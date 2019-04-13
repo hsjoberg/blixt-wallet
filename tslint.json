@@ -1,0 +1,17 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+      "tslint:recommended",
+      "tslint-react",
+      "tslint-react-native"
+    ],
+    "jsRules": {
+    },
+    "rules": {
+      "no-var-requires" : true,
+      "no-empty-interface": false,
+      "object-literal-sort-keys": false,
+      "no-consecutive-blank-lines": false
+    },
+    "rulesDirectory": []
+}
