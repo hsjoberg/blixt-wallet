@@ -1,17 +1,24 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-      "tslint:recommended",
-      "tslint-react",
-      "tslint-react-native"
-    ],
-    "jsRules": {
-    },
-    "rules": {
-      "no-var-requires" : true,
-      "no-empty-interface": false,
-      "object-literal-sort-keys": false,
-      "no-consecutive-blank-lines": false
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-react-native"
+  ],
+  "jsRules": {
+  },
+  "rules": {
+    "jsx-no-lambda": false,
+    "no-var-requires" : true,
+    "no-empty-interface": false,
+    "object-literal-sort-keys": false,
+    "no-consecutive-blank-lines": false,
+    "ordered-imports": false,
+    "jsx-no-multiline-js": false,
+    "jsx-alignment": false,
+    "no-console": false,
+    "one-line": false,
+    "no-empty": false
+  },
+  "rulesDirectory": []
 }
