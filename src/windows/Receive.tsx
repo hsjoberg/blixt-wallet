@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { View, Touchable, TouchableHighlight, Share, Clipboard, Alert } from "react-native";
+import { View, Touchable, TouchableHighlight, Share, Clipboard, Alert, StatusBar } from "react-native";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Content, Form, Item, Label, Input, H1, H3, Toast, Root } from "native-base";
 
 import * as QRCode from "qrcode";
@@ -10,18 +10,25 @@ const lnInvoice = "lnbc1pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwz
 const qr = QRCode.toString(lnInvoice);
 
 interface IReceiveProps {
-  onGoBackCallback: ( transactionInfo: any) => void;
+  onGoBackCallback: () => void;
 }
 
 type State = "FORM" | "QR";
 
 export default ({ onGoBackCallback }: IReceiveProps) => {
   const [state, setState] = useState<State>("FORM");
-  const [btcValue, setBtcValue] = useState<string | undefined >(undefined);
-  const [dollarValue, setDollarValue] = useState<string | undefined >(undefined);
+  const [btcValue, setBtcValue] = useState<string | undefined>(undefined);
+  const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
 
   return (
     <Root>
+      {/*<StatusBar
+        barStyle="light-content"
+        hidden={false}
+        backgroundColor="orange"
+        translucent={false}
+        networkActivityIndicatorVisible={true}
+      />*/}
       <Container>
         <Header>
           <Left>
@@ -38,30 +45,43 @@ export default ({ onGoBackCallback }: IReceiveProps) => {
             <View style={{ padding: 24 }}>
               <Item style={{ marginTop: 8 }}>
                 <Label>Amount ₿</Label>
-                <Input onChangeText={(text) => {
-                  text = text.replace(/,/g, ".");
-                  if (text.length === 0) {
-                    setBtcValue(undefined);
-                    setDollarValue(undefined);
-                    return;
-                  }
-                  setBtcValue(text);
-                  setDollarValue((Number.parseFloat(text) * 5083).toFixed(2).toString());
-                }}
-                  placeholder="0.00000000" value={btcValue !== undefined ? btcValue.toString() : undefined} keyboardType="numeric" />
+                <Input
+                  onChangeText={(text) => {
+                    text = text.replace(/,/g, ".");
+                    if (text.length === 0) {
+                      setBtcValue(undefined);
+                      setDollarValue(undefined);
+                      return;
+                    }
+                    setBtcValue(text);
+                    setDollarValue((Number.parseFloat(text) * 5083).toFixed(2).toString());
+                  }}
+                  placeholder="0.00000000 (optional)"
+                  value={btcValue !== undefined ? btcValue.toString() : undefined}
+                  keyboardType="numeric"
+                />
               </Item>
               <Item style={{ marginTop: 16 }}>
                 <Label>Amount $</Label>
-                <Input onChangeText={(text) => {
-                  text = text.replace(/,/g, ".");
-                  if (text.length === 0) {
-                    setBtcValue(undefined);
-                    setDollarValue(undefined);
-                    return;
-                  }
-                  setBtcValue((Number.parseFloat(text) / 5083).toFixed(8).toString());
-                  setDollarValue(text);
-                }} placeholder="0.00" value={dollarValue !== undefined ? dollarValue.toString() : undefined} keyboardType="numeric" />
+                <Input
+                  onChangeText={(text) => {
+                    text = text.replace(/,/g, ".");
+                    if (text.length === 0) {
+                      setBtcValue(undefined);
+                      setDollarValue(undefined);
+                      return;
+                    }
+                    setBtcValue((Number.parseFloat(text) / 5083).toFixed(8).toString());
+                    setDollarValue(text);
+                  }}
+                  placeholder="0.00 (optional)"
+                  value={dollarValue !== undefined ? dollarValue.toString() : undefined}
+                  keyboardType="numeric"
+                />
+              </Item>
+              <Item style={{ marginTop: 16 }}>
+                <Label>Message</Label>
+                <Input placeholder="Message to payer (optional)" />
               </Item>
               <Item bordered={false} style={{ marginTop: 16 }}>
                 <Button
@@ -108,7 +128,7 @@ export default ({ onGoBackCallback }: IReceiveProps) => {
                 Clipboard.setString(lnInvoice);
                 Toast.show({
                   text: "Copied to clipboard.",
-                  type: "warning",
+                  type: "primary",
                 });
               }}
               style={{ paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}
