@@ -4,6 +4,12 @@ import { Button, Footer, FooterTab, Icon, Text } from "native-base";
 export default ({ onSendButtonClicked, onReceiveButtonClicked }) => {
   return (
     <Footer>
+      {/*<FooterTab>
+        <Button onPress={onChannelsButtonClicked}>
+          <Icon type="Entypo" name="thunder-cloud" />
+          <Text>Channels</Text>
+        </Button>
+      </FooterTab>*/}
       <FooterTab>
         <Button onPress={onReceiveButtonClicked}>
           {/*<Icon type="FontAwesome" name="qrcode" />*/}
@@ -23,12 +29,6 @@ export default ({ onSendButtonClicked, onReceiveButtonClicked }) => {
           {/*<Icon type="SimpleLineIcons" name="camera" />*/}
           <Icon type="AntDesign" name="camerao" />
           <Text>Send</Text>
-        </Button>
-      </FooterTab>
-      <FooterTab>
-        <Button onPress={onSendButtonClicked}>
-          <Icon type="Entypo" name="thunder-cloud" />
-          <Text>Channels</Text>
         </Button>
       </FooterTab>
     </Footer>
