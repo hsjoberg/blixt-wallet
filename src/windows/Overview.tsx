@@ -197,15 +197,18 @@ const style = StyleSheet.create({
   },
   onchainIcon: {
     position: "absolute",
-    top: 9,
-    left : 9,
+    padding: 4,
+    paddingRight: 8,
+    top: 8,
+    left: 8,
     fontSize: 24,
     color: "#d3a100",
   },
   settingsIcon: {
     position: "absolute",
-    top: 9,
-    right: 9,
+    padding: 4,
+    top: 8,
+    right: 8,
     fontSize: 24,
     color: "#2b3751"
   },

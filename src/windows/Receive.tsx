@@ -35,8 +35,8 @@ export default ({ onGoBackCallback }: IReceiveProps) => {
         </Header>
         {state === "FORM" &&
           <Content style={{width: "100%", height: "100%", flex: 1 }}>
-            <Form style={{ marginTop: 10 }}>
-              <Item>
+            <View style={{ padding: 24 }}>
+              <Item style={{ marginTop: 8 }}>
                 <Label>Amount ₿</Label>
                 <Input onChangeText={(text) => {
                   text = text.replace(/,/g, ".");
@@ -50,7 +50,7 @@ export default ({ onGoBackCallback }: IReceiveProps) => {
                 }}
                   placeholder="0.00000000" value={btcValue !== undefined ? btcValue.toString() : undefined} keyboardType="numeric" />
               </Item>
-              <Item>
+              <Item style={{ marginTop: 16 }}>
                 <Label>Amount $</Label>
                 <Input onChangeText={(text) => {
                   text = text.replace(/,/g, ".");
@@ -63,14 +63,16 @@ export default ({ onGoBackCallback }: IReceiveProps) => {
                   setDollarValue(text);
                 }} placeholder="0.00" value={dollarValue !== undefined ? dollarValue.toString() : undefined} keyboardType="numeric" />
               </Item>
-              <Button
-                style={{ marginLeft: 12, marginRight: 12, marginTop: 20 }}
-                block={true}
-                success={true}
-                onPress={() => setState("QR")}>
-                  <Text>Create invoice</Text>
-              </Button>
-            </Form>
+              <Item bordered={false} style={{ marginTop: 16 }}>
+                <Button
+                  style={{ width: "100%" }}
+                  block={true}
+                  success={true}
+                  onPress={() => setState("QR")}>
+                    <Text>Create invoice</Text>
+                </Button>
+              </Item>
+            </View>
           </Content>
         }
         {state === "QR" &&
@@ -80,6 +82,7 @@ export default ({ onGoBackCallback }: IReceiveProps) => {
             alignItems: "center",
             width: "100%",
             height: "100%",
+            marginTop: -16
           }}>
             <H1
               style={{
@@ -95,8 +98,8 @@ export default ({ onGoBackCallback }: IReceiveProps) => {
                 });
               }}>
                 <SvgUri
-                  width="320"
-                  height="320"
+                  width="330"
+                  height="330"
                   svgXmlData={qr._55}
                 />
             </TouchableHighlight>
