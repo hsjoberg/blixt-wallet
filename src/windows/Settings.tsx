@@ -21,7 +21,7 @@ export default ({ onGoBackCallback }: IProps) => {
           </Body>
         </Header>
         <Content>
-          <List style={{}}>
+          <List>
             <ListItem itemHeader={true} first={true}>
               <Text>Wallet</Text>
             </ListItem>
