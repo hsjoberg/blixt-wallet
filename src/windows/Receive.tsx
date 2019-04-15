@@ -102,7 +102,7 @@ export default ({ onGoBackCallback }: IReceiveProps) => {
             alignItems: "center",
             width: "100%",
             height: "100%",
-            marginTop: -16
+            marginTop: -16,
           }}>
             <H1
               style={{
@@ -128,7 +128,7 @@ export default ({ onGoBackCallback }: IReceiveProps) => {
                 Clipboard.setString(lnInvoice);
                 Toast.show({
                   text: "Copied to clipboard.",
-                  type: "primary",
+                  type: "warning",
                 });
               }}
               style={{ paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}

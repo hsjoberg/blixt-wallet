@@ -12,7 +12,7 @@ import Receive from "./windows/Receive";
 import Settings from "./windows/Settings";
 
 import getTheme from "../native-base-theme/components";
-import material from "../native-base-theme/variables/material";
+import theme from "../native-base-theme/variables/commonColor";
 
 const svga = QRCode.toString("lnbc1pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqdpl2pkx2ctnv5sxxmmwwd5kgetjypeh2ursdae8g6twvus8g6rfwvs8qun0dfjkxaq8rkx3yf5tcsyz3d73gafnh3cax9rn449d9p5uxz9ezhhypd0elx87sjle52x86fux2ypatgddc6k63n7erqz25le42c4u4ecky03ylcqca784w".toUpperCase());
 //console.log(svga._55.length);
@@ -25,8 +25,8 @@ export default () => {
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
 
   return (
-    <StyleProvider style={getTheme(material)}>
-      <Container style={styles.container}>
+    <StyleProvider style={getTheme(theme)}>
+      <View style={styles.container}>
         <Modal
           animationType="fade"
           transparent={false}
@@ -44,7 +44,7 @@ export default () => {
           onRequestClose={() => {
             setSendModalVisible(false);
           }}>
-          <Send onGoBackCallback={() => setSendModalVisible(false)} doneCallback={() => {}} />
+          <Send onGoBackCallback={() => setSendModalVisible(false)} doneCallback={() => setSendModalVisible(false)} />
         </Modal>
 
         <Modal
@@ -63,18 +63,14 @@ export default () => {
           onSendButtonClicked={() => setSendModalVisible(true)}
           onReceiveButtonClicked={() => setReceiveModalVisible(true)}
         />
-      </Container>
+      </View>
     </StyleProvider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFF",
-    flexGrow: 1,
+    width: "100%",
     height: "100%",
   },
   welcome: {

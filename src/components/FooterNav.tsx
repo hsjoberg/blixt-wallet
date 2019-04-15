@@ -1,7 +1,12 @@
 import React from "react";
 import { Button, Footer, FooterTab, Icon, Text } from "native-base";
 
-export default ({ onSendButtonClicked, onReceiveButtonClicked }) => {
+interface IProps {
+  onSendButtonClicked: () => void;
+  onReceiveButtonClicked: () => void;
+};
+
+export default ({ onSendButtonClicked, onReceiveButtonClicked }: IProps) => {
   return (
     <Footer>
       {/*<FooterTab>

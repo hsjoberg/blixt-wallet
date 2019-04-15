@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, TouchableOpacity, StyleSheet, Alert, CheckBox, StatusBar} from "react-native";
-import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Form, Input, CheckBox as CheckBoxNativeBase } from "native-base";
+import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Form, Input, CheckBox as CheckBoxNativeBase, Spinner, Right } from "native-base";
 import { RNCamera, Barcode, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
 
@@ -15,6 +15,7 @@ type State = "CAMERA" | "CONFIRMATION";
 export default (props: ISendProps) => {
   const { onGoBackCallback, doneCallback } = props;
   const [ state, setState ] = useState<State>("CAMERA");
+  const [ isPaying, setIsPaying ] = useState(false);
   const [ bolt11Invoice, setBolt11Invoice ] = useState<string | undefined>(undefined);
   const [ cameraType, setCameraType ] =
     useState<CameraType["back"] | CameraType["front"]>(RNCamera.Constants.Type.back);
@@ -37,6 +38,7 @@ export default (props: ISendProps) => {
         <StatusBar
           hidden={false}
           backgroundColor="#000"
+          animated={true}
           translucent={false}
         />
         <RNCamera
@@ -89,7 +91,7 @@ export default (props: ISendProps) => {
               style={{
                 position: "absolute",
                 fontSize: 26,
-                color: "#DCDCDC",
+                color: "#DDD",
                 padding: 4,
                 bottom: 8,
                 left: 8,
@@ -99,14 +101,13 @@ export default (props: ISendProps) => {
               type="FontAwesome"
               name="paste"
               onPress={() => {
-                console.log("TERST");
                 setBolt11Invoice("lnbc1pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqdpl2pkx2ctnv5sxxmmwwd5kgetjypeh2ursdae8g6twvus8g6rfwvs8qun0dfjkxaq8rkx3yf5tcsyz3d73gafnh3cax9rn449d9p5uxz9ezhhypd0elx87sjle52x86fux2ypatgddc6k63n7erqz25le42c4u4ecky03ylcqca784w");
                 setState("CONFIRMATION");
               }}
               style={{
                 position: "absolute",
                 fontSize: 26,
-                color: "#DCDCDC",
+                color: "#DDD",
                 padding: 4,
                 bottom: 8,
                 right: 8,
@@ -122,11 +123,7 @@ export default (props: ISendProps) => {
       <Container>
         <StatusBar
           hidden={false}
-          translucent={false}
-        />
-        <StatusBar
-          hidden={false}
-          translucent={false}
+          backgroundColor="#000"
         />
         <Header>
           <Left>
@@ -146,10 +143,6 @@ export default (props: ISendProps) => {
               <Icon name="checkmark-circle" />
             </Item>
             <Item style={{ marginTop: 16 }}>
-              <Label>Message</Label>
-              <Input disabled={true} value="Pay 100 sat to Bitrefill" />
-            </Item>
-            <Item style={{ marginTop: 16 }}>
               <Label>Amount ₿</Label>
               <Input disabled={true} value="0.01" />
             </Item>
@@ -158,24 +151,29 @@ export default (props: ISendProps) => {
               <Input disabled={true} value="50" />
             </Item>
             <Item style={{ marginTop: 16 }}>
-              <CheckBox onValueChange={(value) => setFeeCap(value)} value={feeCap} />
-              <View>
-                <Label>Cap fees at 3%</Label>
-              </View>
+              <Label>Message</Label>
+              <Input disabled={true} value="Pay 100 sat to Bitrefill" />
             </Item>
-            {/*<Item style={{ marginTop: 16 }}>
-              <CheckBoxNativeBase checked={true} />
-              <View>
-                <Label>Cap fees at 3%</Label>
-              </View>
-            </Item>*/}
-            <Item bordered={false} style={{ marginTop: 16 }}>
+            <Item style={{ marginTop: 16 }}>
+              <Label>Cap fees at 3%</Label>
+              <Right>
+                <CheckBox onValueChange={(value) => setFeeCap(value)} value={feeCap} />
+              </Right>
+            </Item>
+            <Item bordered={false} style={{ marginTop: 32 }}>
               <Button
+                disabled={isPaying}
                 style={{ width: "100%" }}
                 block={true}
                 success={true}
-                onPress={() => setState("QR")}>
-                  <Text>Pay</Text>
+                onPress={() => {
+                  setIsPaying(true);
+                  setTimeout(() => {
+                    doneCallback({});
+                  }, 4000);
+                }}>
+                {! isPaying && <Text>Pay</Text>}
+                {isPaying && <Spinner color="white" />}
               </Button>
             </Item>
           </View>
