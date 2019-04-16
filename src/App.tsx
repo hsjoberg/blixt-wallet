@@ -10,6 +10,7 @@ import Overview from "./windows/Overview";
 import Send from "./windows/Send";
 import Receive from "./windows/Receive";
 import Settings from "./windows/Settings";
+import LightningInfo from "./windows/LightningInfo";
 
 import getTheme from "../native-base-theme/components";
 import theme from "../native-base-theme/variables/commonColor";
@@ -19,10 +20,12 @@ const svga = QRCode.toString("lnbc1pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqq
 const svgb = QRCode.toString("lnbc1pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqdpl2pkx2ctnv5sxxmmwwd5kgetjypeh2ursdae8g6twvus8g6rfwvs8qun0dfjkxaq8rkx3yf5tcsyz3d73gafnh3cax9rn449d9p5uxz9ezhhypd0elx87sjle52x86fux2ypatgddc6k63n7erqz25le42c4u4ecky03ylcqca784w");
 //console.log(svgb._55.length);
 
+
 export default () => {
   const [sendModalVisible, setSendModalVisible] = useState(false);
   const [receiveModalVisible, setReceiveModalVisible] = useState(false);
   const [settingsModalVisible, setSettingsModalVisible] = useState(false);
+  const [lightningInfoModalVisible, setLightningInfoModalVisible] = useState(false);
 
   return (
     <StyleProvider style={getTheme(theme)}>
@@ -55,6 +58,16 @@ export default () => {
             setSettingsModalVisible(false);
           }}>
           <Settings onGoBackCallback={() => setSettingsModalVisible(false)} />
+        </Modal>
+
+        <Modal
+          animationType="fade"
+          transparent={false}
+          visible={lightningInfoModalVisible}
+          onRequestClose={() => {
+            setSettingsModalVisible(false);
+          }}>
+          <LightningInfo onGoBackCallback={() => setLightningInfoModalVisible(false)} />
         </Modal>
 
         <Overview onSettingsClick={() => setSettingsModalVisible(true)} />

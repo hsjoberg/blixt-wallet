@@ -27,7 +27,8 @@ tmux send-keys -t ${window}.1 'atom .' Enter
 tmux send-keys -t ${window}.1 'react-native run-android --no-packager' Enter
 tmux send-keys -t ${window}.3 'react-native log-android' Enter
 tmux new-window -t $SESSION:2 -k -n Emulator
-tmux send-keys -t ${window}.1 'emulator @Nexus_5X' Enter
+#tmux send-keys -t ${window}.1 'emulator @Nexus_5X' Enter
+tmux send-keys -t ${window}.1 'emulator @Pixel_2_XL' Enter
 tmux set-window-option -t $SESSION:0 automatic-rename off
 
 # all done. select starting window and get to work

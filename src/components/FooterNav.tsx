@@ -4,7 +4,7 @@ import { Button, Footer, FooterTab, Icon, Text } from "native-base";
 interface IProps {
   onSendButtonClicked: () => void;
   onReceiveButtonClicked: () => void;
-};
+}
 
 export default ({ onSendButtonClicked, onReceiveButtonClicked }: IProps) => {
   return (
