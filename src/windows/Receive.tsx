@@ -104,22 +104,18 @@ export default ({ onGoBackCallback }: IReceiveProps) => {
             height: "100%",
             marginTop: -16,
           }}>
-            <H1
-              style={{
-                paddingBottom: 4,
-              }}>Scan this QR code</H1>
+            <H1 style={{ paddingBottom: 4 }}>Scan this QR code</H1>
             <Text note={true}>Expires: 1h</Text>
             <TouchableHighlight
               onPress={async () => {
-                console.log("TEST share");
                 const result = await Share.share({
                   // message: lnInvoice,
                   url: "lightning:" + lnInvoice,
                 });
               }}>
                 <SvgUri
-                  width="330"
-                  height="330"
+                  width={330}
+                  height={330}
                   svgXmlData={qr._55}
                 />
             </TouchableHighlight>
