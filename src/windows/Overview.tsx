@@ -1,10 +1,11 @@
 import React, { Component, useState, useRef } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl } from "react-native";
-import { Icon, H3, Root } from "native-base";
-import { Col, Row, Grid } from "react-native-easy-grid";
+import { Icon, H3, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
+import { useActions, useStore } from "../store";
 
 import TransactionCard from "../components/TransactionCard";
+
 
 const HEADER_MIN_HEIGHT = 56;
 const HEADER_MAX_HEIGHT = 220;
@@ -14,6 +15,8 @@ interface IProps {
 }
 
 export default ({ onSettingsClick }: IProps) => {
+  const setActiveModal = useActions((actions) => actions.modal.setActiveModal);
+
   const [scrollYAnimatedValue, setScrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
   const [refreshing, setRefreshing] = useState(false);
   const transactionListScroll = useRef<ScrollView>();
@@ -51,7 +54,8 @@ export default ({ onSettingsClick }: IProps) => {
         setRefreshing(false);
       }, 1500);
     }}
-  />);
+    />
+  );
 
   return (
     <>
@@ -86,25 +90,46 @@ export default ({ onSettingsClick }: IProps) => {
               }
             }
           }}
-          >
-            {(new Array(4).fill(null)).map((_, key) =>
-              <TransactionCard key={key} onPress={(id) => Alert.alert("Transaction")} />
-            )}
+        >
+          {(new Array(4).fill(null)).map((_, key) =>
+            <TransactionCard key={key} onPress={(id) => Alert.alert("Transaction")} />
+          )}
         </ScrollView>
         <Animated.View
            style={{ ...style.animatedTop, height: headerHeight, backgroundColor: headerBackgroundColor}}
            pointerEvents="box-none">
           <LinearGradient style={style.top} colors={["#FFF", "#FFF"]} pointerEvents="box-none">
             <View style={StyleSheet.absoluteFill}>
-              <Icon style={style.onchainIcon} type="FontAwesome" name="btc" onPress={() => Alert.alert("Bitcoin")} />
-              <Icon style={style.channelsIcon} type="Entypo" name="thunder-cloud" onPress={() => Alert.alert("Lightning")} />
-              <Icon style={style.settingsIcon} type="AntDesign" name="setting" onPress={onSettingsClick} />
+              <Icon
+                style={style.onchainIcon}
+                type="FontAwesome"
+                name="btc"
+                onPress={() => setActiveModal("bitcoin_info")}
+              />
+              <Icon
+                style={style.channelsIcon}
+                type="Entypo"
+                name="thunder-cloud"
+                onPress={() => setActiveModal("lightning_info")}
+              />
+              <Icon
+                style={style.settingsIcon}
+                type="AntDesign"
+                name="setting"
+                onPress={() => setActiveModal("settings")}
+              />
             </View>
-            {<Animated.Text style={{...header.btc, fontSize: headerBtcFontSize}}>0.007 450 32 ₿</Animated.Text>}
-            {/*<Animated.Text style={{...header.btc, fontSize: headerBtcFontSize}}>100 000 000 sat</Animated.Text>*/}
-            <Animated.View style={{opacity: headerFiatOpacity}}>
-              <H3 style={{...header.fiat}}>200 SEK</H3>
-            </Animated.View>
+            {<Animated.Text
+              onPress={() => console.log("Testb")}
+              style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
+                0.007 450 32 ₿
+            </Animated.Text>}
+            {/*<Animated.Text style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>100 000 000 sat</Animated.Text>*/}
+            <Animated.Text
+              onPress={() => console.log("Testingsek")}
+              style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
+                200 SEK
+            </Animated.Text>
           </LinearGradient>
         </Animated.View>
       </View>
@@ -168,7 +193,6 @@ const style = StyleSheet.create({
     backgroundColor: "red",
   },
   transactionList: {
-
     paddingTop: HEADER_MAX_HEIGHT + 12,
     paddingLeft: 8,
     paddingRight: 8,
@@ -177,7 +201,7 @@ const style = StyleSheet.create({
   },
 });
 
-const header = StyleSheet.create({
+const headerInfo = StyleSheet.create({
   btc: {
     color: "#222",
     marginTop: 5,
@@ -186,5 +210,6 @@ const header = StyleSheet.create({
   },
   fiat: {
     color: "#666",
+    fontSize: 22,
   },
 });
