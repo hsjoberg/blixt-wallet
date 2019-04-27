@@ -1,7 +1,16 @@
 import { Action, action } from "easy-peasy";
 
+
+export enum EModalWindow {
+  Receive,
+  Send,
+  Settings,
+  BitcoinInfo,
+  LightningInfo,
+}
+
 export interface IModalModel {
-  active: "receive" | "send"  | "settings" | "bitcoin_info" | "lightning_info" | null;
+  active: EModalWindow | null;
   setActiveModal: Action<IModalModel, IModalModel["active"]>;
 }
 

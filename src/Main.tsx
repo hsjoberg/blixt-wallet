@@ -3,7 +3,7 @@ import { Modal, StyleSheet, View } from "react-native";
 import { Container, Content, Footer, FooterTab, Icon, Item, Label, Text, StyleProvider, Button } from "native-base";
 
 import { useActions, useStore } from "./store";
-import { IModalModel } from "./model/Modal";
+import { IModalModel, EModalWindow } from "./model/Modal";
 
 import FooterNav from "./components/FooterNav";
 import Overview from "./windows/Overview";
@@ -21,39 +21,41 @@ const Test = () => {
   return (
     <View>
       <Text>{active}</Text>
-      <Button onPress={() => setActiveModal("settings")}><Text>Test</Text></Button>
+      <Button onPress={() => setActiveModal(EModalWindow.Settings)}><Text>Test</Text></Button>
     </View>
   );
 };
 
 interface IModals {
-  key: IModalModel["active"];
+  key: EModalWindow; // IModalModel["active"];
   component: any;
   doneCallback: () => void;
 }
 
-const modals: IModals[] = [{
-    key: "receive",
-    component: Receive,
-    doneCallback() {},
-  }, {
-    key: "send",
-    component: Send,
-    doneCallback() {},
-  }, {
-    key: "settings",
-    component: Settings,
-    doneCallback() {},
-  }, {
-    key: "lightning_info",
-    component: LightningInfo,
-    doneCallback() {},
-  },
-];
-
 export default () => {
   const activeModal = useStore((state) => state.modal.active);
   const setActiveModal = useActions((actions) => actions.modal.setActiveModal);
+
+  const modals: IModals[] = [{
+      key: EModalWindow.Receive,
+      component: Receive,
+      doneCallback() {},
+    }, {
+      key: EModalWindow.Send,
+      component: Send,
+      doneCallback() {
+        setActiveModal(null);
+      },
+    }, {
+      key: EModalWindow.Settings,
+      component: Settings,
+      doneCallback() {},
+    }, {
+      key: EModalWindow.LightningInfo,
+      component: LightningInfo,
+      doneCallback() {},
+    },
+  ];
 
   return (
     <View style={styles.container}>
@@ -75,8 +77,8 @@ export default () => {
       <Overview />
 
       <FooterNav
-        onSendButtonClicked={() => setActiveModal("send")}
-        onReceiveButtonClicked={() => setActiveModal("receive")}
+        onSendButtonClicked={() => setActiveModal(EModalWindow.Send)}
+        onReceiveButtonClicked={() => setActiveModal(EModalWindow.Receive)}
       />
     </View>
   );
