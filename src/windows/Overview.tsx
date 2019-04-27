@@ -1,8 +1,9 @@
 import React, { Component, useState, useRef } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl } from "react-native";
-import { Icon, H3, Text } from "native-base";
+import { Container, Icon, H3, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import { useActions, useStore } from "../store";
+import { EModalWindow } from "../model/Modal";
 
 import TransactionCard from "../components/TransactionCard";
 
@@ -11,10 +12,9 @@ const HEADER_MIN_HEIGHT = 56;
 const HEADER_MAX_HEIGHT = 220;
 
 interface IProps {
-  onSettingsClick: () => void;
 }
 
-export default ({ onSettingsClick }: IProps) => {
+export default (props: IProps) => {
   const setActiveModal = useActions((actions) => actions.modal.setActiveModal);
 
   const [scrollYAnimatedValue, setScrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
@@ -58,7 +58,7 @@ export default ({ onSettingsClick }: IProps) => {
   );
 
   return (
-    <>
+    <Container>
       <StatusBar
         barStyle="dark-content"
         hidden={false}
@@ -104,19 +104,19 @@ export default ({ onSettingsClick }: IProps) => {
                 style={style.onchainIcon}
                 type="FontAwesome"
                 name="btc"
-                onPress={() => setActiveModal("bitcoin_info")}
+                onPress={() => setActiveModal(EModalWindow.BitcoinInfo)}
               />
               <Icon
                 style={style.channelsIcon}
                 type="Entypo"
                 name="thunder-cloud"
-                onPress={() => setActiveModal("lightning_info")}
+                onPress={() => setActiveModal(EModalWindow.LightningInfo)}
               />
               <Icon
                 style={style.settingsIcon}
                 type="AntDesign"
                 name="setting"
-                onPress={() => setActiveModal("settings")}
+                onPress={() => setActiveModal(EModalWindow.Settings)}
               />
             </View>
             {<Animated.Text
@@ -133,7 +133,7 @@ export default ({ onSettingsClick }: IProps) => {
           </LinearGradient>
         </Animated.View>
       </View>
-    </>
+    </Container>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { CheckBox, View, Touchable, TouchableHighlight, Share, Clipboard, Alert, StatusBar } from "react-native";
+import { CheckBox, View, Touchable, TouchableHighlight, Share, Clipboard, Alert, StatusBar, StyleSheet } from "react-native";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Content, Form, Item, Label, Input, H1, H3, Toast, Root, List, ListItem, Right, Switch } from "native-base";
 
 interface IProps {
@@ -22,7 +22,7 @@ export default ({ onGoBackCallback }: IProps) => {
         </Header>
         <Content>
           <List>
-            <ListItem itemHeader={true} first={true}>
+            <ListItem style={style.itemHeader} itemHeader={true} first={true}>
               <Text>Wallet</Text>
             </ListItem>
 
@@ -39,12 +39,12 @@ export default ({ onGoBackCallback }: IProps) => {
               <Left><Icon style={{fontSize: 22}} type="AntDesign" name="form" /></Left>
               <Body>
                 <Text>Show mnemonic</Text>
-                <Text note={true} numberOfLines={1}>Show 12-word seed for this wallet</Text>
+                <Text note={true} numberOfLines={1}>Show 24-word seed for this wallet</Text>
               </Body>
             </ListItem>
 
 
-            <ListItem first={true} itemHeader={true}>
+            <ListItem style={style.itemHeader} itemHeader={true}>
               <Text>Display</Text>
             </ListItem>
 
@@ -64,7 +64,7 @@ export default ({ onGoBackCallback }: IProps) => {
             </ListItem>
 
 
-            <ListItem itemHeader={true}>
+            <ListItem style={style.itemHeader} itemHeader={true}>
               <Text>Bitcoin Network</Text>
             </ListItem>
 
@@ -78,7 +78,7 @@ export default ({ onGoBackCallback }: IProps) => {
             </ListItem>
 
 
-            <ListItem itemHeader={true}>
+            <ListItem style={style.itemHeader} itemHeader={true}>
               <Text>Lightning Network</Text>
             </ListItem>
 
@@ -91,13 +91,18 @@ export default ({ onGoBackCallback }: IProps) => {
               <Body><Text>Payment request default description</Text></Body>
             </ListItem>
             <ListItem button={true} icon={true} onPress={() => {}}>
+              <Left><Icon style={{fontSize: 22}} type="Entypo" name="circular-graph" /></Left>
+              <Body><Text>Automatically open channels</Text></Body>
+              <Right><CheckBox value={true} /></Right>
+            </ListItem>
+            <ListItem button={true} icon={true} onPress={() => {}}>
               <Left><Icon style={{fontSize: 22}} type="Entypo" name="fingerprint" /></Left>
               <Body><Text>Backup channels to Google Drive</Text></Body>
               <Right><CheckBox value={true} /></Right>
             </ListItem>
 
 
-            <ListItem itemHeader={true}>
+            <ListItem style={style.itemHeader} itemHeader={true}>
               <Text>Misc.</Text>
             </ListItem>
 
@@ -111,3 +116,10 @@ export default ({ onGoBackCallback }: IProps) => {
     </Root>
   );
 };
+
+const style = StyleSheet.create({
+  itemHeader: {
+    paddingTop: 24,
+    paddingBottom: 16,
+  },
+});
