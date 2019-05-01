@@ -1,6 +1,5 @@
 import { Action, action } from "easy-peasy";
 
-
 export enum EModalWindow {
   Receive,
   Send,

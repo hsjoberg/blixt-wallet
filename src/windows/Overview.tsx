@@ -2,7 +2,7 @@ import React, { Component, useState, useRef } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl } from "react-native";
 import { Container, Icon, H3, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
-import { useActions, useStore } from "../store";
+import { useActions } from "../store";
 import { EModalWindow } from "../model/Modal";
 
 import TransactionCard from "../components/TransactionCard";
