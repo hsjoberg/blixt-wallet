@@ -4,6 +4,8 @@ import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Titl
 import { RNCamera, Barcode, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
 
+import { useActions } from "../store";
+
 interface ISendProps {
   onGoBackCallback: () => void;
   doneCallback: (transactionInfo: any) => void;
@@ -13,6 +15,8 @@ interface ISendProps {
 type State = "CAMERA" | "CONFIRMATION";
 
 export default (props: ISendProps) => {
+  const sendTransaction = useActions((actions) => actions.lightning.sendTransaction);
+
   const { onGoBackCallback, doneCallback } = props;
   const [ state, setState ] = useState<State>("CAMERA");
   const [ isPaying, setIsPaying ] = useState(false);
@@ -166,11 +170,15 @@ export default (props: ISendProps) => {
                 style={{ width: "100%" }}
                 block={true}
                 success={true}
-                onPress={() => {
+                onPress={async () => {
                   setIsPaying(true);
-                  setTimeout(() => {
+                  console.log("Before");
+                  const s: string = await sendTransaction("test");
+                  console.log("After");
+                  /*setTimeout(() => {
                     doneCallback({});
-                  }, 4000);
+                  }, 4000);*/
+                  doneCallback({});
                 }}>
                 {! isPaying && <Text>Pay</Text>}
                 {isPaying && <Spinner color="white" />}
