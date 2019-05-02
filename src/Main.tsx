@@ -60,18 +60,18 @@ export default () => {
   return (
     <View style={styles.container}>
       {modals.map((component, key) => (
-          <Modal
-            key={key}
-            animationType="fade"
-            transparent={false}
-            visible={activeModal === component.key}
-            onRequestClose={() => setActiveModal(null)}
-          >
-            <component.component
-              onGoBackCallback={() => setActiveModal(null)}
-              doneCallback={() => { console.log("Done"); component.doneCallback(); }}
-            />
-          </Modal>
+        <Modal
+          key={key}
+          animationType="fade"
+          transparent={false}
+          visible={activeModal === component.key}
+          onRequestClose={() => setActiveModal(null)}
+        >
+          <component.component
+            onGoBackCallback={() => setActiveModal(null)}
+            doneCallback={() => { console.log("Done"); component.doneCallback(); }}
+          />
+        </Modal>
       ))}
 
       <Overview />

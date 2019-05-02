@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, TouchableOpacity, StyleSheet, Alert, CheckBox, StatusBar} from "react-native";
 import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Form, Input, CheckBox as CheckBoxNativeBase, Spinner, Right } from "native-base";
-import { RNCamera, Barcode, CameraType } from "react-native-camera";
+import { RNCamera, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
 
 import { useActions } from "../store";
