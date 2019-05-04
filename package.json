@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest --transformIgnorePatterns \"node_modules/(?!react-native|native-base|native-base-shoutem-theme)\"",
+    "test": "jest",
     "test-update-snapshot": "jest -u --transformIgnorePatterns \"node_modules/(?!react-native|native-base|native-base-shoutem-theme)\""
   },
   "dependencies": {
@@ -39,11 +39,5 @@
     "tslint-react": "^4.0.0",
     "tslint-react-native": "0.0.7",
     "typescript": "3.4.5"
-  },
-  "jest": {
-    "preset": "react-native",
-    "transformIgnorePatterns": [
-      "node_modules/(?!react-native|@shoutem|react-clone-referenced-element|native-base-shoutem-theme|react-native-camera)"
-    ]
   }
 }
