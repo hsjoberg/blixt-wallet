@@ -21,7 +21,7 @@ build:
   stage: build
   script:
     - yarn install
-    - echo $ANDROID_KEYSTORE | base64 -d > android/app/gitlab-ci-android.keystore
+    - echo "$ANDROID_KEYSTORE" | base64 -d > android/app/gitlab-ci-android.keystore
     - echo "MYAPP_APP_ID=com.blixtwallet" >> android/gradle.properties
     - echo "MYAPP_RELEASE_STORE_FILE=gitlab-ci-android.keystore" >> android/gradle.properties
     - echo "MYAPP_RELEASE_KEY_ALIAS=gitlab-ci-key" >> android/gradle.properties
