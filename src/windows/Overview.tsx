@@ -1,20 +1,18 @@
 import React, { Component, useState, useRef } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl } from "react-native";
-import { Container, Icon, H3, Text } from "native-base";
+import { Container, Icon, H3, Text, Button } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import { useActions } from "../state/store";
 import { EModalWindow } from "../state/Modal";
 
 import TransactionCard from "../components/TransactionCard";
 
+import * as Lightning from "../lightning/index";
 
 const HEADER_MIN_HEIGHT = 56;
 const HEADER_MAX_HEIGHT = 220;
 
-interface IProps {
-}
-
-export default (props: IProps) => {
+export default () => {
   const setActiveModal = useActions((actions) => actions.modal.setActiveModal);
 
   const [scrollYAnimatedValue, setScrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
@@ -37,7 +35,7 @@ export default (props: IProps) => {
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [1, 0],
     extrapolate: "clamp",
-    easing: Easing.bezier(0.165, 0.84, 0.44, 1),
+    easing: Easing.bezier(0.165, 0.9, 0.65, 1),
   });
 
   const headerBtcFontSize = scrollYAnimatedValue.interpolate({
@@ -119,6 +117,14 @@ export default (props: IProps) => {
                 onPress={() => setActiveModal(EModalWindow.Settings)}
               />
             </View>
+            {/*<Button
+              onPress={async () => {
+                await Lightning.connect();
+                console.log("DONE");
+              }}
+            >
+              <Text>lnd</Text>
+            </Button>*/}
             {<Animated.Text
               onPress={() => console.log("Testb")}
               style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
@@ -204,9 +210,9 @@ const style = StyleSheet.create({
 const headerInfo = StyleSheet.create({
   btc: {
     color: "#222",
-    marginTop: 5,
+    marginTop: 12,
     paddingTop: 20,
-    marginBottom: 6,
+    marginBottom: 5,
   },
   fiat: {
     color: "#666",
