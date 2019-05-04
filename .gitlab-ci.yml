@@ -1,13 +1,29 @@
-image: node:latest
+image: reactnativecommunity/react-native-android
 
 cache:
   paths:
     - node_modules/
 
 before_script:
-  - npm install
+  - npm i -g envinfo && envinfo
+  - yarn install
+
+stages:
+  - test
+  - build
 
 test:
   stage: test
   script:
-    - CI=true npm test
+    - CI=true yarn test
+
+
+build:
+  stage: build
+  script:
+    - yarn install
+    - cd android && chmod +x gradlew
+    - ./gradlew assembleRelease
+  artifacts:
+    paths:
+      - android/app/build/outputs/
