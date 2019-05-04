@@ -4,7 +4,7 @@ import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Titl
 import { RNCamera, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
 
-import { useActions } from "../store";
+import { useActions } from "../state/store";
 
 interface ISendProps {
   onGoBackCallback: () => void;
