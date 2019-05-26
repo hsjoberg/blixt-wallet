@@ -1,19 +1,16 @@
-import React, { Component, useState, useRef } from "react";
+import React from "react";
 import { Modal, StyleSheet, View } from "react-native";
-import { Container, Content, Footer, FooterTab, Icon, Item, Label, Text, StyleProvider, Button } from "native-base";
 
 import { useActions, useStore } from "./state/store";
-import { IModalModel, EModalWindow } from "./state/Modal";
+import { EModalWindow } from "./state/Modal";
 
+import Loader from "./Loader";
 import FooterNav from "./components/FooterNav";
 import Overview from "./windows/Overview";
 import Send from "./windows/Send";
 import Receive from "./windows/Receive";
 import Settings from "./windows/Settings";
 import LightningInfo from "./windows/LightningInfo";
-
-import getTheme from "../native-base-theme/components";
-import theme from "../native-base-theme/variables/commonColor";
 
 interface IModals {
   key: EModalWindow;
@@ -24,6 +21,12 @@ interface IModals {
 export default () => {
   const activeModal = useStore((state) => state.modal.active);
   const setActiveModal = useActions((actions) => actions.modal.setActiveModal);
+  const nodeInfo = useStore((store) => store.lightning.nodeInfo);
+  const getBalance = useActions((actions) => actions.lightning.getBalance);
+
+  if (!nodeInfo) {
+    return (<Loader />);
+  }
 
   const modals: IModals[] = [{
       key: EModalWindow.Receive,
@@ -32,8 +35,9 @@ export default () => {
     }, {
       key: EModalWindow.Send,
       component: Send,
-      doneCallback() {
+      async doneCallback() {
         setActiveModal(null);
+        await getBalance();
       },
     }, {
       key: EModalWindow.Settings,
@@ -51,16 +55,16 @@ export default () => {
       {modals.map((component, key) => (
         <Modal
           key={key}
-          animationType="fade"
-          transparent={false}
+          children={
+            <component.component
+              onGoBackCallback={() => setActiveModal(null)}
+              doneCallback={() => { console.log("Done"); component.doneCallback(); }}
+            />
+          }
+          animationType="fade" transparent={false}
           visible={activeModal === component.key}
           onRequestClose={() => setActiveModal(null)}
-        >
-          <component.component
-            onGoBackCallback={() => setActiveModal(null)}
-            doneCallback={() => { console.log("Done"); component.doneCallback(); }}
-          />
-        </Modal>
+        />
       ))}
 
       <Overview />

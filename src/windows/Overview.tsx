@@ -2,17 +2,16 @@ import React, { Component, useState, useRef } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl } from "react-native";
 import { Container, Icon, H3, Text, Button } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
-import { useActions } from "../state/store";
+import { useActions, useStore } from "../state/store";
 import { EModalWindow } from "../state/Modal";
 
 import TransactionCard from "../components/TransactionCard";
-
-import * as Lightning from "../lightning/index";
 
 const HEADER_MIN_HEIGHT = 56;
 const HEADER_MAX_HEIGHT = 220;
 
 export default () => {
+  const balance = useStore((store) => store.lightning.balance);
   const setActiveModal = useActions((actions) => actions.modal.setActiveModal);
 
   const [scrollYAnimatedValue, setScrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
@@ -21,27 +20,22 @@ export default () => {
 
   const headerHeight = scrollYAnimatedValue.interpolate({
     inputRange: [0, ( HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT )],
-    outputRange: [ HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT ],
-    extrapolate: "clamp",
+    outputRange: [ HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT ], extrapolate: "clamp",
   });
 
   const headerBackgroundColor = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: ["#212121", "#01579B"],
-    extrapolate: "clamp",
+    outputRange: ["#212121", "#01579B"], extrapolate: "clamp",
   });
 
   const headerFiatOpacity = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: [1, 0],
-    extrapolate: "clamp",
-    easing: Easing.bezier(0.165, 0.9, 0.65, 1),
+    outputRange: [1, 0], extrapolate: "clamp", easing: Easing.bezier(0.16, 0.9, 0.3, 1),
   });
 
   const headerBtcFontSize = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: [40, 28],
-    extrapolate: "clamp",
+    outputRange: [40, 28], extrapolate: "clamp",
   });
 
   const refreshControl = (
@@ -128,13 +122,14 @@ export default () => {
             {<Animated.Text
               onPress={() => console.log("Testb")}
               style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
-                0.007 450 32 ₿
+                {formatSatToBtc(balance)} ₿
+                {/*0.007 450 32 ₿*/}
             </Animated.Text>}
             {/*<Animated.Text style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>100 000 000 sat</Animated.Text>*/}
             <Animated.Text
               onPress={() => console.log("Testingsek")}
               style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
-                200 SEK
+                {convertSatToFiat(balance)} SEK
             </Animated.Text>
           </LinearGradient>
         </Animated.View>
@@ -158,10 +153,8 @@ const style = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     height: "100%",
-    backgroundColor: "#FFF",
     borderBottomColor: "#CCC",
     borderBottomWidth: 1,
-
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
@@ -210,7 +203,7 @@ const style = StyleSheet.create({
 const headerInfo = StyleSheet.create({
   btc: {
     color: "#222",
-    marginTop: 12,
+    marginTop: 14,
     paddingTop: 20,
     marginBottom: 5,
   },
@@ -219,3 +212,11 @@ const headerInfo = StyleSheet.create({
     fontSize: 22,
   },
 });
+
+function formatSatToBtc(sat: number) {
+  return sat / 100000000;
+}
+
+function convertSatToFiat(sat: number) {
+  return Number.parseFloat(((sat / 100000000) * 76270).toFixed(2));
+}
