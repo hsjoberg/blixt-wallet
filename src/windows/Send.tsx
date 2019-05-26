@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
-import { View, TouchableOpacity, StyleSheet, Alert, CheckBox, StatusBar} from "react-native";
-import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Form, Input, CheckBox as CheckBoxNativeBase, Spinner, Right } from "native-base";
+import React, { useState } from "react";
+import { View, StyleSheet, Alert, CheckBox, StatusBar} from "react-native";
+import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Input, Spinner, Right } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
 
@@ -14,27 +14,19 @@ interface ISendProps {
 
 type State = "CAMERA" | "CONFIRMATION";
 
-export default (props: ISendProps) => {
-  const sendTransaction = useActions((actions) => actions.lightning.sendTransaction);
-
-  const { onGoBackCallback, doneCallback } = props;
-  const [ state, setState ] = useState<State>("CAMERA");
-  const [ isPaying, setIsPaying ] = useState(false);
-  const [ bolt11Invoice, setBolt11Invoice ] = useState<string | undefined>(undefined);
-  const [ cameraType, setCameraType ] =
+export default ({ onGoBackCallback, doneCallback }: ISendProps) => {
+  const sendPayment = useActions((actions) => actions.lightning.sendPayment);
+  const decodePaymentRequest = useActions((actions) => actions.lightning.decodePaymentRequest);
+  const [state, setState] = useState<State>("CAMERA");
+  // Camera
+  const [bolt11Invoice, setBolt11Invoice] = useState<string | undefined>(undefined);
+  const [cameraType, setCameraType] =
     useState<CameraType["back"] | CameraType["front"]>(RNCamera.Constants.Type.back);
-  const [ scanning, setScanning ] = useState(true);
-  const [ feeCap, setFeeCap ] = useState(true);
-
-  const camera = useRef();
-
-  useEffect(() => {
-    console.log("useEffect inside Send.tsx");
-    if (props.bolt11Invoice) {
-      setBolt11Invoice(props.bolt11Invoice);
-      setState("CONFIRMATION");
-    }
-  }, [bolt11Invoice, state]);
+  const [scanning, setScanning] = useState(true);
+  // Send
+  const [isPaying, setIsPaying] = useState(false);
+  const [feeCap, setFeeCap] = useState(true);
+  const [invoiceInfo, setInvoiceInfo] = useState<any>(undefined);
 
   if (state === "CAMERA") {
     return (
@@ -49,33 +41,29 @@ export default (props: ISendProps) => {
           style={{ width: "100%", height: "100%" }}
           type={cameraType}
           permissionDialogTitle={"Permission to use camera"}
-          permissionDialogMessage={"We need your permission to use your camera phone to be able to scan QR codes"}
-          XonGoogleVisionBarcodesDetected={({ barcodes }) => {
-            setBolt11Invoice(barcodes[0].data);
-            setState("CONFIRMATION");
-          }}
-          onBarCodeRead={({ data }) => {
+          permissionDialogMessage={"Permission to use the camera is needed to be able to scan QR codes"}
+          onBarCodeRead={async ({ data }) => {
             if (!scanning) {
               return;
             }
+            data = data.replace(/^lightning:/, "");
             try {
               const decodedBech32 = Bech32.decode(data, 1024);
-              if (decodedBech32.prefix !== "lnbc") {
+              if (decodedBech32.prefix.slice(0, 4) !== "lnbc" && decodedBech32.prefix.slice(0, 4) !== "lntb") {
                 setScanning(false);
-                Alert.alert(`QR code is not a valid Bitcoin Lightning invoice`, undefined, [{
-                  text: "OK",
-                  onPress: () => setScanning(true),
-                }]);
+                Alert.alert(`QR code is not a valid Bitcoin Lightning invoice`, undefined,
+                  [{text: "OK", onPress: () => setScanning(true) }]);
+                return;
               }
               setBolt11Invoice(data);
+              setInvoiceInfo(await decodePaymentRequest({ bolt11: data }));
               setState("CONFIRMATION");
             }
             catch (e) {
               setScanning(false);
-              Alert.alert(`QR code is not a valid Lightning invoice`, undefined, [{
-                text: "OK",
-                onPress: () => setScanning(true),
-              }]);
+              console.log(e);
+              Alert.alert(`QR code is not a valid Lightning invoice`, undefined,
+                [{ text: "OK", onPress: () => setScanning(true) }]);
             }
           }}
           captureAudio={false}
@@ -104,8 +92,10 @@ export default (props: ISendProps) => {
             <Icon
               type="FontAwesome"
               name="paste"
-              onPress={() => {
-                setBolt11Invoice("lnbc1pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqdpl2pkx2ctnv5sxxmmwwd5kgetjypeh2ursdae8g6twvus8g6rfwvs8qun0dfjkxaq8rkx3yf5tcsyz3d73gafnh3cax9rn449d9p5uxz9ezhhypd0elx87sjle52x86fux2ypatgddc6k63n7erqz25le42c4u4ecky03ylcqca784w");
+              onPress={async () => {
+                const bolt11 = "lntb12u1pww4ckdpp5xck8m9yerr9hqufyd6p0pp0pwjv5nqn6guwr9qf4l66wrqv3h2ssdp2xys9xct5da3kx6twv9kk7m3qg3hkccm9ypxxzar5v5cqp5ynhgvxfnkwxx75pcxcq2gye7m5dj26hjglqmhkz8rljhg3eg4hfyg38gnsynty3pdatjg9wpa7pe7g794y0hxk2gqd0hzg2hn5hlulqqen6cr5";
+                setBolt11Invoice(bolt11);
+                setInvoiceInfo(await decodePaymentRequest({ bolt11 }));
                 setState("CONFIRMATION");
               }}
               style={{
@@ -123,12 +113,12 @@ export default (props: ISendProps) => {
     );
   }
   else if (state === "CONFIRMATION") {
+    if (!bolt11Invoice || !invoiceInfo) {
+      return (<Text>Unknown error</Text>);
+    }
+
     return (
       <Container>
-        <StatusBar
-          hidden={false}
-          backgroundColor="#000"
-        />
         <Header>
           <Left>
             <Button transparent={true} onPress={onGoBackCallback}>
@@ -139,24 +129,26 @@ export default (props: ISendProps) => {
             <Title>Confirm pay invoice</Title>
           </Body>
         </Header>
-        <Content style={{width: "100%", height: "100%", flex: 1 }}>
-          <View style={{ padding: 24 }}>
+        <Content style={{width: "100%", height: "100%" }} contentContainerStyle={{ height: "100%", flex:1, display: "flex", justifyContent: "space-between" }}>
+          <View style={{
+            padding: 24,
+          }}>
             <Item success={true} style={{ marginTop: 8 }}>
               <Label>Invoice</Label>
-              <Input disabled={true} value={bolt11Invoice.substring(0, 27) + "..."} />
+              <Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={`${bolt11Invoice.substring(0, 33).toLowerCase()}...`} />
               <Icon name="checkmark-circle" />
             </Item>
             <Item style={{ marginTop: 16 }}>
               <Label>Amount ₿</Label>
-              <Input disabled={true} value="0.01" />
+              <Input disabled={true} value={formatSatToBtc(invoiceInfo.numSatoshis).toString()} />
             </Item>
             <Item style={{ marginTop: 16 }}>
-              <Label>Amount $</Label>
-              <Input disabled={true} value="50" />
+              <Label>Amount SEK</Label>
+              <Input disabled={true} value={convertSatToFiat(invoiceInfo.numSatoshis).toString()} />
             </Item>
             <Item style={{ marginTop: 16 }}>
               <Label>Message</Label>
-              <Input disabled={true} value="Pay 100 sat to Bitrefill" />
+              <Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={invoiceInfo.description} />
             </Item>
             <Item style={{ marginTop: 16 }}>
               <Label>Cap fees at 3%</Label>
@@ -164,7 +156,14 @@ export default (props: ISendProps) => {
                 <CheckBox onValueChange={(value) => setFeeCap(value)} value={feeCap} />
               </Right>
             </Item>
-            <Item bordered={false} style={{ marginTop: 32 }}>
+          </View>
+          <View style={{
+            padding: 24,
+          }}>
+            <Item bordered={false} style={{
+              marginBottom: 4,
+              alignSelf: "flex-end",
+            }}>
               <Button
                 disabled={isPaying}
                 style={{ width: "100%" }}
@@ -172,15 +171,10 @@ export default (props: ISendProps) => {
                 success={true}
                 onPress={async () => {
                   setIsPaying(true);
-                  console.log("Before");
-                  const s: string = await sendTransaction("test");
-                  console.log("After");
-                  /*setTimeout(() => {
-                    doneCallback({});
-                  }, 4000);*/
+                  const s = await sendPayment({ paymentRequest: bolt11Invoice });
                   doneCallback({});
                 }}>
-                {! isPaying && <Text>Pay</Text>}
+                {!isPaying && <Text>Pay</Text>}
                 {isPaying && <Spinner color="white" />}
               </Button>
             </Item>
@@ -195,3 +189,11 @@ export default (props: ISendProps) => {
     );
   }
 };
+
+function formatSatToBtc(sat: number) {
+  return sat / 100000000;
+}
+
+function convertSatToFiat(sat: number) {
+  return Number.parseFloat(((sat / 100000000) * 76270).toFixed(2));
+}
