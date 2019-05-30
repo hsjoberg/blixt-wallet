@@ -18,10 +18,12 @@
     "react-native": "0.59.8",
     "react-native-camera": "2.9.0",
     "react-native-easy-grid": "^0.2.1",
+    "react-native-gesture-handler": "^1.2.2",
     "react-native-immersive": "^2.0.0",
     "react-native-linear-gradient": "^2.5.4",
     "react-native-svg": "^9.4.0",
-    "react-native-svg-uri": "^1.2.3"
+    "react-native-svg-uri": "^1.2.3",
+    "react-navigation": "^3.11.0"
   },
   "devDependencies": {
     "@babel/core": "7.4.5",

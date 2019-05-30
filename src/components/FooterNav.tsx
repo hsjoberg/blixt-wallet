@@ -1,12 +1,12 @@
 import React from "react";
 import { Button, Footer, FooterTab, Icon, Text } from "native-base";
+import { NavigationScreenProp } from "react-navigation";
 
 interface IProps {
-  onSendButtonClicked: () => void;
-  onReceiveButtonClicked: () => void;
+  navigation: NavigationScreenProp<{}>;
 }
 
-export default ({ onSendButtonClicked, onReceiveButtonClicked }: IProps) => {
+export default ({ onSendButtonClicked, onReceiveButtonClicked, navigation }: IProps) => {
   return (
     <Footer>
       {/*<FooterTab>
@@ -16,7 +16,7 @@ export default ({ onSendButtonClicked, onReceiveButtonClicked }: IProps) => {
         </Button>
       </FooterTab>*/}
       <FooterTab>
-        <Button onPress={onReceiveButtonClicked}>
+        <Button onPress={() => navigation.navigate("Receive")}>
           {/*<Icon type="FontAwesome" name="qrcode" />*/}
           {/*<Icon type="MaterialCommunityIcons" name="qrcode" />*/}
           {/*<Icon type="Ionicons" name="barcode" />*/}
@@ -27,7 +27,7 @@ export default ({ onSendButtonClicked, onReceiveButtonClicked }: IProps) => {
         </Button>
       </FooterTab>
       <FooterTab>
-        <Button onPress={onSendButtonClicked}>
+        <Button onPress={() => navigation.navigate("Send")}>
           {/*<Icon type="FontAwesome" name="send-o" />*/}
           {/*<Icon type="MaterialCommunityIcons" name="camera" />*/}
           {/*<Icon type="Ionicons" name="md-qr-scanner" />*/}
