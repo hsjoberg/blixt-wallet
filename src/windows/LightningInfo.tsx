@@ -1,21 +1,8 @@
-import React, { Component, useState } from "react";
-import { Alert,  StyleSheet, View, ScrollView, FlatList } from "react-native";
-import { Body, Text, Header, Container, Left, Button, Title, Right, Icon, H1, Content, H2, H3, Fab, Card, CardItem, ListItem, List } from "native-base";
-import { Col, Row, Grid } from "react-native-easy-grid";
-
-interface IReceiveProps {
-  onGoBackCallback: () => void;
-}
-
-
-const Detail = ({ title, children }) => {
-  return (
-    <View style={style.channelDetail}>
-      <Text style={style.channelDetailTitle}>{title}</Text>
-      <Text style={{...style.channelDetailValue, color: "green"}}>{children}</Text>
-    </View>
-  )
-};
+import React, { useState } from "react";
+import { StyleSheet, View, ScrollView } from "react-native";
+import { Body, Text, Header, Container, Left, Button, Title, Right, Icon, H1, H3, Fab, Card, CardItem } from "native-base";
+import { Row } from "react-native-easy-grid";
+import { NavigationScreenProp } from "react-navigation";
 
 const NodeCard = () => {
   return (
@@ -60,14 +47,17 @@ const NodeCard = () => {
   );
 };
 
-export default ({ onGoBackCallback }: IReceiveProps) => {
+interface IReceiveProps {
+  navigation: NavigationScreenProp<{}>;
+}
+export default ({ navigation }: IReceiveProps) => {
   const [fabActive, setFabActive] = useState(false);
 
   return (
     <Container>
-      <Header>
+      <Header iosBarStyle="light-content">
         <Left>
-          <Button transparent={true} onPress={onGoBackCallback}>
+          <Button transparent={true} onPress={() => navigation.navigate("Main")}>
             <Icon name="arrow-back" />
           </Button>
         </Left>

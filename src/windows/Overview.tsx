@@ -6,13 +6,17 @@ import { useActions, useStore } from "../state/store";
 import { EModalWindow } from "../state/Modal";
 
 import TransactionCard from "../components/TransactionCard";
+import { NavigationScreenProp } from "react-navigation";
 
 const HEADER_MIN_HEIGHT = 56;
 const HEADER_MAX_HEIGHT = 220;
 
-export default () => {
+
+interface IProps {
+  navigation: NavigationScreenProp<{}>;
+}
+export default ({ navigation }: IProps)  => {
   const balance = useStore((store) => store.lightning.balance);
-  const setActiveModal = useActions((actions) => actions.modal.setActiveModal);
 
   const [scrollYAnimatedValue, setScrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
   const [refreshing, setRefreshing] = useState(false);
@@ -96,19 +100,19 @@ export default () => {
                 style={style.onchainIcon}
                 type="FontAwesome"
                 name="btc"
-                onPress={() => setActiveModal(EModalWindow.BitcoinInfo)}
+                onPress={() => {}}
               />
               <Icon
                 style={style.channelsIcon}
                 type="Entypo"
                 name="thunder-cloud"
-                onPress={() => setActiveModal(EModalWindow.LightningInfo)}
+                onPress={() => navigation.navigate("LightningInfo")}
               />
               <Icon
                 style={style.settingsIcon}
                 type="AntDesign"
                 name="setting"
-                onPress={() => setActiveModal(EModalWindow.Settings)}
+                onPress={() => navigation.navigate("Settings")}
               />
             </View>
             {/*<Button
@@ -189,7 +193,7 @@ const style = StyleSheet.create({
   },
   overview: {
     flex: 1,
-    backgroundColor: "red",
+    // backgroundColor: "red",
   },
   transactionList: {
     paddingTop: HEADER_MAX_HEIGHT + 12,
