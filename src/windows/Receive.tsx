@@ -4,6 +4,7 @@ import { Button, Body, Container, Icon, Header, Text, Title, Left, Content, Form
 
 import * as QRCode from "qrcode";
 import SvgUri from "react-native-svg-uri";
+import { NavigationScreenProp } from "react-navigation";
 
 const lnInvoice = "lnbc1pvjluezpp5qqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqqqsyqcyq5rqwzqfqypqdpl2pkx2ctnv5sxxmmwwd5kgetjypeh2ursdae8g6twvus8g6rfwvs8qun0dfjkxaq8rkx3yf5tcsyz3d73gafnh3cax9rn449d9p5uxz9ezhhypd0elx87sjle52x86fux2ypatgddc6k63n7erqz25le42c4u4ecky03ylcqca784w"
 
@@ -11,28 +12,23 @@ const qr = QRCode.toString(lnInvoice);
 
 interface IReceiveProps {
   onGoBackCallback: () => void;
+  navigation: NavigationScreenProp<{}>;
 }
 
 type State = "FORM" | "QR";
 
-export default ({ onGoBackCallback }: IReceiveProps) => {
+export default ({ onGoBackCallback, navigation }: IReceiveProps) => {
+  console.log(navigation);
   const [state, setState] = useState<State>("FORM");
   const [btcValue, setBtcValue] = useState<string | undefined>(undefined);
   const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
 
   return (
     <Root>
-      {/*<StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor="orange"
-        translucent={false}
-        networkActivityIndicatorVisible={true}
-      />*/}
       <Container>
-        <Header>
+        <Header iosBarStyle="light-content">
           <Left>
-            <Button transparent={true} onPress={onGoBackCallback}>
+            <Button transparent={true} onPress={() => navigation.navigate("Main")}>
               <Icon name="arrow-back" />
             </Button>
           </Left>
