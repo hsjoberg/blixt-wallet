@@ -2,14 +2,20 @@ import React, { useEffect } from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { Content, Spinner } from "native-base";
 import { useActions } from "./state/store";
+import { NavigationScreenProp } from "react-navigation";
 
-export default () => {
+interface IProps {
+  navigation: NavigationScreenProp<{}>;
+}
+export default ({ navigation }: IProps) => {
   const initializeLightning = useActions((store) => store.lightning.initialize);
 
   useEffect(() => {
     (async () => {
-      const t = await initializeLightning();
-      console.log(t);
+      const response = await initializeLightning();
+      console.log("initializeLightning() done");
+      console.log(response);
+      navigation.navigate("Main");
     })();
   }, []);
 
