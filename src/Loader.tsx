@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, StatusBar } from "react-native";
-import { Content, Spinner } from "native-base";
+import { Content, Spinner, H1 } from "native-base";
 import { useActions } from "./state/store";
 import { NavigationScreenProp } from "react-navigation";
 
@@ -9,30 +9,27 @@ interface IProps {
 }
 export default ({ navigation }: IProps) => {
   const initializeLightning = useActions((store) => store.lightning.initialize);
+  const [error, setError] = useState<string|undefined>(undefined);
 
   useEffect(() => {
     (async () => {
-      const response = await initializeLightning();
+      if (await initializeLightning()) {
+        navigation.navigate("Main");
+      }
+      else {
+        setError("Error");
+      }
       console.log("initializeLightning() done");
-      console.log(response);
-      navigation.navigate("Main");
     })();
   }, []);
 
   return (
     <Content contentContainerStyle={styles.content}>
-      <StatusBar
-        barStyle="dark-content"
-        hidden={false}
-        backgroundColor="#EFEFEF"
-        animated={true}
-        translucent={false}
-      />
-      <Spinner color="black" size={55} />
+      {!error && <Spinner color="black" size={55} />}
+      {error && <H1 style={{color: "red"}}>{error}</H1>}
     </Content>
   );
 };
-
 
 const styles = StyleSheet.create({
   content: {

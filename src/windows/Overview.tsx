@@ -27,11 +27,6 @@ export default ({ navigation }: IProps)  => {
     outputRange: [ HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT ], extrapolate: "clamp",
   });
 
-  const headerBackgroundColor = scrollYAnimatedValue.interpolate({
-    inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: ["#212121", "#01579B"], extrapolate: "clamp",
-  });
-
   const headerFiatOpacity = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [1, 0], extrapolate: "clamp", easing: Easing.bezier(0.16, 0.9, 0.3, 1),
@@ -92,47 +87,27 @@ export default ({ navigation }: IProps)  => {
           )}
         </ScrollView>
         <Animated.View
-           style={{ ...style.animatedTop, height: headerHeight, backgroundColor: headerBackgroundColor}}
+           style={{ ...style.animatedTop, height: headerHeight }}
            pointerEvents="box-none">
           <LinearGradient style={style.top} colors={["#FFF", "#FFF"]} pointerEvents="box-none">
             <View style={StyleSheet.absoluteFill}>
               <Icon
-                style={style.onchainIcon}
-                type="FontAwesome"
-                name="btc"
-                onPress={() => {}}
+                style={style.onchainIcon} type="FontAwesome" name="btc"
+                onPress={() => navigation.navigate("OnChain")}
               />
               <Icon
-                style={style.channelsIcon}
-                type="Entypo"
-                name="thunder-cloud"
+                style={style.channelsIcon} type="Entypo" name="thunder-cloud"
                 onPress={() => navigation.navigate("LightningInfo")}
               />
               <Icon
-                style={style.settingsIcon}
-                type="AntDesign"
-                name="setting"
+                style={style.settingsIcon} type="AntDesign" name="setting"
                 onPress={() => navigation.navigate("Settings")}
               />
             </View>
-            {/*<Button
-              onPress={async () => {
-                await Lightning.connect();
-                console.log("DONE");
-              }}
-            >
-              <Text>lnd</Text>
-            </Button>*/}
-            {<Animated.Text
-              onPress={() => console.log("Testb")}
-              style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
+            {<Animated.Text style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
                 {formatSatToBtc(balance)} ₿
-                {/*0.007 450 32 ₿*/}
             </Animated.Text>}
-            {/*<Animated.Text style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>100 000 000 sat</Animated.Text>*/}
-            <Animated.Text
-              onPress={() => console.log("Testingsek")}
-              style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
+            <Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
                 {convertSatToFiat(balance)} SEK
             </Animated.Text>
           </LinearGradient>
