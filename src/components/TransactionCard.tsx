@@ -3,7 +3,7 @@ import { Alert, StyleSheet, View } from "react-native";
 import { Body, Card, CardItem, Text, Right, Icon } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { format, fromUnixTime } from "date-fns";
-import { ITransaction } from "../database/transaction";
+import { ITransaction } from "../storage/database/transaction";
 
 interface IProps {
   onPress: (id: string) => void;
@@ -16,6 +16,8 @@ export default ({ onPress, transaction }: IProps) => {
     description,
   } = transaction;
 
+  const positive = value > 0;
+
   return (
     <Card>
       <CardItem button={true} onPress={() => onPress("test")}>
@@ -26,8 +28,9 @@ export default ({ onPress, transaction }: IProps) => {
               {format(fromUnixTime(date), "yyyy-MM-dd hh:mm")}
             </Text>
             <Right>
-              <Text style={transactionStyle.transactionTopValuePositive}>
-                + {formatSatToBtc(value)} ₿
+              <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
+                {positive ? "+" : "-"}
+                {formatSatToBtc(value)} ₿
               </Text>
             </Right>
           </Row>
@@ -41,8 +44,12 @@ export default ({ onPress, transaction }: IProps) => {
 };
 
 // TODO this is so stupid
-// Also cannoat handle > 1
+// Also cannot handle >= 1  || <= 1
 function formatSatToBtc(sat: number) {
+  if (sat < 0) {
+    sat = Math.abs(sat);
+  }
+
   let numZeroes;
   if (sat < 10) {
     numZeroes = 7;
@@ -69,7 +76,7 @@ function formatSatToBtc(sat: number) {
     numZeroes = 0;
   }
 
-  let str = "0." + "0".repeat(numZeroes) + sat;
+  const str = ("0." + "0".repeat(numZeroes) + sat);
   return str;
 }
 

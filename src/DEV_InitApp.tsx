@@ -45,7 +45,7 @@ export default ({ navigation }: IProps) => {
         expire: 1577836800 + Number.parseInt(Math.random() * 1000, 10), // 2020-01-01 00:00:00
         memo: "Memo",
         status: "PAID",
-        value:  1,
+        value:  Number.parseInt(Math.random() * 1000, 10) - Number.parseInt(Math.random() * 1000, 10),
         valuteMsat: 1000,
       }))}><Text>createTransaction()</Text></Button>
       <Button onPress={async () => console.log(await getTransactions(db!))}><Text>getTransactions()</Text></Button>
