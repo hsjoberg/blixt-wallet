@@ -9,7 +9,7 @@ interface IProps {
 }
 export default ({ navigation }: IProps) => {
   const initializeLightning = useActions((store) => store.lightning.initialize);
-  const [error, setError] = useState<string|undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     (async () => {
@@ -25,6 +25,13 @@ export default ({ navigation }: IProps) => {
 
   return (
     <Content contentContainerStyle={styles.content}>
+      <StatusBar
+        backgroundColor="transparent"
+        hidden={false}
+        translucent={true}
+        networkActivityIndicatorVisible={true}
+        barStyle="dark-content"
+      />
       {!error && <Spinner color="black" size={55} />}
       {error && <H1 style={{color: "red"}}>{error}</H1>}
     </Content>

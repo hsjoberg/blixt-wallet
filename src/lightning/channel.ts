@@ -86,7 +86,6 @@ export const channelBalance = async (): Promise<IChannelBalanceResponse> => {
   try {
     const responseString = await LndGrpc.channelBalance();
     const response = fixGrpcJsonResponse<IChannelBalanceResponse>(JSON.parse(responseString));
-    console.log(response);
     return response;
   } catch (e) { throw JSON.parse(e.message); }
 };
