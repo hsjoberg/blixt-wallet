@@ -15,8 +15,7 @@ interface ILightningModelSendPaymentPayload {
   paymentRequest: string;
 }
 
-const timeout =
-  (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
+const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
 export interface ILightningModel {
   initialize: Thunk<ILightningModel, undefined>;
@@ -103,7 +102,7 @@ export default {
 
     await actions.getBalance();
 
-    return "TEST";
+    return true;
   }),
   setNodeInfo: action((state, payload) => {
     state.nodeInfo = payload;
