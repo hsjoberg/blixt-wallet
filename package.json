@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "test-update-snapshot": "jest -u --transformIgnorePatterns \"node_modules/(?!react-native|native-base|native-base-shoutem-theme)\""
+    "test-update-snapshot": "jest -u"
   },
   "dependencies": {
     "@types/qrcode": "1.3.3",
