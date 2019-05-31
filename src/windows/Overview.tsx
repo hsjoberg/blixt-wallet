@@ -1,9 +1,8 @@
-import React, { Component, useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl } from "react-native";
-import { Container, Icon, H3, Text, Button } from "native-base";
+import { Container, Icon, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import { useActions, useStore } from "../state/store";
-import { EModalWindow } from "../state/Modal";
 
 import TransactionCard from "../components/TransactionCard";
 import { NavigationScreenProp } from "react-navigation";
@@ -12,13 +11,15 @@ const HEADER_MIN_HEIGHT = 56;
 const HEADER_MAX_HEIGHT = 220;
 
 
-interface IProps {
+export interface IOverviewProps {
   navigation: NavigationScreenProp<{}>;
 }
-export default ({ navigation }: IProps)  => {
+export default ({ navigation }: IOverviewProps)  => {
   const balance = useStore((store) => store.lightning.balance);
+  const transactions = useStore((store) => store.transaction.transactions);
+  const getTransactions = useActions((store) => store.transaction.getTransactions);
 
-  const [scrollYAnimatedValue, setScrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
+  const [scrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
   const [refreshing, setRefreshing] = useState(false);
   const transactionListScroll = useRef<ScrollView>();
 
@@ -40,13 +41,21 @@ export default ({ navigation }: IProps)  => {
   const refreshControl = (
     <RefreshControl title="Refreshing" progressViewOffset={200} refreshing={refreshing} colors={["orange"]}
       onRefresh={() => {
-      setRefreshing(true);
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 1500);
-    }}
+        setRefreshing(true);
+        setTimeout(() => {
+          setRefreshing(false);
+        }, 1500);
+      }}
     />
   );
+
+  useEffect(() => {
+    (async () => {
+      await getTransactions();
+    })();
+  }, []);
+
+  console.log(transactions);
 
   return (
     <Container>
@@ -82,9 +91,10 @@ export default ({ navigation }: IProps)  => {
             }
           }}
         >
-          {(new Array(4).fill(null)).map((_, key) =>
-            <TransactionCard key={key} onPress={(id) => Alert.alert("Transaction")} />
-          )}
+          {transactions.map((transaction, key) => (
+            <TransactionCard key={key} transaction={transaction} onPress={(id) => Alert.alert("Transaction")} />
+          ))}
+          {transactions.length === 0 && <Text style={{ textAlign: "center", margin: 16, color: "#888" }}>No transactions yet</Text>}
         </ScrollView>
         <Animated.View
            style={{ ...style.animatedTop, height: headerHeight }}
@@ -168,7 +178,7 @@ const style = StyleSheet.create({
   },
   overview: {
     flex: 1,
-    // backgroundColor: "red",
+     backgroundColor: "#EFEFEF",
   },
   transactionList: {
     paddingTop: HEADER_MAX_HEIGHT + 12,

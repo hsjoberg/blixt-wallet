@@ -132,19 +132,10 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
           <View style={{
             padding: 24,
           }}>
-            <TouchableOpacity
-              style={{backgroundColor:"red"}}
-              onPress={() =>  console.log("TEST")}
-              >
-                <Text>TEST</Text>
-            </TouchableOpacity>
             <Item success={true} style={{ marginTop: 8 }}>
-              <Label onPress={() => console.log("check1")}>Invoice</Label>
-              <Input
-                  onFocus={() => console.log("check2 focus")}
-                  editable={false}
-                  onPress={() => console.log("check2")} style={{ fontSize: 13, marginTop: 4 }} value={`${bolt11Invoice.substring(0, 33).toLowerCase()}...`} />
-              <Icon name="checkmark-circle" onPress={() => console.log("check3")} />
+              <Label>Invoice</Label>
+              <Input editable={false} style={{ fontSize: 13, marginTop: 4 }} value={`${bolt11Invoice.substring(0, 33).toLowerCase()}...`} />
+              <Icon name="checkmark-circle" />
             </Item>
             <Item style={{ marginTop: 16 }}>
               <Label>Amount ₿</Label>

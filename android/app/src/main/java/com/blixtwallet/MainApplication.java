@@ -5,10 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.content.res.Resources;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.horcrux.svg.SvgPackage;
 import org.reactnative.camera.RNCameraPackage;
+import org.pgsqlite.SQLitePluginPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -48,10 +50,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AsyncStoragePackage(),
             new RNGestureHandlerPackage(),
             new LinearGradientPackage(),
             new SvgPackage(),
             new RNCameraPackage(),
+            new SQLitePluginPackage(),
             new LndGrpcPackage()
       );
     }
