@@ -55,8 +55,6 @@ export default ({ navigation }: IOverviewProps)  => {
     })();
   }, []);
 
-  console.log(transactions);
-
   return (
     <Container>
       <StatusBar
