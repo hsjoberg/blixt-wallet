@@ -5,7 +5,6 @@ cache:
     - node_modules/
 
 before_script:
-  - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
   - npm i -g envinfo && envinfo
   - yarn install
 
@@ -21,6 +20,7 @@ test:
 build:
   stage: build
   script:
+    - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
     - yarn install
     - echo "$ANDROID_KEYSTORE" | base64 -d > android/app/gitlab-ci-android.keystore
     - echo "MYAPP_APP_ID=com.blixtwallet" >> android/gradle.properties
