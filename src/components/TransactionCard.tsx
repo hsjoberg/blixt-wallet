@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Body, Card, CardItem, Text, Right, Icon } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { format, fromUnixTime } from "date-fns";
@@ -14,6 +14,7 @@ export default ({ onPress, transaction }: IProps) => {
     date,
     value,
     description,
+    status,
   } = transaction;
 
   const positive = value > 0;
@@ -29,19 +30,28 @@ export default ({ onPress, transaction }: IProps) => {
             </Text>
             <Right>
               <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
-                {positive ? "+" : "-"}
-                {formatSatToBtc(value)} ₿
+                {value !== 0 && (positive ? "+" : "-")}
+                {value !== 0 && value + " Sat"}
               </Text>
             </Right>
           </Row>
-          <Text note={true}>
-            {description}
-          </Text>
+          <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+            <Text note={true}>
+              {description || "No description"}
+            </Text>
+            <Text note={true} style={{ marginRight: 0 }}>
+              {status !== "SETTLED" && capitalize(status.toLowerCase())}
+            </Text>
+          </View>
         </Body>
       </CardItem>
     </Card>
   );
 };
+
+const capitalize = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 // TODO this is so stupid
 // Also cannot handle >= 1  || <= 1

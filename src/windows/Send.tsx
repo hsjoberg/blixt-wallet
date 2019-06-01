@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert, CheckBox, StatusBar, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Alert, CheckBox, StatusBar } from "react-native";
 import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Input, Spinner, Right, Toast, Root } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
@@ -67,7 +67,7 @@ export const SendCamera = ({ navigation }: ISendProps) => {
       >
         {({ status }) => {
           if (status === "NOT_AUTHORIZED") {
-            setTimeout(() => navigation.navigate("Main"), 1);
+            setTimeout(() => navigation.pop(), 1);
           }
           else {
             return (
@@ -128,13 +128,15 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
             <Title>Confirm pay invoice</Title>
           </Body>
         </Header>
-        <Content style={{width: "100%", height: "100%" }} contentContainerStyle={{ height: "100%", flex:1, display: "flex", justifyContent: "space-between" }}>
-          <View style={{
-            padding: 24,
-          }}>
+        <Content style={{width: "100%", height: "100%" }} contentContainerStyle={sendStyle.transactionDetails}>
+          <View>
             <Item success={true} style={{ marginTop: 8 }}>
               <Label>Invoice</Label>
-              <Input editable={false} style={{ fontSize: 13, marginTop: 4 }} value={`${bolt11Invoice.substring(0, 33).toLowerCase()}...`} />
+              <Input
+                editable={false}
+                style={{ fontSize: 13, marginTop: 4 }}
+                value={`${bolt11Invoice.substring(0, 33).toLowerCase()}...`}
+              />
               <Icon name="checkmark-circle" />
             </Item>
             <Item style={{ marginTop: 16 }}>
@@ -156,9 +158,7 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
               </Right>
             </Item>
           </View>
-          <View style={{
-            padding: 24,
-          }}>
+          <View>
             <Item bordered={false} style={{
               marginBottom: 4,
               alignSelf: "flex-end",
@@ -173,7 +173,7 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
                     setIsPaying(true);
                     const s = await sendPayment({ paymentRequest: bolt11Invoice });
                     await getBalance();
-                    navigation.navigate("Main");
+                    navigation.pop();
                   } catch (e) {
                     console.log(e);
                     Toast.show({
@@ -212,6 +212,13 @@ const sendStyle = StyleSheet.create({
     padding: 4,
     bottom: 8,
     right: 8,
+  },
+  transactionDetails: {
+    height: "100%",
+    flex: 1,
+    display: "flex",
+    justifyContent: "space-between",
+    padding: 24,
   },
 });
 

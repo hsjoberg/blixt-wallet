@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, StatusBar } from "react-native";
+import { StyleSheet, StatusBar, DeviceEventEmitter } from "react-native";
 import { Content, Text, Button } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
@@ -46,7 +46,7 @@ export default ({ navigation }: IProps) => {
         memo: "Memo",
         status: "PAID",
         value:  Number.parseInt(Math.random() * 1000, 10) - Number.parseInt(Math.random() * 1000, 10),
-        valuteMsat: 1000,
+        valueMsat: 1000,
       }))}><Text>createTransaction()</Text></Button>
       <Button onPress={async () => console.log(await getTransactions(db!))}><Text>getTransactions()</Text></Button>
       <Button onPress={async () => console.log(await getTransaction(db!, 1))}><Text>getTransaction(1)</Text></Button>

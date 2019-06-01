@@ -18,6 +18,7 @@ export default ({ navigation }: IOverviewProps)  => {
   const balance = useStore((store) => store.lightning.balance);
   const transactions = useStore((store) => store.transaction.transactions);
   const getTransactions = useActions((store) => store.transaction.getTransactions);
+  const checkOpenTransactions = useActions((store) => store.transaction.checkOpenTransactions);
 
   const [scrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
   const [refreshing, setRefreshing] = useState(false);
@@ -52,6 +53,7 @@ export default ({ navigation }: IOverviewProps)  => {
   useEffect(() => {
     (async () => {
       await getTransactions();
+      await checkOpenTransactions();
     })();
   }, []);
 
@@ -79,7 +81,7 @@ export default ({ navigation }: IOverviewProps)  => {
             const y = event.nativeEvent.contentOffset.y;
             if (0 < y && y < HEADER_MAX_HEIGHT / 3.2) {
               if (transactionListScroll.current) {
-                transactionListScroll.current.scrollTo({y: 0});
+                // transactionListScroll.current.scrollTo({y: 0});
               }
             }
             else if (HEADER_MAX_HEIGHT / 3.2 <= y && y < HEADER_MAX_HEIGHT) {
