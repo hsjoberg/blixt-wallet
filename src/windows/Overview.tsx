@@ -52,7 +52,9 @@ export default ({ navigation }: IOverviewProps)  => {
 
   useEffect(() => {
     (async () => {
-      await getTransactions();
+      // This is done in InitLightning right now
+      // To prevent unwanted flash of "No transactions yet"
+      // await getTransactions();
       await checkOpenTransactions();
     })();
   }, []);
