@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert, CheckBox, StatusBar } from "react-native";
+import { View, StyleSheet, Alert, CheckBox, StatusBar, Clipboard } from "react-native";
 import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Input, Spinner, Right, Toast, Root } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
 
 import { useActions } from "../state/store";
 import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
+import { IDecodePayReqResponse } from "../lightning";
+import { ITransaction } from "../storage/database/transaction";
 
 interface ISendProps {
   onGoBackCallback: () => void;
@@ -19,6 +21,63 @@ export const SendCamera = ({ navigation }: ISendProps) => {
   const [cameraType, setCameraType] =
     useState<CameraType["back"] | CameraType["front"]>(RNCamera.Constants.Type.back);
   const [scanning, setScanning] = useState(true);
+
+
+  const onCameraSwitchClick = () => {
+    setCameraType(
+      cameraType === RNCamera.Constants.Type.front
+        ? RNCamera.Constants.Type.back
+        : RNCamera.Constants.Type.front
+    );
+  };
+
+  const onPasteClick = async () => {
+    try {
+      const bolt11 = (await Clipboard.getString()).replace(/^lightning:/, "");
+      navigation.navigate("SendConfirmation", {
+        invoiceInfo: await decodePaymentRequest({ bolt11 }),
+        bolt11Invoice: bolt11,
+      });
+    }
+     catch (e) {
+       console.log(e);
+       Alert.alert(`Not a valid Lightning invoice`, undefined,
+         [{ text: "OK", onPress: () => setScanning(true) }]);
+     }
+  };
+
+  const onDebugPaste = async () => {
+    const bolt11 = "lntb12u1pww4ckdpp5xck8m9yerr9hqufyd6p0pp0pwjv5nqn6guwr9qf4l66wrqv3h2ssdp2xys9xct5da3kx6twv9kk7m3qg3hkccm9ypxxzar5v5cqp5ynhgvxfnkwxx75pcxcq2gye7m5dj26hjglqmhkz8rljhg3eg4hfyg38gnsynty3pdatjg9wpa7pe7g794y0hxk2gqd0hzg2hn5hlulqqen6cr5";
+    navigation.navigate("SendConfirmation", {
+      invoiceInfo: await decodePaymentRequest({ bolt11 }),
+      bolt11Invoice: bolt11,
+    });
+  };
+
+  const onBarCodeRead = async ({ data }: { data: string }) => {
+    if (!scanning) {
+      return;
+    }
+    data = data.replace(/^lightning:/, "");
+    try {
+      if (checkBech32(data, "lnbc")) {
+        setScanning(false);
+        Alert.alert(`QR code is not a valid Bitcoin Lightning invoice`, undefined,
+          [{text: "OK", onPress: () => setScanning(true) }]);
+        return;
+      }
+      navigation.navigate("SendConfirmation", {
+        invoiceInfo: await decodePaymentRequest({ bolt11: data }),
+        bolt11Invoice: data,
+      });
+    }
+    catch (e) {
+      setScanning(false);
+      console.log(e);
+      Alert.alert(`QR code is not a valid Lightning invoice`, undefined,
+        [{ text: "OK", onPress: () => setScanning(true) }]);
+    }
+  };
 
   return (
     <View>
@@ -37,64 +96,21 @@ export const SendCamera = ({ navigation }: ISendProps) => {
           message: "Permission to use the camera is needed to be able to scan QR codes",
           buttonPositive: "Okay",
         }}
-        onBarCodeRead={async ({ data }) => {
-          if (!scanning) {
-            return;
-          }
-          data = data.replace(/^lightning:/, "");
-          try {
-            const decodedBech32 = Bech32.decode(data, 1024);
-            if (decodedBech32.prefix.slice(0, 4) !== "lnbc" && decodedBech32.prefix.slice(0, 4) !== "lntb") {
-              setScanning(false);
-              Alert.alert(`QR code is not a valid Bitcoin Lightning invoice`, undefined,
-                [{text: "OK", onPress: () => setScanning(true) }]);
-              return;
-            }
-
-            navigation.navigate("SendConfirmation", {
-              invoiceInfo: await decodePaymentRequest({ bolt11: data }),
-              bolt11Invoice: data,
-            });
-          }
-          catch (e) {
-            setScanning(false);
-            console.log(e);
-            Alert.alert(`QR code is not a valid Lightning invoice`, undefined,
-              [{ text: "OK", onPress: () => setScanning(true) }]);
-          }
-        }}
+        onBarCodeRead={onBarCodeRead}
         captureAudio={false}
       >
         {({ status }) => {
           if (status === "NOT_AUTHORIZED") {
             setTimeout(() => navigation.pop(), 1);
+            return (<></>);
           }
-          else {
-            return (
-              <View style={StyleSheet.absoluteFill}>
-                <Icon
-                  type="Ionicons" name="md-swap" style={sendStyle.swapCamera}
-                  onPress={() => {
-                    setCameraType(
-                      cameraType === RNCamera.Constants.Type.front
-                        ? RNCamera.Constants.Type.back
-                        : RNCamera.Constants.Type.front
-                    );
-                  }}
-                />
-                <Icon
-                  type="FontAwesome" name="paste" style={sendStyle.paste}
-                  onPress={async () => {
-                    const bolt11 = "lntb12u1pww4ckdpp5xck8m9yerr9hqufyd6p0pp0pwjv5nqn6guwr9qf4l66wrqv3h2ssdp2xys9xct5da3kx6twv9kk7m3qg3hkccm9ypxxzar5v5cqp5ynhgvxfnkwxx75pcxcq2gye7m5dj26hjglqmhkz8rljhg3eg4hfyg38gnsynty3pdatjg9wpa7pe7g794y0hxk2gqd0hzg2hn5hlulqqen6cr5";
-                    navigation.navigate("SendConfirmation", {
-                      invoiceInfo: await decodePaymentRequest({ bolt11 }),
-                      bolt11Invoice: bolt11,
-                    });
-                  }}
-                />
-              </View>
-            );
-          }
+          return (
+            <View style={StyleSheet.absoluteFill}>
+              <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
+              <Icon type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
+              <Icon type="FontAwesome" name="paste" style={{... sendStyle.paste, right: 64}} onPress={onDebugPaste} />
+            </View>
+          );
         }}
       </RNCamera>
     </View>
@@ -104,11 +120,13 @@ export const SendCamera = ({ navigation }: ISendProps) => {
 export const SendConfirmation = ({ navigation }: ISendProps) => {
   const sendPayment = useActions((actions) => actions.lightning.sendPayment);
   const getBalance = useActions((actions) => actions.lightning.getBalance);
+  const syncTransaction = useActions((actions) => actions.transaction.syncTransaction);
 
   const [isPaying, setIsPaying] = useState(false);
-  const [feeCap, setFeeCap] = useState(true);
+  // const [feeCap, setFeeCap] = useState(true);
   const bolt11Invoice = navigation.getParam("bolt11Invoice");
-  const invoiceInfo = navigation.getParam("invoiceInfo");
+
+  const invoiceInfo: IDecodePayReqResponse = navigation.getParam("invoiceInfo");
 
   return (
     <Root>
@@ -151,12 +169,12 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
               <Label>Message</Label>
               <Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={invoiceInfo.description} />
             </Item>
-            <Item style={{ marginTop: 16 }}>
+            {/* <Item style={{ marginTop: 16 }}>
               <Label>Cap fees at 3%</Label>
               <Right>
                 <CheckBox onValueChange={(value) => setFeeCap(value)} value={feeCap} />
               </Right>
-            </Item>
+            </Item> */}
           </View>
           <View>
             <Item bordered={false} style={{
@@ -172,14 +190,43 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
                   try {
                     setIsPaying(true);
                     const s = await sendPayment({ paymentRequest: bolt11Invoice });
+
+                    if (s.paymentError && s.paymentError.length > 0) {
+                      throw new Error(s.paymentError);
+                    }
+
+                    const transaction: ITransaction = {
+                      date: invoiceInfo.timestamp,
+                      description: invoiceInfo.description,
+                      expire: invoiceInfo.expiry,
+                      paymentRequest: bolt11Invoice,
+                      remotePubkey: invoiceInfo.destination,
+                      rHash: invoiceInfo.paymentHash,
+                      status: "SETTLED",
+                      value: -invoiceInfo.numSatoshis,
+                      valueMsat: -(invoiceInfo.numSatoshis * 1000),
+                    };
+                    await syncTransaction(transaction);
+
                     await getBalance();
                     navigation.pop();
                   } catch (e) {
                     console.log(e);
+                    let error;
+                    if (e.status && e.status.description) {
+                      error = e.status.description
+                    }
+                    else if (e.message) {
+                      error = e.message;
+                    }
+                    else {
+                      error = e;
+                    }
+
                     Toast.show({
                       duration: 10000,
                       type: "danger",
-                      text: `Error: ${e.status.description}`,
+                      text: `Error: ${error}`,
                       buttonText: "Okay",
                     });
                     setIsPaying(false);
@@ -245,3 +292,12 @@ export default createSwitchNavigator({
   // mode: "modal",
   // headerMode: "none",
 });
+
+const checkBech32 = (bech32: string, prefix: string): boolean => {
+  const prefixLength = prefix.length;
+  const decodedBech32 = Bech32.decode(bech32, 1024);
+  if (decodedBech32.prefix.slice(0, prefixLength) !== prefix && decodedBech32.prefix.slice(0, prefixLength) !== prefix) {
+    return true;
+  }
+  return true;
+};

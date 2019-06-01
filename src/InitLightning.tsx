@@ -9,11 +9,13 @@ interface IProps {
 }
 export default ({ navigation }: IProps) => {
   const initializeLightning = useActions((store) => store.lightning.initialize);
+  const getTransactions = useActions((store) => store.transaction.getTransactions);
   const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     (async () => {
       if (await initializeLightning()) {
+        await getTransactions();
         navigation.navigate("Main");
       }
       else {
