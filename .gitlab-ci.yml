@@ -20,7 +20,7 @@ test:
 build:
   stage: build
   script:
-    - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+    - echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf && sysctl -p
     - yarn install
     - echo "$ANDROID_KEYSTORE" | base64 -d > android/app/gitlab-ci-android.keystore
     - echo "MYAPP_APP_ID=com.blixtwallet" >> android/gradle.properties
