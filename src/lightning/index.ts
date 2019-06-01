@@ -1,5 +1,6 @@
 import { NativeModules } from "react-native";
 import { fixGrpcJsonResponse } from "./utils";
+import { ITransaction } from "../storage/database/transaction";
 export * from "./channel";
 const { LndGrpc } = NativeModules;
 
@@ -64,6 +65,34 @@ export const sendPaymentSync = async (paymentRequest: string): Promise<ISendPaym
   try {
     const responseString = await LndGrpc.sendPaymentSync(paymentRequest);
     const response = fixGrpcJsonResponse<ISendPaymentSyncResponse>(JSON.parse(responseString));
+    return response;
+  } catch (e) { throw JSON.parse(e.message); }
+};
+
+
+export interface IAddInvoiceResponse {
+  paymentRequest: string;
+  addIndex: number;
+  rHash: any; // TODO
+}
+/**
+ * @throws
+ */
+export const addInvoice = async (sat: number, memo: string, expiry: number = 3600): Promise<IAddInvoiceResponse> => {
+  try {
+    const responseString = await LndGrpc.addInvoice(sat, memo, expiry);
+    const response = fixGrpcJsonResponse<IAddInvoiceResponse>(JSON.parse(responseString));
+    return response;
+  } catch (e) { throw JSON.parse(e.message); }
+};
+
+/**
+ * @throws
+ */
+export const lookupInvoice = async (rHash: string): Promise<any> => {
+  try {
+    const responseString = await LndGrpc.lookupInvoice(rHash);
+    const response = fixGrpcJsonResponse<any>(JSON.parse(responseString));
     return response;
   } catch (e) { throw JSON.parse(e.message); }
 };
