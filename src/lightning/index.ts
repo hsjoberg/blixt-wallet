@@ -97,13 +97,26 @@ export const lookupInvoice = async (rHash: string): Promise<any> => {
   } catch (e) { throw JSON.parse(e.message); }
 };
 
+
+export interface IDecodePayReqResponse {
+  cltvExpiry: number; // Presumably blocks
+  descriptionHash: string;
+  description: string;
+  destination: string;
+  expiry: number; // actual seconds (NOT a timestamp)
+  fallbackAddr: string;
+  numSatoshis: number;
+  paymentHash: string;
+  routeHints: any[]; // TODO
+  timestamp: number;
+}
 /**
  * @throws
  */
-export const decodePayReq = async (bolt11: string): Promise<any> => {
+export const decodePayReq = async (bolt11: string): Promise<IDecodePayReqResponse> => {
   try {
     const responseString = await LndGrpc.decodePayReq(bolt11);
-    const response = fixGrpcJsonResponse(JSON.parse(responseString));
+    const response = fixGrpcJsonResponse<IDecodePayReqResponse>(JSON.parse(responseString));
     return response;
   } catch (e) { throw JSON.parse(e.message); }
 };

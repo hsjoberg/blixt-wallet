@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert, CheckBox, StatusBar } from "react-native";
+import { View, StyleSheet, Alert, CheckBox, StatusBar, Clipboard } from "react-native";
 import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Input, Spinner, Right, Toast, Root } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
 
 import { useActions } from "../state/store";
 import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
+import { IDecodePayReqResponse } from "../lightning";
+import { ITransaction } from "../storage/database/transaction";
 
 interface ISendProps {
   onGoBackCallback: () => void;
@@ -85,6 +87,23 @@ export const SendCamera = ({ navigation }: ISendProps) => {
                 <Icon
                   type="FontAwesome" name="paste" style={sendStyle.paste}
                   onPress={async () => {
+                    try {
+                      const bolt11 = (await Clipboard.getString()).replace(/^lightning:/, "");
+                      navigation.navigate("SendConfirmation", {
+                        invoiceInfo: await decodePaymentRequest({ bolt11 }),
+                        bolt11Invoice: bolt11,
+                      });
+                    }
+                     catch (e) {
+                       console.log(e);
+                       Alert.alert(`Not a valid Lightning invoice`, undefined,
+                         [{ text: "OK", onPress: () => setScanning(true) }]);
+                     }
+                  }}
+                />
+                <Icon
+                  type="FontAwesome" name="paste" style={{... sendStyle.paste, right: 64}}
+                  onPress={async () => {
                     const bolt11 = "lntb12u1pww4ckdpp5xck8m9yerr9hqufyd6p0pp0pwjv5nqn6guwr9qf4l66wrqv3h2ssdp2xys9xct5da3kx6twv9kk7m3qg3hkccm9ypxxzar5v5cqp5ynhgvxfnkwxx75pcxcq2gye7m5dj26hjglqmhkz8rljhg3eg4hfyg38gnsynty3pdatjg9wpa7pe7g794y0hxk2gqd0hzg2hn5hlulqqen6cr5";
                     navigation.navigate("SendConfirmation", {
                       invoiceInfo: await decodePaymentRequest({ bolt11 }),
@@ -104,11 +123,13 @@ export const SendCamera = ({ navigation }: ISendProps) => {
 export const SendConfirmation = ({ navigation }: ISendProps) => {
   const sendPayment = useActions((actions) => actions.lightning.sendPayment);
   const getBalance = useActions((actions) => actions.lightning.getBalance);
+  const syncTransaction = useActions((actions) => actions.transaction.syncTransaction);
 
   const [isPaying, setIsPaying] = useState(false);
-  const [feeCap, setFeeCap] = useState(true);
+  // const [feeCap, setFeeCap] = useState(true);
   const bolt11Invoice = navigation.getParam("bolt11Invoice");
-  const invoiceInfo = navigation.getParam("invoiceInfo");
+
+  const invoiceInfo: IDecodePayReqResponse = navigation.getParam("invoiceInfo");
 
   return (
     <Root>
@@ -151,12 +172,12 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
               <Label>Message</Label>
               <Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={invoiceInfo.description} />
             </Item>
-            <Item style={{ marginTop: 16 }}>
+            {/* <Item style={{ marginTop: 16 }}>
               <Label>Cap fees at 3%</Label>
               <Right>
                 <CheckBox onValueChange={(value) => setFeeCap(value)} value={feeCap} />
               </Right>
-            </Item>
+            </Item> */}
           </View>
           <View>
             <Item bordered={false} style={{
@@ -172,14 +193,43 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
                   try {
                     setIsPaying(true);
                     const s = await sendPayment({ paymentRequest: bolt11Invoice });
+
+                    if (s.paymentError && s.paymentError.length > 0) {
+                      throw new Error(s.paymentError);
+                    }
+
+                    const transaction: ITransaction = {
+                      date: invoiceInfo.timestamp,
+                      description: invoiceInfo.description,
+                      expire: invoiceInfo.expiry,
+                      paymentRequest: bolt11Invoice,
+                      remotePubkey: invoiceInfo.destination,
+                      rHash: invoiceInfo.paymentHash,
+                      status: "SETTLED",
+                      value: -invoiceInfo.numSatoshis,
+                      valueMsat: -(invoiceInfo.numSatoshis * 1000),
+                    };
+                    await syncTransaction(transaction);
+
                     await getBalance();
                     navigation.pop();
                   } catch (e) {
                     console.log(e);
+                    let error;
+                    if (e.status && e.status.description) {
+                      error = e.status.description
+                    }
+                    else if (e.message) {
+                      error = e.message;
+                    }
+                    else {
+                      error = e;
+                    }
+
                     Toast.show({
                       duration: 10000,
                       type: "danger",
-                      text: `Error: ${e.status.description}`,
+                      text: `Error: ${error}`,
                       buttonText: "Okay",
                     });
                     setIsPaying(false);
