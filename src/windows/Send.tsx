@@ -22,6 +22,63 @@ export const SendCamera = ({ navigation }: ISendProps) => {
     useState<CameraType["back"] | CameraType["front"]>(RNCamera.Constants.Type.back);
   const [scanning, setScanning] = useState(true);
 
+
+  const onCameraSwitchClick = () => {
+    setCameraType(
+      cameraType === RNCamera.Constants.Type.front
+        ? RNCamera.Constants.Type.back
+        : RNCamera.Constants.Type.front
+    );
+  };
+
+  const onPasteClick = async () => {
+    try {
+      const bolt11 = (await Clipboard.getString()).replace(/^lightning:/, "");
+      navigation.navigate("SendConfirmation", {
+        invoiceInfo: await decodePaymentRequest({ bolt11 }),
+        bolt11Invoice: bolt11,
+      });
+    }
+     catch (e) {
+       console.log(e);
+       Alert.alert(`Not a valid Lightning invoice`, undefined,
+         [{ text: "OK", onPress: () => setScanning(true) }]);
+     }
+  };
+
+  const onDebugPaste = async () => {
+    const bolt11 = "lntb12u1pww4ckdpp5xck8m9yerr9hqufyd6p0pp0pwjv5nqn6guwr9qf4l66wrqv3h2ssdp2xys9xct5da3kx6twv9kk7m3qg3hkccm9ypxxzar5v5cqp5ynhgvxfnkwxx75pcxcq2gye7m5dj26hjglqmhkz8rljhg3eg4hfyg38gnsynty3pdatjg9wpa7pe7g794y0hxk2gqd0hzg2hn5hlulqqen6cr5";
+    navigation.navigate("SendConfirmation", {
+      invoiceInfo: await decodePaymentRequest({ bolt11 }),
+      bolt11Invoice: bolt11,
+    });
+  };
+
+  const onBarCodeRead = async ({ data }: { data: string }) => {
+    if (!scanning) {
+      return;
+    }
+    data = data.replace(/^lightning:/, "");
+    try {
+      if (checkBech32(data, "lnbc")) {
+        setScanning(false);
+        Alert.alert(`QR code is not a valid Bitcoin Lightning invoice`, undefined,
+          [{text: "OK", onPress: () => setScanning(true) }]);
+        return;
+      }
+      navigation.navigate("SendConfirmation", {
+        invoiceInfo: await decodePaymentRequest({ bolt11: data }),
+        bolt11Invoice: data,
+      });
+    }
+    catch (e) {
+      setScanning(false);
+      console.log(e);
+      Alert.alert(`QR code is not a valid Lightning invoice`, undefined,
+        [{ text: "OK", onPress: () => setScanning(true) }]);
+    }
+  };
+
   return (
     <View>
       <StatusBar
@@ -39,81 +96,21 @@ export const SendCamera = ({ navigation }: ISendProps) => {
           message: "Permission to use the camera is needed to be able to scan QR codes",
           buttonPositive: "Okay",
         }}
-        onBarCodeRead={async ({ data }) => {
-          if (!scanning) {
-            return;
-          }
-          data = data.replace(/^lightning:/, "");
-          try {
-            const decodedBech32 = Bech32.decode(data, 1024);
-            if (decodedBech32.prefix.slice(0, 4) !== "lnbc" && decodedBech32.prefix.slice(0, 4) !== "lntb") {
-              setScanning(false);
-              Alert.alert(`QR code is not a valid Bitcoin Lightning invoice`, undefined,
-                [{text: "OK", onPress: () => setScanning(true) }]);
-              return;
-            }
-
-            navigation.navigate("SendConfirmation", {
-              invoiceInfo: await decodePaymentRequest({ bolt11: data }),
-              bolt11Invoice: data,
-            });
-          }
-          catch (e) {
-            setScanning(false);
-            console.log(e);
-            Alert.alert(`QR code is not a valid Lightning invoice`, undefined,
-              [{ text: "OK", onPress: () => setScanning(true) }]);
-          }
-        }}
+        onBarCodeRead={onBarCodeRead}
         captureAudio={false}
       >
         {({ status }) => {
           if (status === "NOT_AUTHORIZED") {
             setTimeout(() => navigation.pop(), 1);
+            return (<></>);
           }
-          else {
-            return (
-              <View style={StyleSheet.absoluteFill}>
-                <Icon
-                  type="Ionicons" name="md-swap" style={sendStyle.swapCamera}
-                  onPress={() => {
-                    setCameraType(
-                      cameraType === RNCamera.Constants.Type.front
-                        ? RNCamera.Constants.Type.back
-                        : RNCamera.Constants.Type.front
-                    );
-                  }}
-                />
-                <Icon
-                  type="FontAwesome" name="paste" style={sendStyle.paste}
-                  onPress={async () => {
-                    try {
-                      const bolt11 = (await Clipboard.getString()).replace(/^lightning:/, "");
-                      navigation.navigate("SendConfirmation", {
-                        invoiceInfo: await decodePaymentRequest({ bolt11 }),
-                        bolt11Invoice: bolt11,
-                      });
-                    }
-                     catch (e) {
-                       console.log(e);
-                       Alert.alert(`Not a valid Lightning invoice`, undefined,
-                         [{ text: "OK", onPress: () => setScanning(true) }]);
-                     }
-                  }}
-                />
-                <Icon
-                  type="FontAwesome" name="paste" style={{... sendStyle.paste, right: 64}}
-                  onPress={async () => {
-                    const bolt11 = "lntb12u1pww4ckdpp5xck8m9yerr9hqufyd6p0pp0pwjv5nqn6guwr9qf4l66wrqv3h2ssdp2xys9xct5da3kx6twv9kk7m3qg3hkccm9ypxxzar5v5cqp5ynhgvxfnkwxx75pcxcq2gye7m5dj26hjglqmhkz8rljhg3eg4hfyg38gnsynty3pdatjg9wpa7pe7g794y0hxk2gqd0hzg2hn5hlulqqen6cr5";
-                    navigation.navigate("SendConfirmation", {
-                      invoiceInfo: await decodePaymentRequest({ bolt11 }),
-                      bolt11Invoice: bolt11,
-                    });
-                  }}
-                />
-              </View>
-            );
-          }
+          return (
+            <View style={StyleSheet.absoluteFill}>
+              <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
+              <Icon type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
+              <Icon type="FontAwesome" name="paste" style={{... sendStyle.paste, right: 64}} onPress={onDebugPaste} />
+            </View>
+          );
         }}
       </RNCamera>
     </View>
@@ -295,3 +292,12 @@ export default createSwitchNavigator({
   // mode: "modal",
   // headerMode: "none",
 });
+
+const checkBech32 = (bech32: string, prefix: string): boolean => {
+  const prefixLength = prefix.length;
+  const decodedBech32 = Bech32.decode(bech32, 1024);
+  if (decodedBech32.prefix.slice(0, prefixLength) !== prefix && decodedBech32.prefix.slice(0, prefixLength) !== prefix) {
+    return true;
+  }
+  return true;
+};
