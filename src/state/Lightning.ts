@@ -31,24 +31,57 @@ const timeout = (time: number) => new Promise((resolve) => setTimeout(() => reso
 
 export interface ILightningModel {
   initialize: Thunk<ILightningModel, undefined, any, IStoreModel>;
+  unlockWallet: Thunk<ILightningModel>;
+  getInfo: Thunk<ILightningModel>;
   setNodeInfo: Action<ILightningModel, IGetInfoResponse>;
 
   getBalance: Thunk<ILightningModel, undefined>;
   setBalance: Action<ILightningModel, number>;
-  setSubscriptionStarted: Action<ILightningModel, boolean>;
 
   decodePaymentRequest: Thunk<ILightningModel, { bolt11: string }, any, any, any>;
   addInvoice: Thunk<ILightningModel, ILightningModAddInvoicePayload, any, IStoreModel, Promise<IAddInvoiceResponse>>;
   sendPayment: Thunk<ILightningModel, ILightningModelSendPaymentPayload>;
 
+  subscribeInvoice: Thunk<ILightningModel>;
+  setInvoiceSubscriptionStarted: Action<ILightningModel, boolean>;
+  subscribeChannelUpdates: Thunk<ILightningModel>;
+  setChannelUpdatesSubscriptionStarted: Action<ILightningModel, boolean>;
+
   nodeInfo?: IGetInfoResponse;
   balance: number;
-  subscriptionStarted: boolean;
+  invoiceSubscriptionStarted: boolean;
+  channelUpdatesSubscriptionStarted: boolean;
+  syncedToChain: boolean;
 }
 
-export default {
-  initialize: thunk(async (actions, payload, { getState, getStoreState, dispatch }) => {
+export const lightning: ILightningModel = {
+  initialize: thunk(async (actions, _, { getState }) => {
+    let gotMacaroon = false;
+    do {
+      console.log("Trying to get macaroon");
+      gotMacaroon = await NativeModules.LndGrpc.readMacaroon();
+      if (!gotMacaroon) {
+        await timeout(500);
+      }
+    } while (!gotMacaroon);
+
     // Attempt to unlock wallet:
+    await actions.unlockWallet();
+    // Get general node information:
+    await actions.getInfo();
+    await actions.getBalance();
+
+    // Start subscriptions:
+    NativeModules.LndGrpc.startInvoiceSubscription();
+
+    if (!(getState().invoiceSubscriptionStarted)) {
+      actions.subscribeInvoice();
+    }
+
+    return true;
+  }),
+
+  unlockWallet: thunk(async () => {
     let unlockWalletDone = false;
     do {
       try {
@@ -67,29 +100,37 @@ export default {
           // Trying again after 1s
           case "UNAVAILABLE":
             console.log("lnd gRPC not online, trying again after 1000ms");
-            await timeout(1000);
+            await timeout(300);
             break;
           case "UNKNOWN":
             console.log("Unknown error");
-            await timeout(1000);
+            await timeout(300);
             break;
           default:
             console.log("Default");
-            await timeout(1000);
+            await timeout(300);
             break;
         }
       }
     } while (!unlockWalletDone);
     console.log("Wallet unlocked");
+  }),
 
-    // Get general node information:
+  getInfo: thunk(async (actions) => {
     let getInfoDone = false;
     do {
       try {
         console.log("try getInfo");
         const info = await getInfo();
+        console.log("info", info);
         actions.setNodeInfo(info);
-        getInfoDone = true;
+
+        if (info.syncedToChain !== true) {
+          await timeout(700);
+        }
+        else {
+          getInfoDone = true;
+        }
       }
       catch (e) {
         console.log(e.status.code);
@@ -114,18 +155,45 @@ export default {
         }
       }
     } while (!getInfoDone);
+  }),
 
-    await actions.getBalance();
+  setNodeInfo: action((state, payload) => {
+    state.nodeInfo = payload;
+  }),
+
+  getBalance: thunk(async (actions) => {
+    const response = await channelBalance();
+    actions.setBalance(response.balance);
+  }),
+  setBalance: action((state, payload) => {
+    state.balance = payload;
+  }),
+  setInvoiceSubscriptionStarted: action((state, payload) => {
+    state.invoiceSubscriptionStarted = payload;
+  }),
+
+  sendPayment: thunk(async (_, payload) => {
+    const result = await sendPaymentSync(payload.paymentRequest);
+    return result;
+  }),
+
+  addInvoice: thunk(async (_, { description, sat, expiry }) => {
+    const result = await addInvoice(sat, description, expiry);
+    return result as IAddInvoiceResponse;
+  }),
+
+  decodePaymentRequest: thunk(async (_, payload) => {
+    const result = await decodePayReq(payload.bolt11);
+    return result;
+  }),
 
 
+  subscribeInvoice: thunk((actions, _, { getState, dispatch }) => {
+    if (getState().invoiceSubscriptionStarted) {
+      console.log("WARNING: Lightning.subscribeInvoice() called when subsription already started");
+      return;
+    }
     console.log("Starting transaction subscription");
-    NativeModules.LndGrpc.startInvoiceSubscription();
-    DeviceEventEmitter.addListener("invoiceStart", (e: any) => {
-      console.log("New invoiceStart event");
-      console.log(e);
-      actions.setSubscriptionStarted(e.start);
-    });
-
     DeviceEventEmitter.addListener("invoice", async (e: any) => {
       console.log("New invoice event");
       console.log(e);
@@ -147,43 +215,20 @@ export default {
       };
       await dispatch.transaction.syncTransaction(transaction);
     });
-
-
-    return true;
-  }),
-  setNodeInfo: action((state, payload) => {
-    state.nodeInfo = payload;
   }),
 
-  getBalance: thunk(async (actions) => {
-    const response = await channelBalance();
-    actions.setBalance(response.balance);
-  }),
-  setBalance: action((state, payload) => {
-    state.balance = payload;
-  }),
-  setSubscriptionStarted: action((state, payload) => {
-    state.subscriptionStarted = payload;
-  }),
-
-  sendPayment: thunk(async (actions, payload) => {
-    const result = await sendPaymentSync(payload.paymentRequest);
-    return result;
-  }),
-
-  addInvoice: thunk(async (_, { description, sat, expiry }) => {
-    const result = await addInvoice(sat, description, expiry);
-    return result as IAddInvoiceResponse;
-  }),
-
-  decodePaymentRequest: thunk(async (_, payload) => {
-    const result = await decodePayReq(payload.bolt11);
-    return result;
+  subscribeChannelUpdates: thunk((actions, _, { getState, dispatch }) => {
+    DeviceEventEmitter.addListener("channel", async (e: any) => {
+      console.log("New channel event");
+      console.log(e);
+    });
   }),
 
   balance: 0,
-  subscriptionStarted: false,
-} as ILightningModel;
+  invoiceSubscriptionStarted: false,
+  channelUpdatesSubscriptionStarted: false,
+  syncedToChain: false,
+};
 
 
 // https://stackoverflow.com/questions/34309988/byte-array-to-hex-string-conversion-in-javascript

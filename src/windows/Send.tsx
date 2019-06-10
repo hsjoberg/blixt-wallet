@@ -60,7 +60,7 @@ export const SendCamera = ({ navigation }: ISendProps) => {
     }
     data = data.replace(/^lightning:/, "");
     try {
-      if (checkBech32(data, "lnbc")) {
+      if (!checkBech32(data, "lntb")) {
         setScanning(false);
         Alert.alert(`QR code is not a valid Bitcoin Lightning invoice`, undefined,
           [{text: "OK", onPress: () => setScanning(true) }]);
@@ -294,10 +294,9 @@ export default createSwitchNavigator({
 });
 
 const checkBech32 = (bech32: string, prefix: string): boolean => {
-  const prefixLength = prefix.length;
   const decodedBech32 = Bech32.decode(bech32, 1024);
-  if (decodedBech32.prefix.slice(0, prefixLength) !== prefix && decodedBech32.prefix.slice(0, prefixLength) !== prefix) {
-    return true;
+  if (decodedBech32.prefix.slice(0, prefix.length).toUpperCase() !== prefix.toUpperCase()) {
+    return false;
   }
   return true;
 };
