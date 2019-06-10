@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 export interface IApp {
   dbVersion: number;
   welcome: boolean;
+  walletCreated: boolean;
 }
 export const getApp = async (): Promise<IApp | null> => await getItemObject("app");
 
@@ -22,6 +23,7 @@ export const setupApp = async () => {
   const app: IApp = {
     dbVersion: 1,
     welcome: false,
+    walletCreated: false,
   };
   await setApp(app);
   return app;

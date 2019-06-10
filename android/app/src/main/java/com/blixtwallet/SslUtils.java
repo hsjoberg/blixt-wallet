@@ -17,9 +17,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 class SslUtils {
-
-    //private static final Logger LOG = LoggerFactory.getLogger(SslUtils.class.getSimpleName());
-
     public static SSLContext getSslContextForCertificateFile(InputStream inputStream) {
         try {
             KeyStore keyStore = SslUtils.getKeyStore(inputStream);
@@ -30,7 +27,6 @@ class SslUtils {
             return sslContext;
         } catch (Exception e) {
             String msg = "Cannot load certificate from file";
-            //LOG.error(msg, e);
             throw new RuntimeException(msg);
         }
     }
@@ -43,7 +39,6 @@ class SslUtils {
             Certificate ca;
             try {
                 ca = cf.generateCertificate(inputStream);
-                //LOG.debug("ca={}", ((X509Certificate) ca).getSubjectDN());
             } finally {
                 inputStream.close();
             }
@@ -53,7 +48,6 @@ class SslUtils {
             keyStore.load(null, null);
             keyStore.setCertificateEntry("ca", ca);
         } catch (Exception e) {
-            //LOG.error("Error during getting keystore", e);
         }
         return keyStore;
     }

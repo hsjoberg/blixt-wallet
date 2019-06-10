@@ -2,6 +2,28 @@ import { NativeModules } from "react-native";
 import { fixGrpcJsonResponse } from "./utils";
 const { LndGrpc } = NativeModules;
 
+/**
+ * @throws
+ */
+export const openChannel = async (pubkey: string, amount: number): Promise<any> => {
+  try {
+    const responseString = await NativeModules.LndGrpc.openChannel(pubkey, amount);
+    const response = fixGrpcJsonResponse<any>(JSON.parse(responseString));
+    return response;
+  } catch (e) { throw JSON.parse(e.message); }
+};
+
+/**
+ * @throws
+ */
+export const closeChannel = async (fundingTx: string, outputIndex: number): Promise<any> => {
+  try {
+    const responseString = await NativeModules.LndGrpc.closeChannel(fundingTx, outputIndex);
+    const response = fixGrpcJsonResponse<any>(JSON.parse(responseString));
+    return response;
+  } catch (e) { throw JSON.parse(e.message); }
+};
+
 export interface IPendingChannel {
   channel: {
     capacity: number;

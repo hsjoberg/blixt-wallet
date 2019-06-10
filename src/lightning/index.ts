@@ -7,15 +7,28 @@ const { LndGrpc } = NativeModules;
 /**
  * @throws
  */
+export const connectPeer = async (pubkey: string, host: string): Promise<any> => {
+  try {
+    const responseString = await NativeModules.LndGrpc.connectPeer(pubkey, host);
+    const response = fixGrpcJsonResponse(JSON.parse(responseString));
+    return response;
+  } catch (e) { throw JSON.parse(e.message); }
+};
+
+/**
+ * @throws
+ */
 export const unlockWallet = async (password: string): Promise<any> => {
   try {
     const responseString = await LndGrpc.unlockWallet(password);
-    return fixGrpcJsonResponse(JSON.parse(responseString));
+    const response = fixGrpcJsonResponse(JSON.parse(responseString));
+    return response;
   } catch (e) { throw JSON.parse(e.message); }
 };
 
 export interface IGetInfoResponse {
   pubkey: string;
+  syncedToChain: boolean;
 }
 
 /**
@@ -24,10 +37,8 @@ export interface IGetInfoResponse {
 export const getInfo = async (): Promise<IGetInfoResponse> => {
   try {
     const responseString = await LndGrpc.getInfo();
-    const response = JSON.parse(responseString);
-    return {
-      pubkey: response.identityPubkey_,
-    };
+    const response = fixGrpcJsonResponse<IGetInfoResponse>(JSON.parse(responseString));
+    return response;
   } catch (e) { throw JSON.parse(e.message); }
 };
 
@@ -117,6 +128,48 @@ export const decodePayReq = async (bolt11: string): Promise<IDecodePayReqRespons
   try {
     const responseString = await LndGrpc.decodePayReq(bolt11);
     const response = fixGrpcJsonResponse<IDecodePayReqResponse>(JSON.parse(responseString));
+    return response;
+  } catch (e) { throw JSON.parse(e.message); }
+};
+
+
+export type IReadLndLogResponse = string[];
+/**
+ * @throws
+ */
+export const readLndLog = async (): Promise<IReadLndLogResponse> => {
+  try {
+    const responseString = await LndGrpc.readLndLog();
+    console.log("responseString");
+    console.log(responseString);
+    const response = fixGrpcJsonResponse<IReadLndLogResponse>(JSON.parse(responseString));
+    return response;
+  } catch (e) { throw JSON.parse(e.message); }
+};
+
+
+/**
+ * @throws
+ */
+export const sendCoins = async (): Promise<any> => {
+  try {
+    const responseString = await LndGrpc.sendCoins();
+    const response = fixGrpcJsonResponse<any>(JSON.parse(responseString));
+    return response;
+  } catch (e) { throw JSON.parse(e.message); }
+};
+
+
+export interface INewAddressResponse {
+  address: string;
+}
+/**
+ * @throws
+ */
+export const newAddress = async (): Promise<INewAddressResponse> => {
+  try {
+    const responseString = await LndGrpc.newAddress();
+    const response = fixGrpcJsonResponse<INewAddressResponse>(JSON.parse(responseString));
     return response;
   } catch (e) { throw JSON.parse(e.message); }
 };

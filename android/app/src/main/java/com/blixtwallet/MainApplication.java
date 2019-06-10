@@ -19,25 +19,6 @@ import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
 
-import android.util.Log;
-
-
-// gRPC:
-import java.io.InputStream;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.io.IOUtils;
-import io.grpc.LightningGrpc.Rpc.GetInfoRequest;
-import io.grpc.LightningGrpc.Rpc.GetInfoResponse;
-import javax.net.ssl.SSLContext;
-import io.grpc.okhttp.OkHttpChannelBuilder;
-import io.grpc.LightningGrpc.LightningGrpc.LightningBlockingStub;
-import io.grpc.CallCredentials;
-import io.grpc.ManagedChannel;
-import io.grpc.Metadata;
-import io.grpc.Status;
-import java.util.concurrent.Executor;
-
-
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
@@ -56,7 +37,8 @@ public class MainApplication extends Application implements ReactApplication {
             new SvgPackage(),
             new RNCameraPackage(),
             new SQLitePluginPackage(),
-            new LndGrpcPackage()
+            new LndGrpcPackage(),
+            new LndProcessStarterPackage()
       );
     }
 
