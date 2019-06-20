@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CheckBox, StyleSheet, NativeModules } from "react-native";
+import { CheckBox, StyleSheet, NativeModules, StatusBar } from "react-native";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Content, Root, List, ListItem, Right, View, } from "native-base";
 
 import { createStackNavigator, NavigationScreenProp } from "react-navigation";
@@ -26,6 +26,9 @@ const Settings = ({ navigation }: ISettingsProps) => {
   return (
     <Root>
       <Container>
+        <StatusBar
+          translucent={false}
+        />
         <Header iosBarStyle="light-content">
           <Left>
             <Button transparent={true} onPress={() => navigation.pop()}>

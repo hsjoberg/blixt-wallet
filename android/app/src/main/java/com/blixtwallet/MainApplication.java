@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.content.res.Resources;
 
 import com.facebook.react.ReactApplication;
+import com.bluroverly.SajjadBlurOverlayPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SajjadBlurOverlayPackage(),
             new AsyncStoragePackage(),
             new RNGestureHandlerPackage(),
             new LinearGradientPackage(),

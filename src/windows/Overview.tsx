@@ -5,7 +5,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { useActions, useStore } from "../state/store";
 
 import TransactionCard from "../components/TransactionCard";
-import { NavigationScreenProp } from "react-navigation";
+import { NavigationScreenProp, createStackNavigator } from "react-navigation";
 
 const HEADER_MIN_HEIGHT = 56;
 const HEADER_MAX_HEIGHT = 220;
@@ -25,8 +25,9 @@ export default ({ navigation }: IOverviewProps)  => {
   const transactionListScroll = useRef<ScrollView>();
 
   const headerHeight = scrollYAnimatedValue.interpolate({
-    inputRange: [0, ( HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT )],
-    outputRange: [ HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT ], extrapolate: "clamp",
+    inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
+    outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+    extrapolate: "clamp",
   });
 
   const headerFiatOpacity = scrollYAnimatedValue.interpolate({
@@ -94,7 +95,7 @@ export default ({ navigation }: IOverviewProps)  => {
           }}
         >
           {transactions.map((transaction, key) => (
-            <TransactionCard key={key} transaction={transaction} onPress={(id) => Alert.alert("Transaction")} />
+            <TransactionCard key={key} transaction={transaction} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />
           ))}
           {transactions.length === 0 && <Text style={{ textAlign: "center", margin: 16, color: "#888" }}>No transactions yet</Text>}
         </ScrollView>
@@ -157,6 +158,7 @@ const style = StyleSheet.create({
     padding: 4,
     paddingRight: 8,
     top: 10,
+    // top: 10 + 16,
     left: 8,
     fontSize: 24,
     color: "#d3a100",
@@ -166,6 +168,7 @@ const style = StyleSheet.create({
     padding: 4,
     paddingRight: 8,
     top: 11,
+    // top: 11 + 16,
     left: 8 + 24 + 8,
     fontSize: 24,
     color: "#007FFF",
@@ -174,13 +177,14 @@ const style = StyleSheet.create({
     position: "absolute",
     padding: 4,
     top: 10,
+    // top: 10 + 16,
     right: 8,
     fontSize: 24,
     color: "#2b3751",
   },
   overview: {
     flex: 1,
-     backgroundColor: "#EFEFEF",
+    backgroundColor: "#EFEFEF",
   },
   transactionList: {
     paddingTop: HEADER_MAX_HEIGHT + 12,

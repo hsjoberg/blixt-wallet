@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableHighlight, Share, Clipboard, StyleSheet } from "react-native";
+import { View, TouchableHighlight, Share, Clipboard, StyleSheet, StatusBar } from "react-native";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Content, Item, Label, Input, H1, H3, Toast, Root } from "native-base";
 
 import * as QRCode from "qrcode";
@@ -26,6 +26,9 @@ export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
 
   return (
     <Container>
+      <StatusBar
+        translucent={false}
+      />
       <Header iosBarStyle="light-content">
         <Left>
           <Button transparent={true} onPress={() => navigation.navigate("Main")}>

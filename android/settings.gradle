@@ -1,4 +1,6 @@
 rootProject.name = 'BlixtWallet'
+include ':react-native-blur-overlay'
+project(':react-native-blur-overlay').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-blur-overlay/android')
 include ':@react-native-community_async-storage'
 project(':@react-native-community_async-storage').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/async-storage/android')
 include ':react-native-gesture-handler'

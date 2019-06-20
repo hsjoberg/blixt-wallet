@@ -7,18 +7,23 @@ import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { IApp, getApp, clearApp, setupApp, setApp } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase } from "../storage/database/sqlite";
 
+import {closeOverlay, openOverlay} from '../Blur';
+//import {closeOverlay, openOverlay} from 'react-native-blur-overlay';
+
 export interface IStoreModel {
   initializeApp: Thunk<IStoreModel>;
   clearApp: Thunk<IStoreModel>;
   setDb: Action<IStoreModel, SQLiteDatabase>;
   setApp: Action<IStoreModel, IApp>;
   setChangeSubscriptionStarted: Action<IStoreModel, boolean>;
+  setLndRestarting: Action<IStoreModel, boolean>;
 
   setWalletCreated: Thunk<IStoreModel, boolean>;
 
   app?: IApp;
   db?: SQLiteDatabase;
   changeSubscriptionStarted: boolean;
+  lndRestarting: boolean;
   lightning: ILightningModel;
   transaction: ITransactionModel;
   channel: IChannelModel;
@@ -64,7 +69,11 @@ const model: IStoreModel = {
         if (e === "active") {
           console.log("active");
           if (await NativeModules.LndProcessStarter.startProcess()) {
+            openOverlay();
+            actions.setLndRestarting(true);
             await dispatch.lightning.initialize();
+            closeOverlay();
+            actions.setLndRestarting(false);
           }
         }
         if (e === "background") {
@@ -88,6 +97,7 @@ const model: IStoreModel = {
   setDb: action((state, db) => { state.db = db; }),
   setApp: action((state, app) => { state.app = app; }),
   setChangeSubscriptionStarted: action((state, payload) => { state.changeSubscriptionStarted = payload; }),
+  setLndRestarting: action((state, payload) => { state.lndRestarting = payload; }),
 
   setWalletCreated: thunk(async (actions, payload) => {
     const app = await getApp();
@@ -101,6 +111,7 @@ const model: IStoreModel = {
   app: undefined,
   db: undefined,
   changeSubscriptionStarted: false,
+  lndRestarting: false,
   lightning,
   transaction,
   channel,

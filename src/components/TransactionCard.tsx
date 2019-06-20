@@ -21,7 +21,7 @@ export default ({ onPress, transaction }: IProps) => {
 
   return (
     <Card>
-      <CardItem button={true} onPress={() => onPress("test")}>
+      <CardItem activeOpacity={1} button={true} onPress={() => onPress(transaction.rHash)}>
         <Body>
           <Row style={transactionStyle.transactionTop}>
             {/*<Icon type="AntDesign" name="pluscircleo" style={{ ...transaction.typeIcon, ...transaction.typeIconReceive}} />*/}
@@ -40,7 +40,7 @@ export default ({ onPress, transaction }: IProps) => {
               {description || "No description"}
             </Text>
             <Text note={true} style={{ marginRight: 0 }}>
-              {status !== "SETTLED" && capitalize(status.toLowerCase())}
+              {status !== "SETTLED" && capitalize(status)}
             </Text>
           </View>
         </Body>
@@ -49,9 +49,7 @@ export default ({ onPress, transaction }: IProps) => {
   );
 };
 
-const capitalize = (string: string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 
 // TODO this is so stupid
 // Also cannot handle >= 1  || <= 1
