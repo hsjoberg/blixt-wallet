@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, StatusBar, NativeModules, ScrollView } from "react-native";
-import { Content, Text, Button, Toast, Root, Input } from "native-base";
+import React, { useEffect } from "react";
+import { StyleSheet, StatusBar, ScrollView } from "react-native";
+import { Root } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
-import { getTransactions, getTransaction, createTransaction } from "./storage/database/transaction";
 import { useStore, useActions } from "./state/store";
 
 
@@ -45,7 +44,6 @@ export default ({ navigation }: IProps) => {
           networkActivityIndicatorVisible={true}
           barStyle="dark-content"
         />
-        <Text>Loading...</Text>
       </ScrollView>
     </Root>
   );

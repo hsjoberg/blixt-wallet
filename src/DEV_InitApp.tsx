@@ -44,12 +44,10 @@ export default ({ navigation }: IProps) => {
       <StatusBar
         backgroundColor="transparent"
         hidden={false}
-        translucent={true}
+        translucent={false}
         networkActivityIndicatorVisible={true}
         barStyle="dark-content"
       />
-
-
       <View style={{ marginTop: 32, width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
         <Button onPress={async () => actions.clearApp()}><Text>actions.clearApp()</Text></Button>
         <Button onPress={async () => await actions.initializeApp()}><Text>actions.initializeApp()</Text></Button>
@@ -67,6 +65,7 @@ export default ({ navigation }: IProps) => {
         <Button onPress={async () => console.log(await getTransactions(db!))}><Text>getTransactions()</Text></Button>
         <Button onPress={async () => console.log(await getTransaction(db!, 1))}><Text>getTransaction(1)</Text></Button>
         <Button onPress={async () => navigation.navigate("Init")}><Text>navigation.navigate("Init")</Text></Button>
+        <Button onPress={async () => navigation.navigate("Overview")}><Text>navigation.navigate("Overview")</Text></Button>
         <Button onPress={async () => navigation.navigate("InitLightning")}><Text>navigation.navigate("InitLightning")</Text></Button>
 
         <Button onPress={async () => {
