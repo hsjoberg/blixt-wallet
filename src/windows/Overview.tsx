@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl } from "react-native";
 import { Container, Icon, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
-import { useActions, useStore } from "../state/store";
+import { useStoreActions, useStoreState } from "../state/store";
 
 import TransactionCard from "../components/TransactionCard";
 import { NavigationScreenProp, createStackNavigator } from "react-navigation";
@@ -15,10 +15,10 @@ export interface IOverviewProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IOverviewProps)  => {
-  const balance = useStore((store) => store.lightning.balance);
-  const transactions = useStore((store) => store.transaction.transactions);
-  const getTransactions = useActions((store) => store.transaction.getTransactions);
-  const checkOpenTransactions = useActions((store) => store.transaction.checkOpenTransactions);
+  const balance = useStoreState((store) => store.lightning.balance);
+  const transactions = useStoreState((store) => store.transaction.transactions);
+  const getTransactions = useStoreActions((store) => store.transaction.getTransactions);
+  const checkOpenTransactions = useStoreActions((store) => store.transaction.checkOpenTransactions);
 
   const [scrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
   const [refreshing, setRefreshing] = useState(false);

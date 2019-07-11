@@ -5,7 +5,7 @@ import { Button, Body, Container, Icon, Header, Text, Title, Left, Content, Item
 import * as QRCode from "qrcode";
 import SvgUri from "react-native-svg-uri";
 import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
-import { useActions, useStore } from "../state/store";
+import { useStoreActions, useStoreState } from "../state/store";
 import { IAddInvoiceResponse } from "../lightning";
 
 import { formatDistanceStrict, fromUnixTime } from "date-fns";
@@ -18,7 +18,7 @@ const BTCSAT = 100000000;
 const BTCUSD = 8525;
 
 export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
-  const addInvoice = useActions((store) => store.lightning.addInvoice);
+  const addInvoice = useStoreActions((store) => store.lightning.addInvoice);
   const [btcValue, setBtcValue] = useState<string | undefined>(undefined);
   const [satValue, setSatValue] = useState<string | undefined>(undefined);
   const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
@@ -129,7 +129,7 @@ const receiveStyle = StyleSheet.create({
 export const ReceiveQr = ({ navigation }: IReceiveProps) => {
   const invoice: IAddInvoiceResponse = navigation.getParam("invoice");
   const transaction =
-    useStore((store) => store.transaction.transactions.find((tx) => tx.paymentRequest === invoice.paymentRequest));
+    useStoreState((store) => store.transaction.transactions.find((tx) => tx.paymentRequest === invoice.paymentRequest));
 
   if (!transaction) {
     return (

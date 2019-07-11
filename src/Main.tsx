@@ -3,7 +3,7 @@ import { Animated, Easing, StyleSheet } from "react-native";
 import { View, Text, Spinner } from "native-base";
 import { createBottomTabNavigator, createAppContainer, createStackNavigator, createSwitchNavigator } from "react-navigation";
 
-import { useStore } from "./state/store";
+import { useStoreState } from "./state/store";
 import FooterNav from "./components/FooterNav";
 import Overview from "./windows/Overview";
 import Send from "./windows/Send";
@@ -73,7 +73,7 @@ const RootStack = createSwitchNavigator({
 const AppContainer = createAppContainer(RootStack);
 
 export default () => {
-  const lndRestarting = useStore((store) => store.lndRestarting);
+  const lndRestarting = useStoreState((store) => store.lndRestarting);
 
   useEffect(() => {
     lndRestarting

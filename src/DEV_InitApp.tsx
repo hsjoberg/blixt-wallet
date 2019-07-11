@@ -4,7 +4,7 @@ import { Content, Text, Button, Toast, Root, Input, View } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { getTransactions, getTransaction, createTransaction } from "./storage/database/transaction";
-import { useStore, useActions } from "./state/store";
+import { useStoreState, useStoreActions } from "./state/store";
 
 // (async () => {
 //   AppState.addEventListener("change", (e) => {
@@ -24,8 +24,8 @@ export default ({ navigation }: IProps) => {
   const [tx, setTx] = useState("");
   const [commandResult, setCommandResult] = useState("{}");
   const [error, setError] = useState("{}");
-  const actions = useActions((store) => store);
-  const db = useStore((store) => store.db);
+  const actions = useStoreActions((store) => store);
+  const db = useStoreState((store) => store.db);
 
   useEffect(() => {
     (async () => {
