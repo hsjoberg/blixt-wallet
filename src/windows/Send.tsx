@@ -4,7 +4,7 @@ import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Titl
 import { RNCamera, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
 
-import { useActions } from "../state/store";
+import { useStoreActions } from "../state/store";
 import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
 import { IDecodePayReqResponse } from "../lightning";
 import { ITransaction } from "../storage/database/transaction";
@@ -16,7 +16,7 @@ interface ISendProps {
   navigation: NavigationScreenProp<{}>;
 }
 export const SendCamera = ({ navigation }: ISendProps) => {
-  const decodePaymentRequest = useActions((actions) => actions.lightning.decodePaymentRequest);
+  const decodePaymentRequest = useStoreActions((actions) => actions.lightning.decodePaymentRequest);
 
   const [cameraType, setCameraType] =
     useState<CameraType["back"] | CameraType["front"]>(RNCamera.Constants.Type.back);
@@ -118,9 +118,9 @@ export const SendCamera = ({ navigation }: ISendProps) => {
 };
 
 export const SendConfirmation = ({ navigation }: ISendProps) => {
-  const sendPayment = useActions((actions) => actions.lightning.sendPayment);
-  const getBalance = useActions((actions) => actions.lightning.getBalance);
-  const syncTransaction = useActions((actions) => actions.transaction.syncTransaction);
+  const sendPayment = useStoreActions((actions) => actions.lightning.sendPayment);
+  const getBalance = useStoreActions((actions) => actions.lightning.getBalance);
+  const syncTransaction = useStoreActions((actions) => actions.transaction.syncTransaction);
 
   const [isPaying, setIsPaying] = useState(false);
   // const [feeCap, setFeeCap] = useState(true);

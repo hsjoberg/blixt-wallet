@@ -4,7 +4,7 @@ import { Body, Text, Header, Container, Left, Button, Title, Right, Icon, H1, H3
 import { RNCamera } from "react-native-camera";
 import { Row } from "react-native-easy-grid";
 import { NavigationScreenProp, createStackNavigator } from "react-navigation";
-import { useStore, useActions } from "../state/store";
+import { useStoreState, useStoreActions } from "../state/store";
 import { IChannel } from "../lightning/channel";
 
 
@@ -14,7 +14,7 @@ export interface IOpenChannelProps {
 export const OpenChannel = ({ navigation }: IOpenChannelProps) => {
   const [peer, setPeer] = useState("");
   const [sat, setSat] = useState("");
-  const connectAndOpenChannel = useActions((actions) => actions.channel.connectAndOpenChannel);
+  const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
   const [result, setResult] = useState<any>();
 
   const [camera, setCamera] = useState(false);
@@ -89,7 +89,7 @@ export interface INodeCardProps {
   channel: IChannel;
 }
 const NodeCard = ({ channel }: INodeCardProps) => {
-  const closeChannel = useActions((store) => store.channel.closeChannel);
+  const closeChannel = useStoreActions((store) => store.channel.closeChannel);
 
   const close = async () => {
     const result = await closeChannel({
@@ -148,7 +148,7 @@ interface ILightningInfoProps {
   navigation: NavigationScreenProp<{}>;
 }
 export const LightningInfo = ({ navigation }: ILightningInfoProps) => {
-  const channels = useStore((store) => store.channel.channels);
+  const channels = useStoreState((store) => store.channel.channels);
   const [fabActive, setFabActive] = useState(false);
 
   return (

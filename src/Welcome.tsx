@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { StyleSheet, NativeModules } from "react-native";
 import { Content, Text, Button } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
-import { useActions } from "./state/store";
+import { useStoreActions } from "./state/store";
 
 const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
@@ -10,7 +10,7 @@ interface IProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IProps) => {
-  const setWalletCreated = useActions((store) => store.setWalletCreated);
+  const setWalletCreated = useStoreActions((store) => store.setWalletCreated);
 
   return (
     <Content contentContainerStyle={styles.content}>

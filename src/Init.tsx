@@ -3,15 +3,15 @@ import { StyleSheet, StatusBar, ScrollView } from "react-native";
 import { Root } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
-import { useStore, useActions } from "./state/store";
+import { useStoreState, useStoreActions } from "./state/store";
 
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IProps) => {
-  const actions = useActions((store) => store);
-  const app = useStore((store) => store.app);
+  const actions = useStoreActions((store) => store);
+  const app = useStoreState((store) => store.app);
 
   useEffect(() => {
     (async () => {

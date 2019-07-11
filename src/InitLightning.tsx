@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { Content, Spinner, H1 } from "native-base";
-import { useActions, useStore } from "./state/store";
+import { useStoreActions, useStoreState } from "./state/store";
 import { NavigationScreenProp } from "react-navigation";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IProps) => {
-  const initializeLightning = useActions((store) => store.lightning.initialize);
-  const getTransactions = useActions((store) => store.transaction.getTransactions);
-  const getChannels = useActions((store) => store.channel.getChannels);
-  const nodeInfo = useStore((store) => store.lightning.nodeInfo);
+  const initializeLightning = useStoreActions((store) => store.lightning.initialize);
+  const getTransactions = useStoreActions((store) => store.transaction.getTransactions);
+  const getChannels = useStoreActions((store) => store.channel.getChannels);
+  const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {

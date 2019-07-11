@@ -7,14 +7,14 @@ import BlurOverlay, { closeOverlay, openOverlay } from "../Blur";
 import * as QRCode from "qrcode";
 import SvgUri from "react-native-svg-uri";
 
-import { useStore } from "../state/store";
+import { useStoreState } from "../state/store";
 
 export interface ITransactionDetailsProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: ITransactionDetailsProps) => {
   const rHash: string = navigation.getParam("rHash");
-  const transaction = useStore((store) => store.transaction.transactions.find((tx) => tx.rHash === rHash));
+  const transaction = useStoreState((store) => store.transaction.transactions.find((tx) => tx.rHash === rHash));
 
   useEffect(() => {
     setTimeout(() => {

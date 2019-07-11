@@ -56,7 +56,7 @@ class LndProcessStarter extends ReactContextBaseJavaModule {
         //"${profile}\n" +
         "\n" +
         "[Routing]\n" +
-        "assumechanvalid=1\n" +
+        "routing.assumechanvalid=1\n" +
         "\n" +
         "[Bitcoin]\n" +
         "bitcoin.active=1\n" +
