@@ -158,7 +158,7 @@ export const LightningInfo = ({ navigation }: ILightningInfoProps) => {
     (async () => {
       await getChannels();
     })();
-  }, getChannels);
+  }, [getChannels]);
 
   return (
     <Container>

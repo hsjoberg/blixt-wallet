@@ -31,7 +31,8 @@ interface ILightningModAddInvoicePayload {
 const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
 export interface ILightningModel {
-  initialize: Thunk<ILightningModel, undefined, any, IStoreModel>;
+  initialize: Thunk<ILightningModel, void, any, IStoreModel>;
+
   unlockWallet: Thunk<ILightningModel>;
   getInfo: Thunk<ILightningModel>;
   setNodeInfo: Action<ILightningModel, IGetInfoResponse>;
@@ -46,12 +47,10 @@ export interface ILightningModel {
   subscribeInvoice: Thunk<ILightningModel>;
   setInvoiceSubscriptionStarted: Action<ILightningModel, boolean>;
   subscribeChannelUpdates: Thunk<ILightningModel>;
-  setChannelUpdatesSubscriptionStarted: Action<ILightningModel, boolean>;
 
   nodeInfo?: IGetInfoResponse;
   balance: number;
   invoiceSubscriptionStarted: boolean;
-  channelUpdatesSubscriptionStarted: boolean;
   syncedToChain: boolean;
 }
 
@@ -227,7 +226,6 @@ export const lightning: ILightningModel = {
 
   balance: 0,
   invoiceSubscriptionStarted: false,
-  channelUpdatesSubscriptionStarted: false,
   syncedToChain: false,
 };
 
