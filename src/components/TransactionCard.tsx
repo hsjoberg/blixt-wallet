@@ -4,6 +4,8 @@ import { Body, Card, CardItem, Text, Right, Icon } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { format, fromUnixTime } from "date-fns";
 import { ITransaction } from "../storage/database/transaction";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+
 
 interface IProps {
   onPress: (id: string) => void;
@@ -30,7 +32,7 @@ export default ({ onPress, transaction }: IProps) => {
             </Text>
             <Right>
               <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
-                {value !== 0 && (positive ? "+" : "-")}
+                {value !== 0 && (positive ? "+" : "")}
                 {value !== 0 && value + " Sat"}
               </Text>
             </Right>
@@ -93,15 +95,14 @@ const transactionStyle = StyleSheet.create({
     marginBottom: 8,
   },
   transactionTopDate: {
-    fontWeight: "bold",
+    // fontWeight: "bold",
     paddingRight: 4,
   },
   transactionTopValuePositive: {
-    color: "green",
-//    fontSize: 18
+    color: blixtTheme.green,
   },
   transactionTopValueNegative: {
-    color: "red",
+    color: blixtTheme.red,
   },
   transactionOnChain: {
     fontSize: 13,

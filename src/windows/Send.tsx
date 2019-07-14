@@ -6,8 +6,9 @@ import * as Bech32 from "bech32";
 
 import { useStoreActions } from "../state/store";
 import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
-import { IDecodePayReqResponse } from "../lightning";
+import { IDecodePayReqResponse, ISendPaymentSyncResponse } from "../lightning";
 import { ITransaction } from "../storage/database/transaction";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 interface ISendProps {
   onGoBackCallback: () => void;
@@ -59,13 +60,13 @@ export const SendCamera = ({ navigation }: ISendProps) => {
       return;
     }
     data = data.replace(/^lightning:/, "");
+    if (!checkBech32(data, "lntb")) {
+      setScanning(false);
+      Alert.alert(`QR code is not a valid Bitcoin Lightning invoice`, undefined,
+        [{text: "OK", onPress: () => setScanning(true) }]);
+      return;
+    }
     try {
-      if (!checkBech32(data, "lntb")) {
-        setScanning(false);
-        Alert.alert(`QR code is not a valid Bitcoin Lightning invoice`, undefined,
-          [{text: "OK", onPress: () => setScanning(true) }]);
-        return;
-      }
       navigation.navigate("SendConfirmation", {
         invoiceInfo: await decodePaymentRequest({ bolt11: data }),
         bolt11Invoice: data,
@@ -107,8 +108,8 @@ export const SendCamera = ({ navigation }: ISendProps) => {
           return (
             <View style={StyleSheet.absoluteFill}>
               <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
+              <Icon type="MaterialCommunityIcons" name="debug-step-over" style={{... sendStyle.paste, right: 64}} onPress={onDebugPaste} />
               <Icon type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
-              <Icon type="FontAwesome" name="paste" style={{... sendStyle.paste, right: 64}} onPress={onDebugPaste} />
             </View>
           );
         }}
@@ -127,6 +128,55 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
   const bolt11Invoice = navigation.getParam("bolt11Invoice");
 
   const invoiceInfo: IDecodePayReqResponse = navigation.getParam("invoiceInfo");
+
+  const send = async () => {
+    try {
+      setIsPaying(true);
+      const s = await sendPayment({ paymentRequest: bolt11Invoice }) as ISendPaymentSyncResponse;
+
+      if (s.paymentError && s.paymentError.length > 0) {
+        throw new Error(s.paymentError);
+      }
+
+      const transaction: ITransaction = {
+        date: invoiceInfo.timestamp,
+        description: invoiceInfo.description,
+        expire: invoiceInfo.expiry,
+        paymentRequest: bolt11Invoice,
+        remotePubkey: invoiceInfo.destination,
+        rHash: invoiceInfo.paymentHash,
+        status: "SETTLED",
+        value: -invoiceInfo.numSatoshis,
+        valueMsat: -(invoiceInfo.numSatoshis * 1000),
+        fee: s.paymentRoute.hops.reduce((current, route) => current + route.fee, 0),
+        feeMsat: s.paymentRoute.hops.reduce((current, route) => current + route.feeMsat, 0),
+      };
+      await syncTransaction(transaction);
+
+      await getBalance();
+      navigation.pop();
+    } catch (e) {
+      console.log(e);
+      let error;
+      if (e.status && e.status.description) {
+        error = e.status.description;
+      }
+      else if (e.message) {
+        error = e.message;
+      }
+      else {
+        error = e;
+      }
+
+      Toast.show({
+        duration: 10000,
+        type: "danger",
+        text: `Error: ${error}`,
+        buttonText: "Okay",
+      });
+      setIsPaying(false);
+    }
+  }
 
   return (
     <Root>
@@ -149,24 +199,24 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
         <Content style={{width: "100%", height: "100%" }} contentContainerStyle={sendStyle.transactionDetails}>
           <View>
             <Item success={true} style={{ marginTop: 8 }}>
-              <Label>Invoice</Label>
+              <Label style={{ width: 110 }}>Invoice</Label>
               <Input
                 editable={false}
                 style={{ fontSize: 13, marginTop: 4 }}
-                value={`${bolt11Invoice.substring(0, 33).toLowerCase()}...`}
+                value={`${bolt11Invoice.substring(0, 26).toLowerCase()}...`}
               />
               <Icon name="checkmark-circle" />
             </Item>
             <Item style={{ marginTop: 16 }}>
-              <Label>Amount ₿</Label>
+              <Label style={{ width: 110 }}>Amount ₿</Label>
               <Input disabled={true} value={formatSatToBtc(invoiceInfo.numSatoshis).toString()} />
             </Item>
             <Item style={{ marginTop: 16 }}>
-              <Label>Amount SEK</Label>
+              <Label style={{ width: 110 }}>Amount SEK</Label>
               <Input disabled={true} value={convertSatToFiat(invoiceInfo.numSatoshis).toString()} />
             </Item>
             <Item style={{ marginTop: 16 }}>
-              <Label>Message</Label>
+              <Label style={{ width: 110 }}>Message</Label>
               <Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={invoiceInfo.description} />
             </Item>
             {/* <Item style={{ marginTop: 16 }}>
@@ -177,65 +227,19 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
             </Item> */}
           </View>
           <View>
-            <Item bordered={false} style={{
-              marginBottom: 4,
-              alignSelf: "flex-end",
+            <View style={{
+              marginBottom: 2,
             }}>
               <Button
                 disabled={isPaying}
                 style={{ width: "100%" }}
                 block={true}
-                success={true}
-                onPress={async () => {
-                  try {
-                    setIsPaying(true);
-                    const s = await sendPayment({ paymentRequest: bolt11Invoice });
-
-                    if (s.paymentError && s.paymentError.length > 0) {
-                      throw new Error(s.paymentError);
-                    }
-
-                    const transaction: ITransaction = {
-                      date: invoiceInfo.timestamp,
-                      description: invoiceInfo.description,
-                      expire: invoiceInfo.expiry,
-                      paymentRequest: bolt11Invoice,
-                      remotePubkey: invoiceInfo.destination,
-                      rHash: invoiceInfo.paymentHash,
-                      status: "SETTLED",
-                      value: -invoiceInfo.numSatoshis,
-                      valueMsat: -(invoiceInfo.numSatoshis * 1000),
-                    };
-                    await syncTransaction(transaction);
-
-                    await getBalance();
-                    navigation.pop();
-                  } catch (e) {
-                    console.log(e);
-                    let error;
-                    if (e.status && e.status.description) {
-                      error = e.status.description
-                    }
-                    else if (e.message) {
-                      error = e.message;
-                    }
-                    else {
-                      error = e;
-                    }
-
-                    Toast.show({
-                      duration: 10000,
-                      type: "danger",
-                      text: `Error: ${error}`,
-                      buttonText: "Okay",
-                    });
-                    setIsPaying(false);
-                  }
-                }}>
+                primary={true}
+                onPress={send}>
                 {!isPaying && <Text>Pay</Text>}
-                {isPaying && <Spinner color="white" />}
+                {isPaying && <Spinner color={blixtTheme.light} />}
               </Button>
-            </Item>
+            </View>
           </View>
         </Content>
       </Container>
@@ -247,7 +251,7 @@ const sendStyle = StyleSheet.create({
   swapCamera: {
     position: "absolute",
     fontSize: 26,
-    color: "#DDD",
+    color: blixtTheme.light,
     padding: 4,
     bottom: 8,
     left: 8,
@@ -255,7 +259,7 @@ const sendStyle = StyleSheet.create({
   paste: {
     position: "absolute",
     fontSize: 26,
-    color: "#DDD",
+    color: blixtTheme.light,
     padding: 4,
     bottom: 8,
     right: 8,

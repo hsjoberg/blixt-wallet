@@ -2,7 +2,8 @@
 
 import { Platform } from "react-native";
 
-import variable from "./../variables/platform";
+import variable from "./../variables/commonColor";
+import { blixtTheme } from "./../variables/commonColor";
 
 export default (variables /*: * */ = variable) => {
   const itemTheme = {
@@ -95,7 +96,7 @@ export default (variables /*: * */ = variable) => {
     },
     "NativeBase.Label": {
       fontSize: variables.inputFontSize,
-      color: variables.inputColorPlaceholder,
+      color: blixtTheme.primary, // variables.inputColorPlaceholder,
       paddingRight: 5
     },
     "NativeBase.Icon": {
@@ -121,7 +122,7 @@ export default (variables /*: * */ = variable) => {
         paddingLeft: 15
       },
       ".success": {
-        borderColor: variables.inputSuccessBorderColor
+        borderColor: variables.inputBorderColor, // variables.inputSuccessBorderColor
       },
       ".error": {
         borderColor: variables.inputErrorBorderColor
@@ -140,7 +141,7 @@ export default (variables /*: * */ = variable) => {
         paddingLeft: 10
       },
       ".success": {
-        borderColor: variables.inputSuccessBorderColor
+        borderColor: variables.inputBorderColor, //variables.inputSuccessBorderColor
       },
       ".error": {
         borderColor: variables.inputErrorBorderColor
@@ -156,7 +157,7 @@ export default (variables /*: * */ = variable) => {
         paddingLeft: 10
       },
       ".success": {
-        borderColor: variables.inputSuccessBorderColor
+        borderColor: variables.inputBorderColor, //variables.inputSuccessBorderColor
       },
       ".error": {
         borderColor: variables.inputErrorBorderColor
@@ -175,19 +176,19 @@ export default (variables /*: * */ = variable) => {
       },
       ".rounded": {
         borderRadius: 30,
-        borderColor: variables.inputSuccessBorderColor
+        borderColor: variables.inputBorderColor, //variables.inputSuccessBorderColor
       },
       ".regular": {
-        borderColor: variables.inputSuccessBorderColor
+        borderColor: variables.inputBorderColor, //variables.inputSuccessBorderColor
       },
       ".underline": {
         borderWidth: variables.borderWidth * 2,
         borderTopWidth: 0,
         borderRightWidth: 0,
         borderLeftWidth: 0,
-        borderColor: variables.inputSuccessBorderColor
+        borderColor: variables.inputBorderColor, //variables.inputSuccessBorderColor
       },
-      borderColor: variables.inputSuccessBorderColor
+      borderColor: variables.inputBorderColor, //variables.inputSuccessBorderColor
     },
 
     ".error": {

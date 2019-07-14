@@ -5,7 +5,8 @@ import { channel, IChannelModel } from "./Channel";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { IApp, getApp, clearApp, setupApp, setApp } from "../storage/app";
-import { openDatabase, setupInitialSchema, deleteDatabase } from "../storage/database/sqlite";
+import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
+import { clearTransactions } from "../storage/database/transaction";
 
 import {closeOverlay, openOverlay} from '../Blur';
 //import {closeOverlay, openOverlay} from 'react-native-blur-overlay';
@@ -13,6 +14,8 @@ import {closeOverlay, openOverlay} from '../Blur';
 export interface IStoreModel {
   initializeApp: Thunk<IStoreModel>;
   clearApp: Thunk<IStoreModel>;
+  clearTransactions: Thunk<IStoreModel>;
+  resetDb: Thunk<IStoreModel>;
   setDb: Action<IStoreModel, SQLiteDatabase>;
   setApp: Action<IStoreModel, IApp>;
   setChangeSubscriptionStarted: Action<IStoreModel, boolean>;
@@ -92,6 +95,14 @@ const model: IStoreModel = {
   clearApp: thunk(async () => {
     await clearApp();
     await deleteDatabase();
+  }),
+  clearTransactions: thunk(async (_, _2, { getState }) => {
+    await clearTransactions(getState().db!);
+  }),
+  resetDb: thunk(async (_, _2, { getState }) => {
+    const { db } = getState();
+    await dropTables(db);
+    await setupInitialSchema(db);
   }),
 
   setDb: action((state, db) => { state.db = db; }),

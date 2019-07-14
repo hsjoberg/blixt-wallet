@@ -2,7 +2,9 @@
 
 import { Platform } from "react-native";
 
-import variable from "./../variables/platform";
+import variable from "./../variables/commonColor";
+
+import color from "color";
 
 export default (variables /*: * */ = variable) => {
   const platform = variables.platform;
@@ -69,6 +71,8 @@ export default (variables /*: * */ = variable) => {
     backgroundColor: Platform.OS === "android"
       ? variables.footerDefaultBg
       : undefined,
+    borderColor: variables.blixtFooterBorderColor,
+    borderTopWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     flex: 1,

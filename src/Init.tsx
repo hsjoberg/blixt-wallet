@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet, StatusBar, ScrollView } from "react-native";
-import { Root } from "native-base";
+import { Root, Container } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreState, useStoreActions } from "./state/store";
@@ -30,21 +30,20 @@ export default ({ navigation }: IProps) => {
   else if (app && app.walletCreated) {
     setTimeout(() => navigation.navigate("InitLightning"), 1);
   }
-  else {
-    console.log("ERROR");
-  }
 
   return (
     <Root>
-      <ScrollView contentContainerStyle={styles.content}>
-        <StatusBar
-          backgroundColor="transparent"
-          hidden={false}
-          translucent={true}
-          networkActivityIndicatorVisible={true}
-          barStyle="dark-content"
-        />
-      </ScrollView>
+      <Container>
+        <ScrollView contentContainerStyle={styles.content}>
+          <StatusBar
+            backgroundColor="transparent"
+            hidden={false}
+            translucent={true}
+            networkActivityIndicatorVisible={true}
+            barStyle="dark-content"
+          />
+        </ScrollView>
+      </Container>
     </Root>
   );
 };

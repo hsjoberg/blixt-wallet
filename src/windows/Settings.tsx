@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { CheckBox, StyleSheet, NativeModules, StatusBar } from "react-native";
-import { Button, Body, Container, Icon, Header, Text, Title, Left, Content, Root, List, ListItem, Right, View, } from "native-base";
+import { StyleSheet, NativeModules } from "react-native";
+import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Content, Root, List, ListItem, Right, View, } from "native-base";
 
 import { createStackNavigator, NavigationScreenProp } from "react-navigation";
 
@@ -26,10 +26,7 @@ const Settings = ({ navigation }: ISettingsProps) => {
   return (
     <Root>
       <Container>
-        <StatusBar
-          translucent={false}
-        />
-        <Header iosBarStyle="light-content">
+        <Header iosBarStyle="light-content" translucent={false}>
           <Left>
             <Button transparent={true} onPress={() => navigation.pop()}>
               <Icon name="arrow-back" />
@@ -40,21 +37,23 @@ const Settings = ({ navigation }: ISettingsProps) => {
           </Body>
         </Header>
         <Content>
-          <View style={{ width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-            <Button onPress={() => navigation.navigate("DEV_InitApp")}><Text>Go to dev screen</Text></Button>
-            <Button style={{backgroundColor: lndActive}}
-              onPress={async () => {
-                try {
-                  await NativeModules.LndGrpc.getInfo();
-                  setLndActive("green");
-                } catch {
-                  setLndActive("red");
-                }
-              }}>
-              <Text />
-            </Button>
-          </View>
-          <List>
+          {__DEV__ === true &&
+            <View style={{ width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
+              <Button onPress={() => navigation.navigate("DEV_InitApp")}><Text>Go to dev screen</Text></Button>
+              <Button style={{backgroundColor: lndActive}}
+                onPress={async () => {
+                  try {
+                    await NativeModules.LndGrpc.getInfo();
+                    setLndActive("green");
+                  } catch {
+                    setLndActive("red");
+                  }
+                }}>
+                <Text />
+              </Button>
+            </View>
+          }
+          <List style={style.list}>
             <ListItem style={style.itemHeader} itemHeader={true} first={true}>
               <Text>Wallet</Text>
             </ListItem>
@@ -66,9 +65,9 @@ const Settings = ({ navigation }: ISettingsProps) => {
             <ListItem button={true} icon={true} onPress={() => {}}>
               <Left><Icon style={{fontSize: 22}} type="Entypo" name="fingerprint" /></Left>
               <Body><Text>Login with fingerprint</Text></Body>
-              <Right><CheckBox /></Right>
+              <Right><CheckBox checked={true} /></Right>
             </ListItem>
-            <ListItem last={true} button={true} icon={true} onPress={() => {}}>
+            <ListItem button={true} icon={true} onPress={() => {}}>
               <Left><Icon style={{fontSize: 22}} type="AntDesign" name="form" /></Left>
               <Body>
                 <Text>Show mnemonic</Text>
@@ -88,7 +87,7 @@ const Settings = ({ navigation }: ISettingsProps) => {
                 <Text note={true} numberOfLines={1}>USD</Text>
               </Body>
             </ListItem>
-            <ListItem last={true} icon={true} onPress={() => {}}>
+            <ListItem icon={true} onPress={() => {}}>
               <Left><Icon style={{fontSize: 22}} type="FontAwesome5" name="btc" /></Left>
               <Body>
                 <Text>Bitcoin unit</Text>
@@ -105,7 +104,7 @@ const Settings = ({ navigation }: ISettingsProps) => {
               <Left><Icon style={{fontSize: 22}} type="AntDesign" name="team" /></Left>
               <Body><Text>Show current network peer(s)</Text></Body>
             </ListItem>
-            <ListItem icon={true} last={true} onPress={() => {}}>
+            <ListItem icon={true} onPress={() => {}}>
               <Left><Icon style={{fontSize: 22}} type="AntDesign" name="customerservice" /></Left>
               <Body><Text>Set trusted Node for SPV</Text></Body>
             </ListItem>
@@ -126,12 +125,12 @@ const Settings = ({ navigation }: ISettingsProps) => {
             <ListItem button={true} icon={true} onPress={() => {}}>
               <Left><Icon style={{fontSize: 22}} type="Entypo" name="circular-graph" /></Left>
               <Body><Text>Automatically open channels</Text></Body>
-              <Right><CheckBox value={true} /></Right>
+              <Right><CheckBox checked={true} /></Right>
             </ListItem>
             <ListItem button={true} icon={true} onPress={() => {}}>
               <Left><Icon style={{fontSize: 22}} type="Entypo" name="fingerprint" /></Left>
               <Body><Text>Backup channels to Google Drive</Text></Body>
-              <Right><CheckBox value={true} /></Right>
+              <Right><CheckBox checked={false} /></Right>
             </ListItem>
 
 
@@ -158,7 +157,20 @@ const Settings = ({ navigation }: ISettingsProps) => {
       </Container>
     </Root>
   );
-}
+};
+
+const style = StyleSheet.create({
+  list: {
+    paddingTop: 12,
+    paddingLeft: 24,
+    paddingRight: 24,
+    marginBottom: 48,
+  },
+  itemHeader: {
+    paddingTop: 24,
+    paddingBottom: 16,
+  },
+});
 
 export default createStackNavigator({
   Settings,
@@ -166,11 +178,4 @@ export default createStackNavigator({
 }, {
   headerMode: "none",
   initialRouteName: "Settings",
-});
-
-const style = StyleSheet.create({
-  itemHeader: {
-    paddingTop: 24,
-    paddingBottom: 16,
-  },
 });

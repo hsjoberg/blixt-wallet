@@ -4,6 +4,18 @@ import color from "color";
 
 import { Platform, Dimensions, PixelRatio } from "react-native";
 
+export const blixtTheme = {
+  primary: "#bc6610",
+  secondary: "#efad13",
+  dark: "#151313",
+  light: "#e5eaea"
+  ,
+  gray: "#232323",
+  lightGray: "#878787",
+  red: "#d0311e",
+  green: "#1c8c27"
+}
+
 const deviceHeight = Dimensions.get("window").height;
 const deviceWidth = Dimensions.get("window").width;
 const platform = Platform.OS;
@@ -30,11 +42,11 @@ export default {
 
   // Badge
   badgeBg: "#ED1727",
-  badgeColor: "#fff",
+  badgeColor: blixtTheme.light,
   badgePadding: platform === "ios" ? 3 : 0,
 
   // Button
-  btnFontFamily: platform === "ios" ? "System" : "Roboto_medium",
+  btnFontFamily: platform === "ios" ? "System" : "IBMPlexSans-Medium",
   btnDisabledBg: "#b5b5b5",
   buttonPadding: 6,
   get btnPrimaryBg() {
@@ -87,25 +99,25 @@ export default {
   },
 
   // Card
-  cardDefaultBg: "#fff",
-  cardBorderColor: "#ccc",
+  cardDefaultBg: blixtTheme.gray,
+  cardBorderColor: "transparent",
   cardBorderRadius: 2,
   cardItemPadding: platform === "ios" ? 10 : 12,
 
   // CheckBox
-  CheckboxRadius: platform === "ios" ? 13 : 0,
-  CheckboxBorderWidth: platform === "ios" ? 1 : 2,
-  CheckboxPaddingLeft: platform === "ios" ? 4 : 2,
+  CheckboxRadius: platform === "ios" ? 13 : 7,
+  CheckboxBorderWidth: platform === "ios" ? 1 : 1,
+  CheckboxPaddingLeft: platform === "ios" ? 4 : 4,
   CheckboxPaddingBottom: platform === "ios" ? 0 : 5,
   CheckboxIconSize: platform === "ios" ? 21 : 16,
-  CheckboxIconMarginTop: platform === "ios" ? undefined : 1,
-  CheckboxFontSize: platform === "ios" ? 23 / 0.9 : 17,
-  checkboxBgColor: "#039BE5",
+  CheckboxIconMarginTop: platform === "ios" ? undefined : 1.5,
+  CheckboxFontSize: platform === "ios" ? 23 / 0.9 : 16,
+  checkboxBgColor: blixtTheme.primary,
   checkboxSize: 20,
-  checkboxTickColor: "#fff",
+  checkboxTickColor: blixtTheme.light,
 
   // Color
-  brandPrimary: platform === "ios" ? "#007aff" : "#3F51B5",
+  brandPrimary: platform === "ios" ? "#007aff" : blixtTheme.primary,
   brandInfo: "#62B1F6",
   brandSuccess: "#5cb85c",
   brandDanger: "#d9534f",
@@ -114,7 +126,7 @@ export default {
   brandLight: "#f4f4f4",
 
   //Container
-  containerBgColor: "#fff",
+  containerBgColor: blixtTheme.dark,
 
   //Date Picker
   datePickerTextColor: "#000",
@@ -122,7 +134,7 @@ export default {
 
   // Font
   DefaultFontSize: 16,
-  fontFamily: platform === "ios" ? "System" : "Roboto",
+  fontFamily: platform === "ios" ? "System" : "IBMPlexSans-Regular",
   fontSizeBase: 15,
   get fontSizeH1() {
     return this.fontSizeBase * 1.8;
@@ -136,20 +148,22 @@ export default {
 
   // Footer
   footerHeight: 55,
-  footerDefaultBg: platform === "ios" ? "#F8F8F8" : "#3F51B5",
+  footerDefaultBg: platform === "ios" ? "#F8F8F8" : blixtTheme.gray,
   footerPaddingBottom: 0,
 
   // FooterTab
-  tabBarTextColor: platform === "ios" ? "#737373" : "#bfc6ea",
+  tabBarTextColor: platform === "ios" ? "#737373" : blixtTheme.light,
   tabBarTextSize: platform === "ios" ? 14 : 11,
   activeTab: platform === "ios" ? "#007aff" : "#fff",
   sTabBarActiveTextColor: "#007aff",
   tabBarActiveTextColor: platform === "ios" ? "#2874F0" : "#fff",
   tabActiveBgColor: platform === "ios" ? "#cde1f9" : "#3F51B5",
 
+  blixtFooterBorderColor: color(blixtTheme.gray).darken(0.12).hex(),
+
   // Header
-  toolbarBtnColor: platform === "ios" ? "#007aff" : "#fff",
-  toolbarDefaultBg: platform === "ios" ? "#F8F8F8" : "#3F51B5",
+  toolbarBtnColor: platform === "ios" ? "#007aff" : blixtTheme.light,
+  toolbarDefaultBg: platform === "ios" ? "#F8F8F8" : blixtTheme.primary,
   toolbarHeight: platform === "ios" ? 64 : 56,
   toolbarSearchIconSize: platform === "ios" ? 20 : 23,
   toolbarInputColor: platform === "ios" ? "#CECDD2" : "#fff",
@@ -160,7 +174,7 @@ export default {
   toolbarDefaultBorder: platform === "ios" ? "#a7a6ab" : "#3F51B5",
   get statusBarColor() {
     return color(this.toolbarDefaultBg)
-      .darken(0.2)
+      //.darken(0.2)
       .hex();
   },
   get darkenHeader() {
@@ -176,7 +190,7 @@ export default {
 
   // InputGroup
   inputFontSize: 17,
-  inputBorderColor: "#D9D5DC",
+  inputBorderColor: blixtTheme.lightGray,
   inputSuccessBorderColor: "#2b8339",
   inputErrorBorderColor: "#ed2f2f",
   inputHeightBase: 50,
@@ -184,7 +198,7 @@ export default {
     return this.textColor;
   },
   get inputColorPlaceholder() {
-    return "#575757";
+    return "#848484";
   },
 
   // Line Height
@@ -196,11 +210,11 @@ export default {
 
   // List
   listBg: "transparent",
-  listBorderColor: "#c9c9c9",
+  listBorderColor: blixtTheme.lightGray,
   listDividerBg: "#f4f4f4",
   listBtnUnderlayColor: "#DDD",
   listItemPadding: platform === "ios" ? 10 : 12,
-  listNoteColor: "#808080",
+  listNoteColor: blixtTheme.lightGray,
   listNoteSize: 13,
   listItemSelected: platform === "ios" ? "#007aff" : "#3F51B5",
 
@@ -240,19 +254,19 @@ export default {
   tabFontSize: 15,
 
   // Text
-  textColor: "#000",
-  inverseTextColor: "#fff",
+  textColor: blixtTheme.light,
+  inverseTextColor: blixtTheme.light,
   noteFontSize: 14,
   get defaultTextColor() {
     return this.textColor;
   },
 
   // Title
-  titleFontfamily: platform === "ios" ? "System" : "Roboto_medium",
+  titleFontfamily: platform === "ios" ? "System" : "IBMPlexSans-Medium",
   titleFontSize: platform === "ios" ? 17 : 19,
   subTitleFontSize: platform === "ios" ? 11 : 14,
-  subtitleColor: platform === "ios" ? "#000" : "#fff",
-  titleFontColor: platform === "ios" ? "#000" : "#fff",
+  subtitleColor: platform === "ios" ? "#000" : blixtTheme.light,
+  titleFontColor: platform === "ios" ? "#000" : blixtTheme.light,
 
   // Other
   borderRadiusBase: platform === "ios" ? 5 : 2,

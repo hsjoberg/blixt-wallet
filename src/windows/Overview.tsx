@@ -7,8 +7,10 @@ import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import { NavigationScreenProp, createStackNavigator } from "react-navigation";
 
-const HEADER_MIN_HEIGHT = 56;
-const HEADER_MAX_HEIGHT = 220;
+import theme, { blixtTheme } from "../../native-base-theme/variables/commonColor";
+
+const HEADER_MIN_HEIGHT = (StatusBar.currentHeight || 0) + 53;
+const HEADER_MAX_HEIGHT = 195;
 
 
 export interface IOverviewProps {
@@ -37,11 +39,11 @@ export default ({ navigation }: IOverviewProps)  => {
 
   const headerBtcFontSize = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: [40, 28], extrapolate: "clamp",
+    outputRange: [39, 27], extrapolate: "clamp",
   });
 
   const refreshControl = (
-    <RefreshControl title="Refreshing" progressViewOffset={200} refreshing={refreshing} colors={["orange"]}
+    <RefreshControl title="Refreshing" progressViewOffset={183} refreshing={refreshing} colors={[blixtTheme.light]} progressBackgroundColor={blixtTheme.gray}
       onRefresh={() => {
         setRefreshing(true);
         setTimeout(() => {
@@ -63,11 +65,11 @@ export default ({ navigation }: IOverviewProps)  => {
   return (
     <Container>
       <StatusBar
-        barStyle="dark-content"
+        barStyle="light-content"
         hidden={false}
-        backgroundColor="#FFF"
+        backgroundColor="transparent"
         animated={true}
-        translucent={false}
+        translucent={true}
       />
       <View style={style.overview}>
         <ScrollView
@@ -97,12 +99,12 @@ export default ({ navigation }: IOverviewProps)  => {
           {transactions.map((transaction, key) => (
             <TransactionCard key={key} transaction={transaction} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />
           ))}
-          {transactions.length === 0 && <Text style={{ textAlign: "center", margin: 16, color: "#888" }}>No transactions yet</Text>}
+          {transactions.length === 0 && <Text style={{ textAlign: "center", margin: 16 }}>No transactions yet</Text>}
         </ScrollView>
         <Animated.View
            style={{ ...style.animatedTop, height: headerHeight }}
            pointerEvents="box-none">
-          <LinearGradient style={style.top} colors={["#FFF", "#FFF"]} pointerEvents="box-none">
+          <LinearGradient style={style.top} colors={[blixtTheme.secondary, blixtTheme.primary]} pointerEvents="box-none">
             <View style={StyleSheet.absoluteFill}>
               <Icon
                 style={style.onchainIcon} type="FontAwesome" name="btc"
@@ -130,7 +132,14 @@ export default ({ navigation }: IOverviewProps)  => {
   );
 };
 
+const iconTopPadding = StatusBar.currentHeight || 0; // 31;
+console.log("currentHeight", StatusBar.currentHeight);
+
 const style = StyleSheet.create({
+  overview: {
+    flex: 1,
+    backgroundColor: blixtTheme.dark,
+  },
   animatedTop: {
     position: "absolute",
     top: 0,
@@ -138,6 +147,8 @@ const style = StyleSheet.create({
     right: 0,
     justifyContent: "center",
     alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: theme.blixtFooterBorderColor,
   },
   top: {
     flex: 1,
@@ -145,66 +156,53 @@ const style = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     height: "100%",
-    borderBottomColor: "#CCC",
-    borderBottomWidth: 1,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 6,
   },
   onchainIcon: {
     position: "absolute",
     padding: 4,
     paddingRight: 8,
-    top: 10,
-    // top: 10 + 16,
+    top: 12 + iconTopPadding,
     left: 8,
     fontSize: 24,
-    color: "#d3a100",
+    color: blixtTheme.light, // "#d3a100",
   },
   channelsIcon: {
     position: "absolute",
     padding: 4,
     paddingRight: 8,
-    top: 11,
-    // top: 11 + 16,
+    top: 13 + iconTopPadding,
     left: 8 + 24 + 8,
     fontSize: 24,
-    color: "#007FFF",
+    color: blixtTheme.light, // "#007FFF",
   },
   settingsIcon: {
     position: "absolute",
     padding: 4,
-    top: 10,
-    // top: 10 + 16,
+    top: 13 + iconTopPadding,
     right: 8,
     fontSize: 24,
-    color: "#2b3751",
-  },
-  overview: {
-    flex: 1,
-    backgroundColor: "#EFEFEF",
+    color: blixtTheme.light,
   },
   transactionList: {
     paddingTop: HEADER_MAX_HEIGHT + 12,
     paddingLeft: 8,
     paddingRight: 8,
     paddingBottom: 12,
-    backgroundColor: "#EFEFEF",
   },
 });
 
 const headerInfo = StyleSheet.create({
   btc: {
-    color: "#222",
+    color: blixtTheme.light, // "#222",
     marginTop: 14,
-    paddingTop: 20,
-    marginBottom: 5,
+    paddingTop: iconTopPadding + 16,
+    marginBottom: 3,
+    fontFamily: theme.fontFamily,
   },
   fiat: {
-    color: "#666",
-    fontSize: 22,
+    color: blixtTheme.light, // "#666",
+    fontSize: 18,
+    fontFamily: theme.fontFamily,
   },
 });
 

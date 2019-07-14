@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, ScrollView, StatusBar } from "react-native";
 import { Body, Text, Header, Container, Left, Button, Title, Right, Icon, H1, H3, Fab, Card, CardItem, Item, Form, Input } from "native-base";
 import { RNCamera } from "react-native-camera";
 import { Row } from "react-native-easy-grid";
 import { NavigationScreenProp, createStackNavigator } from "react-navigation";
 import { useStoreState, useStoreActions } from "../state/store";
 import { IChannel } from "../lightning/channel";
+
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 
 export interface IOpenChannelProps {
@@ -49,7 +51,7 @@ export const OpenChannel = ({ navigation }: IOpenChannelProps) => {
 
   return (
     <Container>
-      <Header iosBarStyle="light-content">
+      <Header iosBarStyle="light-content" translucent={false}>
         <Left>
           <Button transparent={true} onPress={() => navigation.pop()}>
             <Icon name="arrow-back" />
@@ -149,11 +151,18 @@ interface ILightningInfoProps {
 }
 export const LightningInfo = ({ navigation }: ILightningInfoProps) => {
   const channels = useStoreState((store) => store.channel.channels);
+  const getChannels = useStoreActions((store) => store.channel.getChannels);
   const [fabActive, setFabActive] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      await getChannels();
+    })();
+  }, getChannels);
 
   return (
     <Container>
-      <Header iosBarStyle="light-content">
+      <Header iosBarStyle="light-content" translucent={false}>
         <Left>
           <Button transparent={true} onPress={() => navigation.navigate("Main")}>
             <Icon name="arrow-back" />
@@ -162,6 +171,11 @@ export const LightningInfo = ({ navigation }: ILightningInfoProps) => {
         <Body>
           <Title>Lightning Network</Title>
         </Body>
+        <Right>
+          <Button transparent={true} onPress={async () => await getChannels()}>
+            <Icon name="sync" />
+          </Button>
+        </Right>
       </Header>
       <ScrollView contentContainerStyle={style.container}>
         <View style={style.balanceInfo}>
@@ -177,12 +191,12 @@ export const LightningInfo = ({ navigation }: ILightningInfoProps) => {
       </ScrollView>
       <Fab
         active={fabActive}
-        style={{ backgroundColor: "#5cb85c" }}
+        style={{ backgroundColor: blixtTheme.primary }}
         position="bottomRight"
         onPress={
           () => navigation.navigate("OpenChannel")
         }>
-        <Icon type="Entypo" name="plus" />
+        <Icon type="Entypo" name="plus" style={{ color: blixtTheme.light }} />
       </Fab>
     </Container>
   );

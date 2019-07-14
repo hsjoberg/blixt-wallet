@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, View, ScrollView, Clipboard } from "react-native";
-import { Body, Text, Header, Container, Left, Button, Title, Right, Icon, H1, H3, Fab, Card, CardItem, Toast, Root } from "native-base";
-import { Row } from "react-native-easy-grid";
+import { StyleSheet, ScrollView, Clipboard } from "react-native";
+import { Body, Text, Header, Container, Left, Button, Title, Icon, Toast, Root } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import { newAddress } from "../lightning";
 
@@ -17,7 +16,7 @@ export default ({ navigation }: IOnChainProps) => {
   return (
     <Root>
       <Container>
-        <Header iosBarStyle="light-content">
+        <Header iosBarStyle="light-content" translucent={false}>
           <Left>
             <Button transparent={true} onPress={() => navigation.navigate("Main")}>
               <Icon name="arrow-back" />

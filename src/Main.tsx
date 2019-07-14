@@ -3,6 +3,8 @@ import { Animated, Easing, StyleSheet } from "react-native";
 import { View, Text, Spinner } from "native-base";
 import { createBottomTabNavigator, createAppContainer, createStackNavigator, createSwitchNavigator } from "react-navigation";
 
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
+
 import { useStoreState } from "./state/store";
 import FooterNav from "./components/FooterNav";
 import Overview from "./windows/Overview";
@@ -92,7 +94,7 @@ export default () => {
           customStyles={{ alignItems: "center", justifyContent: "center" }}
           blurStyle="dark"
           children={
-            <Spinner color="black" size={64} />
+            <Spinner color={blixtTheme.light} size={64} />
           }
         />
       }
@@ -104,6 +106,6 @@ export default () => {
 const styles = StyleSheet.create({
   container: {
     height: "100%",
-    backgroundColor: "transparent",
+    backgroundColor: blixtTheme.dark,
   },
 });

@@ -6,15 +6,9 @@ interface IProps {
   navigation: NavigationScreenProp<{}>;
 }
 
-export default ({ onSendButtonClicked, onReceiveButtonClicked, navigation }: IProps) => {
+export default ({ navigation }: IProps) => {
   return (
     <Footer>
-      {/*<FooterTab>
-        <Button onPress={onChannelsButtonClicked}>
-          <Icon type="Entypo" name="thunder-cloud" />
-          <Text>Channels</Text>
-        </Button>
-      </FooterTab>*/}
       <FooterTab>
         <Button onPress={() => navigation.navigate("Receive")}>
           {/*<Icon type="FontAwesome" name="qrcode" />*/}

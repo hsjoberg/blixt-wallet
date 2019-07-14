@@ -65,9 +65,10 @@ export interface ISendPaymentSyncResponse {
   };
   paymentRoute: {
     bitField0: number;
-    paymentRoute: IPaymentRouteHops[]
+    hops: IPaymentRouteHops[]
   };
 }
+
 
 /**
  * @throws
