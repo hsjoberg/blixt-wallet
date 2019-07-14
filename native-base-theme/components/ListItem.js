@@ -3,7 +3,7 @@
 import { Platform, PixelRatio } from "react-native";
 
 import pickerTheme from "./Picker";
-import variable from "./../variables/platform";
+import variable from "./../variables/commonColor";
 
 export default (variables /*: * */ = variable) => {
   const platform = variables.platform;
@@ -94,7 +94,7 @@ export default (variables /*: * */ = variable) => {
       borderBottomWidth: platform === "ios" ? variables.borderWidth : null,
       marginLeft: null,
       padding: variables.listItemPadding,
-      paddingLeft: variables.listItemPadding + 5,
+      paddingLeft: 0, // variables.listItemPadding + 5,
       paddingTop:
         platform === "ios" ? variables.listItemPadding + 25 : undefined,
       paddingBottom:
@@ -132,7 +132,7 @@ export default (variables /*: * */ = variable) => {
         "NativeBase.Text": {
           ".note": {
             color: variables.listNoteColor,
-            fontWeight: "200"
+            fontWeight: "200",
           },
           fontWeight: "600"
         },
@@ -158,7 +158,8 @@ export default (variables /*: * */ = variable) => {
         marginHorizontal: variables.listItemPadding,
         ".note": {
           color: variables.listNoteColor,
-          fontWeight: "200"
+          fontWeight: "200",
+          fontSize: 12,
         }
       },
       alignSelf: null,
@@ -434,7 +435,7 @@ export default (variables /*: * */ = variable) => {
     flexDirection: "row",
     paddingRight: variables.listItemPadding + 6,
     paddingVertical: variables.listItemPadding + 3,
-    marginLeft: variables.listItemPadding + 6,
+    marginLeft: 0, // variables.listItemPadding + 6,
     borderBottomWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
     backgroundColor: variables.listBg,
     borderColor: variables.listBorderColor

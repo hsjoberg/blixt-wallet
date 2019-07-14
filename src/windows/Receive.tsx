@@ -9,6 +9,7 @@ import { useStoreActions, useStoreState } from "../state/store";
 import { IAddInvoiceResponse } from "../lightning";
 
 import { formatDistanceStrict, fromUnixTime } from "date-fns";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 interface IReceiveProps {
   navigation: NavigationScreenProp<{}>;
@@ -26,10 +27,7 @@ export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
 
   return (
     <Container>
-      <StatusBar
-        translucent={false}
-      />
-      <Header iosBarStyle="light-content">
+      <Header iosBarStyle="light-content" translucent={false}>
         <Left>
           <Button transparent={true} onPress={() => navigation.navigate("Main")}>
             <Icon name="arrow-back" />
@@ -42,7 +40,7 @@ export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
         <Content contentContainerStyle={receiveStyle.createInvoice}>
           <View>
             <Item style={{ marginTop: 8 }}>
-              <Label>Amount Sat</Label>
+              <Label style={{ width: 100 }}>Amount Sat</Label>
               {/* <Input
                 onChangeText={(text) => {
                   text = text.replace(/,/g, ".");
@@ -70,7 +68,7 @@ export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
               />
             </Item>
             <Item style={{ marginTop: 16 }}>
-              <Label>Amount $</Label>
+              <Label style={{ width: 100 }}>Amount $</Label>
               <Input
                 onChangeText={(text) => {
                   text = text.replace(/,/g, ".");
@@ -89,16 +87,16 @@ export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
               />
             </Item>
             <Item style={{ marginTop: 16 }}>
-              <Label>Message</Label>
+              <Label style={{ width: 100 }}>Message</Label>
               <Input placeholder="Message to payer (optional)" value={description} onChangeText={setDescription} />
             </Item>
           </View>
           <View>
-            <Item bordered={false} style={{ marginBottom: 4 }}>
+            <View style={{ marginBottom: 2 }}>
               <Button
                 style={{ width: "100%" }}
                 block={true}
-                success={true}
+                primary={true}
                 onPress={async () => {
                   navigation.navigate("ReceiveQr", {
                     invoice: await addInvoice({
@@ -109,7 +107,7 @@ export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
                 }}>
                   <Text>Create invoice</Text>
               </Button>
-            </Item>
+            </View>
           </View>
         </Content>
     </Container>
@@ -134,7 +132,7 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
   if (!transaction) {
     return (
       <Container>
-        <Header iosBarStyle="light-content">
+        <Header iosBarStyle="light-content" translucent={false}>
           <Left>
             <Button transparent={true}>
               <Icon name="arrow-back" />
@@ -156,7 +154,7 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
   const bolt11payReq: string = (QRCode as any).toString(transaction.paymentRequest.toUpperCase())._55;
 
   const Ticker = ({ expire }: { expire: number; }) => {
-    const [display, setDisplay] = useState("");
+    const [display, setDisplay] = useState(formatDistanceStrict(new Date(), fromUnixTime(expire)));
 
     useEffect(() => {
       const interval = setInterval(() => {
@@ -178,7 +176,7 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
   return (
     <Root>
       <Container>
-        <Header iosBarStyle="light-content">
+        <Header iosBarStyle="light-content" translucent={false}>
           <Left>
             <Button transparent={true} onPress={() => navigation.pop()}>
               <Icon name="arrow-back" />
@@ -197,7 +195,7 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
           marginTop: -16,
         }}>
           <H1 style={{ paddingBottom: 4 }}>Scan this QR code</H1>
-          <Text note={true}>
+          <Text style={{ marginBottom: 4 }}>
             <Ticker
               expire={transaction.expire}
             />
@@ -213,6 +211,7 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
                 width={330}
                 height={330}
                 svgXmlData={bolt11payReq}
+                fill={blixtTheme.light}
               />
           </TouchableHighlight>
           <Text
@@ -223,10 +222,10 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
                 type: "warning",
               });
             }}
-            style={{ paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}
+            style={{ paddingTop: 4, paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}
             numberOfLines={1}
             lineBreakMode="middle"
-            note={true}>
+            >
               {transaction.paymentRequest}
           </Text>
           <H3>{transaction.value} sat</H3>

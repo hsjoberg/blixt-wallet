@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, StatusBar } from "react-native";
-import { Content, Spinner, H1 } from "native-base";
+import { Content, Spinner, H1, Container } from "native-base";
 import { useStoreActions, useStoreState } from "./state/store";
 import { NavigationScreenProp } from "react-navigation";
+
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -35,18 +37,18 @@ export default ({ navigation }: IProps) => {
   }
 
   return (
-    <Content contentContainerStyle={styles.content}>
+    <Container style={styles.content}>
       <StatusBar
         backgroundColor="transparent"
         hidden={false}
         translucent={true}
         networkActivityIndicatorVisible={true}
-        barStyle="dark-content"
+        barStyle="light-content"
       />
-      {!error && <Spinner color="black" size={55} />}
+      {!error && <Spinner color={blixtTheme.light} size={55} />}
       {error && <H1 style={{color: "red"}}>{error}</H1>}
       {nodeInfo && !nodeInfo.syncedToChain && <H1>Syncing chain...</H1> || <H1></H1>}
-    </Content>
+    </Container>
   );
 };
 
@@ -54,7 +56,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     height: "100%",
-    backgroundColor: "#EFEFEF",
     justifyContent: "center",
     alignItems: "center",
   },

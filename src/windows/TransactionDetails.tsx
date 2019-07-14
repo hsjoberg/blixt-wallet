@@ -8,6 +8,7 @@ import * as QRCode from "qrcode";
 import SvgUri from "react-native-svg-uri";
 
 import { useStoreState } from "../state/store";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 export interface ITransactionDetailsProps {
   navigation: NavigationScreenProp<{}>;
@@ -69,7 +70,14 @@ export default ({ navigation }: ITransactionDetailsProps) => {
                   </Text>
                   <Text style={style.detailText}>
                     <Text style={{ fontWeight: "bold" }}>Amount:{"\n"}</Text>
-                    {transaction.value} Satoshi</Text>
+                    {transaction.value} Satoshi
+                  </Text>
+                  {transaction.fee &&
+                    <Text style={style.detailText}>
+                      <Text style={{ fontWeight: "bold" }}>Fee:{"\n"}</Text>
+                      {transaction.fee} Satoshi
+                    </Text>
+                  }
                   <Text style={style.detailText}>
                     <Text style={{ fontWeight: "bold" }}>Remote pubkey{"\n"}</Text>
                     {transaction.remotePubkey}
@@ -80,7 +88,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
                   </Text>
                   {transaction.status !== "SETTLED" &&
                     <View style={{ alignItems: "center", justifyContent: "center", width: "100%" }}>
-                      <SvgUri width={300} height={300} svgXmlData={bolt11payReq} />
+                      <SvgUri width={300} height={300} svgXmlData={bolt11payReq} fill={blixtTheme.light} />
                     </View>
                   }
                 </Body>

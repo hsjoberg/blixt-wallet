@@ -11,6 +11,7 @@ import {
   decodePayReq,
   addInvoice,
   IAddInvoiceResponse,
+  ISendPaymentSyncResponse,
 } from "../lightning/index";
 import { IStoreModel } from "./index";
 import { ITransaction } from "../storage/database/transaction";
@@ -40,7 +41,7 @@ export interface ILightningModel {
 
   decodePaymentRequest: Thunk<ILightningModel, { bolt11: string }, any, any, any>;
   addInvoice: Thunk<ILightningModel, ILightningModAddInvoicePayload, any, IStoreModel, Promise<IAddInvoiceResponse>>;
-  sendPayment: Thunk<ILightningModel, ILightningModelSendPaymentPayload>;
+  sendPayment: Thunk<ILightningModel, ILightningModelSendPaymentPayload, any, IStoreModel, Promise<ISendPaymentSyncResponse>>;
 
   subscribeInvoice: Thunk<ILightningModel>;
   setInvoiceSubscriptionStarted: Action<ILightningModel, boolean>;

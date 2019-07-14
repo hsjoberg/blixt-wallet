@@ -27,5 +27,9 @@ export const deleteDatabase = async () => {
   console.log(r);
 };
 
+export const dropTables = async (db: SQLiteDatabase) => {
+  await db.executeSql(`DROP TABLE tx`);
+};
+
 export const migrateDatabase = async () => {
 };

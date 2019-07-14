@@ -1,6 +1,7 @@
 // @flow
 
-import variable from "./../variables/platform";
+import variable from "./../variables/commonColor";
+import { blixtTheme } from "./../variables/commonColor";
 
 export default (variables /*: * */ = variable) => {
   const textTheme = {
@@ -8,7 +9,7 @@ export default (variables /*: * */ = variable) => {
     fontFamily: variables.fontFamily,
     color: variables.textColor,
     ".note": {
-      color: "#a7a7a7",
+      color: blixtTheme.lightGray,
       fontSize: variables.noteFontSize
     }
   };

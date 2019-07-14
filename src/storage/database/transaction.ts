@@ -7,6 +7,8 @@ export interface ITransaction {
   expire: number;
   value: number;
   valueMsat: number;
+  fee?: number;
+  feeMsat?: number;
   description: string;
   remotePubkey: string;
   paymentRequest: string;
@@ -14,18 +16,28 @@ export interface ITransaction {
   rHash: string;
 }
 
+export const clearTransactions = async (db: SQLiteDatabase) => {
+  await query(
+    db,
+    `DELETE FROM tx`,
+    [],
+  );
+};
+
 export const createTransaction = async (db: SQLiteDatabase, transaction: ITransaction): Promise<number> => {
   return await queryInsert(
     db,
     `INSERT INTO tx
-    (date, expire, value, valueMsat, description, remotePubkey, status, paymentRequest, rHash)
+    (date, expire, value, valueMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash)
     VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       transaction.date,
       transaction.expire,
       transaction.value,
       transaction.valueMsat,
+      transaction.fee || null,
+      transaction.feeMsat || null,
       transaction.description,
       transaction.remotePubkey,
       transaction.status,
