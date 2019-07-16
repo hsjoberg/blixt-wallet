@@ -8,8 +8,8 @@ export const blixtTheme = {
   primary: "#bc6610",
   secondary: "#efad13",
   dark: "#151313",
-  light: "#e5eaea"
-  ,
+  light: "#e5eaea",
+
   gray: "#232323",
   lightGray: "#878787",
   red: "#d0311e",
