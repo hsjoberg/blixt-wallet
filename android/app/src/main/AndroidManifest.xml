@@ -27,6 +27,11 @@
           android:name=".LndProcessIntentService"
           android:exported="false"
           android:process=":blixtLndProcess" />
+
+      <service
+          android:name=".LndMobileService"
+          android:exported="false"
+          android:process=":blixtLndMobile" />
     </application>
 
 </manifest>

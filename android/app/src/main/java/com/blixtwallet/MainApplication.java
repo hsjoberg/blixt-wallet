@@ -27,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
             List<ReactPackage> packages = new PackageList(this).getPackages();
             packages.add(new LndGrpcPackage());
             packages.add(new LndProcessStarterPackage());
+            packages.add(new LndMobilePackage());
             return packages;
       }
 

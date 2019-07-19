@@ -12,6 +12,7 @@ interface IProps {
 export default ({ navigation }: IProps) => {
   const actions = useStoreActions((store) => store);
   const app = useStoreState((store) => store.app);
+  const lndReady = useStoreState((store) => store.lndReady);
 
   useEffect(() => {
     (async () => {
@@ -22,34 +23,35 @@ export default ({ navigation }: IProps) => {
         console.log(e);
       }
     })();
-  }, []);
+  }, [actions]);
 
-  if (app && !app.walletCreated) {
-    setTimeout(() => navigation.navigate("Welcome"), 1);
-  }
-  else if (app && app.walletCreated) {
-    setTimeout(() => navigation.navigate("InitLightning"), 1);
+  if (lndReady) {
+    if (app && !app.walletCreated) {
+      setTimeout(() => navigation.navigate("Welcome"), 1);
+    }
+    else if (app && app.walletCreated) {
+      setTimeout(() => navigation.navigate("InitLightning"), 1);
+    }
   }
 
   return (
-    <Root>
-      <Container>
-        <ScrollView contentContainerStyle={styles.content}>
-          <StatusBar
-            backgroundColor="transparent"
-            hidden={false}
-            translucent={true}
-            networkActivityIndicatorVisible={true}
-            barStyle="dark-content"
-          />
-        </ScrollView>
-      </Container>
-    </Root>
+    <Container style={styles.content}>
+      <StatusBar
+        backgroundColor="transparent"
+        hidden={false}
+        translucent={true}
+        networkActivityIndicatorVisible={true}
+        barStyle="light-content"
+      />
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
   content: {
-    padding: 16,
+    flex: 1,
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

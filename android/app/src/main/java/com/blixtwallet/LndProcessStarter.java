@@ -20,8 +20,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
 
-import com.google.gson.Gson;
-
 class LndProcessStarter extends ReactContextBaseJavaModule {
   String TAG = "LndProcessStarter";
   Intent intentLnd;
@@ -49,11 +47,9 @@ class LndProcessStarter extends ReactContextBaseJavaModule {
       out.println(
         "[Application Options]\n" +
         "debuglevel=info\n" +
+        "no-macaroons=1\n" +
+        "maxbackoff=2s\n" +
         "nolisten=1\n" +
-        //"maxpendingchannels=10\n" +
-        //"maxlogfiles=3\n" +
-        //"maxlogfilesize=10\n" +
-        //"${profile}\n" +
         "\n" +
         "[Routing]\n" +
         "routing.assumechanvalid=1\n" +
@@ -64,9 +60,17 @@ class LndProcessStarter extends ReactContextBaseJavaModule {
         "bitcoin.node=neutrino\n" +
         "\n" +
         "[Neutrino]\n" +
-        //"neutrino.addpeer=192.168.1.100:18333\n" +
-        // "neutrino.addpeer=testnet4-btcd.zaphq.io\n" +
-        "neutrino.connect=btcd-testnet.lightning.computer\n"
+        "neutrino.connect=btcd-testnet.lightning.computer\n" +
+        "neutrino.feeurl=https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json\n"
+        // "\n" +
+        // "[autopilot]\n" +
+        // "autopilot.active=0\n" +
+        // "autopilot.private=1\n" +
+        // "autopilot.minconfs=1\n" +
+        // "autopilot.conftarget=6\n" +
+        // "autopilot.allocation=1.0\n" +
+        // "autopilot.heuristic=externalscore:0.95\n" +
+        // "autopilot.heuristic=preferential:0.05"
       );
       out.close();
       Log.i(TAG, "Success "+filename);
@@ -127,5 +131,5 @@ class LndProcessStarter extends ReactContextBaseJavaModule {
         }
     }
     return false;
-}
+  }
 }

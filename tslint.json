@@ -18,7 +18,8 @@
     "jsx-alignment": false,
     "no-console": false,
     "one-line": false,
-    "no-empty": false
+    "no-empty": false,
+    "no-bitwise": false
   },
   "rulesDirectory": []
 }

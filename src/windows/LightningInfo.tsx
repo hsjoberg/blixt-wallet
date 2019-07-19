@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, ScrollView, StatusBar } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import { Body, Text, Header, Container, Left, Button, Title, Right, Icon, H1, H3, Fab, Card, CardItem, Item, Form, Input } from "native-base";
 import { RNCamera } from "react-native-camera";
 import { Row } from "react-native-easy-grid";
 import { NavigationScreenProp, createStackNavigator } from "react-navigation";
 import { useStoreState, useStoreActions } from "../state/store";
 import { IChannel } from "../lightning/channel";
+
+import { lnrpc } from "../../proto/proto";
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
@@ -87,10 +89,54 @@ export const OpenChannel = ({ navigation }: IOpenChannelProps) => {
   );
 };
 
-export interface INodeCardProps {
+
+export interface IPendingOpenChannelCardProps {
+  channel: lnrpc.PendingChannelsResponse.IPendingOpenChannel;
+}
+const PendingOpenChannelCard = ({ channel }: IPendingOpenChannelCardProps) => {
+  if (!channel.channel) {
+    return (<Text>Error</Text>);
+  }
+
+  return (
+    <Card style={style.channelCard}>
+      <CardItem style={style.channelDetail}>
+        <Body>
+          <Row>
+            <Left>
+              <Text style={style.channelDetailTitle}>Node</Text>
+            </Left>
+            <Right>
+              <Text style={style.channelDetailValue}>{channel.channel.remoteNodePub}</Text>
+            </Right>
+          </Row>
+          <Row>
+            <Left>
+              <Text style={style.channelDetailTitle}>Status</Text>
+            </Left>
+            <Right>
+              <Text style={{...style.channelDetailValue, color: "orange"}}>Pending</Text>
+            </Right>
+          </Row>
+          <Row>
+            <Left>
+              <Text style={style.channelDetailTitle}>Amount in channel</Text>
+            </Left>
+            <Right>
+              <Text style={style.channelDetailValue}>{channel.channel.localBalance}/{channel.channel.capacity} satoshi</Text>
+            </Right>
+          </Row>
+        </Body>
+      </CardItem>
+    </Card>
+  );
+};
+
+
+export interface IChannelCardProps {
   channel: IChannel;
 }
-const NodeCard = ({ channel }: INodeCardProps) => {
+const ChannelCard = ({ channel }: IChannelCardProps) => {
   const closeChannel = useStoreActions((store) => store.channel.closeChannel);
 
   const close = async () => {
@@ -151,12 +197,13 @@ interface ILightningInfoProps {
 }
 export const LightningInfo = ({ navigation }: ILightningInfoProps) => {
   const channels = useStoreState((store) => store.channel.channels);
+  const pendingOpenChannels = useStoreState((store) => store.channel.pendingOpenChannels);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const [fabActive, setFabActive] = useState(false);
 
   useEffect(() => {
     (async () => {
-      await getChannels();
+      await getChannels(undefined);
     })();
   }, [getChannels]);
 
@@ -172,7 +219,7 @@ export const LightningInfo = ({ navigation }: ILightningInfoProps) => {
           <Title>Lightning Network</Title>
         </Body>
         <Right>
-          <Button transparent={true} onPress={async () => await getChannels()}>
+          <Button transparent={true} onPress={async () => await getChannels(undefined)}>
             <Icon name="sync" />
           </Button>
         </Right>
@@ -185,8 +232,11 @@ export const LightningInfo = ({ navigation }: ILightningInfoProps) => {
             &nbsp;satoshi
           </H3>
         </View>
+        {pendingOpenChannels.map((pendingOpenChannel, i) => {
+          <PendingOpenChannelCard key={i} channel={pendingOpenChannel} />
+        })}
         {channels.map((channel) => (
-          <NodeCard key={channel.chanId} channel={channel} />
+          <ChannelCard key={channel.chanId} channel={channel} />
         ))}
       </ScrollView>
       <Fab

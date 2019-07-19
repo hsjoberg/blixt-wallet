@@ -29,9 +29,9 @@ public class LndProcessIntentService extends IntentService {
       Log.i(TAG, "Starting LND");
       canBeDestroyed = false;
       lndRunning = true;
-      final String error = lnd.Lnd.start(args);
+      // final String error = lnd.Lnd.start(args);
       Log.e(TAG, "Blixt.lnd.Lnd.start() ended");
-      Log.e(TAG, error);
+      // Log.e(TAG, error);
       canBeDestroyed = true;
       stopSelf();
     }
@@ -43,7 +43,7 @@ public class LndProcessIntentService extends IntentService {
 
       if (lndRunning) {
         Log.e(TAG, "Destroying lnd from onDestroy()");
-        lnd.Lnd.stop();
+        // lnd.Lnd.stop();
       }
 
       lndRunning = false;

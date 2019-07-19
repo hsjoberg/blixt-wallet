@@ -1,37 +1,11 @@
+Make sure Go and environment vars are set up before proceeding.
+
 * Get lnd: `go get -d github.com/lightningnetwork/lnd`
-* Get gomobile: `go get golang.org/x/mobile/cmd/gomobile`
-* Create blixt.go with this as content:
-```Go
-package lnd
-
-import (
-  "fmt"
-  "os"
-  "strings"
-
-  "github.com/lightningnetwork/lnd/channeldb"
-  "github.com/lightningnetwork/lnd/signal"
-)
-
-var (
-   channelDB              *channeldb.DB
-   shutdownSuccessChannel = make(chan bool, 1)
-)
-
-func Start(extraArgs string) string {
-  os.Args = append(os.Args, strings.Fields(extraArgs)...)
-
-  if err := Main(); err != nil {
-    fmt.Fprintln(os.Stderr, err)
-    return err.Error()
-  }
-
-  return ""
-}
-
-func Stop() {
-  signal.RequestShutdown()
-}
-```
-* Compile with `gomobile bind -target=android -tags="android experimental" -o blixtlnd.aar .`
-* Put blixtlnd.aar file inside android/blixtlnd/
+* `cd src/github.com/lightningnetwork/lnd/`
+* Build lnd from a different branch in halseth's repo (PR not merged yet: https://github.com/lightningnetwork/lnd/pull/3282):
+* * `git remote add halseth https://github.com/halseth/lnd`
+* * `git fetch halseth mobile-rpcs`
+* * `git checkout halseth/mobile-rpcs`
+* Get and init gomobile: `go get golang.org/x/mobile/cmd/gomobile` and `gomobile init`
+* Compile with `make android`
+* Put Lndmobile.aar file inside android/lightninglnd

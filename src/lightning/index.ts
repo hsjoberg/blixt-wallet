@@ -1,6 +1,10 @@
 import { NativeModules } from "react-native";
-import { fixGrpcJsonResponse } from "./utils";
+import { fixGrpcJsonResponse, sendCommand } from "./utils";
 import { ITransaction } from "../storage/database/transaction";
+import { Buffer } from "buffer";
+
+import { lnrpc } from "../../proto/proto";
+
 export * from "./channel";
 const { LndGrpc } = NativeModules;
 
@@ -18,28 +22,68 @@ export const connectPeer = async (pubkey: string, host: string): Promise<any> =>
 /**
  * @throws
  */
-export const unlockWallet = async (password: string): Promise<any> => {
+export const unlockWallet = async (password: string): Promise<lnrpc.IUnlockWalletResponse> => {
   try {
-    const responseString = await LndGrpc.unlockWallet(password);
-    const response = fixGrpcJsonResponse(JSON.parse(responseString));
+    const response = await sendCommand<lnrpc.IUnlockWalletRequest, lnrpc.IUnlockWalletResponse>({
+      request: lnrpc.UnlockWalletRequest,
+      response: lnrpc.UnlockWalletResponse,
+      method: "UnlockWallet",
+      options: {
+        walletPassword: Buffer.from(password, "utf8"),
+      },
+    });
     return response;
-  } catch (e) { throw JSON.parse(e.message); }
+
+    // const request = lnrpc.UnlockWalletRequest.create({
+    //   walletPassword: Buffer.from(password, "utf8"),
+    // });
+    // const response = await NativeModules.LndGrpc.sendCommand(
+    //   "UnlockWallet",
+    //   base64.fromByteArray(
+    //     lnrpc.UnlockWalletRequest.encode(request).finish()
+    //   )
+    // );
+
+    // const responseString = await LndGrpc.unlockWallet(password);
+    // const response = fixGrpcJsonResponse(JSON.parse(responseString));
+    // return response;
+  } catch (e) { throw e.message; }
 };
 
 export interface IGetInfoResponse {
-  pubkey: string;
+  identityPubkey: string;
   syncedToChain: boolean;
 }
 
 /**
  * @throws
  */
-export const getInfo = async (): Promise<IGetInfoResponse> => {
+export const getInfo = async (): Promise<lnrpc.IGetInfoResponse> => {
   try {
-    const responseString = await LndGrpc.getInfo();
-    const response = fixGrpcJsonResponse<IGetInfoResponse>(JSON.parse(responseString));
+    const response = await sendCommand<lnrpc.IGetInfoRequest, lnrpc.IGetInfoResponse>({
+      request: lnrpc.GetInfoRequest,
+      response: lnrpc.GetInfoResponse,
+      method: "GetInfo",
+      options: {},
+    });
     return response;
-  } catch (e) { throw JSON.parse(e.message); }
+
+    // const request = lnrpc.GetInfoRequest.create({});
+    //
+    // const responseB64 = await NativeModules.LndGrpc.sendCommand(
+    //   "GetInfo",
+    //   base64.fromByteArray(
+    //     lnrpc.GetInfoRequest.encode(request).finish()
+    //   )
+    // );
+    //
+    // const response = lnrpc.GetInfoResponse.decode(base64.toByteArray(responseB64.data));
+    // return response;
+
+    // const responseString = await LndGrpc.getInfo();
+    // const response = fixGrpcJsonResponse<IGetInfoResponse>(JSON.parse(responseString));
+    // return response;
+  } catch (e) { throw e.message; }
 };
 
 export interface IPaymentRouteHops {
@@ -101,12 +145,22 @@ export const addInvoice = async (sat: number, memo: string, expiry: number = 360
 /**
  * @throws
  */
-export const lookupInvoice = async (rHash: string): Promise<any> => {
+export const lookupInvoice = async (rHash: string): Promise<lnrpc.IInvoice> => {
   try {
-    const responseString = await LndGrpc.lookupInvoice(rHash);
-    const response = fixGrpcJsonResponse<any>(JSON.parse(responseString));
+    const response = await sendCommand<lnrpc.IPaymentHash, lnrpc.IInvoice>({
+      request: lnrpc.PaymentHash,
+      response: lnrpc.Invoice,
+      method: "LookupInvoice",
+      options: {
+        rHashStr: rHash,
+      },
+    });
     return response;
-  } catch (e) { throw JSON.parse(e.message); }
+
+    // const responseString = await LndGrpc.lookupInvoice(rHash);
+    // const response = fixGrpcJsonResponse<any>(JSON.parse(responseString));
+    // return response;
+  } catch (e) { throw e.message; }
 };
 
 

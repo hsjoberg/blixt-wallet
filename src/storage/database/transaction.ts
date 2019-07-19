@@ -12,7 +12,7 @@ export interface ITransaction {
   description: string;
   remotePubkey: string;
   paymentRequest: string;
-  status: "SETTLED" | "EXPIRED" | "OPEN";
+  status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN";
   rHash: string;
 }
 
@@ -36,8 +36,8 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.expire,
       transaction.value,
       transaction.valueMsat,
-      transaction.fee || null,
-      transaction.feeMsat || null,
+      transaction.fee !== undefined ? transaction.fee : null,
+      transaction.feeMsat !== undefined ? transaction.feeMsat : null,
       transaction.description,
       transaction.remotePubkey,
       transaction.status,

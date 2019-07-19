@@ -194,8 +194,9 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
           height: "100%",
           marginTop: -16,
         }}>
-          <H1 style={{ paddingBottom: 4 }}>Scan this QR code</H1>
-          <Text style={{ marginBottom: 4 }}>
+          <H1>Scan this QR code</H1>
+          <Text style={{ marginBottom: 6 }}>
+            <>Expires in </>
             <Ticker
               expire={transaction.expire}
             />
@@ -208,8 +209,8 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
               });
             }}>
               <SvgUri
-                width={330}
-                height={330}
+                width={340}
+                height={340}
                 svgXmlData={bolt11payReq}
                 fill={blixtTheme.light}
               />
@@ -222,7 +223,7 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
                 type: "warning",
               });
             }}
-            style={{ paddingTop: 4, paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}
+            style={{ paddingTop: 6, paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}
             numberOfLines={1}
             lineBreakMode="middle"
             >
