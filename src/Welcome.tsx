@@ -1,38 +1,38 @@
-import React, { useEffect } from "react";
-import { StyleSheet, NativeModules } from "react-native";
-import { Content, Text, Button } from "native-base";
+import React from "react";
+import { StyleSheet, StatusBar } from "react-native";
+import { Text, Button, Container, H1 } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions } from "./state/store";
-
-const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IProps) => {
-  const setWalletCreated = useStoreActions((store) => store.setWalletCreated);
+  const createWallet = useStoreActions((store) => store.createWallet);
+
+  const onCreateWallet = async () => {
+    const result = await createWallet({
+      password: "test1234",
+    });
+    console.log(result);
+
+    navigation.navigate("InitLightning");
+  };
 
   return (
-    <Content contentContainerStyle={styles.content}>
-      <Text>Welcome</Text>
-      <Button
-        onPress={async () => {
-          const result = await NativeModules.LndGrpc.initWallet("test1234");
-          await setWalletCreated(true);
-
-          let gotMacaroon = false;
-          do {
-            console.log("Trying to get macaroon");
-            gotMacaroon = await NativeModules.LndGrpc.readMacaroon();
-            if (!gotMacaroon) {
-              await timeout(1000);
-            }
-          } while (!gotMacaroon);
-
-          navigation.navigate("InitLightning");
-        }}
-      ><Text>Create wallet</Text></Button>
-    </Content>
+    <Container style={styles.content}>
+      <StatusBar
+        backgroundColor="transparent"
+        hidden={false}
+        translucent={true}
+        networkActivityIndicatorVisible={true}
+        barStyle="light-content"
+      />
+      <H1>Welcome</H1>
+      <Button style={{ alignSelf: "center", margin: 10 }} onPress={onCreateWallet}>
+        <Text>Create wallet</Text>
+      </Button>
+    </Container>
   );
 };
 
@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     height: "100%",
-    backgroundColor: "#EFEFEF",
     justifyContent: "center",
     alignItems: "center",
   },

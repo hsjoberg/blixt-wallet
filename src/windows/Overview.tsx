@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl } from "react-native";
 import { Container, Icon, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
@@ -19,8 +19,6 @@ export interface IOverviewProps {
 export default ({ navigation }: IOverviewProps)  => {
   const balance = useStoreState((store) => store.lightning.balance);
   const transactions = useStoreState((store) => store.transaction.transactions);
-  const getTransactions = useStoreActions((store) => store.transaction.getTransactions);
-  const checkOpenTransactions = useStoreActions((store) => store.transaction.checkOpenTransactions);
 
   const [scrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
   const [refreshing, setRefreshing] = useState(false);
@@ -52,15 +50,6 @@ export default ({ navigation }: IOverviewProps)  => {
       }}
     />
   );
-
-  useEffect(() => {
-    (async () => {
-      // This is done in InitLightning right now
-      // To prevent unwanted flash of "No transactions yet"
-      // await getTransactions();
-      await checkOpenTransactions();
-    })();
-  }, []);
 
   return (
     <Container>
@@ -133,7 +122,6 @@ export default ({ navigation }: IOverviewProps)  => {
 };
 
 const iconTopPadding = StatusBar.currentHeight || 0; // 31;
-console.log("currentHeight", StatusBar.currentHeight);
 
 const style = StyleSheet.create({
   overview: {

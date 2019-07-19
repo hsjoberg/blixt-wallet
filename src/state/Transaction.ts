@@ -1,7 +1,7 @@
 import { Thunk, thunk, Action, action, Select, select, State } from "easy-peasy";
 import { ITransaction, getTransactions, createTransaction, updateTransaction } from "../storage/database/transaction";
 import { IStoreModel } from "./index";
-import { lookupInvoice } from "../lightning";
+import { lookupInvoice } from "../lndmobile";
 
 export interface ITransactionModel {
   // TODO fix ? and State<any>, seems to be a problem with easy peasy typescript

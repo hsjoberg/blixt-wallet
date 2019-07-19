@@ -1,5 +1,8 @@
 import { NativeModules } from "react-native";
-import { fixGrpcJsonResponse } from "./utils";
+import { fixGrpcJsonResponse, sendCommand } from "./utils";
+
+import { lnrpc } from "../../proto/proto";
+
 const { LndGrpc } = NativeModules;
 
 /**
@@ -49,12 +52,20 @@ interface IPendingChannelsResponse {
 /**
  * @throws
  */
-export const pendingChannels = async (): Promise<IPendingChannelsResponse> => {
+export const pendingChannels = async (): Promise<lnrpc.IPendingChannelsResponse> => {
   try {
-    const responseString = await LndGrpc.pendingChannels();
-    const response = fixGrpcJsonResponse<IPendingChannelsResponse>(JSON.parse(responseString));
+    const response = await sendCommand<lnrpc.IPendingChannelsRequest, lnrpc.IPendingChannelsResponse>({
+      request: lnrpc.PendingChannelsRequest,
+      response: lnrpc.PendingChannelsResponse,
+      method: "PendingChannels",
+      options: {},
+    });
     return response;
-  } catch (e) { throw JSON.parse(e.message); }
+
+    // const responseString = await LndGrpc.pendingChannels();
+    // const response = fixGrpcJsonResponse<IPendingChannelsResponse>(JSON.parse(responseString));
+    // return response;
+  } catch (e) { throw e.message; }
 };
 
 
@@ -88,12 +99,20 @@ export interface IListChannelsResponse {
 /**
  * @throws
  */
-export const listChannels = async (): Promise<IListChannelsResponse> => {
+export const listChannels = async (): Promise<lnrpc.IListChannelsResponse> => {
   try {
-    const responseString = await LndGrpc.listChannels();
-    const response = fixGrpcJsonResponse<IListChannelsResponse>(JSON.parse(responseString));
+    const response = await sendCommand<lnrpc.IListChannelsRequest, lnrpc.IListChannelsResponse>({
+      request: lnrpc.ListChannelsRequest,
+      response: lnrpc.ListChannelsResponse,
+      method: "ListChannels",
+      options: {},
+    });
     return response;
-  } catch (e) { throw JSON.parse(e.message); }
+
+    // const responseString = await LndGrpc.listChannels();
+    // const response = fixGrpcJsonResponse<IListChannelsResponse>(JSON.parse(responseString));
+    // return response;
+  } catch (e) { throw e.message; }
 };
 
 export interface IChannelBalanceResponse {
@@ -104,10 +123,18 @@ export interface IChannelBalanceResponse {
 /**
  * @throws
  */
-export const channelBalance = async (): Promise<IChannelBalanceResponse> => {
+export const channelBalance = async (): Promise<lnrpc.IChannelBalanceResponse> => {
   try {
-    const responseString = await LndGrpc.channelBalance();
-    const response = fixGrpcJsonResponse<IChannelBalanceResponse>(JSON.parse(responseString));
+    const response = await sendCommand<lnrpc.IChannelBalanceRequest, lnrpc.IChannelBalanceResponse>({
+      request: lnrpc.ChannelBalanceRequest,
+      response: lnrpc.ChannelBalanceResponse,
+      method: "ChannelBalance",
+      options: {},
+    });
     return response;
-  } catch (e) { throw JSON.parse(e.message); }
+
+    // const responseString = await LndGrpc.channelBalance();
+    // const response = fixGrpcJsonResponse<IChannelBalanceResponse>(JSON.parse(responseString));
+    // return response;
+  } catch (e) { throw e.message; }
 };

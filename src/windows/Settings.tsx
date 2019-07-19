@@ -14,12 +14,12 @@ const Settings = ({ navigation }: ISettingsProps) => {
 
   useEffect(() => {
     (async () => {
-      try {
-        await NativeModules.LndGrpc.getInfo();
-        setLndActive("green");
-      } catch {
-        setLndActive("red");
-      }
+      // try {
+      //   await NativeModules.LndGrpc.getInfo();
+      //   setLndActive("green");
+      // } catch {
+      //   setLndActive("red");
+      // }
     })();
   }, []);
 

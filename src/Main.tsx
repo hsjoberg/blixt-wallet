@@ -74,34 +74,36 @@ const RootStack = createSwitchNavigator({
 
 const AppContainer = createAppContainer(RootStack);
 
-export default () => {
-  const lndRestarting = useStoreState((store) => store.lndRestarting);
+export default () => (<AppContainer />);
 
-  useEffect(() => {
-    lndRestarting
-      ? setTimeout(() => openOverlay(), 1)
-      : setTimeout(() => closeOverlay(), 1);
-  }, [lndRestarting]);
-
-  return (
-    <View style={styles.container}>
-      {lndRestarting &&
-        <BlurOverlay
-          radius={15}
-          downsampling={2.07}
-          brightness={0}
-          fadeDuration={0}
-          customStyles={{ alignItems: "center", justifyContent: "center" }}
-          blurStyle="dark"
-          children={
-            <Spinner color={blixtTheme.light} size={64} />
-          }
-        />
-      }
-      <AppContainer />
-    </View>
-  );
-};
+// export default () => {
+//   const lndRestarting = useStoreState((store) => store.lndRestarting);
+//
+//   useEffect(() => {
+//     lndRestarting
+//       ? setTimeout(() => openOverlay(), 1)
+//       : setTimeout(() => closeOverlay(), 1);
+//   }, [lndRestarting]);
+//
+//   return (
+//     <View style={styles.container}>
+//       {lndRestarting &&
+//         <BlurOverlay
+//           radius={15}
+//           downsampling={2.07}
+//           brightness={0}
+//           fadeDuration={0}
+//           customStyles={{ alignItems: "center", justifyContent: "center" }}
+//           blurStyle="dark"
+//           children={
+//             <Spinner color={blixtTheme.light} size={64} />
+//           }
+//         />
+//       }
+//       <AppContainer />
+//     </View>
+//   );
+// };
 
 const styles = StyleSheet.create({
   container: {

@@ -1,15 +1,21 @@
 import { AppState, NativeModules } from "react-native";
+import { Thunk, thunk, Action, action } from "easy-peasy";
+import { SQLiteDatabase } from "react-native-sqlite-storage";
+
 import { lightning, ILightningModel } from "./Lightning";
 import { transaction, ITransactionModel } from "./Transaction";
 import { channel, IChannelModel } from "./Channel";
-import { Thunk, thunk, Action, action } from "easy-peasy";
-import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { IApp, getApp, clearApp, setupApp, setApp } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
+import { genSeed, initWallet } from "../lndmobile/wallet";
 
-import {closeOverlay, openOverlay} from '../Blur';
-//import {closeOverlay, openOverlay} from 'react-native-blur-overlay';
+const { LndMobile } = NativeModules;
+
+
+interface ICreateWalletPayload {
+  password: string;
+}
 
 export interface IStoreModel {
   initializeApp: Thunk<IStoreModel>;
@@ -18,15 +24,14 @@ export interface IStoreModel {
   resetDb: Thunk<IStoreModel>;
   setDb: Action<IStoreModel, SQLiteDatabase>;
   setApp: Action<IStoreModel, IApp>;
-  setChangeSubscriptionStarted: Action<IStoreModel, boolean>;
-  setLndRestarting: Action<IStoreModel, boolean>;
+  setLndReady: Action<IStoreModel, boolean>;
 
+  createWallet: Thunk<IStoreModel, ICreateWalletPayload>;
   setWalletCreated: Thunk<IStoreModel, boolean>;
 
   app?: IApp;
   db?: SQLiteDatabase;
-  changeSubscriptionStarted: boolean;
-  lndRestarting: boolean;
+  lndReady: boolean;
   lightning: ILightningModel;
   transaction: ITransactionModel;
   channel: IChannelModel;
@@ -52,42 +57,20 @@ const model: IStoreModel = {
       await setupInitialSchema(db);
       console.log("Writing lnd.conf");
       await NativeModules.LndProcessStarter.writeConfigFile();
+
+      actions.lightning.setFirstSync(true);
     }
     actions.setApp(app as IApp);
-
-    // Start lnd here
-    await NativeModules.LndProcessStarter.startProcess();
-
-    let gotCertificate = false;
-    do {
-      gotCertificate = await NativeModules.LndGrpc.readCertificate();
-      if (!gotCertificate) {
-        await timeout(500);
+    try {
+      console.log(await NativeModules.LndMobile.init());
+      const status = await NativeModules.LndMobile.checkStatus();
+      if ((status & LndMobile.STATUS_PROCESS_STARTED) !== LndMobile.STATUS_PROCESS_STARTED) {
+        console.log("lnd not started, starting lnd");
+        console.log(await NativeModules.LndMobile.startLnd());
       }
-    } while (!gotCertificate);
-
-    if (!getState().changeSubscriptionStarted) {
-      AppState.addEventListener("change", async (e) => {
-        console.log("CHANGE");
-        if (e === "active") {
-          console.log("active");
-          if (await NativeModules.LndProcessStarter.startProcess()) {
-            openOverlay();
-            actions.setLndRestarting(true);
-            await dispatch.lightning.initialize();
-            closeOverlay();
-            actions.setLndRestarting(false);
-          }
-        }
-        if (e === "background") {
-          console.log("background");
-        }
-        else {
-          console.log(e);
-        }
-      });
-      actions.setChangeSubscriptionStarted(true);
+      actions.setLndReady(true);
     }
+    catch (e) { console.log("Exception", e); }
 
     console.log("App initialized");
     return true;
@@ -101,14 +84,22 @@ const model: IStoreModel = {
   }),
   resetDb: thunk(async (_, _2, { getState }) => {
     const { db } = getState();
-    await dropTables(db);
-    await setupInitialSchema(db);
+    if (db) {
+      await dropTables(db);
+      await setupInitialSchema(db);
+    }
   }),
 
   setDb: action((state, db) => { state.db = db; }),
   setApp: action((state, app) => { state.app = app; }),
-  setChangeSubscriptionStarted: action((state, payload) => { state.changeSubscriptionStarted = payload; }),
-  setLndRestarting: action((state, payload) => { state.lndRestarting = payload; }),
+  setLndReady: action((state, value) => { state.lndReady = value; }),
+
+  createWallet: thunk(async (actions, payload) => {
+    const seed = await genSeed();
+    const wallet = await initWallet(seed.cipherSeedMnemonic, payload.password);
+    actions.setWalletCreated(true);
+    return wallet;
+  }),
 
   setWalletCreated: thunk(async (actions, payload) => {
     const app = await getApp();
@@ -121,8 +112,7 @@ const model: IStoreModel = {
 
   app: undefined,
   db: undefined,
-  changeSubscriptionStarted: false,
-  lndRestarting: false,
+  lndReady: false,
   lightning,
   transaction,
   channel,

@@ -1,26 +1,25 @@
-import { NativeModules, DeviceEventEmitter } from "react-native";
+import { NativeModules, DeviceEventEmitter, ToastAndroid } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import {
-  IGetInfoResponse,
   getInfo,
   unlockWallet,
-  pendingChannels,
-  listChannels,
   channelBalance,
   sendPaymentSync,
   decodePayReq,
   addInvoice,
-  IAddInvoiceResponse,
-  ISendPaymentSyncResponse,
-} from "../lightning/index";
+} from "../lndmobile/index";
 import { IStoreModel } from "./index";
 import { ITransaction } from "../storage/database/transaction";
+import { lnrpc } from "../../proto/proto";
+import { subscribeInvoices, decodeInvoiceResult } from "../lndmobile/wallet";
+import { decodeStreamResult } from "../lndmobile/utils";
 
+const { LndMobile } = NativeModules;
 
 interface ILightningModelSendPaymentPayload {
   paymentRequest: string;
+  invoiceInfo: lnrpc.PayReq;
 }
-
 
 interface ILightningModAddInvoicePayload {
   description: string;
@@ -31,52 +30,57 @@ interface ILightningModAddInvoicePayload {
 const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
 export interface ILightningModel {
-  initialize: Thunk<ILightningModel, void, any, IStoreModel>;
+  initialize: Thunk<ILightningModel, undefined, any, IStoreModel>;
 
   unlockWallet: Thunk<ILightningModel>;
-  getInfo: Thunk<ILightningModel>;
-  setNodeInfo: Action<ILightningModel, IGetInfoResponse>;
+  getInfo: Thunk<ILightningModel, undefined>;
+  setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
+  setReady: Action<ILightningModel, boolean>;
+  setFirstSync: Action<ILightningModel, boolean>;
 
   getBalance: Thunk<ILightningModel, undefined>;
   setBalance: Action<ILightningModel, number>;
 
-  decodePaymentRequest: Thunk<ILightningModel, { bolt11: string }, any, any, any>;
-  addInvoice: Thunk<ILightningModel, ILightningModAddInvoicePayload, any, IStoreModel, Promise<IAddInvoiceResponse>>;
-  sendPayment: Thunk<ILightningModel, ILightningModelSendPaymentPayload, any, IStoreModel, Promise<ISendPaymentSyncResponse>>;
+  decodePaymentRequest: Thunk<ILightningModel, { bolt11: string }, any, any, Promise<lnrpc.PayReq>>;
+  addInvoice: Thunk<ILightningModel, ILightningModAddInvoicePayload, any, IStoreModel, Promise<lnrpc.AddInvoiceResponse>>;
+  sendPayment: Thunk<ILightningModel, ILightningModelSendPaymentPayload, any, IStoreModel, Promise<lnrpc.SendResponse>>;
 
-  subscribeInvoice: Thunk<ILightningModel>;
+  subscribeInvoice: Thunk<ILightningModel, undefined, any, IStoreModel>;
   setInvoiceSubscriptionStarted: Action<ILightningModel, boolean>;
   subscribeChannelUpdates: Thunk<ILightningModel>;
 
-  nodeInfo?: IGetInfoResponse;
+  nodeInfo?: lnrpc.IGetInfoResponse;
   balance: number;
   invoiceSubscriptionStarted: boolean;
   syncedToChain: boolean;
+  ready: boolean;
+  firstSync: boolean;
 }
 
 export const lightning: ILightningModel = {
-  initialize: thunk(async (actions, _, { getState }) => {
-    let gotMacaroon = false;
-    do {
-      console.log("Trying to get macaroon");
-      gotMacaroon = await NativeModules.LndGrpc.readMacaroon();
-      if (!gotMacaroon) {
-        await timeout(500);
-      }
-    } while (!gotMacaroon);
+  initialize: thunk(async (actions, _, { getState, dispatch }) => {
+    const start = new Date().getTime();
 
-    // Attempt to unlock wallet:
-    await actions.unlockWallet();
-    // Get general node information:
-    await actions.getInfo();
-    await actions.getBalance();
-
-    // Start subscriptions:
-    NativeModules.LndGrpc.startInvoiceSubscription();
+    const status = await NativeModules.LndMobile.checkStatus();
+    if ((status & LndMobile.STATUS_WALLET_UNLOCKED) !== LndMobile.STATUS_WALLET_UNLOCKED) {
+      console.log("Wallet not unlocked, unlocking");
+      await actions.unlockWallet(undefined);
+    }
+    console.log("lnd: time to start and unlock: " + (new Date().getTime() - start) + "ms");
+    await actions.getInfo(undefined);
+    await actions.getBalance(undefined);
+    await subscribeInvoices();
+    await dispatch.transaction.getTransactions(undefined);
+    await dispatch.channel.getChannels(undefined);
 
     if (!(getState().invoiceSubscriptionStarted)) {
-      actions.subscribeInvoice();
+      actions.subscribeInvoice(undefined);
     }
+
+    actions.setReady(true);
+
+    console.log("lnd startup time: " + (new Date().getTime() - start) + "ms");
+    ToastAndroid.show("lnd startup time: " + (new Date().getTime() - start) + "ms", ToastAndroid.SHORT);
 
     return true;
   }),
@@ -90,75 +94,44 @@ export const lightning: ILightningModel = {
         unlockWalletDone = true;
       }
       catch (e) {
-        console.log(e.status.code);
-        switch (e.status.code) {
-          // Already unlocked
-          case "UNIMPLEMENTED":
-            unlockWalletDone = true;
-            break;
-          // lnd gRPC not online
-          // Trying again after 1s
-          case "UNAVAILABLE":
-            console.log("lnd gRPC not online, trying again after 1000ms");
-            await timeout(300);
-            break;
-          case "UNKNOWN":
-            console.log("Unknown error");
-            await timeout(300);
-            break;
-          default:
-            console.log("Default");
-            await timeout(300);
-            break;
-        }
+        console.log(e);
+        console.log(typeof e);
+        ToastAndroid.show(e, ToastAndroid.LONG);
+        await timeout(3000);
       }
     } while (!unlockWalletDone);
     console.log("Wallet unlocked");
   }),
 
-  getInfo: thunk(async (actions) => {
-    let getInfoDone = false;
+  getInfo: thunk(async (actions, _, { getState }) => {
+    const firstSync = getState().firstSync;
+    let info;
     do {
-      try {
-        console.log("try getInfo");
-        const info = await getInfo();
-        console.log("info", info);
-        actions.setNodeInfo(info);
+      console.log("getInfo");
+      info = await getInfo();
+      console.log("blockHeight", info.blockHeight);
+      console.log("syncedToChain", info.syncedToChain);
+      actions.setNodeInfo(info);
 
-        if (info.syncedToChain !== true) {
-          await timeout(700);
-        }
-        else {
-          getInfoDone = true;
-        }
+      if (info.syncedToChain !== true) {
+        await timeout(firstSync ? 6000 : 600);
       }
-      catch (e) {
-        console.log(e.status.code);
-        switch (e.status.code) {
-          // Something weird has happened
-          case "UNIMPLEMENTED":
-            throw new Error("Error running gRPC GetInfo");
-          // lnd gRPC is not completely online yet
-          // Trying again after 1s
-          case "UNAVAILABLE":
-            console.log("lnd gRPC LightningRPC not online, trying again after 1000ms");
-            await timeout(1000);
-            break;
-          case "UNKNOWN":
-            console.log("Unknown error");
-            await timeout(1000);
-            break;
-          default:
-            console.log("Default");
-            await timeout(1000);
-            break;
-        }
+      else {
+        console.log(info);
       }
-    } while (!getInfoDone);
+    } while (!info.syncedToChain);
   }),
 
   setNodeInfo: action((state, payload) => {
     state.nodeInfo = payload;
+  }),
+
+  setReady: action((state, payload) => {
+    state.ready = payload;
+  }),
+
+  setFirstSync: action((state, payload) => {
+    state.firstSync = payload;
   }),
 
   getBalance: thunk(async (actions) => {
@@ -172,14 +145,34 @@ export const lightning: ILightningModel = {
     state.invoiceSubscriptionStarted = payload;
   }),
 
-  sendPayment: thunk(async (_, payload) => {
-    const result = await sendPaymentSync(payload.paymentRequest);
+  sendPayment: thunk(async (_, { paymentRequest, invoiceInfo }, { dispatch }) => {
+    const result = await sendPaymentSync(paymentRequest);
+
+    if (result.paymentError && result.paymentError.length > 0) {
+      throw new Error(result.paymentError);
+    }
+
+    const transaction: ITransaction = {
+      date: invoiceInfo.timestamp,
+      description: invoiceInfo.description,
+      expire: invoiceInfo.expiry,
+      paymentRequest,
+      remotePubkey: invoiceInfo.destination,
+      rHash: invoiceInfo.paymentHash,
+      status: "SETTLED",
+      value: -invoiceInfo.numSatoshis,
+      valueMsat: -(invoiceInfo.numSatoshis * 1000),
+      fee: result.paymentRoute!.totalFees! || 0,
+      feeMsat: result.paymentRoute!.totalFeesMsat! || 0,
+    };
+    console.log("ITransaction", transaction);
+    await dispatch.transaction.syncTransaction(transaction);
     return result;
   }),
 
   addInvoice: thunk(async (_, { description, sat, expiry }) => {
     const result = await addInvoice(sat, description, expiry);
-    return result as IAddInvoiceResponse;
+    return result;
   }),
 
   decodePaymentRequest: thunk(async (_, payload) => {
@@ -187,30 +180,31 @@ export const lightning: ILightningModel = {
     return result;
   }),
 
-
-  subscribeInvoice: thunk((actions, _, { getState, dispatch }) => {
+  subscribeInvoice: thunk((_, _2, { getState, dispatch }) => {
     if (getState().invoiceSubscriptionStarted) {
       console.log("WARNING: Lightning.subscribeInvoice() called when subsription already started");
       return;
     }
     console.log("Starting transaction subscription");
-    DeviceEventEmitter.addListener("invoice", async (e: any) => {
+    DeviceEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
       console.log("New invoice event");
       console.log(e);
 
-      const bolt11 = await decodePayReq(e.paymentRequest);
+      const invoice = decodeInvoiceResult(e.data);
+      const bolt11 = await decodePayReq(invoice.paymentRequest);
+
       // TODO in the future we should handle
       // both value (the requested amount in the payreq)
       // and amtPaidMsat (the actual amount paid)
       const transaction: ITransaction = {
-        description: e.description,
-        value: e.value,
-        valueMsat: e.value * 1000,
-        date: e.date,
-        expire: e.date + bolt11.expiry,
-        remotePubkey: bolt11.destination,
-        status: e.state,
-        paymentRequest: e.paymentRequest,
+        description: invoice.memo,
+        value: (invoice as any).value,
+        valueMsat: (invoice as any).value * 1000,
+        date: (invoice as any).creationDate,
+        expire: (invoice as any).creationDate + bolt11.expiry,
+        remotePubkey: (bolt11 as any).destination,
+        status: decodeInvoiceState(invoice.state),
+        paymentRequest: invoice.paymentRequest,
         rHash: bolt11.paymentHash,
       };
       await dispatch.transaction.syncTransaction(transaction);
@@ -227,6 +221,8 @@ export const lightning: ILightningModel = {
   balance: 0,
   invoiceSubscriptionStarted: false,
   syncedToChain: false,
+  ready: false,
+  firstSync: false,
 };
 
 
@@ -235,4 +231,14 @@ function toHexString(byteArray: number[]) {
   return Array.from(byteArray, function(byte) {
     return ("0" + (byte & 0xFF).toString(16)).slice(-2);
   }).join("")
+}
+
+function decodeInvoiceState(invoiceState: lnrpc.Invoice.InvoiceState) {
+  switch (invoiceState) {
+    case lnrpc.Invoice.InvoiceState.ACCEPTED: return "ACCEPTED";
+    case lnrpc.Invoice.InvoiceState.CANCELED: return "CANCELED";
+    case lnrpc.Invoice.InvoiceState.OPEN: return "OPEN";
+    case lnrpc.Invoice.InvoiceState.SETTLED: return "SETTLED";
+    default: return "UNKNOWN";
+  }
 }

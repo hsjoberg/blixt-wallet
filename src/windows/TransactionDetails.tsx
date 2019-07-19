@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, Clipboard, TouchableWithoutFeedback } from "react-native";
 import { View } from "react-native";
-import { Body, Card, Text, CardItem, H1 } from "native-base";
+import { Body, Card, Text, CardItem, H1, Toast, Root } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import BlurOverlay, { closeOverlay, openOverlay } from "../Blur";
 import * as QRCode from "qrcode";
@@ -9,6 +9,27 @@ import SvgUri from "react-native-svg-uri";
 
 import { useStoreState } from "../state/store";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { fromUnixTime, format } from "date-fns";
+
+
+interface IMetaDataProps {
+  title: string;
+  data: string;
+}
+const MetaData = ({ title, data }: IMetaDataProps) => {
+  return (
+    <Text
+      style={style.detailText}
+      onPress={() => {
+        Clipboard.setString(data);
+        Toast.show({ text: "Copied to clipboard.", type: "warning" });
+      }}
+    >
+      <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>
+      {data}
+    </Text>
+  );
+};
 
 export interface ITransactionDetailsProps {
   navigation: NavigationScreenProp<{}>;
@@ -33,70 +54,73 @@ export default ({ navigation }: ITransactionDetailsProps) => {
 
   return (
     <>
-      <TouchableOpacity
-        style={{
-          position: "absolute",
-          flex: 1,
-          left: 0,
-          top: 0,
-          bottom: 0,
-          right: 0,
-          zIndex: 1000,
-        }}
-      >
-        <BlurOverlay
-          onPress={() => {
-            closeOverlay();
-            setTimeout(() => navigation.pop(), 0);
+      <Root>
+        <View
+          style={{
+            position: "absolute",
+            flex: 1,
+            left: 0,
+            top: 0,
+            bottom: 0,
+            right: 0,
+            zIndex: 1000,
           }}
-          fadeDuration={200}
-          radius={15}
-          downsampling={2.07}
-          brightness={0}
-          customStyles={style.blurOverlay}
-          blurStyle="dark"
+          touchSoundDisabled={true}
         >
-          <TouchableOpacity
-            style={style.cardCanvas}
-            activeOpacity={1}
+          <BlurOverlay
+            onPress={() => {
+              closeOverlay();
+              setTimeout(() => navigation.pop(), 0);
+            }}
+            fadeDuration={200}
+            radius={15}
+            downsampling={2.07}
+            brightness={0}
+            customStyles={style.blurOverlay}
+            blurStyle="dark"
+          >
+            <TouchableOpacity
+              style={style.cardCanvas}
+              activeOpacity={1}
+              touchSoundDisabled={true}
             >
-            <Card style={style.card}>
-              <CardItem>
-                <Body>
-                  <H1 style={style.header}>Transaction</H1>
-                  <Text style={style.detailText}>
-                    <Text style={{ fontWeight: "bold" }}>Description:{"\n"}</Text>
-                    {transaction.description}
-                  </Text>
-                  <Text style={style.detailText}>
-                    <Text style={{ fontWeight: "bold" }}>Amount:{"\n"}</Text>
-                    {transaction.value} Satoshi
-                  </Text>
-                  {transaction.fee &&
-                    <Text style={style.detailText}>
-                      <Text style={{ fontWeight: "bold" }}>Fee:{"\n"}</Text>
-                      {transaction.fee} Satoshi
-                    </Text>
-                  }
-                  <Text style={style.detailText}>
-                    <Text style={{ fontWeight: "bold" }}>Remote pubkey{"\n"}</Text>
-                    {transaction.remotePubkey}
-                  </Text>
-                  <Text style={style.detailText}>
-                    <Text style={{ fontWeight: "bold" }}>Status:{"\n"}</Text>
-                    {capitalize(transaction.status)}
-                  </Text>
-                  {transaction.status !== "SETTLED" &&
-                    <View style={{ alignItems: "center", justifyContent: "center", width: "100%" }}>
-                      <SvgUri width={300} height={300} svgXmlData={bolt11payReq} fill={blixtTheme.light} />
-                    </View>
-                  }
-                </Body>
-              </CardItem>
-            </Card>
-          </TouchableOpacity>
-        </BlurOverlay>
-      </TouchableOpacity>
+              <Card style={style.card}>
+                <CardItem>
+                  <Body>
+                    <H1 style={style.header}>Transaction</H1>
+                    <MetaData title="Date" data={format(fromUnixTime(transaction.date), "yyyy-MM-dd hh:mm")} />
+                    <MetaData title="Description" data={transaction.description} />
+                    <MetaData title="Amount" data={transaction.value + " Satoshi"} />
+                    {transaction.fee !== null &&
+                      <MetaData title="Fee" data={transaction.fee + "Satoshi"} />
+                    }
+                    <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>
+                    <MetaData title="Status" data={capitalize(transaction.status)} />
+                    {transaction.status !== "SETTLED" &&
+                      <>
+                        <View style={{ alignItems: "center", justifyContent: "center", width: "100%" }}>
+                          <SvgUri width={300} height={300} svgXmlData={bolt11payReq} fill={blixtTheme.light} />
+                        </View>
+                        <Text
+                          style={{ ...style.detailText, paddingTop: 4, paddingLeft: 18, paddingRight: 18 }}
+                          onPress={() => {
+                            Clipboard.setString(transaction.paymentRequest);
+                            Toast.show({ text: "Copied to clipboard.", type: "warning" });
+                          }}
+                          numberOfLines={1}
+                          lineBreakMode="middle"
+                          >
+                            {transaction.paymentRequest}
+                        </Text>
+                      </>
+                    }
+                  </Body>
+                </CardItem>
+              </Card>
+            </TouchableOpacity>
+          </BlurOverlay>
+        </View>
+      </Root>
     </>
   );
 };
@@ -111,8 +135,8 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   cardCanvas: {
-    width: "85%",
-    minHeight: "60%",
+    width: "87%",
+    minHeight: "50%",
     maxHeight: "80%",
   },
   card: {

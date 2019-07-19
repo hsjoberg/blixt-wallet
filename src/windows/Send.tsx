@@ -6,9 +6,8 @@ import * as Bech32 from "bech32";
 
 import { useStoreActions } from "../state/store";
 import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
-import { IDecodePayReqResponse, ISendPaymentSyncResponse } from "../lightning";
-import { ITransaction } from "../storage/database/transaction";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { lnrpc } from "../../proto/proto";
 
 interface ISendProps {
   onGoBackCallback: () => void;
@@ -127,56 +126,33 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
   // const [feeCap, setFeeCap] = useState(true);
   const bolt11Invoice = navigation.getParam("bolt11Invoice");
 
-  const invoiceInfo: IDecodePayReqResponse = navigation.getParam("invoiceInfo");
+  const invoiceInfo: lnrpc.PayReq = navigation.getParam("invoiceInfo");
 
   const send = async () => {
     try {
       setIsPaying(true);
-      const s = await sendPayment({ paymentRequest: bolt11Invoice }) as ISendPaymentSyncResponse;
-
-      if (s.paymentError && s.paymentError.length > 0) {
-        throw new Error(s.paymentError);
-      }
-
-      const transaction: ITransaction = {
-        date: invoiceInfo.timestamp,
-        description: invoiceInfo.description,
-        expire: invoiceInfo.expiry,
+      const s = await sendPayment({
         paymentRequest: bolt11Invoice,
-        remotePubkey: invoiceInfo.destination,
-        rHash: invoiceInfo.paymentHash,
-        status: "SETTLED",
-        value: -invoiceInfo.numSatoshis,
-        valueMsat: -(invoiceInfo.numSatoshis * 1000),
-        fee: s.paymentRoute.hops.reduce((current, route) => current + route.fee, 0),
-        feeMsat: s.paymentRoute.hops.reduce((current, route) => current + route.feeMsat, 0),
-      };
-      await syncTransaction(transaction);
-
-      await getBalance();
+        invoiceInfo,
+      });
+      await getBalance(undefined);
       navigation.pop();
     } catch (e) {
       console.log(e);
       let error;
-      if (e.status && e.status.description) {
-        error = e.status.description;
-      }
-      else if (e.message) {
-        error = e.message;
-      }
-      else {
-        error = e;
-      }
+      if (e.status && e.status.description) { error = e.status.description; }
+      else if (e.message) { error = e.message; }
+      else { error = e; }
 
       Toast.show({
-        duration: 10000,
+        duration: 12000,
         type: "danger",
         text: `Error: ${error}`,
         buttonText: "Okay",
       });
       setIsPaying(false);
     }
-  }
+  };
 
   return (
     <Root>

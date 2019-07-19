@@ -8,16 +8,20 @@
     "test": "jest",
     "test-update-snapshot": "jest -u",
     "postinstall": "jetify",
-    "jetify": "jetify"
+    "jetify": "jetify",
+    "gen-proto": "pbjs -t static-module -w es6 -o proto/proto.js proto/rpc.proto && pbts -o proto/proto.d.ts proto/proto.js"
   },
   "dependencies": {
     "@react-native-community/async-storage": "1.5.1",
     "@types/qrcode": "1.3.3",
+    "base64-js": "^1.3.0",
     "bech32": "^1.1.3",
+    "buffer": "^5.2.1",
     "date-fns": "2.0.0-beta.2",
     "deep-map-keys": "^2.0.1",
     "easy-peasy": "3.0.0",
     "native-base": "2.13.0",
+    "protobufjs": "^6.8.8",
     "qrcode": "1.4.1",
     "react": "16.8.6",
     "react-native": "0.60.4",

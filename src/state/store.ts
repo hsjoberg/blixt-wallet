@@ -2,8 +2,8 @@ import { createStore, createTypedHooks, Store } from "easy-peasy";
 import { composeWithDevTools } from "remote-redux-devtools";
 import model, { IStoreModel } from "./index";
 
-const { useStoreActions, useStoreState, useDispatch } = createTypedHooks<IStoreModel>();
-export { useStoreActions, useDispatch, useStoreState };
+const { useStoreActions, useStoreState } = createTypedHooks<IStoreModel>();
+export { useStoreActions, useStoreState };
 
 let store: Store<IStoreModel>;
 if (process.env.NODE_ENV === "development") {

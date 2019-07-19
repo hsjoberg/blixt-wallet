@@ -1,7 +1,7 @@
-import { AppState, NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
-import { listChannels, IChannel, openChannel, closeChannel } from "../lightning/channel";
-import { connectPeer } from "../lightning";
+import { listChannels, openChannel, closeChannel, pendingChannels } from "../lndmobile/channel";
+import { connectPeer } from "../lndmobile";
+import { lnrpc } from "../../proto/proto";
 
 export interface IOpenChannelPayload {
   // <pubkey>@<ip>[:<port>]
@@ -16,22 +16,31 @@ export interface ICloseChannelPayload {
 
 export interface IChannelModel {
   getChannels: Thunk<IChannelModel>;
-  setChannels: Action<IChannelModel, IChannel[]>;
+  setChannels: Action<IChannelModel, lnrpc.IChannel[]>;
+  setPendingOpenChannels: Action<IChannelModel, lnrpc.PendingChannelsResponse.IPendingOpenChannel[]>;
 
   connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload>;
   closeChannel: Thunk<IChannelModel, ICloseChannelPayload>;
 
-  channels: IChannel[];
+  channels: lnrpc.IChannel[];
+  pendingOpenChannels: lnrpc.PendingChannelsResponse.IPendingOpenChannel[];
 }
 
 export const channel: IChannelModel = {
   getChannels: thunk(async (actions) => {
-    const response = await listChannels();
-    actions.setChannels(response.channels);
+    const channels = await listChannels();
+    actions.setChannels(channels.channels);
+
+    const pending =  await pendingChannels();
+    actions.setPendingOpenChannels(pending.pendingOpenChannels);
   }),
 
   setChannels: action((state, payload) => {
     state.channels = payload;
+  }),
+
+  setPendingOpenChannels: action((state, payload) => {
+    state.pendingOpenChannels = payload;
   }),
 
   connectAndOpenChannel: thunk(async (_, { peer, amount }) => {
@@ -50,4 +59,5 @@ export const channel: IChannelModel = {
   }),
 
   channels: [],
+  pendingOpenChannels: [],
 };
