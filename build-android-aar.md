@@ -33,5 +33,5 @@ func Stop() {
   signal.RequestShutdown()
 }
 ```
-* Compile with `gomobile bind -target=android -tags="android" -o blixtlnd.aar .`
+* Compile with `gomobile bind -target=android -tags="android experimental" -o blixtlnd.aar .`
 * Put blixtlnd.aar file inside android/blixtlnd/
