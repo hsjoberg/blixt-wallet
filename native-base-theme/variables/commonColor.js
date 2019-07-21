@@ -293,5 +293,9 @@ export default {
       rightInset: 44,
       bottomInset: 21
     }
-  }
+  },
+
+
+
+  buttonUppercaseAndroidText: true
 };
