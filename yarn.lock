@@ -993,10 +993,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@react-native-community/async-storage@1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.5.1.tgz#c496b4969eea5b91da1a5919a611046360b0c51f"
-  integrity sha512-Ssfx2uLYPnsuqIvDCuUOEZT6jh5AVy0U0mr2eHxNO2Syor1nfOrR/n4hTOFcBWc1wamDTGCqo+UHJpxURVXd2Q==
+"@react-native-community/async-storage@1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.6.1.tgz#19be07fc1d65c77bdeb20f46108ba12076aad1c5"
+  integrity sha512-1WA28xfdhG+unkTEk/lXnqI2izv6belo0CYw7UdvaeHm8TIYT6eTmIIdGR7oiCa2xSKEnaPQqRMH6h7gyLNbww==
 
 "@react-native-community/cli-platform-android@^2.0.1", "@react-native-community/cli-platform-android@^2.4.1":
   version "2.4.1"
@@ -5239,18 +5239,19 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-native-base-shoutem-theme@GeekyAnts/theme#master:
-  version "0.2.3"
-  resolved "https://codeload.github.com/GeekyAnts/theme/tar.gz/18e6f46dcd55d431aa5994e3452b32b205a1be88"
+native-base-shoutem-theme@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/native-base-shoutem-theme/-/native-base-shoutem-theme-0.3.0.tgz#9431b52cca7af9db2e2d0f5a864acb48d48dc4de"
+  integrity sha512-guf5IKeMaQERJlD/QYlgxnsrxCeKNqC4vGwFyA8OetanxGt+oNxR5SQhLxM28CIS1D4OCqVl+u8znBdlqsIkZQ==
   dependencies:
     hoist-non-react-statics "^1.0.5"
     lodash "4.17.11"
     prop-types "^15.5.10"
 
-native-base@2.13.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/native-base/-/native-base-2.13.0.tgz#b2b3e7355e4787c77383c91dae90e9506b6194f9"
-  integrity sha512-hbRG6faxdVVA536Doi21M+CEPoWFDKaKucjA2Q42qG16vysQ0Bnn6ThJAl9+/RDuMbiWqiLSieaqPzKJ4WnHew==
+native-base@2.13.4:
+  version "2.13.4"
+  resolved "https://registry.yarnpkg.com/native-base/-/native-base-2.13.4.tgz#c1752d0bb016355b088adc5d6790b1dd678864ac"
+  integrity sha512-qgGW8qWFGVRnfPUgEgN/RC+8uM417H2rH+S9V8+Gg/3ef8RYcSc9wrrX2f+OauSvgfvnWwrPeFPzkBNp7iu3PQ==
   dependencies:
     blueimp-md5 "^2.5.0"
     clamp "^1.0.1"
@@ -5260,7 +5261,7 @@ native-base@2.13.0:
     fs-extra "^2.0.0"
     jest-react-native "^18.0.0"
     lodash "^4.17.14"
-    native-base-shoutem-theme GeekyAnts/theme#master
+    native-base-shoutem-theme "0.3.0"
     opencollective-postinstall "^2.0.2"
     print-message "^2.1.0"
     prop-types "^15.5.10"
@@ -6136,10 +6137,10 @@ react-native-keyboard-aware-scroll-view@0.8.0:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
-react-native-linear-gradient@2.5.5:
-  version "2.5.5"
-  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.5.tgz#efea1f862bde939f6e073a51b4b3ca9e0bb62437"
-  integrity sha512-BoaRqWtQ0Powxrz/4cdkzLQIyV/bwMXCZ+S7fGKSFZr/NtKrOpb9vvyG+d45ufnkuFPbWIqUflFvuLOpf067ag==
+react-native-linear-gradient@2.5.6:
+  version "2.5.6"
+  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
+  integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
 
 react-native-safe-area-view@^0.14.1:
   version "0.14.4"
