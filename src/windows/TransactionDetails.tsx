@@ -92,7 +92,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
                     <MetaData title="Description" data={transaction.description} />
                     <MetaData title="Amount" data={transaction.value + " Satoshi"} />
                     {transaction.fee !== null &&
-                      <MetaData title="Fee" data={transaction.fee + "Satoshi"} />
+                      <MetaData title="Fee" data={transaction.fee + " Satoshi"} />
                     }
                     <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>
                     <MetaData title="Status" data={capitalize(transaction.status)} />

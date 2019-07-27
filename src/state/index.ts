@@ -56,7 +56,7 @@ const model: IStoreModel = {
       console.log("Initializing db for the first time");
       await setupInitialSchema(db);
       console.log("Writing lnd.conf");
-      await NativeModules.LndProcessStarter.writeConfigFile();
+      await NativeModules.LndMobile.writeConfigFile();
 
       actions.lightning.setFirstSync(true);
     }

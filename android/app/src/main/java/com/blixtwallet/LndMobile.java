@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import java.io.PrintWriter;
+import java.io.File;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
