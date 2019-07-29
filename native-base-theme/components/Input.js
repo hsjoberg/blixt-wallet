@@ -1,11 +1,11 @@
 // @flow
 
-import variable from './../variables/platform';
+import variable from './../variables/commonColor';
 
-export default (variables /*: * */ = variable) => {
+export default (variables /* : * */ = variable) => {
   const inputTheme = {
     '.multiline': {
-      height: null,
+      height: null
     },
     height: variables.inputHeightBase,
     color: variables.inputColor,
