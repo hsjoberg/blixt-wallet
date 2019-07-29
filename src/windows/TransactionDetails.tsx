@@ -52,26 +52,17 @@ export default ({ navigation }: ITransactionDetailsProps) => {
 
   const bolt11payReq: string = (QRCode as any).toString(transaction.paymentRequest.toUpperCase())._55;
 
+  const goBack = () => {
+    closeOverlay();
+    setTimeout(() => navigation.pop(), 0);
+  };
+
   return (
     <>
       <Root>
-        <View
-          style={{
-            position: "absolute",
-            flex: 1,
-            left: 0,
-            top: 0,
-            bottom: 0,
-            right: 0,
-            zIndex: 1000,
-          }}
-          touchSoundDisabled={true}
-        >
+        <View style={style.container} touchSoundDisabled={true}>
           <BlurOverlay
-            onPress={() => {
-              closeOverlay();
-              setTimeout(() => navigation.pop(), 0);
-            }}
+            onPress={goBack}
             fadeDuration={200}
             radius={15}
             downsampling={2.07}
@@ -79,11 +70,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             customStyles={style.blurOverlay}
             blurStyle="dark"
           >
-            <TouchableOpacity
-              style={style.cardCanvas}
-              activeOpacity={1}
-              touchSoundDisabled={true}
-            >
+            <TouchableOpacity style={style.cardCanvas} activeOpacity={1} touchSoundDisabled={true}>
               <Card style={style.card}>
                 <CardItem>
                   <Body>
@@ -128,6 +115,14 @@ export default ({ navigation }: ITransactionDetailsProps) => {
 const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 
 const style = StyleSheet.create({
+  container: {
+    position: "absolute",
+    flex: 1,
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0,
+  },
   blurOverlay: {
     width: "100%",
     height: "100%",
@@ -136,13 +131,11 @@ const style = StyleSheet.create({
   },
   cardCanvas: {
     width: "87%",
-    minHeight: "50%",
-    maxHeight: "80%",
   },
   card: {
     padding: 5,
     width: "100%",
-    minHeight: "60%",
+    minHeight: "55%",
   },
   header: {
     width: "100%",

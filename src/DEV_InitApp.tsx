@@ -63,7 +63,7 @@ export default ({ navigation }: IProps) => {
                   fee: Math.floor(Math.random() * 5),
                   feeMsat: Math.floor(Math.random() * 5) * 1000,
                   paymentRequest: "abcdef123456",
-                  rHash: Math.floor(Math.random() * 1000).toString(),
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
                 }),
 
                 createTransaction(db!, {
@@ -75,7 +75,7 @@ export default ({ navigation }: IProps) => {
                   value:  Math.floor(Math.random() * 10000),
                   valueMsat: 1000,
                   paymentRequest: "abcdef123456",
-                  rHash: Math.floor(Math.random() * 1000).toString(),
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
                 }),
 
                 createTransaction(db!, {
@@ -89,7 +89,7 @@ export default ({ navigation }: IProps) => {
                   fee: Math.floor(Math.random() * 5),
                   feeMsat: Math.floor(Math.random() * 5) * 1000,
                   paymentRequest: "abcdef123456",
-                  rHash: Math.floor(Math.random() * 1000).toString(),
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
                 }),
 
                 createTransaction(db!, {
@@ -103,7 +103,7 @@ export default ({ navigation }: IProps) => {
                   fee: Math.floor(Math.random() * 5),
                   feeMsat: Math.floor(Math.random() * 5) * 1000,
                   paymentRequest: "abcdef123456",
-                  rHash: Math.floor(Math.random() * 1000).toString(),
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
                 }),
 
                 createTransaction(db!, {
@@ -115,7 +115,7 @@ export default ({ navigation }: IProps) => {
                   value:  Math.floor(Math.random() * 10000),
                   valueMsat: 1000,
                   paymentRequest: "abcdef123456",
-                  rHash: Math.floor(Math.random() * 1000).toString(),
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
                 }),
 
                 createTransaction(db!, {
@@ -129,7 +129,7 @@ export default ({ navigation }: IProps) => {
                   fee: Math.floor(Math.random() * 5),
                   feeMsat: Math.floor(Math.random() * 5) * 1000,
                   paymentRequest: "abcdef123456",
-                  rHash: Math.floor(Math.random() * 1000).toString(),
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
                 }),
 
                 createTransaction(db!, {
@@ -141,7 +141,7 @@ export default ({ navigation }: IProps) => {
                   value: Math.floor(Math.random() * 10000),
                   valueMsat: 1000,
                   paymentRequest: "abcdef123456",
-                  rHash: Math.floor(Math.random() * 1000).toString(),
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
                 }),
 
                 createTransaction(db!, {
@@ -153,7 +153,7 @@ export default ({ navigation }: IProps) => {
                   value: Math.floor(Math.random() * 10000),
                   valueMsat: 1000,
                   paymentRequest: "abcdef123456",
-                  rHash: Math.floor(Math.random() * 1000).toString(),
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
                 }),
 
                 createTransaction(db!, {
@@ -167,7 +167,7 @@ export default ({ navigation }: IProps) => {
                   fee: Math.floor(Math.random() * 5),
                   feeMsat: Math.floor(Math.random() * 5) * 1000,
                   paymentRequest: "abcdef123456",
-                  rHash: Math.floor(Math.random() * 1000).toString(),
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
                 }),
 
                 createTransaction(db!, {
@@ -179,7 +179,7 @@ export default ({ navigation }: IProps) => {
                   value: Math.floor(Math.random() * 10000),
                   valueMsat: 1000,
                   paymentRequest: "abcdef123456",
-                  rHash: Math.floor(Math.random() * 1000).toString(),
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
                 }),
               ]);
 

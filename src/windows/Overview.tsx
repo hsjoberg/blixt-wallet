@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
-import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl } from "react-native";
+import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, FlatList, SectionList, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import { Container, Icon, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import { useStoreActions, useStoreState } from "../state/store";
@@ -11,6 +11,8 @@ import theme, { blixtTheme } from "../../native-base-theme/variables/commonColor
 
 const HEADER_MIN_HEIGHT = (StatusBar.currentHeight || 0) + 53;
 const HEADER_MAX_HEIGHT = 195;
+const NUM_TRANSACTIONS_PER_LOAD = 25;
+const LOAD_BOTTOM_PADDING = 475;
 
 
 export interface IOverviewProps {
@@ -20,24 +22,29 @@ export default ({ navigation }: IOverviewProps)  => {
   const balance = useStoreState((store) => store.lightning.balance);
   const transactions = useStoreState((store) => store.transaction.transactions);
 
-  const [scrollYAnimatedValue] = useState(new Animated.Value(0)); // TODO fix this...
+  const scrollYAnimatedValue = useRef(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
-  const transactionListScroll = useRef<ScrollView>();
 
-  const headerHeight = scrollYAnimatedValue.interpolate({
+  const [contentExpand, setContentExpand] = useState<number>(1);
+  const [expanding, setExpanding] = useState<boolean>(false);
+
+  const headerHeight = scrollYAnimatedValue.current.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
     extrapolate: "clamp",
   });
 
-  const headerFiatOpacity = scrollYAnimatedValue.interpolate({
+  const headerFiatOpacity = scrollYAnimatedValue.current.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: [1, 0], extrapolate: "clamp", easing: Easing.bezier(0.16, 0.9, 0.3, 1),
+    outputRange: [1, 0],
+    extrapolate: "clamp",
+    easing: Easing.bezier(0.16, 0.9, 0.3, 1),
   });
 
-  const headerBtcFontSize = scrollYAnimatedValue.interpolate({
+  const headerBtcFontSize = scrollYAnimatedValue.current.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: [39, 27], extrapolate: "clamp",
+    outputRange: [39, 27],
+    extrapolate: "clamp",
   });
 
   const refreshControl = (
@@ -51,6 +58,22 @@ export default ({ navigation }: IOverviewProps)  => {
     />
   );
 
+  const transactionListOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    Animated.event(
+      [{ nativeEvent: { contentOffset: { y: scrollYAnimatedValue.current }}}],
+      { useNativeDriver: false },
+    )(event);
+
+    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    const paddingToBottom = LOAD_BOTTOM_PADDING;
+    if (!expanding && (layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom)) {
+      console.log("expanding");
+      setExpanding(true);
+      setTimeout(() => setExpanding(false), 1000);
+      setContentExpand(contentExpand + 1);
+    }
+  };
+
   return (
     <Container>
       <StatusBar
@@ -62,37 +85,20 @@ export default ({ navigation }: IOverviewProps)  => {
       />
       <View style={style.overview}>
         <ScrollView
-          ref={transactionListScroll} contentContainerStyle={style.transactionList}
+          contentContainerStyle={style.transactionList}
           scrollEventThrottle={60}
           refreshControl={refreshControl}
-          onScroll={
-            Animated.event(
-              [{ nativeEvent: { contentOffset: { y: scrollYAnimatedValue }}}],
-              { useNativeDriver: false },
-            )
-          }
-          onMomentumScrollEnd={(event: any) => {
-            const y = event.nativeEvent.contentOffset.y;
-            if (0 < y && y < HEADER_MAX_HEIGHT / 3.2) {
-              if (transactionListScroll.current) {
-                // transactionListScroll.current.scrollTo({y: 0});
-              }
-            }
-            else if (HEADER_MAX_HEIGHT / 3.2 <= y && y < HEADER_MAX_HEIGHT) {
-              if (transactionListScroll.current) {
-                // transactionListScroll.current.scrollTo({y: HEADER_MAX_HEIGHT});
-              }
-            }
-          }}
+          onScroll={transactionListOnScroll}
         >
-          {transactions.map((transaction, key) => (
-            <TransactionCard key={key} transaction={transaction} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />
-          ))}
+          {transactions.map((transaction, key) => {
+            if (key > contentExpand * NUM_TRANSACTIONS_PER_LOAD) {
+              return null;
+            }
+            return (<TransactionCard key={key} transaction={transaction} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />);
+          })}
           {transactions.length === 0 && <Text style={{ textAlign: "center", margin: 16 }}>No transactions yet</Text>}
         </ScrollView>
-        <Animated.View
-           style={{ ...style.animatedTop, height: headerHeight }}
-           pointerEvents="box-none">
+        <Animated.View style={{ ...style.animatedTop, height: headerHeight }} pointerEvents="box-none">
           <LinearGradient style={style.top} colors={[blixtTheme.secondary, blixtTheme.primary]} pointerEvents="box-none">
             <View style={StyleSheet.absoluteFill}>
               <Icon
