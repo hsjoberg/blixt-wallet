@@ -1,10 +1,10 @@
 // @flow
 
-import variable from "./../variables/commonColor";
+import variable from './../variables/commonColor';
 
-export default (variables /*: * */ = variable) => {
+export default (variables /* : * */ = variable) => {
   const viewTheme = {
-    ".padder": {
+    '.padder': {
       padding: variables.contentPadding
     }
   };

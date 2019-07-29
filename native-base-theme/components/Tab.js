@@ -1,11 +1,9 @@
 // @flow
 
-import variable from "./../variables/commonColor";
-
-export default (variables /*: * */ = variable) => {
+export default () => {
   const tabTheme = {
     flex: 1,
-    backgroundColor: "#FFF"
+    backgroundColor: '#FFF'
   };
 
   return tabTheme;
