@@ -26,6 +26,22 @@ export const connectPeer = async (pubkey: string, host: string): Promise<lnrpc.C
   });
 };
 
+
+/**
+ * @throws
+ */
+export const getNodeInfo = async (pubKey: string): Promise<lnrpc.NodeInfo> => {
+  const response = await sendCommand<lnrpc.INodeInfoRequest, lnrpc.NodeInfoRequest, lnrpc.NodeInfo>({
+    request: lnrpc.NodeInfoRequest,
+    response: lnrpc.NodeInfo,
+    method: "GetNodeInfo",
+    options: {
+      pubKey,
+    },
+  });
+  return response;
+}
+
 /**
  * @throws
  */

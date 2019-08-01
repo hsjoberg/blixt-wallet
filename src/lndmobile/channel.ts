@@ -1,9 +1,8 @@
-import { sendCommand } from "./utils";
+import { sendCommand, sendStreamCommand } from "./utils";
 import { lnrpc } from "../../proto/proto";
 
 /**
  * @throws
- * TODO test
  */
 export const openChannel = async (pubkey: string, amount: number): Promise<lnrpc.ChannelPoint> => {
   const response = await sendCommand<lnrpc.IOpenChannelRequest, lnrpc.OpenChannelRequest, lnrpc.ChannelPoint>({
@@ -23,15 +22,19 @@ export const openChannel = async (pubkey: string, amount: number): Promise<lnrpc
 /**
  * @throws
  * TODO implement
- * TODO test
  */
-export const closeChannel = async (fundingTx: string, outputIndex: number): Promise<any> => {
-  try {
-    // const responseString = await NativeModules.LndGrpc.closeChannel(fundingTx, outputIndex);
-    // const response = fixGrpcJsonResponse<any>(JSON.parse(responseString));
-    // return response;
-    return 1;
-  } catch (e) { throw JSON.parse(e.message); }
+export const closeChannel = async (fundingTxId: string, outputIndex: number): Promise<string> => {
+  const response = await sendStreamCommand<lnrpc.ICloseChannelRequest, lnrpc.CloseChannelRequest>({
+    request: lnrpc.CloseChannelRequest,
+    method: "CloseChannel",
+    options: {
+      channelPoint: {
+        fundingTxidStr: fundingTxId,
+        outputIndex,
+      },
+    },
+  });
+  return response;
 };
 
 /**

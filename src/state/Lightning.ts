@@ -34,6 +34,8 @@ export interface ILightningModel {
 
   unlockWallet: Thunk<ILightningModel>;
   getInfo: Thunk<ILightningModel, undefined>;
+  sendPayment: Thunk<ILightningModel, ILightningModelSendPaymentPayload, any, IStoreModel, Promise<lnrpc.SendResponse>>;
+
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
   setReady: Action<ILightningModel, boolean>;
   setFirstSync: Action<ILightningModel, boolean>;
@@ -43,7 +45,6 @@ export interface ILightningModel {
 
   decodePaymentRequest: Thunk<ILightningModel, { bolt11: string }, any, any, Promise<lnrpc.PayReq>>;
   addInvoice: Thunk<ILightningModel, ILightningModAddInvoicePayload, any, IStoreModel, Promise<lnrpc.AddInvoiceResponse>>;
-  sendPayment: Thunk<ILightningModel, ILightningModelSendPaymentPayload, any, IStoreModel, Promise<lnrpc.SendResponse>>;
 
   subscribeInvoice: Thunk<ILightningModel, undefined, any, IStoreModel>;
   setInvoiceSubscriptionStarted: Action<ILightningModel, boolean>;
@@ -76,6 +77,8 @@ export const lightning: ILightningModel = {
     if (!(getState().invoiceSubscriptionStarted)) {
       actions.subscribeInvoice(undefined);
     }
+
+    dispatch.channel.initialize(undefined);
 
     actions.setReady(true);
 

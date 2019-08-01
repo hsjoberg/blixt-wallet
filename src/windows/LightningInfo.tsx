@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
-import { Body, Text, Header, Container, Left, Button, Title, Right, Icon, H1, H3, Fab, Card, CardItem, Item, Form, Input } from "native-base";
+import { Body, Text, Header, Container, Content, Left, Button, Title, Right, Icon, H1, H3, Fab, Card, CardItem, Item, Form, Input, Toast } from "native-base";
 import { RNCamera } from "react-native-camera";
 import { Row } from "react-native-easy-grid";
 import { NavigationScreenProp, createStackNavigator } from "react-navigation";
@@ -16,10 +16,10 @@ export interface IOpenChannelProps {
   navigation: NavigationScreenProp<{}>;
 }
 export const OpenChannel = ({ navigation }: IOpenChannelProps) => {
+  const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
+  const getChannels = useStoreActions((actions) => actions.channel.getChannels);
   const [peer, setPeer] = useState("");
   const [sat, setSat] = useState("");
-  const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
-  const [result, setResult] = useState<any>();
 
   const [camera, setCamera] = useState(false);
 
@@ -53,47 +53,64 @@ export const OpenChannel = ({ navigation }: IOpenChannelProps) => {
 
   return (
     <Container>
-      <Header iosBarStyle="light-content" translucent={false}>
-        <Left>
-          <Button transparent={true} onPress={() => navigation.pop()}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Open channel</Title>
-        </Body>
-      </Header>
-      <Form>
-        <Item>
-          <Input placeholder="Channel" value={peer} onChangeText={setPeer} />
-          <Icon type="AntDesign" name="camera" onPress={() => setCamera(true)} />
-        </Item>
-        <Item>
-          <Input placeholder="Amount (satoshi)" onChangeText={setSat} />
-        </Item>
-        <Item last={true}>
-          <Button onPress={async () => {
-            const r = await connectAndOpenChannel({
-              peer,
-              amount: Number.parseInt(sat, 10),
-            });
-            console.log();
-            setResult(r);
-          }}>
-            <Text>Open channel</Text>
-          </Button>
-        </Item>
-      </Form>
-      {result && <Text>{result.fundingTxId}</Text>}
-    </Container>
+        <Header iosBarStyle="light-content" translucent={false}>
+          <Left>
+            <Button transparent={true} onPress={() => navigation.pop()}>
+              <Icon name="arrow-back" />
+            </Button>
+          </Left>
+          <Body>
+            <Title>Open channel</Title>
+          </Body>
+        </Header>
+        <Content contentContainerStyle={{ padding: 24 }}>
+          <Form>
+            <Item>
+              <Input placeholder="Channel" value={peer} onChangeText={setPeer} />
+              <Icon type="AntDesign" name="camera" onPress={() => setCamera(true)} />
+            </Item>
+            <Item>
+              <Input placeholder="Amount (satoshi)" onChangeText={setSat} />
+            </Item>
+            <Item last={true}>
+              <Button onPress={async () => {
+                try {
+                  const result = await connectAndOpenChannel({
+                    peer,
+                    amount: Number.parseInt(sat, 10),
+                  });
+                  console.log(result);
+                  await getChannels(undefined);
+                  navigation.pop();
+                } catch (e) {
+                  console.log(e);
+                  Toast.show({
+                    duration: 12000,
+                    type: "danger",
+                    text: `Error: ${e.message}`,
+                    buttonText: "Okay",
+                  });
+                }
+              }}>
+                <Text>Open channel</Text>
+              </Button>
+            </Item>
+          </Form>
+        </Content>
+      </Container>
   );
 };
 
 
 export interface IPendingOpenChannelCardProps {
-  channel: lnrpc.PendingChannelsResponse.IPendingOpenChannel;
+  type: "OPEN" | "CLOSING" | "FORCE_CLOSING" | "WAITING_CLOSE";
+  channel: lnrpc.PendingChannelsResponse.IPendingOpenChannel
+            | lnrpc.PendingChannelsResponse.IClosedChannel
+            | lnrpc.PendingChannelsResponse.IForceClosedChannel
+            | lnrpc.PendingChannelsResponse.IWaitingCloseChannel;
+  alias?: string;
 }
-const PendingOpenChannelCard = ({ channel }: IPendingOpenChannelCardProps) => {
+const PendingChannelCard = ({ channel, type, alias }: IPendingOpenChannelCardProps) => {
   if (!channel.channel) {
     return (<Text>Error</Text>);
   }
@@ -110,12 +127,33 @@ const PendingOpenChannelCard = ({ channel }: IPendingOpenChannelCardProps) => {
               <Text style={style.channelDetailValue}>{channel.channel.remoteNodePub}</Text>
             </Right>
           </Row>
+          {alias &&
+            <Row>
+              <Left>
+                <Text style={style.channelDetailTitle}>Alias</Text>
+              </Left>
+              <Right>
+                <Text style={style.channelDetailValue}>{alias}</Text>
+              </Right>
+            </Row>
+          }
           <Row>
             <Left>
               <Text style={style.channelDetailTitle}>Status</Text>
             </Left>
             <Right>
-              <Text style={{...style.channelDetailValue, color: "orange"}}>Pending</Text>
+              {type === "OPEN" &&
+                <Text style={{...style.channelDetailValue, color: "orange"}}>Pending</Text>
+              }
+              {type === "CLOSING" &&
+                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>Closing</Text>
+              }
+              {type === "FORCE_CLOSING" &&
+                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>Force Closing</Text>
+              }
+              {type === "WAITING_CLOSE" &&
+                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>Waiting for Close</Text>
+              }
             </Right>
           </Row>
           <Row>
@@ -123,7 +161,7 @@ const PendingOpenChannelCard = ({ channel }: IPendingOpenChannelCardProps) => {
               <Text style={style.channelDetailTitle}>Amount in channel</Text>
             </Left>
             <Right>
-              <Text style={style.channelDetailValue}>{channel.channel.localBalance}/{channel.channel.capacity} satoshi</Text>
+              <Text style={style.channelDetailValue}>{channel.channel.localBalance}/{channel.channel.capacity} Satoshi</Text>
             </Right>
           </Row>
         </Body>
@@ -135,9 +173,11 @@ const PendingOpenChannelCard = ({ channel }: IPendingOpenChannelCardProps) => {
 
 export interface IChannelCardProps {
   channel: IChannel;
+  alias?: string;
 }
-const ChannelCard = ({ channel }: IChannelCardProps) => {
+const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
   const closeChannel = useStoreActions((store) => store.channel.closeChannel);
+  const getChannels = useStoreActions((store) => store.channel.getChannels);
 
   const close = async () => {
     const result = await closeChannel({
@@ -145,6 +185,8 @@ const ChannelCard = ({ channel }: IChannelCardProps) => {
       outputIndex: Number.parseInt(channel.channelPoint.split(":")[1], 10),
     });
     console.log(result);
+
+    await getChannels(undefined);
   };
 
   return (
@@ -159,6 +201,16 @@ const ChannelCard = ({ channel }: IChannelCardProps) => {
               <Text style={style.channelDetailValue}>{channel.remotePubkey}</Text>
             </Right>
           </Row>
+          {alias &&
+            <Row>
+              <Left>
+                <Text style={style.channelDetailTitle}>Alias</Text>
+              </Left>
+              <Right>
+                <Text style={style.channelDetailValue}>{alias}</Text>
+              </Right>
+            </Row>
+          }
           <Row>
             <Left>
               <Text style={style.channelDetailTitle}>Status</Text>
@@ -197,7 +249,11 @@ interface ILightningInfoProps {
 }
 export const LightningInfo = ({ navigation }: ILightningInfoProps) => {
   const channels = useStoreState((store) => store.channel.channels);
+  const aliases = useStoreState((store) => store.channel.aliases);
   const pendingOpenChannels = useStoreState((store) => store.channel.pendingOpenChannels);
+  const pendingClosingChannels = useStoreState((store) => store.channel.pendingClosingChannels);
+  const pendingForceClosingChannels = useStoreState((store) => store.channel.pendingForceClosingChannels);
+  const waitingCloseChannels = useStoreState((store) => store.channel.waitingCloseChannels);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const [fabActive, setFabActive] = useState(false);
 
@@ -232,12 +288,21 @@ export const LightningInfo = ({ navigation }: ILightningInfoProps) => {
             &nbsp;satoshi
           </H3>
         </View>
-        {pendingOpenChannels.map((pendingOpenChannel, i) => {
-          <PendingOpenChannelCard key={i} channel={pendingOpenChannel} />
-        })}
+        {pendingOpenChannels.map((pendingChannel, i) => (
+          <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub]} type="OPEN" channel={pendingChannel} />)
+        )}
+        {pendingClosingChannels.map((pendingChannel, i) => (
+          <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub]} type="CLOSING" channel={pendingChannel} />)
+        )}
+        {pendingForceClosingChannels.map((pendingChannel, i) => (
+          <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub]} type="FORCE_CLOSING" channel={pendingChannel} />)
+        )}
+        {waitingCloseChannels.map((pendingChannel, i) => (
+          <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub]} type="WAITING_CLOSE" channel={pendingChannel} />)
+        )}
         {channels.map((channel) => (
-          <ChannelCard key={channel.chanId} channel={channel} />
-        ))}
+          <ChannelCard key={channel.chanId} alias={aliases[channel.remotePubkey]} channel={channel} />)
+        )}
       </ScrollView>
       <Fab
         active={fabActive}

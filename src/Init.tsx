@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet, StatusBar, ScrollView } from "react-native";
-import { Root, Container } from "native-base";
+import { Container } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreState, useStoreActions } from "./state/store";

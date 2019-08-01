@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useLayoutEffect } from "react";
 import { Animated, Easing, StyleSheet } from "react-native";
-import { View, Text, Spinner } from "native-base";
+import { View, Text, Spinner, Root } from "native-base";
 import { createBottomTabNavigator, createAppContainer, createStackNavigator, createSwitchNavigator } from "react-navigation";
 
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
@@ -74,7 +74,11 @@ const RootStack = createSwitchNavigator({
 
 const AppContainer = createAppContainer(RootStack);
 
-export default () => (<AppContainer />);
+export default () => (
+  <Root>
+    <AppContainer />
+  </Root>
+);
 
 // export default () => {
 //   const lndRestarting = useStoreState((store) => store.lndRestarting);
