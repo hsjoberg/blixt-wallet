@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Alert, CheckBox, StatusBar, Clipboard } from "react-native";
-import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Input, Spinner, Right, Toast, Root } from "native-base";
+import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Input, Spinner, Right, Toast } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
 
@@ -8,6 +8,7 @@ import { useStoreActions } from "../state/store";
 import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { lnrpc } from "../../proto/proto";
+import { getNodeInfo } from "../lndmobile";
 
 interface ISendProps {
   onGoBackCallback: () => void;
@@ -120,13 +121,19 @@ export const SendCamera = ({ navigation }: ISendProps) => {
 export const SendConfirmation = ({ navigation }: ISendProps) => {
   const sendPayment = useStoreActions((actions) => actions.lightning.sendPayment);
   const getBalance = useStoreActions((actions) => actions.lightning.getBalance);
+  // const getNodeInfo = useStoreActions((actions) => actions.lightning.getNodeInfo);
   const syncTransaction = useStoreActions((actions) => actions.transaction.syncTransaction);
+  const [nodeInfo, setNodeInfo] = useState<lnrpc.NodeInfo | undefined>();
 
   const [isPaying, setIsPaying] = useState(false);
   // const [feeCap, setFeeCap] = useState(true);
   const bolt11Invoice = navigation.getParam("bolt11Invoice");
 
   const invoiceInfo: lnrpc.PayReq = navigation.getParam("invoiceInfo");
+
+  getNodeInfo(invoiceInfo.destination)
+    .then(setNodeInfo)
+    .catch((e) => console.log(`pubkey ${invoiceInfo.destination}: ${e.message}`));
 
   const send = async () => {
     try {
@@ -155,71 +162,75 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
   };
 
   return (
-    <Root>
-      <Container>
-        <StatusBar
-          hidden={false}
-          translucent={false}
-          networkActivityIndicatorVisible={false}
-        />
-        <Header iosBarStyle="light-content">
-          <Left>
-            <Button transparent={true} onPress={() => navigation.navigate("SendCamera")}>
-              <Icon name="arrow-back" />
+    <Container>
+      <StatusBar
+        hidden={false}
+        translucent={false}
+        networkActivityIndicatorVisible={false}
+      />
+      <Header iosBarStyle="light-content">
+        <Left>
+          <Button transparent={true} onPress={() => navigation.navigate("SendCamera")}>
+            <Icon name="arrow-back" />
+          </Button>
+        </Left>
+        <Body>
+          <Title>Confirm pay invoice</Title>
+        </Body>
+      </Header>
+      <Content style={{width: "100%", height: "100%" }} contentContainerStyle={sendStyle.transactionDetails}>
+        <View>
+          <Item success={true} style={{ marginTop: 8 }}>
+            <Label style={{ width: 110 }}>Invoice</Label>
+            <Input
+              editable={false}
+              style={{ fontSize: 13, marginTop: 4 }}
+              value={`${bolt11Invoice.substring(0, 26).toLowerCase()}...`}
+            />
+            <Icon name="checkmark-circle" />
+          </Item>
+          <Item style={{ marginTop: 16 }}>
+            <Label style={{ width: 110 }}>Amount ₿</Label>
+            <Input disabled={true} value={formatSatToBtc(invoiceInfo.numSatoshis).toString()} />
+          </Item>
+          <Item style={{ marginTop: 16 }}>
+            <Label style={{ width: 110 }}>Amount SEK</Label>
+            <Input disabled={true} value={convertSatToFiat(invoiceInfo.numSatoshis).toString()} />
+          </Item>
+          {nodeInfo !== undefined && nodeInfo.node !== undefined &&
+            <Item style={{ marginTop: 16 }}>
+              <Label style={{ width: 110 }}>Recipient</Label>
+              <Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={nodeInfo.node.alias} />
+            </Item>
+          }
+          <Item style={{ marginTop: 16 }}>
+            <Label style={{ width: 110 }}>Message</Label>
+            <Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={invoiceInfo.description} />
+          </Item>
+          {/* <Item style={{ marginTop: 16 }}>
+            <Label>Cap fees at 3%</Label>
+            <Right>
+              <CheckBox onValueChange={(value) => setFeeCap(value)} value={feeCap} />
+            </Right>
+          </Item> */}
+        </View>
+        <View>
+          <View style={{
+            marginBottom: 2,
+          }}>
+            <Button
+              disabled={isPaying}
+              style={{ width: "100%" }}
+              block={true}
+              primary={true}
+              onPress={send}>
+              {!isPaying && <Text>Pay</Text>}
+              {isPaying && <Spinner color={blixtTheme.light} />}
             </Button>
-          </Left>
-          <Body>
-            <Title>Confirm pay invoice</Title>
-          </Body>
-        </Header>
-        <Content style={{width: "100%", height: "100%" }} contentContainerStyle={sendStyle.transactionDetails}>
-          <View>
-            <Item success={true} style={{ marginTop: 8 }}>
-              <Label style={{ width: 110 }}>Invoice</Label>
-              <Input
-                editable={false}
-                style={{ fontSize: 13, marginTop: 4 }}
-                value={`${bolt11Invoice.substring(0, 26).toLowerCase()}...`}
-              />
-              <Icon name="checkmark-circle" />
-            </Item>
-            <Item style={{ marginTop: 16 }}>
-              <Label style={{ width: 110 }}>Amount ₿</Label>
-              <Input disabled={true} value={formatSatToBtc(invoiceInfo.numSatoshis).toString()} />
-            </Item>
-            <Item style={{ marginTop: 16 }}>
-              <Label style={{ width: 110 }}>Amount SEK</Label>
-              <Input disabled={true} value={convertSatToFiat(invoiceInfo.numSatoshis).toString()} />
-            </Item>
-            <Item style={{ marginTop: 16 }}>
-              <Label style={{ width: 110 }}>Message</Label>
-              <Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={invoiceInfo.description} />
-            </Item>
-            {/* <Item style={{ marginTop: 16 }}>
-              <Label>Cap fees at 3%</Label>
-              <Right>
-                <CheckBox onValueChange={(value) => setFeeCap(value)} value={feeCap} />
-              </Right>
-            </Item> */}
           </View>
-          <View>
-            <View style={{
-              marginBottom: 2,
-            }}>
-              <Button
-                disabled={isPaying}
-                style={{ width: "100%" }}
-                block={true}
-                primary={true}
-                onPress={send}>
-                {!isPaying && <Text>Pay</Text>}
-                {isPaying && <Spinner color={blixtTheme.light} />}
-              </Button>
-            </View>
-          </View>
-        </Content>
-      </Container>
-    </Root>
+        </View>
+      </Content>
+    </Container>
   );
 };
 

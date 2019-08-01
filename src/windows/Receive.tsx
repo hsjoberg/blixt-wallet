@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableHighlight, Share, Clipboard, StyleSheet, StatusBar } from "react-native";
-import { Button, Body, Container, Icon, Header, Text, Title, Left, Content, Item, Label, Input, H1, H3, Toast, Root } from "native-base";
+import { Button, Body, Container, Icon, Header, Text, Title, Left, Content, Item, Label, Input, H1, H3, Toast } from "native-base";
 
 import * as QRCode from "qrcode";
 import SvgUri from "react-native-svg-uri";
@@ -174,65 +174,63 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
   };
 
   return (
-    <Root>
-      <Container>
-        <Header iosBarStyle="light-content" translucent={false}>
-          <Left>
-            <Button transparent={true} onPress={() => navigation.pop()}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Receive</Title>
-          </Body>
-        </Header>
-        <View style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-          height: "100%",
-          marginTop: -16,
-        }}>
-          <H1>Scan this QR code</H1>
-          <Text style={{ marginBottom: 6 }}>
-            <>Expires in </>
-            <Ticker
-              expire={transaction.expire}
+    <Container>
+      <Header iosBarStyle="light-content" translucent={false}>
+        <Left>
+          <Button transparent={true} onPress={() => navigation.pop()}>
+            <Icon name="arrow-back" />
+          </Button>
+        </Left>
+        <Body>
+          <Title>Receive</Title>
+        </Body>
+      </Header>
+      <View style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "100%",
+        marginTop: -16,
+      }}>
+        <H1>Scan this QR code</H1>
+        <Text style={{ marginBottom: 6 }}>
+          <>Expires in </>
+          <Ticker
+            expire={transaction.expire}
+          />
+        </Text>
+        <TouchableHighlight
+          onPress={async () => {
+            const result = await Share.share({
+              // message: lnInvoice,
+              url: "lightning:" + bolt11payReq,
+            });
+          }}>
+            <SvgUri
+              width={340}
+              height={340}
+              svgXmlData={bolt11payReq}
+              fill={blixtTheme.light}
             />
-          </Text>
-          <TouchableHighlight
-            onPress={async () => {
-              const result = await Share.share({
-                // message: lnInvoice,
-                url: "lightning:" + bolt11payReq,
-              });
-            }}>
-              <SvgUri
-                width={340}
-                height={340}
-                svgXmlData={bolt11payReq}
-                fill={blixtTheme.light}
-              />
-          </TouchableHighlight>
-          <Text
-            onPress={() => {
-              Clipboard.setString(transaction.paymentRequest);
-              Toast.show({
-                text: "Copied to clipboard.",
-                type: "warning",
-              });
-            }}
-            style={{ paddingTop: 6, paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}
-            numberOfLines={1}
-            lineBreakMode="middle"
-            >
-              {transaction.paymentRequest}
-          </Text>
-          <H3>{transaction.value} sat</H3>
-        </View>
-      </Container>
-    </Root>
+        </TouchableHighlight>
+        <Text
+          onPress={() => {
+            Clipboard.setString(transaction.paymentRequest);
+            Toast.show({
+              text: "Copied to clipboard.",
+              type: "warning",
+            });
+          }}
+          style={{ paddingTop: 6, paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}
+          numberOfLines={1}
+          lineBreakMode="middle"
+          >
+            {transaction.paymentRequest}
+        </Text>
+        <H3>{transaction.value} sat</H3>
+      </View>
+    </Container>
   );
 };
 

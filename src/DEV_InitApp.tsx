@@ -210,7 +210,7 @@ export default ({ navigation }: IProps) => {
               return (
                 <Button key={i} onPress={async () => {
                   try {
-                    const response = await getInfo();
+                      const response = await f();
                       console.log(`${f.name}()`, response.toJSON());
                       setCommandResult(response.toJSON());
                     }

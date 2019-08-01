@@ -86,7 +86,7 @@ export default ({ navigation }: IOverviewProps)  => {
       <View style={style.overview}>
         <ScrollView
           contentContainerStyle={style.transactionList}
-          scrollEventThrottle={60}
+          scrollEventThrottle={16}
           refreshControl={refreshControl}
           onScroll={transactionListOnScroll}
         >
