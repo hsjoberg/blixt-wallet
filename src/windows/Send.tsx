@@ -9,6 +9,7 @@ import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { lnrpc } from "../../proto/proto";
 import { getNodeInfo } from "../lndmobile";
+import BlixtForm from "../components/Form";
 
 interface ISendProps {
   onGoBackCallback: () => void;
@@ -22,7 +23,6 @@ export const SendCamera = ({ navigation }: ISendProps) => {
   const [cameraType, setCameraType] =
     useState<CameraType["back"] | CameraType["front"]>(RNCamera.Constants.Type.back);
   const [scanning, setScanning] = useState(true);
-
 
   const onCameraSwitchClick = () => {
     setCameraType(
@@ -122,11 +122,9 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
   const sendPayment = useStoreActions((actions) => actions.lightning.sendPayment);
   const getBalance = useStoreActions((actions) => actions.lightning.getBalance);
   // const getNodeInfo = useStoreActions((actions) => actions.lightning.getNodeInfo);
-  const syncTransaction = useStoreActions((actions) => actions.transaction.syncTransaction);
   const [nodeInfo, setNodeInfo] = useState<lnrpc.NodeInfo | undefined>();
 
   const [isPaying, setIsPaying] = useState(false);
-  // const [feeCap, setFeeCap] = useState(true);
   const bolt11Invoice = navigation.getParam("bolt11Invoice");
 
   const invoiceInfo: lnrpc.PayReq = navigation.getParam("invoiceInfo");
@@ -161,6 +159,50 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
     }
   };
 
+  const formItems = [];
+
+  formItems.push({
+    key: "INVOICE",
+    title: "Invoice",
+    success: true,
+    component: (
+      <>
+        <Input
+          editable={false}
+          style={{ fontSize: 13, marginTop: 4 }}
+          value={`${bolt11Invoice.substring(0, 26).toLowerCase()}...`}
+        />
+        <Icon name="checkmark-circle" />
+      </>
+    )
+  });
+
+  formItems.push({
+    key: "AMOUNT_BTC",
+    title: "Amount ₿",
+    component: (<Input disabled={true} value={formatSatToBtc(invoiceInfo.numSatoshis).toString()} />),
+  });
+
+  formItems.push({
+    key: "AMOUNT_FIAT",
+    title: "Amount SEK",
+    component: (<Input disabled={true} value={convertSatToFiat(invoiceInfo.numSatoshis).toString()} />),
+  });
+
+  if (nodeInfo !== undefined && nodeInfo.node !== undefined) {
+    formItems.push({
+      key: "RECIPIENT",
+      title: "Recipient",
+      component: (<Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={nodeInfo.node.alias} />),
+    });
+  }
+
+  formItems.push({
+    key: "MESSAGE",
+    title: "Message",
+    component: (<Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={invoiceInfo.description} />),
+  });
+
   return (
     <Container>
       <StatusBar
@@ -178,58 +220,20 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
           <Title>Confirm pay invoice</Title>
         </Body>
       </Header>
-      <Content style={{width: "100%", height: "100%" }} contentContainerStyle={sendStyle.transactionDetails}>
-        <View>
-          <Item success={true} style={{ marginTop: 8 }}>
-            <Label style={{ width: 110 }}>Invoice</Label>
-            <Input
-              editable={false}
-              style={{ fontSize: 13, marginTop: 4 }}
-              value={`${bolt11Invoice.substring(0, 26).toLowerCase()}...`}
-            />
-            <Icon name="checkmark-circle" />
-          </Item>
-          <Item style={{ marginTop: 16 }}>
-            <Label style={{ width: 110 }}>Amount ₿</Label>
-            <Input disabled={true} value={formatSatToBtc(invoiceInfo.numSatoshis).toString()} />
-          </Item>
-          <Item style={{ marginTop: 16 }}>
-            <Label style={{ width: 110 }}>Amount SEK</Label>
-            <Input disabled={true} value={convertSatToFiat(invoiceInfo.numSatoshis).toString()} />
-          </Item>
-          {nodeInfo !== undefined && nodeInfo.node !== undefined &&
-            <Item style={{ marginTop: 16 }}>
-              <Label style={{ width: 110 }}>Recipient</Label>
-              <Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={nodeInfo.node.alias} />
-            </Item>
-          }
-          <Item style={{ marginTop: 16 }}>
-            <Label style={{ width: 110 }}>Message</Label>
-            <Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={invoiceInfo.description} />
-          </Item>
-          {/* <Item style={{ marginTop: 16 }}>
-            <Label>Cap fees at 3%</Label>
-            <Right>
-              <CheckBox onValueChange={(value) => setFeeCap(value)} value={feeCap} />
-            </Right>
-          </Item> */}
-        </View>
-        <View>
-          <View style={{
-            marginBottom: 2,
-          }}>
-            <Button
-              disabled={isPaying}
-              style={{ width: "100%" }}
-              block={true}
-              primary={true}
-              onPress={send}>
-              {!isPaying && <Text>Pay</Text>}
-              {isPaying && <Spinner color={blixtTheme.light} />}
-            </Button>
-          </View>
-        </View>
-      </Content>
+      <BlixtForm
+        items={formItems}
+        buttons={[
+          <Button
+            disabled={isPaying}
+            style={{ width: "100%" }}
+            block={true}
+            primary={true}
+            onPress={send}>
+            {!isPaying && <Text>Pay</Text>}
+            {isPaying && <Spinner color={blixtTheme.light} />}
+          </Button>
+        ]}
+      />
     </Container>
   );
 };
