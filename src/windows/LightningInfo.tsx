@@ -11,6 +11,8 @@ import { lnrpc } from "../../proto/proto";
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
+import BlixtForm from "../components/Form";
+
 
 export interface IOpenChannelProps {
   navigation: NavigationScreenProp<{}>;
@@ -22,6 +24,25 @@ export const OpenChannel = ({ navigation }: IOpenChannelProps) => {
   const [sat, setSat] = useState("");
 
   const [camera, setCamera] = useState(false);
+
+  const onOpenChannelClick = async () => {
+    try {
+      const result = await connectAndOpenChannel({
+        peer,
+        amount: Number.parseInt(sat, 10),
+      });
+      console.log(result);
+      await getChannels(undefined);
+      navigation.pop();
+    } catch (e) {
+      Toast.show({
+        duration: 12000,
+        type: "danger",
+        text: `Error: ${e}`,
+        buttonText: "Okay",
+      });
+    }
+  };
 
   if (camera) {
     return (
@@ -63,40 +84,27 @@ export const OpenChannel = ({ navigation }: IOpenChannelProps) => {
             <Title>Open channel</Title>
           </Body>
         </Header>
-        <Content contentContainerStyle={{ padding: 24 }}>
-          <Form>
-            <Item>
-              <Input placeholder="Channel" value={peer} onChangeText={setPeer} />
-              <Icon type="AntDesign" name="camera" onPress={() => setCamera(true)} />
-            </Item>
-            <Item>
-              <Input placeholder="Amount (satoshi)" onChangeText={setSat} />
-            </Item>
-            <Item last={true}>
-              <Button onPress={async () => {
-                try {
-                  const result = await connectAndOpenChannel({
-                    peer,
-                    amount: Number.parseInt(sat, 10),
-                  });
-                  console.log(result);
-                  await getChannels(undefined);
-                  navigation.pop();
-                } catch (e) {
-                  console.log(e);
-                  Toast.show({
-                    duration: 12000,
-                    type: "danger",
-                    text: `Error: ${e.message}`,
-                    buttonText: "Okay",
-                  });
-                }
-              }}>
-                <Text>Open channel</Text>
-              </Button>
-            </Item>
-          </Form>
-        </Content>
+        <BlixtForm
+          items={[{
+            key: "CHANNEL",
+            title: "Channel URI",
+            component: (
+              <>
+                <Input placeholder="Channel" value={peer} onChangeText={setPeer} />
+                <Icon type="AntDesign" name="camera" onPress={() => setCamera(true)} />
+              </>
+            )
+          }, {
+            key: "AMOUNT",
+            title: "Amount",
+            component: (<Input placeholder="Amount (satoshi)" keyboardType="numeric" onChangeText={setSat} />)
+          }]}
+          buttons={[
+            <Button onPress={onOpenChannelClick} block={true} primary={true}>
+              <Text>Open channel</Text>
+            </Button>
+          ]}
+        />
       </Container>
   );
 };
