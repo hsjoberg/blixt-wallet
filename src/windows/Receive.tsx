@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableHighlight, Share, Clipboard, StyleSheet } from "react-native";
+import { View, TouchableHighlight, Share, Clipboard } from "react-native";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, H1, H3, Toast } from "native-base";
 
 import * as QRCode from "qrcode";
@@ -21,7 +21,7 @@ const BTCSAT = 100000000;
 const BTCUSD = 8525;
 
 export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
-  const addInvoice = useStoreActions((store) => store.lightning.addInvoice);
+  const addInvoice = useStoreActions((store) => store.receive.addInvoice);
   const [btcValue, setBtcValue] = useState<string | undefined>(undefined);
   const [satValue, setSatValue] = useState<string | undefined>(undefined);
   const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
@@ -104,6 +104,7 @@ export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
         items={formItems}
         buttons={[
           <Button
+            key="CREATE_INVOICE"
             style={{ width: "100%" }}
             block={true}
             primary={true}
@@ -116,16 +117,6 @@ export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
     </Container>
   );
 };
-
-const receiveStyle = StyleSheet.create({
-  createInvoice: {
-    height: "100%",
-    flex: 1,
-    display: "flex",
-    justifyContent: "space-between",
-    padding: 24,
-  },
-});
 
 export const ReceiveQr = ({ navigation }: IReceiveProps) => {
   const invoice: IAddInvoiceResponse = navigation.getParam("invoice");
@@ -169,11 +160,15 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
       return () => clearInterval(interval);
     }, [expire]);
 
-    return (
-      <>
-        {display}
-      </>
-    )
+    return (<>{display}</>);
+  };
+
+  const onPressPaymentRequest = () => {
+    Clipboard.setString(transaction.paymentRequest);
+    Toast.show({
+      text: "Copied to clipboard.",
+      type: "warning",
+    });
   };
 
   return (
@@ -205,7 +200,7 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
         </Text>
         <TouchableHighlight
           onPress={async () => {
-            const result = await Share.share({
+            await Share.share({
               // message: lnInvoice,
               url: "lightning:" + bolt11payReq,
             });
@@ -218,18 +213,12 @@ export const ReceiveQr = ({ navigation }: IReceiveProps) => {
             />
         </TouchableHighlight>
         <Text
-          onPress={() => {
-            Clipboard.setString(transaction.paymentRequest);
-            Toast.show({
-              text: "Copied to clipboard.",
-              type: "warning",
-            });
-          }}
+          onPress={onPressPaymentRequest}
           style={{ paddingTop: 6, paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}
           numberOfLines={1}
           lineBreakMode="middle"
-          >
-            {transaction.paymentRequest}
+        >
+          {transaction.paymentRequest}
         </Text>
         <H3>{transaction.value} sat</H3>
       </View>

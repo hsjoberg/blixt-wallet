@@ -11,6 +11,7 @@ import { IApp, getApp, clearApp, setupApp, setApp } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { genSeed, initWallet } from "../lndmobile/wallet";
+import { IReceiveModel, receive } from "./Receive";
 
 const { LndMobile } = NativeModules;
 
@@ -38,6 +39,7 @@ export interface IStoreModel {
   transaction: ITransactionModel;
   channel: IChannelModel;
   send: ISendModel;
+  receive: IReceiveModel;
 }
 
 const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
@@ -120,6 +122,7 @@ const model: IStoreModel = {
   transaction,
   channel,
   send,
+  receive,
 };
 
 export default model;

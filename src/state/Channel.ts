@@ -54,6 +54,7 @@ export interface IChannelModel {
 
 export const channel: IChannelModel = {
   initialize: thunk(async (actions, _, { getState }) => {
+    await actions.getChannels(undefined);
 
     if (getState().channelUpdateSubscriptionStarted) {
       console.log("WARNING: Channel.channelUpdateSubscriptionStarted() called when subsription already started");
