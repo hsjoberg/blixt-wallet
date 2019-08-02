@@ -10,19 +10,6 @@ interface ISettingsProps {
   navigation: NavigationScreenProp<{}>;
 }
 const Settings = ({ navigation }: ISettingsProps) => {
-  const [lndActive, setLndActive] = useState();
-
-  useEffect(() => {
-    (async () => {
-      // try {
-      //   await NativeModules.LndGrpc.getInfo();
-      //   setLndActive("green");
-      // } catch {
-      //   setLndActive("red");
-      // }
-    })();
-  }, []);
-
   return (
     <Root>
       <Container>
@@ -37,22 +24,6 @@ const Settings = ({ navigation }: ISettingsProps) => {
           </Body>
         </Header>
         <Content>
-          {__DEV__ === true &&
-            <View style={{ width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-              <Button onPress={() => navigation.navigate("DEV_InitApp")}><Text>Go to dev screen</Text></Button>
-              <Button style={{backgroundColor: lndActive}}
-                onPress={async () => {
-                  try {
-                    await NativeModules.LndGrpc.getInfo();
-                    setLndActive("green");
-                  } catch {
-                    setLndActive("red");
-                  }
-                }}>
-                <Text />
-              </Button>
-            </View>
-          }
           <List style={style.list}>
             <ListItem style={style.itemHeader} itemHeader={true} first={true}>
               <Text>Wallet</Text>
@@ -152,6 +123,12 @@ const Settings = ({ navigation }: ISettingsProps) => {
               <Left><Icon style={{fontSize: 22}} type="AntDesign" name="info" /></Left>
               <Body><Text>About</Text></Body>
             </ListItem>
+            {__DEV__ === true &&
+              <ListItem icon={true} onPress={() => navigation.navigate("DEV_InitApp")}>
+                <Left><Icon style={{fontSize: 22}} type="MaterialIcons" name="developer-mode" /></Left>
+                <Body><Text>Go to dev screen</Text></Body>
+              </ListItem>
+            }
           </List>
         </Content>
       </Container>

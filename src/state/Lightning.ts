@@ -1,25 +1,12 @@
 import { NativeModules, DeviceEventEmitter, ToastAndroid } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
-import {
-  getInfo,
-  unlockWallet,
-  channelBalance,
-  sendPaymentSync,
-  decodePayReq,
-  addInvoice,
-} from "../lndmobile/index";
+import { getInfo, unlockWallet, channelBalance, sendPaymentSync, decodePayReq, addInvoice } from "../lndmobile/index";
+import { subscribeInvoices, decodeInvoiceResult } from "../lndmobile/wallet";
 import { IStoreModel } from "./index";
 import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
-import { subscribeInvoices, decodeInvoiceResult } from "../lndmobile/wallet";
-import { decodeStreamResult } from "../lndmobile/utils";
 
 const { LndMobile } = NativeModules;
-
-interface ILightningModelSendPaymentPayload {
-  paymentRequest: string;
-  invoiceInfo: lnrpc.PayReq;
-}
 
 interface ILightningModAddInvoicePayload {
   description: string;
@@ -34,7 +21,6 @@ export interface ILightningModel {
 
   unlockWallet: Thunk<ILightningModel>;
   getInfo: Thunk<ILightningModel, undefined>;
-  sendPayment: Thunk<ILightningModel, ILightningModelSendPaymentPayload, any, IStoreModel, Promise<lnrpc.SendResponse>>;
 
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
   setReady: Action<ILightningModel, boolean>;
@@ -43,7 +29,6 @@ export interface ILightningModel {
   getBalance: Thunk<ILightningModel, undefined>;
   setBalance: Action<ILightningModel, number>;
 
-  decodePaymentRequest: Thunk<ILightningModel, { bolt11: string }, any, any, Promise<lnrpc.PayReq>>;
   addInvoice: Thunk<ILightningModel, ILightningModAddInvoicePayload, any, IStoreModel, Promise<lnrpc.AddInvoiceResponse>>;
 
   subscribeInvoice: Thunk<ILightningModel, undefined, any, IStoreModel>;
@@ -148,38 +133,8 @@ export const lightning: ILightningModel = {
     state.invoiceSubscriptionStarted = payload;
   }),
 
-  sendPayment: thunk(async (_, { paymentRequest, invoiceInfo }, { dispatch }) => {
-    const result = await sendPaymentSync(paymentRequest);
-
-    if (result.paymentError && result.paymentError.length > 0) {
-      throw new Error(result.paymentError);
-    }
-
-    const transaction: ITransaction = {
-      date: invoiceInfo.timestamp,
-      description: invoiceInfo.description,
-      expire: invoiceInfo.expiry,
-      paymentRequest,
-      remotePubkey: invoiceInfo.destination,
-      rHash: invoiceInfo.paymentHash,
-      status: "SETTLED",
-      value: -invoiceInfo.numSatoshis,
-      valueMsat: -(invoiceInfo.numSatoshis * 1000),
-      fee: result.paymentRoute!.totalFees! || 0,
-      feeMsat: result.paymentRoute!.totalFeesMsat! || 0,
-    };
-    console.log("ITransaction", transaction);
-    await dispatch.transaction.syncTransaction(transaction);
-    return result;
-  }),
-
   addInvoice: thunk(async (_, { description, sat, expiry }) => {
     const result = await addInvoice(sat, description, expiry);
-    return result;
-  }),
-
-  decodePaymentRequest: thunk(async (_, payload) => {
-    const result = await decodePayReq(payload.bolt11);
     return result;
   }),
 

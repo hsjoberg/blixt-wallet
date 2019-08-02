@@ -77,7 +77,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
                   <MetaData title="Date" data={format(fromUnixTime(transaction.date), "yyyy-MM-dd hh:mm")} />
                   <MetaData title="Description" data={transaction.description} />
                   <MetaData title="Amount" data={transaction.value + " Satoshi"} />
-                  {(transaction.fee !== null && transaction.fee !== undefined) &&
+                  {transaction.fee !== null ??
                     <MetaData title="Fee" data={transaction.fee + " Satoshi"} />
                   }
                   <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>

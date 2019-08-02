@@ -42,7 +42,7 @@ export const sendCommand = async <IReq, Req, Res>({ request, response, method, o
     const instance = request.create(options);
     const b64 = await LndMobile.sendCommand(method, base64.fromByteArray(request.encode(instance).finish()));
     return response.decode(base64.toByteArray(b64.data));
-  } catch (e) { throw e.message; }
+  } catch (e) { throw e; }
 };
 
 export const sendStreamCommand = async <IReq, Req>({ request, method, options }: IStreamCommandOptions<IReq, Req>): Promise<string> =>  {
