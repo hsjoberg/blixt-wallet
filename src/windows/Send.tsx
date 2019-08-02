@@ -4,7 +4,7 @@ import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Titl
 import { RNCamera, CameraType } from "react-native-camera";
 import * as Bech32 from "bech32";
 
-import { useStoreActions } from "../state/store";
+import { useStoreActions, useStoreState } from "../state/store";
 import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { lnrpc } from "../../proto/proto";
@@ -18,7 +18,7 @@ interface ISendProps {
   navigation: NavigationScreenProp<{}>;
 }
 export const SendCamera = ({ navigation }: ISendProps) => {
-  const decodePaymentRequest = useStoreActions((actions) => actions.lightning.decodePaymentRequest);
+  const setPayment = useStoreActions((store) => store.send.setPayment);
 
   const [cameraType, setCameraType] =
     useState<CameraType["back"] | CameraType["front"]>(RNCamera.Constants.Type.back);
@@ -32,56 +32,37 @@ export const SendCamera = ({ navigation }: ISendProps) => {
     );
   };
 
-  const onPasteClick = async () => {
-    try {
-      const bolt11 = (await Clipboard.getString()).replace(/^lightning:/, "");
-      navigation.navigate("SendConfirmation", {
-        invoiceInfo: await decodePaymentRequest({ bolt11 }),
-        bolt11Invoice: bolt11,
-      });
-    }
-     catch (e) {
-       console.log(e);
-       Alert.alert(`Not a valid Lightning invoice`, undefined,
-         [{ text: "OK", onPress: () => setScanning(true) }]);
-     }
-  };
-
-  const onDebugPaste = async () => {
-    const bolt11 = "lntb12u1pww4ckdpp5xck8m9yerr9hqufyd6p0pp0pwjv5nqn6guwr9qf4l66wrqv3h2ssdp2xys9xct5da3kx6twv9kk7m3qg3hkccm9ypxxzar5v5cqp5ynhgvxfnkwxx75pcxcq2gye7m5dj26hjglqmhkz8rljhg3eg4hfyg38gnsynty3pdatjg9wpa7pe7g794y0hxk2gqd0hzg2hn5hlulqqen6cr5";
-    navigation.navigate("SendConfirmation", {
-      invoiceInfo: await decodePaymentRequest({ bolt11 }),
-      bolt11Invoice: bolt11,
-    });
-  };
-
-  const onBarCodeRead = async ({ data }: { data: string }) => {
+  const tryInvoice = async (paymentRequest: string, errorPrefix: string) => {
     if (!scanning) {
       return;
     }
-    data = data.replace(/^lightning:/, "");
-    if (!checkBech32(data, "lntb")) {
-      setScanning(false);
-      Alert.alert(`QR code is not a valid Bitcoin Lightning invoice`, undefined,
-        [{text: "OK", onPress: () => setScanning(true) }]);
-      return;
-    }
+
     try {
-      navigation.navigate("SendConfirmation", {
-        invoiceInfo: await decodePaymentRequest({ bolt11: data }),
-        bolt11Invoice: data,
-      });
-    }
-    catch (e) {
       setScanning(false);
-      console.log(e);
-      Alert.alert(`QR code is not a valid Lightning invoice`, undefined,
-        [{ text: "OK", onPress: () => setScanning(true) }]);
+      await setPayment({ paymentRequestStr: paymentRequest });
+      navigation.navigate("SendConfirmation");
+    } catch (error) {
+      Alert.alert(`${errorPrefix}: ${error.message}`, undefined,
+        [{text: "OK", onPress: () => setScanning(true)}]);
     }
   };
 
+  const onPasteClick = async () => {
+    await tryInvoice(await Clipboard.getString(), "Clipboard paste error");
+  };
+
+  const onDebugPaste = async () => {
+    const bolt11testnet = "lntb12u1pww4ckdpp5xck8m9yerr9hqufyd6p0pp0pwjv5nqn6guwr9qf4l66wrqv3h2ssdp2xys9xct5da3kx6twv9kk7m3qg3hkccm9ypxxzar5v5cqp5ynhgvxfnkwxx75pcxcq2gye7m5dj26hjglqmhkz8rljhg3eg4hfyg38gnsynty3pdatjg9wpa7pe7g794y0hxk2gqd0hzg2hn5hlulqqen6cr5";
+    const bolt11mainnet = "lnbc1500n1pw5gmyxpp5tnx03hfr3tx2lx3aal045c5dycjsah6j6a80c27qmxla3nrk8xmsdp42fjkzep6ypxxjemgw3hxjmn8yptkset9dssx7e3qgehhyar4dejs6cqzpgxqr23s49gpc74nkm8em70rehny2fgkp94vwm6lh8ympp668x2asn8yf5vk76camftzte4nh3h8sf365vwx69mxp4x5p3s7jx8l57vaeqyr68gqx9eaf0";
+    await tryInvoice(bolt11testnet, "Debug clipboard paste error");
+  };
+
+  const onBarCodeRead = async ({ data }: { data: string }) => {
+    await tryInvoice(data, "QR scan error");
+  };
+
   return (
-    <View>
+    <>
       <StatusBar
         backgroundColor="transparent"
         hidden={false}
@@ -108,51 +89,39 @@ export const SendCamera = ({ navigation }: ISendProps) => {
           return (
             <View style={StyleSheet.absoluteFill}>
               <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
-              <Icon type="MaterialCommunityIcons" name="debug-step-over" style={{... sendStyle.paste, right: 64}} onPress={onDebugPaste} />
+              <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />
               <Icon type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
             </View>
           );
         }}
       </RNCamera>
-    </View>
+    </>
   );
 };
 
 export const SendConfirmation = ({ navigation }: ISendProps) => {
-  const sendPayment = useStoreActions((actions) => actions.lightning.sendPayment);
+  const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
   const getBalance = useStoreActions((actions) => actions.lightning.getBalance);
-  // const getNodeInfo = useStoreActions((actions) => actions.lightning.getNodeInfo);
-  const [nodeInfo, setNodeInfo] = useState<lnrpc.NodeInfo | undefined>();
+
+  const nodeInfo = useStoreState((store) => store.send.remoteNodeInfo);
+  const paymentRequest = useStoreState((store) => store.send.paymentRequest);
+  const bolt11Invoice = useStoreState((store) => store.send.paymentRequestStr);
 
   const [isPaying, setIsPaying] = useState(false);
-  const bolt11Invoice = navigation.getParam("bolt11Invoice");
-
-  const invoiceInfo: lnrpc.PayReq = navigation.getParam("invoiceInfo");
-
-  getNodeInfo(invoiceInfo.destination)
-    .then(setNodeInfo)
-    .catch((e) => console.log(`pubkey ${invoiceInfo.destination}: ${e.message}`));
 
   const send = async () => {
     try {
       setIsPaying(true);
-      const s = await sendPayment({
-        paymentRequest: bolt11Invoice,
-        invoiceInfo,
-      });
+      await sendPayment(undefined);
       await getBalance(undefined);
       navigation.pop();
     } catch (e) {
       console.log(e);
-      let error;
-      if (e.status && e.status.description) { error = e.status.description; }
-      else if (e.message) { error = e.message; }
-      else { error = e; }
 
       Toast.show({
         duration: 12000,
         type: "danger",
-        text: `Error: ${error}`,
+        text: `Error: ${e.message}`,
         buttonText: "Okay",
       });
       setIsPaying(false);
@@ -174,19 +143,19 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
         />
         <Icon name="checkmark-circle" />
       </>
-    )
+    ),
   });
 
   formItems.push({
     key: "AMOUNT_BTC",
     title: "Amount ₿",
-    component: (<Input disabled={true} value={formatSatToBtc(invoiceInfo.numSatoshis).toString()} />),
+    component: (<Input disabled={true} value={formatSatToBtc(paymentRequest.numSatoshis).toString()} />),
   });
 
   formItems.push({
     key: "AMOUNT_FIAT",
     title: "Amount SEK",
-    component: (<Input disabled={true} value={convertSatToFiat(invoiceInfo.numSatoshis).toString()} />),
+    component: (<Input disabled={true} value={convertSatToFiat(paymentRequest.numSatoshis).toString()} />),
   });
 
   if (nodeInfo !== undefined && nodeInfo.node !== undefined) {
@@ -200,7 +169,7 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
   formItems.push({
     key: "MESSAGE",
     title: "Message",
-    component: (<Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={invoiceInfo.description} />),
+    component: (<Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={paymentRequest.description} />),
   });
 
   return (
@@ -222,16 +191,18 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
       </Header>
       <BlixtForm
         items={formItems}
-        buttons={[
-          <Button
-            disabled={isPaying}
-            style={{ width: "100%" }}
-            block={true}
-            primary={true}
-            onPress={send}>
-            {!isPaying && <Text>Pay</Text>}
-            {isPaying && <Spinner color={blixtTheme.light} />}
-          </Button>
+        buttons={[(
+            <Button
+              key="PAY"
+              disabled={isPaying}
+              style={{ width: "100%" }}
+              block={true}
+              primary={true}
+              onPress={send}>
+              {!isPaying && <Text>Pay</Text>}
+              {isPaying && <Spinner color={blixtTheme.light} />}
+            </Button>
+          ),
         ]}
       />
     </Container>
@@ -254,6 +225,14 @@ const sendStyle = StyleSheet.create({
     padding: 4,
     bottom: 8,
     right: 8,
+  },
+  pasteDebug: {
+    position: "absolute",
+    fontSize: 26,
+    color: blixtTheme.light,
+    padding: 4,
+    bottom: 8,
+    right: 64,
   },
   transactionDetails: {
     height: "100%",

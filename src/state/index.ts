@@ -5,6 +5,8 @@ import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { lightning, ILightningModel } from "./Lightning";
 import { transaction, ITransactionModel } from "./Transaction";
 import { channel, IChannelModel } from "./Channel";
+import { ISendModel, send } from "./Send";
+
 import { IApp, getApp, clearApp, setupApp, setApp } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
@@ -35,6 +37,7 @@ export interface IStoreModel {
   lightning: ILightningModel;
   transaction: ITransactionModel;
   channel: IChannelModel;
+  send: ISendModel;
 }
 
 const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
@@ -116,6 +119,7 @@ const model: IStoreModel = {
   lightning,
   transaction,
   channel,
+  send,
 };
 
 export default model;
