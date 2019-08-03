@@ -1,13 +1,13 @@
-import { AppState, NativeModules } from "react-native";
+import { NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 
 import { lightning, ILightningModel } from "./Lightning";
 import { transaction, ITransactionModel } from "./Transaction";
 import { channel, IChannelModel } from "./Channel";
-import { ISendModel, send } from "./Send";
+import { send, ISendModel } from "./Send";
 
-import { IApp, getApp, clearApp, setupApp, setApp } from "../storage/app";
+import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { genSeed, initWallet } from "../lndmobile/wallet";
@@ -16,26 +16,25 @@ import { IOnChainModel, onChain } from "./OnChain";
 
 const { LndMobile } = NativeModules;
 
-
 interface ICreateWalletPayload {
   password: string;
 }
 
 export interface IStoreModel {
-  initializeApp: Thunk<IStoreModel>;
+  initializeApp: Thunk<IStoreModel, void, any, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
   clearTransactions: Thunk<IStoreModel>;
   resetDb: Thunk<IStoreModel>;
   setDb: Action<IStoreModel, SQLiteDatabase>;
-  setApp: Action<IStoreModel, IApp>;
-  setLndReady: Action<IStoreModel, boolean>;
+  setAppReady: Action<IStoreModel, boolean>;
+  setWalletCreated: Action<IStoreModel, boolean>;
 
   createWallet: Thunk<IStoreModel, ICreateWalletPayload>;
-  setWalletCreated: Thunk<IStoreModel, boolean>;
 
-  app?: IApp;
   db?: SQLiteDatabase;
-  lndReady: boolean;
+  appReady: boolean;
+  walletCreated: boolean;
+
   lightning: ILightningModel;
   transaction: ITransactionModel;
   channel: IChannelModel;
@@ -45,27 +44,26 @@ export interface IStoreModel {
 }
 
 const model: IStoreModel = {
-  initializeApp: thunk(async (actions, _, { getState }) => {
-    if (getState().app) {
+  initializeApp: thunk(async (actions, _, { getState, dispatch }) => {
+    if (getState().appReady) {
       console.warn("App already initialized");
       return;
     }
 
-    let app = await getApp();
     const db = await openDatabase();
     actions.setDb(db);
-
-    if (!app) {
+    if (!await getItemObject(StorageItem.app)) {
       console.log("Initializing app for the first time");
-      app = await setupApp();
+      await setupApp();
       console.log("Initializing db for the first time");
       await setupInitialSchema(db);
       console.log("Writing lnd.conf");
       await NativeModules.LndMobile.writeConfigFile();
-
-      actions.lightning.setFirstSync(true);
+      dispatch.lightning.setFirstSync(true);
     }
-    actions.setApp(app as IApp);
+
+    actions.setWalletCreated(await getWalletCreated());
+
     try {
       console.log(await NativeModules.LndMobile.init());
       const status = await NativeModules.LndMobile.checkStatus();
@@ -73,9 +71,12 @@ const model: IStoreModel = {
         console.log("lnd not started, starting lnd");
         console.log(await NativeModules.LndMobile.startLnd());
       }
-      actions.setLndReady(true);
+      actions.setAppReady(true);
     }
-    catch (e) { console.log("Exception", e); }
+    catch (e) {
+      console.log("Exception", e);
+      throw e;
+    }
 
     console.log("App initialized");
     return true;
@@ -101,26 +102,18 @@ const model: IStoreModel = {
   createWallet: thunk(async (actions, payload) => {
     const seed = await genSeed();
     const wallet = await initWallet(seed.cipherSeedMnemonic, payload.password);
+    await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);
     return wallet;
   }),
 
-  setWalletCreated: thunk(async (actions, payload) => {
-    const app = await getApp();
-    if (!app) {
-      return;
-    }
-    await setApp({ ...app, walletCreated: payload });
-    actions.setApp(app);
-  }),
-
+  setWalletCreated: action((state, payload) => { state.walletCreated = payload; }),
   setDb: action((state, db) => { state.db = db; }),
-  setApp: action((state, app) => { state.app = app; }),
-  setLndReady: action((state, value) => { state.lndReady = value; }),
+  setAppReady: action((state, value) => { state.appReady = value; }),
 
-  app: undefined,
-  db: undefined,
-  lndReady: false,
+  appReady: false,
+  walletCreated: false,
+
   lightning,
   transaction,
   channel,
