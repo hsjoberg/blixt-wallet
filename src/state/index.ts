@@ -80,13 +80,16 @@ const model: IStoreModel = {
     console.log("App initialized");
     return true;
   }),
+
   clearApp: thunk(async () => {
     await clearApp();
     await deleteDatabase();
   }),
+
   clearTransactions: thunk(async (_, _2, { getState }) => {
     await clearTransactions(getState().db!);
   }),
+
   resetDb: thunk(async (_, _2, { getState }) => {
     const { db } = getState();
     if (db) {
@@ -94,10 +97,6 @@ const model: IStoreModel = {
       await setupInitialSchema(db);
     }
   }),
-
-  setDb: action((state, db) => { state.db = db; }),
-  setApp: action((state, app) => { state.app = app; }),
-  setLndReady: action((state, value) => { state.lndReady = value; }),
 
   createWallet: thunk(async (actions, payload) => {
     const seed = await genSeed();
@@ -114,6 +113,10 @@ const model: IStoreModel = {
     await setApp({ ...app, walletCreated: payload });
     actions.setApp(app);
   }),
+
+  setDb: action((state, db) => { state.db = db; }),
+  setApp: action((state, app) => { state.app = app; }),
+  setLndReady: action((state, value) => { state.lndReady = value; }),
 
   app: undefined,
   db: undefined,

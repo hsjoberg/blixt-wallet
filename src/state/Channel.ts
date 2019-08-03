@@ -104,25 +104,6 @@ export const channel: IChannelModel = {
     responsePendingChannels.waitingCloseChannels.map(async (chan) => chan.channel && setupAlias(chan.channel));
   }),
 
-  setChannels: action((state, payload) => {
-    state.channels = payload;
-  }),
-
-  setPendingChannels: action((state, payload) => {
-    state.pendingOpenChannels = payload.pendingOpenChannels;
-    state.pendingClosingChannels = payload.pendingClosingChannels;
-    state.pendingForceClosingChannels = payload.pendingForceClosingChannels;
-    state.waitingCloseChannels = payload.waitingCloseChannels;
-  }),
-
-  setChannelUpdateSubscriptionStarted: action((state, payload) => {
-    state.channelUpdateSubscriptionStarted = payload;
-  }),
-
-  setAlias: action((state, payload) => {
-    state.aliases[payload.pubkey] = payload.alias;
-  }),
-
   connectAndOpenChannel: thunk(async (_, { peer, amount }) => {
     const [pubkey, host] = peer.split("@");
     await connectPeer(pubkey, host);
@@ -143,9 +124,17 @@ export const channel: IChannelModel = {
     actions.setBalance(response.balance);
   }),
 
-  setBalance: action((state, payload) => state.balance = payload),
+  setPendingChannels: action((state, payload) => {
+    state.pendingOpenChannels = payload.pendingOpenChannels;
+    state.pendingClosingChannels = payload.pendingClosingChannels;
+    state.pendingForceClosingChannels = payload.pendingForceClosingChannels;
+    state.waitingCloseChannels = payload.waitingCloseChannels;
+  }),
 
-
+  setChannels: action((state, payload) => { state.channels = payload }),
+  setChannelUpdateSubscriptionStarted: action((state, payload) => { state.channelUpdateSubscriptionStarted = payload }),
+  setAlias: action((state, payload) => { state.aliases[payload.pubkey] = payload.alias }),
+  setBalance: action((state, payload) => { state.balance = payload }),
 
   channels: [],
   aliases: {},

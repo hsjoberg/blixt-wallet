@@ -2,7 +2,6 @@ import { NativeModules, ToastAndroid } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import { getInfo } from "../lndmobile/index";
 import { unlockWallet } from "../lndmobile/wallet";
-import { channelBalance } from "../lndmobile/channel";
 import { IStoreModel } from "./index";
 import { lnrpc } from "../../proto/proto";
 
@@ -54,7 +53,6 @@ export const lightning: ILightningModel = {
     }
     catch (e) {
       console.log(e);
-      console.log(typeof e);
       ToastAndroid.show(e, ToastAndroid.LONG);
     }
   }),
@@ -78,17 +76,9 @@ export const lightning: ILightningModel = {
     } while (!info.syncedToChain);
   }),
 
-  setNodeInfo: action((state, payload) => {
-    state.nodeInfo = payload;
-  }),
-
-  setReady: action((state, payload) => {
-    state.ready = payload;
-  }),
-
-  setFirstSync: action((state, payload) => {
-    state.firstSync = payload;
-  }),
+  setNodeInfo: action((state, payload) => { state.nodeInfo = payload }),
+  setReady: action((state, payload) => { state.ready = payload }),
+  setFirstSync: action((state, payload) => { state.firstSync = payload }),
 
   syncedToChain: false,
   ready: false,
