@@ -1,6 +1,6 @@
 import { Thunk, thunk, Action, action } from "easy-peasy";
-import { listChannels, openChannel, closeChannel, pendingChannels } from "../lndmobile/channel";
-import { connectPeer, getNodeInfo } from "../lndmobile";
+import { connectPeer, getNodeInfo } from "../lndmobile/index";
+import { listChannels, openChannel, closeChannel, pendingChannels, channelBalance } from "../lndmobile/channel";
 import { lnrpc } from "../../proto/proto";
 import { DeviceEventEmitter } from "react-native";
 
@@ -38,6 +38,8 @@ export interface IChannelModel {
   setPendingChannels: Action<IChannelModel, lnrpc.PendingChannelsResponse>;
   setChannelUpdateSubscriptionStarted: Action<IChannelModel, boolean>;
   setAlias: Action<IChannelModel, ISetAliasPayload>;
+  getBalance: Thunk<IChannelModel, undefined>;
+  setBalance: Action<IChannelModel, number>;
 
   connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload>;
   closeChannel: Thunk<IChannelModel, ICloseChannelPayload>;
@@ -48,13 +50,16 @@ export interface IChannelModel {
   pendingClosingChannels: lnrpc.PendingChannelsResponse.IClosedChannel[];
   pendingForceClosingChannels: lnrpc.PendingChannelsResponse.IForceClosedChannel[];
   waitingCloseChannels: lnrpc.PendingChannelsResponse.IWaitingCloseChannel[];
-
   channelUpdateSubscriptionStarted: boolean;
+  balance: number;
 }
 
 export const channel: IChannelModel = {
   initialize: thunk(async (actions, _, { getState }) => {
-    await actions.getChannels(undefined);
+    await Promise.all([
+      actions.getChannels(undefined),
+      actions.getBalance(undefined),
+    ]);
 
     if (getState().channelUpdateSubscriptionStarted) {
       console.log("WARNING: Channel.channelUpdateSubscriptionStarted() called when subsription already started");
@@ -133,6 +138,15 @@ export const channel: IChannelModel = {
     return result;
   }),
 
+  getBalance: thunk(async (actions) => {
+    const response = await channelBalance();
+    actions.setBalance(response.balance);
+  }),
+
+  setBalance: action((state, payload) => state.balance = payload),
+
+
+
   channels: [],
   aliases: {},
   pendingOpenChannels: [],
@@ -140,4 +154,5 @@ export const channel: IChannelModel = {
   pendingForceClosingChannels: [],
   waitingCloseChannels: [],
   channelUpdateSubscriptionStarted: false,
+  balance: 0,
 };

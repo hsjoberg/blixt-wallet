@@ -12,6 +12,7 @@ import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "..
 import { clearTransactions } from "../storage/database/transaction";
 import { genSeed, initWallet } from "../lndmobile/wallet";
 import { IReceiveModel, receive } from "./Receive";
+import { IOnChainModel, onChain } from "./OnChain";
 
 const { LndMobile } = NativeModules;
 
@@ -40,12 +41,11 @@ export interface IStoreModel {
   channel: IChannelModel;
   send: ISendModel;
   receive: IReceiveModel;
+  onChain: IOnChainModel;
 }
 
-const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
-
 const model: IStoreModel = {
-  initializeApp: thunk(async (actions, _, { getState, dispatch }) => {
+  initializeApp: thunk(async (actions, _, { getState }) => {
     if (getState().app) {
       console.warn("App already initialized");
       return;
@@ -111,7 +111,7 @@ const model: IStoreModel = {
     if (!app) {
       return;
     }
-    await setApp({ ...app, walletCreated: true });
+    await setApp({ ...app, walletCreated: payload });
     actions.setApp(app);
   }),
 
@@ -123,6 +123,7 @@ const model: IStoreModel = {
   channel,
   send,
   receive,
+  onChain,
 };
 
 export default model;

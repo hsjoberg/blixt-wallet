@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { AppState, StyleSheet, StatusBar, DeviceEventEmitter, NativeModules, ScrollView, Clipboard } from "react-native";
-import { Content, Text, Button, Toast, Root, Input, View, Container } from "native-base";
+import React, { useState } from "react";
+import { StyleSheet, StatusBar, NativeModules, ScrollView, Clipboard } from "react-native";
+import { Text, Button, Toast, Root, Input, View, Container } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { getTransactions, getTransaction, createTransaction } from "./storage/database/transaction";
 import { useStoreState, useStoreActions } from "./state/store";
 import { lnrpc } from "../proto/proto";
 import { sendCommand } from "./lndmobile/utils";
-import { getInfo, newAddress, pendingChannels, listChannels, connectPeer, openChannel, sendCoins, closeChannel } from "./lndmobile";
+import { getInfo, connectPeer } from "./lndmobile/index";
 import { initWallet, genSeed } from "./lndmobile/wallet";
+import { pendingChannels, listChannels, openChannel, closeChannel } from "./lndmobile/channel";
+import { newAddress, sendCoins } from "./lndmobile/onchain";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
