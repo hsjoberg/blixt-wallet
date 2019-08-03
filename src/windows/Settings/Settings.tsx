@@ -4,12 +4,11 @@ import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Con
 
 import { createStackNavigator, NavigationScreenProp } from "react-navigation";
 
-import LndLog from "./LndLog";
-
 interface ISettingsProps {
   navigation: NavigationScreenProp<{}>;
 }
-const Settings = ({ navigation }: ISettingsProps) => {
+
+export default ({ navigation }: ISettingsProps) => {
   return (
     <Root>
       <Container>
@@ -109,7 +108,7 @@ const Settings = ({ navigation }: ISettingsProps) => {
               <Text>Advanced</Text>
             </ListItem>
 
-            <ListItem icon={true} onPress={() => navigation.navigate("LndLog")}>
+            <ListItem icon={true}>
               <Left><Icon style={{fontSize: 22}} type="Entypo" name="text" /></Left>
               <Body><Text>Open lnd log</Text></Body>
             </ListItem>
@@ -147,12 +146,4 @@ const style = StyleSheet.create({
     paddingTop: 24,
     paddingBottom: 16,
   },
-});
-
-export default createStackNavigator({
-  Settings,
-  LndLog,
-}, {
-  headerMode: "none",
-  initialRouteName: "Settings",
 });
