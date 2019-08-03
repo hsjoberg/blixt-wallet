@@ -12,6 +12,7 @@ interface IProps {
 export default ({ navigation }: IProps) => {
   const initializeLightning = useStoreActions((store) => store.lightning.initialize);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
+  const firstSync = useStoreState((store) => store.lightning.firstSync);
   const ready = useStoreState((store) => store.lightning.ready);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default ({ navigation }: IProps) => {
       {nodeInfo &&
         <>
           {(!nodeInfo.syncedToChain && <H1>Syncing chain...</H1>) || <H1 />}
-          {(nodeInfo.firstSync && <H3 style={{ fontWeight: "normal", marginTop: 8 }}>This might take a couple of minutes</H3>) || null}
+          {firstSync && <H3 style={{ fontWeight: "normal", marginTop: 8 }}>This might take a couple of minutes</H3>}
         </>
       }
     </Container>

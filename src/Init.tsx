@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, StatusBar, ScrollView } from "react-native";
+import { StyleSheet, StatusBar, ToastAndroid } from "react-native";
 import { Container } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
@@ -11,25 +11,26 @@ interface IProps {
 }
 export default ({ navigation }: IProps) => {
   const actions = useStoreActions((store) => store);
-  const app = useStoreState((store) => store.app);
-  const lndReady = useStoreState((store) => store.lndReady);
+  const appReady = useStoreState((store) => store.appReady);
+  const walletCreated = useStoreState((store) => store.walletCreated);
 
   useEffect(() => {
     (async () => {
       try {
-        await actions.initializeApp();
+        await actions.initializeApp(undefined);
       }
       catch (e) {
         console.log(e);
+        ToastAndroid.show(e.message, ToastAndroid.LONG);
       }
     })();
   }, [actions]);
 
-  if (lndReady) {
-    if (app && !app.walletCreated) {
+  if (appReady) {
+    if (!walletCreated) {
       setTimeout(() => navigation.navigate("Welcome"), 1);
     }
-    else if (app && app.walletCreated) {
+    else if (walletCreated) {
       setTimeout(() => navigation.navigate("InitLightning"), 1);
     }
   }
