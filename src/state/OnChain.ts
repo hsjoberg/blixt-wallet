@@ -48,6 +48,7 @@ export const onChain: IOnChainModel = {
     const transactionDetails = await getTransactions();
 
     const transactions: IBlixtTransaction[] = [];
+    // TODO better method of doing this:
     for (const tx of transactionDetails.transactions) {
       let type: IBlixtTransaction["type"] = "NORMAL";
 

@@ -68,9 +68,7 @@ export const receive: IReceiveModel = {
     });
   }),
 
-  setInvoiceSubscriptionStarted: action((state, payload) => {
-    state.invoiceSubscriptionStarted = payload;
-  }),
+  setInvoiceSubscriptionStarted: action((state, payload) => { state.invoiceSubscriptionStarted = payload }),
 
   invoiceSubscriptionStarted: false,
 };

@@ -93,17 +93,9 @@ export const send: ISendModel = {
     return true;
   }),
 
-  setPaymentRequestStr: action((state, payload) => {
-    state.paymentRequestStr = payload;
-  }),
-
-  setPaymentRequest: action((state, payload) => {
-    state.paymentRequest = payload;
-  }),
-
-  setRemoteNodeInfo: action((state, payload) => {
-    state.remoteNodeInfo = payload;
-  }),
+  setPaymentRequestStr: action((state, payload) => { state.paymentRequestStr = payload }),
+  setPaymentRequest: action((state, payload) => { state.paymentRequest = payload }),
+  setRemoteNodeInfo: action((state, payload) => { state.remoteNodeInfo = payload }),
 };
 
 const checkBech32 = (bech32: string, prefix: string): boolean => {
