@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Alert, StatusBar, Clipboard } from "react-native";
-import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner, Toast } from "native-base";
+import { Icon } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
 
-import { useStoreActions, useStoreState } from "../state/store";
-import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import BlixtForm from "../components/Form";
+import { useStoreActions } from "../../state/store";
+import { NavigationScreenProp } from "react-navigation";
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
-interface ISendProps {
+interface ISendCameraProps {
   onGoBackCallback: () => void;
   doneCallback: (transactionInfo: any) => void;
   bolt11Invoice?: string;
   navigation: NavigationScreenProp<{}>;
 }
-export const SendCamera = ({ navigation }: ISendProps) => {
+export default ({ navigation }: ISendCameraProps) => {
   const setPayment = useStoreActions((store) => store.send.setPayment);
 
   const [cameraType, setCameraType] =
@@ -96,115 +95,6 @@ export const SendCamera = ({ navigation }: ISendProps) => {
   );
 };
 
-export const SendConfirmation = ({ navigation }: ISendProps) => {
-  const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
-  const getBalance = useStoreActions((actions) => actions.lightning.getBalance);
-
-  const nodeInfo = useStoreState((store) => store.send.remoteNodeInfo);
-  const paymentRequest = useStoreState((store) => store.send.paymentRequest);
-  const bolt11Invoice = useStoreState((store) => store.send.paymentRequestStr);
-
-  const [isPaying, setIsPaying] = useState(false);
-
-  const send = async () => {
-    try {
-      setIsPaying(true);
-      await sendPayment(undefined);
-      await getBalance(undefined);
-      navigation.pop();
-    } catch (e) {
-      console.log(e);
-
-      Toast.show({
-        duration: 12000,
-        type: "danger",
-        text: `Error: ${e.message}`,
-        buttonText: "Okay",
-      });
-      setIsPaying(false);
-    }
-  };
-
-  const formItems = [];
-
-  formItems.push({
-    key: "INVOICE",
-    title: "Invoice",
-    success: true,
-    component: (
-      <>
-        <Input
-          editable={false}
-          style={{ fontSize: 13, marginTop: 4 }}
-          value={`${bolt11Invoice.substring(0, 26).toLowerCase()}...`}
-        />
-        <Icon name="checkmark-circle" />
-      </>
-    ),
-  });
-
-  formItems.push({
-    key: "AMOUNT_BTC",
-    title: "Amount ₿",
-    component: (<Input disabled={true} value={formatSatToBtc(paymentRequest.numSatoshis).toString()} />),
-  });
-
-  formItems.push({
-    key: "AMOUNT_FIAT",
-    title: "Amount SEK",
-    component: (<Input disabled={true} value={convertSatToFiat(paymentRequest.numSatoshis).toString()} />),
-  });
-
-  if (nodeInfo !== undefined && nodeInfo.node !== undefined) {
-    formItems.push({
-      key: "RECIPIENT",
-      title: "Recipient",
-      component: (<Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={nodeInfo.node.alias} />),
-    });
-  }
-
-  formItems.push({
-    key: "MESSAGE",
-    title: "Message",
-    component: (<Input style={{ fontSize: 13, marginTop: 4 }} disabled={true} value={paymentRequest.description} />),
-  });
-
-  return (
-    <Container>
-      <StatusBar
-        hidden={false}
-        translucent={false}
-        networkActivityIndicatorVisible={false}
-      />
-      <Header iosBarStyle="light-content">
-        <Left>
-          <Button transparent={true} onPress={() => navigation.navigate("SendCamera")}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Confirm pay invoice</Title>
-        </Body>
-      </Header>
-      <BlixtForm
-        items={formItems}
-        buttons={[(
-            <Button
-              key="PAY"
-              disabled={isPaying}
-              block={true}
-              primary={true}
-              onPress={send}>
-              {!isPaying && <Text>Pay</Text>}
-              {isPaying && <Spinner color={blixtTheme.light} />}
-            </Button>
-          ),
-        ]}
-      />
-    </Container>
-  );
-};
-
 const sendStyle = StyleSheet.create({
   swapCamera: {
     position: "absolute",
@@ -237,28 +127,4 @@ const sendStyle = StyleSheet.create({
     justifyContent: "space-between",
     padding: 24,
   },
-});
-
-function formatSatToBtc(sat: number) {
-  return sat / 100000000;
-}
-
-function convertSatToFiat(sat: number) {
-  return Number.parseFloat(((sat / 100000000) * 76270).toFixed(2));
-}
-
-export default createSwitchNavigator({
-  SendCamera,
-  SendConfirmation,
-}, {
-  initialRouteName: "SendCamera",
-  // transitionConfig : () => ({
-  //   transitionSpec: {
-  //     duration: 0,
-  //     timing: Animated.timing,
-  //     easing: Easing.step0,
-  //   },
-  // }),
-  // mode: "modal",
-  // headerMode: "none",
 });
