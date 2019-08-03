@@ -19,7 +19,7 @@ export interface IOverviewProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IOverviewProps)  => {
-  const balance = useStoreState((store) => store.lightning.balance);
+  const balance = useStoreState((store) => store.channel.balance);
   const transactions = useStoreState((store) => store.transaction.transactions);
 
   const scrollYAnimatedValue = useRef(new Animated.Value(0));

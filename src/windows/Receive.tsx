@@ -105,7 +105,6 @@ export const ReceiveSetup = ({ navigation }: IReceiveProps) => {
         buttons={[
           <Button
             key="CREATE_INVOICE"
-            style={{ width: "100%" }}
             block={true}
             primary={true}
             onPress={onCreateInvoiceClick}

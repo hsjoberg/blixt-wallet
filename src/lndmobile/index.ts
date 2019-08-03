@@ -1,12 +1,7 @@
-import { NativeModules } from "react-native";
-import { fixGrpcJsonResponse, sendCommand } from "./utils";
-import { ITransaction } from "../storage/database/transaction";
+import { sendCommand } from "./utils";
 import { Buffer } from "buffer";
 
 import { lnrpc } from "../../proto/proto";
-
-export * from "./channel";
-const { LndGrpc } = NativeModules;
 
 /**
  * @throws
@@ -37,21 +32,6 @@ export const getNodeInfo = async (pubKey: string): Promise<lnrpc.NodeInfo> => {
     method: "GetNodeInfo",
     options: {
       pubKey,
-    },
-  });
-  return response;
-}
-
-/**
- * @throws
- */
-export const unlockWallet = async (password: string): Promise<lnrpc.UnlockWalletResponse> => {
-  const response = await sendCommand<lnrpc.IUnlockWalletRequest, lnrpc.UnlockWalletRequest, lnrpc.UnlockWalletResponse>({
-    request: lnrpc.UnlockWalletRequest,
-    response: lnrpc.UnlockWalletResponse,
-    method: "UnlockWallet",
-    options: {
-      walletPassword: Buffer.from(password, "utf8"),
     },
   });
   return response;
@@ -139,36 +119,4 @@ export type IReadLndLogResponse = string[];
  */
 export const readLndLog = async (): Promise<IReadLndLogResponse> => {
   return [""];
-};
-
-/**
- * @throws
- * TODO test
- */
-export const sendCoins = async (address: string, sat: number): Promise<lnrpc.SendCoinsResponse> => {
-  const response = await sendCommand<lnrpc.ISendCoinsRequest, lnrpc.SendCoinsRequest, lnrpc.SendCoinsResponse>({
-    request: lnrpc.SendCoinsRequest,
-    response: lnrpc.SendCoinsResponse,
-    method: "SendCoins",
-    options: {
-      addr: address,
-      amount: sat,
-    },
-  });
-  return response;
-};
-
-/**
- * @throws
- */
-export const newAddress = async (): Promise<lnrpc.NewAddressResponse> => {
-  const response = await sendCommand<lnrpc.INewAddressRequest, lnrpc.NewAddressRequest, lnrpc.NewAddressResponse>({
-    request: lnrpc.NewAddressRequest,
-    response: lnrpc.NewAddressResponse,
-    method: "NewAddress",
-    options: {
-      type: lnrpc.AddressType.WITNESS_PUBKEY_HASH,
-    },
-  });
-  return response;
 };

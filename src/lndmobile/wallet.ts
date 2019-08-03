@@ -31,6 +31,21 @@ export const initWallet = async (seed: string[], password: string): Promise<lnrp
   return response;
 };
 
+/**
+ * @throws
+ */
+export const unlockWallet = async (password: string): Promise<lnrpc.UnlockWalletResponse> => {
+  const response = await sendCommand<lnrpc.IUnlockWalletRequest, lnrpc.UnlockWalletRequest, lnrpc.UnlockWalletResponse>({
+    request: lnrpc.UnlockWalletRequest,
+    response: lnrpc.UnlockWalletResponse,
+    method: "UnlockWallet",
+    options: {
+      walletPassword: Buffer.from(password, "utf8"),
+    },
+  });
+  return response;
+};
+
 // TODO exception?
 export const subscribeInvoices = async (): Promise<string> => {
   try {

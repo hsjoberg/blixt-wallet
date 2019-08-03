@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert, CheckBox, StatusBar, Clipboard } from "react-native";
-import { Button, Container, Content, Icon, Item, Label, Text, Header, Left, Title, Body, Input, Spinner, Right, Toast } from "native-base";
+import { View, StyleSheet, Alert, StatusBar, Clipboard } from "react-native";
+import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner, Toast } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
-import * as Bech32 from "bech32";
 
 import { useStoreActions, useStoreState } from "../state/store";
 import { NavigationScreenProp, createSwitchNavigator } from "react-navigation";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { lnrpc } from "../../proto/proto";
-import { getNodeInfo } from "../lndmobile";
 import BlixtForm from "../components/Form";
 
 interface ISendProps {
@@ -195,7 +192,6 @@ export const SendConfirmation = ({ navigation }: ISendProps) => {
             <Button
               key="PAY"
               disabled={isPaying}
-              style={{ width: "100%" }}
               block={true}
               primary={true}
               onPress={send}>
@@ -266,11 +262,3 @@ export default createSwitchNavigator({
   // mode: "modal",
   // headerMode: "none",
 });
-
-const checkBech32 = (bech32: string, prefix: string): boolean => {
-  const decodedBech32 = Bech32.decode(bech32, 1024);
-  if (decodedBech32.prefix.slice(0, prefix.length).toUpperCase() !== prefix.toUpperCase()) {
-    return false;
-  }
-  return true;
-};

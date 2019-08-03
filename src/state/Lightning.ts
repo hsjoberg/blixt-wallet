@@ -1,6 +1,8 @@
 import { NativeModules, ToastAndroid } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
-import { getInfo, unlockWallet, channelBalance } from "../lndmobile/index";
+import { getInfo } from "../lndmobile/index";
+import { unlockWallet } from "../lndmobile/wallet";
+import { channelBalance } from "../lndmobile/channel";
 import { IStoreModel } from "./index";
 import { lnrpc } from "../../proto/proto";
 
@@ -18,11 +20,7 @@ export interface ILightningModel {
   setReady: Action<ILightningModel, boolean>;
   setFirstSync: Action<ILightningModel, boolean>;
 
-  getBalance: Thunk<ILightningModel, undefined>;
-  setBalance: Action<ILightningModel, number>;
-
   nodeInfo?: lnrpc.IGetInfoResponse;
-  balance: number;
   syncedToChain: boolean;
   ready: boolean;
   firstSync: boolean;
@@ -38,7 +36,6 @@ export const lightning: ILightningModel = {
     }
     console.log("lnd: time to start and unlock: " + (new Date().getTime() - start) + "ms");
     await actions.getInfo(undefined);
-    await actions.getBalance(undefined);
     await dispatch.transaction.getTransactions(undefined);
     await dispatch.channel.initialize(undefined);
     await dispatch.receive.initialize(undefined);
@@ -93,16 +90,6 @@ export const lightning: ILightningModel = {
     state.firstSync = payload;
   }),
 
-  getBalance: thunk(async (actions) => {
-    const response = await channelBalance();
-    actions.setBalance(response.balance);
-  }),
-
-  setBalance: action((state, payload) => {
-    state.balance = payload;
-  }),
-
-  balance: 0,
   syncedToChain: false,
   ready: false,
   firstSync: false,
