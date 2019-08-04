@@ -22,6 +22,7 @@ export const getWalletCreated = async (): Promise<boolean> => {
 
 export const clearApp = async () => {
   await Promise.all([
+    AsyncStorage.removeItem(StorageItem.app),
     AsyncStorage.removeItem(StorageItem.dbVersion),
     AsyncStorage.removeItem(StorageItem.walletCreated),
   ]);

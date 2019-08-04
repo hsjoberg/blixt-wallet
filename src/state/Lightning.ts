@@ -34,10 +34,12 @@ export const lightning: ILightningModel = {
       await actions.unlockWallet(undefined);
     }
     console.log("lnd: time to start and unlock: " + (new Date().getTime() - start) + "ms");
-    await actions.getInfo(undefined);
-    await dispatch.transaction.getTransactions(undefined);
-    await dispatch.channel.initialize(undefined);
-    await dispatch.receive.initialize(undefined);
+    await Promise.all([
+      actions.getInfo(undefined),
+      dispatch.transaction.getTransactions(undefined),
+      dispatch.channel.initialize(undefined),
+      dispatch.receive.initialize(undefined),
+    ]);
     actions.setReady(true);
 
     console.log("lnd startup time: " + (new Date().getTime() - start) + "ms");
@@ -76,9 +78,9 @@ export const lightning: ILightningModel = {
     } while (!info.syncedToChain);
   }),
 
-  setNodeInfo: action((state, payload) => { state.nodeInfo = payload }),
-  setReady: action((state, payload) => { state.ready = payload }),
-  setFirstSync: action((state, payload) => { state.firstSync = payload }),
+  setNodeInfo: action((state, payload) => { state.nodeInfo = payload; }),
+  setReady: action((state, payload) => { state.ready = payload; }),
+  setFirstSync: action((state, payload) => { state.firstSync = payload; }),
 
   syncedToChain: false,
   ready: false,

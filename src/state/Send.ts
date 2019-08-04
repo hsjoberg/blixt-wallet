@@ -4,7 +4,7 @@ import * as Bech32 from "bech32";
 import { decodePayReq, getNodeInfo, sendPaymentSync } from "../lndmobile/index";
 import { IStoreModel } from "./index";
 import { lnrpc } from "../../proto/proto";
-import { ITransaction } from "../storage/database/transaction";
+import { ITransaction, ITransactionHops } from "../storage/database/transaction";
 
 const LN_BECH32_PREFIX = "lntb";
 
@@ -86,7 +86,20 @@ export const send: ISendModel = {
       valueMsat: -(paymentRequest.numSatoshis * 1000),
       fee: sendPaymentResult.paymentRoute!.totalFees! || 0,
       feeMsat: sendPaymentResult.paymentRoute!.totalFeesMsat! || 0,
+      nodeAliasCached: remoteNodeInfo.node && remoteNodeInfo.node.alias,
+
+      hops: sendPaymentResult.paymentRoute!.hops!.map((hop) => ({
+        chanId: hop.chanId ?? null,
+        chanCapacity: hop.chanCapacity ?? null,
+        amtToForward: hop.amtToForward || 0,
+        amtToForwardMsat: hop.amtToForwardMsat || 0,
+        fee: hop.fee || 0,
+        feeMsat: hop.feeMsat || 0,
+        expiry: hop.expiry || null,
+        pubKey: hop.pubKey || null,
+      })),
     };
+
     console.log("ITransaction", transaction);
     await dispatch.transaction.syncTransaction(transaction);
 

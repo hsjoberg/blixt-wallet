@@ -7,13 +7,28 @@ export interface ITransaction {
   expire: number;
   value: number;
   valueMsat: number;
-  fee?: number;
-  feeMsat?: number;
+  fee: number | null;
+  feeMsat: number | null;
   description: string;
   remotePubkey: string;
   paymentRequest: string;
   status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN";
   rHash: string;
+  nodeAliasCached: string | null;
+
+  hops: ITransactionHop[];
+}
+
+export interface ITransactionHop {
+  id?: number;
+  chanId: number | null;
+  chanCapacity: number | null;
+  amtToForward: number | null;
+  amtToForwardMsat: number | null;
+  fee: number | null;
+  feeMsat: number | null;
+  expiry: number | null;
+  pubKey: string | null;
 }
 
 export const clearTransactions = async (db: SQLiteDatabase) => {
@@ -25,26 +40,53 @@ export const clearTransactions = async (db: SQLiteDatabase) => {
 };
 
 export const createTransaction = async (db: SQLiteDatabase, transaction: ITransaction): Promise<number> => {
-  return await queryInsert(
+  const txId = await queryInsert(
     db,
     `INSERT INTO tx
-    (date, expire, value, valueMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash)
+    (date, expire, value, valueMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached)
     VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       transaction.date,
       transaction.expire,
       transaction.value,
       transaction.valueMsat,
-      transaction.fee !== undefined ? transaction.fee : null,
-      transaction.feeMsat !== undefined ? transaction.feeMsat : null,
+      transaction.fee,
+      transaction.feeMsat,
       transaction.description,
       transaction.remotePubkey,
       transaction.status,
       transaction.paymentRequest,
       transaction.rHash,
+      transaction.nodeAliasCached,
     ],
   );
+
+  if (transaction.hops) {
+    for (const transactionHop of transaction.hops) {
+      // TODO figure out what fields are always available
+      await queryInsert(
+        db,
+        `INSERT INTO tx_hops
+        (txId, chanId, chanCapacity, amtToForward, amtToForwardMsat, fee, feeMsat, expiry, pubkey)
+        VALUES
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          txId,
+          transactionHop.chanId,
+          transactionHop.chanCapacity,
+          transactionHop.amtToForward,
+          transactionHop.amtToForwardMsat,
+          transactionHop.fee,
+          transactionHop.feeMsat,
+          transactionHop.expiry,
+          transactionHop.pubKey,
+        ],
+      );
+    }
+  }
+
+  return txId;
 };
 
 export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransaction): Promise<void> => {
@@ -76,8 +118,16 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
   );
 };
 
+export const getTransactionHops = async (db: SQLiteDatabase, txId: number): Promise<ITransactionHop[]> => {
+  return await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [txId]);
+};
+
 export const getTransactions = async (db: SQLiteDatabase): Promise<ITransaction[]> => {
-  return await queryMulti<ITransaction>(db, `SELECT * FROM tx ORDER BY date DESC;`);
+  const transactions = await queryMulti<ITransaction>(db, `SELECT * FROM tx ORDER BY date DESC;`);
+  return await Promise.all(transactions.map(async (transaction) => ({
+    ...transaction,
+    // hops: await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [transaction.id!]),
+  })));
 };
 
 export const getTransaction = async (db: SQLiteDatabase, id: number): Promise<ITransaction | null> => {

@@ -5,6 +5,9 @@ export const query = async (db: SQLiteDatabase, sql: string, params: any[]) => {
   return r;
 };
 
+/**
+ * @returns number Insert ID
+ */
 export const queryInsert = async (db: SQLiteDatabase, sql: string, params: any[]): Promise<number> => {
   const r = await query(db, sql, params);
   if (r[0]) {

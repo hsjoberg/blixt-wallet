@@ -69,7 +69,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
     component: (<Input disabled={true} value={convertSatToFiat(paymentRequest.numSatoshis).toString()} />),
   });
 
-  if (nodeInfo !== undefined && nodeInfo.node !== undefined) {
+  if (nodeInfo && nodeInfo.node) {
     formItems.push({
       key: "RECIPIENT",
       title: "Recipient",

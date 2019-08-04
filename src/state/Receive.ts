@@ -57,12 +57,16 @@ export const receive: IReceiveModel = {
         description: invoice.memo,
         value: (invoice as any).value,
         valueMsat: (invoice as any).value * 1000,
+        fee: null,
+        feeMsat: null,
         date: (invoice as any).creationDate,
         expire: (invoice as any).creationDate + paymentRequest.expiry,
         remotePubkey: (paymentRequest as any).destination,
         status: decodeInvoiceState(invoice.state),
         paymentRequest: invoice.paymentRequest,
         rHash: paymentRequest.paymentHash,
+        nodeAliasCached: null,
+        hops: [],
       };
       await dispatch.transaction.syncTransaction(transaction);
     });
