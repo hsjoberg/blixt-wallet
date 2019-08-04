@@ -119,10 +119,6 @@ class LndMobile extends ReactContextBaseJavaModule {
           }
           final Promise promise = requests.remove(request);
           int flags = msg.arg2;
-
-          // WritableMap params = Arguments.createMap();
-          // params.putString("flags", flags);
-
           promise.resolve(flags);
       }
     }
@@ -188,7 +184,9 @@ class LndMobile extends ReactContextBaseJavaModule {
       );
       lndMobileServiceBound = true;
 
-      Log.i(TAG, "LndMobile initailized");
+      Log.i(TAG, "LndMobile initialized");
+
+      // Note: Promise is returned from MSG_REGISTER_CLIENT_ACK message from LndMobileService
     }
     else {
       promise.resolve(0);

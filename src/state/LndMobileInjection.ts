@@ -1,4 +1,9 @@
 import {
+  init,
+  writeConfigFile,
+  checkStatus,
+  startLnd,
+
   addInvoice,
   connectPeer,
   decodePayReq,
@@ -33,6 +38,11 @@ import { lnrpc } from "../../proto/proto";
 
 export interface ILndMobileInjections {
   index: {
+    init: () => Promise<{ data: string } | number>;
+    writeConfigFile: () => Promise<string>;
+    checkStatus: () => Promise<number>;
+    startLnd: () => Promise<string>;
+
     addInvoice: (amount: number, memo: string, expiry?: number) => Promise<lnrpc.AddInvoiceResponse>;
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
     decodePayReq: (bolt11: string) => Promise<lnrpc.PayReq>;
@@ -66,6 +76,11 @@ export interface ILndMobileInjections {
 
 export default {
   index: {
+    init,
+    writeConfigFile,
+    checkStatus,
+    startLnd,
+
     addInvoice,
     connectPeer,
     decodePayReq,

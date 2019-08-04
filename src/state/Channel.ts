@@ -1,8 +1,8 @@
+import { DeviceEventEmitter } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { connectPeer, getNodeInfo } from "../lndmobile/index";
 import { listChannels, openChannel, closeChannel, pendingChannels, channelBalance } from "../lndmobile/channel";
 import { lnrpc } from "../../proto/proto";
-import { DeviceEventEmitter } from "react-native";
 
 export interface IOpenChannelPayload {
   // <pubkey>@<ip>[:<port>]

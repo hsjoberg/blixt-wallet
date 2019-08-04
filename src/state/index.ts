@@ -2,7 +2,7 @@ import { NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 
-import { ILndMobileInjections } from "./LndMobileInjection";
+import { IStoreInjections } from "./store";
 import { lightning, ILightningModel } from "./Lightning";
 import { transaction, ITransactionModel } from "./Transaction";
 import { channel, IChannelModel } from "./Channel";
@@ -21,7 +21,7 @@ interface ICreateWalletPayload {
 }
 
 export interface IStoreModel {
-  initializeApp: Thunk<IStoreModel, void, ILndMobileInjections, IStoreModel>;
+  initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
   clearTransactions: Thunk<IStoreModel>;
   resetDb: Thunk<IStoreModel>;
@@ -29,7 +29,7 @@ export interface IStoreModel {
   setAppReady: Action<IStoreModel, boolean>;
   setWalletCreated: Action<IStoreModel, boolean>;
 
-  createWallet: Thunk<IStoreModel, ICreateWalletPayload, ILndMobileInjections>;
+  createWallet: Thunk<IStoreModel, ICreateWalletPayload, IStoreInjections>;
 
   db?: SQLiteDatabase;
   appReady: boolean;
@@ -50,6 +50,7 @@ const model: IStoreModel = {
       return;
     }
 
+    const { init, writeConfigFile, checkStatus, startLnd } = injections.lndMobile.index;
     const db = await openDatabase();
     actions.setDb(db);
     if (!await getItemObject(StorageItem.app)) {
@@ -58,18 +59,18 @@ const model: IStoreModel = {
       console.log("Initializing db for the first time");
       await setupInitialSchema(db);
       console.log("Writing lnd.conf");
-      await NativeModules.LndMobile.writeConfigFile();
+      await writeConfigFile();
       dispatch.lightning.setFirstSync(true);
     }
 
     actions.setWalletCreated(await getWalletCreated());
 
     try {
-      console.log(await NativeModules.LndMobile.init());
-      const status = await NativeModules.LndMobile.checkStatus();
+      console.log("init", await init());
+      const status = await checkStatus();
       if ((status & LndMobile.STATUS_PROCESS_STARTED) !== LndMobile.STATUS_PROCESS_STARTED) {
         console.log("lnd not started, starting lnd");
-        console.log(await NativeModules.LndMobile.startLnd());
+        console.log(await startLnd());
       }
       actions.setAppReady(true);
     }
