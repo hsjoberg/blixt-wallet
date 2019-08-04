@@ -1,5 +1,4 @@
 import { createStackNavigator } from "react-navigation";
-
 import OnChainInfo from "./OnChainInfo";
 import OnChainTransactionLog from "./OnChainTransactionLog";
 

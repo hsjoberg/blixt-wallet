@@ -1,6 +1,4 @@
 import { sendCommand } from "./utils";
-import { Buffer } from "buffer";
-
 import { lnrpc } from "../../proto/proto";
 
 /**

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableHighlight, Share, Clipboard } from "react-native";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, H1, H3, Toast } from "native-base";
+import { Buffer } from "buffer";
 
 import * as QRCode from "qrcode";
 import SvgUri from "react-native-svg-uri";
 import { NavigationScreenProp } from "react-navigation";
 import { useStoreState } from "../../state/store";
-import { IAddInvoiceResponse } from "../../lightning";
+import { lnrpc } from "../../../proto/proto";
 
 import { formatDistanceStrict, fromUnixTime } from "date-fns";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
@@ -15,9 +16,9 @@ interface IReceiveQRProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IReceiveQRProps) => {
-  const invoice: IAddInvoiceResponse = navigation.getParam("invoice");
-  const transaction =
-    useStoreState((store) => store.transaction.transactions.find((tx) => tx.paymentRequest === invoice.paymentRequest));
+  const invoice: lnrpc.AddInvoiceResponse = navigation.getParam("invoice");
+  const transaction = useStoreState((store) => store.transaction.getTransactionByPaymentRequest(invoice.paymentRequest));
+  // const transaction = useStoreState((store) => store.transaction.getTransactionByRHash(Buffer.from(invoice.rHash).toString("hex")));
 
   if (!transaction) {
     return (
