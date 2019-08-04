@@ -21,6 +21,7 @@ export interface ITransaction {
 
 export interface ITransactionHop {
   id?: number;
+  txId?: number;
   chanId: number | null;
   chanCapacity: number | null;
   amtToForward: number | null;

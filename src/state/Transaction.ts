@@ -1,13 +1,10 @@
-import { Thunk, thunk, Action, action, Select, select, State } from "easy-peasy";
+import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import { ITransaction, getTransactions, createTransaction, updateTransaction } from "../storage/database/transaction";
+
 import { IStoreModel } from "./index";
 import { lookupInvoice } from "../lndmobile";
 
 export interface ITransactionModel {
-  // TODO fix ? and State<any>, seems to be a problem with easy peasy typescript
-  // getTransactionByRHash?: Select<State<any>, (rHash: string) => ITransaction | undefined>;
-  // getTransactionByPaymentRequest?: Select<ITransactionModel, (paymentRequest: string) => ITransaction | undefined>;
-
   addTransaction: Action<ITransactionModel, ITransaction>;
   updateTransaction: Action<ITransactionModel, { transaction: ITransaction }>;
 
@@ -18,17 +15,11 @@ export interface ITransactionModel {
   setTransactions: Action<ITransactionModel, ITransaction[]>;
 
   transactions: ITransaction[];
+  getTransactionByRHash: Computed<ITransactionModel, (rHash: string) => ITransaction | undefined>;
+  getTransactionByPaymentRequest: Computed<ITransactionModel, (paymentRequest: string) => ITransaction | undefined>;
 }
 
 export const transaction: ITransactionModel = {
-  // getTransactionByRHash: select((state) => {
-  //   return (rHash: string) => state.transactions.find((tx: ITransaction) => tx.rHash === rHash);
-  // }),
-  // getTransactionByPaymentRequest: select((state) => {
-  //   return (paymentRequest: string) =>
-  //     state.transactions.find((tx: ITransaction) => tx.paymentRequest === paymentRequest);
-  // }),
-
   /**
    * Synchronizes incoming transactions coming
    * from gGPRC `SubscribeInvoices` (Java backend), from listener in `Receive` store
@@ -123,4 +114,19 @@ export const transaction: ITransactionModel = {
   setTransactions: action((state, transactions) => { state.transactions = transactions; }),
 
   transactions: [],
+  getTransactionByRHash: computed(
+    (state) => {
+      return (rHash: string) => {
+        return state.transactions.find((tx) => rHash === tx.rHash)
+      };
+    }
+  ),
+
+  getTransactionByPaymentRequest: computed(
+    (state) => {
+      return (paymentRequest: string) => {
+        return state.transactions.find((tx) => paymentRequest === tx.paymentRequest)
+      };
+    }
+  ),
 };

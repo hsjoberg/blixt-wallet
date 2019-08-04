@@ -56,7 +56,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             <MetaData title="Description" data={transaction.description} />
             <MetaData title="Amount" data={transaction.value + " Satoshi"} />
             {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee + " Satoshi"} />}
-            {transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
+            {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
             <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>
             <MetaData title="Status" data={capitalize(transaction.status)} />
             {transaction.status !== "SETTLED" &&
