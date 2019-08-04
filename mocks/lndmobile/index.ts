@@ -1,12 +1,11 @@
 import { lnrpc } from "../../proto/proto";
+import { timeout } from "./utils";
 
 export enum ELndMobileStatusCodes {
   STATUS_SERVICE_BOUND = 1,
   STATUS_PROCESS_STARTED = 2,
   STATUS_WALLET_UNLOCKED = 4,
 }
-
-const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
 let LndMobileStatus = 0;
 

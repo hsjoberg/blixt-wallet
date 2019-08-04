@@ -1,9 +1,7 @@
 import { lnrpc } from "../../proto/proto";
 
 export const getTransactions = jest.fn(async (): Promise<lnrpc.TransactionDetails> => {
-  const response = await lnrpc.TransactionDetails.create({
-    transactions: [],
-  });
+  const response = await lnrpc.TransactionDetails.create({ transactions: [] });
   return response;
 });
 
@@ -23,7 +21,7 @@ export const walletBalance = jest.fn(async (): Promise<lnrpc.WalletBalanceRespon
 
 export const sendCoins = jest.fn(async (address: string, sat: number): Promise<lnrpc.SendCoinsResponse> => {
   const response = lnrpc.SendCoinsResponse.create({
-    txid: "7836ca1453ef598b989a09496f48be17e14950a44e6ab2526b4a7fc17f9e4591"
+    txid: "7836ca1453ef598b989a09496f48be17e14950a44e6ab2526b4a7fc17f9e4591",
   });
   return response;
 });

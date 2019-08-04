@@ -1,5 +1,6 @@
 import { Buffer } from "buffer";
 import { lnrpc } from "../../proto/proto";
+import { timeout } from "./utils";
 
 export const genSeed = jest.fn(async (): Promise<lnrpc.GenSeedResponse> => {
   const response = lnrpc.GenSeedResponse.create({
@@ -20,6 +21,7 @@ export const unlockWallet = jest.fn(async (password: string): Promise<lnrpc.Unlo
 });
 
 export const subscribeInvoices = jest.fn(async (): Promise<string> => {
+  await timeout(10);
   return "done";
 });
 //
