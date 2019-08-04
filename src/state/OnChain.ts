@@ -1,8 +1,8 @@
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
 
-import { lnrpc } from "../../proto/proto";
-import { getTransactions, newAddress, walletBalance } from "../lndmobile/onchain";
 import { IStoreModel } from "./index";
+import { IStoreInjections } from "./store";
+import { lnrpc } from "../../proto/proto";
 
 export interface IBlixtTransaction extends lnrpc.ITransaction {
   type: "NORMAL" | "CHANNEL_OPEN" | "CHANNEL_CLOSE";
@@ -15,7 +15,7 @@ export interface ISetTransactionsPayload {
 export interface IOnChainModel {
   getBalance: Thunk<IOnChainModel>;
   getAddress: Thunk<IOnChainModel>;
-  getTransactions: Thunk<IOnChainModel, void, any, IStoreModel>;
+  getTransactions: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
 
   setBalance: Action<IOnChainModel, lnrpc.WalletBalanceResponse>;
   setUnconfirmedBalance: Action<IOnChainModel, lnrpc.WalletBalanceResponse>;
@@ -30,21 +30,22 @@ export interface IOnChainModel {
 }
 
 export const onChain: IOnChainModel = {
-  getBalance: thunk(async (actions) => {
+  getBalance: thunk(async (actions, _, { injections }) => {
+    const { walletBalance } = injections.lndMobile.onchain;
     const walletBalanceResponse = await walletBalance();
     actions.setBalance(walletBalanceResponse);
     actions.setUnconfirmedBalance(walletBalanceResponse);
   }),
 
-  getAddress: thunk(async (actions) => {
+  getAddress: thunk(async (actions, _, { injections }) => {
+    const { newAddress } = injections.lndMobile.onchain;
     const newAddressResponse = await newAddress();
     actions.setAddress(newAddressResponse);
   }),
 
-  getTransactions: thunk(async (actions, _, { getStoreState }) => {
+  getTransactions: thunk(async (actions, _, { getStoreState, injections }) => {
+    const { getTransactions } = injections.lndMobile.onchain;
     const channels = getStoreState().channel.channels;
-
-    console.log("get");
     const transactionDetails = await getTransactions();
 
     const transactions: IBlixtTransaction[] = [];

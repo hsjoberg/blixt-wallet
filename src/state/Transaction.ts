@@ -2,7 +2,7 @@ import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import { ITransaction, getTransactions, createTransaction, updateTransaction } from "../storage/database/transaction";
 
 import { IStoreModel } from "./index";
-import { lookupInvoice } from "../lndmobile";
+import { IStoreInjections } from "./store";
 
 export interface ITransactionModel {
   addTransaction: Action<ITransactionModel, ITransaction>;
@@ -11,7 +11,7 @@ export interface ITransactionModel {
   syncTransaction: Thunk<ITransactionModel, ITransaction, any, IStoreModel>;
 
   getTransactions: Thunk<ITransactionModel, undefined, any, IStoreModel>;
-  checkOpenTransactions: Thunk<ITransactionModel, undefined, any, IStoreModel>;
+  checkOpenTransactions: Thunk<ITransactionModel, undefined, IStoreInjections, IStoreModel>;
   setTransactions: Action<ITransactionModel, ITransaction[]>;
 
   transactions: ITransaction[];
@@ -85,7 +85,8 @@ export const transaction: ITransactionModel = {
    * On app start, check if any invoices have
    * been settled while we were away.
    */
-  checkOpenTransactions: thunk(async (actions, _, { getState, getStoreState }) => {
+  checkOpenTransactions: thunk(async (actions, _, { getState, getStoreState, injections }) => {
+    const { lookupInvoice } = injections.lndMobile.index;
     const db = getStoreState().db;
     if (!db) {
       throw new Error("getTransactions(): db not ready");

@@ -1,8 +1,8 @@
 import { NativeModules, ToastAndroid } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
-import { getInfo } from "../lndmobile/index";
-import { unlockWallet } from "../lndmobile/wallet";
+
 import { IStoreModel } from "./index";
+import { IStoreInjections } from "./store";
 import { lnrpc } from "../../proto/proto";
 
 const { LndMobile } = NativeModules;
@@ -10,10 +10,10 @@ const { LndMobile } = NativeModules;
 const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
 export interface ILightningModel {
-  initialize: Thunk<ILightningModel, undefined, any, IStoreModel>;
+  initialize: Thunk<ILightningModel, undefined, IStoreInjections, IStoreModel>;
 
-  unlockWallet: Thunk<ILightningModel>;
-  getInfo: Thunk<ILightningModel, undefined>;
+  unlockWallet: Thunk<ILightningModel, undefined, IStoreInjections>;
+  getInfo: Thunk<ILightningModel, undefined, IStoreInjections>;
 
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
   setReady: Action<ILightningModel, boolean>;
@@ -48,7 +48,9 @@ export const lightning: ILightningModel = {
     return true;
   }),
 
-  unlockWallet: thunk(async () => {
+  unlockWallet: thunk(async (_, _2, { injections }) => {
+    const { unlockWallet } = injections.lndMobile.wallet;
+
     try {
       console.log("try unlockWallet");
       await unlockWallet("test1234");
@@ -59,7 +61,8 @@ export const lightning: ILightningModel = {
     }
   }),
 
-  getInfo: thunk(async (actions, _, { getState }) => {
+  getInfo: thunk(async (actions, _, { getState, injections }) => {
+    const { getInfo } = injections.lndMobile.index;
     const firstSync = getState().firstSync;
     let info;
     do {
