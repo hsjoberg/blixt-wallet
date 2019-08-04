@@ -26,10 +26,11 @@ export interface ILightningModel {
 }
 
 export const lightning: ILightningModel = {
-  initialize: thunk(async (actions, _, { dispatch }) => {
+  initialize: thunk(async (actions, _, { dispatch, injections }) => {
+    const { checkStatus } = injections.lndMobile.index;
     const start = new Date().getTime();
 
-    const status = await LndMobile.checkStatus();
+    const status = await checkStatus();
     if ((status & LndMobile.STATUS_WALLET_UNLOCKED) !== LndMobile.STATUS_WALLET_UNLOCKED) {
       await actions.unlockWallet(undefined);
     }

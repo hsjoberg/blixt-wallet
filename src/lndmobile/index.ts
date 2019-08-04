@@ -1,9 +1,37 @@
+import { NativeModules } from "react-native";
 import { sendCommand } from "./utils";
 import { lnrpc } from "../../proto/proto";
+const { LndMobile } = NativeModules;
 
 /**
  * @throws
- * TODO test
+ * TODO return values are terrible
+ */
+export const init = async (): Promise<{ data: string } | number> => {
+  return await LndMobile.init();
+};
+
+export const checkStatus = async (): Promise<number> => {
+  return await NativeModules.LndMobile.checkStatus();
+};
+
+/**
+ * @throws
+ * @return string
+ */
+export const writeConfigFile = async () => {
+  return await LndMobile.writeConfigFile();
+};
+
+/**
+ * @throws
+ */
+export const startLnd = async (): Promise<string> => {
+  return await NativeModules.LndMobile.startLnd();
+};
+
+/**
+ * @throws
  */
 export const connectPeer = async (pubkey: string, host: string): Promise<lnrpc.ConnectPeerResponse> => {
   return await sendCommand<lnrpc.IConnectPeerRequest, lnrpc.ConnectPeerRequest, lnrpc.ConnectPeerResponse>({
