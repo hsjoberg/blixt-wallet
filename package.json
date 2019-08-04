@@ -48,6 +48,7 @@
     "@types/remote-redux-devtools": "^0.5.3",
     "babel-jest": "24.8.0",
     "jest": "24.8.0",
+    "jest-date-mock": "^1.0.7",
     "jetifier": "1.6.3",
     "metro-react-native-babel-preset": "0.55.0",
     "react-test-renderer": "16.8.6",
