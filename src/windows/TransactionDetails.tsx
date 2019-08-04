@@ -39,6 +39,10 @@ export default ({ navigation }: ITransactionDetailsProps) => {
   const rHash: string = navigation.getParam("rHash");
   const transaction = useStoreState((store) => store.transaction.transactions.find((tx) => tx.rHash === rHash));
 
+  if (!transaction) {
+    return (<></>);
+  }
+
   const bolt11payReq: string = (QRCode as any).toString(transaction.paymentRequest.toUpperCase())._55;
 
   return (
@@ -48,9 +52,11 @@ export default ({ navigation }: ITransactionDetailsProps) => {
           <Body>
             <H1 style={style.header}>Transaction</H1>
             <MetaData title="Date" data={format(fromUnixTime(transaction.date), "yyyy-MM-dd hh:mm")} />
+            {transaction.nodeAliasCached && <MetaData title="Recipient name" data={transaction.nodeAliasCached} />}
             <MetaData title="Description" data={transaction.description} />
             <MetaData title="Amount" data={transaction.value + " Satoshi"} />
             {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee + " Satoshi"} />}
+            {transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
             <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>
             <MetaData title="Status" data={capitalize(transaction.status)} />
             {transaction.status !== "SETTLED" &&

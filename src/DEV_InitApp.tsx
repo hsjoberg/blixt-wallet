@@ -11,6 +11,7 @@ import { getInfo, connectPeer } from "./lndmobile/index";
 import { initWallet, genSeed } from "./lndmobile/wallet";
 import { pendingChannels, listChannels, openChannel, closeChannel } from "./lndmobile/channel";
 import { newAddress, sendCoins } from "./lndmobile/onchain";
+import { StorageItem, setItemObject } from "./storage/app";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -39,6 +40,7 @@ export default ({ navigation }: IProps) => {
           <Button onPress={async () => actions.clearApp()}><Text>actions.clearApp()</Text></Button>
           <Button onPress={async () => actions.resetDb()}><Text>actions.resetDb()</Text></Button>
           <Button onPress={async () => actions.clearTransactions()}><Text>actions.clearTransactions()</Text></Button>
+          <Button onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text>walletCreated = true</Text></Button>
           <Button onPress={async () => await actions.initializeApp()}><Text>actions.initializeApp()</Text></Button>
           <Button onPress={async () => console.log(await createTransaction(db!, {
             date: 1546300800 + Math.floor(Math.random() * 1000), // 2019-01-01 00:00:00

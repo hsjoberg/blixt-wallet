@@ -38,6 +38,7 @@ export default ({ onPress, transaction }: IProps) => {
           </Row>
           <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
             <Text note={true}>
+              {/*transaction.nodeAliasCached && transaction.nodeAliasCached + ": "*/}
               {description || "No description"}
             </Text>
             <Text note={true} style={{ marginRight: 0 }}>

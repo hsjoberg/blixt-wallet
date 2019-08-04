@@ -35,6 +35,7 @@ export default ({ navigation }: IOpenChannelProps) => {
         text: `Error: ${e.message}`,
         buttonText: "Okay",
       });
+      setOpening(false);
     }
   };
 
