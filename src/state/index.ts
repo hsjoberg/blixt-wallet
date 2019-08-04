@@ -2,17 +2,17 @@ import { NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 
+import { ILndMobileInjections } from "./LndMobileInjection";
 import { lightning, ILightningModel } from "./Lightning";
 import { transaction, ITransactionModel } from "./Transaction";
 import { channel, IChannelModel } from "./Channel";
 import { send, ISendModel } from "./Send";
+import { IReceiveModel, receive } from "./Receive";
+import { IOnChainModel, onChain } from "./OnChain";
 
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
-import { genSeed, initWallet } from "../lndmobile/wallet";
-import { IReceiveModel, receive } from "./Receive";
-import { IOnChainModel, onChain } from "./OnChain";
 
 const { LndMobile } = NativeModules;
 
@@ -21,7 +21,7 @@ interface ICreateWalletPayload {
 }
 
 export interface IStoreModel {
-  initializeApp: Thunk<IStoreModel, void, any, IStoreModel>;
+  initializeApp: Thunk<IStoreModel, void, ILndMobileInjections, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
   clearTransactions: Thunk<IStoreModel>;
   resetDb: Thunk<IStoreModel>;
@@ -29,7 +29,7 @@ export interface IStoreModel {
   setAppReady: Action<IStoreModel, boolean>;
   setWalletCreated: Action<IStoreModel, boolean>;
 
-  createWallet: Thunk<IStoreModel, ICreateWalletPayload>;
+  createWallet: Thunk<IStoreModel, ICreateWalletPayload, ILndMobileInjections>;
 
   db?: SQLiteDatabase;
   appReady: boolean;
@@ -44,7 +44,7 @@ export interface IStoreModel {
 }
 
 const model: IStoreModel = {
-  initializeApp: thunk(async (actions, _, { getState, dispatch }) => {
+  initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
     if (getState().appReady) {
       console.warn("App already initialized");
       return;
@@ -99,7 +99,8 @@ const model: IStoreModel = {
     }
   }),
 
-  createWallet: thunk(async (actions, payload) => {
+  createWallet: thunk(async (actions, payload, { injections }) => {
+    const { genSeed, initWallet } = injections.wallet;
     const seed = await genSeed();
     const wallet = await initWallet(seed.cipherSeedMnemonic, payload.password);
     await setItemObject(StorageItem.walletCreated, true);

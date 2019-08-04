@@ -1,10 +1,10 @@
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as Bech32 from "bech32";
 
-import { decodePayReq, getNodeInfo, sendPaymentSync } from "../lndmobile/index";
 import { IStoreModel } from "./index";
+import { IStoreInjections } from "./store";
+import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
-import { ITransaction, ITransactionHops } from "../storage/database/transaction";
 
 const LN_BECH32_PREFIX = "lntb";
 
@@ -20,8 +20,8 @@ export interface IModelSendPaymentPayload {
 }
 
 export interface ISendModel {
-  setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload>;
-  sendPayment: Thunk<ISendModel, void, any, IStoreModel, Promise<boolean>>;
+  setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections>;
+  sendPayment: Thunk<ISendModel, void, IStoreInjections, IStoreModel, Promise<boolean>>;
 
   setPaymentRequestStr: Action<ISendModel, PaymentRequest>;
   setPaymentRequest: Action<ISendModel, lnrpc.PayReq>;
@@ -36,7 +36,8 @@ export const send: ISendModel = {
   /**
    * @throws
    */
-  setPayment: thunk(async (actions, payload) => {
+  setPayment: thunk(async (actions, payload, { injections }) => {
+    const { decodePayReq, getNodeInfo } = injections.lndMobile.index;
     const paymentRequestStr = payload.paymentRequestStr.replace(/^lightning:/, "");
 
     try {
@@ -63,7 +64,8 @@ export const send: ISendModel = {
   /**
    * @throws
    */
-  sendPayment: thunk(async (_, _2, { getState, dispatch }) => {
+  sendPayment: thunk(async (_, _2, { getState, dispatch, injections }) => {
+    const { sendPaymentSync } = injections.lndMobile.index;
     const { paymentRequestStr, paymentRequest, remoteNodeInfo } = getState();
     if (paymentRequestStr === undefined || paymentRequest === undefined || remoteNodeInfo === undefined) {
       throw new Error("Payment information missing");

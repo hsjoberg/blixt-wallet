@@ -1,11 +1,10 @@
 import { Action, action, Thunk, thunk } from "easy-peasy";
-
-import { decodePayReq, addInvoice } from "../lndmobile/index";
-import { IStoreModel } from "./index";
-import { lnrpc } from "../../proto/proto";
-import { ITransaction } from "../storage/database/transaction";
 import { DeviceEventEmitter } from "react-native";
-import { decodeInvoiceResult, subscribeInvoices } from "../lndmobile/wallet";
+
+import { IStoreModel } from "./index";
+import { IStoreInjections } from "./store";
+import { ITransaction } from "../storage/database/transaction";
+import { lnrpc } from "../../proto/proto";
 
 interface IReceiveModelAddInvoicePayload {
   description: string;
@@ -14,17 +13,18 @@ interface IReceiveModelAddInvoicePayload {
 }
 
 export interface IReceiveModel {
-  initialize: Thunk<IReceiveModel>;
+  initialize: Thunk<IReceiveModel, undefined, IStoreInjections>;
 
-  addInvoice: Thunk<IReceiveModel, IReceiveModelAddInvoicePayload, any, IStoreModel, Promise<lnrpc.AddInvoiceResponse>>;
-  subscribeInvoice: Thunk<IReceiveModel, undefined, any, IStoreModel>;
+  addInvoice: Thunk<IReceiveModel, IReceiveModelAddInvoicePayload, IStoreInjections, IStoreModel, Promise<lnrpc.AddInvoiceResponse>>;
+  subscribeInvoice: Thunk<IReceiveModel, undefined, IStoreInjections, IStoreModel>;
   setInvoiceSubscriptionStarted: Action<IReceiveModel, boolean>;
 
   invoiceSubscriptionStarted: boolean;
 }
 
 export const receive: IReceiveModel = {
-  initialize: thunk(async (actions, _, { getState }) => {
+  initialize: thunk(async (actions, _, { getState, injections }) => {
+    const { subscribeInvoices } = injections.lndMobile.wallet;
     await subscribeInvoices();
 
     if (!(getState().invoiceSubscriptionStarted)) {
@@ -32,12 +32,15 @@ export const receive: IReceiveModel = {
     }
   }),
 
-  addInvoice: thunk(async (_, { description, sat, expiry }) => {
+  addInvoice: thunk(async (_, { description, sat, expiry }, { injections }) => {
+    const { addInvoice } = injections.lndMobile.index;
     const result = await addInvoice(sat, description, expiry);
     return result;
   }),
 
-  subscribeInvoice: thunk((_, _2, { getState, dispatch }) => {
+  subscribeInvoice: thunk((_, _2, { getState, dispatch, injections }) => {
+    const { decodePayReq } = injections.lndMobile.index;
+    const { decodeInvoiceResult } = injections.lndMobile.wallet;
     if (getState().invoiceSubscriptionStarted) {
       console.log("WARNING: Receive.subscribeInvoice() called when subsription already started");
       return;
