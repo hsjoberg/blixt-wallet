@@ -55,7 +55,7 @@ export const startLnd = jest.fn(async (): Promise<string> => {
 //   return response;
 // };
 
-export const getInfo = async (): Promise<lnrpc.GetInfoResponse> => {
+export const getInfo = jest.fn(async (): Promise<lnrpc.GetInfoResponse> => {
   const response = lnrpc.GetInfoResponse.create({
     uris: [],
     chains: [{
@@ -72,7 +72,7 @@ export const getInfo = async (): Promise<lnrpc.GetInfoResponse> => {
     version: '0.7.1-beta commit=v0.7.1-beta-rc1-10-g3760f29f5e758b2865b756604333ca22cf23e90b'
   });
   return response;
-};
+});
 
 // export const sendPaymentSync = async (paymentRequest: string): Promise<lnrpc.SendResponse> => {
 //   const response = await sendCommand<lnrpc.ISendRequest, lnrpc.SendRequest, lnrpc.SendResponse>({

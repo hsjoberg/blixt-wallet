@@ -900,7 +900,7 @@ exports[`renders correctly 1`] = `
               }
               uppercase={false}
             >
-              getInfo
+              mockConstructor
               ()
             </Text>
           </View>
@@ -955,7 +955,7 @@ exports[`renders correctly 1`] = `
               }
               uppercase={false}
             >
-              genSeed
+              mockConstructor
               ()
             </Text>
           </View>
@@ -1010,7 +1010,7 @@ exports[`renders correctly 1`] = `
               }
               uppercase={false}
             >
-              newAddress
+              mockConstructor
               ()
             </Text>
           </View>
@@ -1065,7 +1065,7 @@ exports[`renders correctly 1`] = `
               }
               uppercase={false}
             >
-              pendingChannels
+              mockConstructor
               ()
             </Text>
           </View>
@@ -1120,7 +1120,7 @@ exports[`renders correctly 1`] = `
               }
               uppercase={false}
             >
-              listChannels
+              mockConstructor
               ()
             </Text>
           </View>

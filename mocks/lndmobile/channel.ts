@@ -29,7 +29,7 @@ import { lnrpc } from "../../proto/proto";
 //   return response;
 // };
 
-export const pendingChannels = async (): Promise<lnrpc.PendingChannelsResponse> => {
+export const pendingChannels = jest.fn(async (): Promise<lnrpc.PendingChannelsResponse> => {
   const response = lnrpc.PendingChannelsResponse.create({
     pendingClosingChannels: [],
     pendingForceClosingChannels: [],
@@ -38,19 +38,19 @@ export const pendingChannels = async (): Promise<lnrpc.PendingChannelsResponse> 
     totalLimboBalance: 0,
   });
   return response;
-};
+});
 
-export const listChannels = async (): Promise<lnrpc.ListChannelsResponse> => {
+export const listChannels = jest.fn(async (): Promise<lnrpc.ListChannelsResponse> => {
   const response = lnrpc.ListChannelsResponse.create({
     channels: [], // TODO
   });
   return response;
-};
+});
 
-export const channelBalance = async (): Promise<lnrpc.ChannelBalanceResponse> => {
+export const channelBalance = jest.fn(async (): Promise<lnrpc.ChannelBalanceResponse> => {
   const response = lnrpc.ChannelBalanceResponse.create({
     balance: 0, // TODO
     pendingOpenBalance: 0,
   });
   return response;
-};
+});
