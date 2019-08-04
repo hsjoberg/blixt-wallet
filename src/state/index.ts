@@ -1,4 +1,3 @@
-import { NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
@@ -15,12 +14,16 @@ import { IFiatModel, fiat } from "./Fiat";
 import { ISecurityModel, security } from "./Security";
 import { ISettingsModel, settings } from "./Settings";
 
+
+import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
 
-const { LndMobile } = NativeModules;
+interface ICreateWalletPayload {
+  password: string;
+}
 
 export interface IStoreModel {
   initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
@@ -52,7 +55,7 @@ export interface IStoreModel {
   walletSeed?: string[];
 }
 
-const model: IStoreModel = {
+export const model: IStoreModel = {
   initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
     if (getState().appReady) {
       console.log("App already initialized");
@@ -77,7 +80,7 @@ const model: IStoreModel = {
     try {
       console.log("init", await init());
       const status = await checkStatus();
-      if ((status & LndMobile.STATUS_PROCESS_STARTED) !== LndMobile.STATUS_PROCESS_STARTED) {
+      if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
         console.log("lnd not started, starting lnd");
         console.log(await startLnd());
       }

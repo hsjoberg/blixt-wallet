@@ -12,8 +12,14 @@ export const init = async (): Promise<{ data: string } | number> => {
   return await LndMobile.init();
 };
 
+export enum ELndMobileStatusCodes {
+  STATUS_SERVICE_BOUND = 1,
+  STATUS_PROCESS_STARTED = 2,
+  STATUS_WALLET_UNLOCKED = 4,
+}
+
 export const checkStatus = async (): Promise<number> => {
-  return await NativeModules.LndMobile.checkStatus();
+  return await LndMobile.checkStatus();
 };
 
 /**
@@ -28,7 +34,7 @@ export const writeConfigFile = async () => {
  * @throws
  */
 export const startLnd = async (): Promise<string> => {
-  return await NativeModules.LndMobile.startLnd();
+  return await LndMobile.startLnd();
 };
 
 /**

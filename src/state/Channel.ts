@@ -1,10 +1,7 @@
 import { DeviceEventEmitter } from "react-native";
 import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import Long from "long";
-import bitcoin from "bitcoin-units";
 
-import { connectPeer, getNodeInfo } from "../lndmobile/index";
-import { listChannels, openChannel, closeChannel, pendingChannels, channelBalance } from "../lndmobile/channel";
 import { lnrpc } from "../../proto/proto";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { IStoreInjections } from "./store";
@@ -157,7 +154,10 @@ export const channel: IChannelModel = {
     return true;
   }),
 
-  getChannels: thunk(async (actions, _, { getState }) => {
+  getChannels: thunk(async (actions, _, { getState, injections }) => {
+    const { getNodeInfo } = injections.lndMobile.index;
+    const { listChannels, pendingChannels } = injections.lndMobile.channel;
+
     const channels = await listChannels();
     actions.setChannels(channels.channels);
 
@@ -194,7 +194,9 @@ export const channel: IChannelModel = {
     actions.setChannelEvents(channelEvents);
   }),
 
-  connectAndOpenChannel: thunk(async (_, { peer, amount }) => {
+  connectAndOpenChannel: thunk(async (_, { peer, amount }, { injections }) => {
+    const { connectPeer } = injections.lndMobile.index;
+    const { openChannel } = injections.lndMobile.channel;
     const [pubkey, host] = peer.split("@");
     try {
       await connectPeer(pubkey, host);
@@ -210,13 +212,15 @@ export const channel: IChannelModel = {
     return result;
   }),
 
-  closeChannel: thunk(async (_, { fundingTx, outputIndex }) => {
+  closeChannel: thunk(async (_, { fundingTx, outputIndex }, { injections }) => {
+    const { closeChannel } = injections.lndMobile.channel;
     const result = await closeChannel(fundingTx, outputIndex);
     console.log(result);
     return result;
   }),
 
-  getBalance: thunk(async (actions) => {
+  getBalance: thunk(async (actions, _, { injections }) => {
+    const { channelBalance } = injections.lndMobile.channel;
     const response = await channelBalance(); // response.balance is not Long for some reason
     actions.setBalance(
       response.balance.toNumber

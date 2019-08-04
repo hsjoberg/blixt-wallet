@@ -1,14 +1,13 @@
-import { NativeModules, ToastAndroid } from "react-native";
+import { Platform, ToastAndroid } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import { differenceInDays } from "date-fns";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
+import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { lnrpc } from "../../proto/proto";
 import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/app";
 import { Chain } from "../utils/build";
-
-const { LndMobile } = NativeModules;
 
 const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
@@ -45,7 +44,7 @@ export const lightning: ILightningModel = {
     const start = new Date().getTime();
 
     const status = await checkStatus();
-    if ((status & LndMobile.STATUS_WALLET_UNLOCKED) !== LndMobile.STATUS_WALLET_UNLOCKED) {
+    if ((status & ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) !== ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) {
       try {
         await actions.unlockWallet(undefined);
       } catch (e) {
@@ -77,7 +76,10 @@ export const lightning: ILightningModel = {
     }
 
     console.log("lnd startup time: " + (new Date().getTime() - start) + "ms");
-    ToastAndroid.show("lnd startup time: " + (new Date().getTime() - start) + "ms", ToastAndroid.SHORT);
+    if (Platform.OS === "android") {
+      ToastAndroid.show("lnd startup time: " + (new Date().getTime() - start) + "ms", ToastAndroid.SHORT);
+    }
+
     return true;
   }),
 
