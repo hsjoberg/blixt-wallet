@@ -26,7 +26,13 @@ export interface ILightningModel {
 }
 
 export const lightning: ILightningModel = {
-  initialize: thunk(async (actions, _, { dispatch, injections }) => {
+  initialize: thunk(async (actions, _, { getState, dispatch, injections }) => {
+    const { ready } = getState();
+    if (ready)  {
+      console.log("Lightning store already started");
+      return true;
+    }
+
     const { checkStatus } = injections.lndMobile.index;
     const start = new Date().getTime();
 
@@ -67,14 +73,13 @@ export const lightning: ILightningModel = {
     const firstSync = getState().firstSync;
     let info;
     do {
-      console.log("getInfo");
       info = await getInfo();
       console.log("blockHeight", info.blockHeight);
       console.log("syncedToChain", info.syncedToChain);
       actions.setNodeInfo(info);
 
       if (info.syncedToChain !== true) {
-        await timeout(firstSync ? 6000 : 600);
+        await timeout(firstSync ? 6000 : 333);
       }
       else {
         console.log(info);

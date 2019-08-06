@@ -17,7 +17,7 @@ export const getTransactions = async (): Promise<lnrpc.TransactionDetails> => {
 /**
  * @throws
  */
-export const newAddress = async (type: lnrpc.AddressType = lnrpc.AddressType.WITNESS_PUBKEY_HASH): Promise<lnrpc.NewAddressResponse> => {
+export const newAddress = async (type: lnrpc.AddressType = lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH): Promise<lnrpc.NewAddressResponse> => {
   const response = await sendCommand<lnrpc.INewAddressRequest, lnrpc.NewAddressRequest, lnrpc.NewAddressResponse>({
     request: lnrpc.NewAddressRequest,
     response: lnrpc.NewAddressResponse,
