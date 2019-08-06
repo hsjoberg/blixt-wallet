@@ -2,11 +2,10 @@ import React, { useEffect } from "react";
 import { StyleSheet, View, Clipboard } from "react-native";
 import { Body, Text, Header, Container, H1, H3, Right, Left, Button, Title, Icon, Toast } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
-import * as QRCode from "qrcode";
-import SvgUri from "react-native-svg-uri";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
+import QrCode from "../../components/QrCode";
 
 interface IOnChainInfoProps {
   navigation: NavigationScreenProp<{}>;
@@ -65,12 +64,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
         <View style={style.qrContainer}>
           <View style={style.qr}>
             <H3 style={{ marginBottom: 8 }}>Send Bitcoin on-chain to this address:</H3>
-            <SvgUri
-              width={340}
-              height={340}
-              fill={blixtTheme.light}
-              svgXmlData={(QRCode as any).toString(address.toUpperCase())._55}
-            />
+            <QrCode data={address} />
             <Text
               style={{ paddingTop: 6, paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}
               numberOfLines={1}
@@ -108,6 +102,13 @@ const style = StyleSheet.create({
     flex: 1,
     width: "100%",
     alignItems: "center",
+  },
+  qrCodeContainer: {
+    width: 360,
+    height: 360,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: blixtTheme.light,
   },
 });
 

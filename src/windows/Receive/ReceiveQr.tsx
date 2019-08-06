@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableHighlight, Share, Clipboard } from "react-native";
+import { View, Share, Clipboard } from "react-native";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, H1, H3, Toast } from "native-base";
-import { Buffer } from "buffer";
 
-import * as QRCode from "qrcode";
-import SvgUri from "react-native-svg-uri";
 import { NavigationScreenProp } from "react-navigation";
 import { useStoreState } from "../../state/store";
 import { lnrpc } from "../../../proto/proto";
+import QrCode from "../../components/QrCode";
 
 import { formatDistanceStrict, fromUnixTime } from "date-fns";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 interface IReceiveQRProps {
   navigation: NavigationScreenProp<{}>;
@@ -41,8 +38,6 @@ export default ({ navigation }: IReceiveQRProps) => {
     console.log("Status settled");
     setTimeout(() => navigation.pop(), 1);
   }
-
-  const bolt11payReq: string = (QRCode as any).toString(transaction.paymentRequest.toUpperCase())._55;
 
   const Ticker = ({ expire }: { expire: number; }) => {
     const [display, setDisplay] = useState(formatDistanceStrict(new Date(), fromUnixTime(expire)));
@@ -95,20 +90,15 @@ export default ({ navigation }: IReceiveQRProps) => {
             expire={transaction.expire}
           />
         </Text>
-        <TouchableHighlight
+        <QrCode
+          data={transaction.paymentRequest.toUpperCase()}
           onPress={async () => {
             await Share.share({
               // message: lnInvoice,
-              url: "lightning:" + bolt11payReq,
+              url: "lightning:" + transaction.paymentRequest,
             });
-          }}>
-            <SvgUri
-              width={340}
-              height={340}
-              svgXmlData={bolt11payReq}
-              fill={blixtTheme.light}
-            />
-        </TouchableHighlight>
+          }}
+        />
         <Text
           onPress={onPressPaymentRequest}
           style={{ paddingTop: 6, paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}

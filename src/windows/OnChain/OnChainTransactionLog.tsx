@@ -1,12 +1,9 @@
 import React, { useEffect } from "react";
-import { FlatList, StyleSheet, View, Clipboard } from "react-native";
-import { Body, Text, Header, Container, Content, H1, H3, Right, Left, Button, Title, Icon, Toast } from "native-base";
-import { NavigationScreenProp, createStackNavigator } from "react-navigation";
-import * as QRCode from "qrcode";
-import SvgUri from "react-native-svg-uri";
+import { FlatList } from "react-native";
+import { Body, Header, Container, Content, Right, Left, Button, Title, Icon } from "native-base";
+import { NavigationScreenProp } from "react-navigation";
 
 import OnChainTransactionItem from "../../components/OnChainTransactionItem";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 
 export interface IOnChainTransactionLogProps {
