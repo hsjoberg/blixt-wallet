@@ -38,7 +38,7 @@ export const receive: IReceiveModel = {
     return result;
   }),
 
-  subscribeInvoice: thunk((_, _2, { getState, dispatch, injections }) => {
+  subscribeInvoice: thunk((actions, _2, { getState, dispatch, injections }) => {
     const { decodePayReq } = injections.lndMobile.index;
     const { decodeInvoiceResult } = injections.lndMobile.wallet;
     if (getState().invoiceSubscriptionStarted) {
@@ -73,6 +73,7 @@ export const receive: IReceiveModel = {
       };
       await dispatch.transaction.syncTransaction(transaction);
     });
+    actions.setInvoiceSubscriptionStarted(true);
   }),
 
   setInvoiceSubscriptionStarted: action((state, payload) => { state.invoiceSubscriptionStarted = payload }),

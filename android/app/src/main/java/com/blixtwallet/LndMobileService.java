@@ -28,6 +28,7 @@ public class LndMobileService extends Service {
   private static final String TAG = "LndMobileService";
   boolean lndStarted = false;
   boolean walletUnlocked = false;
+  boolean subscribeInvoicesStreamActive = false;
 
   Messenger messenger = new Messenger(new IncomingHandler());
   ArrayList<Messenger> mClients = new ArrayList<Messenger>();
@@ -92,8 +93,16 @@ public class LndMobileService extends Service {
           case MSG_GRPC_STREAM_COMMAND:
             method = (String) bundle.get("method");
             b = (byte[]) bundle.get("payload");
-
             m = syncMethods.get(method);
+
+            if (subscribeInvoicesStreamActive && method.equals("SubscribeInvoices")) {
+              Log.i(TAG, "Attempting to call gGRPC command SubscribeInvoices when stream already active, ignoring request.");
+              return;
+            }
+            else if (method.equals("SubscribeInvoices")) {
+              subscribeInvoicesStreamActive = true;
+            }
+
             if (m == null) {
               m = streamMethods.get(method);
               if (m == null) {
