@@ -20,7 +20,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   useEffect(() => {
     (async () => {
       await getBalance(undefined);
-      await getAddress(undefined);
+      await getAddress({});
     })();
   }, []);
 
@@ -28,7 +28,9 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
     return (<></>);
   }
 
-  const onGeneratePress = async () => await getAddress(undefined);
+  const onGeneratePress = async () => await getAddress({
+    forceNew: true,
+  });
 
   const onBtcAddressPress = () => {
     Clipboard.setString(address);

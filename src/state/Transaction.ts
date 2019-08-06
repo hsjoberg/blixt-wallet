@@ -118,16 +118,18 @@ export const transaction: ITransactionModel = {
   getTransactionByRHash: computed(
     (state) => {
       return (rHash: string) => {
-        return state.transactions.find((tx) => rHash === tx.rHash)
+        return state.transactions.find((tx) => rHash === tx.rHash);
       };
-    }
+    },
   ),
 
   getTransactionByPaymentRequest: computed(
     (state) => {
       return (paymentRequest: string) => {
-        return state.transactions.find((tx) => paymentRequest === tx.paymentRequest)
+        return state.transactions.find((tx) => {
+          return paymentRequest === tx.paymentRequest;
+        });
       };
-    }
+    },
   ),
 };

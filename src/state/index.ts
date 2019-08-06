@@ -46,7 +46,7 @@ export interface IStoreModel {
 const model: IStoreModel = {
   initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
     if (getState().appReady) {
-      console.warn("App already initialized");
+      console.log("App already initialized");
       return;
     }
 
