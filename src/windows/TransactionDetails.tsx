@@ -1,17 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { StyleSheet, Clipboard } from "react-native";
-import { View } from "react-native";
-import { Body, Card, Text, CardItem, H1, Toast, Button, Icon } from "native-base";
+import { Body, Card, Text, CardItem, H1, Toast } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
-import * as QRCode from "qrcode";
-import SvgUri from "react-native-svg-uri";
-
-import { useStoreState } from "../state/store";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { fromUnixTime, format } from "date-fns";
-import Blurmodal from "../components/BlurModal";
-import { capitalize } from "../utils";
 
+import Blurmodal from "../components/BlurModal";
+import QrCode from "../components/QrCode";
+import { capitalize } from "../utils";
+import { useStoreState } from "../state/store";
 
 interface IMetaDataProps {
   title: string;
@@ -37,13 +33,11 @@ export interface ITransactionDetailsProps {
 }
 export default ({ navigation }: ITransactionDetailsProps) => {
   const rHash: string = navigation.getParam("rHash");
-  const transaction = useStoreState((store) => store.transaction.transactions.find((tx) => tx.rHash === rHash));
+  const transaction = useStoreState((store) => store.transaction.getTransactionByRHash(rHash));
 
   if (!transaction) {
     return (<></>);
   }
-
-  const bolt11payReq: string = (QRCode as any).toString(transaction.paymentRequest.toUpperCase())._55;
 
   return (
     <Blurmodal navigation={navigation}>
@@ -57,13 +51,11 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             <MetaData title="Amount" data={transaction.value + " Satoshi"} />
             {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee + " Satoshi"} />}
             {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
-            <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>
+            {transaction.value < 0 && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}
             <MetaData title="Status" data={capitalize(transaction.status)} />
             {transaction.status !== "SETTLED" &&
               <>
-                <View style={{ alignItems: "center", justifyContent: "center", width: "100%" }}>
-                  <SvgUri width={300} height={300} svgXmlData={bolt11payReq} fill={blixtTheme.light} />
-                </View>
+                <QrCode data={transaction.paymentRequest.toUpperCase()} size={280} border={25} />
                 <Text
                   style={{ ...style.detailText, paddingTop: 4, paddingLeft: 18, paddingRight: 18 }}
                   onPress={() => {
