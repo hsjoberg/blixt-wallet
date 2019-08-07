@@ -55,6 +55,6 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   contentCanvas: {
-    width: "87%",
+    width: "88%",
   },
 });
