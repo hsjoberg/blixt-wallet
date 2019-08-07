@@ -2,10 +2,10 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Body, Card, CardItem, Text, Right, Row } from "native-base";
 
-import { format, fromUnixTime } from "date-fns";
+import { fromUnixTime } from "date-fns";
 import { ITransaction } from "../storage/database/transaction";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { capitalize } from "../utils";
+import { capitalize, formatISO } from "../utils";
 
 interface IProps {
   onPress: (id: string) => void;
@@ -27,7 +27,7 @@ export default ({ onPress, transaction }: IProps) => {
         <Body>
           <Row style={transactionStyle.transactionTop}>
             <Text style={transactionStyle.transactionTopDate}>
-              {format(fromUnixTime(date), "yyyy-MM-dd hh:mm")}
+              {formatISO(fromUnixTime(date))}
             </Text>
             <Right>
               <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>

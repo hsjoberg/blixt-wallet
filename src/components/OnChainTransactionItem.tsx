@@ -1,10 +1,11 @@
 import React from "react";
 import { View } from "react-native";
 import { Body, Text, Right, ListItem, Icon } from "native-base";
-import { format, fromUnixTime } from "date-fns";
+import { fromUnixTime } from "date-fns";
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { IBlixtTransaction } from "../state/OnChain";
+import { formatISO } from "../utils";
 
 export interface IOnChainTransactionItemProps {
   transaction: IBlixtTransaction;
@@ -29,7 +30,7 @@ export const OnChainTransactionItem = ({ transaction }: IOnChainTransactionItemP
       }
       <Body>
         <View style={{ flexDirection: "row" }}>
-          <Text>{format(fromUnixTime(transaction.timeStamp), "yyyy-MM-dd hh:mm")}</Text>
+          <Text>{formatISO(fromUnixTime(transaction.timeStamp))}</Text>
           <Right>
             {transaction.amount && <Text>{transaction.amount} Satoshi</Text>}
           </Right>

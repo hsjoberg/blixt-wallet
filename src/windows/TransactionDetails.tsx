@@ -2,11 +2,11 @@ import React from "react";
 import { StyleSheet, Clipboard } from "react-native";
 import { Body, Card, Text, CardItem, H1, Toast } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
-import { fromUnixTime, format } from "date-fns";
+import { fromUnixTime } from "date-fns";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
-import { capitalize } from "../utils";
+import { capitalize, formatISO } from "../utils";
 import { useStoreState } from "../state/store";
 
 interface IMetaDataProps {
@@ -45,7 +45,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
         <CardItem>
           <Body>
             <H1 style={style.header}>Transaction</H1>
-            <MetaData title="Date" data={format(fromUnixTime(transaction.date), "yyyy-MM-dd hh:mm")} />
+            <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date))} />
             {transaction.nodeAliasCached && <MetaData title="Recipient name" data={transaction.nodeAliasCached} />}
             <MetaData title="Description" data={transaction.description} />
             <MetaData title="Amount" data={transaction.value + " Satoshi"} />
