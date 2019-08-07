@@ -158,7 +158,7 @@ const style = StyleSheet.create({
     top: 12 + iconTopPadding,
     left: 8,
     fontSize: 24,
-    color: blixtTheme.light, // "#d3a100",
+    color: blixtTheme.light,
   },
   channelsIcon: {
     position: "absolute",
@@ -167,7 +167,7 @@ const style = StyleSheet.create({
     top: 13 + iconTopPadding,
     left: 8 + 24 + 8,
     fontSize: 24,
-    color: blixtTheme.light, // "#007FFF",
+    color: blixtTheme.light,
   },
   settingsIcon: {
     position: "absolute",
@@ -187,14 +187,14 @@ const style = StyleSheet.create({
 
 const headerInfo = StyleSheet.create({
   btc: {
-    color: blixtTheme.light, // "#222",
+    color: blixtTheme.light,
     marginTop: 14,
     paddingTop: iconTopPadding + 16,
     marginBottom: 3,
     fontFamily: theme.fontFamily,
   },
   fiat: {
-    color: blixtTheme.light, // "#666",
+    color: blixtTheme.light,
     fontSize: 18,
     fontFamily: theme.fontFamily,
   },

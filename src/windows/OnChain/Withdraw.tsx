@@ -6,6 +6,7 @@ import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { parseBech32 } from "../../utils";
 
 export interface IOpenChannelProps {
   navigation: NavigationScreenProp<{}>;
@@ -46,6 +47,15 @@ export default ({ navigation }: IOpenChannelProps) => {
     }
   };
 
+  const onAddressChange = (text: string) => {
+    const parsed = parseBech32(text);
+    setAddress(parsed.address);
+    if (parsed.amount) {
+      const s = parsed.amount * 100000000;
+      setSat(s.toString());
+    }
+  };
+
   if (camera) {
     return (
       <RNCamera
@@ -56,7 +66,7 @@ export default ({ navigation }: IOpenChannelProps) => {
           buttonPositive: "Okay",
         }}
         onBarCodeRead={({ data }) => {
-          setAddress(data);
+          onAddressChange(data);
           setCamera(false);
         }}
         captureAudio={false}
@@ -92,7 +102,7 @@ export default ({ navigation }: IOpenChannelProps) => {
             title: "Address",
             component: (
               <>
-                <Input placeholder="Bitcoin address" value={address} onChangeText={setAddress} />
+                <Input placeholder="Bitcoin address" value={address} onChangeText={onAddressChange} />
                 <Icon type="AntDesign" name="camera" onPress={() => setCamera(true)} />
               </>
             )
