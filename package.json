@@ -9,7 +9,7 @@
     "test-update-snapshot": "jest -u",
     "postinstall": "jetify",
     "jetify": "jetify",
-    "gen-proto": "pbjs -t static-module -w es6 -o proto/proto.js proto/rpc.proto && pbts -o proto/proto.d.ts proto/proto.js"
+    "gen-proto": "pbjs -t static-module -w es6 --force-long -o proto/proto.js proto/rpc.proto && pbts -o proto/proto.d.ts proto/proto.js"
   },
   "dependencies": {
     "@react-native-community/async-storage": "1.6.1",
@@ -19,6 +19,7 @@
     "date-fns": "2.0.0-beta.2",
     "deep-map-keys": "^2.0.1",
     "easy-peasy": "3.0.0",
+    "long": "^4.0.0",
     "native-base": "2.13.4",
     "protobufjs": "^6.8.8",
     "react": "16.8.6",
@@ -44,6 +45,7 @@
     "@types/react-native-sqlite-storage": "^3.3.1",
     "@types/react-test-renderer": "16.8.3",
     "@types/remote-redux-devtools": "^0.5.3",
+    "@types/long": "^4.0.0",
     "babel-jest": "24.8.0",
     "jest": "24.8.0",
     "jest-date-mock": "^1.0.7",

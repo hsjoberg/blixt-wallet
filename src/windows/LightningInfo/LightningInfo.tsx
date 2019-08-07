@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import { Body, Header, Container, Left, Button, Title, Right, Icon, H1, H3, Fab } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
-import { useStoreState, useStoreActions } from "../../state/store";
+import Long from "long";
 
+import { useStoreState, useStoreActions } from "../../state/store";
 import ChannelCard from "../../components/ChannelCard";
 import PendingChannelCard from "../../components/PendingChannelCard";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
@@ -29,7 +30,7 @@ export default ({ navigation }: ILightningInfoProps) => {
     })();
   }, [getChannels]);
 
-  const balance = channels.reduce((accumulator, channel) => accumulator + channel.localBalance, 0);
+  const balance = channels.reduce((accumulator, channel) => accumulator.add(channel.localBalance || 0), Long.fromInt(0));
 
   const channelCards = [
     ...pendingOpenChannels.map((pendingChannel, i) => (
@@ -70,7 +71,7 @@ export default ({ navigation }: ILightningInfoProps) => {
         <View style={style.balanceInfo}>
           <H1 style={{ textAlign: "center" }}>
             Spendable amount{"\n"}
-            {balance} Satoshi
+            {balance.toString()} Satoshi
           </H1>
         </View>
         <View>

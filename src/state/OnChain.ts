@@ -1,4 +1,5 @@
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
+import Long from "long";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -32,11 +33,11 @@ export interface IOnChainModel {
   setAddress: Action<IOnChainModel, lnrpc.NewAddressResponse>;
   setTransactions: Action<IOnChainModel, ISetTransactionsPayload>;
 
-  balance: number;
-  unconfirmedBalance: number;
-  totalBalance: Computed<IOnChainModel, number>;
+  balance: Long;
+  unconfirmedBalance: Long;
+  totalBalance: Computed<IOnChainModel, Long>;
   address?: string;
-  transactions: lnrpc.Transaction[];
+  transactions: lnrpc.ITransaction[];
 }
 
 export const onChain: IOnChainModel = {
@@ -85,13 +86,13 @@ export const onChain: IOnChainModel = {
     return response;
   }),
 
-  setBalance: action((state, payload) => state.balance = payload.confirmedBalance),
-  setUnconfirmedBalance: action((state, payload) => state.unconfirmedBalance = payload.unconfirmedBalance),
-  setAddress: action((state, payload) => state.address = payload.address),
-  setTransactions: action((state, payload) => state.transactions = payload.transactions),
+  setBalance: action((state, payload) => { state.balance = payload.confirmedBalance; }),
+  setUnconfirmedBalance: action((state, payload) => { state.unconfirmedBalance = payload.unconfirmedBalance; }),
+  setAddress: action((state, payload) => { state.address = payload.address; }),
+  setTransactions: action((state, payload) => { state.transactions = payload.transactions; }),
 
-  balance: 0,
-  unconfirmedBalance: 0,
-  totalBalance: computed((state) => state.balance + state.unconfirmedBalance),
+  balance: Long.fromInt(0),
+  unconfirmedBalance: Long.fromInt(0),
+  totalBalance: computed((state) => state.balance.add(state.unconfirmedBalance)),
   transactions: [],
 };

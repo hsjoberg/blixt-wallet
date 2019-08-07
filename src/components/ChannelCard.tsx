@@ -2,11 +2,11 @@ import React from "react";
 import { Button, Card, CardItem, Body, Row, Right, Text, Left } from "native-base";
 
 import { useStoreActions } from "../state/store";
-import { IChannel } from "../lightning";
 import { StyleSheet } from "react-native";
+import { lnrpc } from "../../proto/proto";
 
 export interface IChannelCardProps {
-  channel: IChannel;
+  channel: lnrpc.IChannel;
   alias?: string;
 }
 export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
@@ -62,7 +62,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
               <Text style={style.channelDetailTitle}>Amount in channel</Text>
             </Left>
             <Right>
-              <Text style={style.channelDetailValue}>{channel.localBalance}/{channel.capacity} satoshi</Text>
+              <Text style={style.channelDetailValue}>{channel.localBalance.toString()}/{channel.capacity.toString()} satoshi</Text>
             </Right>
           </Row>
           <Row>

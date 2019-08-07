@@ -1,5 +1,6 @@
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import { DeviceEventEmitter } from "react-native";
+import Long from "long";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -56,15 +57,16 @@ export const receive: IReceiveModel = {
       // TODO in the future we should handle
       // both value (the requested amount in the payreq)
       // and amtPaidMsat (the actual amount paid)
+
       const transaction: ITransaction = {
         description: invoice.memo,
-        value: (invoice as any).value,
-        valueMsat: (invoice as any).value * 1000,
+        value: invoice.value || Long.fromInt(0),
+        valueMsat: (invoice.value && invoice.value.mul(1000)) || Long.fromInt(0),
         fee: null,
         feeMsat: null,
-        date: (invoice as any).creationDate,
-        expire: (invoice as any).creationDate + paymentRequest.expiry,
-        remotePubkey: (paymentRequest as any).destination,
+        date: invoice.creationDate,
+        expire: invoice.creationDate.add(paymentRequest.expiry),
+        remotePubkey: paymentRequest.destination,
         status: decodeInvoiceState(invoice.state),
         paymentRequest: invoice.paymentRequest,
         rHash: paymentRequest.paymentHash,

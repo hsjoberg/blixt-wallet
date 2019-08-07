@@ -1,14 +1,31 @@
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { queryInsert, queryMulti, querySingle, query } from "./db-utils";
+import Long from "long";
+
+export interface IDBTransaction {
+  id: number;
+  date: string;
+  expire: string;
+  value: string;
+  valueMsat: string;
+  fee: string | null;
+  feeMsat: string | null;
+  description: string;
+  remotePubkey: string;
+  status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN";
+  paymentRequest: string;
+  rHash: string;
+  nodeAliasCached: string | null;
+}
 
 export interface ITransaction {
   id?: number;
-  date: number;
-  expire: number;
-  value: number;
-  valueMsat: number;
-  fee: number | null;
-  feeMsat: number | null;
+  date: Long;
+  expire: Long;
+  value: Long;
+  valueMsat: Long;
+  fee: Long | null;
+  feeMsat: Long | null;
   description: string;
   remotePubkey: string;
   paymentRequest: string;
@@ -22,12 +39,12 @@ export interface ITransaction {
 export interface ITransactionHop {
   id?: number;
   txId?: number;
-  chanId: number | null;
-  chanCapacity: number | null;
-  amtToForward: number | null;
-  amtToForwardMsat: number | null;
-  fee: number | null;
-  feeMsat: number | null;
+  chanId: Long | null;
+  chanCapacity: Long | null;
+  amtToForward: Long | null;
+  amtToForwardMsat: Long | null;
+  fee: Long | null;
+  feeMsat: Long | null;
   expiry: number | null;
   pubKey: string | null;
 }
@@ -48,18 +65,18 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
     VALUES
     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
-      transaction.date,
-      transaction.expire,
-      transaction.value,
-      transaction.valueMsat,
-      transaction.fee,
-      transaction.feeMsat,
+      transaction.date.toString(),
+      transaction.expire.toString(),
+      transaction.value.toString(),
+      transaction.valueMsat.toString(),
+      (transaction.fee && transaction.fee.toString()) || null,
+      (transaction.feeMsat && transaction.feeMsat.toString()) || null,
       transaction.description,
       transaction.remotePubkey,
       transaction.status,
       transaction.paymentRequest,
       transaction.rHash,
-      transaction.nodeAliasCached,
+      transaction.nodeAliasCached || null,
     ],
   );
 
@@ -74,13 +91,13 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
         (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           txId,
-          transactionHop.chanId,
-          transactionHop.chanCapacity,
-          transactionHop.amtToForward,
-          transactionHop.amtToForwardMsat,
-          transactionHop.fee,
-          transactionHop.feeMsat,
-          transactionHop.expiry,
+          (transactionHop.chanId && transactionHop.chanId) || null,
+          (transactionHop.chanCapacity && transactionHop.chanCapacity.toString()) || null,
+          (transactionHop.amtToForward && transactionHop.amtToForward.toString()) || null,
+          (transactionHop.amtToForwardMsat && transactionHop.amtToForwardMsat.toString()) || null,
+          (transactionHop.fee && transactionHop.fee.toString()) || null,
+          (transactionHop.feeMsat && transactionHop.feeMsat.toString()) || null,
+          (transactionHop.expiry && transactionHop.expiry.toString()) || null,
           transactionHop.pubKey,
         ],
       );
@@ -90,6 +107,7 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
   return txId;
 };
 
+// TODO fee is not included here
 export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransaction): Promise<void> => {
   await query(
     db,
@@ -105,10 +123,10 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         rHash = ?
     WHERE id = ?`,
     [
-      transaction.date,
-      transaction.expire,
-      transaction.value,
-      transaction.valueMsat,
+      transaction.date.toString(),
+      transaction.expire.toString(),
+      transaction.value.toString(),
+      transaction.valueMsat.toString(),
       transaction.description,
       transaction.remotePubkey,
       transaction.status,
@@ -124,13 +142,31 @@ export const getTransactionHops = async (db: SQLiteDatabase, txId: number): Prom
 };
 
 export const getTransactions = async (db: SQLiteDatabase): Promise<ITransaction[]> => {
-  const transactions = await queryMulti<ITransaction>(db, `SELECT * FROM tx ORDER BY date DESC;`);
+  const transactions = await queryMulti<IDBTransaction>(db, `SELECT * FROM tx ORDER BY date DESC;`);
   return await Promise.all(transactions.map(async (transaction) => ({
-    ...transaction,
+    ...convertDBTransaction(transaction),
     // hops: await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [transaction.id!]),
-  })));
+  }))) as ITransaction[];
 };
 
 export const getTransaction = async (db: SQLiteDatabase, id: number): Promise<ITransaction | null> => {
-  return await querySingle<ITransaction>(db, `SELECT * FROM tx WHERE id = ?`, [id]);
+  const result = await querySingle<IDBTransaction>(db, `SELECT * FROM tx WHERE id = ?`, [id]);
+  return (result && convertDBTransaction(result)) || null;
 };
+
+const convertDBTransaction = (transaction: IDBTransaction): ITransaction => ({
+  id: transaction.id!,
+  date: Long.fromString(transaction.date),
+  expire: Long.fromString(transaction.expire),
+  value: Long.fromString(transaction.value),
+  valueMsat: Long.fromString(transaction.valueMsat),
+  fee: (transaction.fee && Long.fromString(transaction.fee)) || null,
+  feeMsat: (transaction.feeMsat && Long.fromString(transaction.feeMsat)) || null,
+  description: transaction.description,
+  remotePubkey: transaction.remotePubkey,
+  paymentRequest: transaction.paymentRequest,
+  status: transaction.status,
+  rHash: transaction.rHash,
+  nodeAliasCached: transaction.nodeAliasCached,
+  hops: [],
+});
