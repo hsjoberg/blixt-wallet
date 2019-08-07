@@ -45,13 +45,13 @@ export default ({ navigation }: ITransactionDetailsProps) => {
         <CardItem>
           <Body>
             <H1 style={style.header}>Transaction</H1>
-            <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date))} />
+            <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
             {transaction.nodeAliasCached && <MetaData title="Recipient name" data={transaction.nodeAliasCached} />}
             <MetaData title="Description" data={transaction.description} />
             <MetaData title="Amount" data={transaction.value + " Satoshi"} />
-            {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee + " Satoshi"} />}
+            {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
             {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
-            {transaction.value < 0 && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}
+            {transaction.value.isNegative() && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}
             <MetaData title="Status" data={capitalize(transaction.status)} />
             {transaction.status !== "SETTLED" &&
               <>

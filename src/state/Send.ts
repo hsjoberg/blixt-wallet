@@ -1,5 +1,6 @@
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as Bech32 from "bech32";
+import Long from "long";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -84,19 +85,25 @@ export const send: ISendModel = {
       remotePubkey: paymentRequest.destination,
       rHash: paymentRequest.paymentHash,
       status: "SETTLED",
-      value: -paymentRequest.numSatoshis,
-      valueMsat: -(paymentRequest.numSatoshis * 1000),
-      fee: sendPaymentResult.paymentRoute!.totalFees! || 0,
-      feeMsat: sendPaymentResult.paymentRoute!.totalFeesMsat! || 0,
-      nodeAliasCached: remoteNodeInfo.node && remoteNodeInfo.node.alias,
+      value: paymentRequest.numSatoshis.neg(),
+      valueMsat: paymentRequest.numSatoshis.neg().mul(1000),
+      fee:
+        (sendPaymentResult.paymentRoute &&
+        sendPaymentResult.paymentRoute.totalFees &&
+        sendPaymentResult.paymentRoute.totalFees) || Long.fromInt(0),
+      feeMsat:
+          (sendPaymentResult.paymentRoute &&
+          sendPaymentResult.paymentRoute.totalFeesMsat &&
+          sendPaymentResult.paymentRoute.totalFeesMsat) || Long.fromInt(0),
+      nodeAliasCached: (remoteNodeInfo.node && remoteNodeInfo.node.alias) || null,
 
       hops: sendPaymentResult.paymentRoute!.hops!.map((hop) => ({
-        chanId: hop.chanId ?? null,
-        chanCapacity: hop.chanCapacity ?? null,
-        amtToForward: hop.amtToForward || 0,
-        amtToForwardMsat: hop.amtToForwardMsat || 0,
-        fee: hop.fee || 0,
-        feeMsat: hop.feeMsat || 0,
+        chanId: (hop.chanId && hop.chanId) ?? null,
+        chanCapacity: (hop.chanCapacity && hop.chanCapacity) ?? null,
+        amtToForward: (hop.amtToForward && hop.amtToForward) || Long.fromInt(0),
+        amtToForwardMsat: (hop.amtToForwardMsat && hop.amtToForwardMsat) || Long.fromInt(0),
+        fee: (hop.fee && hop.fee) || Long.fromInt(0),
+        feeMsat: (hop.feeMsat && hop.feeMsat) || Long.fromInt(0),
         expiry: hop.expiry || null,
         pubKey: hop.pubKey || null,
       })),

@@ -87,7 +87,7 @@ export default ({ navigation }: IReceiveQRProps) => {
         <Text style={{ marginBottom: 6 }}>
           <>Expires in </>
           <Ticker
-            expire={transaction.expire}
+            expire={transaction.expire.toNumber()}
           />
         </Text>
         <QrCode
@@ -107,7 +107,7 @@ export default ({ navigation }: IReceiveQRProps) => {
         >
           {transaction.paymentRequest}
         </Text>
-        <H3>{transaction.value} Satoshi</H3>
+        <H3>{transaction.value.toString()} Satoshi</H3>
       </View>
     </Container>
   );

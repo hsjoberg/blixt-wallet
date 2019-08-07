@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StatusBar } from "react-native";
 import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner, Toast } from "native-base";
+import Long from "long";
 
 import { useStoreActions, useStoreState } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
@@ -19,6 +20,10 @@ export default ({ navigation }: ISendConfirmationProps) => {
   const bolt11Invoice = useStoreState((store) => store.send.paymentRequestStr);
 
   const [isPaying, setIsPaying] = useState(false);
+
+  if (!paymentRequest) {
+    return (<Text>Error</Text>);
+  }
 
   const send = async () => {
     try {
@@ -50,7 +55,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
         <Input
           editable={false}
           style={{ fontSize: 13, marginTop: 4 }}
-          value={`${bolt11Invoice.substring(0, 26).toLowerCase()}...`}
+          value={`${bolt11Invoice!.substring(0, 26).toLowerCase()}...`}
         />
         <Icon name="checkmark-circle" />
       </>
@@ -69,7 +74,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
     component: (<Input disabled={true} value={convertSatToFiat(paymentRequest.numSatoshis).toString()} />),
   });
 
-  if (nodeInfo && nodeInfo.node) {
+  if (nodeInfo && nodeInfo.node && nodeInfo.node.alias) {
     formItems.push({
       key: "RECIPIENT",
       title: "Recipient",
@@ -119,10 +124,10 @@ export default ({ navigation }: ISendConfirmationProps) => {
   );
 };
 
-function formatSatToBtc(sat: number) {
-  return sat / 100000000;
+function formatSatToBtc(sat?: Long): Long {
+  return sat && sat.div(100000000) || Long.fromInt(0);
 }
 
-function convertSatToFiat(sat: number) {
-  return Number.parseFloat(((sat / 100000000) * 76270).toFixed(2));
+function convertSatToFiat(sat: Long): Long {
+  return sat.div(100000000).mul(76270);
 }

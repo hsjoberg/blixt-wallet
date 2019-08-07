@@ -19,7 +19,7 @@ export default ({ onPress, transaction }: IProps) => {
     status,
   } = transaction;
 
-  const positive = value > 0;
+  const positive = value.isPositive();
 
   return (
     <Card>
@@ -27,12 +27,12 @@ export default ({ onPress, transaction }: IProps) => {
         <Body>
           <Row style={transactionStyle.transactionTop}>
             <Text style={transactionStyle.transactionTopDate}>
-              {formatISO(fromUnixTime(date))}
+              {formatISO(fromUnixTime(date.toNumber()))}
             </Text>
             <Right>
               <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
-                {value !== 0 && (positive ? "+" : "")}
-                {value !== 0 && value + " Sat"}
+                {value.notEquals(0) && (positive ? "+" : "")}
+                {value.notEquals(0) && value + " Sat"}
               </Text>
             </Right>
           </Row>
