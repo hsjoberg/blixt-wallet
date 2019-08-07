@@ -29,6 +29,8 @@ export default ({ navigation }: ILightningInfoProps) => {
     })();
   }, [getChannels]);
 
+  const balance = channels.reduce((accumulator, channel) => accumulator + channel.localBalance, 0);
+
   const channelCards = [
     ...pendingOpenChannels.map((pendingChannel, i) => (
       <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub]} type="OPEN" channel={pendingChannel} />
@@ -66,11 +68,10 @@ export default ({ navigation }: ILightningInfoProps) => {
       </Header>
       <ScrollView contentContainerStyle={style.container}>
         <View style={style.balanceInfo}>
-          <H1 style={style.spendableTitle}>Spendable amount</H1>
-          <H3 style={style.spendable}>
-            {channels.reduce((accumulator, channel) => accumulator + channel.localBalance, 0)}
-            &nbsp;satoshi
-          </H3>
+          <H1 style={{ textAlign: "center" }}>
+            Spendable amount{"\n"}
+            {balance} Satoshi
+          </H1>
         </View>
         <View>
           {channelCards}
@@ -94,14 +95,11 @@ const style = StyleSheet.create({
     padding: 16,
   },
   balanceInfo: {
-    flex: 0.25,
+    flex: 1,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-  },
-  spendableTitle: {
-    marginBottom: 8,
-  },
-  spendable: {
+    paddingTop: 24,
+    paddingBottom: 24,
   },
 });

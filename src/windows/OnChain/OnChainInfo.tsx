@@ -60,7 +60,10 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
       </Header>
       <View style={{ flex: 1 }}>
         <View style={style.fundsInfo}>
-          <H1 style={{ textAlign: "center" }}>On-chain funds:{"\n"}{balance.toString()} Satoshi</H1>
+          <H1 style={{ textAlign: "center" }}>
+            On-chain funds:{"\n"}
+            {balance.toString()} Satoshi
+          </H1>
         </View>
 
         <View style={style.qrContainer}>
@@ -98,6 +101,7 @@ const style = StyleSheet.create({
   },
   qrContainer: {
     flex: 4,
+    paddingTop: 10,
     paddingLeft: 24,
     paddingRight: 24,
     paddingBottom: 24,

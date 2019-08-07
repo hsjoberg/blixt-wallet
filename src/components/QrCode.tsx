@@ -12,8 +12,8 @@ export interface IQrCodeProps {
   style?: StyleProp<ViewStyle>;
 }
 export default ({ data, onPress, size, color, border, style: customStyle }: IQrCodeProps) => {
-  size = size ?? 325;
-  border = border ?? 35;
+  size = size ?? 320;
+  border = border ?? 30;
 
   return (
     <TouchableHighlight activeOpacity={1} onPress={onPress}>
