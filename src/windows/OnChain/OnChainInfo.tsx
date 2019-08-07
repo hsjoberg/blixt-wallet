@@ -31,6 +31,8 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
     forceNew: true,
   });
 
+  const onWithdrawPress = () => navigation.navigate("Withdraw");
+
   const onBtcAddressPress = () => {
     Clipboard.setString(address);
     Toast.show({
@@ -73,9 +75,14 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
                 {address}
             </Text>
           </View>
-          <Button block={true} primary={true} onPress={onGeneratePress}>
-            <Text>Generate new address</Text>
-          </Button>
+          <View style={style.buttons}>
+            <Button style={style.button} block={true} primary={true} onPress={onGeneratePress}>
+              <Text>Generate new address</Text>
+            </Button>
+            <Button style={[style.button, { marginBottom: 0 }]} block={true} primary={true} onPress={onWithdrawPress}>
+              <Text>Withdraw coins</Text>
+            </Button>
+          </View>
         </View>
       </View>
     </Container>
@@ -84,13 +91,13 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
 
 const style = StyleSheet.create({
   fundsInfo: {
-    flex: 0.25,
+    flex: 1,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
   qrContainer: {
-    flex: 0.75,
+    flex: 4,
     paddingLeft: 24,
     paddingRight: 24,
     paddingBottom: 24,
@@ -109,6 +116,12 @@ const style = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: blixtTheme.light,
+  },
+  buttons: {
+    width: "100%",
+  },
+  button: {
+    marginBottom: 12,
   },
 });
 

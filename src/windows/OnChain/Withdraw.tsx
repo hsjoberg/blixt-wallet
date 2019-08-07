@@ -11,23 +11,30 @@ export interface IOpenChannelProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IOpenChannelProps) => {
-  const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
-  const getChannels = useStoreActions((actions) => actions.channel.getChannels);
-  const [peer, setPeer] = useState("");
+  const sendCoins = useStoreActions((actions) => actions.onChain.sendCoins);
+  const getBalance = useStoreActions((actions) => actions.onChain.getBalance);
+  const [address, setAddress] = useState("");
   const [sat, setSat] = useState("");
-  const [opening, setOpening] = useState(false);
+  const [sending, setSending] = useState(false);
   const [camera, setCamera] = useState(false);
 
-  const onOpenChannelClick = async () => {
+  const onWithdrawClick = async () => {
     try {
-      setOpening(true);
-      const result = await connectAndOpenChannel({
-        peer,
-        amount: Number.parseInt(sat, 10),
+      setSending(true);
+      const result = await sendCoins({
+        address,
+        sat: Number.parseInt(sat, 10),
       });
       console.log(result);
-      await getChannels(undefined);
+      await getBalance(undefined);
       navigation.pop();
+
+      Toast.show({
+        duration: 6000,
+        type: "success",
+        text: "Withdraw succeeded",
+        buttonText: "Okay",
+      });
     } catch (e) {
       Toast.show({
         duration: 12000,
@@ -35,7 +42,7 @@ export default ({ navigation }: IOpenChannelProps) => {
         text: `Error: ${e.message}`,
         buttonText: "Okay",
       });
-      setOpening(false);
+      setSending(false);
     }
   };
 
@@ -49,7 +56,7 @@ export default ({ navigation }: IOpenChannelProps) => {
           buttonPositive: "Okay",
         }}
         onBarCodeRead={({ data }) => {
-          setPeer(data);
+          setAddress(data);
           setCamera(false);
         }}
         captureAudio={false}
@@ -76,16 +83,16 @@ export default ({ navigation }: IOpenChannelProps) => {
             </Button>
           </Left>
           <Body>
-            <Title>Open channel</Title>
+            <Title>Withdraw coins</Title>
           </Body>
         </Header>
         <BlixtForm
           items={[{
-            key: "CHANNEL",
-            title: "Channel URI",
+            key: "BTC_ADDRESS",
+            title: "Address",
             component: (
               <>
-                <Input placeholder="Channel" value={peer} onChangeText={setPeer} />
+                <Input placeholder="Bitcoin address" value={address} onChangeText={setAddress} />
                 <Icon type="AntDesign" name="camera" onPress={() => setCamera(true)} />
               </>
             )
@@ -95,9 +102,9 @@ export default ({ navigation }: IOpenChannelProps) => {
             component: (<Input placeholder="Amount (satoshi)" keyboardType="numeric" onChangeText={setSat} value={sat} />)
           }]}
           buttons={[
-            <Button key="OPEN_CHANNEL" onPress={onOpenChannelClick} block={true} primary={true}>
-              {!opening && <Text>Open channel</Text>}
-              {opening && <Spinner color={blixtTheme.light} />}
+            <Button key="WITHDRAW" onPress={onWithdrawClick} block={true} primary={true}>
+              {!sending && <Text>Withdraw</Text>}
+              {sending && <Spinner color={blixtTheme.light} />}
             </Button>
           ]}
         />
