@@ -9,19 +9,20 @@ import { formatISO } from "../utils";
 
 export interface IOnChainTransactionItemProps {
   transaction: IBlixtTransaction;
+  onPress: (id: string) => void;
 }
-export const OnChainTransactionItem = ({ transaction }: IOnChainTransactionItemProps) => {
+export const OnChainTransactionItem = ({ transaction, onPress }: IOnChainTransactionItemProps) => {
   let icon;
   let text;
   if (transaction.amount === undefined) {
     icon = (<Icon type="MaterialIcons" name="error-outline" style={{color: blixtTheme.red }} />);
     text = (<Text>Error</Text>);
   }
-  else if (transaction.type === "NORMAL" && transaction.amount!.gte(0)) {
+  else if (transaction.type === "NORMAL" && transaction.amount!.isPositive()) {
     icon = (<Icon type="AntDesign" name="plus" style={{color: blixtTheme.green }} />);
     text = (<Text style={{ fontSize: 13 }} note={true}>Received Bitcoin</Text>);
   }
-  else if (transaction.type === "NORMAL" && transaction.amount!.lt(0)) {
+  else if (transaction.type === "NORMAL" && transaction.amount!.isNegative()) {
     icon = (<Icon type="AntDesign" name="minus" style={{color: blixtTheme.red }} />);
     text = (
       <Text style={{ fontSize: 12.5 }} note={true}>
@@ -39,11 +40,11 @@ export const OnChainTransactionItem = ({ transaction }: IOnChainTransactionItemP
   }
 
   return (
-    <ListItem>
+    <ListItem onPress={() => onPress(transaction.txHash!)}>
       {icon}
       <Body>
         <View style={{ flexDirection: "row" }}>
-          <Text>{formatISO(fromUnixTime(transaction.timeStamp!.toInt()))}</Text>
+          <Text>{formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))}</Text>
           <Right>
             {transaction.amount && <Text>{transaction.amount.toString()} Satoshi</Text>}
           </Right>

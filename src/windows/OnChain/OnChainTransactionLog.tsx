@@ -19,6 +19,10 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
     })();
   }, [getTransactions]);
 
+  const onTransactionPress = (txId: string) => {
+    navigation.navigate("OnChainTransactionDetails", { txId });
+  }
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -39,8 +43,14 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
       <Content>
         <FlatList
           style={{ padding: 12 }}
-          data={transactions.sort((tx1, tx2) => tx2.timeStamp - tx1.timeStamp)}
-          renderItem={({ item: transaction }) => <OnChainTransactionItem key={transaction.txHash!} transaction={transaction} />}
+          data={transactions.sort((tx1, tx2) => tx2.timeStamp!.toNumber() - tx1.timeStamp!.toNumber())}
+          renderItem={({ item: transaction }) => (
+            <OnChainTransactionItem
+              key={transaction.txHash!}
+              transaction={transaction}
+              onPress={onTransactionPress}
+            />
+          )}
           keyExtractor={(transaction, i) => transaction.txHash! + i}
         />
       </Content>
