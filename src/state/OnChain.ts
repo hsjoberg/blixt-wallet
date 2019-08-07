@@ -16,10 +16,16 @@ export interface IGetAddressPayload {
   forceNew?: boolean;
 }
 
+export interface ISendCoinsPayload {
+  address: string;
+  sat: number;
+}
+
 export interface IOnChainModel {
   getBalance: Thunk<IOnChainModel>;
   getAddress: Thunk<IOnChainModel, IGetAddressPayload, IStoreInjections>;
   getTransactions: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
+  sendCoins: Thunk<IOnChainModel, ISendCoinsPayload, IStoreInjections, any, Promise<lnrpc.ISendCoinsResponse>>;
 
   setBalance: Action<IOnChainModel, lnrpc.WalletBalanceResponse>;
   setUnconfirmedBalance: Action<IOnChainModel, lnrpc.WalletBalanceResponse>;
@@ -71,6 +77,12 @@ export const onChain: IOnChainModel = {
     }
 
     actions.setTransactions({ transactions });
+  }),
+
+  sendCoins: thunk(async (_, { address, sat }, { injections }) => {
+    const { sendCoins } = injections.lndMobile.onchain;
+    const response = await sendCoins(address, sat);
+    return response;
   }),
 
   setBalance: action((state, payload) => state.balance = payload.confirmedBalance),

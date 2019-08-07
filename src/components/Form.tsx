@@ -26,7 +26,7 @@ export default ({ buttons, items }: IFormProps) => (
     </View>
     <View style={style.buttonContainer}>
       {buttons.map((button, i) => {
-        return (<View key={i} style={{ marginTop: i > 0 ? 10 : 0 }}>{button}</View>);
+        return (<View key={i} style={{ marginTop: i > 0 ? 12 : 0 }}>{button}</View>);
       })}
     </View>
   </Content>
