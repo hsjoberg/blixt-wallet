@@ -21,6 +21,7 @@ import InitLightning from "./InitLightning";
 import BlurOverlay, { closeOverlay, openOverlay } from "./Blur";
 // import BlurOverlay, { closeOverlay, openOverlay } from "react-native-blur-overlay";
 import TransactionDetails from "./windows/TransactionDetails";
+import OnChainTransactionDetails from "./windows/OnChain/OnChainTransactionDetails";
 
 const MainStack = createBottomTabNavigator({
   Overview,
@@ -35,6 +36,9 @@ const StackNavigator = createStackNavigator({
   },
   TransactionDetails : {
     screen: TransactionDetails,
+  },
+  OnChainTransactionDetails: {
+    screen: OnChainTransactionDetails,
   },
   Receive,
   Send,

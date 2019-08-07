@@ -33,11 +33,14 @@ export interface IOnChainModel {
   setAddress: Action<IOnChainModel, lnrpc.NewAddressResponse>;
   setTransactions: Action<IOnChainModel, ISetTransactionsPayload>;
 
+
   balance: Long;
   unconfirmedBalance: Long;
   totalBalance: Computed<IOnChainModel, Long>;
   address?: string;
-  transactions: lnrpc.ITransaction[];
+  transactions: IBlixtTransaction[];
+
+  getOnChainTransactionByTxId: Computed<IOnChainModel, (txId: string) => lnrpc.ITransaction | undefined>;
 }
 
 export const onChain: IOnChainModel = {
@@ -95,4 +98,14 @@ export const onChain: IOnChainModel = {
   unconfirmedBalance: Long.fromInt(0),
   totalBalance: computed((state) => state.balance.add(state.unconfirmedBalance)),
   transactions: [],
+
+  getOnChainTransactionByTxId: computed(
+    (state) => {
+      return (txId: string) => {
+        return state.transactions.find((tx) => {
+          return txId === tx.txHash;
+        });
+      };
+    },
+  ),
 };
