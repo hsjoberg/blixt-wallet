@@ -101,7 +101,7 @@ const model: IStoreModel = {
   }),
 
   createWallet: thunk(async (actions, payload, { injections }) => {
-    const { genSeed, initWallet } = injections.wallet;
+    const { genSeed, initWallet } = injections.lndMobile.wallet;
     const seed = await genSeed();
     const wallet = await initWallet(seed.cipherSeedMnemonic, payload.password);
     await setItemObject(StorageItem.walletCreated, true);
