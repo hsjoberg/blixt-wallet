@@ -63,6 +63,12 @@ export default ({ navigation }: IReceiveQRProps) => {
     });
   };
 
+  const onQrPress = async () => {
+    await Share.share({
+      message: "lightning:" + transaction.paymentRequest,
+    });
+  };
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -83,22 +89,14 @@ export default ({ navigation }: IReceiveQRProps) => {
         height: "100%",
         marginTop: -16,
       }}>
-        <H1>Scan this QR code</H1>
+        <H1 style={{ marginBottom: 2 }}>Scan this QR code</H1>
         <Text style={{ marginBottom: 6 }}>
           <>Expires in </>
           <Ticker
             expire={transaction.expire.toNumber()}
           />
         </Text>
-        <QrCode
-          data={transaction.paymentRequest.toUpperCase()}
-          onPress={async () => {
-            await Share.share({
-              // message: lnInvoice,
-              url: "lightning:" + transaction.paymentRequest,
-            });
-          }}
-        />
+        <QrCode data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} />
         <Text
           onPress={onPressPaymentRequest}
           style={{ paddingTop: 6, paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}

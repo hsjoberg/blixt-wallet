@@ -64,14 +64,14 @@ export default ({ navigation }: ISendConfirmationProps) => {
 
   formItems.push({
     key: "AMOUNT_BTC",
-    title: "Amount ₿",
-    component: (<Input disabled={true} value={formatSatToBtc(paymentRequest.numSatoshis).toString()} />),
+    title: "Amount Sat",
+    component: (<Input disabled={true} value={paymentRequest.numSatoshis.toString()} />),
   });
 
   formItems.push({
     key: "AMOUNT_FIAT",
     title: "Amount SEK",
-    component: (<Input disabled={true} value={convertSatToFiat(paymentRequest.numSatoshis).toString()} />),
+    component: (<Input disabled={true} value={convertSatToFiat(paymentRequest.numSatoshis.toNumber()).toString()} />),
   });
 
   if (nodeInfo && nodeInfo.node && nodeInfo.node.alias) {
@@ -124,10 +124,10 @@ export default ({ navigation }: ISendConfirmationProps) => {
   );
 };
 
-function formatSatToBtc(sat?: Long): Long {
-  return sat && sat.div(100000000) || Long.fromInt(0);
+function formatSatToBtc(sat?: number): number {
+  return sat / 100000000;
 }
 
-function convertSatToFiat(sat: Long): Long {
-  return sat.div(100000000).mul(76270);
+function convertSatToFiat(sat: number): number {
+  return Number.parseFloat(((sat / 100000000) * 76270).toFixed(2));
 }

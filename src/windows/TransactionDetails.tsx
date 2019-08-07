@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Clipboard } from "react-native";
+import { StyleSheet, Clipboard, Share } from "react-native";
 import { Body, Card, Text, CardItem, H1, Toast } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import { fromUnixTime } from "date-fns";
@@ -39,6 +39,12 @@ export default ({ navigation }: ITransactionDetailsProps) => {
     return (<></>);
   }
 
+  const onQrPress = async () => {
+    await Share.share({
+      message: "lightning:" + transaction.paymentRequest,
+    });
+  };
+
   return (
     <Blurmodal navigation={navigation}>
       <Card style={style.card}>
@@ -55,7 +61,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             <MetaData title="Status" data={capitalize(transaction.status)} />
             {transaction.status !== "SETTLED" &&
               <>
-                <QrCode data={transaction.paymentRequest.toUpperCase()} size={280} border={25} />
+                <QrCode data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} size={280} border={25} />
                 <Text
                   style={{ ...style.detailText, paddingTop: 4, paddingLeft: 18, paddingRight: 18 }}
                   onPress={() => {

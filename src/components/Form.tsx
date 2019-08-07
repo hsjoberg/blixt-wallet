@@ -18,8 +18,12 @@ export default ({ buttons, items }: IFormProps) => (
   <Content contentContainerStyle={style.content}>
     <View style={style.itemContainer}>
       {items.map(({ key, title, component, success }, i) => (
-        <Item key={key} style={{ marginTop: i > 0 ? 16 : 8 }} success={success}>
-          <Label style={style.itemLabel}>{title}</Label>
+        <Item key={key} style={{
+          marginTop: i > 0 ? 16 : 8}} success={success}>
+          <Label style={{
+            ...style.itemLabel,
+            fontSize: (title !== null && title.length) >= 14 ? 15 : 17,
+          }}>{title}</Label>
           {component}
         </Item>
       ))}
@@ -38,12 +42,12 @@ const style = StyleSheet.create({
     flex: 1,
     display: "flex",
     justifyContent: "space-between",
-    padding: 24,
+    padding: 22,
   },
   itemContainer: {
   },
   itemLabel: {
-    width: 110,
+    width: 115,
   },
   buttonContainer: {
     marginBottom: 2,
