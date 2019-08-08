@@ -6,6 +6,7 @@ import { RNCamera, CameraType } from "react-native-camera";
 import { useStoreActions } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import Camera from "../../components/Camera";
 
 interface ISendCameraProps {
   onGoBackCallback: () => void;
@@ -15,9 +16,7 @@ interface ISendCameraProps {
 }
 export default ({ navigation }: ISendCameraProps) => {
   const setPayment = useStoreActions((store) => store.send.setPayment);
-
-  const [cameraType, setCameraType] =
-    useState<CameraType["back"] | CameraType["front"]>(RNCamera.Constants.Type.back);
+  const [cameraType, setCameraType] = useState<keyof CameraType>(RNCamera.Constants.Type.back);
   const [scanning, setScanning] = useState(true);
 
   const onCameraSwitchClick = () => {
@@ -53,7 +52,7 @@ export default ({ navigation }: ISendCameraProps) => {
     await tryInvoice(bolt11testnet, "Debug clipboard paste error");
   };
 
-  const onBarCodeRead = async ({ data }: { data: string }) => {
+  const onBarCodeRead = async (data: string) => {
     await tryInvoice(data, "QR scan error");
   };
 
@@ -66,31 +65,17 @@ export default ({ navigation }: ISendCameraProps) => {
         networkActivityIndicatorVisible={true}
         barStyle="light-content"
       />
-      <RNCamera
-        style={{ width: "100%", height: "100%" }}
-        type={cameraType}
-        androidCameraPermissionOptions={{
-          title: "Permission to use camera",
-          message: "Permission to use the camera is needed to be able to scan QR codes",
-          buttonPositive: "Okay",
-        }}
-        onBarCodeRead={onBarCodeRead}
-        captureAudio={false}
+      <Camera
+        cameraType={cameraType}
+        onRead={onBarCodeRead}
+        onNotAuthorized={() => setTimeout(() => navigation.pop(), 1)}
       >
-        {({ status }) => {
-          if (status === "NOT_AUTHORIZED") {
-            setTimeout(() => navigation.pop(), 1);
-            return (<></>);
-          }
-          return (
-            <View style={StyleSheet.absoluteFill}>
-              <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
-              <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />
-              <Icon type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
-            </View>
-          );
-        }}
-      </RNCamera>
+        <View style={StyleSheet.absoluteFill}>
+          <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
+          {__DEV__ && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
+          <Icon type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
+        </View>
+      </Camera>
     </>
   );
 };

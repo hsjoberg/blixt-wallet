@@ -13,7 +13,6 @@ interface IReceiveSetupProps {
 }
 export default ({ navigation }: IReceiveSetupProps) => {
   const addInvoice = useStoreActions((store) => store.receive.addInvoice);
-  const [btcValue, setBtcValue] = useState<string | undefined>(undefined);
   const [satValue, setSatValue] = useState<string | undefined>(undefined);
   const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
   const [description, setDescription] = useState<string>("");
@@ -27,11 +26,9 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const onChangeFiatInput = (text: string) => {
     text = text.replace(/,/g, ".");
     if (text.length === 0) {
-      setBtcValue(undefined);
       setDollarValue(undefined);
       return;
     }
-    setBtcValue((Number.parseFloat(text) / 5083).toFixed(8).toString());
     setSatValue(Math.floor(Number.parseFloat(text) / BTCUSD * BTCSAT).toString());
     setDollarValue(text);
   };
@@ -94,12 +91,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
       <BlixtForm
         items={formItems}
         buttons={[
-          <Button
-            key="CREATE_INVOICE"
-            block={true}
-            primary={true}
-            onPress={onCreateInvoiceClick}
-          >
+          <Button key="CREATE_INVOICE" block={true} primary={true} onPress={onCreateInvoiceClick}>
             <Text>Create invoice</Text>
           </Button>
         ]}

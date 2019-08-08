@@ -45,6 +45,11 @@ export default ({ navigation }: ITransactionDetailsProps) => {
     });
   };
 
+  const onPaymentRequestTextPress = () => {
+    Clipboard.setString(transaction.paymentRequest);
+    Toast.show({ text: "Copied to clipboard.", type: "warning" });
+  };
+
   return (
     <Blurmodal navigation={navigation}>
       <Card style={style.card}>
@@ -62,16 +67,8 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             {transaction.status !== "SETTLED" &&
               <>
                 <QrCode data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} size={280} border={25} />
-                <Text
-                  style={{ ...style.detailText, paddingTop: 4, paddingLeft: 18, paddingRight: 18 }}
-                  onPress={() => {
-                    Clipboard.setString(transaction.paymentRequest);
-                    Toast.show({ text: "Copied to clipboard.", type: "warning" });
-                  }}
-                  numberOfLines={1}
-                  lineBreakMode="middle"
-                  >
-                    {transaction.paymentRequest}
+                <Text style={style.qrText} onPress={onPaymentRequestTextPress} numberOfLines={1} lineBreakMode="middle">
+                  {transaction.paymentRequest}
                 </Text>
               </>
             }
@@ -96,4 +93,10 @@ const style = StyleSheet.create({
   detailText: {
     marginBottom: 7,
   },
+  qrText: {
+    marginBottom: 7,
+    paddingTop: 4,
+    paddingLeft: 18,
+    paddingRight: 18,
+  }
 });

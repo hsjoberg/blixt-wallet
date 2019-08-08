@@ -13,7 +13,6 @@ export interface IFormProps {
   buttons: ReactNode[];
   items: IFormItem[];
 }
-
 export default ({ buttons, items }: IFormProps) => (
   <Content contentContainerStyle={style.content}>
     <View style={style.itemContainer}>

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Toast, Spinner } from "native-base";
-import { RNCamera } from "react-native-camera";
 import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreActions } from "../../state/store";
 import BlixtForm from "../../components/Form";
+import Camera from "../../components/Camera";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { parseBech32 } from "../../utils";
 
@@ -56,68 +56,46 @@ export default ({ navigation }: IOpenChannelProps) => {
     }
   };
 
-  if (camera) {
-    return (
-      <RNCamera
-        style={{ width: "100%", height: "100%" }}
-        androidCameraPermissionOptions={{
-          title: "Permission to use camera",
-          message: "Permission to use the camera is needed to be able to scan QR codes",
-          buttonPositive: "Okay",
-        }}
-        onBarCodeRead={({ data }) => {
-          onAddressChange(data);
-          setCamera(false);
-        }}
-        captureAudio={false}
-      >
-        {({ status }) => {
-          if (status === "NOT_AUTHORIZED") {
-            setTimeout(() => setCamera(false));
-            return (<></>);
-          }
-          return (
-            <></>
-          );
-        }}
-      </RNCamera>
-    );
-  }
+  const onCameraPress = () => {
+    navigation.navigate("CameraFullscreen", {
+      onRead: onAddressChange,
+    });
+  };
 
   return (
     <Container>
-        <Header iosBarStyle="light-content" translucent={false}>
-          <Left>
-            <Button transparent={true} onPress={() => navigation.pop()}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Withdraw coins</Title>
-          </Body>
-        </Header>
-        <BlixtForm
-          items={[{
-            key: "BTC_ADDRESS",
-            title: "Address",
-            component: (
-              <>
-                <Input placeholder="Bitcoin address" value={address} onChangeText={onAddressChange} />
-                <Icon type="AntDesign" name="camera" onPress={() => setCamera(true)} />
-              </>
-            )
-          }, {
-            key: "AMOUNT",
-            title: "Amount",
-            component: (<Input placeholder="Amount (satoshi)" keyboardType="numeric" onChangeText={setSat} value={sat} />)
-          }]}
-          buttons={[
-            <Button key="WITHDRAW" onPress={onWithdrawClick} block={true} primary={true}>
-              {!sending && <Text>Withdraw</Text>}
-              {sending && <Spinner color={blixtTheme.light} />}
-            </Button>
-          ]}
-        />
-      </Container>
+      <Header iosBarStyle="light-content" translucent={false}>
+        <Left>
+          <Button transparent={true} onPress={() => navigation.pop()}>
+            <Icon name="arrow-back" />
+          </Button>
+        </Left>
+        <Body>
+          <Title>Withdraw coins</Title>
+        </Body>
+      </Header>
+      <BlixtForm
+        items={[{
+          key: "BTC_ADDRESS",
+          title: "Address",
+          component: (
+            <>
+              <Input placeholder="Bitcoin address" value={address} onChangeText={onAddressChange} />
+              <Icon type="AntDesign" name="camera" onPress={onCameraPress} />
+            </>
+          )
+        }, {
+          key: "AMOUNT",
+          title: "Amount",
+          component: (<Input placeholder="Amount (satoshi)" keyboardType="numeric" onChangeText={setSat} value={sat} />)
+        }]}
+        buttons={[
+          <Button key="WITHDRAW" onPress={onWithdrawClick} block={true} primary={true}>
+            {!sending && <Text>Withdraw</Text>}
+            {sending && <Spinner color={blixtTheme.light} />}
+          </Button>
+        ]}
+      />
+    </Container>
   );
 };

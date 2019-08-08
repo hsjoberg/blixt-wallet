@@ -15,8 +15,8 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
 
   const close = async () => {
     const result = await closeChannel({
-      fundingTx: channel.channelPoint.split(":")[0],
-      outputIndex: Number.parseInt(channel.channelPoint.split(":")[1], 10),
+      fundingTx: channel.channelPoint!.split(":")[0],
+      outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
     });
     console.log(result);
 
@@ -62,7 +62,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
               <Text style={style.channelDetailTitle}>Amount in channel</Text>
             </Left>
             <Right>
-              <Text style={style.channelDetailValue}>{channel.localBalance.toString()}/{channel.capacity.toString()} satoshi</Text>
+              <Text style={style.channelDetailValue}>{channel.localBalance!.toString()}/{channel.capacity!.toString()} satoshi</Text>
             </Right>
           </Row>
           <Row>

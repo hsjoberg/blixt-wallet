@@ -12,13 +12,7 @@ interface IProps {
   transaction: ITransaction;
 }
 export default ({ onPress, transaction }: IProps) => {
-  const {
-    date,
-    value,
-    description,
-    status,
-  } = transaction;
-
+  const { date, value, description, status } = transaction;
   const positive = value.isPositive();
 
   return (
