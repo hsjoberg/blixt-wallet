@@ -106,7 +106,14 @@ export const channel: IChannelModel = {
 
   connectAndOpenChannel: thunk(async (_, { peer, amount }) => {
     const [pubkey, host] = peer.split("@");
-    await connectPeer(pubkey, host);
+    try {
+      await connectPeer(pubkey, host);
+    }
+    catch (e) {
+      if (!e.message.includes("already connected to peer")) {
+        throw e;
+      }
+    }
 
     const result = await openChannel(pubkey, amount);
     console.log(result);

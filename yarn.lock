@@ -1119,6 +1119,11 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/base64-js@^1.2.5":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@types/base64-js/-/base64-js-1.2.5.tgz#582b2476169a6cba460a214d476c744441d873d5"
+  integrity sha1-WCskdhaabLpGCiFNR2x0REHYc9U=
+
 "@types/bech32@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/bech32/-/bech32-1.1.1.tgz#a8574f9519369c91d5e69287551f675621a67f44"

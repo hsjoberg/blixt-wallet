@@ -14,7 +14,6 @@ export interface ISendConfirmationProps {
 export default ({ navigation }: ISendConfirmationProps) => {
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
   const getBalance = useStoreActions((actions) => actions.channel.getBalance);
-
   const nodeInfo = useStoreState((store) => store.send.remoteNodeInfo);
   const paymentRequest = useStoreState((store) => store.send.paymentRequest);
   const bolt11Invoice = useStoreState((store) => store.send.paymentRequestStr);
@@ -53,7 +52,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
     component: (
       <>
         <Input
-          editable={false}
+          disabled={true}
           style={{ fontSize: 13, marginTop: 4 }}
           value={`${bolt11Invoice!.substring(0, 26).toLowerCase()}...`}
         />
@@ -108,25 +107,20 @@ export default ({ navigation }: ISendConfirmationProps) => {
       <BlixtForm
         items={formItems}
         buttons={[(
-            <Button
-              key="PAY"
-              disabled={isPaying}
-              block={true}
-              primary={true}
-              onPress={send}>
-              {!isPaying && <Text>Pay</Text>}
-              {isPaying && <Spinner color={blixtTheme.light} />}
-            </Button>
-          ),
-        ]}
+          <Button
+            key="PAY"
+            disabled={isPaying}
+            block={true}
+            primary={true}
+            onPress={send}>
+            {!isPaying && <Text>Pay</Text>}
+            {isPaying && <Spinner color={blixtTheme.light} />}
+          </Button>
+        ),]}
       />
     </Container>
   );
 };
-
-function formatSatToBtc(sat?: number): number {
-  return sat / 100000000;
-}
 
 function convertSatToFiat(sat: number): number {
   return Number.parseFloat(((sat / 100000000) * 76270).toFixed(2));

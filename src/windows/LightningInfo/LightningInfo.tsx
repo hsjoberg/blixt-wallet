@@ -19,7 +19,7 @@ export default ({ navigation }: ILightningInfoProps) => {
     pendingOpenChannels,
     pendingClosingChannels,
     pendingForceClosingChannels,
-    waitingCloseChannels
+    waitingCloseChannels,
   } = useStoreState((store) => store.channel);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const [fabActive, setFabActive] = useState(false);
@@ -34,19 +34,19 @@ export default ({ navigation }: ILightningInfoProps) => {
 
   const channelCards = [
     ...pendingOpenChannels.map((pendingChannel, i) => (
-      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub]} type="OPEN" channel={pendingChannel} />
+      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub!]} type="OPEN" channel={pendingChannel} />
     )),
     ...pendingClosingChannels.map((pendingChannel, i) => (
-      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub]} type="CLOSING" channel={pendingChannel} />
+      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub!]} type="CLOSING" channel={pendingChannel} />
     )),
     ...pendingForceClosingChannels.map((pendingChannel, i) => (
-      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub]} type="FORCE_CLOSING" channel={pendingChannel} />
+      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub!]} type="FORCE_CLOSING" channel={pendingChannel} />
     )),
     ...waitingCloseChannels.map((pendingChannel, i) => (
-      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub]} type="WAITING_CLOSE" channel={pendingChannel} />
+      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub!]} type="WAITING_CLOSE" channel={pendingChannel} />
     )),
-    ...channels.map((channel) => (
-      <ChannelCard key={channel.chanId} alias={aliases[channel.remotePubkey]} channel={channel} />
+    ...channels.map((channel, i) => (
+      <ChannelCard key={channel.chanId!.toString()} alias={aliases[channel.remotePubkey!]} channel={channel} />
     )),
   ];
 
@@ -69,23 +69,18 @@ export default ({ navigation }: ILightningInfoProps) => {
       </Header>
       <ScrollView contentContainerStyle={style.container}>
         <View style={style.balanceInfo}>
-          <H1 style={{ textAlign: "center" }}>
-            Spendable amount{"\n"}
-            {balance.toString()} Satoshi
+          <H1 style={style.spendableAmount}>
+            Spendable amount{"\n"} {balance.toString()} Satoshi
           </H1>
         </View>
-        <View>
-          {channelCards}
-        </View>
+        <View>{channelCards}</View>
       </ScrollView>
       <Fab
         active={fabActive}
-        style={{ backgroundColor: blixtTheme.primary }}
+        style={style.fab}
         position="bottomRight"
-        onPress={
-          () => navigation.navigate("OpenChannel")
-        }>
-        <Icon type="Entypo" name="plus" style={{ color: blixtTheme.light }} />
+        onPress={() => navigation.navigate("OpenChannel")}>
+        <Icon type="Entypo" name="plus" style={style.fabNewChannelIcon} />
       </Fab>
     </Container>
   );
@@ -102,5 +97,14 @@ const style = StyleSheet.create({
     alignItems: "center",
     paddingTop: 24,
     paddingBottom: 24,
+  },
+  spendableAmount: {
+    textAlign: "center",
+  },
+  fab: {
+    backgroundColor: blixtTheme.primary,
+  },
+  fabNewChannelIcon: {
+    color: blixtTheme.light,
   },
 });

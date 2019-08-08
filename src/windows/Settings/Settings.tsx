@@ -28,16 +28,16 @@ export default ({ navigation }: ISettingsProps) => {
           </ListItem>
 
           <ListItem button={true} icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="AntDesign" name="lock" /></Left>
+            <Left><Icon style={style.icon} type="AntDesign" name="lock" /></Left>
             <Body><Text>Set pincode</Text></Body>
           </ListItem>
           <ListItem button={true} icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="Entypo" name="fingerprint" /></Left>
+            <Left><Icon style={style.icon} type="Entypo" name="fingerprint" /></Left>
             <Body><Text>Login with fingerprint</Text></Body>
             <Right><CheckBox checked={true} /></Right>
           </ListItem>
           <ListItem button={true} icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="AntDesign" name="form" /></Left>
+            <Left><Icon style={style.icon} type="AntDesign" name="form" /></Left>
             <Body>
               <Text>Show mnemonic</Text>
               <Text note={true} numberOfLines={1}>Show 24-word seed for this wallet</Text>
@@ -50,14 +50,14 @@ export default ({ navigation }: ISettingsProps) => {
           </ListItem>
 
           <ListItem icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="FontAwesome" name="money" /></Left>
+            <Left><Icon style={style.icon} type="FontAwesome" name="money" /></Left>
             <Body>
               <Text>Fiat currency</Text>
               <Text note={true} numberOfLines={1}>USD</Text>
             </Body>
           </ListItem>
           <ListItem icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="FontAwesome5" name="btc" /></Left>
+            <Left><Icon style={style.icon} type="FontAwesome5" name="btc" /></Left>
             <Body>
               <Text>Bitcoin unit</Text>
               <Text note={true} numberOfLines={1}>Bitcoin</Text>
@@ -70,11 +70,11 @@ export default ({ navigation }: ISettingsProps) => {
           </ListItem>
 
           <ListItem icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="AntDesign" name="team" /></Left>
+            <Left><Icon style={style.icon} type="AntDesign" name="team" /></Left>
             <Body><Text>Show current network peer(s)</Text></Body>
           </ListItem>
           <ListItem icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="AntDesign" name="customerservice" /></Left>
+            <Left><Icon style={style.icon} type="AntDesign" name="customerservice" /></Left>
             <Body><Text>Set trusted Node for SPV</Text></Body>
           </ListItem>
 
@@ -84,20 +84,20 @@ export default ({ navigation }: ISettingsProps) => {
           </ListItem>
 
           <ListItem icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="AntDesign" name="user" /></Left>
+            <Left><Icon style={style.icon} type="AntDesign" name="user" /></Left>
             <Body><Text>Show node data</Text></Body>
           </ListItem>
           <ListItem icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="AntDesign" name="edit" /></Left>
+            <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
             <Body><Text>Payment request default description</Text></Body>
           </ListItem>
           <ListItem button={true} icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="Entypo" name="circular-graph" /></Left>
+            <Left><Icon style={style.icon} type="Entypo" name="circular-graph" /></Left>
             <Body><Text>Automatically open channels</Text></Body>
             <Right><CheckBox checked={true} /></Right>
           </ListItem>
           <ListItem button={true} icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="Entypo" name="fingerprint" /></Left>
+            <Left><Icon style={style.icon} type="Entypo" name="fingerprint" /></Left>
             <Body><Text>Backup channels to Google Drive</Text></Body>
             <Right><CheckBox checked={false} /></Right>
           </ListItem>
@@ -108,7 +108,7 @@ export default ({ navigation }: ISettingsProps) => {
           </ListItem>
 
           <ListItem icon={true}>
-            <Left><Icon style={{fontSize: 22}} type="Entypo" name="text" /></Left>
+            <Left><Icon style={style.icon} type="Entypo" name="text" /></Left>
             <Body><Text>Open lnd log</Text></Body>
           </ListItem>
 
@@ -118,12 +118,12 @@ export default ({ navigation }: ISettingsProps) => {
           </ListItem>
 
           <ListItem icon={true} onPress={() => {}}>
-            <Left><Icon style={{fontSize: 22}} type="AntDesign" name="info" /></Left>
+            <Left><Icon style={style.icon} type="AntDesign" name="info" /></Left>
             <Body><Text>About</Text></Body>
           </ListItem>
           {__DEV__ === true &&
             <ListItem icon={true} onPress={() => navigation.navigate("DEV_InitApp")}>
-              <Left><Icon style={{fontSize: 22}} type="MaterialIcons" name="developer-mode" /></Left>
+              <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
               <Body><Text>Go to dev screen</Text></Body>
             </ListItem>
           }
@@ -144,4 +144,7 @@ const style = StyleSheet.create({
     paddingTop: 24,
     paddingBottom: 16,
   },
+  icon: {
+    fontSize: 22,
+  }
 });

@@ -58,24 +58,19 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           </Button>
         </Right>
       </Header>
-      <View style={{ flex: 1 }}>
+      <View style={style.container}>
         <View style={style.fundsInfo}>
           <H1 style={{ textAlign: "center" }}>
             On-chain funds:{"\n"}
             {balance.toString()} Satoshi
           </H1>
         </View>
-
         <View style={style.qrContainer}>
-          <View style={style.qr}>
-            <H3 style={{ marginBottom: 8 }}>Send Bitcoin on-chain to this address:</H3>
+          <View style={style.qrInner}>
+            <H3 style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</H3>
             <QrCode data={address} />
-            <Text
-              style={{ paddingTop: 6, paddingLeft: 18, paddingRight: 18, paddingBottom: 20 }}
-              numberOfLines={1}
-              lineBreakMode="middle"
-              onPress={onBtcAddressPress}>
-                {address}
+            <Text style={style.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressPress}>
+              {address}
             </Text>
           </View>
           <View style={style.buttons}>
@@ -93,6 +88,9 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
 };
 
 const style = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   fundsInfo: {
     flex: 1,
     width: "100%",
@@ -109,17 +107,19 @@ const style = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
-  qr: {
+  qrInner: {
     flex: 1,
     width: "100%",
     alignItems: "center",
   },
-  qrCodeContainer: {
-    width: 360,
-    height: 360,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: blixtTheme.light,
+  sendBitcoinsLabel: {
+    marginBottom: 8,
+  },
+  address: {
+    paddingTop: 6,
+    paddingRight: 18,
+    paddingBottom: 20,
+    paddingLeft: 18,
   },
   buttons: {
     width: "100%",
