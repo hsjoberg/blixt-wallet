@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { Spinner, H1, Container, H3 } from "native-base";
-import { useStoreActions, useStoreState } from "./state/store";
 import { NavigationScreenProp } from "react-navigation";
 
-import { blixtTheme } from "../native-base-theme/variables/commonColor";
+import { useStoreActions, useStoreState } from "../../state/store";
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -22,14 +22,14 @@ export default ({ navigation }: IProps) => {
     })();
   }, [initializeLightning]);
 
-  if (nodeInfo && nodeInfo.syncedToChain && ready) {
+  if (nodeInfo && ready) {
     setTimeout(async () => {
       navigation.navigate("Main");
-    }, 1);
+    }, 0);
   }
 
   return (
-    <Container style={styles.content}>
+    <Container style={style.content}>
       <StatusBar
         backgroundColor="transparent"
         hidden={false}
@@ -38,21 +38,26 @@ export default ({ navigation }: IProps) => {
         barStyle="light-content"
       />
       <Spinner color={blixtTheme.light} size={55} />
-      {nodeInfo &&
+      {!ready && nodeInfo &&!nodeInfo.syncedToChain &&
         <>
-          {(!nodeInfo.syncedToChain && <H1>Syncing chain...</H1>) || <H1 />}
-          {firstSync && <H3 style={{ fontWeight: "normal", marginTop: 8 }}>This might take a couple of minutes</H3>}
+          <H1>Syncing chain...</H1>
+          {firstSync && <H3 style={style.firstSync}>This might take a couple of minutes</H3>}
         </>
       }
+      {!ready && !nodeInfo && <H1 />}
     </Container>
   );
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   content: {
     flex: 1,
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
+  },
+  firstSync: {
+    fontWeight: "normal",
+    marginTop: 9,
   },
 });

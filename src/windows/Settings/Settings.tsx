@@ -122,7 +122,7 @@ export default ({ navigation }: ISettingsProps) => {
             <Body><Text>About</Text></Body>
           </ListItem>
           {__DEV__ === true &&
-            <ListItem icon={true} onPress={() => navigation.navigate("DEV_InitApp")}>
+            <ListItem icon={true} onPress={() => navigation.navigate("DEV_Commands")}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
               <Body><Text>Go to dev screen</Text></Body>
             </ListItem>

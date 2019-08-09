@@ -3,15 +3,15 @@ import { StyleSheet, StatusBar, NativeModules, ScrollView, Clipboard } from "rea
 import { Text, Button, Toast, Input, View, Container } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
-import { getTransactions, getTransaction, createTransaction } from "./storage/database/transaction";
-import { useStoreState, useStoreActions } from "./state/store";
-import { lnrpc } from "../proto/proto";
-import { sendCommand } from "./lndmobile/utils";
-import { getInfo, connectPeer } from "./lndmobile/index";
-import { initWallet, genSeed } from "./lndmobile/wallet";
-import { pendingChannels, listChannels, openChannel, closeChannel } from "./lndmobile/channel";
-import { newAddress, sendCoins } from "./lndmobile/onchain";
-import { StorageItem, setItemObject } from "./storage/app";
+import { getTransactions, getTransaction, createTransaction } from "../../storage/database/transaction";
+import { useStoreState, useStoreActions } from "../../state/store";
+import { lnrpc } from "../../../proto/proto";
+import { sendCommand } from "../../lndmobile/utils";
+import { getInfo, connectPeer } from "../../lndmobile/index";
+import { initWallet, genSeed } from "../../lndmobile/wallet";
+import { pendingChannels, listChannels, openChannel, closeChannel } from "../../lndmobile/channel";
+import { newAddress, sendCoins } from "../../lndmobile/onchain";
+import { StorageItem, setItemObject } from "../../storage/app";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -216,6 +216,7 @@ export default ({ navigation }: IProps) => {
                     const response = await f();
                     console.log(`${f.name}()`, response.toJSON());
                     setCommandResult(response.toJSON());
+                    setError({});
                   }
                   catch (e) {
                     setError(e);

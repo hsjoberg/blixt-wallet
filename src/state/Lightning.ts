@@ -1,9 +1,11 @@
 import { NativeModules, ToastAndroid } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
+import { differenceInDays } from "date-fns";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { lnrpc } from "../../proto/proto";
+import { getItemObject, StorageItem, setItemObject } from "../storage/app";
 
 const { LndMobile } = NativeModules;
 
@@ -14,13 +16,13 @@ export interface ILightningModel {
 
   unlockWallet: Thunk<ILightningModel, undefined, IStoreInjections>;
   getInfo: Thunk<ILightningModel, undefined, IStoreInjections>;
+  waitForChainSync: Thunk<ILightningModel, undefined, IStoreInjections>;
 
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
   setReady: Action<ILightningModel, boolean>;
   setFirstSync: Action<ILightningModel, boolean>;
 
   nodeInfo?: lnrpc.IGetInfoResponse;
-  syncedToChain: boolean;
   ready: boolean;
   firstSync: boolean;
 }
@@ -33,6 +35,10 @@ export const lightning: ILightningModel = {
       return true;
     }
 
+    const lastSync: number = await getItemObject(StorageItem.timeSinceLastSync);
+    const firstSync: boolean = await getItemObject(StorageItem.firstSync);
+    actions.setFirstSync(firstSync);
+
     const { checkStatus } = injections.lndMobile.index;
     const start = new Date().getTime();
 
@@ -41,17 +47,22 @@ export const lightning: ILightningModel = {
       await actions.unlockWallet(undefined);
     }
     console.log("lnd: time to start and unlock: " + (new Date().getTime() - start) + "ms");
-    await Promise.all([
-      actions.getInfo(undefined),
+    Promise.all([
       dispatch.transaction.getTransactions(undefined),
       dispatch.channel.initialize(undefined),
       dispatch.receive.initialize(undefined),
     ]);
-    actions.setReady(true);
+
+    if (differenceInDays(new Date(), lastSync) <3) {
+      actions.setReady(true);
+      actions.waitForChainSync(); // Run asynchronously
+    }
+    else {
+      await actions.waitForChainSync(); // Run synchronously
+    }
 
     console.log("lnd startup time: " + (new Date().getTime() - start) + "ms");
     ToastAndroid.show("lnd startup time: " + (new Date().getTime() - start) + "ms", ToastAndroid.SHORT);
-
     return true;
   }),
 
@@ -70,6 +81,12 @@ export const lightning: ILightningModel = {
 
   getInfo: thunk(async (actions, _, { getState, injections }) => {
     const { getInfo } = injections.lndMobile.index;
+    const info = await getInfo();
+    actions.setNodeInfo(info);
+  }),
+
+  waitForChainSync: thunk(async (actions, _, { getState, injections }) => {
+    const { getInfo } = injections.lndMobile.index;
     const firstSync = getState().firstSync;
     let info;
     do {
@@ -79,19 +96,25 @@ export const lightning: ILightningModel = {
       actions.setNodeInfo(info);
 
       if (info.syncedToChain !== true) {
-        await timeout(firstSync ? 6000 : 333);
+        await timeout(firstSync ? 6000 : 50000);
       }
       else {
         console.log(info);
       }
     } while (!info.syncedToChain);
+
+    if (firstSync) {
+      await setItemObject(StorageItem.firstSync, false);
+      actions.setFirstSync(false);
+    }
+    actions.setReady(true);
+    await setItemObject(StorageItem.timeSinceLastSync, new Date().getTime());
   }),
 
   setNodeInfo: action((state, payload) => { state.nodeInfo = payload; }),
   setReady: action((state, payload) => { state.ready = payload; }),
   setFirstSync: action((state, payload) => { state.firstSync = payload; }),
 
-  syncedToChain: false,
   ready: false,
   firstSync: false,
 };

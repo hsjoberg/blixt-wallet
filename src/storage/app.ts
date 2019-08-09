@@ -5,6 +5,8 @@ export enum StorageItem { // const enums not supported in Babel 7...
   dbVersion = "dbVersion",
   databaseCreated = "databaseCreated",
   walletCreated = "walletCreated",
+  firstSync = "firstSync",
+  timeSinceLastSync = "timeSinceLastSync",
 }
 
 export const setItem = async (key: string, value: string) => await AsyncStorage.setItem(key, value);
@@ -25,6 +27,8 @@ export const clearApp = async () => {
     AsyncStorage.removeItem(StorageItem.app),
     AsyncStorage.removeItem(StorageItem.dbVersion),
     AsyncStorage.removeItem(StorageItem.walletCreated),
+    AsyncStorage.removeItem(StorageItem.firstSync),
+    AsyncStorage.removeItem(StorageItem.timeSinceLastSync),
   ]);
 };
 
@@ -33,5 +37,7 @@ export const setupApp = async () => {
     await setItemObject(StorageItem.app, true),
     await setItemObject(StorageItem.dbVersion, 1),
     await setItemObject(StorageItem.walletCreated, false),
+    await setItemObject(StorageItem.firstSync, true),
+    await setItemObject(StorageItem.timeSinceLastSync, 0),
   ]);
 };

@@ -3,7 +3,7 @@ import { StyleSheet, StatusBar, ToastAndroid } from "react-native";
 import { Container } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
-import { useStoreState, useStoreActions } from "./state/store";
+import { useStoreState, useStoreActions } from "../../state/store";
 
 
 interface IProps {
@@ -28,10 +28,10 @@ export default ({ navigation }: IProps) => {
 
   if (appReady) {
     if (!walletCreated) {
-      setTimeout(() => navigation.navigate("Welcome"), 1);
+      setTimeout(() => navigation.navigate("Welcome"), 0);
     }
     else if (walletCreated) {
-      setTimeout(() => navigation.navigate("InitLightning"), 1);
+      setTimeout(() => navigation.navigate("InitLightning"), 0);
     }
   }
 

@@ -13,10 +13,10 @@ import Receive from "./windows/Receive";
 import Settings from "./windows/Settings";
 import LightningInfo from "./windows/LightningInfo";
 import OnChain from "./windows/OnChain";
-import DEV_InitApp from "./DEV_InitApp";
-import Welcome from "./Welcome";
-import Init from "./Init";
-import InitLightning from "./InitLightning";
+import Init from "./windows/InitProcess/Init";
+import DEV_Commands from "./windows/InitProcess/DEV_Commands";
+import InitLightning from "./windows/InitProcess/InitLightning";
+import Welcome from "./windows/InitProcess/Welcome";
 
 import BlurOverlay, { closeOverlay, openOverlay } from "./Blur";
 // import BlurOverlay, { closeOverlay, openOverlay } from "react-native-blur-overlay";
@@ -67,13 +67,13 @@ const StackNavigator = createStackNavigator({
 });
 
 const RootStack = createSwitchNavigator({
-  DEV_InitApp,
+  DEV_Commands,
   Welcome,
   Init,
   InitLightning,
   Main: { screen: StackNavigator },
 }, {
-  initialRouteName: __DEV__ ? "DEV_InitApp" : "Init",
+  initialRouteName: __DEV__ ? "DEV_Commands" : "Init",
 });
 
 const AppContainer = createAppContainer(RootStack);
