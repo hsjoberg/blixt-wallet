@@ -4,10 +4,10 @@ import { Content, Text, Button, Toast, Input, View, Container } from "native-bas
 import { NavigationScreenProp } from "react-navigation";
 import Long from "long";
 
-import { getTransactions, getTransaction, createTransaction } from "./storage/database/transaction";
-import { useStoreState, useStoreActions } from "./state/store";
-import { lnrpc } from "../proto/proto";
-import { sendCommand } from "./lndmobile/utils";
+import { getTransactions, getTransaction, createTransaction } from "../../storage/database/transaction";
+import { useStoreState, useStoreActions } from "../../state/store";
+import { lnrpc } from "../../proto/proto";
+import { sendCommand } from "../../lndmobile/utils";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;

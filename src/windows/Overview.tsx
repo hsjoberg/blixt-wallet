@@ -21,6 +21,7 @@ export interface IOverviewProps {
 export default ({ navigation }: IOverviewProps)  => {
   const balance = useStoreState((store) => store.channel.balance);
   const transactions = useStoreState((store) => store.transaction.transactions);
+  const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
 
   const scrollYAnimatedValue = useRef(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
@@ -113,6 +114,12 @@ export default ({ navigation }: IOverviewProps)  => {
                 style={style.settingsIcon} type="AntDesign" name="setting"
                 onPress={() => navigation.navigate("Settings")}
               />
+              {(!nodeInfo || !nodeInfo.syncedToChain) &&
+                <Icon
+                  style={style.lightningSyncIcon} name="sync"
+                  onPress={() => Alert.alert("Blixt Wallet is currently syncing the Bitcoin Blockchain.")}
+                />
+              }
             </View>
             {<Animated.Text style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
                 {formatSatToBtc(balance)} ₿
@@ -174,6 +181,14 @@ const style = StyleSheet.create({
     padding: 4,
     top: 13 + iconTopPadding,
     right: 8,
+    fontSize: 24,
+    color: blixtTheme.light,
+  },
+  lightningSyncIcon: {
+    position: "absolute",
+    padding: 4,
+    top: 13 + iconTopPadding,
+    right: 8 + 24 + 8 + 4,
     fontSize: 24,
     color: blixtTheme.light,
   },

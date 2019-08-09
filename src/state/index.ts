@@ -60,7 +60,6 @@ const model: IStoreModel = {
       await setupInitialSchema(db);
       console.log("Writing lnd.conf");
       await writeConfigFile();
-      dispatch.lightning.setFirstSync(true);
     }
 
     actions.setWalletCreated(await getWalletCreated());

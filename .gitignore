@@ -61,3 +61,11 @@ buck-out/
 
 # Android aar
 *.aar
+
+# Protobuf
+proto
+
+# Android Studio
+.classpath
+.project
+.settings

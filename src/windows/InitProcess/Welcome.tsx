@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { Text, Button, Container, H1 } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
-import { useStoreActions } from "./state/store";
+import { useStoreActions } from "../../state/store";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
