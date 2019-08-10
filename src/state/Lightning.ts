@@ -51,6 +51,7 @@ export const lightning: ILightningModel = {
     Promise.all([
       dispatch.channel.initialize(undefined),
       dispatch.receive.initialize(undefined),
+      dispatch.onChain.initialize(undefined),
     ]);
 
     if (differenceInDays(new Date(), lastSync) <3) {
