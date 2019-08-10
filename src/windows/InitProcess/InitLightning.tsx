@@ -22,7 +22,7 @@ export default ({ navigation }: IProps) => {
     })();
   }, [initializeLightning]);
 
-  if (nodeInfo && ready) {
+  if (ready) {
     setTimeout(async () => {
       navigation.navigate("Main");
     }, 0);
@@ -44,7 +44,6 @@ export default ({ navigation }: IProps) => {
           {firstSync && <H3 style={style.firstSync}>This might take a couple of minutes</H3>}
         </>
       }
-      {!ready && !nodeInfo && <H1 />}
     </Container>
   );
 };

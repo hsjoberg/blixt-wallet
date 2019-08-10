@@ -47,8 +47,8 @@ export const lightning: ILightningModel = {
       await actions.unlockWallet(undefined);
     }
     console.log("lnd: time to start and unlock: " + (new Date().getTime() - start) + "ms");
+    await dispatch.transaction.getTransactions(undefined),
     Promise.all([
-      dispatch.transaction.getTransactions(undefined),
       dispatch.channel.initialize(undefined),
       dispatch.receive.initialize(undefined),
     ]);
@@ -96,7 +96,7 @@ export const lightning: ILightningModel = {
       actions.setNodeInfo(info);
 
       if (info.syncedToChain !== true) {
-        await timeout(firstSync ? 6000 : 50000);
+        await timeout(firstSync ? 6000 : 1000);
       }
       else {
         console.log(info);
