@@ -1,6 +1,7 @@
 import { NativeModules } from "react-native";
 import { sendCommand } from "./utils";
 import { lnrpc } from "../../proto/proto";
+import Long from "long";
 const { LndMobile } = NativeModules;
 
 /**
@@ -100,9 +101,9 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
     response: lnrpc.AddInvoiceResponse,
     method: "AddInvoice",
     options: {
-      value: amount,
+      value: Long.fromValue(amount),
       memo,
-      expiry,
+      expiry: Long.fromValue(expiry),
     },
   });
   return response;
