@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Clipboard } from "react-native";
+import { StyleSheet, View, Clipboard, Dimensions } from "react-native";
 import { Body, Text, Header, Container, H1, H3, Right, Left, Button, Title, Icon, Toast } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
+
+const smallScreen = Dimensions.get("window").height < 700;
 
 interface IOnChainInfoProps {
   navigation: NavigationScreenProp<{}>;
@@ -60,27 +61,25 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
       </Header>
       <View style={style.container}>
         <View style={style.fundsInfo}>
-          <H1 style={{ textAlign: "center" }}>
+          <H1 style={style.fundsInfoText}>
             On-chain funds:{"\n"}
             {balance.toString()} Satoshi
           </H1>
         </View>
-        <View style={style.qrContainer}>
-          <View style={style.qrInner}>
-            <H3 style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</H3>
-            <QrCode data={address} />
-            <Text style={style.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressPress}>
-              {address}
-            </Text>
-          </View>
-          <View style={style.buttons}>
-            <Button style={style.button} block={true} primary={true} onPress={onGeneratePress}>
-              <Text>Generate new address</Text>
-            </Button>
-            <Button style={[style.button, { marginBottom: 0 }]} block={true} primary={true} onPress={onWithdrawPress}>
-              <Text>Withdraw coins</Text>
-            </Button>
-          </View>
+        <View style={style.qr}>
+          <H3 style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</H3>
+          <QrCode data={address} size={smallScreen ? 250 : undefined} />
+          <Text style={style.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressPress}>
+            {address}
+          </Text>
+        </View>
+        <View style={style.buttons}>
+          <Button style={style.button} block={true} primary={true} onPress={onGeneratePress}>
+            <Text>Generate new address</Text>
+          </Button>
+          <Button style={[style.button, { marginBottom: 0 }]} block={true} primary={true} onPress={onWithdrawPress}>
+            <Text>Withdraw coins</Text>
+          </Button>
         </View>
       </View>
     </Container>
@@ -90,25 +89,19 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
 const style = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "space-between",
+    padding: 24,
   },
   fundsInfo: {
-    flex: 1,
+    marginTop: !smallScreen ? 24 : 0,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
-  qrContainer: {
-    flex: 4,
-    paddingTop: 10,
-    paddingLeft: 24,
-    paddingRight: 24,
-    paddingBottom: 24,
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
+  fundsInfoText: {
+    textAlign: "center",
   },
-  qrInner: {
-    flex: 1,
+  qr: {
     width: "100%",
     alignItems: "center",
   },
