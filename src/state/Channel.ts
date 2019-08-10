@@ -3,6 +3,7 @@ import { Thunk, thunk, Action, action } from "easy-peasy";
 import { connectPeer, getNodeInfo } from "../lndmobile/index";
 import { listChannels, openChannel, closeChannel, pendingChannels, channelBalance } from "../lndmobile/channel";
 import { lnrpc } from "../../proto/proto";
+import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 
 export interface IOpenChannelPayload {
   // <pubkey>@<ip>[:<port>]
@@ -56,6 +57,9 @@ export interface IChannelModel {
 
 export const channel: IChannelModel = {
   initialize: thunk(async (actions, _, { getState }) => {
+    // Use cached balance before retrieving from lnd:
+    actions.setBalance(await getItemObject(StorageItem.lightningBalance));
+
     await Promise.all([
       actions.getChannels(undefined),
       actions.getBalance(undefined),

@@ -7,6 +7,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   walletCreated = "walletCreated",
   firstSync = "firstSync",
   timeSinceLastSync = "timeSinceLastSync",
+  lightningBalance = "lightningBalance",
 }
 
 export const setItem = async (key: string, value: string) => await AsyncStorage.setItem(key, value);
