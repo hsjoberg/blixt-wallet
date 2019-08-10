@@ -3,12 +3,13 @@ import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 
 import { IStoreInjections } from "./store";
-import { lightning, ILightningModel } from "./Lightning";
-import { transaction, ITransactionModel } from "./Transaction";
-import { channel, IChannelModel } from "./Channel";
-import { send, ISendModel } from "./Send";
+import { ILightningModel, lightning } from "./Lightning";
+import { ITransactionModel, transaction } from "./Transaction";
+import { IChannelModel, channel } from "./Channel";
+import { ISendModel, send } from "./Send";
 import { IReceiveModel, receive } from "./Receive";
 import { IOnChainModel, onChain } from "./OnChain";
+import { IFiatModel, fiat } from "./Fiat";
 
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
@@ -41,6 +42,7 @@ export interface IStoreModel {
   send: ISendModel;
   receive: IReceiveModel;
   onChain: IOnChainModel;
+  fiat: IFiatModel;
 }
 
 const model: IStoreModel = {
@@ -77,6 +79,8 @@ const model: IStoreModel = {
       console.log("Exception", e);
       throw e;
     }
+
+    dispatch.fiat.getRate();
 
     console.log("App initialized");
     return true;
@@ -121,6 +125,7 @@ const model: IStoreModel = {
   send,
   receive,
   onChain,
+  fiat,
 };
 
 export default model;

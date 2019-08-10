@@ -16,11 +16,13 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const [satValue, setSatValue] = useState<string | undefined>(undefined);
   const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
   const [description, setDescription] = useState<string>("");
+  const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
+  const convertFiatToSat = useStoreActions((store) => store.fiat.convertFiatToSat);
 
   const onChangeSatInput = (text: string) => {
     text = text.replace(/\D+/g, "");
     setSatValue(text);
-    setDollarValue(((Number.parseInt(text || "0", 10) / BTCSAT) * BTCUSD).toFixed(2).toString());
+    setDollarValue(convertSatToFiat(Number.parseInt(text || "0", 10)));
   };
 
   const onChangeFiatInput = (text: string) => {
@@ -29,7 +31,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
       setDollarValue(undefined);
       return;
     }
-    setSatValue(Math.floor(Number.parseFloat(text) / BTCUSD * BTCSAT).toString());
+    setSatValue(convertFiatToSat(Number.parseFloat(text)));
     setDollarValue(text);
   };
 
@@ -44,7 +46,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
 
   const formItems = [{
     key: "AMOUNT_SAT",
-    title: "Amount sat",
+    title: "Amount Sat",
     component: (
       <Input
         onChangeText={onChangeSatInput}

@@ -17,6 +17,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
   const nodeInfo = useStoreState((store) => store.send.remoteNodeInfo);
   const paymentRequest = useStoreState((store) => store.send.paymentRequest);
   const bolt11Invoice = useStoreState((store) => store.send.paymentRequestStr);
+  const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
   const [isPaying, setIsPaying] = useState(false);
 
   const clear = useStoreActions((store) => store.send.clear);
@@ -74,7 +75,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
 
   formItems.push({
     key: "AMOUNT_FIAT",
-    title: "Amount SEK",
+    title: "Amount $",
     component: (<Input disabled={true} value={convertSatToFiat(paymentRequest.numSatoshis.toNumber()).toString()} />),
   });
 
@@ -126,7 +127,3 @@ export default ({ navigation }: ISendConfirmationProps) => {
     </Container>
   );
 };
-
-function convertSatToFiat(sat: number): number {
-  return Number.parseFloat(((sat / 100000000) * 76270).toFixed(2));
-}

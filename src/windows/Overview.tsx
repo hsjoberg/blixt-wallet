@@ -22,6 +22,8 @@ export default ({ navigation }: IOverviewProps)  => {
   const balance = useStoreState((store) => store.channel.balance);
   const transactions = useStoreState((store) => store.transaction.transactions);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
+  const fiatRates = useStoreState((store) => store.fiat.fiatRates);
+  const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
 
   const scrollYAnimatedValue = useRef(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
@@ -125,7 +127,7 @@ export default ({ navigation }: IOverviewProps)  => {
                 {formatSatToBtc(balance)} ₿
             </Animated.Text>}
             <Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
-                {convertSatToFiat(balance)} SEK
+                {convertSatToFiat(balance)} USD
             </Animated.Text>
           </LinearGradient>
         </Animated.View>
@@ -217,8 +219,4 @@ const headerInfo = StyleSheet.create({
 
 function formatSatToBtc(sat: number) {
   return sat / 100000000;
-}
-
-function convertSatToFiat(sat: number) {
-  return Number.parseFloat(((sat / 100000000) * 76270).toFixed(2));
 }

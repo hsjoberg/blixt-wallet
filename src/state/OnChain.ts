@@ -23,7 +23,7 @@ export interface ISendCoinsPayload {
 }
 
 export interface IOnChainModel {
-  getBalance: Thunk<IOnChainModel>;
+  getBalance: Thunk<IOnChainModel, void, IStoreInjections>;
   getAddress: Thunk<IOnChainModel, IGetAddressPayload, IStoreInjections>;
   getTransactions: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
   sendCoins: Thunk<IOnChainModel, ISendCoinsPayload, IStoreInjections, any, Promise<lnrpc.ISendCoinsResponse>>;
@@ -46,7 +46,15 @@ export interface IOnChainModel {
 export const onChain: IOnChainModel = {
   getBalance: thunk(async (actions, _, { injections }) => {
     const { walletBalance } = injections.lndMobile.onchain;
-    const walletBalanceResponse = await walletBalance();
+    let walletBalanceResponse = await walletBalance();
+
+    // There's a bug here where totalBalance is
+    // set to 0 instead of Long(0)
+    if (walletBalanceResponse.totalBalance === 0) {
+      walletBalanceResponse.totalBalance = Long .fromNumber(0);
+      walletBalanceResponse.confirmedBalance = Long.fromNumber(0);
+      walletBalanceResponse.unconfirmedBalance = Long.fromNumber(0);
+    }
     actions.setBalance(walletBalanceResponse);
     actions.setUnconfirmedBalance(walletBalanceResponse);
   }),
