@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "react-native";
 import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner, Toast } from "native-base";
 import Long from "long";
@@ -17,8 +17,13 @@ export default ({ navigation }: ISendConfirmationProps) => {
   const nodeInfo = useStoreState((store) => store.send.remoteNodeInfo);
   const paymentRequest = useStoreState((store) => store.send.paymentRequest);
   const bolt11Invoice = useStoreState((store) => store.send.paymentRequestStr);
-
   const [isPaying, setIsPaying] = useState(false);
+
+  const clear = useStoreActions((store) => store.send.clear);
+
+  useEffect(() => {
+    return () => clear();
+  }, [clear]);
 
   if (!paymentRequest) {
     return (<Text>Error</Text>);

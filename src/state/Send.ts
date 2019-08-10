@@ -21,6 +21,7 @@ export interface IModelSendPaymentPayload {
 }
 
 export interface ISendModel {
+  clear: Action<ISendModel>;
   setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections>;
   sendPayment: Thunk<ISendModel, void, IStoreInjections, IStoreModel, Promise<boolean>>;
 
@@ -34,10 +35,17 @@ export interface ISendModel {
 }
 
 export const send: ISendModel = {
+  clear: action((state) =>  {
+    state.paymentRequestStr = undefined;
+    state.remoteNodeInfo = undefined;
+    state.paymentRequest = undefined;
+  }),
+
   /**
    * @throws
    */
   setPayment: thunk(async (actions, payload, { injections }) => {
+    actions.clear();
     const { decodePayReq, getNodeInfo } = injections.lndMobile.index;
     const paymentRequestStr = payload.paymentRequestStr.replace(/^lightning:/, "");
 
@@ -57,9 +65,10 @@ export const send: ISendModel = {
     } catch (e) {
       throw new Error("Code is not a valid Lightning invoice");
     }
-
-    const nodeInfo = await getNodeInfo(paymentRequest.destination);
-    actions.setRemoteNodeInfo(nodeInfo);
+    try {
+      const nodeInfo = await getNodeInfo(paymentRequest.destination);
+      actions.setRemoteNodeInfo(nodeInfo);
+    } catch (e) { }
   }),
 
   /**
