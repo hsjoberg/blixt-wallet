@@ -23,6 +23,7 @@ export interface ISendCoinsPayload {
 }
 
 export interface IOnChainModel {
+  initialize: Thunk<IOnChainModel>;
   getBalance: Thunk<IOnChainModel, void, IStoreInjections>;
   getAddress: Thunk<IOnChainModel, IGetAddressPayload, IStoreInjections>;
   getTransactions: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
@@ -44,6 +45,10 @@ export interface IOnChainModel {
 }
 
 export const onChain: IOnChainModel = {
+  initialize: thunk(async (actions) => {
+    await actions.getAddress({});
+  }),
+
   getBalance: thunk(async (actions, _, { injections }) => {
     const { walletBalance } = injections.lndMobile.onchain;
     let walletBalanceResponse = await walletBalance();

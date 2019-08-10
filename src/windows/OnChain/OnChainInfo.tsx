@@ -20,13 +20,8 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   useEffect(() => {
     (async () => {
       await getBalance(undefined);
-      await getAddress({});
     })();
   }, []);
-
-  if (!address) {
-    return (<></>);
-  }
 
   const onGeneratePress = async () => await getAddress({
     forceNew: true,
@@ -35,7 +30,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   const onWithdrawPress = () => navigation.navigate("Withdraw");
 
   const onBtcAddressPress = () => {
-    Clipboard.setString(address);
+    Clipboard.setString(address!);
     Toast.show({
       text: "Copied to clipboard.",
       type: "warning",
@@ -67,11 +62,15 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           </H1>
         </View>
         <View style={style.qr}>
-          <H3 style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</H3>
-          <QrCode data={address} size={smallScreen ? 250 : undefined} />
-          <Text style={style.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressPress}>
-            {address}
-          </Text>
+          {address &&
+            <>
+              <H3 style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</H3>
+              <QrCode data={address} size={smallScreen ? 250 : undefined} />
+              <Text style={style.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressPress}>
+                {address}
+              </Text>
+            </>
+          }
         </View>
         <View style={style.buttons}>
           <Button style={style.button} block={true} primary={true} onPress={onGeneratePress}>
