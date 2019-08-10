@@ -1,5 +1,6 @@
 import { sendCommand } from "./utils";
 import { lnrpc } from "../../proto/proto";
+import Long from "long";
 
 /**
  * @throws
@@ -53,7 +54,7 @@ export const sendCoins = async (address: string, sat: number): Promise<lnrpc.Sen
     method: "SendCoins",
     options: {
       addr: address,
-      amount: sat,
+      amount: Long.fromValue(sat),
     },
   });
   return response;

@@ -1,5 +1,6 @@
 import { sendCommand, sendStreamCommand } from "./utils";
 import { lnrpc } from "../../proto/proto";
+import Long from "long";
 
 /**
  * @throws
@@ -11,7 +12,7 @@ export const openChannel = async (pubkey: string, amount: number): Promise<lnrpc
     method: "OpenChannelSync",
     options: {
       nodePubkeyString: pubkey,
-      localFundingAmount: amount,
+      localFundingAmount: Long.fromValue(amount),
       minConfs: 1,
     },
   });
