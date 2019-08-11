@@ -18,17 +18,17 @@ export default ({ data, onPress, size, color, border, style: customStyle }: IQrC
   return (
     <TouchableHighlight activeOpacity={1} onPress={onPress}>
       <View style={customStyle}>
-      <View style={
-        [{ width: size + border, height: size + border }, style.qrCodeContainer, customStyle]
-      }>
-        <QRCode
-          value={data}
-          backgroundColor="transparent"
-          color={color}
-          size={size}
-        />
+        <View style={
+          [{ width: size + border, height: size + border }, style.qrCodeContainer]
+        }>
+          <QRCode
+            value={data}
+            backgroundColor="transparent"
+            color={color}
+            size={size}
+          />
+        </View>
       </View>
-    </View>
     </TouchableHighlight>
   );
 };

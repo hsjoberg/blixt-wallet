@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Clipboard, Dimensions } from "react-native";
+import { StyleSheet, View, Clipboard, Dimensions, Share } from "react-native";
 import { Body, Text, Header, Container, H1, H3, Right, Left, Button, Title, Icon, Toast } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
@@ -29,11 +29,17 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
 
   const onWithdrawPress = () => navigation.navigate("Withdraw");
 
-  const onBtcAddressPress = () => {
+  const onBtcAddressTextPress = () => {
     Clipboard.setString(address!);
     Toast.show({
       text: "Copied to clipboard.",
       type: "warning",
+    });
+  };
+
+  const onBtcAddressQrPress = async () => {
+    await Share.share({
+      message: "bitcoin:" + address!,
     });
   };
 
@@ -65,8 +71,8 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           {address &&
             <>
               <H3 style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</H3>
-              <QrCode data={address} size={smallScreen ? 250 : undefined} />
-              <Text style={style.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressPress}>
+              <QrCode data={address} size={smallScreen ? 250 : undefined} onPress={onBtcAddressTextPress} />
+              <Text style={style.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressTextPress}>
                 {address}
               </Text>
             </>

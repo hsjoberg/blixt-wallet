@@ -45,7 +45,6 @@ export const walletBalance = async (): Promise<lnrpc.WalletBalanceResponse> => {
 
 /**
  * @throws
- * TODO test
  */
 export const sendCoins = async (address: string, sat: number): Promise<lnrpc.SendCoinsResponse> => {
   const response = await sendCommand<lnrpc.ISendCoinsRequest, lnrpc.SendCoinsRequest, lnrpc.SendCoinsResponse>({
@@ -58,4 +57,20 @@ export const sendCoins = async (address: string, sat: number): Promise<lnrpc.Sen
     },
   });
   return response;
+};
+
+/**
+ * @throws
+ */
+export const sendCoinsAll = async (address: string, sat: number): Promise<lnrpc.SendCoinsResponse> => {
+ const response = await sendCommand<lnrpc.ISendCoinsRequest, lnrpc.SendCoinsRequest, lnrpc.SendCoinsResponse>({
+   request: lnrpc.SendCoinsRequest,
+   response: lnrpc.SendCoinsResponse,
+   method: "SendCoins",
+   options: {
+     addr: address,
+     sendAll: true,
+   },
+ });
+ return response;
 };

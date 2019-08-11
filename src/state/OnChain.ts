@@ -22,12 +22,17 @@ export interface ISendCoinsPayload {
   sat: number;
 }
 
+export interface ISendCoinsAllPayload {
+  address: string;
+}
+
 export interface IOnChainModel {
   initialize: Thunk<IOnChainModel>;
   getBalance: Thunk<IOnChainModel, void, IStoreInjections>;
   getAddress: Thunk<IOnChainModel, IGetAddressPayload, IStoreInjections>;
   getTransactions: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
   sendCoins: Thunk<IOnChainModel, ISendCoinsPayload, IStoreInjections, any, Promise<lnrpc.ISendCoinsResponse>>;
+  sendCoinsAll: Thunk<IOnChainModel, ISendCoinsAllPayload, IStoreInjections, any, Promise<lnrpc.ISendCoinsResponse>>;
 
   setBalance: Action<IOnChainModel, lnrpc.WalletBalanceResponse>;
   setUnconfirmedBalance: Action<IOnChainModel, lnrpc.WalletBalanceResponse>;
@@ -51,13 +56,17 @@ export const onChain: IOnChainModel = {
 
   getBalance: thunk(async (actions, _, { injections }) => {
     const { walletBalance } = injections.lndMobile.onchain;
-    let walletBalanceResponse = await walletBalance();
+    const walletBalanceResponse = await walletBalance();
 
     // There's a bug here where totalBalance is
     // set to 0 instead of Long(0)
-    if (walletBalanceResponse.totalBalance === 0) {
+    if ((walletBalanceResponse.totalBalance as any) === 0) {
       walletBalanceResponse.totalBalance = Long .fromNumber(0);
+    }
+    if ((walletBalanceResponse.confirmedBalance as any) === 0) {
       walletBalanceResponse.confirmedBalance = Long.fromNumber(0);
+    }
+    if ((walletBalanceResponse.unconfirmedBalance as any) === 0) {
       walletBalanceResponse.unconfirmedBalance = Long.fromNumber(0);
     }
     actions.setBalance(walletBalanceResponse);
@@ -66,9 +75,8 @@ export const onChain: IOnChainModel = {
 
   getAddress: thunk(async (actions, { forceNew }, { injections }) => {
     const { newAddress } = injections.lndMobile.onchain;
-    const newAddressResponse = await newAddress(
-      forceNew ? lnrpc.AddressType.WITNESS_PUBKEY_HASH : lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH
-    );
+    const type = forceNew ? lnrpc.AddressType.WITNESS_PUBKEY_HASH : lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH;
+    const newAddressResponse = await newAddress(type);
     actions.setAddress(newAddressResponse);
   }),
 
@@ -99,6 +107,12 @@ export const onChain: IOnChainModel = {
   sendCoins: thunk(async (_, { address, sat }, { injections }) => {
     const { sendCoins } = injections.lndMobile.onchain;
     const response = await sendCoins(address, sat);
+    return response;
+  }),
+
+  sendCoinsAll: thunk(async (_, { address }, { injections }) => {
+    const { sendCoinsAll } = injections.lndMobile.onchain;
+    const response = await sendCoinsAll(address);
     return response;
   }),
 

@@ -25,6 +25,7 @@ import {
   getTransactions,
   newAddress,
   sendCoins,
+  sendCoinsAll,
   walletBalance,
 } from "../lndmobile/onchain";
 import {
@@ -63,6 +64,7 @@ export interface ILndMobileInjections {
     getTransactions: () => Promise<lnrpc.TransactionDetails>;
     newAddress: (type: lnrpc.AddressType) => Promise<lnrpc.NewAddressResponse>;
     sendCoins: (address: string, sat: number) => Promise<lnrpc.SendCoinsResponse>;
+    sendCoinsAll: (address: string) => Promise<lnrpc.SendCoinsResponse>;
     walletBalance: () => Promise<lnrpc.WalletBalanceResponse>;
   };
   wallet: {
@@ -101,6 +103,7 @@ export default {
     getTransactions,
     newAddress,
     sendCoins,
+    sendCoinsAll,
     walletBalance,
   },
   wallet: {

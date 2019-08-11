@@ -131,8 +131,9 @@ export const channel: IChannelModel = {
   }),
 
   getBalance: thunk(async (actions) => {
-    const response = await channelBalance();
+    const response = await channelBalance(); // response.balance is not Long for some reason
     actions.setBalance(response.balance);
+    await setItemObject(StorageItem.lightningBalance, response.balance);
   }),
 
   setPendingChannels: action((state, payload) => {
@@ -142,10 +143,10 @@ export const channel: IChannelModel = {
     state.waitingCloseChannels = payload.waitingCloseChannels;
   }),
 
-  setChannels: action((state, payload) => { state.channels = payload }),
-  setChannelUpdateSubscriptionStarted: action((state, payload) => { state.channelUpdateSubscriptionStarted = payload }),
-  setAlias: action((state, payload) => { state.aliases[payload.pubkey] = payload.alias }),
-  setBalance: action((state, payload) => { state.balance = payload }),
+  setChannels: action((state, payload) => { state.channels = payload; }),
+  setChannelUpdateSubscriptionStarted: action((state, payload) => { state.channelUpdateSubscriptionStarted = payload; }),
+  setAlias: action((state, payload) => { state.aliases[payload.pubkey] = payload.alias; }),
+  setBalance: action((state, payload) => { state.balance = payload; }),
 
   channels: [],
   aliases: {},
