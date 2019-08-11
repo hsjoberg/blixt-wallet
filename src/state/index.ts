@@ -29,7 +29,9 @@ export interface IStoreModel {
   setDb: Action<IStoreModel, SQLiteDatabase>;
   setAppReady: Action<IStoreModel, boolean>;
   setWalletCreated: Action<IStoreModel, boolean>;
+  setWalletSeed: Action<IStoreModel, string[]>;
 
+  generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
   createWallet: Thunk<IStoreModel, ICreateWalletPayload, IStoreInjections>;
 
   db?: SQLiteDatabase;
@@ -43,6 +45,7 @@ export interface IStoreModel {
   receive: IReceiveModel;
   onChain: IOnChainModel;
   fiat: IFiatModel;
+  walletSeed?: string[];
 }
 
 const model: IStoreModel = {
@@ -103,10 +106,23 @@ const model: IStoreModel = {
     }
   }),
 
-  createWallet: thunk(async (actions, payload, { injections }) => {
-    const { genSeed, initWallet } = injections.lndMobile.wallet;
+  generateSeed: thunk(async (actions, _, { injections }) => {
+    const { genSeed } = injections.lndMobile.wallet;
     const seed = await genSeed();
-    const wallet = await initWallet(seed.cipherSeedMnemonic, payload.password);
+    actions.setWalletSeed(seed.cipherSeedMnemonic);
+  }),
+
+  setWalletSeed: action((state, payload) => {
+    state.walletSeed = payload;
+  }),
+
+  createWallet: thunk(async (actions, payload, { injections, getState }) => {
+    const { initWallet } = injections.lndMobile.wallet;
+    const seed = getState().walletSeed;
+    if (!seed) {
+      return;
+    }
+    const wallet = await initWallet(seed, payload.password);
     await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);
     return wallet;

@@ -16,7 +16,7 @@ import OnChain from "./windows/OnChain";
 import Init from "./windows/InitProcess/Init";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
 import InitLightning from "./windows/InitProcess/InitLightning";
-import Welcome from "./windows/InitProcess/Welcome";
+import Welcome from "./windows/Welcome";
 
 import BlurOverlay, { closeOverlay, openOverlay } from "./Blur";
 // import BlurOverlay, { closeOverlay, openOverlay } from "react-native-blur-overlay";
