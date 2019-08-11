@@ -327,6 +327,7 @@ export default {
 
   // Blixt customization:
   buttonFontFamily: platform === PLATFORM.IOS ? 'System' : blixtTheme.fontMedium,
+  buttonDisabledBg: color(blixtTheme.gray).lighten(0.3).hex(),
 
   cardDefaultBg: blixtTheme.gray,
   cardBorderColor: "transparent",
