@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { StyleSheet, StatusBar, Vibration } from "react-native";
 import { Container, Content, View, Text, Button, Icon } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
-import ReactNativeHapticFeedback from "react-native-haptic-feedback";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
-
 import color from "color";
+
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -15,7 +14,6 @@ export default ({ navigation }: IProps) => {
 
   const onNumberPress = (n: number) => {
     setCode([...code, n]);
-    // ReactNativeHapticFeedback.trigger("impactLight");
     Vibration.vibrate(32);
   };
 
@@ -53,9 +51,6 @@ export default ({ navigation }: IProps) => {
           </Text>
         </View>
         <View style={style.pincodeButtons}>
-          {/* <Button rounded light>
-            <Text>Light</Text>
-          </Button> */}
           <View style={style.buttonRow}>
             {[1, 2, 3].map((n) => (
               <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton} rounded={false}>
@@ -65,20 +60,20 @@ export default ({ navigation }: IProps) => {
           </View>
           <View style={style.buttonRow}>
             {[4, 5, 6].map((n) => (
-              <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton} rounded={false}>
+              <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton}>
                 <Text style={style.pincodeButtonText}>{n}</Text>
               </Button>
             ))}
           </View>
           <View style={style.buttonRow}>
             {[7, 8, 9].map((n) => (
-              <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton} rounded={false}>
+              <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton}>
                 <Text style={style.pincodeButtonText}>{n}</Text>
               </Button>
             ))}
           </View>
           <View style={style.buttonRow}>
-            <Button onPress={() => onClearPress()} style={[style.pincodeButton, style.buttonBackspace]} bordered={true} rounded={false}>
+            <Button onPress={onClearPress} style={[style.buttonDelete, style.pincodeButton]}>
               <Text style={style.pincodeButtonText}>
                 <Icon style={style.buttonClearIcon} type="MaterialCommunityIcons" name="delete-forever" />
               </Text>
@@ -86,7 +81,7 @@ export default ({ navigation }: IProps) => {
             <Button onPress={() => onNumberPress(0)} style={style.pincodeButton} rounded={false}>
               <Text style={style.pincodeButtonText}>0</Text>
             </Button>
-            <Button onPress={() => onBackspacePress()} style={[style.pincodeButton, style.buttonBackspace]} bordered={true} rounded={false}>
+            <Button onPress={onBackspacePress} style={[style.pincodeButton, style.buttonBackspace]}>
               <Text style={style.pincodeButtonText}>
                 <Icon style={style.buttonBackspaceIcon} type="FontAwesome5" name="backspace" />
               </Text>
@@ -106,11 +101,10 @@ const style = StyleSheet.create({
   pincodeInput: {
     flex: 1,
     justifyContent: "flex-end",
-    // backgroundColor: "red",
   },
   enterPincodeText: {
     textAlign: "center",
-    marginBottom: 7,
+    marginBottom: 8,
     textTransform: "uppercase",
   },
   pincodeInputText: {
@@ -127,7 +121,6 @@ const style = StyleSheet.create({
     paddingRight: 64,
     paddingBottom: 32,
     paddingLeft: 64,
-    // backgroundColor: "yellow",
   },
   buttonRow: {
     flexDirection: "row",
@@ -145,8 +138,20 @@ const style = StyleSheet.create({
     lineHeight: 42,
   },
   buttonBackspace: {
-    borderWidth: 0,
-    borderColor: "transparent"
+    elevation: null,
+    shadowColor: undefined,
+    shadowOffset: undefined,
+    shadowOpacity: undefined,
+    shadowRadius: undefined,
+    backgroundColor: "transparent",
+  },
+  buttonDelete: {
+    elevation: null,
+    shadowColor: undefined,
+    shadowOffset: undefined,
+    shadowOpacity: undefined,
+    shadowRadius: undefined,
+    backgroundColor: "transparent",
   },
   buttonBackspaceIcon: {
     color: blixtTheme.light,
