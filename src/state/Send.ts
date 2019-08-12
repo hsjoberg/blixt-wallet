@@ -98,21 +98,19 @@ export const send: ISendModel = {
       valueMsat: paymentRequest.numSatoshis.neg().mul(1000),
       fee:
         (sendPaymentResult.paymentRoute &&
-        sendPaymentResult.paymentRoute.totalFees &&
         sendPaymentResult.paymentRoute.totalFees) || Long.fromInt(0),
       feeMsat:
-          (sendPaymentResult.paymentRoute &&
-          sendPaymentResult.paymentRoute.totalFeesMsat &&
-          sendPaymentResult.paymentRoute.totalFeesMsat) || Long.fromInt(0),
+        (sendPaymentResult.paymentRoute &&
+        sendPaymentResult.paymentRoute.totalFeesMsat) || Long.fromInt(0),
       nodeAliasCached: (remoteNodeInfo.node && remoteNodeInfo.node.alias) || null,
 
       hops: sendPaymentResult.paymentRoute!.hops!.map((hop) => ({
-        chanId: (hop.chanId && hop.chanId) ?? null,
-        chanCapacity: (hop.chanCapacity && hop.chanCapacity) ?? null,
-        amtToForward: (hop.amtToForward && hop.amtToForward) || Long.fromInt(0),
-        amtToForwardMsat: (hop.amtToForwardMsat && hop.amtToForwardMsat) || Long.fromInt(0),
-        fee: (hop.fee && hop.fee) || Long.fromInt(0),
-        feeMsat: (hop.feeMsat && hop.feeMsat) || Long.fromInt(0),
+        chanId: hop.chanId ?? null,
+        chanCapacity: hop.chanCapacity ?? null,
+        amtToForward: hop.amtToForward || Long.fromInt(0),
+        amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
+        fee: hop.fee || Long.fromInt(0),
+        feeMsat: hop.feeMsat || Long.fromInt(0),
         expiry: hop.expiry || null,
         pubKey: hop.pubKey || null,
       })),
@@ -124,9 +122,9 @@ export const send: ISendModel = {
     return true;
   }),
 
-  setPaymentRequestStr: action((state, payload) => { state.paymentRequestStr = payload }),
-  setPaymentRequest: action((state, payload) => { state.paymentRequest = payload }),
-  setRemoteNodeInfo: action((state, payload) => { state.remoteNodeInfo = payload }),
+  setPaymentRequestStr: action((state, payload) => { state.paymentRequestStr = payload; }),
+  setPaymentRequest: action((state, payload) => { state.paymentRequest = payload; }),
+  setRemoteNodeInfo: action((state, payload) => { state.remoteNodeInfo = payload; }),
 };
 
 const checkBech32 = (bech32: string, prefix: string): boolean => {

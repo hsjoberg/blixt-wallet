@@ -91,7 +91,7 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
         (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           txId,
-          (transactionHop.chanId && transactionHop.chanId) || null,
+          (transactionHop.chanId && transactionHop.chanId.toString()) || null,
           (transactionHop.chanCapacity && transactionHop.chanCapacity.toString()) || null,
           (transactionHop.amtToForward && transactionHop.amtToForward.toString()) || null,
           (transactionHop.amtToForwardMsat && transactionHop.amtToForwardMsat.toString()) || null,
