@@ -41,6 +41,7 @@
     "@babel/runtime": "7.5.5",
     "@types/base64-js": "^1.2.5",
     "@types/bech32": "^1.1.1",
+    "@types/color": "^3.0.0",
     "@types/jest": "24.0.17",
     "@types/long": "^4.0.0",
     "@types/react": "16.9.1",
