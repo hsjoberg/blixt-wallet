@@ -133,7 +133,7 @@ export const channel: IChannelModel = {
   getBalance: thunk(async (actions) => {
     const response = await channelBalance(); // response.balance is not Long for some reason
     actions.setBalance(response.balance);
-    await setItemObject(StorageItem.lightningBalance, response.balance);
+    await setItemObject(StorageItem.lightningBalance, response.balance.toString());
   }),
 
   setPendingChannels: action((state, payload) => {
