@@ -14,6 +14,7 @@ import Settings from "./windows/Settings";
 import LightningInfo from "./windows/LightningInfo";
 import OnChain from "./windows/OnChain";
 import Init from "./windows/InitProcess/Init";
+import Pincode from "./windows/InitProcess/Pincode";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
 import InitLightning from "./windows/InitProcess/InitLightning";
 import Welcome from "./windows/Welcome";
@@ -70,6 +71,7 @@ const RootStack = createSwitchNavigator({
   DEV_Commands,
   Welcome,
   Init,
+  Pincode,
   InitLightning,
   Main: { screen: StackNavigator },
 }, {

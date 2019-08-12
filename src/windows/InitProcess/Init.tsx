@@ -31,7 +31,8 @@ export default ({ navigation }: IProps) => {
       setTimeout(() => navigation.navigate("Welcome"), 0);
     }
     else if (walletCreated) {
-      setTimeout(() => navigation.navigate("InitLightning"), 0);
+      setTimeout(() => navigation.navigate("Pincode"), 0);
+      // setTimeout(() => navigation.navigate("InitLightning"), 0);
     }
   }
 
