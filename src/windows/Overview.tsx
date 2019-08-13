@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
-import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, FlatList, SectionList, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import { Container, Icon, Text } from "native-base";
+import React, { useState, useRef, useMemo } from "react";
+import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import { Button, Icon, Text, Content } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
+import { NavigationScreenProp } from "react-navigation";
+
 import { useStoreActions, useStoreState } from "../state/store";
-
 import TransactionCard from "../components/TransactionCard";
-import { NavigationScreenProp, createStackNavigator } from "react-navigation";
-
+import Container from "../components/Container";
 import theme, { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 const HEADER_MIN_HEIGHT = (StatusBar.currentHeight || 0) + 53;
@@ -77,6 +77,18 @@ export default ({ navigation }: IOverviewProps)  => {
     }
   };
 
+  const txs = useMemo(() => {
+    if (transactions.length > 0) {
+      return transactions.map((transaction, key) => {
+        if (key > contentExpand * NUM_TRANSACTIONS_PER_LOAD) {
+          return null;
+        }
+        return (<TransactionCard key={key} transaction={transaction} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />);
+      });
+    }
+    return (<Text style={{ textAlign: "center", margin: 16 }}>No transactions yet</Text>);
+  }, [transactions, contentExpand]);
+
   return (
     <Container>
       <StatusBar
@@ -93,13 +105,7 @@ export default ({ navigation }: IOverviewProps)  => {
           refreshControl={refreshControl}
           onScroll={transactionListOnScroll}
         >
-          {transactions.map((transaction, key) => {
-            if (key > contentExpand * NUM_TRANSACTIONS_PER_LOAD) {
-              return null;
-            }
-            return (<TransactionCard key={key} transaction={transaction} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />);
-          })}
-          {transactions.length === 0 && <Text style={{ textAlign: "center", margin: 16 }}>No transactions yet</Text>}
+          {txs}
         </ScrollView>
         <Animated.View style={{ ...style.animatedTop, height: headerHeight }} pointerEvents="box-none">
           <LinearGradient style={style.top} colors={[blixtTheme.secondary, blixtTheme.primary]} pointerEvents="box-none">
