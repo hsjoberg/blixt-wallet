@@ -42,11 +42,11 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
       </Header>
       <Content>
         <FlatList
-          style={{ padding: 12 }}
           data={transactions.sort((tx1, tx2) => tx2.timeStamp!.toNumber() - tx1.timeStamp!.toNumber())}
           renderItem={({ item: transaction }) => (
             <OnChainTransactionItem
               key={transaction.txHash!}
+              style={{ paddingLeft: 12, paddingRight: 12 }}
               transaction={transaction}
               onPress={onTransactionPress}
             />

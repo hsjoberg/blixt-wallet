@@ -59,7 +59,7 @@ export const fiat: IFiatModel = {
       last: 0,
     },
   },
-}
+};
 
 const validateFiatApiResponse = (response: any): IFiatRates => {
   return response;
