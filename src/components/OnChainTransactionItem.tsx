@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, StyleProp, ViewStyle } from "react-native";
 import { Body, Text, Right, ListItem, Icon } from "native-base";
 import { fromUnixTime } from "date-fns";
 
@@ -10,8 +10,9 @@ import { formatISO } from "../utils";
 export interface IOnChainTransactionItemProps {
   transaction: IBlixtTransaction;
   onPress: (id: string) => void;
+  style?: StyleProp<ViewStyle>;
 }
-export const OnChainTransactionItem = ({ transaction, onPress }: IOnChainTransactionItemProps) => {
+export const OnChainTransactionItem = ({ transaction, onPress, style }: IOnChainTransactionItemProps) => {
   let icon;
   let text;
   if (transaction.amount === undefined) {
@@ -40,7 +41,7 @@ export const OnChainTransactionItem = ({ transaction, onPress }: IOnChainTransac
   }
 
   return (
-    <ListItem onPress={() => onPress(transaction.txHash!)}>
+    <ListItem style={style} onPress={() => onPress(transaction.txHash!)}>
       {icon}
       <Body>
         <View style={{ flexDirection: "row" }}>

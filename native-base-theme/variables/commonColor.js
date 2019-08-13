@@ -341,6 +341,7 @@ export default {
   checkboxBgColor: blixtTheme.primary,
 
   checkboxTickColor: blixtTheme.light,
+  checkboxDefaultColor: "transparent", // Upstream doesn't seem to set this by default
 
   brandPrimary: platform === "ios" ? "#007aff" : blixtTheme.primary,
 

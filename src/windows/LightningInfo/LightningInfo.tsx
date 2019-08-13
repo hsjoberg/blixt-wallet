@@ -22,7 +22,6 @@ export default ({ navigation }: ILightningInfoProps) => {
     waitingCloseChannels,
   } = useStoreState((store) => store.channel);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
-  const [fabActive, setFabActive] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -34,16 +33,36 @@ export default ({ navigation }: ILightningInfoProps) => {
 
   const channelCards = [
     ...pendingOpenChannels.map((pendingChannel, i) => (
-      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub!]} type="OPEN" channel={pendingChannel} />
+      <PendingChannelCard
+        key={((pendingChannel.channel && pendingChannel.channel.channelPoint) || "") + i}
+        alias={aliases[pendingChannel.channel!.remoteNodePub!]}
+        type="OPEN"
+        channel={pendingChannel}
+      />
     )),
     ...pendingClosingChannels.map((pendingChannel, i) => (
-      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub!]} type="CLOSING" channel={pendingChannel} />
+      <PendingChannelCard
+        key={pendingChannel.closingTxid! + i}
+        alias={aliases[pendingChannel.channel!.remoteNodePub!]}
+        type="CLOSING"
+        channel={pendingChannel}
+      />
     )),
     ...pendingForceClosingChannels.map((pendingChannel, i) => (
-      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub!]} type="FORCE_CLOSING" channel={pendingChannel} />
+      <PendingChannelCard
+        key={pendingChannel.closingTxid! + i}
+        alias={aliases[pendingChannel.channel!.remoteNodePub!]}
+        type="FORCE_CLOSING"
+        channel={pendingChannel}
+      />
     )),
     ...waitingCloseChannels.map((pendingChannel, i) => (
-      <PendingChannelCard key={i} alias={aliases[pendingChannel.channel!.remoteNodePub!]} type="WAITING_CLOSE" channel={pendingChannel} />
+      <PendingChannelCard
+        key={((pendingChannel.channel && pendingChannel.channel.channelPoint) || "") + i}
+        alias={aliases[pendingChannel.channel!.remoteNodePub!]}
+        type="WAITING_CLOSE"
+        channel={pendingChannel}
+      />
     )),
     ...channels.map((channel, i) => (
       <ChannelCard key={channel.chanId!.toString()} alias={aliases[channel.remotePubkey!]} channel={channel} />
@@ -76,7 +95,6 @@ export default ({ navigation }: ILightningInfoProps) => {
         <View>{channelCards}</View>
       </ScrollView>
       <Fab
-        active={fabActive}
         style={style.fab}
         position="bottomRight"
         onPress={() => navigation.navigate("OpenChannel")}>

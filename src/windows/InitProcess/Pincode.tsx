@@ -159,6 +159,6 @@ const style = StyleSheet.create({
   },
   buttonClearIcon: {
     color: blixtTheme.light,
-    fontSize: 35,
+    fontSize: 34,
   },
 });
