@@ -41,17 +41,19 @@ export const OnChainTransactionItem = ({ transaction, onPress, style }: IOnChain
   }
 
   return (
-    <ListItem style={style} onPress={() => onPress(transaction.txHash!)}>
-      {icon}
-      <Body>
-        <View style={{ flexDirection: "row" }}>
-          <Text>{formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))}</Text>
-          <Right>
-            {transaction.amount && <Text>{transaction.amount.toString()} Satoshi</Text>}
-          </Right>
-        </View>
-        {text}
-      </Body>
+    <ListItem onPress={() => onPress(transaction.txHash!)}>
+      <View style={[{ flexDirection: "row", justifyContent: "center", alignItems: "center" }, style]}>
+        {icon}
+        <Body>
+          <View style={{ flexDirection: "row" }}>
+            <Text>{formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))}</Text>
+            <Right>
+              {transaction.amount && <Text>{transaction.amount.toString()} Satoshi</Text>}
+            </Right>
+          </View>
+          {text}
+        </Body>
+      </View>
     </ListItem>
   );
 };

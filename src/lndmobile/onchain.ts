@@ -1,4 +1,4 @@
-import { sendCommand } from "./utils";
+import { sendCommand, sendStreamCommand } from "./utils";
 import { lnrpc } from "../../proto/proto";
 import Long from "long";
 
@@ -73,4 +73,19 @@ export const sendCoinsAll = async (address: string, sat: number): Promise<lnrpc.
    },
  });
  return response;
+};
+
+/**
+ * @throws
+ * TODO test
+ */
+export const subscribeTransactions = async (): Promise<string> => {
+  // API docs say that GetTransactionsRequest should be used
+  // https://api.lightning.community/#subscribetransactions
+  const response = await sendStreamCommand<lnrpc.IGetTransactionsRequest, lnrpc.GetTransactionsRequest>({
+    request: lnrpc.GetTransactionsRequest,
+    method: "SubscribeTransactions",
+    options: {},
+  });
+  return response;
 };

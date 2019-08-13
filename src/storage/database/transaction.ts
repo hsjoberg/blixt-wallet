@@ -29,7 +29,7 @@ export interface ITransaction {
   description: string;
   remotePubkey: string;
   paymentRequest: string;
-  status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN";
+  status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN" | "EXPIRED"; // Note: EXPIRED does not exist in lnd
   rHash: string;
   nodeAliasCached: string | null;
 

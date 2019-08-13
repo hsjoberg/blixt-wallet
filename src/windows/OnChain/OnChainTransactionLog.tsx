@@ -21,7 +21,7 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
 
   const onTransactionPress = (txId: string) => {
     navigation.navigate("OnChainTransactionDetails", { txId });
-  }
+  };
 
   return (
     <Container>
@@ -46,7 +46,7 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
           renderItem={({ item: transaction }) => (
             <OnChainTransactionItem
               key={transaction.txHash!}
-              style={{ paddingLeft: 12, paddingRight: 12 }}
+              style={{ paddingHorizontal: 10 }}
               transaction={transaction}
               onPress={onTransactionPress}
             />

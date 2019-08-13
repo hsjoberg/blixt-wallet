@@ -1,11 +1,7 @@
 <resources>
-  <color name="windowBackgroundColor">#151313</color>
-  <color name="defaultStatusBarColor">#151313</color>
-
-
   <color name="primary">#bc6610</color>
   <color name="secondary">#efad13</color>
-  <color name="dark">#151313</color>
+  <color name="dark">#151314</color>
   <color name="light">#e5eaea</color>
   <color name="gray">#232323</color>
   <color name="lightGray">#878787</color>

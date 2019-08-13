@@ -1,9 +1,11 @@
 import { DeviceEventEmitter } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
+
 import { connectPeer, getNodeInfo } from "../lndmobile/index";
 import { listChannels, openChannel, closeChannel, pendingChannels, channelBalance } from "../lndmobile/channel";
 import { lnrpc } from "../../proto/proto";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
+import { IStoreInjections } from "./store";
 
 export interface IOpenChannelPayload {
   // <pubkey>@<ip>[:<port>]
@@ -32,7 +34,7 @@ export interface ISetAliasPayload {
 }
 
 export interface IChannelModel {
-  initialize: Thunk<IChannelModel>;
+  initialize: Thunk<IChannelModel, void, IStoreInjections>;
 
   getChannels: Thunk<IChannelModel>;
   setChannels: Action<IChannelModel, lnrpc.IChannel[]>;
@@ -56,7 +58,7 @@ export interface IChannelModel {
 }
 
 export const channel: IChannelModel = {
-  initialize: thunk(async (actions, _, { getState }) => {
+  initialize: thunk(async (actions, _, { getState, injections }) => {
     // Use cached balance before retrieving from lnd:
     actions.setBalance(await getItemObject(StorageItem.lightningBalance));
 
@@ -66,16 +68,25 @@ export const channel: IChannelModel = {
     ]);
 
     if (getState().channelUpdateSubscriptionStarted) {
-      console.log("WARNING: Channel.channelUpdateSubscriptionStarted() called when subsription already started");
+      console.log("Channel.initialize() called when subscription already started");
       return;
     }
     else {
-      console.log("Starting channel update subscription");
-      DeviceEventEmitter.addListener("CloseChannel", async (e: any) => {
-        console.log("Event CloseChannel");
+      await injections.lndMobile.channel.subscribeChannelEvents();
+      DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
+        console.log("Event SubscribeChannelEvents");
         console.log(e);
-        await actions.getChannels(undefined);
+        await Promise.all([
+          actions.getChannels(undefined),
+          actions.getBalance(undefined),
+        ]);
       });
+      // console.log("Starting channel update subscription");
+      // DeviceEventEmitter.addListener("CloseChannel", async (e: any) => {
+      //   console.log("Event CloseChannel");
+      //   console.log(e);
+      //   await actions.getChannels(undefined);
+      // });
       actions.setChannelUpdateSubscriptionStarted(true);
     }
   }),

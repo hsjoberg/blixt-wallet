@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef, Ref } from "react";
 import { StyleSheet, StatusBar, Vibration } from "react-native";
 import { Container, Content, View, Text, Button, Icon } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import color from "color";
+import * as Animatable from "react-native-animatable";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
@@ -10,6 +11,7 @@ interface IProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IProps) => {
+  const pincodeText = useRef<Animatable.View>();
   const [code, setCode] = useState<number[]>([]);
 
   const onNumberPress = (n: number) => {
@@ -20,17 +22,24 @@ export default ({ navigation }: IProps) => {
   const onBackspacePress = () => {
     const tmp = code.slice();
     tmp.pop();
-    setCode(tmp);
+    setCode(tmp || []);
     Vibration.vibrate(32);
   };
 
   const onClearPress = () => {
     setCode([]);
-    Vibration.vibrate(34);
+    Vibration.vibrate(35);
   };
 
   if (code.length === 6) {
-    setTimeout(() => navigation.navigate("InitLightning"), 0);
+    if (code.join("") === "000000") {
+      setTimeout(() => navigation.navigate("InitLightning"), 0);
+    }
+    else {
+      setTimeout(() => pincodeText!.current!.shake!(950), 1);
+      Vibration.vibrate(300);
+      setCode([]);
+    }
   }
 
   return (
@@ -45,10 +54,12 @@ export default ({ navigation }: IProps) => {
       <Content contentContainerStyle={style.content}>
         <View style={style.pincodeInput}>
           <Text style={style.enterPincodeText}>Enter pincode</Text>
-          <Text style={style.pincodeInputText}>
-            <Text style={style.pincodeInputText}>{"●".repeat(code.length)}</Text>
-            <Text style={{...style.pincodeInputText, color: color(blixtTheme.lightGray).darken(0.6).hex()}}>{"●".repeat(6 - code.length)}</Text>
-          </Text>
+          <View style={{ backgroundColor: blixtTheme.gray }}>
+            <Animatable.Text style={style.pincodeInputText} ref={pincodeText}>
+              <Text style={style.pincodeInputText}>{"●".repeat(code.length)}</Text>
+              <Text style={{...style.pincodeInputText, color: color(blixtTheme.lightGray).darken(0.6).hex()}}>{"●".repeat(6 - code.length)}</Text>
+            </Animatable.Text>
+          </View>
         </View>
         <View style={style.pincodeButtons}>
           <View style={style.buttonRow}>
@@ -107,12 +118,14 @@ const style = StyleSheet.create({
     marginBottom: 8,
     textTransform: "uppercase",
   },
+  pincodeInputContainer: {
+    backgroundColor: blixtTheme.gray,
+    marginBottom: 40,
+  },
   pincodeInputText: {
     textAlign: "center",
-    backgroundColor: blixtTheme.gray,
     fontSize: 44,
     lineHeight: 54,
-    marginBottom: 40,
   },
   pincodeButtons: {
     flex: 1.25,

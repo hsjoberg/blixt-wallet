@@ -7,6 +7,7 @@ import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
+import { timeout } from "../utils/index";
 import theme, { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 const HEADER_MIN_HEIGHT = (StatusBar.currentHeight || 0) + 53;
@@ -31,6 +32,10 @@ export default ({ navigation }: IOverviewProps)  => {
   const [contentExpand, setContentExpand] = useState<number>(1);
   const [expanding, setExpanding] = useState<boolean>(false);
 
+  const getBalance = useStoreActions((store) => store.channel.getBalance);
+  const getFiatRate = useStoreActions((store) => store.fiat.getRate);
+  const checkOpenTransactions = useStoreActions((store) => store.transaction.checkOpenTransactions);
+
   const headerHeight = scrollYAnimatedValue.current.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
@@ -52,11 +57,15 @@ export default ({ navigation }: IOverviewProps)  => {
 
   const refreshControl = (
     <RefreshControl title="Refreshing" progressViewOffset={183} refreshing={refreshing} colors={[blixtTheme.light]} progressBackgroundColor={blixtTheme.gray}
-      onRefresh={() => {
+      onRefresh={async () => {
         setRefreshing(true);
-        setTimeout(() => {
-          setRefreshing(false);
-        }, 1500);
+        await Promise.all(
+          getBalance(),
+          getFiatRate(),
+          checkOpenTransactions(),
+          timeout(1000),
+        );
+        setRefreshing(false);
       }}
     />
   );

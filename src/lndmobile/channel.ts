@@ -16,7 +16,6 @@ export const openChannel = async (pubkey: string, amount: number): Promise<lnrpc
       minConfs: 1,
     },
   });
-
   return response;
 };
 
@@ -72,6 +71,18 @@ export const channelBalance = async (): Promise<lnrpc.ChannelBalanceResponse> =>
     request: lnrpc.ChannelBalanceRequest,
     response: lnrpc.ChannelBalanceResponse,
     method: "ChannelBalance",
+    options: {},
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+export const subscribeChannelEvents = async (): Promise<string> => {
+  const response = await sendStreamCommand<lnrpc.IChannelEventSubscription, lnrpc.ChannelEventSubscription>({
+    request: lnrpc.ChannelEventSubscription,
+    method: "SubscribeChannelEvents",
     options: {},
   });
   return response;
