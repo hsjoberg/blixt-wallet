@@ -64,7 +64,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
             {transaction.value.isNegative() && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}
             <MetaData title="Status" data={capitalize(transaction.status)} />
-            {transaction.status !== "SETTLED" &&
+            {transaction.status === "OPEN" &&
               <>
                 <QrCode data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} size={280} border={25} />
                 <Text style={style.qrText} onPress={onPaymentRequestTextPress} numberOfLines={1} lineBreakMode="middle">

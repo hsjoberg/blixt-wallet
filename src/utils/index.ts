@@ -7,6 +7,7 @@ export const formatISO = (date: Date) => format(date, "yyyy-MM-dd HH:mm");
 
 /**
  * Used for parsing bech32 Bitcoin addresses + URI
+ * TODO change function name
  */
 export interface IParsedBech32 {
   address: string;
@@ -29,3 +30,5 @@ export const parseBech32 = (address: string): IParsedBech32 => {
   returns.address = address;
   return returns;
 };
+
+export const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));

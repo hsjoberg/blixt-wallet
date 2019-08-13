@@ -15,7 +15,6 @@ export default ({ navigation }: IOpenChannelProps) => {
   const [peer, setPeer] = useState("");
   const [sat, setSat] = useState("");
   const [opening, setOpening] = useState(false);
-  const [camera, setCamera] = useState(false);
 
   const onOpenChannelPress = async () => {
     try {
@@ -24,7 +23,6 @@ export default ({ navigation }: IOpenChannelProps) => {
         peer,
         amount: Number.parseInt(sat, 10),
       });
-      console.log(result);
       await getChannels(undefined);
       navigation.pop();
     } catch (e) {

@@ -6,7 +6,7 @@ import { Platform, Dimensions, PixelRatio } from 'react-native';
 export const blixtTheme = {
   primary: "#bc6610",
   secondary: "#efad13",
-  dark: "#151313",
+  dark: "#151314",
   light: "#e5eaea",
 
   gray: "#232323",

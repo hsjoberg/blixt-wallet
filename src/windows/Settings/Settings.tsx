@@ -121,7 +121,7 @@ export default ({ navigation }: ISettingsProps) => {
             <Left><Icon style={style.icon} type="AntDesign" name="info" /></Left>
             <Body><Text>About</Text></Body>
           </ListItem>
-          {!__DEV__ === true &&
+          {__DEV__ === true &&
             <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("DEV_Commands")}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
               <Body><Text>Go to dev screen</Text></Body>

@@ -1,3 +1,4 @@
+import { DeviceEventEmitter } from "react-native";
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
 import Long from "long";
 
@@ -27,7 +28,7 @@ export interface ISendCoinsAllPayload {
 }
 
 export interface IOnChainModel {
-  initialize: Thunk<IOnChainModel>;
+  initialize: Thunk<IOnChainModel, void, IStoreInjections>;
   getBalance: Thunk<IOnChainModel, void, IStoreInjections>;
   getAddress: Thunk<IOnChainModel, IGetAddressPayload, IStoreInjections>;
   getTransactions: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
@@ -38,20 +39,39 @@ export interface IOnChainModel {
   setUnconfirmedBalance: Action<IOnChainModel, lnrpc.WalletBalanceResponse>;
   setAddress: Action<IOnChainModel, lnrpc.NewAddressResponse>;
   setTransactions: Action<IOnChainModel, ISetTransactionsPayload>;
-
+  setTransactionSubscriptionStarted: Action<IOnChainModel, boolean>;
 
   balance: Long;
   unconfirmedBalance: Long;
   totalBalance: Computed<IOnChainModel, Long>;
   address?: string;
   transactions: IBlixtTransaction[];
+  transactionSubscriptionStarted: boolean;
 
   getOnChainTransactionByTxId: Computed<IOnChainModel, (txId: string) => lnrpc.ITransaction | undefined>;
 }
 
 export const onChain: IOnChainModel = {
-  initialize: thunk(async (actions) => {
-    await actions.getAddress({});
+  initialize: thunk(async (actions, _, { getState, injections }) => {
+    await Promise.all([
+      actions.getAddress({}),
+      actions.getBalance(undefined),
+    ]);
+
+    if (getState().transactionSubscriptionStarted) {
+      console.log("OnChain.initialize called when subscription already started");
+      return;
+    }
+    else {
+      await injections.lndMobile.onchain.subscribeTransactions();
+      DeviceEventEmitter.addListener("SubscribeTransactions", async (e: any) => {
+        console.log("Event SubscribeTransactions");
+        console.log(e);
+        await actions.getBalance(undefined);
+      });
+
+      actions.setTransactionSubscriptionStarted(true);
+    }
   }),
 
   getBalance: thunk(async (actions, _, { injections }) => {
@@ -61,7 +81,7 @@ export const onChain: IOnChainModel = {
     // There's a bug here where totalBalance is
     // set to 0 instead of Long(0)
     if ((walletBalanceResponse.totalBalance as any) === 0) {
-      walletBalanceResponse.totalBalance = Long .fromNumber(0);
+      walletBalanceResponse.totalBalance = Long.fromNumber(0);
     }
     if ((walletBalanceResponse.confirmedBalance as any) === 0) {
       walletBalanceResponse.confirmedBalance = Long.fromNumber(0);
@@ -120,11 +140,13 @@ export const onChain: IOnChainModel = {
   setUnconfirmedBalance: action((state, payload) => { state.unconfirmedBalance = payload.unconfirmedBalance; }),
   setAddress: action((state, payload) => { state.address = payload.address; }),
   setTransactions: action((state, payload) => { state.transactions = payload.transactions; }),
+  setTransactionSubscriptionStarted: action((state, payload) => { state.transactionSubscriptionStarted = payload }),
 
   balance: Long.fromInt(0),
   unconfirmedBalance: Long.fromInt(0),
   totalBalance: computed((state) => state.balance.add(state.unconfirmedBalance)),
   transactions: [],
+  transactionSubscriptionStarted: false,
 
   getOnChainTransactionByTxId: computed(
     (state) => {

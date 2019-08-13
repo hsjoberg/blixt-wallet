@@ -95,7 +95,15 @@ export const transaction: ITransactionModel = {
     for (const tx of getState().transactions) {
       if (tx.status === "OPEN") {
         const check = await lookupInvoice(tx.rHash);
-        if (check.settled) {
+        if ((Date.now() / 1000) > (check.creationDate.add(check.expiry).toNumber())) {
+          const updated: ITransaction = {
+            ...tx,
+            status: "EXPIRED",
+          };
+          updateTransaction(db, updated);
+          actions.updateTransaction({ transaction: updated });
+        }
+        else if (check.settled) {
           const updated: ITransaction = {
             ...tx,
             status: "SETTLED",

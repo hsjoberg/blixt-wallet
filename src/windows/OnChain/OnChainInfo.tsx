@@ -23,9 +23,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
     })();
   }, []);
 
-  const onGeneratePress = async () => await getAddress({
-    forceNew: true,
-  });
+  const onGeneratePress = async () => await getAddress({ forceNew: true });
 
   const onWithdrawPress = () => navigation.navigate("Withdraw");
 
@@ -71,7 +69,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           {address &&
             <>
               <H3 style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</H3>
-              <QrCode data={address} size={smallScreen ? 250 : undefined} onPress={onBtcAddressTextPress} />
+              <QrCode data={address} size={smallScreen ? 250 : undefined} onPress={onBtcAddressQrPress} />
               <Text style={style.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressTextPress}>
                 {address}
               </Text>

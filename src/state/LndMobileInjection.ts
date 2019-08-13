@@ -20,6 +20,7 @@ import {
   listChannels,
   openChannel,
   pendingChannels,
+  subscribeChannelEvents,
 } from "../lndmobile/channel";
 import {
   getTransactions,
@@ -27,6 +28,7 @@ import {
   sendCoins,
   sendCoinsAll,
   walletBalance,
+  subscribeTransactions,
 } from "../lndmobile/onchain";
 import {
   decodeInvoiceResult,
@@ -59,6 +61,7 @@ export interface ILndMobileInjections {
     listChannels: () => Promise<lnrpc.ListChannelsResponse>;
     openChannel: (pubkey: string, amount: number) => Promise<lnrpc.ChannelPoint>;
     pendingChannels: () => Promise<lnrpc.PendingChannelsResponse>;
+    subscribeChannelEvents: () => Promise<string>;
   };
   onchain: {
     getTransactions: () => Promise<lnrpc.TransactionDetails>;
@@ -66,6 +69,7 @@ export interface ILndMobileInjections {
     sendCoins: (address: string, sat: number) => Promise<lnrpc.SendCoinsResponse>;
     sendCoinsAll: (address: string) => Promise<lnrpc.SendCoinsResponse>;
     walletBalance: () => Promise<lnrpc.WalletBalanceResponse>;
+    subscribeTransactions: () => Promise<string>;
   };
   wallet: {
     decodeInvoiceResult: (data: string) => lnrpc.Invoice;
@@ -98,6 +102,7 @@ export default {
     listChannels,
     openChannel,
     pendingChannels,
+    subscribeChannelEvents,
   },
   onchain: {
     getTransactions,
@@ -105,6 +110,7 @@ export default {
     sendCoins,
     sendCoinsAll,
     walletBalance,
+    subscribeTransactions,
   },
   wallet: {
     decodeInvoiceResult,
