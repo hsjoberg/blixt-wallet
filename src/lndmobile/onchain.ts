@@ -86,6 +86,6 @@ export const subscribeTransactions = async (): Promise<string> => {
     request: lnrpc.GetTransactionsRequest,
     method: "SubscribeTransactions",
     options: {},
-  });
+  }, true);
   return response;
 };

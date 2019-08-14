@@ -33,7 +33,7 @@ export const closeChannel = async (fundingTxId: string, outputIndex: number): Pr
         outputIndex,
       },
     },
-  });
+  }, true);
   return response;
 };
 
@@ -84,6 +84,6 @@ export const subscribeChannelEvents = async (): Promise<string> => {
     request: lnrpc.ChannelEventSubscription,
     method: "SubscribeChannelEvents",
     options: {},
-  });
+  }, true);
   return response;
 };

@@ -315,7 +315,7 @@ class LndMobile extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void sendStreamCommand(String method, String payloadStr) {
+  public void sendStreamCommand(String method, String payloadStr, boolean streamOnlyOnce) {
     Log.i(TAG, "sendStreamCommand " + method);
     Log.i(TAG, payloadStr);
     Message message = Message.obtain(null, LndMobileService.MSG_GRPC_STREAM_COMMAND, 0, 0);
@@ -325,6 +325,7 @@ class LndMobile extends ReactContextBaseJavaModule {
     // requests.put(req, null);
     bundle.putString("method", method);
     bundle.putByteArray("payload", Base64.decode(payloadStr, Base64.NO_WRAP));
+    bundle.putBoolean("stream_only_once", streamOnlyOnce);
     message.setData(bundle);
 
     try {

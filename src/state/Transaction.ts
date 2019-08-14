@@ -89,7 +89,7 @@ export const transaction: ITransactionModel = {
     const { lookupInvoice } = injections.lndMobile.index;
     const db = getStoreState().db;
     if (!db) {
-      throw new Error("getTransactions(): db not ready");
+      throw new Error("checkOpenTransactions(): db not ready");
     }
 
     for (const tx of getState().transactions) {
