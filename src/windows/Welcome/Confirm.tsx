@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { StatusBar, StyleSheet, Alert } from "react-native";
-import { Container,  View, Button, H1, Card, CardItem, Text, Content, Spinner } from "native-base";
+import { Container, View, Button, H1, Card, CardItem, Text, Content, Spinner, Icon } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
@@ -16,7 +16,7 @@ export default ({ navigation }: IProps) => {
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
   const seed = useStoreState((state) => state.walletSeed);
   const [confirmedWords, setConfirmedWords] = useState<string[]>([]);
-
+  const [selectedWords, setSelectedWords] = useState<Array<string | undefined>>(new Array(24).fill(undefined));
   const [proceeding, setProceeding] = useState(false);
   const [loadSpinnerForButton, setLoadSpinnerForButton] = useState<"skip" | "proceed" | undefined>(undefined);
 
@@ -35,6 +35,7 @@ export default ({ navigation }: IProps) => {
     if (JSON.stringify(seed) !== JSON.stringify(confirmedWords)) {
       Alert.alert("Try again", "Sorry, you wrote the words in the wrong order, please try again.");
       setConfirmedWords([]);
+      setSelectedWords([]);
     }
   }
 
@@ -46,6 +47,19 @@ export default ({ navigation }: IProps) => {
     await createWallet({ password: "test1234" });
     await getAddress({});
     navigation.navigate("AddFunds");
+  };
+
+  const onBackspacePress = () => {
+    const word = confirmedWords[confirmedWords.length - 1];
+    const deleteWord = selectedWords.findIndex((w) => w === word);
+    setSelectedWords((words) => {
+      if (deleteWord !== -1) {
+        words[deleteWord] = undefined;
+      }
+      return words;
+    });
+
+    setConfirmedWords((words) => words.slice(0, -1));
   };
 
   return (
@@ -104,17 +118,28 @@ export default ({ navigation }: IProps) => {
         </View>
         <View style={style.lowerContent}>
           <View style={style.text}>
-            <H1 style={style.textHeader}>Confirm your seed</H1>
+            <View style={style.headerView}>
+              <H1 style={style.textHeader}>Confirm your seed</H1>
+              {selectedWords.length > 0 &&
+                <Icon type="FontAwesome5" name="backspace" style={{ fontSize: 24, marginRight: 10, marginBottom: 6 }} onPress={onBackspacePress}  />
+              }
+            </View>
             <View style={extraStyle.wordButtons}>
               {shuffledSeed.map((word, i) => (
                 <Button
                   key={word + i}
-                  disabled={confirmedWords.includes(word)}
+                  disabled={selectedWords[i] !== undefined}
                   style={{
                     ...extraStyle.wordButton,
-                    opacity: confirmedWords.includes(word) ? 0 : 1}
+                    opacity: selectedWords[i] !== undefined ? 0 : 1}
                   }
-                  onPress={() => setConfirmedWords([...confirmedWords, word])}
+                  onPress={() => {
+                    setConfirmedWords([...confirmedWords, word])
+                    setSelectedWords((words) => {
+                      words[i] = word;
+                      return words;
+                    });
+                  }}
                   small={true}
                 >
                   <Text uppercase={false} style={extraStyle.wordButtonText}>{word}</Text>

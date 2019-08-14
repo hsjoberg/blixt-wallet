@@ -20,9 +20,11 @@ export default ({ navigation }: IProps) => {
   };
 
   const onBackspacePress = () => {
-    const tmp = code.slice();
-    tmp.pop();
-    setCode(tmp || []);
+    setCode((c) => {
+      const tmp = c.slice(0);
+      tmp.pop();
+      return tmp;
+    });
     Vibration.vibrate(32);
   };
 
