@@ -41,6 +41,12 @@ export default ({ navigation }: IProps) => {
           <Button onPress={async () => actions.resetDb()}><Text>actions.resetDb()</Text></Button>
           <Button onPress={async () => actions.clearTransactions()}><Text>actions.clearTransactions()</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text>walletCreated = true</Text></Button>
+          <Button onPress={async () => await setItemObject(StorageItem.loginMethods, ["pincode"])}><Text>set logginMethods to ["pincode"]</Text></Button>
+          <Button onPress={async () => await setItemObject(StorageItem.loginMethods, [])}><Text>set logginMethods to []</Text></Button>
+          <Button onPress={async () => await setItemObject(StorageItem.pincode, "123456")}><Text>set pincode to 123456</Text></Button>
+          <Button onPress={async () => await setItemObject(StorageItem.pincode, "000000")}><Text>set pincode to 000000</Text></Button>
+          <Button onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text>walletCreated = true</Text></Button>
+          <Button onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteWallet())}><Text>DEBUG_deleteWallet</Text></Button>
           <Button onPress={async () => await actions.initializeApp()}><Text>actions.initializeApp()</Text></Button>
           <Button onPress={async () => console.log(await createTransaction(db!, {
             date: 1546300800 + Math.floor(Math.random() * 1000), // 2019-01-01 00:00:00

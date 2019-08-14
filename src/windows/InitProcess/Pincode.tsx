@@ -6,11 +6,13 @@ import color from "color";
 import * as Animatable from "react-native-animatable";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { useStoreActions, useStoreState } from "../../state/store";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IProps) => {
+  const loginPincode = useStoreActions((store) => store.security.loginPincode);
   const pincodeText = useRef<Animatable.View>();
   const [code, setCode] = useState<number[]>([]);
 
@@ -34,14 +36,16 @@ export default ({ navigation }: IProps) => {
   };
 
   if (code.length === 6) {
-    if (code.join("") === "000000") {
-      setTimeout(() => navigation.navigate("InitLightning"), 0);
-    }
-    else {
-      setTimeout(() => pincodeText!.current!.shake!(950), 1);
-      Vibration.vibrate(300);
-      setCode([]);
-    }
+    (async () => {
+      if (await loginPincode(code.join(""))) {
+        setTimeout(() => navigation.navigate("InitLightning"), 0);
+      }
+      else {
+        setTimeout(() => pincodeText!.current!.shake!(950), 1);
+        Vibration.vibrate(300);
+        setCode([]);
+      }
+    })();
   }
 
   return (

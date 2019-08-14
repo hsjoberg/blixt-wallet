@@ -13,6 +13,7 @@ export default ({ navigation }: IProps) => {
   const actions = useStoreActions((store) => store);
   const appReady = useStoreState((store) => store.appReady);
   const walletCreated = useStoreState((store) => store.walletCreated);
+  const loggedIn = useStoreState((store) => store.security.loggedIn);
 
   useEffect(() => {
     (async () => {
@@ -28,11 +29,15 @@ export default ({ navigation }: IProps) => {
 
   if (appReady) {
     if (!walletCreated) {
-      setTimeout(() => navigation.navigate("Welcome"), 0);
+      setTimeout(() => navigation.navigate("Welcome"), 1);
     }
     else if (walletCreated) {
-      setTimeout(() => navigation.navigate("Pincode"), 0);
-      // setTimeout(() => navigation.navigate("InitLightning"), 0);
+      if (loggedIn) {
+        setTimeout(() => navigation.navigate("InitLightning"), 1);
+      }
+      else {
+        setTimeout(() => navigation.navigate("Pincode"), 1);
+      }
     }
   }
 
