@@ -22,6 +22,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 
 public class LndMobileService extends Service {
@@ -29,6 +31,7 @@ public class LndMobileService extends Service {
   boolean lndStarted = false;
   boolean walletUnlocked = false;
   boolean subscribeInvoicesStreamActive = false;
+  Set<String> streamsStarted = new HashSet<String>();
 
   Messenger messenger = new Messenger(new IncomingHandler());
   ArrayList<Messenger> mClients = new ArrayList<Messenger>();
@@ -86,29 +89,31 @@ public class LndMobileService extends Service {
           break;
           case MSG_START_LND:
             bundle = msg.getData();
-            final String args = (String) bundle.get("args");
+            final String args = bundle.getString("args", "");
             startLnd(args, request);
           break;
           case MSG_GRPC_COMMAND:
           case MSG_GRPC_STREAM_COMMAND:
-            method = (String) bundle.get("method");
-            b = (byte[]) bundle.get("payload");
+            method = bundle.getString("method");
+            b = bundle.getByteArray("payload");
             m = syncMethods.get(method);
-
-            if (subscribeInvoicesStreamActive && method.equals("SubscribeInvoices")) {
-              Log.i(TAG, "Attempting to call gGRPC command SubscribeInvoices when stream already active, ignoring request.");
-              return;
-            }
-            else if (method.equals("SubscribeInvoices")) {
-              subscribeInvoicesStreamActive = true;
-            }
-
+            boolean streamOnlyOnce = bundle.getBoolean("stream_only_once");
             if (m == null) {
               m = streamMethods.get(method);
               if (m == null) {
                 Log.e(TAG, "Method " + method + "not found");
                 return;
               }
+            }
+
+            if (msg.what == MSG_GRPC_STREAM_COMMAND) {
+              if (streamOnlyOnce) {
+                if (streamsStarted.contains(method)) {
+                  Log.i(TAG, "Attempting to stream " + method + " twice, not allowing");
+                  return;
+                }
+              }
+              streamsStarted.add(method);
             }
 
             try {

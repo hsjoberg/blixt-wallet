@@ -53,7 +53,7 @@ export const subscribeInvoices = async (): Promise<string> => {
       request: lnrpc.InvoiceSubscription,
       method: "SubscribeInvoices",
       options: {},
-    });
+    }, true);
     return response;
   } catch (e) { throw e.message; }
 };

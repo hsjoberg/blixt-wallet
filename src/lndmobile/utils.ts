@@ -45,9 +45,9 @@ export const sendCommand = async <IReq, Req, Res>({ request, response, method, o
   } catch (e) { throw e; }
 };
 
-export const sendStreamCommand = async <IReq, Req>({ request, method, options }: IStreamCommandOptions<IReq, Req>): Promise<string> =>  {
+export const sendStreamCommand = async <IReq, Req>({ request, method, options }: IStreamCommandOptions<IReq, Req>, streamOnlyOnce: boolean = false): Promise<string> =>  {
   const instance = request.create(options);
-  const response = await LndMobile.sendStreamCommand(method, base64.fromByteArray(request.encode(instance).finish()));
+  const response = await LndMobile.sendStreamCommand(method, base64.fromByteArray(request.encode(instance).finish()), streamOnlyOnce);
   return response;
 };
 
