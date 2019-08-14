@@ -294,6 +294,13 @@ class LndMobile extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void DEBUG_deleteWallet(Promise promise) {
+    String filename = getReactApplicationContext().getFilesDir().toString() + "/data/chain/bitcoin/testnet/wallet.db";
+    File file = new File(filename);
+    promise.resolve(file.delete());
+  }
+
+  @ReactMethod
   public void sendCommand(String method, String payloadStr, final Promise promise) {
     int req = new Random().nextInt();
     requests.put(req, promise);

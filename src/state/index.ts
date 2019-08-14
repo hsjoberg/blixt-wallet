@@ -10,6 +10,7 @@ import { ISendModel, send } from "./Send";
 import { IReceiveModel, receive } from "./Receive";
 import { IOnChainModel, onChain } from "./OnChain";
 import { IFiatModel, fiat } from "./Fiat";
+import { ISecurityModel, security } from "./Security";
 
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
@@ -29,10 +30,10 @@ export interface IStoreModel {
   setDb: Action<IStoreModel, SQLiteDatabase>;
   setAppReady: Action<IStoreModel, boolean>;
   setWalletCreated: Action<IStoreModel, boolean>;
-  setWalletSeed: Action<IStoreModel, string[]>;
+  setWalletSeed: Action<IStoreModel, string[] | undefined>;
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
-  createWallet: Thunk<IStoreModel, ICreateWalletPayload, IStoreInjections>;
+  createWallet: Thunk<IStoreModel, ICreateWalletPayload, IStoreInjections, IStoreModel>;
 
   db?: SQLiteDatabase;
   appReady: boolean;
@@ -45,6 +46,7 @@ export interface IStoreModel {
   receive: IReceiveModel;
   onChain: IOnChainModel;
   fiat: IFiatModel;
+  security: ISecurityModel;
   walletSeed?: string[];
 }
 
@@ -76,7 +78,6 @@ const model: IStoreModel = {
         console.log("lnd not started, starting lnd");
         console.log(await startLnd());
       }
-      actions.setAppReady(true);
     }
     catch (e) {
       console.log("Exception", e);
@@ -84,6 +85,8 @@ const model: IStoreModel = {
     }
 
     dispatch.fiat.getRate();
+    await dispatch.security.initialize();
+    actions.setAppReady(true);
 
     console.log("App initialized");
     return true;
@@ -116,7 +119,7 @@ const model: IStoreModel = {
     state.walletSeed = payload;
   }),
 
-  createWallet: thunk(async (actions, payload, { injections, getState }) => {
+  createWallet: thunk(async (actions, payload, { injections, getState, dispatch }) => {
     const { initWallet } = injections.lndMobile.wallet;
     const seed = getState().walletSeed;
     if (!seed) {
@@ -125,6 +128,8 @@ const model: IStoreModel = {
     const wallet = await initWallet(seed, payload.password);
     await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);
+    await dispatch.security.storeSeed(seed);
+    setTimeout(() => actions.setWalletSeed(undefined), 20000);
     return wallet;
   }),
 
@@ -142,6 +147,7 @@ const model: IStoreModel = {
   receive,
   onChain,
   fiat,
+  security,
 };
 
 export default model;

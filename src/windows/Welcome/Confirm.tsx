@@ -21,7 +21,7 @@ export default ({ navigation }: IProps) => {
   const [loadSpinnerForButton, setLoadSpinnerForButton] = useState<"skip" | "proceed" | undefined>(undefined);
 
   const shuffledSeed: string[] = useMemo(() => {
-    return shuffleArray(seed!);
+    return shuffleArray(seed);
   }, [seed]);
 
   if (!seed) {
@@ -120,7 +120,7 @@ export default ({ navigation }: IProps) => {
           <View style={style.text}>
             <View style={style.headerView}>
               <H1 style={style.textHeader}>Confirm your seed</H1>
-              {selectedWords.length > 0 &&
+              {confirmedWords.length > 0 &&
                 <Icon type="FontAwesome5" name="backspace" style={{ fontSize: 24, marginRight: 10, marginBottom: 6 }} onPress={onBackspacePress}  />
               }
             </View>
@@ -180,7 +180,10 @@ const extraStyle = StyleSheet.create({
   },
 });
 
-const shuffleArray = (originalArray: string[]) => {
+const shuffleArray = (originalArray: string[] | undefined) => {
+  if (!originalArray) {
+    return [];
+  }
   const array = originalArray.slice(0);
   for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

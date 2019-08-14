@@ -1,14 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, NativeModules } from "react-native";
+import { Alert, StyleSheet, NativeModules } from "react-native";
 import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Content, List, ListItem, Right, View } from "native-base";
 
 import { createStackNavigator, NavigationScreenProp } from "react-navigation";
+import { useStoreActions, useStoreState } from "../../state/store";
 
 interface ISettingsProps {
   navigation: NavigationScreenProp<{}>;
 }
 
 export default ({ navigation }: ISettingsProps) => {
+  const seedAvailable = useStoreState((store) => store.security.seedAvailable);
+  const getSeed = useStoreActions((store) => store.security.getSeed);
+  const deleteSeedFromDevice = useStoreActions((store) => store.security.deleteSeedFromDevice);
+
+  const onGetSeedPress = async () => {
+    const seed = await getSeed()
+    if (seed) {
+      Alert.alert("Seed", seed.join(" "));
+    }
+  }
+
+  const onRemoveSeedPress = async () => {
+    Alert.alert("Remove seed", "This will permanently remove the seed from this device. Only do this is you have backed up your seed!",
+      [{
+        text: "Delete seed",
+        onPress: async () => await deleteSeedFromDevice(),
+      }, {
+        text: "Cancel"
+      }])
+  }
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -36,13 +58,24 @@ export default ({ navigation }: ISettingsProps) => {
             <Body><Text>Login with fingerprint</Text></Body>
             <Right><CheckBox checked={true} /></Right>
           </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
-            <Left><Icon style={style.icon} type="AntDesign" name="form" /></Left>
-            <Body>
-              <Text>Show mnemonic</Text>
-              <Text note={true} numberOfLines={1}>Show 24-word seed for this wallet</Text>
-            </Body>
-          </ListItem>
+          {seedAvailable &&
+            <>
+              <ListItem style={style.listItem} button={true} icon={true} onPress={onGetSeedPress}>
+                <Left><Icon style={style.icon} type="AntDesign" name="form" /></Left>
+                <Body>
+                  <Text>Show mnemonic</Text>
+                  <Text note={true} numberOfLines={1}>Show 24-word seed for this wallet</Text>
+                </Body>
+              </ListItem>
+              <ListItem style={style.listItem} button={true} icon={true} onPress={onRemoveSeedPress}>
+                <Left><Icon style={style.icon} type="Entypo" name="eraser" /></Left>
+                <Body>
+                  <Text>Remove mnemonic from device</Text>
+                  <Text note={true} numberOfLines={1}>Permanently remove the seed from this device.</Text>
+                </Body>
+              </ListItem>
+            </>
+          }
 
 
           <ListItem style={style.itemHeader} itemHeader={true}>
