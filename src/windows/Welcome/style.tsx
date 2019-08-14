@@ -34,9 +34,14 @@ export default {
     marginTop: smallScreen ? 10 : 24,
     width: "100%",
   } as StyleProp<TextStyle>,
+  headerView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  } as StyleProp<ViewStyle>,
   textHeader: {
     marginBottom: 3,
-  },
+  } as StyleProp<TextStyle>,
   card: {
     flex: 1,
     margin: 0,
