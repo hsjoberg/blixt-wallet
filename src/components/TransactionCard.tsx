@@ -37,7 +37,12 @@ export default ({ onPress, transaction, unit }: IProps) => {
           <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
             <Text note={true}>
               {/*transaction.nodeAliasCached && transaction.nodeAliasCached + ": "*/}
-              {transaction.value.lessThan(0) && name && <Text style={{ fontWeight: "bold" }} note={true}>{name}: </Text>}
+              {transaction.value.lessThan(0) && name &&
+                <Text note={true}>{/*To */}<Text style={{ fontWeight: "bold" }} note={true}>{name}: </Text></Text>
+              }
+              {transaction.value.greaterThanOrEqual(0) && transaction.payer &&
+                <Text note={true}>{/*From */}<Text style={{ fontWeight: "bold" }} note={true}>{transaction.payer}: </Text></Text>
+                }
               {description && description.length !== 0
                 ? description
                 : "No description"

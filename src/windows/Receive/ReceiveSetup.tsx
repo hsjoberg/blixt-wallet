@@ -19,6 +19,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
+  const [payer, setPayer] = useState<string>("");
 
   const onChangeSatInput = (text: string) => {
     if (bitcoinUnit === "satoshi") {
@@ -26,6 +27,11 @@ export default ({ navigation }: IReceiveSetupProps) => {
     }
     else {
       text = text.replace(/,/g, ".");
+    }
+    if (text.length === 0) {
+      setSatValue(undefined);
+      setDollarValue(undefined);
+      return;
     }
     setSatValue(text);
     setDollarValue(
@@ -38,6 +44,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const onChangeFiatInput = (text: string) => {
     text = text.replace(/,/g, ".");
     if (text.length === 0) {
+      setSatValue(undefined);
       setDollarValue(undefined);
       return;
     }
@@ -60,6 +67,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
         invoice: await addInvoice({
           sat: unitToSatoshi(Number.parseFloat(satValue || "0"), bitcoinUnit),
           description,
+          payer,
         })
       });
     } catch (e) {
@@ -92,6 +100,16 @@ export default ({ navigation }: IReceiveSetupProps) => {
         placeholder="0.00 (optional)"
         value={dollarValue !== undefined ? dollarValue.toString() : undefined}
         keyboardType="numeric"
+      />
+    ),
+  }, {
+    key: "PAYER",
+    title: "Payer",
+    component: (
+      <Input
+        onChangeText={setPayer}
+        placeholder="For bookkeeping (optional)"
+        value={payer}
       />
     ),
   }, {
