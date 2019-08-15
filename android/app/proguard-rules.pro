@@ -8,3 +8,12 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
+# MeiZu Fingerprint
+
+-keep class com.fingerprints.service.** { *; }
+-dontwarn com.fingerprints.service.**
+
+# Samsung Fingerprint
+
+-keep class com.samsung.android.sdk.** { *; }
+-dontwarn com.samsung.android.sdk.**

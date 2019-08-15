@@ -4,12 +4,33 @@ import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Con
 
 import { createStackNavigator, NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../../state/store";
+import { LoginMethods } from "../../state/Security";
 
 interface ISettingsProps {
   navigation: NavigationScreenProp<{}>;
 }
 
 export default ({ navigation }: ISettingsProps) => {
+  // Pincode
+  const loginMethods = useStoreState((store) => store.security.loginMethods);
+  const onRemovePincodePress = () => navigation.navigate("RemovePincodeAuth");
+  const onSetPincodePress = () => navigation.navigate("SetPincode");
+
+  // Fingerprint
+  const fingerprintAvailable = useStoreState((store) => store.security.fingerprintAvailable);
+  const setFingerprintEnabled = useStoreActions((store) => store.security.setFingerprintEnabled);
+  const fingerPrintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
+
+  const onToggleFingerprintPress = async () => {
+    if (fingerPrintEnabled) {
+      navigation.navigate("RemoveFingerprintAuth");
+    }
+    else {
+      await setFingerprintEnabled(true);
+    }
+  }
+
+  // Seed
   const seedAvailable = useStoreState((store) => store.security.seedAvailable);
   const getSeed = useStoreActions((store) => store.security.getSeed);
   const deleteSeedFromDevice = useStoreActions((store) => store.security.deleteSeedFromDevice);
@@ -22,14 +43,15 @@ export default ({ navigation }: ISettingsProps) => {
   }
 
   const onRemoveSeedPress = async () => {
-    Alert.alert("Remove seed", "This will permanently remove the seed from this device. Only do this is you have backed up your seed!",
-      [{
-        text: "Delete seed",
-        onPress: async () => await deleteSeedFromDevice(),
-      }, {
-        text: "Cancel"
-      }])
+    Alert.alert("Remove seed", "This will permanently remove the seed from this device. Only do this is you have backed up your seed!", [{
+      text: "Cancel",
+    }, {
+      text: "Delete seed",
+      onPress: async () => await deleteSeedFromDevice(),
+    }]);
   }
+
+  setTimeout(() => navigation.navigate("Fingerprint"));
 
   return (
     <Container>
@@ -49,15 +71,18 @@ export default ({ navigation }: ISettingsProps) => {
             <Text>Wallet</Text>
           </ListItem>
 
-          <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress}>
             <Left><Icon style={style.icon} type="AntDesign" name="lock" /></Left>
-            <Body><Text>Set pincode</Text></Body>
+            <Body><Text>Login with pincode</Text></Body>
+            <Right><CheckBox checked={loginMethods!.has(LoginMethods.pincode)}  onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress} /></Right>
           </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
-            <Left><Icon style={style.icon} type="Entypo" name="fingerprint" /></Left>
-            <Body><Text>Login with fingerprint</Text></Body>
-            <Right><CheckBox checked={true} /></Right>
-          </ListItem>
+          {fingerprintAvailable &&
+            <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleFingerprintPress}>
+              <Left><Icon style={style.icon} type="Entypo" name="fingerprint" /></Left>
+              <Body><Text>Login with fingerprint</Text></Body>
+              <Right><CheckBox checked={fingerPrintEnabled} onPress={onToggleFingerprintPress}/></Right>
+            </ListItem>
+          }
           {seedAvailable &&
             <>
               <ListItem style={style.listItem} button={true} icon={true} onPress={onGetSeedPress}>
