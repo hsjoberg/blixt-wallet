@@ -7,12 +7,13 @@ const schema = [
     valueMsat TEXT NOT NULL,
     fee TEXT NULL,
     feeMsat TEXT NULL,
-    description	TEXT NOT NULL,
+    description TEXT NOT NULL,
     remotePubkey TEXT NOT NULL,
     status TEXT NOT NULL,
     paymentRequest TEXT NOT NULL,
-    rHash	TEXT NOT NULL,
-    nodeAliasCached TEXT NULL
+    rHash TEXT NOT NULL,
+    nodeAliasCached TEXT NULL,
+    payer TEXT NULL
   )`,
 
   `CREATE TABLE tx_hops (

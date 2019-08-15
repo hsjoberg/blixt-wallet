@@ -16,6 +16,7 @@ export interface IDBTransaction {
   paymentRequest: string;
   rHash: string;
   nodeAliasCached: string | null;
+  payer: string | null;
 }
 
 export interface ITransaction {
@@ -32,6 +33,7 @@ export interface ITransaction {
   status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN" | "EXPIRED"; // Note: EXPIRED does not exist in lnd
   rHash: string;
   nodeAliasCached: string | null;
+  payer: string | null;
 
   hops: ITransactionHop[];
 }
@@ -61,9 +63,9 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
   const txId = await queryInsert(
     db,
     `INSERT INTO tx
-    (date, expire, value, valueMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached)
+    (date, expire, value, valueMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached, payer)
     VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       transaction.date.toString(),
       transaction.expire.toString(),
@@ -77,6 +79,7 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.paymentRequest,
       transaction.rHash,
       transaction.nodeAliasCached || null,
+      transaction.payer || null,
     ],
   );
 
@@ -168,5 +171,6 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => ({
   status: transaction.status,
   rHash: transaction.rHash,
   nodeAliasCached: transaction.nodeAliasCached,
+  payer: transaction.payer,
   hops: [],
 });

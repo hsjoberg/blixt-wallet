@@ -103,6 +103,7 @@ export const send: ISendModel = {
         (sendPaymentResult.paymentRoute &&
         sendPaymentResult.paymentRoute.totalFeesMsat) || Long.fromInt(0),
       nodeAliasCached: (remoteNodeInfo.node && remoteNodeInfo.node.alias) || null,
+      payer: null,
 
       hops: sendPaymentResult.paymentRoute!.hops!.map((hop) => ({
         chanId: hop.chanId ?? null,

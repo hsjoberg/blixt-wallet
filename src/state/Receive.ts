@@ -12,6 +12,7 @@ interface IReceiveModelAddInvoicePayload {
   description: string;
   sat: number;
   expiry?: number;
+  payer: string;
 }
 
 export interface IReceiveModel {
@@ -20,8 +21,10 @@ export interface IReceiveModel {
   addInvoice: Thunk<IReceiveModel, IReceiveModelAddInvoicePayload, IStoreInjections, IStoreModel, Promise<lnrpc.AddInvoiceResponse>>;
   subscribeInvoice: Thunk<IReceiveModel, undefined, IStoreInjections, IStoreModel>;
   setInvoiceSubscriptionStarted: Action<IReceiveModel, boolean>;
+  setPayerTmp: Action<IReceiveModel, string | null>;
 
   invoiceSubscriptionStarted: boolean;
+  payerTmp: string | null;
 }
 
 export const receive: IReceiveModel = {
@@ -34,10 +37,15 @@ export const receive: IReceiveModel = {
     }
   }),
 
-  addInvoice: thunk(async (_, { description, sat, expiry }, { injections, getStoreState }) => {
+  addInvoice: thunk(async (actions, { description, sat, expiry, payer }, { injections, getStoreState }) => {
     const { addInvoice } = injections.lndMobile.index;
     const name = getStoreState().settings.name;
     description = setupDescription(description, name);
+
+    if (payer && payer.length > 0) {
+      actions.setPayerTmp(payer);
+    }
+
     const result = await addInvoice(sat, description, expiry);
     return result;
   }),
@@ -57,6 +65,9 @@ export const receive: IReceiveModel = {
       const invoice = decodeInvoiceResult(e.data);
       const paymentRequest = await decodePayReq(invoice.paymentRequest);
 
+      const payer = getState().payerTmp;
+      actions.setPayerTmp(null);
+
       // TODO in the future we should handle
       // both value (the requested amount in the payreq)
       // and amtPaidMsat (the actual amount paid)
@@ -75,6 +86,7 @@ export const receive: IReceiveModel = {
         rHash: paymentRequest.paymentHash,
         nodeAliasCached: null,
         hops: [],
+        payer: payer,
       };
       await dispatch.transaction.syncTransaction(transaction);
     });
@@ -82,8 +94,10 @@ export const receive: IReceiveModel = {
   }),
 
   setInvoiceSubscriptionStarted: action((state, payload) => { state.invoiceSubscriptionStarted = payload }),
+  setPayerTmp: action((state, payload) => { state.payerTmp = payload }),
 
   invoiceSubscriptionStarted: false,
+  payerTmp: null,
 };
 
 function decodeInvoiceState(invoiceState: lnrpc.Invoice.InvoiceState) {
