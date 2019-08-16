@@ -5,13 +5,15 @@ import { Body, Card, CardItem, Text, Right, Row } from "native-base";
 import { fromUnixTime } from "date-fns";
 import { ITransaction } from "../storage/database/transaction";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { capitalize, formatISO } from "../utils";
+import { capitalize, formatISO, formatBitcoin } from "../utils";
+import { BitcoinUnit } from "../state/BitcoinUnit";
 
 interface IProps {
   onPress: (id: string) => void;
   transaction: ITransaction;
+  unit: BitcoinUnit;
 }
-export default ({ onPress, transaction }: IProps) => {
+export default ({ onPress, transaction, unit }: IProps) => {
   const { date, value, description, status } = transaction;
   const positive = value.isPositive();
 
@@ -26,7 +28,7 @@ export default ({ onPress, transaction }: IProps) => {
             <Right>
               <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
                 {value.notEquals(0) && (positive ? "+" : "")}
-                {value.notEquals(0) && value + " Sat"}
+                {value.notEquals(0) && formatBitcoin(value, unit)}
               </Text>
             </Right>
           </Row>

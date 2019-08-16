@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "react-native";
 import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner, Toast } from "native-base";
-import Long from "long";
 
 import { useStoreActions, useStoreState } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import BlixtForm from "../../components/Form";
+import { valueBitcoin } from "../../utils";
 
 export interface ISendConfirmationProps {
   navigation: NavigationScreenProp<{}>;
@@ -19,6 +19,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
   const bolt11Invoice = useStoreState((store) => store.send.paymentRequestStr);
   const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
   const [isPaying, setIsPaying] = useState(false);
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   const clear = useStoreActions((store) => store.send.clear);
 
@@ -69,8 +70,8 @@ export default ({ navigation }: ISendConfirmationProps) => {
 
   formItems.push({
     key: "AMOUNT_BTC",
-    title: "Amount Sat",
-    component: (<Input disabled={true} value={paymentRequest.numSatoshis.toString()} />),
+    title: `Amount ${bitcoinUnit}`,
+    component: (<Input disabled={true} value={valueBitcoin(paymentRequest.numSatoshis, bitcoinUnit)} />),
   });
 
   formItems.push({

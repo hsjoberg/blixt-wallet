@@ -12,6 +12,7 @@ export interface IOnChainTransactionLogProps {
 export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProps) => {
   const transactions = useStoreState((store) => store.onChain.transactions);
   const getTransactions = useStoreActions((store) => store.onChain.getTransactions);
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   useEffect(() => {
     (async () => {
@@ -46,9 +47,10 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
           renderItem={({ item: transaction }) => (
             <OnChainTransactionItem
               key={transaction.txHash!}
-              style={{ paddingHorizontal: 10 }}
+              style={{ paddingHorizontal: 8 }}
               transaction={transaction}
               onPress={onTransactionPress}
+              unit={bitcoinUnit}
             />
           )}
           keyExtractor={(transaction, i) => transaction.txHash! + i}

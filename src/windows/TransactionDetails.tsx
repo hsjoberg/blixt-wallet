@@ -6,7 +6,7 @@ import { fromUnixTime } from "date-fns";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
-import { capitalize, formatISO } from "../utils";
+import { capitalize, formatISO, formatBitcoin } from "../utils";
 import { useStoreState } from "../state/store";
 
 interface IMetaDataProps {
@@ -34,6 +34,7 @@ export interface ITransactionDetailsProps {
 export default ({ navigation }: ITransactionDetailsProps) => {
   const rHash: string = navigation.getParam("rHash");
   const transaction = useStoreState((store) => store.transaction.getTransactionByRHash(rHash));
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   if (!transaction) {
     return (<></>);
@@ -59,7 +60,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
             {transaction.nodeAliasCached && <MetaData title="Recipient name" data={transaction.nodeAliasCached} />}
             <MetaData title="Description" data={transaction.description} />
-            <MetaData title="Amount" data={transaction.value + " Satoshi"} />
+            <MetaData title="Amount" data={formatBitcoin(transaction.value, bitcoinUnit)} />
             {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
             {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
             {transaction.value.isNegative() && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}

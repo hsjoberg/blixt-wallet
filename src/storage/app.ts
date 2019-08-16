@@ -12,6 +12,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   pincode = "pincode",
   seedStored = "seedStored",
   seed = "seed",
+  bitcoinUnit = "bitcoinUnit", // bitcoin, satoshi, bits, millisatoshi
 }
 
 export const setItem = async (key: string, value: string) => await AsyncStorage.setItem(key, value);
@@ -39,17 +40,19 @@ export const clearApp = async () => {
     removeItem(StorageItem.pincode),
     removeItem(StorageItem.seedStored),
     removeItem(StorageItem.seed),
+    removeItem(StorageItem.bitcoinUnit),
   ]);
 };
 
 export const setupApp = async () => {
   await Promise.all([
-    await setItemObject(StorageItem.app, true),
-    await setItemObject(StorageItem.dbVersion, 1),
-    await setItemObject(StorageItem.walletCreated, false),
-    await setItemObject(StorageItem.firstSync, true),
-    await setItemObject(StorageItem.timeSinceLastSync, 0),
-    await setItemObject(StorageItem.loginMethods, []),
+    setItemObject(StorageItem.app, true),
+    setItemObject(StorageItem.dbVersion, 1),
+    setItemObject(StorageItem.walletCreated, false),
+    setItemObject(StorageItem.firstSync, true),
+    setItemObject(StorageItem.timeSinceLastSync, 0),
+    setItemObject(StorageItem.loginMethods, []),
+    setItemObject(StorageItem.bitcoinUnit, "bitcoin"),
     // Pincode
     // seedStored
     // seed

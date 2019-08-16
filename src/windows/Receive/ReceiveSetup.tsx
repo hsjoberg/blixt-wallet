@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Button, Body, Container, Icon, Header, Text, Title, Left, Input } from "native-base";
+import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast } from "native-base";
 
 import { NavigationScreenProp } from "react-navigation";
-import { useStoreActions } from "../../state/store";
+import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-
-const BTCSAT = 100000000;
-const BTCUSD = 8525;
+import { unitToSatoshi } from "../../utils";
+import { BitcoinUnit, BitcoinUnitAlias } from "../../state/Settings";
 
 interface IReceiveSetupProps {
   navigation: NavigationScreenProp<{}>;
@@ -18,11 +17,21 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const [description, setDescription] = useState<string>("");
   const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
   const convertFiatToSat = useStoreActions((store) => store.fiat.convertFiatToSat);
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   const onChangeSatInput = (text: string) => {
-    text = text.replace(/\D+/g, "");
+    if (bitcoinUnit === BitcoinUnit.satoshi) {
+      text = text.replace(/\D+/g, "");
+    }
+    else {
+      text = text.replace(/,/g, ".");
+    }
     setSatValue(text);
-    setDollarValue(convertSatToFiat(Number.parseInt(text || "0", 10)));
+    setDollarValue(
+      convertSatToFiat( // TODO change function to convertBitcoinToFiat (and pass bitcoinUnit as arg)
+        unitToSatoshi(Number.parseFloat(text || "0"), bitcoinUnit)
+      )
+    );
   };
 
   const onChangeFiatInput = (text: string) => {
@@ -36,17 +45,26 @@ export default ({ navigation }: IReceiveSetupProps) => {
   };
 
   const onCreateInvoiceClick = async () => {
-    navigation.navigate("ReceiveQr", {
-      invoice: await addInvoice({
-        sat: Number.parseInt(satValue || "0", 10),
-        description,
-      })
-    });
+    try {
+      navigation.navigate("ReceiveQr", {
+        invoice: await addInvoice({
+          sat: unitToSatoshi(Number.parseFloat(satValue || "0"), bitcoinUnit),
+          description,
+        })
+      });
+    } catch (e) {
+      Toast.show({
+        duration: 12000,
+        type: "danger",
+        text: `Error: ${e.message}`,
+        buttonText: "Okay",
+      });
+    }
   };
 
   const formItems = [{
     key: "AMOUNT_SAT",
-    title: "Amount Sat",
+    title: `Amount ${BitcoinUnitAlias[bitcoinUnit].nice}`,
     component: (
       <Input
         onChangeText={onChangeSatInput}

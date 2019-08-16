@@ -11,6 +11,7 @@ import { IReceiveModel, receive } from "./Receive";
 import { IOnChainModel, onChain } from "./OnChain";
 import { IFiatModel, fiat } from "./Fiat";
 import { ISecurityModel, security } from "./Security";
+import { ISettingsModel, settings } from "./Settings";
 
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
@@ -47,6 +48,7 @@ export interface IStoreModel {
   onChain: IOnChainModel;
   fiat: IFiatModel;
   security: ISecurityModel;
+  settings: ISettingsModel;
   walletSeed?: string[];
 }
 
@@ -84,6 +86,7 @@ const model: IStoreModel = {
       throw e;
     }
 
+    await dispatch.settings.initialize();
     dispatch.fiat.getRate();
     await dispatch.security.initialize();
     actions.setAppReady(true);
@@ -148,6 +151,7 @@ const model: IStoreModel = {
   onChain,
   fiat,
   security,
+  settings,
 };
 
 export default model;

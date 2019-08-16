@@ -5,6 +5,7 @@ import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
+import { formatBitcoin } from "../../utils";
 
 const smallScreen = Dimensions.get("window").height < 700;
 
@@ -16,6 +17,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
   const balance = useStoreState((store) => store.onChain.balance);
   const address = useStoreState((store) => store.onChain.address);
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   useEffect(() => {
     (async () => {
@@ -62,7 +64,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
         <View style={style.fundsInfo}>
           <H1 style={style.fundsInfoText}>
             On-chain funds:{"\n"}
-            {balance.toString()} Satoshi
+            {formatBitcoin(balance, bitcoinUnit)}
           </H1>
         </View>
         <View style={style.qr}>

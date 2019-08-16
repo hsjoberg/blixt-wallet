@@ -8,20 +8,20 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import ChannelCard from "../../components/ChannelCard";
 import PendingChannelCard from "../../components/PendingChannelCard";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { formatBitcoin } from "../../utils";
 
 interface ILightningInfoProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: ILightningInfoProps) => {
-  const {
-    aliases,
-    channels,
-    pendingOpenChannels,
-    pendingClosingChannels,
-    pendingForceClosingChannels,
-    waitingCloseChannels,
-  } = useStoreState((store) => store.channel);
+  const aliases = useStoreState((store) => store.channel.aliases);
+  const channels = useStoreState((store) => store.channel.channels);
+  const pendingOpenChannels = useStoreState((store) => store.channel.pendingOpenChannels);
+  const pendingClosingChannels = useStoreState((store) => store.channel.pendingClosingChannels);
+  const pendingForceClosingChannels = useStoreState((store) => store.channel.pendingForceClosingChannels);
+  const waitingCloseChannels = useStoreState((store) => store.channel.waitingCloseChannels);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   useEffect(() => {
     (async () => {
@@ -89,7 +89,7 @@ export default ({ navigation }: ILightningInfoProps) => {
       <ScrollView contentContainerStyle={style.container}>
         <View style={style.balanceInfo}>
           <H1 style={style.spendableAmount}>
-            Spendable amount{"\n"} {balance.toString()} Satoshi
+            Spendable amount{"\n"} {formatBitcoin(balance, bitcoinUnit)}
           </H1>
         </View>
         <View>{channelCards}</View>

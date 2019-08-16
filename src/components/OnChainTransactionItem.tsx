@@ -5,14 +5,16 @@ import { fromUnixTime } from "date-fns";
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { IBlixtTransaction } from "../state/OnChain";
-import { formatISO } from "../utils";
+import { formatISO, formatBitcoin } from "../utils";
+import { BitcoinUnit } from "../state/Settings";
 
 export interface IOnChainTransactionItemProps {
   transaction: IBlixtTransaction;
   onPress: (id: string) => void;
   style?: StyleProp<ViewStyle>;
+  unit: BitcoinUnit;
 }
-export const OnChainTransactionItem = ({ transaction, onPress, style }: IOnChainTransactionItemProps) => {
+export const OnChainTransactionItem = ({ transaction, onPress, style, unit }: IOnChainTransactionItemProps) => {
   let icon;
   let text;
   if (transaction.amount === undefined) {
@@ -48,7 +50,7 @@ export const OnChainTransactionItem = ({ transaction, onPress, style }: IOnChain
           <View style={{ flexDirection: "row" }}>
             <Text>{formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))}</Text>
             <Right>
-              {transaction.amount && <Text>{transaction.amount.toString()} Satoshi</Text>}
+              {transaction.amount && <Text>{formatBitcoin(transaction.amount, unit)}</Text>}
             </Right>
           </View>
           {text}

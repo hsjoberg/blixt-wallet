@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Alert, StyleSheet, NativeModules } from "react-native";
-import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Content, List, ListItem, Right, View } from "native-base";
+import React from "react";
+import { Alert, StyleSheet } from "react-native";
+import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Content, List, ListItem, Right } from "native-base";
+import DialogAndroid from "react-native-dialogs";
 
-import { createStackNavigator, NavigationScreenProp } from "react-navigation";
+import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
+import { BitcoinUnit, BitcoinUnitAlias } from "../../state/Settings";
 
 interface ISettingsProps {
   navigation: NavigationScreenProp<{}>;
 }
-
 export default ({ navigation }: ISettingsProps) => {
   // Pincode
   const loginMethods = useStoreState((store) => store.security.loginMethods);
@@ -51,7 +52,27 @@ export default ({ navigation }: ISettingsProps) => {
     }]);
   }
 
-  setTimeout(() => navigation.navigate("Fingerprint"));
+  // Bitcoin unit
+  const currentBitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const changeBitcoinUnit = useStoreActions((store) => store.settings.changeBitcoinUnit);
+
+  const onBitcoinUnitPress = async () => {
+    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+      positiveText: null,
+      negativeText: "Cancel",
+      type: DialogAndroid.listRadio,
+      selectedId: currentBitcoinUnit,
+      items: [
+        { label: BitcoinUnitAlias[BitcoinUnit.bitcoin].settings, id: BitcoinUnit.bitcoin },
+        { label: BitcoinUnitAlias[BitcoinUnit.bit].settings, id: BitcoinUnit.bit },
+        { label: BitcoinUnitAlias[BitcoinUnit.satoshi].settings, id: BitcoinUnit.satoshi },
+        { label: BitcoinUnitAlias[BitcoinUnit.milliBitcoin].settings, id: BitcoinUnit.milliBitcoin },
+      ]
+    });
+    if (selectedItem) {
+      changeBitcoinUnit(selectedItem.id);
+    }
+  }
 
   return (
     <Container>
@@ -114,11 +135,11 @@ export default ({ navigation }: ISettingsProps) => {
               <Text note={true} numberOfLines={1}>USD</Text>
             </Body>
           </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={() => {}}>
+          <ListItem style={style.listItem} icon={true} onPress={onBitcoinUnitPress}>
             <Left><Icon style={style.icon} type="FontAwesome5" name="btc" /></Left>
             <Body>
               <Text>Bitcoin unit</Text>
-              <Text note={true} numberOfLines={1}>Bitcoin</Text>
+              <Text note={true} numberOfLines={1} onPress={onBitcoinUnitPress}>{BitcoinUnitAlias[currentBitcoinUnit].settings}</Text>
             </Body>
           </ListItem>
 
