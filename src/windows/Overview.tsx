@@ -9,21 +9,23 @@ import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
 import { timeout } from "../utils/index";
 import theme, { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { formatBitcoin } from "../utils/index";
+
+import bitcoin from "bitcoin-units";
 
 const HEADER_MIN_HEIGHT = (StatusBar.currentHeight || 0) + 53;
 const HEADER_MAX_HEIGHT = 195;
 const NUM_TRANSACTIONS_PER_LOAD = 25;
 const LOAD_BOTTOM_PADDING = 475;
 
-
 export interface IOverviewProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IOverviewProps)  => {
   const balance = useStoreState((store) => store.channel.balance);
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const transactions = useStoreState((store) => store.transaction.transactions);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
-  const fiatRates = useStoreState((store) => store.fiat.fiatRates);
   const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
 
   const scrollYAnimatedValue = useRef(new Animated.Value(0));
@@ -92,11 +94,11 @@ export default ({ navigation }: IOverviewProps)  => {
         if (key > contentExpand * NUM_TRANSACTIONS_PER_LOAD) {
           return null;
         }
-        return (<TransactionCard key={key} transaction={transaction} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />);
+        return (<TransactionCard key={key} transaction={transaction} unit={bitcoinUnit} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />);
       });
     }
     return (<Text style={{ textAlign: "center", margin: 16 }}>No transactions yet</Text>);
-  }, [transactions, contentExpand]);
+  }, [transactions, contentExpand, bitcoinUnit]);
 
   return (
     <Container>
@@ -139,10 +141,10 @@ export default ({ navigation }: IOverviewProps)  => {
               }
             </View>
             {<Animated.Text style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
-                {formatSatToBtc(balance)} ₿
+              {formatBitcoin(balance, bitcoinUnit)}
             </Animated.Text>}
             <Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
-                {convertSatToFiat(balance)} USD
+              {convertSatToFiat(balance)} USD
             </Animated.Text>
           </LinearGradient>
         </Animated.View>

@@ -1780,6 +1780,18 @@ big-integer@^1.6.7:
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.43.tgz#8ac15bf13e93e509500859061233e19d8d0d99d1"
   integrity sha512-9dULc9jsKmXl0Aeunug8wbF+58n+hQoFjqClN7WeZwGLh0XJUWyJJ9Ee+Ep+Ql/J9fRsTVaeThp8MhiCCrY0Jg==
 
+big.js@^5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/big.js/-/big.js-5.2.2.tgz#65f0af382f578bcdc742bd9c281e9cb2d7768328"
+  integrity sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==
+
+bitcoin-units@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/bitcoin-units/-/bitcoin-units-0.3.0.tgz#014b22db005c31c02865166b5e5a46932865a9c0"
+  integrity sha512-CxmCxfoYDKQhKXMvT1HnShVL1E6rT5IUkVenhrFDphrRGKQHJUTGtK68UY7JnAQKqJA4510cC5MO6aEd/8v1EQ==
+  dependencies:
+    big.js "^5.2.2"
+
 bluebird@^3.5.1:
   version "3.5.5"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.5.tgz#a8d0afd73251effbbd5fe384a77d73003c17a71f"
@@ -6133,6 +6145,11 @@ react-native-camera@3.1.1:
   integrity sha512-Tg1ffUpKlWmafoBm5afGCPFfFKE/lKKiM+gZDlYT38H2IBwbjryWL5BEEbaVi8abZsvQkru5eZAnwUZXUd4vDw==
   dependencies:
     prop-types "^15.6.2"
+
+react-native-dialogs@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-dialogs/-/react-native-dialogs-1.0.5.tgz#b64e8d00e8942009861f432d2cce930e84db8737"
+  integrity sha512-C3Oeqc8g66F75TqWwvNEc/3+6+vBPuLp35wmcbnsCBihi5qKl3iilCAoTQA3JNUswhKKV6MUj3HdF4Uq8s5fdA==
 
 react-native-drawer@2.5.1:
   version "2.5.1"

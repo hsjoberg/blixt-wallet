@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { View, Share, Clipboard, StyleSheet } from "react-native";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, H1, H3, Toast } from "native-base";
+import { formatDistanceStrict, fromUnixTime } from "date-fns";
 
 import { NavigationScreenProp } from "react-navigation";
 import { useStoreState } from "../../state/store";
 import { lnrpc } from "../../../proto/proto";
 import QrCode from "../../components/QrCode";
+import { formatBitcoin } from "../../utils";
 
-import { formatDistanceStrict, fromUnixTime } from "date-fns";
 
 interface IReceiveQRProps {
   navigation: NavigationScreenProp<{}>;
@@ -15,6 +16,7 @@ interface IReceiveQRProps {
 export default ({ navigation }: IReceiveQRProps) => {
   const invoice: lnrpc.AddInvoiceResponse = navigation.getParam("invoice");
   const transaction = useStoreState((store) => store.transaction.getTransactionByPaymentRequest(invoice.paymentRequest));
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   if (!transaction) {
     return (
@@ -92,7 +94,7 @@ export default ({ navigation }: IReceiveQRProps) => {
         <Text onPress={onPressPaymentRequest} style={style.paymentRequest} numberOfLines={1} lineBreakMode="middle">
           {transaction.paymentRequest}
         </Text>
-        <H3>{transaction.value.toString()} Satoshi</H3>
+        <H3>{formatBitcoin(transaction.value, bitcoinUnit)}</H3>
       </View>
     </Container>
   );

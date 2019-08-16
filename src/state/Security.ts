@@ -84,22 +84,22 @@ export const security: ISecurityModel = {
 
   setPincode: thunk(async (actions, payload, { getState }) => {
     const loginMethods = new Set(getState().loginMethods.values());
+    loginMethods.add(LoginMethods.pincode);
 
     await setItemObject(StorageItem.pincode, payload);
     await setItemObject(StorageItem.loginMethods, Array.from(loginMethods));
 
-    loginMethods.add(LoginMethods.pincode);
     actions.setLoginMethods(loginMethods);
   }),
 
   removePincode: thunk(async (actions, pincodeAttempt, { getState }) => {
     if (await actions.checkPincode(pincodeAttempt)) {
       const loginMethods = new Set(getState().loginMethods.values());
+      loginMethods.delete(LoginMethods.pincode);
 
       await removeItem(StorageItem.pincode);
       await setItemObject(StorageItem.loginMethods, []);
 
-      loginMethods.delete(LoginMethods.pincode);
       actions.setLoginMethods(loginMethods);
       return true;
     }

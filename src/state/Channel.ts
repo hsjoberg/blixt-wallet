@@ -1,11 +1,14 @@
 import { DeviceEventEmitter } from "react-native";
-import { Thunk, thunk, Action, action } from "easy-peasy";
+import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
+import Long from "long";
+import bitcoin from "bitcoin-units";
 
 import { connectPeer, getNodeInfo } from "../lndmobile/index";
 import { listChannels, openChannel, closeChannel, pendingChannels, channelBalance } from "../lndmobile/channel";
 import { lnrpc } from "../../proto/proto";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { IStoreInjections } from "./store";
+import { IStoreModel } from "../state";
 
 export interface IOpenChannelPayload {
   // <pubkey>@<ip>[:<port>]
@@ -42,7 +45,7 @@ export interface IChannelModel {
   setChannelUpdateSubscriptionStarted: Action<IChannelModel, boolean>;
   setAlias: Action<IChannelModel, ISetAliasPayload>;
   getBalance: Thunk<IChannelModel, undefined>;
-  setBalance: Action<IChannelModel, number>;
+  setBalance: Action<IChannelModel, Long>;
 
   connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload>;
   closeChannel: Thunk<IChannelModel, ICloseChannelPayload>;
@@ -54,13 +57,13 @@ export interface IChannelModel {
   pendingForceClosingChannels: lnrpc.PendingChannelsResponse.IForceClosedChannel[];
   waitingCloseChannels: lnrpc.PendingChannelsResponse.IWaitingCloseChannel[];
   channelUpdateSubscriptionStarted: boolean;
-  balance: number;
+  balance: Long;
 }
 
 export const channel: IChannelModel = {
   initialize: thunk(async (actions, _, { getState, injections }) => {
     // Use cached balance before retrieving from lnd:
-    actions.setBalance(await getItemObject(StorageItem.lightningBalance));
+    actions.setBalance(Long.fromString(await getItemObject(StorageItem.lightningBalance)));
 
     await Promise.all([
       actions.getChannels(undefined),
@@ -143,7 +146,11 @@ export const channel: IChannelModel = {
 
   getBalance: thunk(async (actions) => {
     const response = await channelBalance(); // response.balance is not Long for some reason
-    actions.setBalance(response.balance);
+    actions.setBalance(
+      response.balance.toNumber
+        ? response.balance
+        : Long.fromNumber(0)
+    );
     await setItemObject(StorageItem.lightningBalance, response.balance.toString());
   }),
 
@@ -166,5 +173,5 @@ export const channel: IChannelModel = {
   pendingForceClosingChannels: [],
   waitingCloseChannels: [],
   channelUpdateSubscriptionStarted: false,
-  balance: 0,
+  balance: Long.fromNumber(0),
 };
