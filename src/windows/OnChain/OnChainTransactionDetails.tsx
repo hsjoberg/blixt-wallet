@@ -7,6 +7,7 @@ import { fromUnixTime } from "date-fns";
 import Blurmodal from "../../components/BlurModal";
 import { formatISO } from "../../utils";
 import { useStoreState } from "../../state/store";
+import { formatBitcoin } from "../../utils";
 
 interface IMetaDataProps {
   title: string;
@@ -33,6 +34,7 @@ export interface ITransactionDetailsProps {
 export default ({ navigation }: ITransactionDetailsProps) => {
   const txId: string = navigation.getParam("txId");
   const transaction = useStoreState((store) => store.onChain.getOnChainTransactionByTxId(txId));
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   if (!transaction) {
     return (<></>);
@@ -46,7 +48,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             <H1 style={style.header}>Transaction</H1>
             <MetaData title="Id" data={transaction.txHash!} />
             <MetaData title="Date" data={formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))} />
-            {transaction.amount && <MetaData title="Amount" data={transaction.amount!.toString() + " Satoshi"} />}
+            {transaction.amount && <MetaData title="Amount" data={formatBitcoin(transaction.amount, bitcoinUnit)} />}
             {transaction.totalFees && <MetaData title="Fees" data={transaction.totalFees.toString() + " Satoshi"} />}
             <MetaData title="Destination" data={transaction.destAddresses![transaction!.destAddresses!.length - 1]} />
             <MetaData title="Confirmations" data={(transaction.numConfirmations && transaction.numConfirmations.toString()) || "Unknown"} />
