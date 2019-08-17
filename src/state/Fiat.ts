@@ -1,4 +1,5 @@
-import { Action, action, Thunk, thunk } from "easy-peasy";
+import { Action, action, Thunk, thunk, computed, Computed } from "easy-peasy";
+import { IStoreModel } from "../state";
 
 const BLOCKCHAIN_FIAT_API_URL = "https://blockchain.info/ticker";
 const BTCSAT = 100000000;
@@ -9,16 +10,19 @@ export interface IFiatRate {
 
 export interface IFiatRates {
   USD: IFiatRate;
+  SEK: IFiatRate
 }
 
 export interface IFiatModel {
   getRate: Thunk<IFiatModel>;
 
   setFiatRates: Action<IFiatModel, IFiatRates>;
-  convertSatToFiat: Thunk<IFiatModel, number>;
+  convertSatToFiat: Thunk<IFiatModel, number, any, IStoreModel, number>;
+  convertSatToFiatFormatted: Thunk<IFiatModel, number, any, IStoreModel, string>;
   convertFiatToSat: Thunk<IFiatModel, number>;
 
   fiatRates: IFiatRates;
+  currentRate: Computed<IFiatModel, number, IStoreModel>;
 };
 
 export const fiat: IFiatModel = {
@@ -38,12 +42,24 @@ export const fiat: IFiatModel = {
     state.fiatRates = payload;
   }),
 
-  convertSatToFiat: thunk((_, sat, { getState }) => {
-    const { USD } = getState().fiatRates;
-    if (!USD || !USD.last) {
-      return 0;
+  convertSatToFiat: thunk((_, sat, { getState, getStoreState }) => {
+    const fiatRates = getState().fiatRates;
+    const currentFiatUnit = getStoreState().settings.fiatUnit;
+    if (!fiatRates[currentFiatUnit] || !fiatRates[currentFiatUnit].last) {
+      return "0";
     }
-    return Number.parseFloat(((sat / BTCSAT) * USD.last).toString()).toFixed(2);
+    const fiat = fiatRates[currentFiatUnit];
+    return Number.parseFloat(((sat / BTCSAT) * fiat.last).toString()).toFixed(2);
+  }),
+
+  convertSatToFiatFormatted: thunk((_, sat, { getState, getStoreState }) => {
+    const fiatRates = getState().fiatRates;
+    const currentFiatUnit = getStoreState().settings.fiatUnit;
+    if (!fiatRates[currentFiatUnit] || !fiatRates[currentFiatUnit].last) {
+      return "0";
+    }
+    const fiat = fiatRates[currentFiatUnit];
+    return `${Number.parseFloat(((sat / BTCSAT) * fiat.last).toString()).toFixed(2)} ${currentFiatUnit}`;
   }),
 
   convertFiatToSat: thunk((_, sat, { getState }) => {
@@ -58,7 +74,20 @@ export const fiat: IFiatModel = {
     USD: {
       last: 0,
     },
+    SEK: {
+      last: 0,
+    },
   },
+
+  currentRate: computed([
+      (state) => state.fiatRates,
+      (_, storeState) => storeState.settings.fiatUnit,
+    ], (fiatRates, fiatUnit) => {
+    if (fiatRates[fiatUnit] && fiatRates[fiatUnit].last) {
+      return fiatRates[fiatUnit].last;
+    }
+    return 0;
+  }),
 };
 
 const validateFiatApiResponse = (response: any): IFiatRates => {

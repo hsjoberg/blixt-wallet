@@ -74,6 +74,26 @@ export default ({ navigation }: ISettingsProps) => {
     }
   }
 
+  // Fiat unit
+  const currentFiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const changeFiatUnit = useStoreActions((store) => store.settings.changeFiatUnit);
+
+  const onFiatUnitPress = async () => {
+    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+      positiveText: null,
+      negativeText: "Cancel",
+      type: DialogAndroid.listRadio,
+      selectedId: currentFiatUnit,
+      items: [
+        { label: "USD", id: "USD" },
+        { label: "SEK", id: "SEK" },
+      ]
+    });
+    if (selectedItem) {
+      changeFiatUnit(selectedItem.id);
+    }
+  }
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -128,11 +148,11 @@ export default ({ navigation }: ISettingsProps) => {
             <Text>Display</Text>
           </ListItem>
 
-          <ListItem style={style.listItem} icon={true} onPress={() => {}}>
+          <ListItem style={style.listItem} icon={true} onPress={onFiatUnitPress}>
             <Left><Icon style={style.icon} type="FontAwesome" name="money" /></Left>
             <Body>
               <Text>Fiat currency</Text>
-              <Text note={true} numberOfLines={1}>USD</Text>
+              <Text note={true} numberOfLines={1} onPress={onFiatUnitPress}>{currentFiatUnit}</Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onBitcoinUnitPress}>

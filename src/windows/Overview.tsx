@@ -7,9 +7,8 @@ import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
-import { timeout } from "../utils/index";
+import { timeout, formatBitcoin, formatFiat } from "../utils/index";
 import theme, { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { formatBitcoin } from "../utils/index";
 
 import bitcoin from "bitcoin-units";
 
@@ -26,7 +25,9 @@ export default ({ navigation }: IOverviewProps)  => {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const transactions = useStoreState((store) => store.transaction.transactions);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
-  const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
+  const convertSatToFiatFormatted = useStoreActions((store) => store.fiat.convertSatToFiatFormatted);
+  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const currentRate = useStoreState((store) => store.fiat.currentRate);
 
   const scrollYAnimatedValue = useRef(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
@@ -144,7 +145,7 @@ export default ({ navigation }: IOverviewProps)  => {
               {formatBitcoin(balance, bitcoinUnit)}
             </Animated.Text>}
             <Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
-              {convertSatToFiat(balance)} USD
+              {formatFiat(balance, currentRate, fiatUnit)}
             </Animated.Text>
           </LinearGradient>
         </Animated.View>
