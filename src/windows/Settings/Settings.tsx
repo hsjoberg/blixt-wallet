@@ -86,6 +86,7 @@ export default ({ navigation }: ISettingsProps) => {
       selectedId: currentFiatUnit,
       items: [
         { label: "USD", id: "USD" },
+        { label: "EUR", id: "EUR" },
         { label: "SEK", id: "SEK" },
       ]
     });
