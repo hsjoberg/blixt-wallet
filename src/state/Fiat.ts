@@ -74,6 +74,9 @@ export const fiat: IFiatModel = {
     USD: {
       last: 0,
     },
+    EUR: {
+      last: 0,
+    },
     SEK: {
       last: 0,
     },
