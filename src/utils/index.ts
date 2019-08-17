@@ -41,3 +41,21 @@ export const formatBitcoin = (satoshi: Long, unit: BitcoinUnit): string => bitco
 export const valueBitcoin = (satoshi: Long, unit: BitcoinUnit): string => bitcoin(satoshi.toNumber(), "satoshi").to(unit).value().toString();
 
 export const unitToSatoshi = (value: number, fromUnit: BitcoinUnit): number => bitcoin(value, fromUnit).to("satoshi").value();
+
+export const formatFiat = (satoshi: Long, conversion: number, fiatUnit?: string): string => {
+  if (fiatUnit) {
+    fiatUnit = " " + fiatUnit;
+  }
+  const btc = bitcoin(satoshi.toNumber(), "satoshi").to("btc").value();
+  return `${Number.parseFloat(((btc) * conversion).toString()).toFixed(2)}${fiatUnit}`;
+}
+
+export const valueFiat = (satoshi: Long, conversion: number, fiatUnit?: string): number => {
+  const btc = bitcoin(satoshi.toNumber(), "satoshi").to("btc").value();
+  return btc * conversion;
+}
+
+export const valueBitcoinFromFiat = (fiat: number, conversion: number, unit: BitcoinUnit): number => {
+  const btc = fiat / conversion;
+  return bitcoin(btc, "btc").to(unit).value();
+}

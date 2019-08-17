@@ -6,7 +6,7 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import BlixtForm from "../../components/Form";
-import { valueBitcoin } from "../../utils";
+import { valueBitcoin, valueFiat } from "../../utils";
 
 export interface ISendConfirmationProps {
   navigation: NavigationScreenProp<{}>;
@@ -20,6 +20,8 @@ export default ({ navigation }: ISendConfirmationProps) => {
   const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
   const [isPaying, setIsPaying] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const currentRate = useStoreState((store) => store.fiat.currentRate);
 
   const clear = useStoreActions((store) => store.send.clear);
 
@@ -76,8 +78,8 @@ export default ({ navigation }: ISendConfirmationProps) => {
 
   formItems.push({
     key: "AMOUNT_FIAT",
-    title: "Amount $",
-    component: (<Input disabled={true} value={convertSatToFiat(paymentRequest.numSatoshis.toNumber()).toString()} />),
+    title: `Amount ${fiatUnit}`,
+    component: (<Input disabled={true} value={valueFiat(paymentRequest.numSatoshis, currentRate).toFixed(2)} />),
   });
 
   if (nodeInfo && nodeInfo.node && nodeInfo.node.alias) {
