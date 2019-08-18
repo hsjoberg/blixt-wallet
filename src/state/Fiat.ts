@@ -10,7 +10,26 @@ export interface IFiatRate {
 
 export interface IFiatRates {
   USD: IFiatRate;
-  SEK: IFiatRate
+  JPY: IFiatRate;
+  CNY: IFiatRate;
+  SGD: IFiatRate;
+  HKD: IFiatRate;
+  CAD: IFiatRate;
+  NZD: IFiatRate;
+  AUD: IFiatRate;
+  CLP: IFiatRate;
+  GBP: IFiatRate;
+  DKK: IFiatRate;
+  SEK: IFiatRate;
+  ISK: IFiatRate;
+  CHF: IFiatRate;
+  BRL: IFiatRate;
+  EUR: IFiatRate;
+  RUB: IFiatRate;
+  PLN: IFiatRate;
+  THB: IFiatRate;
+  KRW: IFiatRate;
+  TWD: IFiatRate;
 }
 
 export interface IFiatModel {
@@ -71,15 +90,27 @@ export const fiat: IFiatModel = {
   }),
 
   fiatRates: {
-    USD: {
-      last: 0,
-    },
-    EUR: {
-      last: 0,
-    },
-    SEK: {
-      last: 0,
-    },
+    USD: { last: 0 },
+    JPY: { last: 0 },
+    CNY: { last: 0 },
+    SGD: { last: 0 },
+    HKD: { last: 0 },
+    CAD: { last: 0 },
+    NZD: { last: 0 },
+    AUD: { last: 0 },
+    CLP: { last: 0 },
+    GBP: { last: 0 },
+    DKK: { last: 0 },
+    SEK: { last: 0 },
+    ISK: { last: 0 },
+    CHF: { last: 0 },
+    BRL: { last: 0 },
+    EUR: { last: 0 },
+    RUB: { last: 0 },
+    PLN: { last: 0 },
+    THB: { last: 0 },
+    KRW: { last: 0 },
+    TWD: { last: 0 },
   },
 
   currentRate: computed([
