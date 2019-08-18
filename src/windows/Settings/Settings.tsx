@@ -107,6 +107,18 @@ export default ({ navigation }: ISettingsProps) => {
     }
   }
 
+  // Name
+  const name = useStoreState((store) => store.settings.name);
+  const changeName = useStoreActions((store) => store.settings.changeName);
+  const onNamePress = async () => {
+    const { action, text } = await DialogAndroid.prompt("Name", "Choose a name that will be shown to people who pay to you", {
+      defaultValue: name,
+    });
+    if (action === DialogAndroid.actionPositive) {
+      await changeName(text);
+    }
+  };
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -195,14 +207,17 @@ export default ({ navigation }: ISettingsProps) => {
             <Text>Lightning Network</Text>
           </ListItem>
 
+          <ListItem style={style.listItem} icon={true} onPress={onNamePress}>
+            <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
+            <Body>
+              <Text>Name</Text>
+              <Text note={true} numberOfLines={1}>Will be shown to those who pay you.</Text>
+            </Body>
+          </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNodeInfo")}>
             <Left><Icon style={style.icon} type="AntDesign" name="user" /></Left>
             <Body><Text>Show node data</Text></Body>
           </ListItem>
-          {/* <ListItem style={style.listItem} icon={true} onPress={() => {}}>
-            <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
-            <Body><Text>Payment request default description</Text></Body>
-          </ListItem> */}
           {/* <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
             <Left><Icon style={style.icon} type="Entypo" name="circular-graph" /></Left>
             <Body><Text>Automatically open channels</Text></Body>
