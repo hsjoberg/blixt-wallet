@@ -4,7 +4,8 @@ import Settings from "./Settings";
 import SetPincode from "./SetPincode";
 import RemovePincodeAuth from "./RemovePincodeAuth";
 import RemoveFingerprintAuth from "./RemoveFingerprintAuth";
-// LightnigNodeInfo is in root stack
+// LightningNodeInfo modal is in root stack
+// About modal is in root stack
 
 export default createStackNavigator({
   Settings,
