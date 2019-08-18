@@ -1,4 +1,7 @@
 import AsyncStorage from "@react-native-community/async-storage";
+import { LoginMethods } from "../state/Security";
+import { IBitcoinUnits } from "../utils/bitcoin-units";
+import { IFiatRates } from "../state/Fiat";
 
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",
@@ -17,7 +20,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
 }
 
 export const setItem = async (key: string, value: string) => await AsyncStorage.setItem(key, value);
-export const setItemObject = async (key: string, value: any) => await AsyncStorage.setItem(key, JSON.stringify(value));
+export const setItemObject = async <T>(key: string, value: T) => await AsyncStorage.setItem(key, JSON.stringify(value));
 export const getItem = async (key: StorageItem) => await AsyncStorage.getItem(key);
 export const getItemObject = async (key: StorageItem) => JSON.parse(await AsyncStorage.getItem(key) || "null");
 export const removeItem = async (key: StorageItem) => await AsyncStorage.removeItem(key);
@@ -48,16 +51,16 @@ export const clearApp = async () => {
 
 export const setupApp = async () => {
   await Promise.all([
-    setItemObject(StorageItem.app, true),
-    setItemObject(StorageItem.dbVersion, 1),
-    setItemObject(StorageItem.walletCreated, false),
-    setItemObject(StorageItem.firstSync, true),
-    setItemObject(StorageItem.timeSinceLastSync, 0),
-    setItemObject(StorageItem.loginMethods, []),
+    setItemObject<boolean>(StorageItem.app, true),
+    setItemObject<number>(StorageItem.dbVersion, 1),
+    setItemObject<boolean>(StorageItem.walletCreated, false),
+    setItemObject<boolean>(StorageItem.firstSync, true),
+    setItemObject<number>(StorageItem.timeSinceLastSync, 0),
+    setItemObject<LoginMethods[]>(StorageItem.loginMethods, []),
     // Pincode
     // seedStored
     // seed
-    setItemObject(StorageItem.bitcoinUnit, "bitcoin"),
-    setItemObject(StorageItem.fiatUnit, "USD"),
+    setItemObject<keyof IBitcoinUnits>(StorageItem.bitcoinUnit, "bitcoin"),
+    setItemObject<keyof IFiatRates>(StorageItem.fiatUnit, "USD"),
   ]);
 };
