@@ -7,6 +7,7 @@ import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import BlixtForm from "../../components/Form";
 import { valueBitcoin, BitcoinUnits, valueFiat } from "../../utils/bitcoin-units";
+import { extractDescription } from "../../utils/NameDesc";
 
 export interface ISendConfirmationProps {
   navigation: NavigationScreenProp<{}>;
@@ -32,6 +33,8 @@ export default ({ navigation }: ISendConfirmationProps) => {
   if (!paymentRequest) {
     return (<Text>Error</Text>);
   }
+
+  const { name, description } = extractDescription(paymentRequest.description);
 
   const send = async () => {
     try {
@@ -82,10 +85,17 @@ export default ({ navigation }: ISendConfirmationProps) => {
     component: (<Input disabled={true} value={valueFiat(paymentRequest.numSatoshis, currentRate).toFixed(2)} />),
   });
 
-  if (nodeInfo && nodeInfo.node && nodeInfo.node.alias) {
+  if (name) {
     formItems.push({
       key: "RECIPIENT",
       title: "Recipient",
+      component: (<Input multiline={true} disabled={true} value={name} />),
+    });
+  }
+  else if (nodeInfo && nodeInfo.node && nodeInfo.node.alias) {
+    formItems.push({
+      key: "NODE_ALIAS",
+      title: "Node Alias",
       component: (<Input disabled={true} value={nodeInfo.node.alias} />),
     });
   }
@@ -93,7 +103,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
   formItems.push({
     key: "MESSAGE",
     title: "Message",
-    component: (<Input multiline={true} disabled={true} value={paymentRequest.description} />),
+    component: (<Input multiline={true} disabled={true} value={description} />),
   });
 
   return (

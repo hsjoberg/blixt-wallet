@@ -6,6 +6,7 @@ import { fromUnixTime } from "date-fns";
 import { ITransaction } from "../storage/database/transaction";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { capitalize, formatISO } from "../utils";
+import { extractDescription } from "../utils/NameDesc";
 import { IBitcoinUnits, formatBitcoin } from "../utils/bitcoin-units";
 
 interface IProps {
@@ -14,8 +15,9 @@ interface IProps {
   unit: keyof IBitcoinUnits;
 }
 export default ({ onPress, transaction, unit }: IProps) => {
-  const { date, value, description, status } = transaction;
+  const { date, value, status } = transaction;
   const positive = value.isPositive();
+  const { name, description } = extractDescription(transaction.description);
 
   return (
     <Card>
@@ -35,7 +37,11 @@ export default ({ onPress, transaction, unit }: IProps) => {
           <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
             <Text note={true}>
               {/*transaction.nodeAliasCached && transaction.nodeAliasCached + ": "*/}
-              {description || "No description"}
+              {transaction.value.lessThan(0) && name && <Text style={{ fontWeight: "bold" }} note={true}>{name}: </Text>}
+              {description && description.length !== 0
+                ? description
+                : "No description"
+              }
             </Text>
             <Text note={true} style={{ marginRight: 0 }}>
               {status !== "SETTLED" && capitalize(status)}
