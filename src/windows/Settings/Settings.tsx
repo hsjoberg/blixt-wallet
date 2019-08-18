@@ -165,7 +165,7 @@ export default ({ navigation }: ISettingsProps) => {
           </ListItem>
 
 
-          <ListItem style={style.itemHeader} itemHeader={true}>
+          {/* <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Bitcoin Network</Text>
           </ListItem>
 
@@ -176,7 +176,7 @@ export default ({ navigation }: ISettingsProps) => {
           <ListItem style={style.listItem} icon={true} onPress={() => {}}>
             <Left><Icon style={style.icon} type="AntDesign" name="customerservice" /></Left>
             <Body><Text>Set trusted Node for SPV</Text></Body>
-          </ListItem>
+          </ListItem> */}
 
 
           <ListItem style={style.itemHeader} itemHeader={true}>
@@ -187,30 +187,30 @@ export default ({ navigation }: ISettingsProps) => {
             <Left><Icon style={style.icon} type="AntDesign" name="user" /></Left>
             <Body><Text>Show node data</Text></Body>
           </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={() => {}}>
+          {/* <ListItem style={style.listItem} icon={true} onPress={() => {}}>
             <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
             <Body><Text>Payment request default description</Text></Body>
-          </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
+          </ListItem> */}
+          {/* <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
             <Left><Icon style={style.icon} type="Entypo" name="circular-graph" /></Left>
             <Body><Text>Automatically open channels</Text></Body>
             <Right><CheckBox checked={true} /></Right>
-          </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
+          </ListItem> */}
+          {/* <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
             <Left><Icon style={style.icon} type="Entypo" name="fingerprint" /></Left>
             <Body><Text>Backup channels to Google Drive</Text></Body>
             <Right><CheckBox checked={false} /></Right>
-          </ListItem>
+          </ListItem> */}
 
 
-          <ListItem style={style.itemHeader} itemHeader={true}>
+          {/* <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Advanced</Text>
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={() => {}}>
             <Left><Icon style={style.icon} type="Entypo" name="text" /></Left>
             <Body><Text>Open lnd log</Text></Body>
-          </ListItem>
+          </ListItem> */}
 
 
           <ListItem style={style.itemHeader} itemHeader={true}>
