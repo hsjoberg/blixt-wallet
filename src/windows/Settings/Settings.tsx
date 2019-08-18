@@ -19,16 +19,10 @@ export default ({ navigation }: ISettingsProps) => {
 
   // Fingerprint
   const fingerprintAvailable = useStoreState((store) => store.security.fingerprintAvailable);
-  const setFingerprintEnabled = useStoreActions((store) => store.security.setFingerprintEnabled);
   const fingerPrintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
 
   const onToggleFingerprintPress = async () => {
-    if (fingerPrintEnabled) {
-      navigation.navigate("RemoveFingerprintAuth");
-    }
-    else {
-      await setFingerprintEnabled(true);
-    }
+    navigation.navigate("ChangeFingerprintSettingsAuth");
   }
 
   // Seed

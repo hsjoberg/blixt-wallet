@@ -3,7 +3,7 @@ import { createStackNavigator } from "react-navigation";
 import Settings from "./Settings";
 import SetPincode from "./SetPincode";
 import RemovePincodeAuth from "./RemovePincodeAuth";
-import RemoveFingerprintAuth from "./RemoveFingerprintAuth";
+import ChangeFingerprintSettingsAuth from "./ChangeFingerprintSettingsAuth";
 // LightningNodeInfo modal is in root stack
 // About modal is in root stack
 
@@ -11,7 +11,7 @@ export default createStackNavigator({
   Settings,
   RemovePincodeAuth,
   SetPincode,
-  RemoveFingerprintAuth,
+  ChangeFingerprintSettingsAuth,
 }, {
   headerMode: "none",
   initialRouteName: "Settings",

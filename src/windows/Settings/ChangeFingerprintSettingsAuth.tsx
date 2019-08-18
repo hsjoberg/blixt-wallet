@@ -13,6 +13,7 @@ export default ({ navigation }: IProps) => {
   const fingerprintStartScan = useStoreActions((store) => store.security.fingerprintStartScan);
   const fingerprintStopScan = useStoreActions((store) => store.security.fingerprintStopScan);
   const setFingerprintEnabled = useStoreActions((store) => store.security.setFingerprintEnabled);
+  const fingerPrintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
 
   // TODO fix useFingerprint hook
   useEffect(() => {
@@ -28,7 +29,7 @@ export default ({ navigation }: IProps) => {
         else if (status === "active") {
           const r = await fingerprintStartScan();
           if (r) {
-            await setFingerprintEnabled(false);
+            await setFingerprintEnabled(!fingerPrintEnabled);
             navigation.pop();
           }
         }
@@ -37,7 +38,7 @@ export default ({ navigation }: IProps) => {
       (async () => {
         const r = await fingerprintStartScan();
         if (r) {
-          await setFingerprintEnabled(false);
+          await setFingerprintEnabled(!fingerPrintEnabled);
           navigation.pop();
         }
       })();
@@ -59,13 +60,10 @@ export default ({ navigation }: IProps) => {
         barStyle="light-content"
       />
       <Content contentContainerStyle={style.content}>
-        <Text style={style.message}>Authenticate to remove fingerprint scan</Text>
+        <Text style={style.message}>Authenticate to change fingerprint settings</Text>
         <View style={style.fingerPrintSymbolContainer}>
           <Icon type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} />
         </View>
-        {/* <View style={style.fingerPrintSymbolContainer}>
-          <Icon type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} />
-        </View> */}
       </Content>
     </Container>
   )
