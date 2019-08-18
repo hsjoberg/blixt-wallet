@@ -9,6 +9,7 @@ import QrCode from "../components/QrCode";
 import { capitalize, formatISO } from "../utils";
 import { formatBitcoin} from "../utils/bitcoin-units"
 import { useStoreState } from "../state/store";
+import { extractDescription } from "../utils/NameDesc";
 
 interface IMetaDataProps {
   title: string;
@@ -41,6 +42,8 @@ export default ({ navigation }: ITransactionDetailsProps) => {
     return (<></>);
   }
 
+  const { name, description } = extractDescription(transaction.description);
+
   const onQrPress = async () => {
     await Share.share({
       message: "lightning:" + transaction.paymentRequest,
@@ -59,8 +62,9 @@ export default ({ navigation }: ITransactionDetailsProps) => {
           <Body>
             <H1 style={style.header}>Transaction</H1>
             <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
-            {transaction.nodeAliasCached && <MetaData title="Recipient name" data={transaction.nodeAliasCached} />}
-            <MetaData title="Description" data={transaction.description} />
+            {(transaction.nodeAliasCached && name == undefined) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
+            {(transaction.value.lessThan(0) && name) && <MetaData title="Recipient" data={name} />}
+            <MetaData title="Description" data={description} />
             <MetaData title="Amount" data={formatBitcoin(transaction.value, bitcoinUnit)} />
             {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
             {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}

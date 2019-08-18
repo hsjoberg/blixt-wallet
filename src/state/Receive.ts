@@ -6,6 +6,7 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
+import { setupDescription } from "../utils/NameDesc";
 
 interface IReceiveModelAddInvoicePayload {
   description: string;
@@ -33,8 +34,10 @@ export const receive: IReceiveModel = {
     }
   }),
 
-  addInvoice: thunk(async (_, { description, sat, expiry }, { injections }) => {
+  addInvoice: thunk(async (_, { description, sat, expiry }, { injections, getStoreState }) => {
     const { addInvoice } = injections.lndMobile.index;
+    const name = getStoreState().settings.name;
+    description = setupDescription(description, name);
     const result = await addInvoice(sat, description, expiry);
     return result;
   }),

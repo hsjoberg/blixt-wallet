@@ -17,6 +17,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   seed = "seed",
   bitcoinUnit = "bitcoinUnit", // bitcoin, satoshi, bits, millisatoshi
   fiatUnit = "fiatUnit",
+  name = "name",
 }
 
 export const setItem = async (key: string, value: string) => await AsyncStorage.setItem(key, value);
