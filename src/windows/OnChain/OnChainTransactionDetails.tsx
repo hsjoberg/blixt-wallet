@@ -7,7 +7,7 @@ import { fromUnixTime } from "date-fns";
 import Blurmodal from "../../components/BlurModal";
 import { formatISO } from "../../utils";
 import { useStoreState } from "../../state/store";
-import { formatBitcoin } from "../../utils";
+import { formatBitcoin } from "../../utils/bitcoin-units";
 
 interface IMetaDataProps {
   title: string;

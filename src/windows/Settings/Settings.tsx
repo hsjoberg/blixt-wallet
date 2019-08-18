@@ -6,7 +6,7 @@ import DialogAndroid from "react-native-dialogs";
 import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
-import { BitcoinUnit, BitcoinUnitAlias } from "../../state/Settings";
+import { BitcoinUnits } from "../../utils/bitcoin-units";
 
 interface ISettingsProps {
   navigation: NavigationScreenProp<{}>;
@@ -63,10 +63,10 @@ export default ({ navigation }: ISettingsProps) => {
       type: DialogAndroid.listRadio,
       selectedId: currentBitcoinUnit,
       items: [
-        { label: BitcoinUnitAlias[BitcoinUnit.bitcoin].settings, id: BitcoinUnit.bitcoin },
-        { label: BitcoinUnitAlias[BitcoinUnit.bit].settings, id: BitcoinUnit.bit },
-        { label: BitcoinUnitAlias[BitcoinUnit.satoshi].settings, id: BitcoinUnit.satoshi },
-        { label: BitcoinUnitAlias[BitcoinUnit.milliBitcoin].settings, id: BitcoinUnit.milliBitcoin },
+        { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
+        { label: BitcoinUnits.bit.settings, id: "bit" },
+        { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
+        { label: BitcoinUnits.milliBitcoin.settings, id: "milliBitcoin" },
       ]
     });
     if (selectedItem) {
@@ -160,7 +160,7 @@ export default ({ navigation }: ISettingsProps) => {
             <Left><Icon style={style.icon} type="FontAwesome5" name="btc" /></Left>
             <Body>
               <Text>Bitcoin unit</Text>
-              <Text note={true} numberOfLines={1} onPress={onBitcoinUnitPress}>{BitcoinUnitAlias[currentBitcoinUnit].settings}</Text>
+              <Text note={true} numberOfLines={1} onPress={onBitcoinUnitPress}>{BitcoinUnits[currentBitcoinUnit].settings}</Text>
             </Body>
           </ListItem>
 

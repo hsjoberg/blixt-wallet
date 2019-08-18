@@ -5,13 +5,13 @@ import { Body, Card, CardItem, Text, Right, Row } from "native-base";
 import { fromUnixTime } from "date-fns";
 import { ITransaction } from "../storage/database/transaction";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { capitalize, formatISO, formatBitcoin } from "../utils";
-import { BitcoinUnit } from "../state/BitcoinUnit";
+import { capitalize, formatISO } from "../utils";
+import { IBitcoinUnits, formatBitcoin } from "../utils/bitcoin-units";
 
 interface IProps {
   onPress: (id: string) => void;
   transaction: ITransaction;
-  unit: BitcoinUnit;
+  unit: keyof IBitcoinUnits;
 }
 export default ({ onPress, transaction, unit }: IProps) => {
   const { date, value, description, status } = transaction;

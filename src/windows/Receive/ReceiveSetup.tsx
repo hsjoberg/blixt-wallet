@@ -4,8 +4,7 @@ import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast 
 import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import { unitToSatoshi, valueBitcoinFromFiat } from "../../utils";
-import { BitcoinUnit, BitcoinUnitAlias } from "../../state/Settings";
+import { unitToSatoshi, BitcoinUnits, valueBitcoinFromFiat } from "../../utils/bitcoin-units";
 
 interface IReceiveSetupProps {
   navigation: NavigationScreenProp<{}>;
@@ -22,7 +21,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
   const onChangeSatInput = (text: string) => {
-    if (bitcoinUnit === BitcoinUnit.satoshi) {
+    if (bitcoinUnit === "satoshi") {
       text = text.replace(/\D+/g, "");
     }
     else {
@@ -42,7 +41,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
       setDollarValue(undefined);
       return;
     }
-    if (bitcoinUnit === BitcoinUnit.satoshi) {
+    if (bitcoinUnit === "satoshi") {
       setSatValue(
         Number.parseInt(valueBitcoinFromFiat(Number.parseFloat(text), currentRate, bitcoinUnit), 10),
       );
@@ -75,7 +74,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
 
   const formItems = [{
     key: "AMOUNT_SAT",
-    title: `Amount ${BitcoinUnitAlias[bitcoinUnit].nice}`,
+    title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
     component: (
       <Input
         onChangeText={onChangeSatInput}

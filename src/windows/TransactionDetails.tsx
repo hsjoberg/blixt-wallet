@@ -6,7 +6,8 @@ import { fromUnixTime } from "date-fns";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
-import { capitalize, formatISO, formatBitcoin } from "../utils";
+import { capitalize, formatISO } from "../utils";
+import { formatBitcoin} from "../utils/bitcoin-units"
 import { useStoreState } from "../state/store";
 
 interface IMetaDataProps {
