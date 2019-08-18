@@ -183,7 +183,7 @@ export default ({ navigation }: ISettingsProps) => {
             <Text>Lightning Network</Text>
           </ListItem>
 
-          <ListItem style={style.listItem} icon={true} onPress={() => {}}>
+          <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNodeInfo")}>
             <Left><Icon style={style.icon} type="AntDesign" name="user" /></Left>
             <Body><Text>Show node data</Text></Body>
           </ListItem>

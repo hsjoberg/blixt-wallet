@@ -18,6 +18,7 @@ import Pincode from "./windows/InitProcess/Pincode";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
 import InitLightning from "./windows/InitProcess/InitLightning";
 import Welcome from "./windows/Welcome";
+import LightningNodeInfo from "./windows/Settings/LightningNodeInfo";
 
 import BlurOverlay, { closeOverlay, openOverlay } from "./Blur";
 // import BlurOverlay, { closeOverlay, openOverlay } from "react-native-blur-overlay";
@@ -41,6 +42,7 @@ const StackNavigator = createStackNavigator({
   OnChainTransactionDetails: {
     screen: OnChainTransactionDetails,
   },
+  LightningNodeInfo,
   Receive,
   Send,
   Settings,
