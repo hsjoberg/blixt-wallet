@@ -7,7 +7,7 @@ import { NavigationScreenProp } from "react-navigation";
 import { useStoreState } from "../../state/store";
 import { lnrpc } from "../../../proto/proto";
 import QrCode from "../../components/QrCode";
-import { formatBitcoin } from "../../utils";
+import { formatBitcoin } from "../../utils/bitcoin-units";
 
 
 interface IReceiveQRProps {

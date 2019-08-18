@@ -84,7 +84,7 @@ const style = StyleSheet.create({
     padding: 5,
     width: "100%",
     minHeight: "55%",
-    maxHeight: "94%",
+    // maxHeight: "94%",
   },
   header: {
     width: "100%",

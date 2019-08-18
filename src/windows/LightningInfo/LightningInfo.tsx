@@ -8,7 +8,7 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import ChannelCard from "../../components/ChannelCard";
 import PendingChannelCard from "../../components/PendingChannelCard";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
-import { formatBitcoin } from "../../utils";
+import { formatBitcoin } from "../../utils/bitcoin-units";
 
 interface ILightningInfoProps {
   navigation: NavigationScreenProp<{}>;

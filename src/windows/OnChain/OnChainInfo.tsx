@@ -5,7 +5,7 @@ import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
-import { formatBitcoin } from "../../utils";
+import { formatBitcoin } from "../../utils/bitcoin-units";
 
 const smallScreen = Dimensions.get("window").height < 700;
 

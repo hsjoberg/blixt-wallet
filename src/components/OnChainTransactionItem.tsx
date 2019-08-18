@@ -5,14 +5,14 @@ import { fromUnixTime } from "date-fns";
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { IBlixtTransaction } from "../state/OnChain";
-import { formatISO, formatBitcoin } from "../utils";
-import { BitcoinUnit } from "../state/Settings";
+import { formatISO } from "../utils";
+import { IBitcoinUnits, formatBitcoin } from "../utils/bitcoin-units";
 
 export interface IOnChainTransactionItemProps {
   transaction: IBlixtTransaction;
   onPress: (id: string) => void;
   style?: StyleProp<ViewStyle>;
-  unit: BitcoinUnit;
+  unit: keyof IBitcoinUnits;
 }
 export const OnChainTransactionItem = ({ transaction, onPress, style, unit }: IOnChainTransactionItemProps) => {
   let icon;

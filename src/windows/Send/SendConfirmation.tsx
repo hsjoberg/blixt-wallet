@@ -6,7 +6,7 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import BlixtForm from "../../components/Form";
-import { valueBitcoin, valueFiat } from "../../utils";
+import { valueBitcoin, BitcoinUnits, valueFiat } from "../../utils/bitcoin-units";
 
 export interface ISendConfirmationProps {
   navigation: NavigationScreenProp<{}>;
@@ -72,7 +72,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
 
   formItems.push({
     key: "AMOUNT_BTC",
-    title: `Amount ${bitcoinUnit}`,
+    title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
     component: (<Input disabled={true} value={valueBitcoin(paymentRequest.numSatoshis, bitcoinUnit)} />),
   });
 

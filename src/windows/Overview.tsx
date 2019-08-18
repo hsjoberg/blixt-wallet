@@ -7,7 +7,8 @@ import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
-import { timeout, formatBitcoin, formatFiat } from "../utils/index";
+import { timeout } from "../utils/index";
+import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import theme, { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 import bitcoin from "bitcoin-units";
@@ -145,7 +146,7 @@ export default ({ navigation }: IOverviewProps)  => {
               {formatBitcoin(balance, bitcoinUnit)}
             </Animated.Text>}
             <Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
-              {formatFiat(balance, currentRate, fiatUnit)}
+              {convertBitcoinToFiat(balance, currentRate, fiatUnit)}
             </Animated.Text>
           </LinearGradient>
         </Animated.View>

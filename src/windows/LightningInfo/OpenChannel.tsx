@@ -5,8 +5,7 @@ import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
-import { unitToSatoshi } from "../../utils";
-import { BitcoinUnitAlias } from "../../state/Settings";
+import { unitToSatoshi, BitcoinUnits } from "../../utils/bitcoin-units";
 
 export interface IOpenChannelProps {
   navigation: NavigationScreenProp<{}>;
@@ -69,8 +68,8 @@ export default ({ navigation }: IOpenChannelProps) => {
           )
         }, {
           key: "AMOUNT",
-          title: `Amount ${BitcoinUnitAlias[bitcoinUnit].nice}`,
-          component: (<Input placeholder={`Amount ${BitcoinUnitAlias[bitcoinUnit].nice}`} keyboardType="numeric" onChangeText={setSat} value={sat} />)
+          title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
+          component: (<Input placeholder={`Amount ${BitcoinUnits[bitcoinUnit].nice}`} keyboardType="numeric" onChangeText={setSat} value={sat} />)
         }]}
         buttons={[
           <Button key="OPEN_CHANNEL" onPress={onOpenChannelPress} block={true} primary={true}>
