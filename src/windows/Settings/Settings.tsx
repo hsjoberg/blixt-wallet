@@ -217,7 +217,7 @@ export default ({ navigation }: ISettingsProps) => {
             <Text>Misc.</Text>
           </ListItem>
 
-          <ListItem style={style.listItem} icon={true} onPress={() => {}}>
+          <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("About")}>
             <Left><Icon style={style.icon} type="AntDesign" name="info" /></Left>
             <Body><Text>About</Text></Body>
           </ListItem>

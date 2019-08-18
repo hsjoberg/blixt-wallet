@@ -19,6 +19,7 @@ import DEV_Commands from "./windows/InitProcess/DEV_Commands";
 import InitLightning from "./windows/InitProcess/InitLightning";
 import Welcome from "./windows/Welcome";
 import LightningNodeInfo from "./windows/Settings/LightningNodeInfo";
+import About from "./windows/Settings/About";
 
 import BlurOverlay, { closeOverlay, openOverlay } from "./Blur";
 // import BlurOverlay, { closeOverlay, openOverlay } from "react-native-blur-overlay";
@@ -36,13 +37,10 @@ const StackNavigator = createStackNavigator({
   Main: {
     screen: MainStack,
   },
-  TransactionDetails : {
-    screen: TransactionDetails,
-  },
-  OnChainTransactionDetails: {
-    screen: OnChainTransactionDetails,
-  },
+  TransactionDetails,
+  OnChainTransactionDetails,
   LightningNodeInfo,
+  About,
   Receive,
   Send,
   Settings,

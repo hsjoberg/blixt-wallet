@@ -24,7 +24,7 @@ export default ({ navigation, children }: ITransactionDetailsProps) => {
     <View style={style.container} touchSoundDisabled={true}>
       <BlurOverlay
         onPress={goBack}
-        fadeDuration={190}
+        fadeDuration={180}
         radius={15}
         downsampling={2.07}
         brightness={0}
