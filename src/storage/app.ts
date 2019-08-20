@@ -47,6 +47,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.seed),
     removeItem(StorageItem.bitcoinUnit),
     removeItem(StorageItem.fiatUnit),
+    removeItem(StorageItem.name),
   ]);
 };
 

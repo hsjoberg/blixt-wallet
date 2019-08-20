@@ -72,7 +72,7 @@ export default ({ navigation }: IProps) => {
             </Text>
           </View>
           <View style={style.buttons}>
-            <Button style={style.button} block={true} onPress={() => navigation.navigate("InitLightning")}>
+            <Button style={style.button} block={true} onPress={() => navigation.navigate("AlmostDone")}>
               <Text>Continue</Text>
             </Button>
           </View>
