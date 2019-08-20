@@ -3,6 +3,7 @@ import FingerprintScanner from "react-native-fingerprint-scanner";
 
 import { StorageItem, getItemObject, setItemObject, removeItem } from "../storage/app";
 import { Alert } from "react-native";
+import { getPin, getSeed as keystoreGetSeed, removeSeed, setSeed, setPin, removePin } from "../storage/keystore";
 
 export enum LoginMethods {
   pincode = "pincode",
@@ -48,7 +49,7 @@ export const security: ISecurityModel = {
   }),
 
   checkPincode: thunk(async (actions, pincodeAttempt) => {
-    const pincode = await getItemObject(StorageItem.pincode);
+    const pincode = await getPin();
     if (pincode === pincodeAttempt) {
       return true;
     }
@@ -65,28 +66,28 @@ export const security: ISecurityModel = {
 
   getSeed: thunk(async (_, _2, { getState }) => {
     if (getState().loggedIn) {
-      return await getItemObject(StorageItem.seed);
+      return await keystoreGetSeed();
     }
     return null;
   }),
 
   deleteSeedFromDevice: thunk(async (actions) => {
-    await removeItem(StorageItem.seed);
+    await removeSeed();
     await setItemObject(StorageItem.seedStored, false);
     actions.setSeedAvailable(false);
   }),
 
   storeSeed: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.seedStored, true);
+    await setSeed(payload);
     actions.setSeedAvailable(true);
-    await setItemObject(StorageItem.seed, payload);
   }),
 
   setPincode: thunk(async (actions, payload, { getState }) => {
     const loginMethods = new Set(getState().loginMethods.values());
     loginMethods.add(LoginMethods.pincode);
 
-    await setItemObject(StorageItem.pincode, payload);
+    await setPin(payload);
     await setItemObject(StorageItem.loginMethods, Array.from(loginMethods));
 
     actions.setLoginMethods(loginMethods);
@@ -97,7 +98,7 @@ export const security: ISecurityModel = {
       const loginMethods = new Set(getState().loginMethods.values());
       loginMethods.delete(LoginMethods.pincode);
 
-      await removeItem(StorageItem.pincode);
+      await removePin();
       await setItemObject(StorageItem.loginMethods, []);
 
       actions.setLoginMethods(loginMethods);

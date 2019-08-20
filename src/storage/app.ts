@@ -12,9 +12,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   timeSinceLastSync = "timeSinceLastSync",
   lightningBalance = "lightningBalance",
   loginMethods = "loginMethods",
-  pincode = "pincode",
   seedStored = "seedStored",
-  seed = "seed",
   bitcoinUnit = "bitcoinUnit", // bitcoin, satoshi, bits, millisatoshi
   fiatUnit = "fiatUnit",
   name = "name",
@@ -42,9 +40,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.firstSync),
     removeItem(StorageItem.timeSinceLastSync),
     removeItem(StorageItem.loginMethods),
-    removeItem(StorageItem.pincode),
     removeItem(StorageItem.seedStored),
-    removeItem(StorageItem.seed),
     removeItem(StorageItem.bitcoinUnit),
     removeItem(StorageItem.fiatUnit),
     removeItem(StorageItem.name),
@@ -59,9 +55,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.firstSync, true),
     setItemObject<number>(StorageItem.timeSinceLastSync, 0),
     setItemObject<LoginMethods[]>(StorageItem.loginMethods, []),
-    // Pincode
-    // seedStored
-    // seed
+    setItemObject<boolean>(StorageItem.seedStored, false), // !
     setItemObject<keyof IBitcoinUnits>(StorageItem.bitcoinUnit, "bitcoin"),
     setItemObject<keyof IFiatRates>(StorageItem.fiatUnit, "USD"),
   ]);
