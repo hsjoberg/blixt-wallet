@@ -224,8 +224,8 @@ const style = StyleSheet.create({
 const headerInfo = StyleSheet.create({
   btc: {
     color: blixtTheme.light,
-    marginTop: 14,
-    paddingTop: iconTopPadding + 16,
+    marginTop: 14 + iconTopPadding + 16,
+    //paddingTop: iconTopPadding + 16,
     marginBottom: 3,
     fontFamily: theme.fontFamily,
   },

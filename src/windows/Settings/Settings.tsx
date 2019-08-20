@@ -20,7 +20,6 @@ export default ({ navigation }: ISettingsProps) => {
   // Fingerprint
   const fingerprintAvailable = useStoreState((store) => store.security.fingerprintAvailable);
   const fingerPrintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
-
   const onToggleFingerprintPress = async () => {
     navigation.navigate("ChangeFingerprintSettingsAuth");
   }
@@ -49,7 +48,6 @@ export default ({ navigation }: ISettingsProps) => {
   // Bitcoin unit
   const currentBitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const changeBitcoinUnit = useStoreActions((store) => store.settings.changeBitcoinUnit);
-
   const onBitcoinUnitPress = async () => {
     const { selectedItem } = await DialogAndroid.showPicker(null, null, {
       positiveText: null,
@@ -71,7 +69,6 @@ export default ({ navigation }: ISettingsProps) => {
   // Fiat unit
   const currentFiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const changeFiatUnit = useStoreActions((store) => store.settings.changeFiatUnit);
-
   const onFiatUnitPress = async () => {
     const { selectedItem } = await DialogAndroid.showPicker(null, null, {
       positiveText: null,
@@ -140,7 +137,7 @@ export default ({ navigation }: ISettingsProps) => {
           <ListItem style={style.listItem} button={true} icon={true} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress}>
             <Left><Icon style={style.icon} type="AntDesign" name="lock" /></Left>
             <Body><Text>Login with pincode</Text></Body>
-            <Right><CheckBox checked={loginMethods!.has(LoginMethods.pincode)}  onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress} /></Right>
+            <Right><CheckBox checked={loginMethods!.has(LoginMethods.pincode)} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress} /></Right>
           </ListItem>
           {fingerprintAvailable &&
             <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleFingerprintPress}>
