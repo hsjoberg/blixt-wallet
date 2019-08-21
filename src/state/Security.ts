@@ -97,10 +97,8 @@ export const security: ISecurityModel = {
     if (await actions.checkPincode(pincodeAttempt)) {
       const loginMethods = new Set(getState().loginMethods.values());
       loginMethods.delete(LoginMethods.pincode);
-
       await removePin();
-      await setItemObject(StorageItem.loginMethods, []);
-
+      await setItemObject(StorageItem.loginMethods, Array.from(loginMethods));
       actions.setLoginMethods(loginMethods);
       return true;
     }
