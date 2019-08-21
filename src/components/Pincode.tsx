@@ -15,7 +15,12 @@ export default ({ onTryCode, textAction }: IPincode) => {
   const [code, setCode] = useState<number[]>([]);
 
   const onNumberPress = (n: number) => {
-    setCode([...code, n]);
+    setCode((code) => {
+      if (code.length < 6) {
+        return [...code, n];
+      }
+      return code;
+    });
     Vibration.vibrate(32);
   };
 
