@@ -1,11 +1,12 @@
 import { NativeModules, ToastAndroid } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import { differenceInDays } from "date-fns";
+import * as base64 from "base64-js";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { lnrpc } from "../../proto/proto";
-import { getItemObject, StorageItem, setItemObject } from "../storage/app";
+import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/app";
 
 const { LndMobile } = NativeModules;
 
@@ -73,7 +74,11 @@ export const lightning: ILightningModel = {
 
     try {
       console.log("try unlockWallet");
-      await unlockWallet("test1234");
+      const password = await getItem(StorageItem.walletPassword);
+      if (!password) {
+        throw new Error("Cannot find wallet password");
+      }
+      await unlockWallet(password);
     }
     catch (e) {
       console.log(e);

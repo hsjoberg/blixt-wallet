@@ -1,6 +1,8 @@
 import { NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
+import { generateSecureRandom } from "react-native-securerandom";
+import * as base64 from "base64-js";
 
 import { IStoreInjections } from "./store";
 import { ILightningModel, lightning } from "./Lightning";
@@ -13,15 +15,11 @@ import { IFiatModel, fiat } from "./Fiat";
 import { ISecurityModel, security } from "./Security";
 import { ISettingsModel, settings } from "./Settings";
 
-import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject } from "../storage/app";
+import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getItem } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 
 const { LndMobile } = NativeModules;
-
-interface ICreateWalletPayload {
-  password: string;
-}
 
 export interface IStoreModel {
   initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
@@ -34,7 +32,7 @@ export interface IStoreModel {
   setWalletSeed: Action<IStoreModel, string[] | undefined>;
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
-  createWallet: Thunk<IStoreModel, ICreateWalletPayload, IStoreInjections, IStoreModel>;
+  createWallet: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
 
   db?: SQLiteDatabase;
   appReady: boolean;
@@ -107,7 +105,9 @@ const model: IStoreModel = {
   resetDb: thunk(async (_, _2, { getState }) => {
     const { db } = getState();
     if (db) {
-      await dropTables(db);
+      try {
+        await dropTables(db);
+      } catch (e) {}
       await setupInitialSchema(db);
     }
   }),
@@ -122,13 +122,16 @@ const model: IStoreModel = {
     state.walletSeed = payload;
   }),
 
-  createWallet: thunk(async (actions, payload, { injections, getState, dispatch }) => {
+  createWallet: thunk(async (actions, _, { injections, getState, dispatch }) => {
     const { initWallet } = injections.lndMobile.wallet;
     const seed = getState().walletSeed;
     if (!seed) {
       return;
     }
-    const wallet = await initWallet(seed, payload.password);
+    const random = await generateSecureRandom(32);
+    const randomBase64 = base64.fromByteArray(random);
+    await setItem(StorageItem.walletPassword, randomBase64);
+    const wallet = await initWallet(seed, randomBase64);
     await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);
     await dispatch.security.storeSeed(seed);
