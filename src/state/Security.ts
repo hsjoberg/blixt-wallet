@@ -86,10 +86,8 @@ export const security: ISecurityModel = {
   setPincode: thunk(async (actions, payload, { getState }) => {
     const loginMethods = new Set(getState().loginMethods.values());
     loginMethods.add(LoginMethods.pincode);
-
     await setPin(payload);
     await setItemObject(StorageItem.loginMethods, Array.from(loginMethods));
-
     actions.setLoginMethods(loginMethods);
   }),
 

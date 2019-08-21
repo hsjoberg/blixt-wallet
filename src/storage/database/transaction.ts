@@ -33,7 +33,7 @@ export interface ITransaction {
   status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN" | "EXPIRED"; // Note: EXPIRED does not exist in lnd
   rHash: string;
   nodeAliasCached: string | null;
-  payer: string | null;
+  payer?: string | null;
 
   hops: ITransactionHop[];
 }

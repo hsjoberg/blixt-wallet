@@ -72,7 +72,7 @@ export const receive: IReceiveModel = {
       // both value (the requested amount in the payreq)
       // and amtPaidMsat (the actual amount paid)
 
-      const transaction: ITransaction = {
+      let transaction: ITransaction = {
         description: invoice.memo,
         value: invoice.value || Long.fromInt(0),
         valueMsat: (invoice.value && invoice.value.mul(1000)) || Long.fromInt(0),
@@ -86,8 +86,10 @@ export const receive: IReceiveModel = {
         rHash: paymentRequest.paymentHash,
         nodeAliasCached: null,
         hops: [],
-        payer: payer,
       };
+      if (payer) {
+        transaction.payer = payer;
+      }
       await dispatch.transaction.syncTransaction(transaction);
     });
     actions.setInvoiceSubscriptionStarted(true);
