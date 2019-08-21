@@ -5,7 +5,7 @@ import Long from "long";
 /**
  * @throws
  */
-export const openChannel = async (pubkey: string, amount: number): Promise<lnrpc.ChannelPoint> => {
+export const openChannel = async (pubkey: string, amount: number, privateChannel: boolean): Promise<lnrpc.ChannelPoint> => {
   const response = await sendCommand<lnrpc.IOpenChannelRequest, lnrpc.OpenChannelRequest, lnrpc.ChannelPoint>({
     request: lnrpc.OpenChannelRequest,
     response: lnrpc.ChannelPoint,
@@ -14,6 +14,7 @@ export const openChannel = async (pubkey: string, amount: number): Promise<lnrpc
       nodePubkeyString: pubkey,
       localFundingAmount: Long.fromValue(amount),
       minConfs: 1,
+      private: privateChannel,
     },
   });
   return response;

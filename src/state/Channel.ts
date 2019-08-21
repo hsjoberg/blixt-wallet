@@ -134,7 +134,7 @@ export const channel: IChannelModel = {
       }
     }
 
-    const result = await openChannel(pubkey, amount);
+    const result = await openChannel(pubkey, amount, true);
     console.log(result);
     return result;
   }),
