@@ -40,6 +40,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.walletCreated),
     removeItem(StorageItem.firstSync),
     removeItem(StorageItem.timeSinceLastSync),
+    removeItem(StorageItem.lightningBalance),
     removeItem(StorageItem.loginMethods),
     removeItem(StorageItem.seedStored),
     removeItem(StorageItem.bitcoinUnit),
@@ -56,6 +57,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.walletCreated, false),
     setItemObject<boolean>(StorageItem.firstSync, true),
     setItemObject<number>(StorageItem.timeSinceLastSync, 0),
+    setItemObject<number>(StorageItem.lightningBalance, 0),
     setItemObject<LoginMethods[]>(StorageItem.loginMethods, []),
     setItemObject<boolean>(StorageItem.seedStored, false), // !
     setItemObject<keyof IBitcoinUnits>(StorageItem.bitcoinUnit, "bitcoin"),
