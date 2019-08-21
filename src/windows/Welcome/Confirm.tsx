@@ -44,7 +44,7 @@ export default ({ navigation }: IProps) => {
       return;
     }
     setProceeding(true);
-    await createWallet({ password: "test1234" });
+    await createWallet();
     await getAddress({});
     navigation.navigate("AddFunds");
   };

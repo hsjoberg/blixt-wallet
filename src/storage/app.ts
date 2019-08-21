@@ -16,10 +16,11 @@ export enum StorageItem { // const enums not supported in Babel 7...
   bitcoinUnit = "bitcoinUnit", // bitcoin, satoshi, bits, millisatoshi
   fiatUnit = "fiatUnit",
   name = "name",
+  walletPassword = "walletPassword",
 }
 
-export const setItem = async (key: string, value: string) => await AsyncStorage.setItem(key, value);
-export const setItemObject = async <T>(key: string, value: T) => await AsyncStorage.setItem(key, JSON.stringify(value));
+export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
+export const setItemObject = async <T>(key: StorageItem, value: T) => await AsyncStorage.setItem(key, JSON.stringify(value));
 export const getItem = async (key: StorageItem) => await AsyncStorage.getItem(key);
 export const getItemObject = async (key: StorageItem) => JSON.parse(await AsyncStorage.getItem(key) || "null");
 export const removeItem = async (key: StorageItem) => await AsyncStorage.removeItem(key);
@@ -44,6 +45,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.bitcoinUnit),
     removeItem(StorageItem.fiatUnit),
     removeItem(StorageItem.name),
+    removeItem(StorageItem.walletPassword),
   ]);
 };
 
@@ -58,5 +60,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.seedStored, false), // !
     setItemObject<keyof IBitcoinUnits>(StorageItem.bitcoinUnit, "bitcoin"),
     setItemObject<keyof IFiatRates>(StorageItem.fiatUnit, "USD"),
+    // walletPassword
   ]);
 };
