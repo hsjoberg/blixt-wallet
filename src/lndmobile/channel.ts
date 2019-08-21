@@ -33,7 +33,7 @@ export const closeChannel = async (fundingTxId: string, outputIndex: number): Pr
         outputIndex,
       },
     },
-  }, true);
+  }, false);
   return response;
 };
 

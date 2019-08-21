@@ -77,6 +77,7 @@ export const channel: IChannelModel = {
     else {
       await injections.lndMobile.channel.subscribeChannelEvents();
       DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
+        // TODO decode event
         console.log("Event SubscribeChannelEvents");
         console.log(e);
         await Promise.all([
