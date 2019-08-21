@@ -72,6 +72,7 @@ export const onChain: IOnChainModel = {
 
       actions.setTransactionSubscriptionStarted(true);
     }
+    return true;
   }),
 
   getBalance: thunk(async (actions, _, { injections }) => {

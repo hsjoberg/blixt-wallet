@@ -9,7 +9,7 @@
     "test-update-snapshot": "jest -u",
     "postinstall": "jetify",
     "jetify": "jetify",
-    "gen-proto": "pbjs -t static-module -w es6 --force-long -o proto/proto.js proto/rpc.proto && pbts -o proto/proto.d.ts proto/proto.js"
+    "gen-proto" : "pbjs -t static-module -w es6 --force-long -o proto/proto.js proto/rpc.proto && pbts -o proto/proto.d.ts proto/proto.js && pbjs -t static-module -w es6 --force-long -o proto/proto-autopilot.js proto/autopilotrpc/autopilot.proto && pbts -o proto/proto-autopilot.d.ts proto/proto-autopilot.js"
   },
   "dependencies": {
     "@react-native-community/async-storage": "1.6.1",

@@ -17,6 +17,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   fiatUnit = "fiatUnit",
   name = "name",
   walletPassword = "walletPassword",
+  autopilotEnabled = "autopilotEnabled",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -24,7 +25,6 @@ export const setItemObject = async <T>(key: StorageItem, value: T) => await Asyn
 export const getItem = async (key: StorageItem) => await AsyncStorage.getItem(key);
 export const getItemObject = async (key: StorageItem) => JSON.parse(await AsyncStorage.getItem(key) || "null");
 export const removeItem = async (key: StorageItem) => await AsyncStorage.removeItem(key);
-
 export const getDbVersion = async (): Promise<number> => {
   return await getItemObject(StorageItem.dbVersion) || 0;
 };
@@ -34,6 +34,7 @@ export const getWalletCreated = async (): Promise<boolean> => {
 };
 
 export const clearApp = async () => {
+  // TODO use AsyncStorage.clear?
   await Promise.all([
     removeItem(StorageItem.app),
     removeItem(StorageItem.dbVersion),
@@ -47,6 +48,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.fiatUnit),
     removeItem(StorageItem.name),
     removeItem(StorageItem.walletPassword),
+    removeItem(StorageItem.autopilotEnabled),
   ]);
 };
 
@@ -57,11 +59,12 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.walletCreated, false),
     setItemObject<boolean>(StorageItem.firstSync, true),
     setItemObject<number>(StorageItem.timeSinceLastSync, 0),
-    setItemObject<number>(StorageItem.lightningBalance, 0),
+    setItemObject<string>(StorageItem.lightningBalance, "0"),
     setItemObject<LoginMethods[]>(StorageItem.loginMethods, []),
     setItemObject<boolean>(StorageItem.seedStored, false), // !
     setItemObject<keyof IBitcoinUnits>(StorageItem.bitcoinUnit, "bitcoin"),
     setItemObject<keyof IFiatRates>(StorageItem.fiatUnit, "USD"),
     // walletPassword
+    setItemObject<boolean>(StorageItem.autopilotEnabled, true),
   ]);
 };

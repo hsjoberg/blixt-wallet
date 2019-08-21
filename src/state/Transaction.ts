@@ -116,6 +116,7 @@ export const transaction: ITransactionModel = {
         }
       }
     }
+    return true;
   }),
 
   /**

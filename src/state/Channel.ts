@@ -93,6 +93,7 @@ export const channel: IChannelModel = {
       // });
       actions.setChannelUpdateSubscriptionStarted(true);
     }
+    return true;
   }),
 
   getChannels: thunk(async (actions, _, { getState }) => {

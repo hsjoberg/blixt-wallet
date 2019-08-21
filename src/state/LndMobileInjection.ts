@@ -37,7 +37,13 @@ import {
   subscribeInvoices,
   unlockWallet,
 } from "../lndmobile/wallet";
+import {
+  status,
+  modifyStatus,
+  queryScores,
+} from "../lndmobile/autopilot";
 import { lnrpc } from "../../proto/proto";
+import { autopilotrpc } from "../../proto/proto-autopilot";
 
 export interface ILndMobileInjections {
   index: {
@@ -77,6 +83,11 @@ export interface ILndMobileInjections {
     initWallet: (seed: string[], password: string) => Promise<lnrpc.InitWalletResponse>;
     subscribeInvoices: () => Promise<string>;
     unlockWallet: (password: string) => Promise<lnrpc.UnlockWalletResponse>;
+  };
+  autopilot: {
+    status: () => autopilotrpc.StatusResponse;
+    modifyStatus: (enable: boolean) => autopilotrpc.ModifyStatusResponse;
+    queryScores: () => autopilotrpc.QueryScoresResponse;
   };
 }
 
@@ -118,5 +129,10 @@ export default {
     initWallet,
     subscribeInvoices,
     unlockWallet,
+  },
+  autopilot: {
+    status,
+    modifyStatus,
+    queryScores,
   },
 } as ILndMobileInjections;
