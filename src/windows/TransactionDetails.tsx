@@ -63,6 +63,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             <H1 style={style.header}>Transaction</H1>
             <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
             {(transaction.nodeAliasCached && name == undefined) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
+            {transaction.value.greaterThanOrEqual(0) && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
             {(transaction.value.lessThan(0) && name) && <MetaData title="Recipient" data={name} />}
             <MetaData title="Description" data={description} />
             <MetaData title="Amount" data={formatBitcoin(transaction.value, bitcoinUnit)} />
