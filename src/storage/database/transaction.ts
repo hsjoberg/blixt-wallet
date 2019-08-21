@@ -12,11 +12,14 @@ export interface IDBTransaction {
   feeMsat: string | null;
   description: string;
   remotePubkey: string;
-  status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN";
+  status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN" | "EXPIRED";
   paymentRequest: string;
   rHash: string;
   nodeAliasCached: string | null;
   payer: string | null;
+  valueUSD: number | null;
+  valueFiat: number | null;
+  valueFiatCurrency: string | null
 }
 
 export interface ITransaction {
@@ -34,6 +37,9 @@ export interface ITransaction {
   rHash: string;
   nodeAliasCached: string | null;
   payer?: string | null;
+  valueUSD: number | null;
+  valueFiat: number | null;
+  valueFiatCurrency: string | null
 
   hops: ITransactionHop[];
 }
@@ -63,9 +69,9 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
   const txId = await queryInsert(
     db,
     `INSERT INTO tx
-    (date, expire, value, valueMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached, payer)
+    (date, expire, value, valueMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached, payer, valueUSD, valueFiat, valueFiatCurrency)
     VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       transaction.date.toString(),
       transaction.expire.toString(),
@@ -80,6 +86,9 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.rHash,
       transaction.nodeAliasCached || null,
       transaction.payer || null,
+      transaction.valueUSD,
+      transaction.valueFiat,
+      transaction.valueFiatCurrency,
     ],
   );
 
@@ -123,7 +132,12 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         remotePubkey = ?,
         status = ?,
         paymentRequest = ?,
-        rHash = ?
+        rHash = ?,
+        nodeAliasCached = ?,
+        payer = ?,
+        valueUSD = ?,
+        valueFiat = ?,
+        valueFiatCurrency = ?
     WHERE id = ?`,
     [
       transaction.date.toString(),
@@ -135,6 +149,11 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.status,
       transaction.paymentRequest,
       transaction.rHash,
+      transaction.nodeAliasCached,
+      transaction.payer,
+      transaction.valueUSD,
+      transaction.valueFiat,
+      transaction.valueFiatCurrency,
       transaction.id,
     ],
   );
@@ -172,5 +191,8 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => ({
   rHash: transaction.rHash,
   nodeAliasCached: transaction.nodeAliasCached,
   payer: transaction.payer,
+  valueUSD: transaction.valueUSD,
+  valueFiat: transaction.valueFiat,
+  valueFiatCurrency: transaction.valueFiatCurrency,
   hops: [],
 });

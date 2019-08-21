@@ -7,6 +7,7 @@ import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
 import { setupDescription } from "../utils/NameDesc";
+import { valueFiat } from "../utils/bitcoin-units";
 
 interface IReceiveModelAddInvoicePayload {
   description: string;
@@ -50,7 +51,7 @@ export const receive: IReceiveModel = {
     return result;
   }),
 
-  subscribeInvoice: thunk((actions, _2, { getState, dispatch, injections }) => {
+  subscribeInvoice: thunk((actions, _2, { getState, dispatch, injections, getStoreState }) => {
     const { decodePayReq } = injections.lndMobile.index;
     const { decodeInvoiceResult } = injections.lndMobile.wallet;
     if (getState().invoiceSubscriptionStarted) {
@@ -85,10 +86,18 @@ export const receive: IReceiveModel = {
         paymentRequest: invoice.paymentRequest,
         rHash: paymentRequest.paymentHash,
         nodeAliasCached: null,
+        valueUSD: null,
+        valueFiat: null,
+        valueFiatCurrency: null,
         hops: [],
       };
       if (payer) {
         transaction.payer = payer;
+      }
+      if (invoice.state === lnrpc.Invoice.InvoiceState.SETTLED) {
+        transaction.valueUSD = valueFiat(invoice.value, getStoreState().fiat.fiatRates.USD.last);
+        transaction.valueFiat = valueFiat(invoice.value, getStoreState().fiat.currentRate);
+        transaction.valueFiatCurrency = getStoreState().settings.fiatUnit;
       }
       await dispatch.transaction.syncTransaction(transaction);
     });
