@@ -116,6 +116,15 @@ export default ({ navigation }: ISettingsProps) => {
     }
   };
 
+  // Autopilot
+  const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
+  const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
+  const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
+  const onToggleAutopilotPress = () => {
+    changeAutopilotEnabled(!autopilotEnabled);
+    setupAutopilot(!autopilotEnabled);
+  }
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -215,11 +224,11 @@ export default ({ navigation }: ISettingsProps) => {
             <Left><Icon style={style.icon} type="AntDesign" name="user" /></Left>
             <Body><Text>Show node data</Text></Body>
           </ListItem>
-          {/* <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleAutopilotPress}>
             <Left><Icon style={style.icon} type="Entypo" name="circular-graph" /></Left>
             <Body><Text>Automatically open channels</Text></Body>
-            <Right><CheckBox checked={true} /></Right>
-          </ListItem> */}
+            <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>
+          </ListItem>
           {/* <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
             <Left><Icon style={style.icon} type="Entypo" name="fingerprint" /></Left>
             <Body><Text>Backup channels to Google Drive</Text></Body>

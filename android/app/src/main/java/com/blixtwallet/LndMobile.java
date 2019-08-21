@@ -273,16 +273,16 @@ class LndMobile extends ReactContextBaseJavaModule {
         "\n" +
         "[Neutrino]\n" +
         "neutrino.connect=btcd-testnet.lightning.computer\n" +
-        "neutrino.feeurl=https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json\n"
-        // "\n" +
-        // "[autopilot]\n" +
-        // "autopilot.active=0\n" +
-        // "autopilot.private=1\n" +
-        // "autopilot.minconfs=1\n" +
-        // "autopilot.conftarget=6\n" +
-        // "autopilot.allocation=1.0\n" +
-        // "autopilot.heuristic=externalscore:0.95\n" +
-        // "autopilot.heuristic=preferential:0.05"
+        "neutrino.feeurl=https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json\n" +
+        "\n" +
+        "[autopilot]\n" +
+        "autopilot.active=0\n" +
+        "autopilot.private=1\n" +
+        "autopilot.minconfs=1\n" +
+        "autopilot.conftarget=1\n" +
+        "autopilot.allocation=1.0\n" +
+        "autopilot.heuristic=externalscore:0.95\n" +
+        "autopilot.heuristic=preferential:0.05\n"
       );
       out.close();
       Log.i(TAG, "Success "+filename);

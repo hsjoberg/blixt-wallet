@@ -10,14 +10,17 @@ export interface ISettingsModel {
   changeBitcoinUnit: Thunk<ISettingsModel, keyof IBitcoinUnits>;
   changeFiatUnit: Thunk<ISettingsModel, keyof IFiatRates>;
   changeName: Thunk<ISettingsModel, string | null>;
+  changeAutopilotEnabled: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
   setName: Action<ISettingsModel, string | null>;
+  setAutopilotEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
   name: string | null;
+  autopilotEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -25,6 +28,7 @@ export const settings: ISettingsModel = {
     actions.setBitcoinUnit(await getItemObject(StorageItem.bitcoinUnit) || "bitcoin");
     actions.setFiatUnit(await getItemObject(StorageItem.fiatUnit) || "USD");
     actions.setName(await getItemObject(StorageItem.name) || null);
+    actions.setAutopilotEnabled(await getItemObject(StorageItem.autopilotEnabled || false));
   }),
 
   changeBitcoinUnit: thunk(async (actions, payload) => {
@@ -45,11 +49,18 @@ export const settings: ISettingsModel = {
     actions.setName(payload);
   }),
 
+  changeAutopilotEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.autopilotEnabled, payload);
+    actions.setAutopilotEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
+  setAutopilotEnabled: action((state, payload) => { state.autopilotEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
   name: null,
+  autopilotEnabled: false,
 };

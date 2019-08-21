@@ -1,7 +1,6 @@
 import { NativeModules, ToastAndroid } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import { differenceInDays } from "date-fns";
-import * as base64 from "base64-js";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -18,6 +17,7 @@ export interface ILightningModel {
   unlockWallet: Thunk<ILightningModel, undefined, IStoreInjections>;
   getInfo: Thunk<ILightningModel, undefined, IStoreInjections>;
   waitForChainSync: Thunk<ILightningModel, undefined, IStoreInjections>;
+  setupAutopilot: Thunk<ILightningModel, boolean, IStoreInjections>;
 
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
   setReady: Action<ILightningModel, boolean>;
@@ -29,7 +29,7 @@ export interface ILightningModel {
 }
 
 export const lightning: ILightningModel = {
-  initialize: thunk(async (actions, _, { getState, dispatch, injections }) => {
+  initialize: thunk(async (actions, _, { getState, dispatch, injections, getStoreState }) => {
     const { ready } = getState();
     if (ready)  {
       console.log("Lightning store already started");
@@ -58,10 +58,15 @@ export const lightning: ILightningModel = {
 
     if (differenceInDays(new Date(), lastSync) <3) {
       actions.setReady(true);
-      actions.waitForChainSync(); // Run asynchronously
+      // Run asynchronously
+      actions.waitForChainSync().then(async () => {
+        await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
+      });
     }
     else {
-      await actions.waitForChainSync(); // Run synchronously
+      // Run synchronously
+      await actions.waitForChainSync();
+      await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
     }
 
     console.log("lnd startup time: " + (new Date().getTime() - start) + "ms");
@@ -84,6 +89,24 @@ export const lightning: ILightningModel = {
       console.log(e);
       ToastAndroid.show(e, ToastAndroid.LONG);
     }
+  }),
+
+  setupAutopilot: thunk(async (_, enabled, { injections }) => {
+    const modifyStatus = injections.lndMobile.autopilot.modifyStatus;
+    const status = injections.lndMobile.autopilot.status;
+
+    do {
+      try {
+        await modifyStatus(enabled);
+        console.log("Autopilot status:");
+        console.log(await status());
+        break;
+      } catch (e) {
+        console.log(e.message);
+        await timeout(2000);
+      }
+    } while (true);
+
   }),
 
   getInfo: thunk(async (actions, _, { getState, injections }) => {

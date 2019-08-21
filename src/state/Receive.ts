@@ -36,6 +36,7 @@ export const receive: IReceiveModel = {
     if (!(getState().invoiceSubscriptionStarted)) {
       actions.subscribeInvoice(undefined);
     }
+    return true;
   }),
 
   addInvoice: thunk(async (actions, { description, sat, expiry, payer }, { injections, getStoreState }) => {
