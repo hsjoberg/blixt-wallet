@@ -13,7 +13,10 @@ const schema = [
     paymentRequest TEXT NOT NULL,
     rHash TEXT NOT NULL,
     nodeAliasCached TEXT NULL,
-    payer TEXT NULL
+    payer TEXT NULL,
+    valueUSD REAL NULL,
+    valueFiat REAL NULL,
+    valueFiatCurrency STRING NULL
   )`,
 
   `CREATE TABLE tx_hops (

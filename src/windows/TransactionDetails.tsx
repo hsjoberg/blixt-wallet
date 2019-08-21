@@ -67,6 +67,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             {(transaction.value.lessThan(0) && name) && <MetaData title="Recipient" data={name} />}
             <MetaData title="Description" data={description} />
             <MetaData title="Amount" data={formatBitcoin(transaction.value, bitcoinUnit)} />
+            {transaction.valueFiat != null && transaction.valueFiatCurrency && <MetaData title="Amount in Fiat (Time of Payment)" data={`${transaction.valueFiat.toFixed(2)} ${transaction.valueFiatCurrency}`} />}
             {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
             {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
             {transaction.value.isNegative() && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}

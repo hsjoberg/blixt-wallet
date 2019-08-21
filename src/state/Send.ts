@@ -6,6 +6,7 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
+import { valueFiat } from "../utils/bitcoin-units";
 
 const LN_BECH32_PREFIX = "lntb";
 
@@ -74,7 +75,7 @@ export const send: ISendModel = {
   /**
    * @throws
    */
-  sendPayment: thunk(async (_, _2, { getState, dispatch, injections }) => {
+  sendPayment: thunk(async (_, _2, { getState, dispatch, injections, getStoreState }) => {
     const { sendPaymentSync } = injections.lndMobile.index;
     const { paymentRequestStr, paymentRequest, remoteNodeInfo } = getState();
     if (paymentRequestStr === undefined || paymentRequest === undefined || remoteNodeInfo === undefined) {
@@ -104,6 +105,9 @@ export const send: ISendModel = {
         sendPaymentResult.paymentRoute.totalFeesMsat) || Long.fromInt(0),
       nodeAliasCached: (remoteNodeInfo.node && remoteNodeInfo.node.alias) || null,
       payer: null,
+      valueUSD: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.fiatRates.USD.last),
+      valueFiat: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.currentRate),
+      valueFiatCurrency: getStoreState().settings.fiatUnit,
 
       hops: sendPaymentResult.paymentRoute!.hops!.map((hop) => ({
         chanId: hop.chanId ?? null,

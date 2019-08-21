@@ -35,8 +35,8 @@ export const transaction: ITransactionModel = {
 
     for (const txIt of transactions) {
       if (txIt.paymentRequest === tx.paymentRequest) {
-        await updateTransaction(db, { ...tx, id: txIt.id });
-        actions.updateTransaction({ transaction: tx });
+        await updateTransaction(db, { ...txIt, ...tx });
+        actions.updateTransaction({ transaction: { ...txIt, ...tx }});
         foundTransaction = true;
       }
     }
@@ -109,6 +109,7 @@ export const transaction: ITransactionModel = {
             status: "SETTLED",
             value: check.amtPaidSat,
             valueMsat: check.amtPaidMsat,
+            // TODO add valueUSD, valueFiat and valueFiatCurrency?
           };
           updateTransaction(db, updated);
           actions.updateTransaction({ transaction: updated });
