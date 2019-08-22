@@ -18,15 +18,20 @@ export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {
   return response;
 };
 
-export const initWallet = async (seed: string[], password: string): Promise<lnrpc.InitWalletResponse> => {
+export const initWallet = async (seed: string[], password: string, recoveryWindow?: number): Promise<lnrpc.InitWalletResponse> => {
+  const options: lnrpc.IInitWalletRequest = {
+    cipherSeedMnemonic: seed,
+    walletPassword: Buffer.from(password, "utf8"),
+  };
+  if (recoveryWindow) {
+    options.recoveryWindow = recoveryWindow;
+  }
+
   const response = await sendCommand<lnrpc.IInitWalletRequest, lnrpc.InitWalletRequest, lnrpc.InitWalletResponse>({
     request: lnrpc.InitWalletRequest,
     response: lnrpc.InitWalletResponse,
     method: "InitWallet",
-    options: {
-      cipherSeedMnemonic: seed,
-      walletPassword: Buffer.from(password, "utf8"),
-    },
+    options
   });
   return response;
 };
@@ -41,6 +46,7 @@ export const unlockWallet = async (password: string): Promise<lnrpc.UnlockWallet
     method: "UnlockWallet",
     options: {
       walletPassword: Buffer.from(password, "utf8"),
+      // TODO recoveryWindow might be needed here when restoring
     },
   });
   return response;

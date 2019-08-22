@@ -23,7 +23,7 @@ export default ({ navigation }: IProps) => {
         return;
       }
       setWalletSeed(splittedSeed);
-      await createWallet();
+      await createWallet(true);
       navigation.navigate("InitLightning");
     } catch (e) {
       Alert.alert(e.message);
