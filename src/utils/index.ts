@@ -34,3 +34,7 @@ export const parseBech32 = (address: string): IParsedBech32 => {
 };
 
 export const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
+
+export const isLong = (subject: any): subject is Long => {
+  return Long.isLong(subject);
+}

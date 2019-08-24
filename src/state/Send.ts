@@ -97,6 +97,8 @@ export const send: ISendModel = {
       status: "SETTLED",
       value: paymentRequest.numSatoshis.neg(),
       valueMsat: paymentRequest.numSatoshis.neg().mul(1000),
+      amtPaidSat: paymentRequest.numSatoshis.neg(),
+      amtPaidMsat: paymentRequest.numSatoshis.neg().mul(1000),
       fee:
         (sendPaymentResult.paymentRoute &&
         sendPaymentResult.paymentRoute.totalFees) || Long.fromInt(0),

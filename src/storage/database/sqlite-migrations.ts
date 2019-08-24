@@ -5,6 +5,8 @@ const schema = [
     expire TEXT NOT NULL,
     value TEXT NOT NULL,
     valueMsat TEXT NOT NULL,
+    amtPaidSat TEXT NOT NULL,
+    amtPaidMsat TEXT NOT NULL,
     fee TEXT NULL,
     feeMsat TEXT NULL,
     description TEXT NOT NULL,

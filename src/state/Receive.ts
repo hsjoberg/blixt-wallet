@@ -74,10 +74,25 @@ export const receive: IReceiveModel = {
       // both value (the requested amount in the payreq)
       // and amtPaidMsat (the actual amount paid)
 
+      console.log(invoice.amtPaid);
+      console.log(invoice.value);
+
+      if (invoice.value ?? !invoice.value.toNumber) {
+        invoice.value = Long.fromValue(invoice.value);
+      }
+      if (invoice.amtPaidSat ?? !invoice.amtPaidSat.toNumber) {
+        invoice.amtPaidSat = Long.fromValue(invoice.amtPaidSat);
+      }
+      if (invoice.amtPaidMsat ?? !invoice.amtPaidMsat.toNumber) {
+        invoice.amtPaidMsat = Long.fromValue(invoice.amtPaidMsat);
+      }
+
       let transaction: ITransaction = {
         description: invoice.memo,
         value: invoice.value || Long.fromInt(0),
         valueMsat: (invoice.value && invoice.value.mul(1000)) || Long.fromInt(0),
+        amtPaidSat: invoice.amtPaidSat,
+        amtPaidMsat: invoice.amtPaidMsat,
         fee: null,
         feeMsat: null,
         date: invoice.creationDate,
@@ -96,8 +111,8 @@ export const receive: IReceiveModel = {
         transaction.payer = payer;
       }
       if (invoice.state === lnrpc.Invoice.InvoiceState.SETTLED) {
-        transaction.valueUSD = valueFiat(invoice.value, getStoreState().fiat.fiatRates.USD.last);
-        transaction.valueFiat = valueFiat(invoice.value, getStoreState().fiat.currentRate);
+        transaction.valueUSD = valueFiat(invoice.amtPaidSat, getStoreState().fiat.fiatRates.USD.last);
+        transaction.valueFiat = valueFiat(invoice.amtPaidSat, getStoreState().fiat.currentRate);
         transaction.valueFiatCurrency = getStoreState().settings.fiatUnit;
       }
       await dispatch.transaction.syncTransaction(transaction);

@@ -6,7 +6,7 @@ import { fromUnixTime } from "date-fns";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
-import { capitalize, formatISO } from "../utils";
+import { capitalize, formatISO, isLong } from "../utils";
 import { formatBitcoin} from "../utils/bitcoin-units"
 import { useStoreState } from "../state/store";
 import { extractDescription } from "../utils/NameDesc";
@@ -55,6 +55,14 @@ export default ({ navigation }: ITransactionDetailsProps) => {
     Toast.show({ text: "Copied to clipboard.", type: "warning" });
   };
 
+  let transactionValue: Long;
+  if (isLong(transaction.amtPaidSat) && transaction.amtPaidSat.greaterThan(0)) {
+    transactionValue = transaction.amtPaidSat;
+  }
+  else {
+    transactionValue = transaction.value;
+  }
+
   return (
     <Blurmodal navigation={navigation}>
       <Card style={style.card}>
@@ -63,10 +71,10 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             <H1 style={style.header}>Transaction</H1>
             <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
             {(transaction.nodeAliasCached && name == undefined) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
-            {transaction.value.greaterThanOrEqual(0) && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
-            {(transaction.value.lessThan(0) && name) && <MetaData title="Recipient" data={name} />}
+            {transactionValue.greaterThanOrEqual(0) && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
+            {(transactionValue.lessThan(0) && name) && <MetaData title="Recipient" data={name} />}
             <MetaData title="Description" data={description} />
-            <MetaData title="Amount" data={formatBitcoin(transaction.value, bitcoinUnit)} />
+            <MetaData title="Amount" data={formatBitcoin(transactionValue, bitcoinUnit)} />
             {transaction.valueFiat != null && transaction.valueFiatCurrency && <MetaData title="Amount in Fiat (Time of Payment)" data={`${transaction.valueFiat.toFixed(2)} ${transaction.valueFiatCurrency}`} />}
             {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
             {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
