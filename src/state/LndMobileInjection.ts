@@ -42,6 +42,7 @@ import {
   status,
   modifyStatus,
   queryScores,
+  setScores,
 } from "../lndmobile/autopilot";
 import { lnrpc } from "../../proto/proto";
 import { autopilotrpc } from "../../proto/proto-autopilot";
@@ -66,7 +67,7 @@ export interface ILndMobileInjections {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;
     closeChannel: (fundingTxId: string, outputIndex: number) => Promise<string>;
     listChannels: () => Promise<lnrpc.ListChannelsResponse>;
-    openChannel: (pubkey: string, amount: number) => Promise<lnrpc.ChannelPoint>;
+    openChannel: (pubkey: string, amount: number, privateChannel: boolean) => Promise<lnrpc.ChannelPoint>;
     pendingChannels: () => Promise<lnrpc.PendingChannelsResponse>;
     subscribeChannelEvents: () => Promise<string>;
     decodeChannelEvent: (data: string) => lnrpc.ChannelEventUpdate;
@@ -82,14 +83,15 @@ export interface ILndMobileInjections {
   wallet: {
     decodeInvoiceResult: (data: string) => lnrpc.Invoice;
     genSeed: () => Promise<lnrpc.GenSeedResponse>;
-    initWallet: (seed: string[], password: string) => Promise<lnrpc.InitWalletResponse>;
+    initWallet: (seed: string[], password: string, recoveryWindow?: number) => Promise<lnrpc.InitWalletResponse>;
     subscribeInvoices: () => Promise<string>;
     unlockWallet: (password: string) => Promise<lnrpc.UnlockWalletResponse>;
   };
   autopilot: {
-    status: () => autopilotrpc.StatusResponse;
-    modifyStatus: (enable: boolean) => autopilotrpc.ModifyStatusResponse;
-    queryScores: () => autopilotrpc.QueryScoresResponse;
+    status: () => Promise<autopilotrpc.StatusResponse>;
+    modifyStatus: (enable: boolean) => Promise<autopilotrpc.ModifyStatusResponse>;
+    queryScores: () => Promise<autopilotrpc.QueryScoresResponse>;
+    setScores: (scores: any) => Promise<autopilotrpc.SetScoresResponse>;
   };
 }
 
@@ -137,5 +139,6 @@ export default {
     status,
     modifyStatus,
     queryScores,
+    setScores,
   },
 } as ILndMobileInjections;

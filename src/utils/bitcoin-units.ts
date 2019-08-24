@@ -1,13 +1,5 @@
-import Big from "big.js";
 import BigNumber from "bignumber.js";
 import Long from "long";
-
-// export enum BitcoinUnit {
-//   bitcoin = "btc",
-//   milliBitcoin = "mbtc",
-//   bit = "bit",
-//   satoshi = "satoshi",
-// }
 
 export interface IBitcoinUnit {
   nice: string;
@@ -48,13 +40,13 @@ export const BitcoinUnits: IBitcoinUnits = {
   // TODO Milli Satoshi
 }
 
-const to = (value: number, from: keyof IBitcoinUnits, to: keyof IBitcoinUnits): BigNumber => {
+export const convertBitcoinUnit = (value: number, from: keyof IBitcoinUnits, to: keyof IBitcoinUnits): BigNumber => {
   const btc = new BigNumber(value).times(BitcoinUnits[from].unit);
   return btc.div(BitcoinUnits[to].unit);
 };
 
 export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits): string => {
-  const value = to(satoshi.toNumber(), "satoshi", unit);
+  const value = convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit);
   let formatted = `${value.toFixed()} ${BitcoinUnits[unit].nice}`;
   if (BitcoinUnits[unit].pluralize && value.eq(new BigNumber(1))) {
     formatted += "s";
@@ -63,11 +55,11 @@ export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits): string 
 };
 
 export const valueBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits): string => {
-  return to(satoshi.toNumber(), "satoshi", unit).toFixed();
+  return convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed();
 };
 
 export const unitToSatoshi = (value: number, fromUnit: keyof IBitcoinUnits): number => {
-  return to(value, fromUnit, "satoshi").toNumber();
+  return convertBitcoinUnit(value, fromUnit, "satoshi").toNumber();
 };
 
 export const convertBitcoinToFiat = (satoshi: Long, conversion: number, fiatUnit?: string): string => {
@@ -79,14 +71,14 @@ export const convertBitcoinToFiat = (satoshi: Long, conversion: number, fiatUnit
 };
 
 export const valueFiat = (satoshi: Long, conversion: number): number => {
-  return to(satoshi.toNumber(), "satoshi", "bitcoin")
+  return convertBitcoinUnit(satoshi.toNumber(), "satoshi", "bitcoin")
           .multipliedBy(conversion)
           .toNumber();
 };
 
 export const valueBitcoinFromFiat = (fiat: number, conversion: number, unit: keyof IBitcoinUnits): number => {
   const btc = fiat / conversion;
-  return to(btc, "bitcoin", unit).toNumber();
+  return convertBitcoinUnit(btc, "bitcoin", unit).toNumber();
 };
 
 function isLong(subject: any): subject is Long {

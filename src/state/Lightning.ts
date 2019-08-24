@@ -95,6 +95,14 @@ export const lightning: ILightningModel = {
     const modifyStatus = injections.lndMobile.autopilot.modifyStatus;
     const status = injections.lndMobile.autopilot.status;
 
+    if (enabled) {
+      await timeout(2000);
+      const scores = await getNodeScores();
+      console.log(scores);
+      const setScore = injections.lndMobile.autopilot.setScores;
+      await setScore(scores);
+    }
+
     do {
       try {
         await modifyStatus(enabled);
@@ -106,7 +114,6 @@ export const lightning: ILightningModel = {
         await timeout(2000);
       }
     } while (true);
-
   }),
 
   getInfo: thunk(async (actions, _, { getState, injections }) => {
@@ -148,3 +155,18 @@ export const lightning: ILightningModel = {
   ready: false,
   firstSync: false,
 };
+
+const getNodeScores = async () => {
+  const url = "https://nodes.lightning.computer/availability/v1/btctestnet.json";
+  const response = await fetch(url);
+  const json = await response.json();
+
+  const scores = json.scores.reduce((map, { public_key, score }) => {
+    if (typeof public_key !== 'string' || !Number.isInteger(score)) {
+      throw new Error('Invalid node score format!');
+    }
+    map[public_key] = score / 100000000.0;
+    return map;
+  }, {});
+  return scores;
+}
