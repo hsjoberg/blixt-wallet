@@ -8,6 +8,8 @@ export interface IDBTransaction {
   expire: string;
   value: string;
   valueMsat: string;
+  amtPaidSat: string;
+  amtPaidMsat: string;
   fee: string | null;
   feeMsat: string | null;
   description: string;
@@ -28,6 +30,8 @@ export interface ITransaction {
   expire: Long;
   value: Long;
   valueMsat: Long;
+  amtPaidSat: Long;
+  amtPaidMsat: Long;
   fee: Long | null;
   feeMsat: Long | null;
   description: string;
@@ -69,14 +73,16 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
   const txId = await queryInsert(
     db,
     `INSERT INTO tx
-    (date, expire, value, valueMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached, payer, valueUSD, valueFiat, valueFiatCurrency)
+    (date, expire, value, valueMsat, amtPaidSat, amtPaidMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached, payer, valueUSD, valueFiat, valueFiatCurrency)
     VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       transaction.date.toString(),
       transaction.expire.toString(),
       transaction.value.toString(),
       transaction.valueMsat.toString(),
+      transaction.amtPaidSat.toString(),
+      transaction.amtPaidMsat.toString(),
       (transaction.fee && transaction.fee.toString()) || null,
       (transaction.feeMsat && transaction.feeMsat.toString()) || null,
       transaction.description,
@@ -128,6 +134,8 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         expire = ?,
         value = ?,
         valueMsat = ?,
+        amtPaidSat = ?,
+        amtPaidMsat = ?,
         description = ?,
         remotePubkey = ?,
         status = ?,
@@ -144,6 +152,8 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.expire.toString(),
       transaction.value.toString(),
       transaction.valueMsat.toString(),
+      transaction.amtPaidSat.toString(),
+      transaction.amtPaidMsat.toString(),
       transaction.description,
       transaction.remotePubkey,
       transaction.status,
@@ -182,6 +192,8 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => ({
   expire: Long.fromString(transaction.expire),
   value: Long.fromString(transaction.value),
   valueMsat: Long.fromString(transaction.valueMsat),
+  amtPaidSat: Long.fromString(transaction.amtPaidSat),
+  amtPaidMsat: Long.fromString(transaction.amtPaidMsat),
   fee: (transaction.fee && Long.fromString(transaction.fee)) || null,
   feeMsat: (transaction.feeMsat && Long.fromString(transaction.feeMsat)) || null,
   description: transaction.description,

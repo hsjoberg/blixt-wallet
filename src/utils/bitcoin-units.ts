@@ -80,7 +80,3 @@ export const valueBitcoinFromFiat = (fiat: number, conversion: number, unit: key
   const btc = fiat / conversion;
   return convertBitcoinUnit(btc, "bitcoin", unit).toNumber();
 };
-
-function isLong(subject: any): subject is Long {
-  return Long.isLong(subject);
-}

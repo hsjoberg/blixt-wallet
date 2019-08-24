@@ -5,7 +5,7 @@ import { Body, Card, CardItem, Text, Right, Row } from "native-base";
 import { fromUnixTime } from "date-fns";
 import { ITransaction } from "../storage/database/transaction";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { capitalize, formatISO } from "../utils";
+import { capitalize, formatISO, isLong } from "../utils";
 import { extractDescription } from "../utils/NameDesc";
 import { IBitcoinUnits, formatBitcoin } from "../utils/bitcoin-units";
 
@@ -15,9 +15,17 @@ interface IProps {
   unit: keyof IBitcoinUnits;
 }
 export default ({ onPress, transaction, unit }: IProps) => {
-  const { date, value, status } = transaction;
+  const { date, value, amtPaidSat, status } = transaction;
   const positive = value.isPositive();
   const { name, description } = extractDescription(transaction.description);
+
+  let transactionValue: Long;
+  if (isLong(amtPaidSat) && amtPaidSat.greaterThan(0)) {
+    transactionValue = amtPaidSat;
+  }
+  else {
+    transactionValue = value;
+  }
 
   return (
     <Card>
@@ -29,8 +37,8 @@ export default ({ onPress, transaction, unit }: IProps) => {
             </Text>
             <Right>
               <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
-                {value.notEquals(0) && (positive ? "+" : "")}
-                {value.notEquals(0) && formatBitcoin(value, unit)}
+                {transactionValue.notEquals(0) && (positive ? "+" : "")}
+                {transactionValue.notEquals(0) && formatBitcoin(transactionValue, unit)}
               </Text>
             </Right>
           </Row>
