@@ -21,6 +21,7 @@ import {
   openChannel,
   pendingChannels,
   subscribeChannelEvents,
+  decodeChannelEvent,
 } from "../lndmobile/channel";
 import {
   getTransactions,
@@ -68,6 +69,7 @@ export interface ILndMobileInjections {
     openChannel: (pubkey: string, amount: number) => Promise<lnrpc.ChannelPoint>;
     pendingChannels: () => Promise<lnrpc.PendingChannelsResponse>;
     subscribeChannelEvents: () => Promise<string>;
+    decodeChannelEvent: (data: string) => lnrpc.ChannelEventUpdate;
   };
   onchain: {
     getTransactions: () => Promise<lnrpc.TransactionDetails>;
@@ -114,6 +116,7 @@ export default {
     openChannel,
     pendingChannels,
     subscribeChannelEvents,
+    decodeChannelEvent,
   },
   onchain: {
     getTransactions,

@@ -22,11 +22,11 @@ export const OnChainTransactionItem = ({ transaction, onPress, style, unit }: IO
     text = (<Text>Error</Text>);
   }
   else if (transaction.type === "NORMAL" && transaction.amount!.isPositive()) {
-    icon = (<Icon type="AntDesign" name="plus" style={{color: blixtTheme.green }} />);
+    icon = (<Icon type="AntDesign" name="plus" style={{ color: blixtTheme.green }} />);
     text = (<Text style={{ fontSize: 13 }} note={true}>Received Bitcoin</Text>);
   }
   else if (transaction.type === "NORMAL" && transaction.amount!.isNegative()) {
-    icon = (<Icon type="AntDesign" name="minus" style={{color: blixtTheme.red }} />);
+    icon = (<Icon type="AntDesign" name="minus" style={{ color: blixtTheme.red }} />);
     text = (
       <Text style={{ fontSize: 12.5 }} note={true}>
         To {transaction!.destAddresses![transaction!.destAddresses!.length - 1]}
@@ -34,11 +34,11 @@ export const OnChainTransactionItem = ({ transaction, onPress, style, unit }: IO
     );
   }
   else if (transaction.type === "CHANNEL_OPEN") {
-    icon = (<Icon type="Entypo" name="circular-graph" style={{color: blixtTheme.primary }} />);
+    icon = (<Icon type="Entypo" name="circle" style={{ color: blixtTheme.primary }} />);
     text = (<Text>Opened a payment channel</Text>);
   }
   else if (transaction.type === "CHANNEL_CLOSE") {
-    icon = (<Icon type="Entypo" name="circular-graph" style={{color: blixtTheme.primary }} />);
+    icon = (<Icon type="Entypo" name="circle-with-cross" style={{ color: blixtTheme.primary }} />);
     text = (<Text>Closed a payment channel</Text>);
   }
 
