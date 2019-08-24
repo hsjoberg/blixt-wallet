@@ -12,6 +12,7 @@ import { initWallet, genSeed } from "../../lndmobile/wallet";
 import { pendingChannels, listChannels, openChannel, closeChannel } from "../../lndmobile/channel";
 import { newAddress, sendCoins } from "../../lndmobile/onchain";
 import { StorageItem, setItemObject } from "../../storage/app";
+import { status, modifyStatus, queryScores } from "../../lndmobile/autopilot";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -50,12 +51,12 @@ export default ({ navigation }: IProps) => {
           <Button onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteWallet())}><Text>DEBUG_deleteWallet</Text></Button>
           <Button onPress={async () => await actions.initializeApp()}><Text>actions.initializeApp()</Text></Button>
           <Button onPress={async () => console.log(await createTransaction(db!, {
-            date: 1546300800 + Math.floor(Math.random() * 1000), // 2019-01-01 00:00:00
-            description: "Test transaction",
+            date: Math.floor(+new Date()/1000) + Math.floor(Math.random() * 1000), // 2019-01-01 00:00:00
+            description: "Alice:  Lunch Phil's Burger",
             remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-            expire: 1577836800 + Math.floor(Math.random() * 1000), // 2020-01-01 00:00:00
+            expire: Math.floor(+new Date()/1000) + Math.floor(1000 + (Math.random() * 1000)), // 2020-01-01 00:00:00
             status: "SETTLED",
-            value:  Math.floor(Math.random() * 1000) - Math.floor(Math.random() * 1000),
+            value:  -1 * Math.floor(Math.random() * 10000),
             valueMsat: 1000,
             paymentRequest: "abcdef123456",
             rHash: "abcdef123456",
@@ -64,7 +65,7 @@ export default ({ navigation }: IProps) => {
             await Promise.all([
               createTransaction(db!, {
                 date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Donation Tor Foundation",
+                description: "Tor Foundation:  Donation",
                 remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
                 expire: 1577836800 + Math.floor(Math.random() * 1000),
                 status: "SETTLED",
@@ -90,7 +91,7 @@ export default ({ navigation }: IProps) => {
 
               createTransaction(db!, {
                 date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "1 Satoccinamon Dolce Latte",
+                description: "Starblocks:  1 Satoccinamon Dolce Latte",
                 remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
                 expire: 1577836800 + Math.floor(Math.random() * 1000),
                 status: "SETTLED",
@@ -104,7 +105,7 @@ export default ({ navigation }: IProps) => {
 
               createTransaction(db!, {
                 date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Webhallen Payment receipt #1a5f1",
+                description: "Webhallen:  Payment receipt #1a5f1",
                 remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
                 expire: 1577836800 + Math.floor(Math.random() * 1000),
                 status: "SETTLED",
@@ -130,7 +131,7 @@ export default ({ navigation }: IProps) => {
 
               createTransaction(db!, {
                 date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Inet payment a34c45af04d",
+                description: "Inet:  Payment a34c45af04d",
                 remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
                 expire: 1577836800 + Math.floor(Math.random() * 1000),
                 status: "SETTLED",
@@ -156,19 +157,7 @@ export default ({ navigation }: IProps) => {
 
               createTransaction(db!, {
                 date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Lunch",
-                remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                expire: 1577836800 + Math.floor(Math.random() * 1000),
-                status: "SETTLED",
-                value: Math.floor(Math.random() * 10000),
-                valueMsat: 1000,
-                paymentRequest: "abcdef123456",
-                rHash: Math.floor(Math.random() * 10000000).toString(),
-              }),
-
-              createTransaction(db!, {
-                date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Webhallen Payment receipt #6b5aa",
+                description: "Webhallen:  Payment receipt #6b5aa",
                 remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
                 expire: 1577836800 + Math.floor(Math.random() * 1000),
                 status: "SETTLED",
@@ -176,18 +165,6 @@ export default ({ navigation }: IProps) => {
                 valueMsat: 1000,
                 fee: Math.floor(Math.random() * 5),
                 feeMsat: Math.floor(Math.random() * 5) * 1000,
-                paymentRequest: "abcdef123456",
-                rHash: Math.floor(Math.random() * 10000000).toString(),
-              }),
-
-              createTransaction(db!, {
-                date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Lunch",
-                remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                expire: 1577836800 + Math.floor(Math.random() * 1000),
-                status: "SETTLED",
-                value: Math.floor(Math.random() * 10000),
-                valueMsat: 1000,
                 paymentRequest: "abcdef123456",
                 rHash: Math.floor(Math.random() * 10000000).toString(),
               }),
@@ -234,6 +211,49 @@ export default ({ navigation }: IProps) => {
               </Button>
             );
           })}
+
+          <Button onPress={async () => {
+            try {
+              const response = await status();
+              console.log(response);
+              console.log(response.active);
+              setCommandResult(response.toJSON());
+              setError({});
+            }
+            catch (e) {
+              setError(e);
+              setCommandResult({});
+            }
+          }}><Text>status</Text></Button>
+
+          <Button onPress={async () => {
+            try {
+              const response = await modifyStatus(true);
+              console.log(response);
+              setCommandResult(response.toJSON());
+              setError({});
+            }
+            catch (e) {
+              setError(e);
+              setCommandResult({});
+            }
+          }}><Text>modifyStatus(true)</Text></Button>
+
+          <Button onPress={async () => {
+            try {
+              const response = await queryScores();
+              console.log(response);
+              console.log("0", response.results[0].scores);
+              console.log("1", response.results[1].scores);
+              console.log("2", response.results[2].scores);
+              setCommandResult(response.toJSON());
+              setError({});
+            }
+            catch (e) {
+              setError(e);
+              setCommandResult({});
+            }
+          }}><Text>queryScores</Text></Button>
 
           <Button onPress={async () => {
             try {

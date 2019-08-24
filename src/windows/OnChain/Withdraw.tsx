@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Toast, Spinner } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
-import { useStoreActions } from "../../state/store";
+import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import Camera from "../../components/Camera";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { parseBech32 } from "../../utils";
+import { unitToSatoshi, BitcoinUnits, convertBitcoinUnit } from "../../utils/bitcoin-units";
 
 export interface IOpenChannelProps {
   navigation: NavigationScreenProp<{}>;
@@ -18,8 +19,9 @@ export default ({ navigation }: IOpenChannelProps) => {
   const [address, setAddress] = useState("");
   const [sat, setSat] = useState("");
   const [sending, setSending] = useState(false);
-  const [camera, setCamera] = useState(false);
   const [withdrawAll, setWithdrawAll] = useState(false);
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+
 
   const onWithdrawClick = async () => {
     try {
@@ -29,7 +31,10 @@ export default ({ navigation }: IOpenChannelProps) => {
         result = await sendCoinsAll({ address });
       }
       else {
-        result = await sendCoins({ address, sat: Number.parseInt(sat, 10)});
+        result = await sendCoins({
+          address,
+          sat: unitToSatoshi(Number.parseFloat(sat || "0"), bitcoinUnit),
+        });
       }
       console.log(result);
       await getBalance(undefined);
@@ -56,7 +61,7 @@ export default ({ navigation }: IOpenChannelProps) => {
     const parsed = parseBech32(text);
     setAddress(parsed.address);
     if (parsed.amount) {
-      const s = parsed.amount * 100000000;
+      const s = convertBitcoinUnit(parsed.amount, "bitcoin", bitcoinUnit); // TODO test
       setSat(s.toString());
     }
   };
@@ -101,10 +106,10 @@ export default ({ navigation }: IOpenChannelProps) => {
           ),
         }, {
           key: "AMOUNT",
-          title: "Amount",
+          title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
           component: (
             <>
-              <Input placeholder="Amount (satoshi)" keyboardType="numeric" onChangeText={setSat} value={withdrawAll ? "Withdraw all funds" : sat} disabled={withdrawAll} />
+              <Input placeholder={`Amount ${BitcoinUnits[bitcoinUnit].nice}`} keyboardType="numeric" onChangeText={setSat} value={withdrawAll ? "Withdraw all funds" : sat} disabled={withdrawAll} />
               {!withdrawAll
                 ? <Button onPress={onWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>All</Text></Button>
                 : <Button onPress={onCancelWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>x</Text></Button>

@@ -62,7 +62,7 @@ export const sendCoins = async (address: string, sat: number): Promise<lnrpc.Sen
 /**
  * @throws
  */
-export const sendCoinsAll = async (address: string, sat: number): Promise<lnrpc.SendCoinsResponse> => {
+export const sendCoinsAll = async (address: string): Promise<lnrpc.SendCoinsResponse> => {
  const response = await sendCommand<lnrpc.ISendCoinsRequest, lnrpc.SendCoinsRequest, lnrpc.SendCoinsResponse>({
    request: lnrpc.SendCoinsRequest,
    response: lnrpc.SendCoinsResponse,

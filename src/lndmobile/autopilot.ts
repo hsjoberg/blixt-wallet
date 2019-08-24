@@ -42,3 +42,20 @@ export const queryScores = async (): Promise<autopilotrpc.QueryScoresResponse> =
   });
   return response;
 };
+
+/**
+ * @throws
+ */
+export const setScores = async (scores: {[k: string]: number}): Promise<autopilotrpc.SetScoresResponse> => {
+  const response = await sendCommand<autopilotrpc.ISetScoresRequest, autopilotrpc.SetScoresRequest, autopilotrpc.SetScoresResponse>({
+    request: autopilotrpc.SetScoresRequest,
+    response: autopilotrpc.SetScoresResponse,
+    method: "SetScores",
+    options: {
+      heuristic: "externalscore",
+      scores
+    },
+  });
+  console.log(response);
+  return response;
+};

@@ -279,7 +279,7 @@ class LndMobile extends ReactContextBaseJavaModule {
         "autopilot.active=0\n" +
         "autopilot.private=1\n" +
         "autopilot.minconfs=1\n" +
-        "autopilot.conftarget=1\n" +
+        "autopilot.conftarget=3\n" +
         "autopilot.allocation=1.0\n" +
         "autopilot.heuristic=externalscore:0.95\n" +
         "autopilot.heuristic=preferential:0.05\n"
