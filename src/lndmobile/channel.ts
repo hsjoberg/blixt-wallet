@@ -1,4 +1,4 @@
-import { sendCommand, sendStreamCommand } from "./utils";
+import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { lnrpc } from "../../proto/proto";
 import Long from "long";
 
@@ -13,7 +13,7 @@ export const openChannel = async (pubkey: string, amount: number, privateChannel
     options: {
       nodePubkeyString: pubkey,
       localFundingAmount: Long.fromValue(amount),
-      minConfs: 1,
+      targetConf: 2,
       private: privateChannel,
     },
   });
@@ -87,4 +87,12 @@ export const subscribeChannelEvents = async (): Promise<string> => {
     options: {},
   }, true);
   return response;
+};
+
+// TODO error handling
+export const decodeChannelEvent = (data: string): lnrpc.ChannelEventUpdate => {
+  return decodeStreamResult<lnrpc.ChannelEventUpdate>({
+    response: lnrpc.ChannelEventUpdate,
+    base64Result: data,
+  });
 };

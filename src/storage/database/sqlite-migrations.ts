@@ -32,6 +32,12 @@ const schema = [
     pubkey TEXT NULL
   )`,
   `CREATE INDEX tx_hops_tx_id ON tx_hops(txId)`,
+
+  `CREATE TABLE channel_event (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    txId STRING NOT NULL,
+    type STRING NOT NULL
+  )`
 ];
 
 const migrations: string[][] = [];

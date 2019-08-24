@@ -103,17 +103,21 @@ export const onChain: IOnChainModel = {
 
   getTransactions: thunk(async (actions, _, { getStoreState, injections }) => {
     const { getTransactions } = injections.lndMobile.onchain;
-    const channels = getStoreState().channel.channels;
+    const channelEvents = getStoreState().channel.channelEvents;
     const transactionDetails = await getTransactions();
 
     const transactions: IBlixtTransaction[] = [];
-    // TODO better method of doing this:
     for (const tx of transactionDetails.transactions) {
       let type: IBlixtTransaction["type"] = "NORMAL";
-
-      for (const channel of channels) {
-        if (tx.txHash === channel.channelPoint!.split(":")[0]) {
-          type = "CHANNEL_OPEN";
+      const matchChannelEvent = channelEvents.find((channelEvent) => channelEvent.txId === tx.txHash);
+      if (matchChannelEvent) {
+        switch (matchChannelEvent.type) {
+          case "OPEN":
+            type = "CHANNEL_OPEN";
+          break;
+          case "CLOSE":
+            type = "CHANNEL_CLOSE";
+          break;
         }
       }
       transactions.push({

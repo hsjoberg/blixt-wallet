@@ -9,6 +9,7 @@ import { lnrpc } from "../../proto/proto";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
+import { IChannelEvent, getChannelEvents, createChannelEvent } from "../storage/database/channel-events";
 
 export interface IOpenChannelPayload {
   // <pubkey>@<ip>[:<port>]
@@ -37,18 +38,21 @@ export interface ISetAliasPayload {
 }
 
 export interface IChannelModel {
-  initialize: Thunk<IChannelModel, void, IStoreInjections>;
+  initialize: Thunk<IChannelModel, void, IStoreInjections, IStoreModel>;
 
   getChannels: Thunk<IChannelModel>;
+  getChannelEvents: Thunk<IChannelModel, void, any, IStoreModel>;
+  getBalance: Thunk<IChannelModel, undefined>;
+  connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload>;
+  closeChannel: Thunk<IChannelModel, ICloseChannelPayload>;
+
   setChannels: Action<IChannelModel, lnrpc.IChannel[]>;
+  setChannelEvents: Action<IChannelModel, IChannelEvent[]>;
+  addChannelEvent: Action<IChannelModel, IChannelEvent>;
   setPendingChannels: Action<IChannelModel, lnrpc.PendingChannelsResponse>;
   setChannelUpdateSubscriptionStarted: Action<IChannelModel, boolean>;
   setAlias: Action<IChannelModel, ISetAliasPayload>;
-  getBalance: Thunk<IChannelModel, undefined>;
   setBalance: Action<IChannelModel, Long>;
-
-  connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload>;
-  closeChannel: Thunk<IChannelModel, ICloseChannelPayload>;
 
   channels: lnrpc.IChannel[];
   aliases: INodeAlias;
@@ -58,16 +62,18 @@ export interface IChannelModel {
   waitingCloseChannels: lnrpc.PendingChannelsResponse.IWaitingCloseChannel[];
   channelUpdateSubscriptionStarted: boolean;
   balance: Long;
+  channelEvents: IChannelEvent[];
 }
 
 export const channel: IChannelModel = {
-  initialize: thunk(async (actions, _, { getState, injections }) => {
+  initialize: thunk(async (actions, _, { getState, getStoreState, injections }) => {
     // Use cached balance before retrieving from lnd:
     actions.setBalance(Long.fromString(await getItemObject(StorageItem.lightningBalance)));
 
     await Promise.all([
-      actions.getChannels(undefined),
-      actions.getBalance(undefined),
+      actions.getChannels(),
+      actions.getChannelEvents(),
+      actions.getBalance(),
     ]);
 
     if (getState().channelUpdateSubscriptionStarted) {
@@ -75,22 +81,48 @@ export const channel: IChannelModel = {
       return;
     }
     else {
+      console.log("Starting channel update subscription");
       await injections.lndMobile.channel.subscribeChannelEvents();
       DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
-        // TODO decode event
-        console.log("Event SubscribeChannelEvents");
-        console.log(e);
+        const db = getStoreState().db;
+        if (!db) {
+          throw new Error("SubscribeChannelEvents: db not ready");
+        }
+
+        const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
+        console.log("Event SubscribeChannelEvents", e);
+        const channelEvent = decodeChannelEvent(e.data);
+        console.log(channelEvent, channelEvent.type);
+
+        if (channelEvent.openChannel) {
+          const txId = channelEvent.openChannel.channelPoint!.split(":")[0];
+          const chanEvent: IChannelEvent = {
+            txId,
+            type: "OPEN",
+          };
+          const insertId = await createChannelEvent(db, chanEvent);
+          actions.addChannelEvent({ id: insertId, ...chanEvent });
+        }
+        else if (channelEvent.closedChannel) {
+          const txId = channelEvent.closedChannel.closingTxHash;
+          const chanEvent: IChannelEvent = {
+            txId: txId!,
+            type: "CLOSE",
+          };
+          const insertId = await createChannelEvent(db, chanEvent);
+          actions.addChannelEvent({ id: insertId, ...chanEvent });
+        }
+
         await Promise.all([
           actions.getChannels(undefined),
           actions.getBalance(undefined),
         ]);
       });
-      // console.log("Starting channel update subscription");
-      // DeviceEventEmitter.addListener("CloseChannel", async (e: any) => {
-      //   console.log("Event CloseChannel");
-      //   console.log(e);
-      //   await actions.getChannels(undefined);
-      // });
+      DeviceEventEmitter.addListener("CloseChannel", async (e: any) => {
+        console.log("Event CloseChannel");
+        console.log(e);
+        await actions.getChannels(undefined);
+      });
       actions.setChannelUpdateSubscriptionStarted(true);
     }
     return true;
@@ -122,6 +154,15 @@ export const channel: IChannelModel = {
     responsePendingChannels.pendingClosingChannels.map(async (chan) => chan.channel && setupAlias(chan.channel));
     responsePendingChannels.pendingForceClosingChannels.map(async (chan) => chan.channel && setupAlias(chan.channel));
     responsePendingChannels.waitingCloseChannels.map(async (chan) => chan.channel && setupAlias(chan.channel));
+  }),
+
+  getChannelEvents: thunk(async (actions, _, { getStoreState }) => {
+    const db = getStoreState().db;
+    if (!db) {
+      throw new Error("getChannelEvents(): db not ready");
+    }
+    const channelEvents = await getChannelEvents(db);
+    actions.setChannelEvents(channelEvents);
   }),
 
   connectAndOpenChannel: thunk(async (_, { peer, amount }) => {
@@ -164,6 +205,8 @@ export const channel: IChannelModel = {
   }),
 
   setChannels: action((state, payload) => { state.channels = payload; }),
+  setChannelEvents: action((state, payload) => { state.channelEvents = payload; }),
+  addChannelEvent: action((state, payload) => { state.channelEvents.push(payload); }),
   setChannelUpdateSubscriptionStarted: action((state, payload) => { state.channelUpdateSubscriptionStarted = payload; }),
   setAlias: action((state, payload) => { state.aliases[payload.pubkey] = payload.alias; }),
   setBalance: action((state, payload) => { state.balance = payload; }),
@@ -176,4 +219,5 @@ export const channel: IChannelModel = {
   waitingCloseChannels: [],
   channelUpdateSubscriptionStarted: false,
   balance: Long.fromNumber(0),
+  channelEvents: [],
 };
