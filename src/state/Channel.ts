@@ -10,6 +10,7 @@ import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
 import { IChannelEvent, getChannelEvents, createChannelEvent } from "../storage/database/channel-events";
+import { localNotification } from "../utils/push-notification";
 
 export interface IOpenChannelPayload {
   // <pubkey>@<ip>[:<port>]
@@ -88,6 +89,7 @@ export const channel: IChannelModel = {
         if (!db) {
           throw new Error("SubscribeChannelEvents: db not ready");
         }
+        const pushNotificationsEnabled = getStoreState().settings.pushNotificationsEnabled;
 
         const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
         console.log("Event SubscribeChannelEvents", e);
@@ -102,6 +104,19 @@ export const channel: IChannelModel = {
           };
           const insertId = await createChannelEvent(db, chanEvent);
           actions.addChannelEvent({ id: insertId, ...chanEvent });
+
+          if (pushNotificationsEnabled) {
+            try {
+              let message = "Opening payment channel";
+              const node = await getNodeInfo(channelEvent.openChannel.remotePubkey!);
+              if (node && node.node) {
+                message += ` with ${node.node.alias}`;
+              }
+              localNotification(message);
+            } catch (e) {
+              console.log("Push notification failed: ", e.message);
+            }
+          }
         }
         else if (channelEvent.closedChannel) {
           const txId = channelEvent.closedChannel.closingTxHash;
@@ -111,6 +126,20 @@ export const channel: IChannelModel = {
           };
           const insertId = await createChannelEvent(db, chanEvent);
           actions.addChannelEvent({ id: insertId, ...chanEvent });
+
+          if (pushNotificationsEnabled) {
+            try {
+              let message = "Payment channel";
+              const node = await getNodeInfo(channelEvent.closedChannel.remotePubkey!);
+              if (node && node.node) {
+                message += ` with ${node.node.alias}`;
+              }
+              message += " closed";
+              localNotification(message);
+            } catch (e) {
+              console.log("Push notification failed: ", e.message);
+            }
+          }
         }
 
         await Promise.all([

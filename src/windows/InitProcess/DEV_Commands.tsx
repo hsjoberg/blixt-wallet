@@ -3,7 +3,6 @@ import { StyleSheet, StatusBar, NativeModules, ScrollView, Clipboard } from "rea
 import { Text, Button, Toast, Input, View, Container } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import Long from "long";
-// import { NotificationsAndroid } from "react-native-notifications";
 
 import { getTransactions, getTransaction, createTransaction } from "../../storage/database/transaction";
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -15,6 +14,7 @@ import { pendingChannels, listChannels, openChannel, closeChannel } from "../../
 import { newAddress, sendCoins } from "../../lndmobile/onchain";
 import { StorageItem, setItemObject } from "../../storage/app";
 import { status, modifyStatus, queryScores } from "../../lndmobile/autopilot";
+import { localNotification } from "../../utils/push-notification";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -44,6 +44,7 @@ export default ({ navigation }: IProps) => {
         <View style={{ marginTop: 32, width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
           <Button onPress={async () => actions.clearApp()}><Text>actions.clearApp()</Text></Button>
           <Button onPress={async () => actions.resetDb()}><Text>actions.resetDb()</Text></Button>
+          <Button onPress={async () => { localNotification("Test"); }}><Text>localNotification()</Text></Button>
           <Button onPress={async () => actions.clearTransactions()}><Text>actions.clearTransactions()</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text>walletCreated = true</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.loginMethods, ["pincode"])}><Text>set logginMethods to ["pincode"]</Text></Button>
