@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StatusBar, StyleSheet, Alert } from "react-native";
-import { Container, Text, View, Button, H1, Textarea, Content } from "native-base";
+import { Container, Text, View, Button, H1, Textarea, Content, Spinner } from "native-base";
 
 import { useStoreActions } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
@@ -10,9 +10,13 @@ interface IProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IProps) => {
+  const [loading, setLoading] = useState(false);
   const [seedText, setSeedText] = useState("");
   const setWalletSeed = useStoreActions((store) => store.setWalletSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
+
+  const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
+  const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
 
   const onRestorePress = async () => {
     try {
@@ -22,10 +26,16 @@ export default ({ navigation }: IProps) => {
         Alert.alert("Seed must be exactly 24 words");
         return;
       }
+      setLoading(true);
       setWalletSeed(splittedSeed);
-      await createWallet(true);
+      await Promise.all([
+        createWallet(true),
+        changeAutopilotEnabled(false),
+        setupAutopilot(false),
+      ]);
       navigation.navigate("InitLightning");
     } catch (e) {
+      setLoading(true);
       Alert.alert(e.message);
     }
   };
@@ -59,8 +69,9 @@ export default ({ navigation }: IProps) => {
           </View>
         </View>
         <View style={style.buttons}>
-          <Button block={true} onPress={onRestorePress}>
-            <Text>Restore Wallet</Text>
+          <Button block={true} onPress={onRestorePress} disabled={loading}>
+            {!loading && <Text>Restore Wallet</Text>}
+            {loading && <Spinner color={blixtTheme.light} />}
           </Button>
         </View>
       </Content>

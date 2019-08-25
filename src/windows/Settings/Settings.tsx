@@ -1,6 +1,6 @@
 import React from "react";
-import { Alert, StyleSheet } from "react-native";
-import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Content, List, ListItem, Right } from "native-base";
+import { Alert, StyleSheet, Clipboard } from "react-native";
+import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Content, List, ListItem, Right, Toast } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 
 import { NavigationScreenProp } from "react-navigation";
@@ -32,7 +32,18 @@ export default ({ navigation }: ISettingsProps) => {
   const onGetSeedPress = async () => {
     const seed = await getSeed()
     if (seed) {
-      Alert.alert("Seed", seed.join(" "));
+      Alert.alert("Seed", seed.join(" "), [{
+        text: "Copy seed",
+        onPress: async () => {
+          Clipboard.setString(seed.join(" "));
+          Toast.show({
+            text: "Copied to clipboard.",
+            type: "warning",
+          });
+        }
+      }, {
+        text: "OK",
+      }]);
     }
   }
 
