@@ -7,7 +7,7 @@ export const BuildType: string = BuildConfig.BUILD_TYPE;
 export const ApplicationId: string = BuildConfig.APPLICATION_ID;
 export const VersionName: string = BuildConfig.VERSION_NAME;
 
-export const Chain: string = BuildConfig.CHAIN;
+export const Chain: "mainnet" | "testnet" = BuildConfig.CHAIN;
 
 export const LnBech32Prefix = Chain === "mainnet"
   ? "lnbc"

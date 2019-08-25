@@ -30,7 +30,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
           <Body>
             <ScrollView>
               <H1 style={style.header}>About Blixt Wallet</H1>
-              <Text style={style.textBlock}>Version {VersionName} - {ApplicationId}{"\n"}
+              <Text style={style.textBlock}>Version {VersionName} {ApplicationId}{"\n"}
               By <Text style={style.textLink} onPress={onHampusLinkPress}>Hampus Sjöberg</Text>
               </Text>
               <Text style={style.textBlock}>Open-source wallet with MIT license{"\n"}
