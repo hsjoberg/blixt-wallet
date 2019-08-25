@@ -6,6 +6,7 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { lnrpc } from "../../proto/proto";
 import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/app";
+import { Chain } from "../utils/build";
 
 const { LndMobile } = NativeModules;
 
@@ -157,7 +158,9 @@ export const lightning: ILightningModel = {
 };
 
 const getNodeScores = async () => {
-  const url = "https://nodes.lightning.computer/availability/v1/btctestnet.json";
+  const url = Chain === "mainnet"
+    ? "https://nodes.lightning.computer/availability/v1/btc.json"
+    : "https://nodes.lightning.computer/availability/v1/btctestnet.json";
   const response = await fetch(url);
   const json = await response.json();
 

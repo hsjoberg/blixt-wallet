@@ -3,6 +3,7 @@ import { StyleSheet, StatusBar, NativeModules, ScrollView, Clipboard } from "rea
 import { Text, Button, Toast, Input, View, Container } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import Long from "long";
+// import { NotificationsAndroid } from "react-native-notifications";
 
 import { getTransactions, getTransaction, createTransaction } from "../../storage/database/transaction";
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -28,6 +29,8 @@ export default ({ navigation }: IProps) => {
   const actions = useStoreActions((store) => store);
   const db = useStoreState((store) => store.db);
 
+  const TransactionStoreGetTransactions = useStoreActions((store) => store.transaction.getTransactions);
+
   return (
     <Container>
       <StatusBar
@@ -51,6 +54,7 @@ export default ({ navigation }: IProps) => {
           <Button onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text>walletCreated = true</Text></Button>
           <Button onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteWallet())}><Text>DEBUG_deleteWallet</Text></Button>
           <Button onPress={async () => await actions.initializeApp()}><Text>actions.initializeApp()</Text></Button>
+
           <Button onPress={async () => console.log(await createTransaction(db!, {
             date: Math.floor(+new Date()/1000) + Math.floor(Math.random() * 1000), // 2019-01-01 00:00:00
             description: "Alice:  Lunch Phil's Burger",
@@ -128,6 +132,7 @@ export default ({ navigation }: IProps) => {
               type: "PAY",
             }]);
           }}><Text>Create demo transactions</Text></Button>
+          <Button onPress={async () => console.log(await TransactionStoreGetTransactions())}><Text>Transaction store: getTransactions()</Text></Button>
           <Button onPress={async () => console.log(await getTransactions(db!))}><Text>getTransactions()</Text></Button>
           <Button onPress={async () => console.log(await getTransaction(db!, 1))}><Text>getTransaction(1)</Text></Button>
           <Button onPress={async () => await NativeModules.LndMobile.init()}><Text>LndMobile.init()</Text></Button>

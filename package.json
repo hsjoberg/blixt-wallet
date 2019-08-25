@@ -9,7 +9,11 @@
     "test-update-snapshot": "jest -u",
     "postinstall": "jetify",
     "jetify": "jetify",
-    "gen-proto": "pbjs -t static-module -w es6 --force-long -o proto/proto.js proto/rpc.proto && pbts -o proto/proto.d.ts proto/proto.js && pbjs -t static-module -w es6 --force-long -o proto/proto-autopilot.js proto/autopilotrpc/autopilot.proto && pbts -o proto/proto-autopilot.d.ts proto/proto-autopilot.js"
+    "gen-proto": "pbjs -t static-module -w es6 --force-long -o proto/proto.js proto/rpc.proto && pbts -o proto/proto.d.ts proto/proto.js && pbjs -t static-module -w es6 --force-long -o proto/proto-autopilot.js proto/autopilotrpc/autopilot.proto && pbts -o proto/proto-autopilot.d.ts proto/proto-autopilot.js",
+    "testnet-debug": "react-native run-android --variant chaintestnetDebug --appIdSuffix testnet.debug",
+    "testnet" : "react-native run-android --variant chaintestnetRelease --appIdSuffix testnet",
+    "mainnet-debug": "react-native run-android --variant chainmainnetDebug --appIdSuffix mainnet.debug",
+    "mainnet": "react-native run-android --variant chainmainnetRelease"
   },
   "dependencies": {
     "@react-native-community/async-storage": "1.6.1",
