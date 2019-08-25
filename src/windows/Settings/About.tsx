@@ -4,9 +4,10 @@ import { Body, Card, Text, CardItem, H1 } from "native-base";
 import { NavigationScreenProp, ScrollView } from "react-navigation";
 
 import Blurmodal from "../../components/BlurModal";
+import { VersionName, ApplicationId, Debug } from "../../utils/build";
 
 const GITHUB_REPO_URL = "https://github.com/hsjoberg/blixt-wallet";
-const HAMPUS_EMAIL = "mailto:hampus.sjoberg#protomail.com";
+const HAMPUS_EMAIL = "mailto:hampus.sjoberg💩protomail.com";
 const software = [
   "lnd with Neutrino",
   "react-native",
@@ -20,7 +21,7 @@ export interface ITransactionDetailsProps {
 }
 export default ({ navigation }: ITransactionDetailsProps) => {
   const onGithubLinkPress = () => Linking.openURL(GITHUB_REPO_URL)
-  const onHampusLinkPress = () => Linking.openURL(HAMPUS_EMAIL.replace("#", "@"));
+  const onHampusLinkPress = () => Linking.openURL(HAMPUS_EMAIL.replace("💩", "@"));
 
   return (
     <Blurmodal navigation={navigation}>
@@ -29,7 +30,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
           <Body>
             <ScrollView>
               <H1 style={style.header}>About Blixt Wallet</H1>
-              <Text style={style.textBlock}>Version 0.1{"\n"}
+              <Text style={style.textBlock}>Version {VersionName}{Debug && " Debug"} - {ApplicationId}{"\n"}
               By <Text style={style.textLink} onPress={onHampusLinkPress}>Hampus Sjöberg</Text>
               </Text>
               <Text style={style.textBlock}>Open-source wallet with MIT license{"\n"}

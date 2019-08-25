@@ -24,7 +24,7 @@ tmux select-pane -t 2
 tmux split-window -v -p 50
 tmux send-keys -t ${window}.2 'npm start' Enter
 tmux send-keys -t ${window}.1 'code .' Enter
-tmux send-keys -t ${window}.1 'react-native run-android --no-packager' Enter
+tmux send-keys -t ${window}.1 'react-native run-android --variant chaintestnetDebug --no-packager' Enter
 tmux send-keys -t ${window}.3 'react-native log-android' Enter
 tmux new-window -t $SESSION:2 -k -n Emulator
 #tmux send-keys -t ${window}.1 'emulator @Nexus_5X' Enter

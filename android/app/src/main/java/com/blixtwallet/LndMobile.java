@@ -256,34 +256,67 @@ class LndMobile extends ReactContextBaseJavaModule {
     try {
       new File(filename).getParentFile().mkdirs();
       PrintWriter out = new PrintWriter(filename);
-      out.println(
-        "[Application Options]\n" +
-        "debuglevel=info\n" +
-        "no-macaroons=1\n" +
-        "maxbackoff=2s\n" +
-        "nolisten=1\n" +
-        "\n" +
-        "[Routing]\n" +
-        "routing.assumechanvalid=1\n" +
-        "\n" +
-        "[Bitcoin]\n" +
-        "bitcoin.active=1\n" +
-        "bitcoin.testnet=1\n" +
-        "bitcoin.node=neutrino\n" +
-        "\n" +
-        "[Neutrino]\n" +
-        "neutrino.connect=btcd-testnet.lightning.computer\n" +
-        "neutrino.feeurl=https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json\n" +
-        "\n" +
-        "[autopilot]\n" +
-        "autopilot.active=0\n" +
-        "autopilot.private=1\n" +
-        "autopilot.minconfs=1\n" +
-        "autopilot.conftarget=3\n" +
-        "autopilot.allocation=1.0\n" +
-        "autopilot.heuristic=externalscore:0.95\n" +
-        "autopilot.heuristic=preferential:0.05\n"
-      );
+
+      if (BuildConfig.CHAIN.equals("mainnet")) {
+        out.println(
+          "[Application Options]\n" +
+          "debuglevel=info\n" +
+          "no-macaroons=1\n" +
+          "maxbackoff=2s\n" +
+          "nolisten=1\n" +
+          "\n" +
+          "[Routing]\n" +
+          "routing.assumechanvalid=1\n" +
+          "\n" +
+          "[Bitcoin]\n" +
+          "bitcoin.active=1\n" +
+          "bitcoin.mainnet=1\n" +
+          "bitcoin.node=neutrino\n" +
+          "\n" +
+          "[Neutrino]\n" +
+          "neutrino.connect=btcd-mainnet.lightning.computer\n" +
+          "neutrino.feeurl=https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json\n" +
+          "\n" +
+          "[autopilot]\n" +
+          "autopilot.active=0\n" +
+          "autopilot.private=1\n" +
+          "autopilot.minconfs=1\n" +
+          "autopilot.conftarget=3\n" +
+          "autopilot.allocation=1.0\n" +
+          "autopilot.heuristic=externalscore:0.95\n" +
+          "autopilot.heuristic=preferential:0.05\n"
+        );
+      }
+      else if (BuildConfig.CHAIN.equals("testnet")) {
+        out.println(
+          "[Application Options]\n" +
+          "debuglevel=info\n" +
+          "no-macaroons=1\n" +
+          "maxbackoff=2s\n" +
+          "nolisten=1\n" +
+          "\n" +
+          "[Routing]\n" +
+          "routing.assumechanvalid=1\n" +
+          "\n" +
+          "[Bitcoin]\n" +
+          "bitcoin.active=1\n" +
+          "bitcoin.testnet=1\n" +
+          "bitcoin.node=neutrino\n" +
+          "\n" +
+          "[Neutrino]\n" +
+          "neutrino.connect=btcd-testnet.lightning.computer\n" +
+          "neutrino.feeurl=https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json\n" +
+          "\n" +
+          "[autopilot]\n" +
+          "autopilot.active=0\n" +
+          "autopilot.private=1\n" +
+          "autopilot.minconfs=1\n" +
+          "autopilot.conftarget=3\n" +
+          "autopilot.allocation=1.0\n" +
+          "autopilot.heuristic=externalscore:0.95\n" +
+          "autopilot.heuristic=preferential:0.05\n"
+        );
+      }
       out.close();
       Log.i(TAG, "Success "+filename);
     } catch (Exception e) {
