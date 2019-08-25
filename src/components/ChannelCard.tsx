@@ -62,7 +62,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
               <Text style={style.channelDetailTitle}>Amount in channel</Text>
             </Left>
             <Right>
-              <Text style={style.channelDetailValue}>{channel.localBalance!.toString()}/{channel.capacity!.toString()} satoshi</Text>
+              <Text style={style.channelDetailAmount}>{channel.localBalance!.toString()}/{channel.capacity!.toString()} satoshi</Text>
             </Right>
           </Row>
           <Row>
@@ -94,4 +94,7 @@ export const style = StyleSheet.create({
   },
   channelDetailValue: {
   },
+  channelDetailAmount: {
+    fontSize: 15,
+  }
 });

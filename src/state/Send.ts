@@ -7,8 +7,7 @@ import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
 import { valueFiat } from "../utils/bitcoin-units";
-
-const LN_BECH32_PREFIX = "lntb";
+import { LnBech32Prefix } from "../utils/build";
 
 type PaymentRequest = string;
 
@@ -51,7 +50,7 @@ export const send: ISendModel = {
     const paymentRequestStr = payload.paymentRequestStr.replace(/^lightning:/, "");
 
     try {
-      if (!checkBech32(paymentRequestStr, LN_BECH32_PREFIX)) {
+      if (!checkBech32(paymentRequestStr, LnBech32Prefix)) {
         throw new Error();
       }
     } catch (e) {

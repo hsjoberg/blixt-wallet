@@ -6338,6 +6338,11 @@ react-native-blur-overlay@^1.0.6:
   dependencies:
     tiny-emitter "^2.0.2"
 
+react-native-build-config@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-build-config/-/react-native-build-config-0.3.1.tgz#c92e3b2d2262bcfec506a8ec3faa3d60b17dc625"
+  integrity sha512-zCWGZxH/yfVxW1ad/poDBZzkSZekabzXPao61J5SaydIcihYJOqmRSJ7PWdH8i+karAPhsu1h3YoeqDTMxfODA==
+
 react-native-camera@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.2.0.tgz#abaade82c6b202b8826dbcb714ba434874985740"
