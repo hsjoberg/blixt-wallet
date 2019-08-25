@@ -131,9 +131,16 @@ export default ({ navigation }: ISettingsProps) => {
   const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
   const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
-  const onToggleAutopilotPress = () => {
+  const onToggleAutopilotPress = () => { // TODO why not await?
     changeAutopilotEnabled(!autopilotEnabled);
     setupAutopilot(!autopilotEnabled);
+  }
+
+  // Push Notifications
+  const pushNotificationsEnabled = useStoreState((store) => store.settings.pushNotificationsEnabled);
+  const changePushNotificationsEnabled = useStoreActions((store) => store.settings.changePushNotificationsEnabled);
+  const onTogglePushNotificationsPress = async () => {
+    await changePushNotificationsEnabled(!pushNotificationsEnabled);
   }
 
   return (
@@ -179,11 +186,19 @@ export default ({ navigation }: ISettingsProps) => {
                 <Left><Icon style={style.icon} type="Entypo" name="eraser" /></Left>
                 <Body>
                   <Text>Remove mnemonic from device</Text>
-                  <Text note={true} numberOfLines={1}>Permanently remove the seed from this device.</Text>
+                  <Text note={true} numberOfLines={1}>Permanently remove the seed from this device</Text>
                 </Body>
               </ListItem>
             </>
           }
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onTogglePushNotificationsPress}>
+            <Left><Icon style={style.icon} type="Entypo" name="bell" /></Left>
+            <Body>
+              <Text>Push notifications</Text>
+              <Text note={true} numberOfLines={1}>When the app is on. For channel events</Text>
+            </Body>
+            <Right><CheckBox checked={pushNotificationsEnabled} onPress={onTogglePushNotificationsPress} /></Right>
+          </ListItem>
 
 
           <ListItem style={style.itemHeader} itemHeader={true}>
@@ -228,7 +243,7 @@ export default ({ navigation }: ISettingsProps) => {
             <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
             <Body>
               <Text>Name</Text>
-              <Text note={true} numberOfLines={1}>Will be shown to those who pay you.</Text>
+              <Text note={true} numberOfLines={1}>Will be shown to those who pay you</Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNodeInfo")}>
