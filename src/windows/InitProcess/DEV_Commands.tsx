@@ -69,21 +69,22 @@ export default ({ navigation }: IProps) => {
               description: string;
               value: number;
               type: "PAY" | "RECEIVE";
+              payer?: string;
             }
             const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
               await Promise.all(
                 invoices.map(async (invoice) => {
                   const value = invoice.value + (((invoice.type == "PAY" ? -1 : 1) * Math.floor(Math.random() * 500))) + Math.floor(Math.random() * 1000);
                   return createTransaction(db!, {
-                    date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 10000)),
+                    date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
                     description: invoice.description,
                     remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
                     expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
                     status: "SETTLED",
-                    value: Long.fromNumber(value),
-                    valueMsat: Long.fromNumber(value * 1000),
-                    amtPaidSat: Long.fromNumber(0),
-                    amtPaidMsat: Long.fromNumber(0),
+                    value: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * value),
+                    valueMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * value * 1000),
+                    amtPaidSat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
+                    amtPaidMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
                     valueUSD: (invoice.type == "PAY" ? -1 : 1) * 100,
                     valueFiat: (invoice.type == "PAY" ? -1 : 1) * 100,
                     valueFiatCurrency : "SEK",
@@ -92,6 +93,7 @@ export default ({ navigation }: IProps) => {
                     paymentRequest: "abcdef123456",
                     rHash: Math.floor(Math.random() * 10000000).toString(),
                     nodeAliasCached: null,
+                    payer: invoice.payer,
                     hops: [],
                   });
                 })
@@ -99,24 +101,30 @@ export default ({ navigation }: IProps) => {
             };
 
             await createDemoTransactions([{
-              value: -100000,
+              value: 100000,
               description: "Tor Foundation:  Donation",
               type: "PAY",
             }, {
               value: 10000,
-              description: "John:  Dinner",
-              type: "PAY",
+              description: "Dinner",
+              payer: "John",
+              type: "RECEIVE",
             }, {
-              value: -1000000,
-              description: "Satoshi's Alpaca socks:  Receipt #1a5f1",
+              value: 1000000,
+              description: "Alpaca socks:  Receipt #1a5f1",
               type: "PAY",
             }, {
               value: 50000,
-              description: "Sarah:  Lunch",
+              description: "Lunch",
+              payer: "Sarah",
+              type: "RECEIVE",
+            }, {
+              value: 200000,
+              description: "Computer store:  Payment a34c45af04d",
               type: "PAY",
             }, {
-              value: -200000,
-              description: "Computer store:  Payment a34c45af04d",
+              value: 100000,
+              description: "Bitcoin Core:  Donation",
               type: "PAY",
             }]);
           }}><Text>Create demo transactions</Text></Button>
