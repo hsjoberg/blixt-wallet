@@ -76,13 +76,12 @@ const transactionStyle = StyleSheet.create({
   },
   transactionTopValuePositive: {
     color: blixtTheme.green,
+    // fontSize: 13,
+    textAlign: "right",
   },
   transactionTopValueNegative: {
     color: blixtTheme.red,
-  },
-  transactionOnChain: {
-    fontSize: 13,
-    marginTop: 3,
-    paddingRight: 5,
+    // fontSize: 13,
+    textAlign: "right",
   },
 });

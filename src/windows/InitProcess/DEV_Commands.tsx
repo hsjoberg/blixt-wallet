@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, StatusBar, NativeModules, ScrollView, Clipboard } from "react-native";
 import { Text, Button, Toast, Input, View, Container } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
+import Long from "long";
 
 import { getTransactions, getTransaction, createTransaction } from "../../storage/database/transaction";
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -64,130 +65,60 @@ export default ({ navigation }: IProps) => {
             rHash: "abcdef123456",
           }))}><Text>createTransaction()</Text></Button>
           <Button onPress={async () => {
-            await Promise.all([
-              createTransaction(db!, {
-                date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Tor Foundation:  Donation",
-                remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                expire: 1577836800 + Math.floor(Math.random() * 1000),
-                status: "SETTLED",
-                value: -1 * Math.floor(Math.random() * 10000),
-                valueMsat: 1000,
-                amtPaidSat: -1 * Math.floor(Math.random() * 10000),
-                amtPaidMsat: 1000,
-                fee: Math.floor(Math.random() * 5),
-                feeMsat: Math.floor(Math.random() * 5) * 1000,
-                paymentRequest: "abcdef123456",
-                rHash: Math.floor(Math.random() * 10000000).toString(),
-              }),
+            interface IDemoInvoice {
+              description: string;
+              value: number;
+              type: "PAY" | "RECEIVE";
+            }
+            const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
+              await Promise.all(
+                invoices.map(async (invoice) => {
+                  const value = invoice.value + (((invoice.type == "PAY" ? -1 : 1) * Math.floor(Math.random() * 500))) + Math.floor(Math.random() * 1000);
+                  return createTransaction(db!, {
+                    date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 10000)),
+                    description: invoice.description,
+                    remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
+                    expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
+                    status: "SETTLED",
+                    value: Long.fromNumber(value),
+                    valueMsat: Long.fromNumber(value * 1000),
+                    amtPaidSat: Long.fromNumber(0),
+                    amtPaidMsat: Long.fromNumber(0),
+                    valueUSD: (invoice.type == "PAY" ? -1 : 1) * 100,
+                    valueFiat: (invoice.type == "PAY" ? -1 : 1) * 100,
+                    valueFiatCurrency : "SEK",
+                    fee: Long.fromNumber(Math.floor(Math.random() * 5)),
+                    feeMsat: Long.fromNumber(Math.floor(Math.random() * 5) * 1000),
+                    paymentRequest: "abcdef123456",
+                    rHash: Math.floor(Math.random() * 10000000).toString(),
+                    nodeAliasCached: null,
+                    hops: [],
+                  });
+                })
+              );
+            };
 
-              createTransaction(db!, {
-                date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Dinner",
-                remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                expire: 1577836800 + Math.floor(Math.random() * 1000),
-                status: "SETTLED",
-                value:  Math.floor(Math.random() * 10000),
-                valueMsat: 1000,
-                amtPaidSat:  Math.floor(Math.random() * 10000),
-                amtPaidMsat: 1000,
-                paymentRequest: "abcdef123456",
-                rHash: Math.floor(Math.random() * 10000000).toString(),
-              }),
-
-              createTransaction(db!, {
-                date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Starblocks:  1 Satoccinamon Dolce Latte",
-                remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                expire: 1577836800 + Math.floor(Math.random() * 1000),
-                status: "SETTLED",
-                value: -1 * Math.floor(Math.random() * 10000),
-                valueMsat: 1000,
-                amtPaidSat: -1 * Math.floor(Math.random() * 10000),
-                amtPaidMsat: 1000,
-                fee: Math.floor(Math.random() * 5),
-                feeMsat: Math.floor(Math.random() * 5) * 1000,
-                paymentRequest: "abcdef123456",
-                rHash: Math.floor(Math.random() * 10000000).toString(),
-              }),
-
-              createTransaction(db!, {
-                date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Webhallen:  Payment receipt #1a5f1",
-                remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                expire: 1577836800 + Math.floor(Math.random() * 1000),
-                status: "SETTLED",
-                value:  -1 * Math.floor(Math.random() * 10000),
-                valueMsat: 1000,
-                amtPaidSat:  -1 * Math.floor(Math.random() * 10000),
-                amtPaidMsat: 1000,
-                fee: Math.floor(Math.random() * 5),
-                feeMsat: Math.floor(Math.random() * 5) * 1000,
-                paymentRequest: "abcdef123456",
-                rHash: Math.floor(Math.random() * 10000000).toString(),
-              }),
-
-              createTransaction(db!, {
-                date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Mat",
-                remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                expire: 1577836800 + Math.floor(Math.random() * 1000),
-                status: "SETTLED",
-                value:  Math.floor(Math.random() * 10000),
-                valueMsat: 1000,
-                amtPaidSat:  Math.floor(Math.random() * 10000),
-                amtPaidMsat: 1000,
-                paymentRequest: "abcdef123456",
-                rHash: Math.floor(Math.random() * 10000000).toString(),
-              }),
-
-              createTransaction(db!, {
-                date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Inet:  Payment a34c45af04d",
-                remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                expire: 1577836800 + Math.floor(Math.random() * 1000),
-                status: "SETTLED",
-                value:  -1 * Math.floor(Math.random() * 10000),
-                valueMsat: 1000,
-                amtPaidSat:  -1 * Math.floor(Math.random() * 10000),
-                amtPaidMsat: 1000,
-                fee: Math.floor(Math.random() * 5),
-                feeMsat: Math.floor(Math.random() * 5) * 1000,
-                paymentRequest: "abcdef123456",
-                rHash: Math.floor(Math.random() * 10000000).toString(),
-              }),
-
-              createTransaction(db!, {
-                date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Lunch",
-                remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                expire: 1577836800 + Math.floor(Math.random() * 1000),
-                status: "SETTLED",
-                value: Math.floor(Math.random() * 10000),
-                valueMsat: 1000,
-                amtPaidSat: Math.floor(Math.random() * 10000),
-                amtPaidMsat: 1000,
-                paymentRequest: "abcdef123456",
-                rHash: Math.floor(Math.random() * 10000000).toString(),
-              }),
-
-              createTransaction(db!, {
-                date: 1546300800 + Math.floor(Math.random() * 1000),
-                description: "Webhallen:  Payment receipt #6b5aa",
-                remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                expire: 1577836800 + Math.floor(Math.random() * 1000),
-                status: "SETTLED",
-                value:  -1 * Math.floor(Math.random() * 10000),
-                valueMsat: 1000,
-                amtPaidSat:  -1 * Math.floor(Math.random() * 10000),
-                amtPaidMsat: 1000,
-                fee: Math.floor(Math.random() * 5),
-                feeMsat: Math.floor(Math.random() * 5) * 1000,
-                paymentRequest: "abcdef123456",
-                rHash: Math.floor(Math.random() * 10000000).toString(),
-              }),
-            ]);
-
+            await createDemoTransactions([{
+              value: -100000,
+              description: "Tor Foundation:  Donation",
+              type: "PAY",
+            }, {
+              value: 10000,
+              description: "John:  Dinner",
+              type: "PAY",
+            }, {
+              value: -1000000,
+              description: "Satoshi's Alpaca socks:  Receipt #1a5f1",
+              type: "PAY",
+            }, {
+              value: 50000,
+              description: "Sarah:  Lunch",
+              type: "PAY",
+            }, {
+              value: -200000,
+              description: "Computer store:  Payment a34c45af04d",
+              type: "PAY",
+            }]);
           }}><Text>Create demo transactions</Text></Button>
           <Button onPress={async () => console.log(await getTransactions(db!))}><Text>getTransactions()</Text></Button>
           <Button onPress={async () => console.log(await getTransaction(db!, 1))}><Text>getTransaction(1)</Text></Button>
@@ -455,3 +386,5 @@ const styles = StyleSheet.create({
     padding: 2,
   },
 });
+
+

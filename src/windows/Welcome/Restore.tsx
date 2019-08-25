@@ -35,7 +35,7 @@ export default ({ navigation }: IProps) => {
       ]);
       navigation.navigate("InitLightning");
     } catch (e) {
-      setLoading(true);
+      setLoading(false);
       Alert.alert(e.message);
     }
   };

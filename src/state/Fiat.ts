@@ -36,9 +36,6 @@ export interface IFiatModel {
   getRate: Thunk<IFiatModel>;
 
   setFiatRates: Action<IFiatModel, IFiatRates>;
-  convertSatToFiat: Thunk<IFiatModel, number, any, IStoreModel, number>;
-  convertSatToFiatFormatted: Thunk<IFiatModel, number, any, IStoreModel, string>;
-  convertFiatToSat: Thunk<IFiatModel, number>;
 
   fiatRates: IFiatRates;
   currentRate: Computed<IFiatModel, number, IStoreModel>;
@@ -50,8 +47,9 @@ export const fiat: IFiatModel = {
       console.log("Fetching fiat rate");
       const result = await fetch(BLOCKCHAIN_FIAT_API_URL);
       const jsonResult = await result.json();
-      const fiatRates = validateFiatApiResponse(jsonResult);
-      actions.setFiatRates(fiatRates);
+      if (validateFiatApiResponse(jsonResult)) {
+        actions.setFiatRates(jsonResult);
+      }
     } catch (e) {
       console.log("Failed to fetch fiat rate API", e.message);
     }
@@ -59,34 +57,6 @@ export const fiat: IFiatModel = {
 
   setFiatRates: action((state, payload) => {
     state.fiatRates = payload;
-  }),
-
-  convertSatToFiat: thunk((_, sat, { getState, getStoreState }) => {
-    const fiatRates = getState().fiatRates;
-    const currentFiatUnit = getStoreState().settings.fiatUnit;
-    if (!fiatRates[currentFiatUnit] || !fiatRates[currentFiatUnit].last) {
-      return "0";
-    }
-    const fiat = fiatRates[currentFiatUnit];
-    return Number.parseFloat(((sat / BTCSAT) * fiat.last).toString()).toFixed(2);
-  }),
-
-  convertSatToFiatFormatted: thunk((_, sat, { getState, getStoreState }) => {
-    const fiatRates = getState().fiatRates;
-    const currentFiatUnit = getStoreState().settings.fiatUnit;
-    if (!fiatRates[currentFiatUnit] || !fiatRates[currentFiatUnit].last) {
-      return "0";
-    }
-    const fiat = fiatRates[currentFiatUnit];
-    return `${Number.parseFloat(((sat / BTCSAT) * fiat.last).toString()).toFixed(2)} ${currentFiatUnit}`;
-  }),
-
-  convertFiatToSat: thunk((_, sat, { getState }) => {
-    const { USD } = getState().fiatRates;
-    if (!USD || !USD.last) {
-      return 0;
-    }
-    return Number.parseFloat(((sat * BTCSAT) / USD.last).toString()).toFixed(2);
   }),
 
   fiatRates: {
@@ -124,6 +94,6 @@ export const fiat: IFiatModel = {
   }),
 };
 
-const validateFiatApiResponse = (response: any): IFiatRates => {
+const validateFiatApiResponse = (response: any): response is IFiatRates => {
   return response;
 };
