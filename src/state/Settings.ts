@@ -59,7 +59,7 @@ export const settings: ISettingsModel = {
   }),
 
   changePushNotificationsEnabled: thunk(async (actions, payload) => {
-    await setItemObject(StorageItem.autopilotEnabled, payload);
+    await setItemObject(StorageItem.pushNotificationsEnabled, payload);
     actions.setPushNotificationsEnabled(payload);
   }),
 

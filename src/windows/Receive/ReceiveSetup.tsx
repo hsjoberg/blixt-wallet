@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast } from "native-base";
+import Long from "long";
 
 import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import { unitToSatoshi, BitcoinUnits, valueBitcoinFromFiat } from "../../utils/bitcoin-units";
+import { unitToSatoshi, BitcoinUnits, valueBitcoinFromFiat, convertBitcoinToFiat } from "../../utils/bitcoin-units";
 
 interface IReceiveSetupProps {
   navigation: NavigationScreenProp<{}>;
@@ -14,8 +15,8 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const [satValue, setSatValue] = useState<string | undefined>(undefined);
   const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
   const [description, setDescription] = useState<string>("");
-  const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
-  const convertFiatToSat = useStoreActions((store) => store.fiat.convertFiatToSat);
+  // const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
+  // const convertFiatToSat = useStoreActions((store) => store.fiat.convertFiatToSat);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -35,8 +36,9 @@ export default ({ navigation }: IReceiveSetupProps) => {
     }
     setSatValue(text);
     setDollarValue(
-      convertSatToFiat( // TODO change function to convertBitcoinToFiat (and pass bitcoinUnit as arg)
-        unitToSatoshi(Number.parseFloat(text || "0"), bitcoinUnit)
+      convertBitcoinToFiat(
+        Long.fromNumber(unitToSatoshi(Number.parseFloat(text || "0"), bitcoinUnit)),
+        currentRate,
       )
     );
   };
