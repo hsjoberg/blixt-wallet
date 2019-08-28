@@ -26,11 +26,6 @@
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 
       <service
-          android:name=".LndProcessIntentService"
-          android:exported="false"
-          android:process=":blixtLndProcess" />
-
-      <service
           android:name=".LndMobileService"
           android:exported="false"
           android:process=":blixtLndMobile" />
