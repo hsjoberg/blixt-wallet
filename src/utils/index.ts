@@ -1,7 +1,6 @@
 import { format } from "date-fns";
 import * as querystring from "querystring";
 import Long from "long";
-import { BitcoinUnit } from "../state/Settings";
 
 export const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 
@@ -35,6 +34,4 @@ export const parseBech32 = (address: string): IParsedBech32 => {
 
 export const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
-export const isLong = (subject: any): subject is Long => {
-  return Long.isLong(subject);
-}
+export const isLong = (subject: any): subject is Long => Long.isLong(subject);

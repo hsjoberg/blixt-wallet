@@ -4,7 +4,6 @@ import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import Camera from "../../components/Camera";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { parseBech32 } from "../../utils";
 import { unitToSatoshi, BitcoinUnits, convertBitcoinUnit } from "../../utils/bitcoin-units";
@@ -21,7 +20,6 @@ export default ({ navigation }: IOpenChannelProps) => {
   const [sending, setSending] = useState(false);
   const [withdrawAll, setWithdrawAll] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
-
 
   const onWithdrawClick = async () => {
     try {

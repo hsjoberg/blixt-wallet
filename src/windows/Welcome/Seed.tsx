@@ -5,7 +5,6 @@ import { Container, Text, View, Button, H1, Card, CardItem, Content } from "nati
 import { useStoreState } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
-
 import style from "./style";
 
 interface IProps {

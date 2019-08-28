@@ -45,9 +45,6 @@ export default ({ navigation }: IProps) => {
       />
       <Content contentContainerStyle={style.content}>
         <Pincode onTryCode={onTryCode} textAction={state} />
-        {/* <View style={style.fingerPrintSymbolContainer}>
-          <Icon type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} />
-        </View> */}
       </Content>
     </Container>
   )

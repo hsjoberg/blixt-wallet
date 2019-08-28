@@ -7,7 +7,7 @@ import { fromUnixTime } from "date-fns";
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
 import { capitalize, formatISO, isLong } from "../utils";
-import { formatBitcoin} from "../utils/bitcoin-units"
+import { formatBitcoin } from "../utils/bitcoin-units"
 import { useStoreState } from "../state/store";
 import { extractDescription } from "../utils/NameDesc";
 

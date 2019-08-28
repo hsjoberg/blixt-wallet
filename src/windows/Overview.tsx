@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import { Button, Icon, Text, Content } from "native-base";
+import { Icon, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import { NavigationScreenProp } from "react-navigation";
 
@@ -9,9 +9,10 @@ import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
 import { timeout } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
-import theme, { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
-import bitcoin from "bitcoin-units";
+const nativeBaseTheme = require("../../native-base-theme/variables/commonColor");
+const theme = nativeBaseTheme.default;
+const blixtTheme = nativeBaseTheme.blixtTheme;
 
 const HEADER_MIN_HEIGHT = (StatusBar.currentHeight || 0) + 53;
 const HEADER_MAX_HEIGHT = 195;
@@ -26,7 +27,6 @@ export default ({ navigation }: IOverviewProps)  => {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const transactions = useStoreState((store) => store.transaction.transactions);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
-  const convertSatToFiatFormatted = useStoreActions((store) => store.fiat.convertSatToFiatFormatted);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
@@ -63,12 +63,12 @@ export default ({ navigation }: IOverviewProps)  => {
     <RefreshControl title="Refreshing" progressViewOffset={183} refreshing={refreshing} colors={[blixtTheme.light]} progressBackgroundColor={blixtTheme.gray}
       onRefresh={async () => {
         setRefreshing(true);
-        await Promise.all(
+        await Promise.all([
           getBalance(),
           getFiatRate(),
           checkOpenTransactions(),
           timeout(1000),
-        );
+        ]);
         setRefreshing(false);
       }}
     />
@@ -124,21 +124,17 @@ export default ({ navigation }: IOverviewProps)  => {
           <LinearGradient style={style.top} colors={[blixtTheme.secondary, blixtTheme.primary]} pointerEvents="box-none">
             <View style={StyleSheet.absoluteFill}>
               <Icon
-                style={style.onchainIcon} type="FontAwesome" name="btc"
-                onPress={() => navigation.navigate("OnChain")}
+                style={style.onchainIcon} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
               />
               <Icon
-                style={style.channelsIcon} type="Entypo" name="thunder-cloud"
-                onPress={() => navigation.navigate("LightningInfo")}
+                style={style.channelsIcon} type="Entypo" name="thunder-cloud" onPress={() => navigation.navigate("LightningInfo")}
               />
               <Icon
-                style={style.settingsIcon} type="AntDesign" name="setting"
-                onPress={() => navigation.navigate("Settings")}
+                style={style.settingsIcon} type="AntDesign" name="setting" onPress={() => navigation.navigate("Settings")}
               />
               {(!nodeInfo || !nodeInfo.syncedToChain) &&
                 <Icon
-                  style={style.lightningSyncIcon} name="sync"
-                  onPress={() => Alert.alert("Blixt Wallet is currently syncing the Bitcoin Blockchain.")}
+                  style={style.lightningSyncIcon} name="sync" onPress={() => Alert.alert("Blixt Wallet is currently syncing the Bitcoin Blockchain.")}
                 />
               }
             </View>
@@ -235,7 +231,3 @@ const headerInfo = StyleSheet.create({
     fontFamily: theme.fontFamily,
   },
 });
-
-function formatSatToBtc(sat: number) {
-  return sat / 100000000;
-}

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, Share, Clipboard, StyleSheet } from "react-native";
+import { NavigationScreenProp } from "react-navigation";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, H1, H3, Toast } from "native-base";
 import { formatDistanceStrict, fromUnixTime } from "date-fns";
 
-import { NavigationScreenProp } from "react-navigation";
 import { useStoreState } from "../../state/store";
 import { lnrpc } from "../../../proto/proto";
 import QrCode from "../../components/QrCode";
 import { formatBitcoin } from "../../utils/bitcoin-units";
-
 
 interface IReceiveQRProps {
   navigation: NavigationScreenProp<{}>;

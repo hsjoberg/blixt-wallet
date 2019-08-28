@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StatusBar, StyleSheet, Clipboard, Share, Dimensions } from "react-native";
-import { Container,  View, Button, H1, Text, Toast, Content, Spinner } from "native-base";
+import { Container,  View, Button, H1, Text, Toast, Content } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
@@ -105,14 +105,3 @@ const extraStyle = StyleSheet.create({
     width: "60%",
   },
 });
-
-const shuffleArray = (originalArray: string[]) => {
-  const array = originalArray.slice(0);
-  for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
-  }
-  return array;
-};

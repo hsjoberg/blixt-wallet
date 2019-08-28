@@ -1,12 +1,9 @@
-import React, { useState, useRef, Ref } from "react";
-import { StyleSheet, StatusBar, Vibration } from "react-native";
-import { Container, Content, View, Text, Button, Icon } from "native-base";
+import React from "react";
+import { StyleSheet, StatusBar } from "react-native";
+import { Container, Content } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
-import color from "color";
-import * as Animatable from "react-native-animatable";
 
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
-import { useStoreActions, useStoreState } from "../../state/store";
+import { useStoreActions } from "../../state/store";
 import Pincode from "../../components/Pincode";
 
 interface IProps {
@@ -34,9 +31,6 @@ export default ({ navigation }: IProps) => {
       />
       <Content contentContainerStyle={style.content}>
         <Pincode onTryCode={onTryCode} textAction="Enter current pincode to remove pincode" />
-        {/* <View style={style.fingerPrintSymbolContainer}>
-          <Icon type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} />
-        </View> */}
       </Content>
     </Container>
   )

@@ -20,7 +20,6 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
         Array.isArray(data)
           ? Clipboard.setString(data.join("\n"))
           : Clipboard.setString(data);
-
         Toast.show({ text: "Copied to clipboard.", type: "warning" });
       }}
     >

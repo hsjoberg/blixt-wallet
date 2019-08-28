@@ -5,7 +5,6 @@ import { NavigationScreenProp } from "react-navigation";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
-
 import style from "./style";
 
 interface IProps {

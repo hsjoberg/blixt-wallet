@@ -24,6 +24,7 @@ export default ({ navigation }: IProps) => {
       // Workaround a bug where leaving foreground would
       // cause fingerprint scanning to not respond
       // TODO check this code
+      // TODO make as a hook
       const handler = async (status: AppStateStatus) => {
         if (status === "background") {
           fingerprintStopScan();
@@ -50,12 +51,6 @@ export default ({ navigation }: IProps) => {
       }
     }
   }, [fingerprintEnabled]);
-
-  // useEffect(() => {
-  //   if (loggedIn) {
-  //     setTimeout(() => navigation.navigate("InitLightning"), 1);
-  //   }
-  // }, [loggedIn]);
 
   const onTryCode = async (code: string) => {
     if (await loginPincode(code)) {

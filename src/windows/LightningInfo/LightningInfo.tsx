@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import { Body, Header, Container, Left, Button, Title, Right, Icon, H1, H3, Fab } from "native-base";
 import { NavigationScreenProp } from "react-navigation";

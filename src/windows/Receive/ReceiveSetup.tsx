@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast } from "native-base";
-import Long from "long";
-
 import { NavigationScreenProp } from "react-navigation";
+
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { unitToSatoshi, BitcoinUnits, valueBitcoinFromFiat, convertBitcoinToFiat } from "../../utils/bitcoin-units";
@@ -15,8 +14,6 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const [satValue, setSatValue] = useState<string | undefined>(undefined);
   const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
   const [description, setDescription] = useState<string>("");
-  // const convertSatToFiat = useStoreActions((store) => store.fiat.convertSatToFiat);
-  // const convertFiatToSat = useStoreActions((store) => store.fiat.convertFiatToSat);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -37,7 +34,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
     setSatValue(text);
     setDollarValue(
       convertBitcoinToFiat(
-        Long.fromNumber(unitToSatoshi(Number.parseFloat(text || "0"), bitcoinUnit)),
+        unitToSatoshi(Number.parseFloat(text || "0"), bitcoinUnit),
         currentRate,
       )
     );
@@ -45,21 +42,14 @@ export default ({ navigation }: IReceiveSetupProps) => {
 
   const onChangeFiatInput = (text: string) => {
     text = text.replace(/,/g, ".");
-    if (text.length === 0) {
+    if (text.length === 0 || text[0] === ".") {
       setSatValue(undefined);
       setDollarValue(undefined);
       return;
     }
-    if (bitcoinUnit === "satoshi") {
-      setSatValue(
-        Number.parseInt(valueBitcoinFromFiat(Number.parseFloat(text), currentRate, bitcoinUnit), 10),
-      );
-    }
-    else {
-      setSatValue(
-        valueBitcoinFromFiat(Number.parseFloat(text), currentRate, bitcoinUnit).toFixed(8),
-      );
-    }
+    setSatValue(
+      valueBitcoinFromFiat(Number.parseFloat(text), currentRate, bitcoinUnit)
+    );
     setDollarValue(text);
   };
 

@@ -9,8 +9,6 @@ import theme from "../native-base-theme/variables/commonColor";
 
 import store from "./state/store";
 
-import "./utils/build";
-
 export default () => {
   return (
     <StoreProvider store={store}>

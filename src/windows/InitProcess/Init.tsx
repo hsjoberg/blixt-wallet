@@ -5,7 +5,6 @@ import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreState, useStoreActions } from "../../state/store";
 
-
 interface IProps {
   navigation: NavigationScreenProp<{}>;
 }
@@ -36,7 +35,7 @@ export default ({ navigation }: IProps) => {
         setTimeout(() => navigation.navigate("InitLightning"), 1);
       }
       else {
-        setTimeout(() => navigation.navigate("Pincode"), 1);
+        setTimeout(() => navigation.navigate("Authentication"), 1);
       }
     }
   }
