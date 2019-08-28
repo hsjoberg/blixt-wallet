@@ -77,7 +77,7 @@ export const send: ISendModel = {
   sendPayment: thunk(async (_, _2, { getState, dispatch, injections, getStoreState }) => {
     const { sendPaymentSync } = injections.lndMobile.index;
     const { paymentRequestStr, paymentRequest, remoteNodeInfo } = getState();
-    if (paymentRequestStr === undefined || paymentRequest === undefined || remoteNodeInfo === undefined) {
+    if (paymentRequestStr === undefined || paymentRequest === undefined) {
       throw new Error("Payment information missing");
     }
 
