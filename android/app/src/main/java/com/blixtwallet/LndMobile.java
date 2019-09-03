@@ -56,10 +56,12 @@ class LndMobile extends ReactContextBaseJavaModule {
     constants.put("STATUS_SERVICE_BOUND", LndStatus.SERVICE_BOUND.flag);
     constants.put("STATUS_PROCESS_STARTED", LndStatus.PROCESS_STARTED.flag);
     constants.put("STATUS_WALLET_UNLOCKED", LndStatus.WALLET_UNLOCKED.flag);
+
     return constants;
   }
 
   class IncomingHandler extends Handler {
+
     @Override
     public void handleMessage(Message msg) {
       Bundle bundle;
@@ -75,7 +77,9 @@ class LndMobile extends ReactContextBaseJavaModule {
             Log.e(TAG, "Unknown request: " + request);
             return;
           }
+
           final Promise promise = requests.remove(request);
+
           if (bundle.containsKey("error")) {
             final String error = (String) bundle.getString("error");
             promise.reject(error);
@@ -83,8 +87,8 @@ class LndMobile extends ReactContextBaseJavaModule {
           }
 
           final byte[] bytes = (byte[]) bundle.get("response");
-
           String b64 = "";
+
           if (bytes != null && bytes.length > 0) {
             b64 = Base64.encodeToString(bytes, Base64.NO_WRAP);
           }
@@ -99,6 +103,7 @@ class LndMobile extends ReactContextBaseJavaModule {
           final String method = (String) bundle.get("method");
 
           String b64 = "";
+
           if (bytes != null && bytes.length > 0) {
             b64 = Base64.encodeToString(bytes, Base64.NO_WRAP);
           }
@@ -113,10 +118,12 @@ class LndMobile extends ReactContextBaseJavaModule {
         }
         case LndMobileService.MSG_CHECKSTATUS_RESPONSE:
           final int request = msg.arg1;
+
           if (!requests.containsKey(request)) {
             Log.e(TAG, "Unknown request: " + request);
             return;
           }
+
           final Promise promise = requests.remove(request);
           int flags = msg.arg2;
           promise.resolve(flags);
@@ -126,6 +133,7 @@ class LndMobile extends ReactContextBaseJavaModule {
 
   class LndMobileServiceConnection implements ServiceConnection {
     private int request;
+
     LndMobileServiceConnection(int request) {
       this.request = request;
     }
@@ -157,6 +165,7 @@ class LndMobile extends ReactContextBaseJavaModule {
       Log.e(TAG, "Service disconnected");
     }
   }
+
   private LndMobileServiceConnection lndMobileServiceConnection;
 
   public LndMobile(ReactApplicationContext reactContext) {
@@ -175,13 +184,14 @@ class LndMobile extends ReactContextBaseJavaModule {
       requests.put(req, promise);
 
       lndMobileServiceConnection = new LndMobileServiceConnection(req);
-
       messenger = new Messenger(new IncomingHandler()); // me
+
       getReactApplicationContext().bindService(
         new Intent(getReactApplicationContext(), LndMobileService.class),
         lndMobileServiceConnection,
         Context.BIND_AUTO_CREATE
       );
+
       lndMobileServiceBound = true;
 
       Log.i(TAG, "LndMobile initialized");
@@ -253,6 +263,7 @@ class LndMobile extends ReactContextBaseJavaModule {
   @ReactMethod
   void writeConfigFile(Promise promise) {
     String filename = getReactApplicationContext().getFilesDir().toString() + "/lnd.conf";
+
     try {
       new File(filename).getParentFile().mkdirs();
       PrintWriter out = new PrintWriter(filename);
@@ -317,12 +328,14 @@ class LndMobile extends ReactContextBaseJavaModule {
           "autopilot.heuristic=preferential:0.05\n"
         );
       }
+
       out.close();
       Log.i(TAG, "Success "+filename);
     } catch (Exception e) {
       Log.e(TAG, "Couldn't write " + filename);
       promise.reject("Couldn't write: " + filename + " \n" + e.getMessage());
     }
+
     promise.resolve("File written: " + filename);
   }
 
