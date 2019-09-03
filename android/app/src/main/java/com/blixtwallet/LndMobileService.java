@@ -36,7 +36,6 @@ public class LndMobileService extends Service {
   Messenger messenger = new Messenger(new IncomingHandler());
   ArrayList<Messenger> mClients = new ArrayList<Messenger>();
 
-
   static final int MSG_REGISTER_CLIENT = 1;
   static final int MSG_REGISTER_CLIENT_ACK = 2;
   static final int MSG_UNREGISTER_CLIENT = 3;
@@ -77,29 +76,35 @@ public class LndMobileService extends Service {
         final byte[] b;
 
         Log.i(TAG, "Got message" + msg);
+
         switch (msg.what) {
           case MSG_REGISTER_CLIENT:
             mClients.add(msg.replyTo);
             Log.d(TAG, "Got register client " + msg.replyTo);
             sendToClients(Message.obtain(null, MSG_REGISTER_CLIENT_ACK, request, 0));
           break;
+
           case MSG_UNREGISTER_CLIENT:
             Log.d(TAG, "Got unregister client " + msg.replyTo);
             mClients.remove(msg.replyTo);
           break;
+
           case MSG_START_LND:
             bundle = msg.getData();
             final String args = bundle.getString("args", "");
             startLnd(args, request);
           break;
+
           case MSG_GRPC_COMMAND:
           case MSG_GRPC_STREAM_COMMAND:
             method = bundle.getString("method");
             b = bundle.getByteArray("payload");
             m = syncMethods.get(method);
             boolean streamOnlyOnce = bundle.getBoolean("stream_only_once");
+
             if (m == null) {
               m = streamMethods.get(method);
+
               if (m == null) {
                 Log.e(TAG, "Method " + method + "not found");
                 return;
@@ -113,6 +118,7 @@ public class LndMobileService extends Service {
                   return;
                 }
               }
+
               streamsStarted.add(method);
             }
 
@@ -128,17 +134,22 @@ public class LndMobileService extends Service {
               e.printStackTrace();
             }
           break;
+
           case MSG_CHECKSTATUS:
             int flags = 0;
+
             if (lndStarted) {
               flags += LndMobile.LndStatus.PROCESS_STARTED.flag;
             }
+
             if (walletUnlocked) {
               flags += LndMobile.LndStatus.WALLET_UNLOCKED.flag;
             }
+
             Log.i(TAG, "MSG_CHECKSTATUS sending " + flags);
             sendToClients(Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
           break;
+
           default:
             super.handleMessage(msg);
         }
@@ -163,10 +174,12 @@ public class LndMobileService extends Service {
 
       Bundle bundle = new Bundle();
       String message = e.getMessage();
+
       if (message.indexOf("desc = ") != -1) {
         Log.i(TAG, "change message");
         message = message.substring(message.indexOf("desc = ") + 7);
       }
+
       bundle.putString("error", message);
       msg.setData(bundle);
 
@@ -176,11 +189,13 @@ public class LndMobileService extends Service {
     @Override
     public void onResponse(byte[] bytes) {
       Log.d(TAG, "LndCallback onResponse for " + method);
+
       // Hack for checking if request is UnlockWallet or InitWallet
       // in which case we'll set walletUnlocked to true
       if (this.method.equals("UnlockWallet") || this.method.equals("InitWallet")) {
         walletUnlocked = true;
       }
+
       Message msg = Message.obtain(null, MSG_GRPC_COMMAND_RESULT, request, 0);
 
       Bundle bundle = new Bundle();
@@ -210,10 +225,12 @@ public class LndMobileService extends Service {
 
         Bundle bundle = new Bundle();
         String message = e.getMessage();
+
         if (message.indexOf("desc = ") != -1) {
           Log.i(TAG, "change message");
           message = message.substring(message.indexOf("desc = ") + 7);
         }
+
         bundle.putString("error", message);
         msg.setData(bundle);
 
@@ -237,9 +254,11 @@ public class LndMobileService extends Service {
   void startLnd(String args, int request) {
     Log.d(TAG, "startLnd(): Starting lnd");
     Runnable startLnd = new Runnable() {
+
       @Override
       public void run() {
         Lndmobile.start(args, new lndmobile.Callback() {
+
           @Override
           public void onError(Exception e) {
             e.printStackTrace();
@@ -267,6 +286,7 @@ public class LndMobileService extends Service {
         });
       }
     };
+
     new Thread(startLnd).start();
   }
 
@@ -302,9 +322,11 @@ public class LndMobileService extends Service {
 
   public LndMobileService() {
     Method[] methods = Lndmobile.class.getDeclaredMethods();
+
     for (Method m : methods) {
       String name = m.getName();
       name = name.substring(0, 1).toUpperCase() + name.substring(1);
+
       if (isStream(m)) {
         streamMethods.put(name, m);
       } else {
@@ -315,12 +337,14 @@ public class LndMobileService extends Service {
 
   private boolean checkLndProcessExists() {
     ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
     for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
       if (p.processName.equals("com.blixtwallet:blixtLndMobile")) {
         Log.i(TAG, "com.blixtwallet:blixtLndMobile pid: " + String.valueOf(p.pid));
         return true;
       }
     }
+
     return false;
   }
 }
