@@ -12,6 +12,3 @@ export const Chain: "mainnet" | "testnet" = BuildConfig.CHAIN;
 export const LnBech32Prefix = Chain === "mainnet"
   ? "lnbc"
   : "lntb";
-
-
-console.log(BuildConfig);
