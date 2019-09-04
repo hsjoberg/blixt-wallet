@@ -79,6 +79,13 @@ export const AlmostDone = ({ navigation }: IProps) => {
     }
   }
 
+    // Autopilot
+    const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
+    const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
+    const onToggleAutopilotPress = () => { // TODO why not await?
+      changeAutopilotEnabled(!autopilotEnabled);
+    }
+
   return (
     <Container>
       <StatusBar
@@ -120,13 +127,22 @@ export const AlmostDone = ({ navigation }: IProps) => {
                 <Text note={true} numberOfLines={1} onPress={onFiatUnitPress}>{currentFiatUnit}</Text>
               </Body>
             </ListItem>
+
+            <ListItem style={extraStyle.listItem} button={true} icon={true} onPress={onToggleAutopilotPress}>
+              <Left><Icon style={extraStyle.icon} type="Entypo" name="circular-graph" /></Left>
+              <Body>
+                <Text>Auto-open Lightning channels</Text>
+                <Text note={true} numberOfLines={1}>Open channels when on-chain funds available</Text>
+              </Body>
+              <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>
+          </ListItem>
           </List>
         </View>
         <View style={style.lowerContent}>
           <View style={style.text}>
             <H1 style={style.textHeader}>Almost done!</H1>
             <Text>
-              Here are some wallet settings you can setup to your liking.{"\n"}
+              Here are some wallet settings you can set up to your liking.{"\n"}
               When you are ready, press continue.
             </Text>
           </View>
