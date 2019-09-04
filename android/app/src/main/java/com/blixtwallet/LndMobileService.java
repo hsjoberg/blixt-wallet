@@ -171,9 +171,20 @@ public class LndMobileService extends Service {
       Bundle bundle = new Bundle();
       String message = e.getMessage();
 
+      bundle.putString("method", method);
+
+      if (message.indexOf("code = ") != -1) {
+        bundle.putString("error_code", message.substring(message.indexOf("code = ") + 7));
+      }
+      else {
+        bundle.putString("error_code", "Error");
+      }
+
       if (message.indexOf("desc = ") != -1) {
-        Log.i(TAG, "change message");
-        message = message.substring(message.indexOf("desc = ") + 7);
+        bundle.putString("error_desc", message.substring(message.indexOf("desc = ") + 7));
+      }
+      else {
+        bundle.putString("error_desc", message);
       }
 
       bundle.putString("error", message);
@@ -213,23 +224,33 @@ public class LndMobileService extends Service {
 
     @Override
     public void onError(Exception e) {
-        Log.e(TAG, "LndStreamCallback onError() for " + method, e);
-        e.printStackTrace();   // TODO: Remove or Log.d()
+      Log.e(TAG, "LndStreamCallback onError() for " + method, e);
+      e.printStackTrace();   // TODO: Remove or Log.d()
 
-        Message msg = Message.obtain(null, MSG_GRPC_STREAM_RESULT, 0, 0);
+      Message msg = Message.obtain(null, MSG_GRPC_STREAM_RESULT, 0, 0);
 
-        Bundle bundle = new Bundle();
-        String message = e.getMessage();
+      Bundle bundle = new Bundle();
+      String message = e.getMessage();
 
-        if (message.indexOf("desc = ") != -1) {
-          Log.i(TAG, "change message");
-          message = message.substring(message.indexOf("desc = ") + 7);
-        }
+      bundle.putString("method", method);
 
-        bundle.putString("error", message);
-        msg.setData(bundle);
+      if (message.indexOf("code = ") != -1) {
+        bundle.putString("error_code", message.substring(message.indexOf("code = ") + 7));
+      }
+      else {
+        bundle.putString("error_code", "Error");
+      }
 
-        sendToClients(msg);
+      if (message.indexOf("desc = ") != -1) {
+        bundle.putString("error_desc", message.substring(message.indexOf("desc = ") + 7));
+      }
+      else {
+        bundle.putString("error_desc", message);
+      }
+
+      msg.setData(bundle);
+
+      sendToClients(msg);
     }
 
     @Override
@@ -261,7 +282,8 @@ public class LndMobileService extends Service {
             Message msg = Message.obtain(null, MSG_START_LND_RESULT, request, 0);
 
             Bundle bundle = new Bundle();
-            bundle.putString("error", e.toString());
+            bundle.putString("error_code", "Lnd Startup Error");
+            bundle.putString("error_desc", e.toString());
             msg.setData(bundle);
 
             sendToClients(msg);

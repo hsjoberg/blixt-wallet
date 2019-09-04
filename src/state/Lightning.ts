@@ -46,7 +46,13 @@ export const lightning: ILightningModel = {
 
     const status = await checkStatus();
     if ((status & LndMobile.STATUS_WALLET_UNLOCKED) !== LndMobile.STATUS_WALLET_UNLOCKED) {
-      await actions.unlockWallet(undefined);
+      try {
+        await actions.unlockWallet(undefined);
+      } catch (e) {
+        console.log(e.message);
+        ToastAndroid.show("Error: Cannot unlock wallet", ToastAndroid.LONG);
+        return
+      }
     }
     console.log("lnd: time to start and unlock: " + (new Date().getTime() - start) + "ms");
     await dispatch.transaction.getTransactions(undefined),
@@ -77,19 +83,12 @@ export const lightning: ILightningModel = {
 
   unlockWallet: thunk(async (_, _2, { injections }) => {
     const { unlockWallet } = injections.lndMobile.wallet;
-
-    try {
-      console.log("try unlockWallet");
-      const password = await getItem(StorageItem.walletPassword);
-      if (!password) {
-        throw new Error("Cannot find wallet password");
-      }
-      await unlockWallet(password);
+    console.log("try unlockWallet");
+    const password = await getItem(StorageItem.walletPassword);
+    if (!password) {
+      throw new Error("Cannot find wallet password");
     }
-    catch (e) {
-      console.log(e);
-      ToastAndroid.show(e, ToastAndroid.LONG);
-    }
+    await unlockWallet(password);
   }),
 
   setupAutopilot: thunk(async (_, enabled, { injections }) => {

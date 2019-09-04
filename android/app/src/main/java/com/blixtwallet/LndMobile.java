@@ -79,9 +79,11 @@ class LndMobile extends ReactContextBaseJavaModule {
 
           final Promise promise = requests.remove(request);
 
-          if (bundle.containsKey("error")) {
-            final String error = (String) bundle.getString("error");
-            promise.reject(error);
+          if (bundle.containsKey("error_code")) {
+            Log.e(TAG, "ERROR" + msg);
+            final String errorCode = bundle.getString("error_code");
+            final String errorDescription = bundle.getString("error_desc");
+            promise.reject(errorCode, errorDescription);
             return;
           }
 
@@ -211,6 +213,7 @@ class LndMobile extends ReactContextBaseJavaModule {
     try {
       lndMobileServiceMessenger.send(messange);
     } catch (RemoteException e) {
+      // promise.reject("IPC", "lnd service not available");
       e.printStackTrace();   // TODO: Remove or Log.d()
       return;
     }
@@ -349,7 +352,6 @@ class LndMobile extends ReactContextBaseJavaModule {
     requests.put(req, promise);
 
     Log.i(TAG, "sendCommand() " + method);
-    Log.i(TAG, payloadStr);
     Message message = Message.obtain(null, LndMobileService.MSG_GRPC_COMMAND, req, 0);
     Bundle bundle = new Bundle();
 
@@ -367,12 +369,9 @@ class LndMobile extends ReactContextBaseJavaModule {
   @ReactMethod
   public void sendStreamCommand(String method, String payloadStr, boolean streamOnlyOnce) {
     Log.i(TAG, "sendStreamCommand() " + method);
-    Log.i(TAG, payloadStr);
     Message message = Message.obtain(null, LndMobileService.MSG_GRPC_STREAM_COMMAND, 0, 0);
     Bundle bundle = new Bundle();
 
-    // int req = new Random().nextInt();
-    // requests.put(req, null);
     bundle.putString("method", method);
     bundle.putByteArray("payload", Base64.decode(payloadStr, Base64.NO_WRAP));
     bundle.putBoolean("stream_only_once", streamOnlyOnce);
