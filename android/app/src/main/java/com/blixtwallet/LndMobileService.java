@@ -67,40 +67,31 @@ public class LndMobileService extends Service {
   class IncomingHandler extends Handler {
       @Override
       public void handleMessage(Message msg) {
-        Log.i(TAG, "Handle message");
+        Log.i(TAG, "handleMessage(" + msg + ")");
         Bundle bundle = msg.getData();
         final int request = msg.arg1;
-
-        final String method;
-        Method m;
-        final byte[] b;
-
-        Log.i(TAG, "Got message" + msg);
 
         switch (msg.what) {
           case MSG_REGISTER_CLIENT:
             mClients.add(msg.replyTo);
             Log.d(TAG, "Got register client " + msg.replyTo);
             sendToClients(Message.obtain(null, MSG_REGISTER_CLIENT_ACK, request, 0));
-          break;
+            break;
 
           case MSG_UNREGISTER_CLIENT:
             Log.d(TAG, "Got unregister client " + msg.replyTo);
             mClients.remove(msg.replyTo);
-          break;
+            break;
 
           case MSG_START_LND:
-            bundle = msg.getData();
             final String args = bundle.getString("args", "");
             startLnd(args, request);
-          break;
+            break;
 
           case MSG_GRPC_COMMAND:
           case MSG_GRPC_STREAM_COMMAND:
-            method = bundle.getString("method");
-            b = bundle.getByteArray("payload");
-            m = syncMethods.get(method);
-            boolean streamOnlyOnce = bundle.getBoolean("stream_only_once");
+            final String method = bundle.getString("method");
+            Method m = syncMethods.get(method);
 
             if (m == null) {
               m = streamMethods.get(method);
@@ -110,6 +101,8 @@ public class LndMobileService extends Service {
                 return;
               }
             }
+
+            boolean streamOnlyOnce = bundle.getBoolean("stream_only_once");
 
             if (msg.what == MSG_GRPC_STREAM_COMMAND) {
               if (streamOnlyOnce) {
@@ -122,6 +115,8 @@ public class LndMobileService extends Service {
               streamsStarted.add(method);
             }
 
+            final byte[] b = bundle.getByteArray("payload");
+
             try {
               m.invoke(
                 null,
@@ -131,9 +126,10 @@ public class LndMobileService extends Service {
                 : new LndStreamCallback(method)
               );
             } catch (IllegalAccessException | InvocationTargetException e) {
-              e.printStackTrace();
+              e.printStackTrace();   // TODO: Remove or Log.d()
             }
-          break;
+
+            break;
 
           case MSG_CHECKSTATUS:
             int flags = 0;
@@ -148,7 +144,7 @@ public class LndMobileService extends Service {
 
             Log.i(TAG, "MSG_CHECKSTATUS sending " + flags);
             sendToClients(Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
-          break;
+            break;
 
           default:
             super.handleMessage(msg);
@@ -167,8 +163,8 @@ public class LndMobileService extends Service {
 
     @Override
     public void onError(Exception e) {
-      Log.e(TAG, "LndCallback onError for " + method);
-      e.printStackTrace();
+      Log.e(TAG, "LndCallback onError() for " + method, e);
+      e.printStackTrace();   // TODO: Remove or Log.d()
 
       Message msg = Message.obtain(null, MSG_GRPC_COMMAND_RESULT, request, 0);
 
@@ -188,7 +184,7 @@ public class LndMobileService extends Service {
 
     @Override
     public void onResponse(byte[] bytes) {
-      Log.d(TAG, "LndCallback onResponse for " + method);
+      Log.d(TAG, "LndCallback onResponse() for " + method);
 
       // Hack for checking if request is UnlockWallet or InitWallet
       // in which case we'll set walletUnlocked to true
@@ -217,9 +213,8 @@ public class LndMobileService extends Service {
 
     @Override
     public void onError(Exception e) {
-        Log.e(TAG, "LndStreamCallback onError for " + method);
-        e.printStackTrace();
-        Log.e(TAG, e.getMessage());
+        Log.e(TAG, "LndStreamCallback onError() for " + method, e);
+        e.printStackTrace();   // TODO: Remove or Log.d()
 
         Message msg = Message.obtain(null, MSG_GRPC_STREAM_RESULT, 0, 0);
 
@@ -239,7 +234,7 @@ public class LndMobileService extends Service {
 
     @Override
     public void onResponse(byte[] bytes) {
-      Log.d(TAG, "onResponse for " + method);
+      Log.d(TAG, "onResponse() for " + method);
       Message msg = Message.obtain(null, MSG_GRPC_STREAM_RESULT, 0, 0);
 
       Bundle bundle = new Bundle();
@@ -261,7 +256,7 @@ public class LndMobileService extends Service {
 
           @Override
           public void onError(Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();   // TODO: Remove or Log.d()
 
             Message msg = Message.obtain(null, MSG_START_LND_RESULT, request, 0);
 
@@ -298,25 +293,26 @@ public class LndMobileService extends Service {
           // The client is dead.  Remove it from the list;
           // we are going through the list from back to front
           // so this is safe to do inside the loop.
-          mClients.remove(i);
+          mClients.remove(i);    // TODO: Need to fix this. See https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html#remove-int-
       }
     }
   }
 
   @Override
   public IBinder onBind(Intent intent) {
-    Log.d(TAG, "onBind");
+    Log.d(TAG, "onBind()");
     return messenger.getBinder();
   }
 
   @Override
   public boolean onUnbind(Intent intent) {
-    Log.d(TAG, "onUnbind");
+    Log.d(TAG, "onUnbind()");
     return false;
   }
 
   @Override
   public void onRebind(Intent intent) {
+    Log.d(TAG, "onRebind()");
       super.onRebind(intent);
   }
 
