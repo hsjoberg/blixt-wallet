@@ -15,14 +15,16 @@ import { IFiatModel, fiat } from "./Fiat";
 import { ISecurityModel, security } from "./Security";
 import { ISettingsModel, settings } from "./Settings";
 
-import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getItem } from "../storage/app";
+import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
+import { appMigration } from "../migration/app-migration";
 
 const { LndMobile } = NativeModules;
 
 export interface IStoreModel {
   initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
+  checkAppVersionMigration: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
   clearTransactions: Thunk<IStoreModel>;
   resetDb: Thunk<IStoreModel>;
@@ -68,6 +70,7 @@ const model: IStoreModel = {
       console.log("Writing lnd.conf");
       await writeConfigFile();
     }
+    await actions.checkAppVersionMigration();
 
     actions.setWalletCreated(await getWalletCreated());
 
@@ -91,6 +94,23 @@ const model: IStoreModel = {
 
     console.log("App initialized");
     return true;
+  }),
+
+  checkAppVersionMigration: thunk(async (_, _2, { getState }) => {
+    const db = getState().db;
+    if (!db) {
+      throw new Error("Version migration check failed, db not available");
+    }
+
+    const appVersion = await getAppVersion();
+    if (appVersion < (appMigration.length - 1)) {
+      console.log(`Beginning App Version from ${appVersion} to ${appMigration.length - 1}`);
+      for (let i = appVersion + 1; i < appMigration.length; i++) {
+        console.log(`Migrating to ${i}`);
+        await appMigration[i].beforeLnd(db, i);
+      }
+      await setAppVersion(appMigration.length - 1);
+    }
   }),
 
   clearApp: thunk(async () => {

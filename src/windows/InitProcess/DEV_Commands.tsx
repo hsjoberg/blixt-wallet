@@ -53,6 +53,7 @@ export default ({ navigation }: IProps) => {
           <Button onPress={async () => await setItemObject(StorageItem.pincode, "000000")}><Text>set pincode to 000000</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.bitcoinUnit, "bitcoin")}><Text>set bitcoinUnit to bitcoin</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text>walletCreated = true</Text></Button>
+          <Button onPress={async () => await setItemObject(StorageItem.appVersion, 0)}><Text>appVersion = 0</Text></Button>
           <Button onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteWallet())}><Text>DEBUG_deleteWallet</Text></Button>
           <Button onPress={async () => await actions.initializeApp()}><Text>actions.initializeApp()</Text></Button>
 
