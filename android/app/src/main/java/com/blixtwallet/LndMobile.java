@@ -64,8 +64,7 @@ class LndMobile extends ReactContextBaseJavaModule {
 
     @Override
     public void handleMessage(Message msg) {
-      Bundle bundle;
-      bundle = msg.getData();
+      Bundle bundle = msg.getData();
 
       switch (msg.what) {
         case LndMobileService.MSG_GRPC_COMMAND_RESULT:
@@ -197,8 +196,7 @@ class LndMobile extends ReactContextBaseJavaModule {
       Log.i(TAG, "LndMobile initialized");
 
       // Note: Promise is returned from MSG_REGISTER_CLIENT_ACK message from LndMobileService
-    }
-    else {
+    } else {
       promise.resolve(0);
     }
   }
@@ -213,7 +211,7 @@ class LndMobile extends ReactContextBaseJavaModule {
     try {
       lndMobileServiceMessenger.send(messange);
     } catch (RemoteException e) {
-      e.printStackTrace();
+      e.printStackTrace();   // TODO: Remove or Log.d()
       return;
     }
   }
@@ -232,7 +230,7 @@ class LndMobile extends ReactContextBaseJavaModule {
     try {
       lndMobileServiceMessenger.send(messange);
     } catch (RemoteException e) {
-      e.printStackTrace();
+      e.printStackTrace();   // TODO: Remove or Log.d()
       return;
     }
   }
@@ -297,8 +295,7 @@ class LndMobile extends ReactContextBaseJavaModule {
           "autopilot.heuristic=externalscore:0.95\n" +
           "autopilot.heuristic=preferential:0.05\n"
         );
-      }
-      else if (BuildConfig.CHAIN.equals("testnet")) {
+      } else if (BuildConfig.CHAIN.equals("testnet")) {
         out.println(
           "[Application Options]\n" +
           "debuglevel=info\n" +
@@ -330,9 +327,9 @@ class LndMobile extends ReactContextBaseJavaModule {
       }
 
       out.close();
-      Log.i(TAG, "Success "+filename);
+      Log.i(TAG, "Success " + filename);
     } catch (Exception e) {
-      Log.e(TAG, "Couldn't write " + filename);
+      Log.e(TAG, "Couldn't write " + filename, e);
       promise.reject("Couldn't write: " + filename + " \n" + e.getMessage());
     }
 
@@ -351,7 +348,7 @@ class LndMobile extends ReactContextBaseJavaModule {
     int req = new Random().nextInt();
     requests.put(req, promise);
 
-    Log.i(TAG, "sendCommand " + method);
+    Log.i(TAG, "sendCommand() " + method);
     Log.i(TAG, payloadStr);
     Message message = Message.obtain(null, LndMobileService.MSG_GRPC_COMMAND, req, 0);
     Bundle bundle = new Bundle();
@@ -363,13 +360,13 @@ class LndMobile extends ReactContextBaseJavaModule {
     try {
       lndMobileServiceMessenger.send(message);
     } catch (RemoteException e) {
-      e.printStackTrace();
+      e.printStackTrace();   // TODO: Remove or Log.d()
     }
   }
 
   @ReactMethod
   public void sendStreamCommand(String method, String payloadStr, boolean streamOnlyOnce) {
-    Log.i(TAG, "sendStreamCommand " + method);
+    Log.i(TAG, "sendStreamCommand() " + method);
     Log.i(TAG, payloadStr);
     Message message = Message.obtain(null, LndMobileService.MSG_GRPC_STREAM_COMMAND, 0, 0);
     Bundle bundle = new Bundle();
@@ -384,7 +381,7 @@ class LndMobile extends ReactContextBaseJavaModule {
     try {
       lndMobileServiceMessenger.send(message);
     } catch (RemoteException e) {
-      e.printStackTrace();
+      e.printStackTrace();   // TODO: Remove or Log.d()
     }
   }
 }
