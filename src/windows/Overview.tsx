@@ -83,10 +83,12 @@ export default ({ navigation }: IOverviewProps)  => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
     const paddingToBottom = LOAD_BOTTOM_PADDING;
     if (!expanding && (layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom)) {
-      console.log("expanding");
-      setExpanding(true);
-      setTimeout(() => setExpanding(false), 1000);
-      setContentExpand(contentExpand + 1);
+      if ((contentExpand * NUM_TRANSACTIONS_PER_LOAD) < transactions.length) {
+        console.log("expanding");
+        setExpanding(true);
+        setTimeout(() => setExpanding(false), 1000);
+        setContentExpand(contentExpand + 1);
+      }
     }
   };
 

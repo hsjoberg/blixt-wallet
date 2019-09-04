@@ -48,7 +48,7 @@ export default ({ navigation }: ISettingsProps) => {
   }
 
   const onRemoveSeedPress = async () => {
-    Alert.alert("Remove seed", "This will permanently remove the seed from this device. Only do this is you have backed up your seed!", [{
+    Alert.alert("Remove seed", "This will permanently remove the seed from this device. Only do this if you have backed up your seed!", [{
       text: "Cancel",
     }, {
       text: "Delete seed",

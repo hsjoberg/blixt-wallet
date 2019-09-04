@@ -370,3 +370,5 @@ export default {
 
   tabBarTextColor: platform === "ios" ? "#737373" : blixtTheme.light,
 };
+
+export const blixtFooterBorderColor = color(blixtTheme.gray).darken(0.12).hex();
