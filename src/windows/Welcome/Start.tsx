@@ -35,6 +35,13 @@ export default ({ navigation }: IStartProps) => {
   const onCreateWalletPress = async () => {
     try {
       await generateSeed(undefined);
+      Alert.alert(
+        "Warning",
+        "Blixt Wallet is still at an early stage of development.\nIf you use this wallet, make sure you understand that you may lose your funds.\n\nThere is currently no way to backup your channels nor WatchTower support to watch your channels while you are offline.",
+        [{
+          text: "I am reckless, continue",
+        }]
+      );
       navigation.navigate("Seed");
     } catch (e) {
       Alert.alert(e.message);
