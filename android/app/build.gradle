@@ -75,7 +75,7 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     entryFile: "index.ts",
-    enableHermes: true,  // clean and rebuild if changing
+    enableHermes: false,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -129,7 +129,7 @@ android {
         applicationId MYAPP_APP_ID
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
+        versionCode 7
         versionName "0.1-alpha"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
