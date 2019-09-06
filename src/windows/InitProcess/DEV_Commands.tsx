@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, StatusBar, NativeModules, ScrollView, Clipboard } from "react-native";
+import { StyleSheet, StatusBar, NativeModules, ScrollView } from "react-native";
+import Clipboard from "@react-native-community/react-native-clipboard";
 import { Text, Button, Toast, Input, View, Container } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import Long from "long";

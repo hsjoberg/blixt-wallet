@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Alert, StatusBar, Clipboard } from "react-native";
+import { View, StyleSheet, Alert, StatusBar } from "react-native";
+import Clipboard from "@react-native-community/react-native-clipboard";
 import { Icon } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
 
@@ -75,7 +76,7 @@ export default ({ navigation }: ISendCameraProps) => {
         <View style={StyleSheet.absoluteFill}>
           <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
           {__DEV__ && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
-          <Icon type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
+          <Icon testID="paste-clipboard" type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
         </View>
       </Camera>
     </>

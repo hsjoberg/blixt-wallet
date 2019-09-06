@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { View, Share, Clipboard, StyleSheet } from "react-native";
+import React from "react";
+import { View, Share, StyleSheet } from "react-native";
+import Clipboard from "@react-native-community/react-native-clipboard";
 import { NavigationScreenProp } from "react-navigation";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, H1, H3, Toast } from "native-base";
 import { formatDistanceStrict, fromUnixTime } from "date-fns";
@@ -8,6 +9,7 @@ import { useStoreState } from "../../state/store";
 import { lnrpc } from "../../../proto/proto";
 import QrCode from "../../components/QrCode";
 import { formatBitcoin } from "../../utils/bitcoin-units";
+import Ticker from "../../components/Ticker";
 
 interface IReceiveQRProps {
   navigation: NavigationScreenProp<{}>;
@@ -35,25 +37,8 @@ export default ({ navigation }: IReceiveQRProps) => {
   }
 
   if (transaction.status === "SETTLED") {
-    console.log("Status settled");
     setTimeout(() => navigation.pop(), 1);
   }
-
-  const Ticker = ({ expire }: { expire: number; }) => {
-    const [display, setDisplay] = useState(formatDistanceStrict(new Date(), fromUnixTime(expire)));
-
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setDisplay(
-          formatDistanceStrict(new Date(), fromUnixTime(expire))
-        );
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }, [expire]);
-
-    return (<>{display}</>);
-  };
 
   const onPressPaymentRequest = () => {
     Clipboard.setString(transaction.paymentRequest);
@@ -70,7 +55,7 @@ export default ({ navigation }: IReceiveQRProps) => {
   };
 
   return (
-    <Container>
+    <Container testID="qr">
       <Header iosBarStyle="light-content" translucent={false}>
         <Left>
           <Button transparent={true} onPress={() => navigation.pop()}>
@@ -83,17 +68,15 @@ export default ({ navigation }: IReceiveQRProps) => {
       </Header>
       <View style={style.container}>
         <H1 style={style.scanThisQr}>Scan this QR code</H1>
-        <Text style={style.expires}>
+        <Text testID="expire" style={style.expires}>
           <>Expires in </>
-          <Ticker
-            expire={transaction.expire.toNumber()}
-          />
+          <Ticker expire={transaction.expire.toNumber()} />
         </Text>
         <QrCode data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} />
-        <Text onPress={onPressPaymentRequest} style={style.paymentRequest} numberOfLines={1} lineBreakMode="middle">
+        <Text testID="payment-request-string" onPress={onPressPaymentRequest} style={style.paymentRequest} numberOfLines={1} lineBreakMode="middle">
           {transaction.paymentRequest}
         </Text>
-        <H3>{formatBitcoin(transaction.value, bitcoinUnit)}</H3>
+        <H3 testID="pay-amount">{formatBitcoin(transaction.value, bitcoinUnit)}</H3>
       </View>
     </Container>
   );

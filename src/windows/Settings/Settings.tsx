@@ -1,5 +1,6 @@
 import React from "react";
-import { Alert, StyleSheet, Clipboard } from "react-native";
+import { Alert, StyleSheet } from "react-native";
+import Clipboard from "@react-native-community/react-native-clipboard";
 import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Content, List, ListItem, Right, Toast } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 

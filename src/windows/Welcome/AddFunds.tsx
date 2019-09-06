@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { StatusBar, StyleSheet, Clipboard, Share, Dimensions } from "react-native";
+import { StatusBar, StyleSheet, Share, Dimensions } from "react-native";
+import Clipboard from "@react-native-community/react-native-clipboard";
 import { Container,  View, Button, H1, Text, Toast, Content } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 

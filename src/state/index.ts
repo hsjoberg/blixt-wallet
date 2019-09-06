@@ -160,7 +160,7 @@ export const model: IStoreModel = {
     await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);
     await dispatch.security.storeSeed(seed);
-    setTimeout(() => actions.setWalletSeed(undefined), 20000);
+    setTimeout(() => actions.setWalletSeed(undefined), 5000);
     return wallet;
   }),
 

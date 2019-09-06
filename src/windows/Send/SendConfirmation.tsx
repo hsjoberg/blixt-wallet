@@ -72,11 +72,11 @@ export default ({ navigation }: ISendConfirmationProps) => {
     ),
   });
 
-  formItems.push({
-    key: "AMOUNT_BTC",
-    title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
-    component: (<Input disabled={true} value={valueBitcoin(paymentRequest.numSatoshis, bitcoinUnit)} />),
-  });
+  // formItems.push({
+  //   key: "AMOUNT_BTC",
+  //   title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
+  //   component: (<Input disabled={true} value={valueBitcoin(paymentRequest.numSatoshis, bitcoinUnit)} />),
+  // });
 
   formItems.push({
     key: "AMOUNT_FIAT",
@@ -127,6 +127,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
         buttons={[(
           <Button
             key="PAY"
+            testID="pay-invoice"
             disabled={isPaying}
             block={true}
             primary={true}

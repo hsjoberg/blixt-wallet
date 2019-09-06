@@ -28,8 +28,8 @@ export default Camera;
 
 import React from "react";
 
-const timeout = (ms) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+const timeout = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 export const Constants = {
@@ -71,7 +71,14 @@ export class RNCamera extends React.Component {
   }
 
   public render() {
-    return null;
+    if (!this.props.children) {
+      return (<></>);
+    }
+    return (
+      this.props.children({
+        status: "AUTHORIZED",
+      })
+    );
   }
 }
 

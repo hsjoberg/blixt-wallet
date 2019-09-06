@@ -1,36 +1,16 @@
-import { createStore } from "easy-peasy";
-import { model } from "../../src/state/index";
-
+import { setItem, StorageItem } from "../../src/storage/app";
+import { setupStore } from "../utils";
 import { getInfo } from "../../mocks/lndmobile/index";
 
-import LndMobile from "../../src/state/LndMobileInjection";
-
-const setupStore = (initialState: any) => createStore(model, {
-  injections: {
-    lndMobile: LndMobile,
-  },
-  initialState,
-});
-
-let store = setupStore({});
-
+jest.setTimeout(10000);
 
 test("initialize lightning store", async () => {
-  store = setupStore(/*{
-    appReady: true,
-    walletCreated: true,
-    lightning: {
-      syncedToChain: false,
-      ready: false,
-      firstSync: false,
-    },
-  }*/);
+  await setItem(StorageItem.walletPassword, "test1234");
+  const store = setupStore();
 
-  await store.getActions().initializeApp(undefined);
-  await store.getActions().lightning.initialize(undefined);
+  await store.getActions().initializeApp();
+  await store.getActions().lightning.initialize();
 
   expect(store.getState().lightning.ready).toBe(true);
-  expect(store.getState().lightning.nodeInfo).toEqual(
-    await getInfo()
-  );
+  expect(store.getState().lightning.nodeInfo).toEqual(await getInfo());
 });

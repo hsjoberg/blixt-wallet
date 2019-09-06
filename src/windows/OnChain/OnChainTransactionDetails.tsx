@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Clipboard } from "react-native";
+import { StyleSheet } from "react-native";
+import Clipboard from "@react-native-community/react-native-clipboard";
 import { Body, Card, Text, CardItem, H1, Toast } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import { fromUnixTime } from "date-fns";

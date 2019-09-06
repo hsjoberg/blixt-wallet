@@ -104,7 +104,7 @@ export const send: ISendModel = {
       feeMsat:
         (sendPaymentResult.paymentRoute &&
         sendPaymentResult.paymentRoute.totalFeesMsat) || Long.fromInt(0),
-      nodeAliasCached: (remoteNodeInfo.node && remoteNodeInfo.node.alias) || null,
+      nodeAliasCached: (remoteNodeInfo && remoteNodeInfo.node && remoteNodeInfo.node.alias) || null,
       payer: null,
       valueUSD: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.fiatRates.USD.last),
       valueFiat: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.currentRate),

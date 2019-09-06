@@ -1,32 +1,23 @@
-import { createStore } from "easy-peasy";
-import { model } from "../../src/state/index";
+import { setupStore } from "../utils";
 
-import LndMobile from "../../src/state/LndMobileInjection";
-
-const setupStore = () => createStore(model, {
-  injections: {
-    lndMobile: LndMobile,
-  },
-});
+jest.setTimeout(10000);
 
 let store = setupStore();
-
 beforeEach(() => {
   store = setupStore();
 });
 
 test("initialize index store", async () => {
-  await store.getActions().initializeApp(undefined);
+  await store.getActions().initializeApp()
 
   expect(store.getState().appReady).toBe(true);
   expect(store.getState().walletCreated).toBe(false);
 });
 
 test("create wallet", async () => {
-  await store.getActions().initializeApp(undefined);
-  await store.getActions().createWallet({
-    password: "test12345",
-  });
+  await store.getActions().initializeApp();
+  await store.getActions().generateSeed();
+  await store.getActions().createWallet(false);
 
   expect(store.getState().appReady).toBe(true);
   expect(store.getState().walletCreated).toBe(true);

@@ -1,0 +1,665 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  collapsable={true}
+  pointerEvents="box-none"
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <View
+      collapsable={false}
+      style={
+        Object {
+          "backgroundColor": "#eee",
+          "flex": 1,
+          "flexDirection": "column-reverse",
+          "overflow": "hidden",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "flex": 1,
+          }
+        }
+      >
+        <View
+          pointerEvents="auto"
+          style={
+            Object {
+              "bottom": 0,
+              "left": 0,
+              "opacity": 1,
+              "paddingTop": 64,
+              "position": "absolute",
+              "right": 0,
+              "top": 0,
+              "transform": Array [
+                Object {
+                  "translateX": 0,
+                },
+                Object {
+                  "translateY": 0,
+                },
+              ],
+            }
+          }
+        >
+          <View
+            accessibilityElementsHidden={false}
+            style={
+              Object {
+                "backgroundColor": "#fff",
+                "flex": 1,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "#fff",
+                  "flex": 1,
+                  "height": 1334,
+                }
+              }
+            >
+              <View>
+                <View
+                  iosBarStyle="light-content"
+                  style={
+                    Object {
+                      "backgroundColor": "#F8F8F8",
+                      "borderBottomColor": "#a7a6ab",
+                      "borderBottomWidth": 0.5,
+                      "elevation": 3,
+                      "flexDirection": "row",
+                      "height": 64,
+                      "justifyContent": "center",
+                      "left": 0,
+                      "paddingLeft": 6,
+                      "paddingRight": 10,
+                      "paddingTop": 18,
+                      "right": 0,
+                      "shadowColor": undefined,
+                      "shadowOffset": undefined,
+                      "shadowOpacity": undefined,
+                      "shadowRadius": undefined,
+                      "top": 0,
+                    }
+                  }
+                  translucent={false}
+                >
+                  <View
+                    style={
+                      Object {
+                        "alignItems": "flex-start",
+                        "alignSelf": "center",
+                        "flex": 1,
+                      }
+                    }
+                  >
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      style={
+                        Object {
+                          "alignItems": "center",
+                          "alignSelf": null,
+                          "backgroundColor": "transparent",
+                          "borderBottomWidth": null,
+                          "borderColor": null,
+                          "borderLeftWidth": null,
+                          "borderRadius": 5,
+                          "borderRightWidth": null,
+                          "borderTopWidth": null,
+                          "borderWidth": undefined,
+                          "elevation": 0,
+                          "flexDirection": "row",
+                          "height": 45,
+                          "justifyContent": "space-between",
+                          "marginLeft": -3,
+                          "paddingBottom": 6,
+                          "paddingLeft": 4,
+                          "paddingRight": 6,
+                          "paddingTop": 6,
+                          "shadowColor": null,
+                          "shadowOffset": null,
+                          "shadowOpacity": null,
+                          "shadowRadius": null,
+                        }
+                      }
+                      transparent={true}
+                    >
+                      <Text
+                        allowFontScaling={false}
+                        style={
+                          Array [
+                            Object {
+                              "color": undefined,
+                              "fontSize": 12,
+                            },
+                            Array [
+                              Object {
+                                "color": "#000",
+                                "fontSize": 30,
+                              },
+                              Object {
+                                "color": "#007aff",
+                                "fontSize": 34,
+                                "marginLeft": 1,
+                                "marginRight": 2,
+                                "marginTop": 0,
+                                "paddingTop": 1,
+                              },
+                            ],
+                            Object {
+                              "fontFamily": "Ionicons",
+                              "fontStyle": "normal",
+                              "fontWeight": "normal",
+                            },
+                            Object {},
+                          ]
+                        }
+                      >
+                        
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={
+                      Object {
+                        "alignItems": "center",
+                        "alignSelf": "center",
+                        "flex": 1,
+                      }
+                    }
+                  >
+                    <Text
+                      numberOfLines={1}
+                      style={
+                        Object {
+                          "color": "#000",
+                          "fontFamily": "System",
+                          "fontSize": 17,
+                          "fontWeight": "700",
+                          "marginLeft": undefined,
+                          "paddingLeft": 4,
+                          "paddingTop": 1,
+                          "textAlign": "center",
+                        }
+                      }
+                    >
+                      Receive
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <ScrollView
+                automaticallyAdjustContentInsets={false}
+                contentContainerStyle={
+                  Array [
+                    Object {
+                      "padding": undefined,
+                    },
+                    Object {
+                      "display": "flex",
+                      "flex": 1,
+                      "height": "100%",
+                      "justifyContent": "space-between",
+                      "padding": 22,
+                    },
+                  ]
+                }
+                contentInset={
+                  Object {
+                    "bottom": 0,
+                  }
+                }
+                enableAutomaticScroll={true}
+                enableOnAndroid={false}
+                enableResetScrollToCoords={true}
+                extraHeight={75}
+                extraScrollHeight={0}
+                keyboardDismissMode="interactive"
+                keyboardOpeningTime={250}
+                keyboardShouldPersistTaps="handled"
+                keyboardSpace={0}
+                resetScrollToCoords={
+                  Object {
+                    "x": 0,
+                    "y": 0,
+                  }
+                }
+                scrollEventThrottle={1}
+                showsVerticalScrollIndicator={true}
+                style={
+                  Object {
+                    "backgroundColor": "transparent",
+                    "flex": 1,
+                  }
+                }
+                viewIsInsideTabBar={false}
+              >
+                <View
+                  style={
+                    Array [
+                      Object {},
+                      Object {},
+                    ]
+                  }
+                >
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    style={
+                      Object {
+                        "alignItems": "center",
+                        "backgroundColor": "transparent",
+                        "borderBottomWidth": 1,
+                        "borderColor": "#D9D5DC",
+                        "borderLeftWidth": 0,
+                        "borderRadius": undefined,
+                        "borderRightWidth": 0,
+                        "borderTopWidth": 0,
+                        "borderWidth": undefined,
+                        "flexDirection": "row",
+                        "marginLeft": 2,
+                        "marginTop": 8,
+                      }
+                    }
+                  >
+                    <Text
+                      style={
+                        Array [
+                          Object {
+                            "color": "#575757",
+                            "fontSize": 17,
+                            "paddingRight": 5,
+                          },
+                          Object {
+                            "fontSize": 17,
+                            "width": 115,
+                          },
+                        ]
+                      }
+                    >
+                      Amount ₿
+                    </Text>
+                    <TextInput
+                      allowFontScaling={true}
+                      editable={true}
+                      keyboardType="numeric"
+                      placeholder="1000 (optional)"
+                      placeholderTextColor="#575757"
+                      rejectResponderTermination={true}
+                      style={
+                        Object {
+                          "color": "#000",
+                          "flex": 1,
+                          "fontSize": 17,
+                          "height": 50,
+                          "paddingLeft": 5,
+                          "paddingRight": 5,
+                          "top": 1.5,
+                        }
+                      }
+                      testID="input-amount-sat"
+                      underlineColorAndroid="rgba(0,0,0,0)"
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    style={
+                      Object {
+                        "alignItems": "center",
+                        "backgroundColor": "transparent",
+                        "borderBottomWidth": 1,
+                        "borderColor": "#D9D5DC",
+                        "borderLeftWidth": 0,
+                        "borderRadius": undefined,
+                        "borderRightWidth": 0,
+                        "borderTopWidth": 0,
+                        "borderWidth": undefined,
+                        "flexDirection": "row",
+                        "marginLeft": 2,
+                        "marginTop": 16,
+                      }
+                    }
+                  >
+                    <Text
+                      style={
+                        Array [
+                          Object {
+                            "color": "#575757",
+                            "fontSize": 17,
+                            "paddingRight": 5,
+                          },
+                          Object {
+                            "fontSize": 17,
+                            "width": 115,
+                          },
+                        ]
+                      }
+                    >
+                      Amount USD
+                    </Text>
+                    <TextInput
+                      allowFontScaling={true}
+                      editable={true}
+                      keyboardType="numeric"
+                      placeholder="0.00 (optional)"
+                      placeholderTextColor="#575757"
+                      rejectResponderTermination={true}
+                      style={
+                        Object {
+                          "color": "#000",
+                          "flex": 1,
+                          "fontSize": 17,
+                          "height": 50,
+                          "paddingLeft": 5,
+                          "paddingRight": 5,
+                          "top": 1.5,
+                        }
+                      }
+                      underlineColorAndroid="rgba(0,0,0,0)"
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    style={
+                      Object {
+                        "alignItems": "center",
+                        "backgroundColor": "transparent",
+                        "borderBottomWidth": 1,
+                        "borderColor": "#D9D5DC",
+                        "borderLeftWidth": 0,
+                        "borderRadius": undefined,
+                        "borderRightWidth": 0,
+                        "borderTopWidth": 0,
+                        "borderWidth": undefined,
+                        "flexDirection": "row",
+                        "marginLeft": 2,
+                        "marginTop": 16,
+                      }
+                    }
+                  >
+                    <Text
+                      style={
+                        Array [
+                          Object {
+                            "color": "#575757",
+                            "fontSize": 17,
+                            "paddingRight": 5,
+                          },
+                          Object {
+                            "fontSize": 17,
+                            "width": 115,
+                          },
+                        ]
+                      }
+                    >
+                      Payer
+                    </Text>
+                    <TextInput
+                      allowFontScaling={true}
+                      editable={true}
+                      placeholder="For bookkeeping (optional)"
+                      placeholderTextColor="#575757"
+                      rejectResponderTermination={true}
+                      style={
+                        Object {
+                          "color": "#000",
+                          "flex": 1,
+                          "fontSize": 17,
+                          "height": 50,
+                          "paddingLeft": 5,
+                          "paddingRight": 5,
+                          "top": 1.5,
+                        }
+                      }
+                      underlineColorAndroid="rgba(0,0,0,0)"
+                      value=""
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    style={
+                      Object {
+                        "alignItems": "center",
+                        "backgroundColor": "transparent",
+                        "borderBottomWidth": 1,
+                        "borderColor": "#D9D5DC",
+                        "borderLeftWidth": 0,
+                        "borderRadius": undefined,
+                        "borderRightWidth": 0,
+                        "borderTopWidth": 0,
+                        "borderWidth": undefined,
+                        "flexDirection": "row",
+                        "marginLeft": 2,
+                        "marginTop": 16,
+                      }
+                    }
+                  >
+                    <Text
+                      style={
+                        Array [
+                          Object {
+                            "color": "#575757",
+                            "fontSize": 17,
+                            "paddingRight": 5,
+                          },
+                          Object {
+                            "fontSize": 17,
+                            "width": 115,
+                          },
+                        ]
+                      }
+                    >
+                      Message
+                    </Text>
+                    <TextInput
+                      allowFontScaling={true}
+                      editable={true}
+                      placeholder="Message to payer (optional)"
+                      placeholderTextColor="#575757"
+                      rejectResponderTermination={true}
+                      style={
+                        Object {
+                          "color": "#000",
+                          "flex": 1,
+                          "fontSize": 17,
+                          "height": 50,
+                          "paddingLeft": 5,
+                          "paddingRight": 5,
+                          "top": 1.5,
+                        }
+                      }
+                      testID="input-message"
+                      underlineColorAndroid="rgba(0,0,0,0)"
+                      value=""
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={
+                    Array [
+                      Object {},
+                      Object {
+                        "marginBottom": 2,
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    style={
+                      Array [
+                        Object {},
+                        Object {
+                          "marginTop": 0,
+                        },
+                      ]
+                    }
+                  >
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      block={true}
+                      primary={true}
+                      style={
+                        Object {
+                          "alignItems": "center",
+                          "alignSelf": "stretch",
+                          "backgroundColor": "#007aff",
+                          "borderBottomWidth": null,
+                          "borderColor": "#007aff",
+                          "borderLeftWidth": null,
+                          "borderRadius": 5,
+                          "borderRightWidth": null,
+                          "borderTopWidth": null,
+                          "borderWidth": undefined,
+                          "elevation": 2,
+                          "flexDirection": "row",
+                          "height": 45,
+                          "justifyContent": "center",
+                          "paddingBottom": 6,
+                          "paddingTop": 6,
+                          "shadowColor": undefined,
+                          "shadowOffset": undefined,
+                          "shadowOpacity": undefined,
+                          "shadowRadius": undefined,
+                        }
+                      }
+                      testID="create-invoice"
+                    >
+                      <Text
+                        style={
+                          Object {
+                            "backgroundColor": "transparent",
+                            "color": "#fff",
+                            "fontFamily": "System",
+                            "fontSize": 16.5,
+                            "marginLeft": 0,
+                            "marginRight": 0,
+                            "paddingLeft": 16,
+                            "paddingRight": 16,
+                          }
+                        }
+                        uppercase={false}
+                      >
+                        Create invoice
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+        </View>
+      </View>
+      <View
+        pointerEvents="box-none"
+        style={
+          Object {
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "backgroundColor": "#FFF",
+              "transform": Array [
+                Object {
+                  "translateX": 0,
+                },
+              ],
+            }
+          }
+        >
+          <View
+            pointerEvents="box-none"
+            style={
+              Object {
+                "backgroundColor": "#FFF",
+                "borderBottomColor": "#A7A7AA",
+                "borderBottomWidth": 0.5,
+                "height": 64,
+                "paddingBottom": 0,
+                "paddingLeft": 0,
+                "paddingRight": 0,
+                "paddingTop": 20,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  Object {
+                    "bottom": 0,
+                    "flexDirection": "row",
+                    "left": 0,
+                    "position": "absolute",
+                    "right": 0,
+                    "top": 0,
+                  }
+                }
+              >
+                <View
+                  pointerEvents="box-none"
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "backgroundColor": "transparent",
+                      "bottom": 0,
+                      "flexDirection": "row",
+                      "justifyContent": "center",
+                      "left": 0,
+                      "opacity": 1,
+                      "position": "absolute",
+                      "right": 0,
+                      "top": 0,
+                    }
+                  }
+                >
+                  <Text
+                    accessibilityTraits="header"
+                    allowFontScaling={false}
+                    numberOfLines={1}
+                    style={
+                      Object {
+                        "color": "rgba(0, 0, 0, .9)",
+                        "fontSize": 17,
+                        "fontWeight": "600",
+                        "marginHorizontal": 16,
+                        "textAlign": "center",
+                      }
+                    }
+                  />
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;

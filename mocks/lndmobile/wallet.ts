@@ -1,6 +1,6 @@
 import { Buffer } from "buffer";
 import { lnrpc } from "../../proto/proto";
-import { timeout } from "./utils";
+import { timeout, decodeStreamResult } from "./utils";
 
 export const genSeed = jest.fn(async (): Promise<lnrpc.GenSeedResponse> => {
   const response = lnrpc.GenSeedResponse.create({
@@ -24,11 +24,11 @@ export const subscribeInvoices = jest.fn(async (): Promise<string> => {
   await timeout(10);
   return "done";
 });
-//
-// // TODO error handling
-// export const decodeInvoiceResult = (data: string): lnrpc.Invoice => {
-//   return decodeStreamResult<lnrpc.Invoice>({
-//     response: lnrpc.Invoice,
-//     base64Result: data,
-//   });
-// };
+
+// TODO error handling
+export const decodeInvoiceResult = (data: string): lnrpc.Invoice => {
+  return decodeStreamResult<lnrpc.Invoice>({
+    response: lnrpc.Invoice,
+    base64Result: data,
+  });
+};
