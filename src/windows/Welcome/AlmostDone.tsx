@@ -4,7 +4,8 @@ import { Body, Icon, Container, Text, View, Button, H1, Content, List, Left, Lis
 import DialogAndroid from "react-native-dialogs";
 
 import { useStoreState, useStoreActions } from "../../state/store";
-import { NavigationScreenProp, createStackNavigator } from "react-navigation";
+import { NavigationScreenProp} from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import style from "./style";
 import { LoginMethods } from "../../state/Security";
@@ -132,7 +133,7 @@ export const AlmostDone = ({ navigation }: IProps) => {
               <Left><Icon style={extraStyle.icon} type="Entypo" name="circular-graph" /></Left>
               <Body>
                 <Text>Auto-open Lightning channels</Text>
-                <Text note={true} numberOfLines={1}>Open channels when on-chain funds available</Text>
+                <Text note={true} numberOfLines={1}>Open channels when on-chain funds are available</Text>
               </Body>
               <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>
           </ListItem>

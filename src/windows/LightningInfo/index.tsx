@@ -1,4 +1,4 @@
-import { createStackNavigator } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
 import LightningInfo from "./LightningInfo";
 import OpenChannel from "./OpenChannel";
 import CameraFullscreen from "../CameraFullscreen";

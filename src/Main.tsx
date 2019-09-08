@@ -1,7 +1,9 @@
 import React from "react";
 import { Animated, Easing } from "react-native";
 import { Root } from "native-base";
-import { createBottomTabNavigator, createAppContainer, createStackNavigator, createSwitchNavigator } from "react-navigation";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+import { createBottomTabNavigator } from "react-navigation-tabs";
 
 import FooterNav from "./components/FooterNav";
 import Overview from "./windows/Overview";
