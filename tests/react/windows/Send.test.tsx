@@ -5,11 +5,15 @@ import { StoreProvider } from "easy-peasy";
 import Long from "long";
 
 import Send from "../../../src/windows/Send";
+import SendCamera from "../../../src/windows/Send/SendCamera";
+import SendConfirmation from "../../../src/windows/Send/SendConfirmation";
 import { createNavigationContainer, setupStore, setDefaultAsyncStorage, mockBlockchainAPI } from "../../utils";
 
 const AppContainer = createNavigationContainer({ Send }, "Send");
+const AppContainerSendCamera = createNavigationContainer({ SendCamera }, "SendCamera");
+const AppContainerSendConfirmation = createNavigationContainer({ SendConfirmation }, "SendConfirmation");
 
-it("renders correctly", async () => {
+it("SendCamera renders correctly", async () => {
   await setDefaultAsyncStorage();
 
   const store = setupStore();
@@ -19,7 +23,7 @@ it("renders correctly", async () => {
 
   const { container, unmount } = render(
     <StoreProvider store={store}>
-      <AppContainer />
+      <AppContainerSendCamera />
     </StoreProvider>
   );
   expect(toJSON(container)).toMatchSnapshot();
@@ -27,7 +31,7 @@ it("renders correctly", async () => {
   unmount();
 });
 
-it.only("It is possible to paste invoice from clipboard and pay it", async () => {
+it("It is possible to paste invoice from clipboard and pay it", async () => {
   await setDefaultAsyncStorage();
   const store = setupStore();
   fetch.once(mockBlockchainAPI());
@@ -50,4 +54,8 @@ it.only("It is possible to paste invoice from clipboard and pay it", async () =>
 
   const payInvoiceButton = await waitForElement(() => queryByTestId("pay-invoice"));
   await act(async () => await fireEvent.press(payInvoiceButton!));
+
+  expect(store.getState().transaction.transactions).toHaveLength(1);
+
+  unmount();
 });

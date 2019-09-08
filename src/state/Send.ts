@@ -47,7 +47,7 @@ export const send: ISendModel = {
   setPayment: thunk(async (actions, payload, { injections }) => {
     actions.clear();
     const { decodePayReq, getNodeInfo } = injections.lndMobile.index;
-    const paymentRequestStr = payload.paymentRequestStr.replace(/^lightning:/, "");
+    const paymentRequestStr = payload.paymentRequestStr.replace(/^lightning:/i, "");
 
     try {
       if (!checkBech32(paymentRequestStr, LnBech32Prefix)) {

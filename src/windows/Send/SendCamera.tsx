@@ -11,8 +11,6 @@ import Camera from "../../components/Camera";
 import { Chain } from "../../utils/build";
 
 interface ISendCameraProps {
-  onGoBackCallback: () => void;
-  doneCallback: (transactionInfo: any) => void;
   bolt11Invoice?: string;
   navigation: NavigationScreenProp<{}>;
 }
