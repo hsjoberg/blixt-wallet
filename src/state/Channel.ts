@@ -226,10 +226,10 @@ export const channel: IChannelModel = {
   getBalance: thunk(async (actions, _, { injections }) => {
     const { channelBalance } = injections.lndMobile.channel;
     const response = await channelBalance(); // response.balance is not Long for some reason
-    actions.setBalance(Long.fromNumber(4397581)
-      // response.balance.toNumber
-      //   ? response.balance
-      //   : Long.fromNumber(0)
+    actions.setBalance(
+      response.balance.toNumber
+        ? response.balance
+        : Long.fromNumber(0)
     );
     await setItemObject(StorageItem.lightningBalance, response.balance.toString());
   }),
