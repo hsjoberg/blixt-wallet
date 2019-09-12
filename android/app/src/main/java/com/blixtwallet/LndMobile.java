@@ -276,6 +276,7 @@ class LndMobile extends ReactContextBaseJavaModule {
           "no-macaroons=1\n" +
           "maxbackoff=2s\n" +
           "nolisten=1\n" +
+          "norest=1\n" +
           "\n" +
           "[Routing]\n" +
           "routing.assumechanvalid=1\n" +
@@ -305,6 +306,7 @@ class LndMobile extends ReactContextBaseJavaModule {
           "no-macaroons=1\n" +
           "maxbackoff=2s\n" +
           "nolisten=1\n" +
+          "norest=1\n" +
           "\n" +
           "[Routing]\n" +
           "routing.assumechanvalid=1\n" +

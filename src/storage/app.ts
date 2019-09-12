@@ -60,7 +60,7 @@ export const clearApp = async () => {
 export const setupApp = async () => {
   await Promise.all([
     setItemObject<boolean>(StorageItem.app, true),
-    setItemObject<number>(StorageItem.appVersion, 0),
+    setItemObject<number>(StorageItem.appVersion, 1),
     setItemObject<boolean>(StorageItem.walletCreated, false),
     setItemObject<boolean>(StorageItem.firstSync, true),
     setItemObject<number>(StorageItem.timeSinceLastSync, 0),

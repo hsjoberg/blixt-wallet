@@ -14,16 +14,11 @@ import { IFiatModel, fiat } from "./Fiat";
 import { ISecurityModel, security } from "./Security";
 import { ISettingsModel, settings } from "./Settings";
 
-
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
-
-interface ICreateWalletPayload {
-  password: string;
-}
 
 export interface IStoreModel {
   initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
@@ -107,7 +102,7 @@ export const model: IStoreModel = {
 
     const appVersion = await getAppVersion();
     if (appVersion < (appMigration.length - 1)) {
-      console.log(`Beginning App Version from ${appVersion} to ${appMigration.length - 1}`);
+      console.log(`Beginning App Version migration from ${appVersion} to ${appMigration.length - 1}`);
       for (let i = appVersion + 1; i < appMigration.length; i++) {
         console.log(`Migrating to ${i}`);
         await appMigration[i].beforeLnd(db, i);
