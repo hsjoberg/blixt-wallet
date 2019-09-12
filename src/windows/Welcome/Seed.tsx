@@ -1,11 +1,12 @@
 import React from "react";
 import { StatusBar } from "react-native";
-import { Container, Text, View, Button, H1, Card, CardItem, Content } from "native-base";
+import { Container, Text, View, Button, H1, Card, CardItem, Content, H3 } from "native-base";
 
 import { useStoreState } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import style from "./style";
+import { smallScreen } from "../../utils/device";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -52,7 +53,11 @@ export default ({ navigation }: IProps) => {
         </View>
         <View style={style.lowerContent}>
           <View style={style.text}>
-            <H1 style={style.textHeader}>Welcome to Blixt Wallet!</H1>
+            {smallScreen ?
+              <H3 style={style.textHeader}>Welcome to Blixt Wallet!</H3>
+              :
+              <H1 style={style.textHeader}>Welcome to Blixt Wallet!</H1>
+            }
             <Text>
               This is your backup seed.{"\n"}{"\n"}
               Write it down on a piece of paper and store it in a safe place.{"\n"}

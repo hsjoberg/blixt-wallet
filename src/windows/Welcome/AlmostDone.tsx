@@ -1,6 +1,6 @@
 import React from "react";
 import { StatusBar, StyleSheet } from "react-native";
-import { Body, Icon, Container, Text, View, Button, H1, Content, List, Left, ListItem, Right, CheckBox } from "native-base";
+import { Body, Icon, Container, Text, View, Button, H1, List, Left, ListItem, Right, CheckBox } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -9,6 +9,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import style from "./style";
 import { LoginMethods } from "../../state/Security";
+import Content from "../../components/Content";
 
 import SetPincode from "../Settings/SetPincode";
 import RemovePincodeAuth from "../Settings/RemovePincodeAuth";
@@ -96,8 +97,8 @@ export const AlmostDone = ({ navigation }: IProps) => {
         networkActivityIndicatorVisible={true}
         barStyle="light-content"
       />
-      <Content contentContainerStyle={style.content}>
-        <View style={[style.upperContent, { paddingTop: 40, paddingLeft: 16, paddingRight: 16 }]}>
+      <Content style={[style.upperContent, { paddingTop: 20, paddingLeft: 14, paddingRight: 14 }]}>
+        <View style={[style.upperContent, { paddingTop: 40 }]}>
           <List style={extraStyle.list}>
             <ListItem style={extraStyle.listItem} icon={true} onPress={onNamePress}>
               <Left><Icon style={extraStyle.icon} type="AntDesign" name="edit" /></Left>
@@ -132,7 +133,7 @@ export const AlmostDone = ({ navigation }: IProps) => {
             <ListItem style={extraStyle.listItem} button={true} icon={true} onPress={onToggleAutopilotPress}>
               <Left><Icon style={extraStyle.icon} type="Entypo" name="circular-graph" /></Left>
               <Body>
-                <Text>Auto-open Lightning channels</Text>
+                <Text>Auto-open channels</Text>
                 <Text note={true} numberOfLines={1}>Open channels when on-chain funds are available</Text>
               </Body>
               <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>

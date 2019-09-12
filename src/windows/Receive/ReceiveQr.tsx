@@ -10,6 +10,7 @@ import { lnrpc } from "../../../proto/proto";
 import QrCode from "../../components/QrCode";
 import { formatBitcoin } from "../../utils/bitcoin-units";
 import Ticker from "../../components/Ticker";
+import { smallScreen } from "../../utils/device";
 
 interface IReceiveQRProps {
   navigation: NavigationScreenProp<{}>;
@@ -72,7 +73,7 @@ export default ({ navigation }: IReceiveQRProps) => {
           <>Expires in </>
           <Ticker expire={transaction.expire.toNumber()} />
         </Text>
-        <QrCode data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} />
+        <QrCode size={smallScreen ? 200 : undefined} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} />
         <Text testID="payment-request-string" onPress={onPressPaymentRequest} style={style.paymentRequest} numberOfLines={1} lineBreakMode="middle">
           {transaction.paymentRequest}
         </Text>

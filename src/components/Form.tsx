@@ -41,12 +41,12 @@ const style = StyleSheet.create({
     flex: 1,
     display: "flex",
     justifyContent: "space-between",
-    padding: 22,
+    padding: 16,
   },
   itemContainer: {
   },
   itemLabel: {
-    width: 115,
+    width: 105,
   },
   buttonContainer: {
     marginBottom: 2,

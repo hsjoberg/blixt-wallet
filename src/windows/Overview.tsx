@@ -213,8 +213,8 @@ const style = StyleSheet.create({
   },
   transactionList: {
     paddingTop: HEADER_MAX_HEIGHT + 12,
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingLeft: 7,
+    paddingRight: 7,
     paddingBottom: 12,
   },
 });

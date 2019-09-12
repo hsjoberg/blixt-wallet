@@ -1,7 +1,8 @@
 import React from "react";
 import { Alert, StyleSheet } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Content, List, ListItem, Right, Toast } from "native-base";
+import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, List, ListItem, Right, Toast } from "native-base";
+import Content from "../../components/Content";
 import DialogAndroid from "react-native-dialogs";
 
 import { NavigationScreenProp } from "react-navigation";
@@ -156,7 +157,7 @@ export default ({ navigation }: ISettingsProps) => {
           <Title>Settings</Title>
         </Body>
       </Header>
-      <Content style={{ paddingLeft: 16, paddingRight: 16 }}>
+      <Content>
         <List style={style.list}>
           <ListItem style={style.itemHeader} itemHeader={true} first={true}>
             <Text>Wallet</Text>
@@ -295,7 +296,7 @@ export default ({ navigation }: ISettingsProps) => {
 
 const style = StyleSheet.create({
   list: {
-    paddingTop: 12,
+    paddingTop: 6,
     marginBottom: 48,
   },
   listItem: {

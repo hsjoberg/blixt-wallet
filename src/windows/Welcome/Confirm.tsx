@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from "react";
 import { StatusBar, StyleSheet, Alert } from "react-native";
-import { Container, View, Button, H1, Card, CardItem, Text, Content, Spinner, Icon } from "native-base";
+import { Container, View, Button, H1, Card, CardItem, Text, Content, Spinner, Icon, H3 } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import style from "./style";
+import { smallScreen } from "../../utils/device";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -118,7 +119,11 @@ export default ({ navigation }: IProps) => {
         <View style={style.lowerContent}>
           <View style={style.text}>
             <View style={style.headerView}>
-              <H1 style={style.textHeader}>Confirm your seed</H1>
+              {smallScreen ?
+                <H3 style={style.textHeader}>Confirm your seed</H3>
+                :
+                <H1 style={style.textHeader}>Confirm your seed</H1>
+              }
               {confirmedWords.length > 0 &&
                 <Icon type="FontAwesome5" name="backspace" style={{ fontSize: 24, marginRight: 10, marginBottom: 6 }} onPress={onBackspacePress}  />
               }

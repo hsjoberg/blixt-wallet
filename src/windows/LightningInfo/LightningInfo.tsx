@@ -106,7 +106,7 @@ export default ({ navigation }: ILightningInfoProps) => {
 
 const style = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 12,
   },
   balanceInfo: {
     flex: 1,

@@ -11,13 +11,13 @@ export default {
     margin: 0,
   } as StyleProp<ViewStyle>,
   upperContent: {
-    flex: 2.15,
+    flex: 1.6,
     width: "100%",
   } as StyleProp<ViewStyle>,
   lowerContent: {
-    paddingRight: 24,
+    paddingRight: 19,
     paddingBottom: 24,
-    paddingLeft: 24,
+    paddingLeft: 19,
     paddingTop: 0,
     flex: 2,
     width: "100%",

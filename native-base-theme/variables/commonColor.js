@@ -369,6 +369,9 @@ export default {
   titleFontColor: platform === "ios" ? "#000" : blixtTheme.light,
 
   tabBarTextColor: platform === "ios" ? "#737373" : blixtTheme.light,
+
+  DefaultFontSize: 15,
+  fontSizeBase: 14,
 };
 
 export const blixtFooterBorderColor = color(blixtTheme.gray).darken(0.12).hex();

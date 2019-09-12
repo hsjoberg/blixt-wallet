@@ -9,8 +9,7 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
 
 import style from "./style";
-
-const smallScreen = Dimensions.get("window").height < 700;
+import { smallScreen } from "../../utils/device";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -58,7 +57,7 @@ export default ({ navigation }: IProps) => {
         <View style={style.upperContent}>
           <View style={extraStyle.qr}>
             <View style={extraStyle.qrInner}>
-              <QrCode style={extraStyle.qrImage} data={address} size={smallScreen ? 240 : 275} onPress={onBtcAddressQrPress} />
+              <QrCode size={smallScreen ? 150 : 275} style={extraStyle.qrImage} data={address} onPress={onBtcAddressQrPress} />
               <Text style={extraStyle.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressTextPress}>
                 {address}
               </Text>

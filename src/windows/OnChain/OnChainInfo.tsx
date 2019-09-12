@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Dimensions, Share } from "react-native";
+import { StyleSheet, View, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Body, Text, Header, Container, H1, H3, Right, Left, Button, Title, Icon, Toast } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
@@ -7,8 +7,7 @@ import { NavigationScreenProp } from "react-navigation";
 import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
 import { formatBitcoin } from "../../utils/bitcoin-units";
-
-const smallScreen = Dimensions.get("window").height < 700;
+import { smallScreen } from "../../utils/device";
 
 interface IOnChainInfoProps {
   navigation: NavigationScreenProp<{}>;
@@ -63,16 +62,21 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
       </Header>
       <View style={style.container}>
         <View style={style.fundsInfo}>
-          <H1 style={style.fundsInfoText}>
-            On-chain funds:{"\n"}
-            {formatBitcoin(balance, bitcoinUnit)}
-          </H1>
+          {smallScreen ?
+            <H3 style={style.fundsInfoText}>
+              On-chain funds:{"\n"} {formatBitcoin(balance, bitcoinUnit)}
+            </H3>
+            :
+            <H1 style={style.fundsInfoText}>
+              On-chain funds:{"\n"} {formatBitcoin(balance, bitcoinUnit)}
+            </H1>
+          }
         </View>
         <View style={style.qr}>
           {address &&
             <>
-              <H3 style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</H3>
-              <QrCode data={address} size={smallScreen ? 250 : undefined} onPress={onBtcAddressQrPress} />
+              <Text style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</Text>
+              <QrCode data={address} size={smallScreen ? 200 : undefined} onPress={onBtcAddressQrPress} />
               <Text style={style.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressTextPress}>
                 {address}
               </Text>
@@ -96,7 +100,7 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    padding: 24,
+    padding: 12,
   },
   fundsInfo: {
     marginTop: !smallScreen ? 24 : 0,
@@ -105,6 +109,7 @@ const style = StyleSheet.create({
     alignItems: "center",
   },
   fundsInfoText: {
+    marginTop: 22,
     textAlign: "center",
   },
   qr: {
