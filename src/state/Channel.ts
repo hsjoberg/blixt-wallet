@@ -1,5 +1,5 @@
 import { DeviceEventEmitter } from "react-native";
-import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
+import { Thunk, thunk, Action, action } from "easy-peasy";
 import Long from "long";
 
 import { lnrpc } from "../../proto/proto";
@@ -36,9 +36,10 @@ export interface ISetAliasPayload {
 }
 
 export interface IChannelModel {
-  initialize: Thunk<IChannelModel, void, IStoreInjections, IStoreModel>;
+  initialize: Thunk<IChannelModel>;
 
-  getChannels: Thunk<IChannelModel>;
+  setupChannelUpdateSubscriptions: Thunk<IChannelModel, void, IStoreInjections, IStoreModel>;
+  getChannels: Thunk<IChannelModel, void, IStoreInjections>;
   getChannelEvents: Thunk<IChannelModel, void, any, IStoreModel>;
   getBalance: Thunk<IChannelModel, undefined>;
   connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload>;
@@ -64,7 +65,7 @@ export interface IChannelModel {
 }
 
 export const channel: IChannelModel = {
-  initialize: thunk(async (actions, _, { getState, getStoreState, injections }) => {
+  initialize: thunk(async (actions, _, { getState }) => {
     // Use cached balance before retrieving from lnd:
     actions.setBalance(Long.fromString(await getItemObject(StorageItem.lightningBalance)));
 
@@ -78,80 +79,83 @@ export const channel: IChannelModel = {
       console.log("Channel.initialize() called when subscription already started");
       return;
     }
-    else {
-      console.log("Starting channel update subscription");
-      await injections.lndMobile.channel.subscribeChannelEvents();
-      DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
-        const db = getStoreState().db;
-        if (!db) {
-          throw new Error("SubscribeChannelEvents: db not ready");
-        }
-        const pushNotificationsEnabled = getStoreState().settings.pushNotificationsEnabled;
-
-        const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
-        console.log("Event SubscribeChannelEvents", e);
-        const channelEvent = decodeChannelEvent(e.data);
-        console.log(channelEvent, channelEvent.type);
-
-        if (channelEvent.openChannel) {
-          const txId = channelEvent.openChannel.channelPoint!.split(":")[0];
-          const chanEvent: IChannelEvent = {
-            txId,
-            type: "OPEN",
-          };
-          const insertId = await createChannelEvent(db, chanEvent);
-          actions.addChannelEvent({ id: insertId, ...chanEvent });
-
-          if (pushNotificationsEnabled) {
-            try {
-              let message = "Opening payment channel";
-              const node = await getNodeInfo(channelEvent.openChannel.remotePubkey!);
-              if (node && node.node) {
-                message += ` with ${node.node.alias}`;
-              }
-              localNotification(message);
-            } catch (e) {
-              console.log("Push notification failed: ", e.message);
-            }
-          }
-        }
-        else if (channelEvent.closedChannel) {
-          const txId = channelEvent.closedChannel.closingTxHash;
-          const chanEvent: IChannelEvent = {
-            txId: txId!,
-            type: "CLOSE",
-          };
-          const insertId = await createChannelEvent(db, chanEvent);
-          actions.addChannelEvent({ id: insertId, ...chanEvent });
-
-          if (pushNotificationsEnabled) {
-            try {
-              let message = "Payment channel";
-              const node = await getNodeInfo(channelEvent.closedChannel.remotePubkey!);
-              if (node && node.node) {
-                message += ` with ${node.node.alias}`;
-              }
-              message += " closed";
-              localNotification(message);
-            } catch (e) {
-              console.log("Push notification failed: ", e.message);
-            }
-          }
-        }
-
-        await Promise.all([
-          actions.getChannels(undefined),
-          actions.getBalance(undefined),
-        ]);
-      });
-      DeviceEventEmitter.addListener("CloseChannel", async (e: any) => {
-        console.log("Event CloseChannel");
-        console.log(e);
-        await actions.getChannels(undefined);
-      });
-      actions.setChannelUpdateSubscriptionStarted(true);
-    }
+    await actions.setupChannelUpdateSubscriptions();
     return true;
+  }),
+
+  setupChannelUpdateSubscriptions: thunk(async (actions, _2, { getStoreState, injections }) => {
+    console.log("Starting channel update subscription");
+    await injections.lndMobile.channel.subscribeChannelEvents();
+    DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
+      const db = getStoreState().db;
+      if (!db) {
+        throw new Error("SubscribeChannelEvents: db not ready");
+      }
+      const pushNotificationsEnabled = getStoreState().settings.pushNotificationsEnabled;
+
+      const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
+      console.log("Event SubscribeChannelEvents", e);
+      const channelEvent = decodeChannelEvent(e.data);
+      console.log(channelEvent, channelEvent.type);
+
+      if (channelEvent.openChannel) {
+        const txId = channelEvent.openChannel.channelPoint!.split(":")[0];
+        const chanEvent: IChannelEvent = {
+          txId,
+          type: "OPEN",
+        };
+        const insertId = await createChannelEvent(db, chanEvent);
+        actions.addChannelEvent({ id: insertId, ...chanEvent });
+
+        if (pushNotificationsEnabled) {
+          try {
+            let message = "Opened payment channel";
+            const node = await injections.lndMobile.index.getNodeInfo(channelEvent.openChannel.remotePubkey!);
+            if (node && node.node) {
+              message += ` with ${node.node.alias}`;
+            }
+            localNotification(message);
+          } catch (e) {
+            console.log("Push notification failed: ", e.message);
+          }
+        }
+      }
+      else if (channelEvent.closedChannel) {
+        const txId = channelEvent.closedChannel.closingTxHash;
+        const chanEvent: IChannelEvent = {
+          txId: txId!,
+          type: "CLOSE",
+        };
+        const insertId = await createChannelEvent(db, chanEvent);
+        actions.addChannelEvent({ id: insertId, ...chanEvent });
+
+        if (pushNotificationsEnabled) {
+          try {
+            let message = "Payment channel";
+            const node = await injections.lndMobile.index.getNodeInfo(channelEvent.closedChannel.remotePubkey!);
+            if (node && node.node) {
+              message += ` with ${node.node.alias}`;
+            }
+            message += " closed";
+            localNotification(message);
+          } catch (e) {
+            console.log("Push notification failed: ", e.message);
+          }
+        }
+      }
+
+      await Promise.all([
+        actions.getChannels(undefined),
+        actions.getBalance(undefined),
+      ]);
+    });
+
+    DeviceEventEmitter.addListener("CloseChannel", async (e: any) => {
+      console.log("Event CloseChannel");
+      console.log(e);
+      await actions.getChannels(undefined);
+    });
+    actions.setChannelUpdateSubscriptionStarted(true);
   }),
 
   getChannels: thunk(async (actions, _, { getState, injections }) => {
@@ -222,10 +226,10 @@ export const channel: IChannelModel = {
   getBalance: thunk(async (actions, _, { injections }) => {
     const { channelBalance } = injections.lndMobile.channel;
     const response = await channelBalance(); // response.balance is not Long for some reason
-    actions.setBalance(
-      response.balance.toNumber
-        ? response.balance
-        : Long.fromNumber(0)
+    actions.setBalance(Long.fromNumber(4397581)
+      // response.balance.toNumber
+      //   ? response.balance
+      //   : Long.fromNumber(0)
     );
     await setItemObject(StorageItem.lightningBalance, response.balance.toString());
   }),

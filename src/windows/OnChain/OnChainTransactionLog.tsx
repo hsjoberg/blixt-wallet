@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { FlatList } from "react-native";
-import { Body, Header, Container, Content, Right, Left, Button, Title, Icon } from "native-base";
+import { Body, Header, Container, Right, Left, Button, Title, Icon } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import OnChainTransactionItem from "../../components/OnChainTransactionItem";
@@ -41,21 +41,20 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
           </Button>
         </Right>
       </Header>
-      <Content>
-        <FlatList
-          data={transactions.sort((tx1, tx2) => tx2.timeStamp!.toNumber() - tx1.timeStamp!.toNumber())}
-          renderItem={({ item: transaction }) => (
-            <OnChainTransactionItem
-              key={transaction.txHash!}
-              style={{ paddingHorizontal: 8 }}
-              transaction={transaction}
-              onPress={onTransactionPress}
-              unit={bitcoinUnit}
-            />
-          )}
-          keyExtractor={(transaction, i) => transaction.txHash! + i}
-        />
-      </Content>
+      <FlatList
+        initialNumToRender={12}
+        data={transactions.sort((tx1, tx2) => tx2.timeStamp!.toNumber() - tx1.timeStamp!.toNumber())}
+        renderItem={({ item: transaction }) => (
+          <OnChainTransactionItem
+            key={transaction.txHash! + transaction.type}
+            style={{ paddingHorizontal: 8 }}
+            transaction={transaction}
+            onPress={onTransactionPress}
+            unit={bitcoinUnit}
+          />
+        )}
+        keyExtractor={(transaction, i) => transaction.txHash! + transaction.type + i}
+      />
     </Container>
   );
 };
