@@ -4,7 +4,7 @@ Blixt Wallet is an open source Lightning first Bitcoin Wallet for Android with f
 powered by lnd and Neutrino SPV.
 
 <p>
-  <img alt="App screenshot" src="app-screenshot.png" width="390" />
+  <img alt="Blixt Lightning Wallet screenshot" src="blixt-wallet-screenshot.png" width="390" />
 </p>
 
 # Features
