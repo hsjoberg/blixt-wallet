@@ -8,31 +8,43 @@ powered by lnd and Neutrino SPV.
 </p>
 
 # Features
-* [x] Embedded lnd with Neutrino
-* [x] Descriptive and clean transaction log
-* [x] Receive payments
-* [x] Autopilot
-* [x] Pincode
-* [x] Fingerprint
-* [x] Optional Name that will be displayed on invoices
-* [x] Optional "Payer" field for bookkeping when creating invoice
-* [ ] WebLN support
-* [ ] Backup to Google Drive
-* [ ] Scheduled sync of chain
-* [ ] Watchtower
-* [ ] URL payments
+
+- [x] Embedded lnd with Neutrino
+- [x] Descriptive and clean transaction log
+- [x] Receive payments
+- [x] Autopilot
+- [x] Pincode
+- [x] Fingerprint
+- [x] Optional Name that will be displayed on invoices
+- [x] Optional "Payer" field for bookkeping when creating invoice
+- [ ] [WebLN](https://webln.dev/) support
+- [ ] Backup to Google Drive
+- [ ] Scheduled sync of chain
+- [ ] Watchtower
+- [ ] URL payments
+
+# Known bugs
+
+The wallet uses lnd that is young and might have bugs. Check [lnd bug list here](https://github.com/lightninglabs/neutrino/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+
+# Development
+
+Do you like React Native, Java SE 8 or Lightning? Come and help out!
 
 ## Build steps
-* Install Go, Node, Yarn, react-native CLI, Android Studio and Android SDK (using npm instead of yarn might work)
-* If needed, install an emulated android device inside Android Studio
-* Build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
-* Install Node packages: `yarn`
-* Generate proto files: `yarn gen-proto`
-* Run: `yarn testnet-debug` (make sure you either have an Android emulator running or an Android device connected via USB)
+
+- Install Go, Node, Yarn, react-native CLI, Android Studio and Android SDK (using npm instead of yarn might work)
+- If needed, install an emulated android device inside Android Studio
+- Build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
+- Install Node packages: `yarn`
+- Generate proto files: `yarn gen-proto`
+- Run: `yarn testnet-debug` (make sure you either have an Android emulator running or an Android device connected via USB)
 
 ## Commit and code-style
+
 Follow the code style of the file you are working in.
 For commits, make descriptive and atomic git commits.
 
 ## License
+
 MIT
