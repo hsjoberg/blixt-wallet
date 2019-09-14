@@ -6,6 +6,7 @@ import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../../state/store";
 import Pincode from "../../components/Pincode";
 import { LoginMethods } from "../../state/Security";
+import { smallScreen } from "../../utils/device";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -93,7 +94,7 @@ const style = StyleSheet.create({
     padding: 8,
     alignContent: "center",
     alignItems:"center",
-    marginBottom: 16,
+    marginBottom: smallScreen ? 0 : 16,
   },
   fingerPrintSymbol: {
     fontSize: 36

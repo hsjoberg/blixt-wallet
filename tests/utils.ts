@@ -1,7 +1,8 @@
 import { createStore } from "easy-peasy";
 import { model } from "../src/state/index";
 import LndMobile from "../src/state/LndMobileInjection";
-import { createAppContainer, createStackNavigator } from "react-navigation";
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
 
 import { setupApp, setItem, setItemObject, StorageItem, clearApp } from "../src/storage/app";
 

@@ -5,6 +5,7 @@ import color from "color";
 import * as Animatable from "react-native-animatable";
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { smallScreen } from "../utils/device";
 
 export interface IPincode {
   textAction: string;
@@ -52,7 +53,6 @@ export default ({ onTryCode, textAction }: IPincode) => {
 
   const pincodeInput = "●".repeat(code.length);
   const pincodeInputPlaceholder = "●".repeat(6 - code.length);
-
 
   return (
     <Container>
@@ -146,13 +146,12 @@ const style = StyleSheet.create({
     color: color(blixtTheme.lightGray).darken(0.6).hex(),
   },
   pincodeButtons: {
-    // backgroundColor:"red",
-    flex: 1.18,
+    flex: smallScreen ? 1.6 : 1.2,
     justifyContent: "center",
-    paddingTop: 64,
-    paddingRight: 64,
-    paddingBottom: 16,
-    paddingLeft: 64,
+    paddingTop: smallScreen ? 32 : 64,
+    paddingRight: smallScreen ? 32 : 64,
+    paddingBottom: smallScreen ? 8 : 16,
+    paddingLeft: smallScreen ? 32 : 64,
   },
   buttonRow: {
     flexDirection: "row",
@@ -160,14 +159,14 @@ const style = StyleSheet.create({
   },
   pincodeButton: {
     margin: 10,
-    width: 72,
-    height: 72,
+    width: smallScreen ? 62 : 72,
+    height: smallScreen ? 62 : 72,
     justifyContent: "center",
     borderRadius: 12,
   },
   pincodeButtonText: {
-    fontSize: 32,
-    lineHeight: 42,
+    fontSize: smallScreen ? 24 : 32,
+    lineHeight: smallScreen ? 34 : 42,
   },
   buttonBackspace: {
     elevation: 0,

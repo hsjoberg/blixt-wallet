@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Text, Header, Container, H1, H3, Right, Left, Button, Title, Icon, Toast } from "native-base";
+import { Body, Text, Header, Container, H1, H2, Right, Left, Button, Title, Icon, Toast } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -63,9 +63,9 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
       <View style={style.container}>
         <View style={style.fundsInfo}>
           {smallScreen ?
-            <H3 style={style.fundsInfoText}>
+            <H2 style={style.fundsInfoText}>
               On-chain funds:{"\n"} {formatBitcoin(balance, bitcoinUnit)}
-            </H3>
+            </H2>
             :
             <H1 style={style.fundsInfoText}>
               On-chain funds:{"\n"} {formatBitcoin(balance, bitcoinUnit)}
@@ -109,7 +109,7 @@ const style = StyleSheet.create({
     alignItems: "center",
   },
   fundsInfoText: {
-    marginTop: 22,
+    marginTop: 8,
     textAlign: "center",
   },
   qr: {

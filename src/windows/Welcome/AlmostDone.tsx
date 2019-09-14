@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar, StyleSheet } from "react-native";
+import { StatusBar, StyleSheet, ToastAndroid } from "react-native";
 import { Body, Icon, Container, Text, View, Button, H1, List, Left, ListItem, Right, CheckBox } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 
@@ -130,7 +130,7 @@ export const AlmostDone = ({ navigation }: IProps) => {
               </Body>
             </ListItem>
 
-            <ListItem style={extraStyle.listItem} button={true} icon={true} onPress={onToggleAutopilotPress}>
+            <ListItem style={extraStyle.listItem} button={true} icon={true} onLongPress={() => ToastAndroid.show("Open channels when on-chain funds are available", ToastAndroid.SHORT)} onPress={onToggleAutopilotPress}>
               <Left><Icon style={extraStyle.icon} type="Entypo" name="circular-graph" /></Left>
               <Body>
                 <Text>Auto-open channels</Text>

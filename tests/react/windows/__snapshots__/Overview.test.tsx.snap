@@ -86,8 +86,8 @@ exports[`renders correctly 1`] = `
                   contentContainerStyle={
                     Object {
                       "paddingBottom": 12,
-                      "paddingLeft": 8,
-                      "paddingRight": 8,
+                      "paddingLeft": 7,
+                      "paddingRight": 7,
                       "paddingTop": 207,
                     }
                   }
@@ -384,7 +384,7 @@ exports[`renders correctly 1`] = `
         <View
           style={
             Object {
-              "backgroundColor": "#FFF",
+              "backgroundColor": "#fff",
               "transform": Array [
                 Object {
                   "translateX": 0,
@@ -397,8 +397,8 @@ exports[`renders correctly 1`] = `
             pointerEvents="box-none"
             style={
               Object {
-                "backgroundColor": "#FFF",
-                "borderBottomColor": "#A7A7AA",
+                "backgroundColor": "#fff",
+                "borderBottomColor": "#a7a7aa",
                 "borderBottomWidth": 0.5,
                 "height": 64,
                 "paddingBottom": 0,
@@ -450,7 +450,7 @@ exports[`renders correctly 1`] = `
                     numberOfLines={1}
                     style={
                       Object {
-                        "color": "rgba(0, 0, 0, .9)",
+                        "color": "rgba(0, 0, 0, 0.9)",
                         "fontSize": 17,
                         "fontWeight": "600",
                         "marginHorizontal": 16,

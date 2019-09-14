@@ -11,6 +11,7 @@ import { capitalize, formatISO, isLong } from "../utils";
 import { formatBitcoin } from "../utils/bitcoin-units"
 import { useStoreState } from "../state/store";
 import { extractDescription } from "../utils/NameDesc";
+import { smallScreen } from "../utils/device";
 
 interface IMetaDataProps {
   title: string;
@@ -83,7 +84,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             <MetaData title="Status" data={capitalize(transaction.status)} />
             {transaction.status === "OPEN" &&
               <>
-                <QrCode data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} size={280} border={25} />
+                <QrCode size={smallScreen ? 220 : 280} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} border={25} />
                 <Text style={style.qrText} onPress={onPaymentRequestTextPress} numberOfLines={1} lineBreakMode="middle">
                   {transaction.paymentRequest}
                 </Text>

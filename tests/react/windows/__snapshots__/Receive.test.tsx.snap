@@ -217,7 +217,7 @@ exports[`renders correctly 1`] = `
                       "flex": 1,
                       "height": "100%",
                       "justifyContent": "space-between",
-                      "padding": 22,
+                      "padding": 16,
                     },
                   ]
                 }
@@ -288,7 +288,7 @@ exports[`renders correctly 1`] = `
                           },
                           Object {
                             "fontSize": 17,
-                            "width": 115,
+                            "width": 105,
                           },
                         ]
                       }
@@ -346,7 +346,7 @@ exports[`renders correctly 1`] = `
                           },
                           Object {
                             "fontSize": 17,
-                            "width": 115,
+                            "width": 105,
                           },
                         ]
                       }
@@ -403,7 +403,7 @@ exports[`renders correctly 1`] = `
                           },
                           Object {
                             "fontSize": 17,
-                            "width": 115,
+                            "width": 105,
                           },
                         ]
                       }
@@ -460,7 +460,7 @@ exports[`renders correctly 1`] = `
                           },
                           Object {
                             "fontSize": 17,
-                            "width": 115,
+                            "width": 105,
                           },
                         ]
                       }
@@ -579,7 +579,7 @@ exports[`renders correctly 1`] = `
         <View
           style={
             Object {
-              "backgroundColor": "#FFF",
+              "backgroundColor": "#fff",
               "transform": Array [
                 Object {
                   "translateX": 0,
@@ -592,8 +592,8 @@ exports[`renders correctly 1`] = `
             pointerEvents="box-none"
             style={
               Object {
-                "backgroundColor": "#FFF",
-                "borderBottomColor": "#A7A7AA",
+                "backgroundColor": "#fff",
+                "borderBottomColor": "#a7a7aa",
                 "borderBottomWidth": 0.5,
                 "height": 64,
                 "paddingBottom": 0,
@@ -645,7 +645,7 @@ exports[`renders correctly 1`] = `
                     numberOfLines={1}
                     style={
                       Object {
-                        "color": "rgba(0, 0, 0, .9)",
+                        "color": "rgba(0, 0, 0, 0.9)",
                         "fontSize": 17,
                         "fontWeight": "600",
                         "marginHorizontal": 16,
