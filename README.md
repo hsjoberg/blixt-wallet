@@ -7,7 +7,7 @@ powered by lnd and Neutrino SPV.
   <img alt="Blixt Lightning Wallet screenshot" src="blixt-wallet-screenshot.png" width="390" />
 </p>
 
-# Features
+## Features
 
 - [x] Embedded lnd with Neutrino
 - [x] Descriptive and clean transaction log
@@ -23,11 +23,11 @@ powered by lnd and Neutrino SPV.
 - [ ] Watchtower
 - [ ] URL payments
 
-# Known bugs
+## Known bugs
 
 The wallet uses lnd that is young and might have bugs. Check [lnd bug list here](https://github.com/lightninglabs/neutrino/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 
-# Development
+## Development
 
 Do you like React Native, Java SE 8 or Lightning? Come and help out!
 
