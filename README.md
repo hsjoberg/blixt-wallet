@@ -38,6 +38,7 @@ Do you like React Native, Java SE 8 or Lightning? Come and help out!
 - Build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
+- Run: `yarn start-metro`
 - Run: `yarn testnet-debug` (make sure you either have an Android emulator running or an Android device connected via USB)
 
 ## Commit and code-style
