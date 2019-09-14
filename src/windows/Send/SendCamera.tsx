@@ -3,12 +3,14 @@ import { View, StyleSheet, Alert, StatusBar } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Icon } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
+import BarcodeMask from 'react-native-barcode-mask';
 
 import { useStoreActions } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Camera from "../../components/Camera";
 import { Chain } from "../../utils/build";
+import { smallScreen } from "../../utils/device";
 
 interface ISendCameraProps {
   bolt11Invoice?: string;
@@ -72,6 +74,12 @@ export default ({ navigation }: ISendCameraProps) => {
         onNotAuthorized={() => setTimeout(() => navigation.pop(), 1)}
       >
         <View style={StyleSheet.absoluteFill}>
+          <BarcodeMask
+            showAnimatedLine={false}
+            edgeColor={blixtTheme.primary}
+            width={smallScreen ? 280 : 310}
+            height={smallScreen ? 280 : 310}
+          />
           <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
           {__DEV__ && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
           <Icon testID="paste-clipboard" type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />

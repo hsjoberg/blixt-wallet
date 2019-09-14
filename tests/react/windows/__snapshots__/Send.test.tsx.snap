@@ -77,6 +77,204 @@ exports[`SendCamera renders correctly 1`] = `
                 }
               }
             >
+              <View
+                style={
+                  Array [
+                    Object {
+                      "alignItems": "center",
+                      "bottom": 0,
+                      "justifyContent": "center",
+                      "left": 0,
+                      "position": "absolute",
+                      "right": 0,
+                      "top": 0,
+                    },
+                  ]
+                }
+              >
+                <View
+                  style={
+                    Array [
+                      Object {
+                        "alignItems": "center",
+                        "justifyContent": "center",
+                      },
+                      Object {
+                        "height": 310,
+                        "width": 310,
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    style={
+                      Array [
+                        Object {
+                          "borderColor": "#bc6610",
+                          "height": 20,
+                          "width": 20,
+                        },
+                        Object {
+                          "left": 0,
+                          "position": "absolute",
+                          "top": 0,
+                        },
+                        Object {
+                          "borderLeftWidth": 4,
+                          "borderTopWidth": 4,
+                        },
+                      ]
+                    }
+                  />
+                  <View
+                    style={
+                      Array [
+                        Object {
+                          "borderColor": "#bc6610",
+                          "height": 20,
+                          "width": 20,
+                        },
+                        Object {
+                          "position": "absolute",
+                          "right": 0,
+                          "top": 0,
+                        },
+                        Object {
+                          "borderRightWidth": 4,
+                          "borderTopWidth": 4,
+                        },
+                      ]
+                    }
+                  />
+                  <View
+                    style={
+                      Array [
+                        Object {
+                          "borderColor": "#bc6610",
+                          "height": 20,
+                          "width": 20,
+                        },
+                        Object {
+                          "bottom": 0,
+                          "left": 0,
+                          "position": "absolute",
+                        },
+                        Object {
+                          "borderBottomWidth": 4,
+                          "borderLeftWidth": 4,
+                        },
+                      ]
+                    }
+                  />
+                  <View
+                    style={
+                      Array [
+                        Object {
+                          "borderColor": "#bc6610",
+                          "height": 20,
+                          "width": 20,
+                        },
+                        Object {
+                          "bottom": 0,
+                          "position": "absolute",
+                          "right": 0,
+                        },
+                        Object {
+                          "borderBottomWidth": 4,
+                          "borderRightWidth": 4,
+                        },
+                      ]
+                    }
+                  />
+                </View>
+                <View
+                  style={
+                    Object {
+                      "alignItems": "center",
+                      "height": "100%",
+                      "justifyContent": "space-around",
+                      "left": 0,
+                      "position": "absolute",
+                      "top": 0,
+                      "width": "100%",
+                    }
+                  }
+                >
+                  <View
+                    style={
+                      Array [
+                        Object {
+                          "width": "100%",
+                        },
+                        Object {
+                          "backgroundColor": "rgba(0, 0, 0, 0.6)",
+                          "flex": 1,
+                        },
+                      ]
+                    }
+                  />
+                  <View
+                    style={
+                      Array [
+                        Object {
+                          "height": 310,
+                        },
+                        Object {
+                          "display": "flex",
+                          "flexDirection": "row",
+                        },
+                      ]
+                    }
+                  >
+                    <View
+                      style={
+                        Array [
+                          Object {
+                            "backgroundColor": "rgba(0, 0, 0, 0.6)",
+                            "flex": 1,
+                          },
+                        ]
+                      }
+                    />
+                    <View
+                      style={
+                        Array [
+                          Object {
+                            "backgroundColor": "transparent",
+                          },
+                          Object {
+                            "height": 310,
+                            "width": 310,
+                          },
+                        ]
+                      }
+                    />
+                    <View
+                      style={
+                        Array [
+                          Object {
+                            "backgroundColor": "rgba(0, 0, 0, 0.6)",
+                            "flex": 1,
+                          },
+                        ]
+                      }
+                    />
+                  </View>
+                  <View
+                    style={
+                      Array [
+                        Object {
+                          "width": "100%",
+                        },
+                        Object {
+                          "backgroundColor": "rgba(0, 0, 0, 0.6)",
+                          "flex": 1,
+                        },
+                      ]
+                    }
+                  />
+                </View>
+              </View>
               <Text
                 allowFontScaling={false}
                 style={
