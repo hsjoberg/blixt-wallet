@@ -129,7 +129,7 @@ android {
         applicationId MYAPP_APP_ID
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
+        versionCode 13
         versionName "0.1-alpha"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
@@ -236,7 +236,7 @@ dependencies {
         implementation jscFlavor
     }
 
-    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation project(':lndmobile')
 }
 
