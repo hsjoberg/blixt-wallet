@@ -17,11 +17,11 @@ powered by lnd and Neutrino SPV.
 - [x] Fingerprint
 - [x] Optional Name that will be displayed on invoices
 - [x] Optional "Payer" field for bookkeping when creating invoice
+- [ ] Scheduled sync of chain
 - [ ] [WebLN](https://webln.dev/) support
 - [ ] Backup to Google Drive
-- [ ] Scheduled sync of chain
-- [ ] Watchtower
-- [ ] URL payments
+- [ ] WatchTower
+- [ ] URL Payments
 
 ## Known bugs
 
