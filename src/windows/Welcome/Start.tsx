@@ -1,9 +1,11 @@
 import React from "react";
 import { StyleSheet, StatusBar, Animated, Alert } from "react-native";
-import { Text,  Container, H1, Button, View } from "native-base";
+import { Text, H1, Button, View } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions } from "../../state/store";
 import * as Animatable from "react-native-animatable";
+
+import Container from "../../components/Container";
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -21,7 +23,7 @@ interface IAnimatedViewProps {
   children: JSX.Element[];
 }
 const AnimatedView = ({ children }: IAnimatedViewProps) => (
-  <Animatable.View duration={650} style={style.buttons} animation="fadeInUp" useNativeDriver={true}>
+  <Animatable.View duration={660} style={style.buttons} animation="fadeInUp" useNativeDriver={true}>
     {children}
   </Animatable.View>
 );

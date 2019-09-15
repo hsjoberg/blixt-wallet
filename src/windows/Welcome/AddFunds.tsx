@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { StatusBar, StyleSheet, Share, Dimensions } from "react-native";
+import { StatusBar, StyleSheet, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Container,  View, Button, H1, Text, Toast, Content } from "native-base";
+import { View, Button, H1, Text, Toast, Spinner } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
@@ -10,6 +10,8 @@ import QrCode from "../../components/QrCode";
 
 import style from "./style";
 import { smallScreen } from "../../utils/device";
+import Container from "../../components/Container";
+import Content from "../../components/Content";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -27,7 +29,11 @@ export default ({ navigation }: IProps) => {
   }, [getAddress]);
 
   if (!address) {
-    return (<></>);
+    return (
+      <Container centered={true}>
+        <Spinner color={blixtTheme.light} size={55} />
+      </Container>
+    );
   }
 
   const onBtcAddressTextPress = () => {
@@ -53,7 +59,7 @@ export default ({ navigation }: IProps) => {
         networkActivityIndicatorVisible={true}
         barStyle="light-content"
       />
-      <Content contentContainerStyle={style.content}>
+      <Content style={style.content}>
         <View style={style.upperContent}>
           <View style={extraStyle.qr}>
             <View style={extraStyle.qrInner}>

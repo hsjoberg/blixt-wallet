@@ -41,23 +41,12 @@ export default ({ navigation }: IProps) => {
   }
 
   return (
-    <Container style={styles.content}>
-      <StatusBar
-        backgroundColor="transparent"
-        hidden={false}
-        translucent={true}
-        networkActivityIndicatorVisible={true}
-        barStyle="light-content"
-      />
-    </Container>
+    <StatusBar
+      backgroundColor="transparent"
+      hidden={false}
+      translucent={true}
+      networkActivityIndicatorVisible={true}
+      barStyle="light-content"
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});

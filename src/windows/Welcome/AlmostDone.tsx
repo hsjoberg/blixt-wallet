@@ -1,6 +1,6 @@
 import React from "react";
 import { StatusBar, StyleSheet, ToastAndroid } from "react-native";
-import { Body, Icon, Container, Text, View, Button, H1, List, Left, ListItem, Right, CheckBox } from "native-base";
+import { Body, Icon, Text, View, Button, H1, List, Left, ListItem, Right, CheckBox } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -9,6 +9,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import style from "./style";
 import { LoginMethods } from "../../state/Security";
+import Container from "../../components/Container";
 import Content from "../../components/Content";
 
 import SetPincode from "../Settings/SetPincode";
@@ -97,7 +98,7 @@ export const AlmostDone = ({ navigation }: IProps) => {
         networkActivityIndicatorVisible={true}
         barStyle="light-content"
       />
-      <Content style={[style.upperContent, { paddingTop: 20, paddingLeft: 14, paddingRight: 14 }]}>
+      <Content style={{ flex: 1, padding: 0 }}>
         <View style={[style.upperContent, { paddingTop: 40 }]}>
           <List style={extraStyle.list}>
             <ListItem style={extraStyle.listItem} icon={true} onPress={onNamePress}>
@@ -183,7 +184,6 @@ const extraStyle = StyleSheet.create({
   },
 });
 
-
 export default createStackNavigator({
   AlmostDone,
   RemovePincodeAuth,
@@ -192,4 +192,5 @@ export default createStackNavigator({
 }, {
   headerMode: "none",
   initialRouteName: "AlmostDone",
+  transparentCard: true,
 });

@@ -1,12 +1,14 @@
 import React from "react";
 import { StatusBar } from "react-native";
-import { Container, Text, View, Button, H1, Card, CardItem, Content, H3 } from "native-base";
+import { Text, View, Button, H1, Card, CardItem, H3 } from "native-base";
 
 import { useStoreState } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import style from "./style";
 import { smallScreen } from "../../utils/device";
+import Container from "../../components/Container";
+import Content from "../../components/Content";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -27,7 +29,7 @@ export default ({ navigation }: IProps) => {
         networkActivityIndicatorVisible={true}
         barStyle="light-content"
       />
-      <Content contentContainerStyle={style.content}>
+      <Content style={style.content}>
         <View style={style.upperContent}>
           <Card style={style.card}>
             <CardItem style={style.cardItem}>

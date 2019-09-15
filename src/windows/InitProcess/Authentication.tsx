@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
-import { StyleSheet, StatusBar, AppState, AppStateStatus, Alert } from "react-native";
-import { Container, Content, View, Icon, Text } from "native-base";
+import { StyleSheet, StatusBar, AppState, AppStateStatus } from "react-native";
+import { View, Icon, Text } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreActions, useStoreState } from "../../state/store";
 import Pincode from "../../components/Pincode";
 import { LoginMethods } from "../../state/Security";
 import { smallScreen } from "../../utils/device";
+import Container from "../../components/Container";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -16,7 +17,6 @@ export default ({ navigation }: IProps) => {
   const fingerprintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
   const fingerprintStartScan = useStoreActions((store) => store.security.fingerprintStartScan);
   const fingerprintStopScan = useStoreActions((store) => store.security.fingerprintStopScan);
-  const loggedIn = useStoreState((store) => store.security.loggedIn);
   const loginMethods = useStoreState((store) => store.security.loginMethods);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default ({ navigation }: IProps) => {
         networkActivityIndicatorVisible={true}
         barStyle="light-content"
       />
-      <Content contentContainerStyle={style.content}>
+      <View style={style.content}>
         {loginMethods.has(LoginMethods.pincode) &&
           <Pincode onTryCode={onTryCode} textAction="Enter pincode" />
         }
@@ -80,7 +80,7 @@ export default ({ navigation }: IProps) => {
           </View>
         }
         {loginMethods.size === 0 && <Text style={{textAlign: "center"}}>Error</Text>}
-      </Content>
+      </View>
     </Container>
   )
 }

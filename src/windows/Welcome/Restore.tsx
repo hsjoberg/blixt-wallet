@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { StatusBar, StyleSheet, Alert } from "react-native";
-import { Container, Text, View, Button, H1, Textarea, Content, Spinner } from "native-base";
+import { Text, View, Button, H1, Textarea, Spinner } from "native-base";
 
 import { useStoreActions } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import Container from "../../components/Container";
+import Content from "../../components/Content";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -49,7 +51,7 @@ export default ({ navigation }: IProps) => {
         networkActivityIndicatorVisible={true}
         barStyle="light-content"
       />
-      <Content contentContainerStyle={style.content}>
+      <Content style={style.content}>
         <View style={style.upperContent}>
           <View style={style.seed}>
             <Textarea

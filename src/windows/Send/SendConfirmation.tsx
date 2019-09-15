@@ -45,7 +45,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
       console.log(e);
 
       Toast.show({
-        duration: 12000,
+        duration: 60000,
         type: "danger",
         text: `Error: ${e.message}`,
         buttonText: "Okay",
