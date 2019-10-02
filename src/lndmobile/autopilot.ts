@@ -1,6 +1,5 @@
-import { sendCommand, sendStreamCommand } from "./utils";
+import { sendCommand } from "./utils";
 import { autopilotrpc } from "../../proto/proto-autopilot";
-import Long from "long";
 
 /**
  * @throws

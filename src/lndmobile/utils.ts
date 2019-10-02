@@ -1,8 +1,6 @@
 import { NativeModules } from "react-native";
-import deepMapKeys from "deep-map-keys";
 import * as base64 from "base64-js";
 import * as $protobuf from "protobufjs";
-import { lnrpc } from "../../proto/proto";
 
 const { LndMobile } = NativeModules;
 

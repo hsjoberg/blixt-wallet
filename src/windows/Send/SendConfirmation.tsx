@@ -72,11 +72,11 @@ export default ({ navigation }: ISendConfirmationProps) => {
     ),
   });
 
-  // formItems.push({
-  //   key: "AMOUNT_BTC",
-  //   title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
-  //   component: (<Input disabled={true} value={valueBitcoin(paymentRequest.numSatoshis, bitcoinUnit)} />),
-  // });
+  formItems.push({
+    key: "AMOUNT_BTC",
+    title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
+    component: (<Input disabled={true} value={valueBitcoin(paymentRequest.numSatoshis, bitcoinUnit)} />),
+  });
 
   formItems.push({
     key: "AMOUNT_FIAT",

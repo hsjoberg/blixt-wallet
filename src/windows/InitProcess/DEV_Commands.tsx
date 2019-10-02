@@ -139,6 +139,7 @@ export default ({ navigation }: IProps) => {
           <Button onPress={async () => console.log(await getTransactions(db!))}><Text>getTransactions()</Text></Button>
           <Button onPress={async () => console.log(await getTransaction(db!, 1))}><Text>getTransaction(1)</Text></Button>
           <Button onPress={async () => await NativeModules.LndMobile.init()}><Text>LndMobile.init()</Text></Button>
+          <Button onPress={async () => await NativeModules.LndMobile.startLnd()}><Text>LndMobile.startLnd()</Text></Button>
           <Button onPress={async () => navigation.navigate("Init")}><Text>navigation.navigate("Init")</Text></Button>
           <Button onPress={async () => navigation.navigate("Overview")}><Text>navigation.navigate("Overview")</Text></Button>
           <Button onPress={async () => navigation.navigate("InitLightning")}><Text>navigation.navigate("InitLightning")</Text></Button>
