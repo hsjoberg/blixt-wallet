@@ -1,6 +1,7 @@
 import { DeviceEventEmitter } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import Long from "long";
+import { Buffer } from "buffer";
 
 import { lnrpc } from "../../proto/proto";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
@@ -137,6 +138,30 @@ export const channel: IChannelModel = {
               message += ` with ${node.node.alias}`;
             }
             message += " closed";
+            localNotification(message);
+          } catch (e) {
+            console.log("Push notification failed: ", e.message);
+          }
+        }
+      }
+      else if (channelEvent.pendingChannelOpen) {
+        if (pushNotificationsEnabled) {
+          const pendingChannels = await injections.lndMobile.channel.pendingChannels();
+          let alias;
+          for (const pendingOpen of pendingChannels.pendingOpenChannels) {
+            if (pendingOpen.channel) {
+              if (pendingOpen.channel.channelPoint!.split(":")[0] === Buffer.from(channelEvent.pendingChannelOpen.channelPoint!.fundingTxidBytes!).reverse().toString("hex")) {
+                const r = await injections.lndMobile.index.getNodeInfo(pendingOpen.channel.remoteNodePub!);
+                alias = r.node!.alias;
+              }
+            }
+          }
+
+          try {
+            let message = "Opening Payment channel";
+            if (alias) {
+              message += ` with ${alias}`;
+            }
             localNotification(message);
           } catch (e) {
             console.log("Push notification failed: ", e.message);
