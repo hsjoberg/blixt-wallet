@@ -1,19 +1,33 @@
 package com.blixtwallet;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import android.Manifest;
 import android.util.Base64;
 import android.util.Log;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Environment;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.Handler;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+
 import java.io.PrintWriter;
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.EnumSet;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -24,11 +38,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.EnumSet;
+import com.facebook.react.modules.permissions.PermissionsModule;
 
 // TODO break this class up
 class LndMobile extends ReactContextBaseJavaModule {
@@ -389,4 +399,114 @@ class LndMobile extends ReactContextBaseJavaModule {
 
     promise.resolve("done");
   }
+
+  @ReactMethod
+  public void copyLndLog(Promise promise) {
+    PermissionsModule permissions = new PermissionsModule(getReactApplicationContext());
+
+    PermissionPromise requestPermissionPromise = new PermissionPromise() {
+
+      @Override
+      public void onSuccess(@Nullable Object value) {
+        if (value.equals("granted")) {
+          if (copyLndLogFile()) {
+            promise.resolve("Done");
+          }
+          else {
+            promise.reject("Error copying");
+          }
+        }
+      }
+
+      @Override
+      public void onFail() {
+        promise.reject("Request Error");
+      }
+
+    };
+
+    PermissionPromise checkPermissionPromise = new PermissionPromise() {
+
+      @Override
+      void onSuccess(@Nullable Object value) {
+        permissions.requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, requestPermissionPromise);
+      }
+
+      @Override
+      void onFail() {
+        promise.reject("Permission Check Error");
+      }
+
+    };
+
+    permissions.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, checkPermissionPromise);
+  }
+
+  public boolean copyLndLogFile() {
+    try {
+      File sourceLocation = new File(
+        getReactApplicationContext().getFilesDir().toString() +
+        "/logs/bitcoin/" +
+        BuildConfig.CHAIN +
+        "/lnd.log"
+      );
+      File targetDir = new File(
+        Environment.getExternalStorageDirectory() +
+        "/BlixtWallet"
+      );
+      File targetLocation = new File(targetDir.toString() + "/lnd-" + BuildConfig.CHAIN + (BuildConfig.DEBUG ? "-debug" : "") +  ".log");
+      Log.e(TAG, targetLocation.toString());
+
+      if (!targetDir.exists()) {
+        if (!targetDir.mkdirs()) {
+          throw new Error("Error creating dir");
+        }
+      }
+
+      InputStream in = new FileInputStream(sourceLocation);
+      OutputStream out = new FileOutputStream(targetLocation);
+
+      byte[] buf = new byte[1024];
+      int len;
+      while ((len = in.read(buf)) > 0) {
+        out.write(buf, 0, len);
+      }
+      in.close();
+      out.close();
+
+      return true;
+    } catch (Throwable e) {
+      Log.e(TAG, "copyLndLogFile() failed: " + e.getMessage());
+      return false;
+    }
+  }
+}
+
+abstract class PermissionPromise implements Promise {
+  abstract void onSuccess(@Nullable Object value);
+
+  abstract void onFail();
+
+  @Override
+  public void resolve(@Nullable Object value) { onSuccess(value); }
+  @Override
+  public void reject(String code, String message) { onFail(); }
+  @Override
+  public void reject(String code, Throwable throwable) { onFail(); }
+  @Override
+  public void reject(String code, String message, Throwable throwable) { onFail(); }
+  @Override
+  public void reject(Throwable throwable) { onFail(); }
+  @Override
+  public void reject(Throwable throwable, WritableMap userInfo) { onFail(); }
+  @Override
+  public void reject(String code, @NonNull WritableMap userInfo) { onFail(); }
+  @Override
+  public void reject(String code, Throwable throwable, WritableMap userInfo) { onFail(); }
+  @Override
+  public void reject(String code, String message, @NonNull WritableMap userInfo) { onFail(); }
+  @Override
+  public void reject(String code, String message, Throwable throwable, WritableMap userInfo) { onFail(); }
+  @Override
+  public void reject(String message) { onFail(); }
 }
