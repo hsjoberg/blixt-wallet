@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, StyleSheet } from "react-native";
+import { Alert, StyleSheet, NativeModules } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, List, ListItem, Right, Toast } from "native-base";
 import Content from "../../components/Content";
@@ -150,7 +150,24 @@ export default ({ navigation }: ISettingsProps) => {
   const changeClipboardInvoiceCheckEnabled = useStoreActions((store) => store.settings.changeClipboardInvoiceCheckEnabled);
   const onToggleClipBoardInvoiceCheck = async () => {
     await changeClipboardInvoiceCheckEnabled(!clipboardInvoiceCheckEnabled);
-  }
+  };
+
+  // Copy log
+  const copyLog = async () => {
+    try {
+      await NativeModules.LndMobile.copyLndLog();
+      Toast.show({
+        text: "Copied lnd log file.",
+        type: "warning",
+      });
+    } catch (e) {
+      console.error(e);
+      Toast.show({
+        text: "Error copying lnd log file.",
+        type: "danger",
+      });
+    }
+  };
 
   return (
     <Container>
@@ -296,6 +313,13 @@ export default ({ navigation }: ISettingsProps) => {
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("About")}>
             <Left><Icon style={style.icon} type="AntDesign" name="info" /></Left>
             <Body><Text>About</Text></Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={() => copyLog()}>
+            <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
+            <Body>
+              <Text>Copy log to local storage</Text>
+              <Text note={true} numberOfLines={1}>Reached from /sdcard/BlixtWallet</Text>
+            </Body>
           </ListItem>
           {(name === "Hampus" || __DEV__ === true) &&
             <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("DEV_Commands")}>
