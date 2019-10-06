@@ -58,10 +58,13 @@ export default ({ navigation }: ITransactionDetailsProps) => {
   };
 
   let transactionValue: Long;
+  let direction: "send" | "receive";
   if (isLong(transaction.amtPaidSat) && transaction.amtPaidSat.greaterThan(0)) {
+    direction = "send";
     transactionValue = transaction.amtPaidSat;
   }
   else {
+    direction = "receive";
     transactionValue = transaction.value;
   }
 
@@ -73,14 +76,14 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             <H1 style={style.header}>Transaction</H1>
             <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
             {(transaction.nodeAliasCached && name == undefined) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
-            {transactionValue.greaterThanOrEqual(0) && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
-            {(transactionValue.lessThan(0) && name) && <MetaData title="Recipient" data={name} />}
+            {direction === "receive" && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
+            {(direction === "send" && name) && <MetaData title="Recipient" data={name} />}
             <MetaData title="Description" data={description} />
             <MetaData title="Amount" data={formatBitcoin(transactionValue, bitcoinUnit)} />
             {transaction.valueFiat != null && transaction.valueFiatCurrency && <MetaData title="Amount in Fiat (Time of Payment)" data={`${transaction.valueFiat.toFixed(2)} ${transaction.valueFiatCurrency}`} />}
             {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
             {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
-            {transaction.value.isNegative() && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}
+            {direction === "send" && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}
             <MetaData title="Status" data={capitalize(transaction.status)} />
             {transaction.status === "OPEN" &&
               <>

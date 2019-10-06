@@ -68,10 +68,15 @@ exports[`renders correctly 1`] = `
           >
             <View
               style={
-                Object {
-                  "height": "100%",
-                  "width": "100%",
-                }
+                Array [
+                  Object {
+                    "flex": 1,
+                    "height": "100%",
+                    "width": "100%",
+                  },
+                  Object {},
+                  undefined,
+                ]
               }
             >
               <View

@@ -3,6 +3,8 @@ import { LoginMethods } from "../state/Security";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 
+const APP_VERSION = 2;
+
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",
   appVersion = "appVersion",
@@ -19,12 +21,13 @@ export enum StorageItem { // const enums not supported in Babel 7...
   walletPassword = "walletPassword",
   autopilotEnabled = "autopilotEnabled",
   pushNotificationsEnabled = "pushNotificationsEnabled",
+  clipboardInvoiceCheck = "clipboardInvoiceCheck",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
 export const setItemObject = async <T>(key: StorageItem, value: T) => await AsyncStorage.setItem(key, JSON.stringify(value));
 export const getItem = async (key: StorageItem) => await AsyncStorage.getItem(key);
-export const getItemObject = async (key: StorageItem) => JSON.parse(await AsyncStorage.getItem(key) || "null");
+export const getItemObject = async <T = any>(key: StorageItem): Promise<T> => JSON.parse(await AsyncStorage.getItem(key) || "null");
 export const removeItem = async (key: StorageItem) => await AsyncStorage.removeItem(key);
 export const getAppVersion = async (): Promise<number> => {
   return await getItemObject(StorageItem.appVersion) || 0;
@@ -54,13 +57,14 @@ export const clearApp = async () => {
     removeItem(StorageItem.walletPassword),
     removeItem(StorageItem.autopilotEnabled),
     removeItem(StorageItem.pushNotificationsEnabled),
+    removeItem(StorageItem.clipboardInvoiceCheck),
   ]);
 };
 
 export const setupApp = async () => {
   await Promise.all([
     setItemObject<boolean>(StorageItem.app, true),
-    setItemObject<number>(StorageItem.appVersion, 1),
+    setItemObject<number>(StorageItem.appVersion, APP_VERSION),
     setItemObject<boolean>(StorageItem.walletCreated, false),
     setItemObject<boolean>(StorageItem.firstSync, true),
     setItemObject<number>(StorageItem.timeSinceLastSync, 0),
@@ -72,5 +76,6 @@ export const setupApp = async () => {
     // walletPassword
     setItemObject<boolean>(StorageItem.autopilotEnabled, true),
     setItemObject<boolean>(StorageItem.pushNotificationsEnabled, true),
+    setItemObject<boolean>(StorageItem.clipboardInvoiceCheck, true),
   ]);
 };

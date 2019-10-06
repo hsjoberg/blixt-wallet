@@ -5,6 +5,7 @@ import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 
+import { setTopLevelNavigator } from "./utils/navigation";
 import FooterNav from "./components/FooterNav";
 import Overview from "./windows/Overview";
 import Send from "./windows/Send";
@@ -79,6 +80,8 @@ const AppContainer = createAppContainer(RootStack);
 
 export default () => (
   <Root>
-    <AppContainer />
+    <AppContainer
+      ref={(navigatorRef) => setTopLevelNavigator(navigatorRef)}
+    />
   </Root>
 );

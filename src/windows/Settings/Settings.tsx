@@ -145,6 +145,13 @@ export default ({ navigation }: ISettingsProps) => {
     await changePushNotificationsEnabled(!pushNotificationsEnabled);
   }
 
+  // Clipboard invoice check
+  const clipboardInvoiceCheckEnabled = useStoreState((store) => store.settings.clipboardInvoiceCheckEnabled);
+  const changeClipboardInvoiceCheckEnabled = useStoreActions((store) => store.settings.changeClipboardInvoiceCheckEnabled);
+  const onToggleClipBoardInvoiceCheck = async () => {
+    await changeClipboardInvoiceCheckEnabled(!clipboardInvoiceCheckEnabled);
+  }
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -200,6 +207,14 @@ export default ({ navigation }: ISettingsProps) => {
               <Text note={true} numberOfLines={1}>When the app is on. For channel events</Text>
             </Body>
             <Right><CheckBox checked={pushNotificationsEnabled} onPress={onTogglePushNotificationsPress} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onToggleClipBoardInvoiceCheck}>
+            <Left><Icon style={style.icon} type="Entypo" name="clipboard" /></Left>
+            <Body>
+              <Text>Check clipboard for invoices</Text>
+              <Text note={true} numberOfLines={1}>Automatically check invoice for Lightning invoices</Text>
+            </Body>
+            <Right><CheckBox checked={clipboardInvoiceCheckEnabled} onPress={onToggleClipBoardInvoiceCheck} /></Right>
           </ListItem>
 
 

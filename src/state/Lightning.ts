@@ -12,11 +12,11 @@ import { Chain } from "../utils/build";
 const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
 export interface ILightningModel {
-  initialize: Thunk<ILightningModel, undefined, IStoreInjections, IStoreModel>;
+  initialize: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
 
-  unlockWallet: Thunk<ILightningModel, undefined, IStoreInjections>;
-  getInfo: Thunk<ILightningModel, undefined, IStoreInjections>;
-  waitForChainSync: Thunk<ILightningModel, undefined, IStoreInjections>;
+  unlockWallet: Thunk<ILightningModel, void, IStoreInjections>;
+  getInfo: Thunk<ILightningModel, void, IStoreInjections>;
+  waitForChainSync: Thunk<ILightningModel, void, IStoreInjections>;
   setupAutopilot: Thunk<ILightningModel, boolean, IStoreInjections>;
 
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
@@ -36,8 +36,8 @@ export const lightning: ILightningModel = {
       return true;
     }
 
-    const lastSync: number = await getItemObject(StorageItem.timeSinceLastSync);
-    const firstSync: boolean = await getItemObject(StorageItem.firstSync);
+    const lastSync = await getItemObject<number>(StorageItem.timeSinceLastSync);
+    const firstSync = await getItemObject<boolean>(StorageItem.firstSync);
     actions.setFirstSync(firstSync);
 
     const { checkStatus } = injections.lndMobile.index;
@@ -46,7 +46,7 @@ export const lightning: ILightningModel = {
     const status = await checkStatus();
     if ((status & ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) !== ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) {
       try {
-        await actions.unlockWallet(undefined);
+        await actions.unlockWallet();
       } catch (e) {
         console.log(e.message);
         ToastAndroid.show("Error: Cannot unlock wallet", ToastAndroid.LONG);
@@ -54,12 +54,13 @@ export const lightning: ILightningModel = {
       }
     }
     console.log("lnd: time to start and unlock: " + (new Date().getTime() - start) + "ms");
-    await dispatch.transaction.getTransactions(undefined),
+    await dispatch.transaction.getTransactions(),
     Promise.all([
-      dispatch.channel.initialize(undefined),
-      dispatch.receive.initialize(undefined),
-      dispatch.onChain.initialize(undefined),
-      dispatch.transaction.checkOpenTransactions(undefined),
+      dispatch.channel.initialize(),
+      dispatch.receive.initialize(),
+      dispatch.onChain.initialize(),
+      dispatch.transaction.checkOpenTransactions(),
+      dispatch.clipboardManager.initialize(),
     ]);
 
     if (differenceInDays(new Date(), lastSync) <3) {

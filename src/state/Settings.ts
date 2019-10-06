@@ -12,18 +12,21 @@ export interface ISettingsModel {
   changeName: Thunk<ISettingsModel, string | null>;
   changeAutopilotEnabled: Thunk<ISettingsModel, boolean>;
   changePushNotificationsEnabled: Thunk<ISettingsModel, boolean>;
+  changeClipboardInvoiceCheckEnabled: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
   setName: Action<ISettingsModel, string | null>;
   setAutopilotEnabled: Action<ISettingsModel, boolean>;
   setPushNotificationsEnabled: Action<ISettingsModel, boolean>;
+  setClipboardInvoiceCheckInvoicesEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
   name: string | null;
   autopilotEnabled: boolean;
   pushNotificationsEnabled: boolean;
+  clipboardInvoiceCheckEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -33,6 +36,7 @@ export const settings: ISettingsModel = {
     actions.setName(await getItemObject(StorageItem.name) || null);
     actions.setAutopilotEnabled(await getItemObject(StorageItem.autopilotEnabled || false));
     actions.setPushNotificationsEnabled(await getItemObject(StorageItem.pushNotificationsEnabled || false));
+    actions.setClipboardInvoiceCheckInvoicesEnabled(await getItemObject(StorageItem.clipboardInvoiceCheck || false));
   }),
 
   changeBitcoinUnit: thunk(async (actions, payload) => {
@@ -63,15 +67,22 @@ export const settings: ISettingsModel = {
     actions.setPushNotificationsEnabled(payload);
   }),
 
+  changeClipboardInvoiceCheckEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.clipboardInvoiceCheck, payload);
+    actions.setClipboardInvoiceCheckInvoicesEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
   setAutopilotEnabled: action((state, payload) => { state.autopilotEnabled = payload; }),
   setPushNotificationsEnabled: action((state, payload) => { state.pushNotificationsEnabled = payload; }),
+  setClipboardInvoiceCheckInvoicesEnabled: action((state, payload) => { state.clipboardInvoiceCheckEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
   name: null,
   autopilotEnabled: false,
   pushNotificationsEnabled: false,
+  clipboardInvoiceCheckEnabled: false,
 };

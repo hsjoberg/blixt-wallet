@@ -13,6 +13,7 @@ import { IOnChainModel, onChain } from "./OnChain";
 import { IFiatModel, fiat } from "./Fiat";
 import { ISecurityModel, security } from "./Security";
 import { ISettingsModel, settings } from "./Settings";
+import { IClipboardManagerModel, clipboardManager } from "./ClipboardManager";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
@@ -47,6 +48,7 @@ export interface IStoreModel {
   fiat: IFiatModel;
   security: ISecurityModel;
   settings: ISettingsModel;
+  clipboardManager: IClipboardManagerModel;
   walletSeed?: string[];
 }
 
@@ -175,6 +177,7 @@ export const model: IStoreModel = {
   fiat,
   security,
   settings,
+  clipboardManager,
 };
 
 export default model;
