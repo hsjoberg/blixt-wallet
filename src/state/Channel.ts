@@ -144,13 +144,13 @@ export const channel: IChannelModel = {
           }
         }
       }
-      else if (channelEvent.pendingChannelOpen) {
+      else if (channelEvent.pendingOpenChannel) {
         if (pushNotificationsEnabled) {
           const pendingChannels = await injections.lndMobile.channel.pendingChannels();
           let alias;
           for (const pendingOpen of pendingChannels.pendingOpenChannels) {
             if (pendingOpen.channel) {
-              if (pendingOpen.channel.channelPoint!.split(":")[0] === Buffer.from(channelEvent.pendingChannelOpen.channelPoint!.fundingTxidBytes!).reverse().toString("hex")) {
+              if (pendingOpen.channel.channelPoint!.split(":")[0] === Buffer.from(channelEvent.pendingOpenChannel.channelPoint!.fundingTxidBytes!).reverse().toString("hex")) {
                 const r = await injections.lndMobile.index.getNodeInfo(pendingOpen.channel.remoteNodePub!);
                 alias = r.node!.alias;
               }

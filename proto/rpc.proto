@@ -1660,7 +1660,7 @@ message ChannelEventUpdate {
         ChannelCloseSummary closed_channel = 2 [ json_name = "closed_channel" ];
         ChannelPoint active_channel = 3 [ json_name = "active_channel" ];
         ChannelPoint inactive_channel = 4 [ json_name = "inactive_channel" ];
-        ChannelOpenUpdate pending_channel_open = 6 [json_name = "pending_channel_open"];
+        ChannelOpenUpdate pending_open_channel = 6 [json_name = "pending_open_channel"];
     }
 
     enum UpdateType {
@@ -1743,14 +1743,6 @@ message QueryRoutesRequest {
     A list of directed node pairs that will be ignored during path finding.
     */
     repeated NodePair ignored_pairs = 10;
-
-    /** 
-    An optional field that can be used to pass an arbitrary set of TLV records
-    to a peer which understands the new records. This can be used to pass
-    application specific data during the payment attempt. If the destination
-    does not support the specified recrods, and error will be returned.
-    */
-    map<uint64, bytes> dest_tlv = 11;
 }
 
 message NodePair {
@@ -1810,17 +1802,9 @@ message Hop {
 
     /** 
     If set to true, then this hop will be encoded using the new variable length
-    TLV format. Note that if any custom tlv_records below are specified, then
-    this field MUST be set to true for them to be encoded properly.
+    TLV format.
     */
     bool tlv_payload = 9 [json_name = "tlv_payload"];
-
-    /**
-    An optional set of key-value TLV records. This is useful within the context
-    of the SendToRoute call as it allows callers to specify arbitrary K-V pairs
-    to drop off at each hop within the onion.
-    */
-    map<uint64, bytes> tlv_records = 10 [json_name = "tlv_records"];
 }
 
 /**
@@ -2206,7 +2190,7 @@ message Invoice {
 enum InvoiceHTLCState {
     ACCEPTED = 0;
     SETTLED = 1;
-    CANCELLED = 2;
+    CANCELED = 2;
 }
 
 /// Details of an HTLC that paid to an invoice
@@ -2226,7 +2210,7 @@ message InvoiceHTLC {
     /// Time at which this htlc was accepted.
     int64 accept_time = 5 [json_name = "accept_time"];
 
-    /// Time at which this htlc was settled or cancelled.
+    /// Time at which this htlc was settled or canceled.
     int64 resolve_time = 6 [json_name = "resolve_time"];
     
     /// Block height at which this htlc expires.

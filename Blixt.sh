@@ -25,7 +25,7 @@ tmux split-window -v -p 50
 tmux send-keys -t ${window}.2 'yarn start-metro' Enter
 tmux send-keys -t ${window}.1 'code .' Enter
 tmux send-keys -t ${window}.1 'yarn testnet-debug' Enter
-tmux send-keys -t ${window}.3 'yarn start' Enter
+tmux send-keys -t ${window}.3 'react-native log-android' Enter
 tmux new-window -t $SESSION:2 -k -n Emulator
 #tmux send-keys -t ${window}.1 'emulator @Nexus_5X' Enter
 tmux send-keys -t ${window}.1 'emulator @Pixel_2_XL' Enter
