@@ -29,7 +29,7 @@ export const OnChainTransactionItem = ({ transaction, onPress, style, unit }: IO
     icon = (<Icon type="AntDesign" name="minus" style={{ color: blixtTheme.red }} />);
     text = (
       <Text style={{ fontSize: 12.5 }} note={true}>
-        To {transaction!.destAddresses![transaction!.destAddresses!.length - 1]}
+        To {transaction!.destAddresses![0]}
       </Text>
     );
   }
