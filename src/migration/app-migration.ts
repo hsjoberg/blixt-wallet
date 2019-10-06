@@ -23,6 +23,7 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       await setItemObject(StorageItem.clipboardInvoiceCheck, true);
+      await LndMobile.writeConfigFile();
     },
   },
 ];
