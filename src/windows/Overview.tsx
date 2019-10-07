@@ -24,6 +24,7 @@ export interface IOverviewProps {
 }
 export default ({ navigation }: IOverviewProps)  => {
   const balance = useStoreState((store) => store.channel.balance);
+  const pendingOpenBalance = useStoreState((store) => store.channel.pendingOpenBalance);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const transactions = useStoreState((store) => store.transaction.transactions);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
@@ -143,9 +144,14 @@ export default ({ navigation }: IOverviewProps)  => {
             {<Animated.Text style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
               {formatBitcoin(balance, bitcoinUnit)}
             </Animated.Text>}
-            <Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
-              {convertBitcoinToFiat(balance, currentRate, fiatUnit)}
-            </Animated.Text>
+            {pendingOpenBalance.greaterThan(0)
+              ? (<Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.pending}}>
+                  ({formatBitcoin(pendingOpenBalance, bitcoinUnit)} pending)
+                </Animated.Text>)
+              : (<Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
+                  {convertBitcoinToFiat(balance, currentRate, fiatUnit)}
+                </Animated.Text>)
+            }
           </LinearGradient>
         </Animated.View>
       </View>
@@ -224,7 +230,7 @@ const headerInfo = StyleSheet.create({
     color: blixtTheme.light,
     marginTop: 14 + iconTopPadding + 16,
     //paddingTop: iconTopPadding + 16,
-    marginBottom: 3,
+    marginBottom: 2,
     fontFamily: theme.fontFamily,
   },
   fiat: {
@@ -232,4 +238,9 @@ const headerInfo = StyleSheet.create({
     fontSize: 18,
     fontFamily: theme.fontFamily,
   },
+  pending: {
+    color: "#d6dbdb",
+    fontSize: 18,
+    fontFamily: theme.fontFamily,
+  }
 });

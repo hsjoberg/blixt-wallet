@@ -42,7 +42,7 @@ export interface IChannelModel {
   setupChannelUpdateSubscriptions: Thunk<IChannelModel, void, IStoreInjections, IStoreModel>;
   getChannels: Thunk<IChannelModel, void, IStoreInjections>;
   getChannelEvents: Thunk<IChannelModel, void, any, IStoreModel>;
-  getBalance: Thunk<IChannelModel, undefined>;
+  getBalance: Thunk<IChannelModel, undefined, IStoreInjections>;
   connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload>;
   closeChannel: Thunk<IChannelModel, ICloseChannelPayload>;
 
@@ -53,6 +53,7 @@ export interface IChannelModel {
   setChannelUpdateSubscriptionStarted: Action<IChannelModel, boolean>;
   setAlias: Action<IChannelModel, ISetAliasPayload>;
   setBalance: Action<IChannelModel, Long>;
+  setPendingOpenBalance: Action<IChannelModel, Long>;
 
   channels: lnrpc.IChannel[];
   aliases: INodeAlias;
@@ -62,6 +63,7 @@ export interface IChannelModel {
   waitingCloseChannels: lnrpc.PendingChannelsResponse.IWaitingCloseChannel[];
   channelUpdateSubscriptionStarted: boolean;
   balance: Long;
+  pendingOpenBalance: Long;
   channelEvents: IChannelEvent[];
 }
 
@@ -256,6 +258,11 @@ export const channel: IChannelModel = {
         ? response.balance
         : Long.fromNumber(0)
     );
+    actions.setPendingOpenBalance(
+      response.pendingOpenBalance.toNumber
+        ? response.pendingOpenBalance
+        : Long.fromNumber(0)
+    );
     await setItemObject(StorageItem.lightningBalance, response.balance.toString());
   }),
 
@@ -272,6 +279,7 @@ export const channel: IChannelModel = {
   setChannelUpdateSubscriptionStarted: action((state, payload) => { state.channelUpdateSubscriptionStarted = payload; }),
   setAlias: action((state, payload) => { state.aliases[payload.pubkey] = payload.alias; }),
   setBalance: action((state, payload) => { state.balance = payload; }),
+  setPendingOpenBalance: action((state, payload) => { state.pendingOpenBalance = payload; }),
 
   channels: [],
   aliases: {},
@@ -281,5 +289,6 @@ export const channel: IChannelModel = {
   waitingCloseChannels: [],
   channelUpdateSubscriptionStarted: false,
   balance: Long.fromNumber(0),
+  pendingOpenBalance: Long.fromNumber(0),
   channelEvents: [],
 };
