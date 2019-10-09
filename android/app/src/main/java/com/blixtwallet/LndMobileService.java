@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.Process;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -25,6 +26,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
+import io.grpc.LightningGrpc.Rpc;
+
+import com.hypertrack.hyperlog.HyperLog;
 
 public class LndMobileService extends Service {
   private static final String TAG = "LndMobileService";
@@ -67,25 +71,26 @@ public class LndMobileService extends Service {
   class IncomingHandler extends Handler {
       @Override
       public void handleMessage(Message msg) {
-        Log.i(TAG, "handleMessage(" + msg + ")");
+        HyperLog.d(TAG, "New incoming message from client, msg id: " + msg.what);
         Bundle bundle = msg.getData();
         final int request = msg.arg1;
 
         switch (msg.what) {
           case MSG_REGISTER_CLIENT:
             mClients.add(msg.replyTo);
-            Log.d(TAG, "Got register client " + msg.replyTo);
-            sendToClients(Message.obtain(null, MSG_REGISTER_CLIENT_ACK, request, 0));
+            HyperLog.d(TAG, "Got register client " + msg.replyTo);
+            sendToClient(msg.replyTo, Message.obtain(null, MSG_REGISTER_CLIENT_ACK, request, 0));
+            //sendToClients(Message.obtain(null, MSG_REGISTER_CLIENT_ACK, request, 0));
             break;
 
           case MSG_UNREGISTER_CLIENT:
-            Log.d(TAG, "Got unregister client " + msg.replyTo);
+            HyperLog.d(TAG, "Got unregister client " + msg.replyTo);
             mClients.remove(msg.replyTo);
             break;
 
           case MSG_START_LND:
             final String args = bundle.getString("args", "");
-            startLnd(args, request);
+            startLnd(msg.replyTo, args, request);
             break;
 
           case MSG_GRPC_COMMAND:
@@ -97,7 +102,7 @@ public class LndMobileService extends Service {
               m = streamMethods.get(method);
 
               if (m == null) {
-                Log.e(TAG, "Method " + method + "not found");
+                HyperLog.e(TAG, "Method " + method + " not found");
                 return;
               }
             }
@@ -107,7 +112,7 @@ public class LndMobileService extends Service {
             if (msg.what == MSG_GRPC_STREAM_COMMAND) {
               if (streamOnlyOnce) {
                 if (streamsStarted.contains(method)) {
-                  Log.i(TAG, "Attempting to stream " + method + " twice, not allowing");
+                  HyperLog.d(TAG, "Attempting to stream " + method + " twice, not allowing");
                   return;
                 }
               }
@@ -122,11 +127,12 @@ public class LndMobileService extends Service {
                 null,
                 b,
                 msg.what == MSG_GRPC_COMMAND
-                ? new LndCallback(method, request)
-                : new LndStreamCallback(method)
+                ? new LndCallback(msg.replyTo, method, request)
+                : new LndStreamCallback(msg.replyTo, method)
               );
             } catch (IllegalAccessException | InvocationTargetException e) {
-              e.printStackTrace();   // TODO: Remove or Log.d()
+              Log.e(TAG, "Could not invoke lndmobile method " + method, e);
+              // TODO(hsjoberg) send error response to client?
             }
 
             break;
@@ -142,8 +148,9 @@ public class LndMobileService extends Service {
               flags += LndMobile.LndStatus.WALLET_UNLOCKED.flag;
             }
 
-            Log.i(TAG, "MSG_CHECKSTATUS sending " + flags);
-            sendToClients(Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
+            HyperLog.d(TAG, "MSG_CHECKSTATUS sending " + flags);
+            sendToClient(msg.replyTo, Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
+            //sendToClients(Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
             break;
 
           default:
@@ -153,18 +160,19 @@ public class LndMobileService extends Service {
   }
 
   class LndCallback implements lndmobile.Callback {
+    private final Messenger recipient;
     private final String method;
     private final int request;
 
-    LndCallback(String method, int request) {
+    LndCallback(Messenger recipient, String method, int request) {
+      this.recipient = recipient;
       this.method = method;
       this.request = request;
     }
 
     @Override
     public void onError(Exception e) {
-      Log.e(TAG, "LndCallback onError() for " + method, e);
-      e.printStackTrace();   // TODO: Remove or Log.d()
+      HyperLog.e(TAG, "LndCallback onError() for " + method, e);
 
       Message msg = Message.obtain(null, MSG_GRPC_COMMAND_RESULT, request, 0);
 
@@ -190,12 +198,13 @@ public class LndMobileService extends Service {
       bundle.putString("error", message);
       msg.setData(bundle);
 
-      sendToClients(msg);
+      sendToClient(recipient, Message.obtain(null, MSG_REGISTER_CLIENT_ACK, request, 0));
+      //sendToClients(msg);
     }
 
     @Override
     public void onResponse(byte[] bytes) {
-      Log.d(TAG, "LndCallback onResponse() for " + method);
+      HyperLog.d(TAG, "LndCallback onResponse() for " + method);
 
       // Hack for checking if request is UnlockWallet or InitWallet
       // in which case we'll set walletUnlocked to true
@@ -208,24 +217,25 @@ public class LndMobileService extends Service {
       Bundle bundle = new Bundle();
       bundle.putByteArray("response", bytes);
       bundle.putString("method", method);
-
       msg.setData(bundle);
-      sendToClients(msg);
-      Log.i(TAG, "sent");
+
+      sendToClient(recipient, msg);
+      //sendToClients(msg);
     }
   }
 
   class LndStreamCallback implements lndmobile.RecvStream {
+    private final Messenger recipient;
     private final String method;
 
-    LndStreamCallback(String method) {
+    LndStreamCallback(Messenger recipient, String method) {
+      this.recipient = recipient;
       this.method = method;
     }
 
     @Override
     public void onError(Exception e) {
-      Log.e(TAG, "LndStreamCallback onError() for " + method, e);
-      e.printStackTrace();   // TODO: Remove or Log.d()
+      HyperLog.e(TAG, "LndStreamCallback onError() for " + method, e);
 
       Message msg = Message.obtain(null, MSG_GRPC_STREAM_RESULT, 0, 0);
 
@@ -250,12 +260,13 @@ public class LndMobileService extends Service {
 
       msg.setData(bundle);
 
-      sendToClients(msg);
+      sendToClient(recipient, msg);
+      //sendToClients(msg);
     }
 
     @Override
     public void onResponse(byte[] bytes) {
-      Log.d(TAG, "onResponse() for " + method);
+      HyperLog.d(TAG, "onResponse() for " + method);
       Message msg = Message.obtain(null, MSG_GRPC_STREAM_RESULT, 0, 0);
 
       Bundle bundle = new Bundle();
@@ -263,12 +274,13 @@ public class LndMobileService extends Service {
       bundle.putString("method", method);
       msg.setData(bundle);
 
-      sendToClients(msg);
+      sendToClient(recipient, msg);
+      //sendToClients(msg);
     }
   }
 
-  void startLnd(String args, int request) {
-    Log.d(TAG, "startLnd(): Starting lnd");
+  void startLnd(Messenger recipient, String args, int request) {
+    HyperLog.d(TAG, "startLnd(): Starting lnd");
     Runnable startLnd = new Runnable() {
 
       @Override
@@ -277,7 +289,7 @@ public class LndMobileService extends Service {
 
           @Override
           public void onError(Exception e) {
-            e.printStackTrace();   // TODO: Remove or Log.d()
+            HyperLog.e(TAG, "Could not invoke Lndmobile.start()", e);
 
             Message msg = Message.obtain(null, MSG_START_LND_RESULT, request, 0);
 
@@ -286,7 +298,8 @@ public class LndMobileService extends Service {
             bundle.putString("error_desc", e.toString());
             msg.setData(bundle);
 
-            sendToClients(msg);
+            sendToClient(recipient, msg);
+            // sendToClients(msg);
           }
 
           @Override
@@ -298,7 +311,8 @@ public class LndMobileService extends Service {
             bundle.putByteArray("response", bytes);
             msg.setData(bundle);
 
-            sendToClients(msg);
+            sendToClient(recipient, msg);
+            // sendToClients(msg);
           }
         });
       }
@@ -307,35 +321,78 @@ public class LndMobileService extends Service {
     new Thread(startLnd).start();
   }
 
+  void sendToClient(Messenger reciever, Message msg) {
+    final int i = mClients.indexOf(reciever);
+    if (i == -1) {
+      HyperLog.w(TAG, "Warning, could not find recipient to send message to");
+      return;
+    }
+    try {
+      mClients.get(i).send(msg);
+    } catch(RemoteException e) {
+      mClients.remove(i);
+    }
+  }
+
   void sendToClients(Message msg) {
-    for (int i = 0; i < mClients.size(); i++) {
+    for (int i = mClients.size() - 1; i >= 0; i--) {
       try {
           mClients.get(i).send(msg);
       } catch (RemoteException e) {
-          // The client is dead.  Remove it from the list;
-          // we are going through the list from back to front
-          // so this is safe to do inside the loop.
-          mClients.remove(i);    // TODO: Need to fix this. See https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html#remove-int-
+          mClients.remove(i);
       }
     }
   }
 
   @Override
   public IBinder onBind(Intent intent) {
-    Log.d(TAG, "onBind()");
+    HyperLog.v(TAG, "onBind()");
     return messenger.getBinder();
   }
 
   @Override
   public boolean onUnbind(Intent intent) {
-    Log.d(TAG, "onUnbind()");
+    HyperLog.v(TAG, "onUnbind()");
+
+    if (mClients.isEmpty()) {
+      HyperLog.i(TAG, "Last client unbound. Checking if lnd is alive and stopping it.");
+
+      if (checkLndProcessExists()) {
+        HyperLog.d(TAG, "Lnd exists, attempting to stop it");
+        Lndmobile.stopDaemon(
+          Rpc.StopRequest.newBuilder().build().toByteArray(),
+          new Callback() {
+            @Override
+            public void onError(Exception e) {
+              HyperLog.e(TAG, "Got Error when trying to stop lnd", e);
+              try {
+                Thread.sleep(10000);
+              } catch (Throwable t) {}
+              killLndProcess();
+            }
+
+            @Override
+            public void onResponse(byte[] bytes) {
+              try {
+                Thread.sleep(10000);
+              } catch (Throwable t) {}
+              killLndProcess();
+            }
+          }
+        );
+      }
+    }
+
+    lndStarted = false;
+    walletUnlocked = false;
+
     return false;
   }
 
   @Override
   public void onRebind(Intent intent) {
-    Log.d(TAG, "onRebind()");
-      super.onRebind(intent);
+    HyperLog.v(TAG, "onRebind()");
+    super.onRebind(intent);
   }
 
   public LndMobileService() {
@@ -354,15 +411,27 @@ public class LndMobileService extends Service {
   }
 
   private boolean checkLndProcessExists() {
+    String packageName = getApplicationContext().getPackageName();
     ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-
     for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
-      if (p.processName.equals("com.blixtwallet:blixtLndMobile")) {
-        Log.i(TAG, "com.blixtwallet:blixtLndMobile pid: " + String.valueOf(p.pid));
+      if (p.processName.equals(packageName + ":blixtLndMobile")) {
+        HyperLog.d(TAG, packageName + ":blixtLndMobile pid: " + String.valueOf(p.pid));
         return true;
       }
     }
+    return false;
+  }
 
+  private boolean killLndProcess() {
+    String packageName = getApplicationContext().getPackageName();
+    ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+    for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
+      if (p.processName.equals(packageName + ":blixtLndMobile")) {
+        HyperLog.i(TAG, "Killing " + packageName + ":blixtLndMobile with pid: " + String.valueOf(p.pid));
+        Process.killProcess(p.pid);
+        return true;
+      }
+    }
     return false;
   }
 }

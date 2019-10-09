@@ -16,7 +16,8 @@
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
-      android:theme="@style/AppTheme">
+      android:theme="@style/AppTheme"
+      tools:replace="android:label">
       <activity
         android:name=".MainActivity"
         android:label="${appName}${chain}${buildType}"
@@ -30,9 +31,9 @@
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 
       <service
-          android:name=".LndMobileService"
-          android:exported="false"
-          android:process=":blixtLndMobile" />
+        android:name=".LndMobileService"
+        android:exported="false"
+        android:process=":blixtLndMobile" />
     </application>
 
 </manifest>

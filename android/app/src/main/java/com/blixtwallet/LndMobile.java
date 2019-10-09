@@ -33,6 +33,10 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.EnumSet;
 
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.NativeModule;
@@ -44,14 +48,19 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.permissions.PermissionsModule;
 
+import com.facebook.react.modules.storage.ReactDatabaseSupplier;
+import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
+
+import com.hypertrack.hyperlog.HyperLog;
+
 // TODO break this class up
 class LndMobile extends ReactContextBaseJavaModule {
   private final String TAG = "LndMobile";
-
   Messenger messenger;
   private boolean lndMobileServiceBound = false;
   private Messenger lndMobileServiceMessenger; // The service
-
   private HashMap<Integer, Promise> requests = new HashMap<>();
 
   public enum LndStatus {
@@ -87,14 +96,14 @@ class LndMobile extends ReactContextBaseJavaModule {
           final int request = msg.arg1;
 
           if (!requests.containsKey(request)) {
-            Log.e(TAG, "Unknown request: " + request);
+            HyperLog.e(TAG, "Unknown request: " + request);
             return;
           }
 
           final Promise promise = requests.remove(request);
 
           if (bundle.containsKey("error_code")) {
-            Log.e(TAG, "ERROR" + msg);
+            HyperLog.e(TAG, "ERROR" + msg);
             final String errorCode = bundle.getString("error_code");
             final String errorDescription = bundle.getString("error_desc");
             promise.reject(errorCode, errorDescription);
@@ -135,7 +144,7 @@ class LndMobile extends ReactContextBaseJavaModule {
           final int request = msg.arg1;
 
           if (!requests.containsKey(request)) {
-            Log.e(TAG, "Unknown request: " + request);
+            HyperLog.w(TAG, "Unknown request: " + request);
             return;
           }
 
@@ -155,7 +164,7 @@ class LndMobile extends ReactContextBaseJavaModule {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-      Log.i(TAG, "Service attached");
+      HyperLog.i(TAG, "Service attached");
       lndMobileServiceBound = true;
       lndMobileServiceMessenger = new Messenger(service);
 
@@ -177,7 +186,7 @@ class LndMobile extends ReactContextBaseJavaModule {
       // unexpectedly disconnected -- that is, its process crashed.
       lndMobileServiceMessenger = null;
       lndMobileServiceBound = false;
-      Log.e(TAG, "Service disconnected");
+      HyperLog.e(TAG, "Service disconnected");
     }
   }
 
@@ -209,7 +218,7 @@ class LndMobile extends ReactContextBaseJavaModule {
 
       lndMobileServiceBound = true;
 
-      Log.i(TAG, "LndMobile initialized");
+      HyperLog.i(TAG, "LndMobile initialized");
 
       // Note: Promise is returned from MSG_REGISTER_CLIENT_ACK message from LndMobileService
     } else {
@@ -224,14 +233,13 @@ class LndMobile extends ReactContextBaseJavaModule {
     int req = new Random().nextInt();
     requests.put(req, promise);
 
-    Message messange = Message.obtain(null, LndMobileService.MSG_CHECKSTATUS, req, 0);
+    Message message = Message.obtain(null, LndMobileService.MSG_CHECKSTATUS, req, 0);
+    message.replyTo = messenger;
 
     try {
-      lndMobileServiceMessenger.send(messange);
+      lndMobileServiceMessenger.send(message);
     } catch (RemoteException e) {
-      // promise.reject("IPC", "lnd service not available");
-      e.printStackTrace();   // TODO: Remove or Log.d()
-      return;
+      promise.reject(TAG, "Could not Send MSG_CHECKSTATUS to LndMobileService", e);
     }
   }
 
@@ -240,42 +248,19 @@ class LndMobile extends ReactContextBaseJavaModule {
     int req = new Random().nextInt();
     requests.put(req, promise);
 
-    Message messange = Message.obtain(null, LndMobileService.MSG_START_LND, req, 0);
+    Message message = Message.obtain(null, LndMobileService.MSG_START_LND, req, 0);
+    message.replyTo = messenger;
 
     Bundle bundle = new Bundle();
     bundle.putString("args", "--lnddir=" + getReactApplicationContext().getFilesDir().getPath());
-    messange.setData(bundle);
+    message.setData(bundle);
 
     try {
-      lndMobileServiceMessenger.send(messange);
+      lndMobileServiceMessenger.send(message);
     } catch (RemoteException e) {
-      e.printStackTrace();   // TODO: Remove or Log.d()
-      return;
+      promise.reject(TAG, "Could not Send MSG_START_LND to LndMobileService", e);
     }
   }
-
-  // @ReactMethod
-  // void startLndMainProcess(final Promise promise) {
-  //   try {
-  //     final String args = "--lnddir=" + getReactApplicationContext().getFilesDir().getPath();
-  //     intentLndMobile = new Intent(getReactApplicationContext(), LndMobileService.class);
-  //     intentLndMobile.putExtra("args", args);
-  //     getReactApplicationContext().startService(intentLndMobile);
-  //
-  //     Runnable startLnd = new Runnable() {
-  //       @Override
-  //       public void run() {
-  //         Lndmobile.start(args, new NativeCallback(promise));
-  //       }
-  //     };
-  //     new Thread(startLnd).start();
-  //     promise.resolve(true);
-  //   }
-  //   catch (Throwable t) {
-  //     Log.e(TAG, "startProcess(): Fail " + t.getMessage());
-  //     promise.reject(t.getMessage());
-  //   }
-  // }
 
   @ReactMethod
   void writeConfigFile(Promise promise) {
@@ -350,10 +335,11 @@ class LndMobile extends ReactContextBaseJavaModule {
       }
 
       out.close();
-      Log.i(TAG, "Success " + filename);
+      HyperLog.d(TAG, "Saved lnd config: " + filename);
     } catch (Exception e) {
-      Log.e(TAG, "Couldn't write " + filename, e);
-      promise.reject("Couldn't write: " + filename + " \n" + e.getMessage());
+      HyperLog.e(TAG, "Couldn't write " + filename, e);
+      promise.reject("Couldn't write: " + filename, e);
+      return;
     }
 
     promise.resolve("File written: " + filename);
@@ -371,8 +357,9 @@ class LndMobile extends ReactContextBaseJavaModule {
     int req = new Random().nextInt();
     requests.put(req, promise);
 
-    Log.i(TAG, "sendCommand() " + method);
+    HyperLog.d(TAG, "sendCommand() " + method);
     Message message = Message.obtain(null, LndMobileService.MSG_GRPC_COMMAND, req, 0);
+    message.replyTo = messenger;
 
     Bundle bundle = new Bundle();
     bundle.putString("method", method);
@@ -382,14 +369,15 @@ class LndMobile extends ReactContextBaseJavaModule {
     try {
       lndMobileServiceMessenger.send(message);
     } catch (RemoteException e) {
-      e.printStackTrace();   // TODO: Remove or Log.d()
+      promise.reject(TAG, "Could not Send MSG_GRPC_COMMAND to LndMobileService", e);
     }
   }
 
   @ReactMethod
   public void sendStreamCommand(String method, String payloadStr, boolean streamOnlyOnce, Promise promise) {
-    Log.i(TAG, "sendStreamCommand() " + method);
+    HyperLog.d(TAG, "sendStreamCommand() " + method);
     Message message = Message.obtain(null, LndMobileService.MSG_GRPC_STREAM_COMMAND, 0, 0);
+    message.replyTo = messenger;
 
     Bundle bundle = new Bundle();
     bundle.putString("method", method);
@@ -400,10 +388,21 @@ class LndMobile extends ReactContextBaseJavaModule {
     try {
       lndMobileServiceMessenger.send(message);
     } catch (RemoteException e) {
-      e.printStackTrace();   // TODO: Remove or Log.d()
+      promise.reject(TAG, "Could not Send MSG_GRPC_STREAM_COMMAND to LndMobileService", e);
     }
 
     promise.resolve("done");
+  }
+
+  @ReactMethod
+  public void saveLogs(Promise promise) {
+    File file = HyperLog.getDeviceLogsInFile(getReactApplicationContext(), false);
+    if (file != null && file.exists()) {
+      promise.resolve(file.getAbsolutePath());
+    }
+    else {
+      promise.reject("Fail saving log");
+    }
   }
 
   @ReactMethod
