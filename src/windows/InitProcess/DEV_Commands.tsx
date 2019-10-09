@@ -13,7 +13,7 @@ import { getInfo, connectPeer } from "../../lndmobile/index";
 import { initWallet, genSeed } from "../../lndmobile/wallet";
 import { pendingChannels, listChannels, openChannel, closeChannel } from "../../lndmobile/channel";
 import { newAddress, sendCoins } from "../../lndmobile/onchain";
-import { StorageItem, setItemObject } from "../../storage/app";
+import { StorageItem, setItemObject, getItem } from "../../storage/app";
 import { status, modifyStatus, queryScores } from "../../lndmobile/autopilot";
 import { localNotification } from "../../utils/push-notification";
 
@@ -57,6 +57,13 @@ export default ({ navigation }: IProps) => {
           <Button onPress={async () => await setItemObject(StorageItem.appVersion, 0)}><Text>appVersion = 0</Text></Button>
           <Button onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteWallet())}><Text>DEBUG_deleteWallet</Text></Button>
           <Button onPress={async () => await actions.initializeApp()}><Text>actions.initializeApp()</Text></Button>
+          <Button onPress={async () => console.log(await NativeModules.LndMobile.readAsyncStorage())}><Text>readAsyncStorage()</Text></Button>
+          <Button onPress={async () => console.log(await getItem("testkey"))}><Text>get()</Text></Button>
+
+          <Button onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.setupScheduledSyncWork())}><Text>setupScheduledSyncWork</Text></Button>
+          <Button onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.removeScheduledSyncWork())}><Text>removeScheduledSyncWork</Text></Button>
+          <Button onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.checkScheduledSyncWorkStatus())}><Text>checkScheduledSyncWorkStatus</Text></Button>
+          <Button onPress={async () => console.log(await NativeModules.LndMobile.saveLogs())}><Text>saveLogs</Text></Button>
 
           <Button onPress={async () => console.log(await createTransaction(db!, {
             date: Math.floor(+new Date()/1000) + Math.floor(Math.random() * 1000), // 2019-01-01 00:00:00

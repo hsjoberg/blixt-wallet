@@ -10,6 +10,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import com.hypertrack.hyperlog.HyperLog;
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
@@ -23,9 +24,8 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     protected List<ReactPackage> getPackages() {
       @SuppressWarnings("UnnecessaryLocalVariable")
             List<ReactPackage> packages = new PackageList(this).getPackages();
-            // packages.add(new LndGrpcPackage());
-            // packages.add(new LndProcessStarterPackage());
             packages.add(new LndMobilePackage());
+            packages.add(new LndMobileScheduledSyncPackage());
             return packages;
       }
 
@@ -45,9 +45,16 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
+
+    HyperLog.initialize(this);
+    HyperLog.setLogLevel(
+      BuildConfig.DEBUG
+        ? android.util.Log.VERBOSE
+        : android.util.Log.INFO
+    );
   }
 
-    /**
+  /**
    * Loads Flipper in React Native templates.
    *
    * @param context
