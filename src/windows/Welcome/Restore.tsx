@@ -20,6 +20,8 @@ export default ({ navigation }: IProps) => {
   const [backupFile, setBackupFile] = useState<DocumentPickerResponse | null>(null);
   const setWalletSeed = useStoreActions((store) => store.setWalletSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
+  const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
+  const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
 
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
   const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
@@ -50,6 +52,8 @@ export default ({ navigation }: IProps) => {
       await Promise.all([
         changeAutopilotEnabled(false),
         setupAutopilot(false),
+        setSyncEnabled(true), // TODO test
+        changeScheduledSyncEnabled(true),
       ]);
       navigation.navigate("InitLightning");
     } catch (e) {

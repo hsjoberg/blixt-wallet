@@ -14,6 +14,7 @@ import { IFiatModel, fiat } from "./Fiat";
 import { ISecurityModel, security } from "./Security";
 import { ISettingsModel, settings } from "./Settings";
 import { IClipboardManagerModel, clipboardManager } from "./ClipboardManager";
+import { IScheduledSyncModel, scheduledSync } from "./ScheduledSync";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
@@ -56,6 +57,7 @@ export interface IStoreModel {
   security: ISecurityModel;
   settings: ISettingsModel;
   clipboardManager: IClipboardManagerModel;
+  scheduledSync: IScheduledSyncModel;
   walletSeed?: string[];
 }
 
@@ -187,6 +189,7 @@ export const model: IStoreModel = {
   security,
   settings,
   clipboardManager,
+  scheduledSync,
 };
 
 export default model;

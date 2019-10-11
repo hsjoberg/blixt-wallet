@@ -26,4 +26,13 @@ export const appMigration: IAppMigration[] = [
       await LndMobile.writeConfigFile();
     },
   },
+  // Version 3
+  {
+    async beforeLnd(db, i) {
+      await NativeModules.LndMobileScheduledSync.setupScheduledSyncWork();
+      await setItemObject(StorageItem.scheduledSyncEnabled, true);
+      await setItemObject(StorageItem.lastScheduledSync, 0);
+      await setItemObject(StorageItem.lastScheduledSyncAttempt, 0);
+    },
+  },
 ];

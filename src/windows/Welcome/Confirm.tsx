@@ -17,6 +17,8 @@ export default ({ navigation }: IProps) => {
   const createWallet = useStoreActions((store) => store.createWallet);
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
   const seed = useStoreState((state) => state.walletSeed);
+  const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
+  const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
   const [confirmedWords, setConfirmedWords] = useState<string[]>([]);
   const [selectedWords, setSelectedWords] = useState<Array<string | undefined>>(new Array(24).fill(undefined));
   const [proceeding, setProceeding] = useState(false);
@@ -48,6 +50,8 @@ export default ({ navigation }: IProps) => {
     setProceeding(true);
     await createWallet();
     await getAddress({});
+    await setSyncEnabled(true); // TODO test
+    await changeScheduledSyncEnabled(true);
     navigation.navigate("AddFunds");
   };
 

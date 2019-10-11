@@ -61,6 +61,7 @@ export const lightning: ILightningModel = {
       dispatch.onChain.initialize(),
       dispatch.transaction.checkOpenTransactions(),
       dispatch.clipboardManager.initialize(),
+      dispatch.scheduledSync.initialize(),
     ]);
 
     if (differenceInDays(new Date(), lastSync) <3) {
