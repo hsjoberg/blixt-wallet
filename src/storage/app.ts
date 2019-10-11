@@ -3,7 +3,7 @@ import { LoginMethods } from "../state/Security";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 
-const APP_VERSION = 2;
+const APP_VERSION = 3;
 
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",
@@ -22,6 +22,9 @@ export enum StorageItem { // const enums not supported in Babel 7...
   autopilotEnabled = "autopilotEnabled",
   pushNotificationsEnabled = "pushNotificationsEnabled",
   clipboardInvoiceCheck = "clipboardInvoiceCheck",
+  scheduledSyncEnabled = "scheduledSyncEnabled",
+  lastScheduledSync = "lastScheduledSync",
+  lastScheduledSyncAttempt = "lastScheduledSyncAttempt"
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -58,6 +61,9 @@ export const clearApp = async () => {
     removeItem(StorageItem.autopilotEnabled),
     removeItem(StorageItem.pushNotificationsEnabled),
     removeItem(StorageItem.clipboardInvoiceCheck),
+    removeItem(StorageItem.scheduledSyncEnabled),
+    removeItem(StorageItem.lastScheduledSync),
+    removeItem(StorageItem.lastScheduledSyncAttempt),
   ]);
 };
 
@@ -77,5 +83,8 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.autopilotEnabled, true),
     setItemObject<boolean>(StorageItem.pushNotificationsEnabled, true),
     setItemObject<boolean>(StorageItem.clipboardInvoiceCheck, true),
+    setItemObject<boolean>(StorageItem.scheduledSyncEnabled, false),
+    setItemObject<number>(StorageItem.lastScheduledSync, 0),
+    setItemObject<number>(StorageItem.lastScheduledSyncAttempt, 0),
   ]);
 };

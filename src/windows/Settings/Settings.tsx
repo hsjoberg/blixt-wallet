@@ -1,17 +1,19 @@
 import React from "react";
-import { Alert, StyleSheet, NativeModules } from "react-native";
+import { Alert, StyleSheet, NativeModules, ToastAndroid } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
+import DocumentPicker from "react-native-document-picker";
+import { readFile } from "react-native-fs";
 import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, List, ListItem, Right, Toast } from "native-base";
-import Content from "../../components/Content";
 import DialogAndroid from "react-native-dialogs";
+import { fromUnixTime } from "date-fns";
 
+import Content from "../../components/Content";
 import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
 import { BitcoinUnits } from "../../utils/bitcoin-units";
-import DocumentPicker from "react-native-document-picker";
-import { readFile } from "react-native-fs";
 import { verifyChanBackup } from "../../lndmobile/channel";
+import { formatISO } from "../../utils";
 
 interface ISettingsProps {
   navigation: NavigationScreenProp<{}>;
@@ -205,6 +207,35 @@ export default ({ navigation }: ISettingsProps) => {
     }
   }
 
+  // Scheduled sync
+  const workInfo = useStoreState((store) => store.scheduledSync.workInfo);
+  const lastScheduledSync = useStoreState((store) => store.scheduledSync.lastScheduledSync);
+  const lastScheduledSyncAttempt = useStoreState((store) => store.scheduledSync.lastScheduledSyncAttempt);
+  console.log(workInfo, lastScheduledSync, lastScheduledSyncAttempt);
+
+  const scheduledSyncEnabled = useStoreState((store) => store.settings.scheduledSyncEnabled);
+  const changeScheduledSyncEnabled = useStoreActions((store) => store.settings.changeScheduledSyncEnabled);
+  const setSyncEnabled = useStoreActions((store) => store.scheduledSync.setSyncEnabled);
+  const onToggleScheduledSyncEnabled = async () => {
+    if (scheduledSyncEnabled)
+      Alert.alert("Not recommended", "Warning. It is not recommended to disable scheduled chain sync.\n\n" +
+                                     "Make sure you keep up-to-date with the network otherwise you risk losing your funds.\n\n" +
+                                     "Only do this if you're know what you're doing.",
+      [{
+        text: "Cancel",
+      }, {
+        text: "Proceed",
+        onPress: async () => {
+          await setSyncEnabled(!scheduledSyncEnabled);
+          await changeScheduledSyncEnabled(!scheduledSyncEnabled);
+        }
+      }]);
+    else {
+      await setSyncEnabled(!scheduledSyncEnabled);
+      await changeScheduledSyncEnabled(!scheduledSyncEnabled);
+    }
+  }
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -223,18 +254,6 @@ export default ({ navigation }: ISettingsProps) => {
             <Text>Wallet</Text>
           </ListItem>
 
-          <ListItem style={style.listItem} button={true} icon={true} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress}>
-            <Left><Icon style={style.icon} type="AntDesign" name="lock" /></Left>
-            <Body><Text>Login with pincode</Text></Body>
-            <Right><CheckBox checked={loginMethods!.has(LoginMethods.pincode)} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress} /></Right>
-          </ListItem>
-          {fingerprintAvailable &&
-            <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleFingerprintPress}>
-              <Left><Icon style={style.icon} type="Entypo" name="fingerprint" /></Left>
-              <Body><Text>Login with fingerprint</Text></Body>
-              <Right><CheckBox checked={fingerPrintEnabled} onPress={onToggleFingerprintPress}/></Right>
-            </ListItem>
-          }
           {seedAvailable &&
             <>
               <ListItem style={style.listItem} button={true} icon={true} onPress={onGetSeedPress}>
@@ -283,6 +302,39 @@ export default ({ navigation }: ISettingsProps) => {
               </Body>
             </ListItem>
           }
+
+
+          <ListItem style={style.itemHeader} itemHeader={true}>
+            <Text>Security</Text>
+          </ListItem>
+
+          <ListItem style={style.listItem} button={true} icon={true} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress}>
+            <Left><Icon style={style.icon} type="AntDesign" name="lock" /></Left>
+            <Body><Text>Login with pincode</Text></Body>
+            <Right><CheckBox checked={loginMethods!.has(LoginMethods.pincode)} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress} /></Right>
+          </ListItem>
+          {fingerprintAvailable &&
+            <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleFingerprintPress}>
+              <Left><Icon style={style.icon} type="Entypo" name="fingerprint" /></Left>
+              <Body><Text>Login with fingerprint</Text></Body>
+              <Right><CheckBox checked={fingerPrintEnabled} onPress={onToggleFingerprintPress}/></Right>
+            </ListItem>
+          }
+          <ListItem
+            style={style.listItem} icon={true} onPress={onToggleScheduledSyncEnabled}
+            onLongPress={() => ToastAndroid.show("Status: " + workInfo + "\n"+
+                                                 "Last sync attempt: " + formatISO(fromUnixTime(lastScheduledSyncAttempt)) + "\n" +
+                                                 "Last sync: " + formatISO(fromUnixTime(lastScheduledSync)), ToastAndroid.LONG)}
+          >
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="sync-alert" /></Left>
+            <Body>
+              <Text>Scheduled chain sync</Text>
+              <Text note={true} numberOfLines={1}>
+                Runs in background every 6 hours
+              </Text>
+            </Body>
+            <Right><CheckBox checked={scheduledSyncEnabled} onPress={onToggleScheduledSyncEnabled} /></Right>
+          </ListItem>
 
 
           <ListItem style={style.itemHeader} itemHeader={true}>
