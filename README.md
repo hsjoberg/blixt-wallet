@@ -17,7 +17,7 @@ powered by lnd and Neutrino SPV.
 - [x] Fingerprint
 - [x] Optional Name that will be displayed on invoices
 - [x] Optional "Payer" field for bookkeping when creating invoice
-- [ ] Scheduled sync of chain
+- [x] Scheduled sync of chain
 - [ ] [WebLN](https://webln.dev/) support
 - [ ] Backup to Google Drive
 - [ ] WatchTower
