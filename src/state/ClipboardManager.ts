@@ -34,14 +34,12 @@ export const clipboardManager: IClipboardManagerModel = {
 
   checkInvoice: thunk(async (actions, text, { dispatch, getState }) => {
     try {
-      if (getState().invoiceCache.includes(text)) {
+      if (getState().invoiceCache.includes(text) || !text || text.length === 0) {
         return;
       }
       actions.addToInvoiceCache(text);
 
-      await dispatch.send.setPayment({
-        paymentRequestStr: text
-      });
+      await dispatch.send.setPayment({paymentRequestStr: text });
 
       Alert.alert(
         "Found invoice in clipboard",
@@ -57,6 +55,7 @@ export const clipboardManager: IClipboardManagerModel = {
         }]
       );
     } catch (e) {
+      console.log(e);
       dispatch.send.clear();
     }
   }),

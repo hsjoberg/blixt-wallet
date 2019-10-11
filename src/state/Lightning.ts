@@ -53,7 +53,7 @@ export const lightning: ILightningModel = {
         return
       }
     }
-    console.log("lnd: time to start and unlock: " + (new Date().getTime() - start) + "ms");
+    console.log("lnd: time to start and unlock: " + (new Date().getTime() - start)/1000 + "s");
     await dispatch.transaction.getTransactions(),
     Promise.all([
       dispatch.channel.initialize(),
@@ -76,9 +76,9 @@ export const lightning: ILightningModel = {
       await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
     }
 
-    console.log("lnd startup time: " + (new Date().getTime() - start) + "ms");
+    console.log("lnd startup time: " + (new Date().getTime() - start)/1000 + "s");
     if (Platform.OS === "android") {
-      ToastAndroid.show("lnd startup time: " + (new Date().getTime() - start) + "ms", ToastAndroid.SHORT);
+      ToastAndroid.show("lnd startup time: " + (new Date().getTime() - start)/1000 + "s", ToastAndroid.SHORT);
     }
 
     return true;
