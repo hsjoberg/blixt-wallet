@@ -17,11 +17,14 @@ powered by lnd and Neutrino SPV.
 - [x] Fingerprint
 - [x] Optional Name that will be displayed on invoices
 - [x] Optional "Payer" field for bookkeping when creating invoice
-- [x] Scheduled sync of chain
+- [x] Scheduled sync of chain background job
+- [x] Local channel backup
+- [ ] Thor support
 - [ ] [WebLN](https://webln.dev/) support
-- [ ] Backup to Google Drive
+- [ ] Channel backup to Google Drive
 - [ ] WatchTower
 - [ ] URL Payments
+- [ ] Pay to Username
 
 ## Known bugs
 
