@@ -56,7 +56,7 @@ export default ({ navigation }: IOverviewProps)  => {
 
   const headerBtcFontSize = scrollYAnimatedValue.current.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: [39, 27],
+    outputRange: [bitcoinUnit === "satoshi" ? 34 : 37, 27],
     extrapolate: "clamp",
   });
 
@@ -142,7 +142,7 @@ export default ({ navigation }: IOverviewProps)  => {
               }
             </View>
             {<Animated.Text style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
-              {formatBitcoin(balance, bitcoinUnit)}
+              {formatBitcoin(balance, bitcoinUnit, false)}
             </Animated.Text>}
             {pendingOpenBalance.greaterThan(0)
               ? (<Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.pending}}>

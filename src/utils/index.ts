@@ -35,3 +35,5 @@ export const parseBech32 = (address: string): IParsedBech32 => {
 export const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
 
 export const isLong = (subject: any): subject is Long => Long.isLong(subject);
+
+export const formatNumberGroupings = (subject: number | string) => subject.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');

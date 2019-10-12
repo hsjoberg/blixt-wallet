@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import Long from "long";
-import { isLong } from "./index";
+import { isLong, formatNumberGroupings } from "./index";
 
 export interface IBitcoinUnit {
   nice: string;
@@ -51,17 +51,26 @@ export const convertBitcoinUnit = (value: number, from: keyof IBitcoinUnits, to:
   return btc.div(BitcoinUnits[to].unit);
 };
 
-export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits): string => {
+export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNumbers: boolean = false): string => {
   const value = convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit);
-  let formatted = `${value.toFixed()} ${BitcoinUnits[unit].nice}`;
+  const fixed =  value.toFixed(unit === "bit" ? 2 : undefined!);
+
+  const formatNumber =
+    groupNumbers
+      ? formatNumberGroupings(fixed)
+      : fixed;
+
+  let formatted = `${formatNumber} ${BitcoinUnits[unit].nice}`;
   if (BitcoinUnits[unit].pluralize && value.eq(new BigNumber(1))) {
     formatted += "s";
   }
   return formatted;
 };
 
-export const valueBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits): string => {
-  return convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed();
+export const valueBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNumbers: boolean = false): string => {
+  return groupNumbers
+     ? convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed()
+     : formatNumberGroupings(convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed());
 };
 
 export const unitToSatoshi = (value: number, fromUnit: keyof IBitcoinUnits): number => {

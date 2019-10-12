@@ -38,7 +38,7 @@ export default ({ onPress, transaction, unit }: IProps) => {
             <Right>
               <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
                 {transactionValue.notEquals(0) && (positive ? "+" : "")}
-                {transactionValue.notEquals(0) && formatBitcoin(transactionValue, unit)}
+                {transactionValue.notEquals(0) && formatBitcoin(transactionValue, unit, false)}
               </Text>
             </Right>
           </Row>

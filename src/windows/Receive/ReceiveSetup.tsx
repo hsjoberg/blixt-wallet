@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
+import Long from "long";
 
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import { unitToSatoshi, BitcoinUnits, valueBitcoinFromFiat, convertBitcoinToFiat } from "../../utils/bitcoin-units";
+import { unitToSatoshi, BitcoinUnits, valueBitcoinFromFiat, convertBitcoinToFiat, formatBitcoin, valueBitcoin } from "../../utils/bitcoin-units";
+
+const MAX_SAT_INVOICE = 4294967;
 
 interface IReceiveSetupProps {
   navigation: NavigationScreenProp<{}>;
@@ -55,6 +58,10 @@ export default ({ navigation }: IReceiveSetupProps) => {
 
   const onCreateInvoiceClick = async () => {
     try {
+      if (unitToSatoshi(Number.parseFloat(satValue!), bitcoinUnit) > MAX_SAT_INVOICE) {
+        throw new Error("Invoice amount cannot be higher than " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnit));
+      }
+
       navigation.navigate("ReceiveQr", {
         invoice: await addInvoice({
           sat: unitToSatoshi(Number.parseFloat(satValue || "0"), bitcoinUnit),

@@ -203,6 +203,8 @@ class LndMobile extends ReactContextBaseJavaModule {
     }
   }
 
+  // TODO unbind LndMobileService?
+
   @ReactMethod
   public void checkStatus(Promise promise) {
     int req = new Random().nextInt();
