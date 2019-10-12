@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Linking, View } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Card, Text, CardItem, H1, Toast } from "native-base";
+import { Body, Card, Text, CardItem, H1, Toast, Button } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import { fromUnixTime } from "date-fns";
 
@@ -9,6 +9,7 @@ import Blurmodal from "../../components/BlurModal";
 import { formatISO } from "../../utils";
 import { useStoreState } from "../../state/store";
 import { formatBitcoin } from "../../utils/bitcoin-units";
+import { Chain } from "../../utils/build";
 
 interface IMetaDataProps {
   title: string;
@@ -41,12 +42,25 @@ export default ({ navigation }: ITransactionDetailsProps) => {
     return (<></>);
   }
 
+  const onPressBlockExplorer = async () => {
+    console.log(await Linking.openURL(
+      `https://blockstream.info/${Chain === "testnet" ? "testnet/" : ""}tx/${txId}`
+    ));
+  }
+
   return (
     <Blurmodal navigation={navigation}>
       <Card style={style.card}>
         <CardItem>
           <Body>
-            <H1 style={style.header}>Transaction</H1>
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+              <H1 style={style.header}>
+                Transaction
+              </H1>
+              <Button small={true} onPress={onPressBlockExplorer}>
+                <Text style={{ fontSize: 9 }}>See in Block Explorer</Text>
+              </Button>
+            </View>
             <MetaData title="Id" data={transaction.txHash!} />
             <MetaData title="Date" data={formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))} />
             {transaction.amount && <MetaData title="Amount" data={formatBitcoin(transaction.amount, bitcoinUnit)} />}
@@ -69,7 +83,6 @@ const style = StyleSheet.create({
     minHeight: "55%",
   },
   header: {
-    width: "100%",
     fontWeight: "bold",
     marginBottom: 8,
   },
