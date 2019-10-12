@@ -27,6 +27,8 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.EnumSet;
 
 import com.facebook.react.bridge.Arguments;
@@ -404,12 +406,8 @@ class LndMobile extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void copyLndLog(Promise promise) {
-    PermissionsModule permissions = new PermissionsModule(getReactApplicationContext());
-
-    PermissionPromise requestPermissionPromise = new PermissionPromise() {
-
-      @Override
-      public void onSuccess(@Nullable Object value) {
+    checkWriteExternalStoragePermission(
+      (@Nullable Object value) -> {
         if (value.equals("granted")) {
           if (copyLndLogFile()) {
             promise.resolve("Done");
@@ -418,30 +416,14 @@ class LndMobile extends ReactContextBaseJavaModule {
             promise.reject("Error copying");
           }
         }
-      }
-
-      @Override
-      public void onFail() {
+      },
+      () -> {
         promise.reject("Request Error");
-      }
-
-    };
-
-    PermissionPromise checkPermissionPromise = new PermissionPromise() {
-
-      @Override
-      void onSuccess(@Nullable Object value) {
-        permissions.requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, requestPermissionPromise);
-      }
-
-      @Override
-      void onFail() {
+      },
+      () -> {
         promise.reject("Permission Check Error");
       }
-
-    };
-
-    permissions.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, checkPermissionPromise);
+    );
   }
 
   public boolean copyLndLogFile() {
@@ -481,6 +463,42 @@ class LndMobile extends ReactContextBaseJavaModule {
       Log.e(TAG, "copyLndLogFile() failed: " + e.getMessage());
       return false;
     }
+  }
+
+  private interface RequestWriteExternalStoragePermissionCallback {
+    void success(@Nullable Object value);
+  }
+
+  private void checkWriteExternalStoragePermission(@NonNull RequestWriteExternalStoragePermissionCallback successCallback,
+                                                   @NonNull Runnable failCallback,
+                                                   @NonNull Runnable failPermissionCheckcallback) {
+    PermissionsModule permissions = new PermissionsModule(getReactApplicationContext());
+
+    PermissionPromise requestPermissionPromise = new PermissionPromise() {
+      @Override
+      public void onSuccess(@Nullable Object value) {
+        successCallback.success(value);
+      }
+
+      @Override
+      public void onFail() {
+        failCallback.run();
+      }
+    };
+
+    PermissionPromise checkPermissionPromise = new PermissionPromise() {
+      @Override
+      void onSuccess(@Nullable Object value) {
+        permissions.requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, requestPermissionPromise);
+      }
+
+      @Override
+      void onFail() {
+        failPermissionCheckcallback.run();
+      }
+    };
+
+    permissions.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, checkPermissionPromise);
   }
 }
 
