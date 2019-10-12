@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { StatusBar, StyleSheet, Alert } from "react-native";
+import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
+import {
+  readFile
+} from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner } from "native-base";
 
 import { useStoreActions } from "../../state/store";
@@ -7,6 +11,7 @@ import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
 import Content from "../../components/Content";
+import { ICreateWalletPayload } from "../../state";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -14,6 +19,7 @@ interface IProps {
 export default ({ navigation }: IProps) => {
   const [loading, setLoading] = useState(false);
   const [seedText, setSeedText] = useState("");
+  const [backupFile, setBackupFile] = useState<DocumentPickerResponse | null>(null);
   const setWalletSeed = useStoreActions((store) => store.setWalletSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
 
@@ -30,8 +36,20 @@ export default ({ navigation }: IProps) => {
       }
       setLoading(true);
       setWalletSeed(splittedSeed);
+
+      const createWalletOpts: ICreateWalletPayload = {
+        restore: {
+          restoreWallet: true,
+        }
+      }
+      if (backupFile) {
+        const backupBase64 = await readFile(backupFile.uri, "base64");
+        createWalletOpts.restore!.channelsBackup = backupBase64;
+      }
+
+      await createWallet(createWalletOpts),
+
       await Promise.all([
-        createWallet(true),
         changeAutopilotEnabled(false),
         setupAutopilot(false),
       ]);
@@ -41,6 +59,18 @@ export default ({ navigation }: IProps) => {
       Alert.alert(e.message);
     }
   };
+
+  const pickChannelsExportFile = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+      });
+      console.log(res);
+      setBackupFile(res);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <Container>
@@ -56,17 +86,27 @@ export default ({ navigation }: IProps) => {
           <View style={style.seed}>
             <Textarea
               style={{width: "100%", backgroundColor: blixtTheme.gray, fontSize: 20, }}
-              rowSpan={8}
+              rowSpan={7}
               bordered={false}
               underline={false}
               onChangeText={setSeedText}
               value={seedText}
             />
+            <View style={{ marginTop: 6, width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+              <Text>{backupFile && backupFile.name}</Text>
+              <Button small onPress={pickChannelsExportFile}>
+                <Text>
+                  {backupFile === null && "Choose channel backup file"}
+                  {backupFile !== null && "Choose another file"}
+                </Text>
+              </Button>
+            </View>
           </View>
           <View style={style.text}>
             <H1 style={style.textHeader}>Restore wallet</H1>
             <Text>
-              To restore your wallet, write each word from your seed separated by a space.{"\n"}
+              To restore your wallet, write each word from your seed separated by a space.{"\n"}{"\n"}
+              If you wish to restore your Lightning Network channels, you need to provide a file backup.
             </Text>
           </View>
         </View>
@@ -92,7 +132,7 @@ const style = StyleSheet.create({
   seed: {
     marginTop: 32,
     height: 200,
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
   },

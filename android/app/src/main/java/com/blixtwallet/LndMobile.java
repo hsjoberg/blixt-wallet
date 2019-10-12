@@ -24,6 +24,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -463,6 +465,41 @@ class LndMobile extends ReactContextBaseJavaModule {
       Log.e(TAG, "copyLndLogFile() failed: " + e.getMessage());
       return false;
     }
+  }
+
+  @ReactMethod
+  public void saveChannelsBackup(String base64Backups, Promise promise) {
+    byte[] backups = Base64.decode(base64Backups, Base64.NO_WRAP);
+    checkWriteExternalStoragePermission(
+      (@Nullable Object value) -> {
+        if (value.equals("granted")) {
+          saveChannelBackupToFile(backups, promise);
+        }
+        else {
+          promise.reject("You must grant access");
+        }
+      },
+      () -> { promise.reject("Request Error"); },
+      () -> { promise.reject("Check Error"); }
+    );
+  }
+
+  private void saveChannelBackupToFile(byte[] backups, Promise promise) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss") ;
+    String path = Environment.getExternalStorageDirectory() +
+                  "/BlixtWallet/channels-backup-" +
+                  dateFormat.format(new Date()) +
+                  ".bin";
+
+    try (FileOutputStream stream = new FileOutputStream(path)) {
+      stream.write(backups);
+      Log.i(TAG, "Success " + path);
+    } catch (Exception e) {
+      Log.e(TAG, "Couldn't write " + path, e);
+      promise.reject("Couldn't write: " + path, e.getMessage());
+    }
+
+    promise.resolve(path);
   }
 
   private interface RequestWriteExternalStoragePermissionCallback {

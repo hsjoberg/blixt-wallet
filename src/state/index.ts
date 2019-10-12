@@ -21,6 +21,13 @@ import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "..
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
 
+export interface ICreateWalletPayload {
+  restore?: {
+    restoreWallet: boolean,
+    channelsBackup?: string;
+  }
+}
+
 export interface IStoreModel {
   initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   checkAppVersionMigration: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
@@ -33,7 +40,7 @@ export interface IStoreModel {
   setWalletSeed: Action<IStoreModel, string[] | undefined>;
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
-  createWallet: Thunk<IStoreModel, boolean | void, IStoreInjections, IStoreModel>;
+  createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
 
   db?: SQLiteDatabase;
   appReady: boolean;
@@ -142,7 +149,7 @@ export const model: IStoreModel = {
     state.walletSeed = payload;
   }),
 
-  createWallet: thunk(async (actions, recovering, { injections, getState, dispatch }) => {
+  createWallet: thunk(async (actions, payload, { injections, getState, dispatch }) => {
     const { initWallet } = injections.lndMobile.wallet;
     const seed = getState().walletSeed;
     if (!seed) {
@@ -151,9 +158,11 @@ export const model: IStoreModel = {
     const random = await generateSecureRandom(32);
     const randomBase64 = base64.fromByteArray(random);
     await setItem(StorageItem.walletPassword, randomBase64);
-    const wallet = recovering
-      ? await initWallet(seed, randomBase64, 250)
+
+    const wallet = payload && payload.restore && payload.restore
+      ? await initWallet(seed, randomBase64, 250, payload.restore.channelsBackup)
       : await initWallet(seed, randomBase64)
+
     await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);
     await dispatch.security.storeSeed(seed);

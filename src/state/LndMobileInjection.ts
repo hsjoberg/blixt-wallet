@@ -22,6 +22,7 @@ import {
   pendingChannels,
   subscribeChannelEvents,
   decodeChannelEvent,
+  exportAllChannelBackups,
 } from "../lndmobile/channel";
 import {
   getTransactions,
@@ -71,6 +72,7 @@ export interface ILndMobileInjections {
     pendingChannels: () => Promise<lnrpc.PendingChannelsResponse>;
     subscribeChannelEvents: () => Promise<string>;
     decodeChannelEvent: (data: string) => lnrpc.ChannelEventUpdate;
+    exportAllChannelBackups: () => Promise<lnrpc.ChanBackupSnapshot>;
   };
   onchain: {
     getTransactions: () => Promise<lnrpc.TransactionDetails>;
@@ -83,7 +85,7 @@ export interface ILndMobileInjections {
   wallet: {
     decodeInvoiceResult: (data: string) => lnrpc.Invoice;
     genSeed: () => Promise<lnrpc.GenSeedResponse>;
-    initWallet: (seed: string[], password: string, recoveryWindow?: number) => Promise<lnrpc.InitWalletResponse>;
+    initWallet: (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string) => Promise<lnrpc.InitWalletResponse>;
     subscribeInvoices: () => Promise<string>;
     unlockWallet: (password: string) => Promise<lnrpc.UnlockWalletResponse>;
   };
@@ -119,6 +121,7 @@ export default {
     pendingChannels,
     subscribeChannelEvents,
     decodeChannelEvent,
+    exportAllChannelBackups,
   },
   onchain: {
     getTransactions,

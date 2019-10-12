@@ -1,5 +1,6 @@
 import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { Buffer } from "buffer";
+import * as base64 from "base64-js";
 
 import { lnrpc } from "../../proto/proto";
 
@@ -18,13 +19,20 @@ export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {
   return response;
 };
 
-export const initWallet = async (seed: string[], password: string, recoveryWindow?: number): Promise<lnrpc.InitWalletResponse> => {
+export const initWallet = async (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string): Promise<lnrpc.InitWalletResponse> => {
   const options: lnrpc.IInitWalletRequest = {
     cipherSeedMnemonic: seed,
-    walletPassword: Buffer.from(password, "utf8"),
+    walletPassword: Buffer.from(password, "utf8"), // TODO(hsjoberg) Buffer.from???
   };
   if (recoveryWindow) {
     options.recoveryWindow = recoveryWindow;
+  }
+  if (channelBackupsBase64) {
+    options.channelBackups = {
+      multiChanBackup: {
+        multiChanBackup: base64.toByteArray(channelBackupsBase64),
+      }
+    }
   }
 
   const response = await sendCommand<lnrpc.IInitWalletRequest, lnrpc.InitWalletRequest, lnrpc.InitWalletResponse>({

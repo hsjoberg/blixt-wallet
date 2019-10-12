@@ -9,6 +9,9 @@ import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
 import { BitcoinUnits } from "../../utils/bitcoin-units";
+import DocumentPicker from "react-native-document-picker";
+import { readFile } from "react-native-fs";
+import { verifyChanBackup } from "../../lndmobile/channel";
 
 interface ISettingsProps {
   navigation: NavigationScreenProp<{}>;
@@ -169,6 +172,39 @@ export default ({ navigation }: ISettingsProps) => {
     }
   };
 
+  // Export channels
+  const exportChannelsBackup = useStoreActions((store) => store.channel.exportChannelsBackup);
+  const onExportChannelsPress = async () => {
+    try {
+      const response = await exportChannelsBackup();
+      Toast.show({
+        text: `File written:\n ${response}`,
+        type: "warning",
+        duration: 10000
+      });
+    } catch (e) {
+      console.log(e);
+      Toast.show({
+        text: e.message,
+        type: "danger",
+        duration: 10000
+      });
+    }
+  }
+
+  // Verify channels backup
+  const onVerifyChannelsBackupPress = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+      });
+      const backupBase64 = await readFile(res.uri, "base64");
+      console.log(await verifyChanBackup(backupBase64));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -233,6 +269,20 @@ export default ({ navigation }: ISettingsProps) => {
             </Body>
             <Right><CheckBox checked={clipboardInvoiceCheckEnabled} onPress={onToggleClipBoardInvoiceCheck} /></Right>
           </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
+            <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
+            <Body>
+              <Text>Export channel backup</Text>
+            </Body>
+          </ListItem>
+          {(name === "Hampus" || __DEV__ === true) &&
+            <ListItem style={style.listItem} icon={true} onPress={onVerifyChannelsBackupPress}>
+              <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
+              <Body>
+                <Text>Verify channel backup</Text>
+              </Body>
+            </ListItem>
+          }
 
 
           <ListItem style={style.itemHeader} itemHeader={true}>

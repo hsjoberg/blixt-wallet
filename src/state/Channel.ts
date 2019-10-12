@@ -1,7 +1,8 @@
-import { DeviceEventEmitter } from "react-native";
+import { DeviceEventEmitter, NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import Long from "long";
 import { Buffer } from "buffer";
+import * as base64 from "base64-js";
 
 import { lnrpc } from "../../proto/proto";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
@@ -45,6 +46,7 @@ export interface IChannelModel {
   getBalance: Thunk<IChannelModel, undefined, IStoreInjections>;
   connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload>;
   closeChannel: Thunk<IChannelModel, ICloseChannelPayload>;
+  exportChannelsBackup: Thunk<IChannelModel, void, IStoreInjections>;
 
   setChannels: Action<IChannelModel, lnrpc.IChannel[]>;
   setChannelEvents: Action<IChannelModel, IChannelEvent[]>;
@@ -248,6 +250,19 @@ export const channel: IChannelModel = {
     const result = await closeChannel(fundingTx, outputIndex);
     console.log(result);
     return result;
+  }),
+
+  exportChannelsBackup: thunk(async (_, _2, { injections }) => {
+    const response = await injections.lndMobile.channel.exportAllChannelBackups();
+    if (response.multiChanBackup && response.multiChanBackup.multiChanBackup) {
+      const exportResponse = await NativeModules.LndMobile.saveChannelsBackup(
+        base64.fromByteArray(response.multiChanBackup.multiChanBackup)
+      );
+      return exportResponse;
+    }
+    else {
+      throw new Error("Export failed");
+    }
   }),
 
   getBalance: thunk(async (actions, _, { injections }) => {

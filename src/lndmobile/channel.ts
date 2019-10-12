@@ -1,6 +1,7 @@
 import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { lnrpc } from "../../proto/proto";
 import Long from "long";
+import * as base64 from "base64-js";
 
 /**
  * @throws
@@ -88,6 +89,38 @@ export const subscribeChannelEvents = async (): Promise<string> => {
   }, true);
   return response;
 };
+
+/**
+ * @throws
+ */
+export const exportAllChannelBackups = async (): Promise<lnrpc.ChanBackupSnapshot> => {
+  const response = await sendCommand<lnrpc.IChanBackupExportRequest, lnrpc.ChanBackupExportRequest, lnrpc.ChanBackupSnapshot>({
+    request: lnrpc.ChanBackupExportRequest,
+    response: lnrpc.ChanBackupSnapshot,
+    method: "ExportAllChannelBackups",
+    options: {},
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+export const verifyChanBackup = async (channelsBackupBase64: string): Promise<lnrpc.VerifyChanBackupResponse> => {
+  const response = await sendCommand<lnrpc.IChanBackupSnapshot, lnrpc.ChanBackupSnapshot, lnrpc.VerifyChanBackupResponse>({
+    request: lnrpc.ChanBackupSnapshot,
+    response: lnrpc.VerifyChanBackupResponse,
+    method: "VerifyChanBackup",
+    options: {
+      multiChanBackup: {
+        multiChanBackup: base64.toByteArray(channelsBackupBase64),
+      },
+    },
+  });
+  return response;
+};
+
+
 
 // TODO error handling
 export const decodeChannelEvent = (data: string): lnrpc.ChannelEventUpdate => {
