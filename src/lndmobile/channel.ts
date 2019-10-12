@@ -120,8 +120,6 @@ export const verifyChanBackup = async (channelsBackupBase64: string): Promise<ln
   return response;
 };
 
-
-
 // TODO error handling
 export const decodeChannelEvent = (data: string): lnrpc.ChannelEventUpdate => {
   return decodeStreamResult<lnrpc.ChannelEventUpdate>({

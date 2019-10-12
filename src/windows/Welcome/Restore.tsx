@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { StatusBar, StyleSheet, Alert } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
-import {
-  readFile
-} from "react-native-fs";
+import { readFile } from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner } from "native-base";
 
 import { useStoreActions } from "../../state/store";
