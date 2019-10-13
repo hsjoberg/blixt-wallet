@@ -20,6 +20,7 @@ export default ({ navigation }: ISendCameraProps) => {
   const setPayment = useStoreActions((store) => store.send.setPayment);
   const [cameraType, setCameraType] = useState<keyof CameraType>(RNCamera.Constants.Type.back);
   const [scanning, setScanning] = useState(true);
+  const setLNURL = useStoreActions((store) => store.lnUrl.setLNUrl)
 
   const onCameraSwitchClick = () => {
     setCameraType(
@@ -34,13 +35,32 @@ export default ({ navigation }: ISendCameraProps) => {
       return;
     }
 
-    try {
-      setScanning(false);
-      await setPayment({ paymentRequestStr: paymentRequest });
-      navigation.navigate("SendConfirmation");
-    } catch (error) {
-      Alert.alert(`${errorPrefix}: ${error.message}`, undefined,
-        [{text: "OK", onPress: () => setScanning(true)}]);
+    paymentRequest = paymentRequest.toUpperCase();
+    paymentRequest = paymentRequest.replace("LIGHTNING:", "");
+
+    setScanning(false);
+
+    // Check for lnurl
+    if (paymentRequest.indexOf("LNURL") === 0) {
+      console.log("LNURL");
+      try {
+        const type = await setLNURL(paymentRequest);
+        if (type === "channelRequest") {
+          navigation.navigate("ChannelRequest");
+        }
+        else {
+          console.log("Unknown lnurl request");
+        }
+      } catch (e) {}
+    }
+    else {
+      try {
+        await setPayment({ paymentRequestStr: paymentRequest });
+        navigation.navigate("SendConfirmation");
+      } catch (error) {
+        Alert.alert(`${errorPrefix}: ${error.message}`, undefined,
+          [{text: "OK", onPress: () => setScanning(true)}]);
+      }
     }
   };
 

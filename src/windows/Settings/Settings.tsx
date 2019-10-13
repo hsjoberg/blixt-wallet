@@ -182,14 +182,14 @@ export default ({ navigation }: ISettingsProps) => {
       Toast.show({
         text: `File written:\n ${response}`,
         type: "warning",
-        duration: 10000
+        duration: 10000,
       });
     } catch (e) {
       console.log(e);
       Toast.show({
         text: e.message,
         type: "danger",
-        duration: 10000
+        duration: 10000,
       });
     }
   }
@@ -284,7 +284,7 @@ export default ({ navigation }: ISettingsProps) => {
             <Left><Icon style={style.icon} type="Entypo" name="clipboard" /></Left>
             <Body>
               <Text>Check clipboard for invoices</Text>
-              <Text note={true} numberOfLines={1}>Automatically check invoice for Lightning invoices</Text>
+              <Text note={true} numberOfLines={1}>Automatically check clipboard for Lightning invoices</Text>
             </Body>
             <Right><CheckBox checked={clipboardInvoiceCheckEnabled} onPress={onToggleClipBoardInvoiceCheck} /></Right>
           </ListItem>

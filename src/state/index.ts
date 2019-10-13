@@ -15,6 +15,7 @@ import { ISecurityModel, security } from "./Security";
 import { ISettingsModel, settings } from "./Settings";
 import { IClipboardManagerModel, clipboardManager } from "./ClipboardManager";
 import { IScheduledSyncModel, scheduledSync } from "./ScheduledSync";
+import { ILNUrlModel, lnUrl } from "./LNURL";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
@@ -58,6 +59,7 @@ export interface IStoreModel {
   settings: ISettingsModel;
   clipboardManager: IClipboardManagerModel;
   scheduledSync: IScheduledSyncModel;
+  lnUrl: ILNUrlModel;
   walletSeed?: string[];
 }
 
@@ -190,6 +192,7 @@ export const model: IStoreModel = {
   settings,
   clipboardManager,
   scheduledSync,
+  lnUrl,
 };
 
 export default model;

@@ -20,6 +20,7 @@ import InitLightning from "./windows/InitProcess/InitLightning";
 import Welcome from "./windows/Welcome";
 import LightningNodeInfo from "./windows/Settings/LightningNodeInfo";
 import About from "./windows/Settings/About";
+import ChannelRequest from "./windows/LNURL/ChannelRequest";
 
 import TransactionDetails from "./windows/TransactionDetails";
 import OnChainTransactionDetails from "./windows/OnChain/OnChainTransactionDetails";
@@ -44,6 +45,7 @@ const StackNavigator = createStackNavigator({
   Settings,
   LightningInfo,
   OnChain,
+  ChannelRequest,
 }, {
   transparentCard: true,
   cardStyle: {

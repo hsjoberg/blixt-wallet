@@ -16,10 +16,10 @@ powered by lnd and Neutrino SPV.
 - [x] Pincode
 - [x] Fingerprint
 - [x] Optional Name that will be displayed on invoices
-- [x] Optional "Payer" field for bookkeping when creating invoice
+- [x] Optional "Payer" field for bookkeeping when creating invoice
 - [x] Scheduled sync of chain background job
 - [x] Local channel backup
-- [ ] Thor support
+- [x] Thor support/Partial lnurl support
 - [ ] [WebLN](https://webln.dev/) support
 - [ ] Channel backup to Google Drive
 - [ ] WatchTower
