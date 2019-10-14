@@ -19,7 +19,7 @@ powered by lnd and Neutrino SPV.
 - [x] Optional "Payer" field for bookkeeping when creating invoice
 - [x] Scheduled sync of chain background job
 - [x] Local channel backup
-- [x] Thor support/Partial lnurl support
+- [x] Thor support/Partial [lnurl](https://github.com/btcontract/lnurl-rfc/blob/master/spec.md) support
 - [ ] [WebLN](https://webln.dev/) support
 - [ ] Channel backup to Google Drive
 - [ ] WatchTower
