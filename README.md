@@ -28,7 +28,7 @@ powered by lnd and Neutrino SPV.
 
 ## Known bugs
 
-The wallet uses lnd that is young and might have bugs. Check [lnd bug list here](https://github.com/lightninglabs/neutrino/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+The wallet uses lnd that is young and might have bugs. Check [lnd bug list here](https://github.com/lightningnetwork/lnd/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 
 ## Development
 
