@@ -19,7 +19,7 @@ powered by lnd and Neutrino SPV.
 - [x] Optional "Payer" field for bookkeeping when creating invoice
 - [x] Scheduled sync of chain background job
 - [x] Local channel backup
-- [x] Thor support/Partial lnurl support
+- [x] Thor support/Partial [lnurl](https://github.com/btcontract/lnurl-rfc/blob/master/spec.md) support
 - [ ] NFC
 - [ ] [WebLN](https://webln.dev/) support
 - [ ] Channel backup to Google Drive
@@ -29,7 +29,7 @@ powered by lnd and Neutrino SPV.
 
 ## Known bugs
 
-The wallet uses lnd that is young and might have bugs. Check [lnd bug list here](https://github.com/lightninglabs/neutrino/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+The wallet uses lnd that is young and might have bugs. Check [lnd bug list here](https://github.com/lightningnetwork/lnd/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 
 ## Development
 
