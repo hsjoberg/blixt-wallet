@@ -20,6 +20,7 @@ powered by lnd and Neutrino SPV.
 - [x] Scheduled sync of chain background job
 - [x] Local channel backup
 - [x] Thor support/Partial lnurl support
+- [ ] NFC
 - [ ] [WebLN](https://webln.dev/) support
 - [ ] Channel backup to Google Drive
 - [ ] WatchTower
