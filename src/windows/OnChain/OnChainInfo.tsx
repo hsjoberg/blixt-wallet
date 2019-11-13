@@ -8,6 +8,7 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
 import { formatBitcoin } from "../../utils/bitcoin-units";
 import { smallScreen } from "../../utils/device";
+import CopyAddress from "../../components/CopyAddress";
 
 interface IOnChainInfoProps {
   navigation: NavigationScreenProp<{}>;
@@ -77,9 +78,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
             <>
               <Text style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</Text>
               <QrCode data={address} size={smallScreen ? 200 : undefined} onPress={onBtcAddressQrPress} />
-              <Text style={style.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressTextPress}>
-                {address}
-              </Text>
+              <CopyAddress text={address} onPress={onBtcAddressTextPress} />
             </>
           }
         </View>
@@ -118,12 +117,6 @@ const style = StyleSheet.create({
   },
   sendBitcoinsLabel: {
     marginBottom: 8,
-  },
-  address: {
-    paddingTop: 6,
-    paddingRight: 18,
-    paddingBottom: 20,
-    paddingLeft: 18,
   },
   buttons: {
     width: "100%",

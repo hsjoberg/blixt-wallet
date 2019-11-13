@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, Vibration } from "react-native";
 import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner, Toast } from "native-base";
 
 import { useStoreActions, useStoreState } from "../../state/store";
@@ -38,8 +38,9 @@ export default ({ navigation }: ISendConfirmationProps) => {
   const send = async () => {
     try {
       setIsPaying(true);
-      await sendPayment(undefined);
-      await getBalance(undefined);
+      await sendPayment();
+      await getBalance();
+      Vibration.vibrate(32);
       navigation.pop();
     } catch (e) {
       console.log(e);
