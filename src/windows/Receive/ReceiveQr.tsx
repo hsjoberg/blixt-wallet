@@ -11,6 +11,7 @@ import QrCode from "../../components/QrCode";
 import { formatBitcoin } from "../../utils/bitcoin-units";
 import Ticker from "../../components/Ticker";
 import { smallScreen } from "../../utils/device";
+import CopyAddress from "../../components/CopyAddress";
 
 interface IReceiveQRProps {
   navigation: NavigationScreenProp<{}>;
@@ -74,9 +75,12 @@ export default ({ navigation }: IReceiveQRProps) => {
           <Ticker expire={transaction.expire.toNumber()} />
         </Text>
         <QrCode size={smallScreen ? 200 : undefined} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} />
-        <Text testID="payment-request-string" onPress={onPressPaymentRequest} style={style.paymentRequest} numberOfLines={1} lineBreakMode="middle">
+        {/* <Text testID="payment-request-string" onPress={onPressPaymentRequest} style={style.paymentRequest} numberOfLines={1} lineBreakMode="middle">
           {transaction.paymentRequest}
-        </Text>
+        </Text> */}
+        <View style={{ width:"85%" }}>
+          <CopyAddress text={transaction.paymentRequest} onPress={onPressPaymentRequest} />
+        </View>
         <H3 testID="pay-amount">{formatBitcoin(transaction.value, bitcoinUnit)}</H3>
       </View>
     </Container>

@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Card, Text, CardItem, H1, Toast } from "native-base";
+import { Body, Card, Text, CardItem, H1, Toast, View } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import { fromUnixTime } from "date-fns";
 
@@ -86,12 +86,12 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             {direction === "send" && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}
             <MetaData title="Status" data={capitalize(transaction.status)} />
             {transaction.status === "OPEN" &&
-              <>
+              <View style={{ alignItems: "center" }}>
                 <QrCode size={smallScreen ? 220 : 280} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} border={25} />
                 <Text style={style.qrText} onPress={onPaymentRequestTextPress} numberOfLines={1} lineBreakMode="middle">
                   {transaction.paymentRequest}
                 </Text>
-              </>
+              </View>
             }
           </Body>
         </CardItem>
