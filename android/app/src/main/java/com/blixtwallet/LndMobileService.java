@@ -127,8 +127,8 @@ public class LndMobileService extends Service {
                 null,
                 b,
                 msg.what == MSG_GRPC_COMMAND
-                ? new LndCallback(msg.replyTo, method, request)
-                : new LndStreamCallback(msg.replyTo, method)
+                  ? new LndCallback(msg.replyTo, method, request)
+                  : new LndStreamCallback(msg.replyTo, method)
               );
             } catch (IllegalAccessException | InvocationTargetException e) {
               Log.e(TAG, "Could not invoke lndmobile method " + method, e);
@@ -198,7 +198,7 @@ public class LndMobileService extends Service {
       bundle.putString("error", message);
       msg.setData(bundle);
 
-      sendToClient(recipient, Message.obtain(null, MSG_REGISTER_CLIENT_ACK, request, 0));
+      sendToClient(recipient, msg);
       //sendToClients(msg);
     }
 
