@@ -87,6 +87,7 @@ class LndMobile extends ReactContextBaseJavaModule {
 
     @Override
     public void handleMessage(Message msg) {
+      HyperLog.d(TAG, "New incoming message from LndMobileService, msg id: " + msg.what);
       Bundle bundle = msg.getData();
 
       switch (msg.what) {
@@ -428,18 +429,19 @@ class LndMobile extends ReactContextBaseJavaModule {
   }
 
   public boolean copyLndLogFile() {
+    File sourceLocation = new File(
+      getReactApplicationContext().getFilesDir().toString() +
+      "/logs/bitcoin/" +
+      BuildConfig.CHAIN +
+      "/lnd.log"
+    );
+    File targetDir = new File(
+      Environment.getExternalStorageDirectory() +
+      "/BlixtWallet"
+    );
+    File targetLocation = new File(targetDir.toString() + "/lnd-" + BuildConfig.CHAIN + (BuildConfig.DEBUG ? "-debug" : "") +  ".log");
+
     try {
-      File sourceLocation = new File(
-        getReactApplicationContext().getFilesDir().toString() +
-        "/logs/bitcoin/" +
-        BuildConfig.CHAIN +
-        "/lnd.log"
-      );
-      File targetDir = new File(
-        Environment.getExternalStorageDirectory() +
-        "/BlixtWallet"
-      );
-      File targetLocation = new File(targetDir.toString() + "/lnd-" + BuildConfig.CHAIN + (BuildConfig.DEBUG ? "-debug" : "") +  ".log");
       Log.e(TAG, targetLocation.toString());
 
       if (!targetDir.exists()) {
@@ -461,7 +463,10 @@ class LndMobile extends ReactContextBaseJavaModule {
 
       return true;
     } catch (Throwable e) {
-      Log.e(TAG, "copyLndLogFile() failed: " + e.getMessage());
+      Log.e(TAG, "copyLndLogFile() failed: " + e.getMessage() + " " +
+                 "source: " + sourceLocation.toString() + "\n " +
+                 "dest: " + targetDir.toString()
+      );
       return false;
     }
   }
