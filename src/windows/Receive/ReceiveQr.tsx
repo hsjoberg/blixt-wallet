@@ -78,7 +78,7 @@ export default ({ navigation }: IReceiveQRProps) => {
         {/* <Text testID="payment-request-string" onPress={onPressPaymentRequest} style={style.paymentRequest} numberOfLines={1} lineBreakMode="middle">
           {transaction.paymentRequest}
         </Text> */}
-        <View style={{ width:"85%" }}>
+        <View style={{ width:"85%" }} testID="payment-request-string">
           <CopyAddress text={transaction.paymentRequest} onPress={onPressPaymentRequest} />
         </View>
         <H3 testID="pay-amount">{formatBitcoin(transaction.value, bitcoinUnit)}</H3>

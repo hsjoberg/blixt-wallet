@@ -348,8 +348,8 @@ exports[`renders correctly 1`] = `
                         Object {
                           "color": "#e5eaea",
                           "fontFamily": "System",
-                          "fontSize": 39,
-                          "marginBottom": 3,
+                          "fontSize": 37,
+                          "marginBottom": 2,
                           "marginTop": 72,
                         }
                       }

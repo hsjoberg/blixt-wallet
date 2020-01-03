@@ -40,6 +40,7 @@ export const receive: IReceiveModel = {
   }),
 
   addInvoice: thunk(async (actions, { description, sat, expiry, payer }, { injections, getStoreState }) => {
+    console.log("invoice test create")
     const { addInvoice } = injections.lndMobile.index;
     const name = getStoreState().settings.name;
     description = setupDescription(description, name);
@@ -49,6 +50,7 @@ export const receive: IReceiveModel = {
     }
 
     const result = await addInvoice(sat, description, expiry);
+    console.log("result");
     return result;
   }),
 
@@ -73,9 +75,6 @@ export const receive: IReceiveModel = {
       // TODO in the future we should handle
       // both value (the requested amount in the payreq)
       // and amtPaidMsat (the actual amount paid)
-
-      console.log(invoice.amtPaid);
-      console.log(invoice.value);
 
       if (invoice.value ?? !invoice.value.toNumber) {
         invoice.value = Long.fromValue(invoice.value);
