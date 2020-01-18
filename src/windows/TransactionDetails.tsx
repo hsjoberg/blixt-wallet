@@ -12,6 +12,7 @@ import { formatBitcoin } from "../utils/bitcoin-units"
 import { useStoreState } from "../state/store";
 import { extractDescription } from "../utils/NameDesc";
 import { smallScreen } from "../utils/device";
+import CopyAddress from "../components/CopyAddress";
 
 interface IMetaDataProps {
   title: string;
@@ -88,9 +89,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             {transaction.status === "OPEN" &&
               <View style={{ alignItems: "center" }}>
                 <QrCode size={smallScreen ? 220 : 280} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} border={25} />
-                <Text style={style.qrText} onPress={onPaymentRequestTextPress} numberOfLines={1} lineBreakMode="middle">
-                  {transaction.paymentRequest}
-                </Text>
+                <CopyAddress text={transaction.paymentRequest} onPress={onPaymentRequestTextPress} />
               </View>
             }
           </Body>
