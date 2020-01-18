@@ -65,6 +65,11 @@ export const send: ISendModel = {
     } catch (e) {
       throw new Error("Code is not a valid Lightning invoice");
     }
+
+    if (Long.fromValue(paymentRequest.numSatoshis).equals(0)) {
+      throw new Error("Zero amount invoices are not supported");
+    }
+
     try {
       const nodeInfo = await getNodeInfo(paymentRequest.destination);
       actions.setRemoteNodeInfo(nodeInfo);

@@ -12,6 +12,7 @@ import style from "./style";
 import { smallScreen } from "../../utils/device";
 import Container from "../../components/Container";
 import Content from "../../components/Content";
+import CopyAddress from "../../components/CopyAddress";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -64,9 +65,7 @@ export default ({ navigation }: IProps) => {
           <View style={extraStyle.qr}>
             <View style={extraStyle.qrInner}>
               <QrCode size={smallScreen ? 150 : 275} style={extraStyle.qrImage} data={address} onPress={onBtcAddressQrPress} />
-              <Text style={extraStyle.address} numberOfLines={1} lineBreakMode="middle" onPress={onBtcAddressTextPress}>
-                {address}
-              </Text>
+              <CopyAddress text={address} onPress={onBtcAddressTextPress} />
             </View>
           </View>
         </View>
