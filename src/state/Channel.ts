@@ -1,7 +1,6 @@
 import { DeviceEventEmitter, NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import Long from "long";
-import { Buffer } from "buffer";
 import * as base64 from "base64-js";
 
 import { lnrpc } from "../../proto/proto";
@@ -10,6 +9,7 @@ import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
 import { IChannelEvent, getChannelEvents, createChannelEvent } from "../storage/database/channel-events";
 import { localNotification } from "../utils/push-notification";
+import { bytesToHexString } from "../utils";
 
 export interface IOpenChannelPayload {
   // <pubkey>@<ip>[:<port>]
@@ -154,7 +154,12 @@ export const channel: IChannelModel = {
           let alias;
           for (const pendingOpen of pendingChannels.pendingOpenChannels) {
             if (pendingOpen.channel) {
-              if (pendingOpen.channel.channelPoint!.split(":")[0] === Buffer.from(channelEvent.pendingOpenChannel.channelPoint!.fundingTxidBytes!).reverse().toString("hex")) {
+              console.log(`TEST ${pendingOpen.channel.channelPoint!.split(":")[0]} === ${bytesToHexString(channelEvent.pendingOpenChannel.txid!.reverse())}`);
+              if (
+                pendingOpen.channel.channelPoint!.split(":")[0]
+                ===
+                bytesToHexString(channelEvent.pendingOpenChannel.txid!.reverse())
+              ) {
                 const r = await injections.lndMobile.index.getNodeInfo(pendingOpen.channel.remoteNodePub!);
                 alias = r.node!.alias;
               }

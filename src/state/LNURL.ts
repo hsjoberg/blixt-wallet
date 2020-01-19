@@ -1,9 +1,9 @@
 import { Action, action, Thunk, thunk, computed, Computed } from "easy-peasy";
-import { Buffer } from "buffer";
 import * as Bech32 from "bech32";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
+import { timeout, bytesToString } from "../utils/index";
 
 export type LNURLType = "channelRequest" | "unknown" | "error" | "unsupported";
 
@@ -48,7 +48,7 @@ export const lnUrl: ILNUrlModel = {
     actions.clear();
     try {
       const decodedBech32 = Bech32.decode(bech32data, 1024);
-      const decodedUrl = Buffer.from(Bech32.fromWords(decodedBech32.words)).toString("utf8");
+      const decodedUrl = bytesToString(Bech32.fromWords(decodedBech32.words));
       console.log(decodedUrl);
       let type: LNURLType;
       const result = await fetch(decodedUrl);
@@ -78,6 +78,10 @@ export const lnUrl: ILNUrlModel = {
     const connectPeer = injections.lndMobile.index.connectPeer;
 
     if (type === "channelRequest" && lnUrlObject && lnUrlObject.tag === "channelRequest") {
+      while (!getStoreState().lightning.nodeInfo) {
+        console.log("nodeInfo is not available yet, sleeping for 1000ms");
+        await timeout(1000);
+      }
       const localPubkey = getStoreState().lightning.nodeInfo!.identityPubkey;
       const [pubkey, host] = lnUrlObject.uri.split("@");
       try {

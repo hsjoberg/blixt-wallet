@@ -1,5 +1,5 @@
 import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
-import { Buffer } from "buffer";
+import { stringToUint8Array } from "../utils/index";
 import * as base64 from "base64-js";
 
 import { lnrpc } from "../../proto/proto";
@@ -22,7 +22,7 @@ export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {
 export const initWallet = async (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string): Promise<lnrpc.InitWalletResponse> => {
   const options: lnrpc.IInitWalletRequest = {
     cipherSeedMnemonic: seed,
-    walletPassword: Buffer.from(password, "utf8"), // TODO(hsjoberg) Buffer.from???
+    walletPassword: stringToUint8Array(password),
   };
   if (recoveryWindow) {
     options.recoveryWindow = recoveryWindow;
@@ -53,7 +53,7 @@ export const unlockWallet = async (password: string): Promise<lnrpc.UnlockWallet
     response: lnrpc.UnlockWalletResponse,
     method: "UnlockWallet",
     options: {
-      walletPassword: Buffer.from(password, "utf8"),
+      walletPassword: stringToUint8Array(password),
       // TODO recoveryWindow might be needed here when restoring
     },
   });

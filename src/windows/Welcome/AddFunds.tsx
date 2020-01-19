@@ -64,7 +64,7 @@ export default ({ navigation }: IProps) => {
         <View style={style.upperContent}>
           <View style={extraStyle.qr}>
             <View style={extraStyle.qrInner}>
-              <QrCode size={smallScreen ? 150 : 275} style={extraStyle.qrImage} data={address} onPress={onBtcAddressQrPress} />
+              <QrCode size={smallScreen ? 150 : 250} style={extraStyle.qrImage} data={address} onPress={onBtcAddressQrPress} />
               <CopyAddress text={address} onPress={onBtcAddressTextPress} />
             </View>
           </View>
