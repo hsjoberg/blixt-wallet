@@ -1,4 +1,3 @@
-import { Buffer } from "buffer";
 import { lnrpc } from "../../proto/proto";
 import { timeout, decodeStreamResult } from "./utils";
 
