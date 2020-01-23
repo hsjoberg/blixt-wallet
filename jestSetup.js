@@ -17,3 +17,4 @@ jest.mock("./src/lndmobile/wallet", () => require("./mocks/lndmobile/wallet"));
 jest.mock("./src/lndmobile/channel", () => require("./mocks/lndmobile/channel"));
 jest.mock("./src/lndmobile/onchain", () => require("./mocks/lndmobile/onchain"));
 jest.mock("./src/lndmobile/autopilot", () => require("./mocks/lndmobile/autopilot"));
+jest.mock("./src/lndmobile/scheduled-sync", () => require("./mocks/lndmobile/scheduled-sync"));

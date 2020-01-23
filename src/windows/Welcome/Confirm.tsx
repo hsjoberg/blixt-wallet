@@ -49,7 +49,7 @@ export default ({ navigation }: IProps) => {
     }
     setProceeding(true);
     await createWallet();
-    await getAddress({});
+    // await getAddress({});
     await setSyncEnabled(true); // TODO test
     await changeScheduledSyncEnabled(true);
     navigation.navigate("AddFunds");

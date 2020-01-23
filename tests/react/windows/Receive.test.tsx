@@ -4,7 +4,7 @@ import { StoreProvider } from "easy-peasy";
 import Long from "long";
 
 import Receive from "../../../src/windows/Receive";
-import { createNavigationContainer, setupStore, setDefaultAsyncStorage } from "../../utils";
+import { createNavigationContainer, setupStore, setDefaultAsyncStorage, initCommonStore } from "../../utils";
 
 jest.setTimeout(10000);
 
@@ -25,9 +25,7 @@ it("renders correctly", () => {
 
 it("is possible to create an invoice and go to the QR screen", async () => {
   await setDefaultAsyncStorage();
-  const store = setupStore();
-  await store.getActions().initializeApp();
-  await store.getActions().lightning.initialize();
+  const store = await initCommonStore(true);
 
   const { queryByTestId, unmount } = render(
     <StoreProvider store={store}>

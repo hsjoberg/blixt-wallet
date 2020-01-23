@@ -11,7 +11,9 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.Process;
 import android.os.RemoteException;
+import android.util.Base64;
 import android.util.Log;
+
 
 import lndmobile.Callback;
 import lndmobile.Lndmobile;
@@ -27,6 +29,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import io.grpc.LightningGrpc.Rpc;
+import com.google.protobuf.ByteString;
 
 import com.hypertrack.hyperlog.HyperLog;
 
@@ -52,6 +55,11 @@ public class LndMobileService extends Service {
   static final int MSG_GRPC_STREAM_WRITE = 10;
   static final int MSG_CHECKSTATUS = 11;
   static final int MSG_CHECKSTATUS_RESPONSE = 12;
+  static final int MSG_WALLETUNLOCKED = 13;
+  static final int MSG_UNLOCKWALLET = 14;
+  static final int MSG_INITWALLET = 15;
+
+  int unlockWalletRequest = -1;
 
   private Map<String, Method> syncMethods = new HashMap<>();
   private Map<String, Method> streamMethods = new HashMap<>();
@@ -153,6 +161,58 @@ public class LndMobileService extends Service {
             //sendToClients(Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
             break;
 
+          case MSG_UNLOCKWALLET: {
+            HyperLog.d(TAG, "Got MSG_UNLOCKWALLET");
+            // unlockWalletRequest = request;
+
+            String password = bundle.getString("password");
+
+            Rpc.UnlockWalletRequest.Builder unlockWallet = Rpc.UnlockWalletRequest.newBuilder();
+            unlockWallet.setWalletPassword(ByteString.copyFromUtf8(password));
+
+            Lndmobile.unlockWallet(
+              unlockWallet.build().toByteArray(),
+              new LndCallback(msg.replyTo, "UnlockWallet", request)
+            );
+            break;
+          }
+
+          case MSG_INITWALLET:
+            HyperLog.d(TAG, "Got MSG_INITWALLET");
+            // Promise should be resolved
+            // when the RPC ready callback
+            // from LndMobile's start is called,
+            // not when the InitWallet RPC call is done
+            unlockWalletRequest = request;
+
+            ArrayList<String> seed = bundle.getStringArrayList("seed");
+            String password = bundle.getString("password");
+            int recoveryWindow = bundle.getInt("recoveryWindow");
+            String channelBackupsBase64 = bundle.getString("channelBackupsBase64");
+
+            Rpc.InitWalletRequest.Builder initWallet = Rpc.InitWalletRequest.newBuilder();
+            initWallet.addAllCipherSeedMnemonic(seed);
+            initWallet.setWalletPassword(ByteString.copyFromUtf8(password));
+            if (recoveryWindow != 0) {
+              initWallet.setRecoveryWindow(recoveryWindow);
+            }
+            if (channelBackupsBase64 != null) {
+              initWallet.setChannelBackups(
+                Rpc.ChanBackupSnapshot.newBuilder().setMultiChanBackup(
+                  Rpc.MultiChanBackup.newBuilder().setMultiChanBackup(
+                    ByteString.copyFrom(Base64.decode(channelBackupsBase64, Base64.DEFAULT))
+                  )
+                )
+              );
+              HyperLog.d(TAG, "Test");
+            }
+
+            Lndmobile.initWallet(
+              initWallet.build().toByteArray(),
+              new LndCallback(msg.replyTo, "InitWallet", -1)
+            );
+            break;
+
           default:
             super.handleMessage(msg);
         }
@@ -205,12 +265,6 @@ public class LndMobileService extends Service {
     @Override
     public void onResponse(byte[] bytes) {
       HyperLog.d(TAG, "LndCallback onResponse() for " + method);
-
-      // Hack for checking if request is UnlockWallet or InitWallet
-      // in which case we'll set walletUnlocked to true
-      if (this.method.equals("UnlockWallet") || this.method.equals("InitWallet")) {
-        walletUnlocked = true;
-      }
 
       Message msg = Message.obtain(null, MSG_GRPC_COMMAND_RESULT, request, 0);
 
@@ -313,6 +367,26 @@ public class LndMobileService extends Service {
 
             sendToClient(recipient, msg);
             // sendToClients(msg);
+          }
+        }, new lndmobile.Callback() {
+
+          @Override
+          public void onError(Exception e) {
+            HyperLog.e(TAG, "wallet unlock onError callback", e);
+          }
+
+          @Override
+          public void onResponse(byte[] bytes) {
+            HyperLog.i(TAG, "wallet unlock onResponse callback");
+            walletUnlocked = true;
+
+            Message msg = Message.obtain(null, MSG_WALLETUNLOCKED, unlockWalletRequest, 0);
+
+            Bundle bundle = new Bundle();
+            bundle.putByteArray("response", bytes);
+            msg.setData(bundle);
+
+            sendToClient(recipient, msg);
           }
         });
       }

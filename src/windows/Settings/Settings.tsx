@@ -19,6 +19,8 @@ interface ISettingsProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: ISettingsProps) => {
+  const rpcReady = useStoreState((store) => store.lightning.rpcReady);
+
   // Pincode
   const loginMethods = useStoreState((store) => store.security.loginMethods);
   const onRemovePincodePress = () => navigation.navigate("RemovePincodeAuth");
@@ -139,6 +141,9 @@ export default ({ navigation }: ISettingsProps) => {
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
   const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
   const onToggleAutopilotPress = () => { // TODO why not await?
+    if (!rpcReady) {
+      return;
+    }
     changeAutopilotEnabled(!autopilotEnabled);
     setupAutopilot(!autopilotEnabled);
   }
@@ -235,6 +240,14 @@ export default ({ navigation }: ISettingsProps) => {
       await changeScheduledSyncEnabled(!scheduledSyncEnabled);
     }
   }
+
+
+  // Debug show startup info
+  const debugShowStartupInfo = useStoreState((store) => store.settings.debugShowStartupInfo);
+  const changeDebugShowStartupInfo = useStoreActions((store) => store.settings.changeDebugShowStartupInfo);
+  const onToggleDebugShowStartupInfo = async () => {
+    await changeDebugShowStartupInfo(!debugShowStartupInfo);
+  };
 
   return (
     <Container>
@@ -429,6 +442,15 @@ export default ({ navigation }: ISettingsProps) => {
               <Body><Text>Go to dev screen</Text></Body>
             </ListItem>
           }
+
+          <ListItem style={style.itemHeader} itemHeader={true}>
+            <Text>Debug</Text>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleDebugShowStartupInfo}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="android-debug-bridge" /></Left>
+            <Body><Text>Show startup info notications</Text></Body>
+            <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
+          </ListItem>
         </List>
       </Content>
     </Container>

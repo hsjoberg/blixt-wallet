@@ -14,6 +14,7 @@ interface IOnChainInfoProps {
   navigation: NavigationScreenProp<{}>;
 }
 export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
+  const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const getBalance = useStoreActions((store) => store.onChain.getBalance);
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
   const balance = useStoreState((store) => store.onChain.balance);
@@ -21,10 +22,12 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   useEffect(() => {
-    (async () => {
-      await getBalance(undefined);
-    })();
-  }, []);
+    if (rpcReady) {
+      (async () => {
+        await getBalance(undefined);
+      })();
+    }
+  }, [getBalance, rpcReady]);
 
   const onGeneratePress = async () => await getAddress({ forceNew: true });
 
@@ -83,10 +86,10 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           }
         </View>
         <View style={style.buttons}>
-          <Button style={style.button} block={true} primary={true} onPress={onGeneratePress}>
+          <Button block={true} primary={true} disabled={!rpcReady} style={style.button} onPress={onGeneratePress}>
             <Text>Generate new address</Text>
           </Button>
-          <Button style={[style.button, { marginBottom: 0 }]} block={true} primary={true} onPress={onWithdrawPress}>
+          <Button block={true} primary={true} disabled={!rpcReady} style={[style.button, { marginBottom: 0 }]} onPress={onWithdrawPress}>
             <Text>Withdraw coins</Text>
           </Button>
         </View>

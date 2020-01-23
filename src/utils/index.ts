@@ -1,3 +1,4 @@
+import { Toast } from "native-base";
 import { format } from "date-fns";
 import * as querystring from "querystring";
 import Long from "long";
@@ -50,4 +51,14 @@ export const bytesToHexString = (bytes: ArrayLike<number>) => {
   return bytes.reduce(function(memo, i) {
     return memo + ('0' + i.toString(16)).slice(-2); //padd with leading 0 if <16
   }, "");
+}
+
+export const toast = (message: string, period = 3000, type: "danger" | "success" | "warning" = "success", button?: string) => {
+  console.log(message);
+  Toast.show({
+    duration: period,
+    type,
+    text: message,
+    buttonText: button,
+  });
 }

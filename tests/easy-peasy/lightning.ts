@@ -1,16 +1,18 @@
-import { setItem, StorageItem } from "../../src/storage/app";
-import { setupStore } from "../utils";
-import { getInfo } from "../../mocks/lndmobile/index";
+import { wait } from "@testing-library/react-native";
 
-jest.setTimeout(10000);
+import { setItem, StorageItem } from "../../src/storage/app";
+import { initCommonStore } from "../utils";
+import { getInfoResponse } from "../../mocks/lndmobile/index";
+
+jest.setTimeout(20000);
 
 test("initialize lightning store", async () => {
   await setItem(StorageItem.walletPassword, "test1234");
-  const store = setupStore();
+  const store = await initCommonStore(false);
 
-  await store.getActions().initializeApp();
-  await store.getActions().lightning.initialize();
+  expect(store.getState().lightning.syncedToChain).toBe(false);
+  expect(store.getState().lightning.nodeInfo).toEqual(getInfoResponse);
+  await wait(() => expect(store.getState().lightning.syncedToChain).toBe(true), { timeout: 5000 });
 
-  expect(store.getState().lightning.ready).toBe(true);
-  expect(store.getState().lightning.nodeInfo).toEqual(await getInfo());
+  // TODO wait for Autopilot to finish
 });

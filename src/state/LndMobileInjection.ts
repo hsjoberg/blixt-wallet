@@ -45,6 +45,9 @@ import {
   queryScores,
   setScores,
 } from "../lndmobile/autopilot";
+import {
+  checkScheduledSyncWorkStatus, WorkInfo
+} from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
 import { lnrpc } from "../../proto/proto";
 import { autopilotrpc } from "../../proto/proto-autopilot";
 
@@ -95,6 +98,9 @@ export interface ILndMobileInjections {
     queryScores: () => Promise<autopilotrpc.QueryScoresResponse>;
     setScores: (scores: any) => Promise<autopilotrpc.SetScoresResponse>;
   };
+  scheduledSync: {
+    checkScheduledSyncWorkStatus: () => Promise<WorkInfo>;
+  };
 }
 
 export default {
@@ -143,5 +149,8 @@ export default {
     modifyStatus,
     queryScores,
     setScores,
+  },
+  scheduledSync: {
+    checkScheduledSyncWorkStatus,
   },
 } as ILndMobileInjections;

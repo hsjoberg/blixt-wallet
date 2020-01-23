@@ -7,7 +7,7 @@ import Long from "long";
 import Send from "../../../src/windows/Send";
 import SendCamera from "../../../src/windows/Send/SendCamera";
 import SendConfirmation from "../../../src/windows/Send/SendConfirmation";
-import { createNavigationContainer, setupStore, setDefaultAsyncStorage, mockBlockchainAPI } from "../../utils";
+import { createNavigationContainer, setupStore, setDefaultAsyncStorage, mockBlockchainAPI, initCommonStore } from "../../utils";
 
 const AppContainer = createNavigationContainer({ Send }, "Send");
 const AppContainerSendCamera = createNavigationContainer({ SendCamera }, "SendCamera");
@@ -33,8 +33,9 @@ it("SendCamera renders correctly", async () => {
 
 it("It is possible to paste invoice from clipboard and pay it", async () => {
   await setDefaultAsyncStorage();
-  const store = setupStore();
   fetch.once(mockBlockchainAPI());
+  const store = await initCommonStore(true);
+
   await store.getActions().initializeApp();
   await store.getActions().lightning.initialize();
   store.getActions().channel.setBalance(Long.fromNumber(10000));

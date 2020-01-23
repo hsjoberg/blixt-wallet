@@ -22,6 +22,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
+  const lightningReady = useStoreState((store) => store.lightning.ready);
 
   const clear = useStoreActions((store) => store.send.clear);
 
@@ -129,12 +130,13 @@ export default ({ navigation }: ISendConfirmationProps) => {
           <Button
             key="PAY"
             testID="pay-invoice"
-            disabled={isPaying}
+            disabled={isPaying || !lightningReady}
             block={true}
             primary={true}
             onPress={send}>
-            {!isPaying && <Text>Pay</Text>}
-            {isPaying && <Spinner color={blixtTheme.light} />}
+              {lightningReady && !isPaying && <Text>Pay</Text>}
+              {lightningReady &&isPaying && <Spinner color={blixtTheme.light} />}
+              {!lightningReady && <Spinner color={blixtTheme.light} />}
           </Button>
         ),]}
       />

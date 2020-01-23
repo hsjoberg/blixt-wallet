@@ -101,8 +101,8 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                 final String method = bundle.getString("method");
 
                 if (method.equals("UnlockWallet")) {
-                  HyperLog.i(TAG, "LndMobileService reports wallet unlocked. Sending GetInfo request");
-                  getInfoRequest();
+                  HyperLog.i(TAG, "Got MSG_GRPC_COMMAND_RESULT for UnlockWallet. Waiting for MSG_WALLETUNLOCKED before doing anything");
+                  // getInfoRequest();
                 } else if (method.equals("GetInfo")) {
                   try {
                     Rpc.GetInfoResponse res = Rpc.GetInfoResponse.parseFrom(response);
@@ -142,6 +142,10 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                   Log.w(TAG, "Got unexpected method in MSG_GRPC_COMMAND_RESULT from LndMobileService. " +
                              "Expected GetInfo or UnlockWallet, got " + method);
                 }
+                break;
+              case LndMobileService.MSG_WALLETUNLOCKED:
+                  HyperLog.i(TAG, "LndMobileService reports RPC server ready. Sending GetInfo request");
+                  getInfoRequest();
                 break;
               default:
                 super.handleMessage(msg);

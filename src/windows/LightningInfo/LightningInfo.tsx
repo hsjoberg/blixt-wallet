@@ -14,6 +14,7 @@ interface ILightningInfoProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: ILightningInfoProps) => {
+  const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const aliases = useStoreState((store) => store.channel.aliases);
   const channels = useStoreState((store) => store.channel.channels);
   const pendingOpenChannels = useStoreState((store) => store.channel.pendingOpenChannels);
@@ -24,10 +25,12 @@ export default ({ navigation }: ILightningInfoProps) => {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   useEffect(() => {
-    (async () => {
-      await getChannels(undefined);
-    })();
-  }, [getChannels]);
+    if (rpcReady) {
+      (async () => {
+        await getChannels(undefined);
+      })();
+    }
+  }, [getChannels, rpcReady]);
 
   const balance = channels.reduce((accumulator, channel) => accumulator.add(channel.localBalance || 0), Long.fromInt(0));
 
