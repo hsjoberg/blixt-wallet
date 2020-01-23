@@ -222,6 +222,14 @@ android {
         pickFirst '**/x86/libjsc.so'
         pickFirst '**/armeabi-v7a/libjsc.so'
     }
+
+    sourceSets {
+        main {
+            proto {
+                srcDir '../../proto'
+            }
+        }
+    }
 }
 
 dependencies {
