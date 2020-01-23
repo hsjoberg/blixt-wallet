@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
-import io.grpc.LightningGrpc.Rpc;
+import lnrpc.Rpc;
 import com.google.protobuf.ByteString;
 
 import com.hypertrack.hyperlog.HyperLog;
