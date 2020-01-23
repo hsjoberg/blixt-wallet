@@ -17,7 +17,7 @@ test("initialize index store", async () => {
 test("create wallet", async () => {
   await store.getActions().initializeApp();
   await store.getActions().generateSeed();
-  await store.getActions().createWallet(false);
+  await store.getActions().createWallet({});
 
   expect(store.getState().appReady).toBe(true);
   expect(store.getState().walletCreated).toBe(true);

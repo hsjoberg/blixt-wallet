@@ -7,7 +7,7 @@ jobs:
       - run: go get golang.org/x/mobile/cmd/gomobile
       - run: go get golang.org/x/tools/go/packages
       - run: gomobile init
-      - run: go get -u github.com/halseth/falafel
+      - run: go get -u -v github.com/lightninglabs/falafel
       - run: go get -d github.com/lightningnetwork/lnd
       - run: cd $GOPATH/src/github.com/lightningnetwork/lnd && make android
       - persist_to_workspace:

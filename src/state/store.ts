@@ -29,7 +29,7 @@ else {
   store = createStore(model, {
     injections: {
       lndMobile: LndMobile,
-    },
+    } as IStoreInjections,
   });
 }
 

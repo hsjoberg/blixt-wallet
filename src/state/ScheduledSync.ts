@@ -2,15 +2,15 @@ import { Alert, Clipboard, AppState, AppStateStatus, NativeModules } from "react
 import { Action, action, Thunk, thunk, computed, Computed } from "easy-peasy";
 import { IStoreModel } from "./index";
 import { StorageItem, getItemObject } from "../storage/app";
+import { WorkInfo } from "../lndmobile/scheduled-sync";
+import { IStoreInjections } from "./store.ts";
 
 const { LndMobileScheduledSync } = NativeModules;
-
-export type WorkInfo = "BLOCKED" | "CANCELLED" | "ENQUEUED" | "FAILED" | "RUNNING" | "SUCCEEDED" | "WORK_NOT_EXIST";
 
 export interface IScheduledSyncModel {
   initialize: Thunk<IScheduledSyncModel>;
 
-  retrieveSyncInfo: Thunk<IScheduledSyncModel>;
+  retrieveSyncInfo: Thunk<IScheduledSyncModel, void, any, IStoreInjections>;
   setSyncEnabled: Thunk<IScheduledSyncModel, boolean>;
 
   setLastScheduledSync: Action<IScheduledSyncModel, number>;
@@ -28,11 +28,11 @@ export const scheduledSync: IScheduledSyncModel = {
     await actions.retrieveSyncInfo();
   }),
 
-  retrieveSyncInfo: thunk(async (actions) => {
+  retrieveSyncInfo: thunk(async (actions, _, { injections }) => {
     try {
       actions.setLastScheduledSync(await getItemObject<number>(StorageItem.lastScheduledSync));
       actions.setLastScheduledSyncAttempt(await getItemObject<number>(StorageItem.lastScheduledSyncAttempt));
-      actions.setWorkInfo(await LndMobileScheduledSync.checkScheduledSyncWorkStatus());
+      actions.setWorkInfo(await injections.lndMobile.scheduledSync.checkScheduledSyncWorkStatus());
     } catch (e) {
       console.log(e);
     }

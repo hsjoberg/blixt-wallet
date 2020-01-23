@@ -513,12 +513,13 @@ exports[`renders correctly 1`] = `
                     <TouchableOpacity
                       activeOpacity={0.5}
                       block={true}
+                      disabled={true}
                       primary={true}
                       style={
                         Object {
                           "alignItems": "center",
                           "alignSelf": "stretch",
-                          "backgroundColor": "#007aff",
+                          "backgroundColor": "#b5b5b5",
                           "borderBottomWidth": null,
                           "borderColor": "#007aff",
                           "borderLeftWidth": null,
@@ -540,23 +541,17 @@ exports[`renders correctly 1`] = `
                       }
                       testID="create-invoice"
                     >
-                      <Text
+                      <ActivityIndicator
+                        animating={true}
+                        color="#e5eaea"
+                        hidesWhenStopped={true}
+                        size="large"
                         style={
                           Object {
-                            "backgroundColor": "transparent",
-                            "color": "#fff",
-                            "fontFamily": "System",
-                            "fontSize": 16.5,
-                            "marginLeft": 0,
-                            "marginRight": 0,
-                            "paddingLeft": 16,
-                            "paddingRight": 16,
+                            "height": 80,
                           }
                         }
-                        uppercase={false}
-                      >
-                        Create invoice
-                      </Text>
+                      />
                     </TouchableOpacity>
                   </View>
                 </View>

@@ -49,6 +49,7 @@ export default ({ navigation }: IProps) => {
 
       await createWallet(createWalletOpts),
 
+      // TODO(hsjoberg) figure out if this should be done:
       await Promise.all([
         changeAutopilotEnabled(false),
         setupAutopilot(false),

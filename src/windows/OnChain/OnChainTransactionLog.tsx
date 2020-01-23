@@ -10,15 +10,18 @@ export interface IOnChainTransactionLogProps {
   navigation: NavigationScreenProp<{}>;
 }
 export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProps) => {
+  const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const transactions = useStoreState((store) => store.onChain.transactions);
   const getTransactions = useStoreActions((store) => store.onChain.getTransactions);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   useEffect(() => {
-    (async () => {
-      await getTransactions(undefined);
-    })();
-  }, [getTransactions]);
+    if (rpcReady) {
+      (async () => {
+        await getTransactions(undefined);
+      })();
+    }
+  }, [getTransactions, rpcReady]);
 
   const onTransactionPress = (txId: string) => {
     navigation.navigate("OnChainTransactionDetails", { txId });
@@ -36,7 +39,7 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
           <Title>Transaction Log</Title>
         </Body>
         <Right>
-          <Button transparent={true} onPress={async () => await getTransactions(undefined)}>
+          <Button transparent={true} onPress={async () => rpcReady && await getTransactions()}>
             <Icon name="sync" />
           </Button>
         </Right>

@@ -54,3 +54,7 @@ export const channelBalance = jest.fn(async (): Promise<lnrpc.ChannelBalanceResp
   });
   return response;
 });
+
+export const subscribeChannelEvents = jest.fn(async (address: string, sat: number): Promise<string> => {
+  return ""; // TODO(hsjoberg)
+});

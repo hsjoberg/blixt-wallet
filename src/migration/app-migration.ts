@@ -35,4 +35,15 @@ export const appMigration: IAppMigration[] = [
       await setItemObject(StorageItem.lastScheduledSyncAttempt, 0);
     },
   },
+  // Version 4
+  {
+    async beforeLnd(db, i) {
+      // Might not be needed:
+      // const result = await NativeModules.LndMobile.deleteTLSCerts();
+      // if (!result) {
+      //   throw new Error("Failed to delete TLS certificates");
+      // }
+      await setItemObject(StorageItem.debugShowStartupInfo, false);
+    },
+  },
 ];

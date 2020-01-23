@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +46,8 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.permissions.PermissionsModule;
 
@@ -97,7 +100,12 @@ class LndMobile extends ReactContextBaseJavaModule {
           final int request = msg.arg1;
 
           if (!requests.containsKey(request)) {
-            HyperLog.e(TAG, "Unknown request: " + request);
+            // If request is -1,
+            // we intentionally don't want to
+            // Resolve the promise.
+            if (request != -1) {
+              HyperLog.e(TAG, "Unknown request: " + request);
+            }
             return;
           }
 
@@ -141,7 +149,7 @@ class LndMobile extends ReactContextBaseJavaModule {
             .emit(method, params);
           break;
         }
-        case LndMobileService.MSG_CHECKSTATUS_RESPONSE:
+        case LndMobileService.MSG_CHECKSTATUS_RESPONSE: {
           final int request = msg.arg1;
 
           if (!requests.containsKey(request)) {
@@ -152,6 +160,20 @@ class LndMobile extends ReactContextBaseJavaModule {
           final Promise promise = requests.remove(request);
           int flags = msg.arg2;
           promise.resolve(flags);
+          break;
+        }
+        case LndMobileService.MSG_WALLETUNLOCKED: {
+          final int request = msg.arg1;
+          final Promise promise = requests.remove(request);
+          if (promise != null) {
+            promise.resolve(null);
+          }
+
+          getReactApplicationContext()
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+            .emit("WalletUnlocked", null);
+          break;
+        }
       }
     }
   }
@@ -348,9 +370,26 @@ class LndMobile extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void DEBUG_deleteWallet(Promise promise) {
-    String filename = getReactApplicationContext().getFilesDir().toString() + "/data/chain/bitcoin/testnet/wallet.db";
+    String filename = getReactApplicationContext().getFilesDir().toString() + "/data/chain/bitcoin/" + BuildConfig.CHAIN + "/wallet.db";
     File file = new File(filename);
     promise.resolve(file.delete());
+  }
+
+  @ReactMethod
+  public void deleteTLSCerts(Promise promise) {
+    HyperLog.d(TAG, "Deleting lnd TLS certificates");
+
+    String tlsKeyFilename = getReactApplicationContext().getFilesDir().toString() + "/tls.key";
+    File tlsKeyFile = new File(tlsKeyFilename);
+    boolean tlsKeyFileDeletion = tlsKeyFile.delete();
+    HyperLog.d(TAG, "Delete: " + tlsKeyFilename.toString() + ": " + tlsKeyFileDeletion);
+
+    String tlsCertFilename = getReactApplicationContext().getFilesDir().toString() + "/tls.cert";
+    File tlsCertFile = new File(tlsCertFilename);
+    boolean tlsCertFileDeletion = tlsCertFile.delete();
+    HyperLog.d(TAG, "Delete: " + tlsCertFilename.toString() + ": " + tlsCertFileDeletion);
+
+    promise.resolve(tlsKeyFileDeletion && tlsCertFileDeletion);
   }
 
   @ReactMethod
@@ -393,6 +432,63 @@ class LndMobile extends ReactContextBaseJavaModule {
     }
 
     promise.resolve("done");
+  }
+
+  @ReactMethod
+  void unlockWallet(String password, Promise promise) {
+    int req = new Random().nextInt();
+    requests.put(req, promise);
+
+    HyperLog.d(TAG, "unlockWallet()");
+    Message message = Message.obtain(null, LndMobileService.MSG_UNLOCKWALLET, req, 0);
+    message.replyTo = messenger;
+
+    Bundle bundle = new Bundle();
+    bundle.putString("password", password);
+    message.setData(bundle);
+
+    try {
+      lndMobileServiceMessenger.send(message);
+    } catch (RemoteException e) {
+      promise.reject(TAG, "Could not Send MSG_UNLOCKWALLET to LndMobileService", e);
+    }
+  }
+
+
+  @ReactMethod
+  void initWallet(ReadableArray seed, String password, int recoveryWindow, String channelBackupsBase64, Promise promise) {
+    int req = new Random().nextInt();
+    requests.put(req, promise);
+
+    ArrayList<String> seedList = new ArrayList();
+    for (int i = 0; i < seed.size(); i++) {
+      if (seed.getType(i) == ReadableType.String) {
+        seedList.add(seed.getString(i));
+      }
+      else {
+        HyperLog.w(TAG, "InitWallet: Got non-string in seed array");
+      }
+    }
+
+    HyperLog.d(TAG, "initWallet()");
+    Message message = Message.obtain(null, LndMobileService.MSG_INITWALLET, req, 0);
+    message.replyTo = messenger;
+
+    Bundle bundle = new Bundle();
+    // TODO(hsjoberg): this could possibly be faster if we
+    // just encode it to a bytearray using the grpc lib here,
+    // instead of letting LndMobileService do that part
+    bundle.putStringArrayList("seed", seedList);
+    bundle.putString("password", password);
+    bundle.putInt("recoveryWindow", recoveryWindow);
+    bundle.putString("channelBackupsBase64", channelBackupsBase64);
+    message.setData(bundle);
+
+    try {
+      lndMobileServiceMessenger.send(message);
+    } catch (RemoteException e) {
+      promise.reject(TAG, "Could not Send MSG_INITWALLET to LndMobileService", e);
+    }
   }
 
   @ReactMethod

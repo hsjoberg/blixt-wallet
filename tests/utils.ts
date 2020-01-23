@@ -1,3 +1,4 @@
+import { DeviceEventEmitter } from "react-native";
 import { createStore } from "easy-peasy";
 import { model } from "../src/state/index";
 import LndMobile from "../src/state/LndMobileInjection";
@@ -5,6 +6,7 @@ import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 
 import { setupApp, setItem, setItemObject, StorageItem, clearApp } from "../src/storage/app";
+import { timeout } from "../src/utils";
 
 export const setupStore = (initialState?: any) => createStore(model, {
   injections: {
@@ -12,6 +14,21 @@ export const setupStore = (initialState?: any) => createStore(model, {
   },
   initialState,
 });
+
+export const initCommonStore = async (waitForEvent = false) => {
+  const store = setupStore();
+  await store.getActions().initializeApp();
+  await store.getActions().lightning.initialize();
+  store.getActions().lightning.setFirstSync(false);
+  DeviceEventEmitter.emit("WalletUnlocked", {});
+
+  if (waitForEvent) {
+    while (!store.getState().lightning.rpcReady) {
+      await timeout(100);
+    }
+  }
+  return store;
+}
 
 export const createNavigationContainer = (routes: any, initial: string) => {
   const RootStack = createStackNavigator(routes, {

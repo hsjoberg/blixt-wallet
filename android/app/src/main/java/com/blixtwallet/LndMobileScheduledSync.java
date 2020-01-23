@@ -44,7 +44,7 @@ class LndMobileScheduledSync extends ReactContextBaseJavaModule {
 
     workManager = WorkManager.getInstance(getReactApplicationContext());
     periodicWorkRequest = BuildConfig.DEBUG
-      ? new PeriodicWorkRequest.Builder(LndMobileScheduledSyncWorker.class, 6, TimeUnit.HOURS)
+      ? new PeriodicWorkRequest.Builder(LndMobileScheduledSyncWorker.class, 15, TimeUnit.MINUTES)
           .setConstraints(new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
           .build()
       : new PeriodicWorkRequest.Builder(LndMobileScheduledSyncWorker.class, 6, TimeUnit.HOURS)

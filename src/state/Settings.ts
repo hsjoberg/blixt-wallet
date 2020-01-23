@@ -14,6 +14,7 @@ export interface ISettingsModel {
   changePushNotificationsEnabled: Thunk<ISettingsModel, boolean>;
   changeClipboardInvoiceCheckEnabled: Thunk<ISettingsModel, boolean>;
   changeScheduledSyncEnabled: Thunk<ISettingsModel, boolean>;
+  changeDebugShowStartupInfo:Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -22,6 +23,7 @@ export interface ISettingsModel {
   setPushNotificationsEnabled: Action<ISettingsModel, boolean>;
   setClipboardInvoiceCheckInvoicesEnabled: Action<ISettingsModel, boolean>;
   setScheduledSyncEnabled: Action<ISettingsModel, boolean>;
+  setDebugShowStartupInfo: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -30,6 +32,7 @@ export interface ISettingsModel {
   pushNotificationsEnabled: boolean;
   clipboardInvoiceCheckEnabled: boolean;
   scheduledSyncEnabled: boolean;
+  debugShowStartupInfo: boolean
 }
 
 export const settings: ISettingsModel = {
@@ -41,6 +44,7 @@ export const settings: ISettingsModel = {
     actions.setPushNotificationsEnabled(await getItemObject(StorageItem.pushNotificationsEnabled || false));
     actions.setClipboardInvoiceCheckInvoicesEnabled(await getItemObject(StorageItem.clipboardInvoiceCheck || false));
     actions.setScheduledSyncEnabled(await getItemObject(StorageItem.scheduledSyncEnabled) || false);
+    actions.setDebugShowStartupInfo(await getItemObject(StorageItem.debugShowStartupInfo) || false);
   }),
 
   changeBitcoinUnit: thunk(async (actions, payload) => {
@@ -81,6 +85,11 @@ export const settings: ISettingsModel = {
     actions.setScheduledSyncEnabled(payload);
   }),
 
+  changeDebugShowStartupInfo: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.debugShowStartupInfo, payload);
+    actions.setDebugShowStartupInfo(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -88,6 +97,7 @@ export const settings: ISettingsModel = {
   setPushNotificationsEnabled: action((state, payload) => { state.pushNotificationsEnabled = payload; }),
   setClipboardInvoiceCheckInvoicesEnabled: action((state, payload) => { state.clipboardInvoiceCheckEnabled = payload; }),
   setScheduledSyncEnabled: action((state, payload) => { state.scheduledSyncEnabled = payload; }),
+  setDebugShowStartupInfo: action((state, payload) => { state.debugShowStartupInfo = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -96,4 +106,5 @@ export const settings: ISettingsModel = {
   pushNotificationsEnabled: false,
   clipboardInvoiceCheckEnabled: false,
   scheduledSyncEnabled: false,
+  debugShowStartupInfo: false,
 };

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast } from "native-base";
+import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast, Spinner } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import Long from "long";
 
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { unitToSatoshi, BitcoinUnits, valueBitcoinFromFiat, convertBitcoinToFiat, formatBitcoin, valueBitcoin } from "../../utils/bitcoin-units";
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 const MAX_SAT_INVOICE = 4294967;
 
@@ -13,6 +14,7 @@ interface IReceiveSetupProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: IReceiveSetupProps) => {
+  const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const addInvoice = useStoreActions((store) => store.receive.addInvoice);
   const [satValue, setSatValue] = useState<string | undefined>(undefined);
   const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
@@ -140,8 +142,15 @@ export default ({ navigation }: IReceiveSetupProps) => {
       <BlixtForm
         items={formItems}
         buttons={[
-          <Button testID="create-invoice" key="CREATE_INVOICE" block={true} primary={true} onPress={onCreateInvoiceClick}>
-            <Text>Create invoice</Text>
+          <Button
+            testID="create-invoice"
+            key="CREATE_INVOICE"
+            block={true}
+            primary={true}
+            onPress={onCreateInvoiceClick}
+            disabled={!rpcReady}
+          >
+            {rpcReady ? <Text>Create invoice</Text> : <Spinner color={blixtTheme.light} />}
           </Button>
         ]}
       />

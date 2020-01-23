@@ -1,4 +1,4 @@
-import { Platform, ToastAndroid } from "react-native";
+import { DeviceEventEmitter } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import { differenceInDays } from "date-fns";
 
@@ -7,12 +7,15 @@ import { IStoreInjections } from "./store";
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { lnrpc } from "../../proto/proto";
 import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/app";
+import { toast, timeout } from "../utils";
 import { Chain } from "../utils/build";
 
-const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
+const SYNC_UNLOCK_WALLET = true;
 
 export interface ILightningModel {
   initialize: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
+
+  setupStores: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
 
   unlockWallet: Thunk<ILightningModel, void, IStoreInjections>;
   getInfo: Thunk<ILightningModel, void, IStoreInjections>;
@@ -20,73 +23,114 @@ export interface ILightningModel {
   setupAutopilot: Thunk<ILightningModel, boolean, IStoreInjections>;
 
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
+  setRPCServerReady: Action<ILightningModel, boolean>;
   setReady: Action<ILightningModel, boolean>;
+  setSyncedToChain: Action<ILightningModel, boolean>;
   setFirstSync: Action<ILightningModel, boolean>;
 
   nodeInfo?: lnrpc.IGetInfoResponse;
+  rpcReady: boolean;
+  syncedToChain: boolean;
   ready: boolean;
   firstSync: boolean;
 }
 
 export const lightning: ILightningModel = {
   initialize: thunk(async (actions, _, { getState, dispatch, injections, getStoreState }) => {
-    const { ready } = getState();
-    if (ready)  {
+    const checkStatus = injections.lndMobile.index.checkStatus;
+
+    if (getState().ready)  {
       console.log("Lightning store already started");
       return true;
     }
 
+    const start = new Date();
     const lastSync = await getItemObject<number>(StorageItem.timeSinceLastSync);
     const firstSync = await getItemObject<boolean>(StorageItem.firstSync);
     actions.setFirstSync(firstSync);
+    const debugShowStartupInfo = getStoreState().settings.debugShowStartupInfo;
+    const fastInit = differenceInDays(start, lastSync) <3 && !firstSync;
 
-    const { checkStatus } = injections.lndMobile.index;
-    const start = new Date().getTime();
+    // moved to setupstores
+    // await dispatch.transaction.getTransactions();
 
     const status = await checkStatus();
+    // Normal wallet unlock flow
     if ((status & ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) !== ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) {
+      // When the RPC server is ready
+      // WalletUnlocked event will be emitted
+      DeviceEventEmitter.addListener("WalletUnlocked", async () => {
+        debugShowStartupInfo && toast("RPC server ready time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+        actions.setRPCServerReady(true);
+        try {
+          actions.setupStores();
+          await actions.waitForChainSync();
+          await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
+        } catch (e) {
+          debugShowStartupInfo && toast(e.message, 10000, "danger");
+          return;
+        }
+
+        debugShowStartupInfo && toast("syncedToChain time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
+      });
+
       try {
-        await actions.unlockWallet();
+        SYNC_UNLOCK_WALLET
+          ? await actions.unlockWallet()
+          : actions.unlockWallet().then(
+            () => debugShowStartupInfo && toast("UnlockWallet time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000)
+          );
       } catch (e) {
         console.log(e.message);
-        ToastAndroid.show("Error: Cannot unlock wallet", ToastAndroid.LONG);
+        debugShowStartupInfo && toast("Error: Cannot unlock wallet", 10000, "danger");
         return
       }
     }
-    console.log("lnd: time to start and unlock: " + (new Date().getTime() - start)/1000 + "s");
-    await dispatch.transaction.getTransactions(),
-    Promise.all([
-      dispatch.channel.initialize(),
-      dispatch.receive.initialize(),
-      dispatch.onChain.initialize(),
-      dispatch.transaction.checkOpenTransactions(),
-      dispatch.clipboardManager.initialize(),
-      dispatch.scheduledSync.initialize(),
-    ]);
-
-    if (differenceInDays(new Date(), lastSync) <3) {
-      actions.setReady(true);
-      // Run asynchronously
-      actions.waitForChainSync().then(async () => {
-        await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
-      });
-    }
+    // If a wallet was created, STATUS_WALLET_UNLOCKED would
+    // already be set when this function is called
     else {
-      // Run synchronously
-      await actions.waitForChainSync();
-      await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
+      actions.setupStores();
+      if (fastInit) {
+        actions.waitForChainSync().then(
+          async () => await actions.setupAutopilot(getStoreState().settings.autopilotEnabled)
+        );
+      }
+      else {
+        await actions.waitForChainSync();
+        await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
+      }
+
+      actions.setRPCServerReady(true);
     }
 
-    console.log("lnd startup time: " + (new Date().getTime() - start)/1000 + "s");
-    if (Platform.OS === "android") {
-      ToastAndroid.show("lnd startup time: " + (new Date().getTime() - start)/1000 + "s", ToastAndroid.SHORT);
+    await dispatch.transaction.getTransactions();
+
+    if (fastInit) {
+      actions.setReady(true);
     }
 
+    debugShowStartupInfo && toast("Initialize time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
     return true;
   }),
 
+  setupStores: thunk(async (_, _2, { dispatch }) => {
+    try {
+      await Promise.all([
+        dispatch.channel.initialize(),
+        dispatch.receive.initialize(),
+        dispatch.onChain.initialize(),
+        dispatch.transaction.checkOpenTransactions(),
+        dispatch.clipboardManager.initialize(),
+        dispatch.scheduledSync.initialize(),
+      ]);
+    } catch (e) {
+      toast(e.message, 10000, "danger");
+      return;
+    }
+  }),
+
   unlockWallet: thunk(async (_, _2, { injections }) => {
-    const { unlockWallet } = injections.lndMobile.wallet;
+    const unlockWallet = injections.lndMobile.wallet.unlockWallet;
     console.log("try unlockWallet");
     const password = await getItem(StorageItem.walletPassword);
     if (!password) {
@@ -100,9 +144,9 @@ export const lightning: ILightningModel = {
     const status = injections.lndMobile.autopilot.status;
 
     if (enabled) {
-      await timeout(2000);
+      await timeout(1000); // TODO(hsjoberg): why?
       const scores = await getNodeScores();
-      console.log(scores);
+      //console.log(scores);
       const setScore = injections.lndMobile.autopilot.setScores;
       await setScore(scores);
     }
@@ -110,8 +154,7 @@ export const lightning: ILightningModel = {
     do {
       try {
         await modifyStatus(enabled);
-        console.log("Autopilot status:");
-        console.log(await status());
+        console.log("Autopilot status:", await status());
         break;
       } catch (e) {
         console.log(e.message);
@@ -132,8 +175,7 @@ export const lightning: ILightningModel = {
     let info;
     do {
       info = await getInfo();
-      console.log("blockHeight", info.blockHeight);
-      console.log("syncedToChain", info.syncedToChain);
+      console.log(`blockHeight: ${info.blockHeight}, syncedToChain: ${info.syncedToChain}`);
       actions.setNodeInfo(info);
 
       if (info.syncedToChain !== true) {
@@ -149,14 +191,19 @@ export const lightning: ILightningModel = {
       actions.setFirstSync(false);
     }
     actions.setReady(true);
+    actions.setSyncedToChain(true);
     await setItemObject(StorageItem.timeSinceLastSync, new Date().getTime());
   }),
 
   setNodeInfo: action((state, payload) => { state.nodeInfo = payload; }),
+  setRPCServerReady: action((state, payload) => { state.rpcReady = payload; }),
   setReady: action((state, payload) => { state.ready = payload; }),
+  setSyncedToChain: action((state, payload) => { state.syncedToChain = payload; }),
   setFirstSync: action((state, payload) => { state.firstSync = payload; }),
 
+  rpcReady: false,
   ready: false,
+  syncedToChain: false,
   firstSync: false,
 };
 

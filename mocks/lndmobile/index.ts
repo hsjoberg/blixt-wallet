@@ -58,7 +58,7 @@ export const startLnd = jest.fn(async (): Promise<string> => {
 //   return response;
 // };
 
-const getInfoResponse = lnrpc.GetInfoResponse.create({
+export const getInfoResponse = lnrpc.GetInfoResponse.create({
   uris: [],
   chains: [{
     chain: "bitcoin",
@@ -73,6 +73,7 @@ const getInfoResponse = lnrpc.GetInfoResponse.create({
   testnet: true,
   bestHeaderTimestamp: 1564940232,
   version: "0.7.1-beta commit=v0.7.1-beta-rc1-10-g3760f29f5e758b2865b756604333ca22cf23e90b",
+  features: {},
 });
 export const getInfo = jest.fn()
   .mockImplementationOnce(async () => getInfoResponse)
