@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 export interface IContainer {
   children?: ReactNode;
@@ -21,6 +22,7 @@ const defaultStyle = StyleSheet.create({
     width: "100%",
     height: "100%",
     flex: 1,
+    backgroundColor: blixtTheme.dark,
   },
 });
 

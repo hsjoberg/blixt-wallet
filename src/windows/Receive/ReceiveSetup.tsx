@@ -148,7 +148,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
             block={true}
             primary={true}
             onPress={onCreateInvoiceClick}
-            disabled={!rpcReady}
+            disabled={!rpcReady || (satValue == "0" || satValue === undefined)}
           >
             {rpcReady ? <Text>Create invoice</Text> : <Spinner color={blixtTheme.light} />}
           </Button>

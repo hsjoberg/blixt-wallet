@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Text, Header, Container, H1, H2, Right, Left, Button, Title, Icon, Toast } from "native-base";
+import { Body, Text, Header, Container, H1, H2, Right, Left, Button, Title, Icon, Toast, Spinner } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -9,6 +9,7 @@ import QrCode from "../../components/QrCode";
 import { formatBitcoin } from "../../utils/bitcoin-units";
 import { smallScreen } from "../../utils/device";
 import CopyAddress from "../../components/CopyAddress";
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 interface IOnChainInfoProps {
   navigation: NavigationScreenProp<{}>;
@@ -83,6 +84,9 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
               <QrCode data={address} size={smallScreen ? 200 : undefined} onPress={onBtcAddressQrPress} />
               <CopyAddress text={address} onPress={onBtcAddressTextPress} />
             </>
+          }
+          {!address &&
+            <Spinner color={blixtTheme.light} />
           }
         </View>
         <View style={style.buttons}>

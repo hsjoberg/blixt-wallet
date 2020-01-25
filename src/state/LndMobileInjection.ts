@@ -23,6 +23,7 @@ import {
   subscribeChannelEvents,
   decodeChannelEvent,
   exportAllChannelBackups,
+  abandonChannel,
 } from "../lndmobile/channel";
 import {
   getTransactions,
@@ -76,6 +77,7 @@ export interface ILndMobileInjections {
     subscribeChannelEvents: () => Promise<string>;
     decodeChannelEvent: (data: string) => lnrpc.ChannelEventUpdate;
     exportAllChannelBackups: () => Promise<lnrpc.ChanBackupSnapshot>;
+    abandonChannel: (fundingTxId: string, outputIndex: number) => Promise<lnrpc.AbandonChannelResponse>;
   };
   onchain: {
     getTransactions: () => Promise<lnrpc.TransactionDetails>;
@@ -128,6 +130,7 @@ export default {
     subscribeChannelEvents,
     decodeChannelEvent,
     exportAllChannelBackups,
+    abandonChannel,
   },
   onchain: {
     getTransactions,

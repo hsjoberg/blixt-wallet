@@ -41,6 +41,24 @@ export const closeChannel = async (fundingTxId: string, outputIndex: number): Pr
 
 /**
  * @throws
+ * TODO implement
+ */
+export const abandonChannel = async (fundingTxId: string, outputIndex: number): Promise<lnrpc.AbandonChannelResponse> => {
+  const response = await sendCommand<lnrpc.IAbandonChannelRequest, lnrpc.AbandonChannelRequest, lnrpc.AbandonChannelResponse>({
+    request: lnrpc.AbandonChannelRequest,
+    response: lnrpc.AbandonChannelResponse,
+    method: "AbandonChannel",
+    options: {
+      channelPoint: {
+        fundingTxidStr: fundingTxId,
+        outputIndex,
+      }
+    },
+  });
+  return response;
+};
+/**
+ * @throws
  */
 export const pendingChannels = async (): Promise<lnrpc.PendingChannelsResponse> => {
   const response = await sendCommand<lnrpc.IPendingChannelsRequest, lnrpc.PendingChannelsRequest, lnrpc.PendingChannelsResponse>({

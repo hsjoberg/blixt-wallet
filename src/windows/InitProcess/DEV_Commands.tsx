@@ -56,6 +56,7 @@ export default ({ navigation }: IProps) => {
           <Button onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text>walletCreated = true</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.appVersion, 0)}><Text>appVersion = 0</Text></Button>
           <Button onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteWallet())}><Text>DEBUG_deleteWallet</Text></Button>
+          <Button onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteDatafolder())}><Text>DEBUG_deleteDatafolder</Text></Button>
           <Button onPress={async () => await actions.initializeApp()}><Text>actions.initializeApp()</Text></Button>
           <Button onPress={async () => console.log(await NativeModules.LndMobile.readAsyncStorage())}><Text>readAsyncStorage()</Text></Button>
           <Button onPress={async () => console.log(await getItem("testkey"))}><Text>get()</Text></Button>

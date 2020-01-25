@@ -1,9 +1,11 @@
 import React from "react";
-import { Body, Text, Left, Right, Card, CardItem, Row } from "native-base";
+import { Body, Text, Left, Right, Card, CardItem, Row, Button } from "native-base";
 
 import { style } from "./ChannelCard";
 import { lnrpc } from "../../proto/proto";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { useStoreActions } from "../state/store";
+import { Debug } from "../utils/build";
 
 export interface IPendingChannelCardProps {
   type: "OPEN" | "CLOSING" | "FORCE_CLOSING" | "WAITING_CLOSE";
@@ -14,9 +16,22 @@ export interface IPendingChannelCardProps {
   alias?: string;
 }
 export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCardProps) => {
+  const abandonChannel = useStoreActions((store) => store.channel.abandonChannel);
+  const getChannels = useStoreActions((store) => store.channel.getChannels);
+
+
   if (!channel.channel) {
     return (<Text>Error</Text>);
   }
+
+  const abandon = async () => {
+    const result = await abandonChannel({
+      fundingTx: channel.channel!.channelPoint!.split(":")[0],
+      outputIndex: Number.parseInt(channel.channel!.channelPoint!.split(":")[1], 10),
+    });
+
+    await getChannels(undefined);
+  };
 
   return (
     <Card style={style.channelCard}>
@@ -67,6 +82,15 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               <Text style={style.channelDetailAmount}>{channel.channel!.localBalance!.toString()}/{channel.channel!.capacity!.toString()} Satoshi</Text>
             </Right>
           </Row>
+          {Debug &&
+            <Row>
+              <Right>
+                <Button onPress={() => abandon()} small>
+                  <Text>Abandon</Text>
+                </Button>
+              </Right>
+            </Row>
+          }
         </Body>
       </CardItem>
     </Card>

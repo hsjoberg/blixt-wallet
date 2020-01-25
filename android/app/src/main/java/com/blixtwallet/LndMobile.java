@@ -368,11 +368,29 @@ class LndMobile extends ReactContextBaseJavaModule {
     promise.resolve("File written: " + filename);
   }
 
+void deleteRecursive(File fileOrDirectory) {
+  if (fileOrDirectory.isDirectory()) {
+    for (File child : fileOrDirectory.listFiles()) {
+      deleteRecursive(child);
+    }
+  }
+
+  HyperLog.d(TAG, "Delete file " + fileOrDirectory.getName() + " : " + fileOrDirectory.delete());
+}
+
   @ReactMethod
   public void DEBUG_deleteWallet(Promise promise) {
     String filename = getReactApplicationContext().getFilesDir().toString() + "/data/chain/bitcoin/" + BuildConfig.CHAIN + "/wallet.db";
     File file = new File(filename);
     promise.resolve(file.delete());
+  }
+
+  @ReactMethod
+  public void DEBUG_deleteDatafolder(Promise promise) {
+    String filename = getReactApplicationContext().getFilesDir().toString() + "/data/";
+    File file = new File(filename);
+    deleteRecursive(file);
+    promise.resolve(null);
   }
 
   @ReactMethod
