@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
-import { Body, Header, Container, Left, Button, Title, Right, Icon, H1, H3, Fab } from "native-base";
+import { Body, Header, Left, Button, Title, Right, Icon, H1, H3, Fab, Spinner } from "native-base";
 import { NavigationScreenProp } from "react-navigation";
 import Long from "long";
 
 import { useStoreState, useStoreActions } from "../../state/store";
+import Container from "../../components/Container";
 import ChannelCard from "../../components/ChannelCard";
 import PendingChannelCard from "../../components/PendingChannelCard";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
@@ -89,14 +90,21 @@ export default ({ navigation }: ILightningInfoProps) => {
           </Button>
         </Right>
       </Header>
-      <ScrollView contentContainerStyle={style.container}>
-        <View style={style.balanceInfo}>
-          <H1 style={style.spendableAmount}>
-            Spendable amount{"\n"} {formatBitcoin(balance, bitcoinUnit)}
-          </H1>
+      {rpcReady &&
+        <ScrollView contentContainerStyle={style.container}>
+          <View style={style.balanceInfo}>
+            <H1 style={style.spendableAmount}>
+              Spendable amount{"\n"} {formatBitcoin(balance, bitcoinUnit)}
+            </H1>
+          </View>
+          <View>{channelCards}</View>
+        </ScrollView>
+      }
+      {!rpcReady &&
+        <View style={style.loadingContainer}>
+          <Spinner color={blixtTheme.light} />
         </View>
-        <View>{channelCards}</View>
-      </ScrollView>
+      }
       <Fab
         style={style.fab}
         position="bottomRight"
@@ -110,6 +118,12 @@ export default ({ navigation }: ILightningInfoProps) => {
 const style = StyleSheet.create({
   container: {
     padding: 12,
+  },
+  loadingContainer: {
+    flex: 1,
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   balanceInfo: {
     flex: 1,

@@ -5,7 +5,7 @@ import { Icon } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
 import BarcodeMask from 'react-native-barcode-mask';
 
-import { useStoreActions } from "../../state/store";
+import { useStoreActions, useStoreState } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Camera from "../../components/Camera";
@@ -17,6 +17,7 @@ interface ISendCameraProps {
   navigation: NavigationScreenProp<{}>;
 }
 export default ({ navigation }: ISendCameraProps) => {
+  const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const setPayment = useStoreActions((store) => store.send.setPayment);
   const [cameraType, setCameraType] = useState<keyof CameraType>(RNCamera.Constants.Type.back);
   const [scanning, setScanning] = useState(true);
@@ -31,7 +32,7 @@ export default ({ navigation }: ISendCameraProps) => {
   };
 
   const tryInvoice = async (paymentRequest: string, errorPrefix: string) => {
-    if (!scanning) {
+    if (!scanning || !rpcReady) {
       return;
     }
 

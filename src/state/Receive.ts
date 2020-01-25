@@ -55,8 +55,8 @@ export const receive: IReceiveModel = {
   }),
 
   subscribeInvoice: thunk((actions, _2, { getState, dispatch, injections, getStoreState }) => {
-    const { decodePayReq } = injections.lndMobile.index;
-    const { decodeInvoiceResult } = injections.lndMobile.wallet;
+    const decodePayReq = injections.lndMobile.index.decodePayReq;
+    const decodeInvoiceResult = injections.lndMobile.wallet.decodeInvoiceResult;
     if (getState().invoiceSubscriptionStarted) {
       console.log("WARNING: Receive.subscribeInvoice() called when subsription already started");
       return;

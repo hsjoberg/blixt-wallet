@@ -38,6 +38,7 @@ export interface ISetAliasPayload {
 }
 
 export interface IChannelModel {
+  setupCachedBalance: Thunk<IChannelModel>;
   initialize: Thunk<IChannelModel>;
 
   setupChannelUpdateSubscriptions: Thunk<IChannelModel, void, IStoreInjections, IStoreModel>;
@@ -46,6 +47,7 @@ export interface IChannelModel {
   getBalance: Thunk<IChannelModel, undefined, IStoreInjections>;
   connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload>;
   closeChannel: Thunk<IChannelModel, ICloseChannelPayload>;
+  abandonChannel: Thunk<IChannelModel, ICloseChannelPayload>;
   exportChannelsBackup: Thunk<IChannelModel, void, IStoreInjections>;
 
   setChannels: Action<IChannelModel, lnrpc.IChannel[]>;
@@ -70,10 +72,12 @@ export interface IChannelModel {
 }
 
 export const channel: IChannelModel = {
-  initialize: thunk(async (actions, _, { getState }) => {
+  setupCachedBalance: thunk(async (actions) => {
     // Use cached balance before retrieving from lnd:
     actions.setBalance(Long.fromString(await getItemObject(StorageItem.lightningBalance)));
+  }),
 
+  initialize: thunk(async (actions, _, { getState }) => {
     await Promise.all([
       actions.getChannels(),
       actions.getChannelEvents(),
@@ -251,8 +255,15 @@ export const channel: IChannelModel = {
   }),
 
   closeChannel: thunk(async (_, { fundingTx, outputIndex }, { injections }) => {
-    const { closeChannel } = injections.lndMobile.channel;
+    const closeChannel = injections.lndMobile.channel.closeChannel;
     const result = await closeChannel(fundingTx, outputIndex);
+    console.log(result);
+    return result;
+  }),
+
+  abandonChannel: thunk(async (_, { fundingTx, outputIndex }, { injections }) => {
+    const abandonChannel = injections.lndMobile.channel.abandonChannel;
+    const result = await abandonChannel(fundingTx, outputIndex);
     console.log(result);
     return result;
   }),

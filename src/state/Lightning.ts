@@ -10,7 +10,7 @@ import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/a
 import { toast, timeout } from "../utils";
 import { Chain } from "../utils/build";
 
-const SYNC_UNLOCK_WALLET = true;
+const SYNC_UNLOCK_WALLET = false;
 
 export interface ILightningModel {
   initialize: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
@@ -41,7 +41,6 @@ export const lightning: ILightningModel = {
 
     if (getState().ready)  {
       console.log("Lightning store already started");
-      return true;
     }
 
     const start = new Date();
@@ -50,9 +49,6 @@ export const lightning: ILightningModel = {
     actions.setFirstSync(firstSync);
     const debugShowStartupInfo = getStoreState().settings.debugShowStartupInfo;
     const fastInit = differenceInDays(start, lastSync) <3 && !firstSync;
-
-    // moved to setupstores
-    // await dispatch.transaction.getTransactions();
 
     const status = await checkStatus();
     // Normal wallet unlock flow
@@ -87,7 +83,8 @@ export const lightning: ILightningModel = {
       }
     }
     // If a wallet was created, STATUS_WALLET_UNLOCKED would
-    // already be set when this function is called
+    // already be set when this function is called.
+    // This code path will also be used if we hot-reload the app (debug builds)
     else {
       actions.setupStores();
       if (fastInit) {
@@ -104,6 +101,7 @@ export const lightning: ILightningModel = {
     }
 
     await dispatch.transaction.getTransactions();
+    await dispatch.channel.setupCachedBalance();
 
     if (fastInit) {
       actions.setReady(true);
