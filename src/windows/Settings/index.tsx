@@ -13,6 +13,12 @@ export default createStackNavigator({
   SetPincode,
   ChangeFingerprintSettingsAuth,
 }, {
+  navigationOptions: {
+    animationEnabled: false,
+  },
+  defaultNavigationOptions: {
+    animationEnabled: false,
+  },
   headerMode: "none",
   initialRouteName: "Settings",
 });

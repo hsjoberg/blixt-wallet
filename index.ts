@@ -7,7 +7,6 @@ import protobuf from "protobufjs";
 protobuf.util.Long = Long;
 protobuf.configure();
 
-ReactNative.unstable_enableLogBox();
 YellowBox.ignoreWarnings(["Warning: component"]); // Workaround until native-base fixes their old
                                                   // componentWillMount etc code
 
