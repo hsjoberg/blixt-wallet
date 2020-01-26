@@ -7,7 +7,7 @@ ENV LANG C.UTF-8
 
 # Golang
 RUN apt-get update && apt-get install -qq -y curl unzip
-RUN curl -o go.tgz https://dl.google.com/go/go1.12.9.linux-amd64.tar.gz
+RUN curl -o go.tgz https://dl.google.com/go/go1.13.6.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf go.tgz
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
