@@ -17,3 +17,6 @@
 
 -keep class com.samsung.android.sdk.** { *; }
 -dontwarn com.samsung.android.sdk.**
+
+# React-native Hermes
+-keep class com.facebook.hermes.unicode.** { *; }

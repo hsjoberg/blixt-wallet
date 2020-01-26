@@ -2,6 +2,7 @@ import { NativeModules } from "react-native";
 import { sendCommand } from "./utils";
 import { lnrpc } from "../../proto/proto";
 import Long from "long";
+import sha from "sha.js";
 const { LndMobile } = NativeModules;
 
 /**
@@ -97,6 +98,30 @@ export const sendPaymentSync = async (paymentRequest: string): Promise<lnrpc.Sen
   });
   return response;
 };
+
+/**
+ * @throws
+ */
+export const sendKeysendPaymentSync = async (destinationPubKey: Uint8Array, sat: Long, preImage: Uint8Array): Promise<lnrpc.SendResponse> => {
+  const response = await sendCommand<lnrpc.ISendRequest, lnrpc.SendRequest, lnrpc.SendResponse>({
+    request: lnrpc.SendRequest,
+    response: lnrpc.SendResponse,
+    method: "SendPaymentSync",
+    options: {
+      dest: destinationPubKey,
+      amt: sat,
+      paymentHash: sha("sha256").update(preImage).digest(),
+      destCustomRecords: {
+        // 5482373484 is the record for lnd
+        // keysend payments as described in
+        // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
+        "5482373484": preImage,
+      },
+    },
+  });
+  return response;
+};
+
 
 /**
  * @throws

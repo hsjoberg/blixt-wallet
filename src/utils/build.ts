@@ -6,6 +6,7 @@ export const VersionCode: number = BuildConfig.VERSION_CODE;
 export const BuildType: string = BuildConfig.BUILD_TYPE;
 export const ApplicationId: string = BuildConfig.APPLICATION_ID;
 export const VersionName: string = BuildConfig.VERSION_NAME;
+export const IsHermes: boolean = global.HermesInternal != null;
 
 export const Chain: "mainnet" | "testnet" = BuildConfig.CHAIN;
 
