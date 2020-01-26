@@ -111,7 +111,7 @@ export default ({ navigation }: IOverviewProps)  => {
         barStyle="light-content"
         hidden={false}
         backgroundColor="transparent"
-        animated={true}
+        animated={false}
         translucent={true}
       />
       <View style={style.overview}>

@@ -29,6 +29,9 @@ import OnChainTransactionDetails from "./windows/OnChain/OnChainTransactionDetai
 const MainStack = createBottomTabNavigator({
   Overview,
 }, {
+  navigationOptions: {
+    animationEnabled: false,
+  },
   initialRouteName: "Overview",
   tabBarComponent: FooterNav,
 });
@@ -49,22 +52,21 @@ const StackNavigator = createStackNavigator({
   ChannelRequest,
   KeysendTest,
 }, {
-  transparentCard: true,
-  cardStyle: {
-    backgroundColor: "transparent",
-    opacity: 1.0,
+  navigationOptions: {
+    animationEnabled: false,
+    headerShown: false,
+    cardStyle: {
+      backgroundColor: "transparent",
+    },
+  },
+  defaultNavigationOptions: {
+    animationEnabled: false,
+    headerShown: false,
+    cardStyle: {
+      backgroundColor: "transparent",
+    },
   },
   initialRouteName: "Main",
-  transitionConfig : () => ({
-    screenInterpolator: (sceneProps) => {
-      return null;
-    },
-    transitionSpec: {
-      duration: 0,
-      timing: Animated.timing,
-      easing: Easing.step0,
-    },
-  }),
   mode: "modal",
   headerMode: "none",
 });
@@ -77,6 +79,9 @@ const RootStack = createSwitchNavigator({
   InitLightning,
   Main: { screen: StackNavigator },
 }, {
+  navigationOptions: {
+    animationEnabled: false,
+  },
   initialRouteName: __DEV__ ? "DEV_Commands" : "Init",
 });
 

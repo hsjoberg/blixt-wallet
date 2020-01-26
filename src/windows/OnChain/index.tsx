@@ -10,6 +10,12 @@ export default createStackNavigator({
   Withdraw,
   CameraFullscreen,
 }, {
+  navigationOptions: {
+    animationEnabled: false,
+  },
+  defaultNavigationOptions: {
+    animationEnabled: false,
+  },
   headerMode: "none",
   initialRouteName: "OnChainInfo",
 });

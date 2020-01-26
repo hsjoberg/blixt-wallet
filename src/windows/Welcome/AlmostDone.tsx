@@ -190,7 +190,12 @@ export default createStackNavigator({
   SetPincode,
   ChangeFingerprintSettingsAuth,
 }, {
+  navigationOptions: {
+    animationEnabled: false,
+  },
+  defaultNavigationOptions: {
+    animationEnabled: false,
+  },
   headerMode: "none",
   initialRouteName: "AlmostDone",
-  transparentCard: true,
 });

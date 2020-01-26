@@ -8,6 +8,12 @@ export default createStackNavigator({
   OpenChannel,
   CameraFullscreen,
 }, {
+  navigationOptions: {
+    animationEnabled: false,
+  },
+  defaultNavigationOptions: {
+    animationEnabled: false,
+  },
   headerMode: "none",
   initialRouteName: "LightningInfo",
 });
