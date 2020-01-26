@@ -158,12 +158,8 @@ export const channel: IChannelModel = {
           let alias;
           for (const pendingOpen of pendingChannels.pendingOpenChannels) {
             if (pendingOpen.channel) {
-              console.log(`TEST ${pendingOpen.channel.channelPoint!.split(":")[0]} === ${bytesToHexString(channelEvent.pendingOpenChannel.txid!.reverse())}`);
-              if (
-                pendingOpen.channel.channelPoint!.split(":")[0]
-                ===
-                bytesToHexString(channelEvent.pendingOpenChannel.txid!.reverse())
-              ) {
+              const txId = [...channelEvent.pendingOpenChannel.txid!].reverse();
+              if (pendingOpen.channel.channelPoint!.split(":")[0] === bytesToHexString(txId)) {
                 const r = await injections.lndMobile.index.getNodeInfo(pendingOpen.channel.remoteNodePub!);
                 alias = r.node!.alias;
               }
