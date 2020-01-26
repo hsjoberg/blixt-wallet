@@ -72,8 +72,8 @@ export default {
   badgePadding: platform === PLATFORM.IOS ? 3 : 0,
 
   // Button
-  buttonFontFamily: platform === PLATFORM.IOS ? 'System' : 'Roboto_medium',
-  buttonDisabledBg: '#b5b5b5',
+  // buttonFontFamily: platform === PLATFORM.IOS ? 'System' : 'Roboto_medium',
+  // buttonDisabledBg: '#b5b5b5',
   buttonPadding: 6,
   get buttonPrimaryBg() {
     return this.brandPrimary;
@@ -127,25 +127,25 @@ export default {
   },
 
   // Card
-  cardDefaultBg: '#fff',
-  cardBorderColor: '#ccc',
+  // cardDefaultBg: '#fff',
+  // cardBorderColor: '#ccc',
   cardBorderRadius: 2,
   cardItemPadding: platform === PLATFORM.IOS ? 10 : 12,
 
   // CheckBox
-  CheckboxRadius: platform === PLATFORM.IOS ? 13 : 0,
-  CheckboxBorderWidth: platform === PLATFORM.IOS ? 1 : 2,
-  CheckboxPaddingLeft: platform === PLATFORM.IOS ? 4 : 2,
+  // CheckboxRadius: platform === PLATFORM.IOS ? 13 : 0,
+  // CheckboxBorderWidth: platform === PLATFORM.IOS ? 1 : 2,
+  // CheckboxPaddingLeft: platform === PLATFORM.IOS ? 4 : 2,
   CheckboxPaddingBottom: platform === PLATFORM.IOS ? 0 : 5,
   CheckboxIconSize: platform === PLATFORM.IOS ? 21 : 16,
-  CheckboxIconMarginTop: platform === PLATFORM.IOS ? undefined : 1,
-  CheckboxFontSize: platform === PLATFORM.IOS ? 23 / 0.9 : 17,
-  checkboxBgColor: '#039BE5',
+  // CheckboxIconMarginTop: platform === PLATFORM.IOS ? undefined : 1,
+  // CheckboxFontSize: platform === PLATFORM.IOS ? 23 / 0.9 : 17,
+  // checkboxBgColor: '#039BE5',
   checkboxSize: 20,
-  checkboxTickColor: '#fff',
+  // checkboxTickColor: '#fff',
 
   // Color
-  brandPrimary: platform === PLATFORM.IOS ? '#007aff' : '#3F51B5',
+  // brandPrimary: platform === PLATFORM.IOS ? '#007aff' : '#3F51B5',
   brandInfo: '#62B1F6',
   brandSuccess: '#5cb85c',
   brandDanger: '#d9534f',
@@ -154,7 +154,7 @@ export default {
   brandLight: '#f4f4f4',
 
   // Container
-  containerBgColor: '#fff',
+  // containerBgColor: '#fff',
 
   // Date Picker
   datePickerTextColor: '#000',
@@ -164,9 +164,9 @@ export default {
   fabWidth: 56,
 
   // Font
-  DefaultFontSize: 16,
-  fontFamily: platform === PLATFORM.IOS ? 'System' : 'Roboto',
-  fontSizeBase: 15,
+  // DefaultFontSize: 16,
+  // fontFamily: platform === PLATFORM.IOS ? 'System' : 'Roboto',
+  // fontSizeBase: 15,
   get fontSizeH1() {
     return this.fontSizeBase * 1.8;
   },
@@ -179,11 +179,11 @@ export default {
 
   // Footer
   footerHeight: 55,
-  footerDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#3F51B5',
+  // footerDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#3F51B5',
   footerPaddingBottom: 0,
 
   // FooterTab
-  tabBarTextColor: platform === PLATFORM.IOS ? '#737373' : '#bfc6ea',
+  // tabBarTextColor: platform === PLATFORM.IOS ? '#737373' : '#bfc6ea',
   tabBarTextSize: platform === PLATFORM.IOS ? 14 : 11,
   activeTab: platform === PLATFORM.IOS ? '#007aff' : '#fff',
   sTabBarActiveTextColor: '#007aff',
@@ -191,8 +191,8 @@ export default {
   tabActiveBgColor: platform === PLATFORM.IOS ? '#cde1f9' : '#3F51B5',
 
   // Header
-  toolbarBtnColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  toolbarDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#3F51B5',
+  // toolbarBtnColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
+  // toolbarDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#3F51B5',
   toolbarHeight: platform === PLATFORM.IOS ? 64 : 56,
   toolbarSearchIconSize: platform === PLATFORM.IOS ? 20 : 23,
   toolbarInputColor: platform === PLATFORM.IOS ? '#CECDD2' : '#fff',
@@ -219,7 +219,7 @@ export default {
 
   // InputGroup
   inputFontSize: 17,
-  inputBorderColor: '#D9D5DC',
+  // inputBorderColor: '#D9D5DC',
   inputSuccessBorderColor: '#2b8339',
   inputErrorBorderColor: '#ed2f2f',
   inputHeightBase: 50,
@@ -239,7 +239,7 @@ export default {
 
   // List
   listBg: 'transparent',
-  listBorderColor: '#c9c9c9',
+  // listBorderColor: '#c9c9c9',
   listDividerBg: '#f4f4f4',
   listBtnUnderlayColor: '#DDD',
   listItemPadding: platform === PLATFORM.IOS ? 10 : 12,
@@ -283,18 +283,18 @@ export default {
   tabFontSize: 15,
 
   // Text
-  textColor: '#000',
-  inverseTextColor: '#fff',
+  // textColor: '#000',
+  // inverseTextColor: '#fff',
   noteFontSize: 14,
   get defaultTextColor() {
     return this.textColor;
   },
 
   // Title
-  titleFontfamily: platform === PLATFORM.IOS ? 'System' : 'Roboto_medium',
+  // titleFontfamily: platform === PLATFORM.IOS ? 'System' : 'Roboto_medium',
   titleFontSize: platform === PLATFORM.IOS ? 17 : 19,
   subTitleFontSize: platform === PLATFORM.IOS ? 11 : 14,
-  subtitleColor: platform === PLATFORM.IOS ? '#000' : '#fff',
+  // subtitleColor: platform === PLATFORM.IOS ? '#000' : '#fff',
   titleFontColor: platform === PLATFORM.IOS ? '#000' : '#fff',
 
   // Other
