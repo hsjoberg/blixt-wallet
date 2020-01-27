@@ -174,6 +174,14 @@ class LndMobile extends ReactContextBaseJavaModule {
             .emit("WalletUnlocked", null);
           break;
         }
+        case LndMobileService.MSG_GRPC_STREAM_STARTED: {
+          final int request = msg.arg1;
+          final Promise promise = requests.remove(request);
+          if (promise != null) {
+            promise.resolve("done");
+          }
+          break;
+        }
       }
     }
   }
@@ -412,10 +420,10 @@ void deleteRecursive(File fileOrDirectory) {
 
   @ReactMethod
   public void sendCommand(String method, String payloadStr, final Promise promise) {
+    HyperLog.d(TAG, "sendCommand() " + method);
     int req = new Random().nextInt();
     requests.put(req, promise);
 
-    HyperLog.d(TAG, "sendCommand() " + method);
     Message message = Message.obtain(null, LndMobileService.MSG_GRPC_COMMAND, req, 0);
     message.replyTo = messenger;
 
@@ -434,7 +442,10 @@ void deleteRecursive(File fileOrDirectory) {
   @ReactMethod
   public void sendStreamCommand(String method, String payloadStr, boolean streamOnlyOnce, Promise promise) {
     HyperLog.d(TAG, "sendStreamCommand() " + method);
-    Message message = Message.obtain(null, LndMobileService.MSG_GRPC_STREAM_COMMAND, 0, 0);
+    int req = new Random().nextInt();
+    requests.put(req, promise);
+
+    Message message = Message.obtain(null, LndMobileService.MSG_GRPC_STREAM_COMMAND, req, 0);
     message.replyTo = messenger;
 
     Bundle bundle = new Bundle();

@@ -58,6 +58,7 @@ public class LndMobileService extends Service {
   static final int MSG_WALLETUNLOCKED = 13;
   static final int MSG_UNLOCKWALLET = 14;
   static final int MSG_INITWALLET = 15;
+  static final int MSG_GRPC_STREAM_STARTED = 16;
 
   int unlockWalletRequest = -1;
 
@@ -138,6 +139,15 @@ public class LndMobileService extends Service {
                   ? new LndCallback(msg.replyTo, method, request)
                   : new LndStreamCallback(msg.replyTo, method)
               );
+
+              if (msg.what == MSG_GRPC_STREAM_COMMAND) {
+                Message message = Message.obtain(null, MSG_GRPC_STREAM_STARTED, request, 0);
+                Bundle sendBundle = new Bundle();
+                sendBundle.putString("method", method);
+                message.setData(sendBundle);
+                sendToClient(msg.replyTo, message);
+              }
+
             } catch (IllegalAccessException | InvocationTargetException e) {
               Log.e(TAG, "Could not invoke lndmobile method " + method, e);
               // TODO(hsjoberg) send error response to client?
