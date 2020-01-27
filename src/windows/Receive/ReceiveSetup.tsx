@@ -15,6 +15,7 @@ interface IReceiveSetupProps {
 }
 export default ({ navigation }: IReceiveSetupProps) => {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
+  const invoiceSubscriptionStarted = useStoreState((store) => store.receive.invoiceSubscriptionStarted);
   const addInvoice = useStoreActions((store) => store.receive.addInvoice);
   const [satValue, setSatValue] = useState<string | undefined>(undefined);
   const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
@@ -23,6 +24,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const [payer, setPayer] = useState<string>("");
+  const [createInvoiceDisabled, setCreateInvoiceDisabled] = useState(false);
 
   const onChangeSatInput = (text: string) => {
     if (bitcoinUnit === "satoshi") {
@@ -60,6 +62,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
 
   const onCreateInvoiceClick = async () => {
     try {
+      setCreateInvoiceDisabled(true);
       if (unitToSatoshi(Number.parseFloat(satValue!), bitcoinUnit) > MAX_SAT_INVOICE) {
         throw new Error("Invoice amount cannot be higher than " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnit));
       }
@@ -72,6 +75,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
         })
       });
     } catch (e) {
+      setCreateInvoiceDisabled(false);
       Toast.show({
         duration: 12000,
         type: "danger",
@@ -148,9 +152,17 @@ export default ({ navigation }: IReceiveSetupProps) => {
             block={true}
             primary={true}
             onPress={onCreateInvoiceClick}
-            disabled={!rpcReady || (satValue == "0" || satValue === undefined)}
+            disabled={
+              createInvoiceDisabled ||
+              !rpcReady ||
+              !invoiceSubscriptionStarted ||
+              (satValue == "0" || satValue === undefined)
+            }
           >
-            {rpcReady ? <Text>Create invoice</Text> : <Spinner color={blixtTheme.light} />}
+            {rpcReady && invoiceSubscriptionStarted
+              ? <Text>Create invoice</Text>
+              : <Spinner color={blixtTheme.light} />
+            }
           </Button>
         ]}
       />
