@@ -187,7 +187,7 @@ android {
             manifestPlaceholders = [buildType: ""]
         }
     }
-    flavorDimensions "chain"
+    flavorDimensions "chain", "custom"
     productFlavors {
         chaintestnet {
             dimension "chain"
@@ -199,6 +199,11 @@ android {
             dimension "chain"
             buildConfigField "String", "CHAIN", '"mainnet"'
             manifestPlaceholders = [chain: ""]
+        }
+
+        normal {
+            dimension "custom"
+            manifestPlaceholders = [custom: ""]
         }
     }
     // applicationVariants are e.g. debug, release
