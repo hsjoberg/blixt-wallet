@@ -8,6 +8,7 @@ import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
 import { setupDescription } from "../utils/NameDesc";
 import { valueFiat } from "../utils/bitcoin-units";
+import { timeout } from "../utils";
 
 interface IReceiveModelAddInvoicePayload {
   description: string;
@@ -17,10 +18,10 @@ interface IReceiveModelAddInvoicePayload {
 }
 
 export interface IReceiveModel {
-  initialize: Thunk<IReceiveModel, undefined, IStoreInjections>;
+  initialize: Thunk<IReceiveModel, void, IStoreInjections>;
 
   addInvoice: Thunk<IReceiveModel, IReceiveModelAddInvoicePayload, IStoreInjections, IStoreModel, Promise<lnrpc.AddInvoiceResponse>>;
-  subscribeInvoice: Thunk<IReceiveModel, undefined, IStoreInjections, IStoreModel>;
+  subscribeInvoice: Thunk<IReceiveModel, void, IStoreInjections, IStoreModel>;
   setInvoiceSubscriptionStarted: Action<IReceiveModel, boolean>;
   setPayerTmp: Action<IReceiveModel, string | null>;
 
@@ -29,13 +30,11 @@ export interface IReceiveModel {
 }
 
 export const receive: IReceiveModel = {
-  initialize: thunk(async (actions, _, { getState, injections }) => {
-    const { subscribeInvoices } = injections.lndMobile.wallet;
+  initialize: thunk(async (actions, _, { injections }) => {
+    const subscribeInvoices = injections.lndMobile.wallet.subscribeInvoices;
     await subscribeInvoices();
-
-    if (!(getState().invoiceSubscriptionStarted)) {
-      actions.subscribeInvoice(undefined);
-    }
+    await timeout(2000); // Wait for the stream to get ready
+    actions.subscribeInvoice();
     return true;
   }),
 
@@ -61,7 +60,6 @@ export const receive: IReceiveModel = {
       console.log("WARNING: Receive.subscribeInvoice() called when subsription already started");
       return;
     }
-    console.log("Starting transaction subscription");
     DeviceEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
       console.log("New invoice event");
 
@@ -117,6 +115,7 @@ export const receive: IReceiveModel = {
       await dispatch.transaction.syncTransaction(transaction);
     });
     actions.setInvoiceSubscriptionStarted(true);
+    console.log("Transaction subscription started");
   }),
 
   setInvoiceSubscriptionStarted: action((state, payload) => { state.invoiceSubscriptionStarted = payload }),
