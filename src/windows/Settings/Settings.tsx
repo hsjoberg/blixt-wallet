@@ -451,10 +451,12 @@ export default ({ navigation }: ISettingsProps) => {
             <Body><Text>Show startup info notications</Text></Body>
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
           </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>
-            <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
-            <Body><Text>Keysend Test</Text></Body>
-          </ListItem>
+          {(name === "Hampus" || __DEV__ === true) &&
+            <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>
+              <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
+              <Body><Text>Keysend Test</Text></Body>
+            </ListItem>
+          }
         </List>
       </Content>
     </Container>
