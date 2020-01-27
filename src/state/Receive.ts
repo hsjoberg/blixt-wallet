@@ -64,9 +64,9 @@ export const receive: IReceiveModel = {
     console.log("Starting transaction subscription");
     DeviceEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
       console.log("New invoice event");
-      console.log(e);
 
       const invoice = decodeInvoiceResult(e.data);
+      console.log(invoice);
       const paymentRequest = await decodePayReq(invoice.paymentRequest);
 
       const payer = getState().payerTmp;

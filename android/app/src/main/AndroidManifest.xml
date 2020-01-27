@@ -12,7 +12,7 @@
 
     <application
       android:name=".MainApplication"
-      android:label="${appName}${chain}${buildType}"
+      android:label="${appName}${chain}${custom}${buildType}"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
@@ -21,7 +21,7 @@
       tools:replace="android:label">
       <activity
         android:name=".MainActivity"
-        android:label="${appName}${chain}${buildType}"
+        android:label="${appName}${chain}${custom}${buildType}"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="adjustResize">
         <intent-filter>

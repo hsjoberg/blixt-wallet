@@ -316,7 +316,7 @@ exports[`renders correctly 1`] = `
                                         "padding": 4,
                                         "paddingRight": 8,
                                         "position": "absolute",
-                                        "top": 12,
+                                        "top": 54,
                                       },
                                     ],
                                     Object {
@@ -355,7 +355,7 @@ exports[`renders correctly 1`] = `
                                         "padding": 4,
                                         "paddingRight": 8,
                                         "position": "absolute",
-                                        "top": 13,
+                                        "top": 55,
                                       },
                                     ],
                                     Object {
@@ -393,7 +393,7 @@ exports[`renders correctly 1`] = `
                                         "padding": 4,
                                         "position": "absolute",
                                         "right": 8,
-                                        "top": 13,
+                                        "top": 55,
                                       },
                                     ],
                                     Object {
@@ -431,7 +431,7 @@ exports[`renders correctly 1`] = `
                                         "padding": 4,
                                         "position": "absolute",
                                         "right": 44,
-                                        "top": 13,
+                                        "top": 55,
                                       },
                                     ],
                                     Object {
@@ -453,7 +453,7 @@ exports[`renders correctly 1`] = `
                                   "fontFamily": "System",
                                   "fontSize": 37,
                                   "marginBottom": 2,
-                                  "marginTop": 30,
+                                  "marginTop": 72,
                                 }
                               }
                             >
