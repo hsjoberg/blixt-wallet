@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Card, CardItem, Body, Row, Right, Text, Left } from "native-base";
 
-import { useStoreActions } from "../state/store";
-import { StyleSheet } from "react-native";
+import { useStoreActions, useStoreState } from "../state/store";
+import { StyleSheet, Alert } from "react-native";
 import { lnrpc } from "../../proto/proto";
 
 export interface IChannelCardProps {
@@ -12,6 +12,9 @@ export interface IChannelCardProps {
 export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
   const closeChannel = useStoreActions((store) => store.channel.closeChannel);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
+  const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
+  const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
+  const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
 
   const close = async () => {
     const result = await closeChannel({
@@ -21,6 +24,19 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
     console.log(result);
 
     await getChannels(undefined);
+
+    Alert.alert(
+      "Autopilot",
+      "Automatic channel opening is enabled, " +
+      "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
+      "Do you wish to disable automatic channel opening?",
+      [
+        { text: "No", },
+        { text: "Yes", onPress: async () => {
+          changeAutopilotEnabled(false);
+          setupAutopilot(false);
+        },
+    }]);
   };
 
   return (
