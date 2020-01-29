@@ -452,10 +452,16 @@ export default ({ navigation }: ISettingsProps) => {
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
           </ListItem>
           {(name === "Hampus" || __DEV__ === true) &&
-            <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>
-              <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
-              <Body><Text>Keysend Test</Text></Body>
-            </ListItem>
+            <>
+              <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>
+                <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
+                <Body><Text>Keysend Test</Text></Body>
+              </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("GoogleDriveTestbed")}>
+                <Left><Icon style={style.icon} type="Entypo" name="google-drive" /></Left>
+                <Body><Text>Google Drive Testbed</Text></Body>
+              </ListItem>
+            </>
           }
         </List>
       </Content>
