@@ -22,6 +22,7 @@ import LightningNodeInfo from "./windows/Settings/LightningNodeInfo";
 import About from "./windows/Settings/About";
 import ChannelRequest from "./windows/LNURL/ChannelRequest";
 import KeysendTest from "./windows/Keysend/Test";
+import GoogleDriveTestbed from "./windows/Google/GoogleDriveTestbed";
 
 import TransactionDetails from "./windows/TransactionDetails";
 import OnChainTransactionDetails from "./windows/OnChain/OnChainTransactionDetails";
@@ -51,6 +52,7 @@ const StackNavigator = createStackNavigator({
   OnChain,
   ChannelRequest,
   KeysendTest,
+  GoogleDriveTestbed
 }, {
   navigationOptions: {
     animationEnabled: false,

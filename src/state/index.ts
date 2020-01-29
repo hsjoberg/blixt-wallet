@@ -16,6 +16,8 @@ import { ISettingsModel, settings } from "./Settings";
 import { IClipboardManagerModel, clipboardManager } from "./ClipboardManager";
 import { IScheduledSyncModel, scheduledSync } from "./ScheduledSync";
 import { ILNUrlModel, lnUrl } from "./LNURL";
+import { IGoogleModel, google } from "./Google";
+import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
@@ -60,6 +62,9 @@ export interface IStoreModel {
   clipboardManager: IClipboardManagerModel;
   scheduledSync: IScheduledSyncModel;
   lnUrl: ILNUrlModel;
+  google: IGoogleModel;
+  googleDriveBackup: IGoogleDriveBackupModel;
+
   walletSeed?: string[];
 }
 
@@ -101,6 +106,8 @@ export const model: IStoreModel = {
     await dispatch.settings.initialize();
     dispatch.fiat.getRate();
     await dispatch.security.initialize();
+    await dispatch.google.initialize();
+    await dispatch.googleDriveBackup.initialize();
     actions.setAppReady(true);
 
     console.log("App initialized");
@@ -193,6 +200,8 @@ export const model: IStoreModel = {
   clipboardManager,
   scheduledSync,
   lnUrl,
+  google,
+  googleDriveBackup,
 };
 
 export default model;
