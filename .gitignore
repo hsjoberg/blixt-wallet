@@ -70,3 +70,6 @@ proto
 .classpath
 .project
 .settings
+
+# Google
+google-services.json
