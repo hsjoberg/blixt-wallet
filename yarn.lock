@@ -1279,6 +1279,11 @@
     wcwidth "^1.0.1"
     ws "^1.1.0"
 
+"@react-native-community/google-signin@^3.0.4":
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/@react-native-community/google-signin/-/google-signin-3.0.4.tgz#0a28ff735162e29764b0044b282752793c94960f"
+  integrity sha512-76FhtnQllErTLFVKTLqmnoHvDM8nK1IPl4p0enEW6F0ScsfA8gMx9o8KMPAUr7BZpcSQpIsFc+EXOh+LldyOWg==
+
 "@react-native-community/masked-view@^0.1.6":
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.6.tgz#c7f2ac187c1f25aa8c30d11baa8f4398eca3bb84"

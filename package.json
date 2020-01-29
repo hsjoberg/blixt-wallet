@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "1.7.1",
+    "@react-native-community/google-signin": "^3.0.4",
     "@react-native-community/masked-view": "^0.1.6",
     "@react-native-community/react-native-clipboard": "^1.0.1",
     "@types/sha.js": "^2.4.0",
