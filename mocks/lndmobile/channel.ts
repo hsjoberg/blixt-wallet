@@ -58,3 +58,13 @@ export const channelBalance = jest.fn(async (): Promise<lnrpc.ChannelBalanceResp
 export const subscribeChannelEvents = jest.fn(async (address: string, sat: number): Promise<string> => {
   return ""; // TODO(hsjoberg)
 });
+
+export const exportAllChannelBackups = async (): Promise<lnrpc.ChanBackupSnapshot> => {
+  const response = lnrpc.ChanBackupSnapshot.create({
+    multiChanBackup: {
+      // chanPoints
+      multiChanBackup: new Uint8Array([1,2,3,4,5,6,7,8,9,10]),
+    },
+  });
+  return response;
+};
