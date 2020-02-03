@@ -42,7 +42,7 @@ export default ({ navigation }: IProps) => {
       {!ready && nodeInfo && !nodeInfo.syncedToChain &&
         <>
           <H1>Syncing chain...</H1>
-          {firstSync && <H3 style={style.firstSync}>This might take a couple of minutes</H3>}
+          {/* {firstSync && <H3 style={style.firstSync}>This might take a couple of minutes</H3>} */}
         </>
       }
     </Container>
