@@ -15,6 +15,7 @@ import Content from "../../components/Content";
 import SetPincode from "../Settings/SetPincode";
 import RemovePincodeAuth from "../Settings/RemovePincodeAuth";
 import ChangeFingerprintSettingsAuth from "../Settings/ChangeFingerprintSettingsAuth";
+import { toast } from "../../utils";
 
 interface IProps {
   navigation: NavigationScreenProp<{}>;
@@ -82,12 +83,29 @@ export const AlmostDone = ({ navigation }: IProps) => {
     }
   }
 
-    // Autopilot
-    const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
-    const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
-    const onToggleAutopilotPress = () => { // TODO why not await?
-      changeAutopilotEnabled(!autopilotEnabled);
+  // Autopilot
+  const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
+  const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
+  const onToggleAutopilotPress = () => { // TODO why not await?
+    changeAutopilotEnabled(!autopilotEnabled);
+  }
+
+  const googleDriveBackupEnabled = useStoreState((store) => store.settings.googleDriveBackupEnabled);
+  const changeGoogleDriveBackupEnabled = useStoreActions((store) => store.settings.changeGoogleDriveBackupEnabled);
+  const googleSignIn = useStoreActions((store) => store.google.signIn);
+  const googleSignOut = useStoreActions((store) => store.google.signOut);
+  const googleIsSignedIn = useStoreState((store) => store.google.isSignedIn);
+  const onToggleGoogleDriveBackup = async () => {
+    if (!googleIsSignedIn) {
+      await googleSignIn();
+      await changeGoogleDriveBackupEnabled(true);
+      toast("Google Drive backup enabled");
     }
+    else {
+      await googleSignOut();
+      await changeGoogleDriveBackupEnabled(false);
+    }
+  };
 
   return (
     <Container>
@@ -138,7 +156,16 @@ export const AlmostDone = ({ navigation }: IProps) => {
                 <Text note={true} numberOfLines={1}>Open channels when on-chain funds are available</Text>
               </Body>
               <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>
-          </ListItem>
+            </ListItem>
+
+            <ListItem style={extraStyle.listItem} icon={true} onPress={onToggleGoogleDriveBackup}>
+              <Left><Icon style={extraStyle.icon} type="MaterialCommunityIcons" name="google-drive" /></Left>
+              <Body>
+                <Text>Google Drive channel backup</Text>
+                <Text note={true} numberOfLines={1}>Automatically backup channels to Google Drive</Text>
+              </Body>
+              <Right><CheckBox checked={googleDriveBackupEnabled} onPress={onToggleGoogleDriveBackup} /></Right>
+            </ListItem>
           </List>
         </View>
         <View style={style.lowerContent}>
