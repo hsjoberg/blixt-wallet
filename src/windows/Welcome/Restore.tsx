@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { StatusBar, StyleSheet, Alert } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import { readFile } from "react-native-fs";
-import { Text, View, Button, H1, Textarea, Spinner } from "native-base";
+import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
 
-import { useStoreActions } from "../../state/store";
+import { useStoreActions, useStoreState } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
@@ -17,12 +17,17 @@ interface IProps {
 export default ({ navigation }: IProps) => {
   const [loading, setLoading] = useState(false);
   const [seedText, setSeedText] = useState("");
+  const [backupType, setBackupType] = useState<"file" | "google_drive" | "none">("none");
   const [backupFile, setBackupFile] = useState<DocumentPickerResponse | null>(null);
+  const [b64Backup, setB64Backup] = useState<string | null>(null);
   const setWalletSeed = useStoreActions((store) => store.setWalletSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
+  const isSignedInGoogle = useStoreState((store) => store.google.isSignedIn);
+  const signInGoogle = useStoreActions((store) => store.google.signIn);
+  const getBackupFile = useStoreActions((store => store.googleDriveBackup.getBackupFile));
+
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
   const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
-
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
   const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
 
@@ -42,9 +47,15 @@ export default ({ navigation }: IProps) => {
           restoreWallet: true,
         }
       }
-      if (backupFile) {
-        const backupBase64 = await readFile(backupFile.uri, "base64");
-        createWalletOpts.restore!.channelsBackup = backupBase64;
+
+      if (backupType === "file") {
+        if (backupFile) {
+          const backupBase64 = await readFile(backupFile.uri, "base64");
+          createWalletOpts.restore!.channelsBackup = backupBase64;
+        }
+      }
+      else if (backupType === "google_drive") {
+        createWalletOpts.restore!.channelsBackup = b64Backup!;
       }
 
       await createWallet(createWalletOpts),
@@ -63,6 +74,23 @@ export default ({ navigation }: IProps) => {
     }
   };
 
+  const googleDriveBackup = async () => {
+    if (!isSignedInGoogle) {
+      if (!(await signInGoogle())) {
+        return;
+      }
+    }
+
+    try {
+      const base64Backup = await getBackupFile();
+      console.log(base64Backup);
+      setB64Backup(base64Backup);
+      setBackupType("google_drive");
+    } catch (e) {
+      window.alert(`Restoring via Google Drive failed:\n\n${e.message}`);
+    }
+  };
+
   const pickChannelsExportFile = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -70,9 +98,16 @@ export default ({ navigation }: IProps) => {
       });
       console.log(res);
       setBackupFile(res);
+      setBackupType("file");
     } catch (e) {
       console.log(e);
     }
+  }
+
+  const undoBackupChoice = () => {
+    setBackupFile(null);
+    setB64Backup(null);
+    setBackupType("none");
   }
 
   return (
@@ -88,21 +123,49 @@ export default ({ navigation }: IProps) => {
         <View style={style.upperContent}>
           <View style={style.seed}>
             <Textarea
-              style={{width: "100%", backgroundColor: blixtTheme.gray, fontSize: 20, }}
-              rowSpan={7}
+              style={{width: "100%", height: 150, backgroundColor: blixtTheme.gray, fontSize: 20, }}
+              rowSpan={6}
               bordered={false}
               underline={false}
               onChangeText={setSeedText}
               value={seedText}
             />
-            <View style={{ marginTop: 6, width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <Text>{backupFile && backupFile.name}</Text>
-              <Button small onPress={pickChannelsExportFile}>
-                <Text>
-                  {backupFile === null && "Choose channel backup file"}
-                  {backupFile !== null && "Choose another file"}
-                </Text>
-              </Button>
+            <View style={{ marginTop: 14, width: "100%", display: "flex" }}>
+              <H3>Channel backup</H3>
+              {backupType === "none" &&
+                <View style={{ display: "flex", flexDirection: "column" }}>
+                  <Button style={{ marginTop: 6, marginBottom: 10 }} small onPress={pickChannelsExportFile}>
+                    <Text>
+                      {backupFile === null && "Choose channel backup file on disk"}
+                    </Text>
+                  </Button>
+                  <Button small onPress={googleDriveBackup}>
+                    <Text>
+                      Restore via Google Drive
+                    </Text>
+                  </Button>
+                </View>
+              }
+              {backupType === "file" &&
+                <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
+                  <Text>{backupFile &&  backupFile.name}</Text>
+                  <Button small onPress={undoBackupChoice}>
+                    <Text>
+                      x
+                    </Text>
+                  </Button>
+                </View>
+              }
+              {backupType === "google_drive" &&
+                <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
+                  <Text>Backup via Google Drive</Text>
+                  <Button small onPress={undoBackupChoice}>
+                    <Text>
+                      x
+                    </Text>
+                  </Button>
+                </View>
+              }
             </View>
           </View>
           <View style={style.text}>
@@ -134,7 +197,7 @@ const style = StyleSheet.create({
   },
   seed: {
     marginTop: 32,
-    height: 200,
+    height: 300,
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
