@@ -37,8 +37,9 @@ export const google: IGoogleModel = {
     if (hasPlayServices) {
       try {
         const user = await GoogleSignin.signInSilently();
-        actions.setUser(user);
+        console.log("Google silent login");
         actions.setIsSignedIn(true);
+        actions.setUser(user);
       } catch (e) {
         if (e.code !== statusCodes.SIGN_IN_REQUIRED) {
           console.warn(`Google: Got unknown error from GoogleSignin.signInSilently(): ${e.code}`);
@@ -55,8 +56,6 @@ export const google: IGoogleModel = {
 
     try {
       const user = await GoogleSignin.signIn();
-
-      console.log(user);
       actions.setUser(user);
       actions.setIsSignedIn(true);
     } catch (error) {
@@ -68,15 +67,17 @@ export const google: IGoogleModel = {
         // play services not available or outdated
       } else {
         // some other error happened
+        console.error(error);
       }
+      return false
     }
+    return true;
   }),
 
   signOut: thunk(async (actions) => {
-    await GoogleSignin.revokeAccess();
+    // await GoogleSignin.revokeAccess();
     await GoogleSignin.signOut();
     actions.setIsSignedIn(false);
-    // await GoogleSignin.clearCachedToken()
   }),
 
   getTokens: thunk(async (_, _2, { getState }) => {

@@ -13,7 +13,7 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
 import { BitcoinUnits } from "../../utils/bitcoin-units";
 import { verifyChanBackup } from "../../lndmobile/channel";
-import { formatISO } from "../../utils";
+import { formatISO, toast } from "../../utils";
 
 interface ISettingsProps {
   navigation: NavigationScreenProp<{}>;
@@ -249,6 +249,35 @@ export default ({ navigation }: ISettingsProps) => {
     await changeDebugShowStartupInfo(!debugShowStartupInfo);
   };
 
+  const googleDriveBackupEnabled = useStoreState((store) => store.settings.googleDriveBackupEnabled);
+  const changeGoogleDriveBackupEnabled = useStoreActions((store) => store.settings.changeGoogleDriveBackupEnabled);
+  const googleSignIn = useStoreActions((store) => store.google.signIn);
+  const googleSignOut = useStoreActions((store) => store.google.signOut);
+  const googleIsSignedIn = useStoreState((store) => store.google.isSignedIn);
+  const googleDriveMakeBackup = useStoreActions((store) => store.googleDriveBackup.makeBackup);
+  const onToggleGoogleDriveBackup = async () => {
+    if (!googleIsSignedIn) {
+      await googleSignIn();
+      await googleDriveMakeBackup();
+      await changeGoogleDriveBackupEnabled(true);
+      toast("Google Drive backup enabled");
+    }
+    else {
+      await googleSignOut();
+      await changeGoogleDriveBackupEnabled(false);
+    }
+  };
+
+  const onDoGoogleDriveBackupPress = async () => {
+    try {
+      await googleDriveMakeBackup();
+      toast("Backed up channels to Google Drive");
+    }
+    catch (e) {
+      toast(`Error backup up: ${e.message}`, 10000, "danger");
+    }
+  }
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -315,7 +344,20 @@ export default ({ navigation }: ISettingsProps) => {
               </Body>
             </ListItem>
           }
-
+          <ListItem style={style.listItem} icon={true} onPress={onToggleGoogleDriveBackup}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-drive" /></Left>
+            <Body>
+              <Text>Google Drive channel backup</Text>
+              <Text note={true} numberOfLines={1}>Automatically backup channels to Google Drive</Text>
+            </Body>
+            <Right><CheckBox checked={googleDriveBackupEnabled} onPress={onToggleGoogleDriveBackup} /></Right>
+          </ListItem>
+          {googleDriveBackupEnabled &&
+            <ListItem style={style.listItem} icon={true} onPress={onDoGoogleDriveBackupPress}>
+              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="folder-google-drive" /></Left>
+              <Body><Text>Manually trigger Google Drive Backup</Text></Body>
+            </ListItem>
+          }
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Security</Text>

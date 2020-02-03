@@ -4,8 +4,7 @@ import * as base64 from "base64-js";
 
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
-
-import { uploadFileAsString, getFiles, checkResponseIsError } from "../utils/google-drive";
+import { uploadFileAsString, getFiles, checkResponseIsError, downloadFileAsString } from "../utils/google-drive";
 import { Chain } from "../utils/build";
 
 export const GOOGLE_DRIVE_BACKUP_FILE = `blixt-wallet-backup-${Chain}.b64`;
@@ -17,6 +16,8 @@ export interface IGoogleDriveBackupModel {
   setChannelUpdateSubscriptionStarted: Action<IGoogleDriveBackupModel, boolean>;
 
   makeBackup: Thunk<IGoogleDriveBackupModel, void, IStoreInjections, IStoreModel>;
+
+  getBackupFile: Thunk<IGoogleDriveBackupModel, void, IStoreInjections, IStoreModel, Promise<string>>;
 
   channelUpdateSubscriptionStarted: boolean;
 };
@@ -32,7 +33,7 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
     console.log("Starting channel update subscription for Google Drive channel backup");
 
     DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
-      if (!getStoreState().google.isSignedIn) {
+      if (!getStoreState().settings.googleDriveBackupEnabled || !getStoreState().google.isSignedIn) {
         return;
       }
       console.log("GoogleDriveBackup: Received SubscribeChannelEvents");
@@ -50,9 +51,9 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
     const exportAllChannelBackups = injections.lndMobile.channel.exportAllChannelBackups;
     const backup = await exportAllChannelBackups();
     const backupsB64 = base64.fromByteArray(backup.multiChanBackup!.multiChanBackup!);
-    const googleTokens = await getStoreActions().google.getTokens();
+    const accessToken = (await getStoreActions().google.getTokens()).accessToken;
 
-    const files = await getFiles(googleTokens.accessToken, [GOOGLE_DRIVE_BACKUP_FILE]);
+    const files = await getFiles(accessToken, [GOOGLE_DRIVE_BACKUP_FILE]);
     if (checkResponseIsError(files)) {
       throw new Error(`Error backing up channels to Google Drive. ${JSON.stringify(files)}`);
     }
@@ -60,7 +61,7 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
       // files.files[0] will be undefined if this is the first
       // time an upload is triggered, so we pass in undefined
       // create a new file.
-      const uploadResult = await uploadFileAsString(googleTokens.accessToken, {
+      const uploadResult = await uploadFileAsString(accessToken, {
         name: GOOGLE_DRIVE_BACKUP_FILE,
         description: "Base64-encoded channel backup for Blixt Wallet",
         mimeType: "application/base64",
@@ -74,6 +75,30 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
         console.log(uploadResult);
         return uploadResult;
       }
+    }
+  }),
+
+  getBackupFile: thunk(async (_, _2, { getStoreActions }) => {
+    const accessToken = (await getStoreActions().google.getTokens()).accessToken;
+
+    const files = await getFiles(accessToken, [GOOGLE_DRIVE_BACKUP_FILE]);
+    if (checkResponseIsError(files)) {
+      console.error(files);
+      throw new Error(files.error.message); // TODO
+    }
+
+    if (files.files.length === 0) {
+      throw new Error("No backup file available.");
+    }
+
+    const backupB64 = await downloadFileAsString(accessToken, files.files[0].id);
+    if (checkResponseIsError(backupB64)) {
+      console.error(backupB64);
+      throw new Error(backupB64.error.message);
+    }
+    else {
+      console.log("Download succeeded");
+      return backupB64;
     }
   }),
 
