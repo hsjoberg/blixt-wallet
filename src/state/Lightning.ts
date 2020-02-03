@@ -48,7 +48,7 @@ export const lightning: ILightningModel = {
     const firstSync = await getItemObject<boolean>(StorageItem.firstSync);
     actions.setFirstSync(firstSync);
     const debugShowStartupInfo = getStoreState().settings.debugShowStartupInfo;
-    const fastInit = differenceInDays(start, lastSync) <3 && !firstSync;
+    const fastInit = differenceInDays(start, lastSync) <3 || firstSync;
 
     const status = await checkStatus();
     // Normal wallet unlock flow
