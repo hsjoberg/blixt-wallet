@@ -15,15 +15,15 @@ export const setupStore = (initialState?: any) => createStore(model, {
   initialState,
 });
 
-export const initCommonStore = async (waitForEvent = false) => {
+export const initCommonStore = async (waitUntilReady = false) => {
   const store = setupStore();
   await store.getActions().initializeApp();
   await store.getActions().lightning.initialize();
   store.getActions().lightning.setFirstSync(false);
   DeviceEventEmitter.emit("WalletUnlocked", {});
 
-  if (waitForEvent) {
-    while (!store.getState().lightning.rpcReady) {
+  if (waitUntilReady) {
+    while (!store.getState().lightning.rpcReady || !store.getState().receive.invoiceSubscriptionStarted) {
       await timeout(100);
     }
   }
