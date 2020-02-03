@@ -2,8 +2,8 @@
 // NOT a generic API as it assumes you want to access
 // appDataFolder and want to upload and download a text file.
 
-const GDRIVE_FILES_URL = "https://www.googleapis.com/drive/v3/files";
-const GDRIVE_UPLOAD_FILES_URL = "https://www.googleapis.com/upload/drive/v3/files";
+export const GDRIVE_FILES_URL = "https://www.googleapis.com/drive/v3/files";
+export const GDRIVE_UPLOAD_FILES_URL = "https://www.googleapis.com/upload/drive/v3/files";
 
 export interface IGoogleDriveFile {
   mimeType: string;

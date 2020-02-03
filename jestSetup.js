@@ -12,6 +12,9 @@ jest.mock("react-native-securerandom", () => require("./mocks/react-native-secur
 jest.mock("react-native-fingerprint-scanner", () => require("./mocks/react-native-fingerprint-scanner"));
 jest.mock("@react-native-community/react-native-clipboard", () => require("./mocks/@react-native-community/react-native-clipboard"));
 jest.mock("@react-native-community/masked-view", () => require("./mocks/@react-native-community/masked-view"));
+jest.mock("@react-native-community/google-signin", () => require("./mocks/@react-native-community/google-signin"));
+jest.mock("react-native-fs", () => require("./mocks/react-native-fs"));
+jest.mock("react-native-document-picker", () => require("./mocks/react-native-document-picker"));
 
 jest.mock("./src/lndmobile/index", () => require("./mocks/lndmobile/index"));
 jest.mock("./src/lndmobile/wallet", () => require("./mocks/lndmobile/wallet"));
