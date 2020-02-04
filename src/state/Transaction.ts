@@ -43,7 +43,7 @@ export const transaction: ITransactionModel = {
 
     if (!foundTransaction) {
       const id = await createTransaction(db, tx);
-      await actions.addTransaction({ ...tx, id });
+      actions.addTransaction({ ...tx, id });
     }
   }),
 
@@ -100,8 +100,8 @@ export const transaction: ITransactionModel = {
             ...tx,
             status: "EXPIRED",
           };
-          updateTransaction(db, updated);
-          actions.updateTransaction({ transaction: updated });
+          // tslint:disable-next-line
+          updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
         }
         else if (check.settled) {
           const updated: ITransaction = {
@@ -111,8 +111,8 @@ export const transaction: ITransactionModel = {
             valueMsat: check.amtPaidMsat,
             // TODO add valueUSD, valueFiat and valueFiatCurrency?
           };
-          updateTransaction(db, updated);
-          actions.updateTransaction({ transaction: updated });
+          // tslint:disable-next-line
+          updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
         }
       }
     }

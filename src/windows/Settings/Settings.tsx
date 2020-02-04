@@ -128,7 +128,7 @@ export default ({ navigation }: ISettingsProps) => {
   const name = useStoreState((store) => store.settings.name);
   const changeName = useStoreActions((store) => store.settings.changeName);
   const onNamePress = async () => {
-    const { action, text } = await DialogAndroid.prompt("Name", "Choose a name that will be shown to people who pay to you", {
+    const { action, text } = await DialogAndroid.prompt("Name", "Choose a name that will be used in transactions", {
       defaultValue: name,
     });
     if (action === DialogAndroid.actionPositive) {
@@ -434,7 +434,7 @@ export default ({ navigation }: ISettingsProps) => {
             <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
             <Body>
               <Text>Name</Text>
-              <Text note={true} numberOfLines={1}>Will be shown to those who pay you</Text>
+              <Text note={true} numberOfLines={1}>Will be used in transactions</Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNodeInfo")}>

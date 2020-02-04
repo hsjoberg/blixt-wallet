@@ -46,4 +46,10 @@ export const appMigration: IAppMigration[] = [
       await setItemObject(StorageItem.debugShowStartupInfo, false);
     },
   },
+  // Version 5
+  {
+    async beforeLnd(db, i) {
+      await db.executeSql("ALTER TABLE tx ADD tlvRecordName STRING");
+    },
+  },
 ];
