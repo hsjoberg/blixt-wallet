@@ -86,7 +86,8 @@ export const send: ISendModel = {
       throw new Error("Payment information missing");
     }
 
-    const sendPaymentResult = await sendPaymentSync(paymentRequestStr);
+    const name = getStoreState().settings.name;
+    const sendPaymentResult = await sendPaymentSync(paymentRequestStr, name);
     if (sendPaymentResult.paymentError && sendPaymentResult.paymentError.length > 0) {
       throw new Error(sendPaymentResult.paymentError);
     }

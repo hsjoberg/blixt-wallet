@@ -47,6 +47,8 @@ export const bytesToString = (bytes: ArrayLike<number>) => {
   return String.fromCharCode.apply(null, bytes);
 }
 
+export const uint8ArrayToString = (bytes: Uint8Array) => bytesToString(bytes);
+
 export const bytesToHexString = (bytes: ArrayLike<number>) => {
   return bytes.reduce(function(memo, i) {
     return memo + ('0' + i.toString(16)).slice(-2); //padd with leading 0 if <16

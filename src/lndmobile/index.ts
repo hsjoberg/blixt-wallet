@@ -3,6 +3,8 @@ import { sendCommand } from "./utils";
 import { lnrpc } from "../../proto/proto";
 import Long from "long";
 import sha from "sha.js";
+import { stringToUint8Array } from "../utils";
+import { TLV_RECORD_NAME } from "../utils/constants";
 const { LndMobile } = NativeModules;
 
 /**
@@ -85,16 +87,27 @@ export const getInfo = async (): Promise<lnrpc.GetInfoResponse> => {
 };
 
 /**
+ *
  * @throws
+ * @param paymentRequest BOLT11-encoded payment request
+ * @params name TLV record for sender name
+ *
  */
-export const sendPaymentSync = async (paymentRequest: string): Promise<lnrpc.SendResponse> => {
+export const sendPaymentSync = async (paymentRequest: string, tlvRecordName?: string | null): Promise<lnrpc.SendResponse> => {
+  const options: lnrpc.ISendRequest = {
+    paymentRequest,
+  };
+  if (tlvRecordName && tlvRecordName.length > 0) {
+    options.destCustomRecords = {
+      [TLV_RECORD_NAME]: stringToUint8Array(tlvRecordName),
+    }
+  }
+
   const response = await sendCommand<lnrpc.ISendRequest, lnrpc.SendRequest, lnrpc.SendResponse>({
     request: lnrpc.SendRequest,
     response: lnrpc.SendResponse,
     method: "SendPaymentSync",
-    options: {
-      paymentRequest,
-    },
+    options,
   });
   return response;
 };

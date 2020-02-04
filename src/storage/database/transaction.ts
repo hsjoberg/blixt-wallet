@@ -21,7 +21,8 @@ export interface IDBTransaction {
   payer: string | null;
   valueUSD: number | null;
   valueFiat: number | null;
-  valueFiatCurrency: string | null
+  valueFiatCurrency: string | null;
+  tlvRecordName: string | null;
 }
 
 export interface ITransaction {
@@ -43,7 +44,8 @@ export interface ITransaction {
   payer?: string | null;
   valueUSD: number | null;
   valueFiat: number | null;
-  valueFiatCurrency: string | null
+  valueFiatCurrency: string | null;
+  tlvRecordName: string | null;
 
   hops: ITransactionHop[];
 }
@@ -73,9 +75,9 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
   const txId = await queryInsert(
     db,
     `INSERT INTO tx
-    (date, expire, value, valueMsat, amtPaidSat, amtPaidMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached, payer, valueUSD, valueFiat, valueFiatCurrency)
+    (date, expire, value, valueMsat, amtPaidSat, amtPaidMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached, payer, valueUSD, valueFiat, valueFiatCurrency, tlvRecordName)
     VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       transaction.date.toString(),
       transaction.expire.toString(),
@@ -95,6 +97,7 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.valueUSD,
       transaction.valueFiat,
       transaction.valueFiatCurrency,
+      transaction.tlvRecordName,
     ],
   );
 
@@ -145,7 +148,8 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         payer = ?,
         valueUSD = ?,
         valueFiat = ?,
-        valueFiatCurrency = ?
+        valueFiatCurrency = ?,
+        tlvRecordName = ?
     WHERE id = ?`,
     [
       transaction.date.toString(),
@@ -164,6 +168,7 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.valueUSD,
       transaction.valueFiat,
       transaction.valueFiatCurrency,
+      transaction.tlvRecordName,
       transaction.id,
     ],
   );
@@ -186,25 +191,28 @@ export const getTransaction = async (db: SQLiteDatabase, id: number): Promise<IT
   return (result && convertDBTransaction(result)) || null;
 };
 
-const convertDBTransaction = (transaction: IDBTransaction): ITransaction => ({
-  id: transaction.id!,
-  date: Long.fromString(transaction.date),
-  expire: Long.fromString(transaction.expire),
-  value: Long.fromString(transaction.value),
-  valueMsat: Long.fromString(transaction.valueMsat),
-  amtPaidSat: Long.fromString(transaction.amtPaidSat),
-  amtPaidMsat: Long.fromString(transaction.amtPaidMsat),
-  fee: (transaction.fee && Long.fromString(transaction.fee)) || null,
-  feeMsat: (transaction.feeMsat && Long.fromString(transaction.feeMsat)) || null,
-  description: transaction.description,
-  remotePubkey: transaction.remotePubkey,
-  paymentRequest: transaction.paymentRequest,
-  status: transaction.status,
-  rHash: transaction.rHash,
-  nodeAliasCached: transaction.nodeAliasCached,
-  payer: transaction.payer,
-  valueUSD: transaction.valueUSD,
-  valueFiat: transaction.valueFiat,
-  valueFiatCurrency: transaction.valueFiatCurrency,
-  hops: [],
-});
+const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
+  return {
+    id: transaction.id!,
+    date: Long.fromString(transaction.date),
+    expire: Long.fromString(transaction.expire),
+    value: Long.fromString(transaction.value),
+    valueMsat: Long.fromString(transaction.valueMsat),
+    amtPaidSat: Long.fromString(transaction.amtPaidSat),
+    amtPaidMsat: Long.fromString(transaction.amtPaidMsat),
+    fee: (transaction.fee && Long.fromString(transaction.fee)) || null,
+    feeMsat: (transaction.feeMsat && Long.fromString(transaction.feeMsat)) || null,
+    description: transaction.description,
+    remotePubkey: transaction.remotePubkey,
+    paymentRequest: transaction.paymentRequest,
+    status: transaction.status,
+    rHash: transaction.rHash,
+    nodeAliasCached: transaction.nodeAliasCached,
+    payer: transaction.payer,
+    valueUSD: transaction.valueUSD,
+    valueFiat: transaction.valueFiat,
+    valueFiatCurrency: transaction.valueFiatCurrency,
+    tlvRecordName: transaction.tlvRecordName,
+    hops: [],
+  };
+};

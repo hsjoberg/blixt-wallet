@@ -123,7 +123,7 @@ export const AlmostDone = ({ navigation }: IProps) => {
               <Left><Icon style={extraStyle.icon} type="AntDesign" name="edit" /></Left>
               <Body>
                 <Text>Name</Text>
-                <Text note={true} numberOfLines={1}>Will be shown to those who pay you.</Text>
+                <Text note={true} numberOfLines={1}>Will be used in transactions.</Text>
               </Body>
             </ListItem>
 

@@ -60,12 +60,12 @@ export default ({ navigation }: ITransactionDetailsProps) => {
 
   let transactionValue: Long;
   let direction: "send" | "receive";
-  if (isLong(transaction.amtPaidSat) && transaction.amtPaidSat.greaterThan(0)) {
-    direction = "send";
+  if (isLong(transaction.amtPaidSat) && transaction.amtPaidSat.greaterThanOrEqual(0)) {
+    direction = "receive";
     transactionValue = transaction.amtPaidSat;
   }
   else {
-    direction = "receive";
+    direction = "send";
     transactionValue = transaction.value;
   }
 
@@ -77,7 +77,8 @@ export default ({ navigation }: ITransactionDetailsProps) => {
             <H1 style={style.header}>Transaction</H1>
             <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
             {(transaction.nodeAliasCached && name == undefined) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
-            {direction === "receive" && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
+            {direction === "receive" && !transaction.tlvRecordName && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
+            {direction === "receive" && transaction.tlvRecordName && <MetaData title="Payer" data={transaction.tlvRecordName} />}
             {(direction === "send" && name) && <MetaData title="Recipient" data={name} />}
             <MetaData title="Description" data={description} />
             <MetaData title="Amount" data={formatBitcoin(transactionValue, bitcoinUnit)} />

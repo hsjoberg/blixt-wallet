@@ -18,7 +18,8 @@ const schema = [
     payer TEXT NULL,
     valueUSD REAL NULL,
     valueFiat REAL NULL,
-    valueFiatCurrency STRING NULL
+    valueFiatCurrency STRING NULL,
+    tlvRecordName STRING NULL
   )`,
 
   `CREATE TABLE tx_hops (

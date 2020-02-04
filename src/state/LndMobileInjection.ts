@@ -66,7 +66,7 @@ export interface ILndMobileInjections {
     getNodeInfo: (pubKey: string) => Promise<lnrpc.NodeInfo>;
     lookupInvoice: (rHash: string) => Promise<lnrpc.Invoice>;
     readLndLog: () => Promise<IReadLndLogResponse>;
-    sendPaymentSync: (paymentRequest: string) => Promise<lnrpc.SendResponse>;
+    sendPaymentSync: (paymentRequest: string, tlvRecordName?: string | null) => Promise<lnrpc.SendResponse>;
   };
   channel: {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;

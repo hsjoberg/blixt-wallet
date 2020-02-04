@@ -15,7 +15,7 @@ interface IProps {
   unit: keyof IBitcoinUnits;
 }
 export default ({ onPress, transaction, unit }: IProps) => {
-  const { date, value, amtPaidSat, status } = transaction;
+  const { date, value, amtPaidSat, status, tlvRecordName } = transaction;
   const positive = value.isPositive();
   const { name, description } = extractDescription(transaction.description);
 
@@ -48,9 +48,12 @@ export default ({ onPress, transaction, unit }: IProps) => {
               {transaction.value.lessThan(0) && name &&
                 <Text note={true}>{/*To */}<Text style={{ fontWeight: "bold" }} note={true}>{name}: </Text></Text>
               }
-              {transaction.value.greaterThanOrEqual(0) && transaction.payer &&
+              {transaction.value.greaterThanOrEqual(0) && tlvRecordName &&
+                <Text note={true}>{/*From */}<Text style={{ fontWeight: "bold" }} note={true}>{tlvRecordName}: </Text></Text>
+              }
+              {transaction.value.greaterThanOrEqual(0) && !tlvRecordName && transaction.payer &&
                 <Text note={true}>{/*From */}<Text style={{ fontWeight: "bold" }} note={true}>{transaction.payer}: </Text></Text>
-                }
+              }
               {description && description.length !== 0
                 ? description
                 : "No description"

@@ -6,9 +6,11 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
+import { Reader } from "protobufjs";
 import { setupDescription } from "../utils/NameDesc";
 import { valueFiat } from "../utils/bitcoin-units";
-import { timeout } from "../utils";
+import { timeout, uint8ArrayToString, bytesToString } from "../utils";
+import { TLV_RECORD_NAME } from "../utils/constants.ts";
 
 interface IReceiveModelAddInvoicePayload {
   description: string;
@@ -49,7 +51,7 @@ export const receive: IReceiveModel = {
     }
 
     const result = await addInvoice(sat, description, expiry);
-    console.log("result");
+    console.log("result", result);
     return result;
   }),
 
@@ -84,7 +86,7 @@ export const receive: IReceiveModel = {
         invoice.amtPaidMsat = Long.fromValue(invoice.amtPaidMsat);
       }
 
-      let transaction: ITransaction = {
+      const transaction: ITransaction = {
         description: invoice.memo,
         value: invoice.value || Long.fromInt(0),
         valueMsat: (invoice.value && invoice.value.mul(1000)) || Long.fromInt(0),
@@ -102,6 +104,7 @@ export const receive: IReceiveModel = {
         valueUSD: null,
         valueFiat: null,
         valueFiatCurrency: null,
+        tlvRecordName: null,
         hops: [],
       };
       if (payer) {
@@ -111,6 +114,24 @@ export const receive: IReceiveModel = {
         transaction.valueUSD = valueFiat(invoice.amtPaidSat, getStoreState().fiat.fiatRates.USD.last);
         transaction.valueFiat = valueFiat(invoice.amtPaidSat, getStoreState().fiat.currentRate);
         transaction.valueFiatCurrency = getStoreState().settings.fiatUnit;
+
+        // Loop through known TLV records
+        for (const htlc of invoice.htlcs) {
+          console.log(htlc.state);
+          if (htlc.customRecords) {
+            console.log(htlc.customRecords);
+
+            const tlvRecordNameKey = Object.keys(lnrpc.InvoiceHTLC.decode(lnrpc.InvoiceHTLC.encode({
+              customRecords: { [TLV_RECORD_NAME]: new Uint8Array([0]) }
+            }).finish()).customRecords)[0];
+
+            if (htlc.customRecords[tlvRecordNameKey]) {
+              const tlvRecordName = uint8ArrayToString(htlc.customRecords[tlvRecordNameKey]);
+              console.log("Found TLV_RECORD_NAME 🎉", tlvRecordName);
+              transaction.tlvRecordName = tlvRecordName;
+            }
+          }
+        }
       }
       await dispatch.transaction.syncTransaction(transaction);
     });
