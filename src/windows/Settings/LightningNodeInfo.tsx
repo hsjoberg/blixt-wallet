@@ -68,6 +68,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
               ]} />
               <MetaData title="Num peers" data={nodeInfo.numPeers!.toString()} />
               <MetaData title="Synced to Chain" data={nodeInfo.syncedToChain!.toString()} />
+              <MetaData title="Synced to Graph" data={nodeInfo.syncedToGraph!.toString()} />
               <MetaData title="Testnet" data={nodeInfo.testnet!.toString()} />
               {nodeInfo.uris && nodeInfo.uris.length > 0 && <MetaData title="Node URIs" data={nodeInfo.uris.join("\n")} />}
               <MetaData title="Lnd Version" data={nodeInfo.version!} />

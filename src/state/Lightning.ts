@@ -20,17 +20,20 @@ export interface ILightningModel {
   unlockWallet: Thunk<ILightningModel, void, IStoreInjections>;
   getInfo: Thunk<ILightningModel, void, IStoreInjections>;
   waitForChainSync: Thunk<ILightningModel, void, IStoreInjections>;
+  waitForGraphSync: Thunk<ILightningModel, void, IStoreInjections>;
   setupAutopilot: Thunk<ILightningModel, boolean, IStoreInjections>;
 
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
   setRPCServerReady: Action<ILightningModel, boolean>;
   setReady: Action<ILightningModel, boolean>;
   setSyncedToChain: Action<ILightningModel, boolean>;
+  setSyncedToGraph: Action<ILightningModel, boolean>;
   setFirstSync: Action<ILightningModel, boolean>;
 
   nodeInfo?: lnrpc.IGetInfoResponse;
   rpcReady: boolean;
   syncedToChain: boolean;
+  syncedToGraph: boolean;
   ready: boolean;
   firstSync: boolean;
 }
@@ -62,6 +65,7 @@ export const lightning: ILightningModel = {
           actions.setupStores();
           await actions.waitForChainSync();
           await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
+          await actions.waitForGraphSync();
         } catch (e) {
           debugShowStartupInfo && toast(e.message, 10000, "danger");
           return;
@@ -89,12 +93,16 @@ export const lightning: ILightningModel = {
       actions.setupStores();
       if (fastInit) {
         actions.waitForChainSync().then(
-          async () => await actions.setupAutopilot(getStoreState().settings.autopilotEnabled)
+          async () => {
+            await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
+            await actions.waitForGraphSync();
+          }
         );
       }
       else {
         await actions.waitForChainSync();
         await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
+        actions.waitForGraphSync();
       }
 
       actions.setRPCServerReady(true);
@@ -189,19 +197,36 @@ export const lightning: ILightningModel = {
       actions.setFirstSync(false);
     }
     actions.setReady(true);
-    actions.setSyncedToChain(true);
+    actions.setSyncedToChain(info.syncedToChain);
     await setItemObject(StorageItem.timeSinceLastSync, new Date().getTime());
+  }),
+
+  waitForGraphSync: thunk(async (actions, _, { getState, injections }) => {
+    const { getInfo } = injections.lndMobile.index;
+    let info;
+    do {
+      info = await getInfo();
+      console.log(`blockHeight: ${info.blockHeight}, syncedToGraph: ${info.syncedToGraph}`);
+      actions.setNodeInfo(info);
+
+      if (info.syncedToGraph !== true) {
+        await timeout(1100);
+      }
+    } while (!info.syncedToGraph);
+    actions.setSyncedToGraph(info.syncedToGraph);
   }),
 
   setNodeInfo: action((state, payload) => { state.nodeInfo = payload; }),
   setRPCServerReady: action((state, payload) => { state.rpcReady = payload; }),
   setReady: action((state, payload) => { state.ready = payload; }),
   setSyncedToChain: action((state, payload) => { state.syncedToChain = payload; }),
+  setSyncedToGraph: action((state, payload) => { state.syncedToGraph = payload; }),
   setFirstSync: action((state, payload) => { state.firstSync = payload; }),
 
   rpcReady: false,
   ready: false,
   syncedToChain: false,
+  syncedToGraph: false,
   firstSync: false,
 };
 
