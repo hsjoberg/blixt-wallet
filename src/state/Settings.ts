@@ -16,6 +16,7 @@ export interface ISettingsModel {
   changeScheduledSyncEnabled: Thunk<ISettingsModel, boolean>;
   changeDebugShowStartupInfo: Thunk<ISettingsModel, boolean>;
   changeGoogleDriveBackupEnabled: Thunk<ISettingsModel, boolean>;
+  changePreferFiat: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -26,6 +27,7 @@ export interface ISettingsModel {
   setScheduledSyncEnabled: Action<ISettingsModel, boolean>;
   setDebugShowStartupInfo: Action<ISettingsModel, boolean>;
   setGoogleDriveBackupEnabled: Action<ISettingsModel, boolean>;
+  setPreferFiat: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -36,6 +38,7 @@ export interface ISettingsModel {
   scheduledSyncEnabled: boolean;
   debugShowStartupInfo: boolean;
   googleDriveBackupEnabled: boolean;
+  preferFiat: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -49,6 +52,7 @@ export const settings: ISettingsModel = {
     actions.setScheduledSyncEnabled(await getItemObject(StorageItem.scheduledSyncEnabled) || false);
     actions.setDebugShowStartupInfo(await getItemObject(StorageItem.debugShowStartupInfo) || false);
     actions.setGoogleDriveBackupEnabled(await getItemObject(StorageItem.googleDriveBackupEnabled) || false);
+    actions.setPreferFiat(await getItemObject(StorageItem.preferFiat) || false);
   }),
 
   changeBitcoinUnit: thunk(async (actions, payload) => {
@@ -99,6 +103,11 @@ export const settings: ISettingsModel = {
     actions.setGoogleDriveBackupEnabled(payload);
   }),
 
+  changePreferFiat: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.preferFiat, payload);
+    actions.setPreferFiat(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -108,6 +117,7 @@ export const settings: ISettingsModel = {
   setScheduledSyncEnabled: action((state, payload) => { state.scheduledSyncEnabled = payload; }),
   setDebugShowStartupInfo: action((state, payload) => { state.debugShowStartupInfo = payload; }),
   setGoogleDriveBackupEnabled: action((state, payload) => { state.googleDriveBackupEnabled = payload; }),
+  setPreferFiat: action((state, payload) => { state.preferFiat = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -118,4 +128,5 @@ export const settings: ISettingsModel = {
   scheduledSyncEnabled: false,
   debugShowStartupInfo: false,
   googleDriveBackupEnabled: false,
+  preferFiat: false,
 };

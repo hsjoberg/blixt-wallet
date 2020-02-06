@@ -7,7 +7,8 @@ import { ITransaction } from "../storage/database/transaction";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { capitalize, formatISO, isLong } from "../utils";
 import { extractDescription } from "../utils/NameDesc";
-import { IBitcoinUnits, formatBitcoin } from "../utils/bitcoin-units";
+import { IBitcoinUnits, formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
+import { useStoreState } from "../state/store.ts";
 
 interface IProps {
   onPress: (id: string) => void;
@@ -18,6 +19,10 @@ export default ({ onPress, transaction, unit }: IProps) => {
   const { date, value, amtPaidSat, status, tlvRecordName } = transaction;
   const positive = value.isPositive();
   const { name, description } = extractDescription(transaction.description);
+
+  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const currentRate = useStoreState((store) => store.fiat.currentRate);
+  const preferFiat = useStoreState((store) => store.settings.preferFiat);
 
   let transactionValue: Long;
   if (isLong(amtPaidSat) && amtPaidSat.greaterThan(0)) {
@@ -37,8 +42,13 @@ export default ({ onPress, transaction, unit }: IProps) => {
             </Text>
             <Right>
               <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
-                {transactionValue.notEquals(0) && (positive ? "+" : "")}
-                {transactionValue.notEquals(0) && formatBitcoin(transactionValue, unit, false)}
+                {transactionValue.notEquals(0) &&
+                  <>
+                    {(positive ? "+" : "")}
+                    {!preferFiat && formatBitcoin(transactionValue, unit, false)}
+                    {preferFiat && convertBitcoinToFiat(transactionValue, currentRate, fiatUnit)}
+                  </>
+                }
               </Text>
             </Right>
           </Row>

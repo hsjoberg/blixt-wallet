@@ -42,6 +42,7 @@ export interface IStoreModel {
   setAppReady: Action<IStoreModel, boolean>;
   setWalletCreated: Action<IStoreModel, boolean>;
   setWalletSeed: Action<IStoreModel, string[] | undefined>;
+  setAppVersion: Action<IStoreModel, number>;
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
@@ -66,6 +67,7 @@ export interface IStoreModel {
   googleDriveBackup: IGoogleDriveBackupModel;
 
   walletSeed?: string[];
+  appVersion: number;
 }
 
 export const model: IStoreModel = {
@@ -86,6 +88,7 @@ export const model: IStoreModel = {
       console.log("Writing lnd.conf");
       await writeConfigFile();
     }
+    actions.setAppVersion(await getAppVersion());
     await actions.checkAppVersionMigration();
 
     actions.setWalletCreated(await getWalletCreated());
@@ -171,7 +174,7 @@ export const model: IStoreModel = {
     await setItem(StorageItem.walletPassword, randomBase64);
 
     const wallet = payload && payload.restore && payload.restore
-      ? await initWallet(seed, randomBase64, 250, payload.restore.channelsBackup)
+      ? await initWallet(seed, randomBase64, 100, payload.restore.channelsBackup)
       : await initWallet(seed, randomBase64)
 
     await setItemObject(StorageItem.walletCreated, true);
@@ -184,9 +187,11 @@ export const model: IStoreModel = {
   setWalletCreated: action((state, payload) => { state.walletCreated = payload; }),
   setDb: action((state, db) => { state.db = db; }),
   setAppReady: action((state, value) => { state.appReady = value; }),
+  setAppVersion: action((state, value) => { state.appVersion = value; }),
 
   appReady: false,
   walletCreated: false,
+  appVersion: 0,
 
   lightning,
   transaction,
