@@ -15,6 +15,7 @@ interface IReceiveSetupProps {
 }
 export default ({ navigation }: IReceiveSetupProps) => {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
+  const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const invoiceSubscriptionStarted = useStoreState((store) => store.receive.invoiceSubscriptionStarted);
   const addInvoice = useStoreActions((store) => store.receive.addInvoice);
   const [satValue, setSatValue] = useState<string | undefined>(undefined);
@@ -156,10 +157,11 @@ export default ({ navigation }: IReceiveSetupProps) => {
               createInvoiceDisabled ||
               !rpcReady ||
               !invoiceSubscriptionStarted ||
+              !syncedToChain ||
               (satValue == "0" || satValue === undefined)
             }
           >
-            {rpcReady && invoiceSubscriptionStarted
+            {rpcReady && invoiceSubscriptionStarted && syncedToChain
               ? <Text>Create invoice</Text>
               : <Spinner color={blixtTheme.light} />
             }

@@ -23,6 +23,9 @@ export default ({ navigation }: ISendConfirmationProps) => {
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const lightningReady = useStoreState((store) => store.lightning.ready);
+  const rpcReady = useStoreState((store) => store.lightning.rpcReady);
+  const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
+  const syncedToGraph = useStoreState((store) => store.lightning.syncedToGraph);
 
   const clear = useStoreActions((store) => store.send.clear);
 
@@ -107,6 +110,8 @@ export default ({ navigation }: ISendConfirmationProps) => {
     component: (<Input multiline={true} disabled={true} value={description} />),
   });
 
+  const ready = lightningReady && rpcReady && syncedToChain && syncedToGraph;
+
   return (
     <Container>
       <StatusBar
@@ -130,13 +135,13 @@ export default ({ navigation }: ISendConfirmationProps) => {
           <Button
             key="PAY"
             testID="pay-invoice"
-            disabled={isPaying || !lightningReady}
+            disabled={isPaying || !ready}
             block={true}
             primary={true}
             onPress={send}>
-              {lightningReady && !isPaying && <Text>Pay</Text>}
-              {lightningReady &&isPaying && <Spinner color={blixtTheme.light} />}
-              {!lightningReady && <Spinner color={blixtTheme.light} />}
+              {ready && !isPaying && <Text>Pay</Text>}
+              {ready && isPaying && <Spinner color={blixtTheme.light} />}
+              {!ready && <Spinner color={blixtTheme.light} />}
           </Button>
         ),]}
       />
