@@ -27,6 +27,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   lastScheduledSyncAttempt = "lastScheduledSyncAttempt",
   debugShowStartupInfo = "debugShowStartupInfo",
   googleDriveBackupEnabled = "googleDriveBackupEnabled",
+  preferFiat = "preferFiat",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -68,6 +69,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.lastScheduledSyncAttempt),
     removeItem(StorageItem.debugShowStartupInfo),
     removeItem(StorageItem.googleDriveBackupEnabled),
+    removeItem(StorageItem.preferFiat),
   ]);
 };
 
@@ -92,5 +94,6 @@ export const setupApp = async () => {
     setItemObject<number>(StorageItem.lastScheduledSyncAttempt, 0),
     setItemObject<boolean>(StorageItem.debugShowStartupInfo, false),
     setItemObject<boolean>(StorageItem.googleDriveBackupEnabled, false),
+    setItemObject<boolean>(StorageItem.preferFiat, false),
   ]);
 };

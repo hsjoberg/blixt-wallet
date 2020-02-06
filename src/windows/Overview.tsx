@@ -30,6 +30,8 @@ export default ({ navigation }: IOverviewProps)  => {
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
+  const preferFiat = useStoreState((store) => store.settings.preferFiat);
+  const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
 
   const scrollYAnimatedValue = useRef(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
@@ -105,6 +107,13 @@ export default ({ navigation }: IOverviewProps)  => {
     return (<Text style={{ textAlign: "center", margin: 16 }}>No transactions yet</Text>);
   }, [transactions, contentExpand, bitcoinUnit]);
 
+  const onPressBalanceHeader = async () => {
+    await changePreferFiat(!preferFiat);
+  }
+
+  const bitcoinBalance = formatBitcoin(balance, bitcoinUnit, false);
+  const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
+
   return (
     <Container>
       <StatusBar
@@ -141,16 +150,26 @@ export default ({ navigation }: IOverviewProps)  => {
                 />
               }
             </View>
-            {<Animated.Text style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
-              {formatBitcoin(balance, bitcoinUnit, false)}
-            </Animated.Text>}
-            {pendingOpenBalance.greaterThan(0)
-              ? (<Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.pending}}>
-                  ({formatBitcoin(pendingOpenBalance, bitcoinUnit)} pending)
-                </Animated.Text>)
-              : (<Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
-                  {convertBitcoinToFiat(balance, currentRate, fiatUnit)}
-                </Animated.Text>)
+
+            {/* Big header */}
+            <Animated.Text onPress={onPressBalanceHeader} style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
+              {!preferFiat && bitcoinBalance}
+              {preferFiat && fiatBalance}
+            </Animated.Text>
+
+            {/* Small header */}
+            {pendingOpenBalance.equals(0) &&
+              <Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
+                {!preferFiat && fiatBalance}
+                {preferFiat && bitcoinBalance}
+              </Animated.Text>
+            }
+            {/* Pending open balance */}
+            {pendingOpenBalance.greaterThan(0) &&
+              <Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.pending}}>
+                {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit)} pending)</>}
+                {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} pending)</>}
+              </Animated.Text>
             }
           </LinearGradient>
         </Animated.View>

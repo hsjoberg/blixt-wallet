@@ -76,13 +76,13 @@ export const receive: IReceiveModel = {
       // both value (the requested amount in the payreq)
       // and amtPaidMsat (the actual amount paid)
 
-      if (invoice.value ?? !invoice.value.toNumber) {
+      if (!Long.isLong(invoice.value)) {
         invoice.value = Long.fromValue(invoice.value);
       }
-      if (invoice.amtPaidSat ?? !invoice.amtPaidSat.toNumber) {
+      if (!Long.isLong(invoice.valueMsat)) {
         invoice.amtPaidSat = Long.fromValue(invoice.amtPaidSat);
       }
-      if (invoice.amtPaidMsat ?? !invoice.amtPaidMsat.toNumber) {
+      if (!Long.isLong(invoice.amtPaidMsat)) {
         invoice.amtPaidMsat = Long.fromValue(invoice.amtPaidMsat);
       }
 
