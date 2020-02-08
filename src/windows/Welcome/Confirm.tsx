@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { StatusBar, StyleSheet, Alert } from "react-native";
 import { View, Button, H1, Card, CardItem, Text, Spinner, Icon, H3 } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { WelcomeStackParamList } from "./index";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import style from "./style";
@@ -11,9 +12,10 @@ import Container from "../../components/Container";
 import Content from "../../components/Content";
 
 interface IProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<WelcomeStackParamList, "Confirm">;
 }
 export default ({ navigation }: IProps) => {
+  const setHoldonboarding = useStoreActions((state) => state.setHoldOnboarding);
   const createWallet = useStoreActions((store) => store.createWallet);
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
   const seed = useStoreState((state) => state.walletSeed);
@@ -48,6 +50,7 @@ export default ({ navigation }: IProps) => {
       return;
     }
     setProceeding(true);
+    setHoldonboarding(true);
     await createWallet();
     // await getAddress({});
     await setSyncEnabled(true); // TODO test

@@ -42,7 +42,8 @@ export const security: ISecurityModel = {
     actions.setLoggedIn(loginMethods.size === 0);
     actions.setSeedAvailable(await getItemObject(StorageItem.seedStored) || false);
     try {
-      actions.setFingerprintAvailable(await FingerprintScanner.isSensorAvailable() === "Fingerprint");
+      const sensorAvailable = await FingerprintScanner.isSensorAvailable();
+      actions.setFingerprintAvailable(sensorAvailable === "Biometrics");
     } catch (e) {
       console.log(e);
     }
@@ -118,7 +119,10 @@ export const security: ISecurityModel = {
       actions.setLoggedIn(true);
       return true;
     } catch (e) {
-      Alert.alert(e.message);
+      console.log(JSON.stringify(e));
+      if (e.name !== "UserCancel" && e.name !== "UserFallback") {
+        Alert.alert(e.message);
+      }
     }
   }),
 

@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import { Body, Header, Left, Button, Title, Right, Icon, H1, H3, Fab, Spinner } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
 import Long from "long";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { LightningInfoStackParamList } from "./index";
 import { useStoreState, useStoreActions } from "../../state/store";
 import Container from "../../components/Container";
 import ChannelCard from "../../components/ChannelCard";
@@ -12,7 +13,7 @@ import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { formatBitcoin } from "../../utils/bitcoin-units";
 
 interface ILightningInfoProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
 }
 export default ({ navigation }: ILightningInfoProps) => {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
@@ -77,7 +78,7 @@ export default ({ navigation }: ILightningInfoProps) => {
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
         <Left>
-          <Button transparent={true} onPress={() => navigation.navigate("Main")}>
+          <Button transparent={true} onPress={() => navigation.goBack()}>
             <Icon name="arrow-back" />
           </Button>
         </Left>

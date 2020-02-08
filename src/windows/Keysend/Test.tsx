@@ -1,9 +1,8 @@
 import React from "react";
 import { Button, Body, Container, Header, Icon, Left, Title } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
 
 interface ILightningInfoProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: any;
 }
 export default ({ navigation }: ILightningInfoProps) => {
   // const rpcReady = useStoreState((store) => store.lightning.rpcReady);
@@ -12,7 +11,7 @@ export default ({ navigation }: ILightningInfoProps) => {
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
         <Left>
-          <Button transparent={true} onPress={() => navigation.navigate("Main")}>
+          <Button transparent={true} onPress={() => navigation.goBack()}>
             <Icon name="arrow-back" />
           </Button>
         </Left>

@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
 import { StyleSheet, StatusBar, AppState, AppStateStatus } from "react-native";
 import { Container, Content, View, Text, Icon } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { useNavigation } from "@react-navigation/native";
 
 import { useStoreActions, useStoreState, } from "../../state/store";
 
-interface IProps {
-  navigation: NavigationScreenProp<{}>;
-}
-export default ({ navigation }: IProps) => {
+export default () => {
+  const navigation = useNavigation();
   const fingerprintAvailable = useStoreState((store) => store.security.fingerprintAvailable);
   const fingerprintStartScan = useStoreActions((store) => store.security.fingerprintStartScan);
   const fingerprintStopScan = useStoreActions((store) => store.security.fingerprintStopScan);
@@ -17,7 +15,6 @@ export default ({ navigation }: IProps) => {
 
   // TODO fix useFingerprint hook
   useEffect(() => {
-    console.log(fingerprintAvailable);
     if (fingerprintAvailable) {
       // Workaround a bug where leaving foreground would
       // cause fingerprint scanning to not respond
@@ -30,8 +27,8 @@ export default ({ navigation }: IProps) => {
           const r = await fingerprintStartScan();
           if (r) {
             await setFingerprintEnabled(!fingerPrintEnabled);
-            navigation.pop();
           }
+          navigation.goBack();
         }
       };
       AppState.addEventListener("change", handler);

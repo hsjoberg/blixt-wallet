@@ -1,9 +1,10 @@
 import React from "react";
 import { StatusBar } from "react-native";
 import { Text, View, Button, H1, Card, CardItem, H3 } from "native-base";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { WelcomeStackParamList } from "./index";
 import { useStoreState } from "../../state/store";
-import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import style from "./style";
 import { smallScreen } from "../../utils/device";
@@ -11,7 +12,7 @@ import Container from "../../components/Container";
 import Content from "../../components/Content";
 
 interface IProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<WelcomeStackParamList, "Seed">;
 }
 export default ({ navigation }: IProps) => {
   const seed = useStoreState((state) => state.walletSeed);

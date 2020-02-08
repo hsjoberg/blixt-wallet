@@ -1,10 +1,12 @@
 import React from "react";
 import { View, Share, StyleSheet } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { NavigationScreenProp } from "react-navigation";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, H1, H3, Toast } from "native-base";
 import { formatDistanceStrict, fromUnixTime } from "date-fns";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { ReceiveStackParamList } from "./index";
 import { useStoreState } from "../../state/store";
 import { lnrpc } from "../../../proto/proto";
 import QrCode from "../../components/QrCode";
@@ -14,10 +16,11 @@ import { smallScreen } from "../../utils/device";
 import CopyAddress from "../../components/CopyAddress";
 
 interface IReceiveQRProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveQr">;
+  route: RouteProp<ReceiveStackParamList, "ReceiveQr">;
 }
-export default ({ navigation }: IReceiveQRProps) => {
-  const invoice: lnrpc.AddInvoiceResponse = navigation.getParam("invoice");
+export default ({ navigation, route }: IReceiveQRProps) => {
+  const invoice: lnrpc.AddInvoiceResponse = route.params.invoice;
   const transaction = useStoreState((store) => store.transaction.getTransactionByPaymentRequest(invoice.paymentRequest));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 

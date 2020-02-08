@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Body, Card, Text, CardItem, H1, Toast, View } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
 import { fromUnixTime } from "date-fns";
 
 import Blurmodal from "../components/BlurModal";
@@ -34,14 +33,15 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
 };
 
 export interface ITransactionDetailsProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: any;
 }
-export default ({ navigation }: ITransactionDetailsProps) => {
-  const rHash: string = navigation.getParam("rHash");
+export default ({ route }: any) => {
+  const rHash: string = route.params.rHash;
   const transaction = useStoreState((store) => store.transaction.getTransactionByRHash(rHash));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   if (!transaction) {
+    console.log("no trans");
     return (<></>);
   }
 
@@ -70,7 +70,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
   }
 
   return (
-    <Blurmodal navigation={navigation}>
+    <Blurmodal>
       <Card style={style.card}>
         <CardItem>
           <Body>

@@ -1,19 +1,26 @@
-import { createStackNavigator } from "react-navigation-stack";
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+
 import LightningInfo from "./LightningInfo";
 import OpenChannel from "./OpenChannel";
 import CameraFullscreen from "../CameraFullscreen";
 
-export default createStackNavigator({
-  LightningInfo,
-  OpenChannel,
-  CameraFullscreen,
-}, {
-  navigationOptions: {
-    animationEnabled: false,
-  },
-  defaultNavigationOptions: {
-    animationEnabled: false,
-  },
-  headerMode: "none",
-  initialRouteName: "LightningInfo",
-});
+const Stack = createStackNavigator();
+
+export type LightningInfoStackParamList = {
+  LightningInfo: undefined;
+  OpenChannel: undefined;
+  CameraFullscreen: {
+    onRead: (data: string) => void;
+  };
+}
+
+export default () => {
+  return (
+    <Stack.Navigator initialRouteName="LightningInfo" screenOptions={{ headerShown: false, animationEnabled: false, cardStyle: { backgroundColor: "transparent" } }}>
+      <Stack.Screen name="LightningInfo" component={LightningInfo} />
+      <Stack.Screen name="OpenChannel" component={OpenChannel} />
+      <Stack.Screen name="CameraFullscreen" component={CameraFullscreen} />
+    </Stack.Navigator>
+  )
+}

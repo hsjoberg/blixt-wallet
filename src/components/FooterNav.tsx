@@ -1,11 +1,10 @@
 import React from "react";
 import { Button, Footer, FooterTab, Icon, Text } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { useNavigation } from "@react-navigation/native";
 
-export interface IFooterNavProps {
-  navigation: NavigationScreenProp<{}>;
-}
-export default ({ navigation }: IFooterNavProps) => {
+export default () => {
+  const navigation = useNavigation();
+
   return (
     <Footer>
       <FooterTab>

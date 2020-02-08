@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { StyleSheet, StatusBar, ToastAndroid } from "react-native";
 import { Container } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
 
 import { useStoreState, useStoreActions } from "../../state/store";
 
 interface IProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: any;
 }
 export default ({ navigation }: IProps) => {
   const actions = useStoreActions((store) => store);
@@ -26,19 +25,19 @@ export default ({ navigation }: IProps) => {
     })();
   }, [actions]);
 
-  if (appReady) {
-    if (!walletCreated) {
-      setTimeout(() => navigation.navigate("Welcome"), 1);
-    }
-    else if (walletCreated) {
-      if (loggedIn) {
-        setTimeout(() => navigation.navigate("InitLightning"), 1);
-      }
-      else {
-        setTimeout(() => navigation.navigate("Authentication"), 1);
-      }
-    }
-  }
+  // if (appReady) {
+  //   if (!walletCreated) {
+  //     setTimeout(() => navigation.navigate("Welcome"), 1);
+  //   }
+  //   else if (walletCreated) {
+  //     if (loggedIn) {
+  //       setTimeout(() => navigation.navigate("InitLightning"), 1);
+  //     }
+  //     else {
+  //       setTimeout(() => navigation.navigate("Authentication"), 1);
+  //     }
+  //   }
+  // }
 
   return (
     <StatusBar

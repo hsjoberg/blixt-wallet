@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Toast, Spinner } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { LightningInfoStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { unitToSatoshi, BitcoinUnits } from "../../utils/bitcoin-units";
 
 export interface IOpenChannelProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
 }
 export default ({ navigation }: IOpenChannelProps) => {
   const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);

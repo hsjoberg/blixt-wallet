@@ -1,7 +1,6 @@
 import React from "react";
-import { StyleSheet, Linking } from "react-native";
+import { StyleSheet, Linking, ScrollView } from "react-native";
 import { Body, Card, Text, CardItem, H1 } from "native-base";
-import { NavigationScreenProp, ScrollView } from "react-navigation";
 
 import Blurmodal from "../../components/BlurModal";
 import { VersionName, ApplicationId, IsHermes } from "../../utils/build";
@@ -17,16 +16,13 @@ const software = [
   "react-native-navigation",
 ]
 
-export interface ITransactionDetailsProps {
-  navigation: NavigationScreenProp<{}>;
-}
-export default ({ navigation }: ITransactionDetailsProps) => {
+export default () => {
   const appVersion = useStoreState((store) => store.appVersion);
   const onGithubLinkPress = () => Linking.openURL(GITHUB_REPO_URL)
   const onHampusLinkPress = () => Linking.openURL(HAMPUS_EMAIL.replace("💩", "@"));
 
   return (
-    <Blurmodal navigation={navigation}>
+    <Blurmodal>
       <Card style={style.card}>
         <CardItem>
           <Body>

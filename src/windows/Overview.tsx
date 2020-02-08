@@ -2,13 +2,15 @@ import React, { useState, useRef, useMemo } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import { Icon, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
-import { NavigationScreenProp } from "react-navigation";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
 import { timeout } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
+import FooterNav from "../components/FooterNav";
 
 const nativeBaseTheme = require("../../native-base-theme/variables/commonColor");
 const theme = nativeBaseTheme.default;
@@ -20,9 +22,9 @@ const NUM_TRANSACTIONS_PER_LOAD = 25;
 const LOAD_BOTTOM_PADDING = 475;
 
 export interface IOverviewProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: NavigationStackProp<RootStackParamList, "Overview">;
 }
-export default ({ navigation }: IOverviewProps)  => {
+const Overview = ({ navigation }: IOverviewProps)  => {
   const balance = useStoreState((store) => store.channel.balance);
   const pendingOpenBalance = useStoreState((store) => store.channel.pendingOpenBalance);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
@@ -263,3 +265,14 @@ const headerInfo = StyleSheet.create({
     fontFamily: theme.fontFamily,
   }
 });
+
+
+const OverviewTabs = createBottomTabNavigator();
+
+export default () => {
+  return (
+    <OverviewTabs.Navigator tabBar={() => <FooterNav />}>
+      <OverviewTabs.Screen name="Overview" component={Overview} />
+    </OverviewTabs.Navigator>
+  );
+};

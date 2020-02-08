@@ -2,9 +2,11 @@ import React from "react";
 import { StyleSheet, Linking, View } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Body, Card, Text, CardItem, H1, Toast, Button } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
 import { fromUnixTime } from "date-fns";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { OnChainStackParamList } from "./index";
 import Blurmodal from "../../components/BlurModal";
 import { formatISO } from "../../utils";
 import { useStoreState } from "../../state/store";
@@ -31,10 +33,11 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
 };
 
 export interface ITransactionDetailsProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<OnChainStackParamList, "OnChainTransactionDetails">;
+  route: RouteProp<OnChainStackParamList, "OnChainTransactionDetails">;
 }
-export default ({ navigation }: ITransactionDetailsProps) => {
-  const txId: string = navigation.getParam("txId");
+export default ({ navigation, route }: ITransactionDetailsProps) => {
+  const txId: string = route.params.txId;
   const transaction = useStoreState((store) => store.onChain.getOnChainTransactionByTxId(txId));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
@@ -49,7 +52,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
   }
 
   return (
-    <Blurmodal navigation={navigation}>
+    <Blurmodal>
       <Card style={style.card}>
         <CardItem>
           <Body>

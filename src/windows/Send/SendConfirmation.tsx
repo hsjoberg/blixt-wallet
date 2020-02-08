@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar, Vibration } from "react-native";
 import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner, Toast } from "native-base";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { SendStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
@@ -10,7 +12,7 @@ import { valueBitcoin, BitcoinUnits, valueFiat } from "../../utils/bitcoin-units
 import { extractDescription } from "../../utils/NameDesc";
 
 export interface ISendConfirmationProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
 }
 export default ({ navigation }: ISendConfirmationProps) => {
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
@@ -121,7 +123,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
       />
       <Header iosBarStyle="light-content">
         <Left>
-          <Button transparent={true} onPress={() => navigation.navigate("SendCamera")}>
+          <Button transparent={true} onPress={() => navigation.pop()}>
             <Icon name="arrow-back" />
           </Button>
         </Left>

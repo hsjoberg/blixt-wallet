@@ -6,9 +6,10 @@ import { readFile } from "react-native-fs";
 import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, List, ListItem, Right, Toast } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { fromUnixTime } from "date-fns";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { SettingsStackParamList } from "./index";
 import Content from "../../components/Content";
-import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
 import { BitcoinUnits } from "../../utils/bitcoin-units";
@@ -16,7 +17,7 @@ import { verifyChanBackup } from "../../lndmobile/channel";
 import { formatISO, toast } from "../../utils";
 
 interface ISettingsProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
 }
 export default ({ navigation }: ISettingsProps) => {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
@@ -479,7 +480,7 @@ export default ({ navigation }: ISettingsProps) => {
             </Body>
           </ListItem>
           {(name === "Hampus" || __DEV__ === true) &&
-            <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("DEV_Commands")}>
+            <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("DEV_CommandsX")}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
               <Body><Text>Go to dev screen</Text></Body>
             </ListItem>

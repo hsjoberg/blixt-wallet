@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { StyleSheet, StatusBar, NativeModules, ScrollView } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Text, Button, Toast, Input, View, Container } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
 import Long from "long";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import { getTransactions, getTransaction, createTransaction } from "../../storage/database/transaction";
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -16,11 +16,13 @@ import { newAddress, sendCoins } from "../../lndmobile/onchain";
 import { StorageItem, setItemObject, getItem } from "../../storage/app";
 import { status, modifyStatus, queryScores } from "../../lndmobile/autopilot";
 import { localNotification } from "../../utils/push-notification";
+import { RootStackParamList } from "../../Main";
 
 interface IProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<RootStackParamList, "DEV_Commands">;
+  continueCallback?: () => void;
 }
-export default ({ navigation }: IProps) => {
+export default ({ navigation, continueCallback }: IProps) => {
   const [connectPeerStr, setConnectPeer] = useState("");
   const [sat, setSat] = useState("");
   const [addr, setAddr] = useState("");
@@ -31,6 +33,8 @@ export default ({ navigation }: IProps) => {
   const db = useStoreState((store) => store.db);
 
   const TransactionStoreGetTransactions = useStoreActions((store) => store.transaction.getTransactions);
+
+  continueCallback = continueCallback || function() {};
 
   return (
     <Container>
@@ -43,6 +47,7 @@ export default ({ navigation }: IProps) => {
       />
       <ScrollView contentContainerStyle={styles.content}>
         <View style={{ marginTop: 32, width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
+          <Button onPress={continueCallback}><Text>continueCallback()</Text></Button>
           <Button onPress={async () => actions.clearApp()}><Text>actions.clearApp()</Text></Button>
           <Button onPress={async () => actions.resetDb()}><Text>actions.resetDb()</Text></Button>
           <Button onPress={async () => { localNotification("Test"); }}><Text>localNotification()</Text></Button>

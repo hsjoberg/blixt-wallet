@@ -1,10 +1,11 @@
 import React from "react";
 import { StyleSheet, StatusBar, Animated, Alert } from "react-native";
 import { Text, H1, Button, View } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
 import { useStoreActions } from "../../state/store";
 import * as Animatable from "react-native-animatable";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { WelcomeStackParamList } from "./index";
 import Container from "../../components/Container";
 
 interface IAnimatedH1Props {
@@ -29,7 +30,7 @@ const AnimatedView = ({ children }: IAnimatedViewProps) => (
 );
 
 export interface IStartProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<WelcomeStackParamList, "Start">;
 }
 export default ({ navigation }: IStartProps) => {
   const generateSeed = useStoreActions((store) => store.generateSeed);

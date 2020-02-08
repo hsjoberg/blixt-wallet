@@ -1,98 +1,137 @@
-import React from "react";
-import { Animated, Easing } from "react-native";
-import { Root } from "native-base";
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import { createBottomTabNavigator } from "react-navigation-tabs";
+import React, { useEffect, useState } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import { setTopLevelNavigator } from "./utils/navigation";
-import FooterNav from "./components/FooterNav";
 import Overview from "./windows/Overview";
 import Send from "./windows/Send";
 import Receive from "./windows/Receive";
 import Settings from "./windows/Settings";
 import LightningInfo from "./windows/LightningInfo";
 import OnChain from "./windows/OnChain";
-import Init from "./windows/InitProcess/Init";
 import Authentication from "./windows/InitProcess/Authentication";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
-import InitLightning from "./windows/InitProcess/InitLightning";
 import Welcome from "./windows/Welcome";
-import LightningNodeInfo from "./windows/Settings/LightningNodeInfo";
-import About from "./windows/Settings/About";
 import ChannelRequest from "./windows/LNURL/ChannelRequest";
 import KeysendTest from "./windows/Keysend/Test";
 import GoogleDriveTestbed from "./windows/Google/GoogleDriveTestbed";
-
 import TransactionDetails from "./windows/TransactionDetails";
-import OnChainTransactionDetails from "./windows/OnChain/OnChainTransactionDetails";
+import Loading from "./windows/Loading";
 
-const MainStack = createBottomTabNavigator({
-  Overview,
-}, {
-  navigationOptions: {
-    animationEnabled: false,
-  },
-  initialRouteName: "Overview",
-  tabBarComponent: FooterNav,
-});
+import { useStoreState, useStoreActions } from "./state/store.ts";
 
-const StackNavigator = createStackNavigator({
-  Main: {
-    screen: MainStack,
-  },
-  TransactionDetails,
-  OnChainTransactionDetails,
-  LightningNodeInfo,
-  About,
-  Receive,
-  Send,
-  Settings,
-  LightningInfo,
-  OnChain,
-  ChannelRequest,
-  KeysendTest,
-  GoogleDriveTestbed
-}, {
-  navigationOptions: {
-    animationEnabled: false,
+const RootStack = createStackNavigator();
+
+export type RootStackParamList = {
+  DEV_Commands: undefined;
+  Init: undefined;
+  Authentication: undefined;
+  InitLightning: undefined;
+
+  Overview: undefined;
+  TransactionDetails: {
+    rHash: string; // TODO
+  };
+  Receive: undefined;
+  Send: undefined;
+  OnChain: undefined;
+  Settings: undefined;
+  ChannelRequest: undefined;
+  GoogleDriveTestbed: undefined;
+  KeysendTest: undefined;
+  DeeplinkChecker: undefined;
+
+  DEV_CommandsX: undefined;
+}
+
+export default () => {
+  const holdOnboarding = useStoreState((store) => store.holdOnboarding);
+  const appReady = useStoreState((store) => store.appReady);
+  const walletCreated = useStoreState((store) => store.walletCreated);
+  const loggedIn = useStoreState((store) => store.security.loggedIn);
+  const initializeApp = useStoreActions((store) => store.initializeApp);
+  const initLightning = useStoreActions((store) => store.lightning.initialize);
+  const deeplinkChecker = useStoreActions((store) => store.deeplinkChecker);
+  const [initialRoute, setInitialRoute] = useState("Overview");
+
+  const [state, setState] =
+    useState<"init" | "initLightning" | "authentication" | "onboarding" | "started">("init");
+
+  useEffect(() => {
+    // tslint:disable-next-line
+    (async () => {
+      if (!appReady) {
+        await initializeApp();
+      }
+      else {
+        if (!walletCreated) {
+          setState("onboarding");
+        }
+        else if (!loggedIn) {
+          setState("authentication");
+        }
+        else {
+          console.log("else?");
+          if (walletCreated && !holdOnboarding) {
+            // setState("initLightning");
+            await initLightning();
+            if (await deeplinkChecker()) {
+              setInitialRoute("SendConfirmation");
+            }
+            setState("started");
+          }
+        }
+      }
+    })();
+  }, [appReady, loggedIn, holdOnboarding, walletCreated]);
+
+  const screenOptions = {
+    gestureEnabled: false,
     headerShown: false,
+    animationEnabled: false,
     cardStyle: {
       backgroundColor: "transparent",
     },
-  },
-  defaultNavigationOptions: {
-    animationEnabled: false,
-    headerShown: false,
-    cardStyle: {
-      backgroundColor: "transparent",
-    },
-  },
-  initialRouteName: "Main",
-  mode: "modal",
-  headerMode: "none",
-});
+  };
 
-const RootStack = createSwitchNavigator({
-  DEV_Commands,
-  Welcome,
-  Init,
-  Authentication,
-  InitLightning,
-  Main: { screen: StackNavigator },
-}, {
-  navigationOptions: {
-    animationEnabled: false,
-  },
-  initialRouteName: __DEV__ ? "DEV_Commands" : "Init",
-});
+  // Initialization
+  if (state === "init" || state === "initLightning") {
+    return (<Loading />);
+  }
+  if (state === "onboarding") {
+    return (<Welcome />);
+  }
+  if (state === "authentication") {
+    return (<Authentication />);
+  }
 
-const AppContainer = createAppContainer(RootStack);
+  return (
+    <RootStack.Navigator initialRouteName={"Start"} screenOptions={screenOptions}>
+      <RootStack.Screen name="Start">{({navigation}) => {
+        if (initialRoute === "Overview") {
+          navigation.replace(initialRoute);
+        }
+        else if (initialRoute === "SendConfirmation") {
+          navigation.replace("Overview");
+          navigation.push("Send", {screen: initialRoute });
+        }
 
-export default () => (
-  <Root>
-    <AppContainer
-      ref={(navigatorRef) => setTopLevelNavigator(navigatorRef)}
-    />
-  </Root>
-);
+        return null;
+      }}</RootStack.Screen>
+      <RootStack.Screen name="Overview" component={Overview} />
+      <RootStack.Screen name="TransactionDetails" component={TransactionDetails} />
+      <RootStack.Screen name="Receive" component={Receive} />
+      <RootStack.Screen name="Send" component={Send} />
+      <RootStack.Screen name="OnChain" component={OnChain} />
+      <RootStack.Screen name="LightningInfo" component={LightningInfo} />
+      <RootStack.Screen name="Settings" component={Settings} />
+      <RootStack.Screen name="ChannelRequest" component={ChannelRequest} />
+
+      <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} />
+      <RootStack.Screen name="KeysendTest" component={KeysendTest} />
+
+      <RootStack.Screen
+        name="DEV_CommandsX"
+        component={DEV_Commands}
+      />
+    </RootStack.Navigator>
+  );
+};

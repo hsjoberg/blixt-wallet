@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Body, Card, Text, CardItem, H1, Toast } from "native-base";
-import { NavigationScreenProp, ScrollView } from "react-navigation";
 import { fromUnixTime } from "date-fns";
 
 import Blurmodal from "../../components/BlurModal";
@@ -31,10 +30,7 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
   );
 };
 
-export interface ITransactionDetailsProps {
-  navigation: NavigationScreenProp<{}>;
-}
-export default ({ navigation }: ITransactionDetailsProps) => {
+export default () => {
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const getNodeInfo = useStoreActions((store) => store.lightning.getInfo);
 
@@ -49,7 +45,7 @@ export default ({ navigation }: ITransactionDetailsProps) => {
   }
 
   return (
-    <Blurmodal navigation={navigation}>
+    <Blurmodal>
       <Card style={style.card}>
         <CardItem>
           <Body>
