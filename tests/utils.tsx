@@ -1,9 +1,12 @@
+import React from "react";
 import { DeviceEventEmitter } from "react-native";
 import { createStore } from "easy-peasy";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from "@react-navigation/stack";
+
+
 import { model } from "../src/state/index";
 import LndMobile from "../src/state/LndMobileInjection";
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
 
 import { setupApp, setItem, setItemObject, StorageItem, clearApp } from "../src/storage/app";
 import { timeout } from "../src/utils";
@@ -31,12 +34,15 @@ export const initCommonStore = async (waitUntilReady = false) => {
 }
 
 export const createNavigationContainer = (routes: any, initial: string) => {
-  const RootStack = createStackNavigator(routes, {
-    initialRouteName: initial,
-  });
+  const RootStack = createStackNavigator();
 
-  const AppContainer = createAppContainer(RootStack);
-  return AppContainer;
+  return (
+    <NavigationContainer>
+      <RootStack.Navigator>
+        <RootStack.Screen name="a" component={routes} />
+      </RootStack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 

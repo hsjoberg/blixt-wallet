@@ -9,9 +9,9 @@ import SendCamera from "../../../src/windows/Send/SendCamera";
 import SendConfirmation from "../../../src/windows/Send/SendConfirmation";
 import { createNavigationContainer, setupStore, setDefaultAsyncStorage, mockBlockchainAPI, initCommonStore } from "../../utils";
 
-const AppContainer = createNavigationContainer({ Send }, "Send");
-const AppContainerSendCamera = createNavigationContainer({ SendCamera }, "SendCamera");
-const AppContainerSendConfirmation = createNavigationContainer({ SendConfirmation }, "SendConfirmation");
+const AppContainer = createNavigationContainer(Send, "Send");
+const AppContainerSendCamera = createNavigationContainer(SendCamera, "SendCamera");
+const AppContainerSendConfirmation = createNavigationContainer(SendConfirmation, "SendConfirmation");
 
 it("SendCamera renders correctly", async () => {
   await setDefaultAsyncStorage();
@@ -23,7 +23,7 @@ it("SendCamera renders correctly", async () => {
 
   const { container, unmount } = render(
     <StoreProvider store={store}>
-      <AppContainerSendCamera />
+      {AppContainerSendCamera}
     </StoreProvider>
   );
   expect(toJSON(container)).toMatchSnapshot();
@@ -44,7 +44,7 @@ it("It is possible to paste invoice from clipboard and pay it", async () => {
 
   const { queryByTestId, unmount } = render(
     <StoreProvider store={store}>
-      <AppContainer />
+      {AppContainer}
     </StoreProvider>
   );
 

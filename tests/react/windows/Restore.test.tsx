@@ -8,14 +8,14 @@ import { createNavigationContainer, setupStore, setDefaultAsyncStorage, initComm
 
 jest.setTimeout(10000);
 
-const AppContainer = createNavigationContainer({ Receive }, "Receive");
+const AppContainer = createNavigationContainer(Receive, "Receive");
 
 it("renders correctly", () => {
   const store = setupStore();
 
   const { container, unmount } = render(
     <StoreProvider store={store}>
-      <AppContainer />
+      {AppContainer}
     </StoreProvider>
   );
   expect(toJSON(container)).toMatchSnapshot();
