@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { FlatList } from "react-native";
 import { Body, Header, Container, Right, Left, Button, Title, Icon } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { OnChainStackParamList } from "./index";
 import OnChainTransactionItem from "../../components/OnChainTransactionItem";
 import { useStoreState, useStoreActions } from "../../state/store";
 
 export interface IOnChainTransactionLogProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<OnChainStackParamList, "OnChainTransactionLog">;
 }
 export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProps) => {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);

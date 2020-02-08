@@ -1,20 +1,18 @@
 import React from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { Container, Content } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { useNavigation } from "@react-navigation/native";
 
 import { useStoreActions } from "../../state/store";
 import Pincode from "../../components/Pincode";
 
-interface IProps {
-  navigation: NavigationScreenProp<{}>;
-}
-export default ({ navigation }: IProps) => {
+export default () => {
+  const navigation = useNavigation();
   const removePincode = useStoreActions((store) => store.security.removePincode);
 
   const onTryCode = async (code: string) => {
     if (await removePincode(code)) {
-      setTimeout(() => navigation.pop(), 0);
+      setTimeout(() => navigation.goBack(), 0);
       return true;
     }
     return false;

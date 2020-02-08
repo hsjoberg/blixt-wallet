@@ -24,6 +24,8 @@ import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setIt
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
+import { NativeModules, Linking } from "react-native";
+import { timeout } from "../utils";
 
 export interface ICreateWalletPayload {
   restore?: {
@@ -41,8 +43,10 @@ export interface IStoreModel {
   setDb: Action<IStoreModel, SQLiteDatabase>;
   setAppReady: Action<IStoreModel, boolean>;
   setWalletCreated: Action<IStoreModel, boolean>;
+  setHoldOnboarding: Action<IStoreModel, boolean>;
   setWalletSeed: Action<IStoreModel, string[] | undefined>;
   setAppVersion: Action<IStoreModel, number>;
+  deeplinkChecker: Thunk<IStoreModel, void, IStoreInjections, IStoreModel, Promise<string | null>>;
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
@@ -50,6 +54,7 @@ export interface IStoreModel {
   db?: SQLiteDatabase;
   appReady: boolean;
   walletCreated: boolean;
+  holdOnboarding: boolean;
 
   lightning: ILightningModel;
   transaction: ITransactionModel;
@@ -184,13 +189,44 @@ export const model: IStoreModel = {
     return wallet;
   }),
 
+  deeplinkChecker: thunk(async (actions, _, { getState, dispatch }) => {
+    try {
+      let lightningURI = await Linking.getInitialURL();
+      if (lightningURI === null) {
+        lightningURI = await NativeModules.LndMobile.getIntentStringData();
+      }
+      if (lightningURI === null) {
+        lightningURI = await NativeModules.LndMobile.getIntentNfcData();
+      }
+      console.log("lightningURI", lightningURI);
+      if (lightningURI && lightningURI.toUpperCase().startsWith("LIGHTNING:")) {
+        console.log("try lightningURI");
+
+        while (!getState().lightning.rpcReady) {
+          await timeout(500);
+        }
+
+        await dispatch.send.setPayment({ paymentRequestStr: lightningURI.toUpperCase().replace("LIGHTNING:", "") });
+        console.log("deeplink true");
+        return true;
+      }
+    } catch (e) {
+      dispatch.send.clear();
+      console.log(e.message);
+    }
+    console.log("deeplink false");
+    return null;
+  }),
+
   setWalletCreated: action((state, payload) => { state.walletCreated = payload; }),
+  setHoldOnboarding: action((state, payload) => { state.holdOnboarding = payload; }),
   setDb: action((state, db) => { state.db = db; }),
   setAppReady: action((state, value) => { state.appReady = value; }),
   setAppVersion: action((state, value) => { state.appVersion = value; }),
 
   appReady: false,
   walletCreated: false,
+  holdOnboarding: false,
   appVersion: 0,
 
   lightning,

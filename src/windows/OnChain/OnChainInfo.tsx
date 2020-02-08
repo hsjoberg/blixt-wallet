@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { StyleSheet, View, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Body, Text, Header, Container, H1, H2, Right, Left, Button, Title, Icon, Toast, Spinner } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { OnChainStackParamList } from "./index";
 import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
 import { formatBitcoin } from "../../utils/bitcoin-units";
@@ -12,7 +13,7 @@ import CopyAddress from "../../components/CopyAddress";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 interface IOnChainInfoProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<OnChainStackParamList, "OnChainInfo">;
 }
 export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
@@ -52,7 +53,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
         <Left>
-          <Button transparent={true} onPress={() => navigation.navigate("Main")}>
+          <Button transparent={true} onPress={() => navigation.goBack()}>
             <Icon name="arrow-back" />
           </Button>
         </Left>

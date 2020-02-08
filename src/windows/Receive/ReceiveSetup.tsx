@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast, Spinner } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 import Long from "long";
 
+import { ReceiveStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { unitToSatoshi, BitcoinUnits, valueBitcoinFromFiat, convertBitcoinToFiat, formatBitcoin, valueBitcoin } from "../../utils/bitcoin-units";
@@ -10,8 +11,8 @@ import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 const MAX_SAT_INVOICE = 4294967;
 
-interface IReceiveSetupProps {
-  navigation: NavigationScreenProp<{}>;
+export interface IReceiveSetupProps {
+  navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveSetup">;
 }
 export default ({ navigation }: IReceiveSetupProps) => {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
@@ -68,7 +69,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
         throw new Error("Invoice amount cannot be higher than " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnit));
       }
 
-      navigation.navigate("ReceiveQr", {
+      navigation.replace("ReceiveQr", {
         invoice: await addInvoice({
           sat: unitToSatoshi(Number.parseFloat(satValue || "0"), bitcoinUnit),
           description,
@@ -136,7 +137,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
         <Left>
-          <Button transparent={true} onPress={() => navigation.navigate("Main")}>
+          <Button transparent={true} onPress={() => navigation.goBack()}>
             <Icon name="arrow-back" />
           </Button>
         </Left>

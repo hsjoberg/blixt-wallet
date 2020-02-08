@@ -1,20 +1,17 @@
 import React, { useState } from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { Container, Content } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { useNavigation } from "@react-navigation/native";
 
 import { useStoreActions } from "../../state/store";
 import Pincode from "../../components/Pincode";
-
-interface IProps {
-  navigation: NavigationScreenProp<{}>;
-}
 
 enum States {
   enter = "Enter a pincode",
   confirm = "Confirm your pincode",
 }
-export default ({ navigation }: IProps) => {
+export default () => {
+  const navigation = useNavigation();
   const [state, setState] = useState<States>(States.enter);
   const [pincode, setStatePincode] = useState<string | undefined>();
   const setPincode = useStoreActions((store) => store.security.setPincode);
@@ -30,7 +27,7 @@ export default ({ navigation }: IProps) => {
       return false;
     }
     await setPincode(code);
-    setTimeout(() => navigation.pop(), 0);
+    setTimeout(() => navigation.goBack(), 0);
     return true;
   }
 

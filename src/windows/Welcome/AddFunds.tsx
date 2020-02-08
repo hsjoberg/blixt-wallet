@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { StatusBar, StyleSheet, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { View, Button, H1, Text, Toast, Spinner } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { WelcomeStackParamList } from "./index";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
@@ -15,7 +16,7 @@ import Content from "../../components/Content";
 import CopyAddress from "../../components/CopyAddress";
 
 interface IProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<WelcomeStackParamList, "AddFunds">;
 }
 export default ({ navigation }: IProps) => {
   const getAddress = useStoreActions((store) => store.onChain.getAddress);

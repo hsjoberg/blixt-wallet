@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { View } from "react-native";
-import { NavigationScreenProp } from "react-navigation";
 import BlurOverlay, { closeOverlay, openOverlay } from "../Blur";
+import { useNavigation } from "@react-navigation/native";
 
 export interface ITransactionDetailsProps {
-  navigation: NavigationScreenProp<{}>;
   children: any;
 }
-export default ({ navigation, children }: ITransactionDetailsProps) => {
+export default ({ children }: ITransactionDetailsProps) => {
+  const navigation = useNavigation();
+
   useEffect(() => {
     setTimeout(() => {
       openOverlay();
@@ -17,7 +18,7 @@ export default ({ navigation, children }: ITransactionDetailsProps) => {
 
   const goBack = () => {
     closeOverlay();
-    setTimeout(() => navigation.pop(), 0);
+    setTimeout(() => navigation.goBack(), 0);
   };
 
   return (

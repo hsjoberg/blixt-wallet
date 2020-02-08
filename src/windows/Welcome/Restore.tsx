@@ -3,16 +3,17 @@ import { StatusBar, StyleSheet, Alert } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import { readFile } from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { WelcomeStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
-import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
 import Content from "../../components/Content";
 import { ICreateWalletPayload } from "../../state";
 
 interface IProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<WelcomeStackParamList, "Restore">;
 }
 export default ({ navigation }: IProps) => {
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,6 @@ export default ({ navigation }: IProps) => {
 
   const onRestorePress = async () => {
     try {
-      console.log(seedText);
       const splittedSeed = seedText.split(" ");
       if (splittedSeed.length !== 24) {
         Alert.alert("Seed must be exactly 24 words");
@@ -67,7 +67,6 @@ export default ({ navigation }: IProps) => {
         setSyncEnabled(true), // TODO test
         changeScheduledSyncEnabled(true),
       ]);
-      navigation.navigate("InitLightning");
     } catch (e) {
       setLoading(false);
       Alert.alert(e.message);

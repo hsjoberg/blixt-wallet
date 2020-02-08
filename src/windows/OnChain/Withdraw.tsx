@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Toast, Spinner } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { OnChainStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
@@ -9,7 +10,7 @@ import { parseBech32 } from "../../utils";
 import { unitToSatoshi, BitcoinUnits, convertBitcoinUnit } from "../../utils/bitcoin-units";
 
 export interface IOpenChannelProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<OnChainStackParamList, "Withdraw">;
 }
 export default ({ navigation }: IOpenChannelProps) => {
   const sendCoins = useStoreActions((actions) => actions.onChain.sendCoins);

@@ -2,10 +2,10 @@ import React from "react";
 import { StatusBar, StyleSheet, ToastAndroid } from "react-native";
 import { Body, Icon, Text, View, Button, H1, List, Left, ListItem, Right, CheckBox } from "native-base";
 import DialogAndroid from "react-native-dialogs";
+import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
 
+import { WelcomeStackParamList } from "./index";
 import { useStoreState, useStoreActions } from "../../state/store";
-import { NavigationScreenProp} from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import style from "./style";
 import { LoginMethods } from "../../state/Security";
@@ -18,9 +18,10 @@ import ChangeFingerprintSettingsAuth from "../Settings/ChangeFingerprintSettings
 import { toast } from "../../utils";
 
 interface IProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<AlmostDoneStackParamList, "AlmostDone">;
 }
-export const AlmostDone = ({ navigation }: IProps) => {
+const AlmostDone = ({ navigation }: IProps) => {
+  const setHoldOnboarding = useStoreActions((store) => store.setHoldOnboarding);
   // Name
   const name = useStoreState((store) => store.settings.name);
   const changeName = useStoreActions((store) => store.settings.changeName);
@@ -177,7 +178,7 @@ export const AlmostDone = ({ navigation }: IProps) => {
             </Text>
           </View>
           <View style={style.buttons}>
-            <Button style={style.button} block={true} onPress={() => navigation.navigate("InitLightning")}>
+            <Button style={style.button} block={true} onPress={() => setHoldOnboarding(false)}>
               <Text>Continue</Text>
             </Button>
           </View>
@@ -211,18 +212,22 @@ const extraStyle = StyleSheet.create({
   },
 });
 
-export default createStackNavigator({
-  AlmostDone,
-  RemovePincodeAuth,
-  SetPincode,
-  ChangeFingerprintSettingsAuth,
-}, {
-  navigationOptions: {
-    animationEnabled: false,
-  },
-  defaultNavigationOptions: {
-    animationEnabled: false,
-  },
-  headerMode: "none",
-  initialRouteName: "AlmostDone",
-});
+const Stack = createStackNavigator();
+
+export type AlmostDoneStackParamList = {
+  AlmostDone: undefined;
+  RemovePincodeAuth: undefined;
+  SetPincode: undefined;
+  ChangeFingerprintSettingsAuth: undefined;
+}
+export default () => {
+  return (
+    <Stack.Navigator initialRouteName="AlmostDone" screenOptions={{ headerShown: false, animationEnabled: false }}>
+      <Stack.Screen name="AlmostDone" component={AlmostDone} />
+      <Stack.Screen name="RemovePincodeAuth" component={RemovePincodeAuth} />
+      <Stack.Screen name="SetPincode" component={SetPincode} />
+      <Stack.Screen name="ChangeFingerprintSettingsAuth" component={ChangeFingerprintSettingsAuth} />
+    </Stack.Navigator>
+  );
+};
+

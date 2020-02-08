@@ -1,20 +1,23 @@
 import React, { useEffect } from "react";
 import { StatusBar, Vibration } from "react-native";
 import { Spinner, Toast } from "native-base";
+import { StackNavigationProp } from "@react-navigation/stack";
+
 
 import Container from "../../components/Container";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
-import { NavigationScreenProp } from "react-navigation";
+import { RootStackParamList } from "../../Main";
 
 interface IChannelRequestProps {
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<RootStackParamList, "ChannelRequest">;
 }
 export default ({ navigation }: IChannelRequestProps) => {
   const type = useStoreState((store) => store.lnUrl.type);
   const doChannelRequest = useStoreActions((store) => store.lnUrl.doChannelRequest);
 
   useEffect(() => {
+    // tslint:disable-next-line
     (async () => {
       if (type === "channelRequest") {
         try {

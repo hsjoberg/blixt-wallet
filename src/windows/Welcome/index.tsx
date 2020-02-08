@@ -1,4 +1,5 @@
-import { createSwitchNavigator } from "react-navigation";
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import Start from "./Start";
 import Seed from "./Seed";
@@ -7,13 +8,30 @@ import AddFunds from "./AddFunds";
 import AlmostDone from "./AlmostDone";
 import Restore from "./Restore";
 
-export default createSwitchNavigator({
-  Start,
-  Seed,
-  Confirm,
-  AddFunds,
-  AlmostDone,
-  Restore,
-}, {
-  initialRouteName: "Start",
-});
+const Stack = createStackNavigator();
+
+export type WelcomeStackParamList = {
+  Start: undefined;
+  Seed: undefined;
+  Confirm: undefined;
+  AddFunds: undefined;
+  AlmostDone: undefined;
+  Restore: undefined;
+
+  SetPincode: undefined;
+  RemovePincodeAuth: undefined;
+  ChangeFingerprintSettingsAuth: undefined;
+}
+
+export default () => {
+  return (
+    <Stack.Navigator initialRouteName="Settings" screenOptions={{ headerShown: false, animationEnabled: false, cardStyle: { backgroundColor: "transparent" } }}>
+      <Stack.Screen name="Start" component={Start} />
+      <Stack.Screen name="Seed" component={Seed} />
+      <Stack.Screen name="Confirm" component={Confirm} />
+      <Stack.Screen name="AddFunds" component={AddFunds} />
+      <Stack.Screen name="AlmostDone" component={AlmostDone} />
+      <Stack.Screen name="Restore" component={Restore} />
+    </Stack.Navigator>
+  );
+}

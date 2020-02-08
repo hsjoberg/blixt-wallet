@@ -4,9 +4,10 @@ import Clipboard from "@react-native-community/react-native-clipboard";
 import { Icon } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
 import BarcodeMask from 'react-native-barcode-mask';
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { SendStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
-import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Camera from "../../components/Camera";
 import { Chain } from "../../utils/build";
@@ -14,7 +15,7 @@ import { smallScreen } from "../../utils/device";
 
 interface ISendCameraProps {
   bolt11Invoice?: string;
-  navigation: NavigationScreenProp<{}>;
+  navigation: StackNavigationProp<SendStackParamList, "SendCamera">;
 }
 export default ({ navigation }: ISendCameraProps) => {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
@@ -57,7 +58,7 @@ export default ({ navigation }: ISendCameraProps) => {
     else {
       try {
         await setPayment({ paymentRequestStr: paymentRequest });
-        navigation.navigate("SendConfirmation");
+        navigation.replace("SendConfirmation");
       } catch (error) {
         Alert.alert(`${errorPrefix}: ${error.message}`, undefined,
           [{text: "OK", onPress: () => setScanning(true)}]);

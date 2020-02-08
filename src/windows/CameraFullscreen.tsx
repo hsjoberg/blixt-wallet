@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import { StatusBar } from "react-native";
-import { NavigationScreenProp } from "react-navigation";
+// import { NavigationScreenProp } from "react-navigation";
 import Camera from "../components/Camera";
 
 type onReadCallback = (address: string) => void;
 
-export interface ICameraFullscreenProps {
-  navigation: NavigationScreenProp<{}>;
-}
-export default ({ navigation }: ICameraFullscreenProps) => {
+export default ({ navigation, route }: any) => {
   const [onReadCalled, setOnReadCalled] = useState(false);
-  const onRead: onReadCallback = navigation.getParam("onRead") || (() => {});
+  const onRead: onReadCallback = route.params.onRead || (() => {});
   return (
     <>
       <StatusBar

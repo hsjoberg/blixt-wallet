@@ -1,18 +1,15 @@
 import React, { useEffect } from "react";
 import { StyleSheet, StatusBar, Linking, NativeModules } from "react-native";
 import { Spinner, H1, H3 } from "native-base";
-import { NavigationScreenProp } from "react-navigation";
-import * as Base64 from "base64-js";
+import { StackNavigationProp } from "@react-navigation/stack";
 
+import { RootStackParamList } from "../../Main";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
-import { timeout, bytesToString } from "../../utils";
+import { timeout } from "../../utils";
 
-interface IProps {
-  navigation: NavigationScreenProp<{}>;
-}
-export default ({ navigation }: IProps) => {
+export default () => {
   const initializeLightning = useStoreActions((store) => store.lightning.initialize);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const firstSync = useStoreState((store) => store.lightning.firstSync);
@@ -27,37 +24,37 @@ export default ({ navigation }: IProps) => {
     })();
   }, [initializeLightning]);
 
-  if (ready) {
-    // Check for deep links
-    setTimeout(async () => {
-      try {
-        let lightningURI = await Linking.getInitialURL();
-        if (lightningURI === null) {
-          lightningURI = await NativeModules.LndMobile.getIntentStringData();
-        }
-        if (lightningURI === null) {
-          lightningURI = await NativeModules.LndMobile.getIntentNfcData();
-        }
+  // if (ready) {
+  //   // Check for deep links
+  //   setTimeout(async () => {
+  //     try {
+  //       let lightningURI = await Linking.getInitialURL();
+  //       if (lightningURI === null) {
+  //         lightningURI = await NativeModules.LndMobile.getIntentStringData();
+  //       }
+  //       if (lightningURI === null) {
+  //         lightningURI = await NativeModules.LndMobile.getIntentNfcData();
+  //       }
 
-        if (lightningURI && lightningURI.startsWith("lightning:")) {
-          console.log("try lightningURI");
+  //       if (lightningURI && lightningURI.startsWith("lightning:")) {
+  //         console.log("try lightningURI");
 
-          while (!rpcReady) {
-            await timeout(500);
-          }
+  //         while (!rpcReady) {
+  //           await timeout(500);
+  //         }
 
-          await setPayment({
-            paymentRequestStr: lightningURI.toUpperCase().replace("LIGHTNING:", ""),
-          });
-          navigation.navigate("SendConfirmation");
-          return;
-        }
-      } catch (e) {
-        console.log(e.message);
-      }
-      navigation.navigate("Main");
-    }, 0);
-  }
+  //         await setPayment({
+  //           paymentRequestStr: lightningURI.toUpperCase().replace("LIGHTNING:", ""),
+  //         });
+  //         navigation.navigate("SendConfirmation");
+  //         return;
+  //       }
+  //     } catch (e) {
+  //       console.log(e.message);
+  //     }
+  //   }, 0);
+  //   navigation.replace("Overview");
+  // }
 
   return (
     <Container centered>

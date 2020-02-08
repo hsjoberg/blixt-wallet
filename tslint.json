@@ -1,9 +1,7 @@
 {
   "defaultSeverity": "error",
   "extends": [
-    "tslint:recommended",
-    "tslint-react",
-    "tslint-react-native"
+    "tslint:recommended"
   ],
   "jsRules": {
   },
@@ -19,7 +17,10 @@
     "no-console": false,
     "one-line": false,
     "no-empty": false,
-    "no-bitwise": false
+    "no-bitwise": false,
+    "no-async-without-await": true,
+    "await-promise": true,
+    "no-floating-promises": true
   },
   "rulesDirectory": []
 }

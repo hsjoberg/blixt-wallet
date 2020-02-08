@@ -677,18 +677,6 @@ void deleteRecursive(File fileOrDirectory) {
   }
 
   @ReactMethod
-  public void startLndLogObserving() {
-    FileObserver lndLogObserver;
-    File lndLog = new File(
-      getReactApplicationContext().getFilesDir().toString() +
-      "/logs/bitcoin/" +
-      BuildConfig.CHAIN +
-      "/lnd.log"
-    );
-    // TODO
-  }
-
-  @ReactMethod
   public void getIntentStringData(Promise promise) {
     String sharedText = getReactApplicationContext()
       .getCurrentActivity().getIntent().getStringExtra(Intent.EXTRA_TEXT);
