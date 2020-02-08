@@ -574,10 +574,10 @@ exports[`renders correctly 1`] = `
             <View
               style={
                 Object {
-                  "backgroundColor": "#fff",
-                  "borderBottomColor": "#a7a7aa",
+                  "backgroundColor": "rgb(255, 255, 255)",
+                  "borderBottomColor": "rgb(199, 199, 204)",
                   "flex": 1,
-                  "shadowColor": "#a7a7aa",
+                  "shadowColor": "rgb(199, 199, 204)",
                   "shadowOffset": Object {
                     "height": 0.5,
                     "width": 0,
@@ -633,13 +633,13 @@ exports[`renders correctly 1`] = `
                   numberOfLines={1}
                   style={
                     Object {
-                      "color": "rgba(0, 0, 0, 0.9)",
+                      "color": "rgb(28, 28, 30)",
                       "fontSize": 17,
                       "fontWeight": "600",
                     }
                   }
                 >
-                  Receive
+                  a
                 </Text>
               </View>
             </View>

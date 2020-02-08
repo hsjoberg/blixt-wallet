@@ -177,308 +177,573 @@ exports[`renders correctly 1`] = `
                     >
                       <View
                         style={
-                          Array [
-                            Object {
-                              "backgroundColor": "#151314",
-                              "flex": 1,
-                              "height": "100%",
-                              "width": "100%",
-                            },
-                            Object {},
-                            undefined,
-                          ]
+                          Object {
+                            "flex": 1,
+                            "overflow": "hidden",
+                          }
                         }
                       >
                         <View
                           style={
                             Object {
-                              "backgroundColor": "#151314",
                               "flex": 1,
                             }
                           }
                         >
-                          <ScrollView
-                            contentContainerStyle={
-                              Object {
-                                "paddingBottom": 12,
-                                "paddingLeft": 7,
-                                "paddingRight": 7,
-                                "paddingTop": 207,
-                              }
-                            }
-                            refreshControl={
-                              <RefreshControl
-                                colors={
-                                  Array [
-                                    "#e5eaea",
-                                  ]
-                                }
-                                onRefresh={[Function]}
-                                progressBackgroundColor="#232323"
-                                progressViewOffset={183}
-                                refreshing={false}
-                                title="Refreshing"
-                              />
-                            }
-                            scrollEventThrottle={16}
-                          >
-                            <Text
-                              style={
-                                Array [
-                                  Object {
-                                    "color": "#000",
-                                    "fontFamily": "System",
-                                    "fontSize": 16,
-                                  },
-                                  Object {
-                                    "margin": 16,
-                                    "textAlign": "center",
-                                  },
-                                ]
-                              }
-                              uppercase={false}
-                            >
-                              No transactions yet
-                            </Text>
-                          </ScrollView>
                           <View
-                            pointerEvents="box-none"
+                            collapsable={false}
+                            pointerEvents="auto"
+                            removeClippedSubviews={false}
                             style={
-                              Object {
-                                "alignItems": "center",
-                                "borderBottomColor": "#1F1F1F",
-                                "borderBottomWidth": 1,
-                                "height": 195,
-                                "justifyContent": "center",
-                                "left": 0,
-                                "position": "absolute",
-                                "right": 0,
-                                "top": 0,
-                              }
+                              Array [
+                                Object {
+                                  "flex": 1,
+                                  "overflow": "hidden",
+                                },
+                                Object {
+                                  "bottom": 0,
+                                  "left": 0,
+                                  "position": "absolute",
+                                  "right": 0,
+                                  "top": 0,
+                                },
+                                Object {
+                                  "opacity": 1,
+                                },
+                              ]
                             }
                           >
-                            <BVLinearGradient
-                              colors={
-                                Array [
-                                  4294094611,
-                                  4290536976,
-                                ]
-                              }
-                              endPoint={
-                                Object {
-                                  "x": 0.5,
-                                  "y": 1,
-                                }
-                              }
-                              locations={null}
-                              pointerEvents="box-none"
-                              startPoint={
-                                Object {
-                                  "x": 0.5,
-                                  "y": 0,
-                                }
-                              }
+                            <View
                               style={
                                 Object {
-                                  "alignItems": "center",
                                   "flex": 1,
-                                  "height": "100%",
-                                  "justifyContent": "center",
-                                  "width": "100%",
                                 }
                               }
                             >
                               <View
+                                accessibilityElementsHidden={false}
+                                importantForAccessibility="auto"
                                 style={
-                                  Object {
-                                    "bottom": 0,
-                                    "left": 0,
-                                    "position": "absolute",
-                                    "right": 0,
-                                    "top": 0,
-                                  }
+                                  Array [
+                                    Object {
+                                      "flex": 1,
+                                    },
+                                    Object {
+                                      "backgroundColor": "rgb(242, 242, 242)",
+                                    },
+                                  ]
                                 }
                               >
-                                <Text
-                                  allowFontScaling={false}
+                                <View
                                   style={
                                     Array [
                                       Object {
-                                        "color": undefined,
-                                        "fontSize": 12,
-                                      },
-                                      Array [
-                                        Object {
-                                          "color": "#000",
-                                          "fontSize": 30,
-                                        },
-                                        Object {
-                                          "color": "#000",
-                                          "fontSize": 30,
-                                        },
-                                        Object {
-                                          "color": "#e5eaea",
-                                          "fontSize": 24,
-                                          "left": 8,
-                                          "padding": 4,
-                                          "paddingRight": 8,
-                                          "position": "absolute",
-                                          "top": 54,
-                                        },
-                                      ],
-                                      Object {
-                                        "fontFamily": "FontAwesome",
-                                        "fontStyle": "normal",
-                                        "fontWeight": "normal",
+                                        "backgroundColor": "#151314",
+                                        "flex": 1,
+                                        "height": "100%",
+                                        "width": "100%",
                                       },
                                       Object {},
-                                    ]
-                                  }
-                                  type="FontAwesome"
-                                >
-                                  
-                                </Text>
-                                <Text
-                                  allowFontScaling={false}
-                                  style={
-                                    Array [
-                                      Object {
-                                        "color": undefined,
-                                        "fontSize": 12,
-                                      },
-                                      Array [
-                                        Object {
-                                          "color": "#000",
-                                          "fontSize": 30,
-                                        },
-                                        Object {
-                                          "color": "#000",
-                                          "fontSize": 30,
-                                        },
-                                        Object {
-                                          "color": "#e5eaea",
-                                          "fontSize": 24,
-                                          "left": 40,
-                                          "padding": 4,
-                                          "paddingRight": 8,
-                                          "position": "absolute",
-                                          "top": 55,
-                                        },
-                                      ],
-                                      Object {
-                                        "fontFamily": "Entypo",
-                                        "fontStyle": "normal",
-                                        "fontWeight": "normal",
-                                      },
-                                      Object {},
-                                    ]
-                                  }
-                                  type="Entypo"
-                                >
-                                  
-                                </Text>
-                                <Text
-                                  allowFontScaling={false}
-                                  style={
-                                    Array [
-                                      Object {
-                                        "color": undefined,
-                                        "fontSize": 12,
-                                      },
-                                      Array [
-                                        Object {
-                                          "color": "#000",
-                                          "fontSize": 30,
-                                        },
-                                        Object {
-                                          "color": "#000",
-                                          "fontSize": 30,
-                                        },
-                                        Object {
-                                          "color": "#e5eaea",
-                                          "fontSize": 24,
-                                          "padding": 4,
-                                          "position": "absolute",
-                                          "right": 8,
-                                          "top": 55,
-                                        },
-                                      ],
-                                      Object {
-                                        "fontFamily": "anticon",
-                                        "fontStyle": "normal",
-                                        "fontWeight": "normal",
-                                      },
-                                      Object {},
-                                    ]
-                                  }
-                                  type="AntDesign"
-                                >
-                                  
-                                </Text>
-                                <Text
-                                  allowFontScaling={false}
-                                  style={
-                                    Array [
-                                      Object {
-                                        "color": undefined,
-                                        "fontSize": 12,
-                                      },
-                                      Array [
-                                        Object {
-                                          "color": "#000",
-                                          "fontSize": 30,
-                                        },
-                                        Object {
-                                          "color": "#000",
-                                          "fontSize": 30,
-                                        },
-                                        Object {
-                                          "color": "#e5eaea",
-                                          "fontSize": 24,
-                                          "padding": 4,
-                                          "position": "absolute",
-                                          "right": 44,
-                                          "top": 55,
-                                        },
-                                      ],
-                                      Object {
-                                        "fontFamily": "Ionicons",
-                                        "fontStyle": "normal",
-                                        "fontWeight": "normal",
-                                      },
-                                      Object {},
+                                      undefined,
                                     ]
                                   }
                                 >
-                                  
-                                </Text>
+                                  <View
+                                    style={
+                                      Object {
+                                        "backgroundColor": "#151314",
+                                        "flex": 1,
+                                      }
+                                    }
+                                  >
+                                    <ScrollView
+                                      contentContainerStyle={
+                                        Object {
+                                          "paddingBottom": 12,
+                                          "paddingLeft": 7,
+                                          "paddingRight": 7,
+                                          "paddingTop": 207,
+                                        }
+                                      }
+                                      refreshControl={
+                                        <RefreshControl
+                                          colors={
+                                            Array [
+                                              "#e5eaea",
+                                            ]
+                                          }
+                                          onRefresh={[Function]}
+                                          progressBackgroundColor="#232323"
+                                          progressViewOffset={183}
+                                          refreshing={false}
+                                          title="Refreshing"
+                                        />
+                                      }
+                                      scrollEventThrottle={16}
+                                    >
+                                      <Text
+                                        style={
+                                          Array [
+                                            Object {
+                                              "color": "#000",
+                                              "fontFamily": "System",
+                                              "fontSize": 16,
+                                            },
+                                            Object {
+                                              "margin": 16,
+                                              "textAlign": "center",
+                                            },
+                                          ]
+                                        }
+                                        uppercase={false}
+                                      >
+                                        No transactions yet
+                                      </Text>
+                                    </ScrollView>
+                                    <View
+                                      pointerEvents="box-none"
+                                      style={
+                                        Object {
+                                          "alignItems": "center",
+                                          "borderBottomColor": "#1F1F1F",
+                                          "borderBottomWidth": 1,
+                                          "height": 195,
+                                          "justifyContent": "center",
+                                          "left": 0,
+                                          "position": "absolute",
+                                          "right": 0,
+                                          "top": 0,
+                                        }
+                                      }
+                                    >
+                                      <BVLinearGradient
+                                        colors={
+                                          Array [
+                                            4294094611,
+                                            4290536976,
+                                          ]
+                                        }
+                                        endPoint={
+                                          Object {
+                                            "x": 0.5,
+                                            "y": 1,
+                                          }
+                                        }
+                                        locations={null}
+                                        pointerEvents="box-none"
+                                        startPoint={
+                                          Object {
+                                            "x": 0.5,
+                                            "y": 0,
+                                          }
+                                        }
+                                        style={
+                                          Object {
+                                            "alignItems": "center",
+                                            "flex": 1,
+                                            "height": "100%",
+                                            "justifyContent": "center",
+                                            "width": "100%",
+                                          }
+                                        }
+                                      >
+                                        <View
+                                          style={
+                                            Object {
+                                              "bottom": 0,
+                                              "left": 0,
+                                              "position": "absolute",
+                                              "right": 0,
+                                              "top": 0,
+                                            }
+                                          }
+                                        >
+                                          <Text
+                                            allowFontScaling={false}
+                                            style={
+                                              Array [
+                                                Object {
+                                                  "color": undefined,
+                                                  "fontSize": 12,
+                                                },
+                                                Array [
+                                                  Object {
+                                                    "color": "#000",
+                                                    "fontSize": 30,
+                                                  },
+                                                  Object {
+                                                    "color": "#000",
+                                                    "fontSize": 30,
+                                                  },
+                                                  Object {
+                                                    "color": "#e5eaea",
+                                                    "fontSize": 24,
+                                                    "left": 8,
+                                                    "padding": 4,
+                                                    "paddingRight": 8,
+                                                    "position": "absolute",
+                                                    "top": 54,
+                                                  },
+                                                ],
+                                                Object {
+                                                  "fontFamily": "FontAwesome",
+                                                  "fontStyle": "normal",
+                                                  "fontWeight": "normal",
+                                                },
+                                                Object {},
+                                              ]
+                                            }
+                                            type="FontAwesome"
+                                          >
+                                            
+                                          </Text>
+                                          <Text
+                                            allowFontScaling={false}
+                                            style={
+                                              Array [
+                                                Object {
+                                                  "color": undefined,
+                                                  "fontSize": 12,
+                                                },
+                                                Array [
+                                                  Object {
+                                                    "color": "#000",
+                                                    "fontSize": 30,
+                                                  },
+                                                  Object {
+                                                    "color": "#000",
+                                                    "fontSize": 30,
+                                                  },
+                                                  Object {
+                                                    "color": "#e5eaea",
+                                                    "fontSize": 24,
+                                                    "left": 40,
+                                                    "padding": 4,
+                                                    "paddingRight": 8,
+                                                    "position": "absolute",
+                                                    "top": 55,
+                                                  },
+                                                ],
+                                                Object {
+                                                  "fontFamily": "Entypo",
+                                                  "fontStyle": "normal",
+                                                  "fontWeight": "normal",
+                                                },
+                                                Object {},
+                                              ]
+                                            }
+                                            type="Entypo"
+                                          >
+                                            
+                                          </Text>
+                                          <Text
+                                            allowFontScaling={false}
+                                            style={
+                                              Array [
+                                                Object {
+                                                  "color": undefined,
+                                                  "fontSize": 12,
+                                                },
+                                                Array [
+                                                  Object {
+                                                    "color": "#000",
+                                                    "fontSize": 30,
+                                                  },
+                                                  Object {
+                                                    "color": "#000",
+                                                    "fontSize": 30,
+                                                  },
+                                                  Object {
+                                                    "color": "#e5eaea",
+                                                    "fontSize": 24,
+                                                    "padding": 4,
+                                                    "position": "absolute",
+                                                    "right": 8,
+                                                    "top": 55,
+                                                  },
+                                                ],
+                                                Object {
+                                                  "fontFamily": "anticon",
+                                                  "fontStyle": "normal",
+                                                  "fontWeight": "normal",
+                                                },
+                                                Object {},
+                                              ]
+                                            }
+                                            type="AntDesign"
+                                          >
+                                            
+                                          </Text>
+                                          <Text
+                                            allowFontScaling={false}
+                                            style={
+                                              Array [
+                                                Object {
+                                                  "color": undefined,
+                                                  "fontSize": 12,
+                                                },
+                                                Array [
+                                                  Object {
+                                                    "color": "#000",
+                                                    "fontSize": 30,
+                                                  },
+                                                  Object {
+                                                    "color": "#000",
+                                                    "fontSize": 30,
+                                                  },
+                                                  Object {
+                                                    "color": "#e5eaea",
+                                                    "fontSize": 24,
+                                                    "padding": 4,
+                                                    "position": "absolute",
+                                                    "right": 44,
+                                                    "top": 55,
+                                                  },
+                                                ],
+                                                Object {
+                                                  "fontFamily": "Ionicons",
+                                                  "fontStyle": "normal",
+                                                  "fontWeight": "normal",
+                                                },
+                                                Object {},
+                                              ]
+                                            }
+                                          >
+                                            
+                                          </Text>
+                                        </View>
+                                        <Text
+                                          style={
+                                            Object {
+                                              "color": "#e5eaea",
+                                              "fontFamily": "System",
+                                              "fontSize": 37,
+                                              "marginBottom": 2,
+                                              "marginTop": 72,
+                                            }
+                                          }
+                                        >
+                                          0.00000123 ₿
+                                        </Text>
+                                        <Text
+                                          style={
+                                            Object {
+                                              "color": "#e5eaea",
+                                              "fontFamily": "System",
+                                              "fontSize": 18,
+                                              "opacity": 1,
+                                            }
+                                          }
+                                        >
+                                          0.00 USD
+                                        </Text>
+                                      </BVLinearGradient>
+                                    </View>
+                                  </View>
+                                </View>
                               </View>
-                              <Text
-                                style={
-                                  Object {
-                                    "color": "#e5eaea",
-                                    "fontFamily": "System",
-                                    "fontSize": 37,
-                                    "marginBottom": 2,
-                                    "marginTop": 72,
-                                  }
+                            </View>
+                          </View>
+                        </View>
+                        <View
+                          style={
+                            Object {
+                              "backgroundColor": "#F8F8F8",
+                              "borderColor": "#cbcbcb",
+                              "borderTopWidth": 0.5,
+                              "elevation": 3,
+                              "flexDirection": "row",
+                              "height": 55,
+                              "justifyContent": "center",
+                              "left": 0,
+                              "paddingBottom": 0,
+                              "right": 0,
+                            }
+                          }
+                        >
+                          <View
+                            style={
+                              Object {
+                                "alignSelf": "stretch",
+                                "backgroundColor": undefined,
+                                "flex": 1,
+                                "flexDirection": "row",
+                                "justifyContent": "space-between",
+                              }
+                            }
+                          >
+                            <TouchableOpacity
+                              activeOpacity={0.5}
+                              style={
+                                Object {
+                                  "alignItems": "center",
+                                  "alignSelf": "center",
+                                  "backgroundColor": "transparent",
+                                  "borderBottomWidth": null,
+                                  "borderColor": null,
+                                  "borderLeftWidth": null,
+                                  "borderRadius": 5,
+                                  "borderRightWidth": null,
+                                  "borderTopWidth": null,
+                                  "borderWidth": undefined,
+                                  "elevation": 0,
+                                  "flex": 1,
+                                  "flexDirection": null,
+                                  "height": 55,
+                                  "justifyContent": "center",
+                                  "paddingBottom": 6,
+                                  "paddingTop": 6,
+                                  "shadowColor": null,
+                                  "shadowOffset": null,
+                                  "shadowOpacity": null,
+                                  "shadowRadius": null,
                                 }
+                              }
+                            >
+                              <Text
+                                allowFontScaling={false}
+                                style={
+                                  Array [
+                                    Object {
+                                      "color": undefined,
+                                      "fontSize": 12,
+                                    },
+                                    Array [
+                                      Object {
+                                        "color": "#000",
+                                        "fontSize": 30,
+                                      },
+                                      Object {
+                                        "color": "#6b6b6b",
+                                        "fontSize": 24,
+                                        "marginLeft": 16,
+                                        "marginRight": 16,
+                                        "paddingTop": 2,
+                                      },
+                                    ],
+                                    Object {
+                                      "fontFamily": "anticon",
+                                      "fontStyle": "normal",
+                                      "fontWeight": "normal",
+                                    },
+                                    Object {},
+                                  ]
+                                }
+                                type="AntDesign"
                               >
-                                0.00000123 ₿
+                                
                               </Text>
                               <Text
                                 style={
                                   Object {
-                                    "color": "#e5eaea",
+                                    "backgroundColor": "transparent",
+                                    "color": "#6b6b6b",
                                     "fontFamily": "System",
-                                    "fontSize": 18,
-                                    "opacity": 1,
+                                    "fontSize": 14,
+                                    "lineHeight": 16,
+                                    "marginLeft": 0,
+                                    "marginRight": 0,
+                                    "paddingLeft": 16,
+                                    "paddingRight": 16,
                                   }
                                 }
+                                uppercase={false}
                               >
-                                0.00 USD
+                                Receive
                               </Text>
-                            </BVLinearGradient>
+                            </TouchableOpacity>
+                          </View>
+                          <View
+                            style={
+                              Object {
+                                "alignSelf": "stretch",
+                                "backgroundColor": undefined,
+                                "flex": 1,
+                                "flexDirection": "row",
+                                "justifyContent": "space-between",
+                              }
+                            }
+                          >
+                            <TouchableOpacity
+                              activeOpacity={0.5}
+                              style={
+                                Object {
+                                  "alignItems": "center",
+                                  "alignSelf": "center",
+                                  "backgroundColor": "transparent",
+                                  "borderBottomWidth": null,
+                                  "borderColor": null,
+                                  "borderLeftWidth": null,
+                                  "borderRadius": 5,
+                                  "borderRightWidth": null,
+                                  "borderTopWidth": null,
+                                  "borderWidth": undefined,
+                                  "elevation": 0,
+                                  "flex": 1,
+                                  "flexDirection": null,
+                                  "height": 55,
+                                  "justifyContent": "center",
+                                  "paddingBottom": 6,
+                                  "paddingTop": 6,
+                                  "shadowColor": null,
+                                  "shadowOffset": null,
+                                  "shadowOpacity": null,
+                                  "shadowRadius": null,
+                                }
+                              }
+                            >
+                              <Text
+                                allowFontScaling={false}
+                                style={
+                                  Array [
+                                    Object {
+                                      "color": undefined,
+                                      "fontSize": 12,
+                                    },
+                                    Array [
+                                      Object {
+                                        "color": "#000",
+                                        "fontSize": 30,
+                                      },
+                                      Object {
+                                        "color": "#6b6b6b",
+                                        "fontSize": 24,
+                                        "marginLeft": 16,
+                                        "marginRight": 16,
+                                        "paddingTop": 2,
+                                      },
+                                    ],
+                                    Object {
+                                      "fontFamily": "anticon",
+                                      "fontStyle": "normal",
+                                      "fontWeight": "normal",
+                                    },
+                                    Object {},
+                                  ]
+                                }
+                                type="AntDesign"
+                              >
+                                
+                              </Text>
+                              <Text
+                                style={
+                                  Object {
+                                    "backgroundColor": "transparent",
+                                    "color": "#6b6b6b",
+                                    "fontFamily": "System",
+                                    "fontSize": 14,
+                                    "lineHeight": 16,
+                                    "marginLeft": 0,
+                                    "marginRight": 0,
+                                    "paddingLeft": 16,
+                                    "paddingRight": 16,
+                                  }
+                                }
+                                uppercase={false}
+                              >
+                                Send
+                              </Text>
+                            </TouchableOpacity>
                           </View>
                         </View>
                       </View>
@@ -530,10 +795,10 @@ exports[`renders correctly 1`] = `
             <View
               style={
                 Object {
-                  "backgroundColor": "#fff",
-                  "borderBottomColor": "#a7a7aa",
+                  "backgroundColor": "rgb(255, 255, 255)",
+                  "borderBottomColor": "rgb(199, 199, 204)",
                   "flex": 1,
-                  "shadowColor": "#a7a7aa",
+                  "shadowColor": "rgb(199, 199, 204)",
                   "shadowOffset": Object {
                     "height": 0.5,
                     "width": 0,
@@ -589,13 +854,13 @@ exports[`renders correctly 1`] = `
                   numberOfLines={1}
                   style={
                     Object {
-                      "color": "rgba(0, 0, 0, 0.9)",
+                      "color": "rgb(28, 28, 30)",
                       "fontSize": 17,
                       "fontWeight": "600",
                     }
                   }
                 >
-                  Overview
+                  a
                 </Text>
               </View>
             </View>
