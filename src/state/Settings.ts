@@ -17,6 +17,7 @@ export interface ISettingsModel {
   changeDebugShowStartupInfo: Thunk<ISettingsModel, boolean>;
   changeGoogleDriveBackupEnabled: Thunk<ISettingsModel, boolean>;
   changePreferFiat: Thunk<ISettingsModel, boolean>;
+  changeTransactionGeolocationEnabled: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -28,6 +29,7 @@ export interface ISettingsModel {
   setDebugShowStartupInfo: Action<ISettingsModel, boolean>;
   setGoogleDriveBackupEnabled: Action<ISettingsModel, boolean>;
   setPreferFiat: Action<ISettingsModel, boolean>;
+  setTransactionGeolocationEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -39,6 +41,7 @@ export interface ISettingsModel {
   debugShowStartupInfo: boolean;
   googleDriveBackupEnabled: boolean;
   preferFiat: boolean;
+  transactionGeolocationEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -53,6 +56,7 @@ export const settings: ISettingsModel = {
     actions.setDebugShowStartupInfo(await getItemObject(StorageItem.debugShowStartupInfo) || false);
     actions.setGoogleDriveBackupEnabled(await getItemObject(StorageItem.googleDriveBackupEnabled) || false);
     actions.setPreferFiat(await getItemObject(StorageItem.preferFiat) || false);
+    actions.setTransactionGeolocationEnabled(await getItemObject(StorageItem.transactionGeolocationEnabled) || false);
   }),
 
   changeBitcoinUnit: thunk(async (actions, payload) => {
@@ -108,6 +112,11 @@ export const settings: ISettingsModel = {
     actions.setPreferFiat(payload);
   }),
 
+  changeTransactionGeolocationEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.transactionGeolocationEnabled, payload);
+    actions.setTransactionGeolocationEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -118,6 +127,7 @@ export const settings: ISettingsModel = {
   setDebugShowStartupInfo: action((state, payload) => { state.debugShowStartupInfo = payload; }),
   setGoogleDriveBackupEnabled: action((state, payload) => { state.googleDriveBackupEnabled = payload; }),
   setPreferFiat: action((state, payload) => { state.preferFiat = payload; }),
+  setTransactionGeolocationEnabled: action((state, payload) => { state.transactionGeolocationEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -129,4 +139,5 @@ export const settings: ISettingsModel = {
   debugShowStartupInfo: false,
   googleDriveBackupEnabled: false,
   preferFiat: false,
+  transactionGeolocationEnabled: false,
 };

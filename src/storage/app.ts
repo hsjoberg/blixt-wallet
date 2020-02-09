@@ -3,7 +3,7 @@ import { LoginMethods } from "../state/Security";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 
-const APP_VERSION = 5;
+const APP_VERSION = 6;
 
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",
@@ -28,6 +28,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   debugShowStartupInfo = "debugShowStartupInfo",
   googleDriveBackupEnabled = "googleDriveBackupEnabled",
   preferFiat = "preferFiat",
+  transactionGeolocationEnabled = "transactionGeolocationEnabled",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -70,6 +71,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.debugShowStartupInfo),
     removeItem(StorageItem.googleDriveBackupEnabled),
     removeItem(StorageItem.preferFiat),
+    removeItem(StorageItem.transactionGeolocationEnabled),
   ]);
 };
 
@@ -95,5 +97,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.debugShowStartupInfo, false),
     setItemObject<boolean>(StorageItem.googleDriveBackupEnabled, false),
     setItemObject<boolean>(StorageItem.preferFiat, false),
+    setItemObject<boolean>(StorageItem.transactionGeolocationEnabled, false),
   ]);
 };

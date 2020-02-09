@@ -19,7 +19,9 @@ const schema = [
     valueUSD REAL NULL,
     valueFiat REAL NULL,
     valueFiatCurrency STRING NULL,
-    tlvRecordName STRING NULL
+    tlvRecordName STRING NULL,
+    locationLong REAL NULL,
+    locationLat REAL NULL
   )`,
 
   `CREATE TABLE tx_hops (

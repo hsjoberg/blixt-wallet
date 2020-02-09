@@ -19,7 +19,7 @@ import { localNotification } from "../../utils/push-notification";
 import { RootStackParamList } from "../../Main";
 
 interface IProps {
-  navigation: StackNavigationProp<RootStackParamList, "DEV_Commands">;
+  navigation?: StackNavigationProp<RootStackParamList, "DEV_Commands">;
   continueCallback?: () => void;
 }
 export default ({ navigation, continueCallback }: IProps) => {

@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { StyleSheet, StatusBar, Vibration } from "react-native";
-import { Container, View, Text, Button, Icon } from "native-base";
+import { View, Text, Button, Icon } from "native-base";
 import color from "color";
 import * as Animatable from "react-native-animatable";
+import Container from "../components/Container";
+
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { smallScreen } from "../utils/device";
@@ -56,62 +58,53 @@ export default ({ onTryCode, textAction }: IPincode) => {
 
   return (
     <Container>
-      <StatusBar
-        backgroundColor="transparent"
-        hidden={false}
-        translucent={true}
-        networkActivityIndicatorVisible={true}
-        barStyle="light-content"
-      />
-      <View style={style.content}>
-        <View style={style.pincodeInput}>
-          <Text style={style.enterPincodeText}>{textAction}</Text>
-          <View style={style.pincodeInputContainer}>
-            <Animatable.Text style={style.pincodeInputText} ref={(pincodeText as any)}>
-              <Text style={style.pincodeInputText}>{pincodeInput}</Text>
-              <Text style={[style.pincodeInputText, style.pincodeInputPlaceholderText]}>
-                {pincodeInputPlaceholder}
-              </Text>
-            </Animatable.Text>
-          </View>
+      <View style={style.pincodeInput}>
+        <Text style={style.enterPincodeText}>{textAction}</Text>
+        <View style={style.pincodeInputContainer}>
+          <Animatable.Text style={style.pincodeInputText} ref={(pincodeText as any)}>
+            <Text style={style.pincodeInputText}>{pincodeInput}</Text>
+            <Text style={[style.pincodeInputText, style.pincodeInputPlaceholderText]}>
+              {pincodeInputPlaceholder}
+            </Text>
+          </Animatable.Text>
         </View>
-        <View style={style.pincodeButtons}>
-          <View style={style.buttonRow}>
-            {[1, 2, 3].map((n) => (
-              <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton} rounded={false}>
-                <Text style={style.pincodeButtonText}>{n}</Text>
-              </Button>
-            ))}
-          </View>
-          <View style={style.buttonRow}>
-            {[4, 5, 6].map((n) => (
-              <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton}>
-                <Text style={style.pincodeButtonText}>{n}</Text>
-              </Button>
-            ))}
-          </View>
-          <View style={style.buttonRow}>
-            {[7, 8, 9].map((n) => (
-              <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton}>
-                <Text style={style.pincodeButtonText}>{n}</Text>
-              </Button>
-            ))}
-          </View>
-          <View style={style.buttonRow}>
-            <Button onPress={onClearPress} style={[style.buttonDelete, style.pincodeButton]}>
-              <Text style={style.pincodeButtonText}>
-                <Icon style={style.buttonClearIcon} type="MaterialCommunityIcons" name="delete-forever" />
-              </Text>
+      </View>
+      <View style={style.pincodeButtons}>
+        <View style={style.buttonRow}>
+          {[1, 2, 3].map((n) => (
+            <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton} rounded={false}>
+              <Text style={style.pincodeButtonText}>{n}</Text>
             </Button>
-            <Button onPress={() => onNumberPress(0)} style={style.pincodeButton} rounded={false}>
-              <Text style={style.pincodeButtonText}>0</Text>
+          ))}
+        </View>
+        <View style={style.buttonRow}>
+          {[4, 5, 6].map((n) => (
+            <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton}>
+              <Text style={style.pincodeButtonText}>{n}</Text>
             </Button>
-            <Button onPress={onBackspacePress} style={[style.pincodeButton, style.buttonBackspace]}>
-              <Text style={style.pincodeButtonText}>
-                <Icon style={style.buttonBackspaceIcon} type="FontAwesome5" name="backspace" />
-              </Text>
+          ))}
+        </View>
+        <View style={style.buttonRow}>
+          {[7, 8, 9].map((n) => (
+            <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton}>
+              <Text style={style.pincodeButtonText}>{n}</Text>
             </Button>
-          </View>
+          ))}
+        </View>
+        <View style={style.buttonRow}>
+          <Button onPress={onClearPress} style={[style.buttonDelete, style.pincodeButton]}>
+            <Text style={style.pincodeButtonText}>
+              <Icon style={style.buttonClearIcon} type="MaterialCommunityIcons" name="delete-forever" />
+            </Text>
+          </Button>
+          <Button onPress={() => onNumberPress(0)} style={style.pincodeButton} rounded={false}>
+            <Text style={style.pincodeButtonText}>0</Text>
+          </Button>
+          <Button onPress={onBackspacePress} style={[style.pincodeButton, style.buttonBackspace]}>
+            <Text style={style.pincodeButtonText}>
+              <Icon style={style.buttonBackspaceIcon} type="FontAwesome5" name="backspace" />
+            </Text>
+          </Button>
         </View>
       </View>
     </Container>
@@ -119,11 +112,6 @@ export default ({ onTryCode, textAction }: IPincode) => {
 }
 
 const style = StyleSheet.create({
-  content: {
-    flex: 1,
-    justifyContent: "center",
-    // backgroundColor: "blue",
-  },
   pincodeInput: {
     flex: 1,
     justifyContent: "flex-end",

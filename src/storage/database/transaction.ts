@@ -23,6 +23,8 @@ export interface IDBTransaction {
   valueFiat: number | null;
   valueFiatCurrency: string | null;
   tlvRecordName: string | null;
+  locationLong: number | null;
+  locationLat: number | null;
 }
 
 export interface ITransaction {
@@ -46,6 +48,8 @@ export interface ITransaction {
   valueFiat: number | null;
   valueFiatCurrency: string | null;
   tlvRecordName: string | null;
+  locationLong: number | null;
+  locationLat: number | null;
 
   hops: ITransactionHop[];
 }
@@ -75,9 +79,9 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
   const txId = await queryInsert(
     db,
     `INSERT INTO tx
-    (date, expire, value, valueMsat, amtPaidSat, amtPaidMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached, payer, valueUSD, valueFiat, valueFiatCurrency, tlvRecordName)
+    (date, expire, value, valueMsat, amtPaidSat, amtPaidMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached, payer, valueUSD, valueFiat, valueFiatCurrency, tlvRecordName, locationLong, locationLat)
     VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       transaction.date.toString(),
       transaction.expire.toString(),
@@ -98,6 +102,8 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.valueFiat,
       transaction.valueFiatCurrency,
       transaction.tlvRecordName,
+      transaction.locationLong,
+      transaction.locationLat,
     ],
   );
 
@@ -149,7 +155,9 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         valueUSD = ?,
         valueFiat = ?,
         valueFiatCurrency = ?,
-        tlvRecordName = ?
+        tlvRecordName = ?,
+        locationLong = ?,
+        locationLat = ?
     WHERE id = ?`,
     [
       transaction.date.toString(),
@@ -169,6 +177,8 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.valueFiat,
       transaction.valueFiatCurrency,
       transaction.tlvRecordName,
+      transaction.locationLong,
+      transaction.locationLat,
       transaction.id,
     ],
   );
@@ -213,6 +223,8 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
     valueFiat: transaction.valueFiat,
     valueFiatCurrency: transaction.valueFiatCurrency,
     tlvRecordName: transaction.tlvRecordName,
+    locationLong: transaction.locationLong,
+    locationLat: transaction.locationLat,
     hops: [],
   };
 };

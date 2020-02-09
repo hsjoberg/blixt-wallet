@@ -8,6 +8,7 @@ import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
 import { valueFiat } from "../utils/bitcoin-units";
 import { LnBech32Prefix } from "../utils/build";
+import { getGeolocation } from "../utils";
 
 type PaymentRequest = string;
 
@@ -115,6 +116,8 @@ export const send: ISendModel = {
       valueUSD: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.fiatRates.USD.last),
       valueFiat: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.currentRate),
       valueFiatCurrency: getStoreState().settings.fiatUnit,
+      locationLong: null,
+      locationLat: null,
 
       hops: sendPaymentResult.paymentRoute!.hops!.map((hop) => ({
         chanId: hop.chanId ?? null,
@@ -130,6 +133,18 @@ export const send: ISendModel = {
 
     console.log("ITransaction", transaction);
     await dispatch.transaction.syncTransaction(transaction);
+
+    if (getStoreState().settings.transactionGeolocationEnabled) {
+      try {
+        console.log("Syncing geolocation for transaction");
+        const coords = await getGeolocation();
+        transaction.locationLong = coords.longitude;
+        transaction.locationLat = coords.latitude;
+        await dispatch.transaction.syncTransaction(transaction);
+      } catch (error) {
+        console.log(`Error getting geolocation for transaction: ${JSON.stringify(error)}`);
+      }
+    }
 
     return true;
   }),

@@ -52,4 +52,11 @@ export const appMigration: IAppMigration[] = [
       await db.executeSql("ALTER TABLE tx ADD tlvRecordName STRING");
     },
   },
+  // Version 6
+  {
+    async beforeLnd(db, i) {
+      await db.executeSql("ALTER TABLE tx ADD locationLong REAL");
+      await db.executeSql("ALTER TABLE tx ADD locationLat REAL");
+    },
+  },
 ];
