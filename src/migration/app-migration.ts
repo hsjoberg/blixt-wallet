@@ -1,7 +1,7 @@
 import { NativeModules } from "react-native";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getItem } from "../storage/app";
-import { getPin, getSeed, removeSeed, setSeed, setPin, removePin } from "../storage/keystore";
+import { getPin, getSeed, removeSeed, setSeed, setPin, removePin, setWalletPassword } from "../storage/keystore";
 const { LndMobile } = NativeModules;
 
 export interface IAppMigration {
@@ -57,6 +57,18 @@ export const appMigration: IAppMigration[] = [
     async beforeLnd(db, i) {
       await db.executeSql("ALTER TABLE tx ADD locationLong REAL");
       await db.executeSql("ALTER TABLE tx ADD locationLat REAL");
+    },
+  },
+  // Version 6
+  {
+    async beforeLnd(db, i) {
+      const password = await getItem(StorageItem.walletPassword);
+      if (!password) {
+        console.log("Cannot find wallet password");
+        return;
+      }
+
+      await setWalletPassword(password);
     },
   },
 ];

@@ -1,3 +1,4 @@
+import { NativeModules, Linking } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
@@ -24,8 +25,8 @@ import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setIt
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
-import { NativeModules, Linking } from "react-native";
 import { timeout } from "../utils";
+import { setWalletPassword } from "../storage/keystore";
 
 export interface ICreateWalletPayload {
   restore?: {
@@ -46,7 +47,7 @@ export interface IStoreModel {
   setHoldOnboarding: Action<IStoreModel, boolean>;
   setWalletSeed: Action<IStoreModel, string[] | undefined>;
   setAppVersion: Action<IStoreModel, number>;
-  deeplinkChecker: Thunk<IStoreModel, void, IStoreInjections, IStoreModel, Promise<string | null>>;
+  deeplinkChecker: Thunk<IStoreModel, void, IStoreInjections, IStoreModel, Promise<boolean | null>>;
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
@@ -177,6 +178,7 @@ export const model: IStoreModel = {
     const random = await generateSecureRandom(32);
     const randomBase64 = base64.fromByteArray(random);
     await setItem(StorageItem.walletPassword, randomBase64);
+    await setWalletPassword(randomBase64);
 
     const wallet = payload && payload.restore && payload.restore
       ? await initWallet(seed, randomBase64, 100, payload.restore.channelsBackup)

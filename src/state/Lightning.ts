@@ -9,6 +9,7 @@ import { lnrpc } from "../../proto/proto";
 import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/app";
 import { toast, timeout } from "../utils";
 import { Chain } from "../utils/build";
+import { getWalletPassword } from "../storage/keystore";
 
 const SYNC_UNLOCK_WALLET = false;
 
@@ -137,8 +138,8 @@ export const lightning: ILightningModel = {
 
   unlockWallet: thunk(async (_, _2, { injections }) => {
     const unlockWallet = injections.lndMobile.wallet.unlockWallet;
-    console.log("try unlockWallet");
-    const password = await getItem(StorageItem.walletPassword);
+    // const password = await getItem(StorageItem.walletPassword);
+    const password = await getWalletPassword();
     if (!password) {
       throw new Error("Cannot find wallet password");
     }
@@ -152,7 +153,7 @@ export const lightning: ILightningModel = {
     if (enabled) {
       await timeout(1000); // TODO(hsjoberg): why?
       const scores = await getNodeScores();
-      //console.log(scores);
+      // console.log(scores);
       const setScore = injections.lndMobile.autopilot.setScores;
       await setScore(scores);
     }

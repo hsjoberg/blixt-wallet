@@ -2,12 +2,13 @@ import * as Keychain from 'react-native-keychain';
 
 const USER = 'blixt';
 
-export const setItem = async (key: string, value: string) => {
+export const setItem = async (key: string, value: string, accessible: Keychain.ACCESSIBLE = Keychain.ACCESSIBLE.WHEN_UNLOCKED) => {
   const options = {
-    accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY, // Possible error by Lightning-app here... omitting ACCESSIBLE
-                                                                    // https://github.com/lightninglabs/lightning-app/blob/master/src/action/keychain-mobile.js#L21
-                                                                    // TODO tell them
+    accessible,
   };
+  // accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY, // Possible error by Lightning-app here... omitting ACCESSIBLE
+  // // https://github.com/lightninglabs/lightning-app/blob/master/src/action/keychain-mobile.js#L21
+  // // TODO tell them
   await Keychain.setInternetCredentials(key, USER, value, options);
 };
 
@@ -35,3 +36,6 @@ export const removeSeed = async () => removeItem("seed");
 export const setPin = async (seed: string) => setItem("pin", seed);
 export const getPin = async () => getItem("pin");
 export const removePin = async () => removeItem("pin");
+
+export const setWalletPassword = async (password: string) => setItem("password", password, Keychain.ACCESSIBLE.ALWAYS);
+export const getWalletPassword = async (): Promise<string | null> => getItem("password");

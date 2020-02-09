@@ -1,5 +1,7 @@
 package com.blixtwallet;
 
+import com.blixtwallet.PromiseWrapper;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -49,6 +51,7 @@ import androidx.work.WorkManager;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -64,6 +67,8 @@ import com.facebook.react.modules.storage.ReactDatabaseSupplier;
 import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+
+import com.oblador.keychain.KeychainModule;
 
 import com.hypertrack.hyperlog.HyperLog;
 
@@ -385,15 +390,36 @@ class LndMobile extends ReactContextBaseJavaModule {
     promise.resolve("File written: " + filename);
   }
 
-void deleteRecursive(File fileOrDirectory) {
-  if (fileOrDirectory.isDirectory()) {
-    for (File child : fileOrDirectory.listFiles()) {
-      deleteRecursive(child);
+  void deleteRecursive(File fileOrDirectory) {
+    if (fileOrDirectory.isDirectory()) {
+      for (File child : fileOrDirectory.listFiles()) {
+        deleteRecursive(child);
+      }
     }
+
+    HyperLog.d(TAG, "Delete file " + fileOrDirectory.getName() + " : " + fileOrDirectory.delete());
   }
 
-  HyperLog.d(TAG, "Delete file " + fileOrDirectory.getName() + " : " + fileOrDirectory.delete());
-}
+  @ReactMethod
+  public void DEBUG_getWalletPasswordFromKeychain(Promise promise) {
+    KeychainModule keychain = new KeychainModule(getReactApplicationContext());
+
+    keychain.getInternetCredentialsForServer("password", null, new PromiseWrapper() {
+      @Override
+      public void onSuccess(@Nullable Object value) {
+        if (value != null) {
+          promise.resolve(((ReadableMap) value).getString("password"));
+          return;
+        }
+        promise.reject("fail2");
+      }
+
+      @Override
+      public void onFail() {
+        promise.reject("fail");
+      }
+    });
+  }
 
   @ReactMethod
   public void DEBUG_deleteWallet(Promise promise) {
@@ -662,7 +688,7 @@ void deleteRecursive(File fileOrDirectory) {
                                                    @NonNull Runnable failPermissionCheckcallback) {
     PermissionsModule permissions = new PermissionsModule(getReactApplicationContext());
 
-    PermissionPromise requestPermissionPromise = new PermissionPromise() {
+    PromiseWrapper requestPromiseWrapper = new PromiseWrapper() {
       @Override
       public void onSuccess(@Nullable Object value) {
         successCallback.success(value);
@@ -674,10 +700,10 @@ void deleteRecursive(File fileOrDirectory) {
       }
     };
 
-    PermissionPromise checkPermissionPromise = new PermissionPromise() {
+    PromiseWrapper checkPromiseWrapper = new PromiseWrapper() {
       @Override
       void onSuccess(@Nullable Object value) {
-        permissions.requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, requestPermissionPromise);
+        permissions.requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, requestPromiseWrapper);
       }
 
       @Override
@@ -686,7 +712,7 @@ void deleteRecursive(File fileOrDirectory) {
       }
     };
 
-    permissions.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, checkPermissionPromise);
+    permissions.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, checkPromiseWrapper);
   }
 
   @ReactMethod
@@ -761,33 +787,4 @@ void deleteRecursive(File fileOrDirectory) {
     }
     promise.resolve(null);
   }
-}
-
-abstract class PermissionPromise implements Promise {
-  abstract void onSuccess(@Nullable Object value);
-
-  abstract void onFail();
-
-  @Override
-  public void resolve(@Nullable Object value) { onSuccess(value); }
-  @Override
-  public void reject(String code, String message) { onFail(); }
-  @Override
-  public void reject(String code, Throwable throwable) { onFail(); }
-  @Override
-  public void reject(String code, String message, Throwable throwable) { onFail(); }
-  @Override
-  public void reject(Throwable throwable) { onFail(); }
-  @Override
-  public void reject(Throwable throwable, WritableMap userInfo) { onFail(); }
-  @Override
-  public void reject(String code, @NonNull WritableMap userInfo) { onFail(); }
-  @Override
-  public void reject(String code, Throwable throwable, WritableMap userInfo) { onFail(); }
-  @Override
-  public void reject(String code, String message, @NonNull WritableMap userInfo) { onFail(); }
-  @Override
-  public void reject(String code, String message, Throwable throwable, WritableMap userInfo) { onFail(); }
-  @Override
-  public void reject(String message) { onFail(); }
 }

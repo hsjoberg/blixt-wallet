@@ -17,6 +17,7 @@ import { StorageItem, setItemObject, getItem } from "../../storage/app";
 import { status, modifyStatus, queryScores } from "../../lndmobile/autopilot";
 import { localNotification } from "../../utils/push-notification";
 import { RootStackParamList } from "../../Main";
+import { setWalletPassword, getWalletPassword } from "../../storage/keystore";
 
 interface IProps {
   navigation?: StackNavigationProp<RootStackParamList, "DEV_Commands">;
@@ -55,16 +56,16 @@ export default ({ navigation, continueCallback }: IProps) => {
           <Button onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text>walletCreated = true</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.loginMethods, ["pincode"])}><Text>set logginMethods to ["pincode"]</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.loginMethods, [])}><Text>set logginMethods to []</Text></Button>
-          <Button onPress={async () => await setItemObject(StorageItem.pincode, "123456")}><Text>set pincode to 123456</Text></Button>
-          <Button onPress={async () => await setItemObject(StorageItem.pincode, "000000")}><Text>set pincode to 000000</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.bitcoinUnit, "bitcoin")}><Text>set bitcoinUnit to bitcoin</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text>walletCreated = true</Text></Button>
           <Button onPress={async () => await setItemObject(StorageItem.appVersion, 0)}><Text>appVersion = 0</Text></Button>
           <Button onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteWallet())}><Text>DEBUG_deleteWallet</Text></Button>
           <Button onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteDatafolder())}><Text>DEBUG_deleteDatafolder</Text></Button>
           <Button onPress={async () => await actions.initializeApp()}><Text>actions.initializeApp()</Text></Button>
-          <Button onPress={async () => console.log(await NativeModules.LndMobile.readAsyncStorage())}><Text>readAsyncStorage()</Text></Button>
-          <Button onPress={async () => console.log(await getItem("testkey"))}><Text>get()</Text></Button>
+
+          {/* <Button onPress={async () => console.log(await getWalletPassword())}><Text>getWalletPassword()</Text></Button>
+          <Button onPress={async () => console.log(await setWalletPassword("test123"))}><Text>setWalletPassword()</Text></Button> */}
+          <Button onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_getWalletPasswordFromKeychain())}><Text>LndMobile.DEBUG_getWalletPasswordFromKeychain()</Text></Button>
 
           <Button onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.setupScheduledSyncWork())}><Text>setupScheduledSyncWork</Text></Button>
           <Button onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.removeScheduledSyncWork())}><Text>removeScheduledSyncWork</Text></Button>
