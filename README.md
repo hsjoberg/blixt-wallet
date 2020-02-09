@@ -20,9 +20,9 @@ powered by lnd and Neutrino SPV.
 - [x] Scheduled sync of chain background job
 - [x] Local channel backup
 - [x] Thor support/Partial [lnurl](https://github.com/btcontract/lnurl-rfc/blob/master/spec.md) support
+- [x] Channel backup to Google Drive
 - [ ] NFC
 - [ ] [WebLN](https://webln.dev/) support
-- [ ] Channel backup to Google Drive
 - [ ] WatchTower
 - [ ] URL Payments
 - [ ] Pay to Username
