@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, StyleSheet, NativeModules, ToastAndroid } from "react-native";
+import { Alert, StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import DocumentPicker from "react-native-document-picker";
 import { readFile } from "react-native-fs";
@@ -7,6 +7,7 @@ import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Lis
 import DialogAndroid from "react-native-dialogs";
 import { fromUnixTime } from "date-fns";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Geolocation from "@react-native-community/geolocation";
 
 import { SettingsStackParamList } from "./index";
 import Content from "../../components/Content";
@@ -279,6 +280,29 @@ export default ({ navigation }: ISettingsProps) => {
     }
   }
 
+  // Transaction geolocation
+  const transactionGeolocationEnabled = useStoreState((store) => store.settings.transactionGeolocationEnabled);
+  const changeTransactionGeolocationEnabled = useStoreActions((store) => store.settings.changeTransactionGeolocationEnabled);
+  const onToggleTransactionGeolocationEnabled = async () => {
+    if (!transactionGeolocationEnabled) {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        );
+        console.log(granted);
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Geolocation granted');
+        } else {
+          console.log('Geolocation permission denied');
+          return;
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+    await changeTransactionGeolocationEnabled(!transactionGeolocationEnabled);
+  };
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -359,6 +383,14 @@ export default ({ navigation }: ISettingsProps) => {
               <Body><Text>Manually trigger Google Drive Backup</Text></Body>
             </ListItem>
           }
+          <ListItem style={style.listItem} icon={true} onPress={onToggleTransactionGeolocationEnabled}>
+            <Left><Icon style={style.icon} type="Entypo" name="location-pin" /></Left>
+            <Body>
+              <Text>Save geolocation of transaction</Text>
+              <Text note={true} numberOfLines={1}>Locally save the location of a transaction</Text>
+            </Body>
+            <Right><CheckBox checked={transactionGeolocationEnabled} onPress={onToggleTransactionGeolocationEnabled} /></Right>
+          </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Security</Text>

@@ -50,11 +50,11 @@ export default () => {
   return (
     <Container>
       <StatusBar
-        backgroundColor="transparent"
-        hidden={false}
-        translucent={true}
-        networkActivityIndicatorVisible={true}
         barStyle="light-content"
+        hidden={false}
+        backgroundColor="transparent"
+        animated={false}
+        translucent={false}
       />
       <Content contentContainerStyle={style.content}>
         <Text style={style.message}>Authenticate to change fingerprint settings</Text>

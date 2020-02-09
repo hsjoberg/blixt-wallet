@@ -1,6 +1,7 @@
 // TODO fix upstream
 import {View, Platform, NativeModules, requireNativeComponent, StyleSheet, TouchableWithoutFeedback,Animated} from 'react-native';
 import React, {Component,} from 'react';
+import Modal from "react-native-modal";
 import PropTypes from 'prop-types'
 var emitter = require('tiny-emitter/instance');
 
@@ -69,15 +70,17 @@ export default class BlurOverlay extends React.Component {
         const { children } = this.props;
         return (
             this.state.showBlurOverlay ?
-            <Animated.View style={[ { opacity: this.state.fadeIn},styles.style] } pointerEvents="box-none">
-            <TouchableWithoutFeedback style={styles.style} onPress={this.props.onPress}>
-                <RCTSajjadBlurOverlay {...this.props} style={[this.props.customStyles,styles.style]}>
-                <View style={[this.props.customStyles,styles.style]}>
-                    {children}
-                </View>
-                </RCTSajjadBlurOverlay>
-            </TouchableWithoutFeedback>
-            </Animated.View> :
+                <Animated.View style={[ { opacity: this.state.fadeIn},styles.style] } pointerEvents="box-none">
+                    <RCTSajjadBlurOverlay {...this.props} style={[this.props.customStyles,styles.style]}>
+                        <Modal
+                            onBackdropPress={this.props.onPress}
+                            onRequestClose={this.props.onPress}
+                            visible={true}
+                        >
+                            {children}
+                        </Modal>
+                    </RCTSajjadBlurOverlay>
+                </Animated.View>:
                 null
         );
     }

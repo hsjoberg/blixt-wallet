@@ -25,16 +25,14 @@ export default ({ children }: ITransactionDetailsProps) => {
     <View style={style.container} touchSoundDisabled={true}>
       <BlurOverlay
         onPress={goBack}
-        fadeDuration={180}
+        fadeDuration={170}
         radius={15}
         downsampling={2.07}
         brightness={0}
         customStyles={style.blurOverlay}
         blurStyle="dark"
       >
-        <TouchableOpacity style={style.contentCanvas} activeOpacity={1} touchSoundDisabled={true}>
-          {children}
-        </TouchableOpacity>
+        {children}
       </BlurOverlay>
     </View>
   );

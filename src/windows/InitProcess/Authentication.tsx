@@ -55,11 +55,11 @@ export default () => {
   return (
     <Container>
       <StatusBar
-        backgroundColor="transparent"
-        hidden={false}
-        translucent={true}
-        networkActivityIndicatorVisible={true}
         barStyle="light-content"
+        hidden={false}
+        backgroundColor="transparent"
+        animated={false}
+        translucent={false}
       />
       <View style={style.content}>
         {loginMethods.has(LoginMethods.pincode) &&

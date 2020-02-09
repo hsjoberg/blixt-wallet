@@ -6,7 +6,7 @@ buildscript {
         minSdkVersion = 16
         compileSdkVersion = 29
         targetSdkVersion = 29
-        supportLibVersion = 29
+        supportLibVersion = "29"
 
         googlePlayServicesAuthVersion = "16.0.0"
     }

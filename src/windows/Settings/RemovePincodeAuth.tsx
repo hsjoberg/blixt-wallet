@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, StatusBar } from "react-native";
-import { Container, Content } from "native-base";
+import { StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { useStoreActions } from "../../state/store";
@@ -19,33 +18,15 @@ export default () => {
   }
 
   return (
-    <Container>
+    <>
       <StatusBar
-        backgroundColor="transparent"
-        hidden={false}
-        translucent={true}
-        networkActivityIndicatorVisible={true}
         barStyle="light-content"
+        hidden={false}
+        backgroundColor="transparent"
+        animated={false}
+        translucent={false}
       />
-      <Content contentContainerStyle={style.content}>
-        <Pincode onTryCode={onTryCode} textAction="Enter current pincode to remove pincode" />
-      </Content>
-    </Container>
+      <Pincode onTryCode={onTryCode} textAction="Enter current pincode to remove pincode" />
+    </>
   )
 }
-
-const style = StyleSheet.create({
-  content: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  fingerPrintSymbolContainer: {
-    padding: 8,
-    alignContent: "center",
-    alignItems:"center",
-    marginBottom: 16,
-  },
-  fingerPrintSymbol: {
-    fontSize: 36
-  },
-});

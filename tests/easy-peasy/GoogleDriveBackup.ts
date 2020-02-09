@@ -18,7 +18,7 @@ const mockGDriveGetFilesOnce = () => {
       id: "123",
       mimeType: "application/base64",
       name: "mock-backup",
-      kind: "dunno",
+      kind: "drive#file",
     }]
   } as IGoogleDriveAPIGetFiles), {
     status: 200,

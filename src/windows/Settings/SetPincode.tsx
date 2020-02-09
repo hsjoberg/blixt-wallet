@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { StyleSheet, StatusBar } from "react-native";
-import { Container, Content } from "native-base";
+import { Content } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
+import Container from "../../components/Container";
 import { useStoreActions } from "../../state/store";
 import Pincode from "../../components/Pincode";
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 enum States {
   enter = "Enter a pincode",
@@ -32,26 +34,20 @@ export default () => {
   }
 
   return (
-    <Container>
+    <>
       <StatusBar
-        backgroundColor="transparent"
-        hidden={false}
-        translucent={true}
-        networkActivityIndicatorVisible={true}
         barStyle="light-content"
+        hidden={false}
+        backgroundColor="transparent"
+        animated={false}
+        translucent={false}
       />
-      <Content contentContainerStyle={style.content}>
-        <Pincode onTryCode={onTryCode} textAction={state} />
-      </Content>
-    </Container>
+      <Pincode onTryCode={onTryCode} textAction={state} />
+    </>
   )
 }
 
 const style = StyleSheet.create({
-  content: {
-    flex: 1,
-    justifyContent: "center",
-  },
   fingerPrintSymbolContainer: {
     padding: 8,
     alignContent: "center",

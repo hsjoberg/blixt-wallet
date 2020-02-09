@@ -15,6 +15,7 @@ jest.mock("@react-native-community/masked-view", () => require("./mocks/@react-n
 jest.mock("@react-native-community/google-signin", () => require("./mocks/@react-native-community/google-signin"));
 jest.mock("react-native-fs", () => require("./mocks/react-native-fs"));
 jest.mock("react-native-document-picker", () => require("./mocks/react-native-document-picker"));
+jest.mock("@react-native-community/geolocation", () => require("./mocks/@react-native-community/geolocation"));
 
 jest.mock("./src/lndmobile/index", () => require("./mocks/lndmobile/index"));
 jest.mock("./src/lndmobile/wallet", () => require("./mocks/lndmobile/wallet"));

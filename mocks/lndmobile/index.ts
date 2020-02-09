@@ -70,14 +70,15 @@ export const getInfoResponse = lnrpc.GetInfoResponse.create({
   blockHeight: 1572555,
   blockHash: "000000000000006cb43faa5c615e45419f48e9d94d77c1bab8a28018cf2db6ef",
   syncedToChain: false,
+  syncedToGraph: false,
   testnet: true,
-  bestHeaderTimestamp: 1564940232,
+  bestHeaderTimestamp: Long.fromNumber(1564940232),
   version: "0.7.1-beta commit=v0.7.1-beta-rc1-10-g3760f29f5e758b2865b756604333ca22cf23e90b",
   features: {},
 });
 export const getInfo = jest.fn()
   .mockImplementationOnce(async () => getInfoResponse)
-  .mockImplementation(async () =>  ({ ...getInfoResponse, syncedToChain: true }));
+  .mockImplementation(async () =>  ({ ...getInfoResponse, syncedToChain: true, syncedToGraph: true }));
 
 export const sendPaymentSync = async (paymentRequest: string): Promise<lnrpc.SendResponse> => {
   const response = lnrpc.SendResponse.create({
