@@ -625,19 +625,32 @@ void deleteRecursive(File fileOrDirectory) {
   private void saveChannelBackupToFile(byte[] backups, Promise promise) {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss") ;
     String path = Environment.getExternalStorageDirectory() +
-                  "/BlixtWallet/channels-backup-" +
-                  dateFormat.format(new Date()) +
-                  ".bin";
+                  "/Blixt-Wallet" +
+                  (BuildConfig.CHAIN.equals("testnet") ? "-testnet" : "") +
+                  (BuildConfig.DEBUG ? "-debug" : "");
+    String file = path +
+                  "/channels-backup-" +
+                  dateFormat.format(new Date()) + ".bin";
 
-    try (FileOutputStream stream = new FileOutputStream(path)) {
-      stream.write(backups);
-      Log.i(TAG, "Success " + path);
+    try {
+      File dir = new File(path);
+      if (!dir.exists()) {
+        dir.mkdirs();
+      }
     } catch (Exception e) {
-      Log.e(TAG, "Couldn't write " + path, e);
-      promise.reject("Couldn't write: " + path, e.getMessage());
+      Log.e(TAG, "Couldn't create folder " + path, e);
+      promise.reject("Couldn't create folder: " + path, e.getMessage());
     }
 
-    promise.resolve(path);
+    try (FileOutputStream stream = new FileOutputStream(file)) {
+      stream.write(backups);
+      Log.i(TAG, "Success " + file);
+    } catch (Exception e) {
+      Log.e(TAG, "Couldn't write " + file, e);
+      promise.reject("Couldn't write: " + file, e.getMessage());
+    }
+
+    promise.resolve(file);
   }
 
   private interface RequestWriteExternalStoragePermissionCallback {

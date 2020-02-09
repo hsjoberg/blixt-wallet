@@ -5,9 +5,10 @@ import { StoreProvider } from "easy-peasy";
 
 import Main from "./Main";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
+import { navigator } from "./utils/navigation";
 
-import getTheme from "../native-base-theme/components";
-import theme from "../native-base-theme/variables/commonColor";
+const getTheme = require("../native-base-theme/components").default;
+const theme = require("../native-base-theme/variables/commonColor").default;
 
 import store from "./state/store";
 
@@ -17,7 +18,7 @@ export default () => {
   return (
     <StoreProvider store={store}>
       <StyleProvider style={getTheme(theme)}>
-        <NavigationContainer>
+        <NavigationContainer ref={navigator}>
           <Root>
             {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
           </Root>

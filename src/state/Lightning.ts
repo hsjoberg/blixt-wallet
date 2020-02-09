@@ -126,9 +126,9 @@ export const lightning: ILightningModel = {
         dispatch.receive.initialize(),
         dispatch.onChain.initialize(),
         dispatch.transaction.checkOpenTransactions(),
-        dispatch.clipboardManager.initialize(),
         dispatch.scheduledSync.initialize(),
       ]);
+      await dispatch.clipboardManager.initialize();
     } catch (e) {
       toast(e.message, 10000, "danger");
       return;
