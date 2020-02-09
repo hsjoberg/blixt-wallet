@@ -5,9 +5,9 @@ import * as base64 from "base64-js";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
 import { uploadFileAsString, getFiles, checkResponseIsError, downloadFileAsString } from "../utils/google-drive";
-import { Chain } from "../utils/build";
+import { Chain, Debug } from "../utils/build";
 
-export const GOOGLE_DRIVE_BACKUP_FILE = `blixt-wallet-backup-${Chain}.b64`;
+export const GOOGLE_DRIVE_BACKUP_FILE = `blixt-wallet-backup-${Chain}${Debug ? "-debug" : ""}.b64`;
 
 export interface IGoogleDriveBackupModel {
   initialize: Thunk<IGoogleDriveBackupModel>;
