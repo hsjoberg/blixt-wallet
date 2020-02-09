@@ -1,6 +1,6 @@
 import { Alert, Clipboard, AppState, AppStateStatus } from "react-native"
 import { Action, action, Thunk, thunk } from "easy-peasy";
-import { navigate } from "../utils/navigation";
+import { navigate, getNavigator } from "../utils/navigation";
 import { IStoreModel } from "./index";
 
 export interface IClipboardManagerModel {
@@ -33,6 +33,15 @@ export const clipboardManager: IClipboardManagerModel = {
   }),
 
   checkInvoice: thunk(async (actions, text, { dispatch, getState }) => {
+    const navigator = getNavigator();
+    if (
+      !navigator ||
+      !navigator.getRootState() ||
+      navigator.getRootState().routes[navigator.getRootState().routes.length-1].name === "Send"
+    ) {
+      console.log("Skipping clipboard check");
+      return;
+    }
     try {
       if (getState().invoiceCache.includes(text) || !text || text.length === 0) {
         return;
@@ -46,11 +55,11 @@ export const clipboardManager: IClipboardManagerModel = {
         "Found a lightning invoice in clipboard. Do you wish to pay this invoice?",
         [{
           text: "Cancel",
-          onPress: async () => dispatch.send.clear()
+          onPress: () => dispatch.send.clear()
         }, {
           text: "Pay invoice",
-          onPress: async () => {
-            navigate("SendConfirmation");
+          onPress: () => {
+            navigate("Send", { screen: "SendConfirmation" });
           }
         }]
       );

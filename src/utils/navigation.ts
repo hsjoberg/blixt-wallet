@@ -1,22 +1,17 @@
-// import { NavigationActions, NavigationContainerComponent, NavigationParams } from 'react-navigation';
+import React from "react";
+import { NavigationContainerRef } from "@react-navigation/native";
 
-// let navigator: NavigationContainerComponent;
+export const navigator = React.createRef<NavigationContainerRef>();
 
-// export function setTopLevelNavigator(navigatorRef: NavigationContainerComponent) {
-//   navigator = navigatorRef;
-// }
+export function getNavigator(): NavigationContainerRef | null {
+  return navigator.current || null;
+}
 
-// export function navigate(routeName: string, params?: NavigationParams) {
-//   if (!navigator) {
-//     console.warn("Warning: navigate() called without navigator properly set up");
-//   }
-
-//   navigator.dispatch(
-//     NavigationActions.navigate({
-//       routeName,
-//       params,
-//     })
-//   );
-// }
 export function navigate(routeName: string, params?: any) {
+  if (!navigator.current) {
+    console.warn("Warning: navigate() called without navigator properly set up");
+    return;
+  }
+
+  navigator.current.navigate(routeName, params);
 }
