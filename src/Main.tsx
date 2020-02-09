@@ -61,7 +61,13 @@ export default () => {
       if (!appReady) {
         await initializeApp();
       }
-      else {
+    })();
+  }, [appReady]);
+
+  useEffect(() => {
+    // tslint:disable-next-line
+    (async () => {
+      if (appReady) {
         if (!walletCreated) {
           setState("onboarding");
         }
