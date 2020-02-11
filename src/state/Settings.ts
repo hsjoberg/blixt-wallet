@@ -3,6 +3,7 @@ import { Action, action, Thunk, thunk } from "easy-peasy";
 import { StorageItem, getItemObject, setItemObject, removeItem, getItem, setItem } from "../storage/app";
 import { IFiatRates } from "./Fiat";
 import { IBitcoinUnit, IBitcoinUnits, BitcoinUnits } from "../utils/bitcoin-units";
+import { MapStyle } from "../utils/google-maps";
 
 export interface ISettingsModel {
   initialize: Thunk<ISettingsModel>;
@@ -18,6 +19,7 @@ export interface ISettingsModel {
   changeGoogleDriveBackupEnabled: Thunk<ISettingsModel, boolean>;
   changePreferFiat: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationEnabled: Thunk<ISettingsModel, boolean>;
+  changeTransactionGeolocationMapStyle: Thunk<ISettingsModel, keyof typeof MapStyle>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -30,6 +32,7 @@ export interface ISettingsModel {
   setGoogleDriveBackupEnabled: Action<ISettingsModel, boolean>;
   setPreferFiat: Action<ISettingsModel, boolean>;
   setTransactionGeolocationEnabled: Action<ISettingsModel, boolean>;
+  setTransactionGeolocationMapStyle: Action<ISettingsModel, keyof typeof MapStyle>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -42,6 +45,7 @@ export interface ISettingsModel {
   googleDriveBackupEnabled: boolean;
   preferFiat: boolean;
   transactionGeolocationEnabled: boolean;
+  transactionGeolocationMapStyle: keyof typeof MapStyle;
 }
 
 export const settings: ISettingsModel = {
@@ -57,6 +61,7 @@ export const settings: ISettingsModel = {
     actions.setGoogleDriveBackupEnabled(await getItemObject(StorageItem.googleDriveBackupEnabled) || false);
     actions.setPreferFiat(await getItemObject(StorageItem.preferFiat) || false);
     actions.setTransactionGeolocationEnabled(await getItemObject(StorageItem.transactionGeolocationEnabled) || false);
+    actions.setTransactionGeolocationMapStyle(await getItem(StorageItem.transactionGeolocationMapStyle) as keyof typeof MapStyle || "darkMode");
   }),
 
   changeBitcoinUnit: thunk(async (actions, payload) => {
@@ -117,6 +122,11 @@ export const settings: ISettingsModel = {
     actions.setTransactionGeolocationEnabled(payload);
   }),
 
+  changeTransactionGeolocationMapStyle: thunk(async (actions, payload) => {
+    await setItem(StorageItem.transactionGeolocationMapStyle, payload);
+    actions.setTransactionGeolocationMapStyle(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -128,6 +138,7 @@ export const settings: ISettingsModel = {
   setGoogleDriveBackupEnabled: action((state, payload) => { state.googleDriveBackupEnabled = payload; }),
   setPreferFiat: action((state, payload) => { state.preferFiat = payload; }),
   setTransactionGeolocationEnabled: action((state, payload) => { state.transactionGeolocationEnabled = payload; }),
+  setTransactionGeolocationMapStyle: action((state, payload) => { state.transactionGeolocationMapStyle = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -140,4 +151,5 @@ export const settings: ISettingsModel = {
   googleDriveBackupEnabled: false,
   preferFiat: false,
   transactionGeolocationEnabled: false,
+  transactionGeolocationMapStyle: "darkMode",
 };

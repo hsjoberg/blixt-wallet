@@ -75,3 +75,8 @@ export const getGeolocation = (): Promise<GeolocationResponse["coords"]>  => {
     });
   });
 }
+
+export const camelCaseToSpace = (text: string) =>
+  text
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, function(str){ return str.toUpperCase(); });

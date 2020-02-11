@@ -13,6 +13,7 @@ import { useStoreState } from "../state/store";
 import { extractDescription } from "../utils/NameDesc";
 import { smallScreen } from "../utils/device";
 import CopyAddress from "../components/CopyAddress";
+import { MapStyle } from "../utils/google-maps";
 
 interface IMetaDataProps {
   title: string;
@@ -40,6 +41,7 @@ export default ({ route }: any) => {
   const rHash: string = route.params.rHash;
   const transaction = useStoreState((store) => store.transaction.getTransactionByRHash(rHash));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const transactionGeolocationMapStyle = useStoreState((store) => store.settings.transactionGeolocationMapStyle);
 
   const [currentScreen, setCurrentScreen] = useState<"Overview" | "Map">("Overview");
 
@@ -138,6 +140,7 @@ export default ({ route }: any) => {
                   latitudeDelta: 0.00622,
                   longitudeDelta: 0.00251,
                 }}
+                customMapStyle={MapStyle[transactionGeolocationMapStyle]}
               >
                 <Marker coordinate={{
                   longitude: transaction.locationLong!,
