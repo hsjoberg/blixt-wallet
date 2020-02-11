@@ -7,6 +7,9 @@ import { IStoreModel } from "../state";
 import { uploadFileAsString, getFiles, checkResponseIsError, downloadFileAsString } from "../utils/google-drive";
 import { Chain, Debug } from "../utils/build";
 
+import logger from "./../utils/log";
+const log = logger("GoogleDriveBackup");
+
 export const GOOGLE_DRIVE_BACKUP_FILE = `blixt-wallet-backup-${Chain}${Debug ? "-debug" : ""}.b64`;
 
 export interface IGoogleDriveBackupModel {
@@ -30,17 +33,17 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
   }),
 
   setupChannelUpdateSubscriptions: thunk((actions, _2, { getStoreState, injections }) => {
-    console.log("Starting channel update subscription for Google Drive channel backup");
+    log.i("Starting channel update subscription for Google Drive channel backup");
 
     DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
       if (!getStoreState().settings.googleDriveBackupEnabled || !getStoreState().google.isSignedIn) {
         return;
       }
-      console.log("GoogleDriveBackup: Received SubscribeChannelEvents");
+      log.d("GoogleDriveBackup: Received SubscribeChannelEvents");
       const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
       const channelEvent = decodeChannelEvent(e.data);
       if (channelEvent.openChannel || channelEvent.closedChannel) {
-        console.log("New channel event received, starting new Google Drive backup");
+        log.i("New channel event received, starting new Google Drive backup");
         await actions.makeBackup();
       }
     });
@@ -71,8 +74,8 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
         throw new Error(`Error backing up channels to Google Drive. ${JSON.stringify(uploadResult)}`);
       }
       else {
-        console.log("Backing up channels to Google Drive succeeded");
-        console.log(uploadResult);
+        log.i("Backing up channels to Google Drive succeeded");
+        log.d("uploadResult", [uploadResult]);
         return uploadResult;
       }
     }
@@ -83,7 +86,7 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
 
     const files = await getFiles(accessToken, [GOOGLE_DRIVE_BACKUP_FILE]);
     if (checkResponseIsError(files)) {
-      console.error(files);
+      log.e("Got error when getting backup metadata", [files]);
       throw new Error(files.error.message); // TODO
     }
 
@@ -93,11 +96,11 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
 
     const backupB64 = await downloadFileAsString(accessToken, files.files[0].id);
     if (checkResponseIsError(backupB64)) {
-      console.error(backupB64);
+      log.e("Got error when downloading backup", [backupB64]);
       throw new Error(backupB64.error.message);
     }
     else {
-      console.log("Download succeeded");
+      log.i("Download succeeded");
       return backupB64;
     }
   }),

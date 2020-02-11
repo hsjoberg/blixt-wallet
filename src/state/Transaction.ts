@@ -4,6 +4,9 @@ import { ITransaction, getTransactions, createTransaction, updateTransaction } f
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 
+import logger from "./../utils/log";
+const log = logger("Transaction");
+
 export interface ITransactionModel {
   addTransaction: Action<ITransactionModel, ITransaction>;
   updateTransaction: Action<ITransactionModel, { transaction: ITransaction }>;

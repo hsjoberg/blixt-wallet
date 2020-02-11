@@ -10,6 +10,9 @@ import { valueFiat } from "../utils/bitcoin-units";
 import { LnBech32Prefix } from "../utils/build";
 import { getGeolocation } from "../utils";
 
+import logger from "./../utils/log";
+const log = logger("Send");
+
 type PaymentRequest = string;
 
 export interface ISendModelSetPaymentPayload {
@@ -131,18 +134,18 @@ export const send: ISendModel = {
       })),
     };
 
-    console.log("ITransaction", transaction);
+    log.d("ITransaction", [transaction]);
     await dispatch.transaction.syncTransaction(transaction);
 
     if (getStoreState().settings.transactionGeolocationEnabled) {
       try {
-        console.log("Syncing geolocation for transaction");
+        log.d("Syncing geolocation for transaction");
         const coords = await getGeolocation();
         transaction.locationLong = coords.longitude;
         transaction.locationLat = coords.latitude;
         await dispatch.transaction.syncTransaction(transaction);
       } catch (error) {
-        console.log(`Error getting geolocation for transaction: ${JSON.stringify(error)}`);
+        log.i(`Error getting geolocation for transaction: ${JSON.stringify(error)}`, [error]);
       }
     }
 

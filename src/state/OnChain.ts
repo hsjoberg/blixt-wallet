@@ -6,6 +6,9 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { lnrpc } from "../../proto/proto";
 
+import logger from "./../utils/log";
+const log = logger("OnChain");
+
 export interface IBlixtTransaction extends lnrpc.ITransaction {
   type: "NORMAL" | "CHANNEL_OPEN" | "CHANNEL_CLOSE";
 }
@@ -59,14 +62,13 @@ export const onChain: IOnChainModel = {
     ]);
 
     if (getState().transactionSubscriptionStarted) {
-      console.log("OnChain.initialize called when subscription already started");
+      log.d("OnChain.initialize called when subscription already started");
       return;
     }
     else {
       await injections.lndMobile.onchain.subscribeTransactions();
       DeviceEventEmitter.addListener("SubscribeTransactions", async (e: any) => {
-        console.log("Event SubscribeTransactions");
-        console.log(e);
+        log.d("Event SubscribeTransactions", [e]);
         await actions.getBalance(undefined);
       });
 

@@ -5,6 +5,9 @@ import { IFiatRates } from "./Fiat";
 import { IBitcoinUnit, IBitcoinUnits, BitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
 
+import logger from "./../utils/log";
+const log = logger("Settings");
+
 export interface ISettingsModel {
   initialize: Thunk<ISettingsModel>;
 

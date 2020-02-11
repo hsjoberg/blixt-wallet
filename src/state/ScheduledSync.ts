@@ -5,6 +5,9 @@ import { StorageItem, getItemObject } from "../storage/app";
 import { WorkInfo } from "../lndmobile/scheduled-sync";
 import { IStoreInjections } from "./store.ts";
 
+import logger from "./../utils/log";
+const log = logger("ScheduledSync");
+
 const { LndMobileScheduledSync } = NativeModules;
 
 export interface IScheduledSyncModel {
@@ -34,7 +37,7 @@ export const scheduledSync: IScheduledSyncModel = {
       actions.setLastScheduledSyncAttempt(await getItemObject<number>(StorageItem.lastScheduledSyncAttempt));
       actions.setWorkInfo(await injections.lndMobile.scheduledSync.checkScheduledSyncWorkStatus());
     } catch (e) {
-      console.log(e);
+      log.e("Error retrieving sync info", [e]);
     }
   }),
 

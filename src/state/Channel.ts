@@ -11,6 +11,9 @@ import { IChannelEvent, getChannelEvents, createChannelEvent } from "../storage/
 import { localNotification } from "../utils/push-notification";
 import { bytesToHexString } from "../utils";
 
+import logger from "./../utils/log";
+const log = logger("Channel");
+
 export interface IOpenChannelPayload {
   // <pubkey>@<ip>[:<port>]
   peer: string;
@@ -85,7 +88,7 @@ export const channel: IChannelModel = {
     ]);
 
     if (getState().channelUpdateSubscriptionStarted) {
-      console.log("Channel.initialize() called when subscription already started");
+      log.d("Channel.initialize() called when subscription already started");
       return;
     }
     await actions.setupChannelUpdateSubscriptions();
@@ -93,7 +96,7 @@ export const channel: IChannelModel = {
   }),
 
   setupChannelUpdateSubscriptions: thunk(async (actions, _2, { getStoreState, injections }) => {
-    console.log("Starting channel update subscription");
+    log.i("Starting channel update subscription");
     await injections.lndMobile.channel.subscribeChannelEvents();
     DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
       const db = getStoreState().db;
@@ -103,9 +106,9 @@ export const channel: IChannelModel = {
       const pushNotificationsEnabled = getStoreState().settings.pushNotificationsEnabled;
 
       const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
-      console.log("Event SubscribeChannelEvents", e);
+      log.v("Event SubscribeChannelEvents", [e]);
       const channelEvent = decodeChannelEvent(e.data);
-      console.log(channelEvent, channelEvent.type);
+      log.v("channelEvent" , [channelEvent, channelEvent.type]);
 
       if (channelEvent.openChannel) {
         const txId = channelEvent.openChannel.channelPoint!.split(":")[0];
@@ -125,7 +128,7 @@ export const channel: IChannelModel = {
             }
             localNotification(message);
           } catch (e) {
-            console.log("Push notification failed: ", e.message);
+            log.e("Push notification failed: ", e.message);
           }
         }
       }
@@ -148,7 +151,7 @@ export const channel: IChannelModel = {
             message += " closed";
             localNotification(message);
           } catch (e) {
-            console.log("Push notification failed: ", e.message);
+            log.e("Push notification failed: ", e.message);
           }
         }
       }
@@ -173,7 +176,7 @@ export const channel: IChannelModel = {
             }
             localNotification(message);
           } catch (e) {
-            console.log("Push notification failed: ", e.message);
+            log.e("Push notification failed: ", e.message);
           }
         }
       }
@@ -185,8 +188,7 @@ export const channel: IChannelModel = {
     });
 
     DeviceEventEmitter.addListener("CloseChannel", async (e: any) => {
-      console.log("Event CloseChannel");
-      console.log(e);
+      log.e("Event CloseChannel", [e]);
       await actions.getChannels(undefined);
     });
     actions.setChannelUpdateSubscriptionStarted(true);
@@ -246,21 +248,21 @@ export const channel: IChannelModel = {
     }
 
     const result = await openChannel(pubkey, amount, true);
-    console.log(result);
+    log.d("openChannel", [result]);
     return result;
   }),
 
   closeChannel: thunk(async (_, { fundingTx, outputIndex }, { injections }) => {
     const closeChannel = injections.lndMobile.channel.closeChannel;
     const result = await closeChannel(fundingTx, outputIndex);
-    console.log(result);
+    log.d("closeChannel", [result]);
     return result;
   }),
 
   abandonChannel: thunk(async (_, { fundingTx, outputIndex }, { injections }) => {
     const abandonChannel = injections.lndMobile.channel.abandonChannel;
     const result = await abandonChannel(fundingTx, outputIndex);
-    console.log(result);
+    log.d("abandonChannel", [result]);
     return result;
   }),
 

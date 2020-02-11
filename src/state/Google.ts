@@ -1,6 +1,8 @@
-import { Action, action, Thunk, thunk, computed, Computed } from "easy-peasy";
-import { IStoreModel } from "../state";
+import { Action, action, Thunk, thunk } from "easy-peasy";
 import { GoogleSignin, statusCodes, User } from '@react-native-community/google-signin';
+
+import logger from "./../utils/log";
+const log = logger("Google");
 
 export interface IGoogleDriveToken {
   idToken: string;
@@ -37,13 +39,11 @@ export const google: IGoogleModel = {
     if (hasPlayServices) {
       try {
         const user = await GoogleSignin.signInSilently();
-        console.log("Google silent login");
         actions.setIsSignedIn(true);
         actions.setUser(user);
       } catch (e) {
         if (e.code !== statusCodes.SIGN_IN_REQUIRED) {
-          console.warn(`Google: Got unknown error from GoogleSignin.signInSilently(): ${e.code}`);
-          console.log(JSON.stringify(e));
+          log.w(`Got unexpected error from GoogleSignin.signInSilently(): ${e.code}`, [e]);
         }
       }
     }
@@ -67,7 +67,7 @@ export const google: IGoogleModel = {
         // play services not available or outdated
       } else {
         // some other error happened
-        console.error(error);
+        log.e("Got expected error from GoogleSignin.signIn(): ${e.code}", [error]);
       }
       return false
     }

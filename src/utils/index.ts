@@ -80,3 +80,19 @@ export const camelCaseToSpace = (text: string) =>
   text
     .replace(/([A-Z])/g, ' $1')
     .replace(/^./, function(str){ return str.toUpperCase(); });
+
+
+// Copied from BufferJS
+export const asciiToBytes = (str: string) => {
+  const byteArray = [];
+  for (let i = 0; i < str.length; ++i) {
+    // Node's code seems to be doing this and not & 0x7F..
+    byteArray.push(str.charCodeAt(i) & 0xFF);
+  }
+  return byteArray;
+};
+
+export const decodeTLVRecord = (utf8: string) => {
+  const bytes = asciiToBytes(utf8);
+  return Long.fromBytesLE(bytes).toNumber();
+}

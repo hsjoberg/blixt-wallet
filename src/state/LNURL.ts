@@ -5,6 +5,9 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { timeout, bytesToString } from "../utils/index";
 
+import logger from "./../utils/log";
+const log = logger("LNURL");
+
 export type LNURLType = "channelRequest" | "unknown" | "error" | "unsupported";
 
 export interface ILNUrlChannelRequest {
@@ -49,12 +52,12 @@ export const lnUrl: ILNUrlModel = {
     try {
       const decodedBech32 = Bech32.decode(bech32data, 1024);
       const decodedUrl = bytesToString(Bech32.fromWords(decodedBech32.words));
-      console.log(decodedUrl);
+      log.d(decodedUrl);
       let type: LNURLType;
       const result = await fetch(decodedUrl);
-      console.log(result);
+      log.v(JSON.stringify(result));
       const lnurlObject: ILNUrlChannelRequest | ILNUrlDummy = await result.json();
-      console.log(lnurlObject);
+      log.v(JSON.stringify(lnurlObject));
       if (lnurlObject.tag === "channelRequest") {
         type = "channelRequest";
       }
@@ -67,7 +70,7 @@ export const lnUrl: ILNUrlModel = {
       actions.setLNUrlObject(lnurlObject);
       return type;
     } catch (e) {
-      console.log(e);
+      log.e("Error reading LNURL", [e]);
       return "error";
     }
   }),
@@ -79,7 +82,7 @@ export const lnUrl: ILNUrlModel = {
 
     if (type === "channelRequest" && lnUrlObject && lnUrlObject.tag === "channelRequest") {
       while (!getStoreState().lightning.nodeInfo) {
-        console.log("nodeInfo is not available yet, sleeping for 1000ms");
+        log.i("nodeInfo is not available yet, sleeping for 1000ms");
         await timeout(1000);
       }
       const localPubkey = getStoreState().lightning.nodeInfo!.identityPubkey;
@@ -88,11 +91,11 @@ export const lnUrl: ILNUrlModel = {
         const connectPeerResult = await connectPeer(pubkey, host);
       } catch (e) {}
       const request = `${lnUrlObject.callback}?k1=${lnUrlObject.k1}&remoteid=${localPubkey}&private=1`;
-      console.log(request);
+      log.v(request);
       const result = await fetch(request);
-      console.log(result);
+      log.v(JSON.stringify(result));
       const response: ILNUrlChannelRequestResponse = await result.json();
-      console.log(response);
+      log.v(JSON.stringify(response));
 
       if (response.status === "OK") {
         return true;
@@ -100,7 +103,6 @@ export const lnUrl: ILNUrlModel = {
       throw new Error(response.reason!);
     }
     else {
-      console.log("fail");
       throw new Error("Requirements not satisfied, type must be channelRequest and lnUrlObject must be set");
     }
   }),

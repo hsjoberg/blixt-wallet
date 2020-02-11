@@ -1,6 +1,9 @@
 import { Action, action, Thunk, thunk, computed, Computed } from "easy-peasy";
 import { IStoreModel } from "../state";
 
+import logger from "./../utils/log";
+const log = logger("Fiat");
+
 const BLOCKCHAIN_FIAT_API_URL = "https://blockchain.info/ticker";
 const BTCSAT = 100000000;
 
@@ -44,14 +47,14 @@ export interface IFiatModel {
 export const fiat: IFiatModel = {
   getRate: thunk(async (actions) => {
     try {
-      console.log("Fetching fiat rate");
+      log.d("Fetching fiat rate");
       const result = await fetch(BLOCKCHAIN_FIAT_API_URL);
       const jsonResult = await result.json();
       if (validateFiatApiResponse(jsonResult)) {
         actions.setFiatRates(jsonResult);
       }
     } catch (e) {
-      console.log("Failed to fetch fiat rate API", e.message);
+      log.e("Failed to fetch fiat rate API:" + e.message);
     }
   }),
 
