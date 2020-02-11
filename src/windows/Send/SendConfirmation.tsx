@@ -112,7 +112,13 @@ export default ({ navigation }: ISendConfirmationProps) => {
     component: (<Input multiline={true} disabled={true} value={description} />),
   });
 
-  const ready = lightningReady && rpcReady && syncedToChain && syncedToGraph;
+  const canSend = (
+    lightningReady &&
+    rpcReady &&
+    syncedToChain &&
+    syncedToGraph &&
+    !isPaying
+  );
 
   return (
     <Container>
@@ -137,13 +143,13 @@ export default ({ navigation }: ISendConfirmationProps) => {
           <Button
             key="PAY"
             testID="pay-invoice"
-            disabled={isPaying || !ready}
             block={true}
             primary={true}
-            onPress={send}>
-              {ready && !isPaying && <Text>Pay</Text>}
-              {ready && isPaying && <Spinner color={blixtTheme.light} />}
-              {!ready && <Spinner color={blixtTheme.light} />}
+            onPress={send}
+            disabled={!canSend}
+          >
+            {canSend && <Text>Pay</Text>}
+            {!canSend && <Spinner color={blixtTheme.light} />}
           </Button>
         ),]}
       />

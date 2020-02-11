@@ -28,6 +28,8 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const [payer, setPayer] = useState<string>("");
   const [createInvoiceDisabled, setCreateInvoiceDisabled] = useState(false);
 
+  const channels = useStoreState((store) => store.channel.channels);
+
   const onChangeSatInput = (text: string) => {
     if (bitcoinUnit === "satoshi") {
       text = text.replace(/\D+/g, "");
@@ -133,6 +135,14 @@ export default ({ navigation }: IReceiveSetupProps) => {
     ),
   }];
 
+  const canSend = (
+    rpcReady &&
+    invoiceSubscriptionStarted &&
+    syncedToChain &&
+    channels.some((channel) => channel.active) &&
+    !createInvoiceDisabled
+  );
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -154,15 +164,9 @@ export default ({ navigation }: IReceiveSetupProps) => {
             block={true}
             primary={true}
             onPress={onCreateInvoiceClick}
-            disabled={
-              createInvoiceDisabled ||
-              !rpcReady ||
-              !invoiceSubscriptionStarted ||
-              !syncedToChain ||
-              (satValue == "0" || satValue === undefined)
-            }
+            disabled={!canSend || satValue == "0" || satValue === undefined}
           >
-            {rpcReady && invoiceSubscriptionStarted && syncedToChain
+            {canSend && !createInvoiceDisabled
               ? <Text>Create invoice</Text>
               : <Spinner color={blixtTheme.light} />
             }
