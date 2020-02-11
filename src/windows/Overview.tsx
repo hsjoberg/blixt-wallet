@@ -2,7 +2,7 @@ import React, { useState, useRef, useMemo } from "react";
 import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import { Icon, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
 import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
@@ -22,9 +22,10 @@ const NUM_TRANSACTIONS_PER_LOAD = 25;
 const LOAD_BOTTOM_PADDING = 475;
 
 export interface IOverviewProps {
-  navigation: NavigationStackProp<RootStackParamList, "Overview">;
+  navigation: BottomTabNavigationProp<RootStackParamList, "Overview">;
 }
 const Overview = ({ navigation }: IOverviewProps)  => {
+  const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const balance = useStoreState((store) => store.channel.balance);
   const pendingOpenBalance = useStoreState((store) => store.channel.pendingOpenBalance);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
@@ -67,6 +68,9 @@ const Overview = ({ navigation }: IOverviewProps)  => {
   const refreshControl = (
     <RefreshControl title="Refreshing" progressViewOffset={183} refreshing={refreshing} colors={[blixtTheme.light]} progressBackgroundColor={blixtTheme.gray}
       onRefresh={async () => {
+        if (!rpcReady) {
+          return;
+        }
         setRefreshing(true);
         await Promise.all([
           getBalance(),

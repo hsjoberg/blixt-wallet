@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { LoginMethods } from "../state/Security";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
+import { MapStyle } from "../utils/google-maps";
 
 const APP_VERSION = 7;
 
@@ -29,6 +30,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   googleDriveBackupEnabled = "googleDriveBackupEnabled",
   preferFiat = "preferFiat",
   transactionGeolocationEnabled = "transactionGeolocationEnabled",
+  transactionGeolocationMapStyle = "transactionGeolocationMapStyle",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -72,6 +74,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.googleDriveBackupEnabled),
     removeItem(StorageItem.preferFiat),
     removeItem(StorageItem.transactionGeolocationEnabled),
+    removeItem(StorageItem.transactionGeolocationMapStyle),
   ]);
 };
 
@@ -98,5 +101,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.googleDriveBackupEnabled, false),
     setItemObject<boolean>(StorageItem.preferFiat, false),
     setItemObject<boolean>(StorageItem.transactionGeolocationEnabled, false),
+    setItemObject<keyof typeof MapStyle>(StorageItem.transactionGeolocationMapStyle, "darkMode"),
   ]);
 };

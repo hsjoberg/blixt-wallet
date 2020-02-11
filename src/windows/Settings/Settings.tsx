@@ -15,7 +15,8 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
 import { BitcoinUnits } from "../../utils/bitcoin-units";
 import { verifyChanBackup } from "../../lndmobile/channel";
-import { formatISO, toast } from "../../utils";
+import { camelCaseToSpace, formatISO, toast } from "../../utils";
+import { MapStyle } from "../../utils/google-maps";
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -243,7 +244,6 @@ export default ({ navigation }: ISettingsProps) => {
     }
   }
 
-
   // Debug show startup info
   const debugShowStartupInfo = useStoreState((store) => store.settings.debugShowStartupInfo);
   const changeDebugShowStartupInfo = useStoreActions((store) => store.settings.changeDebugShowStartupInfo);
@@ -301,6 +301,26 @@ export default ({ navigation }: ISettingsProps) => {
       }
     }
     await changeTransactionGeolocationEnabled(!transactionGeolocationEnabled);
+  };
+
+  // Transaction geolocation map style
+  const transactionGeolocationMapStyle = useStoreState((store) => store.settings.transactionGeolocationMapStyle);
+  const changeTransactionGeolocationMapStyle = useStoreActions((store) => store.settings.changeTransactionGeolocationMapStyle);
+  const onChangeMapStylePress = async () => {
+    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+      positiveText: null,
+      negativeText: "Cancel",
+      type: DialogAndroid.listRadio,
+      selectedId: transactionGeolocationMapStyle,
+      items: Object.keys(MapStyle).map((mapStyle) => ({
+        id: mapStyle,
+        label: camelCaseToSpace(mapStyle),
+      }),
+    )});
+
+    if (selectedItem) {
+      await changeTransactionGeolocationMapStyle(selectedItem.id);
+    }
   };
 
   return (
@@ -391,6 +411,15 @@ export default ({ navigation }: ISettingsProps) => {
             </Body>
             <Right><CheckBox checked={transactionGeolocationEnabled} onPress={onToggleTransactionGeolocationEnabled} /></Right>
           </ListItem>
+          {transactionGeolocationEnabled &&
+            <ListItem style={style.listItem} icon={true} onPress={onChangeMapStylePress}>
+              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-maps" /></Left>
+              <Body>
+                <Text>Set Map theme</Text>
+                <Text note={true}>{camelCaseToSpace(transactionGeolocationMapStyle)}</Text>
+              </Body>
+            </ListItem>
+          }
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Security</Text>
