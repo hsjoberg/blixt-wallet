@@ -6,11 +6,13 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
-import { Reader } from "protobufjs";
 import { setupDescription } from "../utils/NameDesc";
 import { valueFiat } from "../utils/bitcoin-units";
-import { timeout, uint8ArrayToString, bytesToString } from "../utils";
+import { timeout, uint8ArrayToString, bytesToString, decodeTLVRecord } from "../utils";
 import { TLV_RECORD_NAME } from "../utils/constants.ts";
+
+import logger from "./../utils/log";
+const log = logger("Receive");
 
 interface IReceiveModelAddInvoicePayload {
   description: string;
@@ -41,7 +43,7 @@ export const receive: IReceiveModel = {
   }),
 
   addInvoice: thunk(async (actions, { description, sat, expiry, payer }, { injections, getStoreState }) => {
-    console.log("invoice test create")
+    log.d("addInvoice()")
     const { addInvoice } = injections.lndMobile.index;
     const name = getStoreState().settings.name;
     description = setupDescription(description, name);
@@ -51,7 +53,7 @@ export const receive: IReceiveModel = {
     }
 
     const result = await addInvoice(sat, description, expiry);
-    console.log("result", result);
+    log.d("addInvoice()result", [result]);
     return result;
   }),
 
@@ -59,14 +61,14 @@ export const receive: IReceiveModel = {
     const decodePayReq = injections.lndMobile.index.decodePayReq;
     const decodeInvoiceResult = injections.lndMobile.wallet.decodeInvoiceResult;
     if (getState().invoiceSubscriptionStarted) {
-      console.log("WARNING: Receive.subscribeInvoice() called when subsription already started");
+      log.d("Receive.subscribeInvoice() called when subsription already started");
       return;
     }
     DeviceEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
-      console.log("New invoice event");
+      log.i("New invoice event");
 
       const invoice = decodeInvoiceResult(e.data);
-      console.log(invoice);
+      log.d("invoice", [invoice]);
       const paymentRequest = await decodePayReq(invoice.paymentRequest);
 
       const payer = getState().payerTmp;
@@ -117,18 +119,13 @@ export const receive: IReceiveModel = {
 
         // Loop through known TLV records
         for (const htlc of invoice.htlcs) {
-          console.log(htlc.state);
           if (htlc.customRecords) {
-            console.log(htlc.customRecords);
-
-            const tlvRecordNameKey = Object.keys(lnrpc.InvoiceHTLC.decode(lnrpc.InvoiceHTLC.encode({
-              customRecords: { [TLV_RECORD_NAME]: new Uint8Array([0]) }
-            }).finish()).customRecords)[0];
-
-            if (htlc.customRecords[tlvRecordNameKey]) {
-              const tlvRecordName = uint8ArrayToString(htlc.customRecords[tlvRecordNameKey]);
-              console.log("Found TLV_RECORD_NAME 🎉", tlvRecordName);
-              transaction.tlvRecordName = tlvRecordName;
+            for (const [customRecordKey, customRecordValue] of Object.entries(htlc.customRecords)) {
+              if (decodeTLVRecord(customRecordKey) === TLV_RECORD_NAME) {
+                const tlvRecordName = uint8ArrayToString(customRecordValue);
+                log.i("Found TLV_RECORD_NAME 🎉", [tlvRecordName]);
+                transaction.tlvRecordName = tlvRecordName;
+              }
             }
           }
         }
@@ -136,7 +133,7 @@ export const receive: IReceiveModel = {
       await dispatch.transaction.syncTransaction(transaction);
     });
     actions.setInvoiceSubscriptionStarted(true);
-    console.log("Transaction subscription started");
+    log.i("Transaction subscription started");
   }),
 
   setInvoiceSubscriptionStarted: action((state, payload) => { state.invoiceSubscriptionStarted = payload }),

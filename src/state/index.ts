@@ -28,6 +28,9 @@ import { appMigration } from "../migration/app-migration";
 import { timeout } from "../utils";
 import { setWalletPassword } from "../storage/keystore";
 
+import logger from "./../utils/log";
+const log = logger("Store");
+
 export interface ICreateWalletPayload {
   restore?: {
     restoreWallet: boolean,
@@ -79,7 +82,7 @@ export interface IStoreModel {
 export const model: IStoreModel = {
   initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
     if (getState().appReady) {
-      console.log("App already initialized");
+      log.d("App already initialized");
       return;
     }
 
@@ -87,11 +90,11 @@ export const model: IStoreModel = {
     const db = await openDatabase();
     actions.setDb(db);
     if (!await getItemObject(StorageItem.app)) {
-      console.log("Initializing app for the first time");
+      log.i("Initializing app for the first time");
       await setupApp();
-      console.log("Initializing db for the first time");
+      log.i("Initializing db for the first time");
       await setupInitialSchema(db);
-      console.log("Writing lnd.conf");
+      log.i("Writing lnd.conf");
       await writeConfigFile();
     }
     actions.setAppVersion(await getAppVersion());
@@ -100,15 +103,15 @@ export const model: IStoreModel = {
     actions.setWalletCreated(await getWalletCreated());
 
     try {
-      console.log("init", await init());
+      log.d("init", [await init()]);
       const status = await checkStatus();
       if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
-        console.log("lnd not started, starting lnd");
-        console.log(await startLnd());
+        log.i("lnd not started, starting lnd");
+        log.d("", [await startLnd()]);
       }
     }
     catch (e) {
-      console.log("Exception", e);
+      log.e("Exception when trying to init LndMobile and start lnd", [e]);
       throw e;
     }
 
@@ -119,7 +122,7 @@ export const model: IStoreModel = {
     await dispatch.googleDriveBackup.initialize();
     actions.setAppReady(true);
 
-    console.log("App initialized");
+    log.d("App initialized");
     return true;
   }),
 
@@ -131,9 +134,9 @@ export const model: IStoreModel = {
 
     const appVersion = await getAppVersion();
     if (appVersion < (appMigration.length - 1)) {
-      console.log(`Beginning App Version migration from ${appVersion} to ${appMigration.length - 1}`);
+      log.i(`Beginning App Version migration from ${appVersion} to ${appMigration.length - 1}`);
       for (let i = appVersion + 1; i < appMigration.length; i++) {
-        console.log(`Migrating to ${i}`);
+        log.i(`Migrating to ${i}`);
         await appMigration[i].beforeLnd(db, i);
       }
       await setAppVersion(appMigration.length - 1);
@@ -200,23 +203,21 @@ export const model: IStoreModel = {
       if (lightningURI === null) {
         lightningURI = await NativeModules.LndMobile.getIntentNfcData();
       }
-      console.log("lightningURI", lightningURI);
+      log.d("lightningURI", [lightningURI]);
       if (lightningURI && lightningURI.toUpperCase().startsWith("LIGHTNING:")) {
-        console.log("try lightningURI");
+        log.d("try lightningURI");
 
         while (!getState().lightning.rpcReady) {
           await timeout(500);
         }
 
         await dispatch.send.setPayment({ paymentRequestStr: lightningURI.toUpperCase().replace("LIGHTNING:", "") });
-        console.log("deeplink true");
         return true;
       }
     } catch (e) {
       dispatch.send.clear();
-      console.log(e.message);
+      log.e("Error checking deeplink" + e.message);
     }
-    console.log("deeplink false");
     return null;
   }),
 

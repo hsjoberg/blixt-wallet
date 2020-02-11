@@ -11,6 +11,9 @@ import { toast, timeout } from "../utils";
 import { Chain } from "../utils/build";
 import { getWalletPassword } from "../storage/keystore";
 
+import logger from "./../utils/log";
+const log = logger("Lightning");
+
 const SYNC_UNLOCK_WALLET = false;
 
 export interface ILightningModel {
@@ -44,7 +47,7 @@ export const lightning: ILightningModel = {
     const checkStatus = injections.lndMobile.index.checkStatus;
 
     if (getState().ready)  {
-      console.log("Lightning store already started");
+      log.d("Lightning store already started");
     }
 
     const start = new Date();
@@ -82,7 +85,7 @@ export const lightning: ILightningModel = {
             () => debugShowStartupInfo && toast("UnlockWallet time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000)
           );
       } catch (e) {
-        console.log(e.message);
+        log.e("Error unlocking wallet:" + e.message);
         debugShowStartupInfo && toast("Error: Cannot unlock wallet", 10000, "danger");
         return
       }
@@ -161,10 +164,10 @@ export const lightning: ILightningModel = {
     do {
       try {
         await modifyStatus(enabled);
-        console.log("Autopilot status:", await status());
+        log.i("Autopilot status:", [await status()]);
         break;
       } catch (e) {
-        console.log(e.message);
+        log.e("Error modifying Autopilot: " + e.message);
         await timeout(2000);
       }
     } while (true);
@@ -182,14 +185,14 @@ export const lightning: ILightningModel = {
     let info;
     do {
       info = await getInfo();
-      console.log(`blockHeight: ${info.blockHeight}, syncedToChain: ${info.syncedToChain}`);
+      log.d(`blockHeight: ${info.blockHeight}, syncedToChain: ${info.syncedToChain}`);
       actions.setNodeInfo(info);
 
       if (info.syncedToChain !== true) {
         await timeout(firstSync ? 6000 : 1000);
       }
       else {
-        console.log(info);
+        log.d(JSON.stringify(info));
       }
     } while (!info.syncedToChain);
 
@@ -207,7 +210,7 @@ export const lightning: ILightningModel = {
     let info;
     do {
       info = await getInfo();
-      console.log(`blockHeight: ${info.blockHeight}, syncedToGraph: ${info.syncedToGraph}`);
+      log.d(`syncedToGraph: ${info.syncedToGraph}`);
       actions.setNodeInfo(info);
 
       if (info.syncedToGraph !== true) {

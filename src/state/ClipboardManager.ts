@@ -3,6 +3,9 @@ import { Action, action, Thunk, thunk } from "easy-peasy";
 import { navigate, getNavigator } from "../utils/navigation";
 import { IStoreModel } from "./index";
 
+import logger from "./../utils/log";
+const log = logger("ClipboardManager");
+
 export interface IClipboardManagerModel {
   initialize: Thunk<IClipboardManagerModel, void, any, IStoreModel>;
   setupInvoiceListener: Thunk<IClipboardManagerModel, void, any, IStoreModel>;
@@ -39,7 +42,7 @@ export const clipboardManager: IClipboardManagerModel = {
       !navigator.getRootState() ||
       navigator.getRootState().routes[navigator.getRootState().routes.length-1].name === "Send"
     ) {
-      console.log("Skipping clipboard check");
+      log.d("Skipping clipboard check");
       return;
     }
     try {
@@ -64,7 +67,7 @@ export const clipboardManager: IClipboardManagerModel = {
         }]
       );
     } catch (e) {
-      console.log(e);
+      log.d("Error checking clipboard for lightning invoice", [e]);
       dispatch.send.clear();
     }
   }),

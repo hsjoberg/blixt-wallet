@@ -5,6 +5,9 @@ import { StorageItem, getItemObject, setItemObject, removeItem } from "../storag
 import { Alert } from "react-native";
 import { getPin, getSeed as keystoreGetSeed, removeSeed, setSeed, setPin, removePin } from "../storage/keystore";
 
+import logger from "./../utils/log";
+const log = logger("Security");
+
 export enum LoginMethods {
   pincode = "pincode",
   fingerprint = "fingerprint",
@@ -45,7 +48,7 @@ export const security: ISecurityModel = {
       const sensorAvailable = await FingerprintScanner.isSensorAvailable();
       actions.setFingerprintAvailable(sensorAvailable === "Biometrics");
     } catch (e) {
-      console.log(e);
+      log.e("Error checking fingerprint availability", [e]);
     }
   }),
 
@@ -119,8 +122,8 @@ export const security: ISecurityModel = {
       actions.setLoggedIn(true);
       return true;
     } catch (e) {
-      console.log(JSON.stringify(e));
       if (e.name !== "UserCancel" && e.name !== "UserFallback") {
+        log.e("Error while fingerprint scanning", [e]);
         Alert.alert(e.message);
       }
     }

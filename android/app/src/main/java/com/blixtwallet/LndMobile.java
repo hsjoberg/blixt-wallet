@@ -423,6 +423,7 @@ class LndMobile extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void DEBUG_deleteWallet(Promise promise) {
+    HyperLog.i(TAG, "DEBUG deleting wallet");
     String filename = getReactApplicationContext().getFilesDir().toString() + "/data/chain/bitcoin/" + BuildConfig.CHAIN + "/wallet.db";
     File file = new File(filename);
     promise.resolve(file.delete());
@@ -430,6 +431,7 @@ class LndMobile extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void DEBUG_deleteDatafolder(Promise promise) {
+    HyperLog.i(TAG, "DEBUG deleting data folder");
     String filename = getReactApplicationContext().getFilesDir().toString() + "/data/";
     File file = new File(filename);
     deleteRecursive(file);
@@ -438,17 +440,17 @@ class LndMobile extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void deleteTLSCerts(Promise promise) {
-    HyperLog.d(TAG, "Deleting lnd TLS certificates");
+    HyperLog.i(TAG, "Deleting lnd TLS certificates");
 
     String tlsKeyFilename = getReactApplicationContext().getFilesDir().toString() + "/tls.key";
     File tlsKeyFile = new File(tlsKeyFilename);
     boolean tlsKeyFileDeletion = tlsKeyFile.delete();
-    HyperLog.d(TAG, "Delete: " + tlsKeyFilename.toString() + ": " + tlsKeyFileDeletion);
+    HyperLog.i(TAG, "Delete: " + tlsKeyFilename.toString() + ": " + tlsKeyFileDeletion);
 
     String tlsCertFilename = getReactApplicationContext().getFilesDir().toString() + "/tls.cert";
     File tlsCertFile = new File(tlsCertFilename);
     boolean tlsCertFileDeletion = tlsCertFile.delete();
-    HyperLog.d(TAG, "Delete: " + tlsCertFilename.toString() + ": " + tlsCertFileDeletion);
+    HyperLog.i(TAG, "Delete: " + tlsCertFilename.toString() + ": " + tlsCertFileDeletion);
 
     promise.resolve(tlsKeyFileDeletion && tlsCertFileDeletion);
   }
@@ -786,5 +788,31 @@ class LndMobile extends ReactContextBaseJavaModule {
       }
     }
     promise.resolve(null);
+  }
+
+  @ReactMethod
+  public void log(String type, String tag, String message) {
+    String mainTag = "BlixtWallet";
+
+    switch (type) {
+      case "v":
+        HyperLog.v(mainTag, "[" + tag + "] " + message);
+      break;
+      case "d":
+        HyperLog.d(mainTag, "[" + tag + "] " + message);
+      break;
+      case "i":
+        HyperLog.i(mainTag, "[" + tag + "] " + message);
+      break;
+      case "w":
+        HyperLog.w(mainTag, "[" + tag + "] " + message);
+      break;
+      case "e":
+        HyperLog.e(mainTag, "[" + tag + "] " + message);
+      break;
+      default:
+        HyperLog.v(mainTag, "[unknown msg type][" + tag + "] " + message);
+      break;
+    }
   }
 }
