@@ -135,7 +135,6 @@ export const sendKeysendPaymentSync = async (destinationPubKey: Uint8Array, sat:
   return response;
 };
 
-
 /**
  * @throws
  */

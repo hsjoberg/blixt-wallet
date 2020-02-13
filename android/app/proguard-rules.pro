@@ -20,3 +20,7 @@
 
 # React-native Hermes
 -keep class com.facebook.hermes.unicode.** { *; }
+
+# react-native-build-config
+-keep class com.blixtwallet.BuildConfig { *; }
+-keep class com.blixtwallet.testnet.BuildConfig { *; }

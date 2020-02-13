@@ -48,7 +48,7 @@ export const security: ISecurityModel = {
       const sensorAvailable = await FingerprintScanner.isSensorAvailable();
       actions.setFingerprintAvailable(sensorAvailable === "Biometrics");
     } catch (e) {
-      log.e("Error checking fingerprint availability", [e]);
+      log.d("Error checking fingerprint availability", [e]);
     }
   }),
 
