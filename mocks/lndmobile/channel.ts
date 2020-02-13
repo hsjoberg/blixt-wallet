@@ -1,4 +1,5 @@
 import { lnrpc } from "../../proto/proto";
+import Long from "long";
 
 // export const openChannel = async (pubkey: string, amount: number): Promise<lnrpc.ChannelPoint> => {
 //   const response = await sendCommand<lnrpc.IOpenChannelRequest, lnrpc.OpenChannelRequest, lnrpc.ChannelPoint>({
@@ -35,14 +36,20 @@ export const pendingChannels = jest.fn(async (): Promise<lnrpc.PendingChannelsRe
     pendingForceClosingChannels: [],
     pendingOpenChannels: [],
     waitingCloseChannels: [],
-    totalLimboBalance: 0,
+    totalLimboBalance: Long.fromNumber(0),
   });
   return response;
 });
 
 export const listChannels = jest.fn(async (): Promise<lnrpc.ListChannelsResponse> => {
   const response = lnrpc.ListChannelsResponse.create({
-    channels: [], // TODO
+    channels: [{
+      active: true,
+      capacity: Long.fromNumber(1000),
+      chanId: Long.fromNumber(0),
+      channelPoint: "abc:0",
+      localBalance: Long.fromNumber(500),
+    }],
   });
   return response;
 });

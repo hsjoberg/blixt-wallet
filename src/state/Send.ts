@@ -91,7 +91,10 @@ export const send: ISendModel = {
     }
 
     const name = getStoreState().settings.name;
-    const sendPaymentResult = await sendPaymentSync(paymentRequestStr, name);
+    const sendPaymentResult = await sendPaymentSync(
+      paymentRequestStr,
+      (paymentRequest.features["8"] || paymentRequest.features["9"]) ? name : undefined
+    );
     if (sendPaymentResult.paymentError && sendPaymentResult.paymentError.length > 0) {
       throw new Error(sendPaymentResult.paymentError);
     }
