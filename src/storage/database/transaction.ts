@@ -25,6 +25,8 @@ export interface IDBTransaction {
   tlvRecordName: string | null;
   locationLong: number | null;
   locationLat: number | null;
+  website: string | null;
+  weblnPayment: number;
 }
 
 export interface ITransaction {
@@ -50,6 +52,8 @@ export interface ITransaction {
   tlvRecordName: string | null;
   locationLong: number | null;
   locationLat: number | null;
+  website: string | null;
+  weblnPayment: boolean;
 
   hops: ITransactionHop[];
 }
@@ -79,9 +83,57 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
   const txId = await queryInsert(
     db,
     `INSERT INTO tx
-    (date, expire, value, valueMsat, amtPaidSat, amtPaidMsat, fee, feeMsat, description, remotePubkey, status, paymentRequest, rHash, nodeAliasCached, payer, valueUSD, valueFiat, valueFiatCurrency, tlvRecordName, locationLong, locationLat)
+    (
+      date,
+      expire,
+      value,
+      valueMsat,
+      amtPaidSat,
+      amtPaidMsat,
+      fee,
+      feeMsat,
+      description,
+      remotePubkey,
+      status,
+      paymentRequest,
+      rHash,
+      nodeAliasCached,
+      payer,
+      valueUSD,
+      valueFiat,
+      valueFiatCurrency,
+      tlvRecordName,
+      locationLong,
+      locationLat,
+      website,
+      weblnPayment
+    )
     VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    (
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?
+      )`,
     [
       transaction.date.toString(),
       transaction.expire.toString(),
@@ -104,6 +156,8 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.tlvRecordName,
       transaction.locationLong,
       transaction.locationLat,
+      transaction.website,
+      transaction.weblnPayment ? 1 : 0,
     ],
   );
 
@@ -157,7 +211,9 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         valueFiatCurrency = ?,
         tlvRecordName = ?,
         locationLong = ?,
-        locationLat = ?
+        locationLat = ?,
+        website = ?,
+        weblnPayment = ?
     WHERE id = ?`,
     [
       transaction.date.toString(),
@@ -179,6 +235,8 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.tlvRecordName,
       transaction.locationLong,
       transaction.locationLat,
+      transaction.website,
+      transaction.weblnPayment ? 1 : 0,
       transaction.id,
     ],
   );
@@ -225,6 +283,8 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
     tlvRecordName: transaction.tlvRecordName,
     locationLong: transaction.locationLong,
     locationLat: transaction.locationLat,
+    website: transaction.website,
+    weblnPayment: !!transaction.weblnPayment,
     hops: [],
   };
 };

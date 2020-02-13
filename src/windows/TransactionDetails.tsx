@@ -91,6 +91,7 @@ export default ({ route }: any) => {
                 }
               </View>
               <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
+              {transaction.website && <MetaData title="Website" data={transaction.website} />}
               {(transaction.nodeAliasCached && name == undefined) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
               {direction === "receive" && !transaction.tlvRecordName && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
               {direction === "receive" && transaction.tlvRecordName && <MetaData title="Payer" data={transaction.tlvRecordName} />}
@@ -132,7 +133,7 @@ export default ({ route }: any) => {
                provider={PROVIDER_GOOGLE}
                 style={{
                   width: "100%",
-                  height: 395,
+                  height: 450,
                 }}
                 initialRegion={{
                   longitude: transaction.locationLong!,

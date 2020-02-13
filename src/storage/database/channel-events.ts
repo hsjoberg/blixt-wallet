@@ -30,6 +30,5 @@ export const createChannelEvent = async (db: SQLiteDatabase, channelEvent: IChan
 
 export const getChannelEvents = async (db: SQLiteDatabase): Promise<IChannelEvent[]> => {
   const c = await queryMulti<IDBChannelEvent>(db, `SELECT * FROM channel_event;`);
-  console.log(c);
   return c;
 }

@@ -55,13 +55,16 @@ export default ({ onPress, transaction, unit }: IProps) => {
           <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
             <Text note={true}>
               {/*transaction.nodeAliasCached && transaction.nodeAliasCached + ": "*/}
-              {transaction.value.lessThan(0) && name &&
+              {transaction.website &&
+                <Text note={true}>{/*To */}<Text style={{ fontWeight: "bold" }} note={true}>{transaction.website}: </Text></Text>
+              }
+              {!transaction.website && transaction.value.lessThan(0) && name &&
                 <Text note={true}>{/*To */}<Text style={{ fontWeight: "bold" }} note={true}>{name}: </Text></Text>
               }
-              {transaction.value.greaterThanOrEqual(0) && tlvRecordName &&
+              {!transaction.website && transaction.value.greaterThanOrEqual(0) && tlvRecordName &&
                 <Text note={true}>{/*From */}<Text style={{ fontWeight: "bold" }} note={true}>{tlvRecordName}: </Text></Text>
               }
-              {transaction.value.greaterThanOrEqual(0) && !tlvRecordName && transaction.payer &&
+              {!transaction.website && transaction.value.greaterThanOrEqual(0) && !tlvRecordName && transaction.payer &&
                 <Text note={true}>{/*From */}<Text style={{ fontWeight: "bold" }} note={true}>{transaction.payer}: </Text></Text>
               }
               {description && description.length !== 0

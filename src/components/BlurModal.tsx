@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { View } from "react-native";
+import Modal from "react-native-modal";
 import BlurOverlay, { closeOverlay, openOverlay } from "../Blur";
 import { useNavigation } from "@react-navigation/native";
 
@@ -9,16 +10,23 @@ export interface ITransactionDetailsProps {
 }
 export default ({ children }: ITransactionDetailsProps) => {
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
       openOverlay();
     }, 1);
+    setModalVisible(true);
+
+    return () => {
+      setModalVisible(false)
+    }
   }, []);
 
   const goBack = () => {
     closeOverlay();
     setTimeout(() => navigation.goBack(), 0);
+    setModalVisible(false);
   };
 
   return (
@@ -32,7 +40,13 @@ export default ({ children }: ITransactionDetailsProps) => {
         customStyles={style.blurOverlay}
         blurStyle="dark"
       >
-        {children}
+        <Modal
+            onBackdropPress={goBack}
+            onRequestClose={goBack}
+            visible={true}
+        >
+          {children}
+        </Modal>
       </BlurOverlay>
     </View>
   );
@@ -52,8 +66,5 @@ const style = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
-  },
-  contentCanvas: {
-    width: "88%",
   },
 });

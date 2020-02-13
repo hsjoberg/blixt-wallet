@@ -17,25 +17,33 @@ type PaymentRequest = string;
 
 export interface ISendModelSetPaymentPayload {
   paymentRequestStr: PaymentRequest;
+  extraData?: IExtraData;
 }
 
 export interface IModelSendPaymentPayload {
-  paymentRequest: string;
-  invoiceInfo: lnrpc.PayReq;
+  amount?: Long;
+}
+
+interface IExtraData {
+  payer: string | null;
+  weblnPayment: boolean;
+  website: string | null;
 }
 
 export interface ISendModel {
   clear: Action<ISendModel>;
-  setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections>;
-  sendPayment: Thunk<ISendModel, void, IStoreInjections, IStoreModel, Promise<boolean>>;
+  setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections, Promise<lnrpc.PayReq>>;
+  sendPayment: Thunk<ISendModel, IModelSendPaymentPayload | void, IStoreInjections, IStoreModel, Promise<lnrpc.SendResponse>>;
 
   setPaymentRequestStr: Action<ISendModel, PaymentRequest>;
   setPaymentRequest: Action<ISendModel, lnrpc.PayReq>;
   setRemoteNodeInfo: Action<ISendModel, lnrpc.NodeInfo>;
+  setExtraData: Action<ISendModel, IExtraData>;
 
   paymentRequestStr?: PaymentRequest;
   remoteNodeInfo?: lnrpc.NodeInfo;
   paymentRequest?: lnrpc.PayReq;
+  extraData?: IExtraData;
 }
 
 export const send: ISendModel = {
@@ -43,6 +51,7 @@ export const send: ISendModel = {
     state.paymentRequestStr = undefined;
     state.remoteNodeInfo = undefined;
     state.paymentRequest = undefined;
+    state.extraData = undefined;
   }),
 
   /**
@@ -50,7 +59,8 @@ export const send: ISendModel = {
    */
   setPayment: thunk(async (actions, payload, { injections }) => {
     actions.clear();
-    const { decodePayReq, getNodeInfo } = injections.lndMobile.index;
+    const decodePayReq = injections.lndMobile.index.decodePayReq;
+    const getNodeInfo = injections.lndMobile.index.getNodeInfo;
     const paymentRequestStr = payload.paymentRequestStr.replace(/^lightning:/i, "");
 
     try {
@@ -70,34 +80,57 @@ export const send: ISendModel = {
       throw new Error("Code is not a valid Lightning invoice");
     }
 
-    if (Long.fromValue(paymentRequest.numSatoshis).equals(0)) {
-      throw new Error("Zero amount invoices are not supported");
+    // if (Long.fromValue(paymentRequest.numSatoshis).equals(0)) {
+    //   throw new Error("Zero amount invoices are not supported");
+    // }
+
+    if (payload.extraData) {
+      actions.setExtraData(payload.extraData);
     }
 
     try {
       const nodeInfo = await getNodeInfo(paymentRequest.destination);
       actions.setRemoteNodeInfo(nodeInfo);
     } catch (e) { }
+
+    return paymentRequest;
   }),
 
   /**
    * @throws
    */
-  sendPayment: thunk(async (_, _2, { getState, dispatch, injections, getStoreState }) => {
-    const { sendPaymentSync } = injections.lndMobile.index;
-    const { paymentRequestStr, paymentRequest, remoteNodeInfo } = getState();
+  sendPayment: thunk(async (_, payload, { getState, dispatch, injections, getStoreState }) => {
+    const sendPaymentSync = injections.lndMobile.index.sendPaymentSync;
+    const paymentRequestStr = getState().paymentRequestStr;
+    const paymentRequest = getState().paymentRequest;
+    const remoteNodeInfo = getState().remoteNodeInfo;
+
     if (paymentRequestStr === undefined || paymentRequest === undefined) {
       throw new Error("Payment information missing");
+    }
+
+    // If this is a zero sum
+    // invoice, hack the value in
+    if (!paymentRequest.numSatoshis && payload && payload.amount) {
+      paymentRequest.numSatoshis = payload.amount;
+      paymentRequest.numMsat = payload.amount.mul(1000);
     }
 
     const name = getStoreState().settings.name;
     const sendPaymentResult = await sendPaymentSync(
       paymentRequestStr,
+      payload ? Long.fromValue(payload.amount) : undefined,
       (paymentRequest.features["8"] || paymentRequest.features["9"]) ? name : undefined
     );
     if (sendPaymentResult.paymentError && sendPaymentResult.paymentError.length > 0) {
       throw new Error(sendPaymentResult.paymentError);
     }
+
+    const extraData: IExtraData = getState().extraData || {
+      payer: null,
+      weblnPayment: false,
+      website: null,
+    };
 
     const transaction: ITransaction = {
       date: paymentRequest.timestamp,
@@ -118,12 +151,15 @@ export const send: ISendModel = {
         (sendPaymentResult.paymentRoute &&
         sendPaymentResult.paymentRoute.totalFeesMsat) || Long.fromInt(0),
       nodeAliasCached: (remoteNodeInfo && remoteNodeInfo.node && remoteNodeInfo.node.alias) || null,
-      payer: null,
+      payer: extraData.payer,
       valueUSD: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.fiatRates.USD.last),
       valueFiat: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.currentRate),
       valueFiatCurrency: getStoreState().settings.fiatUnit,
       locationLong: null,
       locationLat: null,
+      tlvRecordName: null,
+      weblnPayment: extraData.weblnPayment,
+      website: extraData.website,
 
       hops: sendPaymentResult.paymentRoute!.hops!.map((hop) => ({
         chanId: hop.chanId ?? null,
@@ -136,6 +172,11 @@ export const send: ISendModel = {
         pubKey: hop.pubKey || null,
       })),
     };
+
+    if (payload) {
+      transaction.weblnPayment = payload.weblnPayment || transaction.weblnPayment;
+      transaction.website = payload.website || transaction.website;
+    }
 
     log.d("ITransaction", [transaction]);
     await dispatch.transaction.syncTransaction(transaction);
@@ -152,12 +193,13 @@ export const send: ISendModel = {
       }
     }
 
-    return true;
+    return sendPaymentResult;
   }),
 
   setPaymentRequestStr: action((state, payload) => { state.paymentRequestStr = payload; }),
   setPaymentRequest: action((state, payload) => { state.paymentRequest = payload; }),
   setRemoteNodeInfo: action((state, payload) => { state.remoteNodeInfo = payload; }),
+  setExtraData: action((state, payload) => { state.extraData = payload; }),
 };
 
 const checkBech32 = (bech32: string, prefix: string): boolean => {

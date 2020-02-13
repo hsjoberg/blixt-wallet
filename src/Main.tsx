@@ -14,6 +14,7 @@ import ChannelRequest from "./windows/LNURL/ChannelRequest";
 import KeysendTest from "./windows/Keysend/Test";
 import GoogleDriveTestbed from "./windows/Google/GoogleDriveTestbed";
 import TransactionDetails from "./windows/TransactionDetails";
+import WebLNBrowser from "./windows/WebLN/Browser";
 import Loading from "./windows/Loading";
 
 import { useStoreState, useStoreActions } from "./state/store.ts";
@@ -26,6 +27,7 @@ export type RootStackParamList = {
   Authentication: undefined;
   InitLightning: undefined;
 
+  Loading: undefined;
   Overview: undefined;
   TransactionDetails: {
     rHash: string; // TODO
@@ -38,6 +40,9 @@ export type RootStackParamList = {
   GoogleDriveTestbed: undefined;
   KeysendTest: undefined;
   DeeplinkChecker: undefined;
+  WebLNBrowser: {
+    url: string;
+  } | undefined;
 
   DEV_CommandsX: undefined;
 }
@@ -78,9 +83,6 @@ export default () => {
           if (walletCreated && !holdOnboarding) {
             // setState("initLightning");
             await initLightning();
-            if (await checkDeeplink({ navigate: false })) {
-              setInitialRoute("SendConfirmation");
-            }
             setState("started");
           }
         }
@@ -98,9 +100,9 @@ export default () => {
   };
 
   // Initialization
-  if (state === "init" || state === "initLightning") {
-    return (<Loading />);
-  }
+  // if (state === "init" || state === "initLightning") {
+  //   return (<Loading />);
+  // }
   if (state === "onboarding") {
     return (<Welcome />);
   }
@@ -109,18 +111,8 @@ export default () => {
   }
 
   return (
-    <RootStack.Navigator initialRouteName={"Start"} screenOptions={screenOptions}>
-      <RootStack.Screen name="Start">{({navigation}) => {
-        if (initialRoute === "Overview") {
-          navigation.replace(initialRoute);
-        }
-        else if (initialRoute === "SendConfirmation") {
-          navigation.replace("Overview");
-          navigation.push("Send", {screen: initialRoute });
-        }
-
-        return null;
-      }}</RootStack.Screen>
+    <RootStack.Navigator initialRouteName="Loading" screenOptions={screenOptions}>
+      <RootStack.Screen name="Loading" component={Loading} />
       <RootStack.Screen name="Overview" component={Overview} />
       <RootStack.Screen name="TransactionDetails" component={TransactionDetails} />
       <RootStack.Screen name="Receive" component={Receive} />
@@ -132,6 +124,7 @@ export default () => {
 
       <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} />
       <RootStack.Screen name="KeysendTest" component={KeysendTest} />
+      <RootStack.Screen name="WebLNBrowser" component={WebLNBrowser} />
 
       <RootStack.Screen
         name="DEV_CommandsX"

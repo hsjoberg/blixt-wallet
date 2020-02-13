@@ -1,5 +1,5 @@
 import { DeviceEventEmitter } from "react-native";
-import { Action, action, Thunk, thunk } from "easy-peasy";
+import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
 import { differenceInDays } from "date-fns";
 
 import { IStoreModel } from "./index";
@@ -36,8 +36,8 @@ export interface ILightningModel {
 
   nodeInfo?: lnrpc.IGetInfoResponse;
   rpcReady: boolean;
-  syncedToChain: boolean;
-  syncedToGraph: boolean;
+  syncedToChain: Computed<ILightningModel, boolean>;
+  syncedToGraph: Computed<ILightningModel, boolean>;
   ready: boolean;
   firstSync: boolean;
 }
@@ -112,9 +112,6 @@ export const lightning: ILightningModel = {
       actions.setRPCServerReady(true);
     }
 
-    await dispatch.transaction.getTransactions();
-    await dispatch.channel.setupCachedBalance();
-
     if (fastInit) {
       actions.setReady(true);
     }
@@ -151,15 +148,20 @@ export const lightning: ILightningModel = {
   }),
 
   setupAutopilot: thunk(async (_, enabled, { injections }) => {
+    console.log("Setting up Autopilot");
     const modifyStatus = injections.lndMobile.autopilot.modifyStatus;
     const status = injections.lndMobile.autopilot.status;
 
     if (enabled) {
-      await timeout(1000); // TODO(hsjoberg): why?
-      const scores = await getNodeScores();
-      // console.log(scores);
-      const setScore = injections.lndMobile.autopilot.setScores;
-      await setScore(scores);
+      try {
+        await timeout(1000); // TODO(hsjoberg): why?
+        const scores = await getNodeScores();
+        // console.log(scores);
+        const setScores = injections.lndMobile.autopilot.setScores;
+        await setScores(scores);
+      } catch (e) {
+        log.e("Autopilot fail", [e]);
+      }
     }
 
     do {
@@ -207,6 +209,7 @@ export const lightning: ILightningModel = {
   }),
 
   waitForGraphSync: thunk(async (actions, _, { getState, injections }) => {
+    log.d("Start waiting for graph sync");
     const { getInfo } = injections.lndMobile.index;
     let info;
     do {
@@ -230,8 +233,8 @@ export const lightning: ILightningModel = {
 
   rpcReady: false,
   ready: false,
-  syncedToChain: false,
-  syncedToGraph: false,
+  syncedToChain: computed((state) => (state.nodeInfo && state.nodeInfo.syncedToChain) || false),
+  syncedToGraph: computed((state) => (state.nodeInfo && state.nodeInfo.syncedToGraph) || false),
   firstSync: false,
 };
 

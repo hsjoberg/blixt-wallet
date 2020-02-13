@@ -565,6 +565,10 @@ export default ({ navigation }: ISettingsProps) => {
                 <Left><Icon style={style.icon} type="Entypo" name="google-drive" /></Left>
                 <Body><Text>Google Drive Testbed</Text></Body>
               </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("WebLNBrowser")}>
+                <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
+                <Body><Text>WebLN</Text></Body>
+              </ListItem>
             </>
           }
         </List>

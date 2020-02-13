@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar, Vibration } from "react-native";
+import { StatusBar, Vibration, BackHandler } from "react-native";
 import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner, Toast } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { SendStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
-import { NavigationScreenProp } from "react-navigation";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import BlixtForm from "../../components/Form";
-import { valueBitcoin, BitcoinUnits, valueFiat } from "../../utils/bitcoin-units";
+import { BitcoinUnits, unitToSatoshi } from "../../utils/bitcoin-units";
 import { extractDescription } from "../../utils/NameDesc";
+import Long from "long";
+import useBalance from "../../hooks/useBalance";
+import { RouteProp } from "@react-navigation/native";
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
+  route: RouteProp<SendStackParamList, "SendConfirmation">;
 }
-export default ({ navigation }: ISendConfirmationProps) => {
+export default ({ navigation, route }: ISendConfirmationProps) => {
+  const [amountEditable, setAmountEditable] = useState(false);
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
   const getBalance = useStoreActions((actions) => actions.channel.getBalance);
   const nodeInfo = useStoreState((store) => store.send.remoteNodeInfo);
@@ -23,17 +27,35 @@ export default ({ navigation }: ISendConfirmationProps) => {
   const [isPaying, setIsPaying] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
-  const currentRate = useStoreState((store) => store.fiat.currentRate);
   const lightningReady = useStoreState((store) => store.lightning.ready);
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const syncedToGraph = useStoreState((store) => store.lightning.syncedToGraph);
-
+  const {
+    dollarValue,
+    bitcoinValue,
+    onChangeFiatInput,
+    onChangeBitcoinInput,
+  } = useBalance((paymentRequest && paymentRequest.numSatoshis) || undefined);
   const clear = useStoreActions((store) => store.send.clear);
+  const callback = (route.params && route.params.callback) || (() => {});
 
   useEffect(() => {
-    return () => clear();
-  }, [clear]);
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
+      callback(null);
+    });
+
+    if (paymentRequest) {
+      if (!paymentRequest.numSatoshis) {
+        setAmountEditable(true);
+      }
+    }
+
+    return () => {
+      backHandler.remove()
+      clear();
+    }
+  }, []);
 
   if (!paymentRequest) {
     return (<Text>Error</Text>);
@@ -44,9 +66,13 @@ export default ({ navigation }: ISendConfirmationProps) => {
   const send = async () => {
     try {
       setIsPaying(true);
-      await sendPayment();
+      const payload = amountEditable
+        ? { amount: Long.fromValue(unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit)) }
+        : undefined;
+      const response = await sendPayment(payload);
       await getBalance();
       Vibration.vibrate(32);
+      callback(response.paymentPreimage);
       navigation.pop();
     } catch (e) {
       console.log(e);
@@ -82,13 +108,29 @@ export default ({ navigation }: ISendConfirmationProps) => {
   formItems.push({
     key: "AMOUNT_BTC",
     title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
-    component: (<Input disabled={true} value={valueBitcoin(paymentRequest.numSatoshis, bitcoinUnit)} />),
+    component: (
+      <Input
+        disabled={!amountEditable}
+        onChangeText={(amountEditable && onChangeBitcoinInput) || undefined}
+        placeholder="0"
+        value={bitcoinValue}
+        keyboardType="numeric"
+      />
+    ),
   });
 
   formItems.push({
     key: "AMOUNT_FIAT",
     title: `Amount ${fiatUnit}`,
-    component: (<Input disabled={true} value={valueFiat(paymentRequest.numSatoshis, currentRate).toFixed(2)} />),
+    component: (
+      <Input
+        disabled={!amountEditable}
+        onChangeText={(amountEditable && onChangeFiatInput) || undefined}
+        placeholder="0.00"
+        value={dollarValue}
+        keyboardType="numeric"
+      />
+    ),
   });
 
   if (name) {
@@ -129,7 +171,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
       />
       <Header iosBarStyle="light-content">
         <Left>
-          <Button transparent={true} onPress={() => navigation.pop()}>
+          <Button transparent={true} onPress={() => { callback(null); navigation.pop()}}>
             <Icon name="arrow-back" />
           </Button>
         </Left>
@@ -146,7 +188,7 @@ export default ({ navigation }: ISendConfirmationProps) => {
             block={true}
             primary={true}
             onPress={send}
-            disabled={!canSend}
+            disabled={!canSend || (amountEditable ? (bitcoinValue === "0" || bitcoinValue === "" || bitcoinValue === undefined) : false)}
           >
             {canSend && <Text>Pay</Text>}
             {!canSend && <Spinner color={blixtTheme.light} />}
