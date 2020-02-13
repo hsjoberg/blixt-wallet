@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { StatusBar } from "react-native";
-// import { NavigationScreenProp } from "react-navigation";
 import Camera from "../components/Camera";
 
 type onReadCallback = (address: string) => void;

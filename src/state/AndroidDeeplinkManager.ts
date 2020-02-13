@@ -1,6 +1,6 @@
 import { Alert, AppState, AppStateStatus, Linking, NativeModules } from "react-native"
 import { Action, action, Thunk, thunk } from "easy-peasy";
-import { navigate, getNavigator } from "../utils/navigation";
+import { navigate, getNavigator, replace } from "../utils/navigation";
 import { IStoreModel } from "./index";
 
 import logger from "./../utils/log";
@@ -11,11 +11,12 @@ export interface IAndroidDeeplinkManager {
   initialize: Thunk<IAndroidDeeplinkManager>;
   setupAppStateChangeListener: Thunk<IAndroidDeeplinkManager, void, any, IStoreModel>;
 
-  checkDeeplink: Thunk<IAndroidDeeplinkManager, { navigate: boolean }, any, IStoreModel>;
-  tryInvoice: Thunk<IAndroidDeeplinkManager, { paymentRequest: string, navigate: boolean }, any, IStoreModel>;
-  addToIntentCache: Action<IAndroidDeeplinkManager, string>;
+  checkDeeplink: Thunk<IAndroidDeeplinkManager, { navigate: boolean, navigation?: any }, any, IStoreModel>;
+  tryInvoice: Thunk<IAndroidDeeplinkManager, { paymentRequest: string, navigate: boolean, navigation?: any }, any, IStoreModel>;
+  tryUrl: Thunk<IAndroidDeeplinkManager, { url: string, navigate: boolean, navigation?: any }, any, IStoreModel>;
+  addToCache: Action<IAndroidDeeplinkManager, string>;
 
-  intentCache: string[];
+  Cache: string[];
 }
 
 export const androidDeeplinkManager: IAndroidDeeplinkManager = {
@@ -42,19 +43,29 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
 
   checkDeeplink: thunk(async (actions, payload, { dispatch, getState, getStoreState }) => {
     try {
-      let lightningURI = await Linking.getInitialURL();
-      if (lightningURI === null) {
-        lightningURI = await NativeModules.LndMobile.getIntentStringData();
+      let data = await Linking.getInitialURL();
+      if (data === null) {
+        data = await NativeModules.LndMobile.getIntentStringData();
       }
-      if (lightningURI === null) {
-        lightningURI = await NativeModules.LndMobile.getIntentNfcData();
+      if (data === null) {
+        data = await NativeModules.LndMobile.getIntentNfcData();
       }
-      log.d("lightningURI", [lightningURI]);
-      if (lightningURI && lightningURI.toUpperCase().startsWith("LIGHTNING:")) {
-        return actions.tryInvoice({
-          paymentRequest: lightningURI,
-          navigate: payload.navigate,
-        });
+      log.d("", [data]);
+      if (data) {
+        if (data.toUpperCase().startsWith("LIGHTNING:")) {
+          return await actions.tryInvoice({
+            ...payload,
+            paymentRequest: data,
+          });
+        }
+        // If this is a normal URL
+        // we want to open the WebLN browser
+        else {
+          try {
+            const url = new URL(data);
+            navigate("WebLNBrowser", { url: data });
+          } catch (e) {}
+        }
       }
     } catch (e) {
       dispatch.send.clear();
@@ -64,12 +75,10 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
   }),
 
   tryInvoice: thunk(async (actions, payload, { dispatch, getState, getStoreState }) => {
-    if (getState().intentCache.includes(payload.paymentRequest)) {
+    if (getState().Cache.includes(payload.paymentRequest)) {
       return;
     }
-    actions.addToIntentCache(payload.paymentRequest);
-
-    log.d("try lightningURI");
+    actions.addToCache(payload.paymentRequest);
 
     while (!getStoreState().lightning.rpcReady) {
       await timeout(500);
@@ -77,14 +86,33 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
 
     await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest.toUpperCase().replace("LIGHTNING:", "") });
     if (payload.navigate) {
+      return (nav) => {
+        nav.navigate("Send", { screen: "SendConfirmation" });
+      }
+    }
+    return false;
+  }),
+
+  tryUrl: thunk(async (actions, payload, { dispatch, getState, getStoreState }) => {
+    if (getState().Cache.includes(payload.url)) {
+      return;
+    }
+    actions.addToCache(payload.url);
+
+    while (!getStoreState().lightning.rpcReady) {
+      await timeout(500);
+    }
+
+    await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest.toUpperCase().replace("LIGHTNING:", "") });
+    if (payload.navigation) {
       navigate("Send", { screen: "SendConfirmation" });
     }
     return true;
   }),
 
-  addToIntentCache: action((state, payload) => {
-    state.intentCache = [...state.intentCache, payload];
+  addToCache: action((state, payload) => {
+    state.Cache = [...state.Cache, payload];
   }),
 
-  intentCache: [],
+  Cache: [],
 };

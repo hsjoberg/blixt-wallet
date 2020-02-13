@@ -7,7 +7,9 @@ const Stack = createStackNavigator();
 
 export type SendStackParamList = {
   SendCamera: undefined;
-  SendConfirmation: undefined;
+  SendConfirmation?: {
+    callback?: (r: Uint8Array | null) => void;
+  };
 }
 
 export default () => {

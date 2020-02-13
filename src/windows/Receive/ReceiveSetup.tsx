@@ -8,6 +8,7 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { unitToSatoshi, BitcoinUnits, valueBitcoinFromFiat, convertBitcoinToFiat, formatBitcoin, valueBitcoin } from "../../utils/bitcoin-units";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import useBalance from "../../hooks/useBalance";
 
 const MAX_SAT_INVOICE = 4294967;
 
@@ -19,63 +20,36 @@ export default ({ navigation }: IReceiveSetupProps) => {
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const invoiceSubscriptionStarted = useStoreState((store) => store.receive.invoiceSubscriptionStarted);
   const addInvoice = useStoreActions((store) => store.receive.addInvoice);
-  const [satValue, setSatValue] = useState<string | undefined>(undefined);
-  const [dollarValue, setDollarValue] = useState<string | undefined>(undefined);
   const [description, setDescription] = useState<string>("");
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
-  const currentRate = useStoreState((store) => store.fiat.currentRate);
   const [payer, setPayer] = useState<string>("");
   const [createInvoiceDisabled, setCreateInvoiceDisabled] = useState(false);
+  const {
+    dollarValue,
+    bitcoinValue,
+    onChangeFiatInput,
+    onChangeBitcoinInput,
+  } = useBalance();
 
   const channels = useStoreState((store) => store.channel.channels);
-
-  const onChangeSatInput = (text: string) => {
-    if (bitcoinUnit === "satoshi") {
-      text = text.replace(/\D+/g, "");
-    }
-    else {
-      text = text.replace(/,/g, ".");
-    }
-    if (text.length === 0) {
-      setSatValue(undefined);
-      setDollarValue(undefined);
-      return;
-    }
-    setSatValue(text);
-    setDollarValue(
-      convertBitcoinToFiat(
-        unitToSatoshi(Number.parseFloat(text || "0"), bitcoinUnit),
-        currentRate,
-      )
-    );
-  };
-
-  const onChangeFiatInput = (text: string) => {
-    text = text.replace(/,/g, ".");
-    if (text.length === 0 || text[0] === ".") {
-      setSatValue(undefined);
-      setDollarValue(undefined);
-      return;
-    }
-    setSatValue(
-      valueBitcoinFromFiat(Number.parseFloat(text), currentRate, bitcoinUnit)
-    );
-    setDollarValue(text);
-  };
 
   const onCreateInvoiceClick = async () => {
     try {
       setCreateInvoiceDisabled(true);
-      if (unitToSatoshi(Number.parseFloat(satValue!), bitcoinUnit) > MAX_SAT_INVOICE) {
+      if (unitToSatoshi(Number.parseFloat(bitcoinValue!), bitcoinUnit) > MAX_SAT_INVOICE) {
         throw new Error("Invoice amount cannot be higher than " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnit));
       }
 
       navigation.replace("ReceiveQr", {
         invoice: await addInvoice({
-          sat: unitToSatoshi(Number.parseFloat(satValue || "0"), bitcoinUnit),
+          sat: unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit),
           description,
-          payer,
+          tmpData: {
+            payer: payer || null,
+            weblnPayment: false,
+            website: null,
+          }
         })
       });
     } catch (e) {
@@ -95,9 +69,9 @@ export default ({ navigation }: IReceiveSetupProps) => {
     component: (
       <Input
         testID="input-amount-sat"
-        onChangeText={onChangeSatInput}
-        placeholder="1000 (optional)"
-        value={satValue !== undefined ? satValue.toString() : undefined}
+        onChangeText={onChangeBitcoinInput}
+        placeholder="0"
+        value={bitcoinValue !== undefined ? bitcoinValue.toString() : undefined}
         keyboardType="numeric"
       />
     ),
@@ -107,7 +81,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
     component: (
       <Input
         onChangeText={onChangeFiatInput}
-        placeholder="0.00 (optional)"
+        placeholder="0.00"
         value={dollarValue !== undefined ? dollarValue.toString() : undefined}
         keyboardType="numeric"
       />
@@ -164,7 +138,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
             block={true}
             primary={true}
             onPress={onCreateInvoiceClick}
-            disabled={!canSend || satValue == "0" || satValue === undefined}
+            disabled={!canSend || bitcoinValue == "0" || bitcoinValue === undefined}
           >
             {canSend && !createInvoiceDisabled
               ? <Text>Create invoice</Text>
