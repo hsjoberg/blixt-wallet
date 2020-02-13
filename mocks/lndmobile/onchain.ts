@@ -1,7 +1,8 @@
 import { lnrpc } from "../../proto/proto";
+import Long from "long";
 
 export const getTransactions = jest.fn(async (): Promise<lnrpc.TransactionDetails> => {
-  const response = await lnrpc.TransactionDetails.create({ transactions: [] });
+  const response = lnrpc.TransactionDetails.create({ transactions: [] });
   return response;
 });
 
@@ -12,9 +13,9 @@ export const newAddress = jest.fn(async (type: lnrpc.AddressType = lnrpc.Address
 
 export const walletBalance = jest.fn(async (): Promise<lnrpc.WalletBalanceResponse> => {
   const response = lnrpc.WalletBalanceResponse.create({
-    confirmedBalance: 0,
-    totalBalance: 0,
-    unconfirmedBalance: 0,
+    confirmedBalance: Long.fromNumber(1000),
+    totalBalance: Long.fromNumber(0),
+    unconfirmedBalance: Long.fromNumber(0),
   });
   return response;
 });

@@ -93,7 +93,7 @@ export const getInfo = async (): Promise<lnrpc.GetInfoResponse> => {
  * @params name TLV record for sender name
  *
  */
-export const sendPaymentSync = async (paymentRequest: string, tlvRecordName?: string | null): Promise<lnrpc.SendResponse> => {
+export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlvRecordName?: string | null): Promise<lnrpc.SendResponse> => {
   const options: lnrpc.ISendRequest = {
     paymentRequest,
   };
@@ -101,6 +101,9 @@ export const sendPaymentSync = async (paymentRequest: string, tlvRecordName?: st
     options.destCustomRecords = {
       [TLV_RECORD_NAME]: stringToUint8Array(tlvRecordName),
     }
+  }
+  if (amount) {
+    options.amt = amount;
   }
 
   const response = await sendCommand<lnrpc.ISendRequest, lnrpc.SendRequest, lnrpc.SendResponse>({

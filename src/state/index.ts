@@ -19,6 +19,7 @@ import { IScheduledSyncModel, scheduledSync } from "./ScheduledSync";
 import { ILNUrlModel, lnUrl } from "./LNURL";
 import { IGoogleModel, google } from "./Google";
 import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
+import { IWebLNModel, webln } from "./WebLN";
 import { IAndroidDeeplinkManager, androidDeeplinkManager } from "./AndroidDeeplinkManager";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
@@ -26,6 +27,7 @@ import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setIt
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
+import { timeout } from "../utils";
 import { setWalletPassword } from "../storage/keystore";
 
 import logger from "./../utils/log";
@@ -73,6 +75,7 @@ export interface IStoreModel {
   lnUrl: ILNUrlModel;
   google: IGoogleModel;
   googleDriveBackup: IGoogleDriveBackupModel;
+  webln: IWebLNModel;
   androidDeeplinkManager: IAndroidDeeplinkManager;
 
   walletSeed?: string[];
@@ -115,11 +118,13 @@ export const model: IStoreModel = {
       throw e;
     }
 
-    await dispatch.settings.initialize();
     dispatch.fiat.getRate();
+    await dispatch.settings.initialize();
     await dispatch.security.initialize();
     await dispatch.google.initialize();
     await dispatch.googleDriveBackup.initialize();
+    await dispatch.transaction.getTransactions();
+    await dispatch.channel.setupCachedBalance();
     actions.setAppReady(true);
 
     log.d("App initialized");
@@ -219,6 +224,7 @@ export const model: IStoreModel = {
   lnUrl,
   google,
   googleDriveBackup,
+  webln,
   androidDeeplinkManager,
 };
 

@@ -59,7 +59,7 @@ export const appMigration: IAppMigration[] = [
       await db.executeSql("ALTER TABLE tx ADD locationLat REAL");
     },
   },
-  // Version 6
+  // Version 7
   {
     async beforeLnd(db, i) {
       const password = await getItem(StorageItem.walletPassword);
@@ -69,6 +69,13 @@ export const appMigration: IAppMigration[] = [
       }
 
       await setWalletPassword(password);
+    },
+  },
+  // Version 8
+  {
+    async beforeLnd(db, i) {
+      await db.executeSql("ALTER TABLE tx ADD website TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD weblnPayment BOOLEAN NOT NULL DEFAULT 0 CHECK(weblnPayment IN (0,1))");
     },
   },
 ];

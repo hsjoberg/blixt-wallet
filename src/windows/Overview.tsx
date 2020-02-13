@@ -11,6 +11,8 @@ import Container from "../components/Container";
 import { timeout } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
+import { Chain, Debug } from "../utils/build";
+import Color from "color";
 
 const nativeBaseTheme = require("../../native-base-theme/variables/commonColor");
 const theme = nativeBaseTheme.default;
@@ -35,6 +37,7 @@ const Overview = ({ navigation }: IOverviewProps)  => {
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
+  const name  = useStoreState((store) => store.settings.name);
 
   const scrollYAnimatedValue = useRef(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
@@ -139,7 +142,7 @@ const Overview = ({ navigation }: IOverviewProps)  => {
           {txs}
         </ScrollView>
         <Animated.View style={{ ...style.animatedTop, height: headerHeight }} pointerEvents="box-none">
-          <LinearGradient style={style.top} colors={[blixtTheme.secondary, blixtTheme.primary]} pointerEvents="box-none">
+          <LinearGradient style={style.top} colors={Chain === "mainnet" ? [blixtTheme.secondary, blixtTheme.primary] : [blixtTheme.lightGray, Color(blixtTheme.lightGray).darken(0.30).hex()]} pointerEvents="box-none">
             <View style={StyleSheet.absoluteFill}>
               <Icon
                 style={style.onchainIcon} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
@@ -153,6 +156,11 @@ const Overview = ({ navigation }: IOverviewProps)  => {
               {(!nodeInfo || !nodeInfo.syncedToChain) &&
                 <Icon
                   style={style.lightningSyncIcon} name="sync" onPress={() => Alert.alert("Blixt Wallet is currently syncing the Bitcoin Blockchain.")}
+                />
+              }
+              {(nodeInfo && nodeInfo.syncedToChain && (Debug || name === "Hampus")) &&
+                <Icon
+                  style={style.lightningSyncIcon} type="MaterialCommunityIcons" name="cart-outline" onPress={() => navigation.navigate("WebLNBrowser")}
                 />
               }
             </View>
@@ -214,16 +222,16 @@ const style = StyleSheet.create({
     paddingRight: 8,
     top: 12 + iconTopPadding,
     left: 8,
-    fontSize: 24,
+    fontSize: 25,
     color: blixtTheme.light,
   },
   channelsIcon: {
     position: "absolute",
     padding: 4,
     paddingRight: 8,
-    top: 13 + iconTopPadding,
-    left: 8 + 24 + 8,
-    fontSize: 24,
+    top: 12 + iconTopPadding,
+    left: 8 + 24 + 8 + 1,
+    fontSize: 28,
     color: blixtTheme.light,
   },
   settingsIcon: {
@@ -231,15 +239,15 @@ const style = StyleSheet.create({
     padding: 4,
     top: 13 + iconTopPadding,
     right: 8,
-    fontSize: 24,
+    fontSize: 27,
     color: blixtTheme.light,
   },
   lightningSyncIcon: {
     position: "absolute",
     padding: 4,
     top: 13 + iconTopPadding,
-    right: 8 + 24 + 8 + 4,
-    fontSize: 24,
+    right: 8 + 24 + 8 + 7,
+    fontSize: 27,
     color: blixtTheme.light,
   },
   transactionList: {

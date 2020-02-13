@@ -117,7 +117,7 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
 
     const response = lnrpc.AddInvoiceResponse.create({
       paymentRequest: signed!.paymentRequest,
-      addIndex: 0,
+      addIndex: Long.fromNumber(0),
       rHash: new Uint8Array([1, 2, 3]), // TODO
     });
 
@@ -128,15 +128,15 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
         paymentRequest: signed!.paymentRequest,
         private: false,
         memo: description && (description.data as string),
-        addIndex: 0, // TODO
-        amtPaid: 100,
+        addIndex: Long.fromNumber(0), // TODO
+        amtPaid: Long.fromNumber(100),
         rHash: new Uint8Array([1, 2, 3]), // TODO
-        value: signed!.satoshis,
-        amtPaidMsat: signed!.satoshis * 1000,
-        amtPaidSat: signed!.satoshis,
-        cltvExpiry: cltvExpiry && (cltvExpiry.data as number),
-        creationDate: signed!.timestamp,
-        expiry,
+        value: Long.fromNumber(signed!.satoshis!),
+        amtPaidMsat: Long.fromNumber(signed!.satoshis!).mul(1000),
+        amtPaidSat: Long.fromNumber(signed!.satoshis!),
+        cltvExpiry: cltvExpiry && (Long.fromNumber(cltvExpiry.data as number)),
+        creationDate: Long.fromNumber(signed!.timestamp!),
+        expiry: Long.fromNumber(expiry),
         rPreimage: new Uint8Array([1, 2, 3, 4]), // TODO
         settled: false,
         state: lnrpc.Invoice.InvoiceState.OPEN,
@@ -176,6 +176,7 @@ export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
     expiry: Long.fromNumber(payreq.timeExpireDate! - payreq.timeExpireDate!),
     numSatoshis: Long.fromNumber(payreq.satoshis || 0),
     timestamp: Long.fromNumber(payreq.timeExpireDate || 0),
+    paymentHash: Math.floor(Math.random() * 1000000).toString(),
   });
   return response;
 };
