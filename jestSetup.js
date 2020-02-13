@@ -20,6 +20,10 @@ jest.mock("./src/lndmobile/onchain", () => require("./mocks/lndmobile/onchain"))
 jest.mock("./src/lndmobile/autopilot", () => require("./mocks/lndmobile/autopilot"));
 jest.mock("./src/lndmobile/scheduled-sync", () => require("./mocks/lndmobile/scheduled-sync"));
 
+
+// Workaround 0.62 TouchableOpacity displayName causing press event to not trigger
+jest.mock('react-native/Libraries/Components/Touchable/TouchableOpacity', () => 'TouchableOpacity');
+
 const ReactNative = require("react-native");
 ReactNative.NativeModules.LndMobile = {};
 ReactNative.NativeModules.LndMobile.log = jest.fn();

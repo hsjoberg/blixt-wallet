@@ -10,4 +10,6 @@ protobuf.configure();
 YellowBox.ignoreWarnings(["Warning: component"]); // Workaround until native-base fixes their old
                                                   // componentWillMount etc code
 
+ReactNative.unstable_enableLogBox();
+
 AppRegistry.registerComponent(appName, () => App);
