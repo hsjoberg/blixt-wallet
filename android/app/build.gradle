@@ -189,6 +189,12 @@ android {
     }
     flavorDimensions "chain", "custom"
     productFlavors {
+        chainregtest {
+            dimension "chain"
+            applicationIdSuffix ".regtest"
+            buildConfigField "String", "CHAIN", '"regtest"'
+            manifestPlaceholders = [chain: " Regtest"]
+        }
         chaintestnet {
             dimension "chain"
             applicationIdSuffix ".testnet"

@@ -9,6 +9,7 @@
     "test": "jest --silent",
     "test-update-snapshot": "jest --silent --updateSnapshot",
     "gen-proto": "pbjs -t static-module -w es6 --force-long -o proto/proto.js proto/rpc.proto proto/autopilotrpc/autopilot.proto && pbts -o proto/proto.d.ts proto/proto.js",
+    "regtest-debug": "npx react-native run-android --variant chainregtestNormalDebug --appIdSuffix regtest.debug",
     "testnet-debug": "react-native run-android --variant chaintestnetNormalDebug --appIdSuffix testnet.debug",
     "testnet": "react-native run-android --variant chaintestnetNormalRelease --appIdSuffix testnet",
     "mainnet-debug": "react-native run-android --variant chainmainnetNormalDebug --appIdSuffix debug",
