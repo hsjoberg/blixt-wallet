@@ -136,8 +136,9 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                           HyperLog.v(TAG, "blockHash: " + res.getBlockHash());
                           HyperLog.d(TAG, "blockHeight: " + Integer.toString(res.getBlockHeight()));
                           HyperLog.i(TAG, "syncedToChain: " + Boolean.toString(res.getSyncedToChain()));
+                          HyperLog.i(TAG, "syncedToGraph: " + Boolean.toString(res.getSyncedToGraph()));
 
-                          if (res.getSyncedToChain() == true) {
+                          if (res.getSyncedToChain() == true && res.getSyncedToGraph() == true) {
                             HyperLog.i(TAG, "Sync is done, letting lnd work for 30s before quitting");
                             writeLastScheduledSyncToDb();
 

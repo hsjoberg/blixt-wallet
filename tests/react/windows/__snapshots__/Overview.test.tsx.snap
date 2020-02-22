@@ -319,8 +319,8 @@ exports[`renders correctly 1`] = `
                                       <BVLinearGradient
                                         colors={
                                           Array [
-                                            4294094611,
-                                            4290536976,
+                                            4287072135,
+                                            4284440415,
                                           ]
                                         }
                                         endPoint={
@@ -770,14 +770,7 @@ exports[`renders correctly 1`] = `
           accessibilityElementsHidden={false}
           importantForAccessibility="auto"
           pointerEvents="box-none"
-          style={
-            Object {
-              "left": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-            }
-          }
+          style={null}
         >
           <View
             pointerEvents="none"

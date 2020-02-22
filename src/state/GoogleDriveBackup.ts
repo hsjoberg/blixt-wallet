@@ -63,7 +63,7 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
     else {
       // files.files[0] will be undefined if this is the first
       // time an upload is triggered, so we pass in undefined
-      // create a new file.
+      // to create a new file.
       const uploadResult = await uploadFileAsString(accessToken, {
         name: GOOGLE_DRIVE_BACKUP_FILE,
         description: "Base64-encoded channel backup for Blixt Wallet",

@@ -171,6 +171,19 @@ export const lookupInvoice = async (rHash: string): Promise<lnrpc.Invoice> => {
 /**
  * @throws
  */
+export const listPeers = async (): Promise<lnrpc.ListPeersResponse> => {
+  const response = await sendCommand<lnrpc.IListPeersRequest, lnrpc.ListPeersRequest, lnrpc.ListPeersResponse>({
+    request: lnrpc.ListPeersRequest,
+    response: lnrpc.ListPeersResponse,
+    method: "ListPeers",
+    options: {},
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
 export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
   const response = await sendCommand<lnrpc.IPayReqString, lnrpc.PayReqString, lnrpc.PayReq>({
     request: lnrpc.PayReqString,
