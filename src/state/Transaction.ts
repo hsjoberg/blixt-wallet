@@ -28,16 +28,16 @@ export const transaction: ITransactionModel = {
    * from gGPRC `SubscribeInvoices` (Java backend), from listener in `Receive` store
    * Checks if we have it in our transaction array, otherwise create a new transaction in the db
    */
-  syncTransaction: thunk(async (actions, tx, { getState, getStoreState } ) => {
+  syncTransaction: thunk(async (actions, tx, { getState, getStoreState }) => {
     const db = getStoreState().db;
     if (!db) {
       throw new Error("syncTransaction(): db not ready");
     }
-    const { transactions } = getState();
+    const transactions = getState().transactions;
     let foundTransaction = false;
 
     for (const txIt of transactions) {
-      if (txIt.paymentRequest === tx.paymentRequest) {
+      if (txIt.rHash === tx.rHash) {
         await updateTransaction(db, { ...txIt, ...tx });
         actions.updateTransaction({ transaction: { ...txIt, ...tx }});
         foundTransaction = true;

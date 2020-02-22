@@ -9,7 +9,7 @@ import { getTransactions, getTransaction, createTransaction } from "../../storag
 import { useStoreState, useStoreActions } from "../../state/store";
 import { lnrpc } from "../../../proto/proto";
 import { sendCommand } from "../../lndmobile/utils";
-import { getInfo, connectPeer } from "../../lndmobile/index";
+import { getInfo, connectPeer, listPeers } from "../../lndmobile/index";
 import { initWallet, genSeed } from "../../lndmobile/wallet";
 import { pendingChannels, listChannels, openChannel, closeChannel } from "../../lndmobile/channel";
 import { newAddress, sendCoins } from "../../lndmobile/onchain";
@@ -18,6 +18,8 @@ import { status, modifyStatus, queryScores } from "../../lndmobile/autopilot";
 import { localNotification } from "../../utils/push-notification";
 import { RootStackParamList } from "../../Main";
 import { setWalletPassword, getWalletPassword } from "../../storage/keystore";
+import Content from "../../components/Content";
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 interface IProps {
   navigation?: StackNavigationProp<RootStackParamList, "DEV_Commands">;
@@ -46,8 +48,8 @@ export default ({ navigation, continueCallback }: IProps) => {
         networkActivityIndicatorVisible={true}
         barStyle="light-content"
       />
-      <ScrollView contentContainerStyle={styles.content}>
-        <View style={{ marginTop: 32, width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
+      <Content style={styles.content}>
+        <View style={{ backgroundColor: blixtTheme.dark, marginTop: 32, width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
           <Button onPress={continueCallback}><Text>continueCallback()</Text></Button>
           <Button onPress={async () => actions.clearApp()}><Text>actions.clearApp()</Text></Button>
           <Button onPress={async () => actions.resetDb()}><Text>actions.resetDb()</Text></Button>
@@ -173,7 +175,7 @@ export default ({ navigation, continueCallback }: IProps) => {
             <Text>writeConfigFile()</Text>
           </Button>
 
-          {[getInfo, genSeed, newAddress, pendingChannels, listChannels].map((f, i) => {
+          {[getInfo, genSeed, newAddress, pendingChannels, listChannels, listPeers].map((f, i) => {
             return (
               <Button key={i} onPress={async () => {
                 try {
@@ -295,7 +297,7 @@ export default ({ navigation, continueCallback }: IProps) => {
             <Text>walletBalance()</Text>
           </Button>
         </View>
-
+        <View style={{ backgroundColor: blixtTheme.dark, marginTop: 32, width: "100%", display: "flex", flexDirection: "column", flexWrap: "wrap" }}>
         <Input
           onChangeText={(text: string) => {
             setConnectPeer(text);
@@ -407,7 +409,8 @@ export default ({ navigation, continueCallback }: IProps) => {
             type: "success",
           });
         }}>{JSON.stringify(error)}</Text>
-      </ScrollView>
+        </View>
+      </Content>
     </Container>
   );
 };

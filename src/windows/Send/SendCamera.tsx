@@ -99,8 +99,8 @@ export default ({ navigation }: ISendCameraProps) => {
           <BarcodeMask
             showAnimatedLine={false}
             edgeColor={blixtTheme.primary}
-            width={smallScreen ? 280 : 310}
-            height={smallScreen ? 280 : 310}
+            width={smallScreen ? 270 : 310}
+            height={smallScreen ? 270 : 310}
           />
           <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
           {__DEV__ && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}

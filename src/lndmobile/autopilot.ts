@@ -8,7 +8,7 @@ export const status = async (): Promise<autopilotrpc.StatusResponse> => {
   const response = await sendCommand<autopilotrpc.IStatusRequest, autopilotrpc.StatusRequest, autopilotrpc.StatusResponse>({
     request: autopilotrpc.StatusRequest,
     response: autopilotrpc.StatusResponse,
-    method: "Status",
+    method: "AutopilotStatus",
     options: {},
   });
   return response;
@@ -21,7 +21,7 @@ export const modifyStatus = async (enable: boolean): Promise<autopilotrpc.Modify
   const response = await sendCommand<autopilotrpc.IModifyStatusRequest, autopilotrpc.ModifyStatusRequest, autopilotrpc.ModifyStatusResponse>({
     request: autopilotrpc.ModifyStatusRequest,
     response: autopilotrpc.ModifyStatusResponse,
-    method: "ModifyStatus",
+    method: "AutopilotModifyStatus",
     options: {
       enable,
     },
@@ -36,7 +36,7 @@ export const queryScores = async (): Promise<autopilotrpc.QueryScoresResponse> =
   const response = await sendCommand<autopilotrpc.IQueryScoresRequest, autopilotrpc.QueryScoresRequest, autopilotrpc.QueryScoresResponse>({
     request: autopilotrpc.QueryScoresRequest,
     response: autopilotrpc.QueryScoresResponse,
-    method: "QueryScores",
+    method: "AutopilotQueryScores",
     options: {},
   });
   return response;
@@ -49,7 +49,7 @@ export const setScores = async (scores: {[k: string]: number}): Promise<autopilo
   const response = await sendCommand<autopilotrpc.ISetScoresRequest, autopilotrpc.SetScoresRequest, autopilotrpc.SetScoresResponse>({
     request: autopilotrpc.SetScoresRequest,
     response: autopilotrpc.SetScoresResponse,
-    method: "SetScores",
+    method: "AutopilotSetScores",
     options: {
       heuristic: "externalscore",
       scores

@@ -1,4 +1,4 @@
-import {NativeModules} from "react-native";
+import { NativeModules } from "react-native";
 
 import { Debug } from "./build";
 
@@ -10,7 +10,7 @@ const log = (tag?: string) => {
       if (Debug) {
         const msg = fixMessage(message, data);
         console.debug(`${tag}: ${msg}`);
-        // NativeModules.LndMobile.log("v", tag, msg);
+        NativeModules.LndMobile.log("v", tag, msg);
       }
     },
 
@@ -25,19 +25,19 @@ const log = (tag?: string) => {
     i: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       console.log(`${tag}: ${msg}`);
-      // NativeModules.LndMobile.log("i", tag, msg);
+      NativeModules.LndMobile.log("i", tag, msg);
     },
 
     w: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       console.warn(`${tag}: ${msg}`);
-      // NativeModules.LndMobile.log("w", tag, msg);
+      NativeModules.LndMobile.log("w", tag, msg);
     },
 
     e: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       console.error(`${tag}: ${msg}`);
-      // NativeModules.LndMobile.log("e", tag, msg);
+      NativeModules.LndMobile.log("e", tag, msg);
     },
   };
 };

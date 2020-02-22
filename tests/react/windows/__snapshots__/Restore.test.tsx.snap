@@ -549,14 +549,7 @@ exports[`renders correctly 1`] = `
           accessibilityElementsHidden={false}
           importantForAccessibility="auto"
           pointerEvents="box-none"
-          style={
-            Object {
-              "left": 0,
-              "position": "absolute",
-              "right": 0,
-              "top": 0,
-            }
-          }
+          style={null}
         >
           <View
             pointerEvents="none"

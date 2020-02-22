@@ -43,7 +43,6 @@ test("upload backup file", async () => {
   const store = await initCommonStore(true);
 
   mockGDriveGetFilesOnce();
-  mockGDriveGetFilesOnce();
 
   expect(async() => await store.getActions().googleDriveBackup.makeBackup()).not.toThrow();
 });

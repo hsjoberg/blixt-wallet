@@ -25,18 +25,20 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
 
     await getChannels(undefined);
 
-    Alert.alert(
-      "Autopilot",
-      "Automatic channel opening is enabled, " +
-      "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
-      "Do you wish to disable automatic channel opening?",
-      [
-        { text: "No", },
-        { text: "Yes", onPress: async () => {
-          changeAutopilotEnabled(false);
-          setupAutopilot(false);
-        },
-    }]);
+    if (autopilotEnabled) {
+      Alert.alert(
+        "Autopilot",
+        "Automatic channel opening is enabled, " +
+        "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
+        "Do you wish to disable automatic channel opening?",
+        [
+          { text: "No", },
+          { text: "Yes", onPress: async () => {
+            changeAutopilotEnabled(false);
+            setupAutopilot(false);
+          },
+      }]);
+    }
   };
 
   return (

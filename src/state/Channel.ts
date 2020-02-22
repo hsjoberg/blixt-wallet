@@ -188,7 +188,7 @@ export const channel: IChannelModel = {
     });
 
     DeviceEventEmitter.addListener("CloseChannel", async (e: any) => {
-      log.e("Event CloseChannel", [e]);
+      log.i("Event CloseChannel", [e]);
       await actions.getChannels(undefined);
     });
     actions.setChannelUpdateSubscriptionStarted(true);
