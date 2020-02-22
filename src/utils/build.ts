@@ -8,8 +8,8 @@ export const ApplicationId: string = BuildConfig.APPLICATION_ID;
 export const VersionName: string = BuildConfig.VERSION_NAME;
 export const IsHermes: boolean = global.HermesInternal != null;
 
-export const Chain: "mainnet" | "testnet" = BuildConfig.CHAIN;
+export const Chain: "mainnet" | "testnet" | "regtest" = BuildConfig.CHAIN;
 
-export const LnBech32Prefix = Chain === "mainnet"
+export const LnBech32Prefix = (Chain === "mainnet" || Chain === "regtest")
   ? "lnbc"
   : "lntb";

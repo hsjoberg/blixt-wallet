@@ -377,6 +377,40 @@ class LndMobile extends ReactContextBaseJavaModule {
           "autopilot.heuristic=externalscore:0.95\n" +
           "autopilot.heuristic=preferential:0.05\n"
         );
+      } else if (BuildConfig.CHAIN.equals("regtest")) {
+        out.println(
+          "[Application Options]\n" +
+          "debuglevel=info\n" +
+          "no-macaroons=1\n" +
+          "maxbackoff=2s\n" +
+          "nolisten=1\n" +
+          "norest=1\n" +
+          "sync-freelist=1\n" +
+          "\n" +
+          "[Routing]\n" +
+          "routing.assumechanvalid=1\n" +
+          "\n" +
+          "[Bitcoin]\n" +
+          "bitcoin.active=1\n" +
+          "bitcoin.regtest=1\n" +
+          "bitcoin.node=bitcoind\n" +
+          "\n" +
+          "[Bitcoind]\n" +
+          "bitcoind.rpchost=192.168.1.109:18443\n" +
+          "bitcoind.rpcuser=polaruser\n" +
+          "bitcoind.rpcpass=polarpass\n" +
+          "bitcoind.zmqpubrawblock=192.168.1.109:28334\n" +
+          "bitcoind.zmqpubrawtx=192.168.1.109:29335\n" +
+          "\n" +
+          "[autopilot]\n" +
+          "autopilot.active=0\n" +
+          "autopilot.private=1\n" +
+          "autopilot.minconfs=1\n" +
+          "autopilot.conftarget=3\n" +
+          "autopilot.allocation=1.0\n" +
+          "autopilot.heuristic=externalscore:0.95\n" +
+          "autopilot.heuristic=preferential:0.05\n"
+        );
       }
 
       out.close();
