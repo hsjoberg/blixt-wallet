@@ -756,6 +756,10 @@ Do you wish to proceed?`;
                 <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
                 <Body><Text>Keysend Test</Text></Body>
               </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendExperiment")}>
+                <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
+                <Body><Text>Keysend Experiment</Text></Body>
+              </ListItem>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("GoogleDriveTestbed")}>
                 <Left><Icon style={style.icon} type="Entypo" name="google-drive" /></Left>
                 <Body><Text>Google Drive Testbed</Text></Body>

@@ -114,16 +114,22 @@ export const receive: IReceiveModel = {
         const invoice = decodeInvoiceResult(e.data);
 
         const rHash = bytesToHexString(invoice.rHash);
+        log.d("invoice", [rHash]);
 
-        log.d("invoice", [invoice]);
         const paymentRequest = invoice.paymentRequest
           ? await decodePayReq(invoice.paymentRequest)
           : undefined;
 
+        if (invoice.isKeysend) {
+          if (invoice.state !== lnrpc.Invoice.InvoiceState.SETTLED) {
+            log.i("Found keysend payment, but waiting for invoice state SETTLED");
+            return;
+          }
+        }
+
         // TODO in the future we should handle
         // both value (the requested amount in the payreq)
         // and amtPaidMsat (the actual amount paid)
-
         if (!Long.isLong(invoice.value)) {
           invoice.value = Long.fromValue(invoice.value);
         }
@@ -218,8 +224,7 @@ export const receive: IReceiveModel = {
         }, 500);
         await dispatch.transaction.syncTransaction(transaction);
       } catch (e) {
-        console.error(e)
-        log.i("Error receiving invoice", [e]);
+        log.e("Error receiving invoice", [e]);
         toast("Error receiving payment: " + e.message, undefined, "danger");
       }
     });

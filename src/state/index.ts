@@ -22,6 +22,7 @@ import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup"
 import { IWebLNModel, webln } from "./WebLN";
 import { IAndroidDeeplinkManager, androidDeeplinkManager } from "./AndroidDeeplinkManager";
 import { INotificationManagerModel, notificationManager} from "./NotificationManager";
+import { ILightNameModel, lightName } from "./LightName";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
@@ -87,6 +88,7 @@ export interface IStoreModel {
   webln: IWebLNModel;
   androidDeeplinkManager: IAndroidDeeplinkManager;
   notificationManager: INotificationManagerModel;
+  lightName: ILightNameModel;
 
   walletSeed?: string[];
   appVersion: number;
@@ -267,6 +269,7 @@ export const model: IStoreModel = {
   webln,
   androidDeeplinkManager,
   notificationManager,
+  lightName,
 };
 
 export default model;

@@ -86,6 +86,21 @@ export const listChannels = async (): Promise<lnrpc.ListChannelsResponse> => {
 /**
  * @throws
  */
+export const listPrivateChannels = async (): Promise<lnrpc.ListChannelsResponse> => {
+  const response = await sendCommand<lnrpc.IListChannelsRequest, lnrpc.ListChannelsRequest, lnrpc.ListChannelsResponse>({
+    request: lnrpc.ListChannelsRequest,
+    response: lnrpc.ListChannelsResponse,
+    method: "ListChannels",
+    options: {
+      privateOnly: true,
+    },
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
 export const channelBalance = async (): Promise<lnrpc.ChannelBalanceResponse> => {
   const response = await sendCommand<lnrpc.IChannelBalanceRequest, lnrpc.ChannelBalanceRequest, lnrpc.ChannelBalanceResponse>({
     request: lnrpc.ChannelBalanceRequest,
@@ -137,6 +152,23 @@ export const verifyChanBackup = async (channelsBackupBase64: string): Promise<ln
   });
   return response;
 };
+
+/**
+ * @throws
+ */
+export const getChanInfo = async (chanId: Long): Promise<lnrpc.ChannelEdge> => {
+  const response = await sendCommand<lnrpc.IChanInfoRequest, lnrpc.ChanInfoRequest, lnrpc.ChannelEdge>({
+    request: lnrpc.ChanInfoRequest,
+    response: lnrpc.ChannelEdge,
+    method: "GetChanInfo",
+    options: {
+      chanId,
+    },
+  });
+  return response;
+};
+
+
 
 // TODO error handling
 export const decodeChannelEvent = (data: string): lnrpc.ChannelEventUpdate => {
