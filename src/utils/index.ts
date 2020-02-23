@@ -48,7 +48,7 @@ export const stringToUint8Array = (str: string) => {
 
 export const bytesToString = (bytes: ArrayLike<number>) => {
   return String.fromCharCode.apply(null, bytes);
-}
+};
 
 export const uint8ArrayToString = (bytes: Uint8Array) => bytesToString(bytes);
 
@@ -58,7 +58,7 @@ export const bytesToHexString = (bytes) => {
   return bytes.reduce(function (memo, i) {
     return memo + ('0' + i.toString(16)).slice(-2); //padd with leading 0 if <16
   }, "");
-}
+};
 
 export const hexToUint8Array = (hexString: string) => {
   return new Uint8Array(hexString.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));

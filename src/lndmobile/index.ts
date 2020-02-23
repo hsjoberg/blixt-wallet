@@ -3,7 +3,7 @@ import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { lnrpc, routerrpc, invoicesrpc } from "../../proto/proto";
 import Long from "long";
 import sha from "sha.js";
-import { stringToUint8Array, hexToUint8Array } from "../utils";
+import { stringToUint8Array, hexToUint8Array, decodeTLVRecord } from "../utils";
 import { TLV_RECORD_NAME } from "../utils/constants";
 const { LndMobile } = NativeModules;
 
@@ -61,13 +61,14 @@ export const connectPeer = async (pubkey: string, host: string): Promise<lnrpc.C
 /**
  * @throws
  */
-export const getNodeInfo = async (pubKey: string): Promise<lnrpc.NodeInfo> => {
+export const getNodeInfo = async (pubKey: string, includeChannels: boolean = false): Promise<lnrpc.NodeInfo> => {
   const response = await sendCommand<lnrpc.INodeInfoRequest, lnrpc.NodeInfoRequest, lnrpc.NodeInfo>({
     request: lnrpc.NodeInfoRequest,
     response: lnrpc.NodeInfo,
     method: "GetNodeInfo",
     options: {
       pubKey,
+      includeChannels,
     },
   });
   return response;
@@ -161,27 +162,191 @@ export const decodeSendPaymentV2Result = (data: string): lnrpc.Payment => {
 };
 
 
+export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.IRouteHint[], tlvRecordNameStr: string): Promise<lnrpc.Payment> => {
+  const options: routerrpc.ISendPaymentRequest = {
+    dest: hexToUint8Array(destinationPubKey),
+    amt: sat,
+    routeHints,
+    paymentHash: sha("sha256").update(preImage).digest(),
+    destFeatures: [lnrpc.FeatureBit.TLV_ONION_REQ],
+    destCustomRecords: {
+      // 5482373484 is the record for lnd
+      // keysend payments as described in
+      // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
+      "5482373484": preImage,
+    },
+
+    noInflightUpdates: true,
+    timeoutSeconds: 60,
+    maxParts: 2,
+    feeLimitMsat: Long.fromValue(50000),
+    cltvLimit: 0,
+  };
+  if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {
+    options.destCustomRecords![TLV_RECORD_NAME] = stringToUint8Array(tlvRecordNameStr);
+  }
+
+  return new Promise(async (resolve, reject) => {
+    const listener = DeviceEventEmitter.addListener("RouterSendPaymentV2", (e) => {
+      console.log(e);
+      const response = decodeSendPaymentV2Result(e.data);
+      console.log(response);
+
+      resolve(response);
+      listener.remove();
+    });
+
+    const response = await sendStreamCommand<routerrpc.ISendPaymentRequest, routerrpc.SendPaymentRequest>({
+      request: routerrpc.SendPaymentRequest,
+      method: "RouterSendPaymentV2",
+      options,
+    }, false);
+    console.log(response);
+  });
+};
+
+
 /**
  * @throws
  */
-export const sendKeysendPaymentSync = async (destinationPubKey: Uint8Array, sat: Long, preImage: Uint8Array): Promise<lnrpc.SendResponse> => {
-  const response = await sendCommand<lnrpc.ISendRequest, lnrpc.SendRequest, lnrpc.SendResponse>({
-    request: lnrpc.SendRequest,
-    response: lnrpc.SendResponse,
-    method: "SendPaymentSync",
-    options: {
-      dest: destinationPubKey,
-      amt: sat,
-      paymentHash: sha("sha256").update(preImage).digest(),
-      destCustomRecords: {
-        // 5482373484 is the record for lnd
-        // keysend payments as described in
-        // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
-        "5482373484": preImage,
+// export const sendKeysendPayment2 = async (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.RouteHint[]): Promise<lnrpc.SendResponse> => {
+//   const response = await sendCommand<routerrpc.ISendPaymentRequest, routerrpc.SendPaymentRequest, routerrpc.Send>({
+//     request: lnrpc.SendRequest,
+//     response: lnrpc.SendResponse,
+//     method: "SendPaymentSync",
+//     options: {
+//       dest: hexToUint8Array(destinationPubKey),
+//       amt: sat,
+//       routeHints,
+//       paymentHash: sha("sha256").update(preImage).digest(),
+//       destCustomRecords: {
+//         // 5482373484 is the record for lnd
+//         // keysend payments as described in
+//         // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
+//         "5482373484": preImage,
+//       },
+//       destFeatures: [lnrpc.FeatureBit.TLV_ONION_REQ],
+//     },
+//   });
+//   return response;
+// };
+
+/**
+ * @throws
+ */
+// export const sendKeysendPayment = async (destinationPubKey: Uint8Array, sat: Long, preImage: Uint8Array, routeHints: lnrpc.RouteHint[]): Promise<string> => {
+//   const response = await sendStreamCommand<routerrpc.ISendToRouteRequest, routerrpc.SendPaymentRequest>({
+//     request: routerrpc.SendPaymentRequest,
+//     method: "RouterSendPayment",
+//     options: {
+
+//       dest: destinationPubKey,
+//       amt: sat,
+//       paymentHash: sha("sha256").update(preImage).digest(),
+//       destCustomRecords: {
+//         // 5482373484 is the record for lnd
+//         // keysend payments as described in
+//         // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
+//         "5482373484": preImage,
+//       },
+//       // routeHints: routeHints,
+
+//       timeoutSeconds: 30,
+
+//       // finalCltvDelta: 40, // TODO(hsjoberg): Why? Joost's WhatSat uses this
+//     },
+//   });
+//   return response;
+// };
+
+export const sendKeysendPayment = async (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.IRouteHint[], tlvRecordNameStr: string): Promise<lnrpc.SendResponse> => {
+  try {
+    const responseQueryRoutes = await sendCommand<lnrpc.IQueryRoutesRequest, lnrpc.QueryRoutesRequest, lnrpc.QueryRoutesResponse>({
+      request: lnrpc.QueryRoutesRequest,
+      response: lnrpc.QueryRoutesResponse,
+      method: "QueryRoutes",
+      options: {
+        pubKey: destinationPubKey,
+        amt: sat,
+        routeHints,
+        destCustomRecords: {
+          // Custom records are injected in a hacky way below
+          // because of a bug in protobufjs
+
+          // [TLV_RECORD_NAME]: stringToUint8Array(tlvRecordNameStr),
+          // 5482373484 is the record for lnd
+          // keysend payments as described in
+          // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
+          // "5482373484": preImage,
+        },
+        destFeatures: [lnrpc.FeatureBit.TLV_ONION_REQ],
       },
-    },
+    });
+
+    console.log("responseQueryRoutes", responseQueryRoutes);
+
+    for (const route of responseQueryRoutes.routes) {
+      try {
+        const lastHop = route.hops!.length - 1;
+
+        route.hops![lastHop].customRecords!["5482373484"] =  preImage;
+        if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {
+          route.hops![lastHop].customRecords![TLV_RECORD_NAME] = stringToUint8Array(tlvRecordNameStr);
+        }
+
+        const response = await sendCommand<lnrpc.ISendToRouteRequest, lnrpc.SendToRouteRequest, lnrpc.SendResponse>({
+          request: lnrpc.SendToRouteRequest,
+          response: lnrpc.SendResponse,
+          method: "SendToRouteSync",
+          options: {
+            paymentHash: sha("sha256").update(preImage).digest(),
+            route,
+          },
+        });
+        return response;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  } catch (e) {
+    console.log("QueryRoutes Error", e.message);
+  }
+  return null;
+};
+
+/**
+ * @throws
+ */
+// export const sendKeysendPayment = async (destinationPubKey: Uint8Array, sat: Long, preImage: Uint8Array, routeHints: lnrpc.RouteHint[], tlvRecordName: string): Promise<lnrpc.SendResponse> => {
+//   console.log("sha256:", sha("sha256").update(preImage).digest());
+
+//   const response = await sendCommand<lnrpc.ISendRequest, lnrpc.SendRequest, lnrpc.SendResponse>({
+//     request: lnrpc.SendRequest,
+//     response: lnrpc.SendResponse,
+//     method: "SendPaymentSync",
+//     options: {
+//       dest: destinationPubKey,
+//       amt: sat,
+//       paymentHash: sha("sha256").update(preImage).digest(),
+//       destCustomRecords: {
+//         [TLV_RECORD_NAME]: stringToUint8Array(tlvRecordName),
+//         // 5482373484 is the record for lnd
+//         // keysend payments as described in
+//         // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
+//         "5482373484": preImage,
+//       },
+//     }
+//   });
+
+//   return response;
+// };
+
+// TODO error handling
+export const decodePaymentStatus = (data: string): routerrpc.PaymentStatus => {
+  return decodeStreamResult<routerrpc.PaymentStatus>({
+    response: routerrpc.PaymentStatus,
+    base64Result: data,
   });
-  return response;
 };
 
 /**
