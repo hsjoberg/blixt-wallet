@@ -19,13 +19,13 @@ import { IScheduledSyncModel, scheduledSync } from "./ScheduledSync";
 import { ILNUrlModel, lnUrl } from "./LNURL";
 import { IGoogleModel, google } from "./Google";
 import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
+import { IAndroidDeeplinkManager, androidDeeplinkManager } from "./AndroidDeeplinkManager";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
-import { timeout } from "../utils";
 import { setWalletPassword } from "../storage/keystore";
 
 import logger from "./../utils/log";
@@ -50,7 +50,6 @@ export interface IStoreModel {
   setHoldOnboarding: Action<IStoreModel, boolean>;
   setWalletSeed: Action<IStoreModel, string[] | undefined>;
   setAppVersion: Action<IStoreModel, number>;
-  deeplinkChecker: Thunk<IStoreModel, void, IStoreInjections, IStoreModel, Promise<boolean | null>>;
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
@@ -74,6 +73,7 @@ export interface IStoreModel {
   lnUrl: ILNUrlModel;
   google: IGoogleModel;
   googleDriveBackup: IGoogleDriveBackupModel;
+  androidDeeplinkManager: IAndroidDeeplinkManager;
 
   walletSeed?: string[];
   appVersion: number;
@@ -107,11 +107,11 @@ export const model: IStoreModel = {
       const status = await checkStatus();
       if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
         log.i("lnd not started, starting lnd");
-        log.d("", [await startLnd()]);
+        log.d("lnd started", [await startLnd()]);
       }
     }
     catch (e) {
-      log.e("Exception when trying to init LndMobile and start lnd", [e]);
+      log.e("Exception when trying to initialize LndMobile and start lnd", [e]);
       throw e;
     }
 
@@ -194,33 +194,6 @@ export const model: IStoreModel = {
     return wallet;
   }),
 
-  deeplinkChecker: thunk(async (actions, _, { getState, dispatch }) => {
-    try {
-      let lightningURI = await Linking.getInitialURL();
-      if (lightningURI === null) {
-        lightningURI = await NativeModules.LndMobile.getIntentStringData();
-      }
-      if (lightningURI === null) {
-        lightningURI = await NativeModules.LndMobile.getIntentNfcData();
-      }
-      log.d("lightningURI", [lightningURI]);
-      if (lightningURI && lightningURI.toUpperCase().startsWith("LIGHTNING:")) {
-        log.d("try lightningURI");
-
-        while (!getState().lightning.rpcReady) {
-          await timeout(500);
-        }
-
-        await dispatch.send.setPayment({ paymentRequestStr: lightningURI.toUpperCase().replace("LIGHTNING:", "") });
-        return true;
-      }
-    } catch (e) {
-      dispatch.send.clear();
-      log.e("Error checking deeplink" + e.message);
-    }
-    return null;
-  }),
-
   setWalletCreated: action((state, payload) => { state.walletCreated = payload; }),
   setHoldOnboarding: action((state, payload) => { state.holdOnboarding = payload; }),
   setDb: action((state, db) => { state.db = db; }),
@@ -246,6 +219,7 @@ export const model: IStoreModel = {
   lnUrl,
   google,
   googleDriveBackup,
+  androidDeeplinkManager,
 };
 
 export default model;
