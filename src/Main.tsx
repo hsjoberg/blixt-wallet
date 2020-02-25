@@ -49,7 +49,7 @@ export default () => {
   const loggedIn = useStoreState((store) => store.security.loggedIn);
   const initializeApp = useStoreActions((store) => store.initializeApp);
   const initLightning = useStoreActions((store) => store.lightning.initialize);
-  const deeplinkChecker = useStoreActions((store) => store.deeplinkChecker);
+  const checkDeeplink = useStoreActions((store) => store.androidDeeplinkManager.checkDeeplink);
   const [initialRoute, setInitialRoute] = useState("Overview");
 
   const [state, setState] =
@@ -75,11 +75,10 @@ export default () => {
           setState("authentication");
         }
         else {
-          console.log("else?");
           if (walletCreated && !holdOnboarding) {
             // setState("initLightning");
             await initLightning();
-            if (await deeplinkChecker()) {
+            if (await checkDeeplink({ navigate: false })) {
               setInitialRoute("SendConfirmation");
             }
             setState("started");

@@ -131,6 +131,7 @@ export const lightning: ILightningModel = {
         dispatch.onChain.initialize(),
         dispatch.transaction.checkOpenTransactions(),
         dispatch.scheduledSync.initialize(),
+        dispatch.androidDeeplinkManager.initialize(),
       ]);
       await dispatch.clipboardManager.initialize();
     } catch (e) {
