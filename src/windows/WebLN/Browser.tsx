@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Alert, TextInput, StatusBar, StyleSheet, View, TouchableOpacity, BackHandler, ToastAndroid } from "react-native";
-import { injectJs, postMessageHandler } from "react-native-webln";
+import { injectJs, onMessageHandler } from "react-native-webln";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Card, Icon } from "native-base";
@@ -63,7 +63,7 @@ export default ({ navigation, route }: IBrowserProps) => {
     return () => backHandler.remove();
   }, [canGoBack, disableBackHandler]);
 
-  const onMessage = postMessageHandler(webview, {
+  const onMessage = onMessageHandler(webview, {
     enable: async () => { return; },
     getInfo: handleGetInfoRequest,
     makeInvoice: async (args) => handleMakeInvoiceRequest({ requestUrl: url, data: args }),
