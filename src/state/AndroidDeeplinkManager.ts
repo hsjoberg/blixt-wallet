@@ -1,6 +1,6 @@
-import { Alert, AppState, AppStateStatus, Linking, NativeModules } from "react-native"
+import { AppState, AppStateStatus, Linking, NativeModules } from "react-native"
 import { Action, action, Thunk, thunk } from "easy-peasy";
-import { navigate, getNavigator, replace } from "../utils/navigation";
+import { navigate, getNavigator } from "../utils/navigation";
 import { IStoreModel } from "./index";
 
 import logger from "./../utils/log";
@@ -35,8 +35,10 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
   setupAppStateChangeListener: thunk(async (actions, _, { getStoreState }) => {
     AppState.addEventListener("change", async (status: AppStateStatus) => {
       if (status === "active") {
-        console.log("checking intent");
-        await actions.checkDeeplink({ navigate: true });
+        const result = await actions.checkDeeplink({ navigate: true });
+        if (result) {
+          result(getNavigator());
+        }
       }
     });
   }),
