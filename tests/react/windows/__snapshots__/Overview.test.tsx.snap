@@ -377,7 +377,7 @@ exports[`renders correctly 1`] = `
                                                   },
                                                   Object {
                                                     "color": "#e5eaea",
-                                                    "fontSize": 24,
+                                                    "fontSize": 25,
                                                     "left": 8,
                                                     "padding": 4,
                                                     "paddingRight": 8,
@@ -416,12 +416,12 @@ exports[`renders correctly 1`] = `
                                                   },
                                                   Object {
                                                     "color": "#e5eaea",
-                                                    "fontSize": 24,
-                                                    "left": 40,
+                                                    "fontSize": 28,
+                                                    "left": 41,
                                                     "padding": 4,
                                                     "paddingRight": 8,
                                                     "position": "absolute",
-                                                    "top": 55,
+                                                    "top": 54,
                                                   },
                                                 ],
                                                 Object {
@@ -455,7 +455,7 @@ exports[`renders correctly 1`] = `
                                                   },
                                                   Object {
                                                     "color": "#e5eaea",
-                                                    "fontSize": 24,
+                                                    "fontSize": 27,
                                                     "padding": 4,
                                                     "position": "absolute",
                                                     "right": 8,
@@ -493,10 +493,10 @@ exports[`renders correctly 1`] = `
                                                   },
                                                   Object {
                                                     "color": "#e5eaea",
-                                                    "fontSize": 24,
+                                                    "fontSize": 27,
                                                     "padding": 4,
                                                     "position": "absolute",
-                                                    "right": 44,
+                                                    "right": 47,
                                                     "top": 55,
                                                   },
                                                 ],
