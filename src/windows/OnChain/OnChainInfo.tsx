@@ -69,11 +69,11 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
       <View style={style.container}>
         <View style={style.fundsInfo}>
           {smallScreen ?
-            <H2 style={style.fundsInfoText}>
+            <H2 style={style.fundsInfoText} testID="ONCHAIN_FUNDS">
               On-chain funds:{"\n"} {formatBitcoin(balance, bitcoinUnit)}
             </H2>
             :
-            <H1 style={style.fundsInfoText}>
+            <H1 style={style.fundsInfoText} testID="ONCHAIN_FUNDS">
               On-chain funds:{"\n"} {formatBitcoin(balance, bitcoinUnit)}
             </H1>
           }
