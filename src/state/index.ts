@@ -178,7 +178,7 @@ export const model: IStoreModel = {
   }),
 
   createWallet: thunk(async (actions, payload, { injections, getState, dispatch }) => {
-    const { initWallet } = injections.lndMobile.wallet;
+    const initWallet = injections.lndMobile.wallet.initWallet;
     const seed = getState().walletSeed;
     if (!seed) {
       return;
@@ -195,7 +195,7 @@ export const model: IStoreModel = {
     await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);
     await dispatch.security.storeSeed(seed);
-    setTimeout(() => actions.setWalletSeed(undefined), 5000);
+    actions.setWalletSeed(undefined);
     return wallet;
   }),
 

@@ -38,8 +38,8 @@ export interface IOnChainModel {
   sendCoins: Thunk<IOnChainModel, ISendCoinsPayload, IStoreInjections, any, Promise<lnrpc.ISendCoinsResponse>>;
   sendCoinsAll: Thunk<IOnChainModel, ISendCoinsAllPayload, IStoreInjections, any, Promise<lnrpc.ISendCoinsResponse>>;
 
-  setBalance: Action<IOnChainModel, lnrpc.WalletBalanceResponse>;
-  setUnconfirmedBalance: Action<IOnChainModel, lnrpc.WalletBalanceResponse>;
+  setBalance: Action<IOnChainModel, lnrpc.IWalletBalanceResponse>;
+  setUnconfirmedBalance: Action<IOnChainModel, lnrpc.IWalletBalanceResponse>;
   setAddress: Action<IOnChainModel, lnrpc.NewAddressResponse>;
   setTransactions: Action<IOnChainModel, ISetTransactionsPayload>;
   setTransactionSubscriptionStarted: Action<IOnChainModel, boolean>;
@@ -83,13 +83,13 @@ export const onChain: IOnChainModel = {
 
     // There's a bug here where totalBalance is
     // set to 0 instead of Long(0)
-    if ((walletBalanceResponse.totalBalance as any) === 0) {
+    if ((walletBalanceResponse.totalBalance as unknown) === 0) {
       walletBalanceResponse.totalBalance = Long.fromNumber(0);
     }
-    if ((walletBalanceResponse.confirmedBalance as any) === 0) {
+    if ((walletBalanceResponse.confirmedBalance as unknown) === 0) {
       walletBalanceResponse.confirmedBalance = Long.fromNumber(0);
     }
-    if ((walletBalanceResponse.unconfirmedBalance as any) === 0) {
+    if ((walletBalanceResponse.unconfirmedBalance as unknown) === 0) {
       walletBalanceResponse.unconfirmedBalance = Long.fromNumber(0);
     }
     actions.setBalance(walletBalanceResponse);
@@ -143,8 +143,8 @@ export const onChain: IOnChainModel = {
     return response;
   }),
 
-  setBalance: action((state, payload) => { state.balance = payload.confirmedBalance; }),
-  setUnconfirmedBalance: action((state, payload) => { state.unconfirmedBalance = payload.unconfirmedBalance; }),
+  setBalance: action((state, payload) => { state.balance = payload.confirmedBalance!; }),
+  setUnconfirmedBalance: action((state, payload) => { state.unconfirmedBalance = payload.unconfirmedBalance!; }),
   setAddress: action((state, payload) => { state.address = payload.address; }),
   setTransactions: action((state, payload) => { state.transactions = payload.transactions; }),
   setTransactionSubscriptionStarted: action((state, payload) => { state.transactionSubscriptionStarted = payload }),

@@ -67,7 +67,10 @@ export default ({ navigation }: IProps) => {
         setSyncEnabled(true), // TODO test
         changeScheduledSyncEnabled(true),
       ]);
+
+      navigation.dangerouslyGetParent()!.replace("Loading", {});
     } catch (e) {
+      console.log(e);
       setLoading(false);
       Alert.alert(e.message);
     }
@@ -192,9 +195,10 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 24,
   },
   seed: {
+    padding: 12,
+    width: "100%",
     marginTop: 32,
     height: 300,
     flexDirection: "column",
@@ -206,8 +210,12 @@ const style = StyleSheet.create({
     height: "100%",
   },
   buttons: {
+    paddingRight: 9,
+    paddingBottom: 24,
+    paddingLeft: 9,
     width: "100%",
     bottom: 24,
+    backgroundColor: blixtTheme.dark,
   },
   text: {
     flex: 1,

@@ -99,7 +99,7 @@ export default ({ navigation }: IOpenChannelProps) => {
           title: "Address",
           component: (
             <>
-              <Input placeholder="Bitcoin address" value={address} onChangeText={onAddressChange} />
+              <Input testID="INPUT_BITCOIN_ADDRESS" placeholder="Bitcoin address" value={address} onChangeText={onAddressChange} />
               <Icon type="AntDesign" name="camera" onPress={onCameraPress} />
             </>
           ),
@@ -108,7 +108,7 @@ export default ({ navigation }: IOpenChannelProps) => {
           title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
           component: (
             <>
-              <Input placeholder={`Amount ${BitcoinUnits[bitcoinUnit].nice}`} keyboardType="numeric" onChangeText={setSat} value={withdrawAll ? "Withdraw all funds" : sat} disabled={withdrawAll} />
+              <Input testID="INPUT_AMOUNT" placeholder={`Amount ${BitcoinUnits[bitcoinUnit].nice}`} keyboardType="numeric" onChangeText={setSat} value={withdrawAll ? "Withdraw all funds" : sat} disabled={withdrawAll} />
               {!withdrawAll
                 ? <Button onPress={onWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>All</Text></Button>
                 : <Button onPress={onCancelWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>x</Text></Button>
@@ -117,7 +117,7 @@ export default ({ navigation }: IOpenChannelProps) => {
           ),
         }]}
         buttons={[
-          <Button key="WITHDRAW" onPress={onWithdrawClick} block={true} primary={true}>
+          <Button testID="SEND_COINS" key="WITHDRAW" onPress={onWithdrawClick} block={true} primary={true}>
             {!sending && <Text>Withdraw</Text>}
             {sending && <Spinner color={blixtTheme.light} />}
           </Button>

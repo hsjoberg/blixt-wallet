@@ -33,6 +33,7 @@ export interface ILightningModel {
   setSyncedToChain: Action<ILightningModel, boolean>;
   setSyncedToGraph: Action<ILightningModel, boolean>;
   setFirstSync: Action<ILightningModel, boolean>;
+  setAutopilotSet: Action<ILightningModel, boolean>;
 
   nodeInfo?: lnrpc.IGetInfoResponse;
   rpcReady: boolean;
@@ -40,6 +41,7 @@ export interface ILightningModel {
   syncedToGraph: Computed<ILightningModel, boolean>;
   ready: boolean;
   firstSync: boolean;
+  autopilotSet?: boolean;
 }
 
 export const lightning: ILightningModel = {
@@ -147,7 +149,7 @@ export const lightning: ILightningModel = {
     await unlockWallet(password);
   }),
 
-  setupAutopilot: thunk(async (_, enabled, { injections }) => {
+  setupAutopilot: thunk(async (actions, enabled, { injections }) => {
     console.log("Setting up Autopilot");
     const modifyStatus = injections.lndMobile.autopilot.modifyStatus;
     const status = injections.lndMobile.autopilot.status;
@@ -167,6 +169,7 @@ export const lightning: ILightningModel = {
     do {
       try {
         await modifyStatus(enabled);
+        actions.setAutopilotSet(enabled);
         log.i("Autopilot status:", [await status()]);
         break;
       } catch (e) {
@@ -230,6 +233,7 @@ export const lightning: ILightningModel = {
   setSyncedToChain: action((state, payload) => { state.syncedToChain = payload; }),
   setSyncedToGraph: action((state, payload) => { state.syncedToGraph = payload; }),
   setFirstSync: action((state, payload) => { state.firstSync = payload; }),
+  setAutopilotSet: action((state, payload) => { state.autopilotSet = payload; }),
 
   rpcReady: false,
   ready: false,

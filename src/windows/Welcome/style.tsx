@@ -1,4 +1,5 @@
 import { Dimensions, StyleProp, ViewStyle, TextStyle } from "react-native";
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 const smallScreen = Dimensions.get("window").height < 700;
 
 export default {
@@ -23,8 +24,8 @@ export default {
     width: "100%",
   } as StyleProp<ViewStyle>,
   buttons: {
-    width: "100%",
     flexDirection: "row",
+    backgroundColor: blixtTheme.dark,
   } as StyleProp<ViewStyle>,
   button: {
     width: "100%",

@@ -191,7 +191,6 @@ exports[`renders correctly 1`] = `
                                   "alignItems": "center",
                                   "flex": 1,
                                   "justifyContent": "center",
-                                  "padding": 24,
                                   "width": "100%",
                                 },
                               ],
@@ -248,6 +247,8 @@ exports[`renders correctly 1`] = `
                                     "height": 300,
                                     "justifyContent": "center",
                                     "marginTop": 32,
+                                    "padding": 12,
+                                    "width": "100%",
                                   },
                                 ]
                               }
@@ -457,7 +458,11 @@ exports[`renders correctly 1`] = `
                               Array [
                                 Object {},
                                 Object {
+                                  "backgroundColor": "#151314",
                                   "bottom": 24,
+                                  "paddingBottom": 24,
+                                  "paddingLeft": 9,
+                                  "paddingRight": 9,
                                   "width": "100%",
                                 },
                               ]

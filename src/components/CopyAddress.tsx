@@ -9,13 +9,13 @@ export interface ICopyAddressProps {
 export default ({ text, onPress }: ICopyAddressProps) => (
   <View onTouchStart={onPress}>
     <View style={style.container}>
-    <Text style={style.text} numberOfLines={1} lineBreakMode="middle">
-      {text}
-    </Text>
-    <Text style={style.iconText}>
-      <Icon type="MaterialCommunityIcons" name="content-copy" style={style.icon} />
-    </Text>
-  </View>
+      <Text style={style.text} numberOfLines={1} lineBreakMode="middle">
+        {text}
+      </Text>
+      <Text style={style.iconText}>
+        <Icon type="MaterialCommunityIcons" name="content-copy" style={style.icon} />
+      </Text>
+    </View>
   </View>
 )
 
@@ -23,11 +23,11 @@ const style = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "flex-end",
     paddingTop: 6,
     paddingBottom: 10,
+    marginRight: 15,
 
-    width: "100%"
+    width: "100%",
   },
   text: {
   },

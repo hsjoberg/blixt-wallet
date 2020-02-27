@@ -8,6 +8,8 @@ import AddFunds from "./AddFunds";
 import AlmostDone from "./AlmostDone";
 import Restore from "./Restore";
 
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+
 const Stack = createStackNavigator();
 
 export type WelcomeStackParamList = {
@@ -25,7 +27,7 @@ export type WelcomeStackParamList = {
 
 export default () => {
   return (
-    <Stack.Navigator initialRouteName="Settings" screenOptions={{ headerShown: false, animationEnabled: false, cardStyle: { backgroundColor: "transparent" } }}>
+    <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false, animationEnabled: false, cardStyle: { backgroundColor: blixtTheme.dark } }}>
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Seed" component={Seed} />
       <Stack.Screen name="Confirm" component={Confirm} />
