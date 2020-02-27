@@ -37,7 +37,7 @@ const Overview = ({ navigation }: IOverviewProps)  => {
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
-  const name  = useStoreState((store) => store.settings.name);
+  const experimentWeblnEnabled = useStoreState((store) => store.settings.experimentWeblnEnabled);
 
   const scrollYAnimatedValue = useRef(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
@@ -158,7 +158,7 @@ const Overview = ({ navigation }: IOverviewProps)  => {
                   style={style.lightningSyncIcon} name="sync" onPress={() => Alert.alert("Blixt Wallet is currently syncing the Bitcoin Blockchain.")}
                 />
               }
-              {(nodeInfo && nodeInfo.syncedToChain && (Debug || name === "Hampus")) &&
+              {experimentWeblnEnabled &&
                 <Icon
                   style={style.lightningSyncIcon} type="MaterialCommunityIcons" name="cart-outline" onPress={() => navigation.navigate("WebLNBrowser")}
                 />
