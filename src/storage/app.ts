@@ -31,6 +31,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   preferFiat = "preferFiat",
   transactionGeolocationEnabled = "transactionGeolocationEnabled",
   transactionGeolocationMapStyle = "transactionGeolocationMapStyle",
+  experimentWeblnEnabled = "experimentWeblnEnabled",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -75,6 +76,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.preferFiat),
     removeItem(StorageItem.transactionGeolocationEnabled),
     removeItem(StorageItem.transactionGeolocationMapStyle),
+    removeItem(StorageItem.experimentWeblnEnabled),
   ]);
 };
 
@@ -102,5 +104,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.preferFiat, false),
     setItemObject<boolean>(StorageItem.transactionGeolocationEnabled, false),
     setItemObject<keyof typeof MapStyle>(StorageItem.transactionGeolocationMapStyle, "darkMode"),
+    setItemObject<boolean>(StorageItem.experimentWeblnEnabled, false),
   ]);
 };

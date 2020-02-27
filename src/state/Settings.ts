@@ -23,6 +23,7 @@ export interface ISettingsModel {
   changePreferFiat: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationEnabled: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationMapStyle: Thunk<ISettingsModel, keyof typeof MapStyle>;
+  changeExperimentWeblnEnabled: Thunk<ISettingsModel, boolean>
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -36,6 +37,7 @@ export interface ISettingsModel {
   setPreferFiat: Action<ISettingsModel, boolean>;
   setTransactionGeolocationEnabled: Action<ISettingsModel, boolean>;
   setTransactionGeolocationMapStyle: Action<ISettingsModel, keyof typeof MapStyle>;
+  setExperimentWeblnEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -49,6 +51,7 @@ export interface ISettingsModel {
   preferFiat: boolean;
   transactionGeolocationEnabled: boolean;
   transactionGeolocationMapStyle: keyof typeof MapStyle;
+  experimentWeblnEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -65,6 +68,7 @@ export const settings: ISettingsModel = {
     actions.setPreferFiat(await getItemObject(StorageItem.preferFiat) || false);
     actions.setTransactionGeolocationEnabled(await getItemObject(StorageItem.transactionGeolocationEnabled) || false);
     actions.setTransactionGeolocationMapStyle(await getItem(StorageItem.transactionGeolocationMapStyle) as keyof typeof MapStyle || "darkMode");
+    actions.setExperimentWeblnEnabled(await getItemObject(StorageItem.experimentWeblnEnabled || false));
   }),
 
   changeBitcoinUnit: thunk(async (actions, payload) => {
@@ -130,6 +134,11 @@ export const settings: ISettingsModel = {
     actions.setTransactionGeolocationMapStyle(payload);
   }),
 
+  changeExperimentWeblnEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.experimentWeblnEnabled, payload);
+    actions.setExperimentWeblnEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -142,6 +151,7 @@ export const settings: ISettingsModel = {
   setPreferFiat: action((state, payload) => { state.preferFiat = payload; }),
   setTransactionGeolocationEnabled: action((state, payload) => { state.transactionGeolocationEnabled = payload; }),
   setTransactionGeolocationMapStyle: action((state, payload) => { state.transactionGeolocationMapStyle = payload; }),
+  setExperimentWeblnEnabled: action((state, payload) => { state.experimentWeblnEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -155,4 +165,5 @@ export const settings: ISettingsModel = {
   preferFiat: false,
   transactionGeolocationEnabled: false,
   transactionGeolocationMapStyle: "darkMode",
+  experimentWeblnEnabled: false,
 };
