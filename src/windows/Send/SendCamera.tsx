@@ -3,9 +3,9 @@ import { View, StyleSheet, Alert, StatusBar } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Icon } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
-import BarcodeMask from 'react-native-barcode-mask';
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import BarcodeMask from "../../components/BarCodeMask";
 import { SendStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
