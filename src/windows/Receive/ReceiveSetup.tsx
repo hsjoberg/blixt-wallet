@@ -47,7 +47,7 @@ export default ({ navigation }: IReceiveSetupProps) => {
           description,
           tmpData: {
             payer: payer || null,
-            weblnPayment: false,
+            type: "NORMAL",
             website: null,
           }
         })

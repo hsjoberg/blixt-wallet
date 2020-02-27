@@ -103,7 +103,7 @@ export const webln: IWebLNModel = {
         tmpData: {
           payer: null,
           website: requestUrl.replace('http://','').replace('https://','').split(/[/?#]/)[0],
-          weblnPayment: true,
+          type: "WEBLN",
         },
         description: memo,
         sat: amount,
@@ -124,7 +124,7 @@ export const webln: IWebLNModel = {
         paymentRequestStr,
         extraData: {
           payer: null,
-          weblnPayment,
+          type: weblnPayment ? "WEBLN" : "NORMAL",
           website: requestUrl.replace('http://','').replace('https://','').split(/[/?#]/)[0],
         }
       });

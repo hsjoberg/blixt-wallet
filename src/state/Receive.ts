@@ -18,7 +18,7 @@ const log = logger("Receive");
 interface IInvoiceTempData {
   rHash?: string;
   payer: string | null;
-  weblnPayment: boolean;
+  type: ITransaction["type"];
   website: string | null;
 }
 
@@ -99,13 +99,11 @@ export const receive: IReceiveModel = {
         invoice.amtPaidMsat = Long.fromValue(invoice.amtPaidMsat);
       }
 
-      const tmpData: { [key: string]: IInvoiceTempData } = getState().invoiceTempData || {
-        [bytesToHexString(invoice.rHash)]: {
-          rHash: bytesToHexString(invoice.rHash),
-          payer: null,
-          weblnPayment: false,
-          website: null,
-        },
+      const tmpData: IInvoiceTempData = getState().invoiceTempData[bytesToHexString(invoice.rHash)] || {
+        rHash: bytesToHexString(invoice.rHash),
+        payer: null,
+        type: "NORMAL",
+        website: null,
       };
 
       const transaction: ITransaction = {
@@ -128,9 +126,9 @@ export const receive: IReceiveModel = {
         valueFiatCurrency: null,
         tlvRecordName: null,
 
-        payer: tmpData[bytesToHexString(invoice.rHash)].payer,
-        website: tmpData[bytesToHexString(invoice.rHash)].website,
-        weblnPayment: tmpData[bytesToHexString(invoice.rHash)].weblnPayment,
+        payer: tmpData.payer,
+        website: tmpData.website,
+        type: tmpData.type,
         locationLat: null,
         locationLong: null,
 

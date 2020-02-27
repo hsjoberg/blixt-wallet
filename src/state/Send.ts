@@ -26,7 +26,7 @@ export interface IModelSendPaymentPayload {
 
 interface IExtraData {
   payer: string | null;
-  weblnPayment: boolean;
+  type: ITransaction["type"];
   website: string | null;
 }
 
@@ -119,7 +119,7 @@ export const send: ISendModel = {
     const name = getStoreState().settings.name;
     const sendPaymentResult = await sendPaymentSync(
       paymentRequestStr,
-      payload ? Long.fromValue(payload.amount) : undefined,
+      payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
       (paymentRequest.features["8"] || paymentRequest.features["9"]) ? name : undefined
     );
     if (sendPaymentResult.paymentError && sendPaymentResult.paymentError.length > 0) {
@@ -128,7 +128,7 @@ export const send: ISendModel = {
 
     const extraData: IExtraData = getState().extraData || {
       payer: null,
-      weblnPayment: false,
+      type: "NORMAL",
       website: null,
     };
 
@@ -158,7 +158,7 @@ export const send: ISendModel = {
       locationLong: null,
       locationLat: null,
       tlvRecordName: null,
-      weblnPayment: extraData.weblnPayment,
+      type: extraData.type,
       website: extraData.website,
 
       hops: sendPaymentResult.paymentRoute!.hops!.map((hop) => ({
@@ -172,11 +172,6 @@ export const send: ISendModel = {
         pubKey: hop.pubKey || null,
       })),
     };
-
-    if (payload) {
-      transaction.weblnPayment = payload.weblnPayment || transaction.weblnPayment;
-      transaction.website = payload.website || transaction.website;
-    }
 
     log.d("ITransaction", [transaction]);
     await dispatch.transaction.syncTransaction(transaction);
