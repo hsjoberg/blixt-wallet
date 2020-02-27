@@ -21,8 +21,8 @@ powered by lnd and Neutrino SPV.
 - [x] Local channel backup
 - [x] Thor support/Partial [lnurl](https://github.com/btcontract/lnurl-rfc/blob/master/spec.md) support
 - [x] Channel backup to Google Drive
-- [ ] NFC
 - [ ] [WebLN](https://webln.dev/) support
+- [ ] NFC
 - [ ] WatchTower
 - [ ] URL Payments
 - [ ] Pay to Username
@@ -39,11 +39,11 @@ Do you like React Native, Java SE 8 or Lightning? Come and help out!
 
 - Install Go, Node, Yarn, react-native CLI, Android Studio and Android SDK (using npm instead of yarn might work)
 - If needed, install an emulated android device inside Android Studio
-- Build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
+- (Optional) Build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
 - Run: `yarn start-metro`
-- Run: `yarn testnet-debug` (make sure you either have an Android emulator running or an Android device connected via USB)
+- Run: `yarn testnet-debug`
 
 ## Commit and code-style
 
