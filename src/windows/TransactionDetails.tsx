@@ -104,10 +104,14 @@ export default ({ route }: any) => {
               {direction === "send" && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}
               <MetaData title="Status" data={capitalize(transaction.status)} />
               {transaction.status === "OPEN" &&
-                <View style={{ alignItems: "center" }}>
-                  <QrCode size={smallScreen ? 220 : 280} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} border={25} />
-                  <CopyAddress text={transaction.paymentRequest} onPress={onPaymentRequestTextPress} />
-                </View>
+                <>
+                  <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
+                    <QrCode size={smallScreen ? 220 : 280} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} border={25} />
+                  </View>
+                  <View style={{ alignItems: "center", justifyContent: "center" }}>
+                    <CopyAddress text={transaction.paymentRequest} onPress={onPaymentRequestTextPress} />
+                  </View>
+                </>
               }
             </Body>
           </CardItem>

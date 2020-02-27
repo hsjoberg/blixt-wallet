@@ -55,10 +55,10 @@ export default () => {
   const initializeApp = useStoreActions((store) => store.initializeApp);
   const initLightning = useStoreActions((store) => store.lightning.initialize);
   const checkDeeplink = useStoreActions((store) => store.androidDeeplinkManager.checkDeeplink);
-  const [initialRoute, setInitialRoute] = useState("Overview");
+  const [initialRoute, setInitialRoute] = useState("Loading");
 
   const [state, setState] =
-    useState<"init" | "initLightning" | "authentication" | "onboarding" | "started">("init");
+    useState<"init" | "authentication" | "onboarding" | "started">("init");
 
   useEffect(() => {
     // tslint:disable-next-line
@@ -70,21 +70,21 @@ export default () => {
   }, [appReady]);
 
   useEffect(() => {
+    if (!appReady) {
+      return;
+    }
     // tslint:disable-next-line
     (async () => {
-      if (appReady) {
+      if (!loggedIn) {
+        setState("authentication");
+      }
+      else {
+        setState("started");
         if (!walletCreated) {
-          setState("onboarding");
-        }
-        else if (!loggedIn) {
-          setState("authentication");
+          setInitialRoute("Welcome");
         }
         else {
-          if (walletCreated && !holdOnboarding) {
-            // setState("initLightning");
-            await initLightning();
-            setState("started");
-          }
+          await initLightning();
         }
       }
     })();
@@ -99,20 +99,19 @@ export default () => {
     },
   };
 
-  // Initialization
-  // if (state === "init" || state === "initLightning") {
-  //   return (<Loading />);
-  // }
-  if (state === "onboarding") {
-    return (<Welcome />);
+  if (state === "init") {
+    return (<></>);
   }
+
   if (state === "authentication") {
     return (<Authentication />);
   }
 
   return (
-    <RootStack.Navigator initialRouteName="Loading" screenOptions={screenOptions}>
+    <RootStack.Navigator initialRouteName={initialRoute} screenOptions={screenOptions}>
+      <RootStack.Screen name="Welcome" component={Welcome} />
       <RootStack.Screen name="Loading" component={Loading} />
+
       <RootStack.Screen name="Overview" component={Overview} />
       <RootStack.Screen name="TransactionDetails" component={TransactionDetails} />
       <RootStack.Screen name="Receive" component={Receive} />
@@ -121,11 +120,10 @@ export default () => {
       <RootStack.Screen name="LightningInfo" component={LightningInfo} />
       <RootStack.Screen name="Settings" component={Settings} />
       <RootStack.Screen name="ChannelRequest" component={ChannelRequest} />
+      <RootStack.Screen name="WebLNBrowser" component={WebLNBrowser} />
 
       <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} />
       <RootStack.Screen name="KeysendTest" component={KeysendTest} />
-      <RootStack.Screen name="WebLNBrowser" component={WebLNBrowser} />
-
       <RootStack.Screen
         name="DEV_CommandsX"
         component={DEV_Commands}

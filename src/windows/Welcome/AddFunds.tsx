@@ -103,11 +103,4 @@ const extraStyle = StyleSheet.create({
   qrImage: {
     paddingTop: 8,
   },
-  address: {
-    paddingTop: 6,
-    paddingRight: 4,
-    paddingLeft: 4,
-    marginBottom: 4,
-    width: "60%",
-  },
 });

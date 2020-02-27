@@ -108,6 +108,10 @@ const AlmostDone = ({ navigation }: IProps) => {
     }
   };
 
+  const onPressContinue = () => {
+    navigation.dangerouslyGetParent()!.dangerouslyGetParent()!.replace("Loading", {});
+  };
+
   return (
     <Container>
       <StatusBar
@@ -178,7 +182,7 @@ const AlmostDone = ({ navigation }: IProps) => {
             </Text>
           </View>
           <View style={style.buttons}>
-            <Button style={style.button} block={true} onPress={() => setHoldOnboarding(false)}>
+            <Button style={style.button} block={true} onPress={onPressContinue}>
               <Text>Continue</Text>
             </Button>
           </View>

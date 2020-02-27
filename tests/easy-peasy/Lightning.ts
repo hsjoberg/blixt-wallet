@@ -13,6 +13,7 @@ test("initialize lightning store", async () => {
   expect(store.getState().lightning.syncedToChain).toBe(false);
   expect(store.getState().lightning.nodeInfo).toEqual(getInfoResponse);
   await wait(() => expect(store.getState().lightning.syncedToChain).toBe(true), { timeout: 5000 });
+  await wait(() => expect(store.getState().lightning.autopilotSet).toBeDefined(), { timeout: 5000 });
 
   // TODO wait for Autopilot to finish
 });

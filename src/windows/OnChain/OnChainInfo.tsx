@@ -94,7 +94,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           <Button block={true} primary={true} disabled={!rpcReady} style={style.button} onPress={onGeneratePress}>
             <Text>Generate new address</Text>
           </Button>
-          <Button block={true} primary={true} disabled={!rpcReady} style={[style.button, { marginBottom: 0 }]} onPress={onWithdrawPress}>
+          <Button testID="WITHDRAW" block={true} primary={true} disabled={!rpcReady} style={[style.button, { marginBottom: 0 }]} onPress={onWithdrawPress}>
             <Text>Withdraw coins</Text>
           </Button>
         </View>

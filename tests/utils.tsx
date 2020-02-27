@@ -3,7 +3,7 @@ import { DeviceEventEmitter } from "react-native";
 import { createStore } from "easy-peasy";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from "@react-navigation/stack";
-
+import { wait } from "@testing-library/react-native";
 
 import { model } from "../src/state/index";
 import LndMobile from "../src/state/LndMobileInjection";
@@ -26,9 +26,9 @@ export const initCommonStore = async (waitUntilReady = false) => {
   DeviceEventEmitter.emit("WalletUnlocked", {});
 
   if (waitUntilReady) {
-    while (!store.getState().lightning.rpcReady || !store.getState().receive.invoiceSubscriptionStarted) {
-      await timeout(100);
-    }
+    await wait(() => expect(store.getState().lightning.rpcReady).toBe(true));
+    await wait(() => expect(store.getState().lightning.autopilotSet).toBeDefined());
+    await wait(() => expect(store.getState().receive.invoiceSubscriptionStarted).toBe(true));
   }
   return store;
 }

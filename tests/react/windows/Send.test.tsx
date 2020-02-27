@@ -16,9 +16,7 @@ const AppContainerSendConfirmation = createNavigationContainer(SendConfirmation,
 it("SendCamera renders correctly", async () => {
   await setDefaultAsyncStorage();
 
-  const store = setupStore();
-  await store.getActions().initializeApp();
-  await store.getActions().lightning.initialize();
+  const store = await initCommonStore(true);
   store.getActions().channel.setBalance(Long.fromNumber(123));
 
   const { container, unmount } = render(

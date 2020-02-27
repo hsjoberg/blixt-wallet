@@ -15,7 +15,7 @@ powered by lnd and Neutrino SPV.
 - [x] Autopilot
 - [x] Pincode
 - [x] Fingerprint
-- [x] Optional Name that will be displayed on invoices
+- [x] Optional Recipient/Sender name that will be displayed on transactions
 - [x] Optional "Payer" field for bookkeeping when creating invoice
 - [x] Scheduled sync of chain background job
 - [x] Local channel backup
