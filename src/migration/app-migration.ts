@@ -75,7 +75,7 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       await db.executeSql("ALTER TABLE tx ADD website TEXT NULL");
-      await db.executeSql("ALTER TABLE tx ADD weblnPayment BOOLEAN NOT NULL DEFAULT 0 CHECK(weblnPayment IN (0,1))");
+      await db.executeSql("ALTER TABLE tx ADD type TEXT NOT NULL DEFAULT 'normal'");
     },
   },
 ];

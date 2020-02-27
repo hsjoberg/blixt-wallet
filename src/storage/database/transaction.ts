@@ -26,7 +26,7 @@ export interface IDBTransaction {
   locationLong: number | null;
   locationLat: number | null;
   website: string | null;
-  weblnPayment: number;
+  type: string;
 }
 
 export interface ITransaction {
@@ -53,7 +53,7 @@ export interface ITransaction {
   locationLong: number | null;
   locationLat: number | null;
   website: string | null;
-  weblnPayment: boolean;
+  type: "NORMAL" | "WEBLN";
 
   hops: ITransactionHop[];
 }
@@ -106,7 +106,7 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       locationLong,
       locationLat,
       website,
-      weblnPayment
+      type
     )
     VALUES
     (
@@ -157,7 +157,7 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.locationLong,
       transaction.locationLat,
       transaction.website,
-      transaction.weblnPayment ? 1 : 0,
+      transaction.type,
     ],
   );
 
@@ -213,7 +213,7 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         locationLong = ?,
         locationLat = ?,
         website = ?,
-        weblnPayment = ?
+        type = ?
     WHERE id = ?`,
     [
       transaction.date.toString(),
@@ -236,7 +236,7 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.locationLong,
       transaction.locationLat,
       transaction.website,
-      transaction.weblnPayment ? 1 : 0,
+      transaction.type,
       transaction.id,
     ],
   );
@@ -284,7 +284,7 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
     locationLong: transaction.locationLong,
     locationLat: transaction.locationLat,
     website: transaction.website,
-    weblnPayment: !!transaction.weblnPayment,
+    type: transaction.type as ITransaction["type"] || "NORMAL",
     hops: [],
   };
 };

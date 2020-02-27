@@ -23,7 +23,7 @@ const schema = [
     locationLong REAL NULL,
     locationLat REAL NULL,
     website TEXT NULL,
-    weblnPayment BOOLEAN NOT NULL DEFAULT 0 CHECK(weblnPayment IN (0,1))
+    type TEXT NOT NULL DEFAULT "normal"
   )`,
 
   `CREATE TABLE tx_hops (
