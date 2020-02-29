@@ -6,10 +6,10 @@ export interface ICopyAddressProps {
   onPress: () => void;
   text: string;
 }
-export default ({ text, onPress }: ICopyAddressProps) => (
-  <View onTouchStart={onPress}>
+export default ({ text, onPress, ...props }: ICopyAddressProps) => (
+  <View onTouchStart={onPress} {...props}>
     <View style={style.container}>
-      <Text style={style.text} numberOfLines={1} lineBreakMode="middle">
+      <Text testID="BITCOIN_ADDRESS" style={style.text} numberOfLines={1} lineBreakMode="middle">
         {text}
       </Text>
       <Text style={style.iconText}>

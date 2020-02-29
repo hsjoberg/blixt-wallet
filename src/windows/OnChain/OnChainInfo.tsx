@@ -83,7 +83,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
             <>
               <Text style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</Text>
               <QrCode data={address} size={smallScreen ? 200 : undefined} onPress={onBtcAddressQrPress} />
-              <CopyAddress text={address} onPress={onBtcAddressTextPress} />
+              <CopyAddress testID="COPY_BITCOIN_ADDRESS" text={address} onPress={onBtcAddressTextPress} />
             </>
           }
           {!address &&
@@ -91,7 +91,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           }
         </View>
         <View style={style.buttons}>
-          <Button block={true} primary={true} disabled={!rpcReady} style={style.button} onPress={onGeneratePress}>
+          <Button testID="GENERATE_ADDRESS" block={true} primary={true} disabled={!rpcReady} style={style.button} onPress={onGeneratePress}>
             <Text>Generate new address</Text>
           </Button>
           <Button testID="WITHDRAW" block={true} primary={true} disabled={!rpcReady} style={[style.button, { marginBottom: 0 }]} onPress={onWithdrawPress}>

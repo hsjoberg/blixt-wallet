@@ -61,3 +61,5 @@ it("is possible to create an invoice and go to the QR screen", async () => {
 
   unmount();
 });
+
+// TODO(hsjoberg): Pay invoice
