@@ -1,12 +1,11 @@
 import React from "react";
-import { act, render, toJSON, fireEvent, wait, waitForElement } from "@testing-library/react-native";
+import { act, render, toJSON, fireEvent, wait, waitForElement, within } from "@testing-library/react-native";
 import { StoreProvider } from "easy-peasy";
 import Long from "long";
 
 import OnChain from "../../../src/windows/OnChain/index";
 import { createNavigationContainer, initCommonStore } from "../../utils";
-
-import { walletBalance, sendCoins } from "../../../mocks/lndmobile/onchain";
+import { walletBalance, sendCoins, newAddress } from "../../../mocks/lndmobile/onchain";
 import { lnrpc } from "../../../proto/proto";
 
 jest.setTimeout(10000);
@@ -100,3 +99,31 @@ it("should be possible to withdraw funds (no camera)", async () => {
   unmount();
 });
 
+it("should be possible generate a new bitcoin address", async () => {
+  const store = await initCommonStore(true);
+
+  const {getByTestId, unmount, debug, baseElement } = render(
+    <StoreProvider store={store}>
+      {AppContainer}
+    </StoreProvider>
+  );
+
+  const generateAddressButton = getByTestId("GENERATE_ADDRESS");
+
+  await waitForElement(() => getByTestId('COPY_BITCOIN_ADDRESS'));
+  const bitcoinAddress = getByTestId("COPY_BITCOIN_ADDRESS");
+
+  expect(bitcoinAddress).not.toBeNull();
+  const oldAddress = within(bitcoinAddress).getByTestId("BITCOIN_ADDRESS").children[0];
+
+  newAddress.mockImplementationOnce(() => {
+    const response = lnrpc.NewAddressResponse.create({ address: "tb1qsl4hhqs8skzwknqhwjcyyyjepnwmq8tlcd32m4" });
+    return response;
+  });
+
+  await act(async () => await fireEvent.press(generateAddressButton));
+
+  expect(within(bitcoinAddress).getByTestId("BITCOIN_ADDRESS").children[0]).not.toBe(oldAddress);
+
+  unmount();
+});

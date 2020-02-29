@@ -158,7 +158,7 @@ const Overview = ({ navigation }: IOverviewProps)  => {
                   style={style.lightningSyncIcon} name="sync" onPress={() => Alert.alert("Blixt Wallet is currently syncing the Bitcoin Blockchain.")}
                 />
               }
-              {experimentWeblnEnabled &&
+              {Chain === "mainnet" && nodeInfo && nodeInfo.syncedToChain && experimentWeblnEnabled &&
                 <Icon
                   style={style.lightningSyncIcon} type="MaterialCommunityIcons" name="cart-outline" onPress={() => navigation.navigate("WebLNBrowser")}
                 />

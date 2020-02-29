@@ -17,6 +17,7 @@ import { BitcoinUnits } from "../../utils/bitcoin-units";
 import { verifyChanBackup } from "../../lndmobile/channel";
 import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
+import { Chain } from "../../utils/build";
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -454,7 +455,7 @@ export default ({ navigation }: ISettingsProps) => {
             <Body>
               <Text>Scheduled chain sync</Text>
               <Text note={true} numberOfLines={1}>
-                Runs in background every 6 hours
+                Runs in background every 4 hours
               </Text>
             </Body>
             <Right><CheckBox checked={scheduledSyncEnabled} onPress={onToggleScheduledSyncEnabled} /></Right>
@@ -554,17 +555,21 @@ export default ({ navigation }: ISettingsProps) => {
             </ListItem>
           }
 
-          <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>Experiments</Text>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onExperimentWeblnBrowserEnabledToggle}>
-            <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
-            <Body>
-              <Text>Enable WebLN browser</Text>
-              <Text note={true}>Shows up as an icon on the Overview screen</Text>
-            </Body>
-            <Right><CheckBox checked={experimentWeblnBrowserEnabled} onPress={onExperimentWeblnBrowserEnabledToggle} /></Right>
-          </ListItem>
+          {Chain === "mainnet" &&
+            <>
+              <ListItem style={style.itemHeader} itemHeader={true}>
+                <Text>Experiments</Text>
+              </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={onExperimentWeblnBrowserEnabledToggle}>
+                <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
+                <Body>
+                  <Text>Enable WebLN browser</Text>
+                  <Text note={true}>Shows up as an icon on the Overview screen</Text>
+                </Body>
+                <Right><CheckBox checked={experimentWeblnBrowserEnabled} onPress={onExperimentWeblnBrowserEnabledToggle} /></Right>
+              </ListItem>
+            </>
+          }
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Debug</Text>

@@ -79,8 +79,6 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       return future;
     }
 
-    // final String password = getWalletPassword();
-
     KeychainModule keychain = new KeychainModule(new ReactApplicationContext(getApplicationContext()));
     keychain.getInternetCredentialsForServer("password", null, new PromiseWrapper() {
       @Override
@@ -96,95 +94,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
           HyperLog.d(TAG, "Password data retrieved from keychain");
           final String password = ((ReadableMap) value).getString("password");
           HyperLog.d(TAG, "Password retrieved");
-
-          // Begin work
-          HandlerThread thread = new HandlerThread(HANDLERTHREAD_NAME) {
-            @Override
-            public void run() {
-              incomingHandler = new Handler() {
-                @Override
-                public void handleMessage(Message msg) {
-                  HyperLog.d(TAG, "Handling new incoming message from LndMobileService, msg id: " + msg.what);
-                  HyperLog.v(TAG, msg.toString());
-                  Bundle bundle;
-
-                  switch (msg.what) {
-                    case LndMobileService.MSG_REGISTER_CLIENT_ACK:
-                      try {
-                        HyperLog.i(TAG, "Sending MSG_START_LND request");
-                        startLnd();
-                      } catch (Throwable t) {
-                        t.printStackTrace();
-                      }
-                      break;
-                    case LndMobileService.MSG_START_LND_RESULT:
-                      HyperLog.i(TAG, "LndMobileService reports lnd is started. Sending UnlockWallet request");
-                      unlockWalletRequest(password);
-                      break;
-                    case LndMobileService.MSG_GRPC_COMMAND_RESULT:
-                      bundle = msg.getData();
-                      final byte[] response = bundle.getByteArray("response");
-                      final String method = bundle.getString("method");
-
-                      if (method.equals("UnlockWallet")) {
-                        HyperLog.i(TAG, "Got MSG_GRPC_COMMAND_RESULT for UnlockWallet. Waiting for MSG_WALLETUNLOCKED before doing anything");
-                        // getInfoRequest();
-                      } else if (method.equals("GetInfo")) {
-                        try {
-                          Rpc.GetInfoResponse res = Rpc.GetInfoResponse.parseFrom(response);
-                          HyperLog.d(TAG, "GetInfo response");
-                          HyperLog.v(TAG, "blockHash: " + res.getBlockHash());
-                          HyperLog.d(TAG, "blockHeight: " + Integer.toString(res.getBlockHeight()));
-                          HyperLog.i(TAG, "syncedToChain: " + Boolean.toString(res.getSyncedToChain()));
-                          HyperLog.i(TAG, "syncedToGraph: " + Boolean.toString(res.getSyncedToGraph()));
-
-                          if (res.getSyncedToChain() == true && res.getSyncedToGraph() == true) {
-                            HyperLog.i(TAG, "Sync is done, letting lnd work for 30s before quitting");
-                            writeLastScheduledSyncToDb();
-
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                              public void run() {
-                                HyperLog.i(TAG, "Job is done. Quitting");
-                                unbindLndMobileService();
-
-                                future.set(Result.success());
-                              }
-                            }, 30000);
-                          }
-                          else {
-                            HyperLog.i(TAG, "Sleeping 10s then checking again");
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                              public void run() {
-                                getInfoRequest();
-                              }
-                            }, 10000);
-                          }
-                        } catch (Throwable t) {
-                          t.printStackTrace();
-                        }
-                      }
-                      else {
-                        Log.w(TAG, "Got unexpected method in MSG_GRPC_COMMAND_RESULT from LndMobileService. " +
-                                  "Expected GetInfo or UnlockWallet, got " + method);
-                      }
-                      break;
-                    case LndMobileService.MSG_WALLETUNLOCKED:
-                        HyperLog.i(TAG, "LndMobileService reports RPC server ready. Sending GetInfo request");
-                        getInfoRequest();
-                      break;
-                    default:
-                      super.handleMessage(msg);
-                    }
-                  }
-              };
-
-              messenger = new Messenger(incomingHandler); // me
-              bindLndMobileService();
-            }
-          };
-          thread.run();
+          startLndWorkThread(future, password);
         }
       }
 
@@ -196,6 +106,99 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     });
 
     return future;
+  }
+
+  private void startLndWorkThread(ResolvableFuture future, String password) {
+    HandlerThread thread = new HandlerThread(HANDLERTHREAD_NAME) {
+      @Override
+      public void run() {
+        incomingHandler = new Handler() {
+          @Override
+          public void handleMessage(Message msg) {
+            HyperLog.d(TAG, "Handling new incoming message from LndMobileService, msg id: " + msg.what);
+            HyperLog.v(TAG, msg.toString());
+            Bundle bundle;
+
+            switch (msg.what) {
+              case LndMobileService.MSG_REGISTER_CLIENT_ACK: {
+                try {
+                  HyperLog.i(TAG, "Sending MSG_START_LND request");
+                  startLnd();
+                } catch (Throwable t) {
+                  t.printStackTrace();
+                }
+                break;
+              }
+              case LndMobileService.MSG_START_LND_RESULT: {
+                HyperLog.i(TAG, "LndMobileService reports lnd is started. Sending UnlockWallet request");
+                unlockWalletRequest(password);
+                break;
+              }
+              case LndMobileService.MSG_GRPC_COMMAND_RESULT: {
+                bundle = msg.getData();
+                final byte[] response = bundle.getByteArray("response");
+                final String method = bundle.getString("method");
+
+                if (method.equals("UnlockWallet")) {
+                  HyperLog.i(TAG, "Got MSG_GRPC_COMMAND_RESULT for UnlockWallet. Waiting for MSG_WALLETUNLOCKED before doing anything");
+                } else if (method.equals("GetInfo")) {
+                  try {
+                    Rpc.GetInfoResponse res = Rpc.GetInfoResponse.parseFrom(response);
+                    HyperLog.d(TAG, "GetInfo response");
+                    HyperLog.v(TAG, "blockHash:     " + res.getBlockHash());
+                    HyperLog.d(TAG, "blockHeight:   " + Integer.toString(res.getBlockHeight()));
+                    HyperLog.i(TAG, "syncedToChain: " + Boolean.toString(res.getSyncedToChain()));
+                    HyperLog.i(TAG, "syncedToGraph: " + Boolean.toString(res.getSyncedToGraph()));
+
+                    if (res.getSyncedToChain() == true && res.getSyncedToGraph() == true) {
+                      HyperLog.i(TAG, "Sync is done, letting lnd work for 30s before quitting");
+                      writeLastScheduledSyncToDb();
+
+                      Handler handler = new Handler();
+                      handler.postDelayed(new Runnable() {
+                        public void run() {
+                          HyperLog.i(TAG, "Job is done. Quitting");
+                          unbindLndMobileService();
+
+                          future.set(Result.success());
+                        }
+                      }, 30000);
+                    }
+                    else {
+                      HyperLog.i(TAG, "Sleeping 10s then checking again");
+                      Handler handler = new Handler();
+                      handler.postDelayed(new Runnable() {
+                        public void run() {
+                          getInfoRequest();
+                        }
+                      }, 10000);
+                    }
+                  } catch (Throwable t) {
+                    t.printStackTrace();
+                  }
+                }
+                else {
+                  Log.w(TAG, "Got unexpected method in MSG_GRPC_COMMAND_RESULT from LndMobileService. " +
+                             "Expected GetInfo or UnlockWallet, got " + method);
+                }
+                break;
+              }
+              case LndMobileService.MSG_WALLETUNLOCKED: {
+                  HyperLog.i(TAG, "LndMobileService reports RPC server ready. Sending GetInfo request");
+                  getInfoRequest();
+                break;
+              }
+              default:
+                super.handleMessage(msg);
+            }
+          }
+        };
+
+        messenger = new Messenger(incomingHandler); // me
+        bindLndMobileService();
+      }
+    };
+    thread.run();
   }
 
   private void startLnd() {
