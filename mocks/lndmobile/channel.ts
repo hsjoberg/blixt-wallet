@@ -56,8 +56,8 @@ export const listChannels = jest.fn(async (): Promise<lnrpc.ListChannelsResponse
 
 export const channelBalance = jest.fn(async (): Promise<lnrpc.ChannelBalanceResponse> => {
   const response = lnrpc.ChannelBalanceResponse.create({
-    balance: 0, // TODO
-    pendingOpenBalance: 0,
+    balance: Long.fromValue(0), // TODO
+    pendingOpenBalance: Long.fromValue(0),
   });
   return response;
 });

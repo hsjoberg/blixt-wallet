@@ -63,7 +63,7 @@ export default ({ navigation, route }: IReceiveQRProps) => {
     <Container testID="qr">
       <Header iosBarStyle="light-content" translucent={false}>
         <Left>
-          <Button transparent={true} onPress={() => navigation.pop()}>
+          <Button testID="GO_BACK" transparent={true} onPress={() => navigation.pop()}>
             <Icon name="arrow-back" />
           </Button>
         </Left>
