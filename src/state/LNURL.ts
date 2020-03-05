@@ -88,12 +88,10 @@ export const lnUrl: ILNUrlModel = {
       const localPubkey = getStoreState().lightning.nodeInfo!.identityPubkey;
       const [pubkey, host] = lnUrlObject.uri.split("@");
       try {
-        const connectPeerResult = await connectPeer(pubkey, host);
+        await connectPeer(pubkey, host);
       } catch (e) {}
       const request = `${lnUrlObject.callback}?k1=${lnUrlObject.k1}&remoteid=${localPubkey}&private=1`;
-      log.v(request);
       const result = await fetch(request);
-      log.v(JSON.stringify(result));
       const response: ILNUrlChannelRequestResponse = await result.json();
       log.v(JSON.stringify(response));
 

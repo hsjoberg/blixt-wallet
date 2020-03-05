@@ -68,6 +68,7 @@ export default () => {
               <MetaData title="Testnet" data={nodeInfo.testnet!.toString()} />
               {nodeInfo.uris && nodeInfo.uris.length > 0 && <MetaData title="Node URIs" data={nodeInfo.uris.join("\n")} />}
               <MetaData title="Lnd Version" data={nodeInfo.version!} />
+              <MetaData title="Node features" data={Object.values(nodeInfo.features!).map((feature) => feature.name).join(", ")} />
             </ScrollView>
           </Body>
         </CardItem>

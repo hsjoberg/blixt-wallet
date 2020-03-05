@@ -3,13 +3,14 @@
 import color from 'color';
 import { Platform, Dimensions, PixelRatio } from 'react-native';
 
+ // https://coolors.co/151314-232323-bc6610-f2af13-e5eaea
 export const blixtTheme = {
+  dark: "#151314",
+  gray: "#232323",
   primary: "#bc6610",
   secondary: "#f2af13",
-  dark: "#151314",
   light: "#e5eaea",
 
-  gray: "#232323",
   lightGray: "#878787",
   red: "#d0311e",
   green: "#1c8c27",
