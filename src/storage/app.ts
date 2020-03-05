@@ -103,7 +103,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.googleDriveBackupEnabled, false),
     setItemObject<boolean>(StorageItem.preferFiat, false),
     setItemObject<boolean>(StorageItem.transactionGeolocationEnabled, false),
-    setItemObject<keyof typeof MapStyle>(StorageItem.transactionGeolocationMapStyle, "darkMode"),
+    setItem<keyof typeof MapStyle>(StorageItem.transactionGeolocationMapStyle, "darkMode"),
     setItemObject<boolean>(StorageItem.experimentWeblnEnabled, false),
   ]);
 };
