@@ -138,6 +138,7 @@ const Overview = ({ navigation }: IOverviewProps)  => {
           scrollEventThrottle={16}
           refreshControl={refreshControl}
           onScroll={transactionListOnScroll}
+          testID="TX_LIST"
         >
           {txs}
         </ScrollView>
@@ -166,7 +167,7 @@ const Overview = ({ navigation }: IOverviewProps)  => {
             </View>
 
             {/* Big header */}
-            <Animated.Text onPress={onPressBalanceHeader} style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
+            <Animated.Text testID="BIG_BALANCE_HEADER" onPress={onPressBalanceHeader} style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
               {!preferFiat && bitcoinBalance}
               {preferFiat && fiatBalance}
             </Animated.Text>

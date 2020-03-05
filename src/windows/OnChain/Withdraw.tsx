@@ -117,7 +117,14 @@ export default ({ navigation }: IOpenChannelProps) => {
           ),
         }]}
         buttons={[
-          <Button testID="SEND_COINS" key="WITHDRAW" onPress={onWithdrawClick} block={true} primary={true}>
+          <Button
+            testID="SEND_COINS"
+            key="WITHDRAW"
+            block={true}
+            primary={true}
+            onPress={onWithdrawClick}
+            disabled={sending}
+          >
             {!sending && <Text>Withdraw</Text>}
             {sending && <Spinner color={blixtTheme.light} />}
           </Button>

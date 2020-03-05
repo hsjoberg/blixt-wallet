@@ -56,6 +56,10 @@ export const bytesToHexString = (bytes: ArrayLike<number>) => {
   }, "");
 }
 
+export const hexToUint8Array = (hexString: string) => {
+  return new Uint8Array(hexString.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));
+};
+
 export const toast = (message: string, period = 3000, type: "danger" | "success" | "warning" = "success", button?: string) => {
   console.log(message);
   Toast.show({

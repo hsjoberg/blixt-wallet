@@ -8,13 +8,13 @@ export default () => {
   return (
     <Footer>
       <FooterTab>
-        <Button onPress={() => navigation.navigate("Receive")}>
+        <Button testID="FOOTER_RECEIVE" onPress={() => navigation.navigate("Receive")}>
           {<Icon type="AntDesign" name="qrcode" />}
           <Text>Receive</Text>
         </Button>
       </FooterTab>
       <FooterTab>
-        <Button onPress={() => navigation.navigate("Send")}>
+        <Button testID="FOOTER_SEND" onPress={() => navigation.navigate("Send")}>
           <Icon type="AntDesign" name="camerao" />
           <Text>Send</Text>
         </Button>

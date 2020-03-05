@@ -267,6 +267,7 @@ exports[`renders correctly 1`] = `
                                         />
                                       }
                                       scrollEventThrottle={16}
+                                      testID="TX_LIST"
                                     >
                                       <Text
                                         style={
@@ -509,6 +510,7 @@ exports[`renders correctly 1`] = `
                                               "marginTop": 72,
                                             }
                                           }
+                                          testID="BIG_BALANCE_HEADER"
                                         >
                                           0.00000123 ₿
                                         </Text>
@@ -586,6 +588,7 @@ exports[`renders correctly 1`] = `
                                   "shadowRadius": null,
                                 }
                               }
+                              testID="FOOTER_RECEIVE"
                             >
                               <Text
                                 allowFontScaling={false}
@@ -678,6 +681,7 @@ exports[`renders correctly 1`] = `
                                   "shadowRadius": null,
                                 }
                               }
+                              testID="FOOTER_SEND"
                             >
                               <Text
                                 allowFontScaling={false}
