@@ -1,6 +1,6 @@
 # Blixt Lightning Wallet
 
-Blixt Wallet is an open source Lightning first Bitcoin Wallet for Android with focus on usability and user experience,
+Blixt Wallet is an open source Lightning Bitcoin Wallet for Android with focus on usability and user experience,
 powered by lnd and Neutrino SPV.
 
 <p>
@@ -21,23 +21,23 @@ powered by lnd and Neutrino SPV.
 - [x] Local channel backup
 - [x] Thor support/Partial [lnurl](https://github.com/btcontract/lnurl-rfc/blob/master/spec.md) support
 - [x] Channel backup to Google Drive
-- [ ] [WebLN](https://webln.dev/) support
+- [x] [WebLN](https://webln.dev/) browser
 - [ ] NFC
 - [ ] WatchTower
 - [ ] URL Payments
 - [ ] Pay to Username
 
-## Known bugs
+## Known Bugs
 
 The wallet uses lnd that is young and might have bugs. Check [lnd bug list here](https://github.com/lightningnetwork/lnd/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 
 ## Development
 
-Do you like React Native, Java SE 8 or Lightning? Come and help out!
+Do you like React Native, Java or Lightning? Come and help out!
 
-## Build steps
+## Build Steps
 
-- Install Go, Node, Yarn, react-native CLI, Android Studio and Android SDK (using npm instead of yarn might work)
+- Install [Node](https://nodejs.org), [Yarn](https://classic.yarnpkg.com/), [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
 - If needed, install an emulated android device inside Android Studio
 - (Optional) Build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
 - Install Node packages: `yarn`
@@ -45,7 +45,7 @@ Do you like React Native, Java SE 8 or Lightning? Come and help out!
 - Run: `yarn start-metro`
 - Run: `yarn testnet-debug`
 
-## Commit and code-style
+## Commit and Code-Style
 
 Follow the code style of the file you are working in.
 For commits, make descriptive and atomic git commits.

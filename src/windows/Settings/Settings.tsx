@@ -162,8 +162,12 @@ export default ({ navigation }: ISettingsProps) => {
   // Clipboard invoice check
   const clipboardInvoiceCheckEnabled = useStoreState((store) => store.settings.clipboardInvoiceCheckEnabled);
   const changeClipboardInvoiceCheckEnabled = useStoreActions((store) => store.settings.changeClipboardInvoiceCheckEnabled);
+  const checkInvoice = useStoreActions((store) => store.clipboardManager.checkInvoice);
   const onToggleClipBoardInvoiceCheck = async () => {
     await changeClipboardInvoiceCheckEnabled(!clipboardInvoiceCheckEnabled);
+    const clipboardText = await Clipboard.getString();
+    await checkInvoice(clipboardText);
+
   };
 
   // Copy log
@@ -516,11 +520,6 @@ export default ({ navigation }: ISettingsProps) => {
             <Body><Text>Automatically open channels</Text></Body>
             <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>
           </ListItem>
-          {/* <ListItem style={style.listItem} button={true} icon={true} onPress={() => {}}>
-            <Left><Icon style={style.icon} type="Entypo" name="fingerprint" /></Left>
-            <Body><Text>Backup channels to Google Drive</Text></Body>
-            <Right><CheckBox checked={false} /></Right>
-          </ListItem> */}
 
 
           {/* <ListItem style={style.itemHeader} itemHeader={true}>
