@@ -23,7 +23,7 @@ const schema = [
     locationLong REAL NULL,
     locationLat REAL NULL,
     website TEXT NULL,
-    type TEXT NOT NULL DEFAULT "normal"
+    type TEXT NOT NULL DEFAULT "NORMAL"
   )`,
 
   `CREATE TABLE tx_hops (

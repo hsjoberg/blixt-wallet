@@ -3,7 +3,7 @@ import { NativeModules } from "react-native";
 import { Debug } from "./build";
 
 const log = (tag?: string) => {
-  tag = tag || "";
+  tag = tag ?? "";
 
   return {
     v: (message: string, data: any[] = []) => {

@@ -37,7 +37,7 @@ export default ({ navigation, continueCallback }: IProps) => {
 
   const TransactionStoreGetTransactions = useStoreActions((store) => store.transaction.getTransactions);
 
-  continueCallback = continueCallback || function() {};
+  continueCallback = continueCallback ?? function() {};
 
   return (
     <Container>

@@ -6,7 +6,7 @@ type onReadCallback = (address: string) => void;
 
 export default ({ navigation, route }: any) => {
   const [onReadCalled, setOnReadCalled] = useState(false);
-  const onRead: onReadCallback = route.params.onRead || (() => {});
+  const onRead: onReadCallback = route.params.onRead ?? (() => {});
   return (
     <>
       <StatusBar

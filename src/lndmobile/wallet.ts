@@ -22,7 +22,7 @@ export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {
 };
 
 export const initWallet = async (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string): Promise<void> => {
-  await NativeModules.LndMobile.initWallet(seed, password, recoveryWindow || 0, channelBackupsBase64 || null);
+  await NativeModules.LndMobile.initWallet(seed, password, recoveryWindow ?? 0, channelBackupsBase64 ?? null);
   return;
   // const options: lnrpc.IInitWalletRequest = {
   //   cipherSeedMnemonic: seed,

@@ -116,7 +116,7 @@ export const receive: IReceiveModel = {
           invoice.amtPaidMsat = Long.fromValue(invoice.amtPaidMsat);
         }
 
-        const tmpData: IInvoiceTempData = getState().invoiceTempData[rHash] || {
+        const tmpData: IInvoiceTempData = getState().invoiceTempData[rHash] ?? {
           rHash,
           payer: null,
           type: "NORMAL",
@@ -125,8 +125,8 @@ export const receive: IReceiveModel = {
 
         const transaction: ITransaction = {
           description: invoice.memo,
-          value: invoice.value || Long.fromInt(0),
-          valueMsat: (invoice.value && invoice.value.mul(1000)) || Long.fromInt(0),
+          value: invoice.value ?? Long.fromInt(0),
+          valueMsat: invoice.value.mul(1000) ?? Long.fromInt(0),
           amtPaidSat: invoice.amtPaidSat,
           amtPaidMsat: invoice.amtPaidMsat,
           fee: null,

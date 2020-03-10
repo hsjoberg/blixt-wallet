@@ -36,9 +36,9 @@ export default ({ navigation, route }: ISendConfirmationProps) => {
     bitcoinValue,
     onChangeFiatInput,
     onChangeBitcoinInput,
-  } = useBalance((paymentRequest && paymentRequest.numSatoshis) || undefined);
+  } = useBalance((paymentRequest?.numSatoshis));
   const clear = useStoreActions((store) => store.send.clear);
-  const callback = (route.params && route.params.callback) || (() => {});
+  const callback = (route.params?.callback) ?? (() => {});
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
