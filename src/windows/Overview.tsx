@@ -14,11 +14,11 @@ import FooterNav from "../components/FooterNav";
 import { Chain, Debug } from "../utils/build";
 import Color from "color";
 
-const nativeBaseTheme = require("../../native-base-theme/variables/commonColor");
+import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
 const theme = nativeBaseTheme.default;
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
-const HEADER_MIN_HEIGHT = (StatusBar.currentHeight || 0) + 53;
+const HEADER_MIN_HEIGHT = (StatusBar.currentHeight ?? 0) + 53;
 const HEADER_MAX_HEIGHT = 195;
 const NUM_TRANSACTIONS_PER_LOAD = 25;
 const LOAD_BOTTOM_PADDING = 475;
@@ -193,7 +193,7 @@ const Overview = ({ navigation }: IOverviewProps)  => {
   );
 };
 
-const iconTopPadding = StatusBar.currentHeight || 0; // 31;
+const iconTopPadding = StatusBar.currentHeight ?? 0;
 
 const style = StyleSheet.create({
   overview: {

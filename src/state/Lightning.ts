@@ -237,8 +237,8 @@ export const lightning: ILightningModel = {
 
   rpcReady: false,
   ready: false,
-  syncedToChain: computed((state) => (state.nodeInfo && state.nodeInfo.syncedToChain) || false),
-  syncedToGraph: computed((state) => (state.nodeInfo && state.nodeInfo.syncedToGraph) || false),
+  syncedToChain: computed((state) => (state.nodeInfo?.syncedToChain) ?? false),
+  syncedToGraph: computed((state) => (state.nodeInfo?.syncedToGraph) ?? false),
   firstSync: false,
 };
 

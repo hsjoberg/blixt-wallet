@@ -22,7 +22,7 @@ export default ({ navigation }: IOpenChannelProps) => {
   const onOpenChannelPress = async () => {
     try {
       setOpening(true);
-      const result = await connectAndOpenChannel({
+      await connectAndOpenChannel({
         peer,
         amount: unitToSatoshi(Number.parseFloat(sat || "0"), bitcoinUnit),
       });

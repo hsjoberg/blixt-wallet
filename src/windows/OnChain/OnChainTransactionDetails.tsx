@@ -69,9 +69,9 @@ export default ({ navigation, route }: ITransactionDetailsProps) => {
             {transaction.amount && <MetaData title="Amount" data={formatBitcoin(transaction.amount, bitcoinUnit)} />}
             {transaction.totalFees && <MetaData title="Fees" data={transaction.totalFees.toString() + " Satoshi"} />}
             <MetaData title="Destination" data={transaction.destAddresses![0]} />
-            <MetaData title="Confirmations" data={(transaction.numConfirmations && transaction.numConfirmations.toString()) || "Unknown"} />
-            <MetaData title="Block height" data={(transaction.blockHeight && transaction.blockHeight!.toString()) || "Unknown"} />
-            <MetaData title="Block hash" data={(transaction.blockHash && transaction.blockHash.toString()) || "Unknown"} />
+            <MetaData title="Confirmations" data={(transaction.numConfirmations?.toString()) ?? "Unknown"} />
+            <MetaData title="Block height" data={(transaction.blockHeight?.toString()) ?? "Unknown"} />
+            <MetaData title="Block hash" data={(transaction.blockHash?.toString()) ?? "Unknown"} />
           </Body>
         </CardItem>
       </Card>

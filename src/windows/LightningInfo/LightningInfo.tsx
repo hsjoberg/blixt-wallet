@@ -29,17 +29,17 @@ export default ({ navigation }: ILightningInfoProps) => {
   useEffect(() => {
     if (rpcReady) {
       (async () => {
-        await getChannels(undefined);
+        await getChannels();
       })();
     }
   }, [getChannels, rpcReady]);
 
-  const balance = channels.reduce((accumulator, channel) => accumulator.add(channel.localBalance || 0), Long.fromInt(0));
+  const balance = channels.reduce((accumulator, channel) => accumulator.add(channel.localBalance ?? 0), Long.fromInt(0));
 
   const channelCards = [
     ...pendingOpenChannels.map((pendingChannel, i) => (
       <PendingChannelCard
-        key={((pendingChannel.channel && pendingChannel.channel.channelPoint) || "") + i}
+        key={((pendingChannel?.channel?.channelPoint) ?? "") + i}
         alias={aliases[pendingChannel.channel!.remoteNodePub!]}
         type="OPEN"
         channel={pendingChannel}
@@ -63,14 +63,14 @@ export default ({ navigation }: ILightningInfoProps) => {
     )),
     ...waitingCloseChannels.map((pendingChannel, i) => (
       <PendingChannelCard
-        key={((pendingChannel.channel && pendingChannel.channel.channelPoint) || "") + i}
-        alias={aliases[pendingChannel.channel!.remoteNodePub!]}
+        key={((pendingChannel?.channel?.channelPoint) ?? "") + i}
+        alias={aliases[pendingChannel.channel?.remoteNodePub ?? ""]}
         type="WAITING_CLOSE"
         channel={pendingChannel}
       />
     )),
     ...channels.map((channel, i) => (
-      <ChannelCard key={channel.chanId!.toString()} alias={aliases[channel.remotePubkey!]} channel={channel} />
+      <ChannelCard key={channel.chanId!.toString()} alias={aliases[channel.remotePubkey ?? ""]} channel={channel} />
     )),
   ];
 

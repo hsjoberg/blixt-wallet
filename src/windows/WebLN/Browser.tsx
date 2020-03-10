@@ -190,7 +190,7 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   card: {
-    marginTop: (StatusBar.currentHeight || 0) + 8,
+    marginTop: (StatusBar.currentHeight ?? 0) + 8,
     marginBottom: 12,
     marginLeft: 9,
     marginRight: 9,

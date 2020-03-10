@@ -6,7 +6,7 @@ export default (initialSat?: Long) => {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
-  const [bitcoinValue, setBitcoinValue] = useState<string | undefined>((initialSat && valueBitcoin(initialSat, bitcoinUnit) || undefined));
+  const [bitcoinValue, setBitcoinValue] = useState<string | undefined>(initialSat && valueBitcoin(initialSat, bitcoinUnit));
   const [dollarValue, setDollarValue] = useState<string | undefined>(
     bitcoinValue && convertBitcoinToFiat(
       unitToSatoshi(Number.parseFloat(bitcoinValue), bitcoinUnit),

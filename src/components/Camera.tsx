@@ -22,10 +22,10 @@ export default ({ cameraType, children, onNotAuthorized, onRead, style }: ICamer
     type={cameraType}
   >
     {({ status }) => {
-      if (status === "NOT_AUTHORIZED") {
-        onNotAuthorized && onNotAuthorized();
+      if (status === "NOT_AUTHORIZED" && onNotAuthorized) {
+        onNotAuthorized();
       }
-      return (children || <></>);
+      return (children ?? <></>);
     }}
   </RNCamera>
 );

@@ -4,7 +4,7 @@ import { NavigationContainerRef } from "@react-navigation/native";
 export const navigator = React.createRef<NavigationContainerRef>();
 
 export function getNavigator(): NavigationContainerRef | null {
-  return navigator.current || null;
+  return navigator.current ?? null;
 }
 
 export function navigate(routeName: string, params?: any) {

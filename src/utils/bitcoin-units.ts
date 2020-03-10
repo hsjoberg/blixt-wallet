@@ -86,7 +86,7 @@ export const convertBitcoinToFiat = (satoshi: Long | number, conversion: number,
     fiatUnit = " " + fiatUnit;
   }
   const fiat = valueFiat(satoshi, conversion).toFixed(2);
-  return `${fiat}${fiatUnit || ""}`;
+  return `${fiat}${fiatUnit ?? ""}`;
 };
 
 export const valueFiat = (satoshi: Long, conversion: number): number => {
