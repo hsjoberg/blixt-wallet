@@ -27,9 +27,11 @@ export interface IGoogleDriveBackupModel {
 
 export const googleDriveBackup: IGoogleDriveBackupModel = {
   initialize: thunk(async (actions, _, { getState }) => {
+    log.d("Initializing");
     if (!getState().channelUpdateSubscriptionStarted) {
       await actions.setupChannelUpdateSubscriptions();
     }
+    log.d("Done");
   }),
 
   setupChannelUpdateSubscriptions: thunk((actions, _2, { getStoreState, injections }) => {

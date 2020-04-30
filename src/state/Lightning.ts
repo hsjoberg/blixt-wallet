@@ -60,10 +60,12 @@ export const lightning: ILightningModel = {
     const fastInit = differenceInDays(start, lastSync) <3 || firstSync;
 
     const status = await checkStatus();
+    log.d("status", [status]);
     // Normal wallet unlock flow
     if ((status & ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) !== ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) {
       // When the RPC server is ready
       // WalletUnlocked event will be emitted
+      log.v("Starting WalletUnlocked event listener");
       DeviceEventEmitter.addListener("WalletUnlocked", async () => {
         debugShowStartupInfo && toast("RPC server ready time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
         actions.setRPCServerReady(true);
@@ -81,6 +83,7 @@ export const lightning: ILightningModel = {
       });
 
       try {
+        log.v("Unlocking wallet");
         SYNC_UNLOCK_WALLET
           ? await actions.unlockWallet()
           : actions.unlockWallet().then(
@@ -96,6 +99,7 @@ export const lightning: ILightningModel = {
     // already be set when this function is called.
     // This code path will also be used if we hot-reload the app (debug builds)
     else {
+      log.v("Wallet was already unlocked");
       actions.setupStores();
       if (fastInit) {
         actions.waitForChainSync().then(

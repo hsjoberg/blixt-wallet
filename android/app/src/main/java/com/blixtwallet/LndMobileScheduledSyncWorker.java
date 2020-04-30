@@ -72,6 +72,13 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     HyperLog.i(TAG, "I am " + getApplicationContext().getPackageName());
     writeLastScheduledSyncAttemptToDb();
 
+    HyperLog.i(TAG, "MainActivity.started = " + MainActivity.started);
+    if (MainActivity.started) {
+      HyperLog.i(TAG, "MainActivity is started, quitting job");
+      future.set(Result.success());
+      return future;
+    }
+
     // TODO(hsjoberg) use MSG_CHECKSTATUS instead
     if (checkLndProcessExists()) {
       HyperLog.i(TAG, "Lnd is already started, quitting job");
@@ -328,8 +335,9 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     String packageName = getApplicationContext().getPackageName();
     ActivityManager am = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
     for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
+      HyperLog.d(TAG, "Process " + p.processName);
       if (p.processName.equals(packageName + ":blixtLndMobile")) {
-        HyperLog.d(TAG, packageName + ":blixtLndMobile pid: " + String.valueOf(p.pid));
+        HyperLog.d(TAG, "Found " + packageName + ":blixtLndMobile pid: " + String.valueOf(p.pid));
         return true;
       }
     }

@@ -56,6 +56,7 @@ export interface ISettingsModel {
 
 export const settings: ISettingsModel = {
   initialize: thunk(async (actions) => {
+    log.d("Initializing");
     actions.setBitcoinUnit(await getItemObject(StorageItem.bitcoinUnit) || "bitcoin");
     actions.setFiatUnit(await getItemObject(StorageItem.fiatUnit) || "USD");
     actions.setName(await getItemObject(StorageItem.name) || null);
@@ -69,6 +70,7 @@ export const settings: ISettingsModel = {
     actions.setTransactionGeolocationEnabled(await getItemObject(StorageItem.transactionGeolocationEnabled) || false);
     actions.setTransactionGeolocationMapStyle(await getItem(StorageItem.transactionGeolocationMapStyle) as keyof typeof MapStyle || "darkMode");
     actions.setExperimentWeblnEnabled(await getItemObject(StorageItem.experimentWeblnEnabled || false));
+    log.d("Done");
   }),
 
   changeBitcoinUnit: thunk(async (actions, payload) => {
