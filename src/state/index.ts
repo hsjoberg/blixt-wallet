@@ -1,4 +1,4 @@
-import { NativeModules, Linking } from "react-native";
+import { NativeModules, Linking, Alert } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
@@ -89,6 +89,8 @@ export const model: IStoreModel = {
       return;
     }
 
+    log.v("initializeApp()");
+
     const { init, writeConfigFile, checkStatus, startLnd } = injections.lndMobile.index;
     const db = await openDatabase();
     actions.setDb(db);
@@ -106,11 +108,19 @@ export const model: IStoreModel = {
     actions.setWalletCreated(await getWalletCreated());
 
     try {
-      log.d("init", [await init()]);
+      log.v("Running LndMobile init()");
+      const initReturn = await init();
+      log.v("init done");
+      log.d("init", [initReturn]);
+      log.v("Running LndMobile checkStatus");
       const status = await checkStatus();
+      log.v("status", [status]);
       if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
         log.i("lnd not started, starting lnd");
         log.d("lnd started", [await startLnd()]);
+      }
+      else {
+        log.i("lnd was already started");
       }
     }
     catch (e) {
@@ -118,6 +128,7 @@ export const model: IStoreModel = {
       throw e;
     }
 
+    log.d("Starting up stores");
     dispatch.fiat.getRate();
     await dispatch.settings.initialize();
     await dispatch.security.initialize();
@@ -125,6 +136,7 @@ export const model: IStoreModel = {
     await dispatch.googleDriveBackup.initialize();
     await dispatch.transaction.getTransactions();
     await dispatch.channel.setupCachedBalance();
+    log.d("Done starting up stores")
     actions.setAppReady(true);
 
     log.d("App initialized");
