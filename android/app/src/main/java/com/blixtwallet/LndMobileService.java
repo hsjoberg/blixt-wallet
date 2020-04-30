@@ -98,6 +98,7 @@ public class LndMobileService extends Service {
             break;
 
           case MSG_START_LND:
+            HyperLog.d(TAG, "Got MSG_START_LND request");
             final String args = bundle.getString("args", "");
             startLnd(msg.replyTo, args, request);
             break;
@@ -442,7 +443,7 @@ public class LndMobileService extends Service {
       HyperLog.i(TAG, "Last client unbound. Checking if lnd is alive and stopping it.");
 
       if (checkLndProcessExists()) {
-        HyperLog.d(TAG, "Lnd exists, attempting to stop it");
+        HyperLog.i(TAG, "Lnd exists, attempting to stop it");
         Lndmobile.stopDaemon(
           Rpc.StopRequest.newBuilder().build().toByteArray(),
           new Callback() {

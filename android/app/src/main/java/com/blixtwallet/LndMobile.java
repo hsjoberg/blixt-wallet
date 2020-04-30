@@ -825,6 +825,59 @@ class LndMobile extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void tailLog(Integer numberOfLines, Promise promise) {
+    File file = new File(
+      getReactApplicationContext().getFilesDir().toString() +
+      "/logs/bitcoin/" +
+      BuildConfig.CHAIN +
+      "/lnd.log"
+    );
+
+    java.io.RandomAccessFile fileHandler = null;
+    try {
+      fileHandler = new java.io.RandomAccessFile(file, "r");
+      long fileLength = fileHandler.length() - 1;
+      StringBuilder sb = new StringBuilder();
+      int line = 0;
+
+      for(long filePointer = fileLength; filePointer != -1; filePointer--){
+        fileHandler.seek( filePointer );
+        int readByte = fileHandler.readByte();
+
+        if (readByte == 0xA) {
+          if (filePointer < fileLength) {
+            line = line + 1;
+          }
+        } else if (readByte == 0xD) {
+          if (filePointer < fileLength-1) {
+              line = line + 1;
+          }
+        }
+        if (line >= numberOfLines) {
+          break;
+        }
+        sb.append((char) readByte);
+      }
+
+      String lastLine = sb.reverse().toString();
+      promise.resolve(lastLine);
+    } catch (java.io.FileNotFoundException e) {
+      e.printStackTrace();
+      promise.reject(e);
+    } catch (java.io.IOException e) {
+      e.printStackTrace();
+      promise.reject(e);
+    }
+    finally {
+      if (fileHandler != null) {
+        try {
+          fileHandler.close();
+        } catch (java.io.IOException e) {}
+      }
+    }
+  }
+
+  @ReactMethod
   public void log(String type, String tag, String message) {
     String mainTag = "BlixtWallet";
 

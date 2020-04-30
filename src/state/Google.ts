@@ -27,6 +27,7 @@ export interface IGoogleModel {
 
 export const google: IGoogleModel = {
   initialize: thunk(async (actions) => {
+    log.d("Initializing");
     GoogleSignin.configure({
       scopes: ["https://www.googleapis.com/auth/drive.appdata"],
     });
@@ -47,6 +48,7 @@ export const google: IGoogleModel = {
         }
       }
     }
+    log.d("Done");
   }),
 
   signIn: thunk(async (actions, _, { getState }) => {

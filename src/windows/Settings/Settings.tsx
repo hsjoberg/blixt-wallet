@@ -592,6 +592,13 @@ export default ({ navigation }: ISettingsProps) => {
                 <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
                 <Body><Text>WebLN</Text></Body>
               </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={async () => {
+                const logLines = await NativeModules.LndMobile.tailLog(10);
+                Alert.alert("Log", logLines);
+              }}>
+                <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
+                <Body><Text>Read log</Text></Body>
+              </ListItem>
             </>
           }
         </List>

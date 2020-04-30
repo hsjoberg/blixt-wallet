@@ -75,6 +75,7 @@ export const transaction: ITransactionModel = {
    * and add it to our transaction array
    */
   getTransactions: thunk(async (actions, _, { getStoreState }) => {
+    log.d("getTransactions()");
     const db = getStoreState().db;
     if (!db) {
       throw new Error("getTransactions(): db not ready");
@@ -82,6 +83,7 @@ export const transaction: ITransactionModel = {
 
     const transactions = await getTransactions(db);
     actions.setTransactions(transactions);
+    log.d("getTransactions() done");
   }),
 
   /**

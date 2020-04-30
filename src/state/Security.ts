@@ -40,6 +40,7 @@ export interface ISecurityModel {
 
 export const security: ISecurityModel = {
   initialize: thunk(async (actions) => {
+    log.d("Initializing");
     const loginMethods: Set<LoginMethods> = new Set(await getItemObject(StorageItem.loginMethods));
     actions.setLoginMethods(loginMethods);
     actions.setLoggedIn(loginMethods.size === 0);
@@ -50,6 +51,7 @@ export const security: ISecurityModel = {
     } catch (e) {
       log.d("Error checking fingerprint availability", [e]);
     }
+    log.d("Done");
   }),
 
   checkPincode: thunk(async (actions, pincodeAttempt) => {

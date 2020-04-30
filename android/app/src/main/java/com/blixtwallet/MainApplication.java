@@ -50,7 +50,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     HyperLog.setLogLevel(
       BuildConfig.DEBUG
         ? android.util.Log.VERBOSE
-        : android.util.Log.INFO
+        : android.util.Log.DEBUG
     );
   }
 
