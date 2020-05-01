@@ -14,7 +14,7 @@ export type ReceiveStackParamList = {
   };
 }
 
-export default () => {
+export default function ReceiveIndex() {
   return (
     <Stack.Navigator initialRouteName="ReceiveSetup" screenOptions={{ headerShown: false, animationEnabled: false }}>
       <Stack.Screen name="ReceiveSetup" component={ReceiveSetup} />

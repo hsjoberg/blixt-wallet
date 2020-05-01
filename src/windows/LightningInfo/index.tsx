@@ -15,7 +15,7 @@ export type LightningInfoStackParamList = {
   };
 }
 
-export default () => {
+export default function LightningInfoIndex() {
   return (
     <Stack.Navigator initialRouteName="LightningInfo" screenOptions={{ headerShown: false, animationEnabled: false, cardStyle: { backgroundColor: "transparent" } }}>
       <Stack.Screen name="LightningInfo" component={LightningInfo} />

@@ -15,7 +15,7 @@ interface IProps {
   transaction: ITransaction;
   unit: keyof IBitcoinUnits;
 }
-export default ({ onPress, transaction, unit }: IProps) => {
+export default function TransactionCard({ onPress, transaction, unit }: IProps) {
   const { date, value, amtPaidSat, status, tlvRecordName } = transaction;
   const positive = value.isPositive();
   const { name, description } = extractDescription(transaction.description);

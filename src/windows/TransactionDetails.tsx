@@ -37,7 +37,7 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
 export interface ITransactionDetailsProps {
   navigation: any;
 }
-export default ({ route }: any) => {
+export default function TransactionDetails({ route }: any) {
   const rHash: string = route.params.rHash;
   const transaction = useStoreState((store) => store.transaction.getTransactionByRHash(rHash));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);

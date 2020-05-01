@@ -19,7 +19,7 @@ interface IReceiveQRProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveQr">;
   route: RouteProp<ReceiveStackParamList, "ReceiveQr">;
 }
-export default ({ navigation, route }: IReceiveQRProps) => {
+export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
   const invoice: lnrpc.AddInvoiceResponse = route.params.invoice;
   const transaction = useStoreState((store) => store.transaction.getTransactionByPaymentRequest(invoice.paymentRequest));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);

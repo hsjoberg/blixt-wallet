@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Footer, FooterTab, Icon, Text } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
-export default () => {
+export default function FooterNav() {
   const navigation = useNavigation();
 
   return (

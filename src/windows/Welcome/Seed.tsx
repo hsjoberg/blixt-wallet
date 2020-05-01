@@ -14,7 +14,7 @@ import Content from "../../components/Content";
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Seed">;
 }
-export default ({ navigation }: IProps) => {
+export default function Seed({ navigation }: IProps) {
   const seed = useStoreState((state) => state.walletSeed);
 
   if (!seed) {

@@ -17,7 +17,7 @@ export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
   route: RouteProp<SendStackParamList, "SendConfirmation">;
 }
-export default ({ navigation, route }: ISendConfirmationProps) => {
+export default function SendConfirmation({ navigation, route }: ISendConfirmationProps) {
   const [amountEditable, setAmountEditable] = useState(false);
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
   const getBalance = useStoreActions((actions) => actions.channel.getBalance);

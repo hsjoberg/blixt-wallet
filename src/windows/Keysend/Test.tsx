@@ -4,7 +4,7 @@ import { Button, Body, Container, Header, Icon, Left, Title } from "native-base"
 interface ILightningInfoProps {
   navigation: any;
 }
-export default ({ navigation }: ILightningInfoProps) => {
+export default function KeysendTest({ navigation }: ILightningInfoProps) {
   // const rpcReady = useStoreState((store) => store.lightning.rpcReady);
 
   return (

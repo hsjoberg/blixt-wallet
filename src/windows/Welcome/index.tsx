@@ -25,7 +25,7 @@ export type WelcomeStackParamList = {
   ChangeFingerprintSettingsAuth: undefined;
 }
 
-export default () => {
+export default function WelcomeIndex() {
   return (
     <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false, animationEnabled: false, cardStyle: { backgroundColor: blixtTheme.dark } }}>
       <Stack.Screen name="Start" component={Start} />

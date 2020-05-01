@@ -13,27 +13,29 @@ export interface IFormProps {
   buttons: ReactNode[];
   items: IFormItem[];
 }
-export default ({ buttons, items }: IFormProps) => (
-  <Content contentContainerStyle={style.content}>
-    <View style={style.itemContainer}>
-      {items.map(({ key, title, component, success }, i) => (
-        <Item key={key} style={{
-          marginTop: i > 0 ? 16 : 8}} success={success}>
-          <Label style={{
-            ...style.itemLabel,
-            fontSize: (title !== null && title.length) >= 14 ? 15 : 17,
-          }}>{title}</Label>
-          {component}
-        </Item>
-      ))}
-    </View>
-    <View style={style.buttonContainer}>
-      {buttons.map((button, i) => {
-        return (<View key={i} style={{ marginTop: i > 0 ? 12 : 0 }}>{button}</View>);
-      })}
-    </View>
-  </Content>
-);
+export default function Form({ buttons, items }: IFormProps) {
+  return (
+    <Content contentContainerStyle={style.content}>
+      <View style={style.itemContainer}>
+        {items.map(({ key, title, component, success }, i) => (
+          <Item key={key} style={{
+            marginTop: i > 0 ? 16 : 8}} success={success}>
+            <Label style={{
+              ...style.itemLabel,
+              fontSize: (title !== null && title.length) >= 14 ? 15 : 17,
+            }}>{title}</Label>
+            {component}
+          </Item>
+        ))}
+      </View>
+      <View style={style.buttonContainer}>
+        {buttons.map((button, i) => {
+          return (<View key={i} style={{ marginTop: i > 0 ? 12 : 0 }}>{button}</View>);
+        })}
+      </View>
+    </Content>
+  );
+}
 
 const style = StyleSheet.create({
   content: {

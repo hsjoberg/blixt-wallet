@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { useStoreActions, useStoreState, } from "../../state/store";
 
-export default () => {
+export default function ChangeFingerprintSettingsAuth() {
   const navigation = useNavigation();
   const fingerprintAvailable = useStoreState((store) => store.security.fingerprintAvailable);
   const fingerprintStartScan = useStoreActions((store) => store.security.fingerprintStartScan);

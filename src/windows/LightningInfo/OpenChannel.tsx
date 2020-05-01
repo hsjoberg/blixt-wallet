@@ -11,7 +11,7 @@ import { unitToSatoshi, BitcoinUnits } from "../../utils/bitcoin-units";
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
 }
-export default ({ navigation }: IOpenChannelProps) => {
+export default function OpenChannel({ navigation }: IOpenChannelProps) {
   const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
   const getChannels = useStoreActions((actions) => actions.channel.getChannels);
   const [peer, setPeer] = useState("");

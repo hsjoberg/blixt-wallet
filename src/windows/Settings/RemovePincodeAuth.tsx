@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useStoreActions } from "../../state/store";
 import Pincode from "../../components/Pincode";
 
-export default () => {
+export default function RemovePincodeAuth() {
   const navigation = useNavigation();
   const removePincode = useStoreActions((store) => store.security.removePincode);
 

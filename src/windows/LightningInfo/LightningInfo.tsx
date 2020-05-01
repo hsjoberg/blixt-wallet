@@ -15,7 +15,7 @@ import { formatBitcoin } from "../../utils/bitcoin-units";
 interface ILightningInfoProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
 }
-export default ({ navigation }: ILightningInfoProps) => {
+export default function LightningInfo({ navigation }: ILightningInfoProps) {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const aliases = useStoreState((store) => store.channel.aliases);
   const channels = useStoreState((store) => store.channel.channels);

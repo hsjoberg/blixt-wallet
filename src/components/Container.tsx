@@ -7,15 +7,17 @@ export interface IContainer {
   centered?: boolean;
   style?: StyleProp<ViewStyle>;
 }
-export default ({ children, centered, style }: IContainer) => (
-  <View style={[
-    defaultStyle.style,
-    centered ? centeredStyle.style : {},
-    style
-  ]}>
-    {children}
-  </View>
-)
+export default function Container({ children, centered, style }: IContainer) {
+  return (
+    <View style={[
+      defaultStyle.style,
+      centered ? centeredStyle.style : {},
+      style
+    ]}>
+      {children}
+    </View>
+  );
+}
 
 const defaultStyle = StyleSheet.create({
   style: {

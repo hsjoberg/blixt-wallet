@@ -12,7 +12,7 @@ enum States {
   enter = "Enter a pincode",
   confirm = "Confirm your pincode",
 }
-export default () => {
+export default function SetPincode() {
   const navigation = useNavigation();
   const [state, setState] = useState<States>(States.enter);
   const [pincode, setStatePincode] = useState<string | undefined>();

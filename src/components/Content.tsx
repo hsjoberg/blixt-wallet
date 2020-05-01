@@ -6,8 +6,10 @@ export interface IContentProps {
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
 }
-export default ({ children, style }: IContentProps) => (
-  <Content contentContainerStyle={[{ padding: 14 }, style]}>
-    {children}
-  </Content>
-)
+export default function Content({ children, style }: IContentProps) {
+  return (
+    <Content contentContainerStyle={[{ padding: 14 }, style]}>
+      {children}
+    </Content>
+  );
+}

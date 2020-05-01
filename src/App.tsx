@@ -12,7 +12,7 @@ const theme = require("../native-base-theme/variables/commonColor").default;
 
 import store from "./state/store";
 
-export default () => {
+export default function App() {
   const [debug, setDebug] = useState(__DEV__ ? true : false);
 
   return (

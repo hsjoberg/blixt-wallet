@@ -12,7 +12,7 @@ export type SendStackParamList = {
   };
 }
 
-export default () => {
+export default function SendIndex() {
   return (
     <Stack.Navigator initialRouteName="SendCamera" screenOptions={{ headerShown: false, animationEnabled: false }}>
       <Stack.Screen name="SendCamera" component={SendCamera} />

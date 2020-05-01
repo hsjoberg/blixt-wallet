@@ -7,7 +7,7 @@ import { useStoreState, useStoreActions } from "../../state/store";
 interface IProps {
   navigation: any;
 }
-export default ({ navigation }: IProps) => {
+export function Init({ navigation }: IProps) {
   const actions = useStoreActions((store) => store);
   const appReady = useStoreState((store) => store.appReady);
   const walletCreated = useStoreState((store) => store.walletCreated);

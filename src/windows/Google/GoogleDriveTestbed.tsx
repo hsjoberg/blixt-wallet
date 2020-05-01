@@ -11,7 +11,7 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import { getFiles, checkResponseIsError, downloadFileAsString, deleteFile } from "../../utils/google-drive";
 import { GOOGLE_DRIVE_BACKUP_FILE } from "../../state/GoogleDriveBackup";
 
-export default ({ navigation }: any) => {
+export default function GoogleDriveTestbed({ navigation }: any) {
   const pubkey = useStoreState((store) => store.lightning.nodeInfo!.identityPubkey);
   const signIn = useStoreActions((store) => store.google.signIn);
   const signOut = useStoreActions((store) => store.google.signOut);
