@@ -24,7 +24,7 @@
       <activity
         android:name=".MainActivity"
         android:label="${appName}${chain}${custom}${buildType}"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize">
         <intent-filter>

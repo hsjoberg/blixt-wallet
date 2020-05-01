@@ -28,7 +28,6 @@ exports[`renders correctly 1`] = `
         style={
           Object {
             "flex": 1,
-            "overflow": "hidden",
           }
         }
       >
@@ -115,7 +114,7 @@ exports[`renders correctly 1`] = `
                   pointerEvents="none"
                   style={
                     Object {
-                      "backgroundColor": "#fff",
+                      "backgroundColor": "rgb(242, 242, 242)",
                       "bottom": 0,
                       "left": 0,
                       "position": "absolute",
@@ -176,114 +175,251 @@ exports[`renders correctly 1`] = `
                           ]
                         }
                       >
-                        <ScrollView
-                          automaticallyAdjustContentInsets={false}
-                          contentContainerStyle={
-                            Array [
-                              Object {
-                                "padding": undefined,
-                              },
-                              Array [
-                                Object {
-                                  "padding": 14,
-                                },
-                                Object {
-                                  "alignItems": "center",
-                                  "flex": 1,
-                                  "justifyContent": "center",
-                                  "width": "100%",
-                                },
-                              ],
-                            ]
-                          }
-                          contentInset={
-                            Object {
-                              "bottom": 0,
-                            }
-                          }
-                          enableAutomaticScroll={true}
-                          enableOnAndroid={false}
-                          enableResetScrollToCoords={true}
-                          extraHeight={75}
-                          extraScrollHeight={0}
-                          keyboardDismissMode="interactive"
-                          keyboardOpeningTime={250}
-                          keyboardShouldPersistTaps="handled"
-                          keyboardSpace={0}
-                          resetScrollToCoords={
-                            Object {
-                              "x": 0,
-                              "y": 0,
-                            }
-                          }
-                          scrollEventThrottle={1}
-                          showsVerticalScrollIndicator={true}
+                        <SafeAreaView
                           style={
                             Object {
                               "backgroundColor": "transparent",
                               "flex": 1,
                             }
                           }
-                          viewIsInsideTabBar={false}
                         >
-                          <View
-                            style={
+                          <ScrollView
+                            automaticallyAdjustContentInsets={false}
+                            contentContainerStyle={
                               Array [
-                                Object {},
                                 Object {
-                                  "height": "100%",
-                                  "width": "100%",
+                                  "padding": undefined,
                                 },
+                                Array [
+                                  Object {
+                                    "padding": 14,
+                                  },
+                                  Object {
+                                    "alignItems": "center",
+                                    "flex": 1,
+                                    "justifyContent": "center",
+                                    "width": "100%",
+                                  },
+                                ],
                               ]
                             }
+                            contentInset={
+                              Object {
+                                "bottom": 0,
+                              }
+                            }
+                            enableAutomaticScroll={true}
+                            enableOnAndroid={false}
+                            enableResetScrollToCoords={true}
+                            extraHeight={75}
+                            extraScrollHeight={0}
+                            keyboardDismissMode="interactive"
+                            keyboardOpeningTime={250}
+                            keyboardShouldPersistTaps="handled"
+                            keyboardSpace={0}
+                            resetScrollToCoords={
+                              Object {
+                                "x": 0,
+                                "y": 0,
+                              }
+                            }
+                            scrollEventThrottle={1}
+                            showsVerticalScrollIndicator={true}
+                            style={
+                              Object {
+                                "backgroundColor": "transparent",
+                                "flex": 1,
+                              }
+                            }
+                            viewIsInsideTabBar={false}
                           >
                             <View
                               style={
                                 Array [
                                   Object {},
                                   Object {
-                                    "alignContent": "center",
-                                    "flexDirection": "column",
-                                    "height": 300,
-                                    "justifyContent": "center",
-                                    "marginTop": 32,
-                                    "padding": 12,
+                                    "height": "100%",
                                     "width": "100%",
                                   },
                                 ]
                               }
                             >
-                              <TextInput
-                                allowFontScaling={true}
-                                bordered={false}
-                                editable={true}
-                                multiline={true}
-                                placeholderTextColor="#575757"
-                                rejectResponderTermination={true}
-                                rowSpan={6}
-                                style={
-                                  Object {
-                                    "backgroundColor": "#232323",
-                                    "color": "#000",
-                                    "fontSize": 20,
-                                    "height": 150,
-                                    "paddingLeft": 10,
-                                    "paddingRight": 5,
-                                    "textAlignVertical": "top",
-                                    "width": "100%",
-                                  }
-                                }
-                                underline={false}
-                                underlineColorAndroid="rgba(0,0,0,0)"
-                                value=""
-                              />
                               <View
                                 style={
                                   Array [
                                     Object {},
                                     Object {
-                                      "display": "flex",
-                                      "marginTop": 14,
+                                      "alignContent": "center",
+                                      "flexDirection": "column",
+                                      "height": 300,
+                                      "justifyContent": "center",
+                                      "marginTop": 32,
+                                      "padding": 12,
+                                      "width": "100%",
+                                    },
+                                  ]
+                                }
+                              >
+                                <TextInput
+                                  allowFontScaling={true}
+                                  bordered={false}
+                                  editable={true}
+                                  multiline={true}
+                                  placeholderTextColor="#575757"
+                                  rejectResponderTermination={true}
+                                  rowSpan={6}
+                                  style={
+                                    Object {
+                                      "backgroundColor": "#232323",
+                                      "color": "#000",
+                                      "fontSize": 20,
+                                      "height": 150,
+                                      "paddingLeft": 10,
+                                      "paddingRight": 5,
+                                      "textAlignVertical": "top",
+                                      "width": "100%",
+                                    }
+                                  }
+                                  underline={false}
+                                  underlineColorAndroid="rgba(0,0,0,0)"
+                                  value=""
+                                />
+                                <View
+                                  style={
+                                    Array [
+                                      Object {},
+                                      Object {
+                                        "display": "flex",
+                                        "marginTop": 14,
+                                        "width": "100%",
+                                      },
+                                    ]
+                                  }
+                                >
+                                  <Text
+                                    style={
+                                      Object {
+                                        "color": "#000",
+                                        "fontSize": 21,
+                                        "lineHeight": 25,
+                                      }
+                                    }
+                                  >
+                                    Channel backup
+                                  </Text>
+                                  <View
+                                    style={
+                                      Array [
+                                        Object {},
+                                        Object {
+                                          "display": "flex",
+                                          "flexDirection": "column",
+                                        },
+                                      ]
+                                    }
+                                  >
+                                    <TouchableOpacity
+                                      activeOpacity={0.5}
+                                      small={true}
+                                      style={
+                                        Object {
+                                          "alignItems": "center",
+                                          "backgroundColor": "#007aff",
+                                          "borderBottomWidth": null,
+                                          "borderColor": "#007aff",
+                                          "borderLeftWidth": null,
+                                          "borderRadius": 5,
+                                          "borderRightWidth": null,
+                                          "borderTopWidth": null,
+                                          "borderWidth": undefined,
+                                          "elevation": 2,
+                                          "flexDirection": "row",
+                                          "height": 30,
+                                          "justifyContent": "space-between",
+                                          "marginBottom": 10,
+                                          "marginTop": 6,
+                                          "paddingBottom": 6,
+                                          "paddingTop": 6,
+                                          "shadowColor": undefined,
+                                          "shadowOffset": undefined,
+                                          "shadowOpacity": undefined,
+                                          "shadowRadius": undefined,
+                                        }
+                                      }
+                                    >
+                                      <Text
+                                        style={
+                                          Object {
+                                            "backgroundColor": "transparent",
+                                            "color": "#fff",
+                                            "fontFamily": "System",
+                                            "fontSize": 14,
+                                            "marginLeft": 0,
+                                            "marginRight": 0,
+                                            "paddingLeft": 16,
+                                            "paddingRight": 16,
+                                          }
+                                        }
+                                        uppercase={false}
+                                      >
+                                        Choose channel backup file on disk
+                                      </Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                      activeOpacity={0.5}
+                                      small={true}
+                                      style={
+                                        Object {
+                                          "alignItems": "center",
+                                          "backgroundColor": "#007aff",
+                                          "borderBottomWidth": null,
+                                          "borderColor": "#007aff",
+                                          "borderLeftWidth": null,
+                                          "borderRadius": 5,
+                                          "borderRightWidth": null,
+                                          "borderTopWidth": null,
+                                          "borderWidth": undefined,
+                                          "elevation": 2,
+                                          "flexDirection": "row",
+                                          "height": 30,
+                                          "justifyContent": "space-between",
+                                          "paddingBottom": 6,
+                                          "paddingTop": 6,
+                                          "shadowColor": undefined,
+                                          "shadowOffset": undefined,
+                                          "shadowOpacity": undefined,
+                                          "shadowRadius": undefined,
+                                        }
+                                      }
+                                    >
+                                      <Text
+                                        style={
+                                          Object {
+                                            "backgroundColor": "transparent",
+                                            "color": "#fff",
+                                            "fontFamily": "System",
+                                            "fontSize": 14,
+                                            "marginLeft": 0,
+                                            "marginRight": 0,
+                                            "paddingLeft": 16,
+                                            "paddingRight": 16,
+                                          }
+                                        }
+                                        uppercase={false}
+                                      >
+                                        Restore via Google Drive
+                                      </Text>
+                                    </TouchableOpacity>
+                                  </View>
+                                </View>
+                              </View>
+                              <View
+                                style={
+                                  Array [
+                                    Object {},
+                                    Object {
+                                      "flex": 1,
+                                      "marginTop": 24,
                                       "width": "100%",
                                     },
                                   ]
@@ -291,119 +427,37 @@ exports[`renders correctly 1`] = `
                               >
                                 <Text
                                   style={
-                                    Object {
-                                      "color": "#000",
-                                      "fontSize": 21,
-                                      "lineHeight": 22,
-                                    }
-                                  }
-                                >
-                                  Channel backup
-                                </Text>
-                                <View
-                                  style={
                                     Array [
-                                      Object {},
                                       Object {
-                                        "display": "flex",
-                                        "flexDirection": "column",
+                                        "color": "#000",
+                                        "fontSize": 27,
+                                        "lineHeight": 32,
+                                      },
+                                      Object {
+                                        "marginBottom": 3,
                                       },
                                     ]
                                   }
                                 >
-                                  <TouchableOpacity
-                                    activeOpacity={0.5}
-                                    small={true}
-                                    style={
-                                      Object {
-                                        "alignItems": "center",
-                                        "backgroundColor": "#007aff",
-                                        "borderBottomWidth": null,
-                                        "borderColor": "#007aff",
-                                        "borderLeftWidth": null,
-                                        "borderRadius": 5,
-                                        "borderRightWidth": null,
-                                        "borderTopWidth": null,
-                                        "borderWidth": undefined,
-                                        "elevation": 2,
-                                        "flexDirection": "row",
-                                        "height": 30,
-                                        "justifyContent": "space-between",
-                                        "marginBottom": 10,
-                                        "marginTop": 6,
-                                        "paddingBottom": 6,
-                                        "paddingTop": 6,
-                                        "shadowColor": undefined,
-                                        "shadowOffset": undefined,
-                                        "shadowOpacity": undefined,
-                                        "shadowRadius": undefined,
-                                      }
+                                  Restore wallet
+                                </Text>
+                                <Text
+                                  style={
+                                    Object {
+                                      "color": "#000",
+                                      "fontFamily": "System",
+                                      "fontSize": 16,
                                     }
-                                  >
-                                    <Text
-                                      style={
-                                        Object {
-                                          "backgroundColor": "transparent",
-                                          "color": "#fff",
-                                          "fontFamily": "System",
-                                          "fontSize": 14,
-                                          "marginLeft": 0,
-                                          "marginRight": 0,
-                                          "paddingLeft": 16,
-                                          "paddingRight": 16,
-                                        }
-                                      }
-                                      uppercase={false}
-                                    >
-                                      Choose channel backup file on disk
-                                    </Text>
-                                  </TouchableOpacity>
-                                  <TouchableOpacity
-                                    activeOpacity={0.5}
-                                    small={true}
-                                    style={
-                                      Object {
-                                        "alignItems": "center",
-                                        "backgroundColor": "#007aff",
-                                        "borderBottomWidth": null,
-                                        "borderColor": "#007aff",
-                                        "borderLeftWidth": null,
-                                        "borderRadius": 5,
-                                        "borderRightWidth": null,
-                                        "borderTopWidth": null,
-                                        "borderWidth": undefined,
-                                        "elevation": 2,
-                                        "flexDirection": "row",
-                                        "height": 30,
-                                        "justifyContent": "space-between",
-                                        "paddingBottom": 6,
-                                        "paddingTop": 6,
-                                        "shadowColor": undefined,
-                                        "shadowOffset": undefined,
-                                        "shadowOpacity": undefined,
-                                        "shadowRadius": undefined,
-                                      }
-                                    }
-                                  >
-                                    <Text
-                                      style={
-                                        Object {
-                                          "backgroundColor": "transparent",
-                                          "color": "#fff",
-                                          "fontFamily": "System",
-                                          "fontSize": 14,
-                                          "marginLeft": 0,
-                                          "marginRight": 0,
-                                          "paddingLeft": 16,
-                                          "paddingRight": 16,
-                                        }
-                                      }
-                                      uppercase={false}
-                                    >
-                                      Restore via Google Drive
-                                    </Text>
-                                  </TouchableOpacity>
-                                </View>
+                                  }
+                                  uppercase={false}
+                                >
+                                  To restore your wallet, write each word from your seed separated by a space.
+                                  
+
+                                  
+
+                                  If you wish to restore your Lightning Network channels, you need to provide a file backup.
+                                </Text>
                               </View>
                             </View>
                             <View
@@ -411,112 +465,66 @@ exports[`renders correctly 1`] = `
                                 Array [
                                   Object {},
                                   Object {
-                                    "flex": 1,
-                                    "marginTop": 24,
+                                    "backgroundColor": "#151314",
+                                    "bottom": 24,
+                                    "paddingBottom": 24,
+                                    "paddingLeft": 9,
+                                    "paddingRight": 9,
                                     "width": "100%",
                                   },
                                 ]
                               }
                             >
-                              <Text
-                                style={
-                                  Array [
-                                    Object {
-                                      "color": "#000",
-                                      "fontSize": 27,
-                                      "lineHeight": 32,
-                                    },
-                                    Object {
-                                      "marginBottom": 3,
-                                    },
-                                  ]
-                                }
-                              >
-                                Restore wallet
-                              </Text>
-                              <Text
+                              <TouchableOpacity
+                                activeOpacity={0.5}
+                                block={true}
+                                disabled={false}
                                 style={
                                   Object {
-                                    "color": "#000",
-                                    "fontFamily": "System",
-                                    "fontSize": 16,
+                                    "alignItems": "center",
+                                    "alignSelf": "stretch",
+                                    "backgroundColor": "#007aff",
+                                    "borderBottomWidth": null,
+                                    "borderColor": "#007aff",
+                                    "borderLeftWidth": null,
+                                    "borderRadius": 5,
+                                    "borderRightWidth": null,
+                                    "borderTopWidth": null,
+                                    "borderWidth": undefined,
+                                    "elevation": 2,
+                                    "flexDirection": "row",
+                                    "height": 45,
+                                    "justifyContent": "center",
+                                    "paddingBottom": 6,
+                                    "paddingTop": 6,
+                                    "shadowColor": undefined,
+                                    "shadowOffset": undefined,
+                                    "shadowOpacity": undefined,
+                                    "shadowRadius": undefined,
                                   }
                                 }
-                                uppercase={false}
                               >
-                                To restore your wallet, write each word from your seed separated by a space.
-                                
-
-                                
-
-                                If you wish to restore your Lightning Network channels, you need to provide a file backup.
-                              </Text>
+                                <Text
+                                  style={
+                                    Object {
+                                      "backgroundColor": "transparent",
+                                      "color": "#fff",
+                                      "fontFamily": "System",
+                                      "fontSize": 16.5,
+                                      "marginLeft": 0,
+                                      "marginRight": 0,
+                                      "paddingLeft": 16,
+                                      "paddingRight": 16,
+                                    }
+                                  }
+                                  uppercase={false}
+                                >
+                                  Restore Wallet
+                                </Text>
+                              </TouchableOpacity>
                             </View>
-                          </View>
-                          <View
-                            style={
-                              Array [
-                                Object {},
-                                Object {
-                                  "backgroundColor": "#151314",
-                                  "bottom": 24,
-                                  "paddingBottom": 24,
-                                  "paddingLeft": 9,
-                                  "paddingRight": 9,
-                                  "width": "100%",
-                                },
-                              ]
-                            }
-                          >
-                            <TouchableOpacity
-                              activeOpacity={0.5}
-                              block={true}
-                              disabled={false}
-                              style={
-                                Object {
-                                  "alignItems": "center",
-                                  "alignSelf": "stretch",
-                                  "backgroundColor": "#007aff",
-                                  "borderBottomWidth": null,
-                                  "borderColor": "#007aff",
-                                  "borderLeftWidth": null,
-                                  "borderRadius": 5,
-                                  "borderRightWidth": null,
-                                  "borderTopWidth": null,
-                                  "borderWidth": undefined,
-                                  "elevation": 2,
-                                  "flexDirection": "row",
-                                  "height": 45,
-                                  "justifyContent": "center",
-                                  "paddingBottom": 6,
-                                  "paddingTop": 6,
-                                  "shadowColor": undefined,
-                                  "shadowOffset": undefined,
-                                  "shadowOpacity": undefined,
-                                  "shadowRadius": undefined,
-                                }
-                              }
-                            >
-                              <Text
-                                style={
-                                  Object {
-                                    "backgroundColor": "transparent",
-                                    "color": "#fff",
-                                    "fontFamily": "System",
-                                    "fontSize": 16.5,
-                                    "marginLeft": 0,
-                                    "marginRight": 0,
-                                    "paddingLeft": 16,
-                                    "paddingRight": 16,
-                                  }
-                                }
-                                uppercase={false}
-                              >
-                                Restore Wallet
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                        </ScrollView>
+                          </ScrollView>
+                        </SafeAreaView>
                       </View>
                     </View>
                   </View>
@@ -560,9 +568,9 @@ exports[`renders correctly 1`] = `
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
-                  "borderBottomColor": "rgb(199, 199, 204)",
+                  "borderBottomColor": "rgb(224, 224, 224)",
                   "flex": 1,
-                  "shadowColor": "rgb(199, 199, 204)",
+                  "shadowColor": "rgb(224, 224, 224)",
                   "shadowOffset": Object {
                     "height": 0.5,
                     "width": 0,

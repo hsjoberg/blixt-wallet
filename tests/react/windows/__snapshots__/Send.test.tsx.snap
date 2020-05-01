@@ -28,7 +28,6 @@ exports[`SendCamera renders correctly 1`] = `
         style={
           Object {
             "flex": 1,
-            "overflow": "hidden",
           }
         }
       >
@@ -115,7 +114,7 @@ exports[`SendCamera renders correctly 1`] = `
                   pointerEvents="none"
                   style={
                     Object {
-                      "backgroundColor": "#fff",
+                      "backgroundColor": "rgb(242, 242, 242)",
                       "bottom": 0,
                       "left": 0,
                       "position": "absolute",
@@ -529,9 +528,9 @@ exports[`SendCamera renders correctly 1`] = `
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
-                  "borderBottomColor": "rgb(199, 199, 204)",
+                  "borderBottomColor": "rgb(224, 224, 224)",
                   "flex": 1,
-                  "shadowColor": "rgb(199, 199, 204)",
+                  "shadowColor": "rgb(224, 224, 224)",
                   "shadowOffset": Object {
                     "height": 0.5,
                     "width": 0,
