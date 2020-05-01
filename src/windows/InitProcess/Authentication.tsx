@@ -9,7 +9,7 @@ import { LoginMethods } from "../../state/Security";
 import { smallScreen } from "../../utils/device";
 import Container from "../../components/Container";
 
-export default () => {
+export default function Authentication() {
   const loginPincode = useStoreActions((store) => store.security.loginPincode);
   const fingerprintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
   const fingerprintStartScan = useStoreActions((store) => store.security.fingerprintStartScan);

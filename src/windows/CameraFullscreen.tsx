@@ -4,7 +4,7 @@ import Camera from "../components/Camera";
 
 type onReadCallback = (address: string) => void;
 
-export default ({ navigation, route }: any) => {
+export default function CameraFullscreen({ navigation, route }: any) {
   const [onReadCalled, setOnReadCalled] = useState(false);
   const onRead: onReadCallback = route.params.onRead ?? (() => {});
   return (

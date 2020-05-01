@@ -13,7 +13,7 @@ export interface IPincode {
   textAction: string;
   onTryCode: (code: string) => Promise<boolean>;
 }
-export default ({ onTryCode, textAction }: IPincode) => {
+export default function Pincode({ onTryCode, textAction }: IPincode) {
   const pincodeText = useRef<Animatable.View>();
   const [code, setCode] = useState<number[]>([]);
 

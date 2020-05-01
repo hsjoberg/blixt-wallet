@@ -11,7 +11,7 @@ import { RootStackParamList } from "../Main";
 export interface ILoadingProps {
   navigation: StackNavigationProp<RootStackParamList, "Loading">;
 }
-export default ({ navigation }: ILoadingProps) => {
+export default function Loading({ navigation }: ILoadingProps) {
   const checkDeeplink = useStoreActions((store) => store.androidDeeplinkManager.checkDeeplink);
   const appReady = useStoreState((store) => store.appReady);
 

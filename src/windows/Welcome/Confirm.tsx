@@ -14,7 +14,7 @@ import Content from "../../components/Content";
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Confirm">;
 }
-export default ({ navigation }: IProps) => {
+export default function Confirm({ navigation }: IProps) {
   const setHoldonboarding = useStoreActions((state) => state.setHoldOnboarding);
   const createWallet = useStoreActions((store) => store.createWallet);
   const getAddress = useStoreActions((store) => store.onChain.getAddress);

@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 export interface ITransactionDetailsProps {
   children: any;
 }
-export default ({ children }: ITransactionDetailsProps) => {
+export default function BlurModal({ children }: ITransactionDetailsProps) {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 

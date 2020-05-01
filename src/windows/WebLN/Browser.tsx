@@ -20,7 +20,7 @@ interface IBrowserProps {
   route: RouteProp<RootStackParamList, "WebLNBrowser">;
 
 }
-export default ({ navigation, route }: IBrowserProps) => {
+export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   const initialUrl = route.params ? route.params.url : INITIAL_URL;
 
   const webview = useRef<WebView>();

@@ -16,7 +16,7 @@ const software = [
   "react-native-navigation",
 ]
 
-export default () => {
+export default function About() {
   const appVersion = useStoreState((store) => store.appVersion);
   const onGithubLinkPress = () => Linking.openURL(GITHUB_REPO_URL)
   const onHampusLinkPress = () => Linking.openURL(HAMPUS_EMAIL.replace("💩", "@"));

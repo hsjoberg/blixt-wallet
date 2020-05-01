@@ -47,7 +47,7 @@ export type RootStackParamList = {
   DEV_CommandsX: undefined;
 }
 
-export default () => {
+export default function Main() {
   const holdOnboarding = useStoreState((store) => store.holdOnboarding);
   const appReady = useStoreState((store) => store.appReady);
   const walletCreated = useStoreState((store) => store.walletCreated);

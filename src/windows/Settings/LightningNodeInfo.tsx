@@ -30,7 +30,7 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
   );
 };
 
-export default () => {
+export default function LightningNodeInfo() {
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const getNodeInfo = useStoreActions((store) => store.lightning.getInfo);
 

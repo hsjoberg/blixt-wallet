@@ -18,7 +18,7 @@ import CopyAddress from "../../components/CopyAddress";
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "AddFunds">;
 }
-export default ({ navigation }: IProps) => {
+export default function AddFunds({ navigation }: IProps) {
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
   const address = useStoreState((store) => store.onChain.address);
 

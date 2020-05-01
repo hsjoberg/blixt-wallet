@@ -36,7 +36,7 @@ export interface ITransactionDetailsProps {
   navigation: StackNavigationProp<OnChainStackParamList, "OnChainTransactionDetails">;
   route: RouteProp<OnChainStackParamList, "OnChainTransactionDetails">;
 }
-export default ({ navigation, route }: ITransactionDetailsProps) => {
+export default function OnChainTransactionDetails({ navigation, route }: ITransactionDetailsProps) {
   const txId: string = route.params.txId;
   const transaction = useStoreState((store) => store.onChain.getOnChainTransactionByTxId(txId));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);

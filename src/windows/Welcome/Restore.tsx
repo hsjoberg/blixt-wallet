@@ -15,7 +15,7 @@ import { ICreateWalletPayload } from "../../state";
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Restore">;
 }
-export default ({ navigation }: IProps) => {
+export default function Restore({ navigation }: IProps) {
   const [loading, setLoading] = useState(false);
   const [seedText, setSeedText] = useState("");
   const [backupType, setBackupType] = useState<"file" | "google_drive" | "none">("none");

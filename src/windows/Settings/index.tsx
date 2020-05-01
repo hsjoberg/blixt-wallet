@@ -19,7 +19,7 @@ export type SettingsStackParamList = {
   About: undefined;
 }
 
-export default () => {
+export default function SettingsIndex() {
   return (
     <Stack.Navigator initialRouteName="Settings" screenOptions={{ headerShown: false, animationEnabled: false, cardStyle: { backgroundColor: "transparent" } }}>
       <Stack.Screen name="Settings" component={Settings} />

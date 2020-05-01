@@ -12,7 +12,7 @@ import { RootStackParamList } from "../../Main";
 interface IChannelRequestProps {
   navigation: StackNavigationProp<RootStackParamList, "ChannelRequest">;
 }
-export default ({ navigation }: IChannelRequestProps) => {
+export default function LNURLChannelRequest({ navigation }: IChannelRequestProps) {
   const type = useStoreState((store) => store.lnUrl.type);
   const doChannelRequest = useStoreActions((store) => store.lnUrl.doChannelRequest);
 

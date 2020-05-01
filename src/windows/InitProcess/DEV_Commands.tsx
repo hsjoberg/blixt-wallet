@@ -25,7 +25,7 @@ interface IProps {
   navigation?: StackNavigationProp<RootStackParamList, "DEV_Commands">;
   continueCallback?: () => void;
 }
-export default ({ navigation, continueCallback }: IProps) => {
+export function DEV_Commands({ navigation, continueCallback }: IProps) {
   const [connectPeerStr, setConnectPeer] = useState("");
   const [sat, setSat] = useState("");
   const [addr, setAddr] = useState("");

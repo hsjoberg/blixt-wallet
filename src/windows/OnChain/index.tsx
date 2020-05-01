@@ -21,7 +21,7 @@ export type OnChainStackParamList = {
   };
 }
 
-export default () => {
+export default function OnChainIndex() {
   return (
     <Stack.Navigator initialRouteName="OnChainInfo" screenOptions={{ headerShown: false, animationEnabled: false, cardStyle: { backgroundColor: "transparent" } }}>
       <Stack.Screen name="OnChainInfo" component={OnChainInfo} />

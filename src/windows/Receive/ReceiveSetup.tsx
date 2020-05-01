@@ -15,7 +15,7 @@ const MAX_SAT_INVOICE = 4294967;
 export interface IReceiveSetupProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveSetup">;
 }
-export default ({ navigation }: IReceiveSetupProps) => {
+export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const invoiceSubscriptionStarted = useStoreState((store) => store.receive.invoiceSubscriptionStarted);

@@ -11,7 +11,7 @@ export interface IQrCodeProps {
   border?: number;
   style?: StyleProp<ViewStyle>;
 }
-export default ({ data, onPress, size, color, border, style: customStyle }: IQrCodeProps) => {
+export default function QrCode({ data, onPress, size, color, border, style: customStyle }: IQrCodeProps) {
   size = size ?? 300;
   border = border ?? 26;
 

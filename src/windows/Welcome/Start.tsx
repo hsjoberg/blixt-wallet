@@ -32,7 +32,7 @@ const AnimatedView = ({ children }: IAnimatedViewProps) => (
 export interface IStartProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Start">;
 }
-export default ({ navigation }: IStartProps) => {
+export default function Start({ navigation }: IStartProps) {
   const generateSeed = useStoreActions((store) => store.generateSeed);
 
   const onCreateWalletPress = async () => {

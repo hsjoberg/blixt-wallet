@@ -17,7 +17,7 @@ interface ISendCameraProps {
   bolt11Invoice?: string;
   navigation: StackNavigationProp<SendStackParamList, "SendCamera">;
 }
-export default ({ navigation }: ISendCameraProps) => {
+export default function SendCamera({ navigation }: ISendCameraProps) {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const setPayment = useStoreActions((store) => store.send.setPayment);
   const [cameraType, setCameraType] = useState<keyof CameraType>(RNCamera.Constants.Type.back);

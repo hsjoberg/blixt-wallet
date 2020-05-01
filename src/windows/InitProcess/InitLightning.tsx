@@ -9,7 +9,7 @@ import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
 import { timeout } from "../../utils";
 
-export default () => {
+export default function InitLightning() {
   const initializeLightning = useStoreActions((store) => store.lightning.initialize);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const firstSync = useStoreState((store) => store.lightning.firstSync);

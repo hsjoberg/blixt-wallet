@@ -22,7 +22,7 @@ import { Chain } from "../../utils/build";
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
 }
-export default ({ navigation }: ISettingsProps) => {
+export default function Settings({ navigation }: ISettingsProps) {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
 
   // Pincode
