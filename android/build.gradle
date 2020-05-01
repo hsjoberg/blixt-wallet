@@ -15,7 +15,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.4.2")
+        classpath("com.android.tools.build:gradle:3.5.2")
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.8'
         classpath 'com.google.gms:google-services:4.3.3'
     }
@@ -35,8 +35,7 @@ allprojects {
         google()
         jcenter()
         maven {
-            url "https://jitpack.io"
+            url "https://www.jitpack.io"
         }
-
     }
 }

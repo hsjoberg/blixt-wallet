@@ -28,7 +28,6 @@ exports[`renders correctly 1`] = `
         style={
           Object {
             "flex": 1,
-            "overflow": "hidden",
           }
         }
       >
@@ -115,7 +114,7 @@ exports[`renders correctly 1`] = `
                   pointerEvents="none"
                   style={
                     Object {
-                      "backgroundColor": "#fff",
+                      "backgroundColor": "rgb(242, 242, 242)",
                       "bottom": 0,
                       "left": 0,
                       "position": "absolute",
@@ -187,15 +186,13 @@ exports[`renders correctly 1`] = `
                                   "flex": 1,
                                   "overflow": "hidden",
                                 },
+                                null,
                                 Object {
                                   "bottom": 0,
                                   "left": 0,
                                   "position": "absolute",
                                   "right": 0,
                                   "top": 0,
-                                },
-                                Object {
-                                  "opacity": 1,
                                 },
                               ]
                             }
@@ -370,7 +367,7 @@ exports[`renders correctly 1`] = `
                                                     "padding": 4,
                                                     "paddingRight": 8,
                                                     "position": "absolute",
-                                                    "top": 54,
+                                                    "top": 12,
                                                   },
                                                 ],
                                                 Object {
@@ -409,7 +406,7 @@ exports[`renders correctly 1`] = `
                                                     "padding": 4,
                                                     "paddingRight": 8,
                                                     "position": "absolute",
-                                                    "top": 54,
+                                                    "top": 12,
                                                   },
                                                 ],
                                                 Object {
@@ -447,7 +444,7 @@ exports[`renders correctly 1`] = `
                                                     "padding": 4,
                                                     "position": "absolute",
                                                     "right": 8,
-                                                    "top": 55,
+                                                    "top": 13,
                                                   },
                                                 ],
                                                 Object {
@@ -485,7 +482,7 @@ exports[`renders correctly 1`] = `
                                                     "padding": 4,
                                                     "position": "absolute",
                                                     "right": 47,
-                                                    "top": 55,
+                                                    "top": 13,
                                                   },
                                                 ],
                                                 Object {
@@ -507,7 +504,7 @@ exports[`renders correctly 1`] = `
                                               "fontFamily": "System",
                                               "fontSize": 37,
                                               "marginBottom": 2,
-                                              "marginTop": 72,
+                                              "marginTop": 30,
                                             }
                                           }
                                           testID="BIG_BALANCE_HEADER"
@@ -534,209 +531,217 @@ exports[`renders correctly 1`] = `
                             </View>
                           </View>
                         </View>
-                        <View
+                        <SafeAreaView
                           style={
                             Object {
                               "backgroundColor": "#F8F8F8",
-                              "borderColor": "#cbcbcb",
-                              "borderTopWidth": 0.5,
-                              "elevation": 3,
-                              "flexDirection": "row",
-                              "height": 55,
-                              "justifyContent": "center",
-                              "left": 0,
-                              "paddingBottom": 0,
-                              "right": 0,
                             }
                           }
                         >
                           <View
                             style={
                               Object {
-                                "alignSelf": "stretch",
-                                "backgroundColor": undefined,
-                                "flex": 1,
+                                "backgroundColor": "#F8F8F8",
+                                "borderColor": "#cbcbcb",
+                                "borderTopWidth": 0.5,
+                                "elevation": 3,
                                 "flexDirection": "row",
-                                "justifyContent": "space-between",
+                                "height": 55,
+                                "justifyContent": "center",
+                                "left": 0,
+                                "paddingBottom": 0,
+                                "right": 0,
                               }
                             }
                           >
-                            <TouchableOpacity
-                              activeOpacity={0.5}
+                            <View
                               style={
                                 Object {
-                                  "alignItems": "center",
-                                  "alignSelf": "center",
-                                  "backgroundColor": "transparent",
-                                  "borderBottomWidth": null,
-                                  "borderColor": null,
-                                  "borderLeftWidth": null,
-                                  "borderRadius": 5,
-                                  "borderRightWidth": null,
-                                  "borderTopWidth": null,
-                                  "borderWidth": undefined,
-                                  "elevation": 0,
+                                  "alignSelf": "stretch",
+                                  "backgroundColor": undefined,
                                   "flex": 1,
-                                  "flexDirection": null,
-                                  "height": 55,
-                                  "justifyContent": "center",
-                                  "paddingBottom": 6,
-                                  "paddingTop": 6,
-                                  "shadowColor": null,
-                                  "shadowOffset": null,
-                                  "shadowOpacity": null,
-                                  "shadowRadius": null,
+                                  "flexDirection": "row",
+                                  "justifyContent": "space-between",
                                 }
                               }
-                              testID="FOOTER_RECEIVE"
                             >
-                              <Text
-                                allowFontScaling={false}
-                                style={
-                                  Array [
-                                    Object {
-                                      "color": undefined,
-                                      "fontSize": 12,
-                                    },
-                                    Array [
-                                      Object {
-                                        "color": "#000",
-                                        "fontSize": 30,
-                                      },
-                                      Object {
-                                        "color": "#6b6b6b",
-                                        "fontSize": 24,
-                                        "marginLeft": 16,
-                                        "marginRight": 16,
-                                        "paddingTop": 2,
-                                      },
-                                    ],
-                                    Object {
-                                      "fontFamily": "anticon",
-                                      "fontStyle": "normal",
-                                      "fontWeight": "normal",
-                                    },
-                                    Object {},
-                                  ]
-                                }
-                                type="AntDesign"
-                              >
-                                
-                              </Text>
-                              <Text
+                              <TouchableOpacity
+                                activeOpacity={0.5}
                                 style={
                                   Object {
+                                    "alignItems": "center",
+                                    "alignSelf": "center",
                                     "backgroundColor": "transparent",
-                                    "color": "#6b6b6b",
-                                    "fontFamily": "System",
-                                    "fontSize": 14,
-                                    "lineHeight": 16,
-                                    "marginLeft": 0,
-                                    "marginRight": 0,
-                                    "paddingLeft": 16,
-                                    "paddingRight": 16,
+                                    "borderBottomWidth": null,
+                                    "borderColor": null,
+                                    "borderLeftWidth": null,
+                                    "borderRadius": 5,
+                                    "borderRightWidth": null,
+                                    "borderTopWidth": null,
+                                    "borderWidth": undefined,
+                                    "elevation": 0,
+                                    "flex": 1,
+                                    "flexDirection": null,
+                                    "height": 55,
+                                    "justifyContent": "center",
+                                    "paddingBottom": 6,
+                                    "paddingTop": 6,
+                                    "shadowColor": null,
+                                    "shadowOffset": null,
+                                    "shadowOpacity": null,
+                                    "shadowRadius": null,
                                   }
                                 }
-                                uppercase={false}
+                                testID="FOOTER_RECEIVE"
                               >
-                                Receive
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                          <View
-                            style={
-                              Object {
-                                "alignSelf": "stretch",
-                                "backgroundColor": undefined,
-                                "flex": 1,
-                                "flexDirection": "row",
-                                "justifyContent": "space-between",
-                              }
-                            }
-                          >
-                            <TouchableOpacity
-                              activeOpacity={0.5}
+                                <Text
+                                  allowFontScaling={false}
+                                  style={
+                                    Array [
+                                      Object {
+                                        "color": undefined,
+                                        "fontSize": 12,
+                                      },
+                                      Array [
+                                        Object {
+                                          "color": "#000",
+                                          "fontSize": 30,
+                                        },
+                                        Object {
+                                          "color": "#6b6b6b",
+                                          "fontSize": 24,
+                                          "marginLeft": 16,
+                                          "marginRight": 16,
+                                          "paddingTop": 2,
+                                        },
+                                      ],
+                                      Object {
+                                        "fontFamily": "anticon",
+                                        "fontStyle": "normal",
+                                        "fontWeight": "normal",
+                                      },
+                                      Object {},
+                                    ]
+                                  }
+                                  type="AntDesign"
+                                >
+                                  
+                                </Text>
+                                <Text
+                                  style={
+                                    Object {
+                                      "backgroundColor": "transparent",
+                                      "color": "#6b6b6b",
+                                      "fontFamily": "System",
+                                      "fontSize": 14,
+                                      "lineHeight": 16,
+                                      "marginLeft": 0,
+                                      "marginRight": 0,
+                                      "paddingLeft": 16,
+                                      "paddingRight": 16,
+                                    }
+                                  }
+                                  uppercase={false}
+                                >
+                                  Receive
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
+                            <View
                               style={
                                 Object {
-                                  "alignItems": "center",
-                                  "alignSelf": "center",
-                                  "backgroundColor": "transparent",
-                                  "borderBottomWidth": null,
-                                  "borderColor": null,
-                                  "borderLeftWidth": null,
-                                  "borderRadius": 5,
-                                  "borderRightWidth": null,
-                                  "borderTopWidth": null,
-                                  "borderWidth": undefined,
-                                  "elevation": 0,
+                                  "alignSelf": "stretch",
+                                  "backgroundColor": undefined,
                                   "flex": 1,
-                                  "flexDirection": null,
-                                  "height": 55,
-                                  "justifyContent": "center",
-                                  "paddingBottom": 6,
-                                  "paddingTop": 6,
-                                  "shadowColor": null,
-                                  "shadowOffset": null,
-                                  "shadowOpacity": null,
-                                  "shadowRadius": null,
+                                  "flexDirection": "row",
+                                  "justifyContent": "space-between",
                                 }
                               }
-                              testID="FOOTER_SEND"
                             >
-                              <Text
-                                allowFontScaling={false}
-                                style={
-                                  Array [
-                                    Object {
-                                      "color": undefined,
-                                      "fontSize": 12,
-                                    },
-                                    Array [
-                                      Object {
-                                        "color": "#000",
-                                        "fontSize": 30,
-                                      },
-                                      Object {
-                                        "color": "#6b6b6b",
-                                        "fontSize": 24,
-                                        "marginLeft": 16,
-                                        "marginRight": 16,
-                                        "paddingTop": 2,
-                                      },
-                                    ],
-                                    Object {
-                                      "fontFamily": "anticon",
-                                      "fontStyle": "normal",
-                                      "fontWeight": "normal",
-                                    },
-                                    Object {},
-                                  ]
-                                }
-                                type="AntDesign"
-                              >
-                                
-                              </Text>
-                              <Text
+                              <TouchableOpacity
+                                activeOpacity={0.5}
                                 style={
                                   Object {
+                                    "alignItems": "center",
+                                    "alignSelf": "center",
                                     "backgroundColor": "transparent",
-                                    "color": "#6b6b6b",
-                                    "fontFamily": "System",
-                                    "fontSize": 14,
-                                    "lineHeight": 16,
-                                    "marginLeft": 0,
-                                    "marginRight": 0,
-                                    "paddingLeft": 16,
-                                    "paddingRight": 16,
+                                    "borderBottomWidth": null,
+                                    "borderColor": null,
+                                    "borderLeftWidth": null,
+                                    "borderRadius": 5,
+                                    "borderRightWidth": null,
+                                    "borderTopWidth": null,
+                                    "borderWidth": undefined,
+                                    "elevation": 0,
+                                    "flex": 1,
+                                    "flexDirection": null,
+                                    "height": 55,
+                                    "justifyContent": "center",
+                                    "paddingBottom": 6,
+                                    "paddingTop": 6,
+                                    "shadowColor": null,
+                                    "shadowOffset": null,
+                                    "shadowOpacity": null,
+                                    "shadowRadius": null,
                                   }
                                 }
-                                uppercase={false}
+                                testID="FOOTER_SEND"
                               >
-                                Send
-                              </Text>
-                            </TouchableOpacity>
+                                <Text
+                                  allowFontScaling={false}
+                                  style={
+                                    Array [
+                                      Object {
+                                        "color": undefined,
+                                        "fontSize": 12,
+                                      },
+                                      Array [
+                                        Object {
+                                          "color": "#000",
+                                          "fontSize": 30,
+                                        },
+                                        Object {
+                                          "color": "#6b6b6b",
+                                          "fontSize": 24,
+                                          "marginLeft": 16,
+                                          "marginRight": 16,
+                                          "paddingTop": 2,
+                                        },
+                                      ],
+                                      Object {
+                                        "fontFamily": "anticon",
+                                        "fontStyle": "normal",
+                                        "fontWeight": "normal",
+                                      },
+                                      Object {},
+                                    ]
+                                  }
+                                  type="AntDesign"
+                                >
+                                  
+                                </Text>
+                                <Text
+                                  style={
+                                    Object {
+                                      "backgroundColor": "transparent",
+                                      "color": "#6b6b6b",
+                                      "fontFamily": "System",
+                                      "fontSize": 14,
+                                      "lineHeight": 16,
+                                      "marginLeft": 0,
+                                      "marginRight": 0,
+                                      "paddingLeft": 16,
+                                      "paddingRight": 16,
+                                    }
+                                  }
+                                  uppercase={false}
+                                >
+                                  Send
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
                           </View>
-                        </View>
+                        </SafeAreaView>
                       </View>
                     </View>
                   </View>
@@ -780,9 +785,9 @@ exports[`renders correctly 1`] = `
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
-                  "borderBottomColor": "rgb(199, 199, 204)",
+                  "borderBottomColor": "rgb(224, 224, 224)",
                   "flex": 1,
-                  "shadowColor": "rgb(199, 199, 204)",
+                  "shadowColor": "rgb(224, 224, 224)",
                   "shadowOffset": Object {
                     "height": 0.5,
                     "width": 0,
