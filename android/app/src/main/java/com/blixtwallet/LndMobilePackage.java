@@ -17,5 +17,6 @@ public class LndMobilePackage implements ReactPackage {
 
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
+    return Arrays.asList(new LndMobile(reactContext));
   }
 }

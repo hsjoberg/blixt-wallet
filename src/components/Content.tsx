@@ -6,7 +6,7 @@ export interface IContentProps {
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
 }
-export default function Content({ children, style }: IContentProps) {
+export default function BlixtContent({ children, style }: IContentProps) {
   return (
     <Content contentContainerStyle={[{ padding: 14 }, style]}>
       {children}

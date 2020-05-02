@@ -1,6 +1,5 @@
-import { Alert, Clipboard, AppState, AppStateStatus, NativeModules } from "react-native"
+import { NativeModules } from "react-native"
 import { Action, action, Thunk, thunk, computed, Computed } from "easy-peasy";
-import { IStoreModel } from "./index";
 import { StorageItem, getItemObject } from "../storage/app";
 import { WorkInfo } from "../lndmobile/scheduled-sync";
 import { IStoreInjections } from "./store.ts";
