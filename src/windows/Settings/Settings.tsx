@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid } from "react-native";
+import { Alert, StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid, Linking } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import DocumentPicker from "react-native-document-picker";
 import { readFile } from "react-native-fs";
@@ -328,11 +328,50 @@ export default function Settings({ navigation }: ISettingsProps) {
     }
   };
 
-
+  // WebLN Browser
   const experimentWeblnBrowserEnabled = useStoreState((store) => store.settings.experimentWeblnEnabled);
   const changeExperimentWeblnBrowserEnabled = useStoreActions((store) => store.settings.changeExperimentWeblnEnabled);
   const onExperimentWeblnBrowserEnabledToggle = async () => {
     await changeExperimentWeblnBrowserEnabled(!experimentWeblnBrowserEnabled);
+  }
+
+  // Inbound services list
+  const onInboundServiceListPress = async () => {
+    interface ShowPickerResult {
+      selectedItem: {
+        id: "LNBIG" | "BITREFILL_THOR";
+        label: "LN Big" | "Bitrefill Thor";
+      } | undefined;
+    }
+    const { selectedItem }: ShowPickerResult = await DialogAndroid.showPicker(null, null, {
+      title: "Incoming channel provider",
+      content:
+`Choose an incoming channel provider and press Continue.
+
+Your web browser will be opened to the corresponding provider's website, where you will be able to request a channel.
+
+When you're done, you can copy the address code and/or open the link using Blixt Wallet.`,
+      positiveText: "Continue",
+      negativeText: "Cancel",
+      type: DialogAndroid.listRadio,
+      selectedId: transactionGeolocationMapStyle,
+      items: [{
+        id: "LNBIG",
+        label: "LN Big"
+      }, {
+        id: "BITREFILL_THOR",
+        label: "Bitrefill Thor"
+      }],
+    });
+
+    if (selectedItem) {
+      if (selectedItem.id === "LNBIG") {
+        await Linking.openURL("https://lnbig.com/");
+
+      } else if(selectedItem.id === "BITREFILL_THOR") {
+        await Linking.openURL("https://embed.bitrefill.com/buy/lightning");
+      }
+    };
   }
 
   return (
@@ -519,6 +558,13 @@ export default function Settings({ navigation }: ISettingsProps) {
             <Left><Icon style={style.icon} type="Entypo" name="circular-graph" /></Left>
             <Body><Text>Automatically open channels</Text></Body>
             <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onInboundServiceListPress}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="cloud-download" /></Left>
+            <Body>
+              <Text>Inbound channel services</Text>
+              <Text note={true} numberOfLines={1}>Use an inbound channel service for receiving payments</Text>
+            </Body>
           </ListItem>
 
 
