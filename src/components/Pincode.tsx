@@ -53,8 +53,8 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
     }
   }, [code]);
 
-  const pincodeInput = "●".repeat(code.length);
-  const pincodeInputPlaceholder = "●".repeat(6 - code.length);
+  const pincodeInput = "⬤".repeat(code.length);
+  const pincodeInputPlaceholder = "⬤".repeat(6 - code.length);
 
   return (
     <Container>
@@ -124,11 +124,13 @@ const style = StyleSheet.create({
   },
   pincodeInputContainer: {
     backgroundColor: blixtTheme.gray,
+    paddingVertical: 3,
   },
   pincodeInputText: {
     textAlign: "center",
-    fontSize: 44,
-    lineHeight: 54,
+    fontSize: 35,
+    lineHeight: 44,
+    letterSpacing: 4,
   },
   pincodeInputPlaceholderText: {
     color: color(blixtTheme.lightGray).darken(0.6).hex(),
