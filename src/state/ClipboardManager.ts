@@ -1,9 +1,11 @@
-import { Alert, Clipboard, AppState, AppStateStatus } from "react-native"
+import { Alert, AppState, AppStateStatus } from "react-native";
+import Clipboard from "@react-native-community/clipboard";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import { navigate, getNavigator } from "../utils/navigation";
 import { IStoreModel } from "./index";
 
 import logger from "./../utils/log";
+import { LnBech32Prefix } from "../utils/build";
 const log = logger("ClipboardManager");
 
 export interface IClipboardManagerModel {
@@ -12,6 +14,8 @@ export interface IClipboardManagerModel {
 
   checkInvoice: Thunk<IClipboardManagerModel, string, any, IStoreModel>;
   addToInvoiceCache: Action<IClipboardManagerModel, string>;
+  tryInvoice: Thunk<IClipboardManagerModel, { paymentRequest: string }, any, IStoreModel>;
+  tryLNUrl: Thunk<IClipboardManagerModel, { lnUrl: string }, any, IStoreModel>;
 
   invoiceCache: string[];
 }
@@ -26,7 +30,7 @@ export const clipboardManager: IClipboardManagerModel = {
     }
   }),
 
-  setupInvoiceListener: thunk(async (actions, _, { getStoreState }) => {
+  setupInvoiceListener: thunk((actions, _, { getStoreState }) => {
     AppState.addEventListener("change", async (status: AppStateStatus) => {
       if (getStoreState().settings.clipboardInvoiceCheckEnabled && status === "active") {
         const clipboardText = await Clipboard.getString();
@@ -51,7 +55,24 @@ export const clipboardManager: IClipboardManagerModel = {
       }
       actions.addToInvoiceCache(text);
 
-      await dispatch.send.setPayment({paymentRequestStr: text });
+      // If this is an invoice
+      if (text.startsWith(LnBech32Prefix)) {
+        log.d("ln uri");
+        actions.tryInvoice({ paymentRequest: text });
+      }
+      // If this is an LNURL
+      else if (text.startsWith("LNURL")) {
+        log.d("lnurl");
+        actions.tryLNUrl({ lnUrl: text });
+      }
+    } catch (e) {
+      log.d("Error checking clipboard", [e]);
+    }
+  }),
+
+  tryInvoice: thunk(async (actions, payload, { dispatch, getState }) => {
+    try {
+      await dispatch.send.setPayment({paymentRequestStr: payload.paymentRequest });
 
       Alert.alert(
         "Found invoice in clipboard",
@@ -67,8 +88,32 @@ export const clipboardManager: IClipboardManagerModel = {
         }]
       );
     } catch (e) {
-      log.d("Error checking clipboard for lightning invoice", [e]);
       dispatch.send.clear();
+      log.e(`Error checking clipboard for lightning invoice: ${e.message}`);
+    }
+    return false;
+  }),
+
+  tryLNUrl: thunk(async (actions, payload, { dispatch, getState, getStoreState }) => {
+    const type = await dispatch.lnUrl.setLNUrl(payload.lnUrl);
+    if (type === "channelRequest") {
+      Alert.alert(
+        "Found LNURL in clipboard",
+        `Found an LNURL in clipboard. Do you wish to continue?`,
+        [{
+          text: "Cancel",
+          onPress: () => dispatch.lnUrl.clear()
+        }, {
+          text: "Continue",
+          onPress: () => {
+            log.d("Navigating to channelRequest");
+            navigate("ChannelRequest");
+          }
+        }]
+      );
+    }
+    else {
+      throw new Error("Unknown lnurl request");
     }
   }),
 
