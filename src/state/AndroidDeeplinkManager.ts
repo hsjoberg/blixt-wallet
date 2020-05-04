@@ -1,41 +1,47 @@
 import { AppState, AppStateStatus, Linking, NativeModules } from "react-native"
 import { Action, action, Thunk, thunk } from "easy-peasy";
-import { navigate, getNavigator } from "../utils/navigation";
-import { IStoreModel } from "./index";
+import { NavigationContainerRef } from "@react-navigation/native";
 
-import logger from "./../utils/log";
+import { getNavigator } from "../utils/navigation";
+import { IStoreModel } from "./index";
 import { timeout } from "../utils";
+import { LnBech32Prefix } from "../utils/build";
+import logger from "./../utils/log";
 const log = logger("AndroidDeeplinkManager");
 
 export interface IAndroidDeeplinkManager {
   initialize: Thunk<IAndroidDeeplinkManager>;
   setupAppStateChangeListener: Thunk<IAndroidDeeplinkManager, void, any, IStoreModel>;
 
-  checkDeeplink: Thunk<IAndroidDeeplinkManager, { navigate: boolean, navigation?: any }, any, IStoreModel>;
-  tryInvoice: Thunk<IAndroidDeeplinkManager, { paymentRequest: string, navigate: boolean, navigation?: any }, any, IStoreModel>;
-  tryUrl: Thunk<IAndroidDeeplinkManager, { url: string, navigate: boolean, navigation?: any }, any, IStoreModel>;
+  checkDeeplink: Thunk<IAndroidDeeplinkManager, void, (nav: NavigationContainerRef) => {} | null, IStoreModel>;
+  tryInvoice: Thunk<IAndroidDeeplinkManager, { paymentRequest: string }, (nav: NavigationContainerRef) => {} | null, IStoreModel>;
+  tryLNUrl: Thunk<IAndroidDeeplinkManager, { lnUrl: string }, (nav: NavigationContainerRef) => {} | null, IStoreModel>;
   addToCache: Action<IAndroidDeeplinkManager, string>;
 
-  Cache: string[];
+  cache: string[];
 }
 
 export const androidDeeplinkManager: IAndroidDeeplinkManager = {
   initialize: thunk(async (actions) => {
     actions.setupAppStateChangeListener();
-    Linking.addListener("url", (e: { url: string }) => {
-      actions.tryInvoice({
-        paymentRequest: e.url,
-        navigate: true,
-      });
+    // Used for checking for URL intent invocations
+    Linking.addListener("url", async (e: { url: string }) => {
+      log.d("url eventlistener");
+      const result = await actions.checkDeeplink();
+      console.log(result);
+      if (result) {
+        result(getNavigator());
+      }
     });
-    await actions.checkDeeplink({ navigate: true });
-
+    // await actions.checkDeeplink();
   }),
 
-  setupAppStateChangeListener: thunk(async (actions, _, { getStoreState }) => {
+  setupAppStateChangeListener: thunk((actions, _, { getStoreState }) => {
+    // Used for checking common intent invocations ("Share with app", NFC etc)
     AppState.addEventListener("change", async (status: AppStateStatus) => {
+      log.d("change eventlistener");
       if (status === "active") {
-        const result = await actions.checkDeeplink({ navigate: true });
+        const result = await actions.checkDeeplink();
         if (result) {
           result(getNavigator());
         }
@@ -43,7 +49,7 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
     });
   }),
 
-  checkDeeplink: thunk(async (actions, payload, { dispatch, getState, getStoreState }) => {
+  checkDeeplink: thunk(async (actions, _, { getState, getStoreState }) => {
     try {
       let data = await Linking.getInitialURL();
       if (data === null) {
@@ -52,69 +58,77 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
       if (data === null) {
         data = await NativeModules.LndMobile.getIntentNfcData();
       }
-      log.d("", [data]);
+      log.d("Deeplink", [data]);
       if (data) {
+        // Waiting for RPC server to be ready
+        while (!getStoreState().lightning.rpcReady) {
+          await timeout(500);
+        }
+
         if (data.toUpperCase().startsWith("LIGHTNING:")) {
-          return await actions.tryInvoice({
-            ...payload,
-            paymentRequest: data,
-          });
+          log.d("Deeplink found");
+          const lightningUri = data.toUpperCase().replace("LIGHTNING:", "");
+          if (getState().cache.includes(lightningUri)) {
+            return;
+          }
+          actions.addToCache(lightningUri);
+
+          log.d("", [lightningUri.startsWith(LnBech32Prefix.toUpperCase())]);
+          // If this is an invoice
+          if (lightningUri.startsWith(LnBech32Prefix.toUpperCase())) {
+            return await actions.tryInvoice({ paymentRequest: lightningUri });
+          }
+          // If this is an LNURL
+          else if (lightningUri.startsWith("LNURL")) {
+            return await actions.tryLNUrl({ lnUrl: lightningUri });
+          }
         }
         // If this is a normal URL
         // we want to open the WebLN browser
         else {
           try {
             const url = new URL(data);
-            navigate("WebLNBrowser", { url: data });
+            return (nav: NavigationContainerRef) => {
+              nav?.navigate("WebLNBrowser", { url: data });
+            }
           } catch (e) {}
         }
       }
     } catch (e) {
-      dispatch.send.clear();
-      log.e(`Error checking deeplink: ${e.message}`);
+      log.i(`Error checking deeplink: ${e.message}`);
     }
     return null;
   }),
 
-  tryInvoice: thunk(async (actions, payload, { dispatch, getState, getStoreState }) => {
-    if (getState().Cache.includes(payload.paymentRequest)) {
-      return;
-    }
-    actions.addToCache(payload.paymentRequest);
-
-    while (!getStoreState().lightning.rpcReady) {
-      await timeout(500);
-    }
-
-    await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest.toUpperCase().replace("LIGHTNING:", "") });
-    if (payload.navigate) {
-      return (nav) => {
-        nav.navigate("Send", { screen: "SendConfirmation" });
+  tryInvoice: thunk(async (actions, payload, { dispatch, getState }) => {
+    try {
+      await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest });
+      return (nav: NavigationContainerRef) => {
+        nav?.navigate("Send", { screen: "SendConfirmation" });
       }
+    } catch (e) {
+      dispatch.send.clear();
+      log.i(`Error checking deeplink invoice: ${e.message}`);
     }
     return false;
   }),
 
-  tryUrl: thunk(async (actions, payload, { dispatch, getState, getStoreState }) => {
-    if (getState().Cache.includes(payload.url)) {
-      return;
+  tryLNUrl: thunk(async (actions, payload, { dispatch, getState }) => {
+    const type = await dispatch.lnUrl.setLNUrl(payload.lnUrl);
+    if (type === "channelRequest") {
+      log.d("Navigating to channelRequest");
+      return (nav: NavigationContainerRef) => {
+        nav?.navigate("ChannelRequest");
+      }
     }
-    actions.addToCache(payload.url);
-
-    while (!getStoreState().lightning.rpcReady) {
-      await timeout(500);
+    else {
+      throw new Error("Unknown lnurl request");
     }
-
-    await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest.toUpperCase().replace("LIGHTNING:", "") });
-    if (payload.navigation) {
-      navigate("Send", { screen: "SendConfirmation" });
-    }
-    return true;
   }),
 
   addToCache: action((state, payload) => {
-    state.Cache = [...state.Cache, payload];
+    state.cache = [...state.cache, payload];
   }),
 
-  Cache: [],
+  cache: [],
 };
