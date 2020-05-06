@@ -120,7 +120,7 @@ class LndMobile extends ReactContextBaseJavaModule {
             if (request != -1) {
               HyperLog.e(TAG, "Unknown request: " + request);
             }
-            return;
+            return; // !
           }
 
           final Promise promise = requests.remove(request);

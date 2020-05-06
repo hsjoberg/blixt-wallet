@@ -49,6 +49,8 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   private Messenger messengerService; // The service
   private Messenger messenger; // Me
   private ReactDatabaseSupplier dbSupplier;
+  private boolean lndStarted = false;
+
   // private enum WorkState {
   //   NOT_STARTED, BOUND, WALLET_UNLOCKED, WAITING_FOR_SYNC, DONE;
   //   public static final EnumSet<WorkState> ALL_OPTS = EnumSet.allOf(WorkState.class);
@@ -116,6 +118,9 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   }
 
   private void startLndWorkThread(ResolvableFuture future, String password) {
+    // Make sure we don't attempt to start lnd twice.
+    // A better fix in the future would be to actually
+    // use MSG_CHECKSTATUS in the future
     HandlerThread thread = new HandlerThread(HANDLERTHREAD_NAME) {
       @Override
       public void run() {
@@ -129,14 +134,23 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
             switch (msg.what) {
               case LndMobileService.MSG_REGISTER_CLIENT_ACK: {
                 try {
-                  HyperLog.i(TAG, "Sending MSG_START_LND request");
-                  startLnd();
+                  if (!lndStarted) {
+                    HyperLog.i(TAG, "Sending MSG_START_LND request");
+                    startLnd();
+                  } else {
+                    // Just exit if we reach this scenario
+                    HyperLog.w(TAG, "WARNING, Got MSG_REGISTER_CLIENT_ACK when lnd should already be started, quitting work.");
+                    unbindLndMobileService();
+                    future.set(Result.success());
+                    return;
+                  }
                 } catch (Throwable t) {
                   t.printStackTrace();
                 }
                 break;
               }
               case LndMobileService.MSG_START_LND_RESULT: {
+                lndStarted = true;
                 HyperLog.i(TAG, "LndMobileService reports lnd is started. Sending UnlockWallet request");
                 unlockWalletRequest(password);
                 break;
