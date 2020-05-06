@@ -78,4 +78,10 @@ export const appMigration: IAppMigration[] = [
       await db.executeSql("ALTER TABLE tx ADD type TEXT NOT NULL DEFAULT 'NORMAL'");
     },
   },
+  // Version 9
+  {
+    async beforeLnd(db, i) {
+      await setItem(StorageItem.onchainExplorer, "mempool");
+    },
+  },
 ];

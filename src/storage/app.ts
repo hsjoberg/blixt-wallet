@@ -3,8 +3,9 @@ import { LoginMethods } from "../state/Security";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 import { MapStyle } from "../utils/google-maps";
+import { OnChainExplorer } from "../state/Settings";
 
-const APP_VERSION = 8;
+const APP_VERSION = 9;
 
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",
@@ -32,6 +33,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   transactionGeolocationEnabled = "transactionGeolocationEnabled",
   transactionGeolocationMapStyle = "transactionGeolocationMapStyle",
   experimentWeblnEnabled = "experimentWeblnEnabled",
+  onchainExplorer = "onchainExplorer",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -77,6 +79,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.transactionGeolocationEnabled),
     removeItem(StorageItem.transactionGeolocationMapStyle),
     removeItem(StorageItem.experimentWeblnEnabled),
+    removeItem(StorageItem.onchainExplorer),
   ]);
 };
 
@@ -105,5 +108,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.transactionGeolocationEnabled, false),
     setItem<keyof typeof MapStyle>(StorageItem.transactionGeolocationMapStyle, "darkMode"),
     setItemObject<boolean>(StorageItem.experimentWeblnEnabled, false),
+    setItem(StorageItem.onchainExplorer, "mempool"),
   ]);
 };

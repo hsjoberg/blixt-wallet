@@ -4,9 +4,17 @@ import { StorageItem, getItemObject, setItemObject, removeItem, getItem, setItem
 import { IFiatRates } from "./Fiat";
 import { IBitcoinUnit, IBitcoinUnits, BitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
+import { Chain } from "../utils/build";
 
 import logger from "./../utils/log";
 const log = logger("Settings");
+
+export const OnchainExplorer = {
+  mempool: "https://mempool.space/tx/",
+  blockstream: `https://blockstream.info/${Chain === "testnet" ? "testnet/" : ""}tx/`,
+  oxt: `https://oxt.me/transaction/`,
+  blockchair: "https://blockchair.com/bitcoin/transaction/",
+};
 
 export interface ISettingsModel {
   initialize: Thunk<ISettingsModel>;
@@ -23,7 +31,8 @@ export interface ISettingsModel {
   changePreferFiat: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationEnabled: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationMapStyle: Thunk<ISettingsModel, keyof typeof MapStyle>;
-  changeExperimentWeblnEnabled: Thunk<ISettingsModel, boolean>
+  changeExperimentWeblnEnabled: Thunk<ISettingsModel, boolean>;
+  changeOnchainExplorer: Thunk<ISettingsModel, keyof typeof OnchainExplorer>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -38,6 +47,8 @@ export interface ISettingsModel {
   setTransactionGeolocationEnabled: Action<ISettingsModel, boolean>;
   setTransactionGeolocationMapStyle: Action<ISettingsModel, keyof typeof MapStyle>;
   setExperimentWeblnEnabled: Action<ISettingsModel, boolean>;
+  setOnchainExplorer: Action<ISettingsModel, keyof typeof OnchainExplorer>;
+
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -52,6 +63,7 @@ export interface ISettingsModel {
   transactionGeolocationEnabled: boolean;
   transactionGeolocationMapStyle: keyof typeof MapStyle;
   experimentWeblnEnabled: boolean;
+  onchainExplorer: keyof typeof OnchainExplorer;
 }
 
 export const settings: ISettingsModel = {
@@ -70,6 +82,7 @@ export const settings: ISettingsModel = {
     actions.setTransactionGeolocationEnabled(await getItemObject(StorageItem.transactionGeolocationEnabled) || false);
     actions.setTransactionGeolocationMapStyle(await getItem(StorageItem.transactionGeolocationMapStyle) as keyof typeof MapStyle || "darkMode");
     actions.setExperimentWeblnEnabled(await getItemObject(StorageItem.experimentWeblnEnabled || false));
+    actions.setOnchainExplorer(await getItem(StorageItem.onchainExplorer) ?? "mempool");
     log.d("Done");
   }),
 
@@ -141,6 +154,11 @@ export const settings: ISettingsModel = {
     actions.setExperimentWeblnEnabled(payload);
   }),
 
+  changeOnchainExplorer: thunk(async (actions, payload) => {
+    await setItem(StorageItem.onchainExplorer, payload);
+    actions.setOnchainExplorer(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -154,6 +172,7 @@ export const settings: ISettingsModel = {
   setTransactionGeolocationEnabled: action((state, payload) => { state.transactionGeolocationEnabled = payload; }),
   setTransactionGeolocationMapStyle: action((state, payload) => { state.transactionGeolocationMapStyle = payload; }),
   setExperimentWeblnEnabled: action((state, payload) => { state.experimentWeblnEnabled = payload; }),
+  setOnchainExplorer: action((state, payload) => { state.onchainExplorer = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -168,4 +187,5 @@ export const settings: ISettingsModel = {
   transactionGeolocationEnabled: false,
   transactionGeolocationMapStyle: "darkMode",
   experimentWeblnEnabled: false,
+  onchainExplorer: "mempool",
 };
