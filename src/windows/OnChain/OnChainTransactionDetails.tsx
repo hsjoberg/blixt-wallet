@@ -12,6 +12,8 @@ import { formatISO } from "../../utils";
 import { useStoreState } from "../../state/store";
 import { formatBitcoin } from "../../utils/bitcoin-units";
 import { Chain } from "../../utils/build";
+import { OnchainExplorer } from "../../state/Settings";
+
 
 interface IMetaDataProps {
   title: string;
@@ -40,15 +42,14 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
   const txId: string = route.params.txId;
   const transaction = useStoreState((store) => store.onChain.getOnChainTransactionByTxId(txId));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const onchainExplorer =  useStoreState((store) => store.settings.onchainExplorer);
 
   if (!transaction) {
     return (<></>);
   }
 
   const onPressBlockExplorer = async () => {
-    console.log(await Linking.openURL(
-      `https://blockstream.info/${Chain === "testnet" ? "testnet/" : ""}tx/${txId}`
-    ));
+    await Linking.openURL(`${OnchainExplorer[onchainExplorer]}${txId}`);
   }
 
   return (

@@ -18,6 +18,7 @@ import { verifyChanBackup } from "../../lndmobile/channel";
 import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
 import { Chain } from "../../utils/build";
+import { OnchainExplorer } from "../../state/Settings";
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -354,7 +355,6 @@ When you're done, you can copy the address code and/or open the link using Blixt
       positiveText: "Continue",
       negativeText: "Cancel",
       type: DialogAndroid.listRadio,
-      selectedId: transactionGeolocationMapStyle,
       items: [{
         id: "LNBIG",
         label: "LN Big"
@@ -374,6 +374,26 @@ When you're done, you can copy the address code and/or open the link using Blixt
     };
   }
 
+  // Onchain explorer
+  const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
+  const changeOnchainExplorer = useStoreActions((store) => store.settings.changeOnchainExplorer);
+  const onChangeOnchainExplorerPress = async () => {
+    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+      positiveText: null,
+      negativeText: "Cancel",
+      type: DialogAndroid.listRadio,
+      selectedId: onchainExplorer,
+      items: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
+        id: currOnchainExplorer,
+        label: camelCaseToSpace(currOnchainExplorer),
+      }),
+    )});
+
+    if (selectedItem) {
+      await changeOnchainExplorer(selectedItem.id);
+    }
+  };
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -388,6 +408,51 @@ When you're done, you can copy the address code and/or open the link using Blixt
       </Header>
       <Content>
         <List style={style.list}>
+          <ListItem style={style.itemHeader} itemHeader={true} first={true}>
+            <Text>General</Text>
+          </ListItem>
+
+          <ListItem style={style.listItem} icon={true} onPress={onNamePress}>
+            <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
+            <Body>
+              <Text>Name</Text>
+              <Text note={true} numberOfLines={1}>Will be used in transactions</Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onTogglePushNotificationsPress}>
+            <Left><Icon style={style.icon} type="Entypo" name="bell" /></Left>
+            <Body>
+              <Text>Push notifications</Text>
+              <Text note={true} numberOfLines={1}>When the app is on. For channel events</Text>
+            </Body>
+            <Right><CheckBox checked={pushNotificationsEnabled} onPress={onTogglePushNotificationsPress} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onToggleClipBoardInvoiceCheck}>
+            <Left><Icon style={style.icon} type="Entypo" name="clipboard" /></Left>
+            <Body>
+              <Text>Check clipboard for invoices</Text>
+              <Text note={true} numberOfLines={1}>Automatically check clipboard for Lightning invoices</Text>
+            </Body>
+            <Right><CheckBox checked={clipboardInvoiceCheckEnabled} onPress={onToggleClipBoardInvoiceCheck} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onToggleTransactionGeolocationEnabled}>
+            <Left><Icon style={style.icon} type="Entypo" name="location-pin" /></Left>
+            <Body>
+              <Text>Save geolocation of transaction</Text>
+              <Text note={true} numberOfLines={1}>Locally save the location of a transaction</Text>
+            </Body>
+            <Right><CheckBox checked={transactionGeolocationEnabled} onPress={onToggleTransactionGeolocationEnabled} /></Right>
+          </ListItem>
+          {transactionGeolocationEnabled &&
+            <ListItem style={style.listItem} icon={true} onPress={onChangeMapStylePress}>
+              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-maps" /></Left>
+              <Body>
+                <Text>Set Map theme</Text>
+                <Text note={true}>{camelCaseToSpace(transactionGeolocationMapStyle)}</Text>
+              </Body>
+            </ListItem>
+          }
+
           <ListItem style={style.itemHeader} itemHeader={true} first={true}>
             <Text>Wallet</Text>
           </ListItem>
@@ -410,22 +475,6 @@ When you're done, you can copy the address code and/or open the link using Blixt
               </ListItem>
             </>
           }
-          <ListItem style={style.listItem} button={true} icon={true} onPress={onTogglePushNotificationsPress}>
-            <Left><Icon style={style.icon} type="Entypo" name="bell" /></Left>
-            <Body>
-              <Text>Push notifications</Text>
-              <Text note={true} numberOfLines={1}>When the app is on. For channel events</Text>
-            </Body>
-            <Right><CheckBox checked={pushNotificationsEnabled} onPress={onTogglePushNotificationsPress} /></Right>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onToggleClipBoardInvoiceCheck}>
-            <Left><Icon style={style.icon} type="Entypo" name="clipboard" /></Left>
-            <Body>
-              <Text>Check clipboard for invoices</Text>
-              <Text note={true} numberOfLines={1}>Automatically check clipboard for Lightning invoices</Text>
-            </Body>
-            <Right><CheckBox checked={clipboardInvoiceCheckEnabled} onPress={onToggleClipBoardInvoiceCheck} /></Right>
-          </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
             <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
             <Body>
@@ -452,23 +501,6 @@ When you're done, you can copy the address code and/or open the link using Blixt
             <ListItem style={style.listItem} icon={true} onPress={onDoGoogleDriveBackupPress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="folder-google-drive" /></Left>
               <Body><Text>Manually trigger Google Drive Backup</Text></Body>
-            </ListItem>
-          }
-          <ListItem style={style.listItem} icon={true} onPress={onToggleTransactionGeolocationEnabled}>
-            <Left><Icon style={style.icon} type="Entypo" name="location-pin" /></Left>
-            <Body>
-              <Text>Save geolocation of transaction</Text>
-              <Text note={true} numberOfLines={1}>Locally save the location of a transaction</Text>
-            </Body>
-            <Right><CheckBox checked={transactionGeolocationEnabled} onPress={onToggleTransactionGeolocationEnabled} /></Right>
-          </ListItem>
-          {transactionGeolocationEnabled &&
-            <ListItem style={style.listItem} icon={true} onPress={onChangeMapStylePress}>
-              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-maps" /></Left>
-              <Body>
-                <Text>Set Map theme</Text>
-                <Text note={true}>{camelCaseToSpace(transactionGeolocationMapStyle)}</Text>
-              </Body>
             </ListItem>
           }
 
@@ -523,6 +555,13 @@ When you're done, you can copy the address code and/or open the link using Blixt
               <Text note={true} numberOfLines={1} onPress={onBitcoinUnitPress}>{BitcoinUnits[currentBitcoinUnit].settings}</Text>
             </Body>
           </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onChangeOnchainExplorerPress}>
+            <Left><Icon style={style.icon} type="FontAwesome" name="chain" /></Left>
+            <Body>
+              <Text>Onchain explorer</Text>
+              <Text note={true} numberOfLines={1}>{camelCaseToSpace(onchainExplorer)}</Text>
+            </Body>
+          </ListItem>
 
 
           {/* <ListItem style={style.itemHeader} itemHeader={true}>
@@ -543,13 +582,6 @@ When you're done, you can copy the address code and/or open the link using Blixt
             <Text>Lightning Network</Text>
           </ListItem>
 
-          <ListItem style={style.listItem} icon={true} onPress={onNamePress}>
-            <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
-            <Body>
-              <Text>Name</Text>
-              <Text note={true} numberOfLines={1}>Will be used in transactions</Text>
-            </Body>
-          </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNodeInfo")}>
             <Left><Icon style={style.icon} type="AntDesign" name="user" /></Left>
             <Body><Text>Show node data</Text></Body>
