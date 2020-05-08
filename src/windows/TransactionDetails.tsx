@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Share } from "react-native";
+import { StyleSheet, Share, Linking } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Body, Card, Text, CardItem, H1, Toast, View, Button } from "native-base";
 import { fromUnixTime } from "date-fns";
@@ -14,12 +14,14 @@ import { extractDescription } from "../utils/NameDesc";
 import { smallScreen } from "../utils/device";
 import CopyAddress from "../components/CopyAddress";
 import { MapStyle } from "../utils/google-maps";
+import TextLink from "../components/TextLink";
 
 interface IMetaDataProps {
   title: string;
   data: string;
+  url?: string;
 }
-const MetaData = ({ title, data }: IMetaDataProps) => {
+const MetaData = ({ title, data, url }: IMetaDataProps) => {
   return (
     <Text
       style={style.detailText}
@@ -29,7 +31,8 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
       }}
     >
       <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>
-      {data}
+      {!url && data}
+      {url && <TextLink url={url}>{data}</TextLink>}
     </Text>
   );
 };
@@ -91,7 +94,7 @@ export default function TransactionDetails({ route }: any) {
                 }
               </View>
               <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
-              {transaction.website && <MetaData title="Website" data={transaction.website} />}
+              {transaction.website && <MetaData title="Website" data={transaction.website} url={"https://" + transaction.website} />}
               {(transaction.nodeAliasCached && name == undefined) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
               {direction === "receive" && !transaction.tlvRecordName && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
               {direction === "receive" && transaction.tlvRecordName && <MetaData title="Payer" data={transaction.tlvRecordName} />}

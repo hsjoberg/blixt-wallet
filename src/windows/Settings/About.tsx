@@ -5,6 +5,7 @@ import { Body, Card, Text, CardItem, H1 } from "native-base";
 import Blurmodal from "../../components/BlurModal";
 import { VersionName, ApplicationId, IsHermes } from "../../utils/build";
 import { useStoreState } from "../../state/store.ts";
+import TextLink from "../../components/TextLink";
 
 const GITHUB_REPO_URL = "https://github.com/hsjoberg/blixt-wallet";
 const HAMPUS_EMAIL = "mailto:hampus.sjoberg💩protonmail.com";
@@ -14,12 +15,10 @@ const software = [
   "easy-peasy",
   "react-native-camera",
   "react-native-navigation",
-]
+];
 
 export default function About() {
   const appVersion = useStoreState((store) => store.appVersion);
-  const onGithubLinkPress = () => Linking.openURL(GITHUB_REPO_URL)
-  const onHampusLinkPress = () => Linking.openURL(HAMPUS_EMAIL.replace("💩", "@"));
 
   return (
     <Blurmodal>
@@ -29,10 +28,10 @@ export default function About() {
             <ScrollView>
               <H1 style={style.header}>About Blixt Wallet</H1>
               <Text style={style.textBlock}>Version {VersionName} ({appVersion}) {ApplicationId}{IsHermes ? " Hermes" : ""}{"\n"}
-              By <Text style={style.textLink} onPress={onHampusLinkPress}>Hampus Sjöberg</Text>
+              By <TextLink url={HAMPUS_EMAIL.replace("💩", "@")}>Hampus Sjöberg</TextLink>
               </Text>
               <Text style={style.textBlock}>Open-source wallet with MIT license{"\n"}
-                <Text style={style.textLink} onPress={onGithubLinkPress}>{GITHUB_REPO_URL}</Text>
+                <TextLink url={GITHUB_REPO_URL}>{GITHUB_REPO_URL}</TextLink>
               </Text>
               <Text style={style.textBlock}>
                 <Text style={style.textBold}>Created using:{"\n"}</Text>
@@ -63,9 +62,6 @@ const style = StyleSheet.create({
   },
   textBlock: {
     marginBottom: 8,
-  },
-  textLink: {
-    color: "#4f9ca8",
   },
   textBold : {
     fontWeight: "bold",
