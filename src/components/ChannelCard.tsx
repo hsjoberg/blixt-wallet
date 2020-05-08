@@ -1,8 +1,8 @@
 import React from "react";
+import { StyleSheet, Alert } from "react-native";
 import { Button, Card, CardItem, Body, Row, Right, Text, Left } from "native-base";
 
 import { useStoreActions, useStoreState } from "../state/store";
-import { StyleSheet, Alert } from "react-native";
 import { lnrpc } from "../../proto/proto";
 
 export interface IChannelCardProps {
