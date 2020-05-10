@@ -32,6 +32,7 @@ export const clipboardManager: IClipboardManagerModel = {
 
   setupInvoiceListener: thunk((actions, _, { getStoreState }) => {
     AppState.addEventListener("change", async (status: AppStateStatus) => {
+      log.d("event", [status]);
       if (getStoreState().settings.clipboardInvoiceCheckEnabled && status === "active") {
         const clipboardText = await Clipboard.getString();
         await actions.checkInvoice(clipboardText);
@@ -40,6 +41,7 @@ export const clipboardManager: IClipboardManagerModel = {
   }),
 
   checkInvoice: thunk(async (actions, text, { dispatch, getState }) => {
+    log.i("checkInvoice");
     const navigator = getNavigator();
     if (
       !navigator ||
@@ -51,18 +53,22 @@ export const clipboardManager: IClipboardManagerModel = {
     }
     try {
       if (getState().invoiceCache.includes(text) || !text || text.length === 0) {
+        log.d("Invoice already in cache");
         return;
       }
+      log.i("try", [text]);
       actions.addToInvoiceCache(text);
 
       // If this is an invoice
-      if (text.startsWith(LnBech32Prefix)) {
+      if (text.indexOf(LnBech32Prefix) !== -1) {
         log.d("ln uri");
+        text = text.substring(text.indexOf(LnBech32Prefix)).split(" ")[0];
         actions.tryInvoice({ paymentRequest: text });
       }
       // If this is an LNURL
-      else if (text.startsWith("LNURL")) {
+      else if (text.indexOf("LNURL") !== -1) {
         log.d("lnurl");
+        text = text.substring(text.indexOf("LNURL")).split(" ")[0];
         actions.tryLNUrl({ lnUrl: text });
       }
     } catch (e) {
