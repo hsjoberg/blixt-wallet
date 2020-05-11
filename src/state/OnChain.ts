@@ -24,10 +24,12 @@ export interface IGetAddressPayload {
 export interface ISendCoinsPayload {
   address: string;
   sat: number;
+  feeRate?: number;
 }
 
 export interface ISendCoinsAllPayload {
   address: string;
+  feeRate?: number;
 }
 
 export interface IOnChainModel {
@@ -131,15 +133,15 @@ export const onChain: IOnChainModel = {
     actions.setTransactions({ transactions });
   }),
 
-  sendCoins: thunk(async (_, { address, sat }, { injections }) => {
+  sendCoins: thunk(async (_, { address, sat, feeRate }, { injections }) => {
     const { sendCoins } = injections.lndMobile.onchain;
-    const response = await sendCoins(address, sat);
+    const response = await sendCoins(address, sat, feeRate );
     return response;
   }),
 
-  sendCoinsAll: thunk(async (_, { address }, { injections }) => {
+  sendCoinsAll: thunk(async (_, { address, feeRate }, { injections }) => {
     const { sendCoinsAll } = injections.lndMobile.onchain;
-    const response = await sendCoinsAll(address);
+    const response = await sendCoinsAll(address, feeRate);
     return response;
   }),
 

@@ -46,7 +46,7 @@ export const walletBalance = async (): Promise<lnrpc.WalletBalanceResponse> => {
 /**
  * @throws
  */
-export const sendCoins = async (address: string, sat: number): Promise<lnrpc.SendCoinsResponse> => {
+export const sendCoins = async (address: string, sat: number, feeRate?: number): Promise<lnrpc.SendCoinsResponse> => {
   const response = await sendCommand<lnrpc.ISendCoinsRequest, lnrpc.SendCoinsRequest, lnrpc.SendCoinsResponse>({
     request: lnrpc.SendCoinsRequest,
     response: lnrpc.SendCoinsResponse,
@@ -54,6 +54,7 @@ export const sendCoins = async (address: string, sat: number): Promise<lnrpc.Sen
     options: {
       addr: address,
       amount: Long.fromValue(sat),
+      satPerByte: feeRate ? Long.fromValue(feeRate) : undefined,
     },
   });
   return response;
@@ -62,7 +63,7 @@ export const sendCoins = async (address: string, sat: number): Promise<lnrpc.Sen
 /**
  * @throws
  */
-export const sendCoinsAll = async (address: string): Promise<lnrpc.SendCoinsResponse> => {
+export const sendCoinsAll = async (address: string, feeRate?: number): Promise<lnrpc.SendCoinsResponse> => {
  const response = await sendCommand<lnrpc.ISendCoinsRequest, lnrpc.SendCoinsRequest, lnrpc.SendCoinsResponse>({
    request: lnrpc.SendCoinsRequest,
    response: lnrpc.SendCoinsResponse,
@@ -70,6 +71,7 @@ export const sendCoinsAll = async (address: string): Promise<lnrpc.SendCoinsResp
    options: {
      addr: address,
      sendAll: true,
+     satPerByte: feeRate ? Long.fromValue(feeRate) : undefined,
    },
  });
  return response;
