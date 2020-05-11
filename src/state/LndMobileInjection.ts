@@ -82,8 +82,8 @@ export interface ILndMobileInjections {
   onchain: {
     getTransactions: () => Promise<lnrpc.TransactionDetails>;
     newAddress: (type: lnrpc.AddressType) => Promise<lnrpc.NewAddressResponse>;
-    sendCoins: (address: string, sat: number) => Promise<lnrpc.SendCoinsResponse>;
-    sendCoinsAll: (address: string) => Promise<lnrpc.SendCoinsResponse>;
+    sendCoins: (address: string, sat: number, feeRate?: number) => Promise<lnrpc.SendCoinsResponse>;
+    sendCoinsAll: (address: string, feeRate?: number) => Promise<lnrpc.SendCoinsResponse>;
     walletBalance: () => Promise<lnrpc.WalletBalanceResponse>;
     subscribeTransactions: () => Promise<string>;
   };

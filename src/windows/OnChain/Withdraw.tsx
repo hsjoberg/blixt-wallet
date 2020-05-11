@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { View } from "react-native";
 import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Toast, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Slider from "@react-native-community/slider";
 
 import { OnChainStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
@@ -19,6 +21,7 @@ export default ({ navigation }: IOpenChannelProps) => {
   const [address, setAddress] = useState("");
   const [sat, setSat] = useState("");
   const [sending, setSending] = useState(false);
+  const [feeRate, setFeeRate] = useState(0);
   const [withdrawAll, setWithdrawAll] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
@@ -27,12 +30,16 @@ export default ({ navigation }: IOpenChannelProps) => {
       setSending(true);
       let result;
       if (withdrawAll) {
-        result = await sendCoinsAll({ address });
+        result = await sendCoinsAll({
+          address,
+          feeRate: feeRate !== 0 ? feeRate : undefined,
+        });
       }
       else {
         result = await sendCoins({
           address,
           sat: unitToSatoshi(Number.parseFloat(sat || "0"), bitcoinUnit),
+          feeRate: feeRate !== 0 ? feeRate : undefined,
         });
       }
       console.log(result);
@@ -114,6 +121,36 @@ export default ({ navigation }: IOpenChannelProps) => {
                 : <Button onPress={onCancelWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>x</Text></Button>
               }
             </>
+          ),
+        }, {
+          key: "SAT",
+          title: `Fee-rate`,
+          component: (
+            <View style={{ flex: 1, flexDirection:"row", justifyContent: "space-between", alignItems: "center", paddingRight: 5 }}>
+              <Slider
+                style={{
+                  width: 185,
+                  height: 25,
+                  marginTop: 10,
+                  marginBottom: 10,
+                }}
+                onValueChange={setFeeRate}
+                minimumValue={0}
+                maximumValue={500}
+                step={1}
+                thumbTintColor={blixtTheme.primary}
+                minimumTrackTintColor={blixtTheme.lightGray}
+                maximumTrackTintColor={blixtTheme.lightGray}
+              />
+              <Text>
+                {feeRate !== 0 &&
+                  <>{feeRate} sat/b</>
+                }
+                {feeRate === 0 &&
+                  "auto"
+                }
+              </Text>
+            </View>
           ),
         }]}
         buttons={[
