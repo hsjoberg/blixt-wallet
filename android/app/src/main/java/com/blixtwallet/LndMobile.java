@@ -438,7 +438,13 @@ class LndMobile extends ReactContextBaseJavaModule {
   public void DEBUG_getWalletPasswordFromKeychain(Promise promise) {
     KeychainModule keychain = new KeychainModule(getReactApplicationContext());
 
-    keychain.getInternetCredentialsForServer("password", null, new PromiseWrapper() {
+    WritableMap keychainOptions = Arguments.createMap();
+    WritableMap keychainOptionsAuthenticationPrompt = Arguments.createMap();
+    keychainOptionsAuthenticationPrompt.putString("title", "Authenticate to retrieve secret");
+    keychainOptionsAuthenticationPrompt.putString("cancel", "Cancel");
+    keychainOptions.putMap("authenticationPrompt", keychainOptionsAuthenticationPrompt);
+
+    keychain.getInternetCredentialsForServer("password", keychainOptions, new PromiseWrapper() {
       @Override
       public void onSuccess(@Nullable Object value) {
         if (value != null) {
@@ -449,8 +455,9 @@ class LndMobile extends ReactContextBaseJavaModule {
       }
 
       @Override
-      public void onFail() {
-        promise.reject("fail");
+      public void onFail(Throwable throwable) {
+        Log.d(TAG, "error", throwable);
+        promise.reject(throwable.getMessage());
       }
     });
   }
@@ -731,7 +738,7 @@ class LndMobile extends ReactContextBaseJavaModule {
       }
 
       @Override
-      public void onFail() {
+      public void onFail(Throwable throwable) {
         failCallback.run();
       }
     };
@@ -743,7 +750,7 @@ class LndMobile extends ReactContextBaseJavaModule {
       }
 
       @Override
-      void onFail() {
+      void onFail(Throwable throwable) {
         failPermissionCheckcallback.run();
       }
     };
