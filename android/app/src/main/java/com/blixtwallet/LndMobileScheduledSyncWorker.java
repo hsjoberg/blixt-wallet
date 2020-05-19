@@ -32,7 +32,10 @@ import android.database.sqlite.SQLiteStatement;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.modules.storage.ReactDatabaseSupplier;
 import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
+
 
 import com.oblador.keychain.KeychainModule;
 
@@ -89,7 +92,14 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     }
 
     KeychainModule keychain = new KeychainModule(new ReactApplicationContext(getApplicationContext()));
-    keychain.getInternetCredentialsForServer("password", null, new PromiseWrapper() {
+
+    WritableMap keychainOptions = Arguments.createMap();
+    WritableMap keychainOptionsAuthenticationPrompt = Arguments.createMap();
+    keychainOptionsAuthenticationPrompt.putString("title", "Authenticate to retrieve secret");
+    keychainOptionsAuthenticationPrompt.putString("cancel", "Cancel");
+    keychainOptions.putMap("authenticationPrompt", keychainOptionsAuthenticationPrompt);
+
+    keychain.getInternetCredentialsForServer("password", keychainOptions, new PromiseWrapper() {
       @Override
       public void onSuccess(@Nullable Object value) {
         HyperLog.d(TAG, "onSuccess");
@@ -108,8 +118,8 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       }
 
       @Override
-      public void onFail() {
-        HyperLog.d(TAG, "Failed to get wallet password");
+      public void onFail(Throwable throwable) {
+        HyperLog.d(TAG, "Failed to get wallet password " + throwable.getMessage(), throwable);
         future.set(Result.failure());
       }
     });

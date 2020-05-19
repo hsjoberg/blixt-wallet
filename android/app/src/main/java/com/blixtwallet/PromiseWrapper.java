@@ -10,28 +10,28 @@ import com.facebook.react.bridge.Promise;
 public abstract class PromiseWrapper implements Promise {
   abstract void onSuccess(@Nullable Object value);
 
-  abstract void onFail();
+  abstract void onFail(Throwable throwable);
 
   @Override
   public void resolve(@Nullable Object value) { onSuccess(value); }
   @Override
-  public void reject(String code, String message) { onFail(); }
+  public void reject(String code, String message) { onFail(new Error(message)); }
   @Override
-  public void reject(String code, Throwable throwable) { onFail(); }
+  public void reject(String code, Throwable throwable) { onFail(throwable); }
   @Override
-  public void reject(String code, String message, Throwable throwable) { onFail(); }
+  public void reject(String code, String message, Throwable throwable) { onFail(throwable); }
   @Override
-  public void reject(Throwable throwable) { onFail(); }
+  public void reject(Throwable throwable) { onFail(throwable); }
   @Override
-  public void reject(Throwable throwable, WritableMap userInfo) { onFail(); }
+  public void reject(Throwable throwable, WritableMap userInfo) { onFail(throwable); }
   @Override
-  public void reject(String code, @NonNull WritableMap userInfo) { onFail(); }
+  public void reject(String code, @NonNull WritableMap userInfo) { onFail(new Error(code)); }
   @Override
-  public void reject(String code, Throwable throwable, WritableMap userInfo) { onFail(); }
+  public void reject(String code, Throwable throwable, WritableMap userInfo) { onFail(throwable); }
   @Override
-  public void reject(String code, String message, @NonNull WritableMap userInfo) { onFail(); }
+  public void reject(String code, String message, @NonNull WritableMap userInfo) { onFail(new Error(message)); }
   @Override
-  public void reject(String code, String message, Throwable throwable, WritableMap userInfo) { onFail(); }
+  public void reject(String code, String message, Throwable throwable, WritableMap userInfo) { onFail(throwable); }
   @Override
-  public void reject(String message) { onFail(); }
+  public void reject(String message) { onFail(new Error(message)); }
 }
