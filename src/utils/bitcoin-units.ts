@@ -69,8 +69,8 @@ export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNum
 
 export const valueBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNumbers: boolean = false): string => {
   return groupNumbers
-     ? convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed()
-     : formatNumberGroupings(convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed());
+     ? formatNumberGroupings(convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed())
+     : convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed();
 };
 
 export const unitToSatoshi = (value: number, fromUnit: keyof IBitcoinUnits): number => {
