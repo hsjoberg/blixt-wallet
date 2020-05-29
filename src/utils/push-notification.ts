@@ -9,11 +9,11 @@ PushNotification.configure({
 
 export const localNotification = (message: string): void => {
   PushNotification.localNotification({
-    message: message,
-    playSound: false,
+    message,
+    playSound: true,
     vibrate: false,
-    priority: "min",
-    importance: "min",
+    priority: "default",
+    importance:  "default",
     autoCancel: true,
   });
 };
