@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { StyleSheet, View, ScrollView, Animated } from "react-native";
 import { Body, Header, Left, Button, Title, Right, Icon, H1, H3, Fab, Spinner } from "native-base";
 import Long from "long";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -91,6 +91,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
           </Button>
         </Right>
       </Header>
+
       {rpcReady &&
         <ScrollView contentContainerStyle={style.container}>
           <View style={style.balanceInfo}>
