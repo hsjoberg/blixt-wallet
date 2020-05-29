@@ -7,6 +7,7 @@ export interface IFormItem {
   component: ReactNode;
   key: string | number;
   success?: boolean;
+  active?: boolean;
 }
 
 export interface IFormProps {
@@ -17,15 +18,20 @@ export default function Form({ buttons, items }: IFormProps) {
   return (
     <Content contentContainerStyle={style.content}>
       <View style={style.itemContainer}>
-        {items.map(({ key, title, component, success }, i) => (
-          <Item key={key} style={{
-            marginTop: i > 0 ? 16 : 8}} success={success}>
-            <Label style={{
-              ...style.itemLabel,
-              fontSize: (title !== null && title.length) >= 14 ? 15 : 17,
-            }}>{title}</Label>
-            {component}
-          </Item>
+        {items.map(({ key, title, component, success, active }, i) => (
+          active ?? true
+            ?
+            <Item key={key} style={{
+              marginTop: i > 0 ? 16 : 8
+            }} success={success}>
+              <Label style={{
+                ...style.itemLabel,
+                fontSize: (title !== null && title.length) >= 14 ? 15 : 17,
+              }}>{title}</Label>
+              {component}
+            </Item>
+            :
+            null
         ))}
       </View>
       <View style={style.buttonContainer}>

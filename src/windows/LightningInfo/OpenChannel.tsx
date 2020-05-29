@@ -6,7 +6,7 @@ import { LightningInfoStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
-import { unitToSatoshi, BitcoinUnits } from "../../utils/bitcoin-units";
+import useBalance from "../../hooks/useBalance";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
@@ -15,16 +15,23 @@ export default function OpenChannel({ navigation }: IOpenChannelProps) {
   const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
   const getChannels = useStoreActions((actions) => actions.channel.getChannels);
   const [peer, setPeer] = useState("");
-  const [sat, setSat] = useState("");
   const [opening, setOpening] = useState(false);
-  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const {
+    dollarValue,
+    bitcoinValue,
+    satoshiValue,
+    onChangeFiatInput,
+    onChangeBitcoinInput,
+    bitcoinUnit,
+    fiatUnit,
+  } = useBalance();
 
   const onOpenChannelPress = async () => {
     try {
       setOpening(true);
       await connectAndOpenChannel({
         peer,
-        amount: unitToSatoshi(Number.parseFloat(sat || "0"), bitcoinUnit),
+        amount: satoshiValue,
       });
       await getChannels(undefined);
       navigation.pop();
@@ -69,8 +76,12 @@ export default function OpenChannel({ navigation }: IOpenChannelProps) {
           )
         }, {
           key: "AMOUNT",
-          title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
-          component: (<Input placeholder={`Amount ${BitcoinUnits[bitcoinUnit].nice}`} keyboardType="numeric" onChangeText={setSat} value={sat} />)
+          title: `Amount ${bitcoinUnit.nice}`,
+          component: (<Input placeholder={`Amount ${bitcoinUnit.nice}`} keyboardType="numeric" onChangeText={onChangeBitcoinInput} value={bitcoinValue} />)
+        }, {
+          key: "AMOUNT_FIAT",
+          title: `Amount ${fiatUnit}`,
+          component: (<Input placeholder={`Amount ${fiatUnit}`} keyboardType="numeric" onChangeText={onChangeFiatInput} value={dollarValue} />)
         }]}
         buttons={[
           <Button key="OPEN_CHANNEL" onPress={onOpenChannelPress} block={true} primary={true}>

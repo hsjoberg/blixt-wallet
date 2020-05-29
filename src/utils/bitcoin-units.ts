@@ -60,12 +60,16 @@ export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNum
       ? formatNumberGroupings(fixed)
       : fixed;
 
-  let formatted = `${formatNumber} ${BitcoinUnits[unit].nice}`;
-  if (BitcoinUnits[unit].pluralize && value.eq(new BigNumber(1))) {
-    formatted += "s";
-  }
-  return formatted;
+  return `${formatNumber} ${getUnitNice(value, unit)}`;
 };
+
+export const getUnitNice = (value: BigNumber, unit: keyof IBitcoinUnits) => {
+  let str = BitcoinUnits[unit].nice;
+  if (BitcoinUnits[unit].pluralize && value.eq(new BigNumber(1))) {
+    str += "s";
+  }
+  return str;
+}
 
 export const valueBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNumbers: boolean = false): string => {
   return groupNumbers

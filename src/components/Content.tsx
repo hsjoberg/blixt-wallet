@@ -1,15 +1,29 @@
 import React, { ReactNode } from "react";
 import { Content } from "native-base";
-import { StyleProp, ViewStyle } from "react-native";
+import { StyleProp, ViewStyle, StyleSheet } from "react-native";
 
 export interface IContentProps {
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
+  centered?: boolean;
 }
-export default function BlixtContent({ children, style }: IContentProps) {
+export default function BlixtContent({ children, style, centered }: IContentProps) {
   return (
-    <Content contentContainerStyle={[{ padding: 14 }, style]}>
+    <Content contentContainerStyle={[
+      { padding: 14 },
+      centered ? centeredStyle.style : {},
+      style,
+    ]}>
       {children}
     </Content>
   );
 }
+
+const centeredStyle = StyleSheet.create({
+  style: {
+    flex: 1,
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+})

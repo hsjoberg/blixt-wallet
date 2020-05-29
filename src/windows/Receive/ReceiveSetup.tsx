@@ -6,11 +6,10 @@ import Long from "long";
 import { ReceiveStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import { unitToSatoshi, BitcoinUnits, valueBitcoinFromFiat, convertBitcoinToFiat, formatBitcoin, valueBitcoin } from "../../utils/bitcoin-units";
+import { formatBitcoin } from "../../utils/bitcoin-units";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
-
-const MAX_SAT_INVOICE = 4294967;
+import { MAX_SAT_INVOICE } from "../../utils/constants";
 
 export interface IReceiveSetupProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveSetup">;
@@ -21,29 +20,30 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
   const invoiceSubscriptionStarted = useStoreState((store) => store.receive.invoiceSubscriptionStarted);
   const addInvoice = useStoreActions((store) => store.receive.addInvoice);
   const [description, setDescription] = useState<string>("");
-  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
-  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const bitcoinUnitKey = useStoreState((store) => store.settings.bitcoinUnit);
   const [payer, setPayer] = useState<string>("");
   const [createInvoiceDisabled, setCreateInvoiceDisabled] = useState(false);
   const {
     dollarValue,
     bitcoinValue,
+    satoshiValue,
     onChangeFiatInput,
     onChangeBitcoinInput,
+    bitcoinUnit,
+    fiatUnit,
   } = useBalance();
-
   const channels = useStoreState((store) => store.channel.channels);
 
   const onCreateInvoiceClick = async () => {
     try {
       setCreateInvoiceDisabled(true);
-      if (unitToSatoshi(Number.parseFloat(bitcoinValue!), bitcoinUnit) > MAX_SAT_INVOICE) {
-        throw new Error("Invoice amount cannot be higher than " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnit));
+      if (satoshiValue > MAX_SAT_INVOICE) {
+        throw new Error("Invoice amount cannot be higher than " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnitKey));
       }
 
       navigation.replace("ReceiveQr", {
         invoice: await addInvoice({
-          sat: unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit),
+          sat: satoshiValue,
           description,
           tmpData: {
             payer: payer || null,
@@ -65,7 +65,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
 
   const formItems = [{
     key: "AMOUNT_SAT",
-    title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
+    title: `Amount ${bitcoinUnit.nice}`,
     component: (
       <Input
         testID="input-amount-sat"
@@ -138,7 +138,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
             block={true}
             primary={true}
             onPress={onCreateInvoiceClick}
-            disabled={!canSend || bitcoinValue == "0" || bitcoinValue === undefined}
+            disabled={!canSend || bitcoinValue === "0" || bitcoinValue === undefined}
           >
             {canSend && !createInvoiceDisabled
               ? <Text>Create invoice</Text>
