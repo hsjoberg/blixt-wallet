@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { convertBitcoinToFiat, unitToSatoshi, valueBitcoinFromFiat, valueBitcoin } from "../utils/bitcoin-units";
+import { convertBitcoinToFiat, unitToSatoshi, valueBitcoinFromFiat, valueBitcoin, BitcoinUnits } from "../utils/bitcoin-units";
 import { useStoreState } from "../state/store";
 
-export default (initialSat?: Long) => {
+export default function useBalance(initialSat?: Long) {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
   const [bitcoinValue, setBitcoinValue] = useState<string | undefined>(initialSat && valueBitcoin(initialSat, bitcoinUnit));
@@ -48,6 +49,9 @@ export default (initialSat?: Long) => {
       setDollarValue(text);
     },
     bitcoinValue,
+    satoshiValue: unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit),
     dollarValue,
+    bitcoinUnit: BitcoinUnits[bitcoinUnit],
+    fiatUnit,
   }
 }

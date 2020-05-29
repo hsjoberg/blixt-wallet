@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Share, StyleSheet } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Button, Body, Container, Icon, Header, Text, Title, Left, H1, H3, Toast } from "native-base";
+import { Button, Body, Icon, Header, Text, Title, Left, H1, H3, Toast, Spinner } from "native-base";
 import { formatDistanceStrict, fromUnixTime } from "date-fns";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -14,6 +14,9 @@ import { formatBitcoin } from "../../utils/bitcoin-units";
 import Ticker from "../../components/Ticker";
 import { smallScreen } from "../../utils/device";
 import CopyAddress from "../../components/CopyAddress";
+import Container from "../../components/Container";
+import Content from "../../components/Content";
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 interface IReceiveQRProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveQr">;
@@ -37,6 +40,9 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
             <Title>Receive</Title>
           </Body>
         </Header>
+        <Content centered style={{ marginTop: -50 }}>
+          <Spinner color={blixtTheme.light} size={55} />
+        </Content>
       </Container>
     );
   }
@@ -81,7 +87,7 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
         {/* <Text testID="payment-request-string" onPress={onPressPaymentRequest} style={style.paymentRequest} numberOfLines={1} lineBreakMode="middle">
           {transaction.paymentRequest}
         </Text> */}
-        <View style={{ width:"85%" }} testID="payment-request-string">
+        <View style={{ width: "85%" }} testID="payment-request-string">
           <CopyAddress text={transaction.paymentRequest} onPress={onPressPaymentRequest} />
         </View>
         <H3 testID="pay-amount">{formatBitcoin(transaction.value, bitcoinUnit)}</H3>

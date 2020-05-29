@@ -10,6 +10,7 @@ import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { parseBech32 } from "../../utils";
 import { unitToSatoshi, BitcoinUnits, convertBitcoinUnit } from "../../utils/bitcoin-units";
+import useBalance from "../../hooks/useBalance";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<OnChainStackParamList, "Withdraw">;
@@ -19,11 +20,18 @@ export default ({ navigation }: IOpenChannelProps) => {
   const sendCoinsAll = useStoreActions((actions) => actions.onChain.sendCoinsAll);
   const getBalance = useStoreActions((actions) => actions.onChain.getBalance);
   const [address, setAddress] = useState("");
-  const [sat, setSat] = useState("");
   const [sending, setSending] = useState(false);
   const [feeRate, setFeeRate] = useState(0);
   const [withdrawAll, setWithdrawAll] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const {
+    dollarValue,
+    bitcoinValue,
+    satoshiValue,
+    onChangeFiatInput,
+    onChangeBitcoinInput,
+  } = useBalance();
 
   const onWithdrawClick = async () => {
     try {
@@ -38,7 +46,7 @@ export default ({ navigation }: IOpenChannelProps) => {
       else {
         result = await sendCoins({
           address,
-          sat: unitToSatoshi(Number.parseFloat(sat || "0"), bitcoinUnit),
+          sat: satoshiValue,
           feeRate: feeRate !== 0 ? feeRate : undefined,
         });
       }
@@ -68,7 +76,7 @@ export default ({ navigation }: IOpenChannelProps) => {
     setAddress(parsed.address);
     if (parsed.amount) {
       const s = convertBitcoinUnit(parsed.amount, "bitcoin", bitcoinUnit); // TODO test
-      setSat(s.toString());
+      onChangeBitcoinInput(s.toString());
     }
   };
 
@@ -79,12 +87,10 @@ export default ({ navigation }: IOpenChannelProps) => {
   };
 
   const onWithdrawAllPress = () => {
-    setSat("Withdraw all funds");
     setWithdrawAll(true);
   };
 
   const onCancelWithdrawAllPress = () => {
-    setSat("");
     setWithdrawAll(false);
   };
 
@@ -115,7 +121,14 @@ export default ({ navigation }: IOpenChannelProps) => {
           title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
           component: (
             <>
-              <Input testID="INPUT_AMOUNT" placeholder={`Amount ${BitcoinUnits[bitcoinUnit].nice}`} keyboardType="numeric" onChangeText={setSat} value={withdrawAll ? "Withdraw all funds" : sat} disabled={withdrawAll} />
+              <Input
+                testID="INPUT_AMOUNT"
+                placeholder={`Amount ${BitcoinUnits[bitcoinUnit].nice}`}
+                keyboardType="numeric"
+                onChangeText={onChangeBitcoinInput}
+                value={withdrawAll ? "Withdraw all funds" : bitcoinValue}
+                disabled={withdrawAll}
+              />
               {!withdrawAll
                 ? <Button onPress={onWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>All</Text></Button>
                 : <Button onPress={onCancelWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>x</Text></Button>
@@ -123,10 +136,26 @@ export default ({ navigation }: IOpenChannelProps) => {
             </>
           ),
         }, {
+          key: "AMOUNT_FIAT",
+          title: `Amount ${fiatUnit}`,
+          active: !withdrawAll,
+          component: (
+            <>
+              <Input
+                testID="INPUT_AMOUNT"
+                placeholder={`Amount ${fiatUnit}`}
+                keyboardType="numeric"
+                onChangeText={onChangeFiatInput}
+                value={dollarValue}
+                disabled={withdrawAll}
+              />
+            </>
+          ),
+        }, {
           key: "SAT",
           title: `Fee-rate`,
           component: (
-            <View style={{ flex: 1, flexDirection:"row", justifyContent: "space-between", alignItems: "center", paddingRight: 5 }}>
+            <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: 5 }}>
               <Slider
                 style={{
                   width: 185,
