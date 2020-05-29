@@ -175,7 +175,10 @@ export const receive: IReceiveModel = {
         // as the invoice has been settled
         actions.deleteInvoiceTmpData(rHash);
 
-        await dispatch.channel.getBalance();
+        setTimeout(async () => {
+          await dispatch.channel.getBalance();
+          await dispatch.fiat.getRate();
+        }, 500);
         await dispatch.transaction.syncTransaction(transaction);
       } catch (e) {
         console.error(e)
