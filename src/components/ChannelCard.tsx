@@ -1,9 +1,16 @@
 import React from "react";
 import { StyleSheet, Alert } from "react-native";
 import { Button, Card, CardItem, Body, Row, Right, Text, Left } from "native-base";
+import { Svg, Line, G, Circle, Polyline } from "react-native-svg";
+import Long from "long";
 
 import { useStoreActions, useStoreState } from "../state/store";
 import { lnrpc } from "../../proto/proto";
+import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
+import { formatBitcoin, valueBitcoin, getUnitNice } from "../utils/bitcoin-units";
+import BigNumber from "bignumber.js";
+const theme = nativeBaseTheme.default;
+const blixtTheme = nativeBaseTheme.blixtTheme;
 
 export interface IChannelCardProps {
   channel: lnrpc.IChannel;
@@ -15,6 +22,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
   const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
   const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   const close = async () => {
     const result = await closeChannel({
@@ -41,12 +49,18 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
     }
   };
 
+  const localBalance = channel.localBalance || Long.fromValue(0);
+  const remoteBalance = channel.remoteBalance || Long.fromValue(0);
+  const percentageLocal = localBalance.mul(100).div(channel.capacity!).toNumber() / 100;
+  const percentageRemote = remoteBalance.mul(100).div(channel.capacity!).toNumber() / 100;
+  const percentageReverse = 1 - (percentageLocal + percentageRemote);
+
   return (
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
         <Body>
           <Row>
-            <Left>
+            <Left style={{ alignSelf:"flex-start" }}>
               <Text style={style.channelDetailTitle}>Node</Text>
             </Left>
             <Right>
@@ -55,7 +69,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
           </Row>
           {alias &&
             <Row>
-              <Left>
+              <Left style={{ alignSelf:"flex-start" }}>
                 <Text style={style.channelDetailTitle}>Alias</Text>
               </Left>
               <Right>
@@ -64,7 +78,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
             </Row>
           }
           <Row>
-            <Left>
+            <Left style={{ alignSelf:"flex-start" }}>
               <Text style={style.channelDetailTitle}>Status</Text>
             </Left>
             <Right>
@@ -75,12 +89,67 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
               }
             </Right>
           </Row>
-          <Row>
-            <Left>
+          {/* <Row>
+            <Left style={{ alignSelf:"flex-start" }}>
               <Text style={style.channelDetailTitle}>Amount in channel</Text>
             </Left>
             <Right>
               <Text style={style.channelDetailAmount}>{channel.localBalance!.toString()}/{channel.capacity!.toString()} satoshi</Text>
+            </Right>
+          </Row> */}
+          <Row>
+            <Left style={{ alignSelf:"flex-start" }}>
+              <Text>Capacity</Text>
+            </Left>
+            <Right>
+              <Svg width="100" height="22">
+                <Line
+                  x1="0"
+                  y1="15"
+                  x2={100 * percentageLocal}
+                  y2="15"
+                  stroke={blixtTheme.green}
+                  strokeWidth="8"
+                />
+                <Line
+                  x1={100 * percentageLocal}
+                  y1="15"
+                  x2={(100 * percentageLocal) + (100 * percentageRemote)}
+                  y2="15"
+                  stroke={blixtTheme.red}
+                  strokeWidth="8"
+                />
+                <Line
+                  x1={(100 * percentageLocal) + (100 * percentageRemote)}
+                  y1="15"
+                  x2={(100 * percentageLocal) + (100 * percentageRemote) + (100 * percentageReverse)}
+                  y2="15"
+                  stroke={blixtTheme.lightGray}
+                  strokeWidth="8"
+                />
+              </Svg>
+            </Right>
+          </Row>
+          <Row>
+            <Left style={{ alignSelf:"flex-start" }}>
+              <Text>Can send</Text>
+            </Left>
+            <Right>
+              <Text>
+                <Text style={{ color: blixtTheme.green}}>{valueBitcoin(localBalance, bitcoinUnit)}</Text>{" "}
+                {getUnitNice(new BigNumber(remoteBalance.toNumber()), bitcoinUnit)}
+              </Text>
+            </Right>
+          </Row>
+          <Row>
+            <Left style={{ alignSelf:"flex-start" }}>
+              <Text>Can receive</Text>
+            </Left>
+            <Right>
+              <Text>
+                <Text style={{ color: blixtTheme.red }}>{valueBitcoin(remoteBalance, bitcoinUnit)}</Text>{" "}
+                {getUnitNice(new BigNumber(remoteBalance.toNumber()), bitcoinUnit)}
+              </Text>
             </Right>
           </Row>
           <Row>
