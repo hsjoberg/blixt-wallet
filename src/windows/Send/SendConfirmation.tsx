@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar, Vibration, BackHandler } from "react-native";
 import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner, Toast } from "native-base";
+import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { SendStackParamList } from "./index";
@@ -11,7 +12,6 @@ import { BitcoinUnits, unitToSatoshi } from "../../utils/bitcoin-units";
 import { extractDescription } from "../../utils/NameDesc";
 import Long from "long";
 import useBalance from "../../hooks/useBalance";
-import { RouteProp } from "@react-navigation/native";
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
@@ -73,7 +73,8 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       await getBalance();
       Vibration.vibrate(32);
       callback(response.paymentPreimage);
-      navigation.pop();
+      // navigation.pop();
+      navigation.replace("SendDone");
     } catch (e) {
       console.log(e);
 
@@ -176,7 +177,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
           </Button>
         </Left>
         <Body>
-          <Title>Confirm pay invoice</Title>
+          <Title>Pay invoice</Title>
         </Body>
       </Header>
       <BlixtForm

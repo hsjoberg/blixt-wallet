@@ -17,7 +17,7 @@ import TransactionDetails from "./windows/TransactionDetails";
 import WebLNBrowser from "./windows/WebLN/Browser";
 import Loading from "./windows/Loading";
 
-import { useStoreState, useStoreActions } from "./state/store.ts";
+import { useStoreState, useStoreActions } from "./state/store";
 
 const RootStack = createStackNavigator();
 
