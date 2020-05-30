@@ -82,5 +82,5 @@ it("expect balance to update when paying an invoice", async () => {
     expect(store.getState().transaction.transactions[0].status).toBe("SETTLED");
   });
 
-  expect(bigBalanceHeader.children[0]).toContain("0.000999");
+  await wait(() => expect(bigBalanceHeader.children[0]).toContain("0.000999"));
 });

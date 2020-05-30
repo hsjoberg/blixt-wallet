@@ -142,7 +142,7 @@ export default ({ navigation }: IOpenChannelProps) => {
           component: (
             <>
               <Input
-                testID="INPUT_AMOUNT"
+                testID="INPUT_AMOUNT_FIAT"
                 placeholder={`Amount ${fiatUnit}`}
                 keyboardType="numeric"
                 onChangeText={onChangeFiatInput}
