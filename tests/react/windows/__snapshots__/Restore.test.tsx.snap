@@ -194,6 +194,7 @@ exports[`renders correctly 1`] = `
                                   Object {
                                     "padding": 14,
                                   },
+                                  Object {},
                                   Object {
                                     "alignItems": "center",
                                     "flex": 1,
