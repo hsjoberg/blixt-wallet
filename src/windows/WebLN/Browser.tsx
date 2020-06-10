@@ -10,7 +10,6 @@ import Color from "color";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import BlurOverlay, { closeOverlay, openOverlay } from "../../Blur";
 import { useStoreActions } from "../../state/store";
-import WebLNSite from "../../webln-site/index-txt";
 import { RootStackParamList } from "../../Main";
 
 const INITIAL_URL = "https://blixtwallet.github.io/webln";
@@ -18,7 +17,6 @@ const INITIAL_URL = "https://blixtwallet.github.io/webln";
 interface IBrowserProps {
   navigation: StackNavigationProp<RootStackParamList, "WebLNBrowser">;
   route: RouteProp<RootStackParamList, "WebLNBrowser">;
-
 }
 export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   const initialUrl = route.params ? route.params.url : INITIAL_URL;
@@ -125,10 +123,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
           ref={webview}
           onMessage={onMessage}
           userAgent="BlixtWallet/alpha (WebLN)"
-          source={url !== INITIAL_URL ? { uri: url! } : {
-            html: WebLNSite,
-            baseUrl: INITIAL_URL,
-          }}
+          source={{ uri: url }}
           onLoadStart={(e) => {
             console.log("onLoadStart");
             setJsInjected(false)
@@ -164,8 +159,15 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
             ref={textInput}
             style={style.urlInput}
             value={urlInput}
-            onChangeText={(text) => setUrlInput(text)}
-            onSubmitEditing={(e) => setUrl(e.nativeEvent.text)}
+            onChangeText={(text) => {
+              setUrlInput(text);
+            }}
+            onSubmitEditing={(e) => {
+              if (!e.nativeEvent.text.startsWith("https://") && !e.nativeEvent.text.startsWith("http://")) {
+                e.nativeEvent.text = "https://" + e.nativeEvent.text;
+              }
+              setUrl(e.nativeEvent.text);
+            }}
             keyboardType="url"
             placeholder="Type URL here..."
           />
@@ -218,8 +220,8 @@ const style = StyleSheet.create({
     fontSize: 13,
     backgroundColor: Color(blixtTheme.gray).lighten(0.28).hex(),
     borderRadius: 32,
-    paddingTop: 0,
-    paddingBottom: 0,
+    paddingTop: 5,
+    paddingBottom: 5,
     paddingLeft: 12,
     paddingRight: 8,
   },

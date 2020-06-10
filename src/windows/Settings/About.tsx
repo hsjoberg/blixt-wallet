@@ -3,8 +3,8 @@ import { StyleSheet, Linking, ScrollView } from "react-native";
 import { Body, Card, Text, CardItem, H1 } from "native-base";
 
 import Blurmodal from "../../components/BlurModal";
-import { VersionName, ApplicationId, IsHermes } from "../../utils/build";
-import { useStoreState } from "../../state/store.ts";
+import { VersionName, VersionCode, ApplicationId, IsHermes } from "../../utils/build";
+import { useStoreState } from "../../state/store";
 import TextLink from "../../components/TextLink";
 
 const GITHUB_REPO_URL = "https://github.com/hsjoberg/blixt-wallet";
@@ -27,7 +27,7 @@ export default function About() {
           <Body>
             <ScrollView>
               <H1 style={style.header}>About Blixt Wallet</H1>
-              <Text style={style.textBlock}>Version {VersionName} ({appVersion}) {ApplicationId}{IsHermes ? " Hermes" : ""}{"\n"}
+              <Text style={style.textBlock}>Version {VersionName} ({appVersion}/{VersionCode}) {ApplicationId}{"\n"}
               By <TextLink url={HAMPUS_EMAIL.replace("💩", "@")}>Hampus Sjöberg</TextLink>
               </Text>
               <Text style={style.textBlock}>Open-source wallet with MIT license{"\n"}
@@ -63,7 +63,7 @@ const style = StyleSheet.create({
   textBlock: {
     marginBottom: 8,
   },
-  textBold : {
+  textBold: {
     fontWeight: "bold",
   }
 });

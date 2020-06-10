@@ -66,14 +66,11 @@ export default class BlurOverlay extends React.Component {
     }
 
     render() {
-        const { children } = this.props;
         return (
             this.state.showBlurOverlay ?
                 <Animated.View style={[ { opacity: this.state.fadeIn},styles.style] } pointerEvents="box-none">
-                    <RCTSajjadBlurOverlay {...this.props} style={[this.props.customStyles,styles.style]}>
-                        {children}
-                    </RCTSajjadBlurOverlay>
-                </Animated.View>:
+                    <RCTSajjadBlurOverlay {...this.props} style={[this.props.customStyles,styles.style]} />
+                </Animated.View> :
                 null
         );
     }

@@ -7,8 +7,9 @@ import { useNavigation } from "@react-navigation/native";
 
 export interface ITransactionDetailsProps {
   children: any;
+  useModalComponent?: boolean;
 }
-export default function BlurModal({ children }: ITransactionDetailsProps) {
+export default function BlurModal({ children, useModalComponent }: ITransactionDetailsProps) {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -29,6 +30,8 @@ export default function BlurModal({ children }: ITransactionDetailsProps) {
     setModalVisible(false);
   };
 
+  const useModal = useModalComponent ?? true;
+
   return (
     <View style={style.container} touchSoundDisabled={true}>
       <BlurOverlay
@@ -40,13 +43,16 @@ export default function BlurModal({ children }: ITransactionDetailsProps) {
         customStyles={style.blurOverlay}
         blurStyle="dark"
       >
-        <Modal
-            onBackdropPress={goBack}
-            onRequestClose={goBack}
-            visible={true}
-        >
-          {children}
-        </Modal>
+        {!useModal
+          ? children
+          : <Modal
+              onBackdropPress={goBack}
+              onRequestClose={goBack}
+              visible={true}
+            >
+              {children}
+            </Modal>
+        }
       </BlurOverlay>
     </View>
   );

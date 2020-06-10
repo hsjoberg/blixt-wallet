@@ -10,7 +10,8 @@ import Container from "../../components/Container";
 import ChannelCard from "../../components/ChannelCard";
 import PendingChannelCard from "../../components/PendingChannelCard";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
-import { formatBitcoin } from "../../utils/bitcoin-units";
+import { formatBitcoin, valueFiat } from "../../utils/bitcoin-units";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 interface ILightningInfoProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
@@ -25,6 +26,10 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
   const waitingCloseChannels = useStoreState((store) => store.channel.waitingCloseChannels);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const currentRate = useStoreState((store) => store.fiat.currentRate);
+  const preferFiat = useStoreState((store) => store.settings.preferFiat);
+  const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
 
   useEffect(() => {
     if (rpcReady) {
@@ -74,6 +79,10 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
     )),
   ];
 
+  const onPressBalance = async () => {
+    await changePreferFiat(!preferFiat);
+  }
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -95,8 +104,14 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
       {rpcReady &&
         <ScrollView contentContainerStyle={style.container}>
           <View style={style.balanceInfo}>
-            <H1 style={style.spendableAmount}>
-              Spendable amount{"\n"} {formatBitcoin(balance, bitcoinUnit)}
+            <H1 style={[style.spendableAmount]}>
+              Spendable amount
+            </H1>
+            <H1 onPress={onPressBalance}>
+              {preferFiat
+                ? (valueFiat(balance, currentRate).toFixed(2) + " " + fiatUnit)
+                : formatBitcoin(balance, bitcoinUnit)
+              }
             </H1>
           </View>
           <View>{channelCards}</View>
