@@ -1,4 +1,4 @@
-import PushNotification from "react-native-push-notification";
+import PushNotification, { PushNotificationObject } from "react-native-push-notification";
 
 PushNotification.configure({
   onNotification: function(notification) {
@@ -7,13 +7,13 @@ PushNotification.configure({
   requestPermissions: false
 });
 
-export const localNotification = (message: string): void => {
+export const localNotification = (message: string, importance: PushNotificationObject["importance"] = "default"): void => {
   PushNotification.localNotification({
     message,
     playSound: true,
     vibrate: false,
     priority: "default",
-    importance:  "default",
+    importance,
     autoCancel: true,
   });
 };

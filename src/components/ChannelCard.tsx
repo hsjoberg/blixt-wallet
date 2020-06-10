@@ -7,7 +7,7 @@ import Long from "long";
 import { useStoreActions, useStoreState } from "../state/store";
 import { lnrpc } from "../../proto/proto";
 import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
-import { formatBitcoin, valueBitcoin, getUnitNice } from "../utils/bitcoin-units";
+import { formatBitcoin, valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
 import BigNumber from "bignumber.js";
 const theme = nativeBaseTheme.default;
 const blixtTheme = nativeBaseTheme.blixtTheme;
@@ -23,6 +23,9 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
   const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const currentRate = useStoreState((store) => store.fiat.currentRate);
+  const preferFiat = useStoreState((store) => store.settings.preferFiat);
 
   const close = async () => {
     const result = await closeChannel({
@@ -136,8 +139,26 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
             </Left>
             <Right>
               <Text>
-                <Text style={{ color: blixtTheme.green}}>{valueBitcoin(localBalance, bitcoinUnit)}</Text>{" "}
-                {getUnitNice(new BigNumber(remoteBalance.toNumber()), bitcoinUnit)}
+                {!preferFiat &&
+                  <>
+                    <Text style={{ color: blixtTheme.green }}>
+                      {valueBitcoin(localBalance, bitcoinUnit)}{" "}
+                    </Text>
+                    <Text>
+                      {getUnitNice(new BigNumber(localBalance.toNumber()), bitcoinUnit)}
+                    </Text>
+                  </>
+                }
+                {preferFiat &&
+                  <>
+                    <Text style={{ color: blixtTheme.green }}>
+                      {valueFiat(localBalance, currentRate).toFixed(2)} {fiatUnit}{" "}
+                    </Text>
+                    <Text>
+                      {fiatUnit}
+                    </Text>
+                  </>
+                }
               </Text>
             </Right>
           </Row>
@@ -146,9 +167,27 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
               <Text>Can receive</Text>
             </Left>
             <Right>
-              <Text>
-                <Text style={{ color: blixtTheme.red }}>{valueBitcoin(remoteBalance, bitcoinUnit)}</Text>{" "}
-                {getUnitNice(new BigNumber(remoteBalance.toNumber()), bitcoinUnit)}
+              <Text style={{ textAlign: "right" }}>
+                {!preferFiat &&
+                  <>
+                    <Text style={{ color: blixtTheme.red }}>
+                      {valueBitcoin(remoteBalance, bitcoinUnit)}{" "}
+                    </Text>
+                    <Text>
+                      {getUnitNice(new BigNumber(remoteBalance.toNumber()), bitcoinUnit)}
+                    </Text>
+                  </>
+                }
+                {preferFiat &&
+                  <>
+                    <Text style={{ color: blixtTheme.red}}>
+                      {valueFiat(remoteBalance, currentRate).toFixed(2)} {fiatUnit}{" "}
+                    </Text>
+                    <Text>
+                      {fiatUnit}
+                    </Text>
+                  </>
+                }
               </Text>
             </Right>
           </Row>

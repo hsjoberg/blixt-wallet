@@ -31,7 +31,7 @@ export const BitcoinUnits: IBitcoinUnits = {
     decimals: 5,
   },
   bit: {
-    nice: "bits",
+    nice: "bit",
     settings: "Bits",
     pluralize: true,
     unit: 1 / 1E6,
@@ -53,7 +53,7 @@ export const convertBitcoinUnit = (value: number, from: keyof IBitcoinUnits, to:
 
 export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNumbers: boolean = false): string => {
   const value = convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit);
-  const fixed =  value.toFixed(unit === "bit" ? 2 : undefined!);
+  const fixed = value.toFixed(unit === "bit" ? 2 : undefined!);
 
   const formatNumber =
     groupNumbers
@@ -65,7 +65,7 @@ export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNum
 
 export const getUnitNice = (value: BigNumber, unit: keyof IBitcoinUnits) => {
   let str = BitcoinUnits[unit].nice;
-  if (BitcoinUnits[unit].pluralize && value.eq(new BigNumber(1))) {
+  if (BitcoinUnits[unit].pluralize && !value.isEqualTo(new BigNumber(1))) {
     str += "s";
   }
   return str;
@@ -73,8 +73,8 @@ export const getUnitNice = (value: BigNumber, unit: keyof IBitcoinUnits) => {
 
 export const valueBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNumbers: boolean = false): string => {
   return groupNumbers
-     ? formatNumberGroupings(convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed())
-     : convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed();
+    ? formatNumberGroupings(convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed())
+    : convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed();
 };
 
 export const unitToSatoshi = (value: number, fromUnit: keyof IBitcoinUnits): number => {
@@ -95,8 +95,8 @@ export const convertBitcoinToFiat = (satoshi: Long | number, conversion: number,
 
 export const valueFiat = (satoshi: Long, conversion: number): number => {
   return convertBitcoinUnit(satoshi.toNumber(), "satoshi", "bitcoin")
-          .multipliedBy(conversion)
-          .toNumber();
+    .multipliedBy(conversion)
+    .toNumber();
 };
 
 export const valueBitcoinFromFiat = (fiat: number, conversion: number, unit: keyof IBitcoinUnits): string => {
