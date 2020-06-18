@@ -53,7 +53,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
             </Right>
           </Row>
           <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-            <Text note={true}>
+            <Text note={true} style={{ flex: 1, marginRight:0 }}>
               {/*transaction.nodeAliasCached && transaction.nodeAliasCached + ": "*/}
               {transaction.website &&
                 <Text note={true}>{/*To */}<Text style={{ fontWeight: "bold" }} note={true}>{transaction.website}: </Text></Text>
@@ -72,7 +72,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
                 : "No description"
               }
             </Text>
-            <Text note={true} style={{ marginRight: 0 }}>
+            <Text note={true} style={{ marginLeft: 8, marginRight: 0 }}>
               {status !== "SETTLED" && capitalize(status)}
             </Text>
           </View>

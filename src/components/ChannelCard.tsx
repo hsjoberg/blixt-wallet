@@ -152,7 +152,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
                 {preferFiat &&
                   <>
                     <Text style={{ color: blixtTheme.green }}>
-                      {valueFiat(localBalance, currentRate).toFixed(2)} {fiatUnit}{" "}
+                      {valueFiat(localBalance, currentRate).toFixed(2)}{" "}
                     </Text>
                     <Text>
                       {fiatUnit}
@@ -181,7 +181,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
                 {preferFiat &&
                   <>
                     <Text style={{ color: blixtTheme.red}}>
-                      {valueFiat(remoteBalance, currentRate).toFixed(2)} {fiatUnit}{" "}
+                      {valueFiat(remoteBalance, currentRate).toFixed(2)}{" "}
                     </Text>
                     <Text>
                       {fiatUnit}

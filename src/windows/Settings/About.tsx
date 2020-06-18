@@ -6,9 +6,8 @@ import Blurmodal from "../../components/BlurModal";
 import { VersionName, VersionCode, ApplicationId, IsHermes } from "../../utils/build";
 import { useStoreState } from "../../state/store";
 import TextLink from "../../components/TextLink";
+import { HAMPUS_EMAIL, GITHUB_REPO_URL } from "../../utils/constants";
 
-const GITHUB_REPO_URL = "https://github.com/hsjoberg/blixt-wallet";
-const HAMPUS_EMAIL = "mailto:hampus.sjoberg💩protonmail.com";
 const software = [
   "lnd with Neutrino",
   "react-native",
@@ -28,7 +27,7 @@ export default function About() {
             <ScrollView>
               <H1 style={style.header}>About Blixt Wallet</H1>
               <Text style={style.textBlock}>Version {VersionName} ({appVersion}/{VersionCode}) {ApplicationId}{"\n"}
-              By <TextLink url={HAMPUS_EMAIL.replace("💩", "@")}>Hampus Sjöberg</TextLink>
+              By <TextLink url={HAMPUS_EMAIL}>Hampus Sjöberg</TextLink>
               </Text>
               <Text style={style.textBlock}>Open-source wallet with MIT license{"\n"}
                 <TextLink url={GITHUB_REPO_URL}>{GITHUB_REPO_URL}</TextLink>
