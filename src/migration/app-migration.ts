@@ -11,7 +11,7 @@ export interface IAppMigration {
 export const appMigration: IAppMigration[] = [
   // Version 0
   {
-    async beforeLnd(db, i) {},
+    async beforeLnd(db, i) { },
   },
   // Version 1
   {
@@ -82,6 +82,13 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       await setItem(StorageItem.onchainExplorer, "mempool");
+    },
+  },
+  // Version 10
+  {
+    async beforeLnd(db, i) {
+      await db.executeSql("ALTER TABLE tx ADD preimage TEXT NOT NULL DEFAULT '00'"); // hex string
+      await db.executeSql("ALTER TABLE tx ADD lnurlPayResponse TEXT NULL");
     },
   },
 ];

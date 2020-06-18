@@ -7,11 +7,12 @@ import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
 import { setupDescription } from "../utils/NameDesc";
-import { valueFiat } from "../utils/bitcoin-units";
-import { timeout, uint8ArrayToString, bytesToString, decodeTLVRecord, stringToUint8Array, bytesToHexString, toast } from "../utils";
-import { TLV_RECORD_NAME } from "../utils/constants.ts";
+import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
+import { timeout, uint8ArrayToString, bytesToString, decodeTLVRecord, stringToUint8Array, bytesToHexString, toast, hexToUint8Array } from "../utils";
+import { TLV_RECORD_NAME } from "../utils/constants";
 
 import logger from "./../utils/log";
+import { localNotification } from "../utils/push-notification";
 const log = logger("Receive");
 
 // TODO(hsjoberg): this should match Transaction model
@@ -149,13 +150,19 @@ export const receive: IReceiveModel = {
           locationLat: null,
           locationLong: null,
 
+          preimage: invoice.rPreimage,
+          lnurlPayResponse: null,
+
           hops: [],
         };
 
         if (invoice.state === lnrpc.Invoice.InvoiceState.SETTLED) {
+          const fiatUnit = getStoreState().settings.fiatUnit;
+          const valFiat = valueFiat(invoice.amtPaidSat, getStoreState().fiat.currentRate);
+
           transaction.valueUSD = valueFiat(invoice.amtPaidSat, getStoreState().fiat.fiatRates.USD.last);
-          transaction.valueFiat = valueFiat(invoice.amtPaidSat, getStoreState().fiat.currentRate);
-          transaction.valueFiatCurrency = getStoreState().settings.fiatUnit;
+          transaction.valueFiat = valFiat;
+          transaction.valueFiatCurrency = fiatUnit;
 
           // Loop through known TLV records
           for (const htlc of invoice.htlcs) {
@@ -169,11 +176,18 @@ export const receive: IReceiveModel = {
               }
             }
           }
-        }
 
-        // We can now delete the temp data
-        // as the invoice has been settled
-        actions.deleteInvoiceTmpData(rHash);
+          const bitcoinUnit = getStoreState().settings.bitcoinUnit;
+          let message = `Received ${formatBitcoin(invoice.amtPaidSat, bitcoinUnit)} (${valFiat.toFixed(2)} ${fiatUnit})`;
+          if (transaction.tlvRecordName ?? transaction.payer ?? transaction.website) {
+            message += ` from ${transaction.tlvRecordName ?? transaction.payer ?? transaction.website}`;
+          }
+          localNotification(message, "high");
+
+          // We can now delete the temp data
+          // as the invoice has been settled
+          actions.deleteInvoiceTmpData(rHash);
+        }
 
         setTimeout(async () => {
           await dispatch.channel.getBalance();

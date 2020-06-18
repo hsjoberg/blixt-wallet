@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Share, Linking } from "react-native";
+import { StyleSheet, Share, Linking, TextInput } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Body, Card, Text, CardItem, H1, Toast, View, Button } from "native-base";
 import { fromUnixTime } from "date-fns";
@@ -7,7 +7,7 @@ import MapView, {PROVIDER_GOOGLE, Marker} from "react-native-maps";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
-import { capitalize, formatISO, isLong } from "../utils";
+import { capitalize, formatISO, isLong, getDomainFromURL, decryptLNURLPayAesTagMessage, hexToUint8Array } from "../utils";
 import { formatBitcoin } from "../utils/bitcoin-units"
 import { useStoreState } from "../state/store";
 import { extractDescription } from "../utils/NameDesc";
@@ -15,13 +15,14 @@ import { smallScreen } from "../utils/device";
 import CopyAddress from "../components/CopyAddress";
 import { MapStyle } from "../utils/google-maps";
 import TextLink from "../components/TextLink";
+import { ITransaction } from "../storage/database/transaction";
 
 interface IMetaDataProps {
   title: string;
   data: string;
   url?: string;
 }
-const MetaData = ({ title, data, url }: IMetaDataProps) => {
+function MetaData({ title, data, url }: IMetaDataProps) {
   return (
     <Text
       style={style.detailText}
@@ -76,6 +77,7 @@ export default function TransactionDetails({ route }: any) {
     direction = "send";
     transactionValue = transaction.value;
   }
+  console.log(transaction.type);
 
   if (currentScreen === "Overview") {
     return (
@@ -95,11 +97,13 @@ export default function TransactionDetails({ route }: any) {
               </View>
               <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
               {transaction.website && <MetaData title="Website" data={transaction.website} url={"https://" + transaction.website} />}
-              {(transaction.nodeAliasCached && name == undefined) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
+              {transaction.type !== "NORMAL" && <MetaData title="Type" data={transaction.type} />}
+              {(transaction.type === "LNURL" && transaction.lnurlPayResponse && transaction.lnurlPayResponse.successAction) && <LNURLMetaData transaction={transaction} />}
+              {(transaction.nodeAliasCached && name === null) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
               {direction === "receive" && !transaction.tlvRecordName && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
               {direction === "receive" && transaction.tlvRecordName && <MetaData title="Payer" data={transaction.tlvRecordName} />}
               {(direction === "send" && name) && <MetaData title="Recipient" data={name} />}
-              <MetaData title="Description" data={description} />
+              {(description !== null && description.length > 0) && <MetaData title="Description" data={description} />}
               <MetaData title="Amount" data={formatBitcoin(transactionValue, bitcoinUnit)} />
               {transaction.valueFiat != null && transaction.valueFiatCurrency && <MetaData title="Amount in Fiat (Time of Payment)" data={`${transaction.valueFiat.toFixed(2)} ${transaction.valueFiatCurrency}`} />}
               {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
@@ -162,6 +166,46 @@ export default function TransactionDetails({ route }: any) {
     );
   }
 };
+
+
+interface IWebLNMetaDataProps {
+  transaction: ITransaction;
+}
+function LNURLMetaData({ transaction }: IWebLNMetaDataProps) {
+  let secretMessage: string | null = null;
+
+  if (transaction.lnurlPayResponse?.successAction?.tag === "aes") {
+    secretMessage = decryptLNURLPayAesTagMessage(
+      transaction.preimage,
+      transaction.lnurlPayResponse.successAction.iv,
+      transaction.lnurlPayResponse.successAction.ciphertext,
+    );
+  }
+
+  return (
+    <></>
+  );
+
+  return (
+    <>
+      {transaction.lnurlPayResponse?.successAction?.tag === "message" &&
+        <MetaData title={`Message from ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.message} />
+      }
+      {transaction.lnurlPayResponse?.successAction?.tag === "url" &&
+        <>
+          <MetaData title={`Messsage from ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.description} />
+          <MetaData title={`URL received from ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.url} url={transaction.lnurlPayResponse.successAction.url} />
+        </>
+      }
+      {transaction.lnurlPayResponse?.successAction?.tag === "aes" &&
+        <>
+          <MetaData title={`Messsage from ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.description} />
+          <MetaData title="Secret Message" data={secretMessage!} />
+        </>
+      }
+    </>
+  );
+}
 
 const style = StyleSheet.create({
   card: {

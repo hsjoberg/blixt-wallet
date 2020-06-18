@@ -39,6 +39,9 @@ import {
   initWallet,
   subscribeInvoices,
   unlockWallet,
+  deriveKey,
+  derivePrivateKey,
+  signMessage,
 } from "../lndmobile/wallet";
 import {
   status,
@@ -49,7 +52,7 @@ import {
 import {
   checkScheduledSyncWorkStatus, WorkInfo
 } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
-import { lnrpc } from "../../proto/proto";
+import { lnrpc, signrpc } from "../../proto/proto";
 import { autopilotrpc } from "../../proto/proto-autopilot";
 
 export interface ILndMobileInjections {
@@ -90,9 +93,12 @@ export interface ILndMobileInjections {
   wallet: {
     decodeInvoiceResult: (data: string) => lnrpc.Invoice;
     genSeed: () => Promise<lnrpc.GenSeedResponse>;
-    initWallet: (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string) => Promise<lnrpc.InitWalletResponse>;
+    initWallet: (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string) => Promise<void>;
     subscribeInvoices: () => Promise<string>;
-    unlockWallet: (password: string) => Promise<lnrpc.UnlockWalletResponse>;
+    unlockWallet: (password: string) => Promise<void>;
+    deriveKey: (keyFamily: number, keyIndex: number) => Promise<signrpc.KeyDescriptor>;
+    derivePrivateKey: (keyFamily: number, keyIndex: number) => Promise<signrpc.KeyDescriptor>;
+    signMessage: (keyFamily: number, keyIndex: number, msg: Uint8Array) => Promise<signrpc.SignMessageResp>;
   };
   autopilot: {
     status: () => Promise<autopilotrpc.StatusResponse>;
@@ -146,6 +152,9 @@ export default {
     initWallet,
     subscribeInvoices,
     unlockWallet,
+    deriveKey,
+    derivePrivateKey,
+    signMessage,
   },
   autopilot: {
     status,

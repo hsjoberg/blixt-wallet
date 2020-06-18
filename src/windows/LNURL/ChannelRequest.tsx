@@ -1,49 +1,63 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StatusBar, Vibration } from "react-native";
-import { Spinner, Toast } from "native-base";
+import { Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
-
 
 import Container from "../../components/Container";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { RootStackParamList } from "../../Main";
+import { toast, timeout } from "../../utils";
 
 interface IChannelRequestProps {
-  navigation: StackNavigationProp<RootStackParamList, "ChannelRequest">;
+  navigation: StackNavigationProp<{}>;
 }
 export default function LNURLChannelRequest({ navigation }: IChannelRequestProps) {
+  const [done, setDone] = useState(false);
   const type = useStoreState((store) => store.lnUrl.type);
   const doChannelRequest = useStoreActions((store) => store.lnUrl.doChannelRequest);
+  const clear = useStoreActions((store) => store.lnUrl.clear);
 
   useEffect(() => {
+    if (done) {
+      return;
+    }
     // tslint:disable-next-line
     (async () => {
+      console.log("Doing LNURL channelRequest");
+      // react-navigation bugs out if the processing goes too fast
+      await timeout(500);
       if (type === "channelRequest") {
         try {
           const result = await doChannelRequest({
             private: true,
           });
+          setDone(true);
+          clear();
           Vibration.vibrate(32);
-          Toast.show({
-            text: `Opening inbound channel`,
-            type: "success",
-            duration: 10000,
-          });
-          setTimeout(() => navigation.navigate("Overview"), 1);
+          toast(
+            "Opening inbound channel",
+            10000,
+            "success",
+            "Okay"
+          );
+          navigation.pop();
         } catch (e) {
           console.log(e);
+          setDone(true);
+          clear();
           Vibration.vibrate(50);
-          Toast.show({
-            text: "Error: " + e.message,
-            type: "danger",
-            duration: 10000,
-          });
-          setTimeout(() => navigation.navigate("Overview"), 1);
+          toast(
+            "Error: " + e.message,
+            12000,
+            "warning",
+            "Okay"
+          );
+          navigation.pop();
         }
       }
     })();
-  }, [type]);
+  }, []);
 
   return (
     <Container centered style={{ backgroundColor: blixtTheme.dark }}>

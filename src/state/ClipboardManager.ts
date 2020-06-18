@@ -46,7 +46,7 @@ export const clipboardManager: IClipboardManagerModel = {
     if (
       !navigator ||
       !navigator.getRootState() ||
-      navigator.getRootState().routes[navigator.getRootState().routes.length-1].name === "Send"
+      navigator.getRootState().routes[navigator.getRootState().routes.length - 1].name === "Send"
     ) {
       log.d("Skipping clipboard check");
       return;
@@ -78,7 +78,7 @@ export const clipboardManager: IClipboardManagerModel = {
 
   tryInvoice: thunk(async (actions, payload, { dispatch, getState }) => {
     try {
-      await dispatch.send.setPayment({paymentRequestStr: payload.paymentRequest });
+      await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest });
 
       Alert.alert(
         "Found invoice in clipboard",
@@ -100,11 +100,11 @@ export const clipboardManager: IClipboardManagerModel = {
     return false;
   }),
 
-  tryLNUrl: thunk(async (actions, payload, { dispatch, getState, getStoreState }) => {
+  tryLNUrl: thunk(async (actions, payload, { dispatch }) => {
     const type = await dispatch.lnUrl.setLNUrl(payload.lnUrl);
     if (type === "channelRequest") {
       Alert.alert(
-        "Found LNURL in clipboard",
+        "Found LNURL channel request in clipboard",
         `Found an LNURL in clipboard. Do you wish to continue?`,
         [{
           text: "Cancel",
@@ -113,10 +113,19 @@ export const clipboardManager: IClipboardManagerModel = {
           text: "Continue",
           onPress: () => {
             log.d("Navigating to channelRequest");
-            navigate("ChannelRequest");
+            navigate("LNURL", { screen: "ChannelRequest" });
           }
         }]
       );
+    }
+    else if (type === "login") {
+      navigate("LNURL", { screen: "AuthRequest" });
+    }
+    else if (type === "withdrawRequest") {
+      navigate("LNURL", { screen: "WithdrawRequest" });
+    }
+    else if (type === "payRequest") {
+      navigate("LNURL", { screen: "PayRequest" });
     }
     else {
       throw new Error("Unknown lnurl request");

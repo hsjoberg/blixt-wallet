@@ -8,9 +8,10 @@ import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
 import { valueFiat } from "../utils/bitcoin-units";
 import { LnBech32Prefix } from "../utils/build";
-import { getGeolocation } from "../utils";
+import { getGeolocation, bytesToHexString } from "../utils";
 
 import logger from "./../utils/log";
+import { ILNUrlPayResponse } from "./LNURL";
 const log = logger("Send");
 
 type PaymentRequest = string;
@@ -28,6 +29,7 @@ interface IExtraData {
   payer: string | null;
   type: ITransaction["type"];
   website: string | null;
+  lnurlPayResponse: ILNUrlPayResponse | null;
 }
 
 export interface ISendModel {
@@ -130,6 +132,7 @@ export const send: ISendModel = {
       payer: null,
       type: "NORMAL",
       website: null,
+      lnurlPayResponse: null,
     };
 
     const transaction: ITransaction = {
@@ -160,6 +163,9 @@ export const send: ISendModel = {
       tlvRecordName: null,
       type: extraData.type,
       website: extraData.website,
+
+      preimage: sendPaymentResult.paymentPreimage,
+      lnurlPayResponse: extraData.lnurlPayResponse,
 
       hops: sendPaymentResult.paymentRoute!.hops!.map((hop) => ({
         chanId: hop.chanId ?? null,

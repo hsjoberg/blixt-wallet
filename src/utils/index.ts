@@ -3,6 +3,8 @@ import { format } from "date-fns";
 import * as querystring from "querystring";
 import Long from "long";
 import Geolocation, { GeolocationResponse, GeolocationError } from "@react-native-community/geolocation";
+import aesjs, { ByteSource } from "aes-js";
+import * as base64 from "base64-js";
 
 export const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 
@@ -50,8 +52,10 @@ export const bytesToString = (bytes: ArrayLike<number>) => {
 
 export const uint8ArrayToString = (bytes: Uint8Array) => bytesToString(bytes);
 
-export const bytesToHexString = (bytes: ArrayLike<number>) => {
-  return bytes.reduce(function(memo, i) {
+export const bytesToHexString = (bytes) => {
+  console.log("inside bytesToHexString");
+  console.log(bytes);
+  return bytes.reduce(function (memo, i) {
     return memo + ('0' + i.toString(16)).slice(-2); //padd with leading 0 if <16
   }, "");
 }
@@ -70,7 +74,7 @@ export const toast = (message: string, period = 3000, type: "danger" | "success"
   });
 }
 
-export const getGeolocation = (): Promise<GeolocationResponse["coords"]>  => {
+export const getGeolocation = (): Promise<GeolocationResponse["coords"]> => {
   return new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition((position) => {
       resolve(position.coords);
@@ -83,7 +87,7 @@ export const getGeolocation = (): Promise<GeolocationResponse["coords"]>  => {
 export const camelCaseToSpace = (text: string) =>
   text
     .replace(/([A-Z])/g, ' $1')
-    .replace(/^./, function(str){ return str.toUpperCase(); });
+    .replace(/^./, function(str) { return str.toUpperCase(); });
 
 
 // Copied from BufferJS
@@ -100,3 +104,23 @@ export const decodeTLVRecord = (utf8: string) => {
   const bytes = asciiToBytes(utf8);
   return Long.fromBytesLE(bytes).toNumber();
 }
+
+export const getDomainFromURL = (url: string) => url.replace('http://', '').replace('https://', '').split(/[/?#]/)[0];
+
+export const decryptAesToUtf8 = (key: ByteSource, iv: ByteSource, ciphertext: ByteSource) => {
+  const aesCbc = new aesjs.ModeOfOperation.cbc(
+    key,
+    iv
+  );
+
+  const msg = aesCbc.decrypt(ciphertext);
+  return uint8ArrayToString(msg);
+}
+
+export const decryptLNURLPayAesTagMessage = (preimage: Uint8Array, iv: string, ciphertext: string) => {
+  return decryptAesToUtf8(
+    preimage,
+    base64.toByteArray(iv),
+    base64.toByteArray(ciphertext)
+  );
+};

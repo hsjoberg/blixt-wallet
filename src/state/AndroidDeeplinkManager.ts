@@ -65,13 +65,14 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
           await timeout(500);
         }
 
+        if (getState().cache.includes(data)) {
+          return;
+        }
+        actions.addToCache(data);
+
         if (data.toUpperCase().startsWith("LIGHTNING:")) {
           log.d("Deeplink found");
           const lightningUri = data.toUpperCase().replace("LIGHTNING:", "");
-          if (getState().cache.includes(lightningUri)) {
-            return;
-          }
-          actions.addToCache(lightningUri);
 
           log.d("", [lightningUri.startsWith(LnBech32Prefix.toUpperCase())]);
           // If this is an invoice
@@ -91,7 +92,7 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
             return (nav: NavigationContainerRef) => {
               nav?.navigate("WebLNBrowser", { url: data });
             }
-          } catch (e) {}
+          } catch (e) { }
         }
       }
     } catch (e) {
@@ -118,7 +119,25 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
     if (type === "channelRequest") {
       log.d("Navigating to channelRequest");
       return (nav: NavigationContainerRef) => {
-        nav?.navigate("ChannelRequest");
+        nav?.navigate("LNURL", { screen: "ChannelRequest" });
+      }
+    }
+    else if (type === "login") {
+      log.d("Navigating to authRequest");
+      return (nav: NavigationContainerRef) => {
+        nav?.navigate("LNURL", { screen: "AuthRequest" });
+      }
+    }
+    else if (type === "withdrawRequest") {
+      log.d("Navigating to withdrawRequest");
+      return (nav: NavigationContainerRef) => {
+        nav?.navigate("LNURL", { screen: "WithdrawRequest" });
+      }
+    }
+    else if (type === "payRequest") {
+      log.d("Navigating to payRequest");
+      return (nav: NavigationContainerRef) => {
+        nav?.navigate("LNURL", { screen: "PayRequest" });
       }
     }
     else {

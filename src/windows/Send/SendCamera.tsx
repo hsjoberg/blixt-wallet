@@ -23,6 +23,7 @@ export default function SendCamera({ navigation }: ISendCameraProps) {
   const [cameraType, setCameraType] = useState<keyof CameraType>(RNCamera.Constants.Type.back);
   const [scanning, setScanning] = useState(true);
   const setLNURL = useStoreActions((store) => store.lnUrl.setLNUrl)
+  const lnurlClear = useStoreActions((store) => store.lnUrl.clear)
 
   const onCameraSwitchClick = () => {
     setCameraType(
@@ -48,12 +49,27 @@ export default function SendCamera({ navigation }: ISendCameraProps) {
       try {
         const type = await setLNURL(paymentRequest);
         if (type === "channelRequest") {
-          navigation.navigate("ChannelRequest");
+          console.log("Sending to ChannelRequest");
+          navigation.replace("LNURL", { screen: "ChannelRequest" });
+        }
+        else if (type === "login") {
+          navigation.replace("LNURL", { screen: "AuthRequest" });
+        }
+        else if (type === "withdrawRequest") {
+          navigation.replace("LNURL", { screen: "WithdrawRequest" });
+        }
+        else if (type === "payRequest") {
+          navigation.pop();
+          navigation.navigate("LNURL", { screen: "PayRequest" });
         }
         else {
-          console.log("Unknown lnurl request");
+          console.log("Unknown lnurl request: " + type);
+          Alert.alert(`Unsupported LNURL request: ${type}`, undefined,
+            [{ text: "OK", onPress: () => setScanning(true) }]
+          );
+          lnurlClear();
         }
-      } catch (e) {}
+      } catch (e) { }
     }
     else {
       try {
@@ -61,7 +77,7 @@ export default function SendCamera({ navigation }: ISendCameraProps) {
         navigation.replace("SendConfirmation");
       } catch (error) {
         Alert.alert(`${errorPrefix}: ${error.message}`, undefined,
-          [{text: "OK", onPress: () => setScanning(true)}]);
+          [{ text: "OK", onPress: () => setScanning(true) }]);
       }
     }
   };
@@ -99,8 +115,8 @@ export default function SendCamera({ navigation }: ISendCameraProps) {
           <BarcodeMask
             showAnimatedLine={false}
             edgeColor={blixtTheme.primary}
-            width={smallScreen ? 270 : 310}
-            height={smallScreen ? 270 : 310}
+            width={smallScreen ? 270 : 290}
+            height={smallScreen ? 270 : 290}
           />
           <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
           {__DEV__ && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}

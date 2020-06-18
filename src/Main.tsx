@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import Overview from "./windows/Overview";
+import Help from "./windows/Help";
 import Send from "./windows/Send";
 import Receive from "./windows/Receive";
 import Settings from "./windows/Settings";
@@ -10,14 +11,16 @@ import OnChain from "./windows/OnChain";
 import Authentication from "./windows/InitProcess/Authentication";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
 import Welcome from "./windows/Welcome";
-import ChannelRequest from "./windows/LNURL/ChannelRequest";
+import LNURL from "./windows/LNURL";
 import KeysendTest from "./windows/Keysend/Test";
 import GoogleDriveTestbed from "./windows/Google/GoogleDriveTestbed";
 import TransactionDetails from "./windows/TransactionDetails";
+import SyncInfo from "./windows/SyncInfo";
 import WebLNBrowser from "./windows/WebLN/Browser";
 import Loading from "./windows/Loading";
 
 import { useStoreState, useStoreActions } from "./state/store";
+import { toast } from "./utils";
 
 const RootStack = createStackNavigator();
 
@@ -29,14 +32,16 @@ export type RootStackParamList = {
 
   Loading: undefined;
   Overview: undefined;
+  Help: undefined;
   TransactionDetails: {
     rHash: string; // TODO
   };
+  SyncInfo: undefined;
   Receive: undefined;
   Send: undefined;
   OnChain: undefined;
   Settings: undefined;
-  ChannelRequest: undefined;
+  LNURL: undefined;
   GoogleDriveTestbed: undefined;
   KeysendTest: undefined;
   DeeplinkChecker: undefined;
@@ -64,7 +69,11 @@ export default function Main() {
     // tslint:disable-next-line
     (async () => {
       if (!appReady) {
-        await initializeApp();
+        try {
+          await initializeApp();
+        } catch (e) {
+          toast(e.message, 0, "danger");
+        }
       }
     })();
   }, [appReady]);
@@ -84,7 +93,11 @@ export default function Main() {
           setInitialRoute("Welcome");
         }
         else {
-          await initLightning();
+          try {
+            await initLightning();
+          } catch (e) {
+            toast(e.message, 0, "danger");
+          }
         }
       }
     })();
@@ -113,13 +126,15 @@ export default function Main() {
       <RootStack.Screen name="Loading" component={Loading} />
 
       <RootStack.Screen name="Overview" component={Overview} />
+      <RootStack.Screen name="Help" component={Help} />
       <RootStack.Screen name="TransactionDetails" component={TransactionDetails} />
+      <RootStack.Screen name="SyncInfo" component={SyncInfo} />
       <RootStack.Screen name="Receive" component={Receive} />
       <RootStack.Screen name="Send" component={Send} />
       <RootStack.Screen name="OnChain" component={OnChain} />
       <RootStack.Screen name="LightningInfo" component={LightningInfo} />
       <RootStack.Screen name="Settings" component={Settings} />
-      <RootStack.Screen name="ChannelRequest" component={ChannelRequest} />
+      <RootStack.Screen name="LNURL" component={LNURL} />
       <RootStack.Screen name="WebLNBrowser" component={WebLNBrowser} />
 
       <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} />

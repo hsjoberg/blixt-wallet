@@ -11,6 +11,7 @@ import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import BlurOverlay, { closeOverlay, openOverlay } from "../../Blur";
 import { useStoreActions } from "../../state/store";
 import { RootStackParamList } from "../../Main";
+import BlurModal from "../../components/BlurModal";
 
 const INITIAL_URL = "https://blixtwallet.github.io/webln";
 
@@ -34,13 +35,10 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   const handleSendPaymentRequest = useStoreActions((store) => store.webln.handleSendPaymentRequest);
   const handleSignMessageRequest = useStoreActions((store) => store.webln.handleSignMessageRequest);
   const handleVerifyMessageRequest = useStoreActions((store) => store.webln.handleVerifyMessageRequest);
+  const handleLNURL = useStoreActions((store) => store.webln.handleLNURL);
 
-  useEffect(() => {
-    setTimeout(() => {
-      openOverlay();
-    }, 1);
-    return () => closeOverlay();
-  }, []);
+  const setLNUrl = useStoreActions((store) => store.lnUrl.setLNUrl);
+  const lnurlClear = useStoreActions((store) => store.lnUrl.clear);
 
   useEffect(() => {
     console.log("disableBackHandler", disableBackHandler);
@@ -79,21 +77,31 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
         setDisableBackHandler(false);
       }
     },
-    signMessage: async (message: any) => handleSignMessageRequest({ data: message}),
-    verifyMessage: async (signature: any, message: any) => handleVerifyMessageRequest({ data: { signature, message }}),
+    signMessage: async (message: any) => handleSignMessageRequest({ data: message }),
+    verifyMessage: async (signature: any, message: any) => handleVerifyMessageRequest({ data: { signature, message } }),
 
     // Non-WebLN
     foundInvoice: async (paymentRequestStr) => {
       try {
+        console.log(paymentRequestStr);
         setDisableBackHandler(true);
-        return await handleSendPaymentRequest({
-          data: paymentRequestStr,
-          requestUrl: url,
-          weblnPayment: false,
-        });
+
+        if (paymentRequestStr.indexOf("LNURL") === 0) {
+          await handleLNURL({
+            lnurl: paymentRequestStr,
+          });
+        }
+        else {
+          return await handleSendPaymentRequest({
+            data: paymentRequestStr,
+            requestUrl: url,
+            weblnPayment: false,
+          });
+        }
       } catch (e) {
         throw e;
       } finally {
+        console.log("setDisableBackHandler(false);");
         setDisableBackHandler(false);
       }
     }
@@ -101,22 +109,17 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
 
   const closeBrowser = () => {
     Alert.alert("", "Do you wish to close the browser?",
-    [{
-      text: "Yes",
-      onPress: () => navigation.goBack()
-    }, {
-      text: "No",
-    }])
+      [{
+        text: "Yes",
+        onPress: () => navigation.goBack()
+      }, {
+        text: "No",
+      }])
   }
 
   return (
-    <BlurOverlay
-      fadeDuration={170}
-      radius={15}
-      downsampling={2.07}
-      brightness={0}
-      customStyles={style.blurOverlay}
-      blurStyle="dark"
+    <BlurModal
+      useModalComponent={false}
     >
       <Card style={style.card}>
         <WebView
@@ -179,7 +182,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
           </TouchableOpacity>
         </View>
       </Card>
-    </BlurOverlay>
+    </BlurModal>
   );
 }
 

@@ -1,8 +1,9 @@
-import React, { useState, useRef, useMemo } from "react";
-import { Alert, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import React, { useState, useRef, useMemo, useEffect } from "react";
+import { Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent, TextInput } from "react-native";
 import { Icon, Text } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import Color from "color";
 
 import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
@@ -11,10 +12,14 @@ import Container from "../components/Container";
 import { timeout } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
-import { Chain, Debug } from "../utils/build";
-import Color from "color";
+import { Chain } from "../utils/build";
 
 import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
+import Spinner from "../components/Spinner";
+
+
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
+
 const theme = nativeBaseTheme.default;
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
@@ -26,7 +31,8 @@ const LOAD_BOTTOM_PADDING = 475;
 export interface IOverviewProps {
   navigation: BottomTabNavigationProp<RootStackParamList, "Overview">;
 }
-const Overview = ({ navigation }: IOverviewProps)  => {
+function Overview({ navigation }: IOverviewProps) {
+  const firstSync = useStoreState((store) => store.lightning.firstSync);
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const balance = useStoreState((store) => store.channel.balance);
   const pendingOpenBalance = useStoreState((store) => store.channel.pendingOpenBalance);
@@ -39,7 +45,7 @@ const Overview = ({ navigation }: IOverviewProps)  => {
   const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
   const experimentWeblnEnabled = useStoreState((store) => store.settings.experimentWeblnEnabled);
 
-  const scrollYAnimatedValue = useRef(new Animated.Value(0));
+  const scrollYAnimatedValue = useRef(new Animated.Value(0)).current;
   const [refreshing, setRefreshing] = useState(false);
 
   const [contentExpand, setContentExpand] = useState<number>(1);
@@ -49,27 +55,45 @@ const Overview = ({ navigation }: IOverviewProps)  => {
   const getFiatRate = useStoreActions((store) => store.fiat.getRate);
   const checkOpenTransactions = useStoreActions((store) => store.transaction.checkOpenTransactions);
 
-  const headerHeight = scrollYAnimatedValue.current.interpolate({
+  useEffect(() => {
+    if (firstSync && !nodeInfo?.syncedToGraph) {
+      navigation.navigate("SyncInfo");
+    }
+  }, [firstSync]);
+
+  const headerHeight = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
     extrapolate: "clamp",
   });
 
-  const headerFiatOpacity = scrollYAnimatedValue.current.interpolate({
+  const headerFiatOpacity = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [1, 0],
     extrapolate: "clamp",
     easing: Easing.bezier(0.16, 0.9, 0.3, 1),
   });
 
-  const headerBtcFontSize = scrollYAnimatedValue.current.interpolate({
+  const headerBtcFontSize = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [bitcoinUnit === "satoshi" ? 34 : 37, 27],
     extrapolate: "clamp",
   });
 
+  const iconOpacity = scrollYAnimatedValue.interpolate({
+    inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
+    outputRange: [1, 0],
+    extrapolate: "clamp",
+    easing: Easing.bezier(0.16, 0.8, 0.3, 1),
+  });
+
   const refreshControl = (
-    <RefreshControl title="Refreshing" progressViewOffset={183} refreshing={refreshing} colors={[blixtTheme.light]} progressBackgroundColor={blixtTheme.gray}
+    <RefreshControl
+      title="Refreshing"
+      progressViewOffset={183}
+      refreshing={refreshing}
+      colors={[blixtTheme.light]}
+      progressBackgroundColor={blixtTheme.gray}
       onRefresh={async () => {
         if (!rpcReady) {
           return;
@@ -88,7 +112,7 @@ const Overview = ({ navigation }: IOverviewProps)  => {
 
   const transactionListOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     Animated.event(
-      [{ nativeEvent: { contentOffset: { y: scrollYAnimatedValue.current }}}],
+      [{ nativeEvent: { contentOffset: { y: scrollYAnimatedValue }}}],
       { useNativeDriver: false },
     )(event);
 
@@ -96,7 +120,6 @@ const Overview = ({ navigation }: IOverviewProps)  => {
     const paddingToBottom = LOAD_BOTTOM_PADDING;
     if (!expanding && (layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom)) {
       if ((contentExpand * NUM_TRANSACTIONS_PER_LOAD) < transactions.length) {
-        console.log("expanding");
         setExpanding(true);
         setTimeout(() => setExpanding(false), 1000);
         setContentExpand(contentExpand + 1);
@@ -119,6 +142,10 @@ const Overview = ({ navigation }: IOverviewProps)  => {
   const onPressBalanceHeader = async () => {
     await changePreferFiat(!preferFiat);
   }
+
+  const onPressSyncIcon = () => {
+    navigation.navigate("SyncInfo");
+  };
 
   const bitcoinBalance = formatBitcoin(balance, bitcoinUnit, false);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
@@ -145,29 +172,32 @@ const Overview = ({ navigation }: IOverviewProps)  => {
         <Animated.View style={{ ...style.animatedTop, height: headerHeight }} pointerEvents="box-none">
           <LinearGradient style={style.top} colors={Chain === "mainnet" ? [blixtTheme.secondary, blixtTheme.primary] : [blixtTheme.lightGray, Color(blixtTheme.lightGray).darken(0.30).hex()]} pointerEvents="box-none">
             <View style={StyleSheet.absoluteFill}>
-              <Icon
-                style={style.onchainIcon} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
+              <AnimatedIcon
+                style={[style.onchainIcon, { opacity: iconOpacity }]} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
               />
-              <Icon
-                style={style.channelsIcon} type="Entypo" name="thunder-cloud" onPress={() => navigation.navigate("LightningInfo")}
+              <AnimatedIcon
+                style={[style.channelsIcon, { opacity: iconOpacity }]} type="Entypo" name="thunder-cloud" onPress={() => navigation.navigate("LightningInfo")}
               />
-              <Icon
-                style={style.settingsIcon} type="AntDesign" name="setting" onPress={() => navigation.navigate("Settings")}
+              <AnimatedIcon
+                style={[style.settingsIcon, {}]} type="AntDesign" name="setting" onPress={() => navigation.navigate("Settings")}
+              />
+              <AnimatedIcon
+                style={[style.helpIcon, { opacity: iconOpacity }]} type="MaterialIcons" name="live-help" onPress={() => navigation.navigate("Help")}
               />
               {(!nodeInfo || !nodeInfo.syncedToChain) &&
-                <Icon
-                  style={style.lightningSyncIcon} name="sync" onPress={() => Alert.alert("Blixt Wallet is currently syncing the Bitcoin Blockchain.")}
-                />
+                <Animated.View style={[style.lightningSyncIcon, { opacity: iconOpacity}]}>
+                  <Spinner onPress={onPressSyncIcon} />
+                </Animated.View>
               }
               {Chain === "mainnet" && nodeInfo && nodeInfo.syncedToChain && experimentWeblnEnabled &&
-                <Icon
-                  style={style.lightningSyncIcon} type="MaterialCommunityIcons" name="cart-outline" onPress={() => navigation.navigate("WebLNBrowser")}
+                <AnimatedIcon
+                  style={[style.weblnBrowswerIcon, { opacity: iconOpacity }]} type="MaterialCommunityIcons" name="cart-outline" onPress={() => navigation.navigate("WebLNBrowser")}
                 />
               }
             </View>
 
             {/* Big header */}
-            <Animated.Text testID="BIG_BALANCE_HEADER" onPress={onPressBalanceHeader} style={{...headerInfo.btc, fontSize: headerBtcFontSize}}>
+            <Animated.Text testID="BIG_BALANCE_HEADER" onPress={onPressBalanceHeader} style={{...headerInfo.btc, fontSize: headerBtcFontSize }}>
               {!preferFiat && bitcoinBalance}
               {preferFiat && fiatBalance}
             </Animated.Text>
@@ -238,17 +268,33 @@ const style = StyleSheet.create({
   settingsIcon: {
     position: "absolute",
     padding: 4,
-    top: 13 + iconTopPadding,
+    top: 12 + iconTopPadding,
     right: 8,
     fontSize: 27,
+    color: blixtTheme.light,
+  },
+  helpIcon: {
+    position: "absolute",
+    padding: 4,
+    top: 13 + iconTopPadding,
+    right: 8 + 24 + 8 + 8,
+    fontSize: 25,
     color: blixtTheme.light,
   },
   lightningSyncIcon: {
     position: "absolute",
     padding: 4,
+    top: 12 + iconTopPadding,
+    right: 8 + 24 + 8 + 24 + 8 + 14,
+    fontSize: 24,
+    color: blixtTheme.light,
+  },
+  weblnBrowswerIcon: {
+    position: "absolute",
+    padding: 4,
     top: 13 + iconTopPadding,
-    right: 8 + 24 + 8 + 7,
-    fontSize: 27,
+    right: 8 + 24 + 8 + 24 + 8 + 14,
+    fontSize: 24,
     color: blixtTheme.light,
   },
   transactionList: {
@@ -279,10 +325,9 @@ const headerInfo = StyleSheet.create({
   }
 });
 
-
 const OverviewTabs = createBottomTabNavigator();
 
-export default () => {
+export default function OverviewTabsComponent() {
   return (
     <OverviewTabs.Navigator tabBar={() => <FooterNav />}>
       <OverviewTabs.Screen name="Overview" component={Overview} />
