@@ -3,9 +3,8 @@ import { LoginMethods } from "../state/Security";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 import { MapStyle } from "../utils/google-maps";
-import { OnChainExplorer } from "../state/Settings";
 
-const APP_VERSION = 9;
+const APP_VERSION = 10;
 
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",

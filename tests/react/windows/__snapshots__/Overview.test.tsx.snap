@@ -17,13 +17,114 @@ exports[`renders correctly 1`] = `
       }
     }
   >
-    <RNCSafeAreaView
+    <RNCSafeAreaProvider
       style={
-        Object {
-          "flex": 1,
-        }
+        Array [
+          Object {
+            "flex": 1,
+          },
+          undefined,
+        ]
       }
     >
+      <View
+        pointerEvents="box-none"
+      >
+        <View
+          accessibilityElementsHidden={false}
+          importantForAccessibility="auto"
+          pointerEvents="box-none"
+          style={null}
+        >
+          <View
+            pointerEvents="box-none"
+            style={
+              Object {
+                "bottom": 0,
+                "left": 0,
+                "opacity": 1,
+                "position": "absolute",
+                "right": 0,
+                "top": 0,
+                "zIndex": 0,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "rgb(255, 255, 255)",
+                  "borderBottomColor": "rgb(224, 224, 224)",
+                  "flex": 1,
+                  "shadowColor": "rgb(224, 224, 224)",
+                  "shadowOffset": Object {
+                    "height": 0.5,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0.85,
+                  "shadowRadius": 0,
+                }
+              }
+            />
+          </View>
+          <View
+            pointerEvents="box-none"
+            style={
+              Object {
+                "height": 64,
+                "maxHeight": undefined,
+                "minHeight": undefined,
+                "opacity": undefined,
+                "transform": undefined,
+              }
+            }
+          >
+            <View
+              pointerEvents="none"
+              style={
+                Object {
+                  "height": 20,
+                }
+              }
+            />
+            <View
+              pointerEvents="box-none"
+              style={
+                Object {
+                  "alignItems": "center",
+                  "flex": 1,
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                }
+              }
+            >
+              <View
+                pointerEvents="box-none"
+                style={
+                  Object {
+                    "marginHorizontal": 16,
+                    "opacity": 1,
+                  }
+                }
+              >
+                <Text
+                  accessibilityRole="header"
+                  numberOfLines={1}
+                  style={
+                    Object {
+                      "color": "rgb(28, 28, 30)",
+                      "fontSize": 17,
+                      "fontWeight": "600",
+                    }
+                  }
+                >
+                  a
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
       <View
         style={
           Object {
@@ -66,8 +167,8 @@ exports[`renders correctly 1`] = `
                     "damping": 500,
                     "mass": 3,
                     "overshootClamping": true,
-                    "restDisplacementThreshold": 0.01,
-                    "restSpeedThreshold": 0.01,
+                    "restDisplacementThreshold": 10,
+                    "restSpeedThreshold": 10,
                     "stiffness": 1000,
                   },
                 },
@@ -77,8 +178,8 @@ exports[`renders correctly 1`] = `
                     "damping": 500,
                     "mass": 3,
                     "overshootClamping": true,
-                    "restDisplacementThreshold": 0.01,
-                    "restSpeedThreshold": 0.01,
+                    "restDisplacementThreshold": 10,
+                    "restSpeedThreshold": 10,
                     "stiffness": 1000,
                   },
                 },
@@ -90,7 +191,6 @@ exports[`renders correctly 1`] = `
               style={
                 Object {
                   "flex": 1,
-                  "marginTop": 64,
                 }
               }
             >
@@ -364,6 +464,7 @@ exports[`renders correctly 1`] = `
                                                     "color": "#e5eaea",
                                                     "fontSize": 25,
                                                     "left": 8,
+                                                    "opacity": 1,
                                                     "padding": 4,
                                                     "paddingRight": 8,
                                                     "position": "absolute",
@@ -403,6 +504,7 @@ exports[`renders correctly 1`] = `
                                                     "color": "#e5eaea",
                                                     "fontSize": 28,
                                                     "left": 41,
+                                                    "opacity": 1,
                                                     "padding": 4,
                                                     "paddingRight": 8,
                                                     "position": "absolute",
@@ -444,7 +546,7 @@ exports[`renders correctly 1`] = `
                                                     "padding": 4,
                                                     "position": "absolute",
                                                     "right": 8,
-                                                    "top": 13,
+                                                    "top": 12,
                                                   },
                                                 ],
                                                 Object {
@@ -478,24 +580,76 @@ exports[`renders correctly 1`] = `
                                                   },
                                                   Object {
                                                     "color": "#e5eaea",
-                                                    "fontSize": 27,
+                                                    "fontSize": 25,
+                                                    "opacity": 1,
                                                     "padding": 4,
                                                     "position": "absolute",
-                                                    "right": 47,
+                                                    "right": 48,
                                                     "top": 13,
                                                   },
                                                 ],
                                                 Object {
-                                                  "fontFamily": "Ionicons",
+                                                  "fontFamily": "Material Icons",
                                                   "fontStyle": "normal",
                                                   "fontWeight": "normal",
                                                 },
                                                 Object {},
                                               ]
                                             }
+                                            type="MaterialIcons"
                                           >
-                                            
+                                            
                                           </Text>
+                                          <View
+                                            style={
+                                              Object {
+                                                "color": "#e5eaea",
+                                                "fontSize": 24,
+                                                "opacity": 1,
+                                                "padding": 4,
+                                                "position": "absolute",
+                                                "right": 86,
+                                                "top": 12,
+                                              }
+                                            }
+                                          >
+                                            <Text
+                                              allowFontScaling={false}
+                                              style={
+                                                Array [
+                                                  Object {
+                                                    "color": undefined,
+                                                    "fontSize": 12,
+                                                  },
+                                                  Array [
+                                                    Object {
+                                                      "color": "#000",
+                                                      "fontSize": 30,
+                                                    },
+                                                    Object {
+                                                      "color": "#000",
+                                                      "fontSize": 30,
+                                                    },
+                                                    Object {
+                                                      "fontSize": 29,
+                                                      "height": 29,
+                                                      "marginTop": -1,
+                                                      "opacity": 1,
+                                                      "width": 20,
+                                                    },
+                                                  ],
+                                                  Object {
+                                                    "fontFamily": "Ionicons",
+                                                    "fontStyle": "normal",
+                                                    "fontWeight": "normal",
+                                                  },
+                                                  Object {},
+                                                ]
+                                              }
+                                            >
+                                              
+                                            </Text>
+                                          </View>
                                         </View>
                                         <Text
                                           style={
@@ -751,112 +905,7 @@ exports[`renders correctly 1`] = `
           </View>
         </View>
       </View>
-      <View
-        pointerEvents="box-none"
-        style={
-          Object {
-            "left": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-          }
-        }
-      >
-        <View
-          accessibilityElementsHidden={false}
-          importantForAccessibility="auto"
-          pointerEvents="box-none"
-          style={null}
-        >
-          <View
-            pointerEvents="none"
-            style={
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "opacity": 1,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-              }
-            }
-          >
-            <View
-              style={
-                Object {
-                  "backgroundColor": "rgb(255, 255, 255)",
-                  "borderBottomColor": "rgb(224, 224, 224)",
-                  "flex": 1,
-                  "shadowColor": "rgb(224, 224, 224)",
-                  "shadowOffset": Object {
-                    "height": 0.5,
-                    "width": 0,
-                  },
-                  "shadowOpacity": 0.85,
-                  "shadowRadius": 0,
-                }
-              }
-            />
-          </View>
-          <View
-            pointerEvents="box-none"
-            style={
-              Object {
-                "height": 64,
-                "maxHeight": undefined,
-                "minHeight": undefined,
-                "opacity": undefined,
-                "transform": undefined,
-              }
-            }
-          >
-            <View
-              pointerEvents="none"
-              style={
-                Object {
-                  "height": 20,
-                }
-              }
-            />
-            <View
-              pointerEvents="box-none"
-              style={
-                Object {
-                  "alignItems": "center",
-                  "flex": 1,
-                  "flexDirection": "row",
-                  "justifyContent": "center",
-                }
-              }
-            >
-              <View
-                pointerEvents="box-none"
-                style={
-                  Object {
-                    "marginHorizontal": 18,
-                    "opacity": 1,
-                  }
-                }
-              >
-                <Text
-                  accessibilityRole="header"
-                  numberOfLines={1}
-                  style={
-                    Object {
-                      "color": "rgb(28, 28, 30)",
-                      "fontSize": 17,
-                      "fontWeight": "600",
-                    }
-                  }
-                >
-                  a
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    </RNCSafeAreaView>
+    </RNCSafeAreaProvider>
   </View>
 </View>
 `;

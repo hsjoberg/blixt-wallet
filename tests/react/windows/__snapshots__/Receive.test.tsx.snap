@@ -17,13 +17,114 @@ exports[`renders correctly 1`] = `
       }
     }
   >
-    <RNCSafeAreaView
+    <RNCSafeAreaProvider
       style={
-        Object {
-          "flex": 1,
-        }
+        Array [
+          Object {
+            "flex": 1,
+          },
+          undefined,
+        ]
       }
     >
+      <View
+        pointerEvents="box-none"
+      >
+        <View
+          accessibilityElementsHidden={false}
+          importantForAccessibility="auto"
+          pointerEvents="box-none"
+          style={null}
+        >
+          <View
+            pointerEvents="box-none"
+            style={
+              Object {
+                "bottom": 0,
+                "left": 0,
+                "opacity": 1,
+                "position": "absolute",
+                "right": 0,
+                "top": 0,
+                "zIndex": 0,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "rgb(255, 255, 255)",
+                  "borderBottomColor": "rgb(224, 224, 224)",
+                  "flex": 1,
+                  "shadowColor": "rgb(224, 224, 224)",
+                  "shadowOffset": Object {
+                    "height": 0.5,
+                    "width": 0,
+                  },
+                  "shadowOpacity": 0.85,
+                  "shadowRadius": 0,
+                }
+              }
+            />
+          </View>
+          <View
+            pointerEvents="box-none"
+            style={
+              Object {
+                "height": 64,
+                "maxHeight": undefined,
+                "minHeight": undefined,
+                "opacity": undefined,
+                "transform": undefined,
+              }
+            }
+          >
+            <View
+              pointerEvents="none"
+              style={
+                Object {
+                  "height": 20,
+                }
+              }
+            />
+            <View
+              pointerEvents="box-none"
+              style={
+                Object {
+                  "alignItems": "center",
+                  "flex": 1,
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                }
+              }
+            >
+              <View
+                pointerEvents="box-none"
+                style={
+                  Object {
+                    "marginHorizontal": 16,
+                    "opacity": 1,
+                  }
+                }
+              >
+                <Text
+                  accessibilityRole="header"
+                  numberOfLines={1}
+                  style={
+                    Object {
+                      "color": "rgb(28, 28, 30)",
+                      "fontSize": 17,
+                      "fontWeight": "600",
+                    }
+                  }
+                >
+                  a
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
       <View
         style={
           Object {
@@ -66,8 +167,8 @@ exports[`renders correctly 1`] = `
                     "damping": 500,
                     "mass": 3,
                     "overshootClamping": true,
-                    "restDisplacementThreshold": 0.01,
-                    "restSpeedThreshold": 0.01,
+                    "restDisplacementThreshold": 10,
+                    "restSpeedThreshold": 10,
                     "stiffness": 1000,
                   },
                 },
@@ -77,8 +178,8 @@ exports[`renders correctly 1`] = `
                     "damping": 500,
                     "mass": 3,
                     "overshootClamping": true,
-                    "restDisplacementThreshold": 0.01,
-                    "restSpeedThreshold": 0.01,
+                    "restDisplacementThreshold": 10,
+                    "restSpeedThreshold": 10,
                     "stiffness": 1000,
                   },
                 },
@@ -90,7 +191,6 @@ exports[`renders correctly 1`] = `
               style={
                 Object {
                   "flex": 1,
-                  "marginTop": 64,
                 }
               }
             >
@@ -210,8 +310,8 @@ exports[`renders correctly 1`] = `
                                       "damping": 500,
                                       "mass": 3,
                                       "overshootClamping": true,
-                                      "restDisplacementThreshold": 0.01,
-                                      "restSpeedThreshold": 0.01,
+                                      "restDisplacementThreshold": 10,
+                                      "restSpeedThreshold": 10,
                                       "stiffness": 1000,
                                     },
                                   },
@@ -221,8 +321,8 @@ exports[`renders correctly 1`] = `
                                       "damping": 500,
                                       "mass": 3,
                                       "overshootClamping": true,
-                                      "restDisplacementThreshold": 0.01,
-                                      "restSpeedThreshold": 0.01,
+                                      "restDisplacementThreshold": 10,
+                                      "restSpeedThreshold": 10,
                                       "stiffness": 1000,
                                     },
                                   },
@@ -423,366 +523,322 @@ exports[`renders correctly 1`] = `
                                               </View>
                                             </SafeAreaView>
                                           </View>
-                                          <SafeAreaView
+                                          <View
                                             style={
                                               Object {
-                                                "backgroundColor": "transparent",
+                                                "display": "flex",
                                                 "flex": 1,
+                                                "height": "100%",
+                                                "justifyContent": "space-between",
+                                                "padding": 16,
                                               }
                                             }
                                           >
-                                            <ScrollView
-                                              automaticallyAdjustContentInsets={false}
-                                              contentContainerStyle={
+                                            <View
+                                              style={
                                                 Array [
+                                                  Object {},
+                                                  Object {},
+                                                ]
+                                              }
+                                            >
+                                              <TouchableOpacity
+                                                activeOpacity={1}
+                                                style={
                                                   Object {
-                                                    "padding": undefined,
-                                                  },
+                                                    "alignItems": "center",
+                                                    "backgroundColor": "transparent",
+                                                    "borderBottomWidth": 1,
+                                                    "borderColor": "#D9D5DC",
+                                                    "borderLeftWidth": 0,
+                                                    "borderRadius": undefined,
+                                                    "borderRightWidth": 0,
+                                                    "borderTopWidth": 0,
+                                                    "borderWidth": undefined,
+                                                    "flexDirection": "row",
+                                                    "marginLeft": 2,
+                                                    "marginTop": 8,
+                                                  }
+                                                }
+                                              >
+                                                <Text
+                                                  style={
+                                                    Array [
+                                                      Object {
+                                                        "color": "#575757",
+                                                        "fontSize": 17,
+                                                        "paddingRight": 5,
+                                                      },
+                                                      Object {
+                                                        "fontSize": 17,
+                                                        "width": 105,
+                                                      },
+                                                    ]
+                                                  }
+                                                >
+                                                  Amount ₿
+                                                </Text>
+                                                <TextInput
+                                                  allowFontScaling={true}
+                                                  editable={true}
+                                                  keyboardType="numeric"
+                                                  placeholder="0"
+                                                  placeholderTextColor="#575757"
+                                                  rejectResponderTermination={true}
+                                                  style={
+                                                    Object {
+                                                      "color": "#000",
+                                                      "flex": 1,
+                                                      "fontSize": 17,
+                                                      "height": 50,
+                                                      "paddingLeft": 5,
+                                                      "paddingRight": 5,
+                                                      "top": 1.5,
+                                                    }
+                                                  }
+                                                  testID="input-amount-sat"
+                                                  underlineColorAndroid="rgba(0,0,0,0)"
+                                                />
+                                              </TouchableOpacity>
+                                              <TouchableOpacity
+                                                activeOpacity={1}
+                                                style={
                                                   Object {
-                                                    "display": "flex",
-                                                    "flex": 1,
-                                                    "height": "100%",
-                                                    "justifyContent": "space-between",
-                                                    "padding": 16,
+                                                    "alignItems": "center",
+                                                    "backgroundColor": "transparent",
+                                                    "borderBottomWidth": 1,
+                                                    "borderColor": "#D9D5DC",
+                                                    "borderLeftWidth": 0,
+                                                    "borderRadius": undefined,
+                                                    "borderRightWidth": 0,
+                                                    "borderTopWidth": 0,
+                                                    "borderWidth": undefined,
+                                                    "flexDirection": "row",
+                                                    "marginLeft": 2,
+                                                    "marginTop": 16,
+                                                  }
+                                                }
+                                              >
+                                                <Text
+                                                  style={
+                                                    Array [
+                                                      Object {
+                                                        "color": "#575757",
+                                                        "fontSize": 17,
+                                                        "paddingRight": 5,
+                                                      },
+                                                      Object {
+                                                        "fontSize": 17,
+                                                        "width": 105,
+                                                      },
+                                                    ]
+                                                  }
+                                                >
+                                                  Amount USD
+                                                </Text>
+                                                <TextInput
+                                                  allowFontScaling={true}
+                                                  editable={true}
+                                                  keyboardType="numeric"
+                                                  placeholder="0.00"
+                                                  placeholderTextColor="#575757"
+                                                  rejectResponderTermination={true}
+                                                  style={
+                                                    Object {
+                                                      "color": "#000",
+                                                      "flex": 1,
+                                                      "fontSize": 17,
+                                                      "height": 50,
+                                                      "paddingLeft": 5,
+                                                      "paddingRight": 5,
+                                                      "top": 1.5,
+                                                    }
+                                                  }
+                                                  underlineColorAndroid="rgba(0,0,0,0)"
+                                                />
+                                              </TouchableOpacity>
+                                              <TouchableOpacity
+                                                activeOpacity={1}
+                                                style={
+                                                  Object {
+                                                    "alignItems": "center",
+                                                    "backgroundColor": "transparent",
+                                                    "borderBottomWidth": 1,
+                                                    "borderColor": "#D9D5DC",
+                                                    "borderLeftWidth": 0,
+                                                    "borderRadius": undefined,
+                                                    "borderRightWidth": 0,
+                                                    "borderTopWidth": 0,
+                                                    "borderWidth": undefined,
+                                                    "flexDirection": "row",
+                                                    "marginLeft": 2,
+                                                    "marginTop": 16,
+                                                  }
+                                                }
+                                              >
+                                                <Text
+                                                  style={
+                                                    Array [
+                                                      Object {
+                                                        "color": "#575757",
+                                                        "fontSize": 17,
+                                                        "paddingRight": 5,
+                                                      },
+                                                      Object {
+                                                        "fontSize": 17,
+                                                        "width": 105,
+                                                      },
+                                                    ]
+                                                  }
+                                                >
+                                                  Payer
+                                                </Text>
+                                                <TextInput
+                                                  allowFontScaling={true}
+                                                  editable={true}
+                                                  placeholder="For bookkeeping (optional)"
+                                                  placeholderTextColor="#575757"
+                                                  rejectResponderTermination={true}
+                                                  style={
+                                                    Object {
+                                                      "color": "#000",
+                                                      "flex": 1,
+                                                      "fontSize": 17,
+                                                      "height": 50,
+                                                      "paddingLeft": 5,
+                                                      "paddingRight": 5,
+                                                      "top": 1.5,
+                                                    }
+                                                  }
+                                                  underlineColorAndroid="rgba(0,0,0,0)"
+                                                  value=""
+                                                />
+                                              </TouchableOpacity>
+                                              <TouchableOpacity
+                                                activeOpacity={1}
+                                                style={
+                                                  Object {
+                                                    "alignItems": "center",
+                                                    "backgroundColor": "transparent",
+                                                    "borderBottomWidth": 1,
+                                                    "borderColor": "#D9D5DC",
+                                                    "borderLeftWidth": 0,
+                                                    "borderRadius": undefined,
+                                                    "borderRightWidth": 0,
+                                                    "borderTopWidth": 0,
+                                                    "borderWidth": undefined,
+                                                    "flexDirection": "row",
+                                                    "marginLeft": 2,
+                                                    "marginTop": 16,
+                                                  }
+                                                }
+                                              >
+                                                <Text
+                                                  style={
+                                                    Array [
+                                                      Object {
+                                                        "color": "#575757",
+                                                        "fontSize": 17,
+                                                        "paddingRight": 5,
+                                                      },
+                                                      Object {
+                                                        "fontSize": 17,
+                                                        "width": 105,
+                                                      },
+                                                    ]
+                                                  }
+                                                >
+                                                  Message
+                                                </Text>
+                                                <TextInput
+                                                  allowFontScaling={true}
+                                                  editable={true}
+                                                  placeholder="Message to payer (optional)"
+                                                  placeholderTextColor="#575757"
+                                                  rejectResponderTermination={true}
+                                                  style={
+                                                    Object {
+                                                      "color": "#000",
+                                                      "flex": 1,
+                                                      "fontSize": 17,
+                                                      "height": 50,
+                                                      "paddingLeft": 5,
+                                                      "paddingRight": 5,
+                                                      "top": 1.5,
+                                                    }
+                                                  }
+                                                  testID="input-message"
+                                                  underlineColorAndroid="rgba(0,0,0,0)"
+                                                  value=""
+                                                />
+                                              </TouchableOpacity>
+                                            </View>
+                                            <View
+                                              style={
+                                                Array [
+                                                  Object {},
+                                                  Object {
+                                                    "marginBottom": 2,
                                                   },
                                                 ]
                                               }
-                                              contentInset={
-                                                Object {
-                                                  "bottom": 0,
-                                                }
-                                              }
-                                              enableAutomaticScroll={true}
-                                              enableOnAndroid={false}
-                                              enableResetScrollToCoords={true}
-                                              extraHeight={75}
-                                              extraScrollHeight={0}
-                                              keyboardDismissMode="interactive"
-                                              keyboardOpeningTime={250}
-                                              keyboardShouldPersistTaps="handled"
-                                              keyboardSpace={0}
-                                              resetScrollToCoords={
-                                                Object {
-                                                  "x": 0,
-                                                  "y": 0,
-                                                }
-                                              }
-                                              scrollEventThrottle={1}
-                                              showsVerticalScrollIndicator={true}
-                                              style={
-                                                Object {
-                                                  "backgroundColor": "transparent",
-                                                  "flex": 1,
-                                                }
-                                              }
-                                              viewIsInsideTabBar={false}
                                             >
                                               <View
                                                 style={
                                                   Array [
                                                     Object {},
-                                                    Object {},
-                                                  ]
-                                                }
-                                              >
-                                                <TouchableOpacity
-                                                  activeOpacity={1}
-                                                  style={
                                                     Object {
-                                                      "alignItems": "center",
-                                                      "backgroundColor": "transparent",
-                                                      "borderBottomWidth": 1,
-                                                      "borderColor": "#D9D5DC",
-                                                      "borderLeftWidth": 0,
-                                                      "borderRadius": undefined,
-                                                      "borderRightWidth": 0,
-                                                      "borderTopWidth": 0,
-                                                      "borderWidth": undefined,
-                                                      "flexDirection": "row",
-                                                      "marginLeft": 2,
-                                                      "marginTop": 8,
-                                                    }
-                                                  }
-                                                >
-                                                  <Text
-                                                    style={
-                                                      Array [
-                                                        Object {
-                                                          "color": "#575757",
-                                                          "fontSize": 17,
-                                                          "paddingRight": 5,
-                                                        },
-                                                        Object {
-                                                          "fontSize": 17,
-                                                          "width": 105,
-                                                        },
-                                                      ]
-                                                    }
-                                                  >
-                                                    Amount ₿
-                                                  </Text>
-                                                  <TextInput
-                                                    allowFontScaling={true}
-                                                    editable={true}
-                                                    keyboardType="numeric"
-                                                    placeholder="0"
-                                                    placeholderTextColor="#575757"
-                                                    rejectResponderTermination={true}
-                                                    style={
-                                                      Object {
-                                                        "color": "#000",
-                                                        "flex": 1,
-                                                        "fontSize": 17,
-                                                        "height": 50,
-                                                        "paddingLeft": 5,
-                                                        "paddingRight": 5,
-                                                        "top": 1.5,
-                                                      }
-                                                    }
-                                                    testID="input-amount-sat"
-                                                    underlineColorAndroid="rgba(0,0,0,0)"
-                                                  />
-                                                </TouchableOpacity>
-                                                <TouchableOpacity
-                                                  activeOpacity={1}
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "center",
-                                                      "backgroundColor": "transparent",
-                                                      "borderBottomWidth": 1,
-                                                      "borderColor": "#D9D5DC",
-                                                      "borderLeftWidth": 0,
-                                                      "borderRadius": undefined,
-                                                      "borderRightWidth": 0,
-                                                      "borderTopWidth": 0,
-                                                      "borderWidth": undefined,
-                                                      "flexDirection": "row",
-                                                      "marginLeft": 2,
-                                                      "marginTop": 16,
-                                                    }
-                                                  }
-                                                >
-                                                  <Text
-                                                    style={
-                                                      Array [
-                                                        Object {
-                                                          "color": "#575757",
-                                                          "fontSize": 17,
-                                                          "paddingRight": 5,
-                                                        },
-                                                        Object {
-                                                          "fontSize": 17,
-                                                          "width": 105,
-                                                        },
-                                                      ]
-                                                    }
-                                                  >
-                                                    Amount USD
-                                                  </Text>
-                                                  <TextInput
-                                                    allowFontScaling={true}
-                                                    editable={true}
-                                                    keyboardType="numeric"
-                                                    placeholder="0.00"
-                                                    placeholderTextColor="#575757"
-                                                    rejectResponderTermination={true}
-                                                    style={
-                                                      Object {
-                                                        "color": "#000",
-                                                        "flex": 1,
-                                                        "fontSize": 17,
-                                                        "height": 50,
-                                                        "paddingLeft": 5,
-                                                        "paddingRight": 5,
-                                                        "top": 1.5,
-                                                      }
-                                                    }
-                                                    underlineColorAndroid="rgba(0,0,0,0)"
-                                                  />
-                                                </TouchableOpacity>
-                                                <TouchableOpacity
-                                                  activeOpacity={1}
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "center",
-                                                      "backgroundColor": "transparent",
-                                                      "borderBottomWidth": 1,
-                                                      "borderColor": "#D9D5DC",
-                                                      "borderLeftWidth": 0,
-                                                      "borderRadius": undefined,
-                                                      "borderRightWidth": 0,
-                                                      "borderTopWidth": 0,
-                                                      "borderWidth": undefined,
-                                                      "flexDirection": "row",
-                                                      "marginLeft": 2,
-                                                      "marginTop": 16,
-                                                    }
-                                                  }
-                                                >
-                                                  <Text
-                                                    style={
-                                                      Array [
-                                                        Object {
-                                                          "color": "#575757",
-                                                          "fontSize": 17,
-                                                          "paddingRight": 5,
-                                                        },
-                                                        Object {
-                                                          "fontSize": 17,
-                                                          "width": 105,
-                                                        },
-                                                      ]
-                                                    }
-                                                  >
-                                                    Payer
-                                                  </Text>
-                                                  <TextInput
-                                                    allowFontScaling={true}
-                                                    editable={true}
-                                                    placeholder="For bookkeeping (optional)"
-                                                    placeholderTextColor="#575757"
-                                                    rejectResponderTermination={true}
-                                                    style={
-                                                      Object {
-                                                        "color": "#000",
-                                                        "flex": 1,
-                                                        "fontSize": 17,
-                                                        "height": 50,
-                                                        "paddingLeft": 5,
-                                                        "paddingRight": 5,
-                                                        "top": 1.5,
-                                                      }
-                                                    }
-                                                    underlineColorAndroid="rgba(0,0,0,0)"
-                                                    value=""
-                                                  />
-                                                </TouchableOpacity>
-                                                <TouchableOpacity
-                                                  activeOpacity={1}
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "center",
-                                                      "backgroundColor": "transparent",
-                                                      "borderBottomWidth": 1,
-                                                      "borderColor": "#D9D5DC",
-                                                      "borderLeftWidth": 0,
-                                                      "borderRadius": undefined,
-                                                      "borderRightWidth": 0,
-                                                      "borderTopWidth": 0,
-                                                      "borderWidth": undefined,
-                                                      "flexDirection": "row",
-                                                      "marginLeft": 2,
-                                                      "marginTop": 16,
-                                                    }
-                                                  }
-                                                >
-                                                  <Text
-                                                    style={
-                                                      Array [
-                                                        Object {
-                                                          "color": "#575757",
-                                                          "fontSize": 17,
-                                                          "paddingRight": 5,
-                                                        },
-                                                        Object {
-                                                          "fontSize": 17,
-                                                          "width": 105,
-                                                        },
-                                                      ]
-                                                    }
-                                                  >
-                                                    Message
-                                                  </Text>
-                                                  <TextInput
-                                                    allowFontScaling={true}
-                                                    editable={true}
-                                                    placeholder="Message to payer (optional)"
-                                                    placeholderTextColor="#575757"
-                                                    rejectResponderTermination={true}
-                                                    style={
-                                                      Object {
-                                                        "color": "#000",
-                                                        "flex": 1,
-                                                        "fontSize": 17,
-                                                        "height": 50,
-                                                        "paddingLeft": 5,
-                                                        "paddingRight": 5,
-                                                        "top": 1.5,
-                                                      }
-                                                    }
-                                                    testID="input-message"
-                                                    underlineColorAndroid="rgba(0,0,0,0)"
-                                                    value=""
-                                                  />
-                                                </TouchableOpacity>
-                                              </View>
-                                              <View
-                                                style={
-                                                  Array [
-                                                    Object {},
-                                                    Object {
-                                                      "marginBottom": 2,
+                                                      "marginTop": 0,
                                                     },
                                                   ]
                                                 }
                                               >
-                                                <View
+                                                <TouchableOpacity
+                                                  activeOpacity={0.5}
+                                                  block={true}
+                                                  disabled={true}
+                                                  primary={true}
                                                   style={
-                                                    Array [
-                                                      Object {},
-                                                      Object {
-                                                        "marginTop": 0,
-                                                      },
-                                                    ]
+                                                    Object {
+                                                      "alignItems": "center",
+                                                      "alignSelf": "stretch",
+                                                      "backgroundColor": "#b5b5b5",
+                                                      "borderBottomWidth": null,
+                                                      "borderColor": "#007aff",
+                                                      "borderLeftWidth": null,
+                                                      "borderRadius": 5,
+                                                      "borderRightWidth": null,
+                                                      "borderTopWidth": null,
+                                                      "borderWidth": undefined,
+                                                      "elevation": 2,
+                                                      "flexDirection": "row",
+                                                      "height": 45,
+                                                      "justifyContent": "center",
+                                                      "paddingBottom": 6,
+                                                      "paddingTop": 6,
+                                                      "shadowColor": undefined,
+                                                      "shadowOffset": undefined,
+                                                      "shadowOpacity": undefined,
+                                                      "shadowRadius": undefined,
+                                                    }
                                                   }
+                                                  testID="create-invoice"
                                                 >
-                                                  <TouchableOpacity
-                                                    activeOpacity={0.5}
-                                                    block={true}
-                                                    disabled={true}
-                                                    primary={true}
+                                                  <ActivityIndicator
+                                                    animating={true}
+                                                    color="#e5eaea"
+                                                    hidesWhenStopped={true}
+                                                    size="large"
                                                     style={
                                                       Object {
-                                                        "alignItems": "center",
-                                                        "alignSelf": "stretch",
-                                                        "backgroundColor": "#b5b5b5",
-                                                        "borderBottomWidth": null,
-                                                        "borderColor": "#007aff",
-                                                        "borderLeftWidth": null,
-                                                        "borderRadius": 5,
-                                                        "borderRightWidth": null,
-                                                        "borderTopWidth": null,
-                                                        "borderWidth": undefined,
-                                                        "elevation": 2,
-                                                        "flexDirection": "row",
-                                                        "height": 45,
-                                                        "justifyContent": "center",
-                                                        "paddingBottom": 6,
-                                                        "paddingTop": 6,
-                                                        "shadowColor": undefined,
-                                                        "shadowOffset": undefined,
-                                                        "shadowOpacity": undefined,
-                                                        "shadowRadius": undefined,
+                                                        "height": 80,
                                                       }
                                                     }
-                                                    testID="create-invoice"
-                                                  >
-                                                    <ActivityIndicator
-                                                      animating={true}
-                                                      color="#e5eaea"
-                                                      hidesWhenStopped={true}
-                                                      size="large"
-                                                      style={
-                                                        Object {
-                                                          "height": 80,
-                                                        }
-                                                      }
-                                                    />
-                                                  </TouchableOpacity>
-                                                </View>
+                                                  />
+                                                </TouchableOpacity>
                                               </View>
-                                            </ScrollView>
-                                          </SafeAreaView>
+                                            </View>
+                                          </View>
                                         </View>
                                       </View>
                                     </View>
@@ -819,112 +875,7 @@ exports[`renders correctly 1`] = `
           </View>
         </View>
       </View>
-      <View
-        pointerEvents="box-none"
-        style={
-          Object {
-            "left": 0,
-            "position": "absolute",
-            "right": 0,
-            "top": 0,
-          }
-        }
-      >
-        <View
-          accessibilityElementsHidden={false}
-          importantForAccessibility="auto"
-          pointerEvents="box-none"
-          style={null}
-        >
-          <View
-            pointerEvents="none"
-            style={
-              Object {
-                "bottom": 0,
-                "left": 0,
-                "opacity": 1,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-              }
-            }
-          >
-            <View
-              style={
-                Object {
-                  "backgroundColor": "rgb(255, 255, 255)",
-                  "borderBottomColor": "rgb(224, 224, 224)",
-                  "flex": 1,
-                  "shadowColor": "rgb(224, 224, 224)",
-                  "shadowOffset": Object {
-                    "height": 0.5,
-                    "width": 0,
-                  },
-                  "shadowOpacity": 0.85,
-                  "shadowRadius": 0,
-                }
-              }
-            />
-          </View>
-          <View
-            pointerEvents="box-none"
-            style={
-              Object {
-                "height": 64,
-                "maxHeight": undefined,
-                "minHeight": undefined,
-                "opacity": undefined,
-                "transform": undefined,
-              }
-            }
-          >
-            <View
-              pointerEvents="none"
-              style={
-                Object {
-                  "height": 20,
-                }
-              }
-            />
-            <View
-              pointerEvents="box-none"
-              style={
-                Object {
-                  "alignItems": "center",
-                  "flex": 1,
-                  "flexDirection": "row",
-                  "justifyContent": "center",
-                }
-              }
-            >
-              <View
-                pointerEvents="box-none"
-                style={
-                  Object {
-                    "marginHorizontal": 18,
-                    "opacity": 1,
-                  }
-                }
-              >
-                <Text
-                  accessibilityRole="header"
-                  numberOfLines={1}
-                  style={
-                    Object {
-                      "color": "rgb(28, 28, 30)",
-                      "fontSize": 17,
-                      "fontWeight": "600",
-                    }
-                  }
-                >
-                  a
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    </RNCSafeAreaView>
+    </RNCSafeAreaProvider>
   </View>
 </View>
 `;

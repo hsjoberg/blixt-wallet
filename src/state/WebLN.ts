@@ -4,7 +4,7 @@ import { GetInfoResponse, RequestInvoiceResponse, RequestInvoiceArgs, SendPaymen
 
 import { IStoreModel } from "./index";
 import logger from "./../utils/log";
-import { bytesToHexString } from "../utils";
+import { bytesToHexString, getDomainFromURL } from "../utils";
 import { navigate } from "../utils/navigation";
 import { convertBitcoinToFiat } from "../utils/bitcoin-units";
 
@@ -32,12 +32,17 @@ interface IHandleVerifyMessageRequestPayload {
   };
 }
 
+interface IHandleLNURLPayload {
+  lnurl: string;
+}
+
 export interface IWebLNModel {
   handleGetInfoRequest: Thunk<IWebLNModel, void, any, IStoreModel, Promise<GetInfoResponse>>;
   handleMakeInvoiceRequest: Thunk<IWebLNModel, IHandleMakeInvoiceRequestPayload, any, IStoreModel, Promise<RequestInvoiceResponse>>;
   handleSendPaymentRequest: Thunk<IWebLNModel, IHandleSendPaymentRequestPayload, any, IStoreModel, Promise<SendPaymentResponse>>;
   handleSignMessageRequest: Thunk<IWebLNModel, IHandleSignMessageRequestPayload, any, IStoreModel, Promise<SignMessageResponse>>;
   handleVerifyMessageRequest: Thunk<IWebLNModel, IHandleVerifyMessageRequestPayload, any, IStoreModel, Promise<SignMessageResponse>>;
+  handleLNURL: Thunk<IWebLNModel, IHandleLNURLPayload, any, IStoreModel>;
 };
 
 export const webln: IWebLNModel = {
@@ -102,7 +107,7 @@ export const webln: IWebLNModel = {
       const response = await getStoreActions().receive.addInvoice({
         tmpData: {
           payer: null,
-          website: requestUrl.replace('http://','').replace('https://','').split(/[/?#]/)[0],
+          website: requestUrl.replace('http://', '').replace('https://', '').split(/[/?#]/)[0],
           type: "WEBLN",
         },
         description: memo,
@@ -125,7 +130,8 @@ export const webln: IWebLNModel = {
         extraData: {
           payer: null,
           type: weblnPayment ? "WEBLN" : "NORMAL",
-          website: requestUrl.replace('http://','').replace('https://','').split(/[/?#]/)[0],
+          website: getDomainFromURL(requestUrl),
+          lnurlPayResponse: null,
         }
       });
 
@@ -138,7 +144,7 @@ export const webln: IWebLNModel = {
           balance = ` of ${paymentRequest!.numSatoshis} satoshi (${fiat})`;
         }
         Alert.alert(
-          `Payment request${weblnPayment ? " (WebLN)": ""}`,
+          `Payment request${weblnPayment ? " (WebLN)" : ""}`,
           `Website requests you to pay an invoice${balance}.`,
           [{
             text: "Yes",
@@ -183,5 +189,53 @@ export const webln: IWebLNModel = {
 
   handleVerifyMessageRequest: thunk(() => {
     throw new UnsupportedMethodError('Message verify not supported yet.');
+  }),
+
+  handleLNURL: thunk(async (actions, payload, {getStoreActions }) => {
+    log.i("LNURL");
+    const paymentRequestStr = payload.lnurl;
+    return new Promise(async (resolve, reject) => {
+      try {
+        const type = await getStoreActions().lnUrl.setLNUrl(paymentRequestStr);
+        if (type === "channelRequest") {
+          Alert.alert(
+            "Found LNURL channel request",
+            `Found an LNURL. Do you wish to continue?`,
+            [{
+              text: "Cancel",
+              onPress: () => {
+                getStoreActions().lnUrl.clear();
+                resolve();
+              }
+            }, {
+              text: "Continue",
+              onPress: () => {
+                navigate("LNURL", { screen: "ChannelRequest" });
+                resolve();
+              }
+            }]
+          );
+        }
+        else if (type === "login") {
+          navigate("LNURL", { screen: "AuthRequest" });
+          resolve();
+        }
+        else if (type === "withdrawRequest") {
+          navigate("LNURL", { screen: "WithdrawRequest" });
+          resolve();
+        }
+        else if (type === "payRequest") {
+          navigate("LNURL", { screen: "PayRequest" });
+          resolve();
+        }
+        else {
+          console.log("Unknown lnurl request: " + type);
+          getStoreActions().lnUrl.clear();
+          resolve();
+        }
+      } catch (e) {
+        resolve();
+      }
+    });
   }),
 }

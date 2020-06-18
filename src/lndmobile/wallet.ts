@@ -3,7 +3,7 @@ import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { stringToUint8Array } from "../utils/index";
 import * as base64 from "base64-js";
 
-import { lnrpc } from "../../proto/proto";
+import { lnrpc, walletrpc, signrpc } from "../../proto/proto";
 
 const { LndMobile } = NativeModules;
 
@@ -51,7 +51,7 @@ export const initWallet = async (seed: string[], password: string, recoveryWindo
 /**
  * @throws
  */
-export const unlockWallet = async (password: string, cb: any): Promise<void> => {
+export const unlockWallet = async (password: string): Promise<void> => {
   const start = new Date().getTime();
   await NativeModules.LndMobile.unlockWallet(password);
   // const response = await sendCommand<lnrpc.IUnlockWalletRequest, lnrpc.UnlockWalletRequest, lnrpc.UnlockWalletResponse>({
@@ -66,6 +66,59 @@ export const unlockWallet = async (password: string, cb: any): Promise<void> => 
   // return response;
   console.log("unlock time: " + (new Date().getTime() - start) / 1000 + "s");
   return;
+};
+
+/**
+ * @throws
+ */
+export const deriveKey = async (keyFamily: number, keyIndex: number): Promise<signrpc.KeyDescriptor> => {
+  const response = await sendCommand<signrpc.IKeyLocator, signrpc.KeyLocator, signrpc.KeyDescriptor>({
+    request: signrpc.KeyLocator,
+    response: signrpc.KeyDescriptor,
+    method: "WalletKitDeriveKey",
+    options: {
+      keyFamily: 138,
+      keyIndex: 0,
+    },
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+export const derivePrivateKey = async (keyFamily: number, keyIndex: number): Promise<signrpc.KeyDescriptor> => {
+  const response = await sendCommand<signrpc.IKeyDescriptor, signrpc.KeyDescriptor, signrpc.KeyDescriptor>({
+    request: signrpc.KeyDescriptor,
+    response: signrpc.KeyDescriptor,
+    method: "WalletKitDerivePrivateKey",
+    options: {
+      keyLoc: {
+        keyFamily: 138,
+        keyIndex: 0,
+      },
+    },
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+export const signMessage = async (keyFamily: number, keyIndex: number, msg: Uint8Array): Promise<signrpc.SignMessageResp> => {
+  const response = await sendCommand<signrpc.ISignMessageReq, signrpc.SignMessageReq, signrpc.SignMessageResp>({
+    request: signrpc.SignMessageReq,
+    response: signrpc.SignMessageResp,
+    method: "SignerSignMessage",
+    options: {
+      keyLoc: {
+        keyFamily: 138,
+        keyIndex: 0,
+      },
+      msg,
+    },
+  });
+  return response;
 };
 
 // TODO exception?
