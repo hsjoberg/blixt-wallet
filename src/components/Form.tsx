@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, KeyboardAvoidingView } from "react-native";
 import { Content, View, Item, Text, Label } from "native-base";
 
 export interface IFormItem {
@@ -16,7 +16,7 @@ export interface IFormProps {
 }
 export default function Form({ buttons, items }: IFormProps) {
   return (
-    <Content contentContainerStyle={style.content}>
+    <KeyboardAvoidingView keyboardVerticalOffset={55} behavior="height" style={style.content}>
       <View style={style.itemContainer}>
         {items.map(({ key, title, component, success, active }, i) => (
           active ?? true
@@ -39,7 +39,7 @@ export default function Form({ buttons, items }: IFormProps) {
           return (<View key={i} style={{ marginTop: i > 0 ? 12 : 0 }}>{button}</View>);
         })}
       </View>
-    </Content>
+    </KeyboardAvoidingView>
   );
 }
 
