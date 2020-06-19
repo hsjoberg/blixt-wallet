@@ -1,5 +1,7 @@
 # Blixt Lightning Wallet
 
+<a href="https://play.google.com/store/apps/details?id=com.blixtwallet"><img alt="Get it on Google Play" width="195" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" /></a>
+
 Blixt Wallet is an open source Lightning Bitcoin Wallet for Android with focus on usability and user experience,
 powered by lnd and Neutrino SPV.
 
