@@ -10,7 +10,7 @@ jobs:
       - run: gomobile init
       - run: go get -u -v github.com/lightninglabs/falafel
       - run: go get -d github.com/lightningnetwork/lnd
-      - run: cd $GOPATH/src/github.com/lightningnetwork/lnd && make android
+      - run: cd $GOPATH/src/github.com/lightningnetwork/lnd && git checkout v0.10.1-beta && sed -i 's/use_prefix="0"/use_prefix="1"/g' mobile/gen_bindings.sh && make android
       - persist_to_workspace:
           root: /go/src/github.com/lightningnetwork/lnd
           paths:
