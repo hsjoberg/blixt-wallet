@@ -29,3 +29,5 @@
 -keep class com.facebook.crypto.** {
    *;
 }
+
+-keep class lnrpc.** { *; }

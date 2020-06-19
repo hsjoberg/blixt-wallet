@@ -118,7 +118,7 @@ class LndMobile extends ReactContextBaseJavaModule {
             // we intentionally don't want to
             // Resolve the promise.
             if (request != -1) {
-              HyperLog.e(TAG, "Unknown request: " + request);
+              HyperLog.e(TAG, "Unknown request: " + request + " for " + msg.what);
             }
             return; // !
           }
@@ -167,7 +167,7 @@ class LndMobile extends ReactContextBaseJavaModule {
           final int request = msg.arg1;
 
           if (!requests.containsKey(request)) {
-            HyperLog.w(TAG, "Unknown request: " + request);
+            HyperLog.e(TAG, "Unknown request: " + request + " for " + msg.what);
             return;
           }
 
@@ -210,6 +210,7 @@ class LndMobile extends ReactContextBaseJavaModule {
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
       HyperLog.i(TAG, "Service attached");
+      HyperLog.i(TAG, "Request = " + request);
       lndMobileServiceBound = true;
       lndMobileServiceMessenger = new Messenger(service);
 
@@ -222,6 +223,8 @@ class LndMobile extends ReactContextBaseJavaModule {
         // do anything with it; we can count on soon being
         // disconnected (and then reconnected if it can be restarted)
         // so there is no need to do anything here.
+        Log.e(TAG, "LndMobileServiceConnection:onServiceConnected exception");
+        Log.e(TAG, e.getMessage());
       }
     }
 
