@@ -252,7 +252,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
                 <H1 style={style.header}>
                   Pay
                 </H1>
-                {Debug &&
+                {__DEV__ &&
                   <Button small={true} onPress={viewMetadata}>
                     <Text style={{ fontSize: 7.5 }}>View technical metadata</Text>
                   </Button>

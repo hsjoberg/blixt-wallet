@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View, Icon } from "native-base";
 import { StyleSheet } from "react-native";
+import { smallScreen } from "../utils/device";
 
 export interface ICopyAddressProps {
   onPress: () => void;
@@ -26,9 +27,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     paddingTop: 6,
-    paddingBottom: 10,
-    marginRight: 15,
-
+    marginRight: smallScreen ? -6 : 15,
     width: "100%",
   },
   text: {

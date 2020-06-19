@@ -1,22 +1,21 @@
 import React from "react";
 import { StyleSheet, Alert } from "react-native";
 import { Button, Card, CardItem, Body, Row, Right, Text, Left } from "native-base";
-import { Svg, Line, G, Circle, Polyline } from "react-native-svg";
+import { Svg, Line } from "react-native-svg";
 import Long from "long";
 
 import { useStoreActions, useStoreState } from "../state/store";
 import { lnrpc } from "../../proto/proto";
 import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
-import { formatBitcoin, valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
+import { valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
 import BigNumber from "bignumber.js";
-const theme = nativeBaseTheme.default;
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
 export interface IChannelCardProps {
   channel: lnrpc.IChannel;
   alias?: string;
 }
-export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
+export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const closeChannel = useStoreActions((store) => store.channel.closeChannel);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
@@ -52,18 +51,28 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
     }
   };
 
-  const localBalance = channel.localBalance || Long.fromValue(0);
+  let localBalance = channel.localBalance || Long.fromValue(0);
+  if (localBalance.lessThanOrEqual(channel.localChanReserveSat!)) {
+    localBalance = Long.fromValue(0);
+  }
+  else {
+    localBalance = localBalance.sub(channel.localChanReserveSat!);
+  }
   const remoteBalance = channel.remoteBalance || Long.fromValue(0);
   const percentageLocal = localBalance.mul(100).div(channel.capacity!).toNumber() / 100;
   const percentageRemote = remoteBalance.mul(100).div(channel.capacity!).toNumber() / 100;
   const percentageReverse = 1 - (percentageLocal + percentageRemote);
+
+  const localReserve = Long.fromValue(
+    Math.min(channel.localBalance ? channel.localBalance.toNumber() : 0, channel.localChanReserveSat?.toNumber() ?? 0)
+  );
 
   return (
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
         <Body>
           <Row>
-            <Left style={{ alignSelf:"flex-start" }}>
+            <Left style={{ alignSelf: "flex-start" }}>
               <Text style={style.channelDetailTitle}>Node</Text>
             </Left>
             <Right>
@@ -72,7 +81,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
           </Row>
           {alias &&
             <Row>
-              <Left style={{ alignSelf:"flex-start" }}>
+              <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>Alias</Text>
               </Left>
               <Right>
@@ -81,7 +90,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
             </Row>
           }
           <Row>
-            <Left style={{ alignSelf:"flex-start" }}>
+            <Left style={{ alignSelf: "flex-start" }}>
               <Text style={style.channelDetailTitle}>Status</Text>
             </Left>
             <Right>
@@ -92,16 +101,8 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
               }
             </Right>
           </Row>
-          {/* <Row>
-            <Left style={{ alignSelf:"flex-start" }}>
-              <Text style={style.channelDetailTitle}>Amount in channel</Text>
-            </Left>
-            <Right>
-              <Text style={style.channelDetailAmount}>{channel.localBalance!.toString()}/{channel.capacity!.toString()} satoshi</Text>
-            </Right>
-          </Row> */}
           <Row>
-            <Left style={{ alignSelf:"flex-start" }}>
+            <Left style={{ alignSelf: "flex-start" }}>
               <Text>Capacity</Text>
             </Left>
             <Right>
@@ -134,7 +135,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
             </Right>
           </Row>
           <Row>
-            <Left style={{ alignSelf:"flex-start" }}>
+            <Left style={{ alignSelf: "flex-start" }}>
               <Text>Can send</Text>
             </Left>
             <Right>
@@ -163,7 +164,7 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
             </Right>
           </Row>
           <Row>
-            <Left style={{ alignSelf:"flex-start" }}>
+            <Left style={{ alignSelf: "flex-start" }}>
               <Text>Can receive</Text>
             </Left>
             <Right>
@@ -182,6 +183,54 @@ export const ChannelCard = ({ channel, alias }: IChannelCardProps) => {
                   <>
                     <Text style={{ color: blixtTheme.red}}>
                       {valueFiat(remoteBalance, currentRate).toFixed(2)}{" "}
+                    </Text>
+                    <Text>
+                      {fiatUnit}
+                    </Text>
+                  </>
+                }
+              </Text>
+            </Right>
+          </Row>
+          <Row>
+            <Left style={{ alignSelf: "flex-start" }}>
+              <Text>Local reserve</Text>
+            </Left>
+            <Right>
+              <Text>
+                {!preferFiat &&
+                  <>
+                    <Text>
+                      {localReserve.eq(channel.localChanReserveSat!) &&
+                        <>{valueBitcoin(localReserve, bitcoinUnit)}{" "}</>
+                      }
+                      {localReserve.neq(channel.localChanReserveSat!) &&
+                        <>
+                          {valueBitcoin(localReserve, bitcoinUnit)}
+                          /
+                          {valueBitcoin(channel.localChanReserveSat!, bitcoinUnit)}{" "}
+                        </>
+                      }
+
+                    </Text>
+                    <Text>
+                      {getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}
+                    </Text>
+                  </>
+                }
+                {preferFiat &&
+                  <>
+                    <Text>
+                      {localReserve.eq(channel.localChanReserveSat!) &&
+                        <>{valueFiat(localReserve, currentRate).toFixed(2)}{" "}</>
+                      }
+                      {localReserve.neq(channel.localChanReserveSat!) &&
+                        <>
+                          {valueFiat(localReserve, currentRate).toFixed(2)}
+                          /
+                          {valueFiat(channel.localChanReserveSat!, currentRate).toFixed(2)}{" "}
+                        </>
+                      }
                     </Text>
                     <Text>
                       {fiatUnit}

@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { OnChainStackParamList } from "./index";
 import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
-import { formatBitcoin } from "../../utils/bitcoin-units";
+import { formatBitcoin, valueFiat } from "../../utils/bitcoin-units";
 import { smallScreen } from "../../utils/device";
 import CopyAddress from "../../components/CopyAddress";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
@@ -22,6 +22,10 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   const balance = useStoreState((store) => store.onChain.balance);
   const address = useStoreState((store) => store.onChain.address);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const currentRate = useStoreState((store) => store.fiat.currentRate);
+  const preferFiat = useStoreState((store) => store.settings.preferFiat);
+  const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
 
   useEffect(() => {
     if (rpcReady) {
@@ -49,6 +53,15 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
     });
   };
 
+  const onPressBalance = async () => {
+    await changePreferFiat(!preferFiat);
+  }
+
+  const onChainFunds = preferFiat
+  ? (valueFiat(balance, currentRate).toFixed(2) + " " + fiatUnit)
+  : formatBitcoin(balance, bitcoinUnit)
+  ;
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -69,13 +82,23 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
       <View style={style.container}>
         <View style={style.fundsInfo}>
           {smallScreen ?
-            <H2 style={style.fundsInfoText} testID="ONCHAIN_FUNDS">
-              On-chain funds:{"\n"} {formatBitcoin(balance, bitcoinUnit)}
+          <>
+            <H2 style={style.fundsInfoText}>
+              On-chain funds:
             </H2>
-            :
-            <H1 style={style.fundsInfoText} testID="ONCHAIN_FUNDS">
-              On-chain funds:{"\n"} {formatBitcoin(balance, bitcoinUnit)}
+              <H2 style={style.fundsInfoText} onPress={onPressBalance} testID="ONCHAIN_FUNDS">
+                {onChainFunds}
+              </H2>
+              </>
+          :
+          <>
+            <H1 style={style.fundsInfoText}>
+              On-chain funds:
             </H1>
+              <H1 style={style.fundsInfoText} onPress={onPressBalance} testID="ONCHAIN_FUNDS">
+                {onChainFunds}
+              </H1>
+              </>
           }
         </View>
         <View style={style.qr}>
@@ -110,14 +133,14 @@ const style = StyleSheet.create({
     padding: 12,
   },
   fundsInfo: {
-    marginTop: !smallScreen ? 24 : 0,
+    marginTop: !smallScreen ? 32 : 8,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
   fundsInfoText: {
-    marginTop: 8,
     textAlign: "center",
+    margin: 0,
   },
   qr: {
     width: "100%",

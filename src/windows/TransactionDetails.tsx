@@ -69,9 +69,9 @@ export default function TransactionDetails({ route }: any) {
 
   let transactionValue: Long;
   let direction: "send" | "receive";
-  if (isLong(transaction.amtPaidSat) && transaction.amtPaidSat.greaterThanOrEqual(0)) {
+  if (isLong(transaction.value) && transaction.value.greaterThanOrEqual(0)) {
     direction = "receive";
-    transactionValue = transaction.amtPaidSat;
+    transactionValue = transaction.value;
   }
   else {
     direction = "send";
@@ -181,10 +181,6 @@ function LNURLMetaData({ transaction }: IWebLNMetaDataProps) {
       transaction.lnurlPayResponse.successAction.ciphertext,
     );
   }
-
-  return (
-    <></>
-  );
 
   return (
     <>
