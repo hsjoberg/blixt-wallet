@@ -15,7 +15,7 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 # WORKDIR $GOPATH
 
 # protoc
-RUN curl -L -o protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.9.1/protoc-3.9.1-linux-x86_64.zip && unzip protoc.zip
+RUN curl -L -o protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v3.4.0/protoc-3.4.0-linux-x86_64.zip && unzip protoc.zip
 RUN mv bin/protoc /usr/bin/ && mv include/* /usr/include/
 
 # Java and Node
