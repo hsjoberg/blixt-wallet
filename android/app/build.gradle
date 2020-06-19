@@ -135,7 +135,7 @@ android {
         applicationId MYAPP_APP_ID
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 40
+        versionCode 45
         versionName "0.1-alpha"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
@@ -249,17 +249,18 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
-    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
-      exclude group:'com.facebook.fbjni'
-    }
+    debugImplementation "com.facebook.soloader:soloader:0.9.0"
 
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.flipper'
+    debugImplementation("com.facebook.flipper:flipper:0.47.0") {
+        exclude group:"com.facebook.fbjni"
     }
-
-    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.flipper'
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:0.47.0") {
+        exclude group:"com.facebook.flipper"
     }
+    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:0.47.0") {
+        exclude group:"com.facebook.flipper"
+    }
+    releaseImplementation 'com.facebook.flipper:flipper-noop:0.47.0'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
@@ -269,24 +270,24 @@ dependencies {
         implementation jscFlavor
     }
 
-    implementation 'androidx.appcompat:appcompat:1.0.0' // ta bort?
+    implementation "androidx.appcompat:appcompat:1.1.0" // ta bort?
 
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.work:work-runtime:2.2.0'
-    implementation 'androidx.concurrent:concurrent-futures:1.0.0-rc01'
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation "androidx.work:work-runtime:2.3.4"
+    implementation "androidx.concurrent:concurrent-futures:1.0.0"
 
-    implementation 'javax.annotation:javax.annotation-api:1.3.2'
-    implementation 'io.grpc:grpc-stub:1.20.0'
-    implementation 'io.grpc:grpc-protobuf-lite:1.20.0'
+    implementation "javax.annotation:javax.annotation-api:1.3.2"
+    implementation "io.grpc:grpc-stub:1.30.0"
+    implementation "io.grpc:grpc-protobuf-lite:1.30.0"
 
-    implementation 'com.hypertrack:hyperlog:0.0.10'
+    implementation "com.hypertrack:hyperlog:0.0.10"
 
-    implementation project(':lndmobile')
+    implementation project(":lndmobile")
 }
 
 configurations {
     // https://stackoverflow.com/questions/54717283/program-type-already-present-com-google-common-util-concurrent-listenablefuture
-    all*.exclude group: 'com.google.guava', module: 'listenablefuture'
+    all*.exclude group: "com.google.guava", module: "listenablefuture"
 }
 
 // Run this once to be able to run the application with BUCK
@@ -300,31 +301,17 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.0.0'
-    }
-    plugins {
-        javalite {
-            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
-
-        }
-        grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.20.0'
-        }
+        artifact = "com.google.protobuf:protoc:3.12.3"
     }
     generateProtoTasks {
         all().each { task ->
             task.builtins {
-                remove java
-            }
-            task.plugins {
-                javalite { }
-                grpc {
-                    // Options added to --grpc_out
-                    option 'lite'
+                java {
+                    option "lite"
                 }
             }
         }
     }
 }
 
-apply plugin: 'com.google.gms.google-services'
+apply plugin: "com.google.gms.google-services"
