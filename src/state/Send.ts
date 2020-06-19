@@ -119,14 +119,36 @@ export const send: ISendModel = {
     }
 
     const name = getStoreState().settings.name;
-    const sendPaymentResult = await sendPaymentSync(
-      paymentRequestStr,
-      payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
-      (paymentRequest.features["8"] || paymentRequest.features["9"]) ? name : undefined
-    );
-    if (sendPaymentResult.paymentError && sendPaymentResult.paymentError.length > 0) {
-      throw new Error(sendPaymentResult.paymentError);
-    }
+
+
+    // Attempt to pay invoice
+    // First try with TLV and then without
+    const sendPaymentResult = await (async () => {
+      if (name && (paymentRequest.features["8"] || paymentRequest.features["9"])) {
+        log.i("Attempting to pay with TLV");
+        const tlvAttempt = await sendPaymentSync(
+          paymentRequestStr,
+          payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
+          name
+        );
+        if (!(tlvAttempt.paymentError && tlvAttempt.paymentError.length > 0)) {
+          return tlvAttempt;
+        }
+        log.i("Didn't succeed. Trying without TLV");
+      }
+
+      log.i("Attempting to pay");
+      const nonTlvAttempt = await sendPaymentSync(
+        paymentRequestStr,
+        payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
+        undefined
+      );
+
+      if (nonTlvAttempt.paymentError && nonTlvAttempt.paymentError.length > 0) {
+        throw new Error(nonTlvAttempt.paymentError);
+      }
+      return nonTlvAttempt;
+    })();
 
     const extraData: IExtraData = getState().extraData || {
       payer: null,

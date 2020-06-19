@@ -39,7 +39,13 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
     }
   }, [getChannels, rpcReady]);
 
-  const balance = channels.reduce((accumulator, channel) => accumulator.add(channel.localBalance ?? 0), Long.fromInt(0));
+  const balance = channels.reduce((accumulator, channel) => {
+    return accumulator.add(channel.localBalance!);
+    // if (channel.localBalance!.lessThanOrEqual(channel.localChanReserveSat!)) {
+    //   return accumulator;
+    // }
+    // return accumulator.add(channel.localBalance!.sub(channel.localChanReserveSat!));
+  }, Long.fromInt(0));
 
   const channelCards = [
     ...pendingOpenChannels.map((pendingChannel, i) => (
@@ -105,7 +111,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
         <ScrollView contentContainerStyle={style.container}>
           <View style={style.balanceInfo}>
             <H1 style={[style.spendableAmount]}>
-              Spendable amount
+              Balance
             </H1>
             <H1 onPress={onPressBalance}>
               {preferFiat

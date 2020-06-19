@@ -74,15 +74,15 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               }
             </Right>
           </Row>
-          <Row>
+          {/* <Row>
             <Left>
               <Text style={style.channelDetailTitle}>Amount in channel</Text>
             </Left>
             <Right>
               <Text style={style.channelDetailAmount}>{channel.channel!.localBalance!.toString()}/{channel.channel!.capacity!.toString()} Satoshi</Text>
             </Right>
-          </Row>
-          {Debug &&
+          </Row> */}
+          {__DEV__ &&
             <Row>
               <Right>
                 <Button onPress={() => abandon()} small>

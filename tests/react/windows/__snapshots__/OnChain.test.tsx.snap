@@ -617,7 +617,7 @@ exports[`renders correctly 1`] = `
                                                 Object {
                                                   "alignItems": "center",
                                                   "justifyContent": "center",
-                                                  "marginTop": 24,
+                                                  "marginTop": 32,
                                                   "width": "100%",
                                                 }
                                               }
@@ -631,17 +631,30 @@ exports[`renders correctly 1`] = `
                                                       "lineHeight": 32,
                                                     },
                                                     Object {
-                                                      "marginTop": 8,
+                                                      "margin": 0,
+                                                      "textAlign": "center",
+                                                    },
+                                                  ]
+                                                }
+                                              >
+                                                On-chain funds:
+                                              </Text>
+                                              <Text
+                                                style={
+                                                  Array [
+                                                    Object {
+                                                      "color": "#000",
+                                                      "fontSize": 27,
+                                                      "lineHeight": 32,
+                                                    },
+                                                    Object {
+                                                      "margin": 0,
                                                       "textAlign": "center",
                                                     },
                                                   ]
                                                 }
                                                 testID="ONCHAIN_FUNDS"
                                               >
-                                                On-chain funds:
-                                                
-
-                                                 
                                                 0.00001 ₿
                                               </Text>
                                             </View>
@@ -780,7 +793,6 @@ exports[`renders correctly 1`] = `
                                                         "flexDirection": "row",
                                                         "justifyContent": "center",
                                                         "marginRight": 15,
-                                                        "paddingBottom": 10,
                                                         "paddingTop": 6,
                                                         "width": "100%",
                                                       },
