@@ -1,6 +1,8 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, KeyboardAvoidingView, StyleProp, ViewStyle, StatusBar } from "react-native";
 import { Content, View, Item, Text, Label } from "native-base";
+
+const iconTopPadding = StatusBar.currentHeight ?? 0;
 
 export interface IFormItem {
   title: string | null;
@@ -13,11 +15,12 @@ export interface IFormItem {
 export interface IFormProps {
   buttons: ReactNode[];
   items: IFormItem[];
+  style?: StyleProp<ViewStyle>;
 }
-export default function Form({ buttons, items }: IFormProps) {
+export default function Form({ buttons, items, style }: IFormProps) {
   return (
-    <KeyboardAvoidingView keyboardVerticalOffset={55} behavior="height" style={style.content}>
-      <View style={style.itemContainer}>
+    <KeyboardAvoidingView keyboardVerticalOffset={56} behavior="height" style={[styles.content, style]}>
+      <View style={styles.itemContainer}>
         {items.map(({ key, title, component, success, active }, i) => (
           active ?? true
             ?
@@ -25,7 +28,7 @@ export default function Form({ buttons, items }: IFormProps) {
               marginTop: i > 0 ? 16 : 8
             }} success={success}>
               <Label style={{
-                ...style.itemLabel,
+                ...styles.itemLabel,
                 fontSize: (title !== null && title.length) >= 14 ? 15 : 17,
               }}>{title}</Label>
               {component}
@@ -34,7 +37,7 @@ export default function Form({ buttons, items }: IFormProps) {
             null
         ))}
       </View>
-      <View style={style.buttonContainer}>
+      <View style={styles.buttonContainer}>
         {buttons.map((button, i) => {
           return (<View key={i} style={{ marginTop: i > 0 ? 12 : 0 }}>{button}</View>);
         })}
@@ -43,7 +46,7 @@ export default function Form({ buttons, items }: IFormProps) {
   );
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   content: {
     height: "100%",
     flex: 1,

@@ -7,6 +7,7 @@ import { IStoreInjections } from "./store";
 import { lnrpc } from "../../proto/proto";
 
 import logger from "./../utils/log";
+import { decodeSubscribeTransactionsResult } from "../lndmobile/onchain";
 const log = logger("OnChain");
 
 export interface IBlixtTransaction extends lnrpc.ITransaction {
@@ -33,7 +34,7 @@ export interface ISendCoinsAllPayload {
 }
 
 export interface IOnChainModel {
-  initialize: Thunk<IOnChainModel, void, IStoreInjections>;
+  initialize: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
   getBalance: Thunk<IOnChainModel, void, IStoreInjections>;
   getAddress: Thunk<IOnChainModel, IGetAddressPayload, IStoreInjections>;
   getTransactions: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
@@ -46,6 +47,8 @@ export interface IOnChainModel {
   setTransactions: Action<IOnChainModel, ISetTransactionsPayload>;
   setTransactionSubscriptionStarted: Action<IOnChainModel, boolean>;
 
+  addToTransactionNotificationBlacklist: Action<IOnChainModel, string>;
+
   balance: Long;
   unconfirmedBalance: Long;
   totalBalance: Computed<IOnChainModel, Long>;
@@ -54,10 +57,13 @@ export interface IOnChainModel {
   transactionSubscriptionStarted: boolean;
 
   getOnChainTransactionByTxId: Computed<IOnChainModel, (txId: string) => lnrpc.ITransaction | undefined>;
+
+  transactionNotificationBlacklist: string[];
 }
 
 export const onChain: IOnChainModel = {
-  initialize: thunk(async (actions, _, { getState, injections }) => {
+  initialize: thunk(async (actions, _, { getState, getStoreActions, injections }) => {
+    log.i("Initializing");
     await Promise.all([
       actions.getAddress({}),
       actions.getBalance(undefined),
@@ -71,7 +77,21 @@ export const onChain: IOnChainModel = {
       await injections.lndMobile.onchain.subscribeTransactions();
       DeviceEventEmitter.addListener("SubscribeTransactions", async (e: any) => {
         log.d("Event SubscribeTransactions", [e]);
-        await actions.getBalance(undefined);
+        await actions.getBalance();
+
+        const transaction = decodeSubscribeTransactionsResult(e.data);
+        if (
+            !getState().transactionNotificationBlacklist.includes(transaction.txHash) &&
+            transaction.numConfirmations > 0 &&
+            Long.isLong(transaction.amount) &&
+            transaction.amount.greaterThan(0)
+          ) {
+          getStoreActions().notificationManager.localNotification({
+            message: "Received on-chain transaction",
+            importance: "high",
+          });
+          actions.addToTransactionNotificationBlacklist(transaction.txHash);
+        }
       });
 
       actions.setTransactionSubscriptionStarted(true);
@@ -133,15 +153,17 @@ export const onChain: IOnChainModel = {
     actions.setTransactions({ transactions });
   }),
 
-  sendCoins: thunk(async (_, { address, sat, feeRate }, { injections }) => {
+  sendCoins: thunk(async (actions, { address, sat, feeRate }, { injections }) => {
     const { sendCoins } = injections.lndMobile.onchain;
     const response = await sendCoins(address, sat, feeRate );
+    actions.addToTransactionNotificationBlacklist(response.txid);
     return response;
   }),
 
-  sendCoinsAll: thunk(async (_, { address, feeRate }, { injections }) => {
+  sendCoinsAll: thunk(async (actions, { address, feeRate }, { injections }) => {
     const { sendCoinsAll } = injections.lndMobile.onchain;
     const response = await sendCoinsAll(address, feeRate);
+    actions.addToTransactionNotificationBlacklist(response.txid);
     return response;
   }),
 
@@ -150,6 +172,10 @@ export const onChain: IOnChainModel = {
   setAddress: action((state, payload) => { state.address = payload.address; }),
   setTransactions: action((state, payload) => { state.transactions = payload.transactions; }),
   setTransactionSubscriptionStarted: action((state, payload) => { state.transactionSubscriptionStarted = payload }),
+
+  addToTransactionNotificationBlacklist: action((state, payload) => {
+    state.transactionNotificationBlacklist = [...state.transactionNotificationBlacklist, payload];
+  }),
 
   balance: Long.fromInt(0),
   unconfirmedBalance: Long.fromInt(0),
@@ -166,4 +192,6 @@ export const onChain: IOnChainModel = {
       };
     },
   ),
+
+  transactionNotificationBlacklist: [],
 };

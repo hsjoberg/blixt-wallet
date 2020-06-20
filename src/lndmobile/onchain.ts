@@ -1,4 +1,4 @@
-import { sendCommand, sendStreamCommand } from "./utils";
+import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { lnrpc } from "../../proto/proto";
 import Long from "long";
 
@@ -90,4 +90,11 @@ export const subscribeTransactions = async (): Promise<string> => {
     options: {},
   }, true);
   return response;
+};
+
+export const decodeSubscribeTransactionsResult = (data: string): lnrpc.Transaction => {
+  return decodeStreamResult<lnrpc.Transaction>({
+    response: lnrpc.Transaction,
+    base64Result: data,
+  });
 };

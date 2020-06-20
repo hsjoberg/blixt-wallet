@@ -21,6 +21,7 @@ import { IGoogleModel, google } from "./Google";
 import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
 import { IWebLNModel, webln } from "./WebLN";
 import { IAndroidDeeplinkManager, androidDeeplinkManager } from "./AndroidDeeplinkManager";
+import { INotificationManagerModel, notificationManager} from "./NotificationManager";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
@@ -77,6 +78,7 @@ export interface IStoreModel {
   googleDriveBackup: IGoogleDriveBackupModel;
   webln: IWebLNModel;
   androidDeeplinkManager: IAndroidDeeplinkManager;
+  notificationManager: INotificationManagerModel;
 
   walletSeed?: string[];
   appVersion: number;
@@ -136,7 +138,7 @@ export const model: IStoreModel = {
     await dispatch.googleDriveBackup.initialize();
     await dispatch.transaction.getTransactions();
     await dispatch.channel.setupCachedBalance();
-    log.d("Done starting up stores")
+    log.d("Done starting up stores");
     actions.setAppReady(true);
 
     log.d("App initialized");
@@ -238,6 +240,7 @@ export const model: IStoreModel = {
   googleDriveBackup,
   webln,
   androidDeeplinkManager,
+  notificationManager,
 };
 
 export default model;

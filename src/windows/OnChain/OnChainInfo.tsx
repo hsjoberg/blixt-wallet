@@ -55,11 +55,11 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
 
   const onPressBalance = async () => {
     await changePreferFiat(!preferFiat);
-  }
+  };
 
   const onChainFunds = preferFiat
-  ? (valueFiat(balance, currentRate).toFixed(2) + " " + fiatUnit)
-  : formatBitcoin(balance, bitcoinUnit)
+    ? (valueFiat(balance, currentRate).toFixed(2) + " " + fiatUnit)
+    : formatBitcoin(balance, bitcoinUnit)
   ;
 
   return (
