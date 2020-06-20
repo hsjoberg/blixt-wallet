@@ -423,7 +423,7 @@ When you're done, you can copy the address code and/or open the link using Blixt
             <Left><Icon style={style.icon} type="Entypo" name="bell" /></Left>
             <Body>
               <Text>Push notifications</Text>
-              <Text note={true} numberOfLines={1}>When the app is on. For channel events</Text>
+              <Text note={true} numberOfLines={1}>For transaction and channel events</Text>
             </Body>
             <Right><CheckBox checked={pushNotificationsEnabled} onPress={onTogglePushNotificationsPress} /></Right>
           </ListItem>
@@ -431,7 +431,7 @@ When you're done, you can copy the address code and/or open the link using Blixt
             <Left><Icon style={style.icon} type="Entypo" name="clipboard" /></Left>
             <Body>
               <Text>Check clipboard for invoices</Text>
-              <Text note={true} numberOfLines={1}>Automatically check clipboard for Lightning invoices</Text>
+              <Text note={true} numberOfLines={1}>Automatically check clipboard for invoices</Text>
             </Body>
             <Right><CheckBox checked={clipboardInvoiceCheckEnabled} onPress={onToggleClipBoardInvoiceCheck} /></Right>
           </ListItem>

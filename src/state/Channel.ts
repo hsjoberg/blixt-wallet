@@ -8,8 +8,7 @@ import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
 import { IChannelEvent, getChannelEvents, createChannelEvent } from "../storage/database/channel-events";
-import { localNotification } from "../utils/push-notification";
-import { bytesToHexString } from "../utils";
+import { bytesToHexString, uint8ArrayToString } from "../utils";
 
 import logger from "./../utils/log";
 const log = logger("Channel");
@@ -48,8 +47,8 @@ export interface IChannelModel {
   getChannels: Thunk<IChannelModel, void, IStoreInjections>;
   getChannelEvents: Thunk<IChannelModel, void, any, IStoreModel>;
   getBalance: Thunk<IChannelModel, undefined, IStoreInjections>;
-  connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload>;
-  closeChannel: Thunk<IChannelModel, ICloseChannelPayload>;
+  connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload, IStoreInjections, IStoreModel>;
+  closeChannel: Thunk<IChannelModel, ICloseChannelPayload, any, IStoreModel>;
   abandonChannel: Thunk<IChannelModel, ICloseChannelPayload>;
   exportChannelsBackup: Thunk<IChannelModel, void, IStoreInjections>;
 
@@ -97,7 +96,7 @@ export const channel: IChannelModel = {
     return true;
   }),
 
-  setupChannelUpdateSubscriptions: thunk(async (actions, _2, { getStoreState, injections }) => {
+  setupChannelUpdateSubscriptions: thunk(async (actions, _2, { getStoreState, getStoreActions, injections }) => {
     log.i("Starting channel update subscription");
     await injections.lndMobile.channel.subscribeChannelEvents();
     DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
@@ -128,7 +127,7 @@ export const channel: IChannelModel = {
             if (node && node.node) {
               message += ` with ${node.node.alias}`;
             }
-            localNotification(message);
+            getStoreActions().notificationManager.localNotification({ message, importance: "high" });
           } catch (e) {
             log.e("Push notification failed: ", e.message);
           }
@@ -151,7 +150,7 @@ export const channel: IChannelModel = {
               message += ` with ${node.node.alias}`;
             }
             message += " closed";
-            localNotification(message);
+            getStoreActions().notificationManager.localNotification({ message, importance: "high" });
           } catch (e) {
             log.e("Push notification failed: ", e.message);
           }
@@ -176,7 +175,7 @@ export const channel: IChannelModel = {
             if (alias) {
               message += ` with ${alias}`;
             }
-            localNotification(message);
+            getStoreActions().notificationManager.localNotification({ message, importance: "high" });
           } catch (e) {
             log.e("Push notification failed: ", e.message);
           }
@@ -184,14 +183,14 @@ export const channel: IChannelModel = {
       }
 
       await Promise.all([
-        actions.getChannels(undefined),
-        actions.getBalance(undefined),
+        actions.getChannels(),
+        actions.getBalance(),
       ]);
     });
 
     DeviceEventEmitter.addListener("CloseChannel", async (e: any) => {
       log.i("Event CloseChannel", [e]);
-      await actions.getChannels(undefined);
+      await actions.getChannels();
     });
     actions.setChannelUpdateSubscriptionStarted(true);
   }),
@@ -236,7 +235,7 @@ export const channel: IChannelModel = {
     actions.setChannelEvents(channelEvents);
   }),
 
-  connectAndOpenChannel: thunk(async (_, { peer, amount }, { injections }) => {
+  connectAndOpenChannel: thunk(async (_, { peer, amount }, { injections, getStoreActions }) => {
     const { connectPeer } = injections.lndMobile.index;
     const { openChannel } = injections.lndMobile.channel;
     const [pubkey, host] = peer.split("@");
@@ -250,13 +249,15 @@ export const channel: IChannelModel = {
     }
 
     const result = await openChannel(pubkey, amount, true);
+    getStoreActions().onChain.addToTransactionNotificationBlacklist(bytesToHexString(result.fundingTxidBytes.reverse()))
     log.d("openChannel", [result]);
     return result;
   }),
 
-  closeChannel: thunk(async (_, { fundingTx, outputIndex }, { injections }) => {
+  closeChannel: thunk(async (_, { fundingTx, outputIndex }, { injections, getStoreActions }) => {
     const closeChannel = injections.lndMobile.channel.closeChannel;
     const result = await closeChannel(fundingTx, outputIndex);
+    getStoreActions().onChain.addToTransactionNotificationBlacklist(fundingTx);
     log.d("closeChannel", [result]);
     return result;
   }),

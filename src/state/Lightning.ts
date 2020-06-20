@@ -136,6 +136,7 @@ export const lightning: ILightningModel = {
         dispatch.scheduledSync.initialize(),
         dispatch.androidDeeplinkManager.initialize(),
       ]);
+      await dispatch.notificationManager.initialize();
       await dispatch.clipboardManager.initialize();
     } catch (e) {
       toast(e.message, 10000, "danger");

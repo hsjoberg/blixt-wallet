@@ -8,11 +8,10 @@ import { ITransaction } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/proto";
 import { setupDescription } from "../utils/NameDesc";
 import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
-import { timeout, uint8ArrayToString, bytesToString, decodeTLVRecord, stringToUint8Array, bytesToHexString, toast, hexToUint8Array } from "../utils";
+import { timeout, uint8ArrayToString, decodeTLVRecord, bytesToHexString, toast } from "../utils";
 import { TLV_RECORD_NAME } from "../utils/constants";
 
 import logger from "./../utils/log";
-import { localNotification } from "../utils/push-notification";
 const log = logger("Receive");
 
 // TODO(hsjoberg): this should match Transaction model
@@ -84,7 +83,7 @@ export const receive: IReceiveModel = {
     return result;
   }),
 
-  subscribeInvoice: thunk((actions, _2, { getState, dispatch, injections, getStoreState }) => {
+  subscribeInvoice: thunk((actions, _2, { getState, dispatch, injections, getStoreState, getStoreActions }) => {
     const decodePayReq = injections.lndMobile.index.decodePayReq;
     const decodeInvoiceResult = injections.lndMobile.wallet.decodeInvoiceResult;
     if (getState().invoiceSubscriptionStarted) {
@@ -182,7 +181,7 @@ export const receive: IReceiveModel = {
           if (transaction.tlvRecordName ?? transaction.payer ?? transaction.website) {
             message += ` from ${transaction.tlvRecordName ?? transaction.payer ?? transaction.website}`;
           }
-          localNotification(message, "high");
+          getStoreActions().notificationManager.localNotification({ message, importance: "high" });
 
           // We can now delete the temp data
           // as the invoice has been settled
