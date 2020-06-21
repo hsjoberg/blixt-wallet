@@ -1,6 +1,6 @@
 # Blixt Lightning Wallet
 
-<a href="https://play.google.com/store/apps/details?id=com.blixtwallet"><img alt="Get it on Google Play" width="195" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" /></a>
+<a href="https://play.google.com/apps/testing/com.blixtwallet"><img alt="Get it on Google Play" width="200" height="77" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" /></a>
 
 Blixt Wallet is an open source Lightning Bitcoin Wallet for Android with focus on usability and user experience,
 powered by lnd and Neutrino SPV.
@@ -24,6 +24,7 @@ powered by lnd and Neutrino SPV.
 - [x] [LNURL](https://github.com/btcontract/lnurl-rfc) support (all sub-protocols: pay, channel, auth and withdraw)
 - [x] Channel backup to Google Drive
 - [x] [WebLN](https://webln.dev/) browser
+- [ ] Support for [Multi-Part Payments (MPP)](https://lightning.engineering/posts/2020-05-07-mpp/)
 - [ ] NFC
 - [ ] WatchTower
 - [ ] URL Payments
