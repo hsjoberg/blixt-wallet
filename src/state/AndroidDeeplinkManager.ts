@@ -83,6 +83,18 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
           else if (lightningUri.startsWith("LNURL")) {
             return await actions.tryLNUrl({ lnUrl: lightningUri });
           }
+          else if (data.includes("@")) {
+            log.i(data + " looks like a lightning peer URI");
+            return (nav: NavigationContainerRef) => {
+              nav?.navigate("LightningInfo", { screen: "OpenChannel", params: { peerUri: lightningUri } });
+            }
+          }
+        }
+        else if (data.includes("@")) {
+          log.i(data + " looks like a lightning peer URI");
+          return (nav: NavigationContainerRef) => {
+            nav?.navigate("LightningInfo", { screen: "OpenChannel", params: { peerUri: data } });
+          }
         }
         // If this is a normal URL
         // we want to open the WebLN browser

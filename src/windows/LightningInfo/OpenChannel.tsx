@@ -7,14 +7,17 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
+import { RouteProp } from "@react-navigation/native";
 
 export interface IOpenChannelProps {
-  navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
+  navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
+  route: RouteProp<LightningInfoStackParamList, "OpenChannel">;
 }
-export default function OpenChannel({ navigation }: IOpenChannelProps) {
+export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
+  const peerUri = route.params?.peerUri;
   const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
   const getChannels = useStoreActions((actions) => actions.channel.getChannels);
-  const [peer, setPeer] = useState("");
+  const [peer, setPeer] = useState(peerUri ?? "");
   const [opening, setOpening] = useState(false);
   const {
     dollarValue,

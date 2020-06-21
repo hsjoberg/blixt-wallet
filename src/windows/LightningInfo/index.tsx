@@ -9,7 +9,9 @@ const Stack = createStackNavigator();
 
 export type LightningInfoStackParamList = {
   LightningInfo: undefined;
-  OpenChannel: undefined;
+  OpenChannel: {
+    peerUri?: string;
+  };
   CameraFullscreen: {
     onRead: (data: string) => void;
   };
