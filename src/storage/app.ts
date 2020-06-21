@@ -4,7 +4,7 @@ import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 import { MapStyle } from "../utils/google-maps";
 
-const APP_VERSION = 10;
+const APP_VERSION = 11;
 
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",
