@@ -322,11 +322,11 @@ class LndMobile extends ReactContextBaseJavaModule {
         out.println(
           "[Application Options]\n" +
           "debuglevel=info\n" +
-          "no-macaroons=1\n" +
           "maxbackoff=2s\n" +
           "nolisten=1\n" +
           "norest=1\n" +
           "sync-freelist=1\n" +
+          "accept-keysend=1\n" +
           "\n" +
           "[Routing]\n" +
           "routing.assumechanvalid=1\n" +
@@ -353,11 +353,11 @@ class LndMobile extends ReactContextBaseJavaModule {
         out.println(
           "[Application Options]\n" +
           "debuglevel=info\n" +
-          "no-macaroons=1\n" +
           "maxbackoff=2s\n" +
           "nolisten=1\n" +
           "norest=1\n" +
           "sync-freelist=1\n" +
+          "accept-keysend=1\n" +
           "\n" +
           "[Routing]\n" +
           "routing.assumechanvalid=1\n" +
@@ -384,11 +384,11 @@ class LndMobile extends ReactContextBaseJavaModule {
         out.println(
           "[Application Options]\n" +
           "debuglevel=info\n" +
-          "no-macaroons=1\n" +
           "maxbackoff=2s\n" +
           "nolisten=1\n" +
           "norest=1\n" +
           "sync-freelist=1\n" +
+          "accept-keysend=1\n" +
           "\n" +
           "[Routing]\n" +
           "routing.assumechanvalid=1\n" +

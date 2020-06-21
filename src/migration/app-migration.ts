@@ -91,4 +91,10 @@ export const appMigration: IAppMigration[] = [
       await db.executeSql("ALTER TABLE tx ADD lnurlPayResponse TEXT NULL");
     },
   },
+  // Version 11
+  {
+    async beforeLnd(db, i) {
+      await LndMobile.writeConfigFile();
+    },
+  },
 ];
