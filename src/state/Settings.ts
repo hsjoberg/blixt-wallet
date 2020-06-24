@@ -33,6 +33,7 @@ export interface ISettingsModel {
   changeTransactionGeolocationMapStyle: Thunk<ISettingsModel, keyof typeof MapStyle>;
   changeExperimentWeblnEnabled: Thunk<ISettingsModel, boolean>;
   changeOnchainExplorer: Thunk<ISettingsModel, keyof typeof OnchainExplorer>;
+  changeMultiPathPaymentsEnabled: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -48,7 +49,7 @@ export interface ISettingsModel {
   setTransactionGeolocationMapStyle: Action<ISettingsModel, keyof typeof MapStyle>;
   setExperimentWeblnEnabled: Action<ISettingsModel, boolean>;
   setOnchainExplorer: Action<ISettingsModel, keyof typeof OnchainExplorer>;
-
+  setMultiPathPaymentsEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -64,6 +65,7 @@ export interface ISettingsModel {
   transactionGeolocationMapStyle: keyof typeof MapStyle;
   experimentWeblnEnabled: boolean;
   onchainExplorer: keyof typeof OnchainExplorer;
+  multiPathPaymentsEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -83,6 +85,8 @@ export const settings: ISettingsModel = {
     actions.setTransactionGeolocationMapStyle(await getItem(StorageItem.transactionGeolocationMapStyle) as keyof typeof MapStyle || "darkMode");
     actions.setExperimentWeblnEnabled(await getItemObject(StorageItem.experimentWeblnEnabled || false));
     actions.setOnchainExplorer(await getItem(StorageItem.onchainExplorer) ?? "mempool");
+    actions.setMultiPathPaymentsEnabled(await getItemObject(StorageItem.multiPathPaymentsEnabled || false));
+
     log.d("Done");
   }),
 
@@ -159,6 +163,11 @@ export const settings: ISettingsModel = {
     actions.setOnchainExplorer(payload);
   }),
 
+  changeMultiPathPaymentsEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.multiPathPaymentsEnabled, payload);
+    actions.setMultiPathPaymentsEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -173,6 +182,7 @@ export const settings: ISettingsModel = {
   setTransactionGeolocationMapStyle: action((state, payload) => { state.transactionGeolocationMapStyle = payload; }),
   setExperimentWeblnEnabled: action((state, payload) => { state.experimentWeblnEnabled = payload; }),
   setOnchainExplorer: action((state, payload) => { state.onchainExplorer = payload; }),
+  setMultiPathPaymentsEnabled: action((state, payload) => { state.multiPathPaymentsEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -188,4 +198,5 @@ export const settings: ISettingsModel = {
   transactionGeolocationMapStyle: "darkMode",
   experimentWeblnEnabled: false,
   onchainExplorer: "mempool",
+  multiPathPaymentsEnabled: false,
 };

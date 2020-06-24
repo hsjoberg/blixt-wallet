@@ -394,6 +394,13 @@ When you're done, you can copy the address code and/or open the link using Blixt
     }
   };
 
+    // Onchain explorer
+    const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
+    const changeMultiPathPaymentsEnabled = useStoreActions((store) => store.settings.changeMultiPathPaymentsEnabled);
+    const onChangeMultiPartPaymentEnabledPress = async () => {
+      await changeMultiPathPaymentsEnabled(!multiPathPaymentsEnabled);
+    };
+
   return (
     <Container>
       <Header iosBarStyle="light-content" translucent={false}>
@@ -644,6 +651,14 @@ When you're done, you can copy the address code and/or open the link using Blixt
                   <Text note={true}>Shows up as an icon on the Overview screen</Text>
                 </Body>
                 <Right><CheckBox checked={experimentWeblnBrowserEnabled} onPress={onExperimentWeblnBrowserEnabledToggle} /></Right>
+              </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={onChangeMultiPartPaymentEnabledPress}>
+                <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>
+                <Body>
+                  <Text>Enable Multi-Path Payments</Text>
+                  <Text note={true}>Payments can take up to 2 paths</Text>
+                </Body>
+                <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
               </ListItem>
             </>
           }

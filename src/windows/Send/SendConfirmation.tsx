@@ -12,6 +12,7 @@ import { BitcoinUnits, unitToSatoshi } from "../../utils/bitcoin-units";
 import { extractDescription } from "../../utils/NameDesc";
 import Long from "long";
 import useBalance from "../../hooks/useBalance";
+import { hexToUint8Array } from "../../utils";
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
@@ -20,6 +21,7 @@ export interface ISendConfirmationProps {
 export default function SendConfirmation({ navigation, route }: ISendConfirmationProps) {
   const [amountEditable, setAmountEditable] = useState(false);
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
+  const sendPaymentOld = useStoreActions((actions) => actions.send.sendPaymentOld);
   const getBalance = useStoreActions((actions) => actions.channel.getBalance);
   const nodeInfo = useStoreState((store) => store.send.remoteNodeInfo);
   const paymentRequest = useStoreState((store) => store.send.paymentRequest);
@@ -39,6 +41,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   } = useBalance((paymentRequest?.numSatoshis));
   const clear = useStoreActions((store) => store.send.clear);
   const callback = (route.params?.callback) ?? (() => {});
+  const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
@@ -69,11 +72,19 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       const payload = amountEditable
         ? { amount: Long.fromValue(unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit)) }
         : undefined;
-      const response = await sendPayment(payload);
+
+      if (multiPathPaymentsEnabled) {
+        console.log("Paying with MPP enabled");
+        const response = await sendPayment(payload);
+        callback(hexToUint8Array(response.paymentPreimage));
+      }
+      else {
+        console.log("Paying with MPP disabled");
+        const response = await sendPaymentOld(payload);
+        callback(response.paymentPreimage);
+      }
       await getBalance();
       Vibration.vibrate(32);
-      callback(response.paymentPreimage);
-      // navigation.pop();
       navigation.replace("SendDone");
     } catch (e) {
       console.log(e);

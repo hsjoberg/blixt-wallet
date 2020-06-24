@@ -12,6 +12,7 @@ import {
   lookupInvoice,
   readLndLog,
   sendPaymentSync,
+  sendPaymentV2Sync,
   IReadLndLogResponse,
 } from "../lndmobile/index";
 import {
@@ -70,6 +71,7 @@ export interface ILndMobileInjections {
     lookupInvoice: (rHash: string) => Promise<lnrpc.Invoice>;
     readLndLog: () => Promise<IReadLndLogResponse>;
     sendPaymentSync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null) => Promise<lnrpc.SendResponse>;
+    sendPaymentV2Sync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null) => Promise<lnrpc.Payment>;
   };
   channel: {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;
@@ -126,6 +128,7 @@ export default {
     lookupInvoice,
     readLndLog,
     sendPaymentSync,
+    sendPaymentV2Sync,
   },
   channel: {
     channelBalance,
