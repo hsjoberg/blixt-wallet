@@ -19,7 +19,7 @@ export interface IFormProps {
 }
 export default function Form({ buttons, items, style }: IFormProps) {
   return (
-    <KeyboardAvoidingView keyboardVerticalOffset={56} behavior="height" style={[styles.content, style]}>
+    <View style={[styles.content, style]}>
       <View style={styles.itemContainer}>
         {items.map(({ key, title, component, success, active }, i) => (
           active ?? true
@@ -42,7 +42,7 @@ export default function Form({ buttons, items, style }: IFormProps) {
           return (<View key={i} style={{ marginTop: i > 0 ? 12 : 0 }}>{button}</View>);
         })}
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 

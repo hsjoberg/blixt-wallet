@@ -135,7 +135,7 @@ android {
         applicationId MYAPP_APP_ID
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 45
+        versionCode 49
         versionName "0.1-alpha"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
@@ -281,6 +281,8 @@ dependencies {
     implementation "io.grpc:grpc-protobuf-lite:1.30.0"
 
     implementation "com.hypertrack:hyperlog:0.0.10"
+
+    implementation "com.github.mmin18:realtimeblurview:1.2.1"
 
     implementation project(":lndmobile")
 }

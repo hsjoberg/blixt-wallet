@@ -525,13 +525,17 @@ exports[`renders correctly 1`] = `
                                           </View>
                                           <View
                                             style={
-                                              Object {
-                                                "display": "flex",
-                                                "flex": 1,
-                                                "height": "100%",
-                                                "justifyContent": "space-between",
-                                                "padding": 16,
-                                              }
+                                              Array [
+                                                Object {},
+                                                Object {
+                                                  "display": "flex",
+                                                  "flex": 1,
+                                                  "height": "100%",
+                                                  "justifyContent": "space-between",
+                                                  "padding": 16,
+                                                },
+                                                undefined,
+                                              ]
                                             }
                                           >
                                             <View
