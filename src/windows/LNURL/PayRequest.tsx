@@ -332,9 +332,10 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   container: {
-    // backgroundColor:"red",
     width:"100%",
     padding: 12,
+    flex: 1,
+    justifyContent: "center"
   },
   card: {
     padding: 5,

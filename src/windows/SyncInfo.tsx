@@ -1,11 +1,13 @@
 import React from "react";
 import { StyleSheet } from "react-native";
+import { Body, Card, Text, CardItem, H1, Toast } from "native-base";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Card, Text, CardItem, H1, Toast, View, Button } from "native-base";
-import { useStoreState } from "../state/store";
+import { Bar } from "react-native-progress";
 
+import { useStoreState } from "../state/store";
 import Blurmodal from "../components/BlurModal";
 import TextLink from "../components/TextLink";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 interface IMetaDataProps {
   title: string;
@@ -33,6 +35,15 @@ export interface ISyncInfoProps {
 }
 export default function SyncInfo({ route }: any) {
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
+  const initialKnownBlockheight = useStoreState((store) => store.lightning.initialKnownBlockheight);
+  const bestBlockheight = useStoreState((store) => store.lightning.bestBlockheight);
+
+  const currentProgress = (nodeInfo?.blockHeight ?? 0) - (initialKnownBlockheight ?? 0);
+  const numBlocksUntilSynced = (bestBlockheight ?? 0) - (initialKnownBlockheight ?? 0);
+  let progress = currentProgress / numBlocksUntilSynced;
+  if (Number.isNaN(progress)) {
+    progress = 1;
+  }
 
   return (
     <Blurmodal>
@@ -52,8 +63,20 @@ export default function SyncInfo({ route }: any) {
               }
             </Text>
             <MetaData title="Current block height" data={nodeInfo?.blockHeight?.toString() ?? "N/A"} />
-            <MetaData title="Synced to chain" data={nodeInfo?.syncedToChain ? "Yes" : "No"} />
-            <MetaData title="Synced to lightning graph" data={nodeInfo?.syncedToGraph ? "Yes" : "No"} />
+            {nodeInfo?.syncedToChain === false && bestBlockheight &&
+              <>
+                <Text style={[style.detailText, { fontWeight: "bold" }]}>Progress:</Text>
+                <Bar
+                  width={200}
+                  style={{ marginTop: 3, marginLeft: 1 }}
+                  color={blixtTheme.primary}
+                  progress={progress}
+                />
+              </>
+            }
+            {nodeInfo?.syncedToChain === true &&
+              <MetaData title="Progress" data="Syncing complete" />
+            }
           </Body>
         </CardItem>
       </Card>
@@ -65,7 +88,7 @@ const style = StyleSheet.create({
   card: {
     padding: 5,
     width: "100%",
-    minHeight: "45%",
+    minHeight: "40%",
   },
   header: {
     fontWeight: "bold",

@@ -46,6 +46,7 @@ export const initCommonStore = async (waitUntilReady = false) => {
     TWD: { last: 0.1 },
   }));
 
+  fetch.mockOnce("");
 
   const store = setupStore();
   await store.getActions().initializeApp();
