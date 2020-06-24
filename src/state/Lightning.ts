@@ -35,6 +35,8 @@ export interface ILightningModel {
   setFirstSync: Action<ILightningModel, boolean>;
   setAutopilotSet: Action<ILightningModel, boolean>;
 
+  setBestBlockheight: Action<ILightningModel, number>;
+
   nodeInfo?: lnrpc.IGetInfoResponse;
   rpcReady: boolean;
   syncedToChain: Computed<ILightningModel, boolean>;
@@ -42,6 +44,9 @@ export interface ILightningModel {
   ready: boolean;
   firstSync: boolean;
   autopilotSet?: boolean;
+
+  bestBlockheight?: number;
+  initialKnownBlockheight?: number;
 }
 
 export const lightning: ILightningModel = {
@@ -118,6 +123,17 @@ export const lightning: ILightningModel = {
       actions.setRPCServerReady(true);
     }
 
+    // tslint:disable-next-line: no-floating-promises
+    fetch("https://mempool.space/electrs/blocks/tip/height").then(async (result) => {
+      if (result.ok) {
+        const bestBlockHeight = await result.text();
+        actions.setBestBlockheight(Number.parseInt(bestBlockHeight, 10));
+      }
+      else {
+        log.e("Unable to get best block height from 3rd party");
+      }
+    });
+
     if (fastInit) {
       actions.setReady(true);
     }
@@ -191,7 +207,7 @@ export const lightning: ILightningModel = {
   }),
 
   waitForChainSync: thunk(async (actions, _, { getState, injections }) => {
-    const { getInfo } = injections.lndMobile.index;
+    const getInfo = injections.lndMobile.index.getInfo;
     const firstSync = getState().firstSync;
     let info;
     do {
@@ -232,7 +248,12 @@ export const lightning: ILightningModel = {
     actions.setSyncedToGraph(info.syncedToGraph);
   }),
 
-  setNodeInfo: action((state, payload) => { state.nodeInfo = payload; }),
+  setNodeInfo: action((state, payload) => {
+    state.nodeInfo = payload;
+    if (state.initialKnownBlockheight === undefined) {
+      state.initialKnownBlockheight = payload.blockHeight ?? 0;
+    }
+  }),
   setRPCServerReady: action((state, payload) => { state.rpcReady = payload; }),
   setReady: action((state, payload) => { state.ready = payload; }),
   setSyncedToChain: action((state, payload) => { state.syncedToChain = payload; }),
@@ -240,11 +261,14 @@ export const lightning: ILightningModel = {
   setFirstSync: action((state, payload) => { state.firstSync = payload; }),
   setAutopilotSet: action((state, payload) => { state.autopilotSet = payload; }),
 
+  setBestBlockheight: action((state, payload) => { state.bestBlockheight = payload; }),
+
   rpcReady: false,
   ready: false,
   syncedToChain: computed((state) => (state.nodeInfo?.syncedToChain) ?? false),
   syncedToGraph: computed((state) => (state.nodeInfo?.syncedToGraph) ?? false),
   firstSync: false,
+  bestBlockheight: undefined,
 };
 
 const getNodeScores = async () => {

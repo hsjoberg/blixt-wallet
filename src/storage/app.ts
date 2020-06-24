@@ -4,7 +4,7 @@ import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 import { MapStyle } from "../utils/google-maps";
 
-const APP_VERSION = 11;
+const APP_VERSION = 12;
 
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",
@@ -33,6 +33,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   transactionGeolocationMapStyle = "transactionGeolocationMapStyle",
   experimentWeblnEnabled = "experimentWeblnEnabled",
   onchainExplorer = "onchainExplorer",
+  multiPathPaymentsEnabled = "multiPathPaymentsEnabled",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -79,6 +80,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.transactionGeolocationMapStyle),
     removeItem(StorageItem.experimentWeblnEnabled),
     removeItem(StorageItem.onchainExplorer),
+    removeItem(StorageItem.multiPathPaymentsEnabled),
   ]);
 };
 
@@ -108,5 +110,6 @@ export const setupApp = async () => {
     setItem<keyof typeof MapStyle>(StorageItem.transactionGeolocationMapStyle, "darkMode"),
     setItemObject<boolean>(StorageItem.experimentWeblnEnabled, false),
     setItem(StorageItem.onchainExplorer, "mempool"),
+    setItemObject<boolean>(StorageItem.multiPathPaymentsEnabled, false),
   ]);
 };

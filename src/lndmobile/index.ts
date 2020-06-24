@@ -1,6 +1,6 @@
-import { NativeModules } from "react-native";
-import { sendCommand } from "./utils";
-import { lnrpc } from "../../proto/proto";
+import { NativeModules, DeviceEventEmitter } from "react-native";
+import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
+import { lnrpc, routerrpc } from "../../proto/proto";
 import Long from "long";
 import sha from "sha.js";
 import { stringToUint8Array } from "../utils";
@@ -114,6 +114,53 @@ export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlv
   });
   return response;
 };
+
+
+export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvRecordName?: string | null): Promise<lnrpc.Payment> => {
+  const options: routerrpc.ISendPaymentRequest = {
+    paymentRequest,
+    noInflightUpdates: true,
+    timeoutSeconds: 60,
+    maxParts: 2,
+    feeLimitMsat: Long.fromValue(50000),
+    cltvLimit: 0,
+  };
+  if (tlvRecordName && tlvRecordName.length > 0) {
+    options.destCustomRecords = {
+      [TLV_RECORD_NAME]: stringToUint8Array(tlvRecordName),
+    }
+  }
+  if (amount) {
+    options.amt = amount;
+  }
+
+  return new Promise(async (resolve, reject) => {
+    const listener = DeviceEventEmitter.addListener("RouterSendPaymentV2", (e) => {
+      console.log(e);
+      const response = decodeSendPaymentV2Result(e.data);
+      console.log(response);
+
+      resolve(response);
+      listener.remove();
+    });
+
+    const response = await sendStreamCommand<routerrpc.ISendPaymentRequest, routerrpc.SendPaymentRequest>({
+      request: routerrpc.SendPaymentRequest,
+      method: "RouterSendPaymentV2",
+      options,
+    }, false);
+    console.log(response);
+  });
+};
+
+// TODO error handling
+export const decodeSendPaymentV2Result = (data: string): lnrpc.Payment => {
+  return decodeStreamResult<lnrpc.Payment>({
+    response: lnrpc.Payment,
+    base64Result: data,
+  });
+};
+
 
 /**
  * @throws

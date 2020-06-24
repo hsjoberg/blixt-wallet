@@ -97,4 +97,10 @@ export const appMigration: IAppMigration[] = [
       await LndMobile.writeConfigFile();
     },
   },
+  // Version 12
+  {
+    async beforeLnd(db, i) {
+      await setItemObject(StorageItem.multiPathPaymentsEnabled, false);
+    },
+  },
 ];

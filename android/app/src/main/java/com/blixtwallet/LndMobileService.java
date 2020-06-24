@@ -301,6 +301,11 @@ public class LndMobileService extends Service {
     @Override
     public void onError(Exception e) {
       HyperLog.e(TAG, "LndStreamCallback onError() for " + method, e);
+      HyperLog.e(TAG, e.getMessage());
+
+      if (e.getMessage().contains("EOF")) {
+        HyperLog.i(TAG, "Got EOF in LndStreamCallback for " + method);
+      }
 
       Message msg = Message.obtain(null, MSG_GRPC_STREAM_RESULT, 0, 0);
 
