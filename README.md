@@ -24,7 +24,7 @@ powered by lnd and Neutrino SPV.
 - [x] [LNURL](https://github.com/btcontract/lnurl-rfc) support (all sub-protocols: pay, channel, auth and withdraw)
 - [x] Channel backup to Google Drive
 - [x] [WebLN](https://webln.dev/) browser
-- [ ] Support for [Multi-Part Payments (MPP)](https://lightning.engineering/posts/2020-05-07-mpp/)
+- [x] Support for [Multi-Part Payments (MPP)](https://lightning.engineering/posts/2020-05-07-mpp/)
 - [ ] NFC
 - [ ] WatchTower
 - [ ] URL Payments
