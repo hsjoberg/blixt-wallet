@@ -103,4 +103,10 @@ export const appMigration: IAppMigration[] = [
       await setItemObject(StorageItem.multiPathPaymentsEnabled, false);
     },
   },
+  // Version 13
+  {
+    async beforeLnd(db, i) {
+      await setItem(StorageItem.onboardingState, "DONE");
+    },
+  },
 ];

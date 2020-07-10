@@ -21,7 +21,8 @@ interface IProps {
   navigation: StackNavigationProp<AlmostDoneStackParamList, "AlmostDone">;
 }
 const AlmostDone = ({ navigation }: IProps) => {
-  const setHoldOnboarding = useStoreActions((store) => store.setHoldOnboarding);
+  const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
+
   // Name
   const name = useStoreState((store) => store.settings.name);
   const changeName = useStoreActions((store) => store.settings.changeName);
@@ -91,25 +92,9 @@ const AlmostDone = ({ navigation }: IProps) => {
     changeAutopilotEnabled(!autopilotEnabled);
   }
 
-  const googleDriveBackupEnabled = useStoreState((store) => store.settings.googleDriveBackupEnabled);
-  const changeGoogleDriveBackupEnabled = useStoreActions((store) => store.settings.changeGoogleDriveBackupEnabled);
-  const googleSignIn = useStoreActions((store) => store.google.signIn);
-  const googleSignOut = useStoreActions((store) => store.google.signOut);
-  const googleIsSignedIn = useStoreState((store) => store.google.isSignedIn);
-  const onToggleGoogleDriveBackup = async () => {
-    if (!googleIsSignedIn) {
-      await googleSignIn();
-      await changeGoogleDriveBackupEnabled(true);
-      toast("Google Drive backup enabled");
-    }
-    else {
-      await googleSignOut();
-      await changeGoogleDriveBackupEnabled(false);
-    }
-  };
-
-  const onPressContinue = () => {
-    navigation.dangerouslyGetParent()!.dangerouslyGetParent()!.replace("Loading", {});
+  const onPressContinue = async () => {
+    await changeOnboardingState("DONE");
+    navigation.pop();
   };
 
   return (
@@ -162,22 +147,13 @@ const AlmostDone = ({ navigation }: IProps) => {
               </Body>
               <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>
             </ListItem>
-
-            <ListItem style={extraStyle.listItem} icon={true} onPress={onToggleGoogleDriveBackup}>
-              <Left><Icon style={extraStyle.icon} type="MaterialCommunityIcons" name="google-drive" /></Left>
-              <Body>
-                <Text>Google Drive channel backup</Text>
-                <Text note={true} numberOfLines={1}>Automatically backup channels to Google Drive</Text>
-              </Body>
-              <Right><CheckBox checked={googleDriveBackupEnabled} onPress={onToggleGoogleDriveBackup} /></Right>
-            </ListItem>
           </List>
         </View>
         <View style={style.lowerContent}>
           <View style={style.text}>
             <H1 style={style.textHeader}>Almost done!</H1>
             <Text>
-              Here are some wallet settings you can set up to your liking.{"\n"}
+              Here are some wallet settings you can set up to your liking.{"\n\n"}
               When you are ready, press continue.
             </Text>
           </View>

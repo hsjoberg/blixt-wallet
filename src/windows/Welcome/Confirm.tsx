@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { StatusBar, StyleSheet, Alert } from "react-native";
 import { View, Button, H1, Card, CardItem, Text, Spinner, Icon, H3 } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -18,7 +18,6 @@ export default function Confirm({ navigation }: IProps) {
   const setHoldonboarding = useStoreActions((state) => state.setHoldOnboarding);
   const createWallet = useStoreActions((store) => store.createWallet);
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
-  const seed = useStoreState((state) => state.walletSeed);
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
   const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
   const [confirmedWords, setConfirmedWords] = useState<string[]>([]);
@@ -26,7 +25,26 @@ export default function Confirm({ navigation }: IProps) {
   const [proceeding, setProceeding] = useState(false);
   const [loadSpinnerForButton, setLoadSpinnerForButton] = useState<"skip" | "proceed" | undefined>(undefined);
 
+  const getSeed = useStoreActions((store) => store.security.getSeed);
+  const [seed, setSeed] = useState<string[] | undefined>();
+
+  useEffect(() => {
+    // tslint:disable-next-line: no-async-without-await, no-floating-promises
+    (async () => {
+      const s = await getSeed();
+      if (!s) {
+        console.error("Could not find seed");
+        return;
+      }
+
+      setSeed(s);
+    })();
+  }, []);
+
   const shuffledSeed: string[] = useMemo(() => {
+    if (!seed) {
+      return [];
+    }
     return shuffleArray(seed);
   }, [seed]);
 
@@ -45,17 +63,12 @@ export default function Confirm({ navigation }: IProps) {
     }
   }
 
-  const onContinue = async () => {
+  const onContinue = () => {
     if (proceeding) {
       return;
     }
-    setProceeding(true);
-    setHoldonboarding(true);
-    await createWallet();
-    // await getAddress({});
-    await setSyncEnabled(true); // TODO test
-    await changeScheduledSyncEnabled(true);
-    navigation.navigate("AddFunds");
+
+    navigation.replace("GoogleDriveBackup");
   };
 
   const onBackspacePress = () => {

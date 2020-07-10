@@ -24,6 +24,7 @@ interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
 }
 export default function Settings({ navigation }: ISettingsProps) {
+  const onboardingState = useStoreState((store) => store.onboardingState);
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
 
   // Pincode
@@ -473,13 +474,15 @@ When you're done, you can copy the address code and/or open the link using Blixt
                   <Text note={true} numberOfLines={1}>Show 24-word seed for this wallet</Text>
                 </Body>
               </ListItem>
-              <ListItem style={style.listItem} button={true} icon={true} onPress={onRemoveSeedPress}>
-                <Left><Icon style={style.icon} type="Entypo" name="eraser" /></Left>
-                <Body>
-                  <Text>Remove mnemonic from device</Text>
-                  <Text note={true} numberOfLines={1}>Permanently remove the seed from this device</Text>
-                </Body>
-              </ListItem>
+              {onboardingState === "DONE" &&
+                <ListItem style={style.listItem} button={true} icon={true} onPress={onRemoveSeedPress}>
+                  <Left><Icon style={style.icon} type="Entypo" name="eraser" /></Left>
+                  <Body>
+                    <Text>Remove mnemonic from device</Text>
+                    <Text note={true} numberOfLines={1}>Permanently remove the seed from this device</Text>
+                  </Body>
+                </ListItem>
+              }
             </>
           }
           <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
