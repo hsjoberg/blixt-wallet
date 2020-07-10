@@ -29,6 +29,14 @@ exports[`renders correctly 1`] = `
     >
       <View
         pointerEvents="box-none"
+        style={
+          Array [
+            Object {
+              "zIndex": 1,
+            },
+            false,
+          ]
+        }
       >
         <View
           accessibilityElementsHidden={false}
@@ -144,6 +152,14 @@ exports[`renders correctly 1`] = `
             }
           }
         >
+          <View
+            collapsable={false}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          />
           <View
             accessibilityElementsHidden={false}
             closing={false}
@@ -288,6 +304,14 @@ exports[`renders correctly 1`] = `
                             }
                           >
                             <View
+                              collapsable={false}
+                              style={
+                                Object {
+                                  "opacity": 1,
+                                }
+                              }
+                            />
+                            <View
                               accessibilityElementsHidden={false}
                               closing={false}
                               gestureVelocityImpact={0.3}
@@ -334,6 +358,7 @@ exports[`renders correctly 1`] = `
                                 style={
                                   Object {
                                     "flex": 1,
+                                    "marginTop": 0,
                                   }
                                 }
                               >
@@ -991,21 +1016,19 @@ exports[`renders correctly 1`] = `
                         <View
                           pointerEvents="box-none"
                           style={
-                            Object {
-                              "left": 0,
-                              "position": "absolute",
-                              "right": 0,
-                              "top": 0,
-                            }
+                            Array [
+                              Object {
+                                "zIndex": 1,
+                              },
+                              Object {
+                                "left": 0,
+                                "position": "absolute",
+                                "right": 0,
+                                "top": 0,
+                              },
+                            ]
                           }
-                        >
-                          <View
-                            accessibilityElementsHidden={false}
-                            importantForAccessibility="auto"
-                            pointerEvents="box-none"
-                            style={null}
-                          />
-                        </View>
+                        />
                       </View>
                     </View>
                   </View>

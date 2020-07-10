@@ -21,6 +21,7 @@ import Loading from "./windows/Loading";
 
 import { useStoreState, useStoreActions } from "./state/store";
 import { toast } from "./utils";
+import CameraFullscreen from "./windows/CameraFullscreen";
 
 const RootStack = createStackNavigator();
 
@@ -31,6 +32,7 @@ export type RootStackParamList = {
   InitLightning: undefined;
 
   Loading: undefined;
+  Welcome: undefined;
   Overview: undefined;
   Help: undefined;
   TransactionDetails: {
@@ -124,6 +126,7 @@ export default function Main() {
     <RootStack.Navigator initialRouteName={initialRoute} screenOptions={screenOptions}>
       <RootStack.Screen name="Welcome" component={Welcome} />
       <RootStack.Screen name="Loading" component={Loading} />
+      <RootStack.Screen name="CameraFullscreen" component={CameraFullscreen} />
 
       <RootStack.Screen name="Overview" component={Overview} />
       <RootStack.Screen name="Help" component={Help} />
