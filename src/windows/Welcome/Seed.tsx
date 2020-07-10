@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "react-native";
 import { Text, View, Button, H1, Card, CardItem, H3 } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";
-import { useStoreState } from "../../state/store";
+import { useStoreState, useStoreActions } from "../../state/store";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import style from "./style";
 import { smallScreen } from "../../utils/device";
@@ -15,10 +15,28 @@ interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Seed">;
 }
 export default function Seed({ navigation }: IProps) {
-  const seed = useStoreState((state) => state.walletSeed);
+  const getSeed = useStoreActions((store) => store.security.getSeed);
+  const [seed, setSeed] = useState<string[] | undefined>();
+
+  useEffect(() => {
+    // tslint:disable-next-line: no-async-without-await, no-floating-promises
+    (async () => {
+      const s = await getSeed();
+      if (!s) {
+        console.error("Could not find seed");
+        return;
+      }
+
+      setSeed(s);
+    })();
+  }, []);
 
   if (!seed) {
     return (<></>);
+  }
+
+  const onPressContinue = () => {
+    navigation.replace("Confirm");
   }
 
   return (
@@ -69,7 +87,7 @@ export default function Seed({ navigation }: IProps) {
             </Text>
           </View>
           <View style={style.buttons}>
-            <Button style={style.button} block={true} onPress={() => navigation.navigate("Confirm")}>
+            <Button style={style.button} block={true} onPress={onPressContinue}>
               <Text>I have written it down</Text>
             </Button>
           </View>

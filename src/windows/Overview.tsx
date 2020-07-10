@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo, useEffect } from "react";
-import { Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent, TextInput } from "react-native";
-import { Icon, Text } from "native-base";
+import { Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import Color from "color";
@@ -9,13 +9,17 @@ import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
-import { timeout } from "../utils/index";
+import { timeout, toast } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
 import { Chain } from "../utils/build";
 
 import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
 import Spinner from "../components/Spinner";
+import QrCode from "../components/QrCode";
+import Clipboard from "@react-native-community/clipboard";
+import { useStore } from "easy-peasy";
+import { useNavigation } from "@react-navigation/native";
 
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
@@ -45,6 +49,10 @@ function Overview({ navigation }: IOverviewProps) {
   const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
   const experimentWeblnEnabled = useStoreState((store) => store.settings.experimentWeblnEnabled);
 
+  const bitcoinAddress = useStoreState((store) => store.onChain.address);
+  const onboardingState  = useStoreState((store) => store.onboardingState);
+
+
   const scrollYAnimatedValue = useRef(new Animated.Value(0)).current;
   const [refreshing, setRefreshing] = useState(false);
 
@@ -57,7 +65,7 @@ function Overview({ navigation }: IOverviewProps) {
 
   useEffect(() => {
     if (firstSync && !nodeInfo?.syncedToGraph) {
-      navigation.navigate("SyncInfo");
+      // navigation.navigate("SyncInfo");
     }
   }, [firstSync]);
 
@@ -167,6 +175,12 @@ function Overview({ navigation }: IOverviewProps) {
           onScroll={transactionListOnScroll}
           testID="TX_LIST"
         >
+          {onboardingState === "SEND_ONCHAIN" &&
+            <SendOnChain bitcoinAddress={bitcoinAddress} />
+          }
+          {onboardingState === "DO_BACKUP" &&
+            <DoBackup />
+          }
           {txs}
         </ScrollView>
         <Animated.View style={{ ...style.animatedTop, height: headerHeight }} pointerEvents="box-none">
@@ -222,6 +236,73 @@ function Overview({ navigation }: IOverviewProps) {
     </Container>
   );
 };
+
+
+interface ISendOnChain {
+  bitcoinAddress?: string;
+}
+const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
+  const onQrPress = () => {
+    Clipboard.setString(bitcoinAddress!);
+    toast("Bitcoin address copied to clipboard");
+  };
+
+  return (
+    <Card>
+      <CardItem>
+        <View style={{ flex: 1, flexDirection: "row", justifyContent:"space-between" }}>
+          <View style={{ width: "53%", justifyContent:"center", paddingRight: 4 }}>
+            <Text style={{ fontSize: 15 }}>
+              Welcome to Blixt!{"\n\n"}
+              To get started, send on-chain funds to the bitcoin address to the right
+            </Text>
+          </View>
+          <View>
+            {bitcoinAddress
+              ? <QrCode onPress={onQrPress} data={bitcoinAddress?.toUpperCase() ?? " "} size={135} border={10} />
+              : <View style={{ width: 135 + 10 + 9, height: 135 + 10 + 8, justifyContent: "center" }}>
+                  <NativeBaseSpinner color={blixtTheme.light} />
+                </View>
+            }
+          </View>
+        </View>
+      </CardItem>
+    </Card>
+  );
+};
+
+const DoBackup = () => {
+  const navigation = useNavigation();
+  const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
+
+  const onPressDismiss = async () => {
+    await changeOnboardingState("DONE");
+  };
+
+  const onPressBackupWallet = () => {
+    navigation.navigate("Welcome", { screen: "Seed"})
+  };
+
+  return (
+    <Card>
+      <CardItem>
+        <View style={{ flex: 1 }}>
+          <View>
+            <Text>Thank you for using Blixt Wallet!{"\n\n"}We recommend making a backup of the wallet so that you can restore your funds in case of a phone loss.</Text>
+          </View>
+          <View style={{ flexDirection: "row-reverse" }}>
+            <Button small style={{marginLeft: 7 }} onPress={onPressBackupWallet}>
+              <Text style={{ fontSize: 11 }}>Backup wallet</Text>
+            </Button>
+            <Button small onPress={onPressDismiss}>
+              <Text style={{ fontSize: 11 }}>Dismiss</Text>
+            </Button>
+          </View>
+        </View>
+      </CardItem>
+    </Card>
+  );
+}
 
 const iconTopPadding = StatusBar.currentHeight ?? 0;
 

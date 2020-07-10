@@ -24,15 +24,17 @@ import { IAndroidDeeplinkManager, androidDeeplinkManager } from "./AndroidDeepli
 import { INotificationManagerModel, notificationManager} from "./NotificationManager";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
-import { clearApp, setupApp, getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
+import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
 import { timeout } from "../utils";
-import { setWalletPassword } from "../storage/keystore";
+import { setWalletPassword, getItem } from "../storage/keystore";
 
 import logger from "./../utils/log";
 const log = logger("Store");
+
+type OnboardingState = "SEND_ONCHAIN" | "DO_BACKUP" | "DONE";
 
 export interface ICreateWalletPayload {
   restore?: {
@@ -53,9 +55,11 @@ export interface IStoreModel {
   setHoldOnboarding: Action<IStoreModel, boolean>;
   setWalletSeed: Action<IStoreModel, string[] | undefined>;
   setAppVersion: Action<IStoreModel, number>;
+  setOnboardingState: Action<IStoreModel, OnboardingState>;
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
+  changeOnboardingState: Thunk<IStoreModel, OnboardingState>;
 
   db?: SQLiteDatabase;
   appReady: boolean;
@@ -82,6 +86,7 @@ export interface IStoreModel {
 
   walletSeed?: string[];
   appVersion: number;
+  onboardingState: OnboardingState;
 }
 
 export const model: IStoreModel = {
@@ -106,6 +111,8 @@ export const model: IStoreModel = {
     }
     actions.setAppVersion(await getAppVersion());
     await actions.checkAppVersionMigration();
+
+    actions.setOnboardingState((await getItemAsyncStorage(StorageItem.onboardingState) as OnboardingState) ?? "DO_BACKUP");
 
     actions.setWalletCreated(await getWalletCreated());
 
@@ -213,16 +220,23 @@ export const model: IStoreModel = {
     return wallet;
   }),
 
+  changeOnboardingState: thunk(async (actions, payload) => {
+    await setItem(StorageItem.onboardingState, payload);
+    actions.setOnboardingState(payload);
+  }),
+
   setWalletCreated: action((state, payload) => { state.walletCreated = payload; }),
   setHoldOnboarding: action((state, payload) => { state.holdOnboarding = payload; }),
   setDb: action((state, db) => { state.db = db; }),
   setAppReady: action((state, value) => { state.appReady = value; }),
   setAppVersion: action((state, value) => { state.appVersion = value; }),
+  setOnboardingState: action((state, value) => { state.onboardingState = value; }),
 
   appReady: false,
   walletCreated: false,
   holdOnboarding: false,
   appVersion: 0,
+  onboardingState: "SEND_ONCHAIN",
 
   lightning,
   transaction,

@@ -62,7 +62,7 @@ export interface IOnChainModel {
 }
 
 export const onChain: IOnChainModel = {
-  initialize: thunk(async (actions, _, { getState, getStoreActions, injections }) => {
+  initialize: thunk(async (actions, _, { getState, getStoreActions, getStoreState, injections }) => {
     log.i("Initializing");
     await Promise.all([
       actions.getAddress({}),
@@ -78,6 +78,10 @@ export const onChain: IOnChainModel = {
       DeviceEventEmitter.addListener("SubscribeTransactions", async (e: any) => {
         log.d("Event SubscribeTransactions", [e]);
         await actions.getBalance();
+
+        if (getStoreState().onboardingState === "SEND_ONCHAIN") {
+          getStoreActions().changeOnboardingState("DO_BACKUP");
+        }
 
         const transaction = decodeSubscribeTransactionsResult(e.data);
         if (
