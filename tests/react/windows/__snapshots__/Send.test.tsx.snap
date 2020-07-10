@@ -29,6 +29,14 @@ exports[`SendCamera renders correctly 1`] = `
     >
       <View
         pointerEvents="box-none"
+        style={
+          Array [
+            Object {
+              "zIndex": 1,
+            },
+            false,
+          ]
+        }
       >
         <View
           accessibilityElementsHidden={false}
@@ -144,6 +152,14 @@ exports[`SendCamera renders correctly 1`] = `
             }
           }
         >
+          <View
+            collapsable={false}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          />
           <View
             accessibilityElementsHidden={false}
             closing={false}

@@ -87,7 +87,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
           component: (<Input placeholder={`Amount ${fiatUnit}`} keyboardType="numeric" onChangeText={onChangeFiatInput} value={dollarValue} />)
         }]}
         buttons={[
-          <Button key="OPEN_CHANNEL" onPress={onOpenChannelPress} block={true} primary={true}>
+          <Button key="OPEN_CHANNEL" onPress={onOpenChannelPress} block={true} primary={true} disabled={opening}>
             {!opening && <Text>Open channel</Text>}
             {opening && <Spinner color={blixtTheme.light} />}
           </Button>
