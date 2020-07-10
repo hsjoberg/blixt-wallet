@@ -63,7 +63,7 @@ export default function SyncInfo({ route }: any) {
               }
             </Text>
             <MetaData title="Current block height" data={nodeInfo?.blockHeight?.toString() ?? "N/A"} />
-            {nodeInfo?.syncedToChain === false && bestBlockheight &&
+            {nodeInfo?.syncedToChain === false && bestBlockheight !== undefined &&
               <>
                 <Text style={[style.detailText, { fontWeight: "bold" }]}>Progress:</Text>
                 <Bar
