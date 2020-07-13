@@ -15,11 +15,6 @@ interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Confirm">;
 }
 export default function Confirm({ navigation }: IProps) {
-  const setHoldonboarding = useStoreActions((state) => state.setHoldOnboarding);
-  const createWallet = useStoreActions((store) => store.createWallet);
-  const getAddress = useStoreActions((store) => store.onChain.getAddress);
-  const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
-  const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
   const [confirmedWords, setConfirmedWords] = useState<string[]>([]);
   const [selectedWords, setSelectedWords] = useState<Array<string | undefined>>(new Array(24).fill(undefined));
   const [proceeding, setProceeding] = useState(false);
@@ -151,7 +146,7 @@ export default function Confirm({ navigation }: IProps) {
               }
             </View>
             <View style={extraStyle.wordButtons}>
-              {shuffledSeed.map((word, i) => (
+              {shuffledSeed.sort().map((word, i) => (
                 <Button
                   key={word + i}
                   disabled={selectedWords[i] !== undefined}
