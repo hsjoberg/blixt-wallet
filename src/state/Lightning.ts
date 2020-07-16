@@ -124,7 +124,7 @@ export const lightning: ILightningModel = {
     }
 
     // tslint:disable-next-line: no-floating-promises
-    fetch("https://mempool.space/electrs/blocks/tip/height").then(async (result) => {
+    fetch("https://mempool.space/api/blocks/tip/height").then(async (result) => {
       if (result.ok) {
         const bestBlockHeight = await result.text();
         actions.setBestBlockheight(Number.parseInt(bestBlockHeight, 10));
