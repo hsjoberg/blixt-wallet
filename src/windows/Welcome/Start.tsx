@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { StyleSheet, StatusBar, Animated, Alert } from "react-native";
-import { Text, H1, Button, View, Spinner } from "native-base";
-import { useStoreActions } from "../../state/store";
+import React, { useState, useRef } from "react";
+import { StyleSheet, StatusBar, Animated, Alert, NativeModules } from "react-native";
+import { Text, H1, Button, View, Spinner, Icon } from "native-base";
+import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
+
+import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 
 import { NavigationAction, CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -44,13 +46,20 @@ export default function Start({ navigation }: IStartProps) {
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
   const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
   const [createWalletLoading, setCreateWalletLoading] = useState(false);
+  const torEnabled = useStoreState((store) => store.torEnabled);
+  const changeTorEnabled = useStoreActions((store) => store.settings.changeTorEnabled);
+  const menu = useRef<Menu>();
 
   const onCreateWalletPress = async () => {
     try {
       await generateSeed(undefined);
       Alert.alert(
         "Warning",
-        "Blixt Wallet is still at an early stage of development.\n\nIf you use this wallet, make sure you understand that you may lose your funds.\n\nThere is currently no WatchTower support to watch your channels while you are offline.",
+`Blixt Wallet is still at an early stage of development.
+
+If you use this wallet, make sure you understand that you may lose your funds.
+
+There is currently no WatchTower support to watch your channels while you are offline.`,
         [{
           text: "I am reckless, continue",
           onPress: async  () => {
@@ -81,6 +90,22 @@ export default function Start({ navigation }: IStartProps) {
     navigation.navigate("Restore");
   };
 
+  const showMenu = () => {
+    menu.current.show();
+  }
+
+  const toggleTorEnabled = async () => {
+    changeTorEnabled(!torEnabled);
+    menu.current.hide();
+    try {
+      // await NativeModules.LndMobile.stopLnd();
+      await NativeModules.LndMobile.killLnd();
+    } catch(e) {
+      console.log(e);
+    }
+    NativeModules.LndMobile.restartApp();
+  }
+
   return (
     <Container>
       <View style={style.content}>
@@ -91,6 +116,27 @@ export default function Start({ navigation }: IStartProps) {
           networkActivityIndicatorVisible={true}
           barStyle="light-content"
         />
+        <View style={style.menuDotsIcon}>
+          <Menu
+            ref={menu}
+            button={
+              <Icon
+                type="Entypo"
+                name="dots-three-horizontal"
+                onPress={showMenu}
+              />
+            }
+          >
+            <MenuItem
+              onPress={toggleTorEnabled}
+              // style={{ backgroundColor: blixtTheme.gray }}
+              // textStyle={{ color: blixtTheme.light }}
+              textStyle={{ color: "#000" }}
+            >
+              {torEnabled ? "Disable" : "Enable"} Tor
+            </MenuItem>
+          </Menu>
+        </View>
         {!createWalletLoading
           ? <AnimatedH1>Welcome</AnimatedH1>
           : <H1 style={style.header}>Welcome</H1>
@@ -114,6 +160,8 @@ export default function Start({ navigation }: IStartProps) {
   );
 };
 
+const iconTopPadding = StatusBar.currentHeight ?? 0;
+
 const style = StyleSheet.create({
   content: {
     flex: 1,
@@ -132,5 +180,10 @@ const style = StyleSheet.create({
   },
   button: {
     margin: 8,
+  },
+  menuDotsIcon: {
+    position: "absolute",
+    top: iconTopPadding + 16,
+    right: 24,
   },
 });

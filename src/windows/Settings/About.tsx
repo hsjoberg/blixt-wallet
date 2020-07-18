@@ -37,6 +37,11 @@ export default function About() {
                 {software.join("\n")}
                 {"\n"}... and other amazing open source software.
               </Text>
+              <Text>
+                Tor icon is licensed under CC BY 3.0 by{" "}
+                <TextLink url="https://www.iconfinder.com/iconfinder">IconFinder</TextLink>{" "}
+                (<TextLink url="https://creativecommons.org/licenses/by/3.0/">license</TextLink>)
+              </Text>
             </ScrollView>
           </Body>
         </CardItem>

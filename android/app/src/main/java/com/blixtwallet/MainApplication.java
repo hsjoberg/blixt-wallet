@@ -1,5 +1,7 @@
 package com.blixtwallet;
 
+import com.blixtwallet.tor.BlixtTorPackage;
+
 import androidx.multidex.MultiDexApplication;
 import android.content.Context;
 
@@ -27,6 +29,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
             List<ReactPackage> packages = new PackageList(this).getPackages();
             packages.add(new LndMobilePackage());
             packages.add(new LndMobileScheduledSyncPackage());
+            packages.add(new BlixtTorPackage());
             packages.add(new RealTimeBlurPackage());
             return packages;
       }
