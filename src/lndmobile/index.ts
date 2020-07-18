@@ -36,8 +36,8 @@ export const writeConfigFile = async () => {
 /**
  * @throws
  */
-export const startLnd = async (): Promise<string> => {
-  return await LndMobile.startLnd();
+export const startLnd = async (torEnabled: boolean): Promise<string> => {
+  return await LndMobile.startLnd(torEnabled);
 };
 
 /**

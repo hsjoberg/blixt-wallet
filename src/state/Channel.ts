@@ -100,6 +100,11 @@ export const channel: IChannelModel = {
     log.i("Starting channel update subscription");
     await injections.lndMobile.channel.subscribeChannelEvents();
     DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
+      if (e.data === "") {
+        log.i("Got e.data empty from SubscribeChannelEvent. Skipping event");
+        return;
+      }
+
       const db = getStoreState().db;
       if (!db) {
         throw new Error("SubscribeChannelEvents: db not ready");
