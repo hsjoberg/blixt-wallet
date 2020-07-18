@@ -19,6 +19,7 @@ import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
 import { Chain } from "../../utils/build";
 import { OnchainExplorer } from "../../state/Settings";
+import TorSvg from "./TorSvg";
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -169,7 +170,6 @@ export default function Settings({ navigation }: ISettingsProps) {
     await changeClipboardInvoiceCheckEnabled(!clipboardInvoiceCheckEnabled);
     const clipboardText = await Clipboard.getString();
     await checkInvoice(clipboardText);
-
   };
 
   // Copy log
@@ -233,18 +233,18 @@ export default function Settings({ navigation }: ISettingsProps) {
   const setSyncEnabled = useStoreActions((store) => store.scheduledSync.setSyncEnabled);
   const onToggleScheduledSyncEnabled = async () => {
     if (scheduledSyncEnabled)
-      Alert.alert("Not recommended", "Warning. It is not recommended to disable scheduled chain sync.\n\n" +
-                                     "Make sure you keep up-to-date with the network otherwise you risk losing your funds.\n\n" +
-                                     "Only do this if you're know what you're doing.",
-      [{
-        text: "Cancel",
-      }, {
-        text: "Proceed",
-        onPress: async () => {
-          await setSyncEnabled(!scheduledSyncEnabled);
-          await changeScheduledSyncEnabled(!scheduledSyncEnabled);
-        }
-      }]);
+    Alert.alert("Not recommended", "Warning. It is not recommended to disable scheduled chain sync.\n\n" +
+    "Make sure you keep up-to-date with the network otherwise you risk losing your funds.\n\n" +
+    "Only do this if you're know what you're doing.",
+    [{
+      text: "Cancel",
+    }, {
+      text: "Proceed",
+      onPress: async () => {
+        await setSyncEnabled(!scheduledSyncEnabled);
+        await changeScheduledSyncEnabled(!scheduledSyncEnabled);
+      }
+    }]);
     else {
       await setSyncEnabled(!scheduledSyncEnabled);
       await changeScheduledSyncEnabled(!scheduledSyncEnabled);
@@ -368,11 +368,10 @@ When you're done, you can copy the address code and/or open the link using Blixt
     if (selectedItem) {
       if (selectedItem.id === "LNBIG") {
         await Linking.openURL("https://lnbig.com/");
-
-      } else if(selectedItem.id === "BITREFILL_THOR") {
+      } else if (selectedItem.id === "BITREFILL_THOR") {
         await Linking.openURL("https://embed.bitrefill.com/buy/lightning");
       }
-    };
+    }
   }
 
   // Onchain explorer
@@ -395,12 +394,60 @@ When you're done, you can copy the address code and/or open the link using Blixt
     }
   };
 
-    // Onchain explorer
-    const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
-    const changeMultiPathPaymentsEnabled = useStoreActions((store) => store.settings.changeMultiPathPaymentsEnabled);
-    const onChangeMultiPartPaymentEnabledPress = async () => {
-      await changeMultiPathPaymentsEnabled(!multiPathPaymentsEnabled);
-    };
+  // Multi-path payments
+  const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
+  const changeMultiPathPaymentsEnabled = useStoreActions((store) => store.settings.changeMultiPathPaymentsEnabled);
+  const onChangeMultiPartPaymentEnabledPress = async () => {
+    await changeMultiPathPaymentsEnabled(!multiPathPaymentsEnabled);
+  };
+
+  const torEnabled = useStoreState((store) => store.settings.torEnabled);
+  const changeTorEnabled = useStoreActions((store) => store.settings.changeTorEnabled);
+  const onChangeTorEnabled = async () => {
+    const text = !torEnabled ?
+`Enabling Tor will make the wallet connect to its peers (both Bitcoin and Lightning Network peers) via the Tor Network.
+
+You'll also be able to connect and open channels to Lightning nodes that uses onion services.
+
+WARNING: Blixt Wallet will still talk to the following services without Tor:
+
+https://blockchain.info/ticker
+Reason: To get fiat/bitcoin rates
+
+https://mempool.space/api/blocks/tip/height
+Reason: To get the current block height
+
+https://www.googleapis.com/drive/v3/files
+https://www.googleapis.com/upload/drive/v3/files
+Reason: For Google Drive backup
+
+https://nodes.lightning.computer/availability/v1/btc.json
+Reason: For reliable Lightning nodes
+
+WebLN Browser and LNURL will also not use Tor.`
+:
+`Disabling Tor requires an app restart.
+Do you wish to proceed?`;
+
+    Alert.alert(
+      "Tor",
+      text,
+      [{ text: "Cancel" },
+      {
+        text: "Restart app and enable Tor",
+        onPress: async () => {
+          await changeTorEnabled(!torEnabled);
+          try {
+            await NativeModules.LndMobile.stopLnd();
+            await NativeModules.LndMobile.killLnd();
+          } catch(e) {
+            console.log(e);
+          }
+          NativeModules.LndMobile.restartApp();
+        },
+      }
+    ]);
+  }
 
   return (
     <Container>
@@ -662,6 +709,15 @@ When you're done, you can copy the address code and/or open the link using Blixt
                   <Text note={true}>Payments can take up to 2 paths</Text>
                 </Body>
                 <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
+              </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
+                <Left>
+                  <TorSvg />
+                </Left>
+                <Body>
+                  <Text>Enable Tor</Text>
+                </Body>
+                <Right><CheckBox checked={torEnabled} onPress={onChangeTorEnabled} /></Right>
               </ListItem>
             </>
           }

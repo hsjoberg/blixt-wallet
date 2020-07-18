@@ -61,7 +61,7 @@ export interface ILndMobileInjections {
     init: () => Promise<{ data: string } | number>;
     writeConfigFile: () => Promise<string>;
     checkStatus: () => Promise<number>;
-    startLnd: () => Promise<string>;
+    startLnd: (torEnabled: boolean) => Promise<string>;
 
     addInvoice: (amount: number, memo: string, expiry?: number) => Promise<lnrpc.AddInvoiceResponse>;
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;

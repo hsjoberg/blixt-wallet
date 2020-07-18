@@ -60,6 +60,11 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button onPress={continueCallback}><Text style={styles.buttonText}>continueCallback()</Text></Button>
 
           <Text style={{ width: "100%"}}>Random:</Text>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobile.startTor());
+          }}>
+            <Text>startTor</Text>
+          </Button>
           <Button small onPress={() => {
             Toast.show({
               text: "Copied to clipboard.",

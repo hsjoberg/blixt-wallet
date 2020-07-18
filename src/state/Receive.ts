@@ -95,8 +95,13 @@ export const receive: IReceiveModel = {
     const invoiceSubscription = DeviceEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
       try {
         log.i("New invoice event");
+        if (e.data === "") {
+          log.i("Got e.data empty from SubscribeInvoices. Skipping invoice");
+          return;
+        }
 
         const invoice = decodeInvoiceResult(e.data);
+
         const rHash = bytesToHexString(invoice.rHash);
 
         log.d("invoice", [invoice]);
