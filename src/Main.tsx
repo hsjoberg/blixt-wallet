@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Spinner, H1 } from "native-base";
+import { StatusBar } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import Overview from "./windows/Overview";
@@ -22,6 +24,9 @@ import Loading from "./windows/Loading";
 import { useStoreState, useStoreActions } from "./state/store";
 import { toast } from "./utils";
 import CameraFullscreen from "./windows/CameraFullscreen";
+
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
+import Container from "./components/Container";
 
 const RootStack = createStackNavigator();
 
@@ -63,6 +68,7 @@ export default function Main() {
   const initLightning = useStoreActions((store) => store.lightning.initialize);
   const checkDeeplink = useStoreActions((store) => store.androidDeeplinkManager.checkDeeplink);
   const [initialRoute, setInitialRoute] = useState("Loading");
+  const torLoading = useStoreState((store) => store.torLoading);
 
   const [state, setState] =
     useState<"init" | "authentication" | "onboarding" | "started">("init");
@@ -115,6 +121,21 @@ export default function Main() {
   };
 
   if (state === "init") {
+    if (torLoading) {
+      return (
+        <Container centered>
+          <StatusBar
+            backgroundColor="transparent"
+            hidden={false}
+            translucent={true}
+            networkActivityIndicatorVisible={true}
+            barStyle="light-content"
+          />
+          <Spinner color={blixtTheme.light} size={55} />
+          <H1>Initializing Tor</H1>
+        </Container>
+      );
+    }
     return (<></>);
   }
 

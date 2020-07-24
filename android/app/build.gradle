@@ -135,7 +135,7 @@ android {
         applicationId MYAPP_APP_ID
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 49
+        versionCode 52
         versionName "0.1-alpha"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
@@ -176,6 +176,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
+            // debuggable true
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
@@ -209,6 +210,11 @@ android {
         normal {
             dimension "custom"
             manifestPlaceholders = [custom: ""]
+        }
+        experiment1 {
+            applicationIdSuffix ".experiment1"
+            dimension "custom"
+            manifestPlaceholders = [custom: " Experiment 1"]
         }
     }
 
@@ -285,6 +291,15 @@ dependencies {
     implementation "com.github.mmin18:realtimeblurview:1.2.1"
 
     implementation project(":lndmobile")
+
+    // Tor
+    implementation "com.msopentech.thali:universal:0.0.3"
+    implementation "org.torproject:tor-android-binary:0.4.2.7a"
+    implementation "com.msopentech.thali.toronionproxy.android:android:0.0.3@aar"
+    implementation "org.slf4j:slf4j-android:1.7.7"
+    implementation "net.freehaven.tor.control:jtorctl:0.2" // controlling tor instance via its control port
+
+    implementation "com.jakewharton:process-phoenix:2.0.0"
 }
 
 configurations {

@@ -1,11 +1,11 @@
 package com.blixtwallet;
 
-import com.blixtwallet.PromiseWrapper;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.os.Process;
 import android.util.Base64;
 import android.util.Log;
 import android.content.ComponentName;
@@ -25,7 +25,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.NdefMessage;
 import android.nfc.tech.Ndef;
 import android.nfc.NdefRecord;
-import android.os.Parcelable;
 import java.util.Arrays;
 import java.io.UnsupportedEncodingException;
 
@@ -41,20 +40,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.EnumSet;
-
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
@@ -63,11 +54,7 @@ import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.permissions.PermissionsModule;
 
-import com.facebook.react.modules.storage.ReactDatabaseSupplier;
-import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
-
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.oblador.keychain.KeychainModule;
 
 import com.hypertrack.hyperlog.HyperLog;
@@ -110,7 +97,8 @@ class LndMobile extends ReactContextBaseJavaModule {
       switch (msg.what) {
         case LndMobileService.MSG_GRPC_COMMAND_RESULT:
         case LndMobileService.MSG_START_LND_RESULT:
-        case LndMobileService.MSG_REGISTER_CLIENT_ACK: {
+        case LndMobileService.MSG_REGISTER_CLIENT_ACK:
+        case LndMobileService.MSG_STOP_LND_RESULT: {
           final int request = msg.arg1;
 
           if (!requests.containsKey(request)) {
@@ -146,6 +134,7 @@ class LndMobile extends ReactContextBaseJavaModule {
           break;
         }
         case LndMobileService.MSG_GRPC_STREAM_RESULT: {
+          // TODO handle when error is returned
           final byte[] bytes = (byte[]) bundle.get("response");
           final String method = (String) bundle.get("method");
 
@@ -292,7 +281,7 @@ class LndMobile extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void startLnd(Promise promise) {
+  public void startLnd(boolean torEnabled, Promise promise) {
     int req = new Random().nextInt();
     requests.put(req, promise);
 
@@ -300,7 +289,25 @@ class LndMobile extends ReactContextBaseJavaModule {
     message.replyTo = messenger;
 
     Bundle bundle = new Bundle();
-    bundle.putString("args", "--lnddir=" + getReactApplicationContext().getFilesDir().getPath());
+
+    String params = "--lnddir=" + getReactApplicationContext().getFilesDir().getPath();
+    if (torEnabled) {
+      int socksPort = 9070;
+      int controlPort = 9071;
+      if (BuildConfig.CHAIN.equals("testnet")) {
+        socksPort += 10;
+        controlPort += 10;
+      }
+      if (BuildConfig.DEBUG) {
+        socksPort += 100;
+        controlPort += 100;
+      }
+      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
+    }
+    bundle.putString(
+      "args",
+      params
+    );
     message.setData(bundle);
 
     try {
@@ -308,6 +315,45 @@ class LndMobile extends ReactContextBaseJavaModule {
     } catch (RemoteException e) {
       promise.reject(TAG, "Could not Send MSG_START_LND to LndMobileService", e);
     }
+  }
+
+  @ReactMethod
+  public void stopLnd(Promise promise) {
+    int req = new Random().nextInt();
+    requests.put(req, promise);
+
+    Message message = Message.obtain(null, LndMobileService.MSG_STOP_LND, req, 0);
+    message.replyTo = messenger;
+
+    try {
+      lndMobileServiceMessenger.send(message);
+    } catch (RemoteException e) {
+      promise.reject(TAG, "Could not Send MSG_STOP_LND to LndMobileService", e);
+    }
+  }
+
+  @ReactMethod
+  public void killLnd(Promise promise) {
+    killLndProcess();
+    promise.resolve(true);
+  }
+
+  private boolean killLndProcess() {
+    String packageName = getReactApplicationContext().getPackageName();
+    ActivityManager am = (ActivityManager) getCurrentActivity().getSystemService(Context.ACTIVITY_SERVICE);
+    for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
+      if (p.processName.equals(packageName + ":blixtLndMobile")) {
+        HyperLog.i(TAG, "Killing " + packageName + ":blixtLndMobile with pid: " + String.valueOf(p.pid));
+        Process.killProcess(p.pid);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @ReactMethod
+  public void restartApp() {
+    ProcessPhoenix.triggerRebirth(getReactApplicationContext());
   }
 
   @ReactMethod

@@ -77,6 +77,10 @@ export const onChain: IOnChainModel = {
       await injections.lndMobile.onchain.subscribeTransactions();
       DeviceEventEmitter.addListener("SubscribeTransactions", async (e: any) => {
         log.d("Event SubscribeTransactions", [e]);
+        if (e.data === "") {
+          log.i("Got e.data empty from SubscribeTransactions. Skipping transaction");
+          return;
+        }
         await actions.getBalance();
 
         if (getStoreState().onboardingState === "SEND_ONCHAIN") {

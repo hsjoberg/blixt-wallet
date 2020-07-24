@@ -109,4 +109,10 @@ export const appMigration: IAppMigration[] = [
       await setItem(StorageItem.onboardingState, "DONE");
     },
   },
+  // Version 14
+  {
+    async beforeLnd(db, i) {
+      await setItemObject(StorageItem.torEnabled, false);
+    },
+  },
 ];
