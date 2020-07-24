@@ -264,10 +264,14 @@ export const getTransactionHops = async (db: SQLiteDatabase, txId: number): Prom
 
 export const getTransactions = async (db: SQLiteDatabase): Promise<ITransaction[]> => {
   const transactions = await queryMulti<IDBTransaction>(db, `SELECT * FROM tx ORDER BY date DESC;`);
-  return await Promise.all(transactions.map(async (transaction) => ({
-    ...convertDBTransaction(transaction),
-    // hops: await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [transaction.id!]),
-  }))) as ITransaction[];
+  try {
+    return await Promise.all(transactions.map(async (transaction) => ({
+      ...convertDBTransaction(transaction),
+      // hops: await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [transaction.id!]),
+    }))) as ITransaction[];
+  } catch (e) {
+    throw new Error("Error reading transactions from DB: " + e.message);
+  }
 };
 
 export const getTransaction = async (db: SQLiteDatabase, id: number): Promise<ITransaction | null> => {
@@ -306,7 +310,7 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
     locationLat: transaction.locationLat,
     website: transaction.website,
     type: transaction.type as ITransaction["type"] || "NORMAL",
-    preimage: hexToUint8Array(transaction.preimage),
+    preimage: transaction.preimage ? hexToUint8Array(transaction.preimage) : new Uint8Array([0]),
     lnurlPayResponse,
     hops: [],
   };

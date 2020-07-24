@@ -1,0 +1,1 @@
+adb logcat LndMobile:V LndMobileService:V *:S

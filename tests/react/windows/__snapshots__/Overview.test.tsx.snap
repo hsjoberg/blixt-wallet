@@ -62,9 +62,9 @@ exports[`renders correctly 1`] = `
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
-                  "borderBottomColor": "rgb(224, 224, 224)",
+                  "borderBottomColor": "rgb(216, 216, 216)",
                   "flex": 1,
-                  "shadowColor": "rgb(224, 224, 224)",
+                  "shadowColor": "rgb(216, 216, 216)",
                   "shadowOffset": Object {
                     "height": 0.5,
                     "width": 0,
@@ -455,7 +455,6 @@ exports[`renders correctly 1`] = `
                                                       },
                                                     ]
                                                   }
-                                                  uppercase={false}
                                                 >
                                                   Welcome to Blixt!
                                                   
@@ -504,7 +503,6 @@ exports[`renders correctly 1`] = `
                                               },
                                             ]
                                           }
-                                          uppercase={false}
                                         >
                                           No transactions yet
                                         </Text>
@@ -756,23 +754,25 @@ exports[`renders correctly 1`] = `
                                                       "fontSize": 30,
                                                     },
                                                     Object {
-                                                      "fontSize": 29,
+                                                      "fontSize": 28,
                                                       "height": 29,
+                                                      "marginRight": -1,
                                                       "marginTop": -1,
                                                       "opacity": 1,
-                                                      "width": 20,
+                                                      "width": 27,
                                                     },
                                                   ],
                                                   Object {
-                                                    "fontFamily": "Ionicons",
+                                                    "fontFamily": "Material Icons",
                                                     "fontStyle": "normal",
                                                     "fontWeight": "normal",
                                                   },
                                                   Object {},
                                                 ]
                                               }
+                                              type="MaterialIcons"
                                             >
-                                              
+                                              
                                             </Text>
                                           </View>
                                         </View>
@@ -920,7 +920,6 @@ exports[`renders correctly 1`] = `
                                       "paddingRight": 16,
                                     }
                                   }
-                                  uppercase={false}
                                 >
                                   Receive
                                 </Text>
@@ -1013,7 +1012,6 @@ exports[`renders correctly 1`] = `
                                       "paddingRight": 16,
                                     }
                                   }
-                                  uppercase={false}
                                 >
                                   Send
                                 </Text>

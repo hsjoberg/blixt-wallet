@@ -63,7 +63,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => {
             console.log(await NativeModules.LndMobile.startTor());
           }}>
-            <Text>startTor</Text>
+            <Text style={styles.buttonText}>startTor</Text>
           </Button>
           <Button small onPress={() => {
             Toast.show({
@@ -115,6 +115,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             console.log(await getWalletPassword());
           }}><Text style={styles.buttonText}>getGenericPassword</Text></Button>
           <Button small onPress={async () => console.log(await getWalletPassword())}><Text style={styles.buttonText}>getWalletPassword()</Text></Button>
+          <Button small onPress={async () => {
+            NativeModules.LndMobile.restartApp();
+          }}><Text style={styles.buttonText}>restartApp()</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobile.DEBUG_listProcesses());
+          }}><Text style={styles.buttonText}>DEBUG_listProcesses()</Text></Button>
 
           {/* <Text style={{ width: "100%" }}>Dangerous:</Text>
           <Button small onPress={async () => actions.clearApp()}><Text style={styles.buttonText}>actions.clearApp()</Text></Button>
@@ -129,14 +135,14 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, [])}><Text style={styles.buttonText}>set logginMethods to []</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.bitcoinUnit, "bitcoin")}><Text style={styles.buttonText}>set bitcoinUnit to bitcoin</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text style={styles.buttonText}>walletCreated = true</Text></Button>
-          <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 0)}><Text style={styles.buttonText}>appVersion = 0</Text></Button>
+          <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 11)}><Text style={styles.buttonText}>appVersion = 0</Text></Button>
           <Button small onPress={async () => await setItem(StorageItem.onboardingState, "SEND_ONCHAIN")}><Text style={styles.buttonText}>onboardingState = SEND_ONCHAIN</Text></Button>
           <Button small onPress={async () => await setItem(StorageItem.onboardingState, "DO_BACKUP")}><Text style={styles.buttonText}>onboardingState = DO_BACKUP</Text></Button>
           <Button small onPress={async () => await setItem(StorageItem.onboardingState, "DONE")}><Text style={styles.buttonText}>onboardingState = DONE</Text></Button>
 
           <Text style={{ width: "100%" }}>lndmobile:</Text>
           <Button small onPress={async () => await NativeModules.LndMobile.init()}><Text style={styles.buttonText}>LndMobile.init()</Text></Button>
-          <Button small onPress={async () => await NativeModules.LndMobile.startLnd()}><Text style={styles.buttonText}>LndMobile.startLnd()</Text></Button>
+          <Button small onPress={async () => await NativeModules.LndMobile.startLnd(false)}><Text style={styles.buttonText}>LndMobile.startLnd()</Text></Button>
 
           <Button small onPress={async () => await actions.initializeApp()}><Text style={styles.buttonText}>actions.initializeApp()</Text></Button>
           <Button small onPress={async () => {
@@ -166,18 +172,31 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
 
           <Text style={{ width: "100%" }}>Sqlite:</Text>
           <Button small onPress={async () => console.log(await createTransaction(db!, {
-            date: Math.floor(+new Date() / 1000) + Math.floor(Math.random() * 1000), // 2019-01-01 00:00:00
+            date: Long.fromValue(Math.floor(+new Date() / 1000) + Math.floor(Math.random() * 1000)), // 2019-01-01 00:00:00
             description: "Alice:  Lunch Phil's Burger",
             remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-            expire: Math.floor(+new Date() / 1000) + Math.floor(1000 + (Math.random() * 1000)), // 2020-01-01 00:00:00
+            expire: Long.fromValue(Math.floor(+new Date() / 1000) + Math.floor(1000 + (Math.random() * 1000))), // 2020-01-01 00:00:00
             status: "SETTLED",
-            value: -1 * Math.floor(Math.random() * 10000),
-            valueMsat: 1000,
-            amtPaidSat: -1 * Math.floor(Math.random() * 10000),
-            amtPaidMsat: 1000,
+            value: Long.fromValue(-1 * Math.floor(Math.random() * 10000)),
+            valueMsat: Long.fromValue(1000),
+            amtPaidSat: Long.fromValue(-1 * Math.floor(Math.random() * 10000)),
+            amtPaidMsat: Long.fromNumber(1000),
             paymentRequest: "abcdef123456",
             rHash: "abcdef123456",
-            type: "NORMAL"
+            type: "NORMAL",
+            fee: Long.fromNumber(0),
+            feeMsat: Long.fromNumber(0),
+            nodeAliasCached: null,
+            valueUSD: 0,
+            valueFiat: 0,
+            valueFiatCurrency: "USD",
+            tlvRecordName: null,
+            locationLong: null,
+            locationLat: null,
+            website: null,
+            preimage: new Uint8Array([0]),
+            lnurlPayResponse: null,
+            hops: [],
           }))}><Text style={styles.buttonText}>createTransaction()</Text></Button>
           <Button small onPress={async () => {
             interface IDemoInvoice {
