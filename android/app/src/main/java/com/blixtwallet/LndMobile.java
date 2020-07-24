@@ -1,5 +1,7 @@
 package com.blixtwallet;
 
+import com.blixtwallet.tor.BlixtTorUtils;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -292,17 +294,16 @@ class LndMobile extends ReactContextBaseJavaModule {
 
     String params = "--lnddir=" + getReactApplicationContext().getFilesDir().getPath();
     if (torEnabled) {
-      int socksPort = 9070;
-      int controlPort = 9071;
-      if (BuildConfig.CHAIN.equals("testnet")) {
-        socksPort += 10;
-        controlPort += 10;
-      }
-      if (BuildConfig.DEBUG) {
-        socksPort += 100;
-        controlPort += 100;
-      }
+      int socksPort = BlixtTorUtils.getSocksPort();
+      int controlPort = BlixtTorUtils.getControlPort();
       params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
+      // params += " --tor.v3 --listen=localhost";
+      params += " --nolisten";
+    }
+    else {
+      // If Tor isn't active, make sure we aren't
+      // listening at all
+      params += " --nolisten";
     }
     bundle.putString(
       "args",
@@ -369,7 +370,6 @@ class LndMobile extends ReactContextBaseJavaModule {
           "[Application Options]\n" +
           "debuglevel=info\n" +
           "maxbackoff=2s\n" +
-          "nolisten=1\n" +
           "norest=1\n" +
           "sync-freelist=1\n" +
           "accept-keysend=1\n" +
@@ -400,7 +400,6 @@ class LndMobile extends ReactContextBaseJavaModule {
           "[Application Options]\n" +
           "debuglevel=info\n" +
           "maxbackoff=2s\n" +
-          "nolisten=1\n" +
           "norest=1\n" +
           "sync-freelist=1\n" +
           "accept-keysend=1\n" +
