@@ -708,7 +708,7 @@ exports[`renders correctly 1`] = `
                                               >
                                                 Send Bitcoin on-chain to this address:
                                               </Text>
-                                              <
+                                              <TouchableHighlight
                                                 activeOpacity={1}
                                               >
                                                 <View>
@@ -805,7 +805,7 @@ exports[`renders correctly 1`] = `
                                                     </RNSVGSvgView>
                                                   </View>
                                                 </View>
-                                              </>
+                                              </TouchableHighlight>
                                               <View
                                                 style={Object {}}
                                                 testID="COPY_BITCOIN_ADDRESS"
