@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar, Vibration, BackHandler } from "react-native";
-import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner, Toast } from "native-base";
+import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner } from "native-base";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -12,7 +12,7 @@ import { BitcoinUnits, unitToSatoshi } from "../../utils/bitcoin-units";
 import { extractDescription } from "../../utils/NameDesc";
 import Long from "long";
 import useBalance from "../../hooks/useBalance";
-import { hexToUint8Array } from "../../utils";
+import { hexToUint8Array, toast } from "../../utils";
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
@@ -88,13 +88,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       navigation.replace("SendDone");
     } catch (e) {
       console.log(e);
-
-      Toast.show({
-        duration: 60000,
-        type: "danger",
-        text: `Error: ${e.message}`,
-        buttonText: "Okay",
-      });
+      toast(`Error: ${e.message}`, 60000, "danger", "Okay");
       setIsPaying(false);
     }
   };

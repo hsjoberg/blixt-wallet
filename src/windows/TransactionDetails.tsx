@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Share, Linking, TextInput } from "react-native";
+import { StyleSheet, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Card, Text, CardItem, H1, Toast, View, Button } from "native-base";
+import { Body, Card, Text, CardItem, H1, View, Button } from "native-base";
 import { fromUnixTime } from "date-fns";
-import MapView, {PROVIDER_GOOGLE, Marker} from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
-import { capitalize, formatISO, isLong, getDomainFromURL, decryptLNURLPayAesTagMessage, hexToUint8Array } from "../utils";
+import { capitalize, formatISO, isLong, decryptLNURLPayAesTagMessage, toast } from "../utils";
 import { formatBitcoin } from "../utils/bitcoin-units"
 import { useStoreState } from "../state/store";
 import { extractDescription } from "../utils/NameDesc";
@@ -28,7 +28,7 @@ function MetaData({ title, data, url }: IMetaDataProps) {
       style={style.detailText}
       onPress={() => {
         Clipboard.setString(data);
-        Toast.show({ text: "Copied to clipboard.", type: "warning" });
+        toast("Copied to clipboard", undefined, "warning");
       }}
     >
       <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>
@@ -64,7 +64,7 @@ export default function TransactionDetails({ route }: any) {
 
   const onPaymentRequestTextPress = () => {
     Clipboard.setString(transaction.paymentRequest);
-    Toast.show({ text: "Copied to clipboard.", type: "warning" });
+    toast("Copied to clipboard", undefined, "warning");
   };
 
   let transactionValue: Long;

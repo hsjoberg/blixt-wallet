@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Toast, Spinner } from "native-base";
+import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { LightningInfoStackParamList } from "./index";
-import { useStoreActions, useStoreState } from "../../state/store";
+import { useStoreActions } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { RouteProp } from "@react-navigation/native";
+import { toast } from "../../utils";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -39,12 +40,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
       await getChannels(undefined);
       navigation.pop();
     } catch (e) {
-      Toast.show({
-        duration: 12000,
-        type: "danger",
-        text: `Error: ${e.message}`,
-        buttonText: "Okay",
-      });
+      toast(`Error: ${e.message}`, 12000, "danger", "Okay");
       setOpening(false);
     }
   };

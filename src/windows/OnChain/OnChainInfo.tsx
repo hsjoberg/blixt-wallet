@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Text, Header, Container, H1, H2, Right, Left, Button, Title, Icon, Toast, Spinner } from "native-base";
+import { Body, Text, Header, Container, H1, H2, Right, Left, Button, Title, Icon, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { OnChainStackParamList } from "./index";
@@ -11,6 +11,7 @@ import { formatBitcoin, valueFiat } from "../../utils/bitcoin-units";
 import { smallScreen } from "../../utils/device";
 import CopyAddress from "../../components/CopyAddress";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { toast } from "../../utils";
 
 interface IOnChainInfoProps {
   navigation: StackNavigationProp<OnChainStackParamList, "OnChainInfo">;
@@ -41,10 +42,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
 
   const onBtcAddressTextPress = () => {
     Clipboard.setString(address!);
-    Toast.show({
-      text: "Copied to clipboard.",
-      type: "warning",
-    });
+    toast("Copied to clipboard.", undefined, "warning");
   };
 
   const onBtcAddressQrPress = async () => {

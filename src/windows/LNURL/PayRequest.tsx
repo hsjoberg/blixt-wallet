@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar, Vibration, StyleSheet, Image, Clipboard, Linking, KeyboardAvoidingView } from "react-native";
-import { Body, Card, Text, CardItem, H1, Toast, View, Button, Input, Icon, Spinner } from "native-base";
+import { StatusBar, Vibration, StyleSheet, Clipboard, Linking } from "react-native";
+import { Body, Card, Text, CardItem, H1, View, Button, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import DialogAndroid from "react-native-dialogs";
 import Long from "long";
-import aesjs from "aes-js";
-import * as base64 from "base64-js";
 
-import Container from "../../components/Container";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { RootStackParamList } from "../../Main";
-import { toast, getDomainFromURL, uint8ArrayToString, decryptLNURLPayAesTagMessage } from "../../utils";
+import { toast, getDomainFromURL, decryptLNURLPayAesTagMessage } from "../../utils";
 import Blurmodal from "../../components/BlurModal";
 import { ILNUrlPayRequestMetadata, ILNUrlPayResponse } from "../../state/LNURL";
 import ScaledImage from "../../components/ScaledImage";
 import Color from "color";
 import { formatBitcoin, convertBitcoinToFiat, unitToSatoshi } from "../../utils/bitcoin-units";
 import TextLink from "../../components/TextLink";
-import { Debug } from "../../utils/build";
 
 export interface IPayRequestProps {
   navigation: StackNavigationProp<RootStackParamList>;
@@ -136,10 +132,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     const onPressCopyUrltoClipboard = () => {
       if (payRequestResponse.successAction?.tag === "url") {
         Clipboard.setString(payRequestResponse.successAction.url);
-        Toast.show({
-          text: "Copied to clipboard.",
-          type: "warning",
-        });
+        toast("Copied to clipboard.", undefined, "warning")
       }
     };
 

@@ -1,17 +1,16 @@
 import React from "react";
 import { StyleSheet, Linking, View } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Card, Text, CardItem, H1, Toast, Button } from "native-base";
+import { Body, Card, Text, CardItem, H1, Button } from "native-base";
 import { fromUnixTime } from "date-fns";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { OnChainStackParamList } from "./index";
 import Blurmodal from "../../components/BlurModal";
-import { formatISO } from "../../utils";
+import { formatISO, toast } from "../../utils";
 import { useStoreState } from "../../state/store";
 import { formatBitcoin } from "../../utils/bitcoin-units";
-import { Chain } from "../../utils/build";
 import { OnchainExplorer } from "../../state/Settings";
 
 
@@ -25,7 +24,7 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
       style={style.detailText}
       onPress={() => {
         Clipboard.setString(data);
-        Toast.show({ text: "Copied to clipboard.", type: "warning" });
+        toast("Copied to clipboard.", undefined, "warning");
       }}
     >
       <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>

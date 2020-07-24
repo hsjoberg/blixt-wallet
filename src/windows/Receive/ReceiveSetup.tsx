@@ -10,6 +10,7 @@ import { formatBitcoin } from "../../utils/bitcoin-units";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { MAX_SAT_INVOICE } from "../../utils/constants";
+import { toast } from "../../utils";
 
 export interface IReceiveSetupProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveSetup">;
@@ -54,12 +55,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
       });
     } catch (e) {
       setCreateInvoiceDisabled(false);
-      Toast.show({
-        duration: 12000,
-        type: "danger",
-        text: `Error: ${e.message}`,
-        buttonText: "Okay",
-      });
+      toast(`Error: ${e.message}`, 12000, "danger", "Okay");
     }
   };
 
