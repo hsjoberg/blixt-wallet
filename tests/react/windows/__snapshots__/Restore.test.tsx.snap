@@ -62,9 +62,9 @@ exports[`renders correctly 1`] = `
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
-                  "borderBottomColor": "rgb(224, 224, 224)",
+                  "borderBottomColor": "rgb(216, 216, 216)",
                   "flex": 1,
-                  "shadowColor": "rgb(224, 224, 224)",
+                  "shadowColor": "rgb(216, 216, 216)",
                   "shadowOffset": Object {
                     "height": 0.5,
                     "width": 0,
@@ -400,6 +400,7 @@ exports[`renders correctly 1`] = `
                                       style={
                                         Object {
                                           "alignItems": "center",
+                                          "alignSelf": "flex-start",
                                           "backgroundColor": "#007aff",
                                           "borderBottomWidth": null,
                                           "borderColor": "#007aff",
@@ -436,7 +437,6 @@ exports[`renders correctly 1`] = `
                                             "paddingRight": 16,
                                           }
                                         }
-                                        uppercase={false}
                                       >
                                         Choose channel backup file on disk
                                       </Text>
@@ -447,6 +447,7 @@ exports[`renders correctly 1`] = `
                                       style={
                                         Object {
                                           "alignItems": "center",
+                                          "alignSelf": "flex-start",
                                           "backgroundColor": "#007aff",
                                           "borderBottomWidth": null,
                                           "borderColor": "#007aff",
@@ -481,7 +482,6 @@ exports[`renders correctly 1`] = `
                                             "paddingRight": 16,
                                           }
                                         }
-                                        uppercase={false}
                                       >
                                         Restore via Google Drive
                                       </Text>
@@ -525,7 +525,6 @@ exports[`renders correctly 1`] = `
                                       "fontSize": 16,
                                     }
                                   }
-                                  uppercase={false}
                                 >
                                   To restore your wallet, write each word from your seed separated by a space.
                                   
@@ -593,7 +592,6 @@ exports[`renders correctly 1`] = `
                                       "paddingRight": 16,
                                     }
                                   }
-                                  uppercase={false}
                                 >
                                   Restore Wallet
                                 </Text>

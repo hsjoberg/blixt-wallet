@@ -62,9 +62,9 @@ exports[`renders correctly 1`] = `
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
-                  "borderBottomColor": "rgb(224, 224, 224)",
+                  "borderBottomColor": "rgb(216, 216, 216)",
                   "flex": 1,
-                  "shadowColor": "rgb(224, 224, 224)",
+                  "shadowColor": "rgb(216, 216, 216)",
                   "shadowOffset": Object {
                     "height": 0.5,
                     "width": 0,
@@ -434,7 +434,6 @@ exports[`renders correctly 1`] = `
                                                     "left": 0,
                                                     "paddingLeft": 6,
                                                     "paddingRight": 10,
-                                                    "paddingTop": 18,
                                                     "right": 0,
                                                     "shadowColor": undefined,
                                                     "shadowOffset": undefined,
@@ -515,8 +514,9 @@ exports[`renders correctly 1`] = `
                                                           Object {},
                                                         ]
                                                       }
+                                                      type="Ionicons"
                                                     >
-                                                      
+                                                      
                                                     </Text>
                                                   </TouchableOpacity>
                                                 </View>
@@ -704,7 +704,6 @@ exports[`renders correctly 1`] = `
                                                     },
                                                   ]
                                                 }
-                                                uppercase={false}
                                               >
                                                 Send Bitcoin on-chain to this address:
                                               </Text>
@@ -838,7 +837,6 @@ exports[`renders correctly 1`] = `
                                                       ]
                                                     }
                                                     testID="BITCOIN_ADDRESS"
-                                                    uppercase={false}
                                                   >
                                                     tb1qsl4hhqs8skzwknqhwjcyyyjepnwmq8tlcd32m3
                                                   </Text>
@@ -856,7 +854,6 @@ exports[`renders correctly 1`] = `
                                                         },
                                                       ]
                                                     }
-                                                    uppercase={false}
                                                   >
                                                     <Text
                                                       allowFontScaling={false}
@@ -889,7 +886,7 @@ exports[`renders correctly 1`] = `
                                                       }
                                                       type="MaterialCommunityIcons"
                                                     >
-                                                      
+                                                      󰆏
                                                     </Text>
                                                   </Text>
                                                 </View>
@@ -947,7 +944,6 @@ exports[`renders correctly 1`] = `
                                                       "paddingRight": 16,
                                                     }
                                                   }
-                                                  uppercase={false}
                                                 >
                                                   Generate new address
                                                 </Text>
@@ -997,7 +993,6 @@ exports[`renders correctly 1`] = `
                                                       "paddingRight": 16,
                                                     }
                                                   }
-                                                  uppercase={false}
                                                 >
                                                   Withdraw coins
                                                 </Text>

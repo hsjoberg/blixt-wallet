@@ -181,8 +181,8 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                     HyperLog.i(TAG, "syncedToChain: " + Boolean.toString(res.getSyncedToChain()));
                     HyperLog.i(TAG, "syncedToGraph: " + Boolean.toString(res.getSyncedToGraph()));
 
-                    if (res.getSyncedToChain() == true && res.getSyncedToGraph() == true) {
-                      HyperLog.i(TAG, "Sync is done, letting lnd work for 30s before quitting");
+                    if (res.getSyncedToChain() == true) {
+                      HyperLog.i(TAG, "Sync is done, letting lnd work for 20s before quitting");
                       writeLastScheduledSyncToDb();
 
                       Handler handler = new Handler();
@@ -191,9 +191,10 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                           HyperLog.i(TAG, "Job is done. Quitting");
                           unbindLndMobileService();
 
+                          HyperLog.i(TAG, "Calling future.set(Result.success());");
                           future.set(Result.success());
                         }
-                      }, 30000);
+                      }, 20000);
                     }
                     else {
                       HyperLog.i(TAG, "Sleeping 10s then checking again");

@@ -22,6 +22,7 @@ interface IBrowserProps {
 export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   const initialUrl = route.params ? route.params.url : INITIAL_URL;
 
+  const [showWebview, setShowWebview] = useState(false); // To prevent white flash
   const webview = useRef<WebView>();
   const textInput = useRef<TextInput>();
   const [urlInput, setUrlInput] = useState("");
@@ -123,6 +124,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
     >
       <Card style={style.card}>
         <WebView
+          containerStyle={{ opacity: showWebview ? 1 : 0 }}
           ref={webview}
           onMessage={onMessage}
           userAgent="BlixtWallet/alpha (WebLN)"
@@ -138,6 +140,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
               console.log("Injected");
             }
           }}
+          onLoadEnd={() => setShowWebview(true)}
           onNavigationStateChange={(e) => {
             if (canGoBack !== (e.url !== initialUrl)) {
               setCanGoBack(e.url !== initialUrl);

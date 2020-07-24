@@ -118,7 +118,7 @@ export default function SendCamera({ navigation }: ISendCameraProps) {
             width={smallScreen ? 270 : 290}
             height={smallScreen ? 270 : 290}
           />
-          <Icon type="Ionicons" name="md-swap" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
+          <Icon type="Ionicons" name="camera-reverse" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
           {__DEV__ && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
           <Icon testID="paste-clipboard" type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
         </View>
@@ -133,7 +133,7 @@ const sendStyle = StyleSheet.create({
     fontSize: 26,
     color: blixtTheme.light,
     padding: 4,
-    bottom: 8,
+    bottom: 7,
     left: 8,
   },
   paste: {

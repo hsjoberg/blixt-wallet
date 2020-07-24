@@ -2,7 +2,7 @@ module.exports = {
   preset: '@testing-library/react-native',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   transformIgnorePatterns: [
-    "node_modules/(?!react-native|@shoutem|react-clone-referenced-element|native-base-shoutem-theme|react-native-camera|@react-navigation|react-navigation-tabs|react-navigation|@react-native-community\/async-storage|@react-native-community/slider)",
+    "node_modules/(?!react-native|@shoutem|react-clone-referenced-element|native-base-shoutem-theme|react-native-camera|@react-navigation|react-navigation-tabs|react-navigation|@react-native-community\/async-storage|@react-native-community/slider|@codler\/react-native-keyboard-aware-scroll-view)",
   ],
   testPathIgnorePatterns: [
     "tests/utils.ts",

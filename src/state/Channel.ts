@@ -116,6 +116,10 @@ export const channel: IChannelModel = {
       const channelEvent = decodeChannelEvent(e.data);
       log.v("channelEvent" , [channelEvent, channelEvent.type]);
 
+      if (getStoreState().onboardingState === "SEND_ONCHAIN") {
+        getStoreActions().changeOnboardingState("DO_BACKUP");
+      }
+
       if (channelEvent.openChannel) {
         const txId = channelEvent.openChannel.channelPoint!.split(":")[0];
         const chanEvent: IChannelEvent = {

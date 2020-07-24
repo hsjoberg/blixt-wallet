@@ -1,0 +1,1 @@
+adb logcat ReactNative:V ReactNativeJS:V LndMobile:V SoLoader:V LndMobileService:V Store:V *:S

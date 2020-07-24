@@ -62,9 +62,9 @@ exports[`renders correctly 1`] = `
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
-                  "borderBottomColor": "rgb(224, 224, 224)",
+                  "borderBottomColor": "rgb(216, 216, 216)",
                   "flex": 1,
-                  "shadowColor": "rgb(224, 224, 224)",
+                  "shadowColor": "rgb(216, 216, 216)",
                   "shadowOffset": Object {
                     "height": 0.5,
                     "width": 0,
@@ -432,7 +432,6 @@ exports[`renders correctly 1`] = `
                                                     "left": 0,
                                                     "paddingLeft": 6,
                                                     "paddingRight": 10,
-                                                    "paddingTop": 18,
                                                     "right": 0,
                                                     "shadowColor": undefined,
                                                     "shadowOffset": undefined,
@@ -514,7 +513,7 @@ exports[`renders correctly 1`] = `
                                                         ]
                                                       }
                                                     >
-                                                      
+                                                      
                                                     </Text>
                                                   </TouchableOpacity>
                                                 </View>

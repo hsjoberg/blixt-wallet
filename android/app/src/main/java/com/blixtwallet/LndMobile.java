@@ -529,6 +529,19 @@ class LndMobile extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void DEBUG_listProcesses(Promise promise) {
+    String processes = "";
+
+    String packageName = getReactApplicationContext().getPackageName();
+    ActivityManager am = (ActivityManager) getCurrentActivity().getSystemService(Context.ACTIVITY_SERVICE);
+    for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
+      processes += p.processName + "\n";
+    }
+
+    promise.resolve(processes);
+  }
+
+  @ReactMethod
   public void deleteTLSCerts(Promise promise) {
     HyperLog.i(TAG, "Deleting lnd TLS certificates");
 
