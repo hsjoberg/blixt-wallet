@@ -43,12 +43,14 @@ export default function Spinner({ onPress }: ISpinnerProps) {
       style={{
         // backgroundColor:"blue",
         // transform: [{ rotate: rotation}],
+        marginRight: -1,
         marginTop: -1,
-        width: 20,
+        width: 27,
         height: 29,
-        fontSize: 29,
+        fontSize: 28,
         opacity: fading,
       }}
+      type="MaterialIcons"
       name="sync"
       onPress={onPress}
     />

@@ -102,7 +102,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
         </Body>
         <Right>
           <Button transparent={true} onPress={async () => await getChannels(undefined)}>
-            <Icon name="sync" />
+            <Icon type="MaterialIcons" name="sync" />
           </Button>
         </Right>
       </Header>
