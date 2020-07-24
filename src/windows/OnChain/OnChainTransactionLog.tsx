@@ -41,7 +41,7 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
         </Body>
         <Right>
           <Button transparent={true} onPress={async () => rpcReady && await getTransactions()}>
-            <Icon name="sync" />
+          <Icon type="MaterialIcons" name="sync" />
           </Button>
         </Right>
       </Header>

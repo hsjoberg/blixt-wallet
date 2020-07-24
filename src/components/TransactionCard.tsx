@@ -8,7 +8,7 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { capitalize, formatISO, isLong } from "../utils";
 import { extractDescription } from "../utils/NameDesc";
 import { IBitcoinUnits, formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
-import { useStoreState } from "../state/store.ts";
+import { useStoreState } from "../state/store";
 
 interface IProps {
   onPress: (id: string) => void;

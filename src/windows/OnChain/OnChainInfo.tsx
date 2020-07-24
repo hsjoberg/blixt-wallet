@@ -67,7 +67,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
       <Header iosBarStyle="light-content" translucent={false}>
         <Left>
           <Button transparent={true} onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" />
+            <Icon type="Ionicons" name="arrow-back" />
           </Button>
         </Left>
         <Body>
