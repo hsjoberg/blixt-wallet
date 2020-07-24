@@ -21,7 +21,7 @@ export default (variables /* : * */ = variable) => {
     'NativeBase.IconNB': {
       color: 'transparent',
       lineHeight: variables.CheckboxIconSize,
-      marginTop: variables.CheckboxIconMarginTop,
+      marginTop: -1,
       fontSize: variables.CheckboxFontSize
     },
     borderRadius: variables.CheckboxRadius,
@@ -29,7 +29,7 @@ export default (variables /* : * */ = variable) => {
     width: variables.checkboxSize,
     height: variables.checkboxSize,
     borderWidth: variables.CheckboxBorderWidth,
-    paddingLeft: variables.CheckboxPaddingLeft - 1,
+    paddingLeft: variables.CheckboxPaddingLeft - 3,
     paddingBottom: variables.CheckboxPaddingBottom,
     left: 10
   };
