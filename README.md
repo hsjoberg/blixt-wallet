@@ -25,6 +25,7 @@ powered by lnd and Neutrino SPV.
 - [x] Channel backup to Google Drive
 - [x] [WebLN](https://webln.dev/) browser
 - [x] Support for [Multi-Part Payments (MPP)](https://lightning.engineering/posts/2020-05-07-mpp/)
+- [x] Integrated Tor support
 - [ ] NFC
 - [ ] WatchTower
 - [ ] URL Payments
@@ -43,10 +44,14 @@ Do you like React Native, Java or Lightning? Come and help out!
 - Install [Node](https://nodejs.org), [Yarn](https://classic.yarnpkg.com/), [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
 - If needed, install an emulated android device inside Android Studio
 - (Optional) Build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
+- Get the tor sub-module: `git submodule update --init`
 - Install Node packages: `yarn`
+- Compile the Tor Android lib: `yarn install-tor-lib`
 - Generate proto files: `yarn gen-proto`
+
+To start the application:
 - Run: `yarn start-metro`
-- Run: `yarn testnet-debug`
+- Run: `yarn mainnet-debug or `yarn testnet-debug`
 
 ## Commit and Code-Style
 

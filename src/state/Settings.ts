@@ -34,6 +34,7 @@ export interface ISettingsModel {
   changeExperimentWeblnEnabled: Thunk<ISettingsModel, boolean>;
   changeOnchainExplorer: Thunk<ISettingsModel, keyof typeof OnchainExplorer>;
   changeMultiPathPaymentsEnabled: Thunk<ISettingsModel, boolean>;
+  changeTorEnabled: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -50,6 +51,7 @@ export interface ISettingsModel {
   setExperimentWeblnEnabled: Action<ISettingsModel, boolean>;
   setOnchainExplorer: Action<ISettingsModel, keyof typeof OnchainExplorer>;
   setMultiPathPaymentsEnabled: Action<ISettingsModel, boolean>;
+  setTorEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -66,6 +68,7 @@ export interface ISettingsModel {
   experimentWeblnEnabled: boolean;
   onchainExplorer: keyof typeof OnchainExplorer;
   multiPathPaymentsEnabled: boolean;
+  torEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -86,6 +89,7 @@ export const settings: ISettingsModel = {
     actions.setExperimentWeblnEnabled(await getItemObject(StorageItem.experimentWeblnEnabled || false));
     actions.setOnchainExplorer(await getItem(StorageItem.onchainExplorer) ?? "mempool");
     actions.setMultiPathPaymentsEnabled(await getItemObject(StorageItem.multiPathPaymentsEnabled || false));
+    actions.setTorEnabled(await getItemObject(StorageItem.torEnabled) || false);
 
     log.d("Done");
   }),
@@ -168,6 +172,11 @@ export const settings: ISettingsModel = {
     actions.setMultiPathPaymentsEnabled(payload);
   }),
 
+  changeTorEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.torEnabled, payload);
+    actions.setTorEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -183,6 +192,7 @@ export const settings: ISettingsModel = {
   setExperimentWeblnEnabled: action((state, payload) => { state.experimentWeblnEnabled = payload; }),
   setOnchainExplorer: action((state, payload) => { state.onchainExplorer = payload; }),
   setMultiPathPaymentsEnabled: action((state, payload) => { state.multiPathPaymentsEnabled = payload; }),
+  setTorEnabled: action((state, payload) => { state.torEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -199,4 +209,5 @@ export const settings: ISettingsModel = {
   experimentWeblnEnabled: false,
   onchainExplorer: "mempool",
   multiPathPaymentsEnabled: false,
+  torEnabled: false,
 };

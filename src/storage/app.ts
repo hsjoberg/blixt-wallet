@@ -3,8 +3,9 @@ import { LoginMethods } from "../state/Security";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 import { MapStyle } from "../utils/google-maps";
+import { appMigration } from "../migration/app-migration";
 
-const APP_VERSION = 13;
+const APP_VERSION = appMigration.length - 1;
 
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",
@@ -35,6 +36,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   onchainExplorer = "onchainExplorer",
   multiPathPaymentsEnabled = "multiPathPaymentsEnabled",
   onboardingState = "onboardingState",
+  torEnabled = "torEnabled",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -83,6 +85,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.onchainExplorer),
     removeItem(StorageItem.multiPathPaymentsEnabled),
     removeItem(StorageItem.onboardingState),
+    removeItem(StorageItem.torEnabled),
   ]);
 };
 
@@ -114,5 +117,6 @@ export const setupApp = async () => {
     setItem(StorageItem.onchainExplorer, "mempool"),
     setItemObject<boolean>(StorageItem.multiPathPaymentsEnabled, false),
     setItem(StorageItem.onboardingState, "SEND_ONCHAIN"),
+    setItemObject<boolean>(StorageItem.torEnabled, false),
   ]);
 };

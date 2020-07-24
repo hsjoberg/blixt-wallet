@@ -1,4 +1,4 @@
-import { NativeModules, Linking, Alert } from "react-native";
+import { NativeModules, Linking, Alert, ToastAndroid } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
@@ -24,7 +24,7 @@ import { IAndroidDeeplinkManager, androidDeeplinkManager } from "./AndroidDeepli
 import { INotificationManagerModel, notificationManager} from "./NotificationManager";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
-import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
+import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
@@ -56,6 +56,8 @@ export interface IStoreModel {
   setWalletSeed: Action<IStoreModel, string[] | undefined>;
   setAppVersion: Action<IStoreModel, number>;
   setOnboardingState: Action<IStoreModel, OnboardingState>;
+  setTorEnabled: Action<IStoreModel, boolean>;
+  setTorLoading: Action<IStoreModel, boolean>;
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
@@ -65,6 +67,8 @@ export interface IStoreModel {
   appReady: boolean;
   walletCreated: boolean;
   holdOnboarding: boolean;
+  torLoading: boolean;
+  torEnabled: boolean;
 
   lightning: ILightningModel;
   transaction: ITransactionModel;
@@ -101,7 +105,7 @@ export const model: IStoreModel = {
     const { init, writeConfigFile, checkStatus, startLnd } = injections.lndMobile.index;
     const db = await openDatabase();
     actions.setDb(db);
-    if (!await getItemObject(StorageItem.app)) {
+    if (!await getItemObjectAsyncStorage(StorageItem.app)) {
       log.i("Initializing app for the first time");
       await setupApp();
       log.i("Initializing db for the first time");
@@ -117,6 +121,13 @@ export const model: IStoreModel = {
     actions.setWalletCreated(await getWalletCreated());
 
     try {
+      const torEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled) ?? false;
+      actions.setTorEnabled(torEnabled);
+      if (torEnabled) {
+        actions.setTorLoading(true);
+        await NativeModules.BlixtTor.startTor(); // FIXME
+      }
+
       log.v("Running LndMobile init()");
       const initReturn = await init();
       log.v("init done");
@@ -126,7 +137,8 @@ export const model: IStoreModel = {
       log.v("status", [status]);
       if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
         log.i("lnd not started, starting lnd");
-        log.d("lnd started", [await startLnd()]);
+        log.d("lnd started", [await startLnd(torEnabled)]);
+        actions.setTorLoading(false);
       }
       else {
         log.i("lnd was already started");
@@ -231,12 +243,16 @@ export const model: IStoreModel = {
   setAppReady: action((state, value) => { state.appReady = value; }),
   setAppVersion: action((state, value) => { state.appVersion = value; }),
   setOnboardingState: action((state, value) => { state.onboardingState = value; }),
+  setTorEnabled: action((state, value) => { state.torEnabled = value; }),
+  setTorLoading: action((state, value) => { state.torLoading = value; }),
 
   appReady: false,
   walletCreated: false,
   holdOnboarding: false,
   appVersion: 0,
   onboardingState: "SEND_ONCHAIN",
+  torEnabled: false,
+  torLoading: false,
 
   lightning,
   transaction,

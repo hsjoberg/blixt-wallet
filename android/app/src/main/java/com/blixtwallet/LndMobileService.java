@@ -59,6 +59,8 @@ public class LndMobileService extends Service {
   static final int MSG_UNLOCKWALLET = 14;
   static final int MSG_INITWALLET = 15;
   static final int MSG_GRPC_STREAM_STARTED = 16;
+  static final int MSG_STOP_LND = 17;
+  static final int MSG_STOP_LND_RESULT = 18;
 
   int unlockWalletRequest = -1;
 
@@ -149,7 +151,10 @@ public class LndMobileService extends Service {
                 sendToClient(msg.replyTo, message);
               }
 
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (IllegalAccessException e) {
+              Log.e(TAG, "Could not invoke lndmobile method " + method, e);
+              // TODO(hsjoberg) send error response to client?
+            } catch (InvocationTargetException e) {
               Log.e(TAG, "Could not invoke lndmobile method " + method, e);
               // TODO(hsjoberg) send error response to client?
             }
@@ -222,6 +227,11 @@ public class LndMobileService extends Service {
               initWallet.build().toByteArray(),
               new LndCallback(msg.replyTo, "InitWallet", -1)
             );
+            break;
+
+          case MSG_STOP_LND:
+            HyperLog.d(TAG, "Got MSG_STOP_LND");
+            stopLnd(msg.replyTo, request);
             break;
 
           default:
@@ -449,27 +459,11 @@ public class LndMobileService extends Service {
 
       if (checkLndProcessExists()) {
         HyperLog.i(TAG, "Lnd exists, attempting to stop it");
-        Lndmobile.stopDaemon(
-          Rpc.StopRequest.newBuilder().build().toByteArray(),
-          new Callback() {
-            @Override
-            public void onError(Exception e) {
-              HyperLog.e(TAG, "Got Error when trying to stop lnd", e);
-              try {
-                Thread.sleep(10000);
-              } catch (Throwable t) {}
-              killLndProcess();
-            }
-
-            @Override
-            public void onResponse(byte[] bytes) {
-              try {
-                Thread.sleep(10000);
-              } catch (Throwable t) {}
-              killLndProcess();
-            }
-          }
-        );
+        stopLnd(null, -1);
+        try {
+          Thread.sleep(2000);
+        } catch (InterruptedException e) {}
+        killLndProcess();
       }
     }
 
@@ -498,6 +492,12 @@ public class LndMobileService extends Service {
         syncMethods.put(name, m);
       }
     }
+
+    /*if (checkLndProcessExists()) {
+      HyperLog.w(TAG, "WARNING: Found lnd process while in LndMobileService constructor.");
+      HyperLog.w(TAG, "Going to kill lnd process");
+      killLndProcess();
+    }*/
   }
 
   private boolean checkLndProcessExists() {
@@ -523,5 +523,47 @@ public class LndMobileService extends Service {
       }
     }
     return false;
+  }
+
+  private void stopLnd(Messenger recipient, int request) {
+    Lndmobile.stopDaemon(
+      Rpc.StopRequest.newBuilder().build().toByteArray(),
+      new Callback() {
+        @Override
+        public void onError(Exception e) {
+          HyperLog.e(TAG, "Got Error when trying to stop lnd", e);
+
+          lndStarted = false;
+
+          if (recipient != null) {
+            Message msg = Message.obtain(null, MSG_STOP_LND_RESULT, request, 0);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("error_code", "Lnd Stop Error");
+            bundle.putString("error_desc", e.toString());
+            msg.setData(bundle);
+
+            sendToClient(recipient, msg);
+          }
+        }
+
+        @Override
+        public void onResponse(byte[] bytes) {
+          HyperLog.e(TAG, "onReponse for stopDaemon");
+
+          lndStarted = false;
+
+          if (recipient != null) {
+            Message msg = Message.obtain(null, MSG_STOP_LND_RESULT, request, 0);
+
+            Bundle bundle = new Bundle();
+            bundle.putByteArray("response", bytes);
+            msg.setData(bundle);
+
+            sendToClient(recipient, msg);
+          }
+        }
+      }
+    );
   }
 }
