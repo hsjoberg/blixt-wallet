@@ -51,17 +51,6 @@ class BlixtTor extends ReactContextBaseJavaModule {
     @Override
     protected String doInBackground(String... strings) {
       try {
-        int socksPort = 9070;
-        int controlPort = 9071;
-        if (BuildConfig.CHAIN.equals("testnet")) {
-          socksPort += 10;
-          controlPort += 100;
-        }
-        if (BuildConfig.DEBUG) {
-          socksPort += 100;
-          controlPort += 100;
-        }
-
         String fileStorageLocation = getReactApplicationContext().getFilesDir().getPath() + "/torfiles";
         com.msopentech.thali.toronionproxy.OnionProxyManager onionProxyManager = getOnionProxyManager(fileStorageLocation);
         onionProxyManager.setup();
@@ -69,14 +58,14 @@ class BlixtTor extends ReactContextBaseJavaModule {
         onionProxyManager.getTorInstaller().updateTorConfigCustom(
           "RunAsDaemon 1\n" +
           "AvoidDiskWrites 1\n" +
-          "ControlPort " + controlPort + "\n" +
-          "SOCKSPort " + socksPort + "\n" +
+          "ControlPort " + BlixtTorUtils.getControlPort() + "\n" +
+          "SOCKSPort " + BlixtTorUtils.getSocksPort() + "\n" +
           "DNSPort 0\n" +
           "TransPort 0\n" +
           "CookieAuthentication 1\n" +
           "DisableNetwork 1\n" +
-          "ControlPortWriteToFile " + getReactApplicationContext().getFilesDir().getPath() + "/torfiles/lib/tor/control.txt"+ "\n" +
-          "CookieAuthFile " + getReactApplicationContext().getFilesDir().getPath() + "/torfiles/lib/tor/control_auth_cookie"+ "\n"
+          "ControlPortWriteToFile " + fileStorageLocation + "/lib/tor/control.txt"+ "\n" +
+          "CookieAuthFile " + fileStorageLocation + "/lib/tor/control_auth_cookie"+ "\n"
         );
 
         int totalSecondsPerTorStartup = 4 * 60;

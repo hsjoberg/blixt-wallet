@@ -115,4 +115,10 @@ export const appMigration: IAppMigration[] = [
       await setItemObject(StorageItem.torEnabled, false);
     },
   },
+  // Version 15
+  {
+    async beforeLnd(db, i) {
+      await LndMobile.writeConfigFile();
+    },
+  },
 ];
