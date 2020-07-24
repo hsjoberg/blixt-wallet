@@ -52,10 +52,7 @@ export default function Settings({ navigation }: ISettingsProps) {
         text: "Copy seed",
         onPress: async () => {
           Clipboard.setString(seed.join(" "));
-          Toast.show({
-            text: "Copied to clipboard.",
-            type: "warning",
-          });
+          toast("Copied to clipboard", undefined, "warning");
         }
       }, {
         text: "OK",
@@ -176,16 +173,10 @@ export default function Settings({ navigation }: ISettingsProps) {
   const copyLog = async () => {
     try {
       await NativeModules.LndMobile.copyLndLog();
-      Toast.show({
-        text: "Copied lnd log file.",
-        type: "warning",
-      });
+      toast("Copied lnd log file.", undefined, "warning");
     } catch (e) {
       console.error(e);
-      Toast.show({
-        text: "Error copying lnd log file.",
-        type: "danger",
-      });
+      toast("Error copying lnd log file.", undefined, "danger");
     }
   };
 
@@ -194,18 +185,10 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onExportChannelsPress = async () => {
     try {
       const response = await exportChannelsBackup();
-      Toast.show({
-        text: `File written:\n ${response}`,
-        type: "warning",
-        duration: 10000,
-      });
+      toast(`File written:\n ${response}`, 10000, "warning");
     } catch (e) {
       console.log(e);
-      Toast.show({
-        text: e.message,
-        type: "danger",
-        duration: 10000,
-      });
+      toast(e.message, 10000, "danger");
     }
   }
 

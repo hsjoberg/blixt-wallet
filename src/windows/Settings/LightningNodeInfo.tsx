@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Card, Text, CardItem, H1, Toast } from "native-base";
+import { Body, Card, Text, CardItem, H1 } from "native-base";
 import { fromUnixTime } from "date-fns";
 
 import Blurmodal from "../../components/BlurModal";
-import { formatISO } from "../../utils";
+import { formatISO, toast } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
 
 interface IMetaDataProps {
@@ -20,7 +20,7 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
         Array.isArray(data)
           ? Clipboard.setString(data.join("\n"))
           : Clipboard.setString(data);
-        Toast.show({ text: "Copied to clipboard.", type: "warning" });
+        toast("Copied to clipboard", undefined, "warning");
       }}
     >
       <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>

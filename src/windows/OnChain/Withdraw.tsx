@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Toast, Spinner } from "native-base";
+import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
 
@@ -8,8 +8,8 @@ import { OnChainStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
-import { parseBech32 } from "../../utils";
-import { unitToSatoshi, BitcoinUnits, convertBitcoinUnit } from "../../utils/bitcoin-units";
+import { parseBech32, toast } from "../../utils";
+import { BitcoinUnits, convertBitcoinUnit } from "../../utils/bitcoin-units";
 import useBalance from "../../hooks/useBalance";
 
 export interface IOpenChannelProps {
@@ -54,19 +54,9 @@ export default ({ navigation }: IOpenChannelProps) => {
       await getBalance(undefined);
       navigation.pop();
 
-      Toast.show({
-        duration: 6000,
-        type: "success",
-        text: "Withdraw succeeded",
-        buttonText: "Okay",
-      });
+      toast("Withdraw succeeded", 6000, "success");
     } catch (e) {
-      Toast.show({
-        duration: 12000,
-        type: "danger",
-        text: `Error: ${e.message}`,
-        buttonText: "Okay",
-      });
+      toast(`Error: ${e.message}`, 12000, "danger");
       setSending(false);
     }
   };

@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Body, Card, Text, CardItem, H1, Toast } from "native-base";
+import { Body, Card, Text, CardItem, H1 } from "native-base";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Bar } from "react-native-progress";
 
@@ -8,6 +8,7 @@ import { useStoreState } from "../state/store";
 import Blurmodal from "../components/BlurModal";
 import TextLink from "../components/TextLink";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { toast } from "../utils";
 
 interface IMetaDataProps {
   title: string;
@@ -20,7 +21,7 @@ const MetaData = ({ title, data, url }: IMetaDataProps) => {
       style={style.detailText}
       onPress={() => {
         Clipboard.setString(data);
-        Toast.show({ text: "Copied to clipboard.", type: "warning" });
+        toast("Copied to clipboard.", undefined, "warning");
       }}
     >
       <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>

@@ -14,6 +14,7 @@ import { smallScreen } from "../../utils/device";
 import Container from "../../components/Container";
 import Content from "../../components/Content";
 import CopyAddress from "../../components/CopyAddress";
+import { toast } from "../../utils";
 
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "AddFunds">;
@@ -40,10 +41,7 @@ export default function AddFunds({ navigation }: IProps) {
 
   const onBtcAddressTextPress = () => {
     Clipboard.setString(address!);
-    Toast.show({
-      text: "Copied to clipboard.",
-      type: "warning",
-    });
+    toast("Copied to clipboard", undefined, "warning");
   };
 
   const onBtcAddressQrPress = async () => {

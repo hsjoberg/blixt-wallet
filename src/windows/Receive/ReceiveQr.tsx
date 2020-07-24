@@ -1,8 +1,7 @@
 import React from "react";
 import { View, Share, StyleSheet } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Button, Body, Icon, Header, Text, Title, Left, H1, H3, Toast, Spinner } from "native-base";
-import { formatDistanceStrict, fromUnixTime } from "date-fns";
+import { Button, Body, Icon, Header, Text, Title, Left, H1, H3, Spinner } from "native-base";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -17,6 +16,7 @@ import CopyAddress from "../../components/CopyAddress";
 import Container from "../../components/Container";
 import Content from "../../components/Content";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { toast } from "../../utils";
 
 interface IReceiveQRProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveQr">;
@@ -53,10 +53,7 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
 
   const onPressPaymentRequest = () => {
     Clipboard.setString(transaction.paymentRequest);
-    Toast.show({
-      text: "Copied to clipboard.",
-      type: "warning",
-    });
+    toast("Copied to clipboard", undefined, "warning");
   };
 
   const onQrPress = async () => {
