@@ -226,6 +226,27 @@ export const lightning: ILightningModel = {
     if (firstSync) {
       await setItemObject(StorageItem.firstSync, false);
       actions.setFirstSync(false);
+
+      // Connect to a lightning node
+      // to get the network graph ASAP
+      // in case DNS bootstrap fails
+      setTimeout(async () => {
+        try {
+          const nodes = [
+            ["030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f", "52.50.244.44:9735"],    // Bitrefill
+            ["03c2abfa93eacec04721c019644584424aab2ba4dff3ac9bdab4e9c97007491dda", "157.245.68.47:9735"],   // tippin.me
+            ["03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e", "18.221.23.28:9735"],    // OpenNode
+            ["026b105ac13212c48714c6be9b11577a9ce10f10e1c88a45ce217e6331209faf8b", "52.224.178.244:9735"],  // LivingRoomofSatoshi.com
+            ["02e7c42ae2952d7a71398e23535b53ffc60deb269acbc7c10307e6b797b91b1e79", "87.121.37.156:9735"],   // PeerName.com
+            ["03864ef025fde8fb587d989186ce6a4a186895ee44a926bfc370e2c366597a3f8f", "34.239.230.56:9735"],   // ACINQ
+          ];
+          const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
+          log.i(`Connecting to ${randomNode[0]}@${randomNode[1]} to get LN network graph`);
+          await injections.lndMobile.index.connectPeer(randomNode[0], randomNode[1]);
+        } catch (e) {
+          log.e("Connecting to node for channel graph failed in waitForChainSync firstSync=true", [e]);
+        }
+      }, 1000);
     }
     actions.setReady(true);
     actions.setSyncedToChain(info.syncedToChain);
