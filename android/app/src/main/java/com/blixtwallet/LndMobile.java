@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Process;
 import android.util.Base64;
 import android.util.Log;
@@ -56,6 +57,7 @@ import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.permissions.PermissionsModule;
 
+import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.oblador.keychain.KeychainModule;
 
@@ -265,6 +267,28 @@ class LndMobile extends ReactContextBaseJavaModule {
     }
   }
 
+  @ReactMethod
+  public void unbindLndMobileService(Promise promise) {
+    if (lndMobileServiceBound) {
+      int req = new Random().nextInt();
+      requests.put(req, promise);
+
+      if (lndMobileServiceMessenger != null) {
+        try {
+          Message message = Message.obtain(null, LndMobileService.MSG_UNREGISTER_CLIENT, req);
+          message.replyTo = messenger;
+          lndMobileServiceMessenger.send(message);
+        } catch (RemoteException e) {
+          HyperLog.e(TAG, "Unable to send unbind request to LndMobileService", e);
+        }
+      }
+
+      getReactApplicationContext().unbindService(lndMobileServiceConnection);
+      lndMobileServiceBound = false;
+      HyperLog.i(TAG, "Unbinding LndMobileService");
+    }
+  }
+
   // TODO unbind LndMobileService?
 
   @ReactMethod
@@ -294,10 +318,11 @@ class LndMobile extends ReactContextBaseJavaModule {
 
     String params = "--lnddir=" + getReactApplicationContext().getFilesDir().getPath();
     if (torEnabled) {
+      int listenPort = BlixtTorUtils.getListenPort();
       int socksPort = BlixtTorUtils.getSocksPort();
       int controlPort = BlixtTorUtils.getControlPort();
       params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
-      // params += " --tor.v3 --listen=localhost";
+      // params += " --tor.v3 --listen=localhost:" + listenPort;
       params += " --nolisten";
     }
     else {
@@ -969,5 +994,15 @@ class LndMobile extends ReactContextBaseJavaModule {
         HyperLog.v(mainTag, "[unknown msg type][" + tag + "] " + message);
       break;
     }
+  }
+
+  @ReactMethod
+  public void getTorEnabled(Promise promise) {
+    android.database.sqlite.SQLiteDatabase db = com.facebook.react.modules.storage.ReactDatabaseSupplier.getInstance(getReactApplicationContext()).get();
+    String torEnabled = AsyncLocalStorageUtil.getItemImpl(db, "torEnabled");
+    if (torEnabled != null) {
+      promise.resolve(torEnabled.equals("true"));
+    }
+    promise.reject(new Error(""));
   }
 }

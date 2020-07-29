@@ -1,5 +1,9 @@
 package com.blixtwallet;
 
+import com.blixtwallet.tor.BlixtTor;
+import com.blixtwallet.tor.BlixtTorUtils;
+
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,18 +17,15 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
-import java.util.EnumSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.concurrent.futures.ResolvableFuture;
-import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.ListenableWorker;
 import androidx.work.WorkerParameters;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.ByteString;
-import lnrpc.Rpc;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -36,12 +37,11 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
 
-
 import com.oblador.keychain.KeychainModule;
 
 import com.hypertrack.hyperlog.HyperLog;
 
-import com.blixtwallet.PromiseWrapper;
+import lnrpc.Rpc;
 
 public class LndMobileScheduledSyncWorker extends ListenableWorker {
   private final String TAG = "LndScheduledSyncWorker";
@@ -53,6 +53,10 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   private Messenger messenger; // Me
   private ReactDatabaseSupplier dbSupplier;
   private boolean lndStarted = false;
+  private boolean torEnabled = false;
+  private boolean torStarted = false;
+
+  BlixtTor blixtTor;
 
   // private enum WorkState {
   //   NOT_STARTED, BOUND, WALLET_UNLOCKED, WAITING_FOR_SYNC, DONE;
@@ -68,6 +72,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   public LndMobileScheduledSyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
     super(context, workerParams);
     dbSupplier = ReactDatabaseSupplier.getInstance(getApplicationContext());
+    blixtTor = new BlixtTor(new ReactApplicationContext(getApplicationContext()));
   }
 
   @Override
@@ -91,6 +96,8 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       return future;
     }
 
+    torEnabled = getTorEnabled();
+
     KeychainModule keychain = new KeychainModule(new ReactApplicationContext(getApplicationContext()));
 
     WritableMap keychainOptions = Arguments.createMap();
@@ -105,7 +112,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
         HyperLog.d(TAG, "onSuccess");
 
         if (value == null) {
-          HyperLog.d(TAG, "Failed to get wallet password, got null from keychain provider");
+          HyperLog.e(TAG, "Failed to get wallet password, got null from keychain provider");
           future.set(Result.failure());
           return;
         }
@@ -113,6 +120,14 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
           HyperLog.d(TAG, "Password data retrieved from keychain");
           final String password = ((ReadableMap) value).getString("password");
           HyperLog.d(TAG, "Password retrieved");
+
+          if (torEnabled) {
+            boolean startTorResult = startTor();
+            if (!startTorResult) {
+              future.set(Result.failure());
+              return;
+            }
+          }
           startLndWorkThread(future, password);
         }
       }
@@ -132,6 +147,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     // A better fix in the future would be to actually
     // use MSG_CHECKSTATUS in the future
     HandlerThread thread = new HandlerThread(HANDLERTHREAD_NAME) {
+      @SuppressLint("HandlerLeak")
       @Override
       public void run() {
         incomingHandler = new Handler() {
@@ -182,7 +198,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                     HyperLog.i(TAG, "syncedToGraph: " + Boolean.toString(res.getSyncedToGraph()));
 
                     if (res.getSyncedToChain() == true) {
-                      HyperLog.i(TAG, "Sync is done, letting lnd work for 20s before quitting");
+                      HyperLog.i(TAG, "Sync is done, letting lnd work for 10s before quitting");
                       writeLastScheduledSyncToDb();
 
                       Handler handler = new Handler();
@@ -191,10 +207,34 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                           HyperLog.i(TAG, "Job is done. Quitting");
                           unbindLndMobileService();
 
-                          HyperLog.i(TAG, "Calling future.set(Result.success());");
-                          future.set(Result.success());
+                          if (torStarted) {
+                            if (!MainActivity.started) {
+                              HyperLog.i(TAG, "Stopping Tor");
+                              blixtTor.stopTor(new PromiseWrapper() {
+                                @Override
+                                void onSuccess(@Nullable Object value) {
+                                  HyperLog.i(TAG, "Tor stopped");
+                                }
+
+                                @Override
+                                void onFail(Throwable throwable) {
+                                  HyperLog.e(TAG, "Fail while stopping Tor", throwable);
+                                }
+                              });
+                            } else {
+                              HyperLog.w(TAG, "MainActivity was started when shutting down sync work. I will not stop Tor");
+                            }
+                          }
+
+                          new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                              HyperLog.i(TAG, "Calling future.set(Result.success());");
+                              future.set(Result.success());
+                            }
+                          }, 1500);
                         }
-                      }, 20000);
+                      }, 10000);
                     }
                     else {
                       HyperLog.i(TAG, "Sleeping 10s then checking again");
@@ -230,7 +270,44 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
         bindLndMobileService();
       }
     };
+    // FIXME(hsjoberg):
+    // Calling thread.start() causes fatal exception:
+    // java.lang.RuntimeException: Can't create handler inside thread Thread[blixt_lndmobile_sync,5,main] that has not called Looper.prepare()
+    // Calling run instead, this is really wrong through.
+    // Maybe use AsyncTask instead?
     thread.run();
+  }
+
+  private boolean startTor() {
+    HyperLog.i(TAG, "Starting Tor");
+    blixtTor.startTor(new PromiseWrapper() {
+      @Override
+      void onSuccess(@Nullable Object value) {
+        HyperLog.i(TAG, "Tor started");
+        torStarted = true;
+      }
+
+      @Override
+      void onFail(Throwable throwable) {
+        HyperLog.e(TAG, "Failed to start Tor", throwable);
+        future.set(Result.failure());
+      }
+    });
+    int torTries = 0;
+    while (!torStarted) {
+      if (torTries++ > 30) {
+        HyperLog.e(TAG, "Couldn't start Tor.");
+        future.set(Result.failure());
+        return false;
+      }
+      HyperLog.i(TAG, "Waiting for Tor to start");
+      try {
+        Thread.sleep(1500);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+    return true;
   }
 
   private void startLnd() {
@@ -238,7 +315,21 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       Message message = Message.obtain(null, LndMobileService.MSG_START_LND, 0, 0);
       message.replyTo = messenger;
       Bundle bundle = new Bundle();
-      bundle.putString("args", "--lnddir=" + getApplicationContext().getFilesDir().getPath());
+      String params = "--lnddir=" + getApplicationContext().getFilesDir().getPath();
+      if (torEnabled) {
+        HyperLog.d(TAG, "Adding Tor params for starting lnd");
+        int socksPort = BlixtTorUtils.getSocksPort();
+        int controlPort = BlixtTorUtils.getControlPort();
+        params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
+        // params += " --tor.v3 --listen=localhost";
+        params += " --nolisten";
+      }
+      else {
+        // If Tor isn't active, make sure we aren't
+        // listening at all
+        params += " --nolisten";
+      }
+      bundle.putString("args", params);
       message.setData(bundle);
       messengerService.send(message);
     } catch (RemoteException e) {
@@ -291,7 +382,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
           message.replyTo = messenger;
           messengerService.send(message);
         } catch (RemoteException e) {
-          HyperLog.e(TAG, "Unable to send unbind request to  ", e);
+          HyperLog.e(TAG, "Unable to send unbind request to LndMobileService", e);
         }
       }
 
@@ -304,6 +395,16 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   private String getWalletPassword() {
     SQLiteDatabase db = dbSupplier.get();
     return AsyncLocalStorageUtil.getItemImpl(db, "walletPassword");
+  }
+
+  private boolean getTorEnabled() {
+    SQLiteDatabase db = dbSupplier.get();
+    String torEnabled = AsyncLocalStorageUtil.getItemImpl(db, "torEnabled");
+    if (torEnabled != null) {
+      return torEnabled.equals("true");
+    }
+    HyperLog.w(TAG, "Could not find torEnabled in asyncStorage");
+    return false;
   }
 
   private void writeLastScheduledSyncAttemptToDb() {
