@@ -1,6 +1,5 @@
 package com.blixtwallet.tor;
 
-import com.blixtwallet.BuildConfig;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -12,33 +11,34 @@ import com.msopentech.thali.toronionproxy.OnionProxyManager;
 import com.msopentech.thali.toronionproxy.TorConfig;
 
 import java.io.File;
+
 import com.hypertrack.hyperlog.HyperLog;
 
-class BlixtTor extends ReactContextBaseJavaModule {
+public class BlixtTor extends ReactContextBaseJavaModule {
+  OnionProxyManager onionProxyManager;
+  String fileStorageLocation;
   private final String TAG = "BlixtTor";
 
   public BlixtTor(ReactApplicationContext reactContext) {
     super(reactContext);
-  }
 
-  public String getName() {
-    return "BlixtTor";
-  }
+    fileStorageLocation = reactContext.getFilesDir().getPath() + "/torfiles";
+    File installDir = new File(fileStorageLocation);
+    TorConfig torConfig = AndroidTorConfig.createConfig(installDir, installDir, reactContext);
+    TorInstaller torInstaller = new TorInstaller(reactContext, installDir);
 
-  private OnionProxyManager getOnionProxyManager(String workingSubDirectoryName) {
-    File installDir = new File(workingSubDirectoryName);
-
-    TorConfig torConfig = AndroidTorConfig.createConfig(installDir, installDir, getReactApplicationContext());
-    TorInstaller torInstaller = new TorInstaller(getReactApplicationContext(), installDir);
-
-    return new AndroidOnionProxyManager(
-      getReactApplicationContext(),
+    onionProxyManager = new AndroidOnionProxyManager(
+      reactContext,
       torConfig,
       torInstaller,
       null,
       null,
       null
     );
+  }
+
+  public String getName() {
+    return "BlixtTor";
   }
 
   private class TorStartTask extends android.os.AsyncTask<String, Integer, String> {
@@ -51,12 +51,9 @@ class BlixtTor extends ReactContextBaseJavaModule {
     @Override
     protected String doInBackground(String... strings) {
       try {
-        String fileStorageLocation = getReactApplicationContext().getFilesDir().getPath() + "/torfiles";
-        com.msopentech.thali.toronionproxy.OnionProxyManager onionProxyManager = getOnionProxyManager(fileStorageLocation);
         onionProxyManager.setup();
-        //onionProxyManager.stop();
         onionProxyManager.getTorInstaller().updateTorConfigCustom(
-          "RunAsDaemon 1\n" +
+  "RunAsDaemon 1\n" +
           "AvoidDiskWrites 1\n" +
           "ControlPort " + BlixtTorUtils.getControlPort() + "\n" +
           "SOCKSPort " + BlixtTorUtils.getSocksPort() + "\n" +
@@ -90,8 +87,34 @@ class BlixtTor extends ReactContextBaseJavaModule {
     }
   }
 
+  private class TorStopTask extends android.os.AsyncTask<String, Integer, String> {
+    Promise promise;
+
+    public TorStopTask(Promise p) {
+      promise = p;
+    }
+
+    @Override
+    protected String doInBackground(String... strings) {
+      try {
+        onionProxyManager.stop();
+        promise.resolve(null);
+      }
+      catch (Exception e) {
+        e.printStackTrace();
+        promise.reject(e);
+      }
+      return "done";
+    }
+  }
+
   @ReactMethod
   public void startTor(Promise promise) {
     new TorStartTask(promise).execute();
   }
+
+  @ReactMethod
+  public void stopTor(Promise promise) {
+    new TorStopTask(promise).execute();
+  };
 }
