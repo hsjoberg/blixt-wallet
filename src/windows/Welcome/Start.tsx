@@ -116,27 +116,29 @@ There is currently no WatchTower support to watch your channels while you are of
           networkActivityIndicatorVisible={true}
           barStyle="light-content"
         />
-        <View style={style.menuDotsIcon}>
-          <Menu
-            ref={menu}
-            button={
-              <Icon
-                type="Entypo"
-                name="dots-three-horizontal"
-                onPress={showMenu}
-              />
-            }
-          >
-            <MenuItem
-              onPress={toggleTorEnabled}
-              // style={{ backgroundColor: blixtTheme.gray }}
-              // textStyle={{ color: blixtTheme.light }}
-              textStyle={{ color: "#000" }}
+        {!createWalletLoading &&
+          <View style={style.menuDotsIcon}>
+            <Menu
+              ref={menu}
+              button={
+                <Icon
+                  type="Entypo"
+                  name="dots-three-horizontal"
+                  onPress={showMenu}
+                />
+              }
             >
-              {torEnabled ? "Disable" : "Enable"} Tor
-            </MenuItem>
-          </Menu>
-        </View>
+              <MenuItem
+                onPress={toggleTorEnabled}
+                // style={{ backgroundColor: blixtTheme.gray }}
+                // textStyle={{ color: blixtTheme.light }}
+                textStyle={{ color: "#000" }}
+              >
+                {torEnabled ? "Disable" : "Enable"} Tor
+              </MenuItem>
+            </Menu>
+          </View>
+        }
         {!createWalletLoading
           ? <AnimatedH1>Welcome</AnimatedH1>
           : <H1 style={style.header}>Welcome</H1>

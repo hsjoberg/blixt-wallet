@@ -285,6 +285,175 @@ exports[`renders correctly 1`] = `
                         }
                       >
                         <View
+                          pointerEvents="box-none"
+                          style={
+                            Array [
+                              Object {
+                                "zIndex": 1,
+                              },
+                              false,
+                            ]
+                          }
+                        >
+                          <View
+                            accessibilityElementsHidden={false}
+                            importantForAccessibility="auto"
+                            pointerEvents="box-none"
+                            style={null}
+                          >
+                            <View
+                              pointerEvents="box-none"
+                              style={
+                                Object {
+                                  "bottom": 0,
+                                  "left": 0,
+                                  "position": "absolute",
+                                  "right": 0,
+                                  "top": 0,
+                                  "transform": Array [
+                                    Object {
+                                      "translateX": 0,
+                                    },
+                                  ],
+                                  "zIndex": 0,
+                                }
+                              }
+                            >
+                              <View
+                                style={
+                                  Object {
+                                    "backgroundColor": "#bc6610",
+                                    "borderBottomColor": "rgb(216, 216, 216)",
+                                    "flex": 1,
+                                    "shadowColor": "rgb(216, 216, 216)",
+                                    "shadowOffset": Object {
+                                      "height": 0.5,
+                                      "width": 0,
+                                    },
+                                    "shadowOpacity": 0.85,
+                                    "shadowRadius": 0,
+                                  }
+                                }
+                              />
+                            </View>
+                            <View
+                              pointerEvents="box-none"
+                              style={
+                                Object {
+                                  "height": 64,
+                                  "maxHeight": undefined,
+                                  "minHeight": undefined,
+                                  "opacity": undefined,
+                                  "transform": undefined,
+                                }
+                              }
+                            >
+                              <View
+                                pointerEvents="none"
+                                style={
+                                  Object {
+                                    "height": 20,
+                                  }
+                                }
+                              />
+                              <View
+                                pointerEvents="box-none"
+                                style={
+                                  Object {
+                                    "alignItems": "center",
+                                    "flex": 1,
+                                    "flexDirection": "row",
+                                    "justifyContent": "center",
+                                  }
+                                }
+                              >
+                                <View
+                                  pointerEvents="box-none"
+                                  style={
+                                    Object {
+                                      "marginHorizontal": 16,
+                                      "transform": Array [
+                                        Object {
+                                          "translateX": 0,
+                                        },
+                                      ],
+                                    }
+                                  }
+                                >
+                                  <Text
+                                    accessibilityRole="header"
+                                    numberOfLines={1}
+                                    style={
+                                      Object {
+                                        "color": "#e5eaea",
+                                        "fontSize": 17,
+                                        "fontWeight": "600",
+                                      }
+                                    }
+                                  >
+                                    Bitcoin
+                                  </Text>
+                                </View>
+                                <View
+                                  pointerEvents="box-none"
+                                  style={
+                                    Object {
+                                      "alignItems": "flex-end",
+                                      "bottom": 0,
+                                      "justifyContent": "center",
+                                      "marginRight": 20,
+                                      "position": "absolute",
+                                      "right": 0,
+                                      "top": 0,
+                                      "transform": Array [
+                                        Object {
+                                          "translateX": 0,
+                                        },
+                                      ],
+                                    }
+                                  }
+                                >
+                                  <TouchableWithoutFeedback>
+                                    <Text
+                                      allowFontScaling={false}
+                                      style={
+                                        Array [
+                                          Object {
+                                            "color": undefined,
+                                            "fontSize": 12,
+                                          },
+                                          Array [
+                                            Object {
+                                              "color": "#000",
+                                              "fontSize": 30,
+                                            },
+                                            Object {
+                                              "color": "#000",
+                                              "fontSize": 30,
+                                            },
+                                            Object {
+                                              "fontSize": 22,
+                                            },
+                                          ],
+                                          Object {
+                                            "fontFamily": "anticon",
+                                            "fontStyle": "normal",
+                                            "fontWeight": "normal",
+                                          },
+                                          Object {},
+                                        ]
+                                      }
+                                      type="AntDesign"
+                                    >
+                                      
+                                    </Text>
+                                  </TouchableWithoutFeedback>
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                        </View>
+                        <View
                           style={
                             Object {
                               "flex": 1,
@@ -358,7 +527,6 @@ exports[`renders correctly 1`] = `
                                 style={
                                   Object {
                                     "flex": 1,
-                                    "marginTop": 0,
                                   }
                                 }
                               >
@@ -412,222 +580,6 @@ exports[`renders correctly 1`] = `
                                             }
                                           }
                                         >
-                                          <View>
-                                            <SafeAreaView
-                                              style={
-                                                Object {
-                                                  "backgroundColor": "#F8F8F8",
-                                                }
-                                              }
-                                            >
-                                              <View
-                                                iosBarStyle="light-content"
-                                                style={
-                                                  Object {
-                                                    "backgroundColor": "#F8F8F8",
-                                                    "borderBottomColor": "#a7a6ab",
-                                                    "borderBottomWidth": 0.5,
-                                                    "elevation": 3,
-                                                    "flexDirection": "row",
-                                                    "height": 64,
-                                                    "justifyContent": "center",
-                                                    "left": 0,
-                                                    "paddingLeft": 6,
-                                                    "paddingRight": 10,
-                                                    "right": 0,
-                                                    "shadowColor": undefined,
-                                                    "shadowOffset": undefined,
-                                                    "shadowOpacity": undefined,
-                                                    "shadowRadius": undefined,
-                                                    "top": 0,
-                                                  }
-                                                }
-                                                translucent={false}
-                                              >
-                                                <View
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "flex-start",
-                                                      "alignSelf": "center",
-                                                      "flex": 1,
-                                                    }
-                                                  }
-                                                >
-                                                  <TouchableOpacity
-                                                    activeOpacity={0.5}
-                                                    style={
-                                                      Object {
-                                                        "alignItems": "center",
-                                                        "alignSelf": null,
-                                                        "backgroundColor": "transparent",
-                                                        "borderBottomWidth": null,
-                                                        "borderColor": null,
-                                                        "borderLeftWidth": null,
-                                                        "borderRadius": 5,
-                                                        "borderRightWidth": null,
-                                                        "borderTopWidth": null,
-                                                        "borderWidth": undefined,
-                                                        "elevation": 0,
-                                                        "flexDirection": "row",
-                                                        "height": 45,
-                                                        "justifyContent": "space-between",
-                                                        "marginLeft": -3,
-                                                        "paddingBottom": 6,
-                                                        "paddingLeft": 4,
-                                                        "paddingRight": 6,
-                                                        "paddingTop": 6,
-                                                        "shadowColor": null,
-                                                        "shadowOffset": null,
-                                                        "shadowOpacity": null,
-                                                        "shadowRadius": null,
-                                                      }
-                                                    }
-                                                    transparent={true}
-                                                  >
-                                                    <Text
-                                                      allowFontScaling={false}
-                                                      style={
-                                                        Array [
-                                                          Object {
-                                                            "color": undefined,
-                                                            "fontSize": 12,
-                                                          },
-                                                          Array [
-                                                            Object {
-                                                              "color": "#000",
-                                                              "fontSize": 30,
-                                                            },
-                                                            Object {
-                                                              "color": "#007aff",
-                                                              "fontSize": 34,
-                                                              "marginLeft": 1,
-                                                              "marginRight": 2,
-                                                              "marginTop": 0,
-                                                              "paddingTop": 1,
-                                                            },
-                                                          ],
-                                                          Object {
-                                                            "fontFamily": "Ionicons",
-                                                            "fontStyle": "normal",
-                                                            "fontWeight": "normal",
-                                                          },
-                                                          Object {},
-                                                        ]
-                                                      }
-                                                      type="Ionicons"
-                                                    >
-                                                      
-                                                    </Text>
-                                                  </TouchableOpacity>
-                                                </View>
-                                                <View
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "center",
-                                                      "alignSelf": "center",
-                                                      "flex": 1,
-                                                    }
-                                                  }
-                                                >
-                                                  <Text
-                                                    numberOfLines={1}
-                                                    style={
-                                                      Object {
-                                                        "color": "#000",
-                                                        "fontFamily": "System",
-                                                        "fontSize": 17,
-                                                        "fontWeight": "700",
-                                                        "marginLeft": undefined,
-                                                        "paddingLeft": 4,
-                                                        "paddingTop": 1,
-                                                        "textAlign": "center",
-                                                      }
-                                                    }
-                                                  >
-                                                    Bitcoin
-                                                  </Text>
-                                                </View>
-                                                <View
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "flex-end",
-                                                      "alignSelf": "center",
-                                                      "flex": 1,
-                                                      "flexDirection": "row",
-                                                      "justifyContent": "flex-end",
-                                                    }
-                                                  }
-                                                >
-                                                  <TouchableOpacity
-                                                    activeOpacity={0.5}
-                                                    style={
-                                                      Object {
-                                                        "alignItems": "center",
-                                                        "alignSelf": null,
-                                                        "backgroundColor": "transparent",
-                                                        "borderBottomWidth": null,
-                                                        "borderColor": null,
-                                                        "borderLeftWidth": null,
-                                                        "borderRadius": 50,
-                                                        "borderRightWidth": null,
-                                                        "borderTopWidth": null,
-                                                        "borderWidth": undefined,
-                                                        "elevation": 0,
-                                                        "flexDirection": "row",
-                                                        "height": 45,
-                                                        "justifyContent": "space-between",
-                                                        "marginRight": -9,
-                                                        "paddingBottom": 6,
-                                                        "paddingLeft": 15,
-                                                        "paddingRight": 15,
-                                                        "paddingTop": 6,
-                                                        "shadowColor": null,
-                                                        "shadowOffset": null,
-                                                        "shadowOpacity": null,
-                                                        "shadowRadius": null,
-                                                      }
-                                                    }
-                                                    transparent={true}
-                                                  >
-                                                    <Text
-                                                      allowFontScaling={false}
-                                                      style={
-                                                        Array [
-                                                          Object {
-                                                            "color": undefined,
-                                                            "fontSize": 12,
-                                                          },
-                                                          Array [
-                                                            Object {
-                                                              "color": "#000",
-                                                              "fontSize": 30,
-                                                            },
-                                                            Object {
-                                                              "color": "#007aff",
-                                                              "fontSize": 31,
-                                                              "marginLeft": 2,
-                                                              "marginRight": 0,
-                                                              "marginTop": 0,
-                                                              "paddingTop": 2,
-                                                            },
-                                                          ],
-                                                          Object {
-                                                            "fontFamily": "anticon",
-                                                            "fontStyle": "normal",
-                                                            "fontWeight": "normal",
-                                                          },
-                                                          Object {},
-                                                        ]
-                                                      }
-                                                      type="AntDesign"
-                                                    >
-                                                      
-                                                    </Text>
-                                                  </TouchableOpacity>
-                                                </View>
-                                              </View>
-                                            </SafeAreaView>
-                                          </View>
                                           <View
                                             style={
                                               Object {
@@ -1008,22 +960,6 @@ exports[`renders correctly 1`] = `
                             </View>
                           </View>
                         </View>
-                        <View
-                          pointerEvents="box-none"
-                          style={
-                            Array [
-                              Object {
-                                "zIndex": 1,
-                              },
-                              Object {
-                                "left": 0,
-                                "position": "absolute",
-                                "right": 0,
-                                "top": 0,
-                              },
-                            ]
-                          }
-                        />
                       </View>
                     </View>
                   </View>

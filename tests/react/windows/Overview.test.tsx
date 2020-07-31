@@ -12,6 +12,8 @@ import { lnrpc } from "../../../proto/proto";
 import { hexToUint8Array } from "../../../src/utils";
 import { channelBalance } from "../../../mocks/lndmobile/channel";
 
+jest.setTimeout(10000);
+
 it("renders correctly", () => {
   const AppContainer = createNavigationContainer(Overview, "Overview");
 
