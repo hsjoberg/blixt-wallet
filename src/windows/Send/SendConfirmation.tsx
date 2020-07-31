@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { StatusBar, Vibration, BackHandler } from "react-native";
 import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner } from "native-base";
 import { RouteProp } from "@react-navigation/native";
@@ -59,6 +59,13 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       clear();
     }
   }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Pay invoice",
+      headerShown: true,
+    });
+  }, [navigation]);
 
   if (!paymentRequest) {
     return (<Text>Error</Text>);
@@ -170,21 +177,6 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
   return (
     <Container>
-      <StatusBar
-        hidden={false}
-        translucent={false}
-        networkActivityIndicatorVisible={false}
-      />
-      <Header iosBarStyle="light-content">
-        <Left>
-          <Button transparent={true} onPress={() => { callback(null); navigation.pop()}}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Pay invoice</Title>
-        </Body>
-      </Header>
       <BlixtForm
         items={formItems}
         buttons={[(

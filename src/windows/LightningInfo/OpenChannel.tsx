@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -9,6 +9,7 @@ import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";
+import { TouchableWithoutFeedback } from "react-native";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -29,6 +30,13 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
     bitcoinUnit,
     fiatUnit,
   } = useBalance();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Open channel",
+      headerShown: true,
+    });
+  }, [navigation]);
 
   const onOpenChannelPress = async () => {
     try {
@@ -53,16 +61,6 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
 
   return (
     <Container>
-      <Header iosBarStyle="light-content" translucent={false}>
-        <Left>
-          <Button transparent={true} onPress={() => navigation.pop()}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Open channel</Title>
-        </Body>
-      </Header>
       <BlixtForm
         items={[{
           key: "CHANNEL",

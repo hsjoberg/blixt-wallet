@@ -1,11 +1,12 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
 
 import OnChainInfo from "./OnChainInfo";
 import OnChainTransactionLog from "./OnChainTransactionLog";
 import OnChainTransactionDetails from "./OnChainTransactionDetails";
 import Withdraw from "./Withdraw";
 import CameraFullscreen from "../CameraFullscreen";
+import { NAVIGATION_SCREEN_OPTIONS } from "../../utils/constants";
 
 const Stack = createStackNavigator();
 
@@ -22,8 +23,12 @@ export type OnChainStackParamList = {
 }
 
 export default function OnChainIndex() {
+  const screenOptions: StackNavigationOptions = {
+    ...NAVIGATION_SCREEN_OPTIONS,
+  };
+
   return (
-    <Stack.Navigator initialRouteName="OnChainInfo" screenOptions={{ headerShown: false, animationEnabled: false, cardStyle: { backgroundColor: "transparent" } }}>
+    <Stack.Navigator initialRouteName="OnChainInfo" screenOptions={screenOptions}>
       <Stack.Screen name="OnChainInfo" component={OnChainInfo} />
       <Stack.Screen name="OnChainTransactionLog" component={OnChainTransactionLog} />
       <Stack.Screen name="OnChainTransactionDetails" component={OnChainTransactionDetails} />

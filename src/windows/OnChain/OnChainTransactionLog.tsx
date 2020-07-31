@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { FlatList } from "react-native";
+import React, { useEffect, useLayoutEffect } from "react";
+import { FlatList, TouchableWithoutFeedback } from "react-native";
 import { Body, Header, Container, Right, Left, Button, Title, Icon } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -24,27 +24,26 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
     }
   }, [getTransactions, rpcReady]);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Transaction Log",
+      headerShown: true,
+      headerRight: () => {
+        return (
+          <TouchableWithoutFeedback onPress={async () => rpcReady && await getTransactions()}>
+            <Icon type="MaterialIcons" name="sync" style={{ fontSize: 22 }} />
+          </TouchableWithoutFeedback>
+        )
+      }
+    });
+  }, [navigation]);
+
   const onTransactionPress = (txId: string) => {
     navigation.navigate("OnChainTransactionDetails", { txId });
   };
 
   return (
     <Container>
-      <Header iosBarStyle="light-content" translucent={false}>
-        <Left>
-          <Button transparent={true} onPress={() => navigation.pop()}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Transaction Log</Title>
-        </Body>
-        <Right>
-          <Button transparent={true} onPress={async () => rpcReady && await getTransactions()}>
-          <Icon type="MaterialIcons" name="sync" />
-          </Button>
-        </Right>
-      </Header>
       <FlatList
         initialNumToRender={12}
         data={transactions.sort((tx1, tx2) => tx2.timeStamp!.toNumber() - tx1.timeStamp!.toNumber())}

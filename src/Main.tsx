@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Spinner, H1 } from "native-base";
 import { StatusBar } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, TransitionSpecs, CardStyleInterpolators, StackNavigationOptions } from "@react-navigation/stack";
 
 import Overview from "./windows/Overview";
 import Help from "./windows/Help";
@@ -27,6 +27,7 @@ import CameraFullscreen from "./windows/CameraFullscreen";
 
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import Container from "./components/Container";
+import { NAVIGATION_SCREEN_OPTIONS } from "./utils/constants";
 
 const RootStack = createStackNavigator();
 
@@ -111,13 +112,8 @@ export default function Main() {
     })();
   }, [appReady, loggedIn, holdOnboarding, walletCreated]);
 
-  const screenOptions = {
-    gestureEnabled: false,
-    headerShown: false,
-    animationEnabled: false,
-    cardStyle: {
-      backgroundColor: "transparent",
-    },
+  const screenOptions: StackNavigationOptions = {
+    ...NAVIGATION_SCREEN_OPTIONS,
   };
 
   if (state === "init") {

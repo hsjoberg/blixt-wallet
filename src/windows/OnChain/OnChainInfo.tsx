@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View, Share } from "react-native";
+import React, { useEffect, useLayoutEffect } from "react";
+import { StyleSheet, View, Share, TouchableWithoutFeedback } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Body, Text, Header, Container, H1, H2, Right, Left, Button, Title, Icon, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -36,6 +36,20 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
     }
   }, [getBalance, rpcReady]);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Bitcoin",
+      headerShown: true,
+      headerRight: () => {
+        return (
+          <TouchableWithoutFeedback onPress={() => navigation.navigate("OnChainTransactionLog")}>
+            <Icon type="AntDesign" name="bars" style={{ fontSize: 22 }} />
+          </TouchableWithoutFeedback>
+        )
+      }
+    });
+  }, [navigation]);
+
   const onGeneratePress = async () => await getAddress({ forceNew: true });
 
   const onWithdrawPress = () => navigation.navigate("Withdraw");
@@ -62,41 +76,26 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
 
   return (
     <Container>
-      <Header iosBarStyle="light-content" translucent={false}>
-        <Left>
-          <Button transparent={true} onPress={() => navigation.goBack()}>
-            <Icon type="Ionicons" name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Bitcoin</Title>
-        </Body>
-        <Right>
-          <Button transparent={true} onPress={() => navigation.navigate("OnChainTransactionLog")}>
-            <Icon type="AntDesign" name="bars" />
-          </Button>
-        </Right>
-      </Header>
       <View style={style.container}>
         <View style={style.fundsInfo}>
           {smallScreen ?
-          <>
-            <H2 style={style.fundsInfoText}>
-              On-chain funds:
-            </H2>
+            <>
+              <H2 style={style.fundsInfoText}>
+                On-chain funds:
+              </H2>
               <H2 style={style.fundsInfoText} onPress={onPressBalance} testID="ONCHAIN_FUNDS">
                 {onChainFunds}
               </H2>
-              </>
-          :
-          <>
-            <H1 style={style.fundsInfoText}>
-              On-chain funds:
-            </H1>
+            </>
+            :
+            <>
+              <H1 style={style.fundsInfoText}>
+                On-chain funds:
+              </H1>
               <H1 style={style.fundsInfoText} onPress={onPressBalance} testID="ONCHAIN_FUNDS">
                 {onChainFunds}
               </H1>
-              </>
+            </>
           }
         </View>
         <View style={style.qr}>
