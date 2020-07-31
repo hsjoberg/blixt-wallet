@@ -51,7 +51,7 @@ Do you like React Native, Java or Lightning? Come and help out!
 
 To start the application:
 - Run: `yarn start-metro`
-- Run: `yarn mainnet-debug or `yarn testnet-debug`
+- Run: `yarn mainnet-debug` or `yarn testnet-debug`
 
 ## Commit and Code-Style
 
