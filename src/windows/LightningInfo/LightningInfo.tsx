@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useLayoutEffect } from "react";
 import { StyleSheet, View, ScrollView, Animated } from "react-native";
 import { Body, Header, Left, Button, Title, Right, Icon, H1, H3, Fab, Spinner } from "native-base";
 import Long from "long";
@@ -38,6 +38,20 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
       })();
     }
   }, [getChannels, rpcReady]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Lightning Network",
+      headerShown: true,
+      headerRight: () => {
+        return (
+          <TouchableWithoutFeedback onPress={async () => await getChannels()}>
+            <Icon type="MaterialIcons" name="sync" style={{ fontSize: 22 }} />
+          </TouchableWithoutFeedback>
+        )
+      }
+    });
+  }, [navigation]);
 
   const balance = channels.reduce((accumulator, channel) => {
     return accumulator.add(channel.localBalance!);
@@ -91,22 +105,6 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
 
   return (
     <Container>
-      <Header iosBarStyle="light-content" translucent={false}>
-        <Left>
-          <Button transparent={true} onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Lightning Network</Title>
-        </Body>
-        <Right>
-          <Button transparent={true} onPress={async () => await getChannels(undefined)}>
-            <Icon type="MaterialIcons" name="sync" />
-          </Button>
-        </Right>
-      </Header>
-
       {rpcReady &&
         <ScrollView contentContainerStyle={style.container}>
           <View style={style.balanceInfo}>

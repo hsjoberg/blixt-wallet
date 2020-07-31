@@ -1,5 +1,5 @@
-import React from "react";
-import { Alert, StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid, Linking } from "react-native";
+import React, { useLayoutEffect } from "react";
+import { Alert, StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid, Linking, StatusBar } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import DocumentPicker from "react-native-document-picker";
 import { readFile } from "react-native-fs";
@@ -25,6 +25,13 @@ interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
 }
 export default function Settings({ navigation }: ISettingsProps) {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Settings",
+      headerShown: true,
+    });
+  }, [navigation]);
+
   const onboardingState = useStoreState((store) => store.onboardingState);
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
 
@@ -434,16 +441,6 @@ Do you wish to proceed?`;
 
   return (
     <Container>
-      <Header iosBarStyle="light-content" translucent={false}>
-        <Left>
-          <Button transparent={true} onPress={() => navigation.pop()}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Settings</Title>
-        </Body>
-      </Header>
       <Content>
         <List style={style.list}>
           <ListItem style={style.itemHeader} itemHeader={true} first={true}>

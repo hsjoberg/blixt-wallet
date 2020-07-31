@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { View } from "react-native";
 import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -32,6 +32,13 @@ export default ({ navigation }: IOpenChannelProps) => {
     onChangeFiatInput,
     onChangeBitcoinInput,
   } = useBalance();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Withdraw coins",
+      headerShown: true,
+    });
+  }, [navigation]);
 
   const onWithdrawClick = async () => {
     try {
@@ -86,16 +93,6 @@ export default ({ navigation }: IOpenChannelProps) => {
 
   return (
     <Container>
-      <Header iosBarStyle="light-content" translucent={false}>
-        <Left>
-          <Button transparent={true} onPress={() => navigation.pop()}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Withdraw coins</Title>
-        </Body>
-      </Header>
       <BlixtForm
         items={[{
           key: "BTC_ADDRESS",

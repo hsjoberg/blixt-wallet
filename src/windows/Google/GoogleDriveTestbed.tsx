@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useLayoutEffect} from "react";
 import { DeviceEventEmitter } from "react-native";
 import { Body, Header, Button, Icon, Text, Title, Left, View } from "native-base";
 import Long from "long";
@@ -19,6 +19,13 @@ export default function GoogleDriveTestbed({ navigation }: any) {
 
   const makeBackup = useStoreActions((store) => store.googleDriveBackup.makeBackup);
   const [result, setResult] = useState<string | undefined>(undefined);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Google Drive Testbed",
+      headerShown: true,
+    });
+  }, [navigation]);
 
   const onPressSignIn = async () => {
     try {
@@ -123,16 +130,6 @@ export default function GoogleDriveTestbed({ navigation }: any) {
 
   return (
     <Container>
-      <Header iosBarStyle="light-content" translucent={false}>
-        <Left>
-          <Button transparent={true} onPress={() => navigation.pop()}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Google Drive Testbed</Title>
-        </Body>
-      </Header>
       <Content>
         <View style={{ width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
           <Button onPress={onPressSignIn}>

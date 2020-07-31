@@ -99,13 +99,6 @@ export default function SendCamera({ navigation }: ISendCameraProps) {
 
   return (
     <>
-      <StatusBar
-        backgroundColor="transparent"
-        hidden={false}
-        translucent={true}
-        networkActivityIndicatorVisible={true}
-        barStyle="light-content"
-      />
       <Camera
         cameraType={cameraType}
         onRead={onBarCodeRead}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Long from "long";
@@ -34,6 +34,13 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     fiatUnit,
   } = useBalance();
   const channels = useStoreState((store) => store.channel.channels);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Receive",
+      headerShown: true,
+    });
+  }, [navigation]);
 
   const onCreateInvoiceClick = async () => {
     try {
@@ -115,16 +122,6 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
 
   return (
     <Container>
-      <Header iosBarStyle="light-content" translucent={false}>
-        <Left>
-          <Button transparent={true} onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Receive</Title>
-        </Body>
-      </Header>
       <BlixtForm
         items={formItems}
         buttons={[

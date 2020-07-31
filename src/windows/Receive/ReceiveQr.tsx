@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { View, Share, StyleSheet } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Button, Body, Icon, Header, Text, Title, Left, H1, H3, Spinner } from "native-base";
 import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigationProp, HeaderBackButton } from "@react-navigation/stack";
 
 import { ReceiveStackParamList } from "./index";
 import { useStoreState } from "../../state/store";
@@ -27,19 +27,16 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
   const transaction = useStoreState((store) => store.transaction.getTransactionByPaymentRequest(invoice.paymentRequest));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Receive",
+      headerShown: true,
+    });
+  }, [navigation]);
+
   if (!transaction) {
     return (
       <Container>
-        <Header iosBarStyle="light-content" translucent={false}>
-          <Left>
-            <Button transparent={true}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Receive</Title>
-          </Body>
-        </Header>
         <Content centered style={{ marginTop: -50 }}>
           <Spinner color={blixtTheme.light} size={55} />
         </Content>
@@ -64,16 +61,6 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
 
   return (
     <Container testID="qr">
-      <Header iosBarStyle="light-content" translucent={false}>
-        <Left>
-          <Button testID="GO_BACK" transparent={true} onPress={() => navigation.pop()}>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body>
-          <Title>Receive</Title>
-        </Body>
-      </Header>
       <View style={style.container}>
         <H1 style={style.scanThisQr}>Scan this QR code</H1>
         <Text testID="expire" style={style.expires}>
