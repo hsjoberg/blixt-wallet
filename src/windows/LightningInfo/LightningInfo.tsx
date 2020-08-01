@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useLayoutEffect } from "react";
-import { StyleSheet, View, ScrollView, Animated } from "react-native";
-import { Body, Header, Left, Button, Title, Right, Icon, H1, H3, Fab, Spinner } from "native-base";
+import React, { useEffect, useLayoutEffect } from "react";
+import { StyleSheet, View, ScrollView } from "react-native";
+import { Icon, H1, Fab, Spinner } from "native-base";
 import Long from "long";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -11,7 +11,7 @@ import ChannelCard from "../../components/ChannelCard";
 import PendingChannelCard from "../../components/PendingChannelCard";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { formatBitcoin, valueFiat } from "../../utils/bitcoin-units";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { NavigationButton } from "../../components/NavigationButton";
 
 interface ILightningInfoProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
@@ -45,9 +45,9 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
       headerShown: true,
       headerRight: () => {
         return (
-          <TouchableWithoutFeedback onPress={async () => await getChannels()}>
+          <NavigationButton onPress={async () => await getChannels()}>
             <Icon type="MaterialIcons" name="sync" style={{ fontSize: 22 }} />
-          </TouchableWithoutFeedback>
+          </NavigationButton>
         )
       }
     });
