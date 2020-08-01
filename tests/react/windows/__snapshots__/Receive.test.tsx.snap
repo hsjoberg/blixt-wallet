@@ -838,6 +838,72 @@ exports[`renders correctly 1`] = `
                                                 value=""
                                               />
                                             </View>
+                                            <View
+                                              style={
+                                                Array [
+                                                  Object {},
+                                                  Object {
+                                                    "alignItems": "center",
+                                                    "flexDirection": "row",
+                                                    "marginLeft": 3,
+                                                    "marginTop": 24,
+                                                  },
+                                                ]
+                                              }
+                                            >
+                                              <Text
+                                                allowFontScaling={false}
+                                                style={
+                                                  Array [
+                                                    Object {
+                                                      "color": undefined,
+                                                      "fontSize": 12,
+                                                    },
+                                                    Array [
+                                                      Object {
+                                                        "color": "#000",
+                                                        "fontSize": 30,
+                                                      },
+                                                      Object {
+                                                        "color": "#000",
+                                                        "fontSize": 30,
+                                                      },
+                                                      Object {
+                                                        "color": "#e5eaea",
+                                                        "marginRight": 14,
+                                                      },
+                                                    ],
+                                                    Object {
+                                                      "fontFamily": "anticon",
+                                                      "fontStyle": "normal",
+                                                      "fontWeight": "normal",
+                                                    },
+                                                    Object {},
+                                                  ]
+                                                }
+                                                type="AntDesign"
+                                              >
+                                                
+                                              </Text>
+                                              <Text
+                                                style={
+                                                  Array [
+                                                    Object {
+                                                      "color": "#000",
+                                                      "fontFamily": "System",
+                                                      "fontSize": 16,
+                                                    },
+                                                    Object {
+                                                      "color": "#878787",
+                                                      "justifyContent": "center",
+                                                      "marginRight": 80,
+                                                    },
+                                                  ]
+                                                }
+                                              >
+                                                Before you can receive, you need to open a Lightning channel.
+                                              </Text>
+                                            </View>
                                           </View>
                                           <View
                                             style={
@@ -897,22 +963,17 @@ exports[`renders correctly 1`] = `
                                                 }
                                                 testID="create-invoice"
                                               >
-                                                <Text
+                                                <ActivityIndicator
+                                                  animating={true}
+                                                  color="#e5eaea"
+                                                  hidesWhenStopped={true}
+                                                  size="large"
                                                   style={
                                                     Object {
-                                                      "backgroundColor": "transparent",
-                                                      "color": "#fff",
-                                                      "fontFamily": "System",
-                                                      "fontSize": 16.5,
-                                                      "marginLeft": 0,
-                                                      "marginRight": 0,
-                                                      "paddingLeft": 16,
-                                                      "paddingRight": 16,
+                                                      "height": 80,
                                                     }
                                                   }
-                                                >
-                                                  Create invoice
-                                                </Text>
+                                                />
                                               </View>
                                             </View>
                                           </View>

@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { StyleSheet, KeyboardAvoidingView, StyleProp, ViewStyle, StatusBar } from "react-native";
-import { Content, View, Item, Text, Label } from "native-base";
+import { Content, View, Item, Text, Label, Icon, Button } from "native-base";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 const iconTopPadding = StatusBar.currentHeight ?? 0;
 
@@ -16,8 +17,9 @@ export interface IFormProps {
   buttons: ReactNode[];
   items: IFormItem[];
   style?: StyleProp<ViewStyle>;
+  noticeText?: string;
 }
-export default function Form({ buttons, items, style }: IFormProps) {
+export default function Form({ buttons, items, style, noticeText }: IFormProps) {
   return (
     <View style={[styles.content, style]}>
       <View style={styles.itemContainer}>
@@ -36,6 +38,12 @@ export default function Form({ buttons, items, style }: IFormProps) {
             :
             null
         ))}
+        {noticeText &&
+          <View style={styles.notice}>
+            <Icon style={styles.noticeIcon} type="AntDesign" name="exclamationcircleo" />
+            <Text style={styles.noticeText}>{noticeText}</Text>
+          </View>
+        }
       </View>
       <View style={styles.buttonContainer}>
         {buttons.map((button, i) => {
@@ -61,5 +69,29 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginBottom: 2,
+  },
+  error: {
+    marginTop: 22,
+    marginLeft: 3,
+  },
+  errorText: {
+    color: blixtTheme.red
+  },
+  notice: {
+    marginTop: 24,
+    marginLeft: 3,
+    flexDirection: "row",
+    alignItems:"center",
+  },
+  noticeIcon: {
+    marginRight: 14,
+    color: blixtTheme.light,
+  },
+  noticeText: {
+    color: blixtTheme.lightGray,
+    marginRight: 80,
+    justifyContent:"center",
+    // backgroundColor:"blue",
+
   },
 });

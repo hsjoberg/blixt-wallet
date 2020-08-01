@@ -120,10 +120,23 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     !createInvoiceDisabled
   );
 
+  const loading = (
+    !rpcReady ||
+    !invoiceSubscriptionStarted ||
+    !syncedToChain ||
+    createInvoiceDisabled ||
+    (channels.length > 0 && !channels.some((channel) => channel.active))
+  );
+
+  const noticeText = channels.length === 0
+    ? "Before you can receive, you need to open a Lightning channel."
+    : undefined;
+
   return (
     <Container>
       <BlixtForm
         items={formItems}
+        noticeText={noticeText}
         buttons={[
           <Button
             testID="create-invoice"
@@ -131,11 +144,11 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
             block={true}
             primary={true}
             onPress={onCreateInvoiceClick}
-            disabled={!canSend || bitcoinValue === "0" || bitcoinValue === undefined}
+            disabled={!canSend}
           >
-            {canSend && !createInvoiceDisabled
-              ? <Text>Create invoice</Text>
-              : <Spinner color={blixtTheme.light} />
+            {loading
+              ? <Spinner color={blixtTheme.light} />
+              : <Text>Create invoice</Text>
             }
           </Button>
         ]}
