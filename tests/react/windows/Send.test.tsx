@@ -1,5 +1,5 @@
 import React from "react";
-import { act, render, toJSON, fireEvent, wait, waitForElement } from "@testing-library/react-native";
+import { act, render, fireEvent, waitFor } from "@testing-library/react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { StoreProvider } from "easy-peasy";
 import Long from "long";
@@ -19,12 +19,12 @@ it("SendCamera renders correctly", async () => {
   const store = await initCommonStore(true);
   store.getActions().channel.setBalance(Long.fromNumber(123));
 
-  const { container, unmount } = render(
+  const { unmount, toJSON } = render(
     <StoreProvider store={store}>
       {AppContainerSendCamera}
     </StoreProvider>
   );
-  expect(toJSON(container)).toMatchSnapshot();
+  expect(toJSON()).toMatchSnapshot();
 
   unmount();
 });
@@ -51,7 +51,7 @@ it("It is possible to paste invoice from clipboard and pay it", async () => {
 
   await act(async () => await fireEvent.press(pasteClipboardIcon!));
 
-  const payInvoiceButton = await waitForElement(() => queryByTestId("pay-invoice"));
+  const payInvoiceButton = await waitFor(() => queryByTestId("pay-invoice"));
   await act(async () => await fireEvent.press(payInvoiceButton!));
 
   expect(store.getState().transaction.transactions).toHaveLength(1);

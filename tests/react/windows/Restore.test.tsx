@@ -1,5 +1,5 @@
 import React from "react";
-import { act, render, toJSON, fireEvent, wait, waitForElement } from "@testing-library/react-native";
+import { render } from "@testing-library/react-native";
 import { StoreProvider } from "easy-peasy";
 import Long from "long";
 
@@ -13,12 +13,12 @@ const AppContainer = createNavigationContainer(Receive, "Receive");
 it("renders correctly", () => {
   const store = setupStore();
 
-  const { container, unmount } = render(
+  const { unmount, toJSON } = render(
     <StoreProvider store={store}>
       {AppContainer}
     </StoreProvider>
   );
-  expect(toJSON(container)).toMatchSnapshot();
+  expect(toJSON()).toMatchSnapshot();
 
   unmount();
 });
