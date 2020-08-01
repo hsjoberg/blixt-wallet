@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect } from "react";
-import { StyleSheet, View, Share, TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, View, Share } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Text, Header, Container, H1, H2, Right, Left, Button, Title, Icon, Spinner } from "native-base";
+import { Text, Container, H1, H2, Button, Icon, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { OnChainStackParamList } from "./index";
@@ -12,6 +12,7 @@ import { smallScreen } from "../../utils/device";
 import CopyAddress from "../../components/CopyAddress";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { toast } from "../../utils";
+import { NavigationButton } from "../../components/NavigationButton";
 
 interface IOnChainInfoProps {
   navigation: StackNavigationProp<OnChainStackParamList, "OnChainInfo">;
@@ -42,9 +43,9 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
       headerShown: true,
       headerRight: () => {
         return (
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("OnChainTransactionLog")}>
+          <NavigationButton onPress={() => navigation.navigate("OnChainTransactionLog")}>
             <Icon type="AntDesign" name="bars" style={{ fontSize: 22 }} />
-          </TouchableWithoutFeedback>
+          </NavigationButton>
         )
       }
     });

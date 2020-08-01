@@ -6,6 +6,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { OnChainStackParamList } from "./index";
 import OnChainTransactionItem from "../../components/OnChainTransactionItem";
 import { useStoreState, useStoreActions } from "../../state/store";
+import { NavigationButton } from "../../components/NavigationButton";
 
 export interface IOnChainTransactionLogProps {
   navigation: StackNavigationProp<OnChainStackParamList, "OnChainTransactionLog">;
@@ -30,9 +31,9 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
       headerShown: true,
       headerRight: () => {
         return (
-          <TouchableWithoutFeedback onPress={async () => rpcReady && await getTransactions()}>
+          <NavigationButton onPress={async () => rpcReady && await getTransactions()}>
             <Icon type="MaterialIcons" name="sync" style={{ fontSize: 22 }} />
-          </TouchableWithoutFeedback>
+          </NavigationButton>
         )
       }
     });
