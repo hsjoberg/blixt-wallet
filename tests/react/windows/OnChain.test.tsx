@@ -1,5 +1,5 @@
 import React from "react";
-import { act, render, toJSON, fireEvent, wait, waitForElement, within } from "@testing-library/react-native";
+import { act, render, fireEvent, waitFor, within } from "@testing-library/react-native";
 import { StoreProvider } from "easy-peasy";
 import Long from "long";
 
@@ -15,12 +15,12 @@ const AppContainer = createNavigationContainer(OnChain, "OnChain");
 it("renders correctly", async () => {
   const store = await initCommonStore(true);
 
-  const { container, unmount } = render(
+  const { unmount, toJSON } = render(
     <StoreProvider store={store}>
       {AppContainer}
     </StoreProvider>
   );
-  expect(toJSON(container)).toMatchSnapshot();
+  expect(toJSON()).toMatchSnapshot();
 
   unmount();
 });
@@ -85,9 +85,9 @@ it("should be possible to withdraw funds (no camera)", async () => {
 
   expect(onChainFundsText!.children.join()).toContain("0.00000123");
 
-  const inputBitcoinAddress = await waitForElement(() => queryByTestId("INPUT_BITCOIN_ADDRESS"));
-  const inputAmount = await waitForElement(() => queryByTestId("INPUT_AMOUNT"));
-  const sendCoinsButton = await waitForElement(() => queryByTestId("SEND_COINS"));
+  const inputBitcoinAddress = await waitFor(() => queryByTestId("INPUT_BITCOIN_ADDRESS"));
+  const inputAmount = await waitFor(() => queryByTestId("INPUT_AMOUNT"));
+  const sendCoinsButton = await waitFor(() => queryByTestId("SEND_COINS"));
   expect(sendCoinsButton).not.toBeNull();
 
   act(() => void fireEvent.changeText(inputBitcoinAddress!, "tb1qy24mr4attphw83xhmxcspkkrxwqwurxjy085vuz6t4gxtmfyuq9srzd0yw"));
@@ -110,7 +110,7 @@ it("should be possible generate a new bitcoin address", async () => {
 
   const generateAddressButton = getByTestId("GENERATE_ADDRESS");
 
-  await waitForElement(() => getByTestId('COPY_BITCOIN_ADDRESS'));
+  await waitFor(() => getByTestId('COPY_BITCOIN_ADDRESS'));
   const bitcoinAddress = getByTestId("COPY_BITCOIN_ADDRESS");
 
   expect(bitcoinAddress).not.toBeNull();

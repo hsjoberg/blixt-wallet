@@ -135,7 +135,7 @@ android {
         applicationId MYAPP_APP_ID
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 54
+        versionCode 56
         versionName "0.1-alpha"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
@@ -253,7 +253,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     debugImplementation "com.facebook.soloader:soloader:0.9.0"
 
@@ -296,7 +296,7 @@ dependencies {
     implementation "com.msopentech.thali:universal:0.0.3"
     implementation "org.torproject:tor-android-binary:0.4.2.7a"
     implementation "com.msopentech.thali.toronionproxy.android:android:0.0.3@aar"
-    implementation "org.slf4j:slf4j-android:1.7.7"
+    implementation "org.slf4j:slf4j-android:1.7.30"
     implementation "net.freehaven.tor.control:jtorctl:0.2" // controlling tor instance via its control port
 
     implementation "com.jakewharton:process-phoenix:2.0.0"

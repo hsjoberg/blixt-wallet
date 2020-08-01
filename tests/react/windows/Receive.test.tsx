@@ -1,5 +1,5 @@
 import React from "react";
-import { act, render, toJSON, fireEvent, wait, waitForElement, within } from "@testing-library/react-native";
+import { act, render, fireEvent, waitFor, within } from "@testing-library/react-native";
 import { StoreProvider } from "easy-peasy";
 import Long from "long";
 import * as base64 from "base64-js";
@@ -20,12 +20,12 @@ const AppContainer = createNavigationContainer(Receive, "Receive");
 it("renders correctly", () => {
   const store = setupStore();
 
-  const { container, unmount } = render(
+  const { unmount, toJSON } = render(
     <StoreProvider store={store}>
       {AppContainer}
     </StoreProvider>
   );
-  expect(toJSON(container)).toMatchSnapshot();
+  expect(toJSON()).toMatchSnapshot();
 
   unmount();
 });
@@ -57,10 +57,10 @@ it("is possible to create an invoice and go to the QR screen", async () => {
   // to the next window, from ReceiveSetup.tsx to ReceiveQr.tsx
   act(() => void fireEvent.press(createInvoiceButton!));
 
-  await wait(() => expect(store.getState().transaction.transactions).toHaveLength(1));
-  const paymentRequestString = await waitForElement(() => queryByTestId("payment-request-string"));
-  const expireString = await waitForElement(() => queryByTestId("expire"));
-  const payAmountString = await waitForElement(() => queryByTestId("pay-amount"));
+  await waitFor(() => expect(store.getState().transaction.transactions).toHaveLength(1));
+  const paymentRequestString = await waitFor(() => queryByTestId("payment-request-string"));
+  const expireString = await waitFor(() => queryByTestId("expire"));
+  const payAmountString = await waitFor(() => queryByTestId("pay-amount"));
 
   expect(paymentRequestString).not.toBeNull();
   expect(expireString!.children.join()).toContain("Expires in");
@@ -106,7 +106,7 @@ test("invoice appears on the transaction list", async () => {
   act(() => void fireEvent.press(createInvoiceButton!));
 
   // Expect an invoice to be created
-  await wait(() => expect(store.getState().transaction.transactions).toHaveLength(1));
+  await waitFor(() => expect(store.getState().transaction.transactions).toHaveLength(1));
 
   // Go back to the Overview screen
   const goBackButton = getAllByTestId("header-back");
@@ -135,7 +135,7 @@ test("invoice appears on the transaction list", async () => {
   });
 
   // Expect the invoice to have status SETTLED
-  await wait(async () => {
+  await waitFor(async () => {
     expect(store.getState().transaction.transactions[0].status).toBe("SETTLED");
   });
 

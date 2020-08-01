@@ -1,5 +1,5 @@
 import React from "react";
-import { render, toJSON, wait, within, act } from "@testing-library/react-native";
+import { render, waitFor, within, act } from "@testing-library/react-native";
 import { StoreProvider } from "easy-peasy";
 import Long from "long";
 import * as base64 from "base64-js";
@@ -20,12 +20,12 @@ it("renders correctly", () => {
   const store = setupStore();
   store.getActions().channel.setBalance(Long.fromNumber(123));
 
-  const { container } = render(
+  const { toJSON } = render(
     <StoreProvider store={store}>
       {AppContainer}
     </StoreProvider>
   );
-  expect(toJSON(container)).toMatchSnapshot();
+  expect(toJSON()).toMatchSnapshot();
 });
 
 it("expect balance to update when paying an invoice", async () => {
@@ -46,7 +46,7 @@ it("expect balance to update when paying an invoice", async () => {
     sat: 100,
     description: "Receiving 100 sats",
   });
-  await wait(() => expect(store.getState().transaction.transactions).toHaveLength(1));
+  await waitFor(() => expect(store.getState().transaction.transactions).toHaveLength(1));
 
   const { queryByTestId, getByTestId } = render(
     <StoreProvider store={store}>
@@ -80,9 +80,9 @@ it("expect balance to update when paying an invoice", async () => {
     });
   });
 
-  await wait(async () => {
+  await waitFor(async () => {
     expect(store.getState().transaction.transactions[0].status).toBe("SETTLED");
   });
 
-  await wait(() => expect(bigBalanceHeader.children[0]).toContain("0.000999"));
+  await waitFor(() => expect(bigBalanceHeader.children[0]).toContain("0.000999"));
 });
