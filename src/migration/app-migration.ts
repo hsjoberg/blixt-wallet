@@ -121,4 +121,10 @@ export const appMigration: IAppMigration[] = [
       await LndMobile.writeConfigFile();
     },
   },
+  // Version 16
+  {
+    async beforeLnd(db, i) {
+      await setItemObject<number>(StorageItem.lastGoogleDriveBackup, 0);
+    },
+  },
 ];

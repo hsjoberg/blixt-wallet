@@ -1,11 +1,14 @@
 import { DeviceEventEmitter } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as base64 from "base64-js";
+import { differenceInDays } from "date-fns";
 
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
+import { waitUntilTrue, timeout } from "../utils";
 import { uploadFileAsString, getFiles, checkResponseIsError, downloadFileAsString } from "../utils/google-drive";
 import { Chain, Debug } from "../utils/build";
+import { getItemObject, StorageItem, setItemObject } from "../storage/app";
 
 import logger from "./../utils/log";
 const log = logger("GoogleDriveBackup");
@@ -13,7 +16,7 @@ const log = logger("GoogleDriveBackup");
 export const GOOGLE_DRIVE_BACKUP_FILE = `blixt-wallet-backup-${Chain}${Debug ? "-debug" : ""}.b64`;
 
 export interface IGoogleDriveBackupModel {
-  initialize: Thunk<IGoogleDriveBackupModel>;
+  initialize: Thunk<IGoogleDriveBackupModel, void, any, IStoreModel>;
 
   setupChannelUpdateSubscriptions: Thunk<IGoogleDriveBackupModel, void, IStoreInjections, IStoreModel>;
   setChannelUpdateSubscriptionStarted: Action<IGoogleDriveBackupModel, boolean>;
@@ -26,11 +29,30 @@ export interface IGoogleDriveBackupModel {
 };
 
 export const googleDriveBackup: IGoogleDriveBackupModel = {
-  initialize: thunk(async (actions, _, { getState }) => {
+  initialize: thunk(async (actions, _, { getState, getStoreState }) => {
     log.d("Initializing");
     if (!getState().channelUpdateSubscriptionStarted) {
       await actions.setupChannelUpdateSubscriptions();
     }
+
+    // Automatically backup every 3 days
+    // tslint:disable-next-line: no-floating-promises
+    (async () => {
+      if (getStoreState().settings.googleDriveBackupEnabled) {
+        let lastGoogleDriveBackup = await getItemObject<number>(StorageItem.lastGoogleDriveBackup);
+        log.d("lastGoogleDriveBackup", [lastGoogleDriveBackup]);
+        lastGoogleDriveBackup = lastGoogleDriveBackup - (60 * 60 * 24 * 1000);
+        const currentDate = new Date().getTime();
+        const diff = differenceInDays(currentDate, lastGoogleDriveBackup);
+        if (diff >= 3) {
+          log.i(">= 3 days since last Google Drive backup");
+          await waitUntilTrue(() => getStoreState().lightning.rpcReady);
+          await timeout(2500);
+          await actions.makeBackup();
+          await setItemObject<number>(StorageItem.lastGoogleDriveBackup, currentDate);
+        }
+      }
+    })();
     log.d("Done");
   }),
 
