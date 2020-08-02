@@ -61,6 +61,7 @@ export const getFiles = async (bearer: string, search?: string[]): Promise<IGoog
   if (search && search.length > 0) {
     url.searchParams.append("q", `name = "${search.join(",")}"`);
   }
+  url.searchParams.append("fields", "kind,incompleteSearch,files/kind,files/id,files/name,files/mimeType,files/createdTime,files/modifiedTime");
 
   const getFilesResult = await fetch(url.toString(), { headers });
   if (!expectContentType(getFilesResult, "application/json")) {
