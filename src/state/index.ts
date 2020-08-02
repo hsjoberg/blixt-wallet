@@ -132,16 +132,11 @@ export const model: IStoreModel = {
       const initReturn = await init();
       log.v("init done");
       log.d("init", [initReturn]);
-      log.v("Running LndMobile checkStatus");
+
       const status = await checkStatus();
-      log.v("status", [status]);
-      if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
-        log.i("lnd not started, starting lnd");
+      if (!getState().walletCreated && (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
+        log.i("Wallet not created, starting lnd");
         log.d("lnd started", [await startLnd(torEnabled)]);
-        actions.setTorLoading(false);
-      }
-      else {
-        log.i("lnd was already started");
       }
     }
     catch (e) {

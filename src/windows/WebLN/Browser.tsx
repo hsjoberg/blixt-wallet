@@ -8,7 +8,6 @@ import { WebView } from 'react-native-webview';
 import Color from "color";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
-import BlurOverlay, { closeOverlay, openOverlay } from "../../Blur";
 import { useStoreActions } from "../../state/store";
 import { RootStackParamList } from "../../Main";
 import BlurModal from "../../components/BlurModal";
@@ -37,9 +36,6 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   const handleSignMessageRequest = useStoreActions((store) => store.webln.handleSignMessageRequest);
   const handleVerifyMessageRequest = useStoreActions((store) => store.webln.handleVerifyMessageRequest);
   const handleLNURL = useStoreActions((store) => store.webln.handleLNURL);
-
-  const setLNUrl = useStoreActions((store) => store.lnUrl.setLNUrl);
-  const lnurlClear = useStoreActions((store) => store.lnUrl.clear);
 
   useEffect(() => {
     console.log("disableBackHandler", disableBackHandler);
@@ -119,9 +115,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   }
 
   return (
-    <BlurModal
-      useModalComponent={false}
-    >
+    <BlurModal useModalComponent={false}>
       <Card style={style.card}>
         <WebView
           containerStyle={{ opacity: showWebview ? 1 : 0 }}
@@ -140,7 +134,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
               console.log("Injected");
             }
           }}
-          onLoadEnd={() => setShowWebview(true)}
+          onLoadEnd={() => setTimeout(() => setShowWebview(true), 17)}
           onNavigationStateChange={(e) => {
             if (canGoBack !== (e.url !== initialUrl)) {
               setCanGoBack(e.url !== initialUrl);
