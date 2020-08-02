@@ -67,7 +67,6 @@ export default function Main() {
   const loggedIn = useStoreState((store) => store.security.loggedIn);
   const initializeApp = useStoreActions((store) => store.initializeApp);
   const initLightning = useStoreActions((store) => store.lightning.initialize);
-  const checkDeeplink = useStoreActions((store) => store.androidDeeplinkManager.checkDeeplink);
   const [initialRoute, setInitialRoute] = useState("Loading");
   const torLoading = useStoreState((store) => store.torLoading);
 

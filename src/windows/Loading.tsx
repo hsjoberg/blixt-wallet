@@ -13,10 +13,10 @@ export interface ILoadingProps {
 }
 export default function Loading({ navigation }: ILoadingProps) {
   const checkDeeplink = useStoreActions((store) => store.androidDeeplinkManager.checkDeeplink);
-  const appReady = useStoreState((store) => store.appReady);
+  const ready = useStoreState((store) => store.lightning.ready);
 
   useEffect(() => {
-    if (!appReady) {
+    if (!ready) {
       return;
     }
     // tslint:disable-next-line
@@ -27,7 +27,7 @@ export default function Loading({ navigation }: ILoadingProps) {
         cb(navigation);
       }
     })();
-  }, [appReady]);
+  }, [ready]);
 
 
   return (

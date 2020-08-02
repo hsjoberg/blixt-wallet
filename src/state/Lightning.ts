@@ -52,6 +52,7 @@ export interface ILightningModel {
 export const lightning: ILightningModel = {
   initialize: thunk(async (actions, _, { getState, dispatch, injections, getStoreState }) => {
     const checkStatus = injections.lndMobile.index.checkStatus;
+    const startLnd = injections.lndMobile.index.startLnd;
 
     if (getState().ready)  {
       log.d("Lightning store already started");
@@ -62,10 +63,21 @@ export const lightning: ILightningModel = {
     const firstSync = await getItemObject<boolean>(StorageItem.firstSync);
     actions.setFirstSync(firstSync);
     const debugShowStartupInfo = getStoreState().settings.debugShowStartupInfo;
-    const fastInit = differenceInDays(start, lastSync) <3 || firstSync;
+    const fastInit = true; // differenceInDays(start, lastSync) <3 || firstSync;
 
+    log.v("Running LndMobile checkStatus");
     const status = await checkStatus();
-    log.d("status", [status]);
+    log.v("status", [status]);
+    if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
+      log.i("lnd not started, starting lnd");
+      const torEnabled = getStoreState().torEnabled;
+      log.d("lnd started", [await startLnd(torEnabled)]);
+      debugShowStartupInfo && toast("start lnd time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+    }
+    else {
+      log.i("lnd was already started");
+    }
+
     // Normal wallet unlock flow
     if ((status & ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) !== ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) {
       // When the RPC server is ready
@@ -77,14 +89,14 @@ export const lightning: ILightningModel = {
         try {
           actions.setupStores();
           await actions.waitForChainSync();
+          debugShowStartupInfo && toast("syncedToChain time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
           await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
           await actions.waitForGraphSync();
+          debugShowStartupInfo && toast("syncedToGraph time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
         } catch (e) {
           debugShowStartupInfo && toast(e.message, 10000, "danger");
           return;
         }
-
-        debugShowStartupInfo && toast("syncedToChain time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
       });
 
       try {
@@ -200,7 +212,7 @@ export const lightning: ILightningModel = {
     } while (true);
   }),
 
-  getInfo: thunk(async (actions, _, { getState, injections }) => {
+  getInfo: thunk(async (actions, _, { injections }) => {
     const { getInfo } = injections.lndMobile.index;
     const info = await getInfo();
     actions.setNodeInfo(info);
