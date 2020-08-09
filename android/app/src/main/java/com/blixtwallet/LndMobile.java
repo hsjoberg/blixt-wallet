@@ -4,6 +4,7 @@ import com.blixtwallet.tor.BlixtTorUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.ActivityManager;
@@ -322,8 +323,7 @@ class LndMobile extends ReactContextBaseJavaModule {
       int socksPort = BlixtTorUtils.getSocksPort();
       int controlPort = BlixtTorUtils.getControlPort();
       params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
-      // params += " --tor.v3 --listen=localhost:" + listenPort;
-      params += " --nolisten";
+      params += " --tor.v3 --listen=localhost:" + listenPort;
     }
     else {
       // If Tor isn't active, make sure we aren't
@@ -469,11 +469,11 @@ class LndMobile extends ReactContextBaseJavaModule {
           "bitcoin.node=bitcoind\n" +
           "\n" +
           "[Bitcoind]\n" +
-          "bitcoind.rpchost=192.168.1.109:18443\n" +
+          "bitcoind.rpchost=192.168.1.111:18443\n" +
           "bitcoind.rpcuser=polaruser\n" +
           "bitcoind.rpcpass=polarpass\n" +
-          "bitcoind.zmqpubrawblock=192.168.1.109:28334\n" +
-          "bitcoind.zmqpubrawtx=192.168.1.109:29335\n" +
+          "bitcoind.zmqpubrawblock=192.168.1.111:28334\n" +
+          "bitcoind.zmqpubrawtx=192.168.1.111:29335\n" +
           "\n" +
           "[autopilot]\n" +
           "autopilot.active=0\n" +
@@ -700,8 +700,9 @@ class LndMobile extends ReactContextBaseJavaModule {
     checkWriteExternalStoragePermission(
       (@Nullable Object value) -> {
         if (value.equals("granted")) {
-          if (copyLndLogFile()) {
-            promise.resolve("Done");
+          String lndLogFile = copyLndLogFile();
+          if (lndLogFile != null) {
+            promise.resolve(lndLogFile);
           }
           else {
             promise.reject("Error copying");
@@ -717,7 +718,7 @@ class LndMobile extends ReactContextBaseJavaModule {
     );
   }
 
-  public boolean copyLndLogFile() {
+  public String copyLndLogFile() {
     File sourceLocation = new File(
       getReactApplicationContext().getFilesDir().toString() +
       "/logs/bitcoin/" +
@@ -725,13 +726,12 @@ class LndMobile extends ReactContextBaseJavaModule {
       "/lnd.log"
     );
     File targetDir = new File(
-      Environment.getExternalStorageDirectory() +
-      "/BlixtWallet"
+      ContextCompat.getExternalFilesDirs(getReactApplicationContext(), null)[0].toString()
     );
     File targetLocation = new File(targetDir.toString() + "/lnd-" + BuildConfig.CHAIN + (BuildConfig.DEBUG ? "-debug" : "") +  ".log");
 
     try {
-      Log.e(TAG, targetLocation.toString());
+      Log.i(TAG, targetLocation.toString());
 
       if (!targetDir.exists()) {
         if (!targetDir.mkdirs()) {
@@ -750,13 +750,13 @@ class LndMobile extends ReactContextBaseJavaModule {
       in.close();
       out.close();
 
-      return true;
+      return targetLocation.toString();
     } catch (Throwable e) {
       Log.e(TAG, "copyLndLogFile() failed: " + e.getMessage() + " " +
                  "source: " + sourceLocation.toString() + "\n " +
                  "dest: " + targetDir.toString()
       );
-      return false;
+      return null;
     }
   }
 
@@ -779,10 +779,7 @@ class LndMobile extends ReactContextBaseJavaModule {
 
   private void saveChannelBackupToFile(byte[] backups, Promise promise) {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss") ;
-    String path = Environment.getExternalStorageDirectory() +
-                  "/Blixt-Wallet" +
-                  (BuildConfig.CHAIN.equals("testnet") ? "-testnet" : "") +
-                  (BuildConfig.DEBUG ? "-debug" : "");
+    String path = ContextCompat.getExternalFilesDirs(getReactApplicationContext(), null)[0].toString();
     String file = path +
                   "/channels-backup-" +
                   dateFormat.format(new Date()) + ".bin";

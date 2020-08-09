@@ -139,11 +139,15 @@ export default function Settings({ navigation }: ISettingsProps) {
   const name = useStoreState((store) => store.settings.name);
   const changeName = useStoreActions((store) => store.settings.changeName);
   const onNamePress = async () => {
-    const { action, text } = await DialogAndroid.prompt("Name", "Choose a name that will be used in transactions", {
+    const { action, text } = await DialogAndroid.prompt(
+      "Name",
+      "Choose a name that will be used in transactions\n\n" +
+      "Your name will be seen in invoices to those who pay you as well as " +
+      "people you pay to.", {
       defaultValue: name,
     });
     if (action === DialogAndroid.actionPositive) {
-      await changeName(text);
+      await changeName(text || null);
     }
   };
 
@@ -437,6 +441,10 @@ Do you wish to proceed?`;
         },
       }
     ]);
+  };
+
+  const onShowOnionAddressPress = async () => {
+    navigation.navigate("TorShowOnionAddress");
   }
 
   return (
@@ -451,7 +459,9 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
             <Body>
               <Text>Name</Text>
-              <Text note={true} numberOfLines={1}>Will be used in transactions</Text>
+              <Text note={true} numberOfLines={1}>
+                {name || "Will be used in transactions"}
+              </Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onTogglePushNotificationsPress}>
@@ -699,6 +709,15 @@ Do you wish to proceed?`;
                 </Body>
                 <Right><CheckBox checked={torEnabled} onPress={onChangeTorEnabled} /></Right>
               </ListItem>
+              {torEnabled &&
+                <ListItem style={style.listItem} button={true} icon={true} onPress={onShowOnionAddressPress}>
+                  <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="AntDesign" name="qrcode" /></Left>
+                  <Body>
+                    <Text>Show Tor onion service</Text>
+                    <Text note={true} numberOfLines={1}>For connecting and opening channels to this wallet</Text>
+                  </Body>
+                </ListItem>
+              }
             </>
           }
 
@@ -725,7 +744,7 @@ Do you wish to proceed?`;
                 <Body><Text>WebLN</Text></Body>
               </ListItem>
               <ListItem style={style.listItem} icon={true} onPress={async () => {
-                const logLines = await NativeModules.LndMobile.tailLog(10);
+                const logLines = await NativeModules.LndMobile.tailLog(30);
                 Alert.alert("Log", logLines);
               }}>
                 <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
