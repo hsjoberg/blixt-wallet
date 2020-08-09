@@ -69,8 +69,11 @@ export default function LNURLChannelRequest({ navigation }: IWithdrawRequestProp
         let action: string;
         let sat: number;
 
+        const minWithdrawable = lnObject.minWithdrawable ?? 1;
+        const maxWithdrawable = lnObject.maxWithdrawable;
+
         if (lnObject.minWithdrawable === lnObject.maxWithdrawable) {
-          const amount = formatBitcoin(Long.fromValue(lnObject.minWithdrawable).div(1000), bitcoinUnit);
+          const amount = formatBitcoin(Long.fromValue(lnObject.maxWithdrawable).div(1000), bitcoinUnit);
           description += `\n\nAmount: ${amount}`;
 
           const result = await DialogAndroid.alert(
@@ -84,9 +87,9 @@ export default function LNURLChannelRequest({ navigation }: IWithdrawRequestProp
           sat = Math.floor(lnObject.minWithdrawable / 1000);
         }
         else {
-          const minWithdrawable = formatBitcoin(Long.fromValue(lnObject.minWithdrawable).div(1000), bitcoinUnit);
-          const maxWithdrawable = formatBitcoin(Long.fromValue(lnObject.maxWithdrawable).div(1000), bitcoinUnit);
-          description += `\n\nMin withdrawal amount: ${minWithdrawable}\nMax withdrawal amount: ${maxWithdrawable}`;
+          const minWithdrawableSat = formatBitcoin(Long.fromValue(minWithdrawable).div(1000), bitcoinUnit);
+          const maxWithdrawableSat = formatBitcoin(Long.fromValue(maxWithdrawable).div(1000), bitcoinUnit);
+          description += `\n\nMin withdrawal amount: ${minWithdrawableSat}\nMax withdrawal amount: ${maxWithdrawableSat}`;
 
           const result = await DialogAndroid.prompt(
             title,
