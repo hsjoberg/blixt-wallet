@@ -98,6 +98,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   }
 
   // Fiat unit
+  const fiatRates = useStoreState((store) => store.fiat.fiatRates);
   const currentFiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const changeFiatUnit = useStoreActions((store) => store.settings.changeFiatUnit);
   const onFiatUnitPress = async () => {
@@ -106,29 +107,11 @@ export default function Settings({ navigation }: ISettingsProps) {
       negativeText: "Cancel",
       type: DialogAndroid.listRadio,
       selectedId: currentFiatUnit,
-      items: [
-        { label: "USD", id: "USD" },
-        { label: "EUR", id: "EUR" },
-        { label: "SEK", id: "SEK" },
-        { label: "JPY", id: "JPY" },
-        { label: "CNY", id: "CNY" },
-        { label: "SGD", id: "SGD" },
-        { label: "HKD", id: "HKD" },
-        { label: "CAD", id: "CAD" },
-        { label: "NZD", id: "NZD" },
-        { label: "AUD", id: "AUD" },
-        { label: "CLP", id: "CLP" },
-        { label: "GBP", id: "GBP" },
-        { label: "DKK", id: "DKK" },
-        { label: "ISK", id: "ISK" },
-        { label: "CHF", id: "CHF" },
-        { label: "BRL", id: "BRL" },
-        { label: "RUB", id: "RUB" },
-        { label: "PLN", id: "PLN" },
-        { label: "THB", id: "THB" },
-        { label: "KRW", id: "KRW" },
-        { label: "TWD", id: "TWD" },
-      ]
+      items: Object.entries(fiatRates).map(([currency]) => {
+        return {
+          label: currency, id: currency
+        }
+      })
     });
     if (selectedItem) {
       changeFiatUnit(selectedItem.id);
