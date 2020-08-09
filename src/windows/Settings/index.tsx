@@ -7,6 +7,7 @@ import RemovePincodeAuth from "./RemovePincodeAuth";
 import ChangeFingerprintSettingsAuth from "./ChangeFingerprintSettingsAuth";
 import LightningNodeInfo from "./LightningNodeInfo";
 import About from "./About";
+import TorShowOnionAddress from "./TorShowOnionAddress";
 import { NAVIGATION_SCREEN_OPTIONS } from "../../utils/constants";
 
 const Stack = createStackNavigator();
@@ -18,6 +19,7 @@ export type SettingsStackParamList = {
   ChangeFingerprintSettingsAuth: undefined;
   LightningNodeInfo: undefined;
   About: undefined;
+  TorShowOnionAddress: undefined;
 }
 
 export default function SettingsIndex() {
@@ -33,6 +35,7 @@ export default function SettingsIndex() {
       <Stack.Screen name="ChangeFingerprintSettingsAuth" component={ChangeFingerprintSettingsAuth} />
       <Stack.Screen name="LightningNodeInfo" component={LightningNodeInfo} />
       <Stack.Screen name="About" component={About} />
+      <Stack.Screen name="TorShowOnionAddress" component={TorShowOnionAddress} />
     </Stack.Navigator>
   );
 }
