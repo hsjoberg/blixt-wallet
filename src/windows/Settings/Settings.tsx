@@ -443,6 +443,12 @@ Do you wish to proceed?`;
     ]);
   };
 
+  const hideExpiredInvoices = useStoreState((store) => store.settings.hideExpiredInvoices);
+  const changeHideExpiredInvoices = useStoreActions((store) => store.settings.changeHideExpiredInvoices);
+  const onToggleHideExpiredInvoicesPress = async () => {
+    await changeHideExpiredInvoices(!hideExpiredInvoices);
+  }
+
   const onShowOnionAddressPress = async () => {
     navigation.navigate("TorShowOnionAddress");
   }
@@ -678,6 +684,11 @@ Do you wish to proceed?`;
               <Body><Text>Go to dev screen</Text></Body>
             </ListItem>
           }
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleHideExpiredInvoicesPress}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="file-hidden" /></Left>
+            <Body><Text>Automatically hide expired invoices</Text></Body>
+            <Right><CheckBox checked={hideExpiredInvoices} onPress={onToggleHideExpiredInvoicesPress} /></Right>
+          </ListItem>
 
           {Chain === "mainnet" &&
             <>

@@ -127,4 +127,10 @@ export const appMigration: IAppMigration[] = [
       await setItemObject<number>(StorageItem.lastGoogleDriveBackup, 0);
     },
   },
+  // Version 17
+  {
+    async beforeLnd(db, i) {
+      await setItemObject<boolean>(StorageItem.hideExpiredInvoices, true);
+    },
+  },
 ];
