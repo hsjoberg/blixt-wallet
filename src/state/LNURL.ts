@@ -43,7 +43,7 @@ export interface ILNUrlWithdrawRequest {
   k1: string;
   maxWithdrawable: number;
   defaultDescription: string;
-  minWithdrawable: number;
+  minWithdrawable?: number;
   tag: "withdrawRequest";
 }
 
