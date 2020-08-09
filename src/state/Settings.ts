@@ -35,6 +35,7 @@ export interface ISettingsModel {
   changeOnchainExplorer: Thunk<ISettingsModel, keyof typeof OnchainExplorer>;
   changeMultiPathPaymentsEnabled: Thunk<ISettingsModel, boolean>;
   changeTorEnabled: Thunk<ISettingsModel, boolean>;
+  changeHideExpiredInvoices: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -52,6 +53,7 @@ export interface ISettingsModel {
   setOnchainExplorer: Action<ISettingsModel, keyof typeof OnchainExplorer>;
   setMultiPathPaymentsEnabled: Action<ISettingsModel, boolean>;
   setTorEnabled: Action<ISettingsModel, boolean>;
+  setHideExpiredInvoices: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -69,6 +71,7 @@ export interface ISettingsModel {
   onchainExplorer: keyof typeof OnchainExplorer;
   multiPathPaymentsEnabled: boolean;
   torEnabled: boolean;
+  hideExpiredInvoices: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -90,6 +93,7 @@ export const settings: ISettingsModel = {
     actions.setOnchainExplorer(await getItem(StorageItem.onchainExplorer) ?? "mempool");
     actions.setMultiPathPaymentsEnabled(await getItemObject(StorageItem.multiPathPaymentsEnabled || false));
     actions.setTorEnabled(await getItemObject(StorageItem.torEnabled) || false);
+    actions.setHideExpiredInvoices(await getItemObject(StorageItem.hideExpiredInvoices) || false);
 
     log.d("Done");
   }),
@@ -177,6 +181,11 @@ export const settings: ISettingsModel = {
     actions.setTorEnabled(payload);
   }),
 
+  changeHideExpiredInvoices: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.hideExpiredInvoices, payload);
+    actions.setHideExpiredInvoices(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -193,6 +202,7 @@ export const settings: ISettingsModel = {
   setOnchainExplorer: action((state, payload) => { state.onchainExplorer = payload; }),
   setMultiPathPaymentsEnabled: action((state, payload) => { state.multiPathPaymentsEnabled = payload; }),
   setTorEnabled: action((state, payload) => { state.torEnabled = payload; }),
+  setHideExpiredInvoices: action((state, payload) => { state.hideExpiredInvoices = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -210,4 +220,5 @@ export const settings: ISettingsModel = {
   onchainExplorer: "mempool",
   multiPathPaymentsEnabled: false,
   torEnabled: false,
+  hideExpiredInvoices: false,
 };

@@ -262,8 +262,13 @@ export const getTransactionHops = async (db: SQLiteDatabase, txId: number): Prom
   return await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [txId]);
 };
 
-export const getTransactions = async (db: SQLiteDatabase): Promise<ITransaction[]> => {
-  const transactions = await queryMulti<IDBTransaction>(db, `SELECT * FROM tx ORDER BY date DESC;`);
+export const getTransactions = async (db: SQLiteDatabase, getExpired: boolean): Promise<ITransaction[]> => {
+  const sql = getExpired
+    ? `SELECT * FROM tx ORDER BY date DESC;`
+    : `SELECT * FROM tx WHERE status != "EXPIRED" ORDER BY date DESC;`
+  ;
+
+  const transactions = await queryMulti<IDBTransaction>(db, sql);
   try {
     return await Promise.all(transactions.map(async (transaction) => ({
       ...convertDBTransaction(transaction),

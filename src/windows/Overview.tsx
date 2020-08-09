@@ -48,6 +48,7 @@ function Overview({ navigation }: IOverviewProps) {
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
   const experimentWeblnEnabled = useStoreState((store) => store.settings.experimentWeblnEnabled);
+  const hideExpiredInvoices = useStoreState((store) => store.settings.hideExpiredInvoices);
 
   const bitcoinAddress = useStoreState((store) => store.onChain.address);
   const onboardingState  = useStoreState((store) => store.onboardingState);
@@ -143,11 +144,14 @@ function Overview({ navigation }: IOverviewProps) {
         if (key > contentExpand * NUM_TRANSACTIONS_PER_LOAD) {
           return null;
         }
+        else if (hideExpiredInvoices && transaction.status === "EXPIRED") {
+          return null;
+        }
         return (<TransactionCard key={key} transaction={transaction} unit={bitcoinUnit} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />);
       });
     }
     return (<Text style={{ textAlign: "center", margin: 16 }}>No transactions yet</Text>);
-  }, [transactions, contentExpand, bitcoinUnit]);
+  }, [transactions, contentExpand, bitcoinUnit, hideExpiredInvoices]);
 
   const onPressBalanceHeader = async () => {
     await changePreferFiat(!preferFiat);

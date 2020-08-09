@@ -37,6 +37,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   multiPathPaymentsEnabled = "multiPathPaymentsEnabled",
   onboardingState = "onboardingState",
   torEnabled = "torEnabled",
+  hideExpiredInvoices = "hideExpiredInvoices",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -86,6 +87,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.multiPathPaymentsEnabled),
     removeItem(StorageItem.onboardingState),
     removeItem(StorageItem.torEnabled),
+    removeItem(StorageItem.hideExpiredInvoices),
   ]);
 };
 
@@ -118,5 +120,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.multiPathPaymentsEnabled, false),
     setItem(StorageItem.onboardingState, "SEND_ONCHAIN"),
     setItemObject<boolean>(StorageItem.torEnabled, false),
+    setItemObject<boolean>(StorageItem.hideExpiredInvoices, false),
   ]);
 };

@@ -80,8 +80,9 @@ export const transaction: ITransactionModel = {
     if (!db) {
       throw new Error("getTransactions(): db not ready");
     }
+    const hideExpiredInvoices = getStoreState().settings.hideExpiredInvoices;
 
-    const transactions = await getTransactions(db);
+    const transactions = await getTransactions(db, !hideExpiredInvoices);
     actions.setTransactions(transactions);
     log.d("getTransactions() done");
   }),
