@@ -128,7 +128,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     (channels.length > 0 && !channels.some((channel) => channel.active))
   );
 
-  const noticeText = channels.length === 0
+  const noticeText = rpcReady && channels.length === 0
     ? "Before you can receive, you need to open a Lightning channel."
     : undefined;
 
