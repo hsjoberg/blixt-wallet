@@ -84,6 +84,7 @@ export const onChain: IOnChainModel = {
         await actions.getBalance();
 
         if (getStoreState().onboardingState === "SEND_ONCHAIN") {
+          log.i("Changing onboarding state to DO_BACKUP");
           getStoreActions().changeOnboardingState("DO_BACKUP");
         }
 

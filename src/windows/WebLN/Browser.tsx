@@ -134,7 +134,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
               console.log("Injected");
             }
           }}
-          onLoadEnd={() => setTimeout(() => setShowWebview(true), 17)}
+          onLoadEnd={() => requestAnimationFrame(() => setShowWebview(true))}
           onNavigationStateChange={(e) => {
             if (canGoBack !== (e.url !== initialUrl)) {
               setCanGoBack(e.url !== initialUrl);
@@ -159,6 +159,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
             ref={textInput}
             style={style.urlInput}
             value={urlInput}
+            autoCapitalize="none"
             onChangeText={(text) => {
               setUrlInput(text);
             }}

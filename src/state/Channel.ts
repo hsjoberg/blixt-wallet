@@ -117,6 +117,7 @@ export const channel: IChannelModel = {
       log.v("channelEvent" , [channelEvent, channelEvent.type]);
 
       if (getStoreState().onboardingState === "SEND_ONCHAIN") {
+        log.i("Changing onboarding state to DO_BACKUP");
         getStoreActions().changeOnboardingState("DO_BACKUP");
       }
 
