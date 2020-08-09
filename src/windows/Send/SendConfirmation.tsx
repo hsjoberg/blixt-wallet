@@ -111,7 +111,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
         <Input
           disabled={true}
           style={{ fontSize: 13, marginTop: 4 }}
-          value={`${bolt11Invoice!.substring(0, 26).toLowerCase()}...`}
+          value={`${bolt11Invoice!.substring(0, 29).toLowerCase()}...`}
         />
         <Icon name="checkmark-circle" />
       </>

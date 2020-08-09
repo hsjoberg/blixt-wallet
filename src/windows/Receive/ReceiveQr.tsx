@@ -74,7 +74,9 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
         <View style={{ width: "85%", marginBottom: 16 }} testID="payment-request-string">
           <CopyAddress text={transaction.paymentRequest} onPress={onPressPaymentRequest} />
         </View>
-        <H3 testID="pay-amount">{formatBitcoin(transaction.value, bitcoinUnit)}</H3>
+        {transaction.value?.neq(0) &&
+          <H3 testID="pay-amount">{formatBitcoin(transaction.value, bitcoinUnit)}</H3>
+        }
       </View>
     </Container>
   );

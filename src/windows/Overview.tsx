@@ -12,7 +12,7 @@ import Container from "../components/Container";
 import { timeout, toast } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
-import { Chain } from "../utils/build";
+import { Chain, Debug } from "../utils/build";
 
 import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
 import Spinner from "../components/Spinner";
@@ -62,6 +62,7 @@ function Overview({ navigation }: IOverviewProps) {
   const getBalance = useStoreActions((store) => store.channel.getBalance);
   const getFiatRate = useStoreActions((store) => store.fiat.getRate);
   const checkOpenTransactions = useStoreActions((store) => store.transaction.checkOpenTransactions);
+  const getInfo = useStoreActions((store) => store.lightning.getInfo);
 
   useEffect(() => {
     if (firstSync && !nodeInfo?.syncedToGraph) {
@@ -111,6 +112,7 @@ function Overview({ navigation }: IOverviewProps) {
           getBalance(),
           getFiatRate(),
           checkOpenTransactions(),
+          getInfo(),
           timeout(1000),
         ]);
         setRefreshing(false);

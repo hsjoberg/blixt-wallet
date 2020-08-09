@@ -77,7 +77,6 @@ export default function TransactionDetails({ route }: any) {
     direction = "send";
     transactionValue = transaction.value;
   }
-  console.log(transaction.type);
 
   if (currentScreen === "Overview") {
     return (

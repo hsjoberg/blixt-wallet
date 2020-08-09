@@ -1,5 +1,7 @@
 import { StackNavigationOptions } from "@react-navigation/stack";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { Chain } from "./build";
+import Color from "color";
 
 export const TLV_RECORD_NAME = 128100;
 export const MAX_SAT_INVOICE = 4294967;
@@ -15,7 +17,7 @@ export const NAVIGATION_SCREEN_OPTIONS: StackNavigationOptions = {
     backgroundColor: "transparent",
   },
   headerStyle: {
-    backgroundColor: blixtTheme.primary,
+    backgroundColor: Chain === "mainnet" ? blixtTheme.primary : Color(blixtTheme.lightGray).darken(0.30).hex(),
   },
   headerTitleStyle: {
     color: blixtTheme.light
