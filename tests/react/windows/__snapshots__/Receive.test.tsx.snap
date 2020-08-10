@@ -327,7 +327,7 @@ exports[`renders correctly 1`] = `
                             <View
                               style={
                                 Object {
-                                  "backgroundColor": "#bc6610",
+                                  "backgroundColor": "#5F5F5F",
                                   "borderBottomColor": "rgb(216, 216, 216)",
                                   "flex": 1,
                                   "shadowColor": "rgb(216, 216, 216)",
@@ -837,72 +837,6 @@ exports[`renders correctly 1`] = `
                                                 underlineColorAndroid="rgba(0,0,0,0)"
                                                 value=""
                                               />
-                                            </View>
-                                            <View
-                                              style={
-                                                Array [
-                                                  Object {},
-                                                  Object {
-                                                    "alignItems": "center",
-                                                    "flexDirection": "row",
-                                                    "marginLeft": 3,
-                                                    "marginTop": 24,
-                                                  },
-                                                ]
-                                              }
-                                            >
-                                              <Text
-                                                allowFontScaling={false}
-                                                style={
-                                                  Array [
-                                                    Object {
-                                                      "color": undefined,
-                                                      "fontSize": 12,
-                                                    },
-                                                    Array [
-                                                      Object {
-                                                        "color": "#000",
-                                                        "fontSize": 30,
-                                                      },
-                                                      Object {
-                                                        "color": "#000",
-                                                        "fontSize": 30,
-                                                      },
-                                                      Object {
-                                                        "color": "#e5eaea",
-                                                        "marginRight": 14,
-                                                      },
-                                                    ],
-                                                    Object {
-                                                      "fontFamily": "anticon",
-                                                      "fontStyle": "normal",
-                                                      "fontWeight": "normal",
-                                                    },
-                                                    Object {},
-                                                  ]
-                                                }
-                                                type="AntDesign"
-                                              >
-                                                
-                                              </Text>
-                                              <Text
-                                                style={
-                                                  Array [
-                                                    Object {
-                                                      "color": "#000",
-                                                      "fontFamily": "System",
-                                                      "fontSize": 16,
-                                                    },
-                                                    Object {
-                                                      "color": "#878787",
-                                                      "justifyContent": "center",
-                                                      "marginRight": 80,
-                                                    },
-                                                  ]
-                                                }
-                                              >
-                                                Before you can receive, you need to open a Lightning channel.
-                                              </Text>
                                             </View>
                                           </View>
                                           <View
