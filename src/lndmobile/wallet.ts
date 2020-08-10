@@ -94,8 +94,8 @@ export const derivePrivateKey = async (keyFamily: number, keyIndex: number): Pro
     method: "WalletKitDerivePrivateKey",
     options: {
       keyLoc: {
-        keyFamily: 138,
-        keyIndex: 0,
+        keyFamily,
+        keyIndex,
       },
     },
   });
@@ -112,8 +112,8 @@ export const signMessage = async (keyFamily: number, keyIndex: number, msg: Uint
     method: "SignerSignMessage",
     options: {
       keyLoc: {
-        keyFamily: 138,
-        keyIndex: 0,
+        keyFamily,
+        keyIndex,
       },
       msg,
     },
