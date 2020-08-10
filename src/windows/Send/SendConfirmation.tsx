@@ -81,9 +81,17 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
         : undefined;
 
       if (multiPathPaymentsEnabled) {
-        console.log("Paying with MPP enabled");
-        const response = await sendPayment(payload);
-        callback(hexToUint8Array(response.paymentPreimage));
+        try {
+          console.log("Paying with MPP enabled");
+          const response = await sendPayment(payload);
+          callback(hexToUint8Array(response.paymentPreimage));
+        } catch (e) {
+          console.log("Didn't work. Trying without instead");
+          console.log(e);
+          console.log("Paying with MPP disabled");
+          const response = await sendPaymentOld(payload);
+          callback(response.paymentPreimage);
+        }
       }
       else {
         console.log("Paying with MPP disabled");
