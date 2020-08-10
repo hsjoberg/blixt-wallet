@@ -327,7 +327,7 @@ exports[`renders correctly 1`] = `
                             <View
                               style={
                                 Object {
-                                  "backgroundColor": "#bc6610",
+                                  "backgroundColor": "#5F5F5F",
                                   "borderBottomColor": "rgb(216, 216, 216)",
                                   "flex": 1,
                                   "shadowColor": "rgb(216, 216, 216)",
