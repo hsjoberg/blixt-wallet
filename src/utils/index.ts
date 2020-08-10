@@ -126,3 +126,9 @@ export const decryptLNURLPayAesTagMessage = (preimage: Uint8Array, iv: string, c
     base64.toByteArray(ciphertext)
   );
 };
+
+export const waitUntilTrue = async (cb: () => boolean) => {
+  while (!cb()) {
+    await timeout(1000);
+  }
+}
