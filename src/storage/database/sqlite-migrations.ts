@@ -25,7 +25,8 @@ const schema = [
     website TEXT NULL,
     type TEXT NOT NULL DEFAULT "NORMAL",
     preimage TEXT NOT NULL DEFAULT "00",
-    lnurlPayResponse TEXT NULL
+    lnurlPayResponse TEXT NULL,
+    identifiedService TEXT NULL
   )`,
 
   `CREATE TABLE tx_hops (

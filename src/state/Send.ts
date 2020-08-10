@@ -12,6 +12,7 @@ import { getGeolocation, hexToUint8Array } from "../utils";
 
 import logger from "./../utils/log";
 import { ILNUrlPayResponse } from "./LNURL";
+import { identifyService } from "../utils/lightning-services";
 const log = logger("Send");
 
 type PaymentRequest = string;
@@ -183,6 +184,7 @@ export const send: ISendModel = {
       tlvRecordName: null,
       type: extraData.type,
       website: extraData.website,
+      identifiedService: identifyService(paymentRequest.destination, paymentRequest.description, extraData.website),
 
       preimage: hexToUint8Array(sendPaymentResult.paymentPreimage),
       lnurlPayResponse: extraData.lnurlPayResponse,
@@ -300,6 +302,7 @@ export const send: ISendModel = {
       tlvRecordName: null,
       type: extraData.type,
       website: extraData.website,
+      identifiedService: identifyService(paymentRequest.destination, paymentRequest.description, extraData.website),
 
       preimage: sendPaymentResult.paymentPreimage,
       lnurlPayResponse: extraData.lnurlPayResponse,

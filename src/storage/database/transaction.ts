@@ -2,6 +2,7 @@ import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { queryInsert, queryMulti, querySingle, query } from "./db-utils";
 import Long from "long";
 import { ILNUrlPayResponse } from "../../state/LNURL";
+import { ILightningServices}  from "../../utils/lightning-services";
 import { hexToUint8Array, bytesToHexString } from "../../utils";
 
 export interface IDBTransaction {
@@ -31,6 +32,7 @@ export interface IDBTransaction {
   type: string;
   preimage: string,
   lnurlPayResponse: string | null;
+  identifiedService: string | null;
 }
 
 export interface ITransaction {
@@ -60,6 +62,7 @@ export interface ITransaction {
   type: "NORMAL" | "WEBLN" | "LNURL";
   preimage: Uint8Array,
   lnurlPayResponse: ILNUrlPayResponse | null;
+  identifiedService: keyof ILightningServices  | null;
 
   hops: ITransactionHop[];
 }
@@ -114,7 +117,8 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       website,
       type,
       preimage,
-      lnurlPayResponse
+      lnurlPayResponse,
+      identifiedService
     )
     VALUES
     (
@@ -142,8 +146,9 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       ?,
       ?,
       ?,
+      ?,
       ?
-      )`,
+    )`,
     [
       transaction.date.toString(),
       transaction.expire.toString(),
@@ -169,7 +174,8 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.website,
       transaction.type,
       bytesToHexString(transaction.preimage),
-      transaction.lnurlPayResponse ? JSON.stringify(transaction.lnurlPayResponse) : null
+      transaction.lnurlPayResponse ? JSON.stringify(transaction.lnurlPayResponse) : null,
+      transaction.identifiedService,
     ],
   );
 
@@ -227,7 +233,8 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         website = ?,
         type = ?,
         preimage = ?,
-        lnurlPayResponse = ?
+        lnurlPayResponse = ?,
+        identifiedService = ?
     WHERE id = ?`,
     [
       transaction.date.toString(),
@@ -253,6 +260,7 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.type,
       bytesToHexString(transaction.preimage),
       transaction.lnurlPayResponse ? JSON.stringify(transaction.lnurlPayResponse) : null,
+      transaction.identifiedService,
       transaction.id,
     ],
   );
@@ -317,6 +325,7 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
     type: transaction.type as ITransaction["type"] || "NORMAL",
     preimage: transaction.preimage ? hexToUint8Array(transaction.preimage) : new Uint8Array([0]),
     lnurlPayResponse,
+    identifiedService: transaction.identifiedService,
     hops: [],
   };
 };
