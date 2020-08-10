@@ -10,6 +10,7 @@ import { setupDescription } from "../utils/NameDesc";
 import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
 import { timeout, uint8ArrayToString, decodeTLVRecord, bytesToHexString, toast } from "../utils";
 import { TLV_RECORD_NAME } from "../utils/constants";
+import { identifyService } from "../utils/lightning-services";
 
 import logger from "./../utils/log";
 const log = logger("Receive");
@@ -152,6 +153,8 @@ export const receive: IReceiveModel = {
 
           payer: tmpData.payer,
           website: tmpData.website,
+          identifiedService: identifyService(null, "", tmpData.website),
+
           type: tmpData.type,
           locationLat: null,
           locationLong: null,
@@ -161,6 +164,10 @@ export const receive: IReceiveModel = {
 
           hops: [],
         };
+
+        if (transaction.payer === "Hampus Sjöberg" || transaction.payer === "Hampus Sjoberg") {
+          transaction.identifiedService = "hampus";
+        }
 
         if (invoice.state === lnrpc.Invoice.InvoiceState.SETTLED) {
           const fiatUnit = getStoreState().settings.fiatUnit;

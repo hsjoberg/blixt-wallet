@@ -130,6 +130,7 @@ export const appMigration: IAppMigration[] = [
   // Version 17
   {
     async beforeLnd(db, i) {
+      await db.executeSql("ALTER TABLE tx ADD identifiedService TEXT NULL");
       await setItemObject<boolean>(StorageItem.hideExpiredInvoices, true);
       await setItemObject<number>(StorageItem.lastGoogleDriveBackup, new Date().getTime());
     },

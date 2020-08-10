@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 import { Body, Card, CardItem, Text, Right, Row } from "native-base";
 
 import { fromUnixTime } from "date-fns";
@@ -9,6 +9,7 @@ import { capitalize, formatISO, isLong } from "../utils";
 import { extractDescription } from "../utils/NameDesc";
 import { IBitcoinUnits, formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import { useStoreState } from "../state/store";
+import { getLightningService } from "../utils/lightning-services";
 
 interface IProps {
   onPress: (id: string) => void;
@@ -32,49 +33,73 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
     transactionValue = value;
   }
 
+  // const start = performance.now();
+  // const image = getTransactionImage(transaction);
+  const lightningService = getLightningService(transaction);
+  // console.log("Time: " + (performance.now() - start));
+
+  let recipientOrSender;
+  if (lightningService) {
+    recipientOrSender = lightningService.title;
+  }
+  else if (transaction.website) {
+    recipientOrSender = transaction.website;
+  }
+  else if (transaction.value.lessThan(0) && name) {
+    recipientOrSender = name;
+  }
+  else if (transaction.value.greaterThanOrEqual(0) && tlvRecordName) {
+    recipientOrSender = tlvRecordName;
+  }
+  else if (transaction.value.greaterThanOrEqual(0) && transaction.payer) {
+    recipientOrSender = transaction.payer;
+  }
+
   return (
     <Card>
       <CardItem activeOpacity={1} button={true} onPress={() => onPress(transaction.rHash)}>
-        <Body>
-          <Row style={transactionStyle.transactionTop}>
-            <Text style={transactionStyle.transactionTopDate}>
-              {formatISO(fromUnixTime(date.toNumber()))}
-            </Text>
-            <Right>
-              <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
-                {transactionValue.notEquals(0) &&
-                  <>
-                    {(positive ? "+" : "")}
-                    {!preferFiat && formatBitcoin(transactionValue, unit, false)}
-                    {preferFiat && convertBitcoinToFiat(transactionValue, currentRate, fiatUnit)}
-                  </>
+        <Body style={{ flexDirection: "row" }}>
+          {lightningService &&
+            <View style={transactionStyle.avatarContainer}>
+              <Image
+                source={{ uri: lightningService.image }}
+                style={transactionStyle.avatarImage}
+                width={43}
+                height={43}
+              />
+            </View>
+          }
+          <View style={{ flex: 1 }}>
+            <View style={transactionStyle.transactionTop}>
+              <Text style={transactionStyle.transactionTopDate}>
+                {formatISO(fromUnixTime(date.toNumber()))}
+              </Text>
+              <Right>
+                <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
+                  {transactionValue.notEquals(0) &&
+                    <>
+                      {(positive ? "+" : "")}
+                      {!preferFiat && formatBitcoin(transactionValue, unit, false)}
+                      {preferFiat && convertBitcoinToFiat(transactionValue, currentRate, fiatUnit)}
+                    </>
+                  }
+                </Text>
+              </Right>
+            </View>
+            <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+              <Text note={true} style={{ flex: 1, marginRight:0 }}>
+                {recipientOrSender &&
+                  <Text style={{ fontWeight: "bold" }} note={true}>{recipientOrSender}: </Text>
+                }
+                {description && description.length !== 0
+                  ? description
+                  : "No description"
                 }
               </Text>
-            </Right>
-          </Row>
-          <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-            <Text note={true} style={{ flex: 1, marginRight:0 }}>
-              {/*transaction.nodeAliasCached && transaction.nodeAliasCached + ": "*/}
-              {transaction.website &&
-                <Text note={true}>{/*To */}<Text style={{ fontWeight: "bold" }} note={true}>{transaction.website}: </Text></Text>
-              }
-              {!transaction.website && transaction.value.lessThan(0) && name &&
-                <Text note={true}>{/*To */}<Text style={{ fontWeight: "bold" }} note={true}>{name}: </Text></Text>
-              }
-              {!transaction.website && transaction.value.greaterThanOrEqual(0) && tlvRecordName &&
-                <Text note={true}>{/*From */}<Text style={{ fontWeight: "bold" }} note={true}>{tlvRecordName}: </Text></Text>
-              }
-              {!transaction.website && transaction.value.greaterThanOrEqual(0) && !tlvRecordName && transaction.payer &&
-                <Text note={true}>{/*From */}<Text style={{ fontWeight: "bold" }} note={true}>{transaction.payer}: </Text></Text>
-              }
-              {description && description.length !== 0
-                ? description
-                : "No description"
-              }
-            </Text>
-            <Text note={true} style={{ marginLeft: 8, marginRight: 0 }}>
-              {status !== "SETTLED" && capitalize(status)}
-            </Text>
+              <Text note={true} style={{ marginLeft: 8, marginRight: 0 }}>
+                {status !== "SETTLED" && capitalize(status)}
+              </Text>
+            </View>
           </View>
         </Body>
       </CardItem>
@@ -84,6 +109,8 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
 
 const transactionStyle = StyleSheet.create({
   transactionTop: {
+    flex: 1,
+    flexDirection:"row",
     marginBottom: 8,
   },
   transactionTopDate: {
@@ -100,4 +127,16 @@ const transactionStyle = StyleSheet.create({
     // fontSize: 13,
     textAlign: "right",
   },
+  avatarContainer: {
+    width: 50,
+    alignSelf:"center",
+    marginTop: 2,
+    marginRight: 7,
+    marginLeft: -2,
+  },
+  avatarImage: {
+    width: 320,
+    height: 320,
+    borderRadius: 22,
+  }
 });
