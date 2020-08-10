@@ -57,6 +57,7 @@ export interface ILNUrlPayRequest {
   maxSendable: number;
   minSendable: number;
   metadata: string;
+  commentAllowed?: number;
   tag: "payRequest";
 }
 
@@ -114,7 +115,7 @@ export interface ILNUrlModel {
   doChannelRequest: Thunk<ILNUrlModel, IDoChannelRequestPayload, IStoreInjections, IStoreModel, Promise<boolean>>;
   doAuthRequest: Thunk<ILNUrlModel, void, IStoreInjections, IStoreModel, Promise<boolean>>;
   doWithdrawRequest: Thunk<ILNUrlModel, { satoshi: number; }, IStoreInjections, IStoreModel, Promise<boolean>>;
-  doPayRequest: Thunk<ILNUrlModel, { msat: number }, IStoreInjections, IStoreModel, Promise<IDoPayRequestResponse>>;
+  doPayRequest: Thunk<ILNUrlModel, { msat: number, comment?: string }, IStoreInjections, IStoreModel, Promise<IDoPayRequestResponse>>;
 
   setLNUrlStr: Action<ILNUrlModel, string>;
   setType: Action<ILNUrlModel, LNURLType>;
@@ -358,11 +359,14 @@ export const lnUrl: ILNUrlModel = {
       // (we're skipping fromnodes)
       const url = (
         lnUrlObject.callback +
-        `?amount=${payload.msat}`
+        `?amount=${payload.msat}${payload.comment ? "&comment=" + payload.comment : ""}`
       );
       log.d("url", [url]);
       const result = await fetch(url);
       log.d("result", [JSON.stringify(result)]);
+      if (!result.ok) {
+        throw new Error("Could not pay");
+      }
       let response: ILNUrlPayResponse | ILNUrlPayResponseError;
       try {
         response = await result.json();
@@ -393,12 +397,14 @@ export const lnUrl: ILNUrlModel = {
         //    hash of metadata string converted to byte array in UTF-8 encoding.
         const descriptionHash = paymentRequest.descriptionHash;
         if (!descriptionHash) {
+          console.log(descriptionHash);
           throw new Error("Invoice invalid. Description hash is missing.");
         }
 
+        log.d("metadata", [lnUrlObject.metadata]);
         log.d("Check match", [
           descriptionHash,
-          new sha256Hash().update(stringToUint8Array(lnUrlObject.metadata)),
+          bytesToHexString(new sha256Hash().update(stringToUint8Array(lnUrlObject.metadata)).digest()),
         ]);
 
         // 8. LN WALLET Verifies that amount in provided invoice equals an amount previously specified by user.

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar, Vibration, StyleSheet, Clipboard, Linking } from "react-native";
+import { Vibration, StyleSheet, Clipboard, Linking } from "react-native";
 import { Body, Card, Text, CardItem, H1, View, Button, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import DialogAndroid from "react-native-dialogs";
@@ -41,10 +41,12 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   const [image, setImage] = useState<string | undefined>();
   const [minSpendable, setMinSpendable] = useState<number | undefined>();
   const [maxSpendable, setMaxSpendable] = useState<number | undefined>();
+  const [commentAllowed, setCommentAllowed] = useState<number | undefined>();
   const [payRequestResponse, setPayRequestResponse] = useState<ILNUrlPayResponse | undefined>();
   const [preimage, setPreimage] = useState<Uint8Array | undefined>();
 
   const [sendAmountMSat, setSendAmountMSat] = useState(0);
+  const [comment, setComment] = useState<string | undefined>();
 
   useEffect(() => {
     if (lnUrlObject && lnUrlObject.tag === "payRequest") {
@@ -69,6 +71,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
 
       setMinSpendable(lnUrlObject.minSendable);
       setMaxSpendable(lnUrlObject.maxSendable);
+      setCommentAllowed(lnUrlObject.commentAllowed ?? undefined)
 
       if (lnUrlObject.minSendable === lnUrlObject.maxSendable) {
         setSendAmountMSat(lnUrlObject.minSendable);
@@ -95,6 +98,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
       setDoRequestLoading(true);
       const response = await doPayRequest({
         msat: sendAmountMSat,
+        comment,
       });
       console.log(response);
       setPayRequestResponse(response);
@@ -265,10 +269,20 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
                   <Text> to {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
                 }
               </Text>
+              {commentAllowed &&
+                <>
+                  <Text>
+                    Comment to {domain} (max {commentAllowed} letters):
+                  </Text>
+                  <View style={{ flexDirection:"row" }}>
+                    <Input onChangeText={setComment} keyboardType="default" style={[style.input, { marginTop: 9, marginBottom: 16 }]} />
+                  </View>
+                </>
+              }
               {image &&
                 <ScaledImage
                   uri={"data:image/png;base64," + image}
-                  height={200}
+                  height={190}
                   style={{
                     alignSelf: "center",
                     marginBottom: 28,
