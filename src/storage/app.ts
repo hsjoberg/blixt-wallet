@@ -38,6 +38,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   onboardingState = "onboardingState",
   torEnabled = "torEnabled",
   hideExpiredInvoices = "hideExpiredInvoices",
+  lastGoogleDriveBackup = "lastGoogleDriveBackup",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -88,6 +89,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.onboardingState),
     removeItem(StorageItem.torEnabled),
     removeItem(StorageItem.hideExpiredInvoices),
+    removeItem(StorageItem.lastGoogleDriveBackup),
   ]);
 };
 
@@ -121,5 +123,6 @@ export const setupApp = async () => {
     setItem(StorageItem.onboardingState, "SEND_ONCHAIN"),
     setItemObject<boolean>(StorageItem.torEnabled, false),
     setItemObject<boolean>(StorageItem.hideExpiredInvoices, false),
+    setItemObject<number>(StorageItem.lastGoogleDriveBackup, new Date().getTime()),
   ]);
 };

@@ -131,6 +131,7 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       await setItemObject<boolean>(StorageItem.hideExpiredInvoices, true);
+      await setItemObject<number>(StorageItem.lastGoogleDriveBackup, new Date().getTime());
     },
   },
 ];
