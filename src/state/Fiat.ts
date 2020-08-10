@@ -108,6 +108,7 @@ export const fiat: IFiatModel = {
         parsed[currency.toUpperCase()] = { last: rate };
       }
       actions.setFiatRates(parsed);
+      return;
     } catch (e) {
       log.e("Failed to fetch fiat rate from Coingecko: " + e.message);
       log.i("Falling back to Blockchain.info");
