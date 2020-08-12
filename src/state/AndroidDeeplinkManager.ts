@@ -6,6 +6,7 @@ import { getNavigator } from "../utils/navigation";
 import { IStoreModel } from "./index";
 import { timeout } from "../utils";
 import { LnBech32Prefix } from "../utils/build";
+
 import logger from "./../utils/log";
 const log = logger("AndroidDeeplinkManager");
 
@@ -13,34 +14,34 @@ export interface IAndroidDeeplinkManager {
   initialize: Thunk<IAndroidDeeplinkManager>;
   setupAppStateChangeListener: Thunk<IAndroidDeeplinkManager, void, any, IStoreModel>;
 
-  checkDeeplink: Thunk<IAndroidDeeplinkManager, void, (nav: NavigationContainerRef) => {} | null, IStoreModel>;
-  tryInvoice: Thunk<IAndroidDeeplinkManager, { paymentRequest: string }, (nav: NavigationContainerRef) => {} | null, IStoreModel>;
-  tryLNUrl: Thunk<IAndroidDeeplinkManager, { lnUrl: string }, (nav: NavigationContainerRef) => {} | null, IStoreModel>;
+  checkDeeplink: Thunk<IAndroidDeeplinkManager, void, any, IStoreModel>;
+  tryInvoice: Thunk<IAndroidDeeplinkManager, { paymentRequest: string }, any, IStoreModel>;
+  tryLNUrl: Thunk<IAndroidDeeplinkManager, { lnUrl: string }, any, IStoreModel>;
   addToCache: Action<IAndroidDeeplinkManager, string>;
 
   cache: string[];
 }
 
 export const androidDeeplinkManager: IAndroidDeeplinkManager = {
-  initialize: thunk(async (actions) => {
+  initialize: thunk((actions) => {
     actions.setupAppStateChangeListener();
     // Used for checking for URL intent invocations
     Linking.addListener("url", async (e: { url: string }) => {
-      log.d("url eventlistener");
+      log.i("url eventlistener");
       const result = await actions.checkDeeplink();
       console.log(result);
       if (result) {
         result(getNavigator());
       }
     });
-    // await actions.checkDeeplink();
   }),
 
-  setupAppStateChangeListener: thunk((actions, _, { getStoreState }) => {
+  setupAppStateChangeListener: thunk((actions) => {
     // Used for checking common intent invocations ("Share with app", NFC etc)
     AppState.addEventListener("change", async (status: AppStateStatus) => {
-      log.d("change eventlistener");
+      log.i("New app state found");
       if (status === "active") {
+        log.i("Checking deeplink");
         const result = await actions.checkDeeplink();
         if (result) {
           result(getNavigator());
@@ -70,50 +71,47 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
         }
         actions.addToCache(data);
 
-        if (data.toUpperCase().startsWith("LIGHTNING:")) {
-          log.d("Deeplink found");
-          const lightningUri = data.toUpperCase().replace("LIGHTNING:", "");
+        for (let subject of data.split(/\s/)) {
+          subject = subject.toUpperCase().replace("LIGHTNING:", "");
+          log.d("Testing", [subject]);
 
-          log.d("", [lightningUri.startsWith(LnBech32Prefix.toUpperCase())]);
           // If this is an invoice
-          if (lightningUri.startsWith(LnBech32Prefix.toUpperCase())) {
-            return await actions.tryInvoice({ paymentRequest: lightningUri });
+          if (subject.startsWith(LnBech32Prefix.toUpperCase())) {
+            return await actions.tryInvoice({ paymentRequest: subject.split("?")[0] });
           }
           // If this is an LNURL
-          else if (lightningUri.startsWith("LNURL")) {
-            return await actions.tryLNUrl({ lnUrl: lightningUri });
+          else if (subject.startsWith("LNURL")) {
+            return await actions.tryLNUrl({ lnUrl: subject.split("?")[0] });
           }
-          else if (data.includes("@")) {
-            log.i(data + " looks like a lightning peer URI");
-            return (nav: NavigationContainerRef) => {
-              nav?.navigate("LightningInfo", { screen: "OpenChannel", params: { peerUri: lightningUri } });
+          else if (subject.includes("@")) {
+            const hexRegex = /^[0-9a-fA-F]+$/;
+            const pubkey = subject.split("@")[0];
+            if (hexRegex.test(pubkey)) {
+              log.i("Looks like a lightning peer URI", [subject]);
+              return (nav: NavigationContainerRef) => {
+                nav?.navigate("LightningInfo", { screen: "OpenChannel", params: { peerUri: data } });
+              }
             }
           }
-        }
-        else if (data.includes("@")) {
-          log.i(data + " looks like a lightning peer URI");
-          return (nav: NavigationContainerRef) => {
-            nav?.navigate("LightningInfo", { screen: "OpenChannel", params: { peerUri: data } });
+          // If this is a normal URL
+          // we want to open the WebLN browser
+          else {
+            try {
+              const url = new URL(subject);
+              return (nav: NavigationContainerRef) => {
+                nav?.navigate("WebLNBrowser", { url: subject });
+              }
+            } catch (e) { }
           }
         }
-        // If this is a normal URL
-        // we want to open the WebLN browser
-        else {
-          try {
-            const url = new URL(data);
-            return (nav: NavigationContainerRef) => {
-              nav?.navigate("WebLNBrowser", { url: data });
-            }
-          } catch (e) { }
         }
-      }
     } catch (e) {
       log.i(`Error checking deeplink: ${e.message}`);
     }
     return null;
   }),
 
-  tryInvoice: thunk(async (actions, payload, { dispatch, getState }) => {
+  tryInvoice: thunk(async (_, payload, { dispatch }) => {
     try {
       await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest });
       return (nav: NavigationContainerRef) => {
@@ -126,7 +124,7 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
     return false;
   }),
 
-  tryLNUrl: thunk(async (actions, payload, { dispatch, getState }) => {
+  tryLNUrl: thunk(async (_, payload, { dispatch }) => {
     const type = await dispatch.lnUrl.setLNUrl(payload.lnUrl);
     if (type === "channelRequest") {
       log.d("Navigating to channelRequest");
