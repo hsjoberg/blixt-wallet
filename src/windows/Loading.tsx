@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { StyleSheet, StatusBar } from "react-native";
-import { Spinner, H1, Button, Text } from "native-base";
+import { Spinner } from "native-base";
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Container from "../components/Container";
 import { useStoreState, useStoreActions } from "../state/store";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Main";
+import { CommonActions } from "@react-navigation/native";
 
 export interface ILoadingProps {
   navigation: StackNavigationProp<RootStackParamList, "Loading">;
@@ -21,11 +22,19 @@ export default function Loading({ navigation }: ILoadingProps) {
     }
     // tslint:disable-next-line
     (async () => {
-      const cb = await checkDeeplink({ navigate: true });
-      navigation.replace("Overview");
-      if (cb) {
-        cb(navigation);
-      }
+      const cb = await checkDeeplink();
+
+      requestAnimationFrame(() => {
+        navigation.dispatch(
+          CommonActions.reset({
+             index: 0,
+             routes: [{ name: "Overview" }],
+          })
+        );
+        if (cb) {
+          cb(navigation);
+        }
+      });
     })();
   }, [ready]);
 

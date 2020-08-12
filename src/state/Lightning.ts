@@ -162,10 +162,10 @@ export const lightning: ILightningModel = {
         dispatch.onChain.initialize(),
         dispatch.transaction.checkOpenTransactions(),
         dispatch.scheduledSync.initialize(),
-        dispatch.androidDeeplinkManager.initialize(),
       ]);
       await dispatch.notificationManager.initialize();
       await dispatch.clipboardManager.initialize();
+      await dispatch.androidDeeplinkManager.initialize();
     } catch (e) {
       toast(e.message, 10000, "danger");
       return;
