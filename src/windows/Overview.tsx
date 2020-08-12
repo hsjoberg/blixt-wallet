@@ -1,5 +1,7 @@
 import React, { useState, useRef, useMemo, useEffect } from "react";
 import { Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
 import LinearGradient from "react-native-linear-gradient";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
@@ -12,15 +14,10 @@ import Container from "../components/Container";
 import { timeout, toast } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
-import { Chain, Debug } from "../utils/build";
-
+import { Chain } from "../utils/build";
 import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
 import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
-import Clipboard from "@react-native-community/clipboard";
-import { useStore } from "easy-peasy";
-import { useNavigation } from "@react-navigation/native";
-
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
