@@ -239,6 +239,12 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     );
   }
 
+  if (domain === "") {
+    return (
+      <></>
+    );
+  }
+
   return (
     <Blurmodal useModalComponent={false}>
       <View style={style.container}>
