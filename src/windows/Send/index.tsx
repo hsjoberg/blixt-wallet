@@ -12,7 +12,10 @@ export type SendStackParamList = {
   SendConfirmation?: {
     callback?: (r: Uint8Array | null) => void;
   };
-  SendDone: undefined;
+  SendDone: {
+    preimage: Uint8Array;
+    callback?: (r: Uint8Array | null) => void;
+  };
 }
 
 export default function SendIndex() {

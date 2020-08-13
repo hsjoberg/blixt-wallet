@@ -348,7 +348,7 @@ export const lnUrl: ILNUrlModel = {
     }
   }),
 
-  doPayRequest: thunk(async (_, payload, { getStoreActions, getState, getStoreState, injections }) => {
+  doPayRequest: thunk(async (_, payload, { getStoreActions, getState }) => {
     const type = getState().type;
     const lnUrlStr = getState().lnUrlStr;
     const lnUrlObject = getState().lnUrlObject;
@@ -365,7 +365,13 @@ export const lnUrl: ILNUrlModel = {
       const result = await fetch(url);
       log.d("result", [JSON.stringify(result)]);
       if (!result.ok) {
-        throw new Error("Could not pay");
+        let error;
+        try {
+          error = await result.json();
+        } catch {
+          throw new Error("Could not pay");
+        }
+        throw new Error(error.reason ?? "Could not pay");
       }
       let response: ILNUrlPayResponse | ILNUrlPayResponseError;
       try {

@@ -96,8 +96,12 @@ export default function SendDone({
   navigation,
   route,
 }: ISendConfirmationProps) {
+  const callback = (route.params.callback) ?? (() => {});
+  const preimage = route.params.preimage;
+
   useEffect(() => {
     setTimeout(() => {
+      callback(preimage!);
       navigation.pop();
     }, 1850);
   }, []);

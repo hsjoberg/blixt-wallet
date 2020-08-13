@@ -8,7 +8,7 @@ import Long from "long";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { RootStackParamList } from "../../Main";
-import { toast, getDomainFromURL, decryptLNURLPayAesTagMessage } from "../../utils";
+import { toast, getDomainFromURL, decryptLNURLPayAesTagMessage, hexToUint8Array } from "../../utils";
 import Blurmodal from "../../components/BlurModal";
 import { ILNUrlPayRequestMetadata, ILNUrlPayResponse } from "../../state/LNURL";
 import ScaledImage from "../../components/ScaledImage";
@@ -34,6 +34,9 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
+  const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
+  const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
+  const sendPaymentOld = useStoreActions((actions) => actions.send.sendPaymentOld);
 
   const [metadata, setMetadata] = useState<ILNUrlPayRequestMetadata>();
   const [domain, setDomain] = useState("");
@@ -96,24 +99,54 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   const onPressPay = async () => {
     try {
       setDoRequestLoading(true);
-      const response = await doPayRequest({
+      const paymentRequestResponse = await doPayRequest({
         msat: sendAmountMSat,
         comment,
       });
-      console.log(response);
-      setPayRequestResponse(response);
+      console.log(paymentRequestResponse);
+      setPayRequestResponse(paymentRequestResponse);
 
-      navigation.navigate("Send", {
-        screen: "SendConfirmation",
-        params: {
-          callback: (paymentPreimage: Uint8Array) => {
-            if (paymentPreimage !== null) {
-              setPreimage(paymentPreimage);
-              setPaid(true);
-            }
-          }
+      let preimage: Uint8Array;
+
+      if (multiPathPaymentsEnabled) {
+        try {
+          console.log("Paying with MPP enabled");
+          const response = await sendPayment();
+          preimage = hexToUint8Array(response.paymentPreimage);
+        } catch (e) {
+          console.log("Didn't work. Trying without instead");
+          console.log(e);
+          console.log("Paying with MPP disabled");
+          const response = await sendPaymentOld();
+          preimage = response.paymentPreimage;
         }
-      });
+      }
+      else {
+        console.log("Paying with MPP disabled");
+        const response = await sendPaymentOld();
+        preimage = response.paymentPreimage;
+      }
+
+      setPreimage(preimage);
+      setPaid(true);
+      if (paymentRequestResponse.successAction === null) {
+        navigation.pop();
+      }
+
+      // navigation.navigate("Send", {
+      //   screen: "SendConfirmation",
+      //   params: {
+      //     callback: (paymentPreimage: Uint8Array) => {
+      //       if (paymentPreimage !== null) {
+      //         setPreimage(paymentPreimage);
+      //         setPaid(true);
+      //         if (paymentRequestResponse.successAction === null) {
+      //           navigation.pop();
+      //         }
+      //       }
+      //     }
+      //   }
+      // });
     } catch (e) {
       Vibration.vibrate(50);
       toast(
