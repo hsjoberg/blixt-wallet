@@ -80,27 +80,29 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
         ? { amount: Long.fromValue(unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit)) }
         : undefined;
 
+      let preimage: Uint8Array;
+
       if (multiPathPaymentsEnabled) {
         try {
           console.log("Paying with MPP enabled");
           const response = await sendPayment(payload);
-          callback(hexToUint8Array(response.paymentPreimage));
+          preimage = hexToUint8Array(response.paymentPreimage);
         } catch (e) {
           console.log("Didn't work. Trying without instead");
           console.log(e);
           console.log("Paying with MPP disabled");
           const response = await sendPaymentOld(payload);
-          callback(response.paymentPreimage);
+          preimage = response.paymentPreimage;
         }
       }
       else {
         console.log("Paying with MPP disabled");
         const response = await sendPaymentOld(payload);
-        callback(response.paymentPreimage);
+        preimage = response.paymentPreimage;
       }
       await getBalance();
       Vibration.vibrate(32);
-      navigation.replace("SendDone");
+      navigation.replace("SendDone", { preimage, callback });
     } catch (e) {
       console.log(e);
       toast(`Error: ${e.message}`, 60000, "danger", "Okay");
