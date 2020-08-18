@@ -8226,10 +8226,10 @@ react-native-vector-icons@^7.0.0:
     prop-types "^15.7.2"
     yargs "^15.0.2"
 
-react-native-webln@0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/react-native-webln/-/react-native-webln-0.1.4.tgz#f3fb9726bbbddd9c8fe93718f42e15a7ba4d7798"
-  integrity sha512-26DdymN5BO2vv2adnUCXg85z2gPYOKY/0JuhltR7gw9zWaCCib0Amf+WBciHaME43ZP6JIDArlaSg08Ub+UfSg==
+react-native-webln@0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-webln/-/react-native-webln-0.1.5.tgz#57e87dc12556c3d3af65f0aa4b7b741bb5461b03"
+  integrity sha512-lzUs1DSwygJ8V1lJYCszL/OJSeDEx7NFzsgktvivYPv2+dhopYVfELOMwmRGGn0UkQwb6G5DcNQhAsUTtAZt1g==
 
 react-native-webview@10.4.1:
   version "10.4.1"
