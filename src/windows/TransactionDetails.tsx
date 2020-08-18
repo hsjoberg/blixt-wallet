@@ -7,7 +7,7 @@ import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
-import { capitalize, formatISO, isLong, decryptLNURLPayAesTagMessage, toast } from "../utils";
+import { capitalize, formatISO, isLong, decryptLNURLPayAesTagMessage, toast, bytesToHexString } from "../utils";
 import { formatBitcoin } from "../utils/bitcoin-units"
 import { useStoreState } from "../state/store";
 import { extractDescription } from "../utils/NameDesc";
@@ -107,9 +107,10 @@ export default function TransactionDetails({ route }: any) {
               {transaction.valueFiat != null && transaction.valueFiatCurrency && <MetaData title="Amount in Fiat (Time of Payment)" data={`${transaction.valueFiat.toFixed(2)} ${transaction.valueFiatCurrency}`} />}
               {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
               {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
-              {direction === "send" && <MetaData title="Remote pubkey" data={transaction.remotePubkey}/>}
+              {direction === "send" && <MetaData title="Remote pubkey" data={transaction.remotePubkey} />}
+              {transaction.status === "SETTLED" && transaction.preimage && <MetaData title="Preimage" data={bytesToHexString(transaction.preimage)}/>}
               <MetaData title="Status" data={capitalize(transaction.status)} />
-              {transaction.status === "OPEN" &&
+              {transaction.status === "OPEN" && transaction.type !== "LNURL" &&
                 <>
                   <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                     <QrCode size={smallScreen ? 220 : 280} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} border={25} />
