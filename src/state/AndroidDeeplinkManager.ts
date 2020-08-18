@@ -72,39 +72,45 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
         actions.addToCache(data);
 
         for (let subject of data.split(/\s/)) {
-          subject = subject.toUpperCase().replace("LIGHTNING:", "");
-          log.d("Testing", [subject]);
+          try {
+            subject = subject.toUpperCase().replace("LIGHTNING:", "");
+            log.d("Testing", [subject]);
 
-          // If this is an invoice
-          if (subject.startsWith(LnBech32Prefix.toUpperCase())) {
-            return await actions.tryInvoice({ paymentRequest: subject.split("?")[0] });
-          }
-          // If this is an LNURL
-          else if (subject.startsWith("LNURL")) {
-            return await actions.tryLNUrl({ lnUrl: subject.split("?")[0] });
-          }
-          else if (subject.includes("@")) {
-            const hexRegex = /^[0-9a-fA-F]+$/;
-            const pubkey = subject.split("@")[0];
-            if (hexRegex.test(pubkey)) {
-              log.i("Looks like a lightning peer URI", [subject]);
-              return (nav: NavigationContainerRef) => {
-                nav?.navigate("LightningInfo", { screen: "OpenChannel", params: { peerUri: data } });
+            // If this is an invoice
+            if (subject.startsWith(LnBech32Prefix.toUpperCase())) {
+              return await actions.tryInvoice({ paymentRequest: subject.split("?")[0] });
+            }
+            // If this is an LNURL
+            else if (subject.startsWith("LNURL")) {
+              return await actions.tryLNUrl({ lnUrl: subject.split("?")[0] });
+            }
+            else if (subject.includes("@")) {
+              const hexRegex = /^[0-9a-fA-F]+$/;
+              const pubkey = subject.split("@")[0];
+              if (hexRegex.test(pubkey)) {
+                log.i("Looks like a lightning peer URI", [subject]);
+                return (nav: NavigationContainerRef) => {
+                  nav?.navigate("LightningInfo", { screen: "OpenChannel", params: { peerUri: data } });
+                }
               }
             }
-          }
-          // If this is a normal URL
-          // we want to open the WebLN browser
-          else {
-            try {
-              const url = new URL(subject);
-              return (nav: NavigationContainerRef) => {
-                nav?.navigate("WebLNBrowser", { url: subject });
-              }
-            } catch (e) { }
+            // If this is a normal URL
+            // we want to open the WebLN browser
+            else {
+              try {
+                if (subject.startsWith("HTTPS")) {
+                  const url = new URL(subject);
+                  return (nav: NavigationContainerRef) => {
+                    nav?.navigate("WebLNBrowser", { url: subject });
+                  }
+                }
+              } catch (e) { }
+            }
+          } catch (e) {
+            log.i(`Error checking deeplink subject: ${e.message}`);
           }
         }
-        }
+      }
     } catch (e) {
       log.i(`Error checking deeplink: ${e.message}`);
     }
