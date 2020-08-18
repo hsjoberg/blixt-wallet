@@ -8,6 +8,7 @@ export const MAX_SAT_INVOICE = 4294967;
 
 export const GITHUB_REPO_URL = "https://github.com/hsjoberg/blixt-wallet";
 export const HAMPUS_EMAIL = "mailto:hampus.sjoberg💩protonmail.com".replace("💩", "@");
+export const TELEGRAM = "https://t.me/blixtwallet";
 
 export const NAVIGATION_SCREEN_OPTIONS: StackNavigationOptions = {
   gestureEnabled: false,
