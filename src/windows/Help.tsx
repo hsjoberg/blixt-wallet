@@ -5,7 +5,7 @@ import { Body, Card, Text, CardItem, H1, Toast, View, Button } from "native-base
 import { useStoreState } from "../state/store";
 
 import Blurmodal from "../components/BlurModal";
-import { GITHUB_REPO_URL, HAMPUS_EMAIL } from "../utils/constants";
+import { GITHUB_REPO_URL, HAMPUS_EMAIL, TELEGRAM } from "../utils/constants";
 
 export interface ISyncInfoProps {
   navigation: any;
@@ -17,6 +17,10 @@ export default function SyncInfo({ route }: any) {
 
   const onPressEmail = async () => {
     await Linking.openURL(HAMPUS_EMAIL);
+  }
+
+  const onPressTelegram = async () => {
+    await Linking.openURL(TELEGRAM);
   }
 
   return (
@@ -35,10 +39,13 @@ export default function SyncInfo({ route }: any) {
             </Text>
             <View style={style.actionBar}>
               <Button style={style.actionBarButton} onPress={onPressGithub} small={true} >
-                <Text style={style.actionBarButtonText}>Go to github</Text>
+                <Text style={style.actionBarButtonText}>GitHub</Text>
+              </Button>
+              <Button style={style.actionBarButton} onPress={onPressTelegram} small={true} >
+                <Text style={style.actionBarButtonText}>Telegram group</Text>
               </Button>
               <Button style={style.actionBarButton} onPress={onPressEmail} small={true} >
-                <Text style={style.actionBarButtonText}>Email Blixt Wallet developers</Text>
+                <Text style={style.actionBarButtonText}>Email</Text>
               </Button>
             </View>
           </Body>
