@@ -723,6 +723,13 @@ Do you wish to proceed?`;
             <Body><Text>Show startup info notications</Text></Body>
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
           </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={async () => {
+            const logLines = await NativeModules.LndMobile.tailLog(30);
+            Alert.alert("Log", logLines);
+          }}>
+            <Left><Icon style={style.icon} type="Ionicons" name="newspaper-outline" /></Left>
+            <Body><Text>Read log</Text></Body>
+          </ListItem>
           {(name === "Hampus" || __DEV__ === true) &&
             <>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>
@@ -736,13 +743,6 @@ Do you wish to proceed?`;
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("WebLNBrowser")}>
                 <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
                 <Body><Text>WebLN</Text></Body>
-              </ListItem>
-              <ListItem style={style.listItem} icon={true} onPress={async () => {
-                const logLines = await NativeModules.LndMobile.tailLog(30);
-                Alert.alert("Log", logLines);
-              }}>
-                <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
-                <Body><Text>Read log</Text></Body>
               </ListItem>
             </>
           }
