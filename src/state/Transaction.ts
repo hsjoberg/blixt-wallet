@@ -1,8 +1,10 @@
+import { LayoutAnimation } from "react-native";
 import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import { ITransaction, getTransactions, createTransaction, updateTransaction } from "../storage/database/transaction";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
+import { lnrpc } from "../../proto/proto";
 
 import logger from "./../utils/log";
 const log = logger("Transaction");
@@ -46,6 +48,7 @@ export const transaction: ITransactionModel = {
 
     if (!foundTransaction) {
       const id = await createTransaction(db, tx);
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       actions.addTransaction({ ...tx, id });
     }
   }),
@@ -92,11 +95,13 @@ export const transaction: ITransactionModel = {
    * been settled while we were away.
    */
   checkOpenTransactions: thunk(async (actions, _, { getState, getStoreState, injections }) => {
-    const { lookupInvoice } = injections.lndMobile.index;
+    const lookupInvoice = injections.lndMobile.index.lookupInvoice;
+    const hideExpiredInvoices = getStoreState().settings.hideExpiredInvoices;
     const db = getStoreState().db;
     if (!db) {
       throw new Error("checkOpenTransactions(): db not ready");
     }
+
 
     for (const tx of getState().transactions) {
       if (tx.status === "OPEN") {
@@ -107,7 +112,12 @@ export const transaction: ITransactionModel = {
             status: "EXPIRED",
           };
           // tslint:disable-next-line
-          updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+          updateTransaction(db, updated).then(() => {
+            if (hideExpiredInvoices) {
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+            }
+            actions.updateTransaction({ transaction: updated });
+          });
         }
         else if (check.settled) {
           const updated: ITransaction = {
@@ -119,6 +129,19 @@ export const transaction: ITransactionModel = {
           };
           // tslint:disable-next-line
           updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+        }
+        else if (check.state === lnrpc.Invoice.InvoiceState.CANCELED) {
+          const updated: ITransaction = {
+            ...tx,
+            status: "CANCELED",
+          };
+          // tslint:disable-next-line
+          updateTransaction(db, updated).then(() => {
+            if (hideExpiredInvoices) {
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+            }
+            actions.updateTransaction({ transaction: updated })
+          });
         }
       }
     }

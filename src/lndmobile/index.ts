@@ -1,9 +1,9 @@
 import { NativeModules, DeviceEventEmitter } from "react-native";
 import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
-import { lnrpc, routerrpc } from "../../proto/proto";
+import { lnrpc, routerrpc, invoicesrpc } from "../../proto/proto";
 import Long from "long";
 import sha from "sha.js";
-import { stringToUint8Array } from "../utils";
+import { stringToUint8Array, hexToUint8Array } from "../utils";
 import { TLV_RECORD_NAME } from "../utils/constants";
 const { LndMobile } = NativeModules;
 
@@ -149,7 +149,6 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvReco
       method: "RouterSendPaymentV2",
       options,
     }, false);
-    console.log(response);
   });
 };
 
@@ -198,6 +197,21 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
       memo,
       expiry: Long.fromValue(expiry),
       private: true,
+    },
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+export const cancelInvoice = async (paymentHash: string): Promise<invoicesrpc.CancelInvoiceResp> => {
+  const response = await sendCommand<invoicesrpc.ICancelInvoiceMsg, invoicesrpc.ICancelInvoiceMsg, invoicesrpc.CancelInvoiceResp>({
+    request: invoicesrpc.CancelInvoiceMsg,
+    response: invoicesrpc.CancelInvoiceResp,
+    method: "InvoicesCancelInvoice",
+    options: {
+      paymentHash: hexToUint8Array(paymentHash),
     },
   });
   return response;

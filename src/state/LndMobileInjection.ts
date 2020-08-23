@@ -5,6 +5,7 @@ import {
   startLnd,
 
   addInvoice,
+  cancelInvoice,
   connectPeer,
   decodePayReq,
   getNodeInfo,
@@ -53,7 +54,7 @@ import {
 import {
   checkScheduledSyncWorkStatus, WorkInfo
 } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
-import { lnrpc, signrpc } from "../../proto/proto";
+import { lnrpc, signrpc, invoicesrpc } from "../../proto/proto";
 import { autopilotrpc } from "../../proto/proto-autopilot";
 
 export interface ILndMobileInjections {
@@ -64,6 +65,7 @@ export interface ILndMobileInjections {
     startLnd: (torEnabled: boolean) => Promise<string>;
 
     addInvoice: (amount: number, memo: string, expiry?: number) => Promise<lnrpc.AddInvoiceResponse>;
+    cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
     decodePayReq: (bolt11: string) => Promise<lnrpc.PayReq>;
     getInfo: () => Promise<lnrpc.GetInfoResponse>;
@@ -121,6 +123,7 @@ export default {
     startLnd,
 
     addInvoice,
+    cancelInvoice,
     connectPeer,
     decodePayReq,
     getNodeInfo,

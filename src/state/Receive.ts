@@ -5,7 +5,7 @@ import Long from "long";
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc, invoicesrpc } from "../../proto/proto";
 import { setupDescription } from "../utils/NameDesc";
 import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
 import { timeout, uint8ArrayToString, decodeTLVRecord, bytesToHexString, toast } from "../utils";
@@ -30,11 +30,16 @@ interface IReceiveModelAddInvoicePayload {
   tmpData?: IInvoiceTempData;
 }
 
+interface IReceiveModelCancelInvoicePayload {
+  rHash: string;
+}
+
 export interface IReceiveModel {
   initialize: Thunk<IReceiveModel, void, IStoreInjections>;
   deinitialize: Thunk<IReceiveModel>;
 
   addInvoice: Thunk<IReceiveModel, IReceiveModelAddInvoicePayload, IStoreInjections, IStoreModel, Promise<lnrpc.AddInvoiceResponse>>;
+  cancelInvoice: Thunk<IReceiveModel, IReceiveModelCancelInvoicePayload, IStoreInjections, Promise<invoicesrpc.CancelInvoiceResp>>;
   subscribeInvoice: Thunk<IReceiveModel, void, IStoreInjections, IStoreModel>;
   setInvoiceSubscriptionStarted: Action<IReceiveModel, boolean>;
   setInvoiceSubscriptionResource: Action<IReceiveModel, EmitterSubscription | undefined>;
@@ -84,6 +89,11 @@ export const receive: IReceiveModel = {
     }
 
     return result;
+  }),
+
+  cancelInvoice: thunk(async (_, payload, { injections }) => {
+    const cancelInvoice = injections.lndMobile.index.cancelInvoice;
+    return await cancelInvoice(payload.rHash);
   }),
 
   subscribeInvoice: thunk((actions, _2, { getState, dispatch, injections, getStoreState, getStoreActions }) => {
