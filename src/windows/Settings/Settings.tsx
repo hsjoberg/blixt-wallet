@@ -436,6 +436,12 @@ Do you wish to proceed?`;
     navigation.navigate("TorShowOnionAddress");
   }
 
+  const screenTransitionsEnabled = useStoreState((store) => store.settings.screenTransitionsEnabled);
+  const changeScreenTransitionsEnabled = useStoreActions((store) => store.settings.changeScreenTransitionsEnabled);
+  const onToggleScreenTransitionsEnabledPress = async () => {
+    await changeScreenTransitionsEnabled(!screenTransitionsEnabled);
+  }
+
   return (
     <Container>
       <Content>
@@ -672,6 +678,11 @@ Do you wish to proceed?`;
             <Body><Text>Automatically hide expired invoices</Text></Body>
             <Right><CheckBox checked={hideExpiredInvoices} onPress={onToggleHideExpiredInvoicesPress} /></Right>
           </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleScreenTransitionsEnabledPress}>
+            <Left><Icon style={style.icon} type="Ionicons" name="swap-horizontal" /></Left>
+            <Body><Text>Screen transitions</Text></Body>
+            <Right><CheckBox checked={screenTransitionsEnabled} onPress={onToggleScreenTransitionsEnabledPress} /></Right>
+          </ListItem>
 
           {Chain === "mainnet" &&
             <>
@@ -720,7 +731,7 @@ Do you wish to proceed?`;
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleDebugShowStartupInfo}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="android-debug-bridge" /></Left>
-            <Body><Text>Show startup info notications</Text></Body>
+            <Body><Text>Show startup info notifications</Text></Body>
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={async () => {
@@ -728,7 +739,7 @@ Do you wish to proceed?`;
             Alert.alert("Log", logLines);
           }}>
             <Left><Icon style={style.icon} type="Ionicons" name="newspaper-outline" /></Left>
-            <Body><Text>Read log</Text></Body>
+            <Body><Text>Read lnd log</Text></Body>
           </ListItem>
           {(name === "Hampus" || __DEV__ === true) &&
             <>

@@ -9,7 +9,7 @@ import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
 import { capitalize, formatISO, isLong, decryptLNURLPayAesTagMessage, toast, bytesToHexString } from "../utils";
 import { formatBitcoin } from "../utils/bitcoin-units"
-import { useStoreState } from "../state/store";
+import { useStoreState, useStoreActions } from "../state/store";
 import { extractDescription } from "../utils/NameDesc";
 import { smallScreen } from "../utils/device";
 import CopyAddress from "../components/CopyAddress";
@@ -40,10 +40,13 @@ function MetaData({ title, data, url }: IMetaDataProps) {
 
 export interface ITransactionDetailsProps {
   navigation: any;
+  route: any;
 }
-export default function TransactionDetails({ route }: any) {
+export default function TransactionDetails({ route, navigation }: ITransactionDetailsProps) {
   const rHash: string = route.params.rHash;
   const transaction = useStoreState((store) => store.transaction.getTransactionByRHash(rHash));
+  const checkOpenTransactions = useStoreActions((store) => store.transaction.checkOpenTransactions);
+  const cancelInvoice = useStoreActions((store) => store.receive.cancelInvoice);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const transactionGeolocationMapStyle = useStoreState((store) => store.settings.transactionGeolocationMapStyle);
 
@@ -78,6 +81,20 @@ export default function TransactionDetails({ route }: any) {
     transactionValue = transaction.value;
   }
 
+  const onPressCancelInvoice = async () => {
+    // There's a LayoutAnimation.configureNext() in the Transaction store
+    // to animate the removal of the invoice if hideArchivedInvoices is `true`.
+    // React Native cannot figure out which component(s) should have an
+    // animation as both the navigation will pop and the invoice
+    // will be removed at approximately the same time.
+    // So we delay the cancellation for 35ms.
+    setTimeout(async () => {
+      await cancelInvoice({ rHash: transaction.rHash });
+      await checkOpenTransactions();
+    }, 35);
+    navigation.pop();
+  }
+
   if (currentScreen === "Overview") {
     return (
       <Blurmodal>
@@ -88,6 +105,11 @@ export default function TransactionDetails({ route }: any) {
                 <H1 style={style.header}>
                   Transaction
                 </H1>
+                {transaction.status === "OPEN" &&
+                  <Button small danger onPress={onPressCancelInvoice}>
+                    <Text style={{ fontSize: 9 }}>Cancel invoice</Text>
+                  </Button>
+                }
                 {transaction.locationLat && transaction.locationLat &&
                   <Button small={true} onPress={() => setCurrentScreen("Map")}>
                     <Text style={{ fontSize: 9 }}>Show map</Text>

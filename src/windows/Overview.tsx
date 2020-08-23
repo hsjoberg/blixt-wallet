@@ -50,7 +50,6 @@ function Overview({ navigation }: IOverviewProps) {
   const bitcoinAddress = useStoreState((store) => store.onChain.address);
   const onboardingState  = useStoreState((store) => store.onboardingState);
 
-
   const scrollYAnimatedValue = useRef(new Animated.Value(0)).current;
   const [refreshing, setRefreshing] = useState(false);
 
@@ -61,12 +60,6 @@ function Overview({ navigation }: IOverviewProps) {
   const getFiatRate = useStoreActions((store) => store.fiat.getRate);
   const checkOpenTransactions = useStoreActions((store) => store.transaction.checkOpenTransactions);
   const getInfo = useStoreActions((store) => store.lightning.getInfo);
-
-  useEffect(() => {
-    if (firstSync && !nodeInfo?.syncedToGraph) {
-      // navigation.navigate("SyncInfo");
-    }
-  }, [firstSync]);
 
   const headerHeight = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
@@ -137,14 +130,13 @@ function Overview({ navigation }: IOverviewProps) {
 
   const txs = useMemo(() => {
     if (transactions.length > 0) {
-      return transactions.map((transaction, key) => {
-        if (key > contentExpand * NUM_TRANSACTIONS_PER_LOAD) {
-          return null;
-        }
-        else if (hideExpiredInvoices && transaction.status === "EXPIRED") {
-          return null;
-        }
-        return (<TransactionCard key={key} transaction={transaction} unit={bitcoinUnit} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />);
+      return transactions
+        .filter((transaction) => hideExpiredInvoices ? !(transaction.status === "EXPIRED" || transaction.status === "CANCELED") : true)
+        .map((transaction, key) => {
+          if (key > contentExpand * NUM_TRANSACTIONS_PER_LOAD) {
+            return null;
+          }
+          return (<TransactionCard key={transaction.rHash} transaction={transaction} unit={bitcoinUnit} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />);
       });
     }
     return (<Text style={{ textAlign: "center", margin: 16 }}>No transactions yet</Text>);
