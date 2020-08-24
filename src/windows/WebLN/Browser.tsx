@@ -64,7 +64,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
     sendPayment: async (paymentRequestStr) => {
       try {
         setDisableBackHandler(true);
-        await handleSendPaymentRequest({
+        return await handleSendPaymentRequest({
           data: paymentRequestStr,
           requestUrl: url,
           weblnPayment: true,
