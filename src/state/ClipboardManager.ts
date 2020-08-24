@@ -1,11 +1,12 @@
 import { Alert, AppState, AppStateStatus } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Action, action, Thunk, thunk } from "easy-peasy";
+
 import { navigate, getNavigator } from "../utils/navigation";
 import { IStoreModel } from "./index";
+import { LnBech32Prefix } from "../utils/build";
 
 import logger from "./../utils/log";
-import { LnBech32Prefix } from "../utils/build";
 const log = logger("ClipboardManager");
 
 export interface IClipboardManagerModel {
@@ -76,9 +77,19 @@ export const clipboardManager: IClipboardManagerModel = {
     }
   }),
 
-  tryInvoice: thunk(async (actions, payload, { dispatch, getState }) => {
+  tryInvoice: thunk(async (_, payload, { dispatch, getStoreState }) => {
     try {
-      await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest });
+      const paymentRequest = await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest });
+
+      if (getStoreState().lightning.nodeInfo?.identityPubkey === paymentRequest.destination) {
+        log.d("Found own invoice");
+        return false;
+      }
+
+      if (getStoreState().transaction.getTransactionByRHash(paymentRequest.paymentHash)) {
+        log.d("Found already paid invoice");
+        return false;
+      }
 
       Alert.alert(
         "Found invoice in clipboard",
