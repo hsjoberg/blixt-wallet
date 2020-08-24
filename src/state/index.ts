@@ -1,4 +1,4 @@
-import { NativeModules, Linking, Alert, ToastAndroid } from "react-native";
+import { NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
@@ -95,6 +95,7 @@ export interface IStoreModel {
 
 export const model: IStoreModel = {
   initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
+    log.d("getState().appReady" + getState().appReady);
     if (getState().appReady) {
       log.d("App already initialized");
       return;
