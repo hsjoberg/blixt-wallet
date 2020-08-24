@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { convertBitcoinToFiat, unitToSatoshi, valueBitcoinFromFiat, valueBitcoin, BitcoinUnits } from "../utils/bitcoin-units";
 import { useStoreState } from "../state/store";
 
@@ -24,8 +24,27 @@ export default function useBalance(initialSat?: Long) {
     )
   );
 
+  useEffect(() => {
+    if (bitcoinValue) {
+      setDollarValue(
+        convertBitcoinToFiat(
+          unitToSatoshi(Number.parseFloat(bitcoinValue), bitcoinUnit),
+          currentRate,
+        )
+      );
+    }
+  }, [bitcoinUnit]);
+
+  useEffect(() => {
+    if (dollarValue) {
+      setBitcoinValue(
+        valueBitcoinFromFiat(Number.parseFloat(dollarValue), currentRate, bitcoinUnit)
+      );
+    }
+  }, [fiatUnit]);
+
   return {
-    onChangeBitcoinInput: (text: string) => {
+    onChangeBitcoinInput(text: string) {
       if (bitcoinUnit === "satoshi") {
         text = text.replace(/\[^0-9+\-\/*]/g, "");
       }
@@ -37,7 +56,6 @@ export default function useBalance(initialSat?: Long) {
         setDollarValue(undefined);
         return;
       }
-
       const fiatVal = evaluateExpression(text);
       setBitcoinValue(text);
       setDollarValue(
@@ -47,7 +65,7 @@ export default function useBalance(initialSat?: Long) {
         )
       );
     },
-    onChangeFiatInput: (text: string) => {
+    onChangeFiatInput (text: string) {
       text = text.replace(/,/g, ".");
       if (text.length === 0 || text[0] === ".") {
         setBitcoinValue(undefined);
