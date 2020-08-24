@@ -1,4 +1,4 @@
-import { DeviceEventEmitter } from "react-native";
+import { DeviceEventEmitter, Alert } from "react-native";
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
 import { differenceInDays } from "date-fns";
 
@@ -51,12 +51,14 @@ export interface ILightningModel {
 
 export const lightning: ILightningModel = {
   initialize: thunk(async (actions, _, { getState, dispatch, injections, getStoreState }) => {
-    const checkStatus = injections.lndMobile.index.checkStatus;
-    const startLnd = injections.lndMobile.index.startLnd;
-
+    log.d("getState().ready" + getState().ready);
     if (getState().ready)  {
       log.d("Lightning store already started");
+      return;
     }
+
+    const checkStatus = injections.lndMobile.index.checkStatus;
+    const startLnd = injections.lndMobile.index.startLnd;
 
     const start = new Date();
     const lastSync = await getItemObject<number>(StorageItem.timeSinceLastSync);
