@@ -49,13 +49,6 @@ export default function ChangeFingerprintSettingsAuth() {
 
   return (
     <Container>
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor="transparent"
-        animated={false}
-        translucent={false}
-      />
       <Content contentContainerStyle={style.content}>
         <Text style={style.message}>Authenticate to change fingerprint settings</Text>
         <View style={style.fingerPrintSymbolContainer}>

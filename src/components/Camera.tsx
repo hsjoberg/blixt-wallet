@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 import { StyleProp, ViewStyle, InteractionManager } from "react-native";
 import { RNCamera, CameraType } from "react-native-camera";
 import Container from "./Container";
@@ -15,9 +15,11 @@ export default function Camera({ cameraType, children, onNotAuthorized, onRead, 
   const [start, setStart] = useState(false);
   active = active ?? true;
 
-  InteractionManager.runAfterInteractions(() => {
-    setStart(true);
-  })
+  useEffect(() => {
+    InteractionManager.runAfterInteractions(() => {
+      setStart(true);
+    })
+  }, []);
 
   if (!start || !active) {
     return (

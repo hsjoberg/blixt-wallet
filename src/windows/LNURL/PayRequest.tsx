@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Vibration, StyleSheet, Clipboard, Linking } from "react-native";
+import { Vibration, StyleSheet, Linking } from "react-native";
+import Clipboard from "@react-native-community/react-native-clipboard"
 import { Body, Card, Text, CardItem, H1, View, Button, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import DialogAndroid from "react-native-dialogs";

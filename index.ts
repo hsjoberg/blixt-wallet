@@ -7,10 +7,14 @@ import protobuf from "protobufjs";
 protobuf.util.Long = Long;
 protobuf.configure();
 
-YellowBox.ignoreWarnings(["Warning: component"]); // Workaround until native-base fixes their old
-                                                  // componentWillMount etc code
-YellowBox.ignoreWarnings(["Non-serializable values were found in the navigation state"]); // We are putting functions in navigation route props
-// componentWillMount etc code
+YellowBox.ignoreWarnings([
+  // Workaround until native-base fixes their old
+  "Warning: component",
+  // We are putting functions in navigation route props
+  "Non-serializable values were found in the navigation state",
+  // Native-base doesn't have useNativeDriver for every animation
+  "Animated: `useNativeDriver` was not specified"
+]);
 
 if (
   Platform.OS === "android" &&

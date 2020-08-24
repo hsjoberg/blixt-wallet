@@ -372,7 +372,7 @@ export default (variables /* : * */ = variable) => {
     borderWidth: null,
     height: 45,
     flexDirection: 'row',
-    elevation: 2,
+    // elevation: 2,
     shadowColor:
       platformStyle === PLATFORM.MATERIAL ? variables.brandDark : undefined,
     shadowOffset:
