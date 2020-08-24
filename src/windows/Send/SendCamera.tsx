@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Alert, StatusBar } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Alert, InteractionManager } from "react-native";
 import Clipboard from "@react-native-community/react-native-clipboard";
 import { Icon } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
@@ -12,18 +12,45 @@ import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Camera from "../../components/Camera";
 import { Chain } from "../../utils/build";
 import { smallScreen } from "../../utils/device";
+import { RouteProp } from "@react-navigation/native";
 
 interface ISendCameraProps {
   bolt11Invoice?: string;
   navigation: StackNavigationProp<SendStackParamList, "SendCamera">;
+  route: RouteProp<SendStackParamList, "SendCamera">;
 }
-export default function SendCamera({ navigation }: ISendCameraProps) {
+export default function SendCamera({ navigation, route }: ISendCameraProps) {
+  const viaSwipe = route.params?.viaSwipe ?? false;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const setPayment = useStoreActions((store) => store.send.setPayment);
   const [cameraType, setCameraType] = useState<keyof CameraType>(RNCamera.Constants.Type.back);
   const [scanning, setScanning] = useState(true);
   const setLNURL = useStoreActions((store) => store.lnUrl.setLNUrl)
-  const lnurlClear = useStoreActions((store) => store.lnUrl.clear)
+  const lnurlClear = useStoreActions((store) => store.lnUrl.clear);
+  const [cameraActive, setCameraActive] = useState(route.params?.viaSwipe ?? true);
+
+  useEffect(() => {
+    if (route.params?.viaSwipe) {
+      const startCallback = () => {
+        console.log("Focus");
+        setTimeout(() =>  {
+          setCameraActive(true);
+        }, 250);
+        setScanning(true);
+      };
+      const endCallback = () => {
+        console.log("Blur");
+        setTimeout(() => setCameraActive(false), 700);
+      };
+      navigation.addListener("focus", startCallback);
+      navigation.addListener("blur", endCallback);
+
+      return () => {
+        navigation.removeListener("focus", startCallback);
+        navigation.removeListener("blur", endCallback);
+      };
+    }
+  }, []);
 
   const onCameraSwitchClick = () => {
     setCameraType(
@@ -31,6 +58,24 @@ export default function SendCamera({ navigation }: ISendCameraProps) {
         ? RNCamera.Constants.Type.back
         : RNCamera.Constants.Type.front
     );
+  };
+
+  const gotoNextScreen = (screen: string, options: any, goBackAfterInteraction = true) => {
+    if (viaSwipe) {
+      // Reset TopTabNavigator to Overview screen again
+      if (goBackAfterInteraction) {
+        InteractionManager.runAfterInteractions(() => {
+          navigation.dangerouslyGetParent()?.goBack();
+        });
+      }
+      else {
+        navigation.dangerouslyGetParent()?.goBack();
+      }
+      navigation.navigate(screen, options);
+    }
+    else {
+      navigation.replace(screen, options);
+    }
   };
 
   const tryInvoice = async (paymentRequest: string, errorPrefix: string) => {
@@ -49,18 +94,19 @@ export default function SendCamera({ navigation }: ISendCameraProps) {
       try {
         const type = await setLNURL(paymentRequest);
         if (type === "channelRequest") {
-          console.log("Sending to ChannelRequest");
-          navigation.replace("LNURL", { screen: "ChannelRequest" });
+          gotoNextScreen("LNURL", { screen: "ChannelRequest" });
         }
         else if (type === "login") {
-          navigation.replace("LNURL", { screen: "AuthRequest" });
+          gotoNextScreen("LNURL", { screen: "AuthRequest" }, false);
+          setCameraActive(false);
         }
         else if (type === "withdrawRequest") {
-          navigation.replace("LNURL", { screen: "WithdrawRequest" });
+          gotoNextScreen("LNURL", { screen: "WithdrawRequest" }, false);
+          setCameraActive(false);
         }
         else if (type === "payRequest") {
-          navigation.pop();
-          navigation.navigate("LNURL", { screen: "PayRequest" });
+          gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
+          setCameraActive(false);
         }
         else {
           console.log("Unknown lnurl request: " + type);
@@ -74,7 +120,7 @@ export default function SendCamera({ navigation }: ISendCameraProps) {
     else {
       try {
         await setPayment({ paymentRequestStr: paymentRequest });
-        navigation.replace("SendConfirmation");
+        gotoNextScreen("Send", { screen:"SendConfirmation" });
       } catch (error) {
         Alert.alert(`${errorPrefix}: ${error.message}`, undefined,
           [{ text: "OK", onPress: () => setScanning(true) }]);
@@ -98,25 +144,24 @@ export default function SendCamera({ navigation }: ISendCameraProps) {
   };
 
   return (
-    <>
-      <Camera
-        cameraType={cameraType}
-        onRead={onBarCodeRead}
-        onNotAuthorized={() => setTimeout(() => navigation.pop(), 1)}
-      >
-        <View style={StyleSheet.absoluteFill}>
-          <BarcodeMask
-            showAnimatedLine={false}
-            edgeColor={blixtTheme.primary}
-            width={smallScreen ? 270 : 290}
-            height={smallScreen ? 270 : 290}
-          />
-          <Icon type="Ionicons" name="camera-reverse" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
-          {__DEV__ && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
-          <Icon testID="paste-clipboard" type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
-        </View>
-      </Camera>
-    </>
+    <Camera
+      active={cameraActive}
+      cameraType={cameraType}
+      onRead={onBarCodeRead}
+      onNotAuthorized={() => setTimeout(() => navigation.goBack(), 1)}
+    >
+      <View style={StyleSheet.absoluteFill}>
+        <BarcodeMask
+          showAnimatedLine={false}
+          edgeColor={blixtTheme.primary}
+          width={smallScreen ? 270 : 275}
+          height={smallScreen ? 270 : 275}
+        />
+        <Icon type="Ionicons" name="camera-reverse" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
+        {__DEV__ && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
+        <Icon testID="paste-clipboard" type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
+      </View>
+    </Camera>
   );
 };
 

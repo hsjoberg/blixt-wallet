@@ -8,7 +8,7 @@ import ChangeFingerprintSettingsAuth from "./ChangeFingerprintSettingsAuth";
 import LightningNodeInfo from "./LightningNodeInfo";
 import About from "./About";
 import TorShowOnionAddress from "./TorShowOnionAddress";
-import { NAVIGATION_SCREEN_OPTIONS } from "../../utils/constants";
+import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 
 const Stack = createStackNavigator();
 
@@ -24,7 +24,8 @@ export type SettingsStackParamList = {
 
 export default function SettingsIndex() {
   const screenOptions: StackNavigationOptions = {
-    ...NAVIGATION_SCREEN_OPTIONS,
+    ...useStackNavigationOptions(),
+    animationEnabled: false,
   };
 
   return (

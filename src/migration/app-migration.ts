@@ -136,4 +136,10 @@ export const appMigration: IAppMigration[] = [
       await LndMobile.writeConfigFile();
     },
   },
+  // Version 18
+  {
+    async beforeLnd(db, i) {
+      await setItemObject<boolean>(StorageItem.screenTransitionsEnabled, true);
+    },
+  },
 ];

@@ -84,7 +84,7 @@ class BarcodeMask extends React.Component {
       backgroundColor = this.props.backgroundColor;
     }
 
-    return { backgroundColor: "rgba(0, 0, 0, 0.6)", flex: 1 };
+    return { backgroundColor: this.props.darken ?? true ? "rgba(0, 0, 0, 0.6)" : "transparent", flex: 1 };
   };
 
   _renderEdge = (edgePosition) => {
