@@ -19,13 +19,6 @@ export default function RemovePincodeAuth() {
 
   return (
     <>
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor="transparent"
-        animated={false}
-        translucent={false}
-      />
       <Pincode onTryCode={onTryCode} textAction="Enter current pincode to remove pincode" />
     </>
   )

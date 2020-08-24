@@ -35,7 +35,7 @@ interface IExtraData {
 
 export interface ISendModel {
   clear: Action<ISendModel>;
-  setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections, Promise<lnrpc.PayReq>>;
+  setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections, {}, Promise<lnrpc.PayReq>>;
   sendPayment: Thunk<ISendModel, IModelSendPaymentPayload | void, IStoreInjections, IStoreModel, Promise<lnrpc.Payment>>;
   sendPaymentOld: Thunk<ISendModel, IModelSendPaymentPayload | void, IStoreInjections, IStoreModel, Promise<lnrpc.SendResponse>>;
 
