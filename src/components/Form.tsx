@@ -21,7 +21,7 @@ export interface IFormProps {
 }
 export default function Form({ buttons, items, style, noticeText }: IFormProps) {
   return (
-    <View style={[styles.content, style]}>
+    <KeyboardAvoidingView style={[styles.content, style]}>
       <View style={styles.itemContainer}>
         {items.map(({ key, title, component, success, active }, i) => (
           active ?? true
@@ -50,7 +50,7 @@ export default function Form({ buttons, items, style, noticeText }: IFormProps) 
           return (<View key={i} style={{ marginTop: i > 0 ? 12 : 0 }}>{button}</View>);
         })}
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -92,6 +92,5 @@ const styles = StyleSheet.create({
     marginRight: 80,
     justifyContent:"center",
     // backgroundColor:"blue",
-
   },
 });
