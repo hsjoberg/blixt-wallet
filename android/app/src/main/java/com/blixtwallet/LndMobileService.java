@@ -183,7 +183,7 @@ public class LndMobileService extends Service {
 
             String password = bundle.getString("password");
 
-            Rpc.UnlockWalletRequest.Builder unlockWallet = Rpc.UnlockWalletRequest.newBuilder();
+            lnrpc.Walletunlocker.UnlockWalletRequest.Builder unlockWallet = lnrpc.Walletunlocker.UnlockWalletRequest.newBuilder();
             unlockWallet.setWalletPassword(ByteString.copyFromUtf8(password));
 
             Lndmobile.unlockWallet(
@@ -206,7 +206,7 @@ public class LndMobileService extends Service {
             int recoveryWindow = bundle.getInt("recoveryWindow");
             String channelBackupsBase64 = bundle.getString("channelBackupsBase64");
 
-            Rpc.InitWalletRequest.Builder initWallet = Rpc.InitWalletRequest.newBuilder();
+            lnrpc.Walletunlocker.InitWalletRequest.Builder initWallet = lnrpc.Walletunlocker.InitWalletRequest.newBuilder();
             initWallet.addAllCipherSeedMnemonic(seed);
             initWallet.setWalletPassword(ByteString.copyFromUtf8(password));
             if (recoveryWindow != 0) {

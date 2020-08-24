@@ -343,7 +343,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       message.replyTo = messenger;
       Bundle bundle = new Bundle();
       bundle.putString("method", "UnlockWallet");
-      bundle.putByteArray("payload", Rpc.UnlockWalletRequest.newBuilder().setWalletPassword(ByteString.copyFromUtf8(password)).build().toByteArray());
+      bundle.putByteArray("payload", lnrpc.Walletunlocker.UnlockWalletRequest.newBuilder().setWalletPassword(ByteString.copyFromUtf8(password)).build().toByteArray());
       message.setData(bundle);
       messengerService.send(message);
     } catch (RemoteException e) {
