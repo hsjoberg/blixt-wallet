@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { StatusBar, Vibration, BackHandler } from "react-native";
-import { Button, Container, Icon, Text, Header, Left, Title, Body, Input, Spinner } from "native-base";
+import { Vibration, BackHandler, Keyboard } from "react-native";
+import { Button, Container, Icon, Text, Input, Spinner } from "native-base";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -65,6 +65,12 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       headerTitle: "Pay invoice",
       headerShown: true,
     });
+
+    // Disable swiping to the left because it messes with the keyboard focus
+    navigation.dangerouslyGetParent()?.setOptions({
+      gestureEnabled: false,
+      gestureResponseDistance: { horizontal: 0 },
+    });
   }, [navigation]);
 
   if (!paymentRequest) {
@@ -76,6 +82,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const send = async () => {
     try {
       setIsPaying(true);
+      Keyboard.dismiss();
       const payload = amountEditable
         ? { amount: Long.fromValue(unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit)) }
         : undefined;
