@@ -27,8 +27,6 @@ export const sendCoins = jest.fn(async (address: string, sat: number): Promise<l
   return response;
 });
 
-export const subscribeTransactions = jest.fn(async (address: string, sat: number): Promise<string> => {
+export const subscribeTransactions = jest.fn(async (): Promise<string> => {
   return ""; // TODO(hsjoberg)
 });
-
-

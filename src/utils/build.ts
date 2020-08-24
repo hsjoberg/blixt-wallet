@@ -1,6 +1,6 @@
 import BuildConfig from "react-native-build-config";
 
-export const Flavor: string = BuildConfig.FLAVOR;
+export const Flavor: string = BuildConfig.FLAVOR_custom;
 export const Debug: boolean = BuildConfig.DEBUG;
 export const VersionCode: number = BuildConfig.VERSION_CODE;
 export const BuildType: string = BuildConfig.BUILD_TYPE;
