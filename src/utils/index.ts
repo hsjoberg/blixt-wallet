@@ -130,3 +130,13 @@ export const waitUntilTrue = async (cb: () => boolean) => {
     await timeout(1000);
   }
 }
+
+export const countCharInString = (str: string, char: string) => {
+  let occurances = 0;
+  for (const subject of str) {
+    if (subject === char) {
+      occurances++;
+    }
+  }
+  return occurances;
+}
