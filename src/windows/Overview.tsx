@@ -1,10 +1,11 @@
-import React, { useState, useRef, useMemo, useEffect } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
-import LinearGradient from "react-native-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import LinearGradient from "react-native-linear-gradient";
 import Color from "color";
 
 import { RootStackParamList } from "../Main";
@@ -18,6 +19,7 @@ import { Chain } from "../utils/build";
 import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
 import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
+import Send from "./Send";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -33,7 +35,6 @@ export interface IOverviewProps {
   navigation: BottomTabNavigationProp<RootStackParamList, "Overview">;
 }
 function Overview({ navigation }: IOverviewProps) {
-  const firstSync = useStoreState((store) => store.lightning.firstSync);
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const balance = useStoreState((store) => store.channel.balance);
   const pendingOpenBalance = useStoreState((store) => store.channel.pendingOpenBalance);
@@ -374,7 +375,7 @@ const style = StyleSheet.create({
     color: blixtTheme.light,
   },
   transactionList: {
-    paddingTop: HEADER_MAX_HEIGHT + 12,
+    paddingTop: HEADER_MAX_HEIGHT + 10,
     paddingLeft: 7,
     paddingRight: 7,
     paddingBottom: 12,
@@ -402,11 +403,31 @@ const headerInfo = StyleSheet.create({
 });
 
 const OverviewTabs = createBottomTabNavigator();
-
-export default function OverviewTabsComponent() {
+export function OverviewTabsComponent() {
   return (
     <OverviewTabs.Navigator tabBar={() => <FooterNav />}>
       <OverviewTabs.Screen name="Overview" component={Overview} />
     </OverviewTabs.Navigator>
   );
 };
+
+const TopTabs = createMaterialTopTabNavigator();
+export default function TopTabsComponent() {
+  return (
+    <TopTabs.Navigator
+      springVelocityScale={1.4}
+      lazy={true}
+      sceneContainerStyle={{
+        backgroundColor:"transparent"
+      }}
+      tabBarOptions={{
+        style: {
+          height: 0
+        },
+      }}
+    >
+      <TopTabs.Screen name="OverviewX" component={OverviewTabsComponent}  />
+      <TopTabs.Screen name="SendX" component={Send} initialParams={{ viaSwipe: true }}  />
+    </TopTabs.Navigator>
+  );
+}

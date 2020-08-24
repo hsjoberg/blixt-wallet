@@ -32,8 +32,8 @@ export default function CameraFullscreen({ navigation, route }: any) {
         <BarcodeMask
           showAnimatedLine={false}
           edgeColor={blixtTheme.primary}
-          width={smallScreen ? 270 : 290}
-          height={smallScreen ? 270 : 290}
+          width={smallScreen ? 270 : 275}
+          height={smallScreen ? 270 : 275}
         />
       </Camera>
     </>

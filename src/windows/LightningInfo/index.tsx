@@ -1,10 +1,10 @@
 import React from "react";
-import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
+import { createStackNavigator, StackNavigationOptions, CardStyleInterpolators } from "@react-navigation/stack";
 
 import LightningInfo from "./LightningInfo";
 import OpenChannel from "./OpenChannel";
 import CameraFullscreen from "../CameraFullscreen";
-import { NAVIGATION_SCREEN_OPTIONS } from "../../utils/constants";
+import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 
 const Stack = createStackNavigator();
 
@@ -20,14 +20,18 @@ export type LightningInfoStackParamList = {
 
 export default function LightningInfoIndex() {
   const screenOptions: StackNavigationOptions = {
-    ...NAVIGATION_SCREEN_OPTIONS,
+    ...useStackNavigationOptions(),
   };
 
   return (
     <Stack.Navigator initialRouteName="LightningInfo" screenOptions={screenOptions}>
       <Stack.Screen name="LightningInfo" component={LightningInfo} />
-      <Stack.Screen name="OpenChannel" component={OpenChannel} />
-      <Stack.Screen name="CameraFullscreen" component={CameraFullscreen} />
+      <Stack.Screen name="OpenChannel" component={OpenChannel} options={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }} />
+      <Stack.Screen name="CameraFullscreen" component={CameraFullscreen} options={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }} />
     </Stack.Navigator>
   )
 }

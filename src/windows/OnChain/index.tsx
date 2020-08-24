@@ -1,12 +1,12 @@
 import React from "react";
-import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
+import { createStackNavigator, StackNavigationOptions, CardStyleInterpolators } from "@react-navigation/stack";
 
 import OnChainInfo from "./OnChainInfo";
 import OnChainTransactionLog from "./OnChainTransactionLog";
 import OnChainTransactionDetails from "./OnChainTransactionDetails";
 import Withdraw from "./Withdraw";
 import CameraFullscreen from "../CameraFullscreen";
-import { NAVIGATION_SCREEN_OPTIONS } from "../../utils/constants";
+import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 
 const Stack = createStackNavigator();
 
@@ -24,16 +24,25 @@ export type OnChainStackParamList = {
 
 export default function OnChainIndex() {
   const screenOptions: StackNavigationOptions = {
-    ...NAVIGATION_SCREEN_OPTIONS,
+    ...useStackNavigationOptions(),
   };
 
   return (
     <Stack.Navigator initialRouteName="OnChainInfo" screenOptions={screenOptions}>
       <Stack.Screen name="OnChainInfo" component={OnChainInfo} />
-      <Stack.Screen name="OnChainTransactionLog" component={OnChainTransactionLog} />
-      <Stack.Screen name="OnChainTransactionDetails" component={OnChainTransactionDetails} />
-      <Stack.Screen name="Withdraw" component={Withdraw} />
-      <Stack.Screen name="CameraFullscreen" component={CameraFullscreen} />
+      <Stack.Screen name="OnChainTransactionLog" component={OnChainTransactionLog} options={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }} />
+      <Stack.Screen name="OnChainTransactionDetails" component={OnChainTransactionDetails} options={{
+        animationEnabled: false,
+        cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+      }} />
+      <Stack.Screen name="Withdraw" component={Withdraw} options={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }} />
+      <Stack.Screen name="CameraFullscreen" component={CameraFullscreen} options={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }} />
     </Stack.Navigator>
   )
 }

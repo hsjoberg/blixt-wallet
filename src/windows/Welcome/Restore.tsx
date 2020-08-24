@@ -12,6 +12,8 @@ import Container from "../../components/Container";
 import Content from "../../components/Content";
 import { ICreateWalletPayload } from "../../state";
 
+const iconTopPadding = StatusBar.currentHeight ?? 0;
+
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Restore">;
 }
@@ -117,7 +119,7 @@ export default function Restore({ navigation }: IProps) {
       <StatusBar
         backgroundColor={blixtTheme.dark}
         hidden={false}
-        translucent={false}
+        translucent={true}
         networkActivityIndicatorVisible={true}
         barStyle="light-content"
       />
@@ -191,6 +193,7 @@ export default function Restore({ navigation }: IProps) {
 
 const style = StyleSheet.create({
   content: {
+    marginTop: iconTopPadding,
     width: "100%",
     flex: 1,
     justifyContent: "center",

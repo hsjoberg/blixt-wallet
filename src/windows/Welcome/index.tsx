@@ -1,5 +1,5 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, StackNavigationOptions, CardStyleInterpolators } from "@react-navigation/stack";
 
 import Start from "./Start";
 import Seed from "./Seed";
@@ -11,7 +11,8 @@ import Restore from "./Restore";
 
 import AddFunds from "./AddFunds";
 
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { useStoreState } from "../../state/store";
+import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 
 const Stack = createStackNavigator();
 
@@ -32,8 +33,13 @@ export type WelcomeStackParamList = {
 }
 
 export default function WelcomeIndex() {
+  const screenOptions: StackNavigationOptions = {
+    ...useStackNavigationOptions(),
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+  };
+
   return (
-    <Stack.Navigator initialRouteName="Start" screenOptions={{ headerShown: false, animationEnabled: false, cardStyle: { backgroundColor: blixtTheme.dark } }}>
+    <Stack.Navigator initialRouteName="Start" screenOptions={screenOptions}>
       <Stack.Screen name="Start" component={Start} />
 
       <Stack.Screen name="Seed" component={Seed} />

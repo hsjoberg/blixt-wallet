@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Spinner, H1 } from "native-base";
 import { StatusBar } from "react-native";
-import { createStackNavigator, TransitionSpecs, CardStyleInterpolators, StackNavigationOptions } from "@react-navigation/stack";
+import { Spinner, H1 } from "native-base";
+import { createStackNavigator, CardStyleInterpolators, StackNavigationOptions } from "@react-navigation/stack";
 
 import Overview from "./windows/Overview";
 import Help from "./windows/Help";
@@ -27,7 +27,7 @@ import CameraFullscreen from "./windows/CameraFullscreen";
 
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import Container from "./components/Container";
-import { NAVIGATION_SCREEN_OPTIONS } from "./utils/constants";
+import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
 
 const RootStack = createStackNavigator();
 
@@ -63,6 +63,7 @@ export type RootStackParamList = {
 export default function Main() {
   const holdOnboarding = useStoreState((store) => store.holdOnboarding);
   const appReady = useStoreState((store) => store.appReady);
+  const lightningReady = useStoreState((store) => store.lightning.ready);
   const walletCreated = useStoreState((store) => store.walletCreated);
   const loggedIn = useStoreState((store) => store.security.loggedIn);
   const initializeApp = useStoreActions((store) => store.initializeApp);
@@ -95,7 +96,7 @@ export default function Main() {
       if (!loggedIn) {
         setState("authentication");
       }
-      else {
+      else if (!lightningReady) {
         setState("started");
         if (!walletCreated) {
           setInitialRoute("Welcome");
@@ -108,11 +109,23 @@ export default function Main() {
           }
         }
       }
+      else {
+        setState("started");
+      }
     })();
   }, [appReady, loggedIn, holdOnboarding, walletCreated]);
 
   const screenOptions: StackNavigationOptions = {
-    ...NAVIGATION_SCREEN_OPTIONS,
+    ...useStackNavigationOptions(),
+    gestureEnabled: true,
+    gestureDirection: "horizontal",
+    gestureResponseDistance: { horizontal:0 },
+    gestureVelocityImpact: 1.9,
+  };
+
+  const animationDisabled = {
+    animationEnabled: false,
+    cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
   };
 
   if (state === "init") {
@@ -140,28 +153,33 @@ export default function Main() {
 
   return (
     <RootStack.Navigator initialRouteName={initialRoute} screenOptions={screenOptions}>
-      <RootStack.Screen name="Welcome" component={Welcome} />
-      <RootStack.Screen name="Loading" component={Loading} />
-      <RootStack.Screen name="CameraFullscreen" component={CameraFullscreen} />
+      <RootStack.Screen name="Welcome" component={Welcome} options={animationDisabled} />
+      <RootStack.Screen name="Loading" component={Loading} options={animationDisabled} />
+      <RootStack.Screen name="CameraFullscreen" component={CameraFullscreen} options={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        gestureEnabled:true
+      }} />
 
-      <RootStack.Screen name="Overview" component={Overview} />
-      <RootStack.Screen name="Help" component={Help} />
-      <RootStack.Screen name="TransactionDetails" component={TransactionDetails} />
-      <RootStack.Screen name="SyncInfo" component={SyncInfo} />
+      <RootStack.Screen name="Overview" component={Overview} options={animationDisabled} />
+      <RootStack.Screen name="Help" component={Help} options={animationDisabled} />
+      <RootStack.Screen name="TransactionDetails" component={TransactionDetails} options={animationDisabled} />
+      <RootStack.Screen name="SyncInfo" component={SyncInfo} options={animationDisabled} />
       <RootStack.Screen name="Receive" component={Receive} />
-      <RootStack.Screen name="Send" component={Send} />
+      <RootStack.Screen name="Send" component={Send} options={{
+        gestureResponseDistance: { horizontal: 1000 },
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }} />
       <RootStack.Screen name="OnChain" component={OnChain} />
       <RootStack.Screen name="LightningInfo" component={LightningInfo} />
-      <RootStack.Screen name="Settings" component={Settings} />
-      <RootStack.Screen name="LNURL" component={LNURL} />
-      <RootStack.Screen name="WebLNBrowser" component={WebLNBrowser} />
+      <RootStack.Screen name="Settings" component={Settings} options={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }} />
+      <RootStack.Screen name="LNURL" component={LNURL} options={animationDisabled} />
+      <RootStack.Screen name="WebLNBrowser" component={WebLNBrowser} options={animationDisabled} />
 
-      <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} />
-      <RootStack.Screen name="KeysendTest" component={KeysendTest} />
-      <RootStack.Screen
-        name="DEV_CommandsX"
-        component={DEV_Commands}
-      />
+      <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} options={animationDisabled} />
+      <RootStack.Screen name="KeysendTest" component={KeysendTest} options={animationDisabled} />
+      <RootStack.Screen name="DEV_CommandsX" component={DEV_Commands} options={animationDisabled} />
     </RootStack.Navigator>
   );
 };

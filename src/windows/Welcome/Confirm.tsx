@@ -21,7 +21,7 @@ export default function Confirm({ navigation }: IProps) {
   const [loadSpinnerForButton, setLoadSpinnerForButton] = useState<"skip" | "proceed" | undefined>(undefined);
 
   const getSeed = useStoreActions((store) => store.security.getSeed);
-  const [seed, setSeed] = useState<string[] | undefined>();
+  const [seed, setSeed] = useState<string[] | undefined>([]);
 
   useEffect(() => {
     // tslint:disable-next-line: no-async-without-await, no-floating-promises
