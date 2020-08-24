@@ -1,8 +1,18 @@
 import { createStore, createTypedHooks, Store } from "easy-peasy";
 import { composeWithDevTools } from "remote-redux-devtools";
 import model, { IStoreModel } from "./index";
+import { Flavor } from "../utils/build";
 
-import LndMobile, { ILndMobileInjections } from "./LndMobileInjection";
+let LndMobile;
+if (Flavor === "fakelnd") {
+  console.log("Using fake lnd backend");
+  LndMobile = require("./LndMobileInjectionFake").default;
+}
+else {
+  LndMobile = require("./LndMobileInjection").default;
+}
+
+import { ILndMobileInjections } from "./LndMobileInjection";
 
 const { useStoreActions, useStoreState } = createTypedHooks<IStoreModel>();
 export { useStoreActions, useStoreState };
