@@ -1,14 +1,14 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast, Spinner } from "native-base";
+import DialogAndroid from "react-native-dialogs";
 import { useDebounce } from "use-debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Long from "long";
 
-
 import { ReceiveStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import { formatBitcoin } from "../../utils/bitcoin-units";
+import { formatBitcoin, BitcoinUnits } from "../../utils/bitcoin-units";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { MAX_SAT_INVOICE } from "../../utils/constants";
@@ -96,42 +96,90 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     }
   };
 
+  // Bitcoin unit
+  const currentBitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const changeBitcoinUnit = useStoreActions((store) => store.settings.changeBitcoinUnit);
+  const onPressChangeBitcoinUnit = async () => {
+    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+      positiveText: null,
+      negativeText: "Cancel",
+      type: DialogAndroid.listRadio,
+      selectedId: currentBitcoinUnit,
+      items: [
+        { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
+        { label: BitcoinUnits.bit.settings, id: "bit" },
+        { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
+        { label: BitcoinUnits.milliBitcoin.settings, id: "milliBitcoin" },
+      ]
+    });
+    if (selectedItem) {
+      await changeBitcoinUnit(selectedItem.id);
+    }
+  }
+
+  // Fiat unit
+  const fiatRates = useStoreState((store) => store.fiat.fiatRates);
+  const currentFiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const changeFiatUnit = useStoreActions((store) => store.settings.changeFiatUnit);
+  const onPressChangeFiatUnit = async () => {
+    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+      positiveText: null,
+      negativeText: "Cancel",
+      type: DialogAndroid.listRadio,
+      selectedId: currentFiatUnit,
+      items: Object.entries(fiatRates).map(([currency]) => {
+        return {
+          label: currency, id: currency
+        }
+      })
+    });
+    if (selectedItem) {
+      await changeFiatUnit(selectedItem.id);
+    }
+  }
+
   const formItems = [{
     key: "AMOUNT_SAT",
     title: `Amount ${bitcoinUnit.nice}`,
     component: (
-      <Input
-        testID="input-amount-sat"
-        onChangeText={onChangeBitcoinInput}
-        placeholder="0"
-        value={bitcoinValue !== undefined ? bitcoinValue.toString() : undefined}
-        keyboardType="numeric"
-        onFocus={() => {
-          setMathPadVisible(true);
-          setCurrentlyFocusedInput("bitcoin");
-        }}
-        onBlur={() => {
-          // setMathPadVisible(false);
-        }}
-      />
+      <>
+        <Input
+          testID="input-amount-sat"
+          onChangeText={onChangeBitcoinInput}
+          placeholder="0"
+          value={bitcoinValue !== undefined ? bitcoinValue.toString() : undefined}
+          keyboardType="numeric"
+          onFocus={() => {
+            setMathPadVisible(true);
+            setCurrentlyFocusedInput("bitcoin");
+          }}
+          onBlur={() => {
+            setMathPadVisible(false);
+          }}
+        />
+        <Icon type="Foundation" name="bitcoin-circle" onPress={onPressChangeBitcoinUnit} style={{ fontSize: 31, marginRight: 1 }} />
+      </>
     ),
   }, {
     key: "AMOUNT_FIAT",
     title: `Amount ${fiatUnit}`,
     component: (
-      <Input
-        onChangeText={onChangeFiatInput}
-        placeholder="0.00"
-        value={dollarValue !== undefined ? dollarValue.toString() : undefined}
-        keyboardType="numeric"
-        onFocus={() => {
-          setMathPadVisible(true);
-          setCurrentlyFocusedInput("fiat");
-        }}
-        onBlur={() => {
-          setMathPadVisible(false);
-        }}
-      />
+      <>
+        <Input
+          onChangeText={onChangeFiatInput}
+          placeholder="0.00"
+          value={dollarValue !== undefined ? dollarValue.toString() : undefined}
+          keyboardType="numeric"
+          onFocus={() => {
+            setMathPadVisible(true);
+            setCurrentlyFocusedInput("fiat");
+          }}
+          onBlur={() => {
+            setMathPadVisible(false);
+          }}
+        />
+        <Icon type="FontAwesome" name="money" onPress={onPressChangeFiatUnit} />
+      </>
     ),
   }, {
     key: "PAYER",

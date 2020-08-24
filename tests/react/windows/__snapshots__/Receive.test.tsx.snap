@@ -636,6 +636,42 @@ exports[`renders correctly 1`] = `
                                                 testID="input-amount-sat"
                                                 underlineColorAndroid="rgba(0,0,0,0)"
                                               />
+                                              <Text
+                                                allowFontScaling={false}
+                                                onPress={[Function]}
+                                                style={
+                                                  Array [
+                                                    Object {
+                                                      "color": undefined,
+                                                      "fontSize": 12,
+                                                    },
+                                                    Array [
+                                                      Object {
+                                                        "color": "#000",
+                                                        "fontSize": 30,
+                                                      },
+                                                      Object {
+                                                        "color": "#000",
+                                                        "fontSize": 24,
+                                                        "paddingRight": 8,
+                                                      },
+                                                      Object {
+                                                        "fontSize": 31,
+                                                        "marginRight": 1,
+                                                      },
+                                                    ],
+                                                    Object {
+                                                      "fontFamily": "fontcustom",
+                                                      "fontStyle": "normal",
+                                                      "fontWeight": "normal",
+                                                    },
+                                                    Object {},
+                                                  ]
+                                                }
+                                                type="Foundation"
+                                              >
+                                                
+                                              </Text>
                                             </View>
                                             <View
                                               accessible={true}
@@ -706,6 +742,38 @@ exports[`renders correctly 1`] = `
                                                 }
                                                 underlineColorAndroid="rgba(0,0,0,0)"
                                               />
+                                              <Text
+                                                allowFontScaling={false}
+                                                onPress={[Function]}
+                                                style={
+                                                  Array [
+                                                    Object {
+                                                      "color": undefined,
+                                                      "fontSize": 12,
+                                                    },
+                                                    Array [
+                                                      Object {
+                                                        "color": "#000",
+                                                        "fontSize": 30,
+                                                      },
+                                                      Object {
+                                                        "color": "#000",
+                                                        "fontSize": 24,
+                                                        "paddingRight": 8,
+                                                      },
+                                                    ],
+                                                    Object {
+                                                      "fontFamily": "FontAwesome",
+                                                      "fontStyle": "normal",
+                                                      "fontWeight": "normal",
+                                                    },
+                                                    Object {},
+                                                  ]
+                                                }
+                                                type="FontAwesome"
+                                              >
+                                                
+                                              </Text>
                                             </View>
                                             <View
                                               accessible={true}

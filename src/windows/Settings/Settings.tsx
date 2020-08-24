@@ -7,7 +7,6 @@ import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, Lis
 import DialogAndroid from "react-native-dialogs";
 import { fromUnixTime } from "date-fns";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Geolocation from "@react-native-community/geolocation";
 
 import { SettingsStackParamList } from "./index";
 import Content from "../../components/Content";
