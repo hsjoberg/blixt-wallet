@@ -10,6 +10,7 @@ import LndMobile from "../src/state/LndMobileInjection";
 
 import { setupApp, setItem, setItemObject, StorageItem, clearApp } from "../src/storage/app";
 import { timeout } from "../src/utils";
+import { Root } from "native-base";
 
 global.fetch = require('jest-fetch-mock');
 
@@ -67,11 +68,13 @@ export const createNavigationContainer = (routes: any, initial: string) => {
   const RootStack = createStackNavigator();
 
   return (
-    <NavigationContainer>
-      <RootStack.Navigator>
-        <RootStack.Screen name="a" component={routes} />
-      </RootStack.Navigator>
-    </NavigationContainer>
+    <Root>
+      <NavigationContainer>
+        <RootStack.Navigator>
+          <RootStack.Screen name={initial} component={routes} />
+        </RootStack.Navigator>
+      </NavigationContainer>
+    </Root>
   );
 }
 

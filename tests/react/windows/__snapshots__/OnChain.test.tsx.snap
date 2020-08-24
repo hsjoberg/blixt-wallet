@@ -120,7 +120,7 @@ exports[`renders correctly 1`] = `
                   }
                 }
               >
-                a
+                OnChain
               </Text>
             </View>
           </View>
@@ -329,6 +329,7 @@ exports[`renders correctly 1`] = `
                                 Object {
                                   "backgroundColor": "#5F5F5F",
                                   "borderBottomColor": "rgb(216, 216, 216)",
+                                  "elevation": 0,
                                   "flex": 1,
                                   "shadowColor": "rgb(216, 216, 216)",
                                   "shadowOffset": Object {
@@ -569,6 +570,7 @@ exports[`renders correctly 1`] = `
                                 style={
                                   Object {
                                     "flex": 1,
+                                    "opacity": 1,
                                   }
                                 }
                               >

@@ -120,7 +120,7 @@ exports[`renders correctly 1`] = `
                   }
                 }
               >
-                a
+                OverviewTabsComponent
               </Text>
             </View>
           </View>
@@ -366,7 +366,7 @@ exports[`renders correctly 1`] = `
                                         "paddingBottom": 12,
                                         "paddingLeft": 7,
                                         "paddingRight": 7,
-                                        "paddingTop": 207,
+                                        "paddingTop": 205,
                                       }
                                     }
                                     onScroll={[Function]}

@@ -120,7 +120,7 @@ exports[`renders correctly 1`] = `
                   }
                 }
               >
-                a
+                Receive
               </Text>
             </View>
           </View>
@@ -307,6 +307,7 @@ exports[`renders correctly 1`] = `
                               "alignItems": "center",
                               "flex": 1,
                               "justifyContent": "center",
+                              "marginTop": 0,
                               "width": "100%",
                             },
                           ]

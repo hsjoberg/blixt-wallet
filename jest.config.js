@@ -8,6 +8,7 @@ module.exports = {
     "tests/utils.ts",
   ],
   setupFiles: [
+    // "react-native/jest/setup.js",
     "./jestSetup.js",
     "jest-date-mock",
     "./node_modules/react-native-gesture-handler/jestSetup.js"

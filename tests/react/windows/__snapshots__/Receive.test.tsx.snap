@@ -120,7 +120,7 @@ exports[`renders correctly 1`] = `
                   }
                 }
               >
-                a
+                Receive
               </Text>
             </View>
           </View>
@@ -329,6 +329,7 @@ exports[`renders correctly 1`] = `
                                 Object {
                                   "backgroundColor": "#5F5F5F",
                                   "borderBottomColor": "rgb(216, 216, 216)",
+                                  "elevation": 0,
                                   "flex": 1,
                                   "shadowColor": "rgb(216, 216, 216)",
                                   "shadowOffset": Object {
@@ -496,6 +497,7 @@ exports[`renders correctly 1`] = `
                                 style={
                                   Object {
                                     "flex": 1,
+                                    "opacity": 1,
                                   }
                                 }
                               >
@@ -542,9 +544,9 @@ exports[`renders correctly 1`] = `
                                         }
                                       >
                                         <View
+                                          onLayout={[Function]}
                                           style={
                                             Array [
-                                              Object {},
                                               Object {
                                                 "display": "flex",
                                                 "flex": 1,
@@ -614,7 +616,9 @@ exports[`renders correctly 1`] = `
                                                 allowFontScaling={true}
                                                 editable={true}
                                                 keyboardType="numeric"
+                                                onBlur={[Function]}
                                                 onChangeText={[Function]}
+                                                onFocus={[Function]}
                                                 placeholder="0"
                                                 placeholderTextColor="#575757"
                                                 rejectResponderTermination={true}
@@ -683,7 +687,9 @@ exports[`renders correctly 1`] = `
                                                 allowFontScaling={true}
                                                 editable={true}
                                                 keyboardType="numeric"
+                                                onBlur={[Function]}
                                                 onChangeText={[Function]}
+                                                onFocus={[Function]}
                                                 placeholder="0.00"
                                                 placeholderTextColor="#575757"
                                                 rejectResponderTermination={true}
@@ -886,6 +892,7 @@ exports[`renders correctly 1`] = `
                                                     "flexDirection": "row",
                                                     "height": 45,
                                                     "justifyContent": "center",
+                                                    "marginBottom": 0,
                                                     "opacity": 1,
                                                     "paddingBottom": 6,
                                                     "paddingTop": 6,
@@ -910,6 +917,464 @@ exports[`renders correctly 1`] = `
                                                 />
                                               </View>
                                             </View>
+                                          </View>
+                                        </View>
+                                        <View
+                                          style={
+                                            Object {
+                                              "alignItems": "center",
+                                              "backgroundColor": "#232323",
+                                              "bottom": 0,
+                                              "flexDirection": "row",
+                                              "height": 0,
+                                              "justifyContent": "center",
+                                              "opacity": 0,
+                                              "overflow": "hidden",
+                                              "position": "absolute",
+                                              "width": "100%",
+                                            }
+                                          }
+                                        >
+                                          <View
+                                            accessible={true}
+                                            focusable={true}
+                                            forwardedRef={[Function]}
+                                            onClick={[Function]}
+                                            onResponderGrant={[Function]}
+                                            onResponderMove={[Function]}
+                                            onResponderRelease={[Function]}
+                                            onResponderTerminate={[Function]}
+                                            onResponderTerminationRequest={[Function]}
+                                            onStartShouldSetResponder={[Function]}
+                                            style={
+                                              Object {
+                                                "alignItems": "center",
+                                                "alignSelf": "flex-start",
+                                                "backgroundColor": "#878787",
+                                                "borderBottomWidth": null,
+                                                "borderColor": "#007aff",
+                                                "borderLeftWidth": null,
+                                                "borderRadius": 5,
+                                                "borderRightWidth": null,
+                                                "borderTopWidth": null,
+                                                "borderWidth": undefined,
+                                                "elevation": 2,
+                                                "flexDirection": "row",
+                                                "height": 35,
+                                                "justifyContent": "space-between",
+                                                "marginBottom": 0,
+                                                "marginLeft": 5,
+                                                "marginRight": 5,
+                                                "opacity": 1,
+                                                "paddingBottom": 6,
+                                                "paddingTop": 6,
+                                                "shadowColor": undefined,
+                                                "shadowOffset": undefined,
+                                                "shadowOpacity": undefined,
+                                                "shadowRadius": undefined,
+                                              }
+                                            }
+                                          >
+                                            <Text
+                                              style={
+                                                Array [
+                                                  Object {
+                                                    "backgroundColor": "transparent",
+                                                    "color": "#fff",
+                                                    "fontFamily": "System",
+                                                    "fontSize": 16.5,
+                                                    "marginLeft": 0,
+                                                    "marginRight": 0,
+                                                    "paddingLeft": 16,
+                                                    "paddingRight": 16,
+                                                  },
+                                                  Object {
+                                                    "fontFamily": "monospace",
+                                                    "letterSpacing": 0,
+                                                  },
+                                                ]
+                                              }
+                                            >
+                                              +
+                                            </Text>
+                                          </View>
+                                          <View
+                                            accessible={true}
+                                            focusable={true}
+                                            forwardedRef={[Function]}
+                                            onClick={[Function]}
+                                            onResponderGrant={[Function]}
+                                            onResponderMove={[Function]}
+                                            onResponderRelease={[Function]}
+                                            onResponderTerminate={[Function]}
+                                            onResponderTerminationRequest={[Function]}
+                                            onStartShouldSetResponder={[Function]}
+                                            style={
+                                              Object {
+                                                "alignItems": "center",
+                                                "alignSelf": "flex-start",
+                                                "backgroundColor": "#878787",
+                                                "borderBottomWidth": null,
+                                                "borderColor": "#007aff",
+                                                "borderLeftWidth": null,
+                                                "borderRadius": 5,
+                                                "borderRightWidth": null,
+                                                "borderTopWidth": null,
+                                                "borderWidth": undefined,
+                                                "elevation": 2,
+                                                "flexDirection": "row",
+                                                "height": 35,
+                                                "justifyContent": "space-between",
+                                                "marginBottom": 0,
+                                                "marginLeft": 5,
+                                                "marginRight": 5,
+                                                "opacity": 1,
+                                                "paddingBottom": 6,
+                                                "paddingTop": 6,
+                                                "shadowColor": undefined,
+                                                "shadowOffset": undefined,
+                                                "shadowOpacity": undefined,
+                                                "shadowRadius": undefined,
+                                              }
+                                            }
+                                          >
+                                            <Text
+                                              style={
+                                                Array [
+                                                  Object {
+                                                    "backgroundColor": "transparent",
+                                                    "color": "#fff",
+                                                    "fontFamily": "System",
+                                                    "fontSize": 16.5,
+                                                    "marginLeft": 0,
+                                                    "marginRight": 0,
+                                                    "paddingLeft": 16,
+                                                    "paddingRight": 16,
+                                                  },
+                                                  Object {
+                                                    "fontFamily": "monospace",
+                                                    "letterSpacing": 0,
+                                                  },
+                                                ]
+                                              }
+                                            >
+                                              -
+                                            </Text>
+                                          </View>
+                                          <View
+                                            accessible={true}
+                                            focusable={true}
+                                            forwardedRef={[Function]}
+                                            onClick={[Function]}
+                                            onResponderGrant={[Function]}
+                                            onResponderMove={[Function]}
+                                            onResponderRelease={[Function]}
+                                            onResponderTerminate={[Function]}
+                                            onResponderTerminationRequest={[Function]}
+                                            onStartShouldSetResponder={[Function]}
+                                            style={
+                                              Object {
+                                                "alignItems": "center",
+                                                "alignSelf": "flex-start",
+                                                "backgroundColor": "#878787",
+                                                "borderBottomWidth": null,
+                                                "borderColor": "#007aff",
+                                                "borderLeftWidth": null,
+                                                "borderRadius": 5,
+                                                "borderRightWidth": null,
+                                                "borderTopWidth": null,
+                                                "borderWidth": undefined,
+                                                "elevation": 2,
+                                                "flexDirection": "row",
+                                                "height": 35,
+                                                "justifyContent": "space-between",
+                                                "marginBottom": 0,
+                                                "marginLeft": 5,
+                                                "marginRight": 5,
+                                                "opacity": 1,
+                                                "paddingBottom": 6,
+                                                "paddingTop": 6,
+                                                "shadowColor": undefined,
+                                                "shadowOffset": undefined,
+                                                "shadowOpacity": undefined,
+                                                "shadowRadius": undefined,
+                                              }
+                                            }
+                                          >
+                                            <Text
+                                              style={
+                                                Array [
+                                                  Object {
+                                                    "backgroundColor": "transparent",
+                                                    "color": "#fff",
+                                                    "fontFamily": "System",
+                                                    "fontSize": 16.5,
+                                                    "marginLeft": 0,
+                                                    "marginRight": 0,
+                                                    "paddingLeft": 16,
+                                                    "paddingRight": 16,
+                                                  },
+                                                  Object {
+                                                    "fontFamily": "monospace",
+                                                    "letterSpacing": 0,
+                                                  },
+                                                ]
+                                              }
+                                            >
+                                              *
+                                            </Text>
+                                          </View>
+                                          <View
+                                            accessible={true}
+                                            focusable={true}
+                                            forwardedRef={[Function]}
+                                            onClick={[Function]}
+                                            onResponderGrant={[Function]}
+                                            onResponderMove={[Function]}
+                                            onResponderRelease={[Function]}
+                                            onResponderTerminate={[Function]}
+                                            onResponderTerminationRequest={[Function]}
+                                            onStartShouldSetResponder={[Function]}
+                                            style={
+                                              Object {
+                                                "alignItems": "center",
+                                                "alignSelf": "flex-start",
+                                                "backgroundColor": "#878787",
+                                                "borderBottomWidth": null,
+                                                "borderColor": "#007aff",
+                                                "borderLeftWidth": null,
+                                                "borderRadius": 5,
+                                                "borderRightWidth": null,
+                                                "borderTopWidth": null,
+                                                "borderWidth": undefined,
+                                                "elevation": 2,
+                                                "flexDirection": "row",
+                                                "height": 35,
+                                                "justifyContent": "space-between",
+                                                "marginBottom": 0,
+                                                "marginLeft": 5,
+                                                "marginRight": 5,
+                                                "opacity": 1,
+                                                "paddingBottom": 6,
+                                                "paddingTop": 6,
+                                                "shadowColor": undefined,
+                                                "shadowOffset": undefined,
+                                                "shadowOpacity": undefined,
+                                                "shadowRadius": undefined,
+                                              }
+                                            }
+                                          >
+                                            <Text
+                                              style={
+                                                Array [
+                                                  Object {
+                                                    "backgroundColor": "transparent",
+                                                    "color": "#fff",
+                                                    "fontFamily": "System",
+                                                    "fontSize": 16.5,
+                                                    "marginLeft": 0,
+                                                    "marginRight": 0,
+                                                    "paddingLeft": 16,
+                                                    "paddingRight": 16,
+                                                  },
+                                                  Object {
+                                                    "fontFamily": "monospace",
+                                                    "letterSpacing": 0,
+                                                  },
+                                                ]
+                                              }
+                                            >
+                                              /
+                                            </Text>
+                                          </View>
+                                          <View
+                                            accessible={true}
+                                            focusable={true}
+                                            forwardedRef={[Function]}
+                                            onClick={[Function]}
+                                            onResponderGrant={[Function]}
+                                            onResponderMove={[Function]}
+                                            onResponderRelease={[Function]}
+                                            onResponderTerminate={[Function]}
+                                            onResponderTerminationRequest={[Function]}
+                                            onStartShouldSetResponder={[Function]}
+                                            style={
+                                              Object {
+                                                "alignItems": "center",
+                                                "alignSelf": "flex-start",
+                                                "backgroundColor": "#878787",
+                                                "borderBottomWidth": null,
+                                                "borderColor": "#007aff",
+                                                "borderLeftWidth": null,
+                                                "borderRadius": 5,
+                                                "borderRightWidth": null,
+                                                "borderTopWidth": null,
+                                                "borderWidth": undefined,
+                                                "elevation": 2,
+                                                "flexDirection": "row",
+                                                "height": 35,
+                                                "justifyContent": "space-between",
+                                                "marginBottom": 0,
+                                                "marginLeft": 5,
+                                                "marginRight": 5,
+                                                "opacity": 1,
+                                                "paddingBottom": 6,
+                                                "paddingTop": 6,
+                                                "shadowColor": undefined,
+                                                "shadowOffset": undefined,
+                                                "shadowOpacity": undefined,
+                                                "shadowRadius": undefined,
+                                              }
+                                            }
+                                          >
+                                            <Text
+                                              style={
+                                                Array [
+                                                  Object {
+                                                    "backgroundColor": "transparent",
+                                                    "color": "#fff",
+                                                    "fontFamily": "System",
+                                                    "fontSize": 16.5,
+                                                    "marginLeft": 0,
+                                                    "marginRight": 0,
+                                                    "paddingLeft": 16,
+                                                    "paddingRight": 16,
+                                                  },
+                                                  Object {
+                                                    "fontFamily": "monospace",
+                                                    "letterSpacing": 0,
+                                                  },
+                                                ]
+                                              }
+                                            >
+                                              (
+                                            </Text>
+                                          </View>
+                                          <View
+                                            accessible={true}
+                                            focusable={true}
+                                            forwardedRef={[Function]}
+                                            onClick={[Function]}
+                                            onResponderGrant={[Function]}
+                                            onResponderMove={[Function]}
+                                            onResponderRelease={[Function]}
+                                            onResponderTerminate={[Function]}
+                                            onResponderTerminationRequest={[Function]}
+                                            onStartShouldSetResponder={[Function]}
+                                            style={
+                                              Object {
+                                                "alignItems": "center",
+                                                "alignSelf": "flex-start",
+                                                "backgroundColor": "#878787",
+                                                "borderBottomWidth": null,
+                                                "borderColor": "#007aff",
+                                                "borderLeftWidth": null,
+                                                "borderRadius": 5,
+                                                "borderRightWidth": null,
+                                                "borderTopWidth": null,
+                                                "borderWidth": undefined,
+                                                "elevation": 2,
+                                                "flexDirection": "row",
+                                                "height": 35,
+                                                "justifyContent": "space-between",
+                                                "marginBottom": 0,
+                                                "marginLeft": 5,
+                                                "marginRight": 5,
+                                                "opacity": 1,
+                                                "paddingBottom": 6,
+                                                "paddingTop": 6,
+                                                "shadowColor": undefined,
+                                                "shadowOffset": undefined,
+                                                "shadowOpacity": undefined,
+                                                "shadowRadius": undefined,
+                                              }
+                                            }
+                                          >
+                                            <Text
+                                              style={
+                                                Array [
+                                                  Object {
+                                                    "backgroundColor": "transparent",
+                                                    "color": "#fff",
+                                                    "fontFamily": "System",
+                                                    "fontSize": 16.5,
+                                                    "marginLeft": 0,
+                                                    "marginRight": 0,
+                                                    "paddingLeft": 16,
+                                                    "paddingRight": 16,
+                                                  },
+                                                  Object {
+                                                    "fontFamily": "monospace",
+                                                    "letterSpacing": 0,
+                                                  },
+                                                ]
+                                              }
+                                            >
+                                              )
+                                            </Text>
+                                          </View>
+                                          <View
+                                            accessible={true}
+                                            focusable={true}
+                                            forwardedRef={[Function]}
+                                            onClick={[Function]}
+                                            onResponderGrant={[Function]}
+                                            onResponderMove={[Function]}
+                                            onResponderRelease={[Function]}
+                                            onResponderTerminate={[Function]}
+                                            onResponderTerminationRequest={[Function]}
+                                            onStartShouldSetResponder={[Function]}
+                                            style={
+                                              Object {
+                                                "alignItems": "center",
+                                                "alignSelf": "flex-start",
+                                                "backgroundColor": "#878787",
+                                                "borderBottomWidth": null,
+                                                "borderColor": "#007aff",
+                                                "borderLeftWidth": null,
+                                                "borderRadius": 5,
+                                                "borderRightWidth": null,
+                                                "borderTopWidth": null,
+                                                "borderWidth": undefined,
+                                                "elevation": 2,
+                                                "flexDirection": "row",
+                                                "height": 35,
+                                                "justifyContent": "space-between",
+                                                "marginBottom": 0,
+                                                "marginLeft": 5,
+                                                "marginRight": 5,
+                                                "opacity": 1,
+                                                "paddingBottom": 6,
+                                                "paddingTop": 6,
+                                                "shadowColor": undefined,
+                                                "shadowOffset": undefined,
+                                                "shadowOpacity": undefined,
+                                                "shadowRadius": undefined,
+                                              }
+                                            }
+                                          >
+                                            <Text
+                                              style={
+                                                Array [
+                                                  Object {
+                                                    "backgroundColor": "transparent",
+                                                    "color": "#fff",
+                                                    "fontFamily": "System",
+                                                    "fontSize": 16.5,
+                                                    "marginLeft": 0,
+                                                    "marginRight": 0,
+                                                    "paddingLeft": 16,
+                                                    "paddingRight": 16,
+                                                  },
+                                                  Object {
+                                                    "fontFamily": "monospace",
+                                                    "letterSpacing": 0,
+                                                  },
+                                                ]
+                                              }
+                                            >
+                                              =
+                                            </Text>
                                           </View>
                                         </View>
                                       </View>
