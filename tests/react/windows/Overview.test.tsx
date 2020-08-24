@@ -4,7 +4,7 @@ import { StoreProvider } from "easy-peasy";
 import Long from "long";
 import * as base64 from "base64-js";
 
-import Overview from "../../../src/windows/Overview";
+import { OverviewTabsComponent } from "../../../src/windows/Overview";
 import { setupStore, createNavigationContainer, initCommonStore } from "../../utils";
 import { createStackNavigator } from "@react-navigation/stack";
 import { DeviceEventEmitter } from "react-native";
@@ -15,17 +15,20 @@ import { channelBalance } from "../../../mocks/lndmobile/channel";
 jest.setTimeout(10000);
 
 it("renders correctly", () => {
-  const AppContainer = createNavigationContainer(Overview, "Overview");
+  // @react-navigation/material-top-tabs fails to render so we
+  // use the nested bottom tabs instead
+  const AppContainer = createNavigationContainer(OverviewTabsComponent, "OverviewTabsComponent");
 
   const store = setupStore();
   store.getActions().channel.setBalance(Long.fromNumber(123));
 
-  const { toJSON } = render(
+  const { toJSON, unmount } = render(
     <StoreProvider store={store}>
       {AppContainer}
     </StoreProvider>
   );
   expect(toJSON()).toMatchSnapshot();
+  // unmount();
 });
 
 it("expect balance to update when paying an invoice", async () => {
@@ -39,7 +42,7 @@ it("expect balance to update when paying an invoice", async () => {
     return response;
   });
 
-  const AppContainer = createNavigationContainer(Overview, "Overview");
+  const AppContainer = createNavigationContainer(OverviewTabsComponent, "OverviewTabsComponent");
   const store = await initCommonStore(true);
   // store.getActions().channel.setBalance(Long.fromValue(100000));
   const addInvoiceResponse = await store.getActions().receive.addInvoice({

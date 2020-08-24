@@ -1,3 +1,4 @@
+import React from "react";
 jest.mock("react-native-camera", () => require("./mocks/react-native-camera"));
 jest.mock("@react-native-community/async-storage", () => require("./mocks/@react-native-community/async-storage"));
 jest.mock("react-native-sqlite-storage", () => require("./mocks/react-native-sqlite-storage"));
@@ -23,3 +24,25 @@ jest.mock("./src/lndmobile/scheduled-sync", () => require("./mocks/lndmobile/sch
 const ReactNative = require("react-native");
 ReactNative.NativeModules.LndMobile = {};
 ReactNative.NativeModules.LndMobile.log = jest.fn();
+ReactNative.UIManager.configureNext = jest.fn();
+ReactNative.UIManager.configureNextLayoutAnimation = jest.fn();
+ReactNative.InteractionManager.runAfterInteractions = ((cb) => {
+  cb && cb();
+});
+const NativeBase = require("native-base");
+NativeBase.Toast.show = jest.fn();
+NativeBase.Root = ({ children }) => (<>{children}</>);
+
+import 'react-native-gesture-handler/jestSetup';
+jest.mock('react-native-reanimated', () => {
+  const Reanimated = require('react-native-reanimated/mock');
+
+  // The mock for `call` immediately calls the callback which is incorrect
+  // So we override it with a no-op
+  Reanimated.default.call = () => {};
+
+  return Reanimated;
+});
+
+// Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
+jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
