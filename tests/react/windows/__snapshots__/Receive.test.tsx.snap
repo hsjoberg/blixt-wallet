@@ -544,9 +544,9 @@ exports[`renders correctly 1`] = `
                                         }
                                       >
                                         <View
+                                          onLayout={[Function]}
                                           style={
                                             Array [
-                                              Object {},
                                               Object {
                                                 "display": "flex",
                                                 "flex": 1,
