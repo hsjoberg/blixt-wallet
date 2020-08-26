@@ -1,1 +1,1 @@
-adb logcat LndMobile:V LndMobileService:V LndMobileScheduledSync:V LndScheduledSyncWorker:V *:S
+adb logcat LndMobile:V LndMobileService:V LndMobileScheduledSync:V LndScheduledSyncWorker:V WM-WorkerWrapper:V *:S

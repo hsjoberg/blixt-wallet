@@ -75,6 +75,56 @@
     "api_key": [{
       "current_key": "abcde123465789"
     }]
+  }, {
+    "client_info": {
+      "mobilesdk_app_id": "1:123465798:android:123465798123",
+      "android_client_info": {
+        "package_name": "com.blixtwallet.regtest.experiment1.debug"
+      }
+    },
+    "api_key": [{
+      "current_key": "abcde123465789"
+    }]
+  }, {
+    "client_info": {
+      "mobilesdk_app_id": "1:123465798:android:123465798123",
+      "android_client_info": {
+        "package_name": "com.blixtwallet.experiment1"
+      }
+    },
+    "api_key": [{
+      "current_key": "abcde123465789"
+    }]
+  }, {
+    "client_info": {
+      "mobilesdk_app_id": "1:123465798:android:123465798123",
+      "android_client_info": {
+        "package_name": "com.blixtwallet.experiment1.debug"
+      }
+    },
+    "api_key": [{
+      "current_key": "abcde123465789"
+    }]
+  }, {
+    "client_info": {
+      "mobilesdk_app_id": "1:123465798:android:123465798123",
+      "android_client_info": {
+        "package_name": "com.blixtwallet.fakelnd.debug"
+      }
+    },
+    "api_key": [{
+      "current_key": "abcde123465789"
+    }]
+  }, {
+    "client_info": {
+      "mobilesdk_app_id": "1:123465798:android:123465798123",
+      "android_client_info": {
+        "package_name": "com.blixtwallet.fakelnd"
+      }
+    },
+    "api_key": [{
+      "current_key": "abcde123465789"
+    }]
   }],
   "configuration_version": "1"
 }

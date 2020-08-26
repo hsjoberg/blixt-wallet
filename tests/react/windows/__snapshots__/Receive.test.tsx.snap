@@ -544,15 +544,14 @@ exports[`renders correctly 1`] = `
                                         }
                                       >
                                         <View
-                                          onLayout={[Function]}
                                           style={
                                             Array [
+                                              Object {},
                                               Object {
                                                 "display": "flex",
                                                 "flex": 1,
                                                 "height": "100%",
                                                 "justifyContent": "space-between",
-                                                "padding": 16,
                                               },
                                               undefined,
                                             ]
@@ -562,7 +561,9 @@ exports[`renders correctly 1`] = `
                                             style={
                                               Array [
                                                 Object {},
-                                                Object {},
+                                                Object {
+                                                  "padding": 16,
+                                                },
                                               ]
                                             }
                                           >
@@ -726,6 +727,7 @@ exports[`renders correctly 1`] = `
                                                 onBlur={[Function]}
                                                 onChangeText={[Function]}
                                                 onFocus={[Function]}
+                                                onSubmitEditing={[Function]}
                                                 placeholder="0.00"
                                                 placeholderTextColor="#575757"
                                                 rejectResponderTermination={true}
@@ -825,6 +827,7 @@ exports[`renders correctly 1`] = `
                                                 allowFontScaling={true}
                                                 editable={true}
                                                 onChangeText={[Function]}
+                                                onFocus={[Function]}
                                                 placeholder="For bookkeeping (optional)"
                                                 placeholderTextColor="#575757"
                                                 rejectResponderTermination={true}
@@ -893,6 +896,7 @@ exports[`renders correctly 1`] = `
                                                 allowFontScaling={true}
                                                 editable={true}
                                                 onChangeText={[Function]}
+                                                onFocus={[Function]}
                                                 placeholder="Message to payer (optional)"
                                                 placeholderTextColor="#575757"
                                                 rejectResponderTermination={true}
@@ -929,6 +933,7 @@ exports[`renders correctly 1`] = `
                                                   Object {},
                                                   Object {
                                                     "marginTop": 0,
+                                                    "padding": 16,
                                                   },
                                                 ]
                                               }
@@ -985,464 +990,6 @@ exports[`renders correctly 1`] = `
                                                 />
                                               </View>
                                             </View>
-                                          </View>
-                                        </View>
-                                        <View
-                                          style={
-                                            Object {
-                                              "alignItems": "center",
-                                              "backgroundColor": "#232323",
-                                              "bottom": 0,
-                                              "flexDirection": "row",
-                                              "height": 0,
-                                              "justifyContent": "center",
-                                              "opacity": 0,
-                                              "overflow": "hidden",
-                                              "position": "absolute",
-                                              "width": "100%",
-                                            }
-                                          }
-                                        >
-                                          <View
-                                            accessible={true}
-                                            focusable={true}
-                                            forwardedRef={[Function]}
-                                            onClick={[Function]}
-                                            onResponderGrant={[Function]}
-                                            onResponderMove={[Function]}
-                                            onResponderRelease={[Function]}
-                                            onResponderTerminate={[Function]}
-                                            onResponderTerminationRequest={[Function]}
-                                            onStartShouldSetResponder={[Function]}
-                                            style={
-                                              Object {
-                                                "alignItems": "center",
-                                                "alignSelf": "flex-start",
-                                                "backgroundColor": "#878787",
-                                                "borderBottomWidth": null,
-                                                "borderColor": "#007aff",
-                                                "borderLeftWidth": null,
-                                                "borderRadius": 5,
-                                                "borderRightWidth": null,
-                                                "borderTopWidth": null,
-                                                "borderWidth": undefined,
-                                                "elevation": 2,
-                                                "flexDirection": "row",
-                                                "height": 35,
-                                                "justifyContent": "space-between",
-                                                "marginBottom": 0,
-                                                "marginLeft": 5,
-                                                "marginRight": 5,
-                                                "opacity": 1,
-                                                "paddingBottom": 6,
-                                                "paddingTop": 6,
-                                                "shadowColor": undefined,
-                                                "shadowOffset": undefined,
-                                                "shadowOpacity": undefined,
-                                                "shadowRadius": undefined,
-                                              }
-                                            }
-                                          >
-                                            <Text
-                                              style={
-                                                Array [
-                                                  Object {
-                                                    "backgroundColor": "transparent",
-                                                    "color": "#fff",
-                                                    "fontFamily": "System",
-                                                    "fontSize": 16.5,
-                                                    "marginLeft": 0,
-                                                    "marginRight": 0,
-                                                    "paddingLeft": 16,
-                                                    "paddingRight": 16,
-                                                  },
-                                                  Object {
-                                                    "fontFamily": "monospace",
-                                                    "letterSpacing": 0,
-                                                  },
-                                                ]
-                                              }
-                                            >
-                                              +
-                                            </Text>
-                                          </View>
-                                          <View
-                                            accessible={true}
-                                            focusable={true}
-                                            forwardedRef={[Function]}
-                                            onClick={[Function]}
-                                            onResponderGrant={[Function]}
-                                            onResponderMove={[Function]}
-                                            onResponderRelease={[Function]}
-                                            onResponderTerminate={[Function]}
-                                            onResponderTerminationRequest={[Function]}
-                                            onStartShouldSetResponder={[Function]}
-                                            style={
-                                              Object {
-                                                "alignItems": "center",
-                                                "alignSelf": "flex-start",
-                                                "backgroundColor": "#878787",
-                                                "borderBottomWidth": null,
-                                                "borderColor": "#007aff",
-                                                "borderLeftWidth": null,
-                                                "borderRadius": 5,
-                                                "borderRightWidth": null,
-                                                "borderTopWidth": null,
-                                                "borderWidth": undefined,
-                                                "elevation": 2,
-                                                "flexDirection": "row",
-                                                "height": 35,
-                                                "justifyContent": "space-between",
-                                                "marginBottom": 0,
-                                                "marginLeft": 5,
-                                                "marginRight": 5,
-                                                "opacity": 1,
-                                                "paddingBottom": 6,
-                                                "paddingTop": 6,
-                                                "shadowColor": undefined,
-                                                "shadowOffset": undefined,
-                                                "shadowOpacity": undefined,
-                                                "shadowRadius": undefined,
-                                              }
-                                            }
-                                          >
-                                            <Text
-                                              style={
-                                                Array [
-                                                  Object {
-                                                    "backgroundColor": "transparent",
-                                                    "color": "#fff",
-                                                    "fontFamily": "System",
-                                                    "fontSize": 16.5,
-                                                    "marginLeft": 0,
-                                                    "marginRight": 0,
-                                                    "paddingLeft": 16,
-                                                    "paddingRight": 16,
-                                                  },
-                                                  Object {
-                                                    "fontFamily": "monospace",
-                                                    "letterSpacing": 0,
-                                                  },
-                                                ]
-                                              }
-                                            >
-                                              -
-                                            </Text>
-                                          </View>
-                                          <View
-                                            accessible={true}
-                                            focusable={true}
-                                            forwardedRef={[Function]}
-                                            onClick={[Function]}
-                                            onResponderGrant={[Function]}
-                                            onResponderMove={[Function]}
-                                            onResponderRelease={[Function]}
-                                            onResponderTerminate={[Function]}
-                                            onResponderTerminationRequest={[Function]}
-                                            onStartShouldSetResponder={[Function]}
-                                            style={
-                                              Object {
-                                                "alignItems": "center",
-                                                "alignSelf": "flex-start",
-                                                "backgroundColor": "#878787",
-                                                "borderBottomWidth": null,
-                                                "borderColor": "#007aff",
-                                                "borderLeftWidth": null,
-                                                "borderRadius": 5,
-                                                "borderRightWidth": null,
-                                                "borderTopWidth": null,
-                                                "borderWidth": undefined,
-                                                "elevation": 2,
-                                                "flexDirection": "row",
-                                                "height": 35,
-                                                "justifyContent": "space-between",
-                                                "marginBottom": 0,
-                                                "marginLeft": 5,
-                                                "marginRight": 5,
-                                                "opacity": 1,
-                                                "paddingBottom": 6,
-                                                "paddingTop": 6,
-                                                "shadowColor": undefined,
-                                                "shadowOffset": undefined,
-                                                "shadowOpacity": undefined,
-                                                "shadowRadius": undefined,
-                                              }
-                                            }
-                                          >
-                                            <Text
-                                              style={
-                                                Array [
-                                                  Object {
-                                                    "backgroundColor": "transparent",
-                                                    "color": "#fff",
-                                                    "fontFamily": "System",
-                                                    "fontSize": 16.5,
-                                                    "marginLeft": 0,
-                                                    "marginRight": 0,
-                                                    "paddingLeft": 16,
-                                                    "paddingRight": 16,
-                                                  },
-                                                  Object {
-                                                    "fontFamily": "monospace",
-                                                    "letterSpacing": 0,
-                                                  },
-                                                ]
-                                              }
-                                            >
-                                              *
-                                            </Text>
-                                          </View>
-                                          <View
-                                            accessible={true}
-                                            focusable={true}
-                                            forwardedRef={[Function]}
-                                            onClick={[Function]}
-                                            onResponderGrant={[Function]}
-                                            onResponderMove={[Function]}
-                                            onResponderRelease={[Function]}
-                                            onResponderTerminate={[Function]}
-                                            onResponderTerminationRequest={[Function]}
-                                            onStartShouldSetResponder={[Function]}
-                                            style={
-                                              Object {
-                                                "alignItems": "center",
-                                                "alignSelf": "flex-start",
-                                                "backgroundColor": "#878787",
-                                                "borderBottomWidth": null,
-                                                "borderColor": "#007aff",
-                                                "borderLeftWidth": null,
-                                                "borderRadius": 5,
-                                                "borderRightWidth": null,
-                                                "borderTopWidth": null,
-                                                "borderWidth": undefined,
-                                                "elevation": 2,
-                                                "flexDirection": "row",
-                                                "height": 35,
-                                                "justifyContent": "space-between",
-                                                "marginBottom": 0,
-                                                "marginLeft": 5,
-                                                "marginRight": 5,
-                                                "opacity": 1,
-                                                "paddingBottom": 6,
-                                                "paddingTop": 6,
-                                                "shadowColor": undefined,
-                                                "shadowOffset": undefined,
-                                                "shadowOpacity": undefined,
-                                                "shadowRadius": undefined,
-                                              }
-                                            }
-                                          >
-                                            <Text
-                                              style={
-                                                Array [
-                                                  Object {
-                                                    "backgroundColor": "transparent",
-                                                    "color": "#fff",
-                                                    "fontFamily": "System",
-                                                    "fontSize": 16.5,
-                                                    "marginLeft": 0,
-                                                    "marginRight": 0,
-                                                    "paddingLeft": 16,
-                                                    "paddingRight": 16,
-                                                  },
-                                                  Object {
-                                                    "fontFamily": "monospace",
-                                                    "letterSpacing": 0,
-                                                  },
-                                                ]
-                                              }
-                                            >
-                                              /
-                                            </Text>
-                                          </View>
-                                          <View
-                                            accessible={true}
-                                            focusable={true}
-                                            forwardedRef={[Function]}
-                                            onClick={[Function]}
-                                            onResponderGrant={[Function]}
-                                            onResponderMove={[Function]}
-                                            onResponderRelease={[Function]}
-                                            onResponderTerminate={[Function]}
-                                            onResponderTerminationRequest={[Function]}
-                                            onStartShouldSetResponder={[Function]}
-                                            style={
-                                              Object {
-                                                "alignItems": "center",
-                                                "alignSelf": "flex-start",
-                                                "backgroundColor": "#878787",
-                                                "borderBottomWidth": null,
-                                                "borderColor": "#007aff",
-                                                "borderLeftWidth": null,
-                                                "borderRadius": 5,
-                                                "borderRightWidth": null,
-                                                "borderTopWidth": null,
-                                                "borderWidth": undefined,
-                                                "elevation": 2,
-                                                "flexDirection": "row",
-                                                "height": 35,
-                                                "justifyContent": "space-between",
-                                                "marginBottom": 0,
-                                                "marginLeft": 5,
-                                                "marginRight": 5,
-                                                "opacity": 1,
-                                                "paddingBottom": 6,
-                                                "paddingTop": 6,
-                                                "shadowColor": undefined,
-                                                "shadowOffset": undefined,
-                                                "shadowOpacity": undefined,
-                                                "shadowRadius": undefined,
-                                              }
-                                            }
-                                          >
-                                            <Text
-                                              style={
-                                                Array [
-                                                  Object {
-                                                    "backgroundColor": "transparent",
-                                                    "color": "#fff",
-                                                    "fontFamily": "System",
-                                                    "fontSize": 16.5,
-                                                    "marginLeft": 0,
-                                                    "marginRight": 0,
-                                                    "paddingLeft": 16,
-                                                    "paddingRight": 16,
-                                                  },
-                                                  Object {
-                                                    "fontFamily": "monospace",
-                                                    "letterSpacing": 0,
-                                                  },
-                                                ]
-                                              }
-                                            >
-                                              (
-                                            </Text>
-                                          </View>
-                                          <View
-                                            accessible={true}
-                                            focusable={true}
-                                            forwardedRef={[Function]}
-                                            onClick={[Function]}
-                                            onResponderGrant={[Function]}
-                                            onResponderMove={[Function]}
-                                            onResponderRelease={[Function]}
-                                            onResponderTerminate={[Function]}
-                                            onResponderTerminationRequest={[Function]}
-                                            onStartShouldSetResponder={[Function]}
-                                            style={
-                                              Object {
-                                                "alignItems": "center",
-                                                "alignSelf": "flex-start",
-                                                "backgroundColor": "#878787",
-                                                "borderBottomWidth": null,
-                                                "borderColor": "#007aff",
-                                                "borderLeftWidth": null,
-                                                "borderRadius": 5,
-                                                "borderRightWidth": null,
-                                                "borderTopWidth": null,
-                                                "borderWidth": undefined,
-                                                "elevation": 2,
-                                                "flexDirection": "row",
-                                                "height": 35,
-                                                "justifyContent": "space-between",
-                                                "marginBottom": 0,
-                                                "marginLeft": 5,
-                                                "marginRight": 5,
-                                                "opacity": 1,
-                                                "paddingBottom": 6,
-                                                "paddingTop": 6,
-                                                "shadowColor": undefined,
-                                                "shadowOffset": undefined,
-                                                "shadowOpacity": undefined,
-                                                "shadowRadius": undefined,
-                                              }
-                                            }
-                                          >
-                                            <Text
-                                              style={
-                                                Array [
-                                                  Object {
-                                                    "backgroundColor": "transparent",
-                                                    "color": "#fff",
-                                                    "fontFamily": "System",
-                                                    "fontSize": 16.5,
-                                                    "marginLeft": 0,
-                                                    "marginRight": 0,
-                                                    "paddingLeft": 16,
-                                                    "paddingRight": 16,
-                                                  },
-                                                  Object {
-                                                    "fontFamily": "monospace",
-                                                    "letterSpacing": 0,
-                                                  },
-                                                ]
-                                              }
-                                            >
-                                              )
-                                            </Text>
-                                          </View>
-                                          <View
-                                            accessible={true}
-                                            focusable={true}
-                                            forwardedRef={[Function]}
-                                            onClick={[Function]}
-                                            onResponderGrant={[Function]}
-                                            onResponderMove={[Function]}
-                                            onResponderRelease={[Function]}
-                                            onResponderTerminate={[Function]}
-                                            onResponderTerminationRequest={[Function]}
-                                            onStartShouldSetResponder={[Function]}
-                                            style={
-                                              Object {
-                                                "alignItems": "center",
-                                                "alignSelf": "flex-start",
-                                                "backgroundColor": "#878787",
-                                                "borderBottomWidth": null,
-                                                "borderColor": "#007aff",
-                                                "borderLeftWidth": null,
-                                                "borderRadius": 5,
-                                                "borderRightWidth": null,
-                                                "borderTopWidth": null,
-                                                "borderWidth": undefined,
-                                                "elevation": 2,
-                                                "flexDirection": "row",
-                                                "height": 35,
-                                                "justifyContent": "space-between",
-                                                "marginBottom": 0,
-                                                "marginLeft": 5,
-                                                "marginRight": 5,
-                                                "opacity": 1,
-                                                "paddingBottom": 6,
-                                                "paddingTop": 6,
-                                                "shadowColor": undefined,
-                                                "shadowOffset": undefined,
-                                                "shadowOpacity": undefined,
-                                                "shadowRadius": undefined,
-                                              }
-                                            }
-                                          >
-                                            <Text
-                                              style={
-                                                Array [
-                                                  Object {
-                                                    "backgroundColor": "transparent",
-                                                    "color": "#fff",
-                                                    "fontFamily": "System",
-                                                    "fontSize": 16.5,
-                                                    "marginLeft": 0,
-                                                    "marginRight": 0,
-                                                    "paddingLeft": 16,
-                                                    "paddingRight": 16,
-                                                  },
-                                                  Object {
-                                                    "fontFamily": "monospace",
-                                                    "letterSpacing": 0,
-                                                  },
-                                                ]
-                                              }
-                                            >
-                                              =
-                                            </Text>
                                           </View>
                                         </View>
                                       </View>

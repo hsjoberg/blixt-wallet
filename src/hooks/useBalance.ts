@@ -105,12 +105,12 @@ export default function useBalance(initialSat?: Long) {
 }
 
 function evaluateExpression(str: string) {
+  str = str.replace(/\(\)/, "");
   // Remove trailing math operators, otherwise expr-eval will fail
   str = (str || "0").replace(/[+\-\/*\(]+$/, "") || "0";
   if (countCharInString(str, "(") > countCharInString(str, ")")) {
     str += ")";
   }
-  str = str.replace(/\(\)/, "");
   try {
     str = Parser.evaluate(str).toString();
   } catch(e) {

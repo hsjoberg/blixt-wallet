@@ -116,6 +116,7 @@ export const signMessage = async (keyFamily: number, keyIndex: number, msg: Uint
         keyIndex,
       },
       msg,
+      noHashing: true,
     },
   });
   return response;
