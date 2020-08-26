@@ -61,6 +61,8 @@ public class LndMobileService extends Service {
   static final int MSG_GRPC_STREAM_STARTED = 16;
   static final int MSG_STOP_LND = 17;
   static final int MSG_STOP_LND_RESULT = 18;
+  static final int MSG_PING = 19;
+  static final int MSG_PONG = 20;
 
   int unlockWalletRequest = -1;
 
@@ -162,18 +164,43 @@ public class LndMobileService extends Service {
             break;
 
           case MSG_CHECKSTATUS:
-            int flags = 0;
+            lndmobile.Lndmobile.getStatus(new lndmobile.LndStatusCallback() {
+              @Override
+              public void onResponse(boolean b, boolean b1) {
+                HyperLog.i(TAG, "lnd started" + b);
+                HyperLog.i(TAG, "wallet unlocked" + b1);
 
-            if (lndStarted) {
-              flags += LndMobile.LndStatus.PROCESS_STARTED.flag;
-            }
+                int flags = 0;
 
-            if (walletUnlocked) {
-              flags += LndMobile.LndStatus.WALLET_UNLOCKED.flag;
-            }
+                flags += LndMobile.LndStatus.SERVICE_BOUND.flag;
 
-            HyperLog.d(TAG, "MSG_CHECKSTATUS sending " + flags);
-            sendToClient(msg.replyTo, Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
+                if (b) {
+                  flags += LndMobile.LndStatus.PROCESS_STARTED.flag;
+                }
+
+                if (b1) {
+                  flags += LndMobile.LndStatus.WALLET_UNLOCKED.flag;
+                }
+
+                HyperLog.d(TAG, "MSG_CHECKSTATUS sending " + flags);
+                sendToClient(msg.replyTo, Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
+              }
+            });
+
+            // int flags = 0;
+
+            // flags += LndMobile.LndStatus.SERVICE_BOUND.flag;
+
+            // if (lndStarted) {
+            //   flags += LndMobile.LndStatus.PROCESS_STARTED.flag;
+            // }
+
+            // if (walletUnlocked) {
+            //   flags += LndMobile.LndStatus.WALLET_UNLOCKED.flag;
+            // }
+
+            // HyperLog.d(TAG, "MSG_CHECKSTATUS sending " + flags);
+            // sendToClient(msg.replyTo, Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
             //sendToClients(Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
             break;
 
@@ -232,6 +259,11 @@ public class LndMobileService extends Service {
           case MSG_STOP_LND:
             HyperLog.d(TAG, "Got MSG_STOP_LND");
             stopLnd(msg.replyTo, request);
+            break;
+
+          case MSG_PING:
+            HyperLog.d(TAG, "Got MSG_PING");
+            sendToClient(msg.replyTo, Message.obtain(null, MSG_PONG, request, 0));
             break;
 
           default:

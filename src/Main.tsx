@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, Alert, NativeModules } from "react-native";
 import { Spinner, H1 } from "native-base";
 import { createStackNavigator, CardStyleInterpolators, StackNavigationOptions } from "@react-navigation/stack";
 
@@ -28,6 +28,7 @@ import CameraFullscreen from "./windows/CameraFullscreen";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import Container from "./components/Container";
 import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
+import { navigator } from "./utils/navigation";
 
 const RootStack = createStackNavigator();
 
@@ -63,6 +64,7 @@ export type RootStackParamList = {
 export default function Main() {
   const holdOnboarding = useStoreState((store) => store.holdOnboarding);
   const appReady = useStoreState((store) => store.appReady);
+  const setAppReady = useStoreActions((store) => store.setAppReady);
   const lightningReady = useStoreState((store) => store.lightning.ready);
   const walletCreated = useStoreState((store) => store.walletCreated);
   const loggedIn = useStoreState((store) => store.security.loggedIn);
@@ -103,7 +105,33 @@ export default function Main() {
         }
         else {
           try {
+            const lightningTimeout = setTimeout(() => {
+              Alert.alert(
+                "",
+                "It looks like Blixt Wallet is having trouble starting lnd.\n" +
+                "What do you want to do?",
+                [{
+                  text: "Go to Help Center",
+                  onPress: () => {
+                    navigator.current?.navigate("Settings", { screen: "LndMobileHelpCenter" });
+                  },
+                  style:"default",
+                }, {
+                  text: "Restart app",
+                  onPress: async () => {
+                    await NativeModules.LndMobile.killLnd();
+                    NativeModules.LndMobile.restartApp();
+                  },
+                }, {
+                  text: "Try again",
+                  onPress: () => {
+                    setAppReady(false);
+                  },
+                }]
+              )
+            }, 5 * 1000);
             await initLightning();
+            clearTimeout(lightningTimeout);
           } catch (e) {
             toast(e.message, 0, "danger");
           }
@@ -119,7 +147,7 @@ export default function Main() {
     ...useStackNavigationOptions(),
     gestureEnabled: true,
     gestureDirection: "horizontal",
-    gestureResponseDistance: { horizontal:0 },
+    gestureResponseDistance: { horizontal: 0 },
     gestureVelocityImpact: 1.9,
   };
 
