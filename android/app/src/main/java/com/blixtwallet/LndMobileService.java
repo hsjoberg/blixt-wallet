@@ -164,43 +164,43 @@ public class LndMobileService extends Service {
             break;
 
           case MSG_CHECKSTATUS:
-            lndmobile.Lndmobile.getStatus(new lndmobile.LndStatusCallback() {
-              @Override
-              public void onResponse(boolean b, boolean b1) {
-                HyperLog.i(TAG, "lnd started" + b);
-                HyperLog.i(TAG, "wallet unlocked" + b1);
+            // lndmobile.Lndmobile.getStatus(new lndmobile.LndStatusCallback() {
+            //   @Override
+            //   public void onResponse(boolean b, boolean b1) {
+            //     HyperLog.i(TAG, "lnd started" + b);
+            //     HyperLog.i(TAG, "wallet unlocked" + b1);
 
-                int flags = 0;
+            //     int flags = 0;
 
-                flags += LndMobile.LndStatus.SERVICE_BOUND.flag;
+            //     flags += LndMobile.LndStatus.SERVICE_BOUND.flag;
 
-                if (b) {
-                  flags += LndMobile.LndStatus.PROCESS_STARTED.flag;
-                }
+            //     if (b) {
+            //       flags += LndMobile.LndStatus.PROCESS_STARTED.flag;
+            //     }
 
-                if (b1) {
-                  flags += LndMobile.LndStatus.WALLET_UNLOCKED.flag;
-                }
+            //     if (b1) {
+            //       flags += LndMobile.LndStatus.WALLET_UNLOCKED.flag;
+            //     }
 
-                HyperLog.d(TAG, "MSG_CHECKSTATUS sending " + flags);
-                sendToClient(msg.replyTo, Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
-              }
-            });
+            //     HyperLog.d(TAG, "MSG_CHECKSTATUS sending " + flags);
+            //     sendToClient(msg.replyTo, Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
+            //   }
+            // });
 
-            // int flags = 0;
+            int flags = 0;
 
-            // flags += LndMobile.LndStatus.SERVICE_BOUND.flag;
+            flags += LndMobile.LndStatus.SERVICE_BOUND.flag;
 
-            // if (lndStarted) {
-            //   flags += LndMobile.LndStatus.PROCESS_STARTED.flag;
-            // }
+            if (lndStarted) {
+              flags += LndMobile.LndStatus.PROCESS_STARTED.flag;
+            }
 
-            // if (walletUnlocked) {
-            //   flags += LndMobile.LndStatus.WALLET_UNLOCKED.flag;
-            // }
+            if (walletUnlocked) {
+              flags += LndMobile.LndStatus.WALLET_UNLOCKED.flag;
+            }
 
-            // HyperLog.d(TAG, "MSG_CHECKSTATUS sending " + flags);
-            // sendToClient(msg.replyTo, Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
+            HyperLog.d(TAG, "MSG_CHECKSTATUS sending " + flags);
+            sendToClient(msg.replyTo, Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
             //sendToClients(Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
             break;
 
