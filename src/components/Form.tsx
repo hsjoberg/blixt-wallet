@@ -1,9 +1,8 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, KeyboardAvoidingView, StyleProp, ViewStyle, StatusBar } from "react-native";
-import { Content, View, Item, Text, Label, Icon, Button } from "native-base";
+import { StyleSheet, KeyboardAvoidingView, StyleProp, ViewStyle } from "react-native";
+import { View, Item, Text, Label, Icon } from "native-base";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-
-const iconTopPadding = StatusBar.currentHeight ?? 0;
+import { MathPad, IMathPadProps } from "../components/MathPad";
 
 export interface IFormItem {
   title: string | null;
@@ -18,8 +17,10 @@ export interface IFormProps {
   items: IFormItem[];
   style?: StyleProp<ViewStyle>;
   noticeText?: string;
+  mathPadVisible?: boolean;
+  mathPadProps?: IMathPadProps;
 }
-export default function Form({ buttons, items, style, noticeText }: IFormProps) {
+export default function Form({ buttons, items, style, noticeText, mathPadProps }: IFormProps) {
   return (
     <KeyboardAvoidingView style={[styles.content, style]}>
       <View style={styles.itemContainer}>
@@ -46,9 +47,16 @@ export default function Form({ buttons, items, style, noticeText }: IFormProps) 
         }
       </View>
       <View style={styles.buttonContainer}>
-        {buttons.map((button, i) => {
-          return (<View key={i} style={{ marginTop: i > 0 ? 12 : 0 }}>{button}</View>);
-        })}
+        <>
+          {buttons.map((button, i) => {
+            return (<View key={i} style={{ marginTop: i > 0 ? 6 : 0, padding: 16, }}>{button}</View>);
+          })}
+          {mathPadProps &&
+            <MathPad
+              {...mathPadProps}
+            />
+          }
+        </>
       </View>
     </KeyboardAvoidingView>
   );
@@ -60,9 +68,9 @@ const styles = StyleSheet.create({
     flex: 1,
     display: "flex",
     justifyContent: "space-between",
-    padding: 16,
   },
   itemContainer: {
+    padding: 16,
   },
   itemLabel: {
     width: 105,
