@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { Button, Body, Container, Icon, Header, Text, Title, Left, Input, Toast, Spinner } from "native-base";
+import { Button, Container, Icon, Text, Input, Spinner } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { useDebounce } from "use-debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -13,7 +13,7 @@ import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { MAX_SAT_INVOICE } from "../../utils/constants";
 import { toast } from "../../utils";
-import { View, Keyboard, LayoutAnimation, StyleSheet } from "react-native";
+import { Keyboard } from "react-native";
 
 const MATH_PAD_HEIGHT = 44;
 
@@ -42,19 +42,17 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
   const channels = useStoreState((store) => store.channel.channels);
 
   const [mathPadVisibleOriginal, setMathPadVisible] = useState(false);
+  const [mathPadVisibleShortDebounce] = useDebounce(mathPadVisibleOriginal, 1, { leading: true});
   const [mathPadVisible] = useDebounce(mathPadVisibleOriginal, 100);
 
   const [currentlyFocusedInput, setCurrentlyFocusedInput] = useState<"bitcoin" | "fiat" | "other">("other");
 
   useEffect(() => {
     const keyboardShowListener = Keyboard.addListener("keyboardDidShow", (event) => {
-      console.log("keyboardDidShow")
       // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-      // setMathPadVisible(true);
     });
 
     const keyboardHideListener = Keyboard.addListener("keyboardDidHide", (event) => {
-      console.log("keyboardDidHide")
       setMathPadVisible(false);
       setCurrentlyFocusedInput("other");
     });
@@ -154,7 +152,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
             setCurrentlyFocusedInput("bitcoin");
           }}
           onBlur={() => {
-            setMathPadVisible(false);
+            // setMathPadVisible(false);
           }}
         />
         <Icon type="Foundation" name="bitcoin-circle" onPress={onPressChangeBitcoinUnit} style={{ fontSize: 31, marginRight: 1 }} />
@@ -166,6 +164,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     component: (
       <>
         <Input
+        onSubmitEditing={() => setMathPadVisible(false)}
           onChangeText={onChangeFiatInput}
           placeholder="0.00"
           value={dollarValue !== undefined ? dollarValue.toString() : undefined}
@@ -175,7 +174,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
             setCurrentlyFocusedInput("fiat");
           }}
           onBlur={() => {
-            setMathPadVisible(false);
+            // setMathPadVisible(false);
           }}
         />
         <Icon type="FontAwesome" name="money" onPress={onPressChangeFiatUnit} />
@@ -188,6 +187,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
       <Input
         onChangeText={setPayer}
         placeholder="For bookkeeping (optional)"
+        onFocus={() => setMathPadVisible(false)}
         value={payer}
       />
     ),
@@ -199,6 +199,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
         testID="input-message"
         onChangeText={setDescription}
         placeholder="Message to payer (optional)"
+        onFocus={() => setMathPadVisible(false)}
         value={description}
       />
     ),
@@ -220,7 +221,8 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     (channels.length > 0 && !channels.some((channel) => channel.active))
   );
 
-  const noticeText = rpcReady && channels.length === 0
+  const showNoticeText = rpcReady && channels.length === 0;
+  const noticeText = showNoticeText
     ? "Before you can receive, you need to open a Lightning channel."
     : undefined;
 
@@ -236,6 +238,16 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
   return (
     <Container>
       <BlixtForm
+        mathPadProps={{
+          visible: !showNoticeText && mathPadVisibleOriginal,
+          onAddPress: () => addMathOperatorToInput("+"),
+          onSubPress: () => addMathOperatorToInput("-"),
+          onMulPress: () => addMathOperatorToInput("*"),
+          onDivPress: () => addMathOperatorToInput("/"),
+          onParenthesisLeftPress: () => addMathOperatorToInput("("),
+          onParenthesisRightPress: () => addMathOperatorToInput(")"),
+          onEqualSignPress: () => evalMathExpression(currentlyFocusedInput ?? "bitcoin"),
+        }}
         items={formItems}
         noticeText={noticeText}
         buttons={[
@@ -246,7 +258,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
             primary={true}
             onPress={onCreateInvoiceClick}
             disabled={!canSend}
-            style={{ marginBottom: mathPadVisible ? MATH_PAD_HEIGHT + 5 : 0 }}
+            style={{ marginBottom: mathPadVisible && false ? MATH_PAD_HEIGHT + 5 : 0 }}
           >
             {loading
               ? <Spinner color={blixtTheme.light} />
@@ -255,80 +267,18 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
           </Button>
         ]}
       />
-      <MathPad
-        visible={mathPadVisible}
-        onAddPress={() => addMathOperatorToInput("+")}
-        onSubPress={() => addMathOperatorToInput("-")}
-        onMulPress={() => addMathOperatorToInput("*")}
-        onDivPress={() => addMathOperatorToInput("/")}
-        onParenthesisLeftPress={() => addMathOperatorToInput("(")}
-        onParenthesisRightPress={() => addMathOperatorToInput(")")}
-        onEqualSignPress={() => evalMathExpression(currentlyFocusedInput ?? "bitcoin")}
-      />
+      {/* {mathPadVisibleOriginal  && false &&
+        <MathPad
+          visible={mathPadVisibleOriginal}
+          onAddPress={() => addMathOperatorToInput("+")}
+          onSubPress={() => addMathOperatorToInput("-")}
+          onMulPress={() => addMathOperatorToInput("*")}
+          onDivPress={() => addMathOperatorToInput("/")}
+          onParenthesisLeftPress={() => addMathOperatorToInput("(")}
+          onParenthesisRightPress={() => addMathOperatorToInput(")")}
+          onEqualSignPress={() => evalMathExpression(currentlyFocusedInput ?? "bitcoin")}
+        />
+      } */}
     </Container>
   );
 };
-
-export interface IMathPadProps {
-  visible: boolean;
-  onAddPress: () => void;
-  onSubPress: () => void;
-  onMulPress: () => void;
-  onDivPress: () => void;
-  onParenthesisLeftPress: () => void;
-  onParenthesisRightPress: () => void;
-  onEqualSignPress: () => void;
-}
-export function MathPad({ visible, onAddPress, onSubPress, onMulPress, onDivPress, onParenthesisLeftPress, onParenthesisRightPress, onEqualSignPress }: IMathPadProps) {
-  return (
-    <View style={{
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems:"center",
-      backgroundColor: blixtTheme.gray,
-      overflow: "hidden",
-      width: "100%",
-      height: visible ? 50 : 0, // https://github.com/facebook/react-native/issues/18415
-      // height: 50,
-      opacity: visible ? 1 : 0,
-      position: "absolute",
-      bottom: 0,
-    }}>
-      <Button onPress={onAddPress} style={mathPadStyles.button}>
-        <Text style={mathPadStyles.buttonText}>+</Text>
-      </Button>
-      <Button onPress={onSubPress} style={mathPadStyles.button}>
-        <Text style={mathPadStyles.buttonText}>-</Text>
-      </Button>
-      <Button onPress={onMulPress} style={mathPadStyles.button}>
-        <Text style={mathPadStyles.buttonText}>*</Text>
-      </Button>
-      <Button onPress={onDivPress} style={mathPadStyles.button}>
-        <Text style={mathPadStyles.buttonText}>/</Text>
-      </Button>
-      <Button onPress={onParenthesisLeftPress} style={mathPadStyles.button}>
-        <Text style={mathPadStyles.buttonText}>(</Text>
-      </Button>
-      <Button onPress={onParenthesisRightPress} style={mathPadStyles.button}>
-        <Text style={mathPadStyles.buttonText}>)</Text>
-      </Button>
-      <Button onPress={onEqualSignPress} style={mathPadStyles.button}>
-        <Text style={mathPadStyles.buttonText}>=</Text>
-      </Button>
-    </View>
-  )
-}
-
-const mathPadStyles = StyleSheet.create({
-  button: {
-    marginBottom: 0,
-    marginLeft: 5,
-    marginRight: 5,
-    height: 35,
-    backgroundColor: blixtTheme.lightGray
-  },
-  buttonText: {
-    fontFamily: "monospace",
-    letterSpacing: 0,
-  }
-})
