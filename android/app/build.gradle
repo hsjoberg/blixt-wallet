@@ -135,7 +135,7 @@ android {
         applicationId MYAPP_APP_ID
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 59
+        versionCode 62
         versionName "0.1-alpha"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
@@ -215,6 +215,11 @@ android {
             applicationIdSuffix ".experiment1"
             dimension "custom"
             manifestPlaceholders = [custom: " Experiment 1"]
+        }
+        fakelnd {
+            applicationIdSuffix ".fakelnd"
+            dimension "custom"
+            manifestPlaceholders  = [custom: " Fake lnd"]
         }
     }
 

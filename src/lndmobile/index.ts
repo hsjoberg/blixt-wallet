@@ -245,6 +245,22 @@ export const listPeers = async (): Promise<lnrpc.ListPeersResponse> => {
   return response;
 };
 
+
+/**
+ * @throws
+ */
+export const queryRoutes = async (pubKey: string): Promise<lnrpc.QueryRoutesResponse> => {
+  const response = await sendCommand<lnrpc.IQueryRoutesRequest, lnrpc.IQueryRoutesRequest, lnrpc.QueryRoutesResponse>({
+    request: lnrpc.QueryRoutesRequest,
+    response: lnrpc.QueryRoutesResponse,
+    method: "QueryRoutes",
+    options: {
+      pubKey,
+    },
+  });
+  return response;
+};
+
 /**
  * @throws
  */

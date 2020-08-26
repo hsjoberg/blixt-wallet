@@ -2,7 +2,7 @@ import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
 import FingerprintScanner from "react-native-fingerprint-scanner";
 
 import { StorageItem, getItemObject, setItemObject, removeItem } from "../storage/app";
-import { Alert } from "react-native";
+import { Alert, AppState } from "react-native";
 import { getPin, getSeed as keystoreGetSeed, removeSeed, setSeed, setPin, removePin } from "../storage/keystore";
 
 import logger from "./../utils/log";
@@ -39,7 +39,7 @@ export interface ISecurityModel {
 }
 
 export const security: ISecurityModel = {
-  initialize: thunk(async (actions) => {
+  initialize: thunk(async (actions, _, { getState }) => {
     log.d("Initializing");
     const loginMethods: Set<LoginMethods> = new Set(await getItemObject(StorageItem.loginMethods));
     actions.setLoginMethods(loginMethods);
@@ -52,6 +52,12 @@ export const security: ISecurityModel = {
       log.d("Error checking fingerprint availability", [e]);
     }
     log.d("Done");
+
+    // AppState.addEventListener("change", (state) => {
+    //   if (state === "background" && getState().loginMethods.size > 0) {
+    //     actions.setLoggedIn(false);
+    //   }
+    // });
   }),
 
   checkPincode: thunk(async (actions, pincodeAttempt) => {
