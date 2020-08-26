@@ -57,6 +57,25 @@ export const lightning: ILightningModel = {
       return;
     }
 
+    // When the RPC server is ready
+    // WalletUnlocked event will be emitted
+    log.v("Starting WalletUnlocked event listener");
+    DeviceEventEmitter.addListener("WalletUnlocked", async () => {
+      debugShowStartupInfo && toast("RPC server ready time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+      actions.setRPCServerReady(true);
+      try {
+        actions.setupStores();
+        await actions.waitForChainSync();
+        debugShowStartupInfo && toast("syncedToChain time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
+        await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
+        await actions.waitForGraphSync();
+        debugShowStartupInfo && toast("syncedToGraph time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
+      } catch (e) {
+        debugShowStartupInfo && toast(e.message, 10000, "danger");
+        return;
+      }
+    });
+
     const checkStatus = injections.lndMobile.index.checkStatus;
     const startLnd = injections.lndMobile.index.startLnd;
 
@@ -82,25 +101,6 @@ export const lightning: ILightningModel = {
 
     // Normal wallet unlock flow
     if ((status & ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) !== ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) {
-      // When the RPC server is ready
-      // WalletUnlocked event will be emitted
-      log.v("Starting WalletUnlocked event listener");
-      DeviceEventEmitter.addListener("WalletUnlocked", async () => {
-        debugShowStartupInfo && toast("RPC server ready time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-        actions.setRPCServerReady(true);
-        try {
-          actions.setupStores();
-          await actions.waitForChainSync();
-          debugShowStartupInfo && toast("syncedToChain time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
-          await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
-          await actions.waitForGraphSync();
-          debugShowStartupInfo && toast("syncedToGraph time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
-        } catch (e) {
-          debugShowStartupInfo && toast(e.message, 10000, "danger");
-          return;
-        }
-      });
-
       try {
         log.v("Unlocking wallet");
         SYNC_UNLOCK_WALLET

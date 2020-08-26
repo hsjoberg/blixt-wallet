@@ -13,18 +13,25 @@ import { getTransactions, getTransaction, createTransaction, clearTransactions }
 import { useStoreState, useStoreActions } from "../../state/store";
 import { lnrpc } from "../../../proto/proto";
 import { sendCommand } from "../../lndmobile/utils";
-import { getInfo, connectPeer, listPeers } from "../../lndmobile/index";
-import { initWallet, genSeed, deriveKey } from "../../lndmobile/wallet";
+import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus } from "../../lndmobile/index";
+import { initWallet, genSeed, deriveKey, signMessage, derivePrivateKey } from "../../lndmobile/wallet";
 import { pendingChannels, listChannels, openChannel, closeChannel } from "../../lndmobile/channel";
 import { newAddress, sendCoins } from "../../lndmobile/onchain";
 import { storage, StorageItem, setItemObject, getItem, setItem } from "../../storage/app";
 import { status, modifyStatus, queryScores } from "../../lndmobile/autopilot";
 import { RootStackParamList } from "../../Main";
-import { setWalletPassword, getWalletPassword, getItemObject } from "../../storage/keystore";
+import { setWalletPassword, getWalletPassword, getItemObject, getPin } from "../../storage/keystore";
 import Content from "../../components/Content";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { LoginMethods } from "../../state/Security";
 import Spinner from "../../components/Spinner";
+
+
+import secp256k1 from "secp256k1";
+import { Hash as sha256Hash, HMAC as sha256HMAC } from "fast-sha256";
+import { bytesToString, bytesToHexString } from "../../utils";
+import { ILightningServices } from "../../utils/lightning-services";
+
 
 
 interface IProps {
@@ -56,10 +63,22 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
       />
       <Content style={styles.content}>
         <View style={{ backgroundColor: blixtTheme.dark, marginTop: 32, width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
+        <Button onPress={continueCallback}><Text style={styles.buttonText}>continueCallback()</Text></Button>
 
-          <Button onPress={continueCallback}><Text style={styles.buttonText}>continueCallback()</Text></Button>
+        <Button onPress={async () => {
+          console.log(await decodePayReq("lnbc100n1p0nzg2kpp58f2ztjy39ak8hgd7saya4mvkhwmueuyq0tlet5fedn8ytu3xrllqhp5nh0t5w4w5zh8jdnn5a03hk4pk279l3eex4nzazgkwmqpn7wga6hqcqzpgxq92fjuqsp5sm4zt7024wpwplf705k0gfkyqzk3g984nv9e83pd4093ckg9sm2q9qy9qsqs0wuxrqazy9n0knyx7fhud4q2l92fl2c2qe58tks8hhgfy4dwc5kqe09j38szhjwshna0jp5pet7g27wdj7ecyq4y00vc023lzvtl2sq686za3"));
+
+
+        console.log(await queryRoutes("03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e"))
+        }}><Text style={styles.buttonText}>decode()</Text></Button>
+
 
           <Text style={{ width: "100%"}}>Random:</Text>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobile.getTorEnabled());
+          }}>
+            <Text style={styles.buttonText}>getTorEnabled</Text>
+          </Button>
           <Button small onPress={async () => {
             console.log(await NativeModules.LndMobile.startTor());
           }}>
@@ -106,6 +125,123 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               { data: base64.fromByteArray(lnrpc.InvoiceSubscription.encode(subscribeInvoicesUpdate).finish()) }
             );
           }}><Text style={styles.buttonText}>Emit fake transaction</Text></Button>
+          <Button small onPress={async () => {
+            navigation?.navigate("Welcome");
+          }}>
+            <Text style={styles.buttonText}>navigate to onboarding</Text>
+          </Button>
+
+          <Button small onPress={async () => {
+            interface IDemoInvoice {
+              description: string;
+              value: number;
+              type: "PAY" | "RECEIVE";
+              payer?: string;
+              website?: string;
+              lightningService: keyof ILightningServices | null;
+            }
+            const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
+              for (const invoice of invoices) {
+                await createTransaction(db!, {
+                  date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
+                  description: invoice.description,
+                  remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
+                  expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
+                  status: "SETTLED",
+                  value: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * invoice.value),
+                  valueMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * invoice.value * 1000),
+                  amtPaidSat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
+                  amtPaidMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
+                  valueUSD: (invoice.type == "PAY" ? -1 : 1) * 100,
+                  valueFiat: (invoice.type == "PAY" ? -1 : 1) * 100,
+                  valueFiatCurrency: "SEK",
+                  fee: Long.fromNumber(Math.floor(Math.random() * 5)),
+                  feeMsat: Long.fromNumber(Math.floor(Math.random() * 5) * 1000),
+                  paymentRequest: "abcdef123456",
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
+                  nodeAliasCached: null,
+                  payer: invoice.payer,
+                  type: "NORMAL",
+                  tlvRecordName: null,
+                  locationLat: null,
+                  locationLong: null,
+                  website: invoice.website ?? null,
+                  hops: [],
+                  preimage: new Uint8Array([0,0]),
+                  lnurlPayResponse: null,
+                  identifiedService: invoice.lightningService,
+                });
+              }
+            }
+
+            await clearTransactions(db!);
+            await createDemoTransactions([{
+              value: 150,
+              description: "Read: Lightning Network Trivia",
+              type: "PAY",
+              website: "yalls.org",
+              lightningService: "yalls",
+            }, {
+              value: 100,
+              description: "lightning.gifts redeem 369db072d4252ca056a2a92150b87c6", //7f1f8b0d9a9001d0a",
+              type: "RECEIVE",
+              website: "api.lightning.gifts",
+              lightningService: "lightninggifts",
+            }, {
+              value: 62,
+              description: "Payment for 62 pixels at satoshis.place",
+              type: "PAY",
+              website: "satoshis.place",
+              lightningService: "satoshisplace",
+            }, {
+              value: 100,
+              description: "Withdrawal",
+              type: "RECEIVE",
+              website: "thndr.games",
+              lightningService: "thndrgames",
+            }, {
+              value: 100,
+              description: "etleneum exchange [c7k1dl3gdg3][row4f18ktv]",
+              type: "RECEIVE",
+              website: "etleneum.com",
+              lightningService: "etleneum",
+            }, {
+              value: 1000,
+              description: "LuckyThunder.com pin:2164",
+              type: "PAY",
+              website: "www.luckythunder.com",
+              lightningService: "luckythunder",
+            }, {
+              value: 700,
+              description: "lnsms.world: One text message",
+              type: "PAY",
+              website: "lnsms.world",
+              lightningService: "lnsms",
+            }, {
+              value: 17600,
+              description: "Bitrefill 12507155-a8ff-82a1-1cd4-f79a1346d5c2",
+              type: "PAY",
+              lightningService: "bitrefill",
+            }, {
+              value: 1000,
+              description: "Feed Chickens @ pollofeed.com",
+              type: "PAY",
+              website: "pollofeed.com",
+              lightningService: "pollofeed",
+            },  {
+              value: 1000,
+              description: "1000 sats bet on 2",
+              type: "PAY",
+              website: "lightningspin.com",
+              lightningService: "lightningspin",
+            }]);
+            await TransactionStoreGetTransactions();
+
+            await setItem(StorageItem.onboardingState, "DONE");
+            actions.setOnboardingState("DONE");
+            actions.channel.setBalance(Long.fromNumber(4397581));
+          }}><Text style={styles.buttonText}>Setup demo environment</Text></Button>
+
 
           <Text style={{ width: "100%" }}>Security:</Text>
           <Button small onPress={async () => {
@@ -115,6 +251,8 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             console.log(await getWalletPassword());
           }}><Text style={styles.buttonText}>getGenericPassword</Text></Button>
           <Button small onPress={async () => console.log(await getWalletPassword())}><Text style={styles.buttonText}>getWalletPassword()</Text></Button>
+          <Button small onPress={async () => console.log(await getPin())}><Text style={styles.buttonText}>getPin()</Text></Button>
+
           <Button small onPress={async () => {
             NativeModules.LndMobile.restartApp();
           }}><Text style={styles.buttonText}>restartApp()</Text></Button>
@@ -142,7 +280,13 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
 
           <Text style={{ width: "100%" }}>lndmobile:</Text>
           <Button small onPress={async () => await NativeModules.LndMobile.init()}><Text style={styles.buttonText}>LndMobile.init()</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await checkStatus());
+          }}>
+            <Text style={styles.buttonText}>LndMobile.checkStatus</Text>
+          </Button>
           <Button small onPress={async () => await NativeModules.LndMobile.startLnd(false)}><Text style={styles.buttonText}>LndMobile.startLnd()</Text></Button>
+          <Button small onPress={async () => await NativeModules.LndMobile.stopLnd()}><Text style={styles.buttonText}>LndMobile.stopLnd()</Text></Button>
 
           <Button small onPress={async () => await actions.initializeApp()}><Text style={styles.buttonText}>actions.initializeApp()</Text></Button>
           <Button small onPress={async () => {
@@ -169,6 +313,22 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           }}>
             <Text style={styles.buttonText}>writeConfigFile()</Text>
           </Button>
+          <Button small onPress={async () => {
+            try {
+              const result = await connectPeer("030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f", "52.50.244.44:9735");
+              console.log("connectPeer()", result);
+              setCommandResult(`"${result}"`);
+              setError("{}");
+            }
+            catch (e) {
+              setError(e);
+              setCommandResult({});
+            }
+          }}>
+            <Text style={styles.buttonText}>connect to Bitrefill node</Text>
+          </Button>
+
+
 
           <Text style={{ width: "100%" }}>Sqlite:</Text>
           <Button small onPress={async () => console.log(await createTransaction(db!, {
@@ -204,70 +364,111 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               value: number;
               type: "PAY" | "RECEIVE";
               payer?: string;
+              website?: string;
             }
             const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
-              await Promise.all(
-                invoices.map(async (invoice) => {
-                  const value = invoice.value + (((invoice.type == "PAY" ? -1 : 1) * Math.floor(Math.random() * 500))) + Math.floor(Math.random() * 1000);
-                  return createTransaction(db!, {
-                    date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
-                    description: invoice.description,
-                    remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                    expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
-                    status: "SETTLED",
-                    value: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * value),
-                    valueMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * value * 1000),
-                    amtPaidSat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
-                    amtPaidMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
-                    valueUSD: (invoice.type == "PAY" ? -1 : 1) * 100,
-                    valueFiat: (invoice.type == "PAY" ? -1 : 1) * 100,
-                    valueFiatCurrency: "SEK",
-                    fee: Long.fromNumber(Math.floor(Math.random() * 5)),
-                    feeMsat: Long.fromNumber(Math.floor(Math.random() * 5) * 1000),
-                    paymentRequest: "abcdef123456",
-                    rHash: Math.floor(Math.random() * 10000000).toString(),
-                    nodeAliasCached: null,
-                    payer: invoice.payer,
-                    type: "NORMAL",
-                    tlvRecordName: null,
-                    locationLat: null,
-                    locationLong: null,
-                    website: null,
-                    hops: [],
-                    preimage: new Uint8Array([0,0]),
-                    lnurlPayResponse: null,
-                  });
-                })
-              );
-            };
+              for (const invoice of invoices) {
+                const value = invoice.value + (((invoice.type == "PAY" ? -1 : 1) * Math.floor(Math.random() * 500))) + Math.floor(Math.random() * 1000);
+                await createTransaction(db!, {
+                  date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
+                  description: invoice.description,
+                  remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
+                  expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
+                  status: "SETTLED",
+                  value: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * value),
+                  valueMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * value * 1000),
+                  amtPaidSat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
+                  amtPaidMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
+                  valueUSD: (invoice.type == "PAY" ? -1 : 1) * 100,
+                  valueFiat: (invoice.type == "PAY" ? -1 : 1) * 100,
+                  valueFiatCurrency: "SEK",
+                  fee: Long.fromNumber(Math.floor(Math.random() * 5)),
+                  feeMsat: Long.fromNumber(Math.floor(Math.random() * 5) * 1000),
+                  paymentRequest: "abcdef123456",
+                  rHash: Math.floor(Math.random() * 10000000).toString(),
+                  nodeAliasCached: null,
+                  payer: invoice.payer,
+                  type: "NORMAL",
+                  tlvRecordName: null,
+                  locationLat: null,
+                  locationLong: null,
+                  website: invoice.website ?? null,
+                  hops: [],
+                  preimage: new Uint8Array([0,0]),
+                  lnurlPayResponse: null,
+                });
+              }
+            }
 
             await createDemoTransactions([{
-              value: 100000,
-              description: "Tor Foundation:  Donation",
+              value: 150,
+              description: "Read: Best non-custodial lightning net",
               type: "PAY",
+              website: "yalls.org",
             }, {
-              value: 10000,
-              description: "Dinner",
-              payer: "John",
+              value: 100,
+              description: "lightning.gifts redeem 369db072d4252ca056a2a92150b87c67f1f8b0d9a9001d0a",
               type: "RECEIVE",
+              website: "api.lightning.gifts",
             }, {
-              value: 1000000,
-              description: "Alpaca socks:  Receipt #1a5f1",
+              value: 62,
+              description: "Payment for 62 pixels at satoshis.place",
               type: "PAY",
+              website: "satoshis.place",
             }, {
-              value: 50000,
-              description: "Lunch",
-              payer: "Sarah",
+              value: 1000,
+              description: "LuckyThunder.com pin:2164",
+              type: "PAY",
+              website: "www.luckythunder.com",
+            }, {
+              value: 700,
+              description: "lnsms.world: One text message",
+              type: "PAY",
+              website: "lnsms.world",
+            }, {
+              value: 1000,
+              description: "Feed Chickens @ pollofeed.com",
+              type: "PAY",
+              website: "pollofeed.com"
+            },  {
+              value: 1000,
+              description: "1000 sats bet on 2",
               type: "RECEIVE",
-            }, {
-              value: 200000,
-              description: "Computer store:  Payment a34c45af04d",
-              type: "PAY",
-            }, {
-              value: 100000,
-              description: "Bitcoin Core:  Donation",
-              type: "PAY",
+              website: "lightningspin.com"
             }]);
+
+            // await createDemoTransactions([{
+            //   value: 2989,
+            //   description: "Alice:  Lunch Phil's Burger",
+            //   type: "PAY"
+            // }, {
+            //   value: 11348,
+            //   description: "Dinner",
+            //   payer: "John",
+            //   type: "RECEIVE"
+            // }, {
+            //   value: 100953,
+            //   description: "Tor Foundation:  Donation",
+            //   type: "PAY",
+            // }, {
+            //   value: 50000,
+            //   description: "Lunch",
+            //   payer: "Sarah",
+            //   type: "RECEIVE",
+            // }, {
+            //   value: 1000086,
+            //   description: "Bitcoin Core:  Donation",
+            //   type: "PAY",
+            // }, {
+            //   value: 1000606,
+            //   description: "Alpaca socks:  Receipt #1a5f1",
+            //   type: "PAY",
+            // },  {
+            //   value: 43019,
+            //   description: "Dinner",
+            //   payer: "Michael",
+            //   type: "RECEIVE",
+            // }]);
           }}><Text style={styles.buttonText}>Create demo transactions</Text></Button>
           <Button small onPress={async () => console.log(await TransactionStoreGetTransactions())}><Text style={styles.buttonText}>Transaction store: getTransactions()</Text></Button>
           <Button small onPress={async () => console.log(await getTransactions(db!))}><Text style={styles.buttonText}>getTransactions()</Text></Button>
@@ -337,6 +538,28 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }
           }}><Text style={styles.buttonText}>queryScores</Text></Button>
 
+          <Button small onPress={async () => {
+            try {
+              const message = new sha256Hash().update(new Uint8Array([0])).digest();
+              const response = await signMessage(138, 5, new Uint8Array([1]));
+              console.log("signMessage()", response.signature);
+              // const privKey = await derivePrivateKey(138, 5);
+              // const signedMessage = secp256k1.ecdsaSign(message, privKey.rawKeyBytes);
+              // console.log("\nsecp256k1.ecdsaSign()", (signedMessage.signature));
+              // console.log("\nsecp256k1.signatureExport()", secp256k1.signatureExport(signedMessage.signature));
+
+
+              setCommandResult(response.toJSON());
+              setError({});
+            }
+            catch (e) {
+              console.log(e);
+              setError(e);
+              setCommandResult({});
+            }
+          }}>
+            <Text style={styles.buttonText}>signMessage()</Text>
+          </Button>
           <Button small onPress={async () => {
             try {
               const response = await sendCommand<lnrpc.IStopRequest, lnrpc.StopRequest, lnrpc.StopResponse>({

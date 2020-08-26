@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.FileObserver;
 import android.os.Process;
 import android.util.Base64;
 import android.util.Log;
@@ -29,6 +30,11 @@ import android.nfc.NfcAdapter;
 import android.nfc.NdefMessage;
 import android.nfc.tech.Ndef;
 import android.nfc.NdefRecord;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.io.UnsupportedEncodingException;
 
@@ -103,7 +109,8 @@ class LndMobile extends ReactContextBaseJavaModule {
         case LndMobileService.MSG_GRPC_COMMAND_RESULT:
         case LndMobileService.MSG_START_LND_RESULT:
         case LndMobileService.MSG_REGISTER_CLIENT_ACK:
-        case LndMobileService.MSG_STOP_LND_RESULT: {
+        case LndMobileService.MSG_STOP_LND_RESULT:
+        case LndMobileService.MSG_PONG: {
           final int request = msg.arg1;
 
           if (!requests.containsKey(request)) {
@@ -244,6 +251,51 @@ class LndMobile extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void checkLndMobileServiceConnected(Promise p) {
+    if (lndMobileServiceBound) {
+      p.resolve(true);
+    }
+    else {
+      p.resolve(false);
+    }
+  }
+
+  @ReactMethod
+  public void sendPongToLndMobileservice(Promise promise) {
+    int req = new Random().nextInt();
+    requests.put(req, promise);
+
+    Message message = Message.obtain(null, LndMobileService.MSG_PING, req, 0);
+    message.replyTo = messenger;
+
+    try {
+      lndMobileServiceMessenger.send(message);
+    } catch (RemoteException e) {
+      promise.reject(TAG, "Could not Send MSG_PONG to LndMobileService", e);
+    }
+  }
+
+  @ReactMethod
+  public void checkLndProcessExist(Promise promise) {
+    String packageName = getReactApplicationContext().getPackageName();
+    ActivityManager am = (ActivityManager) getReactApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+    for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
+      if (p.processName.equals(packageName + ":blixtLndMobile")) {
+        HyperLog.d(TAG, packageName + ":blixtLndMobile pid: " + String.valueOf(p.pid));
+        promise.resolve(true);
+        return;
+      }
+    }
+    promise.resolve(false);
+  }
+
+
+  @ReactMethod
+  public void deadPromise(Promise promise) {
+
+  }
+
+  @ReactMethod
   public void init(Promise promise) {
     if (!lndMobileServiceBound) {
       int req = new Random().nextInt();
@@ -358,10 +410,77 @@ class LndMobile extends ReactContextBaseJavaModule {
     }
   }
 
+  private FileObserver logObserver;
+
+  @ReactMethod
+  public void observeLndLogFile(Promise p) {
+    File appDir = getReactApplicationContext().getFilesDir();
+
+    final String logDir = appDir + "/logs/bitcoin/mainnet";
+    final String logFile = logDir + "/lnd.log";
+
+    FileInputStream stream = null;
+    while (true) {
+      try {
+        stream = new FileInputStream(logFile);
+      } catch (FileNotFoundException e) {
+        File dir = new File(logDir);
+        dir.mkdirs();
+        File f = new File(logFile);
+        try {
+          f.createNewFile();
+          continue;
+        } catch (IOException e1) {
+          e1.printStackTrace();
+          return;
+        }
+      }
+      break;
+    }
+
+    final InputStreamReader istream = new InputStreamReader(stream);
+    final BufferedReader buf = new BufferedReader(istream);
+    try {
+      readToEnd(buf, false);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
+
+    logObserver = new FileObserver(logFile) {
+      @Override
+      public void onEvent(int event, String file) {
+        if(event != FileObserver.MODIFY) {
+          return;
+        }
+        try {
+          readToEnd(buf, true);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    };
+    logObserver.startWatching();
+    Log.i("LndNativeModule", "Started watching " + logFile);
+    p.resolve(true);
+  }
+
+  private void readToEnd(BufferedReader buf, boolean emit) throws IOException {
+    String s = "";
+    while ( (s = buf.readLine()) != null ) {
+      if (!emit) {
+        continue;
+      }
+      getReactApplicationContext()
+              .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+              .emit("lndlog", s);
+    }
+  }
+
   @ReactMethod
   public void killLnd(Promise promise) {
-    killLndProcess();
-    promise.resolve(true);
+    boolean result = killLndProcess();
+    promise.resolve(result);
   }
 
   private boolean killLndProcess() {

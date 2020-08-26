@@ -441,6 +441,10 @@ Do you wish to proceed?`;
     await changeScreenTransitionsEnabled(!screenTransitionsEnabled);
   }
 
+  const onLndMobileHelpCenterPress = async () => {
+    navigation.navigate("LndMobileHelpCenter");
+  }
+
   return (
     <Container>
       <Content>
@@ -732,6 +736,12 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="android-debug-bridge" /></Left>
             <Body><Text>Show startup info notifications</Text></Body>
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onLndMobileHelpCenterPress}>
+            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="lifebuoy" /></Left>
+            <Body>
+              <Text>LndMobile help center</Text>
+            </Body>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={async () => {
             const logLines = await NativeModules.LndMobile.tailLog(30);

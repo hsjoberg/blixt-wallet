@@ -8,6 +8,7 @@ import ChangeFingerprintSettingsAuth from "./ChangeFingerprintSettingsAuth";
 import LightningNodeInfo from "./LightningNodeInfo";
 import About from "./About";
 import TorShowOnionAddress from "./TorShowOnionAddress";
+import LndMobileHelpCenter from "./LndMobileHelpCenter";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 
 const Stack = createStackNavigator();
@@ -20,6 +21,7 @@ export type SettingsStackParamList = {
   LightningNodeInfo: undefined;
   About: undefined;
   TorShowOnionAddress: undefined;
+  LndMobileHelpCenter: undefined;
 }
 
 export default function SettingsIndex() {
@@ -37,6 +39,7 @@ export default function SettingsIndex() {
       <Stack.Screen name="LightningNodeInfo" component={LightningNodeInfo} />
       <Stack.Screen name="About" component={About} />
       <Stack.Screen name="TorShowOnionAddress" component={TorShowOnionAddress} />
+      <Stack.Screen name="LndMobileHelpCenter" component={LndMobileHelpCenter} />
     </Stack.Navigator>
   );
 }
