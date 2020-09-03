@@ -19,7 +19,7 @@ interface IProps {
 export default function TransactionCard({ onPress, transaction, unit }: IProps) {
   const { date, value, amtPaidSat, status, tlvRecordName } = transaction;
   const positive = value.isPositive();
-  const { name, description } = extractDescription(transaction.description);
+  let { name, description } = extractDescription(transaction.description);
 
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -34,25 +34,29 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
   }
 
   // const start = performance.now();
-  // const image = getTransactionImage(transaction);
   const lightningService = getLightningService(transaction);
   // console.log("Time: " + (performance.now() - start));
 
   let recipientOrSender;
-  if (lightningService) {
-    recipientOrSender = lightningService.title;
+  if (transaction.note) {
+    description = transaction.note;
   }
-  else if (transaction.website) {
-    recipientOrSender = transaction.website;
-  }
-  else if (transaction.value.lessThan(0) && name) {
-    recipientOrSender = name;
-  }
-  else if (transaction.value.greaterThanOrEqual(0) && tlvRecordName) {
-    recipientOrSender = tlvRecordName;
-  }
-  else if (transaction.value.greaterThanOrEqual(0) && transaction.payer) {
-    recipientOrSender = transaction.payer;
+  else {
+    if (lightningService) {
+      recipientOrSender = lightningService.title;
+    }
+    else if (transaction.website) {
+      recipientOrSender = transaction.website;
+    }
+    else if (transaction.value.lessThan(0) && name) {
+      recipientOrSender = name;
+    }
+    else if (transaction.value.greaterThanOrEqual(0) && tlvRecordName) {
+      recipientOrSender = tlvRecordName;
+    }
+    else if (transaction.value.greaterThanOrEqual(0) && transaction.payer) {
+      recipientOrSender = transaction.payer;
+    }
   }
 
   return (

@@ -142,4 +142,10 @@ export const appMigration: IAppMigration[] = [
       await setItemObject<boolean>(StorageItem.screenTransitionsEnabled, true);
     },
   },
+  // Version 19
+  {
+    async beforeLnd(db, i) {
+      await db.executeSql("ALTER TABLE tx ADD note TEXT NULL");
+    },
+  },
 ];

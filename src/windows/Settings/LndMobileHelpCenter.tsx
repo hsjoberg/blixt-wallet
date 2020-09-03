@@ -188,7 +188,7 @@ export default function LndMobileHelpCenter({ navigation }) {
   };
 
   return (
-    <Blurmodal useModalComponent={false}>
+    <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
       <View style={style.container}>
         <Card style={style.card}>
           <CardItem style={style.cardStyle}>

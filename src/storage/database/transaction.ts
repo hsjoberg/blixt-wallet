@@ -33,6 +33,7 @@ export interface IDBTransaction {
   preimage: string,
   lnurlPayResponse: string | null;
   identifiedService: string | null;
+  note: string | null;
 }
 
 export interface ITransaction {
@@ -63,6 +64,7 @@ export interface ITransaction {
   preimage: Uint8Array,
   lnurlPayResponse: ILNUrlPayResponse | null;
   identifiedService: keyof ILightningServices  | null;
+  note?: string | null;
 
   hops: ITransactionHop[];
 }
@@ -118,10 +120,12 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       type,
       preimage,
       lnurlPayResponse,
-      identifiedService
+      identifiedService,
+      note
     )
     VALUES
     (
+      ?,
       ?,
       ?,
       ?,
@@ -176,6 +180,7 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       bytesToHexString(transaction.preimage),
       transaction.lnurlPayResponse ? JSON.stringify(transaction.lnurlPayResponse) : null,
       transaction.identifiedService,
+      transaction.note ?? null,
     ],
   );
 
@@ -234,7 +239,8 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         type = ?,
         preimage = ?,
         lnurlPayResponse = ?,
-        identifiedService = ?
+        identifiedService = ?,
+        note = ?
     WHERE id = ?`,
     [
       transaction.date.toString(),
@@ -261,6 +267,7 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
       bytesToHexString(transaction.preimage),
       transaction.lnurlPayResponse ? JSON.stringify(transaction.lnurlPayResponse) : null,
       transaction.identifiedService,
+      transaction.note ?? null,
       transaction.id,
     ],
   );
@@ -325,7 +332,8 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
     type: transaction.type as ITransaction["type"] || "NORMAL",
     preimage: transaction.preimage ? hexToUint8Array(transaction.preimage) : new Uint8Array([0]),
     lnurlPayResponse,
-    identifiedService: transaction.identifiedService,
+    identifiedService: transaction.identifiedService as ITransaction["identifiedService"],
+    note: transaction.note,
     hops: [],
   };
 };

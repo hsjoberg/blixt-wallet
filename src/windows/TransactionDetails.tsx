@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, Share } from "react-native";
+import { StyleSheet, Share, Alert, KeyboardAvoidingView } from "react-native";
+import DialogAndroid from "react-native-dialogs";
 import Clipboard from "@react-native-community/react-native-clipboard";
-import { Body, Card, Text, CardItem, H1, View, Button } from "native-base";
+import { Body, Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
 import { fromUnixTime } from "date-fns";
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
@@ -16,6 +17,7 @@ import CopyAddress from "../components/CopyAddress";
 import { MapStyle } from "../utils/google-maps";
 import TextLink from "../components/TextLink";
 import { ITransaction } from "../storage/database/transaction";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 interface IMetaDataProps {
   title: string;
@@ -49,6 +51,8 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
   const cancelInvoice = useStoreActions((store) => store.receive.cancelInvoice);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const transactionGeolocationMapStyle = useStoreState((store) => store.settings.transactionGeolocationMapStyle);
+  const [mapActive, setMapActive] = useState(false);
+  const syncTransaction = useStoreActions((store) => store.transaction.syncTransaction);
 
   const [currentScreen, setCurrentScreen] = useState<"Overview" | "Map">("Overview");
 
@@ -70,17 +74,6 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
     toast("Copied to clipboard", undefined, "warning");
   };
 
-  let transactionValue: Long;
-  let direction: "send" | "receive";
-  if (isLong(transaction.value) && transaction.value.greaterThanOrEqual(0)) {
-    direction = "receive";
-    transactionValue = transaction.value;
-  }
-  else {
-    direction = "send";
-    transactionValue = transaction.value;
-  }
-
   const onPressCancelInvoice = async () => {
     // There's a LayoutAnimation.configureNext() in the Transaction store
     // to animate the removal of the invoice if hideArchivedInvoices is `true`.
@@ -93,11 +86,34 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
       await checkOpenTransactions();
     }, 35);
     navigation.pop();
+  };
+
+  const onPressSetNote = async () => {
+    const result = await DialogAndroid.prompt(null, "Set a note for this transaction", {
+      defaultValue: transaction.note,
+    });
+    if (result.action === DialogAndroid.actionPositive) {
+      await syncTransaction({
+        ...transaction,
+        note: result.text?.trim() || null,
+      });
+    }
+  }
+
+  let transactionValue: Long;
+  let direction: "send" | "receive";
+  if (isLong(transaction.value) && transaction.value.greaterThanOrEqual(0)) {
+    direction = "receive";
+    transactionValue = transaction.value;
+  }
+  else {
+    direction = "send";
+    transactionValue = transaction.value;
   }
 
   if (currentScreen === "Overview") {
     return (
-      <Blurmodal>
+      <Blurmodal useModalComponent={false} goBackByClickingOutside={true}>
         <Card style={style.card}>
           <CardItem>
             <Body>
@@ -105,18 +121,30 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                 <H1 style={style.header}>
                   Transaction
                 </H1>
-                {transaction.status === "OPEN" &&
-                  <Button small danger onPress={onPressCancelInvoice}>
-                    <Text style={{ fontSize: 9 }}>Cancel invoice</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <Button small style={style.actionBarButton} onPress={onPressSetNote}>
+                    <Text style={style.actionBarButtonText}>Set note</Text>
                   </Button>
-                }
-                {transaction.locationLat && transaction.locationLat &&
-                  <Button small={true} onPress={() => setCurrentScreen("Map")}>
-                    <Text style={{ fontSize: 9 }}>Show map</Text>
-                  </Button>
-                }
+                  {transaction.status === "OPEN" &&
+                    <Button small danger onPress={onPressCancelInvoice} style={style.actionBarButton}>
+                      <Text style={style.actionBarButtonText}>Cancel invoice</Text>
+                    </Button>
+                  }
+                  {transaction.locationLat && transaction.locationLat &&
+                    <Button small={true} onPress={() => {
+                      setCurrentScreen("Map");
+                      setTimeout(() => {
+                        setMapActive(true);
+                      }, 200);
+                    }} style={style.actionBarButton}>
+                      <Text style={style.actionBarButtonText}>Show map</Text>
+                    </Button>
+                  }
+                </View>
               </View>
+
               <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
+              {transaction.note && <MetaData title="Note" data={transaction.note} />}
               {transaction.website && <MetaData title="Website" data={transaction.website} url={"https://" + transaction.website} />}
               {transaction.type !== "NORMAL" && <MetaData title="Type" data={transaction.type} />}
               {(transaction.type === "LNURL" && transaction.lnurlPayResponse && transaction.lnurlPayResponse.successAction) && <LNURLMetaData transaction={transaction} />}
@@ -137,9 +165,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                   <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
                     <QrCode size={smallScreen ? 220 : 280} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} border={25} />
                   </View>
-                  <View style={{ alignItems: "center", justifyContent: "center" }}>
-                    <CopyAddress text={transaction.paymentRequest} onPress={onPaymentRequestTextPress} />
-                  </View>
+                  <CopyAddress text={transaction.paymentRequest} onPress={onPaymentRequestTextPress} />
                 </>
               }
             </Body>
@@ -158,15 +184,20 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                 <H1 style={style.header}>
                   Transaction
                 </H1>
-                <Button small={true} onPress={() => setCurrentScreen("Overview")}>
+                <Button small={true} onPress={() => {
+                  setCurrentScreen("Overview");
+                  setMapActive(false);
+                }}>
                   <Text style={{ fontSize: 9 }}>Go back</Text>
                 </Button>
               </View>
               <MapView
-               provider={PROVIDER_GOOGLE}
+              provider={PROVIDER_GOOGLE}
                 style={{
                   width: "100%",
                   height: 450,
+                  backgroundColor:blixtTheme.gray,
+                  opacity: mapActive ? 1 : 0,
                 }}
                 initialRegion={{
                   longitude: transaction.locationLong!,
@@ -228,7 +259,7 @@ function LNURLMetaData({ transaction }: IWebLNMetaDataProps) {
 const style = StyleSheet.create({
   card: {
     padding: 5,
-    width: "100%",
+    // width: "100%",
     minHeight: "55%",
   },
   header: {
@@ -243,5 +274,11 @@ const style = StyleSheet.create({
     paddingTop: 4,
     paddingLeft: 18,
     paddingRight: 18,
+  },
+  actionBarButton: {
+    marginLeft: 7,
+  },
+  actionBarButtonText: {
+    fontSize: 9,
   }
 });
