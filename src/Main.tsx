@@ -130,7 +130,7 @@ export default function Main() {
                   },
                 }]
               )
-            }, 5 * 1000);
+            }, 12 * 1000);
             await initLightning();
             clearTimeout(lightningTimeout);
           } catch (e) {

@@ -67,11 +67,8 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
           <>Expires in </>
           <Ticker expire={transaction.expire.toNumber()} />
         </Text>
-        <QrCode size={smallScreen ? 200 : undefined} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} />
-        {/* <Text testID="payment-request-string" onPress={onPressPaymentRequest} style={style.paymentRequest} numberOfLines={1} lineBreakMode="middle">
-          {transaction.paymentRequest}
-        </Text> */}
-        <View style={{ width: "85%", marginBottom: 16 }} testID="payment-request-string">
+        <QrCode size={smallScreen ? 225 : undefined} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} />
+        <View style={{ width: "89%", marginBottom: 16 }} testID="payment-request-string">
           <CopyAddress text={transaction.paymentRequest} onPress={onPressPaymentRequest} />
         </View>
         {transaction.value?.neq(0) &&

@@ -45,13 +45,22 @@ export default function TorShowOnionAddress() {
             <H1>
               Tor Onion Service
             </H1>
-            <Text>Scan this QR code to open a channel to this wallet.</Text>
-            <View style={{ marginTop: 16, width: "100%", alignItems: "center", justifyContent: "center" }}>
-              <QrCode size={smallScreen ? 220 : 280} data={onionService ?? ""} onPress={onQrPress} border={25} />
-            </View>
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <CopyAddress text={onionService ?? ""} onPress={onPaymentRequestTextPress} />
-            </View>
+            {onionService &&
+              <>
+                <Text>Scan this QR code to open a channel to this wallet.</Text>
+                <View style={{ marginTop: 16, width: "100%", alignItems: "center", justifyContent: "center" }}>
+                  {onionService &&
+                    <QrCode size={smallScreen ? 220 : 280} data={onionService} onPress={onQrPress} border={25} />
+                  }
+                </View>
+                <View style={{ alignItems: "center", justifyContent: "center" }}>
+                  <CopyAddress text={onionService || ""} onPress={onPaymentRequestTextPress} />
+                </View>
+              </>
+            }
+            {!onionService &&
+              <Text style={{ marginTop: 16 }}>Couldn't resolve onion address</Text>
+            }
           </Body>
         </CardItem>
       </Card>

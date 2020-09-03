@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, View, NativeModules, DeviceEventEmitter } from 
 import { Card, Text, CardItem, H1, Button, Spinner } from "native-base";
 
 import Blurmodal from "../../components/BlurModal";
-import { useStoreState } from "../../state/store";
+import { useStoreState, useStoreActions } from "../../state/store";
 import { getInfo, ELndMobileStatusCodes, startLnd } from "../../lndmobile";
 import { newAddress } from "../../lndmobile/onchain";
 import { toast } from "../../utils";
@@ -12,6 +12,7 @@ import { unlockWallet } from "../../lndmobile/wallet";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Color from "color";
 import Clipboard from "@react-native-community/clipboard";
+import { lnrpc } from "../../../proto/proto";
 
 interface IStepsResult {
   title: string;
@@ -86,7 +87,8 @@ export default function LndMobileHelpCenter({ navigation }) {
     }, {
       title: "Lnd NewAddress",
       async exec () {
-        const r = await newAddress();
+        const r = await newAddress(lnrpc.AddressType.WITNESS_PUBKEY_HASH);
+        console.log(r);
         if (r && r.address) {
           return true;
         }
@@ -180,6 +182,11 @@ export default function LndMobileHelpCenter({ navigation }) {
     toast("Copied lnd log to clipboard");
   };
 
+  const runWaitForChainSync = async () => {
+    await runWaitForChainSync();
+    toast("Done");
+  };
+
   return (
     <Blurmodal useModalComponent={false}>
       <View style={style.container}>
@@ -199,17 +206,15 @@ export default function LndMobileHelpCenter({ navigation }) {
                 return (
                   <View style={style.resultItem} key={i}>
                     <Text>{stepResult.title}</Text>
-
                     <View style={{ flex:1, flexDirection:"column",  alignItems:"flex-end" }}>
                       {typeof stepResult.result === "boolean" &&
                         <View style={stepResult.result ? style.resultOk : style.resultBad} />
                       }
                       {typeof stepResult.result === "string" &&
-                        <Text style={{textAlign:"right", fontSize:12}}>
+                        <Text style={{ textAlign:"right", fontSize:12 }}>
                           {stepResult.result}
                         </Text>
                       }
-
                       {stepResult.error && <Text>{stepResult.error.message}</Text>}
                     </View>
                   </View>
@@ -226,12 +231,26 @@ export default function LndMobileHelpCenter({ navigation }) {
               </ScrollView>
             </View>
             <View style={{flexDirection: "row",  flexWrap:"wrap", justifyContent:"flex-end"}}>
-              <Button small style={style.actionButton} onPress={runInit}><Text>init</Text></Button>
-              <Button small style={style.actionButton} onPress={runStartLnd}><Text>startLnd</Text></Button>
-              <Button small style={style.actionButton} onPress={runUnlockWallet}><Text>unlockWallet</Text></Button>
-              <Button small style={style.actionButton} onPress={runCopyLndLog}><Text>Copy lnd log</Text></Button>
-              <Button small danger style={style.actionButton} onPress={runSigKill}><Text>SIGKILL LndMobileService</Text></Button>
-              <Button small dark style={style.actionButton} onPress={() => navigation.pop()}><Text>Exit</Text></Button>
+              <Button small style={style.actionButton} onPress={runInit}>
+                <Text style={style.actionButtonText}>init</Text>
+              </Button>
+              <Button small style={style.actionButton} onPress={runStartLnd}>
+                <Text style={style.actionButtonText}>startLnd</Text>
+              </Button>
+              <Button small style={style.actionButton} onPress={runUnlockWallet}>
+                <Text style={style.actionButtonText}>unlockWallet</Text>
+              </Button>
+              <Button small style={style.actionButton} onPress={runCopyLndLog}>
+                <Text style={style.actionButtonText}>Copy lnd log</Text></Button>
+              <Button small style={style.actionButton} onPress={runWaitForChainSync}>
+                <Text style={style.actionButtonText}>waitForChainSync()</Text>
+              </Button>
+              <Button small danger style={style.actionButton} onPress={runSigKill}>
+                <Text style={style.actionButtonText}>SIGKILL LndMobileService</Text>
+              </Button>
+              <Button small dark style={style.actionButton} onPress={() => navigation.pop()}>
+                <Text style={style.actionButtonText}>Exit</Text>
+              </Button>
             </View>
           </CardItem>
         </Card>
@@ -291,6 +310,9 @@ const style = StyleSheet.create({
     backgroundColor:"red",
   },
   actionButton: {
-    margin: 5,
-  }
+    margin: 3,
+  },
+  actionButtonText: {
+    fontSize: 10,
+  },
 });

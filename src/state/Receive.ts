@@ -53,7 +53,11 @@ export interface IReceiveModel {
 }
 
 export const receive: IReceiveModel = {
-  initialize: thunk(async (actions, _, { injections }) => {
+  initialize: thunk(async (actions, _, { getState, injections }) => {
+    if (getState().invoiceSubscriptionStarted) {
+      log.w("Receive.initialize() called when subscription already started");
+      return;
+    }
     const subscribeInvoices = injections.lndMobile.wallet.subscribeInvoices;
     await subscribeInvoices();
     await timeout(2000); // Wait for the stream to get ready
