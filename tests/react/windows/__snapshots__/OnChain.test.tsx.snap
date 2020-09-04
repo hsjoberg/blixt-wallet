@@ -804,7 +804,18 @@ exports[`renders correctly 1`] = `
                                             </View>
                                             <View
                                               onTouchStart={[Function]}
-                                              style={Object {}}
+                                              style={
+                                                Array [
+                                                  Object {},
+                                                  Object {
+                                                    "alignItems": "center",
+                                                    "flexDirection": "row",
+                                                    "height": 35,
+                                                    "paddingHorizontal": 8,
+                                                    "width": "100%",
+                                                  },
+                                                ]
+                                              }
                                               testID="COPY_BITCOIN_ADDRESS"
                                             >
                                               <View
@@ -812,11 +823,11 @@ exports[`renders correctly 1`] = `
                                                   Array [
                                                     Object {},
                                                     Object {
+                                                      "flex": 1,
                                                       "flexDirection": "row",
                                                       "justifyContent": "center",
-                                                      "marginRight": 15,
-                                                      "paddingTop": 6,
-                                                      "width": "100%",
+                                                      "marginLeft": 14,
+                                                      "marginRight": 14,
                                                     },
                                                   ]
                                                 }
@@ -848,6 +859,7 @@ exports[`renders correctly 1`] = `
                                                       },
                                                       Object {
                                                         "marginLeft": 4,
+                                                        "marginTop": 1,
                                                         "width": 19,
                                                       },
                                                     ]
@@ -855,6 +867,7 @@ exports[`renders correctly 1`] = `
                                                 >
                                                   <Text
                                                     allowFontScaling={false}
+                                                    onPress={[Function]}
                                                     style={
                                                       Array [
                                                         Object {
