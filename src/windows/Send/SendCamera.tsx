@@ -85,8 +85,10 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
 
     paymentRequest = paymentRequest.toUpperCase();
     paymentRequest = paymentRequest.replace("LIGHTNING:", "");
-    if (paymentRequest.indexOf('LIGHTNING=LNURL1') !== -1) {
-      paymentRequest = paymentRequest.split('LIGHTNING=')[1]
+
+    var res = /^(HTTP.*[&?]LIGHTNING=)?((LNURL)([0-9]{1,}[A-Z0-9]+){1})/.exec(paymentRequest);
+    if (res) {
+      paymentRequest = res[2];
     }
 
     setScanning(false);
