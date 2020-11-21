@@ -217,7 +217,7 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
     // const signed = payReq.sign(encoded, privateKeyHex);
 
     const response = lnrpc.AddInvoiceResponse.create({
-      paymentRequest: "abc",
+      paymentRequest: "lnbc1p0nqccppp5p5kgsr0sfc787n6xzpwv63k05k05lzzck90peefr37nxvktp06rqdq0fpsk6ur4wvazqgqcqzpgxqrrssrzjqtdqwyatrvfwavqlyy55ffp4qalnnudhvlh9cf9srnd5kzunw7mxkzwxg5qq0ksqqqqqqyugqqqqhwqpyqsp53sukk23w33nyvg5efjrl5k8dkjlcqrwjn25jeeca80t599fg7n9s9qy9qsq70vcpv4zpgp465w0n373yxqrcla8n07teznwwu4srv4gvhrmhaeqh4zuerl370ms7dxu5wulqcafaf2u6egeay0vuma94yrwud2n6esq7wq4t9",
       addIndex: Long.fromNumber(0),
       rHash: paymentHash,
     });
@@ -226,7 +226,7 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
       // const description = signed!.tags.find((tag) => tag.tagName === "d");
       // const cltvExpiry = signed!.tags.find((tag) => tag.tagName === "min_final_cltv_expiry");
       const invoice = lnrpc.Invoice.create({
-        paymentRequest: "abc",
+        paymentRequest: "lnbc1p0nqccppp5p5kgsr0sfc787n6xzpwv63k05k05lzzck90peefr37nxvktp06rqdq0fpsk6ur4wvazqgqcqzpgxqrrssrzjqtdqwyatrvfwavqlyy55ffp4qalnnudhvlh9cf9srnd5kzunw7mxkzwxg5qq0ksqqqqqqyugqqqqhwqpyqsp53sukk23w33nyvg5efjrl5k8dkjlcqrwjn25jeeca80t599fg7n9s9qy9qsq70vcpv4zpgp465w0n373yxqrcla8n07teznwwu4srv4gvhrmhaeqh4zuerl370ms7dxu5wulqcafaf2u6egeay0vuma94yrwud2n6esq7wq4t9",
         private: false,
         memo,
         addIndex: Long.fromNumber(0), // TODO
@@ -268,7 +268,7 @@ export const lookupInvoice = async (rHash: string): Promise<lnrpc.Invoice> => {
   const invoice = lnrpc.Invoice.create({
     creationDate: Long.fromValue(unixTimestamp),
     expiry: Long.fromValue(3600),
-    paymentRequest: "abc",
+    paymentRequest: "lnbc1p0nqccppp5p5kgsr0sfc787n6xzpwv63k05k05lzzck90peefr37nxvktp06rqdq0fpsk6ur4wvazqgqcqzpgxqrrssrzjqtdqwyatrvfwavqlyy55ffp4qalnnudhvlh9cf9srnd5kzunw7mxkzwxg5qq0ksqqqqqqyugqqqqhwqpyqsp53sukk23w33nyvg5efjrl5k8dkjlcqrwjn25jeeca80t599fg7n9s9qy9qsq70vcpv4zpgp465w0n373yxqrcla8n07teznwwu4srv4gvhrmhaeqh4zuerl370ms7dxu5wulqcafaf2u6egeay0vuma94yrwud2n6esq7wq4t9",
     private: false,
     // memo,
     addIndex: Long.fromNumber(0), // TODO

@@ -115,12 +115,12 @@ const style = StyleSheet.create({
   pincodeInput: {
     flex: 1,
     justifyContent: "flex-end",
-    // backgroundColor:"yellow",
   },
   enterPincodeText: {
     textAlign: "center",
     marginBottom: 8,
     textTransform: "uppercase",
+    backgroundColor: blixtTheme.dark, // Bug: Text disappears without this
   },
   pincodeInputContainer: {
     backgroundColor: blixtTheme.gray,

@@ -8,12 +8,14 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 export interface ITransactionDetailsProps {
   children: any;
   useModalComponent?: boolean;
-  goBackByClickingOutside?: boolean
+  goBackByClickingOutside?: boolean;
+  nomargin?: boolean
 }
-export default function BlurModal({ children, useModalComponent, goBackByClickingOutside }: ITransactionDetailsProps) {
+export default function BlurModal({ children, useModalComponent, goBackByClickingOutside, noMargin }: ITransactionDetailsProps) {
   const navigation = useNavigation();
   const useModal = useModalComponent ?? true;
   goBackByClickingOutside = goBackByClickingOutside ?? true;
+  noMargin = noMargin ?? false;
 
   const goBack = () => {
     if (goBackByClickingOutside) {
@@ -31,7 +33,7 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
         ? <View style={{ flex: 1 }}>
             <TouchableWithoutFeedback style={{ width:"100%", height:"100%" }} onPress={goBack}></TouchableWithoutFeedback>
             <View style={style.container}>
-              <View style={style.inner}>
+              <View style={[style.inner, { margin: noMargin ? 0 : style.inner.margin }]}>
                 {children}
               </View>
             </View>

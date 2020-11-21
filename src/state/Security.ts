@@ -135,6 +135,7 @@ export const security: ISecurityModel = {
         Alert.alert(e.message);
       }
     }
+    return false;
   }),
 
   fingerprintStopScan: thunk(async () => {

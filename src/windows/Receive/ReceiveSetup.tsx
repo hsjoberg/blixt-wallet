@@ -42,7 +42,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
   const channels = useStoreState((store) => store.channel.channels);
 
   const [mathPadVisibleOriginal, setMathPadVisible] = useState(false);
-  const [mathPadVisibleShortDebounce] = useDebounce(mathPadVisibleOriginal, 1, { leading: true});
+  const [mathPadVisibleShortDebounce] = useDebounce(mathPadVisibleOriginal, 1, { leading: true });
   const [mathPadVisible] = useDebounce(mathPadVisibleOriginal, 100);
 
   const [currentlyFocusedInput, setCurrentlyFocusedInput] = useState<"bitcoin" | "fiat" | "other">("other");

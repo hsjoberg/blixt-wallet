@@ -4,55 +4,24 @@ import { Container, Content, View, Text, Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
 import { useStoreActions, useStoreState, } from "../../state/store";
+import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import useFingerprintAuth from "../../hooks/useFingerprintAuth";
 
 export default function ChangeFingerprintSettingsAuth() {
   const navigation = useNavigation();
-  const fingerprintAvailable = useStoreState((store) => store.security.fingerprintAvailable);
-  const fingerprintStartScan = useStoreActions((store) => store.security.fingerprintStartScan);
-  const fingerprintStopScan = useStoreActions((store) => store.security.fingerprintStopScan);
   const setFingerprintEnabled = useStoreActions((store) => store.security.setFingerprintEnabled);
   const fingerPrintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
-
-  // TODO fix useFingerprint hook
-  useEffect(() => {
-    if (fingerprintAvailable) {
-      // Workaround a bug where leaving foreground would
-      // cause fingerprint scanning to not respond
-      // TODO check this code
-      const handler = async (status: AppStateStatus) => {
-        if (status === "background") {
-          fingerprintStopScan();
-        }
-        else if (status === "active") {
-          const r = await fingerprintStartScan();
-          if (r) {
-            await setFingerprintEnabled(!fingerPrintEnabled);
-          }
-          navigation.goBack();
-        }
-      };
-      AppState.addEventListener("change", handler);
-      (async () => {
-        const r = await fingerprintStartScan();
-        if (r) {
-          await setFingerprintEnabled(!fingerPrintEnabled);
-          navigation.pop();
-        }
-      })();
-
-      return () => {
-        fingerprintStopScan();
-        AppState.removeEventListener("change", handler);
-      }
-    }
-  }, [fingerprintAvailable]);
+  const startScan = useFingerprintAuth(async () => {
+    await setFingerprintEnabled(!fingerPrintEnabled);
+    navigation.goBack();
+  });
 
   return (
     <Container>
       <Content contentContainerStyle={style.content}>
         <Text style={style.message}>Authenticate to change fingerprint settings</Text>
         <View style={style.fingerPrintSymbolContainer}>
-          <Icon type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} />
+          <Icon onPress={startScan} type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} />
         </View>
       </Content>
     </Container>
@@ -69,6 +38,7 @@ const style = StyleSheet.create({
     marginBottom: 12,
     textAlign: "center",
     // textTransform: "uppercase",
+    backgroundColor: blixtTheme.dark, // Bug: Text disappears without this
   },
   fingerPrintSymbolContainer: {
     padding: 8,

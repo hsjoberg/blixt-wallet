@@ -181,94 +181,92 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     };
 
     return (
-      <Blurmodal useModalComponent={false}>
-        <View style={style.container}>
-          <Card style={style.card}>
-            <CardItem style={{ flexGrow: 1 }}>
-              <Body>
-                <H1 style={style.header}>
-                  Invoice paid
-                </H1>
-                {payRequestResponse.successAction?.tag === "message" &&
-                  <>
-                    <Text>
-                      Message from {domain}:{"\n"}
-                      {payRequestResponse.successAction.message}
-                    </Text>
-                  </>
-                }
+      <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
+        <Card style={style.card}>
+          <CardItem style={{ flexGrow: 1 }}>
+            <Body>
+              <H1 style={style.header}>
+                Invoice paid
+              </H1>
+              {payRequestResponse.successAction?.tag === "message" &&
+                <>
+                  <Text>
+                    Message from {domain}:{"\n"}
+                    {payRequestResponse.successAction.message}
+                  </Text>
+                </>
+              }
+              {payRequestResponse.successAction?.tag === "url" &&
+                <>
+                  <Text style={style.text}>
+                    Description:{"\n"}
+                    {payRequestResponse.successAction.description}
+                  </Text>
+                  <Text style={style.text}>
+                    URL received from {domain}:{"\n"}
+                    <TextLink url={payRequestResponse.successAction.url}>
+                      {payRequestResponse.successAction.url}
+                    </TextLink>
+                  </Text>
+                </>
+              }
+              {payRequestResponse.successAction?.tag === "aes" &&
+                <>
+                  <Text style={style.text}>Got a secret encrypted message from {domain}.</Text>
+                  <Text style={style.text}>
+                    Message from {domain}:{"\n"}
+                    {payRequestResponse.successAction.description}
+                  </Text>
+                  <Text style={style.text}>
+                    Secret message:{"\n"}
+                    {(() => {
+                      if (payRequestResponse.successAction?.tag === "aes") {
+                        return decryptLNURLPayAesTagMessage(
+                          preimage!,
+                          payRequestResponse.successAction.iv,
+                          payRequestResponse.successAction.ciphertext,
+                        );
+
+                        // const aesCbc = new aesjs.ModeOfOperation.cbc(
+                        //   preimage!,
+                        //   base64.toByteArray(payRequestResponse.successAction.iv)
+                        // );
+
+                        // const msg = aesCbc.decrypt(
+                        //   base64.toByteArray(payRequestResponse.successAction.ciphertext)
+                        // )
+                        // return uint8ArrayToString(msg);
+                      }
+                    })()}
+                  </Text>
+                </>
+              }
+              <View style={[style.actionBar, { justifyContent: undefined }]}>
+                <Button onPress={cancel} small={true}>
+                  <Text style={{ fontSize:10 }}>Done</Text>
+                </Button>
                 {payRequestResponse.successAction?.tag === "url" &&
                   <>
-                    <Text style={style.text}>
-                      Description:{"\n"}
-                      {payRequestResponse.successAction.description}
-                    </Text>
-                    <Text style={style.text}>
-                      URL received from {domain}:{"\n"}
-                      <TextLink url={payRequestResponse.successAction.url}>
-                        {payRequestResponse.successAction.url}
-                      </TextLink>
-                    </Text>
+                    <Button
+                      onPress={onPressCopyUrltoClipboard}
+                      small
+                      style={{ marginRight: 12 }}
+                    >
+                      <Text style={{ fontSize:10 }}>Copy to clipboard</Text>
+                    </Button>
+                    <Button
+                      onPress={onPressOpenUrlInBrowser}
+                      small
+                      style={{ marginRight: 12 }}
+                    >
+                      <Text style={{ fontSize:10 }}>Open Browser</Text>
+                    </Button>
                   </>
                 }
-                {payRequestResponse.successAction?.tag === "aes" &&
-                  <>
-                    <Text style={style.text}>Got a secret encrypted message from {domain}.</Text>
-                    <Text style={style.text}>
-                      Message from {domain}:{"\n"}
-                      {payRequestResponse.successAction.description}
-                    </Text>
-                    <Text style={style.text}>
-                      Secret message:{"\n"}
-                      {(() => {
-                        if (payRequestResponse.successAction?.tag === "aes") {
-                          return decryptLNURLPayAesTagMessage(
-                            preimage!,
-                            payRequestResponse.successAction.iv,
-                            payRequestResponse.successAction.ciphertext,
-                          );
-
-                          // const aesCbc = new aesjs.ModeOfOperation.cbc(
-                          //   preimage!,
-                          //   base64.toByteArray(payRequestResponse.successAction.iv)
-                          // );
-
-                          // const msg = aesCbc.decrypt(
-                          //   base64.toByteArray(payRequestResponse.successAction.ciphertext)
-                          // )
-                          // return uint8ArrayToString(msg);
-                        }
-                      })()}
-                    </Text>
-                  </>
-                }
-                <View style={[style.actionBar, { justifyContent: undefined }]}>
-                  <Button onPress={cancel} small={true}>
-                    <Text style={{ fontSize:10 }}>Done</Text>
-                  </Button>
-                  {payRequestResponse.successAction?.tag === "url" &&
-                    <>
-                      <Button
-                        onPress={onPressCopyUrltoClipboard}
-                        small
-                        style={{ marginRight: 12 }}
-                      >
-                        <Text style={{ fontSize:10 }}>Copy to clipboard</Text>
-                      </Button>
-                      <Button
-                        onPress={onPressOpenUrlInBrowser}
-                        small
-                        style={{ marginRight: 12 }}
-                      >
-                        <Text style={{ fontSize:10 }}>Open Browser</Text>
-                      </Button>
-                    </>
-                  }
-                </View>
-              </Body>
-            </CardItem>
-          </Card>
-        </View>
+              </View>
+            </Body>
+          </CardItem>
+        </Card>
       </Blurmodal>
     );
   }
@@ -280,92 +278,90 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   }
 
   return (
-    <Blurmodal useModalComponent={false}>
-      <View style={style.container}>
-        <Card style={style.card}>
-          <CardItem style={{ flexGrow: 1 }}>
-            <Body>
-              <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-                <H1 style={style.header}>
-                  Pay
-                </H1>
-                {__DEV__ &&
-                  <Button small={true} onPress={viewMetadata}>
-                    <Text style={{ fontSize: 7.5 }}>View technical metadata</Text>
-                  </Button>
-                }
-              </View>
-              <Text style={style.text}>
-                {domain} asks you to pay for a product.
-              </Text>
-              <Text style={style.text}>
-                Description:{"\n"}
-                {text}
-              </Text>
-              <Text style={{ marginBottom: 28 }}>
-                Price:{"\n"}
-                {minSpendableFormatted} ({minSpendableFiatFormatted})
-                {(minSpendable !== maxSpendable) &&
-                  <Text> to {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
-                }
-              </Text>
-              {commentAllowed &&
-                <>
-                  <Text>
-                    Comment to {domain} (max {commentAllowed} letters):
-                  </Text>
-                  <View style={{ flexDirection:"row" }}>
-                    <Input onChangeText={setComment} keyboardType="default" style={[style.input, { marginTop: 9, marginBottom: 16 }]} />
-                  </View>
-                </>
+    <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
+      <Card style={style.card}>
+        <CardItem style={{ flexGrow: 1 }}>
+          <Body>
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+              <H1 style={style.header}>
+                Pay
+              </H1>
+              {__DEV__ &&
+                <Button small={true} onPress={viewMetadata}>
+                  <Text style={{ fontSize: 7.5 }}>View technical metadata</Text>
+                </Button>
               }
-              {image &&
-                <ScaledImage
-                  uri={"data:image/png;base64," + image}
-                  height={190}
-                  style={{
-                    alignSelf: "center",
-                    marginBottom: 28,
-                  }}
+            </View>
+            <Text style={style.text}>
+              {domain} asks you to pay for a product.
+            </Text>
+            <Text style={style.text}>
+              Description:{"\n"}
+              {text}
+            </Text>
+            <Text style={{ marginBottom: 28 }}>
+              Price:{"\n"}
+              {minSpendableFormatted} ({minSpendableFiatFormatted})
+              {(minSpendable !== maxSpendable) &&
+                <Text> to {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
+              }
+            </Text>
+            {commentAllowed &&
+              <>
+                <Text>
+                  Comment to {domain} (max {commentAllowed} letters):
+                </Text>
+                <View style={{ flexDirection:"row" }}>
+                  <Input onChangeText={setComment} keyboardType="default" style={[style.input, { marginTop: 9, marginBottom: 16 }]} />
+                </View>
+              </>
+            }
+            {image &&
+              <ScaledImage
+                uri={"data:image/png;base64," + image}
+                height={190}
+                style={{
+                  alignSelf: "center",
+                  marginBottom: 28,
+                }}
+              />
+            }
+            <View style={style.actionBar}>
+              <Button
+                disabled={doRequestLoading}
+                success
+                onPress={onPressPay}
+                style={{
+                  marginLeft: 10,
+                  width: 58,
+                }}
+                small={true}
+              >
+                {!doRequestLoading && <Text>Pay</Text>}
+                {doRequestLoading && <Spinner style={{ flex:1 }} size={26} color={blixtTheme.light} />}
+              </Button>
+              {minSpendable !== maxSpendable &&
+                <Input
+                  onChangeText={onChangeBitcoinInput}
+                  keyboardType="numeric"
+                  placeholder={`${minSpendableFormatted} to ${maxSpendableFormatted}`}
+                  style={style.input}
                 />
               }
-              <View style={style.actionBar}>
-                <Button
-                  disabled={doRequestLoading}
-                  success
-                  onPress={onPressPay}
-                  style={{
-                    marginLeft: 10,
-                    width: 58,
-                  }}
-                  small={true}
-                >
-                  {!doRequestLoading && <Text>Pay</Text>}
-                  {doRequestLoading && <Spinner style={{ flex:1 }} size={26} color={blixtTheme.light} />}
-                </Button>
-                {minSpendable !== maxSpendable &&
-                  <Input
-                    onChangeText={onChangeBitcoinInput}
-                    keyboardType="numeric"
-                    placeholder={`${minSpendableFormatted} to ${maxSpendableFormatted}`}
-                    style={style.input}
-                  />
-                }
-                <Button
-                  onPress={cancel}
-                  style={{
-                    marginRight: 10,
-                  }}
-                  danger
-                  small={true}
-                >
-                  <Text>Cancel</Text>
-                </Button>
-              </View>
-            </Body>
-          </CardItem>
-        </Card>
-      </View>
+              <Button
+                onPress={cancel}
+                style={{
+                  marginRight: 10,
+                }}
+                danger
+                small={true}
+              >
+                <Text>Cancel</Text>
+              </Button>
+            </View>
+          </Body>
+        </CardItem>
+      </Card>
     </Blurmodal>
   );
 }

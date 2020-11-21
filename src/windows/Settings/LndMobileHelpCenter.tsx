@@ -188,7 +188,7 @@ export default function LndMobileHelpCenter({ navigation }) {
   };
 
   return (
-    <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
+    <Blurmodal useModalComponent={false} goBackByClickingOutside={false} noMargin={true}>
       <View style={style.container}>
         <Card style={style.card}>
           <CardItem style={style.cardStyle}>
@@ -260,19 +260,24 @@ export default function LndMobileHelpCenter({ navigation }) {
 };
 
 const style = StyleSheet.create({
-  container: { flex:1, margin: 5, justifyContent:"center" },
+  container: {
+    margin: 5,
+    height: "100%",
+    justifyContent: "center",
+    alignItems:"center",
+  },
   card: {
     padding: 0,
     width: "100%",
-    minHeight: "85%",
+    minHeight: "86%",
   },
   cardStyle: {
     flex:1,
     flexDirection: "column",
     alignItems: "flex-start",
     paddingTop: 9,
-    paddingLeft:9,
-    paddingRight:9,
+    paddingLeft: 9,
+    paddingRight: 9,
     paddingBottom: 9,
   },
   headerContainer: {

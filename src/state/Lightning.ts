@@ -97,6 +97,7 @@ export const lightning: ILightningModel = {
     }
     else {
       log.i("lnd was already started");
+      debugShowStartupInfo && toast("Lnd already started", undefined, "danger");
     }
 
     // Normal wallet unlock flow
@@ -106,8 +107,17 @@ export const lightning: ILightningModel = {
         SYNC_UNLOCK_WALLET
           ? await actions.unlockWallet()
           : actions.unlockWallet().then(
-            () => debugShowStartupInfo && toast("UnlockWallet time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000)
-          );
+              () => debugShowStartupInfo && toast("UnlockWallet time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000)
+            ).catch((e: any) => {
+              debugShowStartupInfo && toast("Got error from unlockWallet: " + e.message, undefined, "danger");
+              actions.setupStores();
+              actions.waitForChainSync().then(
+                async () => {
+                  await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
+                  await actions.waitForGraphSync();
+                }
+              );
+            });
       } catch (e) {
         log.e("Error unlocking wallet:" + e.message);
         debugShowStartupInfo && toast("Error: Cannot unlock wallet", 10000, "danger");
@@ -152,7 +162,7 @@ export const lightning: ILightningModel = {
       actions.setReady(true);
     }
 
-    debugShowStartupInfo && toast("Initialize time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+    // debugShowStartupInfo && toast("Initialize time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
     return true;
   }),
 
@@ -164,12 +174,13 @@ export const lightning: ILightningModel = {
         dispatch.onChain.initialize(),
         dispatch.transaction.checkOpenTransactions(),
         dispatch.scheduledSync.initialize(),
+        dispatch.blixtLsp.initialize(),
       ]);
       await dispatch.notificationManager.initialize();
       await dispatch.clipboardManager.initialize();
       await dispatch.androidDeeplinkManager.initialize();
     } catch (e) {
-      toast(e.message, 10000, "danger");
+      toast(e.message, 0, "danger", "OK");
       return;
     }
   }),

@@ -8,6 +8,7 @@ import Pincode from "../../components/Pincode";
 import { LoginMethods } from "../../state/Security";
 import { smallScreen } from "../../utils/device";
 import Container from "../../components/Container";
+import useFingerprintAuth from "../../hooks/useFingerprintAuth";
 
 export default function Authentication() {
   const loginPincode = useStoreActions((store) => store.security.loginPincode);
@@ -15,35 +16,7 @@ export default function Authentication() {
   const fingerprintStartScan = useStoreActions((store) => store.security.fingerprintStartScan);
   const fingerprintStopScan = useStoreActions((store) => store.security.fingerprintStopScan);
   const loginMethods = useStoreState((store) => store.security.loginMethods);
-
-  const fingerprintScan = async () => {
-    await fingerprintStartScan();
-    fingerprintStopScan();
-  }
-
-  useEffect(() => {
-    if (fingerprintEnabled) {
-      // Workaround a bug where leaving foreground would
-      // cause fingerprint scanning to not respond
-      // TODO check this code
-      // TODO make as a hook
-      const handler = async (status: AppStateStatus) => {
-        if (status === "active") {
-          await fingerprintScan();
-        }
-      };
-      AppState.addEventListener("change", handler);
-
-      (async () => {
-        await fingerprintScan();
-      })();
-
-      return () => {
-        fingerprintStopScan();
-        AppState.removeEventListener("change", handler);
-      }
-    }
-  }, [fingerprintEnabled]);
+  const startScan = useFingerprintAuth(async () => {});
 
   const onTryCode = async (code: string) => {
     if (await loginPincode(code)) {
@@ -67,7 +40,7 @@ export default function Authentication() {
         }
         {loginMethods.has(LoginMethods.fingerprint) &&
           <View style={style.fingerPrintSymbolContainer}>
-            <Icon type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} onPress={async () => await fingerprintScan()} />
+            <Icon type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} onPress={startScan} />
           </View>
         }
         {loginMethods.size === 0 && <Text style={{textAlign: "center"}}>Error</Text>}
