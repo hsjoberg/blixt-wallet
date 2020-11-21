@@ -3,9 +3,11 @@ import App from "./src/App";
 import {name as appName} from "./app.json";
 import Long from "long";
 import protobuf from "protobufjs";
+import { enableES5 } from "immer";
 
 protobuf.util.Long = Long;
 protobuf.configure();
+enableES5();
 
 YellowBox.ignoreWarnings([
   // Workaround until native-base fixes their old
