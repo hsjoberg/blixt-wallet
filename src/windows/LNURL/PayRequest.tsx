@@ -306,7 +306,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
                 <Text> to {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
               }
             </Text>
-            {commentAllowed &&
+            {typeof commentAllowed === "number" && commentAllowed > 0 &&
               <>
                 <Text>
                   Comment to {domain} (max {commentAllowed} letters):
