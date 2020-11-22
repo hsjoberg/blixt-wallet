@@ -13,6 +13,7 @@ import CopyAddress from "../../components/CopyAddress";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { toast } from "../../utils";
 import { NavigationButton } from "../../components/NavigationButton";
+import { lnrpc } from "../../../proto/proto";
 
 interface IOnChainInfoProps {
   navigation: StackNavigationProp<OnChainStackParamList, "OnChainInfo">;
@@ -23,6 +24,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
   const balance = useStoreState((store) => store.onChain.balance);
   const address = useStoreState((store) => store.onChain.address);
+  const addressType = useStoreState((store) => store.onChain.addressType);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -52,6 +54,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   }, [navigation]);
 
   const onGeneratePress = async () => await getAddress({ forceNew: true });
+  const onGenerateP2SHPress = async () => await getAddress({ forceNew: true, p2sh: true });
 
   const onWithdrawPress = () => navigation.navigate("Withdraw");
 
@@ -103,7 +106,14 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           {address &&
             <>
               <Text style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</Text>
-              <QrCode data={address} size={smallScreen ? 200 : undefined} onPress={onBtcAddressQrPress} />
+              <QrCode data={
+                  (addressType === lnrpc.AddressType.WITNESS_PUBKEY_HASH || addressType === lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH)
+                  ? address.toUpperCase()
+                  : address
+                }
+                size={smallScreen ? 200 : undefined}
+                onPress={onBtcAddressQrPress}
+              />
               <CopyAddress testID="COPY_BITCOIN_ADDRESS" text={address} onPress={onBtcAddressTextPress} />
             </>
           }
@@ -112,7 +122,15 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           }
         </View>
         <View style={style.buttons}>
-          <Button testID="GENERATE_ADDRESS" block={true} primary={true} disabled={!rpcReady} style={style.button} onPress={onGeneratePress}>
+          <Button
+            onLongPress={() => onGenerateP2SHPress()}
+            testID="GENERATE_ADDRESS"
+            block={true}
+            primary={true}
+            disabled={!rpcReady}
+            style={style.button}
+            onPress={onGeneratePress}
+          >
             <Text>Generate new address</Text>
           </Button>
           <Button testID="WITHDRAW" block={true} primary={true} disabled={!rpcReady} style={[style.button, { marginBottom: 0 }]} onPress={onWithdrawPress}>

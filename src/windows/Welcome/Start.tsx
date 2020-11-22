@@ -3,8 +3,7 @@ import { StyleSheet, StatusBar, Animated, Alert, NativeModules } from "react-nat
 import { Text, H1, Button, View, Spinner, Icon } from "native-base";
 import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
-
-import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
+import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 
 import { NavigationAction, CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";

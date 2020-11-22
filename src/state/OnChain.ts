@@ -20,6 +20,7 @@ export interface ISetTransactionsPayload {
 
 export interface IGetAddressPayload {
   forceNew?: boolean;
+  p2sh?: boolean;
 }
 
 export interface ISendCoinsPayload {
@@ -44,6 +45,7 @@ export interface IOnChainModel {
   setBalance: Action<IOnChainModel, lnrpc.IWalletBalanceResponse>;
   setUnconfirmedBalance: Action<IOnChainModel, lnrpc.IWalletBalanceResponse>;
   setAddress: Action<IOnChainModel, lnrpc.NewAddressResponse>;
+  setAddressType: Action<IOnChainModel, lnrpc.AddressType>;
   setTransactions: Action<IOnChainModel, ISetTransactionsPayload>;
   setTransactionSubscriptionStarted: Action<IOnChainModel, boolean>;
 
@@ -53,6 +55,7 @@ export interface IOnChainModel {
   unconfirmedBalance: Long;
   totalBalance: Computed<IOnChainModel, Long>;
   address?: string;
+  addressType?: lnrpc.AddressType;
   transactions: IBlixtTransaction[];
   transactionSubscriptionStarted: boolean;
 
@@ -127,11 +130,28 @@ export const onChain: IOnChainModel = {
     actions.setUnconfirmedBalance(walletBalanceResponse);
   }),
 
-  getAddress: thunk(async (actions, { forceNew }, { injections }) => {
+  getAddress: thunk(async (actions, { forceNew, p2sh }, { injections }) => {
     const { newAddress } = injections.lndMobile.onchain;
-    const type = forceNew ? lnrpc.AddressType.WITNESS_PUBKEY_HASH : lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH;
+    let type: lnrpc.AddressType;
+
+    if (forceNew) {
+      if (p2sh) {
+        type = lnrpc.AddressType.NESTED_PUBKEY_HASH;
+      } else {
+        type = lnrpc.AddressType.WITNESS_PUBKEY_HASH;
+      }
+    } else {
+      if (p2sh) {
+        type = lnrpc.AddressType.UNUSED_NESTED_PUBKEY_HASH;
+      } else {
+        type = lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH;
+      }
+    }
+
     const newAddressResponse = await newAddress(type);
+
     actions.setAddress(newAddressResponse);
+    actions.setAddressType(type);
   }),
 
   getTransactions: thunk(async (actions, _, { getStoreState, injections }) => {
@@ -179,6 +199,7 @@ export const onChain: IOnChainModel = {
   setBalance: action((state, payload) => { state.balance = payload.confirmedBalance!; }),
   setUnconfirmedBalance: action((state, payload) => { state.unconfirmedBalance = payload.unconfirmedBalance!; }),
   setAddress: action((state, payload) => { state.address = payload.address; }),
+  setAddressType: action((state, payload) => { state.addressType = payload; }),
   setTransactions: action((state, payload) => { state.transactions = payload.transactions; }),
   setTransactionSubscriptionStarted: action((state, payload) => { state.transactionSubscriptionStarted = payload }),
 
