@@ -46,7 +46,7 @@ Do you like React Native, Java or Lightning? Come and help out!
 - Download lnd binary from [blixt-lndmobile-releases](https://github.com/BlixtWallet/blixt-lndmobile-releases/releases) and put it in `android/lndmobile`. Alternatively build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
 - Get the tor sub-module: `git submodule update --init`
 - Install Node packages: `yarn`
-- Compile the Tor Android lib: `yarn install-tor-lib`
+- Compile the Tor Android lib: `yarn build-tor-lib`
 - Generate proto files: `yarn gen-proto`
 
 To start the application:
