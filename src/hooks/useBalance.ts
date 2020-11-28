@@ -6,7 +6,7 @@ import exprEval from "expr-eval";
 import { countCharInString } from "../utils";
 const Parser = exprEval.Parser;
 
-export default function useBalance(initialSat?: Long) {
+export default function useBalance(initialSat?: Long, noConversion = false) {
   // gRPC/protobuf 0 is Number
   if (typeof initialSat === "number") {
     initialSat = undefined;
@@ -25,7 +25,7 @@ export default function useBalance(initialSat?: Long) {
   );
 
   useEffect(() => {
-    if (bitcoinValue) {
+    if (bitcoinValue && !noConversion) {
       setDollarValue(
         convertBitcoinToFiat(
           unitToSatoshi(Number.parseFloat(bitcoinValue), bitcoinUnit),
@@ -36,7 +36,7 @@ export default function useBalance(initialSat?: Long) {
   }, [bitcoinUnit]);
 
   useEffect(() => {
-    if (dollarValue) {
+    if (dollarValue && !noConversion) {
       setBitcoinValue(
         valueBitcoinFromFiat(Number.parseFloat(dollarValue), currentRate, bitcoinUnit)
       );

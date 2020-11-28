@@ -38,7 +38,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     bitcoinValue,
     onChangeFiatInput,
     onChangeBitcoinInput,
-  } = useBalance((paymentRequest?.numSatoshis));
+  } = useBalance((paymentRequest?.numSatoshis), true);
   const clear = useStoreActions((store) => store.send.clear);
   const callback = (route.params?.callback) ?? (() => {});
   const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
