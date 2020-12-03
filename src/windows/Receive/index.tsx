@@ -5,6 +5,8 @@ import ReceiveSetup from "./ReceiveSetup";
 import ReceiveQr from "./ReceiveQr";
 import { lnrpc } from "../../../proto/proto";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
+import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectList";
+import { IFiatRates } from "../../state/Fiat";
 
 const Stack = createStackNavigator();
 
@@ -13,6 +15,8 @@ export type ReceiveStackParamList = {
   ReceiveQr: {
     invoice: lnrpc.AddInvoiceResponse;
   };
+  ChangeBitcoinUnit: ISelectListNavigationProps<string>;
+  ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
 }
 
 export default function ReceiveIndex() {
@@ -21,11 +25,13 @@ export default function ReceiveIndex() {
   };
 
   return (
-    <Stack.Navigator initialRouteName="ReceiveSetup" screenOptions={screenOptions}>
+    <Stack.Navigator headerMode="screen" initialRouteName="ReceiveSetup" screenOptions={screenOptions}>
       <Stack.Screen name="ReceiveSetup" component={ReceiveSetup} />
       <Stack.Screen name="ReceiveQr" component={ReceiveQr} options={{
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }} />
+      <Stack.Screen name="ChangeFiatUnit" component={SelectList} />
+      <Stack.Screen name="ChangeBitcoinUnit" component={SelectList} />
     </Stack.Navigator>
   )
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Body, Card, Text, CardItem, H1 } from "native-base";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import Clipboard from "@react-native-community/clipboard";
 import { Bar } from "react-native-progress";
 
 import { useStoreState } from "../state/store";

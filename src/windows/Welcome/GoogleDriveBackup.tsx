@@ -1,21 +1,12 @@
 import React from "react";
-import { StatusBar, StyleSheet, ToastAndroid } from "react-native";
-import { Body, Icon, Text, View, Button, H1, List, Left, ListItem, Right, CheckBox } from "native-base";
-import DialogAndroid from "react-native-dialogs";
-import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
+import { StatusBar, StyleSheet, } from "react-native";
+import { Icon, Text, View, Button, H1 } from "native-base";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";
 import { useStoreState, useStoreActions } from "../../state/store";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import style from "./style";
-import { LoginMethods } from "../../state/Security";
 import Container from "../../components/Container";
-import Content from "../../components/Content";
-
-import SetPincode from "../Settings/SetPincode";
-import RemovePincodeAuth from "../Settings/RemovePincodeAuth";
-import ChangeFingerprintSettingsAuth from "../Settings/ChangeFingerprintSettingsAuth";
-import { toast } from "../../utils";
 
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "GoogleDriveBackup">;
@@ -42,13 +33,13 @@ export default function GoogleDriveBackup({ navigation }: IProps) {
   return (
     <Container>
       <StatusBar
-        backgroundColor={blixtTheme.dark}
-        hidden={false}
-        translucent={false}
-        networkActivityIndicatorVisible={true}
         barStyle="light-content"
+        hidden={false}
+        backgroundColor="transparent"
+        animated={true}
+        translucent={true}
       />
-      <Content style={{ flex: 1, padding: 0 }}>
+      <View style={{ flex: 1, padding: 0 }}>
         <View style={[style.upperContent, { paddingTop: 40, justifyContent:"center" }]}>
           <View style={{ flexDirection: "row", justifyContent: "center"}}>
             {!googleDriveBackupEnabled &&
@@ -78,7 +69,7 @@ export default function GoogleDriveBackup({ navigation }: IProps) {
             </Button>
           </View>
         </View>
-      </Content>
+      </View>
     </Container>
   );
 }

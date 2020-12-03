@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { StatusBar, StyleSheet, Share } from "react-native";
-import Clipboard from "@react-native-community/react-native-clipboard";
-import { View, Button, H1, Text, Toast, Spinner } from "native-base";
+import Clipboard from "@react-native-community/clipboard";
+import { View, Button, H1, Text, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";
@@ -12,7 +12,6 @@ import QrCode from "../../components/QrCode";
 import style from "./style";
 import { smallScreen } from "../../utils/device";
 import Container from "../../components/Container";
-import Content from "../../components/Content";
 import CopyAddress from "../../components/CopyAddress";
 import { toast } from "../../utils";
 
@@ -53,13 +52,13 @@ export default function AddFunds({ navigation }: IProps) {
   return (
     <Container>
       <StatusBar
-        backgroundColor={blixtTheme.dark}
-        hidden={false}
-        translucent={false}
-        networkActivityIndicatorVisible={true}
         barStyle="light-content"
+        hidden={false}
+        backgroundColor="transparent"
+        animated={true}
+        translucent={true}
       />
-      <Content style={style.content}>
+      <View style={style.content}>
         <View style={style.upperContent}>
           <View style={extraStyle.qr}>
             <View style={extraStyle.qrInner}>
@@ -81,7 +80,7 @@ export default function AddFunds({ navigation }: IProps) {
             </Button>
           </View>
         </View>
-      </Content>
+      </View>
     </Container>
   );
 };

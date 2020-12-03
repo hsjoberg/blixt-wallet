@@ -315,7 +315,8 @@ export default (variables /* : * */ = variable) => {
       color: variables.inverseTextColor,
       fontSize: variables.buttonTextSize,
       paddingHorizontal: 16,
-      backgroundColor: 'transparent'
+      backgroundColor: 'transparent',
+      textTransform: 'uppercase',
     },
 
     'NativeBase.Icon': {

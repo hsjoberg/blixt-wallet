@@ -1,21 +1,21 @@
 import React from "react";
-import { StatusBar, StyleSheet, ToastAndroid } from "react-native";
+import { Alert, StatusBar, StyleSheet, ToastAndroid } from "react-native";
 import { Body, Icon, Text, View, Button, H1, List, Left, ListItem, Right, CheckBox } from "native-base";
 import DialogAndroid from "react-native-dialogs";
-import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
+import { createStackNavigator, StackNavigationOptions, StackNavigationProp } from "@react-navigation/stack";
 
-import { WelcomeStackParamList } from "./index";
 import { useStoreState, useStoreActions } from "../../state/store";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import style from "./style";
 import { LoginMethods } from "../../state/Security";
 import Container from "../../components/Container";
-import Content from "../../components/Content";
 
 import SetPincode from "../Settings/SetPincode";
 import RemovePincodeAuth from "../Settings/RemovePincodeAuth";
 import ChangeFingerprintSettingsAuth from "../Settings/ChangeFingerprintSettingsAuth";
-import { toast } from "../../utils";
+import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectList";
+import { PLATFORM } from "../../utils/constants";
+import { IFiatRates } from "../../state/Fiat";
+import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 
 interface IProps {
   navigation: StackNavigationProp<AlmostDoneStackParamList, "AlmostDone">;
@@ -27,11 +27,31 @@ const AlmostDone = ({ navigation }: IProps) => {
   const name = useStoreState((store) => store.settings.name);
   const changeName = useStoreActions((store) => store.settings.changeName);
   const onNamePress = async () => {
-    const { action, text } = await DialogAndroid.prompt("Name", "Choose a name that will be shown to people who pay to you", {
-      defaultValue: name,
-    });
-    if (action === DialogAndroid.actionPositive) {
-      await changeName(text);
+    if (PLATFORM === "android") {
+      const { action, text } = await DialogAndroid.prompt("Name", "Choose a name that will be shown to people who pay to you", {
+        defaultValue: name,
+      });
+      if (action === DialogAndroid.actionPositive) {
+        await changeName(text);
+      }
+    } else if (PLATFORM === "ios") {
+      Alert.prompt(
+        "Name",
+        "Choose a name that will be used in transactions\n\n" +
+        "Your name will be seen in invoices to those who pay you as well as " +
+        "people you pay to.",
+        [{
+          text: "Cancel",
+          onPress: () => {},
+        }, {
+          text: "Set name",
+          onPress: async (text) => {
+            await changeName(text ?? null);
+          },
+        }],
+        "plain-text",
+        name ?? "",
+      );
     }
   };
 
@@ -48,40 +68,54 @@ const AlmostDone = ({ navigation }: IProps) => {
   }
 
   // Fiat unit
+  const fiatRates = useStoreState((store) => store.fiat.fiatRates);
   const currentFiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const changeFiatUnit = useStoreActions((store) => store.settings.changeFiatUnit);
   const onFiatUnitPress = async () => {
-    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
-      positiveText: null,
-      negativeText: "Cancel",
-      type: DialogAndroid.listRadio,
-      selectedId: currentFiatUnit,
-      items: [
-        { label: "USD", id: "USD" },
-        { label: "EUR", id: "EUR" },
-        { label: "SEK", id: "SEK" },
-        { label: "JPY", id: "JPY" },
-        { label: "CNY", id: "CNY" },
-        { label: "SGD", id: "SGD" },
-        { label: "HKD", id: "HKD" },
-        { label: "CAD", id: "CAD" },
-        { label: "NZD", id: "NZD" },
-        { label: "AUD", id: "AUD" },
-        { label: "CLP", id: "CLP" },
-        { label: "GBP", id: "GBP" },
-        { label: "DKK", id: "DKK" },
-        { label: "ISK", id: "ISK" },
-        { label: "CHF", id: "CHF" },
-        { label: "BRL", id: "BRL" },
-        { label: "RUB", id: "RUB" },
-        { label: "PLN", id: "PLN" },
-        { label: "THB", id: "THB" },
-        { label: "KRW", id: "KRW" },
-        { label: "TWD", id: "TWD" },
-      ]
-    });
-    if (selectedItem) {
-      changeFiatUnit(selectedItem.id);
+    if (PLATFORM === "android") {
+      const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+        positiveText: null,
+        negativeText: "Cancel",
+        type: DialogAndroid.listRadio,
+        selectedId: currentFiatUnit,
+        items: [
+          // TODO fiat rates
+          { label: "USD", id: "USD" },
+          { label: "EUR", id: "EUR" },
+          { label: "SEK", id: "SEK" },
+          { label: "JPY", id: "JPY" },
+          { label: "CNY", id: "CNY" },
+          { label: "SGD", id: "SGD" },
+          { label: "HKD", id: "HKD" },
+          { label: "CAD", id: "CAD" },
+          { label: "NZD", id: "NZD" },
+          { label: "AUD", id: "AUD" },
+          { label: "CLP", id: "CLP" },
+          { label: "GBP", id: "GBP" },
+          { label: "DKK", id: "DKK" },
+          { label: "ISK", id: "ISK" },
+          { label: "CHF", id: "CHF" },
+          { label: "BRL", id: "BRL" },
+          { label: "RUB", id: "RUB" },
+          { label: "PLN", id: "PLN" },
+          { label: "THB", id: "THB" },
+          { label: "KRW", id: "KRW" },
+          { label: "TWD", id: "TWD" },
+        ]
+      });
+      if (selectedItem) {
+        changeFiatUnit(selectedItem.id);
+      }
+    } else {
+      navigation.navigate("ChangeFiatUnit", {
+        title: "Change fiat unit",
+        data: Object.entries(fiatRates).map(([currency]) => ({
+          title: currency,
+          value: currency as keyof IFiatRates,
+        })),
+        onPick: async (currency) => await changeFiatUnit(currency as keyof IFiatRates),
+        searchEnabled: true,
+      });
     }
   }
 
@@ -100,13 +134,13 @@ const AlmostDone = ({ navigation }: IProps) => {
   return (
     <Container>
       <StatusBar
-        backgroundColor={blixtTheme.dark}
-        hidden={false}
-        translucent={false}
-        networkActivityIndicatorVisible={true}
         barStyle="light-content"
+        hidden={false}
+        backgroundColor="transparent"
+        animated={true}
+        translucent={true}
       />
-      <Content style={{ flex: 1, padding: 0 }}>
+      <View style={{ flex: 1, padding: 0 }}>
         <View style={[style.upperContent, { paddingTop: 40 }]}>
           <List style={extraStyle.list}>
             <ListItem style={extraStyle.listItem} icon={true} onPress={onNamePress}>
@@ -165,7 +199,7 @@ const AlmostDone = ({ navigation }: IProps) => {
             </Button>
           </View>
         </View>
-      </Content>
+      </View>
     </Container>
   );
 }
@@ -201,14 +235,21 @@ export type AlmostDoneStackParamList = {
   RemovePincodeAuth: undefined;
   SetPincode: undefined;
   ChangeFingerprintSettingsAuth: undefined;
+  ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
 }
 export default () => {
+  const screenOptions: StackNavigationOptions = {
+    ...useStackNavigationOptions(),
+    animationEnabled: false,
+  };
+
   return (
-    <Stack.Navigator initialRouteName="AlmostDone" screenOptions={{ headerShown: false, animationEnabled: false }}>
+    <Stack.Navigator initialRouteName="AlmostDone" screenOptions={screenOptions}>
       <Stack.Screen name="AlmostDone" component={AlmostDone} />
       <Stack.Screen name="RemovePincodeAuth" component={RemovePincodeAuth} />
       <Stack.Screen name="SetPincode" component={SetPincode} />
       <Stack.Screen name="ChangeFingerprintSettingsAuth" component={ChangeFingerprintSettingsAuth} />
+      <Stack.Screen name="ChangeFiatUnit" component={SelectList} />
     </Stack.Navigator>
   );
 };

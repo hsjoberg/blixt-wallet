@@ -16,7 +16,7 @@ export const blixtTheme = {
   green: "#1c8c27",
 
   fontMedium: "IBMPlexSans-Medium",
-  fontRegular: "IBMPlexSans-Regular"
+  fontRegular:  Platform.OS === "android" ? "IBMPlexSans-Regular" : "IBMPlexSans",
 }
 
 export const PLATFORM = {
@@ -327,30 +327,30 @@ export default {
 
 
   // Blixt customization:
-  buttonFontFamily: platform === PLATFORM.IOS ? 'System' : blixtTheme.fontMedium,
+  buttonFontFamily: platform === PLATFORM.IOS ? blixtTheme.fontMedium : blixtTheme.fontMedium,
   buttonDisabledBg: color(blixtTheme.gray).lighten(0.3).hex(),
 
   cardDefaultBg: blixtTheme.gray,
   cardBorderColor: "transparent",
 
-  CheckboxRadius: platform === "ios" ? 13 : 7,
+  CheckboxRadius: platform === "ios" ? 7 : 7,
   CheckboxBorderWidth: platform === "ios" ? 1 : 1,
   CheckboxPaddingLeft: platform === "ios" ? 4 : 4,
 
-  CheckboxIconMarginTop: platform === "ios" ? undefined : 1.5,
-  CheckboxFontSize: platform === "ios" ? 23 / 0.9 : 16,
+  CheckboxIconMarginTop: platform === "ios" ? -1 : 1.5,
+  CheckboxFontSize: platform === "ios" ? 16 : 16,
   checkboxBgColor: blixtTheme.primary,
 
   checkboxTickColor: blixtTheme.light,
   checkboxDefaultColor: "transparent", // Upstream doesn't seem to set this by default
 
-  brandPrimary: platform === "ios" ? "#007aff" : blixtTheme.primary,
+  brandPrimary: platform === "ios" ? blixtTheme.primary : blixtTheme.primary,
 
   containerBgColor: blixtTheme.dark,
 
-  fontFamily: platform === "ios" ? "System" : blixtTheme.fontRegular,
+  fontFamily: platform === "ios" ? blixtTheme.fontRegular : blixtTheme.fontRegular,
 
-  footerDefaultBg: platform === "ios" ? "#F8F8F8" : blixtTheme.gray,
+  footerDefaultBg: platform === "ios" ? blixtTheme.gray : blixtTheme.gray,
 
   blixtFooterBorderColor: color(blixtTheme.gray).darken(0.12).hex(), //!
 
@@ -364,15 +364,17 @@ export default {
   textColor: blixtTheme.light,
   inverseTextColor: blixtTheme.light,
 
-  titleFontfamily: platform === "ios" ? "System" : blixtTheme.fontRegular,
+  titleFontfamily: platform === "ios" ? blixtTheme.fontRegular : blixtTheme.fontRegular,
 
   subtitleColor: platform === "ios" ? "#000" : blixtTheme.light,
   titleFontColor: platform === "ios" ? "#000" : blixtTheme.light,
 
-  tabBarTextColor: platform === "ios" ? "#737373" : blixtTheme.light,
+  tabBarTextColor: platform === "ios" ? blixtTheme.light : blixtTheme.light,
 
   DefaultFontSize: 15,
   fontSizeBase: 14,
+
+  listBtnUnderlayColor: color(blixtTheme.gray).lighten(0.2).hex(),
 };
 
 export const blixtFooterBorderColor = color(blixtTheme.gray).darken(0.12).hex();

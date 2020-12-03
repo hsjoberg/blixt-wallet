@@ -70,3 +70,6 @@ proto
 
 # Google
 google-services.json
+
+# iOS
+/ios/Pods

@@ -78,7 +78,29 @@ export const getNodeInfo = async (pubKey: string): Promise<lnrpc.NodeInfo> => {
 /**
  * @throws
  */
+let getInfoCount = 0;
 export const getInfo = async (): Promise<lnrpc.GetInfoResponse> => {
+  if (getInfoCount++ < 1) {
+    const response = lnrpc.GetInfoResponse.create({
+      uris: [],
+      chains: [{
+        chain: "bitcoin",
+        network: "testnet",
+      }],
+      identityPubkey: "02b5380da0919e32b13c1a21c1c85000eed0ba9a9309fc6849d72230d43088ae1d",
+      alias: "02b5380da0919e32b13c",
+      numPeers: 3,
+      blockHeight: 1572555,
+      blockHash: "000000000000006cb43faa5c615e45419f48e9d94d77c1bab8a28018cf2db6ef",
+      syncedToChain: false,
+      syncedToGraph: false,
+      testnet: true,
+      bestHeaderTimestamp: Long.fromNumber(1564940232),
+      version: "0.7.1-beta commit=v0.7.1-beta-rc1-10-g3760f29f5e758b2865b756604333ca22cf23e90b",
+      features: {},
+    });
+    return response;
+  }
   const response = lnrpc.GetInfoResponse.create({
     uris: [],
     chains: [{

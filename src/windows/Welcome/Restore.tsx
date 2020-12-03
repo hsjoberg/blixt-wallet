@@ -9,10 +9,11 @@ import { WelcomeStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
-import Content from "../../components/Content";
 import { ICreateWalletPayload } from "../../state";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import { PLATFORM } from "../../utils/constants";
 
-const iconTopPadding = StatusBar.currentHeight ?? 0;
+const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Restore">;
@@ -123,7 +124,7 @@ export default function Restore({ navigation }: IProps) {
         networkActivityIndicatorVisible={true}
         barStyle="light-content"
       />
-      <Content style={style.content}>
+      <View style={style.content}>
         <View style={style.upperContent}>
           <View style={style.seed}>
             <Textarea
@@ -133,6 +134,8 @@ export default function Restore({ navigation }: IProps) {
               underline={false}
               onChangeText={setSeedText}
               value={seedText}
+              returnKeyType="done"
+              blurOnSubmit={true}
             />
             <View style={{ marginTop: 14, width: "100%", display: "flex" }}>
               <H3>Channel backup</H3>
@@ -143,11 +146,13 @@ export default function Restore({ navigation }: IProps) {
                       {backupFile === null && "Choose channel backup file on disk"}
                     </Text>
                   </Button>
-                  <Button small onPress={googleDriveBackup}>
-                    <Text>
-                      Restore via Google Drive
-                    </Text>
-                  </Button>
+                  {PLATFORM === "android" &&
+                    <Button small onPress={googleDriveBackup}>
+                      <Text>
+                        Restore via Google Drive
+                      </Text>
+                    </Button>
+                  }
                 </View>
               }
               {backupType === "file" &&
@@ -186,7 +191,7 @@ export default function Restore({ navigation }: IProps) {
             {loading && <Spinner color={blixtTheme.light} />}
           </Button>
         </View>
-      </Content>
+      </View>
     </Container>
   );
 }
@@ -198,6 +203,9 @@ const style = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingBottom: 16,
   },
   seed: {
     padding: 12,

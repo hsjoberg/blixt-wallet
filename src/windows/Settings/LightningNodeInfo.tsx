@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { StyleSheet, ScrollView } from "react-native";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1 } from "native-base";
 import { fromUnixTime } from "date-fns";
 

@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from "react";
 import { View, Share, StyleSheet } from "react-native";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import Clipboard from "@react-native-community/clipboard";
 import { Button, Body, Icon, Header, Text, Title, Left, H1, H3, Spinner } from "native-base";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp, HeaderBackButton } from "@react-navigation/stack";

@@ -514,10 +514,10 @@ exports[`SendCamera renders correctly 1`] = `
                                 "fontSize": 30,
                               },
                               Object {
-                                "bottom": 7,
+                                "bottom": 10,
                                 "color": "#e5eaea",
                                 "fontSize": 26,
-                                "left": 8,
+                                "left": 13,
                                 "padding": 4,
                                 "position": "absolute",
                               },
@@ -553,12 +553,12 @@ exports[`SendCamera renders correctly 1`] = `
                                 "fontSize": 30,
                               },
                               Object {
-                                "bottom": 8,
+                                "bottom": 12,
                                 "color": "#e5eaea",
                                 "fontSize": 26,
                                 "padding": 4,
                                 "position": "absolute",
-                                "right": 64,
+                                "right": 73,
                               },
                             ],
                             Object {
@@ -592,12 +592,12 @@ exports[`SendCamera renders correctly 1`] = `
                                 "fontSize": 30,
                               },
                               Object {
-                                "bottom": 8,
+                                "bottom": 12,
                                 "color": "#e5eaea",
                                 "fontSize": 26,
                                 "padding": 4,
                                 "position": "absolute",
-                                "right": 8,
+                                "right": 16,
                               },
                             ],
                             Object {

@@ -11,7 +11,6 @@ import Restore from "./Restore";
 
 import AddFunds from "./AddFunds";
 
-import { useStoreState } from "../../state/store";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 
 const Stack = createStackNavigator();

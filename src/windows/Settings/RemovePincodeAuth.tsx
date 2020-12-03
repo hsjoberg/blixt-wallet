@@ -1,9 +1,11 @@
 import React from "react";
-import { StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { useStoreActions } from "../../state/store";
 import Pincode from "../../components/Pincode";
+import { PLATFORM } from "../../utils/constants";
+import { Icon } from "native-base";
 
 export default function RemovePincodeAuth() {
   const navigation = useNavigation();
@@ -20,6 +22,15 @@ export default function RemovePincodeAuth() {
   return (
     <>
       <Pincode onTryCode={onTryCode} textAction="Enter current pincode to remove pincode" />
+      {PLATFORM === "ios" &&
+        <Icon style={{
+          position: "absolute",
+          right: 0,
+          padding: 4,
+          top: getStatusBarHeight(true),
+          }} type="Entypo" name="cross" onPress={() => navigation.goBack()}
+        />
+      }
     </>
   )
 }

@@ -1,4 +1,5 @@
-import { Dimensions, StyleProp, ViewStyle, TextStyle } from "react-native";
+import { Dimensions, StyleProp, ViewStyle, TextStyle, StatusBar } from "react-native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 const smallScreen = Dimensions.get("window").height < 700;
 
@@ -9,7 +10,10 @@ export default {
     justifyContent: "center",
     alignItems: "center",
     padding: 0,
-    margin: 0,
+    marginTop: getStatusBarHeight(true) + (StatusBar.currentHeight ?? 0),
+    marginLeft: 0,
+    marginRight: 0,
+    marginBottom: 0,
   } as StyleProp<ViewStyle>,
   upperContent: {
     flex: 1.6,
@@ -41,7 +45,7 @@ export default {
     alignItems: "center",
   } as StyleProp<ViewStyle>,
   textHeader: {
-    marginBottom: 3,
+    marginBottom: 7,
   } as StyleProp<TextStyle>,
   card: {
     flex: 1,

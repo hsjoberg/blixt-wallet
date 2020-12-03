@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, StatusBar } from "react-native";
-import { Content } from "native-base";
+import { StyleSheet } from "react-native";
+import { Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
-import Container from "../../components/Container";
 import { useStoreActions } from "../../state/store";
 import Pincode from "../../components/Pincode";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { PLATFORM } from "../../utils/constants";
 
 enum States {
   enter = "Enter a pincode",
@@ -36,6 +36,15 @@ export default function SetPincode() {
   return (
     <>
       <Pincode onTryCode={onTryCode} textAction={state} />
+      {PLATFORM === "ios" &&
+        <Icon style={{
+          position: "absolute",
+          right: 0,
+          padding: 4,
+          top: getStatusBarHeight(true),
+          }} type="Entypo" name="cross" onPress={() => navigation.goBack()}
+        />
+      }
     </>
   )
 }

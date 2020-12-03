@@ -30,6 +30,7 @@ export default function useStackNavigationOptions(): StackNavigationOptions {
     headerStyle: {
       backgroundColor: Chain === "mainnet" ? blixtTheme.primary : Color(blixtTheme.lightGray).darken(0.30).hex(),
       elevation: 0,
+      shadowColor: "transparent",
     },
     headerTitleStyle: {
       color: blixtTheme.light

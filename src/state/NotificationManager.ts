@@ -1,9 +1,11 @@
-import { Action, action, Thunk, thunk } from "easy-peasy";
+import { Thunk, thunk } from "easy-peasy";
 import PushNotification, { PushNotificationObject } from "react-native-push-notification";
 
-import logger from "./../utils/log";
 import { navigate } from "../utils/navigation";
-import { IStoreModel } from ".";
+import { IStoreModel } from "./index";
+
+import logger from "./../utils/log";
+import { PLATFORM } from "../utils/constants";
 const log = logger("NotificationManager");
 
 interface ILocalNotificationPayload {
@@ -20,6 +22,15 @@ export interface INotificationManagerModel {
 export const notificationManager: INotificationManagerModel = {
   initialize: thunk(async () => {
     log.d("Initializing");
+
+    if (PLATFORM === "ios") {
+      const permissions = await PushNotification.requestPermissions(["alert", "sound", "badge"]);
+
+      if(!permissions.alert) {
+        log.w("Didn't get permissions to send push notifications.");
+        return;
+      }
+    }
 
     PushNotification.configure({
       requestPermissions: false,
@@ -38,7 +49,7 @@ export const notificationManager: INotificationManagerModel = {
     });
   }),
 
-  localNotification: thunk((state, { message, importance }, { getStoreState }) => {
+  localNotification: thunk((_, { message, importance }, { getStoreState }) => {
     if (getStoreState().settings.pushNotificationsEnabled) {
       PushNotification.localNotification({
         message,

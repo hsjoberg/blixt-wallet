@@ -4,12 +4,10 @@ import { Text, View, Button, H1, Card, CardItem, H3 } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";
-import { useStoreState, useStoreActions } from "../../state/store";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { useStoreActions } from "../../state/store";
 import style from "./style";
 import { smallScreen } from "../../utils/device";
 import Container from "../../components/Container";
-import Content from "../../components/Content";
 
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Seed">;
@@ -42,13 +40,13 @@ export default function Seed({ navigation }: IProps) {
   return (
     <Container>
       <StatusBar
-        backgroundColor={blixtTheme.dark}
-        hidden={false}
-        translucent={false}
-        networkActivityIndicatorVisible={true}
         barStyle="light-content"
+        hidden={false}
+        backgroundColor="transparent"
+        animated={true}
+        translucent={true}
       />
-      <Content style={style.content}>
+      <View style={style.content}>
         <View style={style.upperContent}>
           <Card style={style.card}>
             <CardItem style={style.cardItem}>
@@ -92,7 +90,7 @@ export default function Seed({ navigation }: IProps) {
             </Button>
           </View>
         </View>
-      </Content>
+      </View>
     </Container>
   );
 }

@@ -41,7 +41,9 @@ Do you like React Native, Java or Lightning? Come and help out!
 
 ## Build Steps
 
-- Install [Node](https://nodejs.org), [Yarn](https://classic.yarnpkg.com/), [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
+### Android
+
+- Install [Node](https://nodejs.org), [Yarn](https://classic.yarnpkg.com/) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
 - If needed, install an emulated android device inside Android Studio
 - Download lnd binary from [blixt-lndmobile-releases](https://github.com/BlixtWallet/blixt-lndmobile-releases/releases) and put it in `android/lndmobile`. Alternatively build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
 - Get the tor sub-module: `git submodule update --init`
@@ -51,7 +53,28 @@ Do you like React Native, Java or Lightning? Come and help out!
 
 To start the application:
 - Run: `yarn start-metro`
-- Run: `yarn mainnet-debug` or `yarn testnet-debug`
+- Run: `yarn android:mainnet-debug` or `yarn android:testnet-debug`
+
+### iOS
+
+_The iPhone/iOS version is still work in progress and is not yet stable nor fully working._
+
+To build the iOS version, macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
+
+- Install [XCode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
+- Install Node packages: `yarn`
+- Generate proto files: `yarn gen-proto`
+- Install CocoaPods libs: `cd ios && pod install`
+- Setup team signing:
+  - Open ios/BlixtWallet/BlixtWallet.xcworkspace with XCode
+  - Login with your Apple Developer account if XCode asks you to
+  - Click on BlixtWallet in the left column
+  - Click on the Signing &amp; Capabilities tab
+  - Choose your Team in the dropdown and choose a new unique Bundle Identifier (cannot be the same as the ones released on the App Store). Do this for every configuration
+
+To start the application:
+- Run: `yarn start-metro`
+- Run: `yarn ios:fakelnd-debug`
 
 ## Commit and Code-Style
 

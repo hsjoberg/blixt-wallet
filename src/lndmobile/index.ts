@@ -371,7 +371,7 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
  * @throws
  */
 export const cancelInvoice = async (paymentHash: string): Promise<invoicesrpc.CancelInvoiceResp> => {
-  const response = await sendCommand<invoicesrpc.ICancelInvoiceMsg, invoicesrpc.ICancelInvoiceMsg, invoicesrpc.CancelInvoiceResp>({
+  const response = await sendCommand<invoicesrpc.ICancelInvoiceMsg, invoicesrpc.CancelInvoiceMsg, invoicesrpc.CancelInvoiceResp>({
     request: invoicesrpc.CancelInvoiceMsg,
     response: invoicesrpc.CancelInvoiceResp,
     method: "InvoicesCancelInvoice",

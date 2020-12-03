@@ -2,4 +2,4 @@ cd tor
 ./gradlew install
 ./gradlew :universal:build
 ./gradlew :android:build
-./gradlew :android:publishToMaven
+./gradlew :android:publishToMavenLocal

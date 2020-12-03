@@ -24,12 +24,14 @@ export default function LightningInfoIndex() {
   };
 
   return (
-    <Stack.Navigator initialRouteName="LightningInfo" screenOptions={screenOptions}>
+    <Stack.Navigator headerMode="screen" initialRouteName="LightningInfo" screenOptions={screenOptions}>
       <Stack.Screen name="LightningInfo" component={LightningInfo} />
       <Stack.Screen name="OpenChannel" component={OpenChannel} options={{
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }} />
       <Stack.Screen name="CameraFullscreen" component={CameraFullscreen} options={{
+        gestureEnabled: true,
+        gestureResponseDistance: { horizontal: 1000 },
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }} />
     </Stack.Navigator>

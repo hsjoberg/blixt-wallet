@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, StatusBar, NativeModules, ScrollView, DeviceEventEmitter } from "react-native";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import Clipboard from "@react-native-community/clipboard";
 import { Text, Button, Toast, Input, View, Container } from "native-base";
 import Long from "long";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -31,6 +31,7 @@ import secp256k1 from "secp256k1";
 import { Hash as sha256Hash, HMAC as sha256HMAC } from "fast-sha256";
 import { bytesToString, bytesToHexString } from "../../utils";
 import { ILightningServices } from "../../utils/lightning-services";
+import { localNotification } from "../../utils/push-notification";
 
 
 
@@ -63,17 +64,13 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
       />
       <Content style={styles.content}>
         <View style={{ backgroundColor: blixtTheme.dark, marginTop: 32, width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-        <Button onPress={continueCallback}><Text style={styles.buttonText}>continueCallback()</Text></Button>
-
-        <Button onPress={async () => {
-          console.log(await decodePayReq("lnbc100n1p0nzg2kpp58f2ztjy39ak8hgd7saya4mvkhwmueuyq0tlet5fedn8ytu3xrllqhp5nh0t5w4w5zh8jdnn5a03hk4pk279l3eex4nzazgkwmqpn7wga6hqcqzpgxq92fjuqsp5sm4zt7024wpwplf705k0gfkyqzk3g984nv9e83pd4093ckg9sm2q9qy9qsqs0wuxrqazy9n0knyx7fhud4q2l92fl2c2qe58tks8hhgfy4dwc5kqe09j38szhjwshna0jp5pet7g27wdj7ecyq4y00vc023lzvtl2sq686za3"));
-
-
-        console.log(await queryRoutes("03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e"))
-        }}><Text style={styles.buttonText}>decode()</Text></Button>
-
+          <Button onPress={continueCallback}><Text style={styles.buttonText}>continueCallback()</Text></Button>
 
           <Text style={{ width: "100%"}}>Random:</Text>
+          <Button onPress={async () => {
+            console.log(await decodePayReq("lnbc100n1p0nzg2kpp58f2ztjy39ak8hgd7saya4mvkhwmueuyq0tlet5fedn8ytu3xrllqhp5nh0t5w4w5zh8jdnn5a03hk4pk279l3eex4nzazgkwmqpn7wga6hqcqzpgxq92fjuqsp5sm4zt7024wpwplf705k0gfkyqzk3g984nv9e83pd4093ckg9sm2q9qy9qsqs0wuxrqazy9n0knyx7fhud4q2l92fl2c2qe58tks8hhgfy4dwc5kqe09j38szhjwshna0jp5pet7g27wdj7ecyq4y00vc023lzvtl2sq686za3"));
+            console.log(await queryRoutes("03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e"))
+          }}><Text style={styles.buttonText}>decode()</Text></Button>
           <Button small onPress={async () => {
             console.log(await NativeModules.LndMobile.getTorEnabled());
           }}>
@@ -129,6 +126,11 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             navigation?.navigate("Welcome");
           }}>
             <Text style={styles.buttonText}>navigate to onboarding</Text>
+          </Button>
+          <Button small onPress={async () => {
+            navigation?.navigate("Overview");
+          }}>
+            <Text style={styles.buttonText}>navigate to overview</Text>
           </Button>
 
           <Button small onPress={async () => {
@@ -241,6 +243,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             actions.setOnboardingState("DONE");
             actions.channel.setBalance(Long.fromNumber(4397581));
           }}><Text style={styles.buttonText}>Setup demo environment</Text></Button>
+          <Button small onPress={async () => {
+            console.log(localNotification("TEST NOTIFICATION"));
+          }}><Text style={styles.buttonText}>localNotification</Text></Button>
 
 
           <Text style={{ width: "100%" }}>Security:</Text>

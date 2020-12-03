@@ -1,3 +1,4 @@
+import ReactNativePermissions from "react-native-permissions";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as Bech32 from "bech32";
 import Long from "long";
@@ -9,10 +10,11 @@ import { lnrpc } from "../../proto/proto";
 import { valueFiat } from "../utils/bitcoin-units";
 import { LnBech32Prefix } from "../utils/build";
 import { getGeolocation, hexToUint8Array } from "../utils";
-
-import logger from "./../utils/log";
 import { ILNUrlPayResponse } from "./LNURL";
 import { identifyService } from "../utils/lightning-services";
+import { PLATFORM } from "../utils/constants";
+
+import logger from "./../utils/log";
 const log = logger("Send");
 
 type PaymentRequest = string;
@@ -207,6 +209,16 @@ export const send: ISendModel = {
     if (getStoreState().settings.transactionGeolocationEnabled) {
       try {
         log.d("Syncing geolocation for transaction");
+        if (PLATFORM === "ios") {
+          if (await ReactNativePermissions.check(ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE) === "denied") {
+            log.d("Requesting geolocation permission");
+            const r = await ReactNativePermissions.request(ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+            if (r !== "granted") {
+              throw new Error(`Got "${r}" when requesting Geolocation permission`);
+            }
+          }
+        }
+
         const coords = await getGeolocation();
         transaction.locationLong = coords.longitude;
         transaction.locationLat = coords.latitude;
@@ -325,6 +337,16 @@ export const send: ISendModel = {
     if (getStoreState().settings.transactionGeolocationEnabled) {
       try {
         log.d("Syncing geolocation for transaction");
+        if (PLATFORM === "ios") {
+          if (await ReactNativePermissions.check(ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE) === "denied") {
+            log.d("Requesting geolocation permission");
+            const r = await ReactNativePermissions.request(ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+            if (r !== "granted") {
+              throw new Error(`Got "${r}" when requesting Geolocation permission`);
+            }
+          }
+        }
+
         const coords = await getGeolocation();
         transaction.locationLong = coords.longitude;
         transaction.locationLat = coords.latitude;

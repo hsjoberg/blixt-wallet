@@ -8,6 +8,7 @@ import { useStoreState, useStoreActions } from "../state/store";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Main";
 import { CommonActions } from "@react-navigation/native";
+import { PLATFORM } from "../utils/constants";
 
 export interface ILoadingProps {
   navigation: StackNavigationProp<RootStackParamList, "Loading">;
@@ -22,7 +23,10 @@ export default function Loading({ navigation }: ILoadingProps) {
     }
     // tslint:disable-next-line
     (async () => {
-      const cb = await checkDeeplink();
+      let cb: any;
+      if (PLATFORM === "android") {
+        cb = await checkDeeplink();
+      }
 
       requestAnimationFrame(() => {
         navigation.dispatch(

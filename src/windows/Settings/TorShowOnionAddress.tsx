@@ -7,7 +7,7 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
 import { smallScreen } from "../../utils/device";
 import CopyAddress from "../../components/CopyAddress";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import Clipboard from "@react-native-community/clipboard";
 import { toast } from "../../utils";
 
 export default function TorShowOnionAddress() {

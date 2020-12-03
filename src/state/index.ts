@@ -21,7 +21,7 @@ import { IGoogleModel, google } from "./Google";
 import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
 import { IWebLNModel, webln } from "./WebLN";
 import { IAndroidDeeplinkManager, androidDeeplinkManager } from "./AndroidDeeplinkManager";
-import { INotificationManagerModel, notificationManager} from "./NotificationManager";
+import { INotificationManagerModel, notificationManager } from "./NotificationManager";
 import { ILightNameModel, lightName } from "./LightName";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
@@ -31,6 +31,7 @@ import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
 import { timeout } from "../utils";
 import { setWalletPassword, getItem } from "../storage/keystore";
+import { PLATFORM } from "../utils/constants";
 
 import logger from "./../utils/log";
 const log = logger("Store");
@@ -151,8 +152,10 @@ export const model: IStoreModel = {
     dispatch.fiat.getRate();
     await dispatch.settings.initialize();
     await dispatch.security.initialize();
-    await dispatch.google.initialize();
-    await dispatch.googleDriveBackup.initialize();
+    if (PLATFORM === "android") {
+      await dispatch.google.initialize();
+      await dispatch.googleDriveBackup.initialize();
+    }
     await dispatch.transaction.getTransactions();
     await dispatch.channel.setupCachedBalance();
     log.d("Done starting up stores");

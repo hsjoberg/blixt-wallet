@@ -13,6 +13,7 @@ import { extractDescription } from "../../utils/NameDesc";
 import Long from "long";
 import useBalance from "../../hooks/useBalance";
 import { hexToUint8Array, toast } from "../../utils";
+import { PLATFORM } from "../../utils/constants";
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
@@ -145,6 +146,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
         placeholder="0"
         value={bitcoinValue}
         keyboardType="numeric"
+        returnKeyType="done"
       />
     ),
   });
@@ -159,6 +161,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
         placeholder="0.00"
         value={dollarValue}
         keyboardType="numeric"
+        returnKeyType="done"
       />
     ),
   });
@@ -181,7 +184,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   formItems.push({
     key: "MESSAGE",
     title: "Message",
-    component: (<Input multiline={true} disabled={true} value={description} />),
+    component: (<Input multiline={PLATFORM === "android"} disabled={true} value={description} />),
   });
 
   const canSend = (
