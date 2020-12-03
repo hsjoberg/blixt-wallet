@@ -21,7 +21,7 @@ export enum ELndMobileStatusCodes {
   STATUS_WALLET_UNLOCKED = 4,
 }
 
-export const checkStatus = async (): Promise<number> => {
+export const checkStatus = async (): Promise<ELndMobileStatusCodes> => {
   return await LndMobile.checkStatus();
 };
 

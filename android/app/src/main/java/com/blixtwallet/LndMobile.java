@@ -289,12 +289,6 @@ class LndMobile extends ReactContextBaseJavaModule {
     promise.resolve(false);
   }
 
-
-  @ReactMethod
-  public void deadPromise(Promise promise) {
-
-  }
-
   @ReactMethod
   public void init(Promise promise) {
     if (!lndMobileServiceBound) {
