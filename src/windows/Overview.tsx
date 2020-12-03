@@ -1,11 +1,12 @@
 import React, { useState, useRef, useMemo } from "react";
-import { Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import { Platform, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent, SafeAreaView } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import LinearGradient from "react-native-linear-gradient";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 import Color from "color";
 
 import { RootStackParamList } from "../Main";
@@ -20,14 +21,21 @@ import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor"
 import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
 import Send from "./Send";
+import { PLATFORM } from "../utils/constants";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 const theme = nativeBaseTheme.default;
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
-const HEADER_MIN_HEIGHT = (StatusBar.currentHeight ?? 0) + 53;
-const HEADER_MAX_HEIGHT = 195;
+const HEADER_MIN_HEIGHT = Platform.select({
+  android: (StatusBar.currentHeight ?? 0) + 53,
+  ios: getStatusBarHeight(true) + 53,
+}) ?? 53;
+const HEADER_MAX_HEIGHT = Platform.select({
+  android: 195,
+  ios: 195,
+}) ?? 195;
 const NUM_TRANSACTIONS_PER_LOAD = 25;
 const LOAD_BOTTOM_PADDING = 475;
 
@@ -81,6 +89,18 @@ function Overview({ navigation }: IOverviewProps) {
     extrapolate: "clamp",
   });
 
+  const headerBtcLineHeight = scrollYAnimatedValue.interpolate({
+    inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
+    outputRange: [bitcoinUnit === "satoshi" ? 34 : 37 + 4, 29],
+    extrapolate: "clamp",
+  });
+
+  const headerBtcMarginTop = scrollYAnimatedValue.interpolate({
+    inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
+    outputRange: [11, 0],
+    extrapolate: "clamp",
+  });
+
   const iconOpacity = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [1, 0],
@@ -88,30 +108,31 @@ function Overview({ navigation }: IOverviewProps) {
     easing: Easing.bezier(0.16, 0.8, 0.3, 1),
   });
 
-  const refreshControl = (
-    <RefreshControl
-      title="Refreshing"
-      progressViewOffset={183}
-      refreshing={refreshing}
-      colors={[blixtTheme.light]}
-      progressBackgroundColor={blixtTheme.gray}
-      onRefresh={async () => {
-        if (!rpcReady) {
-          return;
-        }
-        setRefreshing(true);
-        await Promise.all([
-          getBalance(),
-          getFiatRate(),
-          checkOpenTransactions(),
-          getInfo(),
-          timeout(1000),
-        ]);
-        setRefreshing(false);
-      }}
-    />
-  );
-
+  const refreshControl = PLATFORM === "android"
+    ? (
+        <RefreshControl
+          title="Refreshing"
+          progressViewOffset={183}
+          refreshing={refreshing}
+          colors={[blixtTheme.light]}
+          progressBackgroundColor={blixtTheme.gray}
+          onRefresh={async () => {
+            if (!rpcReady) {
+              return;
+            }
+            setRefreshing(true);
+            await Promise.all([
+              getBalance(),
+              getFiatRate(),
+              checkOpenTransactions(),
+              getInfo(),
+              timeout(1000),
+            ]);
+            setRefreshing(false);
+          }}
+        />
+      )
+    : (<></>);
   const transactionListOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     Animated.event(
       [{ nativeEvent: { contentOffset: { y: scrollYAnimatedValue }}}],
@@ -207,7 +228,26 @@ function Overview({ navigation }: IOverviewProps) {
             </View>
 
             {/* Big header */}
-            <Animated.Text testID="BIG_BALANCE_HEADER" onPress={onPressBalanceHeader} style={{...headerInfo.btc, fontSize: headerBtcFontSize }}>
+            <Animated.Text
+              testID="BIG_BALANCE_HEADER"
+              onPress={onPressBalanceHeader}
+              style={{
+                ...headerInfo.btc,
+                fontSize: headerBtcFontSize,
+                height: headerBtcFontSize,
+                lineHeight: headerBtcLineHeight,
+
+                marginTop: Animated.add(
+                  headerBtcMarginTop,
+                  16 +
+                  (PLATFORM === "android"
+                    ? iconTopPadding + 3
+                    : iconTopPadding
+                  ) +
+                  16
+                ),
+              }}
+            >
               {!preferFiat && bitcoinBalance}
               {preferFiat && fiatBalance}
             </Animated.Text>
@@ -286,7 +326,7 @@ const DoBackup = () => {
           <View>
             <Text>Thank you for using Blixt Wallet!{"\n\n"}We recommend making a backup of the wallet so that you can restore your funds in case of a phone loss.</Text>
           </View>
-          <View style={{ flexDirection: "row-reverse" }}>
+          <View style={{ flexDirection: "row-reverse", marginTop: 11 }}>
             <Button small style={{marginLeft: 7 }} onPress={onPressBackupWallet}>
               <Text style={{ fontSize: 11 }}>Backup wallet</Text>
             </Button>
@@ -300,7 +340,10 @@ const DoBackup = () => {
   );
 }
 
-const iconTopPadding = StatusBar.currentHeight ?? 0;
+const iconTopPadding = Platform.select({
+  android: StatusBar.currentHeight ?? 0,
+  ios: getStatusBarHeight(true),
+}) ?? 0;
 
 const style = StyleSheet.create({
   overview: {
@@ -326,9 +369,9 @@ const style = StyleSheet.create({
   },
   onchainIcon: {
     position: "absolute",
-    padding: 4,
+    padding: 6,
     paddingRight: 8,
-    top: 11 + iconTopPadding,
+    top: 9 + iconTopPadding,
     left: 8,
     fontSize: 25,
     color: blixtTheme.light,
@@ -344,7 +387,7 @@ const style = StyleSheet.create({
   },
   settingsIcon: {
     position: "absolute",
-    padding: 4,
+    padding: 5,
     top: 11 + iconTopPadding,
     right: 8,
     fontSize: 27,
@@ -352,7 +395,7 @@ const style = StyleSheet.create({
   },
   helpIcon: {
     position: "absolute",
-    padding: 4,
+    padding: 5,
     top: 12 + iconTopPadding,
     right: 8 + 24 + 8 + 8,
     fontSize: 25,
@@ -385,10 +428,8 @@ const style = StyleSheet.create({
 const headerInfo = StyleSheet.create({
   btc: {
     color: blixtTheme.light,
-    marginTop: 14 + iconTopPadding + 16,
-    //paddingTop: iconTopPadding + 16,
-    marginBottom: 2,
-    fontFamily: theme.fontFamily,
+    marginBottom: 3,
+    fontFamily: blixtTheme.fontMedium,
   },
   fiat: {
     color: blixtTheme.light,
@@ -426,7 +467,7 @@ export default function TopTabsComponent() {
         },
       }}
     >
-      <TopTabs.Screen name="OverviewX" component={OverviewTabsComponent}  />
+      <TopTabs.Screen name="OverviewX" component={OverviewTabsComponent} />
       <TopTabs.Screen name="SendX" component={Send} initialParams={{ viaSwipe: true }}  />
     </TopTabs.Navigator>
   );

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { StyleSheet, Share, Alert, KeyboardAvoidingView } from "react-native";
 import DialogAndroid from "react-native-dialogs";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
 import { fromUnixTime } from "date-fns";
-import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
@@ -18,6 +18,7 @@ import { MapStyle } from "../utils/google-maps";
 import TextLink from "../components/TextLink";
 import { ITransaction } from "../storage/database/transaction";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { PLATFORM } from "../utils/constants";
 
 interface IMetaDataProps {
   title: string;
@@ -89,14 +90,29 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
   };
 
   const onPressSetNote = async () => {
-    const result = await DialogAndroid.prompt(null, "Set a note for this transaction", {
-      defaultValue: transaction.note,
-    });
-    if (result.action === DialogAndroid.actionPositive) {
-      await syncTransaction({
-        ...transaction,
-        note: result.text?.trim() || null,
+    if (PLATFORM === "android") {
+      const result = await DialogAndroid.prompt(null, "Set a note for this transaction", {
+        defaultValue: transaction.note,
       });
+      if (result.action === DialogAndroid.actionPositive) {
+        await syncTransaction({
+          ...transaction,
+          note: result.text?.trim() || null,
+        });
+      }
+    } else {
+      Alert.prompt(
+        "Note",
+        "Set a note for this transaction",
+        async (text) => {
+          await syncTransaction({
+            ...transaction,
+            note: text || null,
+          });
+        },
+        "plain-text",
+        transaction.note ?? undefined,
+      )
     }
   }
 
@@ -113,7 +129,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
 
   if (currentScreen === "Overview") {
     return (
-      <Blurmodal useModalComponent={false} goBackByClickingOutside={true}>
+      <Blurmodal goBackByClickingOutside={true}>
         <Card style={style.card}>
           <CardItem>
             <Body>
@@ -192,7 +208,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                 </Button>
               </View>
               <MapView
-              provider={PROVIDER_GOOGLE}
+                provider={PROVIDER_DEFAULT}
                 style={{
                   width: "100%",
                   height: 450,

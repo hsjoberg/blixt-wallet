@@ -1,8 +1,9 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, KeyboardAvoidingView, StyleProp, ViewStyle } from "react-native";
+import { StyleSheet, KeyboardAvoidingView, StyleProp, ViewStyle, InputAccessoryView } from "react-native";
 import { View, Item, Text, Label, Icon } from "native-base";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { MathPad, IMathPadProps } from "../components/MathPad";
+import { PLATFORM } from "../utils/constants";
 
 export interface IFormItem {
   title: string | null;
@@ -51,13 +52,18 @@ export default function Form({ buttons, items, style, noticeText, mathPadProps }
           {buttons.map((button, i) => {
             return (<View key={i} style={{ marginTop: i > 0 ? 6 : 0, padding: 16, }}>{button}</View>);
           })}
-          {mathPadProps &&
+          {PLATFORM === "android" && mathPadProps &&
             <MathPad
               {...mathPadProps}
             />
           }
         </>
       </View>
+      {PLATFORM === "ios" &&
+        <InputAccessoryView nativeID="MATH_PAD">
+          <MathPad {...mathPadProps} />
+        </InputAccessoryView>
+      }
     </KeyboardAvoidingView>
   );
 }
@@ -76,7 +82,8 @@ const styles = StyleSheet.create({
     width: 105,
   },
   buttonContainer: {
-    marginBottom: 2,
+    marginHorizontal: 2,
+    marginBottom: 10,
   },
   error: {
     marginTop: 22,

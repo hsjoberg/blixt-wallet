@@ -299,270 +299,222 @@ exports[`renders correctly 1`] = `
                         ]
                       }
                     >
-                      <RCTScrollView
-                        collapsable={false}
-                        contentContainerStyle={
+                      <View
+                        style={
                           Array [
-                            Object {
-                              "padding": 14,
-                            },
                             Object {},
                             Object {
                               "alignItems": "center",
                               "flex": 1,
                               "justifyContent": "center",
-                              "marginTop": 0,
+                              "marginTop": 20,
+                              "paddingBottom": 16,
+                              "paddingLeft": 16,
+                              "paddingRight": 16,
                               "width": "100%",
                             },
                           ]
                         }
-                        onGestureHandlerEvent={[Function]}
-                        onGestureHandlerStateChange={[Function]}
                       >
-                        <View>
+                        <View
+                          style={
+                            Array [
+                              Object {},
+                              Object {
+                                "height": "100%",
+                                "width": "100%",
+                              },
+                            ]
+                          }
+                        >
                           <View
                             style={
                               Array [
                                 Object {},
                                 Object {
-                                  "height": "100%",
+                                  "alignContent": "center",
+                                  "flexDirection": "column",
+                                  "height": 300,
+                                  "justifyContent": "center",
+                                  "marginTop": 32,
+                                  "padding": 12,
                                   "width": "100%",
                                 },
                               ]
                             }
                           >
+                            <TextInput
+                              allowFontScaling={true}
+                              blurOnSubmit={true}
+                              bordered={false}
+                              editable={true}
+                              multiline={true}
+                              onChangeText={[Function]}
+                              placeholderTextColor="#575757"
+                              rejectResponderTermination={true}
+                              returnKeyType="done"
+                              rowSpan={6}
+                              style={
+                                Object {
+                                  "backgroundColor": "#232323",
+                                  "color": "#000",
+                                  "fontSize": 20,
+                                  "height": 150,
+                                  "paddingLeft": 10,
+                                  "paddingRight": 5,
+                                  "textAlignVertical": "top",
+                                  "width": "100%",
+                                }
+                              }
+                              underline={false}
+                              underlineColorAndroid="rgba(0,0,0,0)"
+                              value=""
+                            />
                             <View
                               style={
                                 Array [
                                   Object {},
                                   Object {
-                                    "alignContent": "center",
-                                    "flexDirection": "column",
-                                    "height": 300,
-                                    "justifyContent": "center",
-                                    "marginTop": 32,
-                                    "padding": 12,
+                                    "display": "flex",
+                                    "marginTop": 14,
                                     "width": "100%",
                                   },
                                 ]
                               }
                             >
-                              <TextInput
-                                allowFontScaling={true}
-                                bordered={false}
-                                editable={true}
-                                multiline={true}
-                                onChangeText={[Function]}
-                                placeholderTextColor="#575757"
-                                rejectResponderTermination={true}
-                                rowSpan={6}
+                              <Text
                                 style={
                                   Object {
-                                    "backgroundColor": "#232323",
                                     "color": "#000",
-                                    "fontSize": 20,
-                                    "height": 150,
-                                    "paddingLeft": 10,
-                                    "paddingRight": 5,
-                                    "textAlignVertical": "top",
-                                    "width": "100%",
+                                    "fontSize": 21,
+                                    "lineHeight": 25,
                                   }
                                 }
-                                underline={false}
-                                underlineColorAndroid="rgba(0,0,0,0)"
-                                value=""
-                              />
+                              >
+                                Channel backup
+                              </Text>
                               <View
                                 style={
                                   Array [
                                     Object {},
                                     Object {
                                       "display": "flex",
-                                      "marginTop": 14,
-                                      "width": "100%",
+                                      "flexDirection": "column",
                                     },
                                   ]
                                 }
                               >
-                                <Text
+                                <View
+                                  accessible={true}
+                                  focusable={true}
+                                  forwardedRef={[Function]}
+                                  onClick={[Function]}
+                                  onResponderGrant={[Function]}
+                                  onResponderMove={[Function]}
+                                  onResponderRelease={[Function]}
+                                  onResponderTerminate={[Function]}
+                                  onResponderTerminationRequest={[Function]}
+                                  onStartShouldSetResponder={[Function]}
                                   style={
                                     Object {
-                                      "color": "#000",
-                                      "fontSize": 21,
-                                      "lineHeight": 25,
+                                      "alignItems": "center",
+                                      "alignSelf": "flex-start",
+                                      "backgroundColor": "#007aff",
+                                      "borderBottomWidth": null,
+                                      "borderColor": "#007aff",
+                                      "borderLeftWidth": null,
+                                      "borderRadius": 5,
+                                      "borderRightWidth": null,
+                                      "borderTopWidth": null,
+                                      "borderWidth": undefined,
+                                      "elevation": 2,
+                                      "flexDirection": "row",
+                                      "height": 30,
+                                      "justifyContent": "space-between",
+                                      "marginBottom": 10,
+                                      "marginTop": 6,
+                                      "opacity": 1,
+                                      "paddingBottom": 6,
+                                      "paddingTop": 6,
+                                      "shadowColor": undefined,
+                                      "shadowOffset": undefined,
+                                      "shadowOpacity": undefined,
+                                      "shadowRadius": undefined,
                                     }
                                   }
                                 >
-                                  Channel backup
-                                </Text>
+                                  <Text
+                                    style={
+                                      Object {
+                                        "backgroundColor": "transparent",
+                                        "color": "#fff",
+                                        "fontFamily": "System",
+                                        "fontSize": 14,
+                                        "marginLeft": 0,
+                                        "marginRight": 0,
+                                        "paddingLeft": 16,
+                                        "paddingRight": 16,
+                                      }
+                                    }
+                                  >
+                                    Choose channel backup file on disk
+                                  </Text>
+                                </View>
                                 <View
+                                  accessible={true}
+                                  focusable={true}
+                                  forwardedRef={[Function]}
+                                  onClick={[Function]}
+                                  onResponderGrant={[Function]}
+                                  onResponderMove={[Function]}
+                                  onResponderRelease={[Function]}
+                                  onResponderTerminate={[Function]}
+                                  onResponderTerminationRequest={[Function]}
+                                  onStartShouldSetResponder={[Function]}
                                   style={
-                                    Array [
-                                      Object {},
-                                      Object {
-                                        "display": "flex",
-                                        "flexDirection": "column",
-                                      },
-                                    ]
+                                    Object {
+                                      "alignItems": "center",
+                                      "alignSelf": "flex-start",
+                                      "backgroundColor": "#007aff",
+                                      "borderBottomWidth": null,
+                                      "borderColor": "#007aff",
+                                      "borderLeftWidth": null,
+                                      "borderRadius": 5,
+                                      "borderRightWidth": null,
+                                      "borderTopWidth": null,
+                                      "borderWidth": undefined,
+                                      "elevation": 2,
+                                      "flexDirection": "row",
+                                      "height": 30,
+                                      "justifyContent": "space-between",
+                                      "opacity": 1,
+                                      "paddingBottom": 6,
+                                      "paddingTop": 6,
+                                      "shadowColor": undefined,
+                                      "shadowOffset": undefined,
+                                      "shadowOpacity": undefined,
+                                      "shadowRadius": undefined,
+                                    }
                                   }
                                 >
-                                  <View
-                                    accessible={true}
-                                    focusable={true}
-                                    forwardedRef={[Function]}
-                                    onClick={[Function]}
-                                    onResponderGrant={[Function]}
-                                    onResponderMove={[Function]}
-                                    onResponderRelease={[Function]}
-                                    onResponderTerminate={[Function]}
-                                    onResponderTerminationRequest={[Function]}
-                                    onStartShouldSetResponder={[Function]}
+                                  <Text
                                     style={
                                       Object {
-                                        "alignItems": "center",
-                                        "alignSelf": "flex-start",
-                                        "backgroundColor": "#007aff",
-                                        "borderBottomWidth": null,
-                                        "borderColor": "#007aff",
-                                        "borderLeftWidth": null,
-                                        "borderRadius": 5,
-                                        "borderRightWidth": null,
-                                        "borderTopWidth": null,
-                                        "borderWidth": undefined,
-                                        "elevation": 2,
-                                        "flexDirection": "row",
-                                        "height": 30,
-                                        "justifyContent": "space-between",
-                                        "marginBottom": 10,
-                                        "marginTop": 6,
-                                        "opacity": 1,
-                                        "paddingBottom": 6,
-                                        "paddingTop": 6,
-                                        "shadowColor": undefined,
-                                        "shadowOffset": undefined,
-                                        "shadowOpacity": undefined,
-                                        "shadowRadius": undefined,
+                                        "backgroundColor": "transparent",
+                                        "color": "#fff",
+                                        "fontFamily": "System",
+                                        "fontSize": 14,
+                                        "marginLeft": 0,
+                                        "marginRight": 0,
+                                        "paddingLeft": 16,
+                                        "paddingRight": 16,
                                       }
                                     }
                                   >
-                                    <Text
-                                      style={
-                                        Object {
-                                          "backgroundColor": "transparent",
-                                          "color": "#fff",
-                                          "fontFamily": "System",
-                                          "fontSize": 14,
-                                          "marginLeft": 0,
-                                          "marginRight": 0,
-                                          "paddingLeft": 16,
-                                          "paddingRight": 16,
-                                        }
-                                      }
-                                    >
-                                      Choose channel backup file on disk
-                                    </Text>
-                                  </View>
-                                  <View
-                                    accessible={true}
-                                    focusable={true}
-                                    forwardedRef={[Function]}
-                                    onClick={[Function]}
-                                    onResponderGrant={[Function]}
-                                    onResponderMove={[Function]}
-                                    onResponderRelease={[Function]}
-                                    onResponderTerminate={[Function]}
-                                    onResponderTerminationRequest={[Function]}
-                                    onStartShouldSetResponder={[Function]}
-                                    style={
-                                      Object {
-                                        "alignItems": "center",
-                                        "alignSelf": "flex-start",
-                                        "backgroundColor": "#007aff",
-                                        "borderBottomWidth": null,
-                                        "borderColor": "#007aff",
-                                        "borderLeftWidth": null,
-                                        "borderRadius": 5,
-                                        "borderRightWidth": null,
-                                        "borderTopWidth": null,
-                                        "borderWidth": undefined,
-                                        "elevation": 2,
-                                        "flexDirection": "row",
-                                        "height": 30,
-                                        "justifyContent": "space-between",
-                                        "opacity": 1,
-                                        "paddingBottom": 6,
-                                        "paddingTop": 6,
-                                        "shadowColor": undefined,
-                                        "shadowOffset": undefined,
-                                        "shadowOpacity": undefined,
-                                        "shadowRadius": undefined,
-                                      }
-                                    }
-                                  >
-                                    <Text
-                                      style={
-                                        Object {
-                                          "backgroundColor": "transparent",
-                                          "color": "#fff",
-                                          "fontFamily": "System",
-                                          "fontSize": 14,
-                                          "marginLeft": 0,
-                                          "marginRight": 0,
-                                          "paddingLeft": 16,
-                                          "paddingRight": 16,
-                                        }
-                                      }
-                                    >
-                                      Restore via Google Drive
-                                    </Text>
-                                  </View>
+                                    Restore via Google Drive
+                                  </Text>
                                 </View>
                               </View>
-                            </View>
-                            <View
-                              style={
-                                Array [
-                                  Object {},
-                                  Object {
-                                    "flex": 1,
-                                    "marginTop": 24,
-                                    "width": "100%",
-                                  },
-                                ]
-                              }
-                            >
-                              <Text
-                                style={
-                                  Array [
-                                    Object {
-                                      "color": "#000",
-                                      "fontSize": 27,
-                                      "lineHeight": 32,
-                                    },
-                                    Object {
-                                      "marginBottom": 3,
-                                    },
-                                  ]
-                                }
-                              >
-                                Restore wallet
-                              </Text>
-                              <Text
-                                style={
-                                  Object {
-                                    "color": "#000",
-                                    "fontFamily": "System",
-                                    "fontSize": 16,
-                                  }
-                                }
-                              >
-                                To restore your wallet, write each word from your seed separated by a space.
-                                
-
-                                
-
-                                If you wish to restore your Lightning Network channels, you need to provide a file backup.
-                              </Text>
                             </View>
                           </View>
                           <View
@@ -570,73 +522,118 @@ exports[`renders correctly 1`] = `
                               Array [
                                 Object {},
                                 Object {
-                                  "backgroundColor": "#151314",
-                                  "bottom": 24,
-                                  "paddingBottom": 24,
-                                  "paddingLeft": 9,
-                                  "paddingRight": 9,
+                                  "flex": 1,
+                                  "marginTop": 24,
                                   "width": "100%",
                                 },
                               ]
                             }
                           >
-                            <View
-                              accessible={true}
-                              focusable={true}
-                              forwardedRef={[Function]}
-                              onClick={[Function]}
-                              onResponderGrant={[Function]}
-                              onResponderMove={[Function]}
-                              onResponderRelease={[Function]}
-                              onResponderTerminate={[Function]}
-                              onResponderTerminationRequest={[Function]}
-                              onStartShouldSetResponder={[Function]}
+                            <Text
+                              style={
+                                Array [
+                                  Object {
+                                    "color": "#000",
+                                    "fontSize": 27,
+                                    "lineHeight": 32,
+                                  },
+                                  Object {
+                                    "marginBottom": 3,
+                                  },
+                                ]
+                              }
+                            >
+                              Restore wallet
+                            </Text>
+                            <Text
                               style={
                                 Object {
-                                  "alignItems": "center",
-                                  "alignSelf": "stretch",
-                                  "backgroundColor": "#007aff",
-                                  "borderBottomWidth": null,
-                                  "borderColor": "#007aff",
-                                  "borderLeftWidth": null,
-                                  "borderRadius": 5,
-                                  "borderRightWidth": null,
-                                  "borderTopWidth": null,
-                                  "borderWidth": undefined,
-                                  "elevation": 2,
-                                  "flexDirection": "row",
-                                  "height": 45,
-                                  "justifyContent": "center",
-                                  "opacity": 1,
-                                  "paddingBottom": 6,
-                                  "paddingTop": 6,
-                                  "shadowColor": undefined,
-                                  "shadowOffset": undefined,
-                                  "shadowOpacity": undefined,
-                                  "shadowRadius": undefined,
+                                  "color": "#000",
+                                  "fontFamily": "System",
+                                  "fontSize": 16,
                                 }
                               }
                             >
-                              <Text
-                                style={
-                                  Object {
-                                    "backgroundColor": "transparent",
-                                    "color": "#fff",
-                                    "fontFamily": "System",
-                                    "fontSize": 16.5,
-                                    "marginLeft": 0,
-                                    "marginRight": 0,
-                                    "paddingLeft": 16,
-                                    "paddingRight": 16,
-                                  }
-                                }
-                              >
-                                Restore Wallet
-                              </Text>
-                            </View>
+                              To restore your wallet, write each word from your seed separated by a space.
+                              
+
+                              
+
+                              If you wish to restore your Lightning Network channels, you need to provide a file backup.
+                            </Text>
                           </View>
                         </View>
-                      </RCTScrollView>
+                        <View
+                          style={
+                            Array [
+                              Object {},
+                              Object {
+                                "backgroundColor": "#151314",
+                                "bottom": 24,
+                                "paddingBottom": 24,
+                                "paddingLeft": 9,
+                                "paddingRight": 9,
+                                "width": "100%",
+                              },
+                            ]
+                          }
+                        >
+                          <View
+                            accessible={true}
+                            focusable={true}
+                            forwardedRef={[Function]}
+                            onClick={[Function]}
+                            onResponderGrant={[Function]}
+                            onResponderMove={[Function]}
+                            onResponderRelease={[Function]}
+                            onResponderTerminate={[Function]}
+                            onResponderTerminationRequest={[Function]}
+                            onStartShouldSetResponder={[Function]}
+                            style={
+                              Object {
+                                "alignItems": "center",
+                                "alignSelf": "stretch",
+                                "backgroundColor": "#007aff",
+                                "borderBottomWidth": null,
+                                "borderColor": "#007aff",
+                                "borderLeftWidth": null,
+                                "borderRadius": 5,
+                                "borderRightWidth": null,
+                                "borderTopWidth": null,
+                                "borderWidth": undefined,
+                                "elevation": 2,
+                                "flexDirection": "row",
+                                "height": 45,
+                                "justifyContent": "center",
+                                "opacity": 1,
+                                "paddingBottom": 6,
+                                "paddingTop": 6,
+                                "shadowColor": undefined,
+                                "shadowOffset": undefined,
+                                "shadowOpacity": undefined,
+                                "shadowRadius": undefined,
+                              }
+                            }
+                          >
+                            <Text
+                              style={
+                                Object {
+                                  "backgroundColor": "transparent",
+                                  "color": "#fff",
+                                  "fontFamily": "System",
+                                  "fontSize": 16.5,
+                                  "marginLeft": 0,
+                                  "marginRight": 0,
+                                  "paddingLeft": 16,
+                                  "paddingRight": 16,
+                                }
+                              }
+                            >
+                              Restore Wallet
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
                     </View>
                   </View>
                 </View>

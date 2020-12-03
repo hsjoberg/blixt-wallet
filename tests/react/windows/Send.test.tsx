@@ -1,6 +1,6 @@
 import React from "react";
 import { act, render, fireEvent, waitFor } from "@testing-library/react-native";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import Clipboard from "@react-native-community/clipboard";
 import { StoreProvider } from "easy-peasy";
 import Long from "long";
 

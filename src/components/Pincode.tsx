@@ -4,10 +4,17 @@ import { View, Text, Button, Icon } from "native-base";
 import color from "color";
 import * as Animatable from "react-native-animatable";
 import Container from "../components/Container";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { smallScreen } from "../utils/device";
+import { PLATFORM } from "../utils/constants";
+
+const hapticFeedbackOptions: ReactNativeHapticFeedback.HapticOptions = {
+  enableVibrateFallback: false,
+  ignoreAndroidSystemSettings: false,
+};
 
 export interface IPincode {
   textAction: string;
@@ -24,7 +31,12 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
       }
       return code;
     });
-    Vibration.vibrate(32);
+
+    if (PLATFORM === "android") {
+      Vibration.vibrate(32);
+    } else if (PLATFORM === "ios") {
+      ReactNativeHapticFeedback.trigger("impactLight", hapticFeedbackOptions);
+    }
   };
 
   const onBackspacePress = () => {
@@ -33,12 +45,20 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
       tmp.pop();
       return tmp;
     });
-    Vibration.vibrate(32);
+    if (PLATFORM === "android") {
+      Vibration.vibrate(32);
+    } else if (PLATFORM === "ios") {
+      ReactNativeHapticFeedback.trigger("impactLight", hapticFeedbackOptions);
+    }
   };
 
   const onClearPress = () => {
     setCode([]);
-    Vibration.vibrate(35);
+    if (PLATFORM === "android") {
+      Vibration.vibrate(35);
+    } else if (PLATFORM === "ios") {
+      ReactNativeHapticFeedback.trigger("impactLight", hapticFeedbackOptions);
+    }
   };
 
   useEffect(() => {
@@ -46,7 +66,11 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
       (async () => {
         if (!await onTryCode(code.join(""))) {
           setTimeout(() => pincodeText!.current!.shake!(950), 1);
-          Vibration.vibrate(300);
+          if (PLATFORM === "android") {
+            Vibration.vibrate(300);
+          } else if (PLATFORM === "ios") {
+            Vibration.vibrate(300);
+          }
         }
         setCode([]);
       })();
@@ -128,7 +152,7 @@ const style = StyleSheet.create({
   },
   pincodeInputText: {
     textAlign: "center",
-    fontSize: 35,
+    fontSize: PLATFORM === "android" ? 35 : 24,
     lineHeight: 44,
     letterSpacing: 4,
   },

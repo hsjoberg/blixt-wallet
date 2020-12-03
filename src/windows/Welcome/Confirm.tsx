@@ -5,11 +5,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
-import { useStoreState, useStoreActions } from "../../state/store";
+import { useStoreActions } from "../../state/store";
 import style from "./style";
 import { smallScreen } from "../../utils/device";
 import Container from "../../components/Container";
-import Content from "../../components/Content";
+import { PLATFORM } from "../../utils/constants";
 
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Confirm">;
@@ -63,7 +63,11 @@ export default function Confirm({ navigation }: IProps) {
       return;
     }
 
-    navigation.replace("GoogleDriveBackup");
+    if (PLATFORM === "android") {
+      navigation.replace("GoogleDriveBackup");
+    } else {
+      navigation.replace("AlmostDone")
+    }
   };
 
   const onBackspacePress = () => {
@@ -82,13 +86,13 @@ export default function Confirm({ navigation }: IProps) {
   return (
     <Container>
       <StatusBar
-        backgroundColor={blixtTheme.dark}
-        hidden={false}
-        translucent={false}
-        networkActivityIndicatorVisible={true}
         barStyle="light-content"
+        hidden={false}
+        backgroundColor="transparent"
+        animated={true}
+        translucent={true}
       />
-      <Content style={style.content}>
+      <View style={style.content}>
         <View style={style.upperContent}>
           <Card style={style.card}>
             <CardItem style={style.cardItem}>
@@ -183,7 +187,7 @@ export default function Confirm({ navigation }: IProps) {
             </Button>
           </View>
         </View>
-      </Content>
+      </View>
     </Container>
   );
 };

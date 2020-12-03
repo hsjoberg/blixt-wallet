@@ -74,11 +74,11 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
         }, {
           key: "AMOUNT",
           title: `Amount ${bitcoinUnit.nice}`,
-          component: (<Input placeholder={`Amount ${bitcoinUnit.nice}`} keyboardType="numeric" onChangeText={onChangeBitcoinInput} value={bitcoinValue} />)
+          component: (<Input placeholder={`Amount ${bitcoinUnit.nice}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeBitcoinInput} value={bitcoinValue} />)
         }, {
           key: "AMOUNT_FIAT",
           title: `Amount ${fiatUnit}`,
-          component: (<Input placeholder={`Amount ${fiatUnit}`} keyboardType="numeric" onChangeText={onChangeFiatInput} value={dollarValue} />)
+          component: (<Input placeholder={`Amount ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} />)
         }]}
         buttons={[
           <Button key="OPEN_CHANNEL" onPress={onOpenChannelPress} block={true} primary={true} disabled={opening}>

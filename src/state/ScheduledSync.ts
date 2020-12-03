@@ -2,7 +2,8 @@ import { NativeModules } from "react-native"
 import { Action, action, Thunk, thunk, computed, Computed } from "easy-peasy";
 import { StorageItem, getItemObject } from "../storage/app";
 import { WorkInfo } from "../lndmobile/scheduled-sync";
-import { IStoreInjections } from "./store.ts";
+import { IStoreInjections } from "./store";
+import { PLATFORM } from "../utils/constants";
 
 import logger from "./../utils/log";
 const log = logger("ScheduledSync");
@@ -27,10 +28,19 @@ export interface IScheduledSyncModel {
 
 export const scheduledSync: IScheduledSyncModel = {
   initialize: thunk(async (actions) => {
+    if (PLATFORM !== "android") {
+      log.w("initialize(): Platform does not support scheduled sync yet");
+      return;
+    }
     await actions.retrieveSyncInfo();
   }),
 
   retrieveSyncInfo: thunk(async (actions, _, { injections }) => {
+    if (PLATFORM !== "android") {
+      log.w("retrieveSyncInfo(): Platform does not support scheduled sync yet");
+      return;
+    }
+
     try {
       actions.setLastScheduledSync(await getItemObject<number>(StorageItem.lastScheduledSync));
       actions.setLastScheduledSyncAttempt(await getItemObject<number>(StorageItem.lastScheduledSyncAttempt));
@@ -41,6 +51,11 @@ export const scheduledSync: IScheduledSyncModel = {
   }),
 
   setSyncEnabled: thunk(async (actions, enabled) => {
+    if (PLATFORM !== "android") {
+      log.w("setSyncEnabled(): Platform does not support scheduled sync yet");
+      return;
+    }
+
     enabled
       ? await LndMobileScheduledSync.setupScheduledSyncWork()
       : await LndMobileScheduledSync.removeScheduledSyncWork();
@@ -54,5 +69,5 @@ export const scheduledSync: IScheduledSyncModel = {
   syncEnabled: computed((store) => ["BLOCKED", "ENQUEUED", "FAILED", "RUNNING", "SUCCEEDED"].includes(store.workInfo!)),
   lastScheduledSync: 0,
   lastScheduledSyncAttempt: 0,
-  workInfo: null,
+  workInfo: "WORK_NOT_EXIST",
 };

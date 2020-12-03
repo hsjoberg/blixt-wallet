@@ -1,24 +1,28 @@
 import React, { useLayoutEffect } from "react";
-import { Alert, StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid, Linking, StatusBar } from "react-native";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import { Alert, StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid, Linking } from "react-native";
+import Clipboard from "@react-native-community/clipboard";
 import DocumentPicker from "react-native-document-picker";
 import { readFile } from "react-native-fs";
-import { CheckBox, Button, Body, Container, Icon, Header, Text, Title, Left, List, ListItem, Right, Toast } from "native-base";
+import ReactNativePermissions from 'react-native-permissions';
+import { CheckBox, Body, Container, Icon, Text, Left, List, ListItem, Right } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { fromUnixTime } from "date-fns";
 import { StackNavigationProp } from "@react-navigation/stack";
+
 
 import { SettingsStackParamList } from "./index";
 import Content from "../../components/Content";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
-import { BitcoinUnits } from "../../utils/bitcoin-units";
+import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
 import { verifyChanBackup } from "../../lndmobile/channel";
 import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
 import { Chain } from "../../utils/build";
 import { OnchainExplorer } from "../../state/Settings";
 import TorSvg from "./TorSvg";
+import { PLATFORM } from "../../utils/constants";
+import { IFiatRates } from "../../state/Fiat";
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -79,20 +83,33 @@ export default function Settings({ navigation }: ISettingsProps) {
   const currentBitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const changeBitcoinUnit = useStoreActions((store) => store.settings.changeBitcoinUnit);
   const onBitcoinUnitPress = async () => {
-    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
-      positiveText: null,
-      negativeText: "Cancel",
-      type: DialogAndroid.listRadio,
-      selectedId: currentBitcoinUnit,
-      items: [
-        { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
-        { label: BitcoinUnits.bit.settings, id: "bit" },
-        { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
-        { label: BitcoinUnits.milliBitcoin.settings, id: "milliBitcoin" },
-      ]
-    });
-    if (selectedItem) {
-      changeBitcoinUnit(selectedItem.id);
+    if (PLATFORM === "android") {
+      const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+        positiveText: null,
+        negativeText: "Cancel",
+        type: DialogAndroid.listRadio,
+        selectedId: currentBitcoinUnit,
+        items: [
+          { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
+          { label: BitcoinUnits.bit.settings, id: "bit" },
+          { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
+          { label: BitcoinUnits.milliBitcoin.settings, id: "milliBitcoin" },
+        ]
+      });
+      if (selectedItem) {
+        changeBitcoinUnit(selectedItem.id);
+      }
+    } else {
+      navigation.navigate("ChangeBitcoinUnit", {
+        title: "Change bitcoin unit",
+        data: [
+          { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
+          { title: BitcoinUnits.bit.settings, value: "bit" },
+          { title: BitcoinUnits.satoshi.settings, value: "satoshi" },
+          { title: BitcoinUnits.milliBitcoin.settings, value: "milliBitcoin" },
+        ],
+        onPick: async (currency) => await changeBitcoinUnit(currency as keyof IBitcoinUnits),
+      });
     }
   }
 
@@ -101,19 +118,31 @@ export default function Settings({ navigation }: ISettingsProps) {
   const currentFiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const changeFiatUnit = useStoreActions((store) => store.settings.changeFiatUnit);
   const onFiatUnitPress = async () => {
-    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
-      positiveText: null,
-      negativeText: "Cancel",
-      type: DialogAndroid.listRadio,
-      selectedId: currentFiatUnit,
-      items: Object.entries(fiatRates).map(([currency]) => {
-        return {
-          label: currency, id: currency
-        }
-      })
-    });
-    if (selectedItem) {
-      changeFiatUnit(selectedItem.id);
+    if (PLATFORM === "android") {
+      const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+        positiveText: null,
+        negativeText: "Cancel",
+        type: DialogAndroid.listRadio,
+        selectedId: currentFiatUnit,
+        items: Object.entries(fiatRates).map(([currency]) => {
+          return {
+            label: currency, id: currency
+          }
+        })
+      });
+      if (selectedItem) {
+        changeFiatUnit(selectedItem.id);
+      }
+    } else {
+      navigation.navigate("ChangeFiatUnit", {
+        title: "Change fiat unit",
+        data: Object.entries(fiatRates).map(([currency]) => ({
+          title: currency,
+          value: currency as keyof IFiatRates,
+        })),
+        onPick: async (currency) => await changeFiatUnit(currency as keyof IFiatRates),
+        searchEnabled: true,
+      });
     }
   }
 
@@ -121,15 +150,35 @@ export default function Settings({ navigation }: ISettingsProps) {
   const name = useStoreState((store) => store.settings.name);
   const changeName = useStoreActions((store) => store.settings.changeName);
   const onNamePress = async () => {
-    const { action, text } = await DialogAndroid.prompt(
-      "Name",
-      "Choose a name that will be used in transactions\n\n" +
-      "Your name will be seen in invoices to those who pay you as well as " +
-      "people you pay to.", {
-      defaultValue: name,
-    });
-    if (action === DialogAndroid.actionPositive) {
-      await changeName(text || null);
+    if (PLATFORM === "android") {
+      const { action, text } = await DialogAndroid.prompt(
+        "Name",
+        "Choose a name that will be used in transactions\n\n" +
+        "Your name will be seen in invoices to those who pay you as well as " +
+        "people you pay to.",
+        { defaultValue: name },
+      );
+      if (action === DialogAndroid.actionPositive) {
+        await changeName(text || null);
+      }
+    } else {
+      Alert.prompt(
+        "Name",
+        "Choose a name that will be used in transactions\n\n" +
+        "Your name will be seen in invoices to those who pay you as well as " +
+        "people you pay to.",
+        [{
+          text: "Cancel",
+          onPress: () => {},
+        }, {
+          text: "Set name",
+          onPress: async (text) => {
+            await changeName(text ?? null);
+          },
+        }],
+        "plain-text",
+        name ?? "",
+      );
     }
   };
 
@@ -269,15 +318,22 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onToggleTransactionGeolocationEnabled = async () => {
     if (!transactionGeolocationEnabled) {
       try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        );
-        console.log(granted);
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('Geolocation granted');
-        } else {
-          console.log('Geolocation permission denied');
-          return;
+        if (PLATFORM === "android") {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          );
+          console.log(granted);
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log('Geolocation granted');
+          } else {
+            console.log('Geolocation permission denied');
+            return;
+          }
+        } else if (PLATFORM === "ios") {
+          const r = await ReactNativePermissions.request(ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+          if (r !== "granted") {
+            console.log("Error: " + r);
+          }
         }
       } catch (err) {
         console.warn(err);
@@ -354,19 +410,30 @@ When you're done, you can copy the address code and/or open the link using Blixt
   const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
   const changeOnchainExplorer = useStoreActions((store) => store.settings.changeOnchainExplorer);
   const onChangeOnchainExplorerPress = async () => {
-    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
-      positiveText: null,
-      negativeText: "Cancel",
-      type: DialogAndroid.listRadio,
-      selectedId: onchainExplorer,
-      items: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
-        id: currOnchainExplorer,
-        label: camelCaseToSpace(currOnchainExplorer),
-      }),
-    )});
+    if (PLATFORM === "android") {
+      const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+        positiveText: null,
+        negativeText: "Cancel",
+        type: DialogAndroid.listRadio,
+        selectedId: onchainExplorer,
+        items: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
+          id: currOnchainExplorer,
+          label: camelCaseToSpace(currOnchainExplorer),
+        }),
+      )});
 
-    if (selectedItem) {
-      await changeOnchainExplorer(selectedItem.id);
+      if (selectedItem) {
+        await changeOnchainExplorer(selectedItem.id);
+      }
+    } else {
+      navigation.navigate("ChangeOnchainExplorer", {
+        title: "Change on-chain explorer",
+        data: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
+          title: camelCaseToSpace(currOnchainExplorer),
+          value: currOnchainExplorer as keyof typeof OnchainExplorer,
+        })),
+        onPick: async (currency) => await changeOnchainExplorer(currency),
+      });
     }
   };
 
@@ -486,7 +553,7 @@ Do you wish to proceed?`;
             </Body>
             <Right><CheckBox checked={transactionGeolocationEnabled} onPress={onToggleTransactionGeolocationEnabled} /></Right>
           </ListItem>
-          {transactionGeolocationEnabled &&
+          {transactionGeolocationEnabled && PLATFORM === "android" &&
             <ListItem style={style.listItem} icon={true} onPress={onChangeMapStylePress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-maps" /></Left>
               <Body>
@@ -520,13 +587,15 @@ Do you wish to proceed?`;
               }
             </>
           }
-          <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
-            <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
-            <Body>
-              <Text>Export channel backup</Text>
-            </Body>
-          </ListItem>
-          {(name === "Hampus" || __DEV__ === true) &&
+          {PLATFORM === "android" &&
+            <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
+              <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
+              <Body>
+                <Text>Export channel backup</Text>
+              </Body>
+            </ListItem>
+          }
+          {(PLATFORM === "android" && (name === "Hampus" || __DEV__ === true)) &&
             <ListItem style={style.listItem} icon={true} onPress={onVerifyChannelsBackupPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
               <Body>
@@ -534,14 +603,16 @@ Do you wish to proceed?`;
               </Body>
             </ListItem>
           }
-          <ListItem style={style.listItem} icon={true} onPress={onToggleGoogleDriveBackup}>
-            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-drive" /></Left>
-            <Body>
-              <Text>Google Drive channel backup</Text>
-              <Text note={true} numberOfLines={1}>Automatically backup channels to Google Drive</Text>
-            </Body>
-            <Right><CheckBox checked={googleDriveBackupEnabled} onPress={onToggleGoogleDriveBackup} /></Right>
-          </ListItem>
+          {PLATFORM == "android" &&
+            <ListItem style={style.listItem} icon={true} onPress={onToggleGoogleDriveBackup}>
+              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-drive" /></Left>
+              <Body>
+                <Text>Google Drive channel backup</Text>
+                <Text note={true} numberOfLines={1}>Automatically backup channels to Google Drive</Text>
+              </Body>
+              <Right><CheckBox checked={googleDriveBackupEnabled} onPress={onToggleGoogleDriveBackup} /></Right>
+            </ListItem>
+          }
           {googleDriveBackupEnabled &&
             <ListItem style={style.listItem} icon={true} onPress={onDoGoogleDriveBackupPress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="folder-google-drive" /></Left>
@@ -565,21 +636,23 @@ Do you wish to proceed?`;
               <Right><CheckBox checked={fingerPrintEnabled} onPress={onToggleFingerprintPress}/></Right>
             </ListItem>
           }
-          <ListItem
-            style={style.listItem} icon={true} onPress={onToggleScheduledSyncEnabled}
-            onLongPress={() => ToastAndroid.show("Status: " + workInfo + "\n"+
-                                                 "Last sync attempt: " + formatISO(fromUnixTime(lastScheduledSyncAttempt)) + "\n" +
-                                                 "Last sync: " + formatISO(fromUnixTime(lastScheduledSync)), ToastAndroid.LONG)}
-          >
-            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="sync-alert" /></Left>
-            <Body>
-              <Text>Scheduled chain sync</Text>
-              <Text note={true} numberOfLines={1}>
-                Runs in background every 4 hours
-              </Text>
-            </Body>
-            <Right><CheckBox checked={scheduledSyncEnabled} onPress={onToggleScheduledSyncEnabled} /></Right>
-          </ListItem>
+          {PLATFORM === "android" &&
+            <ListItem
+              style={style.listItem} icon={true} onPress={onToggleScheduledSyncEnabled}
+              onLongPress={() => ToastAndroid.show("Status: " + workInfo + "\n"+
+                                                  "Last sync attempt: " + formatISO(fromUnixTime(lastScheduledSyncAttempt)) + "\n" +
+                                                  "Last sync: " + formatISO(fromUnixTime(lastScheduledSync)), ToastAndroid.LONG)}
+            >
+              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="sync-alert" /></Left>
+              <Body>
+                <Text>Scheduled chain sync</Text>
+                <Text note={true} numberOfLines={1}>
+                  Runs in background every 4 hours
+                </Text>
+              </Body>
+              <Right><CheckBox checked={scheduledSyncEnabled} onPress={onToggleScheduledSyncEnabled} /></Right>
+            </ListItem>
+          }
 
 
           <ListItem style={style.itemHeader} itemHeader={true}>
@@ -663,13 +736,15 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="AntDesign" name="info" /></Left>
             <Body><Text>About</Text></Body>
           </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={() => copyLog()}>
-            <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
-            <Body>
-              <Text>Copy log to local storage</Text>
-              <Text note={true} numberOfLines={1}>Reached from /sdcard/BlixtWallet</Text>
-            </Body>
-          </ListItem>
+          {PLATFORM === "android" &&
+            <ListItem style={style.listItem} icon={true} onPress={() => copyLog()}>
+              <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
+              <Body>
+                <Text>Copy log to local storage</Text>
+                <Text note={true} numberOfLines={1}>Reached from /sdcard/BlixtWallet</Text>
+              </Body>
+            </ListItem>
+          }
           {(name === "Hampus" || __DEV__ === true) &&
             <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("DEV_CommandsX")}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
@@ -708,15 +783,17 @@ Do you wish to proceed?`;
                 </Body>
                 <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
               </ListItem>
-              <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
-                <Left>
-                  <TorSvg />
-                </Left>
-                <Body>
-                  <Text>Enable Tor</Text>
-                </Body>
-                <Right><CheckBox checked={torEnabled} onPress={onChangeTorEnabled} /></Right>
-              </ListItem>
+              {PLATFORM === "android" &&
+                <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
+                  <Left>
+                    <TorSvg />
+                  </Left>
+                  <Body>
+                    <Text>Enable Tor</Text>
+                  </Body>
+                  <Right><CheckBox checked={torEnabled} onPress={onChangeTorEnabled} /></Right>
+                </ListItem>
+              }
               {torEnabled &&
                 <ListItem style={style.listItem} button={true} icon={true} onPress={onShowOnionAddressPress}>
                   <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="AntDesign" name="qrcode" /></Left>
@@ -737,12 +814,14 @@ Do you wish to proceed?`;
             <Body><Text>Show startup info notifications</Text></Body>
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
           </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={onLndMobileHelpCenterPress}>
-            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="lifebuoy" /></Left>
-            <Body>
-              <Text>LndMobile help center</Text>
-            </Body>
-          </ListItem>
+          {PLATFORM === "android" &&
+            <ListItem style={style.listItem} button={true} icon={true} onPress={onLndMobileHelpCenterPress}>
+              <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="lifebuoy" /></Left>
+              <Body>
+                <Text>LndMobile help center</Text>
+              </Body>
+            </ListItem>
+          }
           <ListItem style={style.listItem} icon={true} onPress={async () => {
             const logLines = await NativeModules.LndMobile.tailLog(30);
             Alert.alert("Log", logLines);
@@ -750,7 +829,7 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="Ionicons" name="newspaper-outline" /></Left>
             <Body><Text>Read lnd log</Text></Body>
           </ListItem>
-          {(name === "Hampus" || __DEV__ === true) &&
+          {(PLATFORM === "android" && (name === "Hampus" || __DEV__ === true)) &&
             <>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>
                 <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
@@ -794,6 +873,7 @@ const style = StyleSheet.create({
     // paddingLeft: 24,
     paddingTop: 24,
     paddingBottom: 16,
+    borderBottomWidth: 0,
   },
   icon: {
     fontSize: 22,

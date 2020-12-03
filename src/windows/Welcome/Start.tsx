@@ -1,16 +1,17 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, StatusBar, Animated, Alert, NativeModules } from "react-native";
+import { StyleSheet, StatusBar, Alert, NativeModules } from "react-native";
 import { Text, H1, Button, View, Spinner, Icon } from "native-base";
 import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
-import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
+import Menu, { MenuItem } from "react-native-material-menu";
 
-import { NavigationAction, CommonActions } from "@react-navigation/native";
+import { CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";
 import Container from "../../components/Container";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { PLATFORM } from "../../utils/constants";
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -115,7 +116,7 @@ There is currently no WatchTower support to watch your channels while you are of
           networkActivityIndicatorVisible={true}
           barStyle="light-content"
         />
-        {!createWalletLoading &&
+        {(!createWalletLoading && PLATFORM === "android") &&
           <View style={style.menuDotsIcon}>
             <Menu
               ref={menu}

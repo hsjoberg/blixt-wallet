@@ -30,6 +30,7 @@ import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import Container from "./components/Container";
 import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
 import { navigator } from "./utils/navigation";
+import { PLATFORM } from "./utils/constants";
 
 const RootStack = createStackNavigator();
 
@@ -146,9 +147,8 @@ export default function Main() {
 
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
-    gestureEnabled: true,
+    gestureEnabled: false,
     gestureDirection: "horizontal",
-    gestureResponseDistance: { horizontal: 0 },
     gestureVelocityImpact: 1.9,
   };
 
@@ -182,11 +182,14 @@ export default function Main() {
 
   return (
     <RootStack.Navigator initialRouteName={initialRoute} screenOptions={screenOptions}>
-      <RootStack.Screen name="Welcome" component={Welcome} options={animationDisabled} />
+      <RootStack.Screen name="Welcome" component={Welcome} options={PLATFORM === "ios" ? {
+        gestureEnabled: true,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      } : animationDisabled} />
       <RootStack.Screen name="Loading" component={Loading} options={animationDisabled} />
       <RootStack.Screen name="CameraFullscreen" component={CameraFullscreen} options={{
+        gestureEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        gestureEnabled:true
       }} />
 
       <RootStack.Screen name="Overview" component={Overview} options={animationDisabled} />
@@ -195,6 +198,7 @@ export default function Main() {
       <RootStack.Screen name="SyncInfo" component={SyncInfo} options={animationDisabled} />
       <RootStack.Screen name="Receive" component={Receive} />
       <RootStack.Screen name="Send" component={Send} options={{
+        gestureEnabled: true,
         gestureResponseDistance: { horizontal: 1000 },
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }} />

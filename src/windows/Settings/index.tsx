@@ -10,6 +10,9 @@ import About from "./About";
 import TorShowOnionAddress from "./TorShowOnionAddress";
 import LndMobileHelpCenter from "./LndMobileHelpCenter";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
+import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectList";
+import { IFiatRates } from "../../state/Fiat";
+import { OnchainExplorer } from "../../state/Settings";
 
 const Stack = createStackNavigator();
 
@@ -22,6 +25,9 @@ export type SettingsStackParamList = {
   About: undefined;
   TorShowOnionAddress: undefined;
   LndMobileHelpCenter: undefined;
+  ChangeBitcoinUnit: ISelectListNavigationProps<string>;
+  ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
+  ChangeOnchainExplorer: ISelectListNavigationProps<keyof typeof OnchainExplorer>;
 }
 
 export default function SettingsIndex() {
@@ -31,7 +37,7 @@ export default function SettingsIndex() {
   };
 
   return (
-    <Stack.Navigator initialRouteName="Settings" screenOptions={screenOptions}>
+    <Stack.Navigator headerMode="screen" initialRouteName="Settings" screenOptions={screenOptions}>
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="RemovePincodeAuth" component={RemovePincodeAuth} />
       <Stack.Screen name="SetPincode" component={SetPincode} />
@@ -40,6 +46,9 @@ export default function SettingsIndex() {
       <Stack.Screen name="About" component={About} />
       <Stack.Screen name="TorShowOnionAddress" component={TorShowOnionAddress} />
       <Stack.Screen name="LndMobileHelpCenter" component={LndMobileHelpCenter} />
+      <Stack.Screen name="ChangeFiatUnit" component={SelectList} />
+      <Stack.Screen name="ChangeBitcoinUnit" component={SelectList} />
+      <Stack.Screen name="ChangeOnchainExplorer" component={SelectList} />
     </Stack.Navigator>
   );
 }

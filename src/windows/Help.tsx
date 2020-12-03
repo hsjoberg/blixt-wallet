@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Linking } from "react-native";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1, Toast, View, Button } from "native-base";
 import { useStoreState } from "../state/store";
 

@@ -1,6 +1,7 @@
 import { NativeModules } from "react-native";
 
 import { Debug } from "./build";
+import { PLATFORM } from "./constants";
 
 const log = (tag?: string) => {
   tag = tag ?? "";
@@ -10,7 +11,9 @@ const log = (tag?: string) => {
       if (Debug) {
         const msg = fixMessage(message, data);
         console.debug(`${tag}: ${msg}`);
-        NativeModules.LndMobile.log("v", tag, msg);
+        if (PLATFORM === "android") {
+          NativeModules.LndMobile.log("v", tag, msg);
+        }
       }
     },
 
@@ -18,26 +21,34 @@ const log = (tag?: string) => {
       if (Debug) {
         const msg = fixMessage(message, data);
         console.debug(`${tag}: ${msg}`);
-        NativeModules.LndMobile.log("d", tag, msg);
+        if (PLATFORM === "android") {
+          NativeModules.LndMobile.log("d", tag, msg);
+        }
       }
     },
 
     i: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       console.log(`${tag}: ${msg}`);
-      NativeModules.LndMobile.log("i", tag, msg);
+      if (PLATFORM === "android") {
+        NativeModules.LndMobile.log("i", tag, msg);
+      }
     },
 
     w: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       console.warn(`${tag}: ${msg}`);
-      NativeModules.LndMobile.log("w", tag, msg);
+      if (PLATFORM === "android") {
+        NativeModules.LndMobile.log("w", tag, msg);
+      }
     },
 
     e: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       console.error(`${tag}: ${msg}`);
-      NativeModules.LndMobile.log("e", tag, msg);
+      if (PLATFORM === "android") {
+        NativeModules.LndMobile.log("e", tag, msg);
+      }
     },
   };
 };

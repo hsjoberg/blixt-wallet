@@ -293,182 +293,6 @@ exports[`renders correctly 1`] = `
                       }
                     >
                       <View
-                        pointerEvents="box-none"
-                        style={
-                          Object {
-                            "zIndex": 1,
-                          }
-                        }
-                      >
-                        <View
-                          accessibilityElementsHidden={false}
-                          importantForAccessibility="auto"
-                          onLayout={[Function]}
-                          pointerEvents="box-none"
-                          style={null}
-                        >
-                          <View
-                            pointerEvents="box-none"
-                            style={
-                              Object {
-                                "bottom": 0,
-                                "left": 0,
-                                "opacity": 1,
-                                "position": "absolute",
-                                "right": 0,
-                                "top": 0,
-                                "zIndex": 0,
-                              }
-                            }
-                          >
-                            <View
-                              style={
-                                Object {
-                                  "backgroundColor": "#5F5F5F",
-                                  "borderBottomColor": "rgb(216, 216, 216)",
-                                  "elevation": 0,
-                                  "flex": 1,
-                                  "shadowColor": "rgb(216, 216, 216)",
-                                  "shadowOffset": Object {
-                                    "height": 0.5,
-                                    "width": 0,
-                                  },
-                                  "shadowOpacity": 0.85,
-                                  "shadowRadius": 0,
-                                }
-                              }
-                            />
-                          </View>
-                          <View
-                            pointerEvents="box-none"
-                            style={
-                              Object {
-                                "height": 44,
-                                "maxHeight": undefined,
-                                "minHeight": undefined,
-                                "opacity": undefined,
-                                "transform": undefined,
-                              }
-                            }
-                          >
-                            <View
-                              pointerEvents="none"
-                              style={
-                                Object {
-                                  "height": 0,
-                                }
-                              }
-                            />
-                            <View
-                              pointerEvents="box-none"
-                              style={
-                                Object {
-                                  "alignItems": "center",
-                                  "flex": 1,
-                                  "flexDirection": "row",
-                                  "justifyContent": "center",
-                                }
-                              }
-                            >
-                              <View
-                                pointerEvents="box-none"
-                                style={
-                                  Object {
-                                    "marginHorizontal": 16,
-                                    "opacity": 1,
-                                  }
-                                }
-                              >
-                                <Text
-                                  accessibilityRole="header"
-                                  aria-level="1"
-                                  numberOfLines={1}
-                                  onLayout={[Function]}
-                                  style={
-                                    Object {
-                                      "color": "#e5eaea",
-                                      "fontSize": 17,
-                                      "fontWeight": "600",
-                                    }
-                                  }
-                                >
-                                  Bitcoin
-                                </Text>
-                              </View>
-                              <View
-                                pointerEvents="box-none"
-                                style={
-                                  Object {
-                                    "alignItems": "flex-end",
-                                    "bottom": 0,
-                                    "justifyContent": "center",
-                                    "marginRight": 20,
-                                    "opacity": 1,
-                                    "position": "absolute",
-                                    "right": 0,
-                                    "top": 0,
-                                  }
-                                }
-                              >
-                                <View
-                                  accessible={true}
-                                  focusable={true}
-                                  hitSlop={
-                                    Object {
-                                      "bottom": 16,
-                                      "left": 16,
-                                      "right": 16,
-                                      "top": 16,
-                                    }
-                                  }
-                                  onClick={[Function]}
-                                  onResponderGrant={[Function]}
-                                  onResponderMove={[Function]}
-                                  onResponderRelease={[Function]}
-                                  onResponderTerminate={[Function]}
-                                  onResponderTerminationRequest={[Function]}
-                                  onStartShouldSetResponder={[Function]}
-                                >
-                                  <Text
-                                    allowFontScaling={false}
-                                    style={
-                                      Array [
-                                        Object {
-                                          "color": undefined,
-                                          "fontSize": 12,
-                                        },
-                                        Array [
-                                          Object {
-                                            "color": "#000",
-                                            "fontSize": 30,
-                                          },
-                                          Object {
-                                            "color": "#000",
-                                            "fontSize": 30,
-                                          },
-                                          Object {
-                                            "fontSize": 22,
-                                          },
-                                        ],
-                                        Object {
-                                          "fontFamily": "anticon",
-                                          "fontStyle": "normal",
-                                          "fontWeight": "normal",
-                                        },
-                                        Object {},
-                                      ]
-                                    }
-                                    type="AntDesign"
-                                  >
-                                    
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                          </View>
-                        </View>
-                      </View>
-                      <View
                         onLayout={[Function]}
                         style={
                           Object {
@@ -902,6 +726,7 @@ exports[`renders correctly 1`] = `
                                           <View
                                             style={
                                               Object {
+                                                "marginBottom": 12,
                                                 "width": "100%",
                                               }
                                             }
@@ -1017,6 +842,174 @@ exports[`renders correctly 1`] = `
                                               >
                                                 Withdraw coins
                                               </Text>
+                                            </View>
+                                          </View>
+                                        </View>
+                                      </View>
+                                    </View>
+                                    <View
+                                      pointerEvents="box-none"
+                                    >
+                                      <View
+                                        accessibilityElementsHidden={false}
+                                        importantForAccessibility="auto"
+                                        onLayout={[Function]}
+                                        pointerEvents="box-none"
+                                        style={null}
+                                      >
+                                        <View
+                                          pointerEvents="box-none"
+                                          style={
+                                            Object {
+                                              "bottom": 0,
+                                              "left": 0,
+                                              "position": "absolute",
+                                              "right": 0,
+                                              "top": 0,
+                                              "zIndex": 0,
+                                            }
+                                          }
+                                        >
+                                          <View
+                                            style={
+                                              Object {
+                                                "backgroundColor": "#5F5F5F",
+                                                "borderBottomColor": "rgb(216, 216, 216)",
+                                                "elevation": 0,
+                                                "flex": 1,
+                                                "shadowColor": "transparent",
+                                                "shadowOffset": Object {
+                                                  "height": 0.5,
+                                                  "width": 0,
+                                                },
+                                                "shadowOpacity": 0.85,
+                                                "shadowRadius": 0,
+                                              }
+                                            }
+                                          />
+                                        </View>
+                                        <View
+                                          pointerEvents="box-none"
+                                          style={
+                                            Object {
+                                              "height": 44,
+                                              "maxHeight": undefined,
+                                              "minHeight": undefined,
+                                              "opacity": undefined,
+                                              "transform": undefined,
+                                            }
+                                          }
+                                        >
+                                          <View
+                                            pointerEvents="none"
+                                            style={
+                                              Object {
+                                                "height": 0,
+                                              }
+                                            }
+                                          />
+                                          <View
+                                            pointerEvents="box-none"
+                                            style={
+                                              Object {
+                                                "alignItems": "center",
+                                                "flex": 1,
+                                                "flexDirection": "row",
+                                                "justifyContent": "center",
+                                              }
+                                            }
+                                          >
+                                            <View
+                                              pointerEvents="box-none"
+                                              style={
+                                                Object {
+                                                  "marginHorizontal": 16,
+                                                }
+                                              }
+                                            >
+                                              <Text
+                                                accessibilityRole="header"
+                                                aria-level="1"
+                                                numberOfLines={1}
+                                                onLayout={[Function]}
+                                                style={
+                                                  Object {
+                                                    "color": "#e5eaea",
+                                                    "fontSize": 17,
+                                                    "fontWeight": "600",
+                                                  }
+                                                }
+                                              >
+                                                Bitcoin
+                                              </Text>
+                                            </View>
+                                            <View
+                                              pointerEvents="box-none"
+                                              style={
+                                                Object {
+                                                  "alignItems": "flex-end",
+                                                  "bottom": 0,
+                                                  "justifyContent": "center",
+                                                  "marginRight": 20,
+                                                  "position": "absolute",
+                                                  "right": 0,
+                                                  "top": 0,
+                                                }
+                                              }
+                                            >
+                                              <View
+                                                accessible={true}
+                                                focusable={true}
+                                                hitSlop={
+                                                  Object {
+                                                    "bottom": 16,
+                                                    "left": 16,
+                                                    "right": 16,
+                                                    "top": 16,
+                                                  }
+                                                }
+                                                onClick={[Function]}
+                                                onResponderGrant={[Function]}
+                                                onResponderMove={[Function]}
+                                                onResponderRelease={[Function]}
+                                                onResponderTerminate={[Function]}
+                                                onResponderTerminationRequest={[Function]}
+                                                onStartShouldSetResponder={[Function]}
+                                              >
+                                                <Text
+                                                  allowFontScaling={false}
+                                                  style={
+                                                    Array [
+                                                      Object {
+                                                        "color": undefined,
+                                                        "fontSize": 12,
+                                                      },
+                                                      Array [
+                                                        Object {
+                                                          "color": "#000",
+                                                          "fontSize": 30,
+                                                        },
+                                                        Object {
+                                                          "color": "#000",
+                                                          "fontSize": 30,
+                                                        },
+                                                        Object {
+                                                          "fontSize": 22,
+                                                        },
+                                                      ],
+                                                      Object {
+                                                        "fontFamily": "anticon",
+                                                        "fontStyle": "normal",
+                                                        "fontWeight": "normal",
+                                                      },
+                                                      Object {},
+                                                    ]
+                                                  }
+                                                  type="AntDesign"
+                                                >
+                                                  
+                                                </Text>
+                                              </View>
                                             </View>
                                           </View>
                                         </View>

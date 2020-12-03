@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { Button, Container, Icon, Text, Input, Spinner } from "native-base";
+import { Button, Icon, Text, Input, Spinner } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { useDebounce } from "use-debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -8,12 +8,14 @@ import Long from "long";
 import { ReceiveStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import { formatBitcoin, BitcoinUnits } from "../../utils/bitcoin-units";
+import { formatBitcoin, BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
-import { MAX_SAT_INVOICE } from "../../utils/constants";
+import { MAX_SAT_INVOICE, PLATFORM } from "../../utils/constants";
 import { toast } from "../../utils";
 import { Keyboard } from "react-native";
+import Container from "../../components/Container";
+import { IFiatRates } from "../../state/Fiat";
 
 const MATH_PAD_HEIGHT = 44;
 
@@ -98,20 +100,33 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
   const currentBitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const changeBitcoinUnit = useStoreActions((store) => store.settings.changeBitcoinUnit);
   const onPressChangeBitcoinUnit = async () => {
-    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
-      positiveText: null,
-      negativeText: "Cancel",
-      type: DialogAndroid.listRadio,
-      selectedId: currentBitcoinUnit,
-      items: [
-        { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
-        { label: BitcoinUnits.bit.settings, id: "bit" },
-        { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
-        { label: BitcoinUnits.milliBitcoin.settings, id: "milliBitcoin" },
-      ]
-    });
-    if (selectedItem) {
-      await changeBitcoinUnit(selectedItem.id);
+    if (PLATFORM === "android") {
+      const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+        positiveText: null,
+        negativeText: "Cancel",
+        type: DialogAndroid.listRadio,
+        selectedId: currentBitcoinUnit,
+        items: [
+          { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
+          { label: BitcoinUnits.bit.settings, id: "bit" },
+          { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
+          { label: BitcoinUnits.milliBitcoin.settings, id: "milliBitcoin" },
+        ]
+      });
+      if (selectedItem) {
+        await changeBitcoinUnit(selectedItem.id);
+      }
+    } else {
+      navigation.navigate("ChangeBitcoinUnit", {
+        title: "Change bitcoin unit",
+        data: [
+          { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
+          { title: BitcoinUnits.bit.settings, value: "bit" },
+          { title: BitcoinUnits.satoshi.settings, value: "satoshi" },
+          { title: BitcoinUnits.milliBitcoin.settings, value: "milliBitcoin" },
+        ],
+        onPick: async (currency) => await changeBitcoinUnit(currency as keyof IBitcoinUnits),
+      });
     }
   }
 
@@ -120,19 +135,31 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
   const currentFiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const changeFiatUnit = useStoreActions((store) => store.settings.changeFiatUnit);
   const onPressChangeFiatUnit = async () => {
-    const { selectedItem } = await DialogAndroid.showPicker(null, null, {
-      positiveText: null,
-      negativeText: "Cancel",
-      type: DialogAndroid.listRadio,
-      selectedId: currentFiatUnit,
-      items: Object.entries(fiatRates).map(([currency]) => {
-        return {
-          label: currency, id: currency
-        }
-      })
-    });
-    if (selectedItem) {
-      await changeFiatUnit(selectedItem.id);
+    if (PLATFORM === "android") {
+      const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+        positiveText: null,
+        negativeText: "Cancel",
+        type: DialogAndroid.listRadio,
+        selectedId: currentFiatUnit,
+        items: Object.entries(fiatRates).map(([currency]) => {
+          return {
+            label: currency, id: currency
+          }
+        })
+      });
+      if (selectedItem) {
+        await changeFiatUnit(selectedItem.id);
+      }
+    } else {
+      navigation.navigate("ChangeFiatUnit", {
+        title: "Change fiat unit",
+        data: Object.entries(fiatRates).map(([currency]) => ({
+          title: currency,
+          value: currency as keyof IFiatRates,
+        })),
+        onPick: async (currency) => await changeFiatUnit(currency as keyof IFiatRates),
+        searchEnabled: true,
+      });
     }
   }
 
@@ -147,6 +174,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
           placeholder="0"
           value={bitcoinValue !== undefined ? bitcoinValue.toString() : undefined}
           keyboardType="numeric"
+          returnKeyType="done"
           onFocus={() => {
             setMathPadVisible(true);
             setCurrentlyFocusedInput("bitcoin");
@@ -154,6 +182,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
           onBlur={() => {
             // setMathPadVisible(false);
           }}
+          inputAccessoryViewID="MATH_PAD"
         />
         <Icon type="Foundation" name="bitcoin-circle" onPress={onPressChangeBitcoinUnit} style={{ fontSize: 31, marginRight: 1 }} />
       </>
@@ -169,6 +198,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
           placeholder="0.00"
           value={dollarValue !== undefined ? dollarValue.toString() : undefined}
           keyboardType="numeric"
+          returnKeyType="done"
           onFocus={() => {
             setMathPadVisible(true);
             setCurrentlyFocusedInput("fiat");
@@ -176,6 +206,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
           onBlur={() => {
             // setMathPadVisible(false);
           }}
+          inputAccessoryViewID="MATH_PAD"
         />
         <Icon type="FontAwesome" name="money" onPress={onPressChangeFiatUnit} />
       </>

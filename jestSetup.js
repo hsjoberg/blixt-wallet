@@ -7,12 +7,13 @@ jest.mock("react-native-push-notification", () => require("./mocks/react-native-
 jest.mock("react-native-keychain", () => require("./mocks/react-native-keychain"));
 jest.mock("react-native-securerandom", () => require("./mocks/react-native-securerandom"));
 jest.mock("react-native-fingerprint-scanner", () => require("./mocks/react-native-fingerprint-scanner"));
-jest.mock("@react-native-community/react-native-clipboard", () => require("./mocks/@react-native-community/react-native-clipboard"));
+jest.mock("@react-native-community/clipboard", () => require("./mocks/@react-native-community/clipboard"));
 jest.mock("@react-native-community/masked-view", () => require("./mocks/@react-native-community/masked-view"));
 jest.mock("@react-native-community/google-signin", () => require("./mocks/@react-native-community/google-signin"));
 jest.mock("react-native-fs", () => require("./mocks/react-native-fs"));
 jest.mock("react-native-document-picker", () => require("./mocks/react-native-document-picker"));
 jest.mock("@react-native-community/geolocation", () => require("./mocks/@react-native-community/geolocation"));
+jest.mock("react-native-permissions", () => require("./mocks/react-native-permissions"));
 
 jest.mock("./src/lndmobile/index", () => require("./mocks/lndmobile/index"));
 jest.mock("./src/lndmobile/wallet", () => require("./mocks/lndmobile/wallet"));
@@ -20,6 +21,8 @@ jest.mock("./src/lndmobile/channel", () => require("./mocks/lndmobile/channel"))
 jest.mock("./src/lndmobile/onchain", () => require("./mocks/lndmobile/onchain"));
 jest.mock("./src/lndmobile/autopilot", () => require("./mocks/lndmobile/autopilot"));
 jest.mock("./src/lndmobile/scheduled-sync", () => require("./mocks/lndmobile/scheduled-sync"));
+
+jest.mock("./src/utils/constants.ts", () => require("./mocks/utils/constants"));
 
 const ReactNative = require("react-native");
 ReactNative.NativeModules.LndMobile = {};

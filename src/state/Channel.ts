@@ -139,7 +139,7 @@ export const channel: IChannelModel = {
             }
             getStoreActions().notificationManager.localNotification({ message, importance: "high" });
           } catch (e) {
-            log.e("Push notification failed: ", e.message);
+            log.e("Push notification failed: ", [e.message]);
           }
         }
       }

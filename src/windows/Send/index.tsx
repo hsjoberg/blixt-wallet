@@ -29,7 +29,7 @@ export default function SendIndex({ route }: { route: RouteProp<{ "Send": {viaSw
   const viaSwipe = route.params?.viaSwipe;
 
   return (
-    <Stack.Navigator initialRouteName="SendCamera" screenOptions={screenOptions}>
+    <Stack.Navigator headerMode="screen" initialRouteName="SendCamera" screenOptions={screenOptions}>
       <Stack.Screen initialParams={viaSwipe !== undefined ? { viaSwipe } : undefined} name="SendCamera" component={SendCamera} options={{
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Linking, View } from "react-native";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1, Button } from "native-base";
 import { fromUnixTime } from "date-fns";
 import { RouteProp } from "@react-navigation/native";

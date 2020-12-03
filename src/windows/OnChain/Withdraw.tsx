@@ -63,7 +63,7 @@ export default ({ navigation }: IOpenChannelProps) => {
 
       toast("Withdraw succeeded", 6000, "success");
     } catch (e) {
-      toast(`Error: ${e.message}`, 12000, "danger");
+      toast(`Error: ${e.message}`, 12000, "danger", "OK");
       setSending(false);
     }
   };
@@ -99,8 +99,13 @@ export default ({ navigation }: IOpenChannelProps) => {
           title: "Address",
           component: (
             <>
-              <Input testID="INPUT_BITCOIN_ADDRESS" placeholder="Bitcoin address" value={address} onChangeText={onAddressChange} />
-              <Icon type="AntDesign" name="camera" onPress={onCameraPress} />
+              <Input
+                testID="INPUT_BITCOIN_ADDRESS"
+                placeholder="Bitcoin address"
+                value={address}
+                onChangeText={onAddressChange}
+              />
+              <Icon type="AntDesign" name="camera" onPress={onCameraPress} style={{ padding: 10 }} />
             </>
           ),
         }, {
@@ -112,6 +117,7 @@ export default ({ navigation }: IOpenChannelProps) => {
                 testID="INPUT_AMOUNT"
                 placeholder={`Amount ${BitcoinUnits[bitcoinUnit].nice}`}
                 keyboardType="numeric"
+                returnKeyType="done"
                 onChangeText={onChangeBitcoinInput}
                 value={withdrawAll ? "Withdraw all funds" : bitcoinValue}
                 disabled={withdrawAll}
@@ -132,6 +138,7 @@ export default ({ navigation }: IOpenChannelProps) => {
                 testID="INPUT_AMOUNT_FIAT"
                 placeholder={`Amount ${fiatUnit}`}
                 keyboardType="numeric"
+                returnKeyType="done"
                 onChangeText={onChangeFiatInput}
                 value={dollarValue}
                 disabled={withdrawAll}

@@ -10,6 +10,7 @@ import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/a
 import { toast, timeout } from "../utils";
 import { Chain } from "../utils/build";
 import { getWalletPassword } from "../storage/keystore";
+import { PLATFORM } from "../utils/constants";
 
 import logger from "./../utils/log";
 const log = logger("Lightning");
@@ -174,11 +175,12 @@ export const lightning: ILightningModel = {
         dispatch.onChain.initialize(),
         dispatch.transaction.checkOpenTransactions(),
         dispatch.scheduledSync.initialize(),
-        dispatch.blixtLsp.initialize(),
       ]);
       await dispatch.notificationManager.initialize();
       await dispatch.clipboardManager.initialize();
-      await dispatch.androidDeeplinkManager.initialize();
+      if (PLATFORM === "android") {
+        await dispatch.androidDeeplinkManager.initialize();
+      }
     } catch (e) {
       toast(e.message, 0, "danger", "OK");
       return;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert, InteractionManager } from "react-native";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import { View, StyleSheet, Alert, InteractionManager, Platform } from "react-native";
+import Clipboard from "@react-native-community/clipboard";
 import { Icon } from "native-base";
 import { RNCamera, CameraType } from "react-native-camera";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -13,6 +13,8 @@ import Camera from "../../components/Camera";
 import { Chain } from "../../utils/build";
 import { smallScreen } from "../../utils/device";
 import { RouteProp } from "@react-navigation/native";
+import GoBackIcon from "../../components/GoBackIcon";
+import { PLATFORM } from "../../utils/constants";
 
 interface ISendCameraProps {
   bolt11Invoice?: string;
@@ -165,6 +167,9 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
         <Icon type="Ionicons" name="camera-reverse" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
         {__DEV__ && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
         <Icon testID="paste-clipboard" type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
+        {PLATFORM === "ios" &&
+          <GoBackIcon />
+        }
       </View>
     </Camera>
   );
@@ -176,24 +181,24 @@ const sendStyle = StyleSheet.create({
     fontSize: 26,
     color: blixtTheme.light,
     padding: 4,
-    bottom: 7,
-    left: 8,
+    bottom: 10,
+    left: 13,
   },
   paste: {
     position: "absolute",
     fontSize: 26,
     color: blixtTheme.light,
     padding: 4,
-    bottom: 8,
-    right: 8,
+    bottom: 12,
+    right: 8 + 8,
   },
   pasteDebug: {
     position: "absolute",
     fontSize: 26,
     color: blixtTheme.light,
     padding: 4,
-    bottom: 8,
-    right: 64,
+    bottom: 12,
+    right: 64 + 9,
   },
   transactionDetails: {
     height: "100%",

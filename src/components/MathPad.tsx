@@ -1,9 +1,10 @@
 import React, { useLayoutEffect } from "react";
-import { StyleSheet, LayoutAnimation, Animated } from "react-native";
+import { StyleSheet, LayoutAnimation, Animated, Keyboard } from "react-native";
 import { createAnimatableComponent } from "react-native-animatable";
 import { Button, Text } from "native-base";
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { PLATFORM } from "../utils/constants";
 
 const AnimatedButton = createAnimatableComponent(Button);
 
@@ -20,7 +21,9 @@ export interface IMathPadProps {
 export function MathPad({ visible, onAddPress, onSubPress, onMulPress, onDivPress, onParenthesisLeftPress, onParenthesisRightPress, onEqualSignPress }: IMathPadProps) {
   useLayoutEffect(() => {
     // if (visible === true) {
-      LayoutAnimation.configureNext(LayoutAnimation.create(90, 'easeInEaseOut', 'opacity'));
+      if (PLATFORM === "android") {
+        LayoutAnimation.configureNext(LayoutAnimation.create(90, 'easeInEaseOut', 'opacity'));
+      }
       // LayoutAnimation.configureNext({
       //   duration: 0,
       //   create: {
@@ -81,6 +84,12 @@ export function MathPad({ visible, onAddPress, onSubPress, onMulPress, onDivPres
       <AnimatedButton onPress={onEqualSignPress} style={mathPadStyles.button}>
         <Text style={mathPadStyles.buttonText}>=</Text>
       </AnimatedButton>
+
+      {PLATFORM === "ios" &&
+        <AnimatedButton onPress={() => Keyboard.dismiss()} style={mathPadStyles.button}>
+          <Text style={mathPadStyles.buttonText}>Done</Text>
+        </AnimatedButton>
+      }
     </Animated.View>
   )
 }
@@ -90,11 +99,12 @@ const mathPadStyles = StyleSheet.create({
     marginBottom: 0,
     marginLeft: 5,
     marginRight: 5,
-    height: 35,
+    height: PLATFORM === "android" ? 35 : 32,
     backgroundColor: blixtTheme.lightGray
   },
   buttonText: {
-    fontFamily: "monospace",
+    fontFamily: PLATFORM === "android" ? "monospace" : undefined,
     letterSpacing: 0,
+    fontSize: PLATFORM === "android" ? undefined : 10,
   }
 })

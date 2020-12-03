@@ -226,6 +226,7 @@ public class LndMobileService extends Service {
             // when the RPC ready callback
             // from LndMobile's start is called,
             // not when the InitWallet RPC call is done
+            // TODO(hsjoberg): document this more clearly
             unlockWalletRequest = request;
 
             ArrayList<String> seed = bundle.getStringArrayList("seed");

@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { StyleSheet, View, Share } from "react-native";
-import Clipboard from "@react-native-community/react-native-clipboard";
+import Clipboard from "@react-native-community/clipboard";
 import { Text, Container, H1, H2, Button, Icon, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -167,6 +167,7 @@ const style = StyleSheet.create({
   },
   buttons: {
     width: "100%",
+    marginBottom: 12,
   },
   button: {
     marginBottom: 12,

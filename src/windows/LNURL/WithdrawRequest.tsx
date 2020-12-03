@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar, Vibration } from "react-native";
+import { Alert, StatusBar, Vibration } from "react-native";
 import { Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import DialogAndroid from "react-native-dialogs";
@@ -12,6 +12,7 @@ import { RootStackParamList } from "../../Main";
 import { getDomainFromURL, toast, timeout } from "../../utils";
 import { ILNUrlWithdrawRequest } from "../../state/LNURL";
 import { convertBitcoinUnit, formatBitcoin, BitcoinUnits } from "../../utils/bitcoin-units";
+import { PLATFORM } from "../../utils/constants";
 
 interface IWithdrawRequestProps {
   navigation: StackNavigationProp<{}>;
@@ -75,35 +76,81 @@ export default function LNURLChannelRequest({ navigation }: IWithdrawRequestProp
         if (lnObject.minWithdrawable === lnObject.maxWithdrawable) {
           const amount = formatBitcoin(Long.fromValue(lnObject.maxWithdrawable).div(1000), bitcoinUnit);
           description += `\n\nAmount: ${amount}`;
-
-          const result = await DialogAndroid.alert(
-            title,
-            description,
-            {
-              negativeText: "Cancel",
-            }
-          );
-          action = result.action;
           sat = Math.floor(lnObject.minWithdrawable / 1000);
+
+          if (PLATFORM === "android") {
+            const result = await DialogAndroid.alert(
+              title,
+              description,
+              {
+                negativeText: "Cancel",
+              }
+            );
+            action = result.action;
+          } else {
+            await new Promise((resolve) => {
+              Alert.alert(
+                title,
+                description,
+                [{
+                  text: "OK",
+                  onPress: () => {
+                    action = DialogAndroid.actionPositive;
+                    resolve();
+                  },
+                }, {
+                  text: "Cancel",
+                  onPress: () => {
+                    action = DialogAndroid.actionNegative;
+                    resolve();
+                  },
+                }]
+              );
+            });
+          }
         }
         else {
           const minWithdrawableSat = formatBitcoin(Long.fromValue(minWithdrawable).div(1000), bitcoinUnit);
           const maxWithdrawableSat = formatBitcoin(Long.fromValue(maxWithdrawable).div(1000), bitcoinUnit);
           description += `\n\nMin withdrawal amount: ${minWithdrawableSat}\nMax withdrawal amount: ${maxWithdrawableSat}`;
 
-          const result = await DialogAndroid.prompt(
-            title,
-            description,
-            {
-              placeholder: `Amount (${BitcoinUnits[bitcoinUnit].nice})`,
-              keyboardType: "numeric",
-              allowEmptyInput: false,
-              negativeText: "Cancel",
-            }
-          );
 
-          action = result.action;
-          sat = convertBitcoinUnit(Number.parseFloat(result.text), bitcoinUnit, "satoshi").toNumber();
+          if (PLATFORM === "android") {
+            const result = await DialogAndroid.prompt(
+              title,
+              description,
+              {
+                placeholder: `Amount (${BitcoinUnits[bitcoinUnit].nice})`,
+                keyboardType: "numeric",
+                allowEmptyInput: false,
+                negativeText: "Cancel",
+              }
+            );
+
+            action = result.action;
+            sat = convertBitcoinUnit(Number.parseFloat(result.text), bitcoinUnit, "satoshi").toNumber();
+          } else {
+            await new Promise((resolve) => {
+              Alert.prompt(
+                title,
+                description,
+                [{
+                  text: "OK",
+                  onPress: (text) => {
+                    action = DialogAndroid.actionPositive;
+                    sat = convertBitcoinUnit(Number.parseFloat(text ?? "0"), bitcoinUnit, "satoshi").toNumber();
+                    resolve();
+                  },
+                }, {
+                  text: "Cancel",
+                  onPress: () => {
+                    action = DialogAndroid.actionNegative;
+                    resolve();
+                  },
+                }]
+              )
+            })
+          }
         }
 
         if (action === DialogAndroid.actionPositive) {

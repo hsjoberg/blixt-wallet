@@ -600,10 +600,10 @@ exports[`renders correctly 1`] = `
                                                   "fontSize": 25,
                                                   "left": 8,
                                                   "opacity": 1,
-                                                  "padding": 4,
+                                                  "padding": 6,
                                                   "paddingRight": 8,
                                                   "position": "absolute",
-                                                  "top": 11,
+                                                  "top": 29,
                                                 },
                                               ],
                                               Object {
@@ -644,7 +644,7 @@ exports[`renders correctly 1`] = `
                                                   "padding": 4,
                                                   "paddingRight": 8,
                                                   "position": "absolute",
-                                                  "top": 11,
+                                                  "top": 31,
                                                 },
                                               ],
                                               Object {
@@ -680,10 +680,10 @@ exports[`renders correctly 1`] = `
                                                 Object {
                                                   "color": "#e5eaea",
                                                   "fontSize": 27,
-                                                  "padding": 4,
+                                                  "padding": 5,
                                                   "position": "absolute",
                                                   "right": 8,
-                                                  "top": 11,
+                                                  "top": 31,
                                                 },
                                               ],
                                               Object {
@@ -720,10 +720,10 @@ exports[`renders correctly 1`] = `
                                                   "color": "#e5eaea",
                                                   "fontSize": 25,
                                                   "opacity": 1,
-                                                  "padding": 4,
+                                                  "padding": 5,
                                                   "position": "absolute",
                                                   "right": 48,
-                                                  "top": 12,
+                                                  "top": 32,
                                                 },
                                               ],
                                               Object {
@@ -747,7 +747,7 @@ exports[`renders correctly 1`] = `
                                               "padding": 4,
                                               "position": "absolute",
                                               "right": 86,
-                                              "top": 11,
+                                              "top": 31,
                                             }
                                           }
                                         >
@@ -797,10 +797,12 @@ exports[`renders correctly 1`] = `
                                         style={
                                           Object {
                                             "color": "#e5eaea",
-                                            "fontFamily": "System",
+                                            "fontFamily": "IBMPlexSans-Medium",
                                             "fontSize": 37,
-                                            "marginBottom": 2,
-                                            "marginTop": 30,
+                                            "height": 37,
+                                            "lineHeight": 41,
+                                            "marginBottom": 3,
+                                            "marginTop": 66,
                                           }
                                         }
                                         testID="BIG_BALANCE_HEADER"
@@ -811,7 +813,7 @@ exports[`renders correctly 1`] = `
                                         style={
                                           Object {
                                             "color": "#e5eaea",
-                                            "fontFamily": "System",
+                                            "fontFamily": "IBMPlexSans",
                                             "fontSize": 18,
                                             "opacity": 1,
                                           }
