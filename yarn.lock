@@ -8771,10 +8771,10 @@ react-native-webln@0.1.10:
   resolved "https://registry.yarnpkg.com/react-native-webln/-/react-native-webln-0.1.10.tgz"
   integrity sha512-H0it8l07rEHCCqDBfl6tt8EuTZKsEJYVzOr9d2ZolU0sKOv07J9+/8tQAUiEbaUB9tFi/HvBbSpr1KUgJCKefg==
 
-react-native-webview@10.10.2:
-  version "10.10.2"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-10.10.2.tgz"
-  integrity sha512-98Dh7q1gEflicFZ8KNL3nK5XRjx50OZXqw87jHofVjKfjbK0LKmvI5X8ymgUMGg61JVgI3AF+g8qpDvqjgQsfg==
+react-native-webview@11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.0.0.tgz#d667cbcc772e963fe88a4156290d25fe47ed43b0"
+  integrity sha512-gzID5ebCFVNkxreuabClymo6QkJbXCLEtiIUY9QAhxY58HsDUp8x0YzDVEROYyEJ4ghL71koAOeQRDNAgNnh1w==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"

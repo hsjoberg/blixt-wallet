@@ -94,7 +94,7 @@
     "react-native-tab-view": "2.15.2",
     "react-native-vector-icons": "^7.1.0",
     "react-native-webln": "0.1.10",
-    "react-native-webview": "10.10.2",
+    "react-native-webview": "11.0.0",
     "secp256k1": "4.0.2",
     "sha.js": "^2.4.11",
     "use-debounce": "5.1.0",
