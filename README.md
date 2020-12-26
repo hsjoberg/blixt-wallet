@@ -74,7 +74,7 @@ To build the iOS version, macOS is required. You also need an Apple Developer ac
 
 To start the application:
 - Run: `yarn start-metro`
-- Run: `yarn ios:fakelnd-debug`
+- Run: `yarn ios:mainnet-fakelnd-debug`
 
 ## Commit and Code-Style
 
