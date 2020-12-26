@@ -21,7 +21,18 @@
 		B77E06202F5CCA2EF5A26E97 /* libPods-BlixtWallet-BlixtWalletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 457694BE08363A5757587B12 /* libPods-BlixtWallet-BlixtWalletTests.a */; };
 		BA12DD7C6C3D42969E297EAE /* IBMPlexSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 53E703C0F141473C8564E7EA /* IBMPlexSans-Regular.ttf */; };
 		C22E6DD819CB41F69AADA37A /* IBMPlexSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D57823EDB09B4CD1998E77F2 /* IBMPlexSans-Medium.ttf */; };
+		CC28DA0B25925F8700A2DFA3 /* rpc.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC28DA0A25925F8700A2DFA3 /* rpc.pb.swift */; };
+		CC28DA1025925FD500A2DFA3 /* walletunlocker.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC28DA0F25925FD500A2DFA3 /* walletunlocker.pb.swift */; };
+		CC3C19202579C662004521F7 /* LndMobile.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6139F12579B66E0077D27B /* LndMobile.m */; };
+		CC3ED73F25983106007D29B4 /* LndMobileScheduledSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3ED73E25983106007D29B4 /* LndMobileScheduledSync.swift */; };
+		CC3ED74425983118007D29B4 /* LndMobileScheduledSync.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3ED74325983118007D29B4 /* LndMobileScheduledSync.m */; };
+		CC3F684925915ACA000F11AA /* LndMobileTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3F684825915ACA000F11AA /* LndMobileTools.m */; };
+		CC3F684E25915AD7000F11AA /* LndMobileTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F684D25915AD7000F11AA /* LndMobileTools.swift */; };
+		CC3F68532591683B000F11AA /* Lnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F68522591683B000F11AA /* Lnd.swift */; };
 		CC4F84C39523CF90E4DA5819 /* libPods-BlixtWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24A62E03C64FF473C7843187 /* libPods-BlixtWallet.a */; };
+		CCB51AEA259C2F74002637A2 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCB51AE9259C2F74002637A2 /* CloudKit.framework */; };
+		CCC7384A2599894B00CC7028 /* Lndmobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC3EDCF9259950F2007D29B4 /* Lndmobile.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		CCDBCBB525864296003E8BA8 /* LndMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDBCBB425864296003E8BA8 /* LndMobile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,7 +97,19 @@
 		C132F37DCBE159303BCD7902 /* Pods-BlixtWallet-tvOS.debugfakelnd.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet-tvOS.debugfakelnd.xcconfig"; path = "Target Support Files/Pods-BlixtWallet-tvOS/Pods-BlixtWallet-tvOS.debugfakelnd.xcconfig"; sourceTree = "<group>"; };
 		C410974135376A18E1B2404A /* Pods-BlixtWallet-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BlixtWallet-tvOS/Pods-BlixtWallet-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		CAAB4E5D47A9A21CFEB062E7 /* Pods-BlixtWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet.release.xcconfig"; path = "Target Support Files/Pods-BlixtWallet/Pods-BlixtWallet.release.xcconfig"; sourceTree = "<group>"; };
+		CC28DA0A25925F8700A2DFA3 /* rpc.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rpc.pb.swift; sourceTree = "<group>"; };
+		CC28DA0F25925FD500A2DFA3 /* walletunlocker.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = walletunlocker.pb.swift; sourceTree = "<group>"; };
+		CC3ED73E25983106007D29B4 /* LndMobileScheduledSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LndMobileScheduledSync.swift; sourceTree = "<group>"; };
+		CC3ED74325983118007D29B4 /* LndMobileScheduledSync.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LndMobileScheduledSync.m; sourceTree = "<group>"; };
+		CC3EDCF9259950F2007D29B4 /* Lndmobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Lndmobile.framework; sourceTree = "<group>"; };
+		CC3F684825915ACA000F11AA /* LndMobileTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LndMobileTools.m; sourceTree = "<group>"; };
+		CC3F684D25915AD7000F11AA /* LndMobileTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LndMobileTools.swift; sourceTree = "<group>"; };
+		CC3F68522591683B000F11AA /* Lnd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lnd.swift; sourceTree = "<group>"; };
+		CC6139F12579B66E0077D27B /* LndMobile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LndMobile.m; sourceTree = "<group>"; };
 		CC85FC242576522B00C376A9 /* BlixtWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BlixtWallet.entitlements; path = BlixtWallet/BlixtWallet.entitlements; sourceTree = "<group>"; };
+		CCB51AE9259C2F74002637A2 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		CCDBCBB325864296003E8BA8 /* BlixtWallet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BlixtWallet-Bridging-Header.h"; sourceTree = "<group>"; };
+		CCDBCBB425864296003E8BA8 /* LndMobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LndMobile.swift; sourceTree = "<group>"; };
 		CFC488B9CB00B9AB0D8FDE59 /* libPods-BlixtWallet-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlixtWallet-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D57823EDB09B4CD1998E77F2 /* IBMPlexSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "IBMPlexSans-Medium.ttf"; path = "../assets/fonts/IBMPlexSans-Medium.ttf"; sourceTree = "<group>"; };
 		D64B150F528503028AA4B961 /* Pods-BlixtWallet-tvOS.debugtestnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet-tvOS.debugtestnet.xcconfig"; path = "Target Support Files/Pods-BlixtWallet-tvOS/Pods-BlixtWallet-tvOS.debugtestnet.xcconfig"; sourceTree = "<group>"; };
@@ -111,7 +134,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCB51AEA259C2F74002637A2 /* CloudKit.framework in Frameworks */,
 				CC4F84C39523CF90E4DA5819 /* libPods-BlixtWallet.a in Frameworks */,
+				CCC7384A2599894B00CC7028 /* Lndmobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +179,7 @@
 		13B07FAE1A68108700A75B9A /* BlixtWallet */ = {
 			isa = PBXGroup;
 			children = (
+				CCDBC9FB258515DD003E8BA8 /* LndMobile */,
 				CC85FC242576522B00C376A9 /* BlixtWallet.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -169,6 +195,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CCB51AE9259C2F74002637A2 /* CloudKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				24A62E03C64FF473C7843187 /* libPods-BlixtWallet.a */,
@@ -228,6 +255,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				CC3EDCF9259950F2007D29B4 /* Lndmobile.framework */,
 				13B07FAE1A68108700A75B9A /* BlixtWallet */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BlixtWalletTests */,
@@ -259,6 +287,23 @@
 				53E703C0F141473C8564E7EA /* IBMPlexSans-Regular.ttf */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		CCDBC9FB258515DD003E8BA8 /* LndMobile */ = {
+			isa = PBXGroup;
+			children = (
+				CC28DA0F25925FD500A2DFA3 /* walletunlocker.pb.swift */,
+				CC28DA0A25925F8700A2DFA3 /* rpc.pb.swift */,
+				CC6139F12579B66E0077D27B /* LndMobile.m */,
+				CC3F684825915ACA000F11AA /* LndMobileTools.m */,
+				CCDBCBB425864296003E8BA8 /* LndMobile.swift */,
+				CCDBCBB325864296003E8BA8 /* BlixtWallet-Bridging-Header.h */,
+				CC3F684D25915AD7000F11AA /* LndMobileTools.swift */,
+				CC3F68522591683B000F11AA /* Lnd.swift */,
+				CC3ED73E25983106007D29B4 /* LndMobileScheduledSync.swift */,
+				CC3ED74325983118007D29B4 /* LndMobileScheduledSync.m */,
+			);
+			path = LndMobile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -358,7 +403,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = AT26Z24V2Q;
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1230;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -508,7 +553,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BlixtWallet/Pods-BlixtWallet-resources.sh",
-				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -529,7 +573,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -560,7 +603,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-BlixtWallet-BlixtWalletTests/Pods-BlixtWallet-BlixtWalletTests-resources.sh",
-				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -581,7 +623,6 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -702,7 +743,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC3F684E25915AD7000F11AA /* LndMobileTools.swift in Sources */,
+				CC3F68532591683B000F11AA /* Lnd.swift in Sources */,
+				CC3ED74425983118007D29B4 /* LndMobileScheduledSync.m in Sources */,
+				CC3ED73F25983106007D29B4 /* LndMobileScheduledSync.swift in Sources */,
+				CCDBCBB525864296003E8BA8 /* LndMobile.swift in Sources */,
+				CC3C19202579C662004521F7 /* LndMobile.m in Sources */,
+				CC28DA0B25925F8700A2DFA3 /* rpc.pb.swift in Sources */,
+				CC28DA1025925FD500A2DFA3 /* walletunlocker.pb.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				CC3F684925915ACA000F11AA /* LndMobileTools.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -744,6 +794,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7FB0EDCFC05DD4E258EB4698 /* Pods-BlixtWallet-BlixtWalletTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -767,6 +818,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6F21675F737F23140EE8373E /* Pods-BlixtWallet-BlixtWalletTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
@@ -791,22 +843,31 @@
 				CHAIN = mainnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
-				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				FLAVOR = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LndMobile",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Blixt-Wallet-Debug2";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.debug;
 				PRODUCT_NAME = "Blixt Wallet Debug";
+				SWIFT_OBJC_BRIDGING_HEADER = "LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -819,20 +880,30 @@
 				CHAIN = mainnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				FLAVOR = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LndMobile",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Blixt-Wallet";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet;
 				PRODUCT_NAME = "Blixt Wallet";
+				SWIFT_OBJC_BRIDGING_HEADER = "LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -979,6 +1050,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -994,7 +1066,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -1036,9 +1108,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1047,7 +1120,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -1055,6 +1128,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1092,6 +1166,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1107,7 +1182,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -1125,25 +1200,34 @@
 			baseConfigurationReference = 51FEA3B5F5E91ADECAF81AF4 /* Pods-BlixtWallet.debugtestnet.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CHAIN = regtest;
+				CHAIN = testnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
-				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				FLAVOR = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LndMobile",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.testnet.debug;
 				PRODUCT_NAME = "Blixt Wallet Testnet Debug";
+				SWIFT_OBJC_BRIDGING_HEADER = "LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = DebugTestnet;
@@ -1152,6 +1236,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DC5C60C16BB07650A497820A /* Pods-BlixtWallet-BlixtWalletTests.debugtestnet.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1255,9 +1340,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1266,7 +1352,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -1274,6 +1360,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1287,20 +1374,30 @@
 				CHAIN = testnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				FLAVOR = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LndMobile",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Blixt-Wallet-Regtest";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.regtest;
 				PRODUCT_NAME = "Blixt Wallet Testnet";
+				SWIFT_OBJC_BRIDGING_HEADER = "LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = ReleaseTestnet;
@@ -1309,6 +1406,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7F8DF590825EC1BAC7E0ABE5 /* Pods-BlixtWallet-BlixtWalletTests.releasetestnet.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
@@ -1412,6 +1510,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1427,7 +1526,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -1445,25 +1544,34 @@
 			baseConfigurationReference = 1D85700D17488384A1AE7C09 /* Pods-BlixtWallet.debugregtest.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CHAIN = mainnet;
+				CHAIN = regtest;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
-				ENABLE_BITCODE = NO;
-				FLAVOR = fakelnd;
+				EXCLUDED_ARCHS = "i386 x86_64";
+				FLAVOR = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LndMobile",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Blixt-Wallet-Regtest-Debug";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.regtest.debug;
 				PRODUCT_NAME = "Blixt Wallet Regtest Debug";
+				SWIFT_OBJC_BRIDGING_HEADER = "LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = DebugRegtest;
@@ -1472,6 +1580,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 542C9ECE0553F656BFC79606 /* Pods-BlixtWallet-BlixtWalletTests.debugregtest.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1575,9 +1684,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1586,7 +1696,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -1594,6 +1704,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1607,20 +1718,30 @@
 				CHAIN = regtest;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
-				FLAVOR = fakelnd;
+				EXCLUDED_ARCHS = "i386 x86_64";
+				FLAVOR = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LndMobile",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Blixt-Wallet-Fakelnd";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.regtest;
 				PRODUCT_NAME = "Blixt Wallet Regtest";
+				SWIFT_OBJC_BRIDGING_HEADER = "LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = ReleaseRegtest;
@@ -1629,6 +1750,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EA2D85B8E85EE977BE93539A /* Pods-BlixtWallet-BlixtWalletTests.releaseregtest.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
@@ -1732,6 +1854,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1747,7 +1870,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -1768,22 +1891,31 @@
 				CHAIN = mainnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
-				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				FLAVOR = fakelnd;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LndMobile",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Blixt-Wallet-Fakelnd-Debug";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.mainnet.fakelnd.debug;
 				PRODUCT_NAME = "Blixt Wallet Fakelnd Debug";
+				SWIFT_OBJC_BRIDGING_HEADER = "LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = DebugFakelnd;
@@ -1792,6 +1924,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1575F4AEEE77591610698556 /* Pods-BlixtWallet-BlixtWalletTests.debugfakelnd.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1895,9 +2028,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1906,7 +2040,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
@@ -1914,6 +2048,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1927,20 +2062,30 @@
 				CHAIN = mainnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
+				EXCLUDED_ARCHS = "i386 x86_64";
 				FLAVOR = fakelnd;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LndMobile",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Blixt-Wallet-Fakelnd";
+				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.mainnet.fakelnd;
 				PRODUCT_NAME = "Blixt Wallet Fakelnd";
+				SWIFT_OBJC_BRIDGING_HEADER = "LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = ReleaseFakelnd;
@@ -1949,6 +2094,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1BF9C37DDFECED4FEB42102D /* Pods-BlixtWallet-BlixtWalletTests.releasefakelnd.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;

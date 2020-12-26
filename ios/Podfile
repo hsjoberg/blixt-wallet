@@ -18,6 +18,9 @@ target 'BlixtWallet' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  # proto
+  pod 'SwiftProtobuf', '~> 1.0'
+
   # react-native-permissions
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"

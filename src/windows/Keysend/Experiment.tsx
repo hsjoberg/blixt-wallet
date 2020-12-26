@@ -12,7 +12,7 @@ import { lnrpc } from "../../../proto/proto";
 import { getChanInfo, listPrivateChannels } from "../../lndmobile/channel";
 import QrCode from "../../components/QrCode";
 import BlixtForm from "../../components/Form";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 import { NavigationButton } from "../../components/NavigationButton";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { ITransaction } from "../../storage/database/transaction";

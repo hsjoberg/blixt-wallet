@@ -6,6 +6,7 @@ import Seed from "./Seed";
 import Confirm from "./Confirm";
 import AlmostDone from "./AlmostDone";
 import GoogleDriveBackup from "./GoogleDriveBackup";
+import ICloudBackup from "./ICloudBackup";
 
 import Restore from "./Restore";
 
@@ -20,6 +21,7 @@ export type WelcomeStackParamList = {
   Seed: undefined;
   Confirm: undefined;
   GoogleDriveBackup: undefined;
+  ICloudBackup: undefined;
   AlmostDone: undefined;
 
   Restore: undefined;
@@ -44,6 +46,7 @@ export default function WelcomeIndex() {
       <Stack.Screen name="Seed" component={Seed} />
       <Stack.Screen name="Confirm" component={Confirm} />
       <Stack.Screen name="GoogleDriveBackup" component={GoogleDriveBackup} />
+      <Stack.Screen name="ICloudBackup" component={ICloudBackup} />
       <Stack.Screen name="AlmostDone" component={AlmostDone} />
 
       <Stack.Screen name="Restore" component={Restore} />

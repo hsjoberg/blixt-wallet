@@ -13,7 +13,7 @@ export enum ELndMobileStatusCodes {
 
 let LndMobileStatus = 0;
 
-export const init = jest.fn(async (): Promise<{ data: string } | number> => {
+export const initialize = jest.fn(async (): Promise<{ data: string } | number> => {
   await timeout(10);
   LndMobileStatus += ELndMobileStatusCodes.STATUS_SERVICE_BOUND; // TODO figure out bitmasking...
   return { data: "" };

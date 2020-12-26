@@ -12,6 +12,7 @@ import Long from "long";
 import { DeviceEventEmitter } from "react-native";
 import { lnrpc } from "../../proto/proto";
 import { deriveKey, signMessage } from "../lndmobile/wallet";
+import { LndMobileEventEmitter } from "../utils/event-listener";
 
 const log = logger("LNURL");
 
@@ -319,7 +320,7 @@ export const lnUrl: ILNUrlModel = {
 
     if (lnUrlStr && type === "withdrawRequest" && lnUrlObject && lnUrlObject.tag === "withdrawRequest") {
       // 5. Once accepted by the user, LN WALLET sends a GET to LN SERVICE in the form of <callback>?k1=<k1>&pr=<lightning invoice, ...>
-      const listener = DeviceEventEmitter.addListener("SubscribeInvoices", async (e) => {
+      const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e) => {
         log.d("SubscribeInvoices event", [e]);
         listener.remove();
 

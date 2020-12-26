@@ -37,6 +37,7 @@ export interface ISettingsModel {
   changeTorEnabled: Thunk<ISettingsModel, boolean>;
   changeHideExpiredInvoices: Thunk<ISettingsModel, boolean>;
   changeScreenTransitionsEnabled: Thunk<ISettingsModel, boolean>;
+  changeICloudBackupEnabled: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -56,6 +57,7 @@ export interface ISettingsModel {
   setTorEnabled: Action<ISettingsModel, boolean>;
   setHideExpiredInvoices: Action<ISettingsModel, boolean>;
   setScreenTransitionsEnabled: Action<ISettingsModel, boolean>;
+  setICloudBackupEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -75,6 +77,7 @@ export interface ISettingsModel {
   torEnabled: boolean;
   hideExpiredInvoices: boolean;
   screenTransitionsEnabled: boolean;
+  iCloudBackupEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -98,6 +101,7 @@ export const settings: ISettingsModel = {
     actions.setTorEnabled(await getItemObject(StorageItem.torEnabled) || false);
     actions.setHideExpiredInvoices(await getItemObject(StorageItem.hideExpiredInvoices) || false);
     actions.setScreenTransitionsEnabled(await getItemObject(StorageItem.screenTransitionsEnabled) ?? true);
+    actions.setICloudBackupEnabled(await getItemObject(StorageItem.iCloudBackupEnabled ?? false));
 
     log.d("Done");
   }),
@@ -195,6 +199,11 @@ export const settings: ISettingsModel = {
     actions.setScreenTransitionsEnabled(payload);
   }),
 
+  changeICloudBackupEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.iCloudBackupEnabled, payload);
+    actions.setICloudBackupEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -213,6 +222,7 @@ export const settings: ISettingsModel = {
   setTorEnabled: action((state, payload) => { state.torEnabled = payload; }),
   setHideExpiredInvoices: action((state, payload) => { state.hideExpiredInvoices = payload; }),
   setScreenTransitionsEnabled: action((state, payload) => { state.screenTransitionsEnabled = payload; }),
+  setICloudBackupEnabled: action((state, payload) => { state.iCloudBackupEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -232,4 +242,5 @@ export const settings: ISettingsModel = {
   torEnabled: false,
   hideExpiredInvoices: false,
   screenTransitionsEnabled: true,
+  iCloudBackupEnabled: false,
 };

@@ -39,7 +39,7 @@ export const sendCommand = async <IReq, Req, Res>({ request, response, method, o
   try {
     const instance = request.create(options);
     const b64 = await LndMobile.sendCommand(method, base64.fromByteArray(request.encode(instance).finish()));
-    return response.decode(base64.toByteArray(b64.data));
+    return response.decode(base64.toByteArray(b64.data || ""));
   } catch (e) { throw e; }
 };
 

@@ -85,7 +85,7 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
     bitcoinUnit: BitcoinUnits[bitcoinUnit],
     fiatUnit,
     evalMathExpression(target: "bitcoin" | "fiat") {
-      const val = evaluateExpression(target === "bitcoin" ? bitcoinValue! : dollarValue!);
+      const val = evaluateExpression(target === "bitcoin" ? bitcoinValue || "0" : dollarValue || "0");
       if (target === "bitcoin") {
         setBitcoinValue(val);
         setDollarValue(

@@ -8,3 +8,5 @@ export const HAMPUS_EMAIL = "mailto:hampus.sjobergðŸ’©protonmail.com".replace("ð
 export const TELEGRAM = "https://t.me/blixtwallet";
 
 export const PLATFORM = Platform.OS;
+
+export const MATH_PAD_NATIVE_ID = "MATH_PAD";

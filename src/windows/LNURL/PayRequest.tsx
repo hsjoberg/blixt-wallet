@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Vibration, StyleSheet, Linking } from "react-native";
+import { Vibration, StyleSheet, Linking, Alert } from "react-native";
 import Clipboard from "@react-native-community/clipboard"
 import { Body, Card, Text, CardItem, H1, View, Button, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
-import DialogAndroid from "react-native-dialogs";
 import Long from "long";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
@@ -89,7 +88,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   };
 
   const viewMetadata = () => {
-    DialogAndroid.alert("Technical metadata", JSON.stringify(metadata, undefined, 2));
+    Alert.alert("Technical metadata", JSON.stringify(metadata, undefined, 2));
   }
 
   const onChangeBitcoinInput = (newText: string) => {

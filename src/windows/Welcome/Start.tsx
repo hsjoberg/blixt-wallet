@@ -99,11 +99,11 @@ There is currently no WatchTower support to watch your channels while you are of
     menu.current.hide();
     try {
       // await NativeModules.LndMobile.stopLnd();
-      await NativeModules.LndMobile.killLnd();
+      await NativeModules.LndMobileTools.killLnd();
     } catch(e) {
       console.log(e);
     }
-    NativeModules.LndMobile.restartApp();
+    NativeModules.LndMobileTools.restartApp();
   }
 
   return (

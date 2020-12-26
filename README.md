@@ -22,7 +22,7 @@ powered by lnd and Neutrino SPV.
 - [x] Scheduled sync of chain background job
 - [x] Local channel backup
 - [x] [LNURL](https://github.com/btcontract/lnurl-rfc) support (all sub-protocols: pay, channel, auth and withdraw)
-- [x] Channel backup to Google Drive
+- [x] Channel backup to Google Drive (Android) and iCloud (iOS)
 - [x] [WebLN](https://webln.dev/) browser
 - [x] Support for [Multi-Part Payments (MPP)](https://lightning.engineering/posts/2020-05-07-mpp/)
 - [x] Integrated Tor support
@@ -57,11 +57,12 @@ To start the application:
 
 ### iOS
 
-_The iPhone/iOS version is still work in progress and is not yet stable nor fully working._
+_The iPhone/iOS version is still work in progress._
 
 To build the iOS version, macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
 
 - Install [XCode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
+- Build lnd for iOS by following the steps in [build-ios-framework.md](build-ios-framework.md)
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
 - Install CocoaPods libs: `cd ios && pod install`
@@ -74,7 +75,7 @@ To build the iOS version, macOS is required. You also need an Apple Developer ac
 
 To start the application:
 - Run: `yarn start-metro`
-- Run: `yarn ios:mainnet-fakelnd-debug`
+- Run: `yarn ios:mainnet-debug --device "<your device name>"` or build from XCode
 
 ## Commit and Code-Style
 

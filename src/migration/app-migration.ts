@@ -2,7 +2,7 @@ import { NativeModules } from "react-native";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getItem } from "../storage/app";
 import { getPin, getSeed, removeSeed, setSeed, setPin, removePin, setWalletPassword } from "../storage/keystore";
-const { LndMobile } = NativeModules;
+const { LndMobile, LndMobileTools } = NativeModules;
 
 export interface IAppMigration {
   beforeLnd: (db: SQLiteDatabase, currentVersion: number) => Promise<void>;
@@ -16,14 +16,14 @@ export const appMigration: IAppMigration[] = [
   // Version 1
   {
     async beforeLnd(db, i) {
-      await LndMobile.writeConfigFile();
+      await LndMobileTools.writeConfigFile();
     },
   },
   // Version 2
   {
     async beforeLnd(db, i) {
       await setItemObject(StorageItem.clipboardInvoiceCheck, true);
-      await LndMobile.writeConfigFile();
+      await LndMobileTools.writeConfigFile();
     },
   },
   // Version 3
@@ -39,7 +39,7 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       // Might not be needed:
-      // const result = await NativeModules.LndMobile.deleteTLSCerts();
+      // const result = await NativeModules.LndMobileTools.deleteTLSCerts();
       // if (!result) {
       //   throw new Error("Failed to delete TLS certificates");
       // }
@@ -94,7 +94,7 @@ export const appMigration: IAppMigration[] = [
   // Version 11
   {
     async beforeLnd(db, i) {
-      await LndMobile.writeConfigFile();
+      await LndMobileTools.writeConfigFile();
     },
   },
   // Version 12
@@ -118,7 +118,7 @@ export const appMigration: IAppMigration[] = [
   // Version 15
   {
     async beforeLnd(db, i) {
-      await LndMobile.writeConfigFile();
+      await LndMobileTools.writeConfigFile();
     },
   },
   // Version 16
@@ -133,7 +133,7 @@ export const appMigration: IAppMigration[] = [
       await db.executeSql("ALTER TABLE tx ADD identifiedService TEXT NULL");
       await setItemObject<boolean>(StorageItem.hideExpiredInvoices, true);
       await setItemObject<number>(StorageItem.lastGoogleDriveBackup, new Date().getTime());
-      await LndMobile.writeConfigFile();
+      await LndMobileTools.writeConfigFile();
     },
   },
   // Version 18
@@ -146,6 +146,12 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       await db.executeSql("ALTER TABLE tx ADD note TEXT NULL");
+    },
+  },
+  // Version 20
+  {
+    async beforeLnd(db, i) {
+      await setItemObject<number>(StorageItem.lastICloudBackup, new Date().getTime());
     },
   },
 ];

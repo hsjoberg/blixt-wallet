@@ -3,7 +3,7 @@ import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
 import RealTimeBlur from "../react-native-realtimeblur";
 import { KeyboardAvoidingView, View, StyleSheet } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { TouchableWithoutFeedback } from "react-native";
 
 export interface ITransactionDetailsProps {
   children: any;
@@ -31,7 +31,7 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
     >
       {!useModal
         ? <View style={{ flex: 1 }}>
-            <TouchableWithoutFeedback style={{ width:"100%", height:"100%" }} onPress={goBack}></TouchableWithoutFeedback>
+            <TouchableWithoutFeedback style={{ width: "100%", height: "100%" }} onPress={goBack}></TouchableWithoutFeedback>
             <View style={style.container}>
               <View style={[style.inner, { margin: noMargin ? 0 : style.inner.margin }]}>
                 {children}

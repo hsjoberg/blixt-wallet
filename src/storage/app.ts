@@ -40,6 +40,8 @@ export enum StorageItem { // const enums not supported in Babel 7...
   hideExpiredInvoices = "hideExpiredInvoices",
   lastGoogleDriveBackup = "lastGoogleDriveBackup",
   screenTransitionsEnabled = "screenTransitionsEnabled",
+  iCloudBackupEnabled = "iCloudBackupEnabled",
+  lastICloudBackup = "lastICloudBackup",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -92,6 +94,8 @@ export const clearApp = async () => {
     removeItem(StorageItem.hideExpiredInvoices),
     removeItem(StorageItem.lastGoogleDriveBackup),
     removeItem(StorageItem.screenTransitionsEnabled),
+    removeItem(StorageItem.iCloudBackupEnabled),
+    removeItem(StorageItem.lastICloudBackup),
   ]);
 };
 
@@ -127,5 +131,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.hideExpiredInvoices, false),
     setItemObject<number>(StorageItem.lastGoogleDriveBackup, new Date().getTime()),
     setItemObject<boolean>(StorageItem.screenTransitionsEnabled, true),
+    setItemObject<boolean>(StorageItem.iCloudBackupEnabled, false),
+    setItemObject<number>(StorageItem.lastICloudBackup, new Date().getTime()),
   ]);
 };

@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { Content } from "native-base";
 import { StyleProp, ViewStyle, StyleSheet } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 
 export interface IContentProps {
   children?: ReactNode;

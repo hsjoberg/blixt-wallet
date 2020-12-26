@@ -15,6 +15,7 @@ export default function Authentication() {
   const fingerprintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
   const fingerprintStartScan = useStoreActions((store) => store.security.fingerprintStartScan);
   const fingerprintStopScan = useStoreActions((store) => store.security.fingerprintStopScan);
+  const biometricsSensor = useStoreState((store) => store.security.sensor);
   const loginMethods = useStoreState((store) => store.security.loginMethods);
   const startScan = useFingerprintAuth(async () => {});
 
@@ -40,7 +41,12 @@ export default function Authentication() {
         }
         {loginMethods.has(LoginMethods.fingerprint) &&
           <View style={style.fingerPrintSymbolContainer}>
-            <Icon type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} onPress={startScan} />
+            {biometricsSensor !== "Face ID" &&
+              <Icon style={style.fingerPrintSymbol} type="Entypo" name="fingerprint" onPress={startScan} />
+            }
+            {biometricsSensor === "Face ID" &&
+              <Icon style={style.fingerPrintSymbol} type="MaterialCommunityIcons" name="face-recognition" onPress={startScan} />
+            }
           </View>
         }
         {loginMethods.size === 0 && <Text style={{textAlign: "center"}}>Error</Text>}

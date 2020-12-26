@@ -4,6 +4,7 @@ import { stringToUint8Array } from "../utils/index";
 import * as base64 from "base64-js";
 
 import { lnrpc, walletrpc, signrpc } from "../../proto/proto";
+import { PLATFORM } from "../utils/constants";
 
 const { LndMobile } = NativeModules;
 
@@ -23,7 +24,6 @@ export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {
 
 export const initWallet = async (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string): Promise<void> => {
   await NativeModules.LndMobile.initWallet(seed, password, recoveryWindow ?? 0, channelBackupsBase64 ?? null);
-  return;
   // const options: lnrpc.IInitWalletRequest = {
   //   cipherSeedMnemonic: seed,
   //   walletPassword: stringToUint8Array(password),
@@ -123,6 +123,7 @@ export const signMessage = async (keyFamily: number, keyIndex: number, msg: Uint
 };
 
 // TODO exception?
+// TODO move to a more appropiate file?
 export const subscribeInvoices = async (): Promise<string> => {
   try {
     const response = await sendStreamCommand<lnrpc.IInvoiceSubscription, lnrpc.InvoiceSubscription>({

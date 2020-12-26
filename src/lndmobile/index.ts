@@ -5,14 +5,13 @@ import Long from "long";
 import sha from "sha.js";
 import { stringToUint8Array, hexToUint8Array, decodeTLVRecord } from "../utils";
 import { TLV_RECORD_NAME } from "../utils/constants";
-const { LndMobile } = NativeModules;
+const { LndMobile, LndMobileTools } = NativeModules;
 
 /**
  * @throws
- * TODO return values are terrible
  */
-export const init = async (): Promise<{ data: string } | number> => {
-  return await LndMobile.init();
+export const initialize = async (): Promise<{ data: string } | number> => {
+  return await LndMobile.initialize();
 };
 
 export enum ELndMobileStatusCodes {
@@ -30,7 +29,7 @@ export const checkStatus = async (): Promise<ELndMobileStatusCodes> => {
  * @return string
  */
 export const writeConfigFile = async () => {
-  return await LndMobile.writeConfigFile();
+  return await LndMobileTools.writeConfigFile();
 };
 
 /**
@@ -38,6 +37,45 @@ export const writeConfigFile = async () => {
  */
 export const startLnd = async (torEnabled: boolean): Promise<string> => {
   return await LndMobile.startLnd(torEnabled);
+};
+
+export const checkICloudEnabled = async (): Promise<boolean> => {
+  return await LndMobileTools.checkICloudEnabled();
+};
+
+/**
+ * @throws
+ */
+export const checkApplicationSupportExists = async () => {
+  return await LndMobileTools.checkApplicationSupportExists();
+};
+
+/**
+ * @throws
+ */
+export const checkLndFolderExists = async () => {
+  return await LndMobileTools.checkLndFolderExists();
+};
+
+/**
+ * @throws
+ */
+export const createIOSApplicationSupportAndLndDirectories = async () => {
+  return await LndMobileTools.createIOSApplicationSupportAndLndDirectories();
+};
+
+/**
+ * @throws
+ */
+export const TEMP_moveLndToApplicationSupport = async () => {
+  return await LndMobileTools.TEMP_moveLndToApplicationSupport();
+};
+
+/**
+ * @throws
+ */
+export const excludeLndICloudBackup = async () => {
+  return await LndMobileTools.excludeLndICloudBackup();
 };
 
 /**
@@ -57,6 +95,20 @@ export const connectPeer = async (pubkey: string, host: string): Promise<lnrpc.C
   });
 };
 
+/**
+ * @throws
+ */
+export const disconnectPeer = async (pubKey: string): Promise<lnrpc.DisconnectPeerResponse> => {
+  const response = await sendCommand<lnrpc.IDisconnectPeerRequest, lnrpc.DisconnectPeerRequest, lnrpc.DisconnectPeerResponse>({
+    request: lnrpc.DisconnectPeerRequest,
+    response: lnrpc.DisconnectPeerResponse,
+    method: "DisconnectPeer",
+    options: {
+      pubKey,
+    },
+  });
+  return response;
+};
 
 /**
  * @throws
@@ -409,7 +461,6 @@ export const listPeers = async (): Promise<lnrpc.ListPeersResponse> => {
   });
   return response;
 };
-
 
 /**
  * @throws

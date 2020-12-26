@@ -1,16 +1,24 @@
 import {
-  init,
+  initialize,
   writeConfigFile,
   checkStatus,
   startLnd,
+  checkICloudEnabled,
+  checkApplicationSupportExists,
+  checkLndFolderExists,
+  createIOSApplicationSupportAndLndDirectories,
+  TEMP_moveLndToApplicationSupport,
+  excludeLndICloudBackup,
 
   addInvoice,
   cancelInvoice,
   connectPeer,
+  // TODO disconnectPeer
   decodePayReq,
   getNodeInfo,
   getInfo,
   lookupInvoice,
+  // TODO listPeers
   readLndLog,
   sendPaymentSync,
   sendPaymentV2Sync,
@@ -54,15 +62,20 @@ import {
 import {
   checkScheduledSyncWorkStatus, WorkInfo
 } from "../lndmobile/fake/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
-import { lnrpc, signrpc, invoicesrpc } from "../../proto/proto";
-import { autopilotrpc } from "../../proto/proto-autopilot";
+import { lnrpc, signrpc, invoicesrpc, autopilotrpc } from "../../proto/proto";
 
 export interface ILndMobileInjections {
   index: {
-    init: () => Promise<{ data: string } | number>;
+    initialize: () => Promise<{ data: string } | number>;
     writeConfigFile: () => Promise<string>;
     checkStatus: () => Promise<number>;
     startLnd: (torEnabled: boolean) => Promise<string>;
+    checkICloudEnabled: () => Promise<boolean>;
+    checkApplicationSupportExists: () => Promise<boolean>;
+    checkLndFolderExists: () => Promise<boolean>;
+    createIOSApplicationSupportAndLndDirectories: () => Promise<boolean>;
+    TEMP_moveLndToApplicationSupport: () => Promise<boolean>;
+    excludeLndICloudBackup: () => Promise<boolean>;
 
     addInvoice: (amount: number, memo: string, expiry?: number) => Promise<lnrpc.AddInvoiceResponse>;
     cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>
@@ -117,10 +130,16 @@ export interface ILndMobileInjections {
 
 export default {
   index: {
-    init,
+    initialize,
     writeConfigFile,
     checkStatus,
     startLnd,
+    checkICloudEnabled,
+    checkApplicationSupportExists,
+    checkLndFolderExists,
+    createIOSApplicationSupportAndLndDirectories,
+    TEMP_moveLndToApplicationSupport,
+    excludeLndICloudBackup,
 
     addInvoice,
     cancelInvoice,

@@ -9,13 +9,15 @@ import { TLV_RECORD_NAME } from "../../utils/constants";
 import * as base64 from "base64-js";
 import payReq from "bolt11";
 
+const { LndMobileTools } = NativeModules;
+
 let LndMobileStatus = 0;
 
 /**
  * @throws
  * TODO return values are terrible
  */
-export const init = async (): Promise<{ data: string } | number> => {
+export const initialize = async (): Promise<{ data: string } | number> => {
   await timeout(10);
   LndMobileStatus += ELndMobileStatusCodes.STATUS_SERVICE_BOUND; // TODO figure out bitmasking...
   return { data: "" };
@@ -45,6 +47,45 @@ export const writeConfigFile = async () => {
 export const startLnd = async (torEnabled: boolean): Promise<string> => {
   await timeout(100);
   return "started";
+};
+
+/**
+ * @throws
+ */
+export const checkApplicationSupportExists = async () => {
+  return await LndMobileTools.checkApplicationSupportExists();
+};
+
+/**
+ * @throws
+ */
+export const checkLndFolderExists = async () => {
+  return await LndMobileTools.checkLndFolderExists();
+};
+
+/**
+ * @throws
+ */
+export const createIOSApplicationSupportAndLndDirectories = async () => {
+  return await LndMobileTools.createIOSApplicationSupportAndLndDirectories();
+};
+
+/**
+ * @throws
+ */
+export const TEMP_moveLndToApplicationSupport = async () => {
+  return await LndMobileTools.TEMP_moveLndToApplicationSupport();
+};
+
+/**
+ * @throws
+ */
+export const excludeLndICloudBackup = async () => {
+  return await LndMobileTools.excludeLndICloudBackup();
+};
+
+export const checkICloudEnabled = async (): Promise<boolean> => {
+  return await LndMobileTools.checkICloudEnabled();
 };
 
 /**

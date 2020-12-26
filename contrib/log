@@ -1,1 +1,1 @@
-adb logcat ReactNative:V ReactNativeJS:V LndMobile:V SoLoader:V LndMobileService:V OnionProxyManagerEventHandler:V BlixtTor:V *oxyManagerEventHandler:V crash_dump64:V DEBUG:V *:S
+adb logcat ReactNative:V ReactNativeJS:V LndMobile:V SoLoader:V LndMobileService:V OnionProxyManagerEventHandler:V BlixtWallet:V BlixtTor:V *oxyManagerEventHandler:V crash_dump64:V DEBUG:V *:S

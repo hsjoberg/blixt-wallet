@@ -20,9 +20,10 @@ import { ILNUrlModel, lnUrl } from "./LNURL";
 import { IGoogleModel, google } from "./Google";
 import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
 import { IWebLNModel, webln } from "./WebLN";
-import { IAndroidDeeplinkManager, androidDeeplinkManager } from "./AndroidDeeplinkManager";
+import { IDeeplinkManager, deeplinkManager } from "./DeeplinkManager";
 import { INotificationManagerModel, notificationManager } from "./NotificationManager";
 import { ILightNameModel, lightName } from "./LightName";
+import { IICloudBackupModel, iCloudBackup } from "./ICloudBackup";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
@@ -87,9 +88,10 @@ export interface IStoreModel {
   google: IGoogleModel;
   googleDriveBackup: IGoogleDriveBackupModel;
   webln: IWebLNModel;
-  androidDeeplinkManager: IAndroidDeeplinkManager;
+  deeplinkManager: IDeeplinkManager;
   notificationManager: INotificationManagerModel;
   lightName: ILightNameModel;
+  iCloudBackup: IICloudBackupModel;
 
   walletSeed?: string[];
   appVersion: number;
@@ -106,16 +108,34 @@ export const model: IStoreModel = {
 
     log.v("initializeApp()");
 
-    const { init, writeConfigFile, checkStatus, startLnd } = injections.lndMobile.index;
+    const { initialize, writeConfigFile, checkStatus, startLnd } = injections.lndMobile.index;
     const db = await openDatabase();
     actions.setDb(db);
     if (!await getItemObjectAsyncStorage(StorageItem.app)) {
       log.i("Initializing app for the first time");
+      if (PLATFORM === "ios") {
+        log.i("Creating Application Support and lnd directories");
+        await injections.lndMobile.index.createIOSApplicationSupportAndLndDirectories();
+        log.i("Excluding lnd directory from backup")
+        await injections.lndMobile.index.excludeLndICloudBackup();
+      }
+
       await setupApp();
       log.i("Initializing db for the first time");
       await setupInitialSchema(db);
       log.i("Writing lnd.conf");
       await writeConfigFile();
+    } else {
+      // Temporarily dealing with moving lnd to "Application Support" folder
+      if (PLATFORM === "ios") {
+        if (!(await injections.lndMobile.index.checkLndFolderExists())) {
+          log.i("Moving lnd from Documents to Application Support");
+          await injections.lndMobile.index.createIOSApplicationSupportAndLndDirectories();
+          await injections.lndMobile.index.TEMP_moveLndToApplicationSupport();
+          log.i("Excluding lnd directory from backup")
+          await injections.lndMobile.index.excludeLndICloudBackup()
+        }
+      }
     }
     actions.setAppVersion(await getAppVersion());
     await actions.checkAppVersionMigration();
@@ -132,10 +152,9 @@ export const model: IStoreModel = {
         await NativeModules.BlixtTor.startTor(); // FIXME
       }
 
-      log.v("Running LndMobile init()");
-      const initReturn = await init();
-      log.v("init done");
-      log.d("init", [initReturn]);
+      log.v("Running LndMobile.initialize()");
+      const initReturn = await initialize();
+      log.v("initialize done", [initReturn]);
 
       const status = await checkStatus();
       if (!getState().walletCreated && (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
@@ -155,6 +174,8 @@ export const model: IStoreModel = {
     if (PLATFORM === "android") {
       await dispatch.google.initialize();
       await dispatch.googleDriveBackup.initialize();
+    } else if (PLATFORM === "ios") {
+      await dispatch.iCloudBackup.initialize();
     }
     await dispatch.transaction.getTransactions();
     await dispatch.channel.setupCachedBalance();
@@ -270,9 +291,10 @@ export const model: IStoreModel = {
   google,
   googleDriveBackup,
   webln,
-  androidDeeplinkManager,
+  deeplinkManager,
   notificationManager,
   lightName,
+  iCloudBackup,
 };
 
 export default model;

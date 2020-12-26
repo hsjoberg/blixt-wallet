@@ -3,6 +3,12 @@ module.exports = {
     ios: {},
     android: {},
   },
-  dependencies: {},
+  dependencies: {
+    '@react-native-community/google-signin': {
+      platforms: {
+        ios: null,
+      },
+    },
+  },
   assets: ["./assets/fonts/"],
 }

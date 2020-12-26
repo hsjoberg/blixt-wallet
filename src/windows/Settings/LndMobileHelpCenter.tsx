@@ -33,7 +33,7 @@ export default function LndMobileHelpCenter({ navigation }) {
       setLndLog(lndLog.slice(0));
     });
 
-    NativeModules.LndMobile.observeLndLogFile();
+    NativeModules.LndMobileTools.observeLndLogFile();
 
     return () => {
       listener.remove();
@@ -43,7 +43,7 @@ export default function LndMobileHelpCenter({ navigation }) {
   const steps = [{
       title: "Check LndMobileService process exist",
       async exec () {
-        const r = await NativeModules.LndMobile.checkLndProcessExist();
+        const r = await NativeModules.LndMobileTools.checkLndProcessExist();
         return r;
       }
     },{
@@ -170,7 +170,7 @@ export default function LndMobileHelpCenter({ navigation }) {
 
   const runSigKill = async () => {
     try {
-      const result = await NativeModules.LndMobile.killLnd();
+      const result = await NativeModules.LndMobileTools.killLnd();
       toast("Result: " + JSON.stringify(result), 0, "success", "OK");
     } catch (e) {
       toast("Error: " + e.message, 0, "danger", "OK");

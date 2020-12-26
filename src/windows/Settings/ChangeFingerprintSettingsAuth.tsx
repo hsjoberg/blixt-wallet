@@ -1,16 +1,20 @@
 import React, { useEffect } from "react";
 import { StyleSheet, StatusBar, AppState, AppStateStatus } from "react-native";
-import { Container, Content, View, Text, Icon } from "native-base";
+import { Container, View, Text, Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
 import { useStoreActions, useStoreState, } from "../../state/store";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import useFingerprintAuth from "../../hooks/useFingerprintAuth";
+import { PLATFORM } from "../../utils/constants";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import BlixtContent from "../../components/Content";
 
 export default function ChangeFingerprintSettingsAuth() {
   const navigation = useNavigation();
   const setFingerprintEnabled = useStoreActions((store) => store.security.setFingerprintEnabled);
   const fingerPrintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
+  const sensor = useStoreState((store) => store.security.sensor);
   const startScan = useFingerprintAuth(async () => {
     navigation.goBack();
     await setFingerprintEnabled(!fingerPrintEnabled);
@@ -18,12 +22,28 @@ export default function ChangeFingerprintSettingsAuth() {
 
   return (
     <Container>
-      <Content contentContainerStyle={style.content}>
-        <Text style={style.message}>Authenticate to change fingerprint settings</Text>
-        <View style={style.fingerPrintSymbolContainer}>
-          <Icon onPress={startScan} type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} />
+      <View style={style.content}>
+        <Text style={style.message}>Authenticate to change biometrics settings</Text>
+        <View style={[style.fingerPrintSymbolContainer, {
+          marginBottom: sensor === "Face ID" ? 320 : 0,
+        }]}>
+          {sensor !== "Face ID" &&
+            <Icon onPress={startScan} type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} />
+          }
+          {sensor === "Face ID" &&
+            <Icon onPress={startScan} type="MaterialCommunityIcons" name="face-recognition" style={style.fingerPrintSymbol} />
+          }
         </View>
-      </Content>
+      </View>
+      {PLATFORM === "ios" &&
+        <Icon style={{
+          position: "absolute",
+          right: 0,
+          padding: 4,
+          top: getStatusBarHeight(true),
+          }} type="Entypo" name="cross" onPress={() => navigation.goBack()}
+        />
+      }
     </Container>
   )
 }

@@ -8,6 +8,7 @@ import { lnrpc } from "../../proto/proto";
 
 import logger from "./../utils/log";
 import { decodeSubscribeTransactionsResult } from "../lndmobile/onchain";
+import { LndMobileEventEmitter } from "../utils/event-listener";
 const log = logger("OnChain");
 
 export interface IBlixtTransaction extends lnrpc.ITransaction {
@@ -78,7 +79,7 @@ export const onChain: IOnChainModel = {
     }
     else {
       await injections.lndMobile.onchain.subscribeTransactions();
-      DeviceEventEmitter.addListener("SubscribeTransactions", async (e: any) => {
+      LndMobileEventEmitter.addListener("SubscribeTransactions", async (e: any) => {
         log.d("Event SubscribeTransactions", [e]);
         if (e.data === "") {
           log.i("Got e.data empty from SubscribeTransactions. Skipping transaction");

@@ -26,7 +26,8 @@ jest.mock("./src/utils/constants.ts", () => require("./mocks/utils/constants"));
 
 const ReactNative = require("react-native");
 ReactNative.NativeModules.LndMobile = {};
-ReactNative.NativeModules.LndMobile.log = jest.fn();
+ReactNative.NativeModules.LndMobileTools = {};
+ReactNative.NativeModules.LndMobileTools.log = jest.fn();
 ReactNative.UIManager.configureNext = jest.fn();
 ReactNative.UIManager.configureNextLayoutAnimation = jest.fn();
 ReactNative.InteractionManager.runAfterInteractions = ((cb) => {

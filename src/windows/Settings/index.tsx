@@ -13,6 +13,7 @@ import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectList";
 import { IFiatRates } from "../../state/Fiat";
 import { OnchainExplorer } from "../../state/Settings";
+import LightningPeers from "./LightningPeers";
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,8 @@ export type SettingsStackParamList = {
   ChangeBitcoinUnit: ISelectListNavigationProps<string>;
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
   ChangeOnchainExplorer: ISelectListNavigationProps<keyof typeof OnchainExplorer>;
+  LightningPeers: undefined;
+  ChannelProvider: ISelectListNavigationProps<string>;
 }
 
 export default function SettingsIndex() {
@@ -49,6 +52,8 @@ export default function SettingsIndex() {
       <Stack.Screen name="ChangeFiatUnit" component={SelectList} />
       <Stack.Screen name="ChangeBitcoinUnit" component={SelectList} />
       <Stack.Screen name="ChangeOnchainExplorer" component={SelectList} />
+      <Stack.Screen name="LightningPeers" component={LightningPeers} />
+      <Stack.Screen name="ChannelProvider" component={SelectList} />
     </Stack.Navigator>
   );
 }

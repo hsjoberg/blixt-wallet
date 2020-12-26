@@ -17,17 +17,30 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>lightning</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CHAIN</key>
 	<string>$(CHAIN)</string>
 	<key>CONFIGURATION</key>
 	<string>$(CONFIGURATION)</string>
+	<key>DEBUG</key>
+	<string>$(DEBUG)</string>
 	<key>FLAVOR</key>
 	<string>$(FLAVOR)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>lightning</string>
@@ -49,11 +62,11 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Scan QR codes for invoices</string>
-	<key>DEBUG</key>
-	<string>$(DEBUG)</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Locally save location of where a transaction was made</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID for accessing wallet functionality</string>
 	<key>NSLocationUsageDescription</key>
+	<string>Locally save location of where a transaction was made</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Locally save location of where a transaction was made</string>
 	<key>SCHEME</key>
 	<string>$(SCHEME)</string>
