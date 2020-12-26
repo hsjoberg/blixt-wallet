@@ -65,6 +65,8 @@ export default function Confirm({ navigation }: IProps) {
 
     if (PLATFORM === "android") {
       navigation.replace("GoogleDriveBackup");
+    } else if (PLATFORM === "ios") {
+      navigation.replace("ICloudBackup");
     } else {
       navigation.replace("AlmostDone")
     }

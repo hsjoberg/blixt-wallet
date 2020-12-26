@@ -220,7 +220,7 @@ function Overview({ navigation }: IOverviewProps) {
                   <Spinner onPress={onPressSyncIcon} />
                 </Animated.View>
               }
-              {Chain === "mainnet" && nodeInfo && nodeInfo.syncedToChain && experimentWeblnEnabled &&
+              {nodeInfo && nodeInfo.syncedToChain && experimentWeblnEnabled &&
                 <AnimatedIcon
                   style={[style.weblnBrowswerIcon, { opacity: iconOpacity }]} type="MaterialCommunityIcons" name="cart-outline" onPress={() => navigation.navigate("WebLNBrowser")}
                 />

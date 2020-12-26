@@ -392,11 +392,6 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     }
   }
 
-  private String getWalletPassword() {
-    SQLiteDatabase db = dbSupplier.get();
-    return AsyncLocalStorageUtil.getItemImpl(db, "walletPassword");
-  }
-
   private boolean getTorEnabled() {
     SQLiteDatabase db = dbSupplier.get();
     String torEnabled = AsyncLocalStorageUtil.getItemImpl(db, "torEnabled");

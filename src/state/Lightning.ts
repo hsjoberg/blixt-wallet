@@ -1,4 +1,3 @@
-import { DeviceEventEmitter, Alert } from "react-native";
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
 import { differenceInDays } from "date-fns";
 
@@ -11,11 +10,22 @@ import { toast, timeout } from "../utils";
 import { Chain } from "../utils/build";
 import { getWalletPassword } from "../storage/keystore";
 import { PLATFORM } from "../utils/constants";
+import { LndMobileEventEmitter } from "../utils/event-listener";
 
 import logger from "./../utils/log";
 const log = logger("Lightning");
 
 const SYNC_UNLOCK_WALLET = false;
+
+interface ILightningPeer {
+  peer: lnrpc.Peer;
+  node?: lnrpc.LightningNode;
+}
+
+interface ISetLightningPeersPayload {
+  peer: lnrpc.IPeer;
+  node?: lnrpc.ILightningNode;
+}
 
 export interface ILightningModel {
   initialize: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
@@ -27,6 +37,8 @@ export interface ILightningModel {
   waitForChainSync: Thunk<ILightningModel, void, IStoreInjections>;
   waitForGraphSync: Thunk<ILightningModel, void, IStoreInjections>;
   setupAutopilot: Thunk<ILightningModel, boolean, IStoreInjections>;
+  getLightningPeers: Thunk<ILightningModel, void, IStoreInjections>;
+  disconnectPeer: Thunk<ILightningModel, string, IStoreInjections>;
 
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
   setRPCServerReady: Action<ILightningModel, boolean>;
@@ -35,6 +47,7 @@ export interface ILightningModel {
   setSyncedToGraph: Action<ILightningModel, boolean>;
   setFirstSync: Action<ILightningModel, boolean>;
   setAutopilotSet: Action<ILightningModel, boolean>;
+  setLightningPeers: Action<ILightningModel, ISetLightningPeersPayload[]>
 
   setBestBlockheight: Action<ILightningModel, number>;
 
@@ -45,6 +58,7 @@ export interface ILightningModel {
   ready: boolean;
   firstSync: boolean;
   autopilotSet?: boolean;
+  lightningPeers: ILightningPeer[];
 
   bestBlockheight?: number;
   initialKnownBlockheight?: number;
@@ -61,7 +75,8 @@ export const lightning: ILightningModel = {
     // When the RPC server is ready
     // WalletUnlocked event will be emitted
     log.v("Starting WalletUnlocked event listener");
-    DeviceEventEmitter.addListener("WalletUnlocked", async () => {
+
+    LndMobileEventEmitter.addListener("WalletUnlocked", async () => {
       debugShowStartupInfo && toast("RPC server ready time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
       actions.setRPCServerReady(true);
       try {
@@ -178,9 +193,7 @@ export const lightning: ILightningModel = {
       ]);
       await dispatch.notificationManager.initialize();
       await dispatch.clipboardManager.initialize();
-      if (PLATFORM === "android") {
-        await dispatch.androidDeeplinkManager.initialize();
-      }
+      await dispatch.deeplinkManager.initialize();
     } catch (e) {
       toast(e.message, 0, "danger", "OK");
       return;
@@ -198,7 +211,7 @@ export const lightning: ILightningModel = {
   }),
 
   setupAutopilot: thunk(async (actions, enabled, { injections }) => {
-    console.log("Setting up Autopilot");
+    log.i("Setting up Autopilot");
     const modifyStatus = injections.lndMobile.autopilot.modifyStatus;
     const status = injections.lndMobile.autopilot.status;
 
@@ -225,6 +238,40 @@ export const lightning: ILightningModel = {
         await timeout(2000);
       }
     } while (true);
+  }),
+
+  getLightningPeers: thunk(async (actions, _, { injections }) => {
+    const listPeers = injections.lndMobile.index.listPeers;
+    const getNodeInfo = injections.lndMobile.index.getNodeInfo;
+
+    const response = await listPeers();
+
+    const lightningPeers = await Promise.all(response.peers.map(async (ipeer) => {
+      let nodeInfo = undefined;
+      try {
+        nodeInfo = await getNodeInfo(ipeer.pubKey ?? "");
+      } catch(e) { console.log(e) }
+      return {
+        peer: ipeer,
+        node: nodeInfo?.node ?? undefined,
+      }
+    }));
+
+    const sortedPeers = lightningPeers.sort((lightningNode, lightningNode2) => {
+      if (lightningNode.peer.pubKey! < lightningNode2.peer.pubKey!) {
+        return -1;
+      } else if (lightningNode.peer.pubKey! > lightningNode2.peer.pubKey!){
+        return 1;
+      }
+      return 0;
+    });
+
+    actions.setLightningPeers(sortedPeers);
+  }),
+
+  disconnectPeer: thunk(async (_, pubkey, { injections }) => {
+    const disconnectPeer = injections.lndMobile.index.disconnectPeer;
+    return await disconnectPeer(pubkey);
   }),
 
   getInfo: thunk(async (actions, _, { injections }) => {
@@ -308,6 +355,12 @@ export const lightning: ILightningModel = {
   setSyncedToGraph: action((state, payload) => { state.syncedToGraph = payload; }),
   setFirstSync: action((state, payload) => { state.firstSync = payload; }),
   setAutopilotSet: action((state, payload) => { state.autopilotSet = payload; }),
+  setLightningPeers: action((state, payload) => {
+    state.lightningPeers = payload.map((p) => ({
+      peer: lnrpc.Peer.create(p.peer),
+      node: lnrpc.LightningNode.create(p.node),
+    }));
+  }),
 
   setBestBlockheight: action((state, payload) => { state.bestBlockheight = payload; }),
 
@@ -317,6 +370,7 @@ export const lightning: ILightningModel = {
   syncedToGraph: computed((state) => (state.nodeInfo?.syncedToGraph) ?? false),
   firstSync: false,
   bestBlockheight: undefined,
+  lightningPeers: [],
 };
 
 const getNodeScores = async () => {

@@ -1,16 +1,24 @@
 import {
-  init,
+  initialize,
   writeConfigFile,
   checkStatus,
   startLnd,
+  checkICloudEnabled,
+  checkApplicationSupportExists,
+  checkLndFolderExists,
+  createIOSApplicationSupportAndLndDirectories,
+  TEMP_moveLndToApplicationSupport,
+  excludeLndICloudBackup,
 
   addInvoice,
   cancelInvoice,
   connectPeer,
+  disconnectPeer,
   decodePayReq,
   getNodeInfo,
   getInfo,
   lookupInvoice,
+  listPeers,
   readLndLog,
   sendPaymentSync,
   sendPaymentV2Sync,
@@ -52,25 +60,33 @@ import {
   setScores,
 } from "../lndmobile/autopilot";
 import {
-  checkScheduledSyncWorkStatus, WorkInfo
+  checkScheduledSyncWorkStatus
 } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
-import { lnrpc, signrpc, invoicesrpc } from "../../proto/proto";
-import { autopilotrpc } from "../../proto/proto-autopilot";
+import { lnrpc, signrpc, invoicesrpc, autopilotrpc } from "../../proto/proto";
+import { WorkInfo } from "../lndmobile/LndMobile";
 
 export interface ILndMobileInjections {
   index: {
-    init: () => Promise<{ data: string } | number>;
+    initialize: () => Promise<{ data: string } | number>;
     writeConfigFile: () => Promise<string>;
     checkStatus: () => Promise<number>;
     startLnd: (torEnabled: boolean) => Promise<string>;
+    checkICloudEnabled: () => Promise<boolean>;
+    checkApplicationSupportExists: () => Promise<boolean>;
+    checkLndFolderExists: () => Promise<boolean>;
+    createIOSApplicationSupportAndLndDirectories: () => Promise<boolean>;
+    TEMP_moveLndToApplicationSupport: () => Promise<boolean>;
+    excludeLndICloudBackup: () => Promise<boolean>;
 
     addInvoice: (amount: number, memo: string, expiry?: number) => Promise<lnrpc.AddInvoiceResponse>;
     cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
+    disconnectPeer: (pubkey: string) => Promise<lnrpc.DisconnectPeerResponse>;
     decodePayReq: (bolt11: string) => Promise<lnrpc.PayReq>;
     getInfo: () => Promise<lnrpc.GetInfoResponse>;
     getNodeInfo: (pubKey: string) => Promise<lnrpc.NodeInfo>;
     lookupInvoice: (rHash: string) => Promise<lnrpc.Invoice>;
+    listPeers: () => Promise<lnrpc.ListPeersResponse>;
     readLndLog: () => Promise<IReadLndLogResponse>;
     sendPaymentSync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null) => Promise<lnrpc.SendResponse>;
     sendPaymentV2Sync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null) => Promise<lnrpc.Payment>;
@@ -117,18 +133,26 @@ export interface ILndMobileInjections {
 
 export default {
   index: {
-    init,
+    initialize,
     writeConfigFile,
     checkStatus,
     startLnd,
+    checkICloudEnabled,
+    checkApplicationSupportExists,
+    checkLndFolderExists,
+    createIOSApplicationSupportAndLndDirectories,
+    TEMP_moveLndToApplicationSupport,
+    excludeLndICloudBackup,
 
     addInvoice,
     cancelInvoice,
     connectPeer,
+    disconnectPeer,
     decodePayReq,
     getNodeInfo,
     getInfo,
     lookupInvoice,
+    listPeers,
     readLndLog,
     sendPaymentSync,
     sendPaymentV2Sync,

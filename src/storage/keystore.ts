@@ -2,7 +2,7 @@ import * as Keychain from 'react-native-keychain';
 
 const USER = 'blixt';
 
-export const setItem = async (key: string, value: string, accessible: Keychain.ACCESSIBLE = Keychain.ACCESSIBLE.WHEN_UNLOCKED) => {
+export const setItem = async (key: string, value: string, accessible: Keychain.ACCESSIBLE = Keychain.ACCESSIBLE.ALWAYS) => {
   const options = {
     accessible,
   };

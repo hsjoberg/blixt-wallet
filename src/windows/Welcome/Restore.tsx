@@ -21,14 +21,16 @@ interface IProps {
 export default function Restore({ navigation }: IProps) {
   const [loading, setLoading] = useState(false);
   const [seedText, setSeedText] = useState("");
-  const [backupType, setBackupType] = useState<"file" | "google_drive" | "none">("none");
+  const [backupType, setBackupType] = useState<"file" | "google_drive" | "icloud" | "none">("none");
   const [backupFile, setBackupFile] = useState<DocumentPickerResponse | null>(null);
   const [b64Backup, setB64Backup] = useState<string | null>(null);
   const setWalletSeed = useStoreActions((store) => store.setWalletSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
   const isSignedInGoogle = useStoreState((store) => store.google.isSignedIn);
   const signInGoogle = useStoreActions((store) => store.google.signIn);
-  const getBackupFile = useStoreActions((store => store.googleDriveBackup.getBackupFile));
+  const googleDriveGetBackupFile = useStoreActions((store => store.googleDriveBackup.getBackupFile));
+  const iCloudGetBackup = useStoreActions((store => store.iCloudBackup.getBackup));
+  const iCloudActive = useStoreState((store) => store.iCloudBackup.iCloudActive);
 
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
   const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
@@ -53,11 +55,11 @@ export default function Restore({ navigation }: IProps) {
 
       if (backupType === "file") {
         if (backupFile) {
-          const backupBase64 = await readFile(backupFile.uri, "base64");
+          const backupBase64 = await readFile(backupFile.uri, PLATFORM === "android" ? "base64" : undefined);
           createWalletOpts.restore!.channelsBackup = backupBase64;
         }
       }
-      else if (backupType === "google_drive") {
+      else if (backupType === "google_drive" || backupType === "icloud") {
         createWalletOpts.restore!.channelsBackup = b64Backup!;
       }
 
@@ -87,12 +89,23 @@ export default function Restore({ navigation }: IProps) {
     }
 
     try {
-      const base64Backup = await getBackupFile();
+      const base64Backup = await googleDriveGetBackupFile();
       console.log(base64Backup);
       setB64Backup(base64Backup);
       setBackupType("google_drive");
     } catch (e) {
-      window.alert(`Restoring via Google Drive failed:\n\n${e.message}`);
+      Alert.alert(`Restoring via Google Drive failed:\n\n${e.message}`);
+    }
+  };
+
+  const iCloudBackup = async () => {
+    try {
+      const base64Backup = await iCloudGetBackup()
+      console.log(base64Backup);
+      setB64Backup(base64Backup);
+      setBackupType("icloud");
+    } catch (e) {
+      Alert.alert(`Restoring via iClouod failed:\n\n${e.message}`);
     }
   };
 
@@ -153,6 +166,13 @@ export default function Restore({ navigation }: IProps) {
                       </Text>
                     </Button>
                   }
+                  {(PLATFORM === "ios" && iCloudActive) &&
+                    <Button small onPress={iCloudBackup}>
+                      <Text>
+                        Restore via iCloud
+                      </Text>
+                    </Button>
+                  }
                 </View>
               }
               {backupType === "file" &&
@@ -168,6 +188,16 @@ export default function Restore({ navigation }: IProps) {
               {backupType === "google_drive" &&
                 <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
                   <Text>Backup via Google Drive</Text>
+                  <Button small onPress={undoBackupChoice}>
+                    <Text>
+                      x
+                    </Text>
+                  </Button>
+                </View>
+              }
+              {backupType === "icloud" &&
+                <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
+                  <Text>Backup via iCloud</Text>
                   <Button small onPress={undoBackupChoice}>
                     <Text>
                       x

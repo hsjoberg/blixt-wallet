@@ -1,7 +1,7 @@
 import { NativeModules } from "react-native"
 import { Action, action, Thunk, thunk, computed, Computed } from "easy-peasy";
 import { StorageItem, getItemObject } from "../storage/app";
-import { WorkInfo } from "../lndmobile/scheduled-sync";
+import { WorkInfo } from "../lndmobile/LndMobile";
 import { IStoreInjections } from "./store";
 import { PLATFORM } from "../utils/constants";
 
@@ -29,7 +29,7 @@ export interface IScheduledSyncModel {
 export const scheduledSync: IScheduledSyncModel = {
   initialize: thunk(async (actions) => {
     if (PLATFORM !== "android") {
-      log.w("initialize(): Platform does not support scheduled sync yet");
+      log.i("initialize(): Platform does not support scheduled sync yet");
       return;
     }
     await actions.retrieveSyncInfo();

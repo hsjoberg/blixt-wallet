@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { StyleSheet, StatusBar, NativeModules, ScrollView, DeviceEventEmitter } from "react-native";
+import { StyleSheet, StatusBar, NativeModules, ScrollView, DeviceEventEmitter, Alert, EventEmitter, NativeEventEmitter } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Text, Button, Toast, Input, View, Container } from "native-base";
 import Long from "long";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as base64 from "base64-js";
 import * as Keychain from 'react-native-keychain';
-
 import Sound from "react-native-sound";
+import iCloudStorage from "react-native-icloudstore";
 
 import { getTransactions, getTransaction, createTransaction, clearTransactions } from "../../storage/database/transaction";
 import { useStoreState, useStoreActions } from "../../state/store";
-import { lnrpc } from "../../../proto/proto";
+import { invoicesrpc, lnrpc } from "../../../proto/proto";
 import { sendCommand } from "../../lndmobile/utils";
 import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus } from "../../lndmobile/index";
 import { initWallet, genSeed, deriveKey, signMessage, derivePrivateKey } from "../../lndmobile/wallet";
@@ -26,14 +26,12 @@ import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { LoginMethods } from "../../state/Security";
 import Spinner from "../../components/Spinner";
 
-
 import secp256k1 from "secp256k1";
 import { Hash as sha256Hash, HMAC as sha256HMAC } from "fast-sha256";
-import { bytesToString, bytesToHexString } from "../../utils";
+import { bytesToString, bytesToHexString, stringToUint8Array } from "../../utils";
 import { ILightningServices } from "../../utils/lightning-services";
 import { localNotification } from "../../utils/push-notification";
-
-
+import { ICLOUD_BACKUP_KEY } from "../../state/ICloudBackup";
 
 interface IProps {
   navigation?: StackNavigationProp<RootStackParamList, "DEV_Commands">;
@@ -72,7 +70,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             console.log(await queryRoutes("03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e"))
           }}><Text style={styles.buttonText}>decode()</Text></Button>
           <Button small onPress={async () => {
-            console.log(await NativeModules.LndMobile.getTorEnabled());
+            console.log(await NativeModules.LndMobileTools.getTorEnabled());
           }}>
             <Text style={styles.buttonText}>getTorEnabled</Text>
           </Button>
@@ -247,6 +245,65 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             console.log(localNotification("TEST NOTIFICATION"));
           }}><Text style={styles.buttonText}>localNotification</Text></Button>
 
+          <Text style={{ width: "100%"}}>iOS LndMobile:</Text>
+          <Button small onPress={async () => {
+            console.log(NativeModules.LndMobileTools);
+            console.log(NativeModules.LndMobileTools.writeConfigFile());
+          }}><Text style={styles.buttonText}>NativeModules.LndMobileTools.writeConfigFile()</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobileTools.DEBUG_listFilesInDocuments());
+          }}><Text style={styles.buttonText}>NativeModules.LndMobileTools.DEBUG_listFilesInDocuments()</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobileTools.DEBUG_listFilesInApplicationSupport());
+          }}><Text style={styles.buttonText}>NativeModules.LndMobileTools.DEBUG_listFilesInApplicationSupport()</Text></Button>
+          <Button small onPress={async () => {
+            console.log(NativeModules.LndMobile);
+            console.log(await NativeModules.LndMobile.startLnd(false));
+          }}><Text style={styles.buttonText}>NativeModules.LndMobile.startLnd()</Text></Button>
+
+          <Button small onPress={async () => {
+            new NativeEventEmitter(NativeModules.LndMobile).addListener("WalletUnlocked", (event: any) => {
+              console.log(event);
+            })
+          }}><Text style={styles.buttonText}>Lndmobile add listener</Text></Button>
+
+          <Button small onPress={async () => {
+            const request = lnrpc.InitWalletRequest.create({
+              cipherSeedMnemonic: ['ability', 'quote', 'laugh', 'pony', 'fancy', 'disease', 'zoo', 'angle', 'autumn', 'december', 'absorb', 'giraffe', 'mandate', 'inner', 'alone', 'flat', 'dose', 'acoustic', 'slice', 'major', 'sample', 'crane', 'opinion', 'jewel'],
+              walletPassword: stringToUint8Array("Test12345!"),
+            });
+
+            const encoded = lnrpc.InitWalletRequest.encode(request).finish();
+            const b64 = base64.fromByteArray(encoded);
+
+            console.log(await NativeModules.LndMobile.initWallet(b64));
+          }}><Text style={styles.buttonText}>NativeModules.LndMobile.initWallet()</Text></Button>
+
+          <Button small onPress={async () => {
+            const request = lnrpc.GetInfoRequest.create({});
+            const encoded = lnrpc.GetInfoRequest.encode(request).finish();
+            const b64 = base64.fromByteArray(encoded);
+
+            const response = await NativeModules.LndMobile.sendCommand("GetInfo", b64);
+            const getInfoResponse = lnrpc.GetInfoResponse.decode(base64.toByteArray(response.data))
+            console.log(getInfoResponse);
+          }}><Text style={styles.buttonText}>sendCommand getInfo</Text></Button>
+
+          <Button small onPress={async () => {
+            const response = await NativeModules.LndMobileTools.checkICloudEnabled();
+            console.log(response);
+          }}><Text style={styles.buttonText}>checkICloudEnabled()</Text></Button>
+
+          <Button small onPress={async () => {
+            const response = await iCloudStorage.getItem(ICLOUD_BACKUP_KEY);
+            console.log(response);
+          }}><Text style={styles.buttonText}>ICloudStore.getItem()</Text></Button>
+
+
+          <Button small onPress={async () => {
+            const response = await setItemObject<number>(StorageItem.lastICloudBackup, 0)
+            console.log(response);
+          }}><Text style={styles.buttonText}>set lastICloudBackup to 0</Text></Button>
 
           <Text style={{ width: "100%" }}>Security:</Text>
           <Button small onPress={async () => {
@@ -259,16 +316,16 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => console.log(await getPin())}><Text style={styles.buttonText}>getPin()</Text></Button>
 
           <Button small onPress={async () => {
-            NativeModules.LndMobile.restartApp();
+            NativeModules.LndMobileTools.restartApp();
           }}><Text style={styles.buttonText}>restartApp()</Text></Button>
           <Button small onPress={async () => {
-            console.log(await NativeModules.LndMobile.DEBUG_listProcesses());
+            console.log(await NativeModules.LndMobileTools.DEBUG_listProcesses());
           }}><Text style={styles.buttonText}>DEBUG_listProcesses()</Text></Button>
 
-          {/* <Text style={{ width: "100%" }}>Dangerous:</Text>
+          <Text style={{ width: "100%" }}>Dangerous:</Text>
           <Button small onPress={async () => actions.clearApp()}><Text style={styles.buttonText}>actions.clearApp()</Text></Button>
-          <Button small onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteWallet())}><Text style={styles.buttonText}>DEBUG_deleteWallet</Text></Button>
-          <Button small onPress={async () => console.log(await NativeModules.LndMobile.DEBUG_deleteDatafolder())}><Text style={styles.buttonText}>DEBUG_deleteDatafolder</Text></Button> */}
+          <Button small onPress={async () => console.log(await NativeModules.LndMobileTools.DEBUG_deleteWallet())}><Text style={styles.buttonText}>DEBUG_deleteWallet</Text></Button>
+          <Button small onPress={async () => console.log(await NativeModules.LndMobileTools.DEBUG_deleteDatafolder())}><Text style={styles.buttonText}>DEBUG_deleteDatafolder</Text></Button>
 
 
           <Text style={{ width:"100%" }}>App storage:</Text>
@@ -296,17 +353,18 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await actions.initializeApp()}><Text style={styles.buttonText}>actions.initializeApp()</Text></Button>
           <Button small onPress={async () => {
             try {
-              console.log(await NativeModules.LndMobile.DEBUG_getWalletPasswordFromKeychain())
+              console.log(await NativeModules.LndMobileTools.DEBUG_getWalletPasswordFromKeychain())
             } catch (e) { console.log(e) }
-          }}><Text style={styles.buttonText}>LndMobile.DEBUG_getWalletPasswordFromKeychain()</Text></Button>
+          }}><Text style={styles.buttonText}>LndMobileTools.DEBUG_getWalletPasswordFromKeychain()</Text></Button>
 
           <Button small onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.setupScheduledSyncWork())}><Text style={styles.buttonText}>setupScheduledSyncWork</Text></Button>
           <Button small onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.removeScheduledSyncWork())}><Text style={styles.buttonText}>removeScheduledSyncWork</Text></Button>
           <Button small onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.checkScheduledSyncWorkStatus())}><Text style={styles.buttonText}>checkScheduledSyncWorkStatus</Text></Button>
-          <Button small onPress={async () => console.log(await NativeModules.LndMobile.saveLogs())}><Text style={styles.buttonText}>saveLogs</Text></Button>
+          <Button small onPress={async () => console.log(await NativeModules.LndMobileTools.saveLogs())}><Text style={styles.buttonText}>saveLogs</Text></Button>
+          <Button small onPress={async () => console.log(await NativeModules.LndMobileTools.copyLndLog())}><Text style={styles.buttonText}>copyLndLog</Text></Button>
           <Button small onPress={async () => {
             try {
-              const result = await NativeModules.LndMobile.writeConfigFile();
+              const result = await NativeModules.LndMobileTools.writeConfigFile();
               console.log("writeConfigFile()", result);
               setCommandResult(`"${result}"`);
               setError("{}");
@@ -332,7 +390,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           }}>
             <Text style={styles.buttonText}>connect to Bitrefill node</Text>
           </Button>
-
 
 
           <Text style={{ width: "100%" }}>Sqlite:</Text>

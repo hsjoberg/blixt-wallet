@@ -3,7 +3,7 @@ import { StyleSheet, KeyboardAvoidingView, StyleProp, ViewStyle, InputAccessoryV
 import { View, Item, Text, Label, Icon } from "native-base";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { MathPad, IMathPadProps } from "../components/MathPad";
-import { PLATFORM } from "../utils/constants";
+import { MATH_PAD_NATIVEID, MATH_PAD_NATIVE_ID, PLATFORM } from "../utils/constants";
 
 export interface IFormItem {
   title: string | null;
@@ -60,7 +60,7 @@ export default function Form({ buttons, items, style, noticeText, mathPadProps }
         </>
       </View>
       {PLATFORM === "ios" &&
-        <InputAccessoryView nativeID="MATH_PAD">
+        <InputAccessoryView nativeID={MATH_PAD_NATIVE_ID}>
           <MathPad {...mathPadProps} />
         </InputAccessoryView>
       }

@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Header, Icon, Input, Item, ListItem, Text } from "native-base";
 import Container from "../../components/Container";
-import { FlatList, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -13,6 +13,7 @@ export interface ISelectListNavigationProps<T> {
   onPick: (address: T) => void;
   data: { title: string, value: T }[];
   searchEnabled?: boolean;
+  description?: string
 }
 
 type IFakeStack<T> = {
@@ -24,11 +25,12 @@ export interface ISelectListProps<T> {
   route: RouteProp<IFakeStack<T>, "SelectList">;
 }
 
-export default function<T = string>({ navigation, route }: ISelectListProps<string>) {
+export default function<T = string>({ navigation, route }: ISelectListProps<T>) {
   const title = route?.params?.title ?? "";
   const onPick = route?.params?.onPick ?? (() => {});
   const data = route?.params?.data ?? [];
   const searchEnabled = route?.params?.searchEnabled ?? false;
+  const description = route?.params?.description;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -61,27 +63,34 @@ export default function<T = string>({ navigation, route }: ISelectListProps<stri
           </Item>
         </Header>
       }
-      <View>
-        <FlatList
-          contentContainerStyle={{ paddingTop: 8, paddingHorizontal: 14, paddingBottom: 100 }}
-          initialNumToRender={20}
-          data={data.filter(({ title, value }) => {
-            return (
-              title.toUpperCase().includes(searchText.toUpperCase()) ||
-              value.toUpperCase().includes(searchText.toUpperCase())
-            );
-          })}
-          renderItem={({ item }) => (
-            <ListItem style={{}} key={item.value} onPress={() => {
-              onPick(item.value);
-              navigation.pop();
-            }}>
-              <Text>{item.title}</Text>
-            </ListItem>
-          )}
-          keyExtractor={(item) => item.value}
-        />
-      </View>
+      <FlatList
+        ListHeaderComponent={description ? <Text style={style.description}>{description}</Text> : undefined}
+        contentContainerStyle={{ paddingTop: 8, paddingHorizontal: 14, paddingBottom: 65 }}
+        initialNumToRender={20}
+        data={data.filter(({ title, value }) => {
+          return (
+            title.toUpperCase().includes(searchText.toUpperCase()) ||
+            (typeof value === "string" && value.toUpperCase().includes(searchText.toUpperCase()))
+          );
+        })}
+        renderItem={({ item }) => (
+          <ListItem style={{}} key={item.value} onPress={() => {
+            onPick(item.value);
+            navigation.pop();
+          }}>
+            <Text>{item.title}</Text>
+          </ListItem>
+        )}
+        keyExtractor={(item) => item.value}
+      />
     </Container>
   )
 }
+
+const style = StyleSheet.create({
+  description: {
+    marginTop: 35,
+    marginHorizontal: 10,
+    marginBottom: 35,
+  }
+});

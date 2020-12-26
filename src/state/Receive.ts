@@ -11,6 +11,7 @@ import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
 import { timeout, uint8ArrayToString, decodeTLVRecord, bytesToHexString, toast } from "../utils";
 import { TLV_RECORD_NAME } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
+import { LndMobileEventEmitter } from "../utils/event-listener";
 
 import logger from "./../utils/log";
 const log = logger("Receive");
@@ -107,7 +108,7 @@ export const receive: IReceiveModel = {
       log.d("Receive.subscribeInvoice() called when subsription already started");
       return;
     }
-    const invoiceSubscription = DeviceEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
+    const invoiceSubscription = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
       try {
         log.i("New invoice event");
         if (e.data === "") {

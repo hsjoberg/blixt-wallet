@@ -6,29 +6,35 @@ export enum ELndMobileStatusCodes {
 
 export interface ILndMobile {
   // General
-  init(): Promise<void>;
-  checkLndMobileServiceConnected(): Promise<boolean>;
-  sendPongToLndMobileservice(): Promise<{ data: string }>;
-  checkStatus(): Promise<ELndMobileStatusCodes>;
-  writeConfigFile(): Promise<string>;
+  initialize(): Promise<{ data: string }>;
   startLnd(torEnabled: boolean): Promise<{ data: string }>
   stopLnd(): Promise<{ data: string }>;
   initWallet(seed: string[], password: string, recoveryWindow: number, channelBackupsBase64: string | null): Promise<{ data: string }>;
   unlockWallet(password: string): Promise<{ data: string }>
-  killLnd(): Promise<boolean>;
-  restartApp(): void;
-  saveChannelsBackup(base64Backups: string): Promise<string>;
-  log(level: "v" | "d" | "i" | "w" | "e", tag: string, msg: string): void;
-  saveLogs(): Promise<string>;
-  copyLndLog(): Promise<string>;
-  tailLog(numberOfLines: number): Promise<string>;
-  getTorEnabled(): Promise<boolean>;
-  observeLndLogFile(): Promise<boolean>;
-  DEBUG_getWalletPasswordFromKeychain(): Promise<string>;
+
+  checkStatus(): Promise<ELndMobileStatusCodes>;
 
   // Send gRPC LND API request
   sendCommand(method: string, base64Payload: string): Promise<{ data: string }>;
   sendStreamCommand(method: string, base64Payload: string, streamOnlyOnce: boolean): Promise<"done">;
+
+  // Android-specific
+  unbindLndMobileService(): Promise<void>; // TODO(hsjoberg): function looks broken
+  sendPongToLndMobileservice(): Promise<{ data: string }>;
+  checkLndMobileServiceConnected(): Promise<boolean>;
+}
+
+export interface ILndMobileTools {
+  writeConfigFile(): Promise<string>;
+  killLnd(): Promise<boolean>;
+  log(level: "v" | "d" | "i" | "w" | "e", tag: string, msg: string): void;
+  saveLogs(): Promise<string>;
+  copyLndLog(): Promise<string>;
+  tailLog(numberOfLines: number): Promise<string>;
+  observeLndLogFile(): Promise<boolean>;
+  saveChannelsBackup(base64Backups: string): Promise<string>;
+  DEBUG_getWalletPasswordFromKeychain(): Promise<string>;
+  getTorEnabled(): Promise<boolean>;
 
   // Android-specific
   getIntentStringData(): Promise<string | null>;
@@ -38,11 +44,29 @@ export interface ILndMobile {
   DEBUG_listProcesses(): Promise<string>;
   checkLndProcessExist(): Promise<boolean>;
   deleteTLSCerts(): Promise<boolean>;
-  unbindLndMobileService(): Promise<void>; // TODO(hsjoberg): function looks broken
+  restartApp(): void;
+
+  // iOS-specific
+  checkICloudEnabled(): Promise<boolean>;
+  checkApplicationSupportExists(): Promise<boolean>;
+  checkLndFolderExists(): Promise<boolean>;
+  createIOSApplicationSupportAndLndDirectories(): Promise<boolean>;
+  excludeLndICloudBackup(): Promise<boolean>;
+  TEMP_moveLndToApplicationSupport(): Promise<boolean>;
+}
+
+export type WorkInfo = "BLOCKED" | "CANCELLED" | "ENQUEUED" | "FAILED" | "RUNNING" | "SUCCEEDED" | "WORK_NOT_EXIST";
+
+export interface ILndMobileScheduledSync {
+  setupScheduledSyncWork: () => Promise<boolean>;
+  removeScheduledSyncWork: () => Promise<boolean>;
+  checkScheduledSyncWorkStatus: () => Promise<WorkInfo>;
 }
 
 declare module "react-native" {
   interface NativeModulesStatic {
     LndMobile: ILndMobile;
+    LndMobileTools: ILndMobileTools;
+    LndMobileScheduledSync: ILndMobileScheduledSync;
   }
 }

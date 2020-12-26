@@ -8,27 +8,28 @@ import { timeout } from "../utils";
 import { LnBech32Prefix } from "../utils/build";
 
 import logger from "./../utils/log";
-const log = logger("AndroidDeeplinkManager");
+import { PLATFORM } from "../utils/constants";
+const log = logger("DeeplinkManager");
 
-export interface IAndroidDeeplinkManager {
-  initialize: Thunk<IAndroidDeeplinkManager>;
-  setupAppStateChangeListener: Thunk<IAndroidDeeplinkManager, void, any, IStoreModel>;
+export interface IDeeplinkManager {
+  initialize: Thunk<IDeeplinkManager>;
+  setupAppStateChangeListener: Thunk<IDeeplinkManager, void, any, IStoreModel>;
 
-  checkDeeplink: Thunk<IAndroidDeeplinkManager, void, any, IStoreModel>;
-  tryInvoice: Thunk<IAndroidDeeplinkManager, { paymentRequest: string }, any, IStoreModel>;
-  tryLNUrl: Thunk<IAndroidDeeplinkManager, { lnUrl: string }, any, IStoreModel>;
-  addToCache: Action<IAndroidDeeplinkManager, string>;
+  checkDeeplink: Thunk<IDeeplinkManager, string | undefined | null, any, IStoreModel>;
+  tryInvoice: Thunk<IDeeplinkManager, { paymentRequest: string }, any, IStoreModel>;
+  tryLNUrl: Thunk<IDeeplinkManager, { lnUrl: string }, any, IStoreModel>;
+  addToCache: Action<IDeeplinkManager, string>;
 
   cache: string[];
 }
 
-export const androidDeeplinkManager: IAndroidDeeplinkManager = {
+export const deeplinkManager: IDeeplinkManager = {
   initialize: thunk((actions) => {
     actions.setupAppStateChangeListener();
     // Used for checking for URL intent invocations
     Linking.addListener("url", async (e: { url: string }) => {
-      log.i("url eventlistener");
-      const result = await actions.checkDeeplink();
+      log.i("url eventlistener", [e]);
+      const result = await actions.checkDeeplink(e.url);
       console.log(result);
       if (result) {
         result(getNavigator());
@@ -50,14 +51,18 @@ export const androidDeeplinkManager: IAndroidDeeplinkManager = {
     });
   }),
 
-  checkDeeplink: thunk(async (actions, _, { getState, getStoreState }) => {
+  checkDeeplink: thunk(async (actions, data, { getState, getStoreState }) => {
     try {
-      let data = await Linking.getInitialURL();
-      if (data === null) {
-        data = await NativeModules.LndMobile.getIntentStringData();
+      if (data === undefined || data === null) {
+        data = await Linking.getInitialURL();
       }
-      if (data === null) {
-        data = await NativeModules.LndMobile.getIntentNfcData();
+      if (PLATFORM === "android") {
+        if (data === null) {
+          data = await NativeModules.LndMobileTools.getIntentStringData();
+        }
+        if (data === null) {
+          data = await NativeModules.LndMobileTools.getIntentNfcData();
+        }
       }
       log.d("Deeplink", [data]);
       if (data) {

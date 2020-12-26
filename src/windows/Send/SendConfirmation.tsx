@@ -170,7 +170,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     formItems.push({
       key: "RECIPIENT",
       title: "Recipient",
-      component: (<Input multiline={true} disabled={true} value={name} />),
+      component: (<Input disabled={true} value={name} />),
     });
   }
   else if (nodeInfo && nodeInfo.node && nodeInfo.node.alias) {

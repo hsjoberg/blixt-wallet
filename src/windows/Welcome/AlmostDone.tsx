@@ -63,6 +63,7 @@ const AlmostDone = ({ navigation }: IProps) => {
   // Fingerprint
   const fingerprintAvailable = useStoreState((store) => store.security.fingerprintAvailable);
   const fingerPrintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
+  const biometricsSensor = useStoreState((store) => store.security.sensor);
   const onToggleFingerprintPress = async () => {
     navigation.navigate("ChangeFingerprintSettingsAuth");
   }
@@ -161,8 +162,22 @@ const AlmostDone = ({ navigation }: IProps) => {
 
             {fingerprintAvailable &&
               <ListItem style={extraStyle.listItem} button={true} icon={true} onPress={onToggleFingerprintPress}>
-                <Left><Icon style={extraStyle.icon} type="Entypo" name="fingerprint" /></Left>
-                <Body><Text>Login with fingerprint</Text></Body>
+                <Left>
+                  {biometricsSensor !== "Face ID" &&
+                    <Icon style={extraStyle.icon} type="Entypo" name="fingerprint" />
+                  }
+                  {biometricsSensor === "Face ID" &&
+                    <Icon style={extraStyle.icon} type="MaterialCommunityIcons" name="face-recognition" />
+                  }
+                </Left>
+                <Body>
+                  <Text>
+                    Login with{" "}
+                    {biometricsSensor === "Biometrics" && "fingerprint"}
+                    {biometricsSensor === "Face ID" && "Face ID"}
+                    {biometricsSensor === "Touch ID" && "Touch ID"}
+                  </Text>
+                </Body>
                 <Right><CheckBox checked={fingerPrintEnabled} onPress={onToggleFingerprintPress}/></Right>
               </ListItem>
             }

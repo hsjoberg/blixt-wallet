@@ -9,6 +9,7 @@ import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
 import { IChannelEvent, getChannelEvents, createChannelEvent } from "../storage/database/channel-events";
 import { bytesToHexString, uint8ArrayToString } from "../utils";
+import { LndMobileEventEmitter } from "../utils/event-listener";
 
 import logger from "./../utils/log";
 const log = logger("Channel");
@@ -99,7 +100,7 @@ export const channel: IChannelModel = {
   setupChannelUpdateSubscriptions: thunk(async (actions, _2, { getStoreState, getStoreActions, injections }) => {
     log.i("Starting channel update subscription");
     await injections.lndMobile.channel.subscribeChannelEvents();
-    DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
+    LndMobileEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
       if (e.data === "") {
         log.i("Got e.data empty from SubscribeChannelEvent. Skipping event");
         return;
@@ -198,7 +199,7 @@ export const channel: IChannelModel = {
       ]);
     });
 
-    DeviceEventEmitter.addListener("CloseChannel", async (e: any) => {
+    LndMobileEventEmitter.addListener("CloseChannel", async (e: any) => {
       log.i("Event CloseChannel", [e]);
       await actions.getChannels();
     });
@@ -282,7 +283,7 @@ export const channel: IChannelModel = {
   exportChannelsBackup: thunk(async (_, _2, { injections }) => {
     const response = await injections.lndMobile.channel.exportAllChannelBackups();
     if (response.multiChanBackup && response.multiChanBackup.multiChanBackup) {
-      const exportResponse = await NativeModules.LndMobile.saveChannelsBackup(
+      const exportResponse = await NativeModules.LndMobileTools.saveChannelsBackup(
         base64.fromByteArray(response.multiChanBackup.multiChanBackup)
       );
       return exportResponse;

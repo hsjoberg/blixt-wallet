@@ -9,20 +9,20 @@ import DialogAndroid from "react-native-dialogs";
 import { fromUnixTime } from "date-fns";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-
 import { SettingsStackParamList } from "./index";
 import Content from "../../components/Content";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
 import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
 import { verifyChanBackup } from "../../lndmobile/channel";
-import { camelCaseToSpace, formatISO, toast } from "../../utils";
+import { camelCaseToSpace, formatISO, timeout, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
 import { Chain } from "../../utils/build";
 import { OnchainExplorer } from "../../state/Settings";
 import TorSvg from "./TorSvg";
 import { PLATFORM } from "../../utils/constants";
 import { IFiatRates } from "../../state/Fiat";
+import BlixtWallet from "../../components/BlixtWallet";
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -46,6 +46,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   // Fingerprint
   const fingerprintAvailable = useStoreState((store) => store.security.fingerprintAvailable);
   const fingerPrintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
+  const biometricsSensor = useStoreState((store) => store.security.sensor);
   const onToggleFingerprintPress = async () => {
     navigation.navigate("ChangeFingerprintSettingsAuth");
   }
@@ -207,14 +208,16 @@ export default function Settings({ navigation }: ISettingsProps) {
   const checkInvoice = useStoreActions((store) => store.clipboardManager.checkInvoice);
   const onToggleClipBoardInvoiceCheck = async () => {
     await changeClipboardInvoiceCheckEnabled(!clipboardInvoiceCheckEnabled);
-    const clipboardText = await Clipboard.getString();
-    await checkInvoice(clipboardText);
+    if (!clipboardInvoiceCheckEnabled) {
+      const clipboardText = await Clipboard.getString();
+      await checkInvoice(clipboardText);
+    }
   };
 
   // Copy log
   const copyLog = async () => {
     try {
-      await NativeModules.LndMobile.copyLndLog();
+      await NativeModules.LndMobileTools.copyLndLog();
       toast("Copied lnd log file.", undefined, "warning");
     } catch (e) {
       console.error(e);
@@ -227,7 +230,9 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onExportChannelsPress = async () => {
     try {
       const response = await exportChannelsBackup();
-      toast(`File written:\n ${response}`, 10000, "warning");
+      if (PLATFORM === "android") {
+        toast(`File written:\n ${response}`, 10000, "warning");
+      }
     } catch (e) {
       console.log(e);
       toast(e.message, 10000, "danger");
@@ -251,7 +256,6 @@ export default function Settings({ navigation }: ISettingsProps) {
   const workInfo = useStoreState((store) => store.scheduledSync.workInfo);
   const lastScheduledSync = useStoreState((store) => store.scheduledSync.lastScheduledSync);
   const lastScheduledSyncAttempt = useStoreState((store) => store.scheduledSync.lastScheduledSyncAttempt);
-  console.log(workInfo, lastScheduledSync, lastScheduledSyncAttempt);
 
   const scheduledSyncEnabled = useStoreState((store) => store.settings.scheduledSyncEnabled);
   const changeScheduledSyncEnabled = useStoreActions((store) => store.settings.changeScheduledSyncEnabled);
@@ -306,6 +310,27 @@ export default function Settings({ navigation }: ISettingsProps) {
     try {
       await googleDriveMakeBackup();
       toast("Backed up channels to Google Drive");
+    }
+    catch (e) {
+      toast(`Error backup up: ${e.message}`, 10000, "danger");
+    }
+  }
+
+  const iCloudBackupEnabled = useStoreState((store) => store.settings.iCloudBackupEnabled);
+  const changeICloudBackupEnabled = useStoreActions((store) => store.settings.changeICloudBackupEnabled);
+  const iCloudMakeBackup = useStoreActions((store) => store.iCloudBackup.makeBackup);
+  const onToggleICloudBackup = async () => {
+      if (!iCloudBackupEnabled) {
+        await iCloudMakeBackup();
+      }
+      await changeICloudBackupEnabled(!iCloudBackupEnabled);
+      toast(`iCloud backup ${iCloudBackupEnabled ? "disabled" : "enabled"}`);
+  };
+
+  const onDoICloudBackupPress = async () => {
+    try {
+      await iCloudMakeBackup();
+      toast("Backed up channels to iCloud");
     }
     catch (e) {
       toast(`Error backup up: ${e.message}`, 10000, "danger");
@@ -371,38 +396,60 @@ export default function Settings({ navigation }: ISettingsProps) {
 
   // Inbound services list
   const onInboundServiceListPress = async () => {
-    interface ShowPickerResult {
-      selectedItem: {
-        id: "LNBIG" | "BITREFILL_THOR";
-        label: "LN Big" | "Bitrefill Thor";
-      } | undefined;
-    }
-    const { selectedItem }: ShowPickerResult = await DialogAndroid.showPicker(null, null, {
-      title: "Incoming channel provider",
-      content:
-`Choose an incoming channel provider and press Continue.
+    const goToSite = async (selectedItem: "LNBIG" | "BITREFILL_THOR") => {
+      if (selectedItem === "LNBIG") {
+        await Linking.openURL("https://lnbig.com/");
+      } else if (selectedItem === "BITREFILL_THOR") {
+        await Linking.openURL("https://embed.bitrefill.com/buy/lightning");
+      }
+    };
+
+    const description = `Choose an incoming channel provider and press Continue.
 
 Your web browser will be opened to the corresponding provider's website, where you will be able to request a channel.
 
-When you're done, you can copy the address code and/or open the link using Blixt Wallet.`,
-      positiveText: "Continue",
-      negativeText: "Cancel",
-      type: DialogAndroid.listRadio,
-      items: [{
-        id: "LNBIG",
-        label: "LN Big"
-      }, {
-        id: "BITREFILL_THOR",
-        label: "Bitrefill Thor"
-      }],
-    });
+When you're done, you can copy the address code and/or open the link using Blixt Wallet.`
 
-    if (selectedItem) {
-      if (selectedItem.id === "LNBIG") {
-        await Linking.openURL("https://lnbig.com/");
-      } else if (selectedItem.id === "BITREFILL_THOR") {
-        await Linking.openURL("https://embed.bitrefill.com/buy/lightning");
+    if (PLATFORM === "android") {
+      interface ShowPickerResult {
+        selectedItem: {
+          id: "LNBIG" | "BITREFILL_THOR";
+          label: "LN Big" | "Bitrefill Thor";
+        } | undefined;
       }
+      const { selectedItem }: ShowPickerResult = await DialogAndroid.showPicker(null, null, {
+        title: "Incoming channel provider",
+        content: description,
+        positiveText: "Continue",
+        negativeText: "Cancel",
+        type: DialogAndroid.listRadio,
+        items: [{
+          id: "LNBIG",
+          label: "LN Big"
+        }, {
+          id: "BITREFILL_THOR",
+          label: "Bitrefill Thor"
+        }],
+      });
+
+      if (selectedItem) {
+        await goToSite(selectedItem.id);
+      }
+    } else {
+      navigation.navigate("ChannelProvider", {
+        title: "Incoming channel provider",
+        description,
+        data: [{
+          title: "LN Big",
+          value: "LNBIG",
+        }, {
+          title: "Bitrefill Thor",
+          value: "BITREFILL_THOR",
+        }],
+        onPick: async (selectedItem) => {
+          goToSite(selectedItem as any)
+        }
+      });
     }
   }
 
@@ -482,11 +529,11 @@ Do you wish to proceed?`;
           await changeTorEnabled(!torEnabled);
           try {
             await NativeModules.LndMobile.stopLnd();
-            await NativeModules.LndMobile.killLnd();
+            await NativeModules.LndMobileTools.killLnd();
           } catch(e) {
             console.log(e);
           }
-          NativeModules.LndMobile.restartApp();
+          NativeModules.LndMobileTools.restartApp();
         },
       }
     ]);
@@ -515,6 +562,8 @@ Do you wish to proceed?`;
   return (
     <Container>
       <Content>
+        <BlixtWallet />
+
         <List style={style.list}>
           <ListItem style={style.itemHeader} itemHeader={true} first={true}>
             <Text>General</Text>
@@ -587,14 +636,12 @@ Do you wish to proceed?`;
               }
             </>
           }
-          {PLATFORM === "android" &&
-            <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
-              <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
-              <Body>
-                <Text>Export channel backup</Text>
-              </Body>
-            </ListItem>
-          }
+          <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
+            <Left><Icon style={style.icon} type="MaterialIcons" name="save" /></Left>
+            <Body>
+              <Text>Export channel backup</Text>
+            </Body>
+          </ListItem>
           {(PLATFORM === "android" && (name === "Hampus" || __DEV__ === true)) &&
             <ListItem style={style.listItem} icon={true} onPress={onVerifyChannelsBackupPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
@@ -619,6 +666,22 @@ Do you wish to proceed?`;
               <Body><Text>Manually trigger Google Drive Backup</Text></Body>
             </ListItem>
           }
+          {PLATFORM == "ios" &&
+            <ListItem style={style.listItem} icon={true} onPress={onToggleICloudBackup}>
+              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="apple-icloud" /></Left>
+              <Body>
+                <Text>iCloud channel backup</Text>
+                <Text note={true} numberOfLines={1}>Automatically backup channels to iCloud</Text>
+              </Body>
+              <Right><CheckBox checked={iCloudBackupEnabled} onPress={onToggleICloudBackup} /></Right>
+            </ListItem>
+          }
+          {iCloudBackupEnabled &&
+            <ListItem style={style.listItem} icon={true} onPress={onDoICloudBackupPress}>
+              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="folder" /></Left>
+              <Body><Text>Manually trigger iCloud Backup</Text></Body>
+            </ListItem>
+          }
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Security</Text>
@@ -631,8 +694,22 @@ Do you wish to proceed?`;
           </ListItem>
           {fingerprintAvailable &&
             <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleFingerprintPress}>
-              <Left><Icon style={style.icon} type="Entypo" name="fingerprint" /></Left>
-              <Body><Text>Login with fingerprint</Text></Body>
+              <Left>
+                {biometricsSensor !== "Face ID" &&
+                  <Icon style={style.icon} type="Entypo" name="fingerprint" />
+                }
+                {biometricsSensor === "Face ID" &&
+                  <Icon style={style.icon} type="MaterialCommunityIcons" name="face-recognition" />
+                }
+              </Left>
+              <Body>
+                <Text>
+                  Login with{" "}
+                  {biometricsSensor === "Biometrics" && "fingerprint"}
+                  {biometricsSensor === "Face ID" && "Face ID"}
+                  {biometricsSensor === "Touch ID" && "Touch ID"}
+                </Text>
+              </Body>
               <Right><CheckBox checked={fingerPrintEnabled} onPress={onToggleFingerprintPress}/></Right>
             </ListItem>
           }
@@ -701,8 +778,12 @@ Do you wish to proceed?`;
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNodeInfo")}>
-            <Left><Icon style={style.icon} type="AntDesign" name="user" /></Left>
+            <Left><Icon style={style.icon} type="Feather" name="user" /></Left>
             <Body><Text>Show node data</Text></Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningPeers")}>
+            <Left><Icon style={style.icon} type="Feather" name="users" /></Left>
+            <Body><Text>Show Lightning peers</Text></Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleAutopilotPress}>
             <Left><Icon style={style.icon} type="Entypo" name="circular-graph" /></Left>
@@ -762,7 +843,7 @@ Do you wish to proceed?`;
             <Right><CheckBox checked={screenTransitionsEnabled} onPress={onToggleScreenTransitionsEnabledPress} /></Right>
           </ListItem>
 
-          {Chain === "mainnet" &&
+          {(Chain === "mainnet" || Chain === "regtest") &&
             <>
               <ListItem style={style.itemHeader} itemHeader={true}>
                 <Text>Experiments</Text>
@@ -822,13 +903,15 @@ Do you wish to proceed?`;
               </Body>
             </ListItem>
           }
-          <ListItem style={style.listItem} icon={true} onPress={async () => {
-            const logLines = await NativeModules.LndMobile.tailLog(30);
-            Alert.alert("Log", logLines);
-          }}>
-            <Left><Icon style={style.icon} type="Ionicons" name="newspaper-outline" /></Left>
-            <Body><Text>Read lnd log</Text></Body>
-          </ListItem>
+          {PLATFORM === "android" &&
+            <ListItem style={style.listItem} icon={true} onPress={async () => {
+              const logLines = await NativeModules.LndMobileTools.tailLog(30);
+              Alert.alert("Log", logLines);
+            }}>
+              <Left><Icon style={style.icon} type="Ionicons" name="newspaper-outline" /></Left>
+              <Body><Text>Read lnd log</Text></Body>
+            </ListItem>
+          }
           {(PLATFORM === "android" && (name === "Hampus" || __DEV__ === true)) &&
             <>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>

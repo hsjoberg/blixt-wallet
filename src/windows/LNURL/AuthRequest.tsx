@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar, Vibration, Alert } from "react-native";
-import { Spinner, Text } from "native-base";
+import { Vibration, Alert } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-import Container from "../../components/Container";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
-import { RootStackParamList } from "../../Main";
 import { getDomainFromURL, toast } from "../../utils";
 import { timeout } from "../../../mocks/lndmobile/utils";
+import { PLATFORM } from "../../utils/constants";
 
 interface IAuthRequestProps {
   navigation: StackNavigationProp<{}>;
@@ -28,6 +25,13 @@ export default function LNURLChannelRequest({ navigation }: IAuthRequestProps) {
     (async () => {
       if (type === "login") {
         await timeout(100);
+
+        if (PLATFORM === "ios") {
+          Alert.alert("Not supported", "LNURL-auth is not yet supported on iOS");
+          navigation.pop();
+          return;
+        }
+
         const domain = getDomainFromURL(lnurlStr!);
         Alert.alert(
           "Login request",

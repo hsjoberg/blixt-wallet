@@ -14,7 +14,7 @@ export interface ILoadingProps {
   navigation: StackNavigationProp<RootStackParamList, "Loading">;
 }
 export default function Loading({ navigation }: ILoadingProps) {
-  const checkDeeplink = useStoreActions((store) => store.androidDeeplinkManager.checkDeeplink);
+  const checkDeeplink = useStoreActions((store) => store.deeplinkManager.checkDeeplink);
   const ready = useStoreState((store) => store.lightning.ready);
 
   useEffect(() => {
@@ -23,10 +23,7 @@ export default function Loading({ navigation }: ILoadingProps) {
     }
     // tslint:disable-next-line
     (async () => {
-      let cb: any;
-      if (PLATFORM === "android") {
-        cb = await checkDeeplink();
-      }
+      let cb = await checkDeeplink();
 
       requestAnimationFrame(() => {
         navigation.dispatch(

@@ -73,3 +73,7 @@ google-services.json
 
 # iOS
 /ios/Pods
+
+# Lnd binaries
+android/lndmobile/Lndmobile.aar
+ios/Lndmobile.framework

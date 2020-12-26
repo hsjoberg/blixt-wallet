@@ -241,7 +241,7 @@ public class LndMobileService extends Service {
               initWallet.setRecoveryWindow(recoveryWindow);
             }
             if (channelBackupsBase64 != null) {
-              HyperLog.d(TAG, "--CHANNEL BACKUP RESTORE TEST--");
+              HyperLog.d(TAG, "--CHANNEL BACKUP RESTORE--");
               initWallet.setChannelBackups(
                 Rpc.ChanBackupSnapshot.newBuilder().setMultiChanBackup(
                   Rpc.MultiChanBackup.newBuilder().setMultiChanBackup(

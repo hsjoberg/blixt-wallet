@@ -35,15 +35,18 @@ export const notificationManager: INotificationManagerModel = {
     PushNotification.configure({
       requestPermissions: false,
       onNotification: ((notification) => {
-        log.i("onNotification");
+        log.i("onNotification", [notification]);
 
-        if (notification.message.toString().includes("on-chain")) {
-          log.i("Navigating to OnChainTransactionLog");
-          navigate("OnChain", { screen: "OnChainTransactionLog"});
-        }
-        else if (notification.message.toString().toLocaleLowerCase().includes("payment channel")) {
-          log.i("Navigating to LightningInfo");
-          navigate("LightningInfo");
+        // TODO(hsjoberg): ios notification deeplinking
+        if (PLATFORM === "android") {
+          if (notification.message.toString().includes("on-chain")) {
+            log.i("Navigating to OnChainTransactionLog");
+            navigate("OnChain", { screen: "OnChainTransactionLog"});
+          }
+          else if (notification.message.toString().toLocaleLowerCase().includes("payment channel")) {
+            log.i("Navigating to LightningInfo");
+            navigate("LightningInfo");
+          }
         }
       }),
     });

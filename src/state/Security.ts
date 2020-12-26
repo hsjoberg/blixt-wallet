@@ -1,5 +1,5 @@
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
-import FingerprintScanner from "react-native-fingerprint-scanner";
+import FingerprintScanner, { Biometrics } from "react-native-fingerprint-scanner";
 
 import { StorageItem, getItemObject, setItemObject, removeItem } from "../storage/app";
 import { Alert, AppState } from "react-native";
@@ -29,13 +29,14 @@ export interface ISecurityModel {
   setLoggedIn: Action<ISecurityModel, boolean>;
   setLoginMethods: Action<ISecurityModel, Set<LoginMethods>>;
   setSeedAvailable: Action<ISecurityModel, boolean>;
-  setFingerprintAvailable: Action<ISecurityModel, boolean>;
+  setSensor: Action<ISecurityModel, Biometrics>;
 
   loggedIn: boolean;
   loginMethods: Set<LoginMethods>;
   seedAvailable: boolean;
-  fingerprintAvailable: boolean;
+  fingerprintAvailable: Computed<ISecurityModel, boolean>;
   fingerprintEnabled: Computed<ISecurityModel, boolean>;
+  sensor: Biometrics | null;
 }
 
 export const security: ISecurityModel = {
@@ -46,8 +47,8 @@ export const security: ISecurityModel = {
     actions.setLoggedIn(loginMethods.size === 0);
     actions.setSeedAvailable(await getItemObject(StorageItem.seedStored) || false);
     try {
-      const sensorAvailable = await FingerprintScanner.isSensorAvailable();
-      actions.setFingerprintAvailable(sensorAvailable === "Biometrics");
+      const sensor = await FingerprintScanner.isSensorAvailable();
+      actions.setSensor(sensor);
     } catch (e) {
       log.d("Error checking fingerprint availability", [e]);
     }
@@ -145,12 +146,12 @@ export const security: ISecurityModel = {
   setLoggedIn: action((store, payload) => { store.loggedIn = payload; }),
   setLoginMethods: action((store, payload) => { store.loginMethods = payload; }),
   setSeedAvailable: action((store, payload) => { store.seedAvailable = payload; }),
-  setFingerprintAvailable: action((store, payload) => { store.fingerprintAvailable = payload; }),
+  setSensor: action((store, payload) => { store.sensor = payload; }),
 
   loginMethods: new Set<LoginMethods>([]),
   loggedIn: false,
   seedAvailable: false,
-  fingerprintAvailable: false,
+  fingerprintAvailable: computed((store) => store.sensor !== null),
   fingerprintEnabled: computed((store) => store.loginMethods.has(LoginMethods.fingerprint)),
+  sensor: null,
 };
-

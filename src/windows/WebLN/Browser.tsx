@@ -115,10 +115,16 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
       }, {
         text: "No",
       }])
-  }
+  };
+
+  const onLongPressHome = () => {
+    if (PLATFORM === "ios" ) {
+      ToastAndroid.show("Go back to store list", ToastAndroid.SHORT);
+    }
+  };
 
   return (
-    <KeyboardAvoidingView behavior="height" style={{flex:1}}>
+    <KeyboardAvoidingView behavior="padding" style={{ flex:1 }} enabled={PLATFORM === "ios"}>
       <Card style={style.card}>
         <WebView
           containerStyle={{ opacity: showWebview ? 1 : 0 }}
@@ -155,7 +161,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
           <TouchableOpacity onPress={closeBrowser}>
             <Icon style={style.closeButton} type="AntDesign" name="close" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setUrl(INITIAL_URL)} onLongPress={() => ToastAndroid.show("Go back to store list", ToastAndroid.SHORT)}>
+          <TouchableOpacity onPress={() => setUrl(INITIAL_URL)} onLongPress={() => onLongPressHome()}>
             <Icon style={style.listButton} type="FontAwesome5" name="home" />
           </TouchableOpacity>
           {PLATFORM === "ios" &&
@@ -202,7 +208,7 @@ const style = StyleSheet.create({
   },
   card: {
     marginTop: (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true) + 8,
-    marginBottom: 12 + (PLATFORM === "ios" ? 10 : 0),
+    marginBottom: 12 + (PLATFORM === "ios" ? 7 : 0),
     marginLeft: 9,
     marginRight: 9,
     paddingTop: 8,

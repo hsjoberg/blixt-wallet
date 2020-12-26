@@ -11,7 +11,7 @@ import BlixtForm from "../../components/Form";
 import { formatBitcoin, BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
-import { MAX_SAT_INVOICE, PLATFORM } from "../../utils/constants";
+import { MATH_PAD_NATIVE_ID, MAX_SAT_INVOICE, PLATFORM } from "../../utils/constants";
 import { toast } from "../../utils";
 import { Keyboard } from "react-native";
 import Container from "../../components/Container";
@@ -169,6 +169,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     component: (
       <>
         <Input
+          onSubmitEditing={() => setMathPadVisible(false)}
           testID="input-amount-sat"
           onChangeText={onChangeBitcoinInput}
           placeholder="0"
@@ -182,7 +183,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
           onBlur={() => {
             // setMathPadVisible(false);
           }}
-          inputAccessoryViewID="MATH_PAD"
+          inputAccessoryViewID={MATH_PAD_NATIVE_ID}
         />
         <Icon type="Foundation" name="bitcoin-circle" onPress={onPressChangeBitcoinUnit} style={{ fontSize: 31, marginRight: 1 }} />
       </>
@@ -193,7 +194,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     component: (
       <>
         <Input
-        onSubmitEditing={() => setMathPadVisible(false)}
+          onSubmitEditing={() => setMathPadVisible(false)}
           onChangeText={onChangeFiatInput}
           placeholder="0.00"
           value={dollarValue !== undefined ? dollarValue.toString() : undefined}
@@ -206,7 +207,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
           onBlur={() => {
             // setMathPadVisible(false);
           }}
-          inputAccessoryViewID="MATH_PAD"
+          inputAccessoryViewID={MATH_PAD_NATIVE_ID}
         />
         <Icon type="FontAwesome" name="money" onPress={onPressChangeFiatUnit} />
       </>
@@ -270,7 +271,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     <Container>
       <BlixtForm
         mathPadProps={{
-          visible: !showNoticeText && mathPadVisibleOriginal,
+          visible: mathPadVisibleOriginal,
           onAddPress: () => addMathOperatorToInput("+"),
           onSubPress: () => addMathOperatorToInput("-"),
           onMulPress: () => addMathOperatorToInput("*"),

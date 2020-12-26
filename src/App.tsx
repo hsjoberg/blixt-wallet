@@ -11,6 +11,7 @@ const getTheme = require("../native-base-theme/components").default;
 const theme = require("../native-base-theme/variables/commonColor").default;
 
 import store from "./state/store";
+import SendDone from "./windows/Send/SendDone";
 
 export default function App() {
   const [debug, setDebug] = useState(__DEV__ ? true : false);

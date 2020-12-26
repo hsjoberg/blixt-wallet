@@ -11,9 +11,7 @@ const log = (tag?: string) => {
       if (Debug) {
         const msg = fixMessage(message, data);
         console.debug(`${tag}: ${msg}`);
-        if (PLATFORM === "android") {
-          NativeModules.LndMobile.log("v", tag, msg);
-        }
+        NativeModules.LndMobileTools.log("v", tag, msg);
       }
     },
 
@@ -21,34 +19,26 @@ const log = (tag?: string) => {
       if (Debug) {
         const msg = fixMessage(message, data);
         console.debug(`${tag}: ${msg}`);
-        if (PLATFORM === "android") {
-          NativeModules.LndMobile.log("d", tag, msg);
-        }
+        NativeModules.LndMobileTools.log("d", tag, msg);
       }
     },
 
     i: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
-      console.log(`${tag}: ${msg}`);
-      if (PLATFORM === "android") {
-        NativeModules.LndMobile.log("i", tag, msg);
-      }
+      console.log(`${tag}: ${msg}`)
+      NativeModules.LndMobileTools.log("i", tag, msg);
     },
 
     w: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
-      console.warn(`${tag}: ${msg}`);
-      if (PLATFORM === "android") {
-        NativeModules.LndMobile.log("w", tag, msg);
-      }
+      console.warn(`${tag}: ${msg}`)
+      NativeModules.LndMobileTools.log("w", tag, msg);
     },
 
     e: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
-      console.error(`${tag}: ${msg}`);
-      if (PLATFORM === "android") {
-        NativeModules.LndMobile.log("e", tag, msg);
-      }
+      console.error(`${tag}: ${msg}`)
+      NativeModules.LndMobileTools.log("e", tag, msg);
     },
   };
 };

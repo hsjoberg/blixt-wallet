@@ -123,13 +123,13 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
         </View>
         <View style={style.buttons}>
           <Button
-            onLongPress={() => onGenerateP2SHPress()}
             testID="GENERATE_ADDRESS"
             block={true}
             primary={true}
             disabled={!rpcReady}
             style={style.button}
             onPress={onGeneratePress}
+            onLongPress={() => onGenerateP2SHPress()}
           >
             <Text>Generate new address</Text>
           </Button>

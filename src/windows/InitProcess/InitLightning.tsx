@@ -30,10 +30,10 @@ export default function InitLightning() {
   //     try {
   //       let lightningURI = await Linking.getInitialURL();
   //       if (lightningURI === null) {
-  //         lightningURI = await NativeModules.LndMobile.getIntentStringData();
+  //         lightningURI = await NativeModules.LndMobileTools.getIntentStringData();
   //       }
   //       if (lightningURI === null) {
-  //         lightningURI = await NativeModules.LndMobile.getIntentNfcData();
+  //         lightningURI = await NativeModules.LndMobileTools.getIntentNfcData();
   //       }
 
   //       if (lightningURI && lightningURI.startsWith("lightning:")) {

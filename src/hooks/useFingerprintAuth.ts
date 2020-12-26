@@ -21,7 +21,6 @@ export default function useFingerprintAuth(callback: () => void, forceEnabled: b
     }
     return () => {
       fingerprintStopScan();
-      // AppState.removeEventListener("change", handler);
     }
   }, [fingerprintAvailable, fingerprintEnabled, forceEnabled]);
 
