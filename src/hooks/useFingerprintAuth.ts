@@ -1,14 +1,9 @@
-import { useState, useEffect } from "react";
-import { convertBitcoinToFiat, unitToSatoshi, valueBitcoinFromFiat, valueBitcoin, BitcoinUnits } from "../utils/bitcoin-units";
+import { useEffect } from "react";
 import { useStoreState, useStoreActions } from "../state/store";
 
-import exprEval from "expr-eval";
-import { countCharInString } from "../utils";
-import { AppStateStatus, AppState } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-
-export default function useFingerprintAuth(callback: () => void) {
+export default function useFingerprintAuth(callback: () => void, forceEnabled: boolean = false) {
   const fingerprintAvailable = useStoreState((store) => store.security.fingerprintAvailable);
+  const fingerprintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
   const fingerprintStartScan = useStoreActions((store) => store.security.fingerprintStartScan);
   const fingerprintStopScan = useStoreActions((store) => store.security.fingerprintStopScan);
 
@@ -21,29 +16,14 @@ export default function useFingerprintAuth(callback: () => void) {
   };
 
   useEffect(() => {
-    if (fingerprintAvailable) {
-      // Workaround a bug where leaving foreground would
-      // cause fingerprint scanning to not respond
-      // TODO check this code
-      const handler = (status: AppStateStatus) => {
-        if (status === "background") {
-          fingerprintStopScan();
-        }
-        else if (status === "active") {
-          // tslint:disable-next-line: no-floating-promises
-          startScan();
-        }
-      };
-      AppState.addEventListener("change", handler);
-      // tslint:disable-next-line: no-floating-promises
+    if (fingerprintAvailable && (fingerprintEnabled || forceEnabled)) {
       startScan();
-
-      return () => {
-        fingerprintStopScan();
-        AppState.removeEventListener("change", handler);
-      }
     }
-  }, [fingerprintAvailable]);
+    return () => {
+      fingerprintStopScan();
+      // AppState.removeEventListener("change", handler);
+    }
+  }, [fingerprintAvailable, fingerprintEnabled, forceEnabled]);
 
   return () => {
     // tslint:disable-next-line: no-floating-promises

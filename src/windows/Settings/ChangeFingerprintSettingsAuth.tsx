@@ -12,9 +12,9 @@ export default function ChangeFingerprintSettingsAuth() {
   const setFingerprintEnabled = useStoreActions((store) => store.security.setFingerprintEnabled);
   const fingerPrintEnabled = useStoreState((store) => store.security.fingerprintEnabled);
   const startScan = useFingerprintAuth(async () => {
-    await setFingerprintEnabled(!fingerPrintEnabled);
     navigation.goBack();
-  });
+    await setFingerprintEnabled(!fingerPrintEnabled);
+  }, true);
 
   return (
     <Container>
