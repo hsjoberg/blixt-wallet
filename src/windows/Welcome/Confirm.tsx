@@ -4,7 +4,7 @@ import { View, Button, H1, Card, CardItem, Text, Spinner, Icon, H3 } from "nativ
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { useStoreActions } from "../../state/store";
 import style from "./style";
 import { smallScreen } from "../../utils/device";

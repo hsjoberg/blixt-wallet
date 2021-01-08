@@ -20,13 +20,14 @@ import GoogleDriveTestbed from "./windows/Google/GoogleDriveTestbed";
 import TransactionDetails from "./windows/TransactionDetails";
 import SyncInfo from "./windows/SyncInfo";
 import WebLNBrowser from "./windows/WebLN/Browser";
+import WebInfo from "./windows/Web/Info";
 import Loading from "./windows/Loading";
 
 import { useStoreState, useStoreActions } from "./state/store";
 import { toast } from "./utils";
 import CameraFullscreen from "./windows/CameraFullscreen";
 
-import { blixtTheme } from "../native-base-theme/variables/commonColor";
+import { blixtTheme } from "./native-base-theme/variables/commonColor";
 import Container from "./components/Container";
 import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
 import { navigator } from "./utils/navigation";
@@ -59,6 +60,7 @@ export type RootStackParamList = {
   WebLNBrowser: {
     url: string;
   } | undefined;
+  WebInfo: undefined;
 
   DEV_CommandsX: undefined;
 }
@@ -194,7 +196,7 @@ export default function Main() {
 
       <RootStack.Screen name="Overview" component={Overview} options={animationDisabled} />
       <RootStack.Screen name="Help" component={Help} options={animationDisabled} />
-      <RootStack.Screen name="TransactionDetails" component={TransactionDetails} options={animationDisabled} />
+      <RootStack.Screen name="TransactionDetails" component={TransactionDetails as any} options={animationDisabled} />
       <RootStack.Screen name="SyncInfo" component={SyncInfo} options={animationDisabled} />
       <RootStack.Screen name="Receive" component={Receive} />
       <RootStack.Screen name="Send" component={Send} options={{
@@ -209,6 +211,7 @@ export default function Main() {
       }} />
       <RootStack.Screen name="LNURL" component={LNURL} options={animationDisabled} />
       <RootStack.Screen name="WebLNBrowser" component={WebLNBrowser} options={animationDisabled} />
+      <RootStack.Screen name="WebInfo" component={WebInfo} options={animationDisabled} />
 
       <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} options={animationDisabled} />
       <RootStack.Screen name="KeysendTest" component={KeysendTest} options={animationDisabled} />

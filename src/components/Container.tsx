@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 
 export interface IContainer {
   children?: ReactNode;

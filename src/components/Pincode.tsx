@@ -7,7 +7,7 @@ import Container from "../components/Container";
 import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 
 
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { smallScreen } from "../utils/device";
 import { PLATFORM } from "../utils/constants";
 

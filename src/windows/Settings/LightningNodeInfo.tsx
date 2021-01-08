@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView, Platform } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1 } from "native-base";
 import { fromUnixTime } from "date-fns";
@@ -91,6 +91,11 @@ const style = StyleSheet.create({
   },
   detailText: {
     marginBottom: 7,
+    ...Platform.select({
+      web: {
+        wordBreak: "break-all"
+      },
+    }),
   },
 });
 

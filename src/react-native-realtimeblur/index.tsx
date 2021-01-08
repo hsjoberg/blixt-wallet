@@ -1,5 +1,4 @@
 import React from "react";
-import RCTRealTimeBlur from "./RCTRealTimeBlur";
 import { View, ViewProps } from "react-native";
 
 interface IRealTimeBlurProps extends ViewProps {
@@ -10,15 +9,13 @@ interface IRealTimeBlurProps extends ViewProps {
 }
 export default function RealTimeBlur(props: IRealTimeBlurProps) {
   return (
-    <>
-      <View
-        {...props}
-        style={[{ backgroundColor: "rgba(0.5, 0.5, 0.5, 0.75)", position: "absolute", width: "100%", height: "100%" }, props.style]}
-      >
-        <View style={{ flex: 1 }}>
-          {props.children}
-        </View>
+    <View
+      {...props}
+      style={[{ backgroundColor: "rgba(0.5, 0.5, 0.5, 0.75)", position: "absolute", width: "100%", height: "100%" }, props.style]}
+    >
+      <View style={{ flex: 1 }}>
+        {props.children}
       </View>
-    </>
+    </View>
   )
 }

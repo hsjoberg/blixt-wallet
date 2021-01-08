@@ -13,6 +13,7 @@ else {
 }
 
 import { ILndMobileInjections } from "./LndMobileInjection";
+import { PLATFORM } from "../utils/constants";
 
 const { useStoreActions, useStoreState } = createTypedHooks<IStoreModel>();
 export { useStoreActions, useStoreState };
@@ -27,12 +28,12 @@ if (process.env.NODE_ENV === "development") {
     injections: {
       lndMobile: LndMobile,
     } as IStoreInjections,
-    compose: composeWithDevTools({
+    compose: PLATFORM !== "web" ? composeWithDevTools({
       realtime: true,
       trace: true,
       hostname: "192.168.1.100",
       port: 8000,
-    })
+    }) : undefined,
   });
 }
 else {

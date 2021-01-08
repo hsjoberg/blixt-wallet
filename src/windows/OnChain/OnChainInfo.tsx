@@ -10,7 +10,7 @@ import QrCode from "../../components/QrCode";
 import { formatBitcoin, valueFiat } from "../../utils/bitcoin-units";
 import { smallScreen } from "../../utils/device";
 import CopyAddress from "../../components/CopyAddress";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { toast } from "../../utils";
 import { NavigationButton } from "../../components/NavigationButton";
 import { lnrpc } from "../../../proto/proto";

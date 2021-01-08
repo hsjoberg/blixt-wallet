@@ -639,12 +639,12 @@ exports[`renders correctly 1`] = `
                                                 Object {
                                                   "color": "#e5eaea",
                                                   "fontSize": 28,
-                                                  "left": 41,
+                                                  "left": 42,
                                                   "opacity": 1,
                                                   "padding": 4,
                                                   "paddingRight": 8,
                                                   "position": "absolute",
-                                                  "top": 31,
+                                                  "top": 32,
                                                 },
                                               ],
                                               Object {
@@ -687,16 +687,16 @@ exports[`renders correctly 1`] = `
                                                 },
                                               ],
                                               Object {
-                                                "fontFamily": "anticon",
+                                                "fontFamily": "Material Icons",
                                                 "fontStyle": "normal",
                                                 "fontWeight": "normal",
                                               },
                                               Object {},
                                             ]
                                           }
-                                          type="AntDesign"
+                                          type="MaterialIcons"
                                         >
-                                          
+                                          
                                         </Text>
                                         <Text
                                           allowFontScaling={false}
@@ -802,7 +802,8 @@ exports[`renders correctly 1`] = `
                                             "height": 37,
                                             "lineHeight": 41,
                                             "marginBottom": 3,
-                                            "marginTop": 66,
+                                            "marginTop": 64,
+                                            "position": "relative",
                                           }
                                         }
                                         testID="BIG_BALANCE_HEADER"

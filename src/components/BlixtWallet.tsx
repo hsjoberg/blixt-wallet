@@ -2,7 +2,7 @@ import { Text } from "native-base";
 import React, { useRef, useState } from "react";
 import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Image as AnimatedImage } from 'react-native-animatable';
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { timeout } from "../utils";
 import { VersionName } from "../utils/build";
 
@@ -59,8 +59,8 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   blixtLogo: {
-    width: 320,
-    height: 320,
+    width: 75,
+    height: 75,
     borderRadius: 55,
     alignSelf: "center",
     margin: 5,

@@ -6,7 +6,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { SendStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import BlixtForm from "../../components/Form";
 import { BitcoinUnits, unitToSatoshi } from "../../utils/bitcoin-units";
 import { extractDescription } from "../../utils/NameDesc";

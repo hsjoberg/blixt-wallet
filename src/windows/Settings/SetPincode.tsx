@@ -36,7 +36,7 @@ export default function SetPincode() {
   return (
     <>
       <Pincode onTryCode={onTryCode} textAction={state} />
-      {PLATFORM === "ios" &&
+      {PLATFORM !== "android" &&
         <Icon style={{
           position: "absolute",
           right: 0,

@@ -17,7 +17,7 @@ import { timeout, toast } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
 import { Chain } from "../utils/build";
-import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
+import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
 import Send from "./Send";
@@ -35,6 +35,7 @@ const HEADER_MIN_HEIGHT = Platform.select({
 const HEADER_MAX_HEIGHT = Platform.select({
   android: 195,
   ios: 195,
+  web: 195 - 32,
 }) ?? 195;
 const NUM_TRANSACTIONS_PER_LOAD = 25;
 const LOAD_BOTTOM_PADDING = 475;
@@ -200,17 +201,17 @@ function Overview({ navigation }: IOverviewProps) {
           }
           {txs}
         </ScrollView>
-        <Animated.View style={{ ...style.animatedTop, height: headerHeight }} pointerEvents="box-none">
+        <Animated.View style={[style.animatedTop,{ height: headerHeight }]} pointerEvents="box-none">
           <LinearGradient style={style.top} colors={Chain === "mainnet" ? [blixtTheme.secondary, blixtTheme.primary] : [blixtTheme.lightGray, Color(blixtTheme.lightGray).darken(0.30).hex()]} pointerEvents="box-none">
             <View style={StyleSheet.absoluteFill}>
               <AnimatedIcon
                 style={[style.onchainIcon, { opacity: iconOpacity }]} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
               />
               <AnimatedIcon
-                style={[style.channelsIcon, { opacity: iconOpacity }]} type="Entypo" name="thunder-cloud" onPress={() => navigation.navigate("LightningInfo")}
+                style={[style.channelsIcon, { opacity: iconOpacity }]} type="Entypo" name="thunder-cloud" onPress={() => (navigation.navigate as any)("LightningInfo")}
               />
               <AnimatedIcon
-                style={[style.settingsIcon, {}]} type="AntDesign" name="setting" onPress={() => navigation.navigate("Settings")}
+                style={[style.settingsIcon, {}]} type="MaterialIcons" name="settings" onPress={() => navigation.navigate("Settings")}
               />
               <AnimatedIcon
                 style={[style.helpIcon, { opacity: iconOpacity }]} type="MaterialIcons" name="live-help" onPress={() => navigation.navigate("Help")}
@@ -227,41 +228,40 @@ function Overview({ navigation }: IOverviewProps) {
               }
             </View>
 
-            {/* Big header */}
             <Animated.Text
               testID="BIG_BALANCE_HEADER"
               onPress={onPressBalanceHeader}
-              style={{
-                ...headerInfo.btc,
+              style={[headerInfo.btc, {
                 fontSize: headerBtcFontSize,
                 height: headerBtcFontSize,
                 lineHeight: headerBtcLineHeight,
+                position: "relative",
 
                 marginTop: Animated.add(
                   headerBtcMarginTop,
                   16 +
-                  (PLATFORM === "android"
-                    ? iconTopPadding + 3
-                    : iconTopPadding
-                  ) +
+                  iconTopPadding +
+                  (Platform.select({
+                    android: 3,
+                    web: -6,
+                    ios: 1
+                  }) ?? 0) + 
                   16
                 ),
-              }}
+              }]}
             >
               {!preferFiat && bitcoinBalance}
               {preferFiat && fiatBalance}
             </Animated.Text>
 
-            {/* Small header */}
             {pendingOpenBalance.equals(0) &&
-              <Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.fiat}}>
+              <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
                 {!preferFiat && fiatBalance}
                 {preferFiat && bitcoinBalance}
               </Animated.Text>
             }
-            {/* Pending open balance */}
             {pendingOpenBalance.greaterThan(0) &&
-              <Animated.Text style={{opacity: headerFiatOpacity, ...headerInfo.pending}}>
+              <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
                 {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit)} pending)</>}
                 {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} pending)</>}
               </Animated.Text>
@@ -371,7 +371,10 @@ const style = StyleSheet.create({
     position: "absolute",
     padding: 6,
     paddingRight: 8,
-    top: 9 + iconTopPadding,
+    top: Platform.select({
+      native: 9 + iconTopPadding,
+      web: 9,
+    }) ?? 0,
     left: 8,
     fontSize: 25,
     color: blixtTheme.light,
@@ -380,15 +383,21 @@ const style = StyleSheet.create({
     position: "absolute",
     padding: 4,
     paddingRight: 8,
-    top: 11 + iconTopPadding,
-    left: 8 + 24 + 8 + 1,
+    top: Platform.select({
+      native: 12 + iconTopPadding,
+      web: 11,
+    }) ?? 0,
+    left: 8 + 24 + 8 + 2,
     fontSize: 28,
     color: blixtTheme.light,
   },
   settingsIcon: {
     position: "absolute",
     padding: 5,
-    top: 11 + iconTopPadding,
+    top: Platform.select({
+      native: 11 + iconTopPadding,
+      web: 7,
+    }),
     right: 8,
     fontSize: 27,
     color: blixtTheme.light,
@@ -396,24 +405,36 @@ const style = StyleSheet.create({
   helpIcon: {
     position: "absolute",
     padding: 5,
-    top: 12 + iconTopPadding,
-    right: 8 + 24 + 8 + 8,
+    top: Platform.select({
+      native: 12 + iconTopPadding,
+      web: 8,
+    }) ?? 0,
+    right: Platform.select({
+      native: 8 + 24 + 8 + 8,
+      web: 8 + 24 + 8 + 7
+    }) ?? 0,
     fontSize: 25,
     color: blixtTheme.light,
   },
   lightningSyncIcon: {
     position: "absolute",
     padding: 4,
-    top: 11 + iconTopPadding,
+    top: Platform.select({
+      native: 11 + iconTopPadding,
+      web: 8,
+    }) ?? 0,
     right: 8 + 24 + 8 + 24 + 8 + 14,
     fontSize: 24,
     color: blixtTheme.light,
   },
   weblnBrowswerIcon: {
     position: "absolute",
-    padding: 4,
-    top: 13 + iconTopPadding,
-    right: 8 + 24 + 8 + 24 + 8 + 14,
+    padding: 5,
+    top: Platform.select({
+      native: 12 + iconTopPadding,
+      web: 8,
+    }) ?? 0,
+    right: 8 + 24 + 8 + 24 + 7 + 14  + (PLATFORM === "web" ? -1 : 0),
     fontSize: 24,
     color: blixtTheme.light,
   },
@@ -428,7 +449,10 @@ const style = StyleSheet.create({
 const headerInfo = StyleSheet.create({
   btc: {
     color: blixtTheme.light,
-    marginBottom: 3,
+    marginBottom: Platform.select({
+      native: 3,
+      web: 4,
+    }),
     fontFamily: blixtTheme.fontMedium,
   },
   fiat: {
@@ -459,16 +483,17 @@ export default function TopTabsComponent() {
       springVelocityScale={1.4}
       lazy={true}
       sceneContainerStyle={{
-        backgroundColor:"transparent"
+        backgroundColor: "transparent"
       }}
       tabBarOptions={{
         style: {
+          display: "none",
           height: 0
         },
       }}
     >
       <TopTabs.Screen name="OverviewX" component={OverviewTabsComponent} />
-      <TopTabs.Screen name="SendX" component={Send} initialParams={{ viaSwipe: true }}  />
+      <TopTabs.Screen name="SendX" component={Send} initialParams={{ viaSwipe: true }} />
     </TopTabs.Navigator>
   );
 }

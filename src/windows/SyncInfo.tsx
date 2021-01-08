@@ -2,13 +2,14 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { Body, Card, Text, CardItem, H1 } from "native-base";
 import Clipboard from "@react-native-community/clipboard";
-import { Bar } from "react-native-progress";
+import Bar from "../components/ProgressBar";
 
 import { useStoreState } from "../state/store";
 import Blurmodal from "../components/BlurModal";
 import TextLink from "../components/TextLink";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { toast } from "../utils";
+import { PLATFORM } from "../utils/constants";
 
 interface IMetaDataProps {
   title: string;
@@ -37,7 +38,10 @@ export interface ISyncInfoProps {
 export default function SyncInfo({ route }: any) {
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const initialKnownBlockheight = useStoreState((store) => store.lightning.initialKnownBlockheight);
-  const bestBlockheight = useStoreState((store) => store.lightning.bestBlockheight);
+  let bestBlockheight = useStoreState((store) => store.lightning.bestBlockheight);
+  if (PLATFORM === "web") {
+    bestBlockheight = 600000;
+  }
 
   const currentProgress = (nodeInfo?.blockHeight ?? 0) - (initialKnownBlockheight ?? 0);
   const numBlocksUntilSynced = (bestBlockheight ?? 0) - (initialKnownBlockheight ?? 0);

@@ -1,9 +1,9 @@
 import React, { ReactNode } from "react";
 import { StyleSheet, KeyboardAvoidingView, StyleProp, ViewStyle, InputAccessoryView } from "react-native";
 import { View, Item, Text, Label, Icon } from "native-base";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { MathPad, IMathPadProps } from "../components/MathPad";
-import { MATH_PAD_NATIVEID, MATH_PAD_NATIVE_ID, PLATFORM } from "../utils/constants";
+import { MATH_PAD_NATIVE_ID, PLATFORM } from "../utils/constants";
 
 export interface IFormItem {
   title: string | null;
@@ -106,6 +106,5 @@ const styles = StyleSheet.create({
     color: blixtTheme.lightGray,
     marginRight: 80,
     justifyContent:"center",
-    // backgroundColor:"blue",
   },
 });

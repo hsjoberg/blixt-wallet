@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
 import { ICreateWalletPayload } from "../../state";
 import { getStatusBarHeight } from "react-native-status-bar-height";

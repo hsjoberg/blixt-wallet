@@ -2,8 +2,9 @@ import Color from "color";
 import { StackNavigationOptions, StackCardInterpolationProps } from "@react-navigation/stack";
 
 import { useStoreState } from "../state/store";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { Chain } from "../utils/build";
+import { Platform } from "react-native";
 
 const forFade = ({ current, next, index, closing }: StackCardInterpolationProps) => {
   const opacity = current.progress.interpolate({
@@ -26,11 +27,18 @@ export default function useStackNavigationOptions(): StackNavigationOptions {
     headerShown: false,
     cardStyle: {
       backgroundColor: "transparent",
+      ...Platform.select({
+        web: {
+          flex: "auto",
+          height: "100vh",
+        }
+      }),
     },
     headerStyle: {
       backgroundColor: Chain === "mainnet" ? blixtTheme.primary : Color(blixtTheme.lightGray).darken(0.30).hex(),
       elevation: 0,
       shadowColor: "transparent",
+      borderBottomColor: "transparent", // web
     },
     headerTitleStyle: {
       color: blixtTheme.light
@@ -46,5 +54,7 @@ export default function useStackNavigationOptions(): StackNavigationOptions {
     cardStyleInterpolator: forFade,
     cardOverlayEnabled: false,
     // animationTypeForReplace: "pop",
+
+    detachPreviousScreen: false,
   };
 }

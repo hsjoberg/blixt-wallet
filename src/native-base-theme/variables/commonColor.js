@@ -16,7 +16,7 @@ export const blixtTheme = {
   green: "#1c8c27",
 
   fontMedium: "IBMPlexSans-Medium",
-  fontRegular:  Platform.OS === "android" ? "IBMPlexSans-Regular" : "IBMPlexSans",
+  fontRegular:  Platform.OS === "ios" ? "IBMPlexSans" : "IBMPlexSans-Regular",
 }
 
 export const PLATFORM = {
@@ -371,8 +371,8 @@ export default {
 
   tabBarTextColor: platform === "ios" ? blixtTheme.light : blixtTheme.light,
 
-  DefaultFontSize: 15,
-  fontSizeBase: 14,
+  DefaultFontSize: 15, // TODO unused?
+  fontSizeBase: platform === "web" ? 13 : 14,
 
   listBtnUnderlayColor: color(blixtTheme.gray).lighten(0.2).hex(),
 };

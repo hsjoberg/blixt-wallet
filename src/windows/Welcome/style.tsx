@@ -1,6 +1,6 @@
 import { Dimensions, StyleProp, ViewStyle, TextStyle, StatusBar } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 const smallScreen = Dimensions.get("window").height < 700;
 
 export default {

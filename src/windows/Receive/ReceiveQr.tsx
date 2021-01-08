@@ -1,9 +1,9 @@
 import React, { useLayoutEffect } from "react";
 import { View, Share, StyleSheet } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
-import { Button, Body, Icon, Header, Text, Title, Left, H1, H3, Spinner } from "native-base";
+import { Text, H1, H3, Spinner } from "native-base";
 import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp, HeaderBackButton } from "@react-navigation/stack";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 import { ReceiveStackParamList } from "./index";
 import { useStoreState } from "../../state/store";
@@ -15,7 +15,7 @@ import { smallScreen } from "../../utils/device";
 import CopyAddress from "../../components/CopyAddress";
 import Container from "../../components/Container";
 import Content from "../../components/Content";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { toast } from "../../utils";
 
 interface IReceiveQRProps {

@@ -3,7 +3,7 @@ import { View, StyleProp, ViewStyle } from "react-native";
 import { Body, Text, Right, ListItem, Icon } from "native-base";
 import { fromUnixTime } from "date-fns";
 
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { IBlixtTransaction } from "../state/OnChain";
 import { formatISO } from "../utils";
 import { IBitcoinUnits, formatBitcoin } from "../utils/bitcoin-units";
@@ -44,7 +44,7 @@ export const OnChainTransactionItem = ({ transaction, onPress, style, unit }: IO
 
   return (
     <ListItem onPress={() => onPress(transaction.txHash!)}>
-      <View style={[{ flexDirection: "row", justifyContent: "center", alignItems: "center" }, style]}>
+      <View style={[{ flexDirection: "row", justifyContent: "center", alignItems: "center", width: "100%" }, style]}>
         {icon}
         <Body>
           <View style={{ flexDirection: "row" }}>

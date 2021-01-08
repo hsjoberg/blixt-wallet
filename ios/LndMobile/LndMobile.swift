@@ -136,11 +136,6 @@ class LndMobile: RCTEventEmitter {
 
   @objc(initWallet:password:recoveryWindow:channelsBackupBase64:resolver:rejecter:)
   func initWallet(_ seed: [AnyHashable], password: String, recoveryWindow: Int, channelsBackupBase64: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    NSLog("seed " + (seed as! [String]).joined())
-    NSLog("password " + password)
-    NSLog("recoveryWindow " + String(recoveryWindow))
-    NSLog("channelsBackupBase64 ", channelsBackupBase64)
-
     self.walletUnlockedResolver = resolve
     Lnd.shared.initWallet(
       seed as! [String],

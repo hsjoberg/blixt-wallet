@@ -5,7 +5,7 @@ import { Body, Card, Text, CardItem, H1, View, Button, Input, Spinner } from "na
 import { StackNavigationProp } from "@react-navigation/stack";
 import Long from "long";
 
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { RootStackParamList } from "../../Main";
 import { toast, getDomainFromURL, decryptLNURLPayAesTagMessage, hexToUint8Array } from "../../utils";

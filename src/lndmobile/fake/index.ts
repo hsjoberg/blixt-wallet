@@ -171,7 +171,7 @@ export const getInfo = async (): Promise<lnrpc.GetInfoResponse> => {
  *
  */
 export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlvRecordName?: string | null): Promise<lnrpc.SendResponse> => {
-  await timeout(100);
+  await timeout(600);
 
   const paymentHash = await generateSecureRandom(32);
   const paymentPreimage = await generateSecureRandom(32);
@@ -192,6 +192,8 @@ export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlv
 
 
 export const sendPaymentV2Sync = async (paymentRequest: string, amount?: Long, tlvRecordName?: string | null): Promise<lnrpc.Payment> => {
+  await timeout(600);
+
   const paymentHash = await generateSecureRandom(32);
   const paymentPreimage = await generateSecureRandom(32);
 
@@ -308,7 +310,7 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
       DeviceEventEmitter.emit("SubscribeInvoices", {
         data: base64.fromByteArray(lnrpc.Invoice.encode(invoice).finish()),
       });
-  }, 200);
+  }, 600);
 
     return response;
   } catch (e) {

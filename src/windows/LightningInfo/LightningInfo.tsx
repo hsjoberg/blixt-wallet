@@ -9,7 +9,7 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import Container from "../../components/Container";
 import ChannelCard from "../../components/ChannelCard";
 import PendingChannelCard from "../../components/PendingChannelCard";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { formatBitcoin, valueFiat } from "../../utils/bitcoin-units";
 import { NavigationButton } from "../../components/NavigationButton";
 

@@ -438,6 +438,7 @@ exports[`SendCamera renders correctly 1`] = `
                               Array [
                                 Object {
                                   "height": 275,
+                                  "width": "100%",
                                 },
                                 Object {
                                   "display": "flex",

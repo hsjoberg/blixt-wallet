@@ -4,7 +4,7 @@ import { Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import Container from "../../components/Container";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { RootStackParamList } from "../../Main";
 import { toast, timeout } from "../../utils";

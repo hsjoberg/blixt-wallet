@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Platform, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 
 import Camera from "../components/Camera";
 import BarcodeMask from "../components/BarCodeMask";
 import { smallScreen } from "../utils/device";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import GoBackIcon from "../components/GoBackIcon";
 import { PLATFORM } from "../utils/constants";
 
@@ -39,7 +39,7 @@ export default function CameraFullscreen({ navigation, route }: any) {
             width={smallScreen ? 270 : 275}
             height={smallScreen ? 270 : 275}
           />
-          {PLATFORM === "ios" &&
+          {PLATFORM !== "android" &&
             <GoBackIcon />
           }
         </>

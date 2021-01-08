@@ -6,7 +6,7 @@ import Long from "long";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as base64 from "base64-js";
 import * as Keychain from 'react-native-keychain';
-import Sound from "react-native-sound";
+// import Sound from "react-native-sound";
 import iCloudStorage from "react-native-icloudstore";
 
 import { getTransactions, getTransaction, createTransaction, clearTransactions } from "../../storage/database/transaction";
@@ -22,7 +22,7 @@ import { status, modifyStatus, queryScores } from "../../lndmobile/autopilot";
 import { RootStackParamList } from "../../Main";
 import { setWalletPassword, getWalletPassword, getItemObject, getPin } from "../../storage/keystore";
 import Content from "../../components/Content";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { LoginMethods } from "../../state/Security";
 import Spinner from "../../components/Spinner";
 
@@ -239,7 +239,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
 
             await setItem(StorageItem.onboardingState, "DONE");
             actions.setOnboardingState("DONE");
-            actions.channel.setBalance(Long.fromNumber(4397581));
+            actions.channel.setBalance(Long.fromNumber(497581));
           }}><Text style={styles.buttonText}>Setup demo environment</Text></Button>
           <Button small onPress={async () => {
             console.log(localNotification("TEST NOTIFICATION"));

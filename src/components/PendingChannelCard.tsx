@@ -3,7 +3,7 @@ import { Body, Text, Left, Right, Card, CardItem, Row, Button } from "native-bas
 
 import { style } from "./ChannelCard";
 import { lnrpc } from "../../proto/proto";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { useStoreActions } from "../state/store";
 import { Debug } from "../utils/build";
 

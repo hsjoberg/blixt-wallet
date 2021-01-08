@@ -6,7 +6,7 @@ import DialogAndroid from "react-native-dialogs";
 import Long from "long";
 
 import Container from "../../components/Container";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { RootStackParamList } from "../../Main";
 import { getDomainFromURL, toast, timeout } from "../../utils";
@@ -139,13 +139,13 @@ export default function LNURLChannelRequest({ navigation }: IWithdrawRequestProp
                   onPress: (text) => {
                     action = DialogAndroid.actionPositive;
                     sat = convertBitcoinUnit(Number.parseFloat(text ?? "0"), bitcoinUnit, "satoshi").toNumber();
-                    resolve();
+                    resolve(void(0));
                   },
                 }, {
                   text: "Cancel",
                   onPress: () => {
                     action = DialogAndroid.actionNegative;
-                    resolve();
+                    resolve(void(0));
                   },
                 }]
               )

@@ -22,7 +22,7 @@ export default function RemovePincodeAuth() {
   return (
     <>
       <Pincode onTryCode={onTryCode} textAction="Enter current pincode to remove pincode" />
-      {PLATFORM === "ios" &&
+      {PLATFORM !== "android" &&
         <Icon style={{
           position: "absolute",
           right: 0,
