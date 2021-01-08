@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
-
-import ReactNative, { AppRegistry, YellowBox, Platform, UIManager } from "react-native";
+import React from "react";
+import ReactNative, { AppRegistry, YellowBox, Platform, UIManager, Text } from "react-native";
 import App from "./src/App";
 import {name as appName} from "./app.json";
 import Long from "long";

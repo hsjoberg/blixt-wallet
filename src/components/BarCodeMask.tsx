@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 
 class BarcodeMask extends React.Component {
 
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       top: new Animated.Value(10),
@@ -69,7 +69,7 @@ class BarcodeMask extends React.Component {
     };
   }
 
-  _onMaskCenterViewLayoutUpdated = ({ nativeEvent }) => {
+  _onMaskCenterViewLayoutUpdated = ({ nativeEvent }: any) => {
     this.setState({
       maskCenterViewHeight: nativeEvent.layout.height,
     });
@@ -78,40 +78,40 @@ class BarcodeMask extends React.Component {
   _applyMaskFrameStyle = () => {
     let backgroundColor = '';
     if (
-      this.props.backgroundColor &&
-      String(this.props.backgroundColor)
+      (this.props as any).backgroundColor &&
+      String((this.props as any).backgroundColor)
     ) {
-      backgroundColor = this.props.backgroundColor;
+      backgroundColor = (this.props as any).backgroundColor;
     }
 
-    return { backgroundColor: this.props.darken ?? true ? "rgba(0, 0, 0, 0.6)" : "transparent", flex: 1 };
+    return { backgroundColor: (this.props as any).darken ?? true ? "rgba(0, 0, 0, 0.6)" : "transparent", flex: 1 };
   };
 
-  _renderEdge = (edgePosition) => {
+  _renderEdge = (edgePosition: any) => {
     const defaultStyle = {
-      width: this.props.edgeWidth,
-      height: this.props.edgeHeight,
-      borderColor: this.props.edgeColor,
+      width: (this.props as any).edgeWidth,
+      height: (this.props as any).edgeHeight,
+      borderColor: (this.props as any).edgeColor,
     };
     const edgeBorderStyle = {
       topRight: {
-        borderRightWidth: this.props.edgeBorderWidth,
-        borderTopWidth: this.props.edgeBorderWidth,
+        borderRightWidth: (this as any).props.edgeBorderWidth,
+        borderTopWidth: (this as any).props.edgeBorderWidth,
       },
       topLeft: {
-        borderLeftWidth: this.props.edgeBorderWidth,
-        borderTopWidth: this.props.edgeBorderWidth,
+        borderLeftWidth: (this as any).props.edgeBorderWidth,
+        borderTopWidth: (this as any).props.edgeBorderWidth,
       },
       bottomRight: {
-        borderRightWidth: this.props.edgeBorderWidth,
-        borderBottomWidth: this.props.edgeBorderWidth,
+        borderRightWidth: (this as any).props.edgeBorderWidth,
+        borderBottomWidth: (this as any).props.edgeBorderWidth,
       },
       bottomLeft: {
-        borderLeftWidth: this.props.edgeBorderWidth,
-        borderBottomWidth: this.props.edgeBorderWidth,
+        borderLeftWidth: (this as any).props.edgeBorderWidth,
+        borderBottomWidth: (this as any).props.edgeBorderWidth,
       },
     };
-    return <View style={[defaultStyle, styles[edgePosition + 'Edge'], edgeBorderStyle[edgePosition]]} />;
+    return <View style={[defaultStyle, (styles as any)[edgePosition + 'Edge'], (edgeBorderStyle as any)[edgePosition]]} />;
   };
 
   render() {
@@ -121,8 +121,8 @@ class BarcodeMask extends React.Component {
           style={[
             styles.finder,
             {
-              width: this.props.width,
-              height: this.props.height,
+              width: (this.props as any).width,
+              height: (this.props as any).height,
             },
           ]}
         >
@@ -135,7 +135,7 @@ class BarcodeMask extends React.Component {
         <View style={styles.maskOuter}>
           <View style={[styles.maskRow, this._applyMaskFrameStyle()]} />
           <View
-            style={[{ height: this.props.height }, styles.maskCenter]}
+            style={[{ height: (this.props as any).height, width: "100%" }, styles.maskCenter]}
             onLayout={this._onMaskCenterViewLayoutUpdated}
           >
             <View style={[this._applyMaskFrameStyle()]} />
@@ -143,8 +143,8 @@ class BarcodeMask extends React.Component {
               style={[
                 styles.maskInner,
                 {
-                  width: this.props.width,
-                  height: this.props.height,
+                  width: (this.props as any).width,
+                  height: (this.props as any).height,
                 },
               ]}
             />
@@ -158,7 +158,7 @@ class BarcodeMask extends React.Component {
 
 }
 
-const propTypes: PropsType = {
+const propTypes = {
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   edgeWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -186,7 +186,7 @@ const defaultProps = {
   backgroundColor: 'rgba(0, 0, 0, 0.6)'
 };
 
-BarcodeMask.propTypes = propTypes;
-BarcodeMask.defaultProps = defaultProps;
+(BarcodeMask as any).propTypes = propTypes;
+(BarcodeMask as any).defaultProps = defaultProps;
 
 export default BarcodeMask;

@@ -5,7 +5,7 @@ import { View, Button, H1, Text, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
 

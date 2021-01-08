@@ -1,5 +1,5 @@
 import React from "react";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { StyleSheet, TouchableHighlight, GestureResponderEvent, View, StyleProp, ViewStyle } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 

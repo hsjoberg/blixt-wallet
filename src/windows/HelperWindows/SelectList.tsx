@@ -2,11 +2,9 @@ import React, { useLayoutEffect, useState } from "react";
 import { Header, Icon, Input, Item, ListItem, Text } from "native-base";
 import Container from "../../components/Container";
 import { FlatList, StyleSheet, View } from "react-native";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
-
-type onPickCallback = (address: string) => void;
 
 export interface ISelectListNavigationProps<T> {
   title: string;
@@ -43,7 +41,7 @@ export default function<T = string>({ navigation, route }: ISelectListProps<T>) 
 
   return (
     <Container>
-      {/* Replace with react-navigation search bar when possible */}
+      {/* TODO(hsjoberg): Replace with react-navigation search bar when possible */}
       {/* https://github.com/react-navigation/search-layout/pull/20 */}
       {searchEnabled &&
         <Header iosBarStyle="light-content" searchBar rounded style={{

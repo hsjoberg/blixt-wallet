@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Alert, TextInput, StatusBar, StyleSheet, View, TouchableOpacity, BackHandler, ToastAndroid, Platform, KeyboardAvoidingView } from "react-native";
+import { TextInput, StatusBar, StyleSheet, View, TouchableOpacity, BackHandler, ToastAndroid, Platform, KeyboardAvoidingView } from "react-native";
 import Modal from "react-native-modal";
 import { getStatusBarHeight } from "react-native-status-bar-height"
 import { injectJs, onMessageHandler } from "react-native-webln";
@@ -9,11 +9,12 @@ import { Card, Icon } from "native-base";
 import { WebView } from 'react-native-webview';
 import Color from "color";
 
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { useStoreActions } from "../../state/store";
 import { RootStackParamList } from "../../Main";
 import BlurModal from "../../components/BlurModal";
 import { PLATFORM } from "../../utils/constants";
+import { Alert } from "../../utils/alert";
 
 const INITIAL_URL = "https://blixtwallet.github.io/webln";
 
@@ -114,6 +115,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
         onPress: () => navigation.goBack()
       }, {
         text: "No",
+        style: "cancel"
       }])
   };
 

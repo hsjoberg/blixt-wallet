@@ -874,7 +874,7 @@ exports[`renders correctly 1`] = `
                                             style={
                                               Object {
                                                 "backgroundColor": "#5F5F5F",
-                                                "borderBottomColor": "rgb(216, 216, 216)",
+                                                "borderBottomColor": "transparent",
                                                 "elevation": 0,
                                                 "flex": 1,
                                                 "shadowColor": "transparent",

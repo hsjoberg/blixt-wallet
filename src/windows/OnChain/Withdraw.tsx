@@ -1,13 +1,13 @@
 import React, { useState, useLayoutEffect } from "react";
 import { View } from "react-native";
-import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Spinner } from "native-base";
+import { Text, Container, Button, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
 
 import { OnChainStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { parseBech32, toast } from "../../utils";
 import { BitcoinUnits, convertBitcoinUnit } from "../../utils/bitcoin-units";
 import useBalance from "../../hooks/useBalance";
@@ -119,7 +119,7 @@ export default ({ navigation }: IOpenChannelProps) => {
                 keyboardType="numeric"
                 returnKeyType="done"
                 onChangeText={onChangeBitcoinInput}
-                value={withdrawAll ? "Withdraw all funds" : bitcoinValue}
+                value={withdrawAll ? "Withdraw all funds" : bitcoinValue || ""}
                 disabled={withdrawAll}
               />
               {!withdrawAll

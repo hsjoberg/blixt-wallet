@@ -5,6 +5,7 @@ import { Action, action, Thunk, thunk } from "easy-peasy";
 import { navigate, getNavigator } from "../utils/navigation";
 import { IStoreModel } from "./index";
 import { LnBech32Prefix } from "../utils/build";
+import { PLATFORM } from "../utils/constants";
 
 import logger from "./../utils/log";
 const log = logger("ClipboardManager");
@@ -23,11 +24,13 @@ export interface IClipboardManagerModel {
 
 export const clipboardManager: IClipboardManagerModel = {
   initialize: thunk(async (actions, _, { getStoreState }) => {
-    actions.setupInvoiceListener();
-
-    if (getStoreState().settings.clipboardInvoiceCheckEnabled) {
-      const clipboardText = await Clipboard.getString();
-      await actions.checkInvoice(clipboardText);
+    if (["android", "ios"].includes(PLATFORM)) {
+      actions.setupInvoiceListener();
+  
+      if (getStoreState().settings.clipboardInvoiceCheckEnabled) {
+        const clipboardText = await Clipboard.getString();
+        await actions.checkInvoice(clipboardText);
+      }
     }
   }),
 

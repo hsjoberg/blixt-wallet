@@ -5,7 +5,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { LightningInfoStackParamList } from "./index";
 import { useStoreActions } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";

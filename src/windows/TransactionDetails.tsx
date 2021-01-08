@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, Share, Alert, KeyboardAvoidingView } from "react-native";
+import { StyleSheet, Share, Platform } from "react-native";
 import DialogAndroid from "react-native-dialogs";
 import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
 import { fromUnixTime } from "date-fns";
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
@@ -17,8 +17,9 @@ import CopyAddress from "../components/CopyAddress";
 import { MapStyle } from "../utils/google-maps";
 import TextLink from "../components/TextLink";
 import { ITransaction } from "../storage/database/transaction";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from ".././native-base-theme/variables/commonColor";
 import { PLATFORM } from "../utils/constants";
+import { Alert } from "../utils/alert";
 
 interface IMetaDataProps {
   title: string;
@@ -127,6 +128,8 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
     transactionValue = transaction.value;
   }
 
+  const hasCoordinates = transaction.locationLat && transaction.locationLat;
+
   if (currentScreen === "Overview") {
     return (
       <Blurmodal goBackByClickingOutside={true}>
@@ -146,7 +149,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                       <Text style={style.actionBarButtonText}>Cancel invoice</Text>
                     </Button>
                   }
-                  {transaction.locationLat && transaction.locationLat &&
+                  {hasCoordinates &&
                     <Button small={true} onPress={() => {
                       setCurrentScreen("Map");
                       setTimeout(() => {
@@ -223,7 +226,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                 }}
                 customMapStyle={MapStyle[transactionGeolocationMapStyle]}
               >
-                <Marker coordinate={{
+                <MapView.Marker coordinate={{
                   longitude: transaction.locationLong!,
                   latitude: transaction.locationLat!,
                 }} />
@@ -284,6 +287,11 @@ const style = StyleSheet.create({
   },
   detailText: {
     marginBottom: 7,
+    ...Platform.select({
+      web: {
+        wordBreak: "break-all"
+      },
+    }),
   },
   qrText: {
     marginBottom: 7,

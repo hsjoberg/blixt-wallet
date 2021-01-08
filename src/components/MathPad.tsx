@@ -3,7 +3,7 @@ import { StyleSheet, LayoutAnimation, Animated, Keyboard } from "react-native";
 import { createAnimatableComponent } from "react-native-animatable";
 import { Button, Text } from "native-base";
 
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { PLATFORM } from "../utils/constants";
 
 const AnimatedButton = createAnimatableComponent(Button);

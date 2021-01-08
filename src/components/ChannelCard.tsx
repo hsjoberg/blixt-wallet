@@ -6,7 +6,7 @@ import Long from "long";
 
 import { useStoreActions, useStoreState } from "../state/store";
 import { lnrpc } from "../../proto/proto";
-import * as nativeBaseTheme from "../../native-base-theme/variables/commonColor";
+import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import { valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
 import BigNumber from "bignumber.js";
 const blixtTheme = nativeBaseTheme.blixtTheme;
@@ -71,7 +71,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
         <Body>
-          <Row>
+          <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
               <Text style={style.channelDetailTitle}>Node</Text>
             </Left>
@@ -80,7 +80,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             </Right>
           </Row>
           {alias &&
-            <Row>
+            <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>Alias</Text>
               </Left>
@@ -89,7 +89,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Right>
             </Row>
           }
-          <Row>
+          <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
               <Text style={style.channelDetailTitle}>Status</Text>
             </Left>
@@ -101,7 +101,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               }
             </Right>
           </Row>
-          <Row>
+          <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
               <Text>Capacity</Text>
             </Left>
@@ -134,7 +134,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Svg>
             </Right>
           </Row>
-          <Row>
+          <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
               <Text>Can send</Text>
             </Left>
@@ -163,7 +163,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Text>
             </Right>
           </Row>
-          <Row>
+          <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
               <Text>Can receive</Text>
             </Left>
@@ -192,7 +192,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Text>
             </Right>
           </Row>
-          <Row>
+          <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
               <Text>Local reserve</Text>
             </Left>
@@ -240,7 +240,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Text>
             </Right>
           </Row>
-          <Row>
+          <Row style={{ width: "100%" }}>
             <Right>
               <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={close}>
                 <Text>Close channel</Text>

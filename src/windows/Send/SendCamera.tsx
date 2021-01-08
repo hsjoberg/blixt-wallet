@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Alert, InteractionManager, Platform } from "react-native";
+import { View, StyleSheet, InteractionManager } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon } from "native-base";
-import { RNCamera, CameraType } from "react-native-camera";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import BarcodeMask from "../../components/BarCodeMask";
 import { SendStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Camera from "../../components/Camera";
 import { Chain } from "../../utils/build";
 import { smallScreen } from "../../utils/device";
 import { RouteProp } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
 import { PLATFORM } from "../../utils/constants";
+import { Alert } from "../../utils/alert";
 
 interface ISendCameraProps {
   bolt11Invoice?: string;
@@ -25,7 +25,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
   const viaSwipe = route.params?.viaSwipe ?? false;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const setPayment = useStoreActions((store) => store.send.setPayment);
-  const [cameraType, setCameraType] = useState<keyof CameraType>(RNCamera.Constants.Type.back);
+  const [cameraType, setCameraType] = useState<"front" | "back">("back");
   const [scanning, setScanning] = useState(true);
   const setLNURL = useStoreActions((store) => store.lnUrl.setLNUrl)
   const lnurlClear = useStoreActions((store) => store.lnUrl.clear);
@@ -56,9 +56,9 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
 
   const onCameraSwitchClick = () => {
     setCameraType(
-      cameraType === RNCamera.Constants.Type.front
-        ? RNCamera.Constants.Type.back
-        : RNCamera.Constants.Type.front
+      cameraType === "front"
+        ? "back"
+        : "front"
     );
   };
 
@@ -165,9 +165,9 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
           height={smallScreen ? 270 : 275}
         />
         <Icon type="Ionicons" name="camera-reverse" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
-        {__DEV__ && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
+        {(__DEV__ || PLATFORM === "web") && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
         <Icon testID="paste-clipboard" type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
-        {PLATFORM === "ios" &&
+        {PLATFORM !== "android" &&
           <GoBackIcon />
         }
       </View>

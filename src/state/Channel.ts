@@ -78,7 +78,7 @@ export const channel: IChannelModel = {
   setupCachedBalance: thunk(async (actions) => {
     log.d("setupCachedBalance()");
     // Use cached balance before retrieving from lnd:
-    actions.setBalance(Long.fromString(await getItemObject(StorageItem.lightningBalance)));
+    actions.setBalance(Long.fromString(await getItemObject(StorageItem.lightningBalance) ?? "0"));
     log.d("setupCachedBalance() done");
   }),
 

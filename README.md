@@ -1,6 +1,7 @@
 # Blixt Lightning Wallet
 
-<a href="https://play.google.com/apps/testing/com.blixtwallet"><img alt="Get it on Google Play" width="200" height="77" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" /></a>
+<a href="https://play.google.com/apps/testing/com.blixtwallet"><img alt="Get it on Google Play" width="200" height="77" src="https://blixtwallet.github.io/assets/images/google-play-badge.png" /></a>
+<a href="https://testflight.apple.com/join/EXvGhRzS"><img alt="Download on the App Store" style="margin-bottom: 12px;" height="52" src="https://blixtwallet.github.io/assets/images/appstore-badge.svg" /></a>
 
 Blixt Wallet is an open source Lightning Bitcoin Wallet for Android with focus on usability and user experience,
 powered by lnd and Neutrino SPV.
@@ -31,15 +32,23 @@ powered by lnd and Neutrino SPV.
 - [ ] URL Payments
 - [ ] Pay to Username
 
-## Known Bugs
-
-The wallet uses lnd that is young and might have bugs. Check [lnd bug list here](https://github.com/lightningnetwork/lnd/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
-
-## Development
-
-Do you like React Native, Java or Lightning? Come and help out!
-
 ## Build Steps
+
+Blixt targets three platforms right now: Web, Android and iOS.
+
+The web target is only used for prototyping and is not a real wallet.
+
+### Web
+
+The easiest way to build Blixt is to build the web version, because you only need Node+Yarn installed and you don't have to compile lnd as you would have for the native targets.
+
+The web version is not used as a real wallet and is only used for fast prototyping.
+It's useful if you want to make design and GUI changes.
+
+- Install [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
+- Install Node packages: `yarn`
+- Generate proto files: `yarn gen-proto`
+- Start the web server: `yarn web`
 
 ### Android
 

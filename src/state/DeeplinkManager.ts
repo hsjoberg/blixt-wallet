@@ -27,14 +27,16 @@ export const deeplinkManager: IDeeplinkManager = {
   initialize: thunk((actions) => {
     actions.setupAppStateChangeListener();
     // Used for checking for URL intent invocations
-    Linking.addListener("url", async (e: { url: string }) => {
-      log.i("url eventlistener", [e]);
-      const result = await actions.checkDeeplink(e.url);
-      console.log(result);
-      if (result) {
-        result(getNavigator());
-      }
-    });
+    if (["android", "ios"].includes(PLATFORM)) {
+      Linking.addListener("url", async (e: { url: string }) => {
+        log.i("url eventlistener", [e]);
+        const result = await actions.checkDeeplink(e.url);
+        console.log(result);
+        if (result) {
+          result(getNavigator());
+        }
+      });
+    }
   }),
 
   setupAppStateChangeListener: thunk((actions) => {
@@ -68,7 +70,7 @@ export const deeplinkManager: IDeeplinkManager = {
       if (data) {
         // Waiting for RPC server to be ready
         while (!getStoreState().lightning.rpcReady) {
-          await timeout(500);
+          await timeout(250);
         }
 
         if (getState().cache.includes(data)) {
@@ -104,6 +106,9 @@ export const deeplinkManager: IDeeplinkManager = {
             else {
               try {
                 if (subject.startsWith("HTTPS")) {
+                  if (PLATFORM === "web") {
+                    return null;
+                  }
                   const url = new URL(subject);
                   return (nav: NavigationContainerRef) => {
                     nav?.navigate("WebLNBrowser", { url: subject });

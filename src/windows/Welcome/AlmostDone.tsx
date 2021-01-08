@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, StatusBar, StyleSheet, ToastAndroid } from "react-native";
+import { StatusBar, StyleSheet, ToastAndroid } from "react-native";
 import { Body, Icon, Text, View, Button, H1, List, Left, ListItem, Right, CheckBox } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { createStackNavigator, StackNavigationOptions, StackNavigationProp } from "@react-navigation/stack";
@@ -16,6 +16,7 @@ import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectL
 import { PLATFORM } from "../../utils/constants";
 import { IFiatRates } from "../../state/Fiat";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
+import { Alert } from "../../utils/alert";
 
 interface IProps {
   navigation: StackNavigationProp<AlmostDoneStackParamList, "AlmostDone">;
@@ -27,32 +28,24 @@ const AlmostDone = ({ navigation }: IProps) => {
   const name = useStoreState((store) => store.settings.name);
   const changeName = useStoreActions((store) => store.settings.changeName);
   const onNamePress = async () => {
-    if (PLATFORM === "android") {
-      const { action, text } = await DialogAndroid.prompt("Name", "Choose a name that will be shown to people who pay to you", {
-        defaultValue: name,
-      });
-      if (action === DialogAndroid.actionPositive) {
-        await changeName(text);
-      }
-    } else if (PLATFORM === "ios") {
-      Alert.prompt(
-        "Name",
-        "Choose a name that will be used in transactions\n\n" +
-        "Your name will be seen in invoices to those who pay you as well as " +
-        "people you pay to.",
-        [{
-          text: "Cancel",
-          onPress: () => {},
-        }, {
-          text: "Set name",
-          onPress: async (text) => {
-            await changeName(text ?? null);
-          },
-        }],
-        "plain-text",
-        name ?? "",
-      );
-    }
+    Alert.prompt(
+      "Name",
+      "Choose a name that will be used in transactions\n\n" +
+      "Your name will be seen in invoices to those who pay you as well as " +
+      "people you pay to.",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Set name",
+        onPress: async (text) => {
+          await changeName(text ?? null);
+        },
+      }],
+      "plain-text",
+      name ?? "",
+    );
   };
 
   // Pincode

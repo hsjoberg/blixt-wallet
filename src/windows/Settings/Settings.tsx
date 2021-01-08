@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { Alert, StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid, Linking } from "react-native";
+import { StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid, Linking, Platform } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import DocumentPicker from "react-native-document-picker";
 import { readFile } from "react-native-fs";
@@ -23,6 +23,7 @@ import TorSvg from "./TorSvg";
 import { PLATFORM } from "../../utils/constants";
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
+import { Alert } from "../../utils/alert";
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -151,36 +152,24 @@ export default function Settings({ navigation }: ISettingsProps) {
   const name = useStoreState((store) => store.settings.name);
   const changeName = useStoreActions((store) => store.settings.changeName);
   const onNamePress = async () => {
-    if (PLATFORM === "android") {
-      const { action, text } = await DialogAndroid.prompt(
-        "Name",
-        "Choose a name that will be used in transactions\n\n" +
-        "Your name will be seen in invoices to those who pay you as well as " +
-        "people you pay to.",
-        { defaultValue: name },
-      );
-      if (action === DialogAndroid.actionPositive) {
-        await changeName(text || null);
-      }
-    } else {
-      Alert.prompt(
-        "Name",
-        "Choose a name that will be used in transactions\n\n" +
-        "Your name will be seen in invoices to those who pay you as well as " +
-        "people you pay to.",
-        [{
-          text: "Cancel",
-          onPress: () => {},
-        }, {
-          text: "Set name",
-          onPress: async (text) => {
-            await changeName(text ?? null);
-          },
-        }],
-        "plain-text",
-        name ?? "",
-      );
-    }
+    Alert.prompt(
+      "Name",
+      "Choose a name that will be used in transactions\n\n" +
+      "Your name will be seen in invoices to those who pay you as well as " +
+      "people you pay to.",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Set name",
+        onPress: async (text) => {
+          await changeName(text ?? null);
+        },
+      }],
+      "plain-text",
+      name ?? "",
+    );
   };
 
   // Autopilot
@@ -636,12 +625,14 @@ Do you wish to proceed?`;
               }
             </>
           }
-          <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
-            <Left><Icon style={style.icon} type="MaterialIcons" name="save" /></Left>
-            <Body>
-              <Text>Export channel backup</Text>
-            </Body>
-          </ListItem>
+          {["android", "ios"].includes(PLATFORM) &&
+            <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
+              <Left><Icon style={style.icon} type="MaterialIcons" name="save" /></Left>
+              <Body>
+                <Text>Export channel backup</Text>
+              </Body>
+            </ListItem>
+          }
           {(PLATFORM === "android" && (name === "Hampus" || __DEV__ === true)) &&
             <ListItem style={style.listItem} icon={true} onPress={onVerifyChannelsBackupPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
@@ -960,5 +951,10 @@ const style = StyleSheet.create({
   },
   icon: {
     fontSize: 22,
+    ...Platform.select({
+      web: {
+        marginRight: 5,
+      }
+    }),
   },
 });

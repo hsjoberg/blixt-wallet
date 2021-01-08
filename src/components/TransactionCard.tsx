@@ -1,10 +1,10 @@
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, Platform } from "react-native";
 import { Body, Card, CardItem, Text, Right, Row } from "native-base";
 
 import { fromUnixTime } from "date-fns";
 import { ITransaction } from "../storage/database/transaction";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from ".././native-base-theme/variables/commonColor";
 import { capitalize, formatISO, isLong } from "../utils";
 import { extractDescription } from "../utils/NameDesc";
 import { IBitcoinUnits, formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
@@ -91,7 +91,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
               </Right>
             </View>
             <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-              <Text note={true} style={{ flex: 1, marginRight:0 }}>
+              <Text note={true} style={transactionStyle.transactionText}>
                 {recipientOrSender &&
                   <Text style={{ fontWeight: "bold" }} note={true}>{recipientOrSender}: </Text>
                 }
@@ -139,8 +139,17 @@ const transactionStyle = StyleSheet.create({
     marginLeft: -2,
   },
   avatarImage: {
-    width: 320,
-    height: 320,
+    width: 43,
+    height: 43,
     borderRadius: 22,
-  }
+  },
+  transactionText: {
+    flex: 1,
+    marginRight: 0,
+    ...Platform.select({
+      web: {
+        wordBreak: "break-all",
+      },
+    }),
+  },
 });

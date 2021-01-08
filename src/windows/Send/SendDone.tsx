@@ -6,8 +6,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import * as Animatable from "react-native-animatable";
 
 import { SendStackParamList } from "./index";
-import Svg, { G, Circle, Polyline } from "react-native-svg";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import Svg, { Circle, Polyline } from "react-native-svg";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);

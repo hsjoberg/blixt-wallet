@@ -5,7 +5,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { RootStackParamList } from "../../Main";
 import { useStoreActions, useStoreState } from "../../state/store";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
 import { timeout } from "../../utils";
 

@@ -1,12 +1,42 @@
+import { Platform } from "react-native";
 import BuildConfig from "react-native-build-config";
-import { PLATFORM } from "./constants";
 
-export const Flavor: string = PLATFORM === "android" ? BuildConfig.FLAVOR_custom : BuildConfig.FLAVOR;
-export const Debug: boolean = PLATFORM === "android" ? BuildConfig.DEBUG : BuildConfig.DEBUG === "true";
-export const VersionCode: number = PLATFORM === "android" ? BuildConfig.VERSION_CODE : BuildConfig.CFBundleVersion;
-export const BuildType: string = PLATFORM === "android" ? BuildConfig.BUILD_TYPE : Debug ? "debug" : "release";
-export const ApplicationId: string = PLATFORM === "android" ? BuildConfig.APPLICATION_ID : BuildConfig.CFBundleIdentifier;
-export const VersionName: string = PLATFORM === "android" ? BuildConfig.VERSION_NAME : BuildConfig.CFBundleShortVersionString;
+export const Flavor: string = Platform.select({
+  android: BuildConfig.FLAVOR_custom,
+  ios: BuildConfig.FLAVOR,
+  web: BuildConfig.FLAVOR,
+});
+
+export const Debug: boolean = Platform.select({
+  android: BuildConfig.DEBUG,
+  ios: BuildConfig.DEBUG === "true",
+  web: BuildConfig.DEBUG,
+});
+
+export const VersionCode: number = Platform.select({
+  android: BuildConfig.VERSION_CODE,
+  ios: BuildConfig.CFBundleVersion,
+  web: BuildConfig.VERSION_CODE,
+});
+
+export const BuildType: string = Platform.select({
+  android: BuildConfig.BUILD_TYPE,
+  ios: Debug ? "debug" : "release",
+  web: BuildConfig.BUILD_TYPE,
+});
+
+export const ApplicationId: string = Platform.select({
+  android: BuildConfig.APPLICATION_ID,
+  ios: BuildConfig.CFBundleIdentifier,
+  web: BuildConfig.APPLICATION_ID,
+});
+
+export const VersionName: string = Platform.select({
+  android: BuildConfig.VERSION_NAME,
+  ios: BuildConfig.CFBundleShortVersionString,
+  web: BuildConfig.VERSION_NAME,
+});
+
 export const IsHermes: boolean = (global as any).HermesInternal != null;
 
 export const Chain: "mainnet" | "testnet" | "regtest" = BuildConfig.CHAIN;

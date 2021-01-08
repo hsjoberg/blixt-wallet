@@ -4,7 +4,7 @@ import { Container, View, Text, Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
 import { useStoreActions, useStoreState, } from "../../state/store";
-import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useFingerprintAuth from "../../hooks/useFingerprintAuth";
 import { PLATFORM } from "../../utils/constants";
 import { getStatusBarHeight } from "react-native-status-bar-height";

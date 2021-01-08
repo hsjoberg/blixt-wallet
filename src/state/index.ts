@@ -30,9 +30,9 @@ import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAs
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
-import { timeout } from "../utils";
 import { setWalletPassword, getItem } from "../storage/keystore";
 import { PLATFORM } from "../utils/constants";
+import SetupWebDemo from "../utils/setup-web-demo-db";
 
 import logger from "./../utils/log";
 const log = logger("Store");
@@ -100,12 +100,11 @@ export interface IStoreModel {
 
 export const model: IStoreModel = {
   initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
-    log.d("getState().appReady" + getState().appReady);
+    log.d("getState().appReady: " + getState().appReady);
     if (getState().appReady) {
       log.d("App already initialized");
       return;
     }
-
     log.v("initializeApp()");
 
     const { initialize, writeConfigFile, checkStatus, startLnd } = injections.lndMobile.index;
@@ -125,6 +124,12 @@ export const model: IStoreModel = {
       await setupInitialSchema(db);
       log.i("Writing lnd.conf");
       await writeConfigFile();
+
+      if (PLATFORM === "web") {
+        await SetupWebDemo(db, dispatch);
+        await dispatch.generateSeed();
+        await dispatch.createWallet();
+      }
     } else {
       // Temporarily dealing with moving lnd to "Application Support" folder
       if (PLATFORM === "ios") {
@@ -139,8 +144,6 @@ export const model: IStoreModel = {
     }
     actions.setAppVersion(await getAppVersion());
     await actions.checkAppVersionMigration();
-
-    actions.setOnboardingState((await getItemAsyncStorage(StorageItem.onboardingState) as OnboardingState) ?? "DO_BACKUP");
 
     actions.setWalletCreated(await getWalletCreated());
 

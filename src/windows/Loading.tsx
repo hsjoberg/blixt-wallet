@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { Spinner } from "native-base";
 
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import Container from "../components/Container";
 import { useStoreState, useStoreActions } from "../state/store";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -34,6 +34,8 @@ export default function Loading({ navigation }: ILoadingProps) {
         );
         if (cb) {
           cb(navigation);
+        } else if (PLATFORM === "web" && WEB_DEMO) {
+          navigation.navigate("WebInfo");
         }
       });
     })();
