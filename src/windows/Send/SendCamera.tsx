@@ -81,9 +81,12 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
   };
 
   const tryInvoice = async (paymentRequest: string, errorPrefix: string) => {
-    if (!scanning || !rpcReady) {
+    if (!cameraActive || !scanning || !rpcReady) {
       return;
     }
+
+    setCameraActive(false);
+    setScanning(false);
 
     paymentRequest = paymentRequest.toUpperCase();
     paymentRequest = paymentRequest.replace("LIGHTNING:", "");
@@ -92,8 +95,6 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
     if (res) {
       paymentRequest = res[2];
     }
-
-    setScanning(false);
 
     // Check for lnurl
     if (paymentRequest.indexOf("LNURL") === 0) {
@@ -105,20 +106,20 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
         }
         else if (type === "login") {
           gotoNextScreen("LNURL", { screen: "AuthRequest" }, false);
-          setCameraActive(false);
         }
         else if (type === "withdrawRequest") {
           gotoNextScreen("LNURL", { screen: "WithdrawRequest" }, false);
-          setCameraActive(false);
         }
         else if (type === "payRequest") {
           gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
-          setCameraActive(false);
         }
         else {
           console.log("Unknown lnurl request: " + type);
           Alert.alert(`Unsupported LNURL request: ${type}`, undefined,
-            [{ text: "OK", onPress: () => setScanning(true) }]
+            [{ text: "OK", onPress: () => {
+              setCameraActive(true);
+              setScanning(true);
+            }}]
           );
           lnurlClear();
         }
@@ -130,7 +131,10 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
         gotoNextScreen("Send", { screen:"SendConfirmation" });
       } catch (error) {
         Alert.alert(`${errorPrefix}: ${error.message}`, undefined,
-          [{ text: "OK", onPress: () => setScanning(true) }]);
+          [{ text: "OK", onPress: () => {
+            setCameraActive(true);
+            setScanning(true);
+          }}]);
       }
     }
   };
