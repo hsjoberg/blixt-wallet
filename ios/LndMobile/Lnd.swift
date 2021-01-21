@@ -227,11 +227,13 @@ open class Lnd {
   }
 
   func sendStreamCommand(_ method: String, payload: String, streamOnlyOnce: Bool, callback: @escaping StreamCallback) {
-    if (self.activeStreams.contains(method)) {
-      NSLog("Attempting to stream " + method + " twice, not allowing")
-      return
-    } else {
-      self.activeStreams.append(method)
+    if (streamOnlyOnce) {
+      if (self.activeStreams.contains(method)) {
+        NSLog("Attempting to stream " + method + " twice, not allowing")
+        return
+      } else {
+        self.activeStreams.append(method)
+      }
     }
     let block = Lnd.streamMethods[method]
     if block == nil {
