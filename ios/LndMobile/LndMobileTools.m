@@ -4,6 +4,12 @@
 @interface RCT_EXTERN_MODULE(LndMobileTools, NSObject)
 
 RCT_EXTERN_METHOD(
+  writeConfig: (NSString *)config
+  resolver: (RCTPromiseResolveBlock)resolve
+  rejecter: (RCTPromiseRejectBlock)reject
+)
+
+RCT_EXTERN_METHOD(
   writeConfigFile: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject
 )

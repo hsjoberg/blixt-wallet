@@ -84,6 +84,24 @@ class LndMobileTools extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  void writeConfig(String config, Promise promise) {
+    String filename = getReactApplicationContext().getFilesDir().toString() + "/lnd.conf";
+
+    try {
+      new File(filename).getParentFile().mkdirs();
+      PrintWriter out = new PrintWriter(filename);
+      out.println(config);
+      out.close();
+      HyperLog.d(TAG, "Saved lnd config: " + filename);
+    } catch (Exception e) {
+      HyperLog.e(TAG, "Couldn't write " + filename, e);
+      promise.reject("Couldn't write: " + filename, e);
+      return;
+    }
+    promise.resolve("File written: " + filename);
+  }
+
+  @ReactMethod
   void writeConfigFile(Promise promise) {
     String filename = getReactApplicationContext().getFilesDir().toString() + "/lnd.conf";
 

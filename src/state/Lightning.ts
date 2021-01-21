@@ -17,6 +17,8 @@ const log = logger("Lightning");
 
 const SYNC_UNLOCK_WALLET = false;
 
+export type LndChainBackend = "neutrino" | "bitcoindWithZmq";
+
 interface ILightningPeer {
   peer: lnrpc.Peer;
   node?: lnrpc.LightningNode;

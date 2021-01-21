@@ -1,7 +1,10 @@
 import { NativeModules } from "react-native";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
+import { LndChainBackend } from "../state/Lightning";
 import { getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getItem } from "../storage/app";
 import { getPin, getSeed, removeSeed, setSeed, setPin, removePin, setWalletPassword } from "../storage/keystore";
+import { Chain } from "../utils/build";
+import { DEFAULT_NEUTRINO_NODE } from "../utils/constants";
 const { LndMobile, LndMobileTools } = NativeModules;
 
 export interface IAppMigration {
@@ -152,6 +155,42 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       await setItemObject<number>(StorageItem.lastICloudBackup, new Date().getTime());
+    },
+  },
+  // Version 21
+  {
+    async beforeLnd(db, i) {
+      let lndChainBackend: LndChainBackend = "neutrino";
+      let neutrinoPeers: string[] = [];
+      let neutrinoFeeUrl = "";
+      if (Chain === "mainnet" || Chain === "testnet") {
+        lndChainBackend = "neutrino";
+        neutrinoPeers.push(DEFAULT_NEUTRINO_NODE);
+        neutrinoFeeUrl = "https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json";
+      }
+
+      let bitcoindRpcHost = "";
+      let bitcoindRpcUser = "";
+      let bitcoindRpcPass = "";
+      let bitcoindPubRawBlock = "";
+      let bitcoindPubRawTx = "";
+      if (Chain === "regtest") {
+        lndChainBackend = "bitcoindWithZmq";
+        bitcoindRpcHost = "192.168.1.113:18443";
+        bitcoindRpcUser = "polaruser";
+        bitcoindRpcPass = "polarpass";
+        bitcoindPubRawBlock = "192.168.1.113:28334";
+        bitcoindPubRawTx = "192.168.1.113:2933";
+      }
+
+      await setItem(StorageItem.lndChainBackend, lndChainBackend);
+      await setItemObject<string[]>(StorageItem.neutrinoPeers, neutrinoPeers);
+      await setItem(StorageItem.neutrinoFeeUrl, neutrinoFeeUrl);
+      await setItem(StorageItem.bitcoindRpcHost, bitcoindRpcHost);
+      await setItem(StorageItem.bitcoindRpcUser, bitcoindRpcUser);
+      await setItem(StorageItem.bitcoindRpcPass, bitcoindRpcPass);
+      await setItem(StorageItem.bitcoindPubRawBlock, bitcoindPubRawBlock);
+      await setItem(StorageItem.bitcoindPubRawTx, bitcoindPubRawTx);
     },
   },
 ];

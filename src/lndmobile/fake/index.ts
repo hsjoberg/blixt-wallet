@@ -37,6 +37,14 @@ export const checkStatus = async (): Promise<number> => {
  * @throws
  * @return string
  */
+export const writeConfig = async (config: string) => {
+  return "File written:";
+};
+
+/**
+ * @throws
+ * @return string
+ */
 export const writeConfigFile = async () => {
   return "File written:";
 };

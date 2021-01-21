@@ -4,6 +4,9 @@ import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 import { MapStyle } from "../utils/google-maps";
 import { appMigration } from "../migration/app-migration";
+import { Chain } from "../utils/build";
+import { LndChainBackend } from "../state/Lightning";
+import { DEFAULT_NEUTRINO_NODE } from "../utils/constants";
 
 const APP_VERSION = appMigration.length - 1;
 
@@ -42,6 +45,14 @@ export enum StorageItem { // const enums not supported in Babel 7...
   screenTransitionsEnabled = "screenTransitionsEnabled",
   iCloudBackupEnabled = "iCloudBackupEnabled",
   lastICloudBackup = "lastICloudBackup",
+  lndChainBackend = "lndChainBackend",
+  neutrinoPeers = "neutrinoPeers",
+  neutrinoFeeUrl = "neutrinoFeeUrl",
+  bitcoindRpcHost = "bitcoindRpcHost",
+  bitcoindRpcUser = "bitcoindRpcUser",
+  bitcoindRpcPass = "bitcoindRpcPass",
+  bitcoindPubRawBlock = "bitcoindPubRawBlock",
+  bitcoindPubRawTx = "bitcoindPubRawTx",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -96,10 +107,41 @@ export const clearApp = async () => {
     removeItem(StorageItem.screenTransitionsEnabled),
     removeItem(StorageItem.iCloudBackupEnabled),
     removeItem(StorageItem.lastICloudBackup),
+    removeItem(StorageItem.lndChainBackend),
+    removeItem(StorageItem.neutrinoPeers),
+    removeItem(StorageItem.neutrinoFeeUrl),
+    removeItem(StorageItem.bitcoindRpcHost),
+    removeItem(StorageItem.bitcoindRpcUser),
+    removeItem(StorageItem.bitcoindRpcPass),
+    removeItem(StorageItem.bitcoindPubRawBlock),
+    removeItem(StorageItem.bitcoindPubRawTx),
   ]);
 };
 
 export const setupApp = async () => {
+  let lndChainBackend: LndChainBackend = "neutrino";
+  let neutrinoPeers: string[] = [];
+  let neutrinoFeeUrl = "";
+  if (Chain === "mainnet" || Chain === "testnet") {
+    lndChainBackend = "neutrino";
+    neutrinoPeers.push(DEFAULT_NEUTRINO_NODE);
+    neutrinoFeeUrl = "https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json";
+  }
+
+  let bitcoindRpcHost = "";
+  let bitcoindRpcUser = "";
+  let bitcoindRpcPass = "";
+  let bitcoindPubRawBlock = "";
+  let bitcoindPubRawTx = "";
+  if (Chain === "regtest") {
+    lndChainBackend = "bitcoindWithZmq";
+    bitcoindRpcHost = "192.168.1.113:18443";
+    bitcoindRpcUser = "polaruser";
+    bitcoindRpcPass = "polarpass";
+    bitcoindPubRawBlock = "192.168.1.113:28334";
+    bitcoindPubRawTx = "192.168.1.113:2933";
+  }
+
   await Promise.all([
     setItemObject<boolean>(StorageItem.app, true),
     setItemObject<number>(StorageItem.appVersion, APP_VERSION),
@@ -133,5 +175,13 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.screenTransitionsEnabled, true),
     setItemObject<boolean>(StorageItem.iCloudBackupEnabled, false),
     setItemObject<number>(StorageItem.lastICloudBackup, new Date().getTime()),
+    setItem(StorageItem.lndChainBackend, lndChainBackend),
+    setItemObject<string[]>(StorageItem.neutrinoPeers, neutrinoPeers),
+    setItem(StorageItem.neutrinoFeeUrl, neutrinoFeeUrl),
+    setItem(StorageItem.bitcoindRpcHost, bitcoindRpcHost),
+    setItem(StorageItem.bitcoindRpcUser, bitcoindRpcUser),
+    setItem(StorageItem.bitcoindRpcPass, bitcoindRpcPass),
+    setItem(StorageItem.bitcoindPubRawBlock, bitcoindPubRawBlock),
+    setItem(StorageItem.bitcoindPubRawTx, bitcoindPubRawTx),
   ]);
 };

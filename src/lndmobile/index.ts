@@ -28,6 +28,14 @@ export const checkStatus = async (): Promise<ELndMobileStatusCodes> => {
  * @throws
  * @return string
  */
+export const writeConfig = async (data: string) => {
+  return await LndMobileTools.writeConfig(data);
+};
+
+/**
+ * @throws
+ * @return string
+ */
 export const writeConfigFile = async () => {
   return await LndMobileTools.writeConfigFile();
 };

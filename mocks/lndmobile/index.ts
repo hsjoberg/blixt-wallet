@@ -23,6 +23,10 @@ export const checkStatus = jest.fn(async (): Promise<number> => {
   return LndMobileStatus;
 });
 
+export const writeConfig = jest.fn(async () => {
+  return "File written:";
+});
+
 export const writeConfigFile = jest.fn(async () => {
   return "File written:";
 });

@@ -1,5 +1,6 @@
 import {
   initialize,
+  writeConfig,
   writeConfigFile,
   checkStatus,
   startLnd,
@@ -68,6 +69,7 @@ import { WorkInfo } from "../lndmobile/LndMobile";
 export interface ILndMobileInjections {
   index: {
     initialize: () => Promise<{ data: string } | number>;
+    writeConfig: (config: string) => Promise<string>;
     writeConfigFile: () => Promise<string>;
     checkStatus: () => Promise<number>;
     startLnd: (torEnabled: boolean) => Promise<string>;
@@ -134,6 +136,7 @@ export interface ILndMobileInjections {
 export default {
   index: {
     initialize,
+    writeConfig,
     writeConfigFile,
     checkStatus,
     startLnd,

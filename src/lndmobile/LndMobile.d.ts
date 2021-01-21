@@ -25,6 +25,7 @@ export interface ILndMobile {
 }
 
 export interface ILndMobileTools {
+  writeConfig(data: string): Promise<string>;
   writeConfigFile(): Promise<string>;
   killLnd(): Promise<boolean>;
   log(level: "v" | "d" | "i" | "w" | "e", tag: string, msg: string): void;

@@ -38,6 +38,7 @@ export interface ISettingsModel {
   changeHideExpiredInvoices: Thunk<ISettingsModel, boolean>;
   changeScreenTransitionsEnabled: Thunk<ISettingsModel, boolean>;
   changeICloudBackupEnabled: Thunk<ISettingsModel, boolean>;
+  changeNeutrinoPeers: Thunk<ISettingsModel, string[]>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -58,6 +59,7 @@ export interface ISettingsModel {
   setHideExpiredInvoices: Action<ISettingsModel, boolean>;
   setScreenTransitionsEnabled: Action<ISettingsModel, boolean>;
   setICloudBackupEnabled: Action<ISettingsModel, boolean>;
+  setNeutrinoPeers: Action<ISettingsModel, string[]>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -78,6 +80,7 @@ export interface ISettingsModel {
   hideExpiredInvoices: boolean;
   screenTransitionsEnabled: boolean;
   iCloudBackupEnabled: boolean;
+  neutrinoPeers: string[];
 }
 
 export const settings: ISettingsModel = {
@@ -102,6 +105,7 @@ export const settings: ISettingsModel = {
     actions.setHideExpiredInvoices(await getItemObject(StorageItem.hideExpiredInvoices) || false);
     actions.setScreenTransitionsEnabled(await getItemObject(StorageItem.screenTransitionsEnabled) ?? true);
     actions.setICloudBackupEnabled(await getItemObject(StorageItem.iCloudBackupEnabled ?? false));
+    actions.setNeutrinoPeers(await getItemObject(StorageItem.neutrinoPeers ?? []));
 
     log.d("Done");
   }),
@@ -204,6 +208,11 @@ export const settings: ISettingsModel = {
     actions.setICloudBackupEnabled(payload);
   }),
 
+  changeNeutrinoPeers: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.neutrinoPeers, payload);
+    actions.setNeutrinoPeers(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -223,6 +232,7 @@ export const settings: ISettingsModel = {
   setHideExpiredInvoices: action((state, payload) => { state.hideExpiredInvoices = payload; }),
   setScreenTransitionsEnabled: action((state, payload) => { state.screenTransitionsEnabled = payload; }),
   setICloudBackupEnabled: action((state, payload) => { state.iCloudBackupEnabled = payload; }),
+  setNeutrinoPeers: action((state, payload) => { state.neutrinoPeers = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -243,4 +253,5 @@ export const settings: ISettingsModel = {
   hideExpiredInvoices: false,
   screenTransitionsEnabled: true,
   iCloudBackupEnabled: false,
+  neutrinoPeers: [],
 };

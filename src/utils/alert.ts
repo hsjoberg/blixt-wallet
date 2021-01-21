@@ -1,24 +1,25 @@
 // https://github.com/necolas/react-native-web/issues/1026#issuecomment-687572134
 import { AlertButton, AlertStatic, AlertType, Alert as RealAlert } from "react-native";
 import DialogAndroid from "react-native-dialogs";
+import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { PLATFORM } from "./constants";
 
 class WebAlert implements AlertStatic {
   public alert(title: string, message?: string, buttons?: AlertButton[]): void {
-    if (PLATFORM ==="web") {
+    if (PLATFORM === "web") {
       if (buttons === undefined || buttons.length === 0) {
         window.alert([title, message].filter(Boolean).join('\n'));
         return;
       }
-  
+
       const result = window.confirm([title, message].filter(Boolean).join('\n'));
-  
+
       if (result === true) {
         const confirm = buttons.find(({ style }) => style !== 'cancel');
         confirm?.onPress?.();
         return;
       }
-  
+
       const cancel = buttons.find(({ style }) => style === 'cancel');
       cancel?.onPress?.();
     } else {
@@ -55,14 +56,24 @@ class WebAlert implements AlertStatic {
       }
 
     } else if (PLATFORM === "android") {
+      const positiveText = typeof callbackOrButtons === "object" ? callbackOrButtons.find(
+        (button) => button.style === "default"
+      )?.text : undefined;
+      const negativeText = typeof callbackOrButtons === "object" ? callbackOrButtons.find(
+        (button) => button.style === "cancel"
+      )?.text : undefined;
+
       DialogAndroid.prompt(
-        "Name",
-        "Choose a name that will be used in transactions\n\n" +
-        "Your name will be seen in invoices to those who pay you as well as " +
-        "people you pay to.",
-        { defaultValue },
-      ).then(({ action, text }: { action: "actionPosisive" | "actionNegative", text: string }) => {
-        if (action === "actionNegative") {
+        title,
+        message,
+        {
+          defaultValue,
+          positiveText,
+          negativeText,
+        },
+      ).then(({ action, text }: { action: "actionPosisive" | "actionNegative" | "actionDismiss", text: string }) => {
+        console.log(action);
+        if (action === "actionNegative" || action === "actionDismiss") {
           if (typeof callbackOrButtons === "object") {
             const cancel = callbackOrButtons.find(({ style }) => style === "cancel");
             cancel?.onPress?.();

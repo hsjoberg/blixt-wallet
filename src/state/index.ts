@@ -5,7 +5,7 @@ import { generateSecureRandom } from "react-native-securerandom";
 import * as base64 from "base64-js";
 
 import { IStoreInjections } from "./store";
-import { ILightningModel, lightning } from "./Lightning";
+import { ILightningModel, lightning, LndChainBackend } from "./Lightning";
 import { ITransactionModel, transaction } from "./Transaction";
 import { IChannelModel, channel } from "./Channel";
 import { ISendModel, send } from "./Send";
@@ -33,6 +33,7 @@ import { appMigration } from "../migration/app-migration";
 import { setWalletPassword, getItem } from "../storage/keystore";
 import { PLATFORM } from "../utils/constants";
 import SetupWebDemo from "../utils/setup-web-demo-db";
+import { Chain } from "../utils/build";
 
 import logger from "./../utils/log";
 const log = logger("Store");
@@ -63,6 +64,7 @@ export interface IStoreModel {
   setTorLoading: Action<IStoreModel, boolean>;
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
+  writeConfig: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
   changeOnboardingState: Thunk<IStoreModel, OnboardingState>;
 
@@ -107,7 +109,7 @@ export const model: IStoreModel = {
     }
     log.v("initializeApp()");
 
-    const { initialize, writeConfigFile, checkStatus, startLnd } = injections.lndMobile.index;
+    const { initialize, checkStatus, startLnd } = injections.lndMobile.index;
     const db = await openDatabase();
     actions.setDb(db);
     if (!await getItemObjectAsyncStorage(StorageItem.app)) {
@@ -123,7 +125,7 @@ export const model: IStoreModel = {
       log.i("Initializing db for the first time");
       await setupInitialSchema(db);
       log.i("Writing lnd.conf");
-      await writeConfigFile();
+      await actions.writeConfig();
 
       if (PLATFORM === "web") {
         await SetupWebDemo(db, dispatch);
@@ -189,7 +191,7 @@ export const model: IStoreModel = {
     return true;
   }),
 
-  checkAppVersionMigration: thunk(async (_, _2, { getState }) => {
+  checkAppVersionMigration: thunk(async (actions, _2, { getState }) => {
     const db = getState().db;
     if (!db) {
       throw new Error("Version migration check failed, db not available");
@@ -203,6 +205,9 @@ export const model: IStoreModel = {
         await appMigration[i].beforeLnd(db, i);
       }
       await setAppVersion(appMigration.length - 1);
+
+      // Re-write configuration in case there's something new
+      await actions.writeConfig();
     }
   }),
 
@@ -233,6 +238,62 @@ export const model: IStoreModel = {
 
   setWalletSeed: action((state, payload) => {
     state.walletSeed = payload;
+  }),
+
+  writeConfig: thunk(async (_, _2, { injections }) => {
+    const writeConfig = injections.lndMobile.index.writeConfig;
+
+    const lndChainBackend = await getItemAsyncStorage(StorageItem.lndChainBackend) as LndChainBackend;
+    const node = Chain;
+    const neutrinoPeers = await getItemObjectAsyncStorage<string[]>(StorageItem.neutrinoPeers);
+    const neutrinoFeeUrl = await getItemAsyncStorage(StorageItem.neutrinoFeeUrl) || null;
+    const bitcoindRpcHost = await getItemAsyncStorage(StorageItem.bitcoindRpcHost) || null;
+    const bitcoindRpcUser = await getItemAsyncStorage(StorageItem.bitcoindRpcUser) || null;
+    const bitcoindRpcPass = await getItemAsyncStorage(StorageItem.bitcoindRpcPass) || null;
+    const bitcoindPubRawBlock = await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) || null;
+    const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
+
+    const config = `
+[Application Options]
+debuglevel=info
+maxbackoff=2s
+norest=1
+sync-freelist=1
+accept-keysend=1
+
+[Routing]
+routing.assumechanvalid=1
+
+[Bitcoin]
+bitcoin.active=1
+bitcoin.${node}=1
+bitcoin.node=${lndChainBackend === "neutrino" ? "neutrino" : "bitcoind"}
+
+${lndChainBackend === "neutrino" ? `
+[Neutrino]
+${neutrinoPeers[0] !== undefined ? `neutrino.connect=${neutrinoPeers[0]}` : ""}
+neutrino.feeurl=${neutrinoFeeUrl}
+` : ""}
+
+${lndChainBackend === "bitcoindWithZmq" ? `
+[Bitcoind]
+bitcoind.rpchost=${bitcoindRpcHost}
+bitcoind.rpcuser=${bitcoindRpcUser}
+bitcoind.rpcpass=${bitcoindRpcPass}
+bitcoind.zmqpubrawblock=${bitcoindPubRawBlock}
+bitcoind.zmqpubrawtx=${bitcoindPubRawTx}
+` : ""}
+
+[autopilot]
+autopilot.active=0
+autopilot.private=1
+autopilot.minconfs=1
+autopilot.conftarget=3
+autopilot.allocation=1.0
+autopilot.heuristic=externalscore:0.95
+autopilot.heuristic=preferential:0.05
+`;
+    await writeConfig(config);
   }),
 
   createWallet: thunk(async (actions, payload, { injections, getState, dispatch }) => {

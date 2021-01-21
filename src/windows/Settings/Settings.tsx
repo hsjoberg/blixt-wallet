@@ -20,7 +20,7 @@ import { MapStyle } from "../../utils/google-maps";
 import { Chain } from "../../utils/build";
 import { OnchainExplorer } from "../../state/Settings";
 import TorSvg from "./TorSvg";
-import { PLATFORM } from "../../utils/constants";
+import { DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../utils/constants";
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
@@ -473,6 +473,84 @@ When you're done, you can copy the address code and/or open the link using Blixt
     }
   };
 
+  const neutrinoPeers = useStoreState((store) => store.settings.neutrinoPeers);
+  const changeNeutrinoPeers = useStoreActions((store) => store.settings.changeNeutrinoPeers);
+  const writeConfig = useStoreActions((store) => store.writeConfig);
+  const restartNeeded = () => {
+    const title = "Restart required";
+    const message = "Blixt Wallet has to be restarted before the new configuration is applied."
+    if (PLATFORM === "android") {
+      Alert.alert(
+        title,
+        message + "\nWould you like to do that now?",
+        [{
+          style: "cancel",
+          text: "No",
+        }, {
+          style: "default",
+          text: "Yes",
+          onPress: async () => {
+            try {
+              await NativeModules.LndMobile.stopLnd();
+              await NativeModules.LndMobileTools.killLnd();
+            } catch(e) {
+              console.log(e);
+            }
+            NativeModules.LndMobileTools.restartApp();
+          }
+        }]
+      );
+    } else {
+      Alert.alert(title, message);
+    }
+  };
+  const onSetBitcoinNodePress = async () => {
+    Alert.prompt(
+      "Set Node",
+      "",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Set node",
+        onPress: async (text) => {
+          if (text === neutrinoPeers[0]) {
+            return;
+          }
+
+          if (text) {
+            await changeNeutrinoPeers([text]);
+          } else {
+            await changeNeutrinoPeers([]);
+          }
+          await writeConfig();
+
+          restartNeeded();
+        },
+      }],
+      "plain-text",
+      neutrinoPeers[0] ?? "",
+    );
+  };
+  const onSetBitcoinNodeLongPress = async () => {
+    Alert.alert(
+      "Restore node",
+      `Would you like to restore to the default node (${DEFAULT_NEUTRINO_NODE}?`,
+      [{
+        style: "cancel",
+        text: "No",
+      }, {
+        style: "default",
+        text: "Yes",
+        onPress: async () => {
+          await changeNeutrinoPeers([DEFAULT_NEUTRINO_NODE]);
+          restartNeeded();
+        },
+      }]
+    )
+  }
+
   // Multi-path payments
   const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
   const changeMultiPathPaymentsEnabled = useStoreActions((store) => store.settings.changeMultiPathPaymentsEnabled);
@@ -750,19 +828,19 @@ Do you wish to proceed?`;
           </ListItem>
 
 
-          {/* <ListItem style={style.itemHeader} itemHeader={true}>
+          <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Bitcoin Network</Text>
           </ListItem>
 
-          <ListItem style={style.listItem} icon={true} onPress={() => {}}>
-            <Left><Icon style={style.icon} type="AntDesign" name="team" /></Left>
-            <Body><Text>Show current network peer(s)</Text></Body>
+          <ListItem style={style.listItem} icon={true} onPress={onSetBitcoinNodePress} onLongPress={onSetBitcoinNodeLongPress}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
+            <Body>
+              <Text>Set Bitcoin Node</Text>
+              <Text note={true} numberOfLines={1}>
+                Set Bitcoin node (BIP157) to connect to
+              </Text>
+            </Body>
           </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={() => {}}>
-            <Left><Icon style={style.icon} type="AntDesign" name="customerservice" /></Left>
-            <Body><Text>Set trusted Node for SPV</Text></Body>
-          </ListItem> */}
-
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Lightning Network</Text>

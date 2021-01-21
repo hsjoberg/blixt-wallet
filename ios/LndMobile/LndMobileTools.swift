@@ -23,6 +23,22 @@ class LndMobileTools: NSObject, RCTBridgeModule {
     return false
   }
 
+  @objc(writeConfig:resolver:rejecter:)
+  func writeConfig(config: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    do {
+      let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+      let url = paths[0].appendingPathComponent("lnd", isDirectory: true).appendingPathComponent("lnd.conf", isDirectory: false)
+
+      try config.write(to: url, atomically: true, encoding: .utf8)
+      let input = try String(contentsOf: url)
+      NSLog("Read config: " + input)
+      resolve("Config written")
+    } catch let error {
+      NSLog(error.localizedDescription)
+      reject("error", error.localizedDescription, error)
+    }
+  }
+
   @objc(writeConfigFile:rejecter:)
   func writeConfigFile(resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) -> Void {
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
