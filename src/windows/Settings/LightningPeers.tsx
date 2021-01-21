@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect } from "react";
-import { Body, Button, Card, CardItem, Icon, Left, Right, Row, Text } from "native-base";
+import { Body, Button, Card, CardItem, Fab, Icon, Left, Right, Row, Text } from "native-base";
 import { Image, StyleSheet } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -13,6 +13,7 @@ import { identifyService, lightningServices } from "../../utils/lightning-servic
 import { timeout } from "../../utils";
 import { SettingsStackParamList } from "./index";
 import { lnrpc } from "../../../proto/proto";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 export interface ISelectListProps {
   navigation: StackNavigationProp<SettingsStackParamList, "LightningPeers">;
@@ -69,7 +70,7 @@ export default function({ navigation }: ISelectListProps) {
             <Card style={style.card} key={peer.peer.pubKey}>
               <CardItem>
                 <Body>
-                  <Row>
+                  <Row style={{ width: "100%" }}>
                     <Left style={{ alignSelf: "flex-start" }}>
                       <Text>Node alias</Text>
                     </Left>
@@ -87,7 +88,7 @@ export default function({ navigation }: ISelectListProps) {
                       }
                     </Right>
                   </Row>
-                  <Row>
+                  <Row style={{ width: "100%" }}>
                     <Left style={{ alignSelf: "flex-start" }}>
                       <Text>Node public key</Text>
                     </Left>
@@ -95,7 +96,7 @@ export default function({ navigation }: ISelectListProps) {
                       <Text style={{ fontSize: 9, textAlign:"right" }}>{peer.peer.pubKey}</Text>
                     </Right>
                   </Row>
-                  <Row>
+                  <Row style={{ width: "100%" }}>
                     <Left style={{ alignSelf: "flex-start" }}>
                       <Text>Node address</Text>
                     </Left>
@@ -103,7 +104,7 @@ export default function({ navigation }: ISelectListProps) {
                     <Text style={style.cardDataText}>{peer.peer.address}</Text>
                     </Right>
                   </Row>
-                  <Row>
+                  <Row style={{ width: "100%" }}>
                     <Left style={{ alignSelf: "flex-start" }}>
                       <Text>Data</Text>
                     </Left>
@@ -114,7 +115,7 @@ export default function({ navigation }: ISelectListProps) {
                       </Text>
                     </Right>
                   </Row>
-                  <Row>
+                  <Row style={{ width: "100%" }}>
                     <Left style={{ alignSelf: "flex-start" }}>
                       <Text>Transfer</Text>
                     </Left>
@@ -125,7 +126,7 @@ export default function({ navigation }: ISelectListProps) {
                       </Text>
                     </Right>
                   </Row>
-                  <Row>
+                  <Row style={{ width: "100%" }}>
                     <Left style={{ alignSelf: "flex-start" }}>
                       <Text>Inbound</Text>
                     </Left>
@@ -135,7 +136,7 @@ export default function({ navigation }: ISelectListProps) {
                       </Text>
                     </Right>
                   </Row>
-                  {/* <Row>
+                  {/* <Row style={{ width: "100%" }}>
                     <Left style={{ alignSelf: "flex-start" }}>
                       <Text>Ping time</Text>
                     </Left>
@@ -145,7 +146,7 @@ export default function({ navigation }: ISelectListProps) {
                       </Text>
                     </Right>
                   </Row> */}
-                  <Row>
+                  <Row style={{ width: "100%" }}>
                     <Left style={{ alignSelf: "flex-start" }}>
                       <Text>Sync type</Text>
                     </Left>
@@ -156,7 +157,7 @@ export default function({ navigation }: ISelectListProps) {
                     </Right>
                   </Row>
                   {peer.peer.errors.length > 0 &&
-                    <Row>
+                    <Row style={{ width: "100%" }}>
                       <Left style={{ alignSelf: "flex-start" }}>
                         <Text>Errors</Text>
                       </Left>
@@ -171,19 +172,26 @@ export default function({ navigation }: ISelectListProps) {
                       </Right>
                     </Row>
                   }
-                  <Row>
-                    <Right>
+                  <Row style={{ width: "100%" }}>
+                    <Left>
                       <Button style={{ marginTop: 14 }} primary={true} small={true} onPress={() => close(peer.peer.pubKey)}>
                         <Text style={{fontSize: 9}}>Disconnect peer</Text>
                       </Button>
-                    </Right>
+                    </Left>
                   </Row>
                 </Body>
               </CardItem>
             </Card>
           );
         })}
+
       </BlixtContent>
+      <Fab
+        style={style.fab}
+        position="bottomRight"
+        onPress={() => navigation.navigate("ConnectToLightningPeer")}>
+        <Icon type="Entypo" name="plus" style={style.fabConnectToPerIcon} />
+      </Fab>
     </Container>
   )
 }
@@ -202,7 +210,13 @@ const style = StyleSheet.create({
   },
   cardDataText: {
     textAlign: "right",
-  }
+  },
+  fab: {
+    backgroundColor: blixtTheme.primary,
+  },
+  fabConnectToPerIcon: {
+    color: blixtTheme.light,
+  },
 })
 
 function getPeerSyncType(type: lnrpc.Peer.SyncType) {

@@ -38,6 +38,7 @@ export interface ILightningModel {
   waitForGraphSync: Thunk<ILightningModel, void, IStoreInjections>;
   setupAutopilot: Thunk<ILightningModel, boolean, IStoreInjections>;
   getLightningPeers: Thunk<ILightningModel, void, IStoreInjections>;
+  connectPeer: Thunk<ILightningModel, string, IStoreInjections>;
   disconnectPeer: Thunk<ILightningModel, string, IStoreInjections>;
 
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
@@ -267,6 +268,12 @@ export const lightning: ILightningModel = {
     });
 
     actions.setLightningPeers(sortedPeers);
+  }),
+
+  connectPeer: thunk(async (_, peer, { injections }) => {
+    const connectPeer = injections.lndMobile.index.connectPeer;
+    const [pubkey, host] = peer.split("@");
+    await connectPeer(pubkey, host);
   }),
 
   disconnectPeer: thunk(async (_, pubkey, { injections }) => {

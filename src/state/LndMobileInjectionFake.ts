@@ -18,7 +18,7 @@ import {
   getNodeInfo,
   getInfo,
   lookupInvoice,
-  // TODO listPeers
+  listPeers,
   readLndLog,
   sendPaymentSync,
   sendPaymentV2Sync,
@@ -84,6 +84,7 @@ export interface ILndMobileInjections {
     getInfo: () => Promise<lnrpc.GetInfoResponse>;
     getNodeInfo: (pubKey: string) => Promise<lnrpc.NodeInfo>;
     lookupInvoice: (rHash: string) => Promise<lnrpc.Invoice>;
+    listPeers: () => Promise<lnrpc.ListPeersResponse>;
     readLndLog: () => Promise<IReadLndLogResponse>;
     sendPaymentSync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null) => Promise<lnrpc.SendResponse>;
     sendPaymentV2Sync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null) => Promise<lnrpc.Payment>;
@@ -148,6 +149,7 @@ export default {
     getNodeInfo,
     getInfo,
     lookupInvoice,
+    listPeers,
     readLndLog,
     sendPaymentSync,
     sendPaymentV2Sync,

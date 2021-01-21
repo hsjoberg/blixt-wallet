@@ -1,5 +1,5 @@
 import React from "react";
-import { createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
+import { CardStyleInterpolators, createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
 
 import Settings from "./Settings";
 import SetPincode from "./SetPincode";
@@ -14,6 +14,7 @@ import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectL
 import { IFiatRates } from "../../state/Fiat";
 import { OnchainExplorer } from "../../state/Settings";
 import LightningPeers from "./LightningPeers";
+import ConnectToLightningPeer from "./ConnectToLightningPeer";
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ export type SettingsStackParamList = {
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
   ChangeOnchainExplorer: ISelectListNavigationProps<keyof typeof OnchainExplorer>;
   LightningPeers: undefined;
+  ConnectToLighningPeer: undefined;
   ChannelProvider: ISelectListNavigationProps<string>;
 }
 
@@ -53,6 +55,10 @@ export default function SettingsIndex() {
       <Stack.Screen name="ChangeBitcoinUnit" component={SelectList} />
       <Stack.Screen name="ChangeOnchainExplorer" component={SelectList} />
       <Stack.Screen name="LightningPeers" component={LightningPeers} />
+      <Stack.Screen name="ConnectToLightningPeer" component={ConnectToLightningPeer} options={{
+        animationEnabled: true,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }} />
       <Stack.Screen name="ChannelProvider" component={SelectList} />
     </Stack.Navigator>
   );

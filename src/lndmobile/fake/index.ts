@@ -368,13 +368,22 @@ export const lookupInvoice = async (rHash: string): Promise<lnrpc.Invoice> => {
  */
 export const listPeers = async (): Promise<lnrpc.ListPeersResponse> => {
   console.error("fake listPeers not implemented");
-  // const response = await sendCommand<lnrpc.IListPeersRequest, lnrpc.ListPeersRequest, lnrpc.ListPeersResponse>({
-  //   request: lnrpc.ListPeersRequest,
-  //   response: lnrpc.ListPeersResponse,
-  //   method: "ListPeers",
-  //   options: {},
-  // });
-  // return response;
+  const listPeers = lnrpc.ListPeersResponse.create({
+    peers: [{
+      address: "123.456.78.90",
+      bytesRecv: Long.fromValue(10),
+      bytesSent: Long.fromValue(10),
+      errors: [],
+      features: {},
+      inbound: false,
+      pingTime: Long.fromValue(50),
+      pubKey: "abcdef123456",
+      satRecv: Long.fromValue(100),
+      satSent: Long.fromValue(100),
+      syncType: lnrpc.Peer.SyncType.PASSIVE_SYNC,
+    }]
+  });
+  return listPeers;
 };
 
 
