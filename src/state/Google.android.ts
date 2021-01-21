@@ -30,25 +30,31 @@ export const google: IGoogleModel = {
   initialize: thunk(async (actions) => {
     log.i("Initializing", [PLATFORM]);
 
-    GoogleSignin.configure({
-      scopes: ["https://www.googleapis.com/auth/drive.appdata"],
-    });
+    try {
+      GoogleSignin.configure({
+        scopes: ["https://www.googleapis.com/auth/drive.appdata"],
+      });
 
-    const hasPlayServices = await GoogleSignin.hasPlayServices({
-      showPlayServicesUpdateDialog: true,
-    });
-    actions.setHasPlayServices(hasPlayServices);
+      log.i("hasPlayServices");
+      const hasPlayServices = await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: false,
+      });
+      actions.setHasPlayServices(hasPlayServices);
+      log.i("after");
 
-    if (hasPlayServices) {
-      try {
-        const user = await GoogleSignin.signInSilently();
-        actions.setIsSignedIn(true);
-        actions.setUser(user);
-      } catch (e) {
-        if (e.code !== statusCodes.SIGN_IN_REQUIRED) {
-          log.w(`Got unexpected error from GoogleSignin.signInSilently(): ${e.code}`, [e]);
+      if (hasPlayServices) {
+        try {
+          const user = await GoogleSignin.signInSilently();
+          actions.setIsSignedIn(true);
+          actions.setUser(user);
+        } catch (e) {
+          if (e.code !== statusCodes.SIGN_IN_REQUIRED) {
+            log.w(`Got unexpected error from GoogleSignin.signInSilently(): ${e.code}`, [e]);
+          }
         }
       }
+    } catch (e) {
+      log.i("Got exception", [e]);
     }
     log.d("Done");
   }),
