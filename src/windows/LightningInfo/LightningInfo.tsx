@@ -129,7 +129,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
       <Fab
         style={style.fab}
         position="bottomRight"
-        onPress={() => navigation.navigate("OpenChannel")}>
+        onPress={() => navigation.navigate("OpenChannel", {})}>
         <Icon type="Entypo" name="plus" style={style.fabNewChannelIcon} />
       </Fab>
     </Container>

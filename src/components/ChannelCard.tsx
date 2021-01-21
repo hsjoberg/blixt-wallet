@@ -241,11 +241,11 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
-            <Right>
+            <Left>
               <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={close}>
                 <Text>Close channel</Text>
               </Button>
-            </Right>
+            </Left>
           </Row>
         </Body>
       </CardItem>

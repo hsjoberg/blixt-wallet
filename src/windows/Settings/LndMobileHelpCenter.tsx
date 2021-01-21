@@ -196,7 +196,7 @@ export default function LndMobileHelpCenter({ navigation }) {
               <H1 style={style.header}>
                 LndMobile Help Center
               </H1>
-              <Button  small info disabled={runningSteps} style={{width: 80, justifyContent: "center" }} onPress={onPressDoTest}>
+              <Button small info disabled={runningSteps} style={{width: 85, justifyContent: "center" }} onPress={onPressDoTest}>
                 {!runningSteps && <Text style={{ fontSize: 12 }}>Do Test</Text>}
                 {runningSteps && <Spinner size="small" color={blixtTheme.light} />}
               </Button>

@@ -197,9 +197,13 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvReco
 
   return new Promise(async (resolve, reject) => {
     const listener = DeviceEventEmitter.addListener("RouterSendPaymentV2", (e) => {
-      console.log(e);
+      if (!e || e.data === null) { // TODO this is an EOF response
+        console.warn("Got erroneous sendPaymentV2Sync response", e);
+        return;
+      }
+      console.log("sendPaymentV2Sync", e);
       const response = decodeSendPaymentV2Result(e.data);
-      console.log(response);
+      console.log("sendPaymentV2Sync",response);
 
       resolve(response);
       listener.remove();

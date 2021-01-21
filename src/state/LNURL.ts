@@ -67,14 +67,14 @@ export interface ILNUrlPayRequest {
 export type ILNUrlPayRequestMetadata = string[][];
 
 export interface ILNUrlPayResponse {
-	pr: string;
+  pr: string;
   successAction:
     | ILNUrlPayResponseSuccessActionAes
     | ILNUrlPayResponseSuccessActionMessage
     | ILNUrlPayResponseSuccessActionUrl
     | null;
-	disposable: boolean | null;
-	routes:	any[]; // NOT SUPPORTED
+  disposable: boolean | null;
+  routes:	any[]; // NOT SUPPORTED
 }
 
 export interface ILNUrlPayResponseSuccessActionUrl {
