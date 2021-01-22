@@ -147,6 +147,7 @@ export const model: IStoreModel = {
     actions.setAppVersion(await getAppVersion());
     await actions.checkAppVersionMigration();
 
+    actions.setOnboardingState((await getItemAsyncStorage(StorageItem.onboardingState) as OnboardingState) ?? "DO_BACKUP");
     actions.setWalletCreated(await getWalletCreated());
 
     try {
