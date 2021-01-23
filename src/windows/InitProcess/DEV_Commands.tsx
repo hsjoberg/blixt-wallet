@@ -13,7 +13,7 @@ import { getTransactions, getTransaction, createTransaction, clearTransactions }
 import { useStoreState, useStoreActions } from "../../state/store";
 import { invoicesrpc, lnrpc } from "../../../proto/proto";
 import { sendCommand } from "../../lndmobile/utils";
-import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus } from "../../lndmobile/index";
+import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus, getNodeInfo } from "../../lndmobile/index";
 import { initWallet, genSeed, deriveKey, signMessage, derivePrivateKey } from "../../lndmobile/wallet";
 import { pendingChannels, listChannels, openChannel, closeChannel } from "../../lndmobile/channel";
 import { newAddress, sendCoins } from "../../lndmobile/onchain";
@@ -705,6 +705,22 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }
           }}>
             <Text style={styles.buttonText}>connectPeer()</Text>
+          </Button>
+          <Button small onPress={async () => {
+            try {
+              const [pubkey] = connectPeerStr.split("@");
+
+              const result = await getNodeInfo(pubkey);
+              console.log("getNodeInfo()", result);
+              setCommandResult(result);
+              setError({});
+            }
+            catch (e) {
+              setError(e);
+              setCommandResult({});
+            }
+          }}>
+            <Text style={styles.buttonText}>getNodeInfo()</Text>
           </Button>
 
           <Input

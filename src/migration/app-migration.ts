@@ -180,7 +180,7 @@ export const appMigration: IAppMigration[] = [
         bitcoindRpcUser = "polaruser";
         bitcoindRpcPass = "polarpass";
         bitcoindPubRawBlock = "192.168.1.113:28334";
-        bitcoindPubRawTx = "192.168.1.113:2933";
+        bitcoindPubRawTx = "192.168.1.113:29335";
       }
 
       await setItem(StorageItem.lndChainBackend, lndChainBackend);
