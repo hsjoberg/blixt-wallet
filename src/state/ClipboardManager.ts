@@ -26,7 +26,7 @@ export const clipboardManager: IClipboardManagerModel = {
   initialize: thunk(async (actions, _, { getStoreState }) => {
     if (["android", "ios"].includes(PLATFORM)) {
       actions.setupInvoiceListener();
-  
+
       if (getStoreState().settings.clipboardInvoiceCheckEnabled) {
         const clipboardText = await Clipboard.getString();
         await actions.checkInvoice(clipboardText);
@@ -66,13 +66,13 @@ export const clipboardManager: IClipboardManagerModel = {
       // If this is an invoice
       if (text.indexOf(LnBech32Prefix) !== -1) {
         log.d("ln uri");
-        text = text.substring(text.indexOf(LnBech32Prefix)).split(" ")[0];
+        text = text.substring(text.indexOf(LnBech32Prefix)).split(/[\s&]/)[0];
         actions.tryInvoice({ paymentRequest: text });
       }
       // If this is an LNURL
       else if (text.indexOf("LNURL") !== -1) {
         log.d("lnurl");
-        text = text.substring(text.indexOf("LNURL")).split(" ")[0];
+        text = text.substring(text.indexOf("LNURL")).split(/[\s&]/)[0];
         actions.tryLNUrl({ lnUrl: text });
       }
     } catch (e) {
