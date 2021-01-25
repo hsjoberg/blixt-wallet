@@ -32,16 +32,6 @@ export const subscribeInvoices = async (): Promise<string> => {
  */
 export const deriveKey = async (keyFamily: number, keyIndex: number): Promise<signrpc.KeyDescriptor> => {
   console.error("fake deriveKey not implemented");
-  // const response = await sendCommand<signrpc.IKeyLocator, signrpc.KeyLocator, signrpc.KeyDescriptor>({
-  //   request: signrpc.KeyLocator,
-  //   response: signrpc.KeyDescriptor,
-  //   method: "WalletKitDeriveKey",
-  //   options: {
-  //     keyFamily: 138,
-  //     keyIndex: 0,
-  //   },
-  // });
-  // return response;
 };
 
 /**
@@ -49,39 +39,28 @@ export const deriveKey = async (keyFamily: number, keyIndex: number): Promise<si
  */
 export const derivePrivateKey = async (keyFamily: number, keyIndex: number): Promise<signrpc.KeyDescriptor> => {
   console.error("fake derivePrivateKey not implemented");
-  // const response = await sendCommand<signrpc.IKeyDescriptor, signrpc.KeyDescriptor, signrpc.KeyDescriptor>({
-  //   request: signrpc.KeyDescriptor,
-  //   response: signrpc.KeyDescriptor,
-  //   method: "WalletKitDerivePrivateKey",
-  //   options: {
-  //     keyLoc: {
-  //       keyFamily,
-  //       keyIndex,
-  //     },
-  //   },
-  // });
-  // return response;
 };
+
+/**
+ * @throws
+ */
+export const verifyMessageNodePubkey = async (signature: string, msg: Uint8Array): Promise<lnrpc.VerifyMessageResponse> => {
+  console.error("fake verifyMessageNodePubkey not implemented");
+}
+
 
 /**
  * @throws
  */
 export const signMessage = async (keyFamily: number, keyIndex: number, msg: Uint8Array): Promise<signrpc.SignMessageResp> => {
   console.error("fake signMessage not implemented");
-  // const response = await sendCommand<signrpc.ISignMessageReq, signrpc.SignMessageReq, signrpc.SignMessageResp>({
-  //   request: signrpc.SignMessageReq,
-  //   response: signrpc.SignMessageResp,
-  //   method: "SignerSignMessage",
-  //   options: {
-  //     keyLoc: {
-  //       keyFamily,
-  //       keyIndex,
-  //     },
-  //     msg,
-  //     noHashing: true,
-  //   },
-  // });
-  // return response;
+}
+
+/**
+ * @throws
+ */
+export const signMessageNodePubkey = async (msg: Uint8Array): Promise<lnrpc.SignMessageResponse> => {
+  console.error("fake signMessageNodePubkey not implemented");
 };
 
 // TODO error handling

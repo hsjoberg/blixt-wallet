@@ -19,6 +19,8 @@ export const unlockWallet = jest.fn(async (password: string): Promise<lnrpc.Unlo
   return response;
 });
 
+// TODO derivePrivateKey, signMessageNodePubkey, signMessage, verifyMessageNodePubkey
+
 export const subscribeInvoices = jest.fn(async (): Promise<string> => {
   await timeout(10);
   return "done";

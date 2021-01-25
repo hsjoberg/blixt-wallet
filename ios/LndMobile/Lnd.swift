@@ -106,6 +106,8 @@ open class Lnd {
     "UnlockWallet": { bytes, cb in LndmobileUnlockWallet(bytes, cb) },
     "WalletKitDeriveKey": { bytes, cb in LndmobileWalletKitDeriveKey(bytes, cb) },
 //    derivePrivateKey
+    "VerifyMessage": { bytes, cb in LndmobileVerifyMessage(bytes, cb) },
+    "SignMessage": { bytes, cb in LndmobileSignMessage(bytes, cb) },
     "SignerSignMessage": { bytes, cb in LndmobileSignerSignMessage(bytes, cb) },
 
     // autopilot

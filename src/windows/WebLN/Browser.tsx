@@ -78,8 +78,12 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
         setDisableBackHandler(false);
       }
     },
-    signMessage: async (message: any) => handleSignMessageRequest({ data: message }),
-    verifyMessage: async (signature: any, message: any) => handleVerifyMessageRequest({ data: { signature, message } }),
+    signMessage: async (message: any) => {
+      return handleSignMessageRequest({ data: message, requestUrl: url });
+    },
+    verifyMessage: async (signature: any, message: any) => {
+      return handleVerifyMessageRequest({ data: { signature, message } });
+    },
 
     // Non-WebLN
     foundInvoice: async (paymentRequestStr) => {
@@ -139,7 +143,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
             setJsInjected(false)
           }}
           onLoadProgress={(e) => {
-            if (!jsInjected && e.nativeEvent.progress > 0.75) {
+            if (!jsInjected && e.nativeEvent.progress > 0.65) {
               webview.current!.injectJavaScript(injectJs());
               setJsInjected(true);
               console.log("Injected");

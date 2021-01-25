@@ -1,12 +1,14 @@
-import { Alert } from "react-native";
 import { Thunk, thunk } from "easy-peasy";
-import { GetInfoResponse, RequestInvoiceResponse, RequestInvoiceArgs, SendPaymentResponse, UnsupportedMethodError, SignMessageResponse, } from "webln";
+import { GetInfoResponse, RequestInvoiceResponse, RequestInvoiceArgs, SendPaymentResponse, UnsupportedMethodError, SignMessageResponse } from "webln";
 
 import { IStoreModel } from "./index";
 import logger from "./../utils/log";
-import { bytesToHexString, getDomainFromURL } from "../utils";
+import { bytesToHexString, getDomainFromURL, stringToUint8Array } from "../utils";
 import { navigate } from "../utils/navigation";
 import { convertBitcoinToFiat } from "../utils/bitcoin-units";
+import { Alert } from "../utils/alert";
+import { ILndMobileInjections } from "./LndMobileInjection";
+import { IStoreInjections } from "./store";
 
 const log = logger("WebLN");
 
@@ -22,6 +24,7 @@ interface IHandleSendPaymentRequestPayload {
 }
 
 interface IHandleSignMessageRequestPayload {
+  requestUrl: string;
   data: string;
 }
 
@@ -37,11 +40,11 @@ interface IHandleLNURLPayload {
 }
 
 export interface IWebLNModel {
-  handleGetInfoRequest: Thunk<IWebLNModel, void, any, IStoreModel, Promise<GetInfoResponse>>;
-  handleMakeInvoiceRequest: Thunk<IWebLNModel, IHandleMakeInvoiceRequestPayload, any, IStoreModel, Promise<RequestInvoiceResponse>>;
-  handleSendPaymentRequest: Thunk<IWebLNModel, IHandleSendPaymentRequestPayload, any, IStoreModel, Promise<SendPaymentResponse>>;
-  handleSignMessageRequest: Thunk<IWebLNModel, IHandleSignMessageRequestPayload, any, IStoreModel, Promise<SignMessageResponse>>;
-  handleVerifyMessageRequest: Thunk<IWebLNModel, IHandleVerifyMessageRequestPayload, any, IStoreModel, Promise<SignMessageResponse>>;
+  handleGetInfoRequest: Thunk<IWebLNModel, void, IStoreInjections, IStoreModel, Promise<GetInfoResponse>>;
+  handleMakeInvoiceRequest: Thunk<IWebLNModel, IHandleMakeInvoiceRequestPayload, IStoreInjections, IStoreModel, Promise<RequestInvoiceResponse>>;
+  handleSendPaymentRequest: Thunk<IWebLNModel, IHandleSendPaymentRequestPayload, IStoreInjections, IStoreModel, Promise<SendPaymentResponse>>;
+  handleSignMessageRequest: Thunk<IWebLNModel, IHandleSignMessageRequestPayload, IStoreInjections, IStoreModel, Promise<SignMessageResponse>>;
+  handleVerifyMessageRequest: Thunk<IWebLNModel, IHandleVerifyMessageRequestPayload, IStoreInjections, IStoreModel, Promise<void>>;
   handleLNURL: Thunk<IWebLNModel, IHandleLNURLPayload, any, IStoreModel>;
 };
 
@@ -183,12 +186,41 @@ export const webln: IWebLNModel = {
     }
   }),
 
-  handleSignMessageRequest: thunk(() => {
-    throw new UnsupportedMethodError('Message sign not supported yet.');
+  handleSignMessageRequest: thunk((_, { data, requestUrl }, { injections }) => {
+    log.i("handleSignMessage");
+
+    return new Promise((resolve, reject) => {
+      Alert.alert(
+        "Sign request",
+        `${getDomainFromURL(requestUrl)} asks you to sign a message:\n\n${data}`,
+        [{
+          style: "cancel",
+          text: "Cancel",
+          onPress: () => {
+            reject("Cancel");
+          }
+        }, {
+          style: "default",
+          text: "Sign message",
+          onPress: async () => {
+            const result = await injections.lndMobile.wallet.signMessageNodePubkey(stringToUint8Array(data));
+            resolve({
+              message: data,
+              signature: result.signature,
+            });
+          }
+        }]
+      );
+    });
   }),
 
-  handleVerifyMessageRequest: thunk(() => {
-    throw new UnsupportedMethodError('Message verify not supported yet.');
+  handleVerifyMessageRequest: thunk(async (_, { data }, { injections }) => {
+    const response = await injections.lndMobile.wallet.verifyMessageNodePubkey(data.signature, stringToUint8Array(data.message));
+    log.i("", [response]);
+    if (response.valid) {
+      return void(0);
+    }
+    throw new Error("Invalid signature.");
   }),
 
   handleLNURL: thunk(async (actions, payload, {getStoreActions }) => {

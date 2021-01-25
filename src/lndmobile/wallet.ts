@@ -105,6 +105,37 @@ export const derivePrivateKey = async (keyFamily: number, keyIndex: number): Pro
 /**
  * @throws
  */
+export const verifyMessageNodePubkey = async (signature: string, msg: Uint8Array): Promise<lnrpc.VerifyMessageResponse> => {
+  const response = await sendCommand<lnrpc.IVerifyMessageRequest, lnrpc.VerifyMessageRequest, lnrpc.VerifyMessageResponse>({
+    request: lnrpc.VerifyMessageRequest,
+    response: lnrpc.VerifyMessageResponse,
+    method: "VerifyMessage",
+    options: {
+      signature,
+      msg,
+    },
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+export const signMessageNodePubkey = async (msg: Uint8Array): Promise<lnrpc.SignMessageResponse> => {
+  const response = await sendCommand<lnrpc.ISignMessageRequest, lnrpc.SignMessageRequest, lnrpc.SignMessageResponse>({
+    request: lnrpc.SignMessageRequest,
+    response: lnrpc.SignMessageResponse,
+    method: "SignMessage",
+    options: {
+      msg,
+    },
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
 export const signMessage = async (keyFamily: number, keyIndex: number, msg: Uint8Array): Promise<signrpc.SignMessageResp> => {
   const response = await sendCommand<signrpc.ISignMessageReq, signrpc.SignMessageReq, signrpc.SignMessageResp>({
     request: signrpc.SignMessageReq,

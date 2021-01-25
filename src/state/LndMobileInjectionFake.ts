@@ -52,7 +52,9 @@ import {
   unlockWallet,
   deriveKey,
   derivePrivateKey,
+  verifyMessageNodePubkey,
   signMessage,
+  signMessageNodePubkey,
 } from "../lndmobile/fake/wallet";
 import {
   status,
@@ -118,7 +120,9 @@ export interface ILndMobileInjections {
     unlockWallet: (password: string) => Promise<void>;
     deriveKey: (keyFamily: number, keyIndex: number) => Promise<signrpc.KeyDescriptor>;
     derivePrivateKey: (keyFamily: number, keyIndex: number) => Promise<signrpc.KeyDescriptor>;
+    verifyMessageNodePubkey: (signature: string, msg: Uint8Array) => Promise<lnrpc.VerifyMessageResponse>;
     signMessage: (keyFamily: number, keyIndex: number, msg: Uint8Array) => Promise<signrpc.SignMessageResp>;
+    signMessageNodePubkey: (msg: Uint8Array) => Promise<lnrpc.SignMessageResponse>;
   };
   autopilot: {
     status: () => Promise<autopilotrpc.StatusResponse>;
@@ -184,7 +188,9 @@ export default {
     unlockWallet,
     deriveKey,
     derivePrivateKey,
+    verifyMessageNodePubkey,
     signMessage,
+    signMessageNodePubkey,
   },
   autopilot: {
     status,
