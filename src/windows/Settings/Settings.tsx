@@ -15,7 +15,7 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
 import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
 import { verifyChanBackup } from "../../lndmobile/channel";
-import { camelCaseToSpace, formatISO, timeout, toast } from "../../utils";
+import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
 import { Chain } from "../../utils/build";
 import { OnchainExplorer } from "../../state/Settings";
@@ -981,7 +981,7 @@ Do you wish to proceed?`;
               <Body><Text>Read lnd log</Text></Body>
             </ListItem>
           }
-          {(PLATFORM === "android" && (name === "Hampus" || __DEV__ === true)) &&
+          {((name === "Hampus" || __DEV__ === true)) &&
             <>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>
                 <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
@@ -998,6 +998,13 @@ Do you wish to proceed?`;
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("WebLNBrowser")}>
                 <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
                 <Body><Text>WebLN</Text></Body>
+              </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={() => {
+                writeConfig();
+                toast("Written")
+              }}>
+                <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="typewriter" /></Left>
+                <Body><Text>Write config</Text></Body>
               </ListItem>
             </>
           }

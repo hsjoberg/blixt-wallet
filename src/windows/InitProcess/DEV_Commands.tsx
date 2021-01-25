@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, StatusBar, NativeModules, ScrollView, DeviceEventEmitter, Alert, EventEmitter, NativeEventEmitter } from "react-native";
+import { StyleSheet, StatusBar, NativeModules, ScrollView, DeviceEventEmitter, EventEmitter, NativeEventEmitter } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Text, Button, Toast, Input, View, Container } from "native-base";
 import Long from "long";
@@ -8,6 +8,7 @@ import * as base64 from "base64-js";
 import * as Keychain from 'react-native-keychain';
 // import Sound from "react-native-sound";
 import iCloudStorage from "react-native-icloudstore";
+import { Alert } from "../../utils/alert";
 
 import { getTransactions, getTransaction, createTransaction, clearTransactions } from "../../storage/database/transaction";
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -62,7 +63,21 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
       />
       <Content style={styles.content}>
         <View style={{ backgroundColor: blixtTheme.dark, marginTop: 32, width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-          <Button onPress={continueCallback}><Text style={styles.buttonText}>continueCallback()</Text></Button>
+          {!navigation && <Button onPress={continueCallback}><Text style={styles.buttonText}>continueCallback()</Text></Button>}
+          {navigation &&
+            <>
+              <Button onPress={async () => {
+                navigation?.navigate("Overview");
+              }}>
+                <Text style={styles.buttonText}>navigate to overview</Text>
+              </Button>
+              <Button onPress={async () => {
+                navigation?.navigate("Welcome");
+              }}>
+                <Text style={styles.buttonText}>navigate to onboarding</Text>
+              </Button>
+            </>
+          }
 
           <Text style={{ width: "100%"}}>Random:</Text>
           <Button onPress={async () => {
@@ -120,16 +135,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               { data: base64.fromByteArray(lnrpc.InvoiceSubscription.encode(subscribeInvoicesUpdate).finish()) }
             );
           }}><Text style={styles.buttonText}>Emit fake transaction</Text></Button>
-          <Button small onPress={async () => {
-            navigation?.navigate("Welcome");
-          }}>
-            <Text style={styles.buttonText}>navigate to onboarding</Text>
-          </Button>
-          <Button small onPress={async () => {
-            navigation?.navigate("Overview");
-          }}>
-            <Text style={styles.buttonText}>navigate to overview</Text>
-          </Button>
 
           <Button small onPress={async () => {
             interface IDemoInvoice {
@@ -323,10 +328,48 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           }}><Text style={styles.buttonText}>DEBUG_listProcesses()</Text></Button>
 
           <Text style={{ width: "100%" }}>Dangerous:</Text>
-          <Button small onPress={async () => actions.clearApp()}><Text style={styles.buttonText}>actions.clearApp()</Text></Button>
-          <Button small onPress={async () => console.log(await NativeModules.LndMobileTools.DEBUG_deleteWallet())}><Text style={styles.buttonText}>DEBUG_deleteWallet</Text></Button>
-          <Button small onPress={async () => console.log(await NativeModules.LndMobileTools.DEBUG_deleteDatafolder())}><Text style={styles.buttonText}>DEBUG_deleteDatafolder</Text></Button>
-
+          <Button danger small onPress={async () => {
+            Alert.alert("Are you sure?", "", [{
+              style: "cancel",
+              text: "No",
+            }, {
+              style: "default",
+              text: "Yes",
+              onPress: () => {
+                actions.clearApp();
+              }
+            }]);
+          }}>
+            <Text style={styles.buttonText}>actions.clearApp()</Text>
+          </Button>
+          <Button danger small onPress={async () => {
+            Alert.alert("Are you sure?", "", [{
+              style: "cancel",
+              text: "No",
+            }, {
+              style: "default",
+              text: "Yes",
+              onPress: async () => {
+                console.log(await NativeModules.LndMobileTools.DEBUG_deleteWallet())
+              }
+            }]);
+          }}>
+            <Text style={styles.buttonText}>DEBUG_deleteWallet</Text>
+          </Button>
+          <Button danger small onPress={async () => {
+            Alert.alert("Are you sure?", "", [{
+              style: "cancel",
+              text: "No",
+            }, {
+              style: "default",
+              text: "Yes",
+              onPress: async () => {
+                console.log(await NativeModules.LndMobileTools.DEBUG_deleteDatafolder())
+              }
+            }]);
+          }}>
+            <Text style={styles.buttonText}>DEBUG_deleteDatafolder</Text>
+          </Button>
 
           <Text style={{ width:"100%" }}>App storage:</Text>
           <Button small onPress={async () => actions.resetDb()}><Text style={styles.buttonText}>actions.resetDb()</Text></Button>
@@ -682,7 +725,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             <Text style={styles.buttonText}>walletBalance()</Text>
           </Button>
         </View>
-        <View style={{ backgroundColor: blixtTheme.dark, marginTop: 32, width: "100%", display: "flex", flexDirection: "column", flexWrap: "wrap" }}>
+        <View style={{ backgroundColor: blixtTheme.dark, padding: 15, marginTop: 10 }}>
           <Input
             onChangeText={(text: string) => {
               setConnectPeer(text);
@@ -793,23 +836,26 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             <Text style={styles.buttonText}>closeChannel()</Text>
           </Button>
 
-          <Text style={styles.buttonText}>{(new Date()).toISOString()}:</Text>
-          <Text style={styles.buttonText} selectable={true} onPress={() => {
-            Clipboard.setString(JSON.stringify(commandResult));
-            Toast.show({
-              text: "Copied to clipboard.",
-              type: "success",
-            });
-          }}>{JSON.stringify(commandResult, null, 2)}</Text>
 
-          <Text style={styles.buttonText}>{(new Date()).toISOString()} error:</Text>
-          <Text style={styles.buttonText} selectable={true} onPress={() => {
-            Clipboard.setString(JSON.stringify(commandResult));
-            Toast.show({
-              text: "Copied to clipboard.",
-              type: "success",
-            });
-          }}>{JSON.stringify(error)}</Text>
+          <View style={{ marginTop: 30 }}>
+            <Text style={styles.buttonText}>{(new Date()).toISOString()}:</Text>
+            <Text style={styles.buttonText} selectable={true} onPress={() => {
+              Clipboard.setString(JSON.stringify(commandResult));
+              Toast.show({
+                text: "Copied to clipboard.",
+                type: "success",
+              });
+            }}>{JSON.stringify(commandResult, null, 2)}</Text>
+
+            <Text style={styles.buttonText}>{(new Date()).toISOString()} error:</Text>
+            <Text style={styles.buttonText} selectable={true} onPress={() => {
+              Clipboard.setString(JSON.stringify(commandResult));
+              Toast.show({
+                text: "Copied to clipboard.",
+                type: "success",
+              });
+            }}>{JSON.stringify(error)}</Text>
+          </View>
         </View>
       </Content>
     </Container>
@@ -818,6 +864,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
 
 const styles = StyleSheet.create({
   content: {
+    width: "100%",
     padding: 2,
   },
   buttonText: {

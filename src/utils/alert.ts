@@ -1,7 +1,6 @@
 // https://github.com/necolas/react-native-web/issues/1026#issuecomment-687572134
 import { AlertButton, AlertStatic, AlertType, Alert as RealAlert } from "react-native";
 import DialogAndroid from "react-native-dialogs";
-import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { PLATFORM } from "./constants";
 
 class WebAlert implements AlertStatic {
