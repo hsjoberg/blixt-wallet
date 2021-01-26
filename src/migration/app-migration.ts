@@ -193,4 +193,12 @@ export const appMigration: IAppMigration[] = [
       await setItem(StorageItem.bitcoindPubRawTx, bitcoindPubRawTx);
     },
   },
+  // Version 22
+  {
+    async beforeLnd(db, i) {
+      if (Chain === "testnet") {
+        await setItemObject<string[]>(StorageItem.neutrinoPeers, [DEFAULT_NEUTRINO_NODE]);
+      }
+    },
+  },
 ];

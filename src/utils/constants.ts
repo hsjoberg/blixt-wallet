@@ -12,4 +12,4 @@ export const PLATFORM = Platform.OS;
 
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
-export const DEFAULT_NEUTRINO_NODE = Chain === "mainnet" ? "btcd-mainnet.lightning.computer" : "btcd-testnet.lightning.computer";
+export const DEFAULT_NEUTRINO_NODE = Chain === "mainnet" ? "btcd-mainnet.lightning.computer" : "testnet.teslacoil.io";
