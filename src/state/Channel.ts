@@ -1,5 +1,5 @@
 import { DeviceEventEmitter, NativeModules } from "react-native";
-import { Thunk, thunk, Action, action } from "easy-peasy";
+import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import Long from "long";
 import * as base64 from "base64-js";
 
@@ -72,6 +72,7 @@ export interface IChannelModel {
   channelUpdateSubscriptionStarted: boolean;
   balance: Long;
   pendingOpenBalance: Long;
+  remoteBalance: Computed<IChannelModel, Long>;
   channelEvents: IChannelEvent[];
 }
 
@@ -334,6 +335,11 @@ export const channel: IChannelModel = {
   waitingCloseChannels: [],
   channelUpdateSubscriptionStarted: false,
   balance: Long.fromNumber(0),
+  remoteBalance: computed((store) => {
+    return store.channels
+      .filter((channel) => channel.active)
+      .reduce((prev, currChannel) => prev.add(currChannel.remoteBalance || Long.fromValue(0)), Long.fromValue(0));
+  }),
   pendingOpenBalance: Long.fromNumber(0),
   channelEvents: [],
 };

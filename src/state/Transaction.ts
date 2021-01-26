@@ -5,6 +5,7 @@ import { ITransaction, getTransactions, createTransaction, updateTransaction } f
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { lnrpc } from "../../proto/proto";
+import { bytesToHexString } from "../utils";
 
 import logger from "./../utils/log";
 const log = logger("Transaction");
@@ -21,6 +22,7 @@ export interface ITransactionModel {
 
   transactions: ITransaction[];
   getTransactionByRHash: Computed<ITransactionModel, (rHash: string) => ITransaction | undefined>;
+  getTransactionByPreimage: Computed<ITransactionModel, (preimage: Uint8Array) => ITransaction | undefined>;
   getTransactionByPaymentRequest: Computed<ITransactionModel, (paymentRequest: string) => ITransaction | undefined>;
 }
 
@@ -158,6 +160,14 @@ export const transaction: ITransactionModel = {
     (state) => {
       return (rHash: string) => {
         return state.transactions.find((tx) => rHash === tx.rHash);
+      };
+    },
+  ),
+
+  getTransactionByPreimage: computed(
+    (state) => {
+      return (preimage: Uint8Array) => {
+        return state.transactions.find((tx) => bytesToHexString(preimage) === bytesToHexString(tx.preimage));
       };
     },
   ),

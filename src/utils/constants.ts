@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import { Chain } from "./build";
+import { chainSelect } from "./chain-select";
 
 export const TLV_RECORD_NAME = 128100;
 export const MAX_SAT_INVOICE = 4294967;
@@ -16,3 +17,9 @@ export const DEFAULT_NEUTRINO_NODE = Chain === "mainnet" ? "node.blixtwallet.com
 
 export const ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID = "common";
 export const ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_NAME = "Common notifications";
+
+export const DEFAULT_DUNDER_SERVER = chainSelect({
+  mainnet: "https://dunder.blixtwallet.com",
+  testnet: "https://testnetdunder.blixtwallet.com",
+  regtest: "http://192.168.1.111:8080",
+});

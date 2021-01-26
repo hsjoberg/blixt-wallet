@@ -76,6 +76,7 @@ open class Lnd {
     "InvoicesCancelInvoice": { bytes, cb in LndmobileInvoicesCancelInvoice(bytes, cb) },
     "ConnectPeer": { bytes, cb in LndmobileConnectPeer(bytes, cb) },
     "DecodePayReq": { bytes, cb in LndmobileDecodePayReq(bytes, cb) },
+    "DescribeGraph": { bytes, cb in LndmobileDescribeGraph(bytes, cb) },
     "GetInfo": { bytes, cb in LndmobileGetInfo(bytes, cb) },
     "GetNodeInfo": { bytes, cb in LndmobileGetNodeInfo(bytes, cb) },
     "LookupInvoice": { bytes, cb in LndmobileLookupInvoice(bytes, cb) },

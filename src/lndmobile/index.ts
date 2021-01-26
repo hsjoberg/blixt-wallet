@@ -447,6 +447,45 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
   return response;
 };
 
+export interface IAddInvoiceBlixtLspArgs {
+  amount: number;
+  memo: string;
+  expiry?: number;
+
+  servicePubkey: string;
+  chanId: string;
+  cltvExpiryDelta: number;
+  feeBaseMsat: number;
+  feeProportionalMillionths: number;
+
+  preimage: Uint8Array;
+}
+/**
+ * @throws
+ */
+export const addInvoiceBlixtLsp = async ({amount, memo, expiry = 600, servicePubkey, chanId, cltvExpiryDelta, feeBaseMsat, feeProportionalMillionths, preimage}: IAddInvoiceBlixtLspArgs): Promise<lnrpc.AddInvoiceResponse> => {
+  const response = await sendCommand<lnrpc.IInvoice, lnrpc.Invoice, lnrpc.AddInvoiceResponse>({
+    request: lnrpc.Invoice,
+    response: lnrpc.AddInvoiceResponse,
+    method: "AddInvoice",
+    options: {
+      rPreimage: preimage,
+      value: Long.fromValue(amount),
+      memo,
+      expiry: Long.fromValue(expiry),
+      // private: true,
+      routeHints: [{hopHints: [{
+        nodeId: servicePubkey,
+        chanId: Long.fromString(chanId),
+        cltvExpiryDelta,
+        feeBaseMsat,
+        feeProportionalMillionths,
+      }]}],
+    },
+  });
+  return response;
+};
+
 /**
  * @throws
  */
@@ -516,6 +555,19 @@ export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
     options: {
       payReq: bolt11,
     },
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+export const describeGraph = async (): Promise<lnrpc.ChannelGraph> => {
+  const response = await sendCommand<lnrpc.IChannelGraphRequest, lnrpc.ChannelGraphRequest, lnrpc.ChannelGraph>({
+    request: lnrpc.ChannelGraphRequest,
+    response: lnrpc.ChannelGraph,
+    method: "DescribeGraph",
+    options: {},
   });
   return response;
 };

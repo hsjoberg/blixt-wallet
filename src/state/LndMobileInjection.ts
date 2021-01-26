@@ -14,6 +14,8 @@ import {
   excludeLndICloudBackup,
 
   addInvoice,
+  addInvoiceBlixtLsp,
+  IAddInvoiceBlixtLspArgs,
   cancelInvoice,
   connectPeer,
   disconnectPeer,
@@ -87,6 +89,7 @@ export interface ILndMobileInjections {
     excludeLndICloudBackup: () => Promise<boolean>;
 
     addInvoice: (amount: number, memo: string, expiry?: number) => Promise<lnrpc.AddInvoiceResponse>;
+    addInvoiceBlixtLsp: (args: IAddInvoiceBlixtLspArgs) => Promise<lnrpc.AddInvoiceResponse>;
     cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
     disconnectPeer: (pubkey: string) => Promise<lnrpc.DisconnectPeerResponse>;
@@ -158,6 +161,7 @@ export default {
     excludeLndICloudBackup,
 
     addInvoice,
+    addInvoiceBlixtLsp,
     cancelInvoice,
     connectPeer,
     disconnectPeer,

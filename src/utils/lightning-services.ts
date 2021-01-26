@@ -194,7 +194,7 @@ export function identifyService(pubkey: string | null, description: string, webs
   else if (description.includes("Hampus Sjöberg") || description.includes("Hampus Sjoberg")) {
     return "hampus";
   }
-  else if (pubkey === "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb") {
+  else if (pubkey === "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb" || pubkey === "036b7130b27a23d6fe1d55c1d3bed9e6da5a17090588b0834e8200e0d50ee6886a") {
     return "blixtwallet";
   }
   else if (pubkey === "031678745383bd273b4c3dbefc8ffbf4847d85c2f62d3407c0c980430b3257c403" || website?.includes("lightning-roulette.com")) {
