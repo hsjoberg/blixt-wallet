@@ -4,7 +4,7 @@ import { LndChainBackend } from "../state/Lightning";
 import { getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getItem } from "../storage/app";
 import { getPin, getSeed, removeSeed, setSeed, setPin, removePin, setWalletPassword } from "../storage/keystore";
 import { Chain } from "../utils/build";
-import { DEFAULT_NEUTRINO_NODE } from "../utils/constants";
+import { DEFAULT_DUNDER_SERVER, DEFAULT_NEUTRINO_NODE } from "../utils/constants";
 const { LndMobile, LndMobileTools } = NativeModules;
 
 export interface IAppMigration {
@@ -209,6 +209,12 @@ export const appMigration: IAppMigration[] = [
           await setItemObject<string[]>(StorageItem.neutrinoPeers, [DEFAULT_NEUTRINO_NODE]);
         }
       }
+    },
+  },
+  // Version 24
+  {
+    async beforeLnd(db, i) {
+      await setItem(StorageItem.dunderServer, DEFAULT_DUNDER_SERVER);
     },
   },
 ];

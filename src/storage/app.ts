@@ -6,7 +6,7 @@ import { MapStyle } from "../utils/google-maps";
 import { appMigration } from "../migration/app-migration";
 import { Chain, VersionCode } from "../utils/build";
 import { LndChainBackend } from "../state/Lightning";
-import { DEFAULT_NEUTRINO_NODE } from "../utils/constants";
+import { DEFAULT_DUNDER_SERVER, DEFAULT_NEUTRINO_NODE } from "../utils/constants";
 
 const APP_VERSION = appMigration.length - 1;
 
@@ -54,6 +54,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   bitcoindRpcPass = "bitcoindRpcPass",
   bitcoindPubRawBlock = "bitcoindPubRawBlock",
   bitcoindPubRawTx = "bitcoindPubRawTx",
+  dunderServer = "dunderServer",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -123,6 +124,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.bitcoindRpcPass),
     removeItem(StorageItem.bitcoindPubRawBlock),
     removeItem(StorageItem.bitcoindPubRawTx),
+    removeItem(StorageItem.dunderServer),
   ]);
 };
 
@@ -192,5 +194,6 @@ export const setupApp = async () => {
     setItem(StorageItem.bitcoindRpcPass, bitcoindRpcPass),
     setItem(StorageItem.bitcoindPubRawBlock, bitcoindPubRawBlock),
     setItem(StorageItem.bitcoindPubRawTx, bitcoindPubRawTx),
+    setItem(StorageItem.dunderServer, DEFAULT_DUNDER_SERVER),
   ]);
 };

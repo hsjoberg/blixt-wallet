@@ -96,15 +96,17 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginLeft: 3,
     flexDirection: "row",
-    alignItems:"center",
+    alignItems: "center",
   },
   noticeIcon: {
-    marginRight: 14,
+    marginRight: 18,
     color: blixtTheme.light,
   },
   noticeText: {
+    fontSize: 14,
     color: blixtTheme.lightGray,
-    marginRight: 80,
-    justifyContent:"center",
+    marginRight: 60,
+    justifyContent: "center",
+    lineHeight: 20
   },
 });

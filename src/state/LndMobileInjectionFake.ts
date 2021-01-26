@@ -14,6 +14,7 @@ import {
   excludeLndICloudBackup,
 
   addInvoice,
+  addInvoiceBlixtLsp,
   cancelInvoice,
   connectPeer,
   // TODO disconnectPeer
@@ -68,6 +69,7 @@ import {
   checkScheduledSyncWorkStatus, WorkInfo
 } from "../lndmobile/fake/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
 import { lnrpc, signrpc, invoicesrpc, autopilotrpc } from "../../proto/proto";
+import { IAddInvoiceBlixtLspArgs } from "../lndmobile";
 
 export interface ILndMobileInjections {
   index: {
@@ -86,6 +88,7 @@ export interface ILndMobileInjections {
     excludeLndICloudBackup: () => Promise<boolean>;
 
     addInvoice: (amount: number, memo: string, expiry?: number) => Promise<lnrpc.AddInvoiceResponse>;
+    addInvoiceBlixtLsp: (args: IAddInvoiceBlixtLspArgs) => Promise<lnrpc.AddInvoiceResponse>;
     cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
     decodePayReq: (bolt11: string) => Promise<lnrpc.PayReq>;

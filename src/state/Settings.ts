@@ -2,7 +2,7 @@ import { Action, action, Thunk, thunk } from "easy-peasy";
 
 import { StorageItem, getItemObject, setItemObject, removeItem, getItem, setItem } from "../storage/app";
 import { IFiatRates } from "./Fiat";
-import { IBitcoinUnit, IBitcoinUnits, BitcoinUnits } from "../utils/bitcoin-units";
+import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
 
@@ -38,7 +38,12 @@ export interface ISettingsModel {
   changeHideExpiredInvoices: Thunk<ISettingsModel, boolean>;
   changeScreenTransitionsEnabled: Thunk<ISettingsModel, boolean>;
   changeICloudBackupEnabled: Thunk<ISettingsModel, boolean>;
+  changeLndChainBackend: Thunk<ISettingsModel, string>;
   changeNeutrinoPeers: Thunk<ISettingsModel, string[]>;
+  changeBitcoindRpcHost: Thunk<ISettingsModel, string>;
+  changeBitcoindPubRawBlock: Thunk<ISettingsModel, string>;
+  changeBitcoindPubRawTx: Thunk<ISettingsModel, string>;
+  changeDunderServer: Thunk<ISettingsModel, string>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -59,7 +64,12 @@ export interface ISettingsModel {
   setHideExpiredInvoices: Action<ISettingsModel, boolean>;
   setScreenTransitionsEnabled: Action<ISettingsModel, boolean>;
   setICloudBackupEnabled: Action<ISettingsModel, boolean>;
+  setLndChainBackend: Action<ISettingsModel, string>;
   setNeutrinoPeers: Action<ISettingsModel, string[]>;
+  setBitcoindRpcHost: Action<ISettingsModel, string>;
+  setBitcoindPubRawBlock: Action<ISettingsModel, string>;
+  setBitcoindPubRawTx: Action<ISettingsModel, string>;
+  setDunderServer: Action<ISettingsModel, string>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -80,7 +90,12 @@ export interface ISettingsModel {
   hideExpiredInvoices: boolean;
   screenTransitionsEnabled: boolean;
   iCloudBackupEnabled: boolean;
+  lndChainBackend: string;
   neutrinoPeers: string[];
+  bitcoindRpcHost: string;
+  bitcoindPubRawBlock: string;
+  bitcoindPubRawTx: string;
+  dunderServer: string;
 }
 
 export const settings: ISettingsModel = {
@@ -105,7 +120,12 @@ export const settings: ISettingsModel = {
     actions.setHideExpiredInvoices(await getItemObject(StorageItem.hideExpiredInvoices) || false);
     actions.setScreenTransitionsEnabled(await getItemObject(StorageItem.screenTransitionsEnabled) ?? true);
     actions.setICloudBackupEnabled(await getItemObject(StorageItem.iCloudBackupEnabled ?? false));
-    actions.setNeutrinoPeers(await getItemObject(StorageItem.neutrinoPeers ?? []));
+    actions.setLndChainBackend(await getItem(StorageItem.lndChainBackend) ?? "");
+    actions.setNeutrinoPeers(await getItemObject(StorageItem.neutrinoPeers) ?? []);
+    actions.setBitcoindRpcHost(await getItem(StorageItem.bitcoindRpcHost) ?? "");
+    actions.setBitcoindPubRawBlock(await getItem(StorageItem.bitcoindPubRawBlock) ?? "");
+    actions.setBitcoindPubRawTx(await getItem(StorageItem.bitcoindPubRawTx) ?? "");
+    actions.setDunderServer(await getItem(StorageItem.dunderServer) ?? "");
 
     log.d("Done");
   }),
@@ -208,9 +228,34 @@ export const settings: ISettingsModel = {
     actions.setICloudBackupEnabled(payload);
   }),
 
+  changeLndChainBackend: thunk(async (actions, payload) => {
+    await setItem(StorageItem.lndChainBackend, payload);
+    actions.setLndChainBackend(payload);
+  }),
+
   changeNeutrinoPeers: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.neutrinoPeers, payload);
     actions.setNeutrinoPeers(payload);
+  }),
+
+  changeBitcoindRpcHost: thunk(async (actions, payload) => {
+    await setItem(StorageItem.bitcoindRpcHost, payload);
+    actions.setBitcoindRpcHost(payload);
+  }),
+
+  changeBitcoindPubRawBlock: thunk(async (actions, payload) => {
+    await setItem(StorageItem.bitcoindPubRawBlock, payload);
+    actions.setBitcoindPubRawBlock(payload);
+  }),
+
+  changeBitcoindPubRawTx: thunk(async (actions, payload) => {
+    await setItem(StorageItem.bitcoindPubRawTx, payload);
+    actions.setBitcoindPubRawTx(payload);
+  }),
+
+  changeDunderServer: thunk(async (actions, payload) => {
+    await setItem(StorageItem.dunderServer, payload);
+    actions.setDunderServer(payload);
   }),
 
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
@@ -232,7 +277,12 @@ export const settings: ISettingsModel = {
   setHideExpiredInvoices: action((state, payload) => { state.hideExpiredInvoices = payload; }),
   setScreenTransitionsEnabled: action((state, payload) => { state.screenTransitionsEnabled = payload; }),
   setICloudBackupEnabled: action((state, payload) => { state.iCloudBackupEnabled = payload; }),
+  setLndChainBackend: action((state, payload) => { state.lndChainBackend = payload; }),
   setNeutrinoPeers: action((state, payload) => { state.neutrinoPeers = payload; }),
+  setBitcoindRpcHost: action((state, payload) => { state.bitcoindRpcHost = payload; }),
+  setBitcoindPubRawBlock: action((state, payload) => { state.bitcoindPubRawBlock = payload; }),
+  setBitcoindPubRawTx: action((state, payload) => { state.bitcoindPubRawTx = payload; }),
+  setDunderServer: action((state, payload) => { state.dunderServer = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -253,5 +303,10 @@ export const settings: ISettingsModel = {
   hideExpiredInvoices: false,
   screenTransitionsEnabled: true,
   iCloudBackupEnabled: false,
+  lndChainBackend: "",
   neutrinoPeers: [],
+  bitcoindRpcHost: "",
+  bitcoindPubRawBlock: "",
+  bitcoindPubRawTx: "",
+  dunderServer: "",
 };

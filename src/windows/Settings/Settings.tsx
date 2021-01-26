@@ -19,10 +19,11 @@ import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
 import { OnchainExplorer } from "../../state/Settings";
 import TorSvg from "./TorSvg";
-import { DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../utils/constants";
+import { DEFAULT_DUNDER_SERVER, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../utils/constants";
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
+import { Chain, Flavor } from "../../utils/build";
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -472,6 +473,7 @@ When you're done, you can copy the address code and/or open the link using Blixt
     }
   };
 
+  // Neutrino peers
   const neutrinoPeers = useStoreState((store) => store.settings.neutrinoPeers);
   const changeNeutrinoPeers = useStoreActions((store) => store.settings.changeNeutrinoPeers);
   const writeConfig = useStoreActions((store) => store.writeConfig);
@@ -544,11 +546,87 @@ When you're done, you can copy the address code and/or open the link using Blixt
         text: "Yes",
         onPress: async () => {
           await changeNeutrinoPeers([DEFAULT_NEUTRINO_NODE]);
+          await writeConfig();
           restartNeeded();
         },
       }]
-    )
-  }
+    );
+  };
+
+  // bitcoind RPC host
+  const bitcoindRpcHost = useStoreState((store) => store.settings.bitcoindRpcHost);
+  const changeBitcoindRpcHost = useStoreActions((store) => store.settings.changeBitcoindRpcHost);
+  const onSetBitcoindRpcHostPress = async () => {
+    Alert.prompt(
+      "Set bitcoind RPC host",
+      "",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Save",
+        onPress: async (text) => {
+          if (text) {
+            await changeBitcoindRpcHost(text);
+            await writeConfig();
+          }
+        },
+      }],
+      "plain-text",
+      bitcoindRpcHost ?? "",
+    );
+  };
+
+  // bitcoind zmq block
+  const bitcoindPubRawBlock = useStoreState((store) => store.settings.bitcoindPubRawBlock);
+  const changeBitcoindPubRawBlock = useStoreActions((store) => store.settings.changeBitcoindPubRawBlock);
+  const onSetBitcoindPubRawBlockPress = async () => {
+    Alert.prompt(
+      "Set bitcoind ZMQ Raw block host",
+      "",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Save",
+        onPress: async (text) => {
+          if (text) {
+            await changeBitcoindPubRawBlock(text);
+            await writeConfig();
+          }
+        },
+      }],
+      "plain-text",
+      bitcoindPubRawBlock ?? "",
+    );
+  };
+
+  // bitcoind zmq tx
+  const bitcoindPubRawTx = useStoreState((store) => store.settings.bitcoindPubRawTx);
+  const changeBitcoindPubRawTx = useStoreActions((store) => store.settings.changeBitcoindPubRawTx);
+  const onSetBitcoindPubRawTxPress = async () => {
+    Alert.prompt(
+      "Set bitcoind ZMQ Raw Tx host",
+      "",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Save",
+        onPress: async (text) => {
+          if (text) {
+            await changeBitcoindPubRawTx(text);
+            await writeConfig();
+          }
+        },
+      }],
+      "plain-text",
+      bitcoindPubRawTx ?? "",
+    );
+  };
 
   // Multi-path payments
   const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
@@ -649,6 +727,49 @@ Do you wish to proceed?`;
       "plain-text",
     );
   }
+
+  // Dunder server
+  const dunderServer = useStoreState((store) => store.settings.dunderServer);
+  const changeDunderServer = useStoreActions((store) => store.settings.changeDunderServer);
+
+  const onSetDunderServerPress = async () => {
+    Alert.prompt(
+      "Set Dunder Server",
+      "",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Set server",
+        onPress: async (text) => {
+          if (text === dunderServer) {
+            return;
+          }
+
+          await changeDunderServer(text ?? "");
+        },
+      }],
+      "plain-text",
+      dunderServer ?? "",
+    );
+  };
+  const onSetDunderServerLongPress = async () => {
+    Alert.alert(
+      "Restore Dunder Server",
+      `Would you like to restore to the default Dunder server (${DEFAULT_DUNDER_SERVER})?`,
+      [{
+        style: "cancel",
+        text: "No",
+      }, {
+        style: "default",
+        text: "Yes",
+        onPress: async () => {
+          await changeDunderServer(DEFAULT_DUNDER_SERVER);
+        },
+      }]
+    );
+  };
 
   const onLndMobileHelpCenterPress = async () => {
     navigation.navigate("LndMobileHelpCenter");
@@ -863,15 +984,39 @@ Do you wish to proceed?`;
             <Text>Bitcoin Network</Text>
           </ListItem>
 
-          <ListItem style={style.listItem} icon={true} onPress={onSetBitcoinNodePress} onLongPress={onSetBitcoinNodeLongPress}>
-            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
-            <Body>
-              <Text>Set Bitcoin Node</Text>
-              <Text note={true}>
-                Set Bitcoin node (BIP157) to connect to
-              </Text>
-            </Body>
-          </ListItem>
+          {Chain !== "regtest" &&
+            <ListItem style={style.listItem} icon={true} onPress={onSetBitcoinNodePress} onLongPress={onSetBitcoinNodeLongPress}>
+              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
+              <Body>
+                <Text>Set Bitcoin Node</Text>
+                <Text note={true}>
+                  Set Bitcoin node (BIP157) to connect to
+                </Text>
+              </Body>
+            </ListItem>
+          }
+          {Chain === "regtest" &&
+            <>
+              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcHostPress}>
+                <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
+                <Body>
+                  <Text>Set bitcoind RPC Host</Text>
+                </Body>
+              </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindPubRawBlockPress}>
+                <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
+                <Body>
+                  <Text>Set bitcoind ZMQ Raw Block Host</Text>
+                </Body>
+              </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindPubRawTxPress}>
+                <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
+                <Body>
+                  <Text>Set bitcoind ZMQ Raw Tx Host</Text>
+                </Body>
+              </ListItem>
+            </>
+          }
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Lightning Network</Text>
@@ -897,6 +1042,15 @@ Do you wish to proceed?`;
               <Text note={true}>Use an inbound channel service for receiving payments</Text>
             </Body>
           </ListItem>
+          {(Chain !== "mainnet" || name?.includes("Dunder")) &&
+            <ListItem style={style.listItem} button={true} icon={true} onPress={onSetDunderServerPress} onLongPress={onSetDunderServerLongPress}>
+              <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
+              <Body>
+                <Text>Set Dunder LSP Server</Text>
+                {/* <Text note={true}>Dunder is a Lightning Service Provider that helps with inbound liquidity</Text> */}
+              </Body>
+            </ListItem>
+          }
 
 
           {/* <ListItem style={style.itemHeader} itemHeader={true}>
@@ -1005,6 +1159,14 @@ Do you wish to proceed?`;
               <Text>LndMobile help center</Text>
             </Body>
           </ListItem>
+          {(Chain !== "mainnet" || name?.includes("Dunder")) &&
+            <ListItem style={style.listItem} button={true} icon={true} onPress={() => navigation.navigate("DunderDoctor")}>
+              <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
+              <Body>
+                <Text>Diagnose Dunder problems</Text>
+              </Body>
+            </ListItem>
+          }
           <ListItem style={style.listItem} icon={true} onPress={async () => {
             navigation.navigate("LndLog");
           }}>

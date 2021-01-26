@@ -16,6 +16,7 @@ import { OnchainExplorer } from "../../state/Settings";
 import LightningPeers from "./LightningPeers";
 import ConnectToLightningPeer from "./ConnectToLightningPeer";
 import LndLog from "./LndLog";
+import DunderDoctor from "./DunderDoctor";
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,7 @@ export type SettingsStackParamList = {
   ConnectToLighningPeer: undefined;
   ChannelProvider: ISelectListNavigationProps<string>;
   LndLog: undefined;
+  DunderDoctor: undefined;
 }
 
 export default function SettingsIndex() {
@@ -63,6 +65,7 @@ export default function SettingsIndex() {
       }} />
       <Stack.Screen name="ChannelProvider" component={SelectList} />
       <Stack.Screen name="LndLog" component={LndLog} />
+      <Stack.Screen name="DunderDoctor" component={DunderDoctor} />
     </Stack.Navigator>
   );
 }

@@ -31,6 +31,20 @@ interface IReceiveModelAddInvoicePayload {
   tmpData?: IInvoiceTempData;
 }
 
+interface IReceiveModelAddInvoiceBlixtLspPayload {
+  description: string;
+  sat: number;
+  expiry?: number;
+  tmpData?: IInvoiceTempData;
+
+  preimage: Uint8Array;
+  chanId: string;
+  cltvExpiryDelta: number;
+  feeBaseMsat: number;
+  feeProportionalMillionths: number;
+  servicePubkey: string;
+}
+
 interface IReceiveModelCancelInvoicePayload {
   rHash: string;
 }
@@ -40,6 +54,7 @@ export interface IReceiveModel {
   deinitialize: Thunk<IReceiveModel>;
 
   addInvoice: Thunk<IReceiveModel, IReceiveModelAddInvoicePayload, IStoreInjections, IStoreModel, Promise<lnrpc.AddInvoiceResponse>>;
+  addInvoiceBlixtLsp: Thunk<IReceiveModel, IReceiveModelAddInvoiceBlixtLspPayload, IStoreInjections, IStoreModel, Promise<lnrpc.AddInvoiceResponse>>;
   cancelInvoice: Thunk<IReceiveModel, IReceiveModelCancelInvoicePayload, IStoreInjections, Promise<invoicesrpc.CancelInvoiceResp>>;
   subscribeInvoice: Thunk<IReceiveModel, void, IStoreInjections, IStoreModel>;
   setInvoiceSubscriptionStarted: Action<IReceiveModel, boolean>;
@@ -90,6 +105,44 @@ export const receive: IReceiveModel = {
       actions.setInvoiceTmpData({
         ...payload.tmpData,
         rHash: bytesToHexString(result.rHash),
+      });
+    }
+
+    return result;
+  }),
+
+  addInvoiceBlixtLsp: thunk(async (actions, payload, { injections, getStoreState, getStoreActions }) => {
+    log.d("addInvoice()");
+    const addInvoiceBlixtLsp = injections.lndMobile.index.addInvoiceBlixtLsp;
+    const name = getStoreState().settings.name;
+    const description = setupDescription(payload.description, name);
+
+    const result = await addInvoiceBlixtLsp({
+      amount: payload.sat,
+      preimage: payload.preimage,
+      chanId: payload.chanId,
+      cltvExpiryDelta: payload.cltvExpiryDelta,
+      feeBaseMsat: payload.feeBaseMsat,
+      feeProportionalMillionths: payload.feeProportionalMillionths,
+      memo: description,
+      servicePubkey: payload.servicePubkey,
+    });
+
+    // (payload.sat, description, payload.expiry);
+    log.d("addInvoice() result", [result]);
+    getStoreActions().clipboardManager.addToInvoiceCache(result.paymentRequest);
+
+    payload.tmpData = payload.tmpData ?? {
+      type: "DUNDER_ONDEMANDCHANNEL",
+      payer: null,
+      website: null,
+    }
+
+    if (payload.tmpData) {
+      actions.setInvoiceTmpData({
+        ...payload.tmpData,
+        rHash: bytesToHexString(result.rHash),
+        type: "DUNDER_ONDEMANDCHANNEL",
       });
     }
 

@@ -133,6 +133,7 @@ export const lightning: ILightningModel = {
       await dispatch.notificationManager.initialize();
       await dispatch.clipboardManager.initialize();
       await dispatch.deeplinkManager.initialize();
+      await dispatch.blixtLsp.initialize();
     } catch (e) {
       toast(e.message, 0, "danger", "OK");
       return;
@@ -201,7 +202,7 @@ export const lightning: ILightningModel = {
   connectPeer: thunk(async (_, peer, { injections }) => {
     const connectPeer = injections.lndMobile.index.connectPeer;
     const [pubkey, host] = peer.split("@");
-    await connectPeer(pubkey, host);
+    return await connectPeer(pubkey, host);
   }),
 
   disconnectPeer: thunk(async (_, pubkey, { injections }) => {
@@ -321,6 +322,10 @@ export const lightning: ILightningModel = {
 };
 
 const getNodeScores = async () => {
+  if (Chain === "testnet") {
+    return { "036b7130b27a23d6fe1d55c1d3bed9e6da5a17090588b0834e8200e0d50ee6886a": 1 };
+  }
+
   const url = Chain === "mainnet"
     ? "https://nodes.lightning.computer/availability/v1/btc.json"
     : "https://nodes.lightning.computer/availability/v1/btctestnet.json";
@@ -334,5 +339,6 @@ const getNodeScores = async () => {
     map[public_key] = score / 100000000.0;
     return map;
   }, {});
+
   return scores;
 }
