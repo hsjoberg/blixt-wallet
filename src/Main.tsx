@@ -76,6 +76,12 @@ export default function Main() {
   const initLightning = useStoreActions((store) => store.lightning.initialize);
   const [initialRoute, setInitialRoute] = useState("Loading");
   const torLoading = useStoreState((store) => store.torLoading);
+  const bitcoindRpcHost = useStoreState((store) => store.settings.bitcoindRpcHost);
+  const bitcoindPubRawBlock = useStoreState((store) => store.settings.bitcoindPubRawBlock);
+  const bitcoindPubRawTx = useStoreState((store) => store.settings.bitcoindPubRawTx);
+  const changeBitcoindRpcHost = useStoreActions((store) => store.settings.changeBitcoindRpcHost);
+  const changeBitcoindPubRawBlock = useStoreActions((store) => store.settings.changeBitcoindPubRawBlock);
+  const changeBitcoindPubRawTx = useStoreActions((store) => store.settings.changeBitcoindPubRawTx);
 
   const [state, setState] =
     useState<"init" | "authentication" | "onboarding" | "started">("init");

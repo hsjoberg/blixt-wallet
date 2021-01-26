@@ -24,6 +24,7 @@ import { IDeeplinkManager, deeplinkManager } from "./DeeplinkManager";
 import { INotificationManagerModel, notificationManager } from "./NotificationManager";
 import { ILightNameModel, lightName } from "./LightName";
 import { IICloudBackupModel, iCloudBackup } from "./ICloudBackup";
+import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
@@ -34,6 +35,7 @@ import { setWalletPassword, getItem } from "../storage/keystore";
 import { PLATFORM } from "../utils/constants";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { Chain } from "../utils/build";
+import { Alert } from "../utils/alert";
 
 import logger from "./../utils/log";
 const log = logger("Store");
@@ -95,6 +97,7 @@ export interface IStoreModel {
   notificationManager: INotificationManagerModel;
   lightName: ILightNameModel;
   iCloudBackup: IICloudBackupModel;
+  blixtLsp: IBlixtLsp;
 
   walletSeed?: string[];
   appVersion: number;
@@ -126,8 +129,17 @@ export const model: IStoreModel = {
         log.i("Excluding lnd directory from backup")
         await injections.lndMobile.index.excludeLndICloudBackup();
       }
-
       await setupApp();
+      if (Chain === "regtest") {
+        await setupRegtest(
+          await getItemAsyncStorage(StorageItem.bitcoindRpcHost) ?? "",
+          await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) ?? "",
+          await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) ?? "",
+          dispatch.settings.changeBitcoindRpcHost,
+          dispatch.settings.changeBitcoindPubRawBlock,
+          dispatch.settings.changeBitcoindPubRawTx,
+        );
+      }
       log.i("Initializing db for the first time");
       await setupInitialSchema(db);
       log.i("Writing lnd.conf");
@@ -267,6 +279,7 @@ maxbackoff=2s
 norest=1
 sync-freelist=1
 accept-keysend=1
+maxpendingchannels=100
 
 [Routing]
 routing.assumechanvalid=1
@@ -275,6 +288,7 @@ routing.assumechanvalid=1
 bitcoin.active=1
 bitcoin.${node}=1
 bitcoin.node=${lndChainBackend === "neutrino" ? "neutrino" : "bitcoind"}
+bitcoin.defaultchanconfs=1
 
 ${lndChainBackend === "neutrino" ? `
 [Neutrino]
@@ -297,8 +311,8 @@ autopilot.private=1
 autopilot.minconfs=1
 autopilot.conftarget=3
 autopilot.allocation=1.0
-autopilot.heuristic=externalscore:0.95
-autopilot.heuristic=preferential:0.05
+autopilot.heuristic=externalscore:${Chain === "testnet" ? "1.00" : "0.95"}
+autopilot.heuristic=preferential:${Chain === "testnet" ? "0.00" : "0.05"}
 `;
     await writeConfig(config);
   }),
@@ -366,6 +380,55 @@ autopilot.heuristic=preferential:0.05
   notificationManager,
   lightName,
   iCloudBackup,
+  blixtLsp,
 };
 
 export default model;
+
+function setupRegtest(
+  bitcoindRpcHost: string,
+  bitcoindPubRawBlock: string,
+  bitcoindPubRawTx: string,
+  changeBitcoindRpcHost: any,
+  changeBitcoindPubRawBlock: any,
+  changeBitcoindPubRawTx: any
+) {
+  return new Promise((resolve, reject) => {
+    Alert.prompt(
+      "Set bitcoind RPC host",
+      "",
+      async (text) => {
+        if (text) {
+          await changeBitcoindRpcHost(text);
+        }
+
+        Alert.prompt(
+          "Set bitcoind ZMQ Raw block host",
+          "",
+          async (text) => {
+            if (text) {
+              await changeBitcoindPubRawBlock(text);
+            }
+
+            Alert.prompt(
+              "Set bitcoind ZMQ Raw Tx host",
+              "",
+              async (text) => {
+                if (text) {
+                  await changeBitcoindPubRawTx(text);
+                }
+                resolve(void(0));
+              },
+              "plain-text",
+              bitcoindPubRawTx ?? "",
+            );
+          },
+          "plain-text",
+          bitcoindPubRawBlock ?? "",
+        );
+      },
+      "plain-text",
+      bitcoindRpcHost ?? "",
+    );
+  });
+}

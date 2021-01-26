@@ -60,7 +60,7 @@ export interface ITransaction {
   locationLong: number | null;
   locationLat: number | null;
   website: string | null;
-  type: "NORMAL" | "WEBLN" | "LNURL";
+  type: "NORMAL" | "WEBLN" | "LNURL" | "DUNDER_ONDEMANDCHANNEL";
   preimage: Uint8Array,
   lnurlPayResponse: ILNUrlPayResponse | null;
   identifiedService: keyof ILightningServices  | null;

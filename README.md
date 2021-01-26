@@ -27,6 +27,7 @@ powered by lnd and Neutrino SPV.
 - [x] [WebLN](https://webln.dev/) browser
 - [x] Support for [Multi-Part Payments (MPP)](https://lightning.engineering/posts/2020-05-07-mpp/)
 - [x] Integrated Tor support
+- [x] Automatically open channels when needed ([LSP](https://github.com/hsjoberg/dunder-lsp))
 - [ ] NFC
 - [ ] WatchTower
 - [ ] URL Payments

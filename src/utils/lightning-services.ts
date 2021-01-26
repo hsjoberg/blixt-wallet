@@ -183,6 +183,9 @@ export function identifyService(pubkey: string | null, description: string, webs
   else if (description.includes("Hampus Sjöberg") || description.includes("Hampus Sjoberg")) {
     return "hampus";
   }
+  else if (pubkey === "036b7130b27a23d6fe1d55c1d3bed9e6da5a17090588b0834e8200e0d50ee6886a") {
+    return "blixtwallet";
+  }
   return null;
 }
 

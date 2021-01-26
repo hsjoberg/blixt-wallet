@@ -60,6 +60,7 @@ export interface IChannelModel {
   setChannelUpdateSubscriptionStarted: Action<IChannelModel, boolean>;
   setAlias: Action<IChannelModel, ISetAliasPayload>;
   setBalance: Action<IChannelModel, Long>;
+  setRemoteBalance: Action<IChannelModel, Long>;
   setPendingOpenBalance: Action<IChannelModel, Long>;
 
   channels: lnrpc.IChannel[];
@@ -71,6 +72,7 @@ export interface IChannelModel {
   channelUpdateSubscriptionStarted: boolean;
   balance: Long;
   pendingOpenBalance: Long;
+  remoteBalance: Long;
   channelEvents: IChannelEvent[];
 }
 
@@ -306,6 +308,7 @@ export const channel: IChannelModel = {
         ? response.pendingOpenBalance
         : Long.fromNumber(0)
     );
+    actions.setRemoteBalance(response.remoteBalance?.sat || Long.fromNumber(0));
     await setItemObject(StorageItem.lightningBalance, response.balance.toString());
   }),
 
@@ -322,6 +325,7 @@ export const channel: IChannelModel = {
   setChannelUpdateSubscriptionStarted: action((state, payload) => { state.channelUpdateSubscriptionStarted = payload; }),
   setAlias: action((state, payload) => { state.aliases[payload.pubkey] = payload.alias; }),
   setBalance: action((state, payload) => { state.balance = payload; }),
+  setRemoteBalance: action((state, payload) => { state.remoteBalance = payload; }),
   setPendingOpenBalance: action((state, payload) => { state.pendingOpenBalance = payload; }),
 
   channels: [],
@@ -332,6 +336,7 @@ export const channel: IChannelModel = {
   waitingCloseChannels: [],
   channelUpdateSubscriptionStarted: false,
   balance: Long.fromNumber(0),
+  remoteBalance: Long.fromNumber(0),
   pendingOpenBalance: Long.fromNumber(0),
   channelEvents: [],
 };

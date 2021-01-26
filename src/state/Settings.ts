@@ -2,7 +2,7 @@ import { Action, action, Thunk, thunk } from "easy-peasy";
 
 import { StorageItem, getItemObject, setItemObject, removeItem, getItem, setItem } from "../storage/app";
 import { IFiatRates } from "./Fiat";
-import { IBitcoinUnit, IBitcoinUnits, BitcoinUnits } from "../utils/bitcoin-units";
+import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
 
@@ -39,6 +39,9 @@ export interface ISettingsModel {
   changeScreenTransitionsEnabled: Thunk<ISettingsModel, boolean>;
   changeICloudBackupEnabled: Thunk<ISettingsModel, boolean>;
   changeNeutrinoPeers: Thunk<ISettingsModel, string[]>;
+  changeBitcoindRpcHost: Thunk<ISettingsModel, string>;
+  changeBitcoindPubRawBlock: Thunk<ISettingsModel, string>;
+  changeBitcoindPubRawTx: Thunk<ISettingsModel, string>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -60,6 +63,9 @@ export interface ISettingsModel {
   setScreenTransitionsEnabled: Action<ISettingsModel, boolean>;
   setICloudBackupEnabled: Action<ISettingsModel, boolean>;
   setNeutrinoPeers: Action<ISettingsModel, string[]>;
+  setBitcoindRpcHost: Action<ISettingsModel, string>;
+  setBitcoindPubRawBlock: Action<ISettingsModel, string>;
+  setBitcoindPubRawTx: Action<ISettingsModel, string>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -81,6 +87,9 @@ export interface ISettingsModel {
   screenTransitionsEnabled: boolean;
   iCloudBackupEnabled: boolean;
   neutrinoPeers: string[];
+  bitcoindRpcHost: string;
+  bitcoindPubRawBlock: string;
+  bitcoindPubRawTx: string;
 }
 
 export const settings: ISettingsModel = {
@@ -105,7 +114,10 @@ export const settings: ISettingsModel = {
     actions.setHideExpiredInvoices(await getItemObject(StorageItem.hideExpiredInvoices) || false);
     actions.setScreenTransitionsEnabled(await getItemObject(StorageItem.screenTransitionsEnabled) ?? true);
     actions.setICloudBackupEnabled(await getItemObject(StorageItem.iCloudBackupEnabled ?? false));
-    actions.setNeutrinoPeers(await getItemObject(StorageItem.neutrinoPeers ?? []));
+    actions.setNeutrinoPeers(await getItemObject(StorageItem.neutrinoPeers) ?? []);
+    actions.setBitcoindRpcHost(await getItem(StorageItem.bitcoindRpcHost) ?? "");
+    actions.setBitcoindPubRawBlock(await getItem(StorageItem.bitcoindPubRawBlock) ?? "");
+    actions.setBitcoindPubRawTx(await getItem(StorageItem.bitcoindPubRawTx) ?? "");
 
     log.d("Done");
   }),
@@ -213,6 +225,21 @@ export const settings: ISettingsModel = {
     actions.setNeutrinoPeers(payload);
   }),
 
+  changeBitcoindRpcHost: thunk(async (actions, payload) => {
+    await setItem(StorageItem.bitcoindRpcHost, payload);
+    actions.setBitcoindRpcHost(payload);
+  }),
+
+  changeBitcoindPubRawBlock: thunk(async (actions, payload) => {
+    await setItem(StorageItem.bitcoindPubRawBlock, payload);
+    actions.setBitcoindPubRawBlock(payload);
+  }),
+
+  changeBitcoindPubRawTx: thunk(async (actions, payload) => {
+    await setItem(StorageItem.bitcoindPubRawTx, payload);
+    actions.setBitcoindPubRawTx(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -233,6 +260,9 @@ export const settings: ISettingsModel = {
   setScreenTransitionsEnabled: action((state, payload) => { state.screenTransitionsEnabled = payload; }),
   setICloudBackupEnabled: action((state, payload) => { state.iCloudBackupEnabled = payload; }),
   setNeutrinoPeers: action((state, payload) => { state.neutrinoPeers = payload; }),
+  setBitcoindRpcHost: action((state, payload) => { state.bitcoindRpcHost = payload; }),
+  setBitcoindPubRawBlock: action((state, payload) => { state.bitcoindPubRawBlock = payload; }),
+  setBitcoindPubRawTx: action((state, payload) => { state.bitcoindPubRawTx = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -254,4 +284,7 @@ export const settings: ISettingsModel = {
   screenTransitionsEnabled: true,
   iCloudBackupEnabled: false,
   neutrinoPeers: [],
+  bitcoindRpcHost: "",
+  bitcoindPubRawBlock: "",
+  bitcoindPubRawTx: "",
 };
