@@ -153,7 +153,7 @@ export const receive: IReceiveModel = {
         };
 
         const transaction: ITransaction = {
-          description: invoice.memo,
+          description: invoice.memo || (invoice.isKeysend ? "Keysend payment" : ""),
           value: invoice.value ?? Long.fromInt(0),
           valueMsat: invoice.value.mul(1000) ?? Long.fromInt(0),
           amtPaidSat: invoice.amtPaidSat,
