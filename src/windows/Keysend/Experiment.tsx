@@ -61,9 +61,6 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       else if (!pubkeyInput) {
         throw new Error("Missing pubkey");
       }
-      else if (!routehintsInput) {
-        throw new Error("Missing route hints");
-      }
       setSending(true);
       const result = await sendKeysendPaymentV2(
         pubkeyInput,

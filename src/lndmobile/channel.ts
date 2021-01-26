@@ -119,7 +119,7 @@ export const subscribeChannelEvents = async (): Promise<string> => {
     request: lnrpc.ChannelEventSubscription,
     method: "SubscribeChannelEvents",
     options: {},
-  }, true);
+  }, false);
   return response;
 };
 

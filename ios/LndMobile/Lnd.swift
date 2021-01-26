@@ -91,6 +91,8 @@ open class Lnd {
     "OpenChannelSync": { bytes, cb in LndmobileOpenChannelSync(bytes, cb) },
     "PendingChannels": { bytes, cb in LndmobilePendingChannels(bytes, cb) },
     "ExportAllChannelBackups": { bytes, cb in LndmobileExportAllChannelBackups(bytes, cb) },
+    "VerifyChanBackup": { bytes, cb in LndmobileVerifyChanBackup(bytes, cb) },
+    "GetChanInfo": { bytes, cb in LndmobileGetChanInfo(bytes, cb) },
     "AbandonChannel": { bytes, cb in LndmobileAbandonChannel(bytes, cb) },
 
     // onchain

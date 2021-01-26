@@ -19,6 +19,8 @@
     "android:mainnet-fakelnd": "react-native run-android --variant chainmainnetFakelndRelease --appIdSuffix fakelnd",
     "android:mainnet-fakelnd-debug": "react-native run-android --variant chainmainnetFakelndDebug --appIdSuffix fakelnd.debug",
     "android:bundle-release": "cd android && ./gradlew clean && ./gradlew bundleChainmainnetNormalRelease && ./gradlew bundleChaintestnetNormalRelease",
+    "android:bundle-release-mainnet": "cd android && ./gradlew clean && ./gradlew bundleChainmainnetNormalRelease",
+    "android:bundle-release-testnet": "cd android && ./gradlew clean && ./gradlew bundleChaintestnetNormalRelease",
     "ios:regtest-debug": "react-native run-ios --scheme BlixtWalletRegtest --configuration DebugRegtest",
     "ios:regtest": "react-native run-ios --scheme BlixtWalletRegtest --configuration ReleaseRegtest",
     "ios:testnet-debug": "react-native run-ios --scheme BlixtWalletTestnet --configuration DebugTestnet",

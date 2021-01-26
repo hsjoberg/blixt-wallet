@@ -269,19 +269,14 @@ export const lnUrl: ILNUrlModel = {
       // Wallet to service interaction flow:
       // 1, 2 omitted
       // 3. Once accepted, user LN WALLET signs k1 on secp256k1 using linkingPrivKey and DER-encodes the signature.
-      // const signedMessage = secp256k1.ecdsaSign(hexToUint8Array(lnUrlObject.k1), linkingKey.rawKeyBytes);
-      // const signedMessageDER = secp256k1.signatureExport(signedMessage.signature);
-      // const linkingKeyPub = secp256k1.publicKeyCreate(linkingKey.rawKeyBytes, true);
-      // const signedMessage2 = secp256k1.ecdsaSign(hexToUint8Array(lnUrlObject.k1), linkingKey.rawKeyBytes);
-      // const signedMessageDER2 = secp256k1.signatureExport(signedMessage2.signature);
-      // const linkingKeyPub2 = secp256k1.publicKeyCreate(linkingKey.rawKeyBytes, true);
+      const signedMessage = secp256k1.ecdsaSign(hexToUint8Array(lnUrlObject.k1), linkingKey.rawKeyBytes);
+      const signedMessageDER = secp256k1.signatureExport(signedMessage.signature);
+      const linkingKeyPub = secp256k1.publicKeyCreate(linkingKey.rawKeyBytes, true);
 
-      const linkingKeyPub = (await deriveKey(138, keyIndex)).rawKeyBytes;
-      const signedMessageDER = (await signMessage(138, keyIndex, hexToUint8Array(lnUrlObject.k1))).signature;
-      // log.d("linkingKeyPub", [linkingKeyPub]);
-      // log.d("linkingKeyPub2", [linkingKeyPub2]);
+      // const signedMessageDER = (await signMessage(138, keyIndex, hexToUint8Array(lnUrlObject.k1))).signature;
+      // const linkingKeyPub = (await deriveKey(138, keyIndex)).rawKeyBytes;
       // log.d("signedMessageDER", [signedMessageDER]);
-      // log.d("signedMessageDER2", [signedMessageDER]);
+      // log.d("linkingKeyPub", [linkingKeyPub]);
 
       //    LN WALLET Then issues a GET to LN SERVICE using
       //    <LNURL_hostname_and_path>?<LNURL_existing_query_parameters>&sig=<hex(sign(k1.toByteArray, linkingPrivKey))>&key=<hex(linkingKey)>

@@ -955,6 +955,10 @@ Do you wish to proceed?`;
               }
             </>
           }
+          <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendExperiment")}>
+            <Left><Icon style={style.icon} type="Feather" name="send" /></Left>
+            <Body><Text>Keysend Experiment</Text></Body>
+          </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Debug</Text>
@@ -986,10 +990,6 @@ Do you wish to proceed?`;
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>
                 <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
                 <Body><Text>Keysend Test</Text></Body>
-              </ListItem>
-              <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendExperiment")}>
-                <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
-                <Body><Text>Keysend Experiment</Text></Body>
               </ListItem>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("GoogleDriveTestbed")}>
                 <Left><Icon style={style.icon} type="Entypo" name="google-drive" /></Left>
