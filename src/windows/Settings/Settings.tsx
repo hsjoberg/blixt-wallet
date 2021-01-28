@@ -536,7 +536,7 @@ When you're done, you can copy the address code and/or open the link using Blixt
   const onSetBitcoinNodeLongPress = async () => {
     Alert.alert(
       "Restore node",
-      `Would you like to restore to the default node (${DEFAULT_NEUTRINO_NODE}?`,
+      `Would you like to restore to the default node (${DEFAULT_NEUTRINO_NODE})?`,
       [{
         style: "cancel",
         text: "No",

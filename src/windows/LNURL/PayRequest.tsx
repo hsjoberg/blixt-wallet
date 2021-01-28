@@ -343,6 +343,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
                 <Input
                   onChangeText={onChangeBitcoinInput}
                   keyboardType="numeric"
+                  returnKeyType="done"
                   placeholder={`${minSpendableFormatted} to ${maxSpendableFormatted}`}
                   style={style.input}
                 />

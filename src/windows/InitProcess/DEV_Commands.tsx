@@ -249,6 +249,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => {
             console.log(localNotification("TEST NOTIFICATION"));
           }}><Text style={styles.buttonText}>localNotification</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobileTools.tailLog(10));
+          }}><Text style={styles.buttonText}>LndMobileTools.tailLog</Text></Button>
 
           <Text style={{ width: "100%"}}>iOS LndMobile:</Text>
           <Button small onPress={async () => {
