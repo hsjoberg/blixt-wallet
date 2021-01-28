@@ -26,29 +26,42 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
 
-  const close = async () => {
-    const result = await closeChannel({
-      fundingTx: channel.channelPoint!.split(":")[0],
-      outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
-    });
-    console.log(result);
+  const close = () => {
+    Alert.alert(
+      "Close channel",
+      `Are you sure you want to close the channel${alias ? ` with ${alias}` : ""}?`,
+      [{
+        style: "cancel",
+        text: "No",
+      },{
+        style: "default",
+        text: "Yes",
+        onPress: async () => {
+          const result = await closeChannel({
+            fundingTx: channel.channelPoint!.split(":")[0],
+            outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
+          });
+          console.log(result);
 
-    await getChannels(undefined);
+          await getChannels(undefined);
 
-    if (autopilotEnabled) {
-      Alert.alert(
-        "Autopilot",
-        "Automatic channel opening is enabled, " +
-        "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
-        "Do you wish to disable automatic channel opening?",
-        [
-          { text: "No", },
-          { text: "Yes", onPress: async () => {
-            changeAutopilotEnabled(false);
-            setupAutopilot(false);
-          },
-      }]);
-    }
+          if (autopilotEnabled) {
+            Alert.alert(
+              "Autopilot",
+              "Automatic channel opening is enabled, " +
+              "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
+              "Do you wish to disable automatic channel opening?",
+              [
+                { text: "No", },
+                { text: "Yes", onPress: async () => {
+                  changeAutopilotEnabled(false);
+                  setupAutopilot(false);
+                },
+            }]);
+          }
+        }
+      }]
+    );
   };
 
   let localBalance = channel.localBalance || Long.fromValue(0);
