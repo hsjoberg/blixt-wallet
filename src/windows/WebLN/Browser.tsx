@@ -33,6 +33,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   const [canGoBack, setCanGoBack] = useState(false);
   const [jsInjected, setJsInjected] = useState(false);
   const [disableBackHandler, setDisableBackHandler] = useState(false);
+  const [weblnSupportDetected, setWeblnSupportDetected] = useState(false);
 
   const handleGetInfoRequest = useStoreActions((store) => store.webln.handleGetInfoRequest);
   const handleMakeInvoiceRequest = useStoreActions((store) => store.webln.handleMakeInvoiceRequest);
@@ -61,8 +62,14 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   }, [canGoBack, disableBackHandler]);
 
   const onMessage = onMessageHandler(webview, {
-    enable: async () => { return; },
-    getInfo: handleGetInfoRequest,
+    enable: async () => {
+      setWeblnSupportDetected(true);
+      return;
+    },
+    getInfo: async () => {
+      setWeblnSupportDetected(true);
+      return handleGetInfoRequest()
+    },
     makeInvoice: async (args) => handleMakeInvoiceRequest({ requestUrl: url, data: args }),
     sendPayment: async (paymentRequestStr) => {
       try {
@@ -141,6 +148,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
           onLoadStart={(e) => {
             console.log("onLoadStart");
             setJsInjected(false)
+            setWeblnSupportDetected(false);
           }}
           onLoadProgress={(e) => {
             if (!jsInjected && e.nativeEvent.progress > 0.65) {
@@ -175,6 +183,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
               <Icon style={style.goBackButton} type="AntDesign" name="arrowleft" />
             </TouchableOpacity>
           }
+          <View style={[style.weblnIndicator, { backgroundColor: weblnSupportDetected ? "blue" : "transparent"}]}></View>
           <TextInput
             ref={textInput}
             style={style.urlInput}
@@ -243,7 +252,7 @@ const style = StyleSheet.create({
     borderRadius: 32,
     paddingTop: 5,
     paddingBottom: 5,
-    paddingLeft: 12,
+    paddingLeft: 13,
     paddingRight: 8,
     color: blixtTheme.light,
   },
@@ -270,4 +279,13 @@ const style = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
   },
+  weblnIndicator: {
+    position: "relative",
+    zIndex: 1000,
+    marginLeft: 6,
+    marginRight: -9,
+    width: 3,
+    height: 3,
+    borderRadius: 8,
+  }
 });
