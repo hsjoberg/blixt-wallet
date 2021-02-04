@@ -7,13 +7,12 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { timeout, bytesToString, getDomainFromURL, stringToUint8Array, hexToUint8Array, bytesToHexString } from "../utils/index";
 
-import logger from "./../utils/log";
 import Long from "long";
-import { DeviceEventEmitter } from "react-native";
 import { lnrpc } from "../../proto/proto";
 import { deriveKey, signMessage } from "../lndmobile/wallet";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 
+import logger from "./../utils/log";
 const log = logger("LNURL");
 
 export type LNURLType = "channelRequest" | "login" | "withdrawRequest" | "payRequest" | "unknown" | "error" | "unsupported";
@@ -366,18 +365,20 @@ export const lnUrl: ILNUrlModel = {
       // 5. LN WALLET makes a GET request using
       // <callback>?amount=<milliSatoshi>&fromnodes=<nodeId1,nodeId2,...>
       // (we're skipping fromnodes)
-      const url = (
-        lnUrlObject.callback +
-        `?amount=${payload.msat}${payload.comment ? "&comment=" + payload.comment : ""}`
-      );
-      log.d("url", [url]);
-      const result = await fetch(url);
+      const url = new URL(lnUrlObject.callback);
+      url.searchParams.append("amount", payload.msat.toString());
+      if (payload.comment) {
+        url.searchParams.append("comment", payload.comment)
+      }
+
+      const result = await fetch(url.href);
       log.d("result", [JSON.stringify(result)]);
       if (!result.ok) {
         let error;
         try {
           error = await result.json();
         } catch {
+          log.i("error", [result]);
           throw new Error("Could not pay");
         }
         throw new Error(error.reason ?? "Could not pay");
