@@ -6,10 +6,9 @@ import { IStoreInjections } from "./store";
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { lnrpc } from "../../proto/proto";
 import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/app";
-import { toast, timeout } from "../utils";
+import { toast, timeout, stringToUint8Array } from "../utils";
 import { Chain } from "../utils/build";
 import { getWalletPassword } from "../storage/keystore";
-import { PLATFORM } from "../utils/constants";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 
 import logger from "./../utils/log";
@@ -42,6 +41,7 @@ export interface ILightningModel {
   getLightningPeers: Thunk<ILightningModel, void, IStoreInjections>;
   connectPeer: Thunk<ILightningModel, string, IStoreInjections>;
   disconnectPeer: Thunk<ILightningModel, string, IStoreInjections>;
+  signMessage: Thunk<ILightningModel, string, IStoreInjections, {}, Promise<lnrpc.SignMessageResponse>>;
 
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
   setRPCServerReady: Action<ILightningModel, boolean>;
@@ -281,6 +281,11 @@ export const lightning: ILightningModel = {
   disconnectPeer: thunk(async (_, pubkey, { injections }) => {
     const disconnectPeer = injections.lndMobile.index.disconnectPeer;
     return await disconnectPeer(pubkey);
+  }),
+
+  signMessage: thunk(async (_, message, { injections }) => {
+    const signMessageNodePubkey = injections.lndMobile.wallet.signMessageNodePubkey;
+    return await signMessageNodePubkey(stringToUint8Array(message));
   }),
 
   getInfo: thunk(async (actions, _, { injections }) => {

@@ -5,7 +5,6 @@ import { style } from "./ChannelCard";
 import { lnrpc } from "../../proto/proto";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { useStoreActions } from "../state/store";
-import { Debug } from "../utils/build";
 
 export interface IPendingChannelCardProps {
   type: "OPEN" | "CLOSING" | "FORCE_CLOSING" | "WAITING_CLOSE";
@@ -42,7 +41,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               <Text style={style.channelDetailTitle}>Node</Text>
             </Left>
             <Right>
-              <Text style={style.channelDetailValue}>{channel.channel.remoteNodePub}</Text>
+              <Text style={{ fontSize: 9.5, textAlign: "right" }}>{channel.channel.remoteNodePub}</Text>
             </Right>
           </Row>
           {alias &&
@@ -74,23 +73,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               }
             </Right>
           </Row>
-          {/* <Row>
-            <Left>
-              <Text style={style.channelDetailTitle}>Amount in channel</Text>
-            </Left>
-            <Right>
-              <Text style={style.channelDetailAmount}>{channel.channel!.localBalance!.toString()}/{channel.channel!.capacity!.toString()} Satoshi</Text>
-            </Right>
-          </Row> */}
-          {__DEV__ &&
-            <Row>
-              <Right>
-                <Button onPress={() => abandon()} small>
-                  <Text>Abandon</Text>
-                </Button>
-              </Right>
-            </Row>
-          }
+
         </Body>
       </CardItem>
     </Card>

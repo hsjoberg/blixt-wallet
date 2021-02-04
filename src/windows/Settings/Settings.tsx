@@ -622,6 +622,35 @@ Do you wish to proceed?`;
     await changeScreenTransitionsEnabled(!screenTransitionsEnabled);
   }
 
+  const signMessage = useStoreActions((store) => store.lightning.signMessage);
+  const onPressSignMesseage = async () => {
+    Alert.prompt(
+      "Sign message",
+      undefined,
+      async (text) => {
+        if (text.length === 0) {
+          return;
+        }
+        const signMessageResponse = await signMessage(text);
+
+        Alert.alert(
+          "Signature",
+          signMessageResponse.signature,
+          [{
+            text: "OK",
+          }, {
+            text: "Copy",
+            onPress: async () => {
+              Clipboard.setString(signMessageResponse.signature);
+              toast("Copied to clipboard", undefined, "warning");
+            }
+          }]
+        );
+      },
+      "plain-text",
+    );
+  }
+
   const onLndMobileHelpCenterPress = async () => {
     navigation.navigate("LndMobileHelpCenter");
   }
@@ -911,49 +940,49 @@ Do you wish to proceed?`;
             <Body><Text>Screen transitions</Text></Body>
             <Right><CheckBox checked={screenTransitionsEnabled} onPress={onToggleScreenTransitionsEnabledPress} /></Right>
           </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onPressSignMesseage}>
+            <Left><Icon style={style.icon} type="FontAwesome5" name="file-signature" /></Left>
+            <Body><Text>Sign message with wallet key</Text></Body>
+          </ListItem>
 
-          {(Chain === "mainnet" || Chain === "regtest") &&
-            <>
-              <ListItem style={style.itemHeader} itemHeader={true}>
-                <Text>Experiments</Text>
-              </ListItem>
-              <ListItem style={style.listItem} icon={true} onPress={onExperimentWeblnBrowserEnabledToggle}>
-                <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
-                <Body>
-                  <Text>Enable WebLN browser</Text>
-                  <Text note={true}>Shows up as an icon on the Overview screen</Text>
-                </Body>
-                <Right><CheckBox checked={experimentWeblnBrowserEnabled} onPress={onExperimentWeblnBrowserEnabledToggle} /></Right>
-              </ListItem>
-              <ListItem style={style.listItem} icon={true} onPress={onChangeMultiPartPaymentEnabledPress}>
-                <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>
-                <Body>
-                  <Text>Enable Multi-Path Payments</Text>
-                  <Text note={true}>Payments can take up to 2 paths</Text>
-                </Body>
-                <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
-              </ListItem>
-              {PLATFORM === "android" &&
-                <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
-                  <Left>
-                    <TorSvg />
-                  </Left>
-                  <Body>
-                    <Text>Enable Tor</Text>
-                  </Body>
-                  <Right><CheckBox checked={torEnabled} onPress={onChangeTorEnabled} /></Right>
-                </ListItem>
-              }
-              {torEnabled &&
-                <ListItem style={style.listItem} button={true} icon={true} onPress={onShowOnionAddressPress}>
-                  <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="AntDesign" name="qrcode" /></Left>
-                  <Body>
-                    <Text>Show Tor onion service</Text>
-                    <Text note={true} numberOfLines={1}>For connecting and opening channels to this wallet</Text>
-                  </Body>
-                </ListItem>
-              }
-            </>
+          <ListItem style={style.itemHeader} itemHeader={true}>
+            <Text>Experiments</Text>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onExperimentWeblnBrowserEnabledToggle}>
+            <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
+            <Body>
+              <Text>Enable WebLN browser</Text>
+              <Text note={true}>Shows up as an icon on the Overview screen</Text>
+            </Body>
+            <Right><CheckBox checked={experimentWeblnBrowserEnabled} onPress={onExperimentWeblnBrowserEnabledToggle} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onChangeMultiPartPaymentEnabledPress}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>
+            <Body>
+              <Text>Enable Multi-Path Payments</Text>
+              <Text note={true}>Payments can take up to 2 paths</Text>
+            </Body>
+            <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
+          </ListItem>
+          {PLATFORM === "android" &&
+            <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
+              <Left>
+                <TorSvg />
+              </Left>
+              <Body>
+                <Text>Enable Tor</Text>
+              </Body>
+              <Right><CheckBox checked={torEnabled} onPress={onChangeTorEnabled} /></Right>
+            </ListItem>
+          }
+          {torEnabled &&
+            <ListItem style={style.listItem} button={true} icon={true} onPress={onShowOnionAddressPress}>
+              <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="AntDesign" name="qrcode" /></Left>
+              <Body>
+                <Text>Show Tor onion service</Text>
+                <Text note={true} numberOfLines={1}>For connecting and opening channels to this wallet</Text>
+              </Body>
+            </ListItem>
           }
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendExperiment")}>
             <Left><Icon style={style.icon} type="Feather" name="send" /></Left>
