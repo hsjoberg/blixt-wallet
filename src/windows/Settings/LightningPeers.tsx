@@ -62,8 +62,8 @@ export default function({ navigation }: ISelectListProps) {
         {lightningPeers.map((peer) => {
           const serviceKey = identifyService(peer.peer.pubKey, "", null);
           let service;
-          if (lightningServices[serviceKey!]) {
-            service = lightningServices[serviceKey!];
+          if (serviceKey && lightningServices[serviceKey]) {
+            service = lightningServices[serviceKey];
           }
 
           return (
@@ -74,7 +74,7 @@ export default function({ navigation }: ISelectListProps) {
                     <Left style={{ alignSelf: "flex-start" }}>
                       <Text>Node alias</Text>
                     </Left>
-                    <Right style={{ flexDirection:"row", alignItems: "center", justifyContent: "flex-end" }}>
+                    <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
                       <Text style={style.cardDataText}>
                         {peer.node?.alias}
                       </Text>
@@ -82,8 +82,8 @@ export default function({ navigation }: ISelectListProps) {
                         <Image
                           source={{ uri: service.image }}
                           style={style.nodeImage}
-                          width={30}
-                          height={30}
+                          width={28}
+                          height={28}
                         />
                       }
                     </Right>
@@ -198,10 +198,9 @@ export default function({ navigation }: ISelectListProps) {
 
 const style = StyleSheet.create({
   nodeImage: {
-    width: 320,
-    height: 320,
     borderRadius: 22,
     marginLeft: 10,
+    marginTop: -2.5,
     marginBottom: 4,
   },
   card: {

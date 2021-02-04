@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet, Alert, Image } from "react-native";
 import { Button, Card, CardItem, Body, Row, Right, Text, Left } from "native-base";
 import { Svg, Line } from "react-native-svg";
 import Long from "long";
@@ -9,6 +9,7 @@ import { lnrpc } from "../../proto/proto";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import { valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
 import BigNumber from "bignumber.js";
+import { identifyService, lightningServices } from "../utils/lightning-services";
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
 export interface IChannelCardProps {
@@ -77,31 +78,47 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const percentageReverse = 1 - (percentageLocal + percentageRemote);
 
   const localReserve = Long.fromValue(
-    Math.min(channel.localBalance ? channel.localBalance.toNumber() : 0, channel.localChanReserveSat?.toNumber() ?? 0)
+    Math.min(channel.localBalance?.toNumber?.() ?? 0, channel.localChanReserveSat?.toNumber?.() ?? 0)
   );
+
+  const serviceKey = identifyService(channel.remotePubkey ?? "", "", null);
+  let service;
+  if (serviceKey && lightningServices[serviceKey]) {
+    service = lightningServices[serviceKey];
+  }
 
   return (
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
         <Body>
-          <Row style={{ width: "100%" }}>
-            <Left style={{ alignSelf: "flex-start" }}>
-              <Text style={style.channelDetailTitle}>Node</Text>
-            </Left>
-            <Right>
-              <Text style={style.channelDetailValue}>{channel.remotePubkey}</Text>
-            </Right>
-          </Row>
           {alias &&
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>Alias</Text>
               </Left>
-              <Right>
-                <Text style={style.channelDetailValue}>{alias}</Text>
+              <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
+                <Text style={style.channelDetailValue}>
+                  {alias}
+                </Text>
+                {service &&
+                  <Image
+                    source={{ uri: service.image }}
+                    style={style.nodeImage}
+                    width={28}
+                    height={28}
+                  />
+                }
               </Right>
             </Row>
           }
+          <Row style={{ width: "100%" }}>
+            <Left style={{ alignSelf: "flex-start" }}>
+              <Text style={style.channelDetailTitle}>Node</Text>
+            </Left>
+            <Right>
+              <Text style={{ fontSize: 9.5, textAlign: "right" }}>{channel.remotePubkey}</Text>
+            </Right>
+          </Row>
           <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
               <Text style={style.channelDetailTitle}>Status</Text>
@@ -253,6 +270,13 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Text>
             </Right>
           </Row>
+          {!channel.private &&
+            <Row style={{ width: "100%" }}>
+              <Right>
+                <Text style={{ color: "orange" }}>Public channel</Text>
+              </Right>
+            </Row>
+          }
           <Row style={{ width: "100%" }}>
             <Left>
               <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={close}>
@@ -284,5 +308,11 @@ export const style = StyleSheet.create({
   },
   channelDetailAmount: {
     fontSize: 15,
-  }
+  },
+  nodeImage: {
+    borderRadius: 22,
+    marginLeft: 10,
+    marginTop: -2.5,
+    marginBottom: 4,
+  },
 });
