@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Button, Body, Container, Header, Icon, Left, Title, H1, Input, Right, Text, Spinner } from "native-base";
-import Content from "../../components/Content";
-import { View, KeyboardAvoidingView, Dimensions, StatusBar } from "react-native";
+import { Button, Icon, H1, Input, Text, Spinner } from "native-base";
+import { View, KeyboardAvoidingView } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { sendKeysendPaymentV2 } from "../../lndmobile/index";
 import Long from "long";
@@ -12,7 +11,6 @@ import { lnrpc } from "../../../proto/proto";
 import { getChanInfo, listPrivateChannels } from "../../lndmobile/channel";
 import QrCode from "../../components/QrCode";
 import BlixtForm from "../../components/Form";
-import { ScrollView } from "react-native";
 import { NavigationButton } from "../../components/NavigationButton";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { ITransaction } from "../../storage/database/transaction";
@@ -179,6 +177,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         onChangeText={setSatInput}
         placeholder="0"
         keyboardType="numeric"
+        returnKeyType="done"
       />
     )}, {
       key: "PUBKEY",
@@ -206,55 +205,53 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   ];
 
   return (
-    <ScrollView style={{ height: Dimensions.get("window").height - 57, backgroundColor: blixtTheme.dark }}>
-      <Content style={{ height: Dimensions.get("window").height - 57, paddingHorizontal: 2 }}>
-        <View style={{ alignItems: "center" }}>
-          <H1 style={{ marginTop: 10, marginBottom: 5 }}>Keysend - scan to pay</H1>
-          {routehints.length > 0  &&
-            <QrCode
-              size={220}
-              data={JSON.stringify({
-                pubkey: myNodeInfo!.identityPubkey,
-                routehints,
-              })}
-            />
-          }
-          {routehints.length === 0 &&
-            <View style={{ margin: 4, width: 220 + 26, height: 220 + 26 }}></View>
-          }
-        </View>
-        <View style={{ padding: 16 }}>
-          <Text style={{ marginBottom: 8 }}>
-            Welcome to the keysend playground.{"\n"}
-            Keysend lets you pay another Blixt Wallet (or lnd with keysend enabled) without requiring an invoice.
-          </Text>
-          <Text>
-            Click on the camera to scan another wallet's QR code or provide a public key and route hints below.
-          </Text>
-        </View>
-        <BlixtForm
-          style={{ flexGrow: 1}}
-          items={formItems}
-          buttons={[
-            <Button
-              style={{ marginTop: 32 }}
-              testID="create-invoice"
-              primary={true}
-              block={true}
-              disabled={sending}
-              key="CREATE_INVOICE"
-              onPress={onClickSend}
-            >
-              {sending &&
-                <Spinner color={blixtTheme.light} />
-              }
-              {!sending &&
-                <Text>Send</Text>
-              }
-            </Button>
-          ]}
-        />
-      </Content>
-    </ScrollView>
+    <KeyboardAvoidingView behavior="height" style={{ flex: 1, backgroundColor: blixtTheme.dark }}>
+      <View style={{ alignItems: "center" }}>
+        <H1 style={{ marginTop: 10, marginBottom: 5 }}>Keysend - scan to pay</H1>
+        {routehints.length > 0  &&
+          <QrCode
+            size={220}
+            data={JSON.stringify({
+              pubkey: myNodeInfo!.identityPubkey,
+              routehints,
+            })}
+          />
+        }
+        {routehints.length === 0 &&
+          <View style={{ margin: 4, width: 220 + 26, height: 220 + 26 }}></View>
+        }
+      </View>
+      <View style={{ padding: 16 }}>
+        <Text style={{ marginBottom: 8 }}>
+          Welcome to the keysend playground.{"\n"}
+          Keysend lets you pay another Blixt Wallet (or lnd with keysend enabled) without requiring an invoice.
+        </Text>
+        <Text>
+          Click on the camera to scan another wallet's QR code or provide a public key and route hints below.
+        </Text>
+      </View>
+      <BlixtForm
+        style={{ flexGrow: 1}}
+        items={formItems}
+        buttons={[
+          <Button
+            style={{ marginTop: 32 }}
+            testID="create-invoice"
+            primary={true}
+            block={true}
+            disabled={sending}
+            key="CREATE_INVOICE"
+            onPress={onClickSend}
+          >
+            {sending &&
+              <Spinner color={blixtTheme.light} />
+            }
+            {!sending &&
+              <Text>Send</Text>
+            }
+          </Button>
+        ]}
+      />
+    </KeyboardAvoidingView>
   );
 }
