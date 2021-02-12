@@ -591,7 +591,7 @@ Do you wish to proceed?`;
       text,
       [{ text: "Cancel" },
       {
-        text: "Restart app and enable Tor",
+        text: !torEnabled ? "Restart app and enable Tor" : "Restart app and disable Tor",
         onPress: async () => {
           await changeTorEnabled(!torEnabled);
           try {
