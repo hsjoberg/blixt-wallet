@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Alert, Image } from "react-native";
+import { StyleSheet, Alert, Image, Linking } from "react-native";
 import { Button, Card, CardItem, Body, Row, Right, Text, Left } from "native-base";
 import { Svg, Line } from "react-native-svg";
 import Long from "long";
@@ -11,6 +11,7 @@ import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import { valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
 import { identifyService, lightningServices } from "../utils/lightning-services";
 import CopyText from "./CopyText";
+import { OnchainExplorer } from "../state/Settings";
 
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
@@ -28,6 +29,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
+  const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
 
   const close = () => {
     Alert.alert(
@@ -66,6 +68,11 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
       }]
     );
   };
+
+  const onPressViewInExplorer = async () => {
+    const txId = channel.channelPoint?.split(":")[0];
+    await Linking.openURL(`${OnchainExplorer[onchainExplorer]}${txId}`);
+  }
 
   let localBalance = channel.localBalance || Long.fromValue(0);
   if (localBalance.lessThanOrEqual(channel.localChanReserveSat!)) {
@@ -288,9 +295,12 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             </Row>
           }
           <Row style={{ width: "100%" }}>
-            <Left>
+            <Left style={{ flexDirection: "row" }}>
               <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={close}>
-                <Text>Close channel</Text>
+                <Text style={{ fontSize: 8 }}>Close channel</Text>
+              </Button>
+              <Button style={{ marginTop: 14, marginLeft: 10 }} small={true} onPress={onPressViewInExplorer}>
+                <Text style={{ fontSize: 8 }}>View in block explorer</Text>
               </Button>
             </Left>
           </Row>
