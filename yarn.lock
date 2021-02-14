@@ -6702,10 +6702,10 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-hermes-engine@0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/hermes-engine/-/hermes-engine-0.7.2.tgz#303cd99d23f68e708b223aec2d49d5872985388b"
-  integrity sha512-E2DkRaO97gwL98LPhgfkMqhHiNsrAjIfEk3wWYn2Y31xdkdWn0572H7RnVcGujMJVqZNJvtknxlpsUb8Wzc3KA==
+hermes-engine@0.5.2-rc1:
+  version "0.5.2-rc1"
+  resolved "https://registry.yarnpkg.com/hermes-engine/-/hermes-engine-0.5.2-rc1.tgz#01faccf58b45f6a4592443c1acf98f0ddbd5bf36"
+  integrity sha512-+cLjML2+XVSLPdEtU/b5FwtF+3yhxV8dfuviRS3MPdMxlxDlG/Iu3wFvTByOzTzWaQyPg+Q/68o5HLrL4QqJng==
 
 hermes-engine@~0.5.0:
   version "0.5.1"
