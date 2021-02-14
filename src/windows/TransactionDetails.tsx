@@ -177,6 +177,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
               {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
               {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
               {direction === "send" && <MetaData title="Remote pubkey" data={transaction.remotePubkey} />}
+              <MetaData title="Payment hash" data={transaction.rHash}/>
               {transaction.status === "SETTLED" && transaction.preimage && <MetaData title="Preimage" data={bytesToHexString(transaction.preimage)}/>}
               <MetaData title="Status" data={capitalize(transaction.status)} />
               {transaction.status === "OPEN" && transaction.type !== "LNURL" &&
