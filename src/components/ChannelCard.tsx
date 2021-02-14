@@ -3,13 +3,15 @@ import { StyleSheet, Alert, Image } from "react-native";
 import { Button, Card, CardItem, Body, Row, Right, Text, Left } from "native-base";
 import { Svg, Line } from "react-native-svg";
 import Long from "long";
+import BigNumber from "bignumber.js";
 
 import { useStoreActions, useStoreState } from "../state/store";
 import { lnrpc } from "../../proto/proto";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import { valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
-import BigNumber from "bignumber.js";
 import { identifyService, lightningServices } from "../utils/lightning-services";
+import CopyText from "./CopyText";
+
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
 export interface IChannelCardProps {
@@ -97,9 +99,9 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 <Text style={style.channelDetailTitle}>Alias</Text>
               </Left>
               <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
-                <Text style={style.channelDetailValue}>
+                <CopyText style={style.channelDetailValue}>
                   {alias}
-                </Text>
+                </CopyText>
                 {service &&
                   <Image
                     source={{ uri: service.image }}
@@ -116,7 +118,15 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text style={style.channelDetailTitle}>Node</Text>
             </Left>
             <Right>
-              <Text style={{ fontSize: 9.5, textAlign: "right" }}>{channel.remotePubkey}</Text>
+              <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>{channel.remotePubkey}</CopyText>
+            </Right>
+          </Row>
+          <Row style={{ width: "100%" }}>
+            <Left style={{ alignSelf: "flex-start" }}>
+              <Text style={style.channelDetailTitle}>Channel ID</Text>
+            </Left>
+            <Right>
+              <CopyText>{channel.chanId?.toString()}</CopyText>
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
