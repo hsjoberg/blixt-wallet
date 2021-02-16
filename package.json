@@ -83,7 +83,7 @@
     "react-native-enhanced-popup-menu": "^0.7.0",
     "react-native-fingerprint-scanner": "6.0.0",
     "react-native-fs": "2.16.6",
-    "react-native-gesture-handler": "1.10.1",
+    "react-native-gesture-handler": "1.9.0",
     "react-native-haptic-feedback": "^1.11.0",
     "react-native-icloudstore": "git+https://github.com/manicakes/react-native-icloudstore.git#4c9f668d3121aedf7a5635b0a13f6e3999c0e6f3",
     "react-native-image-slider-box": "^1.0.12",

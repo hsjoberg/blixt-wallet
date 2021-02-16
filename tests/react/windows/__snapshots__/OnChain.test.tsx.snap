@@ -611,9 +611,11 @@ exports[`renders correctly 1`] = `
                                                             Array [
                                                               "stroke",
                                                               "strokeWidth",
+                                                              "strokeLinecap",
                                                             ]
                                                           }
                                                           stroke={4278190080}
+                                                          strokeLinecap={0}
                                                           strokeWidth={10.344827586206897}
                                                         />
                                                       </RNSVGGroup>
