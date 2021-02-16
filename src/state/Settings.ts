@@ -10,7 +10,7 @@ import logger from "./../utils/log";
 const log = logger("Settings");
 
 export const OnchainExplorer = {
-  mempool: "https://mempool.space/tx/",
+  mempool: `https://mempool.space/${Chain === "testnet" ? "testnet/" : ""}tx/`,
   blockstream: `https://blockstream.info/${Chain === "testnet" ? "testnet/" : ""}tx/`,
   oxt: `https://oxt.me/transaction/`,
   blockchair: "https://blockchair.com/bitcoin/transaction/",
