@@ -6,7 +6,7 @@ import { setItem, StorageItem } from "../storage/app";
 import { clearTransactions, createTransaction } from "../storage/database/transaction";
 import { ILightningServices } from "./lightning-services";
 
-export default async function SetupWebDemo(
+export default async function SetupBlixtDemo(
   db: any,
   dispatch: Dispatch<IStoreModel>
 
@@ -21,7 +21,7 @@ export default async function SetupWebDemo(
   }
   const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
     for (const invoice of invoices) {
-      await createTransaction(db!, {
+      dispatch.transaction.setTransactions(invoices.map((invoice) => ({
         date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
         description: invoice.description,
         remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
@@ -49,7 +49,7 @@ export default async function SetupWebDemo(
         preimage: new Uint8Array([0,0]),
         lnurlPayResponse: null,
         identifiedService: invoice.lightningService,
-      });
+      })));
     }
   }
 
@@ -118,5 +118,5 @@ export default async function SetupWebDemo(
 
   await setItem(StorageItem.onboardingState, "DONE");
   dispatch.setOnboardingState("DONE");
-  dispatch.channel.setBalance(Long.fromNumber(4397581));
+  dispatch.channel.setBalance(Long.fromNumber(439758));
 };

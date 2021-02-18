@@ -655,6 +655,9 @@ Do you wish to proceed?`;
     navigation.navigate("LndMobileHelpCenter");
   }
 
+  // Setup demo environment
+  const setupDemo = useStoreActions((store) => store.setupDemo);
+
   return (
     <Container>
       <Content>
@@ -1034,6 +1037,13 @@ Do you wish to proceed?`;
               }}>
                 <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="typewriter" /></Left>
                 <Body><Text>Write config</Text></Body>
+              </ListItem>
+              <ListItem style={style.listItem} button={true} icon={true} onPress={setupDemo}>
+                <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
+                <Body>
+                  <Text>Activate Demo Mode</Text>
+                  <Text note={true} numberOfLines={1}>Used for promo. Restart app to reset</Text>
+                </Body>
               </ListItem>
             </>
           }

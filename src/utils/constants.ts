@@ -13,3 +13,6 @@ export const PLATFORM = Platform.OS;
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
 export const DEFAULT_NEUTRINO_NODE = Chain === "mainnet" ? "btcd-mainnet.lightning.computer" : "testnet.teslacoil.io";
+
+export const ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID = "common";
+export const ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_NAME = "Common notifications";

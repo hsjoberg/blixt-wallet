@@ -186,10 +186,6 @@ export const receive: IReceiveModel = {
           hops: [],
         };
 
-        if (transaction.payer === "Hampus Sjöberg" || transaction.payer === "Hampus Sjoberg") {
-          transaction.identifiedService = "hampus";
-        }
-
         if (invoice.state === lnrpc.Invoice.InvoiceState.SETTLED) {
           const fiatUnit = getStoreState().settings.fiatUnit;
           const valFiat = valueFiat(invoice.amtPaidSat, getStoreState().fiat.currentRate);
@@ -221,6 +217,13 @@ export const receive: IReceiveModel = {
           // We can now delete the temp data
           // as the invoice has been settled
           actions.deleteInvoiceTmpData(rHash);
+        }
+
+        if (
+          transaction.payer === "Hampus Sjöberg" || transaction.payer === "Hampus Sjoberg" ||
+          transaction.tlvRecordName === "Hampus Sjöberg" || transaction.tlvRecordName === "Hampus Sjoberg"
+        ) {
+          transaction.identifiedService = "hampus";
         }
 
         setTimeout(async () => {

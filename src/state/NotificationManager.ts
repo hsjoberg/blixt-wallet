@@ -5,7 +5,7 @@ import { navigate } from "../utils/navigation";
 import { IStoreModel } from "./index";
 
 import logger from "./../utils/log";
-import { PLATFORM } from "../utils/constants";
+import { ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID, ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_NAME, PLATFORM } from "../utils/constants";
 const log = logger("NotificationManager");
 
 interface ILocalNotificationPayload {
@@ -50,6 +50,15 @@ export const notificationManager: INotificationManagerModel = {
         }
       }),
     });
+
+    if (PLATFORM === "android") {
+      PushNotification.createChannel({
+          channelId: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID,
+          channelName: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_NAME,
+        },
+        () => {}
+      );
+    }
   }),
 
   localNotification: thunk((_, { message, importance }, { getStoreState }) => {

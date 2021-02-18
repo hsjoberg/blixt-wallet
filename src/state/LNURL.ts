@@ -136,8 +136,8 @@ export const lnUrl: ILNUrlModel = {
     actions.clear();
     try {
       let type: LNURLType;
-      const decodedBech32 = Bech32.decode(bech32data, 1024);
-      const decodedUrl = bytesToString(Bech32.fromWords(decodedBech32.words));
+      const decodedBech32 = Bech32.bech32.decode(bech32data, 1024);
+      const decodedUrl = bytesToString(Bech32.bech32.fromWords(decodedBech32.words));
       log.d("decodedUrl", [decodedUrl]);
       actions.setLNUrlStr(decodedUrl);
 

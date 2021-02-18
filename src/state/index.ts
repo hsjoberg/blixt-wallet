@@ -32,7 +32,7 @@ import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
 import { setWalletPassword, getItem } from "../storage/keystore";
 import { PLATFORM } from "../utils/constants";
-import SetupWebDemo from "../utils/setup-web-demo-db";
+import SetupBlixtDemo from "../utils/setup-demo";
 import { Chain } from "../utils/build";
 
 import logger from "./../utils/log";
@@ -48,6 +48,7 @@ export interface ICreateWalletPayload {
 }
 
 export interface IStoreModel {
+  setupDemo: Thunk<IStoreModel, void, any, IStoreModel>;
   initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   checkAppVersionMigration: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
@@ -101,6 +102,11 @@ export interface IStoreModel {
 }
 
 export const model: IStoreModel = {
+  setupDemo: thunk(async (_, _2, { getState, dispatch }) => {
+    const db = getState().db;
+    await SetupBlixtDemo(db, dispatch);
+  }),
+
   initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
     log.d("getState().appReady: " + getState().appReady);
     if (getState().appReady) {
@@ -128,7 +134,7 @@ export const model: IStoreModel = {
       await actions.writeConfig();
 
       if (PLATFORM === "web") {
-        await SetupWebDemo(db, dispatch);
+        await dispatch.setupDemo();
         await dispatch.generateSeed();
         await dispatch.createWallet();
       }

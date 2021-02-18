@@ -366,7 +366,7 @@ export const send: ISendModel = {
 };
 
 const checkBech32 = (bech32: string, prefix: string): boolean => {
-  const decodedBech32 = Bech32.decode(bech32, 1024);
+  const decodedBech32 = Bech32.bech32.decode(bech32, 1024);
   if (decodedBech32.prefix.slice(0, prefix.length).toUpperCase() !== prefix.toUpperCase()) {
     return false;
   }
