@@ -33,10 +33,10 @@ jobs:
       - run: yarn gen-proto
       # - run: yarn test
       # Compile a bundled dev build https://stackoverflow.com/a/56520746
-      - run: ./node_modules/.bin/react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
-      - run: cd android && ./gradlew assembleChainmainnetNormalDebug && ./gradlew assembleChaintestnetNormalDebug
-      - store_artifacts:
-          path: android/app/build/outputs
+      # - run: ./node_modules/.bin/react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+      # - run: cd android && ./gradlew assembleChainmainnetNormalDebug && ./gradlew assembleChaintestnetNormalDebug
+      # - store_artifacts:
+      #     path: android/app/build/outputs
 workflows:
   version: 2
   build:
