@@ -16,4 +16,5 @@ test("initialize lightning store", async () => {
   await waitFor(() => expect(store.getState().lightning.autopilotSet).toBeDefined(), { timeout: 5000 });
 
   // TODO wait for Autopilot to finish
+  await new Promise((r) => setTimeout(r, 10000));
 });
