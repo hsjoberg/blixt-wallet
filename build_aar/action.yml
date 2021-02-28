@@ -1,0 +1,5 @@
+name: 'Build Android AAR'
+description: 'Builds a AAR of lnd mobile'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
