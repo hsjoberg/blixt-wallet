@@ -42,6 +42,6 @@ workflows:
   build:
     jobs:
       - build_aar
-      - build_blixt:
-          requires:
-            - build_aar
+      # - build_blixt:
+      #     requires:
+      #       - build_aar
