@@ -1,0 +1,24 @@
+name: Android build
+
+on: [push, pull_request]
+
+jobs:
+  build_RN:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - run: wget -o android/lndmobile/Lndmobile.aar https://github.com/BlixtWallet/blixt-lndmobile-releases/releases/download/master/Lndmobile.aar
+      - run: yarn
+      - run: git submodule update --init
+      - run: yarn build-tor-lib
+      - run: yarn gen-proto
+      - run: yarn test
+      # Compile a bundled dev build https://stackoverflow.com/a/56520746
+      - run: ./node_modules/.bin/react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
+      - run: cd android && ./gradlew assembleChainmainnetNormalDebug && ./gradlew assembleChaintestnetNormalDebug
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: android-apk
+          path: 'android/app/build/outputs'
