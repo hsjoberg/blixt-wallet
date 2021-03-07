@@ -128,7 +128,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
     transactionValue = transaction.value;
   }
 
-  const hasCoordinates = transaction.locationLat && transaction.locationLat;
+  const hasCoordinates = transaction.locationLat && transaction.locationLong;
 
   if (currentScreen === "Overview") {
     return (
