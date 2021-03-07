@@ -14,9 +14,9 @@ export default {
 const mockSQLite = {
   openDatabase: (...args) => {
     return {
-      transaction: (...args) => {
+      transaction: (...args) => ({
         executeSql: (query) => { return []; }
-      }
+      })
     };
   }
 }
