@@ -163,8 +163,8 @@ export default function({ navigation }: ISelectListProps) {
                       </Left>
                       <Right>
                         <Text style={style.cardDataText}>
-                          {(peer.peer.errors.map((error) => (
-                            <Text>
+                          {(peer.peer.errors.map((error, i) => (
+                            <Text key={`${i}${error.error}`}>
                               {error.error}{"\n"}
                             </Text>
                           )))}
