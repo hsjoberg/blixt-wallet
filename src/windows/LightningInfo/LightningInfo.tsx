@@ -139,6 +139,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
 const style = StyleSheet.create({
   container: {
     padding: 12,
+    paddingBottom: 25,
   },
   loadingContainer: {
     flex: 1,

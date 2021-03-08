@@ -58,7 +58,7 @@ export default function({ navigation }: ISelectListProps) {
 
   return (
     <Container>
-      <BlixtContent>
+      <BlixtContent style={{ paddingBottom: 25 }}>
         {lightningPeers.map((peer) => {
           const serviceKey = identifyService(peer.peer.pubKey, "", null);
           let service;
@@ -184,7 +184,6 @@ export default function({ navigation }: ISelectListProps) {
             </Card>
           );
         })}
-
       </BlixtContent>
       <Fab
         style={style.fab}

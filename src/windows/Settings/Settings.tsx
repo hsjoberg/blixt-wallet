@@ -911,7 +911,7 @@ Do you wish to proceed?`;
 
 
           <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>Misc.</Text>
+            <Text>Miscellaneous</Text>
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("About")}>
