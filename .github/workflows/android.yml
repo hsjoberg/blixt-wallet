@@ -1,0 +1,14 @@
+name: Android build
+
+on: [pull_request]
+
+jobs:
+  build_RN:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - run: yarn
+      - run: git submodule update --init
+      - run: yarn gen-proto
+      - run: yarn test
