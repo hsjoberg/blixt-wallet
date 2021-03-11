@@ -1,6 +1,6 @@
 import { Text } from "native-base";
 import React, { useRef, useState } from "react";
-import { Image, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { Image, PixelRatio, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Image as AnimatedImage } from 'react-native-animatable';
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { timeout } from "../utils";
@@ -71,7 +71,7 @@ const style = StyleSheet.create({
   },
   blixtTitle: {
     fontFamily: blixtTheme.fontMedium,
-    fontSize: 40,
+    fontSize: 40 / PixelRatio.getFontScale(),
   },
   version: {
     textAlign: "right",

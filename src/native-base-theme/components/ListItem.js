@@ -358,7 +358,8 @@ export default (variables /* : * */ = variable) => {
         },
         paddingRight: variables.listItemPadding + 5,
         flex: 0,
-        height: 44,
+        // height: 44,
+        minHeight: 44,
         justifyContent: 'center',
         alignItems: 'center'
       },
@@ -368,7 +369,8 @@ export default (variables /* : * */ = variable) => {
           fontSize: 17
         },
         flex: 1,
-        height: 44,
+        // height: 44,
+        minHeight: 44,
         justifyContent: 'center',
         borderBottomWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
         borderColor: variables.listBorderColor
@@ -404,7 +406,8 @@ export default (variables /* : * */ = variable) => {
         alignItems: 'center',
         flex: 0,
         alignSelf: 'stretch',
-        height: 44,
+        // height: 44,
+        minHeight: 44,
         justifyContent: 'flex-end',
         borderBottomWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
         borderColor: variables.listBorderColor,
@@ -421,7 +424,8 @@ export default (variables /* : * */ = variable) => {
       borderBottomWidth: null,
       paddingVertical: null,
       paddingRight: null,
-      height: 44,
+      // height: 44,
+      minHeight: 44,
       justifyContent: 'center'
     },
     '.noBorder': {

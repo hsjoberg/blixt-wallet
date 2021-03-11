@@ -17,7 +17,6 @@ import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
 import { verifyChanBackup } from "../../lndmobile/channel";
 import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
-import { Chain } from "../../utils/build";
 import { OnchainExplorer } from "../../state/Settings";
 import TorSvg from "./TorSvg";
 import { DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../utils/constants";
@@ -660,7 +659,7 @@ Do you wish to proceed?`;
 
   return (
     <Container>
-      <Content>
+      <Content style={{ padding: 10 }}>
         <BlixtWallet />
 
         <List style={style.list}>
@@ -672,7 +671,7 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
             <Body>
               <Text>Name</Text>
-              <Text note={true} numberOfLines={1}>
+              <Text note={true}>
                 {name || "Will be used in transactions"}
               </Text>
             </Body>
@@ -681,7 +680,7 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="Entypo" name="bell" /></Left>
             <Body>
               <Text>Push notifications</Text>
-              <Text note={true} numberOfLines={1}>For transaction and channel events</Text>
+              <Text note={true}>For transaction and channel events</Text>
             </Body>
             <Right><CheckBox checked={pushNotificationsEnabled} onPress={onTogglePushNotificationsPress} /></Right>
           </ListItem>
@@ -689,7 +688,7 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="Entypo" name="clipboard" /></Left>
             <Body>
               <Text>Check clipboard for invoices</Text>
-              <Text note={true} numberOfLines={1}>Automatically check clipboard for invoices</Text>
+              <Text note={true}>Automatically check clipboard for invoices</Text>
             </Body>
             <Right><CheckBox checked={clipboardInvoiceCheckEnabled} onPress={onToggleClipBoardInvoiceCheck} /></Right>
           </ListItem>
@@ -697,7 +696,7 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="Entypo" name="location-pin" /></Left>
             <Body>
               <Text>Save geolocation of transaction</Text>
-              <Text note={true} numberOfLines={1}>Locally save the location of a transaction</Text>
+              <Text note={true}>Locally save the location of a transaction</Text>
             </Body>
             <Right><CheckBox checked={transactionGeolocationEnabled} onPress={onToggleTransactionGeolocationEnabled} /></Right>
           </ListItem>
@@ -721,7 +720,7 @@ Do you wish to proceed?`;
                 <Left><Icon style={style.icon} type="AntDesign" name="form" /></Left>
                 <Body>
                   <Text>Show mnemonic</Text>
-                  <Text note={true} numberOfLines={1}>Show 24-word seed for this wallet</Text>
+                  <Text note={true}>Show 24-word seed for this wallet</Text>
                 </Body>
               </ListItem>
               {onboardingState === "DONE" &&
@@ -729,7 +728,7 @@ Do you wish to proceed?`;
                   <Left><Icon style={style.icon} type="Entypo" name="eraser" /></Left>
                   <Body>
                     <Text>Remove mnemonic from device</Text>
-                    <Text note={true} numberOfLines={1}>Permanently remove the seed from this device</Text>
+                    <Text note={true}>Permanently remove the seed from this device</Text>
                   </Body>
                 </ListItem>
               }
@@ -756,7 +755,7 @@ Do you wish to proceed?`;
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-drive" /></Left>
               <Body>
                 <Text>Google Drive channel backup</Text>
-                <Text note={true} numberOfLines={1}>Automatically backup channels to Google Drive</Text>
+                <Text note={true}>Automatically backup channels to Google Drive</Text>
               </Body>
               <Right><CheckBox checked={googleDriveBackupEnabled} onPress={onToggleGoogleDriveBackup} /></Right>
             </ListItem>
@@ -772,7 +771,7 @@ Do you wish to proceed?`;
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="apple-icloud" /></Left>
               <Body>
                 <Text>iCloud channel backup</Text>
-                <Text note={true} numberOfLines={1}>Automatically backup channels to iCloud</Text>
+                <Text note={true}>Automatically backup channels to iCloud</Text>
               </Body>
               <Right><CheckBox checked={iCloudBackupEnabled} onPress={onToggleICloudBackup} /></Right>
             </ListItem>
@@ -820,11 +819,11 @@ Do you wish to proceed?`;
               onLongPress={() => ToastAndroid.show("Status: " + workInfo + "\n"+
                                                   "Last sync attempt: " + formatISO(fromUnixTime(lastScheduledSyncAttempt)) + "\n" +
                                                   "Last sync: " + formatISO(fromUnixTime(lastScheduledSync)), ToastAndroid.LONG)}
-            >
+           >
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="sync-alert" /></Left>
               <Body>
                 <Text>Scheduled chain sync</Text>
-                <Text note={true} numberOfLines={1}>
+                <Text note={true}>
                   Runs in background every 4 hours
                 </Text>
               </Body>
@@ -841,21 +840,21 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="FontAwesome" name="money" /></Left>
             <Body>
               <Text>Fiat currency</Text>
-              <Text note={true} numberOfLines={1} onPress={onFiatUnitPress}>{currentFiatUnit}</Text>
+              <Text note={true}  onPress={onFiatUnitPress}>{currentFiatUnit}</Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onBitcoinUnitPress}>
             <Left><Icon style={style.icon} type="FontAwesome5" name="btc" /></Left>
             <Body>
               <Text>Bitcoin unit</Text>
-              <Text note={true} numberOfLines={1} onPress={onBitcoinUnitPress}>{BitcoinUnits[currentBitcoinUnit].settings}</Text>
+              <Text note={true}  onPress={onBitcoinUnitPress}>{BitcoinUnits[currentBitcoinUnit].settings}</Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onChangeOnchainExplorerPress}>
             <Left><Icon style={style.icon} type="FontAwesome" name="chain" /></Left>
             <Body>
               <Text>Onchain explorer</Text>
-              <Text note={true} numberOfLines={1}>{camelCaseToSpace(onchainExplorer)}</Text>
+              <Text note={true}>{camelCaseToSpace(onchainExplorer)}</Text>
             </Body>
           </ListItem>
 
@@ -868,7 +867,7 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
             <Body>
               <Text>Set Bitcoin Node</Text>
-              <Text note={true} numberOfLines={1}>
+              <Text note={true}>
                 Set Bitcoin node (BIP157) to connect to
               </Text>
             </Body>
@@ -895,7 +894,7 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="cloud-download" /></Left>
             <Body>
               <Text>Inbound channel services</Text>
-              <Text note={true} numberOfLines={1}>Use an inbound channel service for receiving payments</Text>
+              <Text note={true}>Use an inbound channel service for receiving payments</Text>
             </Body>
           </ListItem>
 
@@ -923,7 +922,7 @@ Do you wish to proceed?`;
               <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
               <Body>
                 <Text>Copy log to local storage</Text>
-                <Text note={true} numberOfLines={1}>Reached from /sdcard/BlixtWallet</Text>
+                <Text note={true}>Reached from /sdcard/BlixtWallet</Text>
               </Body>
             </ListItem>
           }
@@ -983,7 +982,7 @@ Do you wish to proceed?`;
               <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="AntDesign" name="qrcode" /></Left>
               <Body>
                 <Text>Show Tor onion service</Text>
-                <Text note={true} numberOfLines={1}>For connecting and opening channels to this wallet</Text>
+                <Text note={true}>For connecting and opening channels to this wallet</Text>
               </Body>
             </ListItem>
           }
@@ -1042,7 +1041,7 @@ Do you wish to proceed?`;
                 <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
                 <Body>
                   <Text>Activate Demo Mode</Text>
-                  <Text note={true} numberOfLines={1}>Used for promo. Restart app to reset</Text>
+                  <Text note={true}>Used for promo. Restart app to reset</Text>
                 </Body>
               </ListItem>
             </>
@@ -1059,8 +1058,8 @@ const style = StyleSheet.create({
     marginBottom: 48,
   },
   listItem: {
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingLeft: 2,
+    paddingRight: 2,
     // paddingLeft: 24,
     // paddingRight: 24,
   },
