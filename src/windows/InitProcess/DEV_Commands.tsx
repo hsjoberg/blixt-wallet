@@ -381,7 +381,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, [])}><Text style={styles.buttonText}>set logginMethods to []</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.bitcoinUnit, "bitcoin")}><Text style={styles.buttonText}>set bitcoinUnit to bitcoin</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text style={styles.buttonText}>walletCreated = true</Text></Button>
-          <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 11)}><Text style={styles.buttonText}>appVersion = 0</Text></Button>
+          <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 22)}><Text style={styles.buttonText}>appVersion = 0</Text></Button>
           <Button small onPress={async () => await setItem(StorageItem.onboardingState, "SEND_ONCHAIN")}><Text style={styles.buttonText}>onboardingState = SEND_ONCHAIN</Text></Button>
           <Button small onPress={async () => await setItem(StorageItem.onboardingState, "DO_BACKUP")}><Text style={styles.buttonText}>onboardingState = DO_BACKUP</Text></Button>
           <Button small onPress={async () => await setItem(StorageItem.onboardingState, "DONE")}><Text style={styles.buttonText}>onboardingState = DONE</Text></Button>

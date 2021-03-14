@@ -201,4 +201,14 @@ export const appMigration: IAppMigration[] = [
       }
     },
   },
+  // Version 23
+  {
+    async beforeLnd(db, i) {
+      if (Chain === "mainnet") {
+        if ((await getItemObject<string[]>(StorageItem.neutrinoPeers))[0] === "btcd-mainnet.lightning.computer") {
+          await setItemObject<string[]>(StorageItem.neutrinoPeers, [DEFAULT_NEUTRINO_NODE]);
+        }
+      }
+    },
+  },
 ];
