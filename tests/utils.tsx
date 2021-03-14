@@ -51,6 +51,7 @@ export const initCommonStore = async (waitUntilReady = false) => {
 
   const store = setupStore();
   await store.getActions().initializeApp();
+  store.getActions().settings.setAutopilotEnabled(false);
   await store.getActions().lightning.initialize();
   store.getActions().lightning.setFirstSync(false);
   DeviceEventEmitter.emit("WalletUnlocked", {});

@@ -173,8 +173,10 @@ export const lightning: ILightningModel = {
         actions.setBestBlockheight(Number.parseInt(bestBlockHeight, 10));
       }
       else {
-        log.e("Unable to get best block height from 3rd party");
+        log.e("Unable to get best block height from mempool.space");
       }
+    }).catch((err) => {
+      log.w("mempool.space request failed: " + err.message);
     });
 
     if (fastInit) {
@@ -220,7 +222,7 @@ export const lightning: ILightningModel = {
 
     if (enabled) {
       try {
-        await timeout(1000); // TODO(hsjoberg): why?
+        await timeout(5000);
         const scores = await getNodeScores();
         // console.log(scores);
         const setScores = injections.lndMobile.autopilot.setScores;
