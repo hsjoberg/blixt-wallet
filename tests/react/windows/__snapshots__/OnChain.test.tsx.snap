@@ -851,6 +851,7 @@ exports[`renders correctly 1`] = `
                                     </View>
                                     <View
                                       pointerEvents="box-none"
+                                      style={Object {}}
                                     >
                                       <View
                                         accessibilityElementsHidden={false}

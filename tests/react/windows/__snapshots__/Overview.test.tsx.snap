@@ -790,11 +790,10 @@ exports[`renders correctly 1`] = `
                                         Object {
                                           "color": "#e5eaea",
                                           "fontFamily": "IBMPlexSans-Medium",
-                                          "fontSize": 25.694444444444443,
-                                          "height": undefined,
-                                          "lineHeight": 42,
-                                          "marginBottom": 3,
-                                          "marginTop": 64,
+                                          "fontSize": 24.025974025974026,
+                                          "height": 104,
+                                          "marginBottom": 0,
+                                          "marginTop": 59,
                                           "position": "relative",
                                         }
                                       }
@@ -807,8 +806,8 @@ exports[`renders correctly 1`] = `
                                         Object {
                                           "color": "#e5eaea",
                                           "fontFamily": "IBMPlexSans",
-                                          "fontSize": 12.5,
-                                          "lineHeight": 14.583333333333332,
+                                          "fontSize": 11.688311688311689,
+                                          "lineHeight": 13.636363636363637,
                                           "opacity": 1,
                                         }
                                       }

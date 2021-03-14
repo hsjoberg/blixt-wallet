@@ -35,6 +35,7 @@ export default function About() {
               <Text style={style.textBlock}>
                 <Text style={style.textBold}>Created using:{"\n"}</Text>
                 {software.join("\n")}
+                {IsHermes && "\nHermes"}
                 {"\n"}... and other amazing open source software.
               </Text>
               <Text>

@@ -1,5 +1,4 @@
 import Foundation
-import React
 
 public struct LndMobileToolsError: Error {
   let msg: String

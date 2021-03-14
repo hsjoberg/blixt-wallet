@@ -22,7 +22,7 @@ import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
 import Send from "./Send";
 import { PLATFORM } from "../utils/constants";
-import { fontFactor } from "../utils/scale";
+import { fontFactor, zoomed } from "../utils/scale";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -37,7 +37,7 @@ const HEADER_MAX_HEIGHT = (Platform.select({
   android: 195,
   ios: 195,
   web: 195 - 32,
-}) ?? 195) / (PixelRatio.getFontScale() > 1.2 ? 0.85 : 1);
+}) ?? 195) / (zoomed ? 0.85 : 1);
 const NUM_TRANSACTIONS_PER_LOAD = 25;
 const LOAD_BOTTOM_PADDING = 475;
 
@@ -94,27 +94,18 @@ function Overview({ navigation }: IOverviewProps) {
     extrapolate: "clamp",
   });
 
-  const headerBtcLineHeight = scrollYAnimatedValue.interpolate({
-    inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: [
-      bitcoinUnit === "satoshi" ? 34 : 37 + 5,
-      29,
-    ],
-    extrapolate: "clamp",
-  });
-
   const headerBtcHeight = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [
-      bitcoinUnit === "satoshi" ? 34 : 37 + 10,
-      32,
+      ((bitcoinUnit === "satoshi" ? 34 : 37) + 15) * PixelRatio.getFontScale(),
+      45,
     ],
     extrapolate: "clamp",
   });
 
   const headerBtcMarginTop = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: [11, 0],
+    outputRange: [6, -1],
     extrapolate: "clamp",
   });
 
@@ -249,8 +240,7 @@ function Overview({ navigation }: IOverviewProps) {
               onPress={onPressBalanceHeader}
               style={[headerInfo.btc, {
                 fontSize: headerBtcFontSize,
-                height:  PLATFORM === "android" ? undefined : headerBtcHeight,
-                lineHeight: headerBtcLineHeight,
+                height: PLATFORM === "web" ? undefined : headerBtcHeight,
                 position: "relative",
 
                 marginTop: Animated.add(
@@ -466,8 +456,9 @@ const headerInfo = StyleSheet.create({
   btc: {
     color: blixtTheme.light,
     marginBottom: Platform.select({
-      native: 3,
-      web: 4,
+      android: 4,
+      ios: 0,
+      web: 0,
     }),
     fontFamily: blixtTheme.fontMedium,
   },

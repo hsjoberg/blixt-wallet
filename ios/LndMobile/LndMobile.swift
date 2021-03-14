@@ -1,6 +1,5 @@
 import Foundation
 import Lndmobile
-import React
 
 @objc(LndMobile)
 class LndMobile: RCTEventEmitter {

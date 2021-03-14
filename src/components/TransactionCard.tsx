@@ -10,7 +10,7 @@ import { extractDescription } from "../utils/NameDesc";
 import { IBitcoinUnits, formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import { useStoreState } from "../state/store";
 import { getLightningService } from "../utils/lightning-services";
-import { fontFactor, fontFactorSubtle } from "../utils/scale";
+import { fontFactor, fontFactorSubtle, zoomed } from "../utils/scale";
 
 interface IProps {
   onPress: (id: string) => void;
@@ -77,7 +77,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
           <View style={{ flex: 1 }}>
             <View style={transactionStyle.transactionTop}>
               <Text style={transactionStyle.transactionTopDate}>
-                {formatISO(fromUnixTime(date.toNumber()), PixelRatio.getFontScale() > 1.2)}
+                {formatISO(fromUnixTime(date.toNumber()), zoomed)}
               </Text>
               <Right>
                 <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
@@ -119,20 +119,17 @@ const transactionStyle = StyleSheet.create({
     marginBottom: 8,
   },
   transactionTopDate: {
-    // fontWeight: "bold",
     paddingRight: 4,
-    fontSize: 15 * fontFactor,
+    fontSize: (zoomed ? 12 : 15) * fontFactor,
   },
   transactionTopValuePositive: {
     color: blixtTheme.green,
-    // fontSize: 13,
-    fontSize: 15 * fontFactor,
+    fontSize: (zoomed ? 12 : 15) * fontFactor,
     textAlign: "right",
   },
   transactionTopValueNegative: {
     color: blixtTheme.red,
-    // fontSize: 13,
-    fontSize: 15 * fontFactor,
+    fontSize: (zoomed ? 12 : 15) * fontFactor,
     textAlign: "right",
   },
   avatarContainer: {
@@ -148,7 +145,7 @@ const transactionStyle = StyleSheet.create({
     borderRadius: 22,
   },
   transactionText: {
-    fontSize: 15 * fontFactor,
+    fontSize: 15 * fontFactorSubtle,
     flex: 1,
     marginRight: 0,
     ...Platform.select({
@@ -158,11 +155,11 @@ const transactionStyle = StyleSheet.create({
     }),
   },
   recipientOrSender: {
-    fontSize: 15 * fontFactor,
+    fontSize: 15 * fontFactorSubtle,
     fontWeight: "bold"
   },
   status: {
-    fontSize: 15 * fontFactor,
+    fontSize: 15 * fontFactorSubtle,
     marginLeft: 8,
     marginRight: 0
   },
