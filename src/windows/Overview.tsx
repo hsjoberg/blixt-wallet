@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo } from "react";
-import { Platform, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent, SafeAreaView } from "react-native";
+import { Platform, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent, PixelRatio } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
 import { useNavigation } from "@react-navigation/native";
@@ -22,6 +22,7 @@ import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
 import Send from "./Send";
 import { PLATFORM } from "../utils/constants";
+import { fontFactor } from "../utils/scale";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -32,11 +33,11 @@ const HEADER_MIN_HEIGHT = Platform.select({
   android: (StatusBar.currentHeight ?? 0) + 53,
   ios: getStatusBarHeight(true) + 53,
 }) ?? 53;
-const HEADER_MAX_HEIGHT = Platform.select({
+const HEADER_MAX_HEIGHT = (Platform.select({
   android: 195,
   ios: 195,
   web: 195 - 32,
-}) ?? 195;
+}) ?? 195) / (PixelRatio.getFontScale() > 1.2 ? 0.85 : 1);
 const NUM_TRANSACTIONS_PER_LOAD = 25;
 const LOAD_BOTTOM_PADDING = 475;
 
@@ -86,13 +87,28 @@ function Overview({ navigation }: IOverviewProps) {
 
   const headerBtcFontSize = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: [bitcoinUnit === "satoshi" ? 34 : 37, 27],
+    outputRange: [
+      (bitcoinUnit === "satoshi" ? 34 : 37) * fontFactor,
+      27 * fontFactor
+    ],
     extrapolate: "clamp",
   });
 
   const headerBtcLineHeight = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
-    outputRange: [bitcoinUnit === "satoshi" ? 34 : 37 + 4, 29],
+    outputRange: [
+      bitcoinUnit === "satoshi" ? 34 : 37 + 5,
+      29,
+    ],
+    extrapolate: "clamp",
+  });
+
+  const headerBtcHeight = scrollYAnimatedValue.interpolate({
+    inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
+    outputRange: [
+      bitcoinUnit === "satoshi" ? 34 : 37 + 10,
+      32,
+    ],
     extrapolate: "clamp",
   });
 
@@ -233,7 +249,7 @@ function Overview({ navigation }: IOverviewProps) {
               onPress={onPressBalanceHeader}
               style={[headerInfo.btc, {
                 fontSize: headerBtcFontSize,
-                height: headerBtcFontSize,
+                height:  PLATFORM === "android" ? undefined : headerBtcHeight,
                 lineHeight: headerBtcLineHeight,
                 position: "relative",
 
@@ -245,7 +261,7 @@ function Overview({ navigation }: IOverviewProps) {
                     android: 3,
                     web: -6,
                     ios: 1
-                  }) ?? 0) + 
+                  }) ?? 0) +
                   16
                 ),
               }]}
@@ -457,12 +473,14 @@ const headerInfo = StyleSheet.create({
   },
   fiat: {
     color: blixtTheme.light,
-    fontSize: 18,
+    fontSize: 18 * fontFactor,
+    lineHeight: 21 * fontFactor,
     fontFamily: theme.fontFamily,
   },
   pending: {
     color: "#d6dbdb",
-    fontSize: 18,
+    fontSize: 18 * fontFactor,
+    lineHeight: 21 * fontFactor,
     fontFamily: theme.fontFamily,
   }
 });

@@ -364,7 +364,7 @@ exports[`renders correctly 1`] = `
                                       "paddingBottom": 12,
                                       "paddingLeft": 7,
                                       "paddingRight": 7,
-                                      "paddingTop": 205,
+                                      "paddingTop": 239.41176470588235,
                                     }
                                   }
                                   onScroll={[Function]}
@@ -518,7 +518,7 @@ exports[`renders correctly 1`] = `
                                       "alignItems": "center",
                                       "borderBottomColor": "#1F1F1F",
                                       "borderBottomWidth": 1,
-                                      "height": 195,
+                                      "height": 229.41176470588235,
                                       "justifyContent": "center",
                                       "left": 0,
                                       "position": "absolute",
@@ -790,9 +790,9 @@ exports[`renders correctly 1`] = `
                                         Object {
                                           "color": "#e5eaea",
                                           "fontFamily": "IBMPlexSans-Medium",
-                                          "fontSize": 37,
-                                          "height": 37,
-                                          "lineHeight": 41,
+                                          "fontSize": 25.694444444444443,
+                                          "height": undefined,
+                                          "lineHeight": 42,
                                           "marginBottom": 3,
                                           "marginTop": 64,
                                           "position": "relative",
@@ -807,7 +807,8 @@ exports[`renders correctly 1`] = `
                                         Object {
                                           "color": "#e5eaea",
                                           "fontFamily": "IBMPlexSans",
-                                          "fontSize": 18,
+                                          "fontSize": 12.5,
+                                          "lineHeight": 14.583333333333332,
                                           "opacity": 1,
                                         }
                                       }

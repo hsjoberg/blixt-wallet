@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Image, Platform } from "react-native";
+import { StyleSheet, View, Image, Platform, PixelRatio } from "react-native";
 import { Body, Card, CardItem, Text, Right, Row } from "native-base";
 
 import { fromUnixTime } from "date-fns";
@@ -10,6 +10,7 @@ import { extractDescription } from "../utils/NameDesc";
 import { IBitcoinUnits, formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import { useStoreState } from "../state/store";
 import { getLightningService } from "../utils/lightning-services";
+import { fontFactor, fontFactorSubtle } from "../utils/scale";
 
 interface IProps {
   onPress: (id: string) => void;
@@ -76,7 +77,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
           <View style={{ flex: 1 }}>
             <View style={transactionStyle.transactionTop}>
               <Text style={transactionStyle.transactionTopDate}>
-                {formatISO(fromUnixTime(date.toNumber()))}
+                {formatISO(fromUnixTime(date.toNumber()), PixelRatio.getFontScale() > 1.2)}
               </Text>
               <Right>
                 <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
@@ -93,14 +94,14 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
             <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
               <Text note={true} style={transactionStyle.transactionText}>
                 {recipientOrSender &&
-                  <Text style={{ fontWeight: "bold" }} note={true}>{recipientOrSender}: </Text>
+                  <Text style={transactionStyle.recipientOrSender} note={true}>{recipientOrSender}: </Text>
                 }
                 {description && description.length !== 0
                   ? description
                   : "No description"
                 }
               </Text>
-              <Text note={true} style={{ marginLeft: 8, marginRight: 0 }}>
+              <Text note={true} style={transactionStyle.status}>
                 {status !== "SETTLED" && capitalize(status)}
               </Text>
             </View>
@@ -120,15 +121,18 @@ const transactionStyle = StyleSheet.create({
   transactionTopDate: {
     // fontWeight: "bold",
     paddingRight: 4,
+    fontSize: 15 * fontFactor,
   },
   transactionTopValuePositive: {
     color: blixtTheme.green,
     // fontSize: 13,
+    fontSize: 15 * fontFactor,
     textAlign: "right",
   },
   transactionTopValueNegative: {
     color: blixtTheme.red,
     // fontSize: 13,
+    fontSize: 15 * fontFactor,
     textAlign: "right",
   },
   avatarContainer: {
@@ -144,6 +148,7 @@ const transactionStyle = StyleSheet.create({
     borderRadius: 22,
   },
   transactionText: {
+    fontSize: 15 * fontFactor,
     flex: 1,
     marginRight: 0,
     ...Platform.select({
@@ -151,5 +156,14 @@ const transactionStyle = StyleSheet.create({
         wordBreak: "break-all",
       },
     }),
+  },
+  recipientOrSender: {
+    fontSize: 15 * fontFactor,
+    fontWeight: "bold"
+  },
+  status: {
+    fontSize: 15 * fontFactor,
+    marginLeft: 8,
+    marginRight: 0
   },
 });

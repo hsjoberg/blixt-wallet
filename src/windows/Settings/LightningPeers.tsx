@@ -1,6 +1,6 @@
-import React, { useEffect, useLayoutEffect } from "react";
-import { Body, Button, Card, CardItem, Fab, Icon, Left, Right, Row, Text } from "native-base";
-import { Image, StyleSheet } from "react-native";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Image, StyleSheet, View } from "react-native";
+import { Body, Button, Card, CardItem, Fab, Icon, Left, Right, Row, Text, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import Long from "long";
@@ -10,7 +10,6 @@ import BlixtContent from "../../components/Content";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { NavigationButton } from "../../components/NavigationButton";
 import { identifyService, lightningServices } from "../../utils/lightning-services";
-import { timeout } from "../../utils";
 import { SettingsStackParamList } from "./index";
 import { lnrpc } from "../../../proto/proto";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
@@ -26,13 +25,14 @@ export default function({ navigation }: ISelectListProps) {
   const lightningPeers = useStoreState((store) => store.lightning.lightningPeers);
   const getLightningPeers = useStoreActions((store) => store.lightning.getLightningPeers);
   const disconnectPeer = useStoreActions((store) => store.lightning.disconnectPeer);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log("useeffect");
     if (rpcReady && syncedToChain) {
       (async () => {
-        await timeout(2000)
+        setLoading(true);
         await getLightningPeers();
+        setLoading(false);
       })();
     }
   }, [getLightningPeers, rpcReady, syncedToChain]);
@@ -58,139 +58,148 @@ export default function({ navigation }: ISelectListProps) {
 
   return (
     <Container>
-      <BlixtContent style={{ paddingBottom: 25 }}>
-        {lightningPeers.map((peer) => {
-          const serviceKey = identifyService(peer.peer.pubKey, "", null);
-          let service;
-          if (serviceKey && lightningServices[serviceKey]) {
-            service = lightningServices[serviceKey];
-          }
+      {(loading && lightningPeers.length === 0) &&
+        <View style={style.loadingContainer}>
+          <Spinner color={blixtTheme.light} size={55} />
+        </View>
+      }
+      {!loading &&
+        <>
+          <BlixtContent style={{ paddingBottom: 25 }}>
+            {lightningPeers.map((peer) => {
+              const serviceKey = identifyService(peer.peer.pubKey, "", null);
+              let service;
+              if (serviceKey && lightningServices[serviceKey]) {
+                service = lightningServices[serviceKey];
+              }
 
-          return (
-            <Card style={style.card} key={peer.peer.pubKey}>
-              <CardItem>
-                <Body>
-                  <Row style={{ width: "100%" }}>
-                    <Left style={{ alignSelf: "flex-start" }}>
-                      <Text>Node alias</Text>
-                    </Left>
-                    <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
-                      <Text style={style.cardDataText}>
-                        {peer.node?.alias}
-                      </Text>
-                      {service &&
-                        <Image
-                          source={{ uri: service.image }}
-                          style={style.nodeImage}
-                          width={28}
-                          height={28}
-                        />
-                      }
-                    </Right>
-                  </Row>
-                  <Row style={{ width: "100%" }}>
-                    <Left style={{ alignSelf: "flex-start" }}>
-                      <Text>Node public key</Text>
-                    </Left>
-                    <Right>
-                      <Text style={{ fontSize: 9, textAlign:"right" }}>{peer.peer.pubKey}</Text>
-                    </Right>
-                  </Row>
-                  <Row style={{ width: "100%" }}>
-                    <Left style={{ alignSelf: "flex-start" }}>
-                      <Text>Node address</Text>
-                    </Left>
-                    <Right>
-                    <Text style={style.cardDataText}>{peer.peer.address}</Text>
-                    </Right>
-                  </Row>
-                  <Row style={{ width: "100%" }}>
-                    <Left style={{ alignSelf: "flex-start" }}>
-                      <Text>Data</Text>
-                    </Left>
-                    <Right>
-                      <Text style={style.cardDataText}>
-                        {Long.fromValue(peer.peer.bytesSent).toString()} bytes sent{"\n"}
-                        {Long.fromValue(peer.peer.bytesSent).toString()} byes received
-                      </Text>
-                    </Right>
-                  </Row>
-                  <Row style={{ width: "100%" }}>
-                    <Left style={{ alignSelf: "flex-start" }}>
-                      <Text>Transfer</Text>
-                    </Left>
-                    <Right>
-                      <Text style={style.cardDataText}>
-                        {Long.fromValue(peer.peer.satSent).toString()} sat sent{"\n"}
-                        {Long.fromValue(peer.peer.satRecv).toString()} sat received
-                      </Text>
-                    </Right>
-                  </Row>
-                  <Row style={{ width: "100%" }}>
-                    <Left style={{ alignSelf: "flex-start" }}>
-                      <Text>Inbound</Text>
-                    </Left>
-                    <Right>
-                      <Text style={style.cardDataText}>
-                        {peer.peer.inbound ? "true" : "false"}
-                      </Text>
-                    </Right>
-                  </Row>
-                  {/* <Row style={{ width: "100%" }}>
-                    <Left style={{ alignSelf: "flex-start" }}>
-                      <Text>Ping time</Text>
-                    </Left>
-                    <Right>
-                      <Text style={style.cardDataText}>
-                        {Long.fromValue(peer.peer.pingTime).divtoString()}
-                      </Text>
-                    </Right>
-                  </Row> */}
-                  <Row style={{ width: "100%" }}>
-                    <Left style={{ alignSelf: "flex-start" }}>
-                      <Text>Sync type</Text>
-                    </Left>
-                    <Right>
-                      <Text style={style.cardDataText}>
-                        {getPeerSyncType(peer.peer.syncType)}
-                      </Text>
-                    </Right>
-                  </Row>
-                  {peer.peer.errors.length > 0 &&
-                    <Row style={{ width: "100%" }}>
-                      <Left style={{ alignSelf: "flex-start" }}>
-                        <Text>Errors</Text>
-                      </Left>
-                      <Right>
-                        <Text style={style.cardDataText}>
-                          {(peer.peer.errors.map((error, i) => (
-                            <Text key={`${i}${error.error}`}>
-                              {error.error}{"\n"}
+              return (
+                <Card style={style.card} key={peer.peer.pubKey}>
+                  <CardItem>
+                    <Body>
+                      <Row style={{ width: "100%" }}>
+                        <Left style={{ alignSelf: "flex-start" }}>
+                          <Text>Node alias</Text>
+                        </Left>
+                        <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
+                          <Text style={style.cardDataText}>
+                            {peer.node?.alias}
+                          </Text>
+                          {service &&
+                            <Image
+                              source={{ uri: service.image }}
+                              style={style.nodeImage}
+                              width={28}
+                              height={28}
+                            />
+                          }
+                        </Right>
+                      </Row>
+                      <Row style={{ width: "100%" }}>
+                        <Left style={{ alignSelf: "flex-start" }}>
+                          <Text>Node public key</Text>
+                        </Left>
+                        <Right>
+                          <Text style={{ fontSize: 9, textAlign:"right" }}>{peer.peer.pubKey}</Text>
+                        </Right>
+                      </Row>
+                      <Row style={{ width: "100%" }}>
+                        <Left style={{ alignSelf: "flex-start" }}>
+                          <Text>Node address</Text>
+                        </Left>
+                        <Right>
+                        <Text style={style.cardDataText}>{peer.peer.address}</Text>
+                        </Right>
+                      </Row>
+                      <Row style={{ width: "100%" }}>
+                        <Left style={{ alignSelf: "flex-start" }}>
+                          <Text>Data</Text>
+                        </Left>
+                        <Right>
+                          <Text style={style.cardDataText}>
+                            {Long.fromValue(peer.peer.bytesSent).toString()} bytes sent{"\n"}
+                            {Long.fromValue(peer.peer.bytesSent).toString()} byes received
+                          </Text>
+                        </Right>
+                      </Row>
+                      <Row style={{ width: "100%" }}>
+                        <Left style={{ alignSelf: "flex-start" }}>
+                          <Text>Transfer</Text>
+                        </Left>
+                        <Right>
+                          <Text style={style.cardDataText}>
+                            {Long.fromValue(peer.peer.satSent).toString()} sat sent{"\n"}
+                            {Long.fromValue(peer.peer.satRecv).toString()} sat received
+                          </Text>
+                        </Right>
+                      </Row>
+                      <Row style={{ width: "100%" }}>
+                        <Left style={{ alignSelf: "flex-start" }}>
+                          <Text>Inbound</Text>
+                        </Left>
+                        <Right>
+                          <Text style={style.cardDataText}>
+                            {peer.peer.inbound ? "true" : "false"}
+                          </Text>
+                        </Right>
+                      </Row>
+                      {/* <Row style={{ width: "100%" }}>
+                        <Left style={{ alignSelf: "flex-start" }}>
+                          <Text>Ping time</Text>
+                        </Left>
+                        <Right>
+                          <Text style={style.cardDataText}>
+                            {Long.fromValue(peer.peer.pingTime).divtoString()}
+                          </Text>
+                        </Right>
+                      </Row> */}
+                      <Row style={{ width: "100%" }}>
+                        <Left style={{ alignSelf: "flex-start" }}>
+                          <Text>Sync type</Text>
+                        </Left>
+                        <Right>
+                          <Text style={style.cardDataText}>
+                            {getPeerSyncType(peer.peer.syncType)}
+                          </Text>
+                        </Right>
+                      </Row>
+                      {peer.peer.errors.length > 0 &&
+                        <Row style={{ width: "100%" }}>
+                          <Left style={{ alignSelf: "flex-start" }}>
+                            <Text>Errors</Text>
+                          </Left>
+                          <Right>
+                            <Text style={style.cardDataText}>
+                              {(peer.peer.errors.map((error, i) => (
+                                <Text key={`${i}${error.error}`}>
+                                  {error.error}{"\n"}
+                                </Text>
+                              )))}
                             </Text>
-                          )))}
-                        </Text>
-                      </Right>
-                    </Row>
-                  }
-                  <Row style={{ width: "100%" }}>
-                    <Left>
-                      <Button style={{ marginTop: 14 }} primary={true} small={true} onPress={() => close(peer.peer.pubKey)}>
-                        <Text style={{fontSize: 9}}>Disconnect peer</Text>
-                      </Button>
-                    </Left>
-                  </Row>
-                </Body>
-              </CardItem>
-            </Card>
-          );
-        })}
-      </BlixtContent>
-      <Fab
-        style={style.fab}
-        position="bottomRight"
-        onPress={() => navigation.navigate("ConnectToLightningPeer")}>
-        <Icon type="Entypo" name="plus" style={style.fabConnectToPerIcon} />
-      </Fab>
+                          </Right>
+                        </Row>
+                      }
+                      <Row style={{ width: "100%" }}>
+                        <Left>
+                          <Button style={{ marginTop: 14 }} primary={true} small={true} onPress={() => close(peer.peer.pubKey)}>
+                            <Text style={{fontSize: 9}}>Disconnect peer</Text>
+                          </Button>
+                        </Left>
+                      </Row>
+                    </Body>
+                  </CardItem>
+                </Card>
+              );
+            })}
+          </BlixtContent>
+          <Fab
+            style={style.fab}
+            position="bottomRight"
+            onPress={() => navigation.navigate("ConnectToLightningPeer")}>
+            <Icon type="Entypo" name="plus" style={style.fabConnectToPerIcon} />
+          </Fab>
+        </>
+      }
     </Container>
   )
 }
@@ -214,6 +223,12 @@ const style = StyleSheet.create({
   },
   fabConnectToPerIcon: {
     color: blixtTheme.light,
+  },
+  loadingContainer: {
+    flex: 1,
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 })
 

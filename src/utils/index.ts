@@ -8,7 +8,8 @@ import * as base64 from "base64-js";
 
 export const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 
-export const formatISO = (date: Date) => format(date, "yyyy-MM-dd HH:mm");
+export const formatISO = (date: Date, omitTime: boolean = false) =>
+  format(date, "yyyy-MM-dd" + (omitTime ? "" : " HH:mm"));
 
 /**
  * Used for parsing bech32 Bitcoin addresses + URI
