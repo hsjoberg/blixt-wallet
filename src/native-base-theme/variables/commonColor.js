@@ -137,7 +137,7 @@ export default {
   // CheckboxRadius: platform === PLATFORM.IOS ? 13 : 0,
   // CheckboxBorderWidth: platform === PLATFORM.IOS ? 1 : 2,
   // CheckboxPaddingLeft: platform === PLATFORM.IOS ? 4 : 2,
-  CheckboxPaddingBottom: platform === PLATFORM.IOS ? 0 : 5,
+  CheckboxPaddingBottom: platform === PLATFORM.IOS ? 0 : 0,
   CheckboxIconSize: platform === PLATFORM.IOS ? 21 : 16,
   // CheckboxIconMarginTop: platform === PLATFORM.IOS ? undefined : 1,
   // CheckboxFontSize: platform === PLATFORM.IOS ? 23 / 0.9 : 17,
@@ -337,7 +337,7 @@ export default {
   CheckboxBorderWidth: platform === "ios" ? 1 : 1,
   CheckboxPaddingLeft: platform === "ios" ? 4 : 4,
 
-  CheckboxIconMarginTop: platform === "ios" ? -1 : 1.5,
+  CheckboxIconMarginTop: platform === "ios" ? -1 : 1.2,
   CheckboxFontSize: platform === "ios" ? 16 : 16,
   checkboxBgColor: blixtTheme.primary,
 
