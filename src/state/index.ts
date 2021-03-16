@@ -48,7 +48,7 @@ export interface ICreateWalletPayload {
 }
 
 export interface IStoreModel {
-  setupDemo: Thunk<IStoreModel, void, any, IStoreModel>;
+  setupDemo: Thunk<IStoreModel, { changeDb: boolean }, any, IStoreModel>;
   initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   checkAppVersionMigration: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
@@ -102,9 +102,9 @@ export interface IStoreModel {
 }
 
 export const model: IStoreModel = {
-  setupDemo: thunk(async (_, _2, { getState, dispatch }) => {
+  setupDemo: thunk(async (_, payload, { getState, dispatch }) => {
     const db = getState().db;
-    await SetupBlixtDemo(db, dispatch);
+    await SetupBlixtDemo(db, dispatch, payload.changeDb);
   }),
 
   initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
@@ -134,7 +134,7 @@ export const model: IStoreModel = {
       await actions.writeConfig();
 
       if (PLATFORM === "web") {
-        await dispatch.setupDemo();
+        await dispatch.setupDemo({ changeDb: true });
         await dispatch.generateSeed();
         await dispatch.createWallet();
       }

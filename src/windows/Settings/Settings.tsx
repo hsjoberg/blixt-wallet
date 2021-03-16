@@ -1037,7 +1037,7 @@ Do you wish to proceed?`;
                 <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="typewriter" /></Left>
                 <Body><Text>Write config</Text></Body>
               </ListItem>
-              <ListItem style={style.listItem} button={true} icon={true} onPress={setupDemo}>
+              <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: false })}>
                 <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
                 <Body>
                   <Text>Activate Demo Mode</Text>

@@ -1,15 +1,14 @@
-import { Actions, Dispatch } from "easy-peasy";
+import { Dispatch } from "easy-peasy";
 import Long from "long";
 import { IStoreModel } from "../state";
-import { useStoreActions } from "../state/store";
 import { setItem, StorageItem } from "../storage/app";
-import { clearTransactions, createTransaction } from "../storage/database/transaction";
+import { createTransaction, ITransaction } from "../storage/database/transaction";
 import { ILightningServices } from "./lightning-services";
 
 export default async function SetupBlixtDemo(
   db: any,
-  dispatch: Dispatch<IStoreModel>
-
+  dispatch: Dispatch<IStoreModel>,
+  createDbTransactions: boolean = false,
 ) {
   interface IDemoInvoice {
     description: string;
@@ -21,7 +20,7 @@ export default async function SetupBlixtDemo(
   }
   const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
     for (const invoice of invoices) {
-      dispatch.transaction.setTransactions(invoices.map((invoice) => ({
+      const transaction: ITransaction = {
         date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
         description: invoice.description,
         remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
@@ -49,11 +48,17 @@ export default async function SetupBlixtDemo(
         preimage: new Uint8Array([0,0]),
         lnurlPayResponse: null,
         identifiedService: invoice.lightningService,
-      })));
+      };
+      if (createDbTransactions) {
+        await createTransaction(db, transaction);
+      } else {
+        dispatch.transaction.addTransaction(transaction);
+      }
     }
   }
 
-  await clearTransactions(db!);
+  dispatch.transaction.setTransactions([]);
+
   await createDemoTransactions([{
     value: 150,
     description: "Read: Lightning Network Trivia",
@@ -114,7 +119,10 @@ export default async function SetupBlixtDemo(
     website: "lightningspin.com",
     lightningService: "lightningspin",
   }]);
-  await dispatch.transaction.getTransactions();
+
+  if (createDbTransactions) {
+    await dispatch.transaction.getTransactions();
+  }
 
   await setItem(StorageItem.onboardingState, "DONE");
   dispatch.setOnboardingState("DONE");

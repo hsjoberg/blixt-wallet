@@ -664,7 +664,9 @@ exports[`renders correctly 1`] = `
                                                         "fontFamily": "System",
                                                         "fontSize": 16,
                                                       },
-                                                      Object {},
+                                                      Object {
+                                                        "fontSize": 7.5,
+                                                      },
                                                     ]
                                                   }
                                                   testID="BITCOIN_ADDRESS"
@@ -706,7 +708,7 @@ exports[`renders correctly 1`] = `
                                                             "fontSize": 30,
                                                           },
                                                           Object {
-                                                            "fontSize": 18,
+                                                            "fontSize": 9,
                                                           },
                                                         ],
                                                         Object {

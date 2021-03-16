@@ -97,7 +97,7 @@ function Overview({ navigation }: IOverviewProps) {
   const headerBtcHeight = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [
-      ((bitcoinUnit === "satoshi" ? 34 : 37) + 15) * PixelRatio.getFontScale(),
+      (bitcoinUnit === "satoshi" ? 37 : 40) * 1.3 * Math.min(PixelRatio.getFontScale(), 1.4),
       45,
     ],
     extrapolate: "clamp",
@@ -120,7 +120,7 @@ function Overview({ navigation }: IOverviewProps) {
     ? (
         <RefreshControl
           title="Refreshing"
-          progressViewOffset={183}
+          progressViewOffset={183 / (zoomed ? 0.85 : 1)}
           refreshing={refreshing}
           colors={[blixtTheme.light]}
           progressBackgroundColor={blixtTheme.gray}
@@ -457,7 +457,7 @@ const headerInfo = StyleSheet.create({
     color: blixtTheme.light,
     marginBottom: Platform.select({
       android: 4,
-      ios: 0,
+      ios: -1,
       web: 0,
     }),
     fontFamily: blixtTheme.fontMedium,

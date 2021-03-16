@@ -2,6 +2,7 @@ import React from "react";
 import { Text, View, Icon } from "native-base";
 import { StyleSheet } from "react-native";
 import { smallScreen } from "../utils/device";
+import { fontFactorNormalized } from "../utils/scale";
 
 export interface ICopyAddressProps {
   onPress: () => void;
@@ -35,9 +36,10 @@ const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginRight: smallScreen ? 10 : 14,
-    marginLeft: smallScreen? 10 : 14,
+    marginLeft: smallScreen ? 10 : 14,
   },
   text: {
+    fontSize: 15 * fontFactorNormalized,
   },
   iconText: {
     width: 19,
@@ -45,6 +47,6 @@ const style = StyleSheet.create({
     marginLeft: 4,
   },
   icon: {
-    fontSize: 18,
+    fontSize: 18 * fontFactorNormalized,
   },
 });

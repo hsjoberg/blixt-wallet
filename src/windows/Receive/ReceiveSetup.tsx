@@ -218,7 +218,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     component: (
       <Input
         onChangeText={setPayer}
-        placeholder="For bookkeeping (optional)"
+        placeholder="For bookkeeping"
         onFocus={() => setMathPadVisible(false)}
         value={payer}
       />
@@ -230,7 +230,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
       <Input
         testID="input-message"
         onChangeText={setDescription}
-        placeholder="Message to payer (optional)"
+        placeholder="Message to payer"
         onFocus={() => setMathPadVisible(false)}
         value={description}
       />

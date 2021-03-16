@@ -377,7 +377,7 @@ exports[`renders correctly 1`] = `
                                       }
                                       onRefresh={[Function]}
                                       progressBackgroundColor="#232323"
-                                      progressViewOffset={183}
+                                      progressViewOffset={215.29411764705884}
                                       refreshing={false}
                                       title="Refreshing"
                                     />
@@ -791,8 +791,8 @@ exports[`renders correctly 1`] = `
                                           "color": "#e5eaea",
                                           "fontFamily": "IBMPlexSans-Medium",
                                           "fontSize": 24.025974025974026,
-                                          "height": 104,
-                                          "marginBottom": 0,
+                                          "height": 72.8,
+                                          "marginBottom": -1,
                                           "marginTop": 59,
                                           "position": "relative",
                                         }
