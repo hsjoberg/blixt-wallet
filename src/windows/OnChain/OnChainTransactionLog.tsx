@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect } from "react";
-import { FlatList, TouchableWithoutFeedback } from "react-native";
-import { Body, Header, Container, Right, Left, Button, Title, Icon } from "native-base";
+import { FlatList } from "react-native";
+import { Container, Icon } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { OnChainStackParamList } from "./index";
@@ -20,7 +20,7 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
   useEffect(() => {
     if (rpcReady) {
       (async () => {
-        await getTransactions(undefined);
+        await getTransactions();
       })();
     }
   }, [getTransactions, rpcReady]);
@@ -46,7 +46,7 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
   return (
     <Container>
       <FlatList
-        initialNumToRender={12}
+        initialNumToRender={13}
         data={transactions.sort((tx1, tx2) => tx2.timeStamp!.toNumber() - tx1.timeStamp!.toNumber())}
         renderItem={({ item: transaction }) => (
           <OnChainTransactionItem

@@ -31,10 +31,10 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
 
-  const close = () => {
+  const close = (force: boolean = false) => {
     Alert.alert(
       "Close channel",
-      `Are you sure you want to close the channel${alias ? ` with ${alias}` : ""}?`,
+      `Are you sure you want to${force ? " force" : ""} close the channel${alias ? ` with ${alias}` : ""}?`,
       [{
         style: "cancel",
         text: "No",
@@ -45,6 +45,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           const result = await closeChannel({
             fundingTx: channel.channelPoint!.split(":")[0],
             outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
+            force,
           });
           console.log(result);
 
@@ -296,7 +297,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           }
           <Row style={{ width: "100%" }}>
             <Left style={{ flexDirection: "row" }}>
-              <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={close}>
+              <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => close(false)} onLongPress={() => close(true)}>
                 <Text style={{ fontSize: 8 }}>Close channel</Text>
               </Button>
               <Button style={{ marginTop: 14, marginLeft: 10 }} small={true} onPress={onPressViewInExplorer}>

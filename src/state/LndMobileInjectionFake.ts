@@ -95,7 +95,7 @@ export interface ILndMobileInjections {
   };
   channel: {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;
-    closeChannel: (fundingTxId: string, outputIndex: number) => Promise<string>;
+    closeChannel: (fundingTxId: string, outputIndex: number, force: boolean) => Promise<string>;
     listChannels: () => Promise<lnrpc.ListChannelsResponse>;
     openChannel: (pubkey: string, amount: number, privateChannel: boolean) => Promise<lnrpc.ChannelPoint>;
     pendingChannels: () => Promise<lnrpc.PendingChannelsResponse>;

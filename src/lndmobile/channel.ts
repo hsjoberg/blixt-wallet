@@ -25,7 +25,7 @@ export const openChannel = async (pubkey: string, amount: number, privateChannel
  * @throws
  * TODO implement
  */
-export const closeChannel = async (fundingTxId: string, outputIndex: number): Promise<string> => {
+export const closeChannel = async (fundingTxId: string, outputIndex: number, force: boolean): Promise<string> => {
   const response = await sendStreamCommand<lnrpc.ICloseChannelRequest, lnrpc.CloseChannelRequest>({
     request: lnrpc.CloseChannelRequest,
     method: "CloseChannel",
@@ -34,6 +34,7 @@ export const closeChannel = async (fundingTxId: string, outputIndex: number): Pr
         fundingTxidStr: fundingTxId,
         outputIndex,
       },
+      force,
     },
   }, false);
   return response;

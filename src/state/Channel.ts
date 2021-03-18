@@ -23,6 +23,7 @@ export interface IOpenChannelPayload {
 export interface ICloseChannelPayload {
   fundingTx: string;
   outputIndex: number;
+  force: boolean;
 }
 
 export interface ISetPendingChannelsPayload {
@@ -49,7 +50,7 @@ export interface IChannelModel {
   getChannelEvents: Thunk<IChannelModel, void, any, IStoreModel>;
   getBalance: Thunk<IChannelModel, undefined, IStoreInjections>;
   connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload, IStoreInjections, IStoreModel>;
-  closeChannel: Thunk<IChannelModel, ICloseChannelPayload, any, IStoreModel>;
+  closeChannel: Thunk<IChannelModel, ICloseChannelPayload, IStoreInjections, IStoreModel>;
   abandonChannel: Thunk<IChannelModel, ICloseChannelPayload>;
   exportChannelsBackup: Thunk<IChannelModel, void, IStoreInjections>;
 
@@ -265,9 +266,9 @@ export const channel: IChannelModel = {
     return result;
   }),
 
-  closeChannel: thunk(async (_, { fundingTx, outputIndex }, { injections, getStoreActions }) => {
+  closeChannel: thunk(async (_, { fundingTx, outputIndex, force }, { injections, getStoreActions }) => {
     const closeChannel = injections.lndMobile.channel.closeChannel;
-    const result = await closeChannel(fundingTx, outputIndex);
+    const result = await closeChannel(fundingTx, outputIndex, force);
     getStoreActions().onChain.addToTransactionNotificationBlacklist(fundingTx);
     log.d("closeChannel", [result]);
     return result;
