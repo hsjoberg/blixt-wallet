@@ -129,6 +129,7 @@ export const lightning: ILightningModel = {
               () => debugShowStartupInfo && toast("UnlockWallet time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000)
             ).catch((e: any) => {
               debugShowStartupInfo && toast("Got error from unlockWallet: " + e.message, undefined, "danger");
+              actions.setRPCServerReady(true);
               actions.setupStores();
               actions.waitForChainSync().then(
                 async () => {
