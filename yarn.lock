@@ -3290,10 +3290,10 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@26.0.20":
-  version "26.0.20"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.20.tgz#cd2f2702ecf69e86b586e1f5223a60e454056307"
-  integrity sha512-9zi2Y+5USJRxd0FsahERhBwlcvFh6D2GLQnY2FH2BzK8J9s9omvNHIbvABwIluXa0fD8XVKMLTO0aOEuUfACAA==
+"@types/jest@^26.0.21":
+  version "26.0.21"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.21.tgz#3a73c2731e7e4f0fbaea56ce7ff8c79cf812bd24"
+  integrity sha512-ab9TyM/69yg7eew9eOwKMUmvIZAKEGZYlq/dhe5/0IMUd/QLJv5ldRMdddSn+u22N13FP3s5jYyktxuBwY0kDA==
   dependencies:
     jest-diff "^26.0.0"
     pretty-format "^26.0.0"
@@ -3343,10 +3343,10 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
-"@types/react-native-push-notification@7.0.1":
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-7.0.1.tgz#5bce2dd0ed3868165022586af6168a61ec01d6da"
-  integrity sha512-Ewbjnj6RwEg4UsBmlRPGcZgOdQgkiHnv5CgN+7UBKx49mosrZax/HMK75L2KHw8HbGBbkHSWiwvpRp2Ld8VhXQ==
+"@types/react-native-push-notification@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-7.2.0.tgz#10ed45e95fa6f27e82099c09ef820def0b4c19fb"
+  integrity sha512-4kErWFa0qit8qzPB6Nbp7kG9NiwDyKu5XxrNlrCIc1zoFxu48ABeofVvNCKv2RtlmFvCftibtykeysRZCeuT8A==
 
 "@types/react-native-sqlite-storage@5.0.0":
   version "5.0.0"
@@ -3368,10 +3368,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-native@0.63.51":
-  version "0.63.51"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.63.51.tgz#2fc45ab934801770cdbbcdc6ae5cd85c0e2a2a02"
-  integrity sha512-lpJdBF7T/nZigbequu7p4NptZmTUKq8R7vRADkk00H8DR5igspL10B1F58MvNTu8o/TyqzPISyWoRARqaIy+mw==
+"@types/react-native@^0.63.52":
+  version "0.63.52"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.63.52.tgz#449beb4a413ec0f2c172cbf676a95f5b0952adf4"
+  integrity sha512-sBXvvtJaIUSXQLDh9NZitx1KHkKUdBLZy34lFKJaIXtpHIh5OEbBXeyUTFBtFwjk/RD0tneAtUqsdhheZRzAzw==
   dependencies:
     "@types/react" "*"
 
@@ -10032,10 +10032,10 @@ react-native-dialogs@1.1.1:
   resolved "https://registry.yarnpkg.com/react-native-dialogs/-/react-native-dialogs-1.1.1.tgz"
   integrity sha512-JduVYRXvLTT4k4VfXuKt3HF2/fixsR1EDXkvNf8fJwxKZUs2kzs1E0EtgiAx4IgYMTOewLPVtzTVfiv0GWeHuA==
 
-react-native-document-picker@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-5.0.1.tgz#382ecea8c5dbb83c2fd33fb63f30b079adab2d2a"
-  integrity sha512-HDYAkwFoYzHeXR+cIfJi4/JIuE4DHduOh9eoKIEhCvQjXUQ0xvS6qX9x0AXa+b0FF8iUfFKY2DqFhw9gNcIhUg==
+react-native-document-picker@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-5.0.2.tgz#be5654544055ff6498da5585034c36df91435577"
+  integrity sha512-AGhvDWvuc4cSH8MKOO8HK9Fe4E2533aru1X8sgU5NN/BW1uAY1POUCurcNmlXJFobCHTGi0F+b3Er7glD3yicQ==
 
 react-native-drawer@2.5.1:
   version "2.5.1"
@@ -10144,10 +10144,10 @@ react-native-permissions@3.0.1:
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.0.1.tgz#7273f7d07701974ef50bf77bb052881846a3bb91"
   integrity sha512-loCoNEeBeLsrvITZmrkuCUEMFiuwhKuFvkWbC5Imco4bj2hUW7BVI29i8QyxkC53ydRfSR9OtbR3KQIyghWiNQ==
 
-react-native-push-notification@7.2.2:
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-7.2.2.tgz#19cd567744616d0347097eea5ce9aa49dec4a975"
-  integrity sha512-c/APy4vvhzYBh5ysGn/hMxsWMeOI7rxHeMz40gebo3UyTs39SlSJuG7awU4Q/ezNQ8jNye2+CudG8TVzyzdo1A==
+react-native-push-notification@^7.2.3:
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-7.2.3.tgz#e5efa0d48bfa27ad0cab538ba859b5f2cd21b684"
+  integrity sha512-MWwzGXGD22vQ35roDWBQ4EJl1jS4kuuAAdxqe2C88gULgzT6rQkR9wszl5b5K+hIWqve50qg4zJoSgarr//2KA==
 
 react-native-qrcode-svg@6.1.1:
   version "6.1.1"
@@ -10307,10 +10307,10 @@ react-native-webln@0.1.11:
   resolved "https://registry.yarnpkg.com/react-native-webln/-/react-native-webln-0.1.11.tgz#e7aa6393cc9b424b4ee889e354e80111d6e86b32"
   integrity sha512-nHk6YG6RIkQLev4r7W/+dkjm57Y5R7fO57Ay/yLMQ+r3g8wSSEQP4PsJb2PmqKUomHVrODhgVJEVtu6OYR2CAg==
 
-react-native-webview@^11.2.4:
-  version "11.2.4"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.2.4.tgz#4615648cea9d928e5d59dc5d8b031167841b8dd6"
-  integrity sha512-8C0HHNVhM3GlhtC30fO+sbH5J83zTRdi5qzdP2IvDV9tS0S0ZNPi97GJHjcIRc4dAtIoyn6NHdN5xREKGQZU9w==
+react-native-webview@^11.3.1:
+  version "11.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.3.1.tgz#acc87db56eca568fd561edecbd990e8252b882a5"
+  integrity sha512-qHvD2DVbUVSuRLU33RU4LbfISoJ3q5PWj4fuDcMgEYaEnlvOiOQqR/x5t9z4kdVZ83T+WG8ktp19F2uTCaOKRg==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
@@ -11409,10 +11409,10 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-sql.js@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/sql.js/-/sql.js-1.4.0.tgz#f6987c3c5e5b3d329034cc7d7f81940f89835db1"
-  integrity sha512-lm9x8M6O1kXjSieP/Z8Zayh+ksHN78TYX7pSh0UR1GjSVx5Kp1r+bo+l4s44rcpb0002i25f+QC4FYtfqr3lYQ==
+sql.js@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/sql.js/-/sql.js-1.5.0.tgz#6625c3e41115194f6bfab80a5e53647f1378c3fb"
+  integrity sha512-Qqr6HgX/hCDpLFWdN0BNoNpYQ2c1tOl1c3HGI0cshjaFSAWszKICuLZ9CyFUvRFPpEGW8RzHzwuXWWvXVGTKBg==
 
 sshpk@^1.7.0:
   version "1.16.1"
@@ -12541,10 +12541,10 @@ webpack-sources@^2.1.1:
     source-list-map "^2.0.1"
     source-map "^0.6.1"
 
-webpack@^5.25.1:
-  version "5.25.1"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.25.1.tgz#d3564440ed2569253fa45864405a313916bef6f6"
-  integrity sha512-dzFTJwehoLZkeHUkvMSwAgVdGL+PerfX0mke9tOWjJs4OzFctkxCqD8Zj5J387jLkC4gNqSin0/EurhH28boCg==
+webpack@^5.26.3:
+  version "5.26.3"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.26.3.tgz#bafd439abac08fbb82657ec855d038743b725ab8"
+  integrity sha512-z/F2lt2N1fZqaud1B4SzjL3OW03eULThbBXQ2OX4LSrZX4N9k1A5d0Rje3zS2g887DTWyAV0KGqEf64ois2dhg==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.46"
