@@ -6,6 +6,7 @@ import { IStoreModel } from "./index";
 
 import logger from "./../utils/log";
 import { ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID, ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_NAME, PLATFORM } from "../utils/constants";
+import { localNotification } from "../utils/push-notification";
 const log = logger("NotificationManager");
 
 interface ILocalNotificationPayload {
@@ -63,14 +64,10 @@ export const notificationManager: INotificationManagerModel = {
 
   localNotification: thunk((_, { message, importance }, { getStoreState }) => {
     if (getStoreState().settings.pushNotificationsEnabled) {
-      PushNotification.localNotification({
+      localNotification(
         message,
-        playSound: true,
-        vibrate: false,
-        priority: "default",
-        importance: importance ?? "default",
-        autoCancel: true,
-      });
+        importance ?? "default"
+      );
     }
   }),
 };
