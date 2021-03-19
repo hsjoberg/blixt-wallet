@@ -177,6 +177,7 @@ export function identifyService(pubkey: string | null, description: string, webs
     "024d2387409269f3b79e2708bb39b895c9f4b6a8322153af54eba487d4993bf60f", // LND-38
     "03dab87ff8635982815c4567eb58af48f9944d11c56beb12b91e1049aaea06e187", // LND-41
     "0311cad0edf4ac67298805cf4407d94358ca60cd44f2e360856f3b1c088bcd4782", // LND-42
+    "0283ca0b7eca022bcf8f32aa418e5ff2bd375806faba40409cdc8e48c2b32ef725", // LNBIG.com [billing]
   ].includes(pubkey ?? "")) {
     return "lnbig";
   }
