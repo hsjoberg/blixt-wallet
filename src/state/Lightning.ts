@@ -168,7 +168,10 @@ export const lightning: ILightningModel = {
     }
 
     // tslint:disable-next-line: no-floating-promises
-    fetch("https://mempool.space/api/blocks/tip/height").then(async (result) => {
+    fetch(Chain === "mainnet"
+      ? "https://mempool.space/api/blocks/tip/height"
+      : "https://mempool.space/testnet/api/blocks/tip/height"
+    ).then(async (result) => {
       if (result.ok) {
         const bestBlockHeight = await result.text();
         actions.setBestBlockheight(Number.parseInt(bestBlockHeight, 10));
