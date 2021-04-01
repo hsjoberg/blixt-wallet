@@ -73,6 +73,16 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
             <MetaData title="Confirmations" data={(transaction.numConfirmations?.toString()) ?? "Unknown"} />
             <MetaData title="Block height" data={(transaction.blockHeight?.toString()) ?? "Unknown"} />
             <MetaData title="Block hash" data={(transaction.blockHash?.toString()) ?? "Unknown"} />
+            <Text
+              style={style.detailText}
+              onPress={() => {
+                Clipboard.setString(transaction.rawTxHex?.toString() ?? "Unknown");
+                toast("Copied to clipboard.", undefined, "warning");
+              }}
+            >
+              <Text style={{ fontWeight: "bold" }}>Raw tx hex:{"\n"}</Text>
+              Press to copy
+            </Text>
           </Body>
         </CardItem>
       </Card>
