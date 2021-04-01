@@ -80,3 +80,7 @@ ios/Lndmobile.framework
 
 # Web
 dist
+
+# service-image
+contrib/service-image/webp
+contrib/service-image/code
