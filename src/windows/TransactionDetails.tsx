@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Share, Platform } from "react-native";
+import { StyleSheet, Share, Platform, LayoutAnimation } from "react-native";
 import DialogAndroid from "react-native-dialogs";
 import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
@@ -140,28 +140,28 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                 <H1 style={style.header}>
                   Transaction
                 </H1>
-                <View style={{ flexDirection: "row" }}>
-                  <Button small style={style.actionBarButton} onPress={onPressSetNote}>
-                    <Text style={style.actionBarButtonText}>Set note</Text>
-                  </Button>
-                  {transaction.status === "OPEN" &&
-                    <Button small danger onPress={onPressCancelInvoice} style={style.actionBarButton}>
-                      <Text style={style.actionBarButtonText}>Cancel invoice</Text>
-                    </Button>
-                  }
-                  {hasCoordinates &&
-                    <Button small={true} onPress={() => {
-                      setCurrentScreen("Map");
-                      setTimeout(() => {
-                        setMapActive(true);
-                      }, 450);
-                    }} style={style.actionBarButton}>
-                      <Text style={style.actionBarButtonText}>Show map</Text>
-                    </Button>
-                  }
-                </View>
               </View>
-
+              <View style={{ flexDirection: "row", marginTop: 5, marginBottom: 10 }}>
+                <Button small style={style.actionBarButton} onPress={onPressSetNote}>
+                  <Text>Set note</Text>
+                </Button>
+                {transaction.status === "OPEN" &&
+                  <Button small danger onPress={onPressCancelInvoice} style={style.actionBarButton}>
+                    <Text>Cancel invoice</Text>
+                  </Button>
+                }
+                {hasCoordinates &&
+                  <Button small={true} onPress={() => {
+                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                    setCurrentScreen("Map");
+                    setTimeout(() => {
+                      setMapActive(true);
+                    }, 650);
+                  }} style={style.actionBarButton}>
+                    <Text>Show map</Text>
+                  </Button>
+                }
+              </View>
               <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
               {transaction.note && <MetaData title="Note" data={transaction.note} />}
               {transaction.website && <MetaData title="Website" data={transaction.website} url={"https://" + transaction.website} />}
@@ -200,11 +200,12 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
         <Card style={style.card}>
           <CardItem>
             <Body>
-              <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+              <View style={{ marginBottom: 8, display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center",  width: "100%" }}>
                 <H1 style={style.header}>
                   Transaction
                 </H1>
                 <Button small={true} onPress={() => {
+                  LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
                   setCurrentScreen("Overview");
                   setMapActive(false);
                 }}>
@@ -215,7 +216,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                 provider={PROVIDER_DEFAULT}
                 style={{
                   width: "100%",
-                  height: 450,
+                  height: 475,
                   backgroundColor:blixtTheme.gray,
                   opacity: mapActive ? 1 : 0,
                 }}
@@ -279,12 +280,10 @@ function LNURLMetaData({ transaction }: IWebLNMetaDataProps) {
 const style = StyleSheet.create({
   card: {
     padding: 5,
-    // width: "100%",
     minHeight: "55%",
   },
   header: {
     fontWeight: "bold",
-    marginBottom: 8,
   },
   detailText: {
     marginBottom: 7,
@@ -302,8 +301,5 @@ const style = StyleSheet.create({
   },
   actionBarButton: {
     marginLeft: 7,
-  },
-  actionBarButtonText: {
-    fontSize: 9,
   }
 });
