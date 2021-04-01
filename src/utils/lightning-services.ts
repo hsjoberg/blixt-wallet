@@ -6,7 +6,9 @@ export interface ILightningService {
 }
 
 export interface ILightningServices {
+  bitrefill: ILightningService;
   blixtwallet: ILightningService;
+  coingate: ILightningService;
   etleneum: ILightningService;
   hampus: ILightningService;
   lightningspin: ILightningService;
@@ -14,7 +16,6 @@ export interface ILightningServices {
   satoshisplace: ILightningService;
   thndrgames: ILightningService;
   luckythunder: ILightningService;
-  bitrefill: ILightningService;
   lightninggifts: ILightningService;
   lightningroulette: ILightningService;
   zigzag: ILightningService;
@@ -35,6 +36,10 @@ export const lightningServices: ILightningServices = {
   blixtwallet: {
     title: "Blixt Wallet",
     image: "data:image/webp;base64,UklGRgoDAABXRUJQVlA4IP4CAAAwIACdASrhAOEAPxGIwlgsKaejo3SoUYAiCWVu4DZ51MA/44ejYcPoI+U1ZuzMat9ZG3O8wHnt6btTpYIZL9FcjNfkBVQBCKwLX5AVUAQir5sg8wGu2ZCKwIdl+xUi7/WibZr8gKp0WBi8M476vifGjmsC1+Jsf2HO+1N58509wYVUAQedXERbxwBxBAiZjGb2txAqYHpJnKajEmwOawAMVEdBprx4efDb5/lMbf80puDfuuh0VSES0M8AqoAhO2YeMMBp/cMdHlVnEIrAtfiCVrTkPJlM8ogCEVgWtb+YIHVlH9OTNdsyEVgQoCpQz5yiUgKqAIRWH28gKqAIRWBa/ICqgCEVgWvxAAD+6wn//YvZHrZIfW8fs3AAmCjeZQg9ctA/XBgS9qs1RQkkpjDfXTsAcQCjphg1bfmmdUGTuGaW9DIcol56cxmUTtn/HoaJ3EKYDoa0N7iQ+NY5U3B1TFtOkdCjUAUNUQnORSN1CAtVTogUeeC6to7cxTh+5bSxEgaVw8EEcOcjBtj5+IdUwapUe7QseomReEsGYtykAYf5LaGPODLwYbn2JkrlwAfjif/T+Zus6nhRsSxK46qrZUHW9QAeuYodXTYom7sqWddmuM0PUU3zTv2DSHxwiiMyOIqNnxgW6nG4luJjPzECmFBpDHMeMc47WbjSBnuXK3JX3sPSNNWmL+6tEe8bMobpcpt9Bid/NllfP26Oi6HtO7ZtU7eEj63BZA8fPE7kVDlfxfA6AVrmfF2/DrlyEU7iMn1ilsylA6YuRhX5otlfhZT1bsGzXFAhDolL0nE/mjwF5i3DwAB6rTJuGx3jq48b4KJqxLIX1WG7LuBOPg8qC2+rfx25c8GER/2Ef6nKXD5H3bJiXSh608c3oRFyfm5SBkxDp9cbC2fEqGPSntTzsK9BwzmFpz/IvCLv7jJAAM5e1+tz1ATYnrfHxcgxNaUS4vxfZmKy8euj0AWage1OuwHK+IOL/y9RclVrU1uIyQAtEPMIIXhUkjmSSAAA",
+  },
+  coingate: {
+    title: "Coingate",
+    image: "data:image/webp;base64,UklGRqoDAABXRUJQVlA4IJ4DAADQIgCdASrhAOEAPxGIwVgsKiejpDcoIYAiCWVu4XaxAnzqC3oPIon4hAbYfzAec56V96AoIr+9cCtcQ0Xt5vAs2VWkPQhnknZOydk7J2TsnZOydk7J2b8mfeHOOcdXLTIy2Z96W2F2TsnYvgEJykvy/4qDGWLMNNvzKk1+22UkbGl4BWmfaHE9/cnwb1jPp+FZ1meFiljjHT+DxTtZV7JaqJDdHqqbvOkmvx/dItNVzwbkPs0AMgYlEfskmMO/DXNr14iI0R6icblLyrRowfCfqK1Sua5+OabAjzADcL81/2FjlmuaZAl2cBv/95ydPtkitOOcnUjCizsaa/LiX68gLqe7J2TsnZuWmfeHOO0bjnHOOcc45xzjnHOOcc4rAAD+/y1b//4ET89P6rYuy2P2B4T9NLfoU0eMNfjrOYIQAAAKvkfJ+Vkl+BWmQP1rQP9uUhU4mQRXM3cFay97zPmgOMCdFGIEhv5mb3QhJ/QpIZXbiuvx3CRhVrWyac3EM8ZbhW5sSLB3OOMKsPKiJ1QFU83yzCKoncJOhK+j0K5ZDxxmExqef1qvQyLvUX1RK+W1Sge/E6ABG0oBMY0j2pNxG4qVnVBpZ0ELPgmvTLxzIUc4FqSLpnRHM5gMXhuGdQlhNCEZW5pYNXQRx2dH40OkU8PhJjQhO6g71TgznViWl8KKgbq3KyA73cGedgCYh7TH5PtdkcJ4azjd4koxTtxxZhNF7OOyHE1eubf3RaPv04rIH0dvfRWxefgxixRXQ1dD7PFlQAv2ZAsvxvSxAdzYpi9xK34hn0kjiyqGbv+90ebn4VUdof2lcCzj6q6ZNfzOICBb2IYT21fw+aOccxbhLpSQH2T9+IW7HQRtKRIAKgs199v28Tw5XV5ZT+WGmHZxFuNFIDChDROyTsNk8qVHq3OejFbG72lM0ObP9F2l0+yDUzajxNJVab0trY8aQ61VewZJYh8HKvFyxnBGwO3HNXWou41y1TprePq2ANOqXzRMZqJXg9KIWZOuCl91w2pXml1kHSpC9+puRLY+I2JRHV46ylhBz2e4dbffax/vmDnM4aT8qfb+REreNkPi33EghrdjNfrBrZiRXtn2cXNlxVuGnYyAttKk7brUTpjM5Cl7EXzGoCz+6ty/2xSPKdSEZW+WYuWO7yYV10oPE0qOmm+4nUPSMJBXLphhVJORch7CE+O6wHz1Ev+BqDCbOA5EyFoE/+hOSIAAAAAAAA==",
   },
   etleneum: {
     title: "Etleneum",
@@ -194,6 +199,9 @@ export function identifyService(pubkey: string | null, description: string, webs
   }
   else if (pubkey === "031678745383bd273b4c3dbefc8ffbf4847d85c2f62d3407c0c980430b3257c403" || website?.includes("lightning-roulette.com")) {
     return "lightningroulette";
+  }
+  else if (pubkey === "0242a4ae0c5bef18048fbecf995094b74bfb0f7391418d71ed394784373f41e4f3") {
+    return "coingate";
   }
   return null;
 }
