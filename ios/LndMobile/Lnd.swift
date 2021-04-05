@@ -67,7 +67,6 @@ open class Lnd {
   static let shared = Lnd()
 
   var lndStarted = false
-  var walletUnlocked = false
   var activeStreams: [String] = []
 
   static let syncMethods = [
@@ -123,6 +122,7 @@ open class Lnd {
     // index
     //
     "RouterSendPaymentV2": { req, cb in return LndmobileRouterSendPaymentV2(req, cb) },
+    "SubscribeState": { req, cb in return LndmobileSubscribeState(req, cb) },
     // channel
     //
     "CloseChannel": { req, cb in return LndmobileCloseChannel(req, cb)},
@@ -141,14 +141,10 @@ open class Lnd {
       flags += LndStatusCodes.STATUS_PROCESS_STARTED.rawValue.int32Value
     }
 
-    if (self.walletUnlocked) {
-      flags += LndStatusCodes.STATUS_WALLET_UNLOCKED.rawValue.int32Value
-    }
-
     return flags
   }
 
-  func startLnd(_ torEnabled: Bool, lndStartedCallback: @escaping Callback, walletUnlockedCallback: @escaping Callback) -> Void {
+  func startLnd(_ torEnabled: Bool, lndStartedCallback: @escaping Callback) -> Void {
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
     let lndPath = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
     let args = "--lnddir=\"\(lndPath.path)\""
@@ -158,15 +154,9 @@ open class Lnd {
       lndStartedCallback(data, error)
     }()}
 
-    let unlocked: Callback = {(data: Data?, error: Error?) in {
-      self.walletUnlocked = true
-      walletUnlockedCallback(data, error)
-    }()}
-
     LndmobileStart(
       args,
-      LndmobileCallback(method: "start", callback: started),
-      LndmobileCallback(method: "start2", callback: unlocked)
+      LndmobileCallback(method: "start", callback: started)
     )
   }
 

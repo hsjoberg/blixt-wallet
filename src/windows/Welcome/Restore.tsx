@@ -12,6 +12,7 @@ import Container from "../../components/Container";
 import { ICreateWalletPayload } from "../../state";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { PLATFORM } from "../../utils/constants";
+import { CommonActions } from "@react-navigation/native";
 
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
@@ -35,7 +36,6 @@ export default function Restore({ navigation }: IProps) {
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
   const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
-  const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
 
   const onRestorePress = async () => {
     try {
@@ -63,17 +63,22 @@ export default function Restore({ navigation }: IProps) {
         createWalletOpts.restore!.channelsBackup = b64Backup!;
       }
 
-      await createWallet(createWalletOpts),
+      await createWallet(createWalletOpts);
 
-      // TODO(hsjoberg) figure out if this should be done:
       await Promise.all([
         changeAutopilotEnabled(false),
-        setupAutopilot(false),
         setSyncEnabled(true), // TODO test
         changeScheduledSyncEnabled(true),
       ]);
 
-      navigation.dangerouslyGetParent()!.replace("Loading", {});
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            { name: "Loading" },
+          ],
+        })
+      );
     } catch (e) {
       console.log(e);
       setLoading(false);

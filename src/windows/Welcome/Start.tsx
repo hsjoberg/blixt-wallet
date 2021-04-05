@@ -64,9 +64,7 @@ There is currently no WatchTower support to watch your channels while you are of
           text: "I am reckless, continue",
           onPress: async  () => {
             setCreateWalletLoading(true);
-            // setHoldonboarding(true);
             await createWallet();
-            // await getAddress({});
             await setSyncEnabled(true); // TODO test
             await changeScheduledSyncEnabled(true);
 

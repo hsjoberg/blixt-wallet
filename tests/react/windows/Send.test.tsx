@@ -35,7 +35,7 @@ it("It is possible to paste invoice from clipboard and pay it", async () => {
   const store = await initCommonStore(true);
 
   await store.getActions().initializeApp();
-  await store.getActions().lightning.initialize();
+  await store.getActions().lightning.initialize({ start: new Date() });
   store.getActions().channel.setBalance(Long.fromNumber(10000));
   const invoice = "lntb12u1pww4ckdpp5xck8m9yerr9hqufyd6p0pp0pwjv5nqn6guwr9qf4l66wrqv3h2ssdp2xys9xct5da3kx6twv9kk7m3qg3hkccm9ypxxzar5v5cqp5ynhgvxfnkwxx75pcxcq2gye7m5dj26hjglqmhkz8rljhg3eg4hfyg38gnsynty3pdatjg9wpa7pe7g794y0hxk2gqd0hzg2hn5hlulqqen6cr5";
   Clipboard.setString(invoice);

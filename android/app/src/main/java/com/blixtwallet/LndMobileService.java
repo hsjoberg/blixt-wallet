@@ -36,7 +36,6 @@ import com.hypertrack.hyperlog.HyperLog;
 public class LndMobileService extends Service {
   private static final String TAG = "LndMobileService";
   boolean lndStarted = false;
-  boolean walletUnlocked = false;
   boolean subscribeInvoicesStreamActive = false;
   Set<String> streamsStarted = new HashSet<String>();
 
@@ -55,7 +54,7 @@ public class LndMobileService extends Service {
   static final int MSG_GRPC_STREAM_WRITE = 10;
   static final int MSG_CHECKSTATUS = 11;
   static final int MSG_CHECKSTATUS_RESPONSE = 12;
-  static final int MSG_WALLETUNLOCKED = 13;
+  static final int MSG_WALLETUNLOCKED = 13; // NOT IN USE
   static final int MSG_UNLOCKWALLET = 14;
   static final int MSG_INITWALLET = 15;
   static final int MSG_GRPC_STREAM_STARTED = 16;
@@ -63,8 +62,6 @@ public class LndMobileService extends Service {
   static final int MSG_STOP_LND_RESULT = 18;
   static final int MSG_PING = 19;
   static final int MSG_PONG = 20;
-
-  int unlockWalletRequest = -1;
 
   private Map<String, Method> syncMethods = new HashMap<>();
   private Map<String, Method> streamMethods = new HashMap<>();
@@ -195,10 +192,6 @@ public class LndMobileService extends Service {
               flags += LndMobile.LndStatus.PROCESS_STARTED.flag;
             }
 
-            if (walletUnlocked) {
-              flags += LndMobile.LndStatus.WALLET_UNLOCKED.flag;
-            }
-
             HyperLog.d(TAG, "MSG_CHECKSTATUS sending " + flags);
             sendToClient(msg.replyTo, Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
             //sendToClients(Message.obtain(null, MSG_CHECKSTATUS_RESPONSE, request, flags));
@@ -206,7 +199,6 @@ public class LndMobileService extends Service {
 
           case MSG_UNLOCKWALLET: {
             HyperLog.d(TAG, "Got MSG_UNLOCKWALLET");
-            // unlockWalletRequest = request;
 
             String password = bundle.getString("password");
 
@@ -222,12 +214,6 @@ public class LndMobileService extends Service {
 
           case MSG_INITWALLET:
             HyperLog.d(TAG, "Got MSG_INITWALLET");
-            // Promise should be resolved
-            // when the RPC ready callback
-            // from LndMobile's start is called,
-            // not when the InitWallet RPC call is done
-            // TODO(hsjoberg): document this more clearly
-            unlockWalletRequest = request;
 
             ArrayList<String> seed = bundle.getStringArrayList("seed");
             String password = bundle.getString("password");
@@ -253,7 +239,7 @@ public class LndMobileService extends Service {
 
             Lndmobile.initWallet(
               initWallet.build().toByteArray(),
-              new LndCallback(msg.replyTo, "InitWallet", -1)
+              new LndCallback(msg.replyTo, "InitWallet", request)
             );
             break;
 
@@ -427,26 +413,6 @@ public class LndMobileService extends Service {
             sendToClient(recipient, msg);
             // sendToClients(msg);
           }
-        }, new lndmobile.Callback() {
-
-          @Override
-          public void onError(Exception e) {
-            HyperLog.e(TAG, "wallet unlock onError callback", e);
-          }
-
-          @Override
-          public void onResponse(byte[] bytes) {
-            HyperLog.i(TAG, "wallet unlock onResponse callback");
-            walletUnlocked = true;
-
-            Message msg = Message.obtain(null, MSG_WALLETUNLOCKED, unlockWalletRequest, 0);
-
-            Bundle bundle = new Bundle();
-            bundle.putByteArray("response", bytes);
-            msg.setData(bundle);
-
-            sendToClient(recipient, msg);
-          }
         });
       }
     };
@@ -501,7 +467,6 @@ public class LndMobileService extends Service {
     }
 
     lndStarted = false;
-    walletUnlocked = false;
 
     return false;
   }

@@ -1,5 +1,5 @@
 import { lnrpc } from "../../proto/proto";
-import { timeout } from "./utils";
+import { decodeStreamResult, timeout } from "./utils";
 import { DeviceEventEmitter } from "react-native";
 import * as base64 from "base64-js";
 import payReq from "bolt11";
@@ -30,6 +30,24 @@ export const writeConfig = jest.fn(async () => {
 export const writeConfigFile = jest.fn(async () => {
   return "File written:";
 });
+
+export const subscribeStateEmitter = (data: Uint8Array) => DeviceEventEmitter.emit("SubscribeState", { data: base64.fromByteArray(data) });
+export const subscribeState = async () => {
+  setTimeout(async () => {
+    subscribeStateEmitter(
+      lnrpc.SubscribeStateResponse.encode({
+        state: lnrpc.WalletState.LOCKED,
+      }).finish()
+    );
+  }, 10)
+}
+
+export const decodeState = (data: string): lnrpc.SubscribeStateResponse => {
+  return decodeStreamResult<lnrpc.SubscribeStateResponse>({
+    response: lnrpc.SubscribeStateResponse,
+    base64Result: data,
+  });
+};
 
 export const startLnd = jest.fn(async (): Promise<string> => {
   await timeout(100);

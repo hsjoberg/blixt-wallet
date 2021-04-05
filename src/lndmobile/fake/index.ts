@@ -8,6 +8,7 @@ import { TLV_RECORD_NAME } from "../../utils/constants";
 
 import * as base64 from "base64-js";
 import payReq from "bolt11";
+import { decodeStreamResult } from "../utils";
 
 const { LndMobileTools } = NativeModules;
 
@@ -47,6 +48,23 @@ export const writeConfig = async (config: string) => {
  */
 export const writeConfigFile = async () => {
   return "File written:";
+};
+
+export const subscribeStateEmitter = (data: Uint8Array) => DeviceEventEmitter.emit("SubscribeState", { data: base64.fromByteArray(data) });
+export const subscribeState = async () => {
+  subscribeStateEmitter(
+    lnrpc.SubscribeStateResponse.encode({
+      state: lnrpc.WalletState.LOCKED,
+    }).finish()
+  );
+  return "subscribing";
+}
+
+export const decodeState = (data: string): lnrpc.SubscribeStateResponse => {
+  return decodeStreamResult<lnrpc.SubscribeStateResponse>({
+    response: lnrpc.SubscribeStateResponse,
+    base64Result: data,
+  });
 };
 
 /**

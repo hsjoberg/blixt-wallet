@@ -18,9 +18,6 @@ export default function Loading({ navigation }: ILoadingProps) {
   const ready = useStoreState((store) => store.lightning.ready);
 
   useEffect(() => {
-    if (!ready) {
-      return;
-    }
     // tslint:disable-next-line
     (async () => {
       let cb = await checkDeeplink();
@@ -33,7 +30,9 @@ export default function Loading({ navigation }: ILoadingProps) {
           })
         );
         if (cb) {
-          cb(navigation);
+          setTimeout(() => {
+            cb(navigation);
+          }, 100);
         } else if (PLATFORM === "web" && WEB_DEMO) {
           navigation.navigate("WebInfo");
         }

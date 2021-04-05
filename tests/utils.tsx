@@ -49,18 +49,19 @@ export const initCommonStore = async (waitUntilReady = false) => {
 
   fetch.mockOnce("");
 
+  await setDefaultAsyncStorage()
   const store = setupStore();
-  await store.getActions().initializeApp();
   store.getActions().settings.setAutopilotEnabled(false);
-  await store.getActions().lightning.initialize();
   store.getActions().lightning.setFirstSync(false);
-  DeviceEventEmitter.emit("WalletUnlocked", {});
-
+  await store.getActions().initializeApp();
 
   if (waitUntilReady) {
     await waitFor(() => expect(store.getState().lightning.rpcReady).toBe(true));
+    await waitFor(() => expect(store.getState().lightning.ready).toBe(true));
+    await waitFor(() => expect(store.getState().lightning.syncedToGraph).toBe(true));
     await waitFor(() => expect(store.getState().lightning.autopilotSet).toBeDefined());
     await waitFor(() => expect(store.getState().receive.invoiceSubscriptionStarted).toBe(true));
+    await waitFor(() => expect(store.getState().lightning.initializeDone).toBe(true));
   }
   return store;
 }
@@ -85,6 +86,7 @@ export const setDefaultAsyncStorage = async () => {
   await setupApp();
   await setItemObject(StorageItem.firstSync, false);
   await setItemObject(StorageItem.walletCreated, true);
+  await setItemObject(StorageItem.autopilotEnabled, false);
   await setItem(StorageItem.walletPassword, "test1234");
 }
 

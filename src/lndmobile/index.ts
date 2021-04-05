@@ -40,6 +40,22 @@ export const writeConfigFile = async () => {
   return await LndMobileTools.writeConfigFile();
 };
 
+export const subscribeState = async () => {
+  const response = await sendStreamCommand<lnrpc.ISubscribeStateRequest, lnrpc.SubscribeStateRequest>({
+    request: lnrpc.SubscribeStateRequest,
+    method: "SubscribeState",
+    options: {},
+  }, false);
+  return response;
+}
+
+export const decodeState = (data: string): lnrpc.SubscribeStateResponse => {
+  return decodeStreamResult<lnrpc.SubscribeStateResponse>({
+    response: lnrpc.SubscribeStateResponse,
+    base64Result: data,
+  });
+};
+
 /**
  * @throws
  */

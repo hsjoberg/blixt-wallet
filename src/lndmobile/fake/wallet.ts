@@ -1,9 +1,10 @@
-import { stringToUint8Array, timeout, hexToUint8Array } from "../../utils/index";
+import Long from "long";
+
+import { timeout } from "../../utils/index";
 import * as base64 from "base64-js";
 
-import { lnrpc, walletrpc, signrpc,  } from "../../../proto/proto";
-import { DeviceEventEmitter } from "react-native";
-import Long from "long";
+import { lnrpc, signrpc } from "../../../proto/proto";
+import { subscribeStateEmitter } from "./index";
 
 export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {
   const response = lnrpc.GenSeedResponse.create({
@@ -18,7 +19,17 @@ export const initWallet = async (seed: string[], password: string): Promise<void
 };
 
 export const unlockWallet = async (password: string): Promise<void> => {
-  setTimeout(() => DeviceEventEmitter.emit("WalletUnlocked"), 1000);
+  setTimeout(() => subscribeStateEmitter(
+    lnrpc.SubscribeStateResponse.encode({
+      state: lnrpc.WalletState.UNLOCKED,
+    }).finish()
+  ), 100);
+
+  setTimeout(() => subscribeStateEmitter(
+    lnrpc.SubscribeStateResponse.encode({
+      state: lnrpc.WalletState.RPC_ACTIVE,
+    }).finish()
+  ), 500);
   return;
 };
 

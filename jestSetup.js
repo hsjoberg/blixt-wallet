@@ -33,6 +33,8 @@ ReactNative.UIManager.configureNextLayoutAnimation = jest.fn();
 ReactNative.InteractionManager.runAfterInteractions = ((cb) => {
   cb && cb();
 });
+ReactNative.Linking.addListener = jest.fn();
+
 const NativeBase = require("native-base");
 NativeBase.Toast.show = jest.fn();
 NativeBase.Root = ({ children }) => (<>{children}</>);
