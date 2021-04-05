@@ -3,18 +3,14 @@ import { differenceInDays } from "date-fns";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { lnrpc } from "../../proto/proto";
 import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/app";
 import { toast, timeout, stringToUint8Array } from "../utils";
 import { Chain } from "../utils/build";
 import { getWalletPassword } from "../storage/keystore";
-import { LndMobileEventEmitter } from "../utils/event-listener";
 
 import logger from "./../utils/log";
 const log = logger("Lightning");
-
-const SYNC_UNLOCK_WALLET = false;
 
 export type LndChainBackend = "neutrino" | "bitcoindWithZmq";
 
@@ -29,11 +25,10 @@ interface ISetLightningPeersPayload {
 }
 
 export interface ILightningModel {
-  initialize: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
+  initialize: Thunk<ILightningModel, { start: Date }, IStoreInjections, IStoreModel>;
 
   setupStores: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
 
-  unlockWallet: Thunk<ILightningModel, void, IStoreInjections>;
   getInfo: Thunk<ILightningModel, void, IStoreInjections>;
   waitForChainSync: Thunk<ILightningModel, void, IStoreInjections>;
   waitForGraphSync: Thunk<ILightningModel, void, IStoreInjections>;
@@ -46,6 +41,7 @@ export interface ILightningModel {
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
   setRPCServerReady: Action<ILightningModel, boolean>;
   setReady: Action<ILightningModel, boolean>;
+  setInitializeDone: Action<ILightningModel, boolean>;
   setSyncedToChain: Action<ILightningModel, boolean>;
   setSyncedToGraph: Action<ILightningModel, boolean>;
   setFirstSync: Action<ILightningModel, boolean>;
@@ -59,6 +55,7 @@ export interface ILightningModel {
   syncedToChain: Computed<ILightningModel, boolean>;
   syncedToGraph: Computed<ILightningModel, boolean>;
   ready: boolean;
+  initializeDone: boolean;
   firstSync: boolean;
   autopilotSet?: boolean;
   lightningPeers: ILightningPeer[];
@@ -68,20 +65,26 @@ export interface ILightningModel {
 }
 
 export const lightning: ILightningModel = {
-  initialize: thunk(async (actions, _, { getState, dispatch, injections, getStoreState }) => {
-    log.d("getState().ready" + getState().ready);
+  initialize: thunk(async (actions, { start }, { getState, getStoreState }) => {
+    log.d("getState().ready: " + getState().ready);
     if (getState().ready)  {
       log.d("Lightning store already started");
       return;
     }
 
-    // When the RPC server is ready
-    // WalletUnlocked event will be emitted
-    log.v("Starting WalletUnlocked event listener");
+    log.i("Starting");
 
-    LndMobileEventEmitter.addListener("WalletUnlocked", async () => {
-      debugShowStartupInfo && toast("RPC server ready time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-      actions.setRPCServerReady(true);
+    const lastSync = await getItemObject<number>(StorageItem.timeSinceLastSync);
+    const firstSync = await getItemObject<boolean>(StorageItem.firstSync);
+    actions.setFirstSync(firstSync);
+    const debugShowStartupInfo = getStoreState().settings.debugShowStartupInfo;
+    const fastInit = true; // differenceInDays(start, lastSync) <3 || firstSync;
+    if (fastInit) {
+      actions.setReady(true);
+    }
+    actions.setRPCServerReady(true);
+
+    (async () => {
       try {
         actions.setupStores();
         await actions.waitForChainSync();
@@ -89,105 +92,32 @@ export const lightning: ILightningModel = {
         await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
         await actions.waitForGraphSync();
         debugShowStartupInfo && toast("syncedToGraph time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
+        actions.setInitializeDone(true);
       } catch (e) {
         debugShowStartupInfo && toast(e.message, 10000, "danger");
         return;
       }
-    });
+    })();
 
-    const checkStatus = injections.lndMobile.index.checkStatus;
-    const startLnd = injections.lndMobile.index.startLnd;
-
-    const start = new Date();
-    const lastSync = await getItemObject<number>(StorageItem.timeSinceLastSync);
-    const firstSync = await getItemObject<boolean>(StorageItem.firstSync);
-    actions.setFirstSync(firstSync);
-    const debugShowStartupInfo = getStoreState().settings.debugShowStartupInfo;
-    const fastInit = true; // differenceInDays(start, lastSync) <3 || firstSync;
-
-    log.v("Running LndMobile checkStatus");
-    const status = await checkStatus();
-    log.v("status", [status]);
-    if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
-      log.i("lnd not started, starting lnd");
-      const torEnabled = getStoreState().torEnabled;
-      log.d("lnd started", [await startLnd(torEnabled)]);
-      debugShowStartupInfo && toast("start lnd time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-    }
-    else {
-      log.i("lnd was already started");
-      debugShowStartupInfo && toast("Lnd already started", undefined, "danger");
-    }
-
-    // Normal wallet unlock flow
-    if ((status & ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) !== ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) {
+    (async () => {
       try {
-        log.v("Unlocking wallet");
-        SYNC_UNLOCK_WALLET
-          ? await actions.unlockWallet()
-          : actions.unlockWallet().then(
-              () => debugShowStartupInfo && toast("UnlockWallet time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000)
-            ).catch((e: any) => {
-              debugShowStartupInfo && toast("Got error from unlockWallet: " + e.message, undefined, "danger");
-              actions.setRPCServerReady(true);
-              actions.setupStores();
-              actions.waitForChainSync().then(
-                async () => {
-                  await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
-                  await actions.waitForGraphSync();
-                }
-              );
-            });
-      } catch (e) {
-        log.e("Error unlocking wallet:" + e.message);
-        debugShowStartupInfo && toast("Error: Cannot unlock wallet", 10000, "danger");
-        return
-      }
-    }
-    // If a wallet was created, STATUS_WALLET_UNLOCKED would
-    // already be set when this function is called.
-    // This code path will also be used if we hot-reload the app (debug builds)
-    else {
-      log.v("Wallet was already unlocked");
-      actions.setupStores();
-      if (fastInit) {
-        actions.waitForChainSync().then(
-          async () => {
-            await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
-            await actions.waitForGraphSync();
-          }
+        // tslint:disable-next-line: no-floating-promises
+        const result = await fetch(Chain === "mainnet"
+          ? "https://mempool.space/api/blocks/tip/height"
+          : "https://mempool.space/testnet/api/blocks/tip/height"
         );
+        if (result.ok) {
+          const bestBlockHeight = await result.text();
+          actions.setBestBlockheight(Number.parseInt(bestBlockHeight, 10));
+        } else {
+          log.e("Unable to get best block height from mempool.space");
+        }
+      } catch (e) {
+        debugShowStartupInfo && toast(e.message, 10000, "danger");
+        return;
       }
-      else {
-        await actions.waitForChainSync();
-        await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
-        actions.waitForGraphSync();
-      }
+    })();
 
-      actions.setRPCServerReady(true);
-    }
-
-    // tslint:disable-next-line: no-floating-promises
-    fetch(Chain === "mainnet"
-      ? "https://mempool.space/api/blocks/tip/height"
-      : "https://mempool.space/testnet/api/blocks/tip/height"
-    ).then(async (result) => {
-      if (result.ok) {
-        const bestBlockHeight = await result.text();
-        actions.setBestBlockheight(Number.parseInt(bestBlockHeight, 10));
-      }
-      else {
-        log.e("Unable to get best block height from mempool.space");
-      }
-    }).catch((err) => {
-      log.w("mempool.space request failed: " + err.message);
-    });
-
-    if (fastInit) {
-      actions.setReady(true);
-    }
-
-    // debugShowStartupInfo && toast("Initialize time: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
     return true;
   }),
 
@@ -207,16 +137,6 @@ export const lightning: ILightningModel = {
       toast(e.message, 0, "danger", "OK");
       return;
     }
-  }),
-
-  unlockWallet: thunk(async (_, _2, { injections }) => {
-    const unlockWallet = injections.lndMobile.wallet.unlockWallet;
-    // const password = await getItem(StorageItem.walletPassword);
-    const password = await getWalletPassword();
-    if (!password) {
-      throw new Error("Cannot find wallet password");
-    }
-    await unlockWallet(password);
   }),
 
   setupAutopilot: thunk(async (actions, enabled, { injections }) => {
@@ -371,6 +291,7 @@ export const lightning: ILightningModel = {
   }),
   setRPCServerReady: action((state, payload) => { state.rpcReady = payload; }),
   setReady: action((state, payload) => { state.ready = payload; }),
+  setInitializeDone: action((state, payload) => { state.initializeDone = payload; }),
   setSyncedToChain: action((state, payload) => { state.syncedToChain = payload; }),
   setSyncedToGraph: action((state, payload) => { state.syncedToGraph = payload; }),
   setFirstSync: action((state, payload) => { state.firstSync = payload; }),
@@ -386,6 +307,7 @@ export const lightning: ILightningModel = {
 
   rpcReady: false,
   ready: false,
+  initializeDone: false,
   syncedToChain: computed((state) => (state.nodeInfo?.syncedToChain) ?? false),
   syncedToGraph: computed((state) => (state.nodeInfo?.syncedToGraph) ?? false),
   firstSync: false,

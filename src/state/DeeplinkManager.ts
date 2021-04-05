@@ -4,7 +4,7 @@ import { NavigationContainerRef } from "@react-navigation/native";
 
 import { getNavigator } from "../utils/navigation";
 import { IStoreModel } from "./index";
-import { timeout } from "../utils";
+import { timeout, waitUntilTrue } from "../utils";
 import { LnBech32Prefix } from "../utils/build";
 
 import logger from "./../utils/log";
@@ -69,9 +69,7 @@ export const deeplinkManager: IDeeplinkManager = {
       log.d("Deeplink", [data]);
       if (data) {
         // Waiting for RPC server to be ready
-        while (!getStoreState().lightning.rpcReady) {
-          await timeout(250);
-        }
+        await waitUntilTrue(() => getStoreState().lightning.rpcReady);
 
         if (getState().cache.includes(data)) {
           return;

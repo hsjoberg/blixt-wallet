@@ -93,13 +93,12 @@ class LndMobile extends ReactContextBaseJavaModule {
     final Map<String, Object> constants = new HashMap<>();
     constants.put("STATUS_SERVICE_BOUND", LndStatus.SERVICE_BOUND.flag);
     constants.put("STATUS_PROCESS_STARTED", LndStatus.PROCESS_STARTED.flag);
-    constants.put("STATUS_WALLET_UNLOCKED", LndStatus.WALLET_UNLOCKED.flag);
+    constants.put("STATUS_WALLET_UNLOCKED", LndStatus.WALLET_UNLOCKED.flag); // NOT IN USE
 
     return constants;
   }
 
   class IncomingHandler extends Handler {
-
     @Override
     public void handleMessage(Message msg) {
       HyperLog.d(TAG, "New incoming message from LndMobileService, msg id: " + msg.what);
@@ -175,18 +174,6 @@ class LndMobile extends ReactContextBaseJavaModule {
           final Promise promise = requests.remove(request);
           int flags = msg.arg2;
           promise.resolve(flags);
-          break;
-        }
-        case LndMobileService.MSG_WALLETUNLOCKED: {
-          final int request = msg.arg1;
-          final Promise promise = requests.remove(request);
-          if (promise != null) {
-            promise.resolve(null);
-          }
-
-          getReactApplicationContext()
-            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-            .emit("WalletUnlocked", null);
           break;
         }
         case LndMobileService.MSG_GRPC_STREAM_STARTED: {
@@ -454,7 +441,6 @@ class LndMobile extends ReactContextBaseJavaModule {
       promise.reject(TAG, "Could not Send MSG_UNLOCKWALLET to LndMobileService", e);
     }
   }
-
 
   @ReactMethod
   void initWallet(ReadableArray seed, String password, int recoveryWindow, String channelBackupsBase64, Promise promise) {

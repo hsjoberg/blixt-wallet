@@ -8,12 +8,8 @@ class LndMobile: RCTEventEmitter {
     "LndMobile"
   }
 
-  var walletUnlockedResolver: RCTPromiseResolveBlock? = nil
-
   override func supportedEvents() -> [String]! {
-    var events = Lnd.streamMethods.map{ $0.key }
-    events.append("WalletUnlocked")
-    return events
+    return Lnd.streamMethods.map{ $0.key }
   }
 
   @objc
@@ -105,18 +101,6 @@ class LndMobile: RCTEventEmitter {
       resolve([
         "data": data?.base64EncodedString()
       ])
-    } walletUnlockedCallback: { (data, error) in
-      if let e = error {
-        NSLog("unlock error" + e.localizedDescription)
-        return
-      }
-      self.sendEvent(withName: "WalletUnlocked", body: [
-        "data": data?.base64EncodedString()
-      ])
-      if (self.walletUnlockedResolver != nil) {
-        NSLog("Resolving walletUnlockedResolver")
-        self.walletUnlockedResolver!("done")
-      }
     }
   }
 
@@ -135,7 +119,6 @@ class LndMobile: RCTEventEmitter {
 
   @objc(initWallet:password:recoveryWindow:channelsBackupBase64:resolver:rejecter:)
   func initWallet(_ seed: [AnyHashable], password: String, recoveryWindow: Int, channelsBackupBase64: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    self.walletUnlockedResolver = resolve
     Lnd.shared.initWallet(
       seed as! [String],
       password: password,
@@ -146,9 +129,9 @@ class LndMobile: RCTEventEmitter {
         reject("error", e.localizedDescription, e)
         return
       }
-      // IMPORTANT:
-      // Promise resolve is happening in startLnd
-      // by self.walletUnlockerResolver
+      resolve([
+        "data": data?.base64EncodedString()
+      ])
     }
   }
 

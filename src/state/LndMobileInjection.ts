@@ -2,6 +2,8 @@ import {
   initialize,
   writeConfig,
   writeConfigFile,
+  subscribeState,
+  decodeState,
   checkStatus,
   startLnd,
   checkICloudEnabled,
@@ -73,6 +75,8 @@ export interface ILndMobileInjections {
     initialize: () => Promise<{ data: string } | number>;
     writeConfig: (config: string) => Promise<string>;
     writeConfigFile: () => Promise<string>;
+    subscribeState: () => Promise<string>;
+    decodeState: (data: string) => lnrpc.SubscribeStateResponse;
     checkStatus: () => Promise<number>;
     startLnd: (torEnabled: boolean) => Promise<string>;
     checkICloudEnabled: () => Promise<boolean>;
@@ -143,6 +147,8 @@ export default {
     writeConfig,
     writeConfigFile,
     checkStatus,
+    subscribeState,
+    decodeState,
     startLnd,
     checkICloudEnabled,
     checkApplicationSupportExists,

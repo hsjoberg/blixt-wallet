@@ -6,6 +6,8 @@ export const getGenericPassword = jest.fn().mockResolvedValue(undefined);
 
 export const resetGenericPassword = jest.fn().mockResolvedValue(undefined);
 
+export const getInternetCredentials = jest.fn().mockResolvedValue({ password: "password" });
+
 export const ACCESSIBLE = {
   WHEN_UNLOCKED: "AccessibleWhenUnlocked",
   AFTER_FIRST_UNLOCK: "AccessibleAfterFirstUnlock",

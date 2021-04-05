@@ -41,8 +41,6 @@ import com.oblador.keychain.KeychainModule;
 
 import com.hypertrack.hyperlog.HyperLog;
 
-import lnrpc.Rpc;
-
 public class LndMobileScheduledSyncWorker extends ListenableWorker {
   private final String TAG = "LndScheduledSyncWorker";
   private final String HANDLERTHREAD_NAME = "blixt_lndmobile_sync";
@@ -177,8 +175,36 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
               }
               case LndMobileService.MSG_START_LND_RESULT: {
                 lndStarted = true;
-                HyperLog.i(TAG, "LndMobileService reports lnd is started. Sending UnlockWallet request");
-                unlockWalletRequest(password);
+                subscribeStateRequest();
+                break;
+              }
+              case LndMobileService.MSG_GRPC_STREAM_RESULT: {
+                bundle = msg.getData();
+                final byte[] response = bundle.getByteArray("response");
+                final String method = bundle.getString("method");
+
+                if (method.equals("SubscribeState")) {
+                  try {
+                    lnrpc.Stateservice.SubscribeStateResponse state = lnrpc.Stateservice.SubscribeStateResponse.parseFrom(response);
+                    lnrpc.Stateservice.WalletState currentState = state.getState();
+                    if (currentState == lnrpc.Stateservice.WalletState.LOCKED) {
+                      HyperLog.i(TAG, "Got WalletState.LOCKED");
+                      HyperLog.i(TAG, "SubscribeState reports wallet is locked. Sending UnlockWallet request");
+                      unlockWalletRequest(password);
+                    } else if (currentState == lnrpc.Stateservice.WalletState.UNLOCKED) {
+                      HyperLog.i(TAG, "Got WalletState.UNLOCKED");
+                      HyperLog.i(TAG, "Waiting for WalletState.RPC_ACTIVE");
+                    } else if (currentState == lnrpc.Stateservice.WalletState.RPC_ACTIVE) {
+                      HyperLog.i(TAG, "Got WalletState.RPC_ACTIVE");
+                      HyperLog.i(TAG, "LndMobileService reports RPC server ready. Sending GetInfo request");
+                      getInfoRequest();
+                    } else {
+                      HyperLog.w(TAG, "SubscribeState got unknown state " + currentState);
+                    }
+                  } catch (Throwable t) {
+                    t.printStackTrace();
+                  }
+                }
                 break;
               }
               case LndMobileService.MSG_GRPC_COMMAND_RESULT: {
@@ -187,10 +213,10 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                 final String method = bundle.getString("method");
 
                 if (method.equals("UnlockWallet")) {
-                  HyperLog.i(TAG, "Got MSG_GRPC_COMMAND_RESULT for UnlockWallet. Waiting for MSG_WALLETUNLOCKED before doing anything");
+                  HyperLog.i(TAG, "Got MSG_GRPC_COMMAND_RESULT for UnlockWallet. Waiting for SubscribeState to send event before doing anything");
                 } else if (method.equals("GetInfo")) {
                   try {
-                    Rpc.GetInfoResponse res = Rpc.GetInfoResponse.parseFrom(response);
+                    lnrpc.Rpc.GetInfoResponse res = lnrpc.Rpc.GetInfoResponse.parseFrom(response);
                     HyperLog.d(TAG, "GetInfo response");
                     HyperLog.v(TAG, "blockHash:     " + res.getBlockHash());
                     HyperLog.d(TAG, "blockHeight:   " + Integer.toString(res.getBlockHeight()));
@@ -253,11 +279,6 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                   Log.w(TAG, "Got unexpected method in MSG_GRPC_COMMAND_RESULT from LndMobileService. " +
                              "Expected GetInfo or UnlockWallet, got " + method);
                 }
-                break;
-              }
-              case LndMobileService.MSG_WALLETUNLOCKED: {
-                  HyperLog.i(TAG, "LndMobileService reports RPC server ready. Sending GetInfo request");
-                  getInfoRequest();
                 break;
               }
               default:
@@ -337,6 +358,20 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     }
   }
 
+  private void subscribeStateRequest() {
+    try {
+      Message message = Message.obtain(null, LndMobileService.MSG_GRPC_STREAM_COMMAND, 0, 0);
+      message.replyTo = messenger;
+      Bundle bundle = new Bundle();
+      bundle.putString("method", "SubscribeState");
+      bundle.putByteArray("payload", lnrpc.Stateservice.SubscribeStateRequest.newBuilder().build().toByteArray());
+      message.setData(bundle);
+      messengerService.send(message);
+    } catch (RemoteException e) {
+      e.printStackTrace();
+    }
+  }
+
   private void unlockWalletRequest(String password) {
     try {
       Message message = Message.obtain(null, LndMobileService.MSG_GRPC_COMMAND, 0, 0);
@@ -357,7 +392,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       message.replyTo = messenger;
       Bundle getinfoBundle = new Bundle();
       getinfoBundle.putString("method", "GetInfo");
-      getinfoBundle.putByteArray("payload", Rpc.GetInfoRequest.newBuilder().build().toByteArray());
+      getinfoBundle.putByteArray("payload", lnrpc.Rpc.GetInfoRequest.newBuilder().build().toByteArray());
       message.setData(getinfoBundle);
       messengerService.send(message);
     } catch (RemoteException e) {

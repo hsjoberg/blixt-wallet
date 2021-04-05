@@ -1,3 +1,4 @@
+import { subscribeStateEmitter } from "./index";
 import { lnrpc } from "../../proto/proto";
 import { timeout, decodeStreamResult } from "./utils";
 
@@ -16,6 +17,21 @@ export const initWallet = jest.fn(async (seed: string[], password: string): Prom
 
 export const unlockWallet = jest.fn(async (password: string): Promise<lnrpc.UnlockWalletResponse> => {
   const response = lnrpc.UnlockWalletResponse.create({});
+
+  setTimeout(() => subscribeStateEmitter(
+    lnrpc.SubscribeStateResponse.encode({
+      state: lnrpc.WalletState.UNLOCKED,
+    }).finish()),
+    10,
+  );
+
+  setTimeout(() => subscribeStateEmitter(
+    lnrpc.SubscribeStateResponse.encode({
+      state: lnrpc.WalletState.RPC_ACTIVE,
+    }).finish()),
+    300,
+  );
+
   return response;
 });
 

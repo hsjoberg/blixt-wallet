@@ -1,9 +1,12 @@
 import { setupStore } from "../utils";
+import { setupApp, setItem, setItemObject, StorageItem, clearApp } from "../../src/storage/app";
+import { waitFor } from "@testing-library/react-native";
 
 jest.setTimeout(10000);
 
 let store = setupStore();
-beforeEach(() => {
+beforeEach(async () => {
+  await setItemObject(StorageItem.autopilotEnabled, false);
   store = setupStore();
 });
 
@@ -12,13 +15,6 @@ test("initialize index store", async () => {
 
   expect(store.getState().appReady).toBe(true);
   expect(store.getState().walletCreated).toBe(false);
-});
 
-test("create wallet", async () => {
-  await store.getActions().initializeApp();
-  await store.getActions().generateSeed();
-  await store.getActions().createWallet({});
-
-  expect(store.getState().appReady).toBe(true);
-  expect(store.getState().walletCreated).toBe(true);
+  await new Promise((r) => setTimeout(r, 4000));
 });

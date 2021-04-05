@@ -108,37 +108,36 @@ export default function Main() {
           setInitialRoute("Welcome");
         }
         else {
-          try {
-            const lightningTimeout = setTimeout(() => {
-              Alert.alert(
-                "",
-                "It looks like Blixt Wallet is having trouble starting lnd.\n" +
-                "What do you want to do?",
-                [{
-                  text: "Go to Help Center",
-                  onPress: () => {
-                    navigator.current?.navigate("Settings", { screen: "LndMobileHelpCenter" });
-                  },
-                  style:"default",
-                }, {
-                  text: "Restart app",
-                  onPress: async () => {
-                    await NativeModules.LndMobileTools.killLnd();
-                    NativeModules.LndMobileTools.restartApp();
-                  },
-                }, {
-                  text: "Try again",
-                  onPress: () => {
-                    setAppReady(false);
-                  },
-                }]
-              )
-            }, 12 * 1000);
-            await initLightning();
-            clearTimeout(lightningTimeout);
-          } catch (e) {
-            toast(e.message, 0, "danger");
-          }
+          // try {
+          //   const lightningTimeout = setTimeout(() => {
+          //     Alert.alert(
+          //       "",
+          //       "It looks like Blixt Wallet is having trouble starting lnd.\n" +
+          //       "What do you want to do?",
+          //       [{
+          //         text: "Go to Help Center",
+          //         onPress: () => {
+          //           navigator.current?.navigate("Settings", { screen: "LndMobileHelpCenter" });
+          //         },
+          //         style:"default",
+          //       }, {
+          //         text: "Restart app",
+          //         onPress: async () => {
+          //           await NativeModules.LndMobileTools.killLnd();
+          //           NativeModules.LndMobileTools.restartApp();
+          //         },
+          //       }, {
+          //         text: "Try again",
+          //         onPress: () => {
+          //           setAppReady(false);
+          //         },
+          //       }]
+          //     )
+          //   }, 12 * 1000);
+          //   clearTimeout(lightningTimeout);
+          // } catch (e) {
+          //   toast(e.message, 0, "danger");
+          // }
         }
       }
       else {
@@ -175,7 +174,17 @@ export default function Main() {
         </Container>
       );
     }
-    return (<></>);
+    return (
+      <>
+        <StatusBar
+          backgroundColor="transparent"
+          hidden={false}
+          translucent={true}
+          networkActivityIndicatorVisible={true}
+          barStyle="light-content"
+        />
+      </>
+    );
   }
 
   if (state === "authentication") {

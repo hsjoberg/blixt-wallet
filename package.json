@@ -7,7 +7,7 @@
     "start-metro": "react-native start",
     "test": "jest --silent --roots tests",
     "test-update-snapshot": "jest --silent --roots tests --updateSnapshot",
-    "gen-proto": "pbjs -t static-module -w es6 --force-long -o proto/proto.js proto/rpc.proto proto/walletunlocker.proto proto/autopilotrpc/autopilot.proto proto/walletrpc/walletkit.proto proto/signrpc/signer.proto proto/routerrpc/router.proto proto/invoicesrpc/invoices.proto && pbts -o proto/proto.d.ts proto/proto.js",
+    "gen-proto": "pbjs -t static-module -w es6 --force-long -o proto/proto.js proto/rpc.proto proto/walletunlocker.proto proto/stateservice.proto proto/autopilotrpc/autopilot.proto proto/walletrpc/walletkit.proto proto/signrpc/signer.proto proto/routerrpc/router.proto proto/invoicesrpc/invoices.proto && pbts -o proto/proto.d.ts proto/proto.js",
     "build-tor-lib": "./build-tor",
     "android:clean": "cd android && ./gradlew clean",
     "android:regtest-debug": "react-native run-android --variant chainregtestNormalDebug --appIdSuffix regtest.debug",

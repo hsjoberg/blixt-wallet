@@ -30,10 +30,13 @@ import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAs
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
-import { setWalletPassword, getItem } from "../storage/keystore";
+import { setWalletPassword, getItem, getWalletPassword } from "../storage/keystore";
 import { PLATFORM } from "../utils/constants";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { Chain } from "../utils/build";
+import { LndMobileEventEmitter } from "../utils/event-listener";
+import { lnrpc } from "../../proto/proto";
+import { toast } from "../utils";
 
 import logger from "./../utils/log";
 const log = logger("Store");
@@ -66,6 +69,7 @@ export interface IStoreModel {
 
   generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
   writeConfig: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
+  unlockWallet: Thunk<ILightningModel, void, IStoreInjections>;
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
   changeOnboardingState: Thunk<IStoreModel, OnboardingState>;
 
@@ -169,9 +173,18 @@ export const model: IStoreModel = {
       log.v("initialize done", [initReturn]);
 
       const status = await checkStatus();
-      if (!getState().walletCreated && (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
-        log.i("Wallet not created, starting lnd");
-        log.d("lnd started", [await startLnd(torEnabled)]);
+      log.d("status", [status]);
+      if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
+        log.i("Starting lnd");
+        try {
+          log.d("startLnd", [await startLnd(torEnabled)]);
+        } catch (e) {
+          if (e.message.includes("lnd already started")) {
+            toast("lnd already started", 3000, "warning");
+          } else {
+            throw e;
+          }
+        }
       }
     }
     catch (e) {
@@ -192,8 +205,38 @@ export const model: IStoreModel = {
     await dispatch.transaction.getTransactions();
     await dispatch.channel.setupCachedBalance();
     log.d("Done starting up stores");
-    actions.setAppReady(true);
 
+    const start = new Date();
+    LndMobileEventEmitter.addListener("SubscribeState", async (e: any) => {
+      log.d("SubscribeState", [e]);
+      if (e.data === "") {
+        log.i("Got e.data empty from SubscribeState");
+        return;
+      }
+
+      try {
+        const state = injections.lndMobile.index.decodeState(e.data ?? "");
+        log.i("Current lnd state", [state]);
+        if (state.state === lnrpc.WalletState.NON_EXISTING) {
+          log.d("Got lnrpc.WalletState.NON_EXISTING");
+        } else if (state.state === lnrpc.WalletState.LOCKED) {
+          log.d("Got lnrpc.WalletState.LOCKED");
+          log.d("Wallet locked, unlocking wallet");
+          await dispatch.unlockWallet();
+        } else if (state.state === lnrpc.WalletState.UNLOCKED) {
+          log.d("Got lnrpc.WalletState.UNLOCKED");
+        } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
+          toast("RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          log.d("Got lnrpc.WalletState.RPC_ACTIVE");
+          await dispatch.lightning.initialize({ start });
+        }
+      } catch (e) {
+        toast(e.message, undefined, "danger");
+      }
+    });
+    await injections.lndMobile.index.subscribeState();
+
+    actions.setAppReady(true);
     log.d("App initialized");
     return true;
   }),
@@ -301,6 +344,16 @@ autopilot.heuristic=externalscore:0.95
 autopilot.heuristic=preferential:0.05
 `;
     await writeConfig(config);
+  }),
+
+  unlockWallet: thunk(async (_, _2, { injections }) => {
+    const unlockWallet = injections.lndMobile.wallet.unlockWallet;
+    // const password = await getItem(StorageItem.walletPassword);
+    const password = await getWalletPassword();
+    if (!password) {
+      throw new Error("Cannot find wallet password");
+    }
+    await unlockWallet(password);
   }),
 
   createWallet: thunk(async (actions, payload, { injections, getState, dispatch }) => {
