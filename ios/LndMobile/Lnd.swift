@@ -147,7 +147,7 @@ open class Lnd {
   func startLnd(_ torEnabled: Bool, lndStartedCallback: @escaping Callback) -> Void {
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
     let lndPath = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
-    let args = "--lnddir=\"\(lndPath.path)\""
+    let args = "--nolisten --lnddir=\"\(lndPath.path)\""
 
     let started: Callback = {(data: Data?, error: Error?) in {
       self.lndStarted = true
