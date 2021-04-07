@@ -51,6 +51,7 @@ function Overview({ navigation }: IOverviewProps) {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const transactions = useStoreState((store) => store.transaction.transactions);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
+  const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
@@ -223,8 +224,8 @@ function Overview({ navigation }: IOverviewProps) {
               <AnimatedIcon
                 style={[style.helpIcon, { opacity: iconOpacity }]} type="MaterialIcons" name="live-help" onPress={() => navigation.navigate("Help")}
               />
-              {(!nodeInfo || !nodeInfo.syncedToChain) &&
-                <Animated.View style={[style.lightningSyncIcon, { opacity: iconOpacity}]}>
+              {!syncedToChain &&
+                <Animated.View style={[style.lightningSyncIcon, { opacity: iconOpacity }]}>
                   <Spinner onPress={onPressSyncIcon} />
                 </Animated.View>
               }

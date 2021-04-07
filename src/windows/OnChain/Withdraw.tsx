@@ -167,7 +167,7 @@ export default ({ navigation }: IOpenChannelProps) => {
               />
               <Text>
                 {feeRate !== 0 &&
-                  <>{feeRate} sat/b</>
+                  <>{feeRate} sat/vB</>
                 }
                 {feeRate === 0 &&
                   "auto"

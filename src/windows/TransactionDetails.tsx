@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Share, Platform, LayoutAnimation } from "react-native";
+import { StyleSheet, Share, Platform, LayoutAnimation, ScrollView } from "react-native";
 import DialogAndroid from "react-native-dialogs";
 import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
@@ -135,7 +135,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
       <Blurmodal goBackByClickingOutside={true}>
         <Card style={style.card}>
           <CardItem>
-            <Body>
+            <ScrollView style={{backgroundColor:"transparent"}} contentContainerStyle={{backgroundColor:"transparent"}}>
               <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
                 <H1 style={style.header}>
                   Transaction
@@ -188,7 +188,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                   <CopyAddress text={transaction.paymentRequest} onPress={onPaymentRequestTextPress} />
                 </>
               }
-            </Body>
+            </ScrollView>
           </CardItem>
         </Card>
       </Blurmodal>
@@ -280,7 +280,8 @@ function LNURLMetaData({ transaction }: IWebLNMetaDataProps) {
 const style = StyleSheet.create({
   card: {
     padding: 5,
-    minHeight: "55%",
+    minHeight: "50%",
+    maxHeight: "85%",
   },
   header: {
     fontWeight: "bold",

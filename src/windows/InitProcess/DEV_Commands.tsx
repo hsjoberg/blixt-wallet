@@ -63,15 +63,15 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
       />
       <Content style={styles.content}>
         <View style={{ backgroundColor: blixtTheme.dark, marginTop: 32, width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-          {!navigation && <Button onPress={continueCallback}><Text style={styles.buttonText}>continueCallback()</Text></Button>}
+          {!navigation && <Button success onPress={continueCallback}><Text style={styles.buttonText}>continueCallback()</Text></Button>}
           {navigation &&
             <>
-              <Button onPress={async () => {
+              <Button success onPress={async () => {
                 navigation?.navigate("Overview");
               }}>
                 <Text style={styles.buttonText}>navigate to overview</Text>
               </Button>
-              <Button onPress={async () => {
+              <Button success onPress={async () => {
                 navigation?.navigate("Welcome");
               }}>
                 <Text style={styles.buttonText}>navigate to onboarding</Text>
@@ -387,7 +387,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await setItem(StorageItem.onboardingState, "DONE")}><Text style={styles.buttonText}>onboardingState = DONE</Text></Button>
 
           <Text style={{ width: "100%" }}>lndmobile:</Text>
-          <Button small onPress={async () => await NativeModules.LndMobile.init()}><Text style={styles.buttonText}>LndMobile.init()</Text></Button>
+          <Button small onPress={async () => await NativeModules.LndMobile.initialize()}><Text style={styles.buttonText}>LndMobile.initialize()</Text></Button>
           <Button small onPress={async () => {
             console.log(await checkStatus());
           }}>
@@ -727,6 +727,13 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           }}>
             <Text style={styles.buttonText}>walletBalance()</Text>
           </Button>
+
+          <Text style={{ width: "100%" }}>easy-peasy store:</Text>
+          <Button small onPress={async () => {
+            actions.initializeApp();
+          }}>
+            <Text style={styles.buttonText}>easy-peasy store initialize()</Text>
+          </Button>
         </View>
         <View style={{ backgroundColor: blixtTheme.dark, padding: 15, marginTop: 10 }}>
           <Input
@@ -839,7 +846,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             <Text style={styles.buttonText}>closeChannel()</Text>
           </Button>
 
-
           <View style={{ marginTop: 30 }}>
             <Text style={styles.buttonText}>{(new Date()).toISOString()}:</Text>
             <Text style={styles.buttonText} selectable={true} onPress={() => {
@@ -871,7 +877,6 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   buttonText: {
-    fontSize: 12,
   }
 });
 
