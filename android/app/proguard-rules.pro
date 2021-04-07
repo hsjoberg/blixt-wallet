@@ -31,3 +31,5 @@
 }
 
 -keep class lnrpc.** { *; }
+
+-keep class com.facebook.react.turbomodule.** { *; }

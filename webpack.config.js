@@ -45,6 +45,7 @@ module.exports = {
           path.resolve('node_modules/react-native-fs'),
           path.resolve('node_modules/react-native-document-picker'),
           path.resolve('node_modules/@react-native-community/art'),
+          path.resolve('node_modules/react-native-reanimated'),
         ],
         use: ['babel-loader'],
       },
