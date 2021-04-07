@@ -999,23 +999,20 @@ Do you wish to proceed?`;
             <Body><Text>Show startup info notifications</Text></Body>
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
           </ListItem>
-          {PLATFORM === "android" &&
-            <ListItem style={style.listItem} button={true} icon={true} onPress={onLndMobileHelpCenterPress}>
-              <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="lifebuoy" /></Left>
-              <Body>
-                <Text>LndMobile help center</Text>
-              </Body>
-            </ListItem>
-          }
-          {PLATFORM === "android" &&
-            <ListItem style={style.listItem} icon={true} onPress={async () => {
-              const logLines = await NativeModules.LndMobileTools.tailLog(30);
-              Alert.alert("Log", logLines);
-            }}>
-              <Left><Icon style={style.icon} type="Ionicons" name="newspaper-outline" /></Left>
-              <Body><Text>Read lnd log</Text></Body>
-            </ListItem>
-          }
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onLndMobileHelpCenterPress}>
+            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="lifebuoy" /></Left>
+            <Body>
+              <Text>LndMobile help center</Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={async () => {
+            const logLines = await NativeModules.LndMobileTools.tailLog(30);
+            Alert.alert("Log", logLines);
+          }}>
+            <Left><Icon style={style.icon} type="Ionicons" name="newspaper-outline" /></Left>
+            <Body><Text>Read lnd log</Text></Body>
+          </ListItem>
+
           {((name === "Hampus" || __DEV__ === true)) &&
             <>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>

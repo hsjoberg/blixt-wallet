@@ -5,3 +5,8 @@ export const LndMobileEventEmitter =
   PLATFORM == "android"
     ? DeviceEventEmitter
     : new NativeEventEmitter(NativeModules.LndMobile);
+
+export const LndMobileToolsEventEmitter =
+  PLATFORM == "android"
+    ? DeviceEventEmitter
+    : new NativeEventEmitter(NativeModules.LndMobileTools);

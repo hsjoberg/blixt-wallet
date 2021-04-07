@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, ScrollView, View, NativeModules, DeviceEventEmitter } from "react-native";
+import { StyleSheet, ScrollView, View, NativeModules, DeviceEventEmitter, NativeEventEmitter } from "react-native";
 import { Card, Text, CardItem, H1, Button, Spinner } from "native-base";
 
 import Blurmodal from "../../components/BlurModal";
@@ -13,6 +13,8 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Color from "color";
 import Clipboard from "@react-native-community/clipboard";
 import { lnrpc } from "../../../proto/proto";
+import { PLATFORM } from "../../utils/constants";
+import { LndMobileToolsEventEmitter } from "../../utils/event-listener";
 
 interface IStepsResult {
   title: string;
@@ -27,7 +29,7 @@ export default function LndMobileHelpCenter({ navigation }) {
   const logScrollView = useRef<ScrollView>();
 
   useEffect(() => {
-    const listener = DeviceEventEmitter.addListener("lndlog", (data: string) => {
+    const listener = LndMobileToolsEventEmitter.addListener("lndlog", (data: string) => {
       console.log("lndlog: " + data);
       lndLog.push(data.slice(11));
       setLndLog(lndLog.slice(0));
@@ -40,21 +42,40 @@ export default function LndMobileHelpCenter({ navigation }) {
     };
   }, []);
 
-  const steps = [{
+  let steps: { title: string, exec: () => Promise<boolean | string> }[] = [];
+
+  if (PLATFORM === "android") {
+    steps.push({
       title: "Check LndMobileService process exist",
       async exec () {
+        if (PLATFORM === "ios") {
+          return true;
+        }
         const r = await NativeModules.LndMobileTools.checkLndProcessExist();
         return r;
       }
-    },{
+    });
+
+    steps.push({
       title: "Check LndMobileService connected",
       async exec () {
-          const r = await NativeModules.LndMobile.checkLndMobileServiceConnected();
-          return r;
+        if (PLATFORM === "ios") {
+          return true;
+        }
+        const r = await NativeModules.LndMobile.checkLndMobileServiceConnected();
+        return r;
       },
-    }, {
+    });
+  }
+
+  steps = [
+    ...steps,
+    {
       title: "Ping LndMobileService",
       async exec () {
+        if (PLATFORM === "ios") {
+          return true;
+        }
         const r = await NativeModules.LndMobile.sendPongToLndMobileservice();
         return true;
       }
@@ -83,6 +104,7 @@ export default function LndMobileHelpCenter({ navigation }) {
         if (r && r.identityPubkey) {
           return true;
         }
+        return false;
       }
     }, {
       title: "Lnd NewAddress",
@@ -197,7 +219,7 @@ export default function LndMobileHelpCenter({ navigation }) {
                 LndMobile Help Center
               </H1>
               <Button small info disabled={runningSteps} style={{width: 85, justifyContent: "center" }} onPress={onPressDoTest}>
-                {!runningSteps && <Text style={{ fontSize: 12 }}>Do Test</Text>}
+                {!runningSteps && <Text>Do Test</Text>}
                 {runningSteps && <Spinner size="small" color={blixtTheme.light} />}
               </Button>
             </View>

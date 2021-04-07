@@ -11,14 +11,18 @@ extension LndMobileToolsError: LocalizedError {
 }
 
 @objc(LndMobileTools)
-class LndMobileTools: NSObject, RCTBridgeModule {
+class LndMobileTools: RCTEventEmitter {
   @objc
-  static func moduleName() -> String! {
+  override static func moduleName() -> String! {
     "LndMobileTools"
   }
 
+  override func supportedEvents() -> [String]! {
+    return ["lndlog"]
+  }
+
   @objc
-  static func requiresMainQueueSetup() -> Bool {
+  override static func requiresMainQueueSetup() -> Bool {
     return false
   }
 
@@ -345,5 +349,58 @@ autopilot.heuristic=preferential:0.05
       NSLog("Failed moving lnd files: \(error)")
       reject("error", error.localizedDescription, error)
     }
+  }
+
+  @objc(tailLog:resolver:rejecter:)
+  func tailLog(numberOfLines: Int32, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
+    let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+    let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
+                      .appendingPathComponent("logs", isDirectory: true)
+                      .appendingPathComponent("bitcoin", isDirectory: true)
+                      .appendingPathComponent(chain ?? "mainnet", isDirectory: true)
+                      .appendingPathComponent("lnd.log", isDirectory: false)
+
+    do {
+      let data = try String(contentsOf: url)
+      let lines = data.components(separatedBy: .newlines)
+      resolve(lines.suffix(Int(numberOfLines)).joined(separator: "\n"))
+    } catch {
+      reject("error", error.localizedDescription, error)
+    }
+  }
+
+  @objc(observeLndLogFile:rejecter:)
+  func observeLndLogFile(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
+    let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+    let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
+                      .appendingPathComponent("logs", isDirectory: true)
+                      .appendingPathComponent("bitcoin", isDirectory: true)
+                      .appendingPathComponent(chain ?? "mainnet", isDirectory: true)
+                      .appendingPathComponent("lnd.log", isDirectory: false)
+    let fileHandle = FileHandle(forReadingAtPath: url.path)
+
+    DispatchQueue.main.async(execute: { [self] in
+      NotificationCenter.default.addObserver(
+        forName: FileHandle.readCompletionNotification,
+        object: fileHandle,
+        queue: OperationQueue.main,
+        using: { [self] n in
+          let data = n.userInfo?[NSFileHandleNotificationDataItem] as? Data
+          if data != nil && (data?.count ?? 0) > 0 {
+            var s: String? = nil
+            if let bytes = data {
+              s = String(bytes: bytes, encoding: .utf8)
+            }
+            if let s = s {
+              self.sendEvent(withName: "lndlog", body: s)
+            }
+          }
+          fileHandle?.readInBackgroundAndNotify()
+        })
+      fileHandle?.seekToEndOfFile()
+      fileHandle?.readInBackgroundAndNotify()
+    })
   }
 }
