@@ -9,7 +9,6 @@ import { timeout, bytesToString, getDomainFromURL, stringToUint8Array, hexToUint
 
 import Long from "long";
 import { lnrpc } from "../../proto/proto";
-import { deriveKey, signMessage } from "../lndmobile/wallet";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 
 import logger from "./../utils/log";
@@ -110,6 +109,8 @@ export interface IDoChannelRequestPayload {
 export type IDoPayRequestResponse = ILNUrlPayResponse;
 
 type LNUrlRequest = ILNUrlChannelRequest | ILNUrlAuthRequest | ILNUrlWithdrawRequest | ILNUrlPayRequest | ILNUrlDummy;
+
+const LNURLAUTH_CANONICAL_PHRASE = "DO NOT EVER SIGN THIS TEXT WITH YOUR PRIVATE KEYS! IT IS ONLY USED FOR DERIVATION OF LNURL-AUTH HASHING-KEY, DISCLOSING ITS SIGNATURE WILL COMPROMISE YOUR LNURL-AUTH IDENTITY AND MAY LEAD TO LOSS OF FUNDS!";
 
 export interface ILNUrlModel {
   setLNUrl: Thunk<ILNUrlModel, string, any, IStoreModel, Promise<LNURLType>>;
@@ -243,6 +244,23 @@ export const lnUrl: ILNUrlModel = {
         await timeout(1000);
       }
 
+      // 1. The following canonical phrase is defined: [...].
+      // 2. LN WALLET obtains an RFC6979 deterministic signature of sha256(utf8ToBytes(canonical phrase)) using secp256k1 with node private key.
+      const signature = await injections.lndMobile.wallet.signMessageNodePubkey(stringToUint8Array(LNURLAUTH_CANONICAL_PHRASE));
+      // 3. LN WALLET defines hashingKey as PrivateKey(sha256(obtained signature)).
+      const hashingKey = new sha256Hash().update(stringToUint8Array(signature.signature)).digest();
+      // 4. SERVICE domain name is extracted from auth LNURL and then service-specific linkingPrivKey is defined as PrivateKey(hmacSha256(hashingKey, service domain name)).
+      const domain = getDomainFromURL(lnUrlStr);
+      const linkingKeyPriv = new sha256HMAC(hashingKey).update(stringToUint8Array(domain)).digest();
+
+      // Obtain the public key
+      const linkingKeyPub = secp256k1.publicKeyCreate(linkingKeyPriv, true);
+
+      // Sign the message
+      const signedMessage = secp256k1.ecdsaSign(hexToUint8Array(lnUrlObject.k1), linkingKeyPriv);
+      const signedMessageDER = secp256k1.signatureExport(signedMessage.signature)
+
+      /*
       // FOLLOWS THE LNURL-AUTH SPECIFICATION
       // https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-auth.md
       // Key derivation for Bitcoin wallets:
@@ -276,6 +294,7 @@ export const lnUrl: ILNUrlModel = {
       // const linkingKeyPub = (await deriveKey(138, keyIndex)).rawKeyBytes;
       // log.d("signedMessageDER", [signedMessageDER]);
       // log.d("linkingKeyPub", [linkingKeyPub]);
+      */
 
       //    LN WALLET Then issues a GET to LN SERVICE using
       //    <LNURL_hostname_and_path>?<LNURL_existing_query_parameters>&sig=<hex(sign(k1.toByteArray, linkingPrivKey))>&key=<hex(linkingKey)>
