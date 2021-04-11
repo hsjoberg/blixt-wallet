@@ -26,12 +26,6 @@ export default function LNURLChannelRequest({ navigation }: IAuthRequestProps) {
       if (type === "login") {
         await timeout(100);
 
-        if (PLATFORM === "ios") {
-          Alert.alert("Not supported", "LNURL-auth is not yet supported on iOS");
-          navigation.pop();
-          return;
-        }
-
         const domain = getDomainFromURL(lnurlStr!);
         Alert.alert(
           "Login request",
