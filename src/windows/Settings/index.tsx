@@ -15,6 +15,7 @@ import { IFiatRates } from "../../state/Fiat";
 import { OnchainExplorer } from "../../state/Settings";
 import LightningPeers from "./LightningPeers";
 import ConnectToLightningPeer from "./ConnectToLightningPeer";
+import LndLog from "./LndLog";
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,7 @@ export type SettingsStackParamList = {
   LightningPeers: undefined;
   ConnectToLighningPeer: undefined;
   ChannelProvider: ISelectListNavigationProps<string>;
+  LndLog: undefined;
 }
 
 export default function SettingsIndex() {
@@ -60,6 +62,7 @@ export default function SettingsIndex() {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }} />
       <Stack.Screen name="ChannelProvider" component={SelectList} />
+      <Stack.Screen name="LndLog" component={LndLog} />
     </Stack.Navigator>
   );
 }

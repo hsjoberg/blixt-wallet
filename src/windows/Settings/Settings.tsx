@@ -1006,8 +1006,7 @@ Do you wish to proceed?`;
             </Body>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={async () => {
-            const logLines = await NativeModules.LndMobileTools.tailLog(30);
-            Alert.alert("Log", logLines);
+            navigation.navigate("LndLog");
           }}>
             <Left><Icon style={style.icon} type="Ionicons" name="newspaper-outline" /></Left>
             <Body><Text>Read lnd log</Text></Body>
