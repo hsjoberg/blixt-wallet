@@ -84,3 +84,14 @@ dist
 # service-image
 contrib/service-image/webp
 contrib/service-image/code
+
+# vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+[._]*.un~
+Session.vim
+Sessionx.vim
+*~
