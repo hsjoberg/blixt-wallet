@@ -321,6 +321,7 @@ maxbackoff=2s
 norest=1
 sync-freelist=1
 accept-keysend=1
+tlsdisableautofill=1
 
 [Routing]
 routing.assumechanvalid=1
