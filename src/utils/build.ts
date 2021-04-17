@@ -15,7 +15,7 @@ export const Debug: boolean = Platform.select({
 
 export const VersionCode: number = Platform.select({
   android: BuildConfig.VERSION_CODE,
-  ios: BuildConfig.CFBundleVersion,
+  ios: Number.parseInt(BuildConfig.CFBundleVersion, 10),
   web: BuildConfig.VERSION_CODE,
 });
 

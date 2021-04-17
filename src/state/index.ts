@@ -26,14 +26,14 @@ import { ILightNameModel, lightName } from "./LightName";
 import { IICloudBackupModel, iCloudBackup } from "./ICloudBackup";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
-import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion } from "../storage/app";
+import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion, getAppBuild, setAppBuild } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
 import { setWalletPassword, getItem, getWalletPassword } from "../storage/keystore";
 import { PLATFORM } from "../utils/constants";
 import SetupBlixtDemo from "../utils/setup-demo";
-import { Chain } from "../utils/build";
+import { Chain, VersionCode } from "../utils/build";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { lnrpc } from "../../proto/proto";
 import { toast } from "../utils";
@@ -63,6 +63,7 @@ export interface IStoreModel {
   setHoldOnboarding: Action<IStoreModel, boolean>;
   setWalletSeed: Action<IStoreModel, string[] | undefined>;
   setAppVersion: Action<IStoreModel, number>;
+  setAppBuild: Action<IStoreModel, number>;
   setOnboardingState: Action<IStoreModel, OnboardingState>;
   setTorEnabled: Action<IStoreModel, boolean>;
   setTorLoading: Action<IStoreModel, boolean>;
@@ -102,6 +103,7 @@ export interface IStoreModel {
 
   walletSeed?: string[];
   appVersion: number;
+  appBuild: number;
   onboardingState: OnboardingState;
 }
 
@@ -155,7 +157,9 @@ export const model: IStoreModel = {
       }
     }
     actions.setAppVersion(await getAppVersion());
+    actions.setAppBuild(await getAppBuild());
     await actions.checkAppVersionMigration();
+
 
     actions.setOnboardingState((await getItemAsyncStorage(StorageItem.onboardingState) as OnboardingState) ?? "DO_BACKUP");
     actions.setWalletCreated(await getWalletCreated());
@@ -255,9 +259,14 @@ export const model: IStoreModel = {
         await appMigration[i].beforeLnd(db, i);
       }
       await setAppVersion(appMigration.length - 1);
+    }
 
-      // Re-write configuration in case there's something new
+    const appBuild = await getAppBuild();
+    if (appBuild < VersionCode) {
+      log.i("Found new app build");
+      log.i("Writing config");
       await actions.writeConfig();
+      await setAppBuild(VersionCode);
     }
   }),
 
@@ -303,6 +312,8 @@ export const model: IStoreModel = {
     const bitcoindPubRawBlock = await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) || null;
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
 
+    const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
+
     const config = `
 [Application Options]
 debuglevel=info
@@ -317,7 +328,7 @@ routing.assumechanvalid=1
 [Bitcoin]
 bitcoin.active=1
 bitcoin.${node}=1
-bitcoin.node=${lndChainBackend === "neutrino" ? "neutrino" : "bitcoind"}
+bitcoin.node=${nodeBackend}
 
 ${lndChainBackend === "neutrino" ? `
 [Neutrino]
@@ -388,6 +399,7 @@ autopilot.heuristic=preferential:0.05
   setDb: action((state, db) => { state.db = db; }),
   setAppReady: action((state, value) => { state.appReady = value; }),
   setAppVersion: action((state, value) => { state.appVersion = value; }),
+  setAppBuild: action((state, value) => { state.appBuild = value; }),
   setOnboardingState: action((state, value) => { state.onboardingState = value; }),
   setTorEnabled: action((state, value) => { state.torEnabled = value; }),
   setTorLoading: action((state, value) => { state.torLoading = value; }),
@@ -396,6 +408,7 @@ autopilot.heuristic=preferential:0.05
   walletCreated: false,
   holdOnboarding: false,
   appVersion: 0,
+  appBuild: 0,
   onboardingState: "SEND_ONCHAIN",
   torEnabled: false,
   torLoading: false,

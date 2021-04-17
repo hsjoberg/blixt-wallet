@@ -4,7 +4,7 @@ import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 import { MapStyle } from "../utils/google-maps";
 import { appMigration } from "../migration/app-migration";
-import { Chain } from "../utils/build";
+import { Chain, VersionCode } from "../utils/build";
 import { LndChainBackend } from "../state/Lightning";
 import { DEFAULT_NEUTRINO_NODE } from "../utils/constants";
 
@@ -13,6 +13,7 @@ const APP_VERSION = appMigration.length - 1;
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",
   appVersion = "appVersion",
+  appBuild = "appBuild",
   databaseCreated = "databaseCreated",
   walletCreated = "walletCreated",
   firstSync = "firstSync",
@@ -63,8 +64,14 @@ export const removeItem = async (key: StorageItem) => await AsyncStorage.removeI
 export const getAppVersion = async (): Promise<number> => {
   return await getItemObject(StorageItem.appVersion) || 0;
 };
+export const getAppBuild = async (): Promise<number> => {
+  return await getItemObject(StorageItem.appBuild) || 0;
+};
 export const setAppVersion = async (version: number): Promise<void> => {
   return await setItemObject(StorageItem.appVersion, version);
+};
+export const setAppBuild = async (version: number): Promise<void> => {
+  return await setItemObject(StorageItem.appBuild, version);
 };
 
 export const getWalletCreated = async (): Promise<boolean> => {
@@ -76,6 +83,7 @@ export const clearApp = async () => {
   await Promise.all([
     removeItem(StorageItem.app),
     removeItem(StorageItem.appVersion),
+    removeItem(StorageItem.appBuild),
     removeItem(StorageItem.walletCreated),
     removeItem(StorageItem.firstSync),
     removeItem(StorageItem.timeSinceLastSync),
@@ -145,6 +153,7 @@ export const setupApp = async () => {
   await Promise.all([
     setItemObject<boolean>(StorageItem.app, true),
     setItemObject<number>(StorageItem.appVersion, APP_VERSION),
+    setItemObject<number>(StorageItem.appBuild, VersionCode),
     setItemObject<boolean>(StorageItem.walletCreated, false),
     setItemObject<boolean>(StorageItem.firstSync, true),
     setItemObject<number>(StorageItem.timeSinceLastSync, 0),
