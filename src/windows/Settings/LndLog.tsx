@@ -49,7 +49,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
   }, [navigation]);
 
   const onPressCopy = () => {
-    Clipboard.setString(log)
+    Clipboard.setString(log);
     toast("Copied to clipboard");
   }
 

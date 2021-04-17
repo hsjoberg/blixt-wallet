@@ -84,17 +84,18 @@ export const channel: IChannelModel = {
   }),
 
   initialize: thunk(async (actions, _, { getState }) => {
+    if (getState().channelUpdateSubscriptionStarted) {
+      log.d("Channel.initialize() called when subscription already started");
+      return;
+    }
+    await actions.setupChannelUpdateSubscriptions();
+
     await Promise.all([
       actions.getChannels(),
       actions.getChannelEvents(),
       actions.getBalance(),
     ]);
 
-    if (getState().channelUpdateSubscriptionStarted) {
-      log.d("Channel.initialize() called when subscription already started");
-      return;
-    }
-    await actions.setupChannelUpdateSubscriptions();
     return true;
   }),
 
