@@ -376,13 +376,6 @@ export default function Settings({ navigation }: ISettingsProps) {
     }
   };
 
-  // WebLN Browser
-  const experimentWeblnBrowserEnabled = useStoreState((store) => store.settings.experimentWeblnEnabled);
-  const changeExperimentWeblnBrowserEnabled = useStoreActions((store) => store.settings.changeExperimentWeblnEnabled);
-  const onExperimentWeblnBrowserEnabledToggle = async () => {
-    await changeExperimentWeblnBrowserEnabled(!experimentWeblnBrowserEnabled);
-  }
-
   // Inbound services list
   const onInboundServiceListPress = async () => {
     const goToSite = async (selectedItem: "LNBIG" | "BITREFILL_THOR") => {
@@ -1103,14 +1096,6 @@ Do you wish to proceed?`;
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Experiments</Text>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onExperimentWeblnBrowserEnabledToggle}>
-            <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
-            <Body>
-              <Text>Enable WebLN browser</Text>
-              <Text note={true}>Shows up as an icon on the Overview screen</Text>
-            </Body>
-            <Right><CheckBox checked={experimentWeblnBrowserEnabled} onPress={onExperimentWeblnBrowserEnabledToggle} /></Right>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onChangeMultiPartPaymentEnabledPress}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>

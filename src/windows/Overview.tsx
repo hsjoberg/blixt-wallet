@@ -56,7 +56,6 @@ function Overview({ navigation }: IOverviewProps) {
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
-  const experimentWeblnEnabled = useStoreState((store) => store.settings.experimentWeblnEnabled);
   const hideExpiredInvoices = useStoreState((store) => store.settings.hideExpiredInvoices);
 
   const bitcoinAddress = useStoreState((store) => store.onChain.address);
@@ -229,7 +228,7 @@ function Overview({ navigation }: IOverviewProps) {
                   <Spinner onPress={onPressSyncIcon} />
                 </Animated.View>
               }
-              {nodeInfo && nodeInfo.syncedToChain && experimentWeblnEnabled &&
+              {syncedToChain &&
                 <AnimatedIcon
                   style={[style.weblnBrowswerIcon, { opacity: iconOpacity }]} type="MaterialCommunityIcons" name="cart-outline" onPress={() => navigation.navigate("WebLNBrowser")}
                 />

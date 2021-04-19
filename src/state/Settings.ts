@@ -31,7 +31,6 @@ export interface ISettingsModel {
   changePreferFiat: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationEnabled: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationMapStyle: Thunk<ISettingsModel, keyof typeof MapStyle>;
-  changeExperimentWeblnEnabled: Thunk<ISettingsModel, boolean>;
   changeOnchainExplorer: Thunk<ISettingsModel, keyof typeof OnchainExplorer>;
   changeMultiPathPaymentsEnabled: Thunk<ISettingsModel, boolean>;
   changeTorEnabled: Thunk<ISettingsModel, boolean>;
@@ -57,7 +56,6 @@ export interface ISettingsModel {
   setPreferFiat: Action<ISettingsModel, boolean>;
   setTransactionGeolocationEnabled: Action<ISettingsModel, boolean>;
   setTransactionGeolocationMapStyle: Action<ISettingsModel, keyof typeof MapStyle>;
-  setExperimentWeblnEnabled: Action<ISettingsModel, boolean>;
   setOnchainExplorer: Action<ISettingsModel, keyof typeof OnchainExplorer>;
   setMultiPathPaymentsEnabled: Action<ISettingsModel, boolean>;
   setTorEnabled: Action<ISettingsModel, boolean>;
@@ -83,7 +81,6 @@ export interface ISettingsModel {
   preferFiat: boolean;
   transactionGeolocationEnabled: boolean;
   transactionGeolocationMapStyle: keyof typeof MapStyle;
-  experimentWeblnEnabled: boolean;
   onchainExplorer: keyof typeof OnchainExplorer;
   multiPathPaymentsEnabled: boolean;
   torEnabled: boolean;
@@ -113,7 +110,6 @@ export const settings: ISettingsModel = {
     actions.setPreferFiat(await getItemObject(StorageItem.preferFiat) || false);
     actions.setTransactionGeolocationEnabled(await getItemObject(StorageItem.transactionGeolocationEnabled) || false);
     actions.setTransactionGeolocationMapStyle(await getItem(StorageItem.transactionGeolocationMapStyle) as keyof typeof MapStyle || "darkMode");
-    actions.setExperimentWeblnEnabled(await getItemObject(StorageItem.experimentWeblnEnabled || false));
     actions.setOnchainExplorer(await getItem(StorageItem.onchainExplorer) ?? "mempool");
     actions.setMultiPathPaymentsEnabled(await getItemObject(StorageItem.multiPathPaymentsEnabled || false));
     actions.setTorEnabled(await getItemObject(StorageItem.torEnabled) || false);
@@ -193,11 +189,6 @@ export const settings: ISettingsModel = {
     actions.setTransactionGeolocationMapStyle(payload);
   }),
 
-  changeExperimentWeblnEnabled: thunk(async (actions, payload) => {
-    await setItemObject(StorageItem.experimentWeblnEnabled, payload);
-    actions.setExperimentWeblnEnabled(payload);
-  }),
-
   changeOnchainExplorer: thunk(async (actions, payload) => {
     await setItem(StorageItem.onchainExplorer, payload);
     actions.setOnchainExplorer(payload);
@@ -270,7 +261,6 @@ export const settings: ISettingsModel = {
   setPreferFiat: action((state, payload) => { state.preferFiat = payload; }),
   setTransactionGeolocationEnabled: action((state, payload) => { state.transactionGeolocationEnabled = payload; }),
   setTransactionGeolocationMapStyle: action((state, payload) => { state.transactionGeolocationMapStyle = payload; }),
-  setExperimentWeblnEnabled: action((state, payload) => { state.experimentWeblnEnabled = payload; }),
   setOnchainExplorer: action((state, payload) => { state.onchainExplorer = payload; }),
   setMultiPathPaymentsEnabled: action((state, payload) => { state.multiPathPaymentsEnabled = payload; }),
   setTorEnabled: action((state, payload) => { state.torEnabled = payload; }),
@@ -296,7 +286,6 @@ export const settings: ISettingsModel = {
   preferFiat: false,
   transactionGeolocationEnabled: false,
   transactionGeolocationMapStyle: "darkMode",
-  experimentWeblnEnabled: false,
   onchainExplorer: "mempool",
   multiPathPaymentsEnabled: false,
   torEnabled: false,
