@@ -165,8 +165,8 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
         <BarcodeMask
           showAnimatedLine={false}
           edgeColor={blixtTheme.primary}
-          width={smallScreen ? 270 : 275}
-          height={smallScreen ? 270 : 275}
+          width={smallScreen ? 265 : 270}
+          height={smallScreen ? 265 : 270}
         />
         <Icon type="Ionicons" name="camera-reverse" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
         {(__DEV__ || PLATFORM === "web") && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
