@@ -456,6 +456,7 @@ exports[`renders correctly 1`] = `
                                         "paddingRight": 16,
                                       }
                                     }
+                                    uppercase={false}
                                   >
                                     Choose channel backup file on disk
                                   </Text>
@@ -510,6 +511,7 @@ exports[`renders correctly 1`] = `
                                         "paddingRight": 16,
                                       }
                                     }
+                                    uppercase={false}
                                   >
                                     Restore via Google Drive
                                   </Text>
@@ -553,6 +555,7 @@ exports[`renders correctly 1`] = `
                                   "fontSize": 16,
                                 }
                               }
+                              uppercase={false}
                             >
                               To restore your wallet, write each word from your seed separated by a space.
                               
@@ -628,6 +631,7 @@ exports[`renders correctly 1`] = `
                                   "paddingRight": 16,
                                 }
                               }
+                              uppercase={false}
                             >
                               Restore Wallet
                             </Text>

@@ -14,7 +14,7 @@ PODS:
   - glog (0.3.5)
   - hermes-engine (0.7.2)
   - libevent (2.1.12)
-  - Permission-LocationWhenInUse (3.0.1):
+  - Permission-LocationWhenInUse (3.0.2):
     - RNPermissions
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
@@ -226,13 +226,13 @@ PODS:
   - React-jsinspector (0.64.0)
   - react-native-build-config (0.3.2):
     - React
-  - react-native-camera (3.43.3):
+  - react-native-camera (3.43.6):
     - React-Core
-    - react-native-camera/RCT (= 3.43.3)
-    - react-native-camera/RN (= 3.43.3)
-  - react-native-camera/RCT (3.43.3):
+    - react-native-camera/RCT (= 3.43.6)
+    - react-native-camera/RN (= 3.43.6)
+  - react-native-camera/RCT (3.43.6):
     - React-Core
-  - react-native-camera/RN (3.43.3):
+  - react-native-camera/RN (3.43.6):
     - React-Core
   - react-native-document-picker (5.0.3):
     - React-Core
@@ -240,15 +240,15 @@ PODS:
     - React
   - react-native-geolocation (2.0.2):
     - React
-  - react-native-maps (0.27.1):
-    - React
+  - react-native-maps (0.28.0):
+    - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
   - react-native-slider (3.0.3):
     - React
   - react-native-sqlite-storage (5.0.0):
     - React
-  - react-native-webview (11.3.2):
+  - react-native-webview (11.4.1):
     - React-Core
   - React-perflogger (0.64.0)
   - React-RCTActionSheet (0.64.0):
@@ -330,7 +330,7 @@ PODS:
     - React
   - RNKeychain (4.0.5):
     - React
-  - RNPermissions (3.0.1):
+  - RNPermissions (3.0.2):
     - React-Core
   - RNReactNativeHapticFeedback (1.11.0):
     - React-Core
@@ -372,10 +372,10 @@ PODS:
     - RNSound/Core (= 0.11.0)
   - RNSound/Core (0.11.0):
     - React
-  - RNSVG (12.1.0):
+  - RNSVG (12.1.1):
     - React
-  - RNVectorIcons (7.1.0):
-    - React
+  - RNVectorIcons (8.1.0):
+    - React-Core
   - SwiftProtobuf (1.15.0)
   - Yoga (1.14.0)
 
@@ -573,7 +573,7 @@ SPEC CHECKSUMS:
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   hermes-engine: 7d97ba46a1e29bacf3e3c61ecb2804a5ddd02d4f
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  Permission-LocationWhenInUse: 3a2b0dbc167d79e8e920a4377ff9520cdc108407
+  Permission-LocationWhenInUse: 3c539649b2a5bb9de9f5aa3cb139cafb6fc4dcb2
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
   RCTTypeSafety: 512728b73549e72ad7330b92f3d42936f2a4de5b
@@ -586,15 +586,15 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
   react-native-build-config: 1130ad8668ca251b65e95e002b5b8f308a96726f
-  react-native-camera: 3d39a6120b9e99525bc9d7696a7232c4527c0d44
+  react-native-camera: 9e55a09596b8c4e41eb7d4cce7c39826990c3cac
   react-native-document-picker: 2e6ecd112c48215e36431734d902f35201ffab0a
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
-  react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
+  react-native-maps: 2d405b4e8cee0282e4c02bac434d81450dfea877
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
-  react-native-webview: 71567b6bf3d4e55914e580d720cc8f7df64af817
+  react-native-webview: 4024b67e9c91810450a5960dff60ae708fd5acd1
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11
   React-RCTAnimation: 3f96f21a497ae7dabf4d2f150ee43f906aaf516f
@@ -615,14 +615,14 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNICloudStore: bc6e225811637c09bd1eb055d6cd7448e61cd451
   RNKeychain: 840f8e6f13be0576202aefcdffd26a4f54bfe7b5
-  RNPermissions: 4c8a37b4dde50f1f152bf8cd08c4a43d2355829e
+  RNPermissions: 58c1eb5638504e3afda963a8b0f43b6752132b05
   RNReactNativeHapticFeedback: 653a8c126a0f5e88ce15ffe280b3ff37e1fbb285
   RNReanimated: b8c8004b43446e3c2709fe64b2b41072f87428ad
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSecureRandom: 0dcee021fdb3d50cd5cee5db0ebf583c42f5af0e
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
-  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
-  RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
+  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   SwiftProtobuf: 3320217e9d8fb75f36b40282e78c482640fd75dd
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 

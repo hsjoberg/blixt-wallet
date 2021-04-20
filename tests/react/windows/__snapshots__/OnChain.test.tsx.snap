@@ -513,6 +513,7 @@ exports[`renders correctly 1`] = `
                                                   },
                                                 ]
                                               }
+                                              uppercase={false}
                                             >
                                               Send Bitcoin on-chain to this address:
                                             </Text>
@@ -670,6 +671,7 @@ exports[`renders correctly 1`] = `
                                                     ]
                                                   }
                                                   testID="BITCOIN_ADDRESS"
+                                                  uppercase={false}
                                                 >
                                                   tb1qsl4hhqs8skzwknqhwjcyyyjepnwmq8tlcd32m3
                                                 </Text>
@@ -688,6 +690,7 @@ exports[`renders correctly 1`] = `
                                                       },
                                                     ]
                                                   }
+                                                  uppercase={false}
                                                 >
                                                   <Text
                                                     allowFontScaling={false}
@@ -787,6 +790,7 @@ exports[`renders correctly 1`] = `
                                                     "paddingRight": 16,
                                                   }
                                                 }
+                                                uppercase={false}
                                               >
                                                 Generate new address
                                               </Text>
@@ -843,6 +847,7 @@ exports[`renders correctly 1`] = `
                                                     "paddingRight": 16,
                                                   }
                                                 }
+                                                uppercase={false}
                                               >
                                                 Withdraw coins
                                               </Text>

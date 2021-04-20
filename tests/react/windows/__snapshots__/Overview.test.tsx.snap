@@ -458,6 +458,7 @@ exports[`renders correctly 1`] = `
                                                   },
                                                 ]
                                               }
+                                              uppercase={false}
                                             >
                                               Welcome to Blixt!
                                               
@@ -506,6 +507,7 @@ exports[`renders correctly 1`] = `
                                           },
                                         ]
                                       }
+                                      uppercase={false}
                                     >
                                       No transactions yet
                                     </Text>
@@ -943,6 +945,7 @@ exports[`renders correctly 1`] = `
                                   "paddingRight": 16,
                                 }
                               }
+                              uppercase={false}
                             >
                               Receive
                             </Text>
@@ -1045,6 +1048,7 @@ exports[`renders correctly 1`] = `
                                   "paddingRight": 16,
                                 }
                               }
+                              uppercase={false}
                             >
                               Send
                             </Text>
