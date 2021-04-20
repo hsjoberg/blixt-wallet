@@ -87,13 +87,6 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       return future;
     }
 
-    // TODO(hsjoberg) use MSG_CHECKSTATUS instead
-    if (checkLndProcessExists()) {
-      HyperLog.i(TAG, "Lnd is already started, quitting job");
-      future.set(Result.success());
-      return future;
-    }
-
     torEnabled = getTorEnabled();
 
     KeychainModule keychain = new KeychainModule(new ReactApplicationContext(getApplicationContext()));
@@ -174,6 +167,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                 break;
               }
               case LndMobileService.MSG_START_LND_RESULT: {
+                // TODO(hsjoberg): check for "lnd already started" error? (strictly not needed though)
                 lndStarted = true;
                 subscribeStateRequest();
                 break;

@@ -459,14 +459,8 @@ public class LndMobileService extends Service {
       if (checkLndProcessExists()) {
         HyperLog.i(TAG, "Lnd exists, attempting to stop it");
         stopLnd(null, -1);
-        try {
-          Thread.sleep(2000);
-        } catch (InterruptedException e) {}
-        killLndProcess();
       }
     }
-
-    lndStarted = false;
 
     return false;
   }
