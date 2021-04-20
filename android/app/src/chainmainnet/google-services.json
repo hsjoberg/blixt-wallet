@@ -1,0 +1,131 @@
+{
+  "project_info": {
+    "project_number": "349959255310",
+    "firebase_url": "https://blixt-wallet.firebaseio.com",
+    "project_id": "blixt-wallet",
+    "storage_bucket": "blixt-wallet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349959255310:android:674d8ca658d8468d59d35f",
+        "android_client_info": {
+          "package_name": "com.blixtwallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "349959255310-oa9ogtk6vp969jmbeg1hdodt3cp78a9g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blixtwallet",
+            "certificate_hash": "b8c178ee58a694507442dbe627f5343addb4c5bb"
+          }
+        },
+        {
+          "client_id": "349959255310-nlhtlfjlcv4jufk8c659flj8colqm8r4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYJ3myPlN9bsL7PRs6_VrWIqEZAQLE8D4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "349959255310-nlhtlfjlcv4jufk8c659flj8colqm8r4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349959255310:android:85ac1e39762a39fb59d35f",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "349959255310-5nm9kipu9dmap1374fkv3mk4adumbabm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blixtwallet.debug",
+            "certificate_hash": "076a963bc0168507ca72117b5a9513fe814b6e9d"
+          }
+        },
+        {
+          "client_id": "349959255310-nlhtlfjlcv4jufk8c659flj8colqm8r4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYJ3myPlN9bsL7PRs6_VrWIqEZAQLE8D4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "349959255310-nlhtlfjlcv4jufk8c659flj8colqm8r4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+
+
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123465798:android:123465798123",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.experiment1"
+        }
+      },
+      "api_key": [{
+        "current_key": "abcde123465789"
+      }]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123465798:android:123465798123",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.experiment1.debug"
+        }
+      },
+      "api_key": [{
+        "current_key": "abcde123465789"
+      }]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123465798:android:123465798123",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.fakelnd.debug"
+        }
+      },
+      "api_key": [{
+        "current_key": "abcde123465789"
+      }]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123465798:android:123465798123",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.fakelnd"
+        }
+      },
+      "api_key": [{
+        "current_key": "abcde123465789"
+      }]
+    }
+  ],
+  "configuration_version": "1"
+}
