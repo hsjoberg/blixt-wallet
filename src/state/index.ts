@@ -222,6 +222,7 @@ export const model: IStoreModel = {
     await dispatch.channel.setupCachedBalance();
     log.d("Done starting up stores");
 
+    const debugShowStartupInfo = getState().settings.debugShowStartupInfo;
     const start = new Date();
     LndMobileEventEmitter.addListener("SubscribeState", async (e: any) => {
       log.d("SubscribeState", [e]);
@@ -242,7 +243,7 @@ export const model: IStoreModel = {
         } else if (state.state === lnrpc.WalletState.UNLOCKED) {
           log.d("Got lnrpc.WalletState.UNLOCKED");
         } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
-          toast("RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          debugShowStartupInfo && toast("RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
           log.d("Got lnrpc.WalletState.RPC_ACTIVE");
           await dispatch.lightning.initialize({ start });
         }
