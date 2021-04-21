@@ -217,4 +217,12 @@ export const appMigration: IAppMigration[] = [
       await setItem(StorageItem.dunderServer, DEFAULT_DUNDER_SERVER);
     },
   },
+  // Version 25
+  {
+    async beforeLnd(db, i) {
+      if (Chain === "testnet") {
+        await setItemObject<string[]>(StorageItem.neutrinoPeers, [DEFAULT_NEUTRINO_NODE]);
+      }
+    },
+  },
 ];
