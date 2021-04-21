@@ -126,7 +126,6 @@ android {
     ndkVersion rootProject.ext.ndkVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
     flavorDimensions "default"
-    ndkVersion "20.0.5594570"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
