@@ -35,6 +35,8 @@
     "web:bundle-for-blixt-site": "rm -r dist || true && WEB_DEMO=1 NODE_ENV=production webpack"
   },
   "dependencies": {
+    "@babel/core": "^7.13.16",
+    "@babel/runtime": "^7.13.16",
     "@react-native-community/async-storage": "1.12.1",
     "@react-native-community/clipboard": "1.5.1",
     "@react-native-community/geolocation": "^2.0.2",
@@ -62,7 +64,9 @@
     "fast-sha256": "^1.3.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.1",
+    "jetifier": "1.6.6",
     "long": "^4.0.0",
+    "metro-react-native-babel-preset": "^0.66.0",
     "native-base": "git+https://github.com/hsjoberg/NativeBase.git#58e0a26ffdb6ecff1a8c9e602523e0acdb71dd54",
     "node-polyfill-webpack-plugin": "^1.1.0",
     "protobufjs": "6.10.2",
@@ -111,10 +115,12 @@
     "react-native-web-webview": "^1.0.2",
     "react-native-webln": "0.1.11",
     "react-native-webview": "^11.4.1",
+    "remote-redux-devtools": "^0.5.16",
     "secp256k1": "4.0.2",
     "setimmediate": "^1.0.5",
     "sha.js": "^2.4.11",
     "sql.js": "^1.5.0",
+    "typescript": "^4.2.4",
     "use-debounce": "^6.0.1",
     "wasm-loader": "^1.3.0",
     "webln": "^0.2.2",
@@ -123,8 +129,6 @@
     "webpack-dev-server": "3.11.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.16",
-    "@babel/runtime": "^7.13.16",
     "@testing-library/react-native": "7.2.0",
     "@types/aes-js": "^3.1.1",
     "@types/base64-js": "1.3.0",
@@ -148,14 +152,10 @@
     "jest": "26.6.3",
     "jest-date-mock": "1.0.8",
     "jest-fetch-mock": "3.0.3",
-    "jetifier": "1.6.6",
-    "metro-react-native-babel-preset": "^0.66.0",
     "react-test-renderer": "^17.0.2",
-    "remote-redux-devtools": "^0.5.16",
     "tslint": "6.1.3",
     "tslint-config-airbnb": "^5.11.2",
     "tslint-react": "5.0.0",
-    "tslint-react-native": "0.0.7",
-    "typescript": "^4.2.4"
+    "tslint-react-native": "0.0.7"
   }
 }
