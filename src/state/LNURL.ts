@@ -384,13 +384,14 @@ export const lnUrl: ILNUrlModel = {
       // 5. LN WALLET makes a GET request using
       // <callback>?amount=<milliSatoshi>&fromnodes=<nodeId1,nodeId2,...>
       // (we're skipping fromnodes)
-      const url = new URL(lnUrlObject.callback);
-      url.searchParams.append("amount", payload.msat.toString());
+      let callback = lnUrlObject.callback;
+      let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?"
+      callback = `${callback}${firstSeparator}amount=${payload.msat.toString()}`;
       if (payload.comment) {
-        url.searchParams.append("comment", payload.comment)
+        callback = `${callback}&comment=${payload.comment}`;
       }
 
-      const result = await fetch(url.href);
+      const result = await fetch(callback);
       log.d("result", [JSON.stringify(result)]);
       if (!result.ok) {
         let error;
