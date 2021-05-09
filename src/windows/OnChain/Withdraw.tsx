@@ -1,5 +1,5 @@
-import React, { useState, useLayoutEffect } from "react";
-import { View } from "react-native";
+import React, { useState, useLayoutEffect, useRef } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
 import { Text, Container, Button, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
@@ -22,6 +22,7 @@ export default ({ navigation }: IOpenChannelProps) => {
   const [address, setAddress] = useState("");
   const [sending, setSending] = useState(false);
   const [feeRate, setFeeRate] = useState(0);
+  const slider = useRef<Slider>(null);
   const [withdrawAll, setWithdrawAll] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
@@ -151,6 +152,7 @@ export default ({ navigation }: IOpenChannelProps) => {
           component: (
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: 5 }}>
               <Slider
+                ref={slider}
                 style={{
                   width: 185,
                   height: 25,
@@ -165,14 +167,20 @@ export default ({ navigation }: IOpenChannelProps) => {
                 minimumTrackTintColor={blixtTheme.lightGray}
                 maximumTrackTintColor={blixtTheme.lightGray}
               />
-              <Text>
-                {feeRate !== 0 &&
-                  <>{feeRate} sat/vB</>
-                }
-                {feeRate === 0 &&
-                  "auto"
-                }
-              </Text>
+              <TextInput
+                keyboardType="numeric" value={`${feeRate || ""}`}
+                onChangeText={(text) => {
+                  let value = Math.min(Number.parseInt(text || "0"), 1000);
+                  if (Number.isNaN(value)) {
+                    value = 0
+                  }
+                  setFeeRate(value);
+                  slider.current?.setNativeProps({ value })
+                }}
+                style={style.feeRateTextInput}
+              />
+              {feeRate !== 0 && <Text> sat/vB</Text>}
+              {feeRate === 0 && <Text> auto</Text>}
             </View>
           ),
         }]}
@@ -193,3 +201,13 @@ export default ({ navigation }: IOpenChannelProps) => {
     </Container>
   );
 };
+
+const style = StyleSheet.create({
+  feeRateTextInput: {
+    height: 21,
+    fontFamily: blixtTheme.fontRegular,
+    fontSize: 15,
+    padding: 0,
+    color: blixtTheme.light,
+  },
+});
