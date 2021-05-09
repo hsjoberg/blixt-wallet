@@ -87,7 +87,7 @@ export default function DunderDoctor({ navigation }: ISelectListProps) {
         while (attempt--) {
           try {
             pushLog("Connecting to Dunder's Lightning node...");
-            await connectPeer(serviceStatusResult.peer+"1");
+            await connectPeer(serviceStatusResult.peer);
             return true;
           } catch (e) {
             if (!e.message.includes("already connected to peer")) {
