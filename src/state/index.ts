@@ -367,8 +367,8 @@ autopilot.private=1
 autopilot.minconfs=1
 autopilot.conftarget=3
 autopilot.allocation=1.0
-autopilot.heuristic=externalscore:${Chain === "testnet" || Chain === "mainnet" ? "1.00" : "0.95"}
-autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? "0.00" : "0.05"}
+autopilot.heuristic=externalscore:${Chain === "testnet" || Chain === "mainnet" ? "1.00" : "1.00"}
+autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? "0.00" : "0.00"}
 `;
     await writeConfig(config);
   }),
