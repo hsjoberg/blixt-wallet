@@ -20,7 +20,8 @@ export interface IParsedBech32 {
   amount?: number;
 }
 export const parseBech32 = (address: string): IParsedBech32 => {
-  address = address.toLowerCase().replace("bitcoin:", "");
+  address = address.replace("bitcoin:", "");
+  address = address.replace("BITCOIN:", "");
   const returns: IParsedBech32 = { address: "" };
 
   if (address.includes("?")) {
