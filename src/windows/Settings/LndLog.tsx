@@ -14,19 +14,23 @@ export interface ILndLogProps {
   navigation: StackNavigationProp<SettingsStackParamList, "LndLog">;
 }
 export default function LndLog({ navigation }: ILndLogProps) {
-  const [log, setLog] = useState("");
+  let log = useRef("");
+  const [render, setRender] = useState(0);
   const logScrollView = useRef<ScrollView>(null);
 
   useEffect(() => {
     (async () => {
       const tailLog = await NativeModules.LndMobileTools.tailLog(100);
-      setLog(tailLog.split("\n").map((row) => row.slice(11)).join("\n"));
+      log.current = tailLog.split("\n").map((row) => row.slice(11)).join("\n");
 
-      const listener = LndMobileToolsEventEmitter.addListener("lndlog", (data: string) => {
-        setLog((log) => log + "\n" + data.slice(11));
+      const listener = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
+        log.current = log.current + "\n" + data.slice(11);
+        setRender((r) => r + 1);
       });
 
       NativeModules.LndMobileTools.observeLndLogFile();
+
+      setRender(render + 1);
 
       return () => {
         listener.remove();
@@ -40,7 +44,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
       headerShown: true,
       headerRight: () => {
         return (
-          <NavigationButton onPress={onPressCopy}>
+          <NavigationButton onPress={() => onPressCopy(log.current)}>
             <Icon type="MaterialCommunityIcons" name="content-copy" style={{ fontSize: 22 }} />
           </NavigationButton>
         )
@@ -48,15 +52,15 @@ export default function LndLog({ navigation }: ILndLogProps) {
     });
   }, [navigation]);
 
-  const onPressCopy = () => {
-    Clipboard.setString(log);
+  const onPressCopy = (l: string) => {
+    Clipboard.setString(l);
     toast("Copied to clipboard");
   }
 
   return (
     <Container>
       <ScrollView contentContainerStyle={{ padding: 8 }} ref={logScrollView} onContentSizeChange={() => logScrollView.current?.scrollToEnd()}>
-        <Text style={{ fontSize: 10 }}>{log}</Text>
+        <Text style={{ fontSize: 10 }}>{log.current}</Text>
       </ScrollView>
     </Container>
   )
