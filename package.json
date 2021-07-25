@@ -53,7 +53,7 @@
     "base64-js": "1.5.1",
     "bech32": "2.0.0",
     "bignumber.js": "9.0.1",
-    "color": "^4.0.0",
+    "color": "3.2.1",
     "copy-webpack-plugin": "^9.0.1",
     "crypto-js": "^4.1.1",
     "date-fns": "^2.23.0",
