@@ -764,6 +764,13 @@ Do you wish to proceed?`;
     );
   };
 
+  // Require graph sync before paying
+  const requireGraphSync = useStoreState((store) => store.settings.requireGraphSync);
+  const changeRequireGraphSync = useStoreActions((store) => store.settings.changeRequireGraphSync);
+  const onToggleRequireGraphSyncPress = async () => {
+    await changeRequireGraphSync(!requireGraphSync);
+  };
+
   const onLndMobileHelpCenterPress = async () => {
     navigation.navigate("LndMobileHelpCenter");
   }
@@ -1044,6 +1051,14 @@ Do you wish to proceed?`;
               </Body>
             </ListItem>
           }
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleRequireGraphSyncPress}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="database-sync" /></Left>
+            <Body>
+              <Text>Wait for graph sync before paying</Text>
+              <Text note={true}>Synchronized graph leads to optimal payments paths</Text>
+            </Body>
+            <Right><CheckBox checked={requireGraphSync} onPress={onToggleRequireGraphSyncPress} /></Right>
+          </ListItem>
 
 
           {/* <ListItem style={style.itemHeader} itemHeader={true}>

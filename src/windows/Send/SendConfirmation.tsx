@@ -34,6 +34,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const syncedToGraph = useStoreState((store) => store.lightning.syncedToGraph);
+  const requireGraphSync = useStoreState((store) => store.settings.requireGraphSync);
   const {
     dollarValue,
     bitcoinValue,
@@ -191,7 +192,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     lightningReady &&
     rpcReady &&
     syncedToChain &&
-    syncedToGraph &&
+    (!requireGraphSync || syncedToGraph) &&
     !isPaying
   );
 
