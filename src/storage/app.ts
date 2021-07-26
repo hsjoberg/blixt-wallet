@@ -180,7 +180,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.multiPathPaymentsEnabled, false),
     setItem(StorageItem.onboardingState, "SEND_ONCHAIN"),
     setItemObject<boolean>(StorageItem.torEnabled, false),
-    setItemObject<boolean>(StorageItem.hideExpiredInvoices, false),
+    setItemObject<boolean>(StorageItem.hideExpiredInvoices, true),
     setItemObject<number>(StorageItem.lastGoogleDriveBackup, new Date().getTime()),
     setItemObject<boolean>(StorageItem.screenTransitionsEnabled, true),
     setItemObject<boolean>(StorageItem.iCloudBackupEnabled, false),
