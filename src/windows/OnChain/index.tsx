@@ -31,7 +31,7 @@ export default function OnChainIndex() {
   };
 
   return (
-    <Stack.Navigator headerMode="screen" initialRouteName="OnChainInfo" screenOptions={screenOptions}>
+    <Stack.Navigator initialRouteName="OnChainInfo" screenOptions={screenOptions}>
       <Stack.Screen name="OnChainInfo" component={OnChainInfo} />
       <Stack.Screen name="OnChainTransactionLog" component={OnChainTransactionLog} options={{
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -45,7 +45,7 @@ export default function OnChainIndex() {
       }} />
       <Stack.Screen name="CameraFullscreen" component={CameraFullscreen} options={{
         gestureEnabled: true,
-        gestureResponseDistance: { horizontal: 1000 },
+        gestureResponseDistance: 1000,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }} />
     </Stack.Navigator>

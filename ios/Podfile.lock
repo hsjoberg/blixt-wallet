@@ -242,6 +242,8 @@ PODS:
     - React
   - react-native-maps (0.28.0):
     - React-Core
+  - react-native-pager-view (5.4.0):
+    - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
   - react-native-slider (3.0.3):
@@ -363,7 +365,7 @@ PODS:
     - React-RCTVibration
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.4.0):
+  - RNScreens (3.5.0):
     - React-Core
     - React-RCTImage
   - RNSecureRandom (1.0.0):
@@ -409,6 +411,7 @@ DEPENDENCIES:
   - react-native-fingerprint-scanner (from `../node_modules/react-native-fingerprint-scanner`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
@@ -498,6 +501,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-pager-view:
+    :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -592,6 +597,7 @@ SPEC CHECKSUMS:
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-maps: 2d405b4e8cee0282e4c02bac434d81450dfea877
+  react-native-pager-view: 54970cc27fdef14db2dcfedadb091d711e88065d
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
@@ -619,7 +625,7 @@ SPEC CHECKSUMS:
   RNPermissions: 7043bacbf928eae25808275cfe73799b8f618911
   RNReactNativeHapticFeedback: 653a8c126a0f5e88ce15ffe280b3ff37e1fbb285
   RNReanimated: 9c13c86454bfd54dab7505c1a054470bfecd2563
-  RNScreens: 21b73c94c9117e1110a79ee0ee80c93ccefed8ce
+  RNScreens: 01ab149b5dd5c27f5ff26741b1d2bdf2cee1af35
   RNSecureRandom: 0dcee021fdb3d50cd5cee5db0ebf583c42f5af0e
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f

@@ -479,7 +479,10 @@ const headerInfo = StyleSheet.create({
 const OverviewTabs = createBottomTabNavigator();
 export function OverviewTabsComponent() {
   return (
-    <OverviewTabs.Navigator tabBar={() => <FooterNav />}>
+    <OverviewTabs.Navigator screenOptions={{
+
+      header: () => null,
+    }} tabBar={() => <FooterNav />}>
       <OverviewTabs.Screen name="Overview" component={Overview} />
     </OverviewTabs.Navigator>
   );
@@ -490,14 +493,14 @@ export default function TopTabsComponent() {
   return (
     <TopTabs.Navigator
       springVelocityScale={1.4}
-      lazy={true}
       sceneContainerStyle={{
         backgroundColor: "transparent"
       }}
-      tabBarOptions={{
-        style: {
+      screenOptions={{
+        lazy: true,
+        tabBarStyle: {
           display: "none",
-          height: 0
+          height: 0,
         },
       }}
     >

@@ -75,7 +75,9 @@ export default function SendDone({
   useEffect(() => {
     setTimeout(() => {
       callback(preimage!);
-      navigation.pop();
+      if (navigation.canGoBack()) {
+        navigation.pop();
+      }
     }, 1850);
   }, []);
 

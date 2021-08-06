@@ -67,11 +67,11 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
       // Reset TopTabNavigator to Overview screen again
       if (goBackAfterInteraction) {
         InteractionManager.runAfterInteractions(() => {
-          navigation.dangerouslyGetParent()?.goBack();
+          navigation.getParent()?.goBack();
         });
       }
       else {
-        navigation.dangerouslyGetParent()?.goBack();
+        navigation.getParent()?.goBack();
       }
       navigation.navigate(screen, options);
     }

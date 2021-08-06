@@ -69,9 +69,9 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     });
 
     // Disable swiping to the left because it messes with the keyboard focus
-    navigation.dangerouslyGetParent()?.setOptions({
+    navigation.getParent()?.setOptions({
       gestureEnabled: false,
-      gestureResponseDistance: { horizontal: 0 },
+      gestureResponseDistance: 0,
     });
   }, [navigation]);
 

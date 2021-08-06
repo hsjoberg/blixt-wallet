@@ -216,7 +216,7 @@ export default function Main() {
       <RootStack.Screen name="Receive" component={Receive} />
       <RootStack.Screen name="Send" component={Send} options={{
         gestureEnabled: true,
-        gestureResponseDistance: { horizontal: 1000 },
+        gestureResponseDistance: 1000,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }} />
       <RootStack.Screen name="OnChain" component={OnChain} />

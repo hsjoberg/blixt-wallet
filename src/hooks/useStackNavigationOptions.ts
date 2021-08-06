@@ -25,9 +25,11 @@ export default function useStackNavigationOptions(): StackNavigationOptions {
   return {
     gestureEnabled: false,
     headerShown: false,
+
+    headerMode: "screen",
     cardStyle: {
       backgroundColor: "transparent",
-      ...Platform.select({
+      ...Platform.select<any>({ // TODO any?
         web: {
           flex: "auto",
           height: "100vh",
@@ -44,10 +46,11 @@ export default function useStackNavigationOptions(): StackNavigationOptions {
       color: blixtTheme.light
     },
     headerTintColor: blixtTheme.light,
-    headerPressColorAndroid: blixtTheme.light,
+    headerPressColor: blixtTheme.light,
     headerRightContainerStyle: {
-      marginRight: 20,
+      paddingRight: 20,
     },
+    headerBackTestID: "header-back",
 
     animationEnabled: screenTransitionsEnabled,
     // cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,

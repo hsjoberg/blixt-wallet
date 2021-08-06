@@ -38,7 +38,7 @@ export default function ReceiveIndex() {
   };
 
   return (
-    <Stack.Navigator headerMode="screen" initialRouteName={(Chain !== "mainnet" || name?.includes("Dunder")) ? "ReceiveSetupLsp" : "ReceiveSetup"} screenOptions={screenOptions}>
+    <Stack.Navigator initialRouteName={(Chain !== "mainnet" || name?.includes("Dunder")) ? "ReceiveSetupLsp" : "ReceiveSetup"} screenOptions={screenOptions}>
       <Stack.Screen name="ReceiveSetupLsp" component={ReceiveSetupLsp} />
       <Stack.Screen name="ReceiveSetup" component={ReceiveSetup} />
       <Stack.Screen name="ReceiveQr" component={ReceiveQr} options={{
