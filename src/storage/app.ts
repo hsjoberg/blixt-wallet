@@ -197,6 +197,6 @@ export const setupApp = async () => {
     setItem(StorageItem.bitcoindPubRawTx, bitcoindPubRawTx),
     setItem(StorageItem.dunderServer, DEFAULT_DUNDER_SERVER),
     setItemObject<boolean>(StorageItem.requireGraphSync, false),
-    setItemObject<boolean>(StorageItem.dunderEnabled, true),
+    setItemObject<boolean>(StorageItem.dunderEnabled, false),
   ]);
 };
