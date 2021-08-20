@@ -100,10 +100,9 @@ exports[`renders correctly 1`] = `
               pointerEvents="box-none"
               style={
                 Object {
-                  "alignItems": "center",
+                  "alignItems": "stretch",
                   "flex": 1,
                   "flexDirection": "row",
-                  "justifyContent": "center",
                 }
               }
             >
@@ -124,7 +123,9 @@ exports[`renders correctly 1`] = `
                 pointerEvents="box-none"
                 style={
                   Object {
+                    "justifyContent": "center",
                     "marginHorizontal": 16,
+                    "maxWidth": 718,
                     "opacity": 1,
                   }
                 }
@@ -316,550 +317,186 @@ exports[`renders correctly 1`] = `
                           style={
                             Array [
                               Object {
-                                "backgroundColor": "rgb(242, 242, 242)",
                                 "flex": 1,
                               },
                               undefined,
                             ]
                           }
                         >
-                          <RNSScreenContainer
-                            onLayout={[Function]}
+                          <View
                             style={
-                              Object {
-                                "flex": 1,
-                              }
+                              Array [
+                                Object {
+                                  "backgroundColor": "rgb(242, 242, 242)",
+                                  "flex": 1,
+                                },
+                                undefined,
+                              ]
                             }
                           >
-                            <RNSScreen
-                              activityState={2}
-                              forwardedRef={[Function]}
-                              pointerEvents="box-none"
+                            <RNSScreenContainer
+                              onLayout={[Function]}
                               style={
                                 Object {
-                                  "bottom": 0,
-                                  "left": 0,
-                                  "position": "absolute",
-                                  "right": 0,
-                                  "top": 0,
+                                  "flex": 1,
                                 }
                               }
                             >
-                              <View
-                                collapsable={false}
-                                style={
-                                  Object {
-                                    "opacity": 1,
-                                  }
-                                }
-                              />
-                              <View
-                                accessibilityElementsHidden={false}
-                                closing={false}
-                                gestureVelocityImpact={0.3}
-                                importantForAccessibility="auto"
-                                onClose={[Function]}
-                                onGestureBegin={[Function]}
-                                onGestureCanceled={[Function]}
-                                onGestureEnd={[Function]}
-                                onOpen={[Function]}
-                                onTransition={[Function]}
+                              <RNSScreen
+                                activityState={2}
+                                forwardedRef={[Function]}
                                 pointerEvents="box-none"
                                 style={
-                                  Array [
-                                    Object {
-                                      "display": "flex",
-                                      "overflow": undefined,
-                                    },
-                                    Object {
-                                      "bottom": 0,
-                                      "left": 0,
-                                      "position": "absolute",
-                                      "right": 0,
-                                      "top": 0,
-                                    },
-                                  ]
-                                }
-                                transitionSpec={
                                   Object {
-                                    "close": Object {
-                                      "animation": "spring",
-                                      "config": Object {
-                                        "damping": 500,
-                                        "mass": 3,
-                                        "overshootClamping": true,
-                                        "restDisplacementThreshold": 10,
-                                        "restSpeedThreshold": 10,
-                                        "stiffness": 1000,
-                                      },
-                                    },
-                                    "open": Object {
-                                      "animation": "spring",
-                                      "config": Object {
-                                        "damping": 500,
-                                        "mass": 3,
-                                        "overshootClamping": true,
-                                        "restDisplacementThreshold": 10,
-                                        "restSpeedThreshold": 10,
-                                        "stiffness": 1000,
-                                      },
-                                    },
+                                    "bottom": 0,
+                                    "left": 0,
+                                    "position": "absolute",
+                                    "right": 0,
+                                    "top": 0,
                                   }
                                 }
                               >
                                 <View
-                                  pointerEvents="box-none"
+                                  collapsable={false}
                                   style={
                                     Object {
-                                      "flex": 1,
+                                      "opacity": 1,
+                                    }
+                                  }
+                                />
+                                <View
+                                  accessibilityElementsHidden={false}
+                                  closing={false}
+                                  gestureVelocityImpact={0.3}
+                                  importantForAccessibility="auto"
+                                  onClose={[Function]}
+                                  onGestureBegin={[Function]}
+                                  onGestureCanceled={[Function]}
+                                  onGestureEnd={[Function]}
+                                  onOpen={[Function]}
+                                  onTransition={[Function]}
+                                  pointerEvents="box-none"
+                                  style={
+                                    Array [
+                                      Object {
+                                        "display": "flex",
+                                        "overflow": undefined,
+                                      },
+                                      Object {
+                                        "bottom": 0,
+                                        "left": 0,
+                                        "position": "absolute",
+                                        "right": 0,
+                                        "top": 0,
+                                      },
+                                    ]
+                                  }
+                                  transitionSpec={
+                                    Object {
+                                      "close": Object {
+                                        "animation": "spring",
+                                        "config": Object {
+                                          "damping": 500,
+                                          "mass": 3,
+                                          "overshootClamping": true,
+                                          "restDisplacementThreshold": 10,
+                                          "restSpeedThreshold": 10,
+                                          "stiffness": 1000,
+                                        },
+                                      },
+                                      "open": Object {
+                                        "animation": "spring",
+                                        "config": Object {
+                                          "damping": 500,
+                                          "mass": 3,
+                                          "overshootClamping": true,
+                                          "restDisplacementThreshold": 10,
+                                          "restSpeedThreshold": 10,
+                                          "stiffness": 1000,
+                                        },
+                                      },
                                     }
                                   }
                                 >
                                   <View
-                                    collapsable={false}
-                                    forwardedRef={[Function]}
-                                    needsOffscreenAlphaCompositing={true}
-                                    onGestureHandlerEvent={[Function]}
-                                    onGestureHandlerStateChange={[Function]}
+                                    pointerEvents="box-none"
                                     style={
                                       Object {
                                         "flex": 1,
-                                        "opacity": 1,
                                       }
                                     }
                                   >
                                     <View
+                                      collapsable={false}
+                                      forwardedRef={[Function]}
+                                      needsOffscreenAlphaCompositing={true}
+                                      onGestureHandlerEvent={[Function]}
+                                      onGestureHandlerStateChange={[Function]}
                                       style={
-                                        Array [
-                                          Object {
-                                            "flex": 1,
-                                            "overflow": "hidden",
-                                          },
-                                          Array [
-                                            Object {
-                                              "backgroundColor": "rgb(242, 242, 242)",
-                                            },
-                                            Object {
-                                              "backgroundColor": "transparent",
-                                            },
-                                          ],
-                                        ]
+                                        Object {
+                                          "flex": 1,
+                                          "opacity": 1,
+                                        }
                                       }
                                     >
                                       <View
                                         style={
-                                          Object {
-                                            "flex": 1,
-                                            "flexDirection": "column-reverse",
-                                          }
+                                          Array [
+                                            Object {
+                                              "flex": 1,
+                                              "overflow": "hidden",
+                                            },
+                                            Array [
+                                              Object {
+                                                "backgroundColor": "rgb(242, 242, 242)",
+                                              },
+                                              Object {
+                                                "backgroundColor": "transparent",
+                                              },
+                                            ],
+                                          ]
                                         }
                                       >
                                         <View
                                           style={
                                             Object {
                                               "flex": 1,
+                                              "flexDirection": "column-reverse",
                                             }
                                           }
                                         >
                                           <View
                                             style={
-                                              Array [
-                                                Object {
-                                                  "backgroundColor": "#151314",
-                                                  "flex": 1,
-                                                  "height": "100%",
-                                                  "width": "100%",
-                                                },
-                                                Object {},
-                                                undefined,
-                                              ]
+                                              Object {
+                                                "flex": 1,
+                                              }
                                             }
                                           >
                                             <View
-                                              onLayout={[Function]}
                                               style={
                                                 Array [
                                                   Object {
-                                                    "display": "flex",
+                                                    "backgroundColor": "#151314",
                                                     "flex": 1,
                                                     "height": "100%",
-                                                    "justifyContent": "space-between",
+                                                    "width": "100%",
                                                   },
+                                                  Object {},
                                                   undefined,
                                                 ]
                                               }
                                             >
                                               <View
+                                                onLayout={[Function]}
                                                 style={
                                                   Array [
-                                                    Object {},
                                                     Object {
-                                                      "padding": 16,
+                                                      "display": "flex",
+                                                      "flex": 1,
+                                                      "height": "100%",
+                                                      "justifyContent": "space-between",
                                                     },
-                                                  ]
-                                                }
-                                              >
-                                                <View
-                                                  accessible={true}
-                                                  focusable={false}
-                                                  forwardedRef={[Function]}
-                                                  onClick={[Function]}
-                                                  onResponderGrant={[Function]}
-                                                  onResponderMove={[Function]}
-                                                  onResponderRelease={[Function]}
-                                                  onResponderTerminate={[Function]}
-                                                  onResponderTerminationRequest={[Function]}
-                                                  onStartShouldSetResponder={[Function]}
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "center",
-                                                      "backgroundColor": "transparent",
-                                                      "borderBottomWidth": 1,
-                                                      "borderColor": "#D9D5DC",
-                                                      "borderLeftWidth": 0,
-                                                      "borderRadius": undefined,
-                                                      "borderRightWidth": 0,
-                                                      "borderTopWidth": 0,
-                                                      "borderWidth": undefined,
-                                                      "flexDirection": "row",
-                                                      "marginLeft": 2,
-                                                      "marginTop": 8,
-                                                      "opacity": 1,
-                                                    }
-                                                  }
-                                                >
-                                                  <Text
-                                                    style={
-                                                      Array [
-                                                        Object {
-                                                          "color": "#575757",
-                                                          "fontSize": 17,
-                                                          "paddingRight": 5,
-                                                        },
-                                                        Object {
-                                                          "fontSize": 17,
-                                                          "width": 105,
-                                                        },
-                                                      ]
-                                                    }
-                                                  >
-                                                    Amount ₿
-                                                  </Text>
-                                                  <TextInput
-                                                    allowFontScaling={true}
-                                                    editable={true}
-                                                    keyboardType="numeric"
-                                                    onBlur={[Function]}
-                                                    onChangeText={[Function]}
-                                                    onFocus={[Function]}
-                                                    onSubmitEditing={[Function]}
-                                                    placeholder="0"
-                                                    placeholderTextColor="#575757"
-                                                    rejectResponderTermination={true}
-                                                    returnKeyType="done"
-                                                    style={
-                                                      Object {
-                                                        "color": "#000",
-                                                        "flex": 1,
-                                                        "fontSize": 17,
-                                                        "height": 50,
-                                                        "paddingLeft": 5,
-                                                        "paddingRight": 5,
-                                                        "top": 1.5,
-                                                      }
-                                                    }
-                                                    testID="input-amount-sat"
-                                                    underlineColorAndroid="rgba(0,0,0,0)"
-                                                  />
-                                                  <Text
-                                                    allowFontScaling={false}
-                                                    onPress={[Function]}
-                                                    style={
-                                                      Array [
-                                                        Object {
-                                                          "color": undefined,
-                                                          "fontSize": 12,
-                                                        },
-                                                        Array [
-                                                          Object {
-                                                            "color": "#000",
-                                                            "fontSize": 30,
-                                                          },
-                                                          Object {
-                                                            "color": "#000",
-                                                            "fontSize": 24,
-                                                            "paddingRight": 8,
-                                                          },
-                                                          Object {
-                                                            "fontSize": 31,
-                                                            "marginRight": 1,
-                                                          },
-                                                        ],
-                                                        Object {
-                                                          "fontFamily": "fontcustom",
-                                                          "fontStyle": "normal",
-                                                          "fontWeight": "normal",
-                                                        },
-                                                        Object {},
-                                                      ]
-                                                    }
-                                                    type="Foundation"
-                                                  >
-                                                    
-                                                  </Text>
-                                                </View>
-                                                <View
-                                                  accessible={true}
-                                                  focusable={false}
-                                                  forwardedRef={[Function]}
-                                                  onClick={[Function]}
-                                                  onResponderGrant={[Function]}
-                                                  onResponderMove={[Function]}
-                                                  onResponderRelease={[Function]}
-                                                  onResponderTerminate={[Function]}
-                                                  onResponderTerminationRequest={[Function]}
-                                                  onStartShouldSetResponder={[Function]}
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "center",
-                                                      "backgroundColor": "transparent",
-                                                      "borderBottomWidth": 1,
-                                                      "borderColor": "#D9D5DC",
-                                                      "borderLeftWidth": 0,
-                                                      "borderRadius": undefined,
-                                                      "borderRightWidth": 0,
-                                                      "borderTopWidth": 0,
-                                                      "borderWidth": undefined,
-                                                      "flexDirection": "row",
-                                                      "marginLeft": 2,
-                                                      "marginTop": 16,
-                                                      "opacity": 1,
-                                                    }
-                                                  }
-                                                >
-                                                  <Text
-                                                    style={
-                                                      Array [
-                                                        Object {
-                                                          "color": "#575757",
-                                                          "fontSize": 17,
-                                                          "paddingRight": 5,
-                                                        },
-                                                        Object {
-                                                          "fontSize": 17,
-                                                          "width": 105,
-                                                        },
-                                                      ]
-                                                    }
-                                                  >
-                                                    Amount USD
-                                                  </Text>
-                                                  <TextInput
-                                                    allowFontScaling={true}
-                                                    editable={true}
-                                                    keyboardType="numeric"
-                                                    onBlur={[Function]}
-                                                    onChangeText={[Function]}
-                                                    onFocus={[Function]}
-                                                    onSubmitEditing={[Function]}
-                                                    placeholder="0.00"
-                                                    placeholderTextColor="#575757"
-                                                    rejectResponderTermination={true}
-                                                    returnKeyType="done"
-                                                    style={
-                                                      Object {
-                                                        "color": "#000",
-                                                        "flex": 1,
-                                                        "fontSize": 17,
-                                                        "height": 50,
-                                                        "paddingLeft": 5,
-                                                        "paddingRight": 5,
-                                                        "top": 1.5,
-                                                      }
-                                                    }
-                                                    underlineColorAndroid="rgba(0,0,0,0)"
-                                                  />
-                                                  <Text
-                                                    allowFontScaling={false}
-                                                    onPress={[Function]}
-                                                    style={
-                                                      Array [
-                                                        Object {
-                                                          "color": undefined,
-                                                          "fontSize": 12,
-                                                        },
-                                                        Array [
-                                                          Object {
-                                                            "color": "#000",
-                                                            "fontSize": 30,
-                                                          },
-                                                          Object {
-                                                            "color": "#000",
-                                                            "fontSize": 24,
-                                                            "paddingRight": 8,
-                                                          },
-                                                        ],
-                                                        Object {
-                                                          "fontFamily": "FontAwesome",
-                                                          "fontStyle": "normal",
-                                                          "fontWeight": "normal",
-                                                        },
-                                                        Object {},
-                                                      ]
-                                                    }
-                                                    type="FontAwesome"
-                                                  >
-                                                    
-                                                  </Text>
-                                                </View>
-                                                <View
-                                                  accessible={true}
-                                                  focusable={false}
-                                                  forwardedRef={[Function]}
-                                                  onClick={[Function]}
-                                                  onResponderGrant={[Function]}
-                                                  onResponderMove={[Function]}
-                                                  onResponderRelease={[Function]}
-                                                  onResponderTerminate={[Function]}
-                                                  onResponderTerminationRequest={[Function]}
-                                                  onStartShouldSetResponder={[Function]}
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "center",
-                                                      "backgroundColor": "transparent",
-                                                      "borderBottomWidth": 1,
-                                                      "borderColor": "#D9D5DC",
-                                                      "borderLeftWidth": 0,
-                                                      "borderRadius": undefined,
-                                                      "borderRightWidth": 0,
-                                                      "borderTopWidth": 0,
-                                                      "borderWidth": undefined,
-                                                      "flexDirection": "row",
-                                                      "marginLeft": 2,
-                                                      "marginTop": 16,
-                                                      "opacity": 1,
-                                                    }
-                                                  }
-                                                >
-                                                  <Text
-                                                    style={
-                                                      Array [
-                                                        Object {
-                                                          "color": "#575757",
-                                                          "fontSize": 17,
-                                                          "paddingRight": 5,
-                                                        },
-                                                        Object {
-                                                          "fontSize": 17,
-                                                          "width": 105,
-                                                        },
-                                                      ]
-                                                    }
-                                                  >
-                                                    Payer
-                                                  </Text>
-                                                  <TextInput
-                                                    allowFontScaling={true}
-                                                    editable={true}
-                                                    onChangeText={[Function]}
-                                                    onFocus={[Function]}
-                                                    placeholder="For bookkeeping (optional)"
-                                                    placeholderTextColor="#575757"
-                                                    rejectResponderTermination={true}
-                                                    style={
-                                                      Object {
-                                                        "color": "#000",
-                                                        "flex": 1,
-                                                        "fontSize": 17,
-                                                        "height": 50,
-                                                        "paddingLeft": 5,
-                                                        "paddingRight": 5,
-                                                        "top": 1.5,
-                                                      }
-                                                    }
-                                                    underlineColorAndroid="rgba(0,0,0,0)"
-                                                    value=""
-                                                  />
-                                                </View>
-                                                <View
-                                                  accessible={true}
-                                                  focusable={false}
-                                                  forwardedRef={[Function]}
-                                                  onClick={[Function]}
-                                                  onResponderGrant={[Function]}
-                                                  onResponderMove={[Function]}
-                                                  onResponderRelease={[Function]}
-                                                  onResponderTerminate={[Function]}
-                                                  onResponderTerminationRequest={[Function]}
-                                                  onStartShouldSetResponder={[Function]}
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "center",
-                                                      "backgroundColor": "transparent",
-                                                      "borderBottomWidth": 1,
-                                                      "borderColor": "#D9D5DC",
-                                                      "borderLeftWidth": 0,
-                                                      "borderRadius": undefined,
-                                                      "borderRightWidth": 0,
-                                                      "borderTopWidth": 0,
-                                                      "borderWidth": undefined,
-                                                      "flexDirection": "row",
-                                                      "marginLeft": 2,
-                                                      "marginTop": 16,
-                                                      "opacity": 1,
-                                                    }
-                                                  }
-                                                >
-                                                  <Text
-                                                    style={
-                                                      Array [
-                                                        Object {
-                                                          "color": "#575757",
-                                                          "fontSize": 17,
-                                                          "paddingRight": 5,
-                                                        },
-                                                        Object {
-                                                          "fontSize": 17,
-                                                          "width": 105,
-                                                        },
-                                                      ]
-                                                    }
-                                                  >
-                                                    Message
-                                                  </Text>
-                                                  <TextInput
-                                                    allowFontScaling={true}
-                                                    editable={true}
-                                                    onChangeText={[Function]}
-                                                    onFocus={[Function]}
-                                                    placeholder="Message to payer (optional)"
-                                                    placeholderTextColor="#575757"
-                                                    rejectResponderTermination={true}
-                                                    style={
-                                                      Object {
-                                                        "color": "#000",
-                                                        "flex": 1,
-                                                        "fontSize": 17,
-                                                        "height": 50,
-                                                        "paddingLeft": 5,
-                                                        "paddingRight": 5,
-                                                        "top": 1.5,
-                                                      }
-                                                    }
-                                                    testID="input-message"
-                                                    underlineColorAndroid="rgba(0,0,0,0)"
-                                                    value=""
-                                                  />
-                                                </View>
-                                              </View>
-                                              <View
-                                                style={
-                                                  Array [
-                                                    Object {},
-                                                    Object {
-                                                      "marginBottom": 10,
-                                                      "marginHorizontal": 2,
-                                                    },
+                                                    undefined,
                                                   ]
                                                 }
                                               >
@@ -868,7 +505,6 @@ exports[`renders correctly 1`] = `
                                                     Array [
                                                       Object {},
                                                       Object {
-                                                        "marginTop": 0,
                                                         "padding": 16,
                                                       },
                                                     ]
@@ -876,7 +512,7 @@ exports[`renders correctly 1`] = `
                                                 >
                                                   <View
                                                     accessible={true}
-                                                    focusable={true}
+                                                    focusable={false}
                                                     forwardedRef={[Function]}
                                                     onClick={[Function]}
                                                     onResponderGrant={[Function]}
@@ -888,130 +524,482 @@ exports[`renders correctly 1`] = `
                                                     style={
                                                       Object {
                                                         "alignItems": "center",
-                                                        "alignSelf": "stretch",
-                                                        "backgroundColor": "#b5b5b5",
-                                                        "borderBottomWidth": null,
-                                                        "borderColor": "#007aff",
-                                                        "borderLeftWidth": null,
-                                                        "borderRadius": 5,
-                                                        "borderRightWidth": null,
-                                                        "borderTopWidth": null,
+                                                        "backgroundColor": "transparent",
+                                                        "borderBottomWidth": 1,
+                                                        "borderColor": "#D9D5DC",
+                                                        "borderLeftWidth": 0,
+                                                        "borderRadius": undefined,
+                                                        "borderRightWidth": 0,
+                                                        "borderTopWidth": 0,
                                                         "borderWidth": undefined,
-                                                        "elevation": 2,
                                                         "flexDirection": "row",
-                                                        "height": 45,
-                                                        "justifyContent": "center",
-                                                        "marginBottom": 0,
+                                                        "marginLeft": 2,
+                                                        "marginTop": 8,
                                                         "opacity": 1,
-                                                        "paddingBottom": 6,
-                                                        "paddingTop": 6,
-                                                        "shadowColor": undefined,
-                                                        "shadowOffset": undefined,
-                                                        "shadowOpacity": undefined,
-                                                        "shadowRadius": undefined,
                                                       }
                                                     }
-                                                    testID="create-invoice"
                                                   >
-                                                    <ActivityIndicator
-                                                      animating={true}
-                                                      color="#e5eaea"
-                                                      hidesWhenStopped={true}
-                                                      size="large"
+                                                    <Text
+                                                      style={
+                                                        Array [
+                                                          Object {
+                                                            "color": "#575757",
+                                                            "fontSize": 17,
+                                                            "paddingRight": 5,
+                                                          },
+                                                          Object {
+                                                            "fontSize": 17,
+                                                            "width": 105,
+                                                          },
+                                                        ]
+                                                      }
+                                                    >
+                                                      Amount ₿
+                                                    </Text>
+                                                    <TextInput
+                                                      allowFontScaling={true}
+                                                      editable={true}
+                                                      keyboardType="numeric"
+                                                      onBlur={[Function]}
+                                                      onChangeText={[Function]}
+                                                      onFocus={[Function]}
+                                                      onSubmitEditing={[Function]}
+                                                      placeholder="0"
+                                                      placeholderTextColor="#575757"
+                                                      rejectResponderTermination={true}
+                                                      returnKeyType="done"
                                                       style={
                                                         Object {
-                                                          "height": 80,
+                                                          "color": "#000",
+                                                          "flex": 1,
+                                                          "fontSize": 17,
+                                                          "height": 50,
+                                                          "paddingLeft": 5,
+                                                          "paddingRight": 5,
+                                                          "top": 1.5,
                                                         }
                                                       }
+                                                      testID="input-amount-sat"
+                                                      underlineColorAndroid="rgba(0,0,0,0)"
                                                     />
+                                                    <Text
+                                                      allowFontScaling={false}
+                                                      onPress={[Function]}
+                                                      style={
+                                                        Array [
+                                                          Object {
+                                                            "color": undefined,
+                                                            "fontSize": 12,
+                                                          },
+                                                          Array [
+                                                            Object {
+                                                              "color": "#000",
+                                                              "fontSize": 30,
+                                                            },
+                                                            Object {
+                                                              "color": "#000",
+                                                              "fontSize": 24,
+                                                              "paddingRight": 8,
+                                                            },
+                                                            Object {
+                                                              "fontSize": 31,
+                                                              "marginRight": 1,
+                                                            },
+                                                          ],
+                                                          Object {
+                                                            "fontFamily": "fontcustom",
+                                                            "fontStyle": "normal",
+                                                            "fontWeight": "normal",
+                                                          },
+                                                          Object {},
+                                                        ]
+                                                      }
+                                                      type="Foundation"
+                                                    >
+                                                      
+                                                    </Text>
+                                                  </View>
+                                                  <View
+                                                    accessible={true}
+                                                    focusable={false}
+                                                    forwardedRef={[Function]}
+                                                    onClick={[Function]}
+                                                    onResponderGrant={[Function]}
+                                                    onResponderMove={[Function]}
+                                                    onResponderRelease={[Function]}
+                                                    onResponderTerminate={[Function]}
+                                                    onResponderTerminationRequest={[Function]}
+                                                    onStartShouldSetResponder={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "alignItems": "center",
+                                                        "backgroundColor": "transparent",
+                                                        "borderBottomWidth": 1,
+                                                        "borderColor": "#D9D5DC",
+                                                        "borderLeftWidth": 0,
+                                                        "borderRadius": undefined,
+                                                        "borderRightWidth": 0,
+                                                        "borderTopWidth": 0,
+                                                        "borderWidth": undefined,
+                                                        "flexDirection": "row",
+                                                        "marginLeft": 2,
+                                                        "marginTop": 16,
+                                                        "opacity": 1,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      style={
+                                                        Array [
+                                                          Object {
+                                                            "color": "#575757",
+                                                            "fontSize": 17,
+                                                            "paddingRight": 5,
+                                                          },
+                                                          Object {
+                                                            "fontSize": 17,
+                                                            "width": 105,
+                                                          },
+                                                        ]
+                                                      }
+                                                    >
+                                                      Amount USD
+                                                    </Text>
+                                                    <TextInput
+                                                      allowFontScaling={true}
+                                                      editable={true}
+                                                      keyboardType="numeric"
+                                                      onBlur={[Function]}
+                                                      onChangeText={[Function]}
+                                                      onFocus={[Function]}
+                                                      onSubmitEditing={[Function]}
+                                                      placeholder="0.00"
+                                                      placeholderTextColor="#575757"
+                                                      rejectResponderTermination={true}
+                                                      returnKeyType="done"
+                                                      style={
+                                                        Object {
+                                                          "color": "#000",
+                                                          "flex": 1,
+                                                          "fontSize": 17,
+                                                          "height": 50,
+                                                          "paddingLeft": 5,
+                                                          "paddingRight": 5,
+                                                          "top": 1.5,
+                                                        }
+                                                      }
+                                                      underlineColorAndroid="rgba(0,0,0,0)"
+                                                    />
+                                                    <Text
+                                                      allowFontScaling={false}
+                                                      onPress={[Function]}
+                                                      style={
+                                                        Array [
+                                                          Object {
+                                                            "color": undefined,
+                                                            "fontSize": 12,
+                                                          },
+                                                          Array [
+                                                            Object {
+                                                              "color": "#000",
+                                                              "fontSize": 30,
+                                                            },
+                                                            Object {
+                                                              "color": "#000",
+                                                              "fontSize": 24,
+                                                              "paddingRight": 8,
+                                                            },
+                                                          ],
+                                                          Object {
+                                                            "fontFamily": "FontAwesome",
+                                                            "fontStyle": "normal",
+                                                            "fontWeight": "normal",
+                                                          },
+                                                          Object {},
+                                                        ]
+                                                      }
+                                                      type="FontAwesome"
+                                                    >
+                                                      
+                                                    </Text>
+                                                  </View>
+                                                  <View
+                                                    accessible={true}
+                                                    focusable={false}
+                                                    forwardedRef={[Function]}
+                                                    onClick={[Function]}
+                                                    onResponderGrant={[Function]}
+                                                    onResponderMove={[Function]}
+                                                    onResponderRelease={[Function]}
+                                                    onResponderTerminate={[Function]}
+                                                    onResponderTerminationRequest={[Function]}
+                                                    onStartShouldSetResponder={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "alignItems": "center",
+                                                        "backgroundColor": "transparent",
+                                                        "borderBottomWidth": 1,
+                                                        "borderColor": "#D9D5DC",
+                                                        "borderLeftWidth": 0,
+                                                        "borderRadius": undefined,
+                                                        "borderRightWidth": 0,
+                                                        "borderTopWidth": 0,
+                                                        "borderWidth": undefined,
+                                                        "flexDirection": "row",
+                                                        "marginLeft": 2,
+                                                        "marginTop": 16,
+                                                        "opacity": 1,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      style={
+                                                        Array [
+                                                          Object {
+                                                            "color": "#575757",
+                                                            "fontSize": 17,
+                                                            "paddingRight": 5,
+                                                          },
+                                                          Object {
+                                                            "fontSize": 17,
+                                                            "width": 105,
+                                                          },
+                                                        ]
+                                                      }
+                                                    >
+                                                      Payer
+                                                    </Text>
+                                                    <TextInput
+                                                      allowFontScaling={true}
+                                                      editable={true}
+                                                      onChangeText={[Function]}
+                                                      onFocus={[Function]}
+                                                      placeholder="For bookkeeping (optional)"
+                                                      placeholderTextColor="#575757"
+                                                      rejectResponderTermination={true}
+                                                      style={
+                                                        Object {
+                                                          "color": "#000",
+                                                          "flex": 1,
+                                                          "fontSize": 17,
+                                                          "height": 50,
+                                                          "paddingLeft": 5,
+                                                          "paddingRight": 5,
+                                                          "top": 1.5,
+                                                        }
+                                                      }
+                                                      underlineColorAndroid="rgba(0,0,0,0)"
+                                                      value=""
+                                                    />
+                                                  </View>
+                                                  <View
+                                                    accessible={true}
+                                                    focusable={false}
+                                                    forwardedRef={[Function]}
+                                                    onClick={[Function]}
+                                                    onResponderGrant={[Function]}
+                                                    onResponderMove={[Function]}
+                                                    onResponderRelease={[Function]}
+                                                    onResponderTerminate={[Function]}
+                                                    onResponderTerminationRequest={[Function]}
+                                                    onStartShouldSetResponder={[Function]}
+                                                    style={
+                                                      Object {
+                                                        "alignItems": "center",
+                                                        "backgroundColor": "transparent",
+                                                        "borderBottomWidth": 1,
+                                                        "borderColor": "#D9D5DC",
+                                                        "borderLeftWidth": 0,
+                                                        "borderRadius": undefined,
+                                                        "borderRightWidth": 0,
+                                                        "borderTopWidth": 0,
+                                                        "borderWidth": undefined,
+                                                        "flexDirection": "row",
+                                                        "marginLeft": 2,
+                                                        "marginTop": 16,
+                                                        "opacity": 1,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      style={
+                                                        Array [
+                                                          Object {
+                                                            "color": "#575757",
+                                                            "fontSize": 17,
+                                                            "paddingRight": 5,
+                                                          },
+                                                          Object {
+                                                            "fontSize": 17,
+                                                            "width": 105,
+                                                          },
+                                                        ]
+                                                      }
+                                                    >
+                                                      Message
+                                                    </Text>
+                                                    <TextInput
+                                                      allowFontScaling={true}
+                                                      editable={true}
+                                                      onChangeText={[Function]}
+                                                      onFocus={[Function]}
+                                                      placeholder="Message to payer (optional)"
+                                                      placeholderTextColor="#575757"
+                                                      rejectResponderTermination={true}
+                                                      style={
+                                                        Object {
+                                                          "color": "#000",
+                                                          "flex": 1,
+                                                          "fontSize": 17,
+                                                          "height": 50,
+                                                          "paddingLeft": 5,
+                                                          "paddingRight": 5,
+                                                          "top": 1.5,
+                                                        }
+                                                      }
+                                                      testID="input-message"
+                                                      underlineColorAndroid="rgba(0,0,0,0)"
+                                                      value=""
+                                                    />
+                                                  </View>
+                                                </View>
+                                                <View
+                                                  style={
+                                                    Array [
+                                                      Object {},
+                                                      Object {
+                                                        "marginBottom": 10,
+                                                        "marginHorizontal": 2,
+                                                      },
+                                                    ]
+                                                  }
+                                                >
+                                                  <View
+                                                    style={
+                                                      Array [
+                                                        Object {},
+                                                        Object {
+                                                          "marginTop": 0,
+                                                          "padding": 16,
+                                                        },
+                                                      ]
+                                                    }
+                                                  >
+                                                    <View
+                                                      accessible={true}
+                                                      focusable={true}
+                                                      forwardedRef={[Function]}
+                                                      onClick={[Function]}
+                                                      onResponderGrant={[Function]}
+                                                      onResponderMove={[Function]}
+                                                      onResponderRelease={[Function]}
+                                                      onResponderTerminate={[Function]}
+                                                      onResponderTerminationRequest={[Function]}
+                                                      onStartShouldSetResponder={[Function]}
+                                                      style={
+                                                        Object {
+                                                          "alignItems": "center",
+                                                          "alignSelf": "stretch",
+                                                          "backgroundColor": "#b5b5b5",
+                                                          "borderBottomWidth": null,
+                                                          "borderColor": "#007aff",
+                                                          "borderLeftWidth": null,
+                                                          "borderRadius": 5,
+                                                          "borderRightWidth": null,
+                                                          "borderTopWidth": null,
+                                                          "borderWidth": undefined,
+                                                          "elevation": 2,
+                                                          "flexDirection": "row",
+                                                          "height": 45,
+                                                          "justifyContent": "center",
+                                                          "marginBottom": 0,
+                                                          "opacity": 1,
+                                                          "paddingBottom": 6,
+                                                          "paddingTop": 6,
+                                                          "shadowColor": undefined,
+                                                          "shadowOffset": undefined,
+                                                          "shadowOpacity": undefined,
+                                                          "shadowRadius": undefined,
+                                                        }
+                                                      }
+                                                      testID="create-invoice"
+                                                    >
+                                                      <ActivityIndicator
+                                                        animating={true}
+                                                        color="#e5eaea"
+                                                        hidesWhenStopped={true}
+                                                        size="large"
+                                                        style={
+                                                          Object {
+                                                            "height": 80,
+                                                          }
+                                                        }
+                                                      />
+                                                    </View>
                                                   </View>
                                                 </View>
                                               </View>
                                             </View>
                                           </View>
-                                        </View>
-                                        <View
-                                          pointerEvents="box-none"
-                                          style={Object {}}
-                                        >
                                           <View
-                                            accessibilityElementsHidden={false}
-                                            importantForAccessibility="auto"
-                                            onLayout={[Function]}
                                             pointerEvents="box-none"
-                                            style={null}
+                                            style={Object {}}
                                           >
                                             <View
+                                              accessibilityElementsHidden={false}
+                                              importantForAccessibility="auto"
+                                              onLayout={[Function]}
                                               pointerEvents="box-none"
-                                              style={
-                                                Object {
-                                                  "bottom": 0,
-                                                  "left": 0,
-                                                  "position": "absolute",
-                                                  "right": 0,
-                                                  "top": 0,
-                                                  "zIndex": 0,
-                                                }
-                                              }
+                                              style={null}
                                             >
-                                              <View
-                                                style={
-                                                  Object {
-                                                    "backgroundColor": "#5F5F5F",
-                                                    "borderBottomColor": "transparent",
-                                                    "elevation": 0,
-                                                    "flex": 1,
-                                                    "shadowColor": "transparent",
-                                                    "shadowOffset": Object {
-                                                      "height": 0.5,
-                                                      "width": 0,
-                                                    },
-                                                    "shadowOpacity": 0.85,
-                                                    "shadowRadius": 0,
-                                                  }
-                                                }
-                                              />
-                                            </View>
-                                            <View
-                                              pointerEvents="box-none"
-                                              style={
-                                                Object {
-                                                  "height": 44,
-                                                  "maxHeight": undefined,
-                                                  "minHeight": undefined,
-                                                  "opacity": undefined,
-                                                  "transform": undefined,
-                                                }
-                                              }
-                                            >
-                                              <View
-                                                pointerEvents="none"
-                                                style={
-                                                  Object {
-                                                    "height": 0,
-                                                  }
-                                                }
-                                              />
                                               <View
                                                 pointerEvents="box-none"
                                                 style={
                                                   Object {
-                                                    "alignItems": "center",
-                                                    "flex": 1,
-                                                    "flexDirection": "row",
-                                                    "justifyContent": "center",
+                                                    "bottom": 0,
+                                                    "left": 0,
+                                                    "position": "absolute",
+                                                    "right": 0,
+                                                    "top": 0,
+                                                    "zIndex": 0,
                                                   }
                                                 }
                                               >
                                                 <View
-                                                  pointerEvents="box-none"
                                                   style={
                                                     Object {
-                                                      "alignItems": "flex-start",
-                                                      "flexBasis": 0,
-                                                      "flexGrow": 1,
-                                                      "justifyContent": "center",
-                                                      "marginStart": 0,
+                                                      "backgroundColor": "#5F5F5F",
+                                                      "borderBottomColor": "transparent",
+                                                      "elevation": 0,
+                                                      "flex": 1,
+                                                      "shadowColor": "transparent",
+                                                      "shadowOffset": Object {
+                                                        "height": 0.5,
+                                                        "width": 0,
+                                                      },
+                                                      "shadowOpacity": 0.85,
+                                                      "shadowRadius": 0,
+                                                    }
+                                                  }
+                                                />
+                                              </View>
+                                              <View
+                                                pointerEvents="box-none"
+                                                style={
+                                                  Object {
+                                                    "height": 44,
+                                                    "maxHeight": undefined,
+                                                    "minHeight": undefined,
+                                                    "opacity": undefined,
+                                                    "transform": undefined,
+                                                  }
+                                                }
+                                              >
+                                                <View
+                                                  pointerEvents="none"
+                                                  style={
+                                                    Object {
+                                                      "height": 0,
                                                     }
                                                   }
                                                 />
@@ -1019,39 +1007,64 @@ exports[`renders correctly 1`] = `
                                                   pointerEvents="box-none"
                                                   style={
                                                     Object {
-                                                      "marginHorizontal": 16,
+                                                      "alignItems": "stretch",
+                                                      "flex": 1,
+                                                      "flexDirection": "row",
                                                     }
                                                   }
                                                 >
-                                                  <Text
-                                                    accessibilityRole="header"
-                                                    aria-level="1"
-                                                    numberOfLines={1}
-                                                    onLayout={[Function]}
+                                                  <View
+                                                    pointerEvents="box-none"
                                                     style={
                                                       Object {
-                                                        "color": "#e5eaea",
-                                                        "fontSize": 17,
-                                                        "fontWeight": "600",
+                                                        "alignItems": "flex-start",
+                                                        "flexBasis": 0,
+                                                        "flexGrow": 1,
+                                                        "justifyContent": "center",
+                                                        "marginStart": 0,
+                                                      }
+                                                    }
+                                                  />
+                                                  <View
+                                                    pointerEvents="box-none"
+                                                    style={
+                                                      Object {
+                                                        "justifyContent": "center",
+                                                        "marginHorizontal": 16,
+                                                        "maxWidth": 718,
                                                       }
                                                     }
                                                   >
-                                                    Receive
-                                                  </Text>
-                                                </View>
-                                                <View
-                                                  pointerEvents="box-none"
-                                                  style={
-                                                    Object {
-                                                      "alignItems": "flex-end",
-                                                      "flexBasis": 0,
-                                                      "flexGrow": 1,
-                                                      "justifyContent": "center",
-                                                      "marginEnd": 0,
-                                                      "paddingRight": 20,
+                                                    <Text
+                                                      accessibilityRole="header"
+                                                      aria-level="1"
+                                                      numberOfLines={1}
+                                                      onLayout={[Function]}
+                                                      style={
+                                                        Object {
+                                                          "color": "#e5eaea",
+                                                          "fontSize": 17,
+                                                          "fontWeight": "600",
+                                                        }
+                                                      }
+                                                    >
+                                                      Receive
+                                                    </Text>
+                                                  </View>
+                                                  <View
+                                                    pointerEvents="box-none"
+                                                    style={
+                                                      Object {
+                                                        "alignItems": "flex-end",
+                                                        "flexBasis": 0,
+                                                        "flexGrow": 1,
+                                                        "justifyContent": "center",
+                                                        "marginEnd": 0,
+                                                        "paddingRight": 20,
+                                                      }
                                                     }
-                                                  }
-                                                />
+                                                  />
+                                                </View>
                                               </View>
                                             </View>
                                           </View>
@@ -1060,22 +1073,22 @@ exports[`renders correctly 1`] = `
                                     </View>
                                   </View>
                                 </View>
-                              </View>
-                            </RNSScreen>
-                          </RNSScreenContainer>
-                          <View
-                            pointerEvents="box-none"
-                            style={
-                              Object {
-                                "height": 44,
-                                "left": 0,
-                                "position": "absolute",
-                                "right": 0,
-                                "top": 0,
-                                "zIndex": 1,
+                              </RNSScreen>
+                            </RNSScreenContainer>
+                            <View
+                              pointerEvents="box-none"
+                              style={
+                                Object {
+                                  "height": 44,
+                                  "left": 0,
+                                  "position": "absolute",
+                                  "right": 0,
+                                  "top": 0,
+                                  "zIndex": 1,
+                                }
                               }
-                            }
-                          />
+                            />
+                          </View>
                         </View>
                       </View>
                     </View>

@@ -23,7 +23,7 @@ import { DEFAULT_DUNDER_SERVER, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../ut
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
-import { Chain, Flavor } from "../../utils/build";
+import { Chain } from "../../utils/build";
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -231,7 +231,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   // Verify channels backup
   const onVerifyChannelsBackupPress = async () => {
     try {
-      const res = await DocumentPicker.pick({
+      const res = await DocumentPicker.pickSingle({
         type: [DocumentPicker.types.allFiles],
       });
       const backupBase64 = await readFile(res.uri, "base64");

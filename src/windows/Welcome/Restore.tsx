@@ -116,7 +116,7 @@ export default function Restore({ navigation }: IProps) {
 
   const pickChannelsExportFile = async () => {
     try {
-      const res = await DocumentPicker.pick({
+      const res = await DocumentPicker.pickSingle({
         type: [DocumentPicker.types.allFiles],
       });
       console.log(res);

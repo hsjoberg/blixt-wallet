@@ -100,10 +100,9 @@ exports[`renders correctly 1`] = `
               pointerEvents="box-none"
               style={
                 Object {
-                  "alignItems": "center",
+                  "alignItems": "stretch",
                   "flex": 1,
                   "flexDirection": "row",
-                  "justifyContent": "center",
                 }
               }
             >
@@ -124,7 +123,9 @@ exports[`renders correctly 1`] = `
                 pointerEvents="box-none"
                 style={
                   Object {
+                    "justifyContent": "center",
                     "marginHorizontal": 16,
+                    "maxWidth": 718,
                     "opacity": 1,
                   }
                 }

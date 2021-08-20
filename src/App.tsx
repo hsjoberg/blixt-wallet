@@ -33,7 +33,7 @@ export default function App() {
           dark: true,
           colors: {
             ...DefaultTheme.colors,
-            background: blixtTheme.dark,
+            background: "transparent",
           }
         }} documentTitle={{ enabled: false }} ref={navigator}>
           <Root>
