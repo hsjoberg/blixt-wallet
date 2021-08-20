@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Vibration, StyleSheet, Linking, Alert } from "react-native";
+import { Vibration, StyleSheet, Linking, Alert, KeyboardAvoidingView } from "react-native";
 import Clipboard from "@react-native-community/clipboard"
 import { Body, Card, Text, CardItem, H1, View, Button, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -92,7 +92,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   }
 
   const onChangeBitcoinInput = (newText: string) => {
-    const msat = unitToSatoshi(Number.parseFloat(newText), bitcoinUnit) * 1000;
+    const msat = unitToSatoshi(Number.parseFloat(newText.replace(/,/g, ".")), bitcoinUnit) * 1000;
     setSendAmountMSat(msat);
   };
 
@@ -276,93 +276,97 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     );
   }
 
+
   return (
-    <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
-      <Card style={style.card}>
-        <CardItem style={{ flexGrow: 1 }}>
-          <Body>
-            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-              <H1 style={style.header}>
-                Pay
-              </H1>
-              {__DEV__ &&
-                <Button small={true} onPress={viewMetadata}>
-                  <Text style={{ fontSize: 7.5 }}>View technical metadata</Text>
-                </Button>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
+      <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
+        <Card style={style.card}>
+          <CardItem style={{ flexGrow: 1 }}>
+            <Body>
+              <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+                <H1 style={style.header}>
+                  Pay
+                </H1>
+                {__DEV__ &&
+                  <Button small={true} onPress={viewMetadata}>
+                    <Text style={{ fontSize: 7.5 }}>View technical metadata</Text>
+                  </Button>
+                }
+              </View>
+              <Text style={style.text}>
+                {domain} asks you to pay.
+              </Text>
+              <Text style={style.text}>
+                Description:{"\n"}
+                {text}
+              </Text>
+              <Text style={{ marginBottom: 28 }}>
+                Price:{"\n"}
+                {minSpendableFormatted} ({minSpendableFiatFormatted})
+                {(minSpendable !== maxSpendable) &&
+                  <Text> to {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
+                }
+              </Text>
+              {typeof commentAllowed === "number" && commentAllowed > 0 &&
+                <>
+                  <Text>
+                    Comment to {domain} (max {commentAllowed} letters):
+                  </Text>
+                  <View style={{ flexDirection:"row" }}>
+                    <Input onChangeText={setComment} keyboardType="default" style={[style.input, { marginTop: 9, marginBottom: 16 }]} />
+                  </View>
+                </>
               }
-            </View>
-            <Text style={style.text}>
-              {domain} asks you to pay for a product.
-            </Text>
-            <Text style={style.text}>
-              Description:{"\n"}
-              {text}
-            </Text>
-            <Text style={{ marginBottom: 28 }}>
-              Price:{"\n"}
-              {minSpendableFormatted} ({minSpendableFiatFormatted})
-              {(minSpendable !== maxSpendable) &&
-                <Text> to {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
-              }
-            </Text>
-            {typeof commentAllowed === "number" && commentAllowed > 0 &&
-              <>
-                <Text>
-                  Comment to {domain} (max {commentAllowed} letters):
-                </Text>
-                <View style={{ flexDirection:"row" }}>
-                  <Input onChangeText={setComment} keyboardType="default" style={[style.input, { marginTop: 9, marginBottom: 16 }]} />
-                </View>
-              </>
-            }
-            {image &&
-              <ScaledImage
-                uri={"data:image/png;base64," + image}
-                height={190}
-                style={{
-                  alignSelf: "center",
-                  marginBottom: 28,
-                }}
-              />
-            }
-            <View style={style.actionBar}>
-              <Button
-                disabled={doRequestLoading}
-                success
-                onPress={onPressPay}
-                style={{
-                  marginLeft: 10,
-                  width: 58,
-                }}
-                small={true}
-              >
-                {!doRequestLoading && <Text>Pay</Text>}
-                {doRequestLoading && <Spinner style={{ flex:1 }} size={26} color={blixtTheme.light} />}
-              </Button>
-              {minSpendable !== maxSpendable &&
-                <Input
-                  onChangeText={onChangeBitcoinInput}
-                  keyboardType="numeric"
-                  returnKeyType="done"
-                  placeholder={`${minSpendableFormatted} to ${maxSpendableFormatted}`}
-                  style={style.input}
+              {image &&
+                <ScaledImage
+                  uri={"data:image/png;base64," + image}
+                  height={190}
+                  style={{
+                    alignSelf: "center",
+                    marginBottom: 28,
+                  }}
                 />
               }
-              <Button
-                onPress={cancel}
-                style={{
-                  marginRight: 10,
-                }}
-                danger
-                small={true}
-              >
-                <Text>Cancel</Text>
-              </Button>
-            </View>
-          </Body>
-        </CardItem>
-      </Card>
-    </Blurmodal>
+              <View style={style.actionBar}>
+                <Button
+                  disabled={doRequestLoading}
+                  success
+                  onPress={onPressPay}
+                  style={{
+                    marginLeft: 10,
+                    width: 52
+
+                  }}
+                  small={true}
+                >
+                  {!doRequestLoading && <Text>Pay</Text>}
+                  {doRequestLoading && <Spinner style={{ flex:1 }} size={26} color={blixtTheme.light} />}
+                </Button>
+                {minSpendable !== maxSpendable &&
+                  <Input
+                    onChangeText={onChangeBitcoinInput}
+                    keyboardType="numeric"
+                    returnKeyType="done"
+                    placeholder={`${minSpendableFormatted} to ${maxSpendableFormatted}`}
+                    style={style.input}
+                  />
+                }
+                <Button
+                  onPress={cancel}
+                  style={{
+                    marginRight: 10,
+                  }}
+                  danger
+                  small={true}
+                >
+                  <Text>Cancel</Text>
+                </Button>
+              </View>
+            </Body>
+          </CardItem>
+        </Card>
+      </Blurmodal>
+    </KeyboardAvoidingView>
   );
 }
 

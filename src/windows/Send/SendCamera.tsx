@@ -28,6 +28,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
   const [cameraType, setCameraType] = useState<"front" | "back">("back");
   const [scanning, setScanning] = useState(true);
   const setLNURL = useStoreActions((store) => store.lnUrl.setLNUrl)
+  const resolveLightningAddress = useStoreActions((store) => store.lnUrl.resolveLightningAddress)
   const lnurlClear = useStoreActions((store) => store.lnUrl.clear);
   const [cameraActive, setCameraActive] = useState(route.params?.viaSwipe ?? true);
 
@@ -124,6 +125,10 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
           lnurlClear();
         }
       } catch (e) { }
+    } else if (paymentRequest.includes("@")) {
+      if (await resolveLightningAddress(paymentRequest)) {
+        gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
+      }
     }
     else {
       try {

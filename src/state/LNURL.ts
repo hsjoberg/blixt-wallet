@@ -1,3 +1,7 @@
+//
+// Sorry for the condition in this file.
+// Reach out to me on Telegram @hsjoberg or lnurl mafia group https://t.me/lnurl if you have any questions.
+//
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as Bech32 from "bech32";
 import { Hash as sha256Hash, HMAC as sha256HMAC } from "fast-sha256";
@@ -7,7 +11,6 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { timeout, bytesToString, getDomainFromURL, stringToUint8Array, hexToUint8Array, bytesToHexString } from "../utils/index";
 
-import Long from "long";
 import { lnrpc } from "../../proto/proto";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 
@@ -15,6 +18,8 @@ import logger from "./../utils/log";
 const log = logger("LNURL");
 
 export type LNURLType = "channelRequest" | "login" | "withdrawRequest" | "payRequest" | "unknown" | "error" | "unsupported";
+
+export type LightningAddress = string;
 
 export interface ILNUrlChannelRequest {
   uri: string;
@@ -129,6 +134,8 @@ export interface ILNUrlModel {
   lnUrlObject: LNUrlRequest | undefined;
 
   clear: Action<ILNUrlModel>;
+
+  resolveLightningAddress: Thunk<ILNUrlModel, LightningAddress>;
 };
 
 export const lnUrl: ILNUrlModel = {
@@ -260,42 +267,6 @@ export const lnUrl: ILNUrlModel = {
       const signedMessage = secp256k1.ecdsaSign(hexToUint8Array(lnUrlObject.k1), linkingKeyPriv);
       const signedMessageDER = secp256k1.signatureExport(signedMessage.signature)
 
-      /*
-      // FOLLOWS THE LNURL-AUTH SPECIFICATION
-      // https://github.com/btcontract/lnurl-rfc/blob/master/lnurl-auth.md
-      // Key derivation for Bitcoin wallets:
-      // 1. There exists a private hashingKey which is derived by user LN WALLET using m/138'/0 path.
-      const hashingKey = await injections.lndMobile.wallet.derivePrivateKey(138, 0);
-      // const hashingKeyPub = await injections.lndMobile.wallet.deriveKey(138, 0);
-      // 2. LN SERVICE domain name is extracted from login LNURL and then hashed using hmacSha256(hashingKey, service domain name).
-      const domain = getDomainFromURL(lnUrlStr);
-      const hmac = new sha256HMAC(hashingKey.rawKeyBytes);
-      const derivationMaterial = hmac.update(stringToUint8Array(domain)).digest();
-      // 3. First 16 bytes are taken from resulting hash and then turned into a sequence of 4 Long values which are in turn used
-      //    to derive a service-specific linkingKey using m/138'/<long1>/<long2>/<long3>/<long4> path
-      // ?? walletrpc.DerviceKey does not allow deriving from such specific path
-      // LN WALLET may choose to use a different derivation scheme but doing so will make it unportable.
-      // That is, users won't be able to switch to a different wallet and keep using a service bound to existing linkingKey.
-      // We cannot derive the correct key in lnd so we are taking the 4 first bytes from the derivationMaterial
-      // and using that instead
-      const first4 = derivationMaterial.slice(0, 4);
-      const keyIndex = Long.fromBytesBE(first4 as unknown as number[], true).toNumber();
-      const linkingKey = await injections.lndMobile.wallet.derivePrivateKey(138, keyIndex);
-      log.d("key derived from family and index", [linkingKey.rawKeyBytes, 138, keyIndex]);
-
-      // Wallet to service interaction flow:
-      // 1, 2 omitted
-      // 3. Once accepted, user LN WALLET signs k1 on secp256k1 using linkingPrivKey and DER-encodes the signature.
-      const signedMessage = secp256k1.ecdsaSign(hexToUint8Array(lnUrlObject.k1), linkingKey.rawKeyBytes);
-      const signedMessageDER = secp256k1.signatureExport(signedMessage.signature);
-      const linkingKeyPub = secp256k1.publicKeyCreate(linkingKey.rawKeyBytes, true);
-
-      // const signedMessageDER = (await signMessage(138, keyIndex, hexToUint8Array(lnUrlObject.k1))).signature;
-      // const linkingKeyPub = (await deriveKey(138, keyIndex)).rawKeyBytes;
-      // log.d("signedMessageDER", [signedMessageDER]);
-      // log.d("linkingKeyPub", [linkingKeyPub]);
-      */
-
       //    LN WALLET Then issues a GET to LN SERVICE using
       //    <LNURL_hostname_and_path>?<LNURL_existing_query_parameters>&sig=<hex(sign(k1.toByteArray, linkingPrivKey))>&key=<hex(linkingKey)>
       const url = (
@@ -319,7 +290,7 @@ export const lnUrl: ILNUrlModel = {
       if (response.status === "OK") {
         return true;
       }
-      throw new Error(response.reason!);
+      throw new Error(response.reason! ?? "Invalid response: " + JSON.stringify(response));
     }
     else {
       throw new Error("Requirements not satisfied, type must be login and lnUrlObject must be set");
@@ -474,6 +445,52 @@ export const lnUrl: ILNUrlModel = {
     state.lnUrlStr = undefined;
     state.type = undefined;
     state.lnUrlObject = undefined;
+  }),
+
+  resolveLightningAddress: thunk(async (actions, lightningAddress) => {
+    actions.clear();
+    // https://github.com/fiatjaf/lnurl-rfc/blob/luds/16.md
+    // The idea here is that a SERVICE can offer human-readable addresses for users or specific internal endpoints
+    // that use the format <username>@<domainname>, e.g. satoshi@bitcoin.org. A user can then type these on a WALLET.
+    //
+    // Upon seeing such an address, WALLET makes a GET request to
+    // https://<domain>/.well-known/lnurlp/<username> endpoint if domain is clearnet or http://<domain>/.well-known/lnurlp/<name> if domain is onion.
+    // For example, if the address is satoshi@bitcoin.org, the request is to be made to https://bitcoin.org/.well-known/lnurlp/satoshi.
+    const [username, domain] = lightningAddress.toLowerCase().split("@");
+    if (domain == undefined) {
+      throw new Error("Invalid Lightning Address");
+    }
+
+    // Normal LNURL fetch request follows:
+    const lnurlPayUrl = `http://${domain}/.well-known/lnurlp/${username}`;
+    actions.setLNUrlStr(lnurlPayUrl);
+    const result = await fetch(lnurlPayUrl);
+
+    if (!result.ok) {
+      let error;
+      try {
+        error = await result.json();
+      } catch {
+        log.i("error", [result]);
+        throw new Error("Could not pay");
+      }
+      throw new Error(error.reason ?? "Could not pay");
+    }
+
+    const lnurlObject: LNUrlRequest | ILNUrlPayResponseError = await result.json();
+
+    if (isLNUrlPayResponseError(lnurlObject)) {
+      log.e("Got error")
+      throw new Error(lnurlObject.reason);
+    }
+
+    log.v(JSON.stringify(lnurlObject));
+    if (lnurlObject.tag === "payRequest") {
+      actions.setType("payRequest");
+      actions.setLNUrlObject(lnurlObject);
+      return true;
+    }
+    return false;
   }),
 
   lnUrlStr: undefined,
