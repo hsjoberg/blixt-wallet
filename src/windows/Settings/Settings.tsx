@@ -764,6 +764,14 @@ Do you wish to proceed?`;
     );
   };
 
+
+  // Enable Dunder LSP
+  const dunderEnabled = useStoreState((store) => store.settings.dunderEnabled);
+  const changeDunderEnabled = useStoreActions((store) => store.settings.changeDunderEnabled);
+  const onToggleDunderEnabled = async () => {
+    await changeDunderEnabled(!dunderEnabled);
+  };
+
   // Require graph sync before paying
   const requireGraphSync = useStoreState((store) => store.settings.requireGraphSync);
   const changeRequireGraphSync = useStoreActions((store) => store.settings.changeRequireGraphSync);
@@ -1077,7 +1085,7 @@ Do you wish to proceed?`;
               <Text note={true}>Use an inbound channel service for receiving payments</Text>
             </Body>
           </ListItem>
-          {(Chain !== "mainnet" || name?.includes("Dunder")) &&
+          {dunderEnabled &&
             <ListItem style={style.listItem} button={true} icon={true} onPress={onSetDunderServerPress} onLongPress={onSetDunderServerLongPress}>
               <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
               <Body>
@@ -1090,21 +1098,10 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="database-sync" /></Left>
             <Body>
               <Text>Wait for graph sync before paying</Text>
-              <Text note={true}>Synchronized graph leads to optimal payments paths</Text>
+              <Text note={true}>Synchronized graph leads to optimal payment paths</Text>
             </Body>
             <Right><CheckBox checked={requireGraphSync} onPress={onToggleRequireGraphSyncPress} /></Right>
           </ListItem>
-
-
-          {/* <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>Advanced</Text>
-          </ListItem>
-
-          <ListItem style={style.listItem} icon={true} onPress={() => {}}>
-            <Left><Icon style={style.icon} type="Entypo" name="text" /></Left>
-            <Body><Text>Open lnd log</Text></Body>
-          </ListItem> */}
-
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Miscellaneous</Text>
@@ -1146,6 +1143,13 @@ Do you wish to proceed?`;
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>Experiments</Text>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onToggleDunderEnabled}>
+            <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
+            <Body>
+              <Text>Enable Dunder LSP</Text>
+            </Body>
+            <Right><CheckBox checked={dunderEnabled} onPress={onToggleDunderEnabled} /></Right>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onChangeMultiPartPaymentEnabledPress}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>
@@ -1194,7 +1198,7 @@ Do you wish to proceed?`;
               <Text>LndMobile help center</Text>
             </Body>
           </ListItem>
-          {(Chain !== "mainnet" || name?.includes("Dunder")) &&
+          {dunderEnabled &&
             <ListItem style={style.listItem} button={true} icon={true} onPress={() => navigation.navigate("DunderDoctor")}>
               <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
               <Body>

@@ -31,14 +31,14 @@ const animationDisabled = {
 };
 
 export default function ReceiveIndex() {
-  const name = useStoreState((store) => store.settings.name);
+  const dunderEnabled = useStoreState((store) => store.settings.dunderEnabled);
 
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
   };
 
   return (
-    <Stack.Navigator initialRouteName={(Chain !== "mainnet" || name?.includes("Dunder")) ? "ReceiveSetupLsp" : "ReceiveSetup"} screenOptions={screenOptions}>
+    <Stack.Navigator initialRouteName={dunderEnabled ? "ReceiveSetupLsp" : "ReceiveSetup"} screenOptions={screenOptions}>
       <Stack.Screen name="ReceiveSetupLsp" component={ReceiveSetupLsp} />
       <Stack.Screen name="ReceiveSetup" component={ReceiveSetup} />
       <Stack.Screen name="ReceiveQr" component={ReceiveQr} options={{

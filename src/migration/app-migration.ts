@@ -231,4 +231,10 @@ export const appMigration: IAppMigration[] = [
       await setItemObject<boolean>(StorageItem.requireGraphSync, false);
     },
   },
+  // Version 26
+  {
+    async beforeLnd(db, i) {
+      await setItemObject<boolean>(StorageItem.dunderEnabled, false);
+    },
+  },
 ];

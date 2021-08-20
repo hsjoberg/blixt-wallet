@@ -44,6 +44,7 @@ export interface ISettingsModel {
   changeBitcoindPubRawTx: Thunk<ISettingsModel, string>;
   changeDunderServer: Thunk<ISettingsModel, string>;
   changeRequireGraphSync: Thunk<ISettingsModel, boolean>;
+  changeDunderEnabled: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -70,6 +71,7 @@ export interface ISettingsModel {
   setBitcoindPubRawTx: Action<ISettingsModel, string>;
   setDunderServer: Action<ISettingsModel, string>;
   setRequireGraphSync: Action<ISettingsModel, boolean>;
+  setDunderEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -96,6 +98,7 @@ export interface ISettingsModel {
   bitcoindPubRawTx: string;
   dunderServer: string;
   requireGraphSync: boolean;
+  dunderEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -126,6 +129,7 @@ export const settings: ISettingsModel = {
     actions.setBitcoindPubRawTx(await getItem(StorageItem.bitcoindPubRawTx) ?? "");
     actions.setDunderServer(await getItem(StorageItem.dunderServer) ?? "");
     actions.setRequireGraphSync(await getItemObject(StorageItem.requireGraphSync) ?? false);
+    actions.setDunderEnabled(await getItemObject(StorageItem.dunderEnabled) ?? false);
 
     log.d("Done");
   }),
@@ -258,6 +262,11 @@ export const settings: ISettingsModel = {
     actions.setRequireGraphSync(payload);
   }),
 
+  changeDunderEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.dunderEnabled, payload);
+    actions.setDunderEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -283,6 +292,7 @@ export const settings: ISettingsModel = {
   setBitcoindPubRawTx: action((state, payload) => { state.bitcoindPubRawTx = payload; }),
   setDunderServer: action((state, payload) => { state.dunderServer = payload; }),
   setRequireGraphSync: action((state, payload) => { state.requireGraphSync = payload; }),
+  setDunderEnabled: action((state, payload) => { state.dunderEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -309,4 +319,5 @@ export const settings: ISettingsModel = {
   bitcoindPubRawTx: "",
   dunderServer: "",
   requireGraphSync: false,
+  dunderEnabled: false,
 };
