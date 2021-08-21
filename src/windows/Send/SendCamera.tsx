@@ -97,6 +97,10 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
       paymentRequest = res[2];
     }
 
+    if (paymentRequest.includes("LIGHTNING=")) {
+      paymentRequest = paymentRequest.split("LIGHTNING=")[1] ?? "";
+    }
+
     // Check for lnurl
     if (paymentRequest.indexOf("LNURL") === 0) {
       console.log("LNURL");
