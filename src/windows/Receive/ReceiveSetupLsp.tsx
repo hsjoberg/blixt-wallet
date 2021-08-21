@@ -385,7 +385,7 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
         {" \n"}
         <TextClickable style={{
           fontSize: 14,
-          lineHeight: 22,
+          lineHeight: 23,
         } as TextStyle} onPress={() => navigation.navigate("DunderLspInfo")}>What's this?</TextClickable>
       </>
     );

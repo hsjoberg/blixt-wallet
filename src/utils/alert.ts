@@ -71,7 +71,6 @@ class WebAlert implements AlertStatic {
           negativeText,
         },
       ).then(({ action, text }: { action: "actionPosisive" | "actionNegative" | "actionDismiss", text: string }) => {
-        console.log(action);
         if (action === "actionNegative" || action === "actionDismiss") {
           if (typeof callbackOrButtons === "object") {
             const cancel = callbackOrButtons.find(({ style }) => style === "cancel");

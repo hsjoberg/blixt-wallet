@@ -179,6 +179,8 @@ module.exports = {
   },
   devServer: {
     https: true,
-    writeToDisk: true,
-  }
+    devMiddleware:{
+      writeToDisk: true,
+    }
+  },
 };

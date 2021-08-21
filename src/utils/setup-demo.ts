@@ -1,5 +1,6 @@
 import { Dispatch } from "easy-peasy";
 import Long from "long";
+
 import { IStoreModel } from "../state";
 import { setItem, StorageItem } from "../storage/app";
 import { createTransaction, ITransaction } from "../storage/database/transaction";
@@ -21,7 +22,7 @@ export default async function SetupBlixtDemo(
   const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
     for (const invoice of invoices) {
       const transaction: ITransaction = {
-        date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
+        date: Long.fromNumber(new Date().getTime() / 1000 + Math.floor(Math.random() * 1000000)),
         description: invoice.description,
         remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
         expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
@@ -112,12 +113,18 @@ export default async function SetupBlixtDemo(
     type: "PAY",
     website: "pollofeed.com",
     lightningService: "pollofeed",
-  },  {
+  }, {
     value: 1000,
     description: "1000 sats bet on 2",
     type: "PAY",
     website: "lightningspin.com",
     lightningService: "lightningspin",
+  }, {
+    value: 1000,
+    description: "LN Markets Withdraw",
+    type: "RECEIVE",
+    website: "lnmarkets.com",
+    lightningService: "lnmarkets",
   }]);
 
   if (createDbTransactions) {

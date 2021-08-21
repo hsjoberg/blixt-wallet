@@ -295,8 +295,9 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
         <View style={{ flex: 1, flexDirection: "row", justifyContent:"space-between" }}>
           <View style={{ width: "53%", justifyContent:"center", paddingRight: 4 }}>
             <Text style={{ fontSize: 15 }}>
-              Welcome to Blixt!{"\n\n"}
-              To get started, send on-chain funds to the bitcoin address to the right
+              Welcome to Blixt Wallet!{"\n\n"}
+              <Text style={{ fontSize: 13 }}>To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
+              A channel will automatically be opened for you.</Text>
             </Text>
           </View>
           <View>

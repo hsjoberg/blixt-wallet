@@ -134,7 +134,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text style={style.channelDetailTitle}>Channel ID</Text>
             </Left>
             <Right>
-              <CopyText>{channel.chanId?.toString()}</CopyText>
+              <CopyText style={{ fontSize: 14 }}>{channel.chanId?.toString()}</CopyText>
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
