@@ -17,7 +17,7 @@ export interface IClipboardManagerModel {
   checkInvoice: Thunk<IClipboardManagerModel, string, any, IStoreModel>;
   addToInvoiceCache: Action<IClipboardManagerModel, string>;
   tryInvoice: Thunk<IClipboardManagerModel, { paymentRequest: string }, any, IStoreModel>;
-  tryLNUrl: Thunk<IClipboardManagerModel, { lnUrl: string }, any, IStoreModel>;
+  tryLNUrl: Thunk<IClipboardManagerModel, { bech32data?: string; url?: string }, any, IStoreModel>;
 
   invoiceCache: string[];
 }
@@ -60,6 +60,7 @@ export const clipboardManager: IClipboardManagerModel = {
         log.d("Invoice already in cache");
         return;
       }
+      text = text.toLowerCase();
       log.i("try", [text]);
       actions.addToInvoiceCache(text);
 
@@ -69,11 +70,22 @@ export const clipboardManager: IClipboardManagerModel = {
         text = text.substring(text.indexOf(LnBech32Prefix)).split(/[\s&]/)[0];
         actions.tryInvoice({ paymentRequest: text });
       }
+      // If this is a non-bech32 LNURL (LUD-17)
+      else if (text.includes("lnurlp:") || text.includes("lnurlw:") || text.includes("lnurlc:")) {
+        log.d("lnurl non-bech32");
+        text = "https://" + text.substring(7).split(/[\s&]/)[0];
+        actions.tryLNUrl({ url: text });
+      }
+      else if (text.includes("keyauth:")) {
+        log.d("lnurl non-bech32 keyauth");
+        text = "https://" + text.substring(8).split(/[\s&]/)[0];
+        actions.tryLNUrl({ url: text });
+      }
       // If this is an LNURL
-      else if (text.indexOf("LNURL") !== -1) {
+      else if (text.includes("lnurl")) {
         log.d("lnurl");
-        text = text.substring(text.indexOf("LNURL")).split(/[\s&]/)[0];
-        actions.tryLNUrl({ lnUrl: text });
+        text = text.substring(text.indexOf("lnurl")).split(/[\s&]/)[0];
+        actions.tryLNUrl({ bech32data: text });
       }
     } catch (e) {
       log.d("Error checking clipboard", [e]);
@@ -115,11 +127,11 @@ export const clipboardManager: IClipboardManagerModel = {
   }),
 
   tryLNUrl: thunk(async (actions, payload, { dispatch }) => {
-    const type = await dispatch.lnUrl.setLNUrl(payload.lnUrl);
+    const type = await dispatch.lnUrl.setLNUrl(payload);
     if (type === "channelRequest") {
       Alert.alert(
         "Found LNURL channel request in clipboard",
-        `Found an LNURL in clipboard. Do you wish to continue?`,
+        `Found an LNURL channel request in clipboard. Do you wish to continue?`,
         [{
           text: "Cancel",
           onPress: () => dispatch.lnUrl.clear()

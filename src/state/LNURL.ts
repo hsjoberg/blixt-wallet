@@ -118,7 +118,7 @@ type LNUrlRequest = ILNUrlChannelRequest | ILNUrlAuthRequest | ILNUrlWithdrawReq
 const LNURLAUTH_CANONICAL_PHRASE = "DO NOT EVER SIGN THIS TEXT WITH YOUR PRIVATE KEYS! IT IS ONLY USED FOR DERIVATION OF LNURL-AUTH HASHING-KEY, DISCLOSING ITS SIGNATURE WILL COMPROMISE YOUR LNURL-AUTH IDENTITY AND MAY LEAD TO LOSS OF FUNDS!";
 
 export interface ILNUrlModel {
-  setLNUrl: Thunk<ILNUrlModel, string, any, IStoreModel, Promise<LNURLType>>;
+  setLNUrl: Thunk<ILNUrlModel, { bech32data?: string; url?: string }, any, IStoreModel, Promise<LNURLType>>;
 
   doChannelRequest: Thunk<ILNUrlModel, IDoChannelRequestPayload, IStoreInjections, IStoreModel, Promise<boolean>>;
   doAuthRequest: Thunk<ILNUrlModel, void, IStoreInjections, IStoreModel, Promise<boolean>>;
@@ -139,17 +139,21 @@ export interface ILNUrlModel {
 };
 
 export const lnUrl: ILNUrlModel = {
-  setLNUrl: thunk(async (actions, bech32data) => {
+  setLNUrl: thunk(async (actions, { bech32data, url }) => {
     log.i("setLNUrl");
     actions.clear();
     try {
       let type: LNURLType;
-      const decodedBech32 = Bech32.bech32.decode(bech32data, 1024);
-      const decodedUrl = bytesToString(Bech32.bech32.fromWords(decodedBech32.words));
-      log.d("decodedUrl", [decodedUrl]);
-      actions.setLNUrlStr(decodedUrl);
+      if (bech32data) {
+        const decodedBech32 = Bech32.bech32.decode(bech32data, 1024);
+        url = bytesToString(Bech32.bech32.fromWords(decodedBech32.words));
+      } else if (!url) {
+        throw new Error("Neither bech32data or url is provided");
+      }
+      log.d("url", [url]);
+      actions.setLNUrlStr(url);
 
-      const queryParams = parseQueryParams(decodedUrl);
+      const queryParams = parseQueryParams(url);
       log.d("queryParams", [queryParams]);
       // If the data is in the URL
       if ("tag" in queryParams) {
@@ -171,8 +175,8 @@ export const lnUrl: ILNUrlModel = {
       }
       // If we have to make a GET request to get the data
       else {
-        log.d(`GET ${decodedUrl}, looking for tag`);
-        const result = await fetch(decodedUrl);
+        log.d(`GET ${url}, looking for tag`);
+        const result = await fetch(url);
 
         if (!result.ok) {
           log.d("Not ok");

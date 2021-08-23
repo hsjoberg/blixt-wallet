@@ -228,7 +228,7 @@ export const webln: IWebLNModel = {
     const paymentRequestStr = payload.lnurl;
     return new Promise(async (resolve, reject) => {
       try {
-        const type = await getStoreActions().lnUrl.setLNUrl(paymentRequestStr);
+        const type = await getStoreActions().lnUrl.setLNUrl({ bech32data: paymentRequestStr});
         if (type === "channelRequest") {
           Alert.alert(
             "Found LNURL channel request",

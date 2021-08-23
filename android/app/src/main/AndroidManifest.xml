@@ -33,11 +33,39 @@
             <category android:name="android.intent.category.DEFAULT" />
         </intent-filter>
 
-        <intent-filter android:label="${appName}${chain}${custom}${buildType}">
+        <intent-filter>
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.BROWSABLE" />
           <category android:name="android.intent.category.DEFAULT" />
           <data android:scheme="lightning" />
+        </intent-filter>
+
+        <intent-filter>
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <data android:scheme="lnurlw" />
+        </intent-filter>
+
+        <intent-filter>
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <data android:scheme="lnurlp" />
+        </intent-filter>
+
+        <intent-filter>
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <data android:scheme="lnurlc" />
+        </intent-filter>
+
+        <intent-filter>
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <data android:scheme="keyauth" />
         </intent-filter>
 
         <intent-filter>

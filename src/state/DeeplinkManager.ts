@@ -4,11 +4,11 @@ import { NavigationContainerRef } from "@react-navigation/native";
 
 import { getNavigator } from "../utils/navigation";
 import { IStoreModel } from "./index";
-import { timeout, waitUntilTrue } from "../utils";
+import { waitUntilTrue } from "../utils";
 import { LnBech32Prefix } from "../utils/build";
+import { PLATFORM } from "../utils/constants";
 
 import logger from "./../utils/log";
-import { PLATFORM } from "../utils/constants";
 const log = logger("DeeplinkManager");
 
 export interface IDeeplinkManager {
@@ -17,7 +17,7 @@ export interface IDeeplinkManager {
 
   checkDeeplink: Thunk<IDeeplinkManager, string | undefined | null, any, IStoreModel>;
   tryInvoice: Thunk<IDeeplinkManager, { paymentRequest: string }, any, IStoreModel>;
-  tryLNUrl: Thunk<IDeeplinkManager, { lnUrl: string }, any, IStoreModel>;
+  tryLNUrl: Thunk<IDeeplinkManager, { bech32data?: string; url?: string }, any, IStoreModel>;
   addToCache: Action<IDeeplinkManager, string>;
 
   cache: string[];
@@ -78,16 +78,25 @@ export const deeplinkManager: IDeeplinkManager = {
 
         for (let subject of data.split(/\s/)) {
           try {
-            subject = subject.toUpperCase().replace("LIGHTNING:", "");
+            subject = subject.toLowerCase().replace("lightning:", "");
             log.d("Testing", [subject]);
 
             // If this is an invoice
-            if (subject.startsWith(LnBech32Prefix.toUpperCase())) {
+            if (subject.startsWith(LnBech32Prefix)) {
               return await actions.tryInvoice({ paymentRequest: subject.split("?")[0] });
             }
+            // If this is a non-bech32 LNURL (LUD-17)
+            else if (subject.startsWith("lnurlp") || subject.startsWith("lnurlw") || subject.startsWith("lnurlc")) {
+              subject = "https://" + subject.substring(7);
+              return await actions.tryLNUrl({ url: subject.split("?")[0] });
+            }
+            else if (subject.startsWith("keyauth")) {
+              subject = "https://" + subject.substring(8);
+              return await actions.tryLNUrl({ url: subject.split("?")[0] });
+            }
             // If this is an LNURL
-            else if (subject.startsWith("LNURL")) {
-              return await actions.tryLNUrl({ lnUrl: subject.split("?")[0] });
+            else if (subject.startsWith("lnurl")) {
+              return await actions.tryLNUrl({ bech32data: subject.split("?")[0] });
             }
             else if (subject.includes("@")) {
               const hexRegex = /^[0-9a-fA-F]+$/;
@@ -139,7 +148,7 @@ export const deeplinkManager: IDeeplinkManager = {
   }),
 
   tryLNUrl: thunk(async (_, payload, { dispatch }) => {
-    const type = await dispatch.lnUrl.setLNUrl(payload.lnUrl);
+    const type = await dispatch.lnUrl.setLNUrl(payload);
     if (type === "channelRequest") {
       log.d("Navigating to channelRequest");
       return (nav: NavigationContainerRef) => {

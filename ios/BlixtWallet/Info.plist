@@ -25,6 +25,10 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>keyauth</string>
+				<string>lnurlc</string>
+				<string>lnurlw</string>
+				<string>lnurlp</string>
 				<string>lightning</string>
 			</array>
 		</dict>
@@ -43,6 +47,10 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>keyauth</string>
+		<string>lnurlc</string>
+		<string>lnurlw</string>
+		<string>lnurlp</string>
 		<string>lightning</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
