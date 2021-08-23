@@ -100,7 +100,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
     if (paymentRequest.indexOf("LNURL") === 0) {
       console.log("LNURL");
       try {
-        const type = await setLNURL(paymentRequest);
+        const type = await setLNURL({ bech32data: paymentRequest });
         if (type === "channelRequest") {
           gotoNextScreen("LNURL", { screen: "ChannelRequest" });
         }

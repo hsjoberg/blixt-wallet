@@ -94,7 +94,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
 
     // Check LNURL fallback scheme
     // https://github.com/fiatjaf/lnurl-rfc/blob/luds/01.md#fallback-scheme
-    var res = /^(http.*[&?]lightning=)?((lnurl|lnbc|lntb)([0-9]{1,}[A-Z0-9]+){1})/.exec(paymentRequest);
+    var res = /^(http.*[&?]lightning=)?((lnurl|lnbc|lntb)([0-9]{1,}[a-z0-9]+){1})/.exec(paymentRequest);
     if (res) {
       paymentRequest = res[2];
     }
@@ -104,15 +104,15 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
     }
 
     // Check for lnurl
-    if (paymentRequest.includes("lnurl") || paymentRequest.includes("keyauth")) {
+    if (paymentRequest.startsWith("lnurl") || paymentRequest.startsWith("keyauth")) {
       console.log("LNURL");
       try {
         let type: string;
-        if (paymentRequest.includes("lnurlp:") || paymentRequest.includes("lnurlw:") || paymentRequest.includes("lnurlc:")) {
+        if (paymentRequest.startsWith("lnurlp:") || paymentRequest.startsWith("lnurlw:") || paymentRequest.startsWith("lnurlc:")) {
           paymentRequest = "https://" + paymentRequest.substring(7).split(/[\s&]/)[0];
           type = await setLNURL({ url: paymentRequest })
         }
-        else if (paymentRequest.includes("keyauth:")) {
+        else if (paymentRequest.startsWith("keyauth:")) {
           paymentRequest = "https://" + paymentRequest.substring(8).split(/[\s&]/)[0];
           type = await setLNURL({ url: paymentRequest })
         } else {
@@ -150,7 +150,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
     else {
       try {
         await setPayment({ paymentRequestStr: paymentRequest });
-        gotoNextScreen("Send", { screen:"SendConfirmation" });
+        gotoNextScreen("Send", { screen: "SendConfirmation" });
       } catch (error) {
         Alert.alert(`${errorPrefix}: ${error.message}`, undefined,
           [{ text: "OK", onPress: () => {
