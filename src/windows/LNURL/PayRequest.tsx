@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Vibration, StyleSheet, Linking, Alert, KeyboardAvoidingView } from "react-native";
+import { Vibration, StyleSheet, Linking, Alert, Keyboard, KeyboardAvoidingView } from "react-native";
 import Clipboard from "@react-native-community/clipboard"
 import { Body, Card, Text, CardItem, H1, View, Button, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -98,6 +98,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
 
   const onPressPay = async () => {
     try {
+      Keyboard.dismiss();
       setDoRequestLoading(true);
       const paymentRequestResponse = await doPayRequest({
         msat: sendAmountMSat,
@@ -276,6 +277,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     );
   }
 
+  const lightningAddress = metadata?.find((item) => item[0] === "text/identifier" || item[0] === "text/email");
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
@@ -283,13 +285,14 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
         <Card style={style.card}>
           <CardItem style={{ flexGrow: 1 }}>
             <Body>
-              <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+              <View style={style.headerContainer}>
                 <H1 style={style.header}>
                   Pay
                 </H1>
+                {lightningAddress && <Text>{lightningAddress[1]}</Text>}
                 {__DEV__ &&
                   <Button small={true} onPress={viewMetadata}>
-                    <Text style={{ fontSize: 7.5 }}>View technical metadata</Text>
+                    <Text style={{ fontSize: 7.5 }}>View metadata</Text>
                   </Button>
                 }
               </View>
@@ -389,9 +392,16 @@ const style = StyleSheet.create({
     width: "100%",
     minHeight: "55%",
   },
+  headerContainer: {
+    display: "flex",
+    marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems:"center",
+    width: "100%"
+  },
   header: {
     fontWeight: "bold",
-    marginBottom: 10,
   },
   detailText: {
     marginBottom: 7,

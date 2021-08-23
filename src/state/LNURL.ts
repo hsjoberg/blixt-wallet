@@ -67,7 +67,7 @@ export interface ILNUrlPayRequest {
   tag: "payRequest";
 }
 
-export type ILNUrlPayRequestMetadata = string[][];
+export type ILNUrlPayRequestMetadata = [string, string][];
 
 export interface ILNUrlPayResponse {
   pr: string;
