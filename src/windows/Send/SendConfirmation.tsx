@@ -44,6 +44,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const clear = useStoreActions((store) => store.send.clear);
   const callback = (route.params?.callback) ?? (() => {});
   const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
+  const channels = useStoreState((store) => store.channel.channels);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
@@ -193,6 +194,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     rpcReady &&
     syncedToChain &&
     (!requireGraphSync || syncedToGraph) &&
+    channels.some((channel) => channel.active) &&
     !isPaying
   );
 
