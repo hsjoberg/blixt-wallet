@@ -168,7 +168,9 @@ export default ({ navigation }: IOpenChannelProps) => {
                 maximumTrackTintColor={blixtTheme.lightGray}
               />
               <TextInput
-                keyboardType="numeric" value={`${feeRate || ""}`}
+                keyboardType="numeric"
+                returnKeyType="done"
+                value={`${feeRate || ""}`}
                 onChangeText={(text) => {
                   let value = Math.min(Number.parseInt(text || "0"), 1000);
                   if (Number.isNaN(value)) {
