@@ -350,7 +350,7 @@ ${lndChainBackend === "neutrino" ? `
 [Neutrino]
 ${neutrinoPeers[0] !== undefined ? `neutrino.connect=${neutrinoPeers[0]}` : ""}
 neutrino.feeurl=${neutrinoFeeUrl}
-neutrino.broadcasttimeout=6s
+neutrino.broadcasttimeout=11s
 neutrino.persistfilters=true
 ` : ""}
 
