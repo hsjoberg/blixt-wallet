@@ -61,6 +61,32 @@ function CheckmarkPolyline() {
   );
 }
 
+
+function Check() {
+  return (
+    <Svg width="185" height="185" style={{ backgroundColor: "transparent" }}>
+      <CheckmarkCircle />
+      <CheckmarkPolyline />
+    </Svg>
+  );
+}
+
+export function Done() {
+  return (
+    <>
+      <Check />
+      <AnimatedText
+        style={{ marginTop: 12 }}
+        duration={300}
+        animation="fadeIn"
+        useNativeDriver={true}
+      >
+        PAYMENT SENT
+      </AnimatedText>
+    </>
+  )
+}
+
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendDone">;
   route: RouteProp<SendStackParamList, "SendDone">;
@@ -83,18 +109,7 @@ export default function SendDone({
 
   return (
     <Container style={{ justifyContent: "center", alignItems: "center" }}>
-      <Svg width="185" height="185" style={{ backgroundColor: "transparent" }}>
-        <CheckmarkCircle />
-        <CheckmarkPolyline />
-      </Svg>
-      <AnimatedText
-        style={{ marginTop: 12 }}
-        duration={300}
-        animation="fadeIn"
-        useNativeDriver={true}
-      >
-        PAYMENT SENT
-      </AnimatedText>
+      <Done />
     </Container>
   );
 }

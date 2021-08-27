@@ -15,6 +15,7 @@ import ScaledImage from "../../components/ScaledImage";
 import Color from "color";
 import { formatBitcoin, convertBitcoinToFiat, unitToSatoshi } from "../../utils/bitcoin-units";
 import TextLink from "../../components/TextLink";
+import { Done } from "../Send/SendDone";
 
 export interface IPayRequestProps {
   navigation: StackNavigationProp<RootStackParamList>;
@@ -66,7 +67,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
       }
 
       const metaDataImage = metadata.filter((m, i) => {
-        return !!m.find((str) => str.toUpperCase().startsWith( "IMAGE"));
+        return !!m.find((str) => str.toUpperCase().startsWith("IMAGE"));
       });
       if (metaDataImage[0]) {
         setImage(metaDataImage[0][1]);
@@ -130,24 +131,6 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
 
       setPreimage(preimage);
       setPaid(true);
-      if (paymentRequestResponse.successAction === null) {
-        navigation.pop();
-      }
-
-      // navigation.navigate("Send", {
-      //   screen: "SendConfirmation",
-      //   params: {
-      //     callback: (paymentPreimage: Uint8Array) => {
-      //       if (paymentPreimage !== null) {
-      //         setPreimage(paymentPreimage);
-      //         setPaid(true);
-      //         if (paymentRequestResponse.successAction === null) {
-      //           navigation.pop();
-      //         }
-      //       }
-      //     }
-      //   }
-      // });
     } catch (e) {
       Vibration.vibrate(50);
       toast(
@@ -184,10 +167,15 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
       <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
         <Card style={style.card}>
           <CardItem style={{ flexGrow: 1 }}>
-            <Body>
+            <Body style={{ flex: 1 }}>
               <H1 style={style.header}>
                 Invoice paid
               </H1>
+              {!payRequestResponse.successAction && (
+                <View style={{ flex: 1, width:"100%", justifyContent: "center", alignItems:"center" }}>
+                  <Done />
+                </View>
+              )}
               {payRequestResponse.successAction?.tag === "message" &&
                 <>
                   <Text>
@@ -226,16 +214,6 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
                           payRequestResponse.successAction.iv,
                           payRequestResponse.successAction.ciphertext,
                         );
-
-                        // const aesCbc = new aesjs.ModeOfOperation.cbc(
-                        //   preimage!,
-                        //   base64.toByteArray(payRequestResponse.successAction.iv)
-                        // );
-
-                        // const msg = aesCbc.decrypt(
-                        //   base64.toByteArray(payRequestResponse.successAction.ciphertext)
-                        // )
-                        // return uint8ArrayToString(msg);
                       }
                     })()}
                   </Text>
@@ -282,6 +260,13 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
       <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
+        {__DEV__ &&
+          <View style={{ position:"absolute", top: -30, right: 0 }}>
+            <Button small={true} onPress={viewMetadata}>
+              <Text style={{ fontSize: 7.5 }}>View metadata</Text>
+            </Button>
+          </View>
+        }
         <Card style={style.card}>
           <CardItem style={{ flexGrow: 1 }}>
             <Body>
@@ -290,50 +275,47 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
                   Pay
                 </H1>
                 {lightningAddress && <Text>{lightningAddress[1]}</Text>}
-                {__DEV__ &&
-                  <Button small={true} onPress={viewMetadata}>
-                    <Text style={{ fontSize: 7.5 }}>View metadata</Text>
-                  </Button>
+              </View>
+              <View style={style.contentContainer}>
+                <Text style={style.text}>
+                  {domain} asks you to pay.
+                </Text>
+                <Text style={style.text}>
+                  Description:{"\n"}
+                  {text}
+                </Text>
+                <Text style={{ marginBottom: 28 }}>
+                  Price:{"\n"}
+                  {minSpendableFormatted} ({minSpendableFiatFormatted})
+                  {(minSpendable !== maxSpendable) &&
+                    <Text> to {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
+                  }
+                </Text>
+                {typeof commentAllowed === "number" && commentAllowed > 0 &&
+                  <>
+                    <Text>
+                      Comment to {domain} (max {commentAllowed} letters):
+                    </Text>
+                    <View style={{ flexDirection:"row" }}>
+                      <Input onChangeText={setComment} keyboardType="default" style={[style.input, { marginTop: 9, marginBottom: 16 }]} />
+                    </View>
+                  </>
+                }
+                {image &&
+                  <ScaledImage
+                    uri={"data:image/png;base64," + image}
+                    height={190}
+                    style={{
+                      alignSelf: "center",
+                      marginBottom: 28,
+                    }}
+                  />
                 }
               </View>
-              <Text style={style.text}>
-                {domain} asks you to pay.
-              </Text>
-              <Text style={style.text}>
-                Description:{"\n"}
-                {text}
-              </Text>
-              <Text style={{ marginBottom: 28 }}>
-                Price:{"\n"}
-                {minSpendableFormatted} ({minSpendableFiatFormatted})
-                {(minSpendable !== maxSpendable) &&
-                  <Text> to {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
-                }
-              </Text>
-              {typeof commentAllowed === "number" && commentAllowed > 0 &&
-                <>
-                  <Text>
-                    Comment to {domain} (max {commentAllowed} letters):
-                  </Text>
-                  <View style={{ flexDirection:"row" }}>
-                    <Input onChangeText={setComment} keyboardType="default" style={[style.input, { marginTop: 9, marginBottom: 16 }]} />
-                  </View>
-                </>
-              }
-              {image &&
-                <ScaledImage
-                  uri={"data:image/png;base64," + image}
-                  height={190}
-                  style={{
-                    alignSelf: "center",
-                    marginBottom: 28,
-                  }}
-                />
-              }
               <View style={style.actionBar}>
                 <Button
-                  disabled={doRequestLoading}
                   success
+                  disabled={doRequestLoading || !(sendAmountMSat > 0)}
                   onPress={onPressPay}
                   style={{
                     marginLeft: 10,
@@ -350,7 +332,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
                     onChangeText={onChangeBitcoinInput}
                     keyboardType="numeric"
                     returnKeyType="done"
-                    placeholder={`${minSpendableFormatted} to ${maxSpendableFormatted}`}
+                    placeholder={`Input amount`}
                     style={style.input}
                   />
                 }
@@ -374,19 +356,6 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
 }
 
 const style = StyleSheet.create({
-  blurOverlay: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  container: {
-    width:"100%",
-    padding: 12,
-    flex: 1,
-    justifyContent: "center"
-  },
   card: {
     padding: 5,
     width: "100%",
@@ -403,18 +372,11 @@ const style = StyleSheet.create({
   header: {
     fontWeight: "bold",
   },
-  detailText: {
-    marginBottom: 7,
-  },
-  qrText: {
-    marginBottom: 7,
-    paddingTop: 4,
-    paddingLeft: 18,
-    paddingRight: 18,
+  contentContainer: {
+    flexGrow: 1,
   },
   actionBar: {
     width: "100%",
-    flexGrow: 1,
     alignItems:"flex-end",
     justifyContent:"space-between",
     flexDirection: "row-reverse",
@@ -429,7 +391,6 @@ const style = StyleSheet.create({
   },
   input: {
     flexGrow: 1,
-    flexShrink: 1,
     flexBasis: "auto",
     height: 28,
     fontSize: 13,
