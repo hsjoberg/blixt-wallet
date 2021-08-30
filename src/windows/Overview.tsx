@@ -2,12 +2,13 @@ import React, { useState, useRef, useMemo } from "react";
 import { Platform, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, RefreshControl, NativeSyntheticEvent, NativeScrollEvent, PixelRatio } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
-import { useNavigation } from "@react-navigation/native";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import LinearGradient from "react-native-linear-gradient";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Color from "color";
+import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
 
 import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
@@ -16,13 +17,14 @@ import Container from "../components/Container";
 import { timeout, toast } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
+import Drawer from "../components/Drawer";
 import { Chain } from "../utils/build";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
 import Send from "./Send";
 import { PLATFORM } from "../utils/constants";
-import { fontFactor, zoomed } from "../utils/scale";
+import { fontFactor, fontFactorNormalized, zoomed } from "../utils/scale";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -88,8 +90,8 @@ function Overview({ navigation }: IOverviewProps) {
   const headerBtcFontSize = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [
-      (bitcoinUnit === "satoshi" ? 34 : 37) * fontFactor,
-      27 * fontFactor
+      (bitcoinUnit === "satoshi" ? 32 : 37) * fontFactor,
+      (bitcoinUnit === "satoshi" ? 24 : 27) * fontFactor,
     ],
     extrapolate: "clamp",
   });
@@ -97,8 +99,8 @@ function Overview({ navigation }: IOverviewProps) {
   const headerBtcHeight = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [
-      (bitcoinUnit === "satoshi" ? 37 : 40) * 1.3 * Math.min(PixelRatio.getFontScale(), 1.4),
-      45,
+      (bitcoinUnit === "satoshi" ? 35 : 40) * 1.3 * Math.min(PixelRatio.getFontScale(), 1.4),
+      (bitcoinUnit === "satoshi" ? 36 : 41),
     ],
     extrapolate: "clamp",
   });
@@ -211,12 +213,15 @@ function Overview({ navigation }: IOverviewProps) {
         <Animated.View style={[style.animatedTop,{ height: headerHeight }]} pointerEvents="box-none">
           <LinearGradient style={style.top} colors={Chain === "mainnet" ? [blixtTheme.secondary, blixtTheme.primary] : [blixtTheme.lightGray, Color(blixtTheme.lightGray).darken(0.30).hex()]} pointerEvents="box-none">
             <View style={StyleSheet.absoluteFill}>
-              <AnimatedIcon
+              {/* <AnimatedIcon
                 style={[style.onchainIcon, { opacity: iconOpacity }]} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
-              />
+              /> */}
               <AnimatedIcon
-                style={[style.channelsIcon, { opacity: iconOpacity }]} type="Entypo" name="thunder-cloud" onPress={() => (navigation.navigate as any)("LightningInfo")}
+                style={[style.menuIcon]} type="Entypo" name="menu" onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
               />
+              {/* <AnimatedIcon
+                style={[style.channelsIcon, { opacity: iconOpacity }]} type="Entypo" name="thunder-cloud" onPress={() => (navigation.navigate as any)("LightningInfo")}
+              /> */}
               <AnimatedIcon
                 style={[style.settingsIcon, {}]} type="MaterialIcons" name="settings" onPress={() => navigation.navigate("Settings")}
               />
@@ -228,11 +233,11 @@ function Overview({ navigation }: IOverviewProps) {
                   <Spinner onPress={onPressSyncIcon} />
                 </Animated.View>
               }
-              {syncedToChain &&
+              {/* {syncedToChain &&
                 <AnimatedIcon
                   style={[style.weblnBrowswerIcon, { opacity: iconOpacity }]} type="MaterialCommunityIcons" name="cart-outline" onPress={() => navigation.navigate("WebLNBrowser")}
                 />
-              }
+              } */}
             </View>
 
             <Animated.Text
@@ -294,9 +299,9 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
       <CardItem>
         <View style={{ flex: 1, flexDirection: "row", justifyContent:"space-between" }}>
           <View style={{ width: "53%", justifyContent:"center", paddingRight: 4 }}>
-            <Text style={{ fontSize: 15 }}>
+            <Text style={{ fontSize: 15 * fontFactor }}>
               Welcome to Blixt Wallet!{"\n\n"}
-              <Text style={{ fontSize: 13 }}>To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
+              <Text style={{ fontSize: 13 * fontFactor }}>To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
               A channel will automatically be opened for you.</Text>
             </Text>
           </View>
@@ -331,14 +336,14 @@ const DoBackup = () => {
       <CardItem>
         <View style={{ flex: 1 }}>
           <View>
-            <Text>Thank you for using Blixt Wallet!{"\n\n"}We recommend making a backup of the wallet so that you can restore your funds in case of a phone loss.</Text>
+            <Text style={{ fontSize: 15 * fontFactor }}>Thank you for using Blixt Wallet!{"\n\n"}We recommend making a backup of the wallet so that you can restore your funds in case of a phone loss.</Text>
           </View>
           <View style={{ flexDirection: "row-reverse", marginTop: 11 }}>
             <Button small style={{marginLeft: 7 }} onPress={onPressBackupWallet}>
-              <Text style={{ fontSize: 11 }}>Backup wallet</Text>
+              <Text style={{ fontSize: 11 * fontFactorNormalized }}>Backup wallet</Text>
             </Button>
             <Button small onPress={onPressDismiss}>
-              <Text style={{ fontSize: 11 }}>Dismiss</Text>
+              <Text style={{ fontSize: 11 * fontFactorNormalized }}>Dismiss</Text>
             </Button>
           </View>
         </View>
@@ -374,6 +379,18 @@ const style = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  menuIcon: {
+    position: "absolute",
+    padding: 5,
+    paddingRight: 8,
+    top: Platform.select({
+      native: 9 + iconTopPadding,
+      web: 9,
+    }) ?? 0,
+    left: 8,
+    fontSize: 31,
+    color: blixtTheme.light,
+  },
   onchainIcon: {
     position: "absolute",
     padding: 6,
@@ -406,7 +423,7 @@ const style = StyleSheet.create({
       web: 7,
     }),
     right: 8,
-    fontSize: 27,
+    fontSize: 29,
     color: blixtTheme.light,
   },
   helpIcon: {
@@ -420,7 +437,7 @@ const style = StyleSheet.create({
       native: 8 + 24 + 8 + 8,
       web: 8 + 24 + 8 + 7
     }) ?? 0,
-    fontSize: 25,
+    fontSize: 27,
     color: blixtTheme.light,
   },
   lightningSyncIcon: {
@@ -431,8 +448,6 @@ const style = StyleSheet.create({
       web: 8,
     }) ?? 0,
     right: 8 + 24 + 8 + 24 + 8 + 14,
-    fontSize: 24,
-    color: blixtTheme.light,
   },
   weblnBrowswerIcon: {
     position: "absolute",
@@ -481,7 +496,6 @@ const OverviewTabs = createBottomTabNavigator();
 export function OverviewTabsComponent() {
   return (
     <OverviewTabs.Navigator screenOptions={{
-
       header: () => null,
     }} tabBar={() => <FooterNav />}>
       <OverviewTabs.Screen name="Overview" component={Overview} />
@@ -489,24 +503,45 @@ export function OverviewTabsComponent() {
   );
 };
 
-const TopTabs = createMaterialTopTabNavigator();
-export default function TopTabsComponent() {
+
+const DrawerNav = createDrawerNavigator();
+
+export function DrawerComponent() {
   return (
-    <TopTabs.Navigator
-      springVelocityScale={1.4}
-      sceneContainerStyle={{
-        backgroundColor: "transparent"
-      }}
-      screenOptions={{
-        lazy: true,
-        tabBarStyle: {
-          display: "none",
-          height: 0,
-        },
-      }}
-    >
-      <TopTabs.Screen name="OverviewX" component={OverviewTabsComponent} />
-      <TopTabs.Screen name="SendX" component={Send} initialParams={{ viaSwipe: true }} />
-    </TopTabs.Navigator>
-  );
+    <DrawerNav.Navigator screenOptions={{
+      header: () => <></>,
+      drawerStyle: {
+        backgroundColor: "transparent",
+        borderRightColor: "transparent",
+        width: 305,
+      },
+      drawerType: "front",
+      swipeEdgeWidth: 400,
+    }} drawerContent={() => <Drawer />}>
+      <DrawerNav.Screen name="OverviewTabs" component={OverviewTabsComponent} />
+    </DrawerNav.Navigator>
+  )
 }
+export default DrawerComponent;
+
+// const TopTabs = createMaterialTopTabNavigator();
+// export default function TopTabsComponent() {
+//   return (
+//     <TopTabs.Navigator
+//       springVelocityScale={1.4}
+//       sceneContainerStyle={{
+//         backgroundColor: "transparent"
+//       }}
+//       screenOptions={{
+//         lazy: true,
+//         tabBarStyle: {
+//           display: "none",
+//           height: 0,
+//         },
+//       }}
+//     >
+//       <TopTabs.Screen name="OverviewX" component={DrawerComponent} />
+//       <TopTabs.Screen name="SendX" component={Send} initialParams={{ viaSwipe: true }} />
+//     </TopTabs.Navigator>
+//   );
+// }

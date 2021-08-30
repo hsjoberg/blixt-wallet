@@ -356,6 +356,43 @@ exports[`renders correctly 1`] = `
                               ]
                             }
                           >
+                            <Text
+                              allowFontScaling={false}
+                              onPress={[Function]}
+                              style={
+                                Array [
+                                  Object {
+                                    "color": undefined,
+                                    "fontSize": 12,
+                                  },
+                                  Array [
+                                    Object {
+                                      "color": "#000",
+                                      "fontSize": 30,
+                                    },
+                                    Object {
+                                      "color": "#000",
+                                      "fontSize": 30,
+                                    },
+                                    Object {
+                                      "left": 8,
+                                      "padding": 9,
+                                      "position": "absolute",
+                                      "top": 28,
+                                    },
+                                  ],
+                                  Object {
+                                    "fontFamily": "Ionicons",
+                                    "fontStyle": "normal",
+                                    "fontWeight": "normal",
+                                  },
+                                  Object {},
+                                ]
+                              }
+                              type="Ionicons"
+                            >
+                              
+                            </Text>
                             <View
                               style={
                                 Array [

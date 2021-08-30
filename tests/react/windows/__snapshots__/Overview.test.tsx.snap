@@ -492,7 +492,7 @@ exports[`renders correctly 1`] = `
                                                         "fontSize": 16,
                                                       },
                                                       Object {
-                                                        "fontSize": 15,
+                                                        "fontSize": 9.74025974025974,
                                                       },
                                                     ]
                                                   }
@@ -511,7 +511,7 @@ exports[`renders correctly 1`] = `
                                                           "fontSize": 16,
                                                         },
                                                         Object {
-                                                          "fontSize": 13,
+                                                          "fontSize": 8.441558441558442,
                                                         },
                                                       ]
                                                     }
@@ -651,56 +651,12 @@ exports[`renders correctly 1`] = `
                                                   },
                                                   Object {
                                                     "color": "#e5eaea",
-                                                    "fontSize": 25,
+                                                    "fontSize": 31,
                                                     "left": 8,
-                                                    "opacity": 1,
-                                                    "padding": 6,
+                                                    "padding": 5,
                                                     "paddingRight": 8,
                                                     "position": "absolute",
                                                     "top": 29,
-                                                  },
-                                                ],
-                                                Object {
-                                                  "fontFamily": "FontAwesome",
-                                                  "fontStyle": "normal",
-                                                  "fontWeight": "normal",
-                                                },
-                                                Object {},
-                                              ]
-                                            }
-                                            type="FontAwesome"
-                                          >
-                                            
-                                          </Text>
-                                          <Text
-                                            allowFontScaling={false}
-                                            collapsable={false}
-                                            nativeID="animatedComponent"
-                                            onPress={[Function]}
-                                            style={
-                                              Array [
-                                                Object {
-                                                  "color": undefined,
-                                                  "fontSize": 12,
-                                                },
-                                                Array [
-                                                  Object {
-                                                    "color": "#000",
-                                                    "fontSize": 30,
-                                                  },
-                                                  Object {
-                                                    "color": "#000",
-                                                    "fontSize": 30,
-                                                  },
-                                                  Object {
-                                                    "color": "#e5eaea",
-                                                    "fontSize": 28,
-                                                    "left": 42,
-                                                    "opacity": 1,
-                                                    "padding": 4,
-                                                    "paddingRight": 8,
-                                                    "position": "absolute",
-                                                    "top": 32,
                                                   },
                                                 ],
                                                 Object {
@@ -713,7 +669,7 @@ exports[`renders correctly 1`] = `
                                             }
                                             type="Entypo"
                                           >
-                                            
+                                            
                                           </Text>
                                           <Text
                                             allowFontScaling={false}
@@ -737,7 +693,7 @@ exports[`renders correctly 1`] = `
                                                   },
                                                   Object {
                                                     "color": "#e5eaea",
-                                                    "fontSize": 27,
+                                                    "fontSize": 29,
                                                     "padding": 5,
                                                     "position": "absolute",
                                                     "right": 8,
@@ -778,7 +734,7 @@ exports[`renders correctly 1`] = `
                                                   },
                                                   Object {
                                                     "color": "#e5eaea",
-                                                    "fontSize": 25,
+                                                    "fontSize": 27,
                                                     "opacity": 1,
                                                     "padding": 5,
                                                     "position": "absolute",
@@ -803,8 +759,6 @@ exports[`renders correctly 1`] = `
                                             nativeID="animatedComponent"
                                             style={
                                               Object {
-                                                "color": "#e5eaea",
-                                                "fontSize": 24,
                                                 "opacity": 1,
                                                 "padding": 4,
                                                 "position": "absolute",
@@ -834,10 +788,8 @@ exports[`renders correctly 1`] = `
                                                       "fontSize": 30,
                                                     },
                                                     Object {
-                                                      "fontSize": 28,
+                                                      "fontSize": 30,
                                                       "height": 29,
-                                                      "marginRight": -1,
-                                                      "marginTop": -1,
                                                       "opacity": 1,
                                                       "width": 27,
                                                     },

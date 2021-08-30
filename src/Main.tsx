@@ -159,9 +159,15 @@ export default function Main() {
     gestureVelocityImpact: 1.9,
   };
 
-  const animationDisabled = {
+  const animationDisabled: StackNavigationOptions = {
     animationEnabled: false,
     cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+  };
+
+  const horizontalTransition: StackNavigationOptions = {
+    gestureEnabled: true,
+    animationEnabled: true,
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
   };
 
   if (state === "init") {
@@ -213,17 +219,16 @@ export default function Main() {
       <RootStack.Screen name="Help" component={Help} options={animationDisabled} />
       <RootStack.Screen name="TransactionDetails" component={TransactionDetails as any} options={animationDisabled} />
       <RootStack.Screen name="SyncInfo" component={SyncInfo} options={animationDisabled} />
-      <RootStack.Screen name="Receive" component={Receive} />
+      <RootStack.Screen name="Receive" component={Receive} options={horizontalTransition} />
       <RootStack.Screen name="Send" component={Send} options={{
+        animationEnabled: true,
         gestureEnabled: true,
-        gestureResponseDistance: 1000,
+        // gestureResponseDistance: 1000,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }} />
-      <RootStack.Screen name="OnChain" component={OnChain} />
-      <RootStack.Screen name="LightningInfo" component={LightningInfo} />
-      <RootStack.Screen name="Settings" component={Settings} options={{
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }} />
+      <RootStack.Screen name="OnChain" component={OnChain} options={horizontalTransition} />
+      <RootStack.Screen name="LightningInfo" component={LightningInfo} options={horizontalTransition} />
+      <RootStack.Screen name="Settings" component={Settings} options={horizontalTransition} />
       <RootStack.Screen name="LNURL" component={LNURL} options={animationDisabled} />
       <RootStack.Screen name="WebLNBrowser" component={WebLNBrowser} options={animationDisabled} />
       <RootStack.Screen name="WebInfo" component={WebInfo} options={animationDisabled} />

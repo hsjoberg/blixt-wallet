@@ -34,11 +34,11 @@ export default function Spinner({ onPress }: ISpinnerProps) {
   return (
     <AnimatedIcon
       style={{
-        marginRight: -1,
-        marginTop: -1,
+        // marginRight: -1,
+        // marginTop: -1,
         width: 27,
         height: 29,
-        fontSize: 28,
+        fontSize: 30,
         opacity: fading,
       }}
       type="MaterialIcons"

@@ -6,10 +6,11 @@ import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { timeout } from "../utils";
 import { VersionName } from "../utils/build";
 
-export default () => {
-  const blixtLogo = useRef<AnimatedImage & Image>(null);
+
+export function BlixtLogo() {
   const [blixtNumPress, setBlixtNumPress] = useState(0);
   const [animationActive, setAnimationActive] = useState(false);
+  const blixtLogo = useRef<AnimatedImage & Image>(null);
 
   const doAnimation = async () => {
     if (!blixtLogo || !blixtLogo.current || animationActive) {
@@ -18,31 +19,37 @@ export default () => {
 
     setAnimationActive(true);
     if (blixtNumPress === 6) {
-      blixtLogo.current.zoomOutDown!(2300)
+      blixtLogo.current.zoomOutDown!(2300);
       return;
     } else {
-      blixtLogo.current.rubberBand!(1500)
+      blixtLogo.current.rubberBand!(1500);
     }
 
     timeout(500).then(() => {
       setBlixtNumPress(blixtNumPress + 1);
       setAnimationActive(false);
     });
-  }
+  };
 
   return (
+    <TouchableWithoutFeedback onPress={doAnimation}>
+      <AnimatedImage
+        ref={blixtLogo}
+        source={{
+          uri: blixtLogoWebP,
+        }}
+        style={style.blixtLogo}
+        width={75}
+        height={75}
+      />
+    </TouchableWithoutFeedback>
+  );
+}
+
+export default () => {
+  return (
     <View style={style.container}>
-      <TouchableWithoutFeedback onPress={doAnimation}>
-        <AnimatedImage
-          ref={blixtLogo}
-          source={{
-            uri: blixtLogoWebP,
-          }}
-          style={style.blixtLogo}
-          width={75}
-          height={75}
-        />
-      </TouchableWithoutFeedback>
+      <BlixtLogo />
       <View style={style.textContainer}>
         <Text style={style.blixtTitle}>Blixt Wallet</Text>
         <Text style={style.version}>version {VersionName}</Text>
@@ -53,7 +60,7 @@ export default () => {
 
 const style = StyleSheet.create({
   container: {
-    marginTop: 16,
+    marginTop: 26,
     height: 200,
     marginBottom: -13,
     justifyContent: "center",
