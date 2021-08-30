@@ -544,11 +544,50 @@ exports[`SendCamera renders correctly 1`] = `
                                   "fontSize": 30,
                                 },
                                 Object {
+                                  "color": "#e5eaea",
+                                  "fontSize": 28,
+                                  "padding": 9,
+                                  "position": "absolute",
+                                  "right": 14,
+                                  "top": 28,
+                                },
+                              ],
+                              Object {
+                                "fontFamily": "Ionicons",
+                                "fontStyle": "normal",
+                                "fontWeight": "normal",
+                              },
+                              Object {},
+                            ]
+                          }
+                          type="Ionicons"
+                        >
+                          
+                        </Text>
+                        <Text
+                          allowFontScaling={false}
+                          onPress={[Function]}
+                          style={
+                            Array [
+                              Object {
+                                "color": undefined,
+                                "fontSize": 12,
+                              },
+                              Array [
+                                Object {
+                                  "color": "#000",
+                                  "fontSize": 30,
+                                },
+                                Object {
+                                  "color": "#000",
+                                  "fontSize": 30,
+                                },
+                                Object {
                                   "bottom": 10,
                                   "color": "#e5eaea",
                                   "fontSize": 26,
                                   "left": 13,
-                                  "padding": 4,
+                                  "padding": 9,
                                   "position": "absolute",
                                 },
                               ],
@@ -586,7 +625,7 @@ exports[`SendCamera renders correctly 1`] = `
                                   "bottom": 12,
                                   "color": "#e5eaea",
                                   "fontSize": 26,
-                                  "padding": 4,
+                                  "padding": 9,
                                   "position": "absolute",
                                   "right": 73,
                                 },
@@ -625,7 +664,7 @@ exports[`SendCamera renders correctly 1`] = `
                                   "bottom": 12,
                                   "color": "#e5eaea",
                                   "fontSize": 26,
-                                  "padding": 4,
+                                  "padding": 9,
                                   "position": "absolute",
                                   "right": 16,
                                 },
