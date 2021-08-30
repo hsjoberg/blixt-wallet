@@ -3,10 +3,11 @@ import { View, StyleSheet, InteractionManager } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import BarcodeMask from "../../components/BarCodeMask";
 import { SendStackParamList } from "./index";
-import { useStoreActions, useStoreState } from "../../state/store";
+import { useStoreState } from "../../state/store";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Camera from "../../components/Camera";
 import { Chain } from "../../utils/build";
@@ -14,7 +15,8 @@ import { smallScreen } from "../../utils/device";
 import { RouteProp } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
 import { PLATFORM } from "../../utils/constants";
-import { Alert } from "../../utils/alert";
+import usePromptLightningAddress  from "../../hooks/usePromptLightningAddress";
+import useEveluateLightningCode  from "../../hooks/useEvaluateLightningCode";
 
 interface ISendCameraProps {
   bolt11Invoice?: string;
@@ -24,13 +26,11 @@ interface ISendCameraProps {
 export default function SendCamera({ navigation, route }: ISendCameraProps) {
   const viaSwipe = route.params?.viaSwipe ?? false;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
-  const setPayment = useStoreActions((store) => store.send.setPayment);
   const [cameraType, setCameraType] = useState<"front" | "back">("back");
   const [scanning, setScanning] = useState(true);
-  const setLNURL = useStoreActions((store) => store.lnUrl.setLNUrl)
-  const resolveLightningAddress = useStoreActions((store) => store.lnUrl.resolveLightningAddress)
-  const lnurlClear = useStoreActions((store) => store.lnUrl.clear);
   const [cameraActive, setCameraActive] = useState(route.params?.viaSwipe ?? true);
+  const promptLightningAddress = usePromptLightningAddress();
+  const evaluateLightningCode = useEveluateLightningCode();
 
   useEffect(() => {
     if (route.params?.viaSwipe) {
@@ -63,6 +63,16 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
     );
   };
 
+  const onLightningAddressClick = async () => {
+    setScanning(false);
+
+    if (await promptLightningAddress()) {
+      gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
+    } else {
+      setScanning(true);
+    }
+  };
+
   const gotoNextScreen = (screen: string, options: any, goBackAfterInteraction = true) => {
     if (viaSwipe) {
       // Reset TopTabNavigator to Overview screen again
@@ -89,75 +99,26 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
     setCameraActive(false);
     setScanning(false);
 
-    paymentRequest = paymentRequest.toLowerCase();
-    paymentRequest = paymentRequest.replace("lightning:", "");
-
-    // Check LNURL fallback scheme
-    // https://github.com/fiatjaf/lnurl-rfc/blob/luds/01.md#fallback-scheme
-    var res = /^(http.*[&?]lightning=)?((lnurl|lnbc|lntb)([0-9]{1,}[a-z0-9]+){1})/.exec(paymentRequest);
-    if (res) {
-      paymentRequest = res[2];
-    }
-
-    if (paymentRequest.includes("lightning=")) {
-      paymentRequest = paymentRequest.split("lightning=")[1] ?? "";
-    }
-
-    // Check for lnurl
-    if (paymentRequest.startsWith("lnurl") || paymentRequest.startsWith("keyauth")) {
-      console.log("LNURL");
-      try {
-        let type: string;
-        if (paymentRequest.startsWith("lnurlp:") || paymentRequest.startsWith("lnurlw:") || paymentRequest.startsWith("lnurlc:")) {
-          paymentRequest = "https://" + paymentRequest.substring(7).split(/[\s&]/)[0];
-          type = await setLNURL({ url: paymentRequest })
-        }
-        else if (paymentRequest.startsWith("keyauth:")) {
-          paymentRequest = "https://" + paymentRequest.substring(8).split(/[\s&]/)[0];
-          type = await setLNURL({ url: paymentRequest })
-        } else {
-          type = await setLNURL({ bech32data: paymentRequest });
-        }
-
-        if (type === "channelRequest") {
-          gotoNextScreen("LNURL", { screen: "ChannelRequest" });
-        }
-        else if (type === "login") {
-          gotoNextScreen("LNURL", { screen: "AuthRequest" }, false);
-        }
-        else if (type === "withdrawRequest") {
-          gotoNextScreen("LNURL", { screen: "WithdrawRequest" }, false);
-        }
-        else if (type === "payRequest") {
-          gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
-        }
-        else {
-          console.log("Unknown lnurl request: " + type);
-          Alert.alert(`Unsupported LNURL request: ${type}`, undefined,
-            [{ text: "OK", onPress: () => {
-              setCameraActive(true);
-              setScanning(true);
-            }}]
-          );
-          lnurlClear();
-        }
-      } catch (e) { }
-    } else if (paymentRequest.includes("@")) {
-      if (await resolveLightningAddress(paymentRequest)) {
-        gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
-      }
-    }
-    else {
-      try {
-        await setPayment({ paymentRequestStr: paymentRequest });
+    switch (await evaluateLightningCode(paymentRequest,  errorPrefix)) {
+      case "BOLT11":
         gotoNextScreen("Send", { screen: "SendConfirmation" });
-      } catch (error) {
-        Alert.alert(`${errorPrefix}: ${error.message}`, undefined,
-          [{ text: "OK", onPress: () => {
-            setCameraActive(true);
-            setScanning(true);
-          }}]);
-      }
+      break;
+      case "LNURLAuthRequest":
+        gotoNextScreen("LNURL", { screen: "AuthRequest" }, false);
+      break;
+      case "LNURLChannelRequest":
+        gotoNextScreen("LNURL", { screen: "ChannelRequest" });
+      break;
+      case "LNURLPayRequest":
+        gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
+      break;
+      case "LNURLWithdrawRequest":
+        gotoNextScreen("LNURL", { screen: "WithdrawRequest" }, false);
+      break;
+      case null:
+        setCameraActive(true);
+        setScanning(true);
+      break;
     }
   };
 
@@ -190,6 +151,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
           width={smallScreen ? 265 : 270}
           height={smallScreen ? 265 : 270}
         />
+        <Icon type="Ionicons" name="at" style={sendStyle.lightningAddress} onPress={onLightningAddressClick} />
         <Icon type="Ionicons" name="camera-reverse" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
         {(__DEV__ || PLATFORM === "web") && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
         <Icon testID="paste-clipboard" type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
@@ -202,11 +164,19 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
 };
 
 const sendStyle = StyleSheet.create({
+  lightningAddress: {
+    position: "absolute",
+    fontSize: 28,
+    color: blixtTheme.light,
+    padding: 9,
+    top: getStatusBarHeight(false) + 8,
+    right: 8 + 6,
+  },
   swapCamera: {
     position: "absolute",
     fontSize: 26,
     color: blixtTheme.light,
-    padding: 4,
+    padding: 9,
     bottom: 10,
     left: 13,
   },
@@ -214,7 +184,7 @@ const sendStyle = StyleSheet.create({
     position: "absolute",
     fontSize: 26,
     color: blixtTheme.light,
-    padding: 4,
+    padding: 9,
     bottom: 12,
     right: 8 + 8,
   },
@@ -222,15 +192,8 @@ const sendStyle = StyleSheet.create({
     position: "absolute",
     fontSize: 26,
     color: blixtTheme.light,
-    padding: 4,
+    padding: 9,
     bottom: 12,
     right: 64 + 9,
-  },
-  transactionDetails: {
-    height: "100%",
-    flex: 1,
-    display: "flex",
-    justifyContent: "space-between",
-    padding: 24,
   },
 });
