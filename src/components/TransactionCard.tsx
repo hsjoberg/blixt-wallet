@@ -43,7 +43,10 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
     description = transaction.note;
   }
   else {
-    if (lightningService) {
+    if (transaction.lightningAddress) {
+      recipientOrSender = transaction.lightningAddress;
+    }
+    else if (lightningService) {
       recipientOrSender = lightningService.title;
     }
     else if (transaction.website) {

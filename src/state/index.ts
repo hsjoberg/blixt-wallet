@@ -25,6 +25,7 @@ import { INotificationManagerModel, notificationManager } from "./NotificationMa
 import { ILightNameModel, lightName } from "./LightName";
 import { IICloudBackupModel, iCloudBackup } from "./ICloudBackup";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
+import { IContactsModel, contacts } from "./Contacts";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion, getAppBuild, setAppBuild } from "../storage/app";
@@ -54,6 +55,7 @@ export interface ICreateWalletPayload {
 
 export interface IStoreModel {
   setupDemo: Thunk<IStoreModel, { changeDb: boolean }, any, IStoreModel>;
+  openDb: Thunk<IStoreModel, undefined, any, {}, Promise<SQLiteDatabase>>;
   initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   checkAppVersionMigration: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
@@ -103,6 +105,7 @@ export interface IStoreModel {
   lightName: ILightNameModel;
   iCloudBackup: IICloudBackupModel;
   blixtLsp: IBlixtLsp;
+  contacts: IContactsModel;
 
   walletSeed?: string[];
   appVersion: number;
@@ -116,6 +119,12 @@ export const model: IStoreModel = {
     await SetupBlixtDemo(db, dispatch, payload.changeDb);
   }),
 
+  openDb: thunk(async (actions) => {
+    const db = await openDatabase();
+    actions.setDb(db);
+    return db;
+  }),
+
   initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
     log.d("getState().appReady: " + getState().appReady);
     if (getState().appReady) {
@@ -125,8 +134,7 @@ export const model: IStoreModel = {
     log.v("initializeApp()");
 
     const { initialize, checkStatus, startLnd } = injections.lndMobile.index;
-    const db = await openDatabase();
-    actions.setDb(db);
+    const db = await actions.openDb();
     if (!await getItemObjectAsyncStorage(StorageItem.app)) {
       log.i("Initializing app for the first time");
       if (PLATFORM === "ios") {
@@ -147,7 +155,11 @@ export const model: IStoreModel = {
         );
       }
       log.i("Initializing db for the first time");
-      await setupInitialSchema(db);
+      try {
+        await setupInitialSchema(db);
+      } catch (error) {
+        throw new Error("Error creating DB: " + error.message)
+      }
       log.i("Writing lnd.conf");
       await actions.writeConfig();
 
@@ -219,6 +231,7 @@ export const model: IStoreModel = {
       await dispatch.iCloudBackup.initialize();
     }
     await dispatch.transaction.getTransactions();
+    await dispatch.contacts.getContacts();
     await dispatch.channel.setupCachedBalance();
     log.d("Done starting up stores");
 
@@ -451,6 +464,7 @@ autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? 
   lightName,
   iCloudBackup,
   blixtLsp,
+  contacts,
 };
 
 export default model;

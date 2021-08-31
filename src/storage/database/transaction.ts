@@ -34,6 +34,8 @@ export interface IDBTransaction {
   lnurlPayResponse: string | null;
   identifiedService: string | null;
   note: string | null;
+  lightningAddress: string | null;
+  lud16IdentifierMimeType: string | null;
 }
 
 export interface ITransaction {
@@ -65,6 +67,8 @@ export interface ITransaction {
   lnurlPayResponse: ILNUrlPayResponse | null;
   identifiedService: keyof ILightningServices  | null;
   note?: string | null;
+  lightningAddress: string | null;
+  lud16IdentifierMimeType: string | null;
 
   hops: ITransactionHop[];
 }
@@ -121,10 +125,14 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       preimage,
       lnurlPayResponse,
       identifiedService,
-      note
+      note,
+      lightningAddress,
+      lud16IdentifierMimeType
     )
     VALUES
     (
+      ?,
+      ?,
       ?,
       ?,
       ?,
@@ -181,6 +189,8 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.lnurlPayResponse ? JSON.stringify(transaction.lnurlPayResponse) : null,
       transaction.identifiedService,
       transaction.note ?? null,
+      transaction.lightningAddress ?? null,
+      transaction.lud16IdentifierMimeType ?? null,
     ],
   );
 
@@ -240,7 +250,9 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         preimage = ?,
         lnurlPayResponse = ?,
         identifiedService = ?,
-        note = ?
+        note = ?,
+        lightningAddress = ?,
+        lud16IdentifierMimeType = ?
     WHERE id = ?`,
     [
       transaction.date.toString(),
@@ -268,6 +280,8 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.lnurlPayResponse ? JSON.stringify(transaction.lnurlPayResponse) : null,
       transaction.identifiedService,
       transaction.note ?? null,
+      transaction.lightningAddress ?? null,
+      transaction.lud16IdentifierMimeType ?? null,
       transaction.id,
     ],
   );
@@ -334,6 +348,8 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
     lnurlPayResponse,
     identifiedService: transaction.identifiedService as ITransaction["identifiedService"],
     note: transaction.note,
+    lightningAddress: transaction.lightningAddress,
+    lud16IdentifierMimeType: transaction.lud16IdentifierMimeType,
     hops: [],
   };
 };

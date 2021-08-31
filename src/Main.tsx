@@ -21,7 +21,9 @@ import TransactionDetails from "./windows/TransactionDetails";
 import SyncInfo from "./windows/SyncInfo";
 import WebLNBrowser from "./windows/WebLN/Browser";
 import WebInfo from "./windows/Web/Info";
+import Contacts from "./windows/Contacts";
 import Loading from "./windows/Loading";
+import LoadingModal from "./windows/LoadingModal";
 
 import { useStoreState, useStoreActions } from "./state/store";
 import { toast } from "./utils";
@@ -42,6 +44,7 @@ export type RootStackParamList = {
   InitLightning: undefined;
 
   Loading: undefined;
+  LoadingModal: undefined;
   Welcome: undefined;
   Overview: undefined;
   Help: undefined;
@@ -166,7 +169,6 @@ export default function Main() {
 
   const horizontalTransition: StackNavigationOptions = {
     gestureEnabled: true,
-    animationEnabled: true,
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
   };
 
@@ -210,6 +212,7 @@ export default function Main() {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       } : animationDisabled} />
       <RootStack.Screen name="Loading" component={Loading} options={animationDisabled} />
+      <RootStack.Screen name="LoadingModal" component={LoadingModal} options={animationDisabled} />
       <RootStack.Screen name="CameraFullscreen" component={CameraFullscreen} options={{
         gestureEnabled: true,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -223,7 +226,7 @@ export default function Main() {
       <RootStack.Screen name="Send" component={Send} options={{
         animationEnabled: true,
         gestureEnabled: true,
-        // gestureResponseDistance: 1000,
+        gestureResponseDistance: 1000,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }} />
       <RootStack.Screen name="OnChain" component={OnChain} options={horizontalTransition} />
@@ -232,6 +235,7 @@ export default function Main() {
       <RootStack.Screen name="LNURL" component={LNURL} options={animationDisabled} />
       <RootStack.Screen name="WebLNBrowser" component={WebLNBrowser} options={animationDisabled} />
       <RootStack.Screen name="WebInfo" component={WebInfo} options={animationDisabled} />
+      <RootStack.Screen name="Contacts" component={Contacts} options={horizontalTransition} />
 
       <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} options={animationDisabled} />
       <RootStack.Screen name="KeysendTest" component={KeysendTest} options={animationDisabled} />

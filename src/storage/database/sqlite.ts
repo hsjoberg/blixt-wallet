@@ -31,6 +31,7 @@ export const dropTables = async (db: SQLiteDatabase) => {
   await db.executeSql(`DROP TABLE tx`);
   await db.executeSql(`DROP TABLE tx_hops`);
   await db.executeSql(`DROP TABLE channel_event`);
+  await db.executeSql(`DROP TABLE contact`);
 };
 
 export const migrateDatabase = async () => {

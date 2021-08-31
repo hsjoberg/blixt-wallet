@@ -231,10 +231,29 @@ export const appMigration: IAppMigration[] = [
       await setItemObject<boolean>(StorageItem.requireGraphSync, false);
     },
   },
-  // Version 26
+  // Version 27
   {
     async beforeLnd(db, i) {
       await setItemObject<boolean>(StorageItem.dunderEnabled, false);
+    },
+  },
+  // Version 28
+  {
+    async beforeLnd(db, i) {
+      await db.executeSql(
+        `CREATE TABLE contact (
+          id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+          domain TEXT NOT NULL,
+          type TEXT NOT NULL,
+          lightningAddress TEXT NULL,
+          lud16IdentifierMimeType TEXT NULL,
+          lnUrlPay TEXT NULL,
+          lnUrlWithdraw TEXT NULL,
+          note TEXT NOT NULL
+        )`
+      );
+      await db.executeSql("ALTER TABLE lightningAddress ADD note TEXT NULL");
+      await db.executeSql("ALTER TABLE lud16IdentifierMimeType ADD note TEXT NULL");
     },
   },
 ];

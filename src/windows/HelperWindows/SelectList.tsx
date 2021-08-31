@@ -44,12 +44,7 @@ export default function<T = string>({ navigation, route }: ISelectListProps<T>) 
       {/* TODO(hsjoberg): Replace with react-navigation search bar when possible */}
       {/* https://github.com/react-navigation/search-layout/pull/20 */}
       {searchEnabled &&
-        <Header iosBarStyle="light-content" searchBar rounded style={{
-          backgroundColor: blixtTheme.primary,
-          paddingTop: 0,
-          borderBottomWidth: 0,
-          marginHorizontal: 8,
-        }}>
+        <Header iosBarStyle="light-content" searchBar rounded style={style.searchHeader}>
           <Item rounded style={{ height:35 }}>
             <Input
               style={{ marginLeft: 8, marginTop: -2.5, borderRadius: 8, color: blixtTheme.dark }}
@@ -62,6 +57,7 @@ export default function<T = string>({ navigation, route }: ISelectListProps<T>) 
         </Header>
       }
       <FlatList
+        alwaysBounceVertical={false}
         ListHeaderComponent={description ? <Text style={style.description}>{description}</Text> : undefined}
         contentContainerStyle={{ paddingTop: 8, paddingHorizontal: 14, paddingBottom: 65 }}
         initialNumToRender={20}
@@ -90,5 +86,12 @@ const style = StyleSheet.create({
     marginTop: 35,
     marginHorizontal: 10,
     marginBottom: 35,
+  },
+  searchHeader: {
+    backgroundColor: blixtTheme.primary,
+    paddingTop: 0,
+    borderBottomWidth: 0,
+    marginHorizontal: 8,
+    elevation: 0,
   }
 });

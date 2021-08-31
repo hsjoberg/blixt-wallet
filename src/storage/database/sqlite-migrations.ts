@@ -27,7 +27,9 @@ const schema = [
     preimage TEXT NOT NULL DEFAULT "00",
     lnurlPayResponse TEXT NULL,
     identifiedService TEXT NULL,
-    note TEXT NULL
+    note TEXT NULL,
+    lightningAddress TEXT NULL,
+    lud16IdentifierMimeType TEXT NULL
   )`,
 
   `CREATE TABLE tx_hops (
@@ -48,6 +50,17 @@ const schema = [
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     txId STRING NOT NULL,
     type STRING NOT NULL
+  )`,
+
+  `CREATE TABLE contact (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    domain TEXT NOT NULL,
+    type TEXT NOT NULL,
+    lightningAddress TEXT NULL,
+    lud16IdentifierMimeType TEXT NULL,
+    lnUrlPay TEXT NULL,
+    lnUrlWithdraw TEXT NULL,
+    note TEXT NOT NULL
   )`
 ];
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { PixelRatio, StyleSheet, TouchableOpacity, View, ScrollView } from "react-native";
+import { Dimensions, PixelRatio, StyleSheet, TouchableOpacity, View, ScrollView } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text } from "native-base";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
@@ -7,8 +7,8 @@ import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BlixtLogo } from "./BlixtWallet";
-import usePromptLightningAddress  from "../hooks/usePromptLightningAddress";
-import useEvaluateLightningCode  from "../hooks/useEvaluateLightningCode";
+import usePromptLightningAddress from "../hooks/usePromptLightningAddress";
+import useEvaluateLightningCode from "../hooks/useEvaluateLightningCode";
 import { fontFactorNormalized } from "../utils/scale";
 
 export default function Drawer() {
@@ -26,7 +26,7 @@ export default function Drawer() {
 
   const sendToLightningAddress = async () => {
     navigation.dispatch(DrawerActions.closeDrawer);
-    if (await promptLightningAddress()) {
+    if ((await promptLightningAddress())[0]) {
       navigation.navigate("LNURL", { screen: "PayRequest" });
     } else {
       navigation.dispatch(DrawerActions.openDrawer);
@@ -65,26 +65,29 @@ export default function Drawer() {
   }
 
   return (
-    <SafeAreaView style={style.drawerContainer}>
+    <View style={style.drawerContainer}>
       <ScrollView style={style.drawerScroll} alwaysBounceVertical={false}>
         <View style={style.logoContainer}>
           <BlixtLogo />
           <Text style={style.blixtTitle}>Blixt Wallet</Text>
         </View>
         <View style={style.menu}>
-          {/* <TouchableOpacity onPress={() => goToScreen("Send")}>
-            <View style={style.menuItem}>
-              <Icon style={style.menuItemIcon} type="AntDesign" name="camerao" />
-              <Text style={style.menuItemText}>Scan</Text>
-            </View>
-          </TouchableOpacity> */}
-
-          {/* <TouchableOpacity onPress={() => goToScreen("Receive")}>
-            <View style={style.menuItem}>
-              <Icon style={style.menuItemIcon} type="AntDesign" name="qrcode" />
-              <Text style={style.menuItemText}>Receive</Text>
-            </View>
-          </TouchableOpacity> */}
+          {/*
+            <>
+              <TouchableOpacity onPress={() => goToScreen("Send")}>
+                <View style={style.menuItem}>
+                  <Icon style={style.menuItemIcon} type="AntDesign" name="camerao" />
+                  <Text style={style.menuItemText}>Scan</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => goToScreen("Receive")}>
+                <View style={style.menuItem}>
+                  <Icon style={style.menuItemIcon} type="AntDesign" name="qrcode" />
+                  <Text style={style.menuItemText}>Receive</Text>
+                </View>
+              </TouchableOpacity>
+            </>
+          */}
 
           <TouchableOpacity onPress={pasteFromClipboard}>
             <View style={style.menuItem}>
@@ -97,6 +100,13 @@ export default function Drawer() {
             <View style={style.menuItem}>
               <Icon style={style.menuItemIcon} type="Ionicons" name="at" />
               <Text style={style.menuItemText}>Send to Lightning Address</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => goToScreen("Contacts")}>
+            <View style={style.menuItem}>
+              <Icon style={style.menuItemIcon} type="AntDesign" name="contacts" />
+              <Text style={style.menuItemText}>Contacts &amp; Services</Text>
             </View>
           </TouchableOpacity>
 
@@ -125,25 +135,27 @@ export default function Drawer() {
       <View style={style.bottom}>
         <Text style={style.bottomText} note>Made with ⚡ in Sweden</Text>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const style = StyleSheet.create({
   drawerContainer: {
     flex: 1,
+    width: "100%",
     backgroundColor: blixtTheme.dark,
   },
   drawerScroll: {
     flex: 1,
+    marginTop: 36,
   },
   logoContainer: {
     paddingTop: 28,
-    paddingBottom: 13,
+    paddingBottom: 11,
     alignItems: "center",
   },
   blixtTitle: {
-    marginTop: 6,
+    marginTop: 3,
     fontFamily: blixtTheme.fontMedium,
     fontSize: 33 / PixelRatio.getFontScale(),
   },
@@ -171,7 +183,7 @@ const style = StyleSheet.create({
   bottom: {
     backgroundColor: blixtTheme.dark,
     paddingTop: 10,
-    paddingBottom: 11,
+    paddingBottom: 20,
     flexDirection: "column-reverse",
     alignItems: "center",
   },

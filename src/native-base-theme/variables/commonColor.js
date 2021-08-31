@@ -15,6 +15,8 @@ export const blixtTheme = {
   red: "#d0311e",
   green: "#1c8c27",
 
+  link: "#4f9ca8",
+
   fontMedium: "IBMPlexSans-Medium",
   fontRegular:  Platform.OS === "ios" ? "IBMPlexSans" : "IBMPlexSans-Regular",
 }

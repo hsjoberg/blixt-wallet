@@ -50,6 +50,8 @@ export interface ILNUrlWithdrawRequest {
   maxWithdrawable: number;
   defaultDescription: string;
   minWithdrawable?: number;
+  balanceCheck?: string;
+  currentBalance?: number;
   tag: "withdrawRequest";
 }
 
@@ -64,6 +66,7 @@ export interface ILNUrlPayRequest {
   minSendable: number;
   metadata: string;
   commentAllowed?: number;
+  disposable?: boolean | null;
   tag: "payRequest";
 }
 
@@ -76,7 +79,6 @@ export interface ILNUrlPayResponse {
     | ILNUrlPayResponseSuccessActionMessage
     | ILNUrlPayResponseSuccessActionUrl
     | null;
-  disposable: boolean | null;
   routes:	any[]; // NOT SUPPORTED
 }
 
@@ -111,11 +113,19 @@ export interface IDoChannelRequestPayload {
   private: true;
 }
 
+interface IDoPayRequestPayload {
+  msat: number;
+  comment?: string;
+  lightningAddress: string | null;
+  lud16IdentifierMimeType: string | null;
+}
+
 export type IDoPayRequestResponse = ILNUrlPayResponse;
 
 type LNUrlRequest = ILNUrlChannelRequest | ILNUrlAuthRequest | ILNUrlWithdrawRequest | ILNUrlPayRequest | ILNUrlDummy;
 
 const LNURLAUTH_CANONICAL_PHRASE = "DO NOT EVER SIGN THIS TEXT WITH YOUR PRIVATE KEYS! IT IS ONLY USED FOR DERIVATION OF LNURL-AUTH HASHING-KEY, DISCLOSING ITS SIGNATURE WILL COMPROMISE YOUR LNURL-AUTH IDENTITY AND MAY LEAD TO LOSS OF FUNDS!";
+
 
 export interface ILNUrlModel {
   setLNUrl: Thunk<ILNUrlModel, { bech32data?: string; url?: string }, any, IStoreModel, Promise<LNURLType>>;
@@ -123,15 +133,17 @@ export interface ILNUrlModel {
   doChannelRequest: Thunk<ILNUrlModel, IDoChannelRequestPayload, IStoreInjections, IStoreModel, Promise<boolean>>;
   doAuthRequest: Thunk<ILNUrlModel, void, IStoreInjections, IStoreModel, Promise<boolean>>;
   doWithdrawRequest: Thunk<ILNUrlModel, { satoshi: number; }, IStoreInjections, IStoreModel, Promise<boolean>>;
-  doPayRequest: Thunk<ILNUrlModel, { msat: number, comment?: string }, IStoreInjections, IStoreModel, Promise<IDoPayRequestResponse>>;
+  doPayRequest: Thunk<ILNUrlModel, IDoPayRequestPayload, IStoreInjections, IStoreModel, Promise<IDoPayRequestResponse>>;
 
   setLNUrlStr: Action<ILNUrlModel, string>;
   setType: Action<ILNUrlModel, LNURLType>;
   setLNUrlObject: Action<ILNUrlModel, LNUrlRequest>;
+  setPayRequestResponse: Action<ILNUrlModel, ILNUrlPayResponse>;
 
   lnUrlStr?: string;
   type?: LNURLType;
   lnUrlObject: LNUrlRequest | undefined;
+  payRequestResponse: ILNUrlPayResponse | undefined;
 
   clear: Action<ILNUrlModel>;
 
@@ -178,6 +190,7 @@ export const lnUrl: ILNUrlModel = {
         log.d(`GET ${url}, looking for tag`);
         const result = await fetch(url);
 
+        // TODO this is not spec compliant
         if (!result.ok) {
           log.d("Not ok");
           const text = await result.text();
@@ -307,50 +320,55 @@ export const lnUrl: ILNUrlModel = {
     const lnUrlObject = getState().lnUrlObject;
 
     if (lnUrlStr && type === "withdrawRequest" && lnUrlObject && lnUrlObject.tag === "withdrawRequest") {
-      // 5. Once accepted by the user, LN WALLET sends a GET to LN SERVICE in the form of <callback>?k1=<k1>&pr=<lightning invoice, ...>
-      const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e) => {
-        log.d("SubscribeInvoices event", [e]);
-        listener.remove();
+      const promise = new Promise<boolean>((resolve, reject) => {
+        const r = getStoreActions().receive.addInvoice({
+          description: lnUrlObject.defaultDescription,
+          sat: satoshi,
+          tmpData: {
+            website: getDomainFromURL(lnUrlStr),
+            type: "LNURL",
+            payer: null,
+          }
+        });
 
-        const invoice = injections.lndMobile.wallet.decodeInvoiceResult(e.data);
+        // 5. Once accepted by the user, LN WALLET sends a GET to LN SERVICE in the form of <callback>?k1=<k1>&pr=<lightning invoice, ...>
+        const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e) => {
+          log.d("SubscribeInvoices event", [e]);
+          listener.remove();
 
-        const url = `${lnUrlObject.callback}?k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
-        log.d("url", [url]);
-        const result = await fetch(url);
-        log.d("result", [JSON.stringify(result)]);
-        let response: ILNUrlWithdrawResponse;
-        try {
-          response = await result.json();
-        } catch (e) {
-          log.d("", [e]);
-          throw new Error("Unable to parse message from the server");
-        }
-        log.d("response", [response]);
+          const invoice = injections.lndMobile.wallet.decodeInvoiceResult(e.data);
+          let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?";
+          const url = `${lnUrlObject.callback}${firstSeparator}k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
+          // const url = `${lnUrlObject.callback}?k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
 
-        if (response.status === "OK") {
-          return true;
-        }
-        throw new Error(response.reason!);
-      });
+          log.d("url", [url]);
+          const result = await fetch(url);
+          log.d("result", [JSON.stringify(result)]);
+          let response: ILNUrlWithdrawResponse;
+          try {
+            response = await result.json();
+          } catch (e) {
+            log.d("", [e]);
+            const textResponse = await result.text();
+            return reject(new Error("Unable to parse message from the server: " + textResponse));
+          }
+          log.d("response", [response]);
 
-      const r = await getStoreActions().receive.addInvoice({
-        description: lnUrlObject.defaultDescription,
-        sat: satoshi,
-        tmpData: {
-          website: getDomainFromURL(lnUrlStr),
-          type: "LNURL",
-          payer: null,
-        }
-      });
-      log.d("r", [r]);
-      return true;
+          if (response.status === "OK") {
+            return resolve(true);
+          }
+          return reject(new Error(response.reason!));
+        });
+      })
+
+      return promise;
     }
     else {
       throw new Error("Requirements not satisfied, type must be login and lnUrlObject must be set");
     }
   }),
 
-  doPayRequest: thunk(async (_, payload, { getStoreActions, getState }) => {
+  doPayRequest: thunk(async (actions, payload, { getStoreActions, getState }) => {
     const type = getState().type;
     const lnUrlStr = getState().lnUrlStr;
     const lnUrlObject = getState().lnUrlObject;
@@ -401,6 +419,8 @@ export const lnUrl: ILNUrlModel = {
             payer: null,
             type: "LNURL",
             website: getDomainFromURL(lnUrlStr),
+            lightningAddress: payload.lightningAddress,
+            lud16IdentifierMimeType: payload.lud16IdentifierMimeType,
           },
         });
 
@@ -430,6 +450,7 @@ export const lnUrl: ILNUrlModel = {
 
         // 11. LN WALLET pays the invoice, no additional user confirmation is required at this point.
         // Jumping back to component:
+        actions.setPayRequestResponse(response);
         return response;
       } catch (e) {
         log.i("Error setting invoice to send subsystem", [e]);
@@ -444,11 +465,13 @@ export const lnUrl: ILNUrlModel = {
   setLNUrlStr: action((state, payload) => { state.lnUrlStr = payload }),
   setType: action((state, payload) => { state.type = payload }),
   setLNUrlObject: action((state, payload) => { state.lnUrlObject = payload }),
+  setPayRequestResponse: action((state, payload) => { state.payRequestResponse = payload }),
 
   clear: action((state) => {
     state.lnUrlStr = undefined;
     state.type = undefined;
     state.lnUrlObject = undefined;
+    state.payRequestResponse = undefined;
   }),
 
   resolveLightningAddress: thunk(async (actions, lightningAddress) => {
@@ -470,6 +493,7 @@ export const lnUrl: ILNUrlModel = {
     actions.setLNUrlStr(lnurlPayUrl);
     const result = await fetch(lnurlPayUrl);
 
+    // TODO this is not spec compliant
     if (!result.ok) {
       let error;
       try {
@@ -500,6 +524,7 @@ export const lnUrl: ILNUrlModel = {
   lnUrlStr: undefined,
   type: undefined,
   lnUrlObject: undefined,
+  payRequestResponse: undefined,
 };
 
 const parseQueryParams = (url: string) => {

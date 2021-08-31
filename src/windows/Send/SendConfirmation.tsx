@@ -14,6 +14,7 @@ import Long from "long";
 import useBalance from "../../hooks/useBalance";
 import { hexToUint8Array, toast } from "../../utils";
 import { PLATFORM } from "../../utils/constants";
+import useLightningReadyToSend from "../../hooks/useLightingReadyToSend";
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
@@ -30,11 +31,6 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const [isPaying, setIsPaying] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
-  const lightningReady = useStoreState((store) => store.lightning.ready);
-  const rpcReady = useStoreState((store) => store.lightning.rpcReady);
-  const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
-  const syncedToGraph = useStoreState((store) => store.lightning.syncedToGraph);
-  const requireGraphSync = useStoreState((store) => store.settings.requireGraphSync);
   const {
     dollarValue,
     bitcoinValue,
@@ -44,7 +40,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const clear = useStoreActions((store) => store.send.clear);
   const callback = (route.params?.callback) ?? (() => {});
   const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
-  const channels = useStoreState((store) => store.channel.channels);
+  const lightningReadyToSend = useLightningReadyToSend();
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
@@ -190,11 +186,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   });
 
   const canSend = (
-    lightningReady &&
-    rpcReady &&
-    syncedToChain &&
-    (!requireGraphSync || syncedToGraph) &&
-    channels.some((channel) => channel.active) &&
+    lightningReadyToSend &&
     !isPaying
   );
 

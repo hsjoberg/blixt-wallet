@@ -66,7 +66,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
   const onLightningAddressClick = async () => {
     setScanning(false);
 
-    if (await promptLightningAddress()) {
+    if ((await promptLightningAddress())[0]) {
       gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
     } else {
       setScanning(true);

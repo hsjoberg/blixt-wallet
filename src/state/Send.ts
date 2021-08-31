@@ -33,6 +33,8 @@ interface IExtraData {
   type: ITransaction["type"];
   website: string | null;
   lnurlPayResponse: ILNUrlPayResponse | null;
+  lightningAddress: string | null;
+  lud16IdentifierMimeType: string | null;
 }
 
 export interface ISendModel {
@@ -160,6 +162,8 @@ export const send: ISendModel = {
       type: "NORMAL",
       website: null,
       lnurlPayResponse: null,
+      lightningAddress: null,
+      lud16IdentifierMimeType: null,
     };
 
     const transaction: ITransaction = {
@@ -187,6 +191,9 @@ export const send: ISendModel = {
       type: extraData.type,
       website: extraData.website,
       identifiedService: identifyService(paymentRequest.destination, paymentRequest.description, extraData.website),
+      //note: // TODO: Why wasn't this added
+      lightningAddress: extraData.lightningAddress ?? null,
+      lud16IdentifierMimeType: extraData.lud16IdentifierMimeType ?? null,
 
       preimage: hexToUint8Array(sendPaymentResult.paymentPreimage),
       lnurlPayResponse: extraData.lnurlPayResponse,
@@ -284,6 +291,8 @@ export const send: ISendModel = {
       type: "NORMAL",
       website: null,
       lnurlPayResponse: null,
+      lightningAddress: null,
+      lud16IdentifierMimeType: null
     };
 
     const transaction: ITransaction = {
@@ -315,6 +324,9 @@ export const send: ISendModel = {
       type: extraData.type,
       website: extraData.website,
       identifiedService: identifyService(paymentRequest.destination, paymentRequest.description, extraData.website),
+      //note: // TODO: Why wasn't this added
+      lightningAddress: extraData.lightningAddress ?? null,
+      lud16IdentifierMimeType: extraData.lud16IdentifierMimeType ?? null,
 
       preimage: sendPaymentResult.paymentPreimage,
       lnurlPayResponse: extraData.lnurlPayResponse,

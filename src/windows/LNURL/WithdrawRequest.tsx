@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Alert, StatusBar, Vibration } from "react-native";
-import { Spinner } from "native-base";
+import { Alert, Vibration } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import DialogAndroid from "react-native-dialogs";
 import Long from "long";
 
-import Container from "../../components/Container";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
-import { RootStackParamList } from "../../Main";
 import { getDomainFromURL, toast, timeout } from "../../utils";
 import { ILNUrlWithdrawRequest } from "../../state/LNURL";
 import { convertBitcoinUnit, formatBitcoin, BitcoinUnits } from "../../utils/bitcoin-units";
 import { PLATFORM } from "../../utils/constants";
+import LoadingModal from "../LoadingModal";
 
 interface IWithdrawRequestProps {
   navigation: StackNavigationProp<{}>;
 }
-export default function LNURLChannelRequest({ navigation }: IWithdrawRequestProps) {
+export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestProps) {
   const [status, setStatus] = useState<"PROMPT" | "PROCESSING" | "DONE">("PROMPT");
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
   const type = useStoreState((store) => store.lnUrl.type);
@@ -25,6 +22,8 @@ export default function LNURLChannelRequest({ navigation }: IWithdrawRequestProp
   const lnObject = useStoreState((store) => store.lnUrl.lnUrlObject) as unknown as ILNUrlWithdrawRequest;
   const clear = useStoreActions((store) => store.lnUrl.clear);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const syncContact = useStoreActions((store) => store.contacts.syncContact);
+  const getContactByLnUrlWithdraw = useStoreState((store) => store.contacts.getContactByLnUrlWithdraw);
 
   const doRequest = async (domain: string, satoshi: number) => {
     try {
@@ -39,6 +38,43 @@ export default function LNURLChannelRequest({ navigation }: IWithdrawRequestProp
         "success",
         "Okay"
       );
+
+      if (lnObject.balanceCheck) {
+        const contact = getContactByLnUrlWithdraw(lnObject.balanceCheck);
+        if (!contact) {
+          Alert.alert(
+            "Add to Contact List",
+            `Would you like to add this withdrawal code to ${domain} to your contact list?`,
+            [{
+              text: "No",
+            }, {
+              text: "Yes",
+              onPress: async () => {
+                await syncContact({
+                  type: "SERVICE",
+                  domain,
+                  lnUrlPay: null,
+                  lnUrlWithdraw: lnObject.balanceCheck ?? null,
+                  lightningAddress: null,
+                  lud16IdentifierMimeType: null,
+                  note: `Account on ${domain}`,
+                });
+              }
+            }],
+          );
+        } else {
+
+          if (lnurlStr !== lnObject.balanceCheck) {
+            console.log("WithdrawRequest: Syncing contact");
+            await syncContact({
+              ...contact,
+              lnUrlWithdraw: lnObject.balanceCheck ?? null,
+              note: `Synced account`,
+            });
+          }
+        }
+      }
+
       navigation.pop();
     } catch (e) {
       console.log(e);
@@ -93,15 +129,15 @@ export default function LNURLChannelRequest({ navigation }: IWithdrawRequestProp
                 title,
                 description,
                 [{
-                  text: "OK",
-                  onPress: () => {
-                    action = DialogAndroid.actionPositive;
-                    resolve();
-                  },
-                }, {
                   text: "Cancel",
                   onPress: () => {
                     action = DialogAndroid.actionNegative;
+                    resolve();
+                  },
+                }, {
+                  text: "OK",
+                  onPress: () => {
+                    action = DialogAndroid.actionPositive;
                     resolve();
                   },
                 }]
@@ -135,19 +171,22 @@ export default function LNURLChannelRequest({ navigation }: IWithdrawRequestProp
                 title,
                 description,
                 [{
+                  text: "Cancel",
+                  onPress: () => {
+                    action = DialogAndroid.actionNegative;
+                    resolve(void(0));
+                  },
+                }, {
                   text: "OK",
                   onPress: (text) => {
                     action = DialogAndroid.actionPositive;
                     sat = convertBitcoinUnit(Number.parseFloat(text ?? "0"), bitcoinUnit, "satoshi").toNumber();
                     resolve(void(0));
                   },
-                }, {
-                  text: "Cancel",
-                  onPress: () => {
-                    action = DialogAndroid.actionNegative;
-                    resolve(void(0));
-                  },
-                }]
+                }],
+                "plain-text",
+                undefined,
+                "decimal-pad"
               )
             })
           }
@@ -168,15 +207,6 @@ export default function LNURLChannelRequest({ navigation }: IWithdrawRequestProp
   }
 
   return (
-    <Container centered style={{ backgroundColor: blixtTheme.dark }}>
-      <StatusBar
-        backgroundColor="transparent"
-        hidden={false}
-        translucent={true}
-        networkActivityIndicatorVisible={true}
-        barStyle="light-content"
-      />
-      <Spinner color={blixtTheme.light} size={55} />
-    </Container>
+    <LoadingModal />
   );
 }

@@ -49,6 +49,8 @@ export default async function SetupBlixtDemo(
         preimage: new Uint8Array([0,0]),
         lnurlPayResponse: null,
         identifiedService: invoice.lightningService,
+        lightningAddress: null,
+        lud16IdentifierMimeType: null,
       };
       if (createDbTransactions) {
         await createTransaction(db, transaction);

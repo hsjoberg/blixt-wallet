@@ -6,20 +6,23 @@ import AuthRequest from "./AuthRequest";
 import ChannelRequest from "./ChannelRequest";
 import WithdrawRequest from "./WithdrawRequest";
 import PayRequest from "./PayRequest";
+import PayRequestAboutLightningAddress from "./PayRequestAboutLightningAddress";
 
 const Stack = createStackNavigator();
 
-export type ReceiveStackParamList = {
+export type LnUrlStackParamList = {
   default: undefined;
   AuthRequest: undefined;
   ChannelRequest: undefined;
   WithdrawRequest: undefined;
   PayRequest: undefined;
+  PayRequestAboutLightningAddress: undefined;
 }
 
 export default function LNUURLIndex() {
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
+    animationEnabled: false,
   };
 
   return (
@@ -29,6 +32,7 @@ export default function LNUURLIndex() {
       <Stack.Screen name="ChannelRequest" component={ChannelRequest} />
       <Stack.Screen name="WithdrawRequest" component={WithdrawRequest} />
       <Stack.Screen name="PayRequest" component={PayRequest} />
+      <Stack.Screen name="PayRequestAboutLightningAddress" component={PayRequestAboutLightningAddress} />
     </Stack.Navigator>
   )
 }

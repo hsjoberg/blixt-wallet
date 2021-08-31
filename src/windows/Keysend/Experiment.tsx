@@ -97,6 +97,8 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         type: "NORMAL",
         website: null,
         identifiedService: null,
+        lightningAddress: null,
+        lud16IdentifierMimeType: null,
 
         preimage: hexToUint8Array(result.paymentPreimage),
         lnurlPayResponse: null,

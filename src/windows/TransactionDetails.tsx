@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Share, Platform, LayoutAnimation, ScrollView } from "react-native";
+import { StyleSheet, Share, Platform, LayoutAnimation, ScrollView, TouchableOpacity } from "react-native";
 import DialogAndroid from "react-native-dialogs";
 import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
@@ -39,6 +39,61 @@ function MetaData({ title, data, url }: IMetaDataProps) {
       {!url && data}
       {url && <TextLink url={url}>{data}</TextLink>}
     </Text>
+  );
+};
+
+function MetaDataLightningAddress({ title, data: lightningAddress, url }: IMetaDataProps) {
+  const getContactByLightningAddress = useStoreState((actions) => actions.contacts.getContactByLightningAddress);
+  const syncContact = useStoreActions((actions) => actions.contacts.syncContact);
+
+  const promptLightningAddressContact = () => {
+    if (!lightningAddress) {
+      return;
+    }
+
+    if (getContactByLightningAddress(lightningAddress)) {
+      Alert.alert("",`${lightningAddress} is in your contact list!`);
+    } else {
+      Alert.alert(
+        "Add to Contact List",
+        `Would you like to add ${lightningAddress} to your contact list?`,
+        [{
+          text: "No",
+        }, {
+          text: "Yes",
+          onPress: async () => {
+            console.log(lightningAddress);
+            const domain = lightningAddress.split("@")[1] ?? "";
+            console.log(domain);
+            syncContact({
+              type: "PERSON",
+              domain,
+              lnUrlPay: null,
+              lnUrlWithdraw: null,
+              lightningAddress: lightningAddress,
+              lud16IdentifierMimeType: "text/identifier",
+              note: "",
+            });
+          }
+        }],
+      );
+    }
+  };
+
+  return (
+    <Text
+      style={[style.detailText, {}]}
+      onPress={() => {
+        Clipboard.setString(lightningAddress);
+        toast("Copied to clipboard", undefined, "warning");
+      }}
+    >
+      <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>
+      {lightningAddress}
+        <TouchableOpacity onPress={promptLightningAddressContact} style={{justifyContent:"center", paddingLeft: 10, paddingRight: 15 }}>
+          <Icon onPress={promptLightningAddressContact} style={{  fontSize: 22, marginBottom: -6 }} type="AntDesign" name={getContactByLightningAddress(lightningAddress) !== undefined ? "check" : "adduser"} />
+        </TouchableOpacity>
+      </Text>
   );
 };
 
@@ -168,6 +223,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
               {transaction.type !== "NORMAL" && <MetaData title="Type" data={transaction.type} />}
               {(transaction.type === "LNURL" && transaction.lnurlPayResponse && transaction.lnurlPayResponse.successAction) && <LNURLMetaData transaction={transaction} />}
               {(transaction.nodeAliasCached && name === null) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
+              {direction === "send" && transaction.lightningAddress && <MetaDataLightningAddress title="Lightning Address" data={transaction.lightningAddress} />}
               {direction === "receive" && !transaction.tlvRecordName && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
               {direction === "receive" && transaction.tlvRecordName && <MetaData title="Payer" data={transaction.tlvRecordName} />}
               {(direction === "send" && name) && <MetaData title="Recipient" data={name} />}
