@@ -33,6 +33,10 @@ powered by lnd and Neutrino SPV.
 - [ ] URL Payments
 - [ ] Pay to Username
 
+## Known Bugs
+
+The wallet uses lnd that is young and might have bugs. Check [lnd bug list here](https://github.com/lightningnetwork/lnd/issues?q=is%3Aissue+is%3Aopen+label%3Abug).
+
 ## Build Steps
 
 Blixt targets three platforms right now: Web, Android and iOS.
