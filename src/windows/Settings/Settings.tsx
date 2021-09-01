@@ -1090,7 +1090,6 @@ Do you wish to proceed?`;
               <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
               <Body>
                 <Text>Set Dunder LSP Server</Text>
-                {/* <Text note={true}>Dunder is a Lightning Service Provider that helps with inbound liquidity</Text> */}
               </Body>
             </ListItem>
           }
@@ -1148,6 +1147,7 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
             <Body>
               <Text>Enable Dunder LSP</Text>
+              <Text note={true}>HIGHLY EXPERIMENTAL. Lightning Service Provider that helps with inbound liquidity.</Text>
             </Body>
             <Right><CheckBox checked={dunderEnabled} onPress={onToggleDunderEnabled} /></Right>
           </ListItem>

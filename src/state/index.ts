@@ -286,6 +286,7 @@ export const model: IStoreModel = {
       }
       await setAppVersion(appMigration.length - 1);
     }
+    actions.setAppVersion(appVersion);
 
     const appBuild = await getAppBuild();
     if (appBuild < VersionCode) {

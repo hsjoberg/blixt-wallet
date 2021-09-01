@@ -130,7 +130,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
             <Body>
               <View style={style.headerContainer}>
                 <H1 style={style.header}>
-                  {!preimage ? "Pay" : ""}
+                  {!preimage ? "Pay" : "Paid"}
                 </H1>
                 {lightningAddress?.[1] !== undefined && (
                   <View style={{ flexDirection: "row", alignItems: "center" }}>

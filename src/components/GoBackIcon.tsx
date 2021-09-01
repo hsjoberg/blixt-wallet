@@ -6,7 +6,7 @@ import { View, TouchableWithoutFeedback, Text } from "react-native";
 
 export default function GoBackIcon() {
   const navigation = useNavigation();
-  
+
   // return (
   //   <TouchableWithoutFeedback
   //   hitSlop
@@ -19,10 +19,10 @@ export default function GoBackIcon() {
       type="Ionicons"
       name="ios-chevron-back-sharp"
       style={{
-        top: getStatusBarHeight(true) + 8,
+        top: getStatusBarHeight(false) + 8,
         left: 8,
         position: "absolute",
-        padding: 6,
+        padding: 9,
       }}
       onPress={() => navigation.goBack()}
     />
