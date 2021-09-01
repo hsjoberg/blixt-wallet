@@ -45,20 +45,20 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
   const metadata = JSON.parse(lnUrlObject.metadata) as ILNUrlPayRequestMetadata;
 
   const text = metadata.find((m, i) => {
-    return m[0] === "text/plain";
+    return m[0]?.toLowerCase?.() === "text/plain";
   })?.[1];
 
   // TODO error if text/plain is missing
 
   const longDesc = metadata.find((m, i) => {
-    return m[0] === "text/long-desc";
+    return m[0]?.toLowerCase?.() === "text/long-desc";
   })?.[1];
 
   const image = metadata.filter((m, i) => {
-    return m[0]?.startsWith?.("IMAGE");
+    return m[0]?.toLowerCase?.()?.startsWith("image");
   })?.[0]?.[1];
 
-  const lightningAddress = metadata?.find((item) => item[0] === "text/identifier" || item[0] === "text/email");
+  const lightningAddress = metadata?.find((item) => item[0]?.toLowerCase?.() === "text/identifier" || item[0]?.toLowerCase?.() === "text/email");
 
   const cancel = () => {
     clear();
