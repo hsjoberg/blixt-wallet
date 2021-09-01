@@ -644,7 +644,7 @@ exports[`renders correctly 1`] = `
                                                     "padding": 5,
                                                     "paddingRight": 8,
                                                     "position": "absolute",
-                                                    "top": 29,
+                                                    "top": 28,
                                                   },
                                                 ],
                                                 Object {
@@ -683,7 +683,7 @@ exports[`renders correctly 1`] = `
                                                     "padding": 5,
                                                     "position": "absolute",
                                                     "right": 8,
-                                                    "top": 31,
+                                                    "top": 30,
                                                   },
                                                 ],
                                                 Object {
@@ -723,7 +723,7 @@ exports[`renders correctly 1`] = `
                                                     "padding": 5,
                                                     "position": "absolute",
                                                     "right": 48,
-                                                    "top": 32,
+                                                    "top": 31,
                                                   },
                                                 ],
                                                 Object {
@@ -744,8 +744,8 @@ exports[`renders correctly 1`] = `
                                                 "opacity": 1,
                                                 "padding": 4,
                                                 "position": "absolute",
-                                                "right": 86,
-                                                "top": 31,
+                                                "right": 85,
+                                                "top": 30,
                                               }
                                             }
                                           >
@@ -771,7 +771,7 @@ exports[`renders correctly 1`] = `
                                                       "fontSize": 30,
                                                       "height": 29,
                                                       "opacity": 1,
-                                                      "width": 27,
+                                                      "width": 30,
                                                     },
                                                   ],
                                                   Object {
