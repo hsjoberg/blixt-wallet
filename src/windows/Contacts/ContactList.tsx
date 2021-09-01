@@ -41,7 +41,7 @@ function Contact({ contact }: IContactProps) {
   const [loadingWithdraw, setLoadingWithdraw] = useState(false); 
 
   useEffect(() => {
-    if (!currentBalance) {
+    if (contact.lnUrlWithdraw && !currentBalance) {
       console.log("Subscribing to invoice inside Contact " + contact.domain + " " + contact.note);
       LndMobileEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
         try {

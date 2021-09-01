@@ -48,6 +48,7 @@ export interface IOverviewProps {
   navigation: BottomTabNavigationProp<RootStackParamList, "Overview">;
 }
 function Overview({ navigation }: IOverviewProps) {
+  const layoutMode = useLayoutMode();
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const balance = useStoreState((store) => store.channel.balance);
   const pendingOpenBalance = useStoreState((store) => store.channel.pendingOpenBalance);
@@ -217,9 +218,11 @@ function Overview({ navigation }: IOverviewProps) {
               {/* <AnimatedIcon
                 style={[style.onchainIcon, { opacity: iconOpacity }]} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
               /> */}
-              <AnimatedIcon
-                style={[style.menuIcon]} type="Entypo" name="menu" onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
-              />
+              {layoutMode === "mobile" && (
+                <AnimatedIcon
+                  style={[style.menuIcon]} type="Entypo" name="menu" onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
+                />
+              )}
               {/* <AnimatedIcon
                 style={[style.channelsIcon, { opacity: iconOpacity }]} type="Entypo" name="thunder-cloud" onPress={() => (navigation.navigate as any)("LightningInfo")}
               /> */}
