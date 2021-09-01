@@ -10,7 +10,6 @@ import { lnrpc } from "../../../proto/proto";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectList";
 import { IFiatRates } from "../../state/Fiat";
-import { Chain, Flavor } from "../../utils/build";
 import { useStoreState } from "../../state/store";
 
 const Stack = createStackNavigator();

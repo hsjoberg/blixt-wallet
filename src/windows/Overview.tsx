@@ -25,6 +25,7 @@ import QrCode from "../components/QrCode";
 import Send from "./Send";
 import { PLATFORM } from "../utils/constants";
 import { fontFactor, fontFactorNormalized, zoomed } from "../utils/scale";
+import useLayoutMode from "../hooks/useLayoutMode";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -90,8 +91,8 @@ function Overview({ navigation }: IOverviewProps) {
   const headerBtcFontSize = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [
-      (bitcoinUnit === "satoshi" ? 32 : 37) * fontFactor,
-      (bitcoinUnit === "satoshi" ? 24 : 27) * fontFactor,
+      (!preferFiat && bitcoinUnit === "satoshi" ? 32 : 37) * fontFactor,
+      (!preferFiat && bitcoinUnit === "satoshi" ? 24 : 27) * fontFactor,
     ],
     extrapolate: "clamp",
   });
@@ -99,8 +100,8 @@ function Overview({ navigation }: IOverviewProps) {
   const headerBtcHeight = scrollYAnimatedValue.interpolate({
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [
-      (bitcoinUnit === "satoshi" ? 35 : 40) * 1.3 * Math.min(PixelRatio.getFontScale(), 1.4),
-      (bitcoinUnit === "satoshi" ? 36 : 41),
+      (!preferFiat && bitcoinUnit === "satoshi" ? 37 : 40) * 1.3 * Math.min(PixelRatio.getFontScale(), 1.4),
+      (!preferFiat && bitcoinUnit === "satoshi" ? 38 : 42),
     ],
     extrapolate: "clamp",
   });
@@ -384,8 +385,8 @@ const style = StyleSheet.create({
     padding: 5,
     paddingRight: 8,
     top: Platform.select({
-      native: 9 + iconTopPadding,
-      web: 9,
+      native: 8 + iconTopPadding,
+      web: 6,
     }) ?? 0,
     left: 8,
     fontSize: 31,
@@ -396,8 +397,8 @@ const style = StyleSheet.create({
     padding: 6,
     paddingRight: 8,
     top: Platform.select({
-      native: 9 + iconTopPadding,
-      web: 9,
+      native: 8 + iconTopPadding,
+      web: 8,
     }) ?? 0,
     left: 8,
     fontSize: 25,
@@ -408,8 +409,8 @@ const style = StyleSheet.create({
     padding: 4,
     paddingRight: 8,
     top: Platform.select({
-      native: 12 + iconTopPadding,
-      web: 11,
+      native: 11 + iconTopPadding,
+      web: 10,
     }) ?? 0,
     left: 8 + 24 + 8 + 2,
     fontSize: 28,
@@ -419,8 +420,8 @@ const style = StyleSheet.create({
     position: "absolute",
     padding: 5,
     top: Platform.select({
-      native: 11 + iconTopPadding,
-      web: 7,
+      native: 10 + iconTopPadding,
+      web: 6,
     }),
     right: 8,
     fontSize: 29,
@@ -430,8 +431,8 @@ const style = StyleSheet.create({
     position: "absolute",
     padding: 5,
     top: Platform.select({
-      native: 12 + iconTopPadding,
-      web: 8,
+      native: 11 + iconTopPadding,
+      web: 7,
     }) ?? 0,
     right: Platform.select({
       native: 8 + 24 + 8 + 8,
@@ -444,17 +445,17 @@ const style = StyleSheet.create({
     position: "absolute",
     padding: 4,
     top: Platform.select({
-      native: 11 + iconTopPadding,
-      web: 8,
+      native: 10 + iconTopPadding,
+      web: 7,
     }) ?? 0,
-    right: 8 + 24 + 8 + 24 + 8 + 14,
+    right: 8 + 24 + 8 + 24 + 8 + 13,
   },
   weblnBrowswerIcon: {
     position: "absolute",
     padding: 5,
     top: Platform.select({
-      native: 12 + iconTopPadding,
-      web: 8,
+      native: 11 + iconTopPadding,
+      web: 7,
     }) ?? 0,
     right: 8 + 24 + 8 + 24 + 7 + 14  + (PLATFORM === "web" ? -1 : 0),
     fontSize: 24,
@@ -493,11 +494,14 @@ const headerInfo = StyleSheet.create({
 });
 
 const OverviewTabs = createBottomTabNavigator();
+
 export function OverviewTabsComponent() {
+  const layoutMode = useLayoutMode();
+
   return (
     <OverviewTabs.Navigator screenOptions={{
       header: () => null,
-    }} tabBar={() => <FooterNav />}>
+    }} tabBar={() => layoutMode === "mobile" ? <FooterNav /> : <></>}>
       <OverviewTabs.Screen name="Overview" component={Overview} />
     </OverviewTabs.Navigator>
   );
@@ -507,6 +511,8 @@ export function OverviewTabsComponent() {
 const DrawerNav = createDrawerNavigator();
 
 export function DrawerComponent() {
+  const layoutMode = useLayoutMode();
+
   return (
     <DrawerNav.Navigator screenOptions={{
       header: () => <></>,
@@ -515,7 +521,7 @@ export function DrawerComponent() {
         borderRightColor: "transparent",
         width: 305,
       },
-      drawerType: "front",
+      drawerType: layoutMode === "mobile" ? "front" : "permanent",
       swipeEdgeWidth: 400,
     }} drawerContent={() => <Drawer />}>
       <DrawerNav.Screen name="OverviewTabs" component={OverviewTabsComponent} />

@@ -36,7 +36,7 @@ export default function Spinner({ onPress }: ISpinnerProps) {
       style={{
         // marginRight: -1,
         // marginTop: -1,
-        width: 27,
+        width: 30,
         height: 29,
         fontSize: 30,
         opacity: fading,

@@ -5,16 +5,17 @@ import { Icon, Text } from "native-base";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { BlixtLogo } from "./BlixtWallet";
 import usePromptLightningAddress from "../hooks/usePromptLightningAddress";
 import useEvaluateLightningCode from "../hooks/useEvaluateLightningCode";
 import { fontFactorNormalized } from "../utils/scale";
+import useLayoutMode from "../hooks/useLayoutMode";
 
 export default function Drawer() {
   const navigation = useNavigation();
   const promptLightningAddress = usePromptLightningAddress();
   const evaluateLightningCode = useEvaluateLightningCode();
+  const layoutMode = useLayoutMode();
 
   const goToScreen = (screen: string, options: any = undefined, delayDrawerClose = true) => {
     setTimeout(
@@ -72,7 +73,7 @@ export default function Drawer() {
           <Text style={style.blixtTitle}>Blixt Wallet</Text>
         </View>
         <View style={style.menu}>
-          {/*
+          {layoutMode === "full" && (
             <>
               <TouchableOpacity onPress={() => goToScreen("Send")}>
                 <View style={style.menuItem}>
@@ -87,7 +88,7 @@ export default function Drawer() {
                 </View>
               </TouchableOpacity>
             </>
-          */}
+          )}
 
           <TouchableOpacity onPress={pasteFromClipboard}>
             <View style={style.menuItem}>

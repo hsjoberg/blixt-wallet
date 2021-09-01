@@ -3,7 +3,7 @@ import { StyleSheet, StatusBar, Alert, NativeModules } from "react-native";
 import { Text, H1, Button, View, Spinner, Icon } from "native-base";
 import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
-import Menu, { MenuItem } from "react-native-material-menu";
+import { Menu, MenuItem } from "react-native-material-menu";
 
 import { CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -36,19 +36,61 @@ function AnimatedView({ children }: IAnimatedViewProps) {
   );
 }
 
+function TopMenu() {
+  const torEnabled = useStoreState((store) => store.torEnabled);
+  const changeTorEnabled = useStoreActions((store) => store.settings.changeTorEnabled);
+  const [visible, setVisible] = useState(false);
+  const hideMenu = () => setVisible(false);
+  const showMenu = () => setVisible(true);
+
+  const toggleTorEnabled = async () => {
+    changeTorEnabled(!torEnabled);
+    setVisible(false);
+    // menu.current.hide();
+    try {
+      // await NativeModules.LndMobile.stopLnd();
+      await NativeModules.LndMobileTools.killLnd();
+    } catch(e) {
+      console.log(e);
+    }
+    NativeModules.LndMobileTools.restartApp();
+  }
+
+  return (
+    <View style={style.menuDotsIcon}>
+      <Menu
+        visible={visible}
+        onRequestClose={hideMenu}
+        anchor={
+          <Icon
+            type="Entypo"
+            name="dots-three-horizontal"
+            onPress={showMenu}
+          />
+        }
+      >
+        <MenuItem
+          onPress={toggleTorEnabled}
+          // style={{ backgroundColor: blixtTheme.gray }}
+          // textStyle={{ color: blixtTheme.light }}
+          textStyle={{ color: "#000" }}
+        >
+          {torEnabled ? "Disable" : "Enable"} Tor
+        </MenuItem>
+      </Menu>
+    </View>
+  );
+}
+
 export interface IStartProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Start">;
 }
 export default function Start({ navigation }: IStartProps) {
-  const setHoldonboarding = useStoreActions((state) => state.setHoldOnboarding);
   const generateSeed = useStoreActions((store) => store.generateSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
   const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
   const [createWalletLoading, setCreateWalletLoading] = useState(false);
-  const torEnabled = useStoreState((store) => store.torEnabled);
-  const changeTorEnabled = useStoreActions((store) => store.settings.changeTorEnabled);
-  const menu = useRef<Menu>();
 
   const onCreateWalletPress = async () => {
     try {
@@ -88,22 +130,6 @@ There is currently no WatchTower support to watch your channels while you are of
     navigation.navigate("Restore");
   };
 
-  const showMenu = () => {
-    menu.current.show();
-  }
-
-  const toggleTorEnabled = async () => {
-    changeTorEnabled(!torEnabled);
-    menu.current.hide();
-    try {
-      // await NativeModules.LndMobile.stopLnd();
-      await NativeModules.LndMobileTools.killLnd();
-    } catch(e) {
-      console.log(e);
-    }
-    NativeModules.LndMobileTools.restartApp();
-  }
-
   return (
     <Container>
       <View style={style.content}>
@@ -115,27 +141,7 @@ There is currently no WatchTower support to watch your channels while you are of
           barStyle="light-content"
         />
         {(!createWalletLoading && PLATFORM === "android") &&
-          <View style={style.menuDotsIcon}>
-            <Menu
-              ref={menu}
-              button={
-                <Icon
-                  type="Entypo"
-                  name="dots-three-horizontal"
-                  onPress={showMenu}
-                />
-              }
-            >
-              <MenuItem
-                onPress={toggleTorEnabled}
-                // style={{ backgroundColor: blixtTheme.gray }}
-                // textStyle={{ color: blixtTheme.light }}
-                textStyle={{ color: "#000" }}
-              >
-                {torEnabled ? "Disable" : "Enable"} Tor
-              </MenuItem>
-            </Menu>
-          </View>
+          <TopMenu />
         }
         {!createWalletLoading
           ? <AnimatedH1>Welcome</AnimatedH1>

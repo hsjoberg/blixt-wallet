@@ -59,8 +59,10 @@ function MetaDataLightningAddress({ title, data: lightningAddress, url }: IMetaD
         `Would you like to add ${lightningAddress} to your contact list?`,
         [{
           text: "No",
+          style: "cancel",
         }, {
           text: "Yes",
+          style: "default",
           onPress: async () => {
             console.log(lightningAddress);
             const domain = lightningAddress.split("@")[1] ?? "";
@@ -74,7 +76,7 @@ function MetaDataLightningAddress({ title, data: lightningAddress, url }: IMetaD
               lud16IdentifierMimeType: "text/identifier",
               note: "",
             });
-          }
+          },
         }],
       );
     }

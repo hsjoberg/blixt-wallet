@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, KeyboardAvoidingView } from "react-native";
+import { KeyboardAvoidingView } from "react-native";
 import { Body, Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -9,6 +9,7 @@ import { getDomainFromURL } from "../../utils";
 import Blurmodal from "../../components/BlurModal";
 import { ILNUrlPayRequestMetadata } from "../../state/LNURL";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Alert } from "../../utils/alert";
 import PaymentCard from "./PayRequest/PaymentCard";
 import PaymentDone from "./PayRequest/PaymentDone";
 import style from "./PayRequest/style";
@@ -48,6 +49,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   }
 
   const promptLightningAddressContact = () => {
+    console.log("prompt promptLightningAddressContact");
     if (!lightningAddress?.[1]) {
       return;
     }
@@ -60,8 +62,10 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
         `Would you like to add ${lightningAddress[1]} to your contact list?`,
         [{
           text: "No",
+          style: "cancel",
         }, {
           text: "Yes",
+          style: "default",
           onPress: async () => {
             const domain = lightningAddress[1].split("@")[1] ?? "";
 
@@ -74,7 +78,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
               lud16IdentifierMimeType: "text/identifier",
               note: "",
             })
-          }
+          },
         }],
       );
     }
