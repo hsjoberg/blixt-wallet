@@ -252,8 +252,8 @@ export const appMigration: IAppMigration[] = [
           note TEXT NOT NULL
         )`
       );
-      await db.executeSql("ALTER TABLE lightningAddress ADD note TEXT NULL");
-      await db.executeSql("ALTER TABLE lud16IdentifierMimeType ADD note TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD lightningAddress TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD lud16IdentifierMimeType TEXT NULL");
     },
   },
 ];
