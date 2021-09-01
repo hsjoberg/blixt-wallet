@@ -35,6 +35,7 @@ interface IExtraData {
   lnurlPayResponse: ILNUrlPayResponse | null;
   lightningAddress: string | null;
   lud16IdentifierMimeType: string | null;
+  lnurlPayTextPlain: string | null;
 }
 
 export interface ISendModel {
@@ -164,11 +165,12 @@ export const send: ISendModel = {
       lnurlPayResponse: null,
       lightningAddress: null,
       lud16IdentifierMimeType: null,
+      lnurlPayTextPlain: null,
     };
 
     const transaction: ITransaction = {
       date: paymentRequest.timestamp,
-      description: paymentRequest.description,
+      description: extraData.lnurlPayTextPlain ?? paymentRequest.description,
       expire: paymentRequest.expiry,
       paymentRequest: paymentRequestStr,
       remotePubkey: paymentRequest.destination,
@@ -292,12 +294,13 @@ export const send: ISendModel = {
       website: null,
       lnurlPayResponse: null,
       lightningAddress: null,
-      lud16IdentifierMimeType: null
+      lud16IdentifierMimeType: null,
+      lnurlPayTextPlain: null,
     };
 
     const transaction: ITransaction = {
       date: paymentRequest.timestamp,
-      description: paymentRequest.description,
+      description: extraData.lnurlPayTextPlain ?? paymentRequest.description,
       expire: paymentRequest.expiry,
       paymentRequest: paymentRequestStr,
       remotePubkey: paymentRequest.destination,

@@ -118,6 +118,7 @@ interface IDoPayRequestPayload {
   comment?: string;
   lightningAddress: string | null;
   lud16IdentifierMimeType: string | null;
+  metadataTextPlain: string;
 }
 
 export type IDoPayRequestResponse = ILNUrlPayResponse;
@@ -421,6 +422,7 @@ export const lnUrl: ILNUrlModel = {
             website: getDomainFromURL(lnUrlStr),
             lightningAddress: payload.lightningAddress,
             lud16IdentifierMimeType: payload.lud16IdentifierMimeType,
+            lnurlPayTextPlain: payload.metadataTextPlain,
           },
         });
 

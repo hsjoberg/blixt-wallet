@@ -137,6 +137,7 @@ export const webln: IWebLNModel = {
           lnurlPayResponse: null,
           lightningAddress: null,
           lud16IdentifierMimeType: null,
+          lnurlPayTextPlain: null,
         }
       });
 

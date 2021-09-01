@@ -45,11 +45,17 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
   const metadata = JSON.parse(lnUrlObject.metadata) as ILNUrlPayRequestMetadata;
 
   const text = metadata.find((m, i) => {
-    return !!m.find((str) => str === "text/plain");
+    return m[0] === "text/plain";
+  })?.[1];
+
+  // TODO error if text/plain is missing
+
+  const longDesc = metadata.find((m, i) => {
+    return m[0] === "text/long-desc";
   })?.[1];
 
   const image = metadata.filter((m, i) => {
-    return !!m.find((str) => str.toUpperCase().startsWith("IMAGE"));
+    return m[0]?.startsWith?.("IMAGE");
   })?.[0]?.[1];
 
   const lightningAddress = metadata?.find((item) => item[0] === "text/identifier" || item[0] === "text/email");
@@ -73,6 +79,7 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
         comment,
         lightningAddress: lightningAddress?.[1] ?? null,
         lud16IdentifierMimeType: lightningAddress?.[0] ?? null,
+        metadataTextPlain: text ?? "Invoice description missing",
       });
       console.log(paymentRequestResponse);
 
@@ -125,7 +132,7 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
         </Text>
         <Text style={style.text}>
           <Text style={style.boldText}>Description:</Text>{"\n"}
-          {text}
+          {longDesc || text}
         </Text>
         <Text style={{ marginBottom: 28 }}>
           <Text style={style.boldText}>Price:</Text>{"\n"}
