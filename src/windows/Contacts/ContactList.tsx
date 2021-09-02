@@ -254,6 +254,7 @@ export default function ContactList({ navigation }: IContactListProps) {
   const syncContact = useStoreActions((store) => store.contacts.syncContact);
   const clearLnUrl = useStoreActions((store) => store.lnUrl.clear);
   const promptLightningAddress = usePromptLightningAddress();
+  const getContactByLightningAddress = useStoreState((store) => store.contacts.getContactByLightningAddress);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -272,8 +273,13 @@ export default function ContactList({ navigation }: IContactListProps) {
 
   const addLightningAddress = async () => {
     const [result, lightningAddress] = await promptLightningAddress();
-    if (result) {
-      const domain = lightningAddress?.split("@")[1] ?? "";
+    if (result && lightningAddress) {
+      if (getContactByLightningAddress(lightningAddress)) {
+        Alert.alert("", `${lightningAddress} already exists in your contact list.`);
+        return;
+      }
+
+      const domain = lightningAddress.split("@")[1] ?? "";
       await syncContact({
         type: "PERSON",
         domain,
@@ -298,6 +304,19 @@ export default function ContactList({ navigation }: IContactListProps) {
     }
     return true;
   });
+
+  const sortedContacts = filteredContacts.sort((a, b) => {
+    const aCmp = a.lightningAddress ?? a.domain;
+    const bCmp = b.lightningAddress ?? b.domain
+
+    if (aCmp < bCmp) {
+      return -1;
+    }
+    if (aCmp > bCmp) {
+      return 1;
+    }
+    return 0;
+  })
 
   return (
     <Container>
@@ -326,7 +345,7 @@ export default function ContactList({ navigation }: IContactListProps) {
             <Text onPress={addLightningAddress} style={{color:blixtTheme.link}}>tapping here</Text>?
           </Text>
         }
-        {filteredContacts.map((contact) => (
+        {sortedContacts.map((contact) => (
           <Contact key={contact.id} contact={contact} />
         ))}
       </Content>

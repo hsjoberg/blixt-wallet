@@ -10,6 +10,9 @@ export default StyleSheet.create({
     height: "auto",
     minHeight: "55%",
   },
+  cardItem: {
+    flexGrow: 1,
+  },
   headerContainer: {
     display: "flex",
     marginBottom: 10,
@@ -24,6 +27,17 @@ export default StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
     width: "100%",
+  },
+  contactContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  lightningAddress: {
+    fontSize: 13,
+  },
+  contactAddIcon: {
+    fontSize: 25,
+    paddingLeft: 8,
   },
   actionBar: {
     width: "100%",

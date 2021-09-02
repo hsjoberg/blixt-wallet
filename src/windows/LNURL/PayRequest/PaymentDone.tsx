@@ -89,11 +89,11 @@ export default function LNURLPayRequestDone({ preimage }: IPayRequestDoneProps) 
             </Text>
           </>
         }
-        {/* {!payRequestResponse.successAction && ( */}
+        {!payRequestResponse.successAction && (
           <View style={{ flex: 1, width: "100%", justifyContent: "center", alignItems:"center" }}>
             <Done />
           </View>
-        {/* )} */}
+        )}
       </View>
       <View style={[style.actionBar, { justifyContent: undefined }]}>
         <Button onPress={cancel} small={true}>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Vibration, Keyboard } from "react-native";
+import { Vibration, Keyboard, Image } from "react-native";
 import { Text, View, Button, Input } from "native-base";
 import Long from "long";
 import { useNavigation } from "@react-navigation/core";
@@ -12,6 +12,7 @@ import { formatBitcoin, convertBitcoinToFiat, unitToSatoshi } from "../../../uti
 import ButtonSpinner from "../../../components/ButtonSpinner";
 import style from "./style";
 import useLightningReadyToSend from "../../../hooks/useLightingReadyToSend";
+import { getLightningService, identifyService, lightningServices } from "../../../utils/lightning-services";
 
 export interface IPaymentCardProps {
   onPaid: (preimage: Uint8Array) => void;
@@ -124,12 +125,34 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
   const maxSpendableFormatted = formatBitcoin(Long.fromValue(maxSpendable ?? 0).div(1000), bitcoinUnit);
   const maxSpendableFiatFormatted = convertBitcoinToFiat(Long.fromValue(maxSpendable ?? 0).div(1000), currentRate) + " " + fiatUnit;
 
+
+  const serviceKey = identifyService(null, "", domain);
+  let service;
+  if (serviceKey && lightningServices[serviceKey]) {
+    service = lightningServices[serviceKey];
+  }
+
   return (
     <>
       <View style={style.contentContainer}>
-        <Text style={style.text}>
-          <Text style={style.boldText}>{domain}</Text> asks you to pay.
-        </Text>
+        <View style={{ flexDirection: "row" }}>
+          {service &&
+            <Image
+              source={{ uri: service.image }}
+              style={{
+                borderRadius: 24,
+                marginRight: 10,
+                marginLeft: 3,
+                marginTop: -2.5,
+              }}
+              width={26}
+              height={26}
+            />
+          }
+          <Text style={style.text}>
+            <Text style={style.boldText}>{domain}</Text> asks you to pay.
+          </Text>
+        </View>
         <Text style={style.text}>
           <Text style={style.boldText}>Description:</Text>{"\n"}
           {longDesc || text}

@@ -119,31 +119,31 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
       <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
         {__DEV__ &&
-          <View style={{ position:"absolute", top: -30, right: 0 }}>
+          <View style={{ position: "absolute", top: -30, right: 0 }}>
             <Button small={true} onPress={viewMetadata}>
               <Text style={{ fontSize: 7.5 }}>View metadata</Text>
             </Button>
           </View>
         }
         <Card style={style.card}>
-          <CardItem style={{ flexGrow: 1 }}>
+          <CardItem style={style.cardItem}>
             <Body>
               <View style={style.headerContainer}>
                 <H1 style={style.header}>
                   {!preimage ? "Pay" : "Paid"}
                 </H1>
                 {lightningAddress?.[1] !== undefined && (
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <TouchableOpacity onPress={onPressLightningAddress}><Text>{lightningAddress[1]}</Text></TouchableOpacity>
+                  <View style={style.contactContainer}>
+                    <TouchableOpacity onPress={onPressLightningAddress}><Text style={style.lightningAddress}>{lightningAddress[1]}</Text></TouchableOpacity>
                     <TouchableOpacity onPress={promptLightningAddressContact}>
-                      <Icon style={{ fontSize: 25, paddingLeft: 8 }} type="AntDesign" name={getContactByLightningAddress(lightningAddress[1]) !== undefined ? "check" : "adduser"} />
+                      <Icon style={style.contactAddIcon} type="AntDesign" name={getContactByLightningAddress(lightningAddress[1]) !== undefined ? "check" : "adduser"} />
                     </TouchableOpacity>
                   </View>
                 )}
                 {lightningAddress?.[1] === undefined && lnUrlObject.disposable === false && (
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View style={style.contactContainer}>
                     <TouchableOpacity onPress={promptLnUrlPayContact}>
-                      <Icon style={{ fontSize: 25, paddingLeft: 8 }} type="AntDesign" name={getContactByLnUrlPay(lnurlStr ?? "") ? "check" : "pluscircle"} />
+                      <Icon style={style.contactAddIcon} type="AntDesign" name={getContactByLnUrlPay(lnurlStr ?? "") ? "check" : "pluscircle"} />
                     </TouchableOpacity>
                   </View>
                 )}
