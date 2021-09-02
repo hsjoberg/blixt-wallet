@@ -8,7 +8,7 @@ export interface INameDesc {
 export const setupDescription = (description: string, name: string | null) => {
   let d = description;
   if (name !== null) {
-    d = name + ":  " + (description || "No invoice descripion");
+    d = name + ":  " + (description || "No invoice description");
   }
   return d;
 }
