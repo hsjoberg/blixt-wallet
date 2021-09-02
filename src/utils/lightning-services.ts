@@ -15,6 +15,7 @@ export interface ILightningServices {
   hampus: ILightningService;
   lightningspin: ILightningService;
   yalls: ILightningService;
+  zebedee: ILightningService;
   satoshisplace: ILightningService;
   stackernews: ILightningService;
   thndrgames: ILightningService;
@@ -117,6 +118,10 @@ export const lightningServices: ILightningServices = {
   yalls: {
     title: "Y'alls",
     image: "data:image/webp;base64,UklGRngDAABXRUJQVlA4IGwDAADQHwCdASrhAOEAPxGIvFesP6YjpJcII/AiCWVu4XKRA1262D63mHw/6X7hXeH96UyGxg36f+v9dY0XtN/vVEpWLPRBSS4lxLiXEuJcS4lxLiXEvt/hs+EOByRSSra5JoxAZKsvkRfddDVcbAk0YgOjWm7HABGRZu/tZtqVELrWptS47TQGVTi6t/8XvuMKnDssptTaliV6LDCL6h2C+4TgNYFc2tTaYEUIGvmSsOxK1N73gB/GImUosT8IuJcClmDrLVrWuU0MjtLAWAr7Lj7Oicq3uHJEbU2ptLYHiSvy1f0nQ7AQFgK+yc0wn/1RqjVGqNU3rWAgLAWAsJpTFZJoxAdc61GOAAD+/Szf/+LQ5h+DV9e9ZVclYjq+bAtFU+cK+gcLj3rLZ7vuiHmsMFrsP7yBjZ32wt9MicBjp21sbvfi4uvY0wRS8mo/0Ch9QfYHm2VIj4EiUoekwhiM2VF/JZFtsl3kKsGPQD9nh5/rcEDyvDAhCSk+XAU4KaRlzlsfjE1VArUF8/YgnYb3RoECBnat9nMgnLderOMdbtg6P+Dd+DKAr7snSfj5WJsMIBUDboFadPvZ1yG3f/mLw4F0vrOQ0GWB6YMrCV6PbfmcL//FdFfcVV8QOVPDcOK1wm9ZjkRmoTJ06tZnLqjjkTgx2hScO5UaVZL3yoD2PFMchbApPbzjsdtm/xeAwV62/Gaqool/GXCTsk6Dho+mszOKcVR6k3RZgSyKOZuAxgTf0KHNpehBShZbxKG+Q6/gusvViJDKS5yiTyzG/sRycY/PMYFC6BcMqT841wYt2n3PohQ7DZo4vRB2jU5SZK9DdhntjYrH8zV5z+f8HFhGNhTXhPt7YjsRHvLV0JVjiNHOU/rJq+D23ZKdzoWC+EZUxrfw4RuETdX+WD0n9uKxtAHw6EtjDeN26eX6lEsttYTc71TvP9/9P28A3zdahrcWUVJKUVd3lu+KF88Q0j9LWgq2jDc4VwbRUWhHbX02gsOEmGBwFl4Ivvvfh8Itkq3ZCTN3+87ZYhtgM89f1Z3QSJcM3rmkn+qkuTuSJl5f/ftJwWvqyVHIz/OqJrrDbOigJm7evURRiqJQJQI3mA+5VgdVFZlE4baqG46yIlvKZXtTP+P8B8HvrHWgBbWP0FrpWAp7ABxD9BBFB5RAAAA=",
+  },
+  zebedee: {
+    title: "ZEBEDEE",
+    image: "data:image/webp;base64,UklGRrABAABXRUJQVlA4IKQBAABwGACdASrhAOEAPxGIwFgsKacjpFPICYAiCWlu4XNBG7NXsVlAw4jRYTUWyRcsoGoAg9YFlA1AEHrAsoGoAg9YFlA1AEHqkJes8o7JVz5o5hNB6wISblrASgV9pGUgV5S7VxMoSAqoBqMuIQT6IxDF1n3IMu1bJFplP8mIXTgETyawncH4FlA05KmR6odyD3Twm2LYmFbOPLg05ImRtjug+pPiT2W1hVQBDCWGw3Fq2SLllA1AEHrAsoGoAg9YFlA1AEHrAsoGoAg9XyAA/v3qDYiAFB4i3ltw9eD1nhFUnuJj8D4QgzP1TofBdmC7rrz12pYRT45E3SWnN3stTekm0gCLv932AX5CMgADKE3TsgaZ43YVjBVFGt1MtBiTsqc3y7HLLqD9NlW72mWq5NlPqu6Wh5rzWPgsufgXt/FDNY2HEUSriuaHKscmJsTz5YHoY3M/ltBxISOhNDUV6JL5TUJJpQ4XZXPMltv9sgkQup22eZ45rI5cfmdSnGswlZUGNGD2i62To40szcdLfJwi44NMDgOcQRqskwd1n5wAAAAAAAA=",
   },
   zigzag: {
     title: "ZigZag",
@@ -238,11 +243,14 @@ export function identifyService(pubkey: string | null, description: string, webs
   else if (pubkey === "03cc1d0932bb99b0697f5b5e5961b83ab7fd66f1efc4c9f5c7bad66c1bcbe78f02") {
     return "stackernews";
   }
-  else if (pubkey === "03ee58475055820fbfa52e356a8920f62f8316129c39369dbdde3e5d0198a9e315") {
+  else if (pubkey === "03ee58475055820fbfa52e356a8920f62f8316129c39369dbdde3e5d0198a9e315" || website?.includes("lntxbot.com")) {
     return "lntxbot";
   }
   else if (website?.includes("lnbits.com")) {
     return "lnbits";
+  }
+  else if (website?.includes("zbd.gg") || website?.includes("api.zebedee.io") || website?.includes("zebedee.io") || pubkey === "03d6b14390cd178d670aa2d57c93d9519feaae7d1e34264d8bbb7932d47b75a50d") {
+    return "zebedee";
   }
   return null;
 }
