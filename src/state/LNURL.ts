@@ -4,8 +4,8 @@
 //
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as Bech32 from "bech32";
-import { Hash as sha256Hash, HMAC as sha256HMAC } from "fast-sha256";
 import secp256k1 from "secp256k1";
+import { CONSTANTS, JSHash } from "react-native-hash";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -20,6 +20,11 @@ const log = logger("LNURL");
 export type LNURLType = "channelRequest" | "login" | "withdrawRequest" | "payRequest" | "unknown" | "error" | "unsupported";
 
 export type LightningAddress = string;
+
+export interface ILNUrlError {
+  status: "ERROR";
+  reason: string;
+}
 
 export interface ILNUrlChannelRequest {
   uri: string;
@@ -80,6 +85,7 @@ export interface ILNUrlPayResponse {
     | ILNUrlPayResponseSuccessActionUrl
     | null;
   routes:	any[]; // NOT SUPPORTED
+  disposable?: boolean | null;
 }
 
 export interface ILNUrlPayResponseSuccessActionUrl {
@@ -191,16 +197,20 @@ export const lnUrl: ILNUrlModel = {
         log.d(`GET ${url}, looking for tag`);
         const result = await fetch(url);
 
-        // TODO this is not spec compliant
-        if (!result.ok) {
-          log.d("Not ok");
-          const text = await result.text();
-          log.d(text);
-          throw new Error(text);
+        log.v(JSON.stringify(result));
+        let lnurlObject: LNUrlRequest | ILNUrlError;
+        try {
+          lnurlObject = await result.json();
+        } catch (e) {
+          log.d("", [e]);
+          throw new Error("Unable to parse message from the server");
+        }
+        log.d("response", [lnurlObject]);
+
+        if (isLNUrlPayResponseError(lnurlObject)) {
+          throw new Error(lnurlObject.reason);
         }
 
-        log.v(JSON.stringify(result));
-        const lnurlObject: LNUrlRequest = await result.json();
         log.v(JSON.stringify(lnurlObject));
         if (lnurlObject.tag === "channelRequest") {
           type = "channelRequest";
@@ -243,14 +253,23 @@ export const lnUrl: ILNUrlModel = {
         await connectPeer(pubkey, host);
       } catch (e) { }
       const request = `${lnUrlObject.callback}?k1=${lnUrlObject.k1}&remoteid=${localPubkey}&private=1`;
-      const result = await fetch(request);
-      const response: ILNUrlChannelRequestResponse = await result.json();
-      log.v(JSON.stringify(response));
 
-      if (response.status === "OK") {
-        return true;
+      const result = await fetch(request);
+      log.v(JSON.stringify(result));
+
+      let response: ILNUrlChannelRequestResponse | ILNUrlError;
+      try {
+        response = await result.json();
+      } catch (e) {
+        log.d("", [e]);
+        throw new Error("Unable to parse message from the server");
       }
-      throw new Error(response.reason!);
+      log.d("response", [response]);
+
+      if (isLNUrlPayResponseError(response)) {
+        throw new Error(response.reason);
+      }
+      return true;
     }
     else {
       throw new Error("Requirements not satisfied, type must be channelRequest and lnUrlObject must be set");
@@ -296,7 +315,8 @@ export const lnUrl: ILNUrlModel = {
       // 4 omitted
       const result = await fetch(url);
       log.d("result", [JSON.stringify(result)]);
-      let response: ILNUrlAuthResponse;
+
+      let response: ILNUrlAuthResponse | ILNUrlError;
       try {
         response = await result.json();
       } catch (e) {
@@ -305,10 +325,11 @@ export const lnUrl: ILNUrlModel = {
       }
       log.d("response", [response]);
 
-      if (response.status === "OK") {
-        return true;
+      if (isLNUrlPayResponseError(response)) {
+        throw new Error(response.reason);
       }
-      throw new Error(response.reason! ?? "Invalid response: " + JSON.stringify(response));
+
+      return true;
     }
     else {
       throw new Error("Requirements not satisfied, type must be login and lnUrlObject must be set");
@@ -340,25 +361,25 @@ export const lnUrl: ILNUrlModel = {
           const invoice = injections.lndMobile.wallet.decodeInvoiceResult(e.data);
           let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?";
           const url = `${lnUrlObject.callback}${firstSeparator}k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
-          // const url = `${lnUrlObject.callback}?k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
-
           log.d("url", [url]);
+
           const result = await fetch(url);
           log.d("result", [JSON.stringify(result)]);
-          let response: ILNUrlWithdrawResponse;
+
+          let response: ILNUrlWithdrawResponse | ILNUrlError;
           try {
             response = await result.json();
           } catch (e) {
             log.d("", [e]);
-            const textResponse = await result.text();
-            return reject(new Error("Unable to parse message from the server: " + textResponse));
+            return reject(new Error("Unable to parse message from the server"));
           }
           log.d("response", [response]);
 
-          if (response.status === "OK") {
-            return resolve(true);
+          if (isLNUrlPayResponseError(response)) {
+            return reject(new Error(response.reason));
           }
-          return reject(new Error(response.reason!));
+
+          resolve(true);
         });
       })
 
@@ -387,16 +408,7 @@ export const lnUrl: ILNUrlModel = {
 
       const result = await fetch(callback);
       log.d("result", [JSON.stringify(result)]);
-      if (!result.ok) {
-        let error;
-        try {
-          error = await result.json();
-        } catch {
-          log.i("error", [result]);
-          throw new Error("Could not pay");
-        }
-        throw new Error(error.reason ?? "Could not pay");
-      }
+
       let response: ILNUrlPayResponse | ILNUrlPayResponseError;
       try {
         response = await result.json();
@@ -430,15 +442,15 @@ export const lnUrl: ILNUrlModel = {
         //    hash of metadata string converted to byte array in UTF-8 encoding.
         const descriptionHash = paymentRequest.descriptionHash;
         if (!descriptionHash) {
-          console.log(descriptionHash);
+          log.d("", [descriptionHash]);
           throw new Error("Invoice invalid. Description hash is missing.");
         }
 
-        log.d("metadata", [lnUrlObject.metadata]);
-        log.d("Check match", [
-          descriptionHash,
-          bytesToHexString(new sha256Hash().update(stringToUint8Array(lnUrlObject.metadata)).digest()),
-        ]);
+        const hashedMetadata = await JSHash(lnUrlObject.metadata, CONSTANTS.HashAlgorithms.sha256);
+        if (hashedMetadata === descriptionHash) {
+          log.i("Description hash does not match metdata hash!", [hashedMetadata, descriptionHash]);
+          throw new Error("Invoice description hash is invalid.");
+        }
 
         // 8. LN WALLET Verifies that amount in provided invoice equals an amount previously specified by user.
         if (paymentRequest.numMsat.notEquals(payload.msat)) {
@@ -495,19 +507,14 @@ export const lnUrl: ILNUrlModel = {
     actions.setLNUrlStr(lnurlPayUrl);
     const result = await fetch(lnurlPayUrl);
 
-    // TODO this is not spec compliant
-    if (!result.ok) {
-      let error;
-      try {
-        error = await result.json();
-      } catch {
-        log.i("error", [result]);
-        throw new Error("Could not pay");
-      }
-      throw new Error(error.reason ?? "Could not pay");
+    let lnurlObject: ILNUrlPayRequest | ILNUrlPayResponseError;
+    try {
+      lnurlObject = await result.json();
+    } catch (e) {
+      log.d("", [e]);
+      throw new Error("Unable to parse message from the server");
     }
-
-    const lnurlObject: LNUrlRequest | ILNUrlPayResponseError = await result.json();
+    log.d("response", [lnurlObject]);
 
     if (isLNUrlPayResponseError(lnurlObject)) {
       log.e("Got error")
