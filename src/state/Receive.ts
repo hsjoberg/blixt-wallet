@@ -224,6 +224,8 @@ export const receive: IReceiveModel = {
           valueFiat: null,
           valueFiatCurrency: null,
           tlvRecordName: null,
+          lightningAddress: null,
+          lud16IdentifierMimeType: null,
 
           payer: tmpData.payer,
           website: tmpData.website,
