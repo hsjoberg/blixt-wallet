@@ -414,7 +414,7 @@ export const lnUrl: ILNUrlModel = {
         response = await result.json();
       } catch (e) {
         log.d("", [e]);
-        throw new Error("Unable to parse message from the server");
+        throw new Error("Unable to parse message from the server.");
       }
       log.d("response", [response]);
 
@@ -423,6 +423,10 @@ export const lnUrl: ILNUrlModel = {
       }
 
       // 6. omitted
+
+      if (!response.pr || response.pr.length === 0) {
+        throw new Error("Response from the server did not contain an invoice.");
+      }
 
       try {
         const paymentRequest: lnrpc.PayReq = await getStoreActions().send.setPayment({
