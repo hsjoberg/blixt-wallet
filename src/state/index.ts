@@ -189,11 +189,35 @@ export const model: IStoreModel = {
     actions.setWalletCreated(await getWalletCreated());
 
     try {
-      const torEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled) ?? false;
+      let torEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled) ?? false;
       actions.setTorEnabled(torEnabled);
       if (torEnabled) {
-        actions.setTorLoading(true);
-        await NativeModules.BlixtTor.startTor(); // FIXME
+        try {
+          actions.setTorLoading(true);
+          await NativeModules.BlixtTor.startTor(); // FIXME
+        } catch (e) {
+          const restartText = "Restart app and try again with Tor";
+          const continueText = "Continue without Tor";
+
+          const result = await Alert.promiseAlert(
+            "",
+            "Tor failed to start.\nThe following error was returned:\n\n" + e.message,
+            [{
+              text: restartText,
+            }, {
+              text: continueText,
+            }]
+          );
+
+          if (result.text === restartText) {
+            NativeModules.LndMobileTools.restartApp();
+            return;
+          } else {
+            actions.setTorEnabled(false);
+            torEnabled = false;
+            actions.setTorLoading(false);
+          }
+        }
       }
 
       log.v("Running LndMobile.initialize()");

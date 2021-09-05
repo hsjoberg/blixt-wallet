@@ -30,6 +30,18 @@ class WebAlert implements AlertStatic {
     }
   }
 
+  public promiseAlert(title: string, message: string | undefined, buttons: AlertButton[]): Promise<AlertButton> {
+    return new Promise((resolve, reject) => {
+      for (const button of buttons) {
+        button.onPress = () => {
+          resolve(button);
+        }
+      }
+
+      this.alert(title, message, buttons);
+    });
+  }
+
   public prompt(
     title: string,
     message?: string,
