@@ -451,7 +451,7 @@ export const lnUrl: ILNUrlModel = {
         }
 
         const hashedMetadata = await JSHash(lnUrlObject.metadata, CONSTANTS.HashAlgorithms.sha256);
-        if (hashedMetadata === descriptionHash) {
+        if (hashedMetadata !== descriptionHash) {
           log.i("Description hash does not match metdata hash!", [hashedMetadata, descriptionHash]);
           throw new Error("Invoice description hash is invalid.");
         }
