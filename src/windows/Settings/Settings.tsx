@@ -794,34 +794,6 @@ Do you wish to proceed?`;
     navigation.navigate("LndMobileHelpCenter");
   }
 
-  // Pay to Lightning Address
-  const resolveLightningAddress = useStoreActions((store) => store.lnUrl.resolveLightningAddress);
-  const onPressPayToLightningAddress = () => {
-    Alert.prompt(
-      "Lightning Address",
-      "Enter Lightning Address (user@domain.com)",
-      [{
-        text: "Cancel",
-        style: "cancel",
-        onPress: () => {},
-      }, {
-        text: "Ok",
-        onPress: async (text) => {
-          try {
-            if (await resolveLightningAddress(text ?? "")) {
-              navigation.push("LNURL", { screen: "PayRequest" }, false);
-            }
-          } catch (error) {
-            Alert.alert("Cannot resolve Lightning Address", error.message);
-          }
-        },
-      }],
-      "plain-text",
-      undefined,
-      "email-address",
-    );
-  };
-
   // Setup demo environment
   const setupDemo = useStoreActions((store) => store.setupDemo);
 
@@ -877,12 +849,6 @@ Do you wish to proceed?`;
               </Body>
             </ListItem>
           }
-          <ListItem style={style.listItem} icon={true} onPress={onPressPayToLightningAddress}>
-            <Left><Icon style={style.icon} type="Feather" name="send" /></Left>
-            <Body>
-              <Text>Pay to a Lightning Address</Text>
-            </Body>
-          </ListItem>
 
 
           <ListItem style={style.itemHeader} itemHeader={true} first={true}>
