@@ -15,6 +15,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.Process;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -53,6 +54,10 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   private boolean lndStarted = false;
   private boolean torEnabled = false;
   private boolean torStarted = false;
+  // Keeps track of how many times we've tried to get info
+  // If this keeps going without `syncedToChain` flipping to `true`
+  // we'll close down lnd and the worker
+  private int numGetInfoCalls = 0;
 
   BlixtTor blixtTor;
 
@@ -148,135 +153,125 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
             HyperLog.v(TAG, msg.toString());
             Bundle bundle;
 
-            switch (msg.what) {
-              case LndMobileService.MSG_REGISTER_CLIENT_ACK: {
-                try {
-                  if (!lndStarted) {
-                    HyperLog.i(TAG, "Sending MSG_START_LND request");
-                    startLnd();
-                  } else {
-                    // Just exit if we reach this scenario
-                    HyperLog.w(TAG, "WARNING, Got MSG_REGISTER_CLIENT_ACK when lnd should already be started, quitting work.");
-                    unbindLndMobileService();
-                    future.set(Result.success());
-                    return;
-                  }
-                } catch (Throwable t) {
-                  t.printStackTrace();
-                }
-                break;
-              }
-              case LndMobileService.MSG_START_LND_RESULT: {
-                // TODO(hsjoberg): check for "lnd already started" error? (strictly not needed though)
-                lndStarted = true;
-                subscribeStateRequest();
-                break;
-              }
-              case LndMobileService.MSG_GRPC_STREAM_RESULT: {
-                bundle = msg.getData();
-                final byte[] response = bundle.getByteArray("response");
-                final String method = bundle.getString("method");
-
-                if (method.equals("SubscribeState")) {
+            try {
+              switch (msg.what) {
+                case LndMobileService.MSG_REGISTER_CLIENT_ACK: {
                   try {
-                    lnrpc.Stateservice.SubscribeStateResponse state = lnrpc.Stateservice.SubscribeStateResponse.parseFrom(response);
-                    lnrpc.Stateservice.WalletState currentState = state.getState();
-                    if (currentState == lnrpc.Stateservice.WalletState.LOCKED) {
-                      HyperLog.i(TAG, "Got WalletState.LOCKED");
-                      HyperLog.i(TAG, "SubscribeState reports wallet is locked. Sending UnlockWallet request");
-                      unlockWalletRequest(password);
-                    } else if (currentState == lnrpc.Stateservice.WalletState.UNLOCKED) {
-                      HyperLog.i(TAG, "Got WalletState.UNLOCKED");
-                      HyperLog.i(TAG, "Waiting for WalletState.RPC_ACTIVE");
-                    } else if (currentState == lnrpc.Stateservice.WalletState.RPC_ACTIVE) {
-                      HyperLog.i(TAG, "Got WalletState.RPC_ACTIVE");
-                      HyperLog.i(TAG, "LndMobileService reports RPC server ready. Sending GetInfo request");
-                      getInfoRequest();
+                    if (!lndStarted) {
+                      HyperLog.i(TAG, "Sending MSG_START_LND request");
+                      startLnd();
                     } else {
-                      HyperLog.w(TAG, "SubscribeState got unknown state " + currentState);
+                      // Just exit if we reach this scenario
+                      HyperLog.w(TAG, "WARNING, Got MSG_REGISTER_CLIENT_ACK when lnd should already be started, quitting work.");
+                      unbindLndMobileService();
+                      future.set(Result.success());
+                      return;
                     }
                   } catch (Throwable t) {
                     t.printStackTrace();
                   }
+                  break;
                 }
-                break;
-              }
-              case LndMobileService.MSG_GRPC_COMMAND_RESULT: {
-                bundle = msg.getData();
-                final byte[] response = bundle.getByteArray("response");
-                final String method = bundle.getString("method");
+                case LndMobileService.MSG_START_LND_RESULT: {
+                  // TODO(hsjoberg): check for "lnd already started" error? (strictly not needed though)
+                  lndStarted = true;
+                  subscribeStateRequest();
+                  break;
+                }
+                case LndMobileService.MSG_GRPC_STREAM_RESULT: {
+                  bundle = msg.getData();
+                  final byte[] response = bundle.getByteArray("response");
+                  final String method = bundle.getString("method");
 
-                if (method.equals("UnlockWallet")) {
-                  HyperLog.i(TAG, "Got MSG_GRPC_COMMAND_RESULT for UnlockWallet. Waiting for SubscribeState to send event before doing anything");
-                } else if (method.equals("GetInfo")) {
-                  try {
-                    lnrpc.Rpc.GetInfoResponse res = lnrpc.Rpc.GetInfoResponse.parseFrom(response);
-                    HyperLog.d(TAG, "GetInfo response");
-                    HyperLog.v(TAG, "blockHash:     " + res.getBlockHash());
-                    HyperLog.d(TAG, "blockHeight:   " + Integer.toString(res.getBlockHeight()));
-                    HyperLog.i(TAG, "syncedToChain: " + Boolean.toString(res.getSyncedToChain()));
-                    HyperLog.i(TAG, "syncedToGraph: " + Boolean.toString(res.getSyncedToGraph()));
+                  if (method.equals("SubscribeState")) {
+                    try {
+                      lnrpc.Stateservice.SubscribeStateResponse state = lnrpc.Stateservice.SubscribeStateResponse.parseFrom(response);
+                      lnrpc.Stateservice.WalletState currentState = state.getState();
+                      if (currentState == lnrpc.Stateservice.WalletState.LOCKED) {
+                        HyperLog.i(TAG, "Got WalletState.LOCKED");
+                        HyperLog.i(TAG, "SubscribeState reports wallet is locked. Sending UnlockWallet request");
+                        unlockWalletRequest(password);
+                      } else if (currentState == lnrpc.Stateservice.WalletState.UNLOCKED) {
+                        HyperLog.i(TAG, "Got WalletState.UNLOCKED");
+                        HyperLog.i(TAG, "Waiting for WalletState.RPC_ACTIVE");
+                      } else if (currentState == lnrpc.Stateservice.WalletState.RPC_ACTIVE) {
+                        HyperLog.i(TAG, "Got WalletState.RPC_ACTIVE");
+                        HyperLog.i(TAG, "LndMobileService reports RPC server ready. Sending GetInfo request");
+                        getInfoRequest();
+                      } else {
+                        HyperLog.w(TAG, "SubscribeState got unknown state " + currentState);
+                      }
+                    } catch (Throwable t) {
+                      t.printStackTrace();
+                    }
+                  } else {
+                    HyperLog.w(TAG, "Warning: Got unknown MSG_GRPC_STREAM_RESULT for method: " + method);
+                  }
+                  break;
+                }
+                case LndMobileService.MSG_GRPC_COMMAND_RESULT: {
+                  bundle = msg.getData();
+                  final byte[] response = bundle.getByteArray("response");
+                  final String method = bundle.getString("method");
 
-                    if (res.getSyncedToChain() == true) {
-                      HyperLog.i(TAG, "Sync is done, letting lnd work for 10s before quitting");
-                      writeLastScheduledSyncToDb();
+                  if (method.equals("UnlockWallet")) {
+                    HyperLog.i(TAG, "Got MSG_GRPC_COMMAND_RESULT for UnlockWallet. Waiting for SubscribeState to send event before doing anything");
+                  } else if (method.equals("GetInfo")) {
+                    try {
+                      lnrpc.Rpc.GetInfoResponse res = lnrpc.Rpc.GetInfoResponse.parseFrom(response);
+                      HyperLog.d(TAG, "GetInfo response");
+                      HyperLog.v(TAG, "blockHash:     " + res.getBlockHash());
+                      HyperLog.d(TAG, "blockHeight:   " + Integer.toString(res.getBlockHeight()));
+                      HyperLog.i(TAG, "syncedToChain: " + Boolean.toString(res.getSyncedToChain()));
+                      HyperLog.i(TAG, "syncedToGraph: " + Boolean.toString(res.getSyncedToGraph()));
 
-                      Handler handler = new Handler();
-                      handler.postDelayed(new Runnable() {
-                        public void run() {
-                          HyperLog.i(TAG, "Job is done. Quitting");
-                          unbindLndMobileService();
+                      if (res.getSyncedToChain() == true) {
+                        HyperLog.i(TAG, "Sync is done, letting lnd work for 10s before quitting");
+                        writeLastScheduledSyncToDb();
 
-                          if (torStarted) {
-                            if (!MainActivity.started) {
-                              HyperLog.i(TAG, "Stopping Tor");
-                              blixtTor.stopTor(new PromiseWrapper() {
-                                @Override
-                                void onSuccess(@Nullable Object value) {
-                                  HyperLog.i(TAG, "Tor stopped");
-                                }
-
-                                @Override
-                                void onFail(Throwable throwable) {
-                                  HyperLog.e(TAG, "Fail while stopping Tor", throwable);
-                                }
-                              });
-                            } else {
-                              HyperLog.w(TAG, "MainActivity was started when shutting down sync work. I will not stop Tor");
-                            }
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                          public void run() {
+                            stopWorker(true);
                           }
-
-                          new Handler().postDelayed(new Runnable() {
-                            @Override
+                        }, 10000);
+                      }
+                      else {
+                        if (++numGetInfoCalls == 10) {
+                          HyperLog.e(TAG, "GetInfo was called " + numGetInfoCalls + " times and still no syncedToChain = true. shutting down worker.");
+                          stopWorker(false);
+                        } else{
+                          HyperLog.i(TAG, "Sleeping 10s then checking again");
+                          Handler handler = new Handler();
+                          handler.postDelayed(new Runnable() {
                             public void run() {
-                              HyperLog.i(TAG, "Calling future.set(Result.success());");
-                              future.set(Result.success());
+                              try {
+                                getInfoRequest();
+                              }
+                              catch (Throwable t) {
+                                HyperLog.e(TAG, "Job handler got an exception, shutting down worker.", t);
+                                stopWorker(false);
+                              }
                             }
-                          }, 1500);
+                          }, 10000);
                         }
-                      }, 10000);
+                      }
+                    } catch (Throwable t) {
+                      t.printStackTrace();
                     }
-                    else {
-                      HyperLog.i(TAG, "Sleeping 10s then checking again");
-                      Handler handler = new Handler();
-                      handler.postDelayed(new Runnable() {
-                        public void run() {
-                          getInfoRequest();
-                        }
-                      }, 10000);
-                    }
-                  } catch (Throwable t) {
-                    t.printStackTrace();
                   }
+                  else {
+                    Log.w(TAG, "Got unexpected method in MSG_GRPC_COMMAND_RESULT from LndMobileService. " +
+                              "Expected GetInfo or UnlockWallet, got " + method);
+                  }
+                  break;
                 }
-                else {
-                  Log.w(TAG, "Got unexpected method in MSG_GRPC_COMMAND_RESULT from LndMobileService. " +
-                             "Expected GetInfo or UnlockWallet, got " + method);
-                }
-                break;
+                default:
+                  super.handleMessage(msg);
               }
-              default:
-                super.handleMessage(msg);
+            } catch (Throwable t) {
+              HyperLog.e(TAG, "Job handler got an exception, shutting down worker.", t);
+              stopWorker(false);
             }
           }
         };
@@ -291,6 +286,41 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     // Calling run instead, this is really wrong through.
     // Maybe use AsyncTask instead?
     thread.run();
+  }
+
+  private void stopWorker(boolean success) {
+    HyperLog.i(TAG, "Job is done. Quitting");
+    unbindLndMobileService();
+
+    if (torStarted) {
+      if (!MainActivity.started) {
+        HyperLog.i(TAG, "Stopping Tor");
+        // blixtTor.stopTor(new PromiseWrapper() {
+        //   @Override
+        //   void onSuccess(@Nullable Object value) {
+        //     HyperLog.i(TAG, "Tor stopped");
+        //   }
+
+        //   @Override
+        //   void onFail(Throwable throwable) {
+        //     HyperLog.e(TAG, "Fail while stopping Tor", throwable);
+        //   }
+        // });
+        future.set(success ? Result.success() : Result.failure());
+        killLndProcess();
+        return;
+      } else {
+        HyperLog.w(TAG, "MainActivity was started when shutting down sync work. I will not stop Tor");
+      }
+    }
+
+    new Handler().postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        HyperLog.i(TAG, "Calling future.set(Result.success());");
+        future.set(success ? Result.success() : Result.failure());
+      }
+    }, 1500);
   }
 
   private boolean startTor() {
@@ -325,73 +355,57 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     return true;
   }
 
-  private void startLnd() {
-    try {
-      Message message = Message.obtain(null, LndMobileService.MSG_START_LND, 0, 0);
-      message.replyTo = messenger;
-      Bundle bundle = new Bundle();
-      String params = "--lnddir=" + getApplicationContext().getFilesDir().getPath();
-      if (torEnabled) {
-        HyperLog.d(TAG, "Adding Tor params for starting lnd");
-        int socksPort = BlixtTorUtils.getSocksPort();
-        int controlPort = BlixtTorUtils.getControlPort();
-        params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
-        // params += " --tor.v3 --listen=localhost";
-        params += " --nolisten";
-      }
-      else {
-        // If Tor isn't active, make sure we aren't
-        // listening at all
-        params += " --nolisten";
-      }
-      bundle.putString("args", params);
-      message.setData(bundle);
-      messengerService.send(message);
-    } catch (RemoteException e) {
-      e.printStackTrace();
+  private void startLnd() throws RemoteException {
+    Message message = Message.obtain(null, LndMobileService.MSG_START_LND, 0, 0);
+    message.replyTo = messenger;
+    Bundle bundle = new Bundle();
+    String params = "--lnddir=" + getApplicationContext().getFilesDir().getPath();
+    if (torEnabled) {
+      HyperLog.d(TAG, "Adding Tor params for starting lnd");
+      int socksPort = BlixtTorUtils.getSocksPort();
+      int controlPort = BlixtTorUtils.getControlPort();
+      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
+      // params += " --tor.v3 --listen=localhost";
+      params += " --nolisten";
     }
+    else {
+      // If Tor isn't active, make sure we aren't
+      // listening at all
+      params += " --nolisten";
+    }
+    bundle.putString("args", params);
+    message.setData(bundle);
+    messengerService.send(message);
   }
 
-  private void subscribeStateRequest() {
-    try {
-      Message message = Message.obtain(null, LndMobileService.MSG_GRPC_STREAM_COMMAND, 0, 0);
-      message.replyTo = messenger;
-      Bundle bundle = new Bundle();
-      bundle.putString("method", "SubscribeState");
-      bundle.putByteArray("payload", lnrpc.Stateservice.SubscribeStateRequest.newBuilder().build().toByteArray());
-      message.setData(bundle);
-      messengerService.send(message);
-    } catch (RemoteException e) {
-      e.printStackTrace();
-    }
+  private void subscribeStateRequest() throws RemoteException {
+    Message message = Message.obtain(null, LndMobileService.MSG_GRPC_STREAM_COMMAND, 0, 0);
+    message.replyTo = messenger;
+    Bundle bundle = new Bundle();
+    bundle.putString("method", "SubscribeState");
+    bundle.putByteArray("payload", lnrpc.Stateservice.SubscribeStateRequest.newBuilder().build().toByteArray());
+    message.setData(bundle);
+    messengerService.send(message);
   }
 
-  private void unlockWalletRequest(String password) {
-    try {
-      Message message = Message.obtain(null, LndMobileService.MSG_GRPC_COMMAND, 0, 0);
-      message.replyTo = messenger;
-      Bundle bundle = new Bundle();
-      bundle.putString("method", "UnlockWallet");
-      bundle.putByteArray("payload", lnrpc.Walletunlocker.UnlockWalletRequest.newBuilder().setWalletPassword(ByteString.copyFromUtf8(password)).build().toByteArray());
-      message.setData(bundle);
-      messengerService.send(message);
-    } catch (RemoteException e) {
-      e.printStackTrace();
-    }
+  private void unlockWalletRequest(String password) throws RemoteException {
+    Message message = Message.obtain(null, LndMobileService.MSG_GRPC_COMMAND, 0, 0);
+    message.replyTo = messenger;
+    Bundle bundle = new Bundle();
+    bundle.putString("method", "UnlockWallet");
+    bundle.putByteArray("payload", lnrpc.Walletunlocker.UnlockWalletRequest.newBuilder().setWalletPassword(ByteString.copyFromUtf8(password)).build().toByteArray());
+    message.setData(bundle);
+    messengerService.send(message);
   }
 
-  private void getInfoRequest() {
-    try {
-      Message message = Message.obtain(null, LndMobileService.MSG_GRPC_COMMAND, 0, 0);
-      message.replyTo = messenger;
-      Bundle getinfoBundle = new Bundle();
-      getinfoBundle.putString("method", "GetInfo");
-      getinfoBundle.putByteArray("payload", lnrpc.Rpc.GetInfoRequest.newBuilder().build().toByteArray());
-      message.setData(getinfoBundle);
-      messengerService.send(message);
-    } catch (RemoteException e) {
-      e.printStackTrace();
-    }
+  private void getInfoRequest() throws RemoteException {
+    Message message = Message.obtain(null, LndMobileService.MSG_GRPC_COMMAND, 0, 0);
+    message.replyTo = messenger;
+    Bundle getinfoBundle = new Bundle();
+    getinfoBundle.putString("method", "GetInfo");
+    getinfoBundle.putByteArray("payload", lnrpc.Rpc.GetInfoRequest.newBuilder().build().toByteArray());
+    message.setData(getinfoBundle);
+    messengerService.send(message);
   }
 
   private void bindLndMobileService() {
@@ -488,6 +502,19 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       HyperLog.d(TAG, "Process " + p.processName);
       if (p.processName.equals(packageName + ":blixtLndMobile")) {
         HyperLog.d(TAG, "Found " + packageName + ":blixtLndMobile pid: " + String.valueOf(p.pid));
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean killLndProcess() {
+    String packageName = getApplicationContext().getPackageName();
+    ActivityManager am = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+    for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
+      if (p.processName.equals(packageName + ":blixtLndMobile")) {
+        HyperLog.i(TAG, "Killing " + packageName + ":blixtLndMobile with pid: " + String.valueOf(p.pid));
+        Process.killProcess(p.pid);
         return true;
       }
     }

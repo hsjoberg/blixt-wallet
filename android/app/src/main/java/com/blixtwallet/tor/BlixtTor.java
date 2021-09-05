@@ -53,7 +53,7 @@ public class BlixtTor extends ReactContextBaseJavaModule {
       try {
         onionProxyManager.setup();
         onionProxyManager.getTorInstaller().updateTorConfigCustom(
-  "RunAsDaemon 1\n" +
+          "RunAsDaemon 1\n" +
           "AvoidDiskWrites 1\n" +
           "ControlPort " + BlixtTorUtils.getControlPort() + "\n" +
           "SOCKSPort " + BlixtTorUtils.getSocksPort() + "\n" +
