@@ -1,8 +1,12 @@
 import { useWindowDimensions } from "react-native";
+import { PLATFORM } from "../utils/constants";
 
 type LayoutMode = "mobile" | "full";
 
 const evalutateMode = (width: number): LayoutMode => {
+  if (PLATFORM === "web" && WEB_DEMO) {
+    return "mobile";
+  }
   return width > 1000 ? "full" : "mobile";
 }
 
