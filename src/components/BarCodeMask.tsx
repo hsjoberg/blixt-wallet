@@ -1,6 +1,111 @@
 import React from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
-import PropTypes from 'prop-types';
+
+interface IBarcodeMaskProps {
+  width?: number | string;
+  height?: number | string;
+  edgeWidth?: number | string;
+  edgeHeight?: number | string;
+  edgeColor?: string;
+  edgeBorderWidth?: number | string;
+  showAnimatedLine?: boolean;
+  animatedLineColor?: string;
+  animatedLineHeight?: number | string;
+  lineAnimationDuration?: number | string;
+  darken?: boolean;
+};
+
+class BarcodeMask extends React.Component<IBarcodeMaskProps> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      top: new Animated.Value(10),
+      maskCenterViewHeight: 0,
+    };
+  }
+
+  _onMaskCenterViewLayoutUpdated = ({ nativeEvent }: any) => {
+    this.setState({
+      maskCenterViewHeight: nativeEvent.layout.height,
+    });
+  };
+
+  _applyMaskFrameStyle = () => {
+    return {
+      backgroundColor: this.props.darken ?? true ? "rgba(0, 0, 0, 0.6)" : "transparent",
+      flex: 1,
+    };
+  };
+
+  _renderEdge = (edgePosition: any) => {
+    const defaultStyle = {
+      width: this.props.edgeWidth,
+      height: this.props.edgeHeight,
+      borderColor: this.props.edgeColor,
+    };
+    const edgeBorderStyle = {
+      topRight: {
+        borderRightWidth: this.props.edgeBorderWidth,
+        borderTopWidth: this.props.edgeBorderWidth,
+      },
+      topLeft: {
+        borderLeftWidth: this.props.edgeBorderWidth,
+        borderTopWidth: this.props.edgeBorderWidth,
+      },
+      bottomRight: {
+        borderRightWidth: this.props.edgeBorderWidth,
+        borderBottomWidth: (this as any).props.edgeBorderWidth,
+      },
+      bottomLeft: {
+        borderLeftWidth: this.props.edgeBorderWidth,
+        borderBottomWidth: this.props.edgeBorderWidth,
+      },
+    };
+    return <View style={[defaultStyle, (styles as any)[edgePosition + 'Edge'], (edgeBorderStyle as any)[edgePosition]]} />;
+  };
+
+  render() {
+    return (
+      <View style={[styles.container]}>
+        <View
+          style={[
+            styles.finder,
+            {
+              width: this.props.width,
+              height: this.props.height,
+            },
+          ]}
+        >
+          {this._renderEdge('topLeft')}
+          {this._renderEdge('topRight')}
+          {this._renderEdge('bottomLeft')}
+          {this._renderEdge('bottomRight')}
+        </View>
+
+        <View style={styles.maskOuter}>
+          <View style={[styles.maskRow, this._applyMaskFrameStyle()]} />
+          <View
+            style={[{ height: this.props.height, width: "100%" }, styles.maskCenter]}
+            onLayout={this._onMaskCenterViewLayoutUpdated}
+          >
+            <View style={[this._applyMaskFrameStyle()]} />
+            <View
+              style={[
+                styles.maskInner,
+                {
+                  width: this.props.width,
+                  height: this.props.height,
+                },
+              ]}
+            />
+            <View style={[this._applyMaskFrameStyle()]} />
+          </View>
+          <View style={[styles.maskRow, this._applyMaskFrameStyle()]} />
+        </View>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -59,119 +164,6 @@ const styles = StyleSheet.create({
   },
 });
 
-class BarcodeMask extends React.Component {
-
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      top: new Animated.Value(10),
-      maskCenterViewHeight: 0,
-    };
-  }
-
-  _onMaskCenterViewLayoutUpdated = ({ nativeEvent }: any) => {
-    this.setState({
-      maskCenterViewHeight: nativeEvent.layout.height,
-    });
-  };
-
-  _applyMaskFrameStyle = () => {
-    let backgroundColor = '';
-    if (
-      (this.props as any).backgroundColor &&
-      String((this.props as any).backgroundColor)
-    ) {
-      backgroundColor = (this.props as any).backgroundColor;
-    }
-
-    return { backgroundColor: (this.props as any).darken ?? true ? "rgba(0, 0, 0, 0.6)" : "transparent", flex: 1 };
-  };
-
-  _renderEdge = (edgePosition: any) => {
-    const defaultStyle = {
-      width: (this.props as any).edgeWidth,
-      height: (this.props as any).edgeHeight,
-      borderColor: (this.props as any).edgeColor,
-    };
-    const edgeBorderStyle = {
-      topRight: {
-        borderRightWidth: (this as any).props.edgeBorderWidth,
-        borderTopWidth: (this as any).props.edgeBorderWidth,
-      },
-      topLeft: {
-        borderLeftWidth: (this as any).props.edgeBorderWidth,
-        borderTopWidth: (this as any).props.edgeBorderWidth,
-      },
-      bottomRight: {
-        borderRightWidth: (this as any).props.edgeBorderWidth,
-        borderBottomWidth: (this as any).props.edgeBorderWidth,
-      },
-      bottomLeft: {
-        borderLeftWidth: (this as any).props.edgeBorderWidth,
-        borderBottomWidth: (this as any).props.edgeBorderWidth,
-      },
-    };
-    return <View style={[defaultStyle, (styles as any)[edgePosition + 'Edge'], (edgeBorderStyle as any)[edgePosition]]} />;
-  };
-
-  render() {
-    return (
-      <View style={[styles.container]}>
-        <View
-          style={[
-            styles.finder,
-            {
-              width: (this.props as any).width,
-              height: (this.props as any).height,
-            },
-          ]}
-        >
-          {this._renderEdge('topLeft')}
-          {this._renderEdge('topRight')}
-          {this._renderEdge('bottomLeft')}
-          {this._renderEdge('bottomRight')}
-        </View>
-
-        <View style={styles.maskOuter}>
-          <View style={[styles.maskRow, this._applyMaskFrameStyle()]} />
-          <View
-            style={[{ height: (this.props as any).height, width: "100%" }, styles.maskCenter]}
-            onLayout={this._onMaskCenterViewLayoutUpdated}
-          >
-            <View style={[this._applyMaskFrameStyle()]} />
-            <View
-              style={[
-                styles.maskInner,
-                {
-                  width: (this.props as any).width,
-                  height: (this.props as any).height,
-                },
-              ]}
-            />
-            <View style={[this._applyMaskFrameStyle()]} />
-          </View>
-          <View style={[styles.maskRow, this._applyMaskFrameStyle()]} />
-        </View>
-      </View>
-    );
-  }
-
-}
-
-const propTypes = {
-  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  edgeWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  edgeHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  edgeColor: PropTypes.string,
-  edgeBorderWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  showAnimatedLine: PropTypes.bool,
-  animatedLineColor: PropTypes.string,
-  animatedLineHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  lineAnimationDuration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  backgroundColor: PropTypes.string,
-};
-
 const defaultProps = {
   width: 280,
   height: 230,
@@ -186,7 +178,6 @@ const defaultProps = {
   backgroundColor: 'rgba(0, 0, 0, 0.6)'
 };
 
-(BarcodeMask as any).propTypes = propTypes;
 (BarcodeMask as any).defaultProps = defaultProps;
 
 export default BarcodeMask;

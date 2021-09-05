@@ -133,13 +133,17 @@ function Overview({ navigation }: IOverviewProps) {
               return;
             }
             setRefreshing(true);
-            await Promise.all([
-              getBalance(),
-              getFiatRate(),
-              checkOpenTransactions(),
-              getInfo(),
-              timeout(1000),
-            ]);
+            try {
+              await Promise.all([
+                getBalance(),
+                getFiatRate(),
+                checkOpenTransactions(),
+                getInfo(),
+                timeout(1000),
+              ]);
+            } catch (error) {
+              toast(error.message, 10, "warning");
+            }
             setRefreshing(false);
           }}
         />

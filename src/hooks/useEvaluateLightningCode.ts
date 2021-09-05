@@ -55,17 +55,17 @@ export default function useEvaluateLightningCode() {
         else {
           console.log("Unknown lnurl request: " + type);
           Alert.alert(`Unsupported LNURL request: ${type}`, undefined,
-            [{ text: "OK", onPress: () => {
-              // setCameraActive(true);
-              // setScanning(true);
-            }}]
+            [{ text: "OK", onPress: () => {}}]
           );
           lnUrlClear();
         }
-      } catch (e) { }
+      } catch (e) {
+        Alert.alert(`${e.message}`, undefined,
+          [{ text: "OK", onPress: () => {}}]
+        );
+      }
     } else if (code.includes("@")) {
       if (await resolveLightningAddress(code)) {
-        // gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
         return "LNURLPayRequest";
       }
     }

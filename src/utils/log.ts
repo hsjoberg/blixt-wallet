@@ -3,6 +3,8 @@ import { NativeModules } from "react-native";
 import { Debug } from "./build";
 import { PLATFORM } from "./constants";
 
+const isNativePlatform = ["android", "ios"].includes(PLATFORM);
+
 const log = (tag?: string) => {
   tag = tag ?? "";
 
@@ -11,7 +13,7 @@ const log = (tag?: string) => {
       if (Debug) {
         const msg = fixMessage(message, data);
         console.debug(`${tag}: ${msg}`);
-        if (["android", "ios"].includes(PLATFORM)) {
+        if (isNativePlatform) {
           NativeModules.LndMobileTools.log("v", tag!, msg);
         }
       }
@@ -21,7 +23,7 @@ const log = (tag?: string) => {
       if (Debug) {
         const msg = fixMessage(message, data);
         console.debug(`${tag}: ${msg}`);
-        if (["android", "ios"].includes(PLATFORM)) {
+        if (isNativePlatform) {
           NativeModules.LndMobileTools.log("d", tag!, msg);
         }
       }
@@ -30,7 +32,7 @@ const log = (tag?: string) => {
     i: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       console.log(`${tag}: ${msg}`)
-      if (["android", "ios"].includes(PLATFORM)) {
+      if (isNativePlatform) {
         NativeModules.LndMobileTools.log("i", tag!, msg);
       }
     },
@@ -38,7 +40,7 @@ const log = (tag?: string) => {
     w: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       console.warn(`${tag}: ${msg}`)
-      if (["android", "ios"].includes(PLATFORM)) {
+      if (isNativePlatform) {
         NativeModules.LndMobileTools.log("w", tag!, msg);
       }
     },
@@ -46,7 +48,7 @@ const log = (tag?: string) => {
     e: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       console.error(`${tag}: ${msg}`)
-      if (["android", "ios"].includes(PLATFORM)) {
+      if (isNativePlatform) {
         NativeModules.LndMobileTools.log("e", tag!, msg);
       }
     },
