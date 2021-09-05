@@ -203,8 +203,19 @@ export default function Settings({ navigation }: ISettingsProps) {
     }
   };
 
-  // Copy log
-  const copyLog = async () => {
+  // Copy App log
+  const copyAppLog = async () => {
+    try {
+      const path = await NativeModules.LndMobileTools.saveLogs();
+      toast("Copied app log file to: " + path, 20000, "warning");
+    } catch (e) {
+      console.error(e);
+      toast("Error copying app log file.", undefined, "danger");
+    }
+  };
+
+  // Copy lnd log
+  const copyLndLog = async () => {
     try {
       await NativeModules.LndMobileTools.copyLndLog();
       toast("Copied lnd log file.", undefined, "warning");
@@ -1031,7 +1042,7 @@ Do you wish to proceed?`;
             <ListItem style={style.listItem} icon={true} onPress={onSetBitcoinNodePress} onLongPress={onSetBitcoinNodeLongPress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
               <Body>
-                <Text>Set Bitcoin Node</Text>
+                <Text>Bitcoin Node</Text>
                 <Text note={true}>
                   Set Bitcoin node (BIP157) to connect to
                 </Text>
@@ -1111,10 +1122,18 @@ Do you wish to proceed?`;
             <Body><Text>About</Text></Body>
           </ListItem>
           {PLATFORM === "android" &&
-            <ListItem style={style.listItem} icon={true} onPress={() => copyLog()}>
+            <ListItem style={style.listItem} icon={true} onPress={() => copyAppLog()}>
               <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
               <Body>
-                <Text>Copy log to local storage</Text>
+                <Text>Copy app log to local storage</Text>
+              </Body>
+            </ListItem>
+          }
+          {PLATFORM === "android" &&
+            <ListItem style={style.listItem} icon={true} onPress={() => copyLndLog()}>
+              <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
+              <Body>
+                <Text>Copy lnd log to local storage</Text>
                 <Text note={true}>Reached from /sdcard/BlixtWallet</Text>
               </Body>
             </ListItem>
