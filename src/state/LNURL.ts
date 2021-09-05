@@ -403,7 +403,7 @@ export const lnUrl: ILNUrlModel = {
       let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?"
       callback = `${callback}${firstSeparator}amount=${payload.msat.toString()}`;
       if (payload.comment) {
-        callback = `${callback}&comment=${payload.comment}`;
+        callback = `${callback}&comment=${encodeURIComponent(payload.comment)}`;
       }
 
       const result = await fetch(callback);
