@@ -1,5 +1,5 @@
-import React from "react";
-import { Dimensions, PixelRatio, StyleSheet, TouchableOpacity, View, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { Dimensions, PixelRatio, StyleSheet, TouchableOpacity, View, ScrollView, LayoutAnimation } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text } from "native-base";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
@@ -16,6 +16,7 @@ export default function Drawer() {
   const promptLightningAddress = usePromptLightningAddress();
   const evaluateLightningCode = useEvaluateLightningCode();
   const layoutMode = useLayoutMode();
+  const [expandAdvanced, setExpandAdvanced] = useState(false);
 
   const goToScreen = (screen: string, options: any = undefined, delayDrawerClose = true) => {
     setTimeout(
@@ -64,6 +65,11 @@ export default function Drawer() {
     );
     navigation.dispatch(DrawerActions.closeDrawer);
   }
+
+  const toggleAdvanced = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setExpandAdvanced(!expandAdvanced);
+  };
 
   return (
     <View style={style.drawerContainer}>
@@ -131,6 +137,28 @@ export default function Drawer() {
               <Text style={style.menuItemText}>Lightning Channels</Text>
             </View>
           </TouchableOpacity>
+
+          <TouchableOpacity onPress={toggleAdvanced}>
+            <View style={style.advancedExpand}>
+              <Text note style={style.advancedExpandText}>Advanced</Text>
+              <Icon style={style.advancedExpandIcon} type="AntDesign" name={expandAdvanced ? "up" : "down"} />
+            </View>
+          </TouchableOpacity>
+
+          <View style={[{height: expandAdvanced ? "auto" : 0 }, style.advanced]}>
+            <TouchableOpacity onPress={() => goToScreen("KeysendExperiment")}>
+              <View style={style.menuItem}>
+                <Icon style={[style.menuItemIcon, { fontSize: 25 }]} color={blixtTheme.dark} type="FontAwesome" name="send" />
+                <Text style={style.menuItemText}>Keysend Experiment</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => goToScreen("KeysendExperiment")}>
+              <View style={style.menuItem}>
+                <Icon style={[style.menuItemIcon, { fontSize: 25 }]} color={blixtTheme.dark} type="FontAwesome" name="send" />
+                <Text style={style.menuItemText}>Keysend Experiment</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
       <View style={style.bottom}>
@@ -172,6 +200,27 @@ const style = StyleSheet.create({
     marginHorizontal: 19,
     marginBottom: 11,
     borderRadius: 12,
+  },
+  advancedExpand: {
+    padding: 13,
+    marginHorizontal: 19,
+    marginTop: -9,
+    marginBottom: 3,
+    borderRadius: 12,
+    flexDirection:"row",
+
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  advancedExpandText: {
+  },
+  advancedExpandIcon: {
+    fontSize: 16,
+    marginLeft: 5,
+    marginTop: 3,
+  },
+  advanced: {
+    overflow: "hidden",
   },
   menuItemIcon: {
     width: 32,

@@ -239,7 +239,7 @@ export default function Main() {
 
       <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} options={animationDisabled} />
       <RootStack.Screen name="KeysendTest" component={KeysendTest} options={animationDisabled} />
-      <RootStack.Screen name="KeysendExperiment" component={KeysendExperiment} options={animationDisabled} />
+      <RootStack.Screen name="KeysendExperiment" component={KeysendExperiment} options={horizontalTransition} />
       <RootStack.Screen name="DEV_CommandsX" component={DEV_Commands} options={animationDisabled} />
     </RootStack.Navigator>
   );

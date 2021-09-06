@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Button, Icon, H1, Input, Text, Spinner } from "native-base";
-import { View, KeyboardAvoidingView } from "react-native";
+import { View } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 import { sendKeysendPaymentV2 } from "../../lndmobile/index";
 import Long from "long";
 import { toast, hexToUint8Array } from "../../utils";
@@ -26,6 +28,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   const [pubkeyInput, setPubkeyInput] = useState("");
   const [routehintsInput, setRoutehintsInput] = useState("");
   const [satInput, setSatInput] = useState("");
+  const [messageInput, setMessageInput] = useState("");
 
   const syncTransaction = useStoreActions((store) => store.transaction.syncTransaction);
 
@@ -39,7 +42,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Bitcoin",
+      headerTitle: "Keysend",
       headerShown: true,
       headerRight: () => {
         return (
@@ -66,6 +69,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         await generateSecureRandom(32),
         JSON.parse(routehintsInput || "[]"),
         name,
+        messageInput,
       );
       console.log(result);
       toast("Payment successful");
@@ -163,6 +167,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
           setRoutehintsInput(json.routehints);
           console.log(data);
         } catch (e) {
+          setPubkeyInput(data);
           console.log(e.message);
         }
       },
@@ -193,7 +198,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         />
       )
     }, {
-      key: "",
+      key: "routehints",
       title: `Route hints`,
       component: (
         <Input
@@ -203,11 +208,22 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
           placeholder="Route hints"
         />
       )
+    }, {
+      key: "message",
+      title: `Message`,
+      component: (
+        <Input
+          testID="input-chatmessage"
+          value={messageInput}
+          onChangeText={setMessageInput}
+          placeholder="Enter a chat message here"
+        />
+      )
     },
   ];
 
   return (
-    <KeyboardAvoidingView behavior="height" style={{ flex: 1, backgroundColor: blixtTheme.dark }}>
+    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: blixtTheme.dark }}>
       <View style={{ alignItems: "center" }}>
         <H1 style={{ marginTop: 10, marginBottom: 5 }}>Keysend - scan to pay</H1>
         {routehints.length > 0  &&
@@ -254,6 +270,6 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
           </Button>
         ]}
       />
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 }

@@ -193,12 +193,12 @@ export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlv
 };
 
 
-export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvRecordName?: string | null): Promise<lnrpc.Payment> => {
+export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvRecordName?: string | null, multiPath?: boolean): Promise<lnrpc.Payment> => {
   const options: routerrpc.ISendPaymentRequest = {
     paymentRequest,
     noInflightUpdates: true,
     timeoutSeconds: 60,
-    maxParts: 2,
+    maxParts: multiPath ? 2 : undefined,
     feeLimitMsat: Long.fromValue(50000),
     cltvLimit: 0,
   };
@@ -242,7 +242,7 @@ export const decodeSendPaymentV2Result = (data: string): lnrpc.Payment => {
 };
 
 
-export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.IRouteHint[], tlvRecordNameStr: string): Promise<lnrpc.Payment> => {
+export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.IRouteHint[], tlvRecordNameStr: string, tlvRecordWhatSatMessageStr: string): Promise<lnrpc.Payment> => {
   const options: routerrpc.ISendPaymentRequest = {
     dest: hexToUint8Array(destinationPubKey),
     amt: sat,
@@ -264,6 +264,9 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
   };
   if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {
     options.destCustomRecords![TLV_RECORD_NAME] = unicodeStringToUint8Array(tlvRecordNameStr);
+  }
+  if (tlvRecordWhatSatMessageStr && tlvRecordWhatSatMessageStr.length > 0) {
+    options.destCustomRecords![TLV_WHATSAT_MESSAGE] = unicodeStringToUint8Array(tlvRecordWhatSatMessageStr);
   }
 
   return new Promise(async (resolve, reject) => {

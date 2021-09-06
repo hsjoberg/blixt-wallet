@@ -8,8 +8,8 @@ import { ITransaction } from "../storage/database/transaction";
 import { lnrpc, invoicesrpc } from "../../proto/proto";
 import { setupDescription } from "../utils/NameDesc";
 import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
-import { timeout, uint8ArrayToString, decodeTLVRecord, bytesToHexString, toast } from "../utils";
-import { TLV_RECORD_NAME } from "../utils/constants";
+import { timeout, decodeTLVRecord, bytesToHexString, toast, uint8ArrayToUnicodeString } from "../utils";
+import { TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 
@@ -249,14 +249,24 @@ export const receive: IReceiveModel = {
           transaction.valueFiat = valFiat;
           transaction.valueFiatCurrency = fiatUnit;
 
+          let tlvRecordWhatSatMessage: string | undefined = undefined;
           // Loop through known TLV records
           for (const htlc of invoice.htlcs) {
             if (htlc.customRecords) {
               for (const [customRecordKey, customRecordValue] of Object.entries(htlc.customRecords)) {
-                if (decodeTLVRecord(customRecordKey) === TLV_RECORD_NAME) {
-                  const tlvRecordName = uint8ArrayToString(customRecordValue);
+                const decodedTLVRecord = decodeTLVRecord(customRecordKey);
+                if (decodedTLVRecord === TLV_RECORD_NAME) {
+                  const tlvRecordName = uint8ArrayToUnicodeString(customRecordValue);
                   log.i("Found TLV_RECORD_NAME 🎉", [tlvRecordName]);
                   transaction.tlvRecordName = tlvRecordName;
+                } else if (decodedTLVRecord === TLV_WHATSAT_MESSAGE) {
+                  tlvRecordWhatSatMessage = uint8ArrayToUnicodeString(customRecordValue);
+                  log.i("Found TLV_WHATSAT_MESSAGE 🎉", [tlvRecordWhatSatMessage]);
+                  if (invoice.isKeysend) {
+                    transaction.description = tlvRecordWhatSatMessage;
+                  }
+                } else {
+                  log.i("Unknown TLV record", [decodedTLVRecord]);
                 }
               }
             }
@@ -266,6 +276,9 @@ export const receive: IReceiveModel = {
           let message = `Received ${formatBitcoin(invoice.amtPaidSat, bitcoinUnit)} (${valFiat.toFixed(2)} ${fiatUnit})`;
           if (transaction.tlvRecordName ?? transaction.payer ?? transaction.website) {
             message += ` from ${transaction.tlvRecordName ?? transaction.payer ?? transaction.website}`;
+          }
+          if (tlvRecordWhatSatMessage) {
+            message += ` with the message: ` + tlvRecordWhatSatMessage;
           }
           getStoreActions().notificationManager.localNotification({ message, importance: "high" });
 
