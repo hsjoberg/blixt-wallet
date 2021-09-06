@@ -137,78 +137,80 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   };
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={{ flex:1 }} enabled={PLATFORM === "ios"}>
-      <Card style={style.card}>
-        <WebView
-          containerStyle={{ opacity: showWebview ? 1 : 0 }}
-          ref={webview}
-          onMessage={onMessage}
-          userAgent="BlixtWallet/alpha (WebLN)"
-          source={{ uri: url }}
-          onLoadStart={(e) => {
-            console.log("onLoadStart");
-            setJsInjected(false)
-            setWeblnSupportDetected(false);
-          }}
-          onLoadProgress={(e) => {
-            if (!jsInjected && e.nativeEvent.progress > 0.65) {
-              webview.current!.injectJavaScript(injectJs());
-              setJsInjected(true);
-              console.log("Injected");
-            }
-          }}
-          onLoadEnd={() => requestAnimationFrame(() => setShowWebview(true))}
-          onNavigationStateChange={(e) => {
-            if (canGoBack !== (e.url !== initialUrl)) {
-              setCanGoBack(e.url !== initialUrl);
-            }
-            setUrl(e.url);
-            setUrlInput(e.url);
-            if (textInput.current) {
-              textInput.current.blur();
-            }
-          }}
-          onError={(e) => console.log(e)}
-          style={style.webview}
-        />
-        <View style={style.urlNav}>
-          <TouchableOpacity onPress={closeBrowser}>
-            <Icon style={style.closeButton} type="AntDesign" name="close" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setUrl(INITIAL_URL)} onLongPress={() => onLongPressHome()}>
-            <Icon style={style.listButton} type="FontAwesome5" name="home" />
-          </TouchableOpacity>
-          {PLATFORM === "ios" &&
-            <TouchableOpacity onPress={() => webview.current?.goBack()}>
-              <Icon style={style.goBackButton} type="AntDesign" name="arrowleft" />
-            </TouchableOpacity>
-          }
-          <View style={[style.weblnIndicator, { backgroundColor: weblnSupportDetected ? "blue" : "transparent"}]}></View>
-          <TextInput
-            ref={textInput}
-            style={style.urlInput}
-            value={urlInput}
-            autoCapitalize="none"
-            onChangeText={(text) => {
-              setUrlInput(text);
+    <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} enabled={PLATFORM === "ios"}>
+      <BlurModal useModalComponent={false} nomargin goBackByClickingOutside={false}>
+        <Card style={style.card}>
+          <WebView
+            containerStyle={{ opacity: showWebview ? 1 : 0 }}
+            ref={webview}
+            onMessage={onMessage}
+            userAgent="BlixtWallet/alpha (WebLN)"
+            source={{ uri: url }}
+            onLoadStart={(e) => {
+              console.log("onLoadStart");
+              setJsInjected(false)
+              setWeblnSupportDetected(false);
             }}
-            onSubmitEditing={(e) => {
-              if (!e.nativeEvent.text.startsWith("https://") && !e.nativeEvent.text.startsWith("http://")) {
-                e.nativeEvent.text = "https://" + e.nativeEvent.text;
+            onLoadProgress={(e) => {
+              if (!jsInjected && e.nativeEvent.progress > 0.65) {
+                webview.current!.injectJavaScript(injectJs());
+                setJsInjected(true);
+                console.log("Injected");
               }
-              setUrl(e.nativeEvent.text);
             }}
-            keyboardType="url"
-            placeholder="Type URL here..."
+            onLoadEnd={() => requestAnimationFrame(() => setShowWebview(true))}
+            onNavigationStateChange={(e) => {
+              if (canGoBack !== (e.url !== initialUrl)) {
+                setCanGoBack(e.url !== initialUrl);
+              }
+              setUrl(e.url);
+              setUrlInput(e.url);
+              if (textInput.current) {
+                textInput.current.blur();
+              }
+            }}
+            onError={(e) => console.log(e)}
+            style={style.webview}
           />
-          <TouchableOpacity onPress={() => webview.current!.reload()}>
-            <Icon style={style.goButton} type="MaterialCommunityIcons" name="sync" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setUrl(urlInput)}>
-            <Icon style={style.goButton} type="AntDesign" name="arrowright" />
-          </TouchableOpacity>
-        </View>
-      </Card>
+          <View style={style.urlNav}>
+            <TouchableOpacity onPress={closeBrowser}>
+              <Icon style={style.closeButton} type="AntDesign" name="close" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setUrl(INITIAL_URL)} onLongPress={() => onLongPressHome()}>
+              <Icon style={style.listButton} type="FontAwesome5" name="home" />
+            </TouchableOpacity>
+            {PLATFORM === "ios" &&
+              <TouchableOpacity onPress={() => webview.current?.goBack()}>
+                <Icon style={style.goBackButton} type="AntDesign" name="arrowleft" />
+              </TouchableOpacity>
+            }
+            <View style={[style.weblnIndicator, { backgroundColor: weblnSupportDetected ? "blue" : "transparent"}]}></View>
+            <TextInput
+              ref={textInput}
+              style={style.urlInput}
+              value={urlInput}
+              autoCapitalize="none"
+              onChangeText={(text) => {
+                setUrlInput(text);
+              }}
+              onSubmitEditing={(e) => {
+                if (!e.nativeEvent.text.startsWith("https://") && !e.nativeEvent.text.startsWith("http://")) {
+                  e.nativeEvent.text = "https://" + e.nativeEvent.text;
+                }
+                setUrl(e.nativeEvent.text);
+              }}
+              keyboardType="url"
+              placeholder="Type URL here..."
+            />
+            <TouchableOpacity onPress={() => webview.current!.reload()}>
+              <Icon style={style.goButton} type="MaterialCommunityIcons" name="sync" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setUrl(urlInput)}>
+              <Icon style={style.goButton} type="AntDesign" name="arrowright" />
+            </TouchableOpacity>
+          </View>
+        </Card>
+      </BlurModal>
     </KeyboardAvoidingView>
   );
 }
@@ -230,6 +232,7 @@ const style = StyleSheet.create({
     paddingRight: 8,
     paddingLeft: 8,
     flex: 1,
+    height: "100%",
   },
   webview: {
     width: "100%",

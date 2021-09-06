@@ -58,9 +58,10 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   inner: {
+    flex: 1,
     margin: 12,
     padding: 0,
     justifyContent: "flex-start",
     flexDirection: "column",
   },
-})
+});
