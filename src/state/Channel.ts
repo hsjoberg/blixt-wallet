@@ -8,7 +8,7 @@ import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
 import { IChannelEvent, getChannelEvents, createChannelEvent } from "../storage/database/channel-events";
-import { bytesToHexString, uint8ArrayToString } from "../utils";
+import { bytesToHexString, timeout } from "../utils";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 
 import logger from "./../utils/log";
@@ -43,7 +43,7 @@ export interface ISetAliasPayload {
 
 export interface IChannelModel {
   setupCachedBalance: Thunk<IChannelModel>;
-  initialize: Thunk<IChannelModel>;
+  initialize: Thunk<IChannelModel, undefined, IStoreInjections>;
 
   setupChannelUpdateSubscriptions: Thunk<IChannelModel, void, IStoreInjections, IStoreModel>;
   getChannels: Thunk<IChannelModel, void, IStoreInjections>;
@@ -84,7 +84,7 @@ export const channel: IChannelModel = {
     log.d("setupCachedBalance() done");
   }),
 
-  initialize: thunk(async (actions, _, { getState }) => {
+  initialize: thunk(async (actions, _, { getState, injections }) => {
     if (getState().channelUpdateSubscriptionStarted) {
       log.d("Channel.initialize() called when subscription already started");
       return;
@@ -96,6 +96,33 @@ export const channel: IChannelModel = {
       actions.getChannelEvents(),
       actions.getBalance(),
     ]);
+
+    // Temporary fix as the Blixt IP has changed:
+    const channels = getState().channels;
+    for (const channel of channels) {
+      if (channel.remotePubkey === "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb") {
+        let tries = 25;
+        while (tries-- !== 0) {
+          log.i("Found channel with Blixt node, trying to connect via the new IP address");
+          try {
+            await injections.lndMobile.index.connectPeer(
+              "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb",
+              "176.9.17.121:9735"
+            );
+            break;
+          } catch (error) {
+            if (!error.message.includes("already connected to peer")) {
+              log.i("Failed to connect to Blixt node", [error]);
+              log.i("Trying again...");
+              await timeout(5000);
+            } else {
+              break;
+            }
+          }
+        }
+        break;
+      }
+    }
 
     return true;
   }),
