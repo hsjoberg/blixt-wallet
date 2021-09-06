@@ -28,6 +28,7 @@ export interface ILightningServices {
   lnbits: ILightningService;
   lnsms: ILightningService;
   lnurlpaychat: ILightningService;
+  taprootwatch: ILightningService;
   lntxbot: ILightningService;
   pollofeed: ILightningService;
   lngames: ILightningService;
@@ -145,6 +146,10 @@ export const lightningServices: ILightningServices = {
     title: "lnurl-pay chat",
     image: "data:image/webp;base64,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",
   },
+  taprootwatch: {
+    title: "taproot.watch",
+    image: "data:image/webp;base64,UklGRv4DAABXRUJQVlA4WAoAAAAQAAAA4AAA4AAAQUxQSMABAAABkHNtt2k7c+9r27Y724xROalvFdtmZ9u2U9m2bVvzB8y5v1vd7IiYALL937Ki6eVnyb7O1mCWdlu7Zd9rtuTvZ7dumd8pVzfnhuVvfrPV/3y1rMhdK9ehZxnFK13cNPIf/I6RfDPEUZ26M4zmuVpdjFnfGM8//ZwVidrAkP7b66VGyn1G9Ui0EilPGNdHWSpkPGJkLwQqYFxnbPe4iHNawejOE9f5Lzw/uwoLfsn43nEXZcxghGeISmeIP0VKWogRzxMU+wmkVyFy+jHKveUcg2mvISXpK0zsKqUt49xZynqgJgsx9wN1XIgfA33WsdnzK6nZw2m2/2z/2f6z/Wf7z/bf/738SZHh/RGo884yaAtQx0noTKAGS2kNVL0U7/cw/XSUQmthWkpiy2FqlON7B6QTJLgJpM6SHB5AdNVDEvX8CdDfNiR7B0DbSHjCG3iehUij6j/gfK8j+VPAmWgoQKOhmWuQhubEv7jMdSYlJ6Lypb9BWpq17yB5W0ua5h/F4+/JWNLVbegjMF40kb5xU14A8XJsAKkc0P8cCOe6B5LaZvmo428t7v6RPikmKR+Zlj1+qlX3SkvzJ9v/LewDVlA4IBgCAAAQGQCdASrhAOEAPxGIvVc/qiajpdMoU/AiCWVu33Pu4I783udDehvbgc8s+sAb1KAOghUoA50JZCLhKaxuAuFhpk1Kc3DZfhNYj9aGWKkKeFIup0P4GHR4wVViMwMNhnwNy7ix8iZOFQR7rc2NV48qJzpPYbl2iTtnWRpxI3jsj/esyOb3FL4qW/l9d9q8kwMNAFjj0eF/jzjOdwVFxtwwQtcxLiJShn4uAycqkkWUxOSTu2NGJHy7TJm+4CvvA3N1vQI5cyOGriFSgDoIVKAEAAD+8PgAABD/RcpsnyaM6UMwN3Vi1e/DxBlExRaZZ3K/VRrz2IHBsre3vyf40X3yL0QrgZ7SMM0Cre1L1Aq3tTPJ8zDnVKzUSOD2TkZP+CXL5Mz1rgm6//w3PdOPBiRRZko2gmj+BBYrIY7O4nwcB6Pn91U7vuqgliLfItnNqYcs4jNLwsRQOnLi4d6YLU0f2YqTDfOqe2UEd6kzhYkB4UDS3BSjNW40U4eZSUm6ZnIaJo11PepxCeoN2FeYjQKeho5HEE8Gq/7wL30zuXf2SYaTOKsx1ZuMYwUa/s+3VK6UeM1kuzON3WFNZ1y4HY5Y4NOgp8z1ACAA5RGLmpe6MOQ9iVRqb/9gx6qn5b5E+pDT4aHR2zOTBcmFSa2ugqddgRxBWNlTyWZSwNF6UbV+dI+jL2Sums29roSC0bX7JgAAAAAAAAAAAA==",
+  },
 };
 
 export function identifyService(pubkey: string | null, description: string, website: string | null): keyof typeof lightningServices | null {
@@ -194,8 +199,11 @@ export function identifyService(pubkey: string | null, description: string, webs
   if (pubkey === "03c2abfa93eacec04721c019644584424aab2ba4dff3ac9bdab4e9c97007491dda" || website?.includes("tippin.me")) {
     return "tippin";
   }
-  if (pubkey === "021ae2986faa33f82ef4106f9ac2265f9fd9fb2061ffd6028ab6782ebfa3d8bc1f" || website?.includes("chat.blixtwallet.com")) {
+  if (website?.includes("chat.blixtwallet.com")) {
     return "lnurlpaychat";
+  }
+  if (website?.includes("taproot.watch")) {
+    return "taprootwatch";
   }
   if ([
     "0390b5d4492dc2f5318e5233ab2cebf6d48914881a33ef6a9c6bcdbb433ad986d0", // LND-01
