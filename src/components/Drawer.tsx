@@ -152,12 +152,6 @@ export default function Drawer() {
                 <Text style={style.menuItemText}>Keysend Experiment</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => goToScreen("KeysendExperiment")}>
-              <View style={style.menuItem}>
-                <Icon style={[style.menuItemIcon, { fontSize: 25 }]} color={blixtTheme.dark} type="FontAwesome" name="send" />
-                <Text style={style.menuItemText}>Keysend Experiment</Text>
-              </View>
-            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
