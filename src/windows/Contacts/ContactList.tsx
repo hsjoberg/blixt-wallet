@@ -1,9 +1,10 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet, View, LayoutAnimation, Pressable, StatusBar } from "react-native";
-import { Icon, Card, CardItem, Text, Button, Header, Item, Input } from "native-base";
+import { StyleSheet, View, LayoutAnimation, Pressable, StatusBar, EmitterSubscription } from "react-native";
+import { Icon, Card, CardItem, Text, Button, Header, Item, Input, CheckBox } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/core";
 import Long from "long";
+import Color from "color";
 
 import { ContactsStackParamList } from "./index";
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -22,6 +23,7 @@ import ButtonSpinner from "../../components/ButtonSpinner";
 import { LndMobileEventEmitter } from "../../utils/event-listener";
 import { decodeInvoiceResult } from "../../lndmobile/wallet";
 import { lnrpc } from "../../../proto/proto";
+import { Chain } from "../../utils/build";
 
 interface IContactProps {
   contact: IContact;
@@ -41,9 +43,12 @@ function Contact({ contact }: IContactProps) {
   const [loadingWithdraw, setLoadingWithdraw] = useState(false); 
 
   useEffect(() => {
+    let listener: EmitterSubscription | null = null;
+
     if (contact.lnUrlWithdraw && !currentBalance) {
       console.log("Subscribing to invoice inside Contact " + contact.domain + " " + contact.note);
-      LndMobileEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
+      listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
+        console.log("Contact component: SubscribeInvoices");
         try {
           if (e.data === "") {
             return;
@@ -52,12 +57,16 @@ function Contact({ contact }: IContactProps) {
           const invoice = decodeInvoiceResult(e.data);
           if (invoice.state === lnrpc.Invoice.InvoiceState.SETTLED) {
             console.log("Contact: An invoice was settled, querying balance");
+            console.log("Syncing from subscription");
             await syncBalance();
           }
         } catch (e) {
-          console.log("From Contact" + e);
+          console.log("From Contact component" + e);
         }
       });
+    }
+    return () => {
+      listener?.remove();
     }
   }, [currentBalance !== undefined]);
 
@@ -359,7 +368,7 @@ const style = StyleSheet.create({
     paddingBottom: 25,
   },
   searchHeader: {
-    backgroundColor: blixtTheme.primary,
+    backgroundColor: Chain === "mainnet" ? blixtTheme.primary : Color(blixtTheme.lightGray).darken(0.30).hex(),
     paddingTop: 0,
     borderBottomWidth: 0,
     marginHorizontal: 8,
