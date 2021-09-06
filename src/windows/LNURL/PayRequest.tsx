@@ -13,6 +13,7 @@ import { Alert } from "../../utils/alert";
 import PaymentCard from "./PayRequest/PaymentCard";
 import PaymentDone from "./PayRequest/PaymentDone";
 import style from "./PayRequest/style";
+import { PLATFORM } from "../../utils/constants";
 
 export interface IPayRequestProps {
   navigation: StackNavigationProp<LnUrlStackParamList>;
@@ -22,6 +23,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   const [preimage, setPreimage] = useState<Uint8Array | undefined>();
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
   const lnUrlObject = useStoreState((store) => store.lnUrl.lnUrlObject);
+  const payRequestResponse = useStoreState((store) => store.lnUrl.payRequestResponse);
   const domain = getDomainFromURL(lnurlStr ?? "");
   const syncContact = useStoreActions((actions) => actions.contacts.syncContact);
   const getContactByLightningAddress = useStoreState((actions) => actions.contacts.getContactByLightningAddress);
@@ -85,10 +87,6 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   };
 
   const promptLnUrlPayContact = () => {
-    if (lnUrlObject.disposable ?? true) {
-      return;
-    }
-
     if (getContactByLnUrlPay(lnurlStr ?? "")) {
       Alert.alert("",`Payment code for ${domain} is in your contact list.`);
     } else {
@@ -115,45 +113,49 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     }
   };
 
+  const disposableIsFalse = /*lnUrlObject.disposable === false ||*/ (preimage && payRequestResponse?.disposable) === false;
+
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior="height">
-      <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
-        {__DEV__ &&
-          <View style={{ position: "absolute", top: -30, right: 0 }}>
-            <Button small={true} onPress={viewMetadata}>
-              <Text style={{ fontSize: 7.5 }}>View metadata</Text>
-            </Button>
-          </View>
-        }
-        <Card style={style.card}>
-          <CardItem style={style.cardItem}>
-            <Body>
-              <View style={style.headerContainer}>
-                <H1 style={style.header}>
-                  {!preimage ? "Pay" : "Paid"}
-                </H1>
-                {lightningAddress?.[1] !== undefined && (
-                  <View style={style.contactContainer}>
-                    <TouchableOpacity onPress={onPressLightningAddress}><Text style={style.lightningAddress}>{lightningAddress[1]}</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={promptLightningAddressContact}>
-                      <Icon style={style.contactAddIcon} type="AntDesign" name={getContactByLightningAddress(lightningAddress[1]) !== undefined ? "check" : "adduser"} />
-                    </TouchableOpacity>
-                  </View>
-                )}
-                {lightningAddress?.[1] === undefined && lnUrlObject.disposable === false && (
-                  <View style={style.contactContainer}>
-                    <TouchableOpacity onPress={promptLnUrlPayContact}>
-                      <Icon style={style.contactAddIcon} type="AntDesign" name={getContactByLnUrlPay(lnurlStr ?? "") ? "check" : "pluscircle"} />
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-              {!preimage && <PaymentCard onPaid={paidCallback} lnUrlObject={lnUrlObject} />}
-              {preimage && <PaymentDone preimage={preimage} />}
-            </Body>
-          </CardItem>
-        </Card>
-      </Blurmodal>
-    </KeyboardAvoidingView>
+    <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
+      <KeyboardAvoidingView behavior={PLATFORM === "android" ? "height" : "padding"} keyboardVerticalOffset={60}>
+        <View style={style.keyboardContainer}>
+          {__DEV__ &&
+            <View style={{ position: "absolute", top: 50, right: 0, zIndex: 10000 }}>
+              <Button small={true} onPress={viewMetadata}>
+                <Text style={{ fontSize: 7.5 }}>View metadata</Text>
+              </Button>
+            </View>
+          }
+          <Card style={style.card}>
+            <CardItem style={style.cardItem}>
+              <Body style={{ flex: 1, height: "100%" }}>
+                <View style={style.headerContainer}>
+                  <H1 style={style.header}>
+                    {!preimage ? "Pay" : "Paid"}
+                  </H1>
+                  {lightningAddress?.[1] !== undefined && (
+                    <View style={style.contactContainer}>
+                      <TouchableOpacity onPress={onPressLightningAddress}><Text style={style.lightningAddress}>{lightningAddress[1]}</Text></TouchableOpacity>
+                      <TouchableOpacity onPress={promptLightningAddressContact}>
+                        <Icon style={style.contactAddIcon} type="AntDesign" name={getContactByLightningAddress(lightningAddress[1]) !== undefined ? "check" : "adduser"} />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  {lightningAddress?.[1] === undefined && disposableIsFalse && (
+                    <View style={style.contactContainer}>
+                      <TouchableOpacity onPress={promptLnUrlPayContact}>
+                        <Icon style={style.contactAddIcon} type="AntDesign" name={getContactByLnUrlPay(lnurlStr ?? "") ? "check" : "pluscircle"} />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
+                {!preimage && <PaymentCard onPaid={paidCallback} lnUrlObject={lnUrlObject} />}
+                {preimage && <PaymentDone preimage={preimage} />}
+              </Body>
+            </CardItem>
+          </Card>
+        </View>
+      </KeyboardAvoidingView>
+    </Blurmodal>
   );
 }

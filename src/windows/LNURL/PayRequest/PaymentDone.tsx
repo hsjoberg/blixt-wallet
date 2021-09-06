@@ -45,7 +45,7 @@ export default function LNURLPayRequestDone({ preimage }: IPayRequestDoneProps) 
 
   return (
     <>
-      <View style={style.contentContainer}>
+      {/* <View style={style.contentContainer}> */}
         {payRequestResponse.successAction?.tag === "message" &&
           <>
             <Text>
@@ -89,13 +89,13 @@ export default function LNURLPayRequestDone({ preimage }: IPayRequestDoneProps) 
             </Text>
           </>
         }
-        {!payRequestResponse.successAction && (
-          <View style={{ flex: 1, width: "100%", justifyContent: "center", alignItems:"center" }}>
+        {/* {!payRequestResponse.successAction && ( */}
+          <View style={{ width: "100%", flexGrow: 1, justifyContent: "center", alignItems: "center" }}>
             <Done />
           </View>
-        )}
-      </View>
-      <View style={[style.actionBar, { justifyContent: undefined }]}>
+        {/* )} */}
+      {/* </View> */}
+      <View style={[style.actionBar, { }]}>
         <Button onPress={cancel} small={true}>
           <Text style={{ fontSize:10 }}>Done</Text>
         </Button>

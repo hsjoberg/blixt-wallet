@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Vibration, Keyboard, Image } from "react-native";
-import { Text, View, Button, Input } from "native-base";
+import { Text, View, Button, Input, CheckBox } from "native-base";
 import Long from "long";
 import { useNavigation } from "@react-navigation/core";
 
@@ -8,11 +8,14 @@ import { useStoreState, useStoreActions } from "../../../state/store";
 import { toast, getDomainFromURL, hexToUint8Array } from "../../../utils";
 import { ILNUrlPayRequest, ILNUrlPayRequestMetadata, ILNUrlPayResponse } from "../../../state/LNURL";
 import ScaledImage from "../../../components/ScaledImage";
-import { formatBitcoin, convertBitcoinToFiat, unitToSatoshi } from "../../../utils/bitcoin-units";
+import { formatBitcoin, convertBitcoinToFiat, unitToSatoshi, BitcoinUnits } from "../../../utils/bitcoin-units";
 import ButtonSpinner from "../../../components/ButtonSpinner";
 import style from "./style";
 import useLightningReadyToSend from "../../../hooks/useLightingReadyToSend";
-import { getLightningService, identifyService, lightningServices } from "../../../utils/lightning-services";
+import { identifyService, lightningServices } from "../../../utils/lightning-services";
+import { Alert } from "../../../utils/alert";
+import { setupDescription } from "../../../utils/NameDesc";
+import { PLATFORM } from "../../../utils/constants";
 
 export interface IPaymentCardProps {
   onPaid: (preimage: Uint8Array) => void;
@@ -34,7 +37,6 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
-  const sendPaymentOld = useStoreActions((actions) => actions.send.sendPaymentOld);
   const getBalance = useStoreActions((actions) => actions.channel.getBalance);
   const [comment, setComment] = useState<string | undefined>();
   const minSpendable = lnUrlObject?.minSendable;
@@ -42,6 +44,8 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
   const commentAllowed = lnUrlObject.commentAllowed ?? undefined;
   const [sendAmountMSat, setSendAmountMSat] = useState(minSpendable === maxSpendable ? lnUrlObject?.minSendable : 0);
   const domain = getDomainFromURL(lnurlStr ?? "");
+  const name = useStoreState((store) => store.settings.name);
+  const [sendName, setSendName] = useState<boolean | undefined>(lnUrlObject.commentAllowed !== undefined ? false : undefined);
 
   const metadata = JSON.parse(lnUrlObject.metadata) as ILNUrlPayRequestMetadata;
 
@@ -55,9 +59,11 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
     return m[0]?.toLowerCase?.() === "text/long-desc";
   })?.[1];
 
-  const image = metadata.filter((m, i) => {
+  const imageData = metadata.filter((m, i) => {
     return m[0]?.toLowerCase?.()?.startsWith("image");
-  })?.[0]?.[1];
+  })?.[0];
+  const image = imageData?.[1];
+  const imageMimeType = imageData?.[0];
 
   const lightningAddress = metadata?.find((item) => item[0]?.toLowerCase?.() === "text/identifier" || item[0]?.toLowerCase?.() === "text/email");
 
@@ -72,38 +78,31 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
   };
 
   const onPressPay = async () => {
+    if (commentAllowed && sendName && !comment) {
+      Alert.alert("", "You must provide a comment if you choose to include your name to this payment");
+      return;
+    }
+
     try {
+      let c = comment;
+      if (c && c.length > 0 && sendName && name) {
+        c = setupDescription(c, name);
+      }
+
       Keyboard.dismiss();
       setDoRequestLoading(true);
       const paymentRequestResponse = await doPayRequest({
         msat: sendAmountMSat,
-        comment,
+        comment: c,
         lightningAddress: lightningAddress?.[1] ?? null,
         lud16IdentifierMimeType: lightningAddress?.[0] ?? null,
         metadataTextPlain: text ?? "Invoice description missing",
       });
       console.log(paymentRequestResponse);
+;
+      const response = await sendPayment();
+      const preimage = hexToUint8Array(response.paymentPreimage);
 
-      let preimage: Uint8Array;
-
-      if (multiPathPaymentsEnabled) {
-        try {
-          console.log("Paying with MPP enabled");
-          const response = await sendPayment();
-          preimage = hexToUint8Array(response.paymentPreimage);
-        } catch (e) {
-          console.log("Didn't work. Trying without instead");
-          console.log(e);
-          console.log("Paying with MPP disabled");
-          const response = await sendPaymentOld();
-          preimage = response.paymentPreimage;
-        }
-      }
-      else {
-        console.log("Paying with MPP disabled");
-        const response = await sendPaymentOld();
-        preimage = response.paymentPreimage;
-      }
       await getBalance();
       Vibration.vibrate(32);
       onPaid(preimage);
@@ -134,7 +133,7 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
 
   return (
     <>
-      <View style={style.contentContainer}>
+      {/* <View style={style.contentContainer}> */}
         <View style={{ flexDirection: "row" }}>
           {service &&
             <Image
@@ -158,7 +157,7 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
           {longDesc || text}
         </Text>
         <Text style={{ marginBottom: 28 }}>
-          <Text style={style.boldText}>Price:</Text>{"\n"}
+          <Text style={style.boldText}>Amount:</Text>{"\n"}
           {minSpendableFormatted} ({minSpendableFiatFormatted})
           {(minSpendable !== maxSpendable) &&
             <Text> to {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
@@ -169,23 +168,27 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
             <Text>
               Comment to <Text style={style.boldText}>{domain}</Text> (max {commentAllowed} letters):
             </Text>
-            <View style={{ flexDirection:"row" }}>
+            <View style={{ flexDirection: "row", width: "100%" }}>
               <Input onChangeText={setComment} keyboardType="default" style={[style.input, { marginTop: 9, marginBottom: 16 }]} />
+            </View>
+            <View style={{ flexDirection: "row", marginBottom: 32 }}>
+              <CheckBox checked={sendName} onPress={() => setSendName(!sendName)} style={{ marginRight: 18 }} />
+              <Text style={{ fontSize: 13, marginTop: PLATFORM === "ios" ? 2 : 0 }} onPress={() => setSendName(!sendName)}>Send my name together with this comment</Text>
             </View>
           </>
         }
         {image &&
           <ScaledImage
-            uri={"data:image/png;base64," + image}
-            height={185}
+            uri={`data:${imageMimeType},` + image}
+            height={160}
             style={{
               alignSelf: "center",
-              marginBottom: 28,
+              marginBottom: 32,
             }}
           />
         }
-      </View>
-      <View style={style.actionBar}>
+      {/* </View> */}
+      <View style={[style.actionBar, { flexGrow: 1 }]}>
         <Button
           success
           disabled={!lightningReadyToSend || doRequestLoading || !(sendAmountMSat > 0)}
@@ -204,7 +207,7 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
             onChangeText={onChangeBitcoinInput}
             keyboardType="numeric"
             returnKeyType="done"
-            placeholder={`Input amount`}
+            placeholder={`Input amount (${BitcoinUnits[bitcoinUnit].nice})`}
             style={style.input}
           />
         }

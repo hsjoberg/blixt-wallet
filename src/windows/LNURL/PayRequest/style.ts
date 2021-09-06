@@ -4,14 +4,19 @@ import { StyleSheet } from "react-native";
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
 
 export default StyleSheet.create({
+  keyboardContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+  },
   card: {
     padding: 5,
     width: "100%",
-    height: "auto",
-    minHeight: "55%",
+    minHeight: "60%",
+    flexDirection: "row",
   },
   cardItem: {
-    flexGrow: 1,
+    flex: 1,
   },
   headerContainer: {
     display: "flex",
@@ -25,8 +30,9 @@ export default StyleSheet.create({
     fontWeight: "bold",
   },
   contentContainer: {
-    flexGrow: 1,
+    flex: 1,
     width: "100%",
+    height: "100%",
   },
   contactContainer: {
     flexDirection: "row",
@@ -41,7 +47,7 @@ export default StyleSheet.create({
   },
   actionBar: {
     width: "100%",
-    alignItems:"flex-end",
+    alignItems: "flex-end",
     justifyContent: "space-between",
     flexDirection: "row-reverse",
   },
@@ -57,8 +63,6 @@ export default StyleSheet.create({
     fontSize: 18,
   },
   input: {
-    flexGrow: 1,
-    flexBasis: "auto",
     height: 28,
     fontSize: 13,
     backgroundColor: Color(blixtTheme.gray).lighten(0.28).hex(),
