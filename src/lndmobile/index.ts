@@ -3,8 +3,8 @@ import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { lnrpc, routerrpc, invoicesrpc } from "../../proto/proto";
 import Long from "long";
 import sha from "sha.js";
-import { stringToUint8Array, hexToUint8Array, decodeTLVRecord } from "../utils";
-import { TLV_RECORD_NAME } from "../utils/constants";
+import { stringToUint8Array, hexToUint8Array, decodeTLVRecord, unicodeStringToUint8Array } from "../utils";
+import { TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 const { LndMobile, LndMobileTools } = NativeModules;
 
 /**
@@ -176,7 +176,7 @@ export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlv
   };
   if (tlvRecordName && tlvRecordName.length > 0) {
     options.destCustomRecords = {
-      [TLV_RECORD_NAME]: stringToUint8Array(tlvRecordName),
+      [TLV_RECORD_NAME]: unicodeStringToUint8Array(tlvRecordName),
     }
   }
   if (amount) {
@@ -204,7 +204,7 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvReco
   };
   if (tlvRecordName && tlvRecordName.length > 0) {
     options.destCustomRecords = {
-      [TLV_RECORD_NAME]: stringToUint8Array(tlvRecordName),
+      [TLV_RECORD_NAME]: unicodeStringToUint8Array(tlvRecordName),
     }
   }
   if (amount) {
@@ -263,7 +263,7 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
     cltvLimit: 0,
   };
   if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {
-    options.destCustomRecords![TLV_RECORD_NAME] = stringToUint8Array(tlvRecordNameStr);
+    options.destCustomRecords![TLV_RECORD_NAME] = unicodeStringToUint8Array(tlvRecordNameStr);
   }
 
   return new Promise(async (resolve, reject) => {
