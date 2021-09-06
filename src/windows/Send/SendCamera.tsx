@@ -148,8 +148,8 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
         <BarcodeMask
           showAnimatedLine={false}
           edgeColor={blixtTheme.primary}
-          width={smallScreen ? 265 : 270}
-          height={smallScreen ? 265 : 270}
+          width={265}
+          height={265}
         />
         <Icon type="Ionicons" name="at" style={sendStyle.lightningAddress} onPress={onLightningAddressClick} />
         <Icon type="Ionicons" name="camera-reverse" style={sendStyle.swapCamera} onPress={onCameraSwitchClick} />
