@@ -231,8 +231,7 @@ export const lnUrl: ILNUrlModel = {
       actions.setType(type);
       return type;
     } catch (e) {
-      log.e("Error reading LNURL", [e]);
-      return "error";
+      throw e;
     }
   }),
 
