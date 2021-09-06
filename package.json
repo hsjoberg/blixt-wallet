@@ -35,7 +35,7 @@
     "web:bundle-for-blixt-site": "rm -r dist || true && WEB_DEMO=1 NODE_ENV=production webpack"
   },
   "dependencies": {
-    "@babel/core": "^7.15.0",
+    "@babel/core": "^7.15.5",
     "@babel/runtime": "^7.15.3",
     "@react-native-community/async-storage": "1.12.1",
     "@react-native-community/clipboard": "1.5.1",
@@ -92,7 +92,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-keychain": "4.0.5",
     "react-native-linear-gradient": "2.5.6",
-    "react-native-maps": "^0.28.0",
+    "react-native-maps": "^0.29.3",
     "react-native-material-menu": "^2.0.0",
     "react-native-modal": "^13.0.0",
     "react-native-pager-view": "^5.4.1",
@@ -141,7 +141,7 @@
     "@types/crypto-js": "^4.0.2",
     "@types/jest": "^27.0.1",
     "@types/long": "4.0.1",
-    "@types/react": "^17.0.18",
+    "@types/react": "^17.0.20",
     "@types/react-native": "^0.64.13",
     "@types/react-native-push-notification": "^7.3.2",
     "@types/react-native-sqlite-storage": "^5.0.1",
