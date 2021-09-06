@@ -23,7 +23,6 @@ export interface ISendConfirmationProps {
 export default function SendConfirmation({ navigation, route }: ISendConfirmationProps) {
   const [amountEditable, setAmountEditable] = useState(false);
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
-  const sendPaymentOld = useStoreActions((actions) => actions.send.sendPaymentOld);
   const getBalance = useStoreActions((actions) => actions.channel.getBalance);
   const nodeInfo = useStoreState((store) => store.send.remoteNodeInfo);
   const paymentRequest = useStoreState((store) => store.send.paymentRequest);
@@ -86,26 +85,9 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
         ? { amount: Long.fromValue(unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit)) }
         : undefined;
 
-      let preimage: Uint8Array;
+      const response = await sendPayment(payload);
+      const preimage = hexToUint8Array(response.paymentPreimage);
 
-      if (multiPathPaymentsEnabled) {
-        try {
-          console.log("Paying with MPP enabled");
-          const response = await sendPayment(payload);
-          preimage = hexToUint8Array(response.paymentPreimage);
-        } catch (e) {
-          console.log("Didn't work. Trying without instead");
-          console.log(e);
-          console.log("Paying with MPP disabled");
-          const response = await sendPaymentOld(payload);
-          preimage = response.paymentPreimage;
-        }
-      }
-      else {
-        console.log("Paying with MPP disabled");
-        const response = await sendPaymentOld(payload);
-        preimage = response.paymentPreimage;
-      }
       await getBalance();
       Vibration.vibrate(32);
       navigation.replace("SendDone", { preimage, callback });

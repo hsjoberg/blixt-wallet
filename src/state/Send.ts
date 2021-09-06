@@ -42,7 +42,6 @@ export interface ISendModel {
   clear: Action<ISendModel>;
   setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections, {}, Promise<lnrpc.PayReq>>;
   sendPayment: Thunk<ISendModel, IModelSendPaymentPayload | void, IStoreInjections, IStoreModel, Promise<lnrpc.Payment>>;
-  sendPaymentOld: Thunk<ISendModel, IModelSendPaymentPayload | void, IStoreInjections, IStoreModel, Promise<lnrpc.SendResponse>>;
 
   setPaymentRequestStr: Action<ISendModel, PaymentRequest>;
   setPaymentRequest: Action<ISendModel, lnrpc.PayReq>;
@@ -126,37 +125,18 @@ export const send: ISendModel = {
     }
 
     const name = getStoreState().settings.name;
+    const multiPathPaymentsEnabled = getStoreState().settings.multiPathPaymentsEnabled;
 
-    // Attempt to pay invoice
-    // First try with TLV and then without
-    const sendPaymentResult = await (async () => {
-      if (name && (paymentRequest.features["8"] || paymentRequest.features["9"])) {
-        log.i("Attempting to pay with TLV");
-        const tlvAttempt = await sendPaymentV2Sync(
-          paymentRequestStr,
-          payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
-          name
-        );
-        log.i("First status", [tlvAttempt.status]);
-        if (tlvAttempt.status === lnrpc.Payment.PaymentStatus.SUCCEEDED) {
-          return tlvAttempt;
-        }
-        log.i("Didn't succeed. Trying without TLV");
-      }
-
-      log.i("Attempting to pay");
-      const nonTlvAttempt = await sendPaymentV2Sync(
-        paymentRequestStr,
-        payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
-        undefined
-      );
-      log.i("Second status", [nonTlvAttempt.status]);
-
-      if (!(nonTlvAttempt.status === lnrpc.Payment.PaymentStatus.SUCCEEDED)) {
-        throw new Error(`${translatePaymentFailureReason(nonTlvAttempt.failureReason)}`);
-      }
-      return nonTlvAttempt;
-    })();
+    const sendPaymentResult = await sendPaymentV2Sync(
+      paymentRequestStr,
+      payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
+      name,
+      multiPathPaymentsEnabled,
+    );
+    log.i("status", [sendPaymentResult.status, sendPaymentResult.failureReason]);
+    if (sendPaymentResult.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
+      throw new Error(`${translatePaymentFailureReason(sendPaymentResult.failureReason)}`);
+    }
 
     const extraData: IExtraData = getState().extraData || {
       payer: null,
@@ -201,140 +181,6 @@ export const send: ISendModel = {
       lnurlPayResponse: extraData.lnurlPayResponse,
 
       hops: sendPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
-        chanId: hop.chanId ?? null,
-        chanCapacity: hop.chanCapacity ?? null,
-        amtToForward: hop.amtToForward || Long.fromInt(0),
-        amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-        fee: hop.fee || Long.fromInt(0),
-        feeMsat: hop.feeMsat || Long.fromInt(0),
-        expiry: hop.expiry || null,
-        pubKey: hop.pubKey || null,
-      })) ?? [],
-    };
-
-    log.d("ITransaction", [transaction]);
-    await dispatch.transaction.syncTransaction(transaction);
-
-    if (getStoreState().settings.transactionGeolocationEnabled) {
-      try {
-        log.d("Syncing geolocation for transaction");
-        if (PLATFORM === "ios") {
-          if (await ReactNativePermissions.check(ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE) === "denied") {
-            log.d("Requesting geolocation permission");
-            const r = await ReactNativePermissions.request(ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-            if (r !== "granted") {
-              throw new Error(`Got "${r}" when requesting Geolocation permission`);
-            }
-          }
-        }
-
-        const coords = await getGeolocation();
-        transaction.locationLong = coords.longitude;
-        transaction.locationLat = coords.latitude;
-        await dispatch.transaction.syncTransaction(transaction);
-      } catch (error) {
-        log.i(`Error getting geolocation for transaction: ${JSON.stringify(error)}`, [error]);
-      }
-    }
-
-    return sendPaymentResult;
-  }),
-
-  sendPaymentOld: thunk(async (_, payload, { getState, dispatch, injections, getStoreState }) => {
-    const sendPaymentSync = injections.lndMobile.index.sendPaymentSync;
-    const paymentRequestStr = getState().paymentRequestStr;
-    const paymentRequest = getState().paymentRequest;
-    const remoteNodeInfo = getState().remoteNodeInfo;
-
-    if (paymentRequestStr === undefined || paymentRequest === undefined) {
-      throw new Error("Payment information missing");
-    }
-
-    // If this is a zero sum
-    // invoice, hack the value in
-    if (!paymentRequest.numSatoshis && payload && payload.amount) {
-      paymentRequest.numSatoshis = payload.amount;
-      paymentRequest.numMsat = payload.amount.mul(1000);
-    }
-
-    const name = getStoreState().settings.name;
-
-    // Attempt to pay invoice
-    // First try with TLV and then without
-    const sendPaymentResult = await (async () => {
-      if (name && (paymentRequest.features["8"] || paymentRequest.features["9"])) {
-        log.i("Attempting to pay with TLV");
-        const tlvAttempt = await sendPaymentSync(
-          paymentRequestStr,
-          payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
-          name
-        );
-        if (!(tlvAttempt.paymentError && tlvAttempt.paymentError.length > 0)) {
-          return tlvAttempt;
-        }
-        log.i("Didn't succeed. Trying without TLV");
-      }
-
-      log.i("Attempting to pay");
-      const nonTlvAttempt = await sendPaymentSync(
-        paymentRequestStr,
-        payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
-        undefined
-      );
-
-      if (nonTlvAttempt.paymentError && nonTlvAttempt.paymentError.length > 0) {
-        throw new Error(nonTlvAttempt.paymentError);
-      }
-      return nonTlvAttempt;
-    })();
-
-    const extraData: IExtraData = getState().extraData || {
-      payer: null,
-      type: "NORMAL",
-      website: null,
-      lnurlPayResponse: null,
-      lightningAddress: null,
-      lud16IdentifierMimeType: null,
-      lnurlPayTextPlain: null,
-    };
-
-    const transaction: ITransaction = {
-      date: paymentRequest.timestamp,
-      description: extraData.lnurlPayTextPlain ?? paymentRequest.description,
-      expire: paymentRequest.expiry,
-      paymentRequest: paymentRequestStr,
-      remotePubkey: paymentRequest.destination,
-      rHash: paymentRequest.paymentHash,
-      status: "SETTLED",
-      value: paymentRequest.numSatoshis.neg(),
-      valueMsat: paymentRequest.numSatoshis.neg().mul(1000),
-      amtPaidSat: paymentRequest.numSatoshis.neg(),
-      amtPaidMsat: paymentRequest.numSatoshis.neg().mul(1000),
-      fee:
-        (sendPaymentResult.paymentRoute &&
-        sendPaymentResult.paymentRoute.totalFees) || Long.fromInt(0),
-      feeMsat:
-        (sendPaymentResult.paymentRoute &&
-        sendPaymentResult.paymentRoute.totalFeesMsat) || Long.fromInt(0),
-      nodeAliasCached: (remoteNodeInfo && remoteNodeInfo.node && remoteNodeInfo.node.alias) || null,
-      payer: extraData.payer,
-      valueUSD: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.fiatRates.USD.last),
-      valueFiat: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.currentRate),
-      valueFiatCurrency: getStoreState().settings.fiatUnit,
-      locationLong: null,
-      locationLat: null,
-      tlvRecordName: null,
-      type: extraData.type,
-      website: extraData.website,
-      identifiedService: identifyService(paymentRequest.destination, paymentRequest.description, extraData.website),
-      //note: // TODO: Why wasn't this added
-      lightningAddress: extraData.lightningAddress ?? null,
-      lud16IdentifierMimeType: extraData.lud16IdentifierMimeType ?? null,
-
-      preimage: sendPaymentResult.paymentPreimage,
-      lnurlPayResponse: extraData.lnurlPayResponse,
-
-      hops: sendPaymentResult.paymentRoute!.hops!.map((hop) => ({
         chanId: hop.chanId ?? null,
         chanCapacity: hop.chanCapacity ?? null,
         amtToForward: hop.amtToForward || Long.fromInt(0),
