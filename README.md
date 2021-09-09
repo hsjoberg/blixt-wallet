@@ -27,11 +27,10 @@ powered by lnd and Neutrino SPV.
 - [x] [WebLN](https://webln.dev/) browser
 - [x] Support for [Multi-Part Payments (MPP)](https://lightning.engineering/posts/2020-05-07-mpp/)
 - [x] Integrated Tor support
+- [x] Sending to Lightning Address
 - [ ] Automatically open channels when needed ([LSP](https://github.com/hsjoberg/dunder-lsp))
+- [ ] Receiving via Lightning Address by [Lightning Box](https://github.com/hsjoberg/lightning-box)
 - [ ] NFC
-- [ ] WatchTower
-- [ ] URL Payments
-- [ ] Pay to Username
 
 ## Known Bugs
 
