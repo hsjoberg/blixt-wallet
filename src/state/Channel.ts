@@ -1,4 +1,4 @@
-import { DeviceEventEmitter, NativeModules } from "react-native";
+import { NativeModules } from "react-native";
 import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import Long from "long";
 import * as base64 from "base64-js";

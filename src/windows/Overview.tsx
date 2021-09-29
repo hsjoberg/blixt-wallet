@@ -3,12 +3,11 @@ import { Platform, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, Re
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import LinearGradient from "react-native-linear-gradient";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Color from "color";
-import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
@@ -22,7 +21,6 @@ import { Chain } from "../utils/build";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
-import Send from "./Send";
 import { PLATFORM } from "../utils/constants";
 import { fontFactor, fontFactorNormalized, zoomed } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
@@ -102,7 +100,7 @@ function Overview({ navigation }: IOverviewProps) {
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [
       (!preferFiat && bitcoinUnit === "satoshi" ? 37 : 40) * 1.3 * Math.min(PixelRatio.getFontScale(), 1.4),
-      (!preferFiat && bitcoinUnit === "satoshi" ? 38 : 42),
+      (!preferFiat && bitcoinUnit === "satoshi" ? 38.5 : 42),
     ],
     extrapolate: "clamp",
   });
@@ -208,9 +206,9 @@ function Overview({ navigation }: IOverviewProps) {
           onScroll={transactionListOnScroll}
           testID="TX_LIST"
         >
-          {onboardingState === "SEND_ONCHAIN" &&
+          {/* {onboardingState === "SEND_ONCHAIN" && */}
             <SendOnChain bitcoinAddress={bitcoinAddress} />
-          }
+          {/* } */}
           {onboardingState === "DO_BACKUP" &&
             <DoBackup />
           }
@@ -297,6 +295,9 @@ interface ISendOnChain {
   bitcoinAddress?: string;
 }
 const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
+  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const currentRate = useStoreState((store) => store.fiat.currentRate);
+
   const onQrPress = () => {
     Clipboard.setString(bitcoinAddress!);
     toast("Bitcoin address copied to clipboard");
@@ -305,15 +306,18 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
   return (
     <Card>
       <CardItem>
-        <View style={{ flex: 1, flexDirection: "row", justifyContent:"space-between" }}>
+        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ width: "53%", justifyContent:"center", paddingRight: 4 }}>
             <Text style={{ fontSize: 15 * fontFactor }}>
               Welcome to Blixt Wallet!{"\n\n"}
-              <Text style={{ fontSize: 13 * fontFactor }}>To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
-              A channel will automatically be opened for you.</Text>
+              <Text style={{ fontSize: 13 * fontFactor }}>
+                To get started, send on-chain to the bitcoin address to the right.{"\n\n"}
+                Send at least 22000 satoshi ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).{"\n\n"}
+                A channel will automatically be opened for you.
+              </Text>
             </Text>
           </View>
-          <View>
+          <View style={{ justifyContent: "center" }}>
             {bitcoinAddress
               ? <QrCode onPress={onQrPress} data={bitcoinAddress?.toUpperCase() ?? " "} size={135} border={10} />
               : <View style={{ width: 135 + 10 + 9, height: 135 + 10 + 8, justifyContent: "center" }}>
@@ -536,25 +540,3 @@ export function DrawerComponent() {
   )
 }
 export default DrawerComponent;
-
-// const TopTabs = createMaterialTopTabNavigator();
-// export default function TopTabsComponent() {
-//   return (
-//     <TopTabs.Navigator
-//       springVelocityScale={1.4}
-//       sceneContainerStyle={{
-//         backgroundColor: "transparent"
-//       }}
-//       screenOptions={{
-//         lazy: true,
-//         tabBarStyle: {
-//           display: "none",
-//           height: 0,
-//         },
-//       }}
-//     >
-//       <TopTabs.Screen name="OverviewX" component={DrawerComponent} />
-//       <TopTabs.Screen name="SendX" component={Send} initialParams={{ viaSwipe: true }} />
-//     </TopTabs.Navigator>
-//   );
-// }

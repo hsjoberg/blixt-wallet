@@ -3,6 +3,7 @@ import Long from "long";
 
 import { IStoreModel } from "../state";
 import { setItem, StorageItem } from "../storage/app";
+import { createContact, IContact } from "../storage/database/contact";
 import { createTransaction, ITransaction } from "../storage/database/transaction";
 import { ILightningServices } from "./lightning-services";
 
@@ -11,6 +12,9 @@ export default async function SetupBlixtDemo(
   dispatch: Dispatch<IStoreModel>,
   createDbTransactions: boolean = false,
 ) {
+  dispatch.transaction.setTransactions([]);
+  dispatch.contacts.setContacts([]);
+
   interface IDemoInvoice {
     description: string;
     value: number;
@@ -59,8 +63,6 @@ export default async function SetupBlixtDemo(
       }
     }
   }
-
-  dispatch.transaction.setTransactions([]);
 
   await createDemoTransactions([{
     value: 150,
@@ -136,4 +138,71 @@ export default async function SetupBlixtDemo(
   await setItem(StorageItem.onboardingState, "DONE");
   dispatch.setOnboardingState("DONE");
   dispatch.channel.setBalance(Long.fromNumber(439758));
+
+
+  const createDemoContacts = async (contacts: IContact[]) => {
+    for (const contact of contacts) {
+      if (createDbTransactions) {
+        await createContact(db, contact);
+      } else {
+        dispatch.contacts.addContact(contact);
+      }
+    }
+  };
+
+  await createDemoContacts([{
+    id: 1,
+    domain: "lnmarkets.com",
+    type: "SERVICE",
+    lnUrlPay: "https://lntxbot.com/.well-known/lnurlp/hsjoberg",
+    lnUrlWithdraw: "https://456",
+    lightningAddress: null,
+    lud16IdentifierMimeType: null,
+    note: "Account on LNMarkets",
+  }, {
+    id: 2,
+    domain: "lntxbot.com",
+    type: "PERSON",
+    lnUrlPay: "https://789",
+    lnUrlWithdraw: null,
+    lightningAddress: "fiatjaf@lntxbot.com",
+    lud16IdentifierMimeType: "text/identifier",
+    note: "fiatjaf on Telegram",
+  }, {
+    id: 3,
+    domain: "blixtwallet.com",
+    type: "PERSON",
+    lnUrlPay: "https://789",
+    lnUrlWithdraw: null,
+    lightningAddress: "hampus@blixtwallet.com",
+    lud16IdentifierMimeType: "text/identifier",
+    note: "Hampus's Lightning Box",
+  }, {
+    id: 4,
+    domain: "kollider.com",
+    type: "SERVICE",
+    lnUrlPay: "https://789",
+    lnUrlWithdraw: "https://0123",
+    lightningAddress: null,
+    lud16IdentifierMimeType: null,
+    note: "Account on Kollider",
+  }, {
+    id: 5,
+    domain: "zbd.gg",
+    type: "PERSON",
+    lnUrlPay: "https://789",
+    lnUrlWithdraw: null,
+    lightningAddress: "coco@zbd.gg",
+    lud16IdentifierMimeType: "text/identifier",
+    note: "coco on Zebedee",
+  }, {
+    id: 6,
+    domain: "lntxbot.com",
+    type: "PERSON",
+    lnUrlPay: "https://123",
+    lnUrlWithdraw: null,
+    lightningAddress: "hsjoberg@lntxbot.com",
+    lud16IdentifierMimeType: "text/identifier",
+    note: "hsjoberg on Telegram",
+  }]);
 };

@@ -129,7 +129,7 @@ class LndMobile: RCTEventEmitter {
     }
   }
 
-  @objc(startLnd:rejecter:)
+  @objc(stopLnd:rejecter:)
   func stopLnd(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject:@escaping RCTPromiseRejectBlock) {
     Lnd.shared.stopLnd() { (data, error) in
       if let e = error {

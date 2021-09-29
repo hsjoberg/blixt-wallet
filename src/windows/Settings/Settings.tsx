@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid, Linking, Platform } from "react-native";
+import { StyleSheet, NativeModules, PermissionsAndroid, Linking, Platform } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import DocumentPicker from "react-native-document-picker";
 import { readFile } from "react-native-fs";
@@ -278,6 +278,16 @@ export default function Settings({ navigation }: ISettingsProps) {
       await setSyncEnabled(!scheduledSyncEnabled);
       await changeScheduledSyncEnabled(!scheduledSyncEnabled);
     }
+  };
+  const onLongPressScheduledSyncEnabled = async () => {
+    toast(
+      `Status: ${workInfo}\n`+
+      `Last sync attempt: ${formatISO(fromUnixTime(lastScheduledSyncAttempt))}\n` +
+      `Last sync: ${formatISO(fromUnixTime(lastScheduledSync))}`,
+      0,
+      "success",
+      "OK",
+    )
   }
 
   // Debug show startup info
@@ -955,12 +965,7 @@ Do you wish to proceed?`;
             </ListItem>
           }
           {PLATFORM === "android" &&
-            <ListItem
-              style={style.listItem} icon={true} onPress={onToggleScheduledSyncEnabled}
-              onLongPress={() => ToastAndroid.show("Status: " + workInfo + "\n"+
-                                                  "Last sync attempt: " + formatISO(fromUnixTime(lastScheduledSyncAttempt)) + "\n" +
-                                                  "Last sync: " + formatISO(fromUnixTime(lastScheduledSync)), ToastAndroid.LONG)}
-           >
+            <ListItem style={style.listItem} icon={true} onPress={onToggleScheduledSyncEnabled} onLongPress={onLongPressScheduledSyncEnabled}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="sync-alert" /></Left>
               <Body>
                 <Text>Scheduled chain sync</Text>

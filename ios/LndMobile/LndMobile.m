@@ -20,6 +20,11 @@ RCT_EXTERN_METHOD(
 )
 
 RCT_EXTERN_METHOD(
+  stopLnd: (RCTPromiseResolveBlock)resolve
+  rejecter: (RCTPromiseRejectBlock)reject
+)
+
+RCT_EXTERN_METHOD(
   initWallet: (NSArray *)seed
   password: (NSString *)password
   recoveryWindow: (NSInteger)recoveryWindow

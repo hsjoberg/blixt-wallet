@@ -168,7 +168,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
 
     if (!connectToPeer) {
       setCreateInvoiceDisabled(false);
-      Alert.alert("", "Failed to connect To Dunder, please try again later.");
+      Alert.alert("", "Failed to connect to Dunder, please try again later.");
 
       return;
     }

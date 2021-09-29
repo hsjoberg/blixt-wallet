@@ -153,10 +153,14 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         }]
       }));
     }
-    Clipboard.setString(JSON.stringify(routeHints));
 
     setRoutehints(JSON.stringify(routeHints));
   };
+
+  const onPressQr = () => {
+    Clipboard.setString(JSON.stringify(routehints));
+    toast("Copied to clipboard");
+  }
 
   const onPressCamera = () => {
     navigation.navigate("CameraFullscreen", {
@@ -228,6 +232,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         <H1 style={{ marginTop: 10, marginBottom: 5 }}>Keysend - scan to pay</H1>
         {routehints.length > 0  &&
           <QrCode
+            onPress={onPressQr}
             size={220}
             data={JSON.stringify({
               pubkey: myNodeInfo!.identityPubkey,

@@ -8,7 +8,7 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 export interface IWebInfoProps {
   navigation: any;
 }
-export default function WebInfo({ navigation }: IWebInfoProps) {  
+export default function WebInfo({ navigation }: IWebInfoProps) {
   return (
     <Blurmodal goBackByClickingOutside={true}>
       <H1 style={style.title} onPress={() => navigation.pop()}>
@@ -16,7 +16,7 @@ export default function WebInfo({ navigation }: IWebInfoProps) {
       </H1>
       <Text style={style.text} onPress={() => navigation.pop()} >
         Press to try out Blixt Wallet!
-        </Text>
+      </Text>
     </Blurmodal>
   );
 };

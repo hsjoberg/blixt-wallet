@@ -138,7 +138,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
 
   return (
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} enabled={PLATFORM === "ios"}>
-      <BlurModal useModalComponent={false} nomargin goBackByClickingOutside={false}>
+      <BlurModal useModalComponent={false} noMargin goBackByClickingOutside={false}>
         <Card style={style.card}>
           <WebView
             containerStyle={{ opacity: showWebview ? 1 : 0 }}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Share, Platform, LayoutAnimation, ScrollView, TouchableOpacity } from "react-native";
 import DialogAndroid from "react-native-dialogs";
 import Clipboard from "@react-native-community/clipboard";
-import { Body, Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
+import { Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
 import { fromUnixTime } from "date-fns";
 import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
 
@@ -192,7 +192,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
       <Blurmodal goBackByClickingOutside={true}>
         <Card style={style.card}>
           <CardItem>
-            <ScrollView style={{backgroundColor:"transparent"}} contentContainerStyle={{backgroundColor:"transparent"}}>
+            <ScrollView alwaysBounceVertical={false}>
               <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
                 <H1 style={style.header}>
                   Transaction
@@ -213,7 +213,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                     setCurrentScreen("Map");
                     setTimeout(() => {
                       setMapActive(true);
-                    }, 650);
+                    }, 750);
                   }} style={style.actionBarButton}>
                     <Text>Show map</Text>
                   </Button>
@@ -257,7 +257,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
       <Blurmodal>
         <Card style={style.card}>
           <CardItem>
-            <Body>
+            <ScrollView alwaysBounceVertical={false}>
               <View style={{ marginBottom: 8, display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center",  width: "100%" }}>
                 <H1 style={style.header}>
                   Transaction
@@ -291,7 +291,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                   latitude: transaction.locationLat!,
                 }} />
               </MapView>
-            </Body>
+            </ScrollView>
           </CardItem>
         </Card>
       </Blurmodal>
@@ -340,6 +340,7 @@ const style = StyleSheet.create({
     padding: 5,
     minHeight: "50%",
     maxHeight: "85%",
+    overflow: "hidden",
   },
   header: {
     fontWeight: "bold",

@@ -1,5 +1,4 @@
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
-import { differenceInDays } from "date-fns";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -7,7 +6,6 @@ import { lnrpc } from "../../proto/proto";
 import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/app";
 import { toast, timeout, stringToUint8Array } from "../utils";
 import { Chain } from "../utils/build";
-import { getWalletPassword } from "../storage/keystore";
 
 import logger from "./../utils/log";
 const log = logger("Lightning");
@@ -94,7 +92,7 @@ export const lightning: ILightningModel = {
         debugShowStartupInfo && toast("syncedToGraph time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
         actions.setInitializeDone(true);
       } catch (e) {
-        debugShowStartupInfo && toast(e.message, 10000, "danger");
+        debugShowStartupInfo && toast("Error in initialization task: " + e.message, 10000, "danger");
         return;
       }
     })();

@@ -8,7 +8,7 @@ export interface ITransactionDetailsProps {
   children: any;
   useModalComponent?: boolean;
   goBackByClickingOutside?: boolean;
-  nomargin?: boolean
+  noMargin?: boolean
 }
 export default function BlurModal({ children, useModalComponent, goBackByClickingOutside, noMargin }: ITransactionDetailsProps) {
   const navigation = useNavigation();

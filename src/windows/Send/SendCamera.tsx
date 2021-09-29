@@ -11,12 +11,12 @@ import { useStoreState } from "../../state/store";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Camera from "../../components/Camera";
 import { Chain } from "../../utils/build";
-import { smallScreen } from "../../utils/device";
 import { RouteProp } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
 import { PLATFORM } from "../../utils/constants";
 import usePromptLightningAddress  from "../../hooks/usePromptLightningAddress";
 import useEveluateLightningCode  from "../../hooks/useEvaluateLightningCode";
+import { toast } from "../../utils";
 
 interface ISendCameraProps {
   bolt11Invoice?: string;
@@ -96,29 +96,33 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
       return;
     }
 
-    setCameraActive(false);
-    setScanning(false);
+    try {
+      setCameraActive(false);
+      setScanning(false);
 
-    switch (await evaluateLightningCode(paymentRequest,  errorPrefix)) {
-      case "BOLT11":
-        gotoNextScreen("Send", { screen: "SendConfirmation" });
-      break;
-      case "LNURLAuthRequest":
-        gotoNextScreen("LNURL", { screen: "AuthRequest" }, false);
-      break;
-      case "LNURLChannelRequest":
-        gotoNextScreen("LNURL", { screen: "ChannelRequest" });
-      break;
-      case "LNURLPayRequest":
-        gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
-      break;
-      case "LNURLWithdrawRequest":
-        gotoNextScreen("LNURL", { screen: "WithdrawRequest" }, false);
-      break;
-      case null:
-        setCameraActive(true);
-        setScanning(true);
-      break;
+      switch (await evaluateLightningCode(paymentRequest,  errorPrefix)) {
+        case "BOLT11":
+          gotoNextScreen("Send", { screen: "SendConfirmation" });
+        break;
+        case "LNURLAuthRequest":
+          gotoNextScreen("LNURL", { screen: "AuthRequest" }, false);
+        break;
+        case "LNURLChannelRequest":
+          gotoNextScreen("LNURL", { screen: "ChannelRequest" });
+        break;
+        case "LNURLPayRequest":
+          gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
+        break;
+        case "LNURLWithdrawRequest":
+          gotoNextScreen("LNURL", { screen: "WithdrawRequest" }, false);
+        break;
+        case null:
+          setCameraActive(true);
+          setScanning(true);
+        break;
+      }
+    } catch (error) {
+      toast(error.message, 13000, "danger");
     }
   };
 
