@@ -5,6 +5,7 @@ import * as base64 from "base64-js";
 import payReq from "bolt11";
 import Long from "long";
 import { IAddInvoiceBlixtLspArgs } from "../../src/lndmobile";
+import { bytesToHexString } from "../../src/utils";
 
 export enum ELndMobileStatusCodes {
   STATUS_SERVICE_BOUND = 1,
@@ -117,6 +118,36 @@ export const sendPaymentSync = async (paymentRequest: string): Promise<lnrpc.Sen
   return response;
 };
 
+export const sendPaymentV2Sync = async (paymentRequest: string): Promise<lnrpc.Payment> => {
+  await timeout(600);
+
+  const paymentHash = new Uint8Array([0,1,2,3]);
+  const paymentPreimage = new Uint8Array([0,1,2,3]);
+
+  const response = lnrpc.Payment.create({
+    paymentHash: bytesToHexString(paymentHash),
+    paymentPreimage: bytesToHexString(paymentPreimage),
+
+    status: lnrpc.Payment.PaymentStatus.SUCCEEDED,
+    fee: Long.fromValue(1),
+    feeMsat: Long.fromValue(1000),
+    htlcs: [{
+      route: {
+        hops: [{
+          chanId: Long.fromValue(1),
+          chanCapacity: Long.fromValue(10000),
+          amtToForward: Long.fromValue(100),
+          amtToForwardMsat: Long.fromValue(100000),
+          fee: Long.fromValue(1),
+          feeMsat: Long.fromValue(1000),
+          expiry: 3600,
+          pubKey: "abc",
+        }],
+      },
+    }],
+  });
+  return response;
+};
 
 export const addInvoice = async (amount: number, memo: string, expiry: number = 3600): Promise<lnrpc.AddInvoiceResponse> => {
   try {
