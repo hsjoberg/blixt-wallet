@@ -199,7 +199,7 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvReco
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: multiPath ? 2 : undefined,
-    feeLimitMsat: Long.fromValue(50000),
+    feeLimitSat: Long.fromValue(2500),
     cltvLimit: 0,
   };
   if (tlvRecordName && tlvRecordName.length > 0) {
@@ -259,7 +259,7 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: 2,
-    feeLimitMsat: Long.fromValue(50000),
+    feeLimitSat: Long.fromValue(2500),
     cltvLimit: 0,
   };
   if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {
