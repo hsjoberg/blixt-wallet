@@ -340,8 +340,8 @@ exports[`SendCamera renders correctly 1`] = `
                                   "justifyContent": "center",
                                 },
                                 Object {
-                                  "height": 270,
-                                  "width": 270,
+                                  "height": 265,
+                                  "width": 265,
                                 },
                               ]
                             }
@@ -458,7 +458,7 @@ exports[`SendCamera renders correctly 1`] = `
                               style={
                                 Array [
                                   Object {
-                                    "height": 270,
+                                    "height": 265,
                                     "width": "100%",
                                   },
                                   Object {
@@ -485,8 +485,8 @@ exports[`SendCamera renders correctly 1`] = `
                                       "backgroundColor": "transparent",
                                     },
                                     Object {
-                                      "height": 270,
-                                      "width": 270,
+                                      "height": 265,
+                                      "width": 265,
                                     },
                                   ]
                                 }

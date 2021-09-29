@@ -206,9 +206,9 @@ function Overview({ navigation }: IOverviewProps) {
           onScroll={transactionListOnScroll}
           testID="TX_LIST"
         >
-          {/* {onboardingState === "SEND_ONCHAIN" && */}
+          {onboardingState === "SEND_ONCHAIN" &&
             <SendOnChain bitcoinAddress={bitcoinAddress} />
-          {/* } */}
+          }
           {onboardingState === "DO_BACKUP" &&
             <DoBackup />
           }

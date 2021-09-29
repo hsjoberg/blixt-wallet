@@ -507,7 +507,13 @@ exports[`renders correctly 1`] = `
                                                     }
                                                     uppercase={false}
                                                   >
-                                                    To get started, send on-chain funds to the bitcoin address to the right.
+                                                    To get started, send on-chain to the bitcoin address to the right.
+                                                    
+
+
+                                                    Send at least 22000 satoshi (
+                                                    0.00 USD
+                                                    ).
                                                     
 
 
@@ -515,7 +521,13 @@ exports[`renders correctly 1`] = `
                                                   </Text>
                                                 </Text>
                                               </View>
-                                              <View>
+                                              <View
+                                                style={
+                                                  Object {
+                                                    "justifyContent": "center",
+                                                  }
+                                                }
+                                              >
                                                 <View
                                                   style={
                                                     Object {
