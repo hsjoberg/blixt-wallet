@@ -1,10 +1,12 @@
-import { NativeModules, DeviceEventEmitter } from "react-native";
+import { NativeModules } from "react-native";
 import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { lnrpc, routerrpc, invoicesrpc } from "../../proto/proto";
 import Long from "long";
 import sha from "sha.js";
-import { stringToUint8Array, hexToUint8Array, decodeTLVRecord, unicodeStringToUint8Array } from "../utils";
-import { TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
+import { stringToUint8Array, hexToUint8Array, unicodeStringToUint8Array } from "../utils";
+import { TLV_KEYSEND, TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+import { LndMobileEventEmitter } from "../utils/event-listener";
 const { LndMobile, LndMobileTools } = NativeModules;
 
 /**
@@ -212,17 +214,21 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvReco
   }
 
   return new Promise(async (resolve, reject) => {
-    const listener = DeviceEventEmitter.addListener("RouterSendPaymentV2", (e) => {
-      if (!e || e.data === null) { // TODO this is an EOF response
-        console.warn("Got erroneous sendPaymentV2Sync response", e);
+    const listener = LndMobileEventEmitter.addListener("RouterSendPaymentV2", (e) => {
+      listener.remove();
+      const error = checkLndStreamErrorResponse("RouterSendPaymentV2", e);
+      if (error === "EOF") {
         return;
+      } else if (error) {
+        console.log("Got error from RouterSendPaymentV2", [error]);
+        return reject(error);
       }
+
       console.log("sendPaymentV2Sync", e);
       const response = decodeSendPaymentV2Result(e.data);
       console.log("sendPaymentV2Sync",response);
 
       resolve(response);
-      listener.remove();
     });
 
     const response = await sendStreamCommand<routerrpc.ISendPaymentRequest, routerrpc.SendPaymentRequest>({
@@ -253,7 +259,7 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
       // 5482373484 is the record for lnd
       // keysend payments as described in
       // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
-      "5482373484": preImage,
+      [TLV_KEYSEND]: preImage,
     },
 
     noInflightUpdates: true,
@@ -270,8 +276,16 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
   }
 
   return new Promise(async (resolve, reject) => {
-    const listener = DeviceEventEmitter.addListener("RouterSendPaymentV2", (e) => {
+    const listener = LndMobileEventEmitter.addListener("RouterSendPaymentV2", (e) => {
       console.log(e);
+      const error = checkLndStreamErrorResponse("RouterSendPaymentV2", e);
+      if (error === "EOF") {
+        return;
+      } else if (error) {
+        console.log("Got error from RouterSendPaymentV2", [error]);
+        reject(error);
+      }
+
       const response = decodeSendPaymentV2Result(e.data);
       console.log(response);
 
@@ -287,60 +301,6 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
     console.log(response);
   });
 };
-
-
-/**
- * @throws
- */
-// export const sendKeysendPayment2 = async (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.RouteHint[]): Promise<lnrpc.SendResponse> => {
-//   const response = await sendCommand<routerrpc.ISendPaymentRequest, routerrpc.SendPaymentRequest, routerrpc.Send>({
-//     request: lnrpc.SendRequest,
-//     response: lnrpc.SendResponse,
-//     method: "SendPaymentSync",
-//     options: {
-//       dest: hexToUint8Array(destinationPubKey),
-//       amt: sat,
-//       routeHints,
-//       paymentHash: sha("sha256").update(preImage).digest(),
-//       destCustomRecords: {
-//         // 5482373484 is the record for lnd
-//         // keysend payments as described in
-//         // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
-//         "5482373484": preImage,
-//       },
-//       destFeatures: [lnrpc.FeatureBit.TLV_ONION_REQ],
-//     },
-//   });
-//   return response;
-// };
-
-/**
- * @throws
- */
-// export const sendKeysendPayment = async (destinationPubKey: Uint8Array, sat: Long, preImage: Uint8Array, routeHints: lnrpc.RouteHint[]): Promise<string> => {
-//   const response = await sendStreamCommand<routerrpc.ISendToRouteRequest, routerrpc.SendPaymentRequest>({
-//     request: routerrpc.SendPaymentRequest,
-//     method: "RouterSendPayment",
-//     options: {
-
-//       dest: destinationPubKey,
-//       amt: sat,
-//       paymentHash: sha("sha256").update(preImage).digest(),
-//       destCustomRecords: {
-//         // 5482373484 is the record for lnd
-//         // keysend payments as described in
-//         // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
-//         "5482373484": preImage,
-//       },
-//       // routeHints: routeHints,
-
-//       timeoutSeconds: 30,
-
-//       // finalCltvDelta: 40, // TODO(hsjoberg): Why? Joost's WhatSat uses this
-//     },
-//   });
-//   return response;
-// };
 
 export const sendKeysendPayment = async (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.IRouteHint[], tlvRecordNameStr: string): Promise<lnrpc.SendResponse> => {
   try {
@@ -396,33 +356,6 @@ export const sendKeysendPayment = async (destinationPubKey: string, sat: Long, p
   }
   return null;
 };
-
-/**
- * @throws
- */
-// export const sendKeysendPayment = async (destinationPubKey: Uint8Array, sat: Long, preImage: Uint8Array, routeHints: lnrpc.RouteHint[], tlvRecordName: string): Promise<lnrpc.SendResponse> => {
-//   console.log("sha256:", sha("sha256").update(preImage).digest());
-
-//   const response = await sendCommand<lnrpc.ISendRequest, lnrpc.SendRequest, lnrpc.SendResponse>({
-//     request: lnrpc.SendRequest,
-//     response: lnrpc.SendResponse,
-//     method: "SendPaymentSync",
-//     options: {
-//       dest: destinationPubKey,
-//       amt: sat,
-//       paymentHash: sha("sha256").update(preImage).digest(),
-//       destCustomRecords: {
-//         [TLV_RECORD_NAME]: stringToUint8Array(tlvRecordName),
-//         // 5482373484 is the record for lnd
-//         // keysend payments as described in
-//         // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
-//         "5482373484": preImage,
-//       },
-//     }
-//   });
-
-//   return response;
-// };
 
 // TODO error handling
 export const decodePaymentStatus = (data: string): routerrpc.PaymentStatus => {

@@ -1,4 +1,3 @@
-import { DeviceEventEmitter } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as base64 from "base64-js";
 import { differenceInDays } from "date-fns";
@@ -6,9 +5,11 @@ import iCloudStorage from "react-native-icloudstore";
 
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
-import { waitUntilTrue, timeout } from "../utils";
+import { waitUntilTrue, timeout, toast } from "../utils";
 import { Chain, Debug, Flavor } from "../utils/build";
 import { getItemObject, StorageItem, setItemObject } from "../storage/app";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+import { LndMobileEventEmitter } from "../utils/event-listener";
 
 import logger from "./../utils/log";
 const log = logger("ICloudBackup");
@@ -21,7 +22,7 @@ export interface IICloudBackupModel {
   setupChannelUpdateSubscriptions: Thunk<IICloudBackupModel, void, IStoreInjections, IStoreModel>;
   makeBackup: Thunk<IICloudBackupModel, void, IStoreInjections, IStoreModel>;
   getBackup: Thunk<IICloudBackupModel, void, IStoreInjections, IStoreModel, Promise<string>>;
-  
+
   setChannelUpdateSubscriptionStarted: Action<IICloudBackupModel, boolean>;
   setICloudActive: Action<IICloudBackupModel, boolean>;
 
@@ -69,16 +70,28 @@ export const iCloudBackup: IICloudBackupModel = {
   setupChannelUpdateSubscriptions: thunk((actions, _2, { getStoreState, injections }) => {
     log.i("Starting channel update subscription for iCloud channel backup");
 
-    DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
-      if (!getStoreState().settings.iCloudBackupEnabled) {
-        return;
-      }
-      log.d("Received SubscribeChannelEvents");
-      const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
-      const channelEvent = decodeChannelEvent(e.data);
-      if (channelEvent.openChannel || channelEvent.closedChannel) {
-        log.i("New channel event received, starting new iCloud backup");
-        await actions.makeBackup();
+    LndMobileEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
+      try {
+        if (!getStoreState().settings.iCloudBackupEnabled) {
+          return;
+        }
+        log.d("Received SubscribeChannelEvents");
+
+        const error = checkLndStreamErrorResponse("SubscribeChannelEvents", e);
+        if (error === "EOF") {
+          return;
+        } else if (error) {
+          throw error
+        }
+
+        const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
+        const channelEvent = decodeChannelEvent(e.data);
+        if (channelEvent.openChannel || channelEvent.closedChannel) {
+          log.i("New channel event received, starting new iCloud backup");
+          await actions.makeBackup();
+        }
+      } catch (error) {
+        toast("Error backing up to iCloud: " + error.message, undefined, "danger");
       }
     });
     actions.setChannelUpdateSubscriptionStarted(true);

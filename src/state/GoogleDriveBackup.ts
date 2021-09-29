@@ -1,14 +1,15 @@
-import { DeviceEventEmitter } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as base64 from "base64-js";
 import { differenceInDays } from "date-fns";
 
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
-import { waitUntilTrue, timeout } from "../utils";
+import { waitUntilTrue, timeout, toast } from "../utils";
 import { uploadFileAsString, getFiles, checkResponseIsError, downloadFileAsString } from "../utils/google-drive";
 import { Chain, Debug } from "../utils/build";
 import { getItemObject, StorageItem, setItemObject } from "../storage/app";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+import { LndMobileEventEmitter } from "../utils/event-listener";
 
 import logger from "./../utils/log";
 const log = logger("GoogleDriveBackup");
@@ -59,16 +60,29 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
   setupChannelUpdateSubscriptions: thunk((actions, _2, { getStoreState, injections }) => {
     log.i("Starting channel update subscription for Google Drive channel backup");
 
-    DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
-      if (!getStoreState().settings.googleDriveBackupEnabled || !getStoreState().google.isSignedIn) {
-        return;
-      }
-      log.d("GoogleDriveBackup: Received SubscribeChannelEvents");
-      const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
-      const channelEvent = decodeChannelEvent(e.data);
-      if (channelEvent.openChannel || channelEvent.closedChannel) {
-        log.i("New channel event received, starting new Google Drive backup");
-        await actions.makeBackup();
+    LndMobileEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
+      try {
+        if (!getStoreState().settings.googleDriveBackupEnabled || !getStoreState().google.isSignedIn) {
+          return;
+        }
+
+        const error = checkLndStreamErrorResponse("SubscribeChannelEvents", e);
+        if (error === "EOF") {
+          return;
+        } else if (error) {
+          console.log("Got error from SubscribeChannelEvents", [error]);
+          throw error;
+        }
+
+        log.d("GoogleDriveBackup: Received SubscribeChannelEvents");
+        const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
+        const channelEvent = decodeChannelEvent(e.data);
+        if (channelEvent.openChannel || channelEvent.closedChannel) {
+          log.i("New channel event received, starting new Google Drive backup");
+          await actions.makeBackup();
+        }
+      } catch (error) {
+        toast("Error backing up to Google Drive: " + error.message, undefined, "danger", "OK");
       }
     });
     actions.setChannelUpdateSubscriptionStarted(true);

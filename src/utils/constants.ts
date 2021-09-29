@@ -3,9 +3,10 @@ import { Chain } from "./build";
 import { chainSelect } from "./chain-select";
 
 export const TLV_RECORD_NAME = 128100;
-export const MAX_SAT_INVOICE = 4294967;
-
+export const TLV_KEYSEND = 5482373484;
 export const TLV_WHATSAT_MESSAGE = 34349334;
+
+export const MAX_SAT_INVOICE = 4294967;
 
 export const GITHUB_REPO_URL = "https://github.com/hsjoberg/blixt-wallet";
 export const HAMPUS_EMAIL = "mailto:hampus.sjoberg💩protonmail.com".replace("💩", "@");

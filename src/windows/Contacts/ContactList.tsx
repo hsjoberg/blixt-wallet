@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet, View, LayoutAnimation, Pressable, StatusBar, EmitterSubscription } from "react-native";
-import { Icon, Card, CardItem, Text, Button, Header, Item, Input, CheckBox } from "native-base";
+import { StyleSheet, View, LayoutAnimation, Pressable, StatusBar, EmitterSubscription, Image } from "react-native";
+import { Icon, Card, CardItem, Text, Button, Header, Item, Input } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/core";
 import Long from "long";
@@ -24,6 +24,7 @@ import { LndMobileEventEmitter } from "../../utils/event-listener";
 import { decodeInvoiceResult } from "../../lndmobile/wallet";
 import { lnrpc } from "../../../proto/proto";
 import { Chain } from "../../utils/build";
+import { checkLndStreamErrorResponse } from "../../utils/lndmobile";
 
 interface IContactProps {
   contact: IContact;
@@ -48,10 +49,14 @@ function Contact({ contact }: IContactProps) {
     if (contact.lnUrlWithdraw && !currentBalance) {
       console.log("Subscribing to invoice inside Contact " + contact.domain + " " + contact.note);
       listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
-        console.log("Contact component: SubscribeInvoices");
         try {
-          if (e.data === "") {
+          console.log("Contact component: SubscribeInvoices");
+          const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
+          if (error === "EOF") {
             return;
+          } else if (error) {
+            console.log("ContactList: Got error from SubscribeInvoices", [error]);
+            throw error;
           }
 
           const invoice = decodeInvoiceResult(e.data);

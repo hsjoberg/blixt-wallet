@@ -1,6 +1,31 @@
 import Foundation
 import Lndmobile
 
+// https://stackoverflow.com/a/32306142
+extension StringProtocol {
+  func index<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
+    range(of: string, options: options)?.lowerBound
+  }
+  func endIndex<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
+    range(of: string, options: options)?.upperBound
+  }
+  func indices<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> [Index] {
+    ranges(of: string, options: options).map(\.lowerBound)
+  }
+  func ranges<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> [Range<Index>] {
+    var result: [Range<Index>] = []
+    var startIndex = self.startIndex
+    while startIndex < endIndex,
+        let range = self[startIndex...]
+          .range(of: string, options: options) {
+          result.append(range)
+          startIndex = range.lowerBound < range.upperBound ? range.upperBound :
+            index(range.lowerBound, offsetBy: 1, limitedBy: endIndex) ?? endIndex
+    }
+    return result
+  }
+}
+
 @objc(LndMobile)
 class LndMobile: RCTEventEmitter {
   @objc
@@ -172,9 +197,23 @@ class LndMobile: RCTEventEmitter {
       streamOnlyOnce: streamOnlyOnce
     ) { (data, error) in
       if let e = error {
-        // TODO(hsjoberg): handle error...
-        NSLog("stream error")
+        NSLog("Stream error for " + method)
         NSLog(e.localizedDescription)
+
+        let fullError = e.localizedDescription
+        var errorCode = "Error"
+        var errorDesc = fullError
+
+        if let codeRange = fullError.range(of: "code = "), let descRange = fullError.range(of: " desc = ") {
+          errorCode = String(fullError[codeRange.upperBound..<descRange.lowerBound])
+          errorDesc = String(fullError[descRange.upperBound..<fullError.endIndex])
+        }
+
+        self.sendEvent(
+          withName: method,
+          body: ["error_code": errorCode, "error_desc": errorDesc]
+        )
+        return
       }
       self.sendEvent(
         withName: method,

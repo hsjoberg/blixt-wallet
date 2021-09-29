@@ -40,6 +40,7 @@ import { LndMobileEventEmitter } from "../utils/event-listener";
 import { lnrpc } from "../../proto/proto";
 import { toast } from "../utils";
 import { Alert } from "../utils/alert";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 import logger from "./../utils/log";
 const log = logger("Store");
@@ -262,13 +263,15 @@ export const model: IStoreModel = {
     const debugShowStartupInfo = getState().settings.debugShowStartupInfo;
     const start = new Date();
     LndMobileEventEmitter.addListener("SubscribeState", async (e: any) => {
-      log.d("SubscribeState", [e]);
-      if (e.data === "") {
-        log.i("Got e.data empty from SubscribeState");
-        return;
-      }
-
       try {
+        log.d("SubscribeState", [e]);
+        const error = checkLndStreamErrorResponse("SubscribeState", e);
+        if (error === "EOF") {
+          return;
+        } else if (error) {
+          throw error;
+        }
+
         const state = injections.lndMobile.index.decodeState(e.data ?? "");
         log.i("Current lnd state", [state]);
         if (state.state === lnrpc.WalletState.NON_EXISTING) {
@@ -284,8 +287,8 @@ export const model: IStoreModel = {
           log.d("Got lnrpc.WalletState.RPC_ACTIVE");
           await dispatch.lightning.initialize({ start });
         }
-      } catch (e) {
-        toast(e.message, undefined, "danger");
+      } catch (error) {
+        toast(error.message, undefined, "danger");
       }
     });
     await injections.lndMobile.index.subscribeState();

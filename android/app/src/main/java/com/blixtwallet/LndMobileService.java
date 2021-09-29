@@ -281,17 +281,12 @@ public class LndMobileService extends Service {
 
       bundle.putString("method", method);
 
-      if (message.contains("code = ")) {
-        bundle.putString("error_code", message.substring(message.indexOf("code = ") + 7));
-      }
-      else {
-        bundle.putString("error_code", "Error");
-      }
-
-      if (message.contains("desc = ")) {
+      if (message.contains("code = ") && message.contains("desc = ")) {
+        bundle.putString("error_code", message.substring(message.indexOf("code = ") + 7, message.indexOf(" desc = ")));
         bundle.putString("error_desc", message.substring(message.indexOf("desc = ") + 7));
       }
       else {
+        bundle.putString("error_code", "Error");
         bundle.putString("error_desc", message);
       }
 
@@ -343,17 +338,12 @@ public class LndMobileService extends Service {
 
       bundle.putString("method", method);
 
-      if (message.indexOf("code = ") != -1) {
-        bundle.putString("error_code", message.substring(message.indexOf("code = ") + 7));
-      }
-      else {
-        bundle.putString("error_code", "Error");
-      }
-
-      if (message.indexOf("desc = ") != -1) {
+      if (message.contains("code = ") && message.contains("desc = ")) {
+        bundle.putString("error_code", message.substring(message.indexOf("code = ") + 7, message.indexOf(" desc = ")));
         bundle.putString("error_desc", message.substring(message.indexOf("desc = ") + 7));
       }
       else {
+        bundle.putString("error_code", "Error");
         bundle.putString("error_desc", message);
       }
 

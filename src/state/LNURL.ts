@@ -9,10 +9,10 @@ import { CONSTANTS, JSHash } from "react-native-hash";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { timeout, bytesToString, getDomainFromURL, stringToUint8Array, hexToUint8Array, bytesToHexString } from "../utils/index";
-
+import { timeout, bytesToString, getDomainFromURL, stringToUint8Array, hexToUint8Array, bytesToHexString, toast } from "../utils/index";
 import { lnrpc } from "../../proto/proto";
 import { LndMobileEventEmitter } from "../utils/event-listener";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 import logger from "./../utils/log";
 const log = logger("LNURL");
@@ -354,31 +354,42 @@ export const lnUrl: ILNUrlModel = {
 
         // 5. Once accepted by the user, LN WALLET sends a GET to LN SERVICE in the form of <callback>?k1=<k1>&pr=<lightning invoice, ...>
         const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e) => {
-          log.d("SubscribeInvoices event", [e]);
-          listener.remove();
-
-          const invoice = injections.lndMobile.wallet.decodeInvoiceResult(e.data);
-          let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?";
-          const url = `${lnUrlObject.callback}${firstSeparator}k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
-          log.d("url", [url]);
-
-          const result = await fetch(url);
-          log.d("result", [JSON.stringify(result)]);
-
-          let response: ILNUrlWithdrawResponse | ILNUrlError;
           try {
-            response = await result.json();
-          } catch (e) {
-            log.d("", [e]);
-            return reject(new Error("Unable to parse message from the server"));
-          }
-          log.d("response", [response]);
+            log.d("SubscribeInvoices event", [e]);
+            listener.remove();
+            const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
+            if (error === "EOF") {
+              return;
+            } else if (error) {
+              log.d("Got error from SubscribeInvoices", [error]);
+              return;
+            }
 
-          if (isLNUrlPayResponseError(response)) {
-            return reject(new Error(response.reason));
-          }
+            const invoice = injections.lndMobile.wallet.decodeInvoiceResult(e.data);
+            let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?";
+            const url = `${lnUrlObject.callback}${firstSeparator}k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
+            log.d("url", [url]);
 
-          resolve(true);
+            const result = await fetch(url);
+            log.d("result", [JSON.stringify(result)]);
+
+            let response: ILNUrlWithdrawResponse | ILNUrlError;
+            try {
+              response = await result.json();
+            } catch (e) {
+              log.d("", [e]);
+              return reject(new Error("Unable to parse message from the server"));
+            }
+            log.d("response", [response]);
+
+            if (isLNUrlPayResponseError(response)) {
+              return reject(new Error(response.reason));
+            }
+
+            resolve(true);
+          } catch (error) {
+            toast(error.message, undefined, "danger");
+          }
         });
       })
 
