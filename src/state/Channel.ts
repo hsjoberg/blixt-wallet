@@ -98,33 +98,6 @@ export const channel: IChannelModel = {
       actions.getBalance(),
     ]);
 
-    // Temporary fix as the Blixt IP has changed:
-    const channels = getState().channels;
-    for (const channel of channels) {
-      if (channel.remotePubkey === "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb") {
-        let tries = 25;
-        while (tries-- !== 0) {
-          log.i("Found channel with Blixt node, trying to connect via the new IP address");
-          try {
-            await injections.lndMobile.index.connectPeer(
-              "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb",
-              "176.9.17.121:9735"
-            );
-            break;
-          } catch (error) {
-            if (!error.message.includes("already connected to peer")) {
-              log.i("Failed to connect to Blixt node", [error]);
-              log.i("Trying again...");
-              await timeout(5000);
-            } else {
-              break;
-            }
-          }
-        }
-        break;
-      }
-    }
-
     return true;
   }),
 
