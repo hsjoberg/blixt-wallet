@@ -54,6 +54,9 @@ export default StyleSheet.create({
   text: {
     marginBottom: 14,
   },
+  inputLabel: {
+    marginBottom: 9,
+  },
   boldText: {
     fontWeight: "bold",
   },
@@ -71,5 +74,14 @@ export default StyleSheet.create({
     paddingBottom: 5,
     paddingLeft: 12,
     paddingRight: 8,
-  }
+  },
+  inputCurrencyButton: {
+    borderRadius: 10,
+    position: "absolute",
+    right: 5,
+    top: 4,
+    padding: 0,
+    justifyContent: "center",
+    height: 20
+  },
 });
