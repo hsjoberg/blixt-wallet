@@ -3,8 +3,8 @@ const log = Log("utils/lndmobile.ts");
 
 export function checkLndStreamErrorResponse(name: string, event: any): Error | "EOF" | null {
   console.log("checkLndStreamErrorResponse", name, event);
-  if (!event || typeof event !== "object" || event.data === null) {
-    return new Error("Got invalid response from lnd: " + JSON.stringify(event));
+  if (!event || typeof event !== "object") {
+    return new Error(name + ": Got invalid response from lnd: " + JSON.stringify(event));
   }
   console.log("checkLndStreamErrorResponse error_desc:", event.error_desc)
   if (event.error_code) {
