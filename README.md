@@ -70,7 +70,7 @@ To start the application:
 
 ### iOS
 
-_The iPhone/iOS version is still work in progress._
+_The iPhone/iOS version is still a work in progress._
 
 To build the iOS version, macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
 
