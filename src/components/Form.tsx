@@ -21,9 +21,10 @@ export interface IFormProps {
   mathPadVisible?: boolean;
   mathPadProps?: IMathPadProps;
 }
+
 export default function Form({ buttons, items, style, noticeText, mathPadProps }: IFormProps) {
   return (
-    <KeyboardAvoidingView style={[styles.content, style]}>
+    <KeyboardAvoidingView enabled={PLATFORM === "ios"} style={[styles.content, style]} behavior={"padding"} keyboardVerticalOffset={77}>
       <View style={styles.itemContainer}>
         {items.map(({ key, title, component, success, active }, i) => (
           active ?? true

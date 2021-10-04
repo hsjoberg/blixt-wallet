@@ -91,9 +91,9 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       await getBalance();
       Vibration.vibrate(32);
       navigation.replace("SendDone", { preimage, callback });
-    } catch (e) {
-      console.log(e);
-      toast(`Error: ${e.message}`, 60000, "danger", "Okay");
+    } catch (error) {
+      console.log(error);
+      toast(`Error: ${error.message}`, 60000, "danger", "Okay");
       setIsPaying(false);
     }
   };

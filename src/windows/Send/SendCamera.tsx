@@ -14,8 +14,8 @@ import { Chain } from "../../utils/build";
 import { RouteProp } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
 import { PLATFORM } from "../../utils/constants";
-import usePromptLightningAddress  from "../../hooks/usePromptLightningAddress";
-import useEveluateLightningCode  from "../../hooks/useEvaluateLightningCode";
+import usePromptLightningAddress from "../../hooks/usePromptLightningAddress";
+import useEveluateLightningCode from "../../hooks/useEvaluateLightningCode";
 import { toast } from "../../utils";
 
 interface ISendCameraProps {

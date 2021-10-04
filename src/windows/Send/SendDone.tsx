@@ -104,7 +104,7 @@ export default function SendDone({
       if (navigation.canGoBack()) {
         navigation.pop();
       }
-    }, 1850);
+    }, 2200);
   }, []);
 
   return (
