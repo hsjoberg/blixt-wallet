@@ -65,6 +65,41 @@ export interface ILNUrlWithdrawResponse {
   reason?: string;
 }
 
+export type Metadata = [string, string];
+
+export type ILNUrlPayRequestMetadata = Metadata[];
+
+export interface ILNUrlPayRequestPayerData {
+  name?: {
+    mandatory: boolean;
+  };
+  pubkey?: {
+    mandatory: boolean;
+  };
+  identifier?: {
+    mandatory: boolean;
+  };
+  email?: {
+    mandatory: boolean;
+  };
+  auth?: {
+    mandatory?: boolean;
+    k1?: string; // hex
+  };
+};
+
+export interface ILNUrlPayResponsePayerData {
+  name?: string;
+  pubkey?: string; // hex
+  auth?: {
+    key: string;
+    k1: string;
+    sig: string; // hex
+  },
+  email?: string;
+  identifier?: string;
+}
+
 export interface ILNUrlPayRequest {
   callback: string;
   maxSendable: number;
@@ -73,9 +108,8 @@ export interface ILNUrlPayRequest {
   commentAllowed?: number;
   disposable?: boolean | null;
   tag: "payRequest";
+  payerData?: ILNUrlPayRequestPayerData;
 }
-
-export type ILNUrlPayRequestMetadata = [string, string][];
 
 export interface ILNUrlPayResponse {
   pr: string;
@@ -125,6 +159,7 @@ interface IDoPayRequestPayload {
   lightningAddress: string | null;
   lud16IdentifierMimeType: string | null;
   metadataTextPlain: string;
+  payerData?: ILNUrlPayResponsePayerData;
 }
 
 export type IDoPayRequestResponse = ILNUrlPayResponse;
@@ -409,12 +444,18 @@ export const lnUrl: ILNUrlModel = {
       // 5. LN WALLET makes a GET request using
       // <callback>?amount=<milliSatoshi>&fromnodes=<nodeId1,nodeId2,...>
       // (we're skipping fromnodes)
+      const gotPayerData = !!payload.payerData;
+
       let callback = lnUrlObject.callback;
       let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?"
       callback = `${callback}${firstSeparator}amount=${payload.msat.toString()}`;
       if (payload.comment) {
         callback = `${callback}&comment=${encodeURIComponent(payload.comment)}`;
       }
+      if (payload.payerData) {
+        callback = `${callback}&payerdata=${encodeURIComponent(JSON.stringify(payload.payerData))}`
+      }
+      log.d("callback" ,[callback]);
 
       const result = await fetch(callback);
       log.d("result", [JSON.stringify(result)]);
@@ -439,6 +480,7 @@ export const lnUrl: ILNUrlModel = {
       }
 
       try {
+        log.d("pr", [response.pr]);
         const paymentRequest: lnrpc.PayReq = await getStoreActions().send.setPayment({
           paymentRequestStr: response.pr,
           extraData: {
@@ -460,7 +502,12 @@ export const lnUrl: ILNUrlModel = {
           throw new Error("Invoice invalid. Description hash is missing.");
         }
 
-        const hashedMetadata = await JSHash(lnUrlObject.metadata, CONSTANTS.HashAlgorithms.sha256);
+        let dataToHash = lnUrlObject.metadata;
+        if (gotPayerData) {
+          dataToHash = `${dataToHash}${JSON.stringify(payload.payerData)}`;
+        }
+
+        const hashedMetadata = await JSHash(dataToHash, CONSTANTS.HashAlgorithms.sha256);
         if (hashedMetadata !== descriptionHash) {
           log.i("Description hash does not match metdata hash!", [hashedMetadata, descriptionHash]);
           throw new Error("Invoice description hash is invalid.");
@@ -523,15 +570,16 @@ export const lnUrl: ILNUrlModel = {
 
     let lnurlObject: ILNUrlPayRequest | ILNUrlPayResponseError;
     try {
-      lnurlObject = await result.json();
+      const lnurlText = await result.text();
+      log.i("",[lnurlText]);
+      lnurlObject = JSON.parse(lnurlText);
     } catch (e) {
-      log.d("", [e]);
-      throw new Error("Unable to parse message from the server");
+      throw new Error("Unable to parse message from the server: " + e.message);
     }
     log.d("response", [lnurlObject]);
 
     if (isLNUrlPayResponseError(lnurlObject)) {
-      log.e("Got error")
+      log.e("Got error");
       throw new Error(lnurlObject.reason);
     }
 

@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import { Vibration, Keyboard, Image } from "react-native";
-import { Text, View, Button, Input, CheckBox } from "native-base";
+import { Text, View, Button, Input } from "native-base";
 import Long from "long";
 import { useNavigation } from "@react-navigation/core";
 
 import { useStoreState, useStoreActions } from "../../../state/store";
 import { toast, getDomainFromURL, hexToUint8Array } from "../../../utils";
-import { ILNUrlPayRequest, ILNUrlPayRequestMetadata, ILNUrlPayResponse } from "../../../state/LNURL";
+import { ILNUrlPayRequest, ILNUrlPayRequestMetadata, ILNUrlPayResponsePayerData } from "../../../state/LNURL";
 import ScaledImage from "../../../components/ScaledImage";
-import { formatBitcoin, convertBitcoinToFiat, unitToSatoshi, BitcoinUnits, valueFiat, valueBitcoin } from "../../../utils/bitcoin-units";
+import { formatBitcoin, convertBitcoinToFiat } from "../../../utils/bitcoin-units";
 import ButtonSpinner from "../../../components/ButtonSpinner";
 import style from "./style";
 import useLightningReadyToSend from "../../../hooks/useLightingReadyToSend";
 import { identifyService, lightningServices } from "../../../utils/lightning-services";
 import { Alert } from "../../../utils/alert";
 import { setupDescription } from "../../../utils/NameDesc";
-import { PLATFORM } from "../../../utils/constants";
 import useBalance from "../../../hooks/useBalance";
+import { PayerData } from "./PayerData";
 
 export interface IPaymentCardProps {
   onPaid: (preimage: Uint8Array) => void;
@@ -56,13 +56,17 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
 
   try {
     const metadata = JSON.parse(lnUrlObject.metadata) as ILNUrlPayRequestMetadata;
+    const payerData = lnUrlObject.payerData;
+    const payerDataName = payerData?.name ?? null;
+
+    console.log(metadata);
 
     const text = metadata.find((m, i) => {
       return m[0]?.toLowerCase?.() === "text/plain";
     })?.[1];
 
     if (!text) {
-      throw new Error("Payment is missing a description.")
+      throw new Error("Payment is missing a description.");
     }
 
     const longDesc = metadata.find((m, i) => {
@@ -82,15 +86,27 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
     };
 
     const onPressPay = async () => {
-      if (commentAllowed && sendName && !comment) {
+      if (!payerDataName && commentAllowed && sendName && !comment) {
         Alert.alert("", "You must provide a comment if you choose to include your name to this payment");
         return;
       }
 
       try {
         let c = comment;
-        if (c && c.length > 0 && sendName && name) {
+        if (!payerDataName && c && c.length > 0 && sendName && name) {
           c = setupDescription(c, name);
+        }
+
+        let sendPayerData = false;
+        const payerData: ILNUrlPayResponsePayerData = {};
+        if (payerDataName) {
+          if (payerDataName.mandatory) {
+            sendPayerData = true;
+            payerData.name = name ?? "Anonymous";
+          } else if (sendName) {
+            sendPayerData = true;
+            payerData.name = name ?? "";
+          }
         }
 
         const amountMsat = minSpendable !== maxSpendable
@@ -105,6 +121,7 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
           lightningAddress: lightningAddress?.[1] ?? null,
           lud16IdentifierMimeType: lightningAddress?.[0] ?? null,
           metadataTextPlain: text ?? "Invoice description missing",
+          payerData: sendPayerData ? payerData : undefined,
         });
         console.log(paymentRequestResponse);
         const response = await sendPayment();
@@ -196,19 +213,16 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
               </Button>
             </View>
           }
-          {typeof commentAllowed === "number" && commentAllowed > 0 &&
-            <>
-              <Text style={style.inputLabel}>
-                Comment to <Text style={style.boldText}>{domain}</Text> (max {commentAllowed} letters):
-              </Text>
-              <View style={{ flexDirection: "row" }}>
-                <Input onChangeText={setComment} keyboardType="default" style={[style.input, { marginBottom: 10 }]} />
-              </View>
-              <View style={{ flexDirection: "row", marginBottom: 32 }}>
-                <CheckBox checked={sendName} onPress={() => setSendName(!sendName)} style={{ marginRight: 18 }} />
-                <Text style={{ fontSize: 13,  marginTop: PLATFORM === "ios" ? 2 : 0 }} onPress={() => setSendName(!sendName)}>Send my name together with this comment</Text>
-              </View>
-            </>
+          {(payerData || typeof commentAllowed === "number" && commentAllowed > 0) &&
+            <PayerData
+              commentAllowed={commentAllowed}
+              domain={domain}
+              name={name}
+              payerDataName={payerDataName}
+              sendName={sendName}
+              setComment={setComment}
+              setSendName={setSendName}
+            />
           }
           {image &&
             <ScaledImage
