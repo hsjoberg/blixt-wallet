@@ -672,7 +672,9 @@ Reason: For Google Drive backup
 https://nodes.lightning.computer/availability/v1/btc.json
 Reason: For reliable Lightning nodes
 
-WebLN Browser and LNURL will also not use Tor.`
+WebLN Browser and LNURL will also not use Tor.
+
+Do you wish to proceed?`
 :
 `Disabling Tor requires an app restart.
 Do you wish to proceed?`;
@@ -680,18 +682,25 @@ Do you wish to proceed?`;
     Alert.alert(
       "Tor",
       text,
-      [{ text: "Cancel" },
+      [{ text: "No" },
       {
-        text: !torEnabled ? "Restart app and enable Tor" : "Restart app and disable Tor",
+        text: "Yes",
         onPress: async () => {
           await changeTorEnabled(!torEnabled);
-          try {
-            await NativeModules.LndMobile.stopLnd();
-            await NativeModules.LndMobileTools.killLnd();
-          } catch(e) {
-            console.log(e);
+          if (PLATFORM === "android") {
+            try {
+              await NativeModules.LndMobile.stopLnd();
+              await NativeModules.LndMobileTools.killLnd();
+            } catch(e) {
+              console.log(e);
+            }
+            NativeModules.LndMobileTools.restartApp();
+          } else {
+            Alert.alert(
+              "Restart required",
+              "Blixt Wallet has to be restarted before the new configuration is applied."
+            );
           }
-          NativeModules.LndMobileTools.restartApp();
         },
       }
     ]);
@@ -1149,7 +1158,7 @@ Do you wish to proceed?`;
             </Body>
             <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
           </ListItem>
-          {PLATFORM === "android" &&
+          {["android", "ios"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
               <Left>
                 <TorSvg />
@@ -1160,7 +1169,7 @@ Do you wish to proceed?`;
               <Right><CheckBox checked={torEnabled} onPress={onChangeTorEnabled} /></Right>
             </ListItem>
           }
-          {torEnabled &&
+          {(torEnabled && PLATFORM === "android") &&
             <ListItem style={style.listItem} button={true} icon={true} onPress={onShowOnionAddressPress}>
               <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="AntDesign" name="qrcode" /></Left>
               <Body>

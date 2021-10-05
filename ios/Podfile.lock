@@ -258,6 +258,8 @@ PODS:
     - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
+  - react-native-tor (0.1.7):
+    - React
   - react-native-webview (11.14.0):
     - React-Core
   - React-perflogger (0.66.0)
@@ -399,6 +401,7 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
+  - react-native-tor (from `../node_modules/react-native-tor`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -499,6 +502,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/slider"
   react-native-sqlite-storage:
     :path: "../node_modules/react-native-sqlite-storage"
+  react-native-tor:
+    :path: "../node_modules/react-native-tor"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-perflogger:
@@ -594,6 +599,7 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-slider: 269d81247e2a87358ee03241da55b00c919e4d7a
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
+  react-native-tor: 6a64351e96ccd6a49941989703f63ec81fc1ae7c
   react-native-webview: d70bc760daaa0e2667dec569b93014882565819c
   React-perflogger: 1f554c2b684e2f484f9edcdfdaeedab039fbaca8
   React-RCTActionSheet: 610d5a5d71ab4808734782c8bca6a12ec3563672
@@ -626,6 +632,6 @@ SPEC CHECKSUMS:
   SwiftProtobuf: c3c12645230d9b09c72267e0de89468c5543bd86
   Yoga: c11abbf5809216c91fcd62f5571078b83d9b6720
 
-PODFILE CHECKSUM: 38fe29b014a89954516d148ce5ef844668d48cbe
+PODFILE CHECKSUM: 927c20a12f1de4a478b87a1af4f1648f64294f2c
 
 COCOAPODS: 1.10.1

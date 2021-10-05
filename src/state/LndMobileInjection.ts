@@ -80,7 +80,7 @@ export interface ILndMobileInjections {
     subscribeState: () => Promise<string>;
     decodeState: (data: string) => lnrpc.SubscribeStateResponse;
     checkStatus: () => Promise<number>;
-    startLnd: (torEnabled: boolean) => Promise<string>;
+    startLnd: (torEnabled: boolean, args: string) => Promise<string>;
     checkICloudEnabled: () => Promise<boolean>;
     checkApplicationSupportExists: () => Promise<boolean>;
     checkLndFolderExists: () => Promise<boolean>;

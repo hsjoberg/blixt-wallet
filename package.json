@@ -58,7 +58,7 @@
     "color": "^4.0.1",
     "copy-webpack-plugin": "^9.0.1",
     "crypto-js": "^4.1.1",
-    "date-fns": "^2.24.0",
+    "date-fns": "^2.25.0",
     "easy-peasy": "^5.0.3",
     "expo-barcode-scanner": "^10.2.2",
     "expo-camera": "^11.2.2",
@@ -109,6 +109,7 @@
     "react-native-status-bar-height": "^2.6.0",
     "react-native-svg": "^12.1.1",
     "react-native-svg-web": "^1.0.9",
+    "react-native-tor": "^0.1.7",
     "react-native-unimodules": "^0.14.8",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "^0.17.5",
@@ -129,7 +130,7 @@
     "webln": "^0.2.2",
     "webpack": "^5.56.1",
     "webpack-cli": "^4.8.0",
-    "webpack-dev-server": "4.3.0"
+    "webpack-dev-server": "^4.3.1"
   },
   "devDependencies": {
     "@testing-library/react-native": "7.2.0",
@@ -141,7 +142,7 @@
     "@types/jest": "^27.0.2",
     "@types/long": "4.0.1",
     "@types/react": "^17.0.27",
-    "@types/react-native": "^0.65.3",
+    "@types/react-native": "^0.65.5",
     "@types/react-native-push-notification": "^7.3.2",
     "@types/react-native-sqlite-storage": "^5.0.1",
     "@types/react-native-vector-icons": "^6.4.9",

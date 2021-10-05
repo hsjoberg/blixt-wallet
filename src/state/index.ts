@@ -1,8 +1,9 @@
-import { NativeModules } from "react-native";
+import { NativeModules, PlatformColor } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
 import * as base64 from "base64-js";
+import Tor from "react-native-tor";
 
 import { IStoreInjections } from "./store";
 import { ILightningModel, lightning, LndChainBackend } from "./Lightning";
@@ -192,10 +193,17 @@ export const model: IStoreModel = {
     try {
       let torEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled) ?? false;
       actions.setTorEnabled(torEnabled);
+      let socksPort = 0;
       if (torEnabled) {
         try {
           actions.setTorLoading(true);
-          await NativeModules.BlixtTor.startTor(); // FIXME
+          if (PLATFORM === "android") {
+            await NativeModules.BlixtTor.startTor();
+          } else if (PLATFORM === "ios") {
+            const tor = Tor();
+            socksPort = await tor.startIfNotStarted();
+          }
+          log.i("socksPort", [socksPort]);
         } catch (e) {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
@@ -230,7 +238,7 @@ export const model: IStoreModel = {
       if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
         log.i("Starting lnd");
         try {
-          log.d("startLnd", [await startLnd(torEnabled)]);
+          log.d("startLnd", [await startLnd(torEnabled, socksPort > 0 ? ("--tor.socks=127.0.0.1:" + socksPort) : "")]);
         } catch (e) {
           if (e.message.includes("lnd already started")) {
             toast("lnd already started", 3000, "warning");

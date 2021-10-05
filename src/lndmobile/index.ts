@@ -61,8 +61,8 @@ export const decodeState = (data: string): lnrpc.SubscribeStateResponse => {
 /**
  * @throws
  */
-export const startLnd = async (torEnabled: boolean): Promise<string> => {
-  return await LndMobile.startLnd(torEnabled);
+export const startLnd = async (torEnabled: boolean, args: string): Promise<string> => {
+  return await LndMobile.startLnd(torEnabled, args);
 };
 
 export const checkICloudEnabled = async (): Promise<boolean> => {

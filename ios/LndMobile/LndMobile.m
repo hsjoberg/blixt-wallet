@@ -15,6 +15,7 @@ RCT_EXTERN_METHOD(
 
 RCT_EXTERN_METHOD(
   startLnd: (BOOL)torEnabled
+  args: (NSString *)args
   resolver: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject
 )

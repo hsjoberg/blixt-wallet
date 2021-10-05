@@ -1779,6 +1779,11 @@
   resolved "https://registry.yarnpkg.com/@types/aes-js/-/aes-js-3.1.1.tgz#34b3978122310c135de4b377270d1d65676fae28"
   integrity sha512-SDSGgXT3LRCH6qMWk8OHT1vLSVNuHNvCpKCx2/TYtQMbMGGgxJC9fspwSkQjqzRagrWnCrxuLL3jMNXLXHHvSw==
 
+"@types/async@^3.2.6":
+  version "3.2.8"
+  resolved "https://registry.yarnpkg.com/@types/async/-/async-3.2.8.tgz#c4171a8990ed9ae4f0843cacbdceb4fabd7cc7e8"
+  integrity sha512-1vvBNUF6mY6Px8MZIJoTbCI8h06N9jkIFGbLxaVJk9nX11TlnojrzUoN3MyRgqw5pL67+eV3MUvPX7PqjM5Wbg==
+
 "@types/babel__core@^7.0.0", "@types/babel__core@^7.1.14":
   version "7.1.16"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.16.tgz#bc12c74b7d65e82d29876b5d0baf5c625ac58702"
@@ -2011,10 +2016,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-native@^0.65.3":
-  version "0.65.3"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.65.3.tgz#1cc6eb292ab7f4487d3c378ff0be04940fa257b4"
-  integrity sha512-23YX98rFNR43f2rvEV1cQ8VAFSj9ylXPqmzQMotC45hsK/SCNtLwJx1mgZ5jkyqs9TLjspzU0jszr58+Z9seQQ==
+"@types/react-native@^0.65.5":
+  version "0.65.5"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.65.5.tgz#e5e473be8c7ed784419554f25cc8850b9c3ce68d"
+  integrity sha512-lc2JVmqVIkFmEtUHX8jCkuepqRSzlhRPBIlVFVc0hgfoUxvntrORhmK7LCnAbHfmpUqVVGhMjax27CCTACQ2Kw==
   dependencies:
     "@types/react" "*"
 
@@ -2568,6 +2573,11 @@ async@^2.4.0, async@^2.6.2:
   integrity sha512-zflvls11DCy+dQWzTW2dzuilv8Z5X/pjfmZOWba6TNIVDm+2UDaJmXSOXlasHKfNBs8oo3M0aT50fDEWfKZjXg==
   dependencies:
     lodash "^4.17.14"
+
+async@^3.2.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/async/-/async-3.2.1.tgz#d3274ec66d107a47476a4c49136aacdb00665fc8"
+  integrity sha512-XdD5lRO/87udXCMC9meWdYiR+Nq6ZjUfXidViUZGu2F1MO4T3XwZ1et0hb2++BgLfhyJwy44BGB/yx80ABx8hg==
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -3856,10 +3866,10 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-date-fns@^2.24.0:
-  version "2.24.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.24.0.tgz#7d86dc0d93c87b76b63d213b4413337cfd1c105d"
-  integrity sha512-6ujwvwgPID6zbI0o7UbURi2vlLDR9uP26+tW6Lg+Ji3w7dd0i3DOcjcClLjLPranT60SSEFBwdSyYwn/ZkPIuw==
+date-fns@^2.25.0:
+  version "2.25.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.25.0.tgz#8c5c8f1d958be3809a9a03f4b742eba894fc5680"
+  integrity sha512-ovYRFnTrbGPD4nqaEqescPEv1mNwvt+UTqI3Ay9SzNtey9NZnYu6E2qCcBBgJ6/2VF1zGGygpyTDITqpQQ5e+w==
 
 dayjs@^1.8.15:
   version "1.10.7"
@@ -8537,6 +8547,14 @@ react-native-svg@^12.1.1:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"
 
+react-native-tor@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/react-native-tor/-/react-native-tor-0.1.7.tgz#5b3fa7621de7e105f08a75a405719270f24afb70"
+  integrity sha512-jIIo4at/cD/Hy6y/Ae+509XeJ/47AvAoRBJBOV0CsmpAh6WacBmIrkiEBv1SUqh2pkbXG6YGn3CRJFowbc5UYw==
+  dependencies:
+    "@types/async" "^3.2.6"
+    async "^3.2.0"
+
 react-native-unimodules@^0.14.8:
   version "0.14.8"
   resolved "https://registry.yarnpkg.com/react-native-unimodules/-/react-native-unimodules-0.14.8.tgz#8bf859ac1a4e06122e0331ddf9dec62019884432"
@@ -10465,10 +10483,10 @@ webpack-dev-middleware@^5.2.1:
     range-parser "^1.2.1"
     schema-utils "^3.1.0"
 
-webpack-dev-server@4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-4.3.0.tgz#732f5869d4c06e222b599daee64bc268f5edea24"
-  integrity sha512-kuqP9Xn4OzcKe7f0rJwd4p8xqiD+4b5Lzu8tJa8OttRL3E1Q8gI2KmUtouJTgDswjjvHOHlZDV8LTQfSY5qZSA==
+webpack-dev-server@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/webpack-dev-server/-/webpack-dev-server-4.3.1.tgz#759d3337f0fbea297fbd1e433ab04ccfc000076b"
+  integrity sha512-qNXQCVYo1kYhH9pgLtm8LRNkXX3XzTfHSj/zqzaqYzGPca+Qjr+81wj1jgPMCHhIhso9WEQ+kX9z23iG9PzQ7w==
   dependencies:
     ansi-html-community "^0.0.8"
     bonjour "^3.5.0"

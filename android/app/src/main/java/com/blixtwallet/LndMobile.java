@@ -325,7 +325,8 @@ class LndMobile extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void startLnd(boolean torEnabled, Promise promise) {
+  public void startLnd(boolean torEnabled, String args, Promise promise) {
+    // TODO args is only used on iOS right now
     int req = new Random().nextInt();
     requests.put(req, promise);
 
