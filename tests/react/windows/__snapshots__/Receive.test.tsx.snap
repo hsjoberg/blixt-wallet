@@ -60,6 +60,8 @@ exports[`renders correctly 1`] = `
             }
           >
             <View
+              collapsable={false}
+              nativeID="animatedComponent"
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
@@ -77,6 +79,8 @@ exports[`renders correctly 1`] = `
             />
           </View>
           <View
+            collapsable={false}
+            nativeID="animatedComponent"
             pointerEvents="box-none"
             style={
               Object {
@@ -133,6 +137,8 @@ exports[`renders correctly 1`] = `
                 <Text
                   accessibilityRole="header"
                   aria-level="1"
+                  collapsable={false}
+                  nativeID="animatedComponent"
                   numberOfLines={1}
                   onLayout={[Function]}
                   style={
@@ -248,6 +254,8 @@ exports[`renders correctly 1`] = `
             }
           >
             <View
+              collapsable={false}
+              nativeID="animatedComponent"
               pointerEvents="box-none"
               style={
                 Object {
@@ -490,13 +498,18 @@ exports[`renders correctly 1`] = `
                                                 onLayout={[Function]}
                                                 style={
                                                   Array [
+                                                    Array [
+                                                      Object {
+                                                        "display": "flex",
+                                                        "flex": 1,
+                                                        "height": "100%",
+                                                        "justifyContent": "space-between",
+                                                      },
+                                                      undefined,
+                                                    ],
                                                     Object {
-                                                      "display": "flex",
-                                                      "flex": 1,
-                                                      "height": "100%",
-                                                      "justifyContent": "space-between",
+                                                      "paddingBottom": 0,
                                                     },
-                                                    undefined,
                                                   ]
                                                 }
                                               >
@@ -512,8 +525,10 @@ exports[`renders correctly 1`] = `
                                                 >
                                                   <View
                                                     accessible={true}
+                                                    collapsable={false}
                                                     focusable={false}
                                                     forwardedRef={[Function]}
+                                                    nativeID="animatedComponent"
                                                     onClick={[Function]}
                                                     onResponderGrant={[Function]}
                                                     onResponderMove={[Function]}
@@ -557,7 +572,6 @@ exports[`renders correctly 1`] = `
                                                       Amount ₿
                                                     </Text>
                                                     <TextInput
-                                                      allowFontScaling={true}
                                                       editable={true}
                                                       keyboardType="numeric"
                                                       onBlur={[Function]}
@@ -566,7 +580,6 @@ exports[`renders correctly 1`] = `
                                                       onSubmitEditing={[Function]}
                                                       placeholder="0"
                                                       placeholderTextColor="#575757"
-                                                      rejectResponderTermination={true}
                                                       returnKeyType="done"
                                                       style={
                                                         Object {
@@ -621,8 +634,10 @@ exports[`renders correctly 1`] = `
                                                   </View>
                                                   <View
                                                     accessible={true}
+                                                    collapsable={false}
                                                     focusable={false}
                                                     forwardedRef={[Function]}
+                                                    nativeID="animatedComponent"
                                                     onClick={[Function]}
                                                     onResponderGrant={[Function]}
                                                     onResponderMove={[Function]}
@@ -666,7 +681,6 @@ exports[`renders correctly 1`] = `
                                                       Amount USD
                                                     </Text>
                                                     <TextInput
-                                                      allowFontScaling={true}
                                                       editable={true}
                                                       keyboardType="numeric"
                                                       onBlur={[Function]}
@@ -675,7 +689,6 @@ exports[`renders correctly 1`] = `
                                                       onSubmitEditing={[Function]}
                                                       placeholder="0.00"
                                                       placeholderTextColor="#575757"
-                                                      rejectResponderTermination={true}
                                                       returnKeyType="done"
                                                       style={
                                                         Object {
@@ -725,8 +738,10 @@ exports[`renders correctly 1`] = `
                                                   </View>
                                                   <View
                                                     accessible={true}
+                                                    collapsable={false}
                                                     focusable={false}
                                                     forwardedRef={[Function]}
+                                                    nativeID="animatedComponent"
                                                     onClick={[Function]}
                                                     onResponderGrant={[Function]}
                                                     onResponderMove={[Function]}
@@ -770,13 +785,11 @@ exports[`renders correctly 1`] = `
                                                       Payer
                                                     </Text>
                                                     <TextInput
-                                                      allowFontScaling={true}
                                                       editable={true}
                                                       onChangeText={[Function]}
                                                       onFocus={[Function]}
                                                       placeholder="For bookkeeping"
                                                       placeholderTextColor="#575757"
-                                                      rejectResponderTermination={true}
                                                       style={
                                                         Object {
                                                           "color": "#000",
@@ -794,8 +807,10 @@ exports[`renders correctly 1`] = `
                                                   </View>
                                                   <View
                                                     accessible={true}
+                                                    collapsable={false}
                                                     focusable={false}
                                                     forwardedRef={[Function]}
+                                                    nativeID="animatedComponent"
                                                     onClick={[Function]}
                                                     onResponderGrant={[Function]}
                                                     onResponderMove={[Function]}
@@ -839,13 +854,11 @@ exports[`renders correctly 1`] = `
                                                       Message
                                                     </Text>
                                                     <TextInput
-                                                      allowFontScaling={true}
                                                       editable={true}
                                                       onChangeText={[Function]}
                                                       onFocus={[Function]}
                                                       placeholder="Message to payer"
                                                       placeholderTextColor="#575757"
-                                                      rejectResponderTermination={true}
                                                       style={
                                                         Object {
                                                           "color": "#000",
@@ -886,9 +899,16 @@ exports[`renders correctly 1`] = `
                                                     }
                                                   >
                                                     <View
+                                                      accessibilityState={
+                                                        Object {
+                                                          "disabled": true,
+                                                        }
+                                                      }
                                                       accessible={true}
+                                                      collapsable={false}
                                                       focusable={true}
                                                       forwardedRef={[Function]}
+                                                      nativeID="animatedComponent"
                                                       onClick={[Function]}
                                                       onResponderGrant={[Function]}
                                                       onResponderMove={[Function]}
@@ -925,9 +945,7 @@ exports[`renders correctly 1`] = `
                                                       testID="create-invoice"
                                                     >
                                                       <ActivityIndicator
-                                                        animating={true}
                                                         color="#e5eaea"
-                                                        hidesWhenStopped={true}
                                                         size="large"
                                                         style={
                                                           Object {
@@ -953,6 +971,8 @@ exports[`renders correctly 1`] = `
                                               style={null}
                                             >
                                               <View
+                                                collapsable={false}
+                                                nativeID="animatedComponent"
                                                 pointerEvents="box-none"
                                                 style={
                                                   Object {
@@ -966,6 +986,8 @@ exports[`renders correctly 1`] = `
                                                 }
                                               >
                                                 <View
+                                                  collapsable={false}
+                                                  nativeID="animatedComponent"
                                                   style={
                                                     Object {
                                                       "backgroundColor": "#5F5F5F",
@@ -984,6 +1006,8 @@ exports[`renders correctly 1`] = `
                                                 />
                                               </View>
                                               <View
+                                                collapsable={false}
+                                                nativeID="animatedComponent"
                                                 pointerEvents="box-none"
                                                 style={
                                                   Object {
@@ -1014,6 +1038,8 @@ exports[`renders correctly 1`] = `
                                                   }
                                                 >
                                                   <View
+                                                    collapsable={false}
+                                                    nativeID="animatedComponent"
                                                     pointerEvents="box-none"
                                                     style={
                                                       Object {
@@ -1026,6 +1052,8 @@ exports[`renders correctly 1`] = `
                                                     }
                                                   />
                                                   <View
+                                                    collapsable={false}
+                                                    nativeID="animatedComponent"
                                                     pointerEvents="box-none"
                                                     style={
                                                       Object {
@@ -1038,6 +1066,8 @@ exports[`renders correctly 1`] = `
                                                     <Text
                                                       accessibilityRole="header"
                                                       aria-level="1"
+                                                      collapsable={false}
+                                                      nativeID="animatedComponent"
                                                       numberOfLines={1}
                                                       onLayout={[Function]}
                                                       style={
@@ -1052,6 +1082,8 @@ exports[`renders correctly 1`] = `
                                                     </Text>
                                                   </View>
                                                   <View
+                                                    collapsable={false}
+                                                    nativeID="animatedComponent"
                                                     pointerEvents="box-none"
                                                     style={
                                                       Object {

@@ -60,6 +60,8 @@ exports[`renders correctly 1`] = `
             }
           >
             <View
+              collapsable={false}
+              nativeID="animatedComponent"
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
@@ -77,6 +79,8 @@ exports[`renders correctly 1`] = `
             />
           </View>
           <View
+            collapsable={false}
+            nativeID="animatedComponent"
             pointerEvents="box-none"
             style={
               Object {
@@ -133,6 +137,8 @@ exports[`renders correctly 1`] = `
                 <Text
                   accessibilityRole="header"
                   aria-level="1"
+                  collapsable={false}
+                  nativeID="animatedComponent"
                   numberOfLines={1}
                   onLayout={[Function]}
                   style={
@@ -248,6 +254,8 @@ exports[`renders correctly 1`] = `
             }
           >
             <View
+              collapsable={false}
+              nativeID="animatedComponent"
               pointerEvents="box-none"
               style={
                 Object {
@@ -326,7 +334,9 @@ exports[`renders correctly 1`] = `
                         >
                           <RNSScreen
                             activityState={2}
+                            collapsable={false}
                             forwardedRef={[Function]}
+                            nativeID="animatedComponent"
                             style={
                               Object {
                                 "bottom": 0,
@@ -538,9 +548,7 @@ exports[`renders correctly 1`] = `
                                                   }
                                                 >
                                                   <ActivityIndicator
-                                                    animating={true}
                                                     color="#e5eaea"
-                                                    hidesWhenStopped={true}
                                                     size="large"
                                                     style={
                                                       Object {
@@ -574,6 +582,8 @@ exports[`renders correctly 1`] = `
                                       </View>
                                     </RCTScrollView>
                                     <View
+                                      collapsable={false}
+                                      nativeID="animatedComponent"
                                       pointerEvents="box-none"
                                       style={
                                         Object {
@@ -633,6 +643,8 @@ exports[`renders correctly 1`] = `
                                         >
                                           <Text
                                             allowFontScaling={false}
+                                            collapsable={false}
+                                            nativeID="animatedComponent"
                                             onPress={[Function]}
                                             style={
                                               Array [
@@ -673,6 +685,8 @@ exports[`renders correctly 1`] = `
                                           </Text>
                                           <Text
                                             allowFontScaling={false}
+                                            collapsable={false}
+                                            nativeID="animatedComponent"
                                             onPress={[Function]}
                                             style={
                                               Array [
@@ -712,6 +726,8 @@ exports[`renders correctly 1`] = `
                                           </Text>
                                           <Text
                                             allowFontScaling={false}
+                                            collapsable={false}
+                                            nativeID="animatedComponent"
                                             onPress={[Function]}
                                             style={
                                               Array [
@@ -751,6 +767,8 @@ exports[`renders correctly 1`] = `
                                             
                                           </Text>
                                           <View
+                                            collapsable={false}
+                                            nativeID="animatedComponent"
                                             style={
                                               Object {
                                                 "opacity": 1,
@@ -763,6 +781,8 @@ exports[`renders correctly 1`] = `
                                           >
                                             <Text
                                               allowFontScaling={false}
+                                              collapsable={false}
+                                              nativeID="animatedComponent"
                                               onPress={[Function]}
                                               style={
                                                 Array [
@@ -801,6 +821,8 @@ exports[`renders correctly 1`] = `
                                           </View>
                                         </View>
                                         <Text
+                                          collapsable={false}
+                                          nativeID="animatedComponent"
                                           onPress={[Function]}
                                           style={
                                             Object {
@@ -818,6 +840,8 @@ exports[`renders correctly 1`] = `
                                           0.00000123 ₿
                                         </Text>
                                         <Text
+                                          collapsable={false}
+                                          nativeID="animatedComponent"
                                           style={
                                             Object {
                                               "color": "#e5eaea",
@@ -879,8 +903,10 @@ exports[`renders correctly 1`] = `
                             >
                               <View
                                 accessible={true}
+                                collapsable={false}
                                 focusable={true}
                                 forwardedRef={[Function]}
+                                nativeID="animatedComponent"
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
@@ -982,8 +1008,10 @@ exports[`renders correctly 1`] = `
                             >
                               <View
                                 accessible={true}
+                                collapsable={false}
                                 focusable={true}
                                 forwardedRef={[Function]}
+                                nativeID="animatedComponent"
                                 onClick={[Function]}
                                 onResponderGrant={[Function]}
                                 onResponderMove={[Function]}
