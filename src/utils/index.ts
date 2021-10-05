@@ -5,6 +5,7 @@ import Long from "long";
 import Geolocation, { GeolocationResponse, GeolocationError } from "@react-native-community/geolocation";
 import aesjs, { ByteSource } from "aes-js";
 import * as base64 from "base64-js";
+import { Alert } from "react-native";
 
 export const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 
@@ -67,13 +68,17 @@ export const hexToUint8Array = (hexString: string) => {
 };
 
 export const toast = (message: string, period = 8000, type: "danger" | "success" | "warning" = "success", button?: string) => {
-  console.log(message);
-  Toast.show({
-    duration: period,
-    type,
-    text: message,
-    buttonText: button,
-  });
+  try {
+    console.log(message);
+    Toast.show({
+      duration: period,
+      type,
+      text: message,
+      buttonText: button,
+    });
+  } catch (error) {
+    Alert.alert("", error.message);
+  }
 }
 
 export const getGeolocation = (): Promise<GeolocationResponse["coords"]> => {
