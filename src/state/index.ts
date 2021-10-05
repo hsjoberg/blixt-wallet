@@ -200,7 +200,10 @@ export const model: IStoreModel = {
           if (PLATFORM === "android") {
             await NativeModules.BlixtTor.startTor();
           } else if (PLATFORM === "ios") {
-            const tor = Tor();
+            const tor = Tor({
+              stopDaemonOnBackground: false,
+              startDaemonOnActive: true,
+            });
             socksPort = await tor.startIfNotStarted();
           }
           log.i("socksPort", [socksPort]);
