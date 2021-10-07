@@ -242,7 +242,7 @@ PODS:
     - React-Core
   - react-native-camera/RN (4.2.1):
     - React-Core
-  - react-native-document-picker (6.1.1):
+  - react-native-document-picker (7.1.0):
     - React-Core
   - react-native-fingerprint-scanner (6.0.0):
     - React
@@ -254,7 +254,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
-  - react-native-slider (4.1.7):
+  - react-native-slider (4.1.8):
     - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
@@ -591,13 +591,13 @@ SPEC CHECKSUMS:
   React-logger: 9a9cd87d4ea681ae929b32ef580638ff1b50fb24
   react-native-build-config: 1130ad8668ca251b65e95e002b5b8f308a96726f
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
-  react-native-document-picker: b95a0f0a22fd37d56cea697f84bc3893b2141d15
+  react-native-document-picker: bf12b9ca87790f9b723106ffde0eff239928e515
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-hash: f853f4db98157c4adb8e9dc956c0f076f27aa48f
   react-native-maps: 41d01d8e0afcebe32bec9eea3bd945adc1b18f7a
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
-  react-native-slider: 269d81247e2a87358ee03241da55b00c919e4d7a
+  react-native-slider: 64c2214609cdcd4ca9ac7260007dfa023a1824f6
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-tor: 6a64351e96ccd6a49941989703f63ec81fc1ae7c
   react-native-webview: d70bc760daaa0e2667dec569b93014882565819c

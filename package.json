@@ -35,7 +35,7 @@
     "web:bundle-for-blixt-site": "rm -r dist || true && WEB_DEMO=1 NODE_ENV=production webpack"
   },
   "dependencies": {
-    "@babel/core": "^7.15.5",
+    "@babel/core": "^7.15.8",
     "@babel/preset-typescript": "^7.15.0",
     "@babel/runtime": "^7.15.3",
     "@react-native-community/async-storage": "1.12.1",
@@ -44,7 +44,7 @@
     "@react-native-community/google-signin": "5.0.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/push-notification-ios": "1.10.1",
-    "@react-native-community/slider": "4.1.7",
+    "@react-native-community/slider": "^4.1.8",
     "@react-navigation/bottom-tabs": "^6.0.7",
     "@react-navigation/drawer": "^6.1.4",
     "@react-navigation/material-top-tabs": "^6.0.1",
@@ -81,7 +81,7 @@
     "react-native-camera": "^4.2.1",
     "react-native-codegen": "^0.0.8",
     "react-native-dialogs": "1.1.1",
-    "react-native-document-picker": "^6.1.1",
+    "react-native-document-picker": "^7.1.0",
     "react-native-easy-grid": "0.2.2",
     "react-native-enhanced-popup-menu": "^0.7.0",
     "react-native-fingerprint-scanner": "6.0.0",
@@ -128,8 +128,8 @@
     "use-debounce": "^7.0.0",
     "wasm-loader": "^1.3.0",
     "webln": "^0.2.2",
-    "webpack": "^5.56.1",
-    "webpack-cli": "^4.8.0",
+    "webpack": "^5.58.0",
+    "webpack-cli": "^4.9.0",
     "webpack-dev-server": "^4.3.1"
   },
   "devDependencies": {
