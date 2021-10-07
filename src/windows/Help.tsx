@@ -34,17 +34,20 @@ export default function SyncInfo({ route }: any) {
             <Text style={{ marginBottom: 14 }}>
               If you run into problems or have feedback, you can contact Blixt Wallet developers by filing an issue on Github or by contacting us via email.
             </Text>
+            <Text style={{ marginBottom: 14 }}>
+              You are also welcome to join our public Telegram chat group.
+            </Text>
             <Text style={{ marginBottom: 28 }}>
-              As Blixt Wallet is a new wallet, we need feedback on common issues that users might face.
+              As Blixt Wallet is a new wallet, we need feedback on common issues that you might encounter.
             </Text>
             <View style={style.actionBar}>
-              <Button style={style.actionBarButton} onPress={onPressGithub} small={true} >
+              <Button style={style.actionBarButton} onPress={onPressGithub} small={true}>
                 <Text style={style.actionBarButtonText}>GitHub</Text>
               </Button>
-              <Button style={style.actionBarButton} onPress={onPressTelegram} small={true} >
+              <Button style={style.actionBarButton} onPress={onPressTelegram} small={true}>
                 <Text style={style.actionBarButtonText}>Telegram group</Text>
               </Button>
-              <Button style={style.actionBarButton} onPress={onPressEmail} small={true} >
+              <Button style={style.actionBarButton} onPress={onPressEmail} small={true}>
                 <Text style={style.actionBarButtonText}>Email</Text>
               </Button>
             </View>

@@ -24,6 +24,7 @@ import QrCode from "../components/QrCode";
 import { PLATFORM } from "../utils/constants";
 import { fontFactor, fontFactorNormalized, zoomed } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
+import Long from "long";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -253,6 +254,7 @@ function Overview({ navigation }: IOverviewProps) {
                 fontSize: headerBtcFontSize,
                 height: PLATFORM === "web" ? undefined : headerBtcHeight,
                 position: "relative",
+                paddingHorizontal: 12,
 
                 marginTop: Animated.add(
                   headerBtcMarginTop,
@@ -295,6 +297,7 @@ interface ISendOnChain {
   bitcoinAddress?: string;
 }
 const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
@@ -307,19 +310,19 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
     <Card>
       <CardItem>
         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
-          <View style={{ width: "53%", justifyContent:"center", paddingRight: 4 }}>
+          <View style={{ width: "59%", justifyContent: "center", paddingRight: 4 }}>
             <Text style={{ fontSize: 15 * fontFactor }}>
               Welcome to Blixt Wallet!{"\n\n"}
               <Text style={{ fontSize: 13 * fontFactor }}>
-                To get started, send on-chain to the bitcoin address to the right.{"\n\n"}
-                Send at least 22000 satoshi ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).{"\n\n"}
-                A channel will automatically be opened for you.
+                To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
+                A channel will automatically be opened for you.{"\n\n"}
+                Send at least {formatBitcoin(Long.fromValue(22000), bitcoinUnit)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
               </Text>
             </Text>
           </View>
           <View style={{ justifyContent: "center" }}>
             {bitcoinAddress
-              ? <QrCode onPress={onQrPress} data={bitcoinAddress?.toUpperCase() ?? " "} size={135} border={10} />
+              ? <QrCode onPress={onQrPress} data={bitcoinAddress?.toUpperCase() ?? " "} size={127} border={10} />
               : <View style={{ width: 135 + 10 + 9, height: 135 + 10 + 8, justifyContent: "center" }}>
                   <NativeBaseSpinner color={blixtTheme.light} />
                 </View>
