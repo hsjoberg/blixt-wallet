@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -24,8 +24,8 @@
 		CC3F684E25915AD7000F11AA /* LndMobileTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F684D25915AD7000F11AA /* LndMobileTools.swift */; };
 		CC3F68532591683B000F11AA /* Lnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F68522591683B000F11AA /* Lnd.swift */; };
 		CC4F84C39523CF90E4DA5819 /* libPods-BlixtWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24A62E03C64FF473C7843187 /* libPods-BlixtWallet.a */; };
+		CC84D3E5270F3EF9007C6D63 /* Lndmobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDE5A1F270E84D4004EE251 /* Lndmobile.xcframework */; };
 		CCB51AEA259C2F74002637A2 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCB51AE9259C2F74002637A2 /* CloudKit.framework */; };
-		CCC7384A2599894B00CC7028 /* Lndmobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC3EDCF9259950F2007D29B4 /* Lndmobile.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		CCDBCBB525864296003E8BA8 /* LndMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDBCBB425864296003E8BA8 /* LndMobile.swift */; };
 /* End PBXBuildFile section */
 
@@ -86,7 +86,6 @@
 		CC28DA0F25925FD500A2DFA3 /* walletunlocker.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = walletunlocker.pb.swift; sourceTree = "<group>"; };
 		CC3ED73E25983106007D29B4 /* LndMobileScheduledSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LndMobileScheduledSync.swift; sourceTree = "<group>"; };
 		CC3ED74325983118007D29B4 /* LndMobileScheduledSync.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LndMobileScheduledSync.m; sourceTree = "<group>"; };
-		CC3EDCF9259950F2007D29B4 /* Lndmobile.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Lndmobile.framework; sourceTree = "<group>"; };
 		CC3F684825915ACA000F11AA /* LndMobileTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LndMobileTools.m; sourceTree = "<group>"; };
 		CC3F684D25915AD7000F11AA /* LndMobileTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LndMobileTools.swift; sourceTree = "<group>"; };
 		CC3F68522591683B000F11AA /* Lnd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lnd.swift; sourceTree = "<group>"; };
@@ -95,6 +94,7 @@
 		CCB51AE9259C2F74002637A2 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		CCDBCBB325864296003E8BA8 /* BlixtWallet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BlixtWallet-Bridging-Header.h"; sourceTree = "<group>"; };
 		CCDBCBB425864296003E8BA8 /* LndMobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LndMobile.swift; sourceTree = "<group>"; };
+		CCDE5A1F270E84D4004EE251 /* Lndmobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Lndmobile.xcframework; sourceTree = "<group>"; };
 		CFC488B9CB00B9AB0D8FDE59 /* libPods-BlixtWallet-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BlixtWallet-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D57823EDB09B4CD1998E77F2 /* IBMPlexSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "IBMPlexSans-Medium.ttf"; path = "../assets/fonts/IBMPlexSans-Medium.ttf"; sourceTree = "<group>"; };
 		D64B150F528503028AA4B961 /* Pods-BlixtWallet-tvOS.debugtestnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet-tvOS.debugtestnet.xcconfig"; path = "Target Support Files/Pods-BlixtWallet-tvOS/Pods-BlixtWallet-tvOS.debugtestnet.xcconfig"; sourceTree = "<group>"; };
@@ -119,9 +119,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC84D3E5270F3EF9007C6D63 /* Lndmobile.xcframework in Frameworks */,
 				CCB51AEA259C2F74002637A2 /* CloudKit.framework in Frameworks */,
 				CC4F84C39523CF90E4DA5819 /* libPods-BlixtWallet.a in Frameworks */,
-				CCC7384A2599894B00CC7028 /* Lndmobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +164,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CCDE5A1F270E84D4004EE251 /* Lndmobile.xcframework */,
 				CCB51AE9259C2F74002637A2 /* CloudKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -224,7 +225,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				CC3EDCF9259950F2007D29B4 /* Lndmobile.framework */,
 				13B07FAE1A68108700A75B9A /* BlixtWallet */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* BlixtWalletTests */,
@@ -643,7 +643,11 @@
 				);
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -664,7 +668,11 @@
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -684,7 +692,7 @@
 				CHAIN = mainnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				EXCLUDED_ARCHS = "i386 x86_64";
@@ -696,7 +704,10 @@
 				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 0.3.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -721,7 +732,7 @@
 				CHAIN = mainnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				EXCLUDED_ARCHS = "i386 x86_64";
@@ -733,7 +744,10 @@
 				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 0.3.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -799,7 +813,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -854,7 +871,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -917,7 +937,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -937,7 +960,7 @@
 				CHAIN = testnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				EXCLUDED_ARCHS = "i386 x86_64";
@@ -949,7 +972,10 @@
 				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 0.3.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -978,7 +1004,11 @@
 				);
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1033,7 +1063,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -1054,7 +1087,7 @@
 				CHAIN = testnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				EXCLUDED_ARCHS = "i386 x86_64";
@@ -1066,7 +1099,10 @@
 				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 0.3.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1091,7 +1127,11 @@
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1153,7 +1193,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -1173,7 +1216,7 @@
 				CHAIN = regtest;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				EXCLUDED_ARCHS = "i386 x86_64";
@@ -1185,7 +1228,10 @@
 				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 0.3.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1214,7 +1260,11 @@
 				);
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1269,7 +1319,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -1290,7 +1343,7 @@
 				CHAIN = regtest;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				EXCLUDED_ARCHS = "i386 x86_64";
@@ -1302,7 +1355,10 @@
 				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 0.3.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1327,7 +1383,11 @@
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1389,7 +1449,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -1409,7 +1472,7 @@
 				CHAIN = mainnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				EXCLUDED_ARCHS = "i386 x86_64";
@@ -1421,7 +1484,10 @@
 				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 0.3.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1450,7 +1516,11 @@
 				);
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1505,7 +1575,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -1526,7 +1599,7 @@
 				CHAIN = mainnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 32;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				EXCLUDED_ARCHS = "i386 x86_64";
@@ -1538,7 +1611,10 @@
 				);
 				INFOPLIST_FILE = BlixtWallet/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 0.3.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1563,7 +1639,11 @@
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = BlixtWalletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
