@@ -479,7 +479,7 @@ exports[`renders correctly 1`] = `
                                                   Object {
                                                     "justifyContent": "center",
                                                     "paddingRight": 4,
-                                                    "width": "53%",
+                                                    "width": "59%",
                                                   }
                                                 }
                                               >
@@ -517,17 +517,19 @@ exports[`renders correctly 1`] = `
                                                     }
                                                     uppercase={false}
                                                   >
-                                                    To get started, send on-chain to the bitcoin address to the right.
-                                                    
-
-
-                                                    Send at least 22000 satoshi (
-                                                    0.00 USD
-                                                    ).
+                                                    To get started, send on-chain funds to the bitcoin address to the right.
                                                     
 
 
                                                     A channel will automatically be opened for you.
+                                                    
+
+
+                                                    Send at least 
+                                                    0.00022 ₿
+                                                     (
+                                                    0.00 USD
+                                                    ).
                                                   </Text>
                                                 </Text>
                                               </View>
@@ -832,6 +834,7 @@ exports[`renders correctly 1`] = `
                                               "height": 72.8,
                                               "marginBottom": -1,
                                               "marginTop": 59,
+                                              "paddingHorizontal": 12,
                                               "position": "relative",
                                             }
                                           }
