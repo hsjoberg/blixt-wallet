@@ -91,7 +91,7 @@
     "react-native-hash": "^2.0.0",
     "react-native-icloudstore": "git+https://github.com/manicakes/react-native-icloudstore.git#4c9f668d3121aedf7a5635b0a13f6e3999c0e6f3",
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
-    "react-native-keychain": "^8.0.0",
+    "react-native-keychain": "4.0.5",
     "react-native-linear-gradient": "2.5.6",
     "react-native-maps": "^0.29.3",
     "react-native-material-menu": "^2.0.0",
