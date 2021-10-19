@@ -19,6 +19,7 @@ export interface IOpenChannelPayload {
   // <pubkey>@<ip>[:<port>]
   peer: string;
   amount: number;
+  feeRateSat?: number;
 }
 
 export interface ICloseChannelPayload {
@@ -271,7 +272,7 @@ export const channel: IChannelModel = {
     actions.setChannelEvents(channelEvents);
   }),
 
-  connectAndOpenChannel: thunk(async (_, { peer, amount }, { injections, getStoreActions }) => {
+  connectAndOpenChannel: thunk(async (_, { peer, amount, feeRateSat }, { injections, getStoreActions }) => {
     const { connectPeer } = injections.lndMobile.index;
     const { openChannel } = injections.lndMobile.channel;
     const [pubkey, host] = peer.split("@");
@@ -284,7 +285,7 @@ export const channel: IChannelModel = {
       }
     }
 
-    const result = await openChannel(pubkey, amount, true);
+    const result = await openChannel(pubkey, amount, true, feeRateSat);
     getStoreActions().onChain.addToTransactionNotificationBlacklist(bytesToHexString(result.fundingTxidBytes.reverse()))
     log.d("openChannel", [result]);
     return result;

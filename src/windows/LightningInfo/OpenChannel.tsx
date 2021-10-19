@@ -1,5 +1,5 @@
-import React, { useState, useLayoutEffect } from "react";
-import { Body, Text, Header, Container, Left, Button, Title, Icon, Input, Spinner } from "native-base";
+import React, { useState, useLayoutEffect, useRef } from "react";
+import { Text, Container, Button, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { LightningInfoStackParamList } from "./index";
@@ -9,7 +9,8 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";
-import { TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import Slider from "@react-native-community/slider";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -21,6 +22,8 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
   const getChannels = useStoreActions((actions) => actions.channel.getChannels);
   const [peer, setPeer] = useState(peerUri ?? "");
   const [opening, setOpening] = useState(false);
+  const [feeRate, setFeeRate] = useState(0);
+  const slider = useRef<Slider>(null);
   const {
     dollarValue,
     bitcoinValue,
@@ -44,6 +47,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
       await connectAndOpenChannel({
         peer,
         amount: satoshiValue,
+        feeRateSat: feeRate !== 0 ? feeRate : undefined,
       });
       await getChannels(undefined);
       navigation.pop();
@@ -79,6 +83,45 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
           key: "AMOUNT_FIAT",
           title: `Amount ${fiatUnit}`,
           component: (<Input placeholder={`Amount ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} />)
+        }, {
+          key: "SAT",
+          title: `Fee-rate`,
+          component: (
+            <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: 5 }}>
+              <Slider
+                ref={slider}
+                style={{
+                  width: 185,
+                  height: 25,
+                  marginTop: 10,
+                  marginBottom: 10,
+                }}
+                onValueChange={setFeeRate}
+                minimumValue={0}
+                maximumValue={500}
+                step={1}
+                thumbTintColor={blixtTheme.primary}
+                minimumTrackTintColor={blixtTheme.lightGray}
+                maximumTrackTintColor={blixtTheme.lightGray}
+              />
+              <TextInput
+                keyboardType="numeric"
+                returnKeyType="done"
+                value={`${feeRate || ""}`}
+                onChangeText={(text) => {
+                  let value = Math.min(Number.parseInt(text || "0"), 1000);
+                  if (Number.isNaN(value)) {
+                    value = 0
+                  }
+                  setFeeRate(value);
+                  slider.current?.setNativeProps({ value })
+                }}
+                style={style.feeRateTextInput}
+              />
+              {feeRate !== 0 && <Text> sat/vB</Text>}
+              {feeRate === 0 && <Text> auto</Text>}
+            </View>
+          ),
         }]}
         buttons={[
           <Button key="OPEN_CHANNEL" onPress={onOpenChannelPress} block={true} primary={true} disabled={opening}>
@@ -90,3 +133,13 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
     </Container>
   );
 };
+
+const style = StyleSheet.create({
+  feeRateTextInput: {
+    height: 21,
+    fontFamily: blixtTheme.fontRegular,
+    fontSize: 15,
+    padding: 0,
+    color: blixtTheme.light,
+  },
+});
