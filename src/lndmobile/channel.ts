@@ -14,7 +14,7 @@ export const openChannel = async (pubkey: string, amount: number, privateChannel
     options: {
       nodePubkeyString: pubkey,
       localFundingAmount: Long.fromValue(amount),
-      targetConf: 2,
+      targetConf: feeRateSat ? undefined : 2,
       private: privateChannel,
       satPerByte: feeRateSat ? Long.fromValue(feeRateSat) : undefined,
     },
