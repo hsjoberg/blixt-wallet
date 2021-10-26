@@ -423,6 +423,11 @@ autopilot.conftarget=3
 autopilot.allocation=1.0
 autopilot.heuristic=externalscore:${Chain === "testnet" || Chain === "mainnet" ? "1.00" : "1.00"}
 autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? "0.00" : "0.00"}
+
+[protocol]
+protocol.wumbo-channels=true
+protocol.no-anchors=true
+protocol.no-script-enforced-lease=true
 `;
     await writeConfig(config);
   }),
