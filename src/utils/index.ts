@@ -1,3 +1,4 @@
+import { AppState } from "react-native";
 import { Toast } from "native-base";
 import { format } from "date-fns";
 import * as querystring from "querystring";
@@ -69,13 +70,16 @@ export const hexToUint8Array = (hexString: string) => {
 
 export const toast = (message: string, period = 8000, type: "danger" | "success" | "warning" = "success", button?: string) => {
   try {
-    console.log(message);
-    Toast.show({
-      duration: period,
-      type,
-      text: message,
-      buttonText: button,
-    });
+    if (AppState.currentState === "active") {
+      Toast.show({
+        duration: period,
+        type,
+        text: message,
+        buttonText: button,
+      });
+    } else {
+      console.log(`Got message in while in ${AppState.currentState} app state`)
+    }
   } catch (error) {
     Alert.alert("", error.message);
   }

@@ -242,7 +242,7 @@ PODS:
     - React-Core
   - react-native-camera/RN (4.2.1):
     - React-Core
-  - react-native-document-picker (7.1.0):
+  - react-native-document-picker (7.1.1):
     - React-Core
   - react-native-fingerprint-scanner (6.0.0):
     - React
@@ -254,7 +254,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
-  - react-native-slider (4.1.9):
+  - react-native-slider (4.1.10):
     - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
@@ -361,7 +361,7 @@ PODS:
     - React-Core
   - RNSVG (12.1.1):
     - React
-  - RNVectorIcons (8.1.0):
+  - RNVectorIcons (9.0.0):
     - React-Core
   - SwiftProtobuf (1.18.0)
   - Yoga (1.14.0)
@@ -591,13 +591,13 @@ SPEC CHECKSUMS:
   React-logger: bfddd3418dc1d45b77b822958f3e31422e2c179b
   react-native-build-config: 1130ad8668ca251b65e95e002b5b8f308a96726f
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
-  react-native-document-picker: bf12b9ca87790f9b723106ffde0eff239928e515
+  react-native-document-picker: f4cc4df2eff8c9015d862a59bdaef11a153f1292
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-hash: f853f4db98157c4adb8e9dc956c0f076f27aa48f
   react-native-maps: 41d01d8e0afcebe32bec9eea3bd945adc1b18f7a
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
-  react-native-slider: c4bee37b3fe65aaf3b266bb2173d56cb412cb5ae
+  react-native-slider: c98f8413776ec1218ec9cd4f8ed32bfd91d428fc
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-tor: 6a64351e96ccd6a49941989703f63ec81fc1ae7c
   react-native-webview: db22ab831b8c5f7697957a67f7a7ac1cecfed18d
@@ -628,7 +628,7 @@ SPEC CHECKSUMS:
   RNSecureRandom: 0dcee021fdb3d50cd5cee5db0ebf583c42f5af0e
   RNSound: 27e8268bdb0a1f191f219a33267f7e0445e8d62f
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
-  RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
+  RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   SwiftProtobuf: c3c12645230d9b09c72267e0de89468c5543bd86
   Yoga: 2b4a01651f42a32f82e6cef3830a3ba48088237f
 
