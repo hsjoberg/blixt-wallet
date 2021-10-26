@@ -32,6 +32,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Settings",
+      headerBackTitle: "Back",
       headerShown: true,
     });
   }, [navigation]);

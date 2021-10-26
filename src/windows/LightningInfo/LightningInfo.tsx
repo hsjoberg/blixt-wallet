@@ -41,7 +41,8 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Lightning Network",
+      headerTitle: "Lightning Channels",
+      headerBackTitle: "Back",
       headerShown: true,
       headerRight: () => {
         return (

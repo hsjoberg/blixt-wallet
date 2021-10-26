@@ -16,9 +16,11 @@ import BlixtForm from "../../components/Form";
 import { NavigationButton } from "../../components/NavigationButton";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { ITransaction } from "../../storage/database/transaction";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../Main";
 
 interface ILightningInfoProps {
-  navigation: any;
+  navigation: StackNavigationProp<RootStackParamList, "KeysendExperiment">;
 }
 export default function KeysendTest({ navigation }: ILightningInfoProps) {
   const [sending, setSending] = useState(false);
@@ -43,6 +45,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Keysend",
+      headerBackTitle: "Back",
       headerShown: true,
       headerRight: () => {
         return (

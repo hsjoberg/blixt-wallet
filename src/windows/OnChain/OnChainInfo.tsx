@@ -42,6 +42,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Bitcoin",
+      headerBackTitle: "Back",
       headerShown: true,
       headerRight: () => {
         return (

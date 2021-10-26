@@ -61,6 +61,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Pay invoice",
+      headerBackTitle: "Back",
       headerShown: true,
     });
 

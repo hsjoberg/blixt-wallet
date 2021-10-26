@@ -30,6 +30,7 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Receive",
+      headerBackTitle: "Back",
       headerShown: true,
     });
   }, [navigation]);

@@ -59,6 +59,7 @@ export type RootStackParamList = {
   LNURL: undefined;
   GoogleDriveTestbed: undefined;
   KeysendTest: undefined;
+  KeysendExperiment: undefined;
   DeeplinkChecker: undefined;
   WebLNBrowser: {
     url: string;

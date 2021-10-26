@@ -273,6 +273,7 @@ export default function ContactList({ navigation }: IContactListProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Contacts & Services",
+      headerBackTitle: "Back",
       headerShown: true,
       headerRight: () => {
         return (
