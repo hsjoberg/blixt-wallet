@@ -31,7 +31,7 @@ export interface ISettingsModel {
   changePreferFiat: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationEnabled: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationMapStyle: Thunk<ISettingsModel, keyof typeof MapStyle>;
-  changeOnchainExplorer: Thunk<ISettingsModel, keyof typeof OnchainExplorer>;
+  changeOnchainExplorer: Thunk<ISettingsModel, (keyof typeof OnchainExplorer) | string>;
   changeMultiPathPaymentsEnabled: Thunk<ISettingsModel, boolean>;
   changeTorEnabled: Thunk<ISettingsModel, boolean>;
   changeHideExpiredInvoices: Thunk<ISettingsModel, boolean>;
@@ -58,7 +58,7 @@ export interface ISettingsModel {
   setPreferFiat: Action<ISettingsModel, boolean>;
   setTransactionGeolocationEnabled: Action<ISettingsModel, boolean>;
   setTransactionGeolocationMapStyle: Action<ISettingsModel, keyof typeof MapStyle>;
-  setOnchainExplorer: Action<ISettingsModel, keyof typeof OnchainExplorer>;
+  setOnchainExplorer: Action<ISettingsModel, (keyof typeof OnchainExplorer) | string>;
   setMultiPathPaymentsEnabled: Action<ISettingsModel, boolean>;
   setTorEnabled: Action<ISettingsModel, boolean>;
   setHideExpiredInvoices: Action<ISettingsModel, boolean>;
@@ -85,7 +85,7 @@ export interface ISettingsModel {
   preferFiat: boolean;
   transactionGeolocationEnabled: boolean;
   transactionGeolocationMapStyle: keyof typeof MapStyle;
-  onchainExplorer: keyof typeof OnchainExplorer;
+  onchainExplorer: (keyof typeof OnchainExplorer) | string;
   multiPathPaymentsEnabled: boolean;
   torEnabled: boolean;
   hideExpiredInvoices: boolean;

@@ -31,7 +31,7 @@ export type SettingsStackParamList = {
   LndMobileHelpCenter: undefined;
   ChangeBitcoinUnit: ISelectListNavigationProps<string>;
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
-  ChangeOnchainExplorer: ISelectListNavigationProps<keyof typeof OnchainExplorer>;
+  ChangeOnchainExplorer: ISelectListNavigationProps<(keyof typeof OnchainExplorer) | string>;
   LightningPeers: undefined;
   ConnectToLighningPeer: undefined;
   ChannelProvider: ISelectListNavigationProps<string>;

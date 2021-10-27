@@ -11,8 +11,7 @@ import Blurmodal from "../../components/BlurModal";
 import { formatISO, toast } from "../../utils";
 import { useStoreState } from "../../state/store";
 import { formatBitcoin } from "../../utils/bitcoin-units";
-import { OnchainExplorer } from "../../state/Settings";
-
+import { constructOnchainExplorerUrl } from "../../utils/onchain-explorer";
 
 interface IMetaDataProps {
   title: string;
@@ -48,7 +47,7 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
   }
 
   const onPressBlockExplorer = async () => {
-    await Linking.openURL(`${OnchainExplorer[onchainExplorer]}${txId}`);
+    await Linking.openURL(constructOnchainExplorerUrl(onchainExplorer, txId));
   }
 
   return (

@@ -461,6 +461,19 @@ When you're done, you can copy the address code and/or open the link using Blixt
   const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
   const changeOnchainExplorer = useStoreActions((store) => store.settings.changeOnchainExplorer);
   const onChangeOnchainExplorerPress = async () => {
+    const setCustomExplorer = async () => {
+      const explorer = await Alert.promisePromptCallback(
+        "Custom Onchain Explorer",
+        "Set a custom onchain explorer (https://domain.com/)",
+        undefined,
+        onchainExplorer in OnchainExplorer ? undefined : onchainExplorer,
+      );
+
+      if (explorer.trim().length !== 0) {
+        await changeOnchainExplorer(explorer);
+      }
+    };
+
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
@@ -470,20 +483,38 @@ When you're done, you can copy the address code and/or open the link using Blixt
         items: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
           id: currOnchainExplorer,
           label: camelCaseToSpace(currOnchainExplorer),
-        }),
-      )});
+        })).concat(({
+          id: "CUSTOM",
+          label: "Custom explorer"
+        }))
+      });
 
       if (selectedItem) {
-        await changeOnchainExplorer(selectedItem.id);
+        if (selectedItem.id === "CUSTOM") {
+          // Custom explorer, let's ask the user for a URL
+          await setCustomExplorer();
+        } else {
+          await changeOnchainExplorer(selectedItem.id);
+        }
       }
     } else {
       navigation.navigate("ChangeOnchainExplorer", {
-        title: "Change on-chain explorer",
+        title: "Change onchain explorer",
         data: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
           title: camelCaseToSpace(currOnchainExplorer),
-          value: currOnchainExplorer as keyof typeof OnchainExplorer,
-        })),
-        onPick: async (currency) => await changeOnchainExplorer(currency),
+          value: currOnchainExplorer,
+        })).concat({
+          title: "Custom explorer",
+          value: "CUSTOM"
+        }),
+        onPick: async (onchainExplorer) => {
+          if (onchainExplorer === "CUSTOM") {
+            // Custom explorer, let's ask the user for a URL
+            await setCustomExplorer();
+          } else {
+            await changeOnchainExplorer(onchainExplorer);
+          }
+        },
       });
     }
   };
@@ -1010,7 +1041,7 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="FontAwesome" name="chain" /></Left>
             <Body>
               <Text>Onchain explorer</Text>
-              <Text note={true}>{camelCaseToSpace(onchainExplorer)}</Text>
+              <Text note={true}>{onchainExplorer in OnchainExplorer ? camelCaseToSpace(onchainExplorer) : onchainExplorer}</Text>
             </Body>
           </ListItem>
 
