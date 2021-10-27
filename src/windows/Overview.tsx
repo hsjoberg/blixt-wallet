@@ -3,11 +3,12 @@ import { Platform, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, Re
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import LinearGradient from "react-native-linear-gradient";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Color from "color";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import Long from "long";
 
 import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
@@ -24,7 +25,7 @@ import QrCode from "../components/QrCode";
 import { PLATFORM } from "../utils/constants";
 import { fontFactor, fontFactorNormalized, zoomed } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
-import Long from "long";
+import CopyAddress from "../components/CopyAddress";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -301,7 +302,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
-  const onQrPress = () => {
+  const copyAddress = () => {
     Clipboard.setString(bitcoinAddress!);
     toast("Bitcoin address copied to clipboard");
   };
@@ -322,7 +323,11 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
           </View>
           <View style={{ justifyContent: "center" }}>
             {bitcoinAddress
-              ? <QrCode onPress={onQrPress} data={bitcoinAddress?.toUpperCase() ?? " "} size={127} border={10} />
+              ?
+                <>
+                  <QrCode onPress={copyAddress} data={bitcoinAddress?.toUpperCase() ?? " "} size={127} border={10} />
+                  <CopyAddress text={bitcoinAddress}  onPress={copyAddress} />
+                </>
               : <View style={{ width: 135 + 10 + 9, height: 135 + 10 + 8, justifyContent: "center" }}>
                   <NativeBaseSpinner color={blixtTheme.light} />
                 </View>
