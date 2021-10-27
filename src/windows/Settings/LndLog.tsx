@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { NativeModules, ScrollView } from "react-native";
+import { EmitterSubscription, NativeModules, NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Icon, Text } from "native-base";
 import Clipboard from "@react-native-community/clipboard";
@@ -17,13 +17,15 @@ export default function LndLog({ navigation }: ILndLogProps) {
   let log = useRef("");
   const [render, setRender] = useState(0);
   const logScrollView = useRef<ScrollView>(null);
+  const [scrollViewAtTheEnd, setScrollViewAtTheEnd] = useState(true);
 
   useEffect(() => {
+    let listener: EmitterSubscription;
     (async () => {
       const tailLog = await NativeModules.LndMobileTools.tailLog(100);
       log.current = tailLog.split("\n").map((row) => row.slice(11)).join("\n");
 
-      const listener = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
+      listener = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
         log.current = log.current + "\n" + data.slice(11);
         setRender((r) => r + 1);
       });
@@ -31,11 +33,11 @@ export default function LndLog({ navigation }: ILndLogProps) {
       NativeModules.LndMobileTools.observeLndLogFile();
 
       setRender(render + 1);
-
-      return () => {
-        listener.remove();
-      }
     })();
+
+    return () => {
+      listener.remove();
+    }
   }, []);
 
   useLayoutEffect(() => {
@@ -57,9 +59,26 @@ export default function LndLog({ navigation }: ILndLogProps) {
     toast("Copied to clipboard");
   }
 
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+  };
+
   return (
     <Container>
-      <ScrollView contentContainerStyle={{ padding: 8 }} ref={logScrollView} onContentSizeChange={() => logScrollView.current?.scrollToEnd()}>
+      <ScrollView
+        ref={logScrollView}
+        contentContainerStyle={{ padding: 8 }}
+        onContentSizeChange={() => {
+          if (scrollViewAtTheEnd) {
+            logScrollView.current?.scrollToEnd();
+          }
+        }}
+        onScroll={({nativeEvent}) => {
+          setScrollViewAtTheEnd(isCloseToBottom(nativeEvent));
+        }}
+        scrollEventThrottle={400}
+      >
         <Text style={{ fontSize: 10 }}>{log.current}</Text>
       </ScrollView>
     </Container>

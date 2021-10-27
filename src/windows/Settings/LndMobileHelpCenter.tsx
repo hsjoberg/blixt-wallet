@@ -27,10 +27,10 @@ export default function LndMobileHelpCenter({ navigation }) {
   const [stepsResult, setStepsResult] = useState<IStepsResult[]>([]);
   const [lndLog, setLndLog] = useState<string[]>([]);
   const logScrollView = useRef<ScrollView>();
+  const [scrollViewAtTheEnd, setScrollViewAtTheEnd] = useState(true);
 
   useEffect(() => {
     const listener = LndMobileToolsEventEmitter.addListener("lndlog", (data: string) => {
-      console.log("lndlog: " + data);
       lndLog.push(data.slice(11));
       setLndLog(lndLog.slice(0));
     });
@@ -209,6 +209,11 @@ export default function LndMobileHelpCenter({ navigation }) {
     toast("Done");
   };
 
+  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+  };
+
   return (
     <Blurmodal useModalComponent={false} goBackByClickingOutside={false} noMargin={true}>
       <View style={style.container}>
@@ -244,7 +249,17 @@ export default function LndMobileHelpCenter({ navigation }) {
               })}
             </View>
             <View style={{ flex: 0.75, padding: 3, width:"100%", backgroundColor: Color(blixtTheme.gray).darken(0.2).hex() }}>
-              <ScrollView ref={logScrollView} onContentSizeChange={() => logScrollView.current?.scrollToEnd()}>
+              <ScrollView
+                ref={logScrollView}
+                onContentSizeChange={() => {
+                  if (scrollViewAtTheEnd) {
+                    logScrollView.current?.scrollToEnd()
+                  }
+                }}
+                onScroll={({nativeEvent}) => {
+                  setScrollViewAtTheEnd(isCloseToBottom(nativeEvent));
+                }}
+              >
                 {lndLog.map((text, i) => {
                   return (
                     <Text key={i} style={{ fontSize: 11 }}>{text}</Text>
