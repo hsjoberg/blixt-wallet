@@ -233,12 +233,18 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               type: "PAY",
               website: "pollofeed.com",
               lightningService: "pollofeed",
-            },  {
+            }, {
               value: 1000,
               description: "1000 sats bet on 2",
               type: "PAY",
               website: "lightningspin.com",
               lightningService: "lightningspin",
+            }, {
+              value: 2000,
+              description: "Payment for air ticket change: 2000 sats",
+              type: "PAY",
+              website: "future.travel",
+              lightningService: "futuretravel",
             }]);
             await TransactionStoreGetTransactions();
 
@@ -545,6 +551,11 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               description: "1000 sats bet on 2",
               type: "RECEIVE",
               website: "lightningspin.com"
+            }, {
+              value: 2000,
+              description: "Payment for air ticket change: 2000 sats",
+              type: "PAY",
+              website: "future.travel"
             }]);
 
             // await createDemoTransactions([{
