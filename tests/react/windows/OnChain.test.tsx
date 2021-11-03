@@ -6,7 +6,7 @@ import Long from "long";
 import OnChain from "../../../src/windows/OnChain/index";
 import { createNavigationContainer, initCommonStore } from "../../utils";
 import { walletBalance, sendCoins, newAddress } from "../../../mocks/lndmobile/onchain";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 
 jest.setTimeout(10000);
 

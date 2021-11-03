@@ -10,7 +10,7 @@ import { createNavigationContainer, setupStore, setDefaultAsyncStorage, initComm
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { DeviceEventEmitter } from "react-native";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { hexToUint8Array } from "../../../src/utils";
 
 jest.setTimeout(10000);
