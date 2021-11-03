@@ -1,5 +1,5 @@
 import { subscribeStateEmitter } from "./index";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { timeout, decodeStreamResult } from "./utils";
 
 export const genSeed = jest.fn(async (): Promise<lnrpc.GenSeedResponse> => {

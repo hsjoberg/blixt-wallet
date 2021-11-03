@@ -15,7 +15,6 @@
 		B77E06202F5CCA2EF5A26E97 /* libPods-BlixtWallet-BlixtWalletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 457694BE08363A5757587B12 /* libPods-BlixtWallet-BlixtWalletTests.a */; };
 		BA12DD7C6C3D42969E297EAE /* IBMPlexSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 53E703C0F141473C8564E7EA /* IBMPlexSans-Regular.ttf */; };
 		C22E6DD819CB41F69AADA37A /* IBMPlexSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D57823EDB09B4CD1998E77F2 /* IBMPlexSans-Medium.ttf */; };
-		CC28DA0B25925F8700A2DFA3 /* rpc.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC28DA0A25925F8700A2DFA3 /* rpc.pb.swift */; };
 		CC28DA1025925FD500A2DFA3 /* walletunlocker.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC28DA0F25925FD500A2DFA3 /* walletunlocker.pb.swift */; };
 		CC3C19202579C662004521F7 /* LndMobile.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6139F12579B66E0077D27B /* LndMobile.m */; };
 		CC3ED73F25983106007D29B4 /* LndMobileScheduledSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3ED73E25983106007D29B4 /* LndMobileScheduledSync.swift */; };
@@ -25,6 +24,7 @@
 		CC3F68532591683B000F11AA /* Lnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F68522591683B000F11AA /* Lnd.swift */; };
 		CC4F84C39523CF90E4DA5819 /* libPods-BlixtWallet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24A62E03C64FF473C7843187 /* libPods-BlixtWallet.a */; };
 		CC84D3E5270F3EF9007C6D63 /* Lndmobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDE5A1F270E84D4004EE251 /* Lndmobile.xcframework */; };
+		CC9DE6072733465900B72A38 /* lightning.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9DE6062733465900B72A38 /* lightning.pb.swift */; };
 		CCB51AEA259C2F74002637A2 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCB51AE9259C2F74002637A2 /* CloudKit.framework */; };
 		CCDBCBB525864296003E8BA8 /* LndMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCDBCBB425864296003E8BA8 /* LndMobile.swift */; };
 /* End PBXBuildFile section */
@@ -82,7 +82,6 @@
 		C132F37DCBE159303BCD7902 /* Pods-BlixtWallet-tvOS.debugfakelnd.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet-tvOS.debugfakelnd.xcconfig"; path = "Target Support Files/Pods-BlixtWallet-tvOS/Pods-BlixtWallet-tvOS.debugfakelnd.xcconfig"; sourceTree = "<group>"; };
 		C410974135376A18E1B2404A /* Pods-BlixtWallet-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BlixtWallet-tvOS/Pods-BlixtWallet-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		CAAB4E5D47A9A21CFEB062E7 /* Pods-BlixtWallet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet.release.xcconfig"; path = "Target Support Files/Pods-BlixtWallet/Pods-BlixtWallet.release.xcconfig"; sourceTree = "<group>"; };
-		CC28DA0A25925F8700A2DFA3 /* rpc.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rpc.pb.swift; sourceTree = "<group>"; };
 		CC28DA0F25925FD500A2DFA3 /* walletunlocker.pb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = walletunlocker.pb.swift; sourceTree = "<group>"; };
 		CC3ED73E25983106007D29B4 /* LndMobileScheduledSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LndMobileScheduledSync.swift; sourceTree = "<group>"; };
 		CC3ED74325983118007D29B4 /* LndMobileScheduledSync.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LndMobileScheduledSync.m; sourceTree = "<group>"; };
@@ -91,6 +90,7 @@
 		CC3F68522591683B000F11AA /* Lnd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lnd.swift; sourceTree = "<group>"; };
 		CC6139F12579B66E0077D27B /* LndMobile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LndMobile.m; sourceTree = "<group>"; };
 		CC85FC242576522B00C376A9 /* BlixtWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BlixtWallet.entitlements; path = BlixtWallet/BlixtWallet.entitlements; sourceTree = "<group>"; };
+		CC9DE6062733465900B72A38 /* lightning.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = lightning.pb.swift; sourceTree = "<group>"; };
 		CCB51AE9259C2F74002637A2 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		CCDBCBB325864296003E8BA8 /* BlixtWallet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BlixtWallet-Bridging-Header.h"; sourceTree = "<group>"; };
 		CCDBCBB425864296003E8BA8 /* LndMobile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LndMobile.swift; sourceTree = "<group>"; };
@@ -259,8 +259,8 @@
 		CCDBC9FB258515DD003E8BA8 /* LndMobile */ = {
 			isa = PBXGroup;
 			children = (
+				CC9DE6062733465900B72A38 /* lightning.pb.swift */,
 				CC28DA0F25925FD500A2DFA3 /* walletunlocker.pb.swift */,
-				CC28DA0A25925F8700A2DFA3 /* rpc.pb.swift */,
 				CC6139F12579B66E0077D27B /* LndMobile.m */,
 				CC3F684825915ACA000F11AA /* LndMobileTools.m */,
 				CCDBCBB425864296003E8BA8 /* LndMobile.swift */,
@@ -607,12 +607,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC3F684E25915AD7000F11AA /* LndMobileTools.swift in Sources */,
+				CC9DE6072733465900B72A38 /* lightning.pb.swift in Sources */,
 				CC3F68532591683B000F11AA /* Lnd.swift in Sources */,
 				CC3ED74425983118007D29B4 /* LndMobileScheduledSync.m in Sources */,
 				CC3ED73F25983106007D29B4 /* LndMobileScheduledSync.swift in Sources */,
 				CCDBCBB525864296003E8BA8 /* LndMobile.swift in Sources */,
 				CC3C19202579C662004521F7 /* LndMobile.m in Sources */,
-				CC28DA0B25925F8700A2DFA3 /* rpc.pb.swift in Sources */,
 				CC28DA1025925FD500A2DFA3 /* walletunlocker.pb.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				CC3F684925915ACA000F11AA /* LndMobileTools.m in Sources */,

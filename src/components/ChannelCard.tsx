@@ -6,7 +6,7 @@ import Long from "long";
 import BigNumber from "bignumber.js";
 
 import { useStoreActions, useStoreState } from "../state/store";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import { valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
 import { identifyService, lightningServices } from "../utils/lightning-services";

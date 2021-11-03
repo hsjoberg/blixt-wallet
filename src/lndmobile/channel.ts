@@ -1,5 +1,5 @@
 import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import Long from "long";
 import * as base64 from "base64-js";
 

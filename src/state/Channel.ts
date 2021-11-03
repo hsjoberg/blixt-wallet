@@ -3,7 +3,7 @@ import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import Long from "long";
 import * as base64 from "base64-js";
 
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";

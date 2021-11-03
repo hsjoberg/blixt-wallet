@@ -2,7 +2,7 @@ import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/app";
 import { toast, timeout, stringToUint8Array } from "../utils";
 import { Chain } from "../utils/build";

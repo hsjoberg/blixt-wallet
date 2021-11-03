@@ -1,6 +1,6 @@
 import { NativeModules, DeviceEventEmitter } from "react-native";
 import { generateSecureRandom } from "react-native-securerandom";
-import { lnrpc, routerrpc, invoicesrpc } from "../../../proto/proto";
+import { lnrpc, routerrpc, invoicesrpc } from "../../../proto/lightning";
 import Long from "long";
 import sha from "sha.js";
 import { stringToUint8Array, timeout, bytesToHexString } from "../../utils";

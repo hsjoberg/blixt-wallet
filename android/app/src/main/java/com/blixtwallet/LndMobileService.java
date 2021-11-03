@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
-import lnrpc.Rpc;
 import com.google.protobuf.ByteString;
 
 import com.hypertrack.hyperlog.HyperLog;
@@ -229,8 +228,8 @@ public class LndMobileService extends Service {
             if (channelBackupsBase64 != null) {
               HyperLog.d(TAG, "--CHANNEL BACKUP RESTORE--");
               initWallet.setChannelBackups(
-                Rpc.ChanBackupSnapshot.newBuilder().setMultiChanBackup(
-                  Rpc.MultiChanBackup.newBuilder().setMultiChanBackup(
+                lnrpc.LightningOuterClass.ChanBackupSnapshot.newBuilder().setMultiChanBackup(
+                  lnrpc.LightningOuterClass.MultiChanBackup.newBuilder().setMultiChanBackup(
                     ByteString.copyFrom(Base64.decode(channelBackupsBase64, Base64.DEFAULT))
                   )
                 )
@@ -509,7 +508,7 @@ public class LndMobileService extends Service {
 
   private void stopLnd(Messenger recipient, int request) {
     Lndmobile.stopDaemon(
-      Rpc.StopRequest.newBuilder().build().toByteArray(),
+      lnrpc.LightningOuterClass.StopRequest.newBuilder().build().toByteArray(),
       new Callback() {
         @Override
         public void onError(Exception e) {

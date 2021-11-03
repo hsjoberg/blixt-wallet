@@ -120,11 +120,52 @@ struct Lnrpc_InitWalletRequest {
   ///RPC as otherwise all access to the daemon will be lost!
   var statelessInit: Bool = false
 
+  ///
+  ///extended_master_key is an alternative to specifying cipher_seed_mnemonic and
+  ///aezeed_passphrase. Instead of deriving the master root key from the entropy
+  ///of an aezeed cipher seed, the given extended master root key is used
+  ///directly as the wallet's master key. This allows users to import/use a
+  ///master key from another wallet. When doing so, lnd still uses its default
+  ///SegWit only (BIP49/84) derivation paths and funds from custom/non-default
+  ///derivation paths will not automatically appear in the on-chain wallet. Using
+  ///an 'xprv' instead of an aezeed also has the disadvantage that the wallet's
+  ///birthday is not known as that is an information that's only encoded in the
+  ///aezeed, not the xprv. Therefore a birthday needs to be specified in
+  ///extended_master_key_birthday_timestamp or a "safe" default value will be
+  ///used.
+  var extendedMasterKey: String = String()
+
+  ///
+  ///extended_master_key_birthday_timestamp is the optional unix timestamp in
+  ///seconds to use as the wallet's birthday when using an extended master key
+  ///to restore the wallet. lnd will only start scanning for funds in blocks that
+  ///are after the birthday which can speed up the process significantly. If the
+  ///birthday is not known, this should be left at its default value of 0 in
+  ///which case lnd will start scanning from the first SegWit block (481824 on
+  ///mainnet).
+  var extendedMasterKeyBirthdayTimestamp: UInt64 = 0
+
+  ///
+  ///watch_only is the third option of initializing a wallet: by importing
+  ///account xpubs only and therefore creating a watch-only wallet that does not
+  ///contain any private keys. That means the wallet won't be able to sign for
+  ///any of the keys and _needs_ to be run with a remote signer that has the
+  ///corresponding private keys and can serve signing RPC requests.
+  var watchOnly: Lnrpc_WatchOnly {
+    get {return _watchOnly ?? Lnrpc_WatchOnly()}
+    set {_watchOnly = newValue}
+  }
+  /// Returns true if `watchOnly` has been explicitly set.
+  var hasWatchOnly: Bool {return self._watchOnly != nil}
+  /// Clears the value of `watchOnly`. Subsequent reads from it will return its default value.
+  mutating func clearWatchOnly() {self._watchOnly = nil}
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   init() {}
 
   fileprivate var _channelBackups: Lnrpc_ChanBackupSnapshot? = nil
+  fileprivate var _watchOnly: Lnrpc_WatchOnly? = nil
 }
 
 struct Lnrpc_InitWalletResponse {
@@ -139,6 +180,72 @@ struct Lnrpc_InitWalletResponse {
   ///caller. Otherwise a copy of this macaroon is also persisted on disk by the
   ///daemon, together with other macaroon files.
   var adminMacaroon: Data = Data()
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Lnrpc_WatchOnly {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  ///
+  ///The unix timestamp in seconds of when the master key was created. lnd will
+  ///only start scanning for funds in blocks that are after the birthday which
+  ///can speed up the process significantly. If the birthday is not known, this
+  ///should be left at its default value of 0 in which case lnd will start
+  ///scanning from the first SegWit block (481824 on mainnet).
+  var masterKeyBirthdayTimestamp: UInt64 = 0
+
+  ///
+  ///The fingerprint of the root key (also known as the key with derivation path
+  ///m/) from which the account public keys were derived from. This may be
+  ///required by some hardware wallets for proper identification and signing. The
+  ///bytes must be in big-endian order.
+  var masterKeyFingerprint: Data = Data()
+
+  ///
+  ///The list of accounts to import. There _must_ be an account for all of lnd's
+  ///main key scopes: BIP49/BIP84 (m/49'/0'/0', m/84'/0'/0', note that the
+  ///coin type is always 0, even for testnet/regtest) and lnd's internal key
+  ///scope (m/1017'/<coin_type>'/<account>'), where account is the key family as
+  ///defined in `keychain/derivation.go` (currently indices 0 to 9).
+  var accounts: [Lnrpc_WatchOnlyAccount] = []
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Lnrpc_WatchOnlyAccount {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  ///
+  ///Purpose is the first number in the derivation path, must be either 49, 84
+  ///or 1017.
+  var purpose: UInt32 = 0
+
+  ///
+  ///Coin type is the second number in the derivation path, this is _always_ 0
+  ///for purposes 49 and 84. It only needs to be set to 1 for purpose 1017 on
+  ///testnet or regtest.
+  var coinType: UInt32 = 0
+
+  ///
+  ///Account is the third number in the derivation path. For purposes 49 and 84
+  ///at least the default account (index 0) needs to be created but optional
+  ///additional accounts are allowed. For purpose 1017 there needs to be exactly
+  ///one account for each of the key families defined in `keychain/derivation.go`
+  ///(currently indices 0 to 9)
+  var account: UInt32 = 0
+
+  ///
+  ///The extended public key at depth 3 for the given account.
+  var xpub: String = String()
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -343,6 +450,9 @@ extension Lnrpc_InitWalletRequest: SwiftProtobuf.Message, SwiftProtobuf._Message
     4: .standard(proto: "recovery_window"),
     5: .standard(proto: "channel_backups"),
     6: .standard(proto: "stateless_init"),
+    7: .standard(proto: "extended_master_key"),
+    8: .standard(proto: "extended_master_key_birthday_timestamp"),
+    9: .standard(proto: "watch_only"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -357,6 +467,9 @@ extension Lnrpc_InitWalletRequest: SwiftProtobuf.Message, SwiftProtobuf._Message
       case 4: try { try decoder.decodeSingularInt32Field(value: &self.recoveryWindow) }()
       case 5: try { try decoder.decodeSingularMessageField(value: &self._channelBackups) }()
       case 6: try { try decoder.decodeSingularBoolField(value: &self.statelessInit) }()
+      case 7: try { try decoder.decodeSingularStringField(value: &self.extendedMasterKey) }()
+      case 8: try { try decoder.decodeSingularUInt64Field(value: &self.extendedMasterKeyBirthdayTimestamp) }()
+      case 9: try { try decoder.decodeSingularMessageField(value: &self._watchOnly) }()
       default: break
       }
     }
@@ -381,6 +494,15 @@ extension Lnrpc_InitWalletRequest: SwiftProtobuf.Message, SwiftProtobuf._Message
     if self.statelessInit != false {
       try visitor.visitSingularBoolField(value: self.statelessInit, fieldNumber: 6)
     }
+    if !self.extendedMasterKey.isEmpty {
+      try visitor.visitSingularStringField(value: self.extendedMasterKey, fieldNumber: 7)
+    }
+    if self.extendedMasterKeyBirthdayTimestamp != 0 {
+      try visitor.visitSingularUInt64Field(value: self.extendedMasterKeyBirthdayTimestamp, fieldNumber: 8)
+    }
+    if let v = self._watchOnly {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -391,6 +513,9 @@ extension Lnrpc_InitWalletRequest: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs.recoveryWindow != rhs.recoveryWindow {return false}
     if lhs._channelBackups != rhs._channelBackups {return false}
     if lhs.statelessInit != rhs.statelessInit {return false}
+    if lhs.extendedMasterKey != rhs.extendedMasterKey {return false}
+    if lhs.extendedMasterKeyBirthdayTimestamp != rhs.extendedMasterKeyBirthdayTimestamp {return false}
+    if lhs._watchOnly != rhs._watchOnly {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -423,6 +548,100 @@ extension Lnrpc_InitWalletResponse: SwiftProtobuf.Message, SwiftProtobuf._Messag
 
   static func ==(lhs: Lnrpc_InitWalletResponse, rhs: Lnrpc_InitWalletResponse) -> Bool {
     if lhs.adminMacaroon != rhs.adminMacaroon {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Lnrpc_WatchOnly: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".WatchOnly"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "master_key_birthday_timestamp"),
+    2: .standard(proto: "master_key_fingerprint"),
+    3: .same(proto: "accounts"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt64Field(value: &self.masterKeyBirthdayTimestamp) }()
+      case 2: try { try decoder.decodeSingularBytesField(value: &self.masterKeyFingerprint) }()
+      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.accounts) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.masterKeyBirthdayTimestamp != 0 {
+      try visitor.visitSingularUInt64Field(value: self.masterKeyBirthdayTimestamp, fieldNumber: 1)
+    }
+    if !self.masterKeyFingerprint.isEmpty {
+      try visitor.visitSingularBytesField(value: self.masterKeyFingerprint, fieldNumber: 2)
+    }
+    if !self.accounts.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.accounts, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Lnrpc_WatchOnly, rhs: Lnrpc_WatchOnly) -> Bool {
+    if lhs.masterKeyBirthdayTimestamp != rhs.masterKeyBirthdayTimestamp {return false}
+    if lhs.masterKeyFingerprint != rhs.masterKeyFingerprint {return false}
+    if lhs.accounts != rhs.accounts {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Lnrpc_WatchOnlyAccount: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".WatchOnlyAccount"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "purpose"),
+    2: .standard(proto: "coin_type"),
+    3: .same(proto: "account"),
+    4: .same(proto: "xpub"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt32Field(value: &self.purpose) }()
+      case 2: try { try decoder.decodeSingularUInt32Field(value: &self.coinType) }()
+      case 3: try { try decoder.decodeSingularUInt32Field(value: &self.account) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self.xpub) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.purpose != 0 {
+      try visitor.visitSingularUInt32Field(value: self.purpose, fieldNumber: 1)
+    }
+    if self.coinType != 0 {
+      try visitor.visitSingularUInt32Field(value: self.coinType, fieldNumber: 2)
+    }
+    if self.account != 0 {
+      try visitor.visitSingularUInt32Field(value: self.account, fieldNumber: 3)
+    }
+    if !self.xpub.isEmpty {
+      try visitor.visitSingularStringField(value: self.xpub, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Lnrpc_WatchOnlyAccount, rhs: Lnrpc_WatchOnlyAccount) -> Bool {
+    if lhs.purpose != rhs.purpose {return false}
+    if lhs.coinType != rhs.coinType {return false}
+    if lhs.account != rhs.account {return false}
+    if lhs.xpub != rhs.xpub {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

@@ -10,7 +10,7 @@ import { CONSTANTS, JSHash } from "react-native-hash";
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { timeout, bytesToString, getDomainFromURL, stringToUint8Array, hexToUint8Array, bytesToHexString, toast } from "../utils/index";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 

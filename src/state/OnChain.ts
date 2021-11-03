@@ -3,7 +3,7 @@ import Long from "long";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { decodeSubscribeTransactionsResult } from "../lndmobile/onchain";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";

@@ -38,7 +38,7 @@ import { PLATFORM } from "../utils/constants";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { Chain, VersionCode } from "../utils/build";
 import { LndMobileEventEmitter } from "../utils/event-listener";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { toast } from "../utils";
 import { Alert } from "../utils/alert";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";

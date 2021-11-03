@@ -13,7 +13,7 @@ import CopyAddress from "../../components/CopyAddress";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { toast } from "../../utils";
 import { NavigationButton } from "../../components/NavigationButton";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 
 interface IOnChainInfoProps {
   navigation: StackNavigationProp<OnChainStackParamList, "OnChainInfo">;

@@ -10,7 +10,7 @@ import { routerrpc } from "../../../proto/router";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { decodeInvoiceResult } from "../../lndmobile/wallet";
 import { generateSecureRandom } from "react-native-securerandom";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { listChannels, getChanInfo, listPrivateChannels } from "../../lndmobile/channel";
 import QrCode from "../../components/QrCode";
 import { LndMobileEventEmitter } from "../../utils/event-listener";

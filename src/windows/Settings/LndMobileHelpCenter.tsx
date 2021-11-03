@@ -12,7 +12,7 @@ import { unlockWallet } from "../../lndmobile/wallet";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Color from "color";
 import Clipboard from "@react-native-community/clipboard";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { PLATFORM } from "../../utils/constants";
 import { LndMobileToolsEventEmitter } from "../../utils/event-listener";
 

@@ -9,7 +9,7 @@ import Long from "long";
 import { toast, hexToUint8Array } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { generateSecureRandom } from "react-native-securerandom";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { getChanInfo, listPrivateChannels } from "../../lndmobile/channel";
 import QrCode from "../../components/QrCode";
 import BlixtForm from "../../components/Form";

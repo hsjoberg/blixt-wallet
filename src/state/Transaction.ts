@@ -4,7 +4,7 @@ import { ITransaction, getTransactions, createTransaction, updateTransaction } f
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { bytesToHexString } from "../utils";
 
 import logger from "./../utils/log";

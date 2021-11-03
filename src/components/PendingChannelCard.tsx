@@ -3,7 +3,7 @@ import { Body, Text, Left, Right, Card, CardItem, Row, Button } from "native-bas
 import { Image, Linking } from "react-native";
 
 import { style } from "./ChannelCard";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { useStoreActions, useStoreState } from "../state/store";
 import { identifyService, lightningServices } from "../utils/lightning-services";

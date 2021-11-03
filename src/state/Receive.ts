@@ -5,7 +5,7 @@ import Long from "long";
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
-import { lnrpc, invoicesrpc } from "../../proto/proto";
+import { lnrpc, invoicesrpc } from "../../proto/lightning";
 import { setupDescription } from "../utils/NameDesc";
 import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
 import { timeout, decodeTLVRecord, bytesToHexString, toast, uint8ArrayToUnicodeString } from "../utils";

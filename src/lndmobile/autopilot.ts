@@ -1,5 +1,5 @@
 import { sendCommand } from "./utils";
-import { autopilotrpc } from "../../proto/proto";
+import { autopilotrpc } from "../../proto/lightning";
 
 /**
  * @throws

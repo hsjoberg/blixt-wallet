@@ -2275,10 +2275,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.18.tgz#1d3ca764718915584fcd9f6344621b7672665c67"
   integrity sha512-fh+pAqt4xRzPfqA6eh3Z2y6fyZavRIumvjhaCL753+TVkGKGhpPeyrJG2JftD0T9q4GF00KjefsQ+PQNDdWQaQ==
 
-"@types/node@>=13.7.0":
-  version "16.11.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.6.tgz#6bef7a2a0ad684cf6e90fcfe31cecabd9ce0a3ae"
-  integrity sha512-ua7PgUoeQFjmWPcoo9khiPum3Pd60k4/2ZGXt18sm2Slk0W0xZTqt5Y0Ny1NyBiN1EVQ/+FaF9NcY4Qe6rwk5w==
+"@types/node@^13.7.0":
+  version "13.13.52"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.13.52.tgz#03c13be70b9031baaed79481c0c0cfb0045e53f7"
+  integrity sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==
 
 "@types/prettier@^2.1.5":
   version "2.4.1"
@@ -8460,10 +8460,9 @@ prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.2,
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
-protobufjs@^6.11.2:
-  version "6.11.2"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-6.11.2.tgz#de39fabd4ed32beaa08e9bb1e30d08544c1edf8b"
-  integrity sha512-4BQJoPooKJl2G9j3XftkIXjoC9C0Av2NOrWmbLWT1vH32GcSUHjM0Arra6UfTsVyfMAuFzaLucXn1sadxJydAw==
+"protobufjs@git+https://github.com/AndiDog/protobuf.js.git#fa4999b5d5de16a7484ee503eafddde23c06492b":
+  version "6.10.2"
+  resolved "git+https://github.com/AndiDog/protobuf.js.git#fa4999b5d5de16a7484ee503eafddde23c06492b"
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
@@ -8476,7 +8475,7 @@ protobufjs@^6.11.2:
     "@protobufjs/pool" "^1.1.0"
     "@protobufjs/utf8" "^1.1.0"
     "@types/long" "^4.0.1"
-    "@types/node" ">=13.7.0"
+    "@types/node" "^13.7.0"
     long "^4.0.0"
 
 proxy-addr@~2.0.5:

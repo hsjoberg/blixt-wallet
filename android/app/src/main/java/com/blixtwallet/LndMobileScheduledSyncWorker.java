@@ -218,7 +218,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                     HyperLog.i(TAG, "Got MSG_GRPC_COMMAND_RESULT for UnlockWallet. Waiting for SubscribeState to send event before doing anything");
                   } else if (method.equals("GetInfo")) {
                     try {
-                      lnrpc.Rpc.GetInfoResponse res = lnrpc.Rpc.GetInfoResponse.parseFrom(response);
+                      lnrpc.LightningOuterClass.GetInfoResponse res = lnrpc.LightningOuterClass.GetInfoResponse.parseFrom(response);
                       HyperLog.d(TAG, "GetInfo response");
                       HyperLog.v(TAG, "blockHash:     " + res.getBlockHash());
                       HyperLog.d(TAG, "blockHeight:   " + Integer.toString(res.getBlockHeight()));
@@ -403,7 +403,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     message.replyTo = messenger;
     Bundle getinfoBundle = new Bundle();
     getinfoBundle.putString("method", "GetInfo");
-    getinfoBundle.putByteArray("payload", lnrpc.Rpc.GetInfoRequest.newBuilder().build().toByteArray());
+    getinfoBundle.putByteArray("payload", lnrpc.LightningOuterClass.GetInfoRequest.newBuilder().build().toByteArray());
     message.setData(getinfoBundle);
     messengerService.send(message);
   }

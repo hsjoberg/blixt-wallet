@@ -1,6 +1,6 @@
 import { NativeModules } from "react-native";
 import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
-import { lnrpc, routerrpc, invoicesrpc } from "../../proto/proto";
+import { lnrpc, routerrpc, invoicesrpc } from "../../proto/lightning";
 import Long from "long";
 import sha from "sha.js";
 import { stringToUint8Array, hexToUint8Array, unicodeStringToUint8Array } from "../utils";

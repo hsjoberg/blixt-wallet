@@ -22,7 +22,7 @@ import { ILNUrlWithdrawRequest } from "../../state/LNURL";
 import ButtonSpinner from "../../components/ButtonSpinner";
 import { LndMobileEventEmitter } from "../../utils/event-listener";
 import { decodeInvoiceResult } from "../../lndmobile/wallet";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { Chain } from "../../utils/build";
 import { checkLndStreamErrorResponse } from "../../utils/lndmobile";
 

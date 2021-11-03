@@ -3,7 +3,7 @@ import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { stringToUint8Array } from "../utils/index";
 import * as base64 from "base64-js";
 
-import { lnrpc, walletrpc, signrpc } from "../../proto/proto";
+import { lnrpc, walletrpc, signrpc } from "../../proto/lightning";
 import { PLATFORM } from "../utils/constants";
 
 const { LndMobile } = NativeModules;

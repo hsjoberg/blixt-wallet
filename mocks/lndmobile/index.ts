@@ -1,4 +1,4 @@
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { decodeStreamResult, timeout } from "./utils";
 import { DeviceEventEmitter } from "react-native";
 import * as base64 from "base64-js";

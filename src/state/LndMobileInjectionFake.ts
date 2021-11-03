@@ -68,7 +68,7 @@ import {
 import {
   checkScheduledSyncWorkStatus, WorkInfo
 } from "../lndmobile/fake/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
-import { lnrpc, signrpc, invoicesrpc, autopilotrpc } from "../../proto/proto";
+import { lnrpc, signrpc, invoicesrpc, autopilotrpc } from "../../proto/lightning";
 import { IAddInvoiceBlixtLspArgs } from "../lndmobile";
 
 export interface ILndMobileInjections {
