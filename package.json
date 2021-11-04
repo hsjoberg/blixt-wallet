@@ -31,8 +31,7 @@
     "ios:mainnet-fakelnd": "react-native run-ios --scheme BlixtWalletFakelnd --configuration ReleaseFakelnd",
     "ios:mainnet-fakelnd-debug": "react-native run-ios --scheme BlixtWalletFakelnd --configuration DebugFakelnd",
     "web": "webpack serve",
-    "web:bundle": "rm -r dist || true && NODE_ENV=production webpack",
-    "web:bundle-for-blixt-site": "rm -r dist || true && WEB_DEMO=1 NODE_ENV=production webpack"
+    "web:bundle": "rm -r dist || true && NODE_ENV=production webpack"
   },
   "dependencies": {
     "@babel/core": "^7.16.0",
