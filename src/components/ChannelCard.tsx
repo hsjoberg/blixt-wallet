@@ -295,7 +295,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             <Right>
               <Text>
                 {preferFiat && valueFiat(channel.commitFee ?? Long.fromValue(0), currentRate).toFixed(2) + " " + fiatUnit}
-                {!preferFiat && valueBitcoin(channel.commitFee ?? Long.fromValue(0), bitcoinUnit)}{" "}{getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}
+                {!preferFiat && valueBitcoin(channel.commitFee ?? Long.fromValue(0), bitcoinUnit) + " " + getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}
               </Text>
             </Right>
           </Row>
