@@ -10,6 +10,7 @@ import usePromptLightningAddress from "../hooks/usePromptLightningAddress";
 import useEvaluateLightningCode from "../hooks/useEvaluateLightningCode";
 import { fontFactorNormalized } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
+import { PLATFORM } from "../utils/constants";
 
 export default function Drawer() {
   const navigation = useNavigation();
@@ -140,21 +141,25 @@ export default function Drawer() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={toggleAdvanced}>
-            <View style={style.advancedExpand}>
-              <Text note style={style.advancedExpandText}>Advanced</Text>
-              <Icon style={style.advancedExpandIcon} type="AntDesign" name={expandAdvanced ? "up" : "down"} />
-            </View>
-          </TouchableOpacity>
+          {PLATFORM !== "ios" && (
+            <>
+              <TouchableOpacity onPress={toggleAdvanced}>
+                <View style={style.advancedExpand}>
+                  <Text note style={style.advancedExpandText}>Advanced</Text>
+                  <Icon style={style.advancedExpandIcon} type="AntDesign" name={expandAdvanced ? "up" : "down"} />
+                </View>
+              </TouchableOpacity>
 
-          <View style={[{height: expandAdvanced ? "auto" : 0 }, style.advanced]}>
-            <TouchableOpacity onPress={() => goToScreen("KeysendExperiment")}>
-              <View style={style.menuItem}>
-                <Icon style={[style.menuItemIcon, { fontSize: 25 }]} color={blixtTheme.dark} type="FontAwesome" name="send" />
-                <Text style={style.menuItemText}>Keysend Experiment</Text>
+              <View style={[{height: expandAdvanced ? "auto" : 0 }, style.advanced]}>
+                <TouchableOpacity onPress={() => goToScreen("KeysendExperiment")}>
+                  <View style={style.menuItem}>
+                    <Icon style={[style.menuItemIcon, { fontSize: 25 }]} color={blixtTheme.dark} type="FontAwesome" name="send" />
+                    <Text style={style.menuItemText}>Keysend Experiment</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-          </View>
+            </>
+          )}
         </View>
       </ScrollView>
       <View style={style.bottom}>
