@@ -218,8 +218,8 @@ export default function Settings({ navigation }: ISettingsProps) {
   // Copy lnd log
   const copyLndLog = async () => {
     try {
-      await NativeModules.LndMobileTools.copyLndLog();
-      toast("Copied lnd log file.", undefined, "warning");
+      const filePath = await NativeModules.LndMobileTools.copyLndLog();
+      toast("Copied lnd log file to: " + filePath, undefined, "warning");
     } catch (e) {
       console.error(e);
       toast("Error copying lnd log file.", undefined, "danger");
@@ -1146,7 +1146,6 @@ Do you wish to proceed?`;
               <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
               <Body>
                 <Text>Copy lnd log to local storage</Text>
-                <Text note={true}>Reached from /sdcard/BlixtWallet</Text>
               </Body>
             </ListItem>
           }
