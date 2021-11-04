@@ -213,12 +213,12 @@ class LndMobile: RCTEventEmitter {
           withName: method,
           body: ["error_code": errorCode, "error_desc": errorDesc]
         )
-        return
+      } else {
+        self.sendEvent(
+          withName: method,
+          body: ["data": data?.base64EncodedString()]
+        )
       }
-      self.sendEvent(
-        withName: method,
-        body: ["data": data?.base64EncodedString()]
-      )
     }
     resolve("done")
   }
