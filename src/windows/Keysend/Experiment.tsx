@@ -250,7 +250,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       <View style={{ padding: 16 }}>
         <Text style={{ marginBottom: 8 }}>
           Welcome to the keysend playground.{"\n"}
-          Keysend lets you pay another Blixt Wallet (or lnd with keysend enabled) without requiring an invoice.
+          Keysend lets you pay another Blixt Wallet (or any Lightning node that supports keysend) without requiring an invoice.
         </Text>
         <Text>
           Click on the camera to scan another wallet's QR code or provide a public key and route hints below.

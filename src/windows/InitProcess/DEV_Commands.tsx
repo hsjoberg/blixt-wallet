@@ -8,11 +8,12 @@ import * as base64 from "base64-js";
 import * as Keychain from 'react-native-keychain';
 // import Sound from "react-native-sound";
 import iCloudStorage from "react-native-icloudstore";
-import { Alert } from "../../utils/alert";
+import { JSHash, CONSTANTS } from "react-native-hash";
 
+import { Alert } from "../../utils/alert";
 import { getTransactions, getTransaction, createTransaction, clearTransactions } from "../../storage/database/transaction";
 import { useStoreState, useStoreActions } from "../../state/store";
-import { invoicesrpc, lnrpc } from "../../../proto/proto";
+import { invoicesrpc, lnrpc } from "../../../proto/lightning";
 import { sendCommand } from "../../lndmobile/utils";
 import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus, getNodeInfo } from "../../lndmobile/index";
 import { initWallet, genSeed, deriveKey, signMessage, derivePrivateKey } from "../../lndmobile/wallet";
@@ -28,11 +29,13 @@ import { LoginMethods } from "../../state/Security";
 import Spinner from "../../components/Spinner";
 
 import secp256k1 from "secp256k1";
-import { Hash as sha256Hash, HMAC as sha256HMAC } from "fast-sha256";
-import { bytesToString, bytesToHexString, stringToUint8Array } from "../../utils";
+import { bytesToString, bytesToHexString, stringToUint8Array, toast } from "../../utils";
 import { ILightningServices } from "../../utils/lightning-services";
 import { localNotification } from "../../utils/push-notification";
 import { ICLOUD_BACKUP_KEY } from "../../state/ICloudBackup";
+import { notificationManager } from "../../state/NotificationManager";
+import PushNotification from "react-native-push-notification";
+import { ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID } from "../../utils/constants";
 
 interface IProps {
   navigation?: StackNavigationProp<RootStackParamList, "DEV_Commands">;
@@ -80,7 +83,21 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           }
 
           <Text style={{ width: "100%"}}>Random:</Text>
-          <Button onPress={async () => {
+          <Button small onPress={async () => {
+            const encoder = new TextEncoder();
+            console.log(encoder);
+          }}><Text style={styles.buttonText}>TextEncoder</Text></Button>
+          <Button small onPress={async () => {
+            const metadata = '[["text/plain","lnurl-pay chat:  Comment 📝"],["text/long-desc","Write a message to be displayed on chat.blixtwallet.com.\\n\\nOnce the payment goes through, your message will be displayed on the web page."]]';
+
+            console.log(
+              await JSHash(metadata, CONSTANTS.HashAlgorithms.sha256)
+            );
+            console.log("");
+            try {
+            } catch (e) { console.log("error") }
+          }}><Text style={styles.buttonText}>favicon etleneum</Text></Button>
+          <Button small onPress={async () => {
             console.log(await decodePayReq("lnbc100n1p0nzg2kpp58f2ztjy39ak8hgd7saya4mvkhwmueuyq0tlet5fedn8ytu3xrllqhp5nh0t5w4w5zh8jdnn5a03hk4pk279l3eex4nzazgkwmqpn7wga6hqcqzpgxq92fjuqsp5sm4zt7024wpwplf705k0gfkyqzk3g984nv9e83pd4093ckg9sm2q9qy9qsqs0wuxrqazy9n0knyx7fhud4q2l92fl2c2qe58tks8hhgfy4dwc5kqe09j38szhjwshna0jp5pet7g27wdj7ecyq4y00vc023lzvtl2sq686za3"));
             console.log(await queryRoutes("03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e"))
           }}><Text style={styles.buttonText}>decode()</Text></Button>
@@ -95,12 +112,18 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             <Text style={styles.buttonText}>startTor</Text>
           </Button>
           <Button small onPress={() => {
-            Toast.show({
-              text: "Copied to clipboard.",
-              type: "success",
-            });
+            toast("Copied to clipboard.", undefined, "success");
           }}>
             <Text style={styles.buttonText}>Toast</Text>
+          </Button>
+          <Button small onPress={() => {
+            setTimeout(() => {
+              console.log("TOAST!")
+              toast("Copied to clipboard.", undefined, "success");
+              console.log("TOAST2!")
+            }, 2000);
+          }}>
+            <Text style={styles.buttonText}>Toast crash</Text>
           </Button>
           <Button small onPress={() => {
             const whoosh = new Sound('success.wav', Sound.MAIN_BUNDLE, (error) => {
@@ -247,6 +270,21 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             actions.channel.setBalance(Long.fromNumber(497581));
           }}><Text style={styles.buttonText}>Setup demo environment</Text></Button>
           <Button small onPress={async () => {
+            PushNotification.clearLocalNotification("TEST123",21312);
+            // PushNotification.localNotification({
+            //   channelId: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID,
+            //   message: "Persistant 123",
+            //   playSound: true,
+            //   vibrate: false,
+            //   priority: "high",
+            //   importance: "high",
+            //   autoCancel: true,
+            //   ongoing: true,
+            //   id: 21312,
+            //   tag:"TEST123"
+            // })
+          }}><Text style={styles.buttonText}>persistant</Text></Button>
+          <Button small onPress={async () => {
             console.log(localNotification("TEST NOTIFICATION"));
           }}><Text style={styles.buttonText}>localNotification</Text></Button>
           <Button small onPress={async () => {
@@ -384,9 +422,18 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text style={styles.buttonText}>walletCreated = true</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 27)}><Text style={styles.buttonText}>appVersion = 27</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 28)}><Text style={styles.buttonText}>appVersion = 28</Text></Button>
-          <Button small onPress={async () => await setItem(StorageItem.onboardingState, "SEND_ONCHAIN")}><Text style={styles.buttonText}>onboardingState = SEND_ONCHAIN</Text></Button>
-          <Button small onPress={async () => await setItem(StorageItem.onboardingState, "DO_BACKUP")}><Text style={styles.buttonText}>onboardingState = DO_BACKUP</Text></Button>
-          <Button small onPress={async () => await setItem(StorageItem.onboardingState, "DONE")}><Text style={styles.buttonText}>onboardingState = DONE</Text></Button>
+          <Button small onPress={async () => {
+            await setItem(StorageItem.onboardingState, "SEND_ONCHAIN");
+            actions.changeOnboardingState("SEND_ONCHAIN");
+          }}><Text style={styles.buttonText}>onboardingState = SEND_ONCHAIN</Text></Button>
+          <Button small onPress={async () => {
+            await setItem(StorageItem.onboardingState, "DO_BACKUP");
+            actions.changeOnboardingState("DO_BACKUP");
+          }}><Text style={styles.buttonText}>onboardingState = DO_BACKUP</Text></Button>
+          <Button small onPress={async () => {
+            await setItem(StorageItem.onboardingState, "DONE");
+            actions.changeOnboardingState("DONE");
+          }}><Text style={styles.buttonText}>onboardingState = DONE</Text></Button>
 
           <Text style={{ width: "100%" }}>lndmobile:</Text>
           <Button small onPress={async () => await NativeModules.LndMobile.initialize()}><Text style={styles.buttonText}>LndMobile.initialize()</Text></Button>
