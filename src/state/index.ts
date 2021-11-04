@@ -295,8 +295,17 @@ export const model: IStoreModel = {
           log.d("Got lnrpc.WalletState.UNLOCKED");
         } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
           debugShowStartupInfo && toast("RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-          log.d("Got lnrpc.WalletState.RPC_ACTIVE");
           await dispatch.lightning.initialize({ start });
+          log.d("Got lnrpc.WalletState.RPC_ACTIVE");
+        } else if (state.state === lnrpc.WalletState.SERVER_ACTIVE) {
+          debugShowStartupInfo && toast("Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          log.d("Got lnrpc.WalletState.SERVER_ACTIVE");
+
+          // We'll enter this branch of code if the react-native frontend desyncs with lnd.
+          // This can happen for example if Android kills react-native but not LndMobileService.
+          if (!getState().lightning.rpcReady) {
+            await dispatch.lightning.initialize({ start });
+          }
         }
       } catch (error) {
         toast(error.message, undefined, "danger");
