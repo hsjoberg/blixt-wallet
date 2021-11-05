@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, ScrollView, View, NativeModules, DeviceEventEmitter, NativeEventEmitter } from "react-native";
+import { StyleSheet, ScrollView, View, NativeModules } from "react-native";
 import { Card, Text, CardItem, H1, Button, Spinner } from "native-base";
 
 import Blurmodal from "../../components/BlurModal";
-import { useStoreState, useStoreActions } from "../../state/store";
 import { getInfo, ELndMobileStatusCodes, startLnd } from "../../lndmobile";
 import { newAddress } from "../../lndmobile/onchain";
 import { toast } from "../../utils";

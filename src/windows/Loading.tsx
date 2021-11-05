@@ -33,7 +33,7 @@ export default function Loading({ navigation }: ILoadingProps) {
           setTimeout(() => {
             cb(navigation);
           }, 100);
-        } else if (PLATFORM === "web" && WEB_DEMO) {
+        } else if (PLATFORM === "web" && window.BLIXT_WEB_DEMO) {
           navigation.navigate("WebInfo");
         }
       });

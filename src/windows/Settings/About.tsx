@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Linking, ScrollView } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import { Body, Card, Text, CardItem, H1 } from "native-base";
 
 import Blurmodal from "../../components/BlurModal";

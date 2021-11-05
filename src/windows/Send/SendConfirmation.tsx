@@ -38,7 +38,6 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   } = useBalance((paymentRequest?.numSatoshis), true);
   const clear = useStoreActions((store) => store.send.clear);
   const callback = (route.params?.callback) ?? (() => {});
-  const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
   const lightningReadyToSend = useLightningReadyToSend();
 
   useEffect(() => {
@@ -53,7 +52,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     }
 
     return () => {
-      backHandler.remove()
+      backHandler.remove();
       clear();
     }
   }, []);
@@ -63,12 +62,6 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       headerTitle: "Pay invoice",
       headerBackTitle: "Back",
       headerShown: true,
-    });
-
-    // Disable swiping to the left because it messes with the keyboard focus
-    navigation.getParent()?.setOptions({
-      gestureEnabled: false,
-      gestureResponseDistance: 0,
     });
   }, [navigation]);
 

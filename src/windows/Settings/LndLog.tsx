@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { EmitterSubscription, NativeModules, NativeScrollEvent, NativeSyntheticEvent, ScrollView } from "react-native";
+import { EmitterSubscription, NativeModules, NativeScrollEvent, ScrollView } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Icon, Text } from "native-base";
 import Clipboard from "@react-native-community/clipboard";

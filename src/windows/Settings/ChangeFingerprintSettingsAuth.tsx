@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { StyleSheet, StatusBar, AppState, AppStateStatus } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { Container, View, Text, Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
@@ -8,7 +8,6 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useFingerprintAuth from "../../hooks/useFingerprintAuth";
 import { PLATFORM } from "../../utils/constants";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import BlixtContent from "../../components/Content";
 
 export default function ChangeFingerprintSettingsAuth() {
   const navigation = useNavigation();
