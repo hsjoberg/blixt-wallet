@@ -283,7 +283,7 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
         return;
       } else if (error) {
         console.log("Got error from RouterSendPaymentV2", [error]);
-        reject(error);
+        return reject(error);
       }
 
       const response = decodeSendPaymentV2Result(e.data);
