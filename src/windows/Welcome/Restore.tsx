@@ -13,6 +13,7 @@ import { ICreateWalletPayload } from "../../state";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { PLATFORM } from "../../utils/constants";
 import { CommonActions } from "@react-navigation/native";
+import GoBackIcon from "../../components/GoBackIcon";
 
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
@@ -145,8 +146,9 @@ export default function Restore({ navigation }: IProps) {
       <View style={style.content}>
         <View style={style.upperContent}>
           <View style={style.seed}>
+            {PLATFORM !== "android" && <GoBackIcon />}
             <Textarea
-              style={{width: "100%", height: 150, backgroundColor: blixtTheme.gray, fontSize: 20, }}
+              style={style.seedBox}
               rowSpan={6}
               bordered={false}
               underline={false}
@@ -250,6 +252,13 @@ const style = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
+  },
+  seedBox: {
+    width: "100%",
+    height: 150,
+    backgroundColor: blixtTheme.gray,
+    fontSize: 20,
+    marginTop: PLATFORM !== "android" ? 60 : undefined,
   },
   upperContent: {
     width: "100%",

@@ -10,12 +10,15 @@ export default function GoBackIcon() {
       type="Ionicons"
       name="ios-chevron-back-sharp"
       style={{
-        top: getStatusBarHeight(false) + 8,
-        left: 8,
+        paddingHorizontal: 20,
+        marginLeft: -20,
+        paddingVertical: 6,
+        marginTop: -3,
+        top: 0,
+        left: 0,
         position: "absolute",
-        padding: 9,
       }}
-      onPress={() => navigation.goBack()}
+      onPress={navigation.goBack}
     />
   );
 }
