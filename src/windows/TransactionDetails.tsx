@@ -338,8 +338,8 @@ function LNURLMetaData({ transaction }: IWebLNMetaDataProps) {
 const style = StyleSheet.create({
   card: {
     padding: 5,
-    minHeight: "50%",
-    maxHeight: "85%",
+    minHeight: PLATFORM !== "web" ? "50%" : undefined,
+    maxHeight: PLATFORM !== "web" ? "85%" : undefined,
     overflow: "hidden",
   },
   header: {

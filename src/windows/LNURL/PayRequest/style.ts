@@ -66,6 +66,12 @@ export default StyleSheet.create({
   icon: {
     fontSize: 18,
   },
+  inputAmountContainer: {
+    width: "100%",
+    flexDirection: "row",
+    marginBottom: 10,
+    position: "relative",
+  },
   input: {
     height: 28,
     fontSize: 13,

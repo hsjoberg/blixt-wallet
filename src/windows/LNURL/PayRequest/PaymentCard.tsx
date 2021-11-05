@@ -191,7 +191,7 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
             }
           </Text>
           {minSpendable !== maxSpendable &&
-            <View style={{flexDirection: "row", marginBottom: 10, position: "relative" }}>
+            <View style={style.inputAmountContainer}>
               <Input
                 onChangeText={preferFiat ?  onChangeFiatInput : onChangeBitcoinInput}
                 keyboardType="numeric"

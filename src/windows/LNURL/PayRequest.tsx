@@ -120,7 +120,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     const disposableIsFalse = /*lnUrlObject.disposable === false ||*/ (preimage && payRequestResponse?.disposable) === false;
 
 
-    const KeyboardAvoid = PLATFORM === "ios" ? KeyboardAvoidingView : React.Fragment;
+    const KeyboardAvoid = PLATFORM === "ios" ? KeyboardAvoidingView : View;
 
     return (
       <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>

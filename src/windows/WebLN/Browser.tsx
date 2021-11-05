@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import { TextInput, StatusBar, StyleSheet, View, TouchableOpacity, BackHandler, ToastAndroid, Platform, KeyboardAvoidingView } from "react-native";
-import Modal from "react-native-modal";
 import { getStatusBarHeight } from "react-native-status-bar-height"
 import { injectJs, onMessageHandler } from "react-native-webln";
 import { RouteProp } from "@react-navigation/native";
@@ -131,14 +130,14 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   };
 
   const onLongPressHome = () => {
-    if (PLATFORM === "ios" ) {
+    if (PLATFORM === "android") {
       ToastAndroid.show("Go back to store list", ToastAndroid.SHORT);
     }
   };
 
   return (
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} enabled={PLATFORM === "ios"}>
-      <BlurModal useModalComponent={false} noMargin goBackByClickingOutside={false}>
+      <BlurModal useModalComponent={false} noMargin goBackByClickingOutside={false} style={{ height: "100%" }}>
         <Card style={style.card}>
           <WebView
             containerStyle={{ opacity: showWebview ? 1 : 0 }}
@@ -179,7 +178,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
             <TouchableOpacity onPress={() => setUrl(INITIAL_URL)} onLongPress={() => onLongPressHome()}>
               <Icon style={style.listButton} type="FontAwesome5" name="home" />
             </TouchableOpacity>
-            {PLATFORM === "ios" &&
+            {PLATFORM !== "android" &&
               <TouchableOpacity onPress={() => webview.current?.goBack()}>
                 <Icon style={style.goBackButton} type="AntDesign" name="arrowleft" />
               </TouchableOpacity>
