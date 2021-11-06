@@ -845,6 +845,13 @@ Do you wish to proceed?`;
     navigation.navigate("LndMobileHelpCenter");
   }
 
+  // Lnd Graph Cache
+  const lndNoGraphCache = useStoreState((store) => store.settings.lndNoGraphCache);
+  const changeLndNoGraphCache = useStoreActions((store) => store.settings.changeLndNoGraphCache);
+  const onToggleLndNoGraphCache = async () => {
+    await changeLndNoGraphCache(!lndNoGraphCache);
+  };
+
   // Setup demo environment
   const setupDemo = useStoreActions((store) => store.setupDemo);
 
@@ -1264,15 +1271,22 @@ Do you wish to proceed?`;
                 <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="typewriter" /></Left>
                 <Body><Text>Write config</Text></Body>
               </ListItem>
-              <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: false })}>
-                <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
-                <Body>
-                  <Text>Activate Demo Mode</Text>
-                  <Text note={true}>Used for promo. Restart app to reset</Text>
-                </Body>
-              </ListItem>
             </>
           }
+          <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: false })}>
+            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
+            <Body>
+              <Text>Activate Demo Mode</Text>
+              <Text note={true}>Used for promo. Restart app to reset</Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleLndNoGraphCache}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="database-sync" /></Left>
+            <Body>
+              <Text>Disable lnd graph cache</Text>
+            </Body>
+            <Right><CheckBox checked={lndNoGraphCache} onPress={onToggleLndNoGraphCache} /></Right>
+          </ListItem>
         </List>
       </Content>
     </Container>

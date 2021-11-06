@@ -246,7 +246,7 @@ export const model: IStoreModel = {
           if (e.message.includes("lnd already started")) {
             toast("lnd already started", 3000, "warning");
           } else {
-            throw e;
+            throw new Error("Failed to start lnd: " + e.message);
           }
         }
       }
@@ -373,7 +373,7 @@ export const model: IStoreModel = {
     state.walletSeed = payload;
   }),
 
-  writeConfig: thunk(async (_, _2, { injections }) => {
+  writeConfig: thunk(async (_, _2, { injections, getState }) => {
     const writeConfig = injections.lndMobile.index.writeConfig;
 
     const lndChainBackend = await getItemAsyncStorage(StorageItem.lndChainBackend) as LndChainBackend;
@@ -385,6 +385,7 @@ export const model: IStoreModel = {
     const bitcoindRpcPass = await getItemAsyncStorage(StorageItem.bitcoindRpcPass) || null;
     const bitcoindPubRawBlock = await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) || null;
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
+    const lndNoGraphCache = getState().settings.lndNoGraphCache;
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
 
@@ -397,6 +398,9 @@ sync-freelist=1
 accept-keysend=1
 tlsdisableautofill=1
 maxpendingchannels=1000
+
+[db]
+db.no-graph-cache=${lndNoGraphCache.toString()}
 
 [Routing]
 routing.assumechanvalid=1
