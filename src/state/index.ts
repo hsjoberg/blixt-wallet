@@ -404,6 +404,7 @@ db.no-graph-cache=${lndNoGraphCache.toString()}
 
 [Routing]
 routing.assumechanvalid=1
+routing.strictgraphpruning=true
 
 [Bitcoin]
 bitcoin.active=1
