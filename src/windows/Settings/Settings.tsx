@@ -24,6 +24,7 @@ import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
 import { Chain } from "../../utils/build";
+import { getNodeInfo } from "../../lndmobile";
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -845,6 +846,33 @@ Do you wish to proceed?`;
     navigation.navigate("LndMobileHelpCenter");
   }
 
+  const onGetNodeInfoPress = async () => {
+    Alert.prompt(
+      "Get node info",
+      "Enter Node ID",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Get info",
+        onPress: async (text) => {
+          if (text === "") {
+            return;
+          }
+          try {
+            const nodeInfo = await getNodeInfo((text ?? "").split("@")[0], true);
+            Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
+          } catch (e) {
+            Alert.alert(e.message);
+          }
+        },
+      }],
+      "plain-text",
+    );
+  };
+
+
   // Lnd Graph Cache
   const lndNoGraphCache = useStoreState((store) => store.settings.lndNoGraphCache);
   const changeLndNoGraphCache = useStoreActions((store) => store.settings.changeLndNoGraphCache);
@@ -1233,6 +1261,12 @@ Do you wish to proceed?`;
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="lifebuoy" /></Left>
             <Body>
               <Text>LndMobile help center</Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onGetNodeInfoPress}>
+            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="info" /></Left>
+            <Body>
+              <Text>Get node info</Text>
             </Body>
           </ListItem>
           {dunderEnabled &&

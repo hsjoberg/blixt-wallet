@@ -208,7 +208,7 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
               >
                 <Text style={{fontSize: 10 }}>
                   {preferFiat && <>{fiatUnit}</>}
-                  {!preferFiat && <>Satoshi</>}
+                  {!preferFiat && <>{bitcoinUnit.nice}</>}
                 </Text>
               </Button>
             </View>
