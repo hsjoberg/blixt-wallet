@@ -389,6 +389,7 @@ exports[`renders correctly 1`] = `
                                     "color": "#000",
                                     "fontSize": 20,
                                     "height": 150,
+                                    "marginTop": undefined,
                                     "paddingLeft": 10,
                                     "paddingRight": 5,
                                     "textAlignVertical": "top",

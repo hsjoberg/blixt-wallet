@@ -163,7 +163,6 @@ module.exports = {
       'react-native$': 'react-native-web',
       'react-native-linear-gradient': 'react-native-web-linear-gradient',
       'react-native-maps': 'react-native-web-maps',
-      'react-native-modal': 'react-native-web-modal',
       'react-native-svg': 'react-native-svg-web',
       'react-native-webview': 'react-native-web-webview',
     }),
