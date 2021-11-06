@@ -141,25 +141,21 @@ export default function Drawer() {
             </View>
           </TouchableOpacity>
 
-          {PLATFORM !== "ios" && (
-            <>
-              <TouchableOpacity onPress={toggleAdvanced}>
-                <View style={style.advancedExpand}>
-                  <Text note style={style.advancedExpandText}>Advanced</Text>
-                  <Icon style={style.advancedExpandIcon} type="AntDesign" name={expandAdvanced ? "up" : "down"} />
-                </View>
-              </TouchableOpacity>
+          <TouchableOpacity onPress={toggleAdvanced}>
+            <View style={style.advancedExpand}>
+              <Text note style={style.advancedExpandText}>Advanced</Text>
+              <Icon style={style.advancedExpandIcon} type="AntDesign" name={expandAdvanced ? "up" : "down"} />
+            </View>
+          </TouchableOpacity>
 
-              <View style={[{height: expandAdvanced ? "auto" : 0 }, style.advanced]}>
-                <TouchableOpacity onPress={() => goToScreen("KeysendExperiment")}>
-                  <View style={style.menuItem}>
-                    <Icon style={[style.menuItemIcon, { fontSize: 25 }]} color={blixtTheme.dark} type="FontAwesome" name="send" />
-                    <Text style={style.menuItemText}>Keysend Experiment</Text>
-                  </View>
-                </TouchableOpacity>
+          <View style={[{height: expandAdvanced ? "auto" : 0 }, style.advanced]}>
+            <TouchableOpacity onPress={() => goToScreen("KeysendExperiment")}>
+              <View style={style.menuItem}>
+                <Icon style={[style.menuItemIcon, { fontSize: 25 }]} color={blixtTheme.dark} type="FontAwesome" name="send" />
+                <Text style={style.menuItemText}>Keysend Experiment</Text>
               </View>
-            </>
-          )}
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
       <View style={style.bottom}>
