@@ -141,8 +141,8 @@ android {
         applicationId MYAPP_APP_ID
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 97
-        versionName "0.3.10"
+        versionCode 98
+        versionName "0.3.11"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
         manifestPlaceholders = [appName: "Blixt Wallet"]
