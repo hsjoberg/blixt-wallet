@@ -113,7 +113,12 @@ function Contact({ contact }: IContactProps) {
       setLoadingPay(true);
       if (contact.lightningAddress) {
         if (await resolveLightningAddress(contact.lightningAddress)) {
-          navigation.navigate("LNURL", { screen: "PayRequest" });
+          navigation.navigate("LNURL", {
+            screen: "PayRequest",
+            params: {
+              callback: syncBalance,
+            },
+          });
           setTimeout(() => setLoadingPay(false), 1);
         }
       } else if (contact.lnUrlPay) {
@@ -121,7 +126,12 @@ function Contact({ contact }: IContactProps) {
           url: contact.lnUrlPay,
         });
         if (result === "payRequest") {
-          navigation.navigate("LNURL", { screen: "PayRequest" });
+          navigation.navigate("LNURL", {
+            screen: "PayRequest",
+            params: {
+              callback: syncBalance,
+            },
+          });
           setTimeout(() => setLoadingPay(false), 1);
         } else {
           if (result === "error") {

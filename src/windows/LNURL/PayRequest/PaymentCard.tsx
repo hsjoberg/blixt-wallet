@@ -21,9 +21,10 @@ import { PayerData } from "./PayerData";
 export interface IPaymentCardProps {
   onPaid: (preimage: Uint8Array) => void;
   lnUrlObject: ILNUrlPayRequest;
+  callback?: (r: Uint8Array | null) => void;
 }
 
-export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) {
+export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentCardProps) {
   const navigation = useNavigation();
   const lightningReadyToSend = useLightningReadyToSend();
 
@@ -82,6 +83,7 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
     const lightningAddress = metadata?.find((item) => item[0]?.toLowerCase?.() === "text/identifier" || item[0]?.toLowerCase?.() === "text/email");
 
     const cancel = () => {
+      callback?.(null);
       navigation.pop();
     };
 
@@ -264,6 +266,7 @@ export default function PaymentCard({ onPaid, lnUrlObject }: IPaymentCardProps) 
     );
   } catch (error) {
     Alert.alert(`Unable to pay:\n\n${error.message}`);
+    callback?.(null);
     navigation.goBack();
     return (<></>)
   }

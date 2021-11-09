@@ -7,19 +7,21 @@ import { LnUrlStackParamList } from "./index";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { getDomainFromURL } from "../../utils";
 import Blurmodal from "../../components/BlurModal";
-import { ILNUrlPayRequestMetadata, PayerIds } from "../../state/LNURL";
+import { ILNUrlPayRequestMetadata } from "../../state/LNURL";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Alert } from "../../utils/alert";
 import PaymentCard from "./PayRequest/PaymentCard";
 import PaymentDone from "./PayRequest/PaymentDone";
 import style from "./PayRequest/style";
 import { PLATFORM } from "../../utils/constants";
+import { RouteProp } from "@react-navigation/native";
 
 export interface IPayRequestProps {
   navigation: StackNavigationProp<LnUrlStackParamList>;
-  route: any;
+  route: RouteProp<LnUrlStackParamList, "PayRequest">;
 }
 export default function LNURLPayRequest({ navigation, route }: IPayRequestProps) {
+  const callback = (route?.params?.callback) ?? (() => {});
   const [preimage, setPreimage] = useState<Uint8Array | undefined>();
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
   const lnUrlObject = useStoreState((store) => store.lnUrl.lnUrlObject);
@@ -30,9 +32,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
   const getContactByLightningAddress = useStoreState((actions) => actions.contacts.getContactByLightningAddress);
   const getContactByLnUrlPay = useStoreState((actions) => actions.contacts.getContactByLnUrlPay);
 
-  useEffect(() => {
-    return clear
-  }, [])
+  useEffect(() => clear, []);
 
   try {
     if (domain === "" || (!lnUrlObject || lnUrlObject.tag !== "payRequest")) {
@@ -55,7 +55,6 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     }
 
     const promptLightningAddressContact = () => {
-      console.log("prompt promptLightningAddressContact");
       if (!lightningAddress?.[1]) {
         return;
       }
@@ -156,8 +155,8 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
                       </View>
                     )}
                   </View>
-                  {!preimage && <PaymentCard onPaid={paidCallback} lnUrlObject={lnUrlObject} />}
-                  {preimage && <PaymentDone preimage={preimage} />}
+                  {!preimage && <PaymentCard onPaid={paidCallback} lnUrlObject={lnUrlObject} callback={callback} />}
+                  {preimage && <PaymentDone preimage={preimage} callback={callback} />}
                 </Body>
               </CardItem>
             </Card>
@@ -167,6 +166,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     );
   } catch (error) {
     Alert.alert(`Unable to pay:\n\n${error.message}`);
+    callback(null);
     navigation.goBack();
     return (<></>);
   }

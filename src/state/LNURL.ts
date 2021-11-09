@@ -57,6 +57,7 @@ export interface ILNUrlWithdrawRequest {
   minWithdrawable?: number;
   balanceCheck?: string;
   currentBalance?: number;
+  payLink?: string;
   tag: "withdrawRequest";
 }
 
