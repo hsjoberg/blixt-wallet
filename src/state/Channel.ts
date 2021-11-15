@@ -142,9 +142,9 @@ export const channel: IChannelModel = {
           if (pushNotificationsEnabled) {
             try {
               let message = "Opened payment channel";
-              const node = await injections.lndMobile.index.getNodeInfo(channelEvent.openChannel.remotePubkey!);
-              if (node && node.node) {
-                message += ` with ${node.node.alias}`;
+              const nodeInfo = await injections.lndMobile.index.getNodeInfo(channelEvent.openChannel.remotePubkey!);
+              if (nodeInfo.node) {
+                message += ` with ${nodeInfo.node?.alias}`;
               }
               getStoreActions().notificationManager.localNotification({ message, importance: "high" });
             } catch (e) {
@@ -164,9 +164,9 @@ export const channel: IChannelModel = {
           if (pushNotificationsEnabled) {
             try {
               let message = "Payment channel";
-              const node = await injections.lndMobile.index.getNodeInfo(channelEvent.closedChannel.remotePubkey!);
-              if (node && node.node) {
-                message += ` with ${node.node.alias}`;
+              const nodeInfo = await injections.lndMobile.index.getNodeInfo(channelEvent.closedChannel.remotePubkey!);
+              if (nodeInfo.node) {
+                message += ` with ${nodeInfo.node?.alias}`;
               }
               message += " closed";
               getStoreActions().notificationManager.localNotification({ message, importance: "high" });
@@ -183,8 +183,12 @@ export const channel: IChannelModel = {
               if (pendingOpen.channel) {
                 const txId = [...channelEvent.pendingOpenChannel.txid!].reverse();
                 if (pendingOpen.channel.channelPoint!.split(":")[0] === bytesToHexString(txId)) {
-                  const r = await injections.lndMobile.index.getNodeInfo(pendingOpen.channel.remoteNodePub!);
-                  alias = r.node!.alias;
+                  try {
+                    const nodeInfo = await injections.lndMobile.index.getNodeInfo(pendingOpen.channel.remoteNodePub!);
+                    if (nodeInfo.node) {
+                      alias = nodeInfo.node?.alias;
+                    }
+                  } catch (e) { log.e("getNodeInfo failed", [e]); }
                 }
               }
             }
