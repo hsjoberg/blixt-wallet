@@ -146,7 +146,7 @@ export default function Restore({ navigation }: IProps) {
       <View style={style.content}>
         <View style={style.upperContent}>
           <View style={style.seed}>
-            {PLATFORM !== "android" && <GoBackIcon />}
+            {PLATFORM !== "android" && <GoBackIcon style={style.goBack} />}
             <Textarea
               style={style.seedBox}
               rowSpan={6}
@@ -293,5 +293,14 @@ const style = StyleSheet.create({
     flex: 1,
     height: "100%",
     justifyContent: "space-around",
+  },
+  goBack: {
+    paddingHorizontal: 20,
+    marginLeft: -20,
+    paddingVertical: 6,
+    marginTop: -3,
+    top: 0,
+    left: 0,
+    position: "absolute",
   },
 });

@@ -160,7 +160,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
         {(__DEV__ || PLATFORM === "web") && <Icon type="MaterialCommunityIcons" name="debug-step-over" style={sendStyle.pasteDebug} onPress={onDebugPaste} />}
         <Icon testID="paste-clipboard" type="FontAwesome" name="paste" style={sendStyle.paste} onPress={onPasteClick} />
         {PLATFORM !== "android" &&
-          <GoBackIcon />
+          <GoBackIcon style={sendStyle.goBack} />
         }
       </View>
     </Camera>
@@ -168,6 +168,12 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
 };
 
 const sendStyle = StyleSheet.create({
+  goBack: {
+    top: getStatusBarHeight(false) + 8,
+    left: 8,
+    position: "absolute",
+    padding: 9,
+  },
   lightningAddress: {
     position: "absolute",
     fontSize: 28,

@@ -2,22 +2,18 @@ import React from "react";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { useNavigation } from "@react-navigation/native";
 import { Icon } from "native-base";
+import { ViewStyle } from "react-native";
 
-export default function GoBackIcon() {
+interface IGoBackIcon {
+  style?: ViewStyle;
+}
+export default function GoBackIcon({ style }: IGoBackIcon) {
   const navigation = useNavigation();
   return (
     <Icon
       type="Ionicons"
       name="ios-chevron-back-sharp"
-      style={{
-        paddingHorizontal: 20,
-        marginLeft: -20,
-        paddingVertical: 6,
-        marginTop: -3,
-        top: 0,
-        left: 0,
-        position: "absolute",
-      }}
+      style={style}
       onPress={navigation.goBack}
     />
   );
