@@ -1,9 +1,13 @@
 import React from "react";
 import { View, StyleSheet, Pressable, ViewStyle } from "react-native";
 import Modal from "react-native-modal";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+
 import { useNavigation } from "@react-navigation/native";
 import RealTimeBlur from "../react-native-realtimeblur";
 import { PLATFORM } from "../utils/constants";
+import { Icon } from "native-base";
+
 
 export interface ITransactionDetailsProps {
   children: any;
@@ -45,14 +49,17 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
               {children}
             </View>
           </>
-        : <Modal
-            onBackdropPress={goBack}
-            onRequestClose={goBack}
-            visible={true}
-            style={userStyle}
-          >
-            {children}
-          </Modal>
+        : <>
+            <Modal
+              onBackdropPress={goBack}
+              onRequestClose={goBack}
+              visible={true}
+              style={userStyle}
+            >
+              {children}
+            </Modal>
+            <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />
+          </>
       }
     </RealTimeBlur>
   );
@@ -76,4 +83,9 @@ const style = StyleSheet.create({
   modal: {
     marginHorizontal: 6,
   },
+  cross: {
+    position: "absolute",
+    top: getStatusBarHeight() + 0,
+    right: 10,
+  }
 });

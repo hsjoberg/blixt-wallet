@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Pressable, ViewStyle } from "react-native";
+import { Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import RealTimeBlur from "../react-native-realtimeblur";
 
@@ -40,6 +41,7 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
       <View style={[style.modal, userStyle]}>
         {children}
       </View>
+      <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />
     </RealTimeBlur>
   );
 };
@@ -61,4 +63,9 @@ const style = StyleSheet.create({
   modal: {
     marginHorizontal: 6,
   },
+  cross: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  }
 });
