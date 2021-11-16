@@ -19,6 +19,7 @@ import {
   connectPeer,
   // TODO disconnectPeer
   decodePayReq,
+  // TODO getRecoveryInfo
   getNodeInfo,
   getInfo,
   lookupInvoice,

@@ -508,6 +508,19 @@ export const describeGraph = async (): Promise<lnrpc.ChannelGraph> => {
   return response;
 };
 
+/**
+ * @throws
+ */
+export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> => {
+  const response = await sendCommand<lnrpc.IGetRecoveryInfoRequest, lnrpc.GetRecoveryInfoRequest, lnrpc.GetRecoveryInfoResponse>({
+    request: lnrpc.GetRecoveryInfoRequest,
+    response: lnrpc.GetRecoveryInfoResponse,
+    method: "GetRecoveryInfo",
+    options: {},
+  });
+  return response;
+};
+
 export type IReadLndLogResponse = string[];
 /**
  * @throws

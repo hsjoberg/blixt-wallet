@@ -394,6 +394,11 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void observeLndLogFile(Promise p) {
+    if (logObserver != null) {
+      p.resolve(true);
+      return;
+    }
+
     File appDir = getReactApplicationContext().getFilesDir();
 
     final String logDir = appDir + "/logs/bitcoin/mainnet";

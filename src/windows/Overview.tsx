@@ -26,6 +26,7 @@ import { PLATFORM } from "../utils/constants";
 import { fontFactor, fontFactorNormalized, zoomed } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
 import CopyAddress from "../components/CopyAddress";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -54,7 +55,7 @@ function Overview({ navigation }: IOverviewProps) {
   const pendingOpenBalance = useStoreState((store) => store.channel.pendingOpenBalance);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const transactions = useStoreState((store) => store.transaction.transactions);
-  const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
+  const isRecoverMode = useStoreState((store) => store.lightning.isRecoverMode);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -208,6 +209,9 @@ function Overview({ navigation }: IOverviewProps) {
           onScroll={transactionListOnScroll}
           testID="TX_LIST"
         >
+          {isRecoverMode && (
+            <RecoverInfo />
+          )}
           {onboardingState === "SEND_ONCHAIN" &&
             <SendOnChain bitcoinAddress={bitcoinAddress} />
           }
@@ -293,6 +297,26 @@ function Overview({ navigation }: IOverviewProps) {
   );
 };
 
+const RecoverInfo = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const recoverInfo = useStoreState((store) => store.lightning.recoverInfo);
+
+  return (
+    <Card>
+      <CardItem>
+        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+          <Text>
+            {!recoverInfo.recoveryFinished && <>Wallet recovery in progress.</>}
+            {recoverInfo.recoveryFinished && <>Wallet recovery finished.</>}
+          </Text>
+          <Button small onPress={() => navigation.navigate("SyncInfo")}>
+            <Text>More info</Text>
+          </Button>
+        </View>
+      </CardItem>
+    </Card>
+  );
+};
 
 interface ISendOnChain {
   bitcoinAddress?: string;

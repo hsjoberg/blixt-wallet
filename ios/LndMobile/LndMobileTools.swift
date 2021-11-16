@@ -370,8 +370,13 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
+  var lndLogFileObservingStarted = false
   @objc(observeLndLogFile:rejecter:)
   func observeLndLogFile(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    if (lndLogFileObservingStarted) {
+      resolve(true)
+      return
+    }
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
     let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
@@ -402,5 +407,7 @@ autopilot.heuristic=preferential:0.05
       fileHandle?.seekToEndOfFile()
       fileHandle?.readInBackgroundAndNotify()
     })
+    lndLogFileObservingStarted = true
+    resolve(true)
   }
 }

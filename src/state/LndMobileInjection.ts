@@ -20,6 +20,7 @@ import {
   connectPeer,
   disconnectPeer,
   decodePayReq,
+  getRecoveryInfo,
   getNodeInfo,
   getInfo,
   lookupInvoice,
@@ -94,6 +95,7 @@ export interface ILndMobileInjections {
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
     disconnectPeer: (pubkey: string) => Promise<lnrpc.DisconnectPeerResponse>;
     decodePayReq: (bolt11: string) => Promise<lnrpc.PayReq>;
+    getRecoveryInfo: () => Promise<lnrpc.GetRecoveryInfoResponse>;
     getInfo: () => Promise<lnrpc.GetInfoResponse>;
     getNodeInfo: (pubKey: string) => Promise<lnrpc.NodeInfo>;
     lookupInvoice: (rHash: string) => Promise<lnrpc.Invoice>;
@@ -166,6 +168,7 @@ export default {
     connectPeer,
     disconnectPeer,
     decodePayReq,
+    getRecoveryInfo,
     getNodeInfo,
     getInfo,
     lookupInvoice,

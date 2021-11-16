@@ -37,6 +37,7 @@ export default function Restore({ navigation }: IProps) {
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
   const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
+  const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
   const onRestorePress = async () => {
     try {
@@ -70,6 +71,7 @@ export default function Restore({ navigation }: IProps) {
         changeAutopilotEnabled(false),
         setSyncEnabled(true), // TODO test
         changeScheduledSyncEnabled(true),
+        changeOnboardingState("DONE"),
       ]);
 
       navigation.dispatch(

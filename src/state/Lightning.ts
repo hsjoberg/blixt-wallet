@@ -30,6 +30,7 @@ export interface ILightningModel {
   getInfo: Thunk<ILightningModel, void, IStoreInjections>;
   waitForChainSync: Thunk<ILightningModel, void, IStoreInjections>;
   waitForGraphSync: Thunk<ILightningModel, void, IStoreInjections>;
+  checkRecoverInfo: Thunk<ILightningModel, void, IStoreInjections, IStoreModel, Promise<void>>;
   setupAutopilot: Thunk<ILightningModel, boolean, IStoreInjections>;
   getLightningPeers: Thunk<ILightningModel, void, IStoreInjections>;
   connectPeer: Thunk<ILightningModel, string, IStoreInjections>;
@@ -42,6 +43,7 @@ export interface ILightningModel {
   setInitializeDone: Action<ILightningModel, boolean>;
   setSyncedToChain: Action<ILightningModel, boolean>;
   setSyncedToGraph: Action<ILightningModel, boolean>;
+  setRecoverInfo: Action<ILightningModel, lnrpc.GetRecoveryInfoResponse>;
   setFirstSync: Action<ILightningModel, boolean>;
   setAutopilotSet: Action<ILightningModel, boolean>;
   setLightningPeers: Action<ILightningModel, ISetLightningPeersPayload[]>
@@ -52,6 +54,8 @@ export interface ILightningModel {
   rpcReady: boolean;
   syncedToChain: Computed<ILightningModel, boolean>;
   syncedToGraph: Computed<ILightningModel, boolean>;
+  recoverInfo: lnrpc.GetRecoveryInfoResponse;
+  isRecoverMode: Computed<ILightningModel, boolean>;
   ready: boolean;
   initializeDone: boolean;
   firstSync: boolean;
@@ -85,6 +89,9 @@ export const lightning: ILightningModel = {
     (async () => {
       try {
         actions.setupStores();
+        actions.checkRecoverInfo()
+          .then(() => debugShowStartupInfo && toast("checkRecoverInfo time: " + (new Date().getTime() - start.getTime()) / 1000 + "s"))
+          .catch((error) => toast("checkRecoverInfo error: " + error.message, undefined, "danger"));
         await actions.waitForChainSync();
         debugShowStartupInfo && toast("syncedToChain time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
         await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
@@ -219,6 +226,23 @@ export const lightning: ILightningModel = {
     actions.setNodeInfo(info);
   }),
 
+  checkRecoverInfo: thunk((async (actions, _, { getState, injections }) => {
+    while (true) {
+      try {
+        const info = await injections.lndMobile.index.getRecoveryInfo();
+        log.i("Recovery info", [info, info.recoveryMode, info.recoveryFinished, info.progress]);
+        actions.setRecoverInfo(info);
+        if (!info.recoveryMode || info.recoveryFinished) {
+          log.i("Recovery either finished or not activated");
+          break;
+        }
+      } catch (e) {
+        log.e("checkRecoverInfo: " + e.message);
+      }
+      await timeout(10000);
+    }
+  })),
+
   waitForChainSync: thunk(async (actions, _, { getState, injections }) => {
     const getInfo = injections.lndMobile.index.getInfo;
     const firstSync = getState().firstSync;
@@ -298,6 +322,7 @@ export const lightning: ILightningModel = {
   setInitializeDone: action((state, payload) => { state.initializeDone = payload; }),
   setSyncedToChain: action((state, payload) => { state.syncedToChain = payload; }),
   setSyncedToGraph: action((state, payload) => { state.syncedToGraph = payload; }),
+  setRecoverInfo: action((state, payload) => { state.recoverInfo = payload }),
   setFirstSync: action((state, payload) => { state.firstSync = payload; }),
   setAutopilotSet: action((state, payload) => { state.autopilotSet = payload; }),
   setLightningPeers: action((state, payload) => {
@@ -314,6 +339,12 @@ export const lightning: ILightningModel = {
   initializeDone: false,
   syncedToChain: computed((state) => (state.nodeInfo?.syncedToChain) ?? false),
   syncedToGraph: computed((state) => (state.nodeInfo?.syncedToGraph) ?? false),
+  isRecoverMode: computed((state) => state.recoverInfo.recoveryMode),
+  recoverInfo: lnrpc.GetRecoveryInfoResponse.create({
+    progress: 0,
+    recoveryFinished: false,
+    recoveryMode: false,
+  }),
   firstSync: false,
   bestBlockheight: undefined,
   lightningPeers: [],
