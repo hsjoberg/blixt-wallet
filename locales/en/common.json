@@ -1,0 +1,21 @@
+{
+  "buttons": {
+    "ok": "Ok",
+    "cancel": "Cancel",
+    "continue":"Continue",
+    "no": "No",
+    "yes": "Yes",
+    "save": "Save",
+    "copy": "Copy"
+  },
+  "msg":{
+    "status":"Status",
+    "error":"Error",
+    "lastSync":"Last sync",
+    "lastSyncAttempt":"Last sync attempt",
+    "written":"Written",
+    "enabled":"enabled",
+    "disabled":"disabled"
+  }
+}
+

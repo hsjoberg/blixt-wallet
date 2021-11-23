@@ -14,6 +14,8 @@ import { blixtTheme } from "./native-base-theme/variables/commonColor";
 import store from "./state/store";
 import { clearApp } from "./storage/app";
 import { PLATFORM } from "./utils/constants";
+import "./i18n/i18n";
+
 
 export default function App() {
   const [debug, setDebug] = useState(__DEV__ ? true : false);
@@ -29,17 +31,19 @@ export default function App() {
   return (
     <StoreProvider store={store}>
       <StyleProvider style={getTheme(theme)}>
-        <NavigationContainer theme={{
-          dark: true,
-          colors: {
-            ...DefaultTheme.colors,
-            background: "transparent",
-          }
-        }} documentTitle={{ enabled: false }} ref={navigator}>
-          <Root>
-            {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
-          </Root>
-        </NavigationContainer>
+        <React.Suspense fallback={<>Loading...</>}>
+            <NavigationContainer theme={{
+            dark: true,
+            colors: {
+                ...DefaultTheme.colors,
+                background: "transparent",
+            }
+            }} documentTitle={{ enabled: false }} ref={navigator}>
+            <Root>
+                {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
+            </Root>
+            </NavigationContainer>
+        </React.Suspense>
       </StyleProvider>
     </StoreProvider>
   );
