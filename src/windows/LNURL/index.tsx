@@ -15,7 +15,9 @@ export type LnUrlStackParamList = {
   AuthRequest: undefined;
   ChannelRequest: undefined;
   WithdrawRequest: undefined;
-  PayRequest: undefined;
+  PayRequest: {
+    callback?: (r: Uint8Array | null) => void;
+  };
   PayRequestAboutLightningAddress: undefined;
 }
 

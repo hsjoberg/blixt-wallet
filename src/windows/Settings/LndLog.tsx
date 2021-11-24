@@ -1,5 +1,5 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { NativeModules, ScrollView } from "react-native";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
+import { EmitterSubscription, NativeModules } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Icon, Text } from "native-base";
 import Clipboard from "@react-native-community/clipboard";
@@ -9,33 +9,34 @@ import Container from "../../components/Container";
 import { NavigationButton } from "../../components/NavigationButton";
 import { LndMobileToolsEventEmitter } from "../../utils/event-listener";
 import { toast } from "../../utils";
+import LogBox from "../../components/LogBox";
+import useForceUpdate from "../../hooks/useForceUpdate";
 
 export interface ILndLogProps {
   navigation: StackNavigationProp<SettingsStackParamList, "LndLog">;
 }
 export default function LndLog({ navigation }: ILndLogProps) {
   let log = useRef("");
-  const [render, setRender] = useState(0);
-  const logScrollView = useRef<ScrollView>(null);
+  const forceUpdate = useForceUpdate();
 
   useEffect(() => {
+    let listener: EmitterSubscription;
     (async () => {
       const tailLog = await NativeModules.LndMobileTools.tailLog(100);
       log.current = tailLog.split("\n").map((row) => row.slice(11)).join("\n");
 
-      const listener = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
+      listener = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
         log.current = log.current + "\n" + data.slice(11);
-        setRender((r) => r + 1);
+        forceUpdate();
       });
 
       NativeModules.LndMobileTools.observeLndLogFile();
-
-      setRender(render + 1);
-
-      return () => {
-        listener.remove();
-      }
+      forceUpdate();
     })();
+
+    return () => {
+      listener.remove();
+    }
   }, []);
 
   useLayoutEffect(() => {
@@ -59,9 +60,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
 
   return (
     <Container>
-      <ScrollView contentContainerStyle={{ padding: 8 }} ref={logScrollView} onContentSizeChange={() => logScrollView.current?.scrollToEnd()}>
-        <Text style={{ fontSize: 10 }}>{log.current}</Text>
-      </ScrollView>
+      <LogBox text={log.current} scrollLock={false} />
     </Container>
   )
 }

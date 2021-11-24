@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, ScrollView, View, NativeModules, DeviceEventEmitter, NativeEventEmitter } from "react-native";
+import { StyleSheet, ScrollView, View, NativeModules, EmitterSubscription } from "react-native";
 import { Card, Text, CardItem, H1, Button, Spinner } from "native-base";
 
 import Blurmodal from "../../components/BlurModal";
-import { useStoreState, useStoreActions } from "../../state/store";
 import { getInfo, ELndMobileStatusCodes, startLnd } from "../../lndmobile";
 import { newAddress } from "../../lndmobile/onchain";
 import { toast } from "../../utils";
@@ -12,9 +11,11 @@ import { unlockWallet } from "../../lndmobile/wallet";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Color from "color";
 import Clipboard from "@react-native-community/clipboard";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { PLATFORM } from "../../utils/constants";
 import { LndMobileToolsEventEmitter } from "../../utils/event-listener";
+import LogBox from "../../components/LogBox";
+import useForceUpdate from "../../hooks/useForceUpdate";
 
 interface IStepsResult {
   title: string;
@@ -25,17 +26,23 @@ interface IStepsResult {
 export default function LndMobileHelpCenter({ navigation }) {
   const [runningSteps, setRunningSteps] = useState(false);
   const [stepsResult, setStepsResult] = useState<IStepsResult[]>([]);
-  const [lndLog, setLndLog] = useState<string[]>([]);
-  const logScrollView = useRef<ScrollView>();
+  let log = useRef("");
+  const forceUpdate = useForceUpdate();
 
   useEffect(() => {
-    const listener = LndMobileToolsEventEmitter.addListener("lndlog", (data: string) => {
-      console.log("lndlog: " + data);
-      lndLog.push(data.slice(11));
-      setLndLog(lndLog.slice(0));
-    });
+    let listener: EmitterSubscription;
+    (async () => {
+      const tailLog = await NativeModules.LndMobileTools.tailLog(100);
+      log.current = tailLog.split("\n").map((row) => row.slice(11)).join("\n");
 
-    NativeModules.LndMobileTools.observeLndLogFile();
+      listener = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
+        log.current = log.current + "\n" + data.slice(11);
+        forceUpdate();
+      });
+
+      NativeModules.LndMobileTools.observeLndLogFile();
+      forceUpdate();
+    })();
 
     return () => {
       listener.remove();
@@ -199,9 +206,9 @@ export default function LndMobileHelpCenter({ navigation }) {
     }
   };
 
-  const runCopyLndLog = async () => {
-    Clipboard.setString(lndLog.join("\n"));
-    toast("Copied lnd log to clipboard");
+  const runCopyLndLog = async (l: string) => {
+    Clipboard.setString(l);
+    toast("Copied to clipboard");
   };
 
   const runWaitForChainSync = async () => {
@@ -243,14 +250,8 @@ export default function LndMobileHelpCenter({ navigation }) {
                 );
               })}
             </View>
-            <View style={{ flex: 0.75, padding: 3, width:"100%", backgroundColor: Color(blixtTheme.gray).darken(0.2).hex() }}>
-              <ScrollView ref={logScrollView} onContentSizeChange={() => logScrollView.current?.scrollToEnd()}>
-                {lndLog.map((text, i) => {
-                  return (
-                    <Text key={i} style={{ fontSize: 11 }}>{text}</Text>
-                  );
-                })}
-              </ScrollView>
+            <View style={{ flex: 0.75, padding: 3, width: "100%", backgroundColor: Color(blixtTheme.gray).darken(0.2).hex() }}>
+              <LogBox text={log.current} scrollLock={true} />
             </View>
             <View style={{flexDirection: "row",  flexWrap:"wrap", justifyContent:"flex-end"}}>
               <Button small style={style.actionButton} onPress={runInit}>
@@ -262,7 +263,7 @@ export default function LndMobileHelpCenter({ navigation }) {
               <Button small style={style.actionButton} onPress={runUnlockWallet}>
                 <Text style={style.actionButtonText}>unlockWallet</Text>
               </Button>
-              <Button small style={style.actionButton} onPress={runCopyLndLog}>
+              <Button small style={style.actionButton} onPress={() => runCopyLndLog(log.current)}>
                 <Text style={style.actionButtonText}>Copy lnd log</Text></Button>
               <Button small style={style.actionButton} onPress={runWaitForChainSync}>
                 <Text style={style.actionButtonText}>waitForChainSync()</Text>

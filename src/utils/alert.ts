@@ -108,6 +108,18 @@ class WebAlert implements AlertStatic {
       );
     }
   }
+
+  public promisePromptCallback(
+    title: string,
+    message?: string,
+    type?: AlertType,
+    defaultValue?: string,
+    keyboardType?: string
+  ): Promise<string> {
+    return new Promise((resolve) => {
+      this.prompt(title, message, resolve, type, defaultValue, keyboardType);
+    });
+  }
 }
 
 export const Alert = new WebAlert();

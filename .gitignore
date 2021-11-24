@@ -76,7 +76,7 @@ google-services.json
 
 # Lnd binaries
 android/lndmobile/Lndmobile.aar
-ios/Lndmobile.framework
+ios/Lndmobile.xcframework
 
 # Web
 dist

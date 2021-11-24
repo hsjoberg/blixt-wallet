@@ -9,10 +9,10 @@ import { CONSTANTS, JSHash } from "react-native-hash";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { timeout, bytesToString, getDomainFromURL, stringToUint8Array, hexToUint8Array, bytesToHexString } from "../utils/index";
-
-import { lnrpc } from "../../proto/proto";
+import { timeout, bytesToString, getDomainFromURL, stringToUint8Array, hexToUint8Array, bytesToHexString, toast } from "../utils/index";
+import { lnrpc } from "../../proto/lightning";
 import { LndMobileEventEmitter } from "../utils/event-listener";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 import logger from "./../utils/log";
 const log = logger("LNURL");
@@ -57,12 +57,48 @@ export interface ILNUrlWithdrawRequest {
   minWithdrawable?: number;
   balanceCheck?: string;
   currentBalance?: number;
+  payLink?: string;
   tag: "withdrawRequest";
 }
 
 export interface ILNUrlWithdrawResponse {
   status: "OK" | "ERROR";
   reason?: string;
+}
+
+export type Metadata = [string, string];
+
+export type ILNUrlPayRequestMetadata = Metadata[];
+
+export interface ILNUrlPayRequestPayerData {
+  name?: {
+    mandatory: boolean;
+  };
+  pubkey?: {
+    mandatory: boolean;
+  };
+  identifier?: {
+    mandatory: boolean;
+  };
+  email?: {
+    mandatory: boolean;
+  };
+  auth?: {
+    mandatory?: boolean;
+    k1?: string; // hex
+  };
+};
+
+export interface ILNUrlPayResponsePayerData {
+  name?: string;
+  pubkey?: string; // hex
+  auth?: {
+    key: string;
+    k1: string;
+    sig: string; // hex
+  },
+  email?: string;
+  identifier?: string;
 }
 
 export interface ILNUrlPayRequest {
@@ -73,9 +109,8 @@ export interface ILNUrlPayRequest {
   commentAllowed?: number;
   disposable?: boolean | null;
   tag: "payRequest";
+  payerData?: ILNUrlPayRequestPayerData;
 }
-
-export type ILNUrlPayRequestMetadata = [string, string][];
 
 export interface ILNUrlPayResponse {
   pr: string;
@@ -125,6 +160,7 @@ interface IDoPayRequestPayload {
   lightningAddress: string | null;
   lud16IdentifierMimeType: string | null;
   metadataTextPlain: string;
+  payerData?: ILNUrlPayResponsePayerData;
 }
 
 export type IDoPayRequestResponse = ILNUrlPayResponse;
@@ -354,31 +390,42 @@ export const lnUrl: ILNUrlModel = {
 
         // 5. Once accepted by the user, LN WALLET sends a GET to LN SERVICE in the form of <callback>?k1=<k1>&pr=<lightning invoice, ...>
         const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e) => {
-          log.d("SubscribeInvoices event", [e]);
-          listener.remove();
-
-          const invoice = injections.lndMobile.wallet.decodeInvoiceResult(e.data);
-          let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?";
-          const url = `${lnUrlObject.callback}${firstSeparator}k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
-          log.d("url", [url]);
-
-          const result = await fetch(url);
-          log.d("result", [JSON.stringify(result)]);
-
-          let response: ILNUrlWithdrawResponse | ILNUrlError;
           try {
-            response = await result.json();
-          } catch (e) {
-            log.d("", [e]);
-            return reject(new Error("Unable to parse message from the server"));
-          }
-          log.d("response", [response]);
+            log.d("SubscribeInvoices event", [e]);
+            listener.remove();
+            const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
+            if (error === "EOF") {
+              return;
+            } else if (error) {
+              log.d("Got error from SubscribeInvoices", [error]);
+              return;
+            }
 
-          if (isLNUrlPayResponseError(response)) {
-            return reject(new Error(response.reason));
-          }
+            const invoice = injections.lndMobile.wallet.decodeInvoiceResult(e.data);
+            let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?";
+            const url = `${lnUrlObject.callback}${firstSeparator}k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
+            log.d("url", [url]);
 
-          resolve(true);
+            const result = await fetch(url);
+            log.d("result", [JSON.stringify(result)]);
+
+            let response: ILNUrlWithdrawResponse | ILNUrlError;
+            try {
+              response = await result.json();
+            } catch (e) {
+              log.d("", [e]);
+              return reject(new Error("Unable to parse message from the server"));
+            }
+            log.d("response", [response]);
+
+            if (isLNUrlPayResponseError(response)) {
+              return reject(new Error(response.reason));
+            }
+
+            resolve(true);
+          } catch (error) {
+            toast(error.message, undefined, "danger");
+          }
         });
       })
 
@@ -398,12 +445,18 @@ export const lnUrl: ILNUrlModel = {
       // 5. LN WALLET makes a GET request using
       // <callback>?amount=<milliSatoshi>&fromnodes=<nodeId1,nodeId2,...>
       // (we're skipping fromnodes)
+      const gotPayerData = !!payload.payerData;
+
       let callback = lnUrlObject.callback;
       let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?"
       callback = `${callback}${firstSeparator}amount=${payload.msat.toString()}`;
       if (payload.comment) {
         callback = `${callback}&comment=${encodeURIComponent(payload.comment)}`;
       }
+      if (payload.payerData) {
+        callback = `${callback}&payerdata=${encodeURIComponent(JSON.stringify(payload.payerData))}`
+      }
+      log.d("callback" ,[callback]);
 
       const result = await fetch(callback);
       log.d("result", [JSON.stringify(result)]);
@@ -428,6 +481,7 @@ export const lnUrl: ILNUrlModel = {
       }
 
       try {
+        log.d("pr", [response.pr]);
         const paymentRequest: lnrpc.PayReq = await getStoreActions().send.setPayment({
           paymentRequestStr: response.pr,
           extraData: {
@@ -449,7 +503,12 @@ export const lnUrl: ILNUrlModel = {
           throw new Error("Invoice invalid. Description hash is missing.");
         }
 
-        const hashedMetadata = await JSHash(lnUrlObject.metadata, CONSTANTS.HashAlgorithms.sha256);
+        let dataToHash = lnUrlObject.metadata;
+        if (gotPayerData) {
+          dataToHash = `${dataToHash}${JSON.stringify(payload.payerData)}`;
+        }
+
+        const hashedMetadata = await JSHash(dataToHash, CONSTANTS.HashAlgorithms.sha256);
         if (hashedMetadata !== descriptionHash) {
           log.i("Description hash does not match metdata hash!", [hashedMetadata, descriptionHash]);
           throw new Error("Invoice description hash is invalid.");
@@ -512,15 +571,16 @@ export const lnUrl: ILNUrlModel = {
 
     let lnurlObject: ILNUrlPayRequest | ILNUrlPayResponseError;
     try {
-      lnurlObject = await result.json();
+      const lnurlText = await result.text();
+      log.i("",[lnurlText]);
+      lnurlObject = JSON.parse(lnurlText);
     } catch (e) {
-      log.d("", [e]);
-      throw new Error("Unable to parse message from the server");
+      throw new Error("Unable to parse message from the server: " + e.message);
     }
     log.d("response", [lnurlObject]);
 
     if (isLNUrlPayResponseError(lnurlObject)) {
-      log.e("Got error")
+      log.e("Got error");
       throw new Error(lnurlObject.reason);
     }
 

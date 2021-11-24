@@ -53,7 +53,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
                 await syncContact({
                   type: "SERVICE",
                   domain,
-                  lnUrlPay: null,
+                  lnUrlPay: lnObject.payLink ?? null,
                   lnUrlWithdraw: lnObject.balanceCheck ?? null,
                   lightningAddress: null,
                   lud16IdentifierMimeType: null,
@@ -63,7 +63,6 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
             }],
           );
         } else {
-
           if (lnurlStr !== lnObject.balanceCheck) {
             console.log("WithdrawRequest: Syncing contact");
             await syncContact({

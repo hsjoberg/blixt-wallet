@@ -1,14 +1,15 @@
-import { DeviceEventEmitter } from "react-native";
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
 import Long from "long";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { lnrpc } from "../../proto/proto";
-
-import logger from "./../utils/log";
+import { lnrpc } from "../../proto/lightning";
 import { decodeSubscribeTransactionsResult } from "../lndmobile/onchain";
 import { LndMobileEventEmitter } from "../utils/event-listener";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+import { toast } from "../utils";
+
+import logger from "./../utils/log";
 const log = logger("OnChain");
 
 export interface IBlixtTransaction extends lnrpc.ITransaction {
@@ -80,30 +81,38 @@ export const onChain: IOnChainModel = {
     else {
       await injections.lndMobile.onchain.subscribeTransactions();
       LndMobileEventEmitter.addListener("SubscribeTransactions", async (e: any) => {
-        log.d("Event SubscribeTransactions", [e]);
-        if (e.data === "") {
-          log.i("Got e.data empty from SubscribeTransactions. Skipping transaction");
-          return;
-        }
-        await actions.getBalance();
+        try {
+          log.d("Event SubscribeTransactions", [e]);
+          const error = checkLndStreamErrorResponse("SubscribeTransactions", e);
+          if (error === "EOF") {
+            return;
+          } else if (error) {
+            log.e("Got error from SubscribeTransactions", [error]);
+            return;
+          }
 
-        if (getStoreState().onboardingState === "SEND_ONCHAIN") {
-          log.i("Changing onboarding state to DO_BACKUP");
-          getStoreActions().changeOnboardingState("DO_BACKUP");
-        }
+          await actions.getBalance();
 
-        const transaction = decodeSubscribeTransactionsResult(e.data);
-        if (
+          if (getStoreState().onboardingState === "SEND_ONCHAIN") {
+            log.i("Changing onboarding state to DO_BACKUP");
+            getStoreActions().changeOnboardingState("DO_BACKUP");
+          }
+
+          const transaction = decodeSubscribeTransactionsResult(e.data);
+          if (
             !getState().transactionNotificationBlacklist.includes(transaction.txHash) &&
             transaction.numConfirmations > 0 &&
             Long.isLong(transaction.amount) &&
             transaction.amount.greaterThan(0)
           ) {
-          getStoreActions().notificationManager.localNotification({
-            message: "Received on-chain transaction",
-            importance: "high",
-          });
-          actions.addToTransactionNotificationBlacklist(transaction.txHash);
+            getStoreActions().notificationManager.localNotification({
+              message: "Received on-chain transaction",
+              importance: "high",
+            });
+            actions.addToTransactionNotificationBlacklist(transaction.txHash);
+          }
+        } catch (error) {
+          toast(error.message, undefined, "danger");
         }
       });
 

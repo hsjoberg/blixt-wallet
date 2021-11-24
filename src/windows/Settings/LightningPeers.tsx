@@ -11,7 +11,7 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import { NavigationButton } from "../../components/NavigationButton";
 import { identifyService, lightningServices } from "../../utils/lightning-services";
 import { SettingsStackParamList } from "./index";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
 export interface ISelectListProps {

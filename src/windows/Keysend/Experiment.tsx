@@ -9,16 +9,18 @@ import Long from "long";
 import { toast, hexToUint8Array } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { generateSecureRandom } from "react-native-securerandom";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { getChanInfo, listPrivateChannels } from "../../lndmobile/channel";
 import QrCode from "../../components/QrCode";
 import BlixtForm from "../../components/Form";
 import { NavigationButton } from "../../components/NavigationButton";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { ITransaction } from "../../storage/database/transaction";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../Main";
 
 interface ILightningInfoProps {
-  navigation: any;
+  navigation: StackNavigationProp<RootStackParamList, "KeysendExperiment">;
 }
 export default function KeysendTest({ navigation }: ILightningInfoProps) {
   const [sending, setSending] = useState(false);
@@ -43,6 +45,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Keysend",
+      headerBackTitle: "Back",
       headerShown: true,
       headerRight: () => {
         return (
@@ -153,10 +156,14 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         }]
       }));
     }
-    Clipboard.setString(JSON.stringify(routeHints));
 
     setRoutehints(JSON.stringify(routeHints));
   };
+
+  const onPressQr = () => {
+    Clipboard.setString(JSON.stringify(routehints));
+    toast("Copied to clipboard");
+  }
 
   const onPressCamera = () => {
     navigation.navigate("CameraFullscreen", {
@@ -228,6 +235,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         <H1 style={{ marginTop: 10, marginBottom: 5 }}>Keysend - scan to pay</H1>
         {routehints.length > 0  &&
           <QrCode
+            onPress={onPressQr}
             size={220}
             data={JSON.stringify({
               pubkey: myNodeInfo!.identityPubkey,
@@ -242,7 +250,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       <View style={{ padding: 16 }}>
         <Text style={{ marginBottom: 8 }}>
           Welcome to the keysend playground.{"\n"}
-          Keysend lets you pay another Blixt Wallet (or lnd with keysend enabled) without requiring an invoice.
+          Keysend lets you pay another Blixt Wallet (or any Lightning node that supports keysend) without requiring an invoice.
         </Text>
         <Text>
           Click on the camera to scan another wallet's QR code or provide a public key and route hints below.

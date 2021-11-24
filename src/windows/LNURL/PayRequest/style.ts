@@ -2,6 +2,7 @@ import Color from "color";
 import { StyleSheet } from "react-native";
 
 import { blixtTheme } from "../../../native-base-theme/variables/commonColor";
+import { PLATFORM } from "../../../utils/constants";
 
 export default StyleSheet.create({
   keyboardContainer: {
@@ -54,6 +55,9 @@ export default StyleSheet.create({
   text: {
     marginBottom: 14,
   },
+  inputLabel: {
+    marginBottom: 9,
+  },
   boldText: {
     fontWeight: "bold",
   },
@@ -61,6 +65,12 @@ export default StyleSheet.create({
   },
   icon: {
     fontSize: 18,
+  },
+  inputAmountContainer: {
+    width: "100%",
+    flexDirection: "row",
+    marginBottom: 10,
+    position: "relative",
   },
   input: {
     height: 28,
@@ -71,5 +81,26 @@ export default StyleSheet.create({
     paddingBottom: 5,
     paddingLeft: 12,
     paddingRight: 8,
-  }
+  },
+  inputCurrencyButton: {
+    borderRadius: 10,
+    position: "absolute",
+    right: 5,
+    top: 4,
+    padding: 0,
+    justifyContent: "center",
+    height: 20
+  },
+  metadataSection: {
+    marginBottom: 32,
+    width: "100%",
+  },
+  metadataSectionCheckbox: {
+    marginRight: 18,
+  },
+  metadataSectionCheckboxLabel: {
+    flex: 1,
+    fontSize: 13,
+    marginTop: PLATFORM === "ios" ? 2 : 0,
+  },
 });

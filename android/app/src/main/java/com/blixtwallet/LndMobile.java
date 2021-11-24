@@ -113,9 +113,7 @@ class LndMobile extends ReactContextBaseJavaModule {
           final int request = msg.arg1;
 
           if (!requests.containsKey(request)) {
-            // If request is -1,
-            // we intentionally don't want to
-            // Resolve the promise.
+            // If request is -1, we intentionally don't want to resolve the promise.
             if (request != -1) {
               HyperLog.e(TAG, "Unknown request: " + request + " for " + msg.what);
             }
@@ -126,37 +124,37 @@ class LndMobile extends ReactContextBaseJavaModule {
 
           if (bundle.containsKey("error_code")) {
             HyperLog.e(TAG, "ERROR" + msg);
-            final String errorCode = bundle.getString("error_code");
-            final String errorDescription = bundle.getString("error_desc");
-            promise.reject(errorCode, errorDescription);
-            return;
+            promise.reject(bundle.getString("error_code"), bundle.getString("error_desc"));
+          } else {
+            final byte[] bytes = (byte[]) bundle.get("response");
+            String b64 = "";
+            if (bytes != null && bytes.length > 0) {
+              b64 = Base64.encodeToString(bytes, Base64.NO_WRAP);
+            }
+            WritableMap params = Arguments.createMap();
+            params.putString("data", b64);
+            promise.resolve(params);
           }
 
-          final byte[] bytes = (byte[]) bundle.get("response");
-          String b64 = "";
-
-          if (bytes != null && bytes.length > 0) {
-            b64 = Base64.encodeToString(bytes, Base64.NO_WRAP);
-          }
-
-          WritableMap params = Arguments.createMap();
-          params.putString("data", b64);
-          promise.resolve(params);
           break;
         }
         case LndMobileService.MSG_GRPC_STREAM_RESULT: {
-          // TODO handle when error is returned
-          final byte[] bytes = (byte[]) bundle.get("response");
+          // TODO EOF Stream error
           final String method = (String) bundle.get("method");
-
-          String b64 = "";
-
-          if (bytes != null && bytes.length > 0) {
-            b64 = Base64.encodeToString(bytes, Base64.NO_WRAP);
-          }
-
           WritableMap params = Arguments.createMap();
-          params.putString("data", b64);
+
+          if (bundle.containsKey("error_code")) {
+            HyperLog.e(TAG, "ERROR" + msg);
+            params.putString("error_code", bundle.getString("error_code"));
+            params.putString("error_desc", bundle.getString("error_desc"));
+          } else {
+            final byte[] bytes = (byte[]) bundle.get("response");
+            String b64 = "";
+            if (bytes != null && bytes.length > 0) {
+              b64 = Base64.encodeToString(bytes, Base64.NO_WRAP);
+            }
+            params.putString("data", b64);
+          }
 
           getReactApplicationContext()
             .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
@@ -327,7 +325,8 @@ class LndMobile extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void startLnd(boolean torEnabled, Promise promise) {
+  public void startLnd(boolean torEnabled, String args, Promise promise) {
+    // TODO args is only used on iOS right now
     int req = new Random().nextInt();
     requests.put(req, promise);
 

@@ -1,17 +1,18 @@
+import { EmitterSubscription } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
-import { DeviceEventEmitter, EmitterSubscription } from "react-native";
 import Long from "long";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
-import { lnrpc, invoicesrpc } from "../../proto/proto";
+import { lnrpc, invoicesrpc } from "../../proto/lightning";
 import { setupDescription } from "../utils/NameDesc";
 import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
 import { timeout, decodeTLVRecord, bytesToHexString, toast, uint8ArrayToUnicodeString } from "../utils";
 import { TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
 import { LndMobileEventEmitter } from "../utils/event-listener";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 import logger from "./../utils/log";
 const log = logger("Receive");
@@ -164,9 +165,12 @@ export const receive: IReceiveModel = {
     const invoiceSubscription = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
       try {
         log.i("New invoice event");
-        if (e.data === "") {
-          log.i("Got e.data empty from SubscribeInvoices. Skipping invoice");
+        const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
+        if (error === "EOF") {
           return;
+        } else if (error) {
+          log.d("Got error from SubscribeInvoices", [error]);
+          throw error;
         }
 
         const invoice = decodeInvoiceResult(e.data);
@@ -299,9 +303,9 @@ export const receive: IReceiveModel = {
           await dispatch.fiat.getRate();
         }, 500);
         await dispatch.transaction.syncTransaction(transaction);
-      } catch (e) {
-        log.e("Error receiving invoice", [e]);
-        toast("Error receiving payment: " + e.message, undefined, "danger");
+      } catch (error) {
+        log.e("Error receiving invoice", [error]);
+        toast("Error receiving payment: " + error.message, undefined, "danger");
       }
     });
     actions.setInvoiceSubscriptionStarted(true);

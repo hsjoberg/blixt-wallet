@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { StyleSheet, NativeModules, ToastAndroid, PermissionsAndroid, Linking, Platform } from "react-native";
+import { StyleSheet, NativeModules, PermissionsAndroid, Linking, Platform } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import DocumentPicker from "react-native-document-picker";
 import { readFile } from "react-native-fs";
@@ -24,6 +24,7 @@ import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
 import { Chain } from "../../utils/build";
+import { getNodeInfo } from "../../lndmobile";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -37,6 +38,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: t("title"),
+      headerBackTitle: "Back",
       headerShown: true,
     });
   }, [navigation]);
@@ -220,8 +222,8 @@ export default function Settings({ navigation }: ISettingsProps) {
   // Copy lnd log
   const copyLndLog = async () => {
     try {
-      await NativeModules.LndMobileTools.copyLndLog();
-      toast(t("miscelaneous.lndLog.dialog.alert"), undefined, "warning");
+      const filePath = await NativeModules.LndMobileTools.copyLndLog();
+      toast(t("miscelaneous.lndLog.dialog.alert") + ": " + filePath, undefined, "warning");
     } catch (e) {
       console.error(e);
       toast(t("miscelaneous.lndLog.dialog.error"), undefined, "danger");
@@ -280,6 +282,16 @@ export default function Settings({ navigation }: ISettingsProps) {
       await setSyncEnabled(!scheduledSyncEnabled);
       await changeScheduledSyncEnabled(!scheduledSyncEnabled);
     }
+  };
+  const onLongPressScheduledSyncEnabled = async () => {
+    toast(
+      `${t("msg.status",{ns:namespaces.common})}: ${workInfo}\n`+
+      `${t("msg.lastSyncAttempt",{ns:namespaces.common})}: ${formatISO(fromUnixTime(lastScheduledSyncAttempt))}\n` +
+      `${t("msg.lastSync",{ns:namespaces.common})}: ${formatISO(fromUnixTime(lastScheduledSync))}`,
+      0,
+      "success",
+      t("buttons.ok",{ns:namespaces.common}),
+    )
   }
 
   // Debug show startup info
@@ -452,6 +464,19 @@ ${t("LN.inbound.dialog.msg3")}`
   const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
   const changeOnchainExplorer = useStoreActions((store) => store.settings.changeOnchainExplorer);
   const onChangeOnchainExplorerPress = async () => {
+    const setCustomExplorer = async () => {
+      const explorer = await Alert.promisePromptCallback(
+        "Custom Onchain Explorer",
+        "Set a custom onchain explorer (https://domain.com/)",
+        undefined,
+        onchainExplorer in OnchainExplorer ? undefined : onchainExplorer,
+      );
+
+      if (explorer.trim().length !== 0) {
+        await changeOnchainExplorer(explorer);
+      }
+    };
+
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
@@ -461,20 +486,38 @@ ${t("LN.inbound.dialog.msg3")}`
         items: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
           id: currOnchainExplorer,
           label: camelCaseToSpace(currOnchainExplorer),
-        }),
-      )});
+        })).concat(({
+          id: "CUSTOM",
+          label: "Custom explorer"
+        }))
+      });
 
       if (selectedItem) {
-        await changeOnchainExplorer(selectedItem.id);
+        if (selectedItem.id === "CUSTOM") {
+          // Custom explorer, let's ask the user for a URL
+          await setCustomExplorer();
+        } else {
+          await changeOnchainExplorer(selectedItem.id);
+        }
       }
     } else {
       navigation.navigate("ChangeOnchainExplorer", {
         title: t("display.onchainExplorer.dialog.title"),
         data: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
           title: camelCaseToSpace(currOnchainExplorer),
-          value: currOnchainExplorer as keyof typeof OnchainExplorer,
-        })),
-        onPick: async (currency) => await changeOnchainExplorer(currency),
+          value: currOnchainExplorer,
+        })).concat({
+          title: "Custom explorer",
+          value: "CUSTOM"
+        }),
+        onPick: async (onchainExplorer) => {
+          if (onchainExplorer === "CUSTOM") {
+            // Custom explorer, let's ask the user for a URL
+            await setCustomExplorer();
+          } else {
+            await changeOnchainExplorer(onchainExplorer);
+          }
+        },
       });
     }
   };
@@ -672,18 +715,25 @@ ${t("experimental.tor.disabled.msg2")}`;
     Alert.alert(
       "Tor",
       text,
-      [{ text: t("button.cancel",{ns:namespaces.common}) },
+      [{ text: t("button.no",{ns:namespaces.common}) },
       {
-        text: !torEnabled ? t("experimental.tor.enabled.title") : t("experimental.tor.disabled.title"),
+        text: t("button.yes",{ns:namespaces.common}),
         onPress: async () => {
           await changeTorEnabled(!torEnabled);
-          try {
-            await NativeModules.LndMobile.stopLnd();
-            await NativeModules.LndMobileTools.killLnd();
-          } catch(e) {
-            console.log(e);
+          if (PLATFORM === "android") {
+            try {
+              await NativeModules.LndMobile.stopLnd();
+              await NativeModules.LndMobileTools.killLnd();
+            } catch(e) {
+              console.log(e);
+            }
+            NativeModules.LndMobileTools.restartApp();
+          } else {
+            Alert.alert(
+              "Restart required",
+              "Blixt Wallet has to be restarted before the new configuration is applied."
+            );
           }
-          NativeModules.LndMobileTools.restartApp();
         },
       }
     ]);
@@ -795,6 +845,40 @@ ${t("experimental.tor.disabled.msg2")}`;
   const onLndMobileHelpCenterPress = async () => {
     navigation.navigate("LndMobileHelpCenter");
   }
+
+  const onGetNodeInfoPress = async () => {
+    Alert.prompt(
+      "Get node info",
+      "Enter Node ID",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Get info",
+        onPress: async (text) => {
+          if (text === "") {
+            return;
+          }
+          try {
+            const nodeInfo = await getNodeInfo((text ?? "").split("@")[0], true);
+            Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
+          } catch (e) {
+            Alert.alert(e.message);
+          }
+        },
+      }],
+      "plain-text",
+    );
+  };
+
+
+  // Lnd Graph Cache
+  const lndNoGraphCache = useStoreState((store) => store.settings.lndNoGraphCache);
+  const changeLndNoGraphCache = useStoreActions((store) => store.settings.changeLndNoGraphCache);
+  const onToggleLndNoGraphCache = async () => {
+    await changeLndNoGraphCache(!lndNoGraphCache);
+  };
 
   // Setup demo environment
   const setupDemo = useStoreActions((store) => store.setupDemo);
@@ -957,12 +1041,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             </ListItem>
           }
           {PLATFORM === "android" &&
-            <ListItem
-              style={style.listItem} icon={true} onPress={onToggleScheduledSyncEnabled}
-              onLongPress={() => ToastAndroid.show(t("msg.status",{ns:namespaces.common})+": " + workInfo + "\n"+
-                                                  t("msg.lastSyncAttempt",{ns:namespaces.common})+": " + formatISO(fromUnixTime(lastScheduledSyncAttempt)) + "\n" +
-                                                  t("msg.lastSyncAttempt",{ns:namespaces.common})+": " + formatISO(fromUnixTime(lastScheduledSync)), ToastAndroid.LONG)}
-           >
+            <ListItem style={style.listItem} icon={true} onPress={onToggleScheduledSyncEnabled} onLongPress={onLongPressScheduledSyncEnabled}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="sync-alert" /></Left>
               <Body>
                 <Text>{t("security.chainSync.title")}</Text>
@@ -997,7 +1076,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Left><Icon style={style.icon} type="FontAwesome" name="chain" /></Left>
             <Body>
               <Text>{t("display.onchainExplorer.title")}</Text>
-              <Text note={true}>{camelCaseToSpace(onchainExplorer)}</Text>
+              <Text note={true}>{onchainExplorer in OnchainExplorer ? camelCaseToSpace(onchainExplorer) : onchainExplorer}</Text>
             </Body>
           </ListItem>
 
@@ -1100,7 +1179,6 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
               <Body>
                 <Text>{t("miscelaneous.lndLog.title")}</Text>
-                <Text note={true}>{t("miscelaneous.lndLog.subtitle")}</Text>
               </Body>
             </ListItem>
           }
@@ -1144,7 +1222,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Body>
             <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
           </ListItem>
-          {PLATFORM === "android" &&
+          {["android", "ios"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
               <Left>
                 <TorSvg />
@@ -1155,7 +1233,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Right><CheckBox checked={torEnabled} onPress={onChangeTorEnabled} /></Right>
             </ListItem>
           }
-          {torEnabled &&
+          {(torEnabled && PLATFORM === "android") &&
             <ListItem style={style.listItem} button={true} icon={true} onPress={onShowOnionAddressPress}>
               <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="AntDesign" name="qrcode" /></Left>
               <Body>
@@ -1181,6 +1259,12 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="lifebuoy" /></Left>
             <Body>
               <Text>{t("debug.helpCencer.title")}</Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onGetNodeInfoPress}>
+            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="info" /></Left>
+            <Body>
+              <Text>Get node info</Text>
             </Body>
           </ListItem>
           {dunderEnabled &&
@@ -1219,15 +1303,22 @@ ${t("experimental.tor.disabled.msg2")}`;
                 <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="typewriter" /></Left>
                 <Body><Text>{t("debug.config.title")}</Text></Body>
               </ListItem>
-              <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: false })}>
-                <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
-                <Body>
-                  <Text>{t("debug.demo.title")}</Text>
-                  <Text note={true}>{t("debug.demo.title")}</Text>
-                </Body>
-              </ListItem>
             </>
           }
+          <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: false })}>
+            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
+            <Body>
+              <Text>Activate Demo Mode</Text>
+              <Text note={true}>Used for promo. Restart app to reset</Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleLndNoGraphCache}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="database-sync" /></Left>
+            <Body>
+              <Text>Disable lnd graph cache</Text>
+            </Body>
+            <Right><CheckBox checked={lndNoGraphCache} onPress={onToggleLndNoGraphCache} /></Right>
+          </ListItem>
         </List>
       </Content>
     </Container>

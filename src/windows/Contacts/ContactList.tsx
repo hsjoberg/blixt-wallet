@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet, View, LayoutAnimation, Pressable, StatusBar, EmitterSubscription } from "react-native";
-import { Icon, Card, CardItem, Text, Button, Header, Item, Input, CheckBox } from "native-base";
+import { StyleSheet, View, LayoutAnimation, Pressable, StatusBar, EmitterSubscription, Image } from "react-native";
+import { Icon, Card, CardItem, Text, Button, Header, Item, Input } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/core";
 import Long from "long";
@@ -22,8 +22,9 @@ import { ILNUrlWithdrawRequest } from "../../state/LNURL";
 import ButtonSpinner from "../../components/ButtonSpinner";
 import { LndMobileEventEmitter } from "../../utils/event-listener";
 import { decodeInvoiceResult } from "../../lndmobile/wallet";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { Chain } from "../../utils/build";
+import { checkLndStreamErrorResponse } from "../../utils/lndmobile";
 
 interface IContactProps {
   contact: IContact;
@@ -48,10 +49,14 @@ function Contact({ contact }: IContactProps) {
     if (contact.lnUrlWithdraw && !currentBalance) {
       console.log("Subscribing to invoice inside Contact " + contact.domain + " " + contact.note);
       listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
-        console.log("Contact component: SubscribeInvoices");
         try {
-          if (e.data === "") {
+          console.log("Contact component: SubscribeInvoices");
+          const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
+          if (error === "EOF") {
             return;
+          } else if (error) {
+            console.log("ContactList: Got error from SubscribeInvoices", [error]);
+            throw error;
           }
 
           const invoice = decodeInvoiceResult(e.data);
@@ -108,7 +113,12 @@ function Contact({ contact }: IContactProps) {
       setLoadingPay(true);
       if (contact.lightningAddress) {
         if (await resolveLightningAddress(contact.lightningAddress)) {
-          navigation.navigate("LNURL", { screen: "PayRequest" });
+          navigation.navigate("LNURL", {
+            screen: "PayRequest",
+            params: {
+              callback: syncBalance,
+            },
+          });
           setTimeout(() => setLoadingPay(false), 1);
         }
       } else if (contact.lnUrlPay) {
@@ -116,7 +126,12 @@ function Contact({ contact }: IContactProps) {
           url: contact.lnUrlPay,
         });
         if (result === "payRequest") {
-          navigation.navigate("LNURL", { screen: "PayRequest" });
+          navigation.navigate("LNURL", {
+            screen: "PayRequest",
+            params: {
+              callback: syncBalance,
+            },
+          });
           setTimeout(() => setLoadingPay(false), 1);
         } else {
           if (result === "error") {
@@ -268,6 +283,7 @@ export default function ContactList({ navigation }: IContactListProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Contacts & Services",
+      headerBackTitle: "Back",
       headerShown: true,
       headerRight: () => {
         return (

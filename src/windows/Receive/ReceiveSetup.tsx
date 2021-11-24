@@ -68,6 +68,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Receive",
+      headerBackTitle: "Back",
       headerShown: true,
     });
   }, [navigation]);

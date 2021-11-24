@@ -6,12 +6,12 @@ import Long from "long";
 import BigNumber from "bignumber.js";
 
 import { useStoreActions, useStoreState } from "../state/store";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import { valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
 import { identifyService, lightningServices } from "../utils/lightning-services";
 import CopyText from "./CopyText";
-import { OnchainExplorer } from "../state/Settings";
+import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
 
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
@@ -72,7 +72,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
 
   const onPressViewInExplorer = async () => {
     const txId = channel.channelPoint?.split(":")[0];
-    await Linking.openURL(`${OnchainExplorer[onchainExplorer]}${txId}`);
+    await Linking.openURL(constructOnchainExplorerUrl(onchainExplorer, txId ?? ""));
   }
 
   let localBalance = channel.localBalance || Long.fromValue(0);
@@ -285,6 +285,17 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                     </Text>
                   </>
                 }
+              </Text>
+            </Right>
+          </Row>
+          <Row style={{ width: "100%" }}>
+            <Left style={{ alignSelf: "flex-start" }}>
+              <Text style={style.channelDetailTitle}>Commitment fee</Text>
+            </Left>
+            <Right>
+              <Text>
+                {preferFiat && valueFiat(channel.commitFee ?? Long.fromValue(0), currentRate).toFixed(2) + " " + fiatUnit}
+                {!preferFiat && valueBitcoin(channel.commitFee ?? Long.fromValue(0), bitcoinUnit) + " " + getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}
               </Text>
             </Right>
           </Row>

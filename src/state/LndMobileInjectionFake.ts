@@ -19,6 +19,7 @@ import {
   connectPeer,
   // TODO disconnectPeer
   decodePayReq,
+  // TODO getRecoveryInfo
   getNodeInfo,
   getInfo,
   lookupInvoice,
@@ -68,7 +69,7 @@ import {
 import {
   checkScheduledSyncWorkStatus, WorkInfo
 } from "../lndmobile/fake/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
-import { lnrpc, signrpc, invoicesrpc, autopilotrpc } from "../../proto/proto";
+import { lnrpc, signrpc, invoicesrpc, autopilotrpc } from "../../proto/lightning";
 import { IAddInvoiceBlixtLspArgs } from "../lndmobile";
 
 export interface ILndMobileInjections {
@@ -79,7 +80,7 @@ export interface ILndMobileInjections {
     subscribeState: () => Promise<string>;
     decodeState: (data: string) => lnrpc.SubscribeStateResponse;
     checkStatus: () => Promise<number>;
-    startLnd: (torEnabled: boolean) => Promise<string>;
+    startLnd: (torEnabled: boolean, args: string) => Promise<string>;
     checkICloudEnabled: () => Promise<boolean>;
     checkApplicationSupportExists: () => Promise<boolean>;
     checkLndFolderExists: () => Promise<boolean>;
@@ -104,7 +105,7 @@ export interface ILndMobileInjections {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;
     closeChannel: (fundingTxId: string, outputIndex: number, force: boolean) => Promise<string>;
     listChannels: () => Promise<lnrpc.ListChannelsResponse>;
-    openChannel: (pubkey: string, amount: number, privateChannel: boolean) => Promise<lnrpc.ChannelPoint>;
+    openChannel: (pubkey: string, amount: number, privateChannel: boolean, feeRateSat?: number) => Promise<lnrpc.ChannelPoint>;
     pendingChannels: () => Promise<lnrpc.PendingChannelsResponse>;
     subscribeChannelEvents: () => Promise<string>;
     decodeChannelEvent: (data: string) => lnrpc.ChannelEventUpdate;

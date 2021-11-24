@@ -4,7 +4,7 @@ import { Body, Header, Button, Icon, Text, Title, Left, View } from "native-base
 import Long from "long";
 import * as base64 from "base64-js";
 
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import Content from "../../components/Content";
 import Container from "../../components/Container";
 import { useStoreState, useStoreActions } from "../../state/store";

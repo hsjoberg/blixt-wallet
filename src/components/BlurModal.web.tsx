@@ -1,5 +1,6 @@
 import React from "react";
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, ViewStyle } from "react-native";
+import { Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import RealTimeBlur from "../react-native-realtimeblur";
 
@@ -7,9 +8,10 @@ export interface ITransactionDetailsProps {
   children: any;
   useModalComponent?: boolean;
   goBackByClickingOutside?: boolean;
-  noMargin?: boolean
+  noMargin?: boolean;
+  style?: ViewStyle;
 }
-export default function BlurModal({ children, useModalComponent, goBackByClickingOutside, noMargin }: ITransactionDetailsProps) {
+export default function BlurModal({ children, useModalComponent, goBackByClickingOutside, noMargin, style: userStyle }: ITransactionDetailsProps) {
   const navigation = useNavigation();
   const useModal = useModalComponent ?? true;
   goBackByClickingOutside = goBackByClickingOutside ?? true;
@@ -26,7 +28,6 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
       overlayColor="#00000000"
       downsampleFactor={1.2}
       blurRadius={15}
-      style={{justifyContent:"center"}}
     >
       <Pressable
         style={{
@@ -37,9 +38,10 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
         }}
         onPress={goBack}
       />
-      <View style={style.modal}>
+      <View style={[style.modal, userStyle]}>
         {children}
       </View>
+      <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />
     </RealTimeBlur>
   );
 };
@@ -59,9 +61,11 @@ const style = StyleSheet.create({
     flexDirection: "column",
   },
   modal: {
-    marginVertical: "auto",
-    // marginHorizontal: Dimensions.get("screen").width * 0.01,
-    marginHorizontal: 4,
-    overflow: "hidden",
+    marginHorizontal: 6,
+  },
+  cross: {
+    position: "absolute",
+    top: 10,
+    right: 10,
   }
-})
+});

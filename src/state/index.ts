@@ -1,8 +1,9 @@
-import { NativeModules } from "react-native";
+import { NativeModules, PlatformColor } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
 import * as base64 from "base64-js";
+import Tor from "react-native-tor";
 
 import { IStoreInjections } from "./store";
 import { ILightningModel, lightning, LndChainBackend } from "./Lightning";
@@ -37,9 +38,10 @@ import { PLATFORM } from "../utils/constants";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { Chain, VersionCode } from "../utils/build";
 import { LndMobileEventEmitter } from "../utils/event-listener";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { toast } from "../utils";
 import { Alert } from "../utils/alert";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 import logger from "./../utils/log";
 const log = logger("Store");
@@ -191,10 +193,20 @@ export const model: IStoreModel = {
     try {
       let torEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled) ?? false;
       actions.setTorEnabled(torEnabled);
+      let socksPort = 0;
       if (torEnabled) {
         try {
           actions.setTorLoading(true);
-          await NativeModules.BlixtTor.startTor(); // FIXME
+          if (PLATFORM === "android") {
+            await NativeModules.BlixtTor.startTor();
+          } else if (PLATFORM === "ios") {
+            const tor = Tor({
+              stopDaemonOnBackground: false,
+              startDaemonOnActive: true,
+            });
+            socksPort = await tor.startIfNotStarted();
+          }
+          log.i("socksPort", [socksPort]);
         } catch (e) {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
@@ -229,12 +241,12 @@ export const model: IStoreModel = {
       if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
         log.i("Starting lnd");
         try {
-          log.d("startLnd", [await startLnd(torEnabled)]);
+          log.d("startLnd", [await startLnd(torEnabled, socksPort > 0 ? ("--tor.socks=127.0.0.1:" + socksPort) : "")]);
         } catch (e) {
           if (e.message.includes("lnd already started")) {
             toast("lnd already started", 3000, "warning");
           } else {
-            throw e;
+            throw new Error("Failed to start lnd: " + e.message);
           }
         }
       }
@@ -262,13 +274,15 @@ export const model: IStoreModel = {
     const debugShowStartupInfo = getState().settings.debugShowStartupInfo;
     const start = new Date();
     LndMobileEventEmitter.addListener("SubscribeState", async (e: any) => {
-      log.d("SubscribeState", [e]);
-      if (e.data === "") {
-        log.i("Got e.data empty from SubscribeState");
-        return;
-      }
-
       try {
+        log.d("SubscribeState", [e]);
+        const error = checkLndStreamErrorResponse("SubscribeState", e);
+        if (error === "EOF") {
+          return;
+        } else if (error) {
+          throw error;
+        }
+
         const state = injections.lndMobile.index.decodeState(e.data ?? "");
         log.i("Current lnd state", [state]);
         if (state.state === lnrpc.WalletState.NON_EXISTING) {
@@ -281,11 +295,20 @@ export const model: IStoreModel = {
           log.d("Got lnrpc.WalletState.UNLOCKED");
         } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
           debugShowStartupInfo && toast("RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-          log.d("Got lnrpc.WalletState.RPC_ACTIVE");
           await dispatch.lightning.initialize({ start });
+          log.d("Got lnrpc.WalletState.RPC_ACTIVE");
+        } else if (state.state === lnrpc.WalletState.SERVER_ACTIVE) {
+          debugShowStartupInfo && toast("Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          log.d("Got lnrpc.WalletState.SERVER_ACTIVE");
+
+          // We'll enter this branch of code if the react-native frontend desyncs with lnd.
+          // This can happen for example if Android kills react-native but not LndMobileService.
+          if (!getState().lightning.rpcReady) {
+            await dispatch.lightning.initialize({ start });
+          }
         }
-      } catch (e) {
-        toast(e.message, undefined, "danger");
+      } catch (error) {
+        toast(error.message, undefined, "danger");
       }
     });
     await injections.lndMobile.index.subscribeState();
@@ -350,7 +373,7 @@ export const model: IStoreModel = {
     state.walletSeed = payload;
   }),
 
-  writeConfig: thunk(async (_, _2, { injections }) => {
+  writeConfig: thunk(async (_, _2, { injections, getState }) => {
     const writeConfig = injections.lndMobile.index.writeConfig;
 
     const lndChainBackend = await getItemAsyncStorage(StorageItem.lndChainBackend) as LndChainBackend;
@@ -362,6 +385,7 @@ export const model: IStoreModel = {
     const bitcoindRpcPass = await getItemAsyncStorage(StorageItem.bitcoindRpcPass) || null;
     const bitcoindPubRawBlock = await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) || null;
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
+    const lndNoGraphCache = getState().settings.lndNoGraphCache;
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
 
@@ -375,8 +399,12 @@ accept-keysend=1
 tlsdisableautofill=1
 maxpendingchannels=1000
 
+[db]
+db.no-graph-cache=${lndNoGraphCache.toString()}
+
 [Routing]
 routing.assumechanvalid=1
+routing.strictgraphpruning=true
 
 [Bitcoin]
 bitcoin.active=1
@@ -409,6 +437,11 @@ autopilot.conftarget=3
 autopilot.allocation=1.0
 autopilot.heuristic=externalscore:${Chain === "testnet" || Chain === "mainnet" ? "1.00" : "1.00"}
 autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? "0.00" : "0.00"}
+
+[protocol]
+protocol.wumbo-channels=true
+protocol.no-anchors=true
+protocol.no-script-enforced-lease=true
 `;
     await writeConfig(config);
   }),

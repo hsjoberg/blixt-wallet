@@ -31,6 +31,7 @@ exports[`renders correctly 1`] = `
       }
     >
       <View
+        collapsable={false}
         pointerEvents="box-none"
         style={
           Object {
@@ -46,6 +47,7 @@ exports[`renders correctly 1`] = `
           style={null}
         >
           <View
+            collapsable={false}
             pointerEvents="box-none"
             style={
               Object {
@@ -60,6 +62,7 @@ exports[`renders correctly 1`] = `
             }
           >
             <View
+              collapsable={false}
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
@@ -77,6 +80,7 @@ exports[`renders correctly 1`] = `
             />
           </View>
           <View
+            collapsable={false}
             pointerEvents="box-none"
             style={
               Object {
@@ -107,6 +111,7 @@ exports[`renders correctly 1`] = `
               }
             >
               <View
+                collapsable={false}
                 pointerEvents="box-none"
                 style={
                   Object {
@@ -120,6 +125,7 @@ exports[`renders correctly 1`] = `
                 }
               />
               <View
+                collapsable={false}
                 pointerEvents="box-none"
                 style={
                   Object {
@@ -133,6 +139,7 @@ exports[`renders correctly 1`] = `
                 <Text
                   accessibilityRole="header"
                   aria-level="1"
+                  collapsable={false}
                   numberOfLines={1}
                   onLayout={[Function]}
                   style={
@@ -147,6 +154,7 @@ exports[`renders correctly 1`] = `
                 </Text>
               </View>
               <View
+                collapsable={false}
                 pointerEvents="box-none"
                 style={
                   Object {
@@ -173,6 +181,7 @@ exports[`renders correctly 1`] = `
       >
         <RNSScreen
           activityState={2}
+          collapsable={false}
           forwardedRef={[Function]}
           pointerEvents="box-none"
           style={
@@ -248,6 +257,7 @@ exports[`renders correctly 1`] = `
             }
           >
             <View
+              collapsable={false}
               pointerEvents="box-none"
               style={
                 Object {
@@ -348,43 +358,6 @@ exports[`renders correctly 1`] = `
                               ]
                             }
                           >
-                            <Text
-                              allowFontScaling={false}
-                              onPress={[Function]}
-                              style={
-                                Array [
-                                  Object {
-                                    "color": undefined,
-                                    "fontSize": 12,
-                                  },
-                                  Array [
-                                    Object {
-                                      "color": "#000",
-                                      "fontSize": 30,
-                                    },
-                                    Object {
-                                      "color": "#000",
-                                      "fontSize": 30,
-                                    },
-                                    Object {
-                                      "left": 8,
-                                      "padding": 9,
-                                      "position": "absolute",
-                                      "top": 28,
-                                    },
-                                  ],
-                                  Object {
-                                    "fontFamily": "Ionicons",
-                                    "fontStyle": "normal",
-                                    "fontWeight": "normal",
-                                  },
-                                  Object {},
-                                ]
-                              }
-                              type="Ionicons"
-                            >
-                              
-                            </Text>
                             <View
                               style={
                                 Array [
@@ -402,14 +375,12 @@ exports[`renders correctly 1`] = `
                               }
                             >
                               <TextInput
-                                allowFontScaling={true}
                                 blurOnSubmit={true}
                                 bordered={false}
                                 editable={true}
                                 multiline={true}
                                 onChangeText={[Function]}
                                 placeholderTextColor="#575757"
-                                rejectResponderTermination={true}
                                 returnKeyType="done"
                                 rowSpan={6}
                                 style={
@@ -418,6 +389,7 @@ exports[`renders correctly 1`] = `
                                     "color": "#000",
                                     "fontSize": 20,
                                     "height": 150,
+                                    "marginTop": undefined,
                                     "paddingLeft": 10,
                                     "paddingRight": 5,
                                     "textAlignVertical": "top",
@@ -464,6 +436,7 @@ exports[`renders correctly 1`] = `
                                 >
                                   <View
                                     accessible={true}
+                                    collapsable={false}
                                     focusable={true}
                                     forwardedRef={[Function]}
                                     onClick={[Function]}
@@ -521,6 +494,7 @@ exports[`renders correctly 1`] = `
                                   </View>
                                   <View
                                     accessible={true}
+                                    collapsable={false}
                                     focusable={true}
                                     forwardedRef={[Function]}
                                     onClick={[Function]}
@@ -640,7 +614,13 @@ exports[`renders correctly 1`] = `
                             }
                           >
                             <View
+                              accessibilityState={
+                                Object {
+                                  "disabled": false,
+                                }
+                              }
                               accessible={true}
+                              collapsable={false}
                               focusable={true}
                               forwardedRef={[Function]}
                               onClick={[Function]}

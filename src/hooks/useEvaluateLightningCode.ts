@@ -29,12 +29,12 @@ export default function useEvaluateLightningCode() {
       console.log("LNURL");
       try {
         let type: string;
-        if (code.startsWith("lnurlp:") || code.startsWith("lnurlw:") || code.startsWith("lnurlc:")) {
-          code = "https://" + code.substring(7).split(/[\s&]/)[0];
+        if (code.startsWith("lnurlp://") || code.startsWith("lnurlw:") || code.startsWith("lnurlc:")) {
+          code = "https://" + code.substring(9).split(/[\s&]/)[0];
           type = await setLNUrl({ url: code })
         }
-        else if (code.startsWith("keyauth:")) {
-          code = "https://" + code.substring(8).split(/[\s&]/)[0];
+        else if (code.startsWith("keyauth://")) {
+          code = "https://" + code.substring(10).split(/[\s&]/)[0];
           type = await setLNUrl({ url: code })
         } else {
           type = await setLNUrl({ bech32data: code });

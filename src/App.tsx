@@ -9,7 +9,6 @@ import { navigator } from "./utils/navigation";
 
 const getTheme = require("./native-base-theme/components").default;
 const theme = require("./native-base-theme/variables/commonColor").default;
-import { blixtTheme } from "./native-base-theme/variables/commonColor";
 
 import store from "./state/store";
 import { clearApp } from "./storage/app";

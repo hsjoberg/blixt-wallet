@@ -3,7 +3,7 @@ import Long from "long";
 import { timeout } from "../../utils/index";
 import * as base64 from "base64-js";
 
-import { lnrpc, signrpc } from "../../../proto/proto";
+import { lnrpc, signrpc } from "../../../proto/lightning";
 import { subscribeStateEmitter } from "./index";
 
 export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {

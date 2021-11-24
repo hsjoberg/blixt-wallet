@@ -38,7 +38,6 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   } = useBalance((paymentRequest?.numSatoshis), true);
   const clear = useStoreActions((store) => store.send.clear);
   const callback = (route.params?.callback) ?? (() => {});
-  const multiPathPaymentsEnabled = useStoreState((store) => store.settings.multiPathPaymentsEnabled);
   const lightningReadyToSend = useLightningReadyToSend();
 
   useEffect(() => {
@@ -53,7 +52,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     }
 
     return () => {
-      backHandler.remove()
+      backHandler.remove();
       clear();
     }
   }, []);
@@ -61,13 +60,8 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Pay invoice",
+      headerBackTitle: "Back",
       headerShown: true,
-    });
-
-    // Disable swiping to the left because it messes with the keyboard focus
-    navigation.getParent()?.setOptions({
-      gestureEnabled: false,
-      gestureResponseDistance: 0,
     });
   }, [navigation]);
 
@@ -91,9 +85,9 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       await getBalance();
       Vibration.vibrate(32);
       navigation.replace("SendDone", { preimage, callback });
-    } catch (e) {
-      console.log(e);
-      toast(`Error: ${e.message}`, 60000, "danger", "Okay");
+    } catch (error) {
+      console.log(error);
+      toast(`Error: ${error.message}`, 60000, "danger", "Okay");
       setIsPaying(false);
     }
   };

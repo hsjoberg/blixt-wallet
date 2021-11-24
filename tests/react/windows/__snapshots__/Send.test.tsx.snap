@@ -31,6 +31,7 @@ exports[`SendCamera renders correctly 1`] = `
       }
     >
       <View
+        collapsable={false}
         pointerEvents="box-none"
         style={
           Object {
@@ -46,6 +47,7 @@ exports[`SendCamera renders correctly 1`] = `
           style={null}
         >
           <View
+            collapsable={false}
             pointerEvents="box-none"
             style={
               Object {
@@ -60,6 +62,7 @@ exports[`SendCamera renders correctly 1`] = `
             }
           >
             <View
+              collapsable={false}
               style={
                 Object {
                   "backgroundColor": "rgb(255, 255, 255)",
@@ -77,6 +80,7 @@ exports[`SendCamera renders correctly 1`] = `
             />
           </View>
           <View
+            collapsable={false}
             pointerEvents="box-none"
             style={
               Object {
@@ -107,6 +111,7 @@ exports[`SendCamera renders correctly 1`] = `
               }
             >
               <View
+                collapsable={false}
                 pointerEvents="box-none"
                 style={
                   Object {
@@ -120,6 +125,7 @@ exports[`SendCamera renders correctly 1`] = `
                 }
               />
               <View
+                collapsable={false}
                 pointerEvents="box-none"
                 style={
                   Object {
@@ -133,6 +139,7 @@ exports[`SendCamera renders correctly 1`] = `
                 <Text
                   accessibilityRole="header"
                   aria-level="1"
+                  collapsable={false}
                   numberOfLines={1}
                   onLayout={[Function]}
                   style={
@@ -147,6 +154,7 @@ exports[`SendCamera renders correctly 1`] = `
                 </Text>
               </View>
               <View
+                collapsable={false}
                 pointerEvents="box-none"
                 style={
                   Object {
@@ -173,6 +181,7 @@ exports[`SendCamera renders correctly 1`] = `
       >
         <RNSScreen
           activityState={2}
+          collapsable={false}
           forwardedRef={[Function]}
           pointerEvents="box-none"
           style={
@@ -248,6 +257,7 @@ exports[`SendCamera renders correctly 1`] = `
             }
           >
             <View
+              collapsable={false}
               pointerEvents="box-none"
               style={
                 Object {
@@ -340,8 +350,8 @@ exports[`SendCamera renders correctly 1`] = `
                                   "justifyContent": "center",
                                 },
                                 Object {
-                                  "height": 270,
-                                  "width": 270,
+                                  "height": 265,
+                                  "width": 265,
                                 },
                               ]
                             }
@@ -458,7 +468,7 @@ exports[`SendCamera renders correctly 1`] = `
                               style={
                                 Array [
                                   Object {
-                                    "height": 270,
+                                    "height": 265,
                                     "width": "100%",
                                   },
                                   Object {
@@ -485,8 +495,8 @@ exports[`SendCamera renders correctly 1`] = `
                                       "backgroundColor": "transparent",
                                     },
                                     Object {
-                                      "height": 270,
-                                      "width": 270,
+                                      "height": 265,
+                                      "width": 265,
                                     },
                                   ]
                                 }

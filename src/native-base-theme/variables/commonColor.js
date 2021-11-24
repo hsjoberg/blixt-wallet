@@ -77,7 +77,7 @@ export default {
   // Button
   // buttonFontFamily: platform === PLATFORM.IOS ? 'System' : 'Roboto_medium',
   // buttonDisabledBg: '#b5b5b5',
-  buttonPadding: 6,
+  buttonPadding: 0,
   get buttonPrimaryBg() {
     return this.brandPrimary;
   },

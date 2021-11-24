@@ -29,6 +29,10 @@ service State {
     // state will always be delivered immediately.
     rpc SubscribeState (SubscribeStateRequest)
         returns (stream SubscribeStateResponse);
+
+    // GetState returns the current wallet state without streaming further
+    // changes.
+    rpc GetState (GetStateRequest) returns (GetStateResponse);
 }
 
 enum WalletState {
@@ -36,11 +40,23 @@ enum WalletState {
     LOCKED = 1;
     UNLOCKED = 2;
     RPC_ACTIVE = 3;
+
+    // SERVER_ACTIVE means that the lnd server is ready to accept calls.
+    SERVER_ACTIVE = 4;
+
+    WAITING_TO_START = 255;
 }
 
 message SubscribeStateRequest {
 }
 
 message SubscribeStateResponse {
+    WalletState state = 1;
+}
+
+message GetStateRequest {
+}
+
+message GetStateResponse {
     WalletState state = 1;
 }

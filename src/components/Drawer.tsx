@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Dimensions, PixelRatio, StyleSheet, TouchableOpacity, View, ScrollView, LayoutAnimation } from "react-native";
+import { PixelRatio, StyleSheet, TouchableOpacity, View, ScrollView, LayoutAnimation } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text } from "native-base";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
@@ -10,6 +10,7 @@ import usePromptLightningAddress from "../hooks/usePromptLightningAddress";
 import useEvaluateLightningCode from "../hooks/useEvaluateLightningCode";
 import { fontFactorNormalized } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
+import { PLATFORM } from "../utils/constants";
 
 export default function Drawer() {
   const navigation = useNavigation();
@@ -18,11 +19,13 @@ export default function Drawer() {
   const layoutMode = useLayoutMode();
   const [expandAdvanced, setExpandAdvanced] = useState(false);
 
+  const closeDrawer = () => {
+    navigation.dispatch(DrawerActions.closeDrawer);
+    setExpandAdvanced(false);
+  };
+
   const goToScreen = (screen: string, options: any = undefined, delayDrawerClose = true) => {
-    setTimeout(
-      () => navigation.dispatch(DrawerActions.closeDrawer),
-      delayDrawerClose ? 500 : 1,
-    );
+    setTimeout(closeDrawer, delayDrawerClose ? 600 : 1);
     navigation.navigate(screen, options);
   };
 

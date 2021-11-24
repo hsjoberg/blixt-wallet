@@ -56,6 +56,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   dunderServer = "dunderServer",
   requireGraphSync = "requireGraphSync",
   dunderEnabled = "dunderEnabled",
+  lndNoGraphCache = "lndNoGraphCache",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -127,6 +128,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.dunderServer),
     removeItem(StorageItem.requireGraphSync),
     removeItem(StorageItem.dunderEnabled),
+    removeItem(StorageItem.lndNoGraphCache),
   ]);
 };
 
@@ -198,5 +200,6 @@ export const setupApp = async () => {
     setItem(StorageItem.dunderServer, DEFAULT_DUNDER_SERVER),
     setItemObject<boolean>(StorageItem.requireGraphSync, false),
     setItemObject<boolean>(StorageItem.dunderEnabled, false),
+    setItemObject<boolean>(StorageItem.lndNoGraphCache, false),
   ]);
 };

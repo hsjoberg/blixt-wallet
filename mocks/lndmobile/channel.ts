@@ -1,4 +1,4 @@
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import Long from "long";
 
 // export const openChannel = async (pubkey: string, amount: number): Promise<lnrpc.ChannelPoint> => {

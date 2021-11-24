@@ -13,6 +13,7 @@ import { ICreateWalletPayload } from "../../state";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { PLATFORM } from "../../utils/constants";
 import { CommonActions } from "@react-navigation/native";
+import GoBackIcon from "../../components/GoBackIcon";
 
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
@@ -36,6 +37,7 @@ export default function Restore({ navigation }: IProps) {
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
   const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
+  const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
   const onRestorePress = async () => {
     try {
@@ -69,6 +71,7 @@ export default function Restore({ navigation }: IProps) {
         changeAutopilotEnabled(false),
         setSyncEnabled(true), // TODO test
         changeScheduledSyncEnabled(true),
+        changeOnboardingState("DONE"),
       ]);
 
       navigation.dispatch(
@@ -145,8 +148,9 @@ export default function Restore({ navigation }: IProps) {
       <View style={style.content}>
         <View style={style.upperContent}>
           <View style={style.seed}>
+            {PLATFORM !== "android" && <GoBackIcon style={style.goBack} />}
             <Textarea
-              style={{width: "100%", height: 150, backgroundColor: blixtTheme.gray, fontSize: 20, }}
+              style={style.seedBox}
               rowSpan={6}
               bordered={false}
               underline={false}
@@ -251,6 +255,13 @@ const style = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
   },
+  seedBox: {
+    width: "100%",
+    height: 150,
+    backgroundColor: blixtTheme.gray,
+    fontSize: 20,
+    marginTop: PLATFORM !== "android" ? 60 : undefined,
+  },
   upperContent: {
     width: "100%",
     height: "100%",
@@ -284,5 +295,14 @@ const style = StyleSheet.create({
     flex: 1,
     height: "100%",
     justifyContent: "space-around",
+  },
+  goBack: {
+    paddingHorizontal: 20,
+    marginLeft: -20,
+    paddingVertical: 6,
+    marginTop: -3,
+    top: 0,
+    left: 0,
+    position: "absolute",
   },
 });

@@ -1,10 +1,11 @@
-import { DeviceEventEmitter } from "react-native";
 import { Action, action, computed, Computed, Thunk, thunk } from "easy-peasy";
 import { generateSecureRandom } from "react-native-securerandom";
 
 import { IStoreInjections } from "./store";
 import { bytesToHexString, stringToUint8Array } from "../utils";
 import { IStoreModel } from "./index";
+import { LndMobileEventEmitter } from "../utils/event-listener";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 import logger from "./../utils/log";
 const log = logger("BlixtLsp");
@@ -88,15 +89,18 @@ export interface IBlixtLsp {
 };
 
 export const blixtLsp: IBlixtLsp = {
-  initialize: thunk(async (actions, _, { injections, getState, getStoreState, getStoreActions }) => {
+  initialize: thunk(async (actions, _, { getState, getStoreState, getStoreActions }) => {
     log.d("Initializing");
 
-    // Excpet subscription to be started in Channel store
-    DeviceEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
+    // Expect subscription to be started in Channel store
+    LndMobileEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
       log.d("SubscribeChannelEvents");
-      if (e.data === "") {
-        log.i("Got e.data empty from SubscribeChannelEvent. Skipping event");
+      const error = checkLndStreamErrorResponse("SubscribeChannelEvents", e);
+      if (error === "EOF") {
         return;
+      } else if (error) {
+        log.d("Got error from SubscribeChannelEvents", [error]);
+        throw error;
       }
 
       // const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;

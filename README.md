@@ -44,21 +44,22 @@ The web target is only used for prototyping and is not a real wallet.
 
 ### Web
 
-The easiest way to build Blixt is to build the web version, because you only need Node+Yarn installed and you don't have to compile lnd as you would have for the native targets.
+The easiest way get started is to build the web version, because you only need NodeJS and Yarn installed.
+For the other targets you need to install their respective toolchains and also [golang](https://golang.org) &amp; [gomobile](https://pkg.go.dev/golang.org/x/mobile#section-readme) in order to build lnd for Blixt.
 
-The web version is not used as a real wallet and is only used for fast prototyping.
+The web version is not used as a real wallet and is only for fast prototyping.
 It's useful if you want to make design and GUI changes.
 
-- Install [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
+- Install [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com)
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
 - Start the web server: `yarn web`
 
 ### Android
 
-- Install [Node](https://nodejs.org), [Yarn](https://classic.yarnpkg.com/) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
+- Install [Node](https://nodejs.org), [Yarn](https://classic.yarnpkg.com) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
 - If needed, install an emulated android device inside Android Studio
-- Download lnd binary from [blixt-lndmobile-releases](https://github.com/BlixtWallet/blixt-lndmobile-releases/releases) and put it in `android/lndmobile`. Alternatively build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
+- Download lnd binary from [from the latest Blixt Wallet release](https://github.com/hsjoberg/blixt-wallet/releases) and put it in `android/lndmobile`. Alternatively build lnd for Android by following the steps in [build-android-aar.md](build-android-aar.md)
 - Get the tor sub-module: `git submodule update --init`
 - Install Node packages: `yarn`
 - Compile the Tor Android lib: `yarn build-tor-lib`
@@ -70,11 +71,9 @@ To start the application:
 
 ### iOS
 
-_The iPhone/iOS version is still work in progress._
-
 To build the iOS version, macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
 
-- Install [XCode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
+- Install [XCode](https://developer.apple.com/xcode), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com)
 - Build lnd for iOS by following the steps in [build-ios-framework.md](build-ios-framework.md)
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`

@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import React from "react";
-import ReactNative, { AppRegistry, YellowBox, Platform, UIManager, Text } from "react-native";
+import ReactNative, { AppRegistry, LogBox, Platform, UIManager, Text } from "react-native";
 import App from "./src/App";
 import {name as appName} from "./app.json";
 import Long from "long";
@@ -13,7 +13,7 @@ protobuf.util.Long = Long;
 protobuf.configure();
 enableES5();
 
-YellowBox.ignoreWarnings([
+LogBox.ignoreLogs([
   // Workaround until native-base fixes their old
   "Warning: component",
   // We are putting functions in navigation route props

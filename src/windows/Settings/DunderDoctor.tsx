@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { Button, Icon, Text, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";

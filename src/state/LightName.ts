@@ -3,7 +3,7 @@ import { Action, action, Thunk, thunk } from "easy-peasy";
 
 import { Chain, Debug } from "../utils/build";
 
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { IStoreModel } from ".";
 import logger from "./../utils/log";
 import { listPrivateChannels, getChanInfo } from "../lndmobile/channel";

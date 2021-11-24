@@ -12,8 +12,9 @@ import style from "./style";
 
 export interface IPayRequestDoneProps {
   preimage: Uint8Array;
+  callback?: (r: Uint8Array | null) => void;
 }
-export default function LNURLPayRequestDone({ preimage }: IPayRequestDoneProps) {
+export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestDoneProps) {
   const navigation = useNavigation();
   const clear = useStoreActions((store) => store.lnUrl.clear);
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
@@ -24,11 +25,11 @@ export default function LNURLPayRequestDone({ preimage }: IPayRequestDoneProps) 
     return (<></>);
   }
 
-  const cancel = () => {
+  const done = () => {
     clear();
+    callback?.(preimage);
     navigation.goBack();
   };
-
 
   const onPressCopyUrltoClipboard = () => {
     if (payRequestResponse.successAction?.tag === "url") {
@@ -96,7 +97,7 @@ export default function LNURLPayRequestDone({ preimage }: IPayRequestDoneProps) 
         {/* )} */}
       {/* </View> */}
       <View style={[style.actionBar, { }]}>
-        <Button onPress={cancel} small={true}>
+        <Button onPress={done} small={true}>
           <Text style={{ fontSize:10 }}>Done</Text>
         </Button>
         {payRequestResponse.successAction?.tag === "url" &&

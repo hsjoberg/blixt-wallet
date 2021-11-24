@@ -1,4 +1,4 @@
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import Long from "long";
 import * as base64 from "base64-js";
 import { DeviceEventEmitter } from "react-native";
@@ -115,6 +115,8 @@ export const listChannels = async (): Promise<lnrpc.ListChannelsResponse> => {
       localChanReserveSat: Long.fromNumber(10),
       remoteBalance: Long.fromNumber(500),
       remotePubkey: "abcdef1234567890",
+      commitFee: Long.fromValue(1),
+      private: true,
     }],
   });
   return response;

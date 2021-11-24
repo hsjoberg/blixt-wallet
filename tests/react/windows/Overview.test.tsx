@@ -8,7 +8,7 @@ import { OverviewTabsComponent } from "../../../src/windows/Overview";
 import { setupStore, createNavigationContainer, initCommonStore } from "../../utils";
 import { createStackNavigator } from "@react-navigation/stack";
 import { DeviceEventEmitter } from "react-native";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { hexToUint8Array } from "../../../src/utils";
 import { channelBalance } from "../../../mocks/lndmobile/channel";
 

@@ -90,9 +90,6 @@ module.exports = {
       VERSION_NAME: JSON.stringify("webdemo"),
       CHAIN: JSON.stringify("mainnet"),
       __DEV__: JSON.stringify(process.env.NODE_ENV !== "production"),
-
-      // Whether this build is for Blixt's website
-      WEB_DEMO: JSON.stringify(process.env.WEB_DEMO === "1"),
     }),
 
     // sql.js:
@@ -167,7 +164,6 @@ module.exports = {
       'react-native$': 'react-native-web',
       'react-native-linear-gradient': 'react-native-web-linear-gradient',
       'react-native-maps': 'react-native-web-maps',
-      'react-native-modal': 'react-native-web-modal',
       'react-native-svg': 'react-native-svg-web',
       'react-native-webview': 'react-native-web-webview',
     }),

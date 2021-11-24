@@ -20,6 +20,7 @@ import {
   connectPeer,
   disconnectPeer,
   decodePayReq,
+  getRecoveryInfo,
   getNodeInfo,
   getInfo,
   lookupInvoice,
@@ -69,7 +70,7 @@ import {
 import {
   checkScheduledSyncWorkStatus
 } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
-import { lnrpc, signrpc, invoicesrpc, autopilotrpc } from "../../proto/proto";
+import { lnrpc, signrpc, invoicesrpc, autopilotrpc } from "../../proto/lightning";
 import { WorkInfo } from "../lndmobile/LndMobile";
 
 export interface ILndMobileInjections {
@@ -80,7 +81,7 @@ export interface ILndMobileInjections {
     subscribeState: () => Promise<string>;
     decodeState: (data: string) => lnrpc.SubscribeStateResponse;
     checkStatus: () => Promise<number>;
-    startLnd: (torEnabled: boolean) => Promise<string>;
+    startLnd: (torEnabled: boolean, args: string) => Promise<string>;
     checkICloudEnabled: () => Promise<boolean>;
     checkApplicationSupportExists: () => Promise<boolean>;
     checkLndFolderExists: () => Promise<boolean>;
@@ -94,6 +95,7 @@ export interface ILndMobileInjections {
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
     disconnectPeer: (pubkey: string) => Promise<lnrpc.DisconnectPeerResponse>;
     decodePayReq: (bolt11: string) => Promise<lnrpc.PayReq>;
+    getRecoveryInfo: () => Promise<lnrpc.GetRecoveryInfoResponse>;
     getInfo: () => Promise<lnrpc.GetInfoResponse>;
     getNodeInfo: (pubKey: string) => Promise<lnrpc.NodeInfo>;
     lookupInvoice: (rHash: string) => Promise<lnrpc.Invoice>;
@@ -106,7 +108,7 @@ export interface ILndMobileInjections {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;
     closeChannel: (fundingTxId: string, outputIndex: number, force: boolean) => Promise<string>;
     listChannels: () => Promise<lnrpc.ListChannelsResponse>;
-    openChannel: (pubkey: string, amount: number, privateChannel: boolean) => Promise<lnrpc.ChannelPoint>;
+    openChannel: (pubkey: string, amount: number, privateChannel: boolean, feeRateSat?: number) => Promise<lnrpc.ChannelPoint>;
     pendingChannels: () => Promise<lnrpc.PendingChannelsResponse>;
     subscribeChannelEvents: () => Promise<string>;
     decodeChannelEvent: (data: string) => lnrpc.ChannelEventUpdate;
@@ -166,6 +168,7 @@ export default {
     connectPeer,
     disconnectPeer,
     decodePayReq,
+    getRecoveryInfo,
     getNodeInfo,
     getInfo,
     lookupInvoice,

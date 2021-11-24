@@ -3,11 +3,11 @@ import { Body, Text, Left, Right, Card, CardItem, Row, Button } from "native-bas
 import { Image, Linking } from "react-native";
 
 import { style } from "./ChannelCard";
-import { lnrpc } from "../../proto/proto";
+import { lnrpc } from "../../proto/lightning";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { useStoreActions, useStoreState } from "../state/store";
 import { identifyService, lightningServices } from "../utils/lightning-services";
-import { OnchainExplorer } from "../state/Settings";
+import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
 
 export interface IPendingChannelCardProps {
   type: "OPEN" | "CLOSING" | "FORCE_CLOSING" | "WAITING_CLOSE";
@@ -37,7 +37,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
 
   const onPressViewInExplorer = async () => {
     const txId = channel.channel?.channelPoint?.split(":")[0];
-    await Linking.openURL(`${OnchainExplorer[onchainExplorer]}${txId}`);
+    await Linking.openURL(constructOnchainExplorerUrl(onchainExplorer, txId ?? ""));
   }
 
   const serviceKey = identifyService(channel.channel.remoteNodePub ?? "", "", null);

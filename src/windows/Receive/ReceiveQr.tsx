@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { ReceiveStackParamList } from "./index";
 import { useStoreState } from "../../state/store";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import QrCode from "../../components/QrCode";
 import { formatBitcoin } from "../../utils/bitcoin-units";
 import Ticker from "../../components/Ticker";
@@ -30,6 +30,7 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Receive",
+      headerBackTitle: "Back",
       headerShown: true,
     });
   }, [navigation]);

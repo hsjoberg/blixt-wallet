@@ -3,6 +3,7 @@ import Long from "long";
 import { isLong, formatNumberGroupings } from "./index";
 
 export interface IBitcoinUnit {
+  key: keyof IBitcoinUnits;
   nice: string;
   settings: string;
   unit: number;
@@ -19,18 +20,21 @@ export interface IBitcoinUnits {
 
 export const BitcoinUnits: IBitcoinUnits = {
   bitcoin: {
+    key: "bitcoin",
     nice: "₿",
     settings: "Bitcoin",
     unit: 1,
     decimals: 8,
   },
   milliBitcoin: {
+    key: "milliBitcoin",
     nice: "mBTC",
     settings: "Milli Bitcoin",
     unit: 1 / 1E3,
     decimals: 5,
   },
   bit: {
+    key: "bit",
     nice: "bit",
     settings: "Bits",
     pluralize: true,
@@ -38,6 +42,7 @@ export const BitcoinUnits: IBitcoinUnits = {
     decimals: 2,
   },
   satoshi: {
+    key: "satoshi",
     nice: "satoshi",
     settings: "Satoshi",
     unit: 1 / 1E8,

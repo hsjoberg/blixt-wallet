@@ -10,9 +10,11 @@ import { routerrpc } from "../../../proto/router";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { decodeInvoiceResult } from "../../lndmobile/wallet";
 import { generateSecureRandom } from "react-native-securerandom";
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import { listChannels, getChanInfo, listPrivateChannels } from "../../lndmobile/channel";
 import QrCode from "../../components/QrCode";
+import { LndMobileEventEmitter } from "../../utils/event-listener";
+import { checkLndStreamErrorResponse } from "../../utils/lndmobile";
 
 interface ILightningInfoProps {
   navigation: any;
@@ -38,7 +40,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   }, []);
 
   const onClickSend = async () => {
-    const listener = DeviceEventEmitter.addListener("RouterSendPayment", (e) => {
+    const listener = LndMobileEventEmitter.addListener("RouterSendPayment", (e) => {
       console.log(e);
       const response = decodePaymentStatus(e.data);
       console.log(response);
@@ -63,7 +65,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   }
 
   const getRouteHintsByInvoice = async () => {
-    const listener = DeviceEventEmitter.addListener("SubscribeInvoices", (e) => {
+    const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", (e) => {
       const invoice = decodeInvoiceResult(e.data);
       console.log("invoice.routeHints", JSON.stringify(invoice.routeHints));
       Clipboard.setString(JSON.stringify(invoice.routeHints));

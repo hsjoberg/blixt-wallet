@@ -6,7 +6,7 @@ import ReceiveSetupLsp from "./ReceiveSetupLsp";
 import ReceiveQr from "./ReceiveQr";
 import DunderLspInfo from "./DunderLspInfo";
 
-import { lnrpc } from "../../../proto/proto";
+import { lnrpc } from "../../../proto/lightning";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectList";
 import { IFiatRates } from "../../state/Fiat";

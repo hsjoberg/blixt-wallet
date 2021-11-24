@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
-import lnrpc.Rpc;
 import com.google.protobuf.ByteString;
 
 import com.hypertrack.hyperlog.HyperLog;
@@ -229,8 +228,8 @@ public class LndMobileService extends Service {
             if (channelBackupsBase64 != null) {
               HyperLog.d(TAG, "--CHANNEL BACKUP RESTORE--");
               initWallet.setChannelBackups(
-                Rpc.ChanBackupSnapshot.newBuilder().setMultiChanBackup(
-                  Rpc.MultiChanBackup.newBuilder().setMultiChanBackup(
+                lnrpc.LightningOuterClass.ChanBackupSnapshot.newBuilder().setMultiChanBackup(
+                  lnrpc.LightningOuterClass.MultiChanBackup.newBuilder().setMultiChanBackup(
                     ByteString.copyFrom(Base64.decode(channelBackupsBase64, Base64.DEFAULT))
                   )
                 )
@@ -281,17 +280,12 @@ public class LndMobileService extends Service {
 
       bundle.putString("method", method);
 
-      if (message.contains("code = ")) {
-        bundle.putString("error_code", message.substring(message.indexOf("code = ") + 7));
-      }
-      else {
-        bundle.putString("error_code", "Error");
-      }
-
-      if (message.contains("desc = ")) {
+      if (message.contains("code = ") && message.contains("desc = ")) {
+        bundle.putString("error_code", message.substring(message.indexOf("code = ") + 7, message.indexOf(" desc = ")));
         bundle.putString("error_desc", message.substring(message.indexOf("desc = ") + 7));
       }
       else {
+        bundle.putString("error_code", "Error");
         bundle.putString("error_desc", message);
       }
 
@@ -343,17 +337,12 @@ public class LndMobileService extends Service {
 
       bundle.putString("method", method);
 
-      if (message.indexOf("code = ") != -1) {
-        bundle.putString("error_code", message.substring(message.indexOf("code = ") + 7));
-      }
-      else {
-        bundle.putString("error_code", "Error");
-      }
-
-      if (message.indexOf("desc = ") != -1) {
+      if (message.contains("code = ") && message.contains("desc = ")) {
+        bundle.putString("error_code", message.substring(message.indexOf("code = ") + 7, message.indexOf(" desc = ")));
         bundle.putString("error_desc", message.substring(message.indexOf("desc = ") + 7));
       }
       else {
+        bundle.putString("error_code", "Error");
         bundle.putString("error_desc", message);
       }
 
@@ -519,7 +508,7 @@ public class LndMobileService extends Service {
 
   private void stopLnd(Messenger recipient, int request) {
     Lndmobile.stopDaemon(
-      Rpc.StopRequest.newBuilder().build().toByteArray(),
+      lnrpc.LightningOuterClass.StopRequest.newBuilder().build().toByteArray(),
       new Callback() {
         @Override
         public void onError(Exception e) {

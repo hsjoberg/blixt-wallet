@@ -3,12 +3,12 @@ import { Platform, Animated, StyleSheet, View, ScrollView, StatusBar, Easing, Re
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import LinearGradient from "react-native-linear-gradient";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Color from "color";
-import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
+import Long from "long";
 
 import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
@@ -22,10 +22,11 @@ import { Chain } from "../utils/build";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
-import Send from "./Send";
 import { PLATFORM } from "../utils/constants";
 import { fontFactor, fontFactorNormalized, zoomed } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
+import CopyAddress from "../components/CopyAddress";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -54,7 +55,7 @@ function Overview({ navigation }: IOverviewProps) {
   const pendingOpenBalance = useStoreState((store) => store.channel.pendingOpenBalance);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const transactions = useStoreState((store) => store.transaction.transactions);
-  const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
+  const isRecoverMode = useStoreState((store) => store.lightning.isRecoverMode);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -102,7 +103,7 @@ function Overview({ navigation }: IOverviewProps) {
     inputRange: [0, (HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT)],
     outputRange: [
       (!preferFiat && bitcoinUnit === "satoshi" ? 37 : 40) * 1.3 * Math.min(PixelRatio.getFontScale(), 1.4),
-      (!preferFiat && bitcoinUnit === "satoshi" ? 38 : 42),
+      (!preferFiat && bitcoinUnit === "satoshi" ? 38.5 : 42),
     ],
     extrapolate: "clamp",
   });
@@ -208,6 +209,9 @@ function Overview({ navigation }: IOverviewProps) {
           onScroll={transactionListOnScroll}
           testID="TX_LIST"
         >
+          {isRecoverMode && (
+            <RecoverInfo />
+          )}
           {onboardingState === "SEND_ONCHAIN" &&
             <SendOnChain bitcoinAddress={bitcoinAddress} />
           }
@@ -255,6 +259,7 @@ function Overview({ navigation }: IOverviewProps) {
                 fontSize: headerBtcFontSize,
                 height: PLATFORM === "web" ? undefined : headerBtcHeight,
                 position: "relative",
+                paddingHorizontal: 12,
 
                 marginTop: Animated.add(
                   headerBtcMarginTop,
@@ -292,12 +297,36 @@ function Overview({ navigation }: IOverviewProps) {
   );
 };
 
+const RecoverInfo = () => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const recoverInfo = useStoreState((store) => store.lightning.recoverInfo);
+
+  return (
+    <Card>
+      <CardItem>
+        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+          <Text>
+            {!recoverInfo.recoveryFinished && <>Wallet recovery in progress.</>}
+            {recoverInfo.recoveryFinished && <>Wallet recovery finished.</>}
+          </Text>
+          <Button small onPress={() => navigation.navigate("SyncInfo")}>
+            <Text>More info</Text>
+          </Button>
+        </View>
+      </CardItem>
+    </Card>
+  );
+};
 
 interface ISendOnChain {
   bitcoinAddress?: string;
 }
 const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
-  const onQrPress = () => {
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
+  const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const currentRate = useStoreState((store) => store.fiat.currentRate);
+
+  const copyAddress = () => {
     Clipboard.setString(bitcoinAddress!);
     toast("Bitcoin address copied to clipboard");
   };
@@ -305,17 +334,24 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
   return (
     <Card>
       <CardItem>
-        <View style={{ flex: 1, flexDirection: "row", justifyContent:"space-between" }}>
-          <View style={{ width: "53%", justifyContent:"center", paddingRight: 4 }}>
+        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={{ width: "59%", justifyContent: "center", paddingRight: 4 }}>
             <Text style={{ fontSize: 15 * fontFactor }}>
               Welcome to Blixt Wallet!{"\n\n"}
-              <Text style={{ fontSize: 13 * fontFactor }}>To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
-              A channel will automatically be opened for you.</Text>
+              <Text style={{ fontSize: 13 * fontFactor }}>
+                To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
+                A channel will automatically be opened for you.{"\n\n"}
+                Send at least {formatBitcoin(Long.fromValue(22000), bitcoinUnit)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
+              </Text>
             </Text>
           </View>
-          <View>
+          <View style={{ justifyContent: "center" }}>
             {bitcoinAddress
-              ? <QrCode onPress={onQrPress} data={bitcoinAddress?.toUpperCase() ?? " "} size={135} border={10} />
+              ?
+                <>
+                  <QrCode onPress={copyAddress} data={bitcoinAddress?.toUpperCase() ?? " "} size={127} border={10} />
+                  <CopyAddress text={bitcoinAddress}  onPress={copyAddress} />
+                </>
               : <View style={{ width: 135 + 10 + 9, height: 135 + 10 + 8, justifyContent: "center" }}>
                   <NativeBaseSpinner color={blixtTheme.light} />
                 </View>
@@ -536,25 +572,3 @@ export function DrawerComponent() {
   )
 }
 export default DrawerComponent;
-
-// const TopTabs = createMaterialTopTabNavigator();
-// export default function TopTabsComponent() {
-//   return (
-//     <TopTabs.Navigator
-//       springVelocityScale={1.4}
-//       sceneContainerStyle={{
-//         backgroundColor: "transparent"
-//       }}
-//       screenOptions={{
-//         lazy: true,
-//         tabBarStyle: {
-//           display: "none",
-//           height: 0,
-//         },
-//       }}
-//     >
-//       <TopTabs.Screen name="OverviewX" component={DrawerComponent} />
-//       <TopTabs.Screen name="SendX" component={Send} initialParams={{ viaSwipe: true }} />
-//     </TopTabs.Navigator>
-//   );
-// }
