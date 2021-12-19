@@ -1,0 +1,19 @@
+{
+    "recoverInfo":{
+        "msg1":"Wallet recovery in progress.",
+        "msg2":"Wallet recovery finished.",
+        "more":"More info"
+    },
+    "sendOnChain":{
+        "title":"Welcome to Blixt Wallet!",
+        "msg1":"To get started, send on-chain funds to the bitcoin address to the right.",
+        "msg2":"A channel will automatically be opened for you.",
+        "msg3":"Send at least",
+        "alert":"Bitcoin address copied to clipboard"
+    },
+    "doBackup":{
+        "msg1":"Thank you for using Blixt Wallet!",
+        "msg2":"We recommend making a backup of the wallet so that you can restore your funds in case of a phone loss.",
+        "backup":"Backup wallet"
+    }
+}

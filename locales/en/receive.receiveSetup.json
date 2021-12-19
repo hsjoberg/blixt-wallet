@@ -1,0 +1,28 @@
+{
+    "layout":{
+        "title":"Receive"
+    },
+    "createInvoice":{
+        "title":"Create invoice",
+        "error":"Invoice amount cannot be higher than",
+        "alert":"Before you can receive, you need to open a Lightning channel."
+    },
+    "form":{
+        "amountFiat":{
+            "title":"Amount",
+            "change":"Change fiat unit"
+        },
+        "amountBitcoin":{
+            "title":"Amount",
+            "change":"Change bitcoin unit"
+        },
+        "payer":{
+            "title":"Payer",
+            "placeholder":"For bookkeeping"
+        },
+        "description":{
+            "title":"Message",
+            "placeholder":"Message to payer"
+        }
+    }
+}

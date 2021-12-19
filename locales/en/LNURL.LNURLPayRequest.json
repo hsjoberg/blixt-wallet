@@ -1,0 +1,29 @@
+{
+    "viewMetadata":{
+        "title":"View metadata",
+        "dialog":{
+            "title":"Technical metadata"
+        }
+    },
+    "lightningAddress":{
+        "alert1":{
+            "msg":"is in your contact list!"
+        },
+        "alert2":{
+            "title":"Add to Contact List",
+            "msg":"Would you like to add",
+            "msg1":"to your contact list?"
+        }
+    },
+    "payContact":{
+        "alert1":{
+            "msg":"is in your contact list!"
+        },
+        "alert2":{
+            "title":"Add to Contact List",
+            "msg":"Would you like to add this payment code to",
+            "msg1":"to your contact list?"
+        }
+    },
+    "error":"Unable to pay"
+}
