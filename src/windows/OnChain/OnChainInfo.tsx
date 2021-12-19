@@ -15,10 +15,16 @@ import { toast } from "../../utils";
 import { NavigationButton } from "../../components/NavigationButton";
 import { lnrpc } from "../../../proto/lightning";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 interface IOnChainInfoProps {
   navigation: StackNavigationProp<OnChainStackParamList, "OnChainInfo">;
 }
 export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
+  t = useTranslation(namespaces.onchain.onChainInfo).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const getBalance = useStoreActions((store) => store.onChain.getBalance);
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
@@ -42,7 +48,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "Bitcoin",
-      headerBackTitle: "Back",
+      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
       headerShown: true,
       headerRight: () => {
         return (
@@ -61,7 +67,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
 
   const onBtcAddressTextPress = () => {
     Clipboard.setString(address!);
-    toast("Copied to clipboard.", undefined, "warning");
+    toast(t("address.alert"), undefined, "warning");
   };
 
   const onBtcAddressQrPress = async () => {
@@ -86,7 +92,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           {smallScreen ?
             <>
               <H2 style={style.fundsInfoText}>
-                On-chain funds:
+              {t("funds.title")}:
               </H2>
               <H2 style={style.fundsInfoText} onPress={onPressBalance} testID="ONCHAIN_FUNDS">
                 {onChainFunds}
@@ -95,7 +101,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
             :
             <>
               <H1 style={style.fundsInfoText}>
-                On-chain funds:
+              {t("funds.title")}:
               </H1>
               <H1 style={style.fundsInfoText} onPress={onPressBalance} testID="ONCHAIN_FUNDS">
                 {onChainFunds}
@@ -106,7 +112,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
         <View style={style.qr}>
           {address &&
             <>
-              <Text style={style.sendBitcoinsLabel}>Send Bitcoin on-chain to this address:</Text>
+              <Text style={style.sendBitcoinsLabel}>{t("address.title")}:</Text>
               <QrCode data={
                   (addressType === lnrpc.AddressType.WITNESS_PUBKEY_HASH || addressType === lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH)
                   ? address.toUpperCase()
@@ -132,10 +138,10 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
             onPress={onGeneratePress}
             onLongPress={() => onGenerateP2SHPress()}
           >
-            <Text>Generate new address</Text>
+            <Text>{t("newAddress.title")}</Text>
           </Button>
           <Button testID="WITHDRAW" block={true} primary={true} disabled={!rpcReady} style={[style.button, { marginBottom: 0 }]} onPress={onWithdrawPress}>
-            <Text>Withdraw coins</Text>
+            <Text>{t("withdraw.title")}</Text>
           </Button>
         </View>
       </View>

@@ -213,7 +213,7 @@ export default function Settings({ navigation }: ISettingsProps) {
     try {
       const path = await NativeModules.LndMobileTools.saveLogs();
       toast(`${t("miscelaneous.appLog.dialog.alert")}: `+ path, 20000, "warning");
-    } catch (e) {
+    } catch (e:any) {
       console.error(e);
       toast(t("miscelaneous.appLog.dialog.error"), undefined, "danger");
     }
@@ -238,7 +238,7 @@ export default function Settings({ navigation }: ISettingsProps) {
       if (PLATFORM === "android") {
         toast(t("wallet.backup.export.alert")+`\n ${response}`, 10000, "warning");
       }
-    } catch (e) {
+    } catch (e:any) {
       console.log(e);
       toast(e.message, 10000, "danger");
     }
@@ -252,7 +252,7 @@ export default function Settings({ navigation }: ISettingsProps) {
       });
       const backupBase64 = await readFile(res.uri, "base64");
       console.log(await verifyChanBackup(backupBase64));
-    } catch (e) {
+    } catch (e:any) {
       console.log(e);
     }
   }
@@ -325,7 +325,7 @@ export default function Settings({ navigation }: ISettingsProps) {
       await googleDriveMakeBackup();
       toast(t("wallet.backup.googleCloudForce.alert"));
     }
-    catch (e) {
+    catch (e:any) {
       toast(t("wallet.backup.error")+`: ${e.message}`, 10000, "danger");
     }
   }
@@ -346,7 +346,7 @@ export default function Settings({ navigation }: ISettingsProps) {
       await iCloudMakeBackup();
       toast(t("wallet.backup.iCloudForce.alert"));
     }
-    catch (e) {
+    catch (e:any) {
       toast(t("wallet.backup.error")+`: ${e.message}`, 10000, "danger");
     }
   }
@@ -374,7 +374,7 @@ export default function Settings({ navigation }: ISettingsProps) {
             console.log(t("msg.error",{ns:namespaces.common})+": " + r);
           }
         }
-      } catch (err) {
+      } catch (err:any) {
         console.warn(err);
       }
     }
@@ -863,7 +863,7 @@ ${t("experimental.tor.disabled.msg2")}`;
           try {
             const nodeInfo = await getNodeInfo((text ?? "").split("@")[0], true);
             Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
-          } catch (e) {
+          } catch (e:any) {
             Alert.alert(e.message);
           }
         },
@@ -898,7 +898,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Body>
               <Text>{t("general.name.title")}</Text>
               <Text note={true}>
-                {name || t("general.name.alternativeName")}
+                {name || t("general.name.subtitle")}
               </Text>
             </Body>
           </ListItem>

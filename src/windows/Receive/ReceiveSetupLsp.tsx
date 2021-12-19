@@ -19,12 +19,18 @@ import { IFiatRates } from "../../state/Fiat";
 import { Alert } from "../../utils/alert";
 import TextClickable from "../../components/TextClickable";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 const MATH_PAD_HEIGHT = 44;
 
 export interface IReceiveSetupProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveSetup">;
 }
 export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
+  t = useTranslation(namespaces.receive.receiveSetup).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const invoiceSubscriptionStarted = useStoreState((store) => store.receive.invoiceSubscriptionStarted);
@@ -115,7 +121,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Receive",
+      headerTitle: t("layout.title"),
       headerShown: true,
     });
   }, [navigation]);
@@ -124,7 +130,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     try {
       setCreateInvoiceDisabled(true);
       if (satoshiValue > MAX_SAT_INVOICE) {
-        throw new Error("Invoice amount cannot be higher than " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnitKey));
+        throw new Error(t("createInvoice.error")+" " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnitKey));
       }
 
       navigation.replace("ReceiveQr", {
@@ -140,7 +146,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
       });
     } catch (e) {
       setCreateInvoiceDisabled(false);
-      toast(`Error: ${e.message}`, 12000, "danger", "Okay");
+      toast(`${t("msg.error")}: ${e.message}`, 12000, "danger", "Okay");
     }
   };
 
@@ -168,7 +174,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
 
     if (!connectToPeer) {
       setCreateInvoiceDisabled(false);
-      Alert.alert("", "Failed to connect to Dunder, please try again later.");
+      Alert.alert("", t("createBlixtLspInvoice.alert"));
 
       return;
     }
@@ -177,20 +183,20 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     const approxFeeFormatted = formatBitcoin(Long.fromValue(approxFeeSat), bitcoinUnitKey);
     const approxFeeFiat = convertBitcoinToFiat(approxFeeSat, currentRate, fiatUnit);
     const message =
-`In order to accept a payment for this invoice, a channel on the Lightning Network has to be opened.
+    `${t("createBlixtLspInvoice.msg")}
 
-This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFeeFiat}).`;
+    ${t("createBlixtLspInvoice.msg1")} ${approxFeeFormatted} (${approxFeeFiat}).`;
     Alert.alert(
-      "Channel opening",
+      t("createBlixtLspInvoice.title"),
       message,
       [{
-        text: "Cancel",
+        text: t("buttons.cancel",{ns:namespaces.common}),
         style: "cancel",
         onPress: () => {
           setCreateInvoiceDisabled(false);
         }
       }, {
-        text: "Proceed",
+        text: t("createBlixtLspInvoice.proceed"),
         style: "default",
         onPress: async () => {
           try {
@@ -202,7 +208,7 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
               }),
             });
           } catch (error) {
-            Alert.alert("Error", error.message);
+            Alert.alert(t("msg.error",{ns:namespaces.common}), error.message);
             setCreateInvoiceDisabled(false);
           }
         }
@@ -217,7 +223,7 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: "Cancel",
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: currentBitcoinUnit,
         items: [
@@ -232,7 +238,7 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
       }
     } else {
       navigation.navigate("ChangeBitcoinUnit", {
-        title: "Change bitcoin unit",
+        title: t("form.amountBitcoin.change"),
         data: [
           { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
           { title: BitcoinUnits.bit.settings, value: "bit" },
@@ -252,7 +258,7 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: "Cancel",
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: currentFiatUnit,
         items: Object.entries(fiatRates).map(([currency]) => {
@@ -266,7 +272,7 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
       }
     } else {
       navigation.navigate("ChangeFiatUnit", {
-        title: "Change fiat unit",
+        title: t("form.amountFiat.change"),
         data: Object.entries(fiatRates).map(([currency]) => ({
           title: currency,
           value: currency as keyof IFiatRates,
@@ -279,14 +285,14 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
 
   const formItems = [{
     key: "AMOUNT_SAT",
-    title: `Amount ${bitcoinUnit.nice}`,
+    title: `${t("form.amountBitcoin.title")} ${bitcoinUnit.nice}`,
     component: (
       <>
         <Input
           onSubmitEditing={() => setMathPadVisible(false)}
           testID="input-amount-sat"
           onChangeText={onChangeBitcoinInput}
-          placeholder={minimumBitcoin ? `At least ${minimumBitcoin}`: "0"}
+          placeholder={minimumBitcoin ? `${t("form.amountBitcoin.placeholder")} ${minimumBitcoin}`: "0"}
           value={bitcoinValue !== undefined ? bitcoinValue.toString() : undefined}
           keyboardType="numeric"
           returnKeyType="done"
@@ -304,13 +310,13 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
     ),
   }, {
     key: "AMOUNT_FIAT",
-    title: `Amount ${fiatUnit}`,
+    title: `${t("form.amountFiat.title")} ${fiatUnit}`,
     component: (
       <>
         <Input
           onSubmitEditing={() => setMathPadVisible(false)}
           onChangeText={onChangeFiatInput}
-          placeholder={minimumFiat ? `At least ${minimumFiat}` : "0.00"}
+          placeholder={minimumFiat ? `${t("form.amountFiat.placeholder")} ${minimumFiat}` : "0.00"}
           value={dollarValue !== undefined ? dollarValue.toString() : undefined}
           keyboardType="numeric"
           returnKeyType="done"
@@ -328,7 +334,7 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
     ),
   }, {
     key: "PAYER",
-    title: "Payer",
+    title: t("form.payer.title"),
     component: (
       <Input
         onChangeText={setPayer}
@@ -339,7 +345,7 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
     ),
   }, {
     key: "MESSAGE",
-    title: "Message",
+    title: t("form.description.title"),
     component: (
       <Input
         testID="input-message"
@@ -375,18 +381,18 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
 
   const showNoticeText = rpcReady && channels.length === 0;
   let noticeText: Element | undefined = showNoticeText
-    ? "Before you can receive, you need to open a Lightning channel."
+    ? t("createInvoice.alert")
     : undefined;
   if (shouldUseDunder) {
     // noticeText = `Create an invoice with with at least ${minimumBitcoin} (${minimumFiat}).`;
     noticeText = (
       <>
-        A payment channel by Dunder LSP will be opened when this invoice is paid.
+        {t("createInvoice.lsp.msg")}
         {" \n"}
         <TextClickable style={{
           fontSize: 14,
           lineHeight: 23,
-        } as TextStyle} onPress={() => navigation.navigate("DunderLspInfo")}>What's this?</TextClickable>
+        } as TextStyle} onPress={() => navigation.navigate("DunderLspInfo")}>{t("createInvoice.lsp.msg1")}</TextClickable>
       </>
     );
   }
@@ -428,7 +434,7 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
           >
             {loading
               ? <Spinner color={blixtTheme.light} />
-              : <Text>Create invoice</Text>
+              : <Text>{t("createInvoice.title")}</Text>
             }
           </Button>
         ]}

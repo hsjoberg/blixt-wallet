@@ -12,10 +12,17 @@ import { toast } from "../../utils";
 import LogBox from "../../components/LogBox";
 import useForceUpdate from "../../hooks/useForceUpdate";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 export interface ILndLogProps {
   navigation: StackNavigationProp<SettingsStackParamList, "LndLog">;
 }
 export default function LndLog({ navigation }: ILndLogProps) {
+  t = useTranslation(namespaces.settings.lndLog).t;
+
   let log = useRef("");
   const forceUpdate = useForceUpdate();
 
@@ -55,7 +62,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
 
   const onPressCopy = (l: string) => {
     Clipboard.setString(l);
-    toast("Copied to clipboard");
+    toast(t("msg.clipboardCopy",{ns:namespaces.common}));
   }
 
   return (

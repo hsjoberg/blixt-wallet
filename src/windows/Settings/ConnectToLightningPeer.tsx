@@ -9,12 +9,17 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 export interface IConnectToLightningPeerProps {
   navigation: StackNavigationProp<SettingsStackParamList, "LightningPeers">;
   route: RouteProp<SettingsStackParamList, "LightningPeers">;
 }
 
 export default function OpenChannel({ navigation, route }: IConnectToLightningPeerProps) {
+  const { t, i18n } = useTranslation(namespaces.settings.connectToLightningPeer)
+
   const connectPeer = useStoreActions((store) => store.lightning.connectPeer);
   const getLightningPeers = useStoreActions((store) => store.lightning.getLightningPeers);
   const [peer, setPeer] = useState("");
@@ -22,7 +27,7 @@ export default function OpenChannel({ navigation, route }: IConnectToLightningPe
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Connect to Lightning Peer",
+      headerTitle: t("layout.title"),
       headerShown: true,
     });
   }, [navigation]);
@@ -33,8 +38,8 @@ export default function OpenChannel({ navigation, route }: IConnectToLightningPe
       await connectPeer(peer);
       await getLightningPeers();
       navigation.pop();
-    } catch (e) {
-      toast(`Error: ${e.message}`, 12000, "danger", "Okay");
+    } catch (e:any) {
+      toast(`${t("msg.error")}: ${e.message}`, 12000, "danger", "Okay");
       setConnecting(false);
     }
   };
@@ -50,17 +55,17 @@ export default function OpenChannel({ navigation, route }: IConnectToLightningPe
       <BlixtForm
         items={[{
           key: "NODE",
-          title: "Node URI",
+          title: t("connect.title"),
           component: (
             <>
-              <Input placeholder="Peer URI" value={peer} onChangeText={setPeer} />
+              <Input placeholder={t("connect.placeholder")} value={peer} onChangeText={setPeer} />
               <Icon type="AntDesign" name="camera" onPress={onCameraPress} />
             </>
           )
         },]}
         buttons={[
           <Button key="CONNECT_TO_NODE" onPress={onConnectPress} block={true} primary={true} disabled={connecting}>
-            {!connecting && <Text>Connect</Text>}
+            {!connecting && <Text>{t("connect.accept")}</Text>}
             {connecting && <Spinner color={blixtTheme.light} />}
           </Button>
         ]}

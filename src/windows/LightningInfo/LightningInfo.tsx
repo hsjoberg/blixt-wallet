@@ -13,10 +13,16 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { formatBitcoin, valueFiat } from "../../utils/bitcoin-units";
 import { NavigationButton } from "../../components/NavigationButton";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 interface ILightningInfoProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
 }
 export default function LightningInfo({ navigation }: ILightningInfoProps) {
+  t = useTranslation(namespaces.lightningInfo.lightningInfo).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const aliases = useStoreState((store) => store.channel.aliases);
   const channels = useStoreState((store) => store.channel.channels);
@@ -41,8 +47,8 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Lightning Channels",
-      headerBackTitle: "Back",
+      headerTitle: t("layout.title"),
+      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
       headerShown: true,
       headerRight: () => {
         return (

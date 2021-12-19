@@ -11,10 +11,16 @@ import { convertBitcoinUnit, formatBitcoin, BitcoinUnits } from "../../utils/bit
 import { PLATFORM } from "../../utils/constants";
 import LoadingModal from "../LoadingModal";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 interface IWithdrawRequestProps {
   navigation: StackNavigationProp<{}>;
 }
 export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestProps) {
+  t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
   const [status, setStatus] = useState<"PROMPT" | "PROCESSING" | "DONE">("PROMPT");
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
   const type = useStoreState((store) => store.lnUrl.type);
@@ -33,7 +39,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
       clear();
       Vibration.vibrate(32);
       toast(
-        `Sent withdrawal request to ${domain}`,
+        `${t("doRequest.alert.msg")} ${domain}`,
         10000,
         "success",
         "Okay"
@@ -43,12 +49,12 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
         const contact = getContactByLnUrlWithdraw(lnObject.balanceCheck);
         if (!contact) {
           Alert.alert(
-            "Add to Contact List",
-            `Would you like to add this withdrawal code to ${domain} to your contact list?`,
+            t("doRequest.alert1.title"),
+            `${t("doRequest.alert1.msg")} ${domain} ${t("doRequest.alert1.msg1")}`,
             [{
-              text: "No",
+              text: t("buttons.no",{ns:namespaces.common}),
             }, {
-              text: "Yes",
+              text: t("buttons.yes",{ns:namespaces.common}),
               onPress: async () => {
                 await syncContact({
                   type: "SERVICE",
@@ -57,7 +63,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
                   lnUrlWithdraw: lnObject.balanceCheck ?? null,
                   lightningAddress: null,
                   lud16IdentifierMimeType: null,
-                  note: `Account on ${domain}`,
+                  note: `${t("doRequest.alert1.note")} ${domain}`,
                 });
               }
             }],
@@ -68,7 +74,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
             await syncContact({
               ...contact,
               lnUrlWithdraw: lnObject.balanceCheck ?? null,
-              note: `Synced account`,
+              note: t("doRequest.alert2.note"),
             });
           }
         }
@@ -81,7 +87,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
       clear();
       Vibration.vibrate(50);
       toast(
-        "Error: " + e.message,
+        t("msg.error",{ns:namespaces.common})+": " + e.message,
         12000,
         "warning",
         "Okay"
@@ -100,8 +106,8 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
         await timeout(100);
         const domain = getDomainFromURL(lnurlStr!);
 
-        const title = "Withdrawal request";
-        let description = `Message from ${domain}:\n${lnObject.defaultDescription}`;
+        const title = t("layout.title");
+        let description = `${t("layout.msg")} ${domain}:\n${lnObject.defaultDescription}`;
         let action: string;
         let sat: number;
 
@@ -110,7 +116,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
 
         if (lnObject.minWithdrawable === lnObject.maxWithdrawable) {
           const amount = formatBitcoin(Long.fromValue(lnObject.maxWithdrawable).div(1000), bitcoinUnit);
-          description += `\n\nAmount: ${amount}`;
+          description += `\n\n${t("layout.dialog.msg")}: ${amount}`;
           sat = Math.floor(lnObject.minWithdrawable / 1000);
 
           if (PLATFORM === "android") {
@@ -118,7 +124,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
               title,
               description,
               {
-                negativeText: "Cancel",
+                negativeText: t("buttons.cancel",{ns:namespaces.common}),
               }
             );
             action = result.action;
@@ -128,13 +134,13 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
                 title,
                 description,
                 [{
-                  text: "Cancel",
+                  text: t("buttons.cancel",{ns:namespaces.common}),
                   onPress: () => {
                     action = DialogAndroid.actionNegative;
                     resolve();
                   },
                 }, {
-                  text: "OK",
+                  text: t("buttons.ok",{ns:namespaces.common}),
                   onPress: () => {
                     action = DialogAndroid.actionPositive;
                     resolve();
@@ -147,7 +153,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
         else {
           const minWithdrawableSat = formatBitcoin(Long.fromValue(minWithdrawable).div(1000), bitcoinUnit);
           const maxWithdrawableSat = formatBitcoin(Long.fromValue(maxWithdrawable).div(1000), bitcoinUnit);
-          description += `\n\nMin withdrawal amount: ${minWithdrawableSat}\nMax withdrawal amount: ${maxWithdrawableSat}`;
+          description += `\n\n${t("layout.dialog1.msg")}: ${minWithdrawableSat}\n${t("layout.dialog1.msg1")}: ${maxWithdrawableSat}`;
 
 
           if (PLATFORM === "android") {
@@ -155,10 +161,10 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
               title,
               description,
               {
-                placeholder: `Amount (${BitcoinUnits[bitcoinUnit].nice})`,
+                placeholder: `${t("layout.dialog1.placeholder")} (${BitcoinUnits[bitcoinUnit].nice})`,
                 keyboardType: "numeric",
                 allowEmptyInput: false,
-                negativeText: "Cancel",
+                negativeText: t("buttons.cancel",{ns:namespaces.common}),
               }
             );
 
@@ -170,13 +176,13 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
                 title,
                 description,
                 [{
-                  text: "Cancel",
+                  text: t("buttons.cancel",{ns:namespaces.common}),
                   onPress: () => {
                     action = DialogAndroid.actionNegative;
                     resolve(void(0));
                   },
                 }, {
-                  text: "OK",
+                  text: t("buttons.ok",{ns:namespaces.common}),
                   onPress: (text) => {
                     action = DialogAndroid.actionPositive;
                     sat = convertBitcoinUnit(Number.parseFloat(text ?? "0"), bitcoinUnit, "satoshi").toNumber();

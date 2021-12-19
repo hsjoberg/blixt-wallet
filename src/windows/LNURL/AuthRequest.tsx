@@ -7,10 +7,16 @@ import { getDomainFromURL, toast } from "../../utils";
 import { timeout } from "../../../mocks/lndmobile/utils";
 import { PLATFORM } from "../../utils/constants";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 interface IAuthRequestProps {
   navigation: StackNavigationProp<{}>;
 }
 export default function LNURLChannelRequest({ navigation }: IAuthRequestProps) {
+  t = useTranslation(namespaces.LNURL.authRequest).t;
   const [done, setDone] = useState(false);
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
   const type = useStoreState((store) => store.lnUrl.type);
@@ -28,11 +34,11 @@ export default function LNURLChannelRequest({ navigation }: IAuthRequestProps) {
 
         const domain = getDomainFromURL(lnurlStr!);
         Alert.alert(
-          "Login request",
-          `Do you want to login to ${domain}?`,
+          t("layout.title"),
+          `${t("layout.msg")} ${domain}?`,
           [
             {
-              text: 'Yes',
+              text: t("buttons.yes",{ns:namespaces.common}),
               onPress: async () => {
                 try {
                   const result = await doAuthRequest();
@@ -40,7 +46,7 @@ export default function LNURLChannelRequest({ navigation }: IAuthRequestProps) {
                   clear();
                   Vibration.vibrate(32);
                   toast(
-                    `Authenticated to ${domain}`,
+                    `${t("layout.success")} ${domain}`,
                     10000,
                     "success",
                     "Okay"
@@ -52,7 +58,7 @@ export default function LNURLChannelRequest({ navigation }: IAuthRequestProps) {
                   clear();
                   Vibration.vibrate(50);
                   toast(
-                    "Error: " + e.message,
+                    `${t("msg.error",{ns:namespaces.common})}:`  + e.message,
                     12000,
                     "warning",
                     "Okay"
@@ -61,7 +67,7 @@ export default function LNURLChannelRequest({ navigation }: IAuthRequestProps) {
                 }
               }
             }, {
-              text: 'No',
+              text: t("buttons.no",{ns:namespaces.common}),
               onPress: () => {
                 clear();
                 navigation.pop();

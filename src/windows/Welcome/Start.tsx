@@ -13,6 +13,11 @@ import Container from "../../components/Container";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { PLATFORM } from "../../utils/constants";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 interface IAnimatedH1Props {
   children: JSX.Element | string;
 }
@@ -86,6 +91,7 @@ export interface IStartProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Start">;
 }
 export default function Start({ navigation }: IStartProps) {
+  t = useTranslation(namespaces.welcome.start).t;
   const generateSeed = useStoreActions((store) => store.generateSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
@@ -96,14 +102,14 @@ export default function Start({ navigation }: IStartProps) {
     try {
       await generateSeed(undefined);
       Alert.alert(
-        "Warning",
-`Blixt Wallet is still at an early stage of development.
+        t("msg.warning",{ns:namespaces.common}),
+`${t("createWallet.msg1")}
 
-If you use this wallet, make sure you understand that you may lose your funds.
+${t("createWallet.msg2")}
 
-There is currently no WatchTower support to watch your channels while you are offline.`,
+${t("createWallet.msg3")}`,
         [{
-          text: "I am reckless, continue",
+          text: t("createWallet.msg4"),
           onPress: async  () => {
             setCreateWalletLoading(true);
             await createWallet();
@@ -121,7 +127,7 @@ There is currently no WatchTower support to watch your channels while you are of
           }
         }],
       );
-    } catch (e) {
+    } catch (e:any) {
       Alert.alert(e.message);
     }
   };
@@ -144,18 +150,18 @@ There is currently no WatchTower support to watch your channels while you are of
           <TopMenu />
         }
         {!createWalletLoading
-          ? <AnimatedH1>Welcome</AnimatedH1>
-          : <H1 style={style.header}>Welcome</H1>
+          ? <AnimatedH1>{t("title")}</AnimatedH1>
+          : <H1 style={style.header}>{t("title")}</H1>
         }
         {!createWalletLoading
           ?
             <AnimatedView>
               <Button style={style.button} onPress={onCreateWalletPress}>
-                {!createWalletLoading && <Text>Create Wallet</Text>}
+                {!createWalletLoading && <Text>{t("createWallet.title")}</Text>}
                 {createWalletLoading && <Spinner color={blixtTheme.light} />}
               </Button>
               <Button style={style.button} onPress={onRestoreWalletPress}>
-                <Text>Restore Wallet</Text>
+                <Text>{t("restoreWallet.title")}</Text>
               </Button>
             </AnimatedView>
           :

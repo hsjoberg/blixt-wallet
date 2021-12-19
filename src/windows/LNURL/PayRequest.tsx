@@ -16,11 +16,17 @@ import style from "./PayRequest/style";
 import { PLATFORM } from "../../utils/constants";
 import { RouteProp } from "@react-navigation/native";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 export interface IPayRequestProps {
   navigation: StackNavigationProp<LnUrlStackParamList>;
   route: RouteProp<LnUrlStackParamList, "PayRequest">;
 }
 export default function LNURLPayRequest({ navigation, route }: IPayRequestProps) {
+  t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
   const callback = (route?.params?.callback) ?? (() => {});
   const [preimage, setPreimage] = useState<Uint8Array | undefined>();
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
@@ -47,7 +53,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     };
 
     const viewMetadata = () => {
-      Alert.alert("Technical metadata", JSON.stringify(metadata, undefined, 2));
+      Alert.alert(t("viewMetadata.dialog.title"), JSON.stringify(metadata, undefined, 2));
     };
 
     const onPressLightningAddress = () => {
@@ -60,16 +66,16 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
       }
 
       if (getContactByLightningAddress(lightningAddress[1])) {
-        Alert.alert("",`${lightningAddress[1]} is in your contact list!`);
+        Alert.alert("",`${lightningAddress[1]} ${t("lightningAddress.alert1.title")}`);
       } else {
         Alert.alert(
-          "Add to Contact List",
-          `Would you like to add ${lightningAddress[1]} to your contact list?`,
+          t("lightningAddress.alert2.title"),
+          `${t("lightningAddress.alert2.msg")} ${lightningAddress[1]} ${t("lightningAddress.alert2.msg1")}`,
           [{
-            text: "No",
+            text: t("buttons.no",{ns:namespaces.common}),
             style: "cancel",
           }, {
-            text: "Yes",
+            text: t("buttons.yes",{ns:namespaces.common}),
             style: "default",
             onPress: async () => {
               const domain = lightningAddress[1].split("@")[1] ?? "";
@@ -91,15 +97,15 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
 
     const promptLnUrlPayContact = () => {
       if (getContactByLnUrlPay(lnurlStr ?? "")) {
-        Alert.alert("",`Payment code for ${domain} is in your contact list.`);
+        Alert.alert("",`${t("lightningAddress.alert2.msg")} ${domain} ${t("lightningAddress.alert2.msg1")}`);
       } else {
         Alert.alert(
-          "Add to Contact List",
-          `Would you like to add this payment code to ${domain} to your contact list?`,
+          t("payContact.alert2.title"),
+          `${t("payContact.alert2.msg")} ${domain} ${t("payContact.alert2.msg1")}`,
           [{
-            text: "No",
+            text: t("buttons.no",{ns:namespaces.common}),
           }, {
-            text: "Yes",
+            text: t("buttons.yes",{ns:namespaces.common}),
             onPress: async () => {
               syncContact({
                 type: "SERVICE",
@@ -165,7 +171,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
       </Blurmodal>
     );
   } catch (error) {
-    Alert.alert(`Unable to pay:\n\n${error.message}`);
+    Alert.alert(`${t("error")}:\n\n${error.message}`);
     callback(null);
     navigation.goBack();
     return (<></>);

@@ -17,12 +17,18 @@ import { Keyboard } from "react-native";
 import Container from "../../components/Container";
 import { IFiatRates } from "../../state/Fiat";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 const MATH_PAD_HEIGHT = 44;
 
 export interface IReceiveSetupProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveSetup">;
 }
 export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
+  t = useTranslation(namespaces.receive.receiveSetup).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const invoiceSubscriptionStarted = useStoreState((store) => store.receive.invoiceSubscriptionStarted);
@@ -67,8 +73,8 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Receive",
-      headerBackTitle: "Back",
+      headerTitle: t("layout.title"),
+      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
       headerShown: true,
     });
   }, [navigation]);
@@ -77,7 +83,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     try {
       setCreateInvoiceDisabled(true);
       if (satoshiValue > MAX_SAT_INVOICE) {
-        throw new Error("Invoice amount cannot be higher than " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnitKey));
+        throw new Error(t("createInvoice.error")+" " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnitKey));
       }
 
       navigation.replace("ReceiveQr", {
@@ -93,7 +99,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
       });
     } catch (e) {
       setCreateInvoiceDisabled(false);
-      toast(`Error: ${e.message}`, 12000, "danger", "Okay");
+      toast(`${t("msg.error",{ns:namespaces.common})}: ${e.message}`, 12000, "danger", "Okay");
     }
   };
 
@@ -104,7 +110,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: "Cancel",
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: currentBitcoinUnit,
         items: [
@@ -119,7 +125,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
       }
     } else {
       navigation.navigate("ChangeBitcoinUnit", {
-        title: "Change bitcoin unit",
+        title: t("form.amountBitcoin.change"),
         data: [
           { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
           { title: BitcoinUnits.bit.settings, value: "bit" },
@@ -139,7 +145,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: "Cancel",
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: currentFiatUnit,
         items: Object.entries(fiatRates).map(([currency]) => {
@@ -153,7 +159,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
       }
     } else {
       navigation.navigate("ChangeFiatUnit", {
-        title: "Change fiat unit",
+        title: t("form.amountFiat.change"),
         data: Object.entries(fiatRates).map(([currency]) => ({
           title: currency,
           value: currency as keyof IFiatRates,
@@ -166,7 +172,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
 
   const formItems = [{
     key: "AMOUNT_SAT",
-    title: `Amount ${bitcoinUnit.nice}`,
+    title: `${t("form.amountBitcoin.title")} ${bitcoinUnit.nice}`,
     component: (
       <>
         <Input
@@ -191,7 +197,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     ),
   }, {
     key: "AMOUNT_FIAT",
-    title: `Amount ${fiatUnit}`,
+    title: `${t("form.amountFiat.title")} ${fiatUnit}`,
     component: (
       <>
         <Input
@@ -215,23 +221,23 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
     ),
   }, {
     key: "PAYER",
-    title: "Payer",
+    title: t("form.payer.title"),
     component: (
       <Input
         onChangeText={setPayer}
-        placeholder="For bookkeeping"
+        placeholder={t("form.payer.placeholder")}
         onFocus={() => setMathPadVisible(false)}
         value={payer}
       />
     ),
   }, {
     key: "MESSAGE",
-    title: "Message",
+    title: t("form.description.title"),
     component: (
       <Input
         testID="input-message"
         onChangeText={setDescription}
-        placeholder="Message to payer"
+        placeholder={t("form.description.placeholder")}
         onFocus={() => setMathPadVisible(false)}
         value={description}
       />
@@ -256,7 +262,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
 
   const showNoticeText = rpcReady && channels.length === 0;
   const noticeText = showNoticeText
-    ? "Before you can receive, you need to open a Lightning channel."
+    ? t("createInvoice.alert")
     : undefined;
 
   const addMathOperatorToInput = (operator: "+" |  "-" |  "*" |  "/" |  "(" | ")") => {
@@ -295,7 +301,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
           >
             {loading
               ? <Spinner color={blixtTheme.light} />
-              : <Text>Create invoice</Text>
+              : <Text>{t("createInvoice.title")}</Text>
             }
           </Button>
         ]}

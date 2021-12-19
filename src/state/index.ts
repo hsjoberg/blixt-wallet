@@ -159,7 +159,7 @@ export const model: IStoreModel = {
       log.i("Initializing db for the first time");
       try {
         await setupInitialSchema(db);
-      } catch (error) {
+      } catch (error:any) {
         throw new Error("Error creating DB: " + error.message)
       }
       log.i("Writing lnd.conf");
@@ -207,7 +207,7 @@ export const model: IStoreModel = {
             socksPort = await tor.startIfNotStarted();
           }
           log.i("socksPort", [socksPort]);
-        } catch (e) {
+        } catch (e:any) {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
 
@@ -242,7 +242,7 @@ export const model: IStoreModel = {
         log.i("Starting lnd");
         try {
           log.d("startLnd", [await startLnd(torEnabled, socksPort > 0 ? ("--tor.socks=127.0.0.1:" + socksPort) : "")]);
-        } catch (e) {
+        } catch (e:any) {
           if (e.message.includes("lnd already started")) {
             toast("lnd already started", 3000, "warning");
           } else {
@@ -307,7 +307,7 @@ export const model: IStoreModel = {
             await dispatch.lightning.initialize({ start });
           }
         }
-      } catch (error) {
+      } catch (error:any) {
         toast(error.message, undefined, "danger");
       }
     });

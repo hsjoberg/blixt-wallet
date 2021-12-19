@@ -9,7 +9,13 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
 import { timeout } from "../../utils";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 export default function InitLightning() {
+  t = useTranslation(namespaces.initProcess.initLightning).t;
   const initializeLightning = useStoreActions((store) => store.lightning.initialize);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const firstSync = useStoreState((store) => store.lightning.firstSync);
@@ -68,7 +74,7 @@ export default function InitLightning() {
       <Spinner color={blixtTheme.light} size={55} />
       {!ready && nodeInfo && !nodeInfo.syncedToChain &&
         <>
-          <H1>Syncing chain...</H1>
+          <H1>{t("title")}...</H1>
           {/* {firstSync && <H3 style={style.firstSync}>This might take a couple of minutes</H3>} */}
         </>
       }

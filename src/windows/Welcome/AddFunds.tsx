@@ -15,10 +15,16 @@ import Container from "../../components/Container";
 import CopyAddress from "../../components/CopyAddress";
 import { toast } from "../../utils";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "AddFunds">;
 }
 export default function AddFunds({ navigation }: IProps) {
+  t = useTranslation(namespaces.welcome.addFunds).t;
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
   const address = useStoreState((store) => store.onChain.address);
 
@@ -40,7 +46,7 @@ export default function AddFunds({ navigation }: IProps) {
 
   const onBtcAddressTextPress = () => {
     Clipboard.setString(address!);
-    toast("Copied to clipboard", undefined, "warning");
+    toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
   };
 
   const onBtcAddressQrPress = async () => {
@@ -69,14 +75,14 @@ export default function AddFunds({ navigation }: IProps) {
         </View>
         <View style={style.lowerContent}>
           <View style={style.text}>
-            <H1 style={style.textHeader}>Add funds</H1>
+            <H1 style={style.textHeader}>{t("title")}</H1>
             <Text>
-              To start using Lightning in Blixt Wallet,{"\n"}send bitcoins to the address above.
+            {t("msg1")},{"\n"}{t("msg2")}.
             </Text>
           </View>
           <View style={style.buttons}>
             <Button style={style.button} block={true} onPress={() => navigation.navigate("AlmostDone")}>
-              <Text>Continue</Text>
+              <Text>{t("buttons.continue",{ns:namespaces.common})}</Text>
             </Button>
           </View>
         </View>

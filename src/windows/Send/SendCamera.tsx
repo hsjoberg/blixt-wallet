@@ -121,7 +121,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
           setScanning(true);
         break;
       }
-    } catch (error) {
+    } catch (error:any) {
       toast(error.message, 13000, "danger");
     }
   };

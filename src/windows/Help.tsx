@@ -7,10 +7,15 @@ import { useStoreState } from "../state/store";
 import Blurmodal from "../components/BlurModal";
 import { GITHUB_REPO_URL, HAMPUS_EMAIL, TELEGRAM } from "../utils/constants";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n/i18n.constants";
+
+
 export interface ISyncInfoProps {
   navigation: any;
 }
 export default function SyncInfo({ route }: any) {
+  const { t, i18n } = useTranslation(namespaces.help)
   const onPressGithub = async () => {
     await Linking.openURL(GITHUB_REPO_URL);
   };
@@ -29,23 +34,23 @@ export default function SyncInfo({ route }: any) {
         <CardItem style={{ flexGrow: 1 }}>
           <Body>
             <H1 style={style.header}>
-              Help
+              {t("title")}
             </H1>
             <Text style={{ marginBottom: 14 }}>
-              If you run into problems or have feedback, you can contact Blixt Wallet developers by filing an issue on Github or by contacting us via email.
+              {t("msg1")}
             </Text>
             <Text style={{ marginBottom: 14 }}>
-              You are also welcome to join our public Telegram chat group.
+              {t("msg2")}
             </Text>
             <Text style={{ marginBottom: 28 }}>
-              As Blixt Wallet is a new wallet, we need feedback on common issues that you might encounter.
+              {t("msg3")}
             </Text>
             <View style={style.actionBar}>
               <Button style={style.actionBarButton} onPress={onPressGithub} small={true}>
                 <Text style={style.actionBarButtonText}>GitHub</Text>
               </Button>
               <Button style={style.actionBarButton} onPress={onPressTelegram} small={true}>
-                <Text style={style.actionBarButtonText}>Telegram group</Text>
+                <Text style={style.actionBarButtonText}>Telegram {t("msg4")}</Text>
               </Button>
               <Button style={style.actionBarButton} onPress={onPressEmail} small={true}>
                 <Text style={style.actionBarButtonText}>Email</Text>

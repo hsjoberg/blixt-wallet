@@ -7,7 +7,13 @@ import Pincode from "../../components/Pincode";
 import { PLATFORM } from "../../utils/constants";
 import { Icon } from "native-base";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 export default function RemovePincodeAuth() {
+  t = useTranslation(namespaces.settings.removePincodeAuth).t;
   const navigation = useNavigation();
   const removePincode = useStoreActions((store) => store.security.removePincode);
 
@@ -21,7 +27,7 @@ export default function RemovePincodeAuth() {
 
   return (
     <>
-      <Pincode onTryCode={onTryCode} textAction="Enter current pincode to remove pincode" />
+      <Pincode onTryCode={onTryCode} textAction={t("title")} />
       {PLATFORM !== "android" &&
         <Icon style={{
           position: "absolute",

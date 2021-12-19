@@ -18,6 +18,11 @@ import { setupDescription } from "../../../utils/NameDesc";
 import useBalance from "../../../hooks/useBalance";
 import { PayerData } from "./PayerData";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../../i18n/i18n.constants";
+
+let t:TFunction;
+
 export interface IPaymentCardProps {
   onPaid: (preimage: Uint8Array) => void;
   lnUrlObject: ILNUrlPayRequest;
@@ -25,6 +30,7 @@ export interface IPaymentCardProps {
 }
 
 export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentCardProps) {
+  t = useTranslation(namespaces.LNURL.payRequest.paymentCard).t;
   const navigation = useNavigation();
   const lightningReadyToSend = useLightningReadyToSend();
 
@@ -67,7 +73,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
     })?.[1];
 
     if (!text) {
-      throw new Error("Payment is missing a description.");
+      throw new Error(t("payRequest.error1"));
     }
 
     const longDesc = metadata.find((m, i) => {
@@ -89,7 +95,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
 
     const onPressPay = async () => {
       if (!payerDataName && commentAllowed && sendName && !comment) {
-        Alert.alert("", "You must provide a comment if you choose to include your name to this payment");
+        Alert.alert("", t("pay.alert"));
         return;
       }
 
@@ -178,18 +184,18 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
               />
             }
             <Text style={style.text}>
-              <Text style={style.boldText}>{domain}</Text> asks you to pay.
+              <Text style={style.boldText}>{domain}</Text>{t("form.title")}
             </Text>
           </View>
           <Text style={style.text}>
-            <Text style={style.boldText}>Description:</Text>{"\n"}
+            <Text style={style.boldText}>{t("form.description.title")}:</Text>{"\n"}
             {longDesc || text}
           </Text>
           <Text style={style.inputLabel}>
-            <Text style={style.boldText}>Amount:</Text>{"\n"}
+            <Text style={style.boldText}>{t("form.amount.title")}:</Text>{"\n"}
             {minSpendableFormatted} ({minSpendableFiatFormatted})
             {(minSpendable !== maxSpendable) &&
-              <Text> to {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
+              <Text> {t("form.amount.msg")} {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
             }
           </Text>
           {minSpendable !== maxSpendable &&
@@ -198,7 +204,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
                 onChangeText={preferFiat ?  onChangeFiatInput : onChangeBitcoinInput}
                 keyboardType="numeric"
                 returnKeyType="done"
-                placeholder={`Input amount (${preferFiat ? fiatUnit : bitcoinUnit.nice})`}
+                placeholder={`${t("form.amount.placeholder")} (${preferFiat ? fiatUnit : bitcoinUnit.nice})`}
                 style={[style.input]}
                 value={preferFiat ? dollarValue : bitcoinValue}
               />
@@ -249,7 +255,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
             }}
             small={true}
           >
-            {(!doRequestLoading && lightningReadyToSend) ? <Text>Pay</Text> : <ButtonSpinner />}
+            {(!doRequestLoading && lightningReadyToSend) ? <Text>{t("pay.title")}</Text> : <ButtonSpinner />}
           </Button>
           <Button
             onPress={cancel}
@@ -259,13 +265,13 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
             danger
             small={true}
           >
-            <Text>Cancel</Text>
+            <Text>{t("cancel.title")}</Text>
           </Button>
         </View>
       </>
     );
   } catch (error) {
-    Alert.alert(`Unable to pay:\n\n${error.message}`);
+    Alert.alert(`${t("form.alert")}:\n\n${error.message}`);
     callback?.(null);
     navigation.goBack();
     return (<></>)

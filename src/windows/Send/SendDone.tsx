@@ -10,6 +10,11 @@ import Svg, { Circle, Polyline } from "react-native-svg";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedPolyline = Animated.createAnimatedComponent(Polyline);
 const AnimatedText = Animatable.createAnimatableComponent(Text);
@@ -81,7 +86,7 @@ export function Done() {
         animation="fadeIn"
         useNativeDriver={true}
       >
-        PAYMENT SENT
+        {t("done.title")}
       </AnimatedText>
     </>
   )
@@ -95,6 +100,7 @@ export default function SendDone({
   navigation,
   route,
 }: ISendConfirmationProps) {
+  t = useTranslation(namespaces.send.sendDone).t;
   const callback = (route.params.callback) ?? (() => {});
   const preimage = route.params.preimage;
 

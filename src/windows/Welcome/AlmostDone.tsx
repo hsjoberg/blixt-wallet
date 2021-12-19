@@ -18,6 +18,11 @@ import { IFiatRates } from "../../state/Fiat";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 import { Alert } from "../../utils/alert";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
 interface IProps {
   navigation: StackNavigationProp<AlmostDoneStackParamList, "AlmostDone">;
 }
@@ -29,16 +34,16 @@ const AlmostDone = ({ navigation }: IProps) => {
   const changeName = useStoreActions((store) => store.settings.changeName);
   const onNamePress = async () => {
     Alert.prompt(
-      "Name",
-      "Choose a name that will be used in transactions\n\n" +
-      "Your name will be seen in invoices to those who pay you as well as " +
-      "people you pay to.",
+      t("name.alert.title"),
+      t("name.alert.msg1")+"\n\n" +
+      t("name.alert.msg2")+" " +
+      t("name.alert.msg3"),
       [{
-        text: "Cancel",
+        text: t("buttons.cancel",{ns:namespaces.common}),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: "Set name",
+        text: t("name.alert.msg4"),
         onPress: async (text) => {
           await changeName(text ?? null);
         },
@@ -69,7 +74,7 @@ const AlmostDone = ({ navigation }: IProps) => {
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: "Cancel",
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: currentFiatUnit,
         items: [
@@ -102,7 +107,7 @@ const AlmostDone = ({ navigation }: IProps) => {
       }
     } else {
       navigation.navigate("ChangeFiatUnit", {
-        title: "Change fiat unit",
+        title: t("fiatUnit.dialog.title"),
         data: Object.entries(fiatRates).map(([currency]) => ({
           title: currency,
           value: currency as keyof IFiatRates,
@@ -140,16 +145,16 @@ const AlmostDone = ({ navigation }: IProps) => {
             <ListItem style={extraStyle.listItem} icon={true} onPress={onNamePress}>
               <Left><Icon style={extraStyle.icon} type="AntDesign" name="edit" /></Left>
               <Body>
-                <Text>Name</Text>
+                <Text>{t("name.title")}</Text>
                 <Text note={true} numberOfLines={1}>
-                  {name || "Will be used in transactions"}
+                  {name || t("name.msg")}
                 </Text>
               </Body>
             </ListItem>
 
             <ListItem style={extraStyle.listItem} button={true} icon={true} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress}>
               <Left><Icon style={extraStyle.icon} type="AntDesign" name="lock" /></Left>
-              <Body><Text>Login with pincode</Text></Body>
+              <Body><Text>{t("pincode.title")}</Text></Body>
               <Right><CheckBox checked={loginMethods!.has(LoginMethods.pincode)} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress} /></Right>
             </ListItem>
 
@@ -165,7 +170,7 @@ const AlmostDone = ({ navigation }: IProps) => {
                 </Left>
                 <Body>
                   <Text>
-                    Login with{" "}
+                    {t("pincode.msg")}{" "}
                     {biometricsSensor === "Biometrics" && "fingerprint"}
                     {biometricsSensor === "Face ID" && "Face ID"}
                     {biometricsSensor === "Touch ID" && "Touch ID"}
@@ -178,7 +183,7 @@ const AlmostDone = ({ navigation }: IProps) => {
             <ListItem style={extraStyle.listItem} icon={true} onPress={onFiatUnitPress}>
               <Left><Icon style={extraStyle.icon} type="FontAwesome" name="money" /></Left>
               <Body>
-                <Text>Fiat currency</Text>
+                <Text>{t("fiatUnit.title")}</Text>
                 <Text note={true} numberOfLines={1} onPress={onFiatUnitPress}>{currentFiatUnit}</Text>
               </Body>
             </ListItem>
@@ -186,8 +191,8 @@ const AlmostDone = ({ navigation }: IProps) => {
             <ListItem style={extraStyle.listItem} button={true} icon={true} onLongPress={() => ToastAndroid.show("Open channels when on-chain funds are available", ToastAndroid.SHORT)} onPress={onToggleAutopilotPress}>
               <Left><Icon style={extraStyle.icon} type="Entypo" name="circular-graph" /></Left>
               <Body>
-                <Text>Auto-open channels</Text>
-                <Text note={true} numberOfLines={1}>Open channels when on-chain funds are available</Text>
+                <Text>{t("autopilot.title")}</Text>
+                <Text note={true} numberOfLines={1}>{t("autopilot.msg")}</Text>
               </Body>
               <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>
             </ListItem>
@@ -195,15 +200,15 @@ const AlmostDone = ({ navigation }: IProps) => {
         </View>
         <View style={style.lowerContent}>
           <View style={style.text}>
-            <H1 style={style.textHeader}>Almost done!</H1>
+            <H1 style={style.textHeader}>{t("done.title")}</H1>
             <Text>
-              Here are some wallet settings you can set up to your liking.{"\n\n"}
-              When you are ready, press continue.
+              {t("done.msg1")}.{"\n\n"}
+              {t("done.msg2")}.
             </Text>
           </View>
           <View style={style.buttons}>
             <Button style={style.button} block={true} onPress={onPressContinue}>
-              <Text>Continue</Text>
+              <Text>{t("buttons.continue",{ns:namespaces.common})}</Text>
             </Button>
           </View>
         </View>
@@ -246,6 +251,7 @@ export type AlmostDoneStackParamList = {
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
 }
 export default () => {
+  t = useTranslation(namespaces.welcome.almostDone).t;
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
     animationEnabled: false,
