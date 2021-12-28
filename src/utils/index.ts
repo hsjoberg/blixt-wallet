@@ -70,6 +70,7 @@ export const hexToUint8Array = (hexString: string) => {
 
 export const toast = (message: string, period = 8000, type: "danger" | "success" | "warning" = "success", button?: string) => {
   try {
+    console.log(message);
     if (AppState.currentState === "active") {
       Toast.show({
         duration: period,

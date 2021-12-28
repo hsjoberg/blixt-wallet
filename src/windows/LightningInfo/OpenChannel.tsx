@@ -1,6 +1,8 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
 import { Text, Container, Button, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Slider from "@react-native-community/slider";
 
 import { LightningInfoStackParamList } from "./index";
 import { useStoreActions } from "../../state/store";
@@ -9,8 +11,6 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";
-import { StyleSheet, TextInput, TouchableWithoutFeedback, View } from "react-native";
-import Slider from "@react-native-community/slider";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -68,10 +68,10 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
       <BlixtForm
         items={[{
           key: "CHANNEL",
-          title: "Channel URI",
+          title: "Node URI",
           component: (
             <>
-              <Input placeholder="Channel" value={peer} onChangeText={setPeer} />
+              <Input placeholder="pubkey@ip:port" value={peer} onChangeText={setPeer} />
               <Icon type="AntDesign" name="camera" onPress={onCameraPress} />
             </>
           )
