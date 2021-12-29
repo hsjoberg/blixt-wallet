@@ -1176,7 +1176,7 @@ Do you wish to proceed?`;
               </Body>
             </ListItem>
           }
-          {PLATFORM === "android" &&
+          {(PLATFORM === "android" || PLATFORM === "ios") &&
             <ListItem style={style.listItem} icon={true} onPress={() => copyLndLog()}>
               <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
               <Body>
