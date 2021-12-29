@@ -220,8 +220,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   // Copy lnd log
   const copyLndLog = async () => {
     try {
-      const filePath = await NativeModules.LndMobileTools.copyLndLog();
-      toast("Copied lnd log file to: " + filePath, undefined, "warning");
+      await NativeModules.LndMobileTools.copyLndLog();
     } catch (e) {
       console.error(e);
       toast("Error copying lnd log file.", undefined, "danger");
