@@ -555,7 +555,10 @@ When you're done, you can copy the address code and/or open the link using Blixt
   const onSetBitcoinNodePress = async () => {
     Alert.prompt(
       "Set Node",
-      "",
+      "Set a BIP157 compact filter serving Bitcoin node to establish a connection to.\n\n" +
+      "Leave blank to let Blixt Wallet search on the Bitcoin network for a valid node.\n\n" +
+      "To reset to the default node, long-press on the setting.\n\n" +
+      "Note: Blixt Wallet does not support Tor onion v3 yet.",
       [{
         text: "Cancel",
         style: "cancel",
