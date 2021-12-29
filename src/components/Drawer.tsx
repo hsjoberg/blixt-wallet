@@ -10,7 +10,6 @@ import usePromptLightningAddress from "../hooks/usePromptLightningAddress";
 import useEvaluateLightningCode from "../hooks/useEvaluateLightningCode";
 import { fontFactorNormalized } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
-import { PLATFORM } from "../utils/constants";
 
 export default function Drawer() {
   const navigation = useNavigation();
@@ -79,7 +78,7 @@ export default function Drawer() {
       <ScrollView style={style.drawerScroll} alwaysBounceVertical={false}>
         <View style={style.logoContainer}>
           <BlixtLogo />
-          <Text style={style.blixtTitle}>Blixt Wallet</Text>
+          <Text style={style.blixtTitle} onPress={() => goToScreen("SyncInfo", undefined, false)}>Blixt Wallet</Text>
         </View>
         <View style={style.menu}>
           {layoutMode === "full" && (
@@ -176,8 +175,8 @@ const style = StyleSheet.create({
     marginTop: 36,
   },
   logoContainer: {
-    paddingTop: 28,
-    paddingBottom: 11,
+    paddingTop: 22,
+    paddingBottom: 10,
     alignItems: "center",
   },
   blixtTitle: {
@@ -193,7 +192,8 @@ const style = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: blixtTheme.gray,
-    padding: 13,
+    paddingVertical: 11,
+    paddingHorizontal: 13,
     marginHorizontal: 19,
     marginBottom: 11,
     borderRadius: 12,

@@ -60,7 +60,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
 
   return (
     <Container>
-      <LogBox text={log.current} scrollLock={false} />
+      <LogBox text={log.current} scrollLock={true} />
     </Container>
   )
 }

@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "useUnknownInCatchVariables": false
   },
   "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js", "dist", "public"]
 }

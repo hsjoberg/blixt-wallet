@@ -25,6 +25,7 @@ import { decodeInvoiceResult } from "../../lndmobile/wallet";
 import { lnrpc } from "../../../proto/lightning";
 import { Chain } from "../../utils/build";
 import { checkLndStreamErrorResponse } from "../../utils/lndmobile";
+import { fontFactorNormalized } from "../../utils/scale";
 
 interface IContactProps {
   contact: IContact;
@@ -116,7 +117,11 @@ function Contact({ contact }: IContactProps) {
           navigation.navigate("LNURL", {
             screen: "PayRequest",
             params: {
-              callback: syncBalance,
+              callback: async () => {
+                if (contact.lnUrlWithdraw) {
+                  await syncBalance();
+                }
+              },
             },
           });
           setTimeout(() => setLoadingPay(false), 1);
@@ -129,7 +134,11 @@ function Contact({ contact }: IContactProps) {
           navigation.navigate("LNURL", {
             screen: "PayRequest",
             params: {
-              callback: syncBalance,
+              callback: async () => {
+                if (contact.lnUrlWithdraw) {
+                  await syncBalance();
+                }
+              }
             },
           });
           setTimeout(() => setLoadingPay(false), 1);
@@ -238,14 +247,14 @@ function Contact({ contact }: IContactProps) {
               <View style={style.actionButtons}>
                 {contact.lnUrlWithdraw &&
                   <Button onPress={onPressWithdraw} style={[style.actionButton, { width: 90 }]} small disabled={loadingWithdraw}>
-                    {!loadingWithdraw && <Text>Withdraw</Text>}
+                    {!loadingWithdraw && <Text style={style.actionButtonText}>Withdraw</Text>}
                     {loadingWithdraw && <ButtonSpinner />}
                   </Button>
                 }
                 {(contact.lnUrlPay || contact.lightningAddress) &&
                 <>
                   <Button onPress={onPressSend} style={[style.actionButton, { width: 60 }]} small disabled={loadingPay}>
-                    {!loadingPay && <Text style={{textAlign:"center"}}>Send</Text>}
+                    {!loadingPay && <Text style={style.actionButtonText}>Send</Text>}
                     {loadingPay && <ButtonSpinner />}
                   </Button>
                 </>
@@ -253,7 +262,7 @@ function Contact({ contact }: IContactProps) {
 
                 <View style={style.actionButtonsAdmin}>
                   <Button onPress={promptDeleteContact} small style={[style.actionButton]} icon danger>
-                    <Icon type="AntDesign" name="delete" style={[style.actionButton, {fontSize: 10, margin:0,padding:0 }]}/>
+                    <Icon type="AntDesign" name="delete" style={[style.actionButton, {fontSize: 10, margin: 0, padding: 0 }]}/>
                   </Button>
                   {/* <Button small style={[style.actionButton, {  }]} icon warning>
                     <Icon type="AntDesign" name="edit" style={[style.actionButton, {fontSize: 14 }]} />
@@ -448,6 +457,9 @@ const style = StyleSheet.create({
   actionButton: {
     margin: 2,
     justifyContent: "center",
+  },
+  actionButtonText: {
+    fontSize: 10  * fontFactorNormalized,
   },
   balanceInfo: {
     flex: 1,

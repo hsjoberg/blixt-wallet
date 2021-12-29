@@ -83,6 +83,7 @@ open class Lnd {
     "ListPeers": { bytes, cb in LndmobileListPeers(bytes, cb) },
     "DisconnectPeer": { bytes, cb in Lndmobile.LndmobileDisconnectPeer (bytes, cb) },
     "SendPaymentSync": { bytes, cb in LndmobileSendPaymentSync(bytes, cb) },
+    "GetRecoveryInfo": { bytes, cb in LndmobileGetRecoveryInfo(bytes, cb) },
 
     // channel
     //
