@@ -2,7 +2,6 @@ import Log from "./log";
 const log = Log("utils/lndmobile.ts");
 
 export function checkLndStreamErrorResponse(name: string, event: any): Error | "EOF" | null {
-  console.log("checkLndStreamErrorResponse", name, event);
   if (!event || typeof event !== "object") {
     return new Error(name + ": Got invalid response from lnd: " + JSON.stringify(event));
   }

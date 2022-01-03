@@ -17,6 +17,7 @@ import { PLATFORM } from "../../utils/constants";
 import usePromptLightningAddress from "../../hooks/usePromptLightningAddress";
 import useEveluateLightningCode from "../../hooks/useEvaluateLightningCode";
 import { toast } from "../../utils";
+import { Alert } from "../../utils/alert";
 
 interface ISendCameraProps {
   bolt11Invoice?: string;
@@ -146,7 +147,14 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
       active={cameraActive}
       cameraType={cameraType}
       onRead={onBarCodeRead}
-      onNotAuthorized={() => setTimeout(() => navigation.goBack(), 1)}
+      onNotAuthorized={() => {
+        Alert.alert(
+          "Not authorized.",
+          "Camera access was not granted.\n" +
+          "Blixt Wallet needs access to the camera in order to be able to scan QR-codes."
+        );
+        setTimeout(() => navigation.goBack(), 1)
+      }}
     >
       <View style={StyleSheet.absoluteFill}>
         <BarcodeMask

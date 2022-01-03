@@ -274,67 +274,12 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void copyLndLog(Promise promise) {
-    checkWriteExternalStoragePermission(
-      (@Nullable Object value) -> {
-        if (value.equals("granted")) {
-          String lndLogFile = copyLndLogFile();
-          if (lndLogFile != null) {
-            promise.resolve(lndLogFile);
-          }
-          else {
-            promise.reject("Error copying");
-          }
-        }
-      },
-      () -> {
-        promise.reject("Request Error");
-      },
-      () -> {
-        promise.reject("Permission Check Error");
-      }
-    );
-  }
-
-  public String copyLndLogFile() {
-    File sourceLocation = new File(
-      getReactApplicationContext().getFilesDir().toString() +
-      "/logs/bitcoin/" +
-      BuildConfig.CHAIN +
-      "/lnd.log"
-    );
-    File targetDir = new File(
-      ContextCompat.getExternalFilesDirs(getReactApplicationContext(), null)[0].toString()
-    );
-    File targetLocation = new File(targetDir.toString() + "/lnd-" + BuildConfig.CHAIN + (BuildConfig.DEBUG ? "-debug" : "") +  ".log");
-
-    try {
-      Log.i(TAG, targetLocation.toString());
-
-      if (!targetDir.exists()) {
-        if (!targetDir.mkdirs()) {
-          throw new Error("Error creating dir");
-        }
-      }
-
-      InputStream in = new FileInputStream(sourceLocation);
-      OutputStream out = new FileOutputStream(targetLocation);
-
-      byte[] buf = new byte[1024];
-      int len;
-      while ((len = in.read(buf)) > 0) {
-        out.write(buf, 0, len);
-      }
-      in.close();
-      out.close();
-
-      return targetLocation.toString();
-    } catch (Throwable e) {
-      Log.e(TAG, "copyLndLogFile() failed: " + e.getMessage() + " " +
-                 "source: " + sourceLocation.toString() + "\n " +
-                 "dest: " + targetDir.toString()
-      );
-      return null;
-    }
+    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+    intent.setType("text/plain");
+    intent.putExtra(Intent.EXTRA_TITLE, "lnd.log");
+    getReactApplicationContext().getCurrentActivity().startActivityForResult(intent, MainActivity.INTENT_COPYLNDLOG);
+    promise.resolve(true);
   }
 
   @ReactMethod

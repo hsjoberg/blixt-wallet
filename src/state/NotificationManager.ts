@@ -22,43 +22,47 @@ export interface INotificationManagerModel {
 
 export const notificationManager: INotificationManagerModel = {
   initialize: thunk(async () => {
-    log.d("Initializing");
+    try {
+      log.d("Initializing");
 
-    if (PLATFORM === "ios") {
-      const permissions = await PushNotification.requestPermissions(["alert", "sound", "badge"]);
+      if (PLATFORM === "ios") {
+        const permissions = await PushNotification.requestPermissions(["alert", "sound", "badge"]);
 
-      if(!permissions.alert) {
-        log.w("Didn't get permissions to send push notifications.");
-        return;
-      }
-    }
-
-    PushNotification.configure({
-      requestPermissions: false,
-      onNotification: ((notification) => {
-        log.i("onNotification", [notification]);
-
-        // TODO(hsjoberg): ios notification deeplinking
-        if (PLATFORM === "android") {
-          if (notification.message.toString().includes("on-chain")) {
-            log.i("Navigating to OnChainTransactionLog");
-            navigate("OnChain", { screen: "OnChainTransactionLog"});
-          }
-          else if (notification.message.toString().toLocaleLowerCase().includes("payment channel")) {
-            log.i("Navigating to LightningInfo");
-            navigate("LightningInfo");
-          }
+        if(!permissions.alert) {
+          log.w("Didn't get permissions to send push notifications.");
+          return;
         }
-      }),
-    });
+      }
 
-    if (PLATFORM === "android") {
-      PushNotification.createChannel({
-          channelId: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID,
-          channelName: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_NAME,
-        },
-        () => {}
-      );
+      PushNotification.configure({
+        requestPermissions: false,
+        onNotification: ((notification) => {
+          log.i("onNotification", [notification]);
+
+          // TODO(hsjoberg): ios notification deeplinking
+          if (PLATFORM === "android") {
+            if (notification.message.toString().includes("on-chain")) {
+              log.i("Navigating to OnChainTransactionLog");
+              navigate("OnChain", { screen: "OnChainTransactionLog"});
+            }
+            else if (notification.message.toString().toLocaleLowerCase().includes("payment channel")) {
+              log.i("Navigating to LightningInfo");
+              navigate("LightningInfo");
+            }
+          }
+        }),
+      });
+
+      if (PLATFORM === "android") {
+        PushNotification.createChannel({
+            channelId: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID,
+            channelName: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_NAME,
+          },
+          () => {}
+        );
+      }
+    } catch (error) {
+      throw new Error("NotificationManager: ") + error;
     }
   }),
 

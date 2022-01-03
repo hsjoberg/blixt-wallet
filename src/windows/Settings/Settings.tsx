@@ -45,6 +45,7 @@ export default function Settings({ navigation }: ISettingsProps) {
 
   const onboardingState = useStoreState((store) => store.onboardingState);
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
+  const isRecoverMode = useStoreState((store) => store.lightning.isRecoverMode);
 
   // Pincode
   const loginMethods = useStoreState((store) => store.security.loginMethods);
@@ -222,8 +223,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   // Copy lnd log
   const copyLndLog = async () => {
     try {
-      const filePath = await NativeModules.LndMobileTools.copyLndLog();
-      toast(t("miscelaneous.lndLog.dialog.alert") + ": " + filePath, undefined, "warning");
+      await NativeModules.LndMobileTools.copyLndLog();
     } catch (e) {
       console.error(e);
       toast(t("miscelaneous.lndLog.dialog.error"), undefined, "danger");
@@ -557,7 +557,10 @@ ${t("LN.inbound.dialog.msg3")}`
   const onSetBitcoinNodePress = async () => {
     Alert.prompt(
       t("bitcoinNetwork.node.setDialog.title"),
-      "",
+      "Set a BIP157 compact filter serving Bitcoin node to establish a connection to.\n\n" +
+      "Leave blank to let Blixt Wallet search on the Bitcoin network for a valid node.\n\n" +
+      "To reset to the default node, long-press on the setting.\n\n" +
+      "Note: Blixt Wallet does not support Tor onion v3 yet.",
       [{
         text: t("button.cancel",{ns:namespaces.common}),
         style: "cancel",
@@ -827,7 +830,6 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
   };
 
-
   // Enable Dunder LSP
   const dunderEnabled = useStoreState((store) => store.settings.dunderEnabled);
   const changeDunderEnabled = useStoreActions((store) => store.settings.changeDunderEnabled);
@@ -871,7 +873,6 @@ ${t("experimental.tor.disabled.msg2")}`;
       "plain-text",
     );
   };
-
 
   // Lnd Graph Cache
   const lndNoGraphCache = useStoreState((store) => store.settings.lndNoGraphCache);
@@ -977,7 +978,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           }
-          {PLATFORM == "android" &&
+          {(PLATFORM == "android" && !isRecoverMode) &&
             <ListItem style={style.listItem} icon={true} onPress={onToggleGoogleDriveBackup}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-drive" /></Left>
               <Body>
@@ -987,13 +988,13 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Right><CheckBox checked={googleDriveBackupEnabled} onPress={onToggleGoogleDriveBackup} /></Right>
             </ListItem>
           }
-          {googleDriveBackupEnabled &&
+          {(googleDriveBackupEnabled && !isRecoverMode) &&
             <ListItem style={style.listItem} icon={true} onPress={onDoGoogleDriveBackupPress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="folder-google-drive" /></Left>
               <Body><Text>{t("wallet.backup.googleCloudForce.title")}</Text></Body>
             </ListItem>
           }
-          {PLATFORM == "ios" &&
+          {(PLATFORM == "ios" && !isRecoverMode) &&
             <ListItem style={style.listItem} icon={true} onPress={onToggleICloudBackup}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="apple-icloud" /></Left>
               <Body>
@@ -1003,7 +1004,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Right><CheckBox checked={iCloudBackupEnabled} onPress={onToggleICloudBackup} /></Right>
             </ListItem>
           }
-          {iCloudBackupEnabled &&
+          {(iCloudBackupEnabled && !isRecoverMode) &&
             <ListItem style={style.listItem} icon={true} onPress={onDoICloudBackupPress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="folder" /></Left>
               <Body><Text>{t("wallet.backup.iCloudForce.title")}</Text></Body>
@@ -1174,7 +1175,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           }
-          {PLATFORM === "android" &&
+          {(PLATFORM === "android" || PLATFORM === "ios") &&
             <ListItem style={style.listItem} icon={true} onPress={() => copyLndLog()}>
               <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
               <Body>

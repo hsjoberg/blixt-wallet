@@ -154,7 +154,18 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text>Capacity</Text>
             </Left>
             <Right>
-              <Svg width="100" height="22">
+              {!preferFiat &&
+                <Text>
+                  {valueBitcoin(channel.capacity ?? Long.fromValue(0), bitcoinUnit)}{" "}
+                  {getUnitNice(new BigNumber(localBalance.toNumber()), bitcoinUnit)}
+                </Text>
+              }
+              {preferFiat &&
+                <Text>
+                  {valueFiat(localBalance, currentRate).toFixed(2)}{" "}{fiatUnit}
+                </Text>
+              }
+              <Svg width="100" height="22" style={{ marginBottom: 3, marginTop: -1 }}>
                 <Line
                   x1="0"
                   y1="15"

@@ -223,6 +223,20 @@ function Overview({ navigation }: IOverviewProps) {
           {onboardingState === "DO_BACKUP" &&
             <DoBackup />
           }
+          {pendingOpenBalance.greaterThan(0) && (
+              <Card>
+              <CardItem>
+                <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+                  <Text style={{ flexShrink: 1 }}>
+                    A new channel is in the process of being opened...
+                  </Text>
+                  <Button small onPress={() => navigation.navigate("LightningInfo")}>
+                    <Text>View</Text>
+                  </Button>
+                </View>
+              </CardItem>
+            </Card>
+          )}
           {txs}
         </ScrollView>
         <Animated.View style={[style.animatedTop,{ height: headerHeight }]} pointerEvents="box-none">

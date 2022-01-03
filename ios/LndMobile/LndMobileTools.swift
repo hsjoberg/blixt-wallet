@@ -410,4 +410,26 @@ autopilot.heuristic=preferential:0.05
     lndLogFileObservingStarted = true
     resolve(true)
   }
+
+  @objc(copyLndLog:rejecter:)
+  func copyLndLog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
+    let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+    let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
+                      .appendingPathComponent("logs", isDirectory: true)
+                      .appendingPathComponent("bitcoin", isDirectory: true)
+                      .appendingPathComponent(chain ?? "mainnet", isDirectory: true)
+                      .appendingPathComponent("lnd.log", isDirectory: false)
+    do {
+      let data = try String(contentsOf: url)
+      DispatchQueue.main.async {
+        let activityController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+        RCTSharedApplication()?.delegate?.window??.rootViewController?.present(activityController, animated: true, completion: {
+          resolve(true)
+        })
+      }
+    } catch {
+      reject("error", error.localizedDescription, error)
+    }
+  }
 }
