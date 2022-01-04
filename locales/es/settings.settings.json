@@ -3,24 +3,30 @@
   "general":{
     "title":"General",
     "name":{
-      "title":"Name",
+      "title":"Nombre",
       "subtitle":"Will be used in transactions",
       "dialog":{
         "msg":"Choose a name that will be used in transactions\n\nYour name will be seen in invoices to those who pay you as well as people you pay to.",
         "accept":"Set name"
       }
     },
+    "lang":{
+      "title":"Idioma",
+      "dialog":{
+        "title":"Selecciona un idioma"
+      }
+    },
     "pushNotification":{
-      "title":"Push notifications",
-      "subtitle":"For transaction and channel events"
+      "title":"Notificaciones push",
+      "subtitle":"Para eventos de transacciones y canales"
     },
     "checkClipboard":{
-      "title":"Check clipboard for invoices",
-      "subtitle":"Automatically check clipboard for invoices"
+      "title":"Comprueba el portapapeles",
+      "subtitle":"Automaticamente comprueba el portapapeles buscando facturas"
     },
     "saveGeolocation":{
-      "title":"Save geolocation of transaction",
-      "subtitle":"Locally save the location of a transaction",
+      "title":"Guarda la geolocalización de la transacción",
+      "subtitle":"Guarda localmente la ubicación de una transacción",
       "logGranted":"Geolocation granted",
       "logDenied":"Geolocation permission denied"
     },
@@ -29,24 +35,24 @@
     }
   },
   "wallet":{
-    "title":"Wallet",
+    "title":"Cartera",
     "seed":{
       "show":{
-        "title":"Show mnemonic",
-        "subtitle":"Show 24-word seed for this wallet",
+        "title":"Mostrar mnemonic",
+        "subtitle":"Mostrar semilla de 24 palabras para esta billetera",
         "dialog":{
-          "title":"Seed",
-          "alert":"Copied to clipboard",
-          "copy":"Copy seed"
+          "title":"Semilla",
+          "alert":"Copiada al portapapeles",
+          "copy":"Copiar semilla"
         }
       },
       "remove":{
-        "title":"Remove mnemonic from device",
-        "subtitle":"Permanently remove the seed from this device",
+        "title":"Eliminar mnemonic del dispositivo",
+        "subtitle":"Eliminar permanentemente la semilla de este dispositivo",
         "dialog":{
-          "title":"Remove seed",
-          "msg":"This will permanently remove the seed from this device. Only do this if you have backed up your seed!",
-          "accept":"Delete seed"
+          "title":"Borrar semilla",
+          "msg":"Esto eliminará permanentemente la semilla de este dispositivo. ¡Solo haga esto si ha respaldado su semilla!",
+          "accept":"Eliminar semilla"
         }
       }
     },
