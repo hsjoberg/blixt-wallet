@@ -10,6 +10,12 @@
         "accept":"Set name"
       }
     },
+    "lang":{
+      "title":"Language",
+      "dialog":{
+        "title":"Select language"
+      }
+    },
     "pushNotification":{
       "title":"Push notifications",
       "subtitle":"For transaction and channel events"
