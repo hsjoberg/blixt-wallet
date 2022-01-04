@@ -16,9 +16,11 @@ const createI18n = (language: string): i18nInstance => {
       lng: language,
       fallbackLng: language,
       ns: namespaces.common,
-    });
+  });
+  i18n.changeLanguage(languages.es.id);
 
   return i18n;
 };
 
-export const i18n = createI18n(languages.en);
+
+export const i18n = createI18n(languages.en.id);

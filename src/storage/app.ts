@@ -24,6 +24,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   bitcoinUnit = "bitcoinUnit",
   fiatUnit = "fiatUnit",
   name = "name",
+  language = "language",
   walletPassword = "walletPassword",
   autopilotEnabled = "autopilotEnabled",
   pushNotificationsEnabled = "pushNotificationsEnabled",
@@ -95,7 +96,8 @@ export const clearApp = async () => {
     removeItem(StorageItem.seedStored),
     removeItem(StorageItem.bitcoinUnit),
     removeItem(StorageItem.fiatUnit),
-    removeItem(StorageItem.name),
+    removeItem(StorageItem.name),,
+    removeItem(StorageItem.language),
     removeItem(StorageItem.walletPassword),
     removeItem(StorageItem.autopilotEnabled),
     removeItem(StorageItem.pushNotificationsEnabled),
@@ -168,6 +170,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.seedStored, false), // !
     setItemObject<keyof IBitcoinUnits>(StorageItem.bitcoinUnit, "bitcoin"),
     setItemObject<keyof IFiatRates>(StorageItem.fiatUnit, "USD"),
+    setItemObject<string>(StorageItem.language, "en"),
     // walletPassword
     setItemObject<boolean>(StorageItem.autopilotEnabled, true),
     setItemObject<boolean>(StorageItem.pushNotificationsEnabled, true),

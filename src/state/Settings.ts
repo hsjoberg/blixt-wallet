@@ -22,6 +22,7 @@ export interface ISettingsModel {
   changeBitcoinUnit: Thunk<ISettingsModel, keyof IBitcoinUnits>;
   changeFiatUnit: Thunk<ISettingsModel, keyof IFiatRates>;
   changeName: Thunk<ISettingsModel, string | null>;
+  changeLanguage: Thunk<ISettingsModel, string>;
   changeAutopilotEnabled: Thunk<ISettingsModel, boolean>;
   changePushNotificationsEnabled: Thunk<ISettingsModel, boolean>;
   changeClipboardInvoiceCheckEnabled: Thunk<ISettingsModel, boolean>;
@@ -50,6 +51,7 @@ export interface ISettingsModel {
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
   setName: Action<ISettingsModel, string | null>;
+  setLanguage: Action<ISettingsModel, string>;
   setAutopilotEnabled: Action<ISettingsModel, boolean>;
   setPushNotificationsEnabled: Action<ISettingsModel, boolean>;
   setClipboardInvoiceCheckInvoicesEnabled: Action<ISettingsModel, boolean>;
@@ -78,6 +80,7 @@ export interface ISettingsModel {
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
   name: string | null;
+  language: string;
   autopilotEnabled: boolean;
   pushNotificationsEnabled: boolean;
   clipboardInvoiceCheckEnabled: boolean;
@@ -110,6 +113,7 @@ export const settings: ISettingsModel = {
     actions.setBitcoinUnit(await getItemObject(StorageItem.bitcoinUnit) || "bitcoin");
     actions.setFiatUnit(await getItemObject(StorageItem.fiatUnit) || "USD");
     actions.setName(await getItemObject(StorageItem.name) || null);
+    actions.setLanguage(await getItemObject(StorageItem.language) || "en");
     actions.setAutopilotEnabled(await getItemObject(StorageItem.autopilotEnabled || false));
     actions.setPushNotificationsEnabled(await getItemObject(StorageItem.pushNotificationsEnabled || false));
     actions.setClipboardInvoiceCheckInvoicesEnabled(await getItemObject(StorageItem.clipboardInvoiceCheck || false));
@@ -154,6 +158,10 @@ export const settings: ISettingsModel = {
     }
     await setItemObject(StorageItem.name, payload);
     actions.setName(payload);
+  }),
+  changeLanguage: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.language, payload);
+    actions.setLanguage(payload);
   }),
 
   changeAutopilotEnabled: thunk(async (actions, payload) => {
@@ -279,6 +287,9 @@ export const settings: ISettingsModel = {
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
+  setLanguage: action((state, payload) => { 
+    state.language = payload;
+  }),
   setAutopilotEnabled: action((state, payload) => { state.autopilotEnabled = payload; }),
   setPushNotificationsEnabled: action((state, payload) => { state.pushNotificationsEnabled = payload; }),
   setClipboardInvoiceCheckInvoicesEnabled: action((state, payload) => { state.clipboardInvoiceCheckEnabled = payload; }),
@@ -307,6 +318,7 @@ export const settings: ISettingsModel = {
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
   name: null,
+  language: "en",
   autopilotEnabled: false,
   pushNotificationsEnabled: false,
   clipboardInvoiceCheckEnabled: false,

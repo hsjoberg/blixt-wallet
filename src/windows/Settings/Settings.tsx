@@ -27,7 +27,7 @@ import { Chain } from "../../utils/build";
 import { getNodeInfo } from "../../lndmobile";
 
 import { useTranslation } from "react-i18next";
-import { namespaces } from "../../i18n/i18n.constants";
+import { languages, namespaces } from "../../i18n/i18n.constants";
 
 
 interface ISettingsProps {
@@ -176,6 +176,39 @@ export default function Settings({ navigation }: ISettingsProps) {
       "plain-text",
       name ?? "",
     );
+  };
+  const changeLanguage = (lang:string) => {
+    i18n.changeLanguage(lang)
+    useStoreActions((store) => store.settings.changeLanguage)(lang)
+  };
+  const currentLanguage = useStoreState((store) => store.settings.language);
+  // Language
+  const onLangPress = async () => {
+    Object.keys(languages).map((key)=>{
+      return {label:languages[key].name,id:languages[key].id}
+    })
+    if (PLATFORM === "android") {
+      const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+        positiveText: null,
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
+        type: DialogAndroid.listRadio,
+        selectedId: currentLanguage,
+        items: Object.keys(languages).map((key)=>{
+          return {label:languages[key].name,id:languages[key].id}
+        })
+      });
+      if (selectedItem) {
+        changeLanguage(selectedItem.id);
+      }
+    } else {
+      navigation.navigate("ChangeLanguage", {
+        title: t("general.lang.dialog.title"),
+        data: Object.keys(languages).map((key)=>{
+          return {title:languages[key].name,value:languages[key].id}
+        }),
+        onPick: async (lang) => await changeLanguage(lang),
+      });
+    }
   };
 
   // Autopilot
@@ -900,6 +933,15 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>{t("general.name.title")}</Text>
               <Text note={true}>
                 {name || t("general.name.subtitle")}
+              </Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onLangPress}>
+            <Left><Icon style={style.icon} type="Entypo" name="language" /></Left>
+            <Body>
+              <Text>{t("general.lang.title")}</Text>
+              <Text note={true}>
+                {languages[i18n.language].name}
               </Text>
             </Body>
           </ListItem>

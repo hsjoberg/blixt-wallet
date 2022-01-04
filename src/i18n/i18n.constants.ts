@@ -78,8 +78,20 @@ export const namespaces = {
   overview:"overview",
   syncInfo:"syncInfo"
 };
+interface lang{
+  [key:string]:{
+    id:string,
+    name:string
+  }
+}
 
-export const languages = {
-  es: "es",
-  en: "en",
+export const languages:lang = {
+  es: {
+    id:"es",
+    name:"Español"
+  },
+  en: {
+    id:"en",
+    name:"English"
+  },
 };

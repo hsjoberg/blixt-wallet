@@ -185,7 +185,7 @@ export default function LndMobileHelpCenter({ navigation }) {
     try {
       const result = await NativeModules.LndMobile.init();
       toast(t("msg.result",{ns:namespaces.common})+": " + result, 0, "success", "OK");
-    } catch (e) {
+    } catch (e:any) {
       toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
     }
   };
@@ -208,7 +208,7 @@ export default function LndMobileHelpCenter({ navigation }) {
     try {
       const result = await NativeModules.LndMobileTools.killLnd();
       toast(t("msg.result",{ns:namespaces.common})+": " + JSON.stringify(result), 0, "success", "OK");
-    } catch (e) {
+    } catch (e:any) {
       toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
     }
   };
