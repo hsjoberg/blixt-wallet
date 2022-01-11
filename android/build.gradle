@@ -3,9 +3,8 @@
 buildscript {
     ext {
         minSdkVersion = 21
-        compileSdkVersion = 30
-        targetSdkVersion = 30
-        supportLibVersion = "30.0.3"
+        compileSdkVersion = 31
+        targetSdkVersion = 31
         ndkVersion = "22.1.7171670"
     }
     repositories {

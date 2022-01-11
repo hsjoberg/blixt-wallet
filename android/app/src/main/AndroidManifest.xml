@@ -26,6 +26,7 @@
         android:label="${appName}${chain}${custom}${buildType}"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
+        android:exported="true"
         android:windowSoftInputMode="adjustUnspecified">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
