@@ -415,6 +415,7 @@ This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFee
         }}
         items={formItems}
         noticeText={noticeText}
+        noticeIcon="info"
         buttons={[
          <Button
             testID="create-invoice"

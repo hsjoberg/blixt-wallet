@@ -283,6 +283,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
         }}
         items={formItems}
         noticeText={noticeText}
+        noticeIcon="info"
         buttons={[
          <Button
             testID="create-invoice"

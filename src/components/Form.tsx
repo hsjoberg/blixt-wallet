@@ -17,12 +17,13 @@ export interface IFormProps {
   buttons: ReactNode[];
   items: IFormItem[];
   style?: StyleProp<ViewStyle>;
-  noticeText?: string;
+  noticeText?: string | Element;
+  noticeIcon?: "info" | null;
   mathPadVisible?: boolean;
   mathPadProps?: IMathPadProps;
 }
 
-export default function Form({ buttons, items, style, noticeText, mathPadProps }: IFormProps) {
+export default function Form({ buttons, items, style, noticeText, noticeIcon, mathPadProps }: IFormProps) {
   return (
     <KeyboardAvoidingView enabled={PLATFORM === "ios"} style={[styles.content, style]} behavior={"padding"} keyboardVerticalOffset={77}>
       <View style={styles.itemContainer}>
@@ -43,7 +44,7 @@ export default function Form({ buttons, items, style, noticeText, mathPadProps }
         ))}
         {noticeText &&
           <View style={styles.notice}>
-            <Icon style={styles.noticeIcon} type="AntDesign" name="exclamationcircleo" />
+            {noticeIcon == "info" && <Icon style={styles.noticeIcon} type="AntDesign" name="exclamationcircleo" />}
             <Text style={styles.noticeText}>{noticeText}</Text>
           </View>
         }

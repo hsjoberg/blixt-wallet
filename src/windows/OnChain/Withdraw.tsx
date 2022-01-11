@@ -3,6 +3,7 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { Text, Container, Button, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
+import Long from "long";
 
 import { OnChainStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
@@ -11,6 +12,7 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { parseBech32, toast } from "../../utils";
 import { BitcoinUnits, convertBitcoinUnit } from "../../utils/bitcoin-units";
 import useBalance from "../../hooks/useBalance";
+import useFormatBitcoinValue from "../../hooks/useFormatBitcoinValue";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<OnChainStackParamList, "Withdraw">;
@@ -33,6 +35,8 @@ export default ({ navigation }: IOpenChannelProps) => {
     onChangeFiatInput,
     onChangeBitcoinInput,
   } = useBalance();
+  const onChainBalance = useStoreState((store) => store.onChain.balance);
+  const formatBitcoinValue = useFormatBitcoinValue();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -199,6 +203,8 @@ export default ({ navigation }: IOpenChannelProps) => {
             {sending && <Spinner color={blixtTheme.light} />}
           </Button>
         ]}
+        noticeText={`${formatBitcoinValue(Long.fromValue(onChainBalance))} available`}
+        noticeIcon={Long.fromValue(onChainBalance).gt(0) ? null : "info"}
       />
     </Container>
   );
