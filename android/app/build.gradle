@@ -317,14 +317,10 @@ dependencies {
 
     implementation project(":lndmobile")
 
-    // Tor
-    implementation "com.msopentech.thali:universal:0.0.3"
-    implementation "org.torproject:tor-android-binary:0.4.2.7a"
-    implementation "com.msopentech.thali.toronionproxy.android:android:0.0.3@aar"
-    implementation "org.slf4j:slf4j-android:1.7.30"
-    implementation "net.freehaven.tor.control:jtorctl:0.2" // controlling tor instance via its control port
-
     implementation "com.jakewharton:process-phoenix:2.0.0"
+
+    implementation 'info.guardianproject:tor-android:0.4.6.7'
+    implementation 'info.guardianproject:jtorctl:0.4.5.7'
 }
 
 configurations {

@@ -1,6 +1,6 @@
 package com.blixtwallet;
 
-import com.blixtwallet.tor.BlixtTorPackage;
+import com.blixtwallet.BlixtTorPackage;
 
 import androidx.multidex.MultiDexApplication;
 import android.content.Context;
