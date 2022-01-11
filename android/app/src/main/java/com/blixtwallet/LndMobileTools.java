@@ -1,7 +1,5 @@
 package com.blixtwallet;
 
-import com.blixtwallet.tor.BlixtTorUtils;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;

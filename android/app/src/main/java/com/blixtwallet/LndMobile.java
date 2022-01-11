@@ -1,7 +1,5 @@
 package com.blixtwallet;
 
-import com.blixtwallet.tor.BlixtTorUtils;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -335,18 +333,9 @@ class LndMobile extends ReactContextBaseJavaModule {
 
     Bundle bundle = new Bundle();
 
-    String params = "--lnddir=" + getReactApplicationContext().getFilesDir().getPath();
+    String params = "--nolisten --lnddir=" + getReactApplicationContext().getFilesDir().getPath() + " " + args;
     if (torEnabled) {
-      int listenPort = BlixtTorUtils.getListenPort();
-      int socksPort = BlixtTorUtils.getSocksPort();
-      int controlPort = BlixtTorUtils.getControlPort();
-      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
-      params += " --tor.v3 --listen=localhost:" + listenPort;
-    }
-    else {
-      // If Tor isn't active, make sure we aren't
-      // listening at all
-      params += " --nolisten";
+      params += " --tor.active";
     }
     bundle.putString(
       "args",
