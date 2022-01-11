@@ -1,4 +1,4 @@
-package com.blixtwallet.tor;
+package com.blixtwallet;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
