@@ -57,7 +57,21 @@ export default function Restore({ navigation }: IProps) {
 
       if (backupType === "file") {
         if (backupFile) {
-          const backupBase64 = await readFile(backupFile.uri, PLATFORM === "android" ? "base64" : undefined);
+          // Due to system restrictions, we cannot deal with binary files
+          // on iOS, thus the backup file is saved as a base64-string.
+          //
+          // In other to keep compatiblity between platforms,
+          // the native expected format for each platform is tried,
+          // if an error is retrieved, the reverse is tried.
+          //
+          // For Android want `readFile` to convert the binary to base64.
+          // For iOS we want `readFile` to just read the file as a string (it's already in base64).
+          let backupBase64: string;
+          try {
+            backupBase64 = await readFile(backupFile.uri, PLATFORM === "android" ? "base64" : undefined);
+          } catch (e) {
+            backupBase64 = await readFile(backupFile.uri, PLATFORM === "android" ? undefined : "base64");
+          }
           createWalletOpts.restore!.channelsBackup = backupBase64;
         }
       }
