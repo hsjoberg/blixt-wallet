@@ -1,4 +1,4 @@
-/*
+package com.msopentech.thali.android.installer;/*
 Copyright (c) Microsoft Open Technologies, Inc.
 All Rights Reserved
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
@@ -8,13 +8,13 @@ INCLUDING WITHOUT LIMITATION ANY IMPLIED WARRANTIES OR CONDITIONS OF TITLE, FITN
 MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache 2 License for the specific language governing permissions and limitations under the License.
 */
-package com.msopentech.thali.android.installer;
+//package com.msopentech.thali.android.installer;
 
 
 import android.content.Context;
 import android.util.Log;
-import com.msopentech.thali.toronionproxy.TorInstaller;
-import org.torproject.android.binary.TorResourceInstaller;
+//import com.msopentech.thali.toronionproxy.TorInstaller;
+//import org.torproject.android.binary.TorResourceInstaller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,9 +34,9 @@ import java.util.concurrent.TimeoutException;
  *     }
  * </code>
  */
-public abstract class AndroidTorInstaller extends TorInstaller {
+public class AndroidTorInstaller {
 
-    private final TorResourceInstaller resourceInstaller;
+//    private final TorResourceInstaller resourceInstaller;
 
     private static final String TAG = "AndroidTorInstaller";
 
@@ -51,7 +51,7 @@ public abstract class AndroidTorInstaller extends TorInstaller {
      * The location of tor executable will be in the Android native library directory for the app.
      */
     public AndroidTorInstaller(Context context, File configDir) {
-        this.resourceInstaller = new TorResourceInstaller(context, configDir);
+//        this.resourceInstaller = new TorResourceInstaller(context, configDir);
         this.context = context;
     }
 
@@ -59,31 +59,31 @@ public abstract class AndroidTorInstaller extends TorInstaller {
         if(torrcFile == null) {
             throw new FileNotFoundException("Unable to find torrc file. Have you installed Tor resources?");
         }
-        resourceInstaller.updateTorConfigCustom(torrcFile, content);
+//        resourceInstaller.updateTorConfigCustom(torrcFile, content);
     }
 
-    @Override
+//    @Override
     public void setup() throws IOException {
-        try {
-            File torFile = resourceInstaller.installResources();
-            if(torFile != null) {
-                Log.d("AndroidTorInstaller", "tor executable = " + torFile.getAbsolutePath());
-            } else {
-                Log.w(TAG, "Failed to setup tor. No tor executable installed");
-                throw new IOException("Failed to Failed to setup tor. No tor executable installed");
-            }
+//        try {
+//            File torFile = resourceInstaller.installResources();
+//            if(torFile != null) {
+//                Log.d("AndroidTorInstaller", "tor executable = " + torFile.getAbsolutePath());
+//            } else {
+//                Log.w(TAG, "Failed to setup tor. No tor executable installed");
+//                throw new IOException("Failed to Failed to setup tor. No tor executable installed");
+//            }
 
-            this.torrcFile = resourceInstaller.getTorrcFile();
-            if(torrcFile != null) {
-                Log.d("AndroidTorInstaller", "torrc = " + torrcFile.getAbsolutePath());
-            } else {
-                Log.w(TAG, "Failed to setup tor. No torrc file installed");
-                throw new IOException("Failed to Failed to setup tor. No torrc file installed");
-            }
+//            this.torrcFile = resourceInstaller.getTorrcFile();
+//            if(torrcFile != null) {
+//                Log.d("AndroidTorInstaller", "torrc = " + torrcFile.getAbsolutePath());
+//            } else {
+//                Log.w(TAG, "Failed to setup tor. No torrc file installed");
+//                throw new IOException("Failed to Failed to setup tor. No torrc file installed");
+//            }
 
-        } catch (TimeoutException e) {
-            Log.w(TAG, "Failed to setup tor: " + e.getMessage());
-            throw new IOException(e);
-        }
+//        } catch (TimeoutException e) {
+//            Log.w(TAG, "Failed to setup tor: " + e.getMessage());
+//            throw new IOException(e);
+//        }
     }
 }
