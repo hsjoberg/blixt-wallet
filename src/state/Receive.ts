@@ -96,9 +96,10 @@ export const receive: IReceiveModel = {
     log.d("addInvoice()");
     const addInvoice = injections.lndMobile.index.addInvoice;
     const name = getStoreState().settings.name;
+    const invoiceExpiry = getStoreState().settings.invoiceExpiry;
     const description = setupDescription(payload.description, name);
 
-    const result = await addInvoice(payload.sat, description, payload.expiry);
+    const result = await addInvoice(payload.sat, description, payload.expiry ?? invoiceExpiry);
     log.d("addInvoice() result", [result]);
     getStoreActions().clipboardManager.addToInvoiceCache(result.paymentRequest);
 

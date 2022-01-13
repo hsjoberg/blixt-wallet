@@ -19,7 +19,7 @@ import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
 import { OnchainExplorer } from "../../state/Settings";
 import TorSvg from "./TorSvg";
-import { DEFAULT_DUNDER_SERVER, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../utils/constants";
+import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../utils/constants";
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
@@ -881,6 +881,43 @@ Do you wish to proceed?`;
     await changeLndNoGraphCache(!lndNoGraphCache);
   };
 
+  // Invoice expiry
+  const invoiceExpiry = useStoreState((store) => store.settings.invoiceExpiry);
+  const changeInvoiceExpiry = useStoreActions((store) => store.settings.changeInvoiceExpiry);
+  const onPressSetInvoiceExpiry = async () => {
+    const expiryString = await Alert.promisePromptCallback(
+      "Set invoice expiry in seconds",
+      "",
+      "plain-text",
+      invoiceExpiry.toString(),
+      "number-pad"
+    );
+
+    try {
+      const expiryNumber = Number.parseInt(expiryString, 10);
+      await changeInvoiceExpiry(expiryNumber);
+    } catch (e) {
+      Alert.alert("", "Could not update expiry.\n"+ e.message);
+    }
+  }
+
+  const onLongPressSetInvoiceExpiry = async () => {
+    Alert.alert(
+      "",
+      `Would you like to restore the invoice expiry to the default value (${DEFAULT_INVOICE_EXPIRY} seconds)?`,
+      [{
+        style: "cancel",
+        text: "No",
+      }, {
+        style: "default",
+        text: "Yes",
+        onPress: async () => {
+          await changeInvoiceExpiry(DEFAULT_INVOICE_EXPIRY);
+        },
+      }]
+    );
+  };
+
   // Setup demo environment
   const setupDemo = useStoreActions((store) => store.setupDemo);
 
@@ -1245,9 +1282,12 @@ Do you wish to proceed?`;
               </Body>
             </ListItem>
           }
-          <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendExperiment")}>
-            <Left><Icon style={style.icon} type="Feather" name="send" /></Left>
-            <Body><Text>Keysend Experiment</Text></Body>
+          <ListItem style={style.listItem} icon={true} onPress={onPressSetInvoiceExpiry} onLongPress={onLongPressSetInvoiceExpiry}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="timer-outline" /></Left>
+            <Body>
+              <Text>Invoice expiry (seconds)</Text>
+              <Text note={true}>{invoiceExpiry} seconds</Text>
+            </Body>
           </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true}>

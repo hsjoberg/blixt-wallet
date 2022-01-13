@@ -17,6 +17,7 @@ export const PLATFORM = Platform.OS;
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
 export const DEFAULT_NEUTRINO_NODE = Chain === "mainnet" ? "node.blixtwallet.com" : "testnet.blixtwallet.com";
+export const DEFAULT_INVOICE_EXPIRY = 3600;
 
 export const ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID = "common";
 export const ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_NAME = "Common notifications";

@@ -5,6 +5,7 @@ import { IFiatRates } from "./Fiat";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
+import { DEFAULT_INVOICE_EXPIRY } from "../utils/constants";
 
 import logger from "./../utils/log";
 const log = logger("Settings");
@@ -46,6 +47,7 @@ export interface ISettingsModel {
   changeRequireGraphSync: Thunk<ISettingsModel, boolean>;
   changeDunderEnabled: Thunk<ISettingsModel, boolean>;
   changeLndNoGraphCache: Thunk<ISettingsModel, boolean>;
+  changeInvoiceExpiry: Thunk<ISettingsModel, number>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -74,6 +76,7 @@ export interface ISettingsModel {
   setRequireGraphSync: Action<ISettingsModel, boolean>;
   setDunderEnabled: Action<ISettingsModel, boolean>;
   setLndNoGraphCache: Action<ISettingsModel, boolean>;
+  setInvoiceExpiry: Action<ISettingsModel, number>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -102,6 +105,7 @@ export interface ISettingsModel {
   requireGraphSync: boolean;
   dunderEnabled: boolean;
   lndNoGraphCache: boolean;
+  invoiceExpiry: number;
 }
 
 export const settings: ISettingsModel = {
@@ -134,6 +138,7 @@ export const settings: ISettingsModel = {
     actions.setRequireGraphSync(await getItemObject(StorageItem.requireGraphSync) ?? false);
     actions.setDunderEnabled(await getItemObject(StorageItem.dunderEnabled) ?? false);
     actions.setLndNoGraphCache(await getItemObject(StorageItem.lndNoGraphCache) ?? false);
+    actions.setInvoiceExpiry(await getItemObject(StorageItem.invoiceExpiry) ?? DEFAULT_INVOICE_EXPIRY);
 
     log.d("Done");
   }),
@@ -276,6 +281,11 @@ export const settings: ISettingsModel = {
     actions.setLndNoGraphCache(payload);
   }),
 
+  changeInvoiceExpiry: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.invoiceExpiry, payload);
+    actions.setInvoiceExpiry(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -303,6 +313,7 @@ export const settings: ISettingsModel = {
   setRequireGraphSync: action((state, payload) => { state.requireGraphSync = payload; }),
   setDunderEnabled: action((state, payload) => { state.dunderEnabled = payload; }),
   setLndNoGraphCache: action((state, payload) => { state.lndNoGraphCache = payload; }),
+  setInvoiceExpiry: action((state, payload) => { state.invoiceExpiry = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -331,4 +342,5 @@ export const settings: ISettingsModel = {
   requireGraphSync: false,
   dunderEnabled: false,
   lndNoGraphCache: false,
+  invoiceExpiry: DEFAULT_INVOICE_EXPIRY,
 };

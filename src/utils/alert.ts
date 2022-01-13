@@ -81,6 +81,7 @@ class WebAlert implements AlertStatic {
           defaultValue,
           positiveText,
           negativeText,
+          keyboardType,
         },
       ).then(({ action, text }: { action: "actionPosisive" | "actionNegative" | "actionDismiss", text: string }) => {
         if (action === "actionNegative" || action === "actionDismiss") {
