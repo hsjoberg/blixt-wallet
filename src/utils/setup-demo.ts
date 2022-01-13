@@ -129,6 +129,12 @@ export default async function SetupBlixtDemo(
     type: "RECEIVE",
     website: "lnmarkets.com",
     lightningService: "lnmarkets",
+  }, {
+    value: 2000,
+    description: "Payment for air ticket change: 2000 sats",
+    type: "PAY",
+    website: "future.travel",
+    lightningService: "futuretravel",
   }]);
 
   if (createDbTransactions) {
