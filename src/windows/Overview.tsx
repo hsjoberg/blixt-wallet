@@ -52,7 +52,7 @@ export interface IOverviewProps {
   navigation: BottomTabNavigationProp<RootStackParamList, "Overview">;
 }
 function Overview({ navigation }: IOverviewProps) {
-  const { t, i18n } = useTranslation(namespaces.overview)
+  const { t, i18n } = useTranslation(namespaces.overview);
 
   const layoutMode = useLayoutMode();
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
@@ -317,6 +317,7 @@ function Overview({ navigation }: IOverviewProps) {
 };
 
 const RecoverInfo = () => {
+  const { t, i18n } = useTranslation(namespaces.overview);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const recoverInfo = useStoreState((store) => store.lightning.recoverInfo);
 
@@ -341,6 +342,7 @@ interface ISendOnChain {
   bitcoinAddress?: string;
 }
 const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
+  const { t, i18n } = useTranslation(namespaces.overview);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -383,6 +385,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
 };
 
 const DoBackup = () => {
+  const { t, i18n } = useTranslation(namespaces.overview);
   const navigation = useNavigation();
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 

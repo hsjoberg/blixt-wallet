@@ -34,6 +34,7 @@ interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
 }
 export default function Settings({ navigation }: ISettingsProps) {
+  const currentLanguage = useStoreState((store) => store.settings.language);
   const { t, i18n } = useTranslation(namespaces.settings.settings)
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -177,16 +178,11 @@ export default function Settings({ navigation }: ISettingsProps) {
       name ?? "",
     );
   };
-  const changeLanguage = (lang:string) => {
-    i18n.changeLanguage(lang)
-    useStoreActions((store) => store.settings.changeLanguage)(lang)
-  };
-  const currentLanguage = useStoreState((store) => store.settings.language);
+
   // Language
+  const changeLanguage = useStoreActions((store) => store.settings.changeLanguage);
+
   const onLangPress = async () => {
-    Object.keys(languages).map((key)=>{
-      return {label:languages[key].name,id:languages[key].id}
-    })
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
@@ -204,9 +200,12 @@ export default function Settings({ navigation }: ISettingsProps) {
       navigation.navigate("ChangeLanguage", {
         title: t("general.lang.dialog.title"),
         data: Object.keys(languages).map((key)=>{
-          return {title:languages[key].name,value:languages[key].id}
+          return { title: languages[key].name, value: languages[key].id }
         }),
-        onPick: async (lang) => await changeLanguage(lang),
+        onPick: async (lang) => {
+          i18n.changeLanguage(lang);
+          await changeLanguage(lang);
+        },
       });
     }
   };
@@ -1261,7 +1260,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>
             <Body>
               <Text>{t("experimental.MPP.title")}</Text>
-              <Text note={true}>{t("experimental.MPP.subitle")}</Text>
+              <Text note={true}>{t("experimental.MPP.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
           </ListItem>
