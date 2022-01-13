@@ -82,11 +82,11 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
         }, {
           key: "AMOUNT",
           title: `Amount ${bitcoinUnit.nice}`,
-          component: (<Input placeholder={`${formatBitcoinValue(onChainBalance)} available`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeBitcoinInput} value={bitcoinValue} />)
+          component: (<Input placeholder={`Amount ${bitcoinUnit.nice}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeBitcoinInput} value={bitcoinValue} />)
         }, {
           key: "AMOUNT_FIAT",
           title: `Amount ${fiatUnit}`,
-          component: (<Input keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} />)
+          component: (<Input placeholder={`Amount ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} />)
         }, {
           key: "SAT",
           title: `Fee-rate`,
