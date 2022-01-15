@@ -30,7 +30,7 @@ export interface ILndMobileTools {
   killLnd(): Promise<boolean>;
   log(level: "v" | "d" | "i" | "w" | "e", tag: string, msg: string): void;
   saveLogs(): Promise<string>;
-  copyLndLog(): Promise<string>;
+  copyLndLog(): Promise<boolean>;
   tailLog(numberOfLines: number): Promise<string>;
   observeLndLogFile(): Promise<boolean>;
   saveChannelsBackup(base64Backups: string): Promise<string>;

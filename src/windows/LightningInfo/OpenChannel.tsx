@@ -3,14 +3,16 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { Text, Container, Button, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
+import Long from "long";
 
 import { LightningInfoStackParamList } from "./index";
-import { useStoreActions } from "../../state/store";
+import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";
+import useFormatBitcoinValue from "../../hooks/useFormatBitcoinValue";
 
 import { useTranslation, TFunction } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -29,6 +31,8 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
   const [peer, setPeer] = useState(peerUri ?? "");
   const [opening, setOpening] = useState(false);
   const [feeRate, setFeeRate] = useState(0);
+  const onChainBalance = useStoreState((store) => store.onChain.balance);
+  const formatBitcoinValue = useFormatBitcoinValue();
   const slider = useRef<Slider>(null);
   const {
     dollarValue,
@@ -135,6 +139,8 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
             {opening && <Spinner color={blixtTheme.light} />}
           </Button>
         ]}
+        noticeText={`${formatBitcoinValue(onChainBalance)} available`}
+        noticeIcon={Long.fromValue(onChainBalance).gt(0) ? null : "info"}
       />
     </Container>
   );

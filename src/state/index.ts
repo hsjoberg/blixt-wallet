@@ -290,9 +290,11 @@ export const model: IStoreModel = {
         } else if (state.state === lnrpc.WalletState.LOCKED) {
           log.d("Got lnrpc.WalletState.LOCKED");
           log.d("Wallet locked, unlocking wallet");
+          debugShowStartupInfo && toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
           await dispatch.unlockWallet();
         } else if (state.state === lnrpc.WalletState.UNLOCKED) {
           log.d("Got lnrpc.WalletState.UNLOCKED");
+          debugShowStartupInfo && toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
         } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
           debugShowStartupInfo && toast("RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
           await dispatch.lightning.initialize({ start });

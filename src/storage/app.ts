@@ -6,7 +6,7 @@ import { MapStyle } from "../utils/google-maps";
 import { appMigration } from "../migration/app-migration";
 import { Chain, VersionCode } from "../utils/build";
 import { LndChainBackend } from "../state/Lightning";
-import { DEFAULT_DUNDER_SERVER, DEFAULT_NEUTRINO_NODE } from "../utils/constants";
+import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_NEUTRINO_NODE } from "../utils/constants";
 
 const APP_VERSION = appMigration.length - 1;
 
@@ -58,6 +58,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   requireGraphSync = "requireGraphSync",
   dunderEnabled = "dunderEnabled",
   lndNoGraphCache = "lndNoGraphCache",
+  invoiceExpiry = "invoiceExpiry", // in seconds
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -131,6 +132,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.requireGraphSync),
     removeItem(StorageItem.dunderEnabled),
     removeItem(StorageItem.lndNoGraphCache),
+    removeItem(StorageItem.invoiceExpiry),
   ]);
 };
 
@@ -204,5 +206,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.requireGraphSync, false),
     setItemObject<boolean>(StorageItem.dunderEnabled, false),
     setItemObject<boolean>(StorageItem.lndNoGraphCache, false),
+    setItemObject<number>(StorageItem.lndNoGraphCache, DEFAULT_INVOICE_EXPIRY),
   ]);
 };

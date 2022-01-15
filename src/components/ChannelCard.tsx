@@ -162,7 +162,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               }
               {preferFiat &&
                 <Text>
-                  {valueFiat(localBalance, currentRate).toFixed(2)}{" "}{fiatUnit}
+                  {valueFiat(channel.capacity ?? Long.fromValue(0), currentRate).toFixed(2)}{" "}{fiatUnit}
                 </Text>
               }
               <Svg width="100" height="22" style={{ marginBottom: 3, marginTop: -1 }}>
