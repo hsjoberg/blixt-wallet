@@ -1,0 +1,15 @@
+{
+    "funds":{
+        "title":"On-chain funds"
+    },
+    "address":{
+        "title":"Send Bitcoin on-chain to this address",
+        "alert":"Copied to clipboard."
+    },
+    "newAddress":{
+        "title":"Generate new address"
+    },
+    "withdraw":{
+        "title":"Withdraw coins"
+    }
+}

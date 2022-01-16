@@ -1,0 +1,25 @@
+{
+    "layout":{
+        "title":"Withdraw coins"
+    },
+    "form":{
+        "address":{
+            "title":"Address",
+            "placeholder":"Bitcoin address"
+        },
+        "amount":{
+            "title":"Amount",
+            "placeholder":"Amount",
+            "withdrawAll":"Withdraw all funds",
+            "all":"All"
+        },
+        "feeRate":{
+            "title":"Fee-rate",
+            "auto":"auto"
+        },
+        "withdraw":{
+            "title":"Withdraw",
+            "alert":"Withdraw succeeded"
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "title":"Welcome to Blixt Wallet!",
+    "msg":"This is your backup seed.",
+    "msg1":"Write it down on a piece of paper and store it in a safe place.",
+    "msg2":"Should you lose access to your wallet",
+    "msg3":"you may be able to recover your funds by using your backup seed.",
+    "msg4":"The seed standard being used is aezeed.",
+    "button":"I have written it down"
+}
