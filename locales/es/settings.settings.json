@@ -58,35 +58,35 @@
     },
     "backup":{
       "export":{
-        "title":"Export channel backup",
-        "alert":"File written:"
+        "title":"Exportar copia de seguridad de canales",
+        "alert":"Archivo escrito:"
       },
       "verify":{
-        "title":"Verify channel backup"
+        "title":"Verificar copia de seguridad de canales"
       },
       "googleCloud":{
-        "title":"Google Drive channel backup",
-        "subtitle":"Automatically backup channels to Google Drive",
-        "alert":"Google Drive backup enabled"
+        "title":"Copia de seguridad de canales en Google Drive",
+        "subtitle":"Copia de seguridad automatica de canales en Google Drive",
+        "alert":"Copia de seguridad en Google Drive activada"
       },
       "googleCloudForce":{
-        "title":"Manually trigger Google Drive Backup",
-        "alert":"Backed up channels to Google Drive"
+        "title":"Realiza una copia de seguridad manual en Google Drive",
+        "alert":"Canales respaldados en Google Drive"
       },
       "iCloud":{
-        "title":"iCloud channel backup",
-        "subtitle":"Automatically backup channels to iCloud",
-        "alert":"iCloud backup"
+        "title":"Copia de seguridad de canales en iCloud",
+        "subtitle":"Copia de seguridad automatica de canales en iCloud",
+        "alert":"Copia de seguridad en iCloud activada"
       },
       "iCloudForce":{
-        "title":"Manually trigger iCloud Backup",
-        "alert":"Backed up channels to iCloud"
+        "title":"Realiza una copia de seguridad manual en iCloud",
+        "alert":"Canales respaldados en iCloud"
       },
-      "error":"Error backup up"
+      "error":"Error de respaldo"
     }
   },
   "security":{
-    "title":"Security",
+    "title":"Seguridad",
     "pingcode":{
       "title":"Login with pincode"
     },
@@ -106,7 +106,7 @@
     }
   },
   "display":{
-    "title":"Display",
+    "title":"Apariencia",
     "fiatUnit":{
       "title": "Change fiat unit"
     },
@@ -121,19 +121,19 @@
     }
   },
   "bitcoinNetwork":{
-    "title":"Bitcoin Network",
+    "title":"Red Bitcoin",
     "node":{
-      "title": "Bitcoin Node",
+      "title": "Nodo Bitcoin",
       "subtitle":"Set Bitcoin node (BIP157) to connect to",
       "setDialog":{
         "title":"Set Node"
       },
       "restoreDialog":{
-        "title":"Restore node",
+        "title":"Restaurar nodo",
         "msg":"Would you like to restore to the default node"
       },
       "restartDialog":{
-        "title":"Restart required",
+        "title":"Reinicio requerido",
         "msg":"Blixt Wallet has to be restarted before the new configuration is applied.",
         "msg1":"Would you like to do that now?"
       }
@@ -151,19 +151,19 @@
   "LN":{
     "title":"Lightning Network",
     "node":{
-      "title": "Show node data",
+      "title": "Mostrar datos del nodo",
       "subtitle":""
     },
     "peers":{
-      "title": "Show Lightning peers",
+      "title": "mostrar compañeros Lightning",
       "subtitle":""
     },
     "autopilot":{
-      "title": "Automatically open channels",
+      "title": "Automaticamente abrir canales",
       "subtitle":""
     },
     "inbound":{
-      "title": "Inbound channel services",
+      "title": "Servicio de canales entrantes",
       "subtitle":"Use an inbound channel service for receiving payments",
       "dialog":{
           "title":"Incoming channel provider",
