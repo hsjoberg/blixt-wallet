@@ -1,25 +1,25 @@
 {
     "restore":{
-        "title":"Restore wallet",
-        "msg":"To restore your wallet, write each word from your seed separated by a space.",
-        "msg1":"If you wish to restore your Lightning Network channels, you need to provide a file backup.",
-        "loading":"Restore Wallet",
+        "title":"Restaurar cartera",
+        "msg":"Para restaurar to cartera, escribe cada palabra de tu semilla separada por un espacio.",
+        "msg1":"Si quieres restaurar tus canales de Lightning Network, necesitas dar una copia de seguridad de los archivos.",
+        "loading":"Restaurar cartera",
         "channel":{
-            "title":"Channel backup",
-            "file":"Choose channel backup file on disk",
+            "title":"Copia de seguridad de los canales",
+            "file":"Elige una copia de seguridad del archivo del canal en el disco duro",
             "google":{
-                "title":"Restore via Google Drive",
-                "alert":"Restoring via Google Drive failed"
+                "title":"Restaurar via Google Drive",
+                "alert":"Restaurar via Google Drive falló"
             },
             "iCloud":{
-                "title":"Restore via iCloud",
-                "alert":"Restoring via iClouod failed"
+                "title":"Restaurar via iCloud",
+                "alert":"Restaurar via iClouod falló"
             }
         },
-        "seed":"Seed must be exactly 24 words"
+        "seed":"La semila tiene que ser de exactamente 24 palabras"
     },
     "backup":{
-        "google":"Backup via Google Drive",
-        "iCloud":"Backup via iCloud"
+        "google":"Copia de seguridad via Google Drive",
+        "iCloud":"Copia de seguridad via iCloud"
     }
 }

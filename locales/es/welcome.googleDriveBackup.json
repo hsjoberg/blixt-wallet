@@ -1,12 +1,12 @@
 {
     "enable":{
-        "title":"Enable Google Drive backup",
-        "msg":"Google Drive backup enabled"
+        "title":"Habilitar copia de seguridad en Google Drive",
+        "msg":"Copia de seguridad en Google Drive habilitada"
     },
     "backup":{
-        "title":"Cloud Backup",
-        "msg":"In order for your off-chain funds to stay secure in the case of a device loss, we recommend you to keep channels backed up to Google Drive.",
-        "msg1":"This will keep an encrypted backup of your channels that can only be used together with the wallet seed.",
-        "msg2":"When you are ready, press continue."
+        "title":"Copia de seguridad en la nube",
+        "msg":"Para mantener seguros tus fondos off-chain en caso de que pierdas el dispositivo te recomendamos hacer una copia de seguridad en Google Drive.",
+        "msg1":"Esto mantendra una copia de seguridad encriptada de los canales que solo se pueden usar juntos en la semilla de la cartera.",
+        "msg2":"Cuando estes listo, presiona continuar."
     }
 }

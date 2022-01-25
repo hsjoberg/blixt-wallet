@@ -1,40 +1,40 @@
 {
     "layout":{
-        "title":"Contacts & Services",
+        "title":"Servicios y contactos",
         "addLightningAddress":{
-            "title":"tapping here",
-            "alert":"already exists in your contact list"
+            "title":"Toque aquí",
+            "alert":"Ya existe en tu lista de contactos"
         },
-        "msg":"There's nothing here yet...",
-        "msg1":"Why not add a Lightning Address contact by"
+        "msg":"Todavía no hay nada aquí...",
+        "msg1":"Porque no añadir una dirección de contacto Lightning por"
     },
     "contact":{
         "got":"got",
         "syncBalance":{
-            "title":"Remote balance",
-            "error":"Invalid operation, contact doesn't have an LNURL-withdraw code"
+            "title":"Balance remoto",
+            "error":"Operación invalida, el contacto no tiene un LNURL -código para retiro"
         },
         "list":{
-            "pay":"Payments to",
-            "account":"Account on"
+            "pay":"Pagos a",
+            "account":"Cuenta en"
         },
         "send":{
-            "title":"Send",
-            "error1":"Could not pay to this LNURL-pay code",
-            "error2":"The response was not an LNURL-pay response",
-            "error3":"Invalid operation, contact neither has LUD-16 identifier or LNURL-pay code"
+            "title":"Enviar",
+            "error1":"No puedes pagar a este LNURL-código de pago",
+            "error2":"La respuesta no fué LNURL-respuesta de pago",
+            "error3":"Operación invalida, contacto no tiene identificación LUD-16 o LNURL-código de pago"
         },
         "withdraw":{
-            "title":"Withdraw",
-            "error1":"Could not pay to this LNURL-pay code",
-            "error2":"The response was not an LNURL-pay response",
-            "error3":"Invalid operation, contact doesn't have an LNURL-withdraw code"
+            "title":"Retiro",
+            "error1":"No se pudo pagar a este LNURL-código de pago",
+            "error2":"La respuesta no fué un LNURL-respuesta de pago",
+            "error3":"Operación invalida, el contacto no tiene un LNURL-código de retiro"
         },
         "deleteContact":{
             "title":"",
             "dialog":{
-                "title":"Contact deletion",
-                "msg":"Are you sure you want to delete contact"
+                "title":"Eliminación de contacto",
+                "msg":"Estas seguro de que quieres eliminar este contacto"
             }
         }
     }

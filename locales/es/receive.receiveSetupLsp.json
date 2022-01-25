@@ -1,41 +1,41 @@
 {
     "layout":{
-        "title":"Receive"
+        "title":"Recibir"
     },
     "createInvoice":{
-        "title":"Create invoice",
-        "error":"Invoice amount cannot be higher than",
-        "alert":"Before you can receive, you need to open a Lightning channel.",
+        "title":"Crear factura",
+        "error":"La cantidad facturada no puede ser mayor que",
+        "alert":"Antes de que puedas recibir, necesitas abrir un canal Lightning.",
         "lsp":{
-            "msg":"A payment channel by Dunder LSP will be opened when this invoice is paid.",
-            "msg1":"What's this?"
+            "msg":"Un canal de pago hecho por Dunder LSP será abierto cuando la factura es pagada.",
+            "msg1":"Qué es esto?"
         }
     },
     "createBlixtLspInvoice":{
-        "title":"Channel opening",
-        "msg":"In order to accept a payment for this invoice, a channel on the Lightning Network has to be opened.",
-        "msg1":"This requires a one-time fee of approximately",
-        "alert":"Failed to connect to Dunder, please try again later.",
-        "proceed":"Proceed"
+        "title":"Abrir canal",
+        "msg":"Para aceptar el pago de esta factura, un canal en la Linghtning Network tiene que ser abierto.",
+        "msg1":"Esto requiere una comisión única de aproximadamente",
+        "alert":"Fallo al conectar con Dunder, por favor intentar de nuevo más tarde.",
+        "proceed":"Proceder"
     },
     "form":{
         "amountFiat":{
-            "title":"Amount",
-            "change":"Change fiat unit",
-            "placeholder":"At least"
+            "title":"Cantidad",
+            "change":"Cambiar unidad fiat",
+            "placeholder":"Al menos"
         },
         "amountBitcoin":{
-            "title":"Amount",
-            "change":"Change bitcoin unit",
-            "placeholder":"At least"
+            "title":"Cantidad",
+            "change":"Cambiar unidad bitcoin",
+            "placeholder":"Al menos"
         },
         "payer":{
-            "title":"Payer",
-            "placeholder":"For bookkeeping (optional)"
+            "title":"Pagador",
+            "placeholder":"Para contabilidad (opcional)"
         },
         "description":{
-            "title":"Message",
-            "placeholder":"Message to payer (optional)"
+            "title":"Mensaje",
+            "placeholder":"Mensaje para Pagador (opcional)"
         }
     }
 }

@@ -1,32 +1,32 @@
 {
     "name":{
-        "title":"Name",
-        "msg":"Will be used in transactions",
+        "title":"Nombre",
+        "msg":"Será usado en transacciones",
         "alert":{
-            "title":"Name",
-            "msg1":"Choose a name that will be used in transactions",
-            "msg2":"Your name will be seen in invoices to those who pay you as well as",
-            "msg3":"people you pay to.",
+            "title":"Nombre",
+            "msg1":"Elige un nombre que será usado en transacciones",
+            "msg2":"Tu nombre será visto en facturas de los que te pagaron como",
+            "msg3":"las personas a las que pagaste.",
             "msg4":"Set name"
         }
     },
     "pincode":{
-        "title":"Login with pincode",
-        "msg":"Login with"
+        "title":"Iniciar sesión con código pin",
+        "msg":"Iniciar sesión con"
     },
     "fiatUnit":{
-        "title":"Fiat currency",
+        "title":"Moneda Fiat",
         "dialog":{
-            "title":"Change fiat unit"
+            "title":"Cambiar unidad Fiat"
         }
     },
     "autopilot":{
-        "title":"Auto-open channels",
-        "msg":"Open channels when on-chain funds are available"
+        "title":"Canales de auto apertura",
+        "msg":"Abrir canales cuando los fondos en cadena esten disponibles"
     },
     "done":{
-        "title":"Almost done!",
-        "msg1":"Here are some wallet settings you can set up to your liking",
-        "msg2":"When you are ready, press continue"
+        "title":"¡Casi terminado!",
+        "msg1":"Aquí hay algunos ajustes de la cartera que puedes cambiar a tu gusto",
+        "msg2":"Cuando estes listo, presiona continuar"
     }
 }

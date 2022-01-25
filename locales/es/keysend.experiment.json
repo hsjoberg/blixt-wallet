@@ -1,35 +1,35 @@
 {
     "title":"Keysend",
     "qr":{
-        "alert":"Copied to clipboard"
+        "alert":"Copiado al portapapeles"
     },
     "dialog":{
-        "msg1":"Welcome to the keysend playground",
-        "msg2":"Keysend lets you pay another Blixt Wallet (or any Lightning node that supports keysend) without requiring an invoice.",
-        "msg3":"Click on the camera to scan another wallet's QR code or provide a public key and route hints below."
+        "msg1":"Bienvenido al área keysend",
+        "msg2":"Keysend te permite pagar otra Blixt Wallet (o cualquier nodo Lightning que soporta keysend) sin requerir factura.",
+        "msg3":"Click en la camara para escanear otro código QR de cartera o da una llave publica y clave de ruta debajo."
     },
     "send":{
-        "title":"Send",
-        "msg":"Keysend payment",
-        "error1":"Check amount",
-        "error2":"Missing pubkey",
-        "alert":"Payment successful"
+        "title":"enviar",
+        "msg":"Pago Keysend",
+        "error1":"comprobar cantidad",
+        "error2":"pubkey extraviado",
+        "alert":"Pago realizado con exito"
     },
     "form":{
         "amount":{
-            "title":"Amount sat"
+            "title":"cantidad de sat"
         },
         "pubkey":{
-            "title":"Public key",
+            "title":"llave publica",
             "placeholder":"Pubkey"
         },
         "route":{
-            "title":"Route hints",
-            "placeholder":"Route hints"
+            "title":"clave de ruta",
+            "placeholder":"claves de ruta"
         },
         "message":{
-            "title":"Message",
-            "placeholder":"Enter a chat message here"
+            "title":"mensaje",
+            "placeholder":"Introduce un mensaje de chat aquí"
         }
     }
 }

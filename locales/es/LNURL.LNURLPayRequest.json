@@ -1,29 +1,29 @@
 {
     "viewMetadata":{
-        "title":"View metadata",
+        "title":"Ver metadatos",
         "dialog":{
-            "title":"Technical metadata"
+            "title":"Metadatos técnicos"
         }
     },
     "lightningAddress":{
         "alert1":{
-            "msg":"is in your contact list!"
+            "msg":"¡Está en tu lista de contactos!"
         },
         "alert2":{
-            "title":"Add to Contact List",
-            "msg":"Would you like to add",
-            "msg1":"to your contact list?"
+            "title":"Añadir a tu lista de contactos",
+            "msg":"Te gustaría añadir",
+            "msg1":"a tu lista de contactos?"
         }
     },
     "payContact":{
         "alert1":{
-            "msg":"is in your contact list!"
+            "msg":"!está en tu lista de contactos!"
         },
         "alert2":{
-            "title":"Add to Contact List",
-            "msg":"Would you like to add this payment code to",
-            "msg1":"to your contact list?"
+            "title":"Añadir a tu lista de contactos",
+            "msg":"Te gustaría añadir este código de pago a",
+            "msg1":"tu lista de contactos?"
         }
     },
-    "error":"Unable to pay"
+    "error":"Pago inhabilitado"
 }

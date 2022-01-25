@@ -1,12 +1,12 @@
 {
     "commentAllowed":{
-        "msg1":"Comment to",
-        "msg2":"max",
-        "msg3":"letters",
-        "msg4":"Send my name together with this comment"
+        "msg1":"Comentar a",
+        "msg2":"máximo",
+        "msg3":"cartas",
+        "msg4":"Enviar mi nombre junto con este comentario"
     },
     "payerDataName":{
-        "msg1":"Send my name together with this payment",
-        "msg2":"Your name has to be sent together with this payment"
+        "msg1":"Enviar mi nombre junto con este pago",
+        "msg2":"tu nombre ha sido enviado junto con este pago"
     }
 }

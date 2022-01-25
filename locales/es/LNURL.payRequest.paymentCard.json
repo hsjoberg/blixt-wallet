@@ -1,24 +1,24 @@
 {
     "payRequest":{
-        "error1":"Payment is missing a description."
+        "error1":"Al pago le falta una descripción."
     },
     "pay":{
-        "title":"Pay",
-        "alert":"You must provide a comment if you choose to include your name to this payment"
+        "title":"Pagar",
+        "alert":"Tu deberas proveer un comentario si eliges incluir tu nombre a este pago"
     },
     "cancel":{
-        "title":"Cancel"
+        "title":"Cancelar"
     },
     "form":{
-        "title":"asks you to pay.",
+        "title":"preguntarte para pagar.",
         "description":{
-            "title":"Description"
+            "title":"Descripción"
         },
         "amount":{
-            "title":"Amount",
-            "msg":"to",
-            "placeholder":"Input amount"
+            "title":"Cantidad",
+            "msg":"a",
+            "placeholder":"Introduce cantidad"
         },
-        "alert":"Unable to pay"
+        "alert":"Imposible pagar"
     }
 }

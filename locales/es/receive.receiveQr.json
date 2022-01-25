@@ -1,7 +1,7 @@
 {
-    "title":"Receive",
+    "title":"Recibir",
     "qr":{
-        "title":"Scan this QR code",
-        "msg":"Expires in"
+        "title":"Escanear este código QR",
+        "msg":"Expira en"
     }
 }

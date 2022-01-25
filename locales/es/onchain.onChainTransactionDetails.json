@@ -1,17 +1,17 @@
 {
-    "title":"Transaction",
-    "blockExplorer":"See in Block Explorer",
+    "title":"Transacción",
+    "blockExplorer":"Ver en el exploradorde bloques",
     "txHash":"Id",
-    "timeStamp":"Date",
-    "amount":"Amount",
-    "totalFees":"Fees",
-    "label":"Label",
-    "destAddresses":"Destination",
-    "numConfirmations":"Confirmations",
-    "blockHeight":"Block height",
-    "blockHash":"Block hash",
+    "timeStamp":"Fecha",
+    "amount":"Cantidad",
+    "totalFees":"Comisiones",
+    "label":"Etiqueta",
+    "destAddresses":"Destinación",
+    "numConfirmations":"Confirmaciones",
+    "blockHeight":"Altura del bloque",
+    "blockHash":"hash del bloque",
     "rawTxHex":{
         "title":"Raw tx hex",
-        "msg":"Press to copy"
+        "msg":"Presiona para copiar"
     }
 }

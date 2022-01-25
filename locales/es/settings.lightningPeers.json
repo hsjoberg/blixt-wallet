@@ -1,22 +1,22 @@
 {
     "layout":{
-        "title":"Lightning Peers"
+        "title":"Compañero de Lightning"
     },
-    "alias":"Node alias",
-    "pubKey":"Node public key",
-    "address":"Node address",
+    "alias":"Alias del nodo",
+    "pubKey":"Llave publica del nodo",
+    "address":"Dirección del nodo",
     "data":{
-        "title":"Data",
-        "bytesSent":"bytes sent",
-        "bytesRecv":"bytes received"
+        "title":"Datos",
+        "bytesSent":"Bytes enviados",
+        "bytesRecv":"Bytes recibidos"
     },
     "transfer":{
-        "title":"Transfer",
-        "satSent":"sat sent",
-        "satRecv":"sat received"
+        "title":"Transferir",
+        "satSent":"envio de sat",
+        "satRecv":"recibir sat"
     },
-    "inbound":"Inbound",
-    "syncType":"Sync type",
-    "errors":"Errors",
-    "disconnect":"Disconnect peer"
+    "inbound":"Entrante",
+    "syncType":"Tipo de sincronización",
+    "errors":"Errores",
+    "disconnect":"Desconectar compañero"
 }

@@ -1,22 +1,22 @@
 {
     "layout":{
-        "title":"Pay invoice"
+        "title":"Pagar factura"
     },
     "form":{
         "invoice":{
-            "title":"Invoice"
+            "title":"Factura"
         },
         "amount":{
-            "title":"Amount"
+            "title":"Cantidad"
         },
         "recipient":{
-            "title":"Recipient"
+            "title":"Recipiente"
         },
         "nodeAlias":{
-            "title":"Node Alias"
+            "title":"Alias del nodo"
         },
         "description":{
-            "title":"Message"
+            "title":"Mensaje"
         }
     }
 }

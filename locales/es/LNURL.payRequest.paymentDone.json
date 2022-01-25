@@ -1,24 +1,24 @@
 {
     "message":{
-        "title":"Message from"
+        "title":"Mensaje de"
     },
     "url":{
-        "description":"Description",
-        "domain":"URL received from",
+        "description":"Descripción",
+        "domain":"URL recibida de",
         "done":{
-            "title":"Done"
+            "title":"Hecho"
         },
         "copy":{
-            "title":"Copy to clipboard",
-            "msg":"Copied to clipboard."
+            "title":"Copiar al portapapeles",
+            "msg":"Copiado al portapapeles."
         },
         "open":{
-            "title":"Open Browser"
+            "title":"Abrir navegador"
         }
     },
     "aes":{
-        "domain":"Got a secret encrypted message from",
-        "description":"Message from",
-        "secret":"Secret message"
+        "domain":"Tienes un mensaje secreto encriptado de",
+        "description":"Mensaje de",
+        "secret":"Mensaje secreto"
     }
 }

@@ -3,90 +3,90 @@
   "general":{
     "title":"General",
     "name":{
-      "title":"Name",
-      "subtitle":"Will be used in transactions",
+      "title":"Nombre",
+      "subtitle":"Será usado en transacciones",
       "dialog":{
-        "msg":"Choose a name that will be used in transactions\n\nYour name will be seen in invoices to those who pay you as well as people you pay to.",
-        "accept":"Set name"
+        "msg":"Elige un nombre que será usado en transacciones\n\nTu nombre será visto en facturas a los que te pagaron igual que a los que pagaste.",
+        "accept":"Poner nombre"
       }
     },
     "pushNotification":{
-      "title":"Push notifications",
-      "subtitle":"For transaction and channel events"
+      "title":"Notificaciones Push",
+      "subtitle":"Para transacciones o eventos del canal"
     },
     "checkClipboard":{
-      "title":"Check clipboard for invoices",
-      "subtitle":"Automatically check clipboard for invoices"
+      "title":"Comprobar el portapapeles por facturas",
+      "subtitle":"Automaticamente comprobar el portapapeles por facturas"
     },
     "saveGeolocation":{
-      "title":"Save geolocation of transaction",
-      "subtitle":"Locally save the location of a transaction",
-      "logGranted":"Geolocation granted",
-      "logDenied":"Geolocation permission denied"
+      "title":"Guardar geolocalización de la transacción",
+      "subtitle":"Guardar de manera local la localización de una transacción",
+      "logGranted":"Geolocalización concedida",
+      "logDenied":"permiso de geolocalización"
     },
     "mapTheme":{
-      "title":"Set Map theme"
+      "title":"Elegir tema del mapa"
     }
   },
   "wallet":{
-    "title":"Wallet",
+    "title":"Cartera",
     "seed":{
       "show":{
-        "title":"Show mnemonic",
-        "subtitle":"Show 24-word seed for this wallet",
+        "title":"Mostrar la frase Mnemotcnica",
+        "subtitle":"Mostrar semilla de 24 palabras para esta cartera",
         "dialog":{
-          "title":"Seed",
-          "alert":"Copied to clipboard",
-          "copy":"Copy seed"
+          "title":"Semilla",
+          "alert":"Copiado al portapapeles",
+          "copy":"Copiar semilla"
         }
       },
       "remove":{
-        "title":"Remove mnemonic from device",
-        "subtitle":"Permanently remove the seed from this device",
+        "title":"Eliminar la frase Mnemotcnica del dispositivo",
+        "subtitle":"Quitar permanentemente la semilla de este dispositivo",
         "dialog":{
-          "title":"Remove seed",
-          "msg":"This will permanently remove the seed from this device. Only do this if you have backed up your seed!",
-          "accept":"Delete seed"
+          "title":"Quitar semilla",
+          "msg":"Esto eliminara permanentemente la semilla de este dispositivo. ¡Solo haz esto si has hecho copia de seguridad de la semilla!",
+          "aceptar":"Eliminar semilla"
         }
       }
     },
     "backup":{
       "export":{
-        "title":"Export channel backup",
-        "alert":"File written:"
+        "title":"Exportar copia de seguridad del canal",
+        "alert":"Archivo escrito:"
       },
       "verify":{
-        "title":"Verify channel backup"
+        "title":"Verificar copia de seguirdad del canal"
       },
       "googleCloud":{
-        "title":"Google Drive channel backup",
-        "subtitle":"Automatically backup channels to Google Drive",
-        "alert":"Google Drive backup enabled"
+        "title":"Copia de seguridad del canal en Google Drive",
+        "subtitle":"Hacer copia de seguridad de los canales en Google Drive Automaticamente",
+        "alert":"Copia de seguridad en Google Drive activada"
       },
       "googleCloudForce":{
-        "title":"Manually trigger Google Drive Backup",
-        "alert":"Backed up channels to Google Drive"
+        "title":"Activar manualmente la copia de seguridad de Google Drive",
+        "alert":"Copia de seguridad de los canales a Google Drive hecha"
       },
       "iCloud":{
-        "title":"iCloud channel backup",
-        "subtitle":"Automatically backup channels to iCloud",
-        "alert":"iCloud backup"
+        "title":"Copia de seguridad del canal en iCloud",
+        "subtitle":"Automatically backup channels to iCloudHacer copia de seguridad de los canales ",
+        "alert":"Copia de seguridad de iCloud"
       },
       "iCloudForce":{
-        "title":"Manually trigger iCloud Backup",
-        "alert":"Backed up channels to iCloud"
+        "title":"Activar manualmente la copia de seguridad de iCloud",
+        "alert":"Copia de seguridad de los canales a iCloud hecha"
       },
-      "error":"Error backup up"
+      "error":"Tor onion service"
     }
   },
   "security":{
-    "title":"Security",
+    "title":"Seguridad",
     "pingcode":{
-      "title":"Login with pincode"
+      "title":"Iniciar sesión con código pin"
     },
     "biometrics":{
-      "title":"Login with",
-      "fingerprint":"fingerprint",
+      "title":"Iniciar sesión con",
+      "fingerprint":"huella dactilar",
       "faceId":"Face ID",
       "touchID":"Touch ID"
     },
@@ -94,204 +94,204 @@
       "title":"Scheduled chain sync",
       "subtitle":"Runs in background every 4 hours",
       "dialog":{
-        "title":"Not recommended",
-        "msg":"Warning. It is not recommended to disable scheduled chain sync.\n\nMake sure you keep up-to-date with the network otherwise you risk losing your funds.\n\nOnly do this if you're know what you're doing."
+        "title":"No recomendado",
+        "msg":"Advertencia. No está recomendado deshabilitar la sincronización de cadena programada.\n\nAsegurate de mantenerte a la fecha con la network de otra manera te arriesgas a perder tus fondos.\n\nSolo haz esto si sabes lo que estas haciendo."
       }
     }
   },
   "display":{
-    "title":"Display",
+    "title":"Mostrar",
     "fiatUnit":{
-      "title": "Change fiat unit"
+      "title": "Cambiar unidad fiat"
     },
     "bitcoinUnit":{
-      "title": "Change bitcoin unit"
+      "title": "Cambiar unidad Bitcoin"
     },
     "onchainExplorer":{
-      "title": "Onchain explorer",
+      "title": "Explorador Onchain",
       "dialog":{
-        "title":"Change on-chain explorer"
+        "title":"Cambiar explorador on-chain"
       }
     }
   },
   "bitcoinNetwork":{
     "title":"Bitcoin Network",
     "node":{
-      "title": "Bitcoin Node",
-      "subtitle":"Set Bitcoin node (BIP157) to connect to",
+      "title": "Nodo de Bitcoin",
+      "subtitle":"Poner nodo de Bitcoin(BIP157)para conectar a",
       "setDialog":{
-        "title":"Set Node"
+        "title":"Poner nodo"
       },
       "restoreDialog":{
-        "title":"Restore node",
-        "msg":"Would you like to restore to the default node"
+        "title":"Restaurar nodo",
+        "msg":"Te gustaría restaurar al nodo por defecto"
       },
       "restartDialog":{
-        "title":"Restart required",
-        "msg":"Blixt Wallet has to be restarted before the new configuration is applied.",
-        "msg1":"Would you like to do that now?"
+        "title":"Reinicio requerido",
+        "msg":"Blixt Wallet tiene que ser reiniciado antes de aplicar la nueva configuración.",
+        "msg1":"Te gustaría hacer esto ahora?"
       }
     },
     "rpc":{
-      "title": "Set bitcoind RPC Host"
+      "title": "Poner bitcoind RPC Host"
     },
     "zmqRawBlock":{
-      "title": "Set bitcoind ZMQ Raw Block Host"
+      "title": "Poner bitcoind ZMQ Raw Block Host"
     },
     "zmqRawTx":{
-      "title": "Set bitcoind ZMQ Raw Tx Host"
+      "title": "Poner bitcoind ZMQ Raw Tx Host"
     }
   },
   "LN":{
     "title":"Lightning Network",
     "node":{
-      "title": "Show node data",
+      "title": "Mostrar datos del node",
       "subtitle":""
     },
     "peers":{
-      "title": "Show Lightning peers",
+      "title": "Mostrar comañero de Lightning",
       "subtitle":""
     },
     "autopilot":{
-      "title": "Automatically open channels",
+      "title": "Abrir canales Automaticamente",
       "subtitle":""
     },
     "inbound":{
-      "title": "Inbound channel services",
-      "subtitle":"Use an inbound channel service for receiving payments",
+      "title": "Servicios de canal entrante",
+      "subtitle":"Usar un servicio de canal entrante para recibir pagos",
       "dialog":{
-          "title":"Incoming channel provider",
-          "msg1":"Choose an incoming channel provider and press Continue.",
-          "msg2":"Your web browser will be opened to the corresponding provider's website, where you will be able to request a channel.",
-          "msg3":"When you're done, you can copy the address code and/or open the link using Blixt Wallet."
+          "title":"Proveedor de canal entrando",
+          "msg1":"Elige un proveedor de canal entrante y presiona continuar.",
+          "msg2":"Tu navegador web abrira la pagina web del correspondiente proveedor, cuando sea posible solicitar un canal.",
+          "msg3":"Cuando lo hayas hecho, puedes copiar la dirección del codigo y/o abrir el link usando Blixt Wallet."
       }
     },
     "LSP":{
-      "title": "Set Dunder LSP Server",
+      "title": "Poner servidor Dunder LSP",
       "subtitle":"",
       "setDialog":{
-        "title":"Set Dunder Server",
-        "acept":"Set server"
+        "title":"Poner servidor Dunder",
+        "acept":"Poner servidor"
       },
       "restoreDialog":{
-        "title":"Restore Dunder Server",
-        "msg":"Would you like to restore to the default Dunder server"
+        "title":"Restaurar servidor Dunder",
+        "msg":"Te gustaría restaurar al servidor por defecto de Dunder"
       }
     },
     "graphSync":{
-      "title": "Wait for graph sync before paying",
-      "subtitle":"Synchronized graph leads to optimal payment paths"
+      "title": "Espera por el gráfico de sincronización antes de pagar",
+      "subtitle":"El gráfico sincronizado dirige los caminos de pago más optimos"
     }
   },
   "miscelaneous":{
-    "title":"Miscellaneous",
+    "title":"Varios",
     "about":{
-      "title": "About",
+      "title": "Sobre",
       "subtitle":""
     },
     "appLog":{
-      "title": "Copy app log to local storage",
+      "title": "Copiar la aplicación del log al almacenamiento local",
       "subtitle":"",
       "dialog":{
-        "alert":"Copied app log file to",
-        "error":"Error copying app log file."
+        "alert":"Copiar archivo de aplicación del log a",
+        "error":"Error copiando archivo de aplicación del log."
       }
     },
     "lndLog":{
-      "title": "Copy lnd log to local storage",
-      "subtitle":"Reached from /sdcard/BlixtWallet",
+      "title": "Copiar lnd log al almacenamiento local",
+      "subtitle":"Alcanzado por /sdcard/BlixtWallet",
       "dialog":{
-        "alert":"Copied lnd log file",
-        "error":"Error copying lnd log file."
+        "alert":"Copiado archivo lnd log",
+        "error":"Error copiando archivo lnd log."
       }
     },
     "dev":{
-      "title": "Go to dev screen",
+      "title": "Ir a la pantalla dev",
       "subtitle":""
     },
     "expiredInvoices":{
-      "title": "Automatically hide expired invoices",
+      "title": "Ocultar facturas caducadas automaticamente",
       "subtitle":""
     },
     "screenTransactions":{
-      "title": "Screen transitions",
+      "title": "Pantalla de transacciones",
       "subtitle":""
     },
     "signMessage":{
-      "title": "Sign message with wallet key",
+      "title": "Firmar mensaje con la llave de la cartera",
       "subtitle":"",
       "dialog1":{
-        "title":"Sign message"
+        "title":"Firmar mensaje"
       },
       "dialog2":{
-        "title":"Signature",
-        "alert":"Copied to clipboard"
+        "title":"Firma",
+        "alert":"Copiado al portapapeles"
       }
     }
   },
   "experimental":{
-    "title":"Experiments",
+    "title":"Experimentos",
     "LSP":{
-      "title": "Enable Dunder LSP",
-      "subtitle":"HIGHLY EXPERIMENTAL. Lightning Service Provider that helps with inbound liquidity"
+      "title": "Habilitar Dunder LSP",
+      "subtitle":"MUY EXPERIMENTAL. El servicio proveedor de Lightning que ayuda con la liquidez entrante"
     },
     "MPP":{
-      "title": "Enable Multi-Path Payments",
-      "subtitle":"Payments can take up to 2 paths"
+      "title": "Habilitar pagos Multi-ruta",
+      "subtitle":"Los pagos pueden tomar 2 rutas"
     },
     "tor":{
-      "title": "Enable Tor",
+      "title": "Habilitar Tor",
       "subtitle":"",
       "enabled":{
-        "title":"Restart app and enable Tor",
-        "msg1":"Enabling Tor will make the wallet connect to its peers (both Bitcoin and Lightning Network peers) via the Tor Network.",
-        "msg2":"You'll also be able to connect and open channels to Lightning nodes that uses onion services.",
-        "msg3":"WARNING: Blixt Wallet will still talk to the following services without Tor",
-        "msg4":"Reason: To get fiat/bitcoin rates",
-        "msg5":"Reason: To get the current block height",
-        "msg6":"Reason: For Google Drive backup",
-        "msg7":"Reason: For reliable Lightning nodes",
-        "msg8":"WebLN Browser and LNURL will also not use Tor."
+        "title":"Reiniciar aplicación y habilitar Tor",
+        "msg1":"Hablitando Tor hará que la cartera se conecte con su compañero (ambos compañeros Bitcoin y Lightning Network) via Tor Network.",
+        "msg2":"Tu seras capaz de conectar y abrir canales a los nodos de Lightning que usan los servicios onion.",
+        "msg3":"ADVERTENCIA: Blixt Wallet seguira hablando a los siguientes servicios sin Tor",
+        "msg4":"Razón: Para conseguir tarifas fiat/bitcoin",
+        "msg5":"Razón: Para conseguir la altura actual del bloque",
+        "msg6":"Razón: Para la copia de seguridad de Google Drive",
+        "msg7":"Razón: Para confiar en los nodos de Lightning",
+        "msg8":"Navegador WebLN y LNURL tampoco será usado Tor."
       },
       "disabled":{
-        "title":"Restart app and disable Tor",
-        "msg1":"Disabling Tor requires an app restart.",
-        "msg2":"Do you wish to proceed?"
+        "title":"Reiniciar aplicación y desactivar Tor",
+        "msg1":"Deshablitando los requisitos de Tor y reiniciar la aplicación.",
+        "msg2":"Te gustaría proceder?"
       }
     },
     "onion":{
-      "title": "Show Tor onion service",
-      "subtitle":"For connecting and opening channels to this wallet"
+      "title": "Mostrar servicio Tor onion",
+      "subtitle":"Para conectar y abrir canales a esta cartera"
     },
     "keysend":{
-      "title": "Keysend Experiment",
+      "title": "Experimento Keysend",
       "subtitle":""
     }
   },
   "debug":{
     "title":"Debug",
     "startup":{
-      "title": "Show startup info notifications",
+      "title": "Mostrar notificaciones de información del inicio",
       "subtitle":""
     },
     "helpCencer":{
-      "title": "LndMobile help center",
+      "title": "Centro de ayuda LndMobile",
       "subtitle":""
     },
     "LSP":{
-      "title": "Diagnose Dunder problems",
+      "title": "Diagnosticar problemas de Dunder",
       "subtitle":""
     },
     "lndLog":{
-      "title": "Read lnd log",
+      "title": "Leer lnd log",
       "subtitle":""
     },
     "keysend":{
-      "title": "Keysend Test",
+      "title": "Prueba Keysend",
       "subtitle":""
     },
     "googleDrive":{
-      "title": "Google Drive Testbed",
+      "title": "Prueba de Google Drive",
       "subtitle":""
     },
     "webln":{
@@ -299,12 +299,12 @@
       "subtitle":""
     },
     "config":{
-      "title": "Write config",
+      "title": "Escribir config",
       "subtitle":""
     },
     "demo":{
-      "title": "Activate Demo Mode",
-      "subtitle":"Used for promo. Restart app to reset"
+      "title": "Activar modo Demo",
+      "subtitle":"Usado para promo. Reiniciar aplicación para resetear."
     }
   }
 }

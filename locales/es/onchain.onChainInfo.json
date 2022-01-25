@@ -1,15 +1,15 @@
 {
     "funds":{
-        "title":"On-chain funds"
+        "title":"fondos On-chain"
     },
     "address":{
-        "title":"Send Bitcoin on-chain to this address",
-        "alert":"Copied to clipboard."
+        "title":"enviar bitcoins on-chain a esta dirección",
+        "alerta":"Copiado al portapapeles."
     },
     "newAddress":{
-        "title":"Generate new address"
+        "title":"Generar nueva dirección"
     },
     "withdraw":{
-        "title":"Withdraw coins"
+        "title":"retirar monedas"
     }
 }

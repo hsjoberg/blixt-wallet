@@ -1,25 +1,25 @@
 {
     "layout":{
-        "title":"Withdraw coins"
+        "title":"Retirar monedas"
     },
     "form":{
         "address":{
-            "title":"Address",
-            "placeholder":"Bitcoin address"
+            "title":"Dirección",
+            "placeholder":"Dirección Bitcoin"
         },
         "amount":{
-            "title":"Amount",
-            "placeholder":"Amount",
-            "withdrawAll":"Withdraw all funds",
-            "all":"All"
+            "title":"Cantidad",
+            "placeholder":"Cantidad",
+            "withdrawAll":"Retirar todos los fondos",
+            "all":"Todos"
         },
         "feeRate":{
-            "title":"Fee-rate",
+            "title":"Índice de precios",
             "auto":"auto"
         },
         "withdraw":{
-            "title":"Withdraw",
-            "alert":"Withdraw succeeded"
+            "title":"Retirar",
+            "alert":"Retirada exitosa"
         }
     }
 }
