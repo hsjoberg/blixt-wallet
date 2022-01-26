@@ -10,19 +10,26 @@
         "accept":"Poner nombre"
       }
     },
+    "lang":{
+      "title":"Idioma",
+      "dialog":{
+        "title":"Selecciona un idioma"
+      }
+    },
     "pushNotification":{
-      "title":"Notificaciones Push",
-      "subtitle":"Para transacciones o eventos del canal"
+      "title":"Notificaciones push",
+      "subtitle":"Para eventos de transacciones y canales"
     },
     "checkClipboard":{
       "title":"Comprobar el portapapeles por facturas",
-      "subtitle":"Automaticamente comprobar el portapapeles por facturas"
+      "subtitle":"Automaticamente comprueba el portapapeles buscando facturas"
     },
     "saveGeolocation":{
-      "title":"Guardar geolocalización de la transacción",
-      "subtitle":"Guardar de manera local la localización de una transacción",
+      "title":"Guarda geolocalización de la transacción",
+      "subtitle":"Guarda de manera local la localización de una transacción",
       "logGranted":"Geolocalización concedida",
       "logDenied":"permiso de geolocalización"
+
     },
     "mapTheme":{
       "title":"Elegir tema del mapa"
@@ -41,42 +48,42 @@
         }
       },
       "remove":{
-        "title":"Eliminar la frase Mnemotcnica del dispositivo",
-        "subtitle":"Quitar permanentemente la semilla de este dispositivo",
+        "title":"Eliminar mnemonic del dispositivo",
+        "subtitle":"Eliminar permanentemente la semilla de este dispositivo",
         "dialog":{
-          "title":"Quitar semilla",
-          "msg":"Esto eliminara permanentemente la semilla de este dispositivo. ¡Solo haz esto si has hecho copia de seguridad de la semilla!",
-          "aceptar":"Eliminar semilla"
+          "title":"Borrar semilla",
+          "msg":"Esto eliminará permanentemente la semilla de este dispositivo. ¡Solo haga esto si ha respaldado su semilla!",
+          "accept":"Eliminar semilla"
         }
       }
     },
     "backup":{
       "export":{
-        "title":"Exportar copia de seguridad del canal",
+        "title":"Exportar copia de seguridad de canales",
         "alert":"Archivo escrito:"
       },
       "verify":{
-        "title":"Verificar copia de seguirdad del canal"
+        "title":"Verificar copia de seguridad de canales"
       },
       "googleCloud":{
-        "title":"Copia de seguridad del canal en Google Drive",
-        "subtitle":"Hacer copia de seguridad de los canales en Google Drive Automaticamente",
+        "title":"Copia de seguridad de canales en Google Drive",
+        "subtitle":"Copia de seguridad automatica de canales en Google Drive",
         "alert":"Copia de seguridad en Google Drive activada"
       },
       "googleCloudForce":{
-        "title":"Activar manualmente la copia de seguridad de Google Drive",
-        "alert":"Copia de seguridad de los canales a Google Drive hecha"
+        "title":"Realiza una copia de seguridad manual en Google Drive",
+        "alert":"Canales respaldados en Google Drive"
       },
       "iCloud":{
-        "title":"Copia de seguridad del canal en iCloud",
-        "subtitle":"Automatically backup channels to iCloudHacer copia de seguridad de los canales ",
-        "alert":"Copia de seguridad de iCloud"
+        "title":"Copia de seguridad de canales en iCloud",
+        "subtitle":"Copia de seguridad automatica de canales en iCloud",
+        "alert":"Copia de seguridad en iCloud activada"
       },
       "iCloudForce":{
-        "title":"Activar manualmente la copia de seguridad de iCloud",
-        "alert":"Copia de seguridad de los canales a iCloud hecha"
+        "title":"Realiza una copia de seguridad manual en iCloud",
+        "alert":"Canales respaldados en iCloud"
       },
-      "error":"Tor onion service"
+      "error":"Error de respaldo"
     }
   },
   "security":{
@@ -100,7 +107,7 @@
     }
   },
   "display":{
-    "title":"Mostrar",
+    "title":"Apariencia",
     "fiatUnit":{
       "title": "Cambiar unidad fiat"
     },
@@ -115,7 +122,7 @@
     }
   },
   "bitcoinNetwork":{
-    "title":"Bitcoin Network",
+    "title":"Red Bitcoin",
     "node":{
       "title": "Nodo de Bitcoin",
       "subtitle":"Poner nodo de Bitcoin(BIP157)para conectar a",
@@ -124,6 +131,7 @@
       },
       "restoreDialog":{
         "title":"Restaurar nodo",
+
         "msg":"Te gustaría restaurar al nodo por defecto"
       },
       "restartDialog":{
@@ -145,7 +153,7 @@
   "LN":{
     "title":"Lightning Network",
     "node":{
-      "title": "Mostrar datos del node",
+      "title": "Mostrar datos del nodo",
       "subtitle":""
     },
     "peers":{
