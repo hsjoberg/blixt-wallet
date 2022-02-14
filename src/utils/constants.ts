@@ -2,7 +2,7 @@ import { Platform } from "react-native";
 import { Chain } from "./build";
 import { chainSelect } from "./chain-select";
 
-export const TLV_RECORD_NAME = 128100;
+export const TLV_RECORD_NAME = 128101;
 export const TLV_KEYSEND = 5482373484;
 export const TLV_WHATSAT_MESSAGE = 34349334;
 
