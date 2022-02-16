@@ -1,6 +1,6 @@
 import { Action, action, Thunk, thunk } from "easy-peasy";
 
-import { StorageItem, getItemObject, setItemObject, removeItem, getItem, setItem } from "../storage/app";
+import { StorageItem, getItemObject, setItemObject, removeItem, getItem, setItem, setRescanWallet, getRescanWallet } from "../storage/app";
 import { IFiatRates } from "./Fiat";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
@@ -48,6 +48,7 @@ export interface ISettingsModel {
   changeDunderEnabled: Thunk<ISettingsModel, boolean>;
   changeLndNoGraphCache: Thunk<ISettingsModel, boolean>;
   changeInvoiceExpiry: Thunk<ISettingsModel, number>;
+  changeRescanWallet: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -77,6 +78,7 @@ export interface ISettingsModel {
   setDunderEnabled: Action<ISettingsModel, boolean>;
   setLndNoGraphCache: Action<ISettingsModel, boolean>;
   setInvoiceExpiry: Action<ISettingsModel, number>;
+  setRescanWallet: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -106,6 +108,7 @@ export interface ISettingsModel {
   dunderEnabled: boolean;
   lndNoGraphCache: boolean;
   invoiceExpiry: number;
+  rescanWallet: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -139,6 +142,7 @@ export const settings: ISettingsModel = {
     actions.setDunderEnabled(await getItemObject(StorageItem.dunderEnabled) ?? false);
     actions.setLndNoGraphCache(await getItemObject(StorageItem.lndNoGraphCache) ?? false);
     actions.setInvoiceExpiry(await getItemObject(StorageItem.invoiceExpiry) ?? DEFAULT_INVOICE_EXPIRY);
+    actions.setRescanWallet(await getRescanWallet());
 
     log.d("Done");
   }),
@@ -286,6 +290,11 @@ export const settings: ISettingsModel = {
     actions.setInvoiceExpiry(payload);
   }),
 
+  changeRescanWallet: thunk(async (actions, payload) => {
+    await setRescanWallet(payload);
+    actions.setRescanWallet(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -314,6 +323,7 @@ export const settings: ISettingsModel = {
   setDunderEnabled: action((state, payload) => { state.dunderEnabled = payload; }),
   setLndNoGraphCache: action((state, payload) => { state.lndNoGraphCache = payload; }),
   setInvoiceExpiry: action((state, payload) => { state.invoiceExpiry = payload; }),
+  setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -343,4 +353,5 @@ export const settings: ISettingsModel = {
   dunderEnabled: false,
   lndNoGraphCache: false,
   invoiceExpiry: DEFAULT_INVOICE_EXPIRY,
+  rescanWallet: false,
 };

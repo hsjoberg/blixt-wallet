@@ -58,6 +58,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   dunderEnabled = "dunderEnabled",
   lndNoGraphCache = "lndNoGraphCache",
   invoiceExpiry = "invoiceExpiry", // in seconds
+  rescanWallet = "rescanWallet",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -77,9 +78,14 @@ export const setAppVersion = async (version: number): Promise<void> => {
 export const setAppBuild = async (version: number): Promise<void> => {
   return await setItemObject(StorageItem.appBuild, version);
 };
-
 export const getWalletCreated = async (): Promise<boolean> => {
   return await getItemObject(StorageItem.walletCreated) || false;
+};
+export const getRescanWallet = async (): Promise<boolean> => {
+  return await getItemObject(StorageItem.rescanWallet) || false;
+};
+export const setRescanWallet = async (rescan: boolean): Promise<void> => {
+  return await setItemObject<boolean>(StorageItem.rescanWallet, rescan);
 };
 
 export const clearApp = async () => {
@@ -131,6 +137,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.dunderEnabled),
     removeItem(StorageItem.lndNoGraphCache),
     removeItem(StorageItem.invoiceExpiry),
+    removeItem(StorageItem.rescanWallet),
   ]);
 };
 
@@ -204,5 +211,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.dunderEnabled, false),
     setItemObject<boolean>(StorageItem.lndNoGraphCache, false),
     setItemObject<number>(StorageItem.lndNoGraphCache, DEFAULT_INVOICE_EXPIRY),
+    setItemObject<boolean>(StorageItem.rescanWallet, false),
   ]);
 };

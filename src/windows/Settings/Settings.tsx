@@ -918,6 +918,12 @@ Do you wish to proceed?`;
     );
   };
 
+  // Rescan wallet
+  const changeRescanWallet = useStoreActions((store) => store.settings.changeRescanWallet);
+  const onPressRescanWallet = async () => {
+    await changeRescanWallet(true);
+    restartNeeded();
+  };
   // Setup demo environment
   const setupDemo = useStoreActions((store) => store.setupDemo);
 
@@ -1297,6 +1303,13 @@ Do you wish to proceed?`;
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="android-debug-bridge" /></Left>
             <Body><Text>Show startup info notifications</Text></Body>
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onPressRescanWallet}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="restart" /></Left>
+            <Body>
+              <Text>Rescan wallet</Text>
+              <Text note={true}>Rescan the blockchain for wallet transactions</Text>
+            </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onLndMobileHelpCenterPress}>
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="lifebuoy" /></Left>

@@ -350,7 +350,7 @@ class LndMobile extends ReactContextBaseJavaModule {
     }
     bundle.putString(
       "args",
-      params
+      params + " " + args
     );
     message.setData(bundle);
 
