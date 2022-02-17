@@ -232,9 +232,6 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onExportChannelsPress = async () => {
     try {
       const response = await exportChannelsBackup();
-      if (PLATFORM === "android") {
-        toast(`File written:\n ${response}`, 10000, "warning");
-      }
     } catch (e) {
       console.log(e);
       toast(e.message, 10000, "danger");
@@ -248,9 +245,13 @@ export default function Settings({ navigation }: ISettingsProps) {
         type: [DocumentPicker.types.allFiles],
       });
       const backupBase64 = await readFile(res.uri, "base64");
-      console.log(await verifyChanBackup(backupBase64));
+      await verifyChanBackup(backupBase64);
+      Alert.alert("Channel backup file is valid");
     } catch (e) {
       console.log(e);
+      if (!e.message?.includes?.("document picker")) {
+        Alert.alert("Error verifying channel backup", e.message);
+      }
     }
   }
 

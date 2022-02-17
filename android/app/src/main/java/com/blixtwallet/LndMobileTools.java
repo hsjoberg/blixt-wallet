@@ -409,47 +409,15 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void saveChannelsBackup(String base64Backups, Promise promise) {
-    byte[] backups = Base64.decode(base64Backups, Base64.NO_WRAP);
-    checkWriteExternalStoragePermission(
-      (@Nullable Object value) -> {
-        if (value.equals("granted")) {
-          saveChannelBackupToFile(backups, promise);
-        }
-        else {
-          promise.reject("You must grant access");
-        }
-      },
-      () -> { promise.reject("Request Error"); },
-      () -> { promise.reject("Check Error"); }
-    );
-  }
+    MainActivity.tmpChanBackup = Base64.decode(base64Backups, Base64.NO_WRAP);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 
-  private void saveChannelBackupToFile(byte[] backups, Promise promise) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss") ;
-    String path = ContextCompat.getExternalFilesDirs(getReactApplicationContext(), null)[0].toString();
-    String file = path +
-                  "/channels-backup-" +
-                  dateFormat.format(new Date()) + ".bin";
-
-    try {
-      File dir = new File(path);
-      if (!dir.exists()) {
-        dir.mkdirs();
-      }
-    } catch (Exception e) {
-      Log.e(TAG, "Couldn't create folder " + path, e);
-      promise.reject("Couldn't create folder: " + path, e.getMessage());
-    }
-
-    try (FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(backups);
-      Log.i(TAG, "Success " + file);
-    } catch (Exception e) {
-      Log.e(TAG, "Couldn't write " + file, e);
-      promise.reject("Couldn't write: " + file, e.getMessage());
-    }
-
-    promise.resolve(file);
+    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+    intent.setType("text/plain");
+    intent.putExtra(Intent.EXTRA_TITLE, "blixt-channels-backup-" + dateFormat.format(new Date()) + ".bin");
+    getReactApplicationContext().getCurrentActivity().startActivityForResult(intent, MainActivity.INTENT_EXPORTCHANBACKUP);
+    promise.resolve(true);
   }
 
   @ReactMethod
