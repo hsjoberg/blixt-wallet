@@ -107,9 +107,14 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             <Text style={styles.buttonText}>getTorEnabled</Text>
           </Button>
           <Button small onPress={async () => {
-            console.log(await NativeModules.LndMobile.startTor());
+            console.log("Tor", + await NativeModules.BlixtTor.startTor());
           }}>
             <Text style={styles.buttonText}>startTor</Text>
+          </Button>
+          <Button small onPress={async () => {
+            console.log("Tor", + await NativeModules.BlixtTor.stopTor());
+          }}>
+            <Text style={styles.buttonText}>stopTor</Text>
           </Button>
           <Button small onPress={() => {
             toast("Copied to clipboard.", undefined, "success");
@@ -775,6 +780,26 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }
           }}>
             <Text style={styles.buttonText}>walletBalance()</Text>
+          </Button>
+          <Button small onPress={async () => {
+            try {
+              const response = await sendCommand<lnrpc.IGetRecoveryInfoRequest, lnrpc.GetRecoveryInfoRequest, lnrpc.GetRecoveryInfoResponse>({
+                request: lnrpc.GetRecoveryInfoRequest,
+                response: lnrpc.GetRecoveryInfoResponse,
+                method: "GetRecoveryInfo",
+                options: {}, // TODO why is totalBalance a option property?
+              });
+
+              console.log("GetRecoveryInfo() toJSON", response.toJSON());
+              setCommandResult(response.toJSON());
+              setError({});
+            }
+            catch (e) {
+              setError(e);
+              setCommandResult({});
+            }
+          }}>
+            <Text style={styles.buttonText}>getRecoveryInfo()</Text>
           </Button>
 
           <Text style={{ width: "100%" }}>easy-peasy store:</Text>

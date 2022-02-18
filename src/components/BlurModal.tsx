@@ -58,7 +58,7 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
             >
               {children}
             </Modal>
-            <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />
+            {goBackByClickingOutside && <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />}
           </>
       }
     </RealTimeBlur>

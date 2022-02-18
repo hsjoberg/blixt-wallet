@@ -379,10 +379,13 @@ export const lnUrl: ILNUrlModel = {
     const lnUrlStr = getState().lnUrlStr;
     const lnUrlObject = getState().lnUrlObject;
 
-    if (getStoreState().settings.dunderEnabled) {
+    const dunderEnabled = getStoreState().settings.dunderEnabled;
+
+    if (dunderEnabled) {
       await getStoreActions().blixtLsp.ondemandChannel.checkOndemandChannelService();
     }
     const shouldUseDunder =
+      dunderEnabled &&
       getStoreState().blixtLsp.ondemandChannel.serviceActive &&
       (
         getStoreState().lightning.rpcReady && getStoreState().channel.channels.length === 0 ||
