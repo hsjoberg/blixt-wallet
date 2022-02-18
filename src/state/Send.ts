@@ -234,7 +234,7 @@ const checkBech32 = (bech32: string, prefix: string): boolean => {
   return true;
 };
 
-const translatePaymentFailureReason = (reason: lnrpc.PaymentFailureReason) => {
+export const translatePaymentFailureReason = (reason: lnrpc.PaymentFailureReason) => {
   if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_NONE) {
     throw new Error("Payment failed");
   }

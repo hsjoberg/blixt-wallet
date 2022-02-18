@@ -18,6 +18,7 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { ITransaction } from "../../storage/database/transaction";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../Main";
+import { translatePaymentFailureReason } from "../../state/Send";
 
 interface ILightningInfoProps {
   navigation: StackNavigationProp<RootStackParamList, "KeysendExperiment">;
@@ -75,6 +76,10 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         messageInput,
       );
       console.log(result);
+      console.log("status", [result.status, result.failureReason]);
+      if (result.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
+        throw new Error(`${translatePaymentFailureReason(result.failureReason)}`);
+      }
       toast("Payment successful");
       console.log("Payment request is " + result.paymentRequest);
       console.log(typeof result.paymentRequest);
@@ -113,7 +118,6 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         hops: [],
       };
       syncTransaction(transaction);
-
     } catch (e) {
       toast(e.message, undefined, "danger");
     }
