@@ -79,6 +79,7 @@ export const deeplinkManager: IDeeplinkManager = {
         for (let subject of data.split(/\s/)) {
           try {
             subject = subject.toLowerCase().replace("lightning:", "");
+            subject = subject.replace("blixtwallet:", "");
             log.d("Testing", [subject]);
 
             // If this is an invoice

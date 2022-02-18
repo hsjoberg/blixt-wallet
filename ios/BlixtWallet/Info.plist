@@ -30,6 +30,7 @@
 				<string>lnurlw</string>
 				<string>lnurlp</string>
 				<string>lightning</string>
+				<string>blixtwallet</string>
 			</array>
 		</dict>
 	</array>
@@ -52,6 +53,7 @@
 		<string>lnurlw</string>
 		<string>lnurlp</string>
 		<string>lightning</string>
+		<string>blixtwallet</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
