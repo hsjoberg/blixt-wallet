@@ -1,4 +1,4 @@
-import { NativeModules, PlatformColor } from "react-native";
+import { AlertButton, NativeModules, PlatformColor } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
@@ -211,14 +211,19 @@ export const model: IStoreModel = {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
 
+          const buttons: AlertButton[] = [{
+            text: continueText,
+          }];
+          if (PLATFORM === "android") {
+            buttons.unshift({
+              text: restartText,
+            });
+          }
+
           const result = await Alert.promiseAlert(
             "",
             "Tor failed to start.\nThe following error was returned:\n\n" + e.message,
-            [{
-              text: restartText,
-            }, {
-              text: continueText,
-            }]
+            buttons,
           );
 
           if (result.text === restartText) {
