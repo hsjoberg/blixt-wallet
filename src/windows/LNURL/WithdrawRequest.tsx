@@ -182,6 +182,13 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
                   text: "OK",
                   onPress: (text) => {
                     action = DialogAndroid.actionPositive;
+                    text = text ?? "0";
+                    if (bitcoinUnit === "satoshi") {
+                      text = text.replace(/\[^0-9+\-\/*]/g, "");
+                    }
+                    else {
+                      text = text.replace(/,/g, ".");
+                    }
                     sat = convertBitcoinUnit(Number.parseFloat(text ?? "0"), bitcoinUnit, "satoshi").toNumber();
                     resolve(void(0));
                   },
