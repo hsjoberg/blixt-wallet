@@ -6,6 +6,7 @@ import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as Bech32 from "bech32";
 import secp256k1 from "secp256k1";
 import { CONSTANTS, JSHash } from "react-native-hash";
+import { Hash as sha256Hash, HMAC as sha256HMAC } from "fast-sha256";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
