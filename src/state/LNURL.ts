@@ -213,7 +213,7 @@ export const lnUrl: ILNUrlModel = {
       const queryParams = parseQueryParams(url);
       log.d("queryParams", [queryParams]);
       // If the data is in the URL
-      if ("tag" in queryParams) {
+      if ("tag" in queryParams && queryParams.tag === "channelRequest" || queryParams.tag == "login") {
         log.d(`Found tag ${queryParams.tag} in query params`);
         const tag = queryParams.tag; // FIXME
 
