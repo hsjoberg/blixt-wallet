@@ -18,6 +18,7 @@ import Container from "../../components/Container";
 import { IFiatRates } from "../../state/Fiat";
 import { Alert } from "../../utils/alert";
 import TextClickable from "../../components/TextClickable";
+import { dunderPrompt } from "../../utils/dunder";
 
 const MATH_PAD_HEIGHT = 44;
 
@@ -54,6 +55,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
   // Dunder
   const connectPeer = useStoreActions((store) => store.lightning.connectPeer);
   const checkOndemandChannelService = useStoreActions((store) => store.blixtLsp.ondemandChannel.checkOndemandChannelService);
+  const ondemandConnectToService = useStoreActions((store) => store.blixtLsp.ondemandChannel.connectToService);
   const ondemandChannelServiceStatus = useStoreActions((store) => store.blixtLsp.ondemandChannel.serviceStatus);
   const ondemandChannelStatus = useStoreState((store) => store.blixtLsp.ondemandChannel.status);
   const ondemandChannelServiceActive = useStoreState((store) => store.blixtLsp.ondemandChannel.serviceActive);
@@ -146,68 +148,38 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
 
   const createBlixtLspInvoice = async () => {
     setCreateInvoiceDisabled(true);
-    const result = await ondemandChannelServiceStatus();
-    console.log(result);
 
-    let connectToPeer = false;
-    let attempt = 3;
-    while (attempt--) {
-      try {
-        connectToPeer = !!(await connectPeer(result.peer));
-        console.log("test");
-      } catch (e) {
-        if (!e.message.includes("already connected to peer")) {
-          console.log(`Failed to connect: ${e.message}.`);
-          await timeout(1000);
-        } else {
-          connectToPeer = true;
-          break;
-        }
-      }
-    }
-
+    const connectToPeer = await ondemandConnectToService();
     if (!connectToPeer) {
       setCreateInvoiceDisabled(false);
       Alert.alert("", "Failed to connect to Dunder, please try again later.");
-
       return;
     }
 
-    const approxFeeSat = result.approxFeeSat;
-    const approxFeeFormatted = formatBitcoin(Long.fromValue(approxFeeSat), bitcoinUnitKey);
-    const approxFeeFiat = convertBitcoinToFiat(approxFeeSat, currentRate, fiatUnit);
-    const message =
-`In order to accept a payment for this invoice, a channel on the Lightning Network has to be opened.
-
-This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFeeFiat}).`;
-    Alert.alert(
-      "Channel opening",
-      message,
-      [{
-        text: "Cancel",
-        style: "cancel",
-        onPress: () => {
-          setCreateInvoiceDisabled(false);
-        }
-      }, {
-        text: "Proceed",
-        style: "default",
-        onPress: async () => {
-          try {
-            setCreateInvoiceDisabled(true);
-            navigation.replace("ReceiveQr", {
-              invoice: await ondemandChannelAddInvoice({
-                sat: satoshiValue,
-                description
-              }),
-            });
-          } catch (error) {
-            Alert.alert("Error", error.message);
-            setCreateInvoiceDisabled(false);
-          }
-        }
-      }]
+    const serviceStatus = await ondemandChannelServiceStatus();
+    const result = await dunderPrompt(
+      serviceStatus.approxFeeSat,
+      bitcoinUnitKey,
+      currentRate,
+      fiatUnit,
     );
+    if (!result) {
+      setCreateInvoiceDisabled(false);
+      return;
+    }
+
+    try {
+      setCreateInvoiceDisabled(true);
+      navigation.replace("ReceiveQr", {
+        invoice: await ondemandChannelAddInvoice({
+          sat: satoshiValue,
+          description
+        }),
+      });
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      setCreateInvoiceDisabled(false);
+    }
   };
 
   // Bitcoin unit

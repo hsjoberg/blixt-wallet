@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Vibration } from "react-native";
+import { Vibration } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import DialogAndroid from "react-native-dialogs";
 import Long from "long";
@@ -10,6 +10,7 @@ import { ILNUrlWithdrawRequest } from "../../state/LNURL";
 import { convertBitcoinUnit, formatBitcoin, BitcoinUnits } from "../../utils/bitcoin-units";
 import { PLATFORM } from "../../utils/constants";
 import LoadingModal from "../LoadingModal";
+import { Alert } from "../../utils/alert";
 
 interface IWithdrawRequestProps {
   navigation: StackNavigationProp<{}>;
@@ -31,13 +32,15 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
       const result = await doWithdrawRequest({ satoshi });
       setStatus("DONE");
       clear();
-      Vibration.vibrate(32);
-      toast(
-        `Sent withdrawal request to ${domain}`,
-        10000,
-        "success",
-        "Okay"
-      );
+      if (result) {
+        Vibration.vibrate(32);
+        toast(
+          `Sent withdrawal request to ${domain}`,
+          10000,
+          "success",
+          "Okay"
+        );
+      }
 
       if (lnObject.balanceCheck) {
         const contact = getContactByLnUrlWithdraw(lnObject.balanceCheck);
