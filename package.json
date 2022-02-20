@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-native run-android --variant chaintestnetNormalDebug --appIdSuffix testnet.debug",
-    "start-metro": "react-native start",
+    "start-metro": "NODE_OPTIONS=--openssl-legacy-provider react-native start",
     "test": "jest --silent --roots tests",
     "test-update-snapshot": "jest --silent --roots tests --updateSnapshot",
     "gen-proto": "pbjs -t static-module -w es6 --force-long -o proto/lightning.js proto/*.proto proto/*/*.proto && pbts -o proto/lightning.d.ts proto/lightning.js",
