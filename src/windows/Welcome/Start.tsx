@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { StyleSheet, StatusBar, Alert, NativeModules } from "react-native";
 import { Text, H1, Button, View, Spinner, Icon } from "native-base";
 import { useStoreActions, useStoreState } from "../../state/store";
@@ -12,6 +12,8 @@ import { WelcomeStackParamList } from "./index";
 import Container from "../../components/Container";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { PLATFORM } from "../../utils/constants";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -46,14 +48,19 @@ function TopMenu() {
   const toggleTorEnabled = async () => {
     changeTorEnabled(!torEnabled);
     setVisible(false);
-    // menu.current.hide();
-    try {
-      // await NativeModules.LndMobile.stopLnd();
-      await NativeModules.LndMobileTools.killLnd();
-    } catch(e) {
-      console.log(e);
+    if (PLATFORM === "android") {
+      try {
+        // await NativeModules.LndMobile.stopLnd();
+        await NativeModules.LndMobileTools.killLnd();
+      } catch(e) {
+        console.log(e);
+      }
+      NativeModules.LndMobileTools.restartApp();
+    } else {
+      const title = "Restart required";
+      const message = "Blixt Wallet has to be restarted before the new configuration is applied."
+      Alert.alert(title, message);
     }
-    NativeModules.LndMobileTools.restartApp();
   }
 
   return (
@@ -132,7 +139,7 @@ There is currently no WatchTower support to watch your channels while you are of
 
   return (
     <Container>
-      <View style={style.content}>
+      <SafeAreaView style={style.content}>
         <StatusBar
           backgroundColor="transparent"
           hidden={false}
@@ -140,9 +147,9 @@ There is currently no WatchTower support to watch your channels while you are of
           networkActivityIndicatorVisible={true}
           barStyle="light-content"
         />
-        {(!createWalletLoading && PLATFORM === "android") &&
+
           <TopMenu />
-        }
+
         {!createWalletLoading
           ? <AnimatedH1>Welcome</AnimatedH1>
           : <H1 style={style.header}>Welcome</H1>
@@ -161,12 +168,12 @@ There is currently no WatchTower support to watch your channels while you are of
           :
             <Spinner color={blixtTheme.light} />
         }
-      </View>
+      </SafeAreaView>
     </Container>
   );
 };
 
-const iconTopPadding = StatusBar.currentHeight ?? 0;
+const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
 const style = StyleSheet.create({
   content: {
