@@ -148,7 +148,9 @@ There is currently no WatchTower support to watch your channels while you are of
           barStyle="light-content"
         />
 
+        {!createWalletLoading && (
           <TopMenu />
+        )}
 
         {!createWalletLoading
           ? <AnimatedH1>Welcome</AnimatedH1>
