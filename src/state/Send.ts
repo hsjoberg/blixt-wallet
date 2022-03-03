@@ -88,10 +88,6 @@ export const send: ISendModel = {
       throw new Error("Code is not a valid Lightning invoice");
     }
 
-    // if (Long.fromValue(paymentRequest.numSatoshis).equals(0)) {
-    //   throw new Error("Zero amount invoices are not supported");
-    // }
-
     if (payload.extraData) {
       actions.setExtraData(payload.extraData);
     }
@@ -124,6 +120,16 @@ export const send: ISendModel = {
       paymentRequest.numMsat = payload.amount.mul(1000);
     }
 
+    const extraData: IExtraData = getState().extraData ?? {
+      payer: null,
+      type: "NORMAL",
+      website: null,
+      lnurlPayResponse: null,
+      lightningAddress: null,
+      lud16IdentifierMimeType: null,
+      lnurlPayTextPlain: null,
+    };
+
     const name = getStoreState().settings.name;
     const multiPathPaymentsEnabled = getStoreState().settings.multiPathPaymentsEnabled;
 
@@ -137,16 +143,6 @@ export const send: ISendModel = {
     if (sendPaymentResult.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
       throw new Error(`${translatePaymentFailureReason(sendPaymentResult.failureReason)}`);
     }
-
-    const extraData: IExtraData = getState().extraData || {
-      payer: null,
-      type: "NORMAL",
-      website: null,
-      lnurlPayResponse: null,
-      lightningAddress: null,
-      lud16IdentifierMimeType: null,
-      lnurlPayTextPlain: null,
-    };
 
     const transaction: ITransaction = {
       date: paymentRequest.timestamp,
