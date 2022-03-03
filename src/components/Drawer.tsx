@@ -187,7 +187,7 @@ const style = StyleSheet.create({
   },
   drawerScroll: {
     flex: 1,
-    marginTop: 36,
+    paddingTop: 34,
   },
   logoContainer: {
     paddingTop: 22,
