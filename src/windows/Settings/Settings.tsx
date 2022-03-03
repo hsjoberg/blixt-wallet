@@ -1014,7 +1014,7 @@ Do you wish to proceed?`;
               </Body>
             </ListItem>
           }
-          {(PLATFORM === "android" && (name === "Hampus" || __DEV__ === true)) &&
+          {["android", "ios"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onVerifyChannelsBackupPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
               <Body>

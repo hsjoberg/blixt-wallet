@@ -76,12 +76,12 @@ export interface ITransaction {
 export interface ITransactionHop {
   id?: number;
   txId?: number;
-  chanId: Long | null;
-  chanCapacity: Long | null;
-  amtToForward: Long | null;
-  amtToForwardMsat: Long | null;
-  fee: Long | null;
-  feeMsat: Long | null;
+  chanId: Long.Long | null;
+  chanCapacity: Long.Long | null;
+  amtToForward: Long.Long | null;
+  amtToForwardMsat: Long.Long | null;
+  fee: Long.Long | null;
+  feeMsat: Long.Long | null;
   expiry: number | null;
   pubKey: string | null;
 }

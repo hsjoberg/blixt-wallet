@@ -115,7 +115,16 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         preimage: hexToUint8Array(result.paymentPreimage),
         lnurlPayResponse: null,
 
-        hops: [],
+        hops: result.htlcs[0].route?.hops?.map((hop) => ({
+          chanId: hop.chanId ?? null,
+          chanCapacity: hop.chanCapacity ?? null,
+          amtToForward: hop.amtToForward || Long.fromInt(0),
+          amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
+          fee: hop.fee || Long.fromInt(0),
+          feeMsat: hop.feeMsat || Long.fromInt(0),
+          expiry: hop.expiry || null,
+          pubKey: hop.pubKey || null,
+        })) ?? [],
       };
       syncTransaction(transaction);
     } catch (e) {
