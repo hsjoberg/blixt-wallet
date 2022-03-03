@@ -464,7 +464,7 @@ export const lnUrl: ILNUrlModel = {
 
             resolve(true);
           } catch (error) {
-            toast(error.message, undefined, "danger");
+            reject(new Error(error.message));
           }
         });
       })
