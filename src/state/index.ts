@@ -403,7 +403,7 @@ export const model: IStoreModel = {
     const bitcoindRpcPass = await getItemAsyncStorage(StorageItem.bitcoindRpcPass) || null;
     const bitcoindPubRawBlock = await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) || null;
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
-    const lndNoGraphCache = getState().settings.lndNoGraphCache;
+    const lndNoGraphCache = await getItemAsyncStorage(StorageItem.lndNoGraphCache) || "0";
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
 

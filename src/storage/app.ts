@@ -210,7 +210,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.requireGraphSync, false),
     setItemObject<boolean>(StorageItem.dunderEnabled, false),
     setItemObject<boolean>(StorageItem.lndNoGraphCache, false),
-    setItemObject<number>(StorageItem.lndNoGraphCache, DEFAULT_INVOICE_EXPIRY),
+    setItemObject<number>(StorageItem.invoiceExpiry, DEFAULT_INVOICE_EXPIRY),
     setItemObject<boolean>(StorageItem.rescanWallet, false),
   ]);
 };
