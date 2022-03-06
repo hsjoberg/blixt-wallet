@@ -87,7 +87,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
                   {transactionValue.notEquals(0) &&
                     <>
                       {(positive ? "+" : "")}
-                      {!preferFiat && formatBitcoin(transactionValue, unit, false)}
+                      {!preferFiat && formatBitcoin(transactionValue, unit, unit == "satoshi" || unit == "sat" || unit == "bit" ? true : false)}
                       {preferFiat && convertBitcoinToFiat(transactionValue, currentRate, fiatUnit)}
                     </>
                   }

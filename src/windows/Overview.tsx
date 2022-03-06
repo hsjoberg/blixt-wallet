@@ -189,7 +189,7 @@ function Overview({ navigation }: IOverviewProps) {
     navigation.navigate("SyncInfo");
   };
 
-  const bitcoinBalance = formatBitcoin(balance, bitcoinUnit, false);
+  const bitcoinBalance = formatBitcoin(balance, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
 
   return (
@@ -300,7 +300,7 @@ function Overview({ navigation }: IOverviewProps) {
             }
             {pendingOpenBalance.greaterThan(0) &&
               <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
-                {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit)} pending)</>}
+                {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} pending)</>}
                 {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} pending)</>}
               </Animated.Text>
             }
@@ -355,7 +355,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
               <Text style={{ fontSize: 13 * fontFactor }}>
                 To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
                 A channel will automatically be opened for you.{"\n\n"}
-                Send at least {formatBitcoin(Long.fromValue(22000), bitcoinUnit)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
+                Send at least {formatBitcoin(Long.fromValue(22000), bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
               </Text>
             </Text>
           </View>

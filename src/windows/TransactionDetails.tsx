@@ -230,7 +230,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
               {direction === "receive" && transaction.tlvRecordName && <MetaData title="Payer" data={transaction.tlvRecordName} />}
               {(direction === "send" && name) && <MetaData title="Recipient" data={name} />}
               {(description !== null && description.length > 0) && <MetaData title="Description" data={description} />}
-              <MetaData title="Amount" data={formatBitcoin(transactionValue, bitcoinUnit)} />
+              <MetaData title="Amount" data={formatBitcoin(transactionValue, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} />
               {transaction.valueFiat != null && transaction.valueFiatCurrency && <MetaData title="Amount in Fiat (Time of Payment)" data={`${transaction.valueFiat.toFixed(2)} ${transaction.valueFiatCurrency}`} />}
               {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
               {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}

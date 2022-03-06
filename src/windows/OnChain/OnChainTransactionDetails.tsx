@@ -65,7 +65,7 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
             </View>
             <MetaData title="Id" data={transaction.txHash!} />
             <MetaData title="Date" data={formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))} />
-            {transaction.amount && <MetaData title="Amount" data={formatBitcoin(transaction.amount, bitcoinUnit)} />}
+            {transaction.amount && <MetaData title="Amount" data={formatBitcoin(transaction.amount, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} />}
             {transaction.totalFees && <MetaData title="Fees" data={transaction.totalFees.toString() + " Satoshi"} />}
             {transaction.label && <MetaData title="Label" data={transaction.label} />}
             <MetaData title="Destination" data={transaction.destAddresses![0]} />

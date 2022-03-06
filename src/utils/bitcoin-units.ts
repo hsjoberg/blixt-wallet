@@ -15,6 +15,7 @@ export interface IBitcoinUnits {
   bitcoin: IBitcoinUnit;
   milliBitcoin: IBitcoinUnit;
   bit: IBitcoinUnit;
+  sat: IBitcoinUnit;
   satoshi: IBitcoinUnit;
 }
 
@@ -40,6 +41,14 @@ export const BitcoinUnits: IBitcoinUnits = {
     pluralize: true,
     unit: 1 / 1E6,
     decimals: 2,
+  },
+  sat: {
+    key: "sat",
+    nice: "sat",
+    settings: "Sats",
+    pluralize: true,
+    unit: 1 / 1E8,
+    decimals: 0,
   },
   satoshi: {
     key: "satoshi",
