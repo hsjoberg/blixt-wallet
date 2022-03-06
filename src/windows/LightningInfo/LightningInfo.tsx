@@ -128,7 +128,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
             <H1 onPress={onPressBalance}>
               {preferFiat
                 ? (valueFiat(balance, currentRate).toFixed(2) + " " + fiatUnit)
-                : formatBitcoin(balance, bitcoinUnit)
+                : formatBitcoin(balance, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)
               }
             </H1>
           </View>

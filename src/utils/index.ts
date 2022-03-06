@@ -50,7 +50,7 @@ export const timeout = (time: number) => new Promise((resolve) => setTimeout(() 
 
 export const isLong = (subject: any): subject is Long => Long.isLong(subject);
 
-export const formatNumberGroupings = (subject: number | string) => subject.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+export const formatNumberGroupings = (subject: number | string) => subject.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 
 export const stringToUint8Array = (str: string) => {
   return Uint8Array.from(str, x => x.charCodeAt(0))

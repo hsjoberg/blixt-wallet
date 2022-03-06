@@ -80,7 +80,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
 
   const onChainFunds = preferFiat
     ? (valueFiat(balance, currentRate).toFixed(2) + " " + fiatUnit)
-    : formatBitcoin(balance, bitcoinUnit)
+    : formatBitcoin(balance, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)
   ;
 
   return (
