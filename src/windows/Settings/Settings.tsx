@@ -3,7 +3,6 @@ import { StyleSheet, NativeModules, PermissionsAndroid, Linking, Platform } from
 import Clipboard from "@react-native-community/clipboard";
 import DocumentPicker from "react-native-document-picker";
 import { readFile } from "react-native-fs";
-import ReactNativePermissions from 'react-native-permissions';
 import { CheckBox, Body, Container, Icon, Text, Left, List, ListItem, Right } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { fromUnixTime } from "date-fns";
@@ -29,6 +28,10 @@ import { getNodeInfo } from "../../lndmobile";
 import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
 
+let ReactNativePermissions: any;
+if (PLATFORM !== "macos") {
+  ReactNativePermissions = require("react-native-permissions");
+}
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -1047,7 +1050,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               }
             </>
           }
-          {["android", "ios"].includes(PLATFORM) &&
+          {["android", "ios", "macos"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="save" /></Left>
               <Body>

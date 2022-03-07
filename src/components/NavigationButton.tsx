@@ -1,6 +1,5 @@
 import React from "react";
-import { TouchableNativeFeedback, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { TouchableNativeFeedback, View, TouchableWithoutFeedback } from "react-native";
 import { PLATFORM } from "../utils/constants";
 
 export function NavigationButton({ children, onPress }: any) {

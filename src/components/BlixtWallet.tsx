@@ -5,6 +5,7 @@ import { Image as AnimatedImage } from 'react-native-animatable';
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { timeout } from "../utils";
 import { VersionName } from "../utils/build";
+import { PLATFORM } from "../utils/constants";
 
 
 export function BlixtLogo() {
@@ -13,7 +14,7 @@ export function BlixtLogo() {
   const blixtLogo = useRef<AnimatedImage & Image>(null);
 
   const doAnimation = async () => {
-    if (!blixtLogo || !blixtLogo.current || animationActive) {
+    if (PLATFORM === "macos" || !blixtLogo || !blixtLogo.current || animationActive) {
       return;
     }
 

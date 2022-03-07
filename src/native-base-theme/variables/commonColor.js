@@ -18,7 +18,7 @@ export const blixtTheme = {
   link: "#4f9ca8",
 
   fontMedium: "IBMPlexSans-Medium",
-  fontRegular:  Platform.OS === "ios" ? "IBMPlexSans" : "IBMPlexSans-Regular",
+  fontRegular:  (Platform.OS === "ios" || Platform.OS === "macos") ? "IBMPlexSans" : "IBMPlexSans-Regular",
 }
 
 export const PLATFORM = {

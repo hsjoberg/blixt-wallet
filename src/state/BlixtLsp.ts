@@ -1,3 +1,4 @@
+import { NativeModules } from "react-native";
 import { Action, action, computed, Computed, Thunk, thunk } from "easy-peasy";
 import { generateSecureRandom } from "react-native-securerandom";
 
@@ -6,6 +7,8 @@ import { bytesToHexString, stringToUint8Array, timeout } from "../utils";
 import { IStoreModel } from "./index";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+import * as base64 from "base64-js";
+import { PLATFORM } from "../utils/constants";
 
 import logger from "./../utils/log";
 const log = logger("BlixtLsp");
@@ -182,7 +185,7 @@ export const blixtLsp: IBlixtLsp = {
     })),
 
     addInvoice: thunk((async (actions, { sat, description }, { getStoreActions }) => {
-      const preimage = await generateSecureRandom(32);
+      const preimage = PLATFORM === "macos" ? base64.toByteArray(await NativeModules.LndMobileTools.generateSecureRandom(32)) : await generateSecureRandom(32);
       const result = await actions.register({
         preimage,
         amount: sat,

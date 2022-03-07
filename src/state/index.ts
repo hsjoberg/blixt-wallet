@@ -279,7 +279,7 @@ export const model: IStoreModel = {
     if (PLATFORM === "android") {
       await dispatch.google.initialize();
       await dispatch.googleDriveBackup.initialize();
-    } else if (PLATFORM === "ios") {
+    } else if (PLATFORM === "ios" || PLATFORM === "macos") {
       await dispatch.iCloudBackup.initialize();
     }
     await dispatch.transaction.getTransactions();
@@ -324,6 +324,8 @@ export const model: IStoreModel = {
           if (!getState().lightning.rpcReady) {
             await dispatch.lightning.initialize({ start });
           }
+        } else {
+          log.d("Got unknown lnrpc.WalletState", [state.state])
         }
       } catch (error:any) {
         toast(error.message, undefined, "danger");
@@ -480,7 +482,10 @@ protocol.no-script-enforced-lease=true
     if (!seed) {
       return;
     }
-    const random = await generateSecureRandom(32);
+    let random = PLATFORM === "macos"
+      ? base64.toByteArray(await NativeModules.LndMobileTools.generateSecureRandom(32))
+      : await generateSecureRandom(32);
+
     const randomBase64 = base64.fromByteArray(random);
     await setItem(StorageItem.walletPassword, randomBase64);
     await setWalletPassword(randomBase64);

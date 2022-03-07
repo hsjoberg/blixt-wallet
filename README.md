@@ -72,23 +72,40 @@ To start the application:
 
 ### iOS
 
-To build the iOS version, macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
+To build the iOS version, a computer running macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
 
-- Install [XCode](https://developer.apple.com/xcode), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com)
+- Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
 - Build lnd for iOS by following the steps in [build-ios-framework.md](build-ios-framework.md)
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
 - Install CocoaPods libs: `cd ios && pod install`
 - Setup team signing:
-  - Open ios/BlixtWallet/BlixtWallet.xcworkspace with XCode
-  - Login with your Apple Developer account if XCode asks you to
+  - Open ios/BlixtWallet/BlixtWallet.xcworkspace with Xcode
+  - Login with your Apple Developer account if Xcode asks you to
   - Click on BlixtWallet in the left column
   - Click on the Signing &amp; Capabilities tab
   - Choose your Team in the dropdown and choose a new unique Bundle Identifier (cannot be the same as the ones released on the App Store). Do this for every configuration
 
 To start the application:
 - Run: `yarn start-metro`
-- Run: `yarn ios:mainnet-debug --device "<your device name>"` or build from XCode
+- Run: `yarn ios:mainnet-debug --device "<your device name>"` or build from Xcode
+
+### macOS
+
+_The macOS version is still a work in progress._
+
+To build the macOS version, a computer running macOS is required.
+- Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
+- Build lnd for macOS by following the steps in [build-ios-framework.md](build-ios-framework.md).
+  - You have to change lnd's `Makefile` for the `ios` build step to compile for macOS instead of iOS:
+    `$(GOMOBILE_BIN) bind -target=ios` -> `$(GOMOBILE_BIN) bind -target=macos`
+- Install Node packages: `yarn`
+- Generate proto files: `yarn gen-proto`
+- Install CocoaPods libs: `cd macos && pod install`
+
+To start the application:
+- Run: `yarn start-metro`
+- Build app from Xcode
 
 ## Commit and Code-Style
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity } from "react-native";
 import { Body, Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -8,7 +8,6 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import { getDomainFromURL } from "../../utils";
 import Blurmodal from "../../components/BlurModal";
 import { ILNUrlPayRequestMetadata } from "../../state/LNURL";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { Alert } from "../../utils/alert";
 import PaymentCard from "./PayRequest/PaymentCard";
 import PaymentDone from "./PayRequest/PaymentDone";

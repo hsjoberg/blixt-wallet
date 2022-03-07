@@ -1,13 +1,12 @@
 import React from "react";
 import { View, StyleSheet, Pressable, ViewStyle } from "react-native";
+import { Icon } from "native-base";
 import Modal from "react-native-modal";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { useNavigation } from "@react-navigation/native";
 import RealTimeBlur from "../react-native-realtimeblur";
 import { PLATFORM } from "../utils/constants";
-import { Icon } from "native-base";
-
 
 export interface ITransactionDetailsProps {
   children: any;
@@ -18,7 +17,7 @@ export interface ITransactionDetailsProps {
 }
 export default function BlurModal({ children, useModalComponent, goBackByClickingOutside, noMargin, style: userStyle }: ITransactionDetailsProps) {
   const navigation = useNavigation();
-  const useModal = PLATFORM === "web" ? false : useModalComponent ?? true;
+  const useModal = PLATFORM === "web" || PLATFORM === "macos" ? false : useModalComponent ?? true;
   goBackByClickingOutside = goBackByClickingOutside ?? true;
   noMargin = noMargin ?? false;
 
@@ -72,13 +71,18 @@ const style = StyleSheet.create({
     height: "100%",
     flex: 1,
     justifyContent: "center",
+
+    // react-native-macos specific fixes
+    maxWidth: PLATFORM === "ios" ? 650 : undefined,
+    alignSelf: "center",
   },
   inner: {
     flex: 1,
     margin: 12,
     padding: 0,
-    justifyContent: "flex-start",
-    flexDirection: "column",
+
+    // react-native-macos specific fix
+    justifyContent: "center",
   },
   modal: {
     marginHorizontal: 6,
