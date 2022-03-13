@@ -26,23 +26,22 @@ export default function App() {
       }
     })();
   }, []);
+  const nav = (<NavigationContainer theme={{
+    dark: true,
+    colors: {
+        ...DefaultTheme.colors,
+        background: "transparent",
+    }
+    }} documentTitle={{ enabled: false }} ref={navigator}>
+    <Root>
+        {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
+    </Root>
+    </NavigationContainer>)
 
   return (
     <StoreProvider store={store}>
       <StyleProvider style={getTheme(theme)}>
-        <React.Suspense fallback={<>Loading...</>}>
-            <NavigationContainer theme={{
-            dark: true,
-            colors: {
-                ...DefaultTheme.colors,
-                background: "transparent",
-            }
-            }} documentTitle={{ enabled: false }} ref={navigator}>
-            <Root>
-                {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
-            </Root>
-            </NavigationContainer>
-        </React.Suspense>
+        {PLATFORM === "web"?<React.Suspense fallback={<>Loading...</>}>{nav}</React.Suspense>:nav}
       </StyleProvider>
     </StoreProvider>
   );
