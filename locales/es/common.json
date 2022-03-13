@@ -5,17 +5,17 @@
     "continue":"Continuar",
     "no": "No",
     "yes": "Si",
-    "save": "Save",
-    "copy": "Copy"
+    "save": "Salvar",
+    "copy": "Copiar"
   },
   "msg":{
-    "status":"Status",
+    "status":"Estado",
     "error":"Error",
-    "lastSync":"Last sync",
-    "lastSyncAttempt":"Last sync attempt",
-    "written":"Written",
-    "enabled":"enabled",
-    "disabled":"disabled"
+    "lastSync":"Última sincronización",
+    "lastSyncAttempt":"Último intento de sincronización",
+    "written":"Escritura",
+    "enabled":"Habilitado",
+    "disabled":"Desabilitado"
   }
 }
 

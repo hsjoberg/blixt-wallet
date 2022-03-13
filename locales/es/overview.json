@@ -1,0 +1,19 @@
+{
+    "recoverInfo":{
+        "msg1":"Recuperación de la cartera en progreso.",
+        "msg2":"Recuperación de la cartera terminada.",
+        "more":"Más información"
+    },
+    "sendOnChain":{
+        "title":"Bienvenido a Blixt Wallet!",
+        "msg1":"Para empezar, enviar fondos on-chain a la dirección de bitcoin correcta.",
+        "msg2":"Un canal sera abierto automaticamente para ti.",
+        "msg3":"Enviar por lo menos",
+        "alert":"Dirección Bitcoin copiado al portapapeles"
+    },
+    "doBackup":{
+        "msg1":"Gracias por usar Blixt Wallet!",
+        "msg2":"Te recomendamos hacer una copia de seguridad de la cartera para que puedas restaurar tus fondos en caso de perder tu teléfono.",
+        "backup":"Copia de seguridad de la cartera"
+    }
+}

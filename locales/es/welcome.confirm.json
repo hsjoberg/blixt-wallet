@@ -1,0 +1,9 @@
+{
+    "alert":{
+        "title":"Intentar de nuevo",
+        "msg":"Lo siento, escribiste las palabras en un orden incorrecto, por favor intentar de nuevo"
+    },
+    "seed":{
+        "title":"Confirme su semilla"
+    }
+}
