@@ -1,0 +1,28 @@
+{
+    "doRequest":{
+        "alert":{
+            "msg":"Enviar solicitud de retiro a"
+        },
+        "alert1":{
+            "title":"Añadir a tu lista de contactos",
+            "msg":"Te gustaría añadir este código de retiro a",
+            "msg1":"tu lista de contacto?",
+            "note":"Cuenta en"
+        },
+        "alert2":{
+            "note":"Cuenta sincronizada"
+        }
+    },
+    "layout":{
+        "title":"Solicitud de retiro",
+        "msg":"Mensaje de",
+        "dialog":{
+            "msg":"Cantidad"
+        },
+        "dialog1":{
+            "msg":"Minima cantidad de retiro ",
+            "msg1":"Maxima cantidad de retiro",
+            "placeholder":"Cantidad"
+        }
+    }
+}
