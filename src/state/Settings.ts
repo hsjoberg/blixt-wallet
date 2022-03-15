@@ -7,6 +7,8 @@ import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
 import { DEFAULT_INVOICE_EXPIRY } from "../utils/constants";
 
+import {i18n} from "../i18n/i18n"
+
 import logger from "./../utils/log";
 const log = logger("Settings");
 
@@ -166,6 +168,7 @@ export const settings: ISettingsModel = {
   }),
   changeLanguage: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.language, payload);
+    await i18n.changeLanguage(payload);
     actions.setLanguage(payload);
   }),
 

@@ -36,7 +36,6 @@ const createI18n = (language: string): i18nInstance => {
       ns: namespaces.common,
       resources: res
   });
-  i18n.changeLanguage(languages.es.id);
   
   return i18n;
   

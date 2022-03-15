@@ -203,7 +203,6 @@ export default function Settings({ navigation }: ISettingsProps) {
           return { title: languages[key].name, value: languages[key].id }
         }),
         onPick: async (lang) => {
-          i18n.changeLanguage(lang);
           await changeLanguage(lang);
         },
       });
