@@ -15,6 +15,7 @@ const createI18n = (language: string): i18nInstance => {
 
   let backend:any = undefined;
   let res:any = undefined;
+  /*
   if(PLATFORM === "web"){
     i18n.use(HttpApi);
     backend = {
@@ -25,7 +26,13 @@ const createI18n = (language: string): i18nInstance => {
       en:en,
       es:es
     }
+  }/*/
+  res = {
+    en:en,
+    es:es
   }
+
+  //*/
 
   i18n
     .init({

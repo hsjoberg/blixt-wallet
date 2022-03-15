@@ -41,7 +41,7 @@ export default function App() {
   return (
     <StoreProvider store={store}>
       <StyleProvider style={getTheme(theme)}>
-        {PLATFORM === "web"?<React.Suspense fallback={<>Loading...</>}>{nav}</React.Suspense>:nav}
+        {/** /PLATFORM === "web"?<React.Suspense fallback={<>Loading...</>}>{nav}</React.Suspense>:/**/nav}
       </StyleProvider>
     </StoreProvider>
   );
