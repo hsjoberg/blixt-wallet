@@ -18,6 +18,7 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { ITransaction } from "../../storage/database/transaction";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../Main";
+import { translatePaymentFailureReason } from "../../state/Send";
 
 import { useTranslation, TFunction } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -81,6 +82,10 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         messageInput,
       );
       console.log(result);
+      console.log("status", [result.status, result.failureReason]);
+      if (result.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
+        throw new Error(`${translatePaymentFailureReason(result.failureReason)}`);
+      }
       toast(t("send.alert"));
       console.log("Payment request is " + result.paymentRequest);
       console.log(typeof result.paymentRequest);
@@ -116,10 +121,18 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         preimage: hexToUint8Array(result.paymentPreimage),
         lnurlPayResponse: null,
 
-        hops: [],
+        hops: result.htlcs[0].route?.hops?.map((hop) => ({
+          chanId: hop.chanId ?? null,
+          chanCapacity: hop.chanCapacity ?? null,
+          amtToForward: hop.amtToForward || Long.fromInt(0),
+          amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
+          fee: hop.fee || Long.fromInt(0),
+          feeMsat: hop.feeMsat || Long.fromInt(0),
+          expiry: hop.expiry || null,
+          pubKey: hop.pubKey || null,
+        })) ?? [],
       };
       syncTransaction(transaction);
-
     } catch (e) {
       toast(e.message, undefined, "danger");
     }

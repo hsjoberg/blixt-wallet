@@ -213,7 +213,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                     setCurrentScreen("Map");
                     setTimeout(() => {
                       setMapActive(true);
-                    }, 750);
+                    }, 850);
                   }} style={style.actionBarButton}>
                     <Text>Show map</Text>
                   </Button>

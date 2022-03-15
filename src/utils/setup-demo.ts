@@ -129,6 +129,12 @@ export default async function SetupBlixtDemo(
     type: "RECEIVE",
     website: "lnmarkets.com",
     lightningService: "lnmarkets",
+  }, {
+    value: 1000,
+    description: "Kollider Buy order, 10 BTCUSD.PERP @ 359710",
+    type: "PAY",
+    website: "lite.kollider.xyz",
+    lightningService: "kollider",
   }]);
 
   if (createDbTransactions) {

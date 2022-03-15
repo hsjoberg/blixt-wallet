@@ -1,4 +1,4 @@
-import { NativeModules, PlatformColor } from "react-native";
+import { AlertButton, NativeModules, PlatformColor } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
@@ -29,7 +29,7 @@ import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IContactsModel, contacts } from "./Contacts";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
-import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion, getAppBuild, setAppBuild } from "../storage/app";
+import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion, getAppBuild, setAppBuild, getRescanWallet, setRescanWallet } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
@@ -211,14 +211,19 @@ export const model: IStoreModel = {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
 
+          const buttons: AlertButton[] = [{
+            text: continueText,
+          }];
+          if (PLATFORM === "android") {
+            buttons.unshift({
+              text: restartText,
+            });
+          }
+
           const result = await Alert.promiseAlert(
             "",
             "Tor failed to start.\nThe following error was returned:\n\n" + e.message,
-            [{
-              text: restartText,
-            }, {
-              text: continueText,
-            }]
+            buttons,
           );
 
           if (result.text === restartText) {
@@ -241,7 +246,18 @@ export const model: IStoreModel = {
       if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
         log.i("Starting lnd");
         try {
-          log.d("startLnd", [await startLnd(torEnabled, socksPort > 0 ? ("--tor.socks=127.0.0.1:" + socksPort) : "")]);
+          let args = "";
+          if (socksPort > 0) {
+            args = "--tor.socks=127.0.0.1:" + socksPort + " ";
+          }
+          if (await getRescanWallet()) {
+            args +=  "--reset-wallet-transactions ";
+            await setRescanWallet(false);
+          }
+
+          log.d("startLnd", [
+            await startLnd(torEnabled, args)
+          ]);
         } catch (e) {
           if (e.message.includes("lnd already started")) {
             toast("lnd already started", 3000, "warning");
@@ -387,7 +403,7 @@ export const model: IStoreModel = {
     const bitcoindRpcPass = await getItemAsyncStorage(StorageItem.bitcoindRpcPass) || null;
     const bitcoindPubRawBlock = await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) || null;
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
-    const lndNoGraphCache = getState().settings.lndNoGraphCache;
+    const lndNoGraphCache = await getItemAsyncStorage(StorageItem.lndNoGraphCache) || "0";
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
 

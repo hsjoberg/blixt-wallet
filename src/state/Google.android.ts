@@ -1,5 +1,5 @@
 import { Action, action, Thunk, thunk } from "easy-peasy";
-import { GoogleSignin, statusCodes, User } from '@react-native-community/google-signin';
+import { GoogleSignin, statusCodes, User } from "@react-native-google-signin/google-signin";
 
 import logger from "./../utils/log";
 import { PLATFORM } from "../utils/constants";

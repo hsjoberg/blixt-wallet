@@ -256,4 +256,10 @@ export const appMigration: IAppMigration[] = [
       await db.executeSql("ALTER TABLE tx ADD lud16IdentifierMimeType TEXT NULL");
     },
   },
+  // Version 29
+  {
+    async beforeLnd(db, i) {
+      setItemObject<boolean>(StorageItem.lndNoGraphCache, false);
+    },
+  },
 ];

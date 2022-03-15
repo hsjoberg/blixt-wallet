@@ -6,6 +6,7 @@ import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as Bech32 from "bech32";
 import secp256k1 from "secp256k1";
 import { CONSTANTS, JSHash } from "react-native-hash";
+import { Hash as sha256Hash, HMAC as sha256HMAC } from "fast-sha256";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -13,6 +14,8 @@ import { timeout, bytesToString, getDomainFromURL, stringToUint8Array, hexToUint
 import { lnrpc } from "../../proto/lightning";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+import { Alert } from "../utils/alert";
+import { dunderPrompt } from "../utils/dunder";
 
 import logger from "./../utils/log";
 const log = logger("LNURL");
@@ -211,7 +214,7 @@ export const lnUrl: ILNUrlModel = {
       const queryParams = parseQueryParams(url);
       log.d("queryParams", [queryParams]);
       // If the data is in the URL
-      if ("tag" in queryParams) {
+      if ("tag" in queryParams && queryParams.tag === "channelRequest" || queryParams.tag == "login") {
         log.d(`Found tag ${queryParams.tag} in query params`);
         const tag = queryParams.tag; // FIXME
 
@@ -371,22 +374,59 @@ export const lnUrl: ILNUrlModel = {
     }
   }),
 
-  doWithdrawRequest: thunk(async (_, { satoshi }, { getStoreActions, getState, injections }) => {
+  doWithdrawRequest: thunk(async (_, { satoshi }, { getStoreActions, getStoreState, getState, injections }) => {
     const type = getState().type;
     const lnUrlStr = getState().lnUrlStr;
     const lnUrlObject = getState().lnUrlObject;
 
+    const dunderEnabled = getStoreState().settings.dunderEnabled;
+
+    if (dunderEnabled) {
+      await getStoreActions().blixtLsp.ondemandChannel.checkOndemandChannelService();
+    }
+    const shouldUseDunder =
+      dunderEnabled &&
+      getStoreState().blixtLsp.ondemandChannel.serviceActive &&
+      (
+        getStoreState().lightning.rpcReady && getStoreState().channel.channels.length === 0 ||
+        getStoreState().channel.remoteBalance.toSigned().subtract(5000).lessThan(satoshi) // Not perfect...
+      );
+
     if (lnUrlStr && type === "withdrawRequest" && lnUrlObject && lnUrlObject.tag === "withdrawRequest") {
-      const promise = new Promise<boolean>((resolve, reject) => {
-        const r = getStoreActions().receive.addInvoice({
-          description: lnUrlObject.defaultDescription,
-          sat: satoshi,
-          tmpData: {
-            website: getDomainFromURL(lnUrlStr),
-            type: "LNURL",
-            payer: null,
+      const promise = new Promise<boolean>(async (resolve, reject) => {
+        if (shouldUseDunder) {
+          await getStoreActions().blixtLsp.ondemandChannel.connectToService(); // TODO check if it worked
+          const serviceStatus = await getStoreActions().blixtLsp.ondemandChannel.serviceStatus();
+          const result = await dunderPrompt(
+            serviceStatus.approxFeeSat,
+            getStoreState().settings.bitcoinUnit,
+            getStoreState().fiat.currentRate,
+            getStoreState().settings.fiatUnit,
+          );
+          if (!result) {
+            return resolve(false);
           }
-        });
+
+          try {
+            await getStoreActions().blixtLsp.ondemandChannel.addInvoice({
+              sat: satoshi,
+              description: lnUrlObject.defaultDescription,
+            });
+          } catch (error) {
+            Alert.alert("Error", error.message);
+            resolve(false);
+          }
+        } else {
+          const r = getStoreActions().receive.addInvoice({
+            description: lnUrlObject.defaultDescription,
+            sat: satoshi,
+            tmpData: {
+              website: getDomainFromURL(lnUrlStr),
+              type: "LNURL",
+              payer: null,
+            }
+          });
+        }
 
         // 5. Once accepted by the user, LN WALLET sends a GET to LN SERVICE in the form of <callback>?k1=<k1>&pr=<lightning invoice, ...>
         const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e) => {
@@ -424,7 +464,7 @@ export const lnUrl: ILNUrlModel = {
 
             resolve(true);
           } catch (error) {
-            toast(error.message, undefined, "danger");
+            reject(new Error(error.message));
           }
         });
       })

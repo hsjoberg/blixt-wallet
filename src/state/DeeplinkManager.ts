@@ -79,6 +79,7 @@ export const deeplinkManager: IDeeplinkManager = {
         for (let subject of data.split(/\s/)) {
           try {
             subject = subject.toLowerCase().replace("lightning:", "");
+            subject = subject.replace("blixtwallet:", "");
             log.d("Testing", [subject]);
 
             // If this is an invoice
@@ -86,12 +87,12 @@ export const deeplinkManager: IDeeplinkManager = {
               return await actions.tryInvoice({ paymentRequest: subject.split("?")[0] });
             }
             // If this is a non-bech32 LNURL (LUD-17)
-            else if (subject.startsWith("lnurlp") || subject.startsWith("lnurlw") || subject.startsWith("lnurlc")) {
-              subject = "https://" + subject.substring(7);
+            else if (subject.startsWith("lnurlp://") || subject.startsWith("lnurlw://") || subject.startsWith("lnurlc://")) {
+              subject = "https://" + subject.substring(9);
               return await actions.tryLNUrl({ url: subject.split("?")[0] });
             }
-            else if (subject.startsWith("keyauth")) {
-              subject = "https://" + subject.substring(8);
+            else if (subject.startsWith("keyauth://")) {
+              subject = "https://" + subject.substring(10);
               return await actions.tryLNUrl({ url: subject.split("?")[0] });
             }
             // If this is an LNURL

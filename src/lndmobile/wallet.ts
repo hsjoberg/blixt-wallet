@@ -1,12 +1,8 @@
-import { NativeModules } from "react-native";
-import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
-import { stringToUint8Array } from "../utils/index";
 import * as base64 from "base64-js";
 
-import { lnrpc, walletrpc, signrpc } from "../../proto/lightning";
-import { PLATFORM } from "../utils/constants";
-
-const { LndMobile } = NativeModules;
+import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
+import { stringToUint8Array } from "../utils";
+import { lnrpc, signrpc } from "../../proto/lightning";
 
 /**
  * @throws
@@ -22,50 +18,53 @@ export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {
   return response;
 };
 
-export const initWallet = async (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string): Promise<void> => {
-  await NativeModules.LndMobile.initWallet(seed, password, recoveryWindow ?? 0, channelBackupsBase64 ?? null);
-  // const options: lnrpc.IInitWalletRequest = {
-  //   cipherSeedMnemonic: seed,
-  //   walletPassword: stringToUint8Array(password),
-  // };
-  // if (recoveryWindow) {
-  //   options.recoveryWindow = recoveryWindow;
-  // }
-  // if (channelBackupsBase64) {
-  //   options.channelBackups = {
-  //     multiChanBackup: {
-  //       multiChanBackup: base64.toByteArray(channelBackupsBase64),
-  //     }
-  //   }
-  // }
+export const initWallet = async (
+  seed: string[],
+  password: string,
+  recoveryWindow?: number,
+  channelBackupsBase64?: string,
+): Promise<lnrpc.InitWalletResponse> => {
+  // await NativeModules.LndMobile.initWallet(seed, password, recoveryWindow ?? 0, channelBackupsBase64 ?? null);
+  const options: lnrpc.IInitWalletRequest = {
+    cipherSeedMnemonic: seed,
+    walletPassword: stringToUint8Array(password),
+  };
+  if (recoveryWindow) {
+    options.recoveryWindow = recoveryWindow;
+  }
+  if (channelBackupsBase64) {
+    options.channelBackups = {
+      multiChanBackup: {
+        multiChanBackup: base64.toByteArray(channelBackupsBase64),
+      }
+    }
+  }
 
-  // const response = await sendCommand<lnrpc.IInitWalletRequest, lnrpc.InitWalletRequest, lnrpc.InitWalletResponse>({
-  //   request: lnrpc.InitWalletRequest,
-  //   response: lnrpc.InitWalletResponse,
-  //   method: "InitWallet",
-  //   options
-  // });
-  // return response;
+  const response = await sendCommand<lnrpc.IInitWalletRequest, lnrpc.InitWalletRequest, lnrpc.InitWalletResponse>({
+    request: lnrpc.InitWalletRequest,
+    response: lnrpc.InitWalletResponse,
+    method: "InitWallet",
+    options
+  });
+  return response;
 };
 
 /**
  * @throws
  */
-export const unlockWallet = async (password: string): Promise<void> => {
+export const unlockWallet = async (password: string): Promise<lnrpc.UnlockWalletResponse> => {
   const start = new Date().getTime();
-  await NativeModules.LndMobile.unlockWallet(password);
-  // const response = await sendCommand<lnrpc.IUnlockWalletRequest, lnrpc.UnlockWalletRequest, lnrpc.UnlockWalletResponse>({
-  //   request: lnrpc.UnlockWalletRequest,
-  //   response: lnrpc.UnlockWalletResponse,
-  //   method: "UnlockWallet",
-  //   options: {
-  //     walletPassword: stringToUint8Array(password),
-  //     // TODO recoveryWindow might be needed here when restoring
-  //   },
-  // });
-  // return response;
+  // await NativeModules.LndMobile.unlockWallet(password);
+  const response = await sendCommand<lnrpc.IUnlockWalletRequest, lnrpc.UnlockWalletRequest, lnrpc.UnlockWalletResponse>({
+    request: lnrpc.UnlockWalletRequest,
+    response: lnrpc.UnlockWalletResponse,
+    method: "UnlockWallet",
+    options: {
+      walletPassword: stringToUint8Array(password),
+    },
+  });
   console.log("unlock time: " + (new Date().getTime() - start) / 1000 + "s");
-  return;
+  return response;
 };
 
 /**

@@ -10,6 +10,7 @@ import usePromptLightningAddress from "../hooks/usePromptLightningAddress";
 import useEvaluateLightningCode from "../hooks/useEvaluateLightningCode";
 import { fontFactorNormalized } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
+import { useStoreState } from "../state/store";
 
 export default function Drawer() {
   const navigation = useNavigation();
@@ -17,6 +18,8 @@ export default function Drawer() {
   const evaluateLightningCode = useEvaluateLightningCode();
   const layoutMode = useLayoutMode();
   const [expandAdvanced, setExpandAdvanced] = useState(false);
+  const channels = useStoreState((store) => store.channel.channels);
+  const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
 
   const closeDrawer = () => {
     navigation.dispatch(DrawerActions.closeDrawer);
@@ -73,12 +76,24 @@ export default function Drawer() {
     setExpandAdvanced(!expandAdvanced);
   };
 
+  let statusIndicatorColor = blixtTheme.red;
+  if (syncedToChain && channels.length > 0) {
+    if (channels.some((channel) => channel.active)) {
+      statusIndicatorColor = blixtTheme.green;
+    } else {
+      statusIndicatorColor = blixtTheme.primary;
+    }
+  }
+
   return (
     <View style={style.drawerContainer}>
       <ScrollView style={style.drawerScroll} alwaysBounceVertical={false}>
         <View style={style.logoContainer}>
           <BlixtLogo />
           <Text style={style.blixtTitle} onPress={() => goToScreen("SyncInfo", undefined, false)}>Blixt Wallet</Text>
+          <View style={[{
+            backgroundColor: statusIndicatorColor,
+          }, style.statusIndicator]}></View>
         </View>
         <View style={style.menu}>
           {layoutMode === "full" && (
@@ -172,7 +187,7 @@ const style = StyleSheet.create({
   },
   drawerScroll: {
     flex: 1,
-    marginTop: 36,
+    paddingTop: 34,
   },
   logoContainer: {
     paddingTop: 22,
@@ -237,4 +252,12 @@ const style = StyleSheet.create({
   bottomText: {
     fontSize: 12.5 * fontFactorNormalized,
   },
+  statusIndicator: {
+    width: 7,
+    height: 7,
+    borderRadius: 8,
+    position: "absolute",
+    top: 17,
+    right: 18,
+  }
 });

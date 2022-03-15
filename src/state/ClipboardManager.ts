@@ -61,6 +61,7 @@ export const clipboardManager: IClipboardManagerModel = {
         return;
       }
       text = text.toLowerCase();
+      // TODO remove lightning:
       log.i("try", [text]);
       actions.addToInvoiceCache(text);
 
@@ -71,14 +72,14 @@ export const clipboardManager: IClipboardManagerModel = {
         actions.tryInvoice({ paymentRequest: text });
       }
       // If this is a non-bech32 LNURL (LUD-17)
-      else if (text.includes("lnurlp:") || text.includes("lnurlw:") || text.includes("lnurlc:")) {
+      else if (text.includes("lnurlp://") || text.includes("lnurlw://") || text.includes("lnurlc://")) {
         log.d("lnurl non-bech32");
-        text = "https://" + text.substring(7).split(/[\s&]/)[0];
+        text = "https://" + text.substring(9).split(/[\s&]/)[0];
         actions.tryLNUrl({ url: text });
       }
-      else if (text.includes("keyauth:")) {
+      else if (text.includes("keyauth://")) {
         log.d("lnurl non-bech32 keyauth");
-        text = "https://" + text.substring(8).split(/[\s&]/)[0];
+        text = "https://" + text.substring(10).split(/[\s&]/)[0];
         actions.tryLNUrl({ url: text });
       }
       // If this is an LNURL

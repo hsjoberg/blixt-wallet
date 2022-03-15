@@ -326,7 +326,7 @@ exports[`renders correctly 1`] = `
                           ]
                         }
                       >
-                        <RNSScreenContainer
+                        <RNSScreenNavigationContainer
                           style={
                             Object {
                               "flex": 1,
@@ -861,7 +861,7 @@ exports[`renders correctly 1`] = `
                               />
                             </View>
                           </RNSScreen>
-                        </RNSScreenContainer>
+                        </RNSScreenNavigationContainer>
                         <RCTSafeAreaView
                           emulateUnlessSupported={true}
                           style={

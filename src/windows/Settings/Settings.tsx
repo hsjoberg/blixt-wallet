@@ -266,9 +266,6 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onExportChannelsPress = async () => {
     try {
       const response = await exportChannelsBackup();
-      if (PLATFORM === "android") {
-        toast(t("wallet.backup.export.alert")+`\n ${response}`, 10000, "warning");
-      }
     } catch (e) {
       console.log(e);
       toast(e.message, 10000, "danger");
@@ -282,9 +279,13 @@ export default function Settings({ navigation }: ISettingsProps) {
         type: [DocumentPicker.types.allFiles],
       });
       const backupBase64 = await readFile(res.uri, "base64");
-      console.log(await verifyChanBackup(backupBase64));
+      await verifyChanBackup(backupBase64);
+      Alert.alert("Channel backup file is valid");
     } catch (e) {
       console.log(e);
+      if (!e.message?.includes?.("document picker")) {
+        Alert.alert("Error verifying channel backup", e.message);
+      }
     }
   }
 
@@ -949,6 +950,12 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
   };
 
+  // Rescan wallet
+  const changeRescanWallet = useStoreActions((store) => store.settings.changeRescanWallet);
+  const onPressRescanWallet = async () => {
+    await changeRescanWallet(true);
+    restartNeeded();
+  };
   // Setup demo environment
   const setupDemo = useStoreActions((store) => store.setupDemo);
 
@@ -1047,7 +1054,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           }
-          {(PLATFORM === "android" && (name === "Hampus" || __DEV__ === true)) &&
+          {["android", "ios"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onVerifyChannelsBackupPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
               <Body>
@@ -1335,6 +1342,13 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="android-debug-bridge" /></Left>
             <Body><Text>{t("debug.startup.title")}</Text></Body>
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onPressRescanWallet}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="restart" /></Left>
+            <Body>
+              <Text>Rescan wallet</Text>
+              <Text note={true}>Rescan the blockchain for wallet transactions</Text>
+            </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onLndMobileHelpCenterPress}>
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="lifebuoy" /></Left>

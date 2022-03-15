@@ -2,7 +2,7 @@ import { Action, action, computed, Computed, Thunk, thunk } from "easy-peasy";
 import { generateSecureRandom } from "react-native-securerandom";
 
 import { IStoreInjections } from "./store";
-import { bytesToHexString, stringToUint8Array } from "../utils";
+import { bytesToHexString, stringToUint8Array, timeout } from "../utils";
 import { IStoreModel } from "./index";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
@@ -65,6 +65,7 @@ export interface IOnDemandChannelUnknownRequestResponse extends IErrorResponse {
 
 export interface IOndemandChannel {
   checkOndemandChannelService: Thunk<IOndemandChannel, void, IStoreInjections>;
+  connectToService: Thunk<IOndemandChannel, undefined, IStoreInjections, IStoreModel, Promise<boolean>>;
   addInvoice: Thunk<IOndemandChannel, { sat: number; description: string }, IStoreInjections, IStoreModel>;
 
   serviceStatus: Thunk<IOndemandChannel, void, IStoreInjections, IStoreModel, Promise<IOnDemandChannelServiceStatusResponse>>;
@@ -157,6 +158,28 @@ export const blixtLsp: IBlixtLsp = {
         method: "POST",
       })).json();
     }),
+
+    connectToService: thunk((async (actions, _, { getStoreActions }) => {
+      const result = await actions.serviceStatus();
+      log.d("serviceStatus", [result]);
+
+      let connectToPeer = false;
+      let attempt = 3;
+      while (attempt--) {
+        try {
+          connectToPeer = !!(await getStoreActions().lightning.connectPeer(result.peer));
+        } catch (e) {
+          if (!e.message.includes("already connected to peer")) {
+            log.i(`Failed to connect: ${e.message}.`);
+            await timeout(1000);
+          } else {
+            connectToPeer = true;
+            break;
+          }
+        }
+      }
+      return connectToPeer;
+    })),
 
     addInvoice: thunk((async (actions, { sat, description }, { getStoreActions }) => {
       const preimage = await generateSecureRandom(32);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Vibration } from "react-native";
+import { Vibration } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import DialogAndroid from "react-native-dialogs";
 import Long from "long";
@@ -10,6 +10,7 @@ import { ILNUrlWithdrawRequest } from "../../state/LNURL";
 import { convertBitcoinUnit, formatBitcoin, BitcoinUnits } from "../../utils/bitcoin-units";
 import { PLATFORM } from "../../utils/constants";
 import LoadingModal from "../LoadingModal";
+import { Alert } from "../../utils/alert";
 
 import { useTranslation, TFunction } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -37,13 +38,15 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
       const result = await doWithdrawRequest({ satoshi });
       setStatus("DONE");
       clear();
-      Vibration.vibrate(32);
-      toast(
-        `${t("doRequest.alert.msg")} ${domain}`,
-        10000,
-        "success",
-        "Okay"
-      );
+      if (result) {
+        Vibration.vibrate(32);
+        toast(
+          `${t("doRequest.alert.msg")} ${domain}`,
+          10000,
+          "success",
+          "Okay"
+        );
+      }
 
       if (lnObject.balanceCheck) {
         const contact = getContactByLnUrlWithdraw(lnObject.balanceCheck);
@@ -185,6 +188,13 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
                   text: t("buttons.ok",{ns:namespaces.common}),
                   onPress: (text) => {
                     action = DialogAndroid.actionPositive;
+                    text = text ?? "0";
+                    if (bitcoinUnit === "satoshi") {
+                      text = text.replace(/\[^0-9+\-\/*]/g, "");
+                    }
+                    else {
+                      text = text.replace(/,/g, ".");
+                    }
                     sat = convertBitcoinUnit(Number.parseFloat(text ?? "0"), bitcoinUnit, "satoshi").toNumber();
                     resolve(void(0));
                   },
