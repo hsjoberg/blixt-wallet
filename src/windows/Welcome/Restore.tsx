@@ -102,7 +102,7 @@ export default function Restore({ navigation }: IProps) {
           ],
         })
       );
-    } catch (e:any) {
+    } catch (e) {
       console.log(e);
       setLoading(false);
       Alert.alert(e.message);
@@ -121,7 +121,7 @@ export default function Restore({ navigation }: IProps) {
       console.log(base64Backup);
       setB64Backup(base64Backup);
       setBackupType("google_drive");
-    } catch (e:any) {
+    } catch (e) {
       Alert.alert(`${t("restore.channel.google.alert")}:\n\n${e.message}`);
     }
   };
@@ -132,7 +132,7 @@ export default function Restore({ navigation }: IProps) {
       console.log(base64Backup);
       setB64Backup(base64Backup);
       setBackupType("icloud");
-    } catch (e:any) {
+    } catch (e) {
       Alert.alert(`${t("restore.channel.iCloud.alert")}:\n\n${e.message}`);
     }
   };

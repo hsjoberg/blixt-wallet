@@ -207,7 +207,7 @@ export const model: IStoreModel = {
             socksPort = await tor.startIfNotStarted();
           }
           log.i("socksPort", [socksPort]);
-        } catch (e:any) {
+        } catch (e) {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
 
@@ -242,7 +242,7 @@ export const model: IStoreModel = {
         log.i("Starting lnd");
         try {
           log.d("startLnd", [await startLnd(torEnabled, socksPort > 0 ? ("--tor.socks=127.0.0.1:" + socksPort) : "")]);
-        } catch (e:any) {
+        } catch (e) {
           if (e.message.includes("lnd already started")) {
             toast("lnd already started", 3000, "warning");
           } else {

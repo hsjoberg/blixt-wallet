@@ -38,7 +38,7 @@ export default function OpenChannel({ navigation, route }: IConnectToLightningPe
       await connectPeer(peer);
       await getLightningPeers();
       navigation.pop();
-    } catch (e:any) {
+    } catch (e) {
       toast(`${t("msg.error")}: ${e.message}`, 12000, "danger", "Okay");
       setConnecting(false);
     }

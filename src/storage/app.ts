@@ -97,7 +97,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.seedStored),
     removeItem(StorageItem.bitcoinUnit),
     removeItem(StorageItem.fiatUnit),
-    removeItem(StorageItem.name),,
+    removeItem(StorageItem.name),
     removeItem(StorageItem.language),
     removeItem(StorageItem.walletPassword),
     removeItem(StorageItem.autopilotEnabled),

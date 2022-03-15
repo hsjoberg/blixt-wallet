@@ -30,13 +30,11 @@ import { fontFactorNormalized } from "../../utils/scale";
 import { useTranslation, TFunction } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
-let t:TFunction;
-
 interface IContactProps {
   contact: IContact;
 }
 function Contact({ contact }: IContactProps) {
-  t = useTranslation(namespaces.contacts.contactList).t;
+  const t = useTranslation(namespaces.contacts.contactList).t;
   const navigation = useNavigation();
   const setLNUrl = useStoreActions((store) => store.lnUrl.setLNUrl);
   const resolveLightningAddress = useStoreActions((store) => store.lnUrl.resolveLightningAddress);
@@ -287,7 +285,7 @@ interface IContactListProps {
   navigation: StackNavigationProp<ContactsStackParamList, "ContactList">;
 }
 export default function ContactList({ navigation }: IContactListProps) {
-  t = useTranslation(namespaces.contacts.contactList).t;
+  const t = useTranslation(namespaces.contacts.contactList).t;
   const [searchText, setSearchText] = useState("");
   const contacts = useStoreState((store) => store.contacts.contacts);
   const getContacts = useStoreActions((store) => store.contacts.getContacts);

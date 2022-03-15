@@ -87,7 +87,7 @@
   },
   "security":{
     "title":"Security",
-    "pingcode":{
+    "pincode":{
       "title":"Login with pincode"
     },
     "biometrics":{

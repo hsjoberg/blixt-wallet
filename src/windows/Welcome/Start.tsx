@@ -127,7 +127,7 @@ ${t("createWallet.msg3")}`,
           }
         }],
       );
-    } catch (e:any) {
+    } catch (e) {
       Alert.alert(e.message);
     }
   };
