@@ -207,6 +207,9 @@ export const model: IStoreModel = {
             socksPort = await tor.startIfNotStarted();
           }
           log.i("socksPort", [socksPort]);
+          if (socksPort === 0) {
+            throw new Error("Unable to obtain SOCKS port");
+          }
         } catch (e) {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";

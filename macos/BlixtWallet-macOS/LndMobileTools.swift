@@ -222,6 +222,7 @@ autopilot.heuristic=preferential:0.05
   @objc(saveChannelsBackup:resolver:rejecter:)
   func saveChannelsBackup(base64Backups: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
+#if os(macOS)
       do {
         let dataWrapped = Data(base64Encoded: base64Backups, options: [])
         if let data = dataWrapped {
@@ -248,6 +249,12 @@ autopilot.heuristic=preferential:0.05
         print("Error saving backup")
         reject("error", error.localizedDescription, error)
       }
+#elseif os(iOS)
+      let activityController = UIActivityViewController(activityItems: [base64Backups], applicationActivities: nil)
+      RCTSharedApplication()?.delegate?.window??.rootViewController?.present(activityController, animated: true, completion: {
+        resolve(true)
+      })
+#endif
     }
   }
 
@@ -391,8 +398,13 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
+  var lndLogFileObservingStarted = false
   @objc(observeLndLogFile:rejecter:)
   func observeLndLogFile(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    if (lndLogFileObservingStarted) {
+      resolve(true)
+      return
+    }
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
     let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
@@ -423,19 +435,34 @@ autopilot.heuristic=preferential:0.05
       fileHandle?.seekToEndOfFile()
       fileHandle?.readInBackgroundAndNotify()
     })
+    lndLogFileObservingStarted = true
+    resolve(true)
   }
 
-  @objc(generateSecureRandom:resolver:rejecter:)
-  func generateSecureRandom(length: Int, resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-    var bytes = [Int8](repeating: 0, count: length)
-    let status = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
-
-    if status == errSecSuccess {
-      let b = Data(bytes: bytes, count: bytes.count)
-      resolve(b.base64EncodedString())
-    } else {
-      let error = NSError(domain: "RNSecureRandom", code: Int(status), userInfo: nil)
-      reject("randombytes_error", "Error generating random bytes", error)
+  @objc(copyLndLog:rejecter:)
+  func copyLndLog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+#if os(iOS)
+    let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
+    let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+    let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
+                      .appendingPathComponent("logs", isDirectory: true)
+                      .appendingPathComponent("bitcoin", isDirectory: true)
+                      .appendingPathComponent(chain ?? "mainnet", isDirectory: true)
+                      .appendingPathComponent("lnd.log", isDirectory: false)
+    do {
+      let data = try String(contentsOf: url)
+      DispatchQueue.main.async {
+        let activityController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+        RCTSharedApplication()?.delegate?.window??.rootViewController?.present(activityController, animated: true, completion: {
+          resolve(true)
+        })
+      }
+    } catch {
+      reject("error", error.localizedDescription, error)
     }
+#else
+    let error = LndMobileToolsError(msg: "copyLndLog not supported on macOS build")
+    reject("error", error.localizedDescription, error)
+#endif
   }
 }

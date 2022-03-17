@@ -154,5 +154,6 @@ const style = StyleSheet.create({
     fontSize: 15,
     padding: 0,
     color: blixtTheme.light,
+    flex: 1,
   },
 });

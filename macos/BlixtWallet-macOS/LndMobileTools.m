@@ -88,8 +88,7 @@ RCT_EXTERN_METHOD(
 )
 
 RCT_EXTERN_METHOD(
-  generateSecureRandom: (NSInteger)length
-  resolver: (RCTPromiseResolveBlock)resolve
+  copyLndLog: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject
 )
 

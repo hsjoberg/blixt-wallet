@@ -5,9 +5,7 @@ import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import LinearGradient from "react-native-linear-gradient";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import Color from "color";
 import Long from "long";
 
 import { RootStackParamList } from "../Main";
@@ -18,33 +16,24 @@ import { timeout, toast } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
 import Drawer from "../components/Drawer";
-import { Chain } from "../utils/build";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
-import { PLATFORM } from "../utils/constants";
+import { HEADER_MIN_HEIGHT, HEADER_MAX_HEIGHT, PLATFORM } from "../utils/constants";
 import { fontFactor, fontFactorNormalized, zoomed } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
 import CopyAddress from "../components/CopyAddress";
 import { StackNavigationProp } from "@react-navigation/stack";
+import BlixtHeader from "../components/BlixtHeader";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
+
 const theme = nativeBaseTheme.default;
 const blixtTheme = nativeBaseTheme.blixtTheme;
-
-const HEADER_MIN_HEIGHT = Platform.select({
-  android: (StatusBar.currentHeight ?? 0) + 53,
-  ios: getStatusBarHeight(true) + 53,
-}) ?? 53;
-const HEADER_MAX_HEIGHT = (Platform.select({
-  android: 195,
-  ios: 195,
-  web: 195 - 32,
-}) ?? 195) / (zoomed ? 0.85 : 1);
 const NUM_TRANSACTIONS_PER_LOAD = 25;
 const LOAD_BOTTOM_PADDING = 475;
 
@@ -197,11 +186,8 @@ function Overview({ navigation }: IOverviewProps) {
   const bitcoinBalance = formatBitcoin(balance, bitcoinUnit, false);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
 
-
-  const HeaderView = PLATFORM === "macos" ? View : LinearGradient;
-
   return (
-    <Container style={{ flexDirection: "row" }}>
+    <Container style={{ marginTop: PLATFORM === "macos" ? 0.5 : 0 }}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -209,11 +195,6 @@ function Overview({ navigation }: IOverviewProps) {
         animated={false}
         translucent={true}
       />
-      {PLATFORM === "macos" &&
-        <View style={{ width: 330 }}>
-          <Drawer />
-        </View>
-      }
       <View style={style.overview}>
         <ScrollView
           contentContainerStyle={style.transactionList}
@@ -247,8 +228,8 @@ function Overview({ navigation }: IOverviewProps) {
           )}
           {txs}
         </ScrollView>
-        <Animated.View style={[style.animatedTop,{ height: headerHeight }]} pointerEvents="box-none">
-          <HeaderView style={[style.top, { backgroundColor: blixtTheme.primary }]} colors={Chain === "mainnet" ? [blixtTheme.secondary, blixtTheme.primary] : [blixtTheme.lightGray, Color(blixtTheme.lightGray).darken(0.30).hex()]} pointerEvents="box-none">
+        <Animated.View style={[style.animatedTop, { height: headerHeight }]} pointerEvents="box-none">
+          <BlixtHeader height={PLATFORM === "macos" ? headerHeight : undefined} />
             <View style={StyleSheet.absoluteFill}>
               {/* <AnimatedIcon
                 style={[style.onchainIcon, { opacity: iconOpacity }]} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
@@ -317,7 +298,6 @@ function Overview({ navigation }: IOverviewProps) {
                 {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
               </Animated.Text>
             }
-          </HeaderView>
         </Animated.View>
       </View>
     </Container>
@@ -445,13 +425,6 @@ const style = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: theme.blixtFooterBorderColor,
-  },
-  top: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "100%",
   },
   menuIcon: {
     position: "absolute",
@@ -592,12 +565,13 @@ export function DrawerComponent() {
         backgroundColor: "transparent",
         borderRightColor: "transparent",
         width: 305,
+        borderEndColor: blixtTheme.dark,
       },
-      drawerType: layoutMode === "mobile" ? "front" : "permanent",
+      drawerType: (PLATFORM !== "macos" && layoutMode === "mobile") ? "front" : "permanent",
       swipeEdgeWidth: 400,
     }} drawerContent={() => <Drawer />}>
       <DrawerNav.Screen name="OverviewTabs" component={OverviewTabsComponent} />
     </DrawerNav.Navigator>
   )
 }
-export default PLATFORM === "macos" ? OverviewTabsComponent : DrawerComponent;
+export default DrawerComponent;

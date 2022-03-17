@@ -1,6 +1,8 @@
-import { Platform } from "react-native";
+import { Platform, StatusBar } from "react-native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 import { Chain } from "./build";
 import { chainSelect } from "./chain-select";
+import { zoomed } from "./scale";
 
 export const TLV_RECORD_NAME = 128101;
 export const TLV_KEYSEND = 5482373484;
@@ -27,3 +29,16 @@ export const DEFAULT_DUNDER_SERVER = chainSelect({
   testnet: "https://testnetdunder.blixtwallet.com",
   regtest: "http://192.168.1.111:8080",
 });
+
+export const HEADER_MIN_HEIGHT = Platform.select({
+  android: (StatusBar.currentHeight ?? 0) + 53,
+  ios: getStatusBarHeight(true) + 53,
+  macos: 53
+}) ?? 53;
+
+export const HEADER_MAX_HEIGHT = (Platform.select({
+  android: 195,
+  ios: 195,
+  web: 195 - 32,
+  macos: 175
+}) ?? 195) / (zoomed ? 0.85 : 1);

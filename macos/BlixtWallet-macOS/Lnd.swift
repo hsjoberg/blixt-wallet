@@ -83,6 +83,7 @@ open class Lnd {
     "ListPeers": { bytes, cb in LndmobileListPeers(bytes, cb) },
     "DisconnectPeer": { bytes, cb in Lndmobile.LndmobileDisconnectPeer (bytes, cb) },
     "SendPaymentSync": { bytes, cb in LndmobileSendPaymentSync(bytes, cb) },
+    "GetRecoveryInfo": { bytes, cb in LndmobileGetRecoveryInfo(bytes, cb) },
 
     // channel
     //
@@ -149,11 +150,11 @@ open class Lnd {
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
     let lndPath = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
 
-    var lndArgs = " --nolisten --lnddir=\"\(lndPath.path)\" " + args
+    var lndArgs = "--nolisten --lnddir=\"\(lndPath.path)\" " + args
     if (torEnabled) {
       lndArgs += " --tor.active"
     }
-    NSLog("lndArgs" + lndArgs)
+
     let started: Callback = {(data: Data?, error: Error?) in {
       self.lndStarted = true
       lndStartedCallback(data, error)
