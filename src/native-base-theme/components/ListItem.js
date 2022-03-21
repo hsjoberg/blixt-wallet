@@ -357,7 +357,7 @@ export default (variables /* : * */ = variable) => {
           fontSize: variables.iconFontSize - 2
         },
         paddingRight: variables.listItemPadding + 5,
-        flex: 0,
+        flex: platform === "web" ? "none" : 0,
         // height: 44,
         minHeight: 44,
         justifyContent: 'center',

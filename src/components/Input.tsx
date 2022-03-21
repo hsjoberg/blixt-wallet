@@ -1,7 +1,7 @@
 import React from "react";
-import { Input } from "native-base";
+import { Input, NativeBase } from "native-base";
 
-export default function BlixtInput(props: any) {
+export default function BlixtInput(props: NativeBase.Input) {
   return (
     <Input
       enableFocusRing={false} // macOS prop

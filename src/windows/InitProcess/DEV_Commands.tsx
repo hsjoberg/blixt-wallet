@@ -318,6 +318,16 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             console.log(await NativeModules.LndMobileTools.tailLog(10));
           }}><Text style={styles.buttonText}>LndMobileTools.tailLog</Text></Button>
 
+          <Text style={{ width: "100%"}}>Electron:</Text>
+          <Button small onPress={async () => {
+            console.log("ReactNativeElectron", ReactNativeElectron);
+            console.log("ReactNativeElectron.getInitialURL()", await ReactNativeElectron.getInitialURL());
+          }}><Text style={styles.buttonText}>ReactNativeElectron.getInitialURL()</Text></Button>
+          <Button small onPress={async () => {
+            console.log("lndmobile", lndmobile);
+            console.log("lndmobile.hello()", await lndmobile.hello((t) => console.log(t)));
+          }}><Text style={styles.buttonText}>lndmobile.hello()</Text></Button>
+
           <Text style={{ width: "100%"}}>iOS LndMobile:</Text>
           <Button small onPress={async () => {
             console.log(NativeModules.LndMobileTools);

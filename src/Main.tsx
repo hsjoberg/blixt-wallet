@@ -34,6 +34,7 @@ import Container from "./components/Container";
 import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
 import { navigator } from "./utils/navigation";
 import { PLATFORM } from "./utils/constants";
+import Prompt, { IPromptNavigationProps } from "./windows/HelperWindows/Prompt";
 
 const RootStack = createStackNavigator();
 
@@ -66,6 +67,8 @@ export type RootStackParamList = {
     url: string;
   } | undefined;
   WebInfo: undefined;
+
+  Prompt: IPromptNavigationProps;
 
   DEV_CommandsX: undefined;
 }
@@ -234,6 +237,7 @@ export default function Main() {
       <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} options={animationDisabled} />
       <RootStack.Screen name="KeysendTest" component={KeysendTest} options={animationDisabled} />
       <RootStack.Screen name="KeysendExperiment" component={KeysendExperiment} options={horizontalTransition} />
+      <RootStack.Screen name="Prompt" component={Prompt} options={animationDisabled} />
       <RootStack.Screen name="DEV_CommandsX" component={DEV_Commands} options={animationDisabled} />
     </RootStack.Navigator>
   );

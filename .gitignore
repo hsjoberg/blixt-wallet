@@ -82,6 +82,7 @@ macos/Lndmobile.xcframework
 
 # Web
 dist
+.webpack
 
 # service-image
 contrib/service-image/webp
