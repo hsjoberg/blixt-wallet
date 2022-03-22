@@ -1,24 +1,24 @@
 {
-    "payRequest":{
-        "error1":"Al pago le falta una descripción."
+  "payRequest": {
+    "error1": "Al pago le falta una descripción."
+  },
+  "pay": {
+    "title": "Pagar",
+    "alert": "Tu deberas proveer un comentario si eliges incluir tu nombre a este pago"
+  },
+  "cancel": {
+    "title": "Cancelar"
+  },
+  "form": {
+    "title": "preguntarte para pagar.",
+    "description": {
+      "title": "Descripción"
     },
-    "pay":{
-        "title":"Pagar",
-        "alert":"Tu deberas proveer un comentario si eliges incluir tu nombre a este pago"
+    "amount": {
+      "title": "Cantidad",
+      "msg": "a",
+      "placeholder": "Introduce cantidad"
     },
-    "cancel":{
-        "title":"Cancelar"
-    },
-    "form":{
-        "title":"preguntarte para pagar.",
-        "description":{
-            "title":"Descripción"
-        },
-        "amount":{
-            "title":"Cantidad",
-            "msg":"a",
-            "placeholder":"Introduce cantidad"
-        },
-        "alert":"Imposible pagar"
-    }
+    "alert": "Imposible pagar"
+  }
 }

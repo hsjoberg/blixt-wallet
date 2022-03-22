@@ -2,29 +2,28 @@
   "buttons": {
     "ok": "Ok",
     "cancel": "Cancel",
-    "continue":"Continue",
-    "skip":"Skip",
-    "proceed":"Proceed",
-    "back":"Back",
+    "continue": "Continue",
+    "skip": "Skip",
+    "proceed": "Proceed",
+    "back": "Back",
     "no": "No",
     "yes": "Yes",
     "save": "Save",
     "copy": "Copy"
   },
-  "msg":{
-    "status":"Status",
-    "error":"Error",
-    "warning":"Warning",
-    "result":"Result",
-    "pending":"pending",
-    "done":"Done",
-    "dismiss":"Dismiss",
-    "lastSync":"Last sync",
-    "lastSyncAttempt":"Last sync attempt",
-    "clipboardCopy":"Copied to clipboard.",
-    "written":"Written",
-    "enabled":"enabled",
-    "disabled":"disabled"
+  "msg": {
+    "status": "Status",
+    "error": "Error",
+    "warning": "Warning",
+    "result": "Result",
+    "pending": "pending",
+    "done": "Done",
+    "dismiss": "Dismiss",
+    "lastSync": "Last sync",
+    "lastSyncAttempt": "Last sync attempt",
+    "clipboardCopy": "Copied to clipboard.",
+    "written": "Written",
+    "enabled": "enabled",
+    "disabled": "disabled"
   }
 }
-

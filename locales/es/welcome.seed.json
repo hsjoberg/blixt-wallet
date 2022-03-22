@@ -1,9 +1,9 @@
 {
-    "title":"Bienvenido a Blixt Wallet!",
-    "msg":"Esta es tu copia de seguridad de semilla.",
-    "msg1":"Escribela en una hoja de papel y guardala en un lugar seguro.",
-    "msg2":"Si pierdes el acceso a tu cartera",
-    "msg3":"Deberias poder recuperar tus fondos usando la copia de seguridad de semilla",
-    "msg4":"La semilla usada está aezeed.",
-    "button":"Lo he escrito"
+  "title": "Bienvenido a Blixt Wallet!",
+  "msg": "Esta es tu copia de seguridad de semilla.",
+  "msg1": "Escribela en una hoja de papel y guardala en un lugar seguro.",
+  "msg2": "Si pierdes el acceso a tu cartera",
+  "msg3": "Deberias poder recuperar tus fondos usando la copia de seguridad de semilla",
+  "msg4": "La semilla usada está aezeed.",
+  "button": "Lo he escrito"
 }

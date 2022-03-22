@@ -1,7 +1,7 @@
 {
-    "layout":{
-        "title":"Petición de registro",
-        "msg":"Quiere registrarse",
-        "success":"Autenticado a"
-    }
+  "layout": {
+    "title": "Petición de registro",
+    "msg": "Quiere registrarse",
+    "success": "Autenticado a"
+  }
 }

@@ -1,316 +1,316 @@
 {
   "title": "Settings",
-  "general":{
-    "title":"General",
-    "name":{
-      "title":"Name",
-      "subtitle":"Will be used in transactions",
-      "dialog":{
-        "msg":"Choose a name that will be used in transactions\n\nYour name will be seen in invoices to those who pay you as well as people you pay to.",
-        "accept":"Set name"
+  "general": {
+    "title": "General",
+    "name": {
+      "title": "Name",
+      "subtitle": "Will be used in transactions",
+      "dialog": {
+        "msg": "Choose a name that will be used in transactions\n\nYour name will be seen in invoices to those who pay you as well as people you pay to.",
+        "accept": "Set name"
       }
     },
-    "lang":{
-      "title":"Language",
-      "dialog":{
-        "title":"Select language"
+    "lang": {
+      "title": "Language",
+      "dialog": {
+        "title": "Select language"
       }
     },
-    "pushNotification":{
-      "title":"Push notifications",
-      "subtitle":"For transaction and channel events"
+    "pushNotification": {
+      "title": "Push notifications",
+      "subtitle": "For transaction and channel events"
     },
-    "checkClipboard":{
-      "title":"Check clipboard for invoices",
-      "subtitle":"Automatically check clipboard for invoices"
+    "checkClipboard": {
+      "title": "Check clipboard for invoices",
+      "subtitle": "Automatically check clipboard for invoices"
     },
-    "saveGeolocation":{
-      "title":"Save geolocation of transaction",
-      "subtitle":"Locally save the location of a transaction",
-      "logGranted":"Geolocation granted",
-      "logDenied":"Geolocation permission denied"
+    "saveGeolocation": {
+      "title": "Save geolocation of transaction",
+      "subtitle": "Locally save the location of a transaction",
+      "logGranted": "Geolocation granted",
+      "logDenied": "Geolocation permission denied"
     },
-    "mapTheme":{
-      "title":"Set Map theme"
+    "mapTheme": {
+      "title": "Set Map theme"
     }
   },
-  "wallet":{
-    "title":"Wallet",
-    "seed":{
-      "show":{
-        "title":"Show mnemonic",
-        "subtitle":"Show 24-word seed for this wallet",
-        "dialog":{
-          "title":"Seed",
-          "alert":"Copied to clipboard",
-          "copy":"Copy seed"
+  "wallet": {
+    "title": "Wallet",
+    "seed": {
+      "show": {
+        "title": "Show mnemonic",
+        "subtitle": "Show 24-word seed for this wallet",
+        "dialog": {
+          "title": "Seed",
+          "alert": "Copied to clipboard",
+          "copy": "Copy seed"
         }
       },
-      "remove":{
-        "title":"Remove mnemonic from device",
-        "subtitle":"Permanently remove the seed from this device",
-        "dialog":{
-          "title":"Remove seed",
-          "msg":"This will permanently remove the seed from this device. Only do this if you have backed up your seed!",
-          "accept":"Delete seed"
+      "remove": {
+        "title": "Remove mnemonic from device",
+        "subtitle": "Permanently remove the seed from this device",
+        "dialog": {
+          "title": "Remove seed",
+          "msg": "This will permanently remove the seed from this device. Only do this if you have backed up your seed!",
+          "accept": "Delete seed"
         }
       }
     },
-    "backup":{
-      "export":{
-        "title":"Export channel backup",
-        "alert":"File written:"
+    "backup": {
+      "export": {
+        "title": "Export channel backup",
+        "alert": "File written:"
       },
-      "verify":{
-        "title":"Verify channel backup"
+      "verify": {
+        "title": "Verify channel backup"
       },
-      "googleCloud":{
-        "title":"Google Drive channel backup",
-        "subtitle":"Automatically backup channels to Google Drive",
-        "alert":"Google Drive backup enabled"
+      "googleCloud": {
+        "title": "Google Drive channel backup",
+        "subtitle": "Automatically backup channels to Google Drive",
+        "alert": "Google Drive backup enabled"
       },
-      "googleCloudForce":{
-        "title":"Manually trigger Google Drive Backup",
-        "alert":"Backed up channels to Google Drive"
+      "googleCloudForce": {
+        "title": "Manually trigger Google Drive Backup",
+        "alert": "Backed up channels to Google Drive"
       },
-      "iCloud":{
-        "title":"iCloud channel backup",
-        "subtitle":"Automatically backup channels to iCloud",
-        "alert":"iCloud backup"
+      "iCloud": {
+        "title": "iCloud channel backup",
+        "subtitle": "Automatically backup channels to iCloud",
+        "alert": "iCloud backup"
       },
-      "iCloudForce":{
-        "title":"Manually trigger iCloud Backup",
-        "alert":"Backed up channels to iCloud"
+      "iCloudForce": {
+        "title": "Manually trigger iCloud Backup",
+        "alert": "Backed up channels to iCloud"
       },
-      "error":"Error backup up"
+      "error": "Error backup up"
     }
   },
-  "security":{
-    "title":"Security",
-    "pincode":{
-      "title":"Login with pincode"
+  "security": {
+    "title": "Security",
+    "pincode": {
+      "title": "Login with pincode"
     },
-    "biometrics":{
-      "title":"Login with",
-      "fingerprint":"fingerprint",
-      "faceId":"Face ID",
-      "touchID":"Touch ID"
+    "biometrics": {
+      "title": "Login with",
+      "fingerprint": "fingerprint",
+      "faceId": "Face ID",
+      "touchID": "Touch ID"
     },
-    "chainSync":{
-      "title":"Scheduled chain sync",
-      "subtitle":"Runs in background every 4 hours",
-      "dialog":{
-        "title":"Not recommended",
-        "msg":"Warning. It is not recommended to disable scheduled chain sync.\n\nMake sure you keep up-to-date with the network otherwise you risk losing your funds.\n\nOnly do this if you're know what you're doing."
+    "chainSync": {
+      "title": "Scheduled chain sync",
+      "subtitle": "Runs in background every 4 hours",
+      "dialog": {
+        "title": "Not recommended",
+        "msg": "Warning. It is not recommended to disable scheduled chain sync.\n\nMake sure you keep up-to-date with the network otherwise you risk losing your funds.\n\nOnly do this if you're know what you're doing."
       }
     }
   },
-  "display":{
-    "title":"Display",
-    "fiatUnit":{
+  "display": {
+    "title": "Display",
+    "fiatUnit": {
       "title": "Change fiat unit"
     },
-    "bitcoinUnit":{
+    "bitcoinUnit": {
       "title": "Change bitcoin unit"
     },
-    "onchainExplorer":{
+    "onchainExplorer": {
       "title": "Onchain explorer",
-      "dialog":{
-        "title":"Change on-chain explorer"
+      "dialog": {
+        "title": "Change on-chain explorer"
       }
     }
   },
-  "bitcoinNetwork":{
-    "title":"Bitcoin Network",
-    "node":{
+  "bitcoinNetwork": {
+    "title": "Bitcoin Network",
+    "node": {
       "title": "Bitcoin Node",
-      "subtitle":"Set Bitcoin node (BIP157) to connect to",
-      "setDialog":{
-        "title":"Set Node"
+      "subtitle": "Set Bitcoin node (BIP157) to connect to",
+      "setDialog": {
+        "title": "Set Node"
       },
-      "restoreDialog":{
-        "title":"Restore node",
-        "msg":"Would you like to restore to the default node"
+      "restoreDialog": {
+        "title": "Restore node",
+        "msg": "Would you like to restore to the default node"
       },
-      "restartDialog":{
-        "title":"Restart required",
-        "msg":"Blixt Wallet has to be restarted before the new configuration is applied.",
-        "msg1":"Would you like to do that now?"
+      "restartDialog": {
+        "title": "Restart required",
+        "msg": "Blixt Wallet has to be restarted before the new configuration is applied.",
+        "msg1": "Would you like to do that now?"
       }
     },
-    "rpc":{
+    "rpc": {
       "title": "Set bitcoind RPC Host"
     },
-    "zmqRawBlock":{
+    "zmqRawBlock": {
       "title": "Set bitcoind ZMQ Raw Block Host"
     },
-    "zmqRawTx":{
+    "zmqRawTx": {
       "title": "Set bitcoind ZMQ Raw Tx Host"
     }
   },
-  "LN":{
-    "title":"Lightning Network",
-    "node":{
+  "LN": {
+    "title": "Lightning Network",
+    "node": {
       "title": "Show node data",
-      "subtitle":""
+      "subtitle": ""
     },
-    "peers":{
+    "peers": {
       "title": "Show Lightning peers",
-      "subtitle":""
+      "subtitle": ""
     },
-    "autopilot":{
+    "autopilot": {
       "title": "Automatically open channels",
-      "subtitle":""
+      "subtitle": ""
     },
-    "inbound":{
+    "inbound": {
       "title": "Inbound channel services",
-      "subtitle":"Use an inbound channel service for receiving payments",
-      "dialog":{
-          "title":"Incoming channel provider",
-          "msg1":"Choose an incoming channel provider and press Continue.",
-          "msg2":"Your web browser will be opened to the corresponding provider's website, where you will be able to request a channel.",
-          "msg3":"When you're done, you can copy the address code and/or open the link using Blixt Wallet."
+      "subtitle": "Use an inbound channel service for receiving payments",
+      "dialog": {
+        "title": "Incoming channel provider",
+        "msg1": "Choose an incoming channel provider and press Continue.",
+        "msg2": "Your web browser will be opened to the corresponding provider's website, where you will be able to request a channel.",
+        "msg3": "When you're done, you can copy the address code and/or open the link using Blixt Wallet."
       }
     },
-    "LSP":{
+    "LSP": {
       "title": "Set Dunder LSP Server",
-      "subtitle":"",
-      "setDialog":{
-        "title":"Set Dunder Server",
-        "acept":"Set server"
+      "subtitle": "",
+      "setDialog": {
+        "title": "Set Dunder Server",
+        "acept": "Set server"
       },
-      "restoreDialog":{
-        "title":"Restore Dunder Server",
-        "msg":"Would you like to restore to the default Dunder server"
+      "restoreDialog": {
+        "title": "Restore Dunder Server",
+        "msg": "Would you like to restore to the default Dunder server"
       }
     },
-    "graphSync":{
+    "graphSync": {
       "title": "Wait for graph sync before paying",
-      "subtitle":"Synchronized graph leads to optimal payment paths"
+      "subtitle": "Synchronized graph leads to optimal payment paths"
     }
   },
-  "miscelaneous":{
-    "title":"Miscellaneous",
-    "about":{
+  "miscelaneous": {
+    "title": "Miscellaneous",
+    "about": {
       "title": "About",
-      "subtitle":""
+      "subtitle": ""
     },
-    "appLog":{
+    "appLog": {
       "title": "Copy app log to local storage",
-      "subtitle":"",
-      "dialog":{
-        "alert":"Copied app log file to",
-        "error":"Error copying app log file."
+      "subtitle": "",
+      "dialog": {
+        "alert": "Copied app log file to",
+        "error": "Error copying app log file."
       }
     },
-    "lndLog":{
+    "lndLog": {
       "title": "Copy lnd log to local storage",
-      "subtitle":"Reached from /sdcard/BlixtWallet",
-      "dialog":{
-        "alert":"Copied lnd log file",
-        "error":"Error copying lnd log file."
+      "subtitle": "Reached from /sdcard/BlixtWallet",
+      "dialog": {
+        "alert": "Copied lnd log file",
+        "error": "Error copying lnd log file."
       }
     },
-    "dev":{
+    "dev": {
       "title": "Go to dev screen",
-      "subtitle":""
+      "subtitle": ""
     },
-    "expiredInvoices":{
+    "expiredInvoices": {
       "title": "Automatically hide expired invoices",
-      "subtitle":""
+      "subtitle": ""
     },
-    "screenTransactions":{
+    "screenTransactions": {
       "title": "Screen transitions",
-      "subtitle":""
+      "subtitle": ""
     },
-    "signMessage":{
+    "signMessage": {
       "title": "Sign message with wallet key",
-      "subtitle":"",
-      "dialog1":{
-        "title":"Sign message"
+      "subtitle": "",
+      "dialog1": {
+        "title": "Sign message"
       },
-      "dialog2":{
-        "title":"Signature",
-        "alert":"Copied to clipboard"
+      "dialog2": {
+        "title": "Signature",
+        "alert": "Copied to clipboard"
       }
     }
   },
-  "experimental":{
-    "title":"Experiments",
-    "LSP":{
+  "experimental": {
+    "title": "Experiments",
+    "LSP": {
       "title": "Enable Dunder LSP",
-      "subtitle":"HIGHLY EXPERIMENTAL. Lightning Service Provider that helps with inbound liquidity"
+      "subtitle": "HIGHLY EXPERIMENTAL. Lightning Service Provider that helps with inbound liquidity"
     },
-    "MPP":{
+    "MPP": {
       "title": "Enable Multi-Path Payments",
-      "subtitle":"Payments can take up to 2 paths"
+      "subtitle": "Payments can take up to 2 paths"
     },
-    "tor":{
+    "tor": {
       "title": "Enable Tor",
-      "subtitle":"",
-      "enabled":{
-        "title":"Restart app and enable Tor",
-        "msg1":"Enabling Tor will make the wallet connect to its peers (both Bitcoin and Lightning Network peers) via the Tor Network.",
-        "msg2":"You'll also be able to connect and open channels to Lightning nodes that uses onion services.",
-        "msg3":"WARNING: Blixt Wallet will still talk to the following services without Tor",
-        "msg4":"Reason: To get fiat/bitcoin rates",
-        "msg5":"Reason: To get the current block height",
-        "msg6":"Reason: For Google Drive backup",
-        "msg7":"Reason: For reliable Lightning nodes",
-        "msg8":"WebLN Browser and LNURL will also not use Tor."
+      "subtitle": "",
+      "enabled": {
+        "title": "Restart app and enable Tor",
+        "msg1": "Enabling Tor will make the wallet connect to its peers (both Bitcoin and Lightning Network peers) via the Tor Network.",
+        "msg2": "You'll also be able to connect and open channels to Lightning nodes that uses onion services.",
+        "msg3": "WARNING: Blixt Wallet will still talk to the following services without Tor",
+        "msg4": "Reason: To get fiat/bitcoin rates",
+        "msg5": "Reason: To get the current block height",
+        "msg6": "Reason: For Google Drive backup",
+        "msg7": "Reason: For reliable Lightning nodes",
+        "msg8": "WebLN Browser and LNURL will also not use Tor."
       },
-      "disabled":{
-        "title":"Restart app and disable Tor",
-        "msg1":"Disabling Tor requires an app restart.",
-        "msg2":"Do you wish to proceed?"
+      "disabled": {
+        "title": "Restart app and disable Tor",
+        "msg1": "Disabling Tor requires an app restart.",
+        "msg2": "Do you wish to proceed?"
       }
     },
-    "onion":{
+    "onion": {
       "title": "Show Tor onion service",
-      "subtitle":"For connecting and opening channels to this wallet"
+      "subtitle": "For connecting and opening channels to this wallet"
     },
-    "keysend":{
+    "keysend": {
       "title": "Keysend Experiment",
-      "subtitle":""
+      "subtitle": ""
     }
   },
-  "debug":{
-    "title":"Debug",
-    "startup":{
+  "debug": {
+    "title": "Debug",
+    "startup": {
       "title": "Show startup info notifications",
-      "subtitle":""
+      "subtitle": ""
     },
-    "helpCencer":{
+    "helpCencer": {
       "title": "LndMobile help center",
-      "subtitle":""
+      "subtitle": ""
     },
-    "LSP":{
+    "LSP": {
       "title": "Diagnose Dunder problems",
-      "subtitle":""
+      "subtitle": ""
     },
-    "lndLog":{
+    "lndLog": {
       "title": "Read lnd log",
-      "subtitle":""
+      "subtitle": ""
     },
-    "keysend":{
+    "keysend": {
       "title": "Keysend Test",
-      "subtitle":""
+      "subtitle": ""
     },
-    "googleDrive":{
+    "googleDrive": {
       "title": "Google Drive Testbed",
-      "subtitle":""
+      "subtitle": ""
     },
-    "webln":{
+    "webln": {
       "title": "WebLN",
-      "subtitle":""
+      "subtitle": ""
     },
-    "config":{
+    "config": {
       "title": "Write config",
-      "subtitle":""
+      "subtitle": ""
     },
-    "demo":{
+    "demo": {
       "title": "Activate Demo Mode",
-      "subtitle":"Used for promo. Restart app to reset"
+      "subtitle": "Used for promo. Restart app to reset"
     }
   }
 }

@@ -1,22 +1,22 @@
 {
-    "layout":{
-        "title":"Pay invoice"
+  "layout": {
+    "title": "Pay invoice"
+  },
+  "form": {
+    "invoice": {
+      "title": "Invoice"
     },
-    "form":{
-        "invoice":{
-            "title":"Invoice"
-        },
-        "amount":{
-            "title":"Amount"
-        },
-        "recipient":{
-            "title":"Recipient"
-        },
-        "nodeAlias":{
-            "title":"Node Alias"
-        },
-        "description":{
-            "title":"Message"
-        }
+    "amount": {
+      "title": "Amount"
+    },
+    "recipient": {
+      "title": "Recipient"
+    },
+    "nodeAlias": {
+      "title": "Node Alias"
+    },
+    "description": {
+      "title": "Message"
     }
+  }
 }

@@ -1,32 +1,32 @@
 {
-    "name":{
-        "title":"Nombre",
-        "msg":"Será usado en transacciones",
-        "alert":{
-            "title":"Nombre",
-            "msg1":"Elige un nombre que será usado en transacciones",
-            "msg2":"Tu nombre será visto en facturas de los que te pagaron como",
-            "msg3":"las personas a las que pagaste.",
-            "msg4":"Set name"
-        }
-    },
-    "pincode":{
-        "title":"Iniciar sesión con código pin",
-        "msg":"Iniciar sesión con"
-    },
-    "fiatUnit":{
-        "title":"Moneda Fiat",
-        "dialog":{
-            "title":"Cambiar unidad Fiat"
-        }
-    },
-    "autopilot":{
-        "title":"Canales de auto apertura",
-        "msg":"Abrir canales cuando los fondos en cadena esten disponibles"
-    },
-    "done":{
-        "title":"¡Casi terminado!",
-        "msg1":"Aquí hay algunos ajustes de la cartera que puedes cambiar a tu gusto",
-        "msg2":"Cuando estes listo, presiona continuar"
+  "name": {
+    "title": "Nombre",
+    "msg": "Será usado en transacciones",
+    "alert": {
+      "title": "Nombre",
+      "msg1": "Elige un nombre que será usado en transacciones",
+      "msg2": "Tu nombre será visto en facturas de los que te pagaron como",
+      "msg3": "las personas a las que pagaste.",
+      "msg4": "Set name"
     }
+  },
+  "pincode": {
+    "title": "Iniciar sesión con código pin",
+    "msg": "Iniciar sesión con"
+  },
+  "fiatUnit": {
+    "title": "Moneda Fiat",
+    "dialog": {
+      "title": "Cambiar unidad Fiat"
+    }
+  },
+  "autopilot": {
+    "title": "Canales de auto apertura",
+    "msg": "Abrir canales cuando los fondos en cadena esten disponibles"
+  },
+  "done": {
+    "title": "¡Casi terminado!",
+    "msg1": "Aquí hay algunos ajustes de la cartera que puedes cambiar a tu gusto",
+    "msg2": "Cuando estes listo, presiona continuar"
+  }
 }

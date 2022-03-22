@@ -1,5 +1,5 @@
 {
-    "title":"Tor Onion Service",
-    "msg1":"Scan this QR code to open a channel to this wallet",
-    "msg2":"Couldn't resolve onion address"
+  "title": "Tor Onion Service",
+  "msg1": "Scan this QR code to open a channel to this wallet",
+  "msg2": "Couldn't resolve onion address"
 }

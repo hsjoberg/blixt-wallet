@@ -1,28 +1,28 @@
 {
-    "layout":{
-        "title":"Recibir"
+  "layout": {
+    "title": "Recibir"
+  },
+  "createInvoice": {
+    "title": "Crear factura",
+    "error": "La cantidad de la factura no puede ser más grande que",
+    "alert": "Antes de poder recibir, necesitas abrir un canal de Lightning."
+  },
+  "form": {
+    "amountFiat": {
+      "title": "Cantidad",
+      "change": "Cambiar unidad fiat"
     },
-    "createInvoice":{
-        "title":"Crear factura",
-        "error":"La cantidad de la factura no puede ser más grande que",
-        "alert":"Antes de poder recibir, necesitas abrir un canal de Lightning."
+    "amountBitcoin": {
+      "title": "Cantidad",
+      "change": "Cambiar unidad Bitcoin"
     },
-    "form":{
-        "amountFiat":{
-            "title":"Cantidad",
-            "change":"Cambiar unidad fiat"
-        },
-        "amountBitcoin":{
-            "title":"Cantidad",
-            "change":"Cambiar unidad Bitcoin"
-        },
-        "payer":{
-            "title":"Pagador",
-            "placeholder":"Para contabilidad"
-        },
-        "description":{
-            "title":"Mensaje",
-            "placeholder":"Mensaje a pagador"
-        }
+    "payer": {
+      "title": "Pagador",
+      "placeholder": "Para contabilidad"
+    },
+    "description": {
+      "title": "Mensaje",
+      "placeholder": "Mensaje a pagador"
     }
+  }
 }

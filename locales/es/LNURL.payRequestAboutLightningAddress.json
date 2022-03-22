@@ -1,8 +1,8 @@
 {
-    "title":"Sobre la dirección Lightning",
-    "msg1":"Dirección Lightning",
-    "msg2":"Es una forma de pagar a una persona o un servicio en la Lightning Network.",
-    "msg3":"Se ven como direcciones de email, pero en vez de enviar un email al receptor, le envias dinero.",
-    "msg4":"Blixt Wallet tiene todo tipo de soporte para enviar a una dirección Lightning, pero recibiendo",
-    "msg5":"via una dirección Lightning está siendo trabajada."
+  "title": "Sobre la dirección Lightning",
+  "msg1": "Dirección Lightning",
+  "msg2": "Es una forma de pagar a una persona o un servicio en la Lightning Network.",
+  "msg3": "Se ven como direcciones de email, pero en vez de enviar un email al receptor, le envias dinero.",
+  "msg4": "Blixt Wallet tiene todo tipo de soporte para enviar a una dirección Lightning, pero recibiendo",
+  "msg5": "via una dirección Lightning está siendo trabajada."
 }

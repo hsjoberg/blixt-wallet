@@ -1,19 +1,19 @@
 {
-    "layout":{
-        "title":"Open channel"
+  "layout": {
+    "title": "Open channel"
+  },
+  "form": {
+    "title": "Open channel",
+    "channel": {
+      "title": "Node URI",
+      "placeholder": "URI"
     },
-    "form":{
-        "title":"Open channel",
-        "channel": {
-            "title":"Node URI",
-            "placeholder":"URI"
-        },
-        "amount": {
-            "title":"Amount",
-            "placeholder":"Amount"
-        },
-        "fee_rate": {
-            "title":"Fee-rate"
-        }
+    "amount": {
+      "title": "Amount",
+      "placeholder": "Amount"
+    },
+    "fee_rate": {
+      "title": "Fee-rate"
     }
+  }
 }

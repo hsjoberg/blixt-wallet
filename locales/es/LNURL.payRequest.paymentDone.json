@@ -1,24 +1,24 @@
 {
-    "message":{
-        "title":"Mensaje de"
+  "message": {
+    "title": "Mensaje de"
+  },
+  "url": {
+    "description": "Descripción",
+    "domain": "URL recibida de",
+    "done": {
+      "title": "Hecho"
     },
-    "url":{
-        "description":"Descripción",
-        "domain":"URL recibida de",
-        "done":{
-            "title":"Hecho"
-        },
-        "copy":{
-            "title":"Copiar al portapapeles",
-            "msg":"Copiado al portapapeles."
-        },
-        "open":{
-            "title":"Abrir navegador"
-        }
+    "copy": {
+      "title": "Copiar al portapapeles",
+      "msg": "Copiado al portapapeles."
     },
-    "aes":{
-        "domain":"Tienes un mensaje secreto encriptado de",
-        "description":"Mensaje de",
-        "secret":"Mensaje secreto"
+    "open": {
+      "title": "Abrir navegador"
     }
+  },
+  "aes": {
+    "domain": "Tienes un mensaje secreto encriptado de",
+    "description": "Mensaje de",
+    "secret": "Mensaje secreto"
+  }
 }

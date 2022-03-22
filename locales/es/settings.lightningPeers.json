@@ -1,22 +1,22 @@
 {
-    "layout":{
-        "title":"Compañero de Lightning"
-    },
-    "alias":"Alias del nodo",
-    "pubKey":"Llave publica del nodo",
-    "address":"Dirección del nodo",
-    "data":{
-        "title":"Datos",
-        "bytesSent":"Bytes enviados",
-        "bytesRecv":"Bytes recibidos"
-    },
-    "transfer":{
-        "title":"Transferir",
-        "satSent":"envio de sat",
-        "satRecv":"recibir sat"
-    },
-    "inbound":"Entrante",
-    "syncType":"Tipo de sincronización",
-    "errors":"Errores",
-    "disconnect":"Desconectar compañero"
+  "layout": {
+    "title": "Compañero de Lightning"
+  },
+  "alias": "Alias del nodo",
+  "pubKey": "Llave publica del nodo",
+  "address": "Dirección del nodo",
+  "data": {
+    "title": "Datos",
+    "bytesSent": "Bytes enviados",
+    "bytesRecv": "Bytes recibidos"
+  },
+  "transfer": {
+    "title": "Transferir",
+    "satSent": "envio de sat",
+    "satRecv": "recibir sat"
+  },
+  "inbound": "Entrante",
+  "syncType": "Tipo de sincronización",
+  "errors": "Errores",
+  "disconnect": "Desconectar compañero"
 }

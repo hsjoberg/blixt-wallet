@@ -1,8 +1,8 @@
 {
-    "layout":{
-        "title":"Canales Lightning"
-    },
-    "balance":{
-        "title":"Balance"
-    }
+  "layout": {
+    "title": "Canales Lightning"
+  },
+  "balance": {
+    "title": "Balance"
+  }
 }

@@ -1,35 +1,35 @@
 {
-    "title":"Keysend",
-    "qr":{
-        "alert":"Copied to clipboard"
+  "title": "Keysend",
+  "qr": {
+    "alert": "Copied to clipboard"
+  },
+  "dialog": {
+    "msg1": "Welcome to the keysend playground",
+    "msg2": "Keysend lets you pay another Blixt Wallet (or any Lightning node that supports keysend) without requiring an invoice.",
+    "msg3": "Click on the camera to scan another wallet's QR code or provide a public key and route hints below."
+  },
+  "send": {
+    "title": "Send",
+    "msg": "Keysend payment",
+    "error1": "Check amount",
+    "error2": "Missing pubkey",
+    "alert": "Payment successful"
+  },
+  "form": {
+    "amount": {
+      "title": "Amount sat"
     },
-    "dialog":{
-        "msg1":"Welcome to the keysend playground",
-        "msg2":"Keysend lets you pay another Blixt Wallet (or any Lightning node that supports keysend) without requiring an invoice.",
-        "msg3":"Click on the camera to scan another wallet's QR code or provide a public key and route hints below."
+    "pubkey": {
+      "title": "Public key",
+      "placeholder": "Pubkey"
     },
-    "send":{
-        "title":"Send",
-        "msg":"Keysend payment",
-        "error1":"Check amount",
-        "error2":"Missing pubkey",
-        "alert":"Payment successful"
+    "route": {
+      "title": "Route hints",
+      "placeholder": "Route hints"
     },
-    "form":{
-        "amount":{
-            "title":"Amount sat"
-        },
-        "pubkey":{
-            "title":"Public key",
-            "placeholder":"Pubkey"
-        },
-        "route":{
-            "title":"Route hints",
-            "placeholder":"Route hints"
-        },
-        "message":{
-            "title":"Message",
-            "placeholder":"Enter a chat message here"
-        }
+    "message": {
+      "title": "Message",
+      "placeholder": "Enter a chat message here"
     }
+  }
 }

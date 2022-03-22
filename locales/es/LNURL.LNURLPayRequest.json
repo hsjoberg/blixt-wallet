@@ -1,29 +1,29 @@
 {
-    "viewMetadata":{
-        "title":"Ver metadatos",
-        "dialog":{
-            "title":"Metadatos técnicos"
-        }
+  "viewMetadata": {
+    "title": "Ver metadatos",
+    "dialog": {
+      "title": "Metadatos técnicos"
+    }
+  },
+  "lightningAddress": {
+    "alert1": {
+      "msg": "¡Está en tu lista de contactos!"
     },
-    "lightningAddress":{
-        "alert1":{
-            "msg":"¡Está en tu lista de contactos!"
-        },
-        "alert2":{
-            "title":"Añadir a tu lista de contactos",
-            "msg":"Te gustaría añadir",
-            "msg1":"a tu lista de contactos?"
-        }
+    "alert2": {
+      "title": "Añadir a tu lista de contactos",
+      "msg": "Te gustaría añadir",
+      "msg1": "a tu lista de contactos?"
+    }
+  },
+  "payContact": {
+    "alert1": {
+      "msg": "!está en tu lista de contactos!"
     },
-    "payContact":{
-        "alert1":{
-            "msg":"!está en tu lista de contactos!"
-        },
-        "alert2":{
-            "title":"Añadir a tu lista de contactos",
-            "msg":"Te gustaría añadir este código de pago a",
-            "msg1":"tu lista de contactos?"
-        }
-    },
-    "error":"Pago inhabilitado"
+    "alert2": {
+      "title": "Añadir a tu lista de contactos",
+      "msg": "Te gustaría añadir este código de pago a",
+      "msg1": "tu lista de contactos?"
+    }
+  },
+  "error": "Pago inhabilitado"
 }
