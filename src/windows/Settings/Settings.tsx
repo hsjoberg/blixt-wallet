@@ -35,14 +35,15 @@ interface ISettingsProps {
 }
 export default function Settings({ navigation }: ISettingsProps) {
   const currentLanguage = useStoreState((store) => store.settings.language);
-  const { t, i18n } = useTranslation(namespaces.settings.settings)
+  const { t, i18n } = useTranslation(namespaces.settings.settings);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: t("title"),
       headerBackTitle: "Back",
       headerShown: true,
     });
-  }, [navigation]);
+  }, [navigation, currentLanguage]);
 
   const onboardingState = useStoreState((store) => store.onboardingState);
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
@@ -194,7 +195,7 @@ export default function Settings({ navigation }: ISettingsProps) {
         })
       });
       if (selectedItem) {
-        changeLanguage(selectedItem.id);
+        await changeLanguage(selectedItem.id);
       }
     } else {
       navigation.navigate("ChangeLanguage", {

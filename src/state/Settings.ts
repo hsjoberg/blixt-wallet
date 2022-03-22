@@ -309,9 +309,7 @@ export const settings: ISettingsModel = {
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
-  setLanguage: action((state, payload) => { 
-    state.language = payload;
-  }),
+  setLanguage: action((state, payload) => { state.language = payload }),
   setAutopilotEnabled: action((state, payload) => { state.autopilotEnabled = payload; }),
   setPushNotificationsEnabled: action((state, payload) => { state.pushNotificationsEnabled = payload; }),
   setClipboardInvoiceCheckInvoicesEnabled: action((state, payload) => { state.clipboardInvoiceCheckEnabled = payload; }),
