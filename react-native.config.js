@@ -4,7 +4,7 @@ module.exports = {
     android: {},
   },
   dependencies: {
-    '@react-native-community/google-signin': {
+    '@react-native-google-signin/google-signin': {
       platforms: {
         ios: null,
       },
