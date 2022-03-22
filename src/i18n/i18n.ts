@@ -4,6 +4,7 @@ import { languages, namespaces } from "./i18n.constants";
 import {PLATFORM} from "../utils/constants";
 //import Backend from 'i18next-chained-backend';
 import HttpApi from "i18next-http-backend";
+import { getItemObject, StorageItem } from "../storage/app";
 
 import en from "./en"
 import es from "./es"
@@ -43,10 +44,14 @@ const createI18n = (language: string): i18nInstance => {
       ns: namespaces.common,
       resources: res
   });
-  
+
   return i18n;
-  
+
 };
 
 
 export const i18n = createI18n(languages.en.id);
+
+getItemObject(StorageItem.language).then((lang) => {
+  i18n.changeLanguage(lang);
+});
