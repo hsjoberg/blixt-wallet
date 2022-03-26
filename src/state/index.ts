@@ -139,9 +139,11 @@ export const model: IStoreModel = {
     const db = await actions.openDb();
     if (!await getItemObjectAsyncStorage(StorageItem.app)) {
       log.i("Initializing app for the first time");
-      if (PLATFORM === "ios") {
+      if (PLATFORM === "ios" || PLATFORM === "macos") {
         log.i("Creating Application Support and lnd directories");
         await injections.lndMobile.index.createIOSApplicationSupportAndLndDirectories();
+      }
+      if (PLATFORM === "ios") {
         log.i("Excluding lnd directory from backup")
         await injections.lndMobile.index.excludeLndICloudBackup();
       }

@@ -52,5 +52,11 @@
 		<string>IBMPlexSans-Medium.ttf</string>
 		<string>IBMPlexSans-Regular.ttf</string>
 	</array>
+	<key>CHAIN</key>
+	<string>$(CHAIN)</string>
+	<key>DEBUG</key>
+	<string>$(DEBUG)</string>
+	<key>FLAVOR</key>
+	<string>$(FLAVOR)</string>
 </dict>
 </plist>

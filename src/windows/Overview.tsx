@@ -567,7 +567,7 @@ export function DrawerComponent() {
         width: 305,
         borderEndColor: blixtTheme.dark,
       },
-      drawerType: (PLATFORM !== "macos" && layoutMode === "mobile") ? "front" : "permanent",
+      drawerType: layoutMode === "mobile" ? "front" : "permanent",
       swipeEdgeWidth: 400,
     }} drawerContent={() => <Drawer />}>
       <DrawerNav.Screen name="OverviewTabs" component={OverviewTabsComponent} />

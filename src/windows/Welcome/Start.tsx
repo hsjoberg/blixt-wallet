@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, StatusBar, Alert, NativeModules } from "react-native";
+import { StyleSheet, StatusBar, Alert, NativeModules, SafeAreaView } from "react-native";
 import { Text, H1, Button, View, Spinner, Icon } from "native-base";
 import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
@@ -12,7 +12,6 @@ import { WelcomeStackParamList } from "./index";
 import Container from "../../components/Container";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { PLATFORM } from "../../utils/constants";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { useTranslation } from "react-i18next";
@@ -22,11 +21,12 @@ interface IAnimatedH1Props {
   children: JSX.Element | string;
 }
 function AnimatedH1({ children }: IAnimatedH1Props) {
-  const AnimH1 = Animatable.createAnimatableComponent(H1);
   return (
-    <AnimH1 style={style.header} duration={650} animation="fadeInDown" useNativeDriver={true}>
-      {children}
-    </AnimH1>
+    <Animatable.View duration={650} animation="fadeInDown">
+      <H1 style={style.header}>
+        {children}
+      </H1>
+    </Animatable.View>
   );
 };
 
@@ -35,7 +35,7 @@ interface IAnimatedViewProps {
 }
 function AnimatedView({ children }: IAnimatedViewProps) {
   return (
-    <Animatable.View duration={660} style={style.buttons} animation="fadeInUp" useNativeDriver={true}>
+    <Animatable.View duration={660} style={style.buttons} animation="fadeInUp">
       {children}
     </Animatable.View>
   );
@@ -152,7 +152,7 @@ ${t("createWallet.msg3")}`,
           barStyle="light-content"
         />
 
-        {!createWalletLoading && (
+        {(!createWalletLoading && PLATFORM !== "macos") &&  (
           <TopMenu />
         )}
 

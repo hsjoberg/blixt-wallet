@@ -154,6 +154,7 @@ open class Lnd {
     if (torEnabled) {
       lndArgs += " --tor.active"
     }
+    NSLog("lndArgs  " + lndArgs)
 
     let started: Callback = {(data: Data?, error: Error?) in {
       self.lndStarted = true
