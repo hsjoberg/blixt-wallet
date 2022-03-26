@@ -84,12 +84,12 @@ interface ILanguages {
 }
 
 export const languages: ILanguages = {
-  es: {
-    id: "es",
-    name: "Español",
-  },
   en: {
     id: "en",
     name: "English",
+  },
+  es: {
+    id: "es",
+    name: "Español",
   },
 };
