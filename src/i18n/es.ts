@@ -5,7 +5,6 @@ import help from "../../locales/es/help.json";
 import overview from "../../locales/es/overview.json";
 import syncInfo from "../../locales/es/syncInfo.json";
 import contacts_contactList from "../../locales/es/contacts.contactList.json";
-import google_googleDriveTestbed from "../../locales/es/google.googleDriveTestbed.json";
 import initProcess_initLightning from "../../locales/es/initProcess.initLightning.json";
 import keysend_experiment from "../../locales/es/keysend.experiment.json";
 import lightningInfo_lightningInfo from "../../locales/es/lightningInfo.lightningInfo.json";
@@ -56,7 +55,6 @@ export default {
   [namespaces.overview]: overview,
   [namespaces.syncInfo]: syncInfo,
   [namespaces.contacts.contactList]: contacts_contactList,
-  [namespaces.google.googleDriveTestbed]: google_googleDriveTestbed,
   [namespaces.initProcess.initLightning]: initProcess_initLightning,
   [namespaces.keysend.experiment]: keysend_experiment,
   [namespaces.lightningInfo.lightningInfo]: lightningInfo_lightningInfo,

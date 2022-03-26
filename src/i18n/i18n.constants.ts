@@ -3,9 +3,6 @@ export const namespaces = {
   contacts: {
     contactList: "contacts.contactList",
   },
-  google: {
-    googleDriveTestbed: "google.googleDriveTestbed",
-  },
   initProcess: {
     initLightning: "initProcess.initLightning",
   },
