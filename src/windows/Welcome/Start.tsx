@@ -15,10 +15,8 @@ import { PLATFORM } from "../../utils/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -98,7 +96,7 @@ export interface IStartProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Start">;
 }
 export default function Start({ navigation }: IStartProps) {
-  t = useTranslation(namespaces.welcome.start).t;
+  const t = useTranslation(namespaces.welcome.start).t;
   const generateSeed = useStoreActions((store) => store.generateSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);

@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar, StyleSheet, } from "react-native";
+import { StatusBar } from "react-native";
 import { Icon, Text, View, Button, H1 } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -8,16 +8,14 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import style from "./style";
 import Container from "../../components/Container";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "GoogleDriveBackup">;
 }
 export default function GoogleDriveBackup({ navigation }: IProps) {
-  t = useTranslation(namespaces.welcome.googleDriveBackup).t;
+  const t = useTranslation(namespaces.welcome.googleDriveBackup).t;
   const googleDriveBackupEnabled = useStoreState((store) => store.settings.googleDriveBackupEnabled);
   const changeGoogleDriveBackupEnabled = useStoreActions((store) => store.settings.changeGoogleDriveBackupEnabled);
   const googleSignIn = useStoreActions((store) => store.google.signIn);
@@ -78,27 +76,3 @@ export default function GoogleDriveBackup({ navigation }: IProps) {
     </Container>
   );
 }
-
-const extraStyle = StyleSheet.create({
-  list: {
-    paddingTop: 12,
-    marginBottom: 48,
-  },
-  listItem: {
-    paddingLeft: 8,
-    paddingRight: 8,
-    // paddingLeft: 24,
-    // paddingRight: 24,
-  },
-  itemHeader: {
-    paddingLeft: 8,
-    paddingRight: 8,
-    // paddingRight: 24,
-    // paddingLeft: 24,
-    paddingTop: 24,
-    paddingBottom: 16,
-  },
-  icon: {
-    fontSize: 22,
-  },
-});

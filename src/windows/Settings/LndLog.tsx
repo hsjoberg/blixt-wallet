@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { EmitterSubscription, NativeModules } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Icon, Text } from "native-base";
+import { Icon } from "native-base";
 import Clipboard from "@react-native-community/clipboard";
 
 import { SettingsStackParamList } from "./index";
@@ -12,16 +12,14 @@ import { toast } from "../../utils";
 import LogBox from "../../components/LogBox";
 import useForceUpdate from "../../hooks/useForceUpdate";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 export interface ILndLogProps {
   navigation: StackNavigationProp<SettingsStackParamList, "LndLog">;
 }
 export default function LndLog({ navigation }: ILndLogProps) {
-  t = useTranslation(namespaces.settings.lndLog).t;
+  const t = useTranslation(namespaces.settings.lndLog).t;
 
   let log = useRef("");
   const forceUpdate = useForceUpdate();

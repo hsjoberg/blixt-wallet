@@ -9,16 +9,14 @@ import style from "./style";
 import { smallScreen } from "../../utils/device";
 import Container from "../../components/Container";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Seed">;
 }
 export default function Seed({ navigation }: IProps) {
-  t = useTranslation(namespaces.welcome.seed).t;
+  const t = useTranslation(namespaces.welcome.seed).t;
   const getSeed = useStoreActions((store) => store.security.getSeed);
   const [seed, setSeed] = useState<string[] | undefined>();
 

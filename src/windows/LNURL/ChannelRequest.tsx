@@ -6,20 +6,16 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import Container from "../../components/Container";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { useStoreState, useStoreActions } from "../../state/store";
-import { RootStackParamList } from "../../Main";
 import { toast, timeout } from "../../utils";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
-
 
 interface IChannelRequestProps {
   navigation: StackNavigationProp<{}>;
 }
 export default function LNURLChannelRequest({ navigation }: IChannelRequestProps) {
-  t = useTranslation(namespaces.LNURL.channelRequest).t;
+  const t = useTranslation(namespaces.LNURL.channelRequest).t;
   const [done, setDone] = useState(false);
   const type = useStoreState((store) => store.lnUrl.type);
   const doChannelRequest = useStoreActions((store) => store.lnUrl.doChannelRequest);

@@ -15,16 +15,14 @@ import { toast } from "../../utils";
 import { NavigationButton } from "../../components/NavigationButton";
 import { lnrpc } from "../../../proto/lightning";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IOnChainInfoProps {
   navigation: StackNavigationProp<OnChainStackParamList, "OnChainInfo">;
 }
 export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
-  t = useTranslation(namespaces.onchain.onChainInfo).t;
+  const t = useTranslation(namespaces.onchain.onChainInfo).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const getBalance = useStoreActions((store) => store.onChain.getBalance);
   const getAddress = useStoreActions((store) => store.onChain.getAddress);

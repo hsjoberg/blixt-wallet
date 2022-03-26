@@ -20,16 +20,14 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../Main";
 import { translatePaymentFailureReason } from "../../state/Send";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface ILightningInfoProps {
   navigation: StackNavigationProp<RootStackParamList, "KeysendExperiment">;
 }
 export default function KeysendTest({ navigation }: ILightningInfoProps) {
-  t = useTranslation(namespaces.keysend.experiment).t;
+  const t = useTranslation(namespaces.keysend.experiment).t;
   const [sending, setSending] = useState(false);
   const myNodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const [routehints, setRoutehints] = useState("");

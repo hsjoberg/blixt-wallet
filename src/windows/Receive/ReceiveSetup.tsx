@@ -17,10 +17,8 @@ import { Keyboard } from "react-native";
 import Container from "../../components/Container";
 import { IFiatRates } from "../../state/Fiat";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 const MATH_PAD_HEIGHT = 44;
 
@@ -28,7 +26,7 @@ export interface IReceiveSetupProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveSetup">;
 }
 export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
-  t = useTranslation(namespaces.receive.receiveSetup).t;
+  const t = useTranslation(namespaces.receive.receiveSetup).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const invoiceSubscriptionStarted = useStoreState((store) => store.receive.invoiceSubscriptionStarted);

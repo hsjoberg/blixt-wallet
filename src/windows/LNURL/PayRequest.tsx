@@ -16,17 +16,15 @@ import style from "./PayRequest/style";
 import { PLATFORM } from "../../utils/constants";
 import { RouteProp } from "@react-navigation/native";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 export interface IPayRequestProps {
   navigation: StackNavigationProp<LnUrlStackParamList>;
   route: RouteProp<LnUrlStackParamList, "PayRequest">;
 }
 export default function LNURLPayRequest({ navigation, route }: IPayRequestProps) {
-  t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
+  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
   const callback = (route?.params?.callback) ?? (() => {});
   const [preimage, setPreimage] = useState<Uint8Array | undefined>();
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);

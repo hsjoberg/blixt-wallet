@@ -5,10 +5,8 @@ import { ILNUrlPayRequest, ILNUrlPayRequestPayerData } from "../../../state/LNUR
 
 import style from "./style";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../../i18n/i18n.constants";
-
-let t:TFunction;
 
 export interface IPayerDataProps {
   setComment: (text: string) => void;
@@ -20,7 +18,7 @@ export interface IPayerDataProps {
   payerDataName: ILNUrlPayRequestPayerData["name"] | null;
 }
 export function PayerData({ setComment, setSendName, sendName, name, domain, commentAllowed, payerDataName}: IPayerDataProps) {
-  t = useTranslation(namespaces.LNURL.payRequest.payerData).t;
+  const t = useTranslation(namespaces.LNURL.payRequest.payerData).t;
   return (
     <View style={style.metadataSection}>
       {commentAllowed &&

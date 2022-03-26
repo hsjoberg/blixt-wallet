@@ -10,13 +10,11 @@ import CopyAddress from "../../components/CopyAddress";
 import Clipboard from "@react-native-community/clipboard";
 import { toast } from "../../utils";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
-let t:TFunction;
-
 export default function TorShowOnionAddress() {
-  t = useTranslation(namespaces.settings.torShowOnionAddress).t;
+  const t = useTranslation(namespaces.settings.torShowOnionAddress).t;
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const getNodeInfo = useStoreActions((store) => store.lightning.getInfo);
 

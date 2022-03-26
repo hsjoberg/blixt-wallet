@@ -14,10 +14,8 @@ import { SettingsStackParamList } from "./index";
 import { lnrpc } from "../../../proto/lightning";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 export interface ISelectListProps {
   navigation: StackNavigationProp<SettingsStackParamList, "LightningPeers">;
@@ -25,8 +23,7 @@ export interface ISelectListProps {
 }
 
 export default function({ navigation }: ISelectListProps) {
-  t = useTranslation(namespaces.settings.lightningPeers).t;
-  
+  const t = useTranslation(namespaces.settings.lightningPeers).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const lightningPeers = useStoreState((store) => store.lightning.lightningPeers);

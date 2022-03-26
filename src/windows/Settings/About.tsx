@@ -8,10 +8,9 @@ import { useStoreState } from "../../state/store";
 import TextLink from "../../components/TextLink";
 import { HAMPUS_EMAIL, GITHUB_REPO_URL } from "../../utils/constants";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
-let t:TFunction;
 
 const software = [
   "lnd with Neutrino",
@@ -22,7 +21,7 @@ const software = [
 ];
 
 export default function About() {
-  t = useTranslation(namespaces.settings.about).t;
+  const t = useTranslation(namespaces.settings.about).t;
   const appVersion = useStoreState((store) => store.appVersion);
 
   return (

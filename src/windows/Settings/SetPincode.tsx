@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
 import { Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -8,17 +7,15 @@ import { useStoreActions } from "../../state/store";
 import Pincode from "../../components/Pincode";
 import { PLATFORM } from "../../utils/constants";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 enum States {
   enter = "enter",
   confirm = "confirm",
 }
 export default function SetPincode() {
-  t = useTranslation(namespaces.settings.setPincode).t;
+  const t = useTranslation(namespaces.settings.setPincode).t;
   const navigation = useNavigation();
   const [state, setState] = useState<States>(States.enter);
   const [pincode, setStatePincode] = useState<string | undefined>();
@@ -54,15 +51,3 @@ export default function SetPincode() {
     </>
   )
 }
-
-const style = StyleSheet.create({
-  fingerPrintSymbolContainer: {
-    padding: 8,
-    alignContent: "center",
-    alignItems:"center",
-    marginBottom: 16,
-  },
-  fingerPrintSymbol: {
-    fontSize: 36
-  },
-});

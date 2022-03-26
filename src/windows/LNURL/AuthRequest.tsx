@@ -5,18 +5,16 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { getDomainFromURL, toast } from "../../utils";
 import { timeout } from "../../../mocks/lndmobile/utils";
-import { PLATFORM } from "../../utils/constants";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
-let t:TFunction;
 
 interface IAuthRequestProps {
   navigation: StackNavigationProp<{}>;
 }
 export default function LNURLChannelRequest({ navigation }: IAuthRequestProps) {
-  t = useTranslation(namespaces.LNURL.authRequest).t;
+  const t = useTranslation(namespaces.LNURL.authRequest).t;
   const [done, setDone] = useState(false);
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
   const type = useStoreState((store) => store.lnUrl.type);

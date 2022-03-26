@@ -10,17 +10,15 @@ import TextLink from "../../../components/TextLink";
 import { Done } from "../../Send/SendDone";
 import style from "./style";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../../i18n/i18n.constants";
-
-let t:TFunction;
 
 export interface IPayRequestDoneProps {
   preimage: Uint8Array;
   callback?: (r: Uint8Array | null) => void;
 }
 export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestDoneProps) {
-  t = useTranslation(namespaces.LNURL.payRequest.paymentDone).t;
+  const t = useTranslation(namespaces.LNURL.payRequest.paymentDone).t;
   const navigation = useNavigation();
   const clear = useStoreActions((store) => store.lnUrl.clear);
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);

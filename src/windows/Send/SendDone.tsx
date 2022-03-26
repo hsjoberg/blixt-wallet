@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { View, Animated } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Animated } from "react-native";
 import { Text } from "native-base";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -10,10 +10,9 @@ import Svg, { Circle, Polyline } from "react-native-svg";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
-let t:TFunction;
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedPolyline = Animated.createAnimatedComponent(Polyline);
@@ -77,6 +76,8 @@ function Check() {
 }
 
 export function Done() {
+  const t = useTranslation(namespaces.send.sendDone).t;
+
   return (
     <>
       <Check />
@@ -100,7 +101,6 @@ export default function SendDone({
   navigation,
   route,
 }: ISendConfirmationProps) {
-  t = useTranslation(namespaces.send.sendDone).t;
   const callback = (route.params.callback) ?? (() => {});
   const preimage = route.params.preimage;
 

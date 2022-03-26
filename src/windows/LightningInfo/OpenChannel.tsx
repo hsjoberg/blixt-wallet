@@ -14,17 +14,15 @@ import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";
 import useFormatBitcoinValue from "../../hooks/useFormatBitcoinValue";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
   route: RouteProp<LightningInfoStackParamList, "OpenChannel">;
 }
 export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
-  t = useTranslation(namespaces.lightningInfo.openChannel).t;
+  const t = useTranslation(namespaces.lightningInfo.openChannel).t;
   const peerUri = route.params?.peerUri;
   const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
   const getChannels = useStoreActions((actions) => actions.channel.getChannels);

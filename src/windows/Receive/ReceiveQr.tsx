@@ -18,17 +18,15 @@ import Content from "../../components/Content";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { toast } from "../../utils";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IReceiveQRProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveQr">;
   route: RouteProp<ReceiveStackParamList, "ReceiveQr">;
 }
 export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
-  t = useTranslation(namespaces.receive.receiveQr).t;
+  const t = useTranslation(namespaces.receive.receiveQr).t;
   const invoice: lnrpc.AddInvoiceResponse = route.params.invoice;
   const transaction = useStoreState((store) => store.transaction.getTransactionByPaymentRequest(invoice.paymentRequest));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);

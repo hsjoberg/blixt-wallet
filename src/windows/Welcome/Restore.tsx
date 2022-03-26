@@ -15,10 +15,8 @@ import { PLATFORM } from "../../utils/constants";
 import { CommonActions } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
@@ -26,7 +24,7 @@ interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Restore">;
 }
 export default function Restore({ navigation }: IProps) {
-  t = useTranslation(namespaces.welcome.restore).t;
+  const t = useTranslation(namespaces.welcome.restore).t;
   const [loading, setLoading] = useState(false);
   const [seedText, setSeedText] = useState("");
   const [backupType, setBackupType] = useState<"file" | "google_drive" | "icloud" | "none">("none");

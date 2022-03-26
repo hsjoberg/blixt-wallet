@@ -12,16 +12,14 @@ import { PLATFORM } from "../../utils/constants";
 import LoadingModal from "../LoadingModal";
 import { Alert } from "../../utils/alert";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IWithdrawRequestProps {
   navigation: StackNavigationProp<{}>;
 }
 export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestProps) {
-  t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
+  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
   const [status, setStatus] = useState<"PROMPT" | "PROCESSING" | "DONE">("PROMPT");
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
   const type = useStoreState((store) => store.lnUrl.type);

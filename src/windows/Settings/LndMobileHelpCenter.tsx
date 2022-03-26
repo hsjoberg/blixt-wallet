@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, ScrollView, View, NativeModules, EmitterSubscription } from "react-native";
+import { StyleSheet, View, NativeModules, EmitterSubscription } from "react-native";
 import { Card, Text, CardItem, H1, Button, Spinner } from "native-base";
 
 import Blurmodal from "../../components/BlurModal";
@@ -17,10 +17,8 @@ import { LndMobileToolsEventEmitter } from "../../utils/event-listener";
 import LogBox from "../../components/LogBox";
 import useForceUpdate from "../../hooks/useForceUpdate";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IStepsResult {
   title: string;
@@ -29,7 +27,7 @@ interface IStepsResult {
 }
 
 export default function LndMobileHelpCenter({ navigation }) {
-  t = useTranslation(namespaces.settings.lndMobileHelpCenter).t;
+  const t = useTranslation(namespaces.settings.lndMobileHelpCenter).t;
 
   const [runningSteps, setRunningSteps] = useState(false);
   const [stepsResult, setStepsResult] = useState<IStepsResult[]>([]);

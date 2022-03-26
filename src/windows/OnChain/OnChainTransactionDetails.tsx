@@ -13,16 +13,16 @@ import { useStoreState } from "../../state/store";
 import { formatBitcoin } from "../../utils/bitcoin-units";
 import { constructOnchainExplorerUrl } from "../../utils/onchain-explorer";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IMetaDataProps {
   title: string;
   data: string;
 }
 const MetaData = ({ title, data }: IMetaDataProps) => {
+  const t = useTranslation(namespaces.onchain.onChainTransactionDetails).t;
+
   return (
     <Text
       style={style.detailText}
@@ -42,7 +42,7 @@ export interface ITransactionDetailsProps {
   route: RouteProp<OnChainStackParamList, "OnChainTransactionDetails">;
 }
 export default function OnChainTransactionDetails({ navigation, route }: ITransactionDetailsProps) {
-  t = useTranslation(namespaces.onchain.onChainTransactionDetails).t;
+  const t = useTranslation(namespaces.onchain.onChainTransactionDetails).t;
   const txId: string = route.params.txId;
   const transaction = useStoreState((store) => store.onChain.getOnChainTransactionByTxId(txId));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);

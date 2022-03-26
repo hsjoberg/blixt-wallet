@@ -15,16 +15,14 @@ import Container from "../../components/Container";
 import CopyAddress from "../../components/CopyAddress";
 import { toast } from "../../utils";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "AddFunds">;
 }
 export default function AddFunds({ navigation }: IProps) {
-  t = useTranslation(namespaces.welcome.addFunds).t;
+  const t = useTranslation(namespaces.welcome.addFunds).t;
   const getAddress = useStoreActions((store) => store.onChain.getAddress);
   const address = useStoreState((store) => store.onChain.address);
 

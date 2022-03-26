@@ -14,16 +14,14 @@ import { BitcoinUnits, convertBitcoinUnit } from "../../utils/bitcoin-units";
 import useBalance from "../../hooks/useBalance";
 import useFormatBitcoinValue from "../../hooks/useFormatBitcoinValue";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<OnChainStackParamList, "Withdraw">;
 }
 export default ({ navigation }: IOpenChannelProps) => {
-  t = useTranslation(namespaces.onchain.withdraw).t;
+  const t = useTranslation(namespaces.onchain.withdraw).t;
   const sendCoins = useStoreActions((actions) => actions.onChain.sendCoins);
   const sendCoinsAll = useStoreActions((actions) => actions.onChain.sendCoinsAll);
   const getBalance = useStoreActions((actions) => actions.onChain.getBalance);

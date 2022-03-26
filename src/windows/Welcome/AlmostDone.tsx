@@ -18,15 +18,14 @@ import { IFiatRates } from "../../state/Fiat";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 import { Alert } from "../../utils/alert";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IProps {
   navigation: StackNavigationProp<AlmostDoneStackParamList, "AlmostDone">;
 }
 const AlmostDone = ({ navigation }: IProps) => {
+  const t = useTranslation(namespaces.welcome.almostDone).t;
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
   // Name
@@ -251,7 +250,6 @@ export type AlmostDoneStackParamList = {
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
 }
 export default () => {
-  t = useTranslation(namespaces.welcome.almostDone).t;
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
     animationEnabled: false,

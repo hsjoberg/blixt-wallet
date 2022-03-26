@@ -9,13 +9,11 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Container from "../../components/Container";
 import { timeout } from "../../utils";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
-let t:TFunction;
-
 export default function InitLightning() {
-  t = useTranslation(namespaces.initProcess.initLightning).t;
+  const t = useTranslation(namespaces.initProcess.initLightning).t;
   const initializeLightning = useStoreActions((store) => store.lightning.initialize);
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const firstSync = useStoreState((store) => store.lightning.firstSync);

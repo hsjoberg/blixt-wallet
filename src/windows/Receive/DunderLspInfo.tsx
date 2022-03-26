@@ -5,16 +5,14 @@ import { Body, Card, Text, CardItem, H1 } from "native-base";
 import Blurmodal from "../../components/BlurModal";
 import TextLink from "../../components/TextLink";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 export interface IDunderLspInfoProps {
   navigation: any;
 }
 export default function DunderLspInfo({ route }: any) {
-  t = useTranslation(namespaces.receive.dunderLspInfo).t;
+  const t = useTranslation(namespaces.receive.dunderLspInfo).t;
   return (
     <Blurmodal>
       <Card style={style.card}>

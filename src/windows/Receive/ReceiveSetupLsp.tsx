@@ -8,11 +8,11 @@ import Long from "long";
 import { ReceiveStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import { formatBitcoin, BitcoinUnits, IBitcoinUnits, convertBitcoinToFiat, valueBitcoin, valueFiat } from "../../utils/bitcoin-units";
+import { formatBitcoin, BitcoinUnits, IBitcoinUnits, valueBitcoin, valueFiat } from "../../utils/bitcoin-units";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { MATH_PAD_NATIVE_ID, MAX_SAT_INVOICE, PLATFORM } from "../../utils/constants";
-import { timeout, toast } from "../../utils";
+import { toast } from "../../utils";
 import { Keyboard, TextStyle } from "react-native";
 import Container from "../../components/Container";
 import { IFiatRates } from "../../state/Fiat";
@@ -20,10 +20,8 @@ import { Alert } from "../../utils/alert";
 import TextClickable from "../../components/TextClickable";
 import { dunderPrompt } from "../../utils/dunder";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 const MATH_PAD_HEIGHT = 44;
 
@@ -31,7 +29,7 @@ export interface IReceiveSetupProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveSetup">;
 }
 export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
-  t = useTranslation(namespaces.receive.receiveSetup).t;
+  const t = useTranslation(namespaces.receive.receiveSetup).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const invoiceSubscriptionStarted = useStoreState((store) => store.receive.invoiceSubscriptionStarted);

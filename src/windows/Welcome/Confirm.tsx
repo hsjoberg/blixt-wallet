@@ -11,16 +11,14 @@ import { smallScreen } from "../../utils/device";
 import Container from "../../components/Container";
 import { PLATFORM } from "../../utils/constants";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Confirm">;
 }
 export default function Confirm({ navigation }: IProps) {
-  t = useTranslation(namespaces.welcome.confirm).t;
+  const t = useTranslation(namespaces.welcome.confirm).t;
   const [confirmedWords, setConfirmedWords] = useState<string[]>([]);
   const [selectedWords, setSelectedWords] = useState<Array<string | undefined>>(new Array(24).fill(undefined));
   const [proceeding, setProceeding] = useState(false);

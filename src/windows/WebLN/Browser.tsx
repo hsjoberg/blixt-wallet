@@ -15,10 +15,8 @@ import BlurModal from "../../components/BlurModal";
 import { PLATFORM } from "../../utils/constants";
 import { Alert } from "../../utils/alert";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 const INITIAL_URL = "https://blixtwallet.github.io/webln";
 
@@ -27,7 +25,7 @@ interface IBrowserProps {
   route: RouteProp<RootStackParamList, "WebLNBrowser">;
 }
 export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
-  t = useTranslation(namespaces.webLN.browser).t;
+  const t = useTranslation(namespaces.webLN.browser).t;
   const initialUrl = route.params ? route.params.url : INITIAL_URL;
 
   const [showWebview, setShowWebview] = useState(false); // To prevent white flash

@@ -5,13 +5,11 @@ import { Body, Card, Text, CardItem, H1 } from "native-base";
 import Blurmodal from "../../components/BlurModal";
 import TextLink from "../../components/TextLink";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
-let t:TFunction;
-
 export default function PayRequestAboutLightningAddress() {
-  t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
+  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
   return (
     <Blurmodal>
       <Card style={style.card}>

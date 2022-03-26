@@ -18,10 +18,8 @@ import { setupDescription } from "../../../utils/NameDesc";
 import useBalance from "../../../hooks/useBalance";
 import { PayerData } from "./PayerData";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../../i18n/i18n.constants";
-
-let t:TFunction;
 
 export interface IPaymentCardProps {
   onPaid: (preimage: Uint8Array) => void;
@@ -30,7 +28,7 @@ export interface IPaymentCardProps {
 }
 
 export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentCardProps) {
-  t = useTranslation(namespaces.LNURL.payRequest.paymentCard).t;
+  const t = useTranslation(namespaces.LNURL.payRequest.paymentCard).t;
   const navigation = useNavigation();
   const lightningReadyToSend = useLightningReadyToSend();
 

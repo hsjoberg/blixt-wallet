@@ -16,17 +16,15 @@ import { hexToUint8Array, toast } from "../../utils";
 import { PLATFORM } from "../../utils/constants";
 import useLightningReadyToSend from "../../hooks/useLightingReadyToSend";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-
-let t:TFunction;
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
   route: RouteProp<SendStackParamList, "SendConfirmation">;
 }
 export default function SendConfirmation({ navigation, route }: ISendConfirmationProps) {
-  t = useTranslation(namespaces.send.sendConfirmation).t;
+  const t = useTranslation(namespaces.send.sendConfirmation).t;
   const [amountEditable, setAmountEditable] = useState(false);
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
   const getBalance = useStoreActions((actions) => actions.channel.getBalance);
