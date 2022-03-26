@@ -11,24 +11,26 @@
   "send": {
     "title": "enviar",
     "msg": "Pago Keysend",
-    "error1": "comprobar cantidad",
-    "error2": "pubkey extraviado",
+    "error": {
+      "checkAmount": "Comprobar cantidad",
+      "missingPubkey": "Pubkey extraviado"
+    },
     "alert": "Pago realizado con exito"
   },
   "form": {
     "amount": {
-      "title": "cantidad de sat"
+      "title": "Cantidad de sat"
     },
     "pubkey": {
-      "title": "llave publica",
+      "title": "Llave publica",
       "placeholder": "Pubkey"
     },
     "route": {
-      "title": "clave de ruta",
-      "placeholder": "claves de ruta"
+      "title": "Clave de ruta",
+      "placeholder": "Claves de ruta"
     },
     "message": {
-      "title": "mensaje",
+      "title": "Mensaje",
       "placeholder": "Introduce un mensaje de chat aquí"
     }
   }

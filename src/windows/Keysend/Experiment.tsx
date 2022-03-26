@@ -67,10 +67,10 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   const onClickSend = async () => {
     try {
       if (!satInput) {
-        throw new Error(t("send.error1"));
+        throw new Error(t("send.error.checkAmount"));
       }
       else if (!pubkeyInput) {
-        throw new Error(t("send.error1"));
+        throw new Error(t("send.error.missingPubkey"));
       }
       setSending(true);
       const result = await sendKeysendPaymentV2(

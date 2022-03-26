@@ -11,8 +11,10 @@
   "send": {
     "title": "Send",
     "msg": "Keysend payment",
-    "error1": "Check amount",
-    "error2": "Missing pubkey",
+    "error": {
+      "checkAmount": "Check amount",
+      "missingPubkey": "Missing pubkey"
+    },
     "alert": "Payment successful"
   },
   "form": {
