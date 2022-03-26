@@ -92,7 +92,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
           {smallScreen ?
             <>
               <H2 style={style.fundsInfoText}>
-              {t("funds.title")}:
+                {t("funds.title")}:
               </H2>
               <H2 style={style.fundsInfoText} onPress={onPressBalance} testID="ONCHAIN_FUNDS">
                 {onChainFunds}
@@ -101,7 +101,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
             :
             <>
               <H1 style={style.fundsInfoText}>
-              {t("funds.title")}:
+                {t("funds.title")}:
               </H1>
               <H1 style={style.fundsInfoText} onPress={onPressBalance} testID="ONCHAIN_FUNDS">
                 {onChainFunds}

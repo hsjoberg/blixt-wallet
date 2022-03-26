@@ -673,7 +673,7 @@ exports[`renders correctly 1`] = `
                                 }
                                 uppercase={false}
                               >
-                                Restore Wallet
+                                Restore wallet
                               </Text>
                             </View>
                           </View>
