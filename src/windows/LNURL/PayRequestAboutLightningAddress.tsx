@@ -5,23 +5,27 @@ import { Body, Card, Text, CardItem, H1 } from "native-base";
 import Blurmodal from "../../components/BlurModal";
 import TextLink from "../../components/TextLink";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 export default function PayRequestAboutLightningAddress() {
+  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
   return (
     <Blurmodal>
       <Card style={style.card}>
         <CardItem>
           <Body>
-            <H1 style={style.header}>About Lightning Address</H1>
+            <H1 style={style.header}>{t("title")}</H1>
             <Text style={style.textBlock}>
-              <TextLink url="https://lightningaddress.com">Lightning Address</TextLink>{" "}
-              is a way of paying a person or a service on the Lightning Network.
+              <TextLink url="https://lightningaddress.com">{t("msg1")}</TextLink>{" "}
+              {t("msg2")}
             </Text>
             <Text style={style.textBlock}>
-              They look like email addresses, but instead of sending an email to the recipient, you're sending money.
+              {t("msg3")}
             </Text>
             <Text style={style.textBlock}>
-              Blixt Wallet has full support for sending to a Lightning Address, but receiving{" "}
-              via a Lightning Address is still being worked on.
+              {t("msg4")}{" "}
+              {t("msg5")}
             </Text>
           </Body>
         </CardItem>

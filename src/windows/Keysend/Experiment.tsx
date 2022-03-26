@@ -20,10 +20,14 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../Main";
 import { translatePaymentFailureReason } from "../../state/Send";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 interface ILightningInfoProps {
   navigation: StackNavigationProp<RootStackParamList, "KeysendExperiment">;
 }
 export default function KeysendTest({ navigation }: ILightningInfoProps) {
+  const t = useTranslation(namespaces.keysend.experiment).t;
   const [sending, setSending] = useState(false);
   const myNodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const [routehints, setRoutehints] = useState("");
@@ -45,8 +49,8 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Keysend",
-      headerBackTitle: "Back",
+      headerTitle: t("title"),
+      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
       headerShown: true,
       headerRight: () => {
         return (
@@ -61,10 +65,10 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   const onClickSend = async () => {
     try {
       if (!satInput) {
-        throw new Error("Check amount");
+        throw new Error(t("send.error.checkAmount"));
       }
       else if (!pubkeyInput) {
-        throw new Error("Missing pubkey");
+        throw new Error(t("send.error.missingPubkey"));
       }
       setSending(true);
       const result = await sendKeysendPaymentV2(
@@ -80,13 +84,13 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       if (result.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
         throw new Error(`${translatePaymentFailureReason(result.failureReason)}`);
       }
-      toast("Payment successful");
+      toast(t("send.alert"));
       console.log("Payment request is " + result.paymentRequest);
       console.log(typeof result.paymentRequest);
 
       const transaction: ITransaction = {
         date: result.creationDate,
-        description: "Keysend payment",
+        description: t("send.msg"),
         expire: Long.fromValue(0),
         paymentRequest: result.paymentRequest,
         remotePubkey: pubkeyInput,
@@ -175,7 +179,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
 
   const onPressQr = () => {
     Clipboard.setString(JSON.stringify(routehints));
-    toast("Copied to clipboard");
+    toast(t("qr.alert"));
   }
 
   const onPressCamera = () => {
@@ -196,7 +200,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
 
   const formItems = [{
     key: "AMOUNT_SAT",
-    title: `Amount sat`,
+    title: t("form.amount.title"),
     component: (
       <Input
         testID="input-amount-sat"
@@ -208,35 +212,35 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       />
     )}, {
       key: "PUBKEY",
-      title: `Public key`,
+      title: t("form.pubkey.title"),
       component: (
         <Input
           testID="input-pubkey"
           value={pubkeyInput}
           onChangeText={setPubkeyInput}
-          placeholder="Pubkey"
+          placeholder={t("form.pubkey.placeholder")}
         />
       )
     }, {
       key: "routehints",
-      title: `Route hints`,
+      title: t("form.route.title"),
       component: (
         <Input
           testID="input-routehints"
           value={routehintsInput}
           onChangeText={setRoutehintsInput}
-          placeholder="Route hints"
+          placeholder={t("form.route.placeholder")}
         />
       )
     }, {
       key: "message",
-      title: `Message`,
+      title: t("form.message.title"),
       component: (
         <Input
           testID="input-chatmessage"
           value={messageInput}
           onChangeText={setMessageInput}
-          placeholder="Enter a chat message here"
+          placeholder={t("form.message.placeholder")}
         />
       )
     },
@@ -262,11 +266,11 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       </View>
       <View style={{ padding: 16 }}>
         <Text style={{ marginBottom: 8 }}>
-          Welcome to the keysend playground.{"\n"}
-          Keysend lets you pay another Blixt Wallet (or any Lightning node that supports keysend) without requiring an invoice.
+          {t("dialog.msg1")}{"\n"}
+          {t("dialog.msg2")}
         </Text>
         <Text>
-          Click on the camera to scan another wallet's QR code or provide a public key and route hints below.
+          {t("dialog.msg3")}
         </Text>
       </View>
       <BlixtForm
@@ -286,7 +290,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
               <Spinner color={blixtTheme.light} />
             }
             {!sending &&
-              <Text>Send</Text>
+              <Text>{t("send.title")}</Text>
             }
           </Button>
         ]}

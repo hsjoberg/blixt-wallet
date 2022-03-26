@@ -13,17 +13,22 @@ import { useStoreState } from "../../state/store";
 import { formatBitcoin } from "../../utils/bitcoin-units";
 import { constructOnchainExplorerUrl } from "../../utils/onchain-explorer";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 interface IMetaDataProps {
   title: string;
   data: string;
 }
 const MetaData = ({ title, data }: IMetaDataProps) => {
+  const t = useTranslation(namespaces.onchain.onChainTransactionDetails).t;
+
   return (
     <Text
       style={style.detailText}
       onPress={() => {
         Clipboard.setString(data);
-        toast("Copied to clipboard.", undefined, "warning");
+        toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
       }}
     >
       <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>
@@ -37,6 +42,7 @@ export interface ITransactionDetailsProps {
   route: RouteProp<OnChainStackParamList, "OnChainTransactionDetails">;
 }
 export default function OnChainTransactionDetails({ navigation, route }: ITransactionDetailsProps) {
+  const t = useTranslation(namespaces.onchain.onChainTransactionDetails).t;
   const txId: string = route.params.txId;
   const transaction = useStoreState((store) => store.onChain.getOnChainTransactionByTxId(txId));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
@@ -57,30 +63,30 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
           <Body>
             <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
               <H1 style={style.header}>
-                Transaction
+                {t("title")}
               </H1>
               <Button small={true} onPress={onPressBlockExplorer}>
                 <Text style={{ fontSize: 9 }}>See in Block Explorer</Text>
               </Button>
             </View>
-            <MetaData title="Id" data={transaction.txHash!} />
-            <MetaData title="Date" data={formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))} />
-            {transaction.amount && <MetaData title="Amount" data={formatBitcoin(transaction.amount, bitcoinUnit)} />}
-            {transaction.totalFees && <MetaData title="Fees" data={transaction.totalFees.toString() + " Satoshi"} />}
-            {transaction.label && <MetaData title="Label" data={transaction.label} />}
-            <MetaData title="Destination" data={transaction.destAddresses![0]} />
-            <MetaData title="Confirmations" data={(transaction.numConfirmations?.toString()) ?? "Unknown"} />
-            <MetaData title="Block height" data={(transaction.blockHeight?.toString()) ?? "Unknown"} />
-            <MetaData title="Block hash" data={(transaction.blockHash?.toString()) ?? "Unknown"} />
+            <MetaData title={t("txHash")} data={transaction.txHash!} />
+            <MetaData title={t("timeStamp")} data={formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))} />
+            {transaction.amount && <MetaData title={t("amount")} data={formatBitcoin(transaction.amount, bitcoinUnit)} />}
+            {transaction.totalFees && <MetaData title={t("totalFees")} data={transaction.totalFees.toString() + " Satoshi"} />}
+            {transaction.label && <MetaData title={t("label")} data={transaction.label} />}
+            <MetaData title={t("destAddresses")} data={transaction.destAddresses![0]} />
+            <MetaData title={t("numConfirmations")} data={(transaction.numConfirmations?.toString()) ?? "Unknown"} />
+            <MetaData title={t("blockHeight")} data={(transaction.blockHeight?.toString()) ?? "Unknown"} />
+            <MetaData title={t("blockHash")} data={(transaction.blockHash?.toString()) ?? "Unknown"} />
             <Text
               style={style.detailText}
               onPress={() => {
                 Clipboard.setString(transaction.rawTxHex?.toString() ?? "Unknown");
-                toast("Copied to clipboard.", undefined, "warning");
+                toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
               }}
             >
-              <Text style={{ fontWeight: "bold" }}>Raw tx hex:{"\n"}</Text>
-              Press to copy
+              <Text style={{ fontWeight: "bold" }}>{t("rawTxHex.title")}:{"\n"}</Text>
+              {t("rawTxHex.msg")}
             </Text>
           </Body>
         </CardItem>

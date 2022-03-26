@@ -1,0 +1,20 @@
+{
+  "buttons": {
+    "ok": "Ok",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "no": "No",
+    "yes": "Si",
+    "save": "Salvar",
+    "copy": "Copiar"
+  },
+  "msg": {
+    "status": "Estado",
+    "error": "Error",
+    "lastSync": "Última sincronización",
+    "lastSyncAttempt": "Último intento de sincronización",
+    "written": "Escritura",
+    "enabled": "Habilitado",
+    "disabled": "Desabilitado"
+  }
+}

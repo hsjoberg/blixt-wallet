@@ -15,6 +15,9 @@ import BlurModal from "../../components/BlurModal";
 import { PLATFORM } from "../../utils/constants";
 import { Alert } from "../../utils/alert";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 const INITIAL_URL = "https://blixtwallet.github.io/webln";
 
 interface IBrowserProps {
@@ -22,6 +25,7 @@ interface IBrowserProps {
   route: RouteProp<RootStackParamList, "WebLNBrowser">;
 }
 export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
+  const t = useTranslation(namespaces.webLN.browser).t;
   const initialUrl = route.params ? route.params.url : INITIAL_URL;
 
   const [showWebview, setShowWebview] = useState(false); // To prevent white flash
@@ -119,19 +123,19 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   });
 
   const closeBrowser = () => {
-    Alert.alert("", "Do you wish to close the browser?",
+    Alert.alert("", t("close"),
       [{
-        text: "Yes",
+        text: t("buttons.yes",{ns:namespaces.common}),
         onPress: () => navigation.goBack()
       }, {
-        text: "No",
+        text: t("buttons.yes",{ns:namespaces.common}),
         style: "cancel"
       }])
   };
 
   const onLongPressHome = () => {
     if (PLATFORM === "android") {
-      ToastAndroid.show("Go back to store list", ToastAndroid.SHORT);
+      ToastAndroid.show(t("home"), ToastAndroid.SHORT);
     }
   };
 
@@ -199,7 +203,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
                 setUrl(e.nativeEvent.text);
               }}
               keyboardType="url"
-              placeholder="Type URL here..."
+              placeholder={t("placeholder")+"..."}
             />
             <TouchableOpacity onPress={() => webview.current!.reload()}>
               <Icon style={style.goButton} type="MaterialCommunityIcons" name="sync" />

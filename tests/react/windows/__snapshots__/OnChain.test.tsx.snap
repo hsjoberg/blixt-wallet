@@ -531,7 +531,8 @@ exports[`renders correctly 1`] = `
                                                       ]
                                                     }
                                                   >
-                                                    On-chain funds:
+                                                    On-chain funds
+                                                    :
                                                   </Text>
                                                   <Text
                                                     onPress={[Function]}
@@ -576,7 +577,8 @@ exports[`renders correctly 1`] = `
                                                     }
                                                     uppercase={false}
                                                   >
-                                                    Send Bitcoin on-chain to this address:
+                                                    Send Bitcoin on-chain to this address
+                                                    :
                                                   </Text>
                                                   <View
                                                     accessible={true}

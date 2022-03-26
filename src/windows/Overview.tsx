@@ -28,6 +28,9 @@ import useLayoutMode from "../hooks/useLayoutMode";
 import CopyAddress from "../components/CopyAddress";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n/i18n.constants";
+
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 const theme = nativeBaseTheme.default;
@@ -49,6 +52,8 @@ export interface IOverviewProps {
   navigation: BottomTabNavigationProp<RootStackParamList, "Overview">;
 }
 function Overview({ navigation }: IOverviewProps) {
+  const { t, i18n } = useTranslation(namespaces.overview);
+
   const layoutMode = useLayoutMode();
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const balance = useStoreState((store) => store.channel.balance);
@@ -142,7 +147,7 @@ function Overview({ navigation }: IOverviewProps) {
                 getInfo(),
                 timeout(1000),
               ]);
-            } catch (error) {
+            } catch (error:any) {
               toast(error.message, 10, "warning");
             }
             setRefreshing(false);
@@ -300,8 +305,8 @@ function Overview({ navigation }: IOverviewProps) {
             }
             {pendingOpenBalance.greaterThan(0) &&
               <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
-                {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit)} pending)</>}
-                {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} pending)</>}
+                {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
+                {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
               </Animated.Text>
             }
           </LinearGradient>
@@ -312,6 +317,7 @@ function Overview({ navigation }: IOverviewProps) {
 };
 
 const RecoverInfo = () => {
+  const { t, i18n } = useTranslation(namespaces.overview);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const recoverInfo = useStoreState((store) => store.lightning.recoverInfo);
 
@@ -320,11 +326,11 @@ const RecoverInfo = () => {
       <CardItem>
         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
           <Text>
-            {!recoverInfo.recoveryFinished && <>Wallet recovery in progress.</>}
-            {recoverInfo.recoveryFinished && <>Wallet recovery finished.</>}
+            {!recoverInfo.recoveryFinished && <>{t("recoverInfo.msg1")}</>}
+            {recoverInfo.recoveryFinished && <>{t("recoverInfo.msg2")}</>}
           </Text>
           <Button small onPress={() => navigation.navigate("SyncInfo")}>
-            <Text>More info</Text>
+            <Text>{t("recoverInfo.more")}</Text>
           </Button>
         </View>
       </CardItem>
@@ -336,13 +342,14 @@ interface ISendOnChain {
   bitcoinAddress?: string;
 }
 const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
+  const { t, i18n } = useTranslation(namespaces.overview);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
   const copyAddress = () => {
     Clipboard.setString(bitcoinAddress!);
-    toast("Bitcoin address copied to clipboard");
+    toast(t("sendOnChain.alert"));
   };
 
   return (
@@ -351,11 +358,11 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ width: "59%", justifyContent: "center", paddingRight: 4 }}>
             <Text style={{ fontSize: 15 * fontFactor }}>
-              Welcome to Blixt Wallet!{"\n\n"}
+                {t("sendOnChain.title")}{"\n\n"}
               <Text style={{ fontSize: 13 * fontFactor }}>
-                To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
-                A channel will automatically be opened for you.{"\n\n"}
-                Send at least {formatBitcoin(Long.fromValue(22000), bitcoinUnit)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
+                {t("sendOnChain.msg1")}{"\n\n"}
+                {t("sendOnChain.msg2")}{"\n\n"}
+                {t("sendOnChain.msg3")} {formatBitcoin(Long.fromValue(22000), bitcoinUnit)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
               </Text>
             </Text>
           </View>
@@ -378,6 +385,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
 };
 
 const DoBackup = () => {
+  const { t, i18n } = useTranslation(namespaces.overview);
   const navigation = useNavigation();
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
@@ -394,14 +402,14 @@ const DoBackup = () => {
       <CardItem>
         <View style={{ flex: 1 }}>
           <View>
-            <Text style={{ fontSize: 15 * fontFactor }}>Thank you for using Blixt Wallet!{"\n\n"}We recommend making a backup of the wallet so that you can restore your funds in case of a phone loss.</Text>
+            <Text style={{ fontSize: 15 * fontFactor }}>{t("doBackup.msg1")}{"\n\n"}{t("doBackup.msg2")}</Text>
           </View>
           <View style={{ flexDirection: "row-reverse", marginTop: 11 }}>
             <Button small style={{marginLeft: 7 }} onPress={onPressBackupWallet}>
-              <Text style={{ fontSize: 11 * fontFactorNormalized }}>Backup wallet</Text>
+              <Text style={{ fontSize: 11 * fontFactorNormalized }}>{t("doBackup.backup")}</Text>
             </Button>
             <Button small onPress={onPressDismiss}>
-              <Text style={{ fontSize: 11 * fontFactorNormalized }}>Dismiss</Text>
+              <Text style={{ fontSize: 11 * fontFactorNormalized }}>{t("msg.dismiss",{ns:namespaces.common})}</Text>
             </Button>
           </View>
         </View>

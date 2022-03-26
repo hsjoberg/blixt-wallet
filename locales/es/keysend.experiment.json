@@ -1,0 +1,37 @@
+{
+  "title": "Keysend",
+  "qr": {
+    "alert": "Copiado al portapapeles"
+  },
+  "dialog": {
+    "msg1": "Bienvenido al área keysend",
+    "msg2": "Keysend te permite pagar otra Blixt Wallet (o cualquier nodo Lightning que soporta keysend) sin requerir factura.",
+    "msg3": "Click en la camara para escanear otro código QR de cartera o da una llave publica y clave de ruta debajo."
+  },
+  "send": {
+    "title": "enviar",
+    "msg": "Pago Keysend",
+    "error": {
+      "checkAmount": "Comprobar cantidad",
+      "missingPubkey": "Pubkey extraviado"
+    },
+    "alert": "Pago realizado con exito"
+  },
+  "form": {
+    "amount": {
+      "title": "Cantidad de sat"
+    },
+    "pubkey": {
+      "title": "Llave publica",
+      "placeholder": "Pubkey"
+    },
+    "route": {
+      "title": "Clave de ruta",
+      "placeholder": "Claves de ruta"
+    },
+    "message": {
+      "title": "Mensaje",
+      "placeholder": "Introduce un mensaje de chat aquí"
+    }
+  }
+}

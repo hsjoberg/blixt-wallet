@@ -18,19 +18,23 @@ import Content from "../../components/Content";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { toast } from "../../utils";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 interface IReceiveQRProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveQr">;
   route: RouteProp<ReceiveStackParamList, "ReceiveQr">;
 }
 export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
+  const t = useTranslation(namespaces.receive.receiveQr).t;
   const invoice: lnrpc.AddInvoiceResponse = route.params.invoice;
   const transaction = useStoreState((store) => store.transaction.getTransactionByPaymentRequest(invoice.paymentRequest));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Receive",
-      headerBackTitle: "Back",
+      headerTitle: t("title"),
+      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
       headerShown: true,
     });
   }, [navigation]);
@@ -51,7 +55,7 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
 
   const onPressPaymentRequest = () => {
     Clipboard.setString(transaction.paymentRequest);
-    toast("Copied to clipboard", undefined, "warning");
+    toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
   };
 
   const onQrPress = async () => {

@@ -14,11 +14,15 @@ import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";
 import useFormatBitcoinValue from "../../hooks/useFormatBitcoinValue";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
   route: RouteProp<LightningInfoStackParamList, "OpenChannel">;
 }
 export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
+  const t = useTranslation(namespaces.lightningInfo.openChannel).t;
   const peerUri = route.params?.peerUri;
   const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
   const getChannels = useStoreActions((actions) => actions.channel.getChannels);
@@ -40,7 +44,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Open channel",
+      headerTitle: t("layout.title"),
       headerShown: true,
     });
   }, [navigation]);
@@ -72,24 +76,24 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
       <BlixtForm
         items={[{
           key: "CHANNEL",
-          title: "Node URI",
+          title: t("form.channel.title"),
           component: (
             <>
-              <Input placeholder="pubkey@ip:port" value={peer} onChangeText={setPeer} />
+              <Input placeholder={t("form.channel.placeholder")} value={peer} onChangeText={setPeer} />
               <Icon type="AntDesign" name="camera" onPress={onCameraPress} />
             </>
           )
         }, {
           key: "AMOUNT",
-          title: `Amount ${bitcoinUnit.nice}`,
-          component: (<Input placeholder={`Amount ${bitcoinUnit.nice}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeBitcoinInput} value={bitcoinValue} />)
+          title: `${t("form.amount.title")} ${bitcoinUnit.nice}`,
+          component: (<Input placeholder={`${t("form.amount.placeholder")} ${bitcoinUnit.nice}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeBitcoinInput} value={bitcoinValue} />)
         }, {
           key: "AMOUNT_FIAT",
-          title: `Amount ${fiatUnit}`,
-          component: (<Input placeholder={`Amount ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} />)
+          title: `${t("form.amount.title")} ${fiatUnit}`,
+          component: (<Input placeholder={`${t("form.amount.placeholder")} ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} />)
         }, {
           key: "SAT",
-          title: `Fee-rate`,
+          title: t("form.fee_rate.title"),
           component: (
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: 5 }}>
               <Slider
@@ -129,7 +133,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
         }]}
         buttons={[
           <Button key="OPEN_CHANNEL" onPress={onOpenChannelPress} block={true} primary={true} disabled={opening}>
-            {!opening && <Text>Open channel</Text>}
+            {!opening && <Text>{t("form.title")}</Text>}
             {opening && <Spinner color={blixtTheme.light} />}
           </Button>
         ]}

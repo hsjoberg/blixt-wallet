@@ -159,7 +159,7 @@ export const model: IStoreModel = {
       log.i("Initializing db for the first time");
       try {
         await setupInitialSchema(db);
-      } catch (error) {
+      } catch (error:any) {
         throw new Error("Error creating DB: " + error.message)
       }
       log.i("Writing lnd.conf");
@@ -325,7 +325,7 @@ export const model: IStoreModel = {
             await dispatch.lightning.initialize({ start });
           }
         }
-      } catch (error) {
+      } catch (error:any) {
         toast(error.message, undefined, "danger");
       }
     });

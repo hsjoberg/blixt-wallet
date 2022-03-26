@@ -1,0 +1,19 @@
+{
+  "layout": {
+    "title": "Canal abierto"
+  },
+  "form": {
+    "title": "Canal abierto",
+    "channel": {
+      "title": "Nodo URI",
+      "placeholder": "URI"
+    },
+    "amount": {
+      "title": "Cantidad",
+      "placeholder": "Cantidad"
+    },
+    "fee_rate": {
+      "title": "Comisión"
+    }
+  }
+}

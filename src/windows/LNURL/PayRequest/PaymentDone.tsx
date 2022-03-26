@@ -10,11 +10,15 @@ import TextLink from "../../../components/TextLink";
 import { Done } from "../../Send/SendDone";
 import style from "./style";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../../i18n/i18n.constants";
+
 export interface IPayRequestDoneProps {
   preimage: Uint8Array;
   callback?: (r: Uint8Array | null) => void;
 }
 export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestDoneProps) {
+  const t = useTranslation(namespaces.LNURL.payRequest.paymentDone).t;
   const navigation = useNavigation();
   const clear = useStoreActions((store) => store.lnUrl.clear);
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
@@ -34,7 +38,7 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
   const onPressCopyUrltoClipboard = () => {
     if (payRequestResponse.successAction?.tag === "url") {
       Clipboard.setString(payRequestResponse.successAction.url);
-      toast("Copied to clipboard.", undefined, "warning")
+      toast(t("url.copy.msg"), undefined, "warning")
     }
   };
 
@@ -50,7 +54,7 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
         {payRequestResponse.successAction?.tag === "message" &&
           <>
             <Text>
-              Message from {domain}:{"\n"}
+              {t("message.title")} {domain}:{"\n"}
               {payRequestResponse.successAction.message}
             </Text>
           </>
@@ -58,11 +62,11 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
         {payRequestResponse.successAction?.tag === "url" &&
           <>
             <Text style={style.text}>
-              Description:{"\n"}
+              {t("url.description")}:{"\n"}
               {payRequestResponse.successAction.description}
             </Text>
             <Text style={style.text}>
-              URL received from {domain}:{"\n"}
+              {t("url.domain")} {domain}:{"\n"}
               <TextLink url={payRequestResponse.successAction.url}>
                 {payRequestResponse.successAction.url}
               </TextLink>
@@ -71,13 +75,13 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
         }
         {payRequestResponse.successAction?.tag === "aes" &&
           <>
-            <Text style={style.text}>Got a secret encrypted message from {domain}.</Text>
+            <Text style={style.text}>{t("aes.domain")}{domain}.</Text>
             <Text style={style.text}>
-              Message from {domain}:{"\n"}
+              {t("aes.description")} {domain}:{"\n"}
               {payRequestResponse.successAction.description}
             </Text>
             <Text style={style.text}>
-              Secret message:{"\n"}
+            {t("aes.secret")}:{"\n"}
               {(() => {
                 if (payRequestResponse.successAction?.tag === "aes") {
                   return decryptLNURLPayAesTagMessage(
@@ -98,7 +102,7 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
       {/* </View> */}
       <View style={[style.actionBar, { }]}>
         <Button onPress={done} small={true}>
-          <Text style={{ fontSize:10 }}>Done</Text>
+          <Text style={{ fontSize:10 }}>{t("url.done.title")}</Text>
         </Button>
         {payRequestResponse.successAction?.tag === "url" &&
           <>
@@ -107,14 +111,14 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
               small
               style={{ marginRight: 12 }}
             >
-              <Text style={{ fontSize:10 }}>Copy to clipboard</Text>
+              <Text style={{ fontSize:10 }}>{t("url.copy.title")}</Text>
             </Button>
             <Button
               onPress={onPressOpenUrlInBrowser}
               small
               style={{ marginRight: 12 }}
             >
-              <Text style={{ fontSize:10 }}>Open Browser</Text>
+              <Text style={{ fontSize:10 }}>{t("url.open.title")}</Text>
             </Button>
           </>
         }

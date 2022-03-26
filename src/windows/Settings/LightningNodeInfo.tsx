@@ -8,6 +8,13 @@ import Blurmodal from "../../components/BlurModal";
 import { formatISO, toast } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
 
+import { useTranslation,TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
+let t:TFunction;
+
+//const { t, i18n } = useTranslation(namespaces.settings.lightningNodeInfo)
+
 interface IMetaDataProps {
   title: string;
   data: string | string[];
@@ -20,7 +27,7 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
         Array.isArray(data)
           ? Clipboard.setString(data.join("\n"))
           : Clipboard.setString(data);
-        toast("Copied to clipboard", undefined, "warning");
+        toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
       }}
     >
       <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>
@@ -31,6 +38,7 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
 };
 
 export default function LightningNodeInfo() {
+  t = useTranslation(namespaces.settings.lightningNodeInfo).t;
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const getNodeInfo = useStoreActions((store) => store.lightning.getInfo);
 
@@ -50,24 +58,24 @@ export default function LightningNodeInfo() {
         <CardItem>
           <Body>
             <ScrollView>
-              <H1 style={style.header}>Node Info</H1>
-              <MetaData title="Node Alias" data={nodeInfo.alias!} />
-              <MetaData title="Chain" data={nodeInfo.chains!.map(({chain, network}, key) => `${chain} (${network})`).join("\n")} />
-              <MetaData title="Best Header Timestamp" data={formatISO(fromUnixTime(nodeInfo.bestHeaderTimestamp!.toNumber()))} />
-              <MetaData title="Block Hash" data={nodeInfo.blockHash!} />
-              <MetaData title="Block Height" data={nodeInfo.blockHeight!.toString()} />
-              <MetaData title="Identity Pubkey" data={nodeInfo.identityPubkey!} />
-              <MetaData title="Num Channels" data={[
-                `Active: ${nodeInfo.numActiveChannels!.toString()}`,
-                `Inactive: ${nodeInfo.numInactiveChannels!.toString()}`,
-                `Pending: ${nodeInfo.numPendingChannels!.toString()}`,
+              <H1 style={style.header}>{t("title")}</H1>
+              <MetaData title={t("alias")} data={nodeInfo.alias!} />
+              <MetaData title={t("chain")} data={nodeInfo.chains!.map(({chain, network}, key) => `${chain} (${network})`).join("\n")} />
+              <MetaData title={t("timestamp")} data={formatISO(fromUnixTime(nodeInfo.bestHeaderTimestamp!.toNumber()))} />
+              <MetaData title={t("blockHash")} data={nodeInfo.blockHash!} />
+              <MetaData title={t("blockHeight")} data={nodeInfo.blockHeight!.toString()} />
+              <MetaData title={t("identityPubkey")} data={nodeInfo.identityPubkey!} />
+              <MetaData title={t("channel.title")} data={[
+                `${t("channel.active")}: ${nodeInfo.numActiveChannels!.toString()}`,
+                `${t("channel.inactive")}: ${nodeInfo.numInactiveChannels!.toString()}`,
+                `${t("channel.pending")}: ${nodeInfo.numPendingChannels!.toString()}`,
               ]} />
-              <MetaData title="Num peers" data={nodeInfo.numPeers!.toString()} />
-              <MetaData title="Synced to Chain" data={nodeInfo.syncedToChain!.toString()} />
-              <MetaData title="Synced to Graph" data={nodeInfo.syncedToGraph!.toString()} />
-              {nodeInfo.uris && nodeInfo.uris.length > 0 && <MetaData title="Node URIs" data={nodeInfo.uris.join("\n")} />}
-              <MetaData title="Lnd Version" data={nodeInfo.version!} />
-              <MetaData title="Node features" data={Object.values(nodeInfo.features!).map((feature) => feature.name).join(", ")} />
+              <MetaData title={t("numPeers")} data={nodeInfo.numPeers!.toString()} />
+              <MetaData title={t("syncedToChain")} data={nodeInfo.syncedToChain!.toString()} />
+              <MetaData title={t("syncedToGraph")} data={nodeInfo.syncedToGraph!.toString()} />
+              {nodeInfo.uris && nodeInfo.uris.length > 0 && <MetaData title={t("nodeUris")} data={nodeInfo.uris.join("\n")} />}
+              <MetaData title={t("version")} data={nodeInfo.version!} />
+              <MetaData title={t("features")} data={Object.values(nodeInfo.features!).map((feature) => feature.name).join(", ")} />
             </ScrollView>
           </Body>
         </CardItem>

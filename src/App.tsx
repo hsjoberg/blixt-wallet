@@ -13,6 +13,8 @@ const theme = require("./native-base-theme/variables/commonColor").default;
 import store from "./state/store";
 import { clearApp } from "./storage/app";
 import { PLATFORM } from "./utils/constants";
+import "./i18n/i18n";
+
 
 export default function App() {
   const [debug, setDebug] = useState(__DEV__ ? true : false);
@@ -24,21 +26,22 @@ export default function App() {
       }
     })();
   }, []);
+  const nav = (<NavigationContainer theme={{
+    dark: true,
+    colors: {
+        ...DefaultTheme.colors,
+        background: "transparent",
+    }
+    }} documentTitle={{ enabled: false }} ref={navigator}>
+    <Root>
+        {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
+    </Root>
+    </NavigationContainer>)
 
   return (
     <StoreProvider store={store}>
       <StyleProvider style={getTheme(theme)}>
-        <NavigationContainer theme={{
-          dark: true,
-          colors: {
-            ...DefaultTheme.colors,
-            background: "transparent",
-          }
-        }} documentTitle={{ enabled: false }} ref={navigator}>
-          <Root>
-            {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
-          </Root>
-        </NavigationContainer>
+        {/** /PLATFORM === "web"?<React.Suspense fallback={<>Loading...</>}>{nav}</React.Suspense>:/**/nav}
       </StyleProvider>
     </StoreProvider>
   );

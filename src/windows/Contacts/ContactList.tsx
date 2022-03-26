@@ -27,10 +27,14 @@ import { Chain } from "../../utils/build";
 import { checkLndStreamErrorResponse } from "../../utils/lndmobile";
 import { fontFactorNormalized } from "../../utils/scale";
 
+import { useTranslation, TFunction } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 interface IContactProps {
   contact: IContact;
 }
 function Contact({ contact }: IContactProps) {
+  const t = useTranslation(namespaces.contacts.contactList).t;
   const navigation = useNavigation();
   const setLNUrl = useStoreActions((store) => store.lnUrl.setLNUrl);
   const resolveLightningAddress = useStoreActions((store) => store.lnUrl.resolveLightningAddress);
@@ -102,9 +106,9 @@ function Contact({ contact }: IContactProps) {
           }
         }
       } else {
-        throw new Error("Invalid operation, contact doesn't have an LNURL-withdraw code");
+        throw new Error(t("contact.syncBalance.error"));
       }
-    } catch (error) {
+    } catch (error:any) {
       toast(error.message, 0, "danger", "OK");
     }
   };
@@ -144,14 +148,14 @@ function Contact({ contact }: IContactProps) {
           setTimeout(() => setLoadingPay(false), 1);
         } else {
           if (result === "error") {
-            throw new Error("Could not pay to this LNURL-pay code");
+            throw new Error(t("contact.send.error1"));
           }
-          throw new Error(`The response was not an LNURL-pay response (got ${result})`)
+          throw new Error(`${t("contact.send.error2")} (${t("contact.got")} ${result})`)
         }
       } else {
-        throw new Error("Invalid operation, contact neither has LUD-16 identifier or LNURL-pay code");
+        throw new Error(t("contact.send.error3"));
       }
-    } catch (error) {
+    } catch (error:any) {
       setLoadingPay(false);
       toast(error.message, 0, "danger", "OK");
     }
@@ -169,14 +173,14 @@ function Contact({ contact }: IContactProps) {
           setLoadingWithdraw(false);
         } else {
           if (result === "error") {
-            throw new Error("Could not pay to this LNURL-pay code");
+            throw new Error(t("contact.withdraw.error1"));
           }
-          throw new Error(`The response was not an LNURL-pay response (got ${result})`)
+          throw new Error(`${t("contact.withdraw.error2")} (${t("contact.got")} ${result})`)
         }
       } else {
-        throw new Error("Invalid operation, contact doesn't have an LNURL-withdraw code");
+        throw new Error(t("contact.withdraw.error3"));
       }
-    } catch (error) {
+    } catch (error:any) {
       setLoadingWithdraw(false);
       toast(error.message, 0, "danger", "OK");
     }
@@ -184,12 +188,12 @@ function Contact({ contact }: IContactProps) {
 
   const promptDeleteContact = async () => {
     Alert.alert(
-      "Contact deletion",
-      `Are you sure you want to delete contact ${contact.lightningAddress ?? contact.domain}?`,
+      t("contact.deleteContact.dialog.title"),
+      `${t("contact.deleteContact.dialog.msg")} ${contact.lightningAddress ?? contact.domain}?`,
       [{
-        text: "No",
+        text: t("buttons.no",{ns:namespaces.common}),
       }, {
-        text: "Yes",
+        text: t("buttons.yes",{ns:namespaces.common}),
         onPress: async () => {
           await deleteContact(contact.id!);
         }
@@ -208,13 +212,13 @@ function Contact({ contact }: IContactProps) {
                 {contact.type === "SERVICE" && (
                   <>
                     {contact.lnUrlPay && !contact.lnUrlWithdraw &&
-                      <>Payments to <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink></>
+                      <>{t("contact.list.pay")} <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink></>
                     }
                     {!contact.lnUrlPay && contact.lnUrlWithdraw &&
-                      <>Account on <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink></>
+                      <>{t("contact.list.account")} <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink></>
                     }
                     {contact.lnUrlPay && contact.lnUrlWithdraw &&
-                      <>Account on <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink></>
+                      <>{t("contact.list.account")} <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink></>
                     }
                   </>
                 )}
@@ -233,7 +237,7 @@ function Contact({ contact }: IContactProps) {
                 {contact.note.length > 0 && <Text>{contact.note}</Text>}
                 {contact.lnUrlWithdraw &&
                   <Text>
-                    Remote balance:{" "}
+                    {t("contact.syncBalance.title")}:{" "}
                     {currentBalance && (
                       <>
                         {formatBitcoin(Long.fromValue(currentBalance).div(1000), bitcoinUnit)}{" "}
@@ -247,14 +251,14 @@ function Contact({ contact }: IContactProps) {
               <View style={style.actionButtons}>
                 {contact.lnUrlWithdraw &&
                   <Button onPress={onPressWithdraw} style={[style.actionButton, { width: 90 }]} small disabled={loadingWithdraw}>
-                    {!loadingWithdraw && <Text style={style.actionButtonText}>Withdraw</Text>}
+                    {!loadingWithdraw && <Text style={style.actionButtonText}>{t("contact.withdraw.title")}</Text>}
                     {loadingWithdraw && <ButtonSpinner />}
                   </Button>
                 }
                 {(contact.lnUrlPay || contact.lightningAddress) &&
                 <>
                   <Button onPress={onPressSend} style={[style.actionButton, { width: 60 }]} small disabled={loadingPay}>
-                    {!loadingPay && <Text style={style.actionButtonText}>Send</Text>}
+                    {!loadingPay && <Text style={style.actionButtonText}>{t("contact.send.title")}</Text>}
                     {loadingPay && <ButtonSpinner />}
                   </Button>
                 </>
@@ -281,6 +285,7 @@ interface IContactListProps {
   navigation: StackNavigationProp<ContactsStackParamList, "ContactList">;
 }
 export default function ContactList({ navigation }: IContactListProps) {
+  const t = useTranslation(namespaces.contacts.contactList).t;
   const [searchText, setSearchText] = useState("");
   const contacts = useStoreState((store) => store.contacts.contacts);
   const getContacts = useStoreActions((store) => store.contacts.getContacts);
@@ -289,10 +294,12 @@ export default function ContactList({ navigation }: IContactListProps) {
   const promptLightningAddress = usePromptLightningAddress();
   const getContactByLightningAddress = useStoreState((store) => store.contacts.getContactByLightningAddress);
 
+  const headerTitle = t("layout.title",{ns:namespaces.contacts.contactList});
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Contacts & Services",
-      headerBackTitle: "Back",
+      headerTitle: headerTitle,
+      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
       headerShown: true,
       headerRight: () => {
         return (
@@ -309,7 +316,7 @@ export default function ContactList({ navigation }: IContactListProps) {
     const [result, lightningAddress] = await promptLightningAddress();
     if (result && lightningAddress) {
       if (getContactByLightningAddress(lightningAddress)) {
-        Alert.alert("", `${lightningAddress} already exists in your contact list.`);
+        Alert.alert("", `${lightningAddress} ${t("layout.addLightningAddress.alert")}.`);
         return;
       }
 
@@ -375,8 +382,8 @@ export default function ContactList({ navigation }: IContactListProps) {
       <Content>
         {contacts.length === 0 &&
           <Text style={{ textAlign: "center", marginTop: 20 }}>
-            There's nothing here yet...{"\n\n"}Why not add a Lightning Address contact by{"\n"}
-            <Text onPress={addLightningAddress} style={{color:blixtTheme.link}}>tapping here</Text>?
+            {t("layout.msg")+"\n\n"+t("layout.msg")+"\n"}
+            <Text onPress={addLightningAddress} style={{color:blixtTheme.link}}>${t("layout.addLightningAddress.alert")}</Text>?
           </Text>
         }
         {sortedContacts.map((contact) => (

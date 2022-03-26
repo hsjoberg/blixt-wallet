@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, ScrollView, View, NativeModules, EmitterSubscription } from "react-native";
+import { StyleSheet, View, NativeModules, EmitterSubscription } from "react-native";
 import { Card, Text, CardItem, H1, Button, Spinner } from "native-base";
 
 import Blurmodal from "../../components/BlurModal";
@@ -17,6 +17,9 @@ import { LndMobileToolsEventEmitter } from "../../utils/event-listener";
 import LogBox from "../../components/LogBox";
 import useForceUpdate from "../../hooks/useForceUpdate";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 interface IStepsResult {
   title: string;
   result: boolean | string;
@@ -24,6 +27,8 @@ interface IStepsResult {
 }
 
 export default function LndMobileHelpCenter({ navigation }) {
+  const t = useTranslation(namespaces.settings.lndMobileHelpCenter).t;
+
   const [runningSteps, setRunningSteps] = useState(false);
   const [stepsResult, setStepsResult] = useState<IStepsResult[]>([]);
   let log = useRef("");
@@ -177,18 +182,18 @@ export default function LndMobileHelpCenter({ navigation }) {
   const runInit = async () => {
     try {
       const result = await NativeModules.LndMobile.init();
-      toast("Result: " + result, 0, "success", "OK");
+      toast(t("msg.result",{ns:namespaces.common})+": " + result, 0, "success", "OK");
     } catch (e) {
-      toast("Error: " + e.message, 0, "danger", "OK");
+      toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
     }
   };
 
   const runStartLnd = async () => {
     try {
       const result = await startLnd(false);
-      toast("Result: " + JSON.stringify(result), 0, "success", "OK");
+      toast(t("msg.result",{ns:namespaces.common})+": " + JSON.stringify(result), 0, "success", "OK");
     } catch (e) {
-      toast("Error: " + e.message, 0, "danger", "OK");
+      toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
     }
   };
 
@@ -200,20 +205,20 @@ export default function LndMobileHelpCenter({ navigation }) {
   const runSigKill = async () => {
     try {
       const result = await NativeModules.LndMobileTools.killLnd();
-      toast("Result: " + JSON.stringify(result), 0, "success", "OK");
+      toast(t("msg.result",{ns:namespaces.common})+": " + JSON.stringify(result), 0, "success", "OK");
     } catch (e) {
-      toast("Error: " + e.message, 0, "danger", "OK");
+      toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
     }
   };
 
   const runCopyLndLog = async (l: string) => {
     Clipboard.setString(l);
-    toast("Copied to clipboard");
+    toast(t("msg.clipboardCopy",{ns:namespaces.common}));
   };
 
   const runWaitForChainSync = async () => {
     await runWaitForChainSync();
-    toast("Done");
+    toast(t("msg.done",{ns:namespaces.common}));
   };
 
   return (
