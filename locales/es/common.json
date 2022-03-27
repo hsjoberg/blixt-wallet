@@ -1,4 +1,11 @@
 {
+  "generic": {
+    "lightningAddress": "Lightning Address",
+    "nodeAlias": "Node alias",
+    "description": "Description",
+    "amount": "Amount",
+    "fee": "Fee"
+  },
   "buttons": {
     "ok": "Ok",
     "cancel": "Cancelar",

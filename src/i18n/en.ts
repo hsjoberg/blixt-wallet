@@ -49,6 +49,7 @@ import welcome_iCloudBackup from "../../locales/en/welcome.iCloudBackup.json";
 import welcome_restore from "../../locales/en/welcome.restore.json";
 import welcome_seed from "../../locales/en/welcome.seed.json";
 import welcome_start from "../../locales/en/welcome.start.json";
+import transctionDetails from "../../locales/en/transactionDetails.json";
 
 export default {
   [namespaces.common]: common,
@@ -67,12 +68,10 @@ export default {
   [namespaces.LNURL.authRequest]: LNURL_authRequest,
   [namespaces.LNURL.channelRequest]: LNURL_channelRequest,
   [namespaces.LNURL.LNURLPayRequest]: LNURL_LNURLPayRequest,
-  [namespaces.LNURL.payRequestAboutLightningAddress]:
-    LNURL_payRequestAboutLightningAddress,
+  [namespaces.LNURL.payRequestAboutLightningAddress]: LNURL_payRequestAboutLightningAddress,
   [namespaces.LNURL.withdrawRequest]: LNURL_withdrawRequest,
   [namespaces.onchain.onChainInfo]: onchain_onChainInfo,
-  [namespaces.onchain.onChainTransactionDetails]:
-    onchain_onChainTransactionDetails,
+  [namespaces.onchain.onChainTransactionDetails]: onchain_onChainTransactionDetails,
   [namespaces.onchain.onChainTransactionLog]: onchain_onChainTransactionLog,
   [namespaces.onchain.withdraw]: onchain_withdraw,
   [namespaces.receive.dunderLspInfo]: receive_dunderLspInfo,
@@ -103,4 +102,5 @@ export default {
   [namespaces.welcome.restore]: welcome_restore,
   [namespaces.welcome.seed]: welcome_seed,
   [namespaces.welcome.start]: welcome_start,
+  [namespaces.transactionDetails]: transctionDetails,
 };

@@ -75,6 +75,7 @@ export const namespaces = {
   overview: "overview",
   drawer: "drawer",
   syncInfo: "syncInfo",
+  transactionDetails: "transactionDetails",
 };
 
 interface ILanguages {

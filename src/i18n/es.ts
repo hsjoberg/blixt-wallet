@@ -49,6 +49,7 @@ import welcome_iCloudBackup from "../../locales/es/welcome.iCloudBackup.json";
 import welcome_restore from "../../locales/es/welcome.restore.json";
 import welcome_seed from "../../locales/es/welcome.seed.json";
 import welcome_start from "../../locales/es/welcome.start.json";
+import transactionDetails from "../../locales/es/transactionDetails.json";
 
 export default {
   [namespaces.common]: common,
@@ -103,4 +104,5 @@ export default {
   [namespaces.welcome.restore]: welcome_restore,
   [namespaces.welcome.seed]: welcome_seed,
   [namespaces.welcome.start]: welcome_start,
+  [namespaces.transactionDetails]: transactionDetails,
 };
