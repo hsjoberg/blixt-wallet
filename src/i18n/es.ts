@@ -3,6 +3,7 @@ import { namespaces } from "./i18n.constants";
 import common from "../../locales/es/common.json";
 import help from "../../locales/es/help.json";
 import overview from "../../locales/es/overview.json";
+import drawer from "../../locales/es/drawer.json";
 import syncInfo from "../../locales/es/syncInfo.json";
 import contacts_contactList from "../../locales/es/contacts.contactList.json";
 import initProcess_initLightning from "../../locales/es/initProcess.initLightning.json";
@@ -53,6 +54,7 @@ export default {
   [namespaces.common]: common,
   [namespaces.help]: help,
   [namespaces.overview]: overview,
+  [namespaces.drawer]: drawer,
   [namespaces.syncInfo]: syncInfo,
   [namespaces.contacts.contactList]: contacts_contactList,
   [namespaces.initProcess.initLightning]: initProcess_initLightning,

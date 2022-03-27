@@ -73,6 +73,7 @@ export const namespaces = {
   },
   help: "help",
   overview: "overview",
+  drawer: "drawer",
   syncInfo: "syncInfo",
 };
 

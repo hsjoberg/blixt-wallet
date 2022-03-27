@@ -12,7 +12,11 @@ import { fontFactorNormalized } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
 import { useStoreState } from "../state/store";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n/i18n.constants";
+
 export default function Drawer() {
+  const t = useTranslation(namespaces.drawer).t;
   const navigation = useNavigation();
   const promptLightningAddress = usePromptLightningAddress();
   const evaluateLightningCode = useEvaluateLightningCode();
@@ -101,13 +105,13 @@ export default function Drawer() {
               <TouchableOpacity onPress={() => goToScreen("Send")}>
                 <View style={style.menuItem}>
                   <Icon style={style.menuItemIcon} type="AntDesign" name="camerao" />
-                  <Text style={style.menuItemText}>Scan</Text>
+                  <Text style={style.menuItemText}>{t("menu.scan")}</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => goToScreen("Receive")}>
                 <View style={style.menuItem}>
                   <Icon style={style.menuItemIcon} type="AntDesign" name="qrcode" />
-                  <Text style={style.menuItemText}>Receive</Text>
+                  <Text style={style.menuItemText}>{t("menu.receive")}</Text>
                 </View>
               </TouchableOpacity>
             </>
@@ -116,48 +120,48 @@ export default function Drawer() {
           <TouchableOpacity onPress={pasteFromClipboard}>
             <View style={style.menuItem}>
               <Icon style={style.menuItemIcon} type="FontAwesome5" name="paste" />
-              <Text style={style.menuItemText}>Paste from Clipboard</Text>
+              <Text style={style.menuItemText}>{t("menu.pasteFromClipboard")}</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={sendToLightningAddress}>
             <View style={style.menuItem}>
               <Icon style={style.menuItemIcon} type="Ionicons" name="at" />
-              <Text style={style.menuItemText}>Send to Lightning Address</Text>
+              <Text style={style.menuItemText}>{t("menu.sendToLightningAddress")}</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => goToScreen("Contacts")}>
             <View style={style.menuItem}>
               <Icon style={style.menuItemIcon} type="AntDesign" name="contacts" />
-              <Text style={style.menuItemText}>Contacts &amp; Services</Text>
+              <Text style={style.menuItemText}>{t("menu.contactsAndServices")}</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={goToLightningBrowser}>
             <View style={style.menuItem}>
               <Icon style={style.menuItemIcon} type="MaterialCommunityIcons" name="web" />
-              <Text style={style.menuItemText}>Lightning Browser</Text>
+              <Text style={style.menuItemText}>{t("menu.lightningBrowser")}</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => goToScreen("OnChain")}>
             <View style={style.menuItem}>
               <Icon style={style.menuItemIcon} type="MaterialCommunityIcons" name="bitcoin" />
-              <Text style={style.menuItemText}>On-chain</Text>
+              <Text style={style.menuItemText}>{t("menu.onChainWallet")}</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => goToScreen("LightningInfo")}>
             <View style={style.menuItem}>
               <Icon style={style.menuItemIcon} type="Entypo" name="thunder-cloud" />
-              <Text style={style.menuItemText}>Lightning Channels</Text>
+              <Text style={style.menuItemText}>{t("menu.lightningChannels")}</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={toggleAdvanced}>
             <View style={style.advancedExpand}>
-              <Text note style={style.advancedExpandText}>Advanced</Text>
+              <Text note style={style.advancedExpandText}>{t("menu.showMore")}</Text>
               <Icon style={style.advancedExpandIcon} type="AntDesign" name={expandAdvanced ? "up" : "down"} />
             </View>
           </TouchableOpacity>
@@ -166,14 +170,14 @@ export default function Drawer() {
             <TouchableOpacity onPress={() => goToScreen("KeysendExperiment")}>
               <View style={style.menuItem}>
                 <Icon style={[style.menuItemIcon, { fontSize: 25 }]} color={blixtTheme.dark} type="FontAwesome" name="send" />
-                <Text style={style.menuItemText}>Keysend Experiment</Text>
+                <Text style={style.menuItemText}>{t("menu.keysendExperiment")}</Text>
               </View>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
       <View style={style.bottom}>
-        <Text style={style.bottomText} note>Made with ⚡ in Sweden</Text>
+        <Text style={style.bottomText} note>{t("madeInSweden")}</Text>
       </View>
     </View>
   );
