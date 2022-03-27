@@ -1,10 +1,10 @@
 {
   "generic": {
-    "lightningAddress": "Lightning Address",
-    "nodeAlias": "Node alias",
-    "description": "Description",
-    "amount": "Amount",
-    "fee": "Fee"
+    "lightningAddress": "Direccion Lightning",
+    "nodeAlias": "Alias del nodo",
+    "description": "Descripcion",
+    "amount": "Monto",
+    "fee": "Tarifa"
   },
   "buttons": {
     "ok": "Ok",
@@ -12,7 +12,7 @@
     "continue": "Continuar",
     "no": "No",
     "yes": "Si",
-    "save": "Salvar",
+    "save": "Guardar",
     "copy": "Copiar"
   },
   "msg": {
