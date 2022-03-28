@@ -13,7 +13,7 @@
   },
   "doBackup": {
     "msg1": "Danke, dass Du Blixt Wallet verwendest!",
-    "msg2": "Wir empfehlen, ein Wallet-Backup zu erstellen, um im Fall eines Geräteverlusts das Guthaben wiederherstellen zu können",
+    "msg2": "Wir empfehlen, ein Wallet-Backup zu erstellen, um im Falle eines Geräteverlusts das Guthaben wiederherstellen zu können",
     "backup": "Wallet-Backup"
   }
 }
