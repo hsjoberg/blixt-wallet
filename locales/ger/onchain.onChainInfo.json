@@ -1,0 +1,15 @@
+{
+  "funds": {
+    "title": "On-Chain Guthaben"
+  },
+  "address": {
+    "title": "Sende Bitcoin on-chain zu dieser Adresse",
+    "alert": "In die Zwischenablage kopiert."
+  },
+  "newAddress": {
+    "title": "Erzeuge eine neue Adresse"
+  },
+  "withdraw": {
+    "title": "Guthaben abheben"
+  }
+}

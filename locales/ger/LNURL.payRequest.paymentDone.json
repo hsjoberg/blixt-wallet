@@ -1,0 +1,24 @@
+{
+  "message": {
+    "title": "Nachricht von"
+  },
+  "url": {
+    "description": "Beschreibung",
+    "domain": "URL empfangen von",
+    "done": {
+      "title": "Fertig"
+    },
+    "copy": {
+      "title": "Kopiere in die Zwischenablage",
+      "msg": "In die Zwischenablage kopiert."
+    },
+    "open": {
+      "title": "Öffne Browser"
+    }
+  },
+  "aes": {
+    "domain": "Eine verschlüsselte Nachricht empfangen von",
+    "description": "Nachricht von",
+    "secret": "Verschlüsselte Nachricht"
+  }
+}

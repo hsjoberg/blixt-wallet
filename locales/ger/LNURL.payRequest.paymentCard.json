@@ -1,0 +1,24 @@
+{
+  "payRequest": {
+    "error1": "Die Bezahlung enthält keine Beschreibung."
+  },
+  "pay": {
+    "title": "Bezahlen",
+    "alert": "Bitte füge eine Nachricht bei, wenn Du deinen Namen mitsenden möchtest."
+  },
+  "cancel": {
+    "title": "Abbrechen"
+  },
+  "form": {
+    "title": "fordert Dich auf, zu bezahlen.",
+    "description": {
+      "title": "Beschreibung"
+    },
+    "amount": {
+      "title": "Betrag",
+      "msg": "an",
+      "placeholder": "Eingabe Betrag"
+    },
+    "alert": "Bezahlung nicht möglich"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "layout": {
+    "title": "Empfangen"
+  },
+  "createInvoice": {
+    "title": "Erstelle eine Invoice (Rechnung)",
+    "error": "Der Rechnungsbetrag darf nicht höher sein als",
+    "alert": "Für das Empfangen von Rechnungen wird ein offener Lightning-Kanal benötigt."
+  },
+  "form": {
+    "amountFiat": {
+      "title": "Betrag",
+      "change": "Ändere die Fiat-Einheit"
+    },
+    "amountBitcoin": {
+      "title": "Betrag",
+      "change": "Ändere die Bitcoin-Einheit"
+    },
+    "payer": {
+      "title": "Zahlungssender",
+      "placeholder": "Für die Buchhaltung"
+    },
+    "description": {
+      "title": "Nachricht",
+      "placeholder": "Nachricht an den Zahlungssender"
+    }
+  }
+}

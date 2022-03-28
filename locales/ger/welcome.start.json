@@ -1,0 +1,13 @@
+{
+  "title": "Willkommen",
+  "createWallet": {
+    "title": "Erstelle eine Wallet",
+    "msg1": "Blixt Wallet befindet sich noch in einem frühen Entwicklungsstadium.",
+    "msg2": "Wenn Du diese Wallet nutzen möchtest, mache Dir bewusst, dass dein Guthaben verloren gehen könnte.",
+    "msg3": "Es gibt derzeit keinen WatchTower-Support, der deine Lightning-Kanäle im Falle einer Downtime schützen kann.",
+    "msg4": "Ok akzeptiert, weiter"
+  },
+  "restoreWallet": {
+    "title": "Wallet-Wiederherstellung"
+  }
+}

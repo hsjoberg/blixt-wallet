@@ -1,0 +1,29 @@
+{
+  "viewMetadata": {
+    "title": "Metadaten anzeigen",
+    "dialog": {
+      "title": "Technische Metadaten"
+    }
+  },
+  "lightningAddress": {
+    "alert1": {
+      "msg": "ist in deiner Kontaktliste!"
+    },
+    "alert2": {
+      "title": "Zur Kontaktliste hinzufügen",
+      "msg": "Möchtest Du die Adresse zur",
+      "msg1": "Kontaktliste hinzufügen?"
+    }
+  },
+  "payContact": {
+    "alert1": {
+      "msg": "ist in deiner Kontaktliste!"
+    },
+    "alert2": {
+      "title": "Zur Kontaktliste hinzufügen",
+      "msg": "Möchtest Du den Zahlungs-Code zur",
+      "msg1": "Kontaktliste hinzufügen?"
+    }
+  },
+  "error": "Zahlung nicht möglich"
+}
