@@ -1,6 +1,6 @@
 {
   "payRequest": {
-    "error1": "Die Bezahlung enthält keine Beschreibung."
+    "error1": "Die Zahlung enthält keine Beschreibung."
   },
   "pay": {
     "title": "Bezahlen",
