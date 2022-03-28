@@ -1,0 +1,22 @@
+{
+  "syncedToChain": {
+    "title": "Syncing in progress",
+    "title1": "Syncing complete",
+    "msg1": "Blixt Wallet is currently syncing the blockchain.",
+    "msg2": "Once your wallet is in sync with the blockchain, on-chain transactions and funds will be recognized and can be seen from the Bitcoin on-chain section.",
+    "msg3": "Blixt Wallet is in sync with the blockchain.",
+    "blockHeight": {
+      "title": "Current block height",
+      "msg1": "Chain sync progress"
+    }
+  },
+  "recoveryMode": {
+    "title": "Recovering progress",
+    "msg1": "Recover complete",
+    "msg2": "Check the Lightning Channels & On-chain sections"
+  },
+  "lndLog": {
+    "show": "Show lnd log",
+    "copy": "Copy log text"
+  }
+}
