@@ -130,7 +130,6 @@
       },
       "restoreDialog": {
         "title": "Restaurar nodo",
-
         "msg": "Te gustaría restaurar al nodo por defecto"
       },
       "restartDialog": {
