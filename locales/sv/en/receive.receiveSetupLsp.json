@@ -1,0 +1,41 @@
+{
+  "layout": {
+    "title": "Receive"
+  },
+  "createInvoice": {
+    "title": "Create invoice",
+    "error": "Invoice amount cannot be higher than",
+    "alert": "Before you can receive, you need to open a Lightning channel.",
+    "lsp": {
+      "msg": "A payment channel by Dunder LSP will be opened when this invoice is paid.",
+      "msg1": "What's this?"
+    }
+  },
+  "createBlixtLspInvoice": {
+    "title": "Channel opening",
+    "msg": "In order to accept a payment for this invoice, a channel on the Lightning Network has to be opened.",
+    "msg1": "This requires a one-time fee of approximately",
+    "alert": "Failed to connect to Dunder, please try again later.",
+    "proceed": "Proceed"
+  },
+  "form": {
+    "amountFiat": {
+      "title": "Amount",
+      "change": "Change fiat unit",
+      "placeholder": "At least"
+    },
+    "amountBitcoin": {
+      "title": "Amount",
+      "change": "Change bitcoin unit",
+      "placeholder": "At least"
+    },
+    "payer": {
+      "title": "Payer",
+      "placeholder": "For bookkeeping (optional)"
+    },
+    "description": {
+      "title": "Message",
+      "placeholder": "Message to payer (optional)"
+    }
+  }
+}
