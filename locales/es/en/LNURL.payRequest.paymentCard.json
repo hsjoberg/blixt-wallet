@@ -1,0 +1,24 @@
+{
+  "payRequest": {
+    "error1": "Payment is missing a description."
+  },
+  "pay": {
+    "title": "Pay",
+    "alert": "You must provide a comment if you choose to include your name to this payment"
+  },
+  "cancel": {
+    "title": "Cancel"
+  },
+  "form": {
+    "title": "asks you to pay.",
+    "description": {
+      "title": "Description"
+    },
+    "amount": {
+      "title": "Amount",
+      "msg": "to",
+      "placeholder": "Input amount"
+    },
+    "alert": "Unable to pay"
+  }
+}
