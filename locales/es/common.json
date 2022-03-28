@@ -3,7 +3,7 @@
     "lightningAddress": "Direccion Lightning",
     "nodeAlias": "Alias del nodo",
     "description": "Descripcion",
-    "amount": "Monto",
+    "amount": "Cantidad",
     "fee": "Tarifa"
   },
   "buttons": {
