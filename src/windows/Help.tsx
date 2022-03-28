@@ -50,7 +50,7 @@ export default function SyncInfo({ route }: any) {
                 <Text style={style.actionBarButtonText}>GitHub</Text>
               </Button>
               <Button style={style.actionBarButton} onPress={onPressTelegram} small={true}>
-                <Text style={style.actionBarButtonText}>Telegram {t("msg4")}</Text>
+                <Text style={style.actionBarButtonText}>{t("telegramGroup")}</Text>
               </Button>
               <Button style={style.actionBarButton} onPress={onPressEmail} small={true}>
                 <Text style={style.actionBarButtonText}>Email</Text>
