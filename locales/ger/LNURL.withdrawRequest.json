@@ -5,7 +5,7 @@
     },
     "alert1": {
       "title": "Hinzufügen zur Kontaktliste",
-      "msg": "Möchtest Du diesen Auszahlungs-Code zu deiner",
+      "msg": "Möchtest Du diesen Auszahlungscode zu deiner",
       "msg1": "Kontaktliste hinzufügen?",
       "note": "Konto auf"
     },
@@ -20,8 +20,8 @@
       "msg": "Betrag"
     },
     "dialog1": {
-      "msg": "Minimaler Auszahlungsbetrag",
-      "msg1": "Maximaler Auszahlungsbetrag",
+      "msg": "Minimaler Betrag",
+      "msg1": "Maximaler Betrag",
       "placeholder": "Betrag"
     }
   }
