@@ -1,0 +1,12 @@
+{
+  "commentAllowed": {
+    "msg1": "Comment to",
+    "msg2": "max",
+    "msg3": "letters",
+    "msg4": "Send my name together with this comment"
+  },
+  "payerDataName": {
+    "msg1": "Send my name together with this payment",
+    "msg2": "Your name has to be sent together with this payment"
+  }
+}
