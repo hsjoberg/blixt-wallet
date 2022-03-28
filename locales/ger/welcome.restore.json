@@ -1,7 +1,7 @@
 {
   "restore": {
     "title": "Wallet-Wiederherstellung",
-    "msg": "Um dein Wallet wiederherzustellen, tippe jedes Wort deines Seeds getrennt mittels eines Leerzeichen ein.",
+    "msg": "Um dein Wallet wiederherzustellen, tippe jedes Wort deines Seeds getrennt (Leerzeichen) ein.",
     "msg1": "Wenn Du deine Lightning-Kanäle wiederherstellen möchtest, benötigst Du die Backup-Datei.",
     "loading": "Wallet-Wiederherstellung",
     "channel": {
