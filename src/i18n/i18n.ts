@@ -5,7 +5,7 @@ import { getItemObject, StorageItem } from "../storage/app";
 
 import en from "./en";
 import es from "./es";
-import ger from "./ger";
+import de from "./de";
 
 const createI18n = (language: string): i18nInstance => {
   const i18n = i18next.createInstance().use(initReactI18next);
@@ -17,7 +17,7 @@ const createI18n = (language: string): i18nInstance => {
     resources: {
       en: en,
       es: es,
-      ger: ger,
+      de: de,
     },
   });
 
