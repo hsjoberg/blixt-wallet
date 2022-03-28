@@ -2,7 +2,7 @@
   "title": "Willkommen bei Blixt Wallet!",
   "msg": "Das ist dein Backup-Seed.",
   "msg1": "Schreibe ihn auf ein Stück Papier auf und verwahre ihn an einem sicheren Ort.",
-  "msg2": "Solltest Du den Zugang zu deinem Wallet verlieren",
+  "msg2": "Solltest Du den Zugang zu deinem Wallet verlieren,",
   "msg3": "kannst Du dein Guthaben durch Eingabe des Backup-Seeds wiederherstellen.",
   "msg4": "Der Seed-Standard basiert auf aezeed.",
   "button": "Ok, ist notiert"
