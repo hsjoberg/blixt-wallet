@@ -1,0 +1,28 @@
+{
+  "doRequest": {
+    "alert": {
+      "msg": "Sent withdrawal request to"
+    },
+    "alert1": {
+      "title": "Add to Contact List",
+      "msg": "Would you like to add this withdrawal code to",
+      "msg1": "to your contact list?",
+      "note": "Account on"
+    },
+    "alert2": {
+      "note": "Synced account"
+    }
+  },
+  "layout": {
+    "title": "Withdrawal request",
+    "msg": "Message from",
+    "dialog": {
+      "msg": "Amount"
+    },
+    "dialog1": {
+      "msg": "Min withdrawal amount",
+      "msg1": "Max withdrawal amount",
+      "placeholder": "Amount"
+    }
+  }
+}
