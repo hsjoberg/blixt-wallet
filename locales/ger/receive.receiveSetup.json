@@ -4,8 +4,8 @@
   },
   "createInvoice": {
     "title": "Erstelle eine Invoice (Rechnung)",
-    "error": "Der Rechnungsbetrag darf nicht höher sein als",
-    "alert": "Für das Empfangen von Rechnungen wird ein offener Lightning-Kanal benötigt."
+    "error": "Der Invoice-Betrag darf nicht höher sein als",
+    "alert": "Für das Empfangen von Invoices wird ein offener Lightning-Kanal benötigt."
   },
   "form": {
     "amountFiat": {
