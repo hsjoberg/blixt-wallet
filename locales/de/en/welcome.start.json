@@ -1,0 +1,13 @@
+{
+  "title": "Welcome",
+  "createWallet": {
+    "title": "Create Wallet",
+    "msg1": "Blixt Wallet is still at an early stage of development.",
+    "msg2": "If you use this wallet, make sure you understand that you may lose your funds.",
+    "msg3": "There is currently no WatchTower support to watch your channels while you are offline.",
+    "msg4": "I am reckless, continue"
+  },
+  "restoreWallet": {
+    "title": "Restore Wallet"
+  }
+}
