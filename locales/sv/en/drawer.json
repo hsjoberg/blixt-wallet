@@ -1,0 +1,15 @@
+{
+  "menu": {
+    "scan": "Scan",
+    "receive": "Receive",
+    "pasteFromClipboard": "Paste from Clipboard",
+    "sendToLightningAddress": "Send to Lightning Address",
+    "contactsAndServices": "Contacts & Services",
+    "lightningBrowser": "Lightning Browser",
+    "onChainWallet": "On-chain",
+    "lightningChannels": "Lightning Channels",
+    "keysendExperiment": "Keysend Experiment",
+    "showMore": "Advanced"
+  },
+  "madeInSweden": "Made with ⚡ in Sweden"
+}
