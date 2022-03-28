@@ -1,0 +1,30 @@
+{
+  "title": "Transaktion",
+  "date": "Datum",
+  "Note": "Notiz",
+  "website": "Webseite",
+  "type" : "Typ",
+  "lnurl": {
+    "messageFromWebsite": "Nachricht von",
+    "urlReceivedFromWebsite": "URL empfangen von",
+    "secretMessage": "Verschlüsselte Nachricht"
+  },
+  "payer": "Sender",
+  "recipient": "Empfänger",
+  "amountInFiatTimeOfPayment": "Betrag in Fiat (Zahlungszeit)",
+  "numberOfHops": "Anzahl der Hops",
+  "remotePubkey": "Remote PubKey",
+  "paymentHash": "Zahlungshash",
+  "preimage": "Preimage",
+  "status": "Status",
+  "goBack": "Zurück",
+  "button": {
+    "setNote": "Notiz eingeben",
+    "cancelInvoice": "Rechnung abbrechen",
+    "showMap": "Karte anzeigen"
+  },
+  "setNoteDialog": {
+    "title": "Notiz",
+    "text": "Füge eine Notiz für diese Transaktion hinzu"
+  }
+}

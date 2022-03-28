@@ -1,0 +1,22 @@
+{
+  "syncedToChain": {
+    "title": "Synchronisation in Arbeit",
+    "title1": "Synchronisation beendet",
+    "msg1": "Blixt Wallet synchronisiert derzeit die Blockchain.",
+    "msg2": "Wenn dein Wallet die Synchronisation der Blockchain beendet hat, werden On-Chain-Transaktionen und Guthaben verfügbar und im Bereich On-Chain Guthaben angezeigt werden.",
+    "msg3": "Blixt Wallet ist mit der Blockchain synchronisiert.",
+    "blockHeight": {
+      "title": "Aktuelle Blockhöhe",
+      "msg1": "Blockchain-Synchronisation in Arbeit"
+    }
+  },
+  "recoveryMode": {
+    "title": "Wiederherstellungfortschritt",
+    "msg1": "Wiederherstellung abgeschlossen",
+    "msg2": "Prüfe die Bereiche Lightning-Kanäle und On-Chain Guthaben"
+  },
+  "lndLog": {
+    "show": "LND Protokolle anzeigen",
+    "copy": "Protokoll-Text kopieren"
+  }
+}

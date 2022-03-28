@@ -1,0 +1,25 @@
+{
+  "restore": {
+    "title": "Wallet-Wiederherstellung",
+    "msg": "Um dein Wallet wiederherzustellen, tippe jedes Wort deines Seeds getrennt (Leerzeichen) ein.",
+    "msg1": "Wenn Du deine Lightning-Kanäle wiederherstellen möchtest, benötigst Du die Backup-Datei.",
+    "loading": "Wallet-Wiederherstellung",
+    "channel": {
+      "title": "Kanal-Backup",
+      "file": "Wähle die Backup-Datei aus",
+      "google": {
+        "title": "Wiederherstellung mit Google Drive",
+        "alert": "Wiederherstellung mit Google Drive fehlgeschlagen"
+      },
+      "iCloud": {
+        "title": "Wiederherstellung mit iCloud",
+        "alert": "Wiederherstellung mit iCloud fehlgeschlagen"
+      }
+    },
+    "seed": "Seed muss exakt 24 Wörter lang sein"
+  },
+  "backup": {
+    "google": "Backup über Google Drive",
+    "iCloud": "Backup über iCloud"
+  }
+}

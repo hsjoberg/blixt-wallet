@@ -1,0 +1,17 @@
+{
+  "title": "Transaktion",
+  "blockExplorer": "Anzeigen im Block Explorer",
+  "txHash": "Id",
+  "timeStamp": "Datum",
+  "amount": "Betrag",
+  "totalFees": "Gebühren",
+  "label": "Label",
+  "destAddresses": "Zieladressen",
+  "numConfirmations": "Bestätigungen",
+  "blockHeight": "Blockhöhe",
+  "blockHash": "Blockhash",
+  "rawTxHex": {
+    "title": "Raw tx hex",
+    "msg": "Kopieren"
+  }
+}
