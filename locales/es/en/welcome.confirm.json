@@ -1,0 +1,9 @@
+{
+  "alert": {
+    "title": "Try again",
+    "msg": "Sorry, you wrote the words in the wrong order, please try again."
+  },
+  "seed": {
+    "title": "Confirm your seed"
+  }
+}
