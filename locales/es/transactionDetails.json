@@ -11,7 +11,7 @@
   },
   "payer": "Pagador",
   "recipient": "Recipiente",
-  "amountInFiatTimeOfPayment": "Monto en Fiat (Hora del pago)",
+  "amountInFiatTimeOfPayment": "Cantidad en Fiat (Hora del pago)",
   "numberOfHops": "Numero de saltos",
   "remotePubkey": "Pubkey remoto",
   "paymentHash": "Hash del pago",
