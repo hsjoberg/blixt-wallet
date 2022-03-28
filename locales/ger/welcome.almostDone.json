@@ -5,7 +5,7 @@
     "alert": {
       "title": "Name",
       "msg1": "Wähle einen Namen für Transaktionen",
-      "msg2": "Dein Name wird in Rechnungen (Invoices) für Zahlungssender und -empfänger angezeigt",
+      "msg2": "Dein Name wird in Invoices (Rechnungen) für Zahlungssender und -empfänger angezeigt",
       "msg3": "Name eingeben"
     }
   },
@@ -21,7 +21,7 @@
   },
   "autopilot": {
     "title": "Automatisches Öffnen von Kanälen",
-    "msg": "Öffne Kanäle automatisch, sobald on-chain Guthaben zur Verfügung stehen"
+    "msg": "Öffne Kanäle automatisch, sobald On-Chain-Guthaben zur Verfügung stehen"
   },
   "done": {
     "title": "Fast fertig!",
