@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { StyleSheet, View, LayoutAnimation, Pressable, StatusBar, EmitterSubscription, Image } from "react-native";
+import { StyleSheet, View, LayoutAnimation, Pressable, StatusBar, EmitterSubscription } from "react-native";
 import { Icon, Card, CardItem, Text, Button, Header, Item, Input } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/core";
@@ -27,7 +27,7 @@ import { Chain } from "../../utils/build";
 import { checkLndStreamErrorResponse } from "../../utils/lndmobile";
 import { fontFactorNormalized } from "../../utils/scale";
 
-import { useTranslation, TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
 interface IContactProps {
@@ -45,8 +45,8 @@ function Contact({ contact }: IContactProps) {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatRate = useStoreState((store) => store.fiat.currentRate);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
-  const [loadingPay, setLoadingPay] = useState(false); 
-  const [loadingWithdraw, setLoadingWithdraw] = useState(false); 
+  const [loadingPay, setLoadingPay] = useState(false);
+  const [loadingWithdraw, setLoadingWithdraw] = useState(false);
 
   useEffect(() => {
     let listener: EmitterSubscription | null = null;
@@ -148,12 +148,12 @@ function Contact({ contact }: IContactProps) {
           setTimeout(() => setLoadingPay(false), 1);
         } else {
           if (result === "error") {
-            throw new Error(t("contact.send.error1"));
+            throw new Error(t("contact.send.couldNotPay"));
           }
-          throw new Error(`${t("contact.send.error2")} (${t("contact.got")} ${result})`)
+          throw new Error(`${t("contact.send.invalidResponse", { response: result })}`)
         }
       } else {
-        throw new Error(t("contact.send.error3"));
+        throw new Error(t("contact.send.invalidOperation"));
       }
     } catch (error:any) {
       setLoadingPay(false);
@@ -173,12 +173,12 @@ function Contact({ contact }: IContactProps) {
           setLoadingWithdraw(false);
         } else {
           if (result === "error") {
-            throw new Error(t("contact.withdraw.error1"));
+            throw new Error(t("contact.withdraw.couldNotPay"));
           }
-          throw new Error(`${t("contact.withdraw.error2")} (${t("contact.got")} ${result})`)
+          throw new Error(`${t("contact.withdraw.invalidResponse", { response: result })})`);
         }
       } else {
-        throw new Error(t("contact.withdraw.error3"));
+        throw new Error(t("contact.withdraw.invalidOperation"));
       }
     } catch (error:any) {
       setLoadingWithdraw(false);
@@ -188,8 +188,8 @@ function Contact({ contact }: IContactProps) {
 
   const promptDeleteContact = async () => {
     Alert.alert(
-      t("contact.deleteContact.dialog.title"),
-      `${t("contact.deleteContact.dialog.msg")} ${contact.lightningAddress ?? contact.domain}?`,
+      t("contact.deleteContact.title"),
+      `${t("contact.deleteContact.msg", { contact: contact.lightningAddress ?? contact.domain })}`,
       [{
         text: t("buttons.no",{ns:namespaces.common}),
       }, {
@@ -294,12 +294,10 @@ export default function ContactList({ navigation }: IContactListProps) {
   const promptLightningAddress = usePromptLightningAddress();
   const getContactByLightningAddress = useStoreState((store) => store.contacts.getContactByLightningAddress);
 
-  const headerTitle = t("layout.title",{ns:namespaces.contacts.contactList});
-
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: headerTitle,
-      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
+      headerTitle: t("layout.title", { ns:namespaces.contacts.contactList }),
+      headerBackTitle: t("buttons.back", { ns:namespaces.common }),
       headerShown: true,
       headerRight: () => {
         return (
@@ -316,7 +314,7 @@ export default function ContactList({ navigation }: IContactListProps) {
     const [result, lightningAddress] = await promptLightningAddress();
     if (result && lightningAddress) {
       if (getContactByLightningAddress(lightningAddress)) {
-        Alert.alert("", `${lightningAddress} ${t("layout.addLightningAddress.alert")}.`);
+        Alert.alert("", `${lightningAddress} ${t("lightningAddressAlreadyExists")}.`);
         return;
       }
 
@@ -382,8 +380,10 @@ export default function ContactList({ navigation }: IContactListProps) {
       <Content>
         {contacts.length === 0 &&
           <Text style={{ textAlign: "center", marginTop: 20 }}>
-            {t("layout.msg")+"\n\n"+t("layout.msg")+"\n"}
-            <Text onPress={addLightningAddress} style={{color:blixtTheme.link}}>${t("layout.addLightningAddress.alert")}</Text>?
+            {t("layout.nothingHereYet")+"\n\n"+t("layout.whyNotAdd")+"\n"}
+            <Text onPress={addLightningAddress} style={{color:blixtTheme.link}}>
+              {t("layout.tappingHere")}
+            </Text>?
           </Text>
         }
         {sortedContacts.map((contact) => (

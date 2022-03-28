@@ -1,15 +1,12 @@
 {
   "layout": {
     "title": "Contacts & Services",
-    "addLightningAddress": {
-      "title": "tapping here",
-      "alert": "already exists in your contact list"
-    },
-    "msg": "There's nothing here yet...",
-    "msg1": "Why not add a Lightning Address contact by"
+    "lightningAddressAlreadyExists": "already exists in your contact list",
+    "nothingHereYet": "There's nothing here yet...",
+    "whyNotAdd": "Why not add a Lightning Address contact by",
+    "tappingHere": "tapping here"
   },
   "contact": {
-    "got": "got",
     "syncBalance": {
       "title": "Remote balance",
       "error": "Invalid operation, contact doesn't have an LNURL-withdraw code"
@@ -20,22 +17,19 @@
     },
     "send": {
       "title": "Send",
-      "error1": "Could not pay to this LNURL-pay code",
-      "error2": "The response was not an LNURL-pay response",
-      "error3": "Invalid operation, contact neither has LUD-16 identifier or LNURL-pay code"
+      "couldNotPay": "Could not pay to this LNURL-pay code",
+      "invalidResponse": "The response was not an LNURL-pay response (got {{response}})",
+      "invalidOperation": "Invalid operation, contact neither has LUD-16 identifier or LNURL-pay code"
     },
     "withdraw": {
       "title": "Withdraw",
-      "error1": "Could not pay to this LNURL-pay code",
-      "error2": "The response was not an LNURL-pay response",
-      "error3": "Invalid operation, contact doesn't have an LNURL-withdraw code"
+      "couldNotPay": "Could not pay to this LNURL-pay code",
+      "invalidResponse": "The response was not an LNURL-pay response (got {{response}})",
+      "invalidOperation": "Invalid operation, contact doesn't have an LNURL-withdraw code"
     },
     "deleteContact": {
-      "title": "",
-      "dialog": {
-        "title": "Contact deletion",
-        "msg": "Are you sure you want to delete contact"
-      }
+      "title": "Contact deletion",
+      "msg": "Are you sure you want to delete contact {{contact}}?"
     }
   }
 }

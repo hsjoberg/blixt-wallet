@@ -1,15 +1,12 @@
 {
   "layout": {
     "title": "Servicios y contactos",
-    "addLightningAddress": {
-      "title": "Toque aquí",
-      "alert": "Ya existe en tu lista de contactos"
-    },
-    "msg": "Todavía no hay nada aquí...",
-    "msg1": "Porque no añadir una dirección de contacto Lightning por"
+    "lightningAddressAlreadyExists": "Ya existe en tu lista de contactos",
+    "nothingHereYet": "Todavía no hay nada aquí...",
+    "whyNotAdd": "Porque no añadir una dirección de contacto Lightning por",
+    "tappingHere": "toque aquí"
   },
   "contact": {
-    "got": "got",
     "syncBalance": {
       "title": "Balance remoto",
       "error": "Operación invalida, el contacto no tiene un LNURL -código para retiro"
@@ -20,22 +17,19 @@
     },
     "send": {
       "title": "Enviar",
-      "error1": "No puedes pagar a este LNURL-código de pago",
-      "error2": "La respuesta no fué LNURL-respuesta de pago",
-      "error3": "Operación invalida, contacto no tiene identificación LUD-16 o LNURL-código de pago"
+      "couldNotPay": "No puedes pagar a este LNURL-código de pago",
+      "invalidResponse": "La respuesta no fué LNURL-respuesta de pago ({{response}})",
+      "invalidOperation": "Operación invalida, contacto no tiene identificación LUD-16 o LNURL-código de pago"
     },
     "withdraw": {
       "title": "Retiro",
-      "error1": "No se pudo pagar a este LNURL-código de pago",
-      "error2": "La respuesta no fué un LNURL-respuesta de pago",
-      "error3": "Operación invalida, el contacto no tiene un LNURL-código de retiro"
+      "couldNotPay": "No se pudo pagar a este LNURL-código de pago",
+      "invalidResponse": "La respuesta no fué un LNURL-respuesta de pago",
+      "invalidOperation": "Operación invalida, el contacto no tiene un LNURL-código de retiro"
     },
     "deleteContact": {
-      "title": "",
-      "dialog": {
-        "title": "Eliminación de contacto",
-        "msg": "Estas seguro de que quieres eliminar este contacto"
-      }
+      "title": "Eliminación de contacto",
+      "msg": "¿Estas seguro de que quieres eliminar este contacto {{contact}}?"
     }
   }
 }
