@@ -6,7 +6,7 @@
       "title": "Name",
       "subtitle": "wird in Transaktionen verwendet",
       "dialog": {
-        "msg": "Wähle einen Namen für Transaktionen\n\nDein Name wird in Rechnungen (Invoices) den Zahlungssendern und -empfängern angezeigt.",
+        "msg": "Wähle einen Namen für Transaktionen\n\nDein Name wird in Invoices (Rechnungen) den Zahlungssendern und -empfängern angezeigt.",
         "accept": "Wähle einen Namen"
       }
     },
@@ -21,8 +21,8 @@
       "subtitle": "Für Transaktionen und Kanal-Aktionen"
     },
     "checkClipboard": {
-      "title": "Prüfe Zwischenablage auf Rechnungen (Invoices)",
-      "subtitle": "Automatisches Prüfen der Zwischenablage auf Rechnungen (Invoices)"
+      "title": "Prüfe Zwischenablage auf Invoices (Rechnungen)",
+      "subtitle": "Automatisches Prüfen der Zwischenablage auf Invoices (Rechnungen)"
     },
     "saveGeolocation": {
       "title": "Speichere die Geolokation einer Transaktion",
@@ -116,7 +116,7 @@
     "onchainExplorer": {
       "title": "On-chain Explorer",
       "dialog": {
-        "title": "Ändere den on-chain Explorer"
+        "title": "Ändere den On-Chain Explorer"
       }
     }
   },
