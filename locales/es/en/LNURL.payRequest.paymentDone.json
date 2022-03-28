@@ -1,0 +1,24 @@
+{
+  "message": {
+    "title": "Message from"
+  },
+  "url": {
+    "description": "Description",
+    "domain": "URL received from",
+    "done": {
+      "title": "Done"
+    },
+    "copy": {
+      "title": "Copy to clipboard",
+      "msg": "Copied to clipboard."
+    },
+    "open": {
+      "title": "Open Browser"
+    }
+  },
+  "aes": {
+    "domain": "Got a secret encrypted message from",
+    "description": "Message from",
+    "secret": "Secret message"
+  }
+}
