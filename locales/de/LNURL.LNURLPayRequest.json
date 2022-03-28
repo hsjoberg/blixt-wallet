@@ -6,24 +6,22 @@
     }
   },
   "lightningAddress": {
-    "alert1": {
-      "msg": "ist in deiner Kontaktliste!"
+    "alreadyExists": {
+      "msg": "{{lightningAddress}} ist in deiner Kontaktliste"
     },
-    "alert2": {
+    "add": {
       "title": "Zur Kontaktliste hinzufügen",
-      "msg": "Möchtest Du die Adresse zur",
-      "msg1": "Kontaktliste hinzufügen?"
+      "msg": "Möchtest Du die Adresse zur {{lightningAddress}} Kontaktliste hinzufügen?"
     }
   },
   "payContact": {
-    "alert1": {
-      "msg": "ist in deiner Kontaktliste!"
+    "alreadyExists": {
+      "msg": "Zahlungscode zur {{domain}} ist in deiner Kontaktliste"
     },
-    "alert2": {
+    "add": {
       "title": "Zur Kontaktliste hinzufügen",
-      "msg": "Möchtest Du den Zahlungscode zur",
-      "msg1": "Kontaktliste hinzufügen?"
+      "msg": "Möchtest Du den Zahlungscode zur {{domain}} Kontaktliste hinzufügen?"
     }
   },
-  "error": "Zahlung nicht möglich"
+  "unableToPay": "Zahlung nicht möglich"
 }

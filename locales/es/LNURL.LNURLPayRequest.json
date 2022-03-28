@@ -6,24 +6,22 @@
     }
   },
   "lightningAddress": {
-    "alert1": {
-      "msg": "¡Está en tu lista de contactos!"
+    "alreadyExists": {
+      "msg": "{{lightningAddress}} está en tu lista de contactos"
     },
-    "alert2": {
+    "add": {
       "title": "Añadir a tu lista de contactos",
-      "msg": "Te gustaría añadir",
-      "msg1": "a tu lista de contactos?"
+      "msg": "¿Te gustaría añadir {{lightningAddress}} a tu lista de contactos?"
     }
   },
   "payContact": {
-    "alert1": {
-      "msg": "!está en tu lista de contactos!"
+    "alreadyExists": {
+      "msg": "Código de pago a {{domain}} está en tu lista de contactos"
     },
-    "alert2": {
+    "add": {
       "title": "Añadir a tu lista de contactos",
-      "msg": "Te gustaría añadir este código de pago a",
-      "msg1": "tu lista de contactos?"
+      "msg": "¿Te gustaría añadir este código de pago a {{domain}} tu lista de contactos?"
     }
   },
-  "error": "Pago inhabilitado"
+  "unableToPay": "Pago inhabilitado"
 }

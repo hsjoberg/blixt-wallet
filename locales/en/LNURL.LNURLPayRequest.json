@@ -6,24 +6,22 @@
     }
   },
   "lightningAddress": {
-    "alert1": {
-      "msg": "is in your contact list!"
+    "alreadyExists": {
+      "msg": "{{lightningAddress}} is in your contact list"
     },
-    "alert2": {
+    "add": {
       "title": "Add to Contact List",
-      "msg": "Would you like to add",
-      "msg1": "to your contact list?"
+      "msg": "Would you like to add {{lightningAddress}} to your contact list?"
     }
   },
   "payContact": {
-    "alert1": {
-      "msg": "is in your contact list!"
+    "alreadyExists": {
+      "msg": "Payment code for {{domain}} is in your contact list"
     },
-    "alert2": {
+    "add": {
       "title": "Add to Contact List",
-      "msg": "Would you like to add this payment code to",
-      "msg1": "to your contact list?"
+      "msg": "Would you like to add this payment code to {{domain}} to your contact list?"
     }
   },
-  "error": "Unable to pay"
+  "unableToPay": "Unable to pay"
 }

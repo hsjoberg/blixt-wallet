@@ -64,16 +64,16 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
       }
 
       if (getContactByLightningAddress(lightningAddress[1])) {
-        Alert.alert("",`${lightningAddress[1]} ${t("lightningAddress.alert1.title")}`);
+        Alert.alert("", t("lightningAddress.alreadyExists.msg", {lightningAddress: lightningAddress[1] }));
       } else {
         Alert.alert(
-          t("lightningAddress.alert2.title"),
-          `${t("lightningAddress.alert2.msg")} ${lightningAddress[1]} ${t("lightningAddress.alert2.msg1")}`,
+          t("lightningAddress.add.title"),
+          t("lightningAddress.add.msg", { lightningAddress: lightningAddress[1] }),
           [{
-            text: t("buttons.no",{ns:namespaces.common}),
+            text: t("buttons.no", { ns:namespaces.common }),
             style: "cancel",
           }, {
-            text: t("buttons.yes",{ns:namespaces.common}),
+            text: t("buttons.yes", { ns:namespaces.common }),
             style: "default",
             onPress: async () => {
               const domain = lightningAddress[1].split("@")[1] ?? "";
@@ -95,15 +95,15 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
 
     const promptLnUrlPayContact = () => {
       if (getContactByLnUrlPay(lnurlStr ?? "")) {
-        Alert.alert("",`${t("lightningAddress.alert2.msg")} ${domain} ${t("lightningAddress.alert2.msg1")}`);
+        Alert.alert("",t("payContact.alreadyExists.msg", { domain }));
       } else {
         Alert.alert(
-          t("payContact.alert2.title"),
-          `${t("payContact.alert2.msg")} ${domain} ${t("payContact.alert2.msg1")}`,
+          t("payContact.add.title"),
+          t("payContact.add.msg", { domain }),
           [{
-            text: t("buttons.no",{ns:namespaces.common}),
+            text: t("buttons.no", { ns:namespaces.common }),
           }, {
-            text: t("buttons.yes",{ns:namespaces.common}),
+            text: t("buttons.yes", { ns:namespaces.common }),
             onPress: async () => {
               syncContact({
                 type: "SERVICE",
@@ -169,7 +169,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
       </Blurmodal>
     );
   } catch (error) {
-    Alert.alert(`${t("error")}:\n\n${error.message}`);
+    Alert.alert(`${t("unableToPay")}:\n\n${error.message}`);
     callback(null);
     navigation.goBack();
     return (<></>);
