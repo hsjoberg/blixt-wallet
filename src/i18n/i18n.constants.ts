@@ -94,4 +94,8 @@ export const languages: ILanguages = {
     id: "es",
     name: "Español",
   },
+  ger: {
+    id: "ger",
+    name: "Deutsch",
+  },
 };
