@@ -1,0 +1,37 @@
+{
+  "title": "Keysend",
+  "qr": {
+    "alert": "Copied to clipboard"
+  },
+  "dialog": {
+    "msg1": "Welcome to the keysend playground",
+    "msg2": "Keysend lets you pay another Blixt Wallet (or any Lightning node that supports keysend) without requiring an invoice.",
+    "msg3": "Click on the camera to scan another wallet's QR code or provide a public key and route hints below."
+  },
+  "send": {
+    "title": "Send",
+    "msg": "Keysend payment",
+    "error": {
+      "checkAmount": "Check amount",
+      "missingPubkey": "Missing pubkey"
+    },
+    "alert": "Payment successful"
+  },
+  "form": {
+    "amount": {
+      "title": "Amount sat"
+    },
+    "pubkey": {
+      "title": "Public key",
+      "placeholder": "Pubkey"
+    },
+    "route": {
+      "title": "Route hints",
+      "placeholder": "Route hints"
+    },
+    "message": {
+      "title": "Message",
+      "placeholder": "Enter a chat message here"
+    }
+  }
+}
