@@ -16,7 +16,7 @@
         "alert": "Restaurar via iClouod falló"
       }
     },
-    "seed": "La semila tiene que ser de exactamente 24 palabras"
+    "seed": "La semilla debe ser de exactamente 24 palabras"
   },
   "backup": {
     "google": "Copia de seguridad via Google Drive",

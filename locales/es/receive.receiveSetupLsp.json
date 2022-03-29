@@ -7,15 +7,15 @@
     "error": "La cantidad facturada no puede ser mayor que",
     "alert": "Antes de que puedas recibir, necesitas abrir un canal Lightning.",
     "lsp": {
-      "msg": "Un canal de pago hecho por Dunder LSP será abierto cuando la factura es pagada.",
-      "msg1": "Qué es esto?"
+      "msg": "Un canal de pago hecho por Dunder LSP será abierto cuando la factura sea pagada.",
+      "msg1": "¿Qué es esto?"
     }
   },
   "createBlixtLspInvoice": {
     "title": "Abrir canal",
     "msg": "Para aceptar el pago de esta factura, un canal en la Linghtning Network tiene que ser abierto.",
     "msg1": "Esto requiere una comisión única de aproximadamente",
-    "alert": "Fallo al conectar con Dunder, por favor intentar de nuevo más tarde.",
+    "alert": "Fallo al conectar con Dunder, por favor intenta de nuevo más tarde.",
     "proceed": "Proceder"
   },
   "form": {

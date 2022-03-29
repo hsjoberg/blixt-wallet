@@ -1,9 +1,9 @@
 {
   "layout": {
-    "title": "Compañero de Lightning"
+    "title": "Par de Lightning"
   },
   "alias": "Alias del nodo",
-  "pubKey": "Llave publica del nodo",
+  "pubKey": "Llave pública del nodo",
   "address": "Dirección del nodo",
   "data": {
     "title": "Datos",
@@ -12,7 +12,7 @@
   },
   "transfer": {
     "title": "Transferir",
-    "satSent": "envio de sat",
+    "satSent": "envío de sat",
     "satRecv": "recibir sat"
   },
   "inbound": "Entrante",

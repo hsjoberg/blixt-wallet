@@ -29,7 +29,7 @@
     },
     "deleteContact": {
       "title": "Eliminación de contacto",
-      "msg": "¿Estas seguro de que quieres eliminar este contacto {{contact}}?"
+      "msg": "¿Estás seguro de que quieres eliminar este contacto {{contact}}?"
     }
   }
 }

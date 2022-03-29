@@ -20,8 +20,8 @@
       "msg": "Cantidad"
     },
     "dialog1": {
-      "msg": "Minima cantidad de retiro ",
-      "msg1": "Maxima cantidad de retiro",
+      "msg": "Mínima cantidad de retiro ",
+      "msg1": "Máxima cantidad de retiro",
       "placeholder": "Cantidad"
     }
   }
