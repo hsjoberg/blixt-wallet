@@ -18,7 +18,7 @@ export interface IPayRequestDoneProps {
   callback?: (r: Uint8Array | null) => void;
 }
 export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestDoneProps) {
-  const t = useTranslation(namespaces.LNURL.payRequest.paymentDone).t;
+  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
   const navigation = useNavigation();
   const clear = useStoreActions((store) => store.lnUrl.clear);
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
@@ -38,7 +38,7 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
   const onPressCopyUrltoClipboard = () => {
     if (payRequestResponse.successAction?.tag === "url") {
       Clipboard.setString(payRequestResponse.successAction.url);
-      toast(t("url.copy.msg"), undefined, "warning")
+      toast(t("done.url.copy.msg"), undefined, "warning")
     }
   };
 
@@ -54,7 +54,7 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
         {payRequestResponse.successAction?.tag === "message" &&
           <>
             <Text>
-              {t("message.title")} {domain}:{"\n"}
+              {t("done.message.title")} {domain}:{"\n"}
               {payRequestResponse.successAction.message}
             </Text>
           </>
@@ -62,11 +62,11 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
         {payRequestResponse.successAction?.tag === "url" &&
           <>
             <Text style={style.text}>
-              {t("url.description")}:{"\n"}
+              {t("done.url.description")}:{"\n"}
               {payRequestResponse.successAction.description}
             </Text>
             <Text style={style.text}>
-              {t("url.domain")} {domain}:{"\n"}
+              {t("done.url.domain")} {domain}:{"\n"}
               <TextLink url={payRequestResponse.successAction.url}>
                 {payRequestResponse.successAction.url}
               </TextLink>
@@ -75,13 +75,13 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
         }
         {payRequestResponse.successAction?.tag === "aes" &&
           <>
-            <Text style={style.text}>{t("aes.domain")}{domain}.</Text>
+            <Text style={style.text}>{t("done.aes.domain")}{domain}.</Text>
             <Text style={style.text}>
-              {t("aes.description")} {domain}:{"\n"}
+              {t("done.aes.description")} {domain}:{"\n"}
               {payRequestResponse.successAction.description}
             </Text>
             <Text style={style.text}>
-            {t("aes.secret")}:{"\n"}
+              {t("done.aes.secret")}:{"\n"}
               {(() => {
                 if (payRequestResponse.successAction?.tag === "aes") {
                   return decryptLNURLPayAesTagMessage(
@@ -102,7 +102,7 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
       {/* </View> */}
       <View style={[style.actionBar, { }]}>
         <Button onPress={done} small={true}>
-          <Text style={{ fontSize:10 }}>{t("url.done.title")}</Text>
+          <Text style={{ fontSize:10 }}>{t("done.url.done.title")}</Text>
         </Button>
         {payRequestResponse.successAction?.tag === "url" &&
           <>
@@ -111,14 +111,14 @@ export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestD
               small
               style={{ marginRight: 12 }}
             >
-              <Text style={{ fontSize:10 }}>{t("url.copy.title")}</Text>
+              <Text style={{ fontSize:10 }}>{t("done.url.copy.title")}</Text>
             </Button>
             <Button
               onPress={onPressOpenUrlInBrowser}
               small
               style={{ marginRight: 12 }}
             >
-              <Text style={{ fontSize:10 }}>{t("url.open.title")}</Text>
+              <Text style={{ fontSize:10 }}>{t("done.url.open.title")}</Text>
             </Button>
           </>
         }

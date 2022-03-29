@@ -28,7 +28,7 @@ export interface IPaymentCardProps {
 }
 
 export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentCardProps) {
-  const t = useTranslation(namespaces.LNURL.payRequest.paymentCard).t;
+  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
   const navigation = useNavigation();
   const lightningReadyToSend = useLightningReadyToSend();
 
@@ -71,7 +71,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
     })?.[1];
 
     if (!text) {
-      throw new Error(t("payRequest.error1"));
+      throw new Error(t("payloadErrors.error1"));
     }
 
     const longDesc = metadata.find((m, i) => {
@@ -93,7 +93,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
 
     const onPressPay = async () => {
       if (!payerDataName && commentAllowed && sendName && !comment) {
-        Alert.alert("", t("pay.alert"));
+        Alert.alert("", t("pay.error.mustProvideComment"));
         return;
       }
 
@@ -182,7 +182,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
               />
             }
             <Text style={style.text}>
-              <Text style={style.boldText}>{domain}</Text>{t("form.title")}
+              <Text style={style.boldText}>{domain}</Text> {t("form.asksYouToPay")}
             </Text>
           </View>
           <Text style={style.text}>
@@ -193,7 +193,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
             <Text style={style.boldText}>{t("form.amount.title")}:</Text>{"\n"}
             {minSpendableFormatted} ({minSpendableFiatFormatted})
             {(minSpendable !== maxSpendable) &&
-              <Text> {t("form.amount.msg")} {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
+              <Text>{" "}{t("form.amount.to")} {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
             }
           </Text>
           {minSpendable !== maxSpendable &&

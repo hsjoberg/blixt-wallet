@@ -15,17 +15,17 @@ export default function PayRequestAboutLightningAddress() {
       <Card style={style.card}>
         <CardItem>
           <Body>
-            <H1 style={style.header}>{t("title")}</H1>
+            <H1 style={style.header}>{t("aboutLightningAddress.title")}</H1>
             <Text style={style.textBlock}>
-              <TextLink url="https://lightningaddress.com">{t("msg1")}</TextLink>{" "}
-              {t("msg2")}
+              <TextLink url="https://lightningaddress.com">{t("aboutLightningAddress.msg1")}</TextLink>{" "}
+              {t("aboutLightningAddress.msg2")}
             </Text>
             <Text style={style.textBlock}>
-              {t("msg3")}
+              {t("aboutLightningAddress.msg3")}
             </Text>
             <Text style={style.textBlock}>
-              {t("msg4")}{" "}
-              {t("msg5")}
+              {t("aboutLightningAddress.msg4")}{" "}
+              {t("aboutLightningAddress.msg5")}
             </Text>
           </Body>
         </CardItem>

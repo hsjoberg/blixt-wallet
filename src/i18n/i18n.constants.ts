@@ -14,15 +14,9 @@ export const namespaces = {
     openChannel: "lightningInfo.openChannel",
   },
   LNURL: {
-    payRequest: {
-      payerData: "LNURL.payRequest.payerData",
-      paymentCard: "LNURL.payRequest.paymentCard",
-      paymentDone: "LNURL.payRequest.paymentDone",
-    },
     authRequest: "LNURL.authRequest",
     channelRequest: "LNURL.channelRequest",
     LNURLPayRequest: "LNURL.LNURLPayRequest",
-    payRequestAboutLightningAddress: "LNURL.payRequestAboutLightningAddress",
     withdrawRequest: "LNURL.withdrawRequest",
   },
   onchain: {

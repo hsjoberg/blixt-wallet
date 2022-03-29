@@ -12,11 +12,7 @@ import lightningInfo_lightningInfo from "../../locales/en/lightningInfo.lightnin
 import lightningInfo_openChannel from "../../locales/en/lightningInfo.openChannel.json";
 import LNURL_authRequest from "../../locales/en/LNURL.authRequest.json";
 import LNURL_channelRequest from "../../locales/en/LNURL.channelRequest.json";
-import LNURL_payRequest_payerData from "../../locales/en/LNURL.payRequest.payerData.json";
-import LNURL_payRequest_paymentCard from "../../locales/en/LNURL.payRequest.paymentCard.json";
-import LNURL_payRequest_paymentDone from "../../locales/en/LNURL.payRequest.paymentDone.json";
 import LNURL_LNURLPayRequest from "../../locales/en/LNURL.LNURLPayRequest.json";
-import LNURL_payRequestAboutLightningAddress from "../../locales/en/LNURL.payRequestAboutLightningAddress.json";
 import LNURL_withdrawRequest from "../../locales/en/LNURL.withdrawRequest.json";
 import onchain_onChainInfo from "../../locales/en/onchain.onChainInfo.json";
 import onchain_onChainTransactionDetails from "../../locales/en/onchain.onChainTransactionDetails.json";
@@ -62,13 +58,9 @@ export default {
   [namespaces.keysend.experiment]: keysend_experiment,
   [namespaces.lightningInfo.lightningInfo]: lightningInfo_lightningInfo,
   [namespaces.lightningInfo.openChannel]: lightningInfo_openChannel,
-  [namespaces.LNURL.payRequest.payerData]: LNURL_payRequest_payerData,
-  [namespaces.LNURL.payRequest.paymentCard]: LNURL_payRequest_paymentCard,
-  [namespaces.LNURL.payRequest.paymentDone]: LNURL_payRequest_paymentDone,
   [namespaces.LNURL.authRequest]: LNURL_authRequest,
   [namespaces.LNURL.channelRequest]: LNURL_channelRequest,
   [namespaces.LNURL.LNURLPayRequest]: LNURL_LNURLPayRequest,
-  [namespaces.LNURL.payRequestAboutLightningAddress]: LNURL_payRequestAboutLightningAddress,
   [namespaces.LNURL.withdrawRequest]: LNURL_withdrawRequest,
   [namespaces.onchain.onChainInfo]: onchain_onChainInfo,
   [namespaces.onchain.onChainTransactionDetails]: onchain_onChainTransactionDetails,
