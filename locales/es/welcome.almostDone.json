@@ -5,9 +5,9 @@
     "alert": {
       "title": "Nombre",
       "msg1": "Elige un nombre que será usado en transacciones",
-      "msg2": "Tu nombre será visto en facturas de los que te pagaron como",
+      "msg2": "Tu nombre será visto en facturas de los que te pagaron cómo",
       "msg3": "las personas a las que pagaste.",
-      "msg4": "Set name"
+      "msg4": "establecer nombre"
     }
   },
   "pincode": {
@@ -27,6 +27,6 @@
   "done": {
     "title": "¡Casi terminado!",
     "msg1": "Aquí hay algunos ajustes de la cartera que puedes cambiar a tu gusto",
-    "msg2": "Cuando estes listo, presiona continuar"
+    "msg2": "Cuando estés listo, presiona continuar"
   }
 }
