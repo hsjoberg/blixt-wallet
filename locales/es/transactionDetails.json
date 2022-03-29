@@ -1,5 +1,5 @@
 {
-  "title": "Transaccion",
+  "title": "Transacción",
   "date": "Fecha",
   "Note": "Nota",
   "website": "Sitio web",
@@ -10,14 +10,14 @@
     "secretMessage": "Mensaje secreto"
   },
   "payer": "Pagador",
-  "recipient": "Recipiente",
+  "recipient": "Destinatario",
   "amountInFiatTimeOfPayment": "Cantidad en Fiat (Hora del pago)",
-  "numberOfHops": "Numero de saltos",
+  "numberOfHops": "Número de saltos",
   "remotePubkey": "Pubkey remoto",
   "paymentHash": "Hash del pago",
   "preimage": "Preimagen",
-  "status": "Estatus",
-  "goBack": "Atras",
+  "status": "Estado",
+  "goBack": "Atrás",
   "button": {
     "setNote": "Poner nota",
     "cancelInvoice": "Cancelar factura",
@@ -25,6 +25,6 @@
   },
   "setNoteDialog": {
     "title": "Nota",
-    "text": "Poner una nota a esta transaccion"
+    "text": "Poner una nota a esta transacción"
   }
 }
