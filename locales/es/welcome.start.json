@@ -3,7 +3,7 @@
   "createWallet": {
     "title": "Crear Cartera",
     "msg1": "Blixt Wallet sigue estando en desarrollo.",
-    "msg2": "Si usas esta cartera, asegurate de entender que puedes perder tus fondos.",
+    "msg2": "Si usas esta cartera, asegúrate de entender que puedes perder tus fondos.",
     "msg3": "No hay torre de vigilancia por ahora para vigilar tus canales mientras estas offline.",
     "msg4": "Soy temerario, cotinuar"
   },
