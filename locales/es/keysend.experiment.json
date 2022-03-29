@@ -6,7 +6,7 @@
   "dialog": {
     "msg1": "Bienvenido al área keysend",
     "msg2": "Keysend te permite pagar otra Blixt Wallet (o cualquier nodo Lightning que soporta keysend) sin requerir factura.",
-    "msg3": "Click en la camara para escanear otro código QR de cartera o da una llave publica y clave de ruta debajo."
+    "msg3": "Click en la camara para escanear otro código QR de cartera o da una llave pública y clave de ruta debajo."
   },
   "send": {
     "title": "enviar",
@@ -22,7 +22,7 @@
       "title": "Cantidad de sat"
     },
     "pubkey": {
-      "title": "Llave publica",
+      "title": "Llave pública",
       "placeholder": "Pubkey"
     },
     "route": {
