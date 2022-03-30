@@ -1,9 +1,9 @@
 {
   "layout": {
-    "title": "Canal abierto"
+    "title": "Abre canal"
   },
   "form": {
-    "title": "Canal abierto",
+    "title": "Abre canal",
     "channel": {
       "title": "Nodo URI",
       "placeholder": "URI"
