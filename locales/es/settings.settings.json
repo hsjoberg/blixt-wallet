@@ -28,7 +28,7 @@
       "title": "Guardar geolocalización de la transacción",
       "subtitle": "Guarda de manera local la localización de una transacción",
       "logGranted": "Geolocalización concedida",
-      "logDenied": "permiso de geolocalización"
+      "logDenied": "Permiso de geolocalización"
     },
     "mapTheme": {
       "title": "Elegir tema del mapa"
