@@ -30,7 +30,7 @@
       "dunderPlaceholder": "Mindestens"
     },
     "payer": {
-      "title": "Zahlungsender",
+      "title": "Zahlungssender",
       "placeholder": "Für die Buchführung"
     },
     "description": {

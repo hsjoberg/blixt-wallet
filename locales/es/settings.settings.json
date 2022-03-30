@@ -28,7 +28,7 @@
       "title": "Guardar geolocalización de la transacción",
       "subtitle": "Guarda de manera local la localización de una transacción",
       "logGranted": "Geolocalización concedida",
-      "logDenied": "permiso de geolocalización"
+      "logDenied": "Permiso de geolocalización"
     },
     "mapTheme": {
       "title": "Elegir tema del mapa"
@@ -124,7 +124,7 @@
     "title": "Red Bitcoin",
     "node": {
       "title": "Nodo de Bitcoin",
-      "subtitle": "Poner nodo de Bitcoin(BIP157)para conectar a",
+      "subtitle": "Poner nodo de Bitcoin (BIP157) para conectar a",
       "setDialog": {
         "title": "Poner nodo"
       },

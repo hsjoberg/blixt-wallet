@@ -1,6 +1,6 @@
 {
   "layout": {
-    "title": "Conectar con un nodo de Lightning"
+    "title": "Conectar a un par de Lightning"
   },
   "connect": {
     "title": "URI del nodo",

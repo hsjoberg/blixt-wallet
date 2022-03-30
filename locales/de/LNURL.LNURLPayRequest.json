@@ -24,6 +24,62 @@
     }
   },
   "unableToPay": "Zahlung nicht möglich",
+  "payerData": {
+    "commentAllowed": "Kommentar für {{target}} (max {{letters}} Zeichen)",
+    "sendNameWithComment": "Füge meinen Namen dieser Nachricht bei",
+    "name": {
+      "ask": "Füge meinen Namen dieser Zahlung bei",
+      "mandatory": "Dein Name muss dieser Zahlung beigefügt werden."
+    }
+  },
+  "payloadErrors": {
+    "missingDescription": "Die Zahlung enthält keine Beschreibung."
+  },
+  "pay": {
+    "title": "Bezahlen",
+    "error": {
+      "mustProvideComment": "Bitte füge eine Nachricht bei, wenn Du deinen Namen mitsenden möchtest."
+    }
+  },
+  "cancel": {
+    "title": "Abbrechen"
+  },
+  "form": {
+    "asksYouToPay": "bittet Dich, zu bezahlen.",
+    "description": {
+      "title": "Beschreibung"
+    },
+    "amount": {
+      "title": "Betrag",
+      "to": "an",
+      "placeholder": "Betrag eingeben"
+    },
+    "alert": "Zahlung nicht möglich"
+  },
+  "done": {
+    "message": {
+      "title": "Nachricht von"
+    },
+    "url": {
+      "description": "Beschreibung",
+      "domain": "URL empfangen von",
+      "done": {
+        "title": "Fertig"
+      },
+      "copy": {
+        "title": "Kopiere in die Zwischenablage",
+        "msg": "In die Zwischenablage kopiert."
+      },
+      "open": {
+        "title": "Öffne Browser"
+      }
+    },
+    "aes": {
+      "domain": "Eine verschlüsselte Nachricht erhalten von",
+      "description": "Nachricht von",
+      "secret": "Verschlüsselte Nachricht"
+    }
+  },
   "aboutLightningAddress": {
     "title": "Über Lightning-Adressen",
     "msg1": "Über Lightning-Adressen",

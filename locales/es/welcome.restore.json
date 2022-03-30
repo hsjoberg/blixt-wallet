@@ -6,7 +6,7 @@
     "loading": "Restaurar cartera",
     "channel": {
       "title": "Copia de seguridad de los canales",
-      "file": "Elige una copia de seguridad del archivo del canal en el disco duro",
+      "file": "Elige una copia de seguridad del archivo del canal en el disco",
       "google": {
         "title": "Restaurar via Google Drive",
         "alert": "Restaurar via Google Drive falló"

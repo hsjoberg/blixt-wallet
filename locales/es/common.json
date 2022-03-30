@@ -10,6 +10,9 @@
     "ok": "Ok",
     "cancel": "Cancelar",
     "continue": "Continuar",
+    "skip": "Saltar",
+    "proceed": "Continuar",
+    "back": "Atras",
     "no": "No",
     "yes": "Si",
     "save": "Guardar",
@@ -18,9 +21,15 @@
   "msg": {
     "status": "Estado",
     "error": "Error",
+    "warning": "Advertencia",
+    "result": "Resultado",
+    "pending": "pendiente",
+    "done": "Hecho",
+    "dismiss": "Descartar",
     "lastSync": "Última sincronización",
     "lastSyncAttempt": "Último intento de sincronización",
-    "written": "Escritura",
+    "clipboardCopy": "Copiado al portapapeles",
+    "written": "Escrito",
     "enabled": "Habilitado",
     "disabled": "Desabilitado"
   }

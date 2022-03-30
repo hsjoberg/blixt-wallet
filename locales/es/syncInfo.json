@@ -7,7 +7,7 @@
     "msg3": "Blixt Wallet está en sincronización con la blockchain.",
     "blockHeight": {
       "title": "Altura del bloque actual",
-      "msg1": "sincronización con la cadena en progreso"
+      "msg1": "Sincronización con la cadena en progreso"
     }
   },
   "recoveryMode": {

@@ -9,7 +9,7 @@
     "msg3": "Click en la camara para escanear otro código QR de cartera o da una llave pública y clave de ruta debajo."
   },
   "send": {
-    "title": "enviar",
+    "title": "Enviar",
     "msg": "Pago Keysend",
     "error": {
       "checkAmount": "Comprobar cantidad",

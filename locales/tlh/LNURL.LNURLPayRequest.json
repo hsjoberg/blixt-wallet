@@ -1,0 +1,91 @@
+{
+  "viewMetadata": {
+    "title": "romuluS HIch",
+    "dialog": {
+      "title": "mod"
+    }
+  },
+  "lightningAddress": {
+    "alreadyExists": {
+      "msg": "{{lightningAddress}} Su'oy'"
+    },
+    "add": {
+      "title": "ghom'a'",
+      "msg": "pe'vIl Dache'chugh {{lightningAddress}} Dasov'a'?"
+    }
+  },
+  "payContact": {
+    "alreadyExists": {
+      "msg": "rItlh {{domain}} Su'oy'"
+    },
+    "add": {
+      "title": "ghom'a'",
+      "msg": "pe'vIl Dache'chugh {{domain}} Dasov'a'?"
+    }
+  },
+  "unableToPay": "DanoHmeH nuv yIlo'",
+  "payerData": {
+    "commentAllowed": "naDev yIghoS {{target}} (max {{letters}} letters)",
+    "sendNameWithComment": "'ej qaStaHvIS ramvam,",
+    "name": {
+      "ask": "'ej qaStaHvIS ramvam,",
+      "mandatory": "wanI'vam taQ bopeghchugh,"
+    }
+  },
+  "payloadErrors": {
+    "missingDescription": "NIchlu'taHvIS 'um tu'lu'"
+  },
+  "pay": {
+    "title": "QI'tu'",
+    "error": {
+      "mustProvideComment": "bIyIntaHvIS bIHopchugh, vaj cholo'rup."
+    }
+  },
+  "cancel": {
+    "title": "qIl"
+  },
+  "form": {
+    "asksYouToPay": "DaQublaw' porghDaj.",
+    "description": {
+      "title": "qurgh"
+    },
+    "amount": {
+      "title": "'antu'",
+      "to": "ngeH",
+      "placeholder": "jISaH"
+    },
+    "alert": "DanoHmeH nuv yIlo'"
+  },
+  "done": {
+    "message": {
+      "title": "qotlh"
+    },
+    "url": {
+      "description": "qurgh",
+      "domain": "URL che' Vo'",
+      "done": {
+        "title": "pItlh"
+      },
+      "copy": {
+        "title": "yIruch",
+        "msg": "boqmaj 'ongmeH Dayaj."
+      },
+      "open": {
+        "title": "loDnI'pu'"
+      }
+    },
+    "aes": {
+      "domain": "mu'wIj bItlaHchu'be'taHvIS ghomlaH.",
+      "description": "qotlh",
+      "secret": "bIjatlhQo'"
+    }
+  },
+  "aboutLightningAddress": {
+    "title": "'antu' tera'nganpu'",
+    "msg1": "tera'nganpu'",
+    "msg2": "reH Suvrup tlhIngan suvwI''a' ghaH je.",
+    "msg3": "jOHwI' bIHeghchugh, vaj joH quvHa'ghach mInDu'wIj.",
+    "msg4": "'ach wa' lutlhej SuvwI'pu' tIq ghaj.\"",
+    "msg5": "tlhIngan Suvlu'taHvIS Hegh'eghta'bogh."
+  }
+}
