@@ -1,4 +1,11 @@
 {
+  "generic": {
+    "lightningAddress": "Lightning-Adresse",
+    "nodeAlias": "Node-Alias",
+    "description": "Beschreibung",
+    "amount": "Betrag",
+    "fee": "Gebühr"
+  },
   "buttons": {
     "ok": "Ok",
     "cancel": "Abbrechen",
@@ -16,7 +23,7 @@
     "error": "Fehler",
     "warning": "Warnung",
     "result": "Ergebnis",
-    "pending": "in Arbeit",
+    "pending": "ausstehend",
     "done": "beendet",
     "dismiss": "abbrechen",
     "lastSync": "Letzte Synchronisation",
