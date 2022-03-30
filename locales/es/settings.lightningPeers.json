@@ -1,6 +1,6 @@
 {
   "layout": {
-    "title": "Par de Lightning"
+    "title": "Pares de Lightning"
   },
   "alias": "Alias del nodo",
   "pubKey": "Llave pública del nodo",
@@ -12,7 +12,7 @@
   },
   "transfer": {
     "title": "Transferir",
-    "satSent": "envío de sat",
+    "satSent": "sat enviado",
     "satRecv": "recibir sat"
   },
   "inbound": "Entrante",
