@@ -3,7 +3,7 @@
     "title": "Servicios y contactos",
     "lightningAddressAlreadyExists": "Ya existe en tu lista de contactos",
     "nothingHereYet": "Todavía no hay nada aquí...",
-    "whyNotAdd": "Porque no añadir una dirección de contacto Lightning por",
+    "whyNotAdd": "Porque no añadir una dirección Lightning por",
     "tappingHere": "toque aquí"
   },
   "contact": {
@@ -18,7 +18,7 @@
     "send": {
       "title": "Enviar",
       "couldNotPay": "No puedes pagar a este LNURL-código de pago",
-      "invalidResponse": "La respuesta no fué LNURL-respuesta de pago ({{response}})",
+      "invalidResponse": "La respuesta no fué una LNURL-pago (got {{response}})",
       "invalidOperation": "Operación invalida, contacto no tiene identificación LUD-16 o LNURL-código de pago"
     },
     "withdraw": {
