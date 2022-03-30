@@ -1,6 +1,6 @@
 {
   "title": "Transacción",
-  "blockExplorer": "Ver en el exploradorde bloques",
+  "blockExplorer": "Ver en el explorador de bloques",
   "txHash": "Id",
   "timeStamp": "Fecha",
   "amount": "Cantidad",
