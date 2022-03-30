@@ -29,7 +29,6 @@ export const namespaces = {
     dunderLspInfo: "receive.dunderLspInfo",
     receiveQr: "receive.receiveQr",
     receiveSetup: "receive.receiveSetup",
-    receiveSetupLsp: "receive.receiveSetupLsp",
   },
   send: {
     sendCamera: "send.sendCamera",

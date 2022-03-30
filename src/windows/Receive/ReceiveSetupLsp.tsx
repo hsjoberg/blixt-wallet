@@ -350,7 +350,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
   );
 
   const showNoticeText = rpcReady && channels.length === 0;
-  let noticeText: Element | undefined = showNoticeText
+  let noticeText: JSX.Element | undefined = showNoticeText
     ? t("createInvoice.alert")
     : undefined;
   if (shouldUseDunder) {

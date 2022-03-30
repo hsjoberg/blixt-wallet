@@ -21,7 +21,6 @@ import onchain_withdraw from "../../locales/de/onchain.withdraw.json";
 import receive_dunderLspInfo from "../../locales/de/receive.dunderLspInfo.json";
 import receive_receiveQr from "../../locales/de/receive.receiveQr.json";
 import receive_receiveSetup from "../../locales/de/receive.receiveSetup.json";
-import receive_receiveSetupLsp from "../../locales/de/receive.receiveSetupLsp.json";
 import send_sendConfirmation from "../../locales/de/send.sendConfirmation.json";
 import send_sendDone from "../../locales/de/send.sendDone.json";
 import settings_about from "../../locales/de/settings.about.json";
@@ -69,7 +68,6 @@ export default {
   [namespaces.receive.dunderLspInfo]: receive_dunderLspInfo,
   [namespaces.receive.receiveQr]: receive_receiveQr,
   [namespaces.receive.receiveSetup]: receive_receiveSetup,
-  [namespaces.receive.receiveSetupLsp]: receive_receiveSetupLsp,
   [namespaces.send.sendConfirmation]: send_sendConfirmation,
   [namespaces.send.sendDone]: send_sendDone,
   [namespaces.send.sendDone]: send_sendDone,
