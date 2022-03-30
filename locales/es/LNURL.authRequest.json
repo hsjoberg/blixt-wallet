@@ -1,7 +1,7 @@
 {
   "layout": {
     "title": "Petición de registro",
-    "msg": "Quiere registrarse",
+    "msg": "Quieres iniciar sesión en",
     "success": "Autenticado a"
   }
 }
