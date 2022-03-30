@@ -23,7 +23,63 @@
       "msg": "¿Te gustaría añadir este código de pago a {{domain}} tu lista de contactos?"
     }
   },
-  "unableToPay": "Pago inhabilitado",
+  "unableToPay": "Pago denegado",
+  "payerData": {
+    "commentAllowed": "Comentario a  {{target}} (max {{letters}} letters)",
+    "sendNameWithComment": "Envia mi nombre junto con este comentario",
+    "name": {
+      "ask": "Envía mi nombre junto con este pago",
+      "mandatory": "Tu nombre tiene que ser enviado junto con este pago"
+    }
+  },
+  "payloadErrors": {
+    "missingDescription": "Falta una descripción"
+  },
+  "pay": {
+    "title": "Pagar",
+    "error": {
+      "mustProvideComment": "Debe proporcionar un comentario si elige incluir su nombre a este pago"
+    }
+  },
+  "cancel": {
+    "title": "Cancelar"
+  },
+  "form": {
+    "asksYouToPay": "le pide que pague",
+    "description": {
+      "title": "Descripción"
+    },
+    "amount": {
+      "title": "Cantidad",
+      "to": "a",
+      "placeholder": "Ingrese la cantidad"
+    },
+    "alert": "No se puede pagar"
+  },
+  "done": {
+    "message": {
+      "title": "Mensaje de"
+    },
+    "url": {
+      "description": "Descripción",
+      "domain": "URL recibida de",
+      "done": {
+        "title": "Hecho"
+      },
+      "copy": {
+        "title": "Copiar al portapapeles",
+        "msg": "Copiado al portapapeles"
+      },
+      "open": {
+        "title": "Abre Explorador"
+      }
+    },
+    "aes": {
+      "domain": "Obtuve un mensaje secreto cifrado de",
+      "description": "Mensaje de",
+      "secret": "Mensaje secreto"
+    }
+  },
   "aboutLightningAddress": {
     "title": "Sobre la dirección Lightning",
     "msg1": "Dirección Lightning",
