@@ -1,10 +1,10 @@
 {
   "layout": {
-    "title": "Conectar con un compañero de Lightning"
+    "title": "Conectar con un nodo de Lightning"
   },
   "connect": {
-    "title": "Nodo URI",
-    "placeholder": "compañero URI",
+    "title": "URI del nodo",
+    "placeholder": "URI del par",
     "accept": "Conectar"
   }
 }

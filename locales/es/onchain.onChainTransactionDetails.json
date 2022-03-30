@@ -6,7 +6,7 @@
   "amount": "Cantidad",
   "totalFees": "Comisiones",
   "label": "Etiqueta",
-  "destAddresses": "Destinación",
+  "destAddresses": "Destino",
   "numConfirmations": "Confirmaciones",
   "blockHeight": "Altura del bloque",
   "blockHash": "hash del bloque",

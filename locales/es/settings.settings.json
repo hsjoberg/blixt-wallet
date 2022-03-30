@@ -22,10 +22,10 @@
     },
     "checkClipboard": {
       "title": "Comprobar el portapapeles por facturas",
-      "subtitle": "Automaticamente comprueba el portapapeles buscando facturas"
+      "subtitle": "Automáticamente comprueba el portapapeles buscando facturas"
     },
     "saveGeolocation": {
-      "title": "Guarda geolocalización de la transacción",
+      "title": "Guardar geolocalización de la transacción",
       "subtitle": "Guarda de manera local la localización de una transacción",
       "logGranted": "Geolocalización concedida",
       "logDenied": "permiso de geolocalización"
@@ -38,7 +38,7 @@
     "title": "Cartera",
     "seed": {
       "show": {
-        "title": "Mostrar la frase Mnemotcnica",
+        "title": "Mostrar la frase mnemónica",
         "subtitle": "Mostrar semilla de 24 palabras para esta cartera",
         "dialog": {
           "title": "Semilla",
@@ -47,11 +47,11 @@
         }
       },
       "remove": {
-        "title": "Eliminar mnemonic del dispositivo",
+        "title": "Eliminar frase mnemónica del dispositivo",
         "subtitle": "Eliminar permanentemente la semilla de este dispositivo",
         "dialog": {
           "title": "Borrar semilla",
-          "msg": "Esto eliminará permanentemente la semilla de este dispositivo. ¡Solo haga esto si ha respaldado su semilla!",
+          "msg": "Esto eliminará permanentemente la semilla de este dispositivo. ¡Solo haga esto sí ha respaldado su semilla!",
           "accept": "Eliminar semilla"
         }
       }
@@ -75,7 +75,7 @@
       },
       "iCloud": {
         "title": "Copia de seguridad de canales en iCloud",
-        "subtitle": "Copia de seguridad automatica de canales en iCloud",
+        "subtitle": "Copia de seguridad automática de canales en iCloud",
         "alert": "Copia de seguridad en iCloud activada"
       },
       "iCloudForce": {
@@ -97,11 +97,11 @@
       "touchID": "Touch ID"
     },
     "chainSync": {
-      "title": "Scheduled chain sync",
-      "subtitle": "Runs in background every 4 hours",
+      "title": "Sincronización de cadena agendada",
+      "subtitle": "Corre en el fondo cada 4 horas",
       "dialog": {
         "title": "No recomendado",
-        "msg": "Advertencia. No está recomendado deshabilitar la sincronización de cadena programada.\n\nAsegurate de mantenerte a la fecha con la network de otra manera te arriesgas a perder tus fondos.\n\nSolo haz esto si sabes lo que estas haciendo."
+        "msg": "Advertencia. No está recomendado deshabilitar la sincronización de cadena programada.\n\nAsegurate de mantenerte a la fecha con la network de otra manera te arriesgas a perder tus fondos.\n\nSolo haz esto sí sabes lo que estas haciendo."
       }
     }
   },
@@ -155,21 +155,21 @@
       "subtitle": ""
     },
     "peers": {
-      "title": "Mostrar comañero de Lightning",
+      "title": "Mostrar pares de Lightning",
       "subtitle": ""
     },
     "autopilot": {
-      "title": "Abrir canales Automaticamente",
+      "title": "Abrir canales automáticamente",
       "subtitle": ""
     },
     "inbound": {
       "title": "Servicios de canal entrante",
       "subtitle": "Usar un servicio de canal entrante para recibir pagos",
       "dialog": {
-        "title": "Proveedor de canal entrando",
+        "title": "Proveedor de canal entrante",
         "msg1": "Elige un proveedor de canal entrante y presiona continuar.",
-        "msg2": "Tu navegador web abrira la pagina web del correspondiente proveedor, cuando sea posible solicitar un canal.",
-        "msg3": "Cuando lo hayas hecho, puedes copiar la dirección del codigo y/o abrir el link usando Blixt Wallet."
+        "msg2": "Tu navegador web abrirá la página web del proveedor correspondiente, cuando sea posible solicitar un canal.",
+        "msg3": "Cuando lo hayas hecho, puedes copiar la dirección del código y/o abrir el link usando Blixt Wallet."
       }
     },
     "LSP": {
@@ -185,8 +185,8 @@
       }
     },
     "graphSync": {
-      "title": "Espera por el gráfico de sincronización antes de pagar",
-      "subtitle": "El gráfico sincronizado dirige los caminos de pago más optimos"
+      "title": "Espera a que el grafo se sincronice antes de pagar",
+      "subtitle": "El grafo sincronizado dirige los pagos por rutas más óptimas"
     }
   },
   "miscelaneous": {
@@ -216,7 +216,7 @@
       "subtitle": ""
     },
     "expiredInvoices": {
-      "title": "Ocultar facturas caducadas automaticamente",
+      "title": "Ocultar facturas caducadas automáticamente",
       "subtitle": ""
     },
     "screenTransactions": {
@@ -250,14 +250,14 @@
       "subtitle": "",
       "enabled": {
         "title": "Reiniciar aplicación y habilitar Tor",
-        "msg1": "Hablitando Tor hará que la cartera se conecte con su compañero (ambos compañeros Bitcoin y Lightning Network) via Tor Network.",
-        "msg2": "Tu seras capaz de conectar y abrir canales a los nodos de Lightning que usan los servicios onion.",
-        "msg3": "ADVERTENCIA: Blixt Wallet seguira hablando a los siguientes servicios sin Tor",
+        "msg1": "Hablitar Tor hará que la cartera se conecte con sus pares (ambos pares Bitcoin y Lightning Network) via Tor Network.",
+        "msg2": "Tu serás capaz de conectar y abrir canales a los nodos de Lightning que usan los servicios onion.",
+        "msg3": "ADVERTENCIA: Blixt Wallet seguirá hablando a los siguientes servicios sin Tor",
         "msg4": "Razón: Para conseguir tarifas fiat/bitcoin",
         "msg5": "Razón: Para conseguir la altura actual del bloque",
         "msg6": "Razón: Para la copia de seguridad de Google Drive",
         "msg7": "Razón: Para confiar en los nodos de Lightning",
-        "msg8": "Navegador WebLN y LNURL tampoco será usado Tor."
+        "msg8": "Navegador WebLN y LNURL támpoco será usado Tor."
       },
       "disabled": {
         "title": "Reiniciar aplicación y desactivar Tor",

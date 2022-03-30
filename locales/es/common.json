@@ -1,8 +1,8 @@
 {
   "generic": {
-    "lightningAddress": "Direccion Lightning",
+    "lightningAddress": "Dirección Lightning",
     "nodeAlias": "Alias del nodo",
-    "description": "Descripcion",
+    "description": "Descripción",
     "amount": "Cantidad",
     "fee": "Tarifa"
   },

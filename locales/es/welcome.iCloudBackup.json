@@ -6,7 +6,7 @@
   "backup": {
     "title": "Copia de seguridad en iCloud",
     "msg": "Para mantener tus fondos off-chain seguros en caso de que pierdas el dispositivo, te recomendamos mantener los canales en una copia de seguridad en iCloud",
-    "msg1": "Esto mantendra una copia de seguridad de los canales que solo se pueden usar con la semilla de la cartera.",
-    "msg2": "Cuando estes listo, presiona continuar"
+    "msg1": "Esto mantendrá una copia de seguridad de los canales que solo se pueden usar con la semilla de la cartera.",
+    "msg2": "Cuando estés listo, presiona continuar"
   }
 }

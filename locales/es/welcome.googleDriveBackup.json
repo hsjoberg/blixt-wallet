@@ -6,7 +6,7 @@
   "backup": {
     "title": "Copia de seguridad en la nube",
     "msg": "Para mantener seguros tus fondos off-chain en caso de que pierdas el dispositivo te recomendamos hacer una copia de seguridad en Google Drive.",
-    "msg1": "Esto mantendra una copia de seguridad encriptada de los canales que solo se pueden usar juntos en la semilla de la cartera.",
-    "msg2": "Cuando estes listo, presiona continuar."
+    "msg1": "Esto mantendrá una copia de seguridad encriptada de los canales que solo se pueden usar juntos en la semilla de la cartera.",
+    "msg2": "Cuando estés listo, presiona continuar."
   }
 }

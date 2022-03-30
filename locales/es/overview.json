@@ -7,7 +7,7 @@
   "sendOnChain": {
     "title": "Bienvenido a Blixt Wallet!",
     "msg1": "Para empezar, enviar fondos on-chain a la dirección de bitcoin correcta.",
-    "msg2": "Un canal sera abierto automaticamente para ti.",
+    "msg2": "Un canal será abierto automáticamente para ti.",
     "msg3": "Enviar por lo menos",
     "alert": "Dirección Bitcoin copiado al portapapeles"
   },
