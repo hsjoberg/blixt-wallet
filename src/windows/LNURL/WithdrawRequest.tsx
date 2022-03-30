@@ -39,7 +39,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
       if (result) {
         Vibration.vibrate(32);
         toast(
-          `${t("doRequest.alert.msg")} ${domain}`,
+          t("doRequest.sentRequest", { domain }),
           10000,
           "success",
           "Okay"
@@ -50,8 +50,8 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
         const contact = getContactByLnUrlWithdraw(lnObject.balanceCheck);
         if (!contact) {
           Alert.alert(
-            t("doRequest.alert1.title"),
-            `${t("doRequest.alert1.msg")} ${domain} ${t("doRequest.alert1.msg1")}`,
+            t("doRequest.addToContactList.title"),
+            `${t("doRequest.addToContactList.msg", { domain })}`,
             [{
               text: t("buttons.no",{ns:namespaces.common}),
             }, {
@@ -64,7 +64,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
                   lnUrlWithdraw: lnObject.balanceCheck ?? null,
                   lightningAddress: null,
                   lud16IdentifierMimeType: null,
-                  note: `${t("doRequest.alert1.note")} ${domain}`,
+                  note: `${t("doRequest.addToContactList.note", { domain })}`,
                 });
               }
             }],
@@ -75,7 +75,6 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
             await syncContact({
               ...contact,
               lnUrlWithdraw: lnObject.balanceCheck ?? null,
-              note: t("doRequest.alert2.note"),
             });
           }
         }
@@ -154,7 +153,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
         else {
           const minWithdrawableSat = formatBitcoin(Long.fromValue(minWithdrawable).div(1000), bitcoinUnit);
           const maxWithdrawableSat = formatBitcoin(Long.fromValue(maxWithdrawable).div(1000), bitcoinUnit);
-          description += `\n\n${t("layout.dialog1.msg")}: ${minWithdrawableSat}\n${t("layout.dialog1.msg1")}: ${maxWithdrawableSat}`;
+          description += `\n\n${t("layout.dialog1.minSat")}: ${minWithdrawableSat}\n${t("layout.dialog1.maxSat")}: ${maxWithdrawableSat}`;
 
 
           if (PLATFORM === "android") {

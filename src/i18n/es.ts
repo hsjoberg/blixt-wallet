@@ -25,11 +25,8 @@ import send_sendConfirmation from "../../locales/es/send.sendConfirmation.json";
 import send_sendDone from "../../locales/es/send.sendDone.json";
 import settings_about from "../../locales/es/settings.about.json";
 import settings_connectToLightningPeer from "../../locales/es/settings.connectToLightningPeer.json";
-import settings_dunderDoctor from "../../locales/es/settings.dunderDoctor.json";
 import settings_lightningNodeInfo from "../../locales/es/settings.lightningNodeInfo.json";
 import settings_lightningPeers from "../../locales/es/settings.lightningPeers.json";
-import settings_lndLog from "../../locales/es/settings.lndLog.json";
-import settings_lndMobileHelpCenter from "../../locales/es/settings.lndMobileHelpCenter.json";
 import settings_removePincodeAuth from "../../locales/es/settings.removePincodeAuth.json";
 import settings_setPincode from "../../locales/es/settings.setPincode.json";
 import settings_settings from "../../locales/es/settings.settings.json";
@@ -73,11 +70,8 @@ export default {
   [namespaces.send.sendDone]: send_sendDone,
   [namespaces.settings.about]: settings_about,
   [namespaces.settings.connectToLightningPeer]: settings_connectToLightningPeer,
-  [namespaces.settings.dunderDoctor]: settings_dunderDoctor,
   [namespaces.settings.lightningNodeInfo]: settings_lightningNodeInfo,
   [namespaces.settings.lightningPeers]: settings_lightningPeers,
-  [namespaces.settings.lndLog]: settings_lndLog,
-  [namespaces.settings.lndMobileHelpCenter]: settings_lndMobileHelpCenter,
   [namespaces.settings.removePincodeAuth]: settings_removePincodeAuth,
   [namespaces.settings.setPincode]: settings_setPincode,
   [namespaces.settings.settings]: settings_settings,

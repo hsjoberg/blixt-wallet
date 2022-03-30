@@ -1,16 +1,10 @@
 {
   "doRequest": {
-    "alert": {
-      "msg": "Enviar solicitud de retiro a"
-    },
-    "alert1": {
+    "sentRequest": "Enviar solicitud de retiro a {{domain}}",
+    "addToContactList": {
       "title": "Añadir a tu lista de contactos",
-      "msg": "Te gustaría añadir este código de retiro a",
-      "msg1": "tu lista de contacto?",
+      "msg": "Te gustaría añadir este código de retiro a {{domain}} tu lista de contacto?",
       "note": "Cuenta en"
-    },
-    "alert2": {
-      "note": "Cuenta sincronizada"
     }
   },
   "layout": {
@@ -20,8 +14,8 @@
       "msg": "Cantidad"
     },
     "dialog1": {
-      "msg": "Mínima cantidad de retiro ",
-      "msg1": "Máxima cantidad de retiro",
+      "minSat": "Mínima cantidad de retiro ",
+      "maxSat": "Máxima cantidad de retiro",
       "placeholder": "Cantidad"
     }
   }

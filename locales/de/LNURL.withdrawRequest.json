@@ -1,16 +1,10 @@
 {
   "doRequest": {
-    "alert": {
-      "msg": "Auszahlungsanforderung gesendet an"
-    },
-    "alert1": {
+    "sentRequest": "Auszahlungsanforderung gesendet an {{domain}}",
+    "addToContactList": {
       "title": "Hinzufügen zur Kontaktliste",
-      "msg": "Möchtest Du diesen Auszahlungscode zu deiner",
-      "msg1": "Kontaktliste hinzufügen?",
+      "msg": "Möchtest Du diesen Auszahlungscode zu deiner {{domain}} Kontaktliste hinzufügen?",
       "note": "Konto auf"
-    },
-    "alert2": {
-      "note": "Konto synchronisiert"
     }
   },
   "layout": {
@@ -20,8 +14,8 @@
       "msg": "Betrag"
     },
     "dialog1": {
-      "msg": "Minimaler Betrag",
-      "msg1": "Maximaler Betrag",
+      "minSat": "Minimaler Betrag",
+      "maxSat": "Maximaler Betrag",
       "placeholder": "Betrag"
     }
   }

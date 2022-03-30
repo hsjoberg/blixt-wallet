@@ -25,11 +25,8 @@ import send_sendConfirmation from "../../locales/en/send.sendConfirmation.json";
 import send_sendDone from "../../locales/en/send.sendDone.json";
 import settings_about from "../../locales/en/settings.about.json";
 import settings_connectToLightningPeer from "../../locales/en/settings.connectToLightningPeer.json";
-import settings_dunderDoctor from "../../locales/en/settings.dunderDoctor.json";
 import settings_lightningNodeInfo from "../../locales/en/settings.lightningNodeInfo.json";
 import settings_lightningPeers from "../../locales/en/settings.lightningPeers.json";
-import settings_lndLog from "../../locales/en/settings.lndLog.json";
-import settings_lndMobileHelpCenter from "../../locales/en/settings.lndMobileHelpCenter.json";
 import settings_removePincodeAuth from "../../locales/en/settings.removePincodeAuth.json";
 import settings_setPincode from "../../locales/en/settings.setPincode.json";
 import settings_settings from "../../locales/en/settings.settings.json";
@@ -44,7 +41,7 @@ import welcome_iCloudBackup from "../../locales/en/welcome.iCloudBackup.json";
 import welcome_restore from "../../locales/en/welcome.restore.json";
 import welcome_seed from "../../locales/en/welcome.seed.json";
 import welcome_start from "../../locales/en/welcome.start.json";
-import transctionDetails from "../../locales/en/transactionDetails.json";
+import transactionDetails from "../../locales/en/transactionDetails.json";
 
 export default {
   [namespaces.common]: common,
@@ -73,11 +70,8 @@ export default {
   [namespaces.send.sendDone]: send_sendDone,
   [namespaces.settings.about]: settings_about,
   [namespaces.settings.connectToLightningPeer]: settings_connectToLightningPeer,
-  [namespaces.settings.dunderDoctor]: settings_dunderDoctor,
   [namespaces.settings.lightningNodeInfo]: settings_lightningNodeInfo,
   [namespaces.settings.lightningPeers]: settings_lightningPeers,
-  [namespaces.settings.lndLog]: settings_lndLog,
-  [namespaces.settings.lndMobileHelpCenter]: settings_lndMobileHelpCenter,
   [namespaces.settings.removePincodeAuth]: settings_removePincodeAuth,
   [namespaces.settings.setPincode]: settings_setPincode,
   [namespaces.settings.settings]: settings_settings,
@@ -92,5 +86,5 @@ export default {
   [namespaces.welcome.restore]: welcome_restore,
   [namespaces.welcome.seed]: welcome_seed,
   [namespaces.welcome.start]: welcome_start,
-  [namespaces.transactionDetails]: transctionDetails,
+  [namespaces.transactionDetails]: transactionDetails,
 };

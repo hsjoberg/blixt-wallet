@@ -262,7 +262,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
           onSubmitEditing={() => setMathPadVisible(false)}
           testID="input-amount-sat"
           onChangeText={onChangeBitcoinInput}
-          placeholder={minimumBitcoin ? `${t("form.amountBitcoin.placeholder")} ${minimumBitcoin}`: "0"}
+          placeholder={minimumBitcoin ? `${t("form.amountBitcoin.dunderPlaceholder")} ${minimumBitcoin}`: "0"}
           value={bitcoinValue !== undefined ? bitcoinValue.toString() : undefined}
           keyboardType="numeric"
           returnKeyType="done"
@@ -286,7 +286,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
         <Input
           onSubmitEditing={() => setMathPadVisible(false)}
           onChangeText={onChangeFiatInput}
-          placeholder={minimumFiat ? `${t("form.amountFiat.placeholder")} ${minimumFiat}` : "0.00"}
+          placeholder={minimumFiat ? `${t("form.amountFiat.dunderPlaceholder")} ${minimumFiat}` : "0.00"}
           value={dollarValue !== undefined ? dollarValue.toString() : undefined}
           keyboardType="numeric"
           returnKeyType="done"
@@ -308,7 +308,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     component: (
       <Input
         onChangeText={setPayer}
-        placeholder="For bookkeeping (optional)"
+        placeholder={t("form.payer.placeholder")}
         onFocus={() => setMathPadVisible(false)}
         value={payer}
       />
@@ -320,7 +320,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
       <Input
         testID="input-message"
         onChangeText={setDescription}
-        placeholder="Message to payer (optional)"
+        placeholder={t("form.description.placeholder")}
         onFocus={() => setMathPadVisible(false)}
         value={description}
       />

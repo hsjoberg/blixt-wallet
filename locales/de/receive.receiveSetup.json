@@ -22,12 +22,12 @@
     "amountFiat": {
       "title": "Betrag",
       "change": "Ändere die Fiat-Einheit",
-      "placeholder": "Mindestens"
+      "dunderPlaceholder": "Mindestens"
     },
     "amountBitcoin": {
       "title": "Betrag",
       "change": "Ändere die Bitcoin-Einheit",
-      "placeholder": "Mindestens"
+      "dunderPlaceholder": "Mindestens"
     },
     "payer": {
       "title": "Zahlungsender",

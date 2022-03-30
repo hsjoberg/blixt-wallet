@@ -22,12 +22,12 @@
     "amountFiat": {
       "title": "Amount",
       "change": "Change fiat unit",
-      "placeholder": "At least"
+      "dunderPlaceholder": "At least"
     },
     "amountBitcoin": {
       "title": "Amount",
       "change": "Change bitcoin unit",
-      "placeholder": "At least"
+      "dunderPlaceholder": "At least"
     },
     "payer": {
       "title": "Payer",
