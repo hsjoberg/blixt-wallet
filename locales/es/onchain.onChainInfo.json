@@ -3,8 +3,8 @@
     "title": "Fondos on-chain"
   },
   "address": {
-    "title": "enviar bitcoins on-chain a esta dirección",
-    "alerta": "Copiado al portapapeles."
+    "title": "enviar Bitcoin on-chain a esta dirección",
+    "alert": "Copiado al portapapeles"
   },
   "newAddress": {
     "title": "Generar nueva dirección"
