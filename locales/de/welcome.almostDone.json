@@ -6,7 +6,8 @@
       "title": "Name",
       "msg1": "Wähle einen Namen für Transaktionen",
       "msg2": "Dein Name wird in Invoices (Rechnungen) für Zahlungssender und -empfänger angezeigt",
-      "msg3": "Name eingeben"
+      "msg3": "Name eingeben",
+      "msg4": "Name eingeben"
     }
   },
   "pincode": {
@@ -14,7 +15,7 @@
     "msg": "Einloggen mit"
   },
   "fiatUnit": {
-    "title": "Fiat Währung",
+    "title": "Fiat-Währung",
     "dialog": {
       "title": "Ändere die Fiat-Einheit"
     }
