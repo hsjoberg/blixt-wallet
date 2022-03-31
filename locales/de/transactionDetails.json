@@ -9,7 +9,7 @@
     "urlReceivedFromWebsite": "URL empfangen von",
     "secretMessage": "Verschlüsselte Nachricht"
   },
-  "payer": "Sender",
+  "payer": "Zahlungssender",
   "recipient": "Empfänger",
   "amountInFiatTimeOfPayment": "Betrag in Fiat (Zahlungszeit)",
   "numberOfHops": "Anzahl der Hops",
