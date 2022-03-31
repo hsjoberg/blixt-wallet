@@ -1,0 +1,19 @@
+{
+  "layout": {
+    "title": "poSmoH"
+  },
+  "form": {
+    "title": "poSmoH",
+    "channel": {
+      "title": "ghobe' URI",
+      "placeholder": "URI"
+    },
+    "amount": {
+      "title": "'antu'",
+      "placeholder": "'antu'"
+    },
+    "fee_rate": {
+      "title": "Dov'a'"
+    }
+  }
+}
