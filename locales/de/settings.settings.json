@@ -4,16 +4,16 @@
     "title": "Allgemein",
     "name": {
       "title": "Name",
-      "subtitle": "wird in Transaktionen verwendet",
+      "subtitle": "wird für Transaktionen verwendet",
       "dialog": {
-        "msg": "Wähle einen Namen für Transaktionen\n\nDein Name wird in Invoices (Rechnungen) den Zahlungssendern und -empfängern angezeigt.",
+        "msg": "Name für Transaktionen eingeben\n\nDein Name wird in Invoices (Rechnungen) den Zahlungssendern und -empfängern angezeigt.",
         "accept": "Wähle einen Namen"
       }
     },
     "lang": {
       "title": "Sprache",
       "dialog": {
-        "title": "Sprache wählen"
+        "title": "Sprache ändern"
       }
     },
     "pushNotification": {
@@ -25,7 +25,7 @@
       "subtitle": "Automatisches Prüfen der Zwischenablage auf Invoices (Rechnungen)"
     },
     "saveGeolocation": {
-      "title": "Speichere die Geolokation einer Transaktion",
+      "title": "Geolokation einer Transaktion speichern",
       "subtitle": "Lokales Speichern der Lokation einer Transaktion",
       "logGranted": "Geolokation erlaubt",
       "logDenied": "Geolokation verweigern"
@@ -108,15 +108,15 @@
   "display": {
     "title": "Anzeige",
     "fiatUnit": {
-      "title": "'Ändere die Fiat-Einheit"
+      "title": "Fiat-Einheit ändern"
     },
     "bitcoinUnit": {
-      "title": "Ändere die Bitcoin-Einheit"
+      "title": "Bitcoin-Einheit ändern"
     },
     "onchainExplorer": {
       "title": "On-chain Explorer",
       "dialog": {
-        "title": "Ändere den On-Chain Explorer"
+        "title": "On-Chain Explorer ändern"
       }
     }
   },
@@ -124,7 +124,7 @@
     "title": "Bitcoin Netzwerk",
     "node": {
       "title": "Bitcoin Node",
-      "subtitle": "Bitcoin node (BIP157) verbinden mit",
+      "subtitle": "Bitcoin Node (BIP157) verbinden mit",
       "setDialog": {
         "title": "Node einstellen"
       },
@@ -236,17 +236,17 @@
     }
   },
   "experimental": {
-    "title": "Experimente",
+    "title": "Experimentelle Optionen",
     "LSP": {
-      "title": "Aktiviere Dunder LSP",
-      "subtitle": "SEHR EXPERIMENTELL. Lightning Service Provider zur Unterstützung bei benötigter Inbound-Liquidität"
+      "title": "Dunder LSP aktivieren",
+      "subtitle": "SEHR EXPERIMENTELL. Lightning Service Provider dient der Beschaffung von benötigter Inbound-Liquidität"
     },
     "MPP": {
-      "title": "Aktiviere Multi-Path Payments",
-      "subtitle": "Zahlungen dürfen bis zu 2 Pfade verwenden"
+      "title": "Multi-Path Payments aktivieren",
+      "subtitle": "Zahlungen dürfen bis zu 2 Routen verwenden"
     },
     "tor": {
-      "title": "Aktiviere Tor",
+      "title": "Tor aktivieren",
       "subtitle": "",
       "enabled": {
         "title": "Starte die App neu und aktivere Tor",
@@ -310,7 +310,7 @@
     },
     "demo": {
       "title": "Demo-Modus aktivieren",
-      "subtitle": "Für Promo. Zurücksetzen per App-Neustart"
+      "subtitle": "Für Promo-Zwecke. Zurücksetzen per App-Neustart"
     }
   }
 }
