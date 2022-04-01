@@ -42,6 +42,7 @@ import welcome_restore from "../../locales/en/welcome.restore.json";
 import welcome_seed from "../../locales/en/welcome.seed.json";
 import welcome_start from "../../locales/en/welcome.start.json";
 import transactionDetails from "../../locales/en/transactionDetails.json";
+import bottomNav from "../../locales/en/bottomNav.json";
 
 export default {
   [namespaces.common]: common,
@@ -87,4 +88,5 @@ export default {
   [namespaces.welcome.seed]: welcome_seed,
   [namespaces.welcome.start]: welcome_start,
   [namespaces.transactionDetails]: transactionDetails,
+  [namespaces.bottomNav]: bottomNav,
 };

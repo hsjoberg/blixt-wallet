@@ -66,6 +66,7 @@ export const namespaces = {
   drawer: "drawer",
   syncInfo: "syncInfo",
   transactionDetails: "transactionDetails",
+  bottomNav: "bottomNav",
 };
 
 interface ILanguages {

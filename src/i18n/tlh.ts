@@ -42,6 +42,7 @@ import welcome_restore from "../../locales/tlh/welcome.restore.json";
 import welcome_seed from "../../locales/tlh/welcome.seed.json";
 import welcome_start from "../../locales/tlh/welcome.start.json";
 import transactionDetails from "../../locales/tlh/transactionDetails.json";
+import bottomNav from "../../locales/tlh/bottomNav.json";
 
 export default {
   [namespaces.common]: common,
@@ -87,4 +88,5 @@ export default {
   [namespaces.welcome.seed]: welcome_seed,
   [namespaces.welcome.start]: welcome_start,
   [namespaces.transactionDetails]: transactionDetails,
+  [namespaces.bottomNav]: bottomNav,
 };
