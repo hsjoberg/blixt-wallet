@@ -22,6 +22,7 @@ import { translatePaymentFailureReason } from "../../state/Send";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { PLATFORM } from "../../utils/constants";
 
 interface ILightningInfoProps {
   navigation: StackNavigationProp<RootStackParamList, "KeysendExperiment">;
@@ -54,9 +55,11 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       headerShown: true,
       headerRight: () => {
         return (
-          <NavigationButton onPress={onPressCamera}>
-            <Icon type="AntDesign" name="camera" style={{ fontSize: 22 }} />
-          </NavigationButton>
+          PLATFORM !== "macos" ? (
+            <NavigationButton onPress={onPressCamera}>
+              <Icon type="AntDesign" name="camera" style={{ fontSize: 22 }} />
+            </NavigationButton>
+          ) : null
         );
       }
     });

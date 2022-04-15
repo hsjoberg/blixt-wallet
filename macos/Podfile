@@ -3,7 +3,17 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 pod 'SwiftProtobuf', '~> 1.0'
 
-target 'BlixtWallet-macOS' do
+project 'BlixtWallet',
+        'DebugTestnet' => :debug,
+        'ReleaseTestnet' => :release,
+        'DebugFakelnd' => :debug,
+        'ReleaseFakelnd' => :release,
+        'DebugRegtest' => :debug,
+        'ReleaseRegtest' => :release,
+        'Debug' => :debug,
+        'Release' => :release
+
+target 'BlixtWallet' do
   platform :macos, '11.5'
   use_native_modules!
   use_react_native!(

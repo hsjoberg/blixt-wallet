@@ -30,22 +30,7 @@ class LndMobileTools: RCTEventEmitter {
   func writeConfig(config: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     do {
       let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-
-#if os(iOS)
-      let blixtDirectory = "lnd"
-#else
-      let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
-      let debug = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String
-      var blixtDirectory = "Blixt Wallet"
-      if (chain == "testnet") {
-        blixtDirectory.append(" Testnet")
-      }
-      if (debug == "true") {
-        blixtDirectory.append(" Debug")
-      }
-#endif
-
-      let url = paths[0].appendingPathComponent(blixtDirectory, isDirectory: true).appendingPathComponent("lnd.conf", isDirectory: false)
+      let url = paths[0].appendingPathComponent("lnd", isDirectory: true).appendingPathComponent("lnd.conf", isDirectory: false)
       NSLog(url.relativeString)
 
       try config.write(to: url, atomically: true, encoding: .utf8)
@@ -61,19 +46,6 @@ class LndMobileTools: RCTEventEmitter {
   @objc(writeConfigFile:rejecter:)
   func writeConfigFile(resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) -> Void {
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
-
-#if os(iOS)
-      let blixtDirectory = "lnd"
-#else
-      let debug = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String
-      var blixtDirectory = "Blixt Wallet"
-      if (chain == "testnet") {
-        blixtDirectory.append(" Testnet")
-      }
-      if (debug == "true") {
-        blixtDirectory.append(" Debug")
-      }
-#endif
     var str = ""
 
     if (chain == "mainnet") {
@@ -179,7 +151,7 @@ autopilot.heuristic=preferential:0.05
 
     do {
       let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-      let url = paths[0].appendingPathComponent(blixtDirectory, isDirectory: true).appendingPathComponent("lnd.conf", isDirectory: false)
+      let url = paths[0].appendingPathComponent("lnd", isDirectory: true).appendingPathComponent("lnd.conf", isDirectory: false)
 
       try str.write(to: url, atomically: true, encoding: .utf8)
       let input = try String(contentsOf: url)
@@ -309,19 +281,6 @@ autopilot.heuristic=preferential:0.05
 
   @objc(DEBUG_listFilesInApplicationSupport:rejecter:)
   func DEBUG_listFilesInApplicationSupport(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-#if os(iOS)
-      let blixtDirectory = "lnd"
-#else
-      let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
-      let debug = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String
-      var blixtDirectory = "Blixt Wallet"
-      if (chain == "testnet") {
-        blixtDirectory.append(" Testnet")
-      }
-      if (debug == "true") {
-        blixtDirectory.append(" Debug")
-      }
-#endif
     let fileManager = FileManager.default
     let applicationSupportUrl = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
     let lndUrl = applicationSupportUrl.appendingPathComponent("lnd")
@@ -344,51 +303,16 @@ autopilot.heuristic=preferential:0.05
 
   @objc(checkLndFolderExists:rejecter:)
   func checkLndFolderExists(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-#if os(iOS)
-      let blixtDirectory = "lnd"
-#else
-      let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
-      let debug = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String
-      var blixtDirectory = "Blixt Wallet"
-      if (chain == "testnet") {
-        blixtDirectory.append(" Testnet")
-      }
-      if (debug == "true") {
-        blixtDirectory.append(" Debug")
-      }
-#endif
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-    let lndFolder = applicationSupport.appendingPathComponent(blixtDirectory, isDirectory: true)
+    let lndFolder = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
     resolve(FileManager.default.fileExists(atPath: lndFolder.path))
   }
 
   @objc(createIOSApplicationSupportAndLndDirectories:rejecter:)
   func createIOSApplicationSupportAndLndDirectories(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     do {
-//      try FileManager.default.url(
-//        for: .applicationSupportDirectory,
-//        in: .userDomainMask,
-//        appropriateFor: nil,
-//        create: true
-//      )
-
-#if os(iOS)
-      let blixtDirectory = "lnd"
-#else
-      let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
-      let debug = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String
-      var blixtDirectory = "Blixt Wallet"
-      if (chain == "testnet") {
-        blixtDirectory.append(" Testnet")
-      }
-      if (debug == "true") {
-        blixtDirectory.append(" Debug")
-      }
-#endif
-
-
       let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-      let lndFolder = applicationSupport.appendingPathComponent(blixtDirectory, isDirectory: true)
+      let lndFolder = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
       // This will create the lnd folder as well as "Application Support"
       try FileManager.default.createDirectory(at: lndFolder, withIntermediateDirectories: true)
 
@@ -400,21 +324,8 @@ autopilot.heuristic=preferential:0.05
 
   @objc(excludeLndICloudBackup:rejecter:)
   func excludeLndICloudBackup(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-#if os(iOS)
-      let blixtDirectory = "lnd"
-#else
-      let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
-      let debug = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String
-      var blixtDirectory = "Blixt Wallet"
-      if (chain == "testnet") {
-        blixtDirectory.append(" Testnet")
-      }
-      if (debug == "true") {
-        blixtDirectory.append(" Debug")
-      }
-#endif
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-    var lndFolder = applicationSupport.appendingPathComponent(blixtDirectory, isDirectory: true)
+    var lndFolder = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
 
     do {
       if FileManager.default.fileExists(atPath: lndFolder.path) {
@@ -466,20 +377,9 @@ autopilot.heuristic=preferential:0.05
   @objc(tailLog:resolver:rejecter:)
   func tailLog(numberOfLines: Int32, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
-#if os(iOS)
-      let blixtDirectory = "lnd"
-#else
-      let debug = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String
-      var blixtDirectory = "Blixt Wallet"
-      if (chain == "testnet") {
-        blixtDirectory.append(" Testnet")
-      }
-      if (debug == "true") {
-        blixtDirectory.append(" Debug")
-      }
-#endif
+
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-    let url = paths[0].appendingPathComponent(blixtDirectory, isDirectory: true)
+    let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
                       .appendingPathComponent("logs", isDirectory: true)
                       .appendingPathComponent("bitcoin", isDirectory: true)
                       .appendingPathComponent(chain ?? "mainnet", isDirectory: true)
@@ -502,20 +402,8 @@ autopilot.heuristic=preferential:0.05
       return
     }
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
-#if os(iOS)
-      let blixtDirectory = "lnd"
-#else
-      let debug = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String
-      var blixtDirectory = "Blixt Wallet"
-      if (chain == "testnet") {
-        blixtDirectory.append(" Testnet")
-      }
-      if (debug == "true") {
-        blixtDirectory.append(" Debug")
-      }
-#endif
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-    let url = paths[0].appendingPathComponent(blixtDirectory, isDirectory: true)
+    let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
                       .appendingPathComponent("logs", isDirectory: true)
                       .appendingPathComponent("bitcoin", isDirectory: true)
                       .appendingPathComponent(chain ?? "mainnet", isDirectory: true)

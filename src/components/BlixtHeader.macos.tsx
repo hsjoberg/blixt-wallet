@@ -1,9 +1,10 @@
+import Color from "color";
 import React from "react";
 import { Animated } from "react-native";
 import {Svg} from "react-native-svg";
 import GradientPath from "react-native-svg-path-gradient";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
-// import { HEADER_MAX_HEIGHT } from "../windows/Overview";
+import { Chain } from "../utils/build";
 
 class SvgHeader extends React.Component {
   render(): React.ReactNode {
@@ -13,7 +14,7 @@ class SvgHeader extends React.Component {
           d={`M0,0 0,50`}
           strokeWidth={10000}
           precision={1}
-          colors={[blixtTheme.secondary, blixtTheme.primary]}
+          colors={Chain === "mainnet" ? [blixtTheme.secondary, blixtTheme.primary] : [blixtTheme.lightGray, Color(blixtTheme.lightGray).darken(0.30).hex()]}
         />
         {this.props.children}
       </Svg>

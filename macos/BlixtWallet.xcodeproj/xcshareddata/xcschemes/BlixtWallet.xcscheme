@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "514201482437B4B30078DB4F"
                BuildableName = "BlixtWallet.app"
-               BlueprintName = "BlixtWallet-macOS"
+               BlueprintName = "BlixtWallet"
                ReferencedContainer = "container:BlixtWallet.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,7 +46,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "514201482437B4B30078DB4F"
             BuildableName = "BlixtWallet.app"
-            BlueprintName = "BlixtWallet-macOS"
+            BlueprintName = "BlixtWallet"
             ReferencedContainer = "container:BlixtWallet.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -63,7 +63,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "514201482437B4B30078DB4F"
             BuildableName = "BlixtWallet.app"
-            BlueprintName = "BlixtWallet-macOS"
+            BlueprintName = "BlixtWallet"
             ReferencedContainer = "container:BlixtWallet.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

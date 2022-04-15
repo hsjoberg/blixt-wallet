@@ -44,6 +44,8 @@ export const VersionName: string = Platform.select({
   web: BuildConfig.VERSION_NAME,
 });
 
+export const AppleTeamId: string = ["ios", "macos"].includes(Platform.OS) ? BuildConfig.TEAM_ID : "";
+
 export const IsHermes: boolean = (global as any).HermesInternal != null;
 
 export const Chain: "mainnet" | "testnet" | "regtest" = BuildConfig.CHAIN;

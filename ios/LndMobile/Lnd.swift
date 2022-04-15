@@ -147,22 +147,8 @@ open class Lnd {
   }
 
   func startLnd(_ torEnabled: Bool, args: String, lndStartedCallback: @escaping Callback) -> Void {
-#if os(iOS)
-      let blixtDirectory = "lnd"
-#else
-      let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
-      let debug = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String
-      var blixtDirectory = "Blixt Wallet"
-      if (chain == "testnet") {
-        blixtDirectory.append(" Testnet")
-      }
-      if (debug == "true") {
-        blixtDirectory.append(" Debug")
-      }
-#endif
-
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-    let lndPath = applicationSupport.appendingPathComponent(blixtDirectory, isDirectory: true)
+    let lndPath = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
 
     var lndArgs = "--nolisten --lnddir=\"\(lndPath.path)\" " + args
     if (torEnabled) {
