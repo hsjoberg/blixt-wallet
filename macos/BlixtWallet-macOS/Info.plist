@@ -2,6 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>keyauth</string>
+				<string>lnurlc</string>
+				<string>lnurlw</string>
+				<string>lnurlp</string>
+				<string>lightning</string>
+				<string>blixtwallet</string>
+			</array>
+		</dict>
+	</array>
 	<key>ATSApplicationFontsPath</key>
 	<string>Fonts</string>
 	<key>CFBundleDevelopmentRegion</key>

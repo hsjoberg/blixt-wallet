@@ -34,7 +34,7 @@
 		1C1BD3F3C6A51DAB27F0704E /* Pods-BlixtWallet.debugtestnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet.debugtestnet.xcconfig"; path = "Target Support Files/Pods-BlixtWallet/Pods-BlixtWallet.debugtestnet.xcconfig"; sourceTree = "<group>"; };
 		1DAC41DE532E3FC199A16233 /* Pods-BlixtWallet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet.debug.xcconfig"; path = "Target Support Files/Pods-BlixtWallet/Pods-BlixtWallet.debug.xcconfig"; sourceTree = "<group>"; };
 		38423A3E24576CBC00BC2EAC /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		514201492437B4B30078DB4F /* BlixtWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlixtWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		514201492437B4B30078DB4F /* Blixt Wallet Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Blixt Wallet Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5142014B2437B4B30078DB4F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5142014C2437B4B30078DB4F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5142014E2437B4B30078DB4F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -164,7 +164,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				514201492437B4B30078DB4F /* BlixtWallet.app */,
+				514201492437B4B30078DB4F /* Blixt Wallet Debug.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,7 +208,7 @@
 			);
 			name = BlixtWallet;
 			productName = BlixtWallet;
-			productReference = 514201492437B4B30078DB4F /* BlixtWallet.app */;
+			productReference = 514201492437B4B30078DB4F /* Blixt Wallet Debug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -399,7 +399,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.debug;
-				PRODUCT_NAME = BlixtWallet;
+				PRODUCT_NAME = "Blixt Wallet Debug";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "../ios/LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -434,7 +434,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet;
-				PRODUCT_NAME = BlixtWallet;
+				PRODUCT_NAME = "Blixt Wallet";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "../ios/LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -644,7 +644,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.testnet.debug;
-				PRODUCT_NAME = BlixtWallet;
+				PRODUCT_NAME = "Blixt Wallet Testnet Debug";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "../ios/LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -732,7 +732,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.testnet;
-				PRODUCT_NAME = BlixtWallet;
+				PRODUCT_NAME = "Blixt Wallet Testnet";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "../ios/LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -827,7 +827,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.mainnet.fakelnd.debug;
-				PRODUCT_NAME = BlixtWallet;
+				PRODUCT_NAME = "Blixt Wallet Fakelnd";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "../ios/LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -915,7 +915,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.mainnet.fakelnd;
-				PRODUCT_NAME = BlixtWallet;
+				PRODUCT_NAME = "Blixt Wallet Fakelnd";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "../ios/LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -1010,7 +1010,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.regtest.debug;
-				PRODUCT_NAME = BlixtWallet;
+				PRODUCT_NAME = "Blixt Wallet Regtest Debug";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "../ios/LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1098,7 +1098,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blixtwallet.regtest;
-				PRODUCT_NAME = BlixtWallet;
+				PRODUCT_NAME = "Blixt Wallet Regtest";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "../ios/LndMobile/BlixtWallet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
