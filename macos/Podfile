@@ -14,7 +14,7 @@ project 'BlixtWallet',
         'Release' => :release
 
 target 'BlixtWallet' do
-  platform :macos, '11.5'
+  platform :macos, '10.15'
   use_native_modules!
   use_react_native!(
     :path => '../node_modules/react-native-macos',

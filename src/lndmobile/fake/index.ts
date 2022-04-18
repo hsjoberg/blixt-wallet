@@ -112,7 +112,7 @@ export const excludeLndICloudBackup = async () => {
 };
 
 export const checkICloudEnabled = async (): Promise<boolean> => {
-  return await LndMobileTools.checkICloudEnabled();
+  return false;
 };
 
 /**

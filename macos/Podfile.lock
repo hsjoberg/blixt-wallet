@@ -289,6 +289,8 @@ PODS:
     - React-Core
   - RNKeychain (8.0.0):
     - React-Core
+  - RNSecureRandom (1.0.0):
+    - React
   - RNSVG (12.3.0):
     - React-Core
   - SwiftProtobuf (1.19.0)
@@ -334,6 +336,7 @@ DEPENDENCIES:
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
+  - RNSecureRandom (from `../node_modules/react-native-securerandom`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - SwiftProtobuf (~> 1.0)
   - Yoga (from `../node_modules/react-native-macos/ReactCommon/yoga`)
@@ -418,6 +421,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNKeychain:
     :path: "../node_modules/react-native-keychain"
+  RNSecureRandom:
+    :path: "../node_modules/react-native-securerandom"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -462,10 +467,11 @@ SPEC CHECKSUMS:
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNFS: fc610f78fdf8bfc89a9e5cc2f898519f4dba1002
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94
+  RNSecureRandom: 46403b4cc818c426b33d11f7981a923de558e0a8
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
   Yoga: 4ac8bca6444e0caf6fcd20b3d2908bb65b31b1dd
 
-PODFILE CHECKSUM: 2e0e2a882d5d1cd305bd7a975b9a3c7191a9f9d9
+PODFILE CHECKSUM: ade9884702ae3ec49700c6a4584fbf7f4541f063
 
 COCOAPODS: 1.10.1

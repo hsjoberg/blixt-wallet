@@ -185,7 +185,7 @@ export const blixtLsp: IBlixtLsp = {
     })),
 
     addInvoice: thunk((async (actions, { sat, description }, { getStoreActions }) => {
-      const preimage = PLATFORM === "macos" ? base64.toByteArray(await NativeModules.LndMobileTools.generateSecureRandom(32)) : await generateSecureRandom(32);
+      const preimage = await generateSecureRandom(32);
       const result = await actions.register({
         preimage,
         amount: sat,

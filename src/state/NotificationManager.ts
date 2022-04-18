@@ -68,7 +68,12 @@ export const notificationManager: INotificationManagerModel = {
         );
       }
     } catch (error) {
-      throw new Error("NotificationManager: ") + error;
+      // TODO(hsjoberg): Perhaps should be handled in the lib instead?
+      if (error.domain === "UNErrorDomain") {
+        return;
+      }
+
+      throw error;
     }
   }),
 

@@ -8967,9 +8967,9 @@ raw-body@2.4.3:
     unpipe "1.0.0"
 
 react-devtools-core@^4.13.0:
-  version "4.24.3"
-  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-4.24.3.tgz#371fef3f5c639db0dc59eeef334dd5e10ac61661"
-  integrity sha512-+htKZxLxDN14jhRG3+IXRiJqNSGHUiPYrMtv9e7qlZxcbKeJjVs+C/hd8kZF5rydp3faBwFN6ZpTaZnLA3/ZGA==
+  version "4.24.2"
+  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-4.24.2.tgz#ce10e3ea502559ce4299c13837d2374cf0d435a7"
+  integrity sha512-UC3rvQCG/dnC95NPNWBFrUEtdAEiFZ9xZe1tTHFOELVR5qfNLroZ3w9tC51NQvvK5E10G2ko3lQ5Vrh3p0bHrA==
   dependencies:
     shell-quote "^1.6.1"
     ws "^7"
@@ -9283,10 +9283,9 @@ react-native-screens@^3.13.1:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-react-native-securerandom@1.0.0:
+"react-native-securerandom@git+https://github.com/hsjoberg/react-native-securerandom.git#621fa937c9540e92b371bd564b400f7e9aaf5117":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-securerandom/-/react-native-securerandom-1.0.0.tgz#1cff2f727c90c9ec3318b42dbf825a628b53b49b"
-  integrity sha512-lnhcsWloFzMN/HffyDBlh4VlqdhDH8uxEzUIH3aJPgC1PxV6OKZkvAk409EwsAhcmG/z3yZuVKegKpUr5IM9ug==
+  resolved "git+https://github.com/hsjoberg/react-native-securerandom.git#621fa937c9540e92b371bd564b400f7e9aaf5117"
   dependencies:
     base64-js "*"
 

@@ -1,4 +1,4 @@
-import { AlertButton, NativeModules, PlatformColor } from "react-native";
+import { AlertButton, NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
@@ -487,9 +487,7 @@ protocol.no-script-enforced-lease=true
     if (!seed) {
       return;
     }
-    let random = PLATFORM === "macos"
-      ? base64.toByteArray(await NativeModules.LndMobileTools.generateSecureRandom(32))
-      : await generateSecureRandom(32);
+    let random = await generateSecureRandom(32);
 
     const randomBase64 = base64.fromByteArray(random);
     await setItem(StorageItem.walletPassword, randomBase64);

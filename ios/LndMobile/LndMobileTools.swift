@@ -461,18 +461,4 @@ autopilot.heuristic=preferential:0.05
     reject("error", error.localizedDescription, error)
 #endif
   }
-
-  @objc(generateSecureRandom:resolver:rejecter:)
-  func generateSecureRandom(length: Int, resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-    var bytes = [Int8](repeating: 0, count: length)
-    let status = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)
-
-    if status == errSecSuccess {
-      let b = Data(bytes: bytes, count: bytes.count)
-      resolve(b.base64EncodedString())
-    } else {
-      let error = NSError(domain: "RNSecureRandom", code: Int(status), userInfo: nil)
-      reject("randombytes_error", "Error generating random bytes", error)
-    }
-  }
 }
