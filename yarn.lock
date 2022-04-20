@@ -9170,9 +9170,9 @@ react-native-keyboard-aware-scroll-view@^0.9.5:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
-"react-native-keychain@git+https://github.com/hsjoberg/react-native-keychain.git#91e82a5e299bc7bd7d83f8e7a18c4fcb80a9c591":
+"react-native-keychain@git+https://github.com/hsjoberg/react-native-keychain#5cef789c6eb2661a05dae1efc2dea3fb71486420":
   version "8.0.0"
-  resolved "git+https://github.com/hsjoberg/react-native-keychain.git#91e82a5e299bc7bd7d83f8e7a18c4fcb80a9c591"
+  resolved "git+https://github.com/hsjoberg/react-native-keychain#5cef789c6eb2661a05dae1efc2dea3fb71486420"
 
 react-native-linear-gradient@^2.5.6:
   version "2.5.6"

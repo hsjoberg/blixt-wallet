@@ -16,6 +16,7 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { toast } from "../../utils";
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -116,19 +117,24 @@ ${t("createWallet.msg3")}`,
         [{
           text: t("createWallet.msg4"),
           onPress: async  () => {
-            setCreateWalletLoading(true);
-            await createWallet();
-            await setSyncEnabled(true); // TODO test
-            await changeScheduledSyncEnabled(true);
+            try {
+              setCreateWalletLoading(true);
+              await createWallet();
+              await setSyncEnabled(true); // TODO test
+              await changeScheduledSyncEnabled(true);
 
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 0,
-                routes: [
-                  { name: "Loading" },
-                ],
-              })
-            );
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [
+                    { name: "Loading" },
+                  ],
+                })
+              );
+            } catch (error) {
+              toast(error.message, undefined, "danger");
+              setCreateWalletLoading(false);
+            }
           }
         }],
       );

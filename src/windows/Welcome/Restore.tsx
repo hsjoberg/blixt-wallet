@@ -17,6 +17,7 @@ import GoBackIcon from "../../components/GoBackIcon";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { toast } from "../../utils";
 
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
@@ -145,6 +146,7 @@ export default function Restore({ navigation }: IProps) {
       setBackupType("file");
     } catch (e) {
       console.log(e);
+      toast(e.message, undefined, "danger", "Okay");
     }
   }
 

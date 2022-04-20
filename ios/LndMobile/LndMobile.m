@@ -1,7 +1,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(LndMobile, NSObject)
+@interface RCT_EXTERN_MODULE(LndMobile, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(
   initialize: (RCTPromiseResolveBlock)resolve

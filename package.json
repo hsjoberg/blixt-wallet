@@ -92,7 +92,7 @@
     "react-native-hash": "^2.0.1",
     "react-native-icloudstore": "git+https://github.com/manicakes/react-native-icloudstore.git#4c9f668d3121aedf7a5635b0a13f6e3999c0e6f3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
-    "react-native-keychain": "git+https://github.com/hsjoberg/react-native-keychain.git#91e82a5e299bc7bd7d83f8e7a18c4fcb80a9c591",
+    "react-native-keychain": "git+https://github.com/hsjoberg/react-native-keychain#5cef789c6eb2661a05dae1efc2dea3fb71486420",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-macos": "^0.66.44",
     "react-native-maps": "^0.30.1",
