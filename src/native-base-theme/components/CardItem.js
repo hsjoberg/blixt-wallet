@@ -87,7 +87,7 @@ export default (variables /* : * */ = variable) => {
         }
       },
       flex: 1,
-      alignSelf: 'stretch',
+      // alignSelf: 'stretch',
       alignItems: 'flex-start'
     },
     'NativeBase.Right': {

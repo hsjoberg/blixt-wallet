@@ -224,13 +224,13 @@ function Overview({ navigation }: IOverviewProps) {
             <DoBackup />
           }
           {pendingOpenBalance.greaterThan(0) && (
-              <Card>
+            <Card>
               <CardItem>
                 <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                  <Text style={{ flexShrink: 1 }}>
+                  <Text style={{ flexShrink: 1, width: "100%", marginRight: 5 }}>
                     A new channel is in the process of being opened...
                   </Text>
-                  <Button small onPress={() => navigation.navigate("LightningInfo")}>
+                  <Button style={{ }} small onPress={() => navigation.navigate("LightningInfo")}>
                     <Text>View</Text>
                   </Button>
                 </View>

@@ -25,6 +25,8 @@ interface IMetaDataProps {
   url?: string;
 }
 const MetaData = ({ title, data, url }: IMetaDataProps) => {
+  const t = useTranslation(namespaces.syncInfo).t;
+
   return (
     <Text
       style={style.detailText}
@@ -42,8 +44,7 @@ const MetaData = ({ title, data, url }: IMetaDataProps) => {
 
 export interface ISyncInfoProps {}
 export default function SyncInfo({}: ISyncInfoProps) {
-  let { t, i18n } = useTranslation(namespaces.syncInfo)
-
+  const t = useTranslation(namespaces.syncInfo).t;
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const recoverInfo = useStoreState((store) => store.lightning.recoverInfo);
   const initialKnownBlockheight = useStoreState((store) => store.lightning.initialKnownBlockheight);
