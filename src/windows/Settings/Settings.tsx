@@ -22,7 +22,6 @@ import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_NEUTRINO_NODE, P
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
-import { Chain } from "../../utils/build";
 import { getNodeInfo } from "../../lndmobile";
 
 import { useTranslation } from "react-i18next";
@@ -39,6 +38,7 @@ interface ISettingsProps {
 export default function Settings({ navigation }: ISettingsProps) {
   const currentLanguage = useStoreState((store) => store.settings.language);
   const { t, i18n } = useTranslation(namespaces.settings.settings);
+  const lndChainBackend = useStoreState((store) => store.settings.lndChainBackend);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -1174,7 +1174,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Text>{t("bitcoinNetwork.title")}</Text>
           </ListItem>
 
-          {Chain !== "regtest" &&
+          {lndChainBackend === "neutrino" &&
             <ListItem style={style.listItem} icon={true} onPress={onSetBitcoinNodePress} onLongPress={onSetBitcoinNodeLongPress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
               <Body>
@@ -1183,7 +1183,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           }
-          {Chain === "regtest" &&
+          {lndChainBackend === "bitcoindWithZmq" &&
             <>
               <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcHostPress}>
                 <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>

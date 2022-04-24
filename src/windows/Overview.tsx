@@ -312,7 +312,7 @@ const RecoverInfo = () => {
   return (
     <Card>
       <CardItem>
-        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
           <Text>
             {!recoverInfo.recoveryFinished && <>{t("recoverInfo.msg1")}</>}
             {recoverInfo.recoveryFinished && <>{t("recoverInfo.msg2")}</>}

@@ -461,4 +461,34 @@ autopilot.heuristic=preferential:0.05
     reject("error", error.localizedDescription, error)
 #endif
   }
+
+  @objc(macosOpenFileDialog:rejecter:)
+  func macosOpenFileDialog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  #if os(iOS)
+    let error = LndMobileToolsError(msg: "Not supported iOS")
+    reject("error", error.localizedDescription, error)
+  #else
+    DispatchQueue.main.async {
+      do {
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        if panel.runModal() == .OK {
+          if let u = panel.url {
+            resolve(try Data(contentsOf: u).base64EncodedString())
+          } else {
+            let error = LndMobileToolsError(msg: "Could not open file")
+            reject("error", error.localizedDescription, error)
+          }
+        } else {
+          resolve(nil)
+        }
+      }
+      catch {
+       print("Error open")
+       reject("error", error.localizedDescription, error)
+     }
+    }
+  #endif
+  }
 }

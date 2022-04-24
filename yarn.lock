@@ -9179,10 +9179,10 @@ react-native-linear-gradient@^2.5.6:
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
   integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
 
-react-native-macos@^0.66.44:
-  version "0.66.44"
-  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.66.44.tgz#feaa477964a1f680da4e656fc7956e7bf39f18a7"
-  integrity sha512-mOr0CNHPsxIzd4egNElVWzgbEaGKZ5cEl9sViIw+inoFsr84uLOeMhqvUtfLl8QMqZvOfepCrkCO6ibJ7tz0wA==
+react-native-macos@^0.66.46:
+  version "0.66.46"
+  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.66.46.tgz#959de855977b2b9c763ed8309c571953d9d99865"
+  integrity sha512-vM3kyNHRoYsX/f02MVLjHDgZEuuQ7ADn4iHuLonFJfxmy/FHeXNvw3lXxTZAdQ+7XItF+oYcK5/yrpTBHR0Z5w==
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^6.0.0"

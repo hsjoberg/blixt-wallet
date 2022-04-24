@@ -81,7 +81,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
           component: (
             <>
               <Input placeholder={t("form.channel.placeholder")} value={peer} onChangeText={setPeer} />
-              <Icon type="AntDesign" name="camera" onPress={onCameraPress} />
+              {PLATFORM !== "macos" && <Icon type="AntDesign" name="camera" onPress={onCameraPress} />}
             </>
           )
         }, {

@@ -54,6 +54,9 @@ export interface ILndMobileTools {
   createIOSApplicationSupportAndLndDirectories(): Promise<boolean>;
   excludeLndICloudBackup(): Promise<boolean>;
   TEMP_moveLndToApplicationSupport(): Promise<boolean>;
+
+  // macOS-specific
+  macosOpenFileDialog(): Promise<string | undefined>;
 }
 
 export type WorkInfo = "BLOCKED" | "CANCELLED" | "ENQUEUED" | "FAILED" | "RUNNING" | "SUCCEEDED" | "WORK_NOT_EXIST";
