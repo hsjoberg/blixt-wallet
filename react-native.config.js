@@ -2,6 +2,7 @@ module.exports = {
   project: {
     ios: {},
     android: {},
+    macos: {},
   },
   dependencies: {
     '@react-native-google-signin/google-signin': {

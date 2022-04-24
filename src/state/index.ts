@@ -1,4 +1,4 @@
-import { AlertButton, NativeModules, PlatformColor } from "react-native";
+import { AlertButton, NativeModules } from "react-native";
 import { Thunk, thunk, Action, action } from "easy-peasy";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { generateSecureRandom } from "react-native-securerandom";
@@ -139,9 +139,11 @@ export const model: IStoreModel = {
     const db = await actions.openDb();
     if (!await getItemObjectAsyncStorage(StorageItem.app)) {
       log.i("Initializing app for the first time");
-      if (PLATFORM === "ios") {
+      if (PLATFORM === "ios" || PLATFORM === "macos") {
         log.i("Creating Application Support and lnd directories");
         await injections.lndMobile.index.createIOSApplicationSupportAndLndDirectories();
+      }
+      if (PLATFORM === "ios") {
         log.i("Excluding lnd directory from backup")
         await injections.lndMobile.index.excludeLndICloudBackup();
       }
@@ -207,6 +209,9 @@ export const model: IStoreModel = {
             socksPort = await tor.startIfNotStarted();
           }
           log.i("socksPort", [socksPort]);
+          if (socksPort === 0) {
+            throw new Error("Unable to obtain SOCKS port");
+          }
         } catch (e) {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
@@ -279,7 +284,7 @@ export const model: IStoreModel = {
     if (PLATFORM === "android") {
       await dispatch.google.initialize();
       await dispatch.googleDriveBackup.initialize();
-    } else if (PLATFORM === "ios") {
+    } else if (PLATFORM === "ios" || PLATFORM === "macos") {
       await dispatch.iCloudBackup.initialize();
     }
     await dispatch.transaction.getTransactions();
@@ -324,6 +329,8 @@ export const model: IStoreModel = {
           if (!getState().lightning.rpcReady) {
             await dispatch.lightning.initialize({ start });
           }
+        } else {
+          log.d("Got unknown lnrpc.WalletState", [state.state])
         }
       } catch (error:any) {
         toast(error.message, undefined, "danger");
@@ -480,7 +487,8 @@ protocol.no-script-enforced-lease=true
     if (!seed) {
       return;
     }
-    const random = await generateSecureRandom(32);
+    let random = await generateSecureRandom(32);
+
     const randomBase64 = base64.fromByteArray(random);
     await setItem(StorageItem.walletPassword, randomBase64);
     await setWalletPassword(randomBase64);

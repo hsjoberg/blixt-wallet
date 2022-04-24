@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { EmitterSubscription, NativeModules, StyleSheet, View } from "react-native";
+import { EmitterSubscription, NativeModules, StyleSheet, View, ScrollView } from "react-native";
 import { Card, Text, CardItem, H1, Button } from "native-base";
 import Clipboard from "@react-native-community/clipboard";
 import Bar from "../components/ProgressBar";
@@ -10,7 +10,6 @@ import TextLink from "../components/TextLink";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { toast } from "../utils";
 import { PLATFORM } from "../utils/constants";
-import { ScrollView } from "react-native-gesture-handler";
 import useForceUpdate from "../hooks/useForceUpdate";
 import { LndMobileToolsEventEmitter } from "../utils/event-listener";
 import LogBox from "../components/LogBox";

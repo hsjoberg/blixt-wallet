@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar, StyleSheet, Alert } from "react-native";
+import { StatusBar, StyleSheet, Alert, NativeModules } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import { readFile } from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
@@ -17,6 +17,7 @@ import GoBackIcon from "../../components/GoBackIcon";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { toast } from "../../utils";
 
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
@@ -27,8 +28,9 @@ export default function Restore({ navigation }: IProps) {
   const t = useTranslation(namespaces.welcome.restore).t;
   const [loading, setLoading] = useState(false);
   const [seedText, setSeedText] = useState("");
-  const [backupType, setBackupType] = useState<"file" | "google_drive" | "icloud" | "none">("none");
+  const [backupType, setBackupType] = useState<"file" | "google_drive" | "icloud" | "macos" | "none">("none");
   const [backupFile, setBackupFile] = useState<DocumentPickerResponse | null>(null);
+  const [macosBakBase64, setMacosBakBase64] = useState<string | undefined>();
   const [b64Backup, setB64Backup] = useState<string | null>(null);
   const setWalletSeed = useStoreActions((store) => store.setWalletSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
@@ -78,9 +80,10 @@ export default function Restore({ navigation }: IProps) {
           }
           createWalletOpts.restore!.channelsBackup = backupBase64;
         }
-      }
-      else if (backupType === "google_drive" || backupType === "icloud") {
+      } else if (backupType === "google_drive" || backupType === "icloud") {
         createWalletOpts.restore!.channelsBackup = b64Backup!;
+      } else if (backupType === "macos") {
+        createWalletOpts.restore!.channelsBackup = macosBakBase64;
       }
 
       await createWallet(createWalletOpts);
@@ -137,14 +140,23 @@ export default function Restore({ navigation }: IProps) {
 
   const pickChannelsExportFile = async () => {
     try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
-      });
-      console.log(res);
-      setBackupFile(res);
-      setBackupType("file");
+      if (PLATFORM !== "macos") {
+        const res = await DocumentPicker.pickSingle({
+          type: [DocumentPicker.types.allFiles],
+        });
+        console.log(res);
+        setBackupFile(res);
+        setBackupType("file");
+      } else {
+        const b = await NativeModules.LndMobileTools.macosOpenFileDialog();
+        console.log(b);
+        setMacosBakBase64(b);
+        setBackupType("macos");
+      }
+
     } catch (e) {
       console.log(e);
+      toast(e.message, undefined, "danger", "Okay");
     }
   }
 

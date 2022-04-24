@@ -27,7 +27,7 @@ export const deeplinkManager: IDeeplinkManager = {
   initialize: thunk((actions) => {
     actions.setupAppStateChangeListener();
     // Used for checking for URL intent invocations
-    if (["android", "ios"].includes(PLATFORM)) {
+    if (["android", "ios", "macos"].includes(PLATFORM)) {
       Linking.addListener("url", async (e: { url: string }) => {
         log.i("url eventlistener", [e]);
         const result = await actions.checkDeeplink(e.url);

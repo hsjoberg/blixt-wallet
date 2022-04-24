@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleProvider, Root } from "native-base";
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer, Theme } from '@react-navigation/native';
 import { StoreProvider } from "easy-peasy";
 
 import Main from "./Main";
@@ -38,11 +38,22 @@ export default function App() {
     </Root>
     </NavigationContainer>)
 
+  const navigatorTheme: Theme = {
+    dark: true,
+    colors: {
+      ...DefaultTheme.colors,
+      background: "transparent",
+    }
+  };
   return (
     <StoreProvider store={store}>
-      <StyleProvider style={getTheme(theme)}>
-        {/** /PLATFORM === "web"?<React.Suspense fallback={<>Loading...</>}>{nav}</React.Suspense>:/**/nav}
-      </StyleProvider>
-    </StoreProvider>
+        <StyleProvider style={getTheme(theme)}>
+          <NavigationContainer theme={navigatorTheme} documentTitle={{ enabled: false }} ref={navigator}>
+            <Root>
+              {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
+            </Root>
+          </NavigationContainer>
+        </StyleProvider>
+      </StoreProvider>
   );
 };

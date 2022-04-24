@@ -11,6 +11,8 @@ import useEvaluateLightningCode from "../hooks/useEvaluateLightningCode";
 import { fontFactorNormalized } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
 import { useStoreState } from "../state/store";
+import { PLATFORM } from "../utils/constants";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
@@ -26,7 +28,9 @@ export default function Drawer() {
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
 
   const closeDrawer = () => {
-    navigation.dispatch(DrawerActions.closeDrawer);
+    if (PLATFORM !== "macos") {
+      navigation.dispatch(DrawerActions.closeDrawer);
+    }
     setExpandAdvanced(false);
   };
 
@@ -36,11 +40,15 @@ export default function Drawer() {
   };
 
   const sendToLightningAddress = async () => {
-    navigation.dispatch(DrawerActions.closeDrawer);
+    if (PLATFORM !== "macos") {
+      navigation.dispatch(DrawerActions.closeDrawer);
+    }
     if ((await promptLightningAddress())[0]) {
       navigation.navigate("LNURL", { screen: "PayRequest" });
     } else {
-      navigation.dispatch(DrawerActions.openDrawer);
+      if (PLATFORM !== "macos") {
+        navigation.dispatch(DrawerActions.openDrawer);
+      }
     }
   };
 
@@ -92,22 +100,24 @@ export default function Drawer() {
   return (
     <View style={style.drawerContainer}>
       <ScrollView style={style.drawerScroll} alwaysBounceVertical={false}>
-        <View style={style.logoContainer}>
-          <BlixtLogo />
-          <Text style={style.blixtTitle} onPress={() => goToScreen("SyncInfo", undefined, false)}>Blixt Wallet</Text>
           <View style={[{
             backgroundColor: statusIndicatorColor,
           }, style.statusIndicator]}></View>
+        <View style={style.logoContainer}>
+          <BlixtLogo />
+          <Text style={style.blixtTitle} onPress={() => goToScreen("SyncInfo", undefined, false)}>Blixt Wallet</Text>
         </View>
         <View style={style.menu}>
-          {layoutMode === "full" && (
+          {(layoutMode === "full" || PLATFORM === "macos") && (
             <>
-              <TouchableOpacity onPress={() => goToScreen("Send")}>
-                <View style={style.menuItem}>
-                  <Icon style={style.menuItemIcon} type="AntDesign" name="camerao" />
-                  <Text style={style.menuItemText}>{t("menu.scan")}</Text>
-                </View>
-              </TouchableOpacity>
+              {PLATFORM !== "macos" &&
+                <TouchableOpacity onPress={() => goToScreen("Send")}>
+                  <View style={style.menuItem}>
+                    <Icon style={style.menuItemIcon} type="AntDesign" name="camerao" />
+                    <Text style={style.menuItemText}>{t("menu.scan")}</Text>
+                  </View>
+                </TouchableOpacity>
+              }
               <TouchableOpacity onPress={() => goToScreen("Receive")}>
                 <View style={style.menuItem}>
                   <Icon style={style.menuItemIcon} type="AntDesign" name="qrcode" />
@@ -119,7 +129,7 @@ export default function Drawer() {
 
           <TouchableOpacity onPress={pasteFromClipboard}>
             <View style={style.menuItem}>
-              <Icon style={style.menuItemIcon} type="FontAwesome5" name="paste" />
+              <Icon style={style.menuItemIcon} type={PLATFORM === "macos" ? "FontAwesome" : "FontAwesome5"} name="paste" />
               <Text style={style.menuItemText}>{t("menu.pasteFromClipboard")}</Text>
             </View>
           </TouchableOpacity>
@@ -138,12 +148,14 @@ export default function Drawer() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={goToLightningBrowser}>
-            <View style={style.menuItem}>
-              <Icon style={style.menuItemIcon} type="MaterialCommunityIcons" name="web" />
-              <Text style={style.menuItemText}>{t("menu.lightningBrowser")}</Text>
-            </View>
-          </TouchableOpacity>
+          {PLATFORM !== "macos" &&
+            <TouchableOpacity onPress={goToLightningBrowser}>
+              <View style={style.menuItem}>
+                <Icon style={style.menuItemIcon} type="MaterialCommunityIcons" name="web" />
+                <Text style={style.menuItemText}>{t("menu.lightningBrowser")}</Text>
+              </View>
+            </TouchableOpacity>
+          }
 
           <TouchableOpacity onPress={() => goToScreen("OnChain")}>
             <View style={style.menuItem}>
@@ -191,9 +203,9 @@ const style = StyleSheet.create({
   },
   drawerScroll: {
     flex: 1,
-    paddingTop: 34,
   },
   logoContainer: {
+    marginTop: PLATFORM === "macos" ? 17 : 34,
     paddingTop: 22,
     paddingBottom: 10,
     alignItems: "center",
@@ -211,7 +223,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: blixtTheme.gray,
-    paddingVertical: 11,
+    paddingVertical: 10,
     paddingHorizontal: 13,
     marginHorizontal: 19,
     marginBottom: 11,
@@ -261,7 +273,7 @@ const style = StyleSheet.create({
     height: 7,
     borderRadius: 8,
     position: "absolute",
-    top: 17,
+    top: 16 + getStatusBarHeight(),
     right: 18,
   }
 });

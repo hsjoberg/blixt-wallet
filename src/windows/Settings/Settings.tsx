@@ -3,7 +3,6 @@ import { StyleSheet, NativeModules, PermissionsAndroid, Linking, Platform } from
 import Clipboard from "@react-native-community/clipboard";
 import DocumentPicker from "react-native-document-picker";
 import { readFile } from "react-native-fs";
-import ReactNativePermissions from 'react-native-permissions';
 import { CheckBox, Body, Container, Icon, Text, Left, List, ListItem, Right } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { fromUnixTime } from "date-fns";
@@ -23,12 +22,15 @@ import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_NEUTRINO_NODE, P
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
-import { Chain } from "../../utils/build";
 import { getNodeInfo } from "../../lndmobile";
 
 import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
 
+let ReactNativePermissions: any;
+if (PLATFORM !== "macos") {
+  ReactNativePermissions = require("react-native-permissions");
+}
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
@@ -36,6 +38,7 @@ interface ISettingsProps {
 export default function Settings({ navigation }: ISettingsProps) {
   const currentLanguage = useStoreState((store) => store.settings.language);
   const { t, i18n } = useTranslation(namespaces.settings.settings);
+  const lndChainBackend = useStoreState((store) => store.settings.lndChainBackend);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -1047,7 +1050,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               }
             </>
           }
-          {["android", "ios"].includes(PLATFORM) &&
+          {["android", "ios", "macos"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="save" /></Left>
               <Body>
@@ -1171,7 +1174,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Text>{t("bitcoinNetwork.title")}</Text>
           </ListItem>
 
-          {Chain !== "regtest" &&
+          {lndChainBackend === "neutrino" &&
             <ListItem style={style.listItem} icon={true} onPress={onSetBitcoinNodePress} onLongPress={onSetBitcoinNodeLongPress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
               <Body>
@@ -1180,7 +1183,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           }
-          {Chain === "regtest" &&
+          {lndChainBackend === "bitcoindWithZmq" &&
             <>
               <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcHostPress}>
                 <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
