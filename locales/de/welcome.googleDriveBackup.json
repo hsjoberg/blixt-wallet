@@ -1,0 +1,12 @@
+{
+  "enable": {
+    "title": "Aktiviere Google Drive Backup",
+    "msg": "Google Drive Backup aktiviert"
+  },
+  "backup": {
+    "title": "Cloud Backup",
+    "msg": "Für die Sicherung deines Off-Chain-Guthabens im Falle eines Geräteverlusts empfehlen wir die Lightning Kanäle auf Google Drive zu sichern.",
+    "msg1": "Ein verschlüsseltes Backup deiner Lightning-Kanäle wird vorgehalten. Es kann nur in Kombination mit deinem Wallet-Seed verwendet werden.",
+    "msg2": "Wenn Du fertig bist. drücke Fortfahren."
+  }
+}

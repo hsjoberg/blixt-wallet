@@ -1,0 +1,25 @@
+{
+  "restore": {
+    "title": "Restaurar cartera",
+    "msg": "Para restaurar to cartera, escribe cada palabra de tu semilla separada por un espacio.",
+    "msg1": "Si quieres restaurar tus canales de Lightning Network, necesitas dar una copia de seguridad de los archivos.",
+    "loading": "Restaurar cartera",
+    "channel": {
+      "title": "Copia de seguridad de los canales",
+      "file": "Elige una copia de seguridad del archivo del canal en el disco",
+      "google": {
+        "title": "Restaurar via Google Drive",
+        "alert": "Restaurar via Google Drive falló"
+      },
+      "iCloud": {
+        "title": "Restaurar via iCloud",
+        "alert": "Restaurar via iClouod falló"
+      }
+    },
+    "seed": "La semilla debe ser de exactamente 24 palabras"
+  },
+  "backup": {
+    "google": "Copia de seguridad via Google Drive",
+    "iCloud": "Copia de seguridad via iCloud"
+  }
+}

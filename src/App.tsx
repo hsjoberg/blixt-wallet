@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleProvider, Root } from "native-base";
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer, Theme } from '@react-navigation/native';
 import { StoreProvider } from "easy-peasy";
 
 import Main from "./Main";
@@ -13,6 +13,8 @@ const theme = require("./native-base-theme/variables/commonColor").default;
 import store from "./state/store";
 import { clearApp } from "./storage/app";
 import { PLATFORM } from "./utils/constants";
+import "./i18n/i18n";
+
 
 export default function App() {
   const [debug, setDebug] = useState(__DEV__ ? true : false);
@@ -24,22 +26,34 @@ export default function App() {
       }
     })();
   }, []);
+  const nav = (<NavigationContainer theme={{
+    dark: true,
+    colors: {
+        ...DefaultTheme.colors,
+        background: "transparent",
+    }
+    }} documentTitle={{ enabled: false }} ref={navigator}>
+    <Root>
+        {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
+    </Root>
+    </NavigationContainer>)
 
+  const navigatorTheme: Theme = {
+    dark: true,
+    colors: {
+      ...DefaultTheme.colors,
+      background: "transparent",
+    }
+  };
   return (
     <StoreProvider store={store}>
-      <StyleProvider style={getTheme(theme)}>
-        <NavigationContainer theme={{
-          dark: true,
-          colors: {
-            ...DefaultTheme.colors,
-            background: "transparent",
-          }
-        }} documentTitle={{ enabled: false }} ref={navigator}>
-          <Root>
-            {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
-          </Root>
-        </NavigationContainer>
-      </StyleProvider>
-    </StoreProvider>
+        <StyleProvider style={getTheme(theme)}>
+          <NavigationContainer theme={navigatorTheme} documentTitle={{ enabled: false }} ref={navigator}>
+            <Root>
+              {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
+            </Root>
+          </NavigationContainer>
+        </StyleProvider>
+      </StoreProvider>
   );
 };

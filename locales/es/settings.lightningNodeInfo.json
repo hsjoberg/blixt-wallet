@@ -1,0 +1,21 @@
+{
+  "title": "Información de nodo",
+  "alias": "Alias de nodo",
+  "chain": "Cadena",
+  "timestamp": "Best Header Timestamp",
+  "blockHash": "Hash del bloque",
+  "blockHeight": "Altura del bloque",
+  "identityPubkey": "Llave pública",
+  "channel": {
+    "title": "Número de Canales",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "pending": "Pendiente"
+  },
+  "numPeers": "Número de pares",
+  "syncedToChain": "Sincronizado con la cadena",
+  "syncedToGraph": "Sincronizado con el grafo",
+  "nodeUris": "URIs del nodo",
+  "version": "Versión de Lnd",
+  "features": "Características del nodo"
+}

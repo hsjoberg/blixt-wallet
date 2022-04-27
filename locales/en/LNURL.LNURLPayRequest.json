@@ -1,0 +1,91 @@
+{
+  "viewMetadata": {
+    "title": "View metadata",
+    "dialog": {
+      "title": "Technical metadata"
+    }
+  },
+  "lightningAddress": {
+    "alreadyExists": {
+      "msg": "{{lightningAddress}} is in your contact list"
+    },
+    "add": {
+      "title": "Add to Contact List",
+      "msg": "Would you like to add {{lightningAddress}} to your contact list?"
+    }
+  },
+  "payContact": {
+    "alreadyExists": {
+      "msg": "Payment code for {{domain}} is in your contact list"
+    },
+    "add": {
+      "title": "Add to Contact List",
+      "msg": "Would you like to add this payment code to {{domain}} to your contact list?"
+    }
+  },
+  "unableToPay": "Unable to pay",
+  "payerData": {
+    "commentAllowed": "Comment to {{target}} (max {{letters}} letters)",
+    "sendNameWithComment": "Send my name together with this comment",
+    "name": {
+      "ask": "Send my name together with this payment",
+      "mandatory": "Your name has to be sent together with this payment"
+    }
+  },
+  "payloadErrors": {
+    "missingDescription": "Payment is missing a description."
+  },
+  "pay": {
+    "title": "Pay",
+    "error": {
+      "mustProvideComment": "You must provide a comment if you choose to include your name to this payment"
+    }
+  },
+  "cancel": {
+    "title": "Cancel"
+  },
+  "form": {
+    "asksYouToPay": "asks you to pay.",
+    "description": {
+      "title": "Description"
+    },
+    "amount": {
+      "title": "Amount",
+      "to": "to",
+      "placeholder": "Input amount"
+    },
+    "alert": "Unable to pay"
+  },
+  "done": {
+    "message": {
+      "title": "Message from"
+    },
+    "url": {
+      "description": "Description",
+      "domain": "URL received from",
+      "done": {
+        "title": "Done"
+      },
+      "copy": {
+        "title": "Copy to clipboard",
+        "msg": "Copied to clipboard."
+      },
+      "open": {
+        "title": "Open Browser"
+      }
+    },
+    "aes": {
+      "domain": "Got a secret encrypted message from",
+      "description": "Message from",
+      "secret": "Secret message"
+    }
+  },
+  "aboutLightningAddress": {
+    "title": "About Lightning Address",
+    "msg1": "Lightning Address",
+    "msg2": "is a way of paying a person or a service on the Lightning Network.",
+    "msg3": "They look like email addresses, but instead of sending an email to the recipient, you're sending money.",
+    "msg4": "Blixt Wallet has full support for sending to a Lightning Address, but receiving",
+    "msg5": "via a Lightning Address is still being worked on."
+  }
+}

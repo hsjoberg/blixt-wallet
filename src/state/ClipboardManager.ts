@@ -24,7 +24,7 @@ export interface IClipboardManagerModel {
 
 export const clipboardManager: IClipboardManagerModel = {
   initialize: thunk(async (actions, _, { getStoreState }) => {
-    if (["android", "ios"].includes(PLATFORM)) {
+    if (["android", "ios", "macos"].includes(PLATFORM)) {
       actions.setupInvoiceListener();
 
       if (getStoreState().settings.clipboardInvoiceCheckEnabled) {

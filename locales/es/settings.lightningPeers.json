@@ -1,0 +1,22 @@
+{
+  "layout": {
+    "title": "Pares de Lightning"
+  },
+  "alias": "Alias del nodo",
+  "pubKey": "Llave pública del nodo",
+  "address": "Dirección del nodo",
+  "data": {
+    "title": "Datos",
+    "bytesSent": "Bytes enviados",
+    "bytesRecv": "Bytes recibidos"
+  },
+  "transfer": {
+    "title": "Transferir",
+    "satSent": "sat enviado",
+    "satRecv": "sat recibido"
+  },
+  "inbound": "Entrante",
+  "syncType": "Tipo de sincronización",
+  "errors": "Errores",
+  "disconnect": "Desconectar par"
+}

@@ -1,0 +1,10 @@
+{
+  "layout": {
+    "title": "Conectar a un par de Lightning"
+  },
+  "connect": {
+    "title": "URI del nodo",
+    "placeholder": "URI del par",
+    "accept": "Conectar"
+  }
+}

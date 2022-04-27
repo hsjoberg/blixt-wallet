@@ -1,0 +1,13 @@
+{
+  "title": "yI'el",
+  "createWallet": {
+    "title": "ChenmoH tlhoy'",
+    "msg1": "yo' qIjDaq suvchoH SuvwI'pu' 'e' luHarlu'.",
+    "msg2": "joHwI', bIvumchugh, vaj choquvHa'moHlaHbe'chugh.",
+    "msg3": "reH lut tlhaQ bOQoy boneHpu'chugh.",
+    "msg4": "reH jIHvaD qelnIS"
+  },
+  "restoreWallet": {
+    "title": "qevpa' tlhoy'"
+  }
+}

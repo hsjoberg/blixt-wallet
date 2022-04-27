@@ -6,6 +6,8 @@ import {name as appName} from "./app.json";
 import Long from "long";
 import protobuf from "protobufjs";
 import { enableES5 } from "immer";
+import "./src/i18n/i18n";
+
 
 protobuf.util.Long = Long;
 protobuf.configure();

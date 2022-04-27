@@ -1,0 +1,22 @@
+{
+  "layout": {
+    "title": "Invoice bezahlen"
+  },
+  "form": {
+    "invoice": {
+      "title": "Invoice"
+    },
+    "amount": {
+      "title": "Betrag"
+    },
+    "recipient": {
+      "title": "Empfänger"
+    },
+    "nodeAlias": {
+      "title": "Node Alias"
+    },
+    "description": {
+      "title": "Nachricht"
+    }
+  }
+}

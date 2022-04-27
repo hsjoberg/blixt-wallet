@@ -5,9 +5,7 @@ import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import LinearGradient from "react-native-linear-gradient";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import Color from "color";
 import Long from "long";
 
 import { RootStackParamList } from "../Main";
@@ -18,30 +16,24 @@ import { timeout, toast } from "../utils/index";
 import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
 import Drawer from "../components/Drawer";
-import { Chain } from "../utils/build";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 import Spinner from "../components/Spinner";
 import QrCode from "../components/QrCode";
-import { PLATFORM } from "../utils/constants";
+import { HEADER_MIN_HEIGHT, HEADER_MAX_HEIGHT, PLATFORM } from "../utils/constants";
 import { fontFactor, fontFactorNormalized, zoomed } from "../utils/scale";
 import useLayoutMode from "../hooks/useLayoutMode";
 import CopyAddress from "../components/CopyAddress";
 import { StackNavigationProp } from "@react-navigation/stack";
+import BlixtHeader from "../components/BlixtHeader";
+
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n/i18n.constants";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
+
 const theme = nativeBaseTheme.default;
 const blixtTheme = nativeBaseTheme.blixtTheme;
-
-const HEADER_MIN_HEIGHT = Platform.select({
-  android: (StatusBar.currentHeight ?? 0) + 53,
-  ios: getStatusBarHeight(true) + 53,
-}) ?? 53;
-const HEADER_MAX_HEIGHT = (Platform.select({
-  android: 195,
-  ios: 195,
-  web: 195 - 32,
-}) ?? 195) / (zoomed ? 0.85 : 1);
 const NUM_TRANSACTIONS_PER_LOAD = 25;
 const LOAD_BOTTOM_PADDING = 475;
 
@@ -49,6 +41,8 @@ export interface IOverviewProps {
   navigation: BottomTabNavigationProp<RootStackParamList, "Overview">;
 }
 function Overview({ navigation }: IOverviewProps) {
+  const { t, i18n } = useTranslation(namespaces.overview);
+
   const layoutMode = useLayoutMode();
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const balance = useStoreState((store) => store.channel.balance);
@@ -142,7 +136,7 @@ function Overview({ navigation }: IOverviewProps) {
                 getInfo(),
                 timeout(1000),
               ]);
-            } catch (error) {
+            } catch (error:any) {
               toast(error.message, 10, "warning");
             }
             setRefreshing(false);
@@ -193,7 +187,7 @@ function Overview({ navigation }: IOverviewProps) {
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
 
   return (
-    <Container>
+    <Container style={{ marginTop: PLATFORM === "macos" ? 0.5 : 0 }}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -219,13 +213,13 @@ function Overview({ navigation }: IOverviewProps) {
             <DoBackup />
           }
           {pendingOpenBalance.greaterThan(0) && (
-              <Card>
+            <Card>
               <CardItem>
                 <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                  <Text style={{ flexShrink: 1 }}>
+                  <Text style={{ flexShrink: 1, width: "100%", marginRight: 5 }}>
                     A new channel is in the process of being opened...
                   </Text>
-                  <Button small onPress={() => navigation.navigate("LightningInfo")}>
+                  <Button style={{ }} small onPress={() => navigation.navigate("LightningInfo")}>
                     <Text>View</Text>
                   </Button>
                 </View>
@@ -234,13 +228,13 @@ function Overview({ navigation }: IOverviewProps) {
           )}
           {txs}
         </ScrollView>
-        <Animated.View style={[style.animatedTop,{ height: headerHeight }]} pointerEvents="box-none">
-          <LinearGradient style={style.top} colors={Chain === "mainnet" ? [blixtTheme.secondary, blixtTheme.primary] : [blixtTheme.lightGray, Color(blixtTheme.lightGray).darken(0.30).hex()]} pointerEvents="box-none">
+        <Animated.View style={[style.animatedTop, { height: headerHeight }]} pointerEvents="box-none">
+          <BlixtHeader height={PLATFORM === "macos" ? headerHeight : undefined} />
             <View style={StyleSheet.absoluteFill}>
               {/* <AnimatedIcon
                 style={[style.onchainIcon, { opacity: iconOpacity }]} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
               /> */}
-              {layoutMode === "mobile" && (
+              {(layoutMode === "mobile" && PLATFORM !== "macos") && (
                 <AnimatedIcon
                   style={[style.menuIcon]} type="Entypo" name="menu" onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
                 />
@@ -300,11 +294,15 @@ function Overview({ navigation }: IOverviewProps) {
             }
             {pendingOpenBalance.greaterThan(0) &&
               <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
+<<<<<<< HEAD
                 {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} pending)</>}
                 {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} pending)</>}
+=======
+                {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
+                {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
+>>>>>>> a5b03733573c89eae7bbd4a24f38ec61e0bdfa81
               </Animated.Text>
             }
-          </LinearGradient>
         </Animated.View>
       </View>
     </Container>
@@ -312,19 +310,20 @@ function Overview({ navigation }: IOverviewProps) {
 };
 
 const RecoverInfo = () => {
+  const { t, i18n } = useTranslation(namespaces.overview);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const recoverInfo = useStoreState((store) => store.lightning.recoverInfo);
 
   return (
     <Card>
       <CardItem>
-        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
           <Text>
-            {!recoverInfo.recoveryFinished && <>Wallet recovery in progress.</>}
-            {recoverInfo.recoveryFinished && <>Wallet recovery finished.</>}
+            {!recoverInfo.recoveryFinished && <>{t("recoverInfo.msg1")}</>}
+            {recoverInfo.recoveryFinished && <>{t("recoverInfo.msg2")}</>}
           </Text>
           <Button small onPress={() => navigation.navigate("SyncInfo")}>
-            <Text>More info</Text>
+            <Text>{t("recoverInfo.more")}</Text>
           </Button>
         </View>
       </CardItem>
@@ -336,13 +335,14 @@ interface ISendOnChain {
   bitcoinAddress?: string;
 }
 const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
+  const { t, i18n } = useTranslation(namespaces.overview);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
   const copyAddress = () => {
     Clipboard.setString(bitcoinAddress!);
-    toast("Bitcoin address copied to clipboard");
+    toast(t("sendOnChain.alert"));
   };
 
   return (
@@ -351,11 +351,17 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
         <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ width: "59%", justifyContent: "center", paddingRight: 4 }}>
             <Text style={{ fontSize: 15 * fontFactor }}>
-              Welcome to Blixt Wallet!{"\n\n"}
+                {t("sendOnChain.title")}{"\n\n"}
               <Text style={{ fontSize: 13 * fontFactor }}>
+<<<<<<< HEAD
                 To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
                 A channel will automatically be opened for you.{"\n\n"}
                 Send at least {formatBitcoin(Long.fromValue(22000), bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
+=======
+                {t("sendOnChain.msg1")}{"\n\n"}
+                {t("sendOnChain.msg2")}{"\n\n"}
+                {t("sendOnChain.msg3")} {formatBitcoin(Long.fromValue(22000), bitcoinUnit)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
+>>>>>>> a5b03733573c89eae7bbd4a24f38ec61e0bdfa81
               </Text>
             </Text>
           </View>
@@ -378,6 +384,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
 };
 
 const DoBackup = () => {
+  const { t, i18n } = useTranslation(namespaces.overview);
   const navigation = useNavigation();
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
@@ -394,14 +401,14 @@ const DoBackup = () => {
       <CardItem>
         <View style={{ flex: 1 }}>
           <View>
-            <Text style={{ fontSize: 15 * fontFactor }}>Thank you for using Blixt Wallet!{"\n\n"}We recommend making a backup of the wallet so that you can restore your funds in case of a phone loss.</Text>
+            <Text style={{ fontSize: 15 * fontFactor }}>{t("doBackup.msg1")}{"\n\n"}{t("doBackup.msg2")}</Text>
           </View>
           <View style={{ flexDirection: "row-reverse", marginTop: 11 }}>
             <Button small style={{marginLeft: 7 }} onPress={onPressBackupWallet}>
-              <Text style={{ fontSize: 11 * fontFactorNormalized }}>Backup wallet</Text>
+              <Text style={{ fontSize: 11 * fontFactorNormalized }}>{t("doBackup.backup")}</Text>
             </Button>
             <Button small onPress={onPressDismiss}>
-              <Text style={{ fontSize: 11 * fontFactorNormalized }}>Dismiss</Text>
+              <Text style={{ fontSize: 11 * fontFactorNormalized }}>{t("msg.dismiss",{ns:namespaces.common})}</Text>
             </Button>
           </View>
         </View>
@@ -429,13 +436,6 @@ const style = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: theme.blixtFooterBorderColor,
-  },
-  top: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "100%",
   },
   menuIcon: {
     position: "absolute",
@@ -558,12 +558,11 @@ export function OverviewTabsComponent() {
   return (
     <OverviewTabs.Navigator screenOptions={{
       header: () => null,
-    }} tabBar={() => layoutMode === "mobile" ? <FooterNav /> : <></>}>
+    }} tabBar={() => layoutMode === "mobile" && PLATFORM !== "macos" ? <FooterNav /> : <></>}>
       <OverviewTabs.Screen name="Overview" component={Overview} />
     </OverviewTabs.Navigator>
   );
 };
-
 
 const DrawerNav = createDrawerNavigator();
 
@@ -577,6 +576,7 @@ export function DrawerComponent() {
         backgroundColor: "transparent",
         borderRightColor: "transparent",
         width: 305,
+        borderEndColor: blixtTheme.dark,
       },
       drawerType: layoutMode === "mobile" ? "front" : "permanent",
       swipeEdgeWidth: 400,

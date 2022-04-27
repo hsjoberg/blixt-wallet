@@ -72,11 +72,13 @@ proto
 google-services.json
 
 # iOS
-/ios/Pods
+ios/Pods
+macos/Pods
 
 # Lnd binaries
 android/lndmobile/Lndmobile.aar
 ios/Lndmobile.xcframework
+macos/Lndmobile.xcframework
 
 # Web
 dist

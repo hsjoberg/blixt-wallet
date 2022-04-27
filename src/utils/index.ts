@@ -3,10 +3,16 @@ import { Toast } from "native-base";
 import { format } from "date-fns";
 import * as querystring from "querystring";
 import Long from "long";
-import Geolocation, { GeolocationResponse, GeolocationError } from "@react-native-community/geolocation";
 import aesjs, { ByteSource } from "aes-js";
 import * as base64 from "base64-js";
 import { Alert } from "react-native";
+import type { GeolocationResponse, GeolocationError } from "@react-native-community/geolocation";
+import { PLATFORM } from "./constants";
+
+let Geolocation: any;
+if (PLATFORM !== "macos") {
+  Geolocation = require("@react-native-community/geolocation");
+}
 
 export const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
 

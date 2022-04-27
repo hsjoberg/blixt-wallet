@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
 import { Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -8,11 +7,15 @@ import { useStoreActions } from "../../state/store";
 import Pincode from "../../components/Pincode";
 import { PLATFORM } from "../../utils/constants";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 enum States {
-  enter = "Enter a pincode",
-  confirm = "Confirm your pincode",
+  enter = "enter",
+  confirm = "confirm",
 }
 export default function SetPincode() {
+  const t = useTranslation(namespaces.settings.setPincode).t;
   const navigation = useNavigation();
   const [state, setState] = useState<States>(States.enter);
   const [pincode, setStatePincode] = useState<string | undefined>();
@@ -35,7 +38,7 @@ export default function SetPincode() {
 
   return (
     <>
-      <Pincode onTryCode={onTryCode} textAction={state} />
+      <Pincode onTryCode={onTryCode} textAction={t(state)} />
       {PLATFORM !== "android" &&
         <Icon style={{
           position: "absolute",
@@ -48,15 +51,3 @@ export default function SetPincode() {
     </>
   )
 }
-
-const style = StyleSheet.create({
-  fingerPrintSymbolContainer: {
-    padding: 8,
-    alignContent: "center",
-    alignItems:"center",
-    marginBottom: 16,
-  },
-  fingerPrintSymbol: {
-    fontSize: 36
-  },
-});

@@ -1,7 +1,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(LndMobileTools, NSObject)
+@interface RCT_EXTERN_MODULE(LndMobileTools, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(
   writeConfig: (NSString *)config
@@ -92,5 +92,9 @@ RCT_EXTERN_METHOD(
   rejecter: (RCTPromiseRejectBlock)reject
 )
 
-@end
+RCT_EXTERN_METHOD(
+  macosOpenFileDialog: (RCTPromiseResolveBlock)resolve
+  rejecter: (RCTPromiseRejectBlock)reject
+)
 
+@end

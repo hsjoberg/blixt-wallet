@@ -49,7 +49,9 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           });
           console.log(result);
 
-          await getChannels(undefined);
+          setTimeout(async () => {
+            await getChannels(undefined);
+          }, 3000);
 
           if (autopilotEnabled) {
             Alert.alert(
@@ -165,7 +167,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                   {valueFiat(channel.capacity ?? Long.fromValue(0), currentRate).toFixed(2)}{" "}{fiatUnit}
                 </Text>
               }
-              <Svg width="100" height="22" style={{ marginBottom: 3, marginTop: -1 }}>
+              <Svg width="100" height="22" style={{ marginBottom: 4, marginTop: -1 }}>
                 <Line
                   x1="0"
                   y1="15"

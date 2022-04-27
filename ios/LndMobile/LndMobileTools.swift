@@ -31,6 +31,7 @@ class LndMobileTools: RCTEventEmitter {
     do {
       let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
       let url = paths[0].appendingPathComponent("lnd", isDirectory: true).appendingPathComponent("lnd.conf", isDirectory: false)
+      NSLog(url.relativeString)
 
       try config.write(to: url, atomically: true, encoding: .utf8)
       let input = try String(contentsOf: url)
@@ -220,13 +221,41 @@ autopilot.heuristic=preferential:0.05
   }
 
   @objc(saveChannelsBackup:resolver:rejecter:)
-  func saveChannelsBackup(base64Backups: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  func saveChannelsBackup(base64Backups: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
-      // let data = Data(base64Encoded: base64Backups, options: [])
+#if os(macOS)
+      do {
+        let dataWrapped = Data(base64Encoded: base64Backups, options: [])
+        if let data = dataWrapped {
+          let savePanel = NSSavePanel()
+          savePanel.nameFieldStringValue = "blixt-channel-backup.dat"
+          if (savePanel.runModal() == NSApplication.ModalResponse.OK) {
+            let saveUrl = savePanel.url
+            NSLog(saveUrl?.path ?? "")
+            NSLog(saveUrl?.absoluteString ?? "")
+            NSLog(saveUrl?.relativeString ?? "")
+
+            if let saveUrlUnwrapped = saveUrl {
+              try data.write(to: saveUrlUnwrapped)
+            }
+            resolve(true)
+          } else {
+            resolve(false)
+          }
+        } else {
+          NSLog("WARNING: Unable to unwrap backup data")
+          resolve(false)
+        }
+      } catch {
+        print("Error saving backup")
+        reject("error", error.localizedDescription, error)
+      }
+#elseif os(iOS)
       let activityController = UIActivityViewController(activityItems: [base64Backups], applicationActivities: nil)
       RCTSharedApplication()?.delegate?.window??.rootViewController?.present(activityController, animated: true, completion: {
         resolve(true)
       })
+#endif
     }
   }
 
@@ -282,12 +311,6 @@ autopilot.heuristic=preferential:0.05
   @objc(createIOSApplicationSupportAndLndDirectories:rejecter:)
   func createIOSApplicationSupportAndLndDirectories(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     do {
-//      try FileManager.default.url(
-//        for: .applicationSupportDirectory,
-//        in: .userDomainMask,
-//        appropriateFor: nil,
-//        create: true
-//      )
       let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
       let lndFolder = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
       // This will create the lnd folder as well as "Application Support"
@@ -354,6 +377,7 @@ autopilot.heuristic=preferential:0.05
   @objc(tailLog:resolver:rejecter:)
   func tailLog(numberOfLines: Int32, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
+
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
     let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
                       .appendingPathComponent("logs", isDirectory: true)
@@ -413,6 +437,7 @@ autopilot.heuristic=preferential:0.05
 
   @objc(copyLndLog:rejecter:)
   func copyLndLog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+#if os(iOS)
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
     let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
@@ -431,5 +456,39 @@ autopilot.heuristic=preferential:0.05
     } catch {
       reject("error", error.localizedDescription, error)
     }
+#else
+    let error = LndMobileToolsError(msg: "copyLndLog not supported on macOS build")
+    reject("error", error.localizedDescription, error)
+#endif
+  }
+
+  @objc(macosOpenFileDialog:rejecter:)
+  func macosOpenFileDialog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  #if os(iOS)
+    let error = LndMobileToolsError(msg: "Not supported iOS")
+    reject("error", error.localizedDescription, error)
+  #else
+    DispatchQueue.main.async {
+      do {
+        let panel = NSOpenPanel()
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        if panel.runModal() == .OK {
+          if let u = panel.url {
+            resolve(try Data(contentsOf: u).base64EncodedString())
+          } else {
+            let error = LndMobileToolsError(msg: "Could not open file")
+            reject("error", error.localizedDescription, error)
+          }
+        } else {
+          resolve(nil)
+        }
+      }
+      catch {
+       print("Error open")
+       reject("error", error.localizedDescription, error)
+     }
+    }
+  #endif
   }
 }

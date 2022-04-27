@@ -253,9 +253,13 @@ export const channel: IChannelModel = {
         : (chan as lnrpc.PendingChannelsResponse.IPendingChannel).remoteNodePub;
 
       if (pubkey && typeof pubkey === "string" && !(pubkey! in aliases)) {
-        const nodeInfo = await getNodeInfo(pubkey);
-        if (nodeInfo.node && nodeInfo.node.alias) {
-          actions.setAlias({ pubkey, alias: nodeInfo.node.alias });
+        try {
+          const nodeInfo = await getNodeInfo(pubkey);
+          if (nodeInfo.node && nodeInfo.node.alias) {
+            actions.setAlias({ pubkey, alias: nodeInfo.node.alias });
+          }
+        } catch (error) {
+          log.w("getNodeInfo failed", [error]);
         }
       }
     };

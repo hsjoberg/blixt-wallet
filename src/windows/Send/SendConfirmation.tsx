@@ -16,11 +16,15 @@ import { hexToUint8Array, toast } from "../../utils";
 import { PLATFORM } from "../../utils/constants";
 import useLightningReadyToSend from "../../hooks/useLightingReadyToSend";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
   route: RouteProp<SendStackParamList, "SendConfirmation">;
 }
 export default function SendConfirmation({ navigation, route }: ISendConfirmationProps) {
+  const t = useTranslation(namespaces.send.sendConfirmation).t;
   const [amountEditable, setAmountEditable] = useState(false);
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
   const getBalance = useStoreActions((actions) => actions.channel.getBalance);
@@ -59,14 +63,14 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Pay invoice",
-      headerBackTitle: "Back",
+      headerTitle: t("layout.title"),
+      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
       headerShown: true,
     });
   }, [navigation]);
 
   if (!paymentRequest) {
-    return (<Text>Error</Text>);
+    return (<Text>{t("msg.error",{ns:namespaces.common})}</Text>);
   }
 
   const { name, description } = extractDescription(paymentRequest.description);
@@ -87,7 +91,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       navigation.replace("SendDone", { preimage, callback });
     } catch (error) {
       console.log(error);
-      toast(`Error: ${error.message}`, 60000, "danger", "Okay");
+      toast(`${t("msg.error",{ns:namespaces.common})}: ${error.message}`, 60000, "danger", "Okay");
       setIsPaying(false);
     }
   };
@@ -96,7 +100,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
   formItems.push({
     key: "INVOICE",
-    title: "Invoice",
+    title: t("invoice.title"),
     success: true,
     component: (
       <>
@@ -112,7 +116,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
   formItems.push({
     key: "AMOUNT_BTC",
-    title: `Amount ${BitcoinUnits[bitcoinUnit].nice}`,
+    title: `${t("amount.title")} ${BitcoinUnits[bitcoinUnit].nice}`,
     component: (
       <Input
         disabled={!amountEditable}
@@ -127,7 +131,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
   formItems.push({
     key: "AMOUNT_FIAT",
-    title: `Amount ${fiatUnit}`,
+    title: `${t("amount.title")} ${fiatUnit}`,
     component: (
       <Input
         disabled={!amountEditable}
@@ -143,21 +147,21 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   if (name) {
     formItems.push({
       key: "RECIPIENT",
-      title: "Recipient",
+      title: t("recipient.title"),
       component: (<Input disabled={true} value={name} />),
     });
   }
   else if (nodeInfo && nodeInfo.node && nodeInfo.node.alias) {
     formItems.push({
       key: "NODE_ALIAS",
-      title: "Node Alias",
+      title: t("nodeAlias.title"),
       component: (<Input disabled={true} value={nodeInfo.node.alias} />),
     });
   }
 
   formItems.push({
     key: "MESSAGE",
-    title: "Message",
+    title: t("description.title"),
     component: (<Input multiline={PLATFORM === "android"} disabled={true} value={description} />),
   });
 

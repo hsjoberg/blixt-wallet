@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { EmitterSubscription, NativeModules, StyleSheet, View } from "react-native";
+import { EmitterSubscription, NativeModules, StyleSheet, View, ScrollView } from "react-native";
 import { Card, Text, CardItem, H1, Button } from "native-base";
 import Clipboard from "@react-native-community/clipboard";
 import Bar from "../components/ProgressBar";
@@ -10,10 +10,13 @@ import TextLink from "../components/TextLink";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { toast } from "../utils";
 import { PLATFORM } from "../utils/constants";
-import { ScrollView } from "react-native-gesture-handler";
 import useForceUpdate from "../hooks/useForceUpdate";
 import { LndMobileToolsEventEmitter } from "../utils/event-listener";
 import LogBox from "../components/LogBox";
+
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n/i18n.constants";
+
 
 interface IMetaDataProps {
   title: string;
@@ -21,12 +24,14 @@ interface IMetaDataProps {
   url?: string;
 }
 const MetaData = ({ title, data, url }: IMetaDataProps) => {
+  const t = useTranslation(namespaces.syncInfo).t;
+
   return (
     <Text
       style={style.detailText}
       onPress={() => {
         Clipboard.setString(data);
-        toast("Copied to clipboard.", undefined, "warning");
+        toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
       }}
     >
       <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>
@@ -38,6 +43,7 @@ const MetaData = ({ title, data, url }: IMetaDataProps) => {
 
 export interface ISyncInfoProps {}
 export default function SyncInfo({}: ISyncInfoProps) {
+  const t = useTranslation(namespaces.syncInfo).t;
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const recoverInfo = useStoreState((store) => store.lightning.recoverInfo);
   const initialKnownBlockheight = useStoreState((store) => store.lightning.initialKnownBlockheight);
@@ -71,7 +77,7 @@ export default function SyncInfo({}: ISyncInfoProps) {
 
   const onPressCopy = (l: string) => {
     Clipboard.setString(l);
-    toast("Copied to clipboard", undefined, "warning");
+    toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
   }
 
 
@@ -92,22 +98,22 @@ export default function SyncInfo({}: ISyncInfoProps) {
         <CardItem>
           <ScrollView alwaysBounceVertical={false}>
             <H1 style={style.header}>
-              {!nodeInfo?.syncedToChain ? "Syncing in progress" : "Syncing complete"}
+              {!nodeInfo?.syncedToChain ? t("syncedToChain.title") : t("syncedToChain.title1")}
             </H1>
             <Text style={{ marginBottom: 14 }}>
               {!nodeInfo?.syncedToChain
                 ?
-                  "Blixt Wallet is currently syncing the blockchain.\n\n" +
-                  "Once your wallet is in sync with the blockchain, on-chain transactions and funds will be recognized and can be seen from the Bitcoin on-chain section."
+                  t("syncedToChain.msg1")+"\n\n" +
+                  t("syncedToChain.msg2")
                 :
-                  "Blixt Wallet is in sync with the blockchain."
+                  t("syncedToChain.msg3")
               }
             </Text>
-            <MetaData title="Current block height" data={nodeInfo?.blockHeight?.toString() ?? "N/A"} />
+            <MetaData title={t("syncedToChain.blockHeight.title")} data={nodeInfo?.blockHeight?.toString() ?? "N/A"} />
             {nodeInfo?.syncedToChain === false && bestBlockheight !== undefined &&
               <>
                 <Text style={[style.detailText, { fontWeight: "bold" }]}>
-                  Chain sync progress:
+                  {t("syncedToChain.blockHeight.msg1")}:
                 </Text>
                 <View style={{ flexDirection: "row" }}>
                   <Bar
@@ -123,14 +129,14 @@ export default function SyncInfo({}: ISyncInfoProps) {
               </>
             }
             {nodeInfo?.syncedToChain === true &&
-              <MetaData title="Chain sync progress" data="Syncing complete" />
+              <MetaData title={t("syncedToChain.blockHeight.msg1")} data={t("syncedToChain.title1")} />
             }
 
             {recoverInfo.recoveryMode && (
               <View>
                 {!recoverInfo.recoveryFinished && (
                   <>
-                    <Text style={[style.detailText, { fontWeight: "bold" }]}>Recovering progress:</Text>
+                    <Text style={[style.detailText, { fontWeight: "bold" }]}>{t("recoveryMode.title")}:</Text>
                     <View style={{ flexDirection: "row" }}>
                       <Bar
                         width={200}
@@ -145,7 +151,7 @@ export default function SyncInfo({}: ISyncInfoProps) {
                   </>
                 )}
                 {recoverInfo.recoveryFinished && (
-                  <MetaData title="Recovering progress" data={"Recover complete\nCheck the Lightning Channels & On-chain sections"} />
+                  <MetaData title={t("recoveryMode.title")} data={t("recoveryMode.msg1")+"\n"+t("recoveryMode.msg2")} />
                 )}
               </View>
             )}

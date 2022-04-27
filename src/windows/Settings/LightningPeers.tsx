@@ -14,12 +14,16 @@ import { SettingsStackParamList } from "./index";
 import { lnrpc } from "../../../proto/lightning";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 export interface ISelectListProps {
   navigation: StackNavigationProp<SettingsStackParamList, "LightningPeers">;
   route: RouteProp<SettingsStackParamList, "LightningPeers">;
 }
 
 export default function({ navigation }: ISelectListProps) {
+  const t = useTranslation(namespaces.settings.lightningPeers).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const lightningPeers = useStoreState((store) => store.lightning.lightningPeers);
@@ -39,7 +43,7 @@ export default function({ navigation }: ISelectListProps) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Lightning Peers",
+      headerTitle: t("layout.title"),
       headerShown: true,
       headerRight: () => {
         return (
@@ -79,7 +83,7 @@ export default function({ navigation }: ISelectListProps) {
                     <Body>
                       <Row style={{ width: "100%" }}>
                         <Left style={{ alignSelf: "flex-start" }}>
-                          <Text>Node alias</Text>
+                          <Text>{t("alias")}</Text>
                         </Left>
                         <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
                           <Text style={style.cardDataText}>
@@ -97,7 +101,7 @@ export default function({ navigation }: ISelectListProps) {
                       </Row>
                       <Row style={{ width: "100%" }}>
                         <Left style={{ alignSelf: "flex-start" }}>
-                          <Text>Node public key</Text>
+                          <Text>{t("pubKey")}</Text>
                         </Left>
                         <Right>
                           <Text style={{ fontSize: 9, textAlign:"right" }}>{peer.peer.pubKey}</Text>
@@ -105,7 +109,7 @@ export default function({ navigation }: ISelectListProps) {
                       </Row>
                       <Row style={{ width: "100%" }}>
                         <Left style={{ alignSelf: "flex-start" }}>
-                          <Text>Node address</Text>
+                          <Text>{t("address")}</Text>
                         </Left>
                         <Right>
                         <Text style={style.cardDataText}>{peer.peer.address}</Text>
@@ -113,29 +117,29 @@ export default function({ navigation }: ISelectListProps) {
                       </Row>
                       <Row style={{ width: "100%" }}>
                         <Left style={{ alignSelf: "flex-start" }}>
-                          <Text>Data</Text>
+                          <Text>{t("data.title")}</Text>
                         </Left>
                         <Right>
                           <Text style={style.cardDataText}>
-                            {Long.fromValue(peer.peer.bytesSent).toString()} bytes sent{"\n"}
-                            {Long.fromValue(peer.peer.bytesSent).toString()} byes received
+                            {Long.fromValue(peer.peer.bytesSent).toString()} {t("data.bytesSent")}{"\n"}
+                            {Long.fromValue(peer.peer.bytesRecv).toString()} {t("data.bytesRecv")}
                           </Text>
                         </Right>
                       </Row>
                       <Row style={{ width: "100%" }}>
                         <Left style={{ alignSelf: "flex-start" }}>
-                          <Text>Transfer</Text>
+                          <Text>{t("transfer.title")}</Text>
                         </Left>
                         <Right>
                           <Text style={style.cardDataText}>
-                            {Long.fromValue(peer.peer.satSent).toString()} sat sent{"\n"}
-                            {Long.fromValue(peer.peer.satRecv).toString()} sat received
+                            {Long.fromValue(peer.peer.satSent).toString()} {t("transfer.satSent")}{"\n"}
+                            {Long.fromValue(peer.peer.satRecv).toString()} {t("transfer.satRecv")}
                           </Text>
                         </Right>
                       </Row>
                       <Row style={{ width: "100%" }}>
                         <Left style={{ alignSelf: "flex-start" }}>
-                          <Text>Inbound</Text>
+                          <Text>{t("inbound")}</Text>
                         </Left>
                         <Right>
                           <Text style={style.cardDataText}>
@@ -155,7 +159,7 @@ export default function({ navigation }: ISelectListProps) {
                       </Row> */}
                       <Row style={{ width: "100%" }}>
                         <Left style={{ alignSelf: "flex-start" }}>
-                          <Text>Sync type</Text>
+                          <Text>{t("syncType")}</Text>
                         </Left>
                         <Right>
                           <Text style={style.cardDataText}>
@@ -166,7 +170,7 @@ export default function({ navigation }: ISelectListProps) {
                       {peer.peer.errors.length > 0 &&
                         <Row style={{ width: "100%" }}>
                           <Left style={{ alignSelf: "flex-start" }}>
-                            <Text>Errors</Text>
+                            <Text>{t("errors")}</Text>
                           </Left>
                           <Right>
                             <Text style={style.cardDataText}>
@@ -182,7 +186,7 @@ export default function({ navigation }: ISelectListProps) {
                       <Row style={{ width: "100%" }}>
                         <Left>
                           <Button style={{ marginTop: 14 }} primary={true} small={true} onPress={() => close(peer.peer.pubKey)}>
-                            <Text style={{fontSize: 9}}>Disconnect peer</Text>
+                            <Text style={{fontSize: 9}}>{t("disconnect")}</Text>
                           </Button>
                         </Left>
                       </Row>

@@ -1,0 +1,22 @@
+{
+  "layout": {
+    "title": "Lightning Peers"
+  },
+  "alias": "Node alias",
+  "pubKey": "Node public key",
+  "address": "Node address",
+  "data": {
+    "title": "Data",
+    "bytesSent": "bytes sent",
+    "bytesRecv": "bytes received"
+  },
+  "transfer": {
+    "title": "Transfer",
+    "satSent": "sat sent",
+    "satRecv": "sat received"
+  },
+  "inbound": "Inbound",
+  "syncType": "Sync type",
+  "errors": "Errors",
+  "disconnect": "Disconnect peer"
+}

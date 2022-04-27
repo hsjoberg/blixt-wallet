@@ -8,11 +8,11 @@ import Long from "long";
 import { ReceiveStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import { formatBitcoin, BitcoinUnits, IBitcoinUnits, convertBitcoinToFiat, valueBitcoin, valueFiat } from "../../utils/bitcoin-units";
+import { formatBitcoin, BitcoinUnits, IBitcoinUnits, valueBitcoin, valueFiat } from "../../utils/bitcoin-units";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { MATH_PAD_NATIVE_ID, MAX_SAT_INVOICE, PLATFORM } from "../../utils/constants";
-import { timeout, toast } from "../../utils";
+import { toast } from "../../utils";
 import { Keyboard, TextStyle } from "react-native";
 import Container from "../../components/Container";
 import { IFiatRates } from "../../state/Fiat";
@@ -20,12 +20,16 @@ import { Alert } from "../../utils/alert";
 import TextClickable from "../../components/TextClickable";
 import { dunderPrompt } from "../../utils/dunder";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 const MATH_PAD_HEIGHT = 44;
 
 export interface IReceiveSetupProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveSetup">;
 }
 export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
+  const t = useTranslation(namespaces.receive.receiveSetup).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
   const invoiceSubscriptionStarted = useStoreState((store) => store.receive.invoiceSubscriptionStarted);
@@ -117,7 +121,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Receive",
+      headerTitle: t("layout.title"),
       headerShown: true,
     });
   }, [navigation]);
@@ -126,7 +130,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     try {
       setCreateInvoiceDisabled(true);
       if (satoshiValue > MAX_SAT_INVOICE) {
-        throw new Error("Invoice amount cannot be higher than " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnitKey));
+        throw new Error(t("createInvoice.error")+" " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnitKey));
       }
 
       navigation.replace("ReceiveQr", {
@@ -142,7 +146,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
       });
     } catch (e) {
       setCreateInvoiceDisabled(false);
-      toast(`Error: ${e.message}`, 12000, "danger", "Okay");
+      toast(`${t("msg.error")}: ${e.message}`, 12000, "danger", "Okay");
     }
   };
 
@@ -189,7 +193,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: "Cancel",
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: currentBitcoinUnit,
         items: [
@@ -204,7 +208,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
       }
     } else {
       navigation.navigate("ChangeBitcoinUnit", {
-        title: "Change bitcoin unit",
+        title: t("form.amountBitcoin.change"),
         data: [
           { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
           { title: BitcoinUnits.bit.settings, value: "bit" },
@@ -224,7 +228,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: "Cancel",
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: currentFiatUnit,
         items: Object.entries(fiatRates).map(([currency]) => {
@@ -238,7 +242,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
       }
     } else {
       navigation.navigate("ChangeFiatUnit", {
-        title: "Change fiat unit",
+        title: t("form.amountFiat.change"),
         data: Object.entries(fiatRates).map(([currency]) => ({
           title: currency,
           value: currency as keyof IFiatRates,
@@ -251,14 +255,14 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
 
   const formItems = [{
     key: "AMOUNT_SAT",
-    title: `Amount ${bitcoinUnit.nice}`,
+    title: `${t("form.amountBitcoin.title")} ${bitcoinUnit.nice}`,
     component: (
       <>
         <Input
           onSubmitEditing={() => setMathPadVisible(false)}
           testID="input-amount-sat"
           onChangeText={onChangeBitcoinInput}
-          placeholder={minimumBitcoin ? `At least ${minimumBitcoin}`: "0"}
+          placeholder={minimumBitcoin ? `${t("form.amountBitcoin.dunderPlaceholder")} ${minimumBitcoin}`: "0"}
           value={bitcoinValue !== undefined ? bitcoinValue.toString() : undefined}
           keyboardType="numeric"
           returnKeyType="done"
@@ -276,13 +280,13 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     ),
   }, {
     key: "AMOUNT_FIAT",
-    title: `Amount ${fiatUnit}`,
+    title: `${t("form.amountFiat.title")} ${fiatUnit}`,
     component: (
       <>
         <Input
           onSubmitEditing={() => setMathPadVisible(false)}
           onChangeText={onChangeFiatInput}
-          placeholder={minimumFiat ? `At least ${minimumFiat}` : "0.00"}
+          placeholder={minimumFiat ? `${t("form.amountFiat.dunderPlaceholder")} ${minimumFiat}` : "0.00"}
           value={dollarValue !== undefined ? dollarValue.toString() : undefined}
           keyboardType="numeric"
           returnKeyType="done"
@@ -300,23 +304,23 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     ),
   }, {
     key: "PAYER",
-    title: "Payer",
+    title: t("form.payer.title"),
     component: (
       <Input
         onChangeText={setPayer}
-        placeholder="For bookkeeping (optional)"
+        placeholder={t("form.payer.placeholder")}
         onFocus={() => setMathPadVisible(false)}
         value={payer}
       />
     ),
   }, {
     key: "MESSAGE",
-    title: "Message",
+    title: t("form.description.title"),
     component: (
       <Input
         testID="input-message"
         onChangeText={setDescription}
-        placeholder="Message to payer (optional)"
+        placeholder={t("form.description.placeholder")}
         onFocus={() => setMathPadVisible(false)}
         value={description}
       />
@@ -346,19 +350,19 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
   );
 
   const showNoticeText = rpcReady && channels.length === 0;
-  let noticeText: Element | undefined = showNoticeText
-    ? "Before you can receive, you need to open a Lightning channel."
+  let noticeText: JSX.Element | undefined = showNoticeText
+    ? t("createInvoice.alert")
     : undefined;
   if (shouldUseDunder) {
     // noticeText = `Create an invoice with with at least ${minimumBitcoin} (${minimumFiat}).`;
     noticeText = (
       <>
-        A payment channel by Dunder LSP will be opened when this invoice is paid.
+        {t("createInvoice.lsp.msg")}
         {" \n"}
         <TextClickable style={{
           fontSize: 14,
           lineHeight: 23,
-        } as TextStyle} onPress={() => navigation.navigate("DunderLspInfo")}>What's this?</TextClickable>
+        } as TextStyle} onPress={() => navigation.navigate("DunderLspInfo")}>{t("createInvoice.lsp.msg1")}</TextClickable>
       </>
     );
   }
@@ -401,7 +405,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
           >
             {loading
               ? <Spinner color={blixtTheme.light} />
-              : <Text>Create invoice</Text>
+              : <Text>{t("createInvoice.title")}</Text>
             }
           </Button>
         ]}

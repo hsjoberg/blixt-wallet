@@ -1,13 +1,12 @@
 import React from "react";
 import { View, StyleSheet, Pressable, ViewStyle } from "react-native";
+import { Icon } from "native-base";
 import Modal from "react-native-modal";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { useNavigation } from "@react-navigation/native";
 import RealTimeBlur from "../react-native-realtimeblur";
 import { PLATFORM } from "../utils/constants";
-import { Icon } from "native-base";
-
 
 export interface ITransactionDetailsProps {
   children: any;
@@ -18,7 +17,7 @@ export interface ITransactionDetailsProps {
 }
 export default function BlurModal({ children, useModalComponent, goBackByClickingOutside, noMargin, style: userStyle }: ITransactionDetailsProps) {
   const navigation = useNavigation();
-  const useModal = PLATFORM === "web" ? false : useModalComponent ?? true;
+  const useModal = PLATFORM === "web" || PLATFORM === "macos" ? false : useModalComponent ?? true;
   goBackByClickingOutside = goBackByClickingOutside ?? true;
   noMargin = noMargin ?? false;
 
@@ -35,7 +34,7 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
       blurRadius={15}
     >
       {!useModal
-        ? <>
+        ? <View style={style.modalContainer}>
             <Pressable
               style={{
                 position: "absolute",
@@ -48,7 +47,8 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
             <View style={[style.modal, userStyle]}>
               {children}
             </View>
-          </>
+            {goBackByClickingOutside && <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />}
+          </View>
         : <>
             <Modal
               onBackdropPress={goBack}
@@ -66,26 +66,20 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
 };
 
 const style = StyleSheet.create({
-  container: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
+  modalContainer: {
     flex: 1,
-    justifyContent: "center",
-  },
-  inner: {
-    flex: 1,
-    margin: 12,
-    padding: 0,
-    justifyContent: "flex-start",
-    flexDirection: "column",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center"
   },
   modal: {
     marginHorizontal: 6,
+    maxWidth: 800,
+    flex: 1,
   },
   cross: {
     position: "absolute",
-    top: getStatusBarHeight() + 0,
+    top: getStatusBarHeight() + (PLATFORM === "macos" ? 10 : 0),
     right: 10,
   }
 });

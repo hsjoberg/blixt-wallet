@@ -58,9 +58,9 @@ export const initCommonStore = async (waitUntilReady = false) => {
   if (waitUntilReady) {
     await waitFor(() => expect(store.getState().lightning.rpcReady).toBe(true));
     await waitFor(() => expect(store.getState().lightning.ready).toBe(true));
-    await waitFor(() => expect(store.getState().lightning.syncedToGraph).toBe(true));
+    await waitFor(() => expect(store.getState().lightning.syncedToGraph).toBe(true), { timeout: 5000 });
     await waitFor(() => expect(store.getState().lightning.autopilotSet).toBeDefined());
-    await waitFor(() => expect(store.getState().receive.invoiceSubscriptionStarted).toBe(true));
+    await waitFor(() => expect(store.getState().receive.invoiceSubscriptionStarted).toBe(true), { timeout: 5000 });
     await waitFor(() => expect(store.getState().lightning.initializeDone).toBe(true));
   }
   return store;

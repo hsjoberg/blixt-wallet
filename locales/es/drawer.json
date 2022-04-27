@@ -1,0 +1,15 @@
+{
+  "menu": {
+    "scan": "Scanear",
+    "receive": "Recibir",
+    "pasteFromClipboard": "Pegar desde el portapapeles",
+    "sendToLightningAddress": "Envíar a dirección Lightning",
+    "contactsAndServices": "Contactos y Servicios",
+    "lightningBrowser": "Explorador Lightning",
+    "onChainWallet": "On-chain",
+    "lightningChannels": "Canales Lightning",
+    "keysendExperiment": "Experimento Keysend",
+    "showMore": "Avanzado"
+  },
+  "madeInSweden": "Hecho con ⚡ en Suecia"
+}

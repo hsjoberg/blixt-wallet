@@ -98,6 +98,7 @@ module.exports = {
         { context: './node_modules/sql.js/dist/', from: "sql-wasm.wasm",  to: './' },
         { context: './assets/fonts/', from: "*", to: './' },
         { context: './node_modules/react-native-vector-icons/Fonts/', from: "*", to: './' },
+        { from: path.resolve(__dirname, "locales"), to: path.resolve(__dirname, "dist/locales")}
       ],
     }),
 
