@@ -158,7 +158,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             <Right>
               {!preferFiat &&
                 <Text>
-                  {valueBitcoin(channel.capacity ?? Long.fromValue(0), bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)}{" "}
+                  {valueBitcoin(channel.capacity ?? Long.fromValue(0), bitcoinUnit)}{" "}
                   {getUnitNice(new BigNumber(localBalance.toNumber()), bitcoinUnit)}
                 </Text>
               }
@@ -233,7 +233,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 {!preferFiat &&
                   <>
                     <Text style={{ color: blixtTheme.red }}>
-                      {valueBitcoin(remoteBalance, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)}{" "}
+                      {valueBitcoin(remoteBalance, bitcoinUnit)}{" "}
                     </Text>
                     <Text>
                       {getUnitNice(new BigNumber(remoteBalance.toNumber()), bitcoinUnit)}
@@ -263,13 +263,13 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                   <>
                     <Text>
                       {localReserve.eq(channel.localChanReserveSat!) &&
-                        <>{valueBitcoin(localReserve, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)}{" "}</>
+                        <>{valueBitcoin(localReserve, bitcoinUnit)}{" "}</>
                       }
                       {localReserve.neq(channel.localChanReserveSat!) &&
                         <>
-                          {valueBitcoin(localReserve, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)}
+                          {valueBitcoin(localReserve, bitcoinUnit)}
                           /
-                          {valueBitcoin(channel.localChanReserveSat!, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)}{" "}
+                          {valueBitcoin(channel.localChanReserveSat!, bitcoinUnit)}{" "}
                         </>
                       }
 
@@ -308,7 +308,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             <Right>
               <Text>
                 {preferFiat && valueFiat(channel.commitFee ?? Long.fromValue(0), currentRate).toFixed(2) + " " + fiatUnit}
-                {!preferFiat && valueBitcoin(channel.commitFee ?? Long.fromValue(0), bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false) + " " + getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}
+                {!preferFiat && valueBitcoin(channel.commitFee ?? Long.fromValue(0), bitcoinUnit) + " " + getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}
               </Text>
             </Right>
           </Row>

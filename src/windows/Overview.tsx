@@ -183,7 +183,7 @@ function Overview({ navigation }: IOverviewProps) {
     navigation.navigate("SyncInfo");
   };
 
-  const bitcoinBalance = formatBitcoin(balance, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false);
+  const bitcoinBalance = formatBitcoin(balance, bitcoinUnit);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
 
   return (
@@ -294,13 +294,8 @@ function Overview({ navigation }: IOverviewProps) {
             }
             {pendingOpenBalance.greaterThan(0) &&
               <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
-<<<<<<< HEAD
-                {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} pending)</>}
-                {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} pending)</>}
-=======
                 {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
                 {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
->>>>>>> a5b03733573c89eae7bbd4a24f38ec61e0bdfa81
               </Animated.Text>
             }
         </Animated.View>
@@ -353,15 +348,9 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
             <Text style={{ fontSize: 15 * fontFactor }}>
                 {t("sendOnChain.title")}{"\n\n"}
               <Text style={{ fontSize: 13 * fontFactor }}>
-<<<<<<< HEAD
-                To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
-                A channel will automatically be opened for you.{"\n\n"}
-                Send at least {formatBitcoin(Long.fromValue(22000), bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
-=======
                 {t("sendOnChain.msg1")}{"\n\n"}
                 {t("sendOnChain.msg2")}{"\n\n"}
                 {t("sendOnChain.msg3")} {formatBitcoin(Long.fromValue(22000), bitcoinUnit)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
->>>>>>> a5b03733573c89eae7bbd4a24f38ec61e0bdfa81
               </Text>
             </Text>
           </View>

@@ -228,22 +228,6 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
               {transaction.website && <MetaData title={t("website")} data={transaction.website} url={"https://" + transaction.website} />}
               {transaction.type !== "NORMAL" && <MetaData title={t("type")} data={transaction.type} />}
               {(transaction.type === "LNURL" && transaction.lnurlPayResponse && transaction.lnurlPayResponse.successAction) && <LNURLMetaData transaction={transaction} />}
-<<<<<<< HEAD
-              {(transaction.nodeAliasCached && name === null) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
-              {direction === "send" && transaction.lightningAddress && <MetaDataLightningAddress title="Lightning Address" data={transaction.lightningAddress} />}
-              {direction === "receive" && !transaction.tlvRecordName && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
-              {direction === "receive" && transaction.tlvRecordName && <MetaData title="Payer" data={transaction.tlvRecordName} />}
-              {(direction === "send" && name) && <MetaData title="Recipient" data={name} />}
-              {(description !== null && description.length > 0) && <MetaData title="Description" data={description} />}
-              <MetaData title="Amount" data={formatBitcoin(transactionValue, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} />
-              {transaction.valueFiat != null && transaction.valueFiatCurrency && <MetaData title="Amount in Fiat (Time of Payment)" data={`${transaction.valueFiat.toFixed(2)} ${transaction.valueFiatCurrency}`} />}
-              {transaction.fee !== null && transaction.fee !== undefined && <MetaData title="Fee" data={transaction.fee.toString() + " Satoshi"} />}
-              {transaction.hops && transaction.hops.length > 0 && <MetaData title="Number of hops" data={transaction.hops.length.toString()} />}
-              {direction === "send" && <MetaData title="Remote pubkey" data={transaction.remotePubkey} />}
-              <MetaData title="Payment hash" data={transaction.rHash}/>
-              {transaction.status === "SETTLED" && transaction.preimage && <MetaData title="Preimage" data={bytesToHexString(transaction.preimage)}/>}
-              <MetaData title="Status" data={capitalize(transaction.status)} />
-=======
               {(transaction.nodeAliasCached && name === null) && <MetaData title={t("generic.nodeAlias", { ns: namespaces.common })} data={transaction.nodeAliasCached} />}
               {direction === "send" && transaction.lightningAddress && <MetaDataLightningAddress title={t("generic.lightningAddress", { ns: namespaces.common })} data={transaction.lightningAddress} />}
               {direction === "receive" && !transaction.tlvRecordName && transaction.payer && <MetaData title={t("payer")} data={transaction.payer} />}
@@ -258,7 +242,6 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
               <MetaData title={t("paymentHash")} data={transaction.rHash}/>
               {transaction.status === "SETTLED" && transaction.preimage && <MetaData title={t("preimage")} data={bytesToHexString(transaction.preimage)}/>}
               <MetaData title={t("status")} data={capitalize(transaction.status)} />
->>>>>>> a5b03733573c89eae7bbd4a24f38ec61e0bdfa81
               {transaction.status === "OPEN" && transaction.type !== "LNURL" &&
                 <>
                   <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
