@@ -1,0 +1,32 @@
+{
+  "name": {
+    "title": "Name",
+    "msg": "wird für Transaktionen verwendet",
+    "alert": {
+      "title": "Name",
+      "msg1": "Wähle einen Namen für Transaktionen",
+      "msg2": "Dein Name wird in Invoices (Rechnungen) für Zahlungssender und -empfänger angezeigt",
+      "msg3": "Name eingeben",
+      "msg4": "Name eingeben"
+    }
+  },
+  "pincode": {
+    "title": "Einloggen mit PIN-Code",
+    "msg": "Einloggen mit"
+  },
+  "fiatUnit": {
+    "title": "Fiat-Währung",
+    "dialog": {
+      "title": "Ändere die Fiat-Einheit"
+    }
+  },
+  "autopilot": {
+    "title": "Automatisches Öffnen von Kanälen",
+    "msg": "Öffne Kanäle automatisch, sobald On-Chain-Guthaben zur Verfügung stehen"
+  },
+  "done": {
+    "title": "Fast fertig!",
+    "msg1": "Hier sind einige weitere Wallet-Einstellungen",
+    "msg2": "Wenn fertig, klicke Fortfahren"
+  }
+}

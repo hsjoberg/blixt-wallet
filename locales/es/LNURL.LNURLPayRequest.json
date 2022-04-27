@@ -1,0 +1,91 @@
+{
+  "viewMetadata": {
+    "title": "Ver metadatos",
+    "dialog": {
+      "title": "Metadatos técnicos"
+    }
+  },
+  "lightningAddress": {
+    "alreadyExists": {
+      "msg": "{{lightningAddress}} está en tu lista de contactos"
+    },
+    "add": {
+      "title": "Añadir a tu lista de contactos",
+      "msg": "¿Te gustaría añadir {{lightningAddress}} a tu lista de contactos?"
+    }
+  },
+  "payContact": {
+    "alreadyExists": {
+      "msg": "Código de pago a {{domain}} está en tu lista de contactos"
+    },
+    "add": {
+      "title": "Añadir a tu lista de contactos",
+      "msg": "¿Te gustaría añadir este código de pago a {{domain}} tu lista de contactos?"
+    }
+  },
+  "unableToPay": "Pago denegado",
+  "payerData": {
+    "commentAllowed": "Comentario a  {{target}} (max {{letters}} letters)",
+    "sendNameWithComment": "Envia mi nombre junto con este comentario",
+    "name": {
+      "ask": "Envía mi nombre junto con este pago",
+      "mandatory": "Tu nombre tiene que ser enviado junto con este pago"
+    }
+  },
+  "payloadErrors": {
+    "missingDescription": "Falta una descripción"
+  },
+  "pay": {
+    "title": "Pagar",
+    "error": {
+      "mustProvideComment": "Debe proporcionar un comentario si elige incluir su nombre a este pago"
+    }
+  },
+  "cancel": {
+    "title": "Cancelar"
+  },
+  "form": {
+    "asksYouToPay": "le pide que pague",
+    "description": {
+      "title": "Descripción"
+    },
+    "amount": {
+      "title": "Cantidad",
+      "to": "a",
+      "placeholder": "Ingrese la cantidad"
+    },
+    "alert": "No se puede pagar"
+  },
+  "done": {
+    "message": {
+      "title": "Mensaje de"
+    },
+    "url": {
+      "description": "Descripción",
+      "domain": "URL recibida de",
+      "done": {
+        "title": "Hecho"
+      },
+      "copy": {
+        "title": "Copiar al portapapeles",
+        "msg": "Copiado al portapapeles"
+      },
+      "open": {
+        "title": "Abre Explorador"
+      }
+    },
+    "aes": {
+      "domain": "Obtuve un mensaje secreto cifrado de",
+      "description": "Mensaje de",
+      "secret": "Mensaje secreto"
+    }
+  },
+  "aboutLightningAddress": {
+    "title": "Sobre la dirección Lightning",
+    "msg1": "Dirección Lightning",
+    "msg2": "Es una forma de pagar a una persona o un servicio en la Lightning Network.",
+    "msg3": "Se ven como direcciones de email, pero en vez de enviar un email al receptor, le envias dinero.",
+    "msg4": "Blixt Wallet tiene todo tipo de soporte para enviar a una dirección Lightning, pero recibiendo",
+    "msg5": "via una dirección Lightning está siendo trabajada."
+  }
+}

@@ -268,6 +268,8 @@ exports[`renders correctly 1`] = `
               <View
                 collapsable={false}
                 forwardedRef={[Function]}
+                handlerTag={1}
+                handlerType="PanGestureHandler"
                 needsOffscreenAlphaCompositing={false}
                 onGestureHandlerEvent={[Function]}
                 onGestureHandlerStateChange={[Function]}
@@ -526,7 +528,8 @@ exports[`renders correctly 1`] = `
                                                     
 
 
-                                                    Send at least 
+                                                    Send at least
+                                                     
                                                     0.00022 ₿
                                                      (
                                                     0.00 USD

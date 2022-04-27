@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar, StyleSheet, Alert } from "react-native";
+import { StatusBar, StyleSheet, Alert, NativeModules } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import { readFile } from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
@@ -15,16 +15,22 @@ import { PLATFORM } from "../../utils/constants";
 import { CommonActions } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+import { toast } from "../../utils";
+
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
 interface IProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Restore">;
 }
 export default function Restore({ navigation }: IProps) {
+  const t = useTranslation(namespaces.welcome.restore).t;
   const [loading, setLoading] = useState(false);
   const [seedText, setSeedText] = useState("");
-  const [backupType, setBackupType] = useState<"file" | "google_drive" | "icloud" | "none">("none");
+  const [backupType, setBackupType] = useState<"file" | "google_drive" | "icloud" | "macos" | "none">("none");
   const [backupFile, setBackupFile] = useState<DocumentPickerResponse | null>(null);
+  const [macosBakBase64, setMacosBakBase64] = useState<string | undefined>();
   const [b64Backup, setB64Backup] = useState<string | null>(null);
   const setWalletSeed = useStoreActions((store) => store.setWalletSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
@@ -43,7 +49,7 @@ export default function Restore({ navigation }: IProps) {
     try {
       const splittedSeed = seedText.split(" ");
       if (splittedSeed.length !== 24) {
-        Alert.alert("Seed must be exactly 24 words");
+        Alert.alert(t("restore.seed"));
         return;
       }
       setLoading(true);
@@ -74,9 +80,10 @@ export default function Restore({ navigation }: IProps) {
           }
           createWalletOpts.restore!.channelsBackup = backupBase64;
         }
-      }
-      else if (backupType === "google_drive" || backupType === "icloud") {
+      } else if (backupType === "google_drive" || backupType === "icloud") {
         createWalletOpts.restore!.channelsBackup = b64Backup!;
+      } else if (backupType === "macos") {
+        createWalletOpts.restore!.channelsBackup = macosBakBase64;
       }
 
       await createWallet(createWalletOpts);
@@ -116,7 +123,7 @@ export default function Restore({ navigation }: IProps) {
       setB64Backup(base64Backup);
       setBackupType("google_drive");
     } catch (e) {
-      Alert.alert(`Restoring via Google Drive failed:\n\n${e.message}`);
+      Alert.alert(`${t("restore.channel.google.alert")}:\n\n${e.message}`);
     }
   };
 
@@ -127,20 +134,29 @@ export default function Restore({ navigation }: IProps) {
       setB64Backup(base64Backup);
       setBackupType("icloud");
     } catch (e) {
-      Alert.alert(`Restoring via iClouod failed:\n\n${e.message}`);
+      Alert.alert(`${t("restore.channel.iCloud.alert")}:\n\n${e.message}`);
     }
   };
 
   const pickChannelsExportFile = async () => {
     try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
-      });
-      console.log(res);
-      setBackupFile(res);
-      setBackupType("file");
+      if (PLATFORM !== "macos") {
+        const res = await DocumentPicker.pickSingle({
+          type: [DocumentPicker.types.allFiles],
+        });
+        console.log(res);
+        setBackupFile(res);
+        setBackupType("file");
+      } else {
+        const b = await NativeModules.LndMobileTools.macosOpenFileDialog();
+        console.log(b);
+        setMacosBakBase64(b);
+        setBackupType("macos");
+      }
+
     } catch (e) {
       console.log(e);
+      toast(e.message, undefined, "danger", "Okay");
     }
   }
 
@@ -174,25 +190,25 @@ export default function Restore({ navigation }: IProps) {
               blurOnSubmit={true}
             />
             <View style={{ marginTop: 14, width: "100%", display: "flex" }}>
-              <H3>Channel backup</H3>
+              <H3>{t("restore.channel.title")}</H3>
               {backupType === "none" &&
                 <View style={{ display: "flex", flexDirection: "column" }}>
                   <Button style={{ marginTop: 6, marginBottom: 10 }} small onPress={pickChannelsExportFile}>
                     <Text>
-                      {backupFile === null && "Choose channel backup file on disk"}
+                      {backupFile === null && t("restore.channel.file")}
                     </Text>
                   </Button>
                   {PLATFORM === "android" &&
                     <Button small onPress={googleDriveBackup}>
                       <Text>
-                        Restore via Google Drive
+                        {t("restore.channel.google.title")}
                       </Text>
                     </Button>
                   }
                   {(PLATFORM === "ios" && iCloudActive) &&
                     <Button small onPress={iCloudBackup}>
                       <Text>
-                        Restore via iCloud
+                        {t("restore.channel.iCloud.title")}
                       </Text>
                     </Button>
                   }
@@ -210,7 +226,7 @@ export default function Restore({ navigation }: IProps) {
               }
               {backupType === "google_drive" &&
                 <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
-                  <Text>Backup via Google Drive</Text>
+                  <Text>{t("backup.google")}</Text>
                   <Button small onPress={undoBackupChoice}>
                     <Text>
                       x
@@ -220,7 +236,7 @@ export default function Restore({ navigation }: IProps) {
               }
               {backupType === "icloud" &&
                 <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
-                  <Text>Backup via iCloud</Text>
+                  <Text>{t("backup.iCloud")}</Text>
                   <Button small onPress={undoBackupChoice}>
                     <Text>
                       x
@@ -231,16 +247,16 @@ export default function Restore({ navigation }: IProps) {
             </View>
           </View>
           <View style={style.text}>
-            <H1 style={style.textHeader}>Restore wallet</H1>
+            <H1 style={style.textHeader}>{t("restore.title")}</H1>
             <Text>
-              To restore your wallet, write each word from your seed separated by a space.{"\n"}{"\n"}
-              If you wish to restore your Lightning Network channels, you need to provide a file backup.
+              {t("restore.msg")}{"\n"}{"\n"}
+              {t("restore.msg1")}
             </Text>
           </View>
         </View>
         <View style={style.buttons}>
           <Button block={true} onPress={onRestorePress} disabled={loading}>
-            {!loading && <Text>Restore Wallet</Text>}
+            {!loading && <Text>{t("restore.title")}</Text>}
             {loading && <Spinner color={blixtTheme.light} />}
           </Button>
         </View>

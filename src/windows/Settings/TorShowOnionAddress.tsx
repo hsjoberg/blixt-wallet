@@ -10,7 +10,11 @@ import CopyAddress from "../../components/CopyAddress";
 import Clipboard from "@react-native-community/clipboard";
 import { toast } from "../../utils";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 export default function TorShowOnionAddress() {
+  const t = useTranslation(namespaces.settings.torShowOnionAddress).t;
   const nodeInfo = useStoreState((store) => store.lightning.nodeInfo);
   const getNodeInfo = useStoreActions((store) => store.lightning.getInfo);
 
@@ -34,7 +38,7 @@ export default function TorShowOnionAddress() {
 
   const onPaymentRequestTextPress = () => {
     Clipboard.setString(onionService ?? "");
-    toast("Copied to clipboard", undefined, "warning");
+    toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
   };
 
   return (
@@ -43,11 +47,11 @@ export default function TorShowOnionAddress() {
         <CardItem>
           <Body>
             <H1>
-              Tor Onion Service
+              {t("title")}
             </H1>
             {onionService &&
               <>
-                <Text>Scan this QR code to open a channel to this wallet.</Text>
+                <Text>{t("msg1")}.</Text>
                 <View style={{ marginTop: 16, width: "100%", alignItems: "center", justifyContent: "center" }}>
                   {onionService &&
                     <QrCode size={smallScreen ? 220 : 280} data={onionService} onPress={onQrPress} border={25} />
@@ -59,7 +63,7 @@ export default function TorShowOnionAddress() {
               </>
             }
             {!onionService &&
-              <Text style={{ marginTop: 16 }}>Couldn't resolve onion address</Text>
+              <Text style={{ marginTop: 16 }}>{t("msg2")}</Text>
             }
           </Body>
         </CardItem>

@@ -21,6 +21,9 @@ import { blixtTheme } from ".././native-base-theme/variables/commonColor";
 import { PLATFORM } from "../utils/constants";
 import { Alert } from "../utils/alert";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n/i18n.constants";
+
 interface IMetaDataProps {
   title: string;
   data: string;
@@ -104,6 +107,7 @@ export interface ITransactionDetailsProps {
   route: any;
 }
 export default function TransactionDetails({ route, navigation }: ITransactionDetailsProps) {
+  const t = useTranslation(namespaces.transactionDetails).t;
   const rHash: string = route.params.rHash;
   const transaction = useStoreState((store) => store.transaction.getTransactionByRHash(rHash));
   const checkOpenTransactions = useStoreActions((store) => store.transaction.checkOpenTransactions);
@@ -130,7 +134,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
 
   const onPaymentRequestTextPress = () => {
     Clipboard.setString(transaction.paymentRequest);
-    toast("Copied to clipboard", undefined, "warning");
+    toast(t("msg.clipboardCopy", { ns: namespaces.common }), undefined, "warning");
   };
 
   const onPressCancelInvoice = async () => {
@@ -149,7 +153,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
 
   const onPressSetNote = async () => {
     if (PLATFORM === "android") {
-      const result = await DialogAndroid.prompt(null, "Set a note for this transaction", {
+      const result = await DialogAndroid.prompt(null, t("setNoteDialog.text"), {
         defaultValue: transaction.note,
       });
       if (result.action === DialogAndroid.actionPositive) {
@@ -160,8 +164,8 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
       }
     } else {
       Alert.prompt(
-        "Note",
-        "Set a note for this transaction",
+        t("setNoteDialog.title"),
+        t("setNoteDialog.text"),
         async (text) => {
           await syncTransaction({
             ...transaction,
@@ -195,16 +199,16 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
             <ScrollView alwaysBounceVertical={false}>
               <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
                 <H1 style={style.header}>
-                  Transaction
+                  {t("title")}
                 </H1>
               </View>
               <View style={{ flexDirection: "row", marginTop: 5, marginBottom: 10 }}>
                 <Button small style={style.actionBarButton} onPress={onPressSetNote}>
-                  <Text>Set note</Text>
+                  <Text>{t("button.setNote")}</Text>
                 </Button>
                 {transaction.status === "OPEN" &&
                   <Button small danger onPress={onPressCancelInvoice} style={style.actionBarButton}>
-                    <Text>Cancel invoice</Text>
+                    <Text>{t("button.cancelInvoice")}</Text>
                   </Button>
                 }
                 {hasCoordinates &&
@@ -215,15 +219,16 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                       setMapActive(true);
                     }, 850);
                   }} style={style.actionBarButton}>
-                    <Text>Show map</Text>
+                    <Text>{t("button.showMap")}</Text>
                   </Button>
                 }
               </View>
-              <MetaData title="Date" data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
-              {transaction.note && <MetaData title="Note" data={transaction.note} />}
-              {transaction.website && <MetaData title="Website" data={transaction.website} url={"https://" + transaction.website} />}
-              {transaction.type !== "NORMAL" && <MetaData title="Type" data={transaction.type} />}
+              <MetaData title={t("date")} data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
+              {transaction.note && <MetaData title={t("note")} data={transaction.note} />}
+              {transaction.website && <MetaData title={t("website")} data={transaction.website} url={"https://" + transaction.website} />}
+              {transaction.type !== "NORMAL" && <MetaData title={t("type")} data={transaction.type} />}
               {(transaction.type === "LNURL" && transaction.lnurlPayResponse && transaction.lnurlPayResponse.successAction) && <LNURLMetaData transaction={transaction} />}
+<<<<<<< HEAD
               {(transaction.nodeAliasCached && name === null) && <MetaData title="Node alias" data={transaction.nodeAliasCached} />}
               {direction === "send" && transaction.lightningAddress && <MetaDataLightningAddress title="Lightning Address" data={transaction.lightningAddress} />}
               {direction === "receive" && !transaction.tlvRecordName && transaction.payer && <MetaData title="Payer" data={transaction.payer} />}
@@ -238,6 +243,22 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
               <MetaData title="Payment hash" data={transaction.rHash}/>
               {transaction.status === "SETTLED" && transaction.preimage && <MetaData title="Preimage" data={bytesToHexString(transaction.preimage)}/>}
               <MetaData title="Status" data={capitalize(transaction.status)} />
+=======
+              {(transaction.nodeAliasCached && name === null) && <MetaData title={t("generic.nodeAlias", { ns: namespaces.common })} data={transaction.nodeAliasCached} />}
+              {direction === "send" && transaction.lightningAddress && <MetaDataLightningAddress title={t("generic.lightningAddress", { ns: namespaces.common })} data={transaction.lightningAddress} />}
+              {direction === "receive" && !transaction.tlvRecordName && transaction.payer && <MetaData title={t("payer")} data={transaction.payer} />}
+              {direction === "receive" && transaction.tlvRecordName && <MetaData title={t("payer")} data={transaction.tlvRecordName} />}
+              {(direction === "send" && name) && <MetaData title={t("recipient")} data={name} />}
+              {(description !== null && description.length > 0) && <MetaData title={t("generic.description", { ns: namespaces.common })} data={description} />}
+              <MetaData title={t("generic.amount", { ns: namespaces.common })} data={formatBitcoin(transactionValue, bitcoinUnit)} />
+              {transaction.valueFiat != null && transaction.valueFiatCurrency && <MetaData title={t("amountInFiatTimeOfPayment")} data={`${transaction.valueFiat.toFixed(2)} ${transaction.valueFiatCurrency}`} />}
+              {transaction.fee !== null && transaction.fee !== undefined && <MetaData title={t("generic.fee", { ns: namespaces.common })} data={transaction.fee.toString() + " Satoshi"} />}
+              {transaction.hops && transaction.hops.length > 0 && <MetaData title={t("numberOfHops")} data={transaction.hops.length.toString()} />}
+              {direction === "send" && <MetaData title={t("remotePubkey")} data={transaction.remotePubkey} />}
+              <MetaData title={t("paymentHash")} data={transaction.rHash}/>
+              {transaction.status === "SETTLED" && transaction.preimage && <MetaData title={t("preimage")} data={bytesToHexString(transaction.preimage)}/>}
+              <MetaData title={t("status")} data={capitalize(transaction.status)} />
+>>>>>>> a5b03733573c89eae7bbd4a24f38ec61e0bdfa81
               {transaction.status === "OPEN" && transaction.type !== "LNURL" &&
                 <>
                   <View style={{ width: "100%", alignItems: "center", justifyContent: "center" }}>
@@ -260,14 +281,14 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
             <ScrollView alwaysBounceVertical={false}>
               <View style={{ marginBottom: 8, display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center",  width: "100%" }}>
                 <H1 style={style.header}>
-                  Transaction
+                  {t("title")}
                 </H1>
                 <Button small={true} onPress={() => {
                   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
                   setCurrentScreen("Overview");
                   setMapActive(false);
                 }}>
-                  <Text style={{ fontSize: 9 }}>Go back</Text>
+                  <Text style={{ fontSize: 9 }}>{t("goBack")}</Text>
                 </Button>
               </View>
               <MapView
@@ -304,6 +325,7 @@ interface IWebLNMetaDataProps {
   transaction: ITransaction;
 }
 function LNURLMetaData({ transaction }: IWebLNMetaDataProps) {
+  const t = useTranslation(namespaces.transactionDetails).t;
   let secretMessage: string | null = null;
 
   if (transaction.lnurlPayResponse?.successAction?.tag === "aes") {
@@ -317,18 +339,18 @@ function LNURLMetaData({ transaction }: IWebLNMetaDataProps) {
   return (
     <>
       {transaction.lnurlPayResponse?.successAction?.tag === "message" &&
-        <MetaData title={`Message from ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.message} />
+        <MetaData title={`${t("messageFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.message} />
       }
       {transaction.lnurlPayResponse?.successAction?.tag === "url" &&
         <>
-          <MetaData title={`Messsage from ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.description} />
-          <MetaData title={`URL received from ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.url} url={transaction.lnurlPayResponse.successAction.url} />
+          <MetaData title={`${t("messageFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.description} />
+          <MetaData title={`${t("urlReceivedFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.url} url={transaction.lnurlPayResponse.successAction.url} />
         </>
       }
       {transaction.lnurlPayResponse?.successAction?.tag === "aes" &&
         <>
-          <MetaData title={`Messsage from ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.description} />
-          <MetaData title="Secret Message" data={secretMessage!} />
+          <MetaData title={`${t("messageFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.description} />
+          <MetaData title={`${t("secretMessage")}`} data={secretMessage!} />
         </>
       }
     </>

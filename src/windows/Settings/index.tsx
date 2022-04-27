@@ -31,6 +31,7 @@ export type SettingsStackParamList = {
   LndMobileHelpCenter: undefined;
   ChangeBitcoinUnit: ISelectListNavigationProps<string>;
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
+  ChangeLanguage: ISelectListNavigationProps<string>;
   ChangeOnchainExplorer: ISelectListNavigationProps<(keyof typeof OnchainExplorer) | string>;
   LightningPeers: undefined;
   ConnectToLighningPeer: undefined;
@@ -57,6 +58,7 @@ export default function SettingsIndex() {
       <Stack.Screen name="LndMobileHelpCenter" component={LndMobileHelpCenter} />
       <Stack.Screen name="ChangeFiatUnit" component={SelectList} />
       <Stack.Screen name="ChangeBitcoinUnit" component={SelectList} />
+      <Stack.Screen name="ChangeLanguage" component={SelectList} />
       <Stack.Screen name="ChangeOnchainExplorer" component={SelectList} />
       <Stack.Screen name="LightningPeers" component={LightningPeers} />
       <Stack.Screen name="ConnectToLightningPeer" component={ConnectToLightningPeer} options={{

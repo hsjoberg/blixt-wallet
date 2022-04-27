@@ -1,0 +1,19 @@
+{
+  "recoverInfo": {
+    "msg1": "Wallet-Wiederherstellung in Arbeit.",
+    "msg2": "Wallet-Wiederherstellung beendet.",
+    "more": "Mehr Info"
+  },
+  "sendOnChain": {
+    "title": "Willkommen bei Blixt Wallet!",
+    "msg1": "Um zu starten, sende On-Chain Guthaben an die Bitcoin-Adresse.",
+    "msg2": "Ein Lightning-Kanal wird automatisch für Dich erstellt.",
+    "msg3": "Sende mindestens",
+    "alert": "Bitcoin-Adresse in die Zwischenablage kopiert"
+  },
+  "doBackup": {
+    "msg1": "Danke, dass Du Blixt Wallet verwendest!",
+    "msg2": "Wir empfehlen, ein Wallet-Backup zu erstellen, um im Falle eines Geräteverlusts das Guthaben wiederherstellen zu können",
+    "backup": "Wallet-Backup"
+  }
+}

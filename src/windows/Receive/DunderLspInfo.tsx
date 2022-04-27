@@ -5,33 +5,34 @@ import { Body, Card, Text, CardItem, H1 } from "native-base";
 import Blurmodal from "../../components/BlurModal";
 import TextLink from "../../components/TextLink";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 export interface IDunderLspInfoProps {
   navigation: any;
 }
 export default function DunderLspInfo({ route }: any) {
+  const t = useTranslation(namespaces.receive.dunderLspInfo).t;
   return (
     <Blurmodal>
       <Card style={style.card}>
         <CardItem>
           <Body>
             <H1 style={style.header}>
-              About Dunder LSP
+              {t("title")}
             </H1>
             <Text style={{ marginBottom: 16 }}>
-              Dunder is a Lightning Service Provider (LSP) that automatically opens channels for you
-              when you don't have enough inbound liquidity.
+              {t("msg")}
             </Text>
             <Text style={{ marginBottom: 16 }}>
-              This could for example be the case when you first start using Blixt Wallet.
+              {t("msg1")}
             </Text>
             <Text style={{ marginBottom: 16 }}>
-              As this requires an on-chain transaction, a Bitcoin transaction fee will be deducted from the
-              incoming payment. Future payments will be able to use the newly opened payment channel
-              with the Lightning network.
+              {t("msg2")}
             </Text>
             <Text style={{ marginBottom: 16 }}>
-              Dunder is <TextLink url="https://github.com/hsjoberg/dunder-lsp">open-source</TextLink>
-              {" "}software and you may change the default service provider in Settings.
+              {t("msg3")} <TextLink url="https://github.com/hsjoberg/dunder-lsp">{t("msg4")}</TextLink>
+              {" "}{t("msg5")}
             </Text>
           </Body>
         </CardItem>

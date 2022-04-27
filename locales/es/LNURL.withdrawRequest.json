@@ -1,0 +1,22 @@
+{
+  "doRequest": {
+    "sentRequest": "Enviar solicitud de retiro a {{domain}}",
+    "addToContactList": {
+      "title": "Añadir a tu lista de contactos",
+      "msg": "Te gustaría añadir este código de retiro a {{domain}} tu lista de contacto?",
+      "note": "Cuenta en  {{domain}}"
+    }
+  },
+  "layout": {
+    "title": "Solicitud de retiro",
+    "msg": "Mensaje de",
+    "dialog": {
+      "msg": "Cantidad"
+    },
+    "dialog1": {
+      "minSat": "Mínima cantidad de retiro ",
+      "maxSat": "Máxima cantidad de retiro",
+      "placeholder": "Cantidad"
+    }
+  }
+}

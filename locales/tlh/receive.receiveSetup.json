@@ -1,0 +1,41 @@
+{
+  "layout": {
+    "title": "Hev"
+  },
+  "createInvoice": {
+    "title": "daqchenmoH",
+    "error": "vaj yIyajchoHlaH pagh",
+    "alert": "bIjontaHvIS, choparHa'qu' 'e' DaSovchu'.",
+    "lsp": {
+      "msg": "'ach hegh Qorghqu' ponglu'bogh quvHa'moHlu'chugh.",
+      "msg1": "nuq 'oH Dochvam'e'?"
+    }
+  },
+  "createBlixtLspInvoice": {
+    "title": "valwI'",
+    "msg": "'eldI' tlhoS Hoch, veSDujmey potlhqu' QoraQ tuq.",
+    "msg1": "chenpu'DI' noyqangwI''e' lutu'lu'be'",
+    "alert": "tamtaHvIS HIq vIDelchu' 'e' vIHar.",
+    "proceed": "Ruch"
+  },
+  "form": {
+    "amountFiat": {
+      "title": "'antu'",
+      "change": "qaSbe'",
+      "dunderPlaceholder": "'ay' cha'"
+    },
+    "amountBitcoin": {
+      "title": "'antu'",
+      "change": "Sey'choH",
+      "dunderPlaceholder": "'ay' cha'"
+    },
+    "payer": {
+      "title": "puq",
+      "placeholder": "pagh"
+    },
+    "description": {
+      "title": "QIn",
+      "placeholder": "puqbe'wI'"
+    }
+  }
+}

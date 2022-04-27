@@ -1,4 +1,3 @@
-import ReactNativePermissions from "react-native-permissions";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as Bech32 from "bech32";
 import Long from "long";
@@ -13,6 +12,11 @@ import { getGeolocation, hexToUint8Array } from "../utils";
 import { ILNUrlPayResponse } from "./LNURL";
 import { identifyService } from "../utils/lightning-services";
 import { PLATFORM } from "../utils/constants";
+
+let ReactNativePermissions: any;
+if (PLATFORM !== "macos") {
+  ReactNativePermissions = require("react-native-permissions");
+}
 
 import logger from "./../utils/log";
 const log = logger("Send");

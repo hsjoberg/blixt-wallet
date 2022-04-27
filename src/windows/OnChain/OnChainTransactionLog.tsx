@@ -8,10 +8,14 @@ import OnChainTransactionItem from "../../components/OnChainTransactionItem";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { NavigationButton } from "../../components/NavigationButton";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 export interface IOnChainTransactionLogProps {
   navigation: StackNavigationProp<OnChainStackParamList, "OnChainTransactionLog">;
 }
 export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProps) => {
+  const t = useTranslation(namespaces.onchain.onChainTransactionLog).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const transactions = useStoreState((store) => store.onChain.transactions);
   const getTransactions = useStoreActions((store) => store.onChain.getTransactions);
@@ -27,7 +31,7 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Transaction Log",
+      headerTitle: t("layout.title"),
       headerShown: true,
       headerRight: () => {
         return (

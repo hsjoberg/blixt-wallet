@@ -1,0 +1,22 @@
+{
+  "layout": {
+    "title": "Pagar factura"
+  },
+  "form": {
+    "invoice": {
+      "title": "Factura"
+    },
+    "amount": {
+      "title": "Cantidad"
+    },
+    "recipient": {
+      "title": "Receptor"
+    },
+    "nodeAlias": {
+      "title": "Alias del nodo"
+    },
+    "description": {
+      "title": "Mensaje"
+    }
+  }
+}

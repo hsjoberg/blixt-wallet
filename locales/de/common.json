@@ -1,0 +1,36 @@
+{
+  "generic": {
+    "lightningAddress": "Lightning-Adresse",
+    "nodeAlias": "Node-Alias",
+    "description": "Beschreibung",
+    "amount": "Betrag",
+    "fee": "Gebühr"
+  },
+  "buttons": {
+    "ok": "Ok",
+    "cancel": "Abbrechen",
+    "continue": "Weiter",
+    "skip": "Überspringen",
+    "proceed": "Fortfahren",
+    "back": "Zurück",
+    "no": "Nein",
+    "yes": "Ja",
+    "save": "Speichern",
+    "copy": "Kopieren"
+  },
+  "msg": {
+    "status": "Status",
+    "error": "Fehler",
+    "warning": "Warnung",
+    "result": "Ergebnis",
+    "pending": "ausstehend",
+    "done": "beendet",
+    "dismiss": "abbrechen",
+    "lastSync": "Letzte Synchronisation",
+    "lastSyncAttempt": "Letzter Synchronisationsversuch",
+    "clipboardCopy": "In die Zwischenablage kopiert.",
+    "written": "geschrieben",
+    "enabled": "aktiviert",
+    "disabled": "deaktiviert"
+  }
+}

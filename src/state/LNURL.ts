@@ -170,9 +170,6 @@ export type IDoPayRequestResponse = ILNUrlPayResponse;
 
 type LNUrlRequest = ILNUrlChannelRequest | ILNUrlAuthRequest | ILNUrlWithdrawRequest | ILNUrlPayRequest | ILNUrlDummy;
 
-const LNURLAUTH_CANONICAL_PHRASE = "DO NOT EVER SIGN THIS TEXT WITH YOUR PRIVATE KEYS! IT IS ONLY USED FOR DERIVATION OF LNURL-AUTH HASHING-KEY, DISCLOSING ITS SIGNATURE WILL COMPROMISE YOUR LNURL-AUTH IDENTITY AND MAY LEAD TO LOSS OF FUNDS!";
-
-
 export interface ILNUrlModel {
   setLNUrl: Thunk<ILNUrlModel, { bech32data?: string; url?: string }, any, IStoreModel, Promise<LNURLType>>;
 
@@ -327,6 +324,7 @@ export const lnUrl: ILNUrlModel = {
       }
 
       // 1. The following canonical phrase is defined: [...].
+      const LNURLAUTH_CANONICAL_PHRASE = "DO NOT EVER SIGN THIS TEXT WITH YOUR PRIVATE KEYS! IT IS ONLY USED FOR DERIVATION OF LNURL-AUTH HASHING-KEY, DISCLOSING ITS SIGNATURE WILL COMPROMISE YOUR LNURL-AUTH IDENTITY AND MAY LEAD TO LOSS OF FUNDS!";
       // 2. LN WALLET obtains an RFC6979 deterministic signature of sha256(utf8ToBytes(canonical phrase)) using secp256k1 with node private key.
       const signature = await injections.lndMobile.wallet.signMessageNodePubkey(stringToUint8Array(LNURLAUTH_CANONICAL_PHRASE));
       // 3. LN WALLET defines hashingKey as PrivateKey(sha256(obtained signature)).

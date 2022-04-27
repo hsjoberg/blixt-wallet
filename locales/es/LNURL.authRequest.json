@@ -1,0 +1,7 @@
+{
+  "layout": {
+    "title": "Solicitud inicio sesión",
+    "msg": "Quieres iniciar sesión en",
+    "success": "Autenticado a"
+  }
+}

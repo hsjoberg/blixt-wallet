@@ -1,7 +1,6 @@
 import React, { ReactNode, useState, useEffect } from "react";
-import { StyleProp, ViewStyle, InteractionManager } from "react-native";
-import { Camera } from "expo-camera";
-import { BarCodeScanner } from "expo-barcode-scanner";
+import { StyleProp, ViewStyle, InteractionManager, View } from "react-native";
+import { QrReader } from "react-qr-reader";
 import Container from "./Container";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 
@@ -32,23 +31,22 @@ export default function CameraComponent({ cameraType, children, onNotAuthorized,
   }
 
   return (
-    <Camera
-      style={[{ width: "100%", height: "100%", backgroundColor: blixtTheme.dark }, style]}
-      barCodeScannerSettings={{
-        barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
-      }}
-      onBarCodeScanned={(e) => {
-        if (onRead) {
-          onRead(e.data)
-        }
-      }}
-      type={
-        cameraType === Camera.Constants.Type.back
-          ? Camera.Constants.Type.back
-          : Camera.Constants.Type.front
-      }
-    >
+    <View style={[{ width: "100%", height: "100%", backgroundColor: blixtTheme.dark }, style]}>
+      <QrReader
+        onResult={(result, error) => {
+          if (!!result) {
+            onRead?.(result?.text);
+          }
+
+          if (!!error) {
+            console.info(error);
+          }
+        }}
+        // style={{ width: "100%", height: "100%", backgroundColor: blixtTheme.dark }}
+        constraints={{}}
+        videoContainerStyle={{ position: undefined }}
+      />
       {children ?? <></>}
-    </Camera>
+    </View>
   );
 }

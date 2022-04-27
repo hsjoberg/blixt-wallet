@@ -240,6 +240,18 @@ export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
   return response;
 };
 
+/**
+ * @throws
+ */
+ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> => {
+  const response = lnrpc.GetRecoveryInfoResponse.create({
+    progress: 1,
+    recoveryFinished: false,
+    recoveryMode: false,
+  })
+  return response;
+};
+
 // export type IReadLndLogResponse = string[];
 //
 // export const readLndLog = async (): Promise<IReadLndLogResponse> => {

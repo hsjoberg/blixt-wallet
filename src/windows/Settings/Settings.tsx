@@ -3,7 +3,6 @@ import { StyleSheet, NativeModules, PermissionsAndroid, Linking, Platform } from
 import Clipboard from "@react-native-community/clipboard";
 import DocumentPicker from "react-native-document-picker";
 import { readFile } from "react-native-fs";
-import ReactNativePermissions from 'react-native-permissions';
 import { CheckBox, Body, Container, Icon, Text, Left, List, ListItem, Right } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { fromUnixTime } from "date-fns";
@@ -23,20 +22,31 @@ import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_NEUTRINO_NODE, P
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
-import { Chain } from "../../utils/build";
 import { getNodeInfo } from "../../lndmobile";
+
+import { useTranslation } from "react-i18next";
+import { languages, namespaces } from "../../i18n/i18n.constants";
+
+let ReactNativePermissions: any;
+if (PLATFORM !== "macos") {
+  ReactNativePermissions = require("react-native-permissions");
+}
 
 interface ISettingsProps {
   navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
 }
 export default function Settings({ navigation }: ISettingsProps) {
+  const currentLanguage = useStoreState((store) => store.settings.language);
+  const { t, i18n } = useTranslation(namespaces.settings.settings);
+  const lndChainBackend = useStoreState((store) => store.settings.lndChainBackend);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "Settings",
+      headerTitle: t("title"),
       headerBackTitle: "Back",
       headerShown: true,
     });
-  }, [navigation]);
+  }, [navigation, currentLanguage]);
 
   const onboardingState = useStoreState((store) => store.onboardingState);
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
@@ -63,23 +73,23 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onGetSeedPress = async () => {
     const seed = await getSeed()
     if (seed) {
-      Alert.alert("Seed", seed.join(" "), [{
-        text: "Copy seed",
+      Alert.alert(t("wallet.seed.show.dialog.title"), seed.join(" "), [{
+        text: t("wallet.seed.show.dialog.copy"),
         onPress: async () => {
           Clipboard.setString(seed.join(" "));
-          toast("Copied to clipboard", undefined, "warning");
+          toast(t("wallet.seed.show.dialog.alert"), undefined, "warning");
         }
       }, {
-        text: "OK",
+        text: t("buttons.ok",{ns:namespaces.common}),
       }]);
     }
   }
 
   const onRemoveSeedPress = async () => {
-    Alert.alert("Remove seed", "This will permanently remove the seed from this device. Only do this if you have backed up your seed!", [{
-      text: "Cancel",
+    Alert.alert(t("wallet.seed.remove.dialog.title"), t("wallet.seed.remove.dialog..msg"), [{
+      text: t("buttons.cancel",{ns:namespaces.common}),
     }, {
-      text: "Delete seed",
+      text: t("wallet.seed.remove.dialog.accept"),
       onPress: async () => await deleteSeedFromDevice(),
     }]);
   }
@@ -91,7 +101,7 @@ export default function Settings({ navigation }: ISettingsProps) {
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: "Cancel",
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: currentBitcoinUnit,
         items: [
@@ -107,7 +117,7 @@ export default function Settings({ navigation }: ISettingsProps) {
       }
     } else {
       navigation.navigate("ChangeBitcoinUnit", {
-        title: "Change bitcoin unit",
+        title: t("display.bitcoinUnit.title"),
         data: [
           { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
           { title: BitcoinUnits.bit.settings, value: "bit" },
@@ -128,7 +138,7 @@ export default function Settings({ navigation }: ISettingsProps) {
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: "Cancel",
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: currentFiatUnit,
         items: Object.entries(fiatRates).map(([currency]) => {
@@ -142,7 +152,7 @@ export default function Settings({ navigation }: ISettingsProps) {
       }
     } else {
       navigation.navigate("ChangeFiatUnit", {
-        title: "Change fiat unit",
+        title: t("display.fiatUnit.title"),
         data: Object.entries(fiatRates).map(([currency]) => ({
           title: currency,
           value: currency as keyof IFiatRates,
@@ -158,16 +168,14 @@ export default function Settings({ navigation }: ISettingsProps) {
   const changeName = useStoreActions((store) => store.settings.changeName);
   const onNamePress = async () => {
     Alert.prompt(
-      "Name",
-      "Choose a name that will be used in transactions\n\n" +
-      "Your name will be seen in invoices to those who pay you as well as " +
-      "people you pay to.",
+      t("general.name.title"),
+      t("general.name.dialog.msg"),
       [{
-        text: "Cancel",
+        text: t("buttons.cancel",{ns:namespaces.common}),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: "Set name",
+        text: t("general.name.dialog.accept"),
         onPress: async (text) => {
           await changeName(text ?? null);
         },
@@ -175,6 +183,36 @@ export default function Settings({ navigation }: ISettingsProps) {
       "plain-text",
       name ?? "",
     );
+  };
+
+  // Language
+  const changeLanguage = useStoreActions((store) => store.settings.changeLanguage);
+
+  const onLangPress = async () => {
+    if (PLATFORM === "android") {
+      const { selectedItem } = await DialogAndroid.showPicker(null, null, {
+        positiveText: null,
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
+        type: DialogAndroid.listRadio,
+        selectedId: currentLanguage,
+        items: Object.keys(languages).map((key)=>{
+          return {label:languages[key].name,id:languages[key].id}
+        })
+      });
+      if (selectedItem) {
+        await changeLanguage(selectedItem.id);
+      }
+    } else {
+      navigation.navigate("ChangeLanguage", {
+        title: t("general.lang.dialog.title"),
+        data: Object.keys(languages).map((key)=>{
+          return { title: languages[key].name, value: languages[key].id }
+        }),
+        onPick: async (lang) => {
+          await changeLanguage(lang);
+        },
+      });
+    }
   };
 
   // Autopilot
@@ -212,10 +250,10 @@ export default function Settings({ navigation }: ISettingsProps) {
   const copyAppLog = async () => {
     try {
       const path = await NativeModules.LndMobileTools.saveLogs();
-      toast("Copied app log file to: " + path, 20000, "warning");
+      toast(`${t("miscelaneous.appLog.dialog.alert")}: `+ path, 20000, "warning");
     } catch (e) {
       console.error(e);
-      toast("Error copying app log file.", undefined, "danger");
+      toast(t("miscelaneous.appLog.dialog.error"), undefined, "danger");
     }
   };
 
@@ -225,7 +263,7 @@ export default function Settings({ navigation }: ISettingsProps) {
       await NativeModules.LndMobileTools.copyLndLog();
     } catch (e) {
       console.error(e);
-      toast("Error copying lnd log file.", undefined, "danger");
+      toast(t("miscelaneous.lndLog.dialog.error"), undefined, "danger");
     }
   };
 
@@ -267,18 +305,17 @@ export default function Settings({ navigation }: ISettingsProps) {
   const setSyncEnabled = useStoreActions((store) => store.scheduledSync.setSyncEnabled);
   const onToggleScheduledSyncEnabled = async () => {
     if (scheduledSyncEnabled)
-    Alert.alert("Not recommended", "Warning. It is not recommended to disable scheduled chain sync.\n\n" +
-    "Make sure you keep up-to-date with the network otherwise you risk losing your funds.\n\n" +
-    "Only do this if you're know what you're doing.",
-    [{
-      text: "Cancel",
-    }, {
-      text: "Proceed",
-      onPress: async () => {
-        await setSyncEnabled(!scheduledSyncEnabled);
-        await changeScheduledSyncEnabled(!scheduledSyncEnabled);
-      }
-    }]);
+      Alert.alert(t("security.chainSync.dialog.title"),
+                  t("security.chainSync.dialog.msg"),
+      [{
+        text: t("button.cancel",{ns:namespaces.common}),
+      }, {
+        text: "Proceed",
+        onPress: async () => {
+          await setSyncEnabled(!scheduledSyncEnabled);
+          await changeScheduledSyncEnabled(!scheduledSyncEnabled);
+        }
+      }]);
     else {
       await setSyncEnabled(!scheduledSyncEnabled);
       await changeScheduledSyncEnabled(!scheduledSyncEnabled);
@@ -286,12 +323,12 @@ export default function Settings({ navigation }: ISettingsProps) {
   };
   const onLongPressScheduledSyncEnabled = async () => {
     toast(
-      `Status: ${workInfo}\n`+
-      `Last sync attempt: ${formatISO(fromUnixTime(lastScheduledSyncAttempt))}\n` +
-      `Last sync: ${formatISO(fromUnixTime(lastScheduledSync))}`,
+      `${t("msg.status",{ns:namespaces.common})}: ${workInfo}\n`+
+      `${t("msg.lastSyncAttempt",{ns:namespaces.common})}: ${formatISO(fromUnixTime(lastScheduledSyncAttempt))}\n` +
+      `${t("msg.lastSync",{ns:namespaces.common})}: ${formatISO(fromUnixTime(lastScheduledSync))}`,
       0,
       "success",
-      "OK",
+      t("buttons.ok",{ns:namespaces.common}),
     )
   }
 
@@ -313,7 +350,7 @@ export default function Settings({ navigation }: ISettingsProps) {
       await googleSignIn();
       await googleDriveMakeBackup();
       await changeGoogleDriveBackupEnabled(true);
-      toast("Google Drive backup enabled");
+      toast(t("wallet.backup.googleCloud.alert"));
     }
     else {
       await googleSignOut();
@@ -324,10 +361,10 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onDoGoogleDriveBackupPress = async () => {
     try {
       await googleDriveMakeBackup();
-      toast("Backed up channels to Google Drive");
+      toast(t("wallet.backup.googleCloudForce.alert"));
     }
     catch (e) {
-      toast(`Error backup up: ${e.message}`, 10000, "danger");
+      toast(t("wallet.backup.error")+`: ${e.message}`, 10000, "danger");
     }
   }
 
@@ -339,16 +376,16 @@ export default function Settings({ navigation }: ISettingsProps) {
         await iCloudMakeBackup();
       }
       await changeICloudBackupEnabled(!iCloudBackupEnabled);
-      toast(`iCloud backup ${iCloudBackupEnabled ? "disabled" : "enabled"}`);
+      toast(`${t("wallet.backup.iCloud.alert")} ${iCloudBackupEnabled ? "disabled" : "enabled"}`);
   };
 
   const onDoICloudBackupPress = async () => {
     try {
       await iCloudMakeBackup();
-      toast("Backed up channels to iCloud");
+      toast(t("wallet.backup.iCloudForce.alert"));
     }
     catch (e) {
-      toast(`Error backup up: ${e.message}`, 10000, "danger");
+      toast(t("wallet.backup.error")+`: ${e.message}`, 10000, "danger");
     }
   }
 
@@ -364,18 +401,18 @@ export default function Settings({ navigation }: ISettingsProps) {
           );
           console.log(granted);
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log('Geolocation granted');
+            console.log(t("general.saveGeolocation.logGranted"));
           } else {
-            console.log('Geolocation permission denied');
+            console.log(t("general.saveGeolocation.logDenied"));
             return;
           }
         } else if (PLATFORM === "ios") {
           const r = await ReactNativePermissions.request(ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
           if (r !== "granted") {
-            console.log("Error: " + r);
+            console.log(t("msg.error",{ns:namespaces.common})+": " + r);
           }
         }
-      } catch (err) {
+      } catch (err:any) {
         console.warn(err);
       }
     }
@@ -388,7 +425,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onChangeMapStylePress = async () => {
     const { selectedItem } = await DialogAndroid.showPicker(null, null, {
       positiveText: null,
-      negativeText: "Cancel",
+      negativeText: t("button.cancel",{ns:namespaces.common}),
       type: DialogAndroid.listRadio,
       selectedId: transactionGeolocationMapStyle,
       items: Object.keys(MapStyle).map((mapStyle) => ({
@@ -412,11 +449,11 @@ export default function Settings({ navigation }: ISettingsProps) {
       }
     };
 
-    const description = `Choose an incoming channel provider and press Continue.
+    const description = `${t("LN.inbound.dialog.msg1")}
 
-Your web browser will be opened to the corresponding provider's website, where you will be able to request a channel.
+${t("LN.inbound.dialog.msg2")}
 
-When you're done, you can copy the address code and/or open the link using Blixt Wallet.`
+${t("LN.inbound.dialog.msg3")}`
 
     if (PLATFORM === "android") {
       interface ShowPickerResult {
@@ -426,10 +463,10 @@ When you're done, you can copy the address code and/or open the link using Blixt
         } | undefined;
       }
       const { selectedItem }: ShowPickerResult = await DialogAndroid.showPicker(null, null, {
-        title: "Incoming channel provider",
+        title: t("LN.inbound.dialog.title"),
         content: description,
-        positiveText: "Continue",
-        negativeText: "Cancel",
+        positiveText: t("button.continue",{ns:namespaces.common}),
+        negativeText: t("button.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         items: [{
           id: "LNBIG",
@@ -445,7 +482,7 @@ When you're done, you can copy the address code and/or open the link using Blixt
       }
     } else {
       navigation.navigate("ChannelProvider", {
-        title: "Incoming channel provider",
+        title: t("LN.inbound.dialog.title"),
         description,
         data: [{
           title: "LN Big",
@@ -481,7 +518,7 @@ When you're done, you can copy the address code and/or open the link using Blixt
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: "Cancel",
+        negativeText: t("button.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: onchainExplorer,
         items: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
@@ -503,7 +540,7 @@ When you're done, you can copy the address code and/or open the link using Blixt
       }
     } else {
       navigation.navigate("ChangeOnchainExplorer", {
-        title: "Change onchain explorer",
+        title: t("display.onchainExplorer.dialog.title"),
         data: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
           title: camelCaseToSpace(currOnchainExplorer),
           value: currOnchainExplorer,
@@ -528,18 +565,18 @@ When you're done, you can copy the address code and/or open the link using Blixt
   const changeNeutrinoPeers = useStoreActions((store) => store.settings.changeNeutrinoPeers);
   const writeConfig = useStoreActions((store) => store.writeConfig);
   const restartNeeded = () => {
-    const title = "Restart required";
-    const message = "Blixt Wallet has to be restarted before the new configuration is applied."
+    const title = t("bitcoinNetwork.restartDialog.title");
+    const message = t("bitcoinNetwork.restartDialog.msg1")
     if (PLATFORM === "android") {
       Alert.alert(
         title,
-        message + "\nWould you like to do that now?",
+        message + "\n"+t("bitcoinNetwork.restartDialog.msg2"),
         [{
           style: "cancel",
-          text: "No",
+          text: t("button.no",{ns:namespaces.common}),
         }, {
           style: "default",
-          text: "Yes",
+          text: t("button.yes",{ns:namespaces.common}),
           onPress: async () => {
             try {
               await NativeModules.LndMobile.stopLnd();
@@ -557,17 +594,17 @@ When you're done, you can copy the address code and/or open the link using Blixt
   };
   const onSetBitcoinNodePress = async () => {
     Alert.prompt(
-      "Set Node",
+      t("bitcoinNetwork.node.setDialog.title"),
       "Set a BIP157 compact filter serving Bitcoin node to establish a connection to.\n\n" +
       "Leave blank to let Blixt Wallet search on the Bitcoin network for a valid node.\n\n" +
       "To reset to the default node, long-press on the setting.\n\n" +
       "Note: Blixt Wallet does not support Tor onion v3 yet.",
       [{
-        text: "Cancel",
+        text: t("button.cancel",{ns:namespaces.common}),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: "Set node",
+        text: t("bitcoinNetwork.node.setDialog.title"),
         onPress: async (text) => {
           if (text === neutrinoPeers[0]) {
             return;
@@ -589,14 +626,14 @@ When you're done, you can copy the address code and/or open the link using Blixt
   };
   const onSetBitcoinNodeLongPress = async () => {
     Alert.alert(
-      "Restore node",
-      `Would you like to restore to the default node (${DEFAULT_NEUTRINO_NODE})?`,
+      t("bitcoinNetwork.node.restoreDialog.title"),
+      `${t("bitcoinNetwork.node.restoreDialog.msg")} (${DEFAULT_NEUTRINO_NODE})?`,
       [{
         style: "cancel",
-        text: "No",
+        text: t("button.no",{ns:namespaces.common}),
       }, {
         style: "default",
-        text: "Yes",
+        text: t("button.yes",{ns:namespaces.common}),
         onPress: async () => {
           await changeNeutrinoPeers([DEFAULT_NEUTRINO_NODE]);
           await writeConfig();
@@ -611,14 +648,14 @@ When you're done, you can copy the address code and/or open the link using Blixt
   const changeBitcoindRpcHost = useStoreActions((store) => store.settings.changeBitcoindRpcHost);
   const onSetBitcoindRpcHostPress = async () => {
     Alert.prompt(
-      "Set bitcoind RPC host",
+      t("bitcoinNetwork.rpc.title"),
       "",
       [{
-        text: "Cancel",
+        text: t("button.cancel",{ns:namespaces.common}),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: "Save",
+        text: t("button.save",{ns:namespaces.common}),
         onPress: async (text) => {
           if (text) {
             await changeBitcoindRpcHost(text);
@@ -636,14 +673,14 @@ When you're done, you can copy the address code and/or open the link using Blixt
   const changeBitcoindPubRawBlock = useStoreActions((store) => store.settings.changeBitcoindPubRawBlock);
   const onSetBitcoindPubRawBlockPress = async () => {
     Alert.prompt(
-      "Set bitcoind ZMQ Raw block host",
+      t("bitcoinNetwork.zmqRawBlock.title"),
       "",
       [{
-        text: "Cancel",
+        text: t("button.cancel",{ns:namespaces.common}),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: "Save",
+        text: t("button.save",{ns:namespaces.common}),
         onPress: async (text) => {
           if (text) {
             await changeBitcoindPubRawBlock(text);
@@ -661,14 +698,14 @@ When you're done, you can copy the address code and/or open the link using Blixt
   const changeBitcoindPubRawTx = useStoreActions((store) => store.settings.changeBitcoindPubRawTx);
   const onSetBitcoindPubRawTxPress = async () => {
     Alert.prompt(
-      "Set bitcoind ZMQ Raw Tx host",
+      t("bitcoinNetwork.zmqRawTx.title"),
       "",
       [{
-        text: "Cancel",
+        text: t("button.cancel",{ns:namespaces.common}),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: "Save",
+        text: t("button.save",{ns:namespaces.common}),
         onPress: async (text) => {
           if (text) {
             await changeBitcoindPubRawTx(text);
@@ -692,38 +729,36 @@ When you're done, you can copy the address code and/or open the link using Blixt
   const changeTorEnabled = useStoreActions((store) => store.settings.changeTorEnabled);
   const onChangeTorEnabled = async () => {
     const text = !torEnabled ?
-`Enabling Tor will make the wallet connect to its peers (both Bitcoin and Lightning Network peers) via the Tor Network.
+`${t("experimental.tor.enabled.msg1")}
 
-You'll also be able to connect and open channels to Lightning nodes that uses onion services.
+${t("experimental.tor.enabled.msg2")}
 
-WARNING: Blixt Wallet will still talk to the following services without Tor:
+${t("experimental.tor.enabled.msg3")}:
 
 https://blockchain.info/ticker
-Reason: To get fiat/bitcoin rates
+${t("experimental.tor.enabled.msg4")}
 
 https://mempool.space/api/blocks/tip/height
-Reason: To get the current block height
+${t("experimental.tor.enabled.msg5")}
 
 https://www.googleapis.com/drive/v3/files
 https://www.googleapis.com/upload/drive/v3/files
-Reason: For Google Drive backup
+${t("experimental.tor.enabled.msg6")}
 
 https://nodes.lightning.computer/availability/v1/btc.json
-Reason: For reliable Lightning nodes
+${t("experimental.tor.enabled.msg7")}
 
-WebLN Browser and LNURL will also not use Tor.
-
-Do you wish to proceed?`
+${t("experimental.tor.enabled.msg8")}`
 :
-`Disabling Tor requires an app restart.
-Do you wish to proceed?`;
+`${t("experimental.tor.disabled.msg1")}
+${t("experimental.tor.disabled.msg2")}`;
 
     Alert.alert(
       "Tor",
       text,
-      [{ text: "No" },
+      [{ text: t("button.no",{ns:namespaces.common}) },
       {
-        text: "Yes",
+        text: t("button.yes",{ns:namespaces.common}),
         onPress: async () => {
           await changeTorEnabled(!torEnabled);
           if (PLATFORM === "android") {
@@ -764,7 +799,7 @@ Do you wish to proceed?`;
   const signMessage = useStoreActions((store) => store.lightning.signMessage);
   const onPressSignMesseage = async () => {
     Alert.prompt(
-      "Sign message",
+      t("miscelaneous.signMessage.dialog1.title"),
       undefined,
       async (text) => {
         if (text.length === 0) {
@@ -773,15 +808,15 @@ Do you wish to proceed?`;
         const signMessageResponse = await signMessage(text);
 
         Alert.alert(
-          "Signature",
+          t("miscelaneous.signMessage.dialog2.title"),
           signMessageResponse.signature,
           [{
-            text: "OK",
+            text: t("button.ok",{ns:namespaces.common}),
           }, {
-            text: "Copy",
+            text: t("button.copy",{ns:namespaces.common}),
             onPress: async () => {
               Clipboard.setString(signMessageResponse.signature);
-              toast("Copied to clipboard", undefined, "warning");
+              toast(t("miscelaneous.signMessage.dialog2.alert"), undefined, "warning");
             }
           }]
         );
@@ -796,14 +831,14 @@ Do you wish to proceed?`;
 
   const onSetDunderServerPress = async () => {
     Alert.prompt(
-      "Set Dunder Server",
+      t("LN.LSP.setDialog.title"),
       "",
       [{
-        text: "Cancel",
+        text: t("button.cancel",{ns:namespaces.common}),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: "Set server",
+        text: t("LN.LSP.setDialog.acept"),
         onPress: async (text) => {
           if (text === dunderServer) {
             return;
@@ -818,14 +853,14 @@ Do you wish to proceed?`;
   };
   const onSetDunderServerLongPress = async () => {
     Alert.alert(
-      "Restore Dunder Server",
-      `Would you like to restore to the default Dunder server (${DEFAULT_DUNDER_SERVER})?`,
+      t("LN.LSP.restoreDialog.title"),
+      `${t("LN.LSP.restoreDialog.msg")} (${DEFAULT_DUNDER_SERVER})?`,
       [{
         style: "cancel",
-        text: "No",
+        text: t("button.no",{ns:namespaces.common}),
       }, {
         style: "default",
-        text: "Yes",
+        text: t("button.yes",{ns:namespaces.common}),
         onPress: async () => {
           await changeDunderServer(DEFAULT_DUNDER_SERVER);
         },
@@ -937,39 +972,48 @@ Do you wish to proceed?`;
 
         <List style={style.list}>
           <ListItem style={style.itemHeader} itemHeader={true} first={true}>
-            <Text>General</Text>
+            <Text>{t("general.title",{ns:namespaces.settings.settings})}</Text>
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={onNamePress}>
             <Left><Icon style={style.icon} type="AntDesign" name="edit" /></Left>
             <Body>
-              <Text>Name</Text>
+              <Text>{t("general.name.title")}</Text>
               <Text note={true}>
-                {name || "Will be used in transactions"}
+                {name || t("general.name.subtitle")}
+              </Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onLangPress}>
+            <Left><Icon style={style.icon} type="Entypo" name="language" /></Left>
+            <Body>
+              <Text>{t("general.lang.title")}</Text>
+              <Text note={true}>
+                {languages[i18n.language].name}
               </Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onTogglePushNotificationsPress}>
             <Left><Icon style={style.icon} type="Entypo" name="bell" /></Left>
             <Body>
-              <Text>Push notifications</Text>
-              <Text note={true}>For transaction and channel events</Text>
+              <Text>{t("general.pushNotification.title")}</Text>
+              <Text note={true}>{t("general.pushNotification.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={pushNotificationsEnabled} onPress={onTogglePushNotificationsPress} /></Right>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onToggleClipBoardInvoiceCheck}>
             <Left><Icon style={style.icon} type="Entypo" name="clipboard" /></Left>
             <Body>
-              <Text>Check clipboard for invoices</Text>
-              <Text note={true}>Automatically check clipboard for invoices</Text>
+              <Text>{t("general.checkClipboard.title")}</Text>
+              <Text note={true}>{t("general.checkClipboard.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={clipboardInvoiceCheckEnabled} onPress={onToggleClipBoardInvoiceCheck} /></Right>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onToggleTransactionGeolocationEnabled}>
             <Left><Icon style={style.icon} type="Entypo" name="location-pin" /></Left>
             <Body>
-              <Text>Save geolocation of transaction</Text>
-              <Text note={true}>Locally save the location of a transaction</Text>
+              <Text>{t("general.saveGeolocation.title")}</Text>
+              <Text note={true}>{t("general.saveGeolocation.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={transactionGeolocationEnabled} onPress={onToggleTransactionGeolocationEnabled} /></Right>
           </ListItem>
@@ -977,7 +1021,7 @@ Do you wish to proceed?`;
             <ListItem style={style.listItem} icon={true} onPress={onChangeMapStylePress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-maps" /></Left>
               <Body>
-                <Text>Set Map theme</Text>
+                <Text>{t("general.mapTheme.title")}</Text>
                 <Text note={true}>{camelCaseToSpace(transactionGeolocationMapStyle)}</Text>
               </Body>
             </ListItem>
@@ -985,7 +1029,7 @@ Do you wish to proceed?`;
 
 
           <ListItem style={style.itemHeader} itemHeader={true} first={true}>
-            <Text>Wallet</Text>
+            <Text>{t("wallet.title")}</Text>
           </ListItem>
 
           {seedAvailable &&
@@ -993,26 +1037,26 @@ Do you wish to proceed?`;
               <ListItem style={style.listItem} button={true} icon={true} onPress={onGetSeedPress}>
                 <Left><Icon style={style.icon} type="AntDesign" name="form" /></Left>
                 <Body>
-                  <Text>Show mnemonic</Text>
-                  <Text note={true}>Show 24-word seed for this wallet</Text>
+                  <Text>{t("wallet.seed.show.title")}</Text>
+                  <Text note={true}>{t("wallet.seed.show.subtitle")}</Text>
                 </Body>
               </ListItem>
               {onboardingState === "DONE" &&
                 <ListItem style={style.listItem} button={true} icon={true} onPress={onRemoveSeedPress}>
                   <Left><Icon style={style.icon} type="Entypo" name="eraser" /></Left>
                   <Body>
-                    <Text>Remove mnemonic from device</Text>
-                    <Text note={true}>Permanently remove the seed from this device</Text>
+                    <Text>{t("wallet.seed.remove.title")}</Text>
+                    <Text note={true}>{t("wallet.seed.remove.subtitle")}</Text>
                   </Body>
                 </ListItem>
               }
             </>
           }
-          {["android", "ios"].includes(PLATFORM) &&
+          {["android", "ios", "macos"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="save" /></Left>
               <Body>
-                <Text>Export channel backup</Text>
+                <Text>{t("wallet.backup.export.title")}</Text>
               </Body>
             </ListItem>
           }
@@ -1020,7 +1064,7 @@ Do you wish to proceed?`;
             <ListItem style={style.listItem} icon={true} onPress={onVerifyChannelsBackupPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="backup" /></Left>
               <Body>
-                <Text>Verify channel backup</Text>
+                <Text>{t("wallet.backup.verify.title")}</Text>
               </Body>
             </ListItem>
           }
@@ -1028,8 +1072,8 @@ Do you wish to proceed?`;
             <ListItem style={style.listItem} icon={true} onPress={onToggleGoogleDriveBackup}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-drive" /></Left>
               <Body>
-                <Text>Google Drive channel backup</Text>
-                <Text note={true}>Automatically backup channels to Google Drive</Text>
+                <Text>{t("wallet.backup.googleCloud.title")}</Text>
+                <Text note={true}>{t("wallet.backup.googleCloud.subtitle")}</Text>
               </Body>
               <Right><CheckBox checked={googleDriveBackupEnabled} onPress={onToggleGoogleDriveBackup} /></Right>
             </ListItem>
@@ -1037,15 +1081,15 @@ Do you wish to proceed?`;
           {(googleDriveBackupEnabled && !isRecoverMode) &&
             <ListItem style={style.listItem} icon={true} onPress={onDoGoogleDriveBackupPress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="folder-google-drive" /></Left>
-              <Body><Text>Manually trigger Google Drive Backup</Text></Body>
+              <Body><Text>{t("wallet.backup.googleCloudForce.title")}</Text></Body>
             </ListItem>
           }
           {(PLATFORM == "ios" && !isRecoverMode) &&
             <ListItem style={style.listItem} icon={true} onPress={onToggleICloudBackup}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="apple-icloud" /></Left>
               <Body>
-                <Text>iCloud channel backup</Text>
-                <Text note={true}>Automatically backup channels to iCloud</Text>
+                <Text>{t("wallet.backup.iCloud.title")}</Text>
+                <Text note={true}>{t("wallet.backup.iCloud.subtitle")}</Text>
               </Body>
               <Right><CheckBox checked={iCloudBackupEnabled} onPress={onToggleICloudBackup} /></Right>
             </ListItem>
@@ -1053,17 +1097,17 @@ Do you wish to proceed?`;
           {(iCloudBackupEnabled && !isRecoverMode) &&
             <ListItem style={style.listItem} icon={true} onPress={onDoICloudBackupPress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="folder" /></Left>
-              <Body><Text>Manually trigger iCloud Backup</Text></Body>
+              <Body><Text>{t("wallet.backup.iCloudForce.title")}</Text></Body>
             </ListItem>
           }
 
           <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>Security</Text>
+            <Text>{t("security.title")}</Text>
           </ListItem>
 
           <ListItem style={style.listItem} button={true} icon={true} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress}>
             <Left><Icon style={style.icon} type="AntDesign" name="lock" /></Left>
-            <Body><Text>Login with pincode</Text></Body>
+            <Body><Text>{t("security.pincode.title")}</Text></Body>
             <Right><CheckBox checked={loginMethods!.has(LoginMethods.pincode)} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress} /></Right>
           </ListItem>
           {fingerprintAvailable &&
@@ -1078,10 +1122,10 @@ Do you wish to proceed?`;
               </Left>
               <Body>
                 <Text>
-                  Login with{" "}
-                  {biometricsSensor === "Biometrics" && "fingerprint"}
-                  {biometricsSensor === "Face ID" && "Face ID"}
-                  {biometricsSensor === "Touch ID" && "Touch ID"}
+                {t("security.biometrics.title")}{" "}
+                  {biometricsSensor === "Biometrics" && t("security.biometrics.fingerprint")}
+                  {biometricsSensor === "Face ID" && t("security.biometrics.faceId")}
+                  {biometricsSensor === "Touch ID" && t("security.biometrics.touchID")}
                 </Text>
               </Body>
               <Right><CheckBox checked={fingerPrintEnabled} onPress={onToggleFingerprintPress}/></Right>
@@ -1091,9 +1135,9 @@ Do you wish to proceed?`;
             <ListItem style={style.listItem} icon={true} onPress={onToggleScheduledSyncEnabled} onLongPress={onLongPressScheduledSyncEnabled}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="sync-alert" /></Left>
               <Body>
-                <Text>Scheduled chain sync</Text>
+                <Text>{t("security.chainSync.title")}</Text>
                 <Text note={true}>
-                  Runs in background every 4 hours
+                  {t("security.chainSync.subtitle")}
                 </Text>
               </Body>
               <Right><CheckBox checked={scheduledSyncEnabled} onPress={onToggleScheduledSyncEnabled} /></Right>
@@ -1102,124 +1146,122 @@ Do you wish to proceed?`;
 
 
           <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>Display</Text>
+            <Text>{t("display.title")}</Text>
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={onFiatUnitPress}>
             <Left><Icon style={style.icon} type="FontAwesome" name="money" /></Left>
             <Body>
-              <Text>Fiat currency</Text>
+              <Text>{t("display.fiatUnit.title")}</Text>
               <Text note={true}  onPress={onFiatUnitPress}>{currentFiatUnit}</Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onBitcoinUnitPress}>
             <Left><Icon style={style.icon} type="FontAwesome5" name="btc" /></Left>
             <Body>
-              <Text>Bitcoin unit</Text>
+              <Text>{t("display.bitcoinUnit.title")}</Text>
               <Text note={true}  onPress={onBitcoinUnitPress}>{BitcoinUnits[currentBitcoinUnit].settings}</Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onChangeOnchainExplorerPress}>
             <Left><Icon style={style.icon} type="FontAwesome" name="chain" /></Left>
             <Body>
-              <Text>Onchain explorer</Text>
+              <Text>{t("display.onchainExplorer.title")}</Text>
               <Text note={true}>{onchainExplorer in OnchainExplorer ? camelCaseToSpace(onchainExplorer) : onchainExplorer}</Text>
             </Body>
           </ListItem>
 
 
           <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>Bitcoin Network</Text>
+            <Text>{t("bitcoinNetwork.title")}</Text>
           </ListItem>
 
-          {Chain !== "regtest" &&
+          {lndChainBackend === "neutrino" &&
             <ListItem style={style.listItem} icon={true} onPress={onSetBitcoinNodePress} onLongPress={onSetBitcoinNodeLongPress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
               <Body>
-                <Text>Bitcoin Node</Text>
-                <Text note={true}>
-                  Set Bitcoin node (BIP157) to connect to
-                </Text>
+                <Text>{t("bitcoinNetwork.node.title")}</Text>
+                <Text note={true}>{t("bitcoinNetwork.node.subtitle")}</Text>
               </Body>
             </ListItem>
           }
-          {Chain === "regtest" &&
+          {lndChainBackend === "bitcoindWithZmq" &&
             <>
               <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcHostPress}>
                 <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
                 <Body>
-                  <Text>Set bitcoind RPC Host</Text>
+                  <Text>{t("bitcoinNetwork.rpc.title")}</Text>
                 </Body>
               </ListItem>
               <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindPubRawBlockPress}>
                 <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
                 <Body>
-                  <Text>Set bitcoind ZMQ Raw Block Host</Text>
+                  <Text>{t("bitcoinNetwork.zmqRawBlock.title")}</Text>
                 </Body>
               </ListItem>
               <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindPubRawTxPress}>
                 <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" /></Left>
                 <Body>
-                  <Text>Set bitcoind ZMQ Raw Tx Host</Text>
+                  <Text>{t("bitcoinNetwork.zmqRawTx.title")}</Text>
                 </Body>
               </ListItem>
             </>
           }
 
           <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>Lightning Network</Text>
+            <Text>{t("LN.title")}</Text>
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNodeInfo")}>
             <Left><Icon style={style.icon} type="Feather" name="user" /></Left>
-            <Body><Text>Show node data</Text></Body>
+            <Body><Text>{t("LN.node.title")}</Text></Body>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningPeers")}>
             <Left><Icon style={style.icon} type="Feather" name="users" /></Left>
-            <Body><Text>Show Lightning peers</Text></Body>
+            <Body><Text>{t("LN.peers.title")}</Text></Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleAutopilotPress}>
             <Left><Icon style={style.icon} type="Entypo" name="circular-graph" /></Left>
-            <Body><Text>Automatically open channels</Text></Body>
+            <Body><Text>{t("LN.autopilot.title")}</Text></Body>
             <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onInboundServiceListPress}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="cloud-download" /></Left>
             <Body>
-              <Text>Inbound channel services</Text>
-              <Text note={true}>Use an inbound channel service for receiving payments</Text>
+              <Text>{t("LN.inbound.title")}</Text>
+              <Text note={true}>{t("LN.inbound.subtitle")}</Text>
             </Body>
           </ListItem>
           {dunderEnabled &&
             <ListItem style={style.listItem} button={true} icon={true} onPress={onSetDunderServerPress} onLongPress={onSetDunderServerLongPress}>
               <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
               <Body>
-                <Text>Set Dunder LSP Server</Text>
+                <Text>{t("LN.LSP.title")}</Text>
               </Body>
             </ListItem>
           }
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleRequireGraphSyncPress}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="database-sync" /></Left>
             <Body>
-              <Text>Wait for graph sync before paying</Text>
-              <Text note={true}>Synchronized graph leads to optimal payment paths</Text>
+              <Text>{t("LN.graphSync.title")}</Text>
+              <Text note={true}>{t("LN.graphSync.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={requireGraphSync} onPress={onToggleRequireGraphSyncPress} /></Right>
           </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>Miscellaneous</Text>
+            <Text>{t("miscelaneous.title")}</Text>
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("About")}>
             <Left><Icon style={style.icon} type="AntDesign" name="info" /></Left>
-            <Body><Text>About</Text></Body>
+            <Body><Text>{t("miscelaneous.about.title")}</Text></Body>
           </ListItem>
           {PLATFORM === "android" &&
             <ListItem style={style.listItem} icon={true} onPress={() => copyAppLog()}>
               <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
               <Body>
-                <Text>Copy app log to local storage</Text>
+                <Text>{t("miscelaneous.appLog.title")}</Text>
               </Body>
             </ListItem>
           }
@@ -1227,47 +1269,47 @@ Do you wish to proceed?`;
             <ListItem style={style.listItem} icon={true} onPress={() => copyLndLog()}>
               <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
               <Body>
-                <Text>Copy lnd log to local storage</Text>
+                <Text>{t("miscelaneous.lndLog.title")}</Text>
               </Body>
             </ListItem>
           }
           {(name === "Hampus" || __DEV__ === true) &&
             <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("DEV_CommandsX")}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
-              <Body><Text>Go to dev screen</Text></Body>
+              <Body><Text>{t("miscelaneous.dev.title")}</Text></Body>
             </ListItem>
           }
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleHideExpiredInvoicesPress}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="file-hidden" /></Left>
-            <Body><Text>Automatically hide expired invoices</Text></Body>
+            <Body><Text>{t("miscelaneous.expiredInvoices.title")}</Text></Body>
             <Right><CheckBox checked={hideExpiredInvoices} onPress={onToggleHideExpiredInvoicesPress} /></Right>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleScreenTransitionsEnabledPress}>
             <Left><Icon style={style.icon} type="Ionicons" name="swap-horizontal" /></Left>
-            <Body><Text>Screen transitions</Text></Body>
+            <Body><Text>{t("miscelaneous.screenTransactions.title")}</Text></Body>
             <Right><CheckBox checked={screenTransitionsEnabled} onPress={onToggleScreenTransitionsEnabledPress} /></Right>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onPressSignMesseage}>
             <Left><Icon style={style.icon} type="FontAwesome5" name="file-signature" /></Left>
-            <Body><Text>Sign message with wallet key</Text></Body>
+            <Body><Text>{t("miscelaneous.signMessage.title")}</Text></Body>
           </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>Experiments</Text>
+            <Text>{t("experimental.title")}</Text>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onToggleDunderEnabled}>
             <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
             <Body>
-              <Text>Enable Dunder LSP</Text>
-              <Text note={true}>HIGHLY EXPERIMENTAL. Lightning Service Provider that helps with inbound liquidity.</Text>
+              <Text>{t("experimental.LSP.title")}</Text>
+              <Text note={true}>{t("experimental.LSP.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={dunderEnabled} onPress={onToggleDunderEnabled} /></Right>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={onChangeMultiPartPaymentEnabledPress}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>
             <Body>
-              <Text>Enable Multi-Path Payments</Text>
-              <Text note={true}>Payments can take up to 2 paths</Text>
+              <Text>{t("experimental.MPP.title")}</Text>
+              <Text note={true}>{t("experimental.MPP.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
           </ListItem>
@@ -1277,7 +1319,7 @@ Do you wish to proceed?`;
                 <TorSvg />
               </Left>
               <Body>
-                <Text>Enable Tor</Text>
+                <Text>{t("experimental.tor.title")}</Text>
               </Body>
               <Right><CheckBox checked={torEnabled} onPress={onChangeTorEnabled} /></Right>
             </ListItem>
@@ -1286,8 +1328,8 @@ Do you wish to proceed?`;
             <ListItem style={style.listItem} button={true} icon={true} onPress={onShowOnionAddressPress}>
               <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="AntDesign" name="qrcode" /></Left>
               <Body>
-                <Text>Show Tor onion service</Text>
-                <Text note={true}>For connecting and opening channels to this wallet</Text>
+                <Text>{t("experimental.onion.title")}</Text>
+                <Text note={true}>{t("experimental.onion.subtitle")}</Text>
               </Body>
             </ListItem>
           }
@@ -1300,11 +1342,11 @@ Do you wish to proceed?`;
           </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>Debug</Text>
+            <Text>{t("debug.title")}</Text>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleDebugShowStartupInfo}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="android-debug-bridge" /></Left>
-            <Body><Text>Show startup info notifications</Text></Body>
+            <Body><Text>{t("debug.startup.title")}</Text></Body>
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onPressRescanWallet}>
@@ -1317,7 +1359,7 @@ Do you wish to proceed?`;
           <ListItem style={style.listItem} button={true} icon={true} onPress={onLndMobileHelpCenterPress}>
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="lifebuoy" /></Left>
             <Body>
-              <Text>LndMobile help center</Text>
+              <Text>{t("debug.helpCencer.title")}</Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onGetNodeInfoPress}>
@@ -1330,7 +1372,7 @@ Do you wish to proceed?`;
             <ListItem style={style.listItem} button={true} icon={true} onPress={() => navigation.navigate("DunderDoctor")}>
               <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
               <Body>
-                <Text>Diagnose Dunder problems</Text>
+                <Text>{t("debug.LSP.title")}</Text>
               </Body>
             </ListItem>
           }
@@ -1338,29 +1380,29 @@ Do you wish to proceed?`;
             navigation.navigate("LndLog");
           }}>
             <Left><Icon style={style.icon} type="Ionicons" name="newspaper-outline" /></Left>
-            <Body><Text>Read lnd log</Text></Body>
+            <Body><Text>{t("debug.lndLog.title")}</Text></Body>
           </ListItem>
 
           {((name === "Hampus" || __DEV__ === true)) &&
             <>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>
                 <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
-                <Body><Text>Keysend Test</Text></Body>
+                <Body><Text>{t("debug.keysend.title")}</Text></Body>
               </ListItem>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("GoogleDriveTestbed")}>
                 <Left><Icon style={style.icon} type="Entypo" name="google-drive" /></Left>
-                <Body><Text>Google Drive Testbed</Text></Body>
+                <Body><Text>{t("debug.googleDrive.title")}</Text></Body>
               </ListItem>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("WebLNBrowser")}>
                 <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
-                <Body><Text>WebLN</Text></Body>
+                <Body><Text>{t("debug.webln.title")}</Text></Body>
               </ListItem>
               <ListItem style={style.listItem} icon={true} onPress={() => {
                 writeConfig();
-                toast("Written")
+                toast(t("msg.written",{ns:namespaces.common}))
               }}>
                 <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="typewriter" /></Left>
-                <Body><Text>Write config</Text></Body>
+                <Body><Text>{t("debug.config.title")}</Text></Body>
               </ListItem>
             </>
           }

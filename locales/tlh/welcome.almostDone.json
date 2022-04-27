@@ -1,0 +1,32 @@
+{
+  "name": {
+    "title": "pong",
+    "msg": "qaStaHvIS poHlu'chu'pu'bogh",
+    "alert": {
+      "title": "pong",
+      "msg1": "vaj ngoHmey SaHlu'meH mIw'a' tu'lu'be''a'",
+      "msg2": "qaStaHvIS mInDu'lIj,",
+      "msg3": "DaQungHa'chugh.",
+      "msg4": "qaStaHvIS mIw yIlo'rup"
+    }
+  },
+  "pincode": {
+    "title": "ghIjqa'",
+    "msg": "yIvuS"
+  },
+  "fiatUnit": {
+    "title": "maQmIgh",
+    "dialog": {
+      "title": "qaSbe'"
+    }
+  },
+  "autopilot": {
+    "title": "motlhHa'",
+    "msg": "ghuy'cha', belmoHtaHvIS nI' latlh DotlhDaj"
+  },
+  "done": {
+    "title": "Qo'!",
+    "msg1": "peghmey DIlo'taHvIS je tlhuH",
+    "msg2": "'ej cheghDI' 'oH,"
+  }
+}

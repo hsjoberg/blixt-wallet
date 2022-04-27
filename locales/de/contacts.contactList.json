@@ -1,0 +1,35 @@
+{
+  "layout": {
+    "title": "Kontakte & Services",
+    "lightningAddressAlreadyExists": "ist bereits in der Kontaktliste vorhanden",
+    "nothingHereYet": "Keine Kontakte vorhanden...",
+    "whyNotAdd": "Füge eine Lightning-Adresse hinzu",
+    "tappingHere": "hier eingeben"
+  },
+  "contact": {
+    "syncBalance": {
+      "title": "Remote Balance",
+      "error": "Ungültige Operation, der Kontakt hat keinen LNURL-withdraw Code"
+    },
+    "list": {
+      "pay": "Zahlung an",
+      "account": "Konto auf"
+    },
+    "send": {
+      "title": "Senden",
+      "couldNotPay": "Konnte nicht an diesen LNURL-pay Code gesendet werden",
+      "invalidResponse": "Ungültige LNURL-pay Antwort ({{response}}",
+      "invalidOperation": "Ungültige Operation, Kontakt hat weder LUD-16 Identifier noch LNURL-pay Code"
+    },
+    "withdraw": {
+      "title": "Abheben",
+      "couldNotPay": "Konnte nicht an diesen LNURL-pay Code gesendet werden",
+      "invalidResponse": "Ungültige LNURL-withdraw Antwort ({{response}})",
+      "invalidOperation": "Ungültige Operation, der Kontakt hat keinen LNURL-withdraw Code"
+    },
+    "deleteContact": {
+      "title": "Kontakt entfernen",
+      "msg": "Möchtest Du diesen Kontakt wirklich löschen {{contact}}?"
+    }
+  }
+}

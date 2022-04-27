@@ -1,0 +1,7 @@
+{
+  "layout": {
+    "title": "Login request",
+    "msg": "Do you want to login to",
+    "success": "Authenticated to"
+  }
+}

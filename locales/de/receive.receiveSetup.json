@@ -1,0 +1,41 @@
+{
+  "layout": {
+    "title": "Empfangen"
+  },
+  "createInvoice": {
+    "title": "Erstelle eine Invoice (Rechnung)",
+    "error": "Der Rechnungsbetrag darf nicht höher sein als",
+    "alert": "Vor dem Empfangen einer Invoice, öffne zuerste einen Lightning-Kanal.",
+    "lsp": {
+      "msg": "Ein Zahlungskanal von Dunder LSP wird eröffnet, wenn diese Rechnung beglichen wird.",
+      "msg1": "Was bedeutet das?"
+    }
+  },
+  "createBlixtLspInvoice": {
+    "title": "Kanal-Öffnung",
+    "msg": "Um eine Zahlung für diese Rechnung akzeptieren zu können, muss ein Kanal zum Lightning Netzwerk geöffnet werden.",
+    "msg1": "Dies erfordert eine Einmalgebühr von ungefähr",
+    "alert": "Verbindung zu Dunder fehlgeschlagen, bitte versuche es später erneut.",
+    "proceed": "Fortfahren"
+  },
+  "form": {
+    "amountFiat": {
+      "title": "Betrag",
+      "change": "Ändere die Fiat-Einheit",
+      "dunderPlaceholder": "Mindestens"
+    },
+    "amountBitcoin": {
+      "title": "Betrag",
+      "change": "Ändere die Bitcoin-Einheit",
+      "dunderPlaceholder": "Mindestens"
+    },
+    "payer": {
+      "title": "Zahlungssender",
+      "placeholder": "Für die Buchführung"
+    },
+    "description": {
+      "title": "Nachricht",
+      "placeholder": "Nachricht an Zahlungssender"
+    }
+  }
+}
