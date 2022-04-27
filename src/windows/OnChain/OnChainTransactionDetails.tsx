@@ -69,17 +69,6 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
                 <Text style={{ fontSize: 9 }}>See in Block Explorer</Text>
               </Button>
             </View>
-<<<<<<< HEAD
-            <MetaData title="Id" data={transaction.txHash!} />
-            <MetaData title="Date" data={formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))} />
-            {transaction.amount && <MetaData title="Amount" data={formatBitcoin(transaction.amount, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} />}
-            {transaction.totalFees && <MetaData title="Fees" data={transaction.totalFees.toString() + " Satoshi"} />}
-            {transaction.label && <MetaData title="Label" data={transaction.label} />}
-            <MetaData title="Destination" data={transaction.destAddresses![0]} />
-            <MetaData title="Confirmations" data={(transaction.numConfirmations?.toString()) ?? "Unknown"} />
-            <MetaData title="Block height" data={(transaction.blockHeight?.toString()) ?? "Unknown"} />
-            <MetaData title="Block hash" data={(transaction.blockHash?.toString()) ?? "Unknown"} />
-=======
             <MetaData title={t("txHash")} data={transaction.txHash!} />
             <MetaData title={t("timeStamp")} data={formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))} />
             {transaction.amount && <MetaData title={t("amount")} data={formatBitcoin(transaction.amount, bitcoinUnit)} />}
@@ -89,7 +78,6 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
             <MetaData title={t("numConfirmations")} data={(transaction.numConfirmations?.toString()) ?? "Unknown"} />
             <MetaData title={t("blockHeight")} data={(transaction.blockHeight?.toString()) ?? "Unknown"} />
             <MetaData title={t("blockHash")} data={(transaction.blockHash?.toString()) ?? "Unknown"} />
->>>>>>> a5b03733573c89eae7bbd4a24f38ec61e0bdfa81
             <Text
               style={style.detailText}
               onPress={() => {
