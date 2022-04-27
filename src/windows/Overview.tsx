@@ -183,7 +183,7 @@ function Overview({ navigation }: IOverviewProps) {
     navigation.navigate("SyncInfo");
   };
 
-  const bitcoinBalance = formatBitcoin(balance, bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false);
+  const bitcoinBalance = formatBitcoin(balance, bitcoinUnit);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
 
   return (
@@ -348,15 +348,9 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
             <Text style={{ fontSize: 15 * fontFactor }}>
                 {t("sendOnChain.title")}{"\n\n"}
               <Text style={{ fontSize: 13 * fontFactor }}>
-<<<<<<< HEAD
                 {t("sendOnChain.msg1")}{"\n\n"}
                 {t("sendOnChain.msg2")}{"\n\n"}
                 {t("sendOnChain.msg3")} {formatBitcoin(Long.fromValue(22000), bitcoinUnit)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
-=======
-                To get started, send on-chain funds to the bitcoin address to the right.{"\n\n"}
-                A channel will automatically be opened for you.{"\n\n"}
-                Send at least {formatBitcoin(Long.fromValue(22000), bitcoinUnit, bitcoinUnit == "satoshi" || bitcoinUnit == "sat" || bitcoinUnit == "bit" ? true : false)} ({convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
->>>>>>> cd0fcb8 (Added sats unit option. Also added comma separated thousands.)
               </Text>
             </Text>
           </View>
