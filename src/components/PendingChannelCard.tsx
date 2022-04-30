@@ -8,6 +8,7 @@ import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { useStoreActions, useStoreState } from "../state/store";
 import { identifyService, lightningServices } from "../utils/lightning-services";
 import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
+import CopyText from "./CopyText";
 
 export interface IPendingChannelCardProps {
   type: "OPEN" | "CLOSING" | "FORCE_CLOSING" | "WAITING_CLOSE";
@@ -56,9 +57,9 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                 <Text style={style.channelDetailTitle}>Alias</Text>
               </Left>
               <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
-                <Text style={style.channelDetailValue}>
+                <CopyText style={style.channelDetailValue}>
                   {alias}
-                </Text>
+                </CopyText>
                 {service &&
                   <Image
                     source={{ uri: service.image }}
@@ -75,7 +76,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               <Text style={style.channelDetailTitle}>Node</Text>
             </Left>
             <Right>
-              <Text style={{ fontSize: 9.5, textAlign: "right" }}>{channel.channel.remoteNodePub}</Text>
+              <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>{channel.channel.remoteNodePub}</CopyText>
             </Right>
           </Row>
           <Row>
