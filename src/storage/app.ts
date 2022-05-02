@@ -60,6 +60,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   lndNoGraphCache = "lndNoGraphCache",
   invoiceExpiry = "invoiceExpiry", // in seconds
   rescanWallet = "rescanWallet",
+  receiveViaP2TR = "receiveViaP2TR",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -140,6 +141,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.lndNoGraphCache),
     removeItem(StorageItem.invoiceExpiry),
     removeItem(StorageItem.rescanWallet),
+    removeItem(StorageItem.receiveViaP2TR),
   ]);
 };
 
@@ -215,5 +217,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.lndNoGraphCache, false),
     setItemObject<number>(StorageItem.invoiceExpiry, DEFAULT_INVOICE_EXPIRY),
     setItemObject<boolean>(StorageItem.rescanWallet, false),
+    setItemObject<boolean>(StorageItem.receiveViaP2TR, false),
   ]);
 };

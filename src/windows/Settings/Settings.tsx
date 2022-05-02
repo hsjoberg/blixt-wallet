@@ -899,6 +899,13 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeDunderEnabled(!dunderEnabled);
   };
 
+  // Enable Receive by P2TR
+  const receiveViaP2TR = useStoreState((store) => store.settings.receiveViaP2TR);
+  const changeReceiveViaP2TR = useStoreActions((store) => store.settings.changeReceiveViaP2TR);
+  const onToggleReceiveViaP2TR = async () => {
+    await changeReceiveViaP2TR(!receiveViaP2TR);
+  };
+
   // Require graph sync before paying
   const requireGraphSync = useStoreState((store) => store.settings.requireGraphSync);
   const changeRequireGraphSync = useStoreActions((store) => store.settings.changeRequireGraphSync);
@@ -1231,6 +1238,13 @@ ${t("experimental.tor.disabled.msg2")}`;
               </ListItem>
             </>
           }
+          <ListItem style={style.listItem} icon={true} onPress={onToggleReceiveViaP2TR}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="carrot" /></Left>
+            <Body>
+              <Text>{t("bitcoinNetwork.p2tr.title")}</Text>
+            </Body>
+            <Right><CheckBox checked={receiveViaP2TR} onPress={onToggleReceiveViaP2TR} /></Right>
+          </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("LN.title")}</Text>

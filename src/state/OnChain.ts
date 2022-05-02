@@ -39,7 +39,7 @@ export interface ISendCoinsAllPayload {
 export interface IOnChainModel {
   initialize: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
   getBalance: Thunk<IOnChainModel, void, IStoreInjections>;
-  getAddress: Thunk<IOnChainModel, IGetAddressPayload, IStoreInjections>;
+  getAddress: Thunk<IOnChainModel, IGetAddressPayload, IStoreInjections, IStoreModel>;
   getTransactions: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
   sendCoins: Thunk<IOnChainModel, ISendCoinsPayload, IStoreInjections, any, Promise<lnrpc.ISendCoinsResponse>>;
   sendCoinsAll: Thunk<IOnChainModel, ISendCoinsAllPayload, IStoreInjections, any, Promise<lnrpc.ISendCoinsResponse>>;
@@ -140,7 +140,8 @@ export const onChain: IOnChainModel = {
     actions.setUnconfirmedBalance(walletBalanceResponse);
   }),
 
-  getAddress: thunk(async (actions, { forceNew, p2sh }, { injections }) => {
+  getAddress: thunk(async (actions, { forceNew, p2sh }, { injections, getStoreState }) => {
+    try {
     const { newAddress } = injections.lndMobile.onchain;
     let type: lnrpc.AddressType;
 
@@ -148,13 +149,21 @@ export const onChain: IOnChainModel = {
       if (p2sh) {
         type = lnrpc.AddressType.NESTED_PUBKEY_HASH;
       } else {
-        type = lnrpc.AddressType.WITNESS_PUBKEY_HASH;
+        if (getStoreState().settings.receiveViaP2TR) {
+          type = lnrpc.AddressType.TAPROOT_PUBKEY;
+        } else {
+          type = lnrpc.AddressType.WITNESS_PUBKEY_HASH;
+        }
       }
     } else {
       if (p2sh) {
         type = lnrpc.AddressType.UNUSED_NESTED_PUBKEY_HASH;
       } else {
-        type = lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH;
+        if (getStoreState().settings.receiveViaP2TR) {
+          type = lnrpc.AddressType.UNUSED_TAPROOT_PUBKEY;
+        } else {
+          type = lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH;
+        }
       }
     }
 
@@ -162,6 +171,9 @@ export const onChain: IOnChainModel = {
 
     actions.setAddress(newAddressResponse);
     actions.setAddressType(type);
+    } catch (error) {
+      throw new Error("Error while generating bitcoin address: " + error.message);
+    }
   }),
 
   getTransactions: thunk(async (actions, _, { getStoreState, injections }) => {

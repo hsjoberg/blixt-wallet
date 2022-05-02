@@ -52,6 +52,7 @@ export interface ISettingsModel {
   changeLndNoGraphCache: Thunk<ISettingsModel, boolean>;
   changeInvoiceExpiry: Thunk<ISettingsModel, number>;
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
+  changeReceiveViaP2TR: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -83,6 +84,7 @@ export interface ISettingsModel {
   setLndNoGraphCache: Action<ISettingsModel, boolean>;
   setInvoiceExpiry: Action<ISettingsModel, number>;
   setRescanWallet: Action<ISettingsModel, boolean>;
+  setReceiveViaP2TR: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -114,6 +116,7 @@ export interface ISettingsModel {
   lndNoGraphCache: boolean;
   invoiceExpiry: number;
   rescanWallet: boolean;
+  receiveViaP2TR: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -149,6 +152,7 @@ export const settings: ISettingsModel = {
     actions.setLndNoGraphCache(await getItemObject(StorageItem.lndNoGraphCache) ?? false);
     actions.setInvoiceExpiry(await getItemObject(StorageItem.invoiceExpiry) ?? DEFAULT_INVOICE_EXPIRY);
     actions.setRescanWallet(await getRescanWallet());
+    actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
 
     log.d("Done");
   }),
@@ -306,6 +310,11 @@ export const settings: ISettingsModel = {
     actions.setRescanWallet(payload);
   }),
 
+  changeReceiveViaP2TR: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.receiveViaP2TR, payload);
+    actions.setReceiveViaP2TR(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -336,6 +345,7 @@ export const settings: ISettingsModel = {
   setLndNoGraphCache: action((state, payload) => { state.lndNoGraphCache = payload; }),
   setInvoiceExpiry: action((state, payload) => { state.invoiceExpiry = payload; }),
   setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
+  setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -367,4 +377,5 @@ export const settings: ISettingsModel = {
   lndNoGraphCache: false,
   invoiceExpiry: DEFAULT_INVOICE_EXPIRY,
   rescanWallet: false,
+  receiveViaP2TR: false,
 };

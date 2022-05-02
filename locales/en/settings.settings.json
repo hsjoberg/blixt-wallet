@@ -146,6 +146,9 @@
     },
     "zmqRawTx": {
       "title": "Set bitcoind ZMQ Raw Tx Host"
+    },
+    "p2tr": {
+      "title": "Enable receiving on-chain via Taproot (P2TR)"
     }
   },
   "LN": {
