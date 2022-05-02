@@ -15,13 +15,18 @@ export default function WebInfo({ navigation }: IWebInfoProps) {
   const t = useTranslation(namespaces.web.info).t;
 
   return (
-    <Blurmodal goBackByClickingOutside={true}>
+    <Blurmodal goBackByClickingOutside={true} hideCross={true}>
       <H1 style={style.title} onPress={() => navigation.pop()}>
         {t("title")}
       </H1>
       <Text style={style.text} onPress={() => navigation.pop()}>
         {t("pressToTry")}
       </Text>
+      <View style={{flexDirection: "row", justifyContent: "center", marginTop: 14 }}>
+        <Button small onPress={() => navigation.pop()}>
+          <Text>Continue</Text>
+        </Button>
+      </View>
     </Blurmodal>
   );
 };
