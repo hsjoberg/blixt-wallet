@@ -1297,12 +1297,6 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           }
-          {(name === "Hampus" || __DEV__ === true) &&
-            <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("DEV_CommandsX")}>
-              <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
-              <Body><Text>{t("miscelaneous.dev.title")}</Text></Body>
-            </ListItem>
-          }
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleHideExpiredInvoicesPress}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="file-hidden" /></Left>
             <Body><Text>{t("miscelaneous.expiredInvoices.title")}</Text></Body>
@@ -1372,10 +1366,12 @@ ${t("experimental.tor.disabled.msg2")}`;
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("debug.title")}</Text>
           </ListItem>
-          {/* <ListItem style={style.listItem} button={true} icon={true} onPress={onPressRescanBlockchain}>
-            <Left><Icon style={style.icon} type="Ionicons" name="search-sharp" /></Left>
-            <Body><Text>Rescan blockchain for UTXOs</Text></Body>
-          </ListItem> */}
+          {(name === "Hampus" || __DEV__ === true) &&
+            <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("DEV_CommandsX")}>
+              <Left><Icon style={style.icon} type="MaterialIcons" name="developer-mode" /></Left>
+              <Body><Text>{t("miscelaneous.dev.title")}</Text></Body>
+            </ListItem>
+          }
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleDebugShowStartupInfo}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="android-debug-bridge" /></Left>
             <Body><Text>{t("debug.startup.title")}</Text></Body>

@@ -663,12 +663,19 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => console.log(await clearTransactions(db!))}><Text style={styles.buttonText}>actions.clearTransactions()</Text></Button>
 
           <Text style={{ width: "100%" }}>Lndmobile commands:</Text>
-          {[getInfo, genSeed, newAddress, pendingChannels, listChannels, listPeers].map((f, i) => {
+          {[
+            ["getInfo", getInfo],
+            ["genSeed", genSeed],
+            ["newAddress", newAddress],
+            ["pendingChannels", pendingChannels],
+            ["listChannels", listChannels],
+            ["listPeers", listPeers]
+          ].map(([name, f], i) => {
             return (
               <Button small key={i} onPress={async () => {
                 try {
                   const response = await f();
-                  console.log(`${f.name}()`, response.toJSON());
+                  console.log(`${name}()`, response.toJSON());
                   setCommandResult(response.toJSON());
                   setError({});
                 }
@@ -677,7 +684,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                   setCommandResult({});
                 }
               }}>
-                <Text style={styles.buttonText}>{f.name}()</Text>
+                <Text style={styles.buttonText}>{name}()</Text>
               </Button>
             );
           })}

@@ -387,7 +387,9 @@ exports[`renders correctly 1`] = `
                                         "width": "100%",
                                       },
                                       Object {},
-                                      undefined,
+                                      Object {
+                                        "marginTop": 0,
+                                      },
                                     ]
                                   }
                                 >
@@ -405,7 +407,7 @@ exports[`renders correctly 1`] = `
                                           "paddingBottom": 12,
                                           "paddingLeft": 7,
                                           "paddingRight": 7,
-                                          "paddingTop": 239.41176470588235,
+                                          "paddingTop": 205,
                                         }
                                       }
                                       onScroll={[Function]}
@@ -595,7 +597,7 @@ exports[`renders correctly 1`] = `
                                           "alignItems": "center",
                                           "borderBottomColor": "#1F1F1F",
                                           "borderBottomWidth": 1,
-                                          "height": 229.41176470588235,
+                                          "height": 195,
                                           "justifyContent": "center",
                                           "left": 0,
                                           "position": "absolute",
@@ -618,7 +620,6 @@ exports[`renders correctly 1`] = `
                                           }
                                         }
                                         locations={null}
-                                        pointerEvents="box-none"
                                         startPoint={
                                           Object {
                                             "x": 0.5,
@@ -626,234 +627,241 @@ exports[`renders correctly 1`] = `
                                           }
                                         }
                                         style={
+                                          Array [
+                                            Object {
+                                              "backgroundColor": "#bc6610",
+                                              "position": "absolute",
+                                            },
+                                            Object {
+                                              "alignItems": "center",
+                                              "flex": 1,
+                                              "height": "100%",
+                                              "justifyContent": "center",
+                                              "width": "100%",
+                                            },
+                                          ]
+                                        }
+                                      />
+                                      <View
+                                        style={
                                           Object {
-                                            "alignItems": "center",
-                                            "flex": 1,
-                                            "height": "100%",
-                                            "justifyContent": "center",
-                                            "width": "100%",
+                                            "bottom": 0,
+                                            "left": 0,
+                                            "position": "absolute",
+                                            "right": 0,
+                                            "top": 0,
                                           }
                                         }
                                       >
-                                        <View
-                                          style={
-                                            Object {
-                                              "bottom": 0,
-                                              "left": 0,
-                                              "position": "absolute",
-                                              "right": 0,
-                                              "top": 0,
-                                            }
-                                          }
-                                        >
-                                          <Text
-                                            allowFontScaling={false}
-                                            collapsable={false}
-                                            onPress={[Function]}
-                                            style={
-                                              Array [
-                                                Object {
-                                                  "color": undefined,
-                                                  "fontSize": 12,
-                                                },
-                                                Array [
-                                                  Object {
-                                                    "color": "#000",
-                                                    "fontSize": 30,
-                                                  },
-                                                  Object {
-                                                    "color": "#000",
-                                                    "fontSize": 30,
-                                                  },
-                                                  Object {
-                                                    "color": "#e5eaea",
-                                                    "fontSize": 31,
-                                                    "left": 8,
-                                                    "padding": 5,
-                                                    "paddingRight": 8,
-                                                    "position": "absolute",
-                                                    "top": 28,
-                                                  },
-                                                ],
-                                                Object {
-                                                  "fontFamily": "Entypo",
-                                                  "fontStyle": "normal",
-                                                  "fontWeight": "normal",
-                                                },
-                                                Object {},
-                                              ]
-                                            }
-                                            type="Entypo"
-                                          >
-                                            
-                                          </Text>
-                                          <Text
-                                            allowFontScaling={false}
-                                            collapsable={false}
-                                            onPress={[Function]}
-                                            style={
-                                              Array [
-                                                Object {
-                                                  "color": undefined,
-                                                  "fontSize": 12,
-                                                },
-                                                Array [
-                                                  Object {
-                                                    "color": "#000",
-                                                    "fontSize": 30,
-                                                  },
-                                                  Object {
-                                                    "color": "#000",
-                                                    "fontSize": 30,
-                                                  },
-                                                  Object {
-                                                    "color": "#e5eaea",
-                                                    "fontSize": 29,
-                                                    "padding": 5,
-                                                    "position": "absolute",
-                                                    "right": 8,
-                                                    "top": 30,
-                                                  },
-                                                ],
-                                                Object {
-                                                  "fontFamily": "Material Icons",
-                                                  "fontStyle": "normal",
-                                                  "fontWeight": "normal",
-                                                },
-                                                Object {},
-                                              ]
-                                            }
-                                            type="MaterialIcons"
-                                          >
-                                            
-                                          </Text>
-                                          <Text
-                                            allowFontScaling={false}
-                                            collapsable={false}
-                                            onPress={[Function]}
-                                            style={
-                                              Array [
-                                                Object {
-                                                  "color": undefined,
-                                                  "fontSize": 12,
-                                                },
-                                                Array [
-                                                  Object {
-                                                    "color": "#000",
-                                                    "fontSize": 30,
-                                                  },
-                                                  Object {
-                                                    "color": "#000",
-                                                    "fontSize": 30,
-                                                  },
-                                                  Object {
-                                                    "color": "#e5eaea",
-                                                    "fontSize": 27,
-                                                    "opacity": 1,
-                                                    "padding": 5,
-                                                    "position": "absolute",
-                                                    "right": 48,
-                                                    "top": 31,
-                                                  },
-                                                ],
-                                                Object {
-                                                  "fontFamily": "Material Icons",
-                                                  "fontStyle": "normal",
-                                                  "fontWeight": "normal",
-                                                },
-                                                Object {},
-                                              ]
-                                            }
-                                            type="MaterialIcons"
-                                          >
-                                            
-                                          </Text>
-                                          <View
-                                            collapsable={false}
-                                            style={
-                                              Object {
-                                                "opacity": 1,
-                                                "padding": 4,
-                                                "position": "absolute",
-                                                "right": 85,
-                                                "top": 30,
-                                              }
-                                            }
-                                          >
-                                            <Text
-                                              allowFontScaling={false}
-                                              collapsable={false}
-                                              onPress={[Function]}
-                                              style={
-                                                Array [
-                                                  Object {
-                                                    "color": undefined,
-                                                    "fontSize": 12,
-                                                  },
-                                                  Array [
-                                                    Object {
-                                                      "color": "#000",
-                                                      "fontSize": 30,
-                                                    },
-                                                    Object {
-                                                      "color": "#000",
-                                                      "fontSize": 30,
-                                                    },
-                                                    Object {
-                                                      "fontSize": 30,
-                                                      "height": 29,
-                                                      "opacity": 1,
-                                                      "width": 30,
-                                                    },
-                                                  ],
-                                                  Object {
-                                                    "fontFamily": "Material Icons",
-                                                    "fontStyle": "normal",
-                                                    "fontWeight": "normal",
-                                                  },
-                                                  Object {},
-                                                ]
-                                              }
-                                              type="MaterialIcons"
-                                            >
-                                              
-                                            </Text>
-                                          </View>
-                                        </View>
                                         <Text
+                                          allowFontScaling={false}
                                           collapsable={false}
                                           onPress={[Function]}
                                           style={
-                                            Object {
-                                              "color": "#e5eaea",
-                                              "fontFamily": "IBMPlexSans-Medium",
-                                              "fontSize": 24.025974025974026,
-                                              "height": 72.8,
-                                              "marginBottom": -1,
-                                              "marginTop": 59,
-                                              "paddingHorizontal": 12,
-                                              "position": "relative",
-                                            }
+                                            Array [
+                                              Object {
+                                                "color": undefined,
+                                                "fontSize": 12,
+                                              },
+                                              Array [
+                                                Object {
+                                                  "color": "#000",
+                                                  "fontSize": 30,
+                                                },
+                                                Object {
+                                                  "color": "#000",
+                                                  "fontSize": 30,
+                                                },
+                                                Object {
+                                                  "color": "#e5eaea",
+                                                  "fontSize": 31,
+                                                  "left": 8,
+                                                  "padding": 5,
+                                                  "paddingRight": 8,
+                                                  "position": "absolute",
+                                                  "top": 28,
+                                                },
+                                              ],
+                                              Object {
+                                                "fontFamily": "Entypo",
+                                                "fontStyle": "normal",
+                                                "fontWeight": "normal",
+                                              },
+                                              Object {},
+                                            ]
                                           }
-                                          testID="BIG_BALANCE_HEADER"
+                                          type="Entypo"
                                         >
-                                          0.00000123 ₿
+                                          
                                         </Text>
                                         <Text
+                                          allowFontScaling={false}
+                                          collapsable={false}
+                                          onPress={[Function]}
+                                          style={
+                                            Array [
+                                              Object {
+                                                "color": undefined,
+                                                "fontSize": 12,
+                                              },
+                                              Array [
+                                                Object {
+                                                  "color": "#000",
+                                                  "fontSize": 30,
+                                                },
+                                                Object {
+                                                  "color": "#000",
+                                                  "fontSize": 30,
+                                                },
+                                                Object {
+                                                  "color": "#e5eaea",
+                                                  "fontSize": 29,
+                                                  "padding": 5,
+                                                  "position": "absolute",
+                                                  "right": 8,
+                                                  "top": 30,
+                                                },
+                                              ],
+                                              Object {
+                                                "fontFamily": "Material Icons",
+                                                "fontStyle": "normal",
+                                                "fontWeight": "normal",
+                                              },
+                                              Object {},
+                                            ]
+                                          }
+                                          type="MaterialIcons"
+                                        >
+                                          
+                                        </Text>
+                                        <Text
+                                          allowFontScaling={false}
+                                          collapsable={false}
+                                          onPress={[Function]}
+                                          style={
+                                            Array [
+                                              Object {
+                                                "color": undefined,
+                                                "fontSize": 12,
+                                              },
+                                              Array [
+                                                Object {
+                                                  "color": "#000",
+                                                  "fontSize": 30,
+                                                },
+                                                Object {
+                                                  "color": "#000",
+                                                  "fontSize": 30,
+                                                },
+                                                Object {
+                                                  "color": "#e5eaea",
+                                                  "fontSize": 27,
+                                                  "opacity": 1,
+                                                  "padding": 5,
+                                                  "position": "absolute",
+                                                  "right": 48,
+                                                  "top": 31,
+                                                },
+                                              ],
+                                              Object {
+                                                "fontFamily": "Material Icons",
+                                                "fontStyle": "normal",
+                                                "fontWeight": "normal",
+                                              },
+                                              Object {},
+                                            ]
+                                          }
+                                          type="MaterialIcons"
+                                        >
+                                          
+                                        </Text>
+                                        <View
                                           collapsable={false}
                                           style={
                                             Object {
-                                              "color": "#e5eaea",
-                                              "fontFamily": "IBMPlexSans",
-                                              "fontSize": 11.688311688311689,
-                                              "lineHeight": 13.636363636363637,
                                               "opacity": 1,
+                                              "padding": 4,
+                                              "position": "absolute",
+                                              "right": 85,
+                                              "top": 30,
                                             }
                                           }
                                         >
-                                          0.00 USD
-                                        </Text>
-                                      </BVLinearGradient>
+                                          <Text
+                                            allowFontScaling={false}
+                                            collapsable={false}
+                                            onPress={[Function]}
+                                            style={
+                                              Array [
+                                                Object {
+                                                  "color": undefined,
+                                                  "fontSize": 12,
+                                                },
+                                                Array [
+                                                  Object {
+                                                    "color": "#000",
+                                                    "fontSize": 30,
+                                                  },
+                                                  Object {
+                                                    "color": "#000",
+                                                    "fontSize": 30,
+                                                  },
+                                                  Object {
+                                                    "fontSize": 30,
+                                                    "height": 29,
+                                                    "opacity": 1,
+                                                    "width": 30,
+                                                  },
+                                                ],
+                                                Object {
+                                                  "fontFamily": "Material Icons",
+                                                  "fontStyle": "normal",
+                                                  "fontWeight": "normal",
+                                                },
+                                                Object {},
+                                              ]
+                                            }
+                                            type="MaterialIcons"
+                                          >
+                                            
+                                          </Text>
+                                        </View>
+                                      </View>
+                                      <Text
+                                        collapsable={false}
+                                        onPress={[Function]}
+                                        style={
+                                          Object {
+                                            "color": "#e5eaea",
+                                            "fontFamily": "IBMPlexSans-Medium",
+                                            "fontSize": 24.025974025974026,
+                                            "height": 72.8,
+                                            "marginBottom": -1,
+                                            "marginTop": 59,
+                                            "paddingHorizontal": 12,
+                                            "position": "relative",
+                                            "zIndex": 1000,
+                                          }
+                                        }
+                                        testID="BIG_BALANCE_HEADER"
+                                      >
+                                        0.00000123 ₿
+                                      </Text>
+                                      <Text
+                                        collapsable={false}
+                                        style={
+                                          Object {
+                                            "color": "#e5eaea",
+                                            "fontFamily": "IBMPlexSans",
+                                            "fontSize": 11.688311688311689,
+                                            "lineHeight": 13.636363636363637,
+                                            "opacity": 1,
+                                            "zIndex": 1000,
+                                          }
+                                        }
+                                      >
+                                        0.00 USD
+                                      </Text>
                                     </View>
                                   </View>
                                 </View>

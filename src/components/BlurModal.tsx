@@ -12,10 +12,11 @@ export interface ITransactionDetailsProps {
   children: any;
   useModalComponent?: boolean;
   goBackByClickingOutside?: boolean;
+  hideCross?: boolean;
   noMargin?: boolean,
   style?: ViewStyle;
 }
-export default function BlurModal({ children, useModalComponent, goBackByClickingOutside, noMargin, style: userStyle }: ITransactionDetailsProps) {
+export default function BlurModal({ children, useModalComponent, goBackByClickingOutside, hideCross, noMargin, style: userStyle }: ITransactionDetailsProps) {
   const navigation = useNavigation();
   const useModal = PLATFORM === "web" || PLATFORM === "macos" ? false : useModalComponent ?? true;
   goBackByClickingOutside = goBackByClickingOutside ?? true;
@@ -58,7 +59,7 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
             >
               {children}
             </Modal>
-            {goBackByClickingOutside && <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />}
+            {(goBackByClickingOutside && !hideCross) && <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />}
           </>
       }
     </RealTimeBlur>
@@ -79,7 +80,7 @@ const style = StyleSheet.create({
   },
   cross: {
     position: "absolute",
-    top: getStatusBarHeight() + (PLATFORM === "macos" ? 10 : 0),
+    top: getStatusBarHeight() + (PLATFORM === "macos" || PLATFORM === "web" ? 10 : 0),
     right: 10,
   }
 });
