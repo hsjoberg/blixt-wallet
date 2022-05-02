@@ -6,3 +6,6 @@ export const HAMPUS_EMAIL = "mailto:hampus.sjobergðŸ’©protonmail.com".replace("ð
 export const TELEGRAM = "https://t.me/blixtwallet";
 
 export const PLATFORM = "android";
+
+export const HEADER_MIN_HEIGHT = 53;
+export const HEADER_MAX_HEIGHT = 195;

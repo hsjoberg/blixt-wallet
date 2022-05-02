@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, StatusBar, NativeModules, ScrollView, DeviceEventEmitter, EventEmitter, NativeEventEmitter } from "react-native";
+import { StyleSheet, StatusBar, NativeModules, ScrollView, DeviceEventEmitter, EventEmitter, NativeEventEmitter, Linking } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Text, Button, Toast, Input, View, Container } from "native-base";
 import Long from "long";
@@ -36,7 +36,14 @@ import { localNotification } from "../../utils/push-notification";
 import { ICLOUD_BACKUP_KEY } from "../../state/ICloudBackup";
 import { notificationManager } from "../../state/NotificationManager";
 import PushNotification from "react-native-push-notification";
-import { ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID } from "../../utils/constants";
+import { ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID, PLATFORM } from "../../utils/constants";
+
+// let iCloudStorage: any;
+// console.log(PLATFORM);
+// if (PLATFORM === "ios") {
+//   console.log("why")
+//   iCloudStorage = require("react-native-icloudstore").default;
+// }
 
 interface IProps {
   navigation?: StackNavigationProp<RootStackParamList, "DEV_Commands">;
@@ -85,6 +92,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
 
           <Text style={{ width: "100%"}}>Random:</Text>
           <Button small onPress={async () => {
+            Alert.alert("",await Linking.getInitialURL()??"no");
+          }}><Text style={styles.buttonText}>getInitialURL</Text></Button>
+          <Button small onPress={async () => {
             console.log(await generateSecureRandom(32));
           }}><Text style={styles.buttonText}>generateSecureRandom</Text></Button>
           <Button small onPress={async () => {
@@ -111,12 +121,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             <Text style={styles.buttonText}>getTorEnabled</Text>
           </Button>
           <Button small onPress={async () => {
-            console.log("Tor", + await NativeModules.BlixtTor.startTor());
+            console.log("Tor", await NativeModules.BlixtTor.startTor());
           }}>
             <Text style={styles.buttonText}>startTor</Text>
           </Button>
           <Button small onPress={async () => {
-            console.log("Tor", + await NativeModules.BlixtTor.stopTor());
+            console.log("Tor", await NativeModules.BlixtTor.stopTor());
           }}>
             <Text style={styles.buttonText}>stopTor</Text>
           </Button>
@@ -167,6 +177,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               { data: base64.fromByteArray(lnrpc.InvoiceSubscription.encode(subscribeInvoicesUpdate).finish()) }
             );
           }}><Text style={styles.buttonText}>Emit fake transaction</Text></Button>
+          <Button small onPress={async () => {
+            actions.scheduledSync.setSyncEnabled(true);
+          }}><Text style={styles.buttonText}>scheduledSync.setSyncEnabled(true)</Text></Button>
+          <Button small onPress={async () => {
+            actions.scheduledSync.setSyncEnabled(false);
+          }}><Text style={styles.buttonText}>scheduledSync.setSyncEnabled(false)</Text></Button>
 
           <Button small onPress={async () => {
             interface IDemoInvoice {
@@ -424,6 +440,8 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Text style={{ width:"100%" }}>App storage:</Text>
           <Button small onPress={async () => actions.openDb()}><Text style={styles.buttonText}>actions.openDb()</Text></Button>
           <Button small onPress={async () => actions.resetDb()}><Text style={styles.buttonText}>actions.resetDb()</Text></Button>
+          <Button small onPress={async () => await setItem(StorageItem.lndChainBackend, "neutrino")}><Text style={styles.buttonText}>lndChainBackend = neutrino</Text></Button>
+          <Button small onPress={async () => await setItem(StorageItem.lndChainBackend, "bitcoindWithZmq")}><Text style={styles.buttonText}>lndChainBackend = bitcoindWithZmq</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text style={styles.buttonText}>walletCreated = true</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, ["pincode"])}><Text style={styles.buttonText}>set logginMethods to ["pincode"]</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, [])}><Text style={styles.buttonText}>set logginMethods to []</Text></Button>
@@ -431,6 +449,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text style={styles.buttonText}>walletCreated = true</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 27)}><Text style={styles.buttonText}>appVersion = 27</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 28)}><Text style={styles.buttonText}>appVersion = 28</Text></Button>
+          <Button small onPress={async () => {
+            actions.settings.changeTorEnabled(false);
+          }}><Text style={styles.buttonText}>changeTorEnabled(false)</Text></Button>
           <Button small onPress={async () => {
             await setItem(StorageItem.onboardingState, "SEND_ONCHAIN");
             actions.changeOnboardingState("SEND_ONCHAIN");

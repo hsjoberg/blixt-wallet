@@ -86,7 +86,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   }
 
   const onRemoveSeedPress = async () => {
-    Alert.alert(t("wallet.seed.remove.dialog.title"), t("wallet.seed.remove.dialog..msg"), [{
+    Alert.alert(t("wallet.seed.remove.dialog.title"), t("wallet.seed.remove.dialog.msg"), [{
       text: t("buttons.cancel",{ns:namespaces.common}),
     }, {
       text: t("wallet.seed.remove.dialog.accept"),
@@ -518,7 +518,7 @@ ${t("LN.inbound.dialog.msg3")}`
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: t("button.cancel",{ns:namespaces.common}),
+        negativeText: t("buttons.cancel",{ns:namespaces.common}),
         type: DialogAndroid.listRadio,
         selectedId: onchainExplorer,
         items: Object.keys(OnchainExplorer).map((currOnchainExplorer) => ({
@@ -600,7 +600,7 @@ ${t("LN.inbound.dialog.msg3")}`
       "To reset to the default node, long-press on the setting.\n\n" +
       "Note: Blixt Wallet does not support Tor onion v3 yet.",
       [{
-        text: t("button.cancel",{ns:namespaces.common}),
+        text: t("buttons.cancel",{ns:namespaces.common}),
         style: "cancel",
         onPress: () => {},
       }, {
@@ -825,6 +825,30 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
   }
 
+  // Delete wallet
+  const onPressDeleteWallet = async () => {
+    Alert.prompt(
+      "Delete wallet",
+      "WARNING!\nOnly do this if you're know what you're doing.\n" +
+      "Any funds that has not been properly backed up will be lost forever.\n\n" +
+      "Write \"delete wallet\" and press OK to continue.\n" +
+      "Once the wallet has been deleted, the app will be restarted " +
+      "for you to create restore or create a new wallet",
+      async (text) => {
+        if (text.length === 0 || text !== "delete wallet") {
+          return;
+        }
+
+        if (text === "delete wallet") {
+          // await NativeModules.LndMobile.stopLnd();
+          // await timeout(1000);
+          // await NativeModules.LndMobileTools.DEBUG_deleteDatafolder();
+        }
+      },
+      "plain-text",
+    );
+  }
+
   // Dunder server
   const dunderServer = useStoreState((store) => store.settings.dunderServer);
   const changeDunderServer = useStoreActions((store) => store.settings.changeDunderServer);
@@ -834,7 +858,7 @@ ${t("experimental.tor.disabled.msg2")}`;
       t("LN.LSP.setDialog.title"),
       "",
       [{
-        text: t("button.cancel",{ns:namespaces.common}),
+        text: t("buttons.cancel",{ ns:namespaces.common }),
         style: "cancel",
         onPress: () => {},
       }, {
@@ -1293,6 +1317,10 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Left><Icon style={style.icon} type="FontAwesome5" name="file-signature" /></Left>
             <Body><Text>{t("miscelaneous.signMessage.title")}</Text></Body>
           </ListItem>
+          {/* <ListItem style={style.listItem} icon={true} onPress={onPressDeleteWallet}>
+            <Left><Icon style={style.icon} type="FontAwesome5" name="file-signature" /></Left>
+            <Body><Text>Delete wallet</Text></Body>
+          </ListItem> */}
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("experimental.title")}</Text>
@@ -1344,6 +1372,10 @@ ${t("experimental.tor.disabled.msg2")}`;
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("debug.title")}</Text>
           </ListItem>
+          {/* <ListItem style={style.listItem} button={true} icon={true} onPress={onPressRescanBlockchain}>
+            <Left><Icon style={style.icon} type="Ionicons" name="search-sharp" /></Left>
+            <Body><Text>Rescan blockchain for UTXOs</Text></Body>
+          </ListItem> */}
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleDebugShowStartupInfo}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="android-debug-bridge" /></Left>
             <Body><Text>{t("debug.startup.title")}</Text></Body>

@@ -64,13 +64,13 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: t("layout.title"),
-      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
+      headerBackTitle: t("buttons.back", { ns:namespaces.common }),
       headerShown: true,
     });
   }, [navigation]);
 
   if (!paymentRequest) {
-    return (<Text>{t("msg.error",{ns:namespaces.common})}</Text>);
+    return (<Text>{t("msg.error", { ns:namespaces.common })}</Text>);
   }
 
   const { name, description } = extractDescription(paymentRequest.description);
@@ -100,7 +100,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
   formItems.push({
     key: "INVOICE",
-    title: t("invoice.title"),
+    title: t("form.invoice.title"),
     success: true,
     component: (
       <>
@@ -116,7 +116,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
   formItems.push({
     key: "AMOUNT_BTC",
-    title: `${t("amount.title")} ${BitcoinUnits[bitcoinUnit].nice}`,
+    title: `${t("form.amount.title")} ${BitcoinUnits[bitcoinUnit].nice}`,
     component: (
       <Input
         disabled={!amountEditable}
@@ -131,7 +131,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
   formItems.push({
     key: "AMOUNT_FIAT",
-    title: `${t("amount.title")} ${fiatUnit}`,
+    title: `${t("form.amount.title")} ${fiatUnit}`,
     component: (
       <Input
         disabled={!amountEditable}
@@ -147,21 +147,21 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   if (name) {
     formItems.push({
       key: "RECIPIENT",
-      title: t("recipient.title"),
+      title: t("form.recipient.title"),
       component: (<Input disabled={true} value={name} />),
     });
   }
   else if (nodeInfo && nodeInfo.node && nodeInfo.node.alias) {
     formItems.push({
       key: "NODE_ALIAS",
-      title: t("nodeAlias.title"),
+      title: t("form.nodeAlias.title"),
       component: (<Input disabled={true} value={nodeInfo.node.alias} />),
     });
   }
 
   formItems.push({
     key: "MESSAGE",
-    title: t("description.title"),
+    title: t("form.description.title"),
     component: (<Input multiline={PLATFORM === "android"} disabled={true} value={description} />),
   });
 

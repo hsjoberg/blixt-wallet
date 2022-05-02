@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { TextInput, StatusBar, StyleSheet, View, TouchableOpacity, BackHandler, ToastAndroid, Platform, KeyboardAvoidingView } from "react-native";
+import { TextInput, StatusBar, StyleSheet, View, TouchableOpacity, BackHandler, ToastAndroid, KeyboardAvoidingView } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height"
 import { injectJs, onMessageHandler } from "react-native-webln";
 import { RouteProp } from "@react-navigation/native";
@@ -125,10 +125,10 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   const closeBrowser = () => {
     Alert.alert("", t("close"),
       [{
-        text: t("buttons.yes",{ns:namespaces.common}),
+        text: t("buttons.yes",{ ns:namespaces.common }),
         onPress: () => navigation.goBack()
       }, {
-        text: t("buttons.yes",{ns:namespaces.common}),
+        text: t("buttons.no",{ ns:namespaces.common }),
         style: "cancel"
       }])
   };
@@ -141,7 +141,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
 
   return (
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} enabled={PLATFORM === "ios"}>
-      <BlurModal useModalComponent={false} noMargin goBackByClickingOutside={false} style={{ height: "100%" }}>
+      <BlurModal useModalComponent={false} noMargin goBackByClickingOutside={false} style={{ height: "100%", maxWidth: PLATFORM === "macos" ? "90%" : "100%" }}>
         <Card style={style.card}>
           <WebView
             containerStyle={{ opacity: showWebview ? 1 : 0 }}
@@ -180,7 +180,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
               <Icon style={style.closeButton} type="AntDesign" name="close" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setUrl(INITIAL_URL)} onLongPress={() => onLongPressHome()}>
-              <Icon style={style.listButton} type="FontAwesome5" name="home" />
+              <Icon style={style.listButton} type={PLATFORM !== "macos" ? "FontAwesome5" : "FontAwesome"} name="home" />
             </TouchableOpacity>
             {PLATFORM !== "android" &&
               <TouchableOpacity onPress={() => webview.current?.goBack()}>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { StyleSheet, StatusBar, Vibration } from "react-native";
+import { StyleSheet, Vibration } from "react-native";
 import { View, Text, Button, Icon } from "native-base";
 import color from "color";
 import * as Animatable from "react-native-animatable";
@@ -126,7 +126,8 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
           </Button>
           <Button onPress={onBackspacePress} style={[style.pincodeButton, style.buttonBackspace]}>
             <Text style={style.pincodeButtonText}>
-              <Icon style={style.buttonBackspaceIcon} type="FontAwesome5" name="backspace" />
+              {PLATFORM === "macos" && <Icon style={style.buttonBackspaceIcon} type="Entypo" name="erase" />}
+              {PLATFORM !== "macos" && <Icon style={style.buttonBackspaceIcon} type="FontAwesome" name="back" />}
             </Text>
           </Button>
         </View>

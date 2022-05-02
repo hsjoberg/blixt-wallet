@@ -1,5 +1,4 @@
 import React from "react";
-import { TextStyle } from "react-native";
 import { NativeBase, Text } from "native-base";
 import Clipboard from "@react-native-community/clipboard";
 

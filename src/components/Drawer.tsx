@@ -99,7 +99,7 @@ export default function Drawer() {
 
   return (
     <View style={style.drawerContainer}>
-      <ScrollView style={style.drawerScroll} alwaysBounceVertical={false}>
+      <ScrollView style={style.drawerScroll} contentContainerStyle={style.drawerScrollInner} alwaysBounceVertical={false}>
           <View style={[{
             backgroundColor: statusIndicatorColor,
           }, style.statusIndicator]}></View>
@@ -148,14 +148,13 @@ export default function Drawer() {
             </View>
           </TouchableOpacity>
 
-          {PLATFORM !== "macos" &&
             <TouchableOpacity onPress={goToLightningBrowser}>
               <View style={style.menuItem}>
                 <Icon style={style.menuItemIcon} type="MaterialCommunityIcons" name="web" />
                 <Text style={style.menuItemText}>{t("menu.lightningBrowser")}</Text>
               </View>
             </TouchableOpacity>
-          }
+
 
           <TouchableOpacity onPress={() => goToScreen("OnChain")}>
             <View style={style.menuItem}>
@@ -225,7 +224,8 @@ const style = StyleSheet.create({
     backgroundColor: blixtTheme.gray,
     paddingVertical: 10,
     paddingHorizontal: 13,
-    marginHorizontal: 19,
+    marginLeft: 19,
+    marginRight: PLATFORM !== "macos" ? 19 : 4,
     marginBottom: 11,
     borderRadius: 12,
   },

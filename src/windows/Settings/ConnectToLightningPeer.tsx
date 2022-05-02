@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect } from "react";
 import { Text, Container, Button, Icon, Input, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { useTranslation } from "react-i18next";
 
 import { SettingsStackParamList } from "./index";
 import { useStoreActions } from "../../state/store";
@@ -8,8 +9,7 @@ import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";
-
-import { useTranslation } from "react-i18next";
+import { PLATFORM } from "../../utils/constants";
 import { namespaces } from "../../i18n/i18n.constants";
 
 export interface IConnectToLightningPeerProps {
@@ -18,8 +18,7 @@ export interface IConnectToLightningPeerProps {
 }
 
 export default function OpenChannel({ navigation, route }: IConnectToLightningPeerProps) {
-  const { t, i18n } = useTranslation(namespaces.settings.connectToLightningPeer)
-
+  const { t } = useTranslation(namespaces.settings.connectToLightningPeer)
   const connectPeer = useStoreActions((store) => store.lightning.connectPeer);
   const getLightningPeers = useStoreActions((store) => store.lightning.getLightningPeers);
   const [peer, setPeer] = useState("");
@@ -59,7 +58,7 @@ export default function OpenChannel({ navigation, route }: IConnectToLightningPe
           component: (
             <>
               <Input placeholder={t("connect.placeholder")} value={peer} onChangeText={setPeer} />
-              <Icon type="AntDesign" name="camera" onPress={onCameraPress} />
+              {PLATFORM !== "macos" && <Icon type="AntDesign" name="camera" onPress={onCameraPress} />}
             </>
           )
         },]}

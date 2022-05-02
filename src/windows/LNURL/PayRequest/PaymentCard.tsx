@@ -17,6 +17,7 @@ import { Alert } from "../../../utils/alert";
 import { setupDescription } from "../../../utils/NameDesc";
 import useBalance from "../../../hooks/useBalance";
 import { PayerData } from "./PayerData";
+import { PLATFORM } from "../../../utils/constants";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../../i18n/i18n.constants";
@@ -203,7 +204,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
                 keyboardType="numeric"
                 returnKeyType="done"
                 placeholder={`${t("form.amount.placeholder")} (${preferFiat ? fiatUnit : bitcoinUnit.nice})`}
-                style={[style.input]}
+                style={[style.input, { marginRight: PLATFORM === "macos" ? 90 : undefined }]}
                 value={preferFiat ? dollarValue : bitcoinValue}
               />
               <Button

@@ -215,20 +215,24 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvReco
 
   return new Promise(async (resolve, reject) => {
     const listener = LndMobileEventEmitter.addListener("RouterSendPaymentV2", (e) => {
-      listener.remove();
-      const error = checkLndStreamErrorResponse("RouterSendPaymentV2", e);
-      if (error === "EOF") {
-        return;
-      } else if (error) {
-        console.log("Got error from RouterSendPaymentV2", [error]);
-        return reject(error);
+      try {
+        listener.remove();
+        const error = checkLndStreamErrorResponse("RouterSendPaymentV2", e);
+        if (error === "EOF") {
+          return;
+        } else if (error) {
+          console.log("Got error from RouterSendPaymentV2", [error]);
+          return reject(error);
+        }
+
+        console.log("sendPaymentV2Sync", e);
+        const response = decodeSendPaymentV2Result(e.data);
+        console.log("sendPaymentV2Sync",response);
+
+        resolve(response);
+      } catch (error) {
+        reject(error.message);
       }
-
-      console.log("sendPaymentV2Sync", e);
-      const response = decodeSendPaymentV2Result(e.data);
-      console.log("sendPaymentV2Sync",response);
-
-      resolve(response);
     });
 
     const response = await sendStreamCommand<routerrpc.ISendPaymentRequest, routerrpc.SendPaymentRequest>({

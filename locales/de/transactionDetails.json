@@ -1,7 +1,7 @@
 {
   "title": "Transaktion",
   "date": "Datum",
-  "Note": "Notiz",
+  "note": "Notiz",
   "website": "Webseite",
   "type" : "Typ",
   "lnurl": {

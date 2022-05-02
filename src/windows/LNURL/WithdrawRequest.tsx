@@ -19,7 +19,7 @@ interface IWithdrawRequestProps {
   navigation: StackNavigationProp<{}>;
 }
 export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestProps) {
-  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
+  const t = useTranslation(namespaces.LNURL.withdrawRequest).t;
   const [status, setStatus] = useState<"PROMPT" | "PROCESSING" | "DONE">("PROMPT");
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
   const type = useStoreState((store) => store.lnUrl.type);
@@ -64,7 +64,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
                   lnUrlWithdraw: lnObject.balanceCheck ?? null,
                   lightningAddress: null,
                   lud16IdentifierMimeType: null,
-                  note: `${t("doRequest.addToContactList.note", { domain })}`,
+                  note: t("doRequest.addToContactList.note", { domain }),
                 });
               }
             }],

@@ -186,9 +186,7 @@ export function identifyService(pubkey: string | null, description: string, webs
   if (description.includes("LuckyThunder.com") || website?.includes("luckythunder.com")) {
     return "luckythunder";
   }
-  // TODO(hsjoberg): not tested:
-  // Bitrefill.com
-  if (pubkey === "030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f") {
+  if (pubkey === "030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f" || pubkey === "03d607f3e69fd032524a867b288216bfab263b6eaee4e07783799a6fe69bb84fac") {
     return "bitrefill"
   }
   if (website?.includes("lightning.gifts")) {

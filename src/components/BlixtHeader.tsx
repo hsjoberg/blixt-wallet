@@ -2,6 +2,7 @@ import React from "react";
 import LinearGradient from "react-native-linear-gradient";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { Chain } from "../utils/build";
+import Color from "color";
 
 export default function BlixtHeader(props: any) {
   return (

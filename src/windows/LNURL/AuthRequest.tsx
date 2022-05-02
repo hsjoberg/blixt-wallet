@@ -56,7 +56,7 @@ export default function LNURLChannelRequest({ navigation }: IAuthRequestProps) {
                   clear();
                   Vibration.vibrate(50);
                   toast(
-                    `${t("msg.error",{ns:namespaces.common})}:`  + e.message,
+                    `${t("msg.error", { ns:namespaces.common })}: `  + e.message,
                     12000,
                     "warning",
                     "Okay"

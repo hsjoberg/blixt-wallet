@@ -524,12 +524,14 @@ const headerInfo = StyleSheet.create({
       web: 0,
     }),
     fontFamily: blixtTheme.fontMedium,
+    zIndex: 1000,
   },
   fiat: {
     color: blixtTheme.light,
     fontSize: 18 * fontFactor,
     lineHeight: 21 * fontFactor,
     fontFamily: theme.fontFamily,
+    zIndex: 1000,
   },
   pending: {
     color: "#d6dbdb",
