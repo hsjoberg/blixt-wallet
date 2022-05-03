@@ -200,7 +200,7 @@ export default {
   toolbarSearchIconSize: platform === PLATFORM.IOS ? 20 : 23,
   toolbarInputColor: platform === PLATFORM.IOS ? '#CECDD2' : '#fff',
   searchBarHeight: platform === PLATFORM.IOS ? 30 : 40,
-  searchBarInputHeight: platform === PLATFORM.IOS ? 30 : 50,
+  searchBarInputHeight: platform === PLATFORM.IOS ? 30 : platform === "macos" ? 20 : 50,
   toolbarBtnTextColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
   iosStatusbar: 'dark-content',
   toolbarDefaultBorder: platform === PLATFORM.IOS ? '#a7a6ab' : '#3F51B5',
@@ -225,7 +225,7 @@ export default {
   // inputBorderColor: '#D9D5DC',
   inputSuccessBorderColor: '#2b8339',
   inputErrorBorderColor: '#ed2f2f',
-  inputHeightBase: 50,
+  inputHeightBase: platform !== "macos" ? 50 : 25,
   get inputColor() {
     return this.textColor;
   },
