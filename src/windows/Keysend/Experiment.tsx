@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Button, Icon, H1, Input, Text, Spinner } from "native-base";
+import { Button, Icon, H1, Text, Spinner } from "native-base";
 import { View } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -19,10 +19,11 @@ import { ITransaction } from "../../storage/database/transaction";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../Main";
 import { translatePaymentFailureReason } from "../../state/Send";
+import { PLATFORM } from "../../utils/constants";
+import Input from "../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-import { PLATFORM } from "../../utils/constants";
 
 interface ILightningInfoProps {
   navigation: StackNavigationProp<RootStackParamList, "KeysendExperiment">;

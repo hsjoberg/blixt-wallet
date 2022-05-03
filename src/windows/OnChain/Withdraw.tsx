@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-import { Text, Container, Button, Icon, Input, Spinner } from "native-base";
+import { Text, Container, Button, Icon, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
 import Long from "long";
@@ -14,6 +14,7 @@ import { BitcoinUnits, convertBitcoinUnit } from "../../utils/bitcoin-units";
 import useBalance from "../../hooks/useBalance";
 import useFormatBitcoinValue from "../../hooks/useFormatBitcoinValue";
 import { PLATFORM } from "../../utils/constants";
+import Input from "../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";

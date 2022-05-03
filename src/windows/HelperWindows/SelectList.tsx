@@ -1,10 +1,11 @@
 import React, { useLayoutEffect, useState } from "react";
-import { Header, Icon, Input, Item, ListItem, Text } from "native-base";
+import { Header, Icon, Item, ListItem, Text } from "native-base";
 import Container from "../../components/Container";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
+import Input from "../../components/Input";
 
 export interface ISelectListNavigationProps<T> {
   title: string;

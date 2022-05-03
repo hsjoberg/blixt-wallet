@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from "react";
-import { Text, Container, Button, Icon, Input, Spinner } from "native-base";
+import { Text, Container, Button, Icon, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useTranslation } from "react-i18next";
 
@@ -11,6 +11,7 @@ import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";
 import { PLATFORM } from "../../utils/constants";
 import { namespaces } from "../../i18n/i18n.constants";
+import Input from "../../components/Input";
 
 export interface IConnectToLightningPeerProps {
   navigation: StackNavigationProp<SettingsStackParamList, "LightningPeers">;

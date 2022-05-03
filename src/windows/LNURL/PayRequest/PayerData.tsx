@@ -1,9 +1,10 @@
-import { CheckBox, Input, Text } from "native-base";
+import { CheckBox, Text } from "native-base";
 import React from "react";
 import { View } from "react-native";
 import { ILNUrlPayRequest, ILNUrlPayRequestPayerData } from "../../../state/LNURL";
 
 import style from "./style";
+import Input from "../../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../../i18n/i18n.constants";

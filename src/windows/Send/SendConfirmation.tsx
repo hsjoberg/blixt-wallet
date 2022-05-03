@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Vibration, BackHandler, Keyboard } from "react-native";
-import { Button, Container, Icon, Text, Input, Spinner } from "native-base";
+import { Button, Container, Icon, Text, Spinner } from "native-base";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -15,6 +15,7 @@ import useBalance from "../../hooks/useBalance";
 import { hexToUint8Array, toast } from "../../utils";
 import { PLATFORM } from "../../utils/constants";
 import useLightningReadyToSend from "../../hooks/useLightingReadyToSend";
+import Input from "../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";

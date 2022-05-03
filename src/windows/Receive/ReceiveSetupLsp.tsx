@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { Button, Icon, Text, Input, Spinner } from "native-base";
+import { Button, Icon, Text, Spinner } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { useDebounce } from "use-debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -19,6 +19,7 @@ import { IFiatRates } from "../../state/Fiat";
 import { Alert } from "../../utils/alert";
 import TextClickable from "../../components/TextClickable";
 import { dunderPrompt } from "../../utils/dunder";
+import Input from "../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";

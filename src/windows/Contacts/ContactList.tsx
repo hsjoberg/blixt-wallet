@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
-import { StyleSheet, StatusBar, TextInput } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import { Icon, Text, Header, Item } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Color from "color";
@@ -14,6 +14,7 @@ import usePromptLightningAddress from "../../hooks/usePromptLightningAddress";
 import { Alert } from "../../utils/alert";
 import { Chain } from "../../utils/build";
 import Contact from "./Contact";
+import Input from "../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -98,11 +99,12 @@ export default function ContactList({ navigation }: IContactListProps) {
     <Container>
       <Header iosBarStyle="light-content" searchBar rounded style={style.searchHeader}>
         <Item rounded style={{ height: 35 }}>
-          <TextInput
+          <Input
             style={{ marginLeft: 8, marginTop: -2.5, borderRadius: 8, color: blixtTheme.dark }}
             placeholder="Search"
             onChangeText={setSearchText}
             autoCorrect={false}
+            enableFocusRing={false} // macOS prop
           />
           <Icon name="ios-search" />
         </Item>

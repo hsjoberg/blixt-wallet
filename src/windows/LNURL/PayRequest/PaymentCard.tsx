@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Vibration, Keyboard, Image } from "react-native";
-import { Text, View, Button, Input } from "native-base";
+import { Text, View, Button } from "native-base";
 import Long from "long";
 import { useNavigation } from "@react-navigation/core";
 
@@ -18,6 +18,7 @@ import { setupDescription } from "../../../utils/NameDesc";
 import useBalance from "../../../hooks/useBalance";
 import { PayerData } from "./PayerData";
 import { PLATFORM } from "../../../utils/constants";
+import Input from "../../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../../i18n/i18n.constants";
