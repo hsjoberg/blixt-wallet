@@ -6,8 +6,9 @@ import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
 import { DEFAULT_INVOICE_EXPIRY } from "../utils/constants";
+import { IStoreModel } from "./index";
 
-import {i18n} from "../i18n/i18n"
+import { i18n } from "../i18n/i18n";
 
 import logger from "./../utils/log";
 const log = logger("Settings");
@@ -52,7 +53,7 @@ export interface ISettingsModel {
   changeLndNoGraphCache: Thunk<ISettingsModel, boolean>;
   changeInvoiceExpiry: Thunk<ISettingsModel, number>;
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
-  changeReceiveViaP2TR: Thunk<ISettingsModel, boolean>;
+  changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -310,9 +311,10 @@ export const settings: ISettingsModel = {
     actions.setRescanWallet(payload);
   }),
 
-  changeReceiveViaP2TR: thunk(async (actions, payload) => {
+  changeReceiveViaP2TR: thunk(async (actions, payload, { getStoreActions }) => {
     await setItemObject(StorageItem.receiveViaP2TR, payload);
     actions.setReceiveViaP2TR(payload);
+    await getStoreActions().onChain.getAddress({});
   }),
 
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
