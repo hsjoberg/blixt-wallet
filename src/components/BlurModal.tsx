@@ -48,7 +48,7 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
             <View style={[style.modal, userStyle]}>
               {children}
             </View>
-            {goBackByClickingOutside && <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />}
+            {goBackByClickingOutside && !hideCross && <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />}
           </View>
         : <>
             <Modal

@@ -10,6 +10,7 @@ import * as Keychain from 'react-native-keychain';
 import iCloudStorage from "react-native-icloudstore";
 import { JSHash, CONSTANTS } from "react-native-hash";
 import { generateSecureRandom } from "react-native-securerandom";
+import RNLocalize from "react-native-localize";
 
 import { Alert } from "../../utils/alert";
 import { getTransactions, getTransaction, createTransaction, clearTransactions } from "../../storage/database/transaction";
@@ -97,6 +98,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => {
             console.log(await generateSecureRandom(32));
           }}><Text style={styles.buttonText}>generateSecureRandom</Text></Button>
+          <Button small onPress={async () => {
+            console.log(RNLocalize.getLocales());
+          }}><Text style={styles.buttonText}>getLocales</Text></Button>
           <Button small onPress={async () => {
             const encoder = new TextEncoder();
             console.log(encoder);

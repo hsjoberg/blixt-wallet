@@ -8661,10 +8661,10 @@ react-native-codegen@^0.0.13:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
-react-native-codegen@^0.0.15:
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.0.15.tgz#ff664909dad8d7d8c6c3c8ff74ad548cf15956f9"
-  integrity sha512-kxOwGM9Jmz476NGZCq/kJswX4rD8c0kXCkZ6UNszAs+LbtlT8D2dyJeH2RRxLSZXDFUcvbgKWQNcHTidzmvYkA==
+react-native-codegen@^0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.0.16.tgz#5561ab5810df29ff7edb6bc66e0146fab78bc17d"
+  integrity sha512-fAid3BeRGhEAG0oDhgnqwj1Btdp7S6WE4oVfwbsOPHm3DmGW7Fe1lcBudPauJPiUs4t63ABK3A4LQXpPSRjaOg==
   dependencies:
     "@babel/parser" "^7.14.0"
     flow-parser "^0.121.0"
@@ -8774,6 +8774,11 @@ react-native-linear-gradient@^2.5.6:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
   integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
+
+react-native-localize@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-2.2.1.tgz#6fe646833691c6ee8a474df3c8b069402cb1dba8"
+  integrity sha512-BuPaQWvxLZG1NrCDGqgAnecDrNQu3LED9/Pyl4H2LwTMHcEngXpE5PfVntW2GiLumdr6nUOkWmMnh8PynZqrsw==
 
 "react-native-macos@git+https://github.com/hsjoberg/react-native#de844421594347f362788c400aee2b331c5cd28a":
   version "1000.0.0"
