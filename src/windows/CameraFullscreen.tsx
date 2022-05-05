@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, StyleSheet } from "react-native";
 
 import Camera from "../components/Camera";
 import BarcodeMask from "../components/BarCodeMask";
@@ -7,12 +7,20 @@ import { smallScreen } from "../utils/device";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import GoBackIcon from "../components/GoBackIcon";
 import { PLATFORM } from "../utils/constants";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
+import { RootStackParamList } from "../Main";
 
-type onReadCallback = (address: string) => void;
+interface ICameraFullscreenProps {
+  bolt11Invoice?: string;
+  navigation: StackNavigationProp<RootStackParamList, "CameraFullScreen">;
+  route: RouteProp<RootStackParamList, "CameraFullScreen">;
+}
 
-export default function CameraFullscreen({ navigation, route }: any) {
+export default function CameraFullscreen({ navigation, route }: ICameraFullscreenProps) {
   const [onReadCalled, setOnReadCalled] = useState(false);
-  const onRead: onReadCallback = route.params.onRead ?? (() => {});
+  const onRead = route.params.onRead ?? (() => {});
   return (
     <>
       <StatusBar
@@ -40,10 +48,19 @@ export default function CameraFullscreen({ navigation, route }: any) {
             height={smallScreen ? 270 : 275}
           />
           {PLATFORM !== "android" &&
-            <GoBackIcon />
+            <GoBackIcon style={style.goBack} />
           }
         </>
       </Camera>
     </>
   );
 }
+
+const style = StyleSheet.create({
+  goBack: {
+    top: getStatusBarHeight(false) + 8,
+    left: 8,
+    position: "absolute",
+    padding: 9,
+  },
+});
