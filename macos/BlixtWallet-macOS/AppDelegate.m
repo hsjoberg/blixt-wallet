@@ -18,7 +18,11 @@
   _bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:nil];
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+- (void)application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls {
+  [RCTLinkingManager setInitialUrl:urls[0]];
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
   [[NSAppleEventManager sharedAppleEventManager]
    setEventHandler:self
    andSelector:@selector(getURL:withReplyEvent:)
@@ -27,9 +31,7 @@
   // Insert code here to initialize your application
 }
 
-- (void)getURL:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)reply
-{
-  NSLog(@"Inside getURL");
+- (void)getURL:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)reply {
   [RCTLinkingManager getUrlEventHandler:event withReplyEvent:reply];
 }
 

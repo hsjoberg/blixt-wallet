@@ -94,7 +94,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-keychain": "git+https://github.com/hsjoberg/react-native-keychain#5cef789c6eb2661a05dae1efc2dea3fb71486420",
     "react-native-linear-gradient": "^2.5.6",
-    "react-native-macos": "^0.66.48",
+    "react-native-macos": "git+https://github.com/hsjoberg/react-native#de844421594347f362788c400aee2b331c5cd28a",
     "react-native-maps": "^0.31.1",
     "react-native-material-menu": "^2.0.0",
     "react-native-modal": "^13.0.1",
