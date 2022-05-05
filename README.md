@@ -92,20 +92,17 @@ To start the application:
 
 ### macOS
 
-_The macOS version is still a work in progress._
-
 To build the macOS version, a computer running macOS is required.
 - Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
-- Build lnd for macOS by following the steps in [build-ios-framework.md](build-ios-framework.md).
-  - You have to change lnd's `Makefile` for the `ios` build step to compile for macOS instead of iOS:
-    `$(GOMOBILE_BIN) bind -target=ios` -> `$(GOMOBILE_BIN) bind -target=macos`
+- Build lnd for macOS by following the steps in [build-ios-framework.md](build-ios-framework.md)
+  - Intead of running `make ios`, run `make macos` or `make apple`
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
 - Install CocoaPods libs: `cd macos && pod install`
 
 To start the application:
 - Run: `yarn start-metro`
-- Build app from Xcode
+- Build app from Xcode or run `yarn macos:mainnet-debug`
 
 ## Commit and Code-Style
 
