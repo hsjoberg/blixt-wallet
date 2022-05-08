@@ -69,21 +69,21 @@
   },
   "overview": {
     "recoverInfo": {
-      "msg1": "Wallet-Wiederherstellung in Arbeit.",
-      "msg2": "Wallet-Wiederherstellung beendet.",
-      "more": "Mehr Info"
+      "msg1": "Wallet recovery in progress.",
+      "msg2": "Wallet recovery finished.",
+      "more": "More info"
     },
     "sendOnChain": {
-      "title": "Willkommen bei Blixt Wallet!",
-      "msg1": "Um zu starten, sende On-Chain Guthaben an die Bitcoin-Adresse.",
-      "msg2": "Ein Lightning-Kanal wird automatisch für Dich erstellt.",
-      "msg3": "Sende mindestens",
-      "alert": "Bitcoin-Adresse in die Zwischenablage kopiert"
+      "title": "Welcome to Blixt Wallet!",
+      "msg1": "To get started, send on-chain funds to the bitcoin address to the right.",
+      "msg2": "A channel will automatically be opened for you.",
+      "msg3": "Send at least",
+      "alert": "Bitcoin address copied to clipboard"
     },
     "doBackup": {
-      "msg1": "Danke, dass Du Blixt Wallet verwendest!",
-      "msg2": "Wir empfehlen, ein Wallet-Backup zu erstellen, um im Falle eines Geräteverlusts das Guthaben wiederherstellen zu können",
-      "backup": "Wallet-Backup"
+      "msg1": "Thank you for using Blixt Wallet!",
+      "msg2": "We recommend making a backup of the wallet so that you can restore your funds in case of a phone loss.",
+      "backup": "Backup wallet"
     }
   },
   "help": {
@@ -530,7 +530,7 @@
         "title": "Name",
         "subtitle": "Will be used in transactions",
         "dialog": {
-          "msg": "Choose a name that will be used in transactions\n\nYour name will be seen in invoices to those who pay you as well as people you pay to.",
+          "msg": "Choose a name that will be used in transactions.\n\nYour name will be seen in invoices to those who pay you as well as people you pay to.",
           "accept": "Set name"
         }
       },
@@ -922,9 +922,15 @@
     "msg2": "send bitcoins to the address above"
   },
   "welcome.almostDone": {
-    "title": "Add funds",
-    "msg1": "To start using Lightning in Blixt Wallet",
-    "msg2": "send bitcoins to the address above"
+    "autopilot": {
+      "title": "Auto-open channels",
+      "msg": "Open channels when on-chain funds are available"
+    },
+    "done": {
+      "title": "Almost done!",
+      "msg1": "Here are some wallet settings you can set up to your liking",
+      "msg2": "When you are ready, press continue"
+    }
   },
   "welcome.confirm": {
     "alert": {
