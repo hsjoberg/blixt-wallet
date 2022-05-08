@@ -19,7 +19,7 @@ export interface IPayerDataProps {
   payerDataName: ILNUrlPayRequestPayerData["name"] | null;
 }
 export function PayerData({ setComment, setSendName, sendName, name, domain, commentAllowed, payerDataName}: IPayerDataProps) {
-  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
+  const t = useTranslation(namespaces.LNURL.payRequest).t;
   return (
     <View style={style.metadataSection}>
       {commentAllowed &&

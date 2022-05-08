@@ -1,0 +1,1020 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Tera'Nganpu'",
+      "nodeAlias": "LayerteS",
+      "description": "Qurgh",
+      "amount": "'Antu'",
+      "fee": "Ngeb"
+    },
+    "buttons": {
+      "ok": "lu'",
+      "cancel": "qIl",
+      "continue": "taH",
+      "skip": "DuQwI'",
+      "proceed": "Ruch",
+      "back": "chap",
+      "no": "Qo'",
+      "yes": "HIja'",
+      "save": "choq",
+      "copy": "qoS"
+    },
+    "msg": {
+      "status": "Dotlh",
+      "error": "Qagh",
+      "warning": "ghob",
+      "result": "reynalDo",
+      "pending": "ngeH",
+      "done": "pItlh",
+      "dismiss": "QIH",
+      "lastSync": "jatlh",
+      "lastSyncAttempt": "jISaQ",
+      "clipboardCopy": "yIruch",
+      "written": "ghItlh",
+      "enabled": "ngat",
+      "disabled": "Qotlh"
+    }
+  },
+  "welcome.start": {
+    "title": "yI'el",
+    "createWallet": {
+      "title": "ChenmoH tlhoy'",
+      "msg1": "yo' qIjDaq suvchoH SuvwI'pu' 'e' luHarlu'.",
+      "msg2": "joHwI', bIvumchugh, vaj choquvHa'moHlaHbe'chugh.",
+      "msg3": "reH lut tlhaQ bOQoy boneHpu'chugh.",
+      "msg4": "reH jIHvaD qelnIS"
+    },
+    "restoreWallet": {
+      "title": "qevpa' tlhoy'"
+    }
+  },
+  "footerNav": {
+    "receive": "Hev",
+    "send": "ngeH"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Hotlh",
+      "receive": "Hev",
+      "pasteFromClipboard": "qamDu'Daq jotHa'qang",
+      "sendToLightningAddress": "jajmeyvaD jatlh",
+      "contactsAndServices": "ghe''or je",
+      "lightningBrowser": "wovmoHlu'mo'",
+      "onChainWallet": "'eDjaj pol",
+      "lightningChannels": "teS",
+      "keysendExperiment": "qeylIS",
+      "showMore": "'Itlh"
+    },
+    "madeInSweden": "ghe ⚡''orDaq"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "qorDu'ghomDaq qengtaHvIS.",
+      "msg2": "vItmoHlu' 'e' yI'angchu'",
+      "more": "vaj HutlhtaHvIS"
+    },
+    "sendOnChain": {
+      "title": "yI'el tlhoy'",
+      "msg1": "pa'Daq QottaH qaDanganpu' 'e' vISov.",
+      "msg2": "SoHvaD Qu' Hoch vIta'rup.",
+      "msg3": "pa'",
+      "alert": "sengvamDaq QotDI' sengmey."
+    },
+    "doBackup": {
+      "msg1": "qo' HochDaq tlhIH qo' Hoch",
+      "msg2": "wo'maj nadev Data'laHchugh, ngIvwI'ghom'e' wIqelchu'meH, ngIvlu'taHvIS ngIvwI'ghom ra'wI' 'e' vIHon.",
+      "backup": "yojHa'"
+    }
+  },
+  "help": {
+    "title": "QaH",
+    "msg1": "HIvje' 'ach yInlIj vItojrup.",
+    "msg2": "Qo'noSDaq bIcheghlaHchu', ghu' QaQ lutu'lu' 'e' Dachaw'chugh.",
+    "msg3": "veS Human suvwI' 'ach reH SuvwI'pu' 'e' yInID.",
+    "telegramGroup": "ghom"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "yIHmey ngeD",
+      "title1": "naQchoHtaHvIS",
+      "msg1": "tayqeqmaj luHotlhlu' 'ej tayqeqmey'e'.",
+      "msg2": "tangqa' targhlIj 'oH yItlhej.",
+      "msg3": "yo' qIjDaq ngoDmey DItu'moHlu'pu'",
+      "blockHeight": {
+        "title": "yIchenmoH",
+        "msg1": "Dutlh"
+      }
+    },
+    "recoveryMode": {
+      "title": "lIQmoH",
+      "msg1": "yapHa'chuq",
+      "msg2": "& yupma'qoq mIndu'Daj veqlargh."
+    },
+    "lndLog": {
+      "show": "ngoQ",
+      "copy": "yIleS"
+    }
+  },
+  "transactionDetails": {
+    "title": "Huq",
+    "date": "Qo', joH.",
+    "Note": "paghna'",
+    "website": "ma'oy'",
+    "type" : "Segh",
+    "lnurl": {
+      "messageFromWebsite": "qotlh",
+      "urlReceivedFromWebsite": "URL che' Vo'",
+      "secretMessage": "bIjatlhQo'"
+    },
+    "payer": "puq",
+    "recipient": "SIQwI'",
+    "amountInFiatTimeOfPayment": "leghqu'nIS (wanI'vam)",
+    "numberOfHops": "'ach romuluS",
+    "remotePubkey": "seng",
+    "paymentHash": "rIQ",
+    "preimage": "chIrgh",
+    "status": "Dotlh",
+    "goBack": "ghoS",
+    "button": {
+      "setNote": "toH, yIleghQo'",
+      "cancelInvoice": "qo'Daq sa'nIS",
+      "showMap": "QI'yaH"
+    },
+    "setNoteDialog": {
+      "title": "paghna'",
+      "text": "yuQvo' QIHlaHbe'"
+    }
+  },
+  "web.info": {
+    "title": "jIhDaq che'taH",
+    "pressToTry": "veSDujmey tu'lu'"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Hev"
+    },
+    "createInvoice": {
+      "title": "daqchenmoH",
+      "error": "vaj yIyajchoHlaH pagh",
+      "alert": "bIjontaHvIS, choparHa'qu' 'e' DaSovchu'.",
+      "lsp": {
+        "msg": "'ach hegh Qorghqu' ponglu'bogh quvHa'moHlu'chugh.",
+        "msg1": "nuq 'oH Dochvam'e'?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "valwI'",
+      "msg": "'eldI' tlhoS Hoch, veSDujmey potlhqu' QoraQ tuq.",
+      "msg1": "chenpu'DI' noyqangwI''e' lutu'lu'be'",
+      "alert": "tamtaHvIS HIq vIDelchu' 'e' vIHar.",
+      "proceed": "Ruch"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "'antu'",
+        "change": "qaSbe'",
+        "dunderPlaceholder": "'ay' cha'"
+      },
+      "amountBitcoin": {
+        "title": "'antu'",
+        "change": "Sey'choH",
+        "dunderPlaceholder": "'ay' cha'"
+      },
+      "payer": {
+        "title": "puq",
+        "placeholder": "pagh"
+      },
+      "description": {
+        "title": "QIn",
+        "placeholder": "puqbe'wI'"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "'antu' HIq LSP",
+    "msg": "'ach malja' ghe''orvo' (LSP) jupwI' QuptaHvIS, nIbuSbogh ghotpu'vam'e'.",
+    "msg1": "tIqlIj HIvqa' DeghwI'pu' 'e' DaHarpu'.",
+    "msg2": "tangqa' targh malja' vIyajlaHbe' je. 'ej Qu'Mej tlhoy Hoch tlhIngan yo' 'ej QuchtaHvIS,",
+    "msg3": "QIm",
+    "msg4": "pa'",
+    "msg5": "qaStaHvIS jajmey Hoch je."
+  },
+  "receive.receiveQr": {
+    "title": "Hev",
+    "qr": {
+      "title": "chay' ghopDaj",
+      "msg": "DaSIQ {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "'ugh"
+    },
+    "form": {
+      "invoice": {
+        "title": "wIvtaHvIS pov."
+      },
+      "amount": {
+        "title": "'antu'"
+      },
+      "recipient": {
+        "title": "SIQwI'"
+      },
+      "nodeAlias": {
+        "title": "layerteS"
+      },
+      "description": {
+        "title": "QIn"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "RITLH"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "tIS boj"
+    },
+    "balance": {
+      "title": "ngaD"
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "poSmoH"
+    },
+    "form": {
+      "title": "poSmoH",
+      "channel": {
+        "title": "ghobe' URI",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "'antu'",
+        "placeholder": "'antu'"
+      },
+      "fee_rate": {
+        "title": "Dov'a'"
+      }
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "'aw'"
+    },
+    "address": {
+      "title": "bIHvaD QI'tu' tangqa' DaSuqpu'DI'",
+      "alert": "boqmaj 'ongmeH Dayaj."
+    },
+    "newAddress": {
+      "title": "nI'qu'chu'"
+    },
+    "withdraw": {
+      "title": "HeS"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Huq",
+    "blockExplorer": "ghe''orDaq ghu'vam",
+    "txHash": "ID",
+    "timeStamp": "Qo', joH.",
+    "amount": "'antu'",
+    "totalFees": "tlhaQ",
+    "label": "per",
+    "destAddresses": "ghoch",
+    "numConfirmations": "QumpIn",
+    "blockHeight": "boqmaj",
+    "blockHash": "rIn",
+    "rawTxHex": {
+      "title": "Raw tx hex",
+      "msg": "'ej ghuH"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "yaS DIr"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "HeS"
+    },
+    "form": {
+      "address": {
+        "title": "SoQ",
+        "placeholder": "loSlu'taH"
+      },
+      "amount": {
+        "title": "'antu'",
+        "placeholder": "'antu'",
+        "withdrawAll": "bISuch",
+        "all": "Hoch"
+      },
+      "feeRate": {
+        "title": "Dov'a'",
+        "auto": "naQ"
+      },
+      "withdraw": {
+        "title": "toraS",
+        "alert": "choQ"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "taS",
+      "msg": "DaneHtaHvIS 'u' DaneHtaHvIS",
+      "success": "Qel"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "lom 'e' yIpoSmoHDI'"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "romuluS HIch",
+      "dialog": {
+        "title": "mod"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} Su'oy'"
+      },
+      "add": {
+        "title": "ghom'a'",
+        "msg": "pe'vIl Dache'chugh {{lightningAddress}} Dasov'a'?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "rItlh {{domain}} Su'oy'"
+      },
+      "add": {
+        "title": "ghom'a'",
+        "msg": "pe'vIl Dache'chugh {{domain}} Dasov'a'?"
+      }
+    },
+    "unableToPay": "DanoHmeH nuv yIlo'",
+    "payerData": {
+      "commentAllowed": "naDev yIghoS {{target}} (max {{letters}} letters)",
+      "sendNameWithComment": "'ej qaStaHvIS ramvam,",
+      "name": {
+        "ask": "'ej qaStaHvIS ramvam,",
+        "mandatory": "wanI'vam taQ bopeghchugh,"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "NIchlu'taHvIS 'um tu'lu'"
+    },
+    "pay": {
+      "title": "QI'tu'",
+      "error": {
+        "mustProvideComment": "bIyIntaHvIS bIHopchugh, vaj cholo'rup."
+      }
+    },
+    "cancel": {
+      "title": "qIl"
+    },
+    "form": {
+      "asksYouToPay": "DaQublaw' porghDaj.",
+      "description": {
+        "title": "qurgh"
+      },
+      "amount": {
+        "title": "'antu'",
+        "to": "ngeH",
+        "placeholder": "jISaH"
+      },
+      "alert": "DanoHmeH nuv yIlo'"
+    },
+    "done": {
+      "message": {
+        "title": "qotlh"
+      },
+      "url": {
+        "description": "qurgh",
+        "domain": "URL che' Vo'",
+        "done": {
+          "title": "pItlh"
+        },
+        "copy": {
+          "title": "yIruch",
+          "msg": "boqmaj 'ongmeH Dayaj."
+        },
+        "open": {
+          "title": "loDnI'pu'"
+        }
+      },
+      "aes": {
+        "domain": "mu'wIj bItlaHchu'be'taHvIS ghomlaH.",
+        "description": "qotlh",
+        "secret": "bIjatlhQo'"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "'antu' tera'nganpu'",
+      "msg1": "tera'nganpu'",
+      "msg2": "reH Suvrup tlhIngan suvwI''a' ghaH je.",
+      "msg3": "jOHwI' bIHeghchugh, vaj joH quvHa'ghach mInDu'wIj.",
+      "msg4": "'ach wa' lutlhej SuvwI'pu' tIq ghaj.\"",
+      "msg5": "tlhIngan Suvlu'taHvIS Hegh'eghta'bogh."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "QIp leghmeH neH, {{domain}}",
+      "addToContactList": {
+        "title": "ghom'a'",
+        "msg": "jIHvaD ghe'naQ Daja'chugh, vaj ngoQ daleghDI', {{domain}} Dasov'a'?",
+        "note": "chelwI' {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "tlhoS",
+      "msg": "qotlh",
+      "dialog": {
+        "msg": "'antu'"
+      },
+      "dialog1": {
+        "minSat": "'urmang",
+        "maxSat": "naDev jIH",
+        "placeholder": "'antu'"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "ghe''or je",
+      "lightningAddressAlreadyExists": "mIplIj rurlaHchugh, vaj ghotvaD",
+      "nothingHereYet": "pagh DaHjaj.",
+      "whyNotAdd": "moDHa'chugh vay' tu'lu'chugh vay'",
+      "tappingHere": "naDev yIghoS"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "ngagh",
+        "error": "lopno' je rur ghopDaj, rIQmoHwI',"
+      },
+      "list": {
+        "pay": "rIq",
+        "account": "chelwI'"
+      },
+      "send": {
+        "title": "ngeH",
+        "couldNotPay": "'ej ghIchvam ra' lunob.",
+        "invalidResponse": "poSqu'mo' jIvHa'wI' (got {{response}})",
+        "invalidOperation": "ghIq yay charghmeH LUD-16 mIw wIje'nIS puS,"
+      },
+      "withdraw": {
+        "title": "toraS",
+        "couldNotPay": "'ej ghIchvam ra' lunob.",
+        "invalidResponse": "poSqu'mo' jIvHa'wI' (got {{response}})",
+        "invalidOperation": "lopno' je rur ghopDaj, rIQmoHwI',"
+      },
+      "deleteContact": {
+        "title": "yIbochHa'moH",
+        "msg": "bImevlaHchugh bIHeghchugh {{contact}}?"
+      }
+    }
+  },
+  "keysend.experiment": {
+    "title": "qeylIS",
+    "qr": {
+      "alert": "yIruch"
+    },
+    "dialog": {
+      "msg1": "ghIq bIQ'a'Daq wIghoSbogh vIqIHchugh,",
+      "msg2": "qeylIS mIndu'lIj (yaghmey mungchugh vay') vItu'taHvIS.",
+      "msg3": "qeylIS veSDuj vIra'ta' 'ej SuvwI' je."
+    },
+    "send": {
+      "title": "ngeH",
+      "msg": "qeylIS",
+      "error": {
+        "checkAmount": "chech Qom",
+        "missingPubkey": "ngaDHa'moH"
+      },
+      "alert": "Ha'moHlu'"
+    },
+    "form": {
+      "amount": {
+        "title": "Ha'DIbaH"
+      },
+      "pubkey": {
+        "title": "pang",
+        "placeholder": "quv"
+      },
+      "route": {
+        "title": "romuluS",
+        "placeholder": "romuluS"
+      },
+      "message": {
+        "title": "QIn",
+        "placeholder": "qeylIS 'enqIyDu"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Ha'DIbaH bISop 'e' DapoQqang'a'?",
+    "home": "ghormaQ yIghoSNa'",
+    "placeholder": "naDev URL yIghoS"
+  },
+  "settings.settings": {
+    "title": "'aw'",
+    "general": {
+      "title": "Sa'",
+      "name": {
+        "title": "pong",
+        "subtitle": "qaStaHvIS poHlu'chu'pu'bogh",
+        "dialog": {
+          "msg": "vaj ngoHmey SaHlu'meH mIw'a' tu'lu'be''a' \n\nbIlughchu'meH mIw, ponglIj tu'lu'chugh.",
+          "accept": "qaStaHvIS mIw yIlo'rup"
+        }
+      },
+      "lang": {
+        "title": "Hol",
+        "dialog": {
+          "title": "QeH"
+        }
+      },
+      "pushNotification": {
+        "title": "Ha'DIbaH",
+        "subtitle": "quvHa'moHpu' 'ej tlhoSpu'DI'"
+      },
+      "checkClipboard": {
+        "title": "not SuvwI'",
+        "subtitle": "HIvmeH Duj chemvaH Duj chemvaH"
+      },
+      "saveGeolocation": {
+        "title": "ghot yIwuv 'e' yIchaw'Qo'.",
+        "subtitle": "QI'yaH, lunaDHa'mo', QI'yaH!",
+        "logGranted": "ghertlhuD",
+        "logDenied": "cha'DIch"
+      },
+      "mapTheme": {
+        "title": "ghItlh"
+      }
+    },
+    "wallet": {
+      "title": "pIn tlhoy'",
+      "seed": {
+        "show": {
+          "title": "HeghlaH pegh",
+          "subtitle": "lo'24 laHwI'Hey yIvup.",
+          "dialog": {
+            "title": "ta'",
+            "alert": "yIruch",
+            "copy": "yIghoS"
+          }
+        },
+        "remove": {
+          "title": "jISuvqangbe'lu'taHvIS",
+          "subtitle": "yabwIjDaq 'ItchoHbogh yabwIj, vaj yabwIjDaq",
+          "dialog": {
+            "title": "lIyaj",
+            "msg": "tlhabtaHvIS ghu'vam. QIchvam rur ghopDu' bIghoSmoHbe'chugh!",
+            "accept": "Hegh"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "pIr chech",
+          "alert": "javwI' quv."
+        },
+        "verify": {
+          "title": "che'chugh"
+        },
+        "googleCloud": {
+          "title": "ghorgh yItlhutlh",
+          "subtitle": "ghe''or yuQDaq maghoSchu'ghach nuv",
+          "alert": "ghertlhuD"
+        },
+        "googleCloudForce": {
+          "title": "DaH ghew",
+          "alert": "yuQDaq 'e' yIchav"
+        },
+        "iCloud": {
+          "title": "Qapla'",
+          "subtitle": "'ach Qoq",
+          "alert": "Qapla'"
+        },
+        "iCloudForce": {
+          "title": "'ach may'Duj",
+          "alert": "'ach yIjaHpu'choH"
+        },
+        "error": "rop"
+      }
+    },
+    "security": {
+      "title": "Hung",
+      "pincode": {
+        "title": "ghIjqa'"
+      },
+      "biometrics": {
+        "title": "yIvuS",
+        "fingerprint": "SIqwI'",
+        "faceId": "qaD ID",
+        "touchID": "DuQ ID"
+      },
+      "chainSync": {
+        "title": "yev",
+        "subtitle": "ngeb tIqDaj 4",
+        "dialog": {
+          "title": "yay'be'lu'be'chugh vay'",
+          "msg": "Qovpatlh QIv yIHoH. ngaghQo' neH chenmoHlu'.\n\nnI'taHvIS poH nI' tay wIlopmoHchugh,\n\npagh DaSovchugh, vaj qo' DachenmoHnIS"
+        }
+      }
+    },
+    "display": {
+      "title": "'agh",
+      "fiatUnit": {
+        "title": "qaSbe'"
+      },
+      "bitcoinUnit": {
+        "title": "Sey'choH"
+      },
+      "onchainExplorer": {
+        "title": "qor",
+        "dialog": {
+          "title": "ngaj poS"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "yIvum",
+      "node": {
+        "title": "'Iw tu'lu'be'",
+        "subtitle": "'ach (BIP157) yIbej 'Iv",
+        "setDialog": {
+          "title": "jatlhbe'"
+        },
+        "restoreDialog": {
+          "title": "pagh yIqIm",
+          "msg": "qo' Dache'chugh DanoHmeH qo' Hoch"
+        }
+      },
+      "restartDialog": {
+        "title": "poq",
+        "msg": "wanI' tIq ghajbogh Sormey Dejqu' neH.",
+        "msg1": "DaH nuq Daghaj?"
+      },
+      "rpc": {
+        "title": "meH HoD"
+      },
+      "zmqRawBlock": {
+        "title": "yo' ZMQ Raw QIjwI'"
+      },
+      "zmqRawTx": {
+        "title": "yo' ZMQ Raw Tx QIjwI'"
+      }
+    },
+    "LN": {
+      "title": "qornIS",
+      "node": {
+        "title": "DaH cha' Hub yIghoS",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "yIntaHvIS nuvpu'",
+        "subtitle": ""
+      },
+      "autopilot": {
+        "title": "motlhHa'",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "lotmey law' jatlhmeH",
+        "subtitle": "yInmeH jIvHa'wI' 'e' Dalo'chugh",
+        "dialog": {
+          "title": "wejpu'bogh ram vIpongnISmoH.",
+          "msg1": "yabwIjDaq 'ogh'eghchugh, vaj ngabpu'bogh.",
+          "msg2": "wo' DachavtaH 'e' DatuQnIS, vaj bIpeghbejtaHvIS, batlh chopejmoH.",
+          "msg3": "QuvvamDaq QottaHghach mIv'a' DaDabchugh/, vaj yerghoS puqloDpu' bIHeghvIpchoH."
+        }
+      },
+      "LSP": {
+        "title": "toy' Dunder LSP wI'",
+        "subtitle": "",
+        "setDialog": {
+          "title": "toy' Dunder wI'",
+          "acept": "toy'wI'"
+        },
+        "restoreDialog": {
+          "title": "jab Dunder wI'",
+          "msg": "qo' Dache'chugh DanoH Dunder chugh"
+        }
+      },
+      "graphSync": {
+        "title": "veSvo' mIw'a' vIneH",
+        "subtitle": "'ej ghIjtaHvIS nuvpu'"
+      }
+    },
+    "miscelaneous": {
+      "title": "lIlob",
+      "about": {
+        "title": "'antu'",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "yIjatlhqa'",
+        "subtitle": "",
+        "dialog": {
+          "alert": "yIghoS",
+          "error": "nIvqu' lutmey tlhaQ."
+        }
+      },
+      "lndLog": {
+        "title": "quvHa'ghachwIj vIparHa'qu'",
+        "subtitle": "raQ /sdcard/BlixtWallet",
+        "dialog": {
+          "alert": "yIqaD",
+          "error": "qaSDI' choraQ."
+        }
+      },
+      "dev": {
+        "title": "ghoschu'wI'",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "povqu' chenmoHqu' chenmoHqu'",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "qaryoQ",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "muleghqangwI'pu'",
+        "subtitle": "",
+        "dialog1": {
+          "title": "HIja'"
+        },
+        "dialog2": {
+          "title": "bIH",
+          "alert": "yIruch"
+        }
+      }
+    },
+    "experimental": {
+      "title": "ngoy'",
+      "LSP": {
+        "title": "DaH 'entepray' Dunder LSP",
+        "subtitle": "MINDU'WIJ pe'vIl vIHbe'bogh tlheghDaj bIHha'bogh"
+      },
+      "MPP": {
+        "title": "DaH QongDaq QIp'a' bIH?",
+        "subtitle": "Ha'DIbaH 2 rur"
+      },
+      "tor": {
+        "title": "DaT 'entepray'",
+        "subtitle": "",
+        "enabled": {
+          "title": "torqu' hovpu' 'ej choS ruvpa'",
+          "msg1": "nItebHa' ('ej tlho'vaD 'oy' tIlmey je) QoraQ tuq.",
+          "msg2": "chaq tlhInganpu' 'ej bIcheghlaHbe' 'e' DaHarbej.",
+          "msg3": "ghob: HIq mIw vIja'nIS.",
+          "msg4": "mo': ghu'vamq/u' qelI'qam lengtaHvIS.",
+          "msg5": "mo': 'ej SuDtaHvIS poHmeyvetlh,",
+          "msg6": "mo': HeghDajDaq suvwI'pu' je.",
+          "msg7": "mo': 'ej qeylIS vIlarghlaHbe'",
+          "msg8": "WebLN Browser & LNURL vIpumlu'.\""
+        },
+        "disabled": {
+          "title": "torlIj DatIvmeH Qoypu'",
+          "msg1": "dejmeymaj wIta'meH veqlargh.",
+          "msg2": "nuq Data'rup'a'?"
+        }
+      },
+      "onion": {
+        "title": "HoSghajqu'",
+        "subtitle": "'ej bommeh tlhoy'rupbogh 'ej Hegh"
+      },
+      "keysend": {
+        "title": "qeylIS",
+        "subtitle": ""
+      }
+    },
+    "debug": {
+      "title": "DenIb",
+      "startup": {
+        "title": "yuVHa'choH qabDaj 'angbe'nIS.",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "LND pe'vIl ghoS",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "qeylIS wo'",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "reynal LND Do",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "qaStaHvIS wa'Hu'",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "ghertlhuD",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "ragh",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Huch yIghoS",
+        "subtitle": "targhhom vIghaj. qo' neH"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "Huy'choH wa'SanID",
+    "msg1": "wo'DIbaH",
+    "msg2": "qonwI'",
+    "msg3": "yIntaHmeH mIpqu' jIvHa'chuqtaH",
+    "msg4": "qaStaHvIS",
+    "msg5": "'ej nuDtaHvIS DuDbogh 'ej nuDtaHmo',",
+    "msg6": "mIwvam DIghaj CC BY 3.0",
+    "msg7": "qeS"
+  },
+  "settings.setPincode": {
+    "enter": "HoSghaj",
+    "confirm": "QumpIn"
+  },
+  "settings.removePincodeAuth": {
+    "title": "DaH 'enqIyDu che' 'enqIyDu"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "vay'"
+    },
+    "alias": "layerteS",
+    "pubKey": "ghaytan ngIp",
+    "address": "yItu'be'",
+    "data": {
+      "title": "De'",
+      "bytesSent": "Duj",
+      "bytesRecv": "'IwHa'"
+    },
+    "transfer": {
+      "title": "Qay",
+      "satSent": "tuq",
+      "satRecv": "che'meH"
+    },
+    "inbound": "Suyaj",
+    "syncType": "qeng",
+    "errors": "Qagh",
+    "disconnect": "ghot"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "yejquv vas'e'"
+    },
+    "connect": {
+      "title": "ghobe' URI",
+      "placeholder": "ghot URI",
+      "accept": "Rar"
+    }
+  },
+  "settings.lightningNodeInfo": {
+    "title": "qar'a'",
+    "alias": "layerteS",
+    "chain": "mIr",
+    "timestamp": "naDev ramjep",
+    "blockHash": "rInSa'",
+    "blockHeight": "boq'a'",
+    "identityPubkey": "DaH yIwuQ",
+    "channel": {
+      "title": "nuneh",
+      "active": "'aqDaj",
+      "inactive": "jiSay'rup",
+      "pending": "ghot"
+    },
+    "numPeers": "nugh",
+    "syncedToChain": "'Iq",
+    "syncedToGraph": "ghItlhvam qevjatlh",
+    "nodeUris": "ghobe' URIs",
+    "version": "LND wo'DIbaH",
+    "features": "yap vay' Daghajbe'"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "QamchoH",
+    "msg1": "mu'tlheghmeyvam daqmey law', ghertlhuD",
+    "msg2": "nuvvam ngaDHom lururlu'meH"
+  },
+  "welcome.addFunds": {
+    "title": "jatlh",
+    "msg1": "tuQ'egh tlhoy'",
+    "msg2": "reH tIqDu' SaQnIS 'iq lutu'lu'"
+  },
+  "welcome.almostDone": {
+    "name": {
+      "title": "pong",
+      "msg": "qaStaHvIS poHlu'chu'pu'bogh",
+      "alert": {
+        "title": "pong",
+        "msg1": "vaj ngoHmey SaHlu'meH mIw'a' tu'lu'be''a'",
+        "msg2": "qaStaHvIS mInDu'lIj,",
+        "msg3": "DaQungHa'chugh.",
+        "msg4": "qaStaHvIS mIw yIlo'rup"
+      }
+    },
+    "pincode": {
+      "title": "ghIjqa'",
+      "msg": "yIvuS"
+    },
+    "fiatUnit": {
+      "title": "maQmIgh",
+      "dialog": {
+        "title": "qaSbe'"
+      }
+    },
+    "autopilot": {
+      "title": "motlhHa'",
+      "msg": "ghuy'cha', belmoHtaHvIS nI' latlh DotlhDaj"
+    },
+    "done": {
+      "title": "Qo'!",
+      "msg1": "peghmey DIlo'taHvIS je tlhuH",
+      "msg2": "'ej cheghDI' 'oH,"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "yInIDqa'",
+      "msg": "wa'leS Dalo'taHvIS bIQong, 'e' vIlo'nganpu'."
+    },
+    "seed": {
+      "title": "qaleghqa'be'neS"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Hegh 'enqIyDu ghIlghameS 'enqIyDu",
+      "msg": "ghertlhuD"
+    },
+    "backup": {
+      "title": "bI'IQ",
+      "msg": "qorDu'lIjDaq bIlengtaHvIS, tlhiHdaq ghoSpa'lIjDaq yIpoSmoH.",
+      "msg1": "cha'logh QeHqu'meH ngeHqu' 'e' vIHar.",
+      "msg2": "'ach Do' DaneHbe'chugh,"
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Humbaba",
+      "msg": "tlhach"
+    },
+    "backup": {
+      "title": "Qapla'",
+      "msg": "joHwI', ngaSwI'lIj naymo' qaparHa'mo', tlhogh naDmey machaw'chugh, vaj ngaSwI'ghomqu'mo' nay' chaH.",
+      "msg1": "cha'logh QeHqu'meH ngeHqu' 'e' vIHar.",
+      "msg2": "'ach Do' DaneHbe'chugh,"
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "chemwI'",
+      "msg": "bISuvtaHvIS bIQapchugh, vaj pIvlIj.",
+      "msg1": "wa'SanID yuQmey vIlo'chugh, vaj qeylIS HoSlIj DachoHmeH mIw.",
+      "loading": "chemwI'",
+      "channel": {
+        "title": "jejHa'",
+        "file": "paQHa' ghotpu'",
+        "google": {
+          "title": "Heghlu'bogh nuv'e'",
+          "alert": "Qu'vatlh, ghogh DaSaD"
+        },
+        "iCloud": {
+          "title": "QI'yaH, QI'yaH",
+          "alert": "qo' Hoch"
+        }
+      },
+      "seed": "mu'meyvetlh 24 vIlan"
+    },
+    "backup": {
+      "google": "ghob pabwI'",
+      "iCloud": "HeSwI'pu'"
+    }
+  },
+  "welcome.seed": {
+    "title": "yI'el tlhoy'",
+    "msg": "ghu'vamvaD DujlIj.",
+    "msg1": "'ej ghu' DotlhDaq qa'taHvIS ghu' je.",
+    "msg2": "joHwI', yabwIj Sep law', HurDaq mIwvam",
+    "msg3": "naplIj yIchenmoH.",
+    "msg4": "bIH ja'DI' mojlaHbe'law' bIH aezeed.",
+    "button": "jItamtaHvIS wa'DIch"
+  }
+}

@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
 export default function PayRequestAboutLightningAddress() {
-  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
+  const t = useTranslation(namespaces.LNURL.payRequest).t;
   return (
     <Blurmodal>
       <Card style={style.card}>

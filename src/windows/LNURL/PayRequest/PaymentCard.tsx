@@ -30,7 +30,7 @@ export interface IPaymentCardProps {
 }
 
 export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentCardProps) {
-  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
+  const t = useTranslation(namespaces.LNURL.payRequest).t;
   const navigation = useNavigation();
   const lightningReadyToSend = useLightningReadyToSend();
 

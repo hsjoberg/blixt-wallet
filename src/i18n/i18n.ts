@@ -16,10 +16,10 @@ const createI18n = (language: string): i18nInstance => {
     fallbackLng: language,
     ns: namespaces.common,
     resources: {
-      en: en,
-      es: es,
-      de: de,
-      tlh: tlh,
+      en,
+      es,
+      de,
+      tlh,
     },
   });
 

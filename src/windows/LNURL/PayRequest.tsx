@@ -23,7 +23,7 @@ export interface IPayRequestProps {
   route: RouteProp<LnUrlStackParamList, "PayRequest">;
 }
 export default function LNURLPayRequest({ navigation, route }: IPayRequestProps) {
-  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
+  const t = useTranslation(namespaces.LNURL.payRequest).t;
   const callback = (route?.params?.callback) ?? (() => {});
   const [preimage, setPreimage] = useState<Uint8Array | undefined>();
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);

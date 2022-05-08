@@ -1,0 +1,1020 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Lightning-Adresse",
+      "nodeAlias": "Node-Alias",
+      "description": "Beschreibung",
+      "amount": "Betrag",
+      "fee": "Gebühr"
+    },
+    "buttons": {
+      "ok": "Ok",
+      "cancel": "Abbrechen",
+      "continue": "Weiter",
+      "skip": "Überspringen",
+      "proceed": "Fortfahren",
+      "back": "Zurück",
+      "no": "Nein",
+      "yes": "Ja",
+      "save": "Speichern",
+      "copy": "Kopieren"
+    },
+    "msg": {
+      "status": "Status",
+      "error": "Fehler",
+      "warning": "Warnung",
+      "result": "Ergebnis",
+      "pending": "ausstehend",
+      "done": "beendet",
+      "dismiss": "abbrechen",
+      "lastSync": "Letzte Synchronisation",
+      "lastSyncAttempt": "Letzter Synchronisationsversuch",
+      "clipboardCopy": "In die Zwischenablage kopiert.",
+      "written": "geschrieben",
+      "enabled": "aktiviert",
+      "disabled": "deaktiviert"
+    }
+  },
+  "welcome.start": {
+    "title": "Willkommen",
+    "createWallet": {
+      "title": "Erstelle eine Wallet",
+      "msg1": "Blixt Wallet befindet sich noch in einem frühen Entwicklungsstadium.",
+      "msg2": "Wenn Du diese Wallet nutzen möchtest, sei Dir bewusst, dass dein Guthaben verloren gehen könnte.",
+      "msg3": "Es gibt derzeit keinen WatchTower-Support, der deine Lightning-Kanäle im Falle einer Downtime schützen kann.",
+      "msg4": "Ok akzeptiert, weiter"
+    },
+    "restoreWallet": {
+      "title": "Wallet-Wiederherstellung"
+    }
+  },
+  "footerNav": {
+    "receive": "Empfangen",
+    "send": "Senden"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Scannen",
+      "receive": "Empfangen",
+      "pasteFromClipboard": "Aus Zwischenablage",
+      "sendToLightningAddress": "Senden an Lightning Addresse",
+      "contactsAndServices": "Kontakte & Services",
+      "lightningBrowser": "Lightning Browser",
+      "onChainWallet": "On-Chain Guthaben",
+      "lightningChannels": "Lightning-Kanäle",
+      "keysendExperiment": "Keysend Experiment",
+      "showMore": "Erweitert"
+    },
+    "madeInSweden": "Made with ⚡ in Sweden"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "Wallet-Wiederherstellung in Arbeit.",
+      "msg2": "Wallet-Wiederherstellung beendet.",
+      "more": "Mehr Info"
+    },
+    "sendOnChain": {
+      "title": "Willkommen bei Blixt Wallet!",
+      "msg1": "Um zu starten, sende On-Chain Guthaben an die Bitcoin-Adresse.",
+      "msg2": "Ein Lightning-Kanal wird automatisch für Dich erstellt.",
+      "msg3": "Sende mindestens",
+      "alert": "Bitcoin-Adresse in die Zwischenablage kopiert"
+    },
+    "doBackup": {
+      "msg1": "Danke, dass Du Blixt Wallet verwendest!",
+      "msg2": "Wir empfehlen, ein Wallet-Backup zu erstellen, um im Falle eines Geräteverlusts das Guthaben wiederherstellen zu können",
+      "backup": "Wallet-Backup"
+    }
+  },
+  "help": {
+    "title": "Hilfe",
+    "msg1": "Wenn Du Hilfe benötigst oder uns Feedback geben möchtest, erstelle bitte ein Issue auf GitHub oder kontaktiere die Blixt Wallet-Entwickler per E-Mail.",
+    "msg2": "Du bist herzlich eingeladen, unserer öffentlichen Telegramgruppe beizutreten.",
+    "msg3": "Da Blixt Wallet noch eine junge Wallet ist, sind wir für jegliches Feedback bei Problemen sehr dankbar.",
+    "telegramGroup": "Telegram gruppe"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Synchronisation in Arbeit",
+      "title1": "Synchronisation beendet",
+      "msg1": "Blixt Wallet synchronisiert derzeit die Blockchain.",
+      "msg2": "Wenn dein Wallet die Synchronisation der Blockchain beendet hat, werden On-Chain-Transaktionen und Guthaben verfügbar und im Bereich On-Chain Guthaben angezeigt werden.",
+      "msg3": "Blixt Wallet ist mit der Blockchain synchronisiert.",
+      "blockHeight": {
+        "title": "Aktuelle Blockhöhe",
+        "msg1": "Blockchain-Synchronisation in Arbeit"
+      }
+    },
+    "recoveryMode": {
+      "title": "Wiederherstellungfortschritt",
+      "msg1": "Wiederherstellung abgeschlossen",
+      "msg2": "Prüfe die Bereiche Lightning-Kanäle und On-Chain Guthaben"
+    },
+    "lndLog": {
+      "show": "LND Protokolle anzeigen",
+      "copy": "Protokoll-Text kopieren"
+    }
+  },
+  "transactionDetails": {
+    "title": "Transaktion",
+    "date": "Datum",
+    "note": "Notiz",
+    "website": "Webseite",
+    "type" : "Typ",
+    "lnurl": {
+      "messageFromWebsite": "Nachricht von",
+      "urlReceivedFromWebsite": "URL empfangen von",
+      "secretMessage": "Verschlüsselte Nachricht"
+    },
+    "payer": "Zahlungssender",
+    "recipient": "Empfänger",
+    "amountInFiatTimeOfPayment": "Betrag in Fiat (Zahlungszeit)",
+    "numberOfHops": "Anzahl der Hops",
+    "remotePubkey": "Remote PubKey",
+    "paymentHash": "Zahlungshash",
+    "preimage": "Preimage",
+    "status": "Status",
+    "goBack": "Zurück",
+    "button": {
+      "setNote": "Notiz eingeben",
+      "cancelInvoice": "Rechnung abbrechen",
+      "showMap": "Karte anzeigen"
+    },
+    "setNoteDialog": {
+      "title": "Notiz",
+      "text": "Füge eine Notiz für diese Transaktion hinzu"
+    }
+  },
+  "web.info": {
+    "title": "Interaktive Demo",
+    "pressToTry": "Hier klicken, um Blixt Wallet auszuprobieren!"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Empfangen"
+    },
+    "createInvoice": {
+      "title": "Erstelle eine Invoice (Rechnung)",
+      "error": "Der Rechnungsbetrag darf nicht höher sein als",
+      "alert": "Vor dem Empfangen einer Invoice, öffne zuerste einen Lightning-Kanal.",
+      "lsp": {
+        "msg": "Ein Zahlungskanal von Dunder LSP wird eröffnet, wenn diese Rechnung beglichen wird.",
+        "msg1": "Was bedeutet das?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Kanal-Öffnung",
+      "msg": "Um eine Zahlung für diese Rechnung akzeptieren zu können, muss ein Kanal zum Lightning Netzwerk geöffnet werden.",
+      "msg1": "Dies erfordert eine Einmalgebühr von ungefähr",
+      "alert": "Verbindung zu Dunder fehlgeschlagen, bitte versuche es später erneut.",
+      "proceed": "Fortfahren"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Betrag",
+        "change": "Ändere die Fiat-Einheit",
+        "dunderPlaceholder": "Mindestens"
+      },
+      "amountBitcoin": {
+        "title": "Betrag",
+        "change": "Ändere die Bitcoin-Einheit",
+        "dunderPlaceholder": "Mindestens"
+      },
+      "payer": {
+        "title": "Zahlungssender",
+        "placeholder": "Für die Buchführung"
+      },
+      "description": {
+        "title": "Nachricht",
+        "placeholder": "Nachricht an Zahlungssender"
+      }
+    }
+  },
+  "receive.receiveQr": {
+    "title": "Empfangen",
+    "qr": {
+      "title": "Scanne diesen QR-Code",
+      "msg": "Läuft ab in {{time}}"
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "About Dunder LSP",
+    "msg": "Dunder is a Lightning Service Provider (LSP) that automatically opens channels for you when you don't have enough inbound liquidity.",
+    "msg1": "This could for example be the case when you first start using Blixt Wallet.",
+    "msg2": "As this requires an on-chain transaction, a Bitcoin transaction fee will be deducted from the incoming payment. Future payments will be able to use the newly opened payment channel with the Lightning network.",
+    "msg3": "Dunder is",
+    "msg4": "open-source",
+    "msg5": "software and you may change the default service provider in Settings."
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Invoice bezahlen"
+    },
+    "form": {
+      "invoice": {
+        "title": "Invoice"
+      },
+      "amount": {
+        "title": "Betrag"
+      },
+      "recipient": {
+        "title": "Empfänger"
+      },
+      "nodeAlias": {
+        "title": "Node Alias"
+      },
+      "description": {
+        "title": "Nachricht"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "ZAHLUNG GESENDET"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Lightning-Kanäle"
+    },
+    "balance": {
+      "title": "Balance"
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Lightning-Kanal öffnen"
+    },
+    "form": {
+      "title": "Lightning-Kanal öffnen",
+      "channel": {
+        "title": "Node URI",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Betrag",
+        "placeholder": "Betrag"
+      },
+      "fee_rate": {
+        "title": "Gebührenrate"
+      }
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "On-Chain Guthaben"
+    },
+    "address": {
+      "title": "Sende Bitcoin on-chain zu dieser Adresse",
+      "alert": "In die Zwischenablage kopiert."
+    },
+    "newAddress": {
+      "title": "Erzeuge neue Adresse"
+    },
+    "withdraw": {
+      "title": "Guthaben abheben"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Transaktion",
+    "blockExplorer": "Anzeigen im Block Explorer",
+    "txHash": "Id",
+    "timeStamp": "Datum",
+    "amount": "Betrag",
+    "totalFees": "Gebühren",
+    "label": "Label",
+    "destAddresses": "Zieladressen",
+    "numConfirmations": "Bestätigungen",
+    "blockHeight": "Blockhöhe",
+    "blockHash": "Blockhash",
+    "rawTxHex": {
+      "title": "Raw tx hex",
+      "msg": "Kopieren"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Transaktionslog"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Guthaben auszahlen"
+    },
+    "form": {
+      "address": {
+        "title": "Adresse",
+        "placeholder": "Bitcoinadresse"
+      },
+      "amount": {
+        "title": "Betrag",
+        "placeholder": "Betrag",
+        "withdrawAll": "Alles auszahlen",
+        "all": "Alles"
+      },
+      "feeRate": {
+        "title": "Gebührenrate",
+        "auto": "auto"
+      },
+      "withdraw": {
+        "title": "Auszahlen",
+        "alert": "Auszahlung erfolgreich"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Login Anforderung",
+      "msg": "Einloggen in",
+      "success": "Authentifiziert in"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Öffne Inbound-Kanal"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Metadaten anzeigen",
+      "dialog": {
+        "title": "Technische Metadaten"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} ist in deiner Kontaktliste"
+      },
+      "add": {
+        "title": "Zur Kontaktliste hinzufügen",
+        "msg": "Möchtest Du die Adresse zur {{lightningAddress}} Kontaktliste hinzufügen?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Zahlungscode zur {{domain}} ist in deiner Kontaktliste"
+      },
+      "add": {
+        "title": "Zur Kontaktliste hinzufügen",
+        "msg": "Möchtest Du den Zahlungscode zur {{domain}} Kontaktliste hinzufügen?"
+      }
+    },
+    "unableToPay": "Zahlung nicht möglich",
+    "payerData": {
+      "commentAllowed": "Kommentar für {{target}} (max {{letters}} Zeichen)",
+      "sendNameWithComment": "Füge meinen Namen dieser Nachricht bei",
+      "name": {
+        "ask": "Füge meinen Namen dieser Zahlung bei",
+        "mandatory": "Dein Name muss dieser Zahlung beigefügt werden."
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "Die Zahlung enthält keine Beschreibung."
+    },
+    "pay": {
+      "title": "Bezahlen",
+      "error": {
+        "mustProvideComment": "Bitte füge eine Nachricht bei, wenn Du deinen Namen mitsenden möchtest."
+      }
+    },
+    "cancel": {
+      "title": "Abbrechen"
+    },
+    "form": {
+      "asksYouToPay": "bittet Dich, zu bezahlen.",
+      "description": {
+        "title": "Beschreibung"
+      },
+      "amount": {
+        "title": "Betrag",
+        "to": "an",
+        "placeholder": "Betrag eingeben"
+      },
+      "alert": "Zahlung nicht möglich"
+    },
+    "done": {
+      "message": {
+        "title": "Nachricht von"
+      },
+      "url": {
+        "description": "Beschreibung",
+        "domain": "URL empfangen von",
+        "done": {
+          "title": "Fertig"
+        },
+        "copy": {
+          "title": "Kopiere in die Zwischenablage",
+          "msg": "In die Zwischenablage kopiert."
+        },
+        "open": {
+          "title": "Öffne Browser"
+        }
+      },
+      "aes": {
+        "domain": "Eine verschlüsselte Nachricht erhalten von",
+        "description": "Nachricht von",
+        "secret": "Verschlüsselte Nachricht"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "Über Lightning-Adressen",
+      "msg1": "Über Lightning-Adressen",
+      "msg2": "können Personen oder Dienste im Lightning-Netzwerk bezahlt werden.",
+      "msg3": "Sie sehen aus wie E-Mailadressen, senden und empfangen jedoch Geld anstatt E-Mails.",
+      "msg4": "Blixt Wallet unterstützt vollständig das Senden an Lightning-Adressen.",
+      "msg5": "Das Empfangen von Guthaben via Lightning-Adressen ist noch in Arbeit."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "Auszahlungsanforderung gesendet an {{domain}}",
+      "addToContactList": {
+        "title": "Hinzufügen zur Kontaktliste",
+        "msg": "Möchtest Du diesen Auszahlungscode zu deiner {{domain}} Kontaktliste hinzufügen?",
+        "note": "Konto auf"
+      }
+    },
+    "layout": {
+      "title": "Auszahlungsanforderung",
+      "msg": "Nachricht von",
+      "dialog": {
+        "msg": "Betrag"
+      },
+      "dialog1": {
+        "minSat": "Minimaler Betrag",
+        "maxSat": "Maximaler Betrag",
+        "placeholder": "Betrag"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Kontakte & Services",
+      "lightningAddressAlreadyExists": "ist bereits in der Kontaktliste vorhanden",
+      "nothingHereYet": "Keine Kontakte vorhanden...",
+      "whyNotAdd": "Füge eine Lightning-Adresse hinzu",
+      "tappingHere": "hier eingeben"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Remote Balance",
+        "error": "Ungültige Operation, der Kontakt hat keinen LNURL-withdraw Code"
+      },
+      "list": {
+        "pay": "Zahlung an",
+        "account": "Konto auf"
+      },
+      "send": {
+        "title": "Senden",
+        "couldNotPay": "Konnte nicht an diesen LNURL-pay Code gesendet werden",
+        "invalidResponse": "Ungültige LNURL-pay Antwort ({{response}}",
+        "invalidOperation": "Ungültige Operation, Kontakt hat weder LUD-16 Identifier noch LNURL-pay Code"
+      },
+      "withdraw": {
+        "title": "Abheben",
+        "couldNotPay": "Konnte nicht an diesen LNURL-pay Code gesendet werden",
+        "invalidResponse": "Ungültige LNURL-withdraw Antwort ({{response}})",
+        "invalidOperation": "Ungültige Operation, der Kontakt hat keinen LNURL-withdraw Code"
+      },
+      "deleteContact": {
+        "title": "Kontakt entfernen",
+        "msg": "Möchtest Du diesen Kontakt wirklich löschen {{contact}}?"
+      }
+    }
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "In die Zwischenablage kopiert."
+    },
+    "dialog": {
+      "msg1": "Willkommen auf dem Keysend-Spielplatz",
+      "msg2": "Keysend-Zahlungen ermöglichen Überweisungen an andere Blixt Wallets (oder andere Lightning Nodes, die Keysend unterstützen) ohne vorherige Invoice-Erstellung.",
+      "msg3": "Klicke auf das Kamerasymbol, um QR-Codes zu scannen oder füge einen Public Key und Routenanweisungen unten ein."
+    },
+    "send": {
+      "title": "Senden",
+      "msg": "Keysend-Zahlung",
+      "error": {
+        "checkAmount": "Betrag prüfen",
+        "missingPubkey": "Fehlender Pubkey"
+      },
+      "alert": "Zahlung war erfolgreich"
+    },
+    "form": {
+      "amount": {
+        "title": "Betrag Sat"
+      },
+      "pubkey": {
+        "title": "Public Key",
+        "placeholder": "Pubkey"
+      },
+      "route": {
+        "title": "Vorgeschlagene Route",
+        "placeholder": "Vorgeschlagene Route"
+      },
+      "message": {
+        "title": "Nachricht",
+        "placeholder": "Tippe eine Chat-Nachricht hier ein"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Do you wish to close the browser?",
+    "home": "Go back to store list",
+    "placeholder": "Type URL here"
+  },
+  "settings.settings": {
+    "title": "Einstellungen",
+    "general": {
+      "title": "Allgemein",
+      "name": {
+        "title": "Name",
+        "subtitle": "wird für Transaktionen verwendet",
+        "dialog": {
+          "msg": "Name für Transaktionen eingeben\n\nDein Name wird in Invoices (Rechnungen) den Zahlungssendern und -empfängern angezeigt.",
+          "accept": "Wähle einen Namen"
+        }
+      },
+      "lang": {
+        "title": "Sprache",
+        "dialog": {
+          "title": "Sprache ändern"
+        }
+      },
+      "pushNotification": {
+        "title": "Push-Benachrichtigungen",
+        "subtitle": "Für Transaktionen und Kanal-Aktionen"
+      },
+      "checkClipboard": {
+        "title": "Prüfe Zwischenablage auf Invoices (Rechnungen)",
+        "subtitle": "Automatisches Prüfen der Zwischenablage auf Invoices (Rechnungen)"
+      },
+      "saveGeolocation": {
+        "title": "Geolokation einer Transaktion speichern",
+        "subtitle": "Lokales Speichern der Lokation einer Transaktion",
+        "logGranted": "Geolokation erlaubt",
+        "logDenied": "Geolokation verweigern"
+      },
+      "mapTheme": {
+        "title": "Karten-Thema einstellen"
+      }
+    },
+    "wallet": {
+      "title": "Wallet",
+      "seed": {
+        "show": {
+          "title": "Mnemonic anzeigen",
+          "subtitle": "Zeige 24-Wörter-Seed für diese Wallet",
+          "dialog": {
+            "title": "Seed",
+            "alert": "In die Zwischenablage kopiert",
+            "copy": "Seed kopieren"
+          }
+        },
+        "remove": {
+          "title": "Mnemonic von Gerät löschen",
+          "subtitle": "Dauerhafte Entfernung des Seeds von diesem Gerät",
+          "dialog": {
+            "title": "Seed löschen",
+            "msg": "Dies wird den Seed von diesem Gerät dauerhaft entfernen. Fahre nur dann fort, wenn Du den Seed anderweitig gesichert hast!",
+            "accept": "Seed löschen"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Exportiere Kanal-Backup",
+          "alert": "Datei gespeichert:"
+        },
+        "verify": {
+          "title": "Verifiziere Kanal-Backup"
+        },
+        "googleCloud": {
+          "title": "Google Drive Kanal-Backup",
+          "subtitle": "Automatisches Kanal-Backup auf Google Drive",
+          "alert": "Google Drive Backup aktiviert"
+        },
+        "googleCloudForce": {
+          "title": "Manuelles Backup auf Google Drive",
+          "alert": "Manuelles Backup auf Google Drive erfolgt"
+        },
+        "iCloud": {
+          "title": "iCloud Kanal-Backup",
+          "subtitle": "Automatisches Backup auf iCloud",
+          "alert": "iCloud Backup"
+        },
+        "iCloudForce": {
+          "title": "Manuelles Backup auf iCloud",
+          "alert": "Manuelles Backup auf iCloud erfolgt"
+        },
+        "error": "Fehler bei Backup auf"
+      }
+    },
+    "security": {
+      "title": "Sicherheit",
+      "pincode": {
+        "title": "Einloggen mit PIN-Code"
+      },
+      "biometrics": {
+        "title": "Einloggen mit",
+        "fingerprint": "Fingerprint",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Geplante Blockchain-Synchronisation",
+        "subtitle": "Im Hintergrund alle 4 Stunden",
+        "dialog": {
+          "title": "Nicht empfohlen",
+          "msg": "Warnung. Es wird nicht empfohlen, die planmäßige Blockchain-Synchronisation zu deaktivieren.\n\nStelle sicher, dass die Anwendung auf dem aktuellen Netzwerk-Stand ist, um Kapitalverlust vorzubeugen.\n\nNur für fortgeschrittene Anwender!"
+        }
+      }
+    },
+    "display": {
+      "title": "Anzeige",
+      "fiatUnit": {
+        "title": "Fiat-Einheit ändern"
+      },
+      "bitcoinUnit": {
+        "title": "Bitcoin-Einheit ändern"
+      },
+      "onchainExplorer": {
+        "title": "On-chain Explorer",
+        "dialog": {
+          "title": "On-Chain Explorer ändern"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Bitcoin Netzwerk",
+      "node": {
+        "title": "Bitcoin Node",
+        "subtitle": "Bitcoin Node (BIP157) verbinden mit",
+        "setDialog": {
+          "title": "Node einstellen"
+        },
+        "restoreDialog": {
+          "title": "Node wiederherstellen",
+          "msg": "Möchtest Du die Standard-Node wiederherstellen"
+        }
+      },
+      "restartDialog": {
+        "title": "Neustart erforderlich",
+        "msg": "Blixt Wallet benötigt einen Neustart, um die Änderungen zu übernehmen.",
+        "msg1": "Möchtest Du jetzt neustarten?"
+      },
+      "rpc": {
+        "title": "bitcoind RPC Host einstellen"
+      },
+      "zmqRawBlock": {
+        "title": "bitcoind ZMQ Raw Block Host einstellen"
+      },
+      "zmqRawTx": {
+        "title": "bitcoind ZMQ Raw Tx Host einstellen"
+      }
+    },
+    "LN": {
+      "title": "Lightning Netzwerk",
+      "node": {
+        "title": "Node-Daten anzeigen",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Lightning Peers anzeigen",
+        "subtitle": ""
+      },
+      "autopilot": {
+        "title": "Öffne Kanäle automatisch",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Inbound-Kanal-Dienst",
+        "subtitle": "Verwende den Inbound-Kanal-Dienst, um Zahlungen zu empfangen",
+        "dialog": {
+          "title": "Incoming-Kanal Provider",
+          "msg1": "Wähle einen Incoming-Kanal Provider und drücke Weiter.",
+          "msg2": "Dein Web-Browser wird auf die entsprechende Webseite weitergeleitet, wo Du einen Kanal anfordern kannst.",
+          "msg3": "Wenn erledigt, kopiere den Adresscode und/oder öffne den Link mit Blixt Wallet."
+        }
+      },
+      "LSP": {
+        "title": "Dunder LSP Server eingeben",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Dunder Server festlegen",
+          "acept": "Server festlegen"
+        },
+        "restoreDialog": {
+          "title": "Dunder Server wiederherstellen",
+          "msg": "Möchtest Du die Standardeinstellungen für den Dunder Server wiederherstellen"
+        }
+      },
+      "graphSync": {
+        "title": "Warte auf die Graph-Synchronisation vor dem Senden von Zahlungen",
+        "subtitle": "Ein synchronisierter Graph führt zu optimaleren Zahlungsrouten"
+      }
+    },
+    "miscelaneous": {
+      "title": "Verschiedenes",
+      "about": {
+        "title": "Über",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "Kopiere Protokolldatei in den lokalen Speicher",
+        "subtitle": "",
+        "dialog": {
+          "alert": "Kopiert Protokolldatei nach",
+          "error": "Fehler beim Kopieren der Protokolldatei."
+        }
+      },
+      "lndLog": {
+        "title": "Kopiere LND-Protokolle in den lokalen Speicher",
+        "subtitle": "Von /sdcard/BlixtWallet",
+        "dialog": {
+          "alert": "LND-Protokolldatei kopiert",
+          "error": "Fehler beim Kopieren der LND-Protokolldatei."
+        }
+      },
+      "dev": {
+        "title": "Gehe zu dev screen",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Verstecke abgelaufene Rechnungen automatisch",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Anzeigenübergänge",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Signiere Nachricht mit Wallet-Key",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Signiere Nachricht"
+        },
+        "dialog2": {
+          "title": "Signatur",
+          "alert": "In die Zwischenablage kopiert"
+        }
+      }
+    },
+    "experimental": {
+      "title": "Experimentelle Optionen",
+      "LSP": {
+        "title": "Dunder LSP aktivieren",
+        "subtitle": "SEHR EXPERIMENTELL. Lightning Service Provider dient der Beschaffung von benötigter Inbound-Liquidität"
+      },
+      "MPP": {
+        "title": "Multi-Path Payments aktivieren",
+        "subtitle": "Zahlungen dürfen bis zu 2 Routen verwenden"
+      },
+      "tor": {
+        "title": "Tor aktivieren",
+        "subtitle": "",
+        "enabled": {
+          "title": "Starte die App neu und aktivere Tor",
+          "msg1": "Nach Aktiviertung von Tor wird Blixt Wallet die Verbindungen zu den Peers (Bitcoin und Lightning Netzwerk Peers) über das Tor Netzwerk vornehmen.",
+          "msg2": "Damit bist Du im Stande, Verbindungen zu Lightning-Nodes und -Services aufzunehmen, die Onion-Dienste verwenden.",
+          "msg3": "WARNUNG: Blixt Wallet kommuniziert zu den folgenden Diensten dennoch außerhalb des Tor Netzwerks",
+          "msg4": "Grund: Um Fiat/Bitcoin-Kurse abzufragen",
+          "msg5": "Grund: Um die aktuelle Blockhöhe abzufregen",
+          "msg6": "Grund: Um Backups an Google Drive zu senden",
+          "msg7": "Grund: Um zuverlässige Lightning Nodes anzubinden",
+          "msg8": "WebLN Browser und LNURL nutzen ebenfalls das Tor Netzwerk nicht."
+        },
+        "disabled": {
+          "title": "App neustarten und Tor deaktivieren",
+          "msg1": "Um Tor zu deaktivieren muss die App neugestartet werden.",
+          "msg2": "Möchtest Du fortfahren?"
+        }
+      },
+      "onion": {
+        "title": "Tor Onion Service",
+        "subtitle": "Tor Service zum Verbinden und Öffnen von Kanälen zu diesem Wallet"
+      },
+      "keysend": {
+        "title": "Keysend Experiment",
+        "subtitle": ""
+      }
+    },
+    "debug": {
+      "title": "Debug",
+      "startup": {
+        "title": "Startup-Info Benachrichtigungen",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "LndMobile Hilfe Center",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Dunder Probleme diagnostizieren",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "LND-Protokoll anzeigen",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Keysend Test",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Google Drive Testbed",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Konfiguration speichern",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Demo-Modus aktivieren",
+        "subtitle": "Für Promo-Zwecke. Zurücksetzen per App-Neustart"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "Über Blixt Wallet",
+    "msg1": "Version",
+    "msg2": "Von",
+    "msg3": "Open-Source Wallet mit MIT Lizenz",
+    "msg4": "Erstellt mit",
+    "msg5": "und anderer bemerkenswerter Open-Source Software",
+    "msg6": "Tor Symbol ist lizensiert unter CC BY 3.0 von",
+    "msg7": "Lizenz"
+  },
+  "settings.setPincode": {
+    "enter": "Einen PIN-Code eingeben",
+    "confirm": "Bestätige den PIN-Code"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Zur Entfernung bitte PIN-Code eingeben"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Lightning Peers"
+    },
+    "alias": "Node alias",
+    "pubKey": "Node public key",
+    "address": "Node Adresse",
+    "data": {
+      "title": "Daten",
+      "bytesSent": "bytes gesendet",
+      "bytesRecv": "bytes empfangen"
+    },
+    "transfer": {
+      "title": "Transfer",
+      "satSent": "sat gesendet",
+      "satRecv": "sat empfangen"
+    },
+    "inbound": "Inbound",
+    "syncType": "Sync-Typ",
+    "errors": "Fehler",
+    "disconnect": "Peer trennen"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Verbindung mit Lightning Peer herstellen"
+    },
+    "connect": {
+      "title": "Node URI",
+      "placeholder": "Peer URI",
+      "accept": "Verbinden"
+    }
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Node Info",
+    "alias": "Node Alias",
+    "chain": "Chain",
+    "timestamp": "Letzter Header Zeitstempel",
+    "blockHash": "Blockhash",
+    "blockHeight": "Blockhöhe",
+    "identityPubkey": "Identität Pubkey",
+    "channel": {
+      "title": "Anzahl Kanäle",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "pending": "Wartend"
+    },
+    "numPeers": "Anzahl Peers",
+    "syncedToChain": "Synced to Chain",
+    "syncedToGraph": "Synced to Graph",
+    "nodeUris": "Node URIs",
+    "version": "Lnd Version",
+    "features": "Node Eigenschaften"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Tor Onion Service",
+    "msg1": "Scanne diesen QR-Ccode, um einen Kanal zu dieser Wallet zu öffnen",
+    "msg2": "Onion-Adresse konnte nicht aufgelöst werden"
+  },
+  "welcome.addFunds": {
+    "title": "Guthaben hinzufügen",
+    "msg1": "Um Lightning in der Blixt Wallet verwenden zu können,",
+    "msg2": "sende Bitcoins an die oben genannten Adresse"
+  },
+  "welcome.almostDone": {
+    "name": {
+      "title": "Name",
+      "msg": "wird für Transaktionen verwendet",
+      "alert": {
+        "title": "Name",
+        "msg1": "Wähle einen Namen für Transaktionen",
+        "msg2": "Dein Name wird in Invoices (Rechnungen) für Zahlungssender und -empfänger angezeigt",
+        "msg3": "Name eingeben",
+        "msg4": "Name eingeben"
+      }
+    },
+    "pincode": {
+      "title": "Einloggen mit PIN-Code",
+      "msg": "Einloggen mit"
+    },
+    "fiatUnit": {
+      "title": "Fiat-Währung",
+      "dialog": {
+        "title": "Ändere die Fiat-Einheit"
+      }
+    },
+    "autopilot": {
+      "title": "Automatisches Öffnen von Kanälen",
+      "msg": "Öffne Kanäle automatisch, sobald On-Chain-Guthaben zur Verfügung stehen"
+    },
+    "done": {
+      "title": "Fast fertig!",
+      "msg1": "Hier sind einige weitere Wallet-Einstellungen",
+      "msg2": "Wenn fertig, klicke Fortfahren"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Versuch es nochmal",
+      "msg": "Sorry, Du hat die Wörter in der falschen Reihenfolge eingegeben, versuche es bitte erneut."
+    },
+    "seed": {
+      "title": "Bestätige deinen Seed"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Aktiviere Google Drive Backup",
+      "msg": "Google Drive Backup aktiviert"
+    },
+    "backup": {
+      "title": "Cloud Backup",
+      "msg": "Für die Sicherung deines Off-Chain-Guthabens im Falle eines Geräteverlusts empfehlen wir die Lightning Kanäle auf Google Drive zu sichern.",
+      "msg1": "Ein verschlüsseltes Backup deiner Lightning-Kanäle wird vorgehalten. Es kann nur in Kombination mit deinem Wallet-Seed verwendet werden.",
+      "msg2": "Wenn Du fertig bist. drücke Fortfahren."
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Aktiviere iCloud Backup",
+      "msg": "iCloud Backup aktiviert"
+    },
+    "backup": {
+      "title": "iCloud Backup",
+      "msg": "Für die Sicherung deines Off-Chain-Guthabens im Falle eines Geräteverlusts empfehlen wir die Lightning Kanäle auf iCloud zu sichern.",
+      "msg1": "Ein verschlüsseltes Backup deiner Lightning-Kanäle wird vorgehalten. Es kann nur in Kombination mit deinem Wallet-Seed verwendet werden.",
+      "msg2": "Wenn Du fertig bist. drücke Fortfahren."
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Wallet-Wiederherstellung",
+      "msg": "Um dein Wallet wiederherzustellen, tippe jedes Wort deines Seeds getrennt durch Leerzeichen ein.",
+      "msg1": "Wenn Du deine Lightning-Kanäle wiederherstellen möchtest, benötigst Du die Backup-Datei.",
+      "loading": "Wallet-Wiederherstellung",
+      "channel": {
+        "title": "Kanal-Backup",
+        "file": "Wähle die Backup-Datei aus",
+        "google": {
+          "title": "Wiederherstellung mit Google Drive",
+          "alert": "Wiederherstellung mit Google Drive fehlgeschlagen"
+        },
+        "iCloud": {
+          "title": "Wiederherstellung mit iCloud",
+          "alert": "Wiederherstellung mit iCloud fehlgeschlagen"
+        }
+      },
+      "seed": "Seed muss exakt 24 Wörter lang sein"
+    },
+    "backup": {
+      "google": "Backup über Google Drive",
+      "iCloud": "Backup über iCloud"
+    }
+  },
+  "welcome.seed": {
+    "title": "Willkommen bei Blixt Wallet!",
+    "msg": "Das ist dein Backup-Seed.",
+    "msg1": "Schreibe ihn auf ein Stück Papier auf und verwahre ihn an einem sicheren Ort.",
+    "msg2": "Solltest Du den Zugang zu deinem Wallet verlieren,",
+    "msg3": "kannst Du dein Guthaben durch Eingabe des Backup-Seeds wiederherstellen.",
+    "msg4": "Der Seed-Standard basiert auf aezeed.",
+    "button": "Ok, ist notiert"
+  }
+}

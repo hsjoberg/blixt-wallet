@@ -7,7 +7,7 @@ import { namespaces } from "../i18n/i18n.constants";
 
 export default function FooterNav() {
   const navigation = useNavigation();
-  const t = useTranslation(namespaces.bottomNav).t;
+  const t = useTranslation(namespaces.footerNav).t;
 
   return (
     <Footer>

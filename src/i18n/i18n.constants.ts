@@ -16,7 +16,7 @@ export const namespaces = {
   LNURL: {
     authRequest: "LNURL.authRequest",
     channelRequest: "LNURL.channelRequest",
-    LNURLPayRequest: "LNURL.LNURLPayRequest",
+    payRequest: "LNURL.payRequest",
     withdrawRequest: "LNURL.withdrawRequest",
   },
   onchain: {
@@ -66,7 +66,7 @@ export const namespaces = {
   drawer: "drawer",
   syncInfo: "syncInfo",
   transactionDetails: "transactionDetails",
-  bottomNav: "bottomNav",
+  footerNav: "footerNav",
 };
 
 interface ILanguages {

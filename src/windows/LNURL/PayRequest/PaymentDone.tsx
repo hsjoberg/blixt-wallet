@@ -18,7 +18,7 @@ export interface IPayRequestDoneProps {
   callback?: (r: Uint8Array | null) => void;
 }
 export default function LNURLPayRequestDone({ preimage, callback }: IPayRequestDoneProps) {
-  const t = useTranslation(namespaces.LNURL.LNURLPayRequest).t;
+  const t = useTranslation(namespaces.LNURL.payRequest).t;
   const navigation = useNavigation();
   const clear = useStoreActions((store) => store.lnUrl.clear);
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);

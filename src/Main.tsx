@@ -39,9 +39,7 @@ const RootStack = createStackNavigator();
 
 export type RootStackParamList = {
   DEV_Commands: undefined;
-  Init: undefined;
   Authentication: undefined;
-  InitLightning: undefined;
 
   Loading: undefined;
   LoadingModal: undefined;

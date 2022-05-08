@@ -1003,7 +1003,7 @@ ${t("experimental.tor.disabled.msg2")}`;
 
         <List style={style.list}>
           <ListItem style={style.itemHeader} itemHeader={true} first={true}>
-            <Text>{t("general.title",{ns:namespaces.settings.settings})}</Text>
+            <Text>{t("general.title")}</Text>
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={onNamePress}>

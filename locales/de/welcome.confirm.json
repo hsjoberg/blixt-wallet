@@ -1,9 +1,0 @@
-{
-  "alert": {
-    "title": "Versuch es nochmal",
-    "msg": "Sorry, Du hat die Wörter in der falschen Reihenfolge eingegeben, versuche es bitte erneut."
-  },
-  "seed": {
-    "title": "Bestätige deinen Seed"
-  }
-}

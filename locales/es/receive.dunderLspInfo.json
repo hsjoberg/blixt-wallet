@@ -1,9 +1,0 @@
-{
-  "title": "Sobre Dunder LSP",
-  "msg": "Dunder es un Proveedor de Servicio Lightning (LSP) que automáticamente abre canales para ti cuando no tienes suficiente liquidez entrante.",
-  "msg1": "Esto podria ser el ejemplo del caso cuando empiezas a usar Blixt Wallet.",
-  "msg2": "Como esto requiere una transacción on-chain, una comisión de transacción de Bitcoin será deducida del pago. Los futuros pagos serán capaces de usar los nuevos canales abiertos con la Lightning network.",
-  "msg3": "Dunder es",
-  "msg4": "un software de código abierto",
-  "msg5": "y debes cambiar el proveedor por defecto en Ajustes."
-}
