@@ -190,13 +190,6 @@
       }
     }
   },
-  "receive.receiveQr": {
-    "title": "Empfangen",
-    "qr": {
-      "title": "Scanne diesen QR-Code",
-      "msg": "Läuft ab in {{time}}"
-    }
-  },
   "receive.dunderLspInfo": {
     "title": "About Dunder LSP",
     "msg": "Dunder is a Lightning Service Provider (LSP) that automatically opens channels for you when you don't have enough inbound liquidity.",
@@ -205,6 +198,13 @@
     "msg3": "Dunder is",
     "msg4": "open-source",
     "msg5": "software and you may change the default service provider in Settings."
+  },
+  "receive.receiveQr": {
+    "title": "Empfangen",
+    "qr": {
+      "title": "Scanne diesen QR-Code",
+      "msg": "Läuft ab in {{time}}"
+    }
   },
   "send.sendConfirmation": {
     "layout": {
@@ -480,6 +480,11 @@
       }
     }
   },
+  "webLN.browser": {
+    "close": "Do you wish to close the browser?",
+    "home": "Go back to store list",
+    "placeholder": "Type URL here"
+  },
   "keysend.experiment": {
     "title": "Keysend",
     "qr": {
@@ -516,11 +521,6 @@
         "placeholder": "Tippe eine Chat-Nachricht hier ein"
       }
     }
-  },
-  "webLN.browser": {
-    "close": "Do you wish to close the browser?",
-    "home": "Go back to store list",
-    "placeholder": "Type URL here"
   },
   "settings.settings": {
     "title": "Einstellungen",
@@ -670,6 +670,9 @@
       },
       "zmqRawTx": {
         "title": "bitcoind ZMQ Raw Tx Host einstellen"
+      },
+      "p2tr": {
+        "title": "Aktiviere den Empfang von Bitcoin (on-chain) über Taproot (P2TR)"
       }
     },
     "LN": {
@@ -919,36 +922,9 @@
     "msg2": "sende Bitcoins an die oben genannten Adresse"
   },
   "welcome.almostDone": {
-    "name": {
-      "title": "Name",
-      "msg": "wird für Transaktionen verwendet",
-      "alert": {
-        "title": "Name",
-        "msg1": "Wähle einen Namen für Transaktionen",
-        "msg2": "Dein Name wird in Invoices (Rechnungen) für Zahlungssender und -empfänger angezeigt",
-        "msg3": "Name eingeben",
-        "msg4": "Name eingeben"
-      }
-    },
-    "pincode": {
-      "title": "Einloggen mit PIN-Code",
-      "msg": "Einloggen mit"
-    },
-    "fiatUnit": {
-      "title": "Fiat-Währung",
-      "dialog": {
-        "title": "Ändere die Fiat-Einheit"
-      }
-    },
-    "autopilot": {
-      "title": "Automatisches Öffnen von Kanälen",
-      "msg": "Öffne Kanäle automatisch, sobald On-Chain-Guthaben zur Verfügung stehen"
-    },
-    "done": {
-      "title": "Fast fertig!",
-      "msg1": "Hier sind einige weitere Wallet-Einstellungen",
-      "msg2": "Wenn fertig, klicke Fortfahren"
-    }
+    "title": "Guthaben hinzufügen",
+    "msg1": "Um Lightning in der Blixt Wallet verwenden zu können,",
+    "msg2": "sende Bitcoins an die oben genannten Adresse"
   },
   "welcome.confirm": {
     "alert": {
