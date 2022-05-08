@@ -37,6 +37,10 @@ powered by lnd and Neutrino SPV.
 
 The wallet uses lnd that is young and might have bugs. Check [lnd bug list here](https://github.com/lightningnetwork/lnd/issues?q=is%3Aissue+is%3Aopen+label%3Abug).
 
+## Translation
+
+You can contribute to the project by translating the app via [Transifex](https://www.transifex.com/blixt-wallet/blixt-wallet).
+
 ## Build Steps
 
 Blixt targets three platforms right now: Web, Android and iOS.
