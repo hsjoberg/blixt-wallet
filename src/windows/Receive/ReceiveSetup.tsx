@@ -115,6 +115,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
         items: [
           { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
           { label: BitcoinUnits.bit.settings, id: "bit" },
+          { label: BitcoinUnits.sat.settings, id: "sat" },
           { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
           { label: BitcoinUnits.milliBitcoin.settings, id: "milliBitcoin" },
         ]
@@ -128,6 +129,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
         data: [
           { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
           { title: BitcoinUnits.bit.settings, value: "bit" },
+          { title: BitcoinUnits.sat.settings, value: "sat" },
           { title: BitcoinUnits.satoshi.settings, value: "satoshi" },
           { title: BitcoinUnits.milliBitcoin.settings, value: "milliBitcoin" },
         ],

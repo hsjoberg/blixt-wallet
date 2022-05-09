@@ -12,6 +12,7 @@ import PendingChannelCard from "../../components/PendingChannelCard";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { formatBitcoin, valueFiat } from "../../utils/bitcoin-units";
 import { NavigationButton } from "../../components/NavigationButton";
+import { toast } from "../../utils";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -35,11 +36,19 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
 
+  async function getChans() {
+    (async () => {
+      try {
+        await getChannels();
+      } catch (error) {
+        toast(error.message, undefined, "danger", "OK");
+      }
+    })();
+  }
+
   useEffect(() => {
     if (rpcReady) {
-      (async () => {
-        await getChannels();
-      })();
+      getChans();
     }
   }, [getChannels, rpcReady]);
 
@@ -50,7 +59,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
       headerShown: true,
       headerRight: () => {
         return (
-          <NavigationButton onPress={async () => await getChannels()}>
+          <NavigationButton onPress={getChans}>
             <Icon type="MaterialIcons" name="sync" style={{ fontSize: 22 }} />
           </NavigationButton>
         )

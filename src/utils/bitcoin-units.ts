@@ -16,6 +16,7 @@ export interface IBitcoinUnits {
   milliBitcoin: IBitcoinUnit;
   bit: IBitcoinUnit;
   sat: IBitcoinUnit;
+  sats: IBitcoinUnit;
   satoshi: IBitcoinUnit;
 }
 
@@ -57,7 +58,6 @@ export const BitcoinUnits: IBitcoinUnits = {
     unit: 1 / 1E8,
     decimals: 0,
   },
-  // TODO Milli Satoshi
 }
 
 export const convertBitcoinUnit = (value: number, from: keyof IBitcoinUnits, to: keyof IBitcoinUnits): BigNumber => {
@@ -85,7 +85,7 @@ export const getUnitNice = (value: BigNumber, unit: keyof IBitcoinUnits) => {
   return str;
 }
 
-export const valueBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNumbers: boolean = false): string => {
+export const valueBitcoin = (satoshi: Long.Long, unit: keyof IBitcoinUnits, groupNumbers: boolean = false): string => {
   return groupNumbers
     ? formatNumberGroupings(convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed())
     : convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed();
@@ -107,7 +107,7 @@ export const convertBitcoinToFiat = (satoshi: Long | number, conversion: number,
   return `${fiat}${fiatUnit ?? ""}`;
 };
 
-export const valueFiat = (satoshi: Long, conversion: number): number => {
+export const valueFiat = (satoshi: Long.Long, conversion: number): number => {
   return convertBitcoinUnit(satoshi.toNumber(), "satoshi", "bitcoin")
     .multipliedBy(conversion)
     .toNumber();

@@ -107,7 +107,7 @@ export default function Settings({ navigation }: ISettingsProps) {
         items: [
           { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
           { label: BitcoinUnits.bit.settings, id: "bit" },
-          { label: BitcoinUnits.sats.settings, id: "sats" },
+          { label: BitcoinUnits.sat.settings, id: "sat" },
           { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
           { label: BitcoinUnits.milliBitcoin.settings, id: "milliBitcoin" },
         ]

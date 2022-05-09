@@ -25,7 +25,7 @@ interface IProps {
   navigation: StackNavigationProp<AlmostDoneStackParamList, "AlmostDone">;
 }
 const AlmostDone = ({ navigation }: IProps) => {
-  const t = useTranslation(namespaces.welcome.almostDone).t;
+  const { t, i18n } = useTranslation(namespaces.welcome.almostDone);
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
   // Name
@@ -33,16 +33,14 @@ const AlmostDone = ({ navigation }: IProps) => {
   const changeName = useStoreActions((store) => store.settings.changeName);
   const onNamePress = async () => {
     Alert.prompt(
-      t("name.alert.title"),
-      t("name.alert.msg1")+"\n\n" +
-      t("name.alert.msg2")+" " +
-      t("name.alert.msg3"),
+      t("general.name.title", { ns: namespaces.settings.settings }),
+      t("general.name.dialog.msg", { ns: namespaces.settings.settings }),
       [{
-        text: t("buttons.cancel",{ns:namespaces.common}),
+        text: t("buttons.cancel",{ ns:namespaces.common }),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: t("name.alert.msg4"),
+        text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
         onPress: async (text) => {
           await changeName(text ?? null);
         },
@@ -106,7 +104,7 @@ const AlmostDone = ({ navigation }: IProps) => {
       }
     } else {
       navigation.navigate("ChangeFiatUnit", {
-        title: t("fiatUnit.dialog.title"),
+        title: t("display.fiatUnit.title", { ns: namespaces.settings.settings }),
         data: Object.entries(fiatRates).map(([currency]) => ({
           title: currency,
           value: currency as keyof IFiatRates,
@@ -144,16 +142,16 @@ const AlmostDone = ({ navigation }: IProps) => {
             <ListItem style={extraStyle.listItem} icon={true} onPress={onNamePress}>
               <Left><Icon style={extraStyle.icon} type="AntDesign" name="edit" /></Left>
               <Body>
-                <Text>{t("name.title")}</Text>
-                <Text note={true} numberOfLines={1}>
-                  {name || t("name.msg")}
-                </Text>
+              <Text>{t("general.name.title", { ns: namespaces.settings.settings })}</Text>
+              <Text note={true}>
+                {name || t("general.name.subtitle", { ns: namespaces.settings.settings })}
+              </Text>
               </Body>
             </ListItem>
 
             <ListItem style={extraStyle.listItem} button={true} icon={true} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress}>
               <Left><Icon style={extraStyle.icon} type="AntDesign" name="lock" /></Left>
-              <Body><Text>{t("pincode.title")}</Text></Body>
+              <Body><Text>{t("security.pincode.title", { ns: namespaces.settings.settings })}</Text></Body>
               <Right><CheckBox checked={loginMethods!.has(LoginMethods.pincode)} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress} /></Right>
             </ListItem>
 
@@ -169,7 +167,7 @@ const AlmostDone = ({ navigation }: IProps) => {
                 </Left>
                 <Body>
                   <Text>
-                    {t("pincode.msg")}{" "}
+                    {t("security.biometrics.title", { ns: namespaces.settings.settings })}{" "}
                     {biometricsSensor === "Biometrics" && "fingerprint"}
                     {biometricsSensor === "Face ID" && "Face ID"}
                     {biometricsSensor === "Touch ID" && "Touch ID"}
@@ -182,7 +180,7 @@ const AlmostDone = ({ navigation }: IProps) => {
             <ListItem style={extraStyle.listItem} icon={true} onPress={onFiatUnitPress}>
               <Left><Icon style={extraStyle.icon} type="FontAwesome" name="money" /></Left>
               <Body>
-                <Text>{t("fiatUnit.title")}</Text>
+              <Text>{t("display.fiatUnit.title", { ns: namespaces.settings.settings })}</Text>
                 <Text note={true} numberOfLines={1} onPress={onFiatUnitPress}>{currentFiatUnit}</Text>
               </Body>
             </ListItem>
