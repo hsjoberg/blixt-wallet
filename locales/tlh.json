@@ -74,14 +74,14 @@
       "more": "vaj HutlhtaHvIS"
     },
     "sendOnChain": {
-      "title": "yI'el tlhoy'",
+      "title": "yI'el Blixt Wallet!",
       "msg1": "pa'Daq QottaH qaDanganpu' 'e' vISov.",
       "msg2": "SoHvaD Qu' Hoch vIta'rup.",
       "msg3": "pa'",
       "alert": "sengvamDaq QotDI' sengmey."
     },
     "doBackup": {
-      "msg1": "qo' HochDaq tlhIH qo' Hoch",
+      "msg1": "qatlho' Blixt Wallet!",
       "msg2": "wo'maj nadev Data'laHchugh, ngIvwI'ghom'e' wIqelchu'meH, ngIvlu'taHvIS ngIvwI'ghom ra'wI' 'e' vIHon.",
       "backup": "yojHa'"
     }
@@ -118,7 +118,7 @@
   "transactionDetails": {
     "title": "Huq",
     "date": "Qo', joH.",
-    "Note": "paghna'",
+    "note": "paghna'",
     "website": "ma'oy'",
     "type" : "Segh",
     "lnurl": {
@@ -480,6 +480,11 @@
       }
     }
   },
+  "webLN.browser": {
+    "close": "Ha'DIbaH bISop 'e' DapoQqang'a'?",
+    "home": "ghormaQ yIghoSNa'",
+    "placeholder": "naDev URL yIghoS"
+  },
   "keysend.experiment": {
     "title": "qeylIS",
     "qr": {
@@ -517,11 +522,6 @@
       }
     }
   },
-  "webLN.browser": {
-    "close": "Ha'DIbaH bISop 'e' DapoQqang'a'?",
-    "home": "ghormaQ yIghoSNa'",
-    "placeholder": "naDev URL yIghoS"
-  },
   "settings.settings": {
     "title": "'aw'",
     "general": {
@@ -530,7 +530,7 @@
         "title": "pong",
         "subtitle": "qaStaHvIS poHlu'chu'pu'bogh",
         "dialog": {
-          "msg": "vaj ngoHmey SaHlu'meH mIw'a' tu'lu'be''a' \n\nbIlughchu'meH mIw, ponglIj tu'lu'chugh.",
+          "msg": "vaj ngoHmey SaHlu'meH mIw'a' tu'lu'be''a'.\n\nbIlughchu'meH mIw, ponglIj tu'lu'chugh.",
           "accept": "qaStaHvIS mIw yIlo'rup"
         }
       },
@@ -670,6 +670,9 @@
       },
       "zmqRawTx": {
         "title": "yo' ZMQ Raw Tx QIjwI'"
+      },
+      "p2tr": {
+        "title": "Datejpu'DI' 'enqIyDu Taproot (P2TR)"
       }
     },
     "LN": {
@@ -919,29 +922,8 @@
     "msg2": "reH tIqDu' SaQnIS 'iq lutu'lu'"
   },
   "welcome.almostDone": {
-    "name": {
-      "title": "pong",
-      "msg": "qaStaHvIS poHlu'chu'pu'bogh",
-      "alert": {
-        "title": "pong",
-        "msg1": "vaj ngoHmey SaHlu'meH mIw'a' tu'lu'be''a'",
-        "msg2": "qaStaHvIS mInDu'lIj,",
-        "msg3": "DaQungHa'chugh.",
-        "msg4": "qaStaHvIS mIw yIlo'rup"
-      }
-    },
-    "pincode": {
-      "title": "ghIjqa'",
-      "msg": "yIvuS"
-    },
-    "fiatUnit": {
-      "title": "maQmIgh",
-      "dialog": {
-        "title": "qaSbe'"
-      }
-    },
     "autopilot": {
-      "title": "motlhHa'",
+      "title": "ghe''or",
       "msg": "ghuy'cha', belmoHtaHvIS nI' latlh DotlhDaj"
     },
     "done": {
