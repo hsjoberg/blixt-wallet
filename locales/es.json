@@ -69,21 +69,21 @@
   },
   "overview": {
     "recoverInfo": {
-      "msg1": "Recuperación de la cartera en progreso.",
-      "msg2": "Recuperación de la cartera terminada.",
+      "msg1": "Recuperación del monedero en progreso",
+      "msg2": "Recuperación del monedero finalizada",
       "more": "Más información"
     },
     "sendOnChain": {
-      "title": "Bienvenido a Blixt Wallet!",
-      "msg1": "Para empezar, enviar fondos on-chain a la dirección de bitcoin correcta.",
-      "msg2": "Un canal será abierto automáticamente para ti.",
-      "msg3": "Enviar por lo menos",
-      "alert": "Dirección Bitcoin copiado al portapapeles"
+      "title": "¡Bienvenido a Blixt Wallet!",
+      "msg1": "Para comenzar, envíe fondos en cadena a la dirección de bitcoin a la derecha.",
+      "msg2": "Se abrirá automáticamente un canal para usted.",
+      "msg3": "Enviar al menos",
+      "alert": "Dirección de Bitcoin copiada al portapapeles"
     },
     "doBackup": {
-      "msg1": "Gracias por usar Blixt Wallet!",
-      "msg2": "Te recomendamos hacer una copia de seguridad de la cartera para que puedas restaurar tus fondos en caso de perder tu teléfono.",
-      "backup": "Copia de seguridad de la cartera"
+      "msg1": "¡Gracias por usar Blixt Wallet!",
+      "msg2": "Recomendamos hacer una copia de seguridad del monedero para que pueda restaurar sus fondos en caso de pérdida del teléfono.",
+      "backup": "Copia del monedero"
     }
   },
   "help": {
@@ -190,13 +190,6 @@
       }
     }
   },
-  "receive.receiveQr": {
-    "title": "Recibir",
-    "qr": {
-      "title": "Escanear este código QR",
-      "msg": "Expira en {{time}}"
-    }
-  },
   "receive.dunderLspInfo": {
     "title": "Sobre Dunder LSP",
     "msg": "Dunder es un Proveedor de Servicio Lightning (LSP) que automáticamente abre canales para ti cuando no tienes suficiente liquidez entrante.",
@@ -205,6 +198,13 @@
     "msg3": "Dunder es",
     "msg4": "un software de código abierto",
     "msg5": "y debes cambiar el proveedor por defecto en Ajustes."
+  },
+  "receive.receiveQr": {
+    "title": "Recibir",
+    "qr": {
+      "title": "Escanear este código QR",
+      "msg": "Expira en {{time}}"
+    }
   },
   "send.sendConfirmation": {
     "layout": {
@@ -480,6 +480,11 @@
       }
     }
   },
+  "webLN.browser": {
+    "close": "¿Te gustaría cerrar el navegador?",
+    "home": "Ir atras a la lista de la tienda",
+    "placeholder": "Escribe la URL aquí"
+  },
   "keysend.experiment": {
     "title": "Keysend",
     "qr": {
@@ -517,11 +522,6 @@
       }
     }
   },
-  "webLN.browser": {
-    "close": "¿Te gustaría cerrar el navegador?",
-    "home": "Ir atras a la lista de la tienda",
-    "placeholder": "Escribe la URL aquí"
-  },
   "settings.settings": {
     "title": "Ajustes",
     "general": {
@@ -530,7 +530,7 @@
         "title": "Nombre",
         "subtitle": "Será usado en transacciones",
         "dialog": {
-          "msg": "Elige un nombre que será usado en transacciones\n\nTu nombre será visto en facturas a los que te pagaron igual que a los que pagaste.",
+          "msg": "Elija un nombre que se utilizará en las transacciones.\n\nSu nombre se verá en las facturas de quienes le pagan, así como de las personas a las que le paga.",
           "accept": "Poner nombre"
         }
       },
@@ -670,6 +670,9 @@
       },
       "zmqRawTx": {
         "title": "Poner bitcoind ZMQ Raw Tx Host"
+      },
+      "p2tr": {
+        "title": "Habilite la recepción en onchain a través de Taproot (P2TR)"
       }
     },
     "LN": {
@@ -919,34 +922,13 @@
     "msg2": "enviar Bitcoins a la siguiente dirección"
   },
   "welcome.almostDone": {
-    "name": {
-      "title": "Nombre",
-      "msg": "Será usado en transacciones",
-      "alert": {
-        "title": "Nombre",
-        "msg1": "Elige un nombre que será usado en transacciones",
-        "msg2": "Tu nombre será visto en facturas de los que te pagaron cómo",
-        "msg3": "las personas a las que pagaste.",
-        "msg4": "establecer nombre"
-      }
-    },
-    "pincode": {
-      "title": "Iniciar sesión con código pin",
-      "msg": "Iniciar sesión con"
-    },
-    "fiatUnit": {
-      "title": "Moneda Fiat",
-      "dialog": {
-        "title": "Cambiar unidad Fiat"
-      }
-    },
     "autopilot": {
-      "title": "Canales de auto apertura",
-      "msg": "Abrir canales cuando los fondos en cadena esten disponibles"
+      "title": "Apertura de canales automática",
+      "msg": "Abrir canales cuando los fondos en onchain estén disponibles"
     },
     "done": {
-      "title": "¡Casi terminado!",
-      "msg1": "Aquí hay algunos ajustes de la cartera que puedes cambiar a tu gusto",
+      "title": "¡Casi listo!",
+      "msg1": "Aquí hay algunas configuraciones del monedero que puede configurar a su gusto",
       "msg2": "Cuando estés listo, presiona continuar"
     }
   },
