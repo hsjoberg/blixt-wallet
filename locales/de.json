@@ -922,9 +922,15 @@
     "msg2": "sende Bitcoins an die oben genannten Adresse"
   },
   "welcome.almostDone": {
-    "title": "Guthaben hinzufügen",
-    "msg1": "Um Lightning in der Blixt Wallet verwenden zu können,",
-    "msg2": "sende Bitcoins an die oben genannten Adresse"
+    "autopilot": {
+      "title": "Öffne Kanäle automatisch",
+      "msg": "Öffne Kanäle automatisch, sobald On-Chain-Guthaben zur Verfügung steht"
+    },
+    "done": {
+      "title": "Fast fertig!",
+      "msg1": "Hier sind einige weitere Wallet-Einstellungen",
+      "msg2": "Wenn Du fertig bist. wähle Fortfahren."
+    }
   },
   "welcome.confirm": {
     "alert": {
