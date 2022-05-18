@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, StatusBar, Alert, NativeModules, SafeAreaView } from "react-native";
+import { StyleSheet, StatusBar, NativeModules, SafeAreaView } from "react-native";
 import { Text, H1, Button, View, Spinner, Icon } from "native-base";
 import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
 import { Menu, MenuItem } from "react-native-material-menu";
-
 import { CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -17,6 +16,7 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { toast } from "../../utils";
+import { Alert } from "../../utils/alert";
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -43,8 +43,12 @@ function AnimatedView({ children }: IAnimatedViewProps) {
 }
 
 function TopMenu() {
+  const t = useTranslation(namespaces.welcome.start).t;
   const torEnabled = useStoreState((store) => store.torEnabled);
   const changeTorEnabled = useStoreActions((store) => store.settings.changeTorEnabled);
+  const neutrinoPeers = useStoreState((store) => store.settings.neutrinoPeers);
+  const changeNeutrinoPeers = useStoreActions((store) => store.settings.changeNeutrinoPeers);
+  const writeConfig = useStoreActions((store) => store.writeConfig);
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
@@ -65,7 +69,67 @@ function TopMenu() {
       const message = "Blixt Wallet has to be restarted before the new configuration is applied."
       Alert.alert(title, message);
     }
-  }
+  };
+
+  const onSetBitcoinNodePress = async () => {
+    Alert.prompt(
+      t("bitcoinNetwork.node.setDialog.title", { ns: namespaces.settings.settings }),
+      t("bitcoinNetwork.node.setDialog.info", { ns: namespaces.settings.settings }) + "\n\n" +
+      t("bitcoinNetwork.node.setDialog.leaveBlankToSearch", { ns: namespaces.settings.settings }),
+      [{
+        text: t("buttons.cancel", { ns:namespaces.common }),
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: t("bitcoinNetwork.node.setDialog.title", { ns: namespaces.settings.settings }),
+        onPress: async (text) => {
+          if (text === neutrinoPeers[0]) {
+            return;
+          }
+
+          if (text) {
+            await changeNeutrinoPeers([text]);
+          } else {
+            await changeNeutrinoPeers([]);
+          }
+          await writeConfig();
+
+          restartNeeded();
+        },
+      }],
+      "plain-text",
+      neutrinoPeers[0] ?? "",
+    );
+  };
+
+  const restartNeeded = () => {
+    const title = t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings });
+    const message = t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings });
+    if (PLATFORM === "android") {
+      Alert.alert(
+        title,
+        message + "\n" + t("bitcoinNetwork.restartDialog.msg1", { ns: namespaces.settings.settings }),
+        [{
+          style: "cancel",
+          text: t("buttons.no",{ ns:namespaces.common }),
+        }, {
+          style: "default",
+          text: t("buttons.yes",{ ns:namespaces.common }),
+          onPress: async () => {
+            try {
+              await NativeModules.LndMobile.stopLnd();
+              await NativeModules.LndMobileTools.killLnd();
+            } catch(e) {
+              console.log(e);
+            }
+            NativeModules.LndMobileTools.restartApp();
+          }
+        }]
+      );
+    } else {
+      Alert.alert(title, message);
+    }
+  };
 
   return (
     <View style={style.menuDotsIcon}>
@@ -80,13 +144,11 @@ function TopMenu() {
           />
         }
       >
-        <MenuItem
-          onPress={toggleTorEnabled}
-          // style={{ backgroundColor: blixtTheme.gray }}
-          // textStyle={{ color: blixtTheme.light }}
-          textStyle={{ color: "#000" }}
-        >
-          {torEnabled ? "Disable" : "Enable"} Tor
+        <MenuItem onPress={toggleTorEnabled} textStyle={{ color: "#000" }}>
+          {torEnabled ? t("menu.disableTor") : t("menu.enableTor")}
+        </MenuItem>
+        <MenuItem onPress={onSetBitcoinNodePress} textStyle={{ color: "#000" }}>
+          {t("menu.setBitcoinNode")}
         </MenuItem>
       </Menu>
     </View>

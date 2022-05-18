@@ -46,6 +46,11 @@
     },
     "restoreWallet": {
       "title": "Restore Wallet"
+    },
+    "menu": {
+      "enableTor": "Enable Tor",
+      "disableTor": "Disable Tor",
+      "setBitcoinNode": "Set Bitcoin node"
     }
   },
   "footerNav": {
