@@ -80,6 +80,8 @@
 	<string>Locally save location of where a transaction was made</string>
 	<key>SCHEME</key>
 	<string>$(SCHEME)</string>
+	<key>TEAM_ID</key>
+	<string>$(TeamIdentifierPrefix)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>IBMPlexSans-Medium.ttf</string>
@@ -116,7 +118,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-  <key>TEAM_ID</key>
-  <string>$(TeamIdentifierPrefix)</string>
 </dict>
 </plist>
