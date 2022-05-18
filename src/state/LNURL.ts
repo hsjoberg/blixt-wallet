@@ -5,8 +5,8 @@
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as Bech32 from "bech32";
 import secp256k1 from "secp256k1";
-import { CONSTANTS, JSHash } from "react-native-hash";
-import { Hash as sha256Hash, HMAC as sha256HMAC } from "fast-sha256";
+import { CONSTANTS, JSHash, JSHmac } from "react-native-hash";
+import { HMAC as sha256HMAC } from "fast-sha256";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -328,10 +328,13 @@ export const lnUrl: ILNUrlModel = {
       // 2. LN WALLET obtains an RFC6979 deterministic signature of sha256(utf8ToBytes(canonical phrase)) using secp256k1 with node private key.
       const signature = await injections.lndMobile.wallet.signMessageNodePubkey(stringToUint8Array(LNURLAUTH_CANONICAL_PHRASE));
       // 3. LN WALLET defines hashingKey as PrivateKey(sha256(obtained signature)).
-      const hashingKey = new sha256Hash().update(stringToUint8Array(signature.signature)).digest();
+      const hashingKey = await JSHash(signature.signature, CONSTANTS.HashAlgorithms.sha256);
+
       // 4. SERVICE domain name is extracted from auth LNURL and then service-specific linkingPrivKey is defined as PrivateKey(hmacSha256(hashingKey, service domain name)).
       const domain = getDomainFromURL(lnUrlStr);
-      const linkingKeyPriv = new sha256HMAC(hashingKey).update(stringToUint8Array(domain)).digest();
+      const linkingKeyPriv = getStoreState().settings.legacyLnurlAuthEnabled
+        ? new sha256HMAC(hexToUint8Array(hashingKey)).update(stringToUint8Array(domain)).digest()
+        : hexToUint8Array(await JSHmac(domain, hashingKey, CONSTANTS.HmacAlgorithms.HmacSHA256));
 
       // Obtain the public key
       const linkingKeyPub = secp256k1.publicKeyCreate(linkingKeyPriv, true);
@@ -548,7 +551,7 @@ export const lnUrl: ILNUrlModel = {
 
         const hashedMetadata = await JSHash(dataToHash, CONSTANTS.HashAlgorithms.sha256);
         if (hashedMetadata !== descriptionHash) {
-          log.i("Description hash does not match metdata hash!", [hashedMetadata, descriptionHash]);
+          log.i("Description hash does not match metadata hash!", [hashedMetadata, descriptionHash]);
           throw new Error("Invoice description hash is invalid.");
         }
 

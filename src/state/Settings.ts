@@ -7,7 +7,6 @@ import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
 import { DEFAULT_INVOICE_EXPIRY } from "../utils/constants";
 import { IStoreModel } from "./index";
-
 import { i18n } from "../i18n/i18n";
 
 import logger from "./../utils/log";
@@ -54,6 +53,7 @@ export interface ISettingsModel {
   changeInvoiceExpiry: Thunk<ISettingsModel, number>;
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
   changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
+  changeLegacyLnurlAuthEnabled: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -86,6 +86,7 @@ export interface ISettingsModel {
   setInvoiceExpiry: Action<ISettingsModel, number>;
   setRescanWallet: Action<ISettingsModel, boolean>;
   setReceiveViaP2TR: Action<ISettingsModel, boolean>;
+  setLegacyLnurlAuthEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -118,6 +119,7 @@ export interface ISettingsModel {
   invoiceExpiry: number;
   rescanWallet: boolean;
   receiveViaP2TR: boolean;
+  legacyLnurlAuthEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -154,6 +156,7 @@ export const settings: ISettingsModel = {
     actions.setInvoiceExpiry(await getItemObject(StorageItem.invoiceExpiry) ?? DEFAULT_INVOICE_EXPIRY);
     actions.setRescanWallet(await getRescanWallet());
     actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
+    actions.setLegacyLnurlAuthEnabled(await getItemObject(StorageItem.legacyLnurlAuthEnabled) ?? false);
 
     log.d("Done");
   }),
@@ -317,6 +320,11 @@ export const settings: ISettingsModel = {
     await getStoreActions().onChain.getAddress({});
   }),
 
+  changeLegacyLnurlAuthEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.legacyLnurlAuthEnabled, payload);
+    actions.setLegacyLnurlAuthEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -348,6 +356,7 @@ export const settings: ISettingsModel = {
   setInvoiceExpiry: action((state, payload) => { state.invoiceExpiry = payload; }),
   setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
   setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
+  setLegacyLnurlAuthEnabled: action((state, payload) => { state.legacyLnurlAuthEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -380,4 +389,5 @@ export const settings: ISettingsModel = {
   invoiceExpiry: DEFAULT_INVOICE_EXPIRY,
   rescanWallet: false,
   receiveViaP2TR: false,
+  legacyLnurlAuthEnabled: false,
 };
