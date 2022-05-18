@@ -650,7 +650,10 @@
         "title": "'Iw tu'lu'be'",
         "subtitle": "'ach (BIP157) yIbej 'Iv",
         "setDialog": {
-          "title": "jatlhbe'"
+          "title": "jatlhbe'",
+          "info": "bortaS BIP157 bIghHom'e' chenmoHlu'chugh.",
+          "leaveBlankToSearch": "veSDuj ra'ta' QoraQ tuq.",
+          "longPressToReset": "qo' DachID'eghchugh, vaj qo' ({{defaultNode}}) 'ej 'ut qIv Hutlhbogh bommey, bochqu'taH."
         },
         "restoreDialog": {
           "title": "pagh yIqIm",
