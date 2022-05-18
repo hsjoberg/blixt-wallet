@@ -56,7 +56,7 @@
     "menu": {
       "scan": "Scannen",
       "receive": "Empfangen",
-      "pasteFromClipboard": "Aus Zwischenablage",
+      "pasteFromClipboard": "Einfügen aus Zwischenablage",
       "sendToLightningAddress": "Senden an Lightning Addresse",
       "contactsAndServices": "Kontakte & Services",
       "lightningBrowser": "Lightning Browser",
@@ -75,23 +75,23 @@
     },
     "sendOnChain": {
       "title": "Willkommen bei Blixt Wallet!",
-      "msg1": "Um zu starten, sende On-Chain Guthaben an die Bitcoin-Adresse.",
+      "msg1": "Um zu beginnen, sende On-Chain Guthaben an die Bitcoin-Adresse.",
       "msg2": "Ein Lightning-Kanal wird automatisch für Dich erstellt.",
       "msg3": "Sende mindestens",
       "alert": "Bitcoin-Adresse in die Zwischenablage kopiert"
     },
     "doBackup": {
-      "msg1": "Danke, dass Du Blixt Wallet verwendest!",
-      "msg2": "Wir empfehlen, ein Wallet-Backup zu erstellen, um im Falle eines Geräteverlusts das Guthaben wiederherstellen zu können",
+      "msg1": "Danke, dass Du die Blixt Wallet verwendest!",
+      "msg2": "Wir empfehlen, ein Wallet-Backup zu erstellen, um im Falle eines Geräteverlustes das Guthaben wiederherstellen zu können.",
       "backup": "Wallet-Backup"
     }
   },
   "help": {
     "title": "Hilfe",
     "msg1": "Wenn Du Hilfe benötigst oder uns Feedback geben möchtest, erstelle bitte ein Issue auf GitHub oder kontaktiere die Blixt Wallet-Entwickler per E-Mail.",
-    "msg2": "Du bist herzlich eingeladen, unserer öffentlichen Telegramgruppe beizutreten.",
-    "msg3": "Da Blixt Wallet noch eine junge Wallet ist, sind wir für jegliches Feedback bei Problemen sehr dankbar.",
-    "telegramGroup": "Telegram gruppe"
+    "msg2": "Du bist herzlich eingeladen, unserer öffentlichen Telegram-Gruppe beizutreten.",
+    "msg3": "Da Blixt Wallet noch eine junge App ist, sind wir für jegliches Feedback bei Problemen sehr dankbar.",
+    "telegramGroup": "Telegram-Gruppe"
   },
   "syncInfo": {
     "syncedToChain": {
@@ -111,7 +111,7 @@
       "msg2": "Prüfe die Bereiche Lightning-Kanäle und On-Chain Guthaben"
     },
     "lndLog": {
-      "show": "LND Protokolle anzeigen",
+      "show": "LND-Logs anzeigen",
       "copy": "Protokoll-Text kopieren"
     }
   },
@@ -128,8 +128,8 @@
     },
     "payer": "Zahlungssender",
     "recipient": "Empfänger",
-    "amountInFiatTimeOfPayment": "Betrag in Fiat (Zahlungszeit)",
-    "numberOfHops": "Anzahl der Hops",
+    "amountInFiatTimeOfPayment": "Betrag in Fiat (Zahlungszeitstempel)",
+    "numberOfHops": "Anzahl an Hops",
     "remotePubkey": "Remote PubKey",
     "paymentHash": "Zahlungshash",
     "preimage": "Preimage",
@@ -142,7 +142,7 @@
     },
     "setNoteDialog": {
       "title": "Notiz",
-      "text": "Füge eine Notiz für diese Transaktion hinzu"
+      "text": "Notiz für diese Transaktion hinzufügen"
     }
   },
   "web.info": {
@@ -156,9 +156,9 @@
     "createInvoice": {
       "title": "Erstelle eine Invoice (Rechnung)",
       "error": "Der Rechnungsbetrag darf nicht höher sein als",
-      "alert": "Vor dem Empfangen einer Invoice, öffne zuerste einen Lightning-Kanal.",
+      "alert": "Vor dem Empfangen einer Invoice, öffne zuerst einen Lightning-Kanal.",
       "lsp": {
-        "msg": "Ein Zahlungskanal von Dunder LSP wird eröffnet, wenn diese Rechnung beglichen wird.",
+        "msg": "Ein Zahlungskanal wird von Dunder LSP eröffnet, wenn diese Rechnung beglichen wird.",
         "msg1": "Was bedeutet das?"
       }
     },
@@ -172,12 +172,12 @@
     "form": {
       "amountFiat": {
         "title": "Betrag",
-        "change": "Ändere die Fiat-Einheit",
+        "change": "Fiat-Einheit ändern",
         "dunderPlaceholder": "Mindestens"
       },
       "amountBitcoin": {
         "title": "Betrag",
-        "change": "Ändere die Bitcoin-Einheit",
+        "change": "Bitcoin-Einheit ändern",
         "dunderPlaceholder": "Mindestens"
       },
       "payer": {
