@@ -56,7 +56,7 @@
     "menu": {
       "scan": "Scannen",
       "receive": "Empfangen",
-      "pasteFromClipboard": "Aus Zwischenablage",
+      "pasteFromClipboard": "Einfügen aus Zwischenablage",
       "sendToLightningAddress": "Senden an Lightning Addresse",
       "contactsAndServices": "Kontakte & Services",
       "lightningBrowser": "Lightning Browser",
@@ -75,23 +75,23 @@
     },
     "sendOnChain": {
       "title": "Willkommen bei Blixt Wallet!",
-      "msg1": "Um zu starten, sende On-Chain Guthaben an die Bitcoin-Adresse.",
+      "msg1": "Um zu beginnen, sende On-Chain Guthaben an die Bitcoin-Adresse.",
       "msg2": "Ein Lightning-Kanal wird automatisch für Dich erstellt.",
       "msg3": "Sende mindestens",
       "alert": "Bitcoin-Adresse in die Zwischenablage kopiert"
     },
     "doBackup": {
-      "msg1": "Danke, dass Du Blixt Wallet verwendest!",
-      "msg2": "Wir empfehlen, ein Wallet-Backup zu erstellen, um im Falle eines Geräteverlusts das Guthaben wiederherstellen zu können",
+      "msg1": "Danke, dass Du die Blixt Wallet verwendest!",
+      "msg2": "Wir empfehlen, ein Wallet-Backup zu erstellen, um im Falle eines Geräteverlustes das Guthaben wiederherstellen zu können.",
       "backup": "Wallet-Backup"
     }
   },
   "help": {
     "title": "Hilfe",
     "msg1": "Wenn Du Hilfe benötigst oder uns Feedback geben möchtest, erstelle bitte ein Issue auf GitHub oder kontaktiere die Blixt Wallet-Entwickler per E-Mail.",
-    "msg2": "Du bist herzlich eingeladen, unserer öffentlichen Telegramgruppe beizutreten.",
-    "msg3": "Da Blixt Wallet noch eine junge Wallet ist, sind wir für jegliches Feedback bei Problemen sehr dankbar.",
-    "telegramGroup": "Telegram gruppe"
+    "msg2": "Du bist herzlich eingeladen, unserer öffentlichen Telegram-Gruppe beizutreten.",
+    "msg3": "Da Blixt Wallet noch eine junge App ist, sind wir für jegliches Feedback bei Problemen sehr dankbar.",
+    "telegramGroup": "Telegram-Gruppe"
   },
   "syncInfo": {
     "syncedToChain": {
@@ -111,7 +111,7 @@
       "msg2": "Prüfe die Bereiche Lightning-Kanäle und On-Chain Guthaben"
     },
     "lndLog": {
-      "show": "LND Protokolle anzeigen",
+      "show": "LND-Logs anzeigen",
       "copy": "Protokoll-Text kopieren"
     }
   },
@@ -128,8 +128,8 @@
     },
     "payer": "Zahlungssender",
     "recipient": "Empfänger",
-    "amountInFiatTimeOfPayment": "Betrag in Fiat (Zahlungszeit)",
-    "numberOfHops": "Anzahl der Hops",
+    "amountInFiatTimeOfPayment": "Betrag in Fiat (Zahlungszeitstempel)",
+    "numberOfHops": "Anzahl an Hops",
     "remotePubkey": "Remote PubKey",
     "paymentHash": "Zahlungshash",
     "preimage": "Preimage",
@@ -142,7 +142,7 @@
     },
     "setNoteDialog": {
       "title": "Notiz",
-      "text": "Füge eine Notiz für diese Transaktion hinzu"
+      "text": "Notiz für diese Transaktion hinzufügen"
     }
   },
   "web.info": {
@@ -156,9 +156,9 @@
     "createInvoice": {
       "title": "Erstelle eine Invoice (Rechnung)",
       "error": "Der Rechnungsbetrag darf nicht höher sein als",
-      "alert": "Vor dem Empfangen einer Invoice, öffne zuerste einen Lightning-Kanal.",
+      "alert": "Vor dem Empfangen einer Invoice, öffne zuerst einen Lightning-Kanal.",
       "lsp": {
-        "msg": "Ein Zahlungskanal von Dunder LSP wird eröffnet, wenn diese Rechnung beglichen wird.",
+        "msg": "Ein Zahlungskanal wird von Dunder LSP eröffnet, wenn diese Rechnung beglichen wird.",
         "msg1": "Was bedeutet das?"
       }
     },
@@ -172,12 +172,12 @@
     "form": {
       "amountFiat": {
         "title": "Betrag",
-        "change": "Ändere die Fiat-Einheit",
+        "change": "Fiat-Einheit ändern",
         "dunderPlaceholder": "Mindestens"
       },
       "amountBitcoin": {
         "title": "Betrag",
-        "change": "Ändere die Bitcoin-Einheit",
+        "change": "Bitcoin-Einheit ändern",
         "dunderPlaceholder": "Mindestens"
       },
       "payer": {
@@ -192,12 +192,12 @@
   },
   "receive.dunderLspInfo": {
     "title": "About Dunder LSP",
-    "msg": "Dunder is a Lightning Service Provider (LSP) that automatically opens channels for you when you don't have enough inbound liquidity.",
-    "msg1": "This could for example be the case when you first start using Blixt Wallet.",
-    "msg2": "As this requires an on-chain transaction, a Bitcoin transaction fee will be deducted from the incoming payment. Future payments will be able to use the newly opened payment channel with the Lightning network.",
-    "msg3": "Dunder is",
-    "msg4": "open-source",
-    "msg5": "software and you may change the default service provider in Settings."
+    "msg": "Dunder ist ein Lightning Service Provider (LSP), welcher automatisiert Lightning-Kanäle für Dich öffnet, wenn nicht genügend Inbound-Liquidität vorhanden ist.",
+    "msg1": "Dies könnte der Fall sein, wenn Du beispielsweise die Blixt Wallet zum ersten Mal verwendest.",
+    "msg2": "Da dies eine initiale On-Chain-Transaktion erfordert, wird eine einmalige Gebühr für die dafür notwendige Bitcoin-Transaktion von der eingehenden Zahlung abgezogen. Alle weiteren Zahlungen werden über diesen erstellten Lightning-Kanal durchgeführt.",
+    "msg3": "Dunder ist",
+    "msg4": "Open-Source",
+    "msg5": "Software. Der standardmäßige Serviceprovider kann in den Einstellungen geändert werden."
   },
   "receive.receiveQr": {
     "title": "Empfangen",
@@ -314,7 +314,7 @@
       },
       "feeRate": {
         "title": "Gebührenrate",
-        "auto": "auto"
+        "auto": "automatisch"
       },
       "withdraw": {
         "title": "Auszahlen",
@@ -324,13 +324,13 @@
   },
   "LNURL.authRequest": {
     "layout": {
-      "title": "Login Anforderung",
+      "title": "Login-Anforderung",
       "msg": "Einloggen in",
       "success": "Authentifiziert in"
     }
   },
   "LNURL.channelRequest": {
-    "alert": "Öffne Inbound-Kanal"
+    "alert": "Inbound-Kanal öffnen"
   },
   "LNURL.payRequest": {
     "viewMetadata": {
@@ -360,9 +360,9 @@
     "unableToPay": "Zahlung nicht möglich",
     "payerData": {
       "commentAllowed": "Kommentar für {{target}} (max {{letters}} Zeichen)",
-      "sendNameWithComment": "Füge meinen Namen dieser Nachricht bei",
+      "sendNameWithComment": "Meinen Namen dieser Nachricht beifügen",
       "name": {
-        "ask": "Füge meinen Namen dieser Zahlung bei",
+        "ask": "Meinen Namen dieser Nachricht beifügen",
         "mandatory": "Dein Name muss dieser Zahlung beigefügt werden."
       }
     },
@@ -405,7 +405,7 @@
           "msg": "In die Zwischenablage kopiert."
         },
         "open": {
-          "title": "Öffne Browser"
+          "title": "Browser öffnen"
         }
       },
       "aes": {
@@ -469,7 +469,7 @@
         "invalidOperation": "Ungültige Operation, Kontakt hat weder LUD-16 Identifier noch LNURL-pay Code"
       },
       "withdraw": {
-        "title": "Abheben",
+        "title": "Auszahlen",
         "couldNotPay": "Konnte nicht an diesen LNURL-pay Code gesendet werden",
         "invalidResponse": "Ungültige LNURL-withdraw Antwort ({{response}})",
         "invalidOperation": "Ungültige Operation, der Kontakt hat keinen LNURL-withdraw Code"
@@ -510,7 +510,7 @@
       },
       "pubkey": {
         "title": "Public Key",
-        "placeholder": "Pubkey"
+        "placeholder": "PubKey"
       },
       "route": {
         "title": "Vorgeschlagene Route",
@@ -518,7 +518,7 @@
       },
       "message": {
         "title": "Nachricht",
-        "placeholder": "Tippe eine Chat-Nachricht hier ein"
+        "placeholder": "Chat-Nachricht hier eintippen"
       }
     }
   },
@@ -563,7 +563,7 @@
       "seed": {
         "show": {
           "title": "Mnemonic anzeigen",
-          "subtitle": "Zeige 24-Wörter-Seed für diese Wallet",
+          "subtitle": "24-Wörter-Seed für diese Wallet anzeigen",
           "dialog": {
             "title": "Seed",
             "alert": "In die Zwischenablage kopiert",
@@ -645,10 +645,10 @@
       }
     },
     "bitcoinNetwork": {
-      "title": "Bitcoin Netzwerk",
+      "title": "Bitcoin-Netzwerk",
       "node": {
-        "title": "Bitcoin Node",
-        "subtitle": "Bitcoin Node (BIP157) verbinden mit",
+        "title": "Bitcoin-Node",
+        "subtitle": "Mit Bitcoin-Node (BIP157 erforderlich) verbinden",
         "setDialog": {
           "title": "Node einstellen",
           "info": "Bitcoin-Node verbinden (BIP157-Unterstützung erforderlich)",
@@ -666,38 +666,38 @@
         "msg1": "Möchtest Du jetzt neustarten?"
       },
       "rpc": {
-        "title": "bitcoind RPC Host einstellen"
+        "title": "bitcoind RPC Host eingeben"
       },
       "zmqRawBlock": {
-        "title": "bitcoind ZMQ Raw Block Host einstellen"
+        "title": "bitcoind ZMQ Raw Block Host eingeben"
       },
       "zmqRawTx": {
-        "title": "bitcoind ZMQ Raw Tx Host einstellen"
+        "title": "bitcoind ZMQ Raw Tx Host eingeben"
       },
       "p2tr": {
         "title": "Aktiviere den Empfang von Bitcoin (on-chain) über Taproot (P2TR)"
       }
     },
     "LN": {
-      "title": "Lightning Netzwerk",
+      "title": "Lightning-Netzwerk",
       "node": {
         "title": "Node-Daten anzeigen",
         "subtitle": ""
       },
       "peers": {
-        "title": "Lightning Peers anzeigen",
+        "title": "Lightning-Peers anzeigen",
         "subtitle": ""
       },
       "autopilot": {
-        "title": "Öffne Kanäle automatisch",
+        "title": "Kanäle automatisch öffnen",
         "subtitle": ""
       },
       "inbound": {
-        "title": "Inbound-Kanal-Dienst",
-        "subtitle": "Verwende den Inbound-Kanal-Dienst, um Zahlungen zu empfangen",
+        "title": "Channel Provider",
+        "subtitle": "Verwende den Channel Provider, um Zahlungen zu empfangen",
         "dialog": {
-          "title": "Incoming-Kanal Provider",
-          "msg1": "Wähle einen Incoming-Kanal Provider und drücke Weiter.",
+          "title": "Channel Provider",
+          "msg1": "Wähle einen Channel Provider und drücke Weiter.",
           "msg2": "Dein Web-Browser wird auf die entsprechende Webseite weitergeleitet, wo Du einen Kanal anfordern kannst.",
           "msg3": "Wenn erledigt, kopiere den Adresscode und/oder öffne den Link mit Blixt Wallet."
         }
@@ -726,15 +726,15 @@
         "subtitle": ""
       },
       "appLog": {
-        "title": "Kopiere Protokolldatei in den lokalen Speicher",
+        "title": "Protokolldatei in den lokalen Speicher kopieren",
         "subtitle": "",
         "dialog": {
-          "alert": "Kopiert Protokolldatei nach",
+          "alert": "Protokolldatei kopiert nach",
           "error": "Fehler beim Kopieren der Protokolldatei."
         }
       },
       "lndLog": {
-        "title": "Kopiere LND-Protokolle in den lokalen Speicher",
+        "title": "LND-Protokolle in den lokalen Speicher kopieren",
         "subtitle": "Von /sdcard/BlixtWallet",
         "dialog": {
           "alert": "LND-Protokolldatei kopiert",
@@ -746,7 +746,7 @@
         "subtitle": ""
       },
       "expiredInvoices": {
-        "title": "Verstecke abgelaufene Rechnungen automatisch",
+        "title": "Abgelaufene Rechnungen automatisch verbergen",
         "subtitle": ""
       },
       "screenTransactions": {
@@ -754,10 +754,10 @@
         "subtitle": ""
       },
       "signMessage": {
-        "title": "Signiere Nachricht mit Wallet-Key",
+        "title": "Nachricht mit Wallet-Key signieren",
         "subtitle": "",
         "dialog1": {
-          "title": "Signiere Nachricht"
+          "title": "Nachricht signieren"
         },
         "dialog2": {
           "title": "Signatur",
