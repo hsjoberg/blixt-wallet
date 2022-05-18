@@ -650,7 +650,10 @@
         "title": "Bitcoin Node",
         "subtitle": "Bitcoin Node (BIP157) verbinden mit",
         "setDialog": {
-          "title": "Node einstellen"
+          "title": "Node einstellen",
+          "info": "Bitcoin-Node verbinden (BIP157-Unterstützung erforderlich)",
+          "leaveBlankToSearch": "Frei lassen, um Blixt Wallet nach einer Bitcoin-Node suchen zu lassen.",
+          "longPressToReset": "Um die Standard-Node ({{defaultNode}}) zurückzusetzen, halte diese Einstellung länger gedrückt."
         },
         "restoreDialog": {
           "title": "Node wiederherstellen",
