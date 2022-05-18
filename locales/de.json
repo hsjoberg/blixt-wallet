@@ -56,7 +56,7 @@
     "menu": {
       "scan": "Scannen",
       "receive": "Empfangen",
-      "pasteFromClipboard": "Aus Zwischenablage",
+      "pasteFromClipboard": "Einfügen aus Zwischenablage",
       "sendToLightningAddress": "Senden an Lightning Addresse",
       "contactsAndServices": "Kontakte & Services",
       "lightningBrowser": "Lightning Browser",
