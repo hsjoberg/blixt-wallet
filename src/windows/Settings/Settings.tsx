@@ -566,17 +566,17 @@ ${t("LN.inbound.dialog.msg3")}`
   const writeConfig = useStoreActions((store) => store.writeConfig);
   const restartNeeded = () => {
     const title = t("bitcoinNetwork.restartDialog.title");
-    const message = t("bitcoinNetwork.restartDialog.msg1")
+    const message = t("bitcoinNetwork.restartDialog.msg");
     if (PLATFORM === "android") {
       Alert.alert(
         title,
-        message + "\n"+t("bitcoinNetwork.restartDialog.msg2"),
+        message + "\n" + t("bitcoinNetwork.restartDialog.msg1"),
         [{
           style: "cancel",
-          text: t("button.no",{ns:namespaces.common}),
+          text: t("buttons.no",{ns:namespaces.common}),
         }, {
           style: "default",
-          text: t("button.yes",{ns:namespaces.common}),
+          text: t("buttons.yes",{ns:namespaces.common}),
           onPress: async () => {
             try {
               await NativeModules.LndMobile.stopLnd();
@@ -595,10 +595,9 @@ ${t("LN.inbound.dialog.msg3")}`
   const onSetBitcoinNodePress = async () => {
     Alert.prompt(
       t("bitcoinNetwork.node.setDialog.title"),
-      "Set a BIP157 compact filter serving Bitcoin node to establish a connection to.\n\n" +
-      "Leave blank to let Blixt Wallet search on the Bitcoin network for a valid node.\n\n" +
-      "To reset to the default node, long-press on the setting.\n\n" +
-      "Note: Blixt Wallet does not support Tor onion v3 yet.",
+      t("bitcoinNetwork.node.setDialog.info") + "\n\n" +
+      t("bitcoinNetwork.node.setDialog.leaveBlankToSearch") + "\n\n" +
+      t("bitcoinNetwork.node.setDialog.longPressToReset", { defaultNode: DEFAULT_NEUTRINO_NODE }),
       [{
         text: t("buttons.cancel",{ns:namespaces.common}),
         style: "cancel",
@@ -630,10 +629,10 @@ ${t("LN.inbound.dialog.msg3")}`
       `${t("bitcoinNetwork.node.restoreDialog.msg")} (${DEFAULT_NEUTRINO_NODE})?`,
       [{
         style: "cancel",
-        text: t("button.no",{ns:namespaces.common}),
+        text: t("buttons.no",{ns:namespaces.common}),
       }, {
         style: "default",
-        text: t("button.yes",{ns:namespaces.common}),
+        text: t("buttons.yes",{ns:namespaces.common}),
         onPress: async () => {
           await changeNeutrinoPeers([DEFAULT_NEUTRINO_NODE]);
           await writeConfig();
@@ -756,9 +755,9 @@ ${t("experimental.tor.disabled.msg2")}`;
     Alert.alert(
       "Tor",
       text,
-      [{ text: t("button.no",{ns:namespaces.common}) },
+      [{ text: t("buttons.no",{ns:namespaces.common}) },
       {
-        text: t("button.yes",{ns:namespaces.common}),
+        text: t("buttons.yes",{ns:namespaces.common}),
         onPress: async () => {
           await changeTorEnabled(!torEnabled);
           if (PLATFORM === "android") {
@@ -771,8 +770,8 @@ ${t("experimental.tor.disabled.msg2")}`;
             NativeModules.LndMobileTools.restartApp();
           } else {
             Alert.alert(
-              "Restart required",
-              "Blixt Wallet has to be restarted before the new configuration is applied."
+              t("bitcoinNetwork.restartDialog.title"),
+              t("bitcoinNetwork.restartDialog.msg"),
             );
           }
         },
