@@ -650,7 +650,10 @@
         "title": "Nodo de Bitcoin",
         "subtitle": "Poner nodo de Bitcoin (BIP157) para conectar a",
         "setDialog": {
-          "title": "Poner nodo"
+          "title": "Poner nodo",
+          "info": "Configure un nodo Bitcoin compatible con BIP157 para establecer una conexión.",
+          "leaveBlankToSearch": "Déjelo en blanco para permitir que Blixt Wallet busque en la red Bitcoin un nodo válido.",
+          "longPressToReset": "Para restablecer el nodo predeterminado ({{defaultNode}}), mantenga presionada la opción."
         },
         "restoreDialog": {
           "title": "Restaurar nodo",
