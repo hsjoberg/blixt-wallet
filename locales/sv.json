@@ -1,0 +1,1010 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Lightningadress",
+      "nodeAlias": "Nodnamn",
+      "description": "Beskrivning",
+      "amount": "Belopp",
+      "fee": "Avgift"
+    },
+    "buttons": {
+      "ok": "Okej",
+      "cancel": "Avbryt",
+      "continue": "Fortsätt",
+      "skip": "Skippa",
+      "proceed": "Fortsätt",
+      "back": "Backa",
+      "no": "Nej",
+      "yes": "Ja",
+      "save": "Spara",
+      "copy": "Kopiera"
+    },
+    "msg": {
+      "status": "Status",
+      "error": "Fel",
+      "warning": "Varning",
+      "result": "Resultat",
+      "pending": "inkommande",
+      "done": "Klar",
+      "dismiss": "Avfärda",
+      "lastSync": "Senaste synkningen",
+      "lastSyncAttempt": "Senaste synkförsöket",
+      "clipboardCopy": "Kopierat till urklipp.",
+      "written": "Skriven",
+      "enabled": "Aktiverat",
+      "disabled": "Deaktiverat"
+    }
+  },
+  "welcome.start": {
+    "title": "Välkommen",
+    "createWallet": {
+      "title": "Skapa plånbok",
+      "msg1": "Blixt Wallet är fortfarande i en tidig utvecklingsfas.",
+      "msg2": "Om du använder denna plånbok, var beredd på att du kan förlora dina pengar.",
+      "msg3": "Det finns för tillfället inget WatchTower-stöd som övervakar dina kanaler när du är offline.",
+      "msg4": "Jag är besinningslös, fortsätt"
+    },
+    "restoreWallet": {
+      "title": "Återställ plånbok"
+    },
+    "menu": {
+      "enableTor": "Aktivera Tor",
+      "disableTor": "Deaktivera Tor",
+      "setBitcoinNode": "Sätt Bitcoinnod"
+    }
+  },
+  "footerNav": {
+    "receive": "Ta emot",
+    "send": "Skicka"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Skanna",
+      "receive": "Ta emot",
+      "pasteFromClipboard": "Klistra in ifrån urklipp",
+      "sendToLightningAddress": "Skicka till Lightningadress",
+      "contactsAndServices": "Kontakter & Tjänster",
+      "lightningBrowser": "Lightning webbläsare",
+      "onChainWallet": "On-chain",
+      "lightningChannels": "Lightningkanaler",
+      "keysendExperiment": "Keysendexperiment",
+      "showMore": "Avancerat"
+    },
+    "madeInSweden": "Skapat med ⚡ i Sverige"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "Plånboksåterställning under process",
+      "msg2": "Plånboksåterställning klar",
+      "more": "Mer info"
+    },
+    "sendOnChain": {
+      "title": "Välkommen till Blixt Wallet!",
+      "msg1": "För att komma igång, skicka on-chain till bitcoinadressen till höger.",
+      "msg2": "En betalkanal kommer automatiskt öppnas åt dig.",
+      "msg3": "Skicka åtmistone",
+      "alert": "Bitcoinadress kopierat till urklipp"
+    },
+    "doBackup": {
+      "msg1": "Tack för att din använder Blixt Wallet!",
+      "msg2": "Vi rekommenderar dig att skapa en backup av plånboken så att du kan återställa dina pengar ifall du förlorar din telefon.",
+      "backup": "Skapa backup"
+    }
+  },
+  "help": {
+    "title": "Hjälp",
+    "msg1": "If du springer på problem eller har feedback så kan du kontakta Blixt Wallet-utvecklarna genom att skapa en buggrapport på GitHub eller kontakta oss via email.",
+    "msg2": "Du är också välkommen att gå med i vår publika Telegram-chattgrupp.",
+    "msg3": "Eftersom Blixt Wallet är en ny plånbok så behöver vi feedback på problem du kanske stöter på.",
+    "telegramGroup": "Telegramgrupp"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Synkning pågår",
+      "title1": "Synkning klar",
+      "msg1": "Blixt Wallet synkar blockkedjan för tillfället.",
+      "msg2": "När din plånbok är i synk med blockkedjan så kommer on-chain-transaktioner dyka upp i On-chain-delen  av appen.",
+      "msg3": "Blixt Wallet är i synk med blockkedjan.",
+      "blockHeight": {
+        "title": "Aktuell blockhöjd",
+        "msg1": "Kedjesynk pågår"
+      }
+    },
+    "recoveryMode": {
+      "title": "Återställningsstatus",
+      "msg1": "Återställning klar",
+      "msg2": "Kolla sektionerna Lightningkanaler och On-chain"
+    },
+    "lndLog": {
+      "show": "Visa lnd-loggen",
+      "copy": "Kopiera logtexten"
+    }
+  },
+  "transactionDetails": {
+    "title": "Transaktion",
+    "date": "Datum",
+    "note": "Notis",
+    "website": "Webbsida",
+    "type" : "Typ",
+    "lnurl": {
+      "messageFromWebsite": "Meddelande ifrån",
+      "urlReceivedFromWebsite": "URL mottaget ifrån",
+      "secretMessage": "Hemligt meddelande"
+    },
+    "payer": "Betalare",
+    "recipient": "Mottagare",
+    "amountInFiatTimeOfPayment": "Belopp i fiat (vid betalningstillfället)",
+    "numberOfHops": "Antal hopp",
+    "remotePubkey": "Partens publika nyckel",
+    "paymentHash": "Betalningshash",
+    "preimage": "Preimage",
+    "status": "Status",
+    "goBack": "Gå tillbaka",
+    "button": {
+      "setNote": "Sätt notis",
+      "cancelInvoice": "Avbryt faktura",
+      "showMap": "Visa karta"
+    },
+    "setNoteDialog": {
+      "title": "Notis",
+      "text": "Sätt en notis för denna transaktion"
+    }
+  },
+  "web.info": {
+    "title": "Interaktiv demo",
+    "pressToTry": "Tryck för att pröva Blixt Wallet!"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Ta emot"
+    },
+    "createInvoice": {
+      "title": "Skapa faktura",
+      "error": "Fakturans belopp kan inte vara högre än",
+      "alert": "Innan du kan ta emot så måste du öppna en Lightningkanal",
+      "lsp": {
+        "msg": "En betalkanal av Dunder LSP kommer automatiskt öppnas när denna faktura betalas.",
+        "msg1": "Vad är detta?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Kanal öppnas",
+      "msg": "För att kunna acceptera en betalning för denna faktura så måste en kanal på Lightningnätverket öppnas.",
+      "msg1": "Detta kräver en engångsavgift på ungefär",
+      "alert": "Misslyckades med att ansluta till Dunder, försök igen senare.",
+      "proceed": "Forstätt"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Belopp",
+        "change": "Ändra fiatvaluta",
+        "dunderPlaceholder": "Åtminstone"
+      },
+      "amountBitcoin": {
+        "title": "Belopp",
+        "change": "Ändra bitcoinenhet",
+        "dunderPlaceholder": "Åtminstone"
+      },
+      "payer": {
+        "title": "Betalare",
+        "placeholder": "För bokföring"
+      },
+      "description": {
+        "title": "Meddelande",
+        "placeholder": "Meddelande till betalare"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "Om Dunder LSP",
+    "msg": "Dunder är en Lightning Service Provider (LSP) som automatiskt öppnar kanaler åt dig ifall du inte har tillräckligt med inkommande likviditet.",
+    "msg1": "Denna kan till exempel vara fallet ifall detta är första gången du använder Blixt Wallet.",
+    "msg2": "Eftersom detta kräver en on-chaintransaktion så kommer en transaktionsavgift dras av ifrån den inkommande betalningen. Framtida betalningar kommer kunna använda den nyligen öppnade kanalen i Lightningnätverket.",
+    "msg3": "Dunder är",
+    "msg4": "öppen källkod",
+    "msg5": "mjukvara och du kan ändra tjänstleverantör i inställningar."
+  },
+  "receive.receiveQr": {
+    "title": "Ta emot",
+    "qr": {
+      "title": "Skanna denna QR-kod",
+      "msg": "Går ut om {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Betala faktura"
+    },
+    "form": {
+      "invoice": {
+        "title": "Faktura"
+      },
+      "amount": {
+        "title": "Belopp"
+      },
+      "recipient": {
+        "title": "Mottagare"
+      },
+      "nodeAlias": {
+        "title": "Nodnamn"
+      },
+      "description": {
+        "title": "Meddelande"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "BETALNING SKICKAD"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Lightningkanaler"
+    },
+    "balance": {
+      "title": "Balans"
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Ny kanal"
+    },
+    "form": {
+      "title": "Öppna kanal",
+      "channel": {
+        "title": "Nod URI",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Belopp",
+        "placeholder": "Belopp"
+      },
+      "fee_rate": {
+        "title": "Avgiftssats"
+      }
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "Tillgångar on-chain"
+    },
+    "address": {
+      "title": "Skicka Bitcoin till denna on-chainadress",
+      "alert": "Kopierat till urklipp."
+    },
+    "newAddress": {
+      "title": "Generera ny adress"
+    },
+    "withdraw": {
+      "title": "Ta ut bitcoin"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Transaktion",
+    "blockExplorer": "See in en blockexplorer",
+    "txHash": "Id",
+    "timeStamp": "Datum",
+    "amount": "Belopp",
+    "totalFees": "Avgift",
+    "label": "Notis",
+    "destAddresses": "Destination",
+    "numConfirmations": "Bekräftelser",
+    "blockHeight": "Blockhöjd",
+    "blockHash": "Blockhash",
+    "rawTxHex": {
+      "title": "Tx hex",
+      "msg": "Tryck för att kopiera"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Transaktionslogg"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Ta ut bitcoin"
+    },
+    "form": {
+      "address": {
+        "title": "Adress",
+        "placeholder": "Bitcoinadress"
+      },
+      "amount": {
+        "title": "Belopp",
+        "placeholder": "Belopp",
+        "withdrawAll": "Ta ut allt",
+        "all": "Allt"
+      },
+      "feeRate": {
+        "title": "Avgiftssats",
+        "auto": "auto"
+      },
+      "withdraw": {
+        "title": "Ta ut",
+        "alert": "Uttagningen lyckades"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Inloggningsförfrågan",
+      "msg": "Vill du logga in till",
+      "success": "Autentiserad till"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Öppnar inkommande kanal"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Visa metadata",
+      "dialog": {
+        "title": "Teknisk metadata"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} är i din kontaktlista"
+      },
+      "add": {
+        "title": "Lägg till kontaktlista",
+        "msg": "Vill du lägga till {{lightningAddress}} till din kontaktlista?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Betalningskoden för {{domain}} har lagts till din kontaktlista"
+      },
+      "add": {
+        "title": "Lägg till kontaktlista",
+        "msg": "Vill du lägga till betalningskoden till {{domain}} till din kontaktlista?"
+      }
+    },
+    "unableToPay": "Kunde inte betala",
+    "payerData": {
+      "commentAllowed": "Kommentar till {{target}} (max {{letters}} tecken)",
+      "sendNameWithComment": "Skicka mitt namn tillsammans med denna kommentar",
+      "name": {
+        "ask": "Skicka mitt namn tillsammans med denna betalning",
+        "mandatory": "Ditt namn måste skickas tillsammans med denna betalning"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "Betalningen saknar en beskrivning."
+    },
+    "pay": {
+      "title": "Betala",
+      "error": {
+        "mustProvideComment": "Du måste ha med en kommentar ifall du väljer att inkludera ditt namn till denna betalning"
+      }
+    },
+    "cancel": {
+      "title": "Avbryt"
+    },
+    "form": {
+      "asksYouToPay": "frågar efter en betalning",
+      "description": {
+        "title": "Beskrivning"
+      },
+      "amount": {
+        "title": "Belopp",
+        "to": "till",
+        "placeholder": "Skriv in belopp"
+      },
+      "alert": "Kunde inte betala"
+    },
+    "done": {
+      "message": {
+        "title": "Meddelande ifrån"
+      },
+      "url": {
+        "description": "Beskrivning",
+        "domain": "URL mottaget ifrån",
+        "done": {
+          "title": "Klar"
+        },
+        "copy": {
+          "title": "Kopiera till urklipp",
+          "msg": "Kopierat till urklipp."
+        },
+        "open": {
+          "title": "Öppna webbläsare"
+        }
+      },
+      "aes": {
+        "domain": "Hemligt meddelande mottaget ifrån",
+        "description": "Meddelande ifrån",
+        "secret": "Hemligt meddelande"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "Om Lightningadress",
+      "msg1": "Lightningadress",
+      "msg2": "är ett sätt att betala en person eller tjänst på Lightningnätverket.",
+      "msg3": "De ser ut som e-postadresser, men istället för att skicka en e-post så skickar du pengar",
+      "msg4": "Blixt Wallet har fullt stöd för att skicka till en Lightningadress, men att ta emot",
+      "msg5": "via en Lightningadress arbetas fortfarande på."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "Skickat utdragsbegäran till {{domain}}",
+      "addToContactList": {
+        "title": "Lägg till kontaktlista",
+        "msg": "Vill du lägga till denna utdragskod till {{domain}} till din kontaktlista?",
+        "note": "Konto hos {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "Utdragsbegäran",
+      "msg": "Meddelande ifrån",
+      "dialog": {
+        "msg": "Belopp"
+      },
+      "dialog1": {
+        "minSat": "Minimum utdragsbelopp",
+        "maxSat": "Maximum utdragsbelopp",
+        "placeholder": "Belopp"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Kontakter & Tjänster",
+      "lightningAddressAlreadyExists": "finns redan i din kontaktlista",
+      "nothingHereYet": "Det finns inget här än...",
+      "whyNotAdd": "Varför inte lägga till en Lightningaddress genom att",
+      "tappingHere": "trycka här"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Tillgångar hos tjänsten",
+        "error": "Ogiltig åtgärd. Kontakten har ingen LNURL-withdraw-kod"
+      },
+      "list": {
+        "pay": "Betalningar till",
+        "account": "Konto hos"
+      },
+      "send": {
+        "title": "Skicka",
+        "couldNotPay": "Kunde inte betala till denna LNURL-pay-kod",
+        "invalidResponse": "Responsen var inte en LNURL-pay-respons (fick {{response}})",
+        "invalidOperation": "Ogiltig åtgärd. Kontakten har varken en LUD-16-identifierare eller en LNURL-pay-kod"
+      },
+      "withdraw": {
+        "title": "Ta ut",
+        "couldNotPay": "Kunde inte betala till denna LNURL-pay-kod",
+        "invalidResponse": "Responsen var inte en LNURL-pay-respons (fick {{response}})",
+        "invalidOperation": "Ogiltig åtgärd. Kontakten har inte en LNURL-withdraw-kod"
+      },
+      "deleteContact": {
+        "title": "Kontaktborttagning",
+        "msg": "Är du säker på att du vill ta bort kontakten {{contact}}?"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Vill du stänga webbläsaren?",
+    "home": "Gå tillbaka till WebLN-listan",
+    "placeholder": "Skriv in en URL här"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "Kopierat till urklipp"
+    },
+    "dialog": {
+      "msg1": "Välkommen till keysend playground",
+      "msg2": "Keysend låter dig betala andra Blixtplånböcker (och andra lightningnoder som stödjer keysend) utan att behöva en faktura.",
+      "msg3": "Tryck på kameran för att skanna en annan plånboks QR-kod eller skriv in publik nyckel och route hints nedan."
+    },
+    "send": {
+      "title": "Skicka",
+      "msg": "Keysendbetalning",
+      "error": {
+        "checkAmount": "Kontrollera beloppet",
+        "missingPubkey": "Publik nyckel fattas"
+      },
+      "alert": "Betalningen lyckades"
+    },
+    "form": {
+      "amount": {
+        "title": "Belopp sat"
+      },
+      "pubkey": {
+        "title": "Publik nyckel",
+        "placeholder": "Publik nyckel"
+      },
+      "route": {
+        "title": "Route hints",
+        "placeholder": "Route hints"
+      },
+      "message": {
+        "title": "Meddelande",
+        "placeholder": "Skriv in ett chattmeddelande här"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "Inställningar",
+    "general": {
+      "title": "Generellt",
+      "name": {
+        "title": "Namn",
+        "subtitle": "Kommer användas i transaktioner",
+        "dialog": {
+          "msg": "Välj ett namn som kommer användas i transaktioner.\n\nDitt namn kommer synas i fakturerar för de som betalar till dig såväl som till de du betalar till.",
+          "accept": "Sätt namn"
+        }
+      },
+      "lang": {
+        "title": "Språk",
+        "dialog": {
+          "title": "Välj språk"
+        }
+      },
+      "pushNotification": {
+        "title": "Pushnotifikationer",
+        "subtitle": "För transaktioner och kanalhändelser"
+      },
+      "checkClipboard": {
+        "title": "Kolla urklippet efter fakturor",
+        "subtitle": "Automatiskt kolla ifall urklippet innehåller fakturor"
+      },
+      "saveGeolocation": {
+        "title": "Spara geolocation för transaktioner",
+        "subtitle": "Lokalt spara geolocation för en transaktion",
+        "logGranted": "Tillåtelse att slå upp geolocation tillåts",
+        "logDenied": "Tillåtelse att slå upp geolocation nekad."
+      },
+      "mapTheme": {
+        "title": "Sätt karttema"
+      }
+    },
+    "wallet": {
+      "title": "Plånbok",
+      "seed": {
+        "show": {
+          "title": "Visa mnemonic",
+          "subtitle": "Visa de 24:a orden för denna plånbok",
+          "dialog": {
+            "title": "Seed",
+            "alert": "Kopiera till urklipp",
+            "copy": "Kopiera seed"
+          }
+        },
+        "remove": {
+          "title": "Ta bort seeden ifrån enheten",
+          "subtitle": "Ta bort seeden permanent ifrån denna enhet",
+          "dialog": {
+            "title": "Ta bort seed",
+            "msg": "Detta kommer permanent ta bort seeden ifrån din enhet. Gör endast detta ifall du har backat upp din seed!",
+            "accept": "Ta bort seed"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Exportera kanalbackup",
+          "alert": "Fil skriven:"
+        },
+        "verify": {
+          "title": "Verifiera kanalbackup"
+        },
+        "googleCloud": {
+          "title": "Google Drive-kanalbackup",
+          "subtitle": "Automatiskt backa upp kanaler till Google Drive",
+          "alert": "Google Drive-backup aktiverat"
+        },
+        "googleCloudForce": {
+          "title": "Trigga manuellt igång Google Drive-backup",
+          "alert": "Kanaler uppbackade till Google Drive"
+        },
+        "iCloud": {
+          "title": "iCloud-kanalbackup",
+          "subtitle": "Automatiskt backa upp kanaler till iCloud",
+          "alert": "iCloud-backup"
+        },
+        "iCloudForce": {
+          "title": "Trigga manuellt igång iCloud-backup",
+          "alert": "Kanaler uppbackade till iCloud"
+        },
+        "error": "Fel vid uppbackning"
+      }
+    },
+    "security": {
+      "title": "Säkerhet",
+      "pincode": {
+        "title": "Logga in med pinkod"
+      },
+      "biometrics": {
+        "title": "Logga in med",
+        "fingerprint": "fingeravtryck",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Schemalagd kedjesynkning",
+        "subtitle": "Körs var 4:e timme",
+        "dialog": {
+          "title": "Ej rekommenderat",
+          "msg": "Varning. Det är inte rekommenderat att stänga av den schemalagda kedjesynkningen.\n\nVar säker på att du är uppdaterad med nätverket annars riskerar du att förlora dina tillgångar.\n\nGör endast detta ifall du vet vad du håller på med."
+        }
+      }
+    },
+    "display": {
+      "title": "Utseende",
+      "fiatUnit": {
+        "title": "Ändra fiatvaluta"
+      },
+      "bitcoinUnit": {
+        "title": "Ändra bitcoinenhet"
+      },
+      "onchainExplorer": {
+        "title": "Onchain-explorer",
+        "dialog": {
+          "title": "Ändra onchain-explorer"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Bitcoinnätverket",
+      "node": {
+        "title": "Bitcoinnod",
+        "subtitle": "Sätt Bitcoinnod (BIP157) att ansluta till",
+        "setDialog": {
+          "title": "Sätt nod",
+          "info": "Sätt en BIP157-kompatibel Bitcoinnod att ansluta till.",
+          "leaveBlankToSearch": "Lämna blankt ifall du vill att Blixt Wallet ska söka efter en giltig nod i nätverket.",
+          "longPressToReset": "För att återställa till standardnnoden ({{defaultNode}}), långtryck på inställningen."
+        },
+        "restoreDialog": {
+          "title": "Återställ nod",
+          "msg": "Vill du återställa till standardnoden"
+        }
+      },
+      "restartDialog": {
+        "title": "Omstart krävs",
+        "msg": "Blixt Wallet måste startas om innan konfigureringen börjar gälla.",
+        "msg1": "Vill du gör det nu?"
+      },
+      "rpc": {
+        "title": "Set bitcoind RPC host"
+      },
+      "zmqRawBlock": {
+        "title": "Sätt bitcoind ZMQ Raw Block host"
+      },
+      "zmqRawTx": {
+        "title": "Sätt bitcoind ZMQ Raw Tx Host"
+      },
+      "p2tr": {
+        "title": "Aktivera ta emot on-chain via Taproot (P2TR)"
+      }
+    },
+    "LN": {
+      "title": "Lightningnätverket",
+      "node": {
+        "title": "Visa data om noden ",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Visa Lightningnoder",
+        "subtitle": ""
+      },
+      "autopilot": {
+        "title": "Öppna automatiskt kanaler",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Inbound channel-tjänster",
+        "subtitle": "Använd en \"inbound channel\"-tjänst för att kunna ta emot betalningar ",
+        "dialog": {
+          "title": "Inbound channel-tjänst",
+          "msg1": "Välj en inbound channel-tjänst och tryck på fortsätt.",
+          "msg2": "Din webbläsare kommer att öppnas till tjänstens webbplats. Där kan du kunna begära en kanal.",
+          "msg3": "När du är klar kan du kopiera koden och/eller öppna länken med Blixt Wallet."
+        }
+      },
+      "LSP": {
+        "title": "Sätt Dunder LSP-server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Sätt Dunder-server",
+          "acept": "Sätt server"
+        },
+        "restoreDialog": {
+          "title": "Återställ Dunder-server",
+          "msg": "Vill du återställa till standardservern för Dunder"
+        }
+      },
+      "graphSync": {
+        "title": "Vänta på graph-synk innan betalning",
+        "subtitle": "En synkroniserad graph-synk leder till optimala betalningsrutter."
+      }
+    },
+    "miscelaneous": {
+      "title": "Diverse",
+      "about": {
+        "title": "Om appen",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "Kopiera apploggen till lokal disk",
+        "subtitle": "",
+        "dialog": {
+          "alert": "Apploggen kopierade till",
+          "error": "Fel vid kopiering av applogg."
+        }
+      },
+      "lndLog": {
+        "title": "Kopiera lnd-loggen till lokal disk",
+        "subtitle": "Nås ifrån /sdcard/BlixtWallet",
+        "dialog": {
+          "alert": "Kopierade lnd-loggen",
+          "error": "Fel vid kopiering av lnd-loggen."
+        }
+      },
+      "dev": {
+        "title": "Gå till dev-skärmen",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Dölj automatiskt utgångna kopior",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Skärmövergångar",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Signera med plånbokens nyckel",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Signera meddelande"
+        },
+        "dialog2": {
+          "title": "Signatur",
+          "alert": "Kopierat till urklipp"
+        }
+      }
+    },
+    "experimental": {
+      "title": "Experiment",
+      "LSP": {
+        "title": "Aktivera Dunder LSP",
+        "subtitle": "MYCKET EXPERIMENTELLT. Lightning Service Provider som hjälper till med inkommande likviditet"
+      },
+      "MPP": {
+        "title": "Aktivera Multi+Path Payments",
+        "subtitle": "Betalningar kan ta upp till 2 vägar"
+      },
+      "tor": {
+        "title": "Aktivera Tor",
+        "subtitle": "",
+        "enabled": {
+          "title": "Start om och aktivera Tor",
+          "msg1": "Om du aktiverar Tor så kommer Blixt Wallet att ansluta till noder i Bitcoinnätverket och Lightningnätverket över Tornätverket.",
+          "msg2": "Du kommer också kunna ansluta och öppna kanaler till Lightningnoder som har en onion service",
+          "msg3": "VARNING: Blixt Wallet kommer fortfarande kommunicera med följande tjänster utan Tor",
+          "msg4": "Anledning: För att hämta fiat/bitcoin-kurser",
+          "msg5": "ANLEDNING: För att hämta aktuell blockhöjd",
+          "msg6": "ANLEDNING: För Google Drive-backup",
+          "msg7": "ANLEDNING: För pålitliga Lightningnoder",
+          "msg8": "WebLN-webbläsaren och LNURL kommer inte använda sig utav Tor"
+        },
+        "disabled": {
+          "title": "Starta om och inaktivera Tor",
+          "msg1": "Deaktivering av Tor kräver en omstart av appen",
+          "msg2": "Vill du fortsätta?"
+        }
+      },
+      "onion": {
+        "title": "Visa Tor onion service",
+        "subtitle": "För att ansluta och öppna kanaler till denna plånbok"
+      },
+      "keysend": {
+        "title": "Keysendexperimentet",
+        "subtitle": ""
+      }
+    },
+    "debug": {
+      "title": "Debug",
+      "startup": {
+        "title": "Visa uppstartsnotifikationer",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "LndMobiler-hjälpcenter",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Diagnostisera problem med Dunder",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "Läs lnd-loggen",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Keysend Test",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Google Drive Testbed",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Skriv konfiguration",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Aktivera demoläget",
+        "subtitle": "Används för promo. Starta om för att nollställa"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "Om Blixt Wallet",
+    "msg1": "Version",
+    "msg2": "Av",
+    "msg3": "Plånbok med öppen källkod med MIT-licens ",
+    "msg4": "Skapat med hjälp av",
+    "msg5": "och andra fantastiska mjukvaror med öppen källkod",
+    "msg6": "Torikonen är licensierad under CC BY 3.0 av",
+    "msg7": "licens"
+  },
+  "settings.setPincode": {
+    "enter": "Skriv in pinkod",
+    "confirm": "Bekräfta din pinkod"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Skriv in din pinkod för att ta bort pinkod"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Lightningnoder"
+    },
+    "alias": "Nodnamn",
+    "pubKey": "Nodens publika nyckel",
+    "address": "Nodadress",
+    "data": {
+      "title": "Data",
+      "bytesSent": "bytes skickat",
+      "bytesRecv": "bytes mottaget"
+    },
+    "transfer": {
+      "title": "Transfer",
+      "satSent": "sat skickat",
+      "satRecv": "sat mottaget"
+    },
+    "inbound": "Inkommande",
+    "syncType": "Synktyp",
+    "errors": "Fel",
+    "disconnect": "Koppla ifrån nod"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Anslut till Lightningnod"
+    },
+    "connect": {
+      "title": "Nod URI",
+      "placeholder": "Nod URI",
+      "accept": "Anslut"
+    }
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Nodinfo",
+    "alias": "Nodnamn",
+    "chain": "Kedja",
+    "timestamp": "Bästa header-tidstämpel",
+    "blockHash": "Blockhash",
+    "blockHeight": "Blockhöjd",
+    "identityPubkey": "Nodens publika nyckel",
+    "channel": {
+      "title": "Antal kanaler",
+      "active": "Aktiva",
+      "inactive": "Inaktiva",
+      "pending": "Inkommande"
+    },
+    "numPeers": "Antal anslutna noder",
+    "syncedToChain": "Synkad med blockkedjan",
+    "syncedToGraph": "Synkad med nätverksgrafen",
+    "nodeUris": "Node URI:n",
+    "version": "Lnd-version",
+    "features": "Nodfunktioner"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Tor onion service",
+    "msg1": "Skanna denna QR-kod för att öppna en kanal med denna plånbok",
+    "msg2": "Det gick inte att lösa onion-adressen"
+  },
+  "welcome.addFunds": {
+    "title": "Lägg till bitcoin",
+    "msg1": "För att börja använda Lightning i Blixt Wallet",
+    "msg2": "skicka bitcoin till adressen ovan"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "Automatiskt öppna kanaler",
+      "msg": "Öppnar kanaler när det finns on-chain-bitcoin tillgängliga"
+    },
+    "done": {
+      "title": "Nästan klar!",
+      "msg1": "Här är några inställningar du kan justera.",
+      "msg2": "När du är klar, tryck på Fortsätt"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Försök igen",
+      "msg": "Du har skrivit in orden i fel ordning. Försök igen."
+    },
+    "seed": {
+      "title": "Bekräfta din seed"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Aktivera Google Drive-backup",
+      "msg": "Google Drive-backup aktiverat"
+    },
+    "backup": {
+      "title": "Cloud backup",
+      "msg": "För att dina tillgångar off-chain ska vara säkra ifall du förlorar din enhet så rekommenderar vi dig att backa upp dina kanaler till Google Drive.",
+      "msg1": "Denna kommer spara en krypterad backup av dina kanaler som endast kan användas tillsammans med din seed.",
+      "msg2": "Tryck på Fortsätt när du är klar."
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Aktivera iCloud-backup",
+      "msg": "iCloud-backup aktiverat"
+    },
+    "backup": {
+      "title": "iCloud backup",
+      "msg": "För att dina tillgångar off-chain ska vara säkra ifall du förlorar din enhet så rekommenderar vi dig att backa upp dina kanaler till iCloud",
+      "msg1": "Denna kommer spara en krypterad backup av dina kanaler som endast kan användas tillsammans med din seed.",
+      "msg2": "Tryck på Fortsätt när du är klar."
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Återställ plånbok",
+      "msg": "För att återställa din plånbok, skriv ned varje ord ifrån sin seed separerat med ett mellanslag.",
+      "msg1": "Om du vill återställa dina kanaler på Lightningnätverket så måste du förse en kanalbackup.",
+      "loading": "Återställ plånbok",
+      "channel": {
+        "title": "Kanalbackup",
+        "file": "Välj en kanalbackup-fil på disk",
+        "google": {
+          "title": "Återställ via Google Driv",
+          "alert": "Återställning via Google Drive misslyckades"
+        },
+        "iCloud": {
+          "title": "Återställ via iCloud",
+          "alert": "Återställning via iCloud misslyckades"
+        }
+      },
+      "seed": "Seeden måste vara exakt 24 word"
+    },
+    "backup": {
+      "google": "Återställ via Google Drive",
+      "iCloud": "Återställ via iCloud"
+    }
+  },
+  "welcome.seed": {
+    "title": "Välkommen till Blixt Wallet!",
+    "msg": "Detta är din backup-seed",
+    "msg1": "Skriv ner den på ett papper och förvara den på ett säkert ställe.",
+    "msg2": "Om du skulle förlora din plånbok",
+    "msg3": "så kan du återställa dina tillgångar genom din backup-seed.",
+    "msg4": "Seed-standarden är aezseed. ",
+    "button": "Jag har skrivit ned det."
+  }
+}
