@@ -46,6 +46,11 @@
     },
     "restoreWallet": {
       "title": "Restaurer le portefeuille"
+    },
+    "menu": {
+      "enableTor": "Enable Tor",
+      "disableTor": "Disable Tor",
+      "setBitcoinNode": "Set Bitcoin node"
     }
   },
   "footerNav": {
@@ -650,7 +655,10 @@
         "title": "Nœud Bitcoin",
         "subtitle": "Définir le nœud Bitcoin (BIP157) pour se connecter à",
         "setDialog": {
-          "title": "Définir le nœud"
+          "title": "Définir le nœud",
+          "info": "Set a BIP157-supporting Bitcoin node to establish a connection to.",
+          "leaveBlankToSearch": "Leave blank to let Blixt Wallet search on the Bitcoin network for a valid node.",
+          "longPressToReset": "To reset to the default node ({{defaultNode}}), long-press on the setting."
         },
         "restoreDialog": {
           "title": "Restaurer le nœud",
