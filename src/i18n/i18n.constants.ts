@@ -97,4 +97,8 @@ export const languages: ILanguages = {
     id: "tlh",
     name: "Klingon",
   },
+  sv: {
+    id: "sv",
+    name: "Svenska",
+  },
 };
