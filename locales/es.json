@@ -46,15 +46,20 @@
     },
     "restoreWallet": {
       "title": "Restaurar cartera"
+    },
+    "menu": {
+      "enableTor": "Habilitar Tor",
+      "disableTor": "Deshabilitar Tor",
+      "setBitcoinNode": "Establecer nodo Bitcoin"
     }
   },
   "footerNav": {
-    "receive": "Receive",
-    "send": "Send"
+    "receive": "Recibir",
+    "send": "Enviar"
   },
   "drawer": {
     "menu": {
-      "scan": "Scanear",
+      "scan": "Escanear",
       "receive": "Recibir",
       "pasteFromClipboard": "Pegar desde el portapapeles",
       "sendToLightningAddress": "Envíar a dirección Lightning",
@@ -165,7 +170,7 @@
     "createBlixtLspInvoice": {
       "title": "Abrir canal",
       "msg": "Para aceptar el pago de esta factura, un canal en la Linghtning Network tiene que ser abierto.",
-      "msg1": "Esto requiere una comisión única de aproximadamente",
+      "msg1": "Esto requiere una tarifa única de aproximadamente",
       "alert": "Fallo al conectar con Dunder, por favor intentar de nuevo más tarde.",
       "proceed": "Proceder"
     },
@@ -194,7 +199,7 @@
     "title": "Sobre Dunder LSP",
     "msg": "Dunder es un Proveedor de Servicio Lightning (LSP) que automáticamente abre canales para ti cuando no tienes suficiente liquidez entrante.",
     "msg1": "Esto podria ser el ejemplo del caso cuando empiezas a usar Blixt Wallet.",
-    "msg2": "Como esto requiere una transacción on-chain, una comisión de transacción de Bitcoin será deducida del pago. Los futuros pagos serán capaces de usar los nuevos canales abiertos con la Lightning network.",
+    "msg2": "Como esto requiere una transacción on-chain, una tarifa de transacción de Bitcoin será deducida del pago. Los futuros pagos serán capaces de usar los nuevos canales abiertos con la Lightning network.",
     "msg3": "Dunder es",
     "msg4": "un software de código abierto",
     "msg5": "y debes cambiar el proveedor por defecto en Ajustes."
@@ -256,7 +261,7 @@
         "placeholder": "Cantidad"
       },
       "fee_rate": {
-        "title": "Comisión"
+        "title": "Tasa de tarifa"
       }
     }
   },
@@ -281,7 +286,7 @@
     "txHash": "Id",
     "timeStamp": "Fecha",
     "amount": "Cantidad",
-    "totalFees": "Comisiones",
+    "totalFees": "Tarifas",
     "label": "Etiqueta",
     "destAddresses": "Destino",
     "numConfirmations": "Confirmaciones",
@@ -750,7 +755,7 @@
         "subtitle": ""
       },
       "screenTransactions": {
-        "title": "Pantalla de transacciones",
+        "title": "Transiciones de pantalla",
         "subtitle": ""
       },
       "signMessage": {
@@ -763,6 +768,9 @@
           "title": "Firma",
           "alert": "Copiado al portapapeles"
         }
+      },
+      "legacyLnurlAuth": {
+        "title": "Use legacy LNURL-auth authentication"
       }
     },
     "experimental": {
