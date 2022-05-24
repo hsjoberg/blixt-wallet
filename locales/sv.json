@@ -768,6 +768,9 @@
           "title": "Signatur",
           "alert": "Kopierat till urklipp"
         }
+      },
+      "legacyLnurlAuth": {
+        "title": "Use legacy LNURL-auth authentication"
       }
     },
     "experimental": {
