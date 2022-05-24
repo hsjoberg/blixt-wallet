@@ -46,6 +46,11 @@
     },
     "restoreWallet": {
       "title": "qevpa' tlhoy'"
+    },
+    "menu": {
+      "enableTor": "DaH 'entepray' Tor",
+      "disableTor": "Qotlh Tor",
+      "setBitcoinNode": "jatlhbe' Bitcoin"
     }
   },
   "footerNav": {
@@ -645,9 +650,9 @@
       }
     },
     "bitcoinNetwork": {
-      "title": "yIvum",
+      "title": "Bitcoin joq",
       "node": {
-        "title": "'Iw tu'lu'be'",
+        "title": "Bitcoin pum",
         "subtitle": "'ach (BIP157) yIbej 'Iv",
         "setDialog": {
           "title": "jatlhbe'",
@@ -763,6 +768,9 @@
           "title": "bIH",
           "alert": "yIruch"
         }
+      },
+      "legacyLnurlAuth": {
+        "title": "Use legacy LNURL-auth authentication"
       }
     },
     "experimental": {
@@ -776,7 +784,7 @@
         "subtitle": "Ha'DIbaH 2 rur"
       },
       "tor": {
-        "title": "DaT 'entepray'",
+        "title": "DaH 'entepray' Tor",
         "subtitle": "",
         "enabled": {
           "title": "torqu' hovpu' 'ej choS ruvpa'",
