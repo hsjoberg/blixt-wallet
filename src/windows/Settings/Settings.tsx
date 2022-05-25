@@ -1405,8 +1405,8 @@ ${t("experimental.tor.disabled.msg2")}`;
           <ListItem style={style.listItem} button={true} icon={true} onPress={onPressRescanWallet}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="restart" /></Left>
             <Body>
-              <Text>Rescan wallet</Text>
-              <Text note={true}>Rescan the blockchain for wallet transactions</Text>
+              <Text>{t("debug.rescanWallet.title")}</Text>
+              <Text note={true}>{t("debug.rescanWallet.subtitle")}</Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onLndMobileHelpCenterPress}>

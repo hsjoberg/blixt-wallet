@@ -849,6 +849,10 @@
       "demo": {
         "title": "Activate Demo Mode",
         "subtitle": "Used for promo. Restart app to reset"
+      },
+      "rescanWallet": {
+        "title": "Rescan wallet",
+        "subtitle": "Rescan the blockchain for wallet transactions"
       }
     }
   },
@@ -991,7 +995,7 @@
         },
         "iCloud": {
           "title": "Restore via iCloud",
-          "alert": "Restoring via iClouod failed"
+          "alert": "Restoring via iCloud failed"
         }
       },
       "seed": "Seed must be exactly 24 words"
