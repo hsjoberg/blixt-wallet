@@ -16,7 +16,6 @@ export interface IBitcoinUnits {
   milliBitcoin: IBitcoinUnit;
   bit: IBitcoinUnit;
   sat: IBitcoinUnit;
-  sats: IBitcoinUnit;
   satoshi: IBitcoinUnit;
 }
 

@@ -180,7 +180,7 @@ export const setupApp = async () => {
     setItemObject<string>(StorageItem.lightningBalance, "0"),
     setItemObject<LoginMethods[]>(StorageItem.loginMethods, []),
     setItemObject<boolean>(StorageItem.seedStored, false), // !
-    setItemObject<keyof IBitcoinUnits>(StorageItem.bitcoinUnit, "bitcoin"),
+    setItemObject<keyof IBitcoinUnits>(StorageItem.bitcoinUnit, "sat"),
     setItemObject<keyof IFiatRates>(StorageItem.fiatUnit, "USD"),
     setItemObject<string>(StorageItem.language, "en"),
     // walletPassword
