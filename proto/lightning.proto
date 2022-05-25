@@ -1809,6 +1809,11 @@ message GetInfoResponse {
     announcements and invoices.
     */
     map<uint32, Feature> features = 19;
+
+    /*
+    Indicates whether the HTLC interceptor API is in always-on mode.
+    */
+    bool require_htlc_interceptor = 21;
 }
 
 message GetRecoveryInfoRequest {
@@ -2364,9 +2369,6 @@ message PendingChannelsResponse {
         // The pending channel
         PendingChannel channel = 1;
 
-        // The height at which this channel will be confirmed
-        uint32 confirmation_height = 2;
-
         /*
         The amount calculated to be paid in fees for the current set of
         commitment transactions. The fee amount is persisted with the channel
@@ -2385,6 +2387,9 @@ message PendingChannelsResponse {
         transaction. This value can later be updated once the channel is open.
         */
         int64 fee_per_kw = 6;
+
+        // Previously used for confirmation_height. Do not reuse.
+        reserved 2;
     }
 
     message WaitingCloseChannel {
@@ -2692,6 +2697,12 @@ message QueryRoutesRequest {
     fallback.
     */
     repeated lnrpc.FeatureBit dest_features = 17;
+
+    /*
+    The time preference for this payment. Set to -1 to optimize for fees
+    only, to 1 to optimize for reliability only or a value inbetween for a mix.
+    */
+    double time_pref = 18;
 }
 
 message NodePair {
@@ -2760,7 +2771,7 @@ message Hop {
     TLV format. Note that if any custom tlv_records below are specified, then
     this field MUST be set to true for them to be encoded properly.
     */
-    bool tlv_payload = 9;
+    bool tlv_payload = 9 [deprecated = true];
 
     /*
     An optional TLV record that signals the use of an MPP payment. If present,
@@ -2786,6 +2797,9 @@ message Hop {
     to drop off at each hop within the onion.
     */
     map<uint64, bytes> custom_records = 11;
+
+    // The payment metadata to send along with the payment to the payee.
+    bytes metadata = 13;
 }
 
 message MPPRecord {
@@ -3619,6 +3633,14 @@ message ListPaymentsRequest {
     of the returned payments is always oldest first (ascending index order).
     */
     bool reversed = 4;
+
+    /*
+    If set, all payments (complete and incomplete, independent of the
+    max_payments parameter) will be counted. Note that setting this to true will
+    increase the run time of the call significantly on systems that have a lot
+    of payments, as all of them have to be iterated through to be counted.
+    */
+    bool count_total_payments = 5;
 }
 
 message ListPaymentsResponse {
@@ -3636,6 +3658,14 @@ message ListPaymentsResponse {
     as the index_offset to continue seeking forwards in the next request.
     */
     uint64 last_index_offset = 3;
+
+    /*
+    Will only be set if count_total_payments in the request was set. Represents
+    the total number of payments (complete and incomplete, independent of the
+    number of payments requested in the query) currently present in the payments
+    database.
+    */
+    uint64 total_num_payments = 4;
 }
 
 message DeletePaymentRequest {
