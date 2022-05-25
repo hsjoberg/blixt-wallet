@@ -780,7 +780,7 @@
         "subtitle": "MYCKET EXPERIMENTELLT. Lightning Service Provider som hjälper till med inkommande likviditet"
       },
       "MPP": {
-        "title": "Aktivera Multi+Path Payments",
+        "title": "Aktivera Multi-Path Payments",
         "subtitle": "Betalningar kan ta upp till 2 vägar"
       },
       "tor": {
@@ -819,7 +819,7 @@
         "subtitle": ""
       },
       "helpCencer": {
-        "title": "LndMobiler-hjälpcenter",
+        "title": "LndMobile-hjälpcenter",
         "subtitle": ""
       },
       "LSP": {
@@ -849,6 +849,10 @@
       "demo": {
         "title": "Aktivera demoläget",
         "subtitle": "Används för promo. Starta om för att nollställa"
+      },
+      "rescanWallet": {
+        "title": "Rescan wallet",
+        "subtitle": "Rescan the blockchain for wallet transactions"
       }
     }
   },
