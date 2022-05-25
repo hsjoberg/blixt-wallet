@@ -10,7 +10,7 @@ import * as Keychain from 'react-native-keychain';
 import iCloudStorage from "react-native-icloudstore";
 import { JSHash, CONSTANTS } from "react-native-hash";
 import { generateSecureRandom } from "react-native-securerandom";
-import RNLocalize from "react-native-localize";
+// import RNLocalize from "react-native-localize";
 
 import { Alert } from "../../utils/alert";
 import { getTransactions, getTransaction, createTransaction, clearTransactions } from "../../storage/database/transaction";
@@ -450,12 +450,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, ["pincode"])}><Text style={styles.buttonText}>set logginMethods to ["pincode"]</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, [])}><Text style={styles.buttonText}>set logginMethods to []</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.bitcoinUnit, "bitcoin")}><Text style={styles.buttonText}>set bitcoinUnit to bitcoin</Text></Button>
-          <Button small onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text style={styles.buttonText}>walletCreated = true</Text></Button>
+          <Button small onPress={async () => await setItemObject(StorageItem.torEnabled, false)}><Text style={styles.buttonText}>torEnabled = false</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 27)}><Text style={styles.buttonText}>appVersion = 27</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 28)}><Text style={styles.buttonText}>appVersion = 28</Text></Button>
-          <Button small onPress={async () => {
-            actions.settings.changeTorEnabled(false);
-          }}><Text style={styles.buttonText}>changeTorEnabled(false)</Text></Button>
           <Button small onPress={async () => {
             await setItem(StorageItem.onboardingState, "SEND_ONCHAIN");
             actions.changeOnboardingState("SEND_ONCHAIN");

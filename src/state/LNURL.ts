@@ -489,7 +489,7 @@ export const lnUrl: ILNUrlModel = {
       const gotPayerData = !!payload.payerData;
 
       let callback = lnUrlObject.callback;
-      let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?"
+      let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?";
       callback = `${callback}${firstSeparator}amount=${payload.msat.toString()}`;
       if (payload.comment) {
         callback = `${callback}&comment=${encodeURIComponent(payload.comment)}`;

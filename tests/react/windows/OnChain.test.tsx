@@ -40,7 +40,7 @@ it("is possible display on-chain funds", async () => {
   );
 
   const onChainFundsText = queryByTestId("ONCHAIN_FUNDS");
-  expect(onChainFundsText!.children.join("1")).toContain("0.00000123");
+  expect(onChainFundsText!.children.join("1")).toContain("123");
 
   unmount();
 });
@@ -83,7 +83,7 @@ it("should be possible to withdraw funds (no camera)", async () => {
   expect(withdrawButton).not.toBeNull();
   fireEvent.press(withdrawButton!);
 
-  expect(onChainFundsText!.children.join()).toContain("0.00000123");
+  expect(onChainFundsText!.children.join()).toContain("123");
 
   const inputBitcoinAddress = await waitFor(() => queryByTestId("INPUT_BITCOIN_ADDRESS"));
   const inputAmount = await waitFor(() => queryByTestId("INPUT_AMOUNT"));
@@ -91,10 +91,10 @@ it("should be possible to withdraw funds (no camera)", async () => {
   expect(sendCoinsButton).not.toBeNull();
 
   act(() => void fireEvent.changeText(inputBitcoinAddress!, "tb1qy24mr4attphw83xhmxcspkkrxwqwurxjy085vuz6t4gxtmfyuq9srzd0yw"));
-  act(() => void fireEvent.changeText(inputAmount!, "0.00000001"));
+  act(() => void fireEvent.changeText(inputAmount!, "1"));
   await act(async () => await fireEvent.press(sendCoinsButton!));
 
-  expect(onChainFundsText!.children.join()).toContain("0.00000122");
+  expect(onChainFundsText!.children.join()).toContain("122");
 
   unmount();
 });

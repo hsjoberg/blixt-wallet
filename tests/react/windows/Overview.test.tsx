@@ -63,7 +63,7 @@ it("expect balance to update when paying an invoice", async () => {
   expect(within(txList).queryAllByText("Open")).not.toBeNull();
 
   const bigBalanceHeader = getByTestId("BIG_BALANCE_HEADER");
-  expect(bigBalanceHeader.children[0]).toContain("0.001");
+  expect(bigBalanceHeader.children[0]).toContain("100000");
 
   // Pay invoice
   const invoice = lnrpc.Invoice.create({
@@ -87,5 +87,5 @@ it("expect balance to update when paying an invoice", async () => {
     expect(store.getState().transaction.transactions[0].status).toBe("SETTLED");
   });
 
-  await waitFor(() => expect(bigBalanceHeader.children[0]).toContain("0.000999"));
+  await waitFor(() => expect(bigBalanceHeader.children[0]).toContain("99900"));
 });

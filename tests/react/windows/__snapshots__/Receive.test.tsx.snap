@@ -580,6 +580,7 @@ exports[`renders correctly 1`] = `
                                                     </Text>
                                                     <TextInput
                                                       editable={true}
+                                                      enableFocusRing={false}
                                                       keyboardType="numeric"
                                                       onBlur={[Function]}
                                                       onChangeText={[Function]}
@@ -688,6 +689,7 @@ exports[`renders correctly 1`] = `
                                                     </Text>
                                                     <TextInput
                                                       editable={true}
+                                                      enableFocusRing={false}
                                                       keyboardType="numeric"
                                                       onBlur={[Function]}
                                                       onChangeText={[Function]}
@@ -791,6 +793,7 @@ exports[`renders correctly 1`] = `
                                                     </Text>
                                                     <TextInput
                                                       editable={true}
+                                                      enableFocusRing={false}
                                                       onChangeText={[Function]}
                                                       onFocus={[Function]}
                                                       placeholder="For bookkeeping"
@@ -859,6 +862,7 @@ exports[`renders correctly 1`] = `
                                                     </Text>
                                                     <TextInput
                                                       editable={true}
+                                                      enableFocusRing={false}
                                                       onChangeText={[Function]}
                                                       onFocus={[Function]}
                                                       placeholder="Message to payer"

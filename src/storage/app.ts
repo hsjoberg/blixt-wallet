@@ -162,12 +162,13 @@ export const setupApp = async () => {
   let bitcoindPubRawBlock = "";
   let bitcoindPubRawTx = "";
   if (Chain === "regtest") {
-    lndChainBackend = "bitcoindWithZmq";
-    bitcoindRpcHost = "192.168.1.113:18443";
-    bitcoindRpcUser = "polaruser";
-    bitcoindRpcPass = "polarpass";
-    bitcoindPubRawBlock = "192.168.1.113:28334";
-    bitcoindPubRawTx = "192.168.1.113:29335";
+    // neutrinoPeers.push("127.0.0.1:19444");
+    // lndChainBackend = "bitcoindWithZmq";
+    // bitcoindRpcHost = "192.168.1.113:18443";
+    // bitcoindRpcUser = "polaruser";
+    // bitcoindRpcPass = "polarpass";
+    // bitcoindPubRawBlock = "192.168.1.113:28334";
+    // bitcoindPubRawTx = "192.168.1.113:29335";
   }
 
   await Promise.all([

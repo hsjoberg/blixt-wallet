@@ -149,13 +149,16 @@ export const model: IStoreModel = {
       }
       await setupApp();
       if (Chain === "regtest") {
-        await setupRegtest(
-          await getItemAsyncStorage(StorageItem.bitcoindRpcHost) ?? "",
-          await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) ?? "",
-          await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) ?? "",
-          dispatch.settings.changeBitcoindRpcHost,
-          dispatch.settings.changeBitcoindPubRawBlock,
-          dispatch.settings.changeBitcoindPubRawTx,
+        // await setupRegtest(
+        //   await getItemAsyncStorage(StorageItem.bitcoindRpcHost) ?? "",
+        //   await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) ?? "",
+        //   await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) ?? "",
+        //   dispatch.settings.changeBitcoindRpcHost,
+        //   dispatch.settings.changeBitcoindPubRawBlock,
+        //   dispatch.settings.changeBitcoindPubRawTx,
+        // );
+        await setupRegtest2(
+          dispatch.settings.changeNeutrinoPeers,
         );
       }
       log.i("Initializing db for the first time");
@@ -597,6 +600,24 @@ function setupRegtest(
       },
       "plain-text",
       bitcoindRpcHost ?? "",
+    );
+  });
+}
+
+function setupRegtest2(
+  changeNeutrinoPeers: any
+) {
+  return new Promise((resolve, reject) => {
+    Alert.prompt(
+      "Set neutrino peer",
+      "",
+      async (text) => {
+        if (text) {
+          await changeNeutrinoPeers([text]);
+          resolve(void(0))
+        }
+      },
+      "plain-text"
     );
   });
 }

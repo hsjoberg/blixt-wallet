@@ -7,7 +7,7 @@ export function getNavigator(): NavigationContainerRef | null {
   return navigator.current ?? null;
 }
 
-export function navigate(routeName: string, params?: any) {
+export function navigate<T = any>(routeName: string, params?: T) {
   if (!navigator.current) {
     console.warn("Warning: navigate() called without navigator properly set up");
     return;
