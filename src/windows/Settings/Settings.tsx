@@ -308,7 +308,7 @@ export default function Settings({ navigation }: ISettingsProps) {
       Alert.alert(t("security.chainSync.dialog.title"),
                   t("security.chainSync.dialog.msg"),
       [{
-        text: t("button.cancel",{ns:namespaces.common}),
+        text: t("buttons.cancel", { ns:namespaces.common }),
       }, {
         text: "Proceed",
         onPress: async () => {
@@ -425,7 +425,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onChangeMapStylePress = async () => {
     const { selectedItem } = await DialogAndroid.showPicker(null, null, {
       positiveText: null,
-      negativeText: t("button.cancel",{ns:namespaces.common}),
+      negativeText: t("buttons.cancel", { ns:namespaces.common }),
       type: DialogAndroid.listRadio,
       selectedId: transactionGeolocationMapStyle,
       items: Object.keys(MapStyle).map((mapStyle) => ({
@@ -465,8 +465,8 @@ ${t("LN.inbound.dialog.msg3")}`
       const { selectedItem }: ShowPickerResult = await DialogAndroid.showPicker(null, null, {
         title: t("LN.inbound.dialog.title"),
         content: description,
-        positiveText: t("button.continue",{ns:namespaces.common}),
-        negativeText: t("button.cancel",{ns:namespaces.common}),
+        positiveText: t("buttons.continue", { ns:namespaces.common }),
+        negativeText: t("buttons.cancel", { ns:namespaces.common }),
         type: DialogAndroid.listRadio,
         items: [{
           id: "LNBIG",
@@ -650,11 +650,11 @@ ${t("LN.inbound.dialog.msg3")}`
       t("bitcoinNetwork.rpc.title"),
       "",
       [{
-        text: t("button.cancel",{ns:namespaces.common}),
+        text: t("buttons.cancel", { ns:namespaces.common }),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: t("button.save",{ns:namespaces.common}),
+        text: t("buttons.save", { ns:namespaces.common }),
         onPress: async (text) => {
           if (text) {
             await changeBitcoindRpcHost(text);
@@ -675,11 +675,11 @@ ${t("LN.inbound.dialog.msg3")}`
       t("bitcoinNetwork.zmqRawBlock.title"),
       "",
       [{
-        text: t("button.cancel",{ns:namespaces.common}),
+        text: t("buttons.cancel", { ns:namespaces.common }),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: t("button.save",{ns:namespaces.common}),
+        text: t("buttons.save", { ns:namespaces.common }),
         onPress: async (text) => {
           if (text) {
             await changeBitcoindPubRawBlock(text);
@@ -700,11 +700,11 @@ ${t("LN.inbound.dialog.msg3")}`
       t("bitcoinNetwork.zmqRawTx.title"),
       "",
       [{
-        text: t("button.cancel",{ns:namespaces.common}),
+        text: t("buttons.cancel", { ns:namespaces.common }),
         style: "cancel",
         onPress: () => {},
       }, {
-        text: t("button.save",{ns:namespaces.common}),
+        text: t("buttons.save", { ns:namespaces.common }),
         onPress: async (text) => {
           if (text) {
             await changeBitcoindPubRawTx(text);
@@ -810,9 +810,9 @@ ${t("experimental.tor.disabled.msg2")}`;
           t("miscelaneous.signMessage.dialog2.title"),
           signMessageResponse.signature,
           [{
-            text: t("button.ok",{ns:namespaces.common}),
+            text: t("buttons.ok", { ns:namespaces.common }),
           }, {
-            text: t("button.copy",{ns:namespaces.common}),
+            text: t("buttons.copy", { ns:namespaces.common }),
             onPress: async () => {
               Clipboard.setString(signMessageResponse.signature);
               toast(t("miscelaneous.signMessage.dialog2.alert"), undefined, "warning");
@@ -887,10 +887,10 @@ ${t("experimental.tor.disabled.msg2")}`;
       `${t("LN.LSP.restoreDialog.msg")} (${DEFAULT_DUNDER_SERVER})?`,
       [{
         style: "cancel",
-        text: t("button.no",{ns:namespaces.common}),
+        text: t("buttons.no", { ns:namespaces.common }),
       }, {
         style: "default",
-        text: t("button.yes",{ns:namespaces.common}),
+        text: t("buttons.yes", { ns:namespaces.common }),
         onPress: async () => {
           await changeDunderServer(DEFAULT_DUNDER_SERVER);
         },
