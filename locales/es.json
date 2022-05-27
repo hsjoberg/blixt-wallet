@@ -768,9 +768,6 @@
           "title": "Firma",
           "alert": "Copiado al portapapeles"
         }
-      },
-      "legacyLnurlAuth": {
-        "title": "Usar autenticación LNURL-auth heredada"
       }
     },
     "experimental": {
