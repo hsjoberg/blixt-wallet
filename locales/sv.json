@@ -768,9 +768,6 @@
           "title": "Signatur",
           "alert": "Kopierat till urklipp"
         }
-      },
-      "legacyLnurlAuth": {
-        "title": "Use legacy LNURL-auth authentication"
       }
     },
     "experimental": {
@@ -851,8 +848,8 @@
         "subtitle": "Används för promo. Starta om för att nollställa"
       },
       "rescanWallet": {
-        "title": "Rescan wallet",
-        "subtitle": "Rescan the blockchain for wallet transactions"
+        "title": "Skanna om plånboken",
+        "subtitle": "Skanna om blockkedjan för plånbokstransaktioner"
       }
     }
   },
