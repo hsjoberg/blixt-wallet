@@ -61,7 +61,6 @@ export enum StorageItem { // const enums not supported in Babel 7...
   invoiceExpiry = "invoiceExpiry", // in seconds
   rescanWallet = "rescanWallet",
   receiveViaP2TR = "receiveViaP2TR",
-  legacyLnurlAuthEnabled = "legacyLnurlAuthEnabled",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);

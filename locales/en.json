@@ -768,9 +768,6 @@
           "title": "Signature",
           "alert": "Copied to clipboard"
         }
-      },
-      "legacyLnurlAuth": {
-        "title": "Use legacy LNURL-auth authentication"
       }
     },
     "experimental": {

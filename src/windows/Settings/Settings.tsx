@@ -824,13 +824,6 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
   }
 
-  // Legacy LNURL-auth
-  const legacyLnurlAuthEnabled = useStoreState((store) => store.settings.legacyLnurlAuthEnabled);
-  const changeLegacyLnurlAuthEnabled = useStoreActions((store) => store.settings.changeLegacyLnurlAuthEnabled);
-  const onToggleLegacyLnurlAuthEnabledPress = async () => {
-    await changeLegacyLnurlAuthEnabled(!legacyLnurlAuthEnabled);
-  }
-
   // Delete wallet
   const onPressDeleteWallet = async () => {
     Alert.prompt(
@@ -1330,11 +1323,6 @@ ${t("experimental.tor.disabled.msg2")}`;
           <ListItem style={style.listItem} icon={true} onPress={onPressSignMesseage}>
             <Left><Icon style={style.icon} type="FontAwesome5" name="file-signature" /></Left>
             <Body><Text>{t("miscelaneous.signMessage.title")}</Text></Body>
-          </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleLegacyLnurlAuthEnabledPress}>
-            <Left><Icon style={style.icon} type="FontAwesome5" name="history" /></Left>
-            <Body><Text>{t("miscelaneous.legacyLnurlAuth.title")}</Text></Body>
-            <Right><CheckBox checked={legacyLnurlAuthEnabled} onPress={onToggleLegacyLnurlAuthEnabledPress} /></Right>
           </ListItem>
           {/* <ListItem style={style.listItem} icon={true} onPress={onPressDeleteWallet}>
             <Left><Icon style={style.icon} type="FontAwesome5" name="file-signature" /></Left>
