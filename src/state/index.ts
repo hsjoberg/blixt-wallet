@@ -212,7 +212,7 @@ export const model: IStoreModel = {
             socksPort = await tor.startIfNotStarted();
           }
           log.i("socksPort", [socksPort]);
-          if (socksPort === 0) {
+          if (socksPort === 0 && PLATFORM === "ios") {
             throw new Error("Unable to obtain SOCKS port");
           }
         } catch (e) {
