@@ -768,9 +768,6 @@
           "title": "Signatur",
           "alert": "In die Zwischenablage kopiert"
         }
-      },
-      "legacyLnurlAuth": {
-        "title": "Benutze die ältere LNURL-AUTH Autentifizierung."
       }
     },
     "experimental": {
@@ -851,8 +848,8 @@
         "subtitle": "Für Promo-Zwecke. Zurücksetzen per App-Neustart"
       },
       "rescanWallet": {
-        "title": "Rescan wallet",
-        "subtitle": "Rescan the blockchain for wallet transactions"
+        "title": "Wallet rescannen",
+        "subtitle": "Blockchain nach Wallet-Transaktionen erneut scannen"
       }
     }
   },
@@ -995,7 +992,7 @@
         },
         "iCloud": {
           "title": "Wiederherstellung mit iCloud",
-          "alert": "Restoring via iCloud failed"
+          "alert": "Wiederherstellung mit iCloud fehlgeschlagen"
         }
       },
       "seed": "Seed muss exakt 24 Wörter lang sein"
