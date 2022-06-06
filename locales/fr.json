@@ -48,9 +48,9 @@
       "title": "Restaurer le portefeuille"
     },
     "menu": {
-      "enableTor": "Enable Tor",
-      "disableTor": "Disable Tor",
-      "setBitcoinNode": "Set Bitcoin node"
+      "enableTor": "Activer Tor",
+      "disableTor": "Désactiver Tor",
+      "setBitcoinNode": "Sélectionner nœud Bitcoin"
     }
   },
   "footerNav": {
@@ -656,9 +656,9 @@
         "subtitle": "Définir le nœud Bitcoin (BIP157) pour se connecter à",
         "setDialog": {
           "title": "Définir le nœud",
-          "info": "Set a BIP157-supporting Bitcoin node to establish a connection to.",
-          "leaveBlankToSearch": "Leave blank to let Blixt Wallet search on the Bitcoin network for a valid node.",
-          "longPressToReset": "To reset to the default node ({{defaultNode}}), long-press on the setting."
+          "info": "Définissez un nœud Bitcoin supportant BIP157 pour établir une connexion.",
+          "leaveBlankToSearch": "Laissez vide et Blixt Wallet recherchera un nœud valide sur le réseau Bitcoin.",
+          "longPressToReset": "Pour rétablir le nœud par défaut ({{defaultNode}}), appuyez longuement sur le paramètre."
         },
         "restoreDialog": {
           "title": "Restaurer le nœud",
@@ -768,9 +768,6 @@
           "title": "Signature",
           "alert": "Copié dans le presse-papiers"
         }
-      },
-      "legacyLnurlAuth": {
-        "title": "Use legacy LNURL-auth authentication"
       }
     },
     "experimental": {
@@ -851,8 +848,8 @@
         "subtitle": "Utilisé pour la promotion. Redémarrer l'application pour réinitialiser"
       },
       "rescanWallet": {
-        "title": "Rescan wallet",
-        "subtitle": "Rescan the blockchain for wallet transactions"
+        "title": "Rescanner le portefeuille",
+        "subtitle": "Rescanner la blockchain pour les transactions de portefeuilles"
       }
     }
   },
@@ -995,7 +992,7 @@
         },
         "iCloud": {
           "title": "Restaurer via iCloud",
-          "alert": "Restoring via iCloud failed"
+          "alert": "La restauration via iCloud a échoué"
         }
       },
       "seed": "La graine doit comporter exactement 24 mots"
