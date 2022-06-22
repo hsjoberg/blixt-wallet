@@ -103,7 +103,7 @@
       "title": "Synkning pågår",
       "title1": "Synkning klar",
       "msg1": "Blixt Wallet synkar blockkedjan för tillfället.",
-      "msg2": "När din plånbok är i synk med blockkedjan så kommer on-chain-transaktioner dyka upp i On-chain-delen  av appen.",
+      "msg2": "När din plånbok är i synk med blockkedjan så kommer on-chain-transaktioner dyka upp i On-chain-delen av appen.",
       "msg3": "Blixt Wallet är i synk med blockkedjan.",
       "blockHeight": {
         "title": "Aktuell blockhöjd",
@@ -768,9 +768,6 @@
           "title": "Signatur",
           "alert": "Kopierat till urklipp"
         }
-      },
-      "legacyLnurlAuth": {
-        "title": "Use legacy LNURL-auth authentication"
       }
     },
     "experimental": {
@@ -851,8 +848,8 @@
         "subtitle": "Används för promo. Starta om för att nollställa"
       },
       "rescanWallet": {
-        "title": "Rescan wallet",
-        "subtitle": "Rescan the blockchain for wallet transactions"
+        "title": "Skanna om plånboken",
+        "subtitle": "Skanna om blockkedjan för plånbokstransaktioner"
       }
     }
   },
