@@ -252,11 +252,26 @@
       "status": "Status",
       "statusActive": "Active",
       "statusInactive": "Inactive",
+      "statusPending": "Pending",
+      "statusClosing": "Closing",
+      "statusForceClosing": "Force closing",
+      "statusWaitingForClose": "Waiting for close",
       "capacity": "Capacity",
       "howMuchCanBeSent": "Can send",
       "howMuchCanBeReceived": "Can receive",
       "localReserve": "Local reserve",
-      "commitmentFee": "Commitment fee"
+      "commitmentFee": "Commitment fee",
+      "pendingFunds": "Pending funds",
+      "balanceInLimbo": "Limbo balance",
+      "pendingHtlcs": "Pending HTLCs",
+      "maturityHeight": "Maturity height",
+      "localCommitmentTxid": "Local commitment TXID",
+      "remoteCommitmentTxid": "Remote commitment TXID",
+      "closeChannel": "Close channel",
+      "viewInBlockExplorer": "View in block explorer",
+      "closeChannelPrompt": {
+        "title": "Close channel"
+      }
     }
   },
   "lightningInfo.openChannel": {

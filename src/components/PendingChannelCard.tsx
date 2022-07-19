@@ -13,6 +13,9 @@ import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
 import CopyText from "./CopyText";
 import { getUnitNice, valueBitcoin, valueFiat } from "../utils/bitcoin-units";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n/i18n.constants";
+
 export interface IPendingChannelCardProps {
   type: "OPEN" | "CLOSING" | "FORCE_CLOSING" | "WAITING_CLOSE";
   channel: lnrpc.PendingChannelsResponse.IPendingOpenChannel
@@ -22,6 +25,7 @@ export interface IPendingChannelCardProps {
   alias?: string;
 }
 export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCardProps) => {
+  const t = useTranslation(namespaces.lightningInfo.lightningInfo).t;
   const abandonChannel = useStoreActions((store) => store.channel.abandonChannel);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
@@ -60,7 +64,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
           {alias &&
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
-                <Text style={style.channelDetailTitle}>Alias</Text>
+                <Text style={style.channelDetailTitle}>{t("channel.alias")}</Text>
               </Left>
               <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
                 <CopyText style={style.channelDetailValue}>
@@ -79,7 +83,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
           }
           <Row>
             <Left>
-              <Text style={style.channelDetailTitle}>Node</Text>
+              <Text style={style.channelDetailTitle}>{t("channel.node")}</Text>
             </Left>
             <Right>
               <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>{channel.channel.remoteNodePub}</CopyText>
@@ -87,20 +91,20 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
           </Row>
           <Row>
             <Left>
-              <Text style={style.channelDetailTitle}>Status</Text>
+              <Text style={style.channelDetailTitle}>{t("channel.status")}</Text>
             </Left>
             <Right>
               {type === "OPEN" &&
-                <Text style={{...style.channelDetailValue, color: "orange"}}>Pending</Text>
+                <Text style={{...style.channelDetailValue, color: "orange"}}>{t("channel.statusPending")}</Text>
               }
               {type === "CLOSING" &&
-                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>Closing</Text>
+                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>{t("channel.statusClosing")}</Text>
               }
               {type === "FORCE_CLOSING" &&
-                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>Force Closing</Text>
+                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>{t("channel.statusForceClosing")}</Text>
               }
               {type === "WAITING_CLOSE" &&
-                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>Waiting for Close</Text>
+                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>{t("channel.statusWaitingForClose")}</Text>
               }
             </Right>
           </Row>
@@ -108,7 +112,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
             <>
               <Row style={{ width: "100%" }}>
                 <Left>
-                  <Text style={style.channelDetailTitle}>Pending funds</Text>
+                  <Text style={style.channelDetailTitle}>{t("channel.pendingFunds")}</Text>
                 </Left>
                 <Right>
                   <Text>
@@ -141,7 +145,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                     const txId = channel.channel?.channelPoint?.split(":")[0];
                     onPressViewInExplorer(txId ?? "");
                   }}>
-                    <Text style={{ fontSize: 8 }}>View in block explorer</Text>
+                    <Text style={{ fontSize: 8 }}>{t("channel.viewInBlockExplorer")}</Text>
                   </Button>
                 </Left>
               </Row>
@@ -151,7 +155,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
             <>
               <Row style={{ width: "100%" }}>
                 <Left>
-                  <Text style={style.channelDetailTitle}>Limbo balance</Text>
+                  <Text style={style.channelDetailTitle}>{t("channel.balanceInLimbo")}</Text>
                 </Left>
                 <Right>
                   {!preferFiat &&
@@ -174,7 +178,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               </Row>
               <Row style={{ width: "100%" }}>
                 <Left>
-                  <Text style={style.channelDetailTitle}>Local commitment TXID</Text>
+                  <Text style={style.channelDetailTitle}>{t("channel.localCommitmentTxid")}</Text>
                 </Left>
                 <Right>
                   <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>
@@ -184,7 +188,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               </Row>
               <Row style={{ width: "100%" }}>
                 <Left>
-                  <Text style={style.channelDetailTitle}>Remote commitment TXID</Text>
+                  <Text style={style.channelDetailTitle}>{t("channel.remoteCommitmentTxid")}</Text>
                 </Left>
                 <Right>
                   <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>
@@ -198,7 +202,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
             <>
               <Row style={{ width: "100%" }}>
                 <Left>
-                  <Text style={style.channelDetailTitle}>Limbo balance</Text>
+                  <Text style={style.channelDetailTitle}>{t("channel.balanceInLimbo")}</Text>
                 </Left>
                 <Right>
                   <Text>
@@ -225,7 +229,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               </Row>
               <Row style={{ width: "100%" }}>
                 <Left>
-                  <Text style={style.channelDetailTitle}>Pending HTLCs</Text>
+                  <Text style={style.channelDetailTitle}>{t("channel.pendingHtlcs")}</Text>
                 </Left>
                 <Right>
                   <CopyText style={{ textAlign: "right" }}>
@@ -236,7 +240,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               {(channel as lnrpc.PendingChannelsResponse.ForceClosedChannel).maturityHeight !== 0 &&
                 <Row style={{ width: "100%" }}>
                   <Left>
-                    <Text style={style.channelDetailTitle}>Maturity height</Text>
+                    <Text style={style.channelDetailTitle}>{t("channel.maturityHeight")}</Text>
                   </Left>
                   <Right>
                     <CopyText style={{  textAlign: "right" }}>
@@ -248,7 +252,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               <Row style={{ width: "100%" }}>
                 <Left>
                   <Button style={{ marginTop: 14 }} small={true} onPress={(() => onPressViewInExplorer((channel as lnrpc.PendingChannelsResponse.ClosedChannel).closingTxid))}>
-                    <Text style={{ fontSize: 8 }}>View in block explorer</Text>
+                    <Text style={{ fontSize: 8 }}>{t("channel.viewInBlockExplorer")}</Text>
                   </Button>
                 </Left>
               </Row>
@@ -259,7 +263,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               <Row style={{ width: "100%" }}>
                 <Left>
                   <Button style={{ marginTop: 14 }} small={true} onPress={(() => onPressViewInExplorer((channel as lnrpc.PendingChannelsResponse.IClosedChannel)?.closingTxid))}>
-                    <Text style={{ fontSize: 8 }}>View in block explorer</Text>
+                    <Text style={{ fontSize: 8 }}>{t("channel.viewInBlockExplorer")}</Text>
                   </Button>
                 </Left>
               </Row>
