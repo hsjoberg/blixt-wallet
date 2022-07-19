@@ -2189,10 +2189,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.2.4.tgz#8d88adceeb32f7997a122feba48d7186fca80346"
   integrity sha512-uY51UoipQW4ELnFWMU6rTHRc4EUYaW+Z1O9Teijej6NYVYdUcUKq+t7WeBGjMAEc1ipyooMeBqRXToWO5zAU2Q==
 
-"@react-native-google-signin/google-signin@^7.1.0":
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-7.2.2.tgz#29e416d5c8484b52de3dc97f982f04b0083f27fe"
-  integrity sha512-FqSJAEYz+SNeIOyokFX3e7nbBgK0js/Hye0YNY+cV0Qf1NxKw1vRt2MQB3kfuVWFCb+OSovgQCl6W8dhYvsblw==
+"@react-native-google-signin/google-signin@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-8.0.0.tgz#f8202c121b4df185eb165dc58b35544c643af25f"
+  integrity sha512-GV0EGXUfiqk9Kav74zOq4ww0rAhMUlwmIGEf94X2ptnxfKu9TufeTig1zuDQGasgFlziWju/Ya2WeC+7TYSbxw==
 
 "@react-native-picker/picker@^1.9.7":
   version "1.16.8"
@@ -2323,10 +2323,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@testing-library/react-native@^9.1.0":
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-9.1.0.tgz#500698b4ae5ade98211cdea0ffd97d823c61c3ac"
-  integrity sha512-YBCSOIMYlh8gI0VG7ExRe80hNpfhC+i7j0cvpwiopUYtbpft8bMJXO35A4zEk7BkiWXEq6bYZ7VDJR3muSLhyQ==
+"@testing-library/react-native@^10.1.1":
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-10.1.1.tgz#f5d1c634af797c890023713e69374fda010ca540"
+  integrity sha512-tflpI2MTOEe0Gmj0FCTYOQD8OwBYq/YpAre0QFe2IMCcMFr55h/5zvCdwB3+uUsr6Nqve+hs6poVrD3t2wwoLQ==
   dependencies:
     pretty-format "^27.0.0"
 
@@ -4665,7 +4665,7 @@ dom-serializer@^2.0.0:
     domhandler "^5.0.2"
     entities "^4.2.0"
 
-domain-browser@^4.19.0:
+domain-browser@^4.22.0:
   version "4.22.0"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-4.22.0.tgz#6ddd34220ec281f9a65d3386d267ddd35c491f9f"
   integrity sha512-IGBwjF7tNk3cwypFNH/7bfzBcgSCbaMOD3GsaY1AU/JRrnHnYgEM0+9kQt52iZxjNsjBtJYtao146V+f8jFZNw==
@@ -8242,10 +8242,10 @@ node-int64@^0.4.0:
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
   integrity sha1-h6kGXNs1XTGC2PlM4RGIuCXGijs=
 
-node-polyfill-webpack-plugin@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/node-polyfill-webpack-plugin/-/node-polyfill-webpack-plugin-1.1.4.tgz#56bfa4d16e17addb9d6b1ef3d04e790c401f5f1d"
-  integrity sha512-Z0XTKj1wRWO8o/Vjobsw5iOJCN+Sua3EZEUc2Ziy9CyVvmHKu6o+t4gUH9GOE0czyPR94LI6ZCV/PpcM8b5yow==
+node-polyfill-webpack-plugin@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/node-polyfill-webpack-plugin/-/node-polyfill-webpack-plugin-2.0.0.tgz#950c5275bf9df00bff36feb92e5e485a688f4d1f"
+  integrity sha512-jrMdoL1KmeTUiqLJb19nOgIFjqbX0ClJg97o0kmigy/d5dyoum0+bqPCaRpaX5mccJES6hwuQTXyCdKQ1p2Y3Q==
   dependencies:
     assert "^2.0.0"
     browserify-zlib "^0.2.0"
@@ -8253,7 +8253,7 @@ node-polyfill-webpack-plugin@^1.1.4:
     console-browserify "^1.2.0"
     constants-browserify "^1.0.0"
     crypto-browserify "^3.12.0"
-    domain-browser "^4.19.0"
+    domain-browser "^4.22.0"
     events "^3.3.0"
     filter-obj "^2.0.2"
     https-browserify "^1.0.0"
@@ -8262,12 +8262,13 @@ node-polyfill-webpack-plugin@^1.1.4:
     process "^0.11.10"
     punycode "^2.1.1"
     querystring-es3 "^0.2.1"
-    readable-stream "^3.6.0"
+    readable-stream "^4.0.0"
     stream-browserify "^3.0.0"
     stream-http "^3.2.0"
     string_decoder "^1.3.0"
     timers-browserify "^2.0.12"
     tty-browserify "^0.0.1"
+    type-fest "^2.14.0"
     url "^0.11.0"
     util "^0.12.4"
     vm-browserify "^1.1.2"
@@ -9078,10 +9079,10 @@ react-native-codegen@^0.0.17:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
-react-native-codegen@^0.69.1:
-  version "0.69.1"
-  resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.69.1.tgz#3632be2f24464e6fad8dd11a25d1b6f3bc2c7d0b"
-  integrity sha512-TOZEqBarczcyYN3iZE3VpKkooOevaAzBq9n7lU0h9mQUvtRhLVyolc+a5K6cWI0e4v4K69I0MqzjPcPeFKo32Q==
+react-native-codegen@^0.70.3:
+  version "0.70.3"
+  resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.70.3.tgz#83f5df704f4856d89c136c963d326d051d30c4e0"
+  integrity sha512-OYEXmlfhk9BcvukuQ6LxcbyigPqv91/HVPsUWr6tjBp9mpiqkBdQnSebH7kSq+ork1EguOpVKd+l3Qe61odMHQ==
   dependencies:
     "@babel/parser" "^7.14.0"
     flow-parser "^0.121.0"
@@ -9374,10 +9375,10 @@ react-native-vector-icons@^7.0.0:
     prop-types "^15.7.2"
     yargs "^15.0.2"
 
-react-native-vector-icons@^9.1.0:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-9.1.0.tgz#52eaa205f5954d567b7048eb93d58ac854a2c59e"
-  integrity sha512-2AHZ/h9d/+rC0odz+OwbGNlc1Lik/pHhSixn4HfC8RtQ8CxfSBZ6gg7bTLcZhdSvZN+ZEGi30Fj+ZnOSQy+smg==
+react-native-vector-icons@^9.2.0:
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-9.2.0.tgz#3c0c82e95defd274d56363cbe8fead8d53167ebd"
+  integrity sha512-wKYLaFuQST/chH3AJRjmOLoLy3JEs1JR6zMNgTaemFpNoXs0ztRnTxcxFD9xhX7cJe1/zoN5BpQYe7kL0m5yyA==
   dependencies:
     prop-types "^15.7.2"
     yargs "^16.1.1"
@@ -9540,6 +9541,13 @@ readable-stream@^3.0.6, readable-stream@^3.4.0, readable-stream@^3.5.0, readable
     inherits "^2.0.3"
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
+
+readable-stream@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-4.1.0.tgz#280d0a29f559d3fb684a277254e02b6f61ae0631"
+  integrity sha512-sVisi3+P2lJ2t0BPbpK629j8wRW06yKGJUcaLAGXPAUhyUxVJm7VsCTit1PFgT4JHUDMrGNR+ZjSKpzGaRF3zw==
+  dependencies:
+    abort-controller "^3.0.0"
 
 readdirp@~3.6.0:
   version "3.6.0"
@@ -10891,6 +10899,11 @@ type-fest@^0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.7.1.tgz#8dda65feaf03ed78f0a3f9678f1869147f7c5c48"
   integrity sha512-Ne2YiiGN8bmrmJJEuTWTLJR32nh/JdL1+PSicowtNb0WFpn59GK8/lfD61bVtzguz7b3PBt74nxpv/Pw5po5Rg==
+
+type-fest@^2.14.0:
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.16.0.tgz#1250fbd64dafaf4c8e405e393ef3fb16d9651db2"
+  integrity sha512-qpaThT2HQkFb83gMOrdKVsfCN7LKxP26Yq+smPzY1FqoHRjqmjqHXA7n5Gkxi8efirtbeEUxzfEdePthQWCuHw==
 
 type-is@~1.6.18:
   version "1.6.18"
