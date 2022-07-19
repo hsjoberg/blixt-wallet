@@ -123,7 +123,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
         <ScrollView contentContainerStyle={style.container}>
           <View style={style.balanceInfo}>
             <H1 style={[style.spendableAmount]}>
-              Balance
+              {t("balance.title")}
             </H1>
             <H1 onPress={onPressBalance}>
               {preferFiat

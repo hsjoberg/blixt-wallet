@@ -13,6 +13,9 @@ import { identifyService, lightningServices } from "../utils/lightning-services"
 import CopyText from "./CopyText";
 import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n/i18n.constants";
+
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
 export interface IChannelCardProps {
@@ -20,6 +23,7 @@ export interface IChannelCardProps {
   alias?: string;
 }
 export function ChannelCard({ channel, alias }: IChannelCardProps) {
+  const t = useTranslation(namespaces.lightningInfo.lightningInfo).t;
   const closeChannel = useStoreActions((store) => store.channel.closeChannel);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
@@ -106,7 +110,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           {alias &&
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
-                <Text style={style.channelDetailTitle}>Alias</Text>
+                <Text style={style.channelDetailTitle}>{t("channel.alias")}</Text>
               </Left>
               <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
                 <CopyText style={style.channelDetailValue}>
@@ -125,7 +129,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           }
           <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
-              <Text style={style.channelDetailTitle}>Node</Text>
+              <Text style={style.channelDetailTitle}>{t("channel.node")}</Text>
             </Left>
             <Right>
               <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>{channel.remotePubkey}</CopyText>
@@ -133,7 +137,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           </Row>
           <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
-              <Text style={style.channelDetailTitle}>Channel ID</Text>
+              <Text style={style.channelDetailTitle}>{t("channel.channelId")}</Text>
             </Left>
             <Right>
               <CopyText style={{ fontSize: 14 }}>{channel.chanId?.toString()}</CopyText>
@@ -141,19 +145,19 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           </Row>
           <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
-              <Text style={style.channelDetailTitle}>Status</Text>
+              <Text style={style.channelDetailTitle}>{t("channel.status")}</Text>
             </Left>
             <Right>
               {channel.active ?
-                <Text style={{...style.channelDetailValue, color: "green"}}>Active</Text>
+                <Text style={{...style.channelDetailValue, color: "green"}}>{t("channel.statusActive")}</Text>
                 :
-                <Text style={{...style.channelDetailValue, color: "red"}}>Inactive</Text>
+                <Text style={{...style.channelDetailValue, color: "red"}}>{t("channel.statusInactive")}</Text>
               }
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
-              <Text>Capacity</Text>
+              <Text>{t("channel.capacity")}</Text>
             </Left>
             <Right>
               {!preferFiat &&
@@ -197,7 +201,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           </Row>
           <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
-              <Text>Can send</Text>
+              <Text>{t("channel.howMuchCanBeSent")}</Text>
             </Left>
             <Right>
               <Text>
@@ -226,7 +230,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           </Row>
           <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
-              <Text>Can receive</Text>
+              <Text>{t("channel.howMuchCanBeReceived")}</Text>
             </Left>
             <Right>
               <Text style={{ textAlign: "right" }}>
@@ -255,7 +259,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           </Row>
           <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
-              <Text>Local reserve</Text>
+              <Text>{t("channel.localReserve")}</Text>
             </Left>
             <Right>
               <Text>
@@ -303,7 +307,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           </Row>
           <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
-              <Text style={style.channelDetailTitle}>Commitment fee</Text>
+              <Text style={style.channelDetailTitle}>{t("channel.commitmentFee")}</Text>
             </Left>
             <Right>
               <Text>
@@ -312,6 +316,16 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Text>
             </Right>
           </Row>
+          {/* <Row style={{ width: "100%" }}>
+            <Left style={{ alignSelf: "flex-start" }}>
+              <Text style={style.channelDetailTitle}>Channel type</Text>
+            </Left>
+            <Right>
+              <Text>
+                {lnrpc.CommitmentType[channel.commitmentType]}
+              </Text>
+            </Right>
+          </Row> */}
           {!channel.private &&
             <Row style={{ width: "100%" }}>
               <Right>

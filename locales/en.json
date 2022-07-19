@@ -244,6 +244,19 @@
     },
     "balance": {
       "title": "Balance"
+    },
+    "channel": {
+      "alias": "Alias",
+      "node": "Node",
+      "channelId": "Channel ID",
+      "status": "Status",
+      "statusActive": "Active",
+      "statusInactive": "Inactive",
+      "capacity": "Capacity",
+      "howMuchCanBeSent": "Can send",
+      "howMuchCanBeReceived": "Can receive",
+      "localReserve": "Local reserve",
+      "commitmentFee": "Commitment fee"
     }
   },
   "lightningInfo.openChannel": {
