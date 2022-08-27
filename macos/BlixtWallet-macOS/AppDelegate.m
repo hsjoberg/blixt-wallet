@@ -42,7 +42,7 @@
 #pragma mark - RCTBridgeDelegate Methods
 
 - (NSURL *)sourceURLForBridge:(__unused RCTBridge *)bridge {
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:@"main"]; // .jsbundle;
+  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"]; // .jsbundle;
 }
 
 @end

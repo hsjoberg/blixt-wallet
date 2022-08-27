@@ -3,7 +3,7 @@
 exports[`renders correctly 1`] = `
 <View
   style={
-    Object {
+    {
       "flex": 1,
     }
   }
@@ -11,8 +11,8 @@ exports[`renders correctly 1`] = `
   <RNCSafeAreaProvider
     onInsetsChange={[Function]}
     style={
-      Array [
-        Object {
+      [
+        {
           "flex": 1,
         },
         undefined,
@@ -21,8 +21,8 @@ exports[`renders correctly 1`] = `
   >
     <View
       style={
-        Array [
-          Object {
+        [
+          {
             "backgroundColor": "rgb(242, 242, 242)",
             "flex": 1,
           },
@@ -34,7 +34,7 @@ exports[`renders correctly 1`] = `
         collapsable={false}
         pointerEvents="box-none"
         style={
-          Object {
+          {
             "zIndex": 1,
           }
         }
@@ -50,7 +50,7 @@ exports[`renders correctly 1`] = `
             collapsable={false}
             pointerEvents="box-none"
             style={
-              Object {
+              {
                 "bottom": 0,
                 "left": 0,
                 "opacity": 1,
@@ -64,12 +64,12 @@ exports[`renders correctly 1`] = `
             <View
               collapsable={false}
               style={
-                Object {
+                {
                   "backgroundColor": "rgb(255, 255, 255)",
                   "borderBottomColor": "rgb(216, 216, 216)",
                   "flex": 1,
                   "shadowColor": "rgb(216, 216, 216)",
-                  "shadowOffset": Object {
+                  "shadowOffset": {
                     "height": 0.5,
                     "width": 0,
                   },
@@ -83,7 +83,7 @@ exports[`renders correctly 1`] = `
             collapsable={false}
             pointerEvents="box-none"
             style={
-              Object {
+              {
                 "height": 44,
                 "maxHeight": undefined,
                 "minHeight": undefined,
@@ -95,7 +95,7 @@ exports[`renders correctly 1`] = `
             <View
               pointerEvents="none"
               style={
-                Object {
+                {
                   "height": 0,
                 }
               }
@@ -103,7 +103,7 @@ exports[`renders correctly 1`] = `
             <View
               pointerEvents="box-none"
               style={
-                Object {
+                {
                   "alignItems": "stretch",
                   "flex": 1,
                   "flexDirection": "row",
@@ -114,7 +114,7 @@ exports[`renders correctly 1`] = `
                 collapsable={false}
                 pointerEvents="box-none"
                 style={
-                  Object {
+                  {
                     "alignItems": "flex-start",
                     "flexBasis": 0,
                     "flexGrow": 1,
@@ -128,7 +128,7 @@ exports[`renders correctly 1`] = `
                 collapsable={false}
                 pointerEvents="box-none"
                 style={
-                  Object {
+                  {
                     "justifyContent": "center",
                     "marginHorizontal": 16,
                     "maxWidth": 718,
@@ -143,7 +143,7 @@ exports[`renders correctly 1`] = `
                   numberOfLines={1}
                   onLayout={[Function]}
                   style={
-                    Object {
+                    {
                       "color": "rgb(28, 28, 30)",
                       "fontSize": 17,
                       "fontWeight": "600",
@@ -157,7 +157,7 @@ exports[`renders correctly 1`] = `
                 collapsable={false}
                 pointerEvents="box-none"
                 style={
-                  Object {
+                  {
                     "alignItems": "flex-end",
                     "flexBasis": 0,
                     "flexGrow": 1,
@@ -174,7 +174,7 @@ exports[`renders correctly 1`] = `
       <RNSScreenContainer
         onLayout={[Function]}
         style={
-          Object {
+          {
             "flex": 1,
           }
         }
@@ -184,7 +184,7 @@ exports[`renders correctly 1`] = `
           collapsable={false}
           forwardedRef={[Function]}
           gestureResponseDistance={
-            Object {
+            {
               "bottom": -1,
               "end": -1,
               "start": -1,
@@ -193,7 +193,7 @@ exports[`renders correctly 1`] = `
           }
           pointerEvents="box-none"
           style={
-            Object {
+            {
               "bottom": 0,
               "left": 0,
               "position": "absolute",
@@ -205,7 +205,7 @@ exports[`renders correctly 1`] = `
           <View
             collapsable={false}
             style={
-              Object {
+              {
                 "opacity": 1,
               }
             }
@@ -223,12 +223,12 @@ exports[`renders correctly 1`] = `
             onTransition={[Function]}
             pointerEvents="box-none"
             style={
-              Array [
-                Object {
+              [
+                {
                   "display": "flex",
                   "overflow": undefined,
                 },
-                Object {
+                {
                   "bottom": 0,
                   "left": 0,
                   "position": "absolute",
@@ -238,10 +238,10 @@ exports[`renders correctly 1`] = `
               ]
             }
             transitionSpec={
-              Object {
-                "close": Object {
+              {
+                "close": {
                   "animation": "spring",
-                  "config": Object {
+                  "config": {
                     "damping": 500,
                     "mass": 3,
                     "overshootClamping": true,
@@ -250,9 +250,9 @@ exports[`renders correctly 1`] = `
                     "stiffness": 1000,
                   },
                 },
-                "open": Object {
+                "open": {
                   "animation": "spring",
-                  "config": Object {
+                  "config": {
                     "damping": 500,
                     "mass": 3,
                     "overshootClamping": true,
@@ -268,7 +268,7 @@ exports[`renders correctly 1`] = `
               collapsable={false}
               pointerEvents="box-none"
               style={
-                Object {
+                {
                   "flex": 1,
                 }
               }
@@ -282,13 +282,13 @@ exports[`renders correctly 1`] = `
                 onGestureHandlerEvent={[Function]}
                 onGestureHandlerStateChange={[Function]}
                 style={
-                  Object {
+                  {
                     "flex": 1,
-                    "transform": Array [
-                      Object {
+                    "transform": [
+                      {
                         "translateX": 0,
                       },
-                      Object {
+                      {
                         "translateX": 0,
                       },
                     ],
@@ -297,13 +297,13 @@ exports[`renders correctly 1`] = `
               >
                 <View
                   style={
-                    Array [
-                      Object {
+                    [
+                      {
                         "flex": 1,
                         "overflow": "hidden",
                       },
-                      Array [
-                        Object {
+                      [
+                        {
                           "backgroundColor": "rgb(242, 242, 242)",
                         },
                         undefined,
@@ -313,7 +313,7 @@ exports[`renders correctly 1`] = `
                 >
                   <View
                     style={
-                      Object {
+                      {
                         "flex": 1,
                         "flexDirection": "column-reverse",
                       }
@@ -321,30 +321,30 @@ exports[`renders correctly 1`] = `
                   >
                     <View
                       style={
-                        Object {
+                        {
                           "flex": 1,
                         }
                       }
                     >
                       <View
                         style={
-                          Array [
-                            Object {
+                          [
+                            {
                               "backgroundColor": "#151314",
                               "flex": 1,
                               "height": "100%",
                               "width": "100%",
                             },
-                            Object {},
+                            {},
                             undefined,
                           ]
                         }
                       >
                         <View
                           style={
-                            Array [
-                              Object {},
-                              Object {
+                            [
+                              {},
+                              {
                                 "alignItems": "center",
                                 "flex": 1,
                                 "justifyContent": "center",
@@ -359,9 +359,9 @@ exports[`renders correctly 1`] = `
                         >
                           <View
                             style={
-                              Array [
-                                Object {},
-                                Object {
+                              [
+                                {},
+                                {
                                   "height": "100%",
                                   "width": "100%",
                                 },
@@ -370,9 +370,9 @@ exports[`renders correctly 1`] = `
                           >
                             <View
                               style={
-                                Array [
-                                  Object {},
-                                  Object {
+                                [
+                                  {},
+                                  {
                                     "alignContent": "center",
                                     "flexDirection": "column",
                                     "height": 300,
@@ -394,7 +394,7 @@ exports[`renders correctly 1`] = `
                                 returnKeyType="done"
                                 rowSpan={6}
                                 style={
-                                  Object {
+                                  {
                                     "backgroundColor": "#232323",
                                     "color": "#000",
                                     "fontSize": 20,
@@ -412,9 +412,9 @@ exports[`renders correctly 1`] = `
                               />
                               <View
                                 style={
-                                  Array [
-                                    Object {},
-                                    Object {
+                                  [
+                                    {},
+                                    {
                                       "display": "flex",
                                       "marginTop": 14,
                                       "width": "100%",
@@ -424,7 +424,7 @@ exports[`renders correctly 1`] = `
                               >
                                 <Text
                                   style={
-                                    Object {
+                                    {
                                       "color": "#000",
                                       "fontSize": 21,
                                       "lineHeight": 25,
@@ -435,9 +435,9 @@ exports[`renders correctly 1`] = `
                                 </Text>
                                 <View
                                   style={
-                                    Array [
-                                      Object {},
-                                      Object {
+                                    [
+                                      {},
+                                      {
                                         "display": "flex",
                                         "flexDirection": "column",
                                       },
@@ -457,7 +457,7 @@ exports[`renders correctly 1`] = `
                                     onResponderTerminationRequest={[Function]}
                                     onStartShouldSetResponder={[Function]}
                                     style={
-                                      Object {
+                                      {
                                         "alignItems": "center",
                                         "alignSelf": "flex-start",
                                         "backgroundColor": "#007aff",
@@ -486,7 +486,7 @@ exports[`renders correctly 1`] = `
                                   >
                                     <Text
                                       style={
-                                        Object {
+                                        {
                                           "backgroundColor": "transparent",
                                           "color": "#fff",
                                           "fontFamily": "System",
@@ -515,7 +515,7 @@ exports[`renders correctly 1`] = `
                                     onResponderTerminationRequest={[Function]}
                                     onStartShouldSetResponder={[Function]}
                                     style={
-                                      Object {
+                                      {
                                         "alignItems": "center",
                                         "alignSelf": "flex-start",
                                         "backgroundColor": "#007aff",
@@ -542,7 +542,7 @@ exports[`renders correctly 1`] = `
                                   >
                                     <Text
                                       style={
-                                        Object {
+                                        {
                                           "backgroundColor": "transparent",
                                           "color": "#fff",
                                           "fontFamily": "System",
@@ -563,9 +563,9 @@ exports[`renders correctly 1`] = `
                             </View>
                             <View
                               style={
-                                Array [
-                                  Object {},
-                                  Object {
+                                [
+                                  {},
+                                  {
                                     "flex": 1,
                                     "marginTop": 24,
                                     "width": "100%",
@@ -575,13 +575,13 @@ exports[`renders correctly 1`] = `
                             >
                               <Text
                                 style={
-                                  Array [
-                                    Object {
+                                  [
+                                    {
                                       "color": "#000",
                                       "fontSize": 27,
                                       "lineHeight": 32,
                                     },
-                                    Object {
+                                    {
                                       "marginBottom": 3,
                                     },
                                   ]
@@ -591,7 +591,7 @@ exports[`renders correctly 1`] = `
                               </Text>
                               <Text
                                 style={
-                                  Object {
+                                  {
                                     "color": "#000",
                                     "fontFamily": "System",
                                     "fontSize": 16,
@@ -610,9 +610,9 @@ exports[`renders correctly 1`] = `
                           </View>
                           <View
                             style={
-                              Array [
-                                Object {},
-                                Object {
+                              [
+                                {},
+                                {
                                   "backgroundColor": "#151314",
                                   "bottom": 24,
                                   "paddingBottom": 24,
@@ -625,7 +625,7 @@ exports[`renders correctly 1`] = `
                           >
                             <View
                               accessibilityState={
-                                Object {
+                                {
                                   "disabled": false,
                                 }
                               }
@@ -641,7 +641,7 @@ exports[`renders correctly 1`] = `
                               onResponderTerminationRequest={[Function]}
                               onStartShouldSetResponder={[Function]}
                               style={
-                                Object {
+                                {
                                   "alignItems": "center",
                                   "alignSelf": "stretch",
                                   "backgroundColor": "#007aff",
@@ -668,7 +668,7 @@ exports[`renders correctly 1`] = `
                             >
                               <Text
                                 style={
-                                  Object {
+                                  {
                                     "backgroundColor": "transparent",
                                     "color": "#fff",
                                     "fontFamily": "System",

@@ -287,14 +287,14 @@ dependencies {
     }
     releaseImplementation 'com.facebook.flipper:flipper-noop:0.99.0'
 
-    compile "com.squareup.okhttp3:okhttp:4.9.1"
-    compile "com.squareup.okhttp3:logging-interceptor:4.2.1"
-    compile "com.squareup.okhttp3:okhttp-urlconnection:4.9.1"
+    implementation "com.squareup.okhttp3:okhttp:4.9.1"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.2.1"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:4.9.1"
 
     if (enableHermes) {
-        def hermesPath = "../../node_modules/hermes-engine/android/";
-        debugImplementation files(hermesPath + "hermes-debug.aar")
-        releaseImplementation files(hermesPath + "hermes-release.aar")
+        implementation("com.facebook.react:hermes-engine:+") { // From node_modules
+            exclude group:'com.facebook.fbjni'
+        }
     } else {
         implementation jscFlavor
     }
