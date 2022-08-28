@@ -60,6 +60,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
     bitcoinUnit,
     fiatUnit,
   } = useBalance();
+  const [sendButtonWidth, setSendButtonWidth] = useState<number | undefined>();
 
   try {
     const metadata = JSON.parse(lnUrlObject.metadata) as ILNUrlPayRequestMetadata;
@@ -250,8 +251,13 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
             onPress={onPressPay}
             style={{
               marginLeft: 10,
-              width: 53,
+              width: sendButtonWidth,
               justifyContent: "center",
+            }}
+            onLayout={(event) => {
+              if (!sendButtonWidth) {
+                setSendButtonWidth(event.nativeEvent.layout.width);
+              }
             }}
             small={true}
           >

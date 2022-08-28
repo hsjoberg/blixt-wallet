@@ -101,7 +101,7 @@ export default function ContactList({ navigation }: IContactListProps) {
         <Item rounded style={{ height: 35 }}>
           <Input
             style={{ marginLeft: 8, marginTop: -2.5, borderRadius: 8, color: blixtTheme.dark }}
-            placeholder="Search"
+            placeholder={t("generic.search", { ns: namespaces.common })}
             onChangeText={setSearchText}
             autoCorrect={false}
             enableFocusRing={false} // macOS prop

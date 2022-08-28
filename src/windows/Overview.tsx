@@ -213,18 +213,7 @@ function Overview({ navigation }: IOverviewProps) {
             <DoBackup />
           }
           {pendingOpenBalance.greaterThan(0) && (
-            <Card>
-              <CardItem>
-                <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-                  <Text style={{ flexShrink: 1, width: "100%", marginRight: 5 }}>
-                    A new channel is in the process of being opened...
-                  </Text>
-                  <Button style={{ }} small onPress={() => navigation.navigate("LightningInfo")}>
-                    <Text>View</Text>
-                  </Button>
-                </View>
-              </CardItem>
-            </Card>
+            <NewChannelBeingOpened />
           )}
           {txs}
         </ScrollView>
@@ -373,7 +362,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
 };
 
 const DoBackup = () => {
-  const { t, i18n } = useTranslation(namespaces.overview);
+  const { t } = useTranslation(namespaces.overview);
   const navigation = useNavigation();
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
@@ -382,7 +371,7 @@ const DoBackup = () => {
   };
 
   const onPressBackupWallet = () => {
-    navigation.navigate("Welcome", { screen: "Seed"})
+    navigation.navigate("Welcome", { screen: "Seed "});
   };
 
   return (
@@ -397,9 +386,33 @@ const DoBackup = () => {
               <Text style={{ fontSize: 11 * fontFactorNormalized }}>{t("doBackup.backup")}</Text>
             </Button>
             <Button small onPress={onPressDismiss}>
-              <Text style={{ fontSize: 11 * fontFactorNormalized }}>{t("msg.dismiss",{ns:namespaces.common})}</Text>
+              <Text style={{ fontSize: 11 * fontFactorNormalized }}>{t("msg.dismiss", { ns:namespaces.common })}</Text>
             </Button>
           </View>
+        </View>
+      </CardItem>
+    </Card>
+  );
+}
+
+const NewChannelBeingOpened = () => {
+  const { t } = useTranslation(namespaces.overview);
+  const navigation = useNavigation();
+
+  const onPressView = () => {
+    navigation.navigate("LightningInfo");
+  };
+
+  return (
+    <Card>
+      <CardItem>
+        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+          <Text style={{ flexShrink: 1, width: "100%", marginRight: 5 }}>
+            {t("newChannelBeingOpened.info")}
+          </Text>
+          <Button style={{ }} small onPress={onPressView}>
+            <Text>{t("newChannelBeingOpened.view")}</Text>
+          </Button>
         </View>
       </CardItem>
     </Card>

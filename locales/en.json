@@ -5,7 +5,8 @@
       "nodeAlias": "Node alias",
       "description": "Description",
       "amount": "Amount",
-      "fee": "Fee"
+      "fee": "Fee",
+      "search": "Search"
     },
     "buttons": {
       "ok": "Ok",
@@ -89,6 +90,10 @@
       "msg1": "Thank you for using Blixt Wallet!",
       "msg2": "We recommend making a backup of the wallet so that you can restore your funds in case of a phone loss.",
       "backup": "Backup wallet"
+    },
+    "newChannelBeingOpened": {
+      "info": "A new channel is in the process of being opened...",
+      "view": "View"
     }
   },
   "help": {
@@ -835,6 +840,10 @@
       "keysend": {
         "title": "Keysend Experiment",
         "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Invoice expiry (seconds)",
+        "subtitle": "{{expiry}} seconds"
       }
     },
     "debug": {
@@ -878,6 +887,16 @@
       "rescanWallet": {
         "title": "Rescan wallet",
         "subtitle": "Rescan the blockchain for wallet transactions"
+      },
+      "getNodeInfo": {
+        "title": "Get node info"
+      },
+      "demoMode": {
+        "title": "Activate Demo Mode",
+        "subtitle": "Used for promo. Restart app to reset"
+      },
+      "disableGraphCache": {
+        "title": "Disable lnd graph cache"
       }
     }
   },

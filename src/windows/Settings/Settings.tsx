@@ -1379,8 +1379,8 @@ ${t("experimental.tor.disabled.msg2")}`;
           <ListItem style={style.listItem} icon={true} onPress={onPressSetInvoiceExpiry} onLongPress={onLongPressSetInvoiceExpiry}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="timer-outline" /></Left>
             <Body>
-              <Text>Invoice expiry (seconds)</Text>
-              <Text note={true}>{invoiceExpiry} seconds</Text>
+              <Text>{t("experimental.invoiceExpiry.title")}</Text>
+              <Text note={true}>{t("experimental.invoiceExpiry.subtitle", { expiry: invoiceExpiry })}</Text>
             </Body>
           </ListItem>
 
@@ -1412,9 +1412,9 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onGetNodeInfoPress}>
-            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1}]} type="Entypo" name="info" /></Left>
+            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="Entypo" name="info" /></Left>
             <Body>
-              <Text>Get node info</Text>
+              <Text>{t("debug.nodeInfo.getNodeInfo")}</Text>
             </Body>
           </ListItem>
           {dunderEnabled &&
@@ -1446,28 +1446,28 @@ ${t("experimental.tor.disabled.msg2")}`;
                 <Left><Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" /></Left>
                 <Body><Text>{t("debug.webln.title")}</Text></Body>
               </ListItem>
-              <ListItem style={style.listItem} icon={true} onPress={() => {
-                writeConfig();
-                toast(t("msg.written",{ns:namespaces.common}))
-              }}>
-                <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="typewriter" /></Left>
-                <Body><Text>{t("debug.config.title")}</Text></Body>
-              </ListItem>
             </>
           }
           <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: false })}>
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
             <Body>
-              <Text>Activate Demo Mode</Text>
-              <Text note={true}>Used for promo. Restart app to reset</Text>
+              <Text>{t("debug.demoMode.title")}</Text>
+              <Text note={true}>{t("debug.demoMode.subtitle")}</Text>
             </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleLndNoGraphCache}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="database-sync" /></Left>
             <Body>
-              <Text>Disable lnd graph cache</Text>
+              <Text>{t("debug.disableGraphCache.title")}</Text>
             </Body>
             <Right><CheckBox checked={lndNoGraphCache} onPress={onToggleLndNoGraphCache} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={() => {
+            writeConfig();
+            toast(t("msg.written",{ns:namespaces.common}))
+          }}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="typewriter" /></Left>
+            <Body><Text>{t("debug.config.title")}</Text></Body>
           </ListItem>
         </List>
       </Content>

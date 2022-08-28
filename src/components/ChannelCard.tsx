@@ -37,7 +37,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
 
   const close = (force: boolean = false) => {
     Alert.alert(
-      "Close channel",
+      t("channel.closeChannelPrompt.title"),
       `Are you sure you want to${force ? " force" : ""} close the channel${alias ? ` with ${alias}` : ""}?`,
       [{
         style: "cancel",
@@ -336,10 +336,10 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           <Row style={{ width: "100%" }}>
             <Left style={{ flexDirection: "row" }}>
               <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => close(false)} onLongPress={() => close(true)}>
-                <Text style={{ fontSize: 8 }}>Close channel</Text>
+                <Text style={{ fontSize: 8 }}>{t("channel.closeChannel")}</Text>
               </Button>
               <Button style={{ marginTop: 14, marginLeft: 10 }} small={true} onPress={onPressViewInExplorer}>
-                <Text style={{ fontSize: 8 }}>View in block explorer</Text>
+                <Text style={{ fontSize: 8 }}>{t("channel.viewInBlockExplorer")}</Text>
               </Button>
             </Left>
           </Row>

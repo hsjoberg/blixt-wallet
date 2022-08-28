@@ -41,6 +41,8 @@ export default function Contact({ contact }: IContactProps) {
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const [loadingPay, setLoadingPay] = useState(false);
   const [loadingWithdraw, setLoadingWithdraw] = useState(false);
+  const [sendButtonWidth, setSendButtonWidth] = useState<number | undefined>();
+  const [widthdrawButtonWidth, setWithdrawButtonWidth] = useState<number | undefined>();
 
   useEffect(() => {
     let listener: EmitterSubscription | null = null;
@@ -246,14 +248,22 @@ export default function Contact({ contact }: IContactProps) {
               </View>
               <View style={style.actionButtons}>
                 {(contact.lnUrlWithdraw && currentBalance! > 0) &&
-                  <Button onPress={onPressWithdraw} style={[style.actionButton, { width: 90 }]} small disabled={loadingWithdraw}>
+                  <Button onPress={onPressWithdraw} style={[style.actionButton, { width: widthdrawButtonWidth }]} small disabled={loadingWithdraw} onLayout={(event) => {
+                    if (!sendButtonWidth) {
+                      setWithdrawButtonWidth(event.nativeEvent.layout.width);
+                    }
+                  }}>
                     {!loadingWithdraw && <Text style={style.actionButtonText}>{t("contact.withdraw.title")}</Text>}
                     {loadingWithdraw && <ButtonSpinner />}
                   </Button>
                 }
                 {(contact.lnUrlPay || contact.lightningAddress) &&
                 <>
-                  <Button onPress={onPressSend} style={[style.actionButton, { width: 60 }]} small disabled={loadingPay}>
+                  <Button onPress={onPressSend} style={[style.actionButton, { width: sendButtonWidth }]} small disabled={loadingPay} onLayout={(event) => {
+                    if (!sendButtonWidth) {
+                      setSendButtonWidth(event.nativeEvent.layout.width);
+                    }
+                  }}>
                     {!loadingPay && <Text style={style.actionButtonText}>{t("contact.send.title")}</Text>}
                     {loadingPay && <ButtonSpinner />}
                   </Button>
