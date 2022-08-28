@@ -5,7 +5,8 @@
       "nodeAlias": "Nodnamn",
       "description": "Beskrivning",
       "amount": "Belopp",
-      "fee": "Avgift"
+      "fee": "Avgift",
+      "search": "Sök"
     },
     "buttons": {
       "ok": "Okej",
@@ -64,7 +65,7 @@
       "pasteFromClipboard": "Klistra in ifrån urklipp",
       "sendToLightningAddress": "Skicka till Lightningadress",
       "contactsAndServices": "Kontakter & Tjänster",
-      "lightningBrowser": "Lightning webbläsare",
+      "lightningBrowser": "Lightning-webbläsare",
       "onChainWallet": "On-chain",
       "lightningChannels": "Lightningkanaler",
       "keysendExperiment": "Keysendexperiment",
@@ -89,6 +90,10 @@
       "msg1": "Tack för att din använder Blixt Wallet!",
       "msg2": "Vi rekommenderar dig att skapa en backup av plånboken så att du kan återställa dina pengar ifall du förlorar din telefon.",
       "backup": "Skapa backup"
+    },
+    "newChannelBeingOpened": {
+      "info": "En ny kanal är på väg att öppnas.",
+      "view": "Visa"
     }
   },
   "help": {
@@ -103,7 +108,7 @@
       "title": "Synkning pågår",
       "title1": "Synkning klar",
       "msg1": "Blixt Wallet synkar blockkedjan för tillfället.",
-      "msg2": "När din plånbok är i synk med blockkedjan så kommer on-chain-transaktioner dyka upp i On-chain-delen  av appen.",
+      "msg2": "När din plånbok är i synk med blockkedjan så kommer on-chain-transaktioner dyka upp i On-chain-delen av appen.",
       "msg3": "Blixt Wallet är i synk med blockkedjan.",
       "blockHeight": {
         "title": "Aktuell blockhöjd",
@@ -244,6 +249,34 @@
     },
     "balance": {
       "title": "Balans"
+    },
+    "channel": {
+      "alias": "Alias",
+      "node": "Nod",
+      "channelId": "Kanal-ID",
+      "status": "Status",
+      "statusActive": "Aktiv",
+      "statusInactive": "Inaktiv",
+      "statusPending": "Inväntar",
+      "statusClosing": "Stänger",
+      "statusForceClosing": "Tvångsstänger",
+      "statusWaitingForClose": "Väntar på att stängas",
+      "capacity": "Kapacitet",
+      "howMuchCanBeSent": "Kan skicka",
+      "howMuchCanBeReceived": "Kan ta emot",
+      "localReserve": "Lokal reserv",
+      "commitmentFee": "Commitment-avgift",
+      "pendingFunds": "Inväntande tillgångar",
+      "balanceInLimbo": "Balans i limbo",
+      "pendingHtlcs": "Inväntande HTLCs",
+      "maturityHeight": "Maturitets-blockhöjd",
+      "localCommitmentTxid": "Lokalt commitment-TXID",
+      "remoteCommitmentTxid": "Motpartens commitment-TXID",
+      "closeChannel": "Stäng kanal",
+      "viewInBlockExplorer": "Visa i blockexplorer",
+      "closeChannelPrompt": {
+        "title": "Stäng kanal"
+      }
     }
   },
   "lightningInfo.openChannel": {
@@ -768,9 +801,6 @@
           "title": "Signatur",
           "alert": "Kopierat till urklipp"
         }
-      },
-      "legacyLnurlAuth": {
-        "title": "Use legacy LNURL-auth authentication"
       }
     },
     "experimental": {
@@ -810,6 +840,10 @@
       "keysend": {
         "title": "Keysendexperimentet",
         "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Giltighetstid för fakturor (sekunder)",
+        "subtitle": "{{expiry}} sekunder"
       }
     },
     "debug": {
@@ -851,8 +885,18 @@
         "subtitle": "Används för promo. Starta om för att nollställa"
       },
       "rescanWallet": {
-        "title": "Rescan wallet",
-        "subtitle": "Rescan the blockchain for wallet transactions"
+        "title": "Skanna om plånboken",
+        "subtitle": "Skanna om blockkedjan för plånbokstransaktioner"
+      },
+      "getNodeInfo": {
+        "title": "Hämta nodinfo"
+      },
+      "demoMode": {
+        "title": "Aktivera Demo-läget",
+        "subtitle": "Används för promo"
+      },
+      "disableGraphCache": {
+        "title": "Stäng av lnd graf-cache"
       }
     }
   },
