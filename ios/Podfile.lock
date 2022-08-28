@@ -353,7 +353,7 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.4.2):
+  - RNGestureHandler (2.6.0):
     - React-Core
   - RNICloudStore (0.1.0):
     - React
@@ -647,7 +647,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
+  RNGestureHandler: 920eb17f5b1e15dae6e5ed1904045f8f90e0b11e
   RNICloudStore: bc6e225811637c09bd1eb055d6cd7448e61cd451
   RNKeychain: 4f63aada75ebafd26f4bc2c670199461eab85d94
   RNLocalize: a64514b46a01375fdfae9349036b4dc7130333b5

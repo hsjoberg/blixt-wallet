@@ -96,7 +96,7 @@
     "react-native-enhanced-popup-menu": "^0.7.0",
     "react-native-fingerprint-scanner": "git+https://github.com/hsjoberg/react-native-fingerprint-scanner.git#b568a440472a04ae8ec2c409c53ce80cbcb9bf00",
     "react-native-fs": "^2.19.0",
-    "react-native-gesture-handler": "git+https://github.com/software-mansion/react-native-gesture-handler.git#aaa257d72a8b2ea88c5dd033b6ea90dc9f6cbc85",
+    "react-native-gesture-handler": "2.6.0",
     "react-native-haptic-feedback": "^1.14.0",
     "react-native-hash": "^3.0.0",
     "react-native-icloudstore": "git+https://github.com/manicakes/react-native-icloudstore.git#4c9f668d3121aedf7a5635b0a13f6e3999c0e6f3",
