@@ -142,6 +142,7 @@ export const channel: IChannelModel = {
           if (pushNotificationsEnabled) {
             try {
               let message = "Opened payment channel";
+              // TODO fix try/catch
               const nodeInfo = await injections.lndMobile.index.getNodeInfo(channelEvent.openChannel.remotePubkey!);
               if (nodeInfo.node) {
                 message += ` with ${nodeInfo.node?.alias}`;

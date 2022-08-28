@@ -26,17 +26,6 @@ export default function App() {
       }
     })();
   }, []);
-  const nav = (<NavigationContainer theme={{
-    dark: true,
-    colors: {
-        ...DefaultTheme.colors,
-        background: "transparent",
-    }
-    }} documentTitle={{ enabled: false }} ref={navigator}>
-    <Root>
-        {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
-    </Root>
-    </NavigationContainer>)
 
   const navigatorTheme: Theme = {
     dark: true,
@@ -45,6 +34,7 @@ export default function App() {
       background: "transparent",
     }
   };
+
   return (
     <StoreProvider store={store}>
         <StyleProvider style={getTheme(theme)}>

@@ -187,7 +187,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   }
 
   const onPressCamera = () => {
-    navigation.navigate("CameraFullscreen", {
+    navigation.navigate("CameraFullScreen", {
       onRead: (data: any) => {
         try {
           const json = JSON.parse(data);
@@ -195,7 +195,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
           setRoutehintsInput(json.routehints);
           console.log(data);
         } catch (e) {
-          setPubkeyInput(data);
+          setPubkeyInput(data?.split("@")[0]);
           console.log(e.message);
         }
       },

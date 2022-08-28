@@ -163,6 +163,7 @@ export default function Restore({ navigation }: IProps) {
   const undoBackupChoice = () => {
     setBackupFile(null);
     setB64Backup(null);
+    setMacosBakBase64(null);
     setBackupType("none");
   }
 
@@ -214,7 +215,7 @@ export default function Restore({ navigation }: IProps) {
                   }
                 </View>
               }
-              {backupType === "file" &&
+              {(backupType === "file" || backupType === "macos") &&
                 <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
                   <Text>{backupFile &&  backupFile.name}</Text>
                   <Button small onPress={undoBackupChoice}>
