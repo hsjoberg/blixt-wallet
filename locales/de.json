@@ -5,7 +5,8 @@
       "nodeAlias": "Node-Alias",
       "description": "Beschreibung",
       "amount": "Betrag",
-      "fee": "Gebühr"
+      "fee": "Gebühr",
+      "search": "Suche"
     },
     "buttons": {
       "ok": "Ok",
@@ -89,6 +90,10 @@
       "msg1": "Danke, dass Du die Blixt Wallet verwendest!",
       "msg2": "Wir empfehlen, ein Wallet-Backup zu erstellen, um im Falle eines Geräteverlustes das Guthaben wiederherstellen zu können.",
       "backup": "Wallet-Backup"
+    },
+    "newChannelBeingOpened": {
+      "info": "Ein neuer Kanal wird gerade geöffnet.",
+      "view": "Anzeigen"
     }
   },
   "help": {
@@ -244,6 +249,34 @@
     },
     "balance": {
       "title": "Balance"
+    },
+    "channel": {
+      "alias": "Alias",
+      "node": "Node",
+      "channelId": "Kanal ID",
+      "status": "Status",
+      "statusActive": "Aktiv",
+      "statusInactive": "Inaktiv",
+      "statusPending": "Ausstehend",
+      "statusClosing": "Schließend",
+      "statusForceClosing": "Erzwungend Schließend (force-close)",
+      "statusWaitingForClose": "Warte auf Schließung",
+      "capacity": "Kapazität",
+      "howMuchCanBeSent": "sendbar",
+      "howMuchCanBeReceived": "empfangbar",
+      "localReserve": "Lokale Reserve",
+      "commitmentFee": "Commitment Gebühr",
+      "pendingFunds": "Wartendes Guthaben",
+      "balanceInLimbo": "Limbo Balance",
+      "pendingHtlcs": "Wartende HTLCs",
+      "maturityHeight": "Maturity Block",
+      "localCommitmentTxid": "Eigene Commitment TXID",
+      "remoteCommitmentTxid": "Fremde Commitment TXID",
+      "closeChannel": "Kanal schließen",
+      "viewInBlockExplorer": "Im Block Explorer ansehen",
+      "closeChannelPrompt": {
+        "title": "Kanal schließen"
+      }
     }
   },
   "lightningInfo.openChannel": {
@@ -768,9 +801,6 @@
           "title": "Signatur",
           "alert": "In die Zwischenablage kopiert"
         }
-      },
-      "legacyLnurlAuth": {
-        "title": "Benutze die ältere LNURL-AUTH Autentifizierung."
       }
     },
     "experimental": {
@@ -810,6 +840,10 @@
       "keysend": {
         "title": "Keysend Experiment",
         "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Invoice-Gültigkeit (Sekunden)",
+        "subtitle": "{{expiry}} Sekunden"
       }
     },
     "debug": {
@@ -851,8 +885,18 @@
         "subtitle": "Für Promo-Zwecke. Zurücksetzen per App-Neustart"
       },
       "rescanWallet": {
-        "title": "Rescan wallet",
-        "subtitle": "Rescan the blockchain for wallet transactions"
+        "title": "Wallet rescannen",
+        "subtitle": "Blockchain nach Wallet-Transaktionen erneut scannen"
+      },
+      "getNodeInfo": {
+        "title": "Node-Informationen aufrufen"
+      },
+      "demoMode": {
+        "title": "Demo Mode aktivieren",
+        "subtitle": "Für Promo-Zwecke. Zurücksetzen per App-Neustart"
+      },
+      "disableGraphCache": {
+        "title": "LND Graph Cache deaktivieren"
       }
     }
   },
@@ -995,7 +1039,7 @@
         },
         "iCloud": {
           "title": "Wiederherstellung mit iCloud",
-          "alert": "Restoring via iCloud failed"
+          "alert": "Wiederherstellung mit iCloud fehlgeschlagen"
         }
       },
       "seed": "Seed muss exakt 24 Wörter lang sein"
