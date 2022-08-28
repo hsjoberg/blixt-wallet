@@ -7,6 +7,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import Input from "../../components/Input";
 
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n/i18n.constants";
+
 export interface ISelectListNavigationProps<T> {
   title: string;
   onPick: (address: T) => void;
@@ -25,6 +28,7 @@ export interface ISelectListProps<T> {
 }
 
 export default function<T = string>({ navigation, route }: ISelectListProps<T>) {
+  const t = useTranslation(namespaces.common).t;
   const title = route?.params?.title ?? "";
   const onPick = route?.params?.onPick ?? (() => {});
   const data = route?.params?.data ?? [];
@@ -49,7 +53,7 @@ export default function<T = string>({ navigation, route }: ISelectListProps<T>) 
           <Item rounded style={{ height:35 }}>
             <Input
               style={{ marginLeft: 8, marginTop: -2.5, borderRadius: 8, color: blixtTheme.dark }}
-              placeholder="Search"
+              placeholder={t("generic.search")}
               onChangeText={(text) => setSearchText(text)}
               autoCorrect={false}
             />

@@ -7,7 +7,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import * as base64 from "base64-js";
 import * as Keychain from 'react-native-keychain';
 // import Sound from "react-native-sound";
-import iCloudStorage from "react-native-icloudstore";
 import { JSHash, CONSTANTS } from "react-native-hash";
 import { generateSecureRandom } from "react-native-securerandom";
 // import RNLocalize from "react-native-localize";
@@ -17,7 +16,7 @@ import { getTransactions, getTransaction, createTransaction, clearTransactions }
 import { useStoreState, useStoreActions } from "../../state/store";
 import { invoicesrpc, lnrpc } from "../../../proto/lightning";
 import { sendCommand } from "../../lndmobile/utils";
-import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus, getNodeInfo } from "../../lndmobile/index";
+import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus, getNodeInfo, listUnspent } from "../../lndmobile/index";
 import { initWallet, genSeed, deriveKey, signMessage, derivePrivateKey } from "../../lndmobile/wallet";
 import { pendingChannels, listChannels, openChannel, closeChannel } from "../../lndmobile/channel";
 import { newAddress, sendCoins } from "../../lndmobile/onchain";
@@ -39,12 +38,11 @@ import { notificationManager } from "../../state/NotificationManager";
 import PushNotification from "react-native-push-notification";
 import { ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID, PLATFORM } from "../../utils/constants";
 
-// let iCloudStorage: any;
-// console.log(PLATFORM);
-// if (PLATFORM === "ios") {
-//   console.log("why")
-//   iCloudStorage = require("react-native-icloudstore").default;
-// }
+let iCloudStorage: any;
+console.log(PLATFORM);
+if (PLATFORM === "ios") {
+  iCloudStorage = require("react-native-icloudstore").default;
+}
 
 interface IProps {
   navigation?: StackNavigationProp<RootStackParamList, "DEV_Commands">;
@@ -670,7 +668,8 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             ["newAddress", newAddress],
             ["pendingChannels", pendingChannels],
             ["listChannels", listChannels],
-            ["listPeers", listPeers]
+            ["listPeers", listPeers],
+            ["listUnspent", listUnspent],
           ].map(([name, f], i) => {
             return (
               <Button small key={i} onPress={async () => {

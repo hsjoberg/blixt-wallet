@@ -68,6 +68,15 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       headerBackTitle: t("buttons.back", { ns:namespaces.common }),
       headerShown: true,
     });
+
+    navigation.getParent()?.setOptions({
+      gestureEnabled: false,
+    });
+    return () => {
+      navigation.getParent()?.setOptions({
+        gestureEnabled: true,
+      });
+    }
   }, [navigation]);
 
   if (!paymentRequest) {
@@ -92,7 +101,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       navigation.replace("SendDone", { preimage, callback });
     } catch (error) {
       console.log(error);
-      toast(`${t("msg.error",{ns:namespaces.common})}: ${error.message}`, 60000, "danger", "Okay");
+      toast(`${t("msg.error",{ ns:namespaces.common })}: ${error.message}`, 60000, "danger", "Okay");
       setIsPaying(false);
     }
   };
