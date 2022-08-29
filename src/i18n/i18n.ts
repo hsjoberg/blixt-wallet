@@ -9,6 +9,7 @@ import de from "./de";
 import fr from "./fr";
 import tlh from "./tlh";
 import sv from "./sv";
+import ru from "./ru";
 
 const createI18n = (language: string): i18nInstance => {
   const i18n = i18next.createInstance().use(initReactI18next);
@@ -24,6 +25,7 @@ const createI18n = (language: string): i18nInstance => {
       fr,
       tlh,
       sv,
+      ru,
     },
   });
 
