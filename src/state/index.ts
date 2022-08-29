@@ -254,7 +254,7 @@ export const model: IStoreModel = {
       if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
         log.i("Starting lnd");
         try {
-          let args = "";
+          let args = "";//--skip-chain-sync ";
           if (socksPort > 0) {
             args = "--tor.socks=127.0.0.1:" + socksPort + " ";
           }
@@ -468,8 +468,6 @@ autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? 
 
 [protocol]
 protocol.wumbo-channels=true
-protocol.no-anchors=true
-protocol.no-script-enforced-lease=true
 `;
     await writeConfig(config);
   }),

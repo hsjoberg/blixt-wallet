@@ -316,16 +316,18 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Text>
             </Right>
           </Row>
-          {/* <Row style={{ width: "100%" }}>
-            <Left style={{ alignSelf: "flex-start" }}>
-              <Text style={style.channelDetailTitle}>Channel type</Text>
-            </Left>
-            <Right>
-              <Text>
-                {lnrpc.CommitmentType[channel.commitmentType]}
-              </Text>
-            </Right>
-          </Row> */}
+          {__DEV__ === true &&
+            <Row style={{ width: "100%" }}>
+              <Left style={{ alignSelf: "flex-start" }}>
+                <Text style={style.channelDetailTitle}>Channel type</Text>
+              </Left>
+              <Right>
+                <Text>
+                  {lnrpc.CommitmentType[channel.commitmentType!]}
+                </Text>
+              </Right>
+            </Row>
+          }
           {!channel.private &&
             <Row style={{ width: "100%" }}>
               <Right>
