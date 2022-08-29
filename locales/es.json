@@ -5,7 +5,8 @@
       "nodeAlias": "Alias del nodo",
       "description": "Descripción",
       "amount": "Cantidad",
-      "fee": "Tarifa"
+      "fee": "Tarifa",
+      "search": "Busqueda"
     },
     "buttons": {
       "ok": "Ok",
@@ -89,6 +90,10 @@
       "msg1": "¡Gracias por usar Blixt Wallet!",
       "msg2": "Recomendamos hacer una copia de seguridad del monedero para que pueda restaurar sus fondos en caso de pérdida del teléfono.",
       "backup": "Copia del monedero"
+    },
+    "newChannelBeingOpened": {
+      "info": "Se está abriendo un nuevo canal...",
+      "view": "Ver"
     }
   },
   "help": {
@@ -244,6 +249,34 @@
     },
     "balance": {
       "title": "Balance"
+    },
+    "channel": {
+      "alias": "Alias",
+      "node": "Nodo",
+      "channelId": "ID del Canal",
+      "status": "Estatus",
+      "statusActive": "Activo",
+      "statusInactive": "Inactivo",
+      "statusPending": "Pendiente",
+      "statusClosing": "Cerrar",
+      "statusForceClosing": "Forzar el cierre",
+      "statusWaitingForClose": "Esperando el cierre",
+      "capacity": "Capacidad",
+      "howMuchCanBeSent": "Puede enviar",
+      "howMuchCanBeReceived": "Puede recibir",
+      "localReserve": "Reserva local",
+      "commitmentFee": "Tasa de compromiso",
+      "pendingFunds": "Fondos pendientes",
+      "balanceInLimbo": "Equilibrio en el limbo",
+      "pendingHtlcs": "Pendientes de HTLCs",
+      "maturityHeight": "Altura de madurez",
+      "localCommitmentTxid": "Compromiso local TXID",
+      "remoteCommitmentTxid": "Compromiso remoto TXID",
+      "closeChannel": "Cerrar Canal",
+      "viewInBlockExplorer": "Ver en el explorador de bloques",
+      "closeChannelPrompt": {
+        "title": "Cerrar canal"
+      }
     }
   },
   "lightningInfo.openChannel": {
@@ -807,6 +840,10 @@
       "keysend": {
         "title": "Experimento Keysend",
         "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Vencimiento de la factura (segundos)",
+        "subtitle": "{{expiración}} segundos"
       }
     },
     "debug": {
@@ -850,6 +887,16 @@
       "rescanWallet": {
         "title": "Volver a escanear monedero",
         "subtitle": "Vuelva a escanear los bloques para transacciones del monedero"
+      },
+      "getNodeInfo": {
+        "title": "Obtener información del nodo"
+      },
+      "demoMode": {
+        "title": "Activar el Modo Demo",
+        "subtitle": "Se utiliza para la promoción. Reinicie la aplicación para restablecer"
+      },
+      "disableGraphCache": {
+        "title": "Desactivar la caché de gráficos lnd"
       }
     }
   },
