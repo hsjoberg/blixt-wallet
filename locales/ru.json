@@ -1,0 +1,1061 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Адрес Молния",
+      "nodeAlias": "Имя узла",
+      "description": "Описание",
+      "amount": "Сумма",
+      "fee": "Комса",
+      "search": "Поиск"
+    },
+    "buttons": {
+      "ok": "Ok",
+      "cancel": "Отмена",
+      "continue": "Продолжить",
+      "skip": "Пропустить",
+      "proceed": "Далее",
+      "back": "Назад",
+      "no": "Нет",
+      "yes": "Да",
+      "save": "Сохранить",
+      "copy": "Копировать"
+    },
+    "msg": {
+      "status": "Статус",
+      "error": "Ошибка",
+      "warning": "Предупреждение",
+      "result": "Результат",
+      "pending": "в обработке",
+      "done": "Завершено",
+      "dismiss": "Отклонить",
+      "lastSync": "Обновлён",
+      "lastSyncAttempt": "Крайняя попытка обновления",
+      "clipboardCopy": "Скопировано в буфер.",
+      "written": "Записано",
+      "enabled": "включено",
+      "disabled": "отключено"
+    }
+  },
+  "welcome.start": {
+    "title": "Добро пожаловать",
+    "createWallet": {
+      "title": "Создать Кошелёк",
+      "msg1": "Blixt Кошелёк всё ещё в ранней стадии разработки.",
+      "msg2": "Если вы используете этот кошелёк, вы должны отдавать себе отчёт в риске потери средств.",
+      "msg3": "Сейчас не поддерживаются WatchTower для \"наблюдения\" за вашими каналами, пока вы оффлайн.",
+      "msg4": "Я дерзок, продолжить"
+    },
+    "restoreWallet": {
+      "title": "Восстановить Кошелёк"
+    },
+    "menu": {
+      "enableTor": "Включить Тор",
+      "disableTor": "Выключить Тор",
+      "setBitcoinNode": "Установить Биткоин-узел"
+    }
+  },
+  "footerNav": {
+    "receive": "Получить",
+    "send": "Отправить"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Сканировать",
+      "receive": "Получить",
+      "pasteFromClipboard": "Вставить из буфера",
+      "sendToLightningAddress": "Отправить на Адрес Молнию",
+      "contactsAndServices": "Контакты и Сервисы",
+      "lightningBrowser": "Браузер Молния",
+      "onChainWallet": "Ончейн",
+      "lightningChannels": "Каналы Молния",
+      "keysendExperiment": "Эксперимент Keysend",
+      "showMore": "Продвинутые опции"
+    },
+    "madeInSweden": "Сделано с ⚡, в Швеции"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "В процессе восстановления кошелька.",
+      "msg2": "Восстановление завершено.",
+      "more": "Больше инфо"
+    },
+    "sendOnChain": {
+      "title": "Добро пожаловать в кошелёк Bixt!",
+      "msg1": "Чтобы начать, отправьте биткоины ончейн на адрес справа.",
+      "msg2": "Ваш канал будет открыт автоматически.",
+      "msg3": "Отправьте как минимум",
+      "alert": "Биткоин-адрес скопирован в буфер"
+    },
+    "doBackup": {
+      "msg1": "Спасибо за использование кошелька Blixt!",
+      "msg2": "Мы рекомендуем сделать резервную копию кошелька, чтобы вы могли восстановить доступ к деньгам в случае утраты устройства.",
+      "backup": "Создать бэкап"
+    },
+    "newChannelBeingOpened": {
+      "info": "Новый канал открывается...",
+      "view": "Смотреть"
+    }
+  },
+  "help": {
+    "title": "Помощь",
+    "msg1": "Если вы хотите оставить отзыв, или столкнулись с проблемами, напишите разработчикам кошелька Blixt в Github или отправьте email.",
+    "msg2": "Также приглашаем вас присоединиться в наш чат в Телеграме.",
+    "msg3": "Новый кошелёк Blixt Wallet нуждается в ваших оценках и сообщениях о проблемах, с которыми вы столкнулись. ",
+    "telegramGroup": "Чат Телеграм"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Синхронизация...",
+      "title1": "Синхронизация завершена",
+      "msg1": "Blixt Wallet сейчас синхронизируется с блокчейном.",
+      "msg2": "Как только ваш кошелёк синхронизируется, ончейн транзакции и баланс станут видны в разделе \"ончейн\" Биткоина",
+      "msg3": "Blixt Wallet синхронизировался с блокчейном.",
+      "blockHeight": {
+        "title": "Текущая высота блока",
+        "msg1": "Синхронизируемся с цепочкой"
+      }
+    },
+    "recoveryMode": {
+      "title": "Восстанавливаем...",
+      "msg1": "Восстановление завершено",
+      "msg2": "Проверьте каналы Молния и \"ончейн\" раздел"
+    },
+    "lndLog": {
+      "show": "Показать лог lnd",
+      "copy": "Копировать текст лога"
+    }
+  },
+  "transactionDetails": {
+    "title": "Транзакция",
+    "date": "Дата",
+    "note": "Заметка",
+    "website": "Вебсайт",
+    "type" : "Тип",
+    "lnurl": {
+      "messageFromWebsite": "Сообщение от",
+      "urlReceivedFromWebsite": "Ссылка получена от",
+      "secretMessage": "Секретное сообщение"
+    },
+    "payer": "Плательщик",
+    "recipient": "Получатель",
+    "amountInFiatTimeOfPayment": "Сумма в \"фиате\" (время платежа)",
+    "numberOfHops": "Количество хопов",
+    "remotePubkey": "Публичный ключ контрагента",
+    "paymentHash": "Хэш платежа",
+    "preimage": "Preimage",
+    "status": "Статус",
+    "goBack": "Назад",
+    "button": {
+      "setNote": "Пометить",
+      "cancelInvoice": "Отменить счёт",
+      "showMap": "Показать карту"
+    },
+    "setNoteDialog": {
+      "title": "Метка",
+      "text": "Пометить транзакцию"
+    }
+  },
+  "web.info": {
+    "title": "Интерактивное демо",
+    "pressToTry": "Попробовать Blixt Wallet!"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Получить"
+    },
+    "createInvoice": {
+      "title": "Создать счёт",
+      "error": "Запрос платежа не может быть выше чем",
+      "alert": "Перед тем как получать саты нужно открыть канал Молния.",
+      "lsp": {
+        "msg": "Канал провайдера ликвидности  Dunder будет открыт после оплаты этого счёта.",
+        "msg1": "Что это?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Канал открывается",
+      "msg": "Для того, чтобы принимать платёж по этому счёту, должен быть открыт канал Молния.",
+      "msg1": "Это требует однократной комиссии приблизительно",
+      "alert": "Невозможно подключиться к Dunder, попробуйте позднее",
+      "proceed": "Далее"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Сумма",
+        "change": "Сменить валюту",
+        "dunderPlaceholder": "Минимум"
+      },
+      "amountBitcoin": {
+        "title": "Сумма",
+        "change": "Сменить единицы расчёта биткоинов",
+        "dunderPlaceholder": "Минимум"
+      },
+      "payer": {
+        "title": "Плательщик",
+        "placeholder": "Для заметок"
+      },
+      "description": {
+        "title": "Сообщение",
+        "placeholder": "Сообщение плательщику"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "О Dunder LSP",
+    "msg": "Dunder это Провайдер Ликвидности Молнии (LSP), который автоматически открывает каналы к вам, когда у вас недостаточно входящей ликвидности",
+    "msg1": "Это может иметь место, когда вы впервые пользуетесь Blixt Wallet.",
+    "msg2": "Так как для этого требуется транзакция в цепи, комиссия за транзакцию Bitcoin будет списана с входящего платежа. Будущие платежи получат доступ к каналу и возможность использовать сеть Молния.",
+    "msg3": "Dunder это",
+    "msg4": "свободное",
+    "msg5": "программное обеспечение и вы можете изменить сервис по умолчанию в Настройках."
+  },
+  "receive.receiveQr": {
+    "title": "Получить",
+    "qr": {
+      "title": "Сканировать этот QR код",
+      "msg": "Истекает через {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Оплатить счёт"
+    },
+    "form": {
+      "invoice": {
+        "title": "Счёт"
+      },
+      "amount": {
+        "title": "Сумма"
+      },
+      "recipient": {
+        "title": "Получатель"
+      },
+      "nodeAlias": {
+        "title": "Имя Узла"
+      },
+      "description": {
+        "title": "Сообщение"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "ПЛАТЁЖ ОТПРАВЛЕН"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Каналы Молния"
+    },
+    "balance": {
+      "title": "Баланс"
+    },
+    "channel": {
+      "alias": "Имя",
+      "node": "Узел",
+      "channelId": "ID Канала",
+      "status": "Статус",
+      "statusActive": "Онлайн",
+      "statusInactive": "Оффлайн",
+      "statusPending": "В обработке",
+      "statusClosing": "Закрывается",
+      "statusForceClosing": "Закрывается экстренно",
+      "statusWaitingForClose": "В ожидании закрытия",
+      "capacity": "Ёмкость",
+      "howMuchCanBeSent": "Могу отправить",
+      "howMuchCanBeReceived": "Могу принять",
+      "localReserve": "Локальный резерв",
+      "commitmentFee": "Принятая комиссия",
+      "pendingFunds": "Средства к получению",
+      "balanceInLimbo": "Баланс вне доступа",
+      "pendingHtlcs": "HTLC в обработке",
+      "maturityHeight": "Высота расчёта",
+      "localCommitmentTxid": "Локальное обязательство TXID",
+      "remoteCommitmentTxid": "Удалённое обязательство TXID",
+      "closeChannel": "Закрыть канал",
+      "viewInBlockExplorer": "Посмотреть в обозревателе блоков",
+      "closeChannelPrompt": {
+        "title": "Закрыть канал"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Открыть канал"
+    },
+    "form": {
+      "title": "Открыть канал",
+      "channel": {
+        "title": "URI Узла",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Сумма",
+        "placeholder": "Сумма"
+      },
+      "fee_rate": {
+        "title": "Комса"
+      }
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "Деньги на цепочке"
+    },
+    "address": {
+      "title": "Отправить биткоины на адрес",
+      "alert": "Скопировано в буфер обмена."
+    },
+    "newAddress": {
+      "title": "Создать новый адрес"
+    },
+    "withdraw": {
+      "title": "Вывести монеты"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Транзакция",
+    "blockExplorer": "Посмотреть в обозревателе блоков",
+    "txHash": "Id",
+    "timeStamp": "Дата",
+    "amount": "Сумма",
+    "totalFees": "Комса",
+    "label": "Метка",
+    "destAddresses": "Назначение",
+    "numConfirmations": "Подтверждения",
+    "blockHeight": "Высота блока",
+    "blockHash": "Хэш блока",
+    "rawTxHex": {
+      "title": "Транзакция в hex",
+      "msg": "Копировать"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Журнал транзакций"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Вывести монеты"
+    },
+    "form": {
+      "address": {
+        "title": "Адрес",
+        "placeholder": "Биткоин адрес"
+      },
+      "amount": {
+        "title": "Сумма",
+        "placeholder": "Сумма",
+        "withdrawAll": "Снять все средства",
+        "all": "Всё"
+      },
+      "feeRate": {
+        "title": "fee-rate",
+        "auto": "auto"
+      },
+      "withdraw": {
+        "title": "withdraw",
+        "alert": "Снять средства удалось"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Запрос на вход в систему",
+      "msg": "Вы хотите войти в систему",
+      "success": "Аутентификация пройдена"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Открытие входящего канала"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Просмотр метаданных",
+      "dialog": {
+        "title": "Технические метаданные"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{ lightningAddress}} есть в вашем списке контактов"
+      },
+      "add": {
+        "title": "Добавить в список контактов",
+        "msg": "Хотите добавить {{lightningAddress}} в список контактов?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Код оплаты для {{domain}} есть в вашем списке контактов"
+      },
+      "add": {
+        "title": "Добавить в список контактов",
+        "msg": "Вы хотите добавить этот код оплаты {{domain}} в список контактов?"
+      }
+    },
+    "unableToPay": "Невозможно оплатить",
+    "payerData": {
+      "commentAllowed": "Комментарий к {{target}} (максимум {{буквы}} букв)",
+      "sendNameWithComment": "Отправить мое имя вместе с этим комментарием",
+      "name": {
+        "ask": "Отправить мое имя вместе с этим платежом",
+        "mandatory": "Ваше имя должно быть отправлено вместе с этим платежом"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "У платежа отсутствует описание"
+    },
+    "pay": {
+      "title": "Оплата",
+      "error": {
+        "mustProvideComment": "Вы должны предоставить комментарий, если вы решили указать свое имя в этом платеже"
+      }
+    },
+    "cancel": {
+      "title": "Cancel"
+    },
+    "form": {
+      "asksYouToPay": "просит вас заплатить",
+      "description": {
+        "title": "Description"
+      },
+      "amount": {
+        "title": "Сумма",
+        "to": "to",
+        "placeholder": "Введенная сумма"
+      },
+      "alert": "Невозможно оплатить"
+    },
+    "done": {
+      "message": {
+        "title": "Сообщение от"
+      },
+      "url": {
+        "description": "Описание",
+        "domain": "URL получен от",
+        "done": {
+          "title": "Выполнено"
+        },
+        "copy": {
+          "title": "Скопировать в буфер обмена",
+          "msg": "Скопировано в буфер обмена"
+        },
+        "open": {
+          "title": "Открыть браузер"
+        }
+      },
+      "aes": {
+        "domain": "Получил секретное зашифрованное сообщение от",
+        "description": "Сообщение от",
+        "secret": "Секретное сообщение"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "About Lightning Address",
+      "msg1": "Lightning Address",
+      "msg2": "это способ оплаты человеку или услуге в сети Lightning Network.",
+      "msg3": "Они похожи на адреса электронной почты, но вместо отправки электронного письма получателю, вы отправляете деньги.",
+      "msg4": "Кошелек Blixt Wallet имеет полную поддержку отправки на Lightning Address, но получение",
+      "msg5": "получение через Lightning Address все еще находится в стадии разработки."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "Отправлен запрос на вывод средств на {{domain}}",
+      "addToContactList": {
+        "title": "Добавить в список контактов",
+        "msg": "Хотите добавить этот код отзыва на {{domain}} в свой список контактов?",
+        "note": "Счет на {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "Запрос на вывод средств",
+      "msg": "Сообщение от",
+      "dialog": {
+        "msg": "Amount"
+      },
+      "dialog1": {
+        "minSat": "Минимальная сумма вывода",
+        "maxSat": "Максимальная сумма вывода",
+        "placeholder": "Amount"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Контакты и услуги",
+      "lightningAddressAlreadyExists": "уже существует в вашем списке контактов",
+      "nothingHereYet": "Здесь еще ничего нет...",
+      "whyNotAdd": "Почему бы не добавить контакт Lightning Address",
+      "tappingHere": "tapping here"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Удаленный баланс",
+        "error": "Неверная операция, у контакта нет кода LNURL-вывода"
+      },
+      "list": {
+        "pay": "Платежи на",
+        "account": "Счет на"
+      },
+      "send": {
+        "title": "Отправить",
+        "couldNotPay": "Не удалось произвести оплату на этот LNURL-код оплаты",
+        "invalidResponse": "Ответ не был ответом LNURL-pay (получен {{response}})",
+        "invalidOperation": "Неверная операция, у контакта нет ни идентификатора LUD-16, ни кода LNURL-pay"
+      },
+      "withdraw": {
+        "title": "Withdraw",
+        "couldNotPay": "Не удалось произвести оплату на этот LNURL-код оплаты",
+        "invalidResponse": "Ответ не был ответом LNURL-pay (получен {{response}})",
+        "invalidOperation": "Недействительная операция, у контакта нет кода LNURL-отзыва"
+      },
+      "deleteContact": {
+        "title": "Удаление контакта",
+        "msg": "Вы уверены, что хотите удалить контакт {{contact}}?"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Вы хотите закрыть браузер?",
+    "home": "Вернуться к списку магазинов",
+    "placeholder": "Введите URL здесь"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "Скопировано в буфер обмена"
+    },
+    "dialog": {
+      "msg1": "Добро пожаловать на игровую площадку keysend",
+      "msg2": "Keysend позволяет вам платить другому кошельку Blixt Wallet (или любому узлу Lightning, поддерживающему keysend), не требуя выставления счета",
+      "msg3": "Нажмите на камеру, чтобы отсканировать QR-код другого кошелька, или предоставьте открытый ключ и подсказки маршрута ниже."
+    },
+    "send": {
+      "title": "Отправить",
+      "msg": "Keysend payment",
+      "error": {
+        "checkAmount": "Сумма чека",
+        "missingPubkey": "Missing pubkey"
+      },
+      "alert": "Платеж прошел успешно"
+    },
+    "form": {
+      "amount": {
+        "title": "Сумма в сат"
+      },
+      "pubkey": {
+        "title": "Открытый ключ",
+        "placeholder": "Pubkey"
+      },
+      "route": {
+        "title": "Route hints",
+        "placeholder": "Подсказки маршрута"
+      },
+      "message": {
+        "title": "Message",
+        "placeholder": "Введите сообщение чата здесь"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "settings",
+    "general": {
+      "title": "Общие",
+      "name": {
+        "title": "Имя",
+        "subtitle": "Будет использоваться в транзакциях",
+        "dialog": {
+          "msg": "Выберите имя, которое будет использоваться в транзакциях.\n\nВаше имя будет отображаться в счетах тем, кто платит вам, а также тем, кому платите вы.",
+          "accept": "Установить имя"
+        }
+      },
+      "lang": {
+        "title": "Language",
+        "dialog": {
+          "title": "Выберите язык"
+        }
+      },
+      "pushNotification": {
+        "title": "Push-уведомления",
+        "subtitle": "Для событий транзакций и каналов"
+      },
+      "checkClipboard": {
+        "title": "Проверить буфер обмена для счетов",
+        "subtitle": "Автоматически проверять буфер обмена для счетов-фактур"
+      },
+      "saveGeolocation": {
+        "title": "Сохранить геолокацию транзакции",
+        "subtitle": "Локальное сохранение местоположения транзакции",
+        "logGranted": "Геолокация разрешена",
+        "logDenied": "Разрешение на геолокацию отклонено"
+      },
+      "mapTheme": {
+        "title": "Установить тему карты"
+      }
+    },
+    "wallet": {
+      "title": "Кошелёк",
+      "seed": {
+        "show": {
+          "title": "Показать мнемонику",
+          "subtitle": "Показать seed-фразу из 24 слов",
+          "dialog": {
+            "title": "Seed",
+            "alert": "Скопировано в буфер обмена",
+            "copy": "Скопировать seed"
+          }
+        },
+        "remove": {
+          "title": "Удалить мнемонику из устройства",
+          "subtitle": "Навсегда удалить мнемонику с этого устройства",
+          "dialog": {
+            "title": "Удалить seed",
+            "msg": "Это навсегда удалит seed-фразу из устройства. Делайте это только тогда, когда вы сделали её резервную копию!",
+            "accept": "Удалить seed"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Экспортировать резервную копию канала",
+          "alert": "Файл записан:"
+        },
+        "verify": {
+          "title": "Проверить резервную копию канала"
+        },
+        "googleCloud": {
+          "title": "Резервная копия на Google Drive",
+          "subtitle": "Автоматически сохранять копию на Google Drive",
+          "alert": "Копирование на Google Drive включено"
+        },
+        "googleCloudForce": {
+          "title": "Вручную копировать на Google Drive",
+          "alert": "Сохранённые каналы на Google Drive"
+        },
+        "iCloud": {
+          "title": "Резервная копия на iCloud ",
+          "subtitle": "Автоматически сохранять на iCloud",
+          "alert": "iCloud резервирование"
+        },
+        "iCloudForce": {
+          "title": "Вручную копировать на iCloud",
+          "alert": "Сохранённые каналы на iCloud"
+        },
+        "error": "Ошибка резервирования"
+      }
+    },
+    "security": {
+      "title": "Security",
+      "pincode": {
+        "title": "Вход с пинкодом"
+      },
+      "biometrics": {
+        "title": "Логин через",
+        "fingerprint": "отпечаток пальца",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Запланированная синхронизация цепочки",
+        "subtitle": "Выполняется в фоновом режиме каждые 4 часа",
+        "dialog": {
+          "title": "Не рекомендуется",
+          "msg": "Предупреждение. Не рекомендуется отключать синхронизацию цепочек по расписанию.\n\nУбедитесь, что вы постоянно обновляете сеть, иначе вы рискуете потерять свои средства.\n\nОсуществляйте это только если вы знаете, что делаете."
+        }
+      }
+    },
+    "display": {
+      "title": "display",
+      "fiatUnit": {
+        "title": "Изменить фиатную единицу"
+      },
+      "bitcoinUnit": {
+        "title": "Изменить единицу биткоина"
+      },
+      "onchainExplorer": {
+        "title": "Onchain explorer",
+        "dialog": {
+          "title": "Change on-chain explorer"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Bitcoin Network",
+      "node": {
+        "title": "Bitcoin Node",
+        "subtitle": "Установить узел Bitcoin (BIP157) для подключения",
+        "setDialog": {
+          "title": "Set Node",
+          "info": "Установка узла Bitcoin, поддерживающего BIP157, для установления соединения с ним",
+          "leaveBlankToSearch": "Оставьте пустым, чтобы позволить Blixt Wallet искать в сети Биткойн действующий узел",
+          "longPressToReset": "Чтобы сбросить настройки до узла по умолчанию ({{defaultNode}}), долго нажимайте на него."
+        },
+        "restoreDialog": {
+          "title": "Восстановить узел",
+          "msg": "Хотите ли вы восстановить узел по умолчанию?"
+        }
+      },
+      "restartDialog": {
+        "title": "Требуется перезапуск",
+        "msg": "Blixt Wallet должен быть перезапущен перед применением новой конфигурации.",
+        "msg1": "Вы хотите сделать это сейчас?"
+      },
+      "rpc": {
+        "title": "Set bitcoind RPC Host"
+      },
+      "zmqRawBlock": {
+        "title": "Set bitcoind ZMQ Raw Block Host"
+      },
+      "zmqRawTx": {
+        "title": "Set bitcoind ZMQ Raw Tx Host"
+      },
+      "p2tr": {
+        "title": "Включить получение on-chain через Taproot (P2TR)"
+      }
+    },
+    "LN": {
+      "title": "Lightning Network",
+      "node": {
+        "title": "Показать данные узла",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Показать сверстников молнии",
+        "subtitle": ""
+      },
+      "autopilot": {
+        "title": "Автоматически открывать каналы",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Услуги входящих каналов",
+        "subtitle": "Использовать сервис входящего канала для приема платежей",
+        "dialog": {
+          "title": "Провайдер входящего канала",
+          "msg1": "Выберите провайдера входящих каналов и нажмите Продолжить",
+          "msg2": "Ваш веб-браузер откроется на веб-сайте соответствующего провайдера, где вы сможете запросить канал.",
+          "msg3": "Когда вы закончите, вы можете скопировать код адреса и/или открыть ссылку с помощью Blixt Wallet."
+        }
+      },
+      "LSP": {
+        "title": "Установить сервер Dunder LSP",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Установить сервер Дандер",
+          "acept": "Установить сервер"
+        },
+        "restoreDialog": {
+          "title": "Восстановить сервер Dunder",
+          "msg": "Хотите ли вы восстановить сервер Dunder по умолчанию?"
+        }
+      },
+      "graphSync": {
+        "title": "Подождите синхронизации графиков перед оплатой",
+        "subtitle": "Синхронизированный граф приводит к оптимальным путям оплаты"
+      }
+    },
+    "miscelaneous": {
+      "title": "Разное",
+      "about": {
+        "title": "About",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "Скопировать журнал приложения в локальное хранилище",
+        "subtitle": "",
+        "dialog": {
+          "alert": "Скопирован файл журнала приложения в",
+          "error": "Ошибка при копировании файла журнала приложения"
+        }
+      },
+      "lndLog": {
+        "title": "Скопировать журнал lnd в локальное хранилище",
+        "subtitle": "Получено из /sdcard/BlixtWallet",
+        "dialog": {
+          "alert": "Скопирован файл журнала lnd",
+          "error": "Ошибка при копировании файла журнала lnd"
+        }
+      },
+      "dev": {
+        "title": "Перейти к экрану dev",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Автоматически скрывать просроченные счета",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Переходы экрана",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Подписать сообщение ключом кошелька",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Подписать сообщение"
+        },
+        "dialog2": {
+          "title": "Signature",
+          "alert": "Скопировано в буфер обмена"
+        }
+      }
+    },
+    "experimental": {
+      "title": "Experiments",
+      "LSP": {
+        "title": "Включить LSP Dunder",
+        "subtitle": "ОЧЕНЬ ЭКСПЕРИМЕНТАЛЬНЫЙ. Поставщик молниеносных услуг, который помогает с входящей ликвидностью"
+      },
+      "MPP": {
+        "title": "Включить многопутевые платежи",
+        "subtitle": "Платежи могут проходить по 2 путям"
+      },
+      "tor": {
+        "title": "Включить Tor",
+        "subtitle": "",
+        "enabled": {
+          "title": "Перезапустите приложение и включите Tor",
+          "msg1": "Включение Tor заставит кошелек подключаться к своим аналогам (как к Bitcoin, так и к Lightning Network) через сеть Tor.",
+          "msg2": "Вы также сможете подключаться и открывать каналы к узлам Lightning, использующим onion-сервисы.",
+          "msg3": "ВНИМАНИЕ: Blixt Wallet по-прежнему будет общаться со следующими сервисами без Tor",
+          "msg4": "Причина: Для получения курсов фиата/биткоина",
+          "msg5": "Причина: Получить текущую высоту блока",
+          "msg6": "Причина: Для резервного копирования на Google Drive",
+          "msg7": "Причина: Для надежных узлов Lightning",
+          "msg8": "WebLN Browser и LNURL также не будут использовать Tor."
+        },
+        "disabled": {
+          "title": "Перезапустите приложение и отключите Tor",
+          "msg1": "Отключение Tor требует перезапуска приложения.",
+          "msg2": "Вы хотите продолжить?"
+        }
+      },
+      "onion": {
+        "title": "Показать луковую службу Tor",
+        "subtitle": "Для подключения и открытия каналов к этому кошельку"
+      },
+      "keysend": {
+        "title": "Keysend Experiment",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Срок действия счета-фактуры (секунды)",
+        "subtitle": "{ {{истечение срока действия}} секунд"
+      }
+    },
+    "debug": {
+      "title": "Debug",
+      "startup": {
+        "title": "Показывать информационные уведомления о запуске",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "Справочный центр LndMobile",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Диагностировать проблемы Дандера",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "Чтение журнала lnd",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Keysend Test",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Google Drive Testbed",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Write config",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Активировать демонстрационный режим",
+        "subtitle": "Используется для промо. Перезапустите приложение, чтобы сбросить настройки"
+      },
+      "rescanWallet": {
+        "title": "Rescan wallet",
+        "subtitle": "Повторное сканирование блокчейна на предмет транзакций кошелька"
+      },
+      "getNodeInfo": {
+        "title": "Получить информацию об узле"
+      },
+      "demoMode": {
+        "title": "Активировать демонстрационный режим",
+        "subtitle": "Используется для промо-акции. Перезапустите приложение, чтобы сбросить настройки"
+      },
+      "disableGraphCache": {
+        "title": "Отключить кэш графиков lnd"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "About Blixt Wallet",
+    "msg1": "Версия",
+    "msg2": "By",
+    "msg3": "Кошелек с открытым исходным кодом и лицензией MIT",
+    "msg4": "Создан с помощью",
+    "msg5": "и других замечательных программ с открытым исходным кодом",
+    "msg6": "Tor icon is licensed under CC BY 3.0 by",
+    "msg7": "license"
+  },
+  "settings.setPincode": {
+    "enter": "Введите пинкод",
+    "confirm": "Подтвердите свой пинкод"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Введите текущий пинкод для удаления пинкода"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Lightning Peers"
+    },
+    "alias": "Node alias",
+    "pubKey": "Открытый ключ узла",
+    "address": "адрес узла",
+    "data": {
+      "title": "Data",
+      "bytesSent": "отправлено байт",
+      "bytesRecv": "байты получены"
+    },
+    "transfer": {
+      "title": "Transfer",
+      "satSent": "sat отправлен",
+      "satRecv": "sat получен"
+    },
+    "inbound": "входящий",
+    "syncType": "Тип синхронизации",
+    "errors": "Ошибки",
+    "disconnect": "Отключить пир"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Подключиться к Lightning Peer"
+    },
+    "connect": {
+      "title": "Node URI",
+      "placeholder": "Peer URI",
+      "accept": "Connect"
+    }
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Информация об узле",
+    "alias": "Node Alias",
+    "chain": "Цепочка",
+    "timestamp": "Временная метка лучшего заголовка",
+    "blockHash": "Хэш блока",
+    "blockHeight": "Высота блока",
+    "identityPubkey": "Identity Pubkey",
+    "channel": {
+      "title": "Num Channels",
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "В обработке"
+    },
+    "numPeers": "Количество пиров",
+    "syncedToChain": "Синхронизировано с цепочкой",
+    "syncedToGraph": "синхронизировано с графиком",
+    "nodeUris": "Node URIs",
+    "version": "Lnd Version",
+    "features": "Node features"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Tor Onion Service",
+    "msg1": "Отсканируйте этот QR-код, чтобы открыть канал к этому кошельку",
+    "msg2": "Couldn't resolve onion address"
+  },
+  "welcome.addFunds": {
+    "title": "Добавить средства",
+    "msg1": "Чтобы начать использовать Lightning в кошельке Blixt",
+    "msg2": "отправить биткоины на указанный адрес"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "Автооткрытие каналов",
+      "msg": "Открывать каналы при наличии средств на цепочке"
+    },
+    "done": {
+      "title": "Почти готово!",
+      "msg1": "Вот некоторые параметры кошелька, которые вы можете настроить по своему вкусу",
+      "msg2": "Когда вы будете готовы, нажмите кнопку Продолжить"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Попробуйте еще раз",
+      "msg": "Извините, вы написали слова в неправильном порядке, пожалуйста, попробуйте еще раз."
+    },
+    "seed": {
+      "title": "Подтвердите свое seed"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Включить резервное копирование Google Drive",
+      "msg": "Включено резервное копирование Google Drive"
+    },
+    "backup": {
+      "title": "Облачное резервное копирование",
+      "msg": "Чтобы ваши внецепочечные средства оставались в безопасности в случае потери устройства, мы рекомендуем хранить резервные копии каналов на Google Диске.",
+      "msg1": "Это позволит сохранить зашифрованную резервную копию ваших каналов, которую можно использовать только вместе с семенем кошелька.",
+      "msg2": "Когда вы будете готовы, нажмите продолжить."
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Включить резервное копирование iCloud",
+      "msg": "Резервное копирование iCloud включено"
+    },
+    "backup": {
+      "title": "iCloud Backup",
+      "msg": "Чтобы ваши внецепочечные средства оставались в безопасности в случае потери устройства, мы рекомендуем вам сохранять резервные копии каналов в iCloud.",
+      "msg1": "Это позволит сохранить зашифрованную резервную копию ваших каналов, которая может быть использована только вместе с семенем кошелька.",
+      "msg2": "Когда вы будете готовы, нажмите продолжить."
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Восстановить кошелек",
+      "msg": "Чтобы восстановить кошелек, напишите каждое слово из вашего семени через пробел.",
+      "msg1": "Если вы хотите восстановить свои каналы Lightning Network, вам необходимо предоставить резервную копию файла.",
+      "loading": "Восстановить кошелек",
+      "channel": {
+        "title": "Резервное копирование канала",
+        "file": "Выберите файл резервной копии канала на диске",
+        "google": {
+          "title": "Восстановление через Google Drive",
+          "alert": "Восстановление через Google Drive не удалось"
+        },
+        "iCloud": {
+          "title": "Восстановление через iCloud",
+          "alert": "Восстановление через iCloud не удалось"
+        }
+      },
+      "seed": "seed должно состоять ровно из 24 слов"
+    },
+    "backup": {
+      "google": "Резервное копирование через Google Drive",
+      "iCloud": "Резервное копирование через iCloud"
+    }
+  },
+  "welcome.seed": {
+    "title": "Добро пожаловать в Blixt Wallet!",
+    "msg": "Это ваше резервное seed",
+    "msg1": "Запишите его на листе бумаги и храните в надежном месте",
+    "msg2": "Если вы потеряете доступ к своему кошельку",
+    "msg3": "возможно, вы сможете восстановить свои средства с помощью резервного семпла",
+    "msg4": "Используемый стандарт seedн - aezeed.",
+    "button": "Я записал"
+  }
+}
