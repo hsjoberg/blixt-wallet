@@ -525,6 +525,20 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
   return response;
 };
 
+/**
+ * @throws
+ */
+ export const listUnspent = async (): Promise<lnrpc.ListUnspentResponse> => {
+  const response = await sendCommand<lnrpc.IListUnspentRequest, lnrpc.ListUnspentRequest, lnrpc.ListUnspentResponse>({
+    request: lnrpc.ListUnspentRequest,
+    response: lnrpc.ListUnspentResponse,
+    method: "WalletKitListUnspent",
+    options: {},
+  });
+  return response;
+};
+
+
 export type IReadLndLogResponse = string[];
 /**
  * @throws

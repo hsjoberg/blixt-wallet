@@ -465,6 +465,16 @@ export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
   return response;
 };
 
+/**
+ * @throws
+ */
+ export const listUnspent = async (): Promise<lnrpc.ListUnspentResponse> => {
+  const response = lnrpc.ListUnspentResponse.create({
+    utxos: []
+  })
+  return response;
+};
+
 export type IReadLndLogResponse = string[];
 /**
  * @throws
