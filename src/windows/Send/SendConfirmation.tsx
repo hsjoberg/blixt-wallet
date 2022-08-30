@@ -69,6 +69,8 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       headerShown: true,
     });
 
+    // Prevent going back by swiping to the right
+    // when we are here in the confirmation screen
     navigation.getParent()?.setOptions({
       gestureEnabled: false,
     });

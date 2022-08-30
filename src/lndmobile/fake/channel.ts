@@ -92,10 +92,87 @@ export const abandonChannel = async (fundingTxId: string, outputIndex: number): 
  */
 export const pendingChannels = async (): Promise<lnrpc.PendingChannelsResponse> => {
   const response = lnrpc.PendingChannelsResponse.create({
-    pendingClosingChannels: [],
-    pendingForceClosingChannels: [],
-    pendingOpenChannels: [],
-    waitingCloseChannels: [],
+    pendingClosingChannels: window.BLIXT_WEB_DEMO ? [] : [
+      {
+        channel: {
+          capacity: new Long(1),
+          channelPoint: "a:0",
+          chanStatusFlags: null,
+          commitmentType: lnrpc.CommitmentType.ANCHORS,
+          initiator: lnrpc.Initiator.INITIATOR_LOCAL,
+          localBalance: new Long(10),
+          localChanReserveSat: new Long(10),
+          numForwardingPackages: new Long(10),
+          private: true,
+          remoteBalance: new Long(10),
+          remoteChanReserveSat: new Long(10),
+          remoteNodePub: "abcd",
+        },
+        closingTxid: "abc"
+      }
+    ],
+    pendingForceClosingChannels: window.BLIXT_WEB_DEMO ? [] : [
+      {
+        anchor: lnrpc.PendingChannelsResponse.ForceClosedChannel.AnchorState["LIMBO"],
+        blocksTilMaturity: 123,
+        channel: {
+          capacity: new Long(1),
+          channelPoint: "b:0",
+          chanStatusFlags: null,
+          commitmentType: lnrpc.CommitmentType.ANCHORS,
+          initiator: lnrpc.Initiator.INITIATOR_LOCAL,
+          localBalance: new Long(10),
+          localChanReserveSat: new Long(10),
+          numForwardingPackages: new Long(10),
+          private: true,
+          remoteBalance: new Long(10),
+          remoteChanReserveSat: new Long(10),
+          remoteNodePub: "abcd2",
+        },
+        closingTxid: "abc2",
+        limboBalance: new Long(1),
+        maturityHeight: 12345,
+        pendingHtlcs: [],
+        recoveredBalance: new Long(123),
+      }
+    ],
+    pendingOpenChannels: window.BLIXT_WEB_DEMO ? [] : [
+      {
+        channel: {
+          capacity: new Long(1),
+          channelPoint: "c:0",
+          chanStatusFlags: null,
+          commitmentType: lnrpc.CommitmentType.ANCHORS,
+          initiator: lnrpc.Initiator.INITIATOR_LOCAL,
+          localBalance: new Long(10),
+          localChanReserveSat: new Long(10),
+          numForwardingPackages: new Long(10),
+          private: true,
+          remoteBalance: new Long(10),
+          remoteChanReserveSat: new Long(10),
+          remoteNodePub: "abcd3",
+        },
+        commitFee: new Long(1),
+        commitWeight: new Long(1),
+        feePerKw: new Long(1)
+      }
+    ],
+    waitingCloseChannels: window.BLIXT_WEB_DEMO ? [] : [
+      {
+        channel: {
+          channelPoint: "d:0",
+        },
+        closingTxid: "abc3",
+        commitments: {
+          localCommitFeeSat: new Long(123),
+          localTxid: "abcdef",
+          remoteCommitFeeSat: new Long(123),
+          remotePendingCommitFeeSat: new Long(123),
+          remotePendingTxid: "abc2",
+          remoteTxid: "abcd4"
+        }
+      }
+    ],
     totalLimboBalance: Long.fromNumber(0),
   });
   return response;
