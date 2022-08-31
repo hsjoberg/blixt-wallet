@@ -6,7 +6,8 @@
       "description": "Description",
       "amount": "Amount",
       "fee": "Fee",
-      "search": "Search"
+      "search": "Search",
+      "viewInBlockExplorer": "View in block explorer"
     },
     "buttons": {
       "ok": "Ok",
@@ -273,7 +274,6 @@
       "localCommitmentTxid": "Local commitment TXID",
       "remoteCommitmentTxid": "Remote commitment TXID",
       "closeChannel": "Close channel",
-      "viewInBlockExplorer": "View in block explorer",
       "closeChannelPrompt": {
         "title": "Close channel"
       }

@@ -66,7 +66,7 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
                 {t("title")}
               </H1>
               <Button small={true} onPress={onPressBlockExplorer}>
-                <Text style={{ fontSize: 9 }}>See in Block Explorer</Text>
+                <Text style={{ fontSize: 9 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
               </Button>
             </View>
             <MetaData title={t("txHash")} data={transaction.txHash!} />

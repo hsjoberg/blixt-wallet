@@ -341,7 +341,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 <Text style={{ fontSize: 8 }}>{t("channel.closeChannel")}</Text>
               </Button>
               <Button style={{ marginTop: 14, marginLeft: 10 }} small={true} onPress={onPressViewInExplorer}>
-                <Text style={{ fontSize: 8 }}>{t("channel.viewInBlockExplorer")}</Text>
+                <Text style={{ fontSize: 8 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
               </Button>
             </Left>
           </Row>

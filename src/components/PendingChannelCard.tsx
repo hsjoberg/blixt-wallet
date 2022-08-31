@@ -145,7 +145,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                     const txId = channel.channel?.channelPoint?.split(":")[0];
                     onPressViewInExplorer(txId ?? "");
                   }}>
-                    <Text style={{ fontSize: 8 }}>{t("channel.viewInBlockExplorer")}</Text>
+                    <Text style={{ fontSize: 8 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
                   </Button>
                 </Left>
               </Row>
@@ -252,7 +252,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               <Row style={{ width: "100%" }}>
                 <Left>
                   <Button style={{ marginTop: 14 }} small={true} onPress={(() => onPressViewInExplorer((channel as lnrpc.PendingChannelsResponse.ClosedChannel).closingTxid))}>
-                    <Text style={{ fontSize: 8 }}>{t("channel.viewInBlockExplorer")}</Text>
+                    <Text style={{ fontSize: 8 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
                   </Button>
                 </Left>
               </Row>
@@ -263,7 +263,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               <Row style={{ width: "100%" }}>
                 <Left>
                   <Button style={{ marginTop: 14 }} small={true} onPress={(() => onPressViewInExplorer((channel as lnrpc.PendingChannelsResponse.IClosedChannel)?.closingTxid))}>
-                    <Text style={{ fontSize: 8 }}>{t("channel.viewInBlockExplorer")}</Text>
+                    <Text style={{ fontSize: 8 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
                   </Button>
                 </Left>
               </Row>
