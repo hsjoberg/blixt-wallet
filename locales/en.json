@@ -315,7 +315,6 @@
   },
   "onchain.onChainTransactionDetails": {
     "title": "Transaction",
-    "blockExplorer": "See in Block Explorer",
     "txHash": "Id",
     "timeStamp": "Date",
     "amount": "Amount",
