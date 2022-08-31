@@ -252,6 +252,7 @@ autopilot.heuristic=preferential:0.05
       }
 #elseif os(iOS)
       let activityController = UIActivityViewController(activityItems: [base64Backups], applicationActivities: nil)
+      activityController.popoverPresentationController?.sourceView = UIView() // so that iPads won't crash, https://stackoverflow.com/a/35931947
       RCTSharedApplication()?.delegate?.window??.rootViewController?.present(activityController, animated: true, completion: {
         resolve(true)
       })
