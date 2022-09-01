@@ -6,7 +6,8 @@
       "description": "Beskrivning",
       "amount": "Belopp",
       "fee": "Avgift",
-      "search": "Sök"
+      "search": "Sök",
+      "viewInBlockExplorer": "Visa i blockexplorer"
     },
     "buttons": {
       "ok": "Okej",
@@ -65,7 +66,7 @@
       "pasteFromClipboard": "Klistra in ifrån urklipp",
       "sendToLightningAddress": "Skicka till Lightningadress",
       "contactsAndServices": "Kontakter & Tjänster",
-      "lightningBrowser": "Lightning-webbläsare",
+      "lightningBrowser": "Lightningwebbläsare",
       "onChainWallet": "On-chain",
       "lightningChannels": "Lightningkanaler",
       "keysendExperiment": "Keysendexperiment",
@@ -87,7 +88,7 @@
       "alert": "Bitcoinadress kopierat till urklipp"
     },
     "doBackup": {
-      "msg1": "Tack för att din använder Blixt Wallet!",
+      "msg1": "Tack för att du använder Blixt Wallet!",
       "msg2": "Vi rekommenderar dig att skapa en backup av plånboken så att du kan återställa dina pengar ifall du förlorar din telefon.",
       "backup": "Skapa backup"
     },
@@ -273,7 +274,6 @@
       "localCommitmentTxid": "Lokalt commitment-TXID",
       "remoteCommitmentTxid": "Motpartens commitment-TXID",
       "closeChannel": "Stäng kanal",
-      "viewInBlockExplorer": "Visa i blockexplorer",
       "closeChannelPrompt": {
         "title": "Stäng kanal"
       }
@@ -315,7 +315,6 @@
   },
   "onchain.onChainTransactionDetails": {
     "title": "Transaktion",
-    "blockExplorer": "See in en blockexplorer",
     "txHash": "Id",
     "timeStamp": "Datum",
     "amount": "Belopp",
