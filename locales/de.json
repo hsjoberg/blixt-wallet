@@ -6,7 +6,8 @@
       "description": "Beschreibung",
       "amount": "Betrag",
       "fee": "Gebühr",
-      "search": "Suche"
+      "search": "Suche",
+      "viewInBlockExplorer": "Im Block Explorer ansehen"
     },
     "buttons": {
       "ok": "Ok",
@@ -273,7 +274,6 @@
       "localCommitmentTxid": "Eigene Commitment TXID",
       "remoteCommitmentTxid": "Fremde Commitment TXID",
       "closeChannel": "Kanal schließen",
-      "viewInBlockExplorer": "Im Block Explorer ansehen",
       "closeChannelPrompt": {
         "title": "Kanal schließen"
       }
@@ -315,7 +315,6 @@
   },
   "onchain.onChainTransactionDetails": {
     "title": "Transaktion",
-    "blockExplorer": "Anzeigen im Block Explorer",
     "txHash": "Id",
     "timeStamp": "Datum",
     "amount": "Betrag",
