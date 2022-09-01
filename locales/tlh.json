@@ -5,7 +5,9 @@
       "nodeAlias": "LayerteS",
       "description": "Qurgh",
       "amount": "'Antu'",
-      "fee": "Ngeb"
+      "fee": "Ngeb",
+      "search": "SoQ",
+      "viewInBlockExplorer": "qorDu'Daq"
     },
     "buttons": {
       "ok": "lu'",
@@ -24,7 +26,7 @@
       "error": "Qagh",
       "warning": "ghob",
       "result": "reynalDo",
-      "pending": "ngeH",
+      "pending": "ghot",
       "done": "pItlh",
       "dismiss": "QIH",
       "lastSync": "jatlh",
@@ -89,6 +91,10 @@
       "msg1": "qatlho' Blixt Wallet!",
       "msg2": "wo'maj nadev Data'laHchugh, ngIvwI'ghom'e' wIqelchu'meH, ngIvlu'taHvIS ngIvwI'ghom ra'wI' 'e' vIHon.",
       "backup": "yojHa'"
+    },
+    "newChannelBeingOpened": {
+      "info": "pa'DajDaq peplaw'taH.",
+      "view": "ghob"
     }
   },
   "help": {
@@ -244,6 +250,33 @@
     },
     "balance": {
       "title": "ngaD"
+    },
+    "channel": {
+      "alias": "'oSrIq",
+      "node": "ghobe'",
+      "channelId": "batlh ID",
+      "status": "Dotlh",
+      "statusActive": "'aqDaj",
+      "statusInactive": "jiSay'rup",
+      "statusPending": "ghot",
+      "statusClosing": "qalI'qos",
+      "statusForceClosing": "'elqangchugh",
+      "statusWaitingForClose": "mIw'a'",
+      "capacity": "qab",
+      "howMuchCanBeSent": "Qel",
+      "howMuchCanBeReceived": "qelI'laH",
+      "localReserve": "qoj",
+      "commitmentFee": "tlha'chu'",
+      "pendingFunds": "tlhab",
+      "balanceInLimbo": "ngab",
+      "pendingHtlcs": "ghot HTLCs",
+      "maturityHeight": "'ej naDev",
+      "localCommitmentTxid": "QumwI''a' TXID",
+      "remoteCommitmentTxid": "yIpoSmoH TXID",
+      "closeChannel": "mIghchoH",
+      "closeChannelPrompt": {
+        "title": "mIghchoH"
+      }
     }
   },
   "lightningInfo.openChannel": {
@@ -282,7 +315,6 @@
   },
   "onchain.onChainTransactionDetails": {
     "title": "Huq",
-    "blockExplorer": "ghe''orDaq ghu'vam",
     "txHash": "ID",
     "timeStamp": "Qo', joH.",
     "amount": "'antu'",
@@ -807,6 +839,10 @@
       "keysend": {
         "title": "qeylIS",
         "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "leghchugh (cha'DIch)",
+        "subtitle": "{{expiry}} cha'DIch"
       }
     },
     "debug": {
@@ -850,6 +886,16 @@
       "rescanWallet": {
         "title": "yabwIj",
         "subtitle": "mIw'a' lutmeyvam tlhaq SuvwI'"
+      },
+      "getNodeInfo": {
+        "title": "yIghoSQo'"
+      },
+      "demoMode": {
+        "title": "Huch yIghoS",
+        "subtitle": "targhhom vIghaj. qo' neH"
+      },
+      "disableGraphCache": {
+        "title": "Qotlh lnd graph ngev"
       }
     }
   },
