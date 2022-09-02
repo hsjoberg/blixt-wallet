@@ -658,7 +658,7 @@
         "touchID": "Touch ID"
       },
       "chainSync": {
-        "title": "Sincronización de cadena agendada",
+        "title": "Sincronización de cadena programada",
         "subtitle": "Corre en segundo plano cada 4 horas",
         "dialog": {
           "title": "No recomendado",
@@ -687,7 +687,7 @@
         "title": "Nodo de Bitcoin",
         "subtitle": "Establecer nodo de Bitcoin (BIP157) para conectar a",
         "setDialog": {
-          "title": "Poner nodo",
+          "title": "Establecer Nodo",
           "info": "Configure un nodo Bitcoin compatible con BIP157 para establecer una conexión.",
           "leaveBlankToSearch": "Déjelo en blanco para permitir que Blixt Wallet busque en la red Bitcoin un nodo válido.",
           "longPressToReset": "Para restablecer el nodo predeterminado ({{defaultNode}}), mantenga presionada la opción."
