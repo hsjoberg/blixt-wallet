@@ -658,7 +658,7 @@
         "touchID": "Touch ID"
       },
       "chainSync": {
-        "title": "Sincronización de cadena agendada",
+        "title": "Sincronización de cadena programada",
         "subtitle": "Corre en segundo plano cada 4 horas",
         "dialog": {
           "title": "No recomendado",
@@ -687,10 +687,10 @@
         "title": "Nodo de Bitcoin",
         "subtitle": "Establecer nodo de Bitcoin (BIP157) para conectar a",
         "setDialog": {
-          "title": "Poner nodo",
+          "title": "Establecer Nodo",
           "info": "Configure un nodo Bitcoin compatible con BIP157 para establecer una conexión.",
-          "leaveBlankToSearch": "Déjelo en blanco para permitir que Blixt Wallet busque en la red Bitcoin un nodo válido.",
-          "longPressToReset": "Para restablecer el nodo predeterminado ({{defaultNode}}), mantenga presionada la opción."
+          "leaveBlankToSearch": "Déjalo en blanco para permitir que Blixt Wallet busque en la red Bitcoin un nodo válido.",
+          "longPressToReset": "Para restablecer el nodo predeterminado ({{defaultNode}}), mantén presionada la opción."
         },
         "restoreDialog": {
           "title": "Restaurar nodo",
@@ -699,20 +699,20 @@
       },
       "restartDialog": {
         "title": "Reinicio requerido",
-        "msg": "Blixt Wallet tiene que ser reiniciada antes de aplicar la nueva configuración.",
+        "msg": "Blixt Wallet debe reiniciarse antes de aplicar la nueva configuración.",
         "msg1": "¿Te gustaría hacer esto ahora?"
       },
       "rpc": {
-        "title": "Poner bitcoind RPC Host"
+        "title": "Establecer servidor de bitcoind RPC"
       },
       "zmqRawBlock": {
-        "title": "Poner bitcoind ZMQ Raw Block Host"
+        "title": "Establecer servidor de bitcoind ZMQ Raw Block"
       },
       "zmqRawTx": {
-        "title": "Poner bitcoind ZMQ Raw Tx Host"
+        "title": "Establecer servidor de bitcoind ZMQ Raw Tx"
       },
       "p2tr": {
-        "title": "Habilite la recepción en On-chain a través de Taproot (P2TR)"
+        "title": "Habilita la recepción en On-chain a través de Taproot (P2TR)"
       }
     },
     "LN": {
@@ -731,10 +731,10 @@
       },
       "inbound": {
         "title": "Servicios de canal entrante",
-        "subtitle": "Usar un servicio de canal entrante para recibir pagos",
+        "subtitle": "Usar un servicio que otorgue capacidad entrante para poder recibir pagos",
         "dialog": {
           "title": "Proveedor de canal entrante",
-          "msg1": "Elige un proveedor de canal entrante y presione en Continuar.",
+          "msg1": "Elige un proveedor de canal entrante y presiona en Continuar.",
           "msg2": "Tu navegador web abrirá la página web del proveedor correspondiente cuando sea posible solicitar un canal.",
           "msg3": "Cuando lo hayas hecho, puedes copiar la dirección del código y/o abrir el enlace usando Blixt Wallet."
         }
@@ -748,7 +748,7 @@
         },
         "restoreDialog": {
           "title": "Restaurar servidor Dunder",
-          "msg": "¿Te gustaría restaurar al servidor por defecto de Dunder?"
+          "msg": "¿Te gustaría restaurar el servidor por defecto de Dunder?"
         }
       },
       "graphSync": {
@@ -824,10 +824,10 @@
           "msg5": "Razón: Para conseguir la altura actual del bloque",
           "msg6": "Razón: Para la copia de seguridad de Google Drive",
           "msg7": "Razón: Para confiar en los nodos de Lightning",
-          "msg8": "Navegador WebLN y LNURL tampoco será usado Tor."
+          "msg8": "Los navegadores WebLN y LNURL no usarán Tor."
         },
         "disabled": {
-          "title": "Reiniciar aplicación y desactivar Tor",
+          "title": "Reiniciar la aplicación y desactivar Tor",
           "msg1": "Deshabilitar los requisitos de Tor y reiniciar la aplicación.",
           "msg2": "¿Te gustaría proceder?"
         }
@@ -842,13 +842,13 @@
       },
       "invoiceExpiry": {
         "title": "Vencimiento de la factura (segundos)",
-        "subtitle": "{{expiración}} segundos"
+        "subtitle": "{{expiry}} segundos"
       }
     },
     "debug": {
       "title": "Debug",
       "startup": {
-        "title": "Mostrar la información del inicio de la app",
+        "title": "Mostrar información sobre el inicio de la aplicación",
         "subtitle": ""
       },
       "helpCencer": {
@@ -892,10 +892,10 @@
       },
       "demoMode": {
         "title": "Activar el Modo Demo",
-        "subtitle": "Se utiliza para la promoción. Reinicie la aplicación para restablecer"
+        "subtitle": "Se utiliza para la promoción. Reinicie la aplicación para restablecerla"
       },
       "disableGraphCache": {
-        "title": "Desactivar la caché de gráficos lnd"
+        "title": "Desactivar la caché del grafo lnd"
       }
     }
   },
@@ -906,7 +906,7 @@
     "msg3": "Cartera de código abierto con licencia MIT",
     "msg4": "Creada usando",
     "msg5": "y otros proyectos increíbles de código abierto",
-    "msg6": "El ícono de Tor esta lincenciado bajo CC BY 3.0 by",
+    "msg6": "El icono de Tor está lincenciado bajo CC BY 3.0 by",
     "msg7": "licencia"
   },
   "settings.setPincode": {
@@ -972,7 +972,7 @@
   "settings.torShowOnionAddress": {
     "title": "Tor Onion Service",
     "msg1": "Escanear este código QR para abrir un canal a esta cartera",
-    "msg2": "No se pudo resolver dirección onion"
+    "msg2": "No se pudo resolver la dirección onion"
   },
   "welcome.addFunds": {
     "title": "Añadir fondos",
