@@ -1,0 +1,1060 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Lightning Adres",
+      "nodeAlias": "Node alias",
+      "description": "Beschrijving",
+      "amount": "Bedrag",
+      "fee": "Vergoeding",
+      "search": "Zoeken",
+      "viewInBlockExplorer": "Bekijken in block explorer"
+    },
+    "buttons": {
+      "ok": "Ok",
+      "cancel": "Annuleren",
+      "continue": "Verder Gaan",
+      "skip": "Overslaan",
+      "proceed": "Doorgaan",
+      "back": "Terug",
+      "no": "Neen",
+      "yes": "Ja",
+      "save": "Opslaan",
+      "copy": "Kopiëren"
+    },
+    "msg": {
+      "status": "Status",
+      "error": "Fout",
+      "warning": "Waarschuwing",
+      "result": "Resultaat",
+      "pending": "in behandeling",
+      "done": "Klaar",
+      "dismiss": "Afwijzen",
+      "lastSync": "Laatste synchronisatie",
+      "lastSyncAttempt": "Laatste synchronisatie poging",
+      "clipboardCopy": "Gekopieerd naar klembord",
+      "written": "Geschreven",
+      "enabled": "ingeschakeld",
+      "disabled": "uitgeschakeld"
+    }
+  },
+  "welcome.start": {
+    "title": "Welkom",
+    "createWallet": {
+      "title": "Wallet aanmaken",
+      "msg1": "Blixt Wallet bevindt zich nog in een vroeg ontwikkelingsstadium.",
+      "msg2": "Als je deze wallet gebruikt, zorg er dan voor dat je begrijpt dat je jouw geld zou kunnen verliezen.",
+      "msg3": "Er is momenteel geen WatchTower-ondersteuning om je kanalen te bewaken terwijl je offline bent.",
+      "msg4": "Ik ben roekeloos, ga verder"
+    },
+    "restoreWallet": {
+      "title": "Wallet Herstellen"
+    },
+    "menu": {
+      "enableTor": "Tor Inschakelen",
+      "disableTor": "Tor Uitschakelen",
+      "setBitcoinNode": "Bitcoin node instellen"
+    }
+  },
+  "footerNav": {
+    "receive": "Ontvangen",
+    "send": "Verzenden"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Scannen",
+      "receive": "Ontvangen",
+      "pasteFromClipboard": "Plakken vanaf Klembord",
+      "sendToLightningAddress": "Verzenden naar Lightning-adres",
+      "contactsAndServices": "Contacten & Diensten",
+      "lightningBrowser": "Lightning Browser",
+      "onChainWallet": "On-chain",
+      "lightningChannels": "Lightning Kanalen",
+      "keysendExperiment": "Keysend-experiment",
+      "showMore": "Geavanceerd"
+    },
+    "madeInSweden": "Gemaakt met ⚡ in Zweden"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "Wallet-herstel aan de gang.",
+      "msg2": "Wallet-herstel compleet.",
+      "more": "Meer info"
+    },
+    "sendOnChain": {
+      "title": "Welkom bij Blixt Wallet!",
+      "msg1": "Om te beginnen, stuur on-chain bitcoin naar het bitcoin-adres aan de rechterkant.",
+      "msg2": "Er wordt automatisch een Lightning kanaal voor je geopend.",
+      "msg3": "Stuur minstens",
+      "alert": "Bitcoin-adres gekopieerd naar klembord"
+    },
+    "doBackup": {
+      "msg1": "Bedankt voor het gebruiken van Blixt Wallet!",
+      "msg2": "We raden aan een back-up van de wallet te maken zodat je jouw geld kunt recupereren indien je jouw telefoon zou verliezen.",
+      "backup": "Wallet backup maken"
+    },
+    "newChannelBeingOpened": {
+      "info": "Er wordt een nieuw kanaal geopend...",
+      "view": "Uiterlijk"
+    }
+  },
+  "help": {
+    "title": "Hulp",
+    "msg1": "Als je problemen ondervindt of feedback hebt, kun je contact opnemen met de Blixt Wallet-ontwikkelaars door een issue te openen op Github of door contact met ons op te nemen via e-mail.",
+    "msg2": "Je bent ook welkom om lid te worden van onze openbare Telegram-chatgroep.",
+    "msg3": "Aangezien Blixt Wallet een nieuwe wallet is, hebben we jouw feedback nodig over problemen die je kunt tegenkomen.",
+    "telegramGroup": "Telegram-groep"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Bezig met synchroniseren",
+      "title1": "Synchronisatie voltooid",
+      "msg1": "Blixt Wallet synchroniseert momenteel de blockchain.",
+      "msg2": "Zodra jouw wallet gesynchroniseerd is met de blockchain, worden on-chain transacties en fondsen herkend en kunnen ze worden bekeken vanuit het Bitcoin on-chain-gedeelte.",
+      "msg3": "Blixt Wallet is in sync met de blockchain.",
+      "blockHeight": {
+        "title": "Huidige blokhoogte",
+        "msg1": "Voortgang blockchain-synchronisatie"
+      }
+    },
+    "recoveryMode": {
+      "title": "Herstelvooruitgang",
+      "msg1": "Herstellen voltooid",
+      "msg2": "Controleer de secties Lightning Kanalen & On-chain"
+    },
+    "lndLog": {
+      "show": "Toon LND log",
+      "copy": "Kopieer log tekst"
+    }
+  },
+  "transactionDetails": {
+    "title": "Transactie",
+    "date": "Datum",
+    "note": "Notitie",
+    "website": "Website",
+    "type" : "Type",
+    "lnurl": {
+      "messageFromWebsite": "Bericht van",
+      "urlReceivedFromWebsite": "URL ontvangen van",
+      "secretMessage": "Geheim bericht"
+    },
+    "payer": "Betaler",
+    "recipient": "Ontvanger",
+    "amountInFiatTimeOfPayment": "Bedrag in Fiat (Tijdstip van Betaling)",
+    "numberOfHops": "Aantal hops",
+    "remotePubkey": "Remote pubkey",
+    "paymentHash": "Payment hash",
+    "preimage": "Preimage",
+    "status": "Status",
+    "goBack": "Ga terug",
+    "button": {
+      "setNote": "Notitie toevoegen",
+      "cancelInvoice": "Betalingsverzoek annuleren",
+      "showMap": "Map tonen"
+    },
+    "setNoteDialog": {
+      "title": "Notitie",
+      "text": "Notitie toevoegen voor deze transactie"
+    }
+  },
+  "web.info": {
+    "title": "Interactieve demo",
+    "pressToTry": "Tap om Blixt uit te proberen"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Ontvangen"
+    },
+    "createInvoice": {
+      "title": "Betaalverzoek creëren",
+      "error": "Bedrag betaalverzoek kan niet hoger zijn dan",
+      "alert": "Vooraleer je bitcoin kan ontvangen, moet je een Lightning-kanaal openen.",
+      "lsp": {
+        "msg": "Wanneer aan dit betaalverzoek is voldaan wordt er een betaalkanaal geopend door Dunder LSP.",
+        "msg1": "Wat is dit?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Kanaal wordt geopend",
+      "msg": "Om een betaling voor dit betaalverzoek te kunnen accepteren, moet er een kanaal geopend worden op het Lightning Netwerk.",
+      "msg1": "Dit vereist een éénmalige bijdrage van ongeveer",
+      "alert": "Kon geen verbinding maken met Dunder, probeer het later opnieuw.",
+      "proceed": "Doorgaan"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Bedrag",
+        "change": "Fiat-eenheid wijzigen",
+        "dunderPlaceholder": "Minstens"
+      },
+      "amountBitcoin": {
+        "title": "Bedrag",
+        "change": "Bitcoin-eenheid wijzigen",
+        "dunderPlaceholder": "Minstens"
+      },
+      "payer": {
+        "title": "Betaler",
+        "placeholder": "Voor boekhouding"
+      },
+      "description": {
+        "title": "Bericht",
+        "placeholder": "Bericht aan betaler"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "Over Dunder LSP",
+    "msg": "Dunder is een Lightning Service Provider (LSP) die automatisch kanalen voor jouw opent wanneer je niet over genoeg inkomende liquiditeit beschikt.",
+    "msg1": "Dit kan bijvoorbeeld het geval zijn wanneer je Blixt Wallet voor het eerst gaat gebruiken.",
+    "msg2": "Omdat dit een on-chain transactie vereist, worden er Bitcoin transactiekosten in mindering gebracht op de inkomende betaling. Toekomstige betalingen zullen gebruik kunnen maken van het nieuw geopende betaalkanaal met het Lightning-netwerk.",
+    "msg3": "Dunder is",
+    "msg4": "open-bron",
+    "msg5": "software en je kan de standaard dienstverlener aanpassen in de Instellingen."
+  },
+  "receive.receiveQr": {
+    "title": "Ontvangen",
+    "qr": {
+      "title": "Scan deze QR-code",
+      "msg": "Vervalt in {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Betaalverzoek betalen"
+    },
+    "form": {
+      "invoice": {
+        "title": "Betaalverzoek"
+      },
+      "amount": {
+        "title": "Bedrag"
+      },
+      "recipient": {
+        "title": "Ontvanger"
+      },
+      "nodeAlias": {
+        "title": "Node Alias"
+      },
+      "description": {
+        "title": "Bericht"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "BETALING VERZONDEN"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Lightning Kanalen"
+    },
+    "balance": {
+      "title": "Saldo"
+    },
+    "channel": {
+      "alias": "Alias",
+      "node": "Node",
+      "channelId": "Kanaal ID",
+      "status": "Status",
+      "statusActive": "Actief",
+      "statusInactive": "Niet actief",
+      "statusPending": "In behandeling",
+      "statusClosing": "Afsluitend",
+      "statusForceClosing": "Gedwongen sluiting",
+      "statusWaitingForClose": "Wachtend op sluiting",
+      "capacity": "Capaciteit",
+      "howMuchCanBeSent": "Kan verzenden",
+      "howMuchCanBeReceived": "Kan ontvangen",
+      "localReserve": "Lokale reserve",
+      "commitmentFee": "Vastleggingsvergoeding",
+      "pendingFunds": "Fondsen in behandeling",
+      "balanceInLimbo": "Saldo in limbo",
+      "pendingHtlcs": "HTLCs in behandeling",
+      "maturityHeight": "Maturiteit blokhoogte",
+      "localCommitmentTxid": "Lokale vastlegging TXID",
+      "remoteCommitmentTxid": "Vastlegging TXID tegenpartij",
+      "closeChannel": "Kanaal sluiten",
+      "closeChannelPrompt": {
+        "title": "Kanaal sluiten"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Kanaal openen"
+    },
+    "form": {
+      "title": "Kanaal openen",
+      "channel": {
+        "title": "Node URI",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Bedrag",
+        "placeholder": "Bedrag"
+      },
+      "fee_rate": {
+        "title": "Tarief"
+      }
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "On-chain fondsen"
+    },
+    "address": {
+      "title": "Stuur Bitcoin on-chain naar dit adres",
+      "alert": "Gekopieerd naar klembord."
+    },
+    "newAddress": {
+      "title": "Nieuw adres genereren"
+    },
+    "withdraw": {
+      "title": "Coins opnemen"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Transacatie",
+    "txHash": "Id",
+    "timeStamp": "Datum",
+    "amount": "Bedrag",
+    "totalFees": "Tarief",
+    "label": "Label",
+    "destAddresses": "Bestemming",
+    "numConfirmations": "Bevestigingen",
+    "blockHeight": "Blokhoogte",
+    "blockHash": "Blok hash",
+    "rawTxHex": {
+      "title": "Ruwe tx hex",
+      "msg": "Tap om te kopiëren"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Transactie Log"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Coins opnemen"
+    },
+    "form": {
+      "address": {
+        "title": "Adres",
+        "placeholder": "Bitcoin-adres"
+      },
+      "amount": {
+        "title": "Bedrag",
+        "placeholder": "Bedrag",
+        "withdrawAll": "Alle fondsen gebruiken",
+        "all": "Alles"
+      },
+      "feeRate": {
+        "title": "Tarief",
+        "auto": "auto"
+      },
+      "withdraw": {
+        "title": "Opnemen",
+        "alert": "Opnemen geslaagd."
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Inlogverzoek",
+      "msg": "Wil je inloggen op",
+      "success": "Geauthenticeerd op"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Inkomend kanaal openen"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Meta-data bekijken",
+      "dialog": {
+        "title": "Technische meta-data"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} staat in je lijst van contacten"
+      },
+      "add": {
+        "title": "Aan contactlijst toevoegen",
+        "msg": "Wil je {{lightningAddress}} aan je contactlijst toevoegen?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Betaalcode voor {{domain}} staat in je contactlijst"
+      },
+      "add": {
+        "title": "Aan contactlijst toevoegen",
+        "msg": "Wil je de betaalcode voor {{domain}} aan je contactlijst toevoegen?"
+      }
+    },
+    "unableToPay": "Kan niet betalen",
+    "payerData": {
+      "commentAllowed": "Opmerking voor {{target}} (max {{letters}} letters)",
+      "sendNameWithComment": "Vermeld mijn naam bij deze opmerking",
+      "name": {
+        "ask": "Vermeld mijn naam bij deze betaling",
+        "mandatory": "Jouw naam moet worden vermeld bij deze betaling"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "Betaling mankeert een beschrijving"
+    },
+    "pay": {
+      "title": "Betaal",
+      "error": {
+        "mustProvideComment": "Je moet een opmerking toevoegen als je ervoor kiest om jouw naam aan deze betaling toe te voegen"
+      }
+    },
+    "cancel": {
+      "title": "Annuleren"
+    },
+    "form": {
+      "asksYouToPay": "vraagt je om te betalen.",
+      "description": {
+        "title": "Beschrijving"
+      },
+      "amount": {
+        "title": "Bedrag",
+        "to": "aan",
+        "placeholder": "Invoer bedrag"
+      },
+      "alert": "Kan niet betalen"
+    },
+    "done": {
+      "message": {
+        "title": "Bericht van"
+      },
+      "url": {
+        "description": "Beschrijving",
+        "domain": "URL ontvangen van",
+        "done": {
+          "title": "Klaar"
+        },
+        "copy": {
+          "title": "Kopiëren naar klembord",
+          "msg": "Gekopieerd naar klembord."
+        },
+        "open": {
+          "title": "Browser openen"
+        }
+      },
+      "aes": {
+        "domain": "Geheim versleuteld bericht ontvangen van",
+        "description": "Bericht van",
+        "secret": "Geheim bericht"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "Over het Lightning-Adres",
+      "msg1": "Lightning-adres",
+      "msg2": "is een manier om een persoon of een dienst op het Lightning Netwerk te betalen.",
+      "msg3": "Ze zien eruit als e-mailadressen, maar in plaats van een e-mail naar de ontvanger te sturen, stuur je geld.",
+      "msg4": "Blixt Wallet voorziet volledige ondersteuning voor het verzenden naar een Lightning-adres, maar ontvangen",
+      "msg5": "via een Lightning-adres is nog niet mogelijk."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "Stuur een opname-verzoek naar {{domain}}",
+      "addToContactList": {
+        "title": "Aan Contacten toevoegen",
+        "msg": "Wil je deze opname-code voor {{domain}} aan je Contacten toevoegen?",
+        "note": "Account op {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "Opname-verzoek",
+      "msg": "Bericht van",
+      "dialog": {
+        "msg": "Bedrag"
+      },
+      "dialog1": {
+        "minSat": "Min opname bedrag",
+        "maxSat": "Max opname bedrag",
+        "placeholder": "Bedrag"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Contacten & Diensten",
+      "lightningAddressAlreadyExists": "bestaat al in jouw contactlijst",
+      "nothingHereYet": "Er is hier nog niets...",
+      "whyNotAdd": "Waarom voegt je geen Lightning-adres contact toe door:",
+      "tappingHere": "hier te tappen"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Beschikbaar saldo",
+        "error": "Ongeldige bewerking, contactpersoon heeft geen LNURL-opnamecode"
+      },
+      "list": {
+        "pay": "Betalingen aan",
+        "account": "Account bij"
+      },
+      "send": {
+        "title": "Verzenden",
+        "couldNotPay": "Kan niet betalen met deze LNURL-betaalcode",
+        "invalidResponse": "Het antwoord was geen geldig LNURL-betaal antwoord (kreeg {{response}})",
+        "invalidOperation": "Ongeldige bewerking, contactpersoon heeft geen LUD-16-ID of LNURL-betaalcode"
+      },
+      "withdraw": {
+        "title": "Opnemen",
+        "couldNotPay": "Kan niet betalen met deze LNURL-betaalcode",
+        "invalidResponse": "Het antwoord was geen geldig LNURL-betaal antwoord (kreeg {{response}})",
+        "invalidOperation": "Ongeldige bewerking, contactpersoon heeft geen LNURL-opnamecode"
+      },
+      "deleteContact": {
+        "title": "Contact verwijderen",
+        "msg": "Weet je zeker dat je contact {{contact}} wilt verwijderen?"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Wil je de browser afsluiten?",
+    "home": "Ga terug naar winkellijst",
+    "placeholder": "Type URL hier"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "Gekopieerd naar klembord"
+    },
+    "dialog": {
+      "msg1": "Welkom in de keysend speeltuin",
+      "msg2": "Met Keysend kan je een andere Blixt Wallet betalen (of een Lightning-node die keysend ondersteunt) zonder dat je een betaalverzoek nodig hebt.",
+      "msg3": "Klik op de camera om de QR-code van een andere wallet te scannen of geef hieronder een openbare sleutel en routehints op."
+    },
+    "send": {
+      "title": "Verzenden",
+      "msg": "Keysend betaling",
+      "error": {
+        "checkAmount": "Controleer bedrag",
+        "missingPubkey": "Ontbrekende pubkey"
+      },
+      "alert": "Betaling gelukt"
+    },
+    "form": {
+      "amount": {
+        "title": "Bedrag sat"
+      },
+      "pubkey": {
+        "title": "Publieke sleutel",
+        "placeholder": "Pubkey"
+      },
+      "route": {
+        "title": "Routehints",
+        "placeholder": "Routehints"
+      },
+      "message": {
+        "title": "Bericht",
+        "placeholder": "Voeg hier een chat-bericht toe"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "Instellingen",
+    "general": {
+      "title": "Algemeen",
+      "name": {
+        "title": "Naam",
+        "subtitle": "Wordt gebruikt in transacties",
+        "dialog": {
+          "msg": "Kies een naam die kan worden gebruikt bij transacties.\n\nJouw naam wordt vermeld op betaalverzoeken van zowel degenen die jou betalen als de mensen aan wie jij betaalt.",
+          "accept": "Naam instellen"
+        }
+      },
+      "lang": {
+        "title": "Taal",
+        "dialog": {
+          "title": "Taal selecteren"
+        }
+      },
+      "pushNotification": {
+        "title": "Push berichten",
+        "subtitle": "Voor transactie- en kanaalgebeurtenissen"
+      },
+      "checkClipboard": {
+        "title": "Controleer klembord op betaalverzoeken",
+        "subtitle": "Automatisch klembord controleren op betaalverzoeken"
+      },
+      "saveGeolocation": {
+        "title": "Bewaar geo-locatie van transactie",
+        "subtitle": "De locatie van een transactie lokaal opslaan",
+        "logGranted": "Geo-locatie toegestaan",
+        "logDenied": "Toestemming voor geo-locatie geweigerd"
+      },
+      "mapTheme": {
+        "title": "Map thema instellen"
+      }
+    },
+    "wallet": {
+      "title": "Wallet",
+      "seed": {
+        "show": {
+          "title": "Toon mnemonic",
+          "subtitle": "Toon 24-woorden seed voor deze wallet",
+          "dialog": {
+            "title": "Seed",
+            "alert": "Gekopieerd naar klembord",
+            "copy": "Seed kopiëren"
+          }
+        },
+        "remove": {
+          "title": "Verwijder mnemonic van apparaat",
+          "subtitle": "Verwijder seed permanent van dit apparaat",
+          "dialog": {
+            "title": "Seed verwijderen",
+            "msg": "Hiermee wordt het seed permanent van dit apparaat verwijderd. Doe dit alleen als je een back-up van je seed hebt gemaakt!",
+            "accept": "Verwijder seed"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Kanaalback-up exporteren",
+          "alert": "Bestand geschreven:"
+        },
+        "verify": {
+          "title": "Kanaalback-up verifiëren"
+        },
+        "googleCloud": {
+          "title": "Google Drive kanaalback-up",
+          "subtitle": "Automatisch een back-up maken van kanalen naar Google Drive",
+          "alert": "Google Drive-back-up ingeschakeld"
+        },
+        "googleCloudForce": {
+          "title": "Activeer handmatig Google Drive-back-up",
+          "alert": "Kanaalback-up naar Google Drive compleet"
+        },
+        "iCloud": {
+          "title": "iCloud kanaalback-up",
+          "subtitle": "Automatisch een back-up maken van kanalen naar iCloud",
+          "alert": "iCloudback-up"
+        },
+        "iCloudForce": {
+          "title": "Activeer handmatig iCloud-back-up",
+          "alert": "Kanaalback-up naar iCloud compleet"
+        },
+        "error": "Fout back-up"
+      }
+    },
+    "security": {
+      "title": "Veiligheid",
+      "pincode": {
+        "title": "Log in met pincode"
+      },
+      "biometrics": {
+        "title": "Log in met",
+        "fingerprint": "vingerafdruk",
+        "faceId": "Gezicht ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Geplande blockchainsynchronisatie",
+        "subtitle": "Actief op de achtergrond elke 4 uur",
+        "dialog": {
+          "title": "Niet aanbevolen",
+          "msg": "Waarschuwing. Het wordt niet aanbevolen om geplande blockchainsynchronisatie uit te schakelen.\n\nZorg ervoor dat je in-sync blijft met het netwerk, anders loop je het risico jouw geld te verliezen.\n\nDoe dit alleen als je weet wat je doet."
+        }
+      }
+    },
+    "display": {
+      "title": "Weergave",
+      "fiatUnit": {
+        "title": "Fiat-eenheid wijzigen"
+      },
+      "bitcoinUnit": {
+        "title": "Bitcoin-eenheid wijzigen"
+      },
+      "onchainExplorer": {
+        "title": "On-chain verkenner",
+        "dialog": {
+          "title": "Wijzig on-chain verkenner"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Bitcoin Netwerk",
+      "node": {
+        "title": "Bitcoin Node",
+        "subtitle": "Stel Bitcoin node (BIP157) in om verbinding mee te maken",
+        "setDialog": {
+          "title": "Node instellen",
+          "info": "Stel een BIP157-ondersteunende Bitcoin-node in om een verbinding mee tot stand te brengen.",
+          "leaveBlankToSearch": "Laat dit veld leeg om Blixt Wallet op het Bitcoin-netwerk te laten zoeken naar een geldig knooppunt.",
+          "longPressToReset": "Om te resetten naar het standaardknooppunt ({{defaultNode}}), hou de instelling lang ingedrukt."
+        },
+        "restoreDialog": {
+          "title": "Knooppunt herstellen",
+          "msg": "Wil je de standaard node herstellen"
+        }
+      },
+      "restartDialog": {
+        "title": "Herstart vereist",
+        "msg": "Blixt Wallet moet opnieuw worden opgestart voordat de nieuwe configuratie wordt toegepast.",
+        "msg1": "Wil je dat nu doen?"
+      },
+      "rpc": {
+        "title": "Bitcoind RPC Host instellen"
+      },
+      "zmqRawBlock": {
+        "title": "Bitcoind ZMQ Raw Block Host instellen"
+      },
+      "zmqRawTx": {
+        "title": "Bitcoind ZMQ Raw Tx Host instellen"
+      },
+      "p2tr": {
+        "title": "On-chain via Taproot (P2TR) ontvangen inschakelen"
+      }
+    },
+    "LN": {
+      "title": "Lightning Netwerk",
+      "node": {
+        "title": "Toon knooppuntgegevens",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Lightning peers weergeven",
+        "subtitle": ""
+      },
+      "autopilot": {
+        "title": "Automatisch kanalen openen",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Inkomende kanaaldiensten",
+        "subtitle": "Gebruik een inkomende kanaaldienst voor het ontvangen van betalingen",
+        "dialog": {
+          "title": "Aanbieder van inkomende kanalen",
+          "msg1": "Kies een aanbieder voor inkomende kanalen en druk op Doorgaan.",
+          "msg2": "Jouw webbrowser wordt geopend met de website van de betreffende aanbieder, waar je een kanaal kunt aanvragen.",
+          "msg3": "Als je klaar bent, kun je de adrescode kopiëren en/of de link openen met Blixt Wallet."
+        }
+      },
+      "LSP": {
+        "title": "Dunder LSP Server instellen",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Dunder Server instellen",
+          "acept": "Server instellen"
+        },
+        "restoreDialog": {
+          "title": "Dunder Server herstellen",
+          "msg": "Wilt je de standaard Dunder-server herstellen"
+        }
+      },
+      "graphSync": {
+        "title": "Wacht op grafieksynchronisatie voordat je betaalt",
+        "subtitle": "Gesynchroniseerde grafiek leidt tot optimale betalingsroutes"
+      }
+    },
+    "miscelaneous": {
+      "title": "Overige",
+      "about": {
+        "title": "Over",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "App-log kopiëren naar lokale opslag",
+        "subtitle": "",
+        "dialog": {
+          "alert": "App-logbestand gekopieerd naar",
+          "error": "Fout bij kopiëren van app-logbestand."
+        }
+      },
+      "lndLog": {
+        "title": "Kopieer LND log naar lokale opslag",
+        "subtitle": "Bereikt vanaf /sd-kaart/Blixt Wallet",
+        "dialog": {
+          "alert": "LND logbestand gekopieerd",
+          "error": "Fout bij het kopiëren LND log file."
+        }
+      },
+      "dev": {
+        "title": "Ga naar dev scherm",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Vervallen betaalverzoeken automatisch verbergen",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Schermtransities",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Bericht ondertekenen met wallet-sleutel",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Bericht ondertekenen"
+        },
+        "dialog2": {
+          "title": "Handtekening",
+          "alert": "Gekopieerd naar klembord"
+        }
+      }
+    },
+    "experimental": {
+      "title": "Experimenten",
+      "LSP": {
+        "title": "Dunder LSP inschakelen",
+        "subtitle": "ZEER EXPERIMENTEEL. Lightning Service Provider die helpt bij inkomende liquiditeit"
+      },
+      "MPP": {
+        "title": "Multi-path-betalingen inschakelen",
+        "subtitle": "Betalingen kunnen tot 2 paden volgen"
+      },
+      "tor": {
+        "title": "Tor inschakelen",
+        "subtitle": "",
+        "enabled": {
+          "title": "Start de app opnieuw en schakel Tor in",
+          "msg1": "Als je Tor inschakelt, maakt de wallet verbinding met zijn peers (zowel Bitcoin- als Lightning Netwerk-peers) via het Tor-netwerk.",
+          "msg2": "Je kunt ook kanalen verbinden en openen met Lightning-knooppunten die onion-diensten gebruiken.",
+          "msg3": "WAARSCHUWING: Blixt Wallet zal nog steeds met de volgende diensten communiceren zonder Tor",
+          "msg4": "Reden: om fiat/bitcoin-tarieven op te vragen",
+          "msg5": "Reden: Om de huidige blokhoogte te controleren",
+          "msg6": "Reden: Voor back-up van Google Drive",
+          "msg7": "Reden: Voor betrouwbare Lightning-knooppunten",
+          "msg8": "WebLN Browser en LNURL zullen ook geen Tor gebruiken."
+        },
+        "disabled": {
+          "title": "Start de app opnieuw en schakel Tor uit",
+          "msg1": "Tor uitschakelen vereist een herstart van de app.",
+          "msg2": "Wil je verder gaan?"
+        }
+      },
+      "onion": {
+        "title": "Toon Tor onion-dienst",
+        "subtitle": "Voor het verbinden en openen van kanalen met deze wallet"
+      },
+      "keysend": {
+        "title": "Keysend Experiment",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Vervaldatum betaalverzoek (seconden)",
+        "subtitle": "{{expiry}} seconden"
+      }
+    },
+    "debug": {
+      "title": "Debuggen",
+      "startup": {
+        "title": "Opstartinfo meldingen weergeven",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "LndMobile-helpcentrum",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Diagnose Dunder problemen",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "Lees LND-log",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Keysend Test",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Google Drive Testbed",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Config schrijven",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Demo-modus inschakelen",
+        "subtitle": "Gebruikt voor promo. Start de app opnieuw om te resetten"
+      },
+      "rescanWallet": {
+        "title": "Wallet opnieuw scannen",
+        "subtitle": "De blockchain opnieuw scannen voor wallet transacties"
+      },
+      "getNodeInfo": {
+        "title": "Knooppuntinfo ophalen"
+      },
+      "demoMode": {
+        "title": "Demo-modus inschakelen",
+        "subtitle": "Gebruikt voor promo. Start de app opnieuw om te resetten"
+      },
+      "disableGraphCache": {
+        "title": "Schakel LND-grafiekcache uit"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "Over Blixt Wallet",
+    "msg1": "Versie",
+    "msg2": "Door",
+    "msg3": "openbronsoftware wallet met MIT-licentie",
+    "msg4": "Gemaakt met",
+    "msg5": "en andere geweldige openbronsoftware",
+    "msg6": "Tor-pictogram is gelicentieerd onder CC BY 3.0 door",
+    "msg7": "licentie"
+  },
+  "settings.setPincode": {
+    "enter": "Pincode invoeren",
+    "confirm": "Bevestig je pincode"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Voer de huidige pincode in om de pincode te verwijderen"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Lightning Peers"
+    },
+    "alias": "Knooppunt alias",
+    "pubKey": "Knooppunt publieke sleutel",
+    "address": "Knooppunt adres",
+    "data": {
+      "title": "Data",
+      "bytesSent": "bytes verzonden",
+      "bytesRecv": "bytes ontvangen"
+    },
+    "transfer": {
+      "title": "Transfer",
+      "satSent": "sat verzonden",
+      "satRecv": "sat ontvangen"
+    },
+    "inbound": "Inbound",
+    "syncType": "Sync type",
+    "errors": "Fouten",
+    "disconnect": "Verbinding met peer verbreken"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Verbinden met Lightning Peer"
+    },
+    "connect": {
+      "title": "Knooppunt URI",
+      "placeholder": "Peer URI",
+      "accept": "Verbinden"
+    }
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Knooppunt Info",
+    "alias": "Knooppunt Alias",
+    "chain": "Chain",
+    "timestamp": "Best Header Timestamp",
+    "blockHash": "Blok-hash",
+    "blockHeight": "Blokhoogte",
+    "identityPubkey": "Identity Pubkey",
+    "channel": {
+      "title": "Aantal Kanalen",
+      "active": "Actief",
+      "inactive": "Niet actief",
+      "pending": "In behandeling"
+    },
+    "numPeers": "Aantal peers",
+    "syncedToChain": "Gesynchroniseerd met Chain",
+    "syncedToGraph": "Gesynchroniseerd met Grafiek",
+    "nodeUris": "Knooppunt URI",
+    "version": "LND-versie",
+    "features": "Knooppuntfuncties"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Tor Onion Diensten",
+    "msg1": "Scan deze QR-code om een kanaal voor deze wallet te openen",
+    "msg2": "Kan onion-adres niet vinden"
+  },
+  "welcome.addFunds": {
+    "title": "Fondsen toevoegen",
+    "msg1": "Om Lightning te beginnen gebruiken in Blixt Wallet",
+    "msg2": "stuur bitcoin naar het bovenstaande adres"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "Kanalen automatisch openen",
+      "msg": "Open kanalen van zodra on-chain fondsen beschikbaar zijn"
+    },
+    "done": {
+      "title": "Bijna klaar!",
+      "msg1": "Hier zijn enkele wallet-instellingen die je naar wens kunt instellen",
+      "msg2": "Als je klaar bent, druk op doorgaan"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Probeer opnieuw",
+      "msg": "Sorry, je hebt de woorden in de verkeerde volgorde geschreven, probeer opnieuw."
+    },
+    "seed": {
+      "title": "Bevestig je seed"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Google Drive back-up inschakelen",
+      "msg": "Google Drive back-up ingeschakeld"
+    },
+    "backup": {
+      "title": "Cloud Back-up",
+      "msg": "Om ervoor te zorgen dat jouw off-chain-fondsen veilig blijven in het geval van verlies van jouw apparaat, raden we je aan een back-up van kanalen te maken op Google Drive.",
+      "msg1": "Dit houdt een versleutelde back-up van je kanalen bij die alleen samen met jouw wallet seed kan worden gebruikt.",
+      "msg2": "Als je klaar bent, druk op doorgaan."
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "iCloud back-up inschakelen",
+      "msg": "iCloud back-up ingeschakeld"
+    },
+    "backup": {
+      "title": "iCloud Back-up",
+      "msg": "Om ervoor te zorgen dat jouw off-chain-fondsen veilig blijven in het geval van verlies van jouw apparaat, raden we je aan een back-up van kanalen te maken op iCloud.",
+      "msg1": "Dit houdt een versleutelde back-up van je kanalen bij die alleen samen met jouw wallet seed kan worden gebruikt.",
+      "msg2": "Als je klaar bent, druk op doorgaan."
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Wallet herstellen",
+      "msg": "Om jouw wallet te herstellen, schrijf elk woord van jouw seed gescheiden door een spatie.",
+      "msg1": "Als je jouw Lightning Netwerk-kanalen wilt herstellen, moet je beschikken over een bestandsback-up.",
+      "loading": "Herstel Wallet",
+      "channel": {
+        "title": "Kanaalback-up",
+        "file": "Kies een kanaalback-upbestand op schijf",
+        "google": {
+          "title": "Herstellen via Google Drive",
+          "alert": "Herstellen via Google Drive mislukt"
+        },
+        "iCloud": {
+          "title": "Herstellen via iCloud",
+          "alert": "Herstellen via iCloud mislukt"
+        }
+      },
+      "seed": "Seed moet exact 24 woorden zijn"
+    },
+    "backup": {
+      "google": "Back-up via Google Drive",
+      "iCloud": "Back-up via iCloud"
+    }
+  },
+  "welcome.seed": {
+    "title": "Welkom bij Blixt Wallet!",
+    "msg": "Dit jouw back-up seed",
+    "msg1": "Schrijf het op een stuk papier en bewaar het op een veilige plaats.",
+    "msg2": "Mocht je de toegang tot jouw wallet verliezen",
+    "msg3": "kan je jouw geld terugkrijgen door jouw back-up seed te gebruiken.",
+    "msg4": "De gebruikt seed standaard is aezeed.",
+    "button": "ik heb het opgeschreven"
+  }
+}
