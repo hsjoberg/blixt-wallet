@@ -5,7 +5,7 @@ import { Body, Card, Text, CardItem, H1, Toast, View, Button } from "native-base
 import { useStoreState } from "../state/store";
 
 import Blurmodal from "../components/BlurModal";
-import { GITHUB_REPO_URL, HAMPUS_EMAIL, TELEGRAM } from "../utils/constants";
+import { GITHUB_REPO_URL, HAMPUS_EMAIL, TELEGRAM, FAQ} from "../utils/constants";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
@@ -27,6 +27,10 @@ export default function SyncInfo({ route }: any) {
   const onPressTelegram = async () => {
     await Linking.openURL(TELEGRAM);
   }
+  
+  const onPressFAQ = async () => {
+    await Linking.openURL(FAQ);
+  }
 
   return (
     <Blurmodal>
@@ -46,6 +50,9 @@ export default function SyncInfo({ route }: any) {
               {t("msg3")}
             </Text>
             <View style={style.actionBar}>
+              <Button style={style.actionBarButton} onPress={onPressFAQ} small={true}>
+                <Text style={style.actionBarButtonText}>FAQ</Text>
+              </Button>
               <Button style={style.actionBarButton} onPress={onPressGithub} small={true}>
                 <Text style={style.actionBarButtonText}>GitHub</Text>
               </Button>
