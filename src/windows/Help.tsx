@@ -50,9 +50,6 @@ export default function SyncInfo({ route }: any) {
               {t("msg3")}
             </Text>
             <View style={style.actionBar}>
-              <Button style={style.actionBarButton} onPress={onPressFAQ} small={true}>
-                <Text style={style.actionBarButtonText}>FAQ</Text>
-              </Button>
               <Button style={style.actionBarButton} onPress={onPressGithub} small={true}>
                 <Text style={style.actionBarButtonText}>GitHub</Text>
               </Button>
@@ -61,6 +58,9 @@ export default function SyncInfo({ route }: any) {
               </Button>
               <Button style={style.actionBarButton} onPress={onPressEmail} small={true}>
                 <Text style={style.actionBarButtonText}>Email</Text>
+              </Button>
+              <Button style={style.actionBarButton} onPress={onPressFAQ} small={true}>
+                <Text style={style.actionBarButtonText}>FAQ</Text>
               </Button>
             </View>
           </Body>
