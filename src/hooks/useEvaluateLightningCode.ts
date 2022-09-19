@@ -22,6 +22,7 @@ export default function useEvaluateLightningCode() {
 
     if (code.includes("lightning=")) {
       code = code.split("lightning=")[1] ?? "";
+      code = code.split("&")[0] ?? "";
     }
 
     // Check for lnurl
