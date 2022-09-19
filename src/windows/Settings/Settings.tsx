@@ -284,7 +284,8 @@ export default function Settings({ navigation }: ISettingsProps) {
       const res = await DocumentPicker.pickSingle({
         type: [DocumentPicker.types.allFiles],
       });
-      const backupBase64 = await readFile(res.uri, "base64");
+      const backupBase64 = await readFile(res.uri, PLATFORM === "android" ? "base64" : undefined);
+      console.log(backupBase64);
       await verifyChanBackup(backupBase64);
       Alert.alert("Channel backup file is valid");
     } catch (e) {
