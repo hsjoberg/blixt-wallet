@@ -6,7 +6,7 @@ import { MapStyle } from "../utils/google-maps";
 import { appMigration } from "../migration/app-migration";
 import { Chain, VersionCode } from "../utils/build";
 import { LndChainBackend } from "../state/Lightning";
-import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_NEUTRINO_NODE } from "../utils/constants";
+import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../utils/constants";
 
 const APP_VERSION = appMigration.length - 1;
 
@@ -186,7 +186,7 @@ export const setupApp = async () => {
     // walletPassword
     setItemObject<boolean>(StorageItem.autopilotEnabled, true),
     setItemObject<boolean>(StorageItem.pushNotificationsEnabled, true),
-    setItemObject<boolean>(StorageItem.clipboardInvoiceCheck, true),
+    setItemObject<boolean>(StorageItem.clipboardInvoiceCheck, PLATFORM === "ios" ? false : true),
     setItemObject<boolean>(StorageItem.scheduledSyncEnabled, false),
     setItemObject<number>(StorageItem.lastScheduledSync, 0),
     setItemObject<number>(StorageItem.lastScheduledSyncAttempt, 0),
