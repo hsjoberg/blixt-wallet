@@ -468,6 +468,7 @@ autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? 
 
 [protocol]
 protocol.wumbo-channels=true
+protocol.option-scid-alias=true
 `;
     await writeConfig(config);
   }),

@@ -200,7 +200,7 @@ export const lnUrl: ILNUrlModel = {
     try {
       let type: LNURLType;
       if (bech32data) {
-        const decodedBech32 = Bech32.bech32.decode(bech32data, 1024);
+        const decodedBech32 = Bech32.bech32.decode(bech32data, 4096);
         url = bytesToString(Bech32.bech32.fromWords(decodedBech32.words));
       } else if (!url) {
         throw new Error("Neither bech32data or url is provided");
