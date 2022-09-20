@@ -225,10 +225,7 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvReco
           return reject(error);
         }
 
-        console.log("sendPaymentV2Sync", e);
         const response = decodeSendPaymentV2Result(e.data);
-        console.log("sendPaymentV2Sync",response);
-
         resolve(response);
       } catch (error) {
         reject(error.message);
@@ -533,6 +530,19 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
     request: lnrpc.ListUnspentRequest,
     response: lnrpc.ListUnspentResponse,
     method: "WalletKitListUnspent",
+    options: {},
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+ export const resetMissionControl = async (): Promise<routerrpc.ResetMissionControlResponse> => {
+  const response = await sendCommand<routerrpc.IResetMissionControlRequest, routerrpc.ResetMissionControlRequest, routerrpc.ResetMissionControlResponse>({
+    request: routerrpc.ResetMissionControlRequest,
+    response: routerrpc.ResetMissionControlResponse,
+    method: "RouterResetMissionControl",
     options: {},
   });
   return response;

@@ -21,6 +21,7 @@ import {
   decodePayReq,
   getRecoveryInfo,
   listUnspent,
+  resetMissionControl,
   getNodeInfo,
   getInfo,
   lookupInvoice,
@@ -70,7 +71,7 @@ import {
 import {
   checkScheduledSyncWorkStatus, WorkInfo
 } from "../lndmobile/fake/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
-import { lnrpc, signrpc, invoicesrpc, autopilotrpc } from "../../proto/lightning";
+import { lnrpc, signrpc, invoicesrpc, autopilotrpc, routerrpc } from "../../proto/lightning";
 import { IAddInvoiceBlixtLspArgs } from "../lndmobile";
 
 export interface ILndMobileInjections {
@@ -96,6 +97,7 @@ export interface ILndMobileInjections {
     decodePayReq: (bolt11: string) => Promise<lnrpc.PayReq>;
     getRecoveryInfo: () => Promise<lnrpc.GetRecoveryInfoResponse>;
     listUnspent: () => Promise<lnrpc.ListUnspentResponse>;
+    resetMissionControl: () => Promise<routerrpc.ResetMissionControlResponse>;
     getInfo: () => Promise<lnrpc.GetInfoResponse>;
     getNodeInfo: (pubKey: string) => Promise<lnrpc.NodeInfo>;
     lookupInvoice: (rHash: string) => Promise<lnrpc.Invoice>;
@@ -163,11 +165,13 @@ export default {
     excludeLndICloudBackup,
 
     addInvoice,
+    addInvoiceBlixtLsp,
     cancelInvoice,
     connectPeer,
     decodePayReq,
     getRecoveryInfo,
     listUnspent,
+    resetMissionControl,
     getNodeInfo,
     getInfo,
     lookupInvoice,

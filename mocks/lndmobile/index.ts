@@ -1,4 +1,4 @@
-import { lnrpc } from "../../proto/lightning";
+import { lnrpc, routerrpc } from "../../proto/lightning";
 import { decodeStreamResult, timeout } from "./utils";
 import { DeviceEventEmitter } from "react-native";
 import * as base64 from "base64-js";
@@ -259,6 +259,14 @@ export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
   const response = lnrpc.ListUnspentResponse.create({
     utxos: []
   })
+  return response;
+};
+
+/**
+ * @throws
+ */
+ export const resetMissionControl = async (): Promise<routerrpc.ResetMissionControlResponse> => {
+  const response = routerrpc.ResetMissionControlResponse.create({})
   return response;
 };
 
