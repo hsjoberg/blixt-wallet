@@ -53,7 +53,12 @@ export default function Drawer() {
   };
 
   const pasteFromClipboard = async () => {
-    const clipboardText = await Clipboard.getString()
+    const clipboardText = await Clipboard.getString();
+
+    if (clipboardText === "" && PLATFORM === "ios") {
+      return;
+    }
+
     switch (await evaluateLightningCode(clipboardText,  "Clipboard paste error")) {
       case "BOLT11":
         goToScreen("Send", { screen: "SendConfirmation" });

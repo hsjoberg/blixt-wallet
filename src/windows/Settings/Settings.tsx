@@ -22,7 +22,7 @@ import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_NEUTRINO_NODE, P
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
-import { getNodeInfo } from "../../lndmobile";
+import { getNodeInfo, resetMissionControl } from "../../lndmobile";
 
 import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
@@ -1005,6 +1005,16 @@ ${t("experimental.tor.disabled.msg2")}`;
   // Setup demo environment
   const setupDemo = useStoreActions((store) => store.setupDemo);
 
+  // Reset mission control
+  const onPressResetMissionControl = async () => {
+    try {
+      await resetMissionControl();
+      toast("Done");
+    } catch (error) {
+      toast(t("msg.error", { ns:namespaces.common }) + ": " + error.message, 0, "danger", "OK");
+    }
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -1470,6 +1480,12 @@ ${t("experimental.tor.disabled.msg2")}`;
           }}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="typewriter" /></Left>
             <Body><Text>{t("debug.config.title")}</Text></Body>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onPressResetMissionControl}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="restore-alert" /></Left>
+            <Body>
+              <Text>{t("debug.resetMissionControl.title")}</Text>
+            </Body>
           </ListItem>
         </List>
       </Content>

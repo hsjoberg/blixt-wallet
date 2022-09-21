@@ -475,6 +475,14 @@ export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
   return response;
 };
 
+/**
+ * @throws
+ */
+ export const resetMissionControl = async (): Promise<routerrpc.ResetMissionControlResponse> => {
+  const response = routerrpc.ResetMissionControlResponse.create({})
+  return response;
+};
+
 export type IReadLndLogResponse = string[];
 /**
  * @throws
