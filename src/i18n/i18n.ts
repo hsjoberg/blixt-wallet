@@ -7,6 +7,7 @@ import en from "./en";
 import es from "./es";
 import de from "./de";
 import fr from "./fr";
+import nl from "./nl";
 import tlh from "./tlh";
 import sv from "./sv";
 import ru from "./ru";
@@ -23,6 +24,7 @@ const createI18n = (language: string): i18nInstance => {
       es,
       de,
       fr,
+      nl,
       tlh,
       sv,
       ru,
