@@ -85,9 +85,11 @@ const style = StyleSheet.create({
     flexGrow: 1,
     alignItems:"flex-end",
     flexDirection: "row-reverse",
+    flexWrap: "wrap",
   },
   actionBarButton: {
     marginLeft: 10,
+    marginTop: 10,
   },
   actionBarButtonText: {
     fontSize: 9.75,
