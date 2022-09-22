@@ -190,6 +190,10 @@ export default function Restore({ navigation }: IProps) {
               value={seedText}
               returnKeyType="done"
               blurOnSubmit={true}
+              autoComplete="off"
+              autoCapitalize="none"
+              autoCorrect={false}
+              importantForAutofill="no"
             />
             <View style={{ marginTop: 14, width: "100%", display: "flex" }}>
               <H3>{t("restore.channel.title")}</H3>
