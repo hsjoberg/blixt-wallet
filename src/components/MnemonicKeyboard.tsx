@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 
-export default function App() {
+export default function MnemonicKeyboard() {
   return (
     <View>
       <View style={styles.row}>
