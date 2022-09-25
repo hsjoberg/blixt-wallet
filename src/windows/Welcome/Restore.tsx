@@ -14,6 +14,7 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import { PLATFORM } from "../../utils/constants";
 import { CommonActions } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
+import MnemonicKeyboard from "../../components/MnemonicKeyboard";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -192,7 +193,10 @@ export default function Restore({ navigation }: IProps) {
               disabled={true}
               autoCapitalize="none"
               autoCorrect={false}
-              importantForAutofill="no"
+            />
+            <MnemonicKeyboard
+              seedText={seedText}
+              setSeedText={setSeedText}
             />
             <View style={{ marginTop: 14, width: "100%", display: "flex" }}>
               <H3>{t("restore.channel.title")}</H3>
