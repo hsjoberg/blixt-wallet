@@ -186,7 +186,6 @@ export default function Restore({ navigation }: IProps) {
               rowSpan={6}
               bordered={false}
               underline={false}
-              onChangeText={setSeedText}
               value={seedText}
               returnKeyType="done"
               blurOnSubmit={true}
