@@ -13,21 +13,19 @@ export default function MnemonicKeyboard() {
         <Text style={styles.key}>y</Text>
         <Text style={styles.key}>u</Text>
         <Text style={styles.key}>i</Text>
-        <Text style={styles.key}>o</Text>
-        <Text style={styles.key}>p</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.key}>a</Text>
-        <Text style={styles.key}>s</Text>
+        <Text style={styles.key}>o</Text>
+        <Text style={styles.key}>p</Text>
         <Text style={styles.key}>e</Text>
         <Text style={styles.key}>d</Text>
         <Text style={styles.key}>f</Text>
         <Text style={styles.key}>g</Text>
         <Text style={styles.key}>h</Text>
         <Text style={styles.key}>j</Text>
-        <Text style={styles.key}>k</Text>
       </View>
       <View style={styles.row}>
+        <Text style={styles.key}>k</Text>
         <Text style={styles.key}>z</Text>
         <Text style={styles.key}>x</Text>
         <Text style={styles.key}>c</Text>
