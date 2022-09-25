@@ -190,7 +190,7 @@ export default function Restore({ navigation }: IProps) {
               value={seedText}
               returnKeyType="done"
               blurOnSubmit={true}
-              autoComplete="off"
+              disabled={true}
               autoCapitalize="none"
               autoCorrect={false}
               importantForAutofill="no"
