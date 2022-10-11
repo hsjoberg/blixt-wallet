@@ -83,7 +83,7 @@ const style = StyleSheet.create({
     flexGrow: 1,
     alignItems: "flex-end",
     flexDirection: "row-reverse",
-    flexWrap: "wrap-reverse",
+    flexWrap: "wrap",
   },
   actionBarButton: {
     marginLeft: 10,

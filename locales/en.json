@@ -297,6 +297,11 @@
       "fee_rate": {
         "title": "Fee-rate"
       }
+    },
+    "torPrompt": {
+      "title": "Enable Tor",
+      "text1": "It looks like you're trying to open a channel to a node that is running under a Tor onion service.",
+      "text2": "In order to connect you need to active Tor for Blixt Wallet."
     }
   },
   "onchain.onChainInfo": {

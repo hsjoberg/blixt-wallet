@@ -67,9 +67,8 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
   return (
     <Container testID="qr">
       <View style={style.container}>
-        <H1 style={style.scanThisQr}>Scan this QR code</H1>
+        <H1 style={style.scanThisQr}>{t("qr.title")}</H1>
         <Text testID="expire" style={style.expires}>
-          <>Expires in </>
           <Ticker expire={transaction.expire.toNumber()} />
         </Text>
         <QrCode size={smallScreen ? 225 : undefined} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} />
