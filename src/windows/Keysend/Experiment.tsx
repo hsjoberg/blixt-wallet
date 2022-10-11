@@ -4,13 +4,12 @@ import { View } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-import { sendKeysendPaymentV2 } from "../../lndmobile/index";
+import { getRouteHints, sendKeysendPaymentV2 } from "../../lndmobile/index";
 import Long from "long";
 import { toast, hexToUint8Array } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { generateSecureRandom } from "react-native-securerandom";
 import { lnrpc } from "../../../proto/lightning";
-import { getChanInfo, listPrivateChannels } from "../../lndmobile/channel";
 import QrCode from "../../components/QrCode";
 import BlixtForm from "../../components/Form";
 import { NavigationButton } from "../../components/NavigationButton";
@@ -45,7 +44,9 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
 
   useEffect(() => {
     (async () => {
-      await getRouteHints();
+      setRoutehints(
+        JSON.stringify(await getRouteHints())
+      );
     })();
   }, []);
 
@@ -139,46 +140,6 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       toast(e.message, undefined, "danger");
     }
     setSending(false);
-  };
-
-  const getRouteHints = async () => {
-    const routeHints: lnrpc.IRouteHint[] = [];
-    const channels = await listPrivateChannels();
-
-    // Follows the code in `addInvoice()` of the lnd project
-    for (const channel of channels.channels) {
-      const chanInfo = await getChanInfo(channel.chanId!);
-      const remotePubkey = channel.remotePubkey;
-      console.log("chanInfo", chanInfo);
-
-      // TODO check if node is publicly
-      // advertised in the network graph
-      // https://github.com/lightningnetwork/lnd/blob/38b521d87d3fd9cff628e5dc09b764aeabaf011a/channeldb/graph.go#L2141
-
-      let policy: lnrpc.IRoutingPolicy;
-      if (remotePubkey === chanInfo.node1Pub) {
-        policy = chanInfo.node1Policy!;
-      }
-      else {
-        policy = chanInfo.node2Policy!;
-      }
-
-      if (!policy) {
-        continue;
-      }
-
-      routeHints.push(lnrpc.RouteHint.create({
-        hopHints: [{
-          nodeId: remotePubkey,
-          chanId: chanInfo.channelId,
-          feeBaseMsat: policy.feeBaseMsat ? policy.feeBaseMsat.toNumber() : undefined,
-          feeProportionalMillionths: policy.feeRateMilliMsat ? policy.feeRateMilliMsat.toNumber() : undefined,
-          cltvExpiryDelta: policy.timeLockDelta,
-        }]
-      }));
-    }
-
-    setRoutehints(JSON.stringify(routeHints));
   };
 
   const onPressQr = () => {

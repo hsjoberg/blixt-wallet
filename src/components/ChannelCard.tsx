@@ -335,6 +335,21 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Right>
             </Row>
           }
+          {channel.zeroConf &&
+            <Row style={{ width: "100%" }}>
+              <Right>
+                <Text style={{ color: "orange" }}>0conf channel</Text>
+              </Right>
+            </Row>
+          }
+          {(channel.aliasScids?.length! > 0) &&
+            <Row style={{ width: "100%" }}>
+              <Right>
+                <Text style={{ color: "orange" }}>Alias scid
+              </Text>
+              </Right>
+            </Row>
+          }
           <Row style={{ width: "100%" }}>
             <Left style={{ flexDirection: "row" }}>
               <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => close(false)} onLongPress={() => close(true)}>

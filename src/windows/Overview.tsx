@@ -172,7 +172,7 @@ function Overview({ navigation }: IOverviewProps) {
           return (<TransactionCard key={transaction.rHash} transaction={transaction} unit={bitcoinUnit} onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })} />);
       });
     }
-    return (<Text style={{ textAlign: "center", margin: 16 }}>No transactions yet</Text>);
+    return (<Text style={{ textAlign: "center", margin: 16 }}>{t("noTransactionsYet")}</Text>);
   }, [transactions, contentExpand, bitcoinUnit, hideExpiredInvoices]);
 
   const onPressBalanceHeader = async () => {
@@ -371,7 +371,7 @@ const DoBackup = () => {
   };
 
   const onPressBackupWallet = () => {
-    navigation.navigate("Welcome", { screen: "Seed "});
+    navigation.navigate("Welcome", { screen: "Seed" });
   };
 
   return (

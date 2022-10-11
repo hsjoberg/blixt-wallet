@@ -95,7 +95,8 @@
     "newChannelBeingOpened": {
       "info": "A new channel is in the process of being opened...",
       "view": "View"
-    }
+    },
+    "noTransactionsYet": "No transactions yet"
   },
   "help": {
     "title": "Help",

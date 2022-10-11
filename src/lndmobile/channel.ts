@@ -17,6 +17,7 @@ export const openChannel = async (pubkey: string, amount: number, privateChannel
       targetConf: feeRateSat ? undefined : 2,
       private: privateChannel,
       satPerByte: feeRateSat ? Long.fromValue(feeRateSat) : undefined,
+      scidAlias: true,
     },
   });
   return response;

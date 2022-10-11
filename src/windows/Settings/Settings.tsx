@@ -1460,7 +1460,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </ListItem>
             </>
           }
-          <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: false })}>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: true })} onLongPress={() => { setupDemo({ changeDb: true }); toast("DB written") }}>
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
             <Body>
               <Text>{t("debug.demoMode.title")}</Text>
