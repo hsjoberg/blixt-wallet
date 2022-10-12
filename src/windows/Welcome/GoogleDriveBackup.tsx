@@ -44,8 +44,8 @@ export default function GoogleDriveBackup({ navigation }: IProps) {
         translucent={true}
       />
       <View style={{ flex: 1, padding: 0 }}>
-        <View style={[style.upperContent, { paddingTop: 40, justifyContent:"center" }]}>
-          <View style={{ flexDirection: "row", justifyContent: "center"}}>
+        <View style={[style.upperContent, { paddingTop: 40, justifyContent: "center" }]}>
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
             {!googleDriveBackupEnabled &&
               <Button bordered light onPress={onPressGoogleDriveBackup}>
                 <Icon type="Entypo" name="google-drive" />

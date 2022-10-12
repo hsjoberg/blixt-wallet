@@ -38,8 +38,8 @@ export default function ICloudBackup({ navigation }: IProps) {
         translucent={true}
       />
       <View style={{ flex: 1, padding: 0 }}>
-        <View style={[style.upperContent, { paddingTop: 40, justifyContent:"center" }]}>
-          <View style={{ flexDirection: "row", justifyContent: "center"}}>
+        <View style={[style.upperContent, { paddingTop: 40, justifyContent: "center" }]}>
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
             {!iCloudBackupEnabled &&
               <Button bordered light onPress={onPressICloudBackup}>
                 <Icon type="MaterialCommunityIcons" name="apple-icloud" />

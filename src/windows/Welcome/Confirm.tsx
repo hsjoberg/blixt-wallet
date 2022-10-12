@@ -10,6 +10,7 @@ import style from "./style";
 import { smallScreen } from "../../utils/device";
 import Container from "../../components/Container";
 import { PLATFORM } from "../../utils/constants";
+import GoBackIcon from "../../components/GoBackIcon";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -98,6 +99,7 @@ export default function Confirm({ navigation }: IProps) {
         animated={true}
         translucent={true}
       />
+      {/* {PLATFORM !== "android" && <GoBackIcon style={style.goBack} />} */}
       <View style={style.content}>
         <View style={style.upperContent}>
           <Card style={style.card}>

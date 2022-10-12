@@ -8,7 +8,6 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import style from "./style";
 import { LoginMethods } from "../../state/Security";
 import Container from "../../components/Container";
-
 import SetPincode from "../Settings/SetPincode";
 import RemovePincodeAuth from "../Settings/RemovePincodeAuth";
 import ChangeFingerprintSettingsAuth from "../Settings/ChangeFingerprintSettingsAuth";
@@ -17,6 +16,7 @@ import { PLATFORM } from "../../utils/constants";
 import { IFiatRates } from "../../state/Fiat";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 import { Alert } from "../../utils/alert";
+import GoBackIcon from "../../components/GoBackIcon";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -136,8 +136,9 @@ const AlmostDone = ({ navigation }: IProps) => {
         animated={true}
         translucent={true}
       />
-      <View style={{ flex: 1, padding: 0 }}>
-        <View style={[style.upperContent, { paddingTop: 40 }]}>
+      {/* {PLATFORM !== "android" && <GoBackIcon style={style.goBack} />} */}
+      <View style={style.content}>
+        <View style={[style.upperContent]}>
           <List style={extraStyle.list}>
             <ListItem style={extraStyle.listItem} icon={true} onPress={onNamePress}>
               <Left><Icon style={extraStyle.icon} type="AntDesign" name="edit" /></Left>
