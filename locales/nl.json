@@ -95,7 +95,8 @@
     "newChannelBeingOpened": {
       "info": "Er wordt een nieuw kanaal geopend...",
       "view": "Uiterlijk"
-    }
+    },
+    "noTransactionsYet": "Nog geen transacties"
   },
   "help": {
     "title": "Hulp",
@@ -296,6 +297,11 @@
       "fee_rate": {
         "title": "Tarief"
       }
+    },
+    "torPrompt": {
+      "title": "Inschakelen Tor",
+      "text1": "Het lijkt erop dat u een kanaal probeert te openen naar een knooppunt dat onder een Tor-ui-service draait.",
+      "text2": "Om verbinding te maken, moet je Tor voor Blixt Wallet activeren."
     }
   },
   "onchain.onChainInfo": {
@@ -896,6 +902,9 @@
       },
       "disableGraphCache": {
         "title": "Schakel LND-grafiekcache uit"
+      },
+      "resetMissionControl": {
+        "title": "Kennis van betalingsroutering resetten"
       }
     }
   },
