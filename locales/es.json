@@ -95,7 +95,8 @@
     "newChannelBeingOpened": {
       "info": "Se está abriendo un nuevo canal...",
       "view": "Ver"
-    }
+    },
+    "noTransactionsYet": "Aún no hay transacciones"
   },
   "help": {
     "title": "Ayuda",
@@ -296,6 +297,11 @@
       "fee_rate": {
         "title": "Coste de la tarifa"
       }
+    },
+    "torPrompt": {
+      "title": "Habilitar Tor",
+      "text1": "Parece que está intentando abrir un canal a un nodo que se ejecuta bajo un servicio onion Tor.",
+      "text2": "Para conectarse, debe activar Tor para Blixt Wallet."
     }
   },
   "onchain.onChainInfo": {
@@ -896,6 +902,9 @@
       },
       "disableGraphCache": {
         "title": "Desactivar la caché del grafo lnd"
+      },
+      "resetMissionControl": {
+        "title": "Restablecer conocimiento de enrutamiento de pago"
       }
     }
   },
