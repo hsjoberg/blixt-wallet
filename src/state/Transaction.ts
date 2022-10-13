@@ -50,7 +50,9 @@ export const transaction: ITransactionModel = {
 
     if (!foundTransaction) {
       const id = await createTransaction(db, tx);
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      // This is causing animation glitches when moving from setup invoice -> QR
+      // Disabling until we know how to solve this.
+      // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       actions.addTransaction({ ...tx, id });
     }
   }),
