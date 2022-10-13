@@ -95,7 +95,8 @@
     "newChannelBeingOpened": {
       "info": "Новый канал открывается...",
       "view": "Смотреть"
-    }
+    },
+    "noTransactionsYet": "Пока нет транзакций"
   },
   "help": {
     "title": "Помощь",
@@ -296,6 +297,11 @@
       "fee_rate": {
         "title": "Комса"
       }
+    },
+    "torPrompt": {
+      "title": "Включить Тор",
+      "text1": "Похоже, вы пытаетесь открыть канал к узлу, работающему под луковой службой Top",
+      "text2": "Для подключения вам необходимо активировать Top для Blixt Wallet."
     }
   },
   "onchain.onChainInfo": {
@@ -896,6 +902,9 @@
       },
       "disableGraphCache": {
         "title": "Отключить кэш графиков lnd"
+      },
+      "resetMissionControl": {
+        "title": "Сбросить знания о маршрутизации платежей"
       }
     }
   },
