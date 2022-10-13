@@ -95,7 +95,8 @@
     "newChannelBeingOpened": {
       "info": "En ny kanal är på väg att öppnas.",
       "view": "Visa"
-    }
+    },
+    "noTransactionsYet": "Inga transaktioner än"
   },
   "help": {
     "title": "Hjälp",
@@ -296,6 +297,11 @@
       "fee_rate": {
         "title": "Avgiftssats"
       }
+    },
+    "torPrompt": {
+      "title": "Aktivera Tor",
+      "text1": "Det ser ut som att du försöker öppna en kanal till en nod som körs under en Tor Onion Service.",
+      "text2": "För att kunna ansluta måste du aktivera Tor för Blixt Wallet."
     }
   },
   "onchain.onChainInfo": {
@@ -896,6 +902,9 @@
       },
       "disableGraphCache": {
         "title": "Stäng av lnd graf-cache"
+      },
+      "resetMissionControl": {
+        "title": "Nollställ vetskap om betalningsrutter"
       }
     }
   },
@@ -986,7 +995,7 @@
     },
     "done": {
       "title": "Nästan klar!",
-      "msg1": "Här är några inställningar du kan justera.",
+      "msg1": "Här är några inställningar du kan justera",
       "msg2": "När du är klar, tryck på Fortsätt"
     }
   },
