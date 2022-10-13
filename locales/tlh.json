@@ -95,7 +95,8 @@
     "newChannelBeingOpened": {
       "info": "pa'DajDaq peplaw'taH.",
       "view": "ghob"
-    }
+    },
+    "noTransactionsYet": "ghuy'cha'"
   },
   "help": {
     "title": "QaH",
@@ -296,6 +297,11 @@
       "fee_rate": {
         "title": "Dov'a'"
       }
+    },
+    "torPrompt": {
+      "title": "DaH 'entepray' Tor",
+      "text1": "wej loDnal Damojqangchugh, vaj daH ponglIj ngaDqu'chugh.",
+      "text2": "qo'Daq bIlengmeH mIwna' tu'lu'chugh, Tor meH Blixt Wallet"
     }
   },
   "onchain.onChainInfo": {
@@ -896,6 +902,9 @@
       },
       "disableGraphCache": {
         "title": "Qotlh lnd graph ngev"
+      },
+      "resetMissionControl": {
+        "title": "DIr luchav 'e'"
       }
     }
   },
