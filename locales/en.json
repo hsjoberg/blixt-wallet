@@ -649,7 +649,7 @@
           "title": "Manually trigger iCloud Backup",
           "alert": "Backed up channels to iCloud"
         },
-        "error": "Error backup up"
+        "error": "Error backing up"
       }
     },
     "security": {

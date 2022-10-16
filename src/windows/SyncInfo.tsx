@@ -158,7 +158,7 @@ export default function SyncInfo({}: ISyncInfoProps) {
             {!showLndLog && (
               <View style={{ marginTop: 10, flexDirection: "row" }}>
                 <Button small onPress={onPressShowLndLog}>
-                  <Text>Show lnd log</Text>
+                  <Text>{t("lndLog.show")}</Text>
                 </Button>
               </View>
             )}
@@ -167,7 +167,7 @@ export default function SyncInfo({}: ISyncInfoProps) {
                 <LogBox text={log.current} style={{ maxHeight: 170 }} />
                 <View style={{ marginTop: 10, flexDirection: "row" }}>
                   <Button small onPress={() => onPressCopy(log.current)}>
-                    <Text>Copy log text</Text>
+                    <Text>{t("lndLog.copy")}</Text>
                   </Button>
                 </View>
               </View>
