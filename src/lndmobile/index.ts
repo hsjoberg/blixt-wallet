@@ -202,16 +202,16 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvReco
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: multiPath ? 2 : undefined,
-    feeLimitSat: Long.fromValue(2500),
+    feeLimitSat: Long.fromValue(Math.max(10, amount?.mul(0.02).toNumber() ?? 0)),
     cltvLimit: 0,
   };
+  if (amount) {
+    options.amt = amount;
+  }
   if (tlvRecordName && tlvRecordName.length > 0) {
     options.destCustomRecords = {
       [TLV_RECORD_NAME]: unicodeStringToUint8Array(tlvRecordName),
     }
-  }
-  if (amount) {
-    options.amt = amount;
   }
 
   return new Promise(async (resolve, reject) => {
@@ -267,7 +267,7 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: 2,
-    feeLimitSat: Long.fromValue(2500),
+    feeLimitSat: Long.fromValue(Math.max(10, sat?.mul(0.02).toNumber() ?? 0)),
     cltvLimit: 0,
   };
   if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {
