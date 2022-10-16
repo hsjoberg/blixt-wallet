@@ -283,6 +283,15 @@ export default function Settings({ navigation }: ISettingsProps) {
       toast(e.message, 10000, "danger");
     }
   }
+  const exportChannelBackupFile = useStoreActions((store) => store.channel.exportChannelBackupFile);
+  const onExportChannelsEmergencyPress = async () => {
+    try {
+      const response = await exportChannelBackupFile();
+    } catch (e) {
+      console.log(e);
+      toast(e.message, 10000, "danger");
+    }
+  }
 
   // Verify channels backup
   const onVerifyChannelsBackupPress = async () => {
@@ -1109,7 +1118,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             </>
           }
           {["android", "ios", "macos"].includes(PLATFORM) &&
-            <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
+            <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress} onLongPress={onExportChannelsEmergencyPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="save" /></Left>
               <Body>
                 <Text>{t("wallet.backup.export.title")}</Text>
@@ -1328,7 +1337,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           }
-          {(PLATFORM === "android" || PLATFORM === "ios") &&
+          {(PLATFORM === "android" || PLATFORM === "ios" || PLATFORM === "macos") &&
             <ListItem style={style.listItem} icon={true} onPress={() => copyLndLog()}>
               <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
               <Body>

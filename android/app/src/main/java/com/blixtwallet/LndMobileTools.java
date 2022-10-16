@@ -421,6 +421,18 @@ class LndMobileTools extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void saveChannelBackupFile(Promise promise) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+
+    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+    intent.setType("text/plain");
+    intent.putExtra(Intent.EXTRA_TITLE, "blixt-channels-backup-" + dateFormat.format(new Date()) + ".bin");
+    getReactApplicationContext().getCurrentActivity().startActivityForResult(intent, MainActivity.INTENT_EXPORTCHANBACKUPFILE);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
   public void DEBUG_getWalletPasswordFromKeychain(Promise promise) {
     KeychainModule keychain = new KeychainModule(getReactApplicationContext());
 

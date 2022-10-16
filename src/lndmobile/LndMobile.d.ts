@@ -34,6 +34,7 @@ export interface ILndMobileTools {
   tailLog(numberOfLines: number): Promise<string>;
   observeLndLogFile(): Promise<boolean>;
   saveChannelsBackup(base64Backups: string): Promise<string>;
+  saveChannelBackupFile(): Promise<boolean>;
   DEBUG_getWalletPasswordFromKeychain(): Promise<string>;
   getTorEnabled(): Promise<boolean>;
 
