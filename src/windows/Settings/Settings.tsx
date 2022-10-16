@@ -192,11 +192,14 @@ export default function Settings({ navigation }: ISettingsProps) {
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: t("buttons.cancel",{ns:namespaces.common}),
+        negativeText: t("buttons.cancel",{ ns:namespaces.common }),
         type: DialogAndroid.listRadio,
         selectedId: currentLanguage,
-        items: Object.keys(languages).map((key)=>{
-          return {label:languages[key].name,id:languages[key].id}
+        items: Object.keys(languages).sort().map((key) => {
+          return {
+            label: languages[key].name,
+            id: languages[key].id
+          }
         })
       });
       if (selectedItem) {
@@ -205,8 +208,11 @@ export default function Settings({ navigation }: ISettingsProps) {
     } else {
       navigation.navigate("ChangeLanguage", {
         title: t("general.lang.dialog.title"),
-        data: Object.keys(languages).map((key)=>{
-          return { title: languages[key].name, value: languages[key].id }
+        data: Object.keys(languages).sort().map((key) => {
+          return {
+            title: languages[key].name,
+            value: languages[key].id
+          }
         }),
         onPick: async (lang) => {
           await changeLanguage(lang);
