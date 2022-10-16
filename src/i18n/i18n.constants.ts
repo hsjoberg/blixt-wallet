@@ -113,4 +113,8 @@ export const languages: ILanguages = {
     id: "sv",
     name: "Svenska",
   },
+  vi: {
+    id: "vi",
+    name: "Tiếng Việt",
+  },
 };
