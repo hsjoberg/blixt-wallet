@@ -253,7 +253,7 @@ PODS:
     - React-Core
   - react-native-camera/RN (4.2.1):
     - React-Core
-  - react-native-document-picker (8.1.1):
+  - react-native-document-picker (8.1.2):
     - React-Core
   - react-native-fingerprint-scanner (6.0.0):
     - React
@@ -367,6 +367,9 @@ PODS:
     - React-Core
   - RNReanimated (1.13.4):
     - React-Core
+  - RNScreens (3.18.2):
+    - React-Core
+    - React-RCTImage
   - RNSecureRandom (1.0.0):
     - React
   - RNSound (0.11.2):
@@ -443,6 +446,7 @@ DEPENDENCIES:
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
+  - RNScreens (from `../node_modules/react-native-screens`)
   - RNSecureRandom (from `../node_modules/react-native-securerandom`)
   - RNSound (from `../node_modules/react-native-sound`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -575,6 +579,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-haptic-feedback"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   RNSecureRandom:
     :path: "../node_modules/react-native-securerandom"
   RNSound:
@@ -614,7 +620,7 @@ SPEC CHECKSUMS:
   React-logger: ebb4d31bbbe4f1a8a1a9b658d7429210b8f68160
   react-native-build-config: d2d6891311ca2e0fa7ca7eeb4324a768e63e485c
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
-  react-native-document-picker: f68191637788994baed5f57d12994aa32cf8bf88
+  react-native-document-picker: f5ec1a712ca2a975c233117f044817bb8393cad4
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: 878f8df870bacc7572f0883d1d7b439502e9727d
   react-native-hash: 4664516df1834e1293b30e711c63f61f7f801b6a
@@ -648,6 +654,7 @@ SPEC CHECKSUMS:
   RNPermissions: dcdb7b99796bbeda6975a6e79ad519c41b251b1c
   RNReactNativeHapticFeedback: 1e3efeca9628ff9876ee7cdd9edec1b336913f8c
   RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
+  RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSecureRandom: 46403b4cc818c426b33d11f7981a923de558e0a8
   RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
