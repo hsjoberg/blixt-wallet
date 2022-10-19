@@ -903,6 +903,9 @@
       "disableGraphCache": {
         "title": "Disable lnd graph cache"
       },
+      "enableZeroConfChannels": {
+        "title": "Enable Zero conf channels"
+      },
       "resetMissionControl": {
         "title": "Reset payment routing knowledge"
       }
