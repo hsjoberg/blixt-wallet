@@ -26,6 +26,7 @@ import { getNodeInfo, resetMissionControl } from "../../lndmobile";
 
 import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
+import {channelAcceptor} from '../../lndmobile/index';
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -974,6 +975,13 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeLndNoGraphCache(!lndNoGraphCache);
   };
 
+  // Lnd Zero Conf Channels
+  const lndZeroConfChannels = useStoreState((store) => store.settings.lndZeroConfChannels);
+  const changeLndZeroConfChannels = useStoreActions((store) => store.settings.changeLndZeroConfChannels);
+  const onToggleLndZeroConfChannels = async () => {
+    await changeLndZeroConfChannels(!lndZeroConfChannels);
+  }
+
   // Invoice expiry
   const invoiceExpiry = useStoreState((store) => store.settings.invoiceExpiry);
   const changeInvoiceExpiry = useStoreActions((store) => store.settings.changeInvoiceExpiry);
@@ -1489,6 +1497,15 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Body>
             <Right><CheckBox checked={lndNoGraphCache} onPress={onToggleLndNoGraphCache} /></Right>
           </ListItem>
+
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleLndZeroConfChannels}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="database-sync" /></Left>
+            <Body>
+              <Text>{t("debug.enableZeroConfChannels.title")}</Text>
+            </Body>
+            <Right><CheckBox checked={lndZeroConfChannels} onPress={onToggleLndZeroConfChannels} /></Right>
+          </ListItem>
+
           <ListItem style={style.listItem} icon={true} onPress={() => {
             writeConfig();
             toast(t("msg.written",{ns:namespaces.common}))

@@ -58,6 +58,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   requireGraphSync = "requireGraphSync",
   dunderEnabled = "dunderEnabled",
   lndNoGraphCache = "lndNoGraphCache",
+  lndZeroConfChannels ="lndZeroConfChannels",
   invoiceExpiry = "invoiceExpiry", // in seconds
   rescanWallet = "rescanWallet",
   receiveViaP2TR = "receiveViaP2TR",
@@ -139,6 +140,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.requireGraphSync),
     removeItem(StorageItem.dunderEnabled),
     removeItem(StorageItem.lndNoGraphCache),
+    removeItem(StorageItem.lndZeroConfChannels),
     removeItem(StorageItem.invoiceExpiry),
     removeItem(StorageItem.rescanWallet),
     removeItem(StorageItem.receiveViaP2TR),
@@ -216,6 +218,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.requireGraphSync, false),
     setItemObject<boolean>(StorageItem.dunderEnabled, false),
     setItemObject<boolean>(StorageItem.lndNoGraphCache, false),
+    setItemObject<boolean>(StorageItem.lndZeroConfChannels, false),
     setItemObject<number>(StorageItem.invoiceExpiry, DEFAULT_INVOICE_EXPIRY),
     setItemObject<boolean>(StorageItem.rescanWallet, false),
     setItemObject<boolean>(StorageItem.receiveViaP2TR, false),

@@ -1,4 +1,4 @@
-import { NativeModules } from "react-native";
+import { EmitterSubscription, NativeModules } from "react-native";
 import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { lnrpc, routerrpc, invoicesrpc } from "../../proto/lightning";
 import Long from "long";

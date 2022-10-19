@@ -53,6 +53,7 @@ export interface ISettingsModel {
   changeLndNoGraphCache: Thunk<ISettingsModel, boolean>;
   changeInvoiceExpiry: Thunk<ISettingsModel, number>;
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
+  changeLndZeroConfChannels: Thunk<ISettingsModel, boolean>;
   changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
@@ -83,6 +84,7 @@ export interface ISettingsModel {
   setRequireGraphSync: Action<ISettingsModel, boolean>;
   setDunderEnabled: Action<ISettingsModel, boolean>;
   setLndNoGraphCache: Action<ISettingsModel, boolean>;
+  setLndZeroConfChannels: Action<ISettingsModel, boolean>;
   setInvoiceExpiry: Action<ISettingsModel, number>;
   setRescanWallet: Action<ISettingsModel, boolean>;
   setReceiveViaP2TR: Action<ISettingsModel, boolean>;
@@ -115,6 +117,7 @@ export interface ISettingsModel {
   requireGraphSync: boolean;
   dunderEnabled: boolean;
   lndNoGraphCache: boolean;
+  lndZeroConfChannels: boolean;
   invoiceExpiry: number;
   rescanWallet: boolean;
   receiveViaP2TR: boolean;
@@ -151,6 +154,7 @@ export const settings: ISettingsModel = {
     actions.setRequireGraphSync(await getItemObject(StorageItem.requireGraphSync) ?? false);
     actions.setDunderEnabled(await getItemObject(StorageItem.dunderEnabled) ?? false);
     actions.setLndNoGraphCache(await getItemObject(StorageItem.lndNoGraphCache) ?? false);
+    actions.setLndZeroConfChannels(await getItemObject(StorageItem.lndZeroConfChannels) ?? false);
     actions.setInvoiceExpiry(await getItemObject(StorageItem.invoiceExpiry) ?? DEFAULT_INVOICE_EXPIRY);
     actions.setRescanWallet(await getRescanWallet());
     actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
@@ -301,6 +305,11 @@ export const settings: ISettingsModel = {
     actions.setLndNoGraphCache(payload);
   }),
 
+  changeLndZeroConfChannels: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.lndZeroConfChannels, payload);
+    actions.setLndZeroConfChannels(payload);
+  }),
+
   changeInvoiceExpiry: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.invoiceExpiry, payload);
     actions.setInvoiceExpiry(payload);
@@ -345,6 +354,7 @@ export const settings: ISettingsModel = {
   setRequireGraphSync: action((state, payload) => { state.requireGraphSync = payload; }),
   setDunderEnabled: action((state, payload) => { state.dunderEnabled = payload; }),
   setLndNoGraphCache: action((state, payload) => { state.lndNoGraphCache = payload; }),
+  setLndZeroConfChannels: action((state, payload) => { state.lndZeroConfChannels = payload; }),
   setInvoiceExpiry: action((state, payload) => { state.invoiceExpiry = payload; }),
   setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
   setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
@@ -377,6 +387,7 @@ export const settings: ISettingsModel = {
   requireGraphSync: false,
   dunderEnabled: false,
   lndNoGraphCache: false,
+  lndZeroConfChannels: false,
   invoiceExpiry: DEFAULT_INVOICE_EXPIRY,
   rescanWallet: false,
   receiveViaP2TR: false,

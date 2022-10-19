@@ -414,6 +414,7 @@ export const model: IStoreModel = {
     const bitcoindPubRawBlock = await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) || null;
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
     const lndNoGraphCache = await getItemAsyncStorage(StorageItem.lndNoGraphCache) || "0";
+    const lndZeroConfChannels = await getItemAsyncStorage(StorageItem.lndZeroConfChannels) || "0";
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
 
@@ -469,6 +470,7 @@ autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? 
 [protocol]
 protocol.wumbo-channels=true
 protocol.option-scid-alias=true
+protocol.zero-conf=${lndZeroConfChannels.toString()}
 `;
     await writeConfig(config);
   }),
