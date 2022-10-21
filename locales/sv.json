@@ -896,6 +896,9 @@
       "getNodeInfo": {
         "title": "Hämta nodinfo"
       },
+      "getChannelInfo": {
+        "title": "Hämta kanalinfo"
+      },
       "demoMode": {
         "title": "Aktivera Demo-läget",
         "subtitle": "Används för promo"
