@@ -896,6 +896,9 @@
       "getNodeInfo": {
         "title": "Get node info"
       },
+      "getChannelInfo": {
+        "title": "Get channel info"
+      },
       "demoMode": {
         "title": "Activate Demo Mode",
         "subtitle": "Used for promo. Restart app to reset"

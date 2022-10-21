@@ -13,7 +13,7 @@ import Content from "../../components/Content";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
 import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
-import { verifyChanBackup } from "../../lndmobile/channel";
+import { getChanInfo, verifyChanBackup } from "../../lndmobile/channel";
 import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
 import { OnchainExplorer } from "../../state/Settings";
@@ -26,6 +26,7 @@ import { getNodeInfo, resetMissionControl } from "../../lndmobile";
 
 import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
+import Long from "long";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -967,6 +968,32 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
   };
 
+  const onGetChanInfoPress = async () => {
+    Alert.prompt(
+      "Get channel info",
+      "Enter Channel ID",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Get info",
+        onPress: async (text) => {
+          if (text === "") {
+            return;
+          }
+          try {
+            const nodeInfo = await getChanInfo(Long.fromValue(text ?? ""));
+            Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
+          } catch (e) {
+            Alert.alert(e.message);
+          }
+        },
+      }],
+      "plain-text",
+    );
+  };
+
   // Lnd Graph Cache
   const lndNoGraphCache = useStoreState((store) => store.settings.lndNoGraphCache);
   const changeLndNoGraphCache = useStoreActions((store) => store.settings.changeLndNoGraphCache);
@@ -1442,6 +1469,12 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="Entypo" name="info" /></Left>
             <Body>
               <Text>{t("debug.getNodeInfo.title")}</Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onGetChanInfoPress}>
+            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="Entypo" name="info" /></Left>
+            <Body>
+              <Text>{t("debug.getChanInfo.title")}</Text>
             </Body>
           </ListItem>
           {dunderEnabled &&
