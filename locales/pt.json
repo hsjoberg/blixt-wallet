@@ -896,6 +896,9 @@
       "getNodeInfo": {
         "title": "Obter informações do nó"
       },
+      "getChannelInfo": {
+        "title": "Obter informações do canal"
+      },
       "demoMode": {
         "title": "Ativar o modo de demonstração",
         "subtitle": "Usado para promoção. Reinicie o aplicativo para redefinir"
