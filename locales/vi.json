@@ -896,6 +896,9 @@
       "getNodeInfo": {
         "title": "Nhận thông tin về nút"
       },
+      "getChannelInfo": {
+        "title": "Nhận thông tin kênh"
+      },
       "demoMode": {
         "title": "Kích hoạt Chế độ Demo",
         "subtitle": "Được sử dụng để quảng cáo. Khởi động lại ứng dụng để reset"
