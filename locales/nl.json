@@ -896,6 +896,9 @@
       "getNodeInfo": {
         "title": "Knooppuntinfo ophalen"
       },
+      "getChannelInfo": {
+        "title": "Kanaalinfo ophalen"
+      },
       "demoMode": {
         "title": "Demo-modus inschakelen",
         "subtitle": "Gebruikt voor promo. Start de app opnieuw om te resetten"
