@@ -11,7 +11,7 @@ import BlixtForm from "../../components/Form";
 import { formatBitcoin, BitcoinUnits, IBitcoinUnits, valueBitcoin, valueFiat } from "../../utils/bitcoin-units";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
-import { MATH_PAD_NATIVE_ID, MAX_SAT_INVOICE, PLATFORM } from "../../utils/constants";
+import { MATH_PAD_NATIVE_ID, PLATFORM } from "../../utils/constants";
 import { toast } from "../../utils";
 import { Keyboard, TextStyle } from "react-native";
 import Container from "../../components/Container";
@@ -130,9 +130,6 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
   const createInvoice = async () => {
     try {
       setCreateInvoiceDisabled(true);
-      if (satoshiValue > MAX_SAT_INVOICE) {
-        throw new Error(t("createInvoice.error")+" " + formatBitcoin(Long.fromNumber(MAX_SAT_INVOICE), bitcoinUnitKey));
-      }
 
       navigation.replace("ReceiveQr", {
         invoice: await addInvoice({
