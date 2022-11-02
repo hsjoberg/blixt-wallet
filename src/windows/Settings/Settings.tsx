@@ -459,13 +459,11 @@ export default function Settings({ navigation }: ISettingsProps) {
 
   // Inbound services list
   const onInboundServiceListPress = async () => {
-    const goToSite = async (selectedItem: "LNBIG" | "BITREFILL_THOR" | "ZFR") => {
+    const goToSite = async (selectedItem: "LNBIG" | "BITREFILL_THOR") => {
       if (selectedItem === "LNBIG") {
         await Linking.openURL("https://lnbig.com/");
       } else if (selectedItem === "BITREFILL_THOR") {
         await Linking.openURL("https://embed.bitrefill.com/buy/lightning");
-      } else if (selectedItem === "ZFR") {
-        await Linking.openURL("https://zerofeerouting.com/mobile-wallets/");
       }
     };
 
@@ -478,8 +476,8 @@ ${t("LN.inbound.dialog.msg3")}`
     if (PLATFORM === "android") {
       interface ShowPickerResult {
         selectedItem: {
-          id: "LNBIG" | "BITREFILL_THOR" | "ZFR";
-          label: "LN Big" | "Bitrefill Thor" | "Zero Fee Routing";
+          id: "LNBIG" | "BITREFILL_THOR";
+          label: "LN Big" | "Bitrefill Thor";
         } | undefined;
       }
       const { selectedItem }: ShowPickerResult = await DialogAndroid.showPicker(null, null, {
@@ -494,9 +492,6 @@ ${t("LN.inbound.dialog.msg3")}`
         }, {
           id: "BITREFILL_THOR",
           label: "Bitrefill Thor"
-        }, {
-          id: "ZFR",
-          label: "Zero Fee Routing"
         }],
       });
 
@@ -513,9 +508,6 @@ ${t("LN.inbound.dialog.msg3")}`
         }, {
           title: "Bitrefill Thor",
           value: "BITREFILL_THOR",
-        }, {
-          title: "Zero Fee Routing",
-          value: "ZFR",
         }],
         onPick: async (selectedItem) => {
           goToSite(selectedItem as any)
