@@ -579,7 +579,7 @@ export function DrawerComponent() {
       drawerStyle: {
         backgroundColor: "transparent",
         borderRightColor: "transparent",
-        width: 305,
+        width: 315,
         borderEndColor: blixtTheme.dark,
       },
       drawerType: layoutMode === "mobile" ? "front" : "permanent",
