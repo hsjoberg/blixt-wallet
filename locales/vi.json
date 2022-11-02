@@ -167,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Tạo hoá đơn",
-      "error": "Số lượng hoá đơn không thể cao hơn",
       "alert": "Bạn cần mở một kênh Lightning trước khi có thể nhận.",
       "lsp": {
         "msg": "Kênh thanh toán của Dunder LSP sẽ được mở khi hóa đơn này được thanh toán.",
