@@ -167,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Erstelle eine Invoice (Rechnung)",
-      "error": "Der Rechnungsbetrag darf nicht höher sein als",
       "alert": "Vor dem Empfangen einer Invoice, öffne zuerst einen Lightning-Kanal.",
       "lsp": {
         "msg": "Ein Zahlungskanal wird von Dunder LSP eröffnet, wenn diese Rechnung beglichen wird.",
