@@ -167,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Betaalverzoek creëren",
-      "error": "Bedrag betaalverzoek kan niet hoger zijn dan",
       "alert": "Vooraleer je bitcoin kan ontvangen, moet je een Lightning-kanaal openen.",
       "lsp": {
         "msg": "Wanneer aan dit betaalverzoek is voldaan wordt er een betaalkanaal geopend door Dunder LSP.",
