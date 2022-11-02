@@ -381,7 +381,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
@@ -419,7 +419,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -635,7 +635,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
@@ -728,7 +728,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
@@ -825,7 +825,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
@@ -918,7 +918,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = fakelnd;
@@ -1015,7 +1015,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
@@ -1108,7 +1108,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
