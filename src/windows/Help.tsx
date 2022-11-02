@@ -1,8 +1,6 @@
 import React from "react";
 import { StyleSheet, Linking } from "react-native";
-import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1, Toast, View, Button } from "native-base";
-import { useStoreState } from "../state/store";
 
 import Blurmodal from "../components/BlurModal";
 import { GITHUB_REPO_URL, HAMPUS_EMAIL, TELEGRAM, FAQ } from "../utils/constants";
@@ -74,7 +72,6 @@ const style = StyleSheet.create({
   card: {
     padding: 5,
     width: "100%",
-    minHeight: "45%",
   },
   header: {
     fontWeight: "bold",
@@ -82,8 +79,9 @@ const style = StyleSheet.create({
   },
   actionBar: {
     width: "100%",
+    marginTop: 10,
     flexGrow: 1,
-    alignItems:"flex-end",
+    alignItems: "flex-end",
     flexDirection: "row-reverse",
     flexWrap: "wrap",
   },

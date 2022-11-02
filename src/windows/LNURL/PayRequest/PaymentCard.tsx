@@ -255,7 +255,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
               justifyContent: "center",
             }}
             onLayout={(event) => {
-              if (!sendButtonWidth) {
+              if (!sendButtonWidth && lightningReadyToSend) {
                 setSendButtonWidth(event.nativeEvent.layout.width);
               }
             }}

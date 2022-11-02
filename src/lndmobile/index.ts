@@ -7,6 +7,7 @@ import { stringToUint8Array, hexToUint8Array, unicodeStringToUint8Array } from "
 import { TLV_KEYSEND, TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { LndMobileEventEmitter } from "../utils/event-listener";
+import { getChanInfo, listPrivateChannels } from "./channel";
 const { LndMobile, LndMobileTools } = NativeModules;
 
 /**
@@ -201,16 +202,16 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvReco
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: multiPath ? 2 : undefined,
-    feeLimitSat: Long.fromValue(2500),
+    feeLimitSat: Long.fromValue(Math.max(10, amount?.mul(0.02).toNumber() ?? 0)),
     cltvLimit: 0,
   };
+  if (amount) {
+    options.amt = amount;
+  }
   if (tlvRecordName && tlvRecordName.length > 0) {
     options.destCustomRecords = {
       [TLV_RECORD_NAME]: unicodeStringToUint8Array(tlvRecordName),
     }
-  }
-  if (amount) {
-    options.amt = amount;
   }
 
   return new Promise(async (resolve, reject) => {
@@ -266,7 +267,7 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: 2,
-    feeLimitSat: Long.fromValue(2500),
+    feeLimitSat: Long.fromValue(Math.max(10, sat?.mul(0.02).toNumber() ?? 0)),
     cltvLimit: 0,
   };
   if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {
@@ -383,6 +384,46 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
   });
   return response;
 };
+
+export const getRouteHints = async (max: number = 5): Promise<lnrpc.IRouteHint[]> => {
+  const routeHints: lnrpc.IRouteHint[] = [];
+  const channels = await listPrivateChannels();
+
+  // Follows the code in `addInvoice()` of the lnd project
+  for (const channel of channels.channels) {
+    const chanInfo = await getChanInfo(channel.chanId!);
+    const remotePubkey = channel.remotePubkey;
+
+    // TODO check if node is publicly
+    // advertised in the network graph
+    // https://github.com/lightningnetwork/lnd/blob/38b521d87d3fd9cff628e5dc09b764aeabaf011a/channeldb/graph.go#L2141
+
+    let policy: lnrpc.IRoutingPolicy;
+    if (remotePubkey === chanInfo.node1Pub) {
+      policy = chanInfo.node1Policy!;
+    }
+    else {
+      policy = chanInfo.node2Policy!;
+    }
+
+    if (!policy) {
+      continue;
+    }
+
+    routeHints.push(lnrpc.RouteHint.create({
+      hopHints: [{
+        nodeId: remotePubkey,
+        chanId: chanInfo.channelId,
+        feeBaseMsat: policy.feeBaseMsat ? policy.feeBaseMsat.toNumber() : undefined,
+        feeProportionalMillionths: policy.feeRateMilliMsat ? policy.feeRateMilliMsat.toNumber() : undefined,
+        cltvExpiryDelta: policy.timeLockDelta,
+      }]
+    }));
+  }
+
+  console.log("our hints", routeHints);
+  return routeHints;
+}
 
 export interface IAddInvoiceBlixtLspArgs {
   amount: number;

@@ -95,7 +95,8 @@
     "newChannelBeingOpened": {
       "info": "En ny kanal är på väg att öppnas.",
       "view": "Visa"
-    }
+    },
+    "noTransactionsYet": "Inga transaktioner än"
   },
   "help": {
     "title": "Hjälp",
@@ -166,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Skapa faktura",
-      "error": "Fakturans belopp kan inte vara högre än",
       "alert": "Innan du kan ta emot så måste du öppna en Lightningkanal",
       "lsp": {
         "msg": "En betalkanal av Dunder LSP kommer automatiskt öppnas när denna faktura betalas.",
@@ -296,6 +296,11 @@
       "fee_rate": {
         "title": "Avgiftssats"
       }
+    },
+    "torPrompt": {
+      "title": "Aktivera Tor",
+      "text1": "Det ser ut som att du försöker öppna en kanal till en nod som körs under en Tor Onion Service.",
+      "text2": "För att kunna ansluta måste du aktivera Tor för Blixt Wallet."
     }
   },
   "onchain.onChainInfo": {
@@ -822,7 +827,7 @@
           "msg3": "VARNING: Blixt Wallet kommer fortfarande kommunicera med följande tjänster utan Tor",
           "msg4": "Anledning: För att hämta fiat/bitcoin-kurser",
           "msg5": "ANLEDNING: För att hämta aktuell blockhöjd",
-          "msg6": "ANLEDNING: För Google Drive-backup",
+          "msg6": "Anledning: För Google Drive-backup",
           "msg7": "ANLEDNING: För pålitliga Lightningnoder",
           "msg8": "WebLN-webbläsaren och LNURL kommer inte använda sig utav Tor"
         },
@@ -890,12 +895,18 @@
       "getNodeInfo": {
         "title": "Hämta nodinfo"
       },
+      "getChannelInfo": {
+        "title": "Hämta kanalinfo"
+      },
       "demoMode": {
         "title": "Aktivera Demo-läget",
         "subtitle": "Används för promo"
       },
       "disableGraphCache": {
         "title": "Stäng av lnd graf-cache"
+      },
+      "resetMissionControl": {
+        "title": "Nollställ vetskap om betalningsrutter"
       }
     }
   },
@@ -986,7 +997,7 @@
     },
     "done": {
       "title": "Nästan klar!",
-      "msg1": "Här är några inställningar du kan justera.",
+      "msg1": "Här är några inställningar du kan justera",
       "msg2": "När du är klar, tryck på Fortsätt"
     }
   },
@@ -1055,6 +1066,6 @@
     "msg2": "Om du skulle förlora din plånbok",
     "msg3": "så kan du återställa dina tillgångar genom din backup-seed.",
     "msg4": "Seed-standarden är aezseed. ",
-    "button": "Jag har skrivit ned det."
+    "button": "Jag har skrivit ned det"
   }
 }

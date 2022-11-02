@@ -674,8 +674,8 @@ exports[`renders correctly 1`] = `
                                                               <RNSVGRect
                                                                 fill={
                                                                   {
+                                                                    "payload": 0,
                                                                     "type": 0,
-                                                                    "value": 0,
                                                                   }
                                                                 }
                                                                 height="300"
@@ -701,8 +701,8 @@ exports[`renders correctly 1`] = `
                                                                 }
                                                                 stroke={
                                                                   {
+                                                                    "payload": 4278190080,
                                                                     "type": 0,
-                                                                    "value": 4278190080,
                                                                   }
                                                                 }
                                                                 strokeLinecap={0}

@@ -36,6 +36,12 @@ RCT_EXTERN_METHOD(
   rejecter: (RCTPromiseRejectBlock)reject
 )
 
+
+RCT_EXTERN_METHOD(
+  saveChannelBackupFile: (RCTPromiseResolveBlock)resolve
+  rejecter: (RCTPromiseRejectBlock)reject
+)
+
 RCT_EXTERN_METHOD(
   checkICloudEnabled: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject

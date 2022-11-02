@@ -48,7 +48,8 @@ export default function Restore({ navigation }: IProps) {
 
   const onRestorePress = async () => {
     try {
-      const splittedSeed = seedText.split(" ");
+      // Note: the first trim is not a mistake, it's to trim out "white-space words" that could exist after the split
+      const splittedSeed = seedText.trim().split(" ").map((word) => word.trim());
       if (splittedSeed.length !== 24) {
         Alert.alert(t("restore.seed"));
         return;

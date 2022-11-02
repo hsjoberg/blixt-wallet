@@ -95,7 +95,8 @@
     "newChannelBeingOpened": {
       "info": "Se está abriendo un nuevo canal...",
       "view": "Ver"
-    }
+    },
+    "noTransactionsYet": "Aún no hay transacciones"
   },
   "help": {
     "title": "Ayuda",
@@ -166,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Crear factura",
-      "error": "La cantidad facturada no puede ser mayor que",
       "alert": "Para poder recibir, necesitas abrir un canal Lightning.",
       "lsp": {
         "msg": "Cuando recibas el pago de la factura, Dunder LSP creará un canal lightning con el que podrás recibir pagos y, posteriormente, enviarlos.",
@@ -296,6 +296,11 @@
       "fee_rate": {
         "title": "Coste de la tarifa"
       }
+    },
+    "torPrompt": {
+      "title": "Habilitar Tor",
+      "text1": "Parece que está intentando abrir un canal a un nodo que se ejecuta bajo un servicio onion Tor.",
+      "text2": "Para conectarse, debe activar Tor para Blixt Wallet."
     }
   },
   "onchain.onChainInfo": {
@@ -890,12 +895,18 @@
       "getNodeInfo": {
         "title": "Obtener información del nodo"
       },
+      "getChannelInfo": {
+        "title": "Obtener información del canal"
+      },
       "demoMode": {
         "title": "Activar el Modo Demo",
         "subtitle": "Se utiliza para la promoción. Reinicie la aplicación para restablecerla"
       },
       "disableGraphCache": {
         "title": "Desactivar la caché del grafo lnd"
+      },
+      "resetMissionControl": {
+        "title": "Restablecer conocimiento de enrutamiento de pago"
       }
     }
   },

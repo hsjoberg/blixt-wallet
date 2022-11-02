@@ -1,16 +1,16 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { NativeModules, StyleSheet, TextInput, View } from "react-native";
 import { Text, Container, Button, Icon, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
 import Long from "long";
+import { RouteProp } from "@react-navigation/native";
 
 import { LightningInfoStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
-import { RouteProp } from "@react-navigation/native";
 import { toast } from "../../utils";
 import useFormatBitcoinValue from "../../hooks/useFormatBitcoinValue";
 import { PLATFORM } from "../../utils/constants";
@@ -18,6 +18,7 @@ import Input from "../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { Alert } from "../../utils/alert";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -43,6 +44,8 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
     bitcoinUnit,
     fiatUnit,
   } = useBalance();
+  const torEnabled = useStoreState((store) => store.settings.torEnabled);
+  const changeTorEnabled = useStoreActions((store) => store.settings.changeTorEnabled);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -61,9 +64,38 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
       });
       await getChannels(undefined);
       navigation.pop();
-    } catch (e) {
-      toast(`Error: ${e.message}`, 12000, "danger", "Okay");
+    } catch (error) {
+      toast(`Error: ${error.message}`, 12000, "danger", "Okay");
       setOpening(false);
+
+      // Special case if the error is likely related to Tor
+      if (torEnabled && error.message?.includes(".onion: no such host") || error.message?.includes(".onion: No address associated with hostname")) {
+        await Alert.alert(
+          t("torPrompt.title"), t("torPrompt.text1") + "\n\n" + t("torPrompt.text2"),
+          [{
+            text: "Cancel",
+          }, {
+            text: "Activate Tor",
+            async onPress(value?) {
+              await changeTorEnabled(!torEnabled);
+              if (PLATFORM === "android") {
+                try {
+                  await NativeModules.LndMobile.stopLnd();
+                  await NativeModules.LndMobileTools.killLnd();
+                } catch(e) {
+                  console.log(e);
+                }
+                NativeModules.LndMobileTools.restartApp();
+              } else {
+                Alert.alert(
+                  t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings }),
+                  t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings }),
+                );
+              }
+            },
+          }]
+        );
+      }
     }
   };
 

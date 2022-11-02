@@ -17,6 +17,7 @@ project 'BlixtWallet',
         'Release' => :release
 
 target 'BlixtWallet' do
+
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -24,11 +25,17 @@ target 'BlixtWallet' do
 
   use_react_native!(
     :path => config[:reactNativePath],
-    # to enable hermes on iOS, change `false` to `true` and then install pods
     :production => production,
-    :hermes_enabled => true, # flags[:hermes_enabled],
+    # Hermes is now enabled by default. Disable by setting this flag to false.
+    # Upcoming versions of React Native may rely on get_default_flags(), but
+    # we make it explicit here to aid in the React Native upgrade process.
+    :hermes_enabled => true,
     :fabric_enabled => flags[:fabric_enabled],
-    :flipper_configuration => false, # FlipperConfiguration.enabled,
+    # Enables Flipper.
+    #
+    # Note that if you have use_frameworks! enabled, Flipper will not work and
+    # you should disable the next line.
+    :flipper_configuration => FlipperConfiguration.disabled,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
@@ -45,14 +52,17 @@ target 'BlixtWallet' do
     # Pods for testing
   end
 
-  # Enables Flipper.
-  #
-  # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable the next line.
-  # use_flipper!()
-
   post_install do |installer|
     react_native_post_install(installer)
+
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+
+    installer.pods_project.targets.each do |target|
+      if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
+        target.build_configurations.each do |config|
+            config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        end
+      end
+    end
   end
 end

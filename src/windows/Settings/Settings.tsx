@@ -13,7 +13,7 @@ import Content from "../../components/Content";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { LoginMethods } from "../../state/Security";
 import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
-import { verifyChanBackup } from "../../lndmobile/channel";
+import { getChanInfo, verifyChanBackup } from "../../lndmobile/channel";
 import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
 import { OnchainExplorer } from "../../state/Settings";
@@ -26,6 +26,7 @@ import { getNodeInfo, resetMissionControl } from "../../lndmobile";
 
 import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
+import Long from "long";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -192,11 +193,14 @@ export default function Settings({ navigation }: ISettingsProps) {
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: t("buttons.cancel",{ns:namespaces.common}),
+        negativeText: t("buttons.cancel",{ ns:namespaces.common }),
         type: DialogAndroid.listRadio,
         selectedId: currentLanguage,
-        items: Object.keys(languages).map((key)=>{
-          return {label:languages[key].name,id:languages[key].id}
+        items: Object.keys(languages).sort().map((key) => {
+          return {
+            label: languages[key].name,
+            id: languages[key].id
+          }
         })
       });
       if (selectedItem) {
@@ -205,8 +209,11 @@ export default function Settings({ navigation }: ISettingsProps) {
     } else {
       navigation.navigate("ChangeLanguage", {
         title: t("general.lang.dialog.title"),
-        data: Object.keys(languages).map((key)=>{
-          return { title: languages[key].name, value: languages[key].id }
+        data: Object.keys(languages).sort().map((key) => {
+          return {
+            title: languages[key].name,
+            value: languages[key].id
+          }
         }),
         onPick: async (lang) => {
           await changeLanguage(lang);
@@ -272,6 +279,15 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onExportChannelsPress = async () => {
     try {
       const response = await exportChannelsBackup();
+    } catch (e) {
+      console.log(e);
+      toast(e.message, 10000, "danger");
+    }
+  }
+  const exportChannelBackupFile = useStoreActions((store) => store.channel.exportChannelBackupFile);
+  const onExportChannelsEmergencyPress = async () => {
+    try {
+      const response = await exportChannelBackupFile();
     } catch (e) {
       console.log(e);
       toast(e.message, 10000, "danger");
@@ -443,13 +459,11 @@ export default function Settings({ navigation }: ISettingsProps) {
 
   // Inbound services list
   const onInboundServiceListPress = async () => {
-    const goToSite = async (selectedItem: "LNBIG" | "BITREFILL_THOR" | "ZFR") => {
+    const goToSite = async (selectedItem: "LNBIG" | "BITREFILL_THOR") => {
       if (selectedItem === "LNBIG") {
         await Linking.openURL("https://lnbig.com/");
       } else if (selectedItem === "BITREFILL_THOR") {
         await Linking.openURL("https://embed.bitrefill.com/buy/lightning");
-      } else if (selectedItem === "ZFR") {
-        await Linking.openURL("https://zerofeerouting.com/mobile-wallets/");
       }
     };
 
@@ -462,8 +476,8 @@ ${t("LN.inbound.dialog.msg3")}`
     if (PLATFORM === "android") {
       interface ShowPickerResult {
         selectedItem: {
-          id: "LNBIG" | "BITREFILL_THOR" | "ZFR";
-          label: "LN Big" | "Bitrefill Thor" | "Zero Fee Routing";
+          id: "LNBIG" | "BITREFILL_THOR";
+          label: "LN Big" | "Bitrefill Thor";
         } | undefined;
       }
       const { selectedItem }: ShowPickerResult = await DialogAndroid.showPicker(null, null, {
@@ -478,9 +492,6 @@ ${t("LN.inbound.dialog.msg3")}`
         }, {
           id: "BITREFILL_THOR",
           label: "Bitrefill Thor"
-        }, {
-          id: "ZFR",
-          label: "Zero Fee Routing"
         }],
       });
 
@@ -497,9 +508,6 @@ ${t("LN.inbound.dialog.msg3")}`
         }, {
           title: "Bitrefill Thor",
           value: "BITREFILL_THOR",
-        }, {
-          title: "Zero Fee Routing",
-          value: "ZFR",
         }],
         onPick: async (selectedItem) => {
           goToSite(selectedItem as any)
@@ -952,6 +960,32 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
   };
 
+  const onGetChanInfoPress = async () => {
+    Alert.prompt(
+      "Get channel info",
+      "Enter Channel ID",
+      [{
+        text: "Cancel",
+        style: "cancel",
+        onPress: () => {},
+      }, {
+        text: "Get info",
+        onPress: async (text) => {
+          if (text === "") {
+            return;
+          }
+          try {
+            const nodeInfo = await getChanInfo(Long.fromValue(text ?? ""));
+            Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
+          } catch (e) {
+            Alert.alert(e.message);
+          }
+        },
+      }],
+      "plain-text",
+    );
+  };
+
   // Lnd Graph Cache
   const lndNoGraphCache = useStoreState((store) => store.settings.lndNoGraphCache);
   const changeLndNoGraphCache = useStoreActions((store) => store.settings.changeLndNoGraphCache);
@@ -1103,7 +1137,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             </>
           }
           {["android", "ios", "macos"].includes(PLATFORM) &&
-            <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress}>
+            <ListItem style={style.listItem} icon={true} onPress={onExportChannelsPress} onLongPress={onExportChannelsEmergencyPress}>
               <Left><Icon style={style.icon} type="MaterialIcons" name="save" /></Left>
               <Body>
                 <Text>{t("wallet.backup.export.title")}</Text>
@@ -1322,7 +1356,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           }
-          {(PLATFORM === "android" || PLATFORM === "ios") &&
+          {(PLATFORM === "android" || PLATFORM === "ios" || PLATFORM === "macos") &&
             <ListItem style={style.listItem} icon={true} onPress={() => copyLndLog()}>
               <Left><Icon style={style.icon} type="AntDesign" name="copy1" /></Left>
               <Body>
@@ -1429,6 +1463,12 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>{t("debug.getNodeInfo.title")}</Text>
             </Body>
           </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onGetChanInfoPress}>
+            <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="Entypo" name="info" /></Left>
+            <Body>
+              <Text>{t("debug.getChannelInfo.title")}</Text>
+            </Body>
+          </ListItem>
           {dunderEnabled &&
             <ListItem style={style.listItem} button={true} icon={true} onPress={() => navigation.navigate("DunderDoctor")}>
               <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
@@ -1460,7 +1500,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </ListItem>
             </>
           }
-          <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: false })}>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: true })} onLongPress={() => { setupDemo({ changeDb: true }); toast("DB written") }}>
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
             <Body>
               <Text>{t("debug.demoMode.title")}</Text>

@@ -5,7 +5,9 @@
       "nodeAlias": "Nom du nœud",
       "description": "Description",
       "amount": "Montant",
-      "fee": "Frais"
+      "fee": "Frais",
+      "search": "Chercher",
+      "viewInBlockExplorer": "Afficher dans l'explorateur de blocs"
     },
     "buttons": {
       "ok": "D'accord",
@@ -89,7 +91,12 @@
       "msg1": "Merci d'avoir utilisé Blixt Wallet !",
       "msg2": "Nous vous recommandons de faire une sauvegarde du portefeuille afin de pouvoir restaurer vos fonds en cas de perte du téléphone.",
       "backup": "Sauvegarde du portefeuille"
-    }
+    },
+    "newChannelBeingOpened": {
+      "info": "Une nouvelle chaîne est en cours d'ouverture...",
+      "view": "Voir"
+    },
+    "noTransactionsYet": "Aucune transaction pour le moment"
   },
   "help": {
     "title": "Aide",
@@ -160,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Créer une facture",
-      "error": "Montant de la facture supérieur à",
       "alert": "Avant de pouvoir recevoir, vous avez besoin d'ouvrir un canal sur le réseau Lightning.",
       "lsp": {
         "msg": "Un canal de paiement de Dunder LSP sera ouvert lorsque cette facture sera payée.",
@@ -244,6 +250,33 @@
     },
     "balance": {
       "title": "Balance"
+    },
+    "channel": {
+      "alias": "Alias",
+      "node": "Nœud",
+      "channelId": "Channel ID",
+      "status": "Statut",
+      "statusActive": "Actif",
+      "statusInactive": "Inactif",
+      "statusPending": "En attente",
+      "statusClosing": "Fermeture",
+      "statusForceClosing": "Forcer la fermeture",
+      "statusWaitingForClose": "En attente de fermeture",
+      "capacity": "Capacité",
+      "howMuchCanBeSent": "Peut envoyer",
+      "howMuchCanBeReceived": "Peut recevoir",
+      "localReserve": "Réserve locale",
+      "commitmentFee": "Commission d'engagement",
+      "pendingFunds": "Fonds en attente",
+      "balanceInLimbo": "Solde en limbo",
+      "pendingHtlcs": "HTLC en attente",
+      "maturityHeight": "Hauteur de maturité",
+      "localCommitmentTxid": "Engagement local TXID",
+      "remoteCommitmentTxid": "Engagement à distance TXID",
+      "closeChannel": "Fermer la chaîne",
+      "closeChannelPrompt": {
+        "title": "Fermer la chaîne"
+      }
     }
   },
   "lightningInfo.openChannel": {
@@ -263,6 +296,11 @@
       "fee_rate": {
         "title": "Taux de frais"
       }
+    },
+    "torPrompt": {
+      "title": "Activer Tor",
+      "text1": "Il semble que vous essayez d'ouvrir un canal vers un nœud qui s'exécute sous un service Tor onion.",
+      "text2": "Pour vous connecter, vous devez activer Tor pour Blixt Wallet."
     }
   },
   "onchain.onChainInfo": {
@@ -282,7 +320,6 @@
   },
   "onchain.onChainTransactionDetails": {
     "title": "Transaction",
-    "blockExplorer": "Voir dans Block Explorer",
     "txHash": "id",
     "timeStamp": "Date",
     "amount": "Montant",
@@ -807,6 +844,10 @@
       "keysend": {
         "title": "Expérience Keysend",
         "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Expiration de la facture (secondes)",
+        "subtitle": "{{expiry}} secondes"
       }
     },
     "debug": {
@@ -850,6 +891,22 @@
       "rescanWallet": {
         "title": "Rescanner le portefeuille",
         "subtitle": "Rescanner la blockchain pour les transactions de portefeuilles"
+      },
+      "getNodeInfo": {
+        "title": "Obtenir des informations sur le nœud"
+      },
+      "getChannelInfo": {
+        "title": "Obtenir des informations sur la chaîne"
+      },
+      "demoMode": {
+        "title": "Activer le mode démo",
+        "subtitle": "Utilisé pour la promo. Redémarrez l'application pour réinitialiser"
+      },
+      "disableGraphCache": {
+        "title": "Désactiver le cache graphique lnd"
+      },
+      "resetMissionControl": {
+        "title": "Réinitialiser les connaissances sur le routage des paiements"
       }
     }
   },

@@ -6,7 +6,7 @@ import * as base64 from "base64-js";
 import { lnrpc } from "../../proto/lightning";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { IStoreInjections } from "./store";
-import { IStoreModel } from "../state";
+import { IStoreModel } from "./index";
 import { IChannelEvent, getChannelEvents, createChannelEvent } from "../storage/database/channel-events";
 import { bytesToHexString, toast } from "../utils";
 import { LndMobileEventEmitter } from "../utils/event-listener";
@@ -55,6 +55,7 @@ export interface IChannelModel {
   closeChannel: Thunk<IChannelModel, ICloseChannelPayload, IStoreInjections, IStoreModel>;
   abandonChannel: Thunk<IChannelModel, ICloseChannelPayload>;
   exportChannelsBackup: Thunk<IChannelModel, void, IStoreInjections>;
+  exportChannelBackupFile: Thunk<IChannelModel, void, IStoreInjections>;
 
   setChannels: Action<IChannelModel, lnrpc.IChannel[]>;
   setChannelEvents: Action<IChannelModel, IChannelEvent[]>;
@@ -326,6 +327,10 @@ export const channel: IChannelModel = {
     else {
       throw new Error("Export failed");
     }
+  }),
+
+  exportChannelBackupFile: thunk(async (_, _2, { injections }) => {
+    return await NativeModules.LndMobileTools.saveChannelBackupFile();
   }),
 
   getBalance: thunk(async (actions, _, { injections }) => {

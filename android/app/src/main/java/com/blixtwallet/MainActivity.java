@@ -22,6 +22,7 @@ public class MainActivity extends ReactActivity {
 
   static int INTENT_COPYLNDLOG = 100;
   static int INTENT_EXPORTCHANBACKUP = 101;
+  static int INTENT_EXPORTCHANBACKUPFILE = 102;
 
   static byte[] tmpChanBackup;
 
@@ -80,6 +81,25 @@ public class MainActivity extends ReactActivity {
                 MainActivity.tmpChanBackup = new byte[0];
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+        else if (requestCode == INTENT_EXPORTCHANBACKUPFILE && resultCode == Activity.RESULT_OK) {
+            Uri destUri = data.getData();
+            File sourceLocation = new File(getFilesDir().toString() + "/data/chain/bitcoin/" + BuildConfig.CHAIN + "/channel.backup");
+            try {
+                InputStream in = new FileInputStream(sourceLocation);
+                OutputStream out = getContentResolver().openOutputStream(destUri);
+
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                in.close();
+                out.close();
+            }
+            catch(IOException e) {
+                Toast.makeText(this, "Error " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
     }

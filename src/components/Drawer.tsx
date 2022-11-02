@@ -229,8 +229,8 @@ const style = StyleSheet.create({
     backgroundColor: blixtTheme.gray,
     paddingVertical: 10,
     paddingHorizontal: 13,
-    marginLeft: 19,
-    marginRight: PLATFORM !== "macos" ? 19 : 4,
+    marginLeft: 18,
+    marginRight: PLATFORM !== "macos" ? 18 : 4,
     marginBottom: 11,
     borderRadius: 12,
   },
@@ -257,11 +257,11 @@ const style = StyleSheet.create({
   },
   menuItemIcon: {
     width: 32,
-    marginRight: 11,
+    marginRight: 8,
   },
   menuItemText: {
     fontFamily: blixtTheme.fontMedium,
-    fontSize: 15 * fontFactorNormalized,
+    fontSize: 14 * fontFactorNormalized,
   },
   bottom: {
     backgroundColor: blixtTheme.dark,

@@ -21,7 +21,7 @@ import com.android.build.OutputFile
  *   // default. Can be overridden with ENTRY_FILE environment variable.
  *   entryFile: "index.android.js",
  *
- *   // https://facebook.github.io/react-native/docs/performance#enable-the-ram-format
+ *   // https://reactnative.dev/docs/performance#enable-the-ram-format
  *   bundleCommand: "ram-bundle",
  *
  *   // whether to bundle JS and assets in debug mode
@@ -80,7 +80,9 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     entryFile: "index.js",
-    enableHermes: true,  // clean and rebuild if changing
+    bundleAssetName: "index.android.bundle",
+    enableHermes: true,  // clean and rebuild if changing,
+    jsBundleDirRelease: "$buildDir/intermediates/assets/release",
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -141,8 +143,8 @@ android {
         applicationId MYAPP_APP_ID
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 102
-        versionName "0.5.1"
+        versionCode 112
+        versionName "0.6.0"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
         manifestPlaceholders = [appName: "Blixt Wallet"]

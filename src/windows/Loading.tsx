@@ -15,30 +15,25 @@ export interface ILoadingProps {
 }
 export default function Loading({ navigation }: ILoadingProps) {
   const checkDeeplink = useStoreActions((store) => store.deeplinkManager.checkDeeplink);
-  const ready = useStoreState((store) => store.lightning.ready);
 
   useEffect(() => {
     // tslint:disable-next-line
     (async () => {
       let cb = await checkDeeplink();
 
-      requestAnimationFrame(() => {
-        navigation.dispatch(
-          CommonActions.reset({
-             index: 0,
-             routes: [{ name: "Overview" }],
-          })
-        );
-        if (cb) {
-          setTimeout(() => {
-            cb(navigation);
-          }, 100);
-        } else if (PLATFORM === "web" && window.BLIXT_WEB_DEMO) {
-          navigation.navigate("WebInfo");
-        }
-      });
+      navigation.dispatch(
+        CommonActions.reset({
+            index: 0,
+            routes: [{ name: "Overview" }],
+        })
+      );
+      if (cb) {
+        cb(navigation);
+      } else if (PLATFORM === "web" && window.BLIXT_WEB_DEMO) {
+        navigation.navigate("WebInfo");
+      }
     })();
-  }, [ready]);
+  }, []);
 
 
   return (

@@ -19,7 +19,6 @@
 }
 
 - (void)application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls {
-  [RCTLinkingManager setInitialUrl:urls[0]];
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification{

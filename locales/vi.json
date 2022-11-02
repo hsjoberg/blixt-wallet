@@ -1,0 +1,1071 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Địa chỉ Lightning",
+      "nodeAlias": "Tên riêng nút",
+      "description": "Mô tả",
+      "amount": "Số lượng",
+      "fee": "Phí",
+      "search": "Tìm kiếm",
+      "viewInBlockExplorer": "Xem bằng trình duyệt khối"
+    },
+    "buttons": {
+      "ok": "Ok",
+      "cancel": "Huỷ",
+      "continue": "Tiếp tục",
+      "skip": "Bỏ qua",
+      "proceed": "Tiếp tục",
+      "back": "Trở về",
+      "no": "Không",
+      "yes": "Có",
+      "save": "Lưu",
+      "copy": "Sao chép"
+    },
+    "msg": {
+      "status": "Trạng thái",
+      "error": "Lỗi",
+      "warning": "Cảnh báo",
+      "result": "Kết quả",
+      "pending": "đang chờ",
+      "done": "Hoàn thành",
+      "dismiss": "Huỷ bỏ",
+      "lastSync": "Đồng bộ gần nhất",
+      "lastSyncAttempt": "Lần đồng bộ gần nhất",
+      "clipboardCopy": "Đã sao chép tới khay nhớ tạm",
+      "written": "Đã viết",
+      "enabled": "bật",
+      "disabled": "tắt"
+    }
+  },
+  "welcome.start": {
+    "title": "Chào mừng",
+    "createWallet": {
+      "title": "Tạo Ví",
+      "msg1": "Ví Blixt vẫn đang trong giai đoạn phát triển.",
+      "msg2": "Nếu bạn dùng ví này, nên hiểu rằng trong trường hợp xấu nhất bạn có thể mất coin của mình.",
+      "msg3": "Hiện không có hỗ trợ WatchTower để xem các kênh của bạn khi bạn ngoại tuyến.",
+      "msg4": "Tôi không quan tâm, hãy tiếp tục"
+    },
+    "restoreWallet": {
+      "title": "Phục hồi Ví"
+    },
+    "menu": {
+      "enableTor": "Bật Tor",
+      "disableTor": "Tắt Tor",
+      "setBitcoinNode": "Thiết lập nút Bitcoin"
+    }
+  },
+  "footerNav": {
+    "receive": "Nhận",
+    "send": "Gửi"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Quét",
+      "receive": "Nhận",
+      "pasteFromClipboard": "Dán từ Khay nhớ tạm",
+      "sendToLightningAddress": "Gửi đến Địa chỉ Lightning",
+      "contactsAndServices": "Liên hệ & Dịch vụ",
+      "lightningBrowser": "Trình duyệt Lightning",
+      "onChainWallet": "Trên chuỗi",
+      "lightningChannels": "Kênh Lightning",
+      "keysendExperiment": "Thử nghiệm Keysend",
+      "showMore": "Nâng cao"
+    },
+    "madeInSweden": "Thực hiện với ⚡ tại Thụy Điển"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "Đang trong quá trình khôi phục ví.",
+      "msg2": "Hoàn thành khôi phục ví.",
+      "more": "Thông tin thêm"
+    },
+    "sendOnChain": {
+      "title": "Chào mừng đến với Ví Blixt",
+      "msg1": "Để bắt đầu, hãy gửi tiền trên chuỗi đến địa chỉ bitcoin ở bên phải.",
+      "msg2": "Một kênh sẽ tự động được mở cho bạn.",
+      "msg3": "Gửi tối thiểu",
+      "alert": "Địa chỉ Bitcoin đã sao chép đến khay nhớ tạm"
+    },
+    "doBackup": {
+      "msg1": "Cảm ơn bạn đã dùng Ví Blixt!",
+      "msg2": "Chúng tôi khuyên bạn nên sao lưu ví để có thể khôi phục tiền của mình trong trường hợp mất điện thoại.",
+      "backup": "Sao lưu ví"
+    },
+    "newChannelBeingOpened": {
+      "info": "Một kênh mới đang trong quá trình mở...",
+      "view": "Giao diện"
+    },
+    "noTransactionsYet": "Chưa có giao dịch nào"
+  },
+  "help": {
+    "title": "Trợ giúp",
+    "msg1": "Nếu bạn gặp sự cố hoặc muốn để lại phản hồi, bạn có thể liên hệ với nhà phát triển của Ví Blixt bằng cách tạo issue trên Github hoặc liên hệ với chúng tôi qua email.",
+    "msg2": "Bạn cũng có thể tham gia nhóm trò chuyện Telegram công khai của chúng tôi.",
+    "msg3": "Vì Blixt là một ví mới, chúng tôi cần phản hồi về các vấn đề phổ biến mà bạn có thể gặp phải.",
+    "telegramGroup": "Nhóm Telegram"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Đang đồng bộ",
+      "title1": "Đồng bộ hoàn thành",
+      "msg1": "Ví Blixt hiện đang đồng bộ chuỗi khối.",
+      "msg2": "Khi ví của bạn đồng bộ với chuỗi khối, các giao dịch và tiền trên chuỗi sẽ được công nhận và có thể được nhìn thấy từ phần Bitcoin trên chuỗi.",
+      "msg3": "Ví Blixt đồng bộ với blockchain.",
+      "blockHeight": {
+        "title": "Chiều cao khối hiện hành",
+        "msg1": "Tiến trình đồng bộ chuỗi"
+      }
+    },
+    "recoveryMode": {
+      "title": "Tiến trình phục hồi",
+      "msg1": "Phục hồi hoàn thành",
+      "msg2": "Kiểm tra các kênh Lightning & phần On-chain"
+    },
+    "lndLog": {
+      "show": "Hiện lịch sử lnd",
+      "copy": "Sao chép log"
+    }
+  },
+  "transactionDetails": {
+    "title": "Giao dịch",
+    "date": "Ngày tháng",
+    "note": "Ghi chú",
+    "website": "Trang web",
+    "type" : "Loại",
+    "lnurl": {
+      "messageFromWebsite": "Tin nhắn từ",
+      "urlReceivedFromWebsite": "URL nhận từ",
+      "secretMessage": "Thông điệp bí mật"
+    },
+    "payer": "Người thanh toán",
+    "recipient": "Người nhận",
+    "amountInFiatTimeOfPayment": "Số lượng fiat (tại thời điểm thanh toán)",
+    "numberOfHops": "Số bước nhảy",
+    "remotePubkey": "Khoá công khai từ xa",
+    "paymentHash": "Hàm băm thanh toán",
+    "preimage": "Preimage",
+    "status": "Trạng thái",
+    "goBack": "Trở về",
+    "button": {
+      "setNote": "Đặt ghi chú",
+      "cancelInvoice": "Huỷ hoá đơn",
+      "showMap": "Hiện bản đồ"
+    },
+    "setNoteDialog": {
+      "title": "Ghi chú",
+      "text": "Đặt ghi chú cho giao dịch này"
+    }
+  },
+  "web.info": {
+    "title": "Demo tương tác",
+    "pressToTry": "Nhấn để dùng thử Ví Blixt"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Nhận"
+    },
+    "createInvoice": {
+      "title": "Tạo hoá đơn",
+      "alert": "Bạn cần mở một kênh Lightning trước khi có thể nhận.",
+      "lsp": {
+        "msg": "Kênh thanh toán của Dunder LSP sẽ được mở khi hóa đơn này được thanh toán.",
+        "msg1": "Đây là gì?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Đang mở kênh",
+      "msg": "Để chấp nhận thanh toán cho hóa đơn này, một kênh trên Mạng Lightning phải được mở.",
+      "msg1": "Điều này yêu cầu một khoản phí một lần trong khoảng",
+      "alert": "Không kết nối được với Dunder, vui lòng thử lại sau.",
+      "proceed": "Tiếp tục"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Số lượng",
+        "change": "Đổi đơn vị fiat",
+        "dunderPlaceholder": "Ít nhất"
+      },
+      "amountBitcoin": {
+        "title": "Số lượng",
+        "change": "Đổi đơn vị bitcoin",
+        "dunderPlaceholder": "Ít nhất"
+      },
+      "payer": {
+        "title": "Người thanh toán",
+        "placeholder": "Để ghi sổ kế toán"
+      },
+      "description": {
+        "title": "Tin nhắn",
+        "placeholder": "Tin nhắn cho người thanh toán"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "Về Dunder LSP",
+    "msg": "Dunder là Nhà cung cấp dịch vụ Lightning (LSP) tự động mở các kênh cho bạn khi bạn không có đủ thanh khoản đầu vào.",
+    "msg1": "Ví dụ: đây có thể là trường hợp khi bạn lần đầu tiên sử dụng Ví Blixt.",
+    "msg2": "Vì điều này yêu cầu giao dịch trên chuỗi, phí giao dịch Bitcoin sẽ được khấu trừ từ khoản thanh toán đến. Các khoản thanh toán trong tương lai sẽ có thể sử dụng kênh thanh toán mới mở với mạng Lightning.",
+    "msg3": "Dunder là",
+    "msg4": "mã nguồn mở",
+    "msg5": "phần mềm và bạn có thể thay đổi nhà cung cấp dịch vụ mặc định trong Cài đặt."
+  },
+  "receive.receiveQr": {
+    "title": "Nhận",
+    "qr": {
+      "title": "Quét mã QR này",
+      "msg": "Hết hạn trong {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Hoá đơn thanh toán"
+    },
+    "form": {
+      "invoice": {
+        "title": "Hoá đơn"
+      },
+      "amount": {
+        "title": "Số lượng"
+      },
+      "recipient": {
+        "title": "Người nhận"
+      },
+      "nodeAlias": {
+        "title": "Tên riêng nút"
+      },
+      "description": {
+        "title": "Tin nhắn"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "THANH TOÁN ĐÃ GỬI"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Các kênh Lightning"
+    },
+    "balance": {
+      "title": "Số dư"
+    },
+    "channel": {
+      "alias": "Tên riêng",
+      "node": "Nút",
+      "channelId": "ID kênh",
+      "status": "Trạng thái",
+      "statusActive": "Kích hoạt",
+      "statusInactive": "Không kích hoạt",
+      "statusPending": "Đang chờ",
+      "statusClosing": "Đang đóng",
+      "statusForceClosing": "Bắt buộc đóng",
+      "statusWaitingForClose": "Đang đợi để đóng",
+      "capacity": "Sức chứa",
+      "howMuchCanBeSent": "Có thể gửi",
+      "howMuchCanBeReceived": "Có thể nhận",
+      "localReserve": "Dự phòng tại chỗ",
+      "commitmentFee": "Phí cam kết",
+      "pendingFunds": "Quỹ đang chờ",
+      "balanceInLimbo": "Số dư Limbo",
+      "pendingHtlcs": "HTLC đang đợi",
+      "maturityHeight": "Chiều cao trưởng thành",
+      "localCommitmentTxid": "TXID cam kết tại chỗ",
+      "remoteCommitmentTxid": "TXID cam kết từ xa",
+      "closeChannel": "Đóng kênh",
+      "closeChannelPrompt": {
+        "title": "Đóng kênh"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Mở kênh"
+    },
+    "form": {
+      "title": "Mở kênh",
+      "channel": {
+        "title": "URI của nút",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Số lượng",
+        "placeholder": "Số lượng"
+      },
+      "fee_rate": {
+        "title": "Tỉ lệ phí"
+      }
+    },
+    "torPrompt": {
+      "title": "Bật Tor",
+      "text1": "Có vẻ như bạn đang cố gắng mở kênh tới một nút đang chạy trong dịch vụ Tor onion.",
+      "text2": "Để kết nối, bạn cần kích hoạt Tor cho Blixt Wallet."
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "Số dư trên chuỗi"
+    },
+    "address": {
+      "title": "Gửi Bitcoin trên chuỗi tới địa chỉ này",
+      "alert": "Đã sao chép vào khay nhớ tạm"
+    },
+    "newAddress": {
+      "title": "Tạo địa chỉ mới"
+    },
+    "withdraw": {
+      "title": "Rút coin"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Giao dịch",
+    "txHash": "Id",
+    "timeStamp": "Ngày tháng",
+    "amount": "Số lượng",
+    "totalFees": "Phí",
+    "label": "Nhãn tên",
+    "destAddresses": "Đích đến",
+    "numConfirmations": "Số xác nhận",
+    "blockHeight": "Chiều cao khối",
+    "blockHash": "Hàm băm khối",
+    "rawTxHex": {
+      "title": "Hex thô của giao dịch",
+      "msg": "Nhấn để sao chép"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Lịch sử Giao dịch"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Rút coin"
+    },
+    "form": {
+      "address": {
+        "title": "Địa chỉ",
+        "placeholder": "Địa chỉ Bitcoin"
+      },
+      "amount": {
+        "title": "Số lượng",
+        "placeholder": "Số lượng",
+        "withdrawAll": "Rút toàn bộ số dư",
+        "all": "Tất cả"
+      },
+      "feeRate": {
+        "title": "Tỉ lệ phí",
+        "auto": "tự động"
+      },
+      "withdraw": {
+        "title": "Rút",
+        "alert": "Rút thành công"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Yêu cầu đăng nhập",
+      "msg": "Bạn có muốn đăng nhập vào",
+      "success": "Đã xác thực cho"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Đang mở kênh inbound"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Xem dữ liệu cơ bản",
+      "dialog": {
+        "title": "Dữ liệu kĩ thuật"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} có trong danh sách liên lạc của bạn"
+      },
+      "add": {
+        "title": "Thêm vào Danh sách Liên lạc",
+        "msg": "Bạn có muốn thêm {{lightningAddress}} vào danh sách liên lạc?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Mã thanh toán cho {{domain}} có trong danh sách liên lạc của bạn"
+      },
+      "add": {
+        "title": "Thêm vào Danh sách Liên lạc",
+        "msg": "Bạn có muốn thêm mã thanh toán này đến {{domain}} vào danh sách liên lạc?"
+      }
+    },
+    "unableToPay": "Không thể thanh toán",
+    "payerData": {
+      "commentAllowed": "Bình luận tới {{target}} (tối đa {{letters}} ký tự)",
+      "sendNameWithComment": "Gửi tên tôi cùng với bình luận này",
+      "name": {
+        "ask": "Gửi tên tôi cùng với khoản thanh toán này",
+        "mandatory": "Tên bạn đã được gửi cùng với khoản thanh toán này"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "Thanh toán thiếu một mục mô tả."
+    },
+    "pay": {
+      "title": "Thanh toán",
+      "error": {
+        "mustProvideComment": "Bạn cần cung cấp một bình luận nếu chọn bao gồm tên trong thanh toán này"
+      }
+    },
+    "cancel": {
+      "title": "Huỷ"
+    },
+    "form": {
+      "asksYouToPay": "yêu cầu bạn thanh toán.",
+      "description": {
+        "title": "Mô tả"
+      },
+      "amount": {
+        "title": "Số lượng",
+        "to": "đến",
+        "placeholder": "Nhập số lượng"
+      },
+      "alert": "Không thể thanh toán"
+    },
+    "done": {
+      "message": {
+        "title": "Tin nhắn từ"
+      },
+      "url": {
+        "description": "Mô tả",
+        "domain": "URL nhận từ",
+        "done": {
+          "title": "Hoàn thành"
+        },
+        "copy": {
+          "title": "Sao chép đến khay nhớ tạm",
+          "msg": "Đã sao chép đến khay nhớ tạm"
+        },
+        "open": {
+          "title": "Mở Trình duyệt"
+        }
+      },
+      "aes": {
+        "domain": "Nhận được một tin nhắn mã hoá từ",
+        "description": "Tin nhắn từ",
+        "secret": "Tin nhắn bí mật"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "Về Địa chỉ Lightning",
+      "msg1": "Địa chỉ Lightning",
+      "msg2": "là một cách thanh toán cho người nhận hoặc dịch vụ trên Mạng Lightning.",
+      "msg3": "Chúng giống như địa chỉ email, nhưng thay vì gửi email đến người nhận, bạn gửi tiền.",
+      "msg4": "Ví Blixt hỗ trợ đầy đủ về việc gửi đến Địa chỉ Lightning, nhưng việc nhận",
+      "msg5": "qua Địa chỉ Lightning vẫn đang được phát triển."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "Gửi yêu cầu rút đến {{domain}}",
+      "addToContactList": {
+        "title": "Thêm vào Danh sách Liên lạc",
+        "msg": "Bạn có muốn thêm mã rút đến {{domain}} vào danh sách liên lạc?",
+        "note": "Tài khoản trên {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "Yêu cầu rút",
+      "msg": "Tin nhắn từ",
+      "dialog": {
+        "msg": "Số lượng"
+      },
+      "dialog1": {
+        "minSat": "Số lượng rút tối thiểu",
+        "maxSat": "Số lượng rút tối đa",
+        "placeholder": "Số lượng"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Liên hệ & Dịch vụ",
+      "lightningAddressAlreadyExists": "đã tồn tại trong danh sách liên hệ của bạn",
+      "nothingHereYet": "Chưa có gì ở đây...",
+      "whyNotAdd": "Tại sao không thêm một Địa chỉ Lightning bằng cách",
+      "tappingHere": "nhấn vào đây"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Số dư bên ngoài",
+        "error": "Tác vụ không hợp lệ, liên lạc không có một mã rút LNURL"
+      },
+      "list": {
+        "pay": "Thanh toán đến",
+        "account": "Tài khoản trên"
+      },
+      "send": {
+        "title": "Gửi",
+        "couldNotPay": "Không thể thanh toán đến mã LNURL-pay này",
+        "invalidResponse": "Phản hồi không phải LNURL-pay (nhận {{response}})",
+        "invalidOperation": "Tác vụ không hợp lệ, liên lạc không có định danh LUD-16 hoặc mã LNURL-pay"
+      },
+      "withdraw": {
+        "title": "Rút",
+        "couldNotPay": "Không thể thanh toán đến mã LNURL-pay này",
+        "invalidResponse": "Phản hồi không phải là phản hồi LNURL-pay (nhận được {{response}})",
+        "invalidOperation": "Tác vụ không hợp lệ, liên hệ không có mã rút LNURL"
+      },
+      "deleteContact": {
+        "title": "Xoá liên lạc",
+        "msg": "Bạn chắc chắn muốn xoá liên lạc {{contact}}?"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Bạn có muốn đóng trình duyệt?",
+    "home": "Trở về danh sách cửa hàng",
+    "placeholder": "Nhập URL tại đây"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "Đã sao chép đến khay nhớ tạm"
+    },
+    "dialog": {
+      "msg1": "Chào mừng đến với sân chơi keysend",
+      "msg2": "Keysend cho phép bạn thanh toán một Ví Blixt khác (hoặc bất kỳ nút Lightning nào hỗ trợ keysend) mà không yêu cầu hóa đơn.",
+      "msg3": "Nhấp vào máy ảnh để quét mã QR của ví khác hoặc cung cấp khóa công khai và gợi ý lộ trình bên dưới."
+    },
+    "send": {
+      "title": "Gửi",
+      "msg": "Thanh toán keysend",
+      "error": {
+        "checkAmount": "Kiểm tra số lượng",
+        "missingPubkey": "Thiếu khoá công khai"
+      },
+      "alert": "Thanh toán thành công"
+    },
+    "form": {
+      "amount": {
+        "title": "Số lượng satoshi"
+      },
+      "pubkey": {
+        "title": "Khoá công khai",
+        "placeholder": "Khoá công khai"
+      },
+      "route": {
+        "title": "Gợi ý lộ trình",
+        "placeholder": "Gợi ý lộ trình"
+      },
+      "message": {
+        "title": "Tin nhắn",
+        "placeholder": "Nhập một tin nhắn tại đây"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "Thiết lập",
+    "general": {
+      "title": "Tổng quan",
+      "name": {
+        "title": "Tên",
+        "subtitle": "Sẽ được dùng trong giao dịch",
+        "dialog": {
+          "msg": "Chọn tên sẽ được dùng trong giao dịch.\n\nTên bạn sẽ được hiện trong hoá đơn mà bạn giao dịch với người khác.",
+          "accept": "Đặt tên"
+        }
+      },
+      "lang": {
+        "title": "Ngôn ngữ",
+        "dialog": {
+          "title": "Chọn ngôn ngữ"
+        }
+      },
+      "pushNotification": {
+        "title": "Đẩy thông báo",
+        "subtitle": "Cho các sự kiện giao dịch và kênh"
+      },
+      "checkClipboard": {
+        "title": "Kiểm tra hoá đơn trong khay nhớ tạm",
+        "subtitle": "Tự động kiểm tra khay nhớ tạm tìm hoá đơn"
+      },
+      "saveGeolocation": {
+        "title": "Lưu vị trí địa lý của giao dịch",
+        "subtitle": "Lưu vị trí giao dịch trên thiết bị",
+        "logGranted": "Vị trí địa lý đã được cấp",
+        "logDenied": "Quyền truy cập vị trí địa lý bị từ chối"
+      },
+      "mapTheme": {
+        "title": "Thiết lập theme bản đồ"
+      }
+    },
+    "wallet": {
+      "title": "Ví",
+      "seed": {
+        "show": {
+          "title": "Hiện mnemonic",
+          "subtitle": "Hiện 24 từ khoá hạt giống của ví này",
+          "dialog": {
+            "title": "Từ khoá hạt giống",
+            "alert": "Đã sao chép đến khay nhớ tạm",
+            "copy": "Sao chép từ khoá"
+          }
+        },
+        "remove": {
+          "title": "Xoá mnemonic khỏi thiết bị",
+          "subtitle": "Xoá vĩnh viễn từ khoá hạt giống khỏi thiết bị này",
+          "dialog": {
+            "title": "Xoá từ khoá hạt giống",
+            "msg": "Thao tác này sẽ xóa vĩnh viễn hạt giống khỏi thiết bị này. Chỉ làm điều này nếu bạn đã sao lưu từ khoá hạt giống của mình!",
+            "accept": "Xoá từ khoá hạt giống"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Xuất bản sao lưu kênh",
+          "alert": "Tệp đã ghi:"
+        },
+        "verify": {
+          "title": "Xác nhận sao lưu kênh"
+        },
+        "googleCloud": {
+          "title": "Sao lưu kênh Google Drive",
+          "subtitle": "Tự động sao lưu kênh đến Google Drive",
+          "alert": "Bật sao lưu Google Drive"
+        },
+        "googleCloudForce": {
+          "title": "Kích hoạt thủ công Sao lưu Google Drive",
+          "alert": "Đã sao lưu các kênh vào Google Drive"
+        },
+        "iCloud": {
+          "title": "Sao lưu kênh iCloud",
+          "subtitle": "Tự động sao lưu kênh đến iCloud",
+          "alert": "Sao lưu iCloud"
+        },
+        "iCloudForce": {
+          "title": "Kích hoạt thủ công sao lưu iCloud",
+          "alert": "Đã sao lưu các kênh lên iCloud"
+        },
+        "error": "Lỗi trong lúc sao lưu"
+      }
+    },
+    "security": {
+      "title": "Bảo mật",
+      "pincode": {
+        "title": "Đăng nhập với mã pin"
+      },
+      "biometrics": {
+        "title": "Đăng nhập với",
+        "fingerprint": "vân tay",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Đồng bộ hóa chuỗi đã lên lịch",
+        "subtitle": "Chạy ngầm mỗi 4 giờ",
+        "dialog": {
+          "title": "Không được khuyến khích",
+          "msg": "Cảnh báo. Bạn không nên tắt đồng bộ hóa chuỗi đã lên lịch.\n\nĐảm bảo rằng bạn luôn cập nhật mạng, nếu không, bạn có nguy cơ mất tiền của mình.\n\nChỉ làm điều này nếu bạn biết mình đang làm gì."
+        }
+      }
+    },
+    "display": {
+      "title": "Hiển thị",
+      "fiatUnit": {
+        "title": "Đổi đơn vị fiat"
+      },
+      "bitcoinUnit": {
+        "title": "Đổi đơn vị bitcoin"
+      },
+      "onchainExplorer": {
+        "title": "Trình duyệt trên chuỗi",
+        "dialog": {
+          "title": "Đổi trình duyệt trên-chuỗi"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Mạng Bitcoin",
+      "node": {
+        "title": "Nút Bitcoin",
+        "subtitle": "Đặt nút Bitcoin (BIP157) để kết nối đến",
+        "setDialog": {
+          "title": "Đặt Nút",
+          "info": "Đặt nút Bitcoin hỗ trợ BIP157 để thiết lập kết nối.",
+          "leaveBlankToSearch": "Để trống để cho Ví Blixt tìm kiếm nút hợp lệ trên mạng Bitcoin.",
+          "longPressToReset": "Để đặt lại về nút mặc định ({{defaultNode}}), hãy nhấn và giữ cài đặt."
+        },
+        "restoreDialog": {
+          "title": "Phục hồi nút",
+          "msg": "Bạn có muốn phục hồi về nút mặc định"
+        }
+      },
+      "restartDialog": {
+        "title": "Cần khởi động lại",
+        "msg": "Blixt Wallet phải được khởi động lại trước khi áp dụng cấu hình mới.",
+        "msg1": "Bạn có muốn làm điều đó ngay bây giờ?"
+      },
+      "rpc": {
+        "title": "Thiết lập bitcoind RPC Host"
+      },
+      "zmqRawBlock": {
+        "title": "Thiết lập bitcoind ZMQ Raw Block Host"
+      },
+      "zmqRawTx": {
+        "title": "Thiếp lập bitcoind ZMQ Raw Tx Host"
+      },
+      "p2tr": {
+        "title": "Cho phép nhận trên chuỗi qua Taproot (P2TR)"
+      }
+    },
+    "LN": {
+      "title": "Mạng Lightning",
+      "node": {
+        "title": "Hiện dữ liệu nút",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Hiển thị các đối tác ngang hàng Lightning",
+        "subtitle": ""
+      },
+      "autopilot": {
+        "title": "Tự động mở kênh",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Dịch vụ kênh đến",
+        "subtitle": "Sử dụng dịch vụ kênh đến để nhận thanh toán",
+        "dialog": {
+          "title": "Nhà cung cấp kênh đến",
+          "msg1": "Chọn một nhà cung cấp kênh đến và nhấn Tiếp tục.",
+          "msg2": "Trình duyệt web của bạn sẽ được mở đến trang web của nhà cung cấp tương ứng, nơi bạn có thể yêu cầu một kênh.",
+          "msg3": "Khi hoàn tất, bạn có thể sao chép mã địa chỉ và/hoặc mở liên kết bằng Ví Blixt."
+        }
+      },
+      "LSP": {
+        "title": "Thiết lập máy chủ Dunder LSP",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Thiết lập máy chủ Dunder",
+          "acept": "Thiết lập máy chủ"
+        },
+        "restoreDialog": {
+          "title": "Phục hồi máy chủ Dunder",
+          "msg": "Bạn có muốn khôi phục về máy chủ Dunder mặc định không"
+        }
+      },
+      "graphSync": {
+        "title": "Chờ đồng bộ hóa biểu đồ trước khi thanh toán",
+        "subtitle": "Biểu đồ được đồng bộ hóa dẫn đến đường dẫn thanh toán tối ưu"
+      }
+    },
+    "miscelaneous": {
+      "title": "Tổng hợp",
+      "about": {
+        "title": "Về",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "Sao chép nhật ký ứng dụng vào bộ nhớ cục bộ",
+        "subtitle": "",
+        "dialog": {
+          "alert": "Đã sao chép tệp nhật ký ứng dụng sang",
+          "error": "Lỗi khi sao chép tệp nhật ký ứng dụng."
+        }
+      },
+      "lndLog": {
+        "title": "Sao chép nhật ký lnd vào bộ nhớ cục bộ",
+        "subtitle": "Tiếp cận từ thẻ sd/Ví Blixt",
+        "dialog": {
+          "alert": "Đã sao chép tệp nhật ký lnd",
+          "error": "Lỗi khi sao chép tệp nhật ký lnd."
+        }
+      },
+      "dev": {
+        "title": "Chuyển đến màn hình nhà phát triển",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Tự động ẩn các hóa đơn đã hết hạn",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Chuyển đổi màn hình",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Ký tin nhắn bằng khóa ví",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Ký tin nhắn"
+        },
+        "dialog2": {
+          "title": "Chữ ký",
+          "alert": "Đã sao chép đến khay nhớ tạm"
+        }
+      }
+    },
+    "experimental": {
+      "title": "Thí nghiệm",
+      "LSP": {
+        "title": "Bật Dunder LSP",
+        "subtitle": "THỬ NGHIỆM. Nhà cung cấp dịch vụ Lightning trợ giúp thanh khoản đầu vào"
+      },
+      "MPP": {
+        "title": "Bật thanh toán đa đường dẫn",
+        "subtitle": "Thanh toán có thể có tới 2 đường dẫn"
+      },
+      "tor": {
+        "title": "Bật Tor",
+        "subtitle": "",
+        "enabled": {
+          "title": "Khởi động lại ứng dụng và bật Tor",
+          "msg1": "Việc kích hoạt Tor sẽ làm cho ví kết nối với các đối tác của nó (cả Bitcoin và Mạng Lightning) thông qua Mạng Tor.",
+          "msg2": "Bạn cũng có thể kết nối và mở các kênh với các nút Lightning sử dụng các dịch vụ onion.",
+          "msg3": "CẢNH BÁO: Ví Blixt sẽ vẫn giao tiếp với các dịch vụ sau mà không có Tor",
+          "msg4": "Lý do: Để cập nhật tỷ giá fiat/bitcoin",
+          "msg5": "Lý do: Để cập nhật chiều cao khối hiện tại",
+          "msg6": "Lý do: Để sao lưu Google Drive",
+          "msg7": "Lý do: Đối với các nút Lightning đáng tin cậy",
+          "msg8": "Trình duyệt WebLN và LNURL cũng sẽ không sử dụng Tor."
+        },
+        "disabled": {
+          "title": "Khởi động lại ứng dụng và tắt Tor",
+          "msg1": "Tắt Tor cần khởi động lại ứng dụng.",
+          "msg2": "Bạn có muốn tiếp tục?"
+        }
+      },
+      "onion": {
+        "title": "Hiện dịch vụ onion Tor",
+        "subtitle": "Để kết nối và mở các kênh với ví này"
+      },
+      "keysend": {
+        "title": "Thử nghiệm Keysend",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Hóa đơn hết hạn (giây)",
+        "subtitle": "{{expiry}} giây"
+      }
+    },
+    "debug": {
+      "title": "Debug",
+      "startup": {
+        "title": "Hiển thị thông báo thông tin khởi động",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "Trung tâm trợ giúp LndMobile",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Chẩn đoán sự cố Dunder",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "Đọc nhật ký lnd",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Kiểm tra Keysend",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Thử nghiệm Google Drive",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Viết cấu hình",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Kích hoạt Chế độ Demo",
+        "subtitle": "Được sử dụng để quảng cáo. Khởi động lại ứng dụng để reset"
+      },
+      "rescanWallet": {
+        "title": "Quét lại ví",
+        "subtitle": "Quét lại chuỗi khối cho các giao dịch ví"
+      },
+      "getNodeInfo": {
+        "title": "Nhận thông tin về nút"
+      },
+      "getChannelInfo": {
+        "title": "Nhận thông tin kênh"
+      },
+      "demoMode": {
+        "title": "Kích hoạt Chế độ Demo",
+        "subtitle": "Được sử dụng để quảng cáo. Khởi động lại ứng dụng để reset"
+      },
+      "disableGraphCache": {
+        "title": "Disable lnd graph cache"
+      },
+      "resetMissionControl": {
+        "title": "Đặt lại thông tin định tuyến thanh toán"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "Về Ví Blixt",
+    "msg1": "Phiên bản",
+    "msg2": "Bởi",
+    "msg3": "Ví mã nguồn mở với giấy phép MIT",
+    "msg4": "Được tạo bằng",
+    "msg5": "và phần mềm nguồn mở tuyệt vời khác",
+    "msg6": "Biểu tượng Tor được cấp phép theo CC BY 3.0 bởi",
+    "msg7": "giấy phép"
+  },
+  "settings.setPincode": {
+    "enter": "Nhập một mã pin",
+    "confirm": "Xác nhận mã pin của bạn"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Nhập mã pin hiện tại để xoá mã pin"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Đối tác ngang hàng Lightning"
+    },
+    "alias": "Tên riêng nút",
+    "pubKey": "Khoá công khai nút",
+    "address": "Địa chỉ nút",
+    "data": {
+      "title": "Dữ liệu",
+      "bytesSent": "byte đã gửi",
+      "bytesRecv": "byte đã nhận"
+    },
+    "transfer": {
+      "title": "Truyền",
+      "satSent": "satoshi đã gửi",
+      "satRecv": "satoshi đã nhận"
+    },
+    "inbound": "Đến",
+    "syncType": "Loại đồng bộ",
+    "errors": "Lỗi",
+    "disconnect": "Ngắt kết nối đối tác"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Kết nối đến Đối tác Lightning"
+    },
+    "connect": {
+      "title": "URI nút",
+      "placeholder": "URI đối tác",
+      "accept": "Kết nối"
+    }
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Thông tin nút",
+    "alias": "Tên riêng nút",
+    "chain": "Chuỗi",
+    "timestamp": "Nhãn thời gian tiêu đề tốt nhất",
+    "blockHash": "Băm của khối",
+    "blockHeight": "Chiều cao khối",
+    "identityPubkey": "Khoá công khai nhận dạng",
+    "channel": {
+      "title": "Num Channels",
+      "active": "Kích hoạt",
+      "inactive": "Không kích hoạt",
+      "pending": "Đang chờ"
+    },
+    "numPeers": "Số lượng đối tác",
+    "syncedToChain": "Đã đồng bộ tới Chuỗi",
+    "syncedToGraph": "Đã đồng bộ tới Biểu đồ",
+    "nodeUris": "URI nút",
+    "version": "Phiên bản Lnd",
+    "features": "Tính năng nút"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Dịch vụ Onion Tor",
+    "msg1": "Quét mã QR để mở một kênh đến ví này",
+    "msg2": "Không thể giải quyết địa chỉ onion"
+  },
+  "welcome.addFunds": {
+    "title": "Thêm quỹ",
+    "msg1": "Để bắt đầu sử dụng Lightning trong Ví Blixt",
+    "msg2": "gửi bitcoin đến địa chỉ trên"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "Các kênh tự động mở",
+      "msg": "Mở các kênh khi có tiền trên chuỗi"
+    },
+    "done": {
+      "title": "Sắp hoàn thành!",
+      "msg1": "Dưới đây là một số cài đặt ví bạn có thể thiết lập theo ý thích của mình",
+      "msg2": "Khi bạn đã sẵn sàng, hãy nhấn tiếp tục"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Thử lại",
+      "msg": "Xin lỗi, bạn đã viết các từ không đúng thứ tự, vui lòng thử lại."
+    },
+    "seed": {
+      "title": "Xác nhận từ khoá hạt giống của bạn"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Bật sao lưu Google Drive",
+      "msg": "Đã bật sao lưu Google Drive"
+    },
+    "backup": {
+      "title": "Sao lưu đám mây",
+      "msg": "Để các khoản tiền ngoài chuỗi của bạn luôn an toàn trong trường hợp mất thiết bị, chúng tôi khuyên bạn nên giữ các kênh được sao lưu vào Google Drive.",
+      "msg1": "Điều này sẽ giữ một bản sao lưu được mã hóa cho các kênh của bạn mà chỉ có thể được sử dụng cùng với hạt giống ví.",
+      "msg2": "Khi bạn đã sẵn sàng, hãy nhấn tiếp tục."
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Bật sao lưu iCloud",
+      "msg": "Đã bật sao lưu iCloud"
+    },
+    "backup": {
+      "title": "Sao lưu iCloud",
+      "msg": "Để các khoản tiền ngoài chuỗi của bạn luôn an toàn trong trường hợp mất thiết bị, chúng tôi khuyên bạn nên giữ các kênh được sao lưu vào iCloud.",
+      "msg1": "Điều này sẽ giữ một bản sao lưu được mã hóa cho các kênh của bạn mà chỉ có thể được sử dụng cùng với hạt giống ví.",
+      "msg2": "Khi bạn đã sẵn sàng, hãy nhấn tiếp tục."
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Khôi phục ví",
+      "msg": "Để khôi phục ví, hãy viết mỗi từ khoá hạt giống được phân tách bằng dấu cách.",
+      "msg1": "Nếu bạn muốn khôi phục các kênh Mạng Lightning của mình, bạn cần cung cấp bản sao lưu tệp.",
+      "loading": "Khôi phục Ví",
+      "channel": {
+        "title": "Sao lưu kênh",
+        "file": "Chọn tệp sao lưu kênh trên đĩa",
+        "google": {
+          "title": "Khôi phục qua Google Drive",
+          "alert": "Khôi phục qua Google Drive thất bại"
+        },
+        "iCloud": {
+          "title": "Khôi phục qua iCloud",
+          "alert": "Khôi phục qua iCloud thất bại"
+        }
+      },
+      "seed": "Từ khoá hạt giống phải chính xác 24 chữ"
+    },
+    "backup": {
+      "google": "Sao lưu qua Google Drive",
+      "iCloud": "Sao lưu qua iCloud"
+    }
+  },
+  "welcome.seed": {
+    "title": "Chào mừng đến Ví Blixt",
+    "msg": "Đây là từ khoá hạt giống dự phòng của bạn.",
+    "msg1": "Ghi chép lại trên một tờ giấy và lưu giữ nơi an toàn.",
+    "msg2": "Nếu bạn mất quyền truy cập ví",
+    "msg3": "bạn có thể khôi phục số dư bằng từ khoá hạt giống dự phòng.",
+    "msg4": "Tiêu chuẩn hạt giống đang được sử dụng được làm thoáng.",
+    "button": "Tôi đã ghi chép chúng lại"
+  }
+}

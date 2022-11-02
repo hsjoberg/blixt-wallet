@@ -81,7 +81,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               </Right>
             </Row>
           }
-          <Row>
+          <Row style={{ width: "100%" }}>
             <Left>
               <Text style={style.channelDetailTitle}>{t("channel.node")}</Text>
             </Left>
@@ -89,7 +89,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>{channel.channel.remoteNodePub}</CopyText>
             </Right>
           </Row>
-          <Row>
+          <Row style={{ width: "100%" }}>
             <Left>
               <Text style={style.channelDetailTitle}>{t("channel.status")}</Text>
             </Left>

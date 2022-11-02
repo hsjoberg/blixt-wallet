@@ -127,7 +127,7 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
           <Button onPress={onBackspacePress} style={[style.pincodeButton, style.buttonBackspace]}>
             <Text style={style.pincodeButtonText}>
               {PLATFORM === "macos" && <Icon style={style.buttonBackspaceIcon} type="Entypo" name="erase" />}
-              {PLATFORM !== "macos" && <Icon style={style.buttonBackspaceIcon} type="FontAwesome" name="back" />}
+              {PLATFORM !== "macos" && <Icon style={style.buttonBackspaceIcon} type="FontAwesome5" name="backspace" />}
             </Text>
           </Button>
         </View>

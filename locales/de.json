@@ -43,7 +43,7 @@
       "title": "Erstelle eine Wallet",
       "msg1": "Blixt Wallet befindet sich noch in einem frühen Entwicklungsstadium.",
       "msg2": "Wenn Du diese Wallet nutzen möchtest, sei Dir bewusst, dass dein Guthaben verloren gehen könnte.",
-      "msg3": "Es gibt derzeit keinen WatchTower-Support, der deine Lightning-Kanäle im Falle einer Downtime schützen kann.",
+      "msg3": "Es gibt derzeit keinen WatchTower-Support, der deine Lightning-Kanäle im Fall einer Downtime schützen kann.",
       "msg4": "Ok akzeptiert, weiter"
     },
     "restoreWallet": {
@@ -95,7 +95,8 @@
     "newChannelBeingOpened": {
       "info": "Ein neuer Kanal wird gerade geöffnet.",
       "view": "Anzeigen"
-    }
+    },
+    "noTransactionsYet": "Keine Transaktionen vorhanden"
   },
   "help": {
     "title": "Hilfe",
@@ -166,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Erstelle eine Invoice (Rechnung)",
-      "error": "Der Rechnungsbetrag darf nicht höher sein als",
       "alert": "Vor dem Empfangen einer Invoice, öffne zuerst einen Lightning-Kanal.",
       "lsp": {
         "msg": "Ein Zahlungskanal wird von Dunder LSP eröffnet, wenn diese Rechnung beglichen wird.",
@@ -260,7 +260,7 @@
       "statusInactive": "Inaktiv",
       "statusPending": "Ausstehend",
       "statusClosing": "Schließend",
-      "statusForceClosing": "Erzwungend Schließend (force-close)",
+      "statusForceClosing": "Erzwungenes Schließen (force-close)",
       "statusWaitingForClose": "Warte auf Schließung",
       "capacity": "Kapazität",
       "howMuchCanBeSent": "sendbar",
@@ -296,6 +296,11 @@
       "fee_rate": {
         "title": "Gebührenrate"
       }
+    },
+    "torPrompt": {
+      "title": "Tor aktivieren",
+      "text1": "Es scheint, dass die zu verbindende Node, zu der ein Kanal eröffnet werden soll, nur über das Tor-Netzwerk erreichbar ist.",
+      "text2": "Aktiviere Tor in der Blixt Wallet, um die Verbindung herstellen zu können."
     }
   },
   "onchain.onChainInfo": {
@@ -888,7 +893,10 @@
         "subtitle": "Blockchain nach Wallet-Transaktionen erneut scannen"
       },
       "getNodeInfo": {
-        "title": "Node-Informationen aufrufen"
+        "title": "Node Info anzeigen"
+      },
+      "getChannelInfo": {
+        "title": "Channel Info anzeigen"
       },
       "demoMode": {
         "title": "Demo Mode aktivieren",
@@ -896,6 +904,9 @@
       },
       "disableGraphCache": {
         "title": "LND Graph Cache deaktivieren"
+      },
+      "resetMissionControl": {
+        "title": "Routing-Historie (Mission Control) zurücksetzen"
       }
     }
   },

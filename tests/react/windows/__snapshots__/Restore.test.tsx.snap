@@ -385,9 +385,13 @@ exports[`renders correctly 1`] = `
                               }
                             >
                               <TextInput
+                                autoCapitalize="none"
+                                autoComplete="off"
+                                autoCorrect={false}
                                 blurOnSubmit={true}
                                 bordered={false}
                                 editable={true}
+                                importantForAutofill="no"
                                 multiline={true}
                                 onChangeText={[Function]}
                                 placeholderTextColor="#575757"

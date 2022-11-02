@@ -95,7 +95,8 @@
     "newChannelBeingOpened": {
       "info": "A new channel is in the process of being opened...",
       "view": "View"
-    }
+    },
+    "noTransactionsYet": "No transactions yet"
   },
   "help": {
     "title": "Help",
@@ -166,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Create invoice",
-      "error": "Invoice amount cannot be higher than",
       "alert": "Before you can receive, you need to open a Lightning channel.",
       "lsp": {
         "msg": "A payment channel by Dunder LSP will be opened when this invoice is paid.",
@@ -296,6 +296,11 @@
       "fee_rate": {
         "title": "Fee-rate"
       }
+    },
+    "torPrompt": {
+      "title": "Enable Tor",
+      "text1": "It looks like you're trying to open a channel to a node that is running under a Tor onion service.",
+      "text2": "In order to connect you need to active Tor for Blixt Wallet."
     }
   },
   "onchain.onChainInfo": {
@@ -643,7 +648,7 @@
           "title": "Manually trigger iCloud Backup",
           "alert": "Backed up channels to iCloud"
         },
-        "error": "Error backup up"
+        "error": "Error backing up"
       }
     },
     "security": {
@@ -889,6 +894,9 @@
       },
       "getNodeInfo": {
         "title": "Get node info"
+      },
+      "getChannelInfo": {
+        "title": "Get channel info"
       },
       "demoMode": {
         "title": "Activate Demo Mode",
