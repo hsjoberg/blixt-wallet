@@ -167,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Skapa faktura",
-      "error": "Fakturans belopp kan inte vara högre än",
       "alert": "Innan du kan ta emot så måste du öppna en Lightningkanal",
       "lsp": {
         "msg": "En betalkanal av Dunder LSP kommer automatiskt öppnas när denna faktura betalas.",
