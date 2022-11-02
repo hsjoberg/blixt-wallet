@@ -113,7 +113,7 @@ export const deeplinkManager: IDeeplinkManager = {
             // we want to open the WebLN browser
             else {
               try {
-                if (subject.startsWith("HTTPS")) {
+                if (subject.startsWith("https")) {
                   if (PLATFORM === "web") {
                     return null;
                   }
