@@ -1474,7 +1474,7 @@ ${t("experimental.tor.disabled.msg2")}`;
           <ListItem style={style.listItem} button={true} icon={true} onPress={onGetChanInfoPress}>
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="Entypo" name="info" /></Left>
             <Body>
-              <Text>{t("debug.getChanInfo.title")}</Text>
+              <Text>{t("debug.getChannelInfo.title")}</Text>
             </Body>
           </ListItem>
           {dunderEnabled &&
