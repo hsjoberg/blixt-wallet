@@ -167,7 +167,6 @@
     },
     "createInvoice": {
       "title": "daqchenmoH",
-      "error": "vaj yIyajchoHlaH pagh",
       "alert": "bIjontaHvIS, choparHa'qu' 'e' DaSovchu'.",
       "lsp": {
         "msg": "'ach hegh Qorghqu' ponglu'bogh quvHa'moHlu'chugh.",
