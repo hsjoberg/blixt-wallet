@@ -296,7 +296,6 @@ exports[`renders correctly 1`] = `
                 }
               >
                 <View
-                  pointerEvents="box-none"
                   style={
                     [
                       {
@@ -473,7 +472,6 @@ exports[`renders correctly 1`] = `
                                       }
                                     >
                                       <View
-                                        pointerEvents="box-none"
                                         style={
                                           [
                                             {
