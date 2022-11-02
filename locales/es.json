@@ -167,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Crear factura",
-      "error": "La cantidad facturada no puede ser mayor que",
       "alert": "Para poder recibir, necesitas abrir un canal Lightning.",
       "lsp": {
         "msg": "Cuando recibas el pago de la factura, Dunder LSP creará un canal lightning con el que podrás recibir pagos y, posteriormente, enviarlos.",
