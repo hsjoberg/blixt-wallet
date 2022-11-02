@@ -14,7 +14,10 @@ export interface ITickerProps {
 }
 export const Ticker = ({ expire }: ITickerProps) => {
   const t = useTranslation(namespaces.receive.receiveQr).t;
-  const language = useStoreState((store) => store.settings.language);
+  let language = useStoreState((store) => store.settings.language);
+  if (language === "en") {
+    language = "enUS";
+  }
   let dateFnsLocale = dateFnsLocales[language];
   if (!dateFnsLocale) {
     console.warn("Could not find date-fns locale for language " + language + ". Defaulting to en");
