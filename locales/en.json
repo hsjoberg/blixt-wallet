@@ -167,7 +167,6 @@
     },
     "createInvoice": {
       "title": "Create invoice",
-      "error": "Invoice amount cannot be higher than",
       "alert": "Before you can receive, you need to open a Lightning channel.",
       "lsp": {
         "msg": "A payment channel by Dunder LSP will be opened when this invoice is paid.",
