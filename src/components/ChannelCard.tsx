@@ -316,6 +316,18 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Text>
             </Right>
           </Row>
+          {(channel.pendingHtlcs?.length ?? 0) > 0 &&
+            <Row style={{ width: "100%" }}>
+              <Left style={{ alignSelf: "flex-start" }}>
+                <Text style={style.channelDetailTitle}>Pending HTLCs</Text>
+              </Left>
+              <Right>
+                <Text>
+                  {channel.pendingHtlcs?.length.toString()}
+                </Text>
+              </Right>
+            </Row>
+          }
           {__DEV__ === true &&
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
