@@ -41,7 +41,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
   }
 
   const close = (channel: lnrpc.PendingChannelsResponse.IWaitingCloseChannel) => {
-    if (!!channel.closingTxid) {
+    if (!!channel.closingTxid || channel.closingTxid !== '') {
       Alert.alert("Closing Tx Has Already Been Broadcasted");
       return;
     }
@@ -68,7 +68,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               outputIndex: Number.parseInt(channelPoint.split(":")[1], 10),
               force: true,
             });
-            
+
             Alert.alert("Force Closed Channel");
           } catch(err) {
             console.log(err);
