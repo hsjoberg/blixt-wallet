@@ -274,6 +274,7 @@
       "localCommitmentTxid": "Local commitment TXID",
       "remoteCommitmentTxid": "Remote commitment TXID",
       "closeChannel": "Close channel",
+      "forceClosePendingChannel": "Force Close Pending Channel",
       "closeChannelPrompt": {
         "title": "Close channel"
       }
