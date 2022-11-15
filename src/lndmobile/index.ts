@@ -196,13 +196,13 @@ export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlv
 };
 
 
-export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, tlvRecordName?: string | null, multiPath?: boolean): Promise<lnrpc.Payment> => {
+export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, pay_amount: Long, tlvRecordName?: string | null, multiPath?: boolean): Promise<lnrpc.Payment> => {
   const options: routerrpc.ISendPaymentRequest = {
     paymentRequest,
     noInflightUpdates: true,
     timeoutSeconds: 60,
-    maxParts: multiPath ? 2 : undefined,
-    feeLimitSat: Long.fromValue(Math.max(10, amount?.mul(0.02).toNumber() ?? 0)),
+    maxParts: multiPath ? 16 : 1,
+    feeLimitSat: Long.fromValue(Math.max(10, pay_amount * 0.02)).toInt(),
     cltvLimit: 0,
   };
   if (amount) {
