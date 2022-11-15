@@ -202,7 +202,7 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, pay_amo
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: multiPath ? 16 : 1,
-    feeLimitSat: Long.fromValue(Math.max(10, pay_amount * 0.02)).toInt(),
+    feeLimitSat: Long.fromValue(Math.max(10, pay_amount * 0.02)),
     cltvLimit: 0,
   };
   if (amount) {
