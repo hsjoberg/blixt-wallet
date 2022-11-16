@@ -262,4 +262,10 @@ export const appMigration: IAppMigration[] = [
       setItemObject<boolean>(StorageItem.lndNoGraphCache, false);
     },
   },
+  // Version 30
+  {
+    async beforeLnd(db, i) {
+      setItemObject<boolean>(StorageItem.multiPathPaymentsEnabled, true);
+    },
+  },
 ];

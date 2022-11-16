@@ -196,7 +196,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.transactionGeolocationEnabled, false),
     setItem<keyof typeof MapStyle>(StorageItem.transactionGeolocationMapStyle, "darkMode"),
     setItem(StorageItem.onchainExplorer, "mempool"),
-    setItemObject<boolean>(StorageItem.multiPathPaymentsEnabled, false),
+    setItemObject<boolean>(StorageItem.multiPathPaymentsEnabled, true),
     setItem(StorageItem.onboardingState, "SEND_ONCHAIN"),
     setItemObject<boolean>(StorageItem.torEnabled, false),
     setItemObject<boolean>(StorageItem.hideExpiredInvoices, true),

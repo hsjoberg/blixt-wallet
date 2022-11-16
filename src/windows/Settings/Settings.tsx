@@ -1394,14 +1394,6 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Body>
             <Right><CheckBox checked={dunderEnabled} onPress={onToggleDunderEnabled} /></Right>
           </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onChangeMultiPartPaymentEnabledPress}>
-            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>
-            <Body>
-              <Text>{t("experimental.MPP.title")}</Text>
-              <Text note={true}>{t("experimental.MPP.subtitle")}</Text>
-            </Body>
-            <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
-          </ListItem>
           {["android", "ios"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
               <Left>
@@ -1526,6 +1518,14 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Body>
               <Text>{t("debug.resetMissionControl.title")}</Text>
             </Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onChangeMultiPartPaymentEnabledPress}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>
+            <Body>
+              <Text>{t("experimental.MPP.title")}</Text>
+              <Text note={true}>{t("experimental.MPP.subtitle")}</Text>
+            </Body>
+            <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
           </ListItem>
         </List>
       </Content>
