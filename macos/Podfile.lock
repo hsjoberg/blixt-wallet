@@ -301,7 +301,7 @@ PODS:
     - React-Core
   - RNSecureRandom (1.0.0):
     - React
-  - RNSVG (13.4.0):
+  - RNSVG (13.6.0):
     - React-Core
   - SwiftProtobuf (1.19.0)
   - Yoga (1.14.0)
@@ -444,47 +444,47 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: 613e39eac4239cc72b15421247b5ab05361266a2
   DoubleConversion: ed15e075aa758ac0e4c1f8b830bd4e4d40d669e8
-  FBLazyVector: cac55f3da6a8acea0fae9aa8c9fbe8551e686546
-  FBReactNativeSpec: 8e6a2be2890f80c8d18adb011bb3e9db160c27d2
+  FBLazyVector: eae1fdb0caed74a40d20afc69c29e860907cf12f
+  FBReactNativeSpec: 170476e00addcfdd8ddefb95accace4805023d1d
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 20113a0d46931b6f096cf8302c68691d75a456ff
   RCT-Folly: 24c6da766832002a4a2aac5f79ee0ca50fbe8507
-  RCTRequired: 2c22b3b95399c99e1412a205794c421ce9c5e375
-  RCTTypeSafety: 54f3bb36e22c8305510ca29d1a377dbbf0cebae5
-  React: 420afc336a8ea1f6fbfaef17047b8e13fa5da345
-  React-callinvoker: bcba22ac193292716d35fe928b46a08841f99924
+  RCTRequired: dfdfe92b6be205830fe8bad13e53c3c5ae571535
+  RCTTypeSafety: dea7bd72f36974373c64cdc8db9675a205cf1acb
+  React: 688fb5d16d9919942127d4c5544f104eb5400e69
+  React-callinvoker: 83b3a3d7f9978bcdfa7b8c502cefc3f413c2316c
   React-Codegen: b3fbef96f960cb15fc61250078b0700cfd4cd8a1
-  React-Core: 59ed55d45c1244297aa33fe2379f44645e90da9c
-  React-CoreModules: 84650f11181463800c0273423d48c81b2ab718cb
-  React-cxxreact: 3161ae9ea52c77f444e5f81c61cb6894a42c2b4d
-  React-jsi: fc1f49829c0e2c5e4bf8aa02a863732e8b1d480a
-  React-jsiexecutor: 71ea44c60690ab433f75498e32bd901327876166
-  React-jsinspector: 43e6ef8acd7eee42ac89c41463e73be595cfea26
-  React-logger: 269862394b28266612248aadd93d99a61be4102d
+  React-Core: 430c31b39eaf8721043820216d55697494493e12
+  React-CoreModules: a17b019e6d70bbf93383da018cd484f37ff5daba
+  React-cxxreact: 9600b9227d763c2168adebeaabd33c5d1b0cbffa
+  React-jsi: 52dc6d37615c44be8ba8d426da7914a586596590
+  React-jsiexecutor: 4c5ff8c88f81f7ba3cae92ab88f46267d38f3c01
+  React-jsinspector: c3f9c1d76e6f17dea5af904323237ec033c662f9
+  React-logger: b52d4419ed84e507368479cecdcdf52a971be96a
   react-native-build-config: d2d6891311ca2e0fa7ca7eeb4324a768e63e485c
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
-  React-perflogger: c5fe5a2b8ba1a392ff9dd8bc52ea68a6292b2d38
-  React-RCTActionSheet: d3b595027976576ed332879d66f1e7298839c988
-  React-RCTAnimation: cdcacbc162762156365875905585e1f78cf28881
-  React-RCTBlob: 1ef74d7fa9d1f199887a5dd5f2f79281b450efad
-  React-RCTImage: cea40d8d4ea81a093a9fd6211572ee6334909153
-  React-RCTLinking: c1531d30613beffc6f875f8789e0813d594c6fb1
-  React-RCTNetwork: 804e8c89a2308ce00afd5cb88a7fd11f4bac6361
-  React-RCTSettings: fd3f2f2b13d80ac46f5385edbd4109197bf1e44f
-  React-RCTText: 319e5f9516231e3418a33e1b8c56e21156b71d48
-  React-RCTVibration: 39a102b568a1a4d7dc7ede7c8198e15cc84e227e
-  React-runtimeexecutor: 0da09772bf8c75fad01a6da95dcdf91dd3bdb017
-  ReactCommon: d8c3f11760860a895901030164e8024e5059060f
+  React-perflogger: fe88dd4df91655433824c2e236cebfcf6088acc5
+  React-RCTActionSheet: 81cdc0600b948459c8184abaadabc201871634e7
+  React-RCTAnimation: fbea9b8f47b50adbf6308dd61a5b049521628b48
+  React-RCTBlob: 7967242f55a9fb8e4e797eb355ea9ac6ec343716
+  React-RCTImage: 741641408092dd0abe42caaa04feb046501c9d9c
+  React-RCTLinking: 316a6f8bb417a456b079d19b0fef1664c151cd80
+  React-RCTNetwork: 9855f2953f545ea6c5a6d42968144ed2848ee230
+  React-RCTSettings: 449e6d7d1724aa240444e3e9c1016908ddd5ab85
+  React-RCTText: 1255fb03ef46066dc9206433a73da2583a6f2857
+  React-RCTVibration: 1b5a46f977c8add7ecb79caf1ae000331b6753a1
+  React-runtimeexecutor: 27c8efb669205dc7287343dd35d9ed61a0252ee5
+  ReactCommon: b3de2f9678b1d74a8c2a7e1ef2334e6d094a44c5
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNKeychain: ff836453cba46938e0e9e4c22e43d43fa2c90333
   RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
   RNSecureRandom: 46403b4cc818c426b33d11f7981a923de558e0a8
-  RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
+  RNSVG: 3a79c0c4992213e4f06c08e62730c5e7b9e4dc17
   SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
-  Yoga: d696259295a24cd1c9f46fc17b674d26d822cd46
+  Yoga: f886fb832ad8a991be392fc2a81070b8d9f73c7f
 
 PODFILE CHECKSUM: ade9884702ae3ec49700c6a4584fbf7f4541f063
 

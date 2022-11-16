@@ -269,7 +269,7 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
-  - react-native-slider (4.3.2):
+  - react-native-slider (4.3.3):
     - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
@@ -377,7 +377,7 @@ PODS:
     - RNSound/Core (= 0.11.2)
   - RNSound/Core (0.11.2):
     - React-Core
-  - RNSVG (13.4.0):
+  - RNSVG (13.6.0):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
@@ -626,7 +626,7 @@ SPEC CHECKSUMS:
   react-native-hash: 4664516df1834e1293b30e711c63f61f7f801b6a
   react-native-maps: 085f614cf14d3637b2048bb9752da5b1c27c2886
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
-  react-native-slider: e540525ea731783850802b7af457d8551edb0711
+  react-native-slider: 7d19220da2f2ae7cbb9aa80127cb73c597fa221f
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-tor: 3b14e9160b2eb7fa3f310921b2dee71a5171e5b7
   react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
@@ -657,7 +657,7 @@ SPEC CHECKSUMS:
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSecureRandom: 46403b4cc818c426b33d11f7981a923de558e0a8
   RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
-  RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
+  RNSVG: 3a79c0c4992213e4f06c08e62730c5e7b9e4dc17
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
   Yoga: 75bf4b0131cfb46a659cd0c13309b79a6fcff66d
