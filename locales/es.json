@@ -274,6 +274,7 @@
       "localCommitmentTxid": "Compromiso local TXID",
       "remoteCommitmentTxid": "Compromiso remoto TXID",
       "closeChannel": "Cerrar Canal",
+      "forceClosePendingChannel": "Cierre Forzoso del canal pendiente",
       "closeChannelPrompt": {
         "title": "Cerrar canal"
       }
