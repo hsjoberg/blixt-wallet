@@ -40,7 +40,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
     return (<Text>Error</Text>);
   }
 
-  const close = (channel: lnrpc.PendingChannelsResponse.IWaitingCloseChannel) => {
+  const forceClose = (channel: lnrpc.PendingChannelsResponse.IWaitingCloseChannel) => {
     if (!!channel.closingTxid || channel.closingTxid !== '') {
       Alert.alert("Closing Tx Has Already Been Broadcasted");
       return;
@@ -138,13 +138,13 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               {type === "OPEN" &&
                 <Text style={{...style.channelDetailValue, color: "orange"}}>{t("channel.statusPending")}</Text>
               }
-              {type === "CLOSING" && 
+              {type === "CLOSING" &&
                 <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>{t("channel.statusClosing")}</Text>
               }
               {type === "FORCE_CLOSING" &&
                 <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>{t("channel.statusForceClosing")}</Text>
               }
-              {type === "WAITING_CLOSE" && 
+              {type === "WAITING_CLOSE" &&
                 <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>{t("channel.statusWaitingForClose")}</Text>
               }
             </Right>
@@ -235,10 +235,14 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                   <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>
                     {(channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.commitments?.remoteTxid || "N/A"}
                   </CopyText>
-                  <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => close(channel)} >
-                    <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
-                  </Button>
                 </Right>
+              </Row>
+              <Row style={{ width: "100%" }}>
+                <Left>
+                  <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => forceClose(channel)}>
+                  <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
+                  </Button>
+                </Left>
               </Row>
             </>
           }
