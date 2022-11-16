@@ -815,7 +815,7 @@
       },
       "MPP": {
         "title": "Multi-path-betalingen inschakelen",
-        "subtitle": "Betalingen kunnen tot 2 paden volgen"
+        "subtitle": "Betalingen kunnen tot 16 paden volgen"
       },
       "tor": {
         "title": "Tor inschakelen",

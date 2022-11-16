@@ -816,7 +816,7 @@
       },
       "MPP": {
         "title": "Habilitar pagos Multi-ruta",
-        "subtitle": "Los pagos pueden tomar hasta 2 rutas"
+        "subtitle": "Los pagos pueden tomar hasta 16 rutas"
       },
       "tor": {
         "title": "Habilitar Tor",

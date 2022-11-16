@@ -816,7 +816,7 @@
       },
       "MPP": {
         "title": "Enable Multi-Path Payments",
-        "subtitle": "Payments can take up to 2 paths"
+        "subtitle": "Payments can take up to 16 paths"
       },
       "tor": {
         "title": "Enable Tor",

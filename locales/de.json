@@ -816,7 +816,7 @@
       },
       "MPP": {
         "title": "Multi-Path Payments aktivieren",
-        "subtitle": "Zahlungen dürfen bis zu 2 Routen verwenden"
+        "subtitle": "Zahlungen dürfen bis zu 16 Routen verwenden"
       },
       "tor": {
         "title": "Tor aktivieren",
