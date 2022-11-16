@@ -588,6 +588,18 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
   });
   return response;
 };
+/**
+ * @throws
+ */
+ export const getNetworkInfo = async (): Promise<lnrpc.NetworkInfo> => {
+  const response = await sendCommand<lnrpc.INetworkInfoRequest, lnrpc.NetworkInfoRequest, lnrpc.NetworkInfo>({
+    request: lnrpc.NetworkInfoRequest,
+    response: lnrpc.NetworkInfo,
+    method: "GetNetworkInfo",
+    options: {},
+  });
+  return response;
+};
 
 
 export type IReadLndLogResponse = string[];

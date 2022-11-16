@@ -16,7 +16,7 @@ import { getTransactions, getTransaction, createTransaction, clearTransactions }
 import { useStoreState, useStoreActions } from "../../state/store";
 import { invoicesrpc, lnrpc } from "../../../proto/lightning";
 import { sendCommand } from "../../lndmobile/utils";
-import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus, getNodeInfo, listUnspent } from "../../lndmobile/index";
+import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus, getNodeInfo, listUnspent, getNetworkInfo } from "../../lndmobile/index";
 import { initWallet, genSeed, deriveKey, signMessage, derivePrivateKey } from "../../lndmobile/wallet";
 import { pendingChannels, listChannels, openChannel, closeChannel } from "../../lndmobile/channel";
 import { newAddress, sendCoins } from "../../lndmobile/onchain";
@@ -670,6 +670,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             ["listChannels", listChannels],
             ["listPeers", listPeers],
             ["listUnspent", listUnspent],
+            ["getNetworkInfo", getNetworkInfo],
           ].map(([name, f], i) => {
             return (
               <Button small key={i} onPress={async () => {
