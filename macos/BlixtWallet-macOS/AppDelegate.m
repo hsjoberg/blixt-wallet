@@ -21,7 +21,7 @@
 - (void)application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls {
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
+- (void)applicationWillFinishLaunching:(NSNotification *)aNotification {
   [[NSAppleEventManager sharedAppleEventManager]
    setEventHandler:self
    andSelector:@selector(getURL:withReplyEvent:)
@@ -29,6 +29,8 @@
   ];
   // Insert code here to initialize your application
 }
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {}
 
 - (void)getURL:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)reply {
   [RCTLinkingManager getUrlEventHandler:event withReplyEvent:reply];
