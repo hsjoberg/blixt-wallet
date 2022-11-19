@@ -414,6 +414,7 @@ export const model: IStoreModel = {
     const bitcoindPubRawBlock = await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) || null;
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
     const lndNoGraphCache = await getItemAsyncStorage(StorageItem.lndNoGraphCache) || "0";
+    const strictGraphPruningEnabled = await getItemAsyncStorage(StorageItem.strictGraphPruningEnabled) || "0";
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
 
@@ -432,7 +433,7 @@ db.no-graph-cache=${lndNoGraphCache.toString()}
 
 [Routing]
 routing.assumechanvalid=1
-routing.strictgraphpruning=true
+routing.strictgraphpruning=${strictGraphPruningEnabled.toString()}
 
 [Bitcoin]
 bitcoin.active=1
