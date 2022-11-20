@@ -88,7 +88,12 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   else {
     localBalance = localBalance.sub(channel.localChanReserveSat!);
   }
-  const remoteBalance = channel.remoteBalance || Long.fromValue(0);
+  let remoteBalance = channel.remoteBalance || Long.fromValue(0);
+  if (remoteBalance.lessThanOrEqual(channel.remoteChanReserveSat!)) {
+    remoteBalance = Long.fromValue(0);
+  } else {
+    remoteBalance = remoteBalance.sub(channel.remoteChanReserveSat!);
+  }
   const percentageLocal = localBalance.mul(100).div(channel.capacity!).toNumber() / 100;
   const percentageRemote = remoteBalance.mul(100).div(channel.capacity!).toNumber() / 100;
   const percentageReverse = 1 - (percentageLocal + percentageRemote);
