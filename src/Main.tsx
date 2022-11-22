@@ -1,39 +1,37 @@
+import { Alert, NativeModules, StatusBar } from "react-native";
+import { CardStyleInterpolators, StackNavigationOptions, createStackNavigator } from "@react-navigation/stack";
+import { H1, Spinner } from "native-base";
 import React, { useEffect, useState } from "react";
-import { StatusBar, Alert, NativeModules } from "react-native";
-import { Spinner, H1 } from "native-base";
-import { createStackNavigator, CardStyleInterpolators, StackNavigationOptions } from "@react-navigation/stack";
+import { useStoreActions, useStoreState } from "./state/store";
 
-import Overview from "./windows/Overview";
-import Help from "./windows/Help";
-import Send from "./windows/Send";
-import Receive from "./windows/Receive";
-import Settings from "./windows/Settings";
-import LightningInfo from "./windows/LightningInfo";
-import OnChain from "./windows/OnChain";
 import Authentication from "./windows/InitProcess/Authentication";
-import DEV_Commands from "./windows/InitProcess/DEV_Commands";
-import Welcome from "./windows/Welcome";
-import LNURL from "./windows/LNURL";
-import KeysendTest from "./windows/Keysend/Test";
-import KeysendExperiment from "./windows/Keysend/Experiment";
-import GoogleDriveTestbed from "./windows/Google/GoogleDriveTestbed";
-import TransactionDetails from "./windows/TransactionDetails";
-import SyncInfo from "./windows/SyncInfo";
-import WebLNBrowser from "./windows/WebLN/Browser";
-import WebInfo from "./windows/Web/Info";
+import CameraFullscreen from "./windows/CameraFullscreen";
 import Contacts from "./windows/Contacts";
+import Container from "./components/Container";
+import DEV_Commands from "./windows/InitProcess/DEV_Commands";
+import GoogleDriveTestbed from "./windows/Google/GoogleDriveTestbed";
+import Help from "./windows/Help";
+import KeysendExperiment from "./windows/Keysend/Experiment";
+import KeysendTest from "./windows/Keysend/Test";
+import LNURL from "./windows/LNURL";
+import LightningInfo from "./windows/LightningInfo";
 import Loading from "./windows/Loading";
 import LoadingModal from "./windows/LoadingModal";
-
-import { useStoreState, useStoreActions } from "./state/store";
-import { toast } from "./utils";
-import CameraFullscreen from "./windows/CameraFullscreen";
-
-import { blixtTheme } from "./native-base-theme/variables/commonColor";
-import Container from "./components/Container";
-import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
-import { navigator } from "./utils/navigation";
+import OnChain from "./windows/OnChain";
+import Overview from "./windows/Overview";
 import { PLATFORM } from "./utils/constants";
+import Receive from "./windows/Receive";
+import Send from "./windows/Send";
+import Settings from "./windows/Settings";
+import SyncInfo from "./windows/SyncInfo";
+import TransactionDetails from "./windows/TransactionDetails";
+import WebInfo from "./windows/Web/Info";
+import WebLNBrowser from "./windows/WebLN/Browser";
+import Welcome from "./windows/Welcome";
+import { blixtTheme } from "./native-base-theme/variables/commonColor";
+import { navigator } from "./utils/navigation";
+import { toast } from "./utils";
+import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
 
 const RootStack = createStackNavigator();
 
@@ -43,7 +41,7 @@ export type RootStackParamList = {
 
   Loading: undefined;
   LoadingModal: undefined;
-  CameraFullScreen: {
+  CameraFullscreen: {
     onRead: (address: string) => void;
   };
   Welcome: undefined;
