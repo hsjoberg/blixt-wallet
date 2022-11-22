@@ -343,7 +343,7 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:4.0.0-rc-2"
+        artifact = "com.google.protobuf:protoc:21.0-rc-1"
     }
     generateProtoTasks {
         all().each { task ->
