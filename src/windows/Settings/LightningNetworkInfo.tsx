@@ -18,7 +18,7 @@ let t:TFunction;
 
 interface IMetaDataProps {
   title: string;
-  data: string | string[] | number | Long;
+  data: string | string[] | number;
 }
 const MetaData = ({ title, data }: IMetaDataProps) => {
   return (
