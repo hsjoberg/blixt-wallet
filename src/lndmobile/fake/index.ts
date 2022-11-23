@@ -143,6 +143,23 @@ export const getNodeInfo = async (pubKey: string): Promise<lnrpc.NodeInfo> => {
   return response;
 };
 
+export const getNetworkInfo = async (pubKey: string): Promise<lnrpc.NetworkInfo> => {
+  const response = lnrpc.NetworkInfo.create({
+    avgChannelSize: 500000,
+    avgOutDegree: 2,
+    graphDiameter: 1,
+    maxChannelSize: 500000,
+    maxOutDegree: 2,
+    medianChannelSizeSat: 250000,
+    minChannelSize: 100000,
+    numChannels: 10,
+    numNodes: 3,
+    numZombieChans: 1,
+    totalNetworkCapacity: 10000000,
+  });
+  return response;
+};
+
 /**
  * @throws
  */
