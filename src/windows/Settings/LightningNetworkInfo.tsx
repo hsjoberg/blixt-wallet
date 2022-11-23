@@ -44,7 +44,6 @@ export default function LightningNetworkInfo() {
 
   useEffect(() => {
     (async () => {
-      // await getNodeInfo();
       await getNetworkInfo();
     })();
   }, [getNetworkInfo]);
