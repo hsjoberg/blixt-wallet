@@ -174,6 +174,7 @@ export default {
     getRecoveryInfo,
     listUnspent,
     resetMissionControl,
+    getNetworkInfo,
     getNodeInfo,
     getInfo,
     lookupInvoice,
