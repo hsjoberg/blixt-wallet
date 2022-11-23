@@ -1308,7 +1308,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Body><Text>{t("LN.node.title")}</Text></Body>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNetworkInfo")}>
-            <Left><Icon style={style.icon} type="Feather" name="user" /></Left>
+            <Left><Icon style={style.icon} type="Entypo" name="network" /></Left>
             <Body><Text>{t("LN.network.title")}</Text></Body>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningPeers")}>

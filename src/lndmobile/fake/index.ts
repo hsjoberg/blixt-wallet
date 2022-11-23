@@ -150,15 +150,11 @@ export const getNetworkInfo = async (): Promise<lnrpc.NetworkInfo> => {
     graphDiameter: 1,
     maxChannelSize: 500000,
     maxOutDegree: 2,
-    medianChannelSizeSat: {
-      low: 250000
-    },
+    medianChannelSizeSat: Long.fromValue(1),
     minChannelSize: 100000,
     numChannels: 10,
     numNodes: 3,
-    numZombieChans: {
-      low: 1
-    },
+    numZombieChans: Long.fromValue(1),
     totalNetworkCapacity: 10000000,
   });
   return response;
