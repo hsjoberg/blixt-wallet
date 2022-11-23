@@ -723,6 +723,10 @@
     },
     "LN": {
       "title": "Lightning Network",
+      "network": {
+        "title": "Show network info",
+        "subtitle": ""
+      },
       "node": {
         "title": "Show node data",
         "subtitle": ""
@@ -959,6 +963,17 @@
       "placeholder": "Peer URI",
       "accept": "Connect"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Lightning Network Info",
+    "avgChannelSize": "Average Channel Size",
+    "avgOutDegree": "Average Out Degree",
+    "graphDiameter": "Graph Diameter",
+    "medianChannelSizeSat": "Median Channel Size",
+    "numChannels": "Number of Channels",
+    "numNodes": "Number of Nodes",
+    "numZombieChans": "Number of Zombie Channels",
+    "totalNetworkCapacity": "Total Network Capacity"
   },
   "settings.lightningNodeInfo": {
     "title": "Node Info",
