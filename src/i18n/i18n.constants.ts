@@ -39,6 +39,7 @@ export const namespaces = {
     about: "settings.about",
     settings: "settings.settings",
     connectToLightningPeer: "settings.connectToLightningPeer",
+    lightningNetworkInfo: "settings.lightningNetworkInfo",
     lightningNodeInfo: "settings.lightningNodeInfo",
     lightningPeers: "settings.lightningPeers",
     removePincodeAuth: "settings.removePincodeAuth",
