@@ -8,19 +8,17 @@ import Blurmodal from "../../components/BlurModal";
 import { formatISO, toast } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
 
-import { useTranslation,TFunction } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import Long from "long";
-
-let t:TFunction;
-
-//const { t, i18n } = useTranslation(namespaces.settings.lightningNodeInfo)
 
 interface IMetaDataProps {
   title: string;
   data: string | string[] | number;
 }
 const MetaData = ({ title, data }: IMetaDataProps) => {
+  const {t} = useTranslation(namespaces.settings.lightningNetworkInfo);
+
   return (
     <Text
       style={style.detailText}
@@ -39,7 +37,8 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
 };
 
 export default function LightningNetworkInfo() {
-  t = useTranslation(namespaces.settings.lightningNetworkInfo).t;
+  const {t} = useTranslation(namespaces.settings.lightningNetworkInfo);
+
   const getNetworkInfo = useStoreActions((store) => store.lightning.getNetworkInfo);
   const networkInfo = useStoreState((store) => store.lightning.networkInfo);
 

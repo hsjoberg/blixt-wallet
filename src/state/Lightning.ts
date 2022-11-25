@@ -52,7 +52,7 @@ export interface ILightningModel {
 
   setBestBlockheight: Action<ILightningModel, number>;
 
-  networkInfo: lnrpc.NetworkInfo;
+  networkInfo?: lnrpc.NetworkInfo;
   nodeInfo?: lnrpc.IGetInfoResponse;
   rpcReady: boolean;
   syncedToChain: Computed<ILightningModel, boolean>;
