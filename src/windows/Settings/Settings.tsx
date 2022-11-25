@@ -1049,6 +1049,15 @@ ${t("experimental.tor.disabled.msg2")}`;
     }
   };
 
+  // Strict Graph Pruning
+  const strictGraphPruningEnabled = useStoreState((store) => store.settings.strictGraphPruningEnabled);
+  const changeStrictGraphPruningEnabled = useStoreActions((store) => store.settings.changeStrictGraphPruningEnabled);
+  const changeStrictGraphPruningEnabledPress = async () => {
+    await changeStrictGraphPruningEnabled(!strictGraphPruningEnabled);
+    await writeConfig();
+    toast(t("msg.written", { ns:namespaces.common }));
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -1526,6 +1535,13 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text note={true}>{t("experimental.MPP.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={changeStrictGraphPruningEnabledPress}>
+            <Left><Icon style={style.icon} type="Entypo" name="trash" /></Left>
+            <Body>
+              <Text>{t("debug.strictGraphPruning.title")}</Text>
+            </Body>
+            <Right><CheckBox checked={strictGraphPruningEnabled} onPress={changeStrictGraphPruningEnabledPress} /></Right>
           </ListItem>
         </List>
       </Content>

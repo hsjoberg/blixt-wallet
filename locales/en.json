@@ -908,6 +908,9 @@
       },
       "resetMissionControl": {
         "title": "Reset payment routing knowledge"
+      },
+      "strictGraphPruning": {
+        "title": "Enable strict LN Graph pruning"
       }
     }
   },

@@ -54,6 +54,7 @@ export interface ISettingsModel {
   changeInvoiceExpiry: Thunk<ISettingsModel, number>;
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
   changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
+  changeStrictGraphPruningEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -86,6 +87,7 @@ export interface ISettingsModel {
   setInvoiceExpiry: Action<ISettingsModel, number>;
   setRescanWallet: Action<ISettingsModel, boolean>;
   setReceiveViaP2TR: Action<ISettingsModel, boolean>;
+  setStrictGraphPruningEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -118,6 +120,7 @@ export interface ISettingsModel {
   invoiceExpiry: number;
   rescanWallet: boolean;
   receiveViaP2TR: boolean;
+  strictGraphPruningEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -154,6 +157,7 @@ export const settings: ISettingsModel = {
     actions.setInvoiceExpiry(await getItemObject(StorageItem.invoiceExpiry) ?? DEFAULT_INVOICE_EXPIRY);
     actions.setRescanWallet(await getRescanWallet());
     actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
+    actions.setStrictGraphPruningEnabled(await getItemObject(StorageItem.strictGraphPruningEnabled) ?? false);
 
     log.d("Done");
   }),
@@ -317,6 +321,11 @@ export const settings: ISettingsModel = {
     await getStoreActions().onChain.getAddress({});
   }),
 
+  changeStrictGraphPruningEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.strictGraphPruningEnabled, payload);
+    actions.setStrictGraphPruningEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -348,6 +357,7 @@ export const settings: ISettingsModel = {
   setInvoiceExpiry: action((state, payload) => { state.invoiceExpiry = payload; }),
   setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
   setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
+  setStrictGraphPruningEnabled: action((state, payload) => { state.strictGraphPruningEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -380,4 +390,5 @@ export const settings: ISettingsModel = {
   invoiceExpiry: DEFAULT_INVOICE_EXPIRY,
   rescanWallet: false,
   receiveViaP2TR: false,
+  strictGraphPruningEnabled: false,
 };
