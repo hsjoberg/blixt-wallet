@@ -274,6 +274,7 @@
       "localCommitmentTxid": "Engagement local TXID",
       "remoteCommitmentTxid": "Engagement à distance TXID",
       "closeChannel": "Fermer la chaîne",
+      "forceClosePendingChannel": "Forcer la fermeture du canal en attente",
       "closeChannelPrompt": {
         "title": "Fermer la chaîne"
       }
@@ -722,6 +723,10 @@
     },
     "LN": {
       "title": "Réseau Lightning",
+      "network": {
+        "title": "Afficher les informations sur le réseau",
+        "subtitle": ""
+      },
       "node": {
         "title": "Afficher les données du nœud",
         "subtitle": ""
@@ -907,6 +912,9 @@
       },
       "resetMissionControl": {
         "title": "Réinitialiser les connaissances sur le routage des paiements"
+      },
+      "strictGraphPruning": {
+        "title": "Activer l'élagage strict du graphique LN"
       }
     }
   },
@@ -958,6 +966,17 @@
       "placeholder": "URI du pair",
       "accept": "Se connecter"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Informations sur le réseau Lightning",
+    "avgChannelSize": "Taille moyenne du canal",
+    "avgOutDegree": "Degré de sortie moyen",
+    "graphDiameter": "Diamètre du graphique",
+    "medianChannelSizeSat": "Taille médiane du canal",
+    "numChannels": "Nombre de canaux",
+    "numNodes": "Nombre de nœuds",
+    "numZombieChans": "Nombre de canaux zombies",
+    "totalNetworkCapacity": "Capacité totale du réseau"
   },
   "settings.lightningNodeInfo": {
     "title": "Informations sur le nœud",
