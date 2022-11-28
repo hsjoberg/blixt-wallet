@@ -140,6 +140,7 @@ export const send: ISendModel = {
     const sendPaymentResult = await sendPaymentV2Sync(
       paymentRequestStr,
       payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
+      paymentRequest.numSatoshis,
       name,
       multiPathPaymentsEnabled,
     );

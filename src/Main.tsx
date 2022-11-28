@@ -43,7 +43,7 @@ export type RootStackParamList = {
 
   Loading: undefined;
   LoadingModal: undefined;
-  CameraFullScreen: {
+  CameraFullscreen: {
     onRead: (address: string) => void;
   };
   Welcome: undefined;

@@ -148,7 +148,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   }
 
   const onPressCamera = () => {
-    navigation.navigate("CameraFullScreen", {
+    navigation.navigate("CameraFullscreen", {
       onRead: (data: any) => {
         try {
           const json = JSON.parse(data);

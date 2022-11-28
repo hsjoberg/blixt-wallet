@@ -61,6 +61,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   invoiceExpiry = "invoiceExpiry", // in seconds
   rescanWallet = "rescanWallet",
   receiveViaP2TR = "receiveViaP2TR",
+  strictGraphPruningEnabled = "strictGraphPruningEnabled",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -142,6 +143,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.invoiceExpiry),
     removeItem(StorageItem.rescanWallet),
     removeItem(StorageItem.receiveViaP2TR),
+    removeItem(StorageItem.strictGraphPruningEnabled),
   ]);
 };
 
@@ -196,7 +198,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.transactionGeolocationEnabled, false),
     setItem<keyof typeof MapStyle>(StorageItem.transactionGeolocationMapStyle, "darkMode"),
     setItem(StorageItem.onchainExplorer, "mempool"),
-    setItemObject<boolean>(StorageItem.multiPathPaymentsEnabled, false),
+    setItemObject<boolean>(StorageItem.multiPathPaymentsEnabled, true),
     setItem(StorageItem.onboardingState, "SEND_ONCHAIN"),
     setItemObject<boolean>(StorageItem.torEnabled, false),
     setItemObject<boolean>(StorageItem.hideExpiredInvoices, true),
@@ -219,5 +221,6 @@ export const setupApp = async () => {
     setItemObject<number>(StorageItem.invoiceExpiry, DEFAULT_INVOICE_EXPIRY),
     setItemObject<boolean>(StorageItem.rescanWallet, false),
     setItemObject<boolean>(StorageItem.receiveViaP2TR, false),
+    setItemObject<boolean>(StorageItem.strictGraphPruningEnabled, false),
   ]);
 };

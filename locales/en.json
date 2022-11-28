@@ -274,6 +274,7 @@
       "localCommitmentTxid": "Local commitment TXID",
       "remoteCommitmentTxid": "Remote commitment TXID",
       "closeChannel": "Close channel",
+      "forceClosePendingChannel": "Force Close Pending Channel",
       "closeChannelPrompt": {
         "title": "Close channel"
       }
@@ -722,6 +723,10 @@
     },
     "LN": {
       "title": "Lightning Network",
+      "network": {
+        "title": "Show network info",
+        "subtitle": ""
+      },
       "node": {
         "title": "Show node data",
         "subtitle": ""
@@ -815,7 +820,7 @@
       },
       "MPP": {
         "title": "Enable Multi-Path Payments",
-        "subtitle": "Payments can take up to 2 paths"
+        "subtitle": "Payments can take up to 16 paths"
       },
       "tor": {
         "title": "Enable Tor",
@@ -907,6 +912,9 @@
       },
       "resetMissionControl": {
         "title": "Reset payment routing knowledge"
+      },
+      "strictGraphPruning": {
+        "title": "Enable strict LN Graph pruning"
       }
     }
   },
@@ -958,6 +966,17 @@
       "placeholder": "Peer URI",
       "accept": "Connect"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Lightning Network Info",
+    "avgChannelSize": "Average Channel Size",
+    "avgOutDegree": "Average Out Degree",
+    "graphDiameter": "Graph Diameter",
+    "medianChannelSizeSat": "Median Channel Size",
+    "numChannels": "Number of Channels",
+    "numNodes": "Number of Nodes",
+    "numZombieChans": "Number of Zombie Channels",
+    "totalNetworkCapacity": "Total Network Capacity"
   },
   "settings.lightningNodeInfo": {
     "title": "Node Info",

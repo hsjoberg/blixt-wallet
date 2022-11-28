@@ -815,7 +815,7 @@
       },
       "MPP": {
         "title": "Bật thanh toán đa đường dẫn",
-        "subtitle": "Thanh toán có thể có tới 2 đường dẫn"
+        "subtitle": "Thanh toán có thể có tới 16 đường dẫn"
       },
       "tor": {
         "title": "Bật Tor",

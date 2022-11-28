@@ -24,6 +24,7 @@ import {
   listUnspent,
   resetMissionControl,
   getNodeInfo,
+  getNetworkInfo,
   getInfo,
   lookupInvoice,
   listPeers,
@@ -101,6 +102,7 @@ export interface ILndMobileInjections {
     listUnspent: () => Promise<lnrpc.ListUnspentResponse>;
     resetMissionControl: () => Promise<routerrpc.ResetMissionControlResponse>;
     getInfo: () => Promise<lnrpc.GetInfoResponse>;
+    getNetworkInfo: () => Promise<lnrpc.NetworkInfo>;
     getNodeInfo: (pubKey: string) => Promise<lnrpc.NodeInfo>;
     lookupInvoice: (rHash: string) => Promise<lnrpc.Invoice>;
     listPeers: () => Promise<lnrpc.ListPeersResponse>;
@@ -176,6 +178,7 @@ export default {
     listUnspent,
     resetMissionControl,
     getNodeInfo,
+    getNetworkInfo,
     getInfo,
     lookupInvoice,
     listPeers,

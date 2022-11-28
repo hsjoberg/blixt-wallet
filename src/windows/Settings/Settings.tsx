@@ -1049,6 +1049,15 @@ ${t("experimental.tor.disabled.msg2")}`;
     }
   };
 
+  // Strict Graph Pruning
+  const strictGraphPruningEnabled = useStoreState((store) => store.settings.strictGraphPruningEnabled);
+  const changeStrictGraphPruningEnabled = useStoreActions((store) => store.settings.changeStrictGraphPruningEnabled);
+  const changeStrictGraphPruningEnabledPress = async () => {
+    await changeStrictGraphPruningEnabled(!strictGraphPruningEnabled);
+    await writeConfig();
+    toast(t("msg.written", { ns:namespaces.common }));
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -1307,6 +1316,10 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Left><Icon style={style.icon} type="Feather" name="user" /></Left>
             <Body><Text>{t("LN.node.title")}</Text></Body>
           </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNetworkInfo")}>
+            <Left><Icon style={style.icon} type="Entypo" name="network" /></Left>
+            <Body><Text>{t("LN.network.title")}</Text></Body>
+          </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningPeers")}>
             <Left><Icon style={style.icon} type="Feather" name="users" /></Left>
             <Body><Text>{t("LN.peers.title")}</Text></Body>
@@ -1393,14 +1406,6 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text note={true}>{t("experimental.LSP.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={dunderEnabled} onPress={onToggleDunderEnabled} /></Right>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onChangeMultiPartPaymentEnabledPress}>
-            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>
-            <Body>
-              <Text>{t("experimental.MPP.title")}</Text>
-              <Text note={true}>{t("experimental.MPP.subtitle")}</Text>
-            </Body>
-            <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
           </ListItem>
           {["android", "ios"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
@@ -1500,7 +1505,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </ListItem>
             </>
           }
-          <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: true })} onLongPress={() => { setupDemo({ changeDb: true }); toast("DB written") }}>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={() => setupDemo({ changeDb: false })} onLongPress={() => { setupDemo({ changeDb: true }); toast("DB written") }}>
             <Left><Icon style={[style.icon, { marginLeft: 1, marginRight: -1 }]} type="AntDesign" name="mobile1" /></Left>
             <Body>
               <Text>{t("debug.demoMode.title")}</Text>
@@ -1526,6 +1531,21 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Body>
               <Text>{t("debug.resetMissionControl.title")}</Text>
             </Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onChangeMultiPartPaymentEnabledPress}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" /></Left>
+            <Body>
+              <Text>{t("experimental.MPP.title")}</Text>
+              <Text note={true}>{t("experimental.MPP.subtitle")}</Text>
+            </Body>
+            <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={changeStrictGraphPruningEnabledPress}>
+            <Left><Icon style={style.icon} type="Entypo" name="trash" /></Left>
+            <Body>
+              <Text>{t("debug.strictGraphPruning.title")}</Text>
+            </Body>
+            <Right><CheckBox checked={strictGraphPruningEnabled} onPress={changeStrictGraphPruningEnabledPress} /></Right>
           </ListItem>
         </List>
       </Content>

@@ -15,6 +15,7 @@ import { getUnitNice, valueBitcoin, valueFiat } from "../utils/bitcoin-units";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
+import { Alert } from "../utils/alert";
 
 export interface IPendingChannelCardProps {
   type: "OPEN" | "CLOSING" | "FORCE_CLOSING" | "WAITING_CLOSE";
@@ -27,6 +28,7 @@ export interface IPendingChannelCardProps {
 export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCardProps) => {
   const t = useTranslation(namespaces.lightningInfo.lightningInfo).t;
   const abandonChannel = useStoreActions((store) => store.channel.abandonChannel);
+  const closeChannel = useStoreActions((store) => store.channel.closeChannel);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
@@ -37,6 +39,45 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
   if (!channel.channel) {
     return (<Text>Error</Text>);
   }
+
+  const forceClose = (channel: lnrpc.PendingChannelsResponse.IWaitingCloseChannel) => {
+    if (!!channel.closingTxid || channel.closingTxid !== '') {
+      Alert.alert("Closing Tx Has Already Been Broadcasted");
+      return;
+    }
+
+    Alert.alert(
+      t("channel.closeChannelPrompt.title"),
+      `Are you sure you want to force close the channel${alias ? ` with ${alias}` : ""}?`,
+      [{
+        style: "cancel",
+        text: "No",
+      },{
+        style: "default",
+        text: "Yes",
+        onPress: async () => {
+          try {
+            const channelPoint = channel.channel?.channelPoint || undefined;
+
+            if (!channelPoint) {
+              return;
+            }
+
+            const result = await closeChannel({
+              fundingTx: channelPoint.split(":")[0],
+              outputIndex: Number.parseInt(channelPoint.split(":")[1], 10),
+              force: true,
+            });
+
+            Alert.alert("Force Closed Channel");
+          } catch(err) {
+            console.log(err);
+            Alert.alert("Failed To Close PendingChannel");
+          }
+        }
+      }]
+    );
+  };
 
   const abandon = async () => {
     const result = await abandonChannel({
@@ -195,6 +236,13 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                     {(channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.commitments?.remoteTxid || "N/A"}
                   </CopyText>
                 </Right>
+              </Row>
+              <Row style={{ width: "100%" }}>
+                <Left>
+                  <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => forceClose(channel)}>
+                  <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
+                  </Button>
+                </Left>
               </Row>
             </>
           }

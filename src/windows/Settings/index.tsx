@@ -6,6 +6,7 @@ import SetPincode from "./SetPincode";
 import RemovePincodeAuth from "./RemovePincodeAuth";
 import ChangeFingerprintSettingsAuth from "./ChangeFingerprintSettingsAuth";
 import LightningNodeInfo from "./LightningNodeInfo";
+import LightningNetworkInfo from './LightningNetworkInfo';
 import About from "./About";
 import TorShowOnionAddress from "./TorShowOnionAddress";
 import LndMobileHelpCenter from "./LndMobileHelpCenter";
@@ -25,6 +26,7 @@ export type SettingsStackParamList = {
   RemovePincodeAuth: undefined;
   SetPincode: undefined;
   ChangeFingerprintSettingsAuth: undefined;
+  LightningNetworkInfo: undefined;
   LightningNodeInfo: undefined;
   About: undefined;
   TorShowOnionAddress: undefined;
@@ -52,6 +54,7 @@ export default function SettingsIndex() {
       <Stack.Screen name="RemovePincodeAuth" component={RemovePincodeAuth} />
       <Stack.Screen name="SetPincode" component={SetPincode} />
       <Stack.Screen name="ChangeFingerprintSettingsAuth" component={ChangeFingerprintSettingsAuth} />
+      <Stack.Screen name="LightningNetworkInfo" component={LightningNetworkInfo} />
       <Stack.Screen name="LightningNodeInfo" component={LightningNodeInfo} />
       <Stack.Screen name="About" component={About} />
       <Stack.Screen name="TorShowOnionAddress" component={TorShowOnionAddress} />

@@ -88,7 +88,12 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   else {
     localBalance = localBalance.sub(channel.localChanReserveSat!);
   }
-  const remoteBalance = channel.remoteBalance || Long.fromValue(0);
+  let remoteBalance = channel.remoteBalance || Long.fromValue(0);
+  if (remoteBalance.lessThanOrEqual(channel.remoteChanReserveSat!)) {
+    remoteBalance = Long.fromValue(0);
+  } else {
+    remoteBalance = remoteBalance.sub(channel.remoteChanReserveSat!);
+  }
   const percentageLocal = localBalance.mul(100).div(channel.capacity!).toNumber() / 100;
   const percentageRemote = remoteBalance.mul(100).div(channel.capacity!).toNumber() / 100;
   const percentageReverse = 1 - (percentageLocal + percentageRemote);
@@ -316,6 +321,18 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Text>
             </Right>
           </Row>
+          {(channel.pendingHtlcs?.length ?? 0) > 0 &&
+            <Row style={{ width: "100%" }}>
+              <Left style={{ alignSelf: "flex-start" }}>
+                <Text style={style.channelDetailTitle}>Pending HTLCs</Text>
+              </Left>
+              <Right>
+                <Text>
+                  {channel.pendingHtlcs?.length.toString()}
+                </Text>
+              </Right>
+            </Row>
+          }
           {__DEV__ === true &&
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>

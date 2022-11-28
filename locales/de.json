@@ -274,6 +274,7 @@
       "localCommitmentTxid": "Eigene Commitment TXID",
       "remoteCommitmentTxid": "Fremde Commitment TXID",
       "closeChannel": "Kanal schließen",
+      "forceClosePendingChannel": "Erzwungene Schließung des ausstehenden Kanals",
       "closeChannelPrompt": {
         "title": "Kanal schließen"
       }
@@ -523,7 +524,7 @@
     }
   },
   "webLN.browser": {
-    "close": "Do you wish to close the browser?",
+    "close": "Willen sie den Browser schließen?",
     "home": "Go back to store list",
     "placeholder": "Type URL here"
   },
@@ -815,7 +816,7 @@
       },
       "MPP": {
         "title": "Multi-Path Payments aktivieren",
-        "subtitle": "Zahlungen dürfen bis zu 2 Routen verwenden"
+        "subtitle": "Zahlungen dürfen bis zu 16 Routen verwenden"
       },
       "tor": {
         "title": "Tor aktivieren",

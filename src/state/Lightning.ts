@@ -28,6 +28,7 @@ export interface ILightningModel {
   setupStores: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
 
   getInfo: Thunk<ILightningModel, void, IStoreInjections>;
+  getNetworkInfo: Thunk<ILightningModel, void, IStoreInjections>;
   waitForChainSync: Thunk<ILightningModel, void, IStoreInjections>;
   waitForGraphSync: Thunk<ILightningModel, void, IStoreInjections>;
   checkRecoverInfo: Thunk<ILightningModel, void, IStoreInjections, IStoreModel, Promise<void>>;
@@ -37,6 +38,7 @@ export interface ILightningModel {
   disconnectPeer: Thunk<ILightningModel, string, IStoreInjections>;
   signMessage: Thunk<ILightningModel, string, IStoreInjections, {}, Promise<lnrpc.SignMessageResponse>>;
 
+  setNetworkInfo: Action<ILightningModel, lnrpc.NetworkInfo>;
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
   setRPCServerReady: Action<ILightningModel, boolean>;
   setReady: Action<ILightningModel, boolean>;
@@ -50,6 +52,7 @@ export interface ILightningModel {
 
   setBestBlockheight: Action<ILightningModel, number>;
 
+  networkInfo?: lnrpc.NetworkInfo;
   nodeInfo?: lnrpc.IGetInfoResponse;
   rpcReady: boolean;
   syncedToChain: Computed<ILightningModel, boolean>;
@@ -226,6 +229,12 @@ export const lightning: ILightningModel = {
     actions.setNodeInfo(info);
   }),
 
+  getNetworkInfo: thunk(async (actions, _, { injections }) => {
+    const networkInfo = injections.lndMobile.index.getNetworkInfo;
+    const info = await networkInfo();
+    actions.setNetworkInfo(info);
+  }),
+
   checkRecoverInfo: thunk((async (actions, _, { getState, injections }) => {
     while (true) {
       try {
@@ -316,6 +325,9 @@ export const lightning: ILightningModel = {
     if (state.initialKnownBlockheight === undefined) {
       state.initialKnownBlockheight = payload.blockHeight ?? 0;
     }
+  }),
+  setNetworkInfo: action((state, payload) => {
+    state.networkInfo = payload;
   }),
   setRPCServerReady: action((state, payload) => { state.rpcReady = payload; }),
   setReady: action((state, payload) => { state.ready = payload; }),

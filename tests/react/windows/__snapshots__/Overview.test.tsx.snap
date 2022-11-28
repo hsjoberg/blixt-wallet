@@ -296,6 +296,7 @@ exports[`renders correctly 1`] = `
                 }
               >
                 <View
+                  pointerEvents="box-none"
                   style={
                     [
                       {

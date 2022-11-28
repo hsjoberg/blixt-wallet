@@ -815,7 +815,7 @@
       },
       "MPP": {
         "title": "Aktivera Multi-Path Payments",
-        "subtitle": "Betalningar kan ta upp till 2 vägar"
+        "subtitle": "Betalningar kan ta upp till 16 vägar"
       },
       "tor": {
         "title": "Aktivera Tor",

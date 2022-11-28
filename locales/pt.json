@@ -815,7 +815,7 @@
       },
       "MPP": {
         "title": "Ativar pagamentos por vários caminhos",
-        "subtitle": "Os pagamentos podem levar até 2 caminhos"
+        "subtitle": "Os pagamentos podem levar até 16 caminhos"
       },
       "tor": {
         "title": "Ativar Tor",
