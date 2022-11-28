@@ -274,6 +274,7 @@
       "localCommitmentTxid": "Lokale vastlegging TXID",
       "remoteCommitmentTxid": "Vastlegging TXID tegenpartij",
       "closeChannel": "Kanaal sluiten",
+      "forceClosePendingChannel": "Sluit kanaal in afwachting af",
       "closeChannelPrompt": {
         "title": "Kanaal sluiten"
       }
@@ -722,6 +723,10 @@
     },
     "LN": {
       "title": "Lightning Netwerk",
+      "network": {
+        "title": "Toon netwerkinfo",
+        "subtitle": ""
+      },
       "node": {
         "title": "Toon knooppuntgegevens",
         "subtitle": ""
@@ -815,7 +820,7 @@
       },
       "MPP": {
         "title": "Multi-path-betalingen inschakelen",
-        "subtitle": "Betalingen kunnen tot 16 paden volgen"
+        "subtitle": "Betalingen kunnen tot 16 paden in beslag nemen"
       },
       "tor": {
         "title": "Tor inschakelen",
@@ -907,6 +912,9 @@
       },
       "resetMissionControl": {
         "title": "Kennis van betalingsroutering resetten"
+      },
+      "strictGraphPruning": {
+        "title": "Strikte LN Graph-snoei inschakelen"
       }
     }
   },
@@ -958,6 +966,17 @@
       "placeholder": "Peer URI",
       "accept": "Verbinden"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Lightning Netwerk informatie",
+    "avgChannelSize": "Gemiddelde kanaalgrootte",
+    "avgOutDegree": "Gemiddelde uitgraad",
+    "graphDiameter": "Grafiek Diameter",
+    "medianChannelSizeSat": "Mediane kanaalgrootte",
+    "numChannels": "Aantal kanalen",
+    "numNodes": "Aantal knooppunten",
+    "numZombieChans": "Aantal zombiekanalen",
+    "totalNetworkCapacity": "Totale netwerkcapaciteit"
   },
   "settings.lightningNodeInfo": {
     "title": "Knooppunt Info",
