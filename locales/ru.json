@@ -274,6 +274,7 @@
       "localCommitmentTxid": "Локальное обязательство TXID",
       "remoteCommitmentTxid": "Удалённое обязательство TXID",
       "closeChannel": "Закрыть канал",
+      "forceClosePendingChannel": "Принудительно закрыть ожидающий канал",
       "closeChannelPrompt": {
         "title": "Закрыть канал"
       }
@@ -722,6 +723,10 @@
     },
     "LN": {
       "title": "Сеть Молния",
+      "network": {
+        "title": "Показать информацию о сети",
+        "subtitle": ""
+      },
       "node": {
         "title": "Показать данные узла",
         "subtitle": ""
@@ -815,7 +820,7 @@
       },
       "MPP": {
         "title": "Включить многопутевые платежи",
-        "subtitle": "Платежи могут проходить по 16 путям"
+        "subtitle": "Платежи могут принимать до 16 путей"
       },
       "tor": {
         "title": "Включить Tor",
@@ -907,6 +912,9 @@
       },
       "resetMissionControl": {
         "title": "Сбросить знания о маршрутизации платежей"
+      },
+      "strictGraphPruning": {
+        "title": "Включить строгое сокращение LN Graph"
       }
     }
   },
@@ -958,6 +966,17 @@
       "placeholder": "URI Пира",
       "accept": "Соединиться"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Информация о сети Lightning",
+    "avgChannelSize": "Средний размер канала",
+    "avgOutDegree": "Средняя степень выхода",
+    "graphDiameter": "Диаметр графика",
+    "medianChannelSizeSat": "Средний размер канала",
+    "numChannels": "Количество каналов",
+    "numNodes": "Количество узлов",
+    "numZombieChans": "Количество каналов зомби",
+    "totalNetworkCapacity": "Общая пропускная способность сети"
   },
   "settings.lightningNodeInfo": {
     "title": "Информация об узле",
