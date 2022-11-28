@@ -274,6 +274,7 @@
       "localCommitmentTxid": "Compromisso local TXID",
       "remoteCommitmentTxid": "Compromisso remoto TXID",
       "closeChannel": "Fechar canal",
+      "forceClosePendingChannel": "Forçar fechamento do canal pendente",
       "closeChannelPrompt": {
         "title": "Fechar canal"
       }
@@ -722,6 +723,10 @@
     },
     "LN": {
       "title": "Lightning Network",
+      "network": {
+        "title": "Mostrar informações de rede",
+        "subtitle": ""
+      },
       "node": {
         "title": "Mostrar dados do nó",
         "subtitle": ""
@@ -907,6 +912,9 @@
       },
       "resetMissionControl": {
         "title": "Redefinir o conhecimento de roteamento de pagamento"
+      },
+      "strictGraphPruning": {
+        "title": "Ativar remoção estrita do gráfico LN"
       }
     }
   },
@@ -958,6 +966,17 @@
       "placeholder": "Par URI",
       "accept": "Conectar"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Informações da rede Lightning",
+    "avgChannelSize": "Tamanho médio do canal",
+    "avgOutDegree": "Grau médio",
+    "graphDiameter": "Diâmetro gráfico",
+    "medianChannelSizeSat": "Tamanho Mediano do Canal",
+    "numChannels": "Número de canais",
+    "numNodes": "Número de nós",
+    "numZombieChans": "Número de Canais Zumbis",
+    "totalNetworkCapacity": "Capacidade total da rede"
   },
   "settings.lightningNodeInfo": {
     "title": "Informações do nó",
