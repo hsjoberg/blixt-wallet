@@ -274,6 +274,7 @@
       "localCommitmentTxid": "TXID cam kết tại chỗ",
       "remoteCommitmentTxid": "TXID cam kết từ xa",
       "closeChannel": "Đóng kênh",
+      "forceClosePendingChannel": "Bắt buộc đóng nguồn đang chờ xử lý",
       "closeChannelPrompt": {
         "title": "Đóng kênh"
       }
@@ -722,6 +723,10 @@
     },
     "LN": {
       "title": "Mạng Lightning",
+      "network": {
+        "title": "Hiển thị thông tin mạng",
+        "subtitle": ""
+      },
       "node": {
         "title": "Hiện dữ liệu nút",
         "subtitle": ""
@@ -815,7 +820,7 @@
       },
       "MPP": {
         "title": "Bật thanh toán đa đường dẫn",
-        "subtitle": "Thanh toán có thể có tới 16 đường dẫn"
+        "subtitle": "Việc thanh toán được phép thực hiện tối đa 16 đường dẫn"
       },
       "tor": {
         "title": "Bật Tor",
@@ -907,6 +912,9 @@
       },
       "resetMissionControl": {
         "title": "Đặt lại thông tin định tuyến thanh toán"
+      },
+      "strictGraphPruning": {
+        "title": "Kích hoạt lược bỏ LN Graph chính xác "
       }
     }
   },
@@ -958,6 +966,17 @@
       "placeholder": "URI đối tác",
       "accept": "Kết nối"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Thông tin mạng Lightning ",
+    "avgChannelSize": "Kích thước trung bình của nguồn",
+    "avgOutDegree": "Mức bình quân của Degree",
+    "graphDiameter": "Graph đường kính ",
+    "medianChannelSizeSat": "Kích thước trung vị của nguồn",
+    "numChannels": "Số nguồn",
+    "numNodes": "Số nút",
+    "numZombieChans": "Số nguồn bị mất kết nối ",
+    "totalNetworkCapacity": "Tổng dung lượng mạng"
   },
   "settings.lightningNodeInfo": {
     "title": "Thông tin nút",
