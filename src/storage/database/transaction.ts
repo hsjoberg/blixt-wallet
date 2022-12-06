@@ -101,6 +101,7 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
     `INSERT INTO tx
     (
       date,
+      duration,
       expire,
       value,
       valueMsat,
@@ -160,10 +161,12 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       ?,
       ?,
       ?,
+      ?,
       ?
     )`,
     [
       transaction.date.toString(),
+      transaction.duration,
       transaction.expire.toString(),
       transaction.value.toString(),
       transaction.valueMsat.toString(),

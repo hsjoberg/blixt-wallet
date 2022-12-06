@@ -274,4 +274,10 @@ export const appMigration: IAppMigration[] = [
       setItemObject<boolean>(StorageItem.strictGraphPruningEnabled, false);
     },
   },
+  // Version 32
+  {
+    async beforeLnd(db, i) {
+      await db.executeSql("ALTER TABLE tx ADD duration TEXT NULL");
+    },
+  },
 ];

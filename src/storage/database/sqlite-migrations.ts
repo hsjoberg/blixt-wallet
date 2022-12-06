@@ -2,6 +2,7 @@ const schema = [
   `CREATE TABLE tx (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     date TEXT NOT NULL,
+    duration TEXT NULL,
     expire TEXT NOT NULL,
     value TEXT NOT NULL,
     valueMsat TEXT NOT NULL,
