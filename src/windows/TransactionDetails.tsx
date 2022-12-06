@@ -237,6 +237,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
               <MetaData title={t("generic.amount", { ns: namespaces.common })} data={formatBitcoin(transactionValue, bitcoinUnit)} />
               {transaction.valueFiat != null && transaction.valueFiatCurrency && <MetaData title={t("amountInFiatTimeOfPayment")} data={`${transaction.valueFiat.toFixed(2)} ${transaction.valueFiatCurrency}`} />}
               {transaction.fee !== null && transaction.fee !== undefined && <MetaData title={t("generic.fee", { ns: namespaces.common })} data={transaction.fee.toString() + " Satoshi"} />}
+              {transaction.duration !==null && <MetaData title={t("duration")} data={transaction.duration || ''} />}
               {transaction.hops && transaction.hops.length > 0 && <MetaData title={t("numberOfHops")} data={transaction.hops.length.toString()} />}
               {direction === "send" && <MetaData title={t("remotePubkey")} data={transaction.remotePubkey} />}
               <MetaData title={t("paymentHash")} data={transaction.rHash}/>

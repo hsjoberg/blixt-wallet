@@ -41,6 +41,7 @@ export interface IDBTransaction {
 export interface ITransaction {
   id?: number;
   date: Long;
+  duration?: string;
   expire: Long;
   value: Long;
   valueMsat: Long;

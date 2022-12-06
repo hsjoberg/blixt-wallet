@@ -130,6 +130,7 @@
   "transactionDetails": {
     "title": "Transaction",
     "date": "Date",
+    "duration": "Time taken to pay invoice",
     "note": "Note",
     "website": "Website",
     "type" : "Type",

@@ -76,6 +76,8 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         throw new Error(t("send.error.missingPubkey"));
       }
       setSending(true);
+      const start = new Date().getTime();
+
       const result = await sendKeysendPaymentV2(
         pubkeyInput,
         Long.fromValue(Number.parseInt(satInput, 10)),
@@ -93,9 +95,12 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       console.log("Payment request is " + result.paymentRequest);
       console.log(typeof result.paymentRequest);
 
+      const settlementDuration = (new Date().getTime() - start) / 1000 + "s";
+
       const transaction: ITransaction = {
         date: result.creationDate,
         description: t("send.msg"),
+        duration: settlementDuration,
         expire: Long.fromValue(0),
         paymentRequest: result.paymentRequest,
         remotePubkey: pubkeyInput,
