@@ -153,7 +153,7 @@ export const send: ISendModel = {
       throw new Error(`${translatePaymentFailureReason(sendPaymentResult.failureReason)}`);
     }
     
-    const settlementDuration = (new Date().getTime() - start) / 1000 + "s";
+    const settlementDuration = (new Date().getTime() - start);
 
     const transaction: ITransaction = {
       date: paymentRequest.timestamp,

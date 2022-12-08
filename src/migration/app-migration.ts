@@ -277,7 +277,7 @@ export const appMigration: IAppMigration[] = [
   // Version 32
   {
     async beforeLnd(db, i) {
-      await db.executeSql("ALTER TABLE tx ADD duration TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD duration REAL NULL");
     },
   },
 ];

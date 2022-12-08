@@ -95,7 +95,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       console.log("Payment request is " + result.paymentRequest);
       console.log(typeof result.paymentRequest);
 
-      const settlementDuration = (new Date().getTime() - start) / 1000 + "s";
+      const settlementDuration = (new Date().getTime() - start);
 
       const transaction: ITransaction = {
         date: result.creationDate,
