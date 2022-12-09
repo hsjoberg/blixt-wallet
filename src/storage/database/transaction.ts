@@ -167,7 +167,7 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
     )`,
     [
       transaction.date.toString(),
-      transaction.duration,
+      transaction.duration ?? null,
       transaction.expire.toString(),
       transaction.value.toString(),
       transaction.valueMsat.toString(),
