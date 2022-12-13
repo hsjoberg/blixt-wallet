@@ -24,7 +24,7 @@ import { Alert } from "../utils/alert";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
 
-const durationAsSeconds = (n: number) => `${n /1000}s`
+const durationAsSeconds = (n: number) => `${(n/1000).toFixed(2)}s`
 
 interface IMetaDataProps {
   title: string;
