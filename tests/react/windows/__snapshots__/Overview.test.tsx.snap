@@ -549,7 +549,7 @@ exports[`renders correctly 1`] = `
 
                                                     Send at least
                                                      
-                                                    0.00022 ₿
+                                                    0.00 022 000 ₿
                                                      (
                                                     0.00 USD
                                                     ).
@@ -862,7 +862,7 @@ exports[`renders correctly 1`] = `
                                         }
                                         testID="BIG_BALANCE_HEADER"
                                       >
-                                        0.00000123 ₿
+                                        0.00 000 123 ₿
                                       </Text>
                                       <Text
                                         collapsable={false}
