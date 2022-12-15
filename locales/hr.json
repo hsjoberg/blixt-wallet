@@ -1,0 +1,1090 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Lightning adresa",
+      "nodeAlias": "Alias noda",
+      "description": "Opis",
+      "amount": "Iznos",
+      "fee": "Naknada",
+      "search": "Traži",
+      "viewInBlockExplorer": "Pogledaj u blok eksploreru"
+    },
+    "buttons": {
+      "ok": "Ok",
+      "cancel": "Poništi",
+      "continue": "Nastavi",
+      "skip": "Preskoči",
+      "proceed": "nastavi",
+      "back": "Natrag",
+      "no": "Ne",
+      "yes": "Da",
+      "save": "Spremi",
+      "copy": "Kopiraj"
+    },
+    "msg": {
+      "status": "Status",
+      "error": "Greška",
+      "warning": "Upozorenje",
+      "result": "Rezultat",
+      "pending": "u tijeku",
+      "done": "Učinjeno",
+      "dismiss": "Odbaci",
+      "lastSync": "Zadnja sinkronizacija",
+      "lastSyncAttempt": "Zadnji pokušaj sinkronizacije",
+      "clipboardCopy": "Kopirano u međuspremnik.",
+      "written": "Napisano",
+      "enabled": "omogućeno",
+      "disabled": "onemogućeno"
+    }
+  },
+  "welcome.start": {
+    "title": "Dobrodošli",
+    "createWallet": {
+      "title": "Stvori novčanik",
+      "msg1": "Blixt Wallet je još uvijek u ranoj fazi razvoja.",
+      "msg2": "Ako koristite ovaj novčanik, svakako shvatite da biste mogli izgubiti svoja sredstva.",
+      "msg3": "Trenutno nema podrške za WatchTower za stražu vaših kanala dok ste odspojeni.",
+      "msg4": "Nemaran sam, nastavi"
+    },
+    "restoreWallet": {
+      "title": "Oporavi novčanik"
+    },
+    "menu": {
+      "enableTor": "Omogući Tor",
+      "disableTor": "Onemogući Tor",
+      "setBitcoinNode": "Postavite Bitcoin nod"
+    }
+  },
+  "footerNav": {
+    "receive": "Primi",
+    "send": "Šalji"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Skeniraj",
+      "receive": "Primi",
+      "pasteFromClipboard": "Zalijepi iz međuspremnika",
+      "sendToLightningAddress": "Pošalji na Lightning adresu",
+      "contactsAndServices": "Kontakti i usluge",
+      "lightningBrowser": "Lightning Browser",
+      "onChainWallet": "On-chain",
+      "lightningChannels": "Lightning kanali",
+      "keysendExperiment": "Keysend eksperiment",
+      "showMore": "Napredno"
+    },
+    "madeInSweden": "Napravljeno s ⚡ u Švedskoj"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "Oporavak novčanika u tijeku.",
+      "msg2": "Oporavak novčanika je završen.",
+      "more": "Više informacija"
+    },
+    "sendOnChain": {
+      "title": "Dobrodošli u Blixt Wallet!",
+      "msg1": "Za početak, pošaljite on-chain sredstva na bitcoin adresu s desne strane.",
+      "msg2": "Kanal će vam se automatski otvoriti.",
+      "msg3": "Pošalji barem",
+      "alert": "Bitcoin adresa kopirana u međuspremnik"
+    },
+    "doBackup": {
+      "msg1": "Hvala što koristite Blixt Wallet!",
+      "msg2": "Preporučujemo da napravite sigurnosnu kopiju novčanika kako biste mogli vratiti svoja sredstva u slučaju gubitka telefona.",
+      "backup": "Napravi sigurnosnu kopiju novčanika"
+    },
+    "newChannelBeingOpened": {
+      "info": "Novi kanal je u procesu otvaranja...",
+      "view": "Pogledaj"
+    },
+    "noTransactionsYet": "Još nema transakcija"
+  },
+  "help": {
+    "title": "Pomoć",
+    "msg1": "Ako naiđete na probleme ili imate povratne informacije, možete se obratiti programerima Blixt Walleta tako što ćete prijaviti problem na Githubu ili nas kontaktirati putem e-pošte.",
+    "msg2": "Također ste dobrodošli pridružiti se našoj javnoj chat grupi u Telegramu.",
+    "msg3": "Budući da je Blixt Wallet novi novčanik, potrebne su nam povratne informacije o uobičajenim problemima s kojima biste se mogli susresti.",
+    "telegramGroup": "Telegram grupa"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Sinkronizacija u tijeku",
+      "title1": "Sinkronizacija dovršena",
+      "msg1": "Blixt Wallet trenutno sinkronizira blockchain.",
+      "msg2": "Nakon što se vaš novčanik sinkronizira s blockchainom, on-chain transakcije i sredstva bit će prepoznati i mogu se vidjeti u odjeljku Bitcoin on-chain.",
+      "msg3": "Blixt Wallet je sinkroniziran s blockchainom.",
+      "blockHeight": {
+        "title": "Trenutna visina bloka",
+        "msg1": "Napredak sinkronizacije lanca"
+      }
+    },
+    "recoveryMode": {
+      "title": "Napredak oporavka",
+      "msg1": "Oporavak dovršen",
+      "msg2": "Provjerite odjeljke Lightning kanali & On-chain"
+    },
+    "lndLog": {
+      "show": "Prikaži lnd log",
+      "copy": "Kopiraj tekst log-a"
+    }
+  },
+  "transactionDetails": {
+    "title": "Transakcija",
+    "date": "Datum",
+    "note": "Bilješka",
+    "website": "Web stranica",
+    "type" : "Tip",
+    "lnurl": {
+      "messageFromWebsite": "Poruka od",
+      "urlReceivedFromWebsite": "URL primljen od",
+      "secretMessage": "Tajna poruka"
+    },
+    "payer": "Platitelj",
+    "recipient": "Primatelj",
+    "amountInFiatTimeOfPayment": "Fiat iznos (vrijeme plaćanja)",
+    "numberOfHops": "Broj skokova",
+    "remotePubkey": "Udaljeni pubkey",
+    "paymentHash": "Hash plaćanja",
+    "preimage": "Predslika",
+    "status": "Status",
+    "goBack": "Idi natrag",
+    "button": {
+      "setNote": "Postavi bilješku",
+      "cancelInvoice": "Otkaži fakturu",
+      "showMap": "Prikaži kartu"
+    },
+    "setNoteDialog": {
+      "title": "Bilješka",
+      "text": "Postavite napomenu za ovu transakciju"
+    }
+  },
+  "web.info": {
+    "title": "Interaktivni demo",
+    "pressToTry": "Pritisnite za isprobavanje Blixt novčanika!"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Primi"
+    },
+    "createInvoice": {
+      "title": "Izradi fakturu",
+      "alert": "Prije primanja morate otvoriti Lightning kanal.",
+      "lsp": {
+        "msg": "Kanal plaćanja Dunder LSP-a otvorit će se kada se ova faktura plati.",
+        "msg1": "Što je ovo?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Otvaranje kanala",
+      "msg": "Kako biste prihvatili plaćanje ove fakture, kanal mora biti otvoren na Lightning Networku.",
+      "msg1": "To zahtijeva jednokratnu naknadu od otprilike",
+      "alert": "Povezivanje s Dunderom nije uspjelo, pokušajte ponovno kasnije.",
+      "proceed": "Nastavi"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Iznos",
+        "change": "Promjena fiat jedinice",
+        "dunderPlaceholder": "Barem"
+      },
+      "amountBitcoin": {
+        "title": "Iznos",
+        "change": "Promijeni bitcoin jedinicu",
+        "dunderPlaceholder": "Barem"
+      },
+      "payer": {
+        "title": "Platitelj",
+        "placeholder": "Za knjigovodstvo"
+      },
+      "description": {
+        "title": "Poruka",
+        "placeholder": "Poruka platitelju"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "O Dunder LSP-u",
+    "msg": "Dunder je Lightning Service Provider (LSP) koji vam automatski otvara kanale kada nemate dovoljno ulazne likvidnosti.",
+    "msg1": "To bi primjerice mogao biti slučaj kada prvi put počnete koristiti Blixt novčanik.",
+    "msg2": "Budući da je za to potrebna on-chain transakcija, naknada za Bitcoin transakciju bit će odbijena od dolazne uplate. Buduća plaćanja moći će se koristiti novootvorenim kanalom plaćanja s Lightning mrežom.",
+    "msg3": "Dunder je",
+    "msg4": "open-source",
+    "msg5": "softver i možete promijeniti zadanog pružatelja usluga u Postavkama."
+  },
+  "receive.receiveQr": {
+    "title": "Primi",
+    "qr": {
+      "title": "Skenirajte ovaj QR kod",
+      "msg": "Istječe za {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Plati fakturu"
+    },
+    "form": {
+      "invoice": {
+        "title": "Faktura"
+      },
+      "amount": {
+        "title": "Iznos"
+      },
+      "recipient": {
+        "title": "Primatelj"
+      },
+      "nodeAlias": {
+        "title": "Alias noda"
+      },
+      "description": {
+        "title": "Poruka"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "UPLATA POSLANA"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Lightning kanali"
+    },
+    "balance": {
+      "title": "Stanje"
+    },
+    "channel": {
+      "alias": "Alias",
+      "node": "Nod",
+      "channelId": "ID kanala",
+      "status": "Status",
+      "statusActive": "Aktivan",
+      "statusInactive": "Neaktivan",
+      "statusPending": "U tijeku",
+      "statusClosing": "Zatvaranje",
+      "statusForceClosing": "Prisilno zatvaranje",
+      "statusWaitingForClose": "Čeka se zatvaranje",
+      "capacity": "Kapacitet",
+      "howMuchCanBeSent": "Može poslati",
+      "howMuchCanBeReceived": "Može primiti",
+      "localReserve": "Lokalna rezerva",
+      "commitmentFee": "Naknada za obavezivanje",
+      "pendingFunds": "Sredstva na čekanju",
+      "balanceInLimbo": "Iznos u limbu",
+      "pendingHtlcs": "HTLC-ovi na čekanju",
+      "maturityHeight": "Visina zrelosti",
+      "localCommitmentTxid": "TXID lokalne obveze",
+      "remoteCommitmentTxid": "TXID udaljene obveze",
+      "closeChannel": "Zatvori kanal",
+      "forceClosePendingChannel": "Prisilno zatvori kanal na čekanju",
+      "closeChannelPrompt": {
+        "title": "Zatvori kanal"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Otvori kanal"
+    },
+    "form": {
+      "title": "Otvori kanal",
+      "channel": {
+        "title": "URI noda",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Iznos",
+        "placeholder": "Iznos"
+      },
+      "fee_rate": {
+        "title": "Stopa naknade"
+      }
+    },
+    "torPrompt": {
+      "title": "Omogući Tor",
+      "text1": "Čini se da pokušavate otvoriti kanal prema nodu koji radi pod Tor onion uslugom.",
+      "text2": "Da biste se povezali morate imati aktivan Tor za Blixt Wallet."
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "On-chain sredstva"
+    },
+    "address": {
+      "title": "Pošaljite Bitcoin on-chain na ovu adresu",
+      "alert": "Kopirano u međuspremnik."
+    },
+    "newAddress": {
+      "title": "Generiraj novu adresu"
+    },
+    "withdraw": {
+      "title": "Povuci sredstva"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Transakcija",
+    "txHash": "Id",
+    "timeStamp": "Datum",
+    "amount": "Iznos",
+    "totalFees": "Naknade",
+    "label": "Oznaka",
+    "destAddresses": "Destinacija",
+    "numConfirmations": "Potvrde",
+    "blockHeight": "Visina bloka",
+    "blockHash": "Hash bloka",
+    "rawTxHex": {
+      "title": "Neobrađeni tx hex",
+      "msg": "Pritisnite za kopiranje"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Dnevnik transakcija"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Povuci sredstva"
+    },
+    "form": {
+      "address": {
+        "title": "Adresa",
+        "placeholder": "Bitcoin adresa"
+      },
+      "amount": {
+        "title": "Iznos",
+        "placeholder": "Iznos",
+        "withdrawAll": "Povuci sva sredstva",
+        "all": "Sve"
+      },
+      "feeRate": {
+        "title": "Stopa naknade",
+        "auto": "auto"
+      },
+      "withdraw": {
+        "title": "Povuci",
+        "alert": "Povlačenje je uspjelo"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Zahtjev za prijavu",
+      "msg": "Želite li se prijaviti na",
+      "success": "Autentificirano za"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Otvaranje ulaznog kanala"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Pregled metapodataka",
+      "dialog": {
+        "title": "Tehnički metapodaci"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} je na vašem popisu kontakata"
+      },
+      "add": {
+        "title": "Dodaj na popis kontakata",
+        "msg": "Želite li dodati {{lightningAddress}} na svoj popis kontakata?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Kod plaćanja za {{domain}} je na vašem popisu kontakata"
+      },
+      "add": {
+        "title": "Dodaj na popis kontakata",
+        "msg": "Želite li dodati ovaj kod plaćanja za {{domain}} na svoj popis kontakata?"
+      }
+    },
+    "unableToPay": "Ne mogu platiti",
+    "payerData": {
+      "commentAllowed": "Komentiraj na {{target}} (maks. {{letters}} slova)",
+      "sendNameWithComment": "Pošalji moje ime zajedno s ovim komentarom",
+      "name": {
+        "ask": "Pošalji moje ime zajedno s ovom uplatom",
+        "mandatory": "Vaše ime mora biti poslano zajedno s ovom uplatom"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "Plaćanju nedostaje opis."
+    },
+    "pay": {
+      "title": "Plati",
+      "error": {
+        "mustProvideComment": "Morate dati komentar ako odlučite uključiti svoje ime u ovo plaćanje"
+      }
+    },
+    "cancel": {
+      "title": "Otkaži"
+    },
+    "form": {
+      "asksYouToPay": "traži da platiš.",
+      "description": {
+        "title": "Opis"
+      },
+      "amount": {
+        "title": "Iznos",
+        "to": "za",
+        "placeholder": "Unos iznosa"
+      },
+      "alert": "Ne mogu platiti"
+    },
+    "done": {
+      "message": {
+        "title": "Poruka od"
+      },
+      "url": {
+        "description": "Opis",
+        "domain": "URL primljen od",
+        "done": {
+          "title": "Gotovo"
+        },
+        "copy": {
+          "title": "Kopiraj u međuspremnik",
+          "msg": "Kopirano u međuspremnik"
+        },
+        "open": {
+          "title": "Otvori preglednik"
+        }
+      },
+      "aes": {
+        "domain": "Primljena tajna šifrirana poruka od",
+        "description": "Poruka od",
+        "secret": "Tajna poruka"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "O Lightning adresi",
+      "msg1": "Lightning adresa",
+      "msg2": "je način plaćanja osobe ili usluge na Lightning Networku.",
+      "msg3": "Izgledaju kao adrese e-pošte, ali umjesto slanja e-pošte primatelju, šaljete novac.",
+      "msg4": "Blixt novčanik ima punu podršku za slanje na Lightning adresu, ali primanje",
+      "msg5": "putem Lightning adrese još uvijek je u izradi."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "Poslan zahtjev za povlačenje na {{domain}}",
+      "addToContactList": {
+        "title": "Dodaj na popis kontakata",
+        "msg": "Želite li dodati ovaj kod za povlačenje na {{domain}} na svoj popis kontakata?",
+        "note": "Račun na {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "Zahtjev za povlačenje",
+      "msg": "Poruka od",
+      "dialog": {
+        "msg": "Iznos"
+      },
+      "dialog1": {
+        "minSat": "Minimalan iznos povlačenja",
+        "maxSat": "Maksimalni iznos za podizanje",
+        "placeholder": "Iznos"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Kontakti i usluge",
+      "lightningAddressAlreadyExists": "već postoji na vašem popisu kontakata",
+      "nothingHereYet": "Ovdje još nema ničega...",
+      "whyNotAdd": "Zašto ne dodati kontakt Lightning adresu od",
+      "tappingHere": "pritiskom ovdje"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Udaljeno stanje",
+        "error": "Nevažeća operacija, kontakt nema LNURL kod za povlačenje"
+      },
+      "list": {
+        "pay": "Uplate za",
+        "account": "Račun na"
+      },
+      "send": {
+        "title": "Pošalji",
+        "couldNotPay": "Nije moguće platiti na ovaj LNURL-pay kod",
+        "invalidResponse": "Odgovor nije bio LNURL-pay odgovor (dobio {{response}})",
+        "invalidOperation": "Nevažeća operacija, kontakt niti ima LUD-16 identifikator niti LNURL-pay kod"
+      },
+      "withdraw": {
+        "title": "Povlačenje",
+        "couldNotPay": "Nije moguće platiti na ovaj LNURL-pay kod",
+        "invalidResponse": "Odgovor nije bio LNURL-pay odgovor (dobio {{response}})",
+        "invalidOperation": "Nevažeća operacija, kontakt nema LNURL kod za povlačenje"
+      },
+      "deleteContact": {
+        "title": "Brisanje kontakta",
+        "msg": "Jeste li sigurni da želite izbrisati kontakt {{contact}}?"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Želite li zatvoriti preglednik?",
+    "home": "Natrag na popis trgovina",
+    "placeholder": "Ovdje upišite URL"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "Kopirano u međuspremnik"
+    },
+    "dialog": {
+      "msg1": "Dobro došli na Keysend igralište",
+      "msg2": "Keysend vam omogućuje plaćanje drugom Blixt novčaniku (ili bilo kojem Lightning nodu koji podržava keysend) bez potrebe za fakturom.",
+      "msg3": "Kliknite na kameru za skeniranje QR koda drugog novčanika ili dajte javni ključ i upute za rutu ispod."
+    },
+    "send": {
+      "title": "Pošalji",
+      "msg": "Keysend plaćanje",
+      "error": {
+        "checkAmount": "Provjeri iznos",
+        "missingPubkey": "Nedostaje pubkey"
+      },
+      "alert": "Plaćanje uspješno"
+    },
+    "form": {
+      "amount": {
+        "title": "Iznos sat"
+      },
+      "pubkey": {
+        "title": "Javni ključ",
+        "placeholder": "Pubkey"
+      },
+      "route": {
+        "title": "Savjeti za rutu",
+        "placeholder": "Savjeti za rutu"
+      },
+      "message": {
+        "title": "Poruka",
+        "placeholder": "Ovdje unesite chat poruku"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "Postavke",
+    "general": {
+      "title": "Općenito",
+      "name": {
+        "title": "Ime",
+        "subtitle": "Koristit će se u transakcijama",
+        "dialog": {
+          "msg": "Odaberite ime koje će se koristiti u transakcijama.\n\nVaše će ime biti vidljivo na fakturama onima koji vam plaćaju, kao i ljudima kojima vi plaćate.",
+          "accept": "Postavi ime"
+        }
+      },
+      "lang": {
+        "title": "Jezik",
+        "dialog": {
+          "title": "Odaberi jezik"
+        }
+      },
+      "pushNotification": {
+        "title": "Push obavijesti",
+        "subtitle": "Za događaje transakcija i kanala"
+      },
+      "checkClipboard": {
+        "title": "Provjerite fakture u međuspremniku",
+        "subtitle": "Automatski provjerite fakture u međuspremniku"
+      },
+      "saveGeolocation": {
+        "title": "Spremi geolokaciju transakcije",
+        "subtitle": "Lokalno spremi lokaciju transakcije",
+        "logGranted": "Geolokacija odobrena",
+        "logDenied": "Dopuštenje za geolociranje odbijeno"
+      },
+      "mapTheme": {
+        "title": "Postavite temu karte"
+      }
+    },
+    "wallet": {
+      "title": "Novčanik",
+      "seed": {
+        "show": {
+          "title": "Prikaži mnemonic",
+          "subtitle": "Prikaži ključ od 24 riječi za ovaj novčanik",
+          "dialog": {
+            "title": "Ključ",
+            "alert": "Kopirano u međuspremnik",
+            "copy": "Kopiraj ključ"
+          }
+        },
+        "remove": {
+          "title": "Uklonite mnemonic s uređaja",
+          "subtitle": "Trajno ukloni ključ iz ovog uređaja",
+          "dialog": {
+            "title": "Ukloni ključ",
+            "msg": "Ovo će trajno ukloniti ključ s ovog uređaja. Učinite ovo samo ako ste sigurnosno kopirali svoj ključ!",
+            "accept": "Izbriši ključ"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Izvoz sigurnosne kopije kanala",
+          "alert": "Datoteka napisana:"
+        },
+        "verify": {
+          "title": "Provjeri sigurnosnu kopiju kanala"
+        },
+        "googleCloud": {
+          "title": "Sigurnosna kopija kanala na Google drive-u",
+          "subtitle": "Automatski sigurnosno kopiraj kanale na Google drive",
+          "alert": "Sigurnosno kopiranje na Google Drive omogućeno"
+        },
+        "googleCloudForce": {
+          "title": "Ručno pokrenite Google Drive Backup",
+          "alert": "Sigurnosno kopirani kanali na Google disk"
+        },
+        "iCloud": {
+          "title": "Sigurnosna kopija kanala na iCloud-u",
+          "subtitle": "Automatski sigurnosno kopirajte kanale na iCloud",
+          "alert": "iCloud sigurnosna kopija"
+        },
+        "iCloudForce": {
+          "title": "Ručno pokrenite iCloud Backup",
+          "alert": "Sigurnosno kopirani kanali na iCloud"
+        },
+        "error": "Pogreška pri sigurnosnom kopiranju"
+      }
+    },
+    "security": {
+      "title": "Sigurnost",
+      "pincode": {
+        "title": "Prijavi se s pin kodom"
+      },
+      "biometrics": {
+        "title": "Prijavi se sa",
+        "fingerprint": "otisak prsta",
+        "faceId": "ID lica",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Planirana sinkronizacija lanca",
+        "subtitle": "Radi u pozadini svaka 4 sata",
+        "dialog": {
+          "title": "Nije preporučeno",
+          "msg": "Upozorenje. Ne preporučuje se onemogućiti planiranu sinkronizaciju lanca.\n\nProvjerite jeste li u tijeku s mrežom jer inače riskirate gubitak sredstava.\n\nUčinite to samo ako znate što radite."
+        }
+      }
+    },
+    "display": {
+      "title": "Prikaz",
+      "fiatUnit": {
+        "title": "Promjena fiat jedinice"
+      },
+      "bitcoinUnit": {
+        "title": "Promjena bitcoin jedinice"
+      },
+      "onchainExplorer": {
+        "title": "Onchain istraživač",
+        "dialog": {
+          "title": "Promijeni on-chain istraživač"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Bitcoin mreža",
+      "node": {
+        "title": "Bitcoin nod",
+        "subtitle": "Postavite Bitcoin nod (BIP157) za povezivanje",
+        "setDialog": {
+          "title": "Postavi nod",
+          "info": "Postavi Bitcoin nod koji podržava BIP157 za uspostavljanje veze.",
+          "leaveBlankToSearch": "Ostavite prazno kako biste omogućili Blixt Walletu da traži važeći nod na Bitcoin mreži.",
+          "longPressToReset": "Za vraćanje na zadani nod ({{defaultNode}}), dugo pritisnite postavku."
+        },
+        "restoreDialog": {
+          "title": "Vrati nod",
+          "msg": "Želite li se vratiti na zadani čvor"
+        }
+      },
+      "restartDialog": {
+        "title": "Potrebno ponovno pokretanje",
+        "msg": "Blixt novčanik mora se ponovno pokrenuti prije primjene nove konfiguracije.",
+        "msg1": "Želite li to učiniti sada?"
+      },
+      "rpc": {
+        "title": "Postavi bitcoind RPC host"
+      },
+      "zmqRawBlock": {
+        "title": "Postavi bitcoind ZMQ Raw Block Host"
+      },
+      "zmqRawTx": {
+        "title": "Postavi bitcoind ZMQ Raw Tx Host"
+      },
+      "p2tr": {
+        "title": "Omogući primanje on-chain putem Taproota (P2TR)"
+      }
+    },
+    "LN": {
+      "title": "Lightning Network",
+      "network": {
+        "title": "Prikaži informacije o mreži",
+        "subtitle": ""
+      },
+      "node": {
+        "title": "Prikaži podatke noda",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Prikaži Lightning peer-ove",
+        "subtitle": ""
+      },
+      "autopilot": {
+        "title": "Automatski otvori kanale",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Usluge ulaznih kanala",
+        "subtitle": "Koristite uslugu ulaznih kanala za primanje uplata",
+        "dialog": {
+          "title": "Pružatelj dolaznih kanala",
+          "msg1": "Odaberite davatelja dolaznih kanala i pritisnite Nastavi.",
+          "msg2": "Vaš će se web preglednik otvoriti na web stranici odgovarajućeg pružatelja usluga, gdje ćete moći zatražiti kanal.",
+          "msg3": "Kada završite, možete kopirati kod adrese i/ili otvoriti poveznicu koristeći Blixt novčanik."
+        }
+      },
+      "LSP": {
+        "title": "Postavite Dunder LSP poslužitelj",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Postavite Dunder poslužitelj",
+          "acept": "Postavi poslužitelj"
+        },
+        "restoreDialog": {
+          "title": "Vratite Dunder poslužitelj",
+          "msg": "Želite li se vratiti na zadani Dunder poslužitelj"
+        }
+      },
+      "graphSync": {
+        "title": "Prije plaćanja pričekajte sinkronizaciju grafa",
+        "subtitle": "Sinkronizirani graf vodi do optimalnih putova plaćanja"
+      }
+    },
+    "miscelaneous": {
+      "title": "Razno",
+      "about": {
+        "title": "O",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "Kopiraj app log u lokalnu pohranu",
+        "subtitle": "",
+        "dialog": {
+          "alert": "Datoteka app log kopirana je u",
+          "error": "Pogreška prilikom kopiranja datoteke app log."
+        }
+      },
+      "lndLog": {
+        "title": "Kopiraj lnd log u lokalnu pohranu",
+        "subtitle": "Dostupno iz /sdcard/BlixtWallet",
+        "dialog": {
+          "alert": "Kopirana lnd log datoteka",
+          "error": "Pogreška pri kopiranju lnd log datoteke."
+        }
+      },
+      "dev": {
+        "title": "Idi na zaslon programera",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Automatski sakrij istekle fakture",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Prijelazi na ekranu",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Potpiši poruku ključem novčanika",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Potpiši poruku"
+        },
+        "dialog2": {
+          "title": "Potpis",
+          "alert": "Kopirano u međuspremnik"
+        }
+      }
+    },
+    "experimental": {
+      "title": "Eksperimenti",
+      "LSP": {
+        "title": "Omogući Dunder LSP",
+        "subtitle": "VRLO EKSPERIMENTALNO. Lightning pružatelj usluga koji pomaže s ulaznom likvidnošću"
+      },
+      "MPP": {
+        "title": "Omogući Multi-Path plaćanja",
+        "subtitle": "Plaćanja mogu koristiti do 16 puteva"
+      },
+      "tor": {
+        "title": "Omogući Tor",
+        "subtitle": "",
+        "enabled": {
+          "title": "Ponovno pokreni aplikaciju i omogući Tor",
+          "msg1": "Omogućavanjem Tor-a novčanik će se povezati sa svojim peerovima (Bitcoin i Lightning Network peerovima) putem Tor mreže.",
+          "msg2": "Također ćete se moći povezati i otvoriti kanale na Lightning nodove koji koriste onion usluge.",
+          "msg3": "UPOZORENJE: Blixt Wallet će i dalje komunicirati sa sljedećim servisima bez Tor-a",
+          "msg4": "Razlog: za dobiti fiat/bitcoin tečajeve",
+          "msg5": "Razlog: dobiti trenutnu visinu bloka",
+          "msg6": "Razlog: Za sigurnosno kopiranje Google diska",
+          "msg7": "Razlog: Za pouzdane Lightning nodove",
+          "msg8": "WebLN Browser i LNURL također neće koristiti Tor."
+        },
+        "disabled": {
+          "title": "Ponovno pokreni aplikaciju i onemogući Tor",
+          "msg1": "Onemogućavanje Tor-a zahtijeva ponovno pokretanje aplikacije.",
+          "msg2": "Želite li nastaviti?"
+        }
+      },
+      "onion": {
+        "title": "Prikaži Tor onion uslugu",
+        "subtitle": "Za povezivanje i otvaranje kanala na ovaj novčanik"
+      },
+      "keysend": {
+        "title": "Keysend eksperiment",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Istek fakture (sekunde)",
+        "subtitle": "{{expiry}} sekundi"
+      }
+    },
+    "debug": {
+      "title": "Debug",
+      "startup": {
+        "title": "Prikaži obavijesti o informacijama o pokretanju",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "LndMobile centar za pomoć",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Dijagnosticiraj Dunder probleme",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "Pročitaj lnd log",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Keysend test",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Google Drive Testbed",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Napiši konfiguraciju",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Aktiviraj demo način rada",
+        "subtitle": "Korišten za promociju. Ponovno pokrenite aplikaciju za poništavanje"
+      },
+      "rescanWallet": {
+        "title": "Ponovno skeniraj novčanik",
+        "subtitle": "Ponovno skeniraj blockchain za transakcije novčanika"
+      },
+      "getNodeInfo": {
+        "title": "Informacije o nodu"
+      },
+      "getChannelInfo": {
+        "title": "Informacije o kanalu"
+      },
+      "demoMode": {
+        "title": "Aktiviraj demo način rada",
+        "subtitle": "Korišten za promociju. Ponovno pokrenite aplikaciju za poništavanje"
+      },
+      "disableGraphCache": {
+        "title": "Onemogući lnd graf cache"
+      },
+      "resetMissionControl": {
+        "title": "Ponovno postavljanje znanja o usmjeravanju plaćanja"
+      },
+      "strictGraphPruning": {
+        "title": "Omogući striktno rezanje LN grafa"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "O Blixt novčaniku",
+    "msg1": "Verzija",
+    "msg2": "Od",
+    "msg3": "Novčanik otvorenog koda s MIT licencom",
+    "msg4": "Stvoren korištenjem",
+    "msg5": "i drugim zapanjujućim softverom otvorenog koda",
+    "msg6": "Tor ikona je licencirana pod CC BY 3.0 od strane",
+    "msg7": "licencija"
+  },
+  "settings.setPincode": {
+    "enter": "Unesite pin kod",
+    "confirm": "Potvrdite svoj pin kod"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Unesite trenutni pin kod za uklanjanje pin koda"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Lightning Peerovi"
+    },
+    "alias": "Alias noda",
+    "pubKey": "Javni ključ noda",
+    "address": "Adresa noda",
+    "data": {
+      "title": "Podaci",
+      "bytesSent": "poslani bajtovi",
+      "bytesRecv": "primljeni bajtovi"
+    },
+    "transfer": {
+      "title": "Prijenos",
+      "satSent": "sat poslano",
+      "satRecv": "sat primljeno"
+    },
+    "inbound": "Dolazni",
+    "syncType": "Vrsta sinkronizacije",
+    "errors": "Greške",
+    "disconnect": "Odspoji peer"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Spoji se na Lightning Peer"
+    },
+    "connect": {
+      "title": "URI noda",
+      "placeholder": "URI peera",
+      "accept": "Spoji"
+    }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Informacije o Lightning mreži",
+    "avgChannelSize": "Prosječna veličina kanala",
+    "avgOutDegree": "Prosječni Out stupanj",
+    "graphDiameter": "Promjer grafa",
+    "medianChannelSizeSat": "Srednja veličina kanala",
+    "numChannels": "Broj kanala",
+    "numNodes": "Broj nodova",
+    "numZombieChans": "Broj zombie kanala",
+    "totalNetworkCapacity": "Ukupni kapacitet mreže"
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Informacije o nodu",
+    "alias": "Alias noda",
+    "chain": "Chain",
+    "timestamp": "Vremenska oznaka najboljeg zaglavlja",
+    "blockHash": "Hash bloka",
+    "blockHeight": "Visina bloka",
+    "identityPubkey": "Pubkey identiteta",
+    "channel": {
+      "title": "Broj kanala",
+      "active": "Aktivno",
+      "inactive": "Neaktivno",
+      "pending": "U tijeku"
+    },
+    "numPeers": "Broj peerova",
+    "syncedToChain": "Sinkronizirano s lancem",
+    "syncedToGraph": "Sinkronizirano s grafom",
+    "nodeUris": "URI noda",
+    "version": "Lnd verzija",
+    "features": "Značajke noda"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Tor Onion servis",
+    "msg1": "Skenirajte ovaj QR kod da otvorite kanal prema ovom novčaniku",
+    "msg2": "Nije moguće razriješiti onion adresu"
+  },
+  "welcome.addFunds": {
+    "title": "Dodaj sredstva",
+    "msg1": "Za početak korištenja Lightninga u Blixt novčaniku",
+    "msg2": "pošaljite bitcoin na gornju adresu"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "Automatsko otvaranje kanala",
+      "msg": "Otvorite kanale kada su on-chain sredstva dostupna"
+    },
+    "done": {
+      "title": "Skoro gotovo!",
+      "msg1": "Evo nekih postavki novčanika koje možete postaviti prema svojim željama",
+      "msg2": "Kada ste spremni, pritisnite Nastavi"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Pokušajte ponovno",
+      "msg": "Žao nam je, napisali ste riječi pogrešnim redoslijedom, pokušajte ponovno."
+    },
+    "seed": {
+      "title": "Potvrdite svoj seed"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Omogućite Google Drive sigurnosno kopiranje",
+      "msg": "Google Drive sigurnosno kopiranje omogućeno"
+    },
+    "backup": {
+      "title": "Sigurnosna kopija u oblaku",
+      "msg": "Kako bi vaša off-chain sredstva ostala sigurna u slučaju gubitka uređaja, preporučujemo vam da zadržite sigurnosnu kopiju kanala na Google Driveu.",
+      "msg1": "Ovo će čuvati šifriranu sigurnosnu kopiju vaših kanala koja se može koristiti samo zajedno sa seedom novčanika.",
+      "msg2": "Kada ste spremni, pritisnite Nastavi"
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Omogući iCloud backup",
+      "msg": "iCloud backup omogućen"
+    },
+    "backup": {
+      "title": "iCloud Backup",
+      "msg": "Kako bi vaša sredstva izvan lanca ostala sigurna u slučaju gubitka uređaja, preporučujemo vam da kanale sigurnosno kopirate na iCloud.",
+      "msg1": "Ovo će čuvati šifriranu sigurnosnu kopiju vaših kanala koja se može koristiti samo zajedno sa seedom novčanika.",
+      "msg2": "Kada ste spremni, pritisnite Nastavi"
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Oporavi novčanik",
+      "msg": "Da obnovite svoj novčanik, napišite svaku riječ iz svog sjemena odvojenu razmakom.",
+      "msg1": "Ako želite vratiti svoje Lightning Network kanale, trebate obezbijediti sigurnosnu kopiju datoteke.",
+      "loading": "Oporavi novčanik",
+      "channel": {
+        "title": "Sigurnosna kopija kanala",
+        "file": "Odaberite datoteku sigurnosne kopije kanala na disku",
+        "google": {
+          "title": "Vratite putem Google Drivea",
+          "alert": "Vraćanje putem Google Drivea nije uspjelo"
+        },
+        "iCloud": {
+          "title": "Vraćanje putem iClouda",
+          "alert": "Vraćanje putem iClouda nije uspjelo"
+        }
+      },
+      "seed": "Sjeme mora imati točno 24 riječi"
+    },
+    "backup": {
+      "google": "Sigurnosno kopiranje putem Google Drivea",
+      "iCloud": "Sigurnosna kopija putem iClouda"
+    }
+  },
+  "welcome.seed": {
+    "title": "Dobrodošli u Blixt novčanik!",
+    "msg": "Ovo je vaša sigurnosna kopija sjemena.",
+    "msg1": "Zapišite to na komad papira i spremite na sigurno mjesto.",
+    "msg2": "Ako izgubite pristup svom novčaniku",
+    "msg3": "moći ćete oporaviti svoja sredstva korištenjem sigurnosne kopije sjemena.",
+    "msg4": "Standard sjemena koji se koristi je aezeed.",
+    "button": "Zapisao sam"
+  }
+}
