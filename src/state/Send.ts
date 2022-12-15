@@ -108,6 +108,8 @@ export const send: ISendModel = {
    * @throws
    */
   sendPayment: thunk(async (_, payload, { getState, dispatch, injections, getStoreState }) => {
+    const start = new Date().getTime();
+
     const sendPaymentV2Sync = injections.lndMobile.index.sendPaymentV2Sync;
     const paymentRequestStr = getState().paymentRequestStr;
     const paymentRequest = getState().paymentRequest;
@@ -144,14 +146,19 @@ export const send: ISendModel = {
       name,
       multiPathPaymentsEnabled,
     );
+
+    
     log.i("status", [sendPaymentResult.status, sendPaymentResult.failureReason]);
     if (sendPaymentResult.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
       throw new Error(`${translatePaymentFailureReason(sendPaymentResult.failureReason)}`);
     }
+    
+    const settlementDuration = (new Date().getTime() - start);
 
     const transaction: ITransaction = {
       date: paymentRequest.timestamp,
       description: extraData.lnurlPayTextPlain ?? paymentRequest.description,
+      duration: settlementDuration,
       expire: paymentRequest.expiry,
       paymentRequest: paymentRequestStr,
       remotePubkey: paymentRequest.destination,

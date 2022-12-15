@@ -8,6 +8,7 @@ import { hexToUint8Array, bytesToHexString } from "../../utils";
 export interface IDBTransaction {
   id: number;
   date: string;
+  duration: number | null;
   expire: string;
   value: string;
   valueMsat: string;
@@ -41,6 +42,7 @@ export interface IDBTransaction {
 export interface ITransaction {
   id?: number;
   date: Long;
+  duration: number | null;
   expire: Long;
   value: Long;
   valueMsat: Long;
@@ -100,6 +102,7 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
     `INSERT INTO tx
     (
       date,
+      duration,
       expire,
       value,
       valueMsat,
@@ -159,10 +162,12 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       ?,
       ?,
       ?,
+      ?,
       ?
     )`,
     [
       transaction.date.toString(),
+      transaction.duration ?? null,
       transaction.expire.toString(),
       transaction.value.toString(),
       transaction.valueMsat.toString(),
@@ -322,6 +327,7 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
   return {
     id: transaction.id!,
     date: Long.fromString(transaction.date),
+    duration: transaction.duration,
     expire: Long.fromString(transaction.expire),
     value: Long.fromString(transaction.value),
     valueMsat: Long.fromString(transaction.valueMsat),
