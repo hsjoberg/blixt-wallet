@@ -66,14 +66,15 @@ export const convertBitcoinUnit = (value: number, from: keyof IBitcoinUnits, to:
 
 export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNumbers: boolean = false): string => {
   const value = convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit);
-  const fixed = value.toFixed(unit === "bit" ? 2 : undefined!);
+  const fixed = value.toFixed(BitcoinUnits[unit].decimals);
 
   const formatNumber =
     groupNumbers
       ? formatNumberGroupings(fixed)
       : fixed;
 
-  return `${formatNumber} ${getUnitNice(value, unit)}`;
+  return `${unit === 'bitcoin' ? formatNumber.substring(0, formatNumber.indexOf(".") + 1) + 
+  formatNumber.substring(formatNumber.indexOf(".") + 1).replace(/(\d{2})(\d{3})(\d{3})/, "$1 $2 $3") : formatNumber} ${getUnitNice(value, unit)}`;
 };
 
 export const getUnitNice = (value: BigNumber, unit: keyof IBitcoinUnits) => {
