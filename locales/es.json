@@ -130,6 +130,7 @@
   "transactionDetails": {
     "title": "Transacción",
     "date": "Fecha",
+    "duration": "Tiempo que tarda en pagar la factura",
     "note": "Nota",
     "website": "Página web",
     "type" : "Tipo",
@@ -723,6 +724,10 @@
     },
     "LN": {
       "title": "Lightning Network",
+      "network": {
+        "title": "Mostrar información de red",
+        "subtitle": ""
+      },
       "node": {
         "title": "Mostrar datos del nodo",
         "subtitle": ""
@@ -908,6 +913,9 @@
       },
       "resetMissionControl": {
         "title": "Restablecer conocimiento de enrutamiento de pago"
+      },
+      "strictGraphPruning": {
+        "title": "Habilitar la poda de gráfico LN estricta"
       }
     }
   },
@@ -959,6 +967,17 @@
       "placeholder": "URI del par",
       "accept": "Conectar"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Lightning Network Info",
+    "avgChannelSize": "Tamaño pro-medio del canal",
+    "avgOutDegree": "Grado promedio de salida",
+    "graphDiameter": "Diámetro del gráfico",
+    "medianChannelSizeSat": "Tamaño medio del canal",
+    "numChannels": "Número de canales",
+    "numNodes": "Número de nodos",
+    "numZombieChans": "Número de canales zombis",
+    "totalNetworkCapacity": "Capacidad total de la red"
   },
   "settings.lightningNodeInfo": {
     "title": "Información de nodo",
