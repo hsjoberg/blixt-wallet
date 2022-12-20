@@ -615,7 +615,7 @@
           }
         },
         "remove": {
-          "title": "Uklonite mnemonic s uređaja",
+          "title": "Ukloni mnemonic s uređaja",
           "subtitle": "Trajno ukloni ključ iz ovog uređaja",
           "dialog": {
             "title": "Ukloni ključ",
@@ -656,7 +656,7 @@
     "security": {
       "title": "Sigurnost",
       "pincode": {
-        "title": "Prijavi se s pin kodom"
+        "title": "Prijava s pin kodom"
       },
       "biometrics": {
         "title": "Prijavi se sa",
