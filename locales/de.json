@@ -130,6 +130,7 @@
   "transactionDetails": {
     "title": "Transaktion",
     "date": "Datum",
+    "duration": "Zeitaufwand zum Bezahlen der Rechnung",
     "note": "Notiz",
     "website": "Webseite",
     "type" : "Typ",
@@ -723,6 +724,10 @@
     },
     "LN": {
       "title": "Lightning-Netzwerk",
+      "network": {
+        "title": "Netzwerkinformationen anzeigen",
+        "subtitle": ""
+      },
       "node": {
         "title": "Node-Daten anzeigen",
         "subtitle": ""
@@ -816,7 +821,7 @@
       },
       "MPP": {
         "title": "Multi-Path Payments aktivieren",
-        "subtitle": "Zahlungen dürfen bis zu 16 Routen verwenden"
+        "subtitle": "Zahlungen können bis zu 16 Pfade nehmen"
       },
       "tor": {
         "title": "Tor aktivieren",
@@ -908,6 +913,9 @@
       },
       "resetMissionControl": {
         "title": "Routing-Historie (Mission Control) zurücksetzen"
+      },
+      "strictGraphPruning": {
+        "title": "Aktivieren Sie die strikte Bereinigung von LN-Diagrammen"
       }
     }
   },
@@ -959,6 +967,17 @@
       "placeholder": "Peer URI",
       "accept": "Verbinden"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Informationen zum Lightning-Netzwerk",
+    "avgChannelSize": "Durchschnittliche Kanalgröße",
+    "avgOutDegree": "Durchschnittlicher Out-Grad",
+    "graphDiameter": "Diagrammdurchmesser",
+    "medianChannelSizeSat": "Mittlere Kanalgröße",
+    "numChannels": "Anzahl der Kanäle",
+    "numNodes": "Anzahl der Knoten",
+    "numZombieChans": "Anzahl der Zombie-Kanäle",
+    "totalNetworkCapacity": "Gesamte Netzwerkkapazität"
   },
   "settings.lightningNodeInfo": {
     "title": "Node Info",
