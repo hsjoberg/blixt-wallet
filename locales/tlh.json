@@ -130,6 +130,7 @@
   "transactionDetails": {
     "title": "Huq",
     "date": "Qo', joH.",
+    "duration": "rojmajDaq qelI'qam law' vIwuvbogh",
     "note": "paghna'",
     "website": "ma'oy'",
     "type" : "Segh",
@@ -274,6 +275,7 @@
       "localCommitmentTxid": "QumwI''a' TXID",
       "remoteCommitmentTxid": "yIpoSmoH TXID",
       "closeChannel": "mIghchoH",
+      "forceClosePendingChannel": "tlha'qo' DaghajtaHvIS",
       "closeChannelPrompt": {
         "title": "mIghchoH"
       }
@@ -722,6 +724,10 @@
     },
     "LN": {
       "title": "qornIS",
+      "network": {
+        "title": "yIjatlhHa'",
+        "subtitle": ""
+      },
       "node": {
         "title": "DaH cha' Hub yIghoS",
         "subtitle": ""
@@ -815,7 +821,7 @@
       },
       "MPP": {
         "title": "DaH QongDaq QIp'a' bIH?",
-        "subtitle": "Ha'DIbaH 16 rur"
+        "subtitle": "vay' rurchoH 16 mIw"
       },
       "tor": {
         "title": "DaH 'entepray' Tor",
@@ -907,6 +913,9 @@
       },
       "resetMissionControl": {
         "title": "DIr luchav 'e'"
+      },
+      "strictGraphPruning": {
+        "title": "ghIlghameS 'e' yIHar"
       }
     }
   },
@@ -958,6 +967,17 @@
       "placeholder": "ghot URI",
       "accept": "Rar"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Dotlh lulo'Ha'",
+    "avgChannelSize": "Holtej",
+    "avgOutDegree": "Hegh'a'",
+    "graphDiameter": "ghIlghameS",
+    "medianChannelSizeSat": "HIq",
+    "numChannels": "Qermal",
+    "numNodes": "ghuy'cha'!",
+    "numZombieChans": "QIb serlu'meH DuHer",
+    "totalNetworkCapacity": "mIvnaq"
   },
   "settings.lightningNodeInfo": {
     "title": "qar'a'",
