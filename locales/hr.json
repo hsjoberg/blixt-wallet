@@ -615,7 +615,7 @@
           }
         },
         "remove": {
-          "title": "Uklonite mnemonic s uređaja",
+          "title": "Ukloni mnemonic s uređaja",
           "subtitle": "Trajno ukloni ključ iz ovog uređaja",
           "dialog": {
             "title": "Ukloni ključ",
