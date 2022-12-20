@@ -81,18 +81,18 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
     await Linking.openURL(constructOnchainExplorerUrl(onchainExplorer, txId ?? ""));
   }
 
-  let localBalance = channel.localBalance || Long.fromValue(0);
+  let localBalance = channel.localBalance ?? Long.fromValue(0);
   if (localBalance.lessThanOrEqual(channel.localChanReserveSat!)) {
     localBalance = Long.fromValue(0);
   }
   else {
     localBalance = localBalance.sub(channel.localChanReserveSat!);
   }
-  let remoteBalance = channel.remoteBalance || Long.fromValue(0);
-  if (remoteBalance.lessThanOrEqual(channel.remoteChanReserveSat!)) {
+  let remoteBalance = channel.remoteBalance ?? Long.fromValue(0);
+  if (remoteBalance.lessThanOrEqual(channel.remoteChanReserveSat ?? Long.fromValue(0))) {
     remoteBalance = Long.fromValue(0);
   } else {
-    remoteBalance = remoteBalance.sub(channel.remoteChanReserveSat!);
+    remoteBalance = remoteBalance.sub(channel.remoteChanReserveSat ?? Long.fromValue(0));
   }
   const percentageLocal = localBalance.mul(100).div(channel.capacity!).toNumber() / 100;
   const percentageRemote = remoteBalance.mul(100).div(channel.capacity!).toNumber() / 100;

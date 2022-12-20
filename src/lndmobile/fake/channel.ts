@@ -191,6 +191,7 @@ export const listChannels = async (): Promise<lnrpc.ListChannelsResponse> => {
       localBalance: Long.fromNumber(490),
       localChanReserveSat: Long.fromNumber(10),
       remoteBalance: Long.fromNumber(500),
+      remoteChanReserveSat: Long.fromNumber(10),
       remotePubkey: "abcdef1234567890",
       commitFee: Long.fromValue(1),
       private: true,

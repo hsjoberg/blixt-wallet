@@ -49,6 +49,12 @@ export const listChannels = jest.fn(async (): Promise<lnrpc.ListChannelsResponse
       chanId: Long.fromNumber(0),
       channelPoint: "abc:0",
       localBalance: Long.fromNumber(500),
+      localChanReserveSat: Long.fromNumber(10),
+      remoteBalance: Long.fromNumber(500),
+      remoteChanReserveSat: Long.fromNumber(10),
+      remotePubkey: "abcdef1234567890",
+      commitFee: Long.fromValue(1),
+      private: true,
     }],
   });
   return response;
