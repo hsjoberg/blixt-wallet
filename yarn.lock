@@ -9114,14 +9114,15 @@ react-native-localize@^2.2.4:
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-2.2.4.tgz#3bc46ade48499ab9df61bf17a9b66633a5ba9bb9"
   integrity sha512-gVmbyAEQQnBQ8vKlAQchFfIISeId3qT6Lc7LHmKF39nsYWX9KN4PHuG6Hk+7gduMI6IHKeZGKcLsOdh6wvN6cg==
 
-"react-native-macos@git+https://github.com/microsoft/react-native-macos#d7b3947f3be923142e156de89c593f993eb5942c":
+"react-native-macos@git+https://github.com/microsoft/react-native-macos#b2c5fa973862365bf8ab137805a53617af33e7cd":
   version "1000.0.0"
-  resolved "git+https://github.com/microsoft/react-native-macos#d7b3947f3be923142e156de89c593f993eb5942c"
+  resolved "git+https://github.com/microsoft/react-native-macos#b2c5fa973862365bf8ab137805a53617af33e7cd"
   dependencies:
     "@jest/create-cache-key-function" "^27.0.1"
     "@react-native-community/cli" "^7.0.3"
     "@react-native-community/cli-platform-android" "^7.0.1"
     "@react-native-community/cli-platform-ios" "^7.0.1"
+    "@react-native-community/cli-tools" "^7.0.1"
     "@react-native/assets" "1.0.0"
     "@react-native/normalize-color" "2.0.0"
     "@react-native/polyfills" "2.0.0"

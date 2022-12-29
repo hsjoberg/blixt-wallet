@@ -253,11 +253,11 @@ PODS:
     - React-Core
   - react-native-camera/RN (4.2.1):
     - React-Core
-  - react-native-document-picker (8.1.2):
+  - react-native-document-picker (8.1.3):
     - React-Core
   - react-native-fingerprint-scanner (6.0.0):
     - React
-  - react-native-geolocation (3.0.3):
+  - react-native-geolocation (3.0.4):
     - React-Core
   - react-native-hash (3.0.3):
     - React
@@ -269,13 +269,13 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
-  - react-native-slider (4.3.3):
+  - react-native-slider (4.4.0):
     - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
   - react-native-tor (0.1.8):
     - React
-  - react-native-webview (11.23.1):
+  - react-native-webview (11.26.0):
     - React-Core
   - React-perflogger (0.69.7)
   - React-RCTActionSheet (0.69.7):
@@ -620,16 +620,16 @@ SPEC CHECKSUMS:
   React-logger: 1e7ac909607ee65fd5c4d8bea8c6e644f66b8843
   react-native-build-config: d2d6891311ca2e0fa7ca7eeb4324a768e63e485c
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
-  react-native-document-picker: f5ec1a712ca2a975c233117f044817bb8393cad4
+  react-native-document-picker: 958e2bc82e128be69055be261aeac8d872c8d34c
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
-  react-native-geolocation: 2b4052c14edff18ba402795f4ce0f2a093c4ba3e
+  react-native-geolocation: 3ed60c3d7f613c36b777b9fd0bc3453214e1b0d5
   react-native-hash: 4664516df1834e1293b30e711c63f61f7f801b6a
   react-native-maps: 085f614cf14d3637b2048bb9752da5b1c27c2886
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
-  react-native-slider: 7d19220da2f2ae7cbb9aa80127cb73c597fa221f
+  react-native-slider: d2938a12c4e439a227c70eec65d119136eb4aeb5
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-tor: 3b14e9160b2eb7fa3f310921b2dee71a5171e5b7
-  react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
+  react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
   React-perflogger: 8e832d4e21fdfa613033c76d58d7e617341e804b
   React-RCTActionSheet: 9ca778182a9523991bff6381045885b6e808bb73
   React-RCTAnimation: 9ced26ad20b96e532ac791a8ab92a7b1ce2266b8
