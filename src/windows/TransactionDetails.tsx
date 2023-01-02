@@ -325,18 +325,18 @@ function LNURLMetaData({ transaction }: IWebLNMetaDataProps) {
   return (
     <>
       {transaction.lnurlPayResponse?.successAction?.tag === "message" &&
-        <MetaData title={`${t("messageFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.message} />
+        <MetaData title={`${t("lnurl.messageFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.message} />
       }
       {transaction.lnurlPayResponse?.successAction?.tag === "url" &&
         <>
-          <MetaData title={`${t("messageFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.description} />
-          <MetaData title={`${t("urlReceivedFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.url} url={transaction.lnurlPayResponse.successAction.url} />
+          <MetaData title={`${t("lnurl.messageFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.description} />
+          <MetaData title={`${t("lnurl.urlReceivedFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.url} url={transaction.lnurlPayResponse.successAction.url} />
         </>
       }
       {transaction.lnurlPayResponse?.successAction?.tag === "aes" &&
         <>
-          <MetaData title={`${t("messageFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.description} />
-          <MetaData title={`${t("secretMessage")}`} data={secretMessage!} />
+          <MetaData title={`${t("lnurl.messageFromWebsite")} ${transaction.website}`} data={transaction.lnurlPayResponse.successAction.description} />
+          <MetaData title={`${t("lnurl.secretMessage")}`} data={secretMessage!} />
         </>
       }
     </>
