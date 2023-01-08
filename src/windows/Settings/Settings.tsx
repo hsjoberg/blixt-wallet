@@ -1102,14 +1102,16 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Body>
             <Right><CheckBox checked={clipboardInvoiceCheckEnabled} onPress={onToggleClipBoardInvoiceCheck} /></Right>
           </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onToggleTransactionGeolocationEnabled}>
-            <Left><Icon style={style.icon} type="Entypo" name="location-pin" /></Left>
-            <Body>
-              <Text>{t("general.saveGeolocation.title")}</Text>
-              <Text note={true}>{t("general.saveGeolocation.subtitle")}</Text>
-            </Body>
-            <Right><CheckBox checked={transactionGeolocationEnabled} onPress={onToggleTransactionGeolocationEnabled} /></Right>
-          </ListItem>
+          {["android", "ios"].includes(PLATFORM) &&
+            <ListItem style={style.listItem} icon={true} onPress={onToggleTransactionGeolocationEnabled}>
+              <Left><Icon style={style.icon} type="Entypo" name="location-pin" /></Left>
+              <Body>
+                <Text>{t("general.saveGeolocation.title")}</Text>
+                <Text note={true}>{t("general.saveGeolocation.subtitle")}</Text>
+              </Body>
+              <Right><CheckBox checked={transactionGeolocationEnabled} onPress={onToggleTransactionGeolocationEnabled} /></Right>
+            </ListItem>
+          }
           {transactionGeolocationEnabled && PLATFORM === "android" &&
             <ListItem style={style.listItem} icon={true} onPress={onChangeMapStylePress}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="google-maps" /></Left>
