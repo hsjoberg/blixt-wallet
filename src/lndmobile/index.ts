@@ -1,6 +1,6 @@
 import { NativeModules } from "react-native";
 import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
-import { lnrpc, routerrpc, invoicesrpc } from "../../proto/lightning";
+import { lnrpc, routerrpc, invoicesrpc, devrpc } from "../../proto/lightning";
 import Long from "long";
 import sha from "sha.js";
 import { stringToUint8Array, hexToUint8Array, unicodeStringToUint8Array } from "../utils";
@@ -196,13 +196,13 @@ export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlv
 };
 
 
-export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, payAmount: Long, tlvRecordName?: string | null, multiPath?: boolean): Promise<lnrpc.Payment> => {
+export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, payAmount?: Long, tlvRecordName?: string | null, multiPath?: boolean): Promise<lnrpc.Payment> => {
   const options: routerrpc.ISendPaymentRequest = {
     paymentRequest,
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: multiPath ? 16 : 1,
-    feeLimitSat: Long.fromValue(Math.max(10, payAmount * 0.02)),
+    feeLimitSat: Long.fromValue(Math.max(10, (payAmount?.toNumber() || 0) * 0.02)),
     cltvLimit: 0,
   };
   if (amount) {
@@ -600,7 +600,6 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
   });
   return response;
 };
-
 
 export type IReadLndLogResponse = string[];
 /**
