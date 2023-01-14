@@ -377,7 +377,7 @@ PODS:
     - RNSound/Core (= 0.11.2)
   - RNSound/Core (0.11.2):
     - React-Core
-  - RNSVG (13.6.0):
+  - RNSVG (13.7.0):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
@@ -657,7 +657,7 @@ SPEC CHECKSUMS:
   RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSecureRandom: 46403b4cc818c426b33d11f7981a923de558e0a8
   RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
-  RNSVG: 3a79c0c4992213e4f06c08e62730c5e7b9e4dc17
+  RNSVG: d787d64ca06b9158e763ad2638a8c4edce00782a
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
   Yoga: 0b84a956f7393ef1f37f3bb213c516184e4a689d
