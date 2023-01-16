@@ -181,7 +181,7 @@ export default function LndMobileHelpCenter({ navigation }) {
 
   const runInit = async () => {
     try {
-      const result = await NativeModules.LndMobile.init();
+      const result = await NativeModules.LndMobile.initialize();
       toast(t("msg.result",{ns:namespaces.common})+": " + result, 0, "success", "OK");
     } catch (e) {
       toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
@@ -198,8 +198,12 @@ export default function LndMobileHelpCenter({ navigation }) {
   };
 
   const runUnlockWallet = async () => {
-    const password = await getWalletPassword();
-    await unlockWallet(password!);
+    try {
+      const password = await getWalletPassword();
+      await unlockWallet(password!);
+    } catch (e) {
+      toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
+    }
   };
 
   const runSigKill = async () => {
@@ -217,8 +221,12 @@ export default function LndMobileHelpCenter({ navigation }) {
   };
 
   const runWaitForChainSync = async () => {
-    await runWaitForChainSync();
-    toast(t("msg.done",{ns:namespaces.common}));
+    try {
+      await runWaitForChainSync();
+      toast(t("msg.done",{ns:namespaces.common}));
+    } catch (e) {
+      toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
+    }
   };
 
   return (
