@@ -201,6 +201,7 @@ export default function LndMobileHelpCenter({ navigation }) {
     try {
       const password = await getWalletPassword();
       await unlockWallet(password!);
+      toast(t("msg.done",{ns:namespaces.common}));
     } catch (e) {
       toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
     }
