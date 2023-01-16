@@ -755,7 +755,7 @@
         "subtitle": "",
         "setDialog": {
           "title": "Postavite Dunder poslužitelj",
-          "acept": "Postavi poslužitelj"
+          "acept": "Postavi poslužitelja"
         },
         "restoreDialog": {
           "title": "Vratite Dunder poslužitelj",
