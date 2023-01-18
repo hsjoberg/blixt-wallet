@@ -441,7 +441,7 @@ public class LndMobileService extends Service {
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startid) {
-    HyperLog.v(TAG, "onStartCommand()")
+    HyperLog.v(TAG, "onStartCommand()");
     Intent notificationIntent = new Intent (this, MainActivity.class);
     PendingIntent pendingIntent =
       PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
