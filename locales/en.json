@@ -984,6 +984,9 @@
       },
       "enforceSpeedloaderOnStartup": {
         "title": "Enforce gossip sync on startup"
+      },
+      "persistentServices": {
+        "title": "Enable persistent LND and Tor (if enabled)"
       }
     }
   },

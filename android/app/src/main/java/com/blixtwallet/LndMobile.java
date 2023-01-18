@@ -62,6 +62,8 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.permissions.PermissionsModule;
+import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
+import com.facebook.react.modules.storage.ReactDatabaseSupplier;
 
 import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
 import com.jakewharton.processphoenix.ProcessPhoenix;
@@ -78,6 +80,7 @@ class LndMobile extends ReactContextBaseJavaModule {
   private boolean lndMobileServiceBound = false;
   private Messenger lndMobileServiceMessenger; // The service
   private HashMap<Integer, Promise> requests = new HashMap<>();
+  private ReactDatabaseSupplier dbSupplier;
 
   public enum LndStatus {
       SERVICE_BOUND, PROCESS_STARTED, WALLET_UNLOCKED;
@@ -242,6 +245,17 @@ class LndMobile extends ReactContextBaseJavaModule {
 
   private LndMobileServiceConnection lndMobileServiceConnection;
 
+  private boolean getPersistentServicesEnabled(Context context) {
+    dbSupplier = ReactDatabaseSupplier.getInstance(context);
+    SQLiteDatabase db = dbSupplier.get();
+    String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
+    if (persistentServicesEnabled != null) {
+      return persistentServicesEnabled.equals("true");
+    }
+    HyperLog.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
+    return false;
+  }
+
   public LndMobile(ReactApplicationContext reactContext) {
     super(reactContext);
   }
@@ -284,9 +298,13 @@ class LndMobile extends ReactContextBaseJavaModule {
 
       lndMobileServiceConnection = new LndMobileServiceConnection(req);
       messenger = new Messenger(new IncomingHandler()); // me
-
+      Intent intent = new Intent(getReactApplicationContext(), LndMobileService.class);
+      if (getPersistentServicesEnabled(getReactApplicationContext())) {
+        getReactApplicationContext().startForegroundService(intent);
+      }
+      // else rely on bindService to start LND
       getReactApplicationContext().bindService(
-        new Intent(getReactApplicationContext(), LndMobileService.class),
+        intent,
         lndMobileServiceConnection,
         Context.BIND_AUTO_CREATE
       );

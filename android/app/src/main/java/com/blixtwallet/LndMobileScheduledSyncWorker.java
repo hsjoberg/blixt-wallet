@@ -50,6 +50,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   private boolean torEnabled = false;
   private int torSocksPort = -1;
   private boolean torStarted = false;
+  private boolean persistentServicesEnabled = false;
   // Keeps track of how many times we've tried to get info
   // If this keeps going without `syncedToChain` flipping to `true`
   // we'll close down lnd and the worker
@@ -77,6 +78,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   @Override
   public ListenableFuture<Result> startWork() {
     torEnabled = getTorEnabled();
+    persistentServicesEnabled = getPersistentServicesEnabled();
 
     return CallbackToFutureAdapter.getFuture(completer -> {
       HyperLog.i(TAG, "------------------------------------");
@@ -85,8 +87,8 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       writeLastScheduledSyncAttemptToDb();
 
       HyperLog.i(TAG, "MainActivity.started = " + MainActivity.started);
-      if (MainActivity.started) {
-        HyperLog.i(TAG, "MainActivity is started, quitting job");
+      if (persistentServicesEnabled || MainActivity.started) {
+        HyperLog.i(TAG, "MainActivity is started, persistentServicesEnabled = " + persistentServicesEnabled + ", quitting job");
         completer.set(Result.success());
         return null;
       }
@@ -120,7 +122,6 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
               //              future.set(Result.failure());
               //              return;
               //            }
-
               blixtTor.startTor(new PromiseWrapper() {
                 @Override
                 void onSuccess(@Nullable Object value) {
@@ -329,11 +330,11 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
              HyperLog.i(TAG,"Tor stopped");
            }
 
-           @Override
-           void onFail(Throwable throwable) {
-             HyperLog.e(TAG, "Fail while stopping Tor", throwable);
-           }
-         });
+          @Override
+          void onFail(Throwable throwable) {
+            HyperLog.e(TAG, "Fail while stopping Tor", throwable);
+          }
+        });
 //      } else {
 //        HyperLog.w(TAG, "MainActivity was started when shutting down sync work. I will not stop Tor");
 //      }
@@ -466,6 +467,16 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       lndMobileServiceBound = false;
       HyperLog.i(TAG, "Unbinding LndMobileService");
     }
+  }
+
+  private boolean getPersistentServicesEnabled() {
+    SQLiteDatabase db = dbSupplier.get();
+    String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
+    if (persistentServicesEnabled != null) {
+      return persistentServicesEnabled.equals("true");
+    }
+    HyperLog.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
+    return false;
   }
 
   private boolean getTorEnabled() {
