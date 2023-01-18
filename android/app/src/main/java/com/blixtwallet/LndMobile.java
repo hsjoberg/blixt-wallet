@@ -268,9 +268,10 @@ class LndMobile extends ReactContextBaseJavaModule {
 
       lndMobileServiceConnection = new LndMobileServiceConnection(req);
       messenger = new Messenger(new IncomingHandler()); // me
-
+      Intent intent = new Intent(getReactApplicationContext(), LndMobileService.class);
+      getReactApplicationContext().startForegroundService(intent);
       getReactApplicationContext().bindService(
-        new Intent(getReactApplicationContext(), LndMobileService.class),
+        intent,
         lndMobileServiceConnection,
         Context.BIND_AUTO_CREATE
       );

@@ -1,10 +1,15 @@
 package com.blixtwallet;
 
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,6 +39,8 @@ import com.hypertrack.hyperlog.HyperLog;
 
 public class LndMobileService extends Service {
   private static final String TAG = "LndMobileService";
+  private final int ONGOING_NOTIFICATION_ID = 1;
+  private final String CHANNEL_DEFAULT_IMPORTANCE = "blixt";
   boolean lndStarted = false;
   boolean subscribeInvoicesStreamActive = false;
   Set<String> streamsStarted = new HashSet<String>();
@@ -430,6 +437,29 @@ public class LndMobileService extends Service {
           mClients.remove(i);
       }
     }
+  }
+
+  @Override
+  public int onStartCommand(Intent intent, int flags, int startid) {
+    Intent notificationIntent = new Intent (this, MainActivity.class);
+    PendingIntent pendingIntent =
+      PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      NotificationChannel chan = new NotificationChannel("com.blixtwallet", "blixt", NotificationManager.IMPORTANCE_NONE);
+      chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+      NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+      assert manager != null;
+      manager.createNotificationChannel(chan);
+    }
+    Notification notification = new Notification.Builder(this, "com.blixtwallet")
+        .setContentTitle("Blixt Wallet")
+        .setContentText("Blixt Wallet is running in the background")
+        .setSmallIcon(R.drawable.ic_launcher_background)
+        .setContentIntent(pendingIntent)
+        .setTicker("Blixt Wallet")
+        .build();
+      startForeground(ONGOING_NOTIFICATION_ID, notification);
+    return startid;
   }
 
   @Override
