@@ -441,6 +441,7 @@ public class LndMobileService extends Service {
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startid) {
+    HyperLog.v(TAG, "onStartCommand()")
     Intent notificationIntent = new Intent (this, MainActivity.class);
     PendingIntent pendingIntent =
       PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
@@ -458,7 +459,7 @@ public class LndMobileService extends Service {
         .setContentIntent(pendingIntent)
         .setTicker("Blixt Wallet")
         .build();
-      startForeground(ONGOING_NOTIFICATION_ID, notification);
+    startForeground(ONGOING_NOTIFICATION_ID, notification);
     return startid;
   }
 
