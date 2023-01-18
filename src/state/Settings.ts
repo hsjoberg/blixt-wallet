@@ -79,6 +79,7 @@ export interface ISettingsModel {
   changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
   changeLndLogLevel: Thunk<ISettingsModel, LndLogLevel>;
   changeLndCompactDb: Thunk<ISettingsModel, boolean>;
+  changePersistentServicesEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -117,6 +118,7 @@ export interface ISettingsModel {
   setMaxLNFeePercentage: Action<ISettingsModel, number>;
   setLndLogLevel: Action<ISettingsModel, LndLogLevel>;
   setLndCompactDb: Action<ISettingsModel, boolean>;
+  setPersistentServicesEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -155,6 +157,7 @@ export interface ISettingsModel {
   lndLogLevel: LndLogLevel;
   lndCompactDb: boolean;
   zeroConfPeers: string[];
+  persistentServicesEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -223,6 +226,7 @@ export const settings: ISettingsModel = {
     actions.setMaxLNFeePercentage((await getItemObject(StorageItem.maxLNFeePercentage)) ?? 2);
     actions.setLndLogLevel(((await getItem(StorageItem.lndLogLevel)) ?? "info") as LndLogLevel);
     actions.setLndCompactDb(await getLndCompactDb());
+    actions.setPersistentServicesEnabled(await getItemObject(StorageItem.persistentServicesEnabled) ?? false);
 
     log.d("Done");
   }),
@@ -417,6 +421,11 @@ export const settings: ISettingsModel = {
     actions.setLndCompactDb(payload);
   }),
 
+  changePersistentServicesEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.persistentServicesEnabled, payload);
+    actions.setPersistentServicesEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -528,6 +537,7 @@ export const settings: ISettingsModel = {
   setLndCompactDb: action((state, payload) => {
     state.lndCompactDb = payload;
   }),
+  setPersistentServicesEnabled: action((state, payload) => { state.persistentServicesEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -566,4 +576,5 @@ export const settings: ISettingsModel = {
   lndLogLevel: DEFAULT_LND_LOG_LEVEL,
   lndPathfindingAlgorithm: DEFAULT_PATHFINDING_ALGORITHM,
   lndCompactDb: false,
+  persistentServicesEnabled: false,
 };

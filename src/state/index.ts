@@ -230,13 +230,13 @@ export const model: IStoreModel = {
         try {
           actions.setTorLoading(true);
           if (PLATFORM === "android") {
-            socksPort = await NativeModules.BlixtTor.startTor();
+            await NativeModules.BlixtTor.startTor();
           } else if (PLATFORM === "ios") {
             const tor = Tor({
               stopDaemonOnBackground: false,
               startDaemonOnActive: true,
             });
-            socksPort = await tor.startIfNotStarted();
+            await tor.startIfNotStarted();
           }
           log.i("socksPort", [socksPort]);
           if (socksPort === 0 && PLATFORM === "ios") {

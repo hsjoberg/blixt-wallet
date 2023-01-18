@@ -970,6 +970,9 @@
       },
       "compactLndDatabases": {
         "title": "Compact lnd's databases"
+      },
+      "persistentServices": {
+        "title": "Enable persistent LND and Tor (if enabled)"
       }
     }
   },
