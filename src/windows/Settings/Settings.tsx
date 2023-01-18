@@ -617,6 +617,10 @@ ${t("LN.inbound.dialog.msg3")}`
           text: t("buttons.yes",{ns:namespaces.common}),
           onPress: async () => {
             try {
+              const torEnabled = useStoreState((store) => store.settings.torEnabled);
+              if (torEnabled) {
+                await NativeModules.BlixtTor.stopTor();
+              }
               await NativeModules.LndMobile.stopLnd();
               await NativeModules.LndMobileTools.killLnd();
             } catch(e) {
@@ -1173,6 +1177,14 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeEnforceSpeedloaderOnStartup(!enforceSpeedloaderOnStartup);
   };
 
+  // Persistent services
+  const persistentServicesEnabled = useStoreState((store) => store.settings.persistentServicesEnabled);
+  const changePersistentServicesEnabled = useStoreActions((store) => store.settings.changePersistentServicesEnabled);
+  const changePersistentServicesEnabledPress = async () => {
+    await changePersistentServicesEnabled(!persistentServicesEnabled);
+    restartNeeded();
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -1687,6 +1699,13 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text note={true}>{t("experimental.MPP.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={changePersistentServicesEnabledPress}>
+            <Left><Icon style={style.icon} type="Entypo" name="globe" /></Left>
+            <Body>
+              <Text>{t("debug.persistentServices.title")}</Text>
+            </Body>
+            <Right><CheckBox checked={persistentServicesEnabled} onPress={changePersistentServicesEnabledPress} /></Right>
           </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={changeStrictGraphPruningEnabledPress}>
             <Left><Icon style={style.icon} type="Entypo" name="trash" /></Left>

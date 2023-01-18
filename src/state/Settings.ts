@@ -64,6 +64,7 @@ export interface ISettingsModel {
   changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
   changeLndLogLevel: Thunk<ISettingsModel, LndLogLevel>;
   changeEnforceSpeedloaderOnStartup: Thunk<ISettingsModel, boolean>;
+  changePersistentServicesEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -102,6 +103,7 @@ export interface ISettingsModel {
   setMaxLNFeePercentage: Action<ISettingsModel, number>;
   setLndLogLevel: Action<ISettingsModel, LndLogLevel>;
   setEnforceSpeedloaderOnStartup: Action<ISettingsModel, boolean>;
+  setPersistentServicesEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -140,6 +142,7 @@ export interface ISettingsModel {
   maxLNFeePercentage: number;
   lndLogLevel: LndLogLevel;
   enforceSpeedloaderOnStartup: boolean;
+  persistentServicesEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -182,6 +185,7 @@ export const settings: ISettingsModel = {
     actions.setMaxLNFeePercentage(await getItemObject(StorageItem.maxLNFeePercentage) ?? 2);
     actions.setLndLogLevel((await getItem(StorageItem.lndLogLevel) ?? "info") as LndLogLevel);
     actions.setEnforceSpeedloaderOnStartup(await getItemObject(StorageItem.enforceSpeedloaderOnStartup || false));
+    actions.setPersistentServicesEnabled(await getItemObject(StorageItem.persistentServicesEnabled) ?? false);
 
     log.d("Done");
   }),
@@ -375,6 +379,11 @@ export const settings: ISettingsModel = {
     actions.setEnforceSpeedloaderOnStartup(payload);
   }),
 
+  changePersistentServicesEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.persistentServicesEnabled, payload);
+    actions.setPersistentServicesEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -412,6 +421,7 @@ export const settings: ISettingsModel = {
   setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
   setLndLogLevel: action((state, payload) => { state.lndLogLevel = payload; }),
   setEnforceSpeedloaderOnStartup: action((state, payload) => { state.enforceSpeedloaderOnStartup = payload; }),
+  setPersistentServicesEnabled: action((state, payload) => { state.persistentServicesEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -450,4 +460,5 @@ export const settings: ISettingsModel = {
   maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
   lndLogLevel: DEFAULT_LND_LOG_LEVEL,
   enforceSpeedloaderOnStartup: false,
+  persistentServicesEnabled: false,
 };

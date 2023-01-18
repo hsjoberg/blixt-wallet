@@ -70,6 +70,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   maxLNFeePercentage = "maxLNFeePercentage",
   lndLogLevel = "lndLogLevel",
   enforceSpeedloaderOnStartup = "enforceSpeedloaderOnStartup",
+  persistentServicesEnabled = "persistentServicesEnabled",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -156,6 +157,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.maxLNFeePercentage),
     removeItem(StorageItem.lndLogLevel),
     removeItem(StorageItem.enforceSpeedloaderOnStartup),
+    removeItem(StorageItem.persistentServicesEnabled),
   ]);
 };
 
@@ -238,5 +240,6 @@ export const setupApp = async () => {
     setItemObject<number>(StorageItem.maxLNFeePercentage, DEFAULT_MAX_LN_FEE_PERCENTAGE),
     setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL),
     setItemObject<boolean>(StorageItem.enforceSpeedloaderOnStartup, true),
+    setItemObject<boolean>(StorageItem.persistentServicesEnabled, false),
   ]);
 };
