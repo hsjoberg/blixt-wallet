@@ -919,6 +919,9 @@
       },
       "strictGraphPruning": {
         "title": "Enable strict LN Graph pruning"
+      },
+      "persistentServices": {
+        "title": "Enable persistent LND and Tor (if enabled)"
       }
     }
   },

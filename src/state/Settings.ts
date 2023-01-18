@@ -55,6 +55,7 @@ export interface ISettingsModel {
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
   changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeStrictGraphPruningEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
+  changePersistentServicesEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -88,6 +89,7 @@ export interface ISettingsModel {
   setRescanWallet: Action<ISettingsModel, boolean>;
   setReceiveViaP2TR: Action<ISettingsModel, boolean>;
   setStrictGraphPruningEnabled: Action<ISettingsModel, boolean>;
+  setPersistentServicesEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -121,6 +123,7 @@ export interface ISettingsModel {
   rescanWallet: boolean;
   receiveViaP2TR: boolean;
   strictGraphPruningEnabled: boolean;
+  persistentServicesEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -158,6 +161,7 @@ export const settings: ISettingsModel = {
     actions.setRescanWallet(await getRescanWallet());
     actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
     actions.setStrictGraphPruningEnabled(await getItemObject(StorageItem.strictGraphPruningEnabled) ?? false);
+    actions.setPersistentServicesEnabled(await getItemObject(StorageItem.persistentServicesEnabled) ?? false);
 
     log.d("Done");
   }),
@@ -326,6 +330,11 @@ export const settings: ISettingsModel = {
     actions.setStrictGraphPruningEnabled(payload);
   }),
 
+  changePersistentServicesEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.persistentServicesEnabled, payload);
+    actions.setPersistentServicesEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -358,6 +367,7 @@ export const settings: ISettingsModel = {
   setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
   setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
   setStrictGraphPruningEnabled: action((state, payload) => { state.strictGraphPruningEnabled = payload; }),
+  setPersistentServicesEnabled: action((state, payload) => { state.persistentServicesEnabled = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -391,4 +401,5 @@ export const settings: ISettingsModel = {
   rescanWallet: false,
   receiveViaP2TR: false,
   strictGraphPruningEnabled: false,
+  persistentServicesEnabled: false,
 };

@@ -63,10 +63,13 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.permissions.PermissionsModule;
 
 import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
+import com.facebook.react.modules.storage.ReactDatabaseSupplier;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.oblador.keychain.KeychainModule;
 
 import com.hypertrack.hyperlog.HyperLog;
+
+import org.torproject.jni.TorService;
 
 // TODO break this class up
 class LndMobileTools extends ReactContextBaseJavaModule {
@@ -74,6 +77,17 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   public LndMobileTools(ReactApplicationContext reactContext) {
     super(reactContext);
+  }
+
+  private boolean getPersistentServicesEnabled(Context context) {
+    ReactDatabaseSupplier dbSupplier = ReactDatabaseSupplier.getInstance(context);
+    SQLiteDatabase db = dbSupplier.get();
+    String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
+    if (persistentServicesEnabled != null) {
+      return persistentServicesEnabled.equals("true");
+    }
+    HyperLog.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
+    return false;
   }
 
   @Override
@@ -614,6 +628,12 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void restartApp() {
+    Intent stopTorIntent = new Intent(getReactApplicationContext(), TorService.class);
+    stopTorIntent.setAction("org.torproject.android.intent.action.STOP");
+    getReactApplicationContext().stopService(stopTorIntent);
+    Intent stopLndIntent = new Intent(getReactApplicationContext(), LndMobileService.class);
+    stopLndIntent.setAction("com.blixtwallet.android.intent.action.STOP");
+    getReactApplicationContext().startService(stopLndIntent);
     ProcessPhoenix.triggerRebirth(getReactApplicationContext());
   }
 

@@ -280,4 +280,10 @@ export const appMigration: IAppMigration[] = [
       await db.executeSql("ALTER TABLE tx ADD duration REAL NULL");
     },
   },
+  // Version 33
+  {
+    async beforeLnd(db, i) {
+      setItemObject<boolean>(StorageItem.persistentServices, false);
+    },
+  },
 ];
