@@ -28,7 +28,6 @@ public class BlixtTor extends ReactContextBaseJavaModule {
   static TorService torService;
   static String currentTorStatus = TorService.STATUS_OFF;
   static Stack<Promise> calleeResolvers = new Stack<>();
-  String fileStorageLocation;
 
   static private final ServiceConnection torServiceConnection = new ServiceConnection() {
     @Override
@@ -64,7 +63,6 @@ public class BlixtTor extends ReactContextBaseJavaModule {
 
   public BlixtTor(ReactApplicationContext reactContext) {
     super(reactContext);
-    fileStorageLocation = reactContext.getFilesDir().getPath() + "/torfiles";
   }
 
   public String getName() {
@@ -102,7 +100,8 @@ public class BlixtTor extends ReactContextBaseJavaModule {
     Intent intent = new Intent(getReactApplicationContext(), TorService.class);
     updateTorConfigCustom(TorService.getDefaultsTorrc(getReactApplicationContext()),
       "ControlPort " + BlixtTorUtils.getControlPort() + "\n" +
-      "SOCKSPort " + BlixtTorUtils.getSocksPort() + "\n");
+      "SOCKSPort " + BlixtTorUtils.getSocksPort() + "\n" + 
+      "CookieAuthentication 1" + "\n");
     getReactApplicationContext().bindService(intent, torServiceConnection, Context.BIND_AUTO_CREATE);
   }
 
