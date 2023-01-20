@@ -36,6 +36,8 @@ import com.oblador.keychain.KeychainModule;
 import com.google.protobuf.ByteString;
 import com.hypertrack.hyperlog.HyperLog;
 
+import org.torproject.jni.TorService;
+
 public class LndMobileScheduledSyncWorker extends ListenableWorker {
   private final String TAG = "LndScheduledSyncWorker";
   private final String HANDLERTHREAD_NAME = "blixt_lndmobile_sync";
@@ -394,9 +396,9 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     String params = "--lnddir=" + getApplicationContext().getFilesDir().getPath();
     if (torEnabled) {
       int socksPort = BlixtTorUtils.getSocksPort();
-      int controlPort = BlixtTorUtils.getControlPort();
-      HyperLog.d(TAG, "Adding Tor params for starting lnd, torSocksPort: " + socksPort + ", controlPort: " + controlPort);
-      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
+      String controlSocket = "unix://" + getApplicationContext().getDir(TorService.class.getSimpleName(), Context.MODE_PRIVATE).getAbsolutePath() + "/data/ControlSocket";
+      HyperLog.d(TAG, "Adding Tor params for starting lnd, torSocksPort: " + socksPort + ", controlSocket: " + controlSocket);
+      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=" + controlSocket;
       params += " --nolisten";
     }
     else {
