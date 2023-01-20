@@ -1318,13 +1318,13 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Left><Icon style={style.icon} type="Feather" name="user" /></Left>
             <Body><Text>{t("LN.node.title")}</Text></Body>
           </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNetworkInfo")}>
-            <Left><Icon style={style.icon} type="Entypo" name="network" /></Left>
-            <Body><Text>{t("LN.network.title")}</Text></Body>
-          </ListItem>
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningPeers")}>
             <Left><Icon style={style.icon} type="Feather" name="users" /></Left>
             <Body><Text>{t("LN.peers.title")}</Text></Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNetworkInfo")}>
+            <Left><Icon style={style.icon} type="Entypo" name="network" /></Left>
+            <Body><Text>{t("LN.network.title")}</Text></Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleAutopilotPress}>
             <Left><Icon style={style.icon} type="Entypo" name="circular-graph" /></Left>

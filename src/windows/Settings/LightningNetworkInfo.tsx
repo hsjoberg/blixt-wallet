@@ -2,10 +2,9 @@ import React, { useEffect } from "react";
 import { StyleSheet, ScrollView, Platform } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Body, Card, Text, CardItem, H1 } from "native-base";
-import { fromUnixTime } from "date-fns";
 
 import Blurmodal from "../../components/BlurModal";
-import { formatISO, toast } from "../../utils";
+import { toast } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
 
 import { useTranslation } from "react-i18next";
@@ -17,7 +16,7 @@ interface IMetaDataProps {
   data: string | string[] | number;
 }
 const MetaData = ({ title, data }: IMetaDataProps) => {
-  const {t} = useTranslation(namespaces.settings.lightningNetworkInfo);
+  const { t } = useTranslation(namespaces.settings.lightningNetworkInfo);
 
   return (
     <Text
@@ -25,7 +24,7 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
       onPress={() => {
         Array.isArray(data)
           ? Clipboard.setString(data.join("\n"))
-          : Clipboard.setString(data);
+          : Clipboard.setString(data.toString());
         toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
       }}
     >
@@ -37,7 +36,7 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
 };
 
 export default function LightningNetworkInfo() {
-  const {t} = useTranslation(namespaces.settings.lightningNetworkInfo);
+  const { t } = useTranslation(namespaces.settings.lightningNetworkInfo);
 
   const getNetworkInfo = useStoreActions((store) => store.lightning.getNetworkInfo);
   const networkInfo = useStoreState((store) => store.lightning.networkInfo);
