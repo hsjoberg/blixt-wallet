@@ -9,7 +9,12 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+
 import java.util.Stack;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -22,8 +27,8 @@ public class BlixtTor extends ReactContextBaseJavaModule {
   static private final String TAG = "BlixtTor";
   static TorService torService;
   static String currentTorStatus = TorService.STATUS_OFF;
-  static boolean torServiceBound = false;
   static Stack<Promise> calleeResolvers = new Stack<>();
+  String fileStorageLocation;
 
   static private final ServiceConnection torServiceConnection = new ServiceConnection() {
     @Override
@@ -31,13 +36,11 @@ public class BlixtTor extends ReactContextBaseJavaModule {
       // We've bound to LocalService, cast the IBinder and get LocalService instance
       TorService.LocalBinder binder = (TorService.LocalBinder) service;
       torService = binder.getService();
-      torServiceBound = true;
       Log.i(TAG, "onServiceConnected");
     }
 
     @Override
     public void onServiceDisconnected(ComponentName arg0) {
-      torServiceBound = false;
       Log.i(TAG, "onServiceDisconnected");
     }
   };
@@ -53,16 +56,30 @@ public class BlixtTor extends ReactContextBaseJavaModule {
         while (calleeResolvers.size() > 0) {
           calleeResolvers.pop().resolve(TorService.socksPort);
         }
+      } else if (status.equals(TorService.STATUS_OFF)) {
+        getReactApplicationContext().unregisterReceiver(torBroadcastReceiver);
       }
     }
   };
 
   public BlixtTor(ReactApplicationContext reactContext) {
     super(reactContext);
+    fileStorageLocation = reactContext.getFilesDir().getPath() + "/torfiles";
   }
 
   public String getName() {
     return "BlixtTor";
+  }
+
+  public void updateTorConfigCustom(File fileTorRcCustom, String extraLines) {
+    try {
+      PrintWriter ps = new PrintWriter(new FileWriter(fileTorRcCustom, false));
+      ps.print(extraLines);
+      ps.flush();
+      ps.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @ReactMethod
@@ -73,26 +90,26 @@ public class BlixtTor extends ReactContextBaseJavaModule {
 //      promise.reject(TAG, "Tor already in progress starting");
 //      return;
 //    }
-    if (torServiceBound || currentTorStatus.equals(TorService.STATUS_ON)) {
-      Log.i(TAG, "torServiceBound: " + torServiceBound + " currentTorStatus.equals(TorService.STATUS_ON)" + currentTorStatus.equals(TorService.STATUS_ON));
+    if (currentTorStatus.equals(TorService.STATUS_ON)) {
+      Log.i(TAG, "currentTorStatus.equals(TorService.STATUS_ON)" + currentTorStatus.equals(TorService.STATUS_ON));
       promise.resolve(TorService.socksPort);
       return;
     }
-    Log.i(TAG, "KOMMER HIT wat" + torServiceBound + " " + currentTorStatus);
+    Log.i(TAG, "KOMMER HIT wat " + currentTorStatus);
     calleeResolvers.add(promise);
     
     getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS));
     Intent intent = new Intent(getReactApplicationContext(), TorService.class);
+    updateTorConfigCustom(TorService.getDefaultsTorrc(getReactApplicationContext()),
+      "ControlPort " + BlixtTorUtils.getControlPort() + "\n" +
+      "SOCKSPort " + BlixtTorUtils.getSocksPort() + "\n");
     getReactApplicationContext().bindService(intent, torServiceConnection, Context.BIND_AUTO_CREATE);
   }
 
   @ReactMethod
   public void stopTor(Promise promise) {
-    if (torServiceBound) {
-      Log.i(TAG,"Unbinding TorService");
-      getReactApplicationContext().unregisterReceiver(torBroadcastReceiver);
-      getReactApplicationContext().unbindService(torServiceConnection);
-    }
+    Log.i(TAG,"Unbinding TorService");
+    getReactApplicationContext().unbindService(torServiceConnection);
     promise.resolve(true);
   };
 }
