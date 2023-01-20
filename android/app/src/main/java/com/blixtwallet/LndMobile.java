@@ -333,9 +333,15 @@ class LndMobile extends ReactContextBaseJavaModule {
 
     Bundle bundle = new Bundle();
 
-    String params = "--nolisten --lnddir=" + getReactApplicationContext().getFilesDir().getPath() + " " + args;
+    String params = "--lnddir=" + getReactApplicationContext().getFilesDir().getPath();
     if (torEnabled) {
-      params += " --tor.active";
+      int listenPort = BlixtTorUtils.getListenPort();
+      int socksPort = BlixtTorUtils.getSocksPort();
+      int controlPort = BlixtTorUtils.getControlPort();
+      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
+      params += " --tor.v3 --listen=localhost:" + listenPort;
+    } else {
+      params += " --nolisten";
     }
     bundle.putString(
       "args",
