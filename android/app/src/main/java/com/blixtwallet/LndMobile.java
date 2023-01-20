@@ -68,6 +68,8 @@ import com.oblador.keychain.KeychainModule;
 
 import com.hypertrack.hyperlog.HyperLog;
 
+import org.torproject.jni.TorService;
+
 // TODO break this class up
 class LndMobile extends ReactContextBaseJavaModule {
   private final String TAG = "LndMobile";
@@ -337,8 +339,8 @@ class LndMobile extends ReactContextBaseJavaModule {
     if (torEnabled) {
       int listenPort = BlixtTorUtils.getListenPort();
       int socksPort = BlixtTorUtils.getSocksPort();
-      int controlPort = BlixtTorUtils.getControlPort();
-      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
+      String controlSocket = "unix://" + getReactApplicationContext().getDir(TorService.class.getSimpleName(), Context.MODE_PRIVATE).getAbsolutePath() + "/data/ControlSocket";
+      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=" + controlSocket;
       params += " --tor.v3 --listen=localhost:" + listenPort;
     } else {
       params += " --nolisten";
