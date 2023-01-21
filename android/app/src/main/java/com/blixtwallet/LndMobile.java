@@ -356,9 +356,8 @@ class LndMobile extends ReactContextBaseJavaModule {
     String params = "--lnddir=" + getReactApplicationContext().getFilesDir().getPath();
     if (torEnabled) {
       int listenPort = BlixtTorUtils.getListenPort();
-      int socksPort = BlixtTorUtils.getSocksPort();
       String controlSocket = "unix://" + getReactApplicationContext().getDir(TorService.class.getSimpleName(), Context.MODE_PRIVATE).getAbsolutePath() + "/data/ControlSocket";
-      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=" + controlSocket;
+      params += " --tor.active --tor.control=" + controlSocket;
       params += " --tor.v3 --listen=localhost:" + listenPort;
     } else {
       params += " --nolisten";
