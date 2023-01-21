@@ -136,7 +136,7 @@ public class BlixtTor extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void startTor(Promise promise) {
-    Log.i(TAG, "KOMMER HIT");
+    Log.i(TAG, "startTor()");
 //    if (calleeResolver != null) {
 //      Log.i(TAG, "calleeResolver != null");
 //      promise.reject(TAG, "Tor already in progress starting");
@@ -147,13 +147,13 @@ public class BlixtTor extends ReactContextBaseJavaModule {
       promise.resolve(TorService.socksPort);
       return;
     }
-    Log.i(TAG, "KOMMER HIT wat " + currentTorStatus);
+    Log.i(TAG, "Starting blixt with status = " + currentTorStatus + ", socksPort = " + BlixtTorUtils.getSocksPort());
     calleeResolvers.add(promise);
     
     boolean persistentServicesEnabled = getPersistentServicesEnabled(getReactApplicationContext());
     getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS));
     Intent intent = new Intent(getReactApplicationContext(), TorService.class);
-    updateTorConfigCustom(TorService.getDefaultsTorrc(getReactApplicationContext()),
+    updateTorConfigCustom(TorService.getTorrc(getReactApplicationContext()),
       "SOCKSPort " + BlixtTorUtils.getSocksPort() + "\n");
     if (persistentServicesEnabled) {
       getReactApplicationContext().startForegroundService(intent);
