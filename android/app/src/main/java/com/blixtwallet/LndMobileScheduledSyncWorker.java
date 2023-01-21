@@ -126,7 +126,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                 @Override
                 void onSuccess(@Nullable Object value) {
                   HyperLog.i(TAG, "Tor started");
-                  HyperLog.i(TAG, "sockSocksPort: " + (int) value);
+                  HyperLog.i(TAG, "torSocksPort: " + (int) value);
                   torStarted = true;
                   torSocksPort = (int) value;
 
@@ -355,7 +355,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
       @Override
       void onSuccess(@Nullable Object value) {
         HyperLog.i(TAG, "Tor started");
-        HyperLog.i(TAG, "sockSocksPort: " + (int) value);
+        HyperLog.i(TAG, "torSocksPort: " + (int) value);
         torStarted = true;
         torSocksPort = (int) value;
       }
@@ -396,10 +396,9 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     Bundle bundle = new Bundle();
     String params = "--lnddir=" + getApplicationContext().getFilesDir().getPath();
     if (torEnabled) {
-      int socksPort = BlixtTorUtils.getSocksPort();
       String controlSocket = "unix://" + getApplicationContext().getDir(TorService.class.getSimpleName(), Context.MODE_PRIVATE).getAbsolutePath() + "/data/ControlSocket";
-      HyperLog.d(TAG, "Adding Tor params for starting lnd, torSocksPort: " + socksPort + ", controlSocket: " + controlSocket);
-      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=" + controlSocket;
+      HyperLog.d(TAG, "Adding Tor params for starting lnd, torSocksPort: " + torSocksPort + ", controlSocket: " + controlSocket);
+      params += " --tor.active --tor.socks=127.0.0.1:" + torSocksPort + " --tor.control=" + controlSocket;
       params += " --nolisten";
     }
     else {
