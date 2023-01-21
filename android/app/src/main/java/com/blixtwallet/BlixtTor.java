@@ -18,10 +18,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Stack;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.io.IOException;
 
 import androidx.core.app.NotificationManagerCompat;
 
@@ -37,7 +33,6 @@ import org.torproject.jni.TorService;
 
 public class BlixtTor extends ReactContextBaseJavaModule {
   static private final String TAG = "BlixtTor";
-  String fileStorageLocation;
   static TorService torService;
   static String currentTorStatus = TorService.STATUS_OFF;
   static Stack<Promise> calleeResolvers = new Stack<>();
@@ -123,17 +118,6 @@ public class BlixtTor extends ReactContextBaseJavaModule {
     return "BlixtTor";
   }
 
-  public void updateTorConfigCustom(File fileTorRcCustom, String extraLines) {
-    try {
-      PrintWriter ps = new PrintWriter(new FileWriter(fileTorRcCustom, false));
-      ps.print(extraLines);
-      ps.flush();
-      ps.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
   @ReactMethod
   public void startTor(Promise promise) {
     Log.i(TAG, "startTor()");
@@ -143,18 +127,16 @@ public class BlixtTor extends ReactContextBaseJavaModule {
 //      return;
 //    }
     if (currentTorStatus.equals(TorService.STATUS_ON)) {
-      Log.i(TAG, "currentTorStatus.equals(TorService.STATUS_ON) " + currentTorStatus.equals(TorService.STATUS_ON));
+      Log.i(TAG, "socksPort = " + TorService.socksPort + ", currentTorStatus.equals(TorService.STATUS_ON) " + currentTorStatus.equals(TorService.STATUS_ON));
       promise.resolve(TorService.socksPort);
       return;
     }
-    Log.i(TAG, "Starting blixt with status = " + currentTorStatus + ", socksPort = " + BlixtTorUtils.getSocksPort());
     calleeResolvers.add(promise);
     
     boolean persistentServicesEnabled = getPersistentServicesEnabled(getReactApplicationContext());
     getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS));
     Intent intent = new Intent(getReactApplicationContext(), TorService.class);
-    updateTorConfigCustom(TorService.getTorrc(getReactApplicationContext()),
-      "SOCKSPort " + BlixtTorUtils.getSocksPort() + "\n");
+    
     if (persistentServicesEnabled) {
       getReactApplicationContext().startForegroundService(intent);
     }
