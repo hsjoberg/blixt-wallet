@@ -1,3 +1,4 @@
+import { PermissionsAndroid } from "react-native";
 import { Thunk, thunk } from "easy-peasy";
 import PushNotification, { PushNotificationObject } from "react-native-push-notification";
 
@@ -38,6 +39,16 @@ export const notificationManager: INotificationManagerModel = {
           log.w("Didn't get permissions to send push notifications.");
           return;
         }
+      } else if (PLATFORM === "android") {
+        log.i("code", [PermissionsAndroid.PERMISSIONS]);
+        const granted = await PermissionsAndroid.request(
+          "android.permission.POST_NOTIFICATIONS" // FIXME PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS needs newer react-native version
+        );
+        if (granted === "denied" || granted === "never_ask_again") {
+          log.w("Post notification permission was denied", [granted]);
+        } else {
+          return;
+        }
       }
 
       PushNotification.configure({
@@ -49,7 +60,7 @@ export const notificationManager: INotificationManagerModel = {
           if (PLATFORM === "android") {
             if (notification.message.toString().includes("on-chain")) {
               log.i("Navigating to OnChainTransactionLog");
-              navigate("OnChain", { screen: "OnChainTransactionLog"});
+              navigate("OnChain", { screen: "OnChainTransactionLog" });
             }
             else if (notification.message.toString().toLocaleLowerCase().includes("payment channel")) {
               log.i("Navigating to LightningInfo");
