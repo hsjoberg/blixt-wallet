@@ -43,7 +43,6 @@ import com.hypertrack.hyperlog.HyperLog;
 public class LndMobileService extends Service {
   private static final String TAG = "LndMobileService";
   private final int ONGOING_NOTIFICATION_ID = 1;
-  private final String CHANNEL_DEFAULT_IMPORTANCE = "blixt";
   boolean lndStarted = false;
   boolean subscribeInvoicesStreamActive = false;
   Set<String> streamsStarted = new HashSet<String>();
