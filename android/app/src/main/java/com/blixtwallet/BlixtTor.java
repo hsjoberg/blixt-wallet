@@ -149,7 +149,11 @@ public class BlixtTor extends ReactContextBaseJavaModule {
       notificationManager.cancelAll();
     }
     Log.i(TAG,"Unbinding TorService");
-    getReactApplicationContext().unbindService(torServiceConnection);
+    try {
+      getReactApplicationContext().unbindService(torServiceConnection);
+    } catch (IllegalArgumentException e) {
+      Log.w(TAG, "Tried to unbindService on unbound service")
+    }
     promise.resolve(true);
   };
 }
