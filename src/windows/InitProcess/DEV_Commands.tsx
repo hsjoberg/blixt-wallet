@@ -509,6 +509,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, ["pincode"])}><Text style={styles.buttonText}>set logginMethods to ["pincode"]</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, [])}><Text style={styles.buttonText}>set logginMethods to []</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.bitcoinUnit, "bitcoin")}><Text style={styles.buttonText}>set bitcoinUnit to bitcoin</Text></Button>
+          <Button small onPress={async () => await setItemObject(StorageItem.torEnabled, true)}><Text style={styles.buttonText}>torEnabled = true</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.torEnabled, false)}><Text style={styles.buttonText}>torEnabled = false</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 27)}><Text style={styles.buttonText}>appVersion = 27</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 28)}><Text style={styles.buttonText}>appVersion = 28</Text></Button>
