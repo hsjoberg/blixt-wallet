@@ -88,7 +88,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
 
       HyperLog.i(TAG, "MainActivity.started = " + MainActivity.started);
       if (persistentServicesEnabled || MainActivity.started) {
-        HyperLog.i(TAG, "MainActivity is started, persistentServicesEnabled = " + persistentServicesEnabled + ", quitting job");
+        HyperLog.i(TAG, "MainActivity is started or persistentServicesEnabled = " + persistentServicesEnabled + ", quitting job");
         completer.set(Result.success());
         return null;
       }
