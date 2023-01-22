@@ -73,13 +73,13 @@ public class BlixtTor extends ReactContextBaseJavaModule {
       PendingIntent pendingIntent =
         PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        NotificationChannel channel = new NotificationChannel("com.blixtwallet", "blixt", NotificationManager.IMPORTANCE_NONE);
+        NotificationChannel channel = new NotificationChannel(BuildConfig.APPLICATION_ID, "blixt", NotificationManager.IMPORTANCE_NONE);
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         notificationManager = NotificationManagerCompat.from(context);
         notificationManager.createNotificationChannel(channel);
         notificationManager.createNotificationChannel(channel);
       }
-      return new Notification.Builder(context, "com.blixtwallet")
+      return new Notification.Builder(context, BuildConfig.APPLICATION_ID)
         .setContentTitle("Tor")
         .setContentText("Tor is running in the background")
         .setSmallIcon(R.drawable.ic_stat_ic_notification)
