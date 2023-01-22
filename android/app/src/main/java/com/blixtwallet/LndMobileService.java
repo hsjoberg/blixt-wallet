@@ -472,13 +472,13 @@ public class LndMobileService extends Service {
         PendingIntent pendingIntent =
           PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          NotificationChannel chan = new NotificationChannel("com.blixtwallet", "blixt", NotificationManager.IMPORTANCE_NONE);
+          NotificationChannel chan = new NotificationChannel(BuildConfig.APPLICATION_ID, "blixt", NotificationManager.IMPORTANCE_NONE);
           chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
           notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
           assert notificationManager != null;
           notificationManager.createNotificationChannel(chan);
         }
-        Notification notification = new Notification.Builder(this, "com.blixtwallet")
+        Notification notification = new Notification.Builder(this, BuildConfig.APPLICATION_ID)
             .setContentTitle("LND")
             .setContentText("LND is running in the background")
             .setSmallIcon(R.drawable.ic_stat_ic_notification)
