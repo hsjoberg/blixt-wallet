@@ -597,10 +597,7 @@ ${t("LN.inbound.dialog.msg3")}`
           text: t("buttons.yes",{ns:namespaces.common}),
           onPress: async () => {
             try {
-              const torEnabled = useStoreState((store) => store.settings.torEnabled);
-              if (torEnabled) {
-                await NativeModules.BlixtTor.stopTor();
-              }
+              await NativeModules.BlixtTor.stopTor();
               await NativeModules.LndMobile.stopLnd();
               await NativeModules.LndMobileTools.killLnd();
             } catch(e) {
