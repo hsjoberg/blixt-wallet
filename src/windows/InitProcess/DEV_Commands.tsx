@@ -91,6 +91,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
 
           <Text style={{ width: "100%"}}>Random:</Text>
           <Button small onPress={async () => {
+            console.log(await(await fetch("https://dunder.blixtwallet.com/ondemand-channel/service-status")).text());
+          }}><Text style={styles.buttonText}>dunder service status</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await(await fetch("http://mempoolhqx4isw62xs7abwphsq7ldayuidyx2v2oethdhhj6mlo2r6ad.onion/")).text());
+          }}><Text style={styles.buttonText}>mempool</Text></Button>
+          <Button small onPress={async () => {
             Alert.alert("",await Linking.getInitialURL()??"no");
           }}><Text style={styles.buttonText}>getInitialURL</Text></Button>
           <Button small onPress={async () => {
@@ -464,6 +470,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, ["pincode"])}><Text style={styles.buttonText}>set logginMethods to ["pincode"]</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, [])}><Text style={styles.buttonText}>set logginMethods to []</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.bitcoinUnit, "bitcoin")}><Text style={styles.buttonText}>set bitcoinUnit to bitcoin</Text></Button>
+          <Button small onPress={async () => await setItemObject(StorageItem.torEnabled, true)}><Text style={styles.buttonText}>torEnabled = true</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.torEnabled, false)}><Text style={styles.buttonText}>torEnabled = false</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 27)}><Text style={styles.buttonText}>appVersion = 27</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 28)}><Text style={styles.buttonText}>appVersion = 28</Text></Button>
