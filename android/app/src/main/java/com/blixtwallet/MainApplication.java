@@ -10,11 +10,19 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.react.modules.network.OkHttpClientFactory;
+import com.facebook.react.modules.network.ReactCookieJarContainer;
 import com.facebook.soloader.SoLoader;
 import com.facebook.react.bridge.JSIModulePackage;
 import java.lang.reflect.InvocationTargetException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.List;
 import com.hypertrack.hyperlog.HyperLog;
+
+import org.torproject.jni.TorService;
+
+import okhttp3.OkHttpClient;
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
@@ -59,6 +67,18 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         ? android.util.Log.VERBOSE
         : android.util.Log.DEBUG
     );
+
+    // Make sure OkHttp is proxied via SOCKS Tor.
+    // This makes sure that `fetch` is proxied in Javascript-land.
+    com.facebook.react.modules.network.OkHttpClientProvider.setOkHttpClientFactory(new OkHttpClientFactory() {
+      @Override
+      public OkHttpClient createNewNetworkModuleClient() {
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+        okHttpClientBuilder.proxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 9050)));
+        okHttpClientBuilder.cookieJar(new ReactCookieJarContainer());
+        return okHttpClientBuilder.build();
+      }
+    });
   }
 
   /**
