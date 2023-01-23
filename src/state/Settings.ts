@@ -56,6 +56,7 @@ export interface ISettingsModel {
   changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeStrictGraphPruningEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changePersistentServicesEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
+  changePersistentServicesWarningShown: Thunk<ISettingsModel, booealn, any, IStoreModel>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -90,6 +91,7 @@ export interface ISettingsModel {
   setReceiveViaP2TR: Action<ISettingsModel, boolean>;
   setStrictGraphPruningEnabled: Action<ISettingsModel, boolean>;
   setPersistentServicesEnabled: Action<ISettingsModel, boolean>;
+  setPersistentServicesWarningShown: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -124,6 +126,7 @@ export interface ISettingsModel {
   receiveViaP2TR: boolean;
   strictGraphPruningEnabled: boolean;
   persistentServicesEnabled: boolean;
+  persistentServicesWarningShown: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -162,6 +165,7 @@ export const settings: ISettingsModel = {
     actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
     actions.setStrictGraphPruningEnabled(await getItemObject(StorageItem.strictGraphPruningEnabled) ?? false);
     actions.setPersistentServicesEnabled(await getItemObject(StorageItem.persistentServicesEnabled) ?? false);
+    actions.setPersistentServicesWarningShown(await getItemObject(StorageItem.persistentServicesWarningShown) ?? false);
 
     log.d("Done");
   }),
@@ -335,6 +339,11 @@ export const settings: ISettingsModel = {
     actions.setPersistentServicesEnabled(payload);
   }),
 
+  changePersistentServicesWarningShown: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.persistentServicesWarningShown, payload);
+    actions.setPersistentServicesWarningShown(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -368,6 +377,7 @@ export const settings: ISettingsModel = {
   setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
   setStrictGraphPruningEnabled: action((state, payload) => { state.strictGraphPruningEnabled = payload; }),
   setPersistentServicesEnabled: action((state, payload) => { state.persistentServicesEnabled = payload; }),
+  setPersistentServicesWarningShown: action((state, payload) => { state.persistentServicesWarningShown = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -402,4 +412,5 @@ export const settings: ISettingsModel = {
   receiveViaP2TR: false,
   strictGraphPruningEnabled: false,
   persistentServicesEnabled: false,
+  persistentServicesWarningShown: false,
 };

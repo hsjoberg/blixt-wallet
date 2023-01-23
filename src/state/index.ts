@@ -245,7 +245,12 @@ export const model: IStoreModel = {
           }
         }
       }
-
+      let persistentServicesEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesEnabled) ?? false;
+      let persistentServicesWarningShown = await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesWarningShown) ?? false;
+      if (persistentServicesEnabled && !persistentServicesWarningShown) {
+        await setItemObject(StorageItem.persistentServicesWarningShown, true);
+        await NativeModules.BlixtTor.showMsg();
+      }
       log.v("Running LndMobile.initialize()");
       const initReturn = await initialize();
       log.v("initialize done", [initReturn]);

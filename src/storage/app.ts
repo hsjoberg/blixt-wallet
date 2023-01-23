@@ -63,6 +63,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   receiveViaP2TR = "receiveViaP2TR",
   strictGraphPruningEnabled = "strictGraphPruningEnabled",
   persistentServicesEnabled = "persistentServicesEnabled",
+  persistentServicesWarningShown = "persistentServicesWarningShown",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -146,6 +147,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.receiveViaP2TR),
     removeItem(StorageItem.strictGraphPruningEnabled),
     removeItem(StorageItem.persistentServicesEnabled),
+    removeItem(StorageItem.persistentServicesWarningShown),
   ]);
 };
 
@@ -225,5 +227,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.receiveViaP2TR, false),
     setItemObject<boolean>(StorageItem.strictGraphPruningEnabled, false),
     setItemObject<boolean>(StorageItem.persistentServicesEnabled, false),
+    setItemObject<boolean>(StorageItem.persistentServicesWarningShown, false),
   ]);
 };
