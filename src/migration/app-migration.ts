@@ -305,5 +305,11 @@ export const appMigration: IAppMigration[] = [
       await setItemObject(StorageItem.lastScheduledGossipSync, 0);
       await setItemObject(StorageItem.lastScheduledGossipSyncAttempt, 0);
     }
-  }
+  },
+  // Version 36
+  {
+    async beforeLnd(db, i) {
+      setItemObject<boolean>(StorageItem.persistentServicesWarningShown, false);
+    },
+  },
 ];
