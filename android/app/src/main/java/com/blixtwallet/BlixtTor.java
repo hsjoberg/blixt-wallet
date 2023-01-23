@@ -156,4 +156,10 @@ public class BlixtTor extends ReactContextBaseJavaModule {
     }
     promise.resolve(true);
   };
+
+  @ReactMethod
+  public void showMsg(Promise promise) {
+    MainActivity.getActivity().showMsg();
+    promise.resolve(true);
+  }
 }

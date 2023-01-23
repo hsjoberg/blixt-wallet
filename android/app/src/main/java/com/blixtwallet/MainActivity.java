@@ -21,6 +21,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
+
+import dev.doubledot.doki.ui.DokiActivity;
 
 public class MainActivity extends ReactActivity {
 
@@ -60,6 +63,7 @@ public class MainActivity extends ReactActivity {
 
   static byte[] tmpChanBackup;
 
+  public static WeakReference<MainActivity> currentActivity;
 
   // react-native-screens override
   @Override
@@ -70,6 +74,7 @@ public class MainActivity extends ReactActivity {
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
       }
     }
+    currentActivity = new WeakReference<>(MainActivity.this);
     started = true;
   }
 
@@ -138,4 +143,12 @@ public class MainActivity extends ReactActivity {
       }
     }
   }
+
+    public void showMsg() {
+        startActivity(new Intent(MainActivity.this, DokiActivity.class));
+    }
+
+    public static MainActivity getActivity() {
+        return currentActivity.get();
+    }
 }
