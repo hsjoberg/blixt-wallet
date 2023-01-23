@@ -10,8 +10,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.Stack;
 import java.io.File;
 import java.io.FileWriter;
@@ -22,12 +20,9 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.modules.network.OkHttpClientFactory;
-import com.facebook.react.modules.network.ReactCookieJarContainer;
 
 import org.torproject.jni.TorService;
 
-import okhttp3.OkHttpClient;
 
 public class BlixtTor extends ReactContextBaseJavaModule {
   static private final String TAG = "BlixtTor";
@@ -96,26 +91,12 @@ public class BlixtTor extends ReactContextBaseJavaModule {
 //    }
     if (currentTorStatus.equals(TorService.STATUS_ON)) {
       Log.i(TAG, "currentTorStatus.equals(TorService.STATUS_ON)" + currentTorStatus.equals(TorService.STATUS_ON));
-
-      // Make sure OkHttp is proxied via SOCKS Tor.
-      // This makes sure that `fetch` is proxied in Javascript-land.
-      com.facebook.react.modules.network.OkHttpClientProvider.setOkHttpClientFactory(new OkHttpClientFactory() {
-        @Override
-        public OkHttpClient createNewNetworkModuleClient() {
-          OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
-          okHttpClientBuilder.proxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", TorService.socksPort)));
-          okHttpClientBuilder.cookieJar(new ReactCookieJarContainer());
-          return okHttpClientBuilder.build();
-        }
-      });
-      com.facebook.react.modules.network.OkHttpClientProvider.createClient(getReactApplicationContext());
-
       promise.resolve(TorService.socksPort);
       return;
     }
     Log.i(TAG, "KOMMER HIT wat " + currentTorStatus);
     calleeResolvers.add(promise);
-    
+
     getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS));
     Intent intent = new Intent(getReactApplicationContext(), TorService.class);
     updateTorConfigCustom(TorService.getDefaultsTorrc(getReactApplicationContext()),
