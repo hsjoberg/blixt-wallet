@@ -97,8 +97,7 @@
 
       <service
         android:name=".LndMobileService"
-        android:exported="false"
-        android:process=":blixtLndMobile" />
+        android:exported="false" />
     </application>
 
 </manifest>
