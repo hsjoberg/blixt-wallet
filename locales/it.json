@@ -1060,6 +1060,9 @@
       "msg": "Per ripristinare il wallet, scrivi ogni parola dal tuo semi separato da uno spazio.",
       "msg1": "Se desideri ripristinare i canali della rete Lightning, devi fornire un backup di file.",
       "loading": "Ripristina il wallet",
+      "passphrase": {
+        "placeholder": "Passphrase (opzionale)"
+      },
       "channel": {
         "title": "Backup di canale",
         "file": "Scegli il file di backup del canale sul disco",

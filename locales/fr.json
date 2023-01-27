@@ -1060,6 +1060,9 @@
       "msg": "Pour restaurer votre portefeuille, écrivez chaque mot de votre graine séparé par un espace.",
       "msg1": "Si vous souhaitez restaurer vos chaînes du réseau Lightning, vous devez fournir une sauvegarde des fichiers.",
       "loading": "Restaurer le portefeuille",
+      "passphrase": {
+        "placeholder": "Passphrase (en option)"
+      },
       "channel": {
         "title": "Sauvegarde des canaux",
         "file": "Choisir le fichier de sauvegarde des canaux sur le disque",

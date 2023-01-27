@@ -1060,6 +1060,9 @@
       "msg": "Para restaurar tu cartera, escribe cada palabra de tu semilla en orden y separada por un espacio.",
       "msg1": "Si quieres restaurar tus canales de la Red Lightning, necesitas la copia de seguridad de los mismos.",
       "loading": "Restaurar cartera",
+      "passphrase": {
+        "placeholder": "Passphrase (opcional)"
+      },
       "channel": {
         "title": "Copia de seguridad de los canales",
         "file": "Elige una copia de seguridad del archivo del canal en la memoria del dispositivo",

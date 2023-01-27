@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar, StyleSheet, Alert, NativeModules } from "react-native";
+import { StatusBar, StyleSheet, Alert, NativeModules, TextInput } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import { readFile } from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
@@ -28,6 +28,7 @@ export default function Restore({ navigation }: IProps) {
   const t = useTranslation(namespaces.welcome.restore).t;
   const [loading, setLoading] = useState(false);
   const [seedText, setSeedText] = useState("");
+  const [passphraseText, setPassphraseText] = useState("");
   const [backupType, setBackupType] = useState<"file" | "google_drive" | "icloud" | "macos" | "none">("none");
   const [backupFile, setBackupFile] = useState<DocumentPickerResponse | null>(null);
   const [macosBakBase64, setMacosBakBase64] = useState<string | undefined>();
@@ -59,6 +60,7 @@ export default function Restore({ navigation }: IProps) {
       const createWalletOpts: ICreateWalletPayload = {
         restore: {
           restoreWallet: true,
+          aezeedPassphrase: passphraseText,
         }
       }
 
@@ -196,6 +198,13 @@ export default function Restore({ navigation }: IProps) {
               autoCorrect={false}
               importantForAutofill="no"
             />
+            <TextInput
+              style={style.passphrase}
+              value={passphraseText}
+              onChangeText={setPassphraseText}
+              placeholder={t("restore.passphrase.placeholder")}
+              secureTextEntry={true}
+            />
             <View style={{ marginTop: 14, width: "100%", display: "flex" }}>
               <H3>{t("restore.channel.title")}</H3>
               {backupType === "none" &&
@@ -298,6 +307,13 @@ const style = StyleSheet.create({
     backgroundColor: blixtTheme.gray,
     fontSize: 20,
     marginTop: PLATFORM !== "android" ? 60 : undefined,
+  },
+  passphrase: {
+    width: "100%",
+    height: 35,
+    backgroundColor: blixtTheme.gray,
+    fontSize: 12,
+    marginTop: 12,
   },
   upperContent: {
     width: "100%",

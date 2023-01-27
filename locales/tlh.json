@@ -1060,6 +1060,9 @@
       "msg": "bISuvtaHvIS bIQapchugh, vaj pIvlIj.",
       "msg1": "wa'SanID yuQmey vIlo'chugh, vaj qeylIS HoSlIj DachoHmeH mIw.",
       "loading": "chemwI'",
+      "passphrase": {
+        "placeholder": "mu'tlheghmeyvam ngoQ."
+      },
       "channel": {
         "title": "jejHa'",
         "file": "paQHa' ghotpu'",

@@ -1060,6 +1060,9 @@
       "msg": "To restore your wallet, write each word from your seed separated by a space.",
       "msg1": "If you wish to restore your Lightning Network channels, you need to provide a file backup.",
       "loading": "Restore Wallet",
+      "passphrase": {
+        "placeholder": "Passphrase (optional)"
+      },
       "channel": {
         "title": "Channel backup",
         "file": "Choose channel backup file on disk",

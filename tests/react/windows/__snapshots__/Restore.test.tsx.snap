@@ -415,6 +415,21 @@ exports[`renders correctly 1`] = `
                                 underlineColorAndroid="rgba(0,0,0,0)"
                                 value=""
                               />
+                              <TextInput
+                                onChangeText={[Function]}
+                                placeholder="Passphrase (optional)"
+                                secureTextEntry={true}
+                                style={
+                                  {
+                                    "backgroundColor": "#232323",
+                                    "fontSize": 12,
+                                    "height": 35,
+                                    "marginTop": 12,
+                                    "width": "100%",
+                                  }
+                                }
+                                value=""
+                              />
                               <View
                                 style={
                                   [

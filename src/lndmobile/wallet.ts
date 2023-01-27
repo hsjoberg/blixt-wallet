@@ -23,11 +23,13 @@ export const initWallet = async (
   password: string,
   recoveryWindow?: number,
   channelBackupsBase64?: string,
+  aezeedPassphrase?: string,
 ): Promise<lnrpc.InitWalletResponse> => {
   // await NativeModules.LndMobile.initWallet(seed, password, recoveryWindow ?? 0, channelBackupsBase64 ?? null);
   const options: lnrpc.IInitWalletRequest = {
     cipherSeedMnemonic: seed,
     walletPassword: stringToUint8Array(password),
+    aezeedPassphrase: aezeedPassphrase ? stringToUint8Array(aezeedPassphrase) : undefined,
   };
   if (recoveryWindow) {
     options.recoveryWindow = recoveryWindow;

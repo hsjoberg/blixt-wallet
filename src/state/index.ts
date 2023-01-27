@@ -52,6 +52,7 @@ export interface ICreateWalletPayload {
   restore?: {
     restoreWallet: boolean,
     channelsBackup?: string;
+    aezeedPassphrase?: string;
   }
 }
 
@@ -497,7 +498,7 @@ protocol.option-scid-alias=true
     await setWalletPassword(randomBase64);
 
     const wallet = payload && payload.restore && payload.restore
-      ? await initWallet(seed, randomBase64, 100, payload.restore.channelsBackup)
+      ? await initWallet(seed, randomBase64, 100, payload.restore.channelsBackup, payload.restore.aezeedPassphrase)
       : await initWallet(seed, randomBase64)
 
     await setItemObject(StorageItem.walletCreated, true);

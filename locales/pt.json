@@ -1060,6 +1060,9 @@
       "msg": "Para restaurar sua carteira, escreva cada palavra de sua semente separada por um espaço.",
       "msg1": "Se você deseja restaurar seus canais do Lightning Network, você precisa fornecer um backup de arquivo.",
       "loading": "Restaurar carteira",
+      "passphrase": {
+        "placeholder": "Passphrase (opcional)"
+      },
       "channel": {
         "title": "Backup de canal",
         "file": "Escolha o arquivo de backup do canal no disco",

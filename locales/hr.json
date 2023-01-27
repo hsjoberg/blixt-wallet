@@ -1060,6 +1060,9 @@
       "msg": "Da obnovite svoj novčanik, napišite svaku riječ iz svog sjemena odvojenu razmakom.",
       "msg1": "Ako želite vratiti svoje Lightning Network kanale, trebate obezbijediti sigurnosnu kopiju datoteke.",
       "loading": "Oporavi novčanik",
+      "passphrase": {
+        "placeholder": "Passphrase (neobavezan)"
+      },
       "channel": {
         "title": "Sigurnosna kopija kanala",
         "file": "Odaberite datoteku sigurnosne kopije kanala na disku",
