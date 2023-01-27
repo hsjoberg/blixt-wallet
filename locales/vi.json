@@ -1059,6 +1059,9 @@
       "msg": "Để khôi phục ví, hãy viết mỗi từ khoá hạt giống được phân tách bằng dấu cách.",
       "msg1": "Nếu bạn muốn khôi phục các kênh Mạng Lightning của mình, bạn cần cung cấp bản sao lưu tệp.",
       "loading": "Khôi phục Ví",
+      "passphrase": {
+        "placeholder": "Cụm mật khẩu (tùy chọn)"
+      },
       "channel": {
         "title": "Sao lưu kênh",
         "file": "Chọn tệp sao lưu kênh trên đĩa",

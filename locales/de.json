@@ -1060,6 +1060,9 @@
       "msg": "Um dein Wallet wiederherzustellen, tippe jedes Wort deines Seeds getrennt durch Leerzeichen ein.",
       "msg1": "Wenn Du deine Lightning-Kanäle wiederherstellen möchtest, benötigst Du die Backup-Datei.",
       "loading": "Wallet-Wiederherstellung",
+      "passphrase": {
+        "placeholder": "Passphrase (optional)"
+      },
       "channel": {
         "title": "Kanal-Backup",
         "file": "Wähle die Backup-Datei aus",

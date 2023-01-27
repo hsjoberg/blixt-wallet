@@ -1060,6 +1060,9 @@
       "msg": "Om jouw wallet te herstellen, schrijf elk woord van jouw seed gescheiden door een spatie.",
       "msg1": "Als je jouw Lightning Netwerk-kanalen wilt herstellen, moet je beschikken over een bestandsback-up.",
       "loading": "Herstel Wallet",
+      "passphrase": {
+        "placeholder": "Passphrase (optionele)"
+      },
       "channel": {
         "title": "Kanaalback-up",
         "file": "Kies een kanaalback-upbestand op schijf",

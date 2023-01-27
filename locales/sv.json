@@ -1040,6 +1040,9 @@
       "msg": "För att återställa din plånbok, skriv ned varje ord ifrån sin seed separerat med ett mellanslag.",
       "msg1": "Om du vill återställa dina kanaler på Lightningnätverket så måste du förse en kanalbackup.",
       "loading": "Återställ plånbok",
+      "passphrase": {
+        "placeholder": "Passphrase (valfritt)"
+      },
       "channel": {
         "title": "Kanalbackup",
         "file": "Välj en kanalbackup-fil på disk",

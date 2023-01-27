@@ -132,7 +132,7 @@ export interface ILndMobileInjections {
   wallet: {
     decodeInvoiceResult: (data: string) => lnrpc.Invoice;
     genSeed: () => Promise<lnrpc.GenSeedResponse>;
-    initWallet: (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string) => Promise<void>;
+    initWallet: (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string, aezeedPassphrase?: string) => Promise<void>;
     subscribeInvoices: () => Promise<string>;
     unlockWallet: (password: string) => Promise<void>;
     deriveKey: (keyFamily: number, keyIndex: number) => Promise<signrpc.KeyDescriptor>;
