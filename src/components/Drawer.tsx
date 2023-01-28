@@ -227,7 +227,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: blixtTheme.gray,
-    paddingVertical: 10,
+    paddingVertical: 9,
     paddingHorizontal: 13,
     marginLeft: 18,
     marginRight: PLATFORM !== "macos" ? 18 : 4,

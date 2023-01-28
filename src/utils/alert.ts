@@ -1,7 +1,9 @@
 // https://github.com/necolas/react-native-web/issues/1026#issuecomment-687572134
-import { AlertButton, AlertStatic, AlertType, Alert as RealAlert } from "react-native";
+import { AlertButton, AlertStatic, AlertType, Alert as RealAlert, Platform } from "react-native";
 import DialogAndroid from "react-native-dialogs";
 import { PLATFORM } from "./constants";
+import { navigate } from "./navigation";
+import { IPromptNavigationProps } from "../windows/HelperWindows/Prompt";
 
 class WebAlert implements AlertStatic {
   public alert(title: string, message?: string, buttons?: AlertButton[]): void {
@@ -50,13 +52,34 @@ class WebAlert implements AlertStatic {
     defaultValue?: string,
     keyboardType?: string,
   ) {
-    if (PLATFORM === "web") {
+    if (Platform.isElectron) {
+      navigate<IPromptNavigationProps>("Prompt", {
+        title,
+        message,
+        defaultValue,
+        onOk: (result) => {
+          if (typeof callbackOrButtons === "object") {
+            const ok = callbackOrButtons.find(({ style }) => style !== "cancel");
+            ok?.onPress?.(result);
+          } else {
+            callbackOrButtons?.(result);
+          }
+        },
+        onCancel: () => {
+          if (typeof callbackOrButtons === "object") {
+            const cancel = callbackOrButtons.find(({ style }) => style === "cancel");
+            cancel?.onPress?.();
+          }
+        }
+      });
+    } else if (PLATFORM === "web") {
       const result = window.prompt(message, defaultValue);
       if (result === null) {
         if (typeof callbackOrButtons === "object") {
           const cancel = callbackOrButtons.find(({ style }) => style === "cancel");
           cancel?.onPress?.();
         }
+        // TODO callbackOrOptions?
       } else {
         if (typeof callbackOrButtons === "object") {
           const ok = callbackOrButtons.find(({ style }) => style !== "cancel");
@@ -65,7 +88,6 @@ class WebAlert implements AlertStatic {
           callbackOrButtons?.(result);
         }
       }
-
     } else if (PLATFORM === "android") {
       const positiveText = typeof callbackOrButtons === "object" ? callbackOrButtons.find(
         (button) => button.style === "default"
