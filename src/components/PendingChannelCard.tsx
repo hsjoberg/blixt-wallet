@@ -41,28 +41,9 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
   if (!channel.channel) {
     return (<Text>Error</Text>);
   }
+  const closingChannel = channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel;
 
-  const CheckForceCloseAbility = () => {
-    if (channel.channel?.chanStatusFlags === dataLossChannelState) {
-      return null;
-    }
-
-    const closingChannel = channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel;
-
-    if (!!closingChannel.closingTxid || closingChannel.closingTxid !== '') {
-      return null;
-    }
-
-    return (
-      <Row style={{ width: "100%" }}>
-      <Left>
-        <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => forceClose(channel)}>
-          <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
-        </Button>
-      </Left>
-    </Row>
-    )
-  }
+  const isForceClosableChannel = (channel.channel?.chanStatusFlags === dataLossChannelState) || !!closingChannel.closingTxid ? false : true
 
   const forceClose = (channel: lnrpc.PendingChannelsResponse.IWaitingCloseChannel) => {
     if (channel.channel?.chanStatusFlags === dataLossChannelState) {
@@ -266,7 +247,17 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                   </CopyText>
                 </Right>
               </Row>
-              <CheckForceCloseAbility />
+              {
+                isForceClosableChannel ? (
+                  <Row style={{ width: "100%" }}>
+                    <Left>
+                      <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => forceClose(channel)}>
+                        <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
+                      </Button>
+                    </Left>
+                  </Row>
+                ) : null
+              }
             </>
           }
           {type === "FORCE_CLOSING" &&
