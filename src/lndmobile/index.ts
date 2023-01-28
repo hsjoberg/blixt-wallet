@@ -410,12 +410,17 @@ export const getRouteHints = async (max: number = 5): Promise<lnrpc.IRouteHint[]
       continue;
     }
 
+    let channelId = chanInfo.channelId;
+    if (channel.peerScidAlias) {
+      channelId = channel.peerScidAlias;
+    }
+
     routeHints.push(lnrpc.RouteHint.create({
       hopHints: [{
         nodeId: remotePubkey,
-        chanId: chanInfo.channelId,
-        feeBaseMsat: policy.feeBaseMsat ? policy.feeBaseMsat.toNumber() : undefined,
-        feeProportionalMillionths: policy.feeRateMilliMsat ? policy.feeRateMilliMsat.toNumber() : undefined,
+        chanId: channelId,
+        feeBaseMsat: policy.feeBaseMsat ? policy.feeBaseMsat.toNumber() : 0,
+        feeProportionalMillionths: policy.feeRateMilliMsat ? policy.feeRateMilliMsat.toNumber() : 0,
         cltvExpiryDelta: policy.timeLockDelta,
       }]
     }));

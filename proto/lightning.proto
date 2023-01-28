@@ -637,6 +637,7 @@ enum OutputScriptType {
     SCRIPT_TYPE_NULLDATA = 6;
     SCRIPT_TYPE_NON_STANDARD = 7;
     SCRIPT_TYPE_WITNESS_UNKNOWN = 8;
+    SCRIPT_TYPE_WITNESS_V1_TAPROOT = 9;
 }
 
 message OutputDetail {
@@ -1509,6 +1510,9 @@ message Channel {
 
     // This is the confirmed / on-chain zero-conf SCID.
     uint64 zero_conf_confirmed_scid = 33;
+
+    // This is the peer SCID alias.
+    uint64 peer_scid_alias = 34 [jstype = JS_STRING];
 }
 
 message ListChannelsRequest {
