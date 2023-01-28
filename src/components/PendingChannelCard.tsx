@@ -17,6 +17,8 @@ import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
 import { Alert } from "../utils/alert";
 
+const dataLossChannelState = 'ChanStatusLocalDataLoss|ChanStatusRestored';
+
 export interface IPendingChannelCardProps {
   type: "OPEN" | "CLOSING" | "FORCE_CLOSING" | "WAITING_CLOSE";
   channel: lnrpc.PendingChannelsResponse.IPendingOpenChannel
@@ -39,8 +41,16 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
   if (!channel.channel) {
     return (<Text>Error</Text>);
   }
+  const closingChannel = channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel;
+
+  const isForceClosableChannel = (channel.channel?.chanStatusFlags === dataLossChannelState) || !!closingChannel.closingTxid ? false : true
 
   const forceClose = (channel: lnrpc.PendingChannelsResponse.IWaitingCloseChannel) => {
+    if (channel.channel?.chanStatusFlags === dataLossChannelState) {
+      Alert.alert("Cannot Force Close A Channel In Recovery State");
+      return;
+    }
+
     if (!!channel.closingTxid || channel.closingTxid !== '') {
       Alert.alert("Closing Tx Has Already Been Broadcasted");
       return;
@@ -237,13 +247,17 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                   </CopyText>
                 </Right>
               </Row>
-              <Row style={{ width: "100%" }}>
-                <Left>
-                  <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => forceClose(channel)}>
-                  <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
-                  </Button>
-                </Left>
-              </Row>
+              {
+                isForceClosableChannel ? (
+                  <Row style={{ width: "100%" }}>
+                    <Left>
+                      <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => forceClose(channel)}>
+                        <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
+                      </Button>
+                    </Left>
+                  </Row>
+                ) : null
+              }
             </>
           }
           {type === "FORCE_CLOSING" &&
