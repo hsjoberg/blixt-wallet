@@ -14,6 +14,7 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import { PLATFORM } from "../../utils/constants";
 import { CommonActions } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
+import MnemonicKeyboard from "../../components/MnemonicKeyboard";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -189,14 +190,16 @@ export default function Restore({ navigation }: IProps) {
               rowSpan={6}
               bordered={false}
               underline={false}
-              onChangeText={setSeedText}
               value={seedText}
               returnKeyType="done"
               blurOnSubmit={true}
-              autoComplete="off"
+              disabled={true}
               autoCapitalize="none"
               autoCorrect={false}
-              importantForAutofill="no"
+            />
+            <MnemonicKeyboard
+              seedText={seedText}
+              setSeedText={setSeedText}
             />
             <TextInput
               style={style.passphrase}
