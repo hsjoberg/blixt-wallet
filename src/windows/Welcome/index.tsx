@@ -13,6 +13,7 @@ import Restore from "./Restore";
 import AddFunds from "./AddFunds";
 
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
+import SelectList from "../HelperWindows/SelectList";
 
 const Stack = createStackNavigator();
 
@@ -31,7 +32,7 @@ export type WelcomeStackParamList = {
   SetPincode: undefined;
   RemovePincodeAuth: undefined;
   ChangeFingerprintSettingsAuth: undefined;
-}
+};
 
 export default function WelcomeIndex() {
   const screenOptions: StackNavigationOptions = {
@@ -42,7 +43,7 @@ export default function WelcomeIndex() {
   return (
     <Stack.Navigator initialRouteName="Start" screenOptions={screenOptions}>
       <Stack.Screen name="Start" component={Start} />
-
+      <Stack.Screen name="ChangeLanguage" component={SelectList} />
       <Stack.Screen name="Seed" component={Seed} />
       <Stack.Screen name="Confirm" component={Confirm} />
       <Stack.Screen name="GoogleDriveBackup" component={GoogleDriveBackup} />
