@@ -34,6 +34,9 @@ import {
   subscribeState,
   writeConfig,
   writeConfigFile,
+  subscribeCustomMessages,
+  decodeCustomMessage,
+  sendCustomMessage,
 } from "../lndmobile/index";
 import {
   abandonChannel,
@@ -95,6 +98,7 @@ export interface ILndMobileInjections {
       amount: number,
       memo: string,
       expiry?: number,
+      descriptionHash?: Uint8Array,
     ) => Promise<lnrpc.AddInvoiceResponse>;
     addInvoiceBlixtLsp: (args: IAddInvoiceBlixtLspArgs) => Promise<lnrpc.AddInvoiceResponse>;
     cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>;
@@ -129,6 +133,13 @@ export interface ILndMobileInjections {
       amount?: Long,
       routeHints?: lnrpc.IRouteHint[],
     ) => Promise<lnrpc.QueryRoutesResponse>;
+    subscribeCustomMessages: () => Promise<string>;
+    decodeCustomMessage: (data: string) => lnrpc.CustomMessage;
+    sendCustomMessage: (
+      peerPubkey: string,
+      type: number,
+      dataString: string,
+    ) => Promise<lnrpc.SendCustomMessageResponse>;
   };
   channel: {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;
@@ -243,6 +254,9 @@ export default {
     sendPaymentSync,
     sendPaymentV2Sync,
     queryRoutes,
+    subscribeCustomMessages,
+    decodeCustomMessage,
+    sendCustomMessage,
   },
   channel: {
     channelBalance,

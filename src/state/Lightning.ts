@@ -164,6 +164,7 @@ export const lightning: ILightningModel = {
         dispatch.deeplinkManager.initialize(),
         dispatch.blixtLsp.initialize(),
         dispatch.channelRpcInterceptor.initialize(),
+        dispatch.lightningBox.initialize(),
       ]);
     } catch (e) {
       toast(e.message, 0, "danger", "OK");

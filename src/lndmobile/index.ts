@@ -394,7 +394,7 @@ export const decodePaymentStatus = (data: string): routerrpc.PaymentStatus => {
 /**
  * @throws
  */
-export const addInvoice = async (amount: number, memo: string, expiry: number = 3600): Promise<lnrpc.AddInvoiceResponse> => {
+export const addInvoice = async (amount: number, memo: string, expiry: number = 3600, descriptionHash?: Uint8Array): Promise<lnrpc.AddInvoiceResponse> => {
   const response = await sendCommand<lnrpc.IInvoice, lnrpc.Invoice, lnrpc.AddInvoiceResponse>({
     request: lnrpc.Invoice,
     response: lnrpc.AddInvoiceResponse,
@@ -402,6 +402,7 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
     options: {
       value: Long.fromValue(amount),
       memo,
+      descriptionHash,
       expiry: Long.fromValue(expiry),
       private: true,
       minHopHints: 6,
