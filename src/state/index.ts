@@ -28,6 +28,7 @@ import { ILightNameModel, lightName } from "./LightName";
 import { IICloudBackupModel, iCloudBackup } from "./ICloudBackup";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IContactsModel, contacts } from "./Contacts";
+import { ILightningBoxModel, lightningBox } from "./LightningBox";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
 import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion, getAppBuild, setAppBuild, getRescanWallet, setRescanWallet } from "../storage/app";
@@ -116,6 +117,7 @@ export interface IStoreModel {
   iCloudBackup: IICloudBackupModel;
   blixtLsp: IBlixtLsp;
   contacts: IContactsModel;
+  lightningBox: ILightningBoxModel;
 
   walletSeed?: string[];
   appVersion: number;
@@ -594,6 +596,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   iCloudBackup,
   blixtLsp,
   contacts,
+  lightningBox,
 };
 
 export default model;

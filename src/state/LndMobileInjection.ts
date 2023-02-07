@@ -32,6 +32,9 @@ import {
   readLndLog,
   sendPaymentSync,
   sendPaymentV2Sync,
+  subscribeCustomMessages,
+  decodeCustomMessage,
+  sendCustomMessage,
   IReadLndLogResponse,
 } from "../lndmobile/index";
 import {
@@ -98,7 +101,7 @@ export interface ILndMobileInjections {
     TEMP_moveLndToApplicationSupport: () => Promise<boolean>;
     excludeLndICloudBackup: () => Promise<boolean>;
 
-    addInvoice: (amount: number, memo: string, expiry?: number) => Promise<lnrpc.AddInvoiceResponse>;
+    addInvoice: (amount: number, memo: string, expiry?: number, descriptionHash?: Uint8Array) => Promise<lnrpc.AddInvoiceResponse>;
     addInvoiceBlixtLsp: (args: IAddInvoiceBlixtLspArgs) => Promise<lnrpc.AddInvoiceResponse>;
     cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
@@ -116,6 +119,9 @@ export interface ILndMobileInjections {
     sendPaymentSync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null) => Promise<lnrpc.SendResponse>;
     sendPaymentV2Sync: (paymentRequest: string, amount?: Long, payAmount?: Long, tlvRecordName?: string | null, multiPath?: boolean, maxLNFeePercentage?: number) => Promise<lnrpc.Payment>;
     queryRoutes: (pubkey: string, amount?: Long, routeHints?: lnrpc.IRouteHint[]) => Promise<lnrpc.QueryRoutesResponse>;
+    subscribeCustomMessages: () => Promise<string>;
+    decodeCustomMessage: (data: string) => lnrpc.CustomMessage;
+    sendCustomMessage: (peerPubkey: string, type: number, dataString: string) => Promise<lnrpc.SendCustomMessageResponse>;
   };
   channel: {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;
@@ -198,6 +204,9 @@ export default {
     sendPaymentSync,
     sendPaymentV2Sync,
     queryRoutes,
+    subscribeCustomMessages,
+    decodeCustomMessage,
+    sendCustomMessage,
   },
   channel: {
     channelBalance,
