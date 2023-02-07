@@ -3,7 +3,7 @@ import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { lnrpc, routerrpc, invoicesrpc, devrpc } from "../../proto/lightning";
 import Long from "long";
 import sha from "sha.js";
-import { stringToUint8Array, hexToUint8Array, unicodeStringToUint8Array } from "../utils";
+import { stringToUint8Array, hexToUint8Array, unicodeStringToUint8Array, uint8ArrayToString } from "../utils";
 import { TLV_KEYSEND, TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { LndMobileEventEmitter } from "../utils/event-listener";
@@ -374,7 +374,7 @@ export const decodePaymentStatus = (data: string): routerrpc.PaymentStatus => {
 /**
  * @throws
  */
-export const addInvoice = async (amount: number, memo: string, expiry: number = 3600): Promise<lnrpc.AddInvoiceResponse> => {
+export const addInvoice = async (amount: number, memo: string, expiry: number = 3600, descriptionHash?: Uint8Array): Promise<lnrpc.AddInvoiceResponse> => {
   const response = await sendCommand<lnrpc.IInvoice, lnrpc.Invoice, lnrpc.AddInvoiceResponse>({
     request: lnrpc.Invoice,
     response: lnrpc.AddInvoiceResponse,
@@ -382,6 +382,7 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
     options: {
       value: Long.fromValue(amount),
       memo,
+      descriptionHash,
       expiry: Long.fromValue(expiry),
       private: true,
       minHopHints: 6,
@@ -623,6 +624,39 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
     response: lnrpc.ListInvoiceResponse,
     method: "ListInvoices",
     options: {},
+  });
+  return response;
+};
+
+export const subscribeCustomMessages = async () => {
+  const response = await sendStreamCommand<lnrpc.ISubscribeCustomMessagesRequest, lnrpc.SubscribeCustomMessagesRequest>({
+    request: lnrpc.SubscribeCustomMessagesRequest,
+    method: "SubscribeCustomMessages",
+    options: {},
+  }, false);
+  return response;
+}
+
+export const decodeCustomMessage = (data: string): lnrpc.CustomMessage => {
+  return decodeStreamResult<lnrpc.CustomMessage>({
+    response: lnrpc.CustomMessage,
+    base64Result: data,
+  });
+};
+
+/**
+ * @throws
+ */
+export const sendCustomMessage = async (peerPubkeyHex: string, type: number, dataString: string): Promise<lnrpc.SendCustomMessageResponse> => {
+  const response = await sendCommand<lnrpc.ISendCustomMessageRequest, lnrpc.SendCustomMessageRequest, lnrpc.SendCustomMessageResponse>({
+    request: lnrpc.SendCustomMessageRequest,
+    response: lnrpc.SendCustomMessageResponse,
+    method: "SendCustomMessage",
+    options: {
+      type,
+      peer: hexToUint8Array(peerPubkeyHex),
+      data: stringToUint8Array(dataString),
+    },
   });
   return response;
 };
