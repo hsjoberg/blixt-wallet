@@ -46,6 +46,9 @@
       "msg3": "There is currently no WatchTower support to watch your channels while you are offline.",
       "msg4": "I am reckless, continue"
     },
+    "language": {
+      "title": "Select language"
+    },
     "restoreWallet": {
       "title": "Restore Wallet"
     },
@@ -133,7 +136,7 @@
     "duration": "Time taken to pay invoice",
     "note": "Note",
     "website": "Website",
-    "type" : "Type",
+    "type": "Type",
     "lnurl": {
       "messageFromWebsite": "Message from",
       "urlReceivedFromWebsite": "URL received from",
