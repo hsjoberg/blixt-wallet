@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar, StyleSheet, Alert, NativeModules, TextInput } from "react-native";
+import { StatusBar, StyleSheet, Alert, NativeModules } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import { readFile } from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
@@ -14,10 +14,11 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import { PLATFORM } from "../../utils/constants";
 import { CommonActions } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
+import Input from "../../components/Input";
+import { toast } from "../../utils";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-import { toast } from "../../utils";
 
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
@@ -186,7 +187,6 @@ export default function Restore({ navigation }: IProps) {
             {PLATFORM !== "android" && <GoBackIcon style={style.goBack} />}
             <Textarea
               style={style.seedBox}
-              rowSpan={6}
               bordered={false}
               underline={false}
               onChangeText={setSeedText}
@@ -198,13 +198,15 @@ export default function Restore({ navigation }: IProps) {
               autoCorrect={false}
               importantForAutofill="no"
             />
-            <TextInput
-              style={style.passphrase}
-              value={passphraseText}
-              onChangeText={setPassphraseText}
-              placeholder={t("restore.passphrase.placeholder")}
-              secureTextEntry={true}
-            />
+            <View style={{ height: 45 }}>
+              <Input
+                style={style.passphrase}
+                value={passphraseText}
+                onChangeText={setPassphraseText}
+                placeholder={t("restore.passphrase.placeholder") ?? ""}
+                secureTextEntry={true}
+              />
+            </View>
             <View style={{ marginTop: 14, width: "100%", display: "flex" }}>
               <H3>{t("restore.channel.title")}</H3>
               {backupType === "none" &&
@@ -296,21 +298,20 @@ const style = StyleSheet.create({
     padding: 12,
     width: "100%",
     marginTop: 32,
-    height: 300,
     flexDirection: "column",
     justifyContent: "center",
     alignContent: "center",
   },
   seedBox: {
     width: "100%",
-    height: 150,
+    height: 120,
     backgroundColor: blixtTheme.gray,
     fontSize: 20,
     marginTop: PLATFORM !== "android" ? 60 : undefined,
   },
   passphrase: {
     width: "100%",
-    height: 35,
+    height: 45,
     backgroundColor: blixtTheme.gray,
     fontSize: 12,
     marginTop: 12,
