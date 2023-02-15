@@ -376,7 +376,6 @@ exports[`renders correctly 1`] = `
                                   {
                                     "alignContent": "center",
                                     "flexDirection": "column",
-                                    "height": 300,
                                     "justifyContent": "center",
                                     "marginTop": 32,
                                     "padding": 12,
@@ -397,13 +396,12 @@ exports[`renders correctly 1`] = `
                                 onChangeText={[Function]}
                                 placeholderTextColor="#575757"
                                 returnKeyType="done"
-                                rowSpan={6}
                                 style={
                                   {
                                     "backgroundColor": "#232323",
                                     "color": "#000",
                                     "fontSize": 20,
-                                    "height": 150,
+                                    "height": 120,
                                     "marginTop": undefined,
                                     "paddingLeft": 10,
                                     "paddingRight": 5,
@@ -415,21 +413,46 @@ exports[`renders correctly 1`] = `
                                 underlineColorAndroid="rgba(0,0,0,0)"
                                 value=""
                               />
-                              <TextInput
-                                onChangeText={[Function]}
-                                placeholder="Passphrase (optional)"
-                                secureTextEntry={true}
+                              <View
                                 style={
-                                  {
-                                    "backgroundColor": "#232323",
-                                    "fontSize": 12,
-                                    "height": 35,
-                                    "marginTop": 12,
-                                    "width": "100%",
-                                  }
+                                  [
+                                    {},
+                                    {
+                                      "height": 45,
+                                    },
+                                  ]
                                 }
-                                value=""
-                              />
+                              >
+                                <TextInput
+                                  editable={true}
+                                  enableFocusRing={false}
+                                  onChangeText={[Function]}
+                                  placeholder="Passphrase (optional)"
+                                  placeholderTextColor="#575757"
+                                  secureTextEntry={true}
+                                  style={
+                                    [
+                                      {
+                                        "color": "#000",
+                                        "flex": 1,
+                                        "fontSize": 17,
+                                        "height": 50,
+                                        "paddingLeft": 5,
+                                        "paddingRight": 5,
+                                      },
+                                      {
+                                        "backgroundColor": "#232323",
+                                        "fontSize": 12,
+                                        "height": 45,
+                                        "marginTop": 12,
+                                        "width": "100%",
+                                      },
+                                    ]
+                                  }
+                                  underlineColorAndroid="rgba(0,0,0,0)"
+                                  value=""
+                                />
+                              </View>
                               <View
                                 style={
                                   [
