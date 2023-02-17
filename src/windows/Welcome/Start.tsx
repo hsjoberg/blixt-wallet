@@ -179,9 +179,11 @@ function TopMenu({ navigation }: IStartProps) {
   return (
     <View style={style.menuDotsIcon}>
       <Menu visible={visible} onRequestClose={hideMenu} anchor={<Icon type="Entypo" name="dots-three-horizontal" onPress={showMenu} />}>
-        <MenuItem onPress={toggleTorEnabled} textStyle={{ color: "#000" }}>
-          {torEnabled ? t("menu.disableTor") : t("menu.enableTor")}
-        </MenuItem>
+        {PLATFORM !== "macos" && (
+          <MenuItem onPress={toggleTorEnabled} textStyle={{ color: "#000" }}>
+            {torEnabled ? t("menu.disableTor") : t("menu.enableTor")}
+          </MenuItem>
+        )}
         <MenuItem onPress={onSetBitcoinNodePress} textStyle={{ color: "#000" }}>
           {t("menu.setBitcoinNode")}
         </MenuItem>
@@ -252,7 +254,7 @@ ${t("createWallet.msg3")}`,
       <SafeAreaView style={style.content}>
         <StatusBar backgroundColor="transparent" hidden={false} translucent={true} networkActivityIndicatorVisible={true} barStyle="light-content" />
 
-        {!createWalletLoading && PLATFORM !== "macos" && <TopMenu navigation={navigation} />}
+        {!createWalletLoading && <TopMenu navigation={navigation} />}
 
         {!createWalletLoading ? <AnimatedH1>{t("title")}</AnimatedH1> : <H1 style={style.header}>{t("title")}</H1>}
         {!createWalletLoading ? (
