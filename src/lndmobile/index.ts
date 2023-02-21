@@ -434,8 +434,8 @@ export const getRouteHints = async (max: number = 5): Promise<lnrpc.IRouteHint[]
     }
 
     let channelId = chanInfo.channelId;
-    if (channel.aliasScids && channel.aliasScids.length > 0) {
-      channelId = channel.aliasScids[0];
+    if (channel.peerScidAlias) {
+      channelId = channel.peerScidAlias;
     }
 
     routeHints.push(lnrpc.RouteHint.create({
