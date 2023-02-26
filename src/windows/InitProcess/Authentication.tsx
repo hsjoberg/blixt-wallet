@@ -24,7 +24,7 @@ export default function Authentication() {
       return true;
     }
     return false;
-  }
+  };
 
   return (
     <Container>
@@ -36,23 +36,33 @@ export default function Authentication() {
         translucent={false}
       />
       <View style={style.content}>
-        {loginMethods.has(LoginMethods.pincode) &&
+        {loginMethods.has(LoginMethods.pincode) && (
           <Pincode onTryCode={onTryCode} textAction="Enter pincode" />
-        }
-        {loginMethods.has(LoginMethods.fingerprint) &&
+        )}
+        {loginMethods.has(LoginMethods.fingerprint) && (
           <View style={style.fingerPrintSymbolContainer}>
-            {biometricsSensor !== "Face ID" &&
-              <Icon style={style.fingerPrintSymbol} type="Entypo" name="fingerprint" onPress={startScan} />
-            }
-            {biometricsSensor === "Face ID" &&
-              <Icon style={style.fingerPrintSymbol} type="MaterialCommunityIcons" name="face-recognition" onPress={startScan} />
-            }
+            {biometricsSensor !== "Face ID" && (
+              <Icon
+                style={style.fingerPrintSymbol}
+                type="Entypo"
+                name="fingerprint"
+                onPress={startScan}
+              />
+            )}
+            {biometricsSensor === "Face ID" && (
+              <Icon
+                style={style.fingerPrintSymbol}
+                type="MaterialCommunityIcons"
+                name="face-recognition"
+                onPress={startScan}
+              />
+            )}
           </View>
-        }
-        {loginMethods.size === 0 && <Text style={{textAlign: "center"}}>Error</Text>}
+        )}
+        {loginMethods.size === 0 && <Text style={{ textAlign: "center" }}>Error</Text>}
       </View>
     </Container>
-  )
+  );
 }
 
 const style = StyleSheet.create({
@@ -63,10 +73,10 @@ const style = StyleSheet.create({
   fingerPrintSymbolContainer: {
     padding: 8,
     alignContent: "center",
-    alignItems:"center",
+    alignItems: "center",
     marginBottom: smallScreen ? 0 : 16,
   },
   fingerPrintSymbol: {
-    fontSize: 36
+    fontSize: 36,
   },
 });

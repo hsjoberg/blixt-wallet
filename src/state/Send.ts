@@ -44,8 +44,20 @@ interface IExtraData {
 
 export interface ISendModel {
   clear: Action<ISendModel>;
-  setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections, {}, Promise<lnrpc.PayReq>>;
-  sendPayment: Thunk<ISendModel, IModelSendPaymentPayload | void, IStoreInjections, IStoreModel, Promise<lnrpc.Payment>>;
+  setPayment: Thunk<
+    ISendModel,
+    ISendModelSetPaymentPayload,
+    IStoreInjections,
+    {},
+    Promise<lnrpc.PayReq>
+  >;
+  sendPayment: Thunk<
+    ISendModel,
+    IModelSendPaymentPayload | void,
+    IStoreInjections,
+    IStoreModel,
+    Promise<lnrpc.Payment>
+  >;
 
   setPaymentRequestStr: Action<ISendModel, PaymentRequest>;
   setPaymentRequest: Action<ISendModel, lnrpc.PayReq>;
@@ -59,7 +71,7 @@ export interface ISendModel {
 }
 
 export const send: ISendModel = {
-  clear: action((state) =>  {
+  clear: action((state) => {
     state.paymentRequestStr = undefined;
     state.remoteNodeInfo = undefined;
     state.paymentRequest = undefined;
@@ -99,7 +111,7 @@ export const send: ISendModel = {
     try {
       const nodeInfo = await getNodeInfo(paymentRequest.destination);
       actions.setRemoteNodeInfo(nodeInfo);
-    } catch (e) { }
+    } catch (e) {}
 
     return paymentRequest;
   }),
@@ -147,13 +159,12 @@ export const send: ISendModel = {
       multiPathPaymentsEnabled,
     );
 
-    
     log.i("status", [sendPaymentResult.status, sendPaymentResult.failureReason]);
     if (sendPaymentResult.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
       throw new Error(`${translatePaymentFailureReason(sendPaymentResult.failureReason)}`);
     }
-    
-    const settlementDuration = (new Date().getTime() - start);
+
+    const settlementDuration = new Date().getTime() - start;
 
     const transaction: ITransaction = {
       date: paymentRequest.timestamp,
@@ -180,7 +191,11 @@ export const send: ISendModel = {
       tlvRecordName: null,
       type: extraData.type,
       website: extraData.website,
-      identifiedService: identifyService(paymentRequest.destination, paymentRequest.description, extraData.website),
+      identifiedService: identifyService(
+        paymentRequest.destination,
+        paymentRequest.description,
+        extraData.website,
+      ),
       //note: // TODO: Why wasn't this added
       lightningAddress: extraData.lightningAddress ?? null,
       lud16IdentifierMimeType: extraData.lud16IdentifierMimeType ?? null,
@@ -188,16 +203,17 @@ export const send: ISendModel = {
       preimage: hexToUint8Array(sendPaymentResult.paymentPreimage),
       lnurlPayResponse: extraData.lnurlPayResponse,
 
-      hops: sendPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
-        chanId: hop.chanId ?? null,
-        chanCapacity: hop.chanCapacity ?? null,
-        amtToForward: hop.amtToForward || Long.fromInt(0),
-        amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-        fee: hop.fee || Long.fromInt(0),
-        feeMsat: hop.feeMsat || Long.fromInt(0),
-        expiry: hop.expiry || null,
-        pubKey: hop.pubKey || null,
-      })) ?? [],
+      hops:
+        sendPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
+          chanId: hop.chanId ?? null,
+          chanCapacity: hop.chanCapacity ?? null,
+          amtToForward: hop.amtToForward || Long.fromInt(0),
+          amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
+          fee: hop.fee || Long.fromInt(0),
+          feeMsat: hop.feeMsat || Long.fromInt(0),
+          expiry: hop.expiry || null,
+          pubKey: hop.pubKey || null,
+        })) ?? [],
     };
 
     log.d("ITransaction", [transaction]);
@@ -207,9 +223,15 @@ export const send: ISendModel = {
       try {
         log.d("Syncing geolocation for transaction");
         if (PLATFORM === "ios") {
-          if (await ReactNativePermissions.check(ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE) === "denied") {
+          if (
+            (await ReactNativePermissions.check(
+              ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+            )) === "denied"
+          ) {
             log.d("Requesting geolocation permission");
-            const r = await ReactNativePermissions.request(ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+            const r = await ReactNativePermissions.request(
+              ReactNativePermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+            );
             if (r !== "granted") {
               throw new Error(`Got "${r}" when requesting Geolocation permission`);
             }
@@ -228,10 +250,18 @@ export const send: ISendModel = {
     return sendPaymentResult;
   }),
 
-  setPaymentRequestStr: action((state, payload) => { state.paymentRequestStr = payload; }),
-  setPaymentRequest: action((state, payload) => { state.paymentRequest = payload; }),
-  setRemoteNodeInfo: action((state, payload) => { state.remoteNodeInfo = payload; }),
-  setExtraData: action((state, payload) => { state.extraData = payload; }),
+  setPaymentRequestStr: action((state, payload) => {
+    state.paymentRequestStr = payload;
+  }),
+  setPaymentRequest: action((state, payload) => {
+    state.paymentRequest = payload;
+  }),
+  setRemoteNodeInfo: action((state, payload) => {
+    state.remoteNodeInfo = payload;
+  }),
+  setExtraData: action((state, payload) => {
+    state.extraData = payload;
+  }),
 };
 
 const checkBech32 = (bech32: string, prefix: string): boolean => {
@@ -245,21 +275,16 @@ const checkBech32 = (bech32: string, prefix: string): boolean => {
 export const translatePaymentFailureReason = (reason: lnrpc.PaymentFailureReason) => {
   if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_NONE) {
     throw new Error("Payment failed");
-  }
-  else if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_TIMEOUT) {
+  } else if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_TIMEOUT) {
     return "Payment timed out";
-  }
-  else if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_NO_ROUTE) {
+  } else if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_NO_ROUTE) {
     return "Could not find route to recipient";
-  }
-  else if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_ERROR) {
+  } else if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_ERROR) {
     return "The payment failed to proceed";
-  }
-  else if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_INCORRECT_PAYMENT_DETAILS) {
+  } else if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_INCORRECT_PAYMENT_DETAILS) {
     return "Incorrect payment details provided";
-  }
-  else if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_INSUFFICIENT_BALANCE) {
+  } else if (reason === lnrpc.PaymentFailureReason.FAILURE_REASON_INSUFFICIENT_BALANCE) {
     return "Insufficient balance";
   }
   return "Unknown error";
-}
+};

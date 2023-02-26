@@ -14,22 +14,20 @@ export function dunderPrompt(
   return new Promise((resolve, reject) => {
     const approxFeeFormatted = formatBitcoin(Long.fromValue(approxFeeSat), bitcoinUnit);
     const approxFeeFiat = convertBitcoinToFiat(approxFeeSat, currentFiatRate, fiatUnit);
-    const message =
-`In order to accept a payment for this invoice, a channel on the Lightning Network has to be opened.
+    const message = `In order to accept a payment for this invoice, a channel on the Lightning Network has to be opened.
 
 This requires a one-time fee of approximately ${approxFeeFormatted} (${approxFeeFiat}).`;
-    Alert.alert(
-      "Channel opening",
-      message,
-      [{
+    Alert.alert("Channel opening", message, [
+      {
         text: "Cancel",
         style: "cancel",
-        onPress: () => resolve(false)
-      }, {
+        onPress: () => resolve(false),
+      },
+      {
         text: "Proceed",
         style: "default",
-        onPress: async () => resolve(true)
-      }]
-    );
-  })
+        onPress: async () => resolve(true),
+      },
+    ]);
+  });
 }

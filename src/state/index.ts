@@ -29,8 +29,28 @@ import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IContactsModel, contacts } from "./Contacts";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
-import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion, getAppBuild, setAppBuild, getRescanWallet, setRescanWallet } from "../storage/app";
-import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
+import {
+  clearApp,
+  setupApp,
+  getWalletCreated,
+  StorageItem,
+  getItem as getItemAsyncStorage,
+  getItemObject as getItemObjectAsyncStorage,
+  setItemObject,
+  setItem,
+  getAppVersion,
+  setAppVersion,
+  getAppBuild,
+  setAppBuild,
+  getRescanWallet,
+  setRescanWallet,
+} from "../storage/app";
+import {
+  openDatabase,
+  setupInitialSchema,
+  deleteDatabase,
+  dropTables,
+} from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
 import { setWalletPassword, getItem, getWalletPassword } from "../storage/keystore";
@@ -50,10 +70,10 @@ type OnboardingState = "SEND_ONCHAIN" | "DO_BACKUP" | "DONE";
 
 export interface ICreateWalletPayload {
   restore?: {
-    restoreWallet: boolean,
+    restoreWallet: boolean;
     channelsBackup?: string;
     aezeedPassphrase?: string;
-  }
+  };
 }
 
 export interface IStoreModel {
@@ -138,14 +158,14 @@ export const model: IStoreModel = {
 
     const { initialize, checkStatus, startLnd } = injections.lndMobile.index;
     const db = await actions.openDb();
-    if (!await getItemObjectAsyncStorage(StorageItem.app)) {
+    if (!(await getItemObjectAsyncStorage(StorageItem.app))) {
       log.i("Initializing app for the first time");
       if (PLATFORM === "ios" || PLATFORM === "macos") {
         log.i("Creating Application Support and lnd directories");
         await injections.lndMobile.index.createIOSApplicationSupportAndLndDirectories();
       }
       if (PLATFORM === "ios") {
-        log.i("Excluding lnd directory from backup")
+        log.i("Excluding lnd directory from backup");
         await injections.lndMobile.index.excludeLndICloudBackup();
       }
       await setupApp();
@@ -158,15 +178,13 @@ export const model: IStoreModel = {
         //   dispatch.settings.changeBitcoindPubRawBlock,
         //   dispatch.settings.changeBitcoindPubRawTx,
         // );
-        await setupRegtest2(
-          dispatch.settings.changeNeutrinoPeers,
-        );
+        await setupRegtest2(dispatch.settings.changeNeutrinoPeers);
       }
       log.i("Initializing db for the first time");
       try {
         await setupInitialSchema(db);
-      } catch (error:any) {
-        throw new Error("Error creating DB: " + error.message)
+      } catch (error: any) {
+        throw new Error("Error creating DB: " + error.message);
       }
       log.i("Writing lnd.conf");
       await actions.writeConfig();
@@ -183,8 +201,8 @@ export const model: IStoreModel = {
           log.i("Moving lnd from Documents to Application Support");
           await injections.lndMobile.index.createIOSApplicationSupportAndLndDirectories();
           await injections.lndMobile.index.TEMP_moveLndToApplicationSupport();
-          log.i("Excluding lnd directory from backup")
-          await injections.lndMobile.index.excludeLndICloudBackup()
+          log.i("Excluding lnd directory from backup");
+          await injections.lndMobile.index.excludeLndICloudBackup();
         }
       }
     }
@@ -192,12 +210,13 @@ export const model: IStoreModel = {
     actions.setAppBuild(await getAppBuild());
     await actions.checkAppVersionMigration();
 
-
-    actions.setOnboardingState((await getItemAsyncStorage(StorageItem.onboardingState) as OnboardingState) ?? "DO_BACKUP");
+    actions.setOnboardingState(
+      ((await getItemAsyncStorage(StorageItem.onboardingState)) as OnboardingState) ?? "DO_BACKUP",
+    );
     actions.setWalletCreated(await getWalletCreated());
 
     try {
-      let torEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled) ?? false;
+      let torEnabled = (await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled)) ?? false;
       actions.setTorEnabled(torEnabled);
       let socksPort = 0;
       if (torEnabled) {
@@ -220,9 +239,11 @@ export const model: IStoreModel = {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
 
-          const buttons: AlertButton[] = [{
-            text: continueText,
-          }];
+          const buttons: AlertButton[] = [
+            {
+              text: continueText,
+            },
+          ];
           if (PLATFORM === "android") {
             buttons.unshift({
               text: restartText,
@@ -252,21 +273,22 @@ export const model: IStoreModel = {
 
       const status = await checkStatus();
       log.d("status", [status]);
-      if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
+      if (
+        (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !==
+        ELndMobileStatusCodes.STATUS_PROCESS_STARTED
+      ) {
         log.i("Starting lnd");
         try {
-          let args = "";//--skip-chain-sync ";
+          let args = ""; //--skip-chain-sync ";
           if (socksPort > 0) {
             args = "--tor.socks=127.0.0.1:" + socksPort + " ";
           }
           if (await getRescanWallet()) {
-            args +=  "--reset-wallet-transactions ";
+            args += "--reset-wallet-transactions ";
             await setRescanWallet(false);
           }
 
-          log.d("startLnd", [
-            await startLnd(torEnabled, args)
-          ]);
+          log.d("startLnd", [await startLnd(torEnabled, args)]);
         } catch (e) {
           if (e.message.includes("lnd already started")) {
             toast("lnd already started", 3000, "warning");
@@ -275,8 +297,7 @@ export const model: IStoreModel = {
           }
         }
       }
-    }
-    catch (e) {
+    } catch (e) {
       log.e("Exception when trying to initialize LndMobile and start lnd", [e]);
       throw e;
     }
@@ -315,17 +336,24 @@ export const model: IStoreModel = {
         } else if (state.state === lnrpc.WalletState.LOCKED) {
           log.d("Got lnrpc.WalletState.LOCKED");
           log.d("Wallet locked, unlocking wallet");
-          debugShowStartupInfo && toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          debugShowStartupInfo &&
+            toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
           await dispatch.unlockWallet();
         } else if (state.state === lnrpc.WalletState.UNLOCKED) {
           log.d("Got lnrpc.WalletState.UNLOCKED");
-          debugShowStartupInfo && toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          debugShowStartupInfo &&
+            toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
         } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
-          debugShowStartupInfo && toast("RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          debugShowStartupInfo &&
+            toast(
+              "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
+              1000,
+            );
           await dispatch.lightning.initialize({ start });
           log.d("Got lnrpc.WalletState.RPC_ACTIVE");
         } else if (state.state === lnrpc.WalletState.SERVER_ACTIVE) {
-          debugShowStartupInfo && toast("Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          debugShowStartupInfo &&
+            toast("Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
           log.d("Got lnrpc.WalletState.SERVER_ACTIVE");
 
           // We'll enter this branch of code if the react-native frontend desyncs with lnd.
@@ -334,9 +362,9 @@ export const model: IStoreModel = {
             await dispatch.lightning.initialize({ start });
           }
         } else {
-          log.d("Got unknown lnrpc.WalletState", [state.state])
+          log.d("Got unknown lnrpc.WalletState", [state.state]);
         }
-      } catch (error:any) {
+      } catch (error: any) {
         toast(error.message, undefined, "danger");
       }
     });
@@ -354,7 +382,7 @@ export const model: IStoreModel = {
     }
 
     const appVersion = await getAppVersion();
-    if (appVersion < (appMigration.length - 1)) {
+    if (appVersion < appMigration.length - 1) {
       log.i(`Beginning App Version migration from ${appVersion} to ${appMigration.length - 1}`);
       for (let i = appVersion + 1; i < appMigration.length; i++) {
         log.i(`Migrating to ${i}`);
@@ -405,17 +433,21 @@ export const model: IStoreModel = {
   writeConfig: thunk(async (_, _2, { injections, getState }) => {
     const writeConfig = injections.lndMobile.index.writeConfig;
 
-    const lndChainBackend = await getItemAsyncStorage(StorageItem.lndChainBackend) as LndChainBackend;
+    const lndChainBackend = (await getItemAsyncStorage(
+      StorageItem.lndChainBackend,
+    )) as LndChainBackend;
     const node = Chain;
     const neutrinoPeers = await getItemObjectAsyncStorage<string[]>(StorageItem.neutrinoPeers);
-    const neutrinoFeeUrl = await getItemAsyncStorage(StorageItem.neutrinoFeeUrl) || null;
-    const bitcoindRpcHost = await getItemAsyncStorage(StorageItem.bitcoindRpcHost) || null;
-    const bitcoindRpcUser = await getItemAsyncStorage(StorageItem.bitcoindRpcUser) || null;
-    const bitcoindRpcPass = await getItemAsyncStorage(StorageItem.bitcoindRpcPass) || null;
-    const bitcoindPubRawBlock = await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock) || null;
-    const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
-    const lndNoGraphCache = await getItemAsyncStorage(StorageItem.lndNoGraphCache) || "0";
-    const strictGraphPruningEnabled = await getItemAsyncStorage(StorageItem.strictGraphPruningEnabled) || "0";
+    const neutrinoFeeUrl = (await getItemAsyncStorage(StorageItem.neutrinoFeeUrl)) || null;
+    const bitcoindRpcHost = (await getItemAsyncStorage(StorageItem.bitcoindRpcHost)) || null;
+    const bitcoindRpcUser = (await getItemAsyncStorage(StorageItem.bitcoindRpcUser)) || null;
+    const bitcoindRpcPass = (await getItemAsyncStorage(StorageItem.bitcoindRpcPass)) || null;
+    const bitcoindPubRawBlock =
+      (await getItemAsyncStorage(StorageItem.bitcoindPubRawBlock)) || null;
+    const bitcoindPubRawTx = (await getItemAsyncStorage(StorageItem.bitcoindPubRawTx)) || null;
+    const lndNoGraphCache = (await getItemAsyncStorage(StorageItem.lndNoGraphCache)) || "0";
+    const strictGraphPruningEnabled =
+      (await getItemAsyncStorage(StorageItem.strictGraphPruningEnabled)) || "0";
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
 
@@ -442,22 +474,30 @@ bitcoin.${node}=1
 bitcoin.node=${nodeBackend}
 bitcoin.defaultchanconfs=1
 
-${lndChainBackend === "neutrino" ? `
+${
+  lndChainBackend === "neutrino"
+    ? `
 [Neutrino]
 ${neutrinoPeers[0] !== undefined ? `neutrino.connect=${neutrinoPeers[0]}` : ""}
 neutrino.feeurl=${neutrinoFeeUrl}
 neutrino.broadcasttimeout=11s
 neutrino.persistfilters=true
-` : ""}
+`
+    : ""
+}
 
-${lndChainBackend === "bitcoindWithZmq" ? `
+${
+  lndChainBackend === "bitcoindWithZmq"
+    ? `
 [Bitcoind]
 bitcoind.rpchost=${bitcoindRpcHost}
 bitcoind.rpcuser=${bitcoindRpcUser}
 bitcoind.rpcpass=${bitcoindRpcPass}
 bitcoind.zmqpubrawblock=${bitcoindPubRawBlock}
 bitcoind.zmqpubrawtx=${bitcoindPubRawTx}
-` : ""}
+`
+    : ""
+}
 
 [autopilot]
 autopilot.active=0
@@ -497,9 +537,16 @@ protocol.option-scid-alias=true
     await setItem(StorageItem.walletPassword, randomBase64);
     await setWalletPassword(randomBase64);
 
-    const wallet = payload && payload.restore && payload.restore
-      ? await initWallet(seed, randomBase64, 100, payload.restore.channelsBackup, payload.restore.aezeedPassphrase)
-      : await initWallet(seed, randomBase64)
+    const wallet =
+      payload && payload.restore && payload.restore
+        ? await initWallet(
+            seed,
+            randomBase64,
+            100,
+            payload.restore.channelsBackup,
+            payload.restore.aezeedPassphrase,
+          )
+        : await initWallet(seed, randomBase64);
 
     await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);
@@ -513,15 +560,33 @@ protocol.option-scid-alias=true
     actions.setOnboardingState(payload);
   }),
 
-  setWalletCreated: action((state, payload) => { state.walletCreated = payload; }),
-  setHoldOnboarding: action((state, payload) => { state.holdOnboarding = payload; }),
-  setDb: action((state, db) => { state.db = db; }),
-  setAppReady: action((state, value) => { state.appReady = value; }),
-  setAppVersion: action((state, value) => { state.appVersion = value; }),
-  setAppBuild: action((state, value) => { state.appBuild = value; }),
-  setOnboardingState: action((state, value) => { state.onboardingState = value; }),
-  setTorEnabled: action((state, value) => { state.torEnabled = value; }),
-  setTorLoading: action((state, value) => { state.torLoading = value; }),
+  setWalletCreated: action((state, payload) => {
+    state.walletCreated = payload;
+  }),
+  setHoldOnboarding: action((state, payload) => {
+    state.holdOnboarding = payload;
+  }),
+  setDb: action((state, db) => {
+    state.db = db;
+  }),
+  setAppReady: action((state, value) => {
+    state.appReady = value;
+  }),
+  setAppVersion: action((state, value) => {
+    state.appVersion = value;
+  }),
+  setAppBuild: action((state, value) => {
+    state.appBuild = value;
+  }),
+  setOnboardingState: action((state, value) => {
+    state.onboardingState = value;
+  }),
+  setTorEnabled: action((state, value) => {
+    state.torEnabled = value;
+  }),
+  setTorLoading: action((state, value) => {
+    state.torLoading = value;
+  }),
 
   appReady: false,
   walletCreated: false,
@@ -563,7 +628,7 @@ function setupRegtest(
   bitcoindPubRawTx: string,
   changeBitcoindRpcHost: any,
   changeBitcoindPubRawBlock: any,
-  changeBitcoindPubRawTx: any
+  changeBitcoindPubRawTx: any,
 ) {
   return new Promise((resolve, reject) => {
     Alert.prompt(
@@ -589,7 +654,7 @@ function setupRegtest(
                 if (text) {
                   await changeBitcoindPubRawTx(text);
                 }
-                resolve(void(0));
+                resolve(void 0);
               },
               "plain-text",
               bitcoindPubRawTx ?? "",
@@ -605,9 +670,7 @@ function setupRegtest(
   });
 }
 
-function setupRegtest2(
-  changeNeutrinoPeers: any
-) {
+function setupRegtest2(changeNeutrinoPeers: any) {
   return new Promise((resolve, reject) => {
     Alert.prompt(
       "Set neutrino peer",
@@ -615,10 +678,10 @@ function setupRegtest2(
       async (text) => {
         if (text) {
           await changeNeutrinoPeers([text]);
-          resolve(void(0))
+          resolve(void 0);
         }
       },
-      "plain-text"
+      "plain-text",
     );
   });
 }

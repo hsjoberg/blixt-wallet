@@ -10,11 +10,10 @@ export interface IContentProps {
 }
 export default function BlixtContent({ children, style, centered }: IContentProps) {
   return (
-    <ScrollView alwaysBounceVertical={false} contentContainerStyle={[
-      { padding: 14 },
-      centered ? centeredStyle.style : {},
-      style,
-    ]}>
+    <ScrollView
+      alwaysBounceVertical={false}
+      contentContainerStyle={[{ padding: 14 }, centered ? centeredStyle.style : {}, style]}
+    >
       {children}
     </ScrollView>
   );
@@ -27,4 +26,4 @@ const centeredStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-})
+});

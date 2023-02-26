@@ -13,10 +13,17 @@ export interface ITransactionDetailsProps {
   useModalComponent?: boolean;
   goBackByClickingOutside?: boolean;
   hideCross?: boolean;
-  noMargin?: boolean,
+  noMargin?: boolean;
   style?: ViewStyle;
 }
-export default function BlurModal({ children, useModalComponent, goBackByClickingOutside, hideCross, noMargin, style: userStyle }: ITransactionDetailsProps) {
+export default function BlurModal({
+  children,
+  useModalComponent,
+  goBackByClickingOutside,
+  hideCross,
+  noMargin,
+  style: userStyle,
+}: ITransactionDetailsProps) {
   const navigation = useNavigation();
   const useModal = PLATFORM === "web" || PLATFORM === "macos" ? false : useModalComponent ?? true;
   goBackByClickingOutside = goBackByClickingOutside ?? true;
@@ -29,49 +36,53 @@ export default function BlurModal({ children, useModalComponent, goBackByClickin
   };
 
   return (
-    <RealTimeBlur
-      overlayColor="#00000000"
-      downsampleFactor={1.2}
-      blurRadius={15}
-    >
-      {!useModal
-        ? <View style={style.modalContainer}>
-            <Pressable
-              style={{
-                position: "absolute",
-                flex: 1,
-                width: "100%",
-                height: PLATFORM === "web" ? "100vh" : "100%",
-              }}
-              onPress={goBack}
+    <RealTimeBlur overlayColor="#00000000" downsampleFactor={1.2} blurRadius={15}>
+      {!useModal ? (
+        <View style={style.modalContainer}>
+          <Pressable
+            style={{
+              position: "absolute",
+              flex: 1,
+              width: "100%",
+              height: PLATFORM === "web" ? "100vh" : "100%",
+            }}
+            onPress={goBack}
+          />
+          <View style={[style.modal, userStyle]}>{children}</View>
+          {goBackByClickingOutside && !hideCross && (
+            <Icon
+              onPress={() => navigation.goBack()}
+              type="Entypo"
+              name="cross"
+              style={style.cross}
             />
-            <View style={[style.modal, userStyle]}>
-              {children}
-            </View>
-            {goBackByClickingOutside && !hideCross && <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />}
-          </View>
-        : <>
-            <Modal
-              onBackdropPress={goBack}
-              onRequestClose={goBack}
-              visible={true}
-              style={userStyle}
-            >
-              {children}
-            </Modal>
-            {(goBackByClickingOutside && !hideCross) && <Icon onPress={() => navigation.goBack()} type="Entypo" name="cross" style={style.cross} />}
-          </>
-      }
+          )}
+        </View>
+      ) : (
+        <>
+          <Modal onBackdropPress={goBack} onRequestClose={goBack} visible={true} style={userStyle}>
+            {children}
+          </Modal>
+          {goBackByClickingOutside && !hideCross && (
+            <Icon
+              onPress={() => navigation.goBack()}
+              type="Entypo"
+              name="cross"
+              style={style.cross}
+            />
+          )}
+        </>
+      )}
     </RealTimeBlur>
   );
-};
+}
 
 const style = StyleSheet.create({
   modalContainer: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   modal: {
     marginHorizontal: 6,
@@ -82,5 +93,5 @@ const style = StyleSheet.create({
     position: "absolute",
     top: getStatusBarHeight() + (PLATFORM === "macos" || PLATFORM === "web" ? 10 : 0),
     right: 10,
-  }
+  },
 });

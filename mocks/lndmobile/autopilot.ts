@@ -23,10 +23,12 @@ export const modifyStatus = async (enable: boolean): Promise<autopilotrpc.Modify
  */
 export const queryScores = async (): Promise<autopilotrpc.QueryScoresResponse> => {
   const response = autopilotrpc.QueryScoresResponse.create({
-    results: [{
-      heuristic: null,
-      scores: {},
-    }],
+    results: [
+      {
+        heuristic: null,
+        scores: {},
+      },
+    ],
   });
   return response;
 };
@@ -34,7 +36,9 @@ export const queryScores = async (): Promise<autopilotrpc.QueryScoresResponse> =
 /**
  * @throws
  */
-export const setScores = async (scores: {[k: string]: number}): Promise<autopilotrpc.SetScoresResponse> => {
+export const setScores = async (scores: {
+  [k: string]: number;
+}): Promise<autopilotrpc.SetScoresResponse> => {
   const response = autopilotrpc.SetScoresResponse.create({});
   return response;
 };

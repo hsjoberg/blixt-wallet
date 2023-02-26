@@ -1,12 +1,16 @@
 import React from "react";
-import { CardStyleInterpolators, createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+  StackNavigationOptions,
+} from "@react-navigation/stack";
 
 import Settings from "./Settings";
 import SetPincode from "./SetPincode";
 import RemovePincodeAuth from "./RemovePincodeAuth";
 import ChangeFingerprintSettingsAuth from "./ChangeFingerprintSettingsAuth";
 import LightningNodeInfo from "./LightningNodeInfo";
-import LightningNetworkInfo from './LightningNetworkInfo';
+import LightningNetworkInfo from "./LightningNetworkInfo";
 import About from "./About";
 import TorShowOnionAddress from "./TorShowOnionAddress";
 import LndMobileHelpCenter from "./LndMobileHelpCenter";
@@ -34,13 +38,13 @@ export type SettingsStackParamList = {
   ChangeBitcoinUnit: ISelectListNavigationProps<string>;
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
   ChangeLanguage: ISelectListNavigationProps<string>;
-  ChangeOnchainExplorer: ISelectListNavigationProps<(keyof typeof OnchainExplorer) | string>;
+  ChangeOnchainExplorer: ISelectListNavigationProps<keyof typeof OnchainExplorer | string>;
   LightningPeers: undefined;
   ConnectToLighningPeer: undefined;
   ChannelProvider: ISelectListNavigationProps<string>;
   LndLog: undefined;
   DunderDoctor: undefined;
-}
+};
 
 export default function SettingsIndex() {
   const screenOptions: StackNavigationOptions = {
@@ -53,7 +57,10 @@ export default function SettingsIndex() {
       <Stack.Screen name="SettingsMain" component={Settings} />
       <Stack.Screen name="RemovePincodeAuth" component={RemovePincodeAuth} />
       <Stack.Screen name="SetPincode" component={SetPincode} />
-      <Stack.Screen name="ChangeFingerprintSettingsAuth" component={ChangeFingerprintSettingsAuth} />
+      <Stack.Screen
+        name="ChangeFingerprintSettingsAuth"
+        component={ChangeFingerprintSettingsAuth}
+      />
       <Stack.Screen name="LightningNetworkInfo" component={LightningNetworkInfo} />
       <Stack.Screen name="LightningNodeInfo" component={LightningNodeInfo} />
       <Stack.Screen name="About" component={About} />
@@ -64,10 +71,14 @@ export default function SettingsIndex() {
       <Stack.Screen name="ChangeLanguage" component={SelectList} />
       <Stack.Screen name="ChangeOnchainExplorer" component={SelectList} />
       <Stack.Screen name="LightningPeers" component={LightningPeers} />
-      <Stack.Screen name="ConnectToLightningPeer" component={ConnectToLightningPeer} options={{
-        animationEnabled: true,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }} />
+      <Stack.Screen
+        name="ConnectToLightningPeer"
+        component={ConnectToLightningPeer}
+        options={{
+          animationEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
       <Stack.Screen name="ChannelProvider" component={SelectList} />
       <Stack.Screen name="LndLog" component={LndLog} />
       <Stack.Screen name="DunderDoctor" component={DunderDoctor} />

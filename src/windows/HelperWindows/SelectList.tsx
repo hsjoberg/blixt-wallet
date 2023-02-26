@@ -13,21 +13,21 @@ import { namespaces } from "../../i18n/i18n.constants";
 export interface ISelectListNavigationProps<T> {
   title: string;
   onPick: (address: T) => void;
-  data: { title: string, value: T }[];
+  data: { title: string; value: T }[];
   searchEnabled?: boolean;
-  description?: string
+  description?: string;
 }
 
 type IFakeStack<T> = {
   SelectList: ISelectListNavigationProps<T>;
-}
+};
 
 export interface ISelectListProps<T> {
   navigation: StackNavigationProp<IFakeStack<T>, "SelectList">;
   route: RouteProp<IFakeStack<T>, "SelectList">;
 }
 
-export default function<T = string>({ navigation, route }: ISelectListProps<T>) {
+export default function <T = string>({ navigation, route }: ISelectListProps<T>) {
   const t = useTranslation(namespaces.common).t;
   const title = route?.params?.title ?? "";
   const onPick = route?.params?.onPick ?? (() => {});
@@ -48,9 +48,9 @@ export default function<T = string>({ navigation, route }: ISelectListProps<T>) 
     <Container>
       {/* TODO(hsjoberg): Replace with react-navigation search bar when possible */}
       {/* https://github.com/react-navigation/search-layout/pull/20 */}
-      {searchEnabled &&
+      {searchEnabled && (
         <Header iosBarStyle="light-content" searchBar rounded style={style.searchHeader}>
-          <Item rounded style={{ height:35 }}>
+          <Item rounded style={{ height: 35 }}>
             <Input
               style={{ marginLeft: 8, marginTop: -2.5, borderRadius: 8, color: blixtTheme.dark }}
               placeholder={t("generic.search")}
@@ -60,10 +60,12 @@ export default function<T = string>({ navigation, route }: ISelectListProps<T>) 
             <Icon name="ios-search" />
           </Item>
         </Header>
-      }
+      )}
       <FlatList
         alwaysBounceVertical={false}
-        ListHeaderComponent={description ? <Text style={style.description}>{description}</Text> : undefined}
+        ListHeaderComponent={
+          description ? <Text style={style.description}>{description}</Text> : undefined
+        }
         contentContainerStyle={{ paddingTop: 8, paddingHorizontal: 14, paddingBottom: 65 }}
         initialNumToRender={20}
         data={data.filter(({ title, value }) => {
@@ -73,17 +75,21 @@ export default function<T = string>({ navigation, route }: ISelectListProps<T>) 
           );
         })}
         renderItem={({ item }) => (
-          <ListItem style={{}} key={item.value} onPress={() => {
-            onPick(item.value);
-            navigation.pop();
-          }}>
+          <ListItem
+            style={{}}
+            key={item.value}
+            onPress={() => {
+              onPick(item.value);
+              navigation.pop();
+            }}
+          >
             <Text>{item.title}</Text>
           </ListItem>
         )}
         keyExtractor={(item) => item.value}
       />
     </Container>
-  )
+  );
 }
 
 const style = StyleSheet.create({
@@ -98,5 +104,5 @@ const style = StyleSheet.create({
     borderBottomWidth: 0,
     marginHorizontal: 8,
     elevation: 0,
-  }
+  },
 });

@@ -14,11 +14,9 @@ export default function RealTimeBlur(props: IRealTimeBlurProps) {
       <RCTRealTimeBlur
         {...props}
         children={null}
-        style={[{ position:"absolute", width: "100%", height: "100%" }, props.style]}
+        style={[{ position: "absolute", width: "100%", height: "100%" }, props.style]}
       />
-      <View style={{ flex: 1 }}>
-        {props.children}
-      </View>
+      <View style={{ flex: 1 }}>{props.children}</View>
     </>
-  )
+  );
 }

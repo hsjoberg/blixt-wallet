@@ -47,9 +47,7 @@ export default function CameraFullscreen({ navigation, route }: ICameraFullscree
             width={smallScreen ? 270 : 275}
             height={smallScreen ? 270 : 275}
           />
-          {PLATFORM !== "android" &&
-            <GoBackIcon style={style.goBack} />
-          }
+          {PLATFORM !== "android" && <GoBackIcon style={style.goBack} />}
         </>
       </Camera>
     </>

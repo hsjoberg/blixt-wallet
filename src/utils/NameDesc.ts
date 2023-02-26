@@ -11,7 +11,7 @@ export const setupDescription = (description: string, name: string | null) => {
     d = name + ":  " + (description || "No invoice description");
   }
   return d;
-}
+};
 
 export const extractDescription = (data: string): INameDesc => {
   const splitted = data.split(NAMEDESC_SEPARATOR);
@@ -32,4 +32,4 @@ export const extractDescription = (data: string): INameDesc => {
     name: splitted[0],
     description: data.slice(splitted[0].length + NAMEDESC_SEPARATOR.length),
   };
-}
+};

@@ -73,7 +73,7 @@ export default function Contact({ contact }: IContactProps) {
     }
     return () => {
       listener?.remove();
-    }
+    };
   }, [currentBalance !== undefined]);
 
   const toggle = async () => {
@@ -89,11 +89,10 @@ export default function Contact({ contact }: IContactProps) {
     try {
       if (contact.lnUrlWithdraw) {
         const balanceCheckResponse = await fetch(contact.lnUrlWithdraw);
-        const lnurlObject = await balanceCheckResponse.json() as ILNUrlWithdrawRequest;
-        console.log(lnurlObject, contact.lnUrlWithdraw)
+        const lnurlObject = (await balanceCheckResponse.json()) as ILNUrlWithdrawRequest;
+        console.log(lnurlObject, contact.lnUrlWithdraw);
         const currBalance = lnurlObject.currentBalance ?? lnurlObject.maxWithdrawable;
         if (typeof currBalance === "number") {
-
           setCurrentBalance(currBalance);
 
           if (lnurlObject.balanceCheck !== contact.lnUrlWithdraw) {
@@ -106,7 +105,7 @@ export default function Contact({ contact }: IContactProps) {
       } else {
         throw new Error(t("contact.syncBalance.error"));
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast(error.message, 0, "danger", "OK");
     }
   };
@@ -140,7 +139,7 @@ export default function Contact({ contact }: IContactProps) {
                 if (contact.lnUrlWithdraw) {
                   await syncBalance();
                 }
-              }
+              },
             },
           });
           setTimeout(() => setLoadingPay(false), 1);
@@ -148,16 +147,16 @@ export default function Contact({ contact }: IContactProps) {
           if (result === "error") {
             throw new Error(t("contact.send.couldNotPay"));
           }
-          throw new Error(`${t("contact.send.invalidResponse", { response: result })}`)
+          throw new Error(`${t("contact.send.invalidResponse", { response: result })}`);
         }
       } else {
         throw new Error(t("contact.send.invalidOperation"));
       }
-    } catch (error:any) {
+    } catch (error: any) {
       setLoadingPay(false);
       toast(error.message, 0, "danger", "OK");
     }
-  }
+  };
 
   const onPressWithdraw = async () => {
     try {
@@ -178,24 +177,27 @@ export default function Contact({ contact }: IContactProps) {
       } else {
         throw new Error(t("contact.withdraw.invalidOperation"));
       }
-    } catch (error:any) {
+    } catch (error: any) {
       setLoadingWithdraw(false);
       toast(error.message, 0, "danger", "OK");
     }
-  }
+  };
 
   const promptDeleteContact = async () => {
     Alert.alert(
       t("contact.deleteContact.title"),
       `${t("contact.deleteContact.msg", { contact: contact.lightningAddress ?? contact.domain })}`,
-      [{
-        text: t("buttons.no",{ns:namespaces.common}),
-      }, {
-        text: t("buttons.yes",{ns:namespaces.common}),
-        onPress: async () => {
-          await deleteContact(contact.id!);
-        }
-      }],
+      [
+        {
+          text: t("buttons.no", { ns: namespaces.common }),
+        },
+        {
+          text: t("buttons.yes", { ns: namespaces.common }),
+          onPress: async () => {
+            await deleteContact(contact.id!);
+          },
+        },
+      ],
     );
   };
 
@@ -205,27 +207,38 @@ export default function Contact({ contact }: IContactProps) {
         <CardItem style={style.cardItem} activeOpacity={1} button>
           <Pressable style={style.cardPressable} onPress={toggle}>
             <View style={style.cardSimple}>
-              <Icon style={style.cardIcon} type="MaterialCommunityIcons" name={contact.type === "SERVICE" ? "web" : "at"} />
+              <Icon
+                style={style.cardIcon}
+                type="MaterialCommunityIcons"
+                name={contact.type === "SERVICE" ? "web" : "at"}
+              />
               <Text style={style.cardTitle} numberOfLines={1} lineBreakMode="middle">
                 {contact.type === "SERVICE" && (
                   <>
-                    {contact.lnUrlPay && !contact.lnUrlWithdraw &&
-                      <>{t("contact.list.pay")} <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink></>
-                    }
-                    {!contact.lnUrlPay && contact.lnUrlWithdraw &&
-                      <>{t("contact.list.account")} <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink></>
-                    }
-                    {contact.lnUrlPay && contact.lnUrlWithdraw &&
-                      <>{t("contact.list.account")} <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink></>
-                    }
+                    {contact.lnUrlPay && !contact.lnUrlWithdraw && (
+                      <>
+                        {t("contact.list.pay")}{" "}
+                        <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink>
+                      </>
+                    )}
+                    {!contact.lnUrlPay && contact.lnUrlWithdraw && (
+                      <>
+                        {t("contact.list.account")}{" "}
+                        <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink>
+                      </>
+                    )}
+                    {contact.lnUrlPay && contact.lnUrlWithdraw && (
+                      <>
+                        {t("contact.list.account")}{" "}
+                        <TextLink url={`https://${contact.domain}`}>{contact.domain}</TextLink>
+                      </>
+                    )}
                   </>
                 )}
-                {contact.type === "PERSON" &&
-                  <>{contact.lightningAddress}</>
-                }
+                {contact.type === "PERSON" && <>{contact.lightningAddress}</>}
               </Text>
               <View style={style.expandContainer}>
-                <Icon type="AntDesign" name={expand ? "minus" : "plus"}/>
+                <Icon type="AntDesign" name={expand ? "minus" : "plus"} />
               </View>
             </View>
           </Pressable>
@@ -233,46 +246,75 @@ export default function Contact({ contact }: IContactProps) {
             <View style={style.cardExpansion}>
               <View style={style.cardExpansionInfo}>
                 {contact.note.length > 0 && <Text>{contact.note}</Text>}
-                {contact.lnUrlWithdraw &&
+                {contact.lnUrlWithdraw && (
                   <Text>
                     {t("contact.syncBalance.title")}:{" "}
                     {currentBalance && (
                       <>
-                        {formatBitcoin(Long.fromValue(currentBalance).div(1000), bitcoinUnit)}{" "}
-                        ({valueFiat(Long.fromValue(currentBalance).div(1000), fiatRate).toFixed(2) + " " + fiatUnit})
+                        {formatBitcoin(Long.fromValue(currentBalance).div(1000), bitcoinUnit)} (
+                        {valueFiat(Long.fromValue(currentBalance).div(1000), fiatRate).toFixed(2) +
+                          " " +
+                          fiatUnit}
+                        )
                       </>
                     )}
                     {currentBalance === undefined && <>...</>}
                   </Text>
-                }
+                )}
               </View>
               <View style={style.actionButtons}>
-                {(contact.lnUrlWithdraw && currentBalance! > 0) &&
-                  <Button onPress={onPressWithdraw} style={[style.actionButton, { width: widthdrawButtonWidth }]} small disabled={loadingWithdraw} onLayout={(event) => {
-                    if (!sendButtonWidth) {
-                      setWithdrawButtonWidth(event.nativeEvent.layout.width);
-                    }
-                  }}>
-                    {!loadingWithdraw && <Text style={style.actionButtonText}>{t("contact.withdraw.title")}</Text>}
+                {contact.lnUrlWithdraw && currentBalance! > 0 && (
+                  <Button
+                    onPress={onPressWithdraw}
+                    style={[style.actionButton, { width: widthdrawButtonWidth }]}
+                    small
+                    disabled={loadingWithdraw}
+                    onLayout={(event) => {
+                      if (!sendButtonWidth) {
+                        setWithdrawButtonWidth(event.nativeEvent.layout.width);
+                      }
+                    }}
+                  >
+                    {!loadingWithdraw && (
+                      <Text style={style.actionButtonText}>{t("contact.withdraw.title")}</Text>
+                    )}
                     {loadingWithdraw && <ButtonSpinner />}
                   </Button>
-                }
-                {(contact.lnUrlPay || contact.lightningAddress) &&
-                <>
-                  <Button onPress={onPressSend} style={[style.actionButton, { width: sendButtonWidth }]} small disabled={loadingPay} onLayout={(event) => {
-                    if (!sendButtonWidth) {
-                      setSendButtonWidth(event.nativeEvent.layout.width);
-                    }
-                  }}>
-                    {!loadingPay && <Text style={style.actionButtonText}>{t("contact.send.title")}</Text>}
-                    {loadingPay && <ButtonSpinner />}
-                  </Button>
-                </>
-                }
+                )}
+                {(contact.lnUrlPay || contact.lightningAddress) && (
+                  <>
+                    <Button
+                      onPress={onPressSend}
+                      style={[style.actionButton, { width: sendButtonWidth }]}
+                      small
+                      disabled={loadingPay}
+                      onLayout={(event) => {
+                        if (!sendButtonWidth) {
+                          setSendButtonWidth(event.nativeEvent.layout.width);
+                        }
+                      }}
+                    >
+                      {!loadingPay && (
+                        <Text style={style.actionButtonText}>{t("contact.send.title")}</Text>
+                      )}
+                      {loadingPay && <ButtonSpinner />}
+                    </Button>
+                  </>
+                )}
 
                 <View style={style.actionButtonsAdmin}>
-                  <Button onPress={promptDeleteContact} small style={[style.actionButton]} icon danger>
-                    <Icon type="AntDesign" name="delete" style={[style.actionButton, {fontSize: 10, margin: 0, padding: 0 }]}/>
+                  <Button
+                    onPress={promptDeleteContact}
+                    small
+                    style={[style.actionButton]}
+                    icon
+                    danger
+                  >
+                    <Icon
+                      type="AntDesign"
+                      name="delete"
+                      style={[style.actionButton, { fontSize: 10, margin: 0, padding: 0 }]}
+                    />
                   </Button>
                   {/* <Button small style={[style.actionButton, {  }]} icon warning>
                     <Icon type="AntDesign" name="edit" style={[style.actionButton, {fontSize: 14 }]} />
@@ -287,21 +329,20 @@ export default function Contact({ contact }: IContactProps) {
   );
 }
 
-
 const style = StyleSheet.create({
   container: {
     padding: 12,
     paddingBottom: 25,
   },
   searchHeader: {
-    backgroundColor: Chain === "mainnet" ? blixtTheme.primary : Color(blixtTheme.lightGray).darken(0.30).hex(),
+    backgroundColor:
+      Chain === "mainnet" ? blixtTheme.primary : Color(blixtTheme.lightGray).darken(0.3).hex(),
     paddingTop: 0,
     borderBottomWidth: 0,
     marginHorizontal: 8,
     elevation: 0,
   },
-  card: {
-  },
+  card: {},
   cardItem: {
     flexDirection: "column",
   },
@@ -315,7 +356,7 @@ const style = StyleSheet.create({
     flex: 1,
     width: "100%",
     flexDirection: "row",
-    alignItems:"center"
+    alignItems: "center",
   },
   cardIcon: {
     padding: 0,
@@ -360,6 +401,6 @@ const style = StyleSheet.create({
     justifyContent: "center",
   },
   actionButtonText: {
-    fontSize: 10  * fontFactorNormalized,
+    fontSize: 10 * fontFactorNormalized,
   },
 });

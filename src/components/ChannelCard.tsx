@@ -38,54 +38,62 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const close = (force: boolean = false) => {
     Alert.alert(
       t("channel.closeChannelPrompt.title"),
-      `Are you sure you want to${force ? " force" : ""} close the channel${alias ? ` with ${alias}` : ""}?`,
-      [{
-        style: "cancel",
-        text: "No",
-      },{
-        style: "default",
-        text: "Yes",
-        onPress: async () => {
-          const result = await closeChannel({
-            fundingTx: channel.channelPoint!.split(":")[0],
-            outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
-            force,
-          });
-          console.log(result);
+      `Are you sure you want to${force ? " force" : ""} close the channel${
+        alias ? ` with ${alias}` : ""
+      }?`,
+      [
+        {
+          style: "cancel",
+          text: "No",
+        },
+        {
+          style: "default",
+          text: "Yes",
+          onPress: async () => {
+            const result = await closeChannel({
+              fundingTx: channel.channelPoint!.split(":")[0],
+              outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
+              force,
+            });
+            console.log(result);
 
-          setTimeout(async () => {
-            await getChannels(undefined);
-          }, 3000);
+            setTimeout(async () => {
+              await getChannels(undefined);
+            }, 3000);
 
-          if (autopilotEnabled) {
-            Alert.alert(
-              "Autopilot",
-              "Automatic channel opening is enabled, " +
-              "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
-              "Do you wish to disable automatic channel opening?",
-              [
-                { text: "No", },
-                { text: "Yes", onPress: async () => {
-                  changeAutopilotEnabled(false);
-                  setupAutopilot(false);
-                },
-            }]);
-          }
-        }
-      }]
+            if (autopilotEnabled) {
+              Alert.alert(
+                "Autopilot",
+                "Automatic channel opening is enabled, " +
+                  "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
+                  "Do you wish to disable automatic channel opening?",
+                [
+                  { text: "No" },
+                  {
+                    text: "Yes",
+                    onPress: async () => {
+                      changeAutopilotEnabled(false);
+                      setupAutopilot(false);
+                    },
+                  },
+                ],
+              );
+            }
+          },
+        },
+      ],
     );
   };
 
   const onPressViewInExplorer = async () => {
     const txId = channel.channelPoint?.split(":")[0];
     await Linking.openURL(constructOnchainExplorerUrl(onchainExplorer, txId ?? ""));
-  }
+  };
 
   let localBalance = channel.localBalance || Long.fromValue(0);
   if (localBalance.lessThanOrEqual(channel.localChanReserveSat!)) {
     localBalance = Long.fromValue(0);
-  }
-  else {
+  } else {
     localBalance = localBalance.sub(channel.localChanReserveSat!);
   }
   let remoteBalance = channel.remoteBalance || Long.fromValue(0);
@@ -99,7 +107,10 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const percentageReverse = 1 - (percentageLocal + percentageRemote);
 
   const localReserve = Long.fromValue(
-    Math.min(channel.localBalance?.toNumber?.() ?? 0, channel.localChanReserveSat?.toNumber?.() ?? 0)
+    Math.min(
+      channel.localBalance?.toNumber?.() ?? 0,
+      channel.localChanReserveSat?.toNumber?.() ?? 0,
+    ),
   );
 
   const serviceKey = identifyService(channel.remotePubkey ?? "", "", null);
@@ -112,32 +123,38 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
         <Body>
-          {alias &&
+          {alias && (
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>{t("channel.alias")}</Text>
               </Left>
-              <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
-                <CopyText style={style.channelDetailValue}>
-                  {alias}
-                </CopyText>
-                {service &&
+              <Right
+                style={{
+                  flexDirection: "row",
+                  alignItems: "flex-start",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <CopyText style={style.channelDetailValue}>{alias}</CopyText>
+                {service && (
                   <Image
                     source={{ uri: service.image }}
                     style={style.nodeImage}
                     width={28}
                     height={28}
                   />
-                }
+                )}
               </Right>
             </Row>
-          }
+          )}
           <Row style={{ width: "100%" }}>
             <Left style={{ alignSelf: "flex-start" }}>
               <Text style={style.channelDetailTitle}>{t("channel.node")}</Text>
             </Left>
             <Right>
-              <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>{channel.remotePubkey}</CopyText>
+              <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>
+                {channel.remotePubkey}
+              </CopyText>
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
@@ -153,11 +170,15 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text style={style.channelDetailTitle}>{t("channel.status")}</Text>
             </Left>
             <Right>
-              {channel.active ?
-                <Text style={{...style.channelDetailValue, color: "green"}}>{t("channel.statusActive")}</Text>
-                :
-                <Text style={{...style.channelDetailValue, color: "red"}}>{t("channel.statusInactive")}</Text>
-              }
+              {channel.active ? (
+                <Text style={{ ...style.channelDetailValue, color: "green" }}>
+                  {t("channel.statusActive")}
+                </Text>
+              ) : (
+                <Text style={{ ...style.channelDetailValue, color: "red" }}>
+                  {t("channel.statusInactive")}
+                </Text>
+              )}
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
@@ -165,17 +186,18 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text>{t("channel.capacity")}</Text>
             </Left>
             <Right>
-              {!preferFiat &&
+              {!preferFiat && (
                 <Text>
                   {valueBitcoin(channel.capacity ?? Long.fromValue(0), bitcoinUnit)}{" "}
                   {getUnitNice(new BigNumber(localBalance.toNumber()), bitcoinUnit)}
                 </Text>
-              }
-              {preferFiat &&
+              )}
+              {preferFiat && (
                 <Text>
-                  {valueFiat(channel.capacity ?? Long.fromValue(0), currentRate).toFixed(2)}{" "}{fiatUnit}
+                  {valueFiat(channel.capacity ?? Long.fromValue(0), currentRate).toFixed(2)}{" "}
+                  {fiatUnit}
                 </Text>
-              }
+              )}
               <Svg width="100" height="22" style={{ marginBottom: 4, marginTop: -1 }}>
                 <Line
                   x1="0"
@@ -188,15 +210,15 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 <Line
                   x1={100 * percentageLocal}
                   y1="15"
-                  x2={(100 * percentageLocal) + (100 * percentageRemote)}
+                  x2={100 * percentageLocal + 100 * percentageRemote}
                   y2="15"
                   stroke={blixtTheme.red}
                   strokeWidth="8"
                 />
                 <Line
-                  x1={(100 * percentageLocal) + (100 * percentageRemote)}
+                  x1={100 * percentageLocal + 100 * percentageRemote}
                   y1="15"
-                  x2={(100 * percentageLocal) + (100 * percentageRemote) + (100 * percentageReverse)}
+                  x2={100 * percentageLocal + 100 * percentageRemote + 100 * percentageReverse}
                   y2="15"
                   stroke={blixtTheme.lightGray}
                   strokeWidth="8"
@@ -210,26 +232,22 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             </Left>
             <Right>
               <Text>
-                {!preferFiat &&
+                {!preferFiat && (
                   <>
                     <Text style={{ color: blixtTheme.green }}>
                       {valueBitcoin(localBalance, bitcoinUnit)}{" "}
                     </Text>
-                    <Text>
-                      {getUnitNice(new BigNumber(localBalance.toNumber()), bitcoinUnit)}
-                    </Text>
+                    <Text>{getUnitNice(new BigNumber(localBalance.toNumber()), bitcoinUnit)}</Text>
                   </>
-                }
-                {preferFiat &&
+                )}
+                {preferFiat && (
                   <>
                     <Text style={{ color: blixtTheme.green }}>
                       {valueFiat(localBalance, currentRate).toFixed(2)}{" "}
                     </Text>
-                    <Text>
-                      {fiatUnit}
-                    </Text>
+                    <Text>{fiatUnit}</Text>
                   </>
-                }
+                )}
               </Text>
             </Right>
           </Row>
@@ -239,26 +257,22 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             </Left>
             <Right>
               <Text style={{ textAlign: "right" }}>
-                {!preferFiat &&
+                {!preferFiat && (
                   <>
                     <Text style={{ color: blixtTheme.red }}>
                       {valueBitcoin(remoteBalance, bitcoinUnit)}{" "}
                     </Text>
-                    <Text>
-                      {getUnitNice(new BigNumber(remoteBalance.toNumber()), bitcoinUnit)}
-                    </Text>
+                    <Text>{getUnitNice(new BigNumber(remoteBalance.toNumber()), bitcoinUnit)}</Text>
                   </>
-                }
-                {preferFiat &&
+                )}
+                {preferFiat && (
                   <>
-                    <Text style={{ color: blixtTheme.red}}>
+                    <Text style={{ color: blixtTheme.red }}>
                       {valueFiat(remoteBalance, currentRate).toFixed(2)}{" "}
                     </Text>
-                    <Text>
-                      {fiatUnit}
-                    </Text>
+                    <Text>{fiatUnit}</Text>
                   </>
-                }
+                )}
               </Text>
             </Right>
           </Row>
@@ -268,45 +282,38 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             </Left>
             <Right>
               <Text>
-                {!preferFiat &&
+                {!preferFiat && (
                   <>
                     <Text>
-                      {localReserve.eq(channel.localChanReserveSat!) &&
-                        <>{valueBitcoin(localReserve, bitcoinUnit)}{" "}</>
-                      }
-                      {localReserve.neq(channel.localChanReserveSat!) &&
+                      {localReserve.eq(channel.localChanReserveSat!) && (
+                        <>{valueBitcoin(localReserve, bitcoinUnit)} </>
+                      )}
+                      {localReserve.neq(channel.localChanReserveSat!) && (
                         <>
-                          {valueBitcoin(localReserve, bitcoinUnit)}
-                          /
+                          {valueBitcoin(localReserve, bitcoinUnit)}/
                           {valueBitcoin(channel.localChanReserveSat!, bitcoinUnit)}{" "}
                         </>
-                      }
-
+                      )}
                     </Text>
-                    <Text>
-                      {getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}
-                    </Text>
+                    <Text>{getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}</Text>
                   </>
-                }
-                {preferFiat &&
+                )}
+                {preferFiat && (
                   <>
                     <Text>
-                      {localReserve.eq(channel.localChanReserveSat!) &&
-                        <>{valueFiat(localReserve, currentRate).toFixed(2)}{" "}</>
-                      }
-                      {localReserve.neq(channel.localChanReserveSat!) &&
+                      {localReserve.eq(channel.localChanReserveSat!) && (
+                        <>{valueFiat(localReserve, currentRate).toFixed(2)} </>
+                      )}
+                      {localReserve.neq(channel.localChanReserveSat!) && (
                         <>
-                          {valueFiat(localReserve, currentRate).toFixed(2)}
-                          /
+                          {valueFiat(localReserve, currentRate).toFixed(2)}/
                           {valueFiat(channel.localChanReserveSat!, currentRate).toFixed(2)}{" "}
                         </>
-                      }
+                      )}
                     </Text>
-                    <Text>
-                      {fiatUnit}
-                    </Text>
+                    <Text>{fiatUnit}</Text>
                   </>
-                }
+                )}
               </Text>
             </Right>
           </Row>
@@ -316,64 +323,77 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             </Left>
             <Right>
               <Text>
-                {preferFiat && valueFiat(channel.commitFee ?? Long.fromValue(0), currentRate).toFixed(2) + " " + fiatUnit}
-                {!preferFiat && valueBitcoin(channel.commitFee ?? Long.fromValue(0), bitcoinUnit) + " " + getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}
+                {preferFiat &&
+                  valueFiat(channel.commitFee ?? Long.fromValue(0), currentRate).toFixed(2) +
+                    " " +
+                    fiatUnit}
+                {!preferFiat &&
+                  valueBitcoin(channel.commitFee ?? Long.fromValue(0), bitcoinUnit) +
+                    " " +
+                    getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}
               </Text>
             </Right>
           </Row>
-          {(channel.pendingHtlcs?.length ?? 0) > 0 &&
+          {(channel.pendingHtlcs?.length ?? 0) > 0 && (
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>Pending HTLCs</Text>
               </Left>
               <Right>
-                <Text>
-                  {channel.pendingHtlcs?.length.toString()}
-                </Text>
+                <Text>{channel.pendingHtlcs?.length.toString()}</Text>
               </Right>
             </Row>
-          }
-          {__DEV__ === true &&
+          )}
+          {__DEV__ === true && (
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>Channel type</Text>
               </Left>
               <Right>
-                <Text>
-                  {lnrpc.CommitmentType[channel.commitmentType!]}
-                </Text>
+                <Text>{lnrpc.CommitmentType[channel.commitmentType!]}</Text>
               </Right>
             </Row>
-          }
-          {!channel.private &&
+          )}
+          {!channel.private && (
             <Row style={{ width: "100%" }}>
               <Right>
                 <Text style={{ color: "orange" }}>Public channel</Text>
               </Right>
             </Row>
-          }
-          {channel.zeroConf &&
+          )}
+          {channel.zeroConf && (
             <Row style={{ width: "100%" }}>
               <Right>
                 <Text style={{ color: "orange" }}>0conf channel</Text>
               </Right>
             </Row>
-          }
-          {(channel.aliasScids?.length! > 0) &&
+          )}
+          {channel.aliasScids?.length! > 0 && (
             <Row style={{ width: "100%" }}>
               <Right>
-                <Text style={{ color: "orange" }}>Alias scid
-              </Text>
+                <Text style={{ color: "orange" }}>Alias scid</Text>
               </Right>
             </Row>
-          }
+          )}
           <Row style={{ width: "100%" }}>
             <Left style={{ flexDirection: "row" }}>
-              <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => close(false)} onLongPress={() => close(true)}>
+              <Button
+                style={{ marginTop: 14 }}
+                danger={true}
+                small={true}
+                onPress={() => close(false)}
+                onLongPress={() => close(true)}
+              >
                 <Text style={{ fontSize: 8 }}>{t("channel.closeChannel")}</Text>
               </Button>
-              <Button style={{ marginTop: 14, marginLeft: 10 }} small={true} onPress={onPressViewInExplorer}>
-                <Text style={{ fontSize: 8 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
+              <Button
+                style={{ marginTop: 14, marginLeft: 10 }}
+                small={true}
+                onPress={onPressViewInExplorer}
+              >
+                <Text style={{ fontSize: 8 }}>
+                  {t("generic.viewInBlockExplorer", { ns: namespaces.common })}
+                </Text>
               </Button>
             </Left>
           </Row>
@@ -381,7 +401,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
       </CardItem>
     </Card>
   );
-};
+}
 
 export default ChannelCard;
 
@@ -390,15 +410,12 @@ export const style = StyleSheet.create({
     width: "100%",
     marginTop: 8,
   },
-  channelDetail: {
-  },
+  channelDetail: {},
   channelDetails: {
     fontSize: 16,
   },
-  channelDetailTitle: {
-  },
-  channelDetailValue: {
-  },
+  channelDetailTitle: {},
+  channelDetailValue: {},
   channelDetailAmount: {
     fontSize: 15,
   },

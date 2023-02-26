@@ -11,9 +11,7 @@ export default function CopyText(props: ICopyTextProps) {
   const onPress = () => {
     Clipboard.setString(props.children ?? "");
     toast("Copied to clipboard");
-  }
+  };
 
-  return (
-    <Text onPress={onPress} {...props}></Text>
-  );
-};
+  return <Text onPress={onPress} {...props}></Text>;
+}

@@ -9,7 +9,11 @@ import { lnrpc, signrpc } from "../../proto/lightning";
  * TODO test
  */
 export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {
-  const response = await sendCommand<lnrpc.IGenSeedRequest, lnrpc.GenSeedRequest, lnrpc.GenSeedResponse>({
+  const response = await sendCommand<
+    lnrpc.IGenSeedRequest,
+    lnrpc.GenSeedRequest,
+    lnrpc.GenSeedResponse
+  >({
     request: lnrpc.GenSeedRequest,
     response: lnrpc.GenSeedResponse,
     method: "GenSeed",
@@ -38,15 +42,19 @@ export const initWallet = async (
     options.channelBackups = {
       multiChanBackup: {
         multiChanBackup: base64.toByteArray(channelBackupsBase64),
-      }
-    }
+      },
+    };
   }
 
-  const response = await sendCommand<lnrpc.IInitWalletRequest, lnrpc.InitWalletRequest, lnrpc.InitWalletResponse>({
+  const response = await sendCommand<
+    lnrpc.IInitWalletRequest,
+    lnrpc.InitWalletRequest,
+    lnrpc.InitWalletResponse
+  >({
     request: lnrpc.InitWalletRequest,
     response: lnrpc.InitWalletResponse,
     method: "InitWallet",
-    options
+    options,
   });
   return response;
 };
@@ -57,7 +65,11 @@ export const initWallet = async (
 export const unlockWallet = async (password: string): Promise<lnrpc.UnlockWalletResponse> => {
   const start = new Date().getTime();
   // await NativeModules.LndMobile.unlockWallet(password);
-  const response = await sendCommand<lnrpc.IUnlockWalletRequest, lnrpc.UnlockWalletRequest, lnrpc.UnlockWalletResponse>({
+  const response = await sendCommand<
+    lnrpc.IUnlockWalletRequest,
+    lnrpc.UnlockWalletRequest,
+    lnrpc.UnlockWalletResponse
+  >({
     request: lnrpc.UnlockWalletRequest,
     response: lnrpc.UnlockWalletResponse,
     method: "UnlockWallet",
@@ -72,8 +84,15 @@ export const unlockWallet = async (password: string): Promise<lnrpc.UnlockWallet
 /**
  * @throws
  */
-export const deriveKey = async (keyFamily: number, keyIndex: number): Promise<signrpc.KeyDescriptor> => {
-  const response = await sendCommand<signrpc.IKeyLocator, signrpc.KeyLocator, signrpc.KeyDescriptor>({
+export const deriveKey = async (
+  keyFamily: number,
+  keyIndex: number,
+): Promise<signrpc.KeyDescriptor> => {
+  const response = await sendCommand<
+    signrpc.IKeyLocator,
+    signrpc.KeyLocator,
+    signrpc.KeyDescriptor
+  >({
     request: signrpc.KeyLocator,
     response: signrpc.KeyDescriptor,
     method: "WalletKitDeriveKey",
@@ -88,8 +107,15 @@ export const deriveKey = async (keyFamily: number, keyIndex: number): Promise<si
 /**
  * @throws
  */
-export const derivePrivateKey = async (keyFamily: number, keyIndex: number): Promise<signrpc.KeyDescriptor> => {
-  const response = await sendCommand<signrpc.IKeyDescriptor, signrpc.KeyDescriptor, signrpc.KeyDescriptor>({
+export const derivePrivateKey = async (
+  keyFamily: number,
+  keyIndex: number,
+): Promise<signrpc.KeyDescriptor> => {
+  const response = await sendCommand<
+    signrpc.IKeyDescriptor,
+    signrpc.KeyDescriptor,
+    signrpc.KeyDescriptor
+  >({
     request: signrpc.KeyDescriptor,
     response: signrpc.KeyDescriptor,
     method: "WalletKitDerivePrivateKey",
@@ -106,8 +132,15 @@ export const derivePrivateKey = async (keyFamily: number, keyIndex: number): Pro
 /**
  * @throws
  */
-export const verifyMessageNodePubkey = async (signature: string, msg: Uint8Array): Promise<lnrpc.VerifyMessageResponse> => {
-  const response = await sendCommand<lnrpc.IVerifyMessageRequest, lnrpc.VerifyMessageRequest, lnrpc.VerifyMessageResponse>({
+export const verifyMessageNodePubkey = async (
+  signature: string,
+  msg: Uint8Array,
+): Promise<lnrpc.VerifyMessageResponse> => {
+  const response = await sendCommand<
+    lnrpc.IVerifyMessageRequest,
+    lnrpc.VerifyMessageRequest,
+    lnrpc.VerifyMessageResponse
+  >({
     request: lnrpc.VerifyMessageRequest,
     response: lnrpc.VerifyMessageResponse,
     method: "VerifyMessage",
@@ -122,8 +155,14 @@ export const verifyMessageNodePubkey = async (signature: string, msg: Uint8Array
 /**
  * @throws
  */
-export const signMessageNodePubkey = async (msg: Uint8Array): Promise<lnrpc.SignMessageResponse> => {
-  const response = await sendCommand<lnrpc.ISignMessageRequest, lnrpc.SignMessageRequest, lnrpc.SignMessageResponse>({
+export const signMessageNodePubkey = async (
+  msg: Uint8Array,
+): Promise<lnrpc.SignMessageResponse> => {
+  const response = await sendCommand<
+    lnrpc.ISignMessageRequest,
+    lnrpc.SignMessageRequest,
+    lnrpc.SignMessageResponse
+  >({
     request: lnrpc.SignMessageRequest,
     response: lnrpc.SignMessageResponse,
     method: "SignMessage",
@@ -137,8 +176,16 @@ export const signMessageNodePubkey = async (msg: Uint8Array): Promise<lnrpc.Sign
 /**
  * @throws
  */
-export const signMessage = async (keyFamily: number, keyIndex: number, msg: Uint8Array): Promise<signrpc.SignMessageResp> => {
-  const response = await sendCommand<signrpc.ISignMessageReq, signrpc.SignMessageReq, signrpc.SignMessageResp>({
+export const signMessage = async (
+  keyFamily: number,
+  keyIndex: number,
+  msg: Uint8Array,
+): Promise<signrpc.SignMessageResp> => {
+  const response = await sendCommand<
+    signrpc.ISignMessageReq,
+    signrpc.SignMessageReq,
+    signrpc.SignMessageResp
+  >({
     request: signrpc.SignMessageReq,
     response: signrpc.SignMessageResp,
     method: "SignerSignMessage",
@@ -158,13 +205,18 @@ export const signMessage = async (keyFamily: number, keyIndex: number, msg: Uint
 // TODO move to a more appropiate file?
 export const subscribeInvoices = async (): Promise<string> => {
   try {
-    const response = await sendStreamCommand<lnrpc.IInvoiceSubscription, lnrpc.InvoiceSubscription>({
-      request: lnrpc.InvoiceSubscription,
-      method: "SubscribeInvoices",
-      options: {},
-    }, false);
+    const response = await sendStreamCommand<lnrpc.IInvoiceSubscription, lnrpc.InvoiceSubscription>(
+      {
+        request: lnrpc.InvoiceSubscription,
+        method: "SubscribeInvoices",
+        options: {},
+      },
+      false,
+    );
     return response;
-  } catch (e) { throw e.message; }
+  } catch (e) {
+    throw e.message;
+  }
 };
 
 // TODO error handling

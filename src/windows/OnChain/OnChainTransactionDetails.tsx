@@ -28,10 +28,12 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
       style={style.detailText}
       onPress={() => {
         Clipboard.setString(data);
-        toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
+        toast(t("msg.clipboardCopy", { ns: namespaces.common }), undefined, "warning");
       }}
     >
-      <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>
+      <Text style={{ fontWeight: "bold" }}>
+        {title}:{"\n"}
+      </Text>
       {data}
     </Text>
   );
@@ -46,46 +48,74 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
   const txId: string = route.params.txId;
   const transaction = useStoreState((store) => store.onChain.getOnChainTransactionByTxId(txId));
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
-  const onchainExplorer =  useStoreState((store) => store.settings.onchainExplorer);
+  const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
 
   if (!transaction) {
-    return (<></>);
+    return <></>;
   }
 
   const onPressBlockExplorer = async () => {
     await Linking.openURL(constructOnchainExplorerUrl(onchainExplorer, txId));
-  }
+  };
 
   return (
     <Blurmodal>
       <Card style={style.card}>
         <CardItem>
           <Body>
-            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
-              <H1 style={style.header}>
-                {t("title")}
-              </H1>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <H1 style={style.header}>{t("title")}</H1>
               <Button small={true} onPress={onPressBlockExplorer}>
-                <Text style={{ fontSize: 9 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
+                <Text style={{ fontSize: 9 }}>
+                  {t("generic.viewInBlockExplorer", { ns: namespaces.common })}
+                </Text>
               </Button>
             </View>
             <MetaData title={t("txHash")} data={transaction.txHash!} />
-            <MetaData title={t("timeStamp")} data={formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))} />
-            {transaction.amount && <MetaData title={t("amount")} data={formatBitcoin(transaction.amount, bitcoinUnit)} />}
-            {transaction.totalFees && <MetaData title={t("totalFees")} data={transaction.totalFees.toString() + " Satoshi"} />}
+            <MetaData
+              title={t("timeStamp")}
+              data={formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))}
+            />
+            {transaction.amount && (
+              <MetaData title={t("amount")} data={formatBitcoin(transaction.amount, bitcoinUnit)} />
+            )}
+            {transaction.totalFees && (
+              <MetaData
+                title={t("totalFees")}
+                data={transaction.totalFees.toString() + " Satoshi"}
+              />
+            )}
             {transaction.label && <MetaData title={t("label")} data={transaction.label} />}
             <MetaData title={t("destAddresses")} data={transaction.destAddresses![0]} />
-            <MetaData title={t("numConfirmations")} data={(transaction.numConfirmations?.toString()) ?? "Unknown"} />
-            <MetaData title={t("blockHeight")} data={(transaction.blockHeight?.toString()) ?? "Unknown"} />
-            <MetaData title={t("blockHash")} data={(transaction.blockHash?.toString()) ?? "Unknown"} />
+            <MetaData
+              title={t("numConfirmations")}
+              data={transaction.numConfirmations?.toString() ?? "Unknown"}
+            />
+            <MetaData
+              title={t("blockHeight")}
+              data={transaction.blockHeight?.toString() ?? "Unknown"}
+            />
+            <MetaData
+              title={t("blockHash")}
+              data={transaction.blockHash?.toString() ?? "Unknown"}
+            />
             <Text
               style={style.detailText}
               onPress={() => {
                 Clipboard.setString(transaction.rawTxHex?.toString() ?? "Unknown");
-                toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
+                toast(t("msg.clipboardCopy", { ns: namespaces.common }), undefined, "warning");
               }}
             >
-              <Text style={{ fontWeight: "bold" }}>{t("rawTxHex.title")}:{"\n"}</Text>
+              <Text style={{ fontWeight: "bold" }}>
+                {t("rawTxHex.title")}:{"\n"}
+              </Text>
               {t("rawTxHex.msg")}
             </Text>
           </Body>
@@ -93,7 +123,7 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
       </Card>
     </Blurmodal>
   );
-};
+}
 
 const style = StyleSheet.create({
   card: {

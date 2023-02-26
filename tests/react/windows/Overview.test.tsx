@@ -22,11 +22,7 @@ it("renders correctly", () => {
   const store = setupStore();
   store.getActions().channel.setBalance(Long.fromNumber(123));
 
-  const { toJSON, unmount } = render(
-    <StoreProvider store={store}>
-      {AppContainer}
-    </StoreProvider>
-  );
+  const { toJSON, unmount } = render(<StoreProvider store={store}>{AppContainer}</StoreProvider>);
   expect(toJSON()).toMatchSnapshot();
   // unmount();
 });
@@ -52,9 +48,7 @@ it("expect balance to update when paying an invoice", async () => {
   await waitFor(() => expect(store.getState().transaction.transactions).toHaveLength(1));
 
   const { queryByTestId, getByTestId } = render(
-    <StoreProvider store={store}>
-      {AppContainer}
-    </StoreProvider>
+    <StoreProvider store={store}>{AppContainer}</StoreProvider>,
   );
 
   const txList = getByTestId("TX_LIST");
@@ -75,11 +69,11 @@ it("expect balance to update when paying an invoice", async () => {
     expiry: Long.fromValue(40),
     isKeysend: false,
     state: lnrpc.Invoice.InvoiceState.SETTLED,
-  })
+  });
   act(() => {
     balance = balance - 100;
     DeviceEventEmitter.emit("SubscribeInvoices", {
-      data: base64.fromByteArray(lnrpc.Invoice.encode(invoice).finish())
+      data: base64.fromByteArray(lnrpc.Invoice.encode(invoice).finish()),
     });
   });
 

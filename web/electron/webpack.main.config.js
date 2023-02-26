@@ -1,6 +1,6 @@
 module.exports = {
-  entry: './web/electron/src/main.ts',
-  devtool: 'source-map',
+  entry: "./web/electron/src/main.ts",
+  devtool: "source-map",
   module: {
     rules: [
       // {
@@ -16,11 +16,11 @@ module.exports = {
       // },
       {
         test: /\.node$/,
-        use: 'node-loader',
+        use: "node-loader",
       },
-      ...require('../webpack/webpack.rules'),
+      ...require("../webpack/webpack.rules"),
     ],
   },
-  plugins: require('../webpack/webpack.plugins'),
-  resolve: require('../webpack/webpack.resolve'),
+  plugins: require("../webpack/webpack.plugins"),
+  resolve: require("../webpack/webpack.resolve"),
 };

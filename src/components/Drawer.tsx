@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { PixelRatio, StyleSheet, TouchableOpacity, View, ScrollView, LayoutAnimation } from "react-native";
+import {
+  PixelRatio,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  LayoutAnimation,
+} from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text } from "native-base";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
@@ -59,34 +66,31 @@ export default function Drawer() {
       return;
     }
 
-    switch (await evaluateLightningCode(clipboardText,  "Clipboard paste error")) {
+    switch (await evaluateLightningCode(clipboardText, "Clipboard paste error")) {
       case "BOLT11":
         goToScreen("Send", { screen: "SendConfirmation" });
-      break;
+        break;
       case "LNURLAuthRequest":
         goToScreen("LNURL", { screen: "AuthRequest" }, false);
-      break;
+        break;
       case "LNURLChannelRequest":
         goToScreen("LNURL", { screen: "ChannelRequest" });
-      break;
+        break;
       case "LNURLPayRequest":
         goToScreen("LNURL", { screen: "PayRequest" }, false);
-      break;
+        break;
       case "LNURLWithdrawRequest":
         goToScreen("LNURL", { screen: "WithdrawRequest" }, false);
-      break;
+        break;
       case null:
-      break;
+        break;
     }
   };
 
   const goToLightningBrowser = () => {
-    setTimeout(
-      () => navigation.navigate("WebLNBrowser"),
-      270,
-    );
+    setTimeout(() => navigation.navigate("WebLNBrowser"), 270);
     navigation.dispatch(DrawerActions.closeDrawer);
-  }
+  };
 
   const toggleAdvanced = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -104,25 +108,36 @@ export default function Drawer() {
 
   return (
     <View style={style.drawerContainer}>
-      <ScrollView style={style.drawerScroll} contentContainerStyle={style.drawerScrollInner} alwaysBounceVertical={false}>
-          <View style={[{
-            backgroundColor: statusIndicatorColor,
-          }, style.statusIndicator]}></View>
+      <ScrollView
+        style={style.drawerScroll}
+        contentContainerStyle={style.drawerScrollInner}
+        alwaysBounceVertical={false}
+      >
+        <View
+          style={[
+            {
+              backgroundColor: statusIndicatorColor,
+            },
+            style.statusIndicator,
+          ]}
+        ></View>
         <View style={style.logoContainer}>
           <BlixtLogo />
-          <Text style={style.blixtTitle} onPress={() => goToScreen("SyncInfo", undefined, false)}>Blixt Wallet</Text>
+          <Text style={style.blixtTitle} onPress={() => goToScreen("SyncInfo", undefined, false)}>
+            Blixt Wallet
+          </Text>
         </View>
         <View style={style.menu}>
           {(layoutMode === "full" || PLATFORM === "macos") && (
             <>
-              {PLATFORM !== "macos" &&
+              {PLATFORM !== "macos" && (
                 <TouchableOpacity onPress={() => goToScreen("Send")}>
                   <View style={style.menuItem}>
                     <Icon style={style.menuItemIcon} type="AntDesign" name="camerao" />
                     <Text style={style.menuItemText}>{t("menu.scan")}</Text>
                   </View>
                 </TouchableOpacity>
-              }
+              )}
               <TouchableOpacity onPress={() => goToScreen("Receive")}>
                 <View style={style.menuItem}>
                   <Icon style={style.menuItemIcon} type="AntDesign" name="qrcode" />
@@ -134,7 +149,11 @@ export default function Drawer() {
 
           <TouchableOpacity onPress={pasteFromClipboard}>
             <View style={style.menuItem}>
-              <Icon style={style.menuItemIcon} type={PLATFORM === "macos" ? "FontAwesome" : "FontAwesome5"} name="paste" />
+              <Icon
+                style={style.menuItemIcon}
+                type={PLATFORM === "macos" ? "FontAwesome" : "FontAwesome5"}
+                name="paste"
+              />
               <Text style={style.menuItemText}>{t("menu.pasteFromClipboard")}</Text>
             </View>
           </TouchableOpacity>
@@ -153,13 +172,12 @@ export default function Drawer() {
             </View>
           </TouchableOpacity>
 
-            <TouchableOpacity onPress={goToLightningBrowser}>
-              <View style={style.menuItem}>
-                <Icon style={style.menuItemIcon} type="MaterialCommunityIcons" name="web" />
-                <Text style={style.menuItemText}>{t("menu.lightningBrowser")}</Text>
-              </View>
-            </TouchableOpacity>
-
+          <TouchableOpacity onPress={goToLightningBrowser}>
+            <View style={style.menuItem}>
+              <Icon style={style.menuItemIcon} type="MaterialCommunityIcons" name="web" />
+              <Text style={style.menuItemText}>{t("menu.lightningBrowser")}</Text>
+            </View>
+          </TouchableOpacity>
 
           <TouchableOpacity onPress={() => goToScreen("OnChain")}>
             <View style={style.menuItem}>
@@ -177,15 +195,26 @@ export default function Drawer() {
 
           <TouchableOpacity onPress={toggleAdvanced}>
             <View style={style.advancedExpand}>
-              <Text note style={style.advancedExpandText}>{t("menu.showMore")}</Text>
-              <Icon style={style.advancedExpandIcon} type="AntDesign" name={expandAdvanced ? "up" : "down"} />
+              <Text note style={style.advancedExpandText}>
+                {t("menu.showMore")}
+              </Text>
+              <Icon
+                style={style.advancedExpandIcon}
+                type="AntDesign"
+                name={expandAdvanced ? "up" : "down"}
+              />
             </View>
           </TouchableOpacity>
 
-          <View style={[{height: expandAdvanced ? "auto" : 0 }, style.advanced]}>
+          <View style={[{ height: expandAdvanced ? "auto" : 0 }, style.advanced]}>
             <TouchableOpacity onPress={() => goToScreen("KeysendExperiment")}>
               <View style={style.menuItem}>
-                <Icon style={[style.menuItemIcon, { fontSize: 25 }]} color={blixtTheme.dark} type="FontAwesome" name="send" />
+                <Icon
+                  style={[style.menuItemIcon, { fontSize: 25 }]}
+                  color={blixtTheme.dark}
+                  type="FontAwesome"
+                  name="send"
+                />
                 <Text style={style.menuItemText}>{t("menu.keysendExperiment")}</Text>
               </View>
             </TouchableOpacity>
@@ -193,11 +222,13 @@ export default function Drawer() {
         </View>
       </ScrollView>
       <View style={style.bottom}>
-        <Text style={style.bottomText} note>{t("madeInSweden")}</Text>
+        <Text style={style.bottomText} note>
+          {t("madeInSweden")}
+        </Text>
       </View>
     </View>
   );
-};
+}
 
 const style = StyleSheet.create({
   drawerContainer: {
@@ -240,13 +271,12 @@ const style = StyleSheet.create({
     marginTop: -9,
     marginBottom: 3,
     borderRadius: 12,
-    flexDirection:"row",
+    flexDirection: "row",
 
     justifyContent: "center",
     alignItems: "center",
   },
-  advancedExpandText: {
-  },
+  advancedExpandText: {},
   advancedExpandIcon: {
     fontSize: 16,
     marginLeft: 5,
@@ -280,5 +310,5 @@ const style = StyleSheet.create({
     position: "absolute",
     top: 16 + getStatusBarHeight(),
     right: 18,
-  }
+  },
 });

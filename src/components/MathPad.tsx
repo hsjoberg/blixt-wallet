@@ -18,40 +18,50 @@ export interface IMathPadProps {
   onParenthesisRightPress: () => void;
   onEqualSignPress: () => void;
 }
-export function MathPad({ visible, onAddPress, onSubPress, onMulPress, onDivPress, onParenthesisLeftPress, onParenthesisRightPress, onEqualSignPress }: IMathPadProps) {
+export function MathPad({
+  visible,
+  onAddPress,
+  onSubPress,
+  onMulPress,
+  onDivPress,
+  onParenthesisLeftPress,
+  onParenthesisRightPress,
+  onEqualSignPress,
+}: IMathPadProps) {
   useLayoutEffect(() => {
     // if (visible === true) {
-      if (PLATFORM === "android") {
-        LayoutAnimation.configureNext(LayoutAnimation.create(90, 'easeInEaseOut', 'opacity'));
-      }
-      // LayoutAnimation.configureNext({
-      //   duration: 0,
-      //   create: {
-      //     duration: 200,
-      //     delay: 0,
-      //     type: LayoutAnimation.Types.easeInEaseOut,
-      //     property: LayoutAnimation.Properties.opacity,
-      //   },
-      //   delete: {
-      //     duration: 1,
-      //     delay: 0,
-      //     type: LayoutAnimation.Types.easeInEaseOut,
-      //     property: LayoutAnimation.Properties.scaleXY,
-      //   },
-      // });
+    if (PLATFORM === "android") {
+      LayoutAnimation.configureNext(LayoutAnimation.create(90, "easeInEaseOut", "opacity"));
+    }
+    // LayoutAnimation.configureNext({
+    //   duration: 0,
+    //   create: {
+    //     duration: 200,
+    //     delay: 0,
+    //     type: LayoutAnimation.Types.easeInEaseOut,
+    //     property: LayoutAnimation.Properties.opacity,
+    //   },
+    //   delete: {
+    //     duration: 1,
+    //     delay: 0,
+    //     type: LayoutAnimation.Types.easeInEaseOut,
+    //     property: LayoutAnimation.Properties.scaleXY,
+    //   },
+    // });
     // }
   }, [visible]);
 
   if (!visible) {
-    return (<></>);
+    return <></>;
   }
 
   return (
-    <Animated.View pointerEvents={visible ? "auto" :"none"}
+    <Animated.View
+      pointerEvents={visible ? "auto" : "none"}
       style={{
         flexDirection: "row",
         justifyContent: "center",
-        alignItems:"center",
+        alignItems: "center",
         backgroundColor: blixtTheme.gray,
         // overflow: "hidden",
         width: "100%",
@@ -62,7 +72,8 @@ export function MathPad({ visible, onAddPress, onSubPress, onMulPress, onDivPres
         // position: "absolute",
         paddingLeft: -10,
         bottom: 0,
-    }}>
+      }}
+    >
       <AnimatedButton onPress={onAddPress} style={mathPadStyles.button}>
         <Text style={mathPadStyles.buttonText}>+</Text>
       </AnimatedButton>
@@ -85,13 +96,13 @@ export function MathPad({ visible, onAddPress, onSubPress, onMulPress, onDivPres
         <Text style={mathPadStyles.buttonText}>=</Text>
       </AnimatedButton>
 
-      {PLATFORM === "ios" &&
+      {PLATFORM === "ios" && (
         <AnimatedButton onPress={() => Keyboard.dismiss()} style={mathPadStyles.button}>
           <Text style={mathPadStyles.buttonText}>Done</Text>
         </AnimatedButton>
-      }
+      )}
     </Animated.View>
-  )
+  );
 }
 
 const mathPadStyles = StyleSheet.create({
@@ -100,11 +111,11 @@ const mathPadStyles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     height: PLATFORM === "android" ? 35 : 32,
-    backgroundColor: blixtTheme.lightGray
+    backgroundColor: blixtTheme.lightGray,
   },
   buttonText: {
     fontFamily: PLATFORM === "android" ? "monospace" : undefined,
     letterSpacing: 0,
     fontSize: PLATFORM === "android" ? undefined : 10,
-  }
-})
+  },
+});

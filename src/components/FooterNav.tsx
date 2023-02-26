@@ -18,11 +18,14 @@ export default function FooterNav() {
         </Button>
       </FooterTab>
       <FooterTab>
-        <Button testID="FOOTER_SEND" onPress={() => navigation.navigate("Send", { params: { viaSwipe: false }})}>
+        <Button
+          testID="FOOTER_SEND"
+          onPress={() => navigation.navigate("Send", { params: { viaSwipe: false } })}
+        >
           <Icon type="AntDesign" name="camerao" />
           <Text>{t("send")}</Text>
         </Button>
       </FooterTab>
     </Footer>
   );
-};
+}

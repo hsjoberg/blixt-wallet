@@ -23,9 +23,9 @@ export default function Loading({ navigation }: ILoadingProps) {
 
       navigation.dispatch(
         CommonActions.reset({
-            index: 0,
-            routes: [{ name: "Overview" }],
-        })
+          index: 0,
+          routes: [{ name: "Overview" }],
+        }),
       );
       if (cb) {
         cb(navigation);
@@ -34,7 +34,6 @@ export default function Loading({ navigation }: ILoadingProps) {
       }
     })();
   }, []);
-
 
   return (
     <Container centered>
@@ -51,7 +50,7 @@ export default function Loading({ navigation }: ILoadingProps) {
       </> */}
     </Container>
   );
-};
+}
 
 const style = StyleSheet.create({
   firstSync: {

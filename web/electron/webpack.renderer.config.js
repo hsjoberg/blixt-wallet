@@ -1,8 +1,8 @@
 const resolve = require("../webpack/webpack.resolve");
 
 module.exports = {
-  target: 'web',
-  devtool: 'source-map',
+  target: "web",
+  devtool: "source-map",
   module: {
     rules: [
       // {
@@ -18,11 +18,11 @@ module.exports = {
       // },
       {
         test: /\.node$/,
-        use: 'node-loader',
+        use: "node-loader",
       },
-      ...require('../webpack/webpack.rules'),
+      ...require("../webpack/webpack.rules"),
     ],
   },
   plugins: require("../webpack/webpack.plugins.js"),
   resolve,
-}
+};

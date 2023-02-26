@@ -15,8 +15,10 @@ const mockSQLite = {
   openDatabase: (...args) => {
     return {
       transaction: (...args) => {
-        executeSql: (query) => { return []; }
-      }
+        executeSql: (query) => {
+          return [];
+        };
+      },
     };
-  }
-}
+  },
+};

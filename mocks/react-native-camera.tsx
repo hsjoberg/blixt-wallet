@@ -68,17 +68,15 @@ export class RNCamera extends React.Component {
     return {
       base64: "base64string",
     };
-  }
+  };
 
   public render() {
     if (!this.props.children) {
-      return (<></>);
+      return <></>;
     }
-    return (
-      this.props.children({
-        status: "AUTHORIZED",
-      })
-    );
+    return this.props.children({
+      status: "AUTHORIZED",
+    });
   }
 }
 

@@ -10,11 +10,6 @@ interface IGoBackIcon {
 export default function GoBackIcon({ style }: IGoBackIcon) {
   const navigation = useNavigation();
   return (
-    <Icon
-      type="Ionicons"
-      name="ios-chevron-back-sharp"
-      style={style}
-      onPress={navigation.goBack}
-    />
+    <Icon type="Ionicons" name="ios-chevron-back-sharp" style={style} onPress={navigation.goBack} />
   );
 }

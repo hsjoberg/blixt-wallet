@@ -29,8 +29,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
   let transactionValue: Long;
   if (isLong(amtPaidSat) && amtPaidSat.greaterThan(0)) {
     transactionValue = amtPaidSat;
-  }
-  else {
+  } else {
     transactionValue = value;
   }
 
@@ -41,24 +40,18 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
   let recipientOrSender;
   if (transaction.note) {
     description = transaction.note;
-  }
-  else {
+  } else {
     if (transaction.lightningAddress) {
       recipientOrSender = transaction.lightningAddress;
-    }
-    else if (lightningService) {
+    } else if (lightningService) {
       recipientOrSender = lightningService.title;
-    }
-    else if (transaction.website) {
+    } else if (transaction.website) {
       recipientOrSender = transaction.website;
-    }
-    else if (transaction.value.lessThan(0) && name) {
+    } else if (transaction.value.lessThan(0) && name) {
       recipientOrSender = name;
-    }
-    else if (transaction.value.greaterThanOrEqual(0) && tlvRecordName) {
+    } else if (transaction.value.greaterThanOrEqual(0) && tlvRecordName) {
       recipientOrSender = tlvRecordName;
-    }
-    else if (transaction.value.greaterThanOrEqual(0) && transaction.payer) {
+    } else if (transaction.value.greaterThanOrEqual(0) && transaction.payer) {
       recipientOrSender = transaction.payer;
     }
   }
@@ -67,7 +60,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
     <Card>
       <CardItem activeOpacity={1} button={true} onPress={() => onPress(transaction.rHash)}>
         <Body style={{ flexDirection: "row" }}>
-          {lightningService &&
+          {lightningService && (
             <View style={transactionStyle.avatarContainer}>
               <Image
                 source={{ uri: lightningService.image }}
@@ -76,33 +69,46 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
                 height={43}
               />
             </View>
-          }
+          )}
           <View style={{ flex: 1 }}>
             <View style={transactionStyle.transactionTop}>
               <Text style={transactionStyle.transactionTopDate}>
                 {formatISO(fromUnixTime(date.toNumber()), zoomed)}
               </Text>
               <Right>
-                <Text style={positive ? transactionStyle.transactionTopValuePositive : transactionStyle.transactionTopValueNegative}>
-                  {transactionValue.notEquals(0) &&
+                <Text
+                  style={
+                    positive
+                      ? transactionStyle.transactionTopValuePositive
+                      : transactionStyle.transactionTopValueNegative
+                  }
+                >
+                  {transactionValue.notEquals(0) && (
                     <>
-                      {(positive ? "+" : "")}
+                      {positive ? "+" : ""}
                       {!preferFiat && formatBitcoin(transactionValue, unit, false)}
                       {preferFiat && convertBitcoinToFiat(transactionValue, currentRate, fiatUnit)}
                     </>
-                  }
+                  )}
                 </Text>
               </Right>
             </View>
-            <View style={{ flex: 1, display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+            <View
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
               <Text note={true} style={transactionStyle.transactionText}>
-                {recipientOrSender &&
-                  <Text style={transactionStyle.recipientOrSender} note={true}>{recipientOrSender}: </Text>
-                }
-                {description && description.length !== 0
-                  ? description
-                  : "No description"
-                }
+                {recipientOrSender && (
+                  <Text style={transactionStyle.recipientOrSender} note={true}>
+                    {recipientOrSender}:{" "}
+                  </Text>
+                )}
+                {description && description.length !== 0 ? description : "No description"}
               </Text>
               <Text note={true} style={transactionStyle.status}>
                 {status !== "SETTLED" && capitalize(status)}
@@ -113,12 +119,12 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
       </CardItem>
     </Card>
   );
-};
+}
 
 const transactionStyle = StyleSheet.create({
   transactionTop: {
     flex: 1,
-    flexDirection:"row",
+    flexDirection: "row",
     marginBottom: 8,
   },
   transactionTopDate: {
@@ -137,7 +143,7 @@ const transactionStyle = StyleSheet.create({
   },
   avatarContainer: {
     width: 50,
-    alignSelf:"center",
+    alignSelf: "center",
     marginTop: 2,
     marginRight: 7,
     marginLeft: -2,
@@ -159,11 +165,11 @@ const transactionStyle = StyleSheet.create({
   },
   recipientOrSender: {
     fontSize: 15 * fontFactorSubtle,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   status: {
     fontSize: 15 * fontFactorSubtle,
     marginLeft: 8,
-    marginRight: 0
+    marginRight: 0,
   },
 });

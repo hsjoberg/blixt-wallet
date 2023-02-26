@@ -1,4 +1,4 @@
-import 'setimmediate';
+import "setimmediate";
 import { AppRegistry } from "react-native";
 import App from "./src/App";
 import AppConfig from "./app.json";
@@ -14,5 +14,5 @@ AppRegistry.registerComponent(AppConfig.name, () => App);
 
 AppRegistry.runApplication(AppConfig.name, {
   initialProps: {},
-  rootTag: document.getElementById('blixt-web-root'),
-})
+  rootTag: document.getElementById("blixt-web-root"),
+});

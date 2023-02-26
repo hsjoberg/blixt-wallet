@@ -28,7 +28,10 @@ export default function LndLog({ navigation }: ILndLogProps) {
     let listener: EmitterSubscription;
     (async () => {
       const tailLog = await NativeModules.LndMobileTools.tailLog(100);
-      log.current = tailLog.split("\n").map((row) => row.slice(11)).join("\n");
+      log.current = tailLog
+        .split("\n")
+        .map((row) => row.slice(11))
+        .join("\n");
 
       listener = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
         log.current = log.current + "\n" + data.slice(11);
@@ -41,7 +44,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
 
     return () => {
       listener.remove();
-    }
+    };
   }, []);
 
   useLayoutEffect(() => {
@@ -53,19 +56,19 @@ export default function LndLog({ navigation }: ILndLogProps) {
           <NavigationButton onPress={() => onPressCopy(log.current)}>
             <Icon type="MaterialCommunityIcons" name="content-copy" style={{ fontSize: 22 }} />
           </NavigationButton>
-        )
-      }
+        );
+      },
     });
   }, [navigation]);
 
   const onPressCopy = (l: string) => {
     Clipboard.setString(l);
-    toast(t("msg.clipboardCopy",{ns:namespaces.common}));
-  }
+    toast(t("msg.clipboardCopy", { ns: namespaces.common }));
+  };
 
   return (
     <Container>
       <LogBox text={log.current} scrollLock={true} />
     </Container>
-  )
+  );
 }

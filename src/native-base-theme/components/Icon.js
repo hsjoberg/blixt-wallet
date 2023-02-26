@@ -1,6 +1,6 @@
 // @flow
 
-import variable, { blixtTheme } from './../variables/commonColor';
+import variable, { blixtTheme } from "./../variables/commonColor";
 
 export default (variables /* : * */ = variable) => {
   const iconTheme = {

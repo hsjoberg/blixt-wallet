@@ -11,7 +11,8 @@ export default {
     justifyContent: "center",
     alignItems: "center",
     padding: 0,
-    marginTop: getStatusBarHeight(true) + (StatusBar.currentHeight ?? 0) + (PLATFORM !== "android" ? 40 : 0),
+    marginTop:
+      getStatusBarHeight(true) + (StatusBar.currentHeight ?? 0) + (PLATFORM !== "android" ? 40 : 0),
     marginLeft: 0,
     marginRight: 0,
     marginBottom: 0,

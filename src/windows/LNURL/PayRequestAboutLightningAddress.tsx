@@ -17,28 +17,27 @@ export default function PayRequestAboutLightningAddress() {
           <Body>
             <H1 style={style.header}>{t("aboutLightningAddress.title")}</H1>
             <Text style={style.textBlock}>
-              <TextLink url="https://lightningaddress.com">{t("aboutLightningAddress.msg1")}</TextLink>{" "}
+              <TextLink url="https://lightningaddress.com">
+                {t("aboutLightningAddress.msg1")}
+              </TextLink>{" "}
               {t("aboutLightningAddress.msg2")}
             </Text>
+            <Text style={style.textBlock}>{t("aboutLightningAddress.msg3")}</Text>
             <Text style={style.textBlock}>
-              {t("aboutLightningAddress.msg3")}
-            </Text>
-            <Text style={style.textBlock}>
-              {t("aboutLightningAddress.msg4")}{" "}
-              {t("aboutLightningAddress.msg5")}
+              {t("aboutLightningAddress.msg4")} {t("aboutLightningAddress.msg5")}
             </Text>
           </Body>
         </CardItem>
       </Card>
     </Blurmodal>
   );
-};
+}
 
 const style = StyleSheet.create({
   card: {
     padding: 5,
     width: "100%",
-    minHeight: "30%"
+    minHeight: "30%",
   },
   header: {
     width: "100%",
@@ -53,6 +52,5 @@ const style = StyleSheet.create({
   },
   textBold: {
     fontWeight: "bold",
-  }
+  },
 });
-

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import React from "react";
+import { Animated, StyleSheet, View } from "react-native";
 
 interface IBarcodeMaskProps {
   width?: number | string;
@@ -13,7 +13,7 @@ interface IBarcodeMaskProps {
   animatedLineHeight?: number | string;
   lineAnimationDuration?: number | string;
   darken?: boolean;
-};
+}
 
 class BarcodeMask extends React.Component<IBarcodeMaskProps> {
   constructor(props: any) {
@@ -61,7 +61,15 @@ class BarcodeMask extends React.Component<IBarcodeMaskProps> {
         borderBottomWidth: this.props.edgeBorderWidth,
       },
     };
-    return <View style={[defaultStyle, (styles as any)[edgePosition + 'Edge'], (edgeBorderStyle as any)[edgePosition]]} />;
+    return (
+      <View
+        style={[
+          defaultStyle,
+          (styles as any)[edgePosition + "Edge"],
+          (edgeBorderStyle as any)[edgePosition],
+        ]}
+      />
+    );
   };
 
   render() {
@@ -76,10 +84,10 @@ class BarcodeMask extends React.Component<IBarcodeMaskProps> {
             },
           ]}
         >
-          {this._renderEdge('topLeft')}
-          {this._renderEdge('topRight')}
-          {this._renderEdge('bottomLeft')}
-          {this._renderEdge('bottomRight')}
+          {this._renderEdge("topLeft")}
+          {this._renderEdge("topRight")}
+          {this._renderEdge("bottomLeft")}
+          {this._renderEdge("bottomRight")}
         </View>
 
         <View style={styles.maskOuter}>
@@ -109,58 +117,58 @@ class BarcodeMask extends React.Component<IBarcodeMaskProps> {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     ...StyleSheet.absoluteFillObject,
   },
   finder: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   topLeftEdge: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
   },
   topRightEdge: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     right: 0,
   },
   bottomLeftEdge: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
   },
   bottomRightEdge: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     right: 0,
   },
   maskOuter: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
   maskInner: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   maskRow: {
-    width: '100%',
+    width: "100%",
   },
   maskCenter: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
   },
   animatedLine: {
-    position: 'absolute',
+    position: "absolute",
     elevation: 4,
     zIndex: 0,
-    width: '85%',
+    width: "85%",
   },
 });
 
@@ -169,13 +177,13 @@ const defaultProps = {
   height: 230,
   edgeWidth: 20,
   edgeHeight: 20,
-  edgeColor: '#FFF',
+  edgeColor: "#FFF",
   edgeBorderWidth: 4,
   showAnimatedLine: true,
-  animatedLineColor: '#FFF',
+  animatedLineColor: "#FFF",
   animatedLineHeight: 2,
   lineAnimationDuration: 1500,
-  backgroundColor: 'rgba(0, 0, 0, 0.6)'
+  backgroundColor: "rgba(0, 0, 0, 0.6)",
 };
 
 (BarcodeMask as any).defaultProps = defaultProps;

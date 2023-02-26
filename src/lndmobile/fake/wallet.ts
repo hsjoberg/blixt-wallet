@@ -8,8 +8,36 @@ import { subscribeStateEmitter } from "./index";
 
 export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {
   const response = lnrpc.GenSeedResponse.create({
-    cipherSeedMnemonic: ['ability', 'quote', 'laugh', 'pony', 'fancy', 'disease', 'zoo', 'angle', 'autumn', 'december', 'absorb', 'giraffe', 'mandate', 'inner', 'alone', 'flat', 'dose', 'acoustic', 'slice', 'major', 'sample', 'crane', 'opinion', 'jewel'],
-    encipheredSeed: new Uint8Array([0, 54, 1, 246, 83, 245, 46, 126, 63, 248, 70, 15, 167, 20, 3, 49, 24, 112, 232, 193, 186, 196, 65, 128, 67, 45, 195, 59, 240, 100, 166, 219, 191])
+    cipherSeedMnemonic: [
+      "ability",
+      "quote",
+      "laugh",
+      "pony",
+      "fancy",
+      "disease",
+      "zoo",
+      "angle",
+      "autumn",
+      "december",
+      "absorb",
+      "giraffe",
+      "mandate",
+      "inner",
+      "alone",
+      "flat",
+      "dose",
+      "acoustic",
+      "slice",
+      "major",
+      "sample",
+      "crane",
+      "opinion",
+      "jewel",
+    ],
+    encipheredSeed: new Uint8Array([
+      0, 54, 1, 246, 83, 245, 46, 126, 63, 248, 70, 15, 167, 20, 3, 49, 24, 112, 232, 193, 186, 196,
+      65, 128, 67, 45, 195, 59, 240, 100, 166, 219, 191,
+    ]),
   });
   return response;
 };
@@ -19,17 +47,25 @@ export const initWallet = async (seed: string[], password: string): Promise<void
 };
 
 export const unlockWallet = async (password: string): Promise<void> => {
-  setTimeout(() => subscribeStateEmitter(
-    lnrpc.SubscribeStateResponse.encode({
-      state: lnrpc.WalletState.UNLOCKED,
-    }).finish()
-  ), 100);
+  setTimeout(
+    () =>
+      subscribeStateEmitter(
+        lnrpc.SubscribeStateResponse.encode({
+          state: lnrpc.WalletState.UNLOCKED,
+        }).finish(),
+      ),
+    100,
+  );
 
-  setTimeout(() => subscribeStateEmitter(
-    lnrpc.SubscribeStateResponse.encode({
-      state: lnrpc.WalletState.RPC_ACTIVE,
-    }).finish()
-  ), 500);
+  setTimeout(
+    () =>
+      subscribeStateEmitter(
+        lnrpc.SubscribeStateResponse.encode({
+          state: lnrpc.WalletState.RPC_ACTIVE,
+        }).finish(),
+      ),
+    500,
+  );
   return;
 };
 
@@ -41,36 +77,50 @@ export const subscribeInvoices = async (): Promise<string> => {
 /**
  * @throws
  */
-export const deriveKey = async (keyFamily: number, keyIndex: number): Promise<signrpc.KeyDescriptor> => {
+export const deriveKey = async (
+  keyFamily: number,
+  keyIndex: number,
+): Promise<signrpc.KeyDescriptor> => {
   console.error("fake deriveKey not implemented");
 };
 
 /**
  * @throws
  */
-export const derivePrivateKey = async (keyFamily: number, keyIndex: number): Promise<signrpc.KeyDescriptor> => {
+export const derivePrivateKey = async (
+  keyFamily: number,
+  keyIndex: number,
+): Promise<signrpc.KeyDescriptor> => {
   console.error("fake derivePrivateKey not implemented");
 };
 
 /**
  * @throws
  */
-export const verifyMessageNodePubkey = async (signature: string, msg: Uint8Array): Promise<lnrpc.VerifyMessageResponse> => {
+export const verifyMessageNodePubkey = async (
+  signature: string,
+  msg: Uint8Array,
+): Promise<lnrpc.VerifyMessageResponse> => {
   console.error("fake verifyMessageNodePubkey not implemented");
-}
-
+};
 
 /**
  * @throws
  */
-export const signMessage = async (keyFamily: number, keyIndex: number, msg: Uint8Array): Promise<signrpc.SignMessageResp> => {
+export const signMessage = async (
+  keyFamily: number,
+  keyIndex: number,
+  msg: Uint8Array,
+): Promise<signrpc.SignMessageResp> => {
   console.error("fake signMessage not implemented");
-}
+};
 
 /**
  * @throws
  */
-export const signMessageNodePubkey = async (msg: Uint8Array): Promise<lnrpc.SignMessageResponse> => {
+export const signMessageNodePubkey = async (
+  msg: Uint8Array,
+): Promise<lnrpc.SignMessageResponse> => {
   console.error("fake signMessageNodePubkey not implemented");
 };
 

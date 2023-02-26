@@ -4,10 +4,10 @@ export const openLimitedPhotoLibraryPicker = jest.fn(async () => {});
 export const openSettings = jest.fn(async () => {});
 export const check = jest.fn(async (permission) => RESULTS.GRANTED);
 export const request = jest.fn(async (permission) => RESULTS.GRANTED);
-export const checkLocationAccuracy = jest.fn(async () => 'full');
-export const requestLocationAccuracy = jest.fn(async (options) => 'full');
+export const checkLocationAccuracy = jest.fn(async () => "full");
+export const requestLocationAccuracy = jest.fn(async (options) => "full");
 
-const notificationOptions = ['alert', 'badge', 'sound', 'carPlay', 'criticalAlert', 'provisional'];
+const notificationOptions = ["alert", "badge", "sound", "carPlay", "criticalAlert", "provisional"];
 
 const notificationSettings = {
   alert: true,
@@ -29,7 +29,7 @@ export const requestNotifications = jest.fn(async (options) => ({
   status: RESULTS.GRANTED,
   settings: options
     .filter((option) => notificationOptions.includes(option))
-    .reduce((acc, option) => ({...acc, [option]: true}), {
+    .reduce((acc, option) => ({ ...acc, [option]: true }), {
       lockScreen: true,
       notificationCenter: true,
     }),

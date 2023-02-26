@@ -1,11 +1,20 @@
 import React, { useRef, useState, useEffect } from "react";
-import { TextInput, StatusBar, StyleSheet, View, TouchableOpacity, BackHandler, ToastAndroid, KeyboardAvoidingView } from "react-native";
-import { getStatusBarHeight } from "react-native-status-bar-height"
+import {
+  TextInput,
+  StatusBar,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  BackHandler,
+  ToastAndroid,
+  KeyboardAvoidingView,
+} from "react-native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 import { injectJs, onMessageHandler } from "react-native-webln";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Card, Icon } from "native-base";
-import { WebView } from 'react-native-webview';
+import { WebView } from "react-native-webview";
 import Color from "color";
 
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
@@ -42,7 +51,9 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
   const handleMakeInvoiceRequest = useStoreActions((store) => store.webln.handleMakeInvoiceRequest);
   const handleSendPaymentRequest = useStoreActions((store) => store.webln.handleSendPaymentRequest);
   const handleSignMessageRequest = useStoreActions((store) => store.webln.handleSignMessageRequest);
-  const handleVerifyMessageRequest = useStoreActions((store) => store.webln.handleVerifyMessageRequest);
+  const handleVerifyMessageRequest = useStoreActions(
+    (store) => store.webln.handleVerifyMessageRequest,
+  );
   const handleLNURL = useStoreActions((store) => store.webln.handleLNURL);
 
   useEffect(() => {
@@ -58,7 +69,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
         return true;
       }
       closeBrowser();
-      return true
+      return true;
     });
 
     return () => backHandler.remove();
@@ -71,7 +82,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
     },
     getInfo: async () => {
       setWeblnSupportDetected(true);
-      return handleGetInfoRequest()
+      return handleGetInfoRequest();
     },
     makeInvoice: async (args) => handleMakeInvoiceRequest({ requestUrl: url, data: args }),
     sendPayment: async (paymentRequestStr) => {
@@ -105,8 +116,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
           await handleLNURL({
             lnurl: paymentRequestStr,
           });
-        }
-        else {
+        } else {
           return await handleSendPaymentRequest({
             data: paymentRequestStr,
             requestUrl: url,
@@ -119,18 +129,20 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
         console.log("setDisableBackHandler(false);");
         setDisableBackHandler(false);
       }
-    }
+    },
   });
 
   const closeBrowser = () => {
-    Alert.alert("", t("close"),
-      [{
-        text: t("buttons.yes",{ ns:namespaces.common }),
-        onPress: () => navigation.goBack()
-      }, {
-        text: t("buttons.no",{ ns:namespaces.common }),
-        style: "cancel"
-      }])
+    Alert.alert("", t("close"), [
+      {
+        text: t("buttons.yes", { ns: namespaces.common }),
+        onPress: () => navigation.goBack(),
+      },
+      {
+        text: t("buttons.no", { ns: namespaces.common }),
+        style: "cancel",
+      },
+    ]);
   };
 
   const onLongPressHome = () => {
@@ -141,7 +153,12 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
 
   return (
     <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }} enabled={PLATFORM === "ios"}>
-      <BlurModal useModalComponent={false} noMargin goBackByClickingOutside={false} style={{ height: "100%", maxWidth: PLATFORM === "macos" ? "90%" : "100%" }}>
+      <BlurModal
+        useModalComponent={false}
+        noMargin
+        goBackByClickingOutside={false}
+        style={{ height: "100%", maxWidth: PLATFORM === "macos" ? "90%" : "100%" }}
+      >
         <Card style={style.card}>
           <WebView
             containerStyle={{ opacity: showWebview ? 1 : 0 }}
@@ -151,7 +168,7 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
             source={{ uri: url }}
             onLoadStart={(e) => {
               console.log("onLoadStart");
-              setJsInjected(false)
+              setJsInjected(false);
               setWeblnSupportDetected(false);
             }}
             onLoadProgress={(e) => {
@@ -179,15 +196,27 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
             <TouchableOpacity onPress={closeBrowser}>
               <Icon style={style.closeButton} type="AntDesign" name="close" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setUrl(INITIAL_URL)} onLongPress={() => onLongPressHome()}>
-              <Icon style={style.listButton} type={PLATFORM !== "macos" ? "FontAwesome5" : "FontAwesome"} name="home" />
+            <TouchableOpacity
+              onPress={() => setUrl(INITIAL_URL)}
+              onLongPress={() => onLongPressHome()}
+            >
+              <Icon
+                style={style.listButton}
+                type={PLATFORM !== "macos" ? "FontAwesome5" : "FontAwesome"}
+                name="home"
+              />
             </TouchableOpacity>
-            {PLATFORM !== "android" &&
+            {PLATFORM !== "android" && (
               <TouchableOpacity onPress={() => webview.current?.goBack()}>
                 <Icon style={style.goBackButton} type="AntDesign" name="arrowleft" />
               </TouchableOpacity>
-            }
-            <View style={[style.weblnIndicator, { backgroundColor: weblnSupportDetected ? "blue" : "transparent"}]}></View>
+            )}
+            <View
+              style={[
+                style.weblnIndicator,
+                { backgroundColor: weblnSupportDetected ? "blue" : "transparent" },
+              ]}
+            ></View>
             <TextInput
               ref={textInput}
               style={style.urlInput}
@@ -197,13 +226,16 @@ export default function WebLNBrowser({ navigation, route }: IBrowserProps) {
                 setUrlInput(text);
               }}
               onSubmitEditing={(e) => {
-                if (!e.nativeEvent.text.startsWith("https://") && !e.nativeEvent.text.startsWith("http://")) {
+                if (
+                  !e.nativeEvent.text.startsWith("https://") &&
+                  !e.nativeEvent.text.startsWith("http://")
+                ) {
                   e.nativeEvent.text = "https://" + e.nativeEvent.text;
                 }
                 setUrl(e.nativeEvent.text);
               }}
               keyboardType="url"
-              placeholder={t("placeholder")+"..."}
+              placeholder={t("placeholder") + "..."}
             />
             <TouchableOpacity onPress={() => webview.current!.reload()}>
               <Icon style={style.goButton} type="MaterialCommunityIcons" name="sync" />
@@ -293,5 +325,5 @@ const style = StyleSheet.create({
     width: 3,
     height: 3,
     borderRadius: 8,
-  }
+  },
 });

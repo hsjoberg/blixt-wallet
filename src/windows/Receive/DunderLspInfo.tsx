@@ -18,28 +18,21 @@ export default function DunderLspInfo({ route }: any) {
       <Card style={style.card}>
         <CardItem>
           <Body>
-            <H1 style={style.header}>
-              {t("title")}
-            </H1>
+            <H1 style={style.header}>{t("title")}</H1>
+            <Text style={{ marginBottom: 16 }}>{t("msg")}</Text>
+            <Text style={{ marginBottom: 16 }}>{t("msg1")}</Text>
+            <Text style={{ marginBottom: 16 }}>{t("msg2")}</Text>
             <Text style={{ marginBottom: 16 }}>
-              {t("msg")}
-            </Text>
-            <Text style={{ marginBottom: 16 }}>
-              {t("msg1")}
-            </Text>
-            <Text style={{ marginBottom: 16 }}>
-              {t("msg2")}
-            </Text>
-            <Text style={{ marginBottom: 16 }}>
-              {t("msg3")} <TextLink url="https://github.com/hsjoberg/dunder-lsp">{t("msg4")}</TextLink>
-              {" "}{t("msg5")}
+              {t("msg3")}{" "}
+              <TextLink url="https://github.com/hsjoberg/dunder-lsp">{t("msg4")}</TextLink>{" "}
+              {t("msg5")}
             </Text>
           </Body>
         </CardItem>
       </Card>
     </Blurmodal>
   );
-};
+}
 
 const style = StyleSheet.create({
   card: {
@@ -59,5 +52,5 @@ const style = StyleSheet.create({
     paddingTop: 4,
     paddingLeft: 18,
     paddingRight: 18,
-  }
+  },
 });

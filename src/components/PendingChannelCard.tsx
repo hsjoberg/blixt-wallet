@@ -17,14 +17,15 @@ import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
 import { Alert } from "../utils/alert";
 
-const dataLossChannelState = 'ChanStatusLocalDataLoss|ChanStatusRestored';
+const dataLossChannelState = "ChanStatusLocalDataLoss|ChanStatusRestored";
 
 export interface IPendingChannelCardProps {
   type: "OPEN" | "CLOSING" | "FORCE_CLOSING" | "WAITING_CLOSE";
-  channel: lnrpc.PendingChannelsResponse.IPendingOpenChannel
-            | lnrpc.PendingChannelsResponse.IClosedChannel
-            | lnrpc.PendingChannelsResponse.IForceClosedChannel
-            | lnrpc.PendingChannelsResponse.IWaitingCloseChannel;
+  channel:
+    | lnrpc.PendingChannelsResponse.IPendingOpenChannel
+    | lnrpc.PendingChannelsResponse.IClosedChannel
+    | lnrpc.PendingChannelsResponse.IForceClosedChannel
+    | lnrpc.PendingChannelsResponse.IWaitingCloseChannel;
   alias?: string;
 }
 export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCardProps) => {
@@ -39,11 +40,14 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
   if (!channel.channel) {
-    return (<Text>Error</Text>);
+    return <Text>Error</Text>;
   }
   const closingChannel = channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel;
 
-  const isForceClosableChannel = (channel.channel?.chanStatusFlags === dataLossChannelState) || !!closingChannel.closingTxid ? false : true
+  const isForceClosableChannel =
+    channel.channel?.chanStatusFlags === dataLossChannelState || !!closingChannel.closingTxid
+      ? false
+      : true;
 
   const forceClose = (channel: lnrpc.PendingChannelsResponse.IWaitingCloseChannel) => {
     if (channel.channel?.chanStatusFlags === dataLossChannelState) {
@@ -51,7 +55,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
       return;
     }
 
-    if (!!channel.closingTxid || channel.closingTxid !== '') {
+    if (!!channel.closingTxid || channel.closingTxid !== "") {
       Alert.alert("Closing Tx Has Already Been Broadcasted");
       return;
     }
@@ -59,33 +63,36 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
     Alert.alert(
       t("channel.closeChannelPrompt.title"),
       `Are you sure you want to force close the channel${alias ? ` with ${alias}` : ""}?`,
-      [{
-        style: "cancel",
-        text: "No",
-      },{
-        style: "default",
-        text: "Yes",
-        onPress: async () => {
-          try {
-            const channelPoint = channel.channel?.channelPoint || undefined;
+      [
+        {
+          style: "cancel",
+          text: "No",
+        },
+        {
+          style: "default",
+          text: "Yes",
+          onPress: async () => {
+            try {
+              const channelPoint = channel.channel?.channelPoint || undefined;
 
-            if (!channelPoint) {
-              return;
+              if (!channelPoint) {
+                return;
+              }
+
+              const result = await closeChannel({
+                fundingTx: channelPoint.split(":")[0],
+                outputIndex: Number.parseInt(channelPoint.split(":")[1], 10),
+                force: true,
+              });
+
+              Alert.alert("Force Closed Channel");
+            } catch (err) {
+              console.log(err);
+              Alert.alert("Failed To Close PendingChannel");
             }
-
-            const result = await closeChannel({
-              fundingTx: channelPoint.split(":")[0],
-              outputIndex: Number.parseInt(channelPoint.split(":")[1], 10),
-              force: true,
-            });
-
-            Alert.alert("Force Closed Channel");
-          } catch(err) {
-            console.log(err);
-            Alert.alert("Failed To Close PendingChannel");
-          }
-        }
-      }]
+          },
+        },
+      ],
     );
   };
 
@@ -100,7 +107,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
 
   const onPressViewInExplorer = async (txId: string) => {
     await Linking.openURL(constructOnchainExplorerUrl(onchainExplorer, txId ?? ""));
-  }
+  };
 
   const serviceKey = identifyService(channel.channel.remoteNodePub ?? "", "", null);
   let service;
@@ -112,32 +119,38 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
         <Body>
-          {alias &&
+          {alias && (
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>{t("channel.alias")}</Text>
               </Left>
-              <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
-                <CopyText style={style.channelDetailValue}>
-                  {alias}
-                </CopyText>
-                {service &&
+              <Right
+                style={{
+                  flexDirection: "row",
+                  alignItems: "flex-start",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <CopyText style={style.channelDetailValue}>{alias}</CopyText>
+                {service && (
                   <Image
                     source={{ uri: service.image }}
                     style={style.nodeImage}
                     width={28}
                     height={28}
                   />
-                }
+                )}
               </Right>
             </Row>
-          }
+          )}
           <Row style={{ width: "100%" }}>
             <Left>
               <Text style={style.channelDetailTitle}>{t("channel.node")}</Text>
             </Left>
             <Right>
-              <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>{channel.channel.remoteNodePub}</CopyText>
+              <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>
+                {channel.channel.remoteNodePub}
+              </CopyText>
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
@@ -145,21 +158,29 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               <Text style={style.channelDetailTitle}>{t("channel.status")}</Text>
             </Left>
             <Right>
-              {type === "OPEN" &&
-                <Text style={{...style.channelDetailValue, color: "orange"}}>{t("channel.statusPending")}</Text>
-              }
-              {type === "CLOSING" &&
-                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>{t("channel.statusClosing")}</Text>
-              }
-              {type === "FORCE_CLOSING" &&
-                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>{t("channel.statusForceClosing")}</Text>
-              }
-              {type === "WAITING_CLOSE" &&
-                <Text style={{...style.channelDetailValue, color: blixtTheme.red}}>{t("channel.statusWaitingForClose")}</Text>
-              }
+              {type === "OPEN" && (
+                <Text style={{ ...style.channelDetailValue, color: "orange" }}>
+                  {t("channel.statusPending")}
+                </Text>
+              )}
+              {type === "CLOSING" && (
+                <Text style={{ ...style.channelDetailValue, color: blixtTheme.red }}>
+                  {t("channel.statusClosing")}
+                </Text>
+              )}
+              {type === "FORCE_CLOSING" && (
+                <Text style={{ ...style.channelDetailValue, color: blixtTheme.red }}>
+                  {t("channel.statusForceClosing")}
+                </Text>
+              )}
+              {type === "WAITING_CLOSE" && (
+                <Text style={{ ...style.channelDetailValue, color: blixtTheme.red }}>
+                  {t("channel.statusWaitingForClose")}
+                </Text>
+              )}
             </Right>
           </Row>
-          {type === "OPEN" &&
+          {type === "OPEN" && (
             <>
               <Row style={{ width: "100%" }}>
                 <Left>
@@ -167,64 +188,98 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                 </Left>
                 <Right>
                   <Text>
-                    {!preferFiat &&
+                    {!preferFiat && (
                       <>
                         <Text>
-                          {valueBitcoin((channel as lnrpc.PendingChannelsResponse.IPendingOpenChannel)?.channel.localBalance || new Long(0), bitcoinUnit)}{" "}
+                          {valueBitcoin(
+                            (channel as lnrpc.PendingChannelsResponse.IPendingOpenChannel)?.channel
+                              .localBalance || new Long(0),
+                            bitcoinUnit,
+                          )}{" "}
                         </Text>
                         <Text>
-                          {getUnitNice(new BigNumber((channel as lnrpc.PendingChannelsResponse.IPendingOpenChannel)?.channel.localBalance?.toNumber?.()), bitcoinUnit)}
+                          {getUnitNice(
+                            new BigNumber(
+                              (
+                                channel as lnrpc.PendingChannelsResponse.IPendingOpenChannel
+                              )?.channel.localBalance?.toNumber?.(),
+                            ),
+                            bitcoinUnit,
+                          )}
                         </Text>
                       </>
-                    }
-                    {preferFiat &&
+                    )}
+                    {preferFiat && (
                       <>
                         <Text>
-                          {valueFiat((channel as lnrpc.PendingChannelsResponse.IPendingOpenChannel)?.channel.localBalance || new Long(0), currentRate).toFixed(2)}{" "}
+                          {valueFiat(
+                            (channel as lnrpc.PendingChannelsResponse.IPendingOpenChannel)?.channel
+                              .localBalance || new Long(0),
+                            currentRate,
+                          ).toFixed(2)}{" "}
                         </Text>
-                        <Text>
-                          {fiatUnit}
-                        </Text>
+                        <Text>{fiatUnit}</Text>
                       </>
-                    }
+                    )}
                   </Text>
                 </Right>
               </Row>
               <Row style={{ width: "100%" }}>
                 <Left>
-                  <Button style={{ marginTop: 14 }} small={true} onPress={() => {
-                    const txId = channel.channel?.channelPoint?.split(":")[0];
-                    onPressViewInExplorer(txId ?? "");
-                  }}>
-                    <Text style={{ fontSize: 8 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
+                  <Button
+                    style={{ marginTop: 14 }}
+                    small={true}
+                    onPress={() => {
+                      const txId = channel.channel?.channelPoint?.split(":")[0];
+                      onPressViewInExplorer(txId ?? "");
+                    }}
+                  >
+                    <Text style={{ fontSize: 8 }}>
+                      {t("generic.viewInBlockExplorer", { ns: namespaces.common })}
+                    </Text>
                   </Button>
                 </Left>
               </Row>
             </>
-          }
-          {type === "WAITING_CLOSE" &&
+          )}
+          {type === "WAITING_CLOSE" && (
             <>
               <Row style={{ width: "100%" }}>
                 <Left>
                   <Text style={style.channelDetailTitle}>{t("channel.balanceInLimbo")}</Text>
                 </Left>
                 <Right>
-                  {!preferFiat &&
+                  {!preferFiat && (
                     <>
                       <Text>
-                        {valueBitcoin((channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.limboBalance || new Long(0), bitcoinUnit)}{" "}
-                        {getUnitNice(new BigNumber((channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.limboBalance?.toNumber?.()), bitcoinUnit)}
+                        {valueBitcoin(
+                          (channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)
+                            ?.limboBalance || new Long(0),
+                          bitcoinUnit,
+                        )}{" "}
+                        {getUnitNice(
+                          new BigNumber(
+                            (
+                              channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel
+                            )?.limboBalance?.toNumber?.(),
+                          ),
+                          bitcoinUnit,
+                        )}
                       </Text>
                     </>
-                  }
-                  {preferFiat &&
+                  )}
+                  {preferFiat && (
                     <>
                       <Text>
-                        {valueFiat((channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.limboBalance || new Long(0), currentRate).toFixed(2)}{" "}
+                        {valueFiat(
+                          (channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)
+                            ?.limboBalance || new Long(0),
+                          currentRate,
+                        ).toFixed(2)}{" "}
                         {fiatUnit}
                       </Text>
                     </>
-                  }
+                  )}
                 </Right>
               </Row>
               <Row style={{ width: "100%" }}>
@@ -233,7 +288,8 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                 </Left>
                 <Right>
                   <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>
-                    {(channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.commitments?.localTxid || "N/A"}
+                    {(channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.commitments
+                      ?.localTxid || "N/A"}
                   </CopyText>
                 </Right>
               </Row>
@@ -243,24 +299,28 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                 </Left>
                 <Right>
                   <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>
-                    {(channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.commitments?.remoteTxid || "N/A"}
+                    {(channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.commitments
+                      ?.remoteTxid || "N/A"}
                   </CopyText>
                 </Right>
               </Row>
-              {
-                isForceClosableChannel ? (
-                  <Row style={{ width: "100%" }}>
-                    <Left>
-                      <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => forceClose(channel)}>
-                        <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
-                      </Button>
-                    </Left>
-                  </Row>
-                ) : null
-              }
+              {isForceClosableChannel ? (
+                <Row style={{ width: "100%" }}>
+                  <Left>
+                    <Button
+                      style={{ marginTop: 14 }}
+                      danger={true}
+                      small={true}
+                      onPress={() => forceClose(channel)}
+                    >
+                      <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
+                    </Button>
+                  </Left>
+                </Row>
+              ) : null}
             </>
-          }
-          {type === "FORCE_CLOSING" &&
+          )}
+          {type === "FORCE_CLOSING" && (
             <>
               <Row style={{ width: "100%" }}>
                 <Left>
@@ -268,24 +328,37 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                 </Left>
                 <Right>
                   <Text>
-                    {!preferFiat &&
+                    {!preferFiat && (
                       <>
                         <Text>
-                          {valueBitcoin((channel as lnrpc.PendingChannelsResponse.IForceClosedChannel)?.limboBalance || new Long(0), bitcoinUnit)}{" "}
-                          {getUnitNice(new BigNumber((channel as lnrpc.PendingChannelsResponse.IForceClosedChannel)?.limboBalance?.toNumber?.()), bitcoinUnit)}
+                          {valueBitcoin(
+                            (channel as lnrpc.PendingChannelsResponse.IForceClosedChannel)
+                              ?.limboBalance || new Long(0),
+                            bitcoinUnit,
+                          )}{" "}
+                          {getUnitNice(
+                            new BigNumber(
+                              (
+                                channel as lnrpc.PendingChannelsResponse.IForceClosedChannel
+                              )?.limboBalance?.toNumber?.(),
+                            ),
+                            bitcoinUnit,
+                          )}
                         </Text>
                       </>
-                    }
-                    {preferFiat &&
+                    )}
+                    {preferFiat && (
                       <>
                         <Text>
-                          {valueFiat((channel as lnrpc.PendingChannelsResponse.IForceClosedChannel)?.limboBalance || new Long(0), currentRate).toFixed(2)}{" "}
+                          {valueFiat(
+                            (channel as lnrpc.PendingChannelsResponse.IForceClosedChannel)
+                              ?.limboBalance || new Long(0),
+                            currentRate,
+                          ).toFixed(2)}{" "}
                         </Text>
-                        <Text>
-                          {fiatUnit}
-                        </Text>
+                        <Text>{fiatUnit}</Text>
                       </>
-                    }
+                    )}
                   </Text>
                 </Right>
               </Row>
@@ -295,42 +368,67 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                 </Left>
                 <Right>
                   <CopyText style={{ textAlign: "right" }}>
-                    {(channel as lnrpc.PendingChannelsResponse.IForceClosedChannel)?.pendingHtlcs?.length.toString()}
+                    {(
+                      channel as lnrpc.PendingChannelsResponse.IForceClosedChannel
+                    )?.pendingHtlcs?.length.toString()}
                   </CopyText>
                 </Right>
               </Row>
-              {(channel as lnrpc.PendingChannelsResponse.ForceClosedChannel).maturityHeight !== 0 &&
+              {(channel as lnrpc.PendingChannelsResponse.ForceClosedChannel).maturityHeight !==
+                0 && (
                 <Row style={{ width: "100%" }}>
                   <Left>
                     <Text style={style.channelDetailTitle}>{t("channel.maturityHeight")}</Text>
                   </Left>
                   <Right>
-                    <CopyText style={{  textAlign: "right" }}>
-                      {(channel as lnrpc.PendingChannelsResponse.IForceClosedChannel)?.maturityHeight?.toString()}
+                    <CopyText style={{ textAlign: "right" }}>
+                      {(
+                        channel as lnrpc.PendingChannelsResponse.IForceClosedChannel
+                      )?.maturityHeight?.toString()}
                     </CopyText>
                   </Right>
                 </Row>
-              }
+              )}
               <Row style={{ width: "100%" }}>
                 <Left>
-                  <Button style={{ marginTop: 14 }} small={true} onPress={(() => onPressViewInExplorer((channel as lnrpc.PendingChannelsResponse.ClosedChannel).closingTxid))}>
-                    <Text style={{ fontSize: 8 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
+                  <Button
+                    style={{ marginTop: 14 }}
+                    small={true}
+                    onPress={() =>
+                      onPressViewInExplorer(
+                        (channel as lnrpc.PendingChannelsResponse.ClosedChannel).closingTxid,
+                      )
+                    }
+                  >
+                    <Text style={{ fontSize: 8 }}>
+                      {t("generic.viewInBlockExplorer", { ns: namespaces.common })}
+                    </Text>
                   </Button>
                 </Left>
               </Row>
             </>
-          }
-          {type === "CLOSING" &&
+          )}
+          {type === "CLOSING" && (
             <>
               <Row style={{ width: "100%" }}>
                 <Left>
-                  <Button style={{ marginTop: 14 }} small={true} onPress={(() => onPressViewInExplorer((channel as lnrpc.PendingChannelsResponse.IClosedChannel)?.closingTxid))}>
-                    <Text style={{ fontSize: 8 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
+                  <Button
+                    style={{ marginTop: 14 }}
+                    small={true}
+                    onPress={() =>
+                      onPressViewInExplorer(
+                        (channel as lnrpc.PendingChannelsResponse.IClosedChannel)?.closingTxid,
+                      )
+                    }
+                  >
+                    <Text style={{ fontSize: 8 }}>
+                      {t("generic.viewInBlockExplorer", { ns: namespaces.common })}
+                    </Text>
                   </Button>
                 </Left>
               </Row>
             </>
-          }
+          )}
         </Body>
       </CardItem>
     </Card>

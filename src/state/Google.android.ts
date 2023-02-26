@@ -24,7 +24,7 @@ export interface IGoogleModel {
   isSignedIn: boolean;
   hasPlayServices: boolean;
   user?: User;
-};
+}
 
 export const google: IGoogleModel = {
   initialize: thunk(async (actions) => {
@@ -60,7 +60,7 @@ export const google: IGoogleModel = {
   }),
 
   signIn: thunk(async (actions, _, { getState }) => {
-    if (!(getState().hasPlayServices)) {
+    if (!getState().hasPlayServices) {
       throw new Error("Google Play Services needed to login to Google");
     }
 
@@ -79,7 +79,7 @@ export const google: IGoogleModel = {
         // some other error happened
         log.e("Got expected error from GoogleSignin.signIn(): ${e.code}", [error]);
       }
-      return false
+      return false;
     }
     return true;
   }),
@@ -97,10 +97,16 @@ export const google: IGoogleModel = {
     return await GoogleSignin.getTokens();
   }),
 
-  setIsSignedIn: action((store, payload) => { store.isSignedIn = payload; }),
-  setHasPlayServices: action((store, payload) => { store.hasPlayServices = payload; }),
-  setUser: action((store, payload) => { store.user = payload; }),
+  setIsSignedIn: action((store, payload) => {
+    store.isSignedIn = payload;
+  }),
+  setHasPlayServices: action((store, payload) => {
+    store.hasPlayServices = payload;
+  }),
+  setUser: action((store, payload) => {
+    store.user = payload;
+  }),
 
   isSignedIn: false,
   hasPlayServices: false,
-}
+};

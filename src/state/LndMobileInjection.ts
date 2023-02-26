@@ -12,7 +12,6 @@ import {
   createIOSApplicationSupportAndLndDirectories,
   TEMP_moveLndToApplicationSupport,
   excludeLndICloudBackup,
-
   addInvoice,
   addInvoiceBlixtLsp,
   IAddInvoiceBlixtLspArgs,
@@ -64,15 +63,8 @@ import {
   signMessage,
   signMessageNodePubkey,
 } from "../lndmobile/wallet";
-import {
-  status,
-  modifyStatus,
-  queryScores,
-  setScores,
-} from "../lndmobile/autopilot";
-import {
-  checkScheduledSyncWorkStatus
-} from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
+import { status, modifyStatus, queryScores, setScores } from "../lndmobile/autopilot";
+import { checkScheduledSyncWorkStatus } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
 import { lnrpc, signrpc, invoicesrpc, autopilotrpc, routerrpc } from "../../proto/lightning";
 import { WorkInfo } from "../lndmobile/LndMobile";
 
@@ -92,9 +84,13 @@ export interface ILndMobileInjections {
     TEMP_moveLndToApplicationSupport: () => Promise<boolean>;
     excludeLndICloudBackup: () => Promise<boolean>;
 
-    addInvoice: (amount: number, memo: string, expiry?: number) => Promise<lnrpc.AddInvoiceResponse>;
+    addInvoice: (
+      amount: number,
+      memo: string,
+      expiry?: number,
+    ) => Promise<lnrpc.AddInvoiceResponse>;
     addInvoiceBlixtLsp: (args: IAddInvoiceBlixtLspArgs) => Promise<lnrpc.AddInvoiceResponse>;
-    cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>
+    cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>;
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
     disconnectPeer: (pubkey: string) => Promise<lnrpc.DisconnectPeerResponse>;
     decodePayReq: (bolt11: string) => Promise<lnrpc.PayReq>;
@@ -107,19 +103,36 @@ export interface ILndMobileInjections {
     lookupInvoice: (rHash: string) => Promise<lnrpc.Invoice>;
     listPeers: () => Promise<lnrpc.ListPeersResponse>;
     readLndLog: () => Promise<IReadLndLogResponse>;
-    sendPaymentSync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null) => Promise<lnrpc.SendResponse>;
-    sendPaymentV2Sync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null, multiPath?: boolean) => Promise<lnrpc.Payment>;
+    sendPaymentSync: (
+      paymentRequest: string,
+      amount?: Long,
+      tlvRecordName?: string | null,
+    ) => Promise<lnrpc.SendResponse>;
+    sendPaymentV2Sync: (
+      paymentRequest: string,
+      amount?: Long,
+      tlvRecordName?: string | null,
+      multiPath?: boolean,
+    ) => Promise<lnrpc.Payment>;
   };
   channel: {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;
     closeChannel: (fundingTxId: string, outputIndex: number, force: boolean) => Promise<string>;
     listChannels: () => Promise<lnrpc.ListChannelsResponse>;
-    openChannel: (pubkey: string, amount: number, privateChannel: boolean, feeRateSat?: number) => Promise<lnrpc.ChannelPoint>;
+    openChannel: (
+      pubkey: string,
+      amount: number,
+      privateChannel: boolean,
+      feeRateSat?: number,
+    ) => Promise<lnrpc.ChannelPoint>;
     pendingChannels: () => Promise<lnrpc.PendingChannelsResponse>;
     subscribeChannelEvents: () => Promise<string>;
     decodeChannelEvent: (data: string) => lnrpc.ChannelEventUpdate;
     exportAllChannelBackups: () => Promise<lnrpc.ChanBackupSnapshot>;
-    abandonChannel: (fundingTxId: string, outputIndex: number) => Promise<lnrpc.AbandonChannelResponse>;
+    abandonChannel: (
+      fundingTxId: string,
+      outputIndex: number,
+    ) => Promise<lnrpc.AbandonChannelResponse>;
   };
   onchain: {
     getTransactions: () => Promise<lnrpc.TransactionDetails>;
@@ -132,13 +145,26 @@ export interface ILndMobileInjections {
   wallet: {
     decodeInvoiceResult: (data: string) => lnrpc.Invoice;
     genSeed: () => Promise<lnrpc.GenSeedResponse>;
-    initWallet: (seed: string[], password: string, recoveryWindow?: number, channelBackupsBase64?: string, aezeedPassphrase?: string) => Promise<void>;
+    initWallet: (
+      seed: string[],
+      password: string,
+      recoveryWindow?: number,
+      channelBackupsBase64?: string,
+      aezeedPassphrase?: string,
+    ) => Promise<void>;
     subscribeInvoices: () => Promise<string>;
     unlockWallet: (password: string) => Promise<void>;
     deriveKey: (keyFamily: number, keyIndex: number) => Promise<signrpc.KeyDescriptor>;
     derivePrivateKey: (keyFamily: number, keyIndex: number) => Promise<signrpc.KeyDescriptor>;
-    verifyMessageNodePubkey: (signature: string, msg: Uint8Array) => Promise<lnrpc.VerifyMessageResponse>;
-    signMessage: (keyFamily: number, keyIndex: number, msg: Uint8Array) => Promise<signrpc.SignMessageResp>;
+    verifyMessageNodePubkey: (
+      signature: string,
+      msg: Uint8Array,
+    ) => Promise<lnrpc.VerifyMessageResponse>;
+    signMessage: (
+      keyFamily: number,
+      keyIndex: number,
+      msg: Uint8Array,
+    ) => Promise<signrpc.SignMessageResp>;
     signMessageNodePubkey: (msg: Uint8Array) => Promise<lnrpc.SignMessageResponse>;
   };
   autopilot: {

@@ -5,7 +5,12 @@ import { differenceInDays } from "date-fns";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
 import { waitUntilTrue, timeout, toast } from "../utils";
-import { uploadFileAsString, getFiles, checkResponseIsError, downloadFileAsString } from "../utils/google-drive";
+import {
+  uploadFileAsString,
+  getFiles,
+  checkResponseIsError,
+  downloadFileAsString,
+} from "../utils/google-drive";
 import { Chain, Debug } from "../utils/build";
 import { getItemObject, StorageItem, setItemObject } from "../storage/app";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
@@ -19,15 +24,26 @@ export const GOOGLE_DRIVE_BACKUP_FILE = `blixt-wallet-backup-${Chain}${Debug ? "
 export interface IGoogleDriveBackupModel {
   initialize: Thunk<IGoogleDriveBackupModel, void, any, IStoreModel>;
 
-  setupChannelUpdateSubscriptions: Thunk<IGoogleDriveBackupModel, void, IStoreInjections, IStoreModel>;
+  setupChannelUpdateSubscriptions: Thunk<
+    IGoogleDriveBackupModel,
+    void,
+    IStoreInjections,
+    IStoreModel
+  >;
   setChannelUpdateSubscriptionStarted: Action<IGoogleDriveBackupModel, boolean>;
 
   makeBackup: Thunk<IGoogleDriveBackupModel, void, IStoreInjections, IStoreModel>;
 
-  getBackupFile: Thunk<IGoogleDriveBackupModel, void, IStoreInjections, IStoreModel, Promise<string>>;
+  getBackupFile: Thunk<
+    IGoogleDriveBackupModel,
+    void,
+    IStoreInjections,
+    IStoreModel,
+    Promise<string>
+  >;
 
   channelUpdateSubscriptionStarted: boolean;
-};
+}
 
 export const googleDriveBackup: IGoogleDriveBackupModel = {
   initialize: thunk(async (actions, _, { getState, getStoreState }) => {
@@ -42,7 +58,7 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
       if (getStoreState().settings.googleDriveBackupEnabled) {
         let lastGoogleDriveBackup = await getItemObject<number>(StorageItem.lastGoogleDriveBackup);
         log.d("lastGoogleDriveBackup", [lastGoogleDriveBackup]);
-        lastGoogleDriveBackup = lastGoogleDriveBackup - (60 * 60 * 24 * 1000);
+        lastGoogleDriveBackup = lastGoogleDriveBackup - 60 * 60 * 24 * 1000;
         const currentDate = new Date().getTime();
         const diff = differenceInDays(currentDate, lastGoogleDriveBackup);
         if (diff >= 3) {
@@ -62,7 +78,10 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
 
     LndMobileEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
       try {
-        if (!getStoreState().settings.googleDriveBackupEnabled || !getStoreState().google.isSignedIn) {
+        if (
+          !getStoreState().settings.googleDriveBackupEnabled ||
+          !getStoreState().google.isSignedIn
+        ) {
           return;
         }
 
@@ -97,21 +116,26 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
     const files = await getFiles(accessToken, [GOOGLE_DRIVE_BACKUP_FILE]);
     if (checkResponseIsError(files)) {
       throw new Error(`Error backing up channels to Google Drive. ${JSON.stringify(files)}`);
-    }
-    else {
+    } else {
       // files.files[0] will be undefined if this is the first
       // time an upload is triggered, so we pass in undefined
       // to create a new file.
-      const uploadResult = await uploadFileAsString(accessToken, {
-        name: GOOGLE_DRIVE_BACKUP_FILE,
-        description: "Base64-encoded channel backup for Blixt Wallet",
-        mimeType: "application/base64",
-      }, backupsB64, files.files[0] ? files.files[0].id : undefined);
+      const uploadResult = await uploadFileAsString(
+        accessToken,
+        {
+          name: GOOGLE_DRIVE_BACKUP_FILE,
+          description: "Base64-encoded channel backup for Blixt Wallet",
+          mimeType: "application/base64",
+        },
+        backupsB64,
+        files.files[0] ? files.files[0].id : undefined,
+      );
 
       if (checkResponseIsError(uploadResult)) {
-        throw new Error(`Error backing up channels to Google Drive. ${JSON.stringify(uploadResult)}`);
-      }
-      else {
+        throw new Error(
+          `Error backing up channels to Google Drive. ${JSON.stringify(uploadResult)}`,
+        );
+      } else {
         log.i("Backing up channels to Google Drive succeeded");
         log.d("uploadResult", [uploadResult]);
         return uploadResult;
@@ -136,14 +160,15 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
     if (checkResponseIsError(backupB64)) {
       log.e("Got error when downloading backup", [backupB64]);
       throw new Error(backupB64.error.message);
-    }
-    else {
+    } else {
       log.i("Download succeeded");
       return backupB64;
     }
   }),
 
-  setChannelUpdateSubscriptionStarted: action((state, payload) => { state.channelUpdateSubscriptionStarted = payload; }),
+  setChannelUpdateSubscriptionStarted: action((state, payload) => {
+    state.channelUpdateSubscriptionStarted = payload;
+  }),
 
   channelUpdateSubscriptionStarted: false,
-}
+};

@@ -11,7 +11,7 @@ beforeEach(async () => {
 });
 
 test("initialize index store", async () => {
-  await store.getActions().initializeApp()
+  await store.getActions().initializeApp();
 
   expect(store.getState().appReady).toBe(true);
   expect(store.getState().walletCreated).toBe(false);

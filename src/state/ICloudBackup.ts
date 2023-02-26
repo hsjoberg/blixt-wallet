@@ -14,7 +14,9 @@ import { LndMobileEventEmitter } from "../utils/event-listener";
 import logger from "./../utils/log";
 const log = logger("ICloudBackup");
 
-export const ICLOUD_BACKUP_KEY = `blixt-wallet-backup-${Chain}${Debug ? "-debug" : ""}${Flavor ? `-${Flavor}` : ""}`;
+export const ICLOUD_BACKUP_KEY = `blixt-wallet-backup-${Chain}${Debug ? "-debug" : ""}${
+  Flavor ? `-${Flavor}` : ""
+}`;
 
 export interface IICloudBackupModel {
   initialize: Thunk<IICloudBackupModel, void, IStoreInjections, IStoreModel>;
@@ -28,7 +30,7 @@ export interface IICloudBackupModel {
 
   channelUpdateSubscriptionStarted: boolean;
   iCloudActive: boolean; // Whether iCloud is active on the system
-};
+}
 
 export const iCloudBackup: IICloudBackupModel = {
   initialize: thunk(async (actions, _, { getState, getStoreState, injections }) => {
@@ -48,7 +50,7 @@ export const iCloudBackup: IICloudBackupModel = {
         try {
           let lastICloudBackup = await getItemObject<number>(StorageItem.lastICloudBackup);
           log.d("lastICloudBackup", [lastICloudBackup]);
-          lastICloudBackup = lastICloudBackup - (60 * 60 * 24 * 1000);
+          lastICloudBackup = lastICloudBackup - 60 * 60 * 24 * 1000;
           const currentDate = new Date().getTime();
           const diff = differenceInDays(currentDate, lastICloudBackup);
           if (diff >= 3) {
@@ -81,7 +83,7 @@ export const iCloudBackup: IICloudBackupModel = {
         if (error === "EOF") {
           return;
         } else if (error) {
-          throw error
+          throw error;
         }
 
         const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
@@ -105,7 +107,7 @@ export const iCloudBackup: IICloudBackupModel = {
 
     const remoteStoredBackupsB64 = await iCloudStorage.getItem(ICLOUD_BACKUP_KEY);
     if (remoteStoredBackupsB64 !== backupsB64) {
-      log.i("iCloud storage missmatch, local, remote:", [backupsB64, remoteStoredBackupsB64])
+      log.i("iCloud storage missmatch, local, remote:", [backupsB64, remoteStoredBackupsB64]);
       throw new Error("Could not save iCloud backup");
     }
 
@@ -116,9 +118,13 @@ export const iCloudBackup: IICloudBackupModel = {
     return await iCloudStorage.getItem(ICLOUD_BACKUP_KEY);
   }),
 
-  setChannelUpdateSubscriptionStarted: action((state, payload) => { state.channelUpdateSubscriptionStarted = payload; }),
-  setICloudActive: action((state, payload) => { state.iCloudActive = payload; }),
+  setChannelUpdateSubscriptionStarted: action((state, payload) => {
+    state.channelUpdateSubscriptionStarted = payload;
+  }),
+  setICloudActive: action((state, payload) => {
+    state.iCloudActive = payload;
+  }),
 
   channelUpdateSubscriptionStarted: false,
   iCloudActive: false,
-}
+};

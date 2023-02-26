@@ -6,7 +6,12 @@ import { MapStyle } from "../utils/google-maps";
 import { appMigration } from "../migration/app-migration";
 import { Chain, VersionCode } from "../utils/build";
 import { LndChainBackend } from "../state/Lightning";
-import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../utils/constants";
+import {
+  DEFAULT_DUNDER_SERVER,
+  DEFAULT_INVOICE_EXPIRY,
+  DEFAULT_NEUTRINO_NODE,
+  PLATFORM,
+} from "../utils/constants";
 
 const APP_VERSION = appMigration.length - 1;
 
@@ -64,16 +69,19 @@ export enum StorageItem { // const enums not supported in Babel 7...
   strictGraphPruningEnabled = "strictGraphPruningEnabled",
 }
 
-export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
-export const setItemObject = async <T>(key: StorageItem, value: T) => await AsyncStorage.setItem(key, JSON.stringify(value));
+export const setItem = async (key: StorageItem, value: string) =>
+  await AsyncStorage.setItem(key, value);
+export const setItemObject = async <T>(key: StorageItem, value: T) =>
+  await AsyncStorage.setItem(key, JSON.stringify(value));
 export const getItem = async (key: StorageItem) => await AsyncStorage.getItem(key);
-export const getItemObject = async <T = any>(key: StorageItem): Promise<T> => JSON.parse(await AsyncStorage.getItem(key) || "null");
+export const getItemObject = async <T = any>(key: StorageItem): Promise<T> =>
+  JSON.parse((await AsyncStorage.getItem(key)) || "null");
 export const removeItem = async (key: StorageItem) => await AsyncStorage.removeItem(key);
 export const getAppVersion = async (): Promise<number> => {
-  return await getItemObject(StorageItem.appVersion) || 0;
+  return (await getItemObject(StorageItem.appVersion)) || 0;
 };
 export const getAppBuild = async (): Promise<number> => {
-  return await getItemObject(StorageItem.appBuild) || 0;
+  return (await getItemObject(StorageItem.appBuild)) || 0;
 };
 export const setAppVersion = async (version: number): Promise<void> => {
   return await setItemObject(StorageItem.appVersion, version);
@@ -82,10 +90,10 @@ export const setAppBuild = async (version: number): Promise<void> => {
   return await setItemObject(StorageItem.appBuild, version);
 };
 export const getWalletCreated = async (): Promise<boolean> => {
-  return await getItemObject(StorageItem.walletCreated) || false;
+  return (await getItemObject(StorageItem.walletCreated)) || false;
 };
 export const getRescanWallet = async (): Promise<boolean> => {
-  return await getItemObject(StorageItem.rescanWallet) || false;
+  return (await getItemObject(StorageItem.rescanWallet)) || false;
 };
 export const setRescanWallet = async (rescan: boolean): Promise<void> => {
   return await setItemObject<boolean>(StorageItem.rescanWallet, rescan);

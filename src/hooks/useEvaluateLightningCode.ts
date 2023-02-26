@@ -1,7 +1,13 @@
 import { Alert } from "../utils/alert";
 import { useStoreActions } from "../state/store";
 
-type EvaluateLightningCodeResponse = "BOLT11" | "LNURLChannelRequest" | "LNURLAuthRequest" | "LNURLWithdrawRequest" | "LNURLPayRequest" | null;
+type EvaluateLightningCodeResponse =
+  | "BOLT11"
+  | "LNURLChannelRequest"
+  | "LNURLAuthRequest"
+  | "LNURLWithdrawRequest"
+  | "LNURLPayRequest"
+  | null;
 
 export default function useEvaluateLightningCode() {
   const setPayment = useStoreActions((store) => store.send.setPayment);
@@ -30,47 +36,43 @@ export default function useEvaluateLightningCode() {
       console.log("LNURL");
       try {
         let type: string;
-        if (code.startsWith("lnurlp://") || code.startsWith("lnurlw:") || code.startsWith("lnurlc:")) {
+        if (
+          code.startsWith("lnurlp://") ||
+          code.startsWith("lnurlw:") ||
+          code.startsWith("lnurlc:")
+        ) {
           code = "https://" + code.substring(9).split(/[\s&]/)[0];
-          type = await setLNUrl({ url: code })
-        }
-        else if (code.startsWith("keyauth://")) {
+          type = await setLNUrl({ url: code });
+        } else if (code.startsWith("keyauth://")) {
           code = "https://" + code.substring(10).split(/[\s&]/)[0];
-          type = await setLNUrl({ url: code })
+          type = await setLNUrl({ url: code });
         } else {
           type = await setLNUrl({ bech32data: code });
         }
 
         if (type === "channelRequest") {
           return "LNURLChannelRequest";
-        }
-        else if (type === "login") {
+        } else if (type === "login") {
           return "LNURLAuthRequest";
-        }
-        else if (type === "withdrawRequest") {
+        } else if (type === "withdrawRequest") {
           return "LNURLWithdrawRequest";
-        }
-        else if (type === "payRequest") {
-          return "LNURLPayRequest"
-        }
-        else {
+        } else if (type === "payRequest") {
+          return "LNURLPayRequest";
+        } else {
           console.log("Unknown lnurl request: " + type);
-          Alert.alert(`Unsupported LNURL request: ${type}`, undefined,
-            [{ text: "OK", onPress: () => {}}]
-          );
+          Alert.alert(`Unsupported LNURL request: ${type}`, undefined, [
+            { text: "OK", onPress: () => {} },
+          ]);
           lnUrlClear();
         }
       } catch (e) {
-        Alert.alert(`${e.message}`, undefined,
-          [{ text: "OK", onPress: () => {}}]
-        );
+        Alert.alert(`${e.message}`, undefined, [{ text: "OK", onPress: () => {} }]);
       }
     } else if (code.includes("@")) {
       if (await resolveLightningAddress(code)) {
         return "LNURLPayRequest";
       }
-    }
-    else {
+    } else {
       try {
         await setPayment({ paymentRequestStr: code });
         return "BOLT11";

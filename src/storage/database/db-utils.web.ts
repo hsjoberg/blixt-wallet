@@ -14,7 +14,11 @@ export const query = async (db: SqlJs.Database, sql: string, params: any[]) => {
 /**
  * @returns number Insert ID
  */
-export const queryInsert = async (db: SqlJs.Database, sql: string, params: any[]): Promise<number> => {
+export const queryInsert = async (
+  db: SqlJs.Database,
+  sql: string,
+  params: any[],
+): Promise<number> => {
   try {
     await query(db, sql, params);
 
@@ -28,7 +32,11 @@ export const queryInsert = async (db: SqlJs.Database, sql: string, params: any[]
   }
 };
 
-export const queryMulti = async <T>(db: SqlJs.Database, sql: string, params: any[] = []): Promise<T[]> => {
+export const queryMulti = async <T>(
+  db: SqlJs.Database,
+  sql: string,
+  params: any[] = [],
+): Promise<T[]> => {
   try {
     const r = await query(db, sql, params);
     return convertToKeyValue(r[0]) as T[];
@@ -40,7 +48,11 @@ export const queryMulti = async <T>(db: SqlJs.Database, sql: string, params: any
   }
 };
 
-export const querySingle = async <T>(db: SqlJs.Database, sql: string, params: any[]): Promise<T | null> => {
+export const querySingle = async <T>(
+  db: SqlJs.Database,
+  sql: string,
+  params: any[],
+): Promise<T | null> => {
   try {
     const r = await query(db, sql, params);
     if (r[0]) {
@@ -62,12 +74,12 @@ function convertToKeyValue(query: any) {
   var keys = query.columns;
   var values = query.values;
 
-  for(var i = 0; i < values.length; i++) {
-      var valueObject: any = {};
-      for(var j = 0; j < keys.length; j++){
-          valueObject[keys[j]] = values[i][j];
-      }
-      queryObjects.push(valueObject);
+  for (var i = 0; i < values.length; i++) {
+    var valueObject: any = {};
+    for (var j = 0; j < keys.length; j++) {
+      valueObject[keys[j]] = values[i][j];
+    }
+    queryObjects.push(valueObject);
   }
   return queryObjects;
 }

@@ -1,5 +1,9 @@
 import React from "react";
-import { createStackNavigator, StackNavigationOptions, CardStyleInterpolators } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+  CardStyleInterpolators,
+} from "@react-navigation/stack";
 import SendCamera from "./SendCamera";
 import SendConfirmation from "./SendConfirmation";
 import SendDone from "./SendDone";
@@ -19,9 +23,13 @@ export type SendStackParamList = {
     preimage: Uint8Array;
     callback?: (r: Uint8Array | null) => void;
   };
-}
+};
 
-export default function SendIndex({ route }: { route: RouteProp<{ "Send": {viaSwipe: boolean | undefined } | undefined}, "Send">}) {
+export default function SendIndex({
+  route,
+}: {
+  route: RouteProp<{ Send: { viaSwipe: boolean | undefined } | undefined }, "Send">;
+}) {
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
   };
@@ -30,15 +38,28 @@ export default function SendIndex({ route }: { route: RouteProp<{ "Send": {viaSw
 
   return (
     <Stack.Navigator initialRouteName="SendCamera" screenOptions={screenOptions}>
-      <Stack.Screen initialParams={viaSwipe !== undefined ? { viaSwipe } : undefined} name="SendCamera" component={SendCamera} options={{
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }} />
-      <Stack.Screen name="SendConfirmation" component={SendConfirmation} options={{
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }} />
-      <Stack.Screen name="SendDone" component={SendDone} options={{
-        cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
-      }} />
+      <Stack.Screen
+        initialParams={viaSwipe !== undefined ? { viaSwipe } : undefined}
+        name="SendCamera"
+        component={SendCamera}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="SendConfirmation"
+        component={SendConfirmation}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
+      <Stack.Screen
+        name="SendDone"
+        component={SendDone}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
+        }}
+      />
     </Stack.Navigator>
-  )
+  );
 }

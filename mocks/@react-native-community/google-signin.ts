@@ -3,8 +3,8 @@ const GoogleSignin = {
   configure: () => Promise.resolve(),
   currentUserAsync: () => {
     return Promise.resolve({
-      name: 'blixt-jest',
-      email: 'blixt-jest@blixtwallet.com',
+      name: "blixt-jest",
+      email: "blixt-jest@blixtwallet.com",
       // .... other user data
     });
   },

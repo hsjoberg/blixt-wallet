@@ -1,6 +1,12 @@
 import { LayoutAnimation } from "react-native";
 import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
-import { IContact, getContacts, createContact, updateContact, deleteContact } from "../storage/database/contact";
+import {
+  IContact,
+  getContacts,
+  createContact,
+  updateContact,
+  deleteContact,
+} from "../storage/database/contact";
 
 import { IStoreModel } from "./index";
 import logger from "./../utils/log";
@@ -20,9 +26,15 @@ export interface IContactsModel {
   setContacts: Action<IContactsModel, IContact[]>;
 
   contacts: IContact[];
-  getContactByLightningAddress: Computed<IContactsModel, (lightningAddress: string) => IContact | undefined>;
+  getContactByLightningAddress: Computed<
+    IContactsModel,
+    (lightningAddress: string) => IContact | undefined
+  >;
   getContactByLnUrlPay: Computed<IContactsModel, (lnUrlPay: string) => IContact | undefined>;
-  getContactByLnUrlWithdraw: Computed<IContactsModel, (lnUrlWithdraw: string) => IContact | undefined>;
+  getContactByLnUrlWithdraw: Computed<
+    IContactsModel,
+    (lnUrlWithdraw: string) => IContact | undefined
+  >;
 }
 
 export const contacts: IContactsModel = {
@@ -41,7 +53,7 @@ export const contacts: IContactsModel = {
     for (const contactIt of contacts) {
       if (contactIt.id === tx.id) {
         await updateContact(db, { ...contactIt, ...tx });
-        actions.updateContact({ contact: { ...contactIt, ...tx }});
+        actions.updateContact({ contact: { ...contactIt, ...tx } });
         foundContact = true;
       }
     }
@@ -52,7 +64,6 @@ export const contacts: IContactsModel = {
       actions.addContact({ ...tx, id });
     }
   }),
-
 
   /**
    * Delete a contact
@@ -105,28 +116,24 @@ export const contacts: IContactsModel = {
   /**
    * Set contacts to our contact array
    */
-  setContacts: action((state, contacts) => { state.contacts = contacts; }),
+  setContacts: action((state, contacts) => {
+    state.contacts = contacts;
+  }),
 
   contacts: [],
-  getContactByLightningAddress: computed(
-    (state) => {
-      return (lightningAddress: string) => {
-        return state.contacts.find((c) => lightningAddress === c.lightningAddress);
-      };
-    },
-  ),
-  getContactByLnUrlPay: computed(
-    (state) => {
-      return (lnUrlPay: string) => {
-        return state.contacts.find((c) => lnUrlPay === c.lnUrlPay);
-      };
-    },
-  ),
-  getContactByLnUrlWithdraw: computed(
-    (state) => {
-      return (lnUrlWithdraw: string) => {
-        return state.contacts.find((c) => lnUrlWithdraw === c.lnUrlWithdraw);
-      };
-    },
-  ),
+  getContactByLightningAddress: computed((state) => {
+    return (lightningAddress: string) => {
+      return state.contacts.find((c) => lightningAddress === c.lightningAddress);
+    };
+  }),
+  getContactByLnUrlPay: computed((state) => {
+    return (lnUrlPay: string) => {
+      return state.contacts.find((c) => lnUrlPay === c.lnUrlPay);
+    };
+  }),
+  getContactByLnUrlWithdraw: computed((state) => {
+    return (lnUrlWithdraw: string) => {
+      return state.contacts.find((c) => lnUrlWithdraw === c.lnUrlWithdraw);
+    };
+  }),
 };

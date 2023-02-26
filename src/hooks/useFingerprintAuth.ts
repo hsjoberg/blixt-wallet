@@ -21,11 +21,11 @@ export default function useFingerprintAuth(callback: () => void, forceEnabled: b
     }
     return () => {
       fingerprintStopScan();
-    }
+    };
   }, [fingerprintAvailable, fingerprintEnabled, forceEnabled]);
 
   return () => {
     // tslint:disable-next-line: no-floating-promises
     startScan();
-  }
+  };
 }

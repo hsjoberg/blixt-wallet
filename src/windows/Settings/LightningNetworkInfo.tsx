@@ -25,10 +25,12 @@ const MetaData = ({ title, data }: IMetaDataProps) => {
         Array.isArray(data)
           ? Clipboard.setString(data.join("\n"))
           : Clipboard.setString(data.toString());
-        toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
+        toast(t("msg.clipboardCopy", { ns: namespaces.common }), undefined, "warning");
       }}
     >
-      <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>
+      <Text style={{ fontWeight: "bold" }}>
+        {title}:{"\n"}
+      </Text>
       {Array.isArray(data) && data.join("\n")}
       {!Array.isArray(data) && data}
     </Text>
@@ -48,7 +50,7 @@ export default function LightningNetworkInfo() {
   }, [getNetworkInfo]);
 
   if (!networkInfo) {
-    return (<></>);
+    return <></>;
   }
 
   return (
@@ -58,19 +60,28 @@ export default function LightningNetworkInfo() {
           <Body>
             <ScrollView>
               <H1 style={style.header}>{t("title")}</H1>
-              <MetaData title={t("totalNetworkCapacity")} data={Long.fromValue(networkInfo.totalNetworkCapacity).toString()} />
+              <MetaData
+                title={t("totalNetworkCapacity")}
+                data={Long.fromValue(networkInfo.totalNetworkCapacity).toString()}
+              />
               <MetaData title={t("numChannels")} data={networkInfo.numChannels} />
               <MetaData title={t("numNodes")} data={networkInfo.numNodes} />
               <MetaData title={t("avgChannelSize")} data={networkInfo.avgChannelSize} />
-              <MetaData title={t("medianChannelSizeSat")} data={Long.fromValue(networkInfo.medianChannelSizeSat).toString()} />
-              <MetaData title={t("numZombieChans")} data={Long.fromValue(networkInfo.numZombieChans).toString()} />
+              <MetaData
+                title={t("medianChannelSizeSat")}
+                data={Long.fromValue(networkInfo.medianChannelSizeSat).toString()}
+              />
+              <MetaData
+                title={t("numZombieChans")}
+                data={Long.fromValue(networkInfo.numZombieChans).toString()}
+              />
             </ScrollView>
           </Body>
         </CardItem>
       </Card>
     </Blurmodal>
   );
-};
+}
 
 const style = StyleSheet.create({
   card: {
@@ -88,9 +99,8 @@ const style = StyleSheet.create({
     marginBottom: 7,
     ...Platform.select({
       web: {
-        wordBreak: "break-all"
+        wordBreak: "break-all",
       },
     }),
   },
 });
-

@@ -71,6 +71,7 @@ It's useful if you want to make design and GUI changes.
 - Generate proto files: `yarn gen-proto`
 
 To start the application:
+
 - Run: `yarn start-metro`
 - Run: `yarn android:mainnet-debug` or `yarn android:testnet-debug`
 
@@ -91,12 +92,14 @@ To build the iOS version, a computer running macOS is required. You also need an
   - Choose your Team in the dropdown and choose a new unique Bundle Identifier (cannot be the same as the ones released on the App Store). Do this for every configuration
 
 To start the application:
+
 - Run: `yarn start-metro`
 - Run: `yarn ios:mainnet-debug --device "<your device name>"` or build from Xcode
 
 ### macOS
 
 To build the macOS version, a computer running macOS is required.
+
 - Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
 - Build lnd for macOS by following the steps in [build-ios-framework.md](build-ios-framework.md)
   - Intead of running `make ios`, run `make macos` or `make apple`
@@ -105,6 +108,7 @@ To build the macOS version, a computer running macOS is required.
 - Install CocoaPods libs: `cd macos && pod install`
 
 To start the application:
+
 - Run: `yarn start-metro`
 - Build app from Xcode or run `yarn macos:mainnet-debug`
 

@@ -17,7 +17,8 @@ export const PLATFORM = Platform.OS;
 
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
-export const DEFAULT_NEUTRINO_NODE = Chain === "mainnet" ? "node.blixtwallet.com" : "testnet.blixtwallet.com";
+export const DEFAULT_NEUTRINO_NODE =
+  Chain === "mainnet" ? "node.blixtwallet.com" : "testnet.blixtwallet.com";
 export const DEFAULT_INVOICE_EXPIRY = 3600;
 
 export const ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID = "common";
@@ -29,15 +30,17 @@ export const DEFAULT_DUNDER_SERVER = chainSelect({
   regtest: "http://192.168.1.111:8080",
 });
 
-export const HEADER_MIN_HEIGHT = Platform.select({
-  android: (StatusBar.currentHeight ?? 0) + 53,
-  ios: getStatusBarHeight(true) + 53,
-  macos: 53
-}) ?? 53;
+export const HEADER_MIN_HEIGHT =
+  Platform.select({
+    android: (StatusBar.currentHeight ?? 0) + 53,
+    ios: getStatusBarHeight(true) + 53,
+    macos: 53,
+  }) ?? 53;
 
-export const HEADER_MAX_HEIGHT = (Platform.select({
-  android: 195,
-  ios: 195,
-  web: 195 - 32,
-  macos: 175
-}) ?? 195) / (zoomed ? 0.85 : 1);
+export const HEADER_MAX_HEIGHT =
+  (Platform.select({
+    android: 195,
+    ios: 195,
+    web: 195 - 32,
+    macos: 175,
+  }) ?? 195) / (zoomed ? 0.85 : 1);

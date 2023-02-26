@@ -7,7 +7,7 @@ export const GDRIVE_UPLOAD_FILES_URL = "https://www.googleapis.com/upload/drive/
 
 export interface IGoogleDriveFile {
   mimeType: string;
-  kind:string;
+  kind: string;
   id: string;
   name: string;
 }
@@ -52,7 +52,10 @@ export interface GoogleDriveUploadFileMetaData {
  *
  * @returns IGoogleDriveFile[] Array of matching files
  */
-export const getFiles = async (bearer: string, search?: string[]): Promise<IGoogleDriveAPIGetFiles | IGoogleDriveAPIError> => {
+export const getFiles = async (
+  bearer: string,
+  search?: string[],
+): Promise<IGoogleDriveAPIGetFiles | IGoogleDriveAPIError> => {
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${bearer}`);
 
@@ -61,19 +64,23 @@ export const getFiles = async (bearer: string, search?: string[]): Promise<IGoog
   if (search && search.length > 0) {
     url.searchParams.append("q", `name = "${search.join(",")}"`);
   }
-  url.searchParams.append("fields", "kind,incompleteSearch,files/kind,files/id,files/name,files/mimeType,files/createdTime,files/modifiedTime");
+  url.searchParams.append(
+    "fields",
+    "kind,incompleteSearch,files/kind,files/id,files/name,files/mimeType,files/createdTime,files/modifiedTime",
+  );
 
   const getFilesResult = await fetch(url.toString(), { headers });
   if (!expectContentType(getFilesResult, "application/json")) {
     throw new Error(
-      `Unexpected response Content-type (${getFilesResult.headers.get("Content-type")}) from getFiles.\n` +
-      `Data: ${await getFilesResult.text()}`
+      `Unexpected response Content-type (${getFilesResult.headers.get(
+        "Content-type",
+      )}) from getFiles.\n` + `Data: ${await getFilesResult.text()}`,
     );
   }
   const filesJSON = await getFilesResult.json();
   return getFilesResult.ok
-    ? filesJSON as IGoogleDriveAPIGetFiles
-    : filesJSON as IGoogleDriveAPIError;
+    ? (filesJSON as IGoogleDriveAPIGetFiles)
+    : (filesJSON as IGoogleDriveAPIError);
 };
 
 /**
@@ -82,7 +89,10 @@ export const getFiles = async (bearer: string, search?: string[]): Promise<IGoog
  * @param bearer Google Drive Access Token
  * @param fileId
  */
-export const downloadFileAsString = async (bearer: string, fileId: string): Promise<string | IGoogleDriveAPIError> => {
+export const downloadFileAsString = async (
+  bearer: string,
+  fileId: string,
+): Promise<string | IGoogleDriveAPIError> => {
   const headers = new Headers();
   headers.append("Authorization", `Bearer ${bearer}`);
 
@@ -96,8 +106,9 @@ export const downloadFileAsString = async (bearer: string, fileId: string): Prom
 
   if (!expectContentType(result, "application/json")) {
     throw new Error(
-      `Unexpected response Content-type (${result.headers.get("Content-type")}) from downloadFileAsString.\n` +
-      `Data: ${await result.text()}`
+      `Unexpected response Content-type (${result.headers.get(
+        "Content-type",
+      )}) from downloadFileAsString.\n` + `Data: ${await result.text()}`,
     );
   }
   return result.json() as unknown as IGoogleDriveAPIError;
@@ -116,7 +127,12 @@ export const downloadFileAsString = async (bearer: string, fileId: string): Prom
  * @param data text-based data
  * @param fileId Google Drive File to replace, leave blank if new file
  */
-export const uploadFileAsString = async (bearer: string, metaData: GoogleDriveUploadFileMetaData, data: string, fileId?: string): Promise<IGoogleDriveFile | IGoogleDriveAPIError> => {
+export const uploadFileAsString = async (
+  bearer: string,
+  metaData: GoogleDriveUploadFileMetaData,
+  data: string,
+  fileId?: string,
+): Promise<IGoogleDriveFile | IGoogleDriveAPIError> => {
   // Provide the path to the file  if this is
   // the first time the file is uploaded
   if (!fileId) {
@@ -124,19 +140,21 @@ export const uploadFileAsString = async (bearer: string, metaData: GoogleDriveUp
   }
 
   const multipartBoundary = "blixt_googledrive_upload";
-  const multipartBody = `\r\n--${multipartBoundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n`
-  + `${JSON.stringify(metaData)}\r\n`
-  + `--${multipartBoundary}\r\nContent-Type: text/plain\r\n\r\n`
-  + `${data}\r\n`
-  + `--${multipartBoundary}--`;
+  const multipartBody =
+    `\r\n--${multipartBoundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n` +
+    `${JSON.stringify(metaData)}\r\n` +
+    `--${multipartBoundary}\r\nContent-Type: text/plain\r\n\r\n` +
+    `${data}\r\n` +
+    `--${multipartBoundary}--`;
 
   const headers = new Headers();
-  headers.append('Authorization', `Bearer ${bearer}`);
-  headers.append('Content-Type', `multipart/related; boundary=${multipartBoundary}`);
-  headers.append('Content-Length', `${multipartBody.length}`);
+  headers.append("Authorization", `Bearer ${bearer}`);
+  headers.append("Content-Type", `multipart/related; boundary=${multipartBoundary}`);
+  headers.append("Content-Length", `${multipartBody.length}`);
 
   const result = await fetch(
-    `${GDRIVE_UPLOAD_FILES_URL}${fileId ? "/" + fileId : ""}?uploadType=multipart`, {
+    `${GDRIVE_UPLOAD_FILES_URL}${fileId ? "/" + fileId : ""}?uploadType=multipart`,
+    {
       headers,
       method: fileId ? "PATCH" : "POST",
       body: multipartBody,
@@ -144,20 +162,24 @@ export const uploadFileAsString = async (bearer: string, metaData: GoogleDriveUp
   );
   if (!expectContentType(result, "application/json")) {
     throw new Error(
-      `Unexpected response Content-type (${result.headers.get("Content-type")}) from uploadFileAsString.\n` +
-      `Data: ${await result.text()}`
+      `Unexpected response Content-type (${result.headers.get(
+        "Content-type",
+      )}) from uploadFileAsString.\n` + `Data: ${await result.text()}`,
     );
   }
 
   const resultJSON = await result.json();
   return result.ok
-    ? resultJSON as unknown as IGoogleDriveFile
-    : resultJSON as unknown as IGoogleDriveAPIError;
+    ? (resultJSON as unknown as IGoogleDriveFile)
+    : (resultJSON as unknown as IGoogleDriveAPIError);
 };
 
-export const deleteFile = async (bearer: string, fileId: string): Promise<IGoogleDriveAPIDeleteFile | IGoogleDriveAPIError>  => {
+export const deleteFile = async (
+  bearer: string,
+  fileId: string,
+): Promise<IGoogleDriveAPIDeleteFile | IGoogleDriveAPIError> => {
   const headers = new Headers();
-  headers.append('Authorization', `Bearer ${bearer}`);
+  headers.append("Authorization", `Bearer ${bearer}`);
 
   const result = await fetch(`${GDRIVE_FILES_URL}/${fileId}`, { method: "DELETE", headers });
   if (result.ok) {
@@ -166,12 +188,13 @@ export const deleteFile = async (bearer: string, fileId: string): Promise<IGoogl
 
   if (!expectContentType(result, "application/json")) {
     throw new Error(
-      `Unexpected response Content-type (${result.headers.get("Content-type")}) from deleteFile.\n` +
-      `Data: ${await result.text()}`
+      `Unexpected response Content-type (${result.headers.get(
+        "Content-type",
+      )}) from deleteFile.\n` + `Data: ${await result.text()}`,
     );
   }
   return result.json() as unknown as IGoogleDriveAPIError;
-}
+};
 
 /**
  * Checks whether returned result an error.
@@ -187,5 +210,5 @@ export const checkResponseIsError = (subject: any): subject is IGoogleDriveAPIEr
 
 const expectContentType = (fetchResult: Response, expectedContentType: string): boolean => {
   const contentType = fetchResult.headers.get("Content-type");
-  return (!!contentType) && contentType.includes(expectedContentType);
-}
+  return !!contentType && contentType.includes(expectedContentType);
+};

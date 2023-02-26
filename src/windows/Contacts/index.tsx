@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 
 export type ContactsStackParamList = {
   ContactList: undefined;
-}
+};
 
 export default function ContactsIndex() {
   const screenOptions: StackNavigationOptions = {
@@ -20,5 +20,5 @@ export default function ContactsIndex() {
     <Stack.Navigator initialRouteName="ContactList" screenOptions={screenOptions}>
       <Stack.Screen name="ContactList" component={ContactList} />
     </Stack.Navigator>
-  )
+  );
 }

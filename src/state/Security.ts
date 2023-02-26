@@ -3,7 +3,14 @@ import FingerprintScanner, { Biometrics } from "react-native-fingerprint-scanner
 
 import { StorageItem, getItemObject, setItemObject, removeItem } from "../storage/app";
 import { Alert, AppState } from "react-native";
-import { getPin, getSeed as keystoreGetSeed, removeSeed, setSeed, setPin, removePin } from "../storage/keystore";
+import {
+  getPin,
+  getSeed as keystoreGetSeed,
+  removeSeed,
+  setSeed,
+  setPin,
+  removePin,
+} from "../storage/keystore";
 
 import logger from "./../utils/log";
 const log = logger("Security");
@@ -45,7 +52,7 @@ export const security: ISecurityModel = {
     const loginMethods: Set<LoginMethods> = new Set(await getItemObject(StorageItem.loginMethods));
     actions.setLoginMethods(loginMethods);
     actions.setLoggedIn(loginMethods.size === 0);
-    actions.setSeedAvailable(await getItemObject(StorageItem.seedStored) || false);
+    actions.setSeedAvailable((await getItemObject(StorageItem.seedStored)) || false);
     try {
       const sensor = await FingerprintScanner.isSensorAvailable();
       actions.setSensor(sensor);
@@ -127,7 +134,7 @@ export const security: ISecurityModel = {
 
   fingerprintStartScan: thunk(async (actions) => {
     try {
-      const r = await FingerprintScanner.authenticate({ onAttempt: () => {}});
+      const r = await FingerprintScanner.authenticate({ onAttempt: () => {} });
       actions.setLoggedIn(true);
       return true;
     } catch (e) {
@@ -143,10 +150,18 @@ export const security: ISecurityModel = {
     FingerprintScanner.release();
   }),
 
-  setLoggedIn: action((store, payload) => { store.loggedIn = payload; }),
-  setLoginMethods: action((store, payload) => { store.loginMethods = payload; }),
-  setSeedAvailable: action((store, payload) => { store.seedAvailable = payload; }),
-  setSensor: action((store, payload) => { store.sensor = payload; }),
+  setLoggedIn: action((store, payload) => {
+    store.loggedIn = payload;
+  }),
+  setLoginMethods: action((store, payload) => {
+    store.loginMethods = payload;
+  }),
+  setSeedAvailable: action((store, payload) => {
+    store.seedAvailable = payload;
+  }),
+  setSensor: action((store, payload) => {
+    store.sensor = payload;
+  }),
 
   loginMethods: new Set<LoginMethods>([]),
   loggedIn: false,

@@ -27,14 +27,16 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
   const channels = useStoreState((store) => store.channel.channels);
   const pendingOpenChannels = useStoreState((store) => store.channel.pendingOpenChannels);
   const pendingClosingChannels = useStoreState((store) => store.channel.pendingClosingChannels);
-  const pendingForceClosingChannels = useStoreState((store) => store.channel.pendingForceClosingChannels);
+  const pendingForceClosingChannels = useStoreState(
+    (store) => store.channel.pendingForceClosingChannels,
+  );
   const waitingCloseChannels = useStoreState((store) => store.channel.waitingCloseChannels);
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
-  const changePreferFiat  = useStoreActions((store) => store.settings.changePreferFiat);
+  const changePreferFiat = useStoreActions((store) => store.settings.changePreferFiat);
 
   async function getChans() {
     (async () => {
@@ -55,15 +57,15 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: t("layout.title"),
-      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
+      headerBackTitle: t("buttons.back", { ns: namespaces.common }),
       headerShown: true,
       headerRight: () => {
         return (
           <NavigationButton onPress={getChans}>
             <Icon type="MaterialIcons" name="sync" style={{ fontSize: 22 }} />
           </NavigationButton>
-        )
-      }
+        );
+      },
     });
   }, [navigation]);
 
@@ -78,7 +80,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
   const channelCards = [
     ...pendingOpenChannels.map((pendingChannel, i) => (
       <PendingChannelCard
-        key={((pendingChannel?.channel?.channelPoint) ?? "") + i}
+        key={(pendingChannel?.channel?.channelPoint ?? "") + i}
         alias={aliases[pendingChannel.channel!.remoteNodePub!]}
         type="OPEN"
         channel={pendingChannel}
@@ -102,53 +104,55 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
     )),
     ...waitingCloseChannels.map((pendingChannel, i) => (
       <PendingChannelCard
-        key={((pendingChannel?.channel?.channelPoint) ?? "") + i}
+        key={(pendingChannel?.channel?.channelPoint ?? "") + i}
         alias={aliases[pendingChannel.channel?.remoteNodePub ?? ""]}
         type="WAITING_CLOSE"
         channel={pendingChannel}
       />
     )),
     ...channels.map((channel, i) => (
-      <ChannelCard key={channel.chanId!.toString()} alias={aliases[channel.remotePubkey ?? ""]} channel={channel} />
+      <ChannelCard
+        key={channel.chanId!.toString()}
+        alias={aliases[channel.remotePubkey ?? ""]}
+        channel={channel}
+      />
     )),
   ];
 
   const onPressBalance = async () => {
     await changePreferFiat(!preferFiat);
-  }
+  };
 
   return (
     <Container>
-      {rpcReady &&
+      {rpcReady && (
         <ScrollView contentContainerStyle={style.container}>
           <View style={style.balanceInfo}>
-            <H1 style={[style.spendableAmount]}>
-              {t("balance.title")}
-            </H1>
+            <H1 style={[style.spendableAmount]}>{t("balance.title")}</H1>
             <H1 onPress={onPressBalance}>
               {preferFiat
-                ? (valueFiat(balance, currentRate).toFixed(2) + " " + fiatUnit)
-                : formatBitcoin(balance, bitcoinUnit)
-              }
+                ? valueFiat(balance, currentRate).toFixed(2) + " " + fiatUnit
+                : formatBitcoin(balance, bitcoinUnit)}
             </H1>
           </View>
           <View>{channelCards}</View>
         </ScrollView>
-      }
-      {!rpcReady &&
+      )}
+      {!rpcReady && (
         <View style={style.loadingContainer}>
           <Spinner color={blixtTheme.light} />
         </View>
-      }
+      )}
       <Fab
         style={style.fab}
         position="bottomRight"
-        onPress={() => navigation.navigate("OpenChannel", {})}>
+        onPress={() => navigation.navigate("OpenChannel", {})}
+      >
         <Icon type="Entypo" name="plus" style={style.fabNewChannelIcon} />
       </Fab>
     </Container>
   );
-};
+}
 
 const style = StyleSheet.create({
   container: {

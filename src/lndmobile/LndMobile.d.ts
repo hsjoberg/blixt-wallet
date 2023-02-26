@@ -7,16 +7,25 @@ export enum ELndMobileStatusCodes {
 export interface ILndMobile {
   // General
   initialize(): Promise<{ data: string }>;
-  startLnd(torEnabled: boolean, args: string): Promise<{ data: string }>
+  startLnd(torEnabled: boolean, args: string): Promise<{ data: string }>;
   stopLnd(): Promise<{ data: string }>;
-  initWallet(seed: string[], password: string, recoveryWindow: number, channelBackupsBase64: string | null): Promise<{ data: string }>;
-  unlockWallet(password: string): Promise<{ data: string }>
+  initWallet(
+    seed: string[],
+    password: string,
+    recoveryWindow: number,
+    channelBackupsBase64: string | null,
+  ): Promise<{ data: string }>;
+  unlockWallet(password: string): Promise<{ data: string }>;
 
   checkStatus(): Promise<ELndMobileStatusCodes>;
 
   // Send gRPC LND API request
   sendCommand(method: string, base64Payload: string): Promise<{ data: string }>;
-  sendStreamCommand(method: string, base64Payload: string, streamOnlyOnce: boolean): Promise<"done">;
+  sendStreamCommand(
+    method: string,
+    base64Payload: string,
+    streamOnlyOnce: boolean,
+  ): Promise<"done">;
 
   // Android-specific
   unbindLndMobileService(): Promise<void>; // TODO(hsjoberg): function looks broken
@@ -60,7 +69,14 @@ export interface ILndMobileTools {
   macosOpenFileDialog(): Promise<string | undefined>;
 }
 
-export type WorkInfo = "BLOCKED" | "CANCELLED" | "ENQUEUED" | "FAILED" | "RUNNING" | "SUCCEEDED" | "WORK_NOT_EXIST";
+export type WorkInfo =
+  | "BLOCKED"
+  | "CANCELLED"
+  | "ENQUEUED"
+  | "FAILED"
+  | "RUNNING"
+  | "SUCCEEDED"
+  | "WORK_NOT_EXIST";
 
 export interface ILndMobileScheduledSync {
   setupScheduledSyncWork: () => Promise<boolean>;

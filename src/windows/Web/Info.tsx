@@ -22,14 +22,14 @@ export default function WebInfo({ navigation }: IWebInfoProps) {
       <Text style={style.text} onPress={() => navigation.pop()}>
         {t("pressToTry")}
       </Text>
-      <View style={{flexDirection: "row", justifyContent: "center", marginTop: 14 }}>
+      <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 14 }}>
         <Button small onPress={() => navigation.pop()}>
           <Text>Continue</Text>
         </Button>
       </View>
     </Blurmodal>
   );
-};
+}
 
 const style = StyleSheet.create({
   title: {
@@ -39,5 +39,5 @@ const style = StyleSheet.create({
   },
   text: {
     textAlign: "center",
-  }
+  },
 });

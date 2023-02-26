@@ -11,20 +11,16 @@ export function NavigationButton({ children, onPress }: any) {
         background={TouchableNativeFeedback.Ripple("rgba(255, 255, 255, .32)", true, 22.5)}
         hitSlop={{ top: 16, right: 16, bottom: 16, left: 16 }}
       >
-        <View>
-          {children}
-        </View>
+        <View>{children}</View>
       </TouchableNativeFeedback>
-    )
+    );
   }
   return (
     <TouchableWithoutFeedback
       onPress={onPress}
       hitSlop={{ top: 16, right: 16, bottom: 16, left: 16 }}
     >
-      <View>
-        {children}
-      </View>
+      <View>{children}</View>
     </TouchableWithoutFeedback>
-  )
+  );
 }

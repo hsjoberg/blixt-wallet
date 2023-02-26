@@ -106,7 +106,7 @@ function TopMenu({ navigation }: IStartProps) {
         },
       ],
       "plain-text",
-      neutrinoPeers[0] ?? ""
+      neutrinoPeers[0] ?? "",
     );
   };
 
@@ -114,25 +114,31 @@ function TopMenu({ navigation }: IStartProps) {
     const title = t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings });
     const message = t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings });
     if (PLATFORM === "android") {
-      Alert.alert(title, message + "\n" + t("bitcoinNetwork.restartDialog.msg1", { ns: namespaces.settings.settings }), [
-        {
-          style: "cancel",
-          text: t("buttons.no", { ns: namespaces.common }),
-        },
-        {
-          style: "default",
-          text: t("buttons.yes", { ns: namespaces.common }),
-          onPress: async () => {
-            try {
-              await NativeModules.LndMobile.stopLnd();
-              await NativeModules.LndMobileTools.killLnd();
-            } catch (e) {
-              console.log(e);
-            }
-            NativeModules.LndMobileTools.restartApp();
+      Alert.alert(
+        title,
+        message +
+          "\n" +
+          t("bitcoinNetwork.restartDialog.msg1", { ns: namespaces.settings.settings }),
+        [
+          {
+            style: "cancel",
+            text: t("buttons.no", { ns: namespaces.common }),
           },
-        },
-      ]);
+          {
+            style: "default",
+            text: t("buttons.yes", { ns: namespaces.common }),
+            onPress: async () => {
+              try {
+                await NativeModules.LndMobile.stopLnd();
+                await NativeModules.LndMobileTools.killLnd();
+              } catch (e) {
+                console.log(e);
+              }
+              NativeModules.LndMobileTools.restartApp();
+            },
+          },
+        ],
+      );
     } else {
       Alert.alert(title, message);
     }
@@ -178,7 +184,11 @@ function TopMenu({ navigation }: IStartProps) {
 
   return (
     <View style={style.menuDotsIcon}>
-      <Menu visible={visible} onRequestClose={hideMenu} anchor={<Icon type="Entypo" name="dots-three-horizontal" onPress={showMenu} />}>
+      <Menu
+        visible={visible}
+        onRequestClose={hideMenu}
+        anchor={<Icon type="Entypo" name="dots-three-horizontal" onPress={showMenu} />}
+      >
         <MenuItem onPress={toggleTorEnabled} textStyle={{ color: "#000" }}>
           {torEnabled ? t("menu.disableTor") : t("menu.enableTor")}
         </MenuItem>
@@ -201,7 +211,9 @@ export default function Start({ navigation }: IStartProps) {
   const generateSeed = useStoreActions((store) => store.generateSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
-  const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
+  const changeScheduledSyncEnabled = useStoreActions(
+    (state) => state.settings.changeScheduledSyncEnabled,
+  );
   const [createWalletLoading, setCreateWalletLoading] = useState(false);
 
   const onCreateWalletPress = async () => {
@@ -228,7 +240,7 @@ ${t("createWallet.msg3")}`,
                   CommonActions.reset({
                     index: 0,
                     routes: [{ name: "Loading" }],
-                  })
+                  }),
                 );
               } catch (error) {
                 toast(error.message, undefined, "danger");
@@ -236,7 +248,7 @@ ${t("createWallet.msg3")}`,
               }
             },
           },
-        ]
+        ],
       );
     } catch (e) {
       Alert.alert(e.message);
@@ -250,11 +262,21 @@ ${t("createWallet.msg3")}`,
   return (
     <Container>
       <SafeAreaView style={style.content}>
-        <StatusBar backgroundColor="transparent" hidden={false} translucent={true} networkActivityIndicatorVisible={true} barStyle="light-content" />
+        <StatusBar
+          backgroundColor="transparent"
+          hidden={false}
+          translucent={true}
+          networkActivityIndicatorVisible={true}
+          barStyle="light-content"
+        />
 
         {!createWalletLoading && PLATFORM !== "macos" && <TopMenu navigation={navigation} />}
 
-        {!createWalletLoading ? <AnimatedH1>{t("title")}</AnimatedH1> : <H1 style={style.header}>{t("title")}</H1>}
+        {!createWalletLoading ? (
+          <AnimatedH1>{t("title")}</AnimatedH1>
+        ) : (
+          <H1 style={style.header}>{t("title")}</H1>
+        )}
         {!createWalletLoading ? (
           <>
             <AnimatedView>

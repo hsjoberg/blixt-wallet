@@ -1,5 +1,9 @@
 import React from "react";
-import { createStackNavigator, StackNavigationOptions, CardStyleInterpolators } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+  CardStyleInterpolators,
+} from "@react-navigation/stack";
 
 import Start from "./Start";
 import Seed from "./Seed";

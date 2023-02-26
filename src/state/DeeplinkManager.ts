@@ -1,4 +1,4 @@
-import { AppState, AppStateStatus, Linking, NativeModules } from "react-native"
+import { AppState, AppStateStatus, Linking, NativeModules } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import { NavigationContainerRef } from "@react-navigation/native";
 
@@ -87,26 +87,31 @@ export const deeplinkManager: IDeeplinkManager = {
               return await actions.tryInvoice({ paymentRequest: subject.split("?")[0] });
             }
             // If this is a non-bech32 LNURL (LUD-17)
-            else if (subject.startsWith("lnurlp://") || subject.startsWith("lnurlw://") || subject.startsWith("lnurlc://")) {
+            else if (
+              subject.startsWith("lnurlp://") ||
+              subject.startsWith("lnurlw://") ||
+              subject.startsWith("lnurlc://")
+            ) {
               subject = "https://" + subject.substring(9);
               return await actions.tryLNUrl({ url: subject.split("?")[0] });
-            }
-            else if (subject.startsWith("keyauth://")) {
+            } else if (subject.startsWith("keyauth://")) {
               subject = "https://" + subject.substring(10);
               return await actions.tryLNUrl({ url: subject.split("?")[0] });
             }
             // If this is an LNURL
             else if (subject.startsWith("lnurl")) {
               return await actions.tryLNUrl({ bech32data: subject.split("?")[0] });
-            }
-            else if (subject.includes("@")) {
+            } else if (subject.includes("@")) {
               const hexRegex = /^[0-9a-fA-F]+$/;
               const pubkey = subject.split("@")[0];
               if (hexRegex.test(pubkey)) {
                 log.i("Looks like a lightning peer URI", [subject]);
                 return (nav: NavigationContainerRef) => {
-                  nav?.navigate("LightningInfo", { screen: "OpenChannel", params: { peerUri: data } });
-                }
+                  nav?.navigate("LightningInfo", {
+                    screen: "OpenChannel",
+                    params: { peerUri: data },
+                  });
+                };
               }
             }
             // If this is a normal URL
@@ -120,9 +125,9 @@ export const deeplinkManager: IDeeplinkManager = {
                   const url = new URL(subject);
                   return (nav: NavigationContainerRef) => {
                     nav?.navigate("WebLNBrowser", { url: subject });
-                  }
+                  };
                 }
-              } catch (e) { }
+              } catch (e) {}
             }
           } catch (e) {
             log.i(`Error checking deeplink subject: ${e.message}`);
@@ -140,7 +145,7 @@ export const deeplinkManager: IDeeplinkManager = {
       await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest });
       return (nav: NavigationContainerRef) => {
         nav?.navigate("Send", { screen: "SendConfirmation" });
-      }
+      };
     } catch (e) {
       dispatch.send.clear();
       log.i(`Error checking deeplink invoice: ${e.message}`);
@@ -154,27 +159,23 @@ export const deeplinkManager: IDeeplinkManager = {
       log.d("Navigating to channelRequest");
       return (nav: NavigationContainerRef) => {
         nav?.navigate("LNURL", { screen: "ChannelRequest" });
-      }
-    }
-    else if (type === "login") {
+      };
+    } else if (type === "login") {
       log.d("Navigating to authRequest");
       return (nav: NavigationContainerRef) => {
         nav?.navigate("LNURL", { screen: "AuthRequest" });
-      }
-    }
-    else if (type === "withdrawRequest") {
+      };
+    } else if (type === "withdrawRequest") {
       log.d("Navigating to withdrawRequest");
       return (nav: NavigationContainerRef) => {
         nav?.navigate("LNURL", { screen: "WithdrawRequest" });
-      }
-    }
-    else if (type === "payRequest") {
+      };
+    } else if (type === "payRequest") {
       log.d("Navigating to payRequest");
       return (nav: NavigationContainerRef) => {
         nav?.navigate("LNURL", { screen: "PayRequest" });
-      }
-    }
-    else {
+      };
+    } else {
       throw new Error("Unknown lnurl request");
     }
   }),

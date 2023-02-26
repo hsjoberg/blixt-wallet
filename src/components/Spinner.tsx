@@ -12,8 +12,8 @@ export default function Spinner({ onPress }: ISpinnerProps) {
   const spinAnim = useRef(new Animated.Value(0)).current;
 
   const fading = spinAnim.interpolate({
-    inputRange:  [0, 0.50, 0.75, 1],
-    outputRange: [1, 0.15, 1, 1]
+    inputRange: [0, 0.5, 0.75, 1],
+    outputRange: [1, 0.15, 1, 1],
   });
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function Spinner({ onPress }: ISpinnerProps) {
         duration: 2500,
         useNativeDriver: true,
         easing: Easing.linear,
-      })
+      }),
     ).start();
   }, [spinAnim]);
 

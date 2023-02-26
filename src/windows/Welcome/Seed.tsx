@@ -36,12 +36,12 @@ export default function Seed({ navigation }: IProps) {
   }, []);
 
   if (!seed) {
-    return (<></>);
+    return <></>;
   }
 
   const onPressContinue = () => {
     navigation.replace("Confirm");
-  }
+  };
 
   return (
     <Container>
@@ -60,17 +60,23 @@ export default function Seed({ navigation }: IProps) {
               <>
                 <View style={style.wordColumn}>
                   {seed.slice(0, 8).map((word, i) => (
-                    <Text key={word + i}>{i + 1}. {word}</Text>
+                    <Text key={word + i}>
+                      {i + 1}. {word}
+                    </Text>
                   ))}
                 </View>
                 <View style={style.wordColumn}>
-                {seed.slice(8, 16).map((word, i) => (
-                    <Text key={word + i + 8}>{i + 9}. {word}</Text>
+                  {seed.slice(8, 16).map((word, i) => (
+                    <Text key={word + i + 8}>
+                      {i + 9}. {word}
+                    </Text>
                   ))}
                 </View>
                 <View style={style.wordColumn}>
-                {seed.slice(16, 24).map((word, i) => (
-                    <Text key={word + i + 16}>{i + 17}. {word}</Text>
+                  {seed.slice(16, 24).map((word, i) => (
+                    <Text key={word + i + 16}>
+                      {i + 17}. {word}
+                    </Text>
                   ))}
                 </View>
               </>
@@ -79,15 +85,21 @@ export default function Seed({ navigation }: IProps) {
         </View>
         <View style={style.lowerContent}>
           <View style={style.text}>
-            {smallScreen ?
+            {smallScreen ? (
               <H3 style={style.textHeader}>{t("title")}</H3>
-              :
+            ) : (
               <H1 style={style.textHeader}>{t("title")}</H1>
-            }
+            )}
             <Text>
-              {t("msg")}{"\n"}{"\n"}
-              {t("msg1")}{"\n"}
-              {t("msg2")},{"\n"}{t("msg3")}{"\n"}{"\n"}
+              {t("msg")}
+              {"\n"}
+              {"\n"}
+              {t("msg1")}
+              {"\n"}
+              {t("msg2")},{"\n"}
+              {t("msg3")}
+              {"\n"}
+              {"\n"}
               {t("msg4")}
             </Text>
           </View>

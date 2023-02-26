@@ -13,22 +13,22 @@ export interface IChannelEvent {
   type: "OPEN" | "CLOSE";
 }
 
-export const createChannelEvent = async (db: SQLiteDatabase, channelEvent: IChannelEvent): Promise<number> => {
+export const createChannelEvent = async (
+  db: SQLiteDatabase,
+  channelEvent: IChannelEvent,
+): Promise<number> => {
   const id = await queryInsert(
     db,
     `INSERT INTO channel_event
     (txId, type)
     VALUES
     (?, ?)`,
-    [
-      channelEvent.txId,
-      channelEvent.type
-    ],
+    [channelEvent.txId, channelEvent.type],
   );
   return id;
-}
+};
 
 export const getChannelEvents = async (db: SQLiteDatabase): Promise<IChannelEvent[]> => {
   const c = await queryMulti<IDBChannelEvent>(db, `SELECT * FROM channel_event;`);
   return c;
-}
+};

@@ -1,25 +1,25 @@
 var PERMISSIONS = Object.freeze({
   ANDROID: {},
   IOS: {},
-  WINDOWS: {}
+  WINDOWS: {},
 });
 
 var RESULTS = Object.freeze({
-  UNAVAILABLE: 'unavailable',
-  BLOCKED: 'blocked',
-  DENIED: 'denied',
-  GRANTED: 'granted',
-  LIMITED: 'limited'
+  UNAVAILABLE: "unavailable",
+  BLOCKED: "blocked",
+  DENIED: "denied",
+  GRANTED: "granted",
+  LIMITED: "limited",
 });
 
-var openLimitedPhotoLibraryPicker = (async () => {});
-var openSettings = (async () => {});
-var check = (async (permission) => RESULTS.GRANTED);
-var request = (async (permission) => RESULTS.GRANTED);
-var checkLocationAccuracy = (async () => 'full');
-var requestLocationAccuracy = (async (options) => 'full');
+var openLimitedPhotoLibraryPicker = async () => {};
+var openSettings = async () => {};
+var check = async (permission) => RESULTS.GRANTED;
+var request = async (permission) => RESULTS.GRANTED;
+var checkLocationAccuracy = async () => "full";
+var requestLocationAccuracy = async (options) => "full";
 
-var notificationOptions = ['alert', 'badge', 'sound', 'carPlay', 'criticalAlert', 'provisional'];
+var notificationOptions = ["alert", "badge", "sound", "carPlay", "criticalAlert", "provisional"];
 
 var notificationSettings = {
   alert: true,
@@ -41,7 +41,7 @@ var requestNotifications = async (options) => ({
   status: RESULTS.GRANTED,
   settings: options
     .filter((option) => notificationOptions.includes(option))
-    .reduce((acc, option) => ({...acc, [option]: true}), {
+    .reduce((acc, option) => ({ ...acc, [option]: true }), {
       lockScreen: true,
       notificationCenter: true,
     }),

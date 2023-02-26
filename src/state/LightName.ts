@@ -23,7 +23,7 @@ export interface ILightNameModel {
   register: Thunk<ILightNameModel, ILightNameModelRegisterPayload, any, IStoreModel>;
 
   username?: string;
-};
+}
 
 export const lightName: ILightNameModel = {
   initialize: thunk(async (actions, _, { getState }) => {
@@ -31,9 +31,9 @@ export const lightName: ILightNameModel = {
   }),
 
   register: thunk(async (actions, payload, { getStoreState }) => {
-    try{
+    try {
       const routeHints = await getRouteHints();
-      log.i("", [routeHints])
+      log.i("", [routeHints]);
       const result = await sendRequest("registerAccount", undefined, {
         username: payload.username,
         routeHints,
@@ -41,11 +41,11 @@ export const lightName: ILightNameModel = {
       });
 
       console.log(result);
-    } catch(e) {
+    } catch (e) {
       log.i("Error", [e]);
     }
   }),
-}
+};
 
 // TODO(hsjoberg) move into model?
 const getRouteHints = async () => {
@@ -65,8 +65,7 @@ const getRouteHints = async () => {
     let policy: lnrpc.IRoutingPolicy;
     if (remotePubkey === chanInfo.node1Pub) {
       policy = chanInfo.node1Policy!;
-    }
-    else {
+    } else {
       policy = chanInfo.node2Policy!;
     }
 
@@ -74,15 +73,21 @@ const getRouteHints = async () => {
       continue;
     }
 
-    routeHints.push(lnrpc.RouteHint.create({
-      hopHints: [{
-        nodeId: remotePubkey,
-        chanId: chanInfo.channelId,
-        feeBaseMsat: policy.feeBaseMsat ? policy.feeBaseMsat.toNumber() : undefined,
-        feeProportionalMillionths: policy.feeRateMilliMsat ? policy.feeRateMilliMsat.toNumber() : undefined,
-        cltvExpiryDelta: policy.timeLockDelta,
-      }]
-    }));
+    routeHints.push(
+      lnrpc.RouteHint.create({
+        hopHints: [
+          {
+            nodeId: remotePubkey,
+            chanId: chanInfo.channelId,
+            feeBaseMsat: policy.feeBaseMsat ? policy.feeBaseMsat.toNumber() : undefined,
+            feeProportionalMillionths: policy.feeRateMilliMsat
+              ? policy.feeRateMilliMsat.toNumber()
+              : undefined,
+            cltvExpiryDelta: policy.timeLockDelta,
+          },
+        ],
+      }),
+    );
   }
 
   return routeHints;
@@ -95,14 +100,15 @@ const sendRequest = async (request: string, getData?: URLSearchParams, postData?
   }
   log.i(requestUrl);
 
-  const result = await fetch(
-    requestUrl, {
+  const result = await fetch(requestUrl, {
     method: "POST",
-    headers: postData ? {
-      'Content-Type': 'application/json'
-    } : undefined,
+    headers: postData
+      ? {
+          "Content-Type": "application/json",
+        }
+      : undefined,
     body: postData ? JSON.stringify(postData) : undefined,
   });
 
   return await result.json();
-}
+};

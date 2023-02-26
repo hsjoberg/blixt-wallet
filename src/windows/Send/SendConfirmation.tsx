@@ -35,14 +35,12 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const [isPaying, setIsPaying] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
-  const {
-    dollarValue,
-    bitcoinValue,
-    onChangeFiatInput,
-    onChangeBitcoinInput,
-  } = useBalance((paymentRequest?.numSatoshis), true);
+  const { dollarValue, bitcoinValue, onChangeFiatInput, onChangeBitcoinInput } = useBalance(
+    paymentRequest?.numSatoshis,
+    true,
+  );
   const clear = useStoreActions((store) => store.send.clear);
-  const callback = (route.params?.callback) ?? (() => {});
+  const callback = route.params?.callback ?? (() => {});
   const lightningReadyToSend = useLightningReadyToSend();
 
   useEffect(() => {
@@ -59,13 +57,13 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     return () => {
       backHandler.remove();
       clear();
-    }
+    };
   }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: t("layout.title"),
-      headerBackTitle: t("buttons.back", { ns:namespaces.common }),
+      headerBackTitle: t("buttons.back", { ns: namespaces.common }),
       headerShown: true,
     });
 
@@ -78,11 +76,11 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       navigation.getParent()?.setOptions({
         gestureEnabled: true,
       });
-    }
+    };
   }, [navigation]);
 
   if (!paymentRequest) {
-    return (<Text>{t("msg.error", { ns:namespaces.common })}</Text>);
+    return <Text>{t("msg.error", { ns: namespaces.common })}</Text>;
   }
 
   const { name, description } = extractDescription(paymentRequest.description);
@@ -92,7 +90,11 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       setIsPaying(true);
       Keyboard.dismiss();
       const payload = amountEditable
-        ? { amount: Long.fromValue(unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit)) }
+        ? {
+            amount: Long.fromValue(
+              unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit),
+            ),
+          }
         : undefined;
 
       const response = await sendPayment(payload);
@@ -103,7 +105,12 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       navigation.replace("SendDone", { preimage, callback });
     } catch (error) {
       console.log(error);
-      toast(`${t("msg.error",{ ns:namespaces.common })}: ${error.message}`, 60000, "danger", "Okay");
+      toast(
+        `${t("msg.error", { ns: namespaces.common })}: ${error.message}`,
+        60000,
+        "danger",
+        "Okay",
+      );
       setIsPaying(false);
     }
   };
@@ -160,46 +167,47 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     formItems.push({
       key: "RECIPIENT",
       title: t("form.recipient.title"),
-      component: (<Input disabled={true} value={name} />),
+      component: <Input disabled={true} value={name} />,
     });
-  }
-  else if (nodeInfo && nodeInfo.node && nodeInfo.node.alias) {
+  } else if (nodeInfo && nodeInfo.node && nodeInfo.node.alias) {
     formItems.push({
       key: "NODE_ALIAS",
       title: t("form.nodeAlias.title"),
-      component: (<Input disabled={true} value={nodeInfo.node.alias} />),
+      component: <Input disabled={true} value={nodeInfo.node.alias} />,
     });
   }
 
   formItems.push({
     key: "MESSAGE",
     title: t("form.description.title"),
-    component: (<Input multiline={PLATFORM === "android"} disabled={true} value={description} />),
+    component: <Input multiline={PLATFORM === "android"} disabled={true} value={description} />,
   });
 
-  const canSend = (
-    lightningReadyToSend &&
-    !isPaying
-  );
+  const canSend = lightningReadyToSend && !isPaying;
 
   return (
     <Container>
       <BlixtForm
         items={formItems}
-        buttons={[(
+        buttons={[
           <Button
             key="PAY"
             testID="pay-invoice"
             block={true}
             primary={true}
             onPress={send}
-            disabled={!canSend || (amountEditable ? (bitcoinValue === "0" || bitcoinValue === "" || bitcoinValue === undefined) : false)}
+            disabled={
+              !canSend ||
+              (amountEditable
+                ? bitcoinValue === "0" || bitcoinValue === "" || bitcoinValue === undefined
+                : false)
+            }
           >
             {canSend && <Text>Pay</Text>}
             {!canSend && <Spinner color={blixtTheme.light} />}
-          </Button>
-        ),]}
+          </Button>,
+        ]}
       />
     </Container>
   );
-};
+}

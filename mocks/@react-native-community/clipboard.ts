@@ -7,5 +7,5 @@ export default {
 
   getString: async () => {
     return string;
-  }
-}
+  },
+};

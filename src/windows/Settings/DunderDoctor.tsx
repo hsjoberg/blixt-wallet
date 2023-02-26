@@ -36,8 +36,8 @@ export default function DunderDoctor({ navigation }: ISelectListProps) {
           <NavigationButton onPress={onPressCopy}>
             <Icon type="MaterialCommunityIcons" name="content-copy" style={{ fontSize: 22 }} />
           </NavigationButton>
-        )
-      }
+        );
+      },
     });
   }, [navigation]);
 
@@ -47,12 +47,12 @@ export default function DunderDoctor({ navigation }: ISelectListProps) {
       newLog.push(message);
       return newLog;
     });
-  }
+  };
 
   const onPressCopy = () => {
     Clipboard.setString(log.join("\n"));
     toast("Copied to clipboard");
-  }
+  };
 
   const runDiagnostic = async () => {
     setRunning(true);
@@ -80,7 +80,6 @@ export default function DunderDoctor({ navigation }: ISelectListProps) {
 
       pushLog(`Funds available on Dunder: ${checkStatusResult.unclaimedAmountSat}.`);
       pushLog(`Connecting to node in an attempt to claim these funds...`);
-
 
       let attempt = 3;
       const connected = await (async () => {
@@ -112,7 +111,7 @@ export default function DunderDoctor({ navigation }: ISelectListProps) {
         pushLog("Failed to connect to Dunder's Lightning node. Try again later.");
         pushLog("Done.");
       } else {
-        pushLog("Connected to Dunder's Lightning node.")
+        pushLog("Connected to Dunder's Lightning node.");
         pushLog("Done.");
       }
     })();
@@ -130,23 +129,18 @@ export default function DunderDoctor({ navigation }: ISelectListProps) {
   return (
     <Container>
       <View style={{ flex: 1, padding: 14 }}>
-        <ScrollView contentContainerStyle={{ padding: 10 }} style={{ backgroundColor: blixtTheme.gray, marginTop: 10, marginBottom: 20, flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{ padding: 10 }}
+          style={{ backgroundColor: blixtTheme.gray, marginTop: 10, marginBottom: 20, flex: 1 }}
+        >
           {log.map((logItem, i) => (
             <Text key={i}>{logItem}</Text>
           ))}
         </ScrollView>
-        <Button
-          onPress={runDiagnostic}
-          block={true}
-          primary={true}
-          disabled={running}
-        >
-          {running
-            ? <Spinner color={blixtTheme.light} />
-            : <Text>Run</Text>
-          }
+        <Button onPress={runDiagnostic} block={true} primary={true} disabled={running}>
+          {running ? <Spinner color={blixtTheme.light} /> : <Text>Run</Text>}
         </Button>
       </View>
     </Container>
-  )
+  );
 }

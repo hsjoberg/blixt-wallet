@@ -10,7 +10,15 @@ import { Hash as sha256Hash, HMAC as sha256HMAC } from "fast-sha256";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { timeout, bytesToString, getDomainFromURL, stringToUint8Array, hexToUint8Array, bytesToHexString, toast } from "../utils/index";
+import {
+  timeout,
+  bytesToString,
+  getDomainFromURL,
+  stringToUint8Array,
+  hexToUint8Array,
+  bytesToHexString,
+  toast,
+} from "../utils/index";
 import { lnrpc } from "../../proto/lightning";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
@@ -20,7 +28,14 @@ import { dunderPrompt } from "../utils/dunder";
 import logger from "./../utils/log";
 const log = logger("LNURL");
 
-export type LNURLType = "channelRequest" | "login" | "withdrawRequest" | "payRequest" | "unknown" | "error" | "unsupported";
+export type LNURLType =
+  | "channelRequest"
+  | "login"
+  | "withdrawRequest"
+  | "payRequest"
+  | "unknown"
+  | "error"
+  | "unsupported";
 
 export type LightningAddress = string;
 
@@ -42,7 +57,7 @@ export interface ILNUrlChannelRequestResponse {
 }
 
 export interface ILNUrlAuthRequest {
-  tag: "login",
+  tag: "login";
   k1: string;
 }
 
@@ -90,7 +105,7 @@ export interface ILNUrlPayRequestPayerData {
     mandatory?: boolean;
     k1?: string; // hex
   };
-};
+}
 
 export interface ILNUrlPayResponsePayerData {
   name?: string;
@@ -99,7 +114,7 @@ export interface ILNUrlPayResponsePayerData {
     key: string;
     k1: string;
     sig: string; // hex
-  },
+  };
   email?: string;
   identifier?: string;
 }
@@ -122,23 +137,23 @@ export interface ILNUrlPayResponse {
     | ILNUrlPayResponseSuccessActionMessage
     | ILNUrlPayResponseSuccessActionUrl
     | null;
-  routes:	any[]; // NOT SUPPORTED
+  routes: any[]; // NOT SUPPORTED
   disposable?: boolean | null;
 }
 
 export interface ILNUrlPayResponseSuccessActionUrl {
-  tag: "url",
+  tag: "url";
   description: string;
   url: string;
 }
 
 export interface ILNUrlPayResponseSuccessActionMessage {
-  tag: "message",
+  tag: "message";
   message: string;
 }
 
 export interface ILNUrlPayResponseSuccessActionAes {
-  tag: "aes",
+  tag: "aes";
   description: string;
   ciphertext: string; // base64-encoded
   iv: string; // base64-encoded
@@ -168,15 +183,44 @@ interface IDoPayRequestPayload {
 
 export type IDoPayRequestResponse = ILNUrlPayResponse;
 
-type LNUrlRequest = ILNUrlChannelRequest | ILNUrlAuthRequest | ILNUrlWithdrawRequest | ILNUrlPayRequest | ILNUrlDummy;
+type LNUrlRequest =
+  | ILNUrlChannelRequest
+  | ILNUrlAuthRequest
+  | ILNUrlWithdrawRequest
+  | ILNUrlPayRequest
+  | ILNUrlDummy;
 
 export interface ILNUrlModel {
-  setLNUrl: Thunk<ILNUrlModel, { bech32data?: string; url?: string }, any, IStoreModel, Promise<LNURLType>>;
+  setLNUrl: Thunk<
+    ILNUrlModel,
+    { bech32data?: string; url?: string },
+    any,
+    IStoreModel,
+    Promise<LNURLType>
+  >;
 
-  doChannelRequest: Thunk<ILNUrlModel, IDoChannelRequestPayload, IStoreInjections, IStoreModel, Promise<boolean>>;
+  doChannelRequest: Thunk<
+    ILNUrlModel,
+    IDoChannelRequestPayload,
+    IStoreInjections,
+    IStoreModel,
+    Promise<boolean>
+  >;
   doAuthRequest: Thunk<ILNUrlModel, void, IStoreInjections, IStoreModel, Promise<boolean>>;
-  doWithdrawRequest: Thunk<ILNUrlModel, { satoshi: number; }, IStoreInjections, IStoreModel, Promise<boolean>>;
-  doPayRequest: Thunk<ILNUrlModel, IDoPayRequestPayload, IStoreInjections, IStoreModel, Promise<IDoPayRequestResponse>>;
+  doWithdrawRequest: Thunk<
+    ILNUrlModel,
+    { satoshi: number },
+    IStoreInjections,
+    IStoreModel,
+    Promise<boolean>
+  >;
+  doPayRequest: Thunk<
+    ILNUrlModel,
+    IDoPayRequestPayload,
+    IStoreInjections,
+    IStoreModel,
+    Promise<IDoPayRequestResponse>
+  >;
 
   setLNUrlStr: Action<ILNUrlModel, string>;
   setType: Action<ILNUrlModel, LNURLType>;
@@ -191,7 +235,7 @@ export interface ILNUrlModel {
   clear: Action<ILNUrlModel>;
 
   resolveLightningAddress: Thunk<ILNUrlModel, LightningAddress>;
-};
+}
 
 export const lnUrl: ILNUrlModel = {
   setLNUrl: thunk(async (actions, { bech32data, url }) => {
@@ -211,7 +255,10 @@ export const lnUrl: ILNUrlModel = {
       const queryParams = parseQueryParams(url);
       log.d("queryParams", [queryParams]);
       // If the data is in the URL
-      if ("tag" in queryParams && queryParams.tag === "channelRequest" || queryParams.tag == "login") {
+      if (
+        ("tag" in queryParams && queryParams.tag === "channelRequest") ||
+        queryParams.tag == "login"
+      ) {
         log.d(`Found tag ${queryParams.tag} in query params`);
         const tag = queryParams.tag; // FIXME
 
@@ -222,8 +269,7 @@ export const lnUrl: ILNUrlModel = {
         if (tag === "login") {
           console.log("login");
           type = "login";
-        }
-        else {
+        } else {
           throw "unknown";
         }
         actions.setLNUrlObject(queryParams); // FIXME
@@ -250,14 +296,11 @@ export const lnUrl: ILNUrlModel = {
         log.v(JSON.stringify(lnurlObject));
         if (lnurlObject.tag === "channelRequest") {
           type = "channelRequest";
-        }
-        else if (lnurlObject.tag === "withdrawRequest") {
+        } else if (lnurlObject.tag === "withdrawRequest") {
           type = "withdrawRequest";
-        }
-        else if (lnurlObject.tag === "payRequest") {
+        } else if (lnurlObject.tag === "payRequest") {
           type = "payRequest";
-        }
-        else {
+        } else {
           throw "unknown";
         }
         log.d(`Found tag ${lnurlObject.tag}`);
@@ -286,7 +329,7 @@ export const lnUrl: ILNUrlModel = {
       const [pubkey, host] = lnUrlObject.uri.split("@");
       try {
         await connectPeer(pubkey, host);
-      } catch (e) { }
+      } catch (e) {}
       const request = `${lnUrlObject.callback}?k1=${lnUrlObject.k1}&remoteid=${localPubkey}&private=1`;
 
       const result = await fetch(request);
@@ -305,9 +348,10 @@ export const lnUrl: ILNUrlModel = {
         throw new Error(response.reason);
       }
       return true;
-    }
-    else {
-      throw new Error("Requirements not satisfied, type must be channelRequest and lnUrlObject must be set");
+    } else {
+      throw new Error(
+        "Requirements not satisfied, type must be channelRequest and lnUrlObject must be set",
+      );
     }
   }),
 
@@ -324,9 +368,12 @@ export const lnUrl: ILNUrlModel = {
       }
 
       // 1. The following canonical phrase is defined: [...].
-      const LNURLAUTH_CANONICAL_PHRASE = "DO NOT EVER SIGN THIS TEXT WITH YOUR PRIVATE KEYS! IT IS ONLY USED FOR DERIVATION OF LNURL-AUTH HASHING-KEY, DISCLOSING ITS SIGNATURE WILL COMPROMISE YOUR LNURL-AUTH IDENTITY AND MAY LEAD TO LOSS OF FUNDS!";
+      const LNURLAUTH_CANONICAL_PHRASE =
+        "DO NOT EVER SIGN THIS TEXT WITH YOUR PRIVATE KEYS! IT IS ONLY USED FOR DERIVATION OF LNURL-AUTH HASHING-KEY, DISCLOSING ITS SIGNATURE WILL COMPROMISE YOUR LNURL-AUTH IDENTITY AND MAY LEAD TO LOSS OF FUNDS!";
       // 2. LN WALLET obtains an RFC6979 deterministic signature of sha256(utf8ToBytes(canonical phrase)) using secp256k1 with node private key.
-      const signature = await injections.lndMobile.wallet.signMessageNodePubkey(stringToUint8Array(LNURLAUTH_CANONICAL_PHRASE));
+      const signature = await injections.lndMobile.wallet.signMessageNodePubkey(
+        stringToUint8Array(LNURLAUTH_CANONICAL_PHRASE),
+      );
       // 3. LN WALLET defines hashingKey as PrivateKey(sha256(obtained signature)).
       const hashingKey = new sha256Hash().update(stringToUint8Array(signature.signature)).digest();
       // 4. SERVICE domain name is extracted from auth LNURL and then service-specific linkingPrivKey is defined as PrivateKey(hmacSha256(hashingKey, service domain name)).
@@ -338,15 +385,14 @@ export const lnUrl: ILNUrlModel = {
 
       // Sign the message
       const signedMessage = secp256k1.ecdsaSign(hexToUint8Array(lnUrlObject.k1), linkingKeyPriv);
-      const signedMessageDER = secp256k1.signatureExport(signedMessage.signature)
+      const signedMessageDER = secp256k1.signatureExport(signedMessage.signature);
 
       //    LN WALLET Then issues a GET to LN SERVICE using
       //    <LNURL_hostname_and_path>?<LNURL_existing_query_parameters>&sig=<hex(sign(k1.toByteArray, linkingPrivKey))>&key=<hex(linkingKey)>
-      const url = (
+      const url =
         lnUrlStr +
         `&sig=${bytesToHexString(signedMessageDER)}` +
-        `&key=${bytesToHexString(linkingKeyPub)}`
-      );
+        `&key=${bytesToHexString(linkingKeyPub)}`;
       log.d("url", [url]);
       // 4 omitted
       const result = await fetch(url);
@@ -366,113 +412,118 @@ export const lnUrl: ILNUrlModel = {
       }
 
       return true;
-    }
-    else {
+    } else {
       throw new Error("Requirements not satisfied, type must be login and lnUrlObject must be set");
     }
   }),
 
-  doWithdrawRequest: thunk(async (_, { satoshi }, { getStoreActions, getStoreState, getState, injections }) => {
-    const type = getState().type;
-    const lnUrlStr = getState().lnUrlStr;
-    const lnUrlObject = getState().lnUrlObject;
+  doWithdrawRequest: thunk(
+    async (_, { satoshi }, { getStoreActions, getStoreState, getState, injections }) => {
+      const type = getState().type;
+      const lnUrlStr = getState().lnUrlStr;
+      const lnUrlObject = getState().lnUrlObject;
 
-    const dunderEnabled = getStoreState().settings.dunderEnabled;
+      const dunderEnabled = getStoreState().settings.dunderEnabled;
 
-    if (dunderEnabled) {
-      await getStoreActions().blixtLsp.ondemandChannel.checkOndemandChannelService();
-    }
-    const shouldUseDunder =
-      dunderEnabled &&
-      getStoreState().blixtLsp.ondemandChannel.serviceActive &&
-      (
-        getStoreState().lightning.rpcReady && getStoreState().channel.channels.length === 0 ||
-        getStoreState().channel.remoteBalance.toSigned().subtract(5000).lessThan(satoshi) // Not perfect...
-      );
+      if (dunderEnabled) {
+        await getStoreActions().blixtLsp.ondemandChannel.checkOndemandChannelService();
+      }
+      const shouldUseDunder =
+        dunderEnabled &&
+        getStoreState().blixtLsp.ondemandChannel.serviceActive &&
+        ((getStoreState().lightning.rpcReady && getStoreState().channel.channels.length === 0) ||
+          getStoreState().channel.remoteBalance.toSigned().subtract(5000).lessThan(satoshi)); // Not perfect...
 
-    if (lnUrlStr && type === "withdrawRequest" && lnUrlObject && lnUrlObject.tag === "withdrawRequest") {
-      const promise = new Promise<boolean>(async (resolve, reject) => {
-        if (shouldUseDunder) {
-          await getStoreActions().blixtLsp.ondemandChannel.connectToService(); // TODO check if it worked
-          const serviceStatus = await getStoreActions().blixtLsp.ondemandChannel.serviceStatus();
-          const result = await dunderPrompt(
-            serviceStatus.approxFeeSat,
-            getStoreState().settings.bitcoinUnit,
-            getStoreState().fiat.currentRate,
-            getStoreState().settings.fiatUnit,
-          );
-          if (!result) {
-            return resolve(false);
-          }
+      if (
+        lnUrlStr &&
+        type === "withdrawRequest" &&
+        lnUrlObject &&
+        lnUrlObject.tag === "withdrawRequest"
+      ) {
+        const promise = new Promise<boolean>(async (resolve, reject) => {
+          if (shouldUseDunder) {
+            await getStoreActions().blixtLsp.ondemandChannel.connectToService(); // TODO check if it worked
+            const serviceStatus = await getStoreActions().blixtLsp.ondemandChannel.serviceStatus();
+            const result = await dunderPrompt(
+              serviceStatus.approxFeeSat,
+              getStoreState().settings.bitcoinUnit,
+              getStoreState().fiat.currentRate,
+              getStoreState().settings.fiatUnit,
+            );
+            if (!result) {
+              return resolve(false);
+            }
 
-          try {
-            await getStoreActions().blixtLsp.ondemandChannel.addInvoice({
-              sat: satoshi,
+            try {
+              await getStoreActions().blixtLsp.ondemandChannel.addInvoice({
+                sat: satoshi,
+                description: lnUrlObject.defaultDescription,
+              });
+            } catch (error) {
+              Alert.alert("Error", error.message);
+              resolve(false);
+            }
+          } else {
+            const r = getStoreActions().receive.addInvoice({
               description: lnUrlObject.defaultDescription,
+              sat: satoshi,
+              tmpData: {
+                website: getDomainFromURL(lnUrlStr),
+                type: "LNURL",
+                payer: null,
+              },
             });
-          } catch (error) {
-            Alert.alert("Error", error.message);
-            resolve(false);
           }
-        } else {
-          const r = getStoreActions().receive.addInvoice({
-            description: lnUrlObject.defaultDescription,
-            sat: satoshi,
-            tmpData: {
-              website: getDomainFromURL(lnUrlStr),
-              type: "LNURL",
-              payer: null,
+
+          // 5. Once accepted by the user, LN WALLET sends a GET to LN SERVICE in the form of <callback>?k1=<k1>&pr=<lightning invoice, ...>
+          const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e) => {
+            try {
+              log.d("SubscribeInvoices event", [e]);
+              listener.remove();
+              const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
+              if (error === "EOF") {
+                return;
+              } else if (error) {
+                log.d("Got error from SubscribeInvoices", [error]);
+                return;
+              }
+
+              const invoice = injections.lndMobile.wallet.decodeInvoiceResult(e.data);
+              let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?";
+              const url = `${lnUrlObject.callback}${firstSeparator}k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
+              log.d("url", [url]);
+
+              const result = await fetch(url);
+              log.d("result", [JSON.stringify(result)]);
+
+              let response: ILNUrlWithdrawResponse | ILNUrlError;
+              try {
+                response = await result.json();
+              } catch (e) {
+                log.d("", [e]);
+                return reject(new Error("Unable to parse message from the server"));
+              }
+              log.d("response", [response]);
+
+              if (isLNUrlPayResponseError(response)) {
+                return reject(new Error(response.reason));
+              }
+
+              resolve(true);
+            } catch (error) {
+              reject(new Error(error.message));
             }
           });
-        }
-
-        // 5. Once accepted by the user, LN WALLET sends a GET to LN SERVICE in the form of <callback>?k1=<k1>&pr=<lightning invoice, ...>
-        const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e) => {
-          try {
-            log.d("SubscribeInvoices event", [e]);
-            listener.remove();
-            const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
-            if (error === "EOF") {
-              return;
-            } else if (error) {
-              log.d("Got error from SubscribeInvoices", [error]);
-              return;
-            }
-
-            const invoice = injections.lndMobile.wallet.decodeInvoiceResult(e.data);
-            let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?";
-            const url = `${lnUrlObject.callback}${firstSeparator}k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
-            log.d("url", [url]);
-
-            const result = await fetch(url);
-            log.d("result", [JSON.stringify(result)]);
-
-            let response: ILNUrlWithdrawResponse | ILNUrlError;
-            try {
-              response = await result.json();
-            } catch (e) {
-              log.d("", [e]);
-              return reject(new Error("Unable to parse message from the server"));
-            }
-            log.d("response", [response]);
-
-            if (isLNUrlPayResponseError(response)) {
-              return reject(new Error(response.reason));
-            }
-
-            resolve(true);
-          } catch (error) {
-            reject(new Error(error.message));
-          }
         });
-      })
 
-      return promise;
-    }
-    else {
-      throw new Error("Requirements not satisfied, type must be login and lnUrlObject must be set");
-    }
-  }),
+        return promise;
+      } else {
+        throw new Error(
+          "Requirements not satisfied, type must be login and lnUrlObject must be set",
+        );
+      }
+    },
+  ),
 
   doPayRequest: thunk(async (actions, payload, { getStoreActions, getState }) => {
     const type = getState().type;
@@ -492,9 +543,9 @@ export const lnUrl: ILNUrlModel = {
         callback = `${callback}&comment=${encodeURIComponent(payload.comment)}`;
       }
       if (payload.payerData) {
-        callback = `${callback}&payerdata=${encodeURIComponent(JSON.stringify(payload.payerData))}`
+        callback = `${callback}&payerdata=${encodeURIComponent(JSON.stringify(payload.payerData))}`;
       }
-      log.d("callback" ,[callback]);
+      log.d("callback", [callback]);
 
       const result = await fetch(callback);
       log.d("result", [JSON.stringify(result)]);
@@ -570,16 +621,23 @@ export const lnUrl: ILNUrlModel = {
         log.i("Error setting invoice to send subsystem", [e]);
         throw e;
       }
-    }
-    else {
+    } else {
       throw new Error("Requirements not satisfied, type must be login and lnUrlObject must be set");
     }
   }),
 
-  setLNUrlStr: action((state, payload) => { state.lnUrlStr = payload }),
-  setType: action((state, payload) => { state.type = payload }),
-  setLNUrlObject: action((state, payload) => { state.lnUrlObject = payload }),
-  setPayRequestResponse: action((state, payload) => { state.payRequestResponse = payload }),
+  setLNUrlStr: action((state, payload) => {
+    state.lnUrlStr = payload;
+  }),
+  setType: action((state, payload) => {
+    state.type = payload;
+  }),
+  setLNUrlObject: action((state, payload) => {
+    state.lnUrlObject = payload;
+  }),
+  setPayRequestResponse: action((state, payload) => {
+    state.payRequestResponse = payload;
+  }),
 
   clear: action((state) => {
     state.lnUrlStr = undefined;
@@ -610,7 +668,7 @@ export const lnUrl: ILNUrlModel = {
     let lnurlObject: ILNUrlPayRequest | ILNUrlPayResponseError;
     try {
       const lnurlText = await result.text();
-      log.i("",[lnurlText]);
+      log.i("", [lnurlText]);
       lnurlObject = JSON.parse(lnurlText);
     } catch (e) {
       throw new Error("Unable to parse message from the server: " + e.message);
@@ -660,15 +718,9 @@ const parseQueryParams = (url: string) => {
 };
 
 const tryLNURLType = (subject: string): subject is LNURLType => {
-  return (
-    subject === "channelRequest" ||
-    subject === "login"
-  );
-}
+  return subject === "channelRequest" || subject === "login";
+};
 
 const isLNUrlPayResponseError = (subject: any): subject is ILNUrlPayResponseError => {
-  return (
-    typeof subject === "object" &&
-    subject.status && subject.status === "ERROR"
-  );
-}
+  return typeof subject === "object" && subject.status && subject.status === "ERROR";
+};

@@ -13,7 +13,6 @@ import Container from "../../components/Container";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
-
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedPolyline = Animated.createAnimatedComponent(Polyline);
 const AnimatedText = Animatable.createAnimatableComponent(Text);
@@ -31,15 +30,7 @@ function CheckmarkCircle() {
     }).start();
   }, []);
 
-
-  return (
-    <AnimatedCircle
-      cx="93"
-      cy="95"
-      r={circleRadius}
-      fill={blixtTheme.green}
-    />
-  );
+  return <AnimatedCircle cx="93" cy="95" r={circleRadius} fill={blixtTheme.green} />;
 }
 
 function CheckmarkPolyline() {
@@ -65,7 +56,6 @@ function CheckmarkPolyline() {
   );
 }
 
-
 function Check() {
   return (
     <Svg width="185" height="185" style={{ backgroundColor: "transparent" }}>
@@ -90,18 +80,15 @@ export function Done() {
         {t("done.title")}
       </AnimatedText>
     </>
-  )
+  );
 }
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendDone">;
   route: RouteProp<SendStackParamList, "SendDone">;
 }
-export default function SendDone({
-  navigation,
-  route,
-}: ISendConfirmationProps) {
-  const callback = (route.params.callback) ?? (() => {});
+export default function SendDone({ navigation, route }: ISendConfirmationProps) {
+  const callback = route.params.callback ?? (() => {});
   const preimage = route.params.preimage;
 
   useEffect(() => {

@@ -9,13 +9,7 @@ export interface IContainer {
 }
 export default function Container({ children, centered, style }: IContainer) {
   return (
-    <View style={[
-      defaultStyle.style,
-      centered ? centeredStyle.style : {},
-      style
-    ]}>
-      {children}
-    </View>
+    <View style={[defaultStyle.style, centered ? centeredStyle.style : {}, style]}>{children}</View>
   );
 }
 
@@ -35,4 +29,4 @@ const centeredStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-})
+});

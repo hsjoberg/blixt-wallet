@@ -11,8 +11,12 @@ export interface IStreamResultOptions<Res> {
   response: ISendResponseClass<Res>;
 }
 
-export const decodeStreamResult = <Res>( { base64Result, response }: IStreamResultOptions<Res>): Res => {
+export const decodeStreamResult = <Res>({
+  base64Result,
+  response,
+}: IStreamResultOptions<Res>): Res => {
   return response.decode(base64.toByteArray(base64Result));
 };
 
-export const timeout = (time: number) => new Promise((resolve) => setTimeout(() => resolve(), time));
+export const timeout = (time: number) =>
+  new Promise((resolve) => setTimeout(() => resolve(), time));

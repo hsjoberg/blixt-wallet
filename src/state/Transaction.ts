@@ -1,6 +1,11 @@
 import { LayoutAnimation } from "react-native";
 import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
-import { ITransaction, getTransactions, createTransaction, updateTransaction } from "../storage/database/transaction";
+import {
+  ITransaction,
+  getTransactions,
+  createTransaction,
+  updateTransaction,
+} from "../storage/database/transaction";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -22,8 +27,14 @@ export interface ITransactionModel {
 
   transactions: ITransaction[];
   getTransactionByRHash: Computed<ITransactionModel, (rHash: string) => ITransaction | undefined>;
-  getTransactionByPreimage: Computed<ITransactionModel, (preimage: Uint8Array) => ITransaction | undefined>;
-  getTransactionByPaymentRequest: Computed<ITransactionModel, (paymentRequest: string) => ITransaction | undefined>;
+  getTransactionByPreimage: Computed<
+    ITransactionModel,
+    (preimage: Uint8Array) => ITransaction | undefined
+  >;
+  getTransactionByPaymentRequest: Computed<
+    ITransactionModel,
+    (paymentRequest: string) => ITransaction | undefined
+  >;
 }
 
 export const transaction: ITransactionModel = {
@@ -43,7 +54,7 @@ export const transaction: ITransactionModel = {
     for (const txIt of transactions) {
       if (txIt.rHash === tx.rHash) {
         await updateTransaction(db, { ...txIt, ...tx });
-        actions.updateTransaction({ transaction: { ...txIt, ...tx }});
+        actions.updateTransaction({ transaction: { ...txIt, ...tx } });
         foundTransaction = true;
       }
     }
@@ -106,11 +117,10 @@ export const transaction: ITransactionModel = {
       throw new Error("checkOpenTransactions(): db not ready");
     }
 
-
     for (const tx of getState().transactions) {
       if (tx.status === "OPEN") {
         const check = await lookupInvoice(tx.rHash);
-        if ((Date.now() / 1000) > (check.creationDate.add(check.expiry).toNumber())) {
+        if (Date.now() / 1000 > check.creationDate.add(check.expiry).toNumber()) {
           const updated: ITransaction = {
             ...tx,
             status: "EXPIRED",
@@ -122,8 +132,7 @@ export const transaction: ITransactionModel = {
             }
             actions.updateTransaction({ transaction: updated });
           });
-        }
-        else if (check.settled) {
+        } else if (check.settled) {
           const updated: ITransaction = {
             ...tx,
             status: "SETTLED",
@@ -132,9 +141,10 @@ export const transaction: ITransactionModel = {
             // TODO add valueUSD, valueFiat and valueFiatCurrency?
           };
           // tslint:disable-next-line
-          updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
-        }
-        else if (check.state === lnrpc.Invoice.InvoiceState.CANCELED) {
+          updateTransaction(db, updated).then(() =>
+            actions.updateTransaction({ transaction: updated }),
+          );
+        } else if (check.state === lnrpc.Invoice.InvoiceState.CANCELED) {
           const updated: ITransaction = {
             ...tx,
             status: "CANCELED",
@@ -144,7 +154,7 @@ export const transaction: ITransactionModel = {
             if (hideExpiredInvoices) {
               LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
             }
-            actions.updateTransaction({ transaction: updated })
+            actions.updateTransaction({ transaction: updated });
           });
         }
       }
@@ -155,32 +165,30 @@ export const transaction: ITransactionModel = {
   /**
    * Set transactions to our transaction array
    */
-  setTransactions: action((state, transactions) => { state.transactions = transactions; }),
+  setTransactions: action((state, transactions) => {
+    state.transactions = transactions;
+  }),
 
   transactions: [],
-  getTransactionByRHash: computed(
-    (state) => {
-      return (rHash: string) => {
-        return state.transactions.find((tx) => rHash === tx.rHash);
-      };
-    },
-  ),
+  getTransactionByRHash: computed((state) => {
+    return (rHash: string) => {
+      return state.transactions.find((tx) => rHash === tx.rHash);
+    };
+  }),
 
-  getTransactionByPreimage: computed(
-    (state) => {
-      return (preimage: Uint8Array) => {
-        return state.transactions.find((tx) => bytesToHexString(preimage) === bytesToHexString(tx.preimage));
-      };
-    },
-  ),
+  getTransactionByPreimage: computed((state) => {
+    return (preimage: Uint8Array) => {
+      return state.transactions.find(
+        (tx) => bytesToHexString(preimage) === bytesToHexString(tx.preimage),
+      );
+    };
+  }),
 
-  getTransactionByPaymentRequest: computed(
-    (state) => {
-      return (paymentRequest: string) => {
-        return state.transactions.find((tx) => {
-          return paymentRequest === tx.paymentRequest;
-        });
-      };
-    },
-  ),
+  getTransactionByPaymentRequest: computed((state) => {
+    return (paymentRequest: string) => {
+      return state.transactions.find((tx) => {
+        return paymentRequest === tx.paymentRequest;
+      });
+    };
+  }),
 };

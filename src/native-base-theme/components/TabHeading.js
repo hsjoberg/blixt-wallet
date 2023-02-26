@@ -1,39 +1,39 @@
 // @flow
 
-import variable from './../variables/commonColor';
-import { PLATFORM } from './../variables/commonColor';
+import variable from "./../variables/commonColor";
+import { PLATFORM } from "./../variables/commonColor";
 
 export default (variables /* : * */ = variable) => {
   const platform = variables.platform;
 
   const tabHeadingTheme = {
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: variables.tabDefaultBg,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    '.scrollable': {
+    alignItems: "center",
+    justifyContent: "center",
+    ".scrollable": {
       paddingHorizontal: 20,
       flex: platform === PLATFORM.ANDROID ? 0 : 1,
-      minWidth: platform === PLATFORM.ANDROID ? undefined : 60
+      minWidth: platform === PLATFORM.ANDROID ? undefined : 60,
     },
-    'NativeBase.Text': {
+    "NativeBase.Text": {
       color: variables.topTabBarTextColor,
-      marginHorizontal: 7
+      marginHorizontal: 7,
     },
-    'NativeBase.Icon': {
+    "NativeBase.Icon": {
       color: variables.topTabBarTextColor,
-      fontSize: platform === PLATFORM.IOS ? 26 : undefined
+      fontSize: platform === PLATFORM.IOS ? 26 : undefined,
     },
-    '.active': {
-      'NativeBase.Text': {
+    ".active": {
+      "NativeBase.Text": {
         color: variables.topTabBarActiveTextColor,
-        fontWeight: '600'
+        fontWeight: "600",
       },
-      'NativeBase.Icon': {
-        color: variables.topTabBarActiveTextColor
-      }
-    }
+      "NativeBase.Icon": {
+        color: variables.topTabBarActiveTextColor,
+      },
+    },
   };
 
   return tabHeadingTheme;

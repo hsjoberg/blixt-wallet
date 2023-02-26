@@ -53,51 +53,51 @@ module.exports = [
 
   new webpack.NormalModuleReplacementPlugin(
     /node_modules\/native-base.*utils\/index\.js/,
-    path.join(__dirname, "../web-hacks/native-base-utils-hack.js")
+    path.join(__dirname, "../web-hacks/native-base-utils-hack.js"),
   ),
 
   new webpack.NormalModuleReplacementPlugin(
     /node_modules\/react-native-permissions/,
-    path.join(__dirname, "../web-hacks/react-native-permission.js")
+    path.join(__dirname, "../web-hacks/react-native-permission.js"),
   ),
 
   new webpack.NormalModuleReplacementPlugin(
     /node_modules\/react-native-push-notification/,
-    path.join(__dirname, "../web-hacks/react-native-push-notification.js")
+    path.join(__dirname, "../web-hacks/react-native-push-notification.js"),
   ),
 
   new webpack.NormalModuleReplacementPlugin(
     /node_modules\/react-native-sqlite-storage/,
-    path.join(__dirname, "../web-hacks/react-native-sqlite-storage.js")
+    path.join(__dirname, "../web-hacks/react-native-sqlite-storage.js"),
   ),
 
   new webpack.NormalModuleReplacementPlugin(
     /node_modules\/react-native-dialogs/,
-    path.join(__dirname, "../web-hacks/react-native-dialogs.js")
+    path.join(__dirname, "../web-hacks/react-native-dialogs.js"),
   ),
 
   new webpack.NormalModuleReplacementPlugin(
     /node_modules\/react-native-fs/,
-    path.join(__dirname, "../web-hacks/react-native-fs.js")
+    path.join(__dirname, "../web-hacks/react-native-fs.js"),
   ),
 
   new webpack.NormalModuleReplacementPlugin(
     /node_modules\/@react-native-community\/clipboard/,
-    path.join(__dirname, "../web-hacks/@react-native-community/clipboard.js")
+    path.join(__dirname, "../web-hacks/@react-native-community/clipboard.js"),
   ),
 
   new webpack.NormalModuleReplacementPlugin(
     /node_modules\/react-native-securerandom/,
-    path.join(__dirname, "../web-hacks/react-native-securerandom.js")
+    path.join(__dirname, "../web-hacks/react-native-securerandom.js"),
   ),
 
   new webpack.NormalModuleReplacementPlugin(
     /node_modules\/react-native-build-config/,
-    path.join(__dirname, "../web-hacks/react-native-build-config.js")
+    path.join(__dirname, "../web-hacks/react-native-build-config.js"),
   ),
 
   new webpack.NormalModuleReplacementPlugin(
     /node_modules\/react-native-icloudstore/,
-    path.join(__dirname, "../web-hacks/react-native-icloudstore.js")
+    path.join(__dirname, "../web-hacks/react-native-icloudstore.js"),
   ),
 ];

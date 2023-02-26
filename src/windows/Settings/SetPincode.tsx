@@ -34,20 +34,24 @@ export default function SetPincode() {
     await setPincode(code);
     setTimeout(() => navigation.goBack(), 0);
     return true;
-  }
+  };
 
   return (
     <>
       <Pincode onTryCode={onTryCode} textAction={t(state)} />
-      {PLATFORM !== "android" &&
-        <Icon style={{
-          position: "absolute",
-          right: 0,
-          padding: 4,
-          top: getStatusBarHeight(true),
-          }} type="Entypo" name="cross" onPress={() => navigation.goBack()}
+      {PLATFORM !== "android" && (
+        <Icon
+          style={{
+            position: "absolute",
+            right: 0,
+            padding: 4,
+            top: getStatusBarHeight(true),
+          }}
+          type="Entypo"
+          name="cross"
+          onPress={() => navigation.goBack()}
         />
-      }
+      )}
     </>
-  )
+  );
 }

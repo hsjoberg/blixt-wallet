@@ -1,7 +1,7 @@
 // @flow
 
-import color from 'color';
-import { Platform, Dimensions, PixelRatio } from 'react-native';
+import color from "color";
+import { Platform, Dimensions, PixelRatio } from "react-native";
 
 // https://coolors.co/151314-232323-bc6610-f2af13-e5eaea
 export const blixtTheme = {
@@ -18,60 +18,58 @@ export const blixtTheme = {
   link: "#4f9ca8",
 
   fontMedium: "IBMPlexSans-Medium",
-  fontRegular:  (Platform.OS === "ios" || Platform.OS === "macos") ? "IBMPlexSans" : "IBMPlexSans-Regular",
-}
-
-export const PLATFORM = {
-  ANDROID: 'android',
-  IOS: 'ios',
-  MATERIAL: 'material',
-  WEB: 'web'
+  fontRegular:
+    Platform.OS === "ios" || Platform.OS === "macos" ? "IBMPlexSans" : "IBMPlexSans-Regular",
 };
 
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+export const PLATFORM = {
+  ANDROID: "android",
+  IOS: "ios",
+  MATERIAL: "material",
+  WEB: "web",
+};
+
+const deviceHeight = Dimensions.get("window").height;
+const deviceWidth = Dimensions.get("window").width;
 const platform = Platform.OS;
 const platformStyle = undefined;
 const isIphoneX =
   platform === PLATFORM.IOS &&
-  (deviceHeight === 812 ||
-    deviceWidth === 812 ||
-    deviceHeight === 896 ||
-    deviceWidth === 896);
+  (deviceHeight === 812 || deviceWidth === 812 || deviceHeight === 896 || deviceWidth === 896);
 
 export default {
   platformStyle,
   platform,
 
   // Accordion
-  headerStyle: '#edebed',
-  iconStyle: '#000',
-  contentStyle: '#f5f4f5',
-  expandedIconStyle: '#000',
-  accordionBorderColor: '#d3d3d3',
+  headerStyle: "#edebed",
+  iconStyle: "#000",
+  contentStyle: "#f5f4f5",
+  expandedIconStyle: "#000",
+  accordionBorderColor: "#d3d3d3",
 
   // ActionSheet
   elevation: 4,
-  containerTouchableBackgroundColor: 'rgba(0,0,0,0.4)',
-  innerTouchableBackgroundColor: '#fff',
+  containerTouchableBackgroundColor: "rgba(0,0,0,0.4)",
+  innerTouchableBackgroundColor: "#fff",
   listItemHeight: 50,
-  listItemBorderColor: 'transparent',
+  listItemBorderColor: "transparent",
   marginHorizontal: -15,
   marginLeft: 14,
   marginTop: 15,
   minHeight: 56,
   padding: 15,
-  touchableTextColor: '#757575',
+  touchableTextColor: "#757575",
 
   // Android
   androidRipple: true,
-  androidRippleColor: 'rgba(256, 256, 256, 0.3)',
-  androidRippleColorDark: 'rgba(0, 0, 0, 0.15)',
+  androidRippleColor: "rgba(256, 256, 256, 0.3)",
+  androidRippleColorDark: "rgba(0, 0, 0, 0.15)",
   buttonUppercaseAndroidText: true,
 
   // Badge
-  badgeBg: '#ED1727',
-  badgeColor: '#fff',
+  badgeBg: "#ED1727",
+  badgeColor: "#fff",
   badgePadding: platform === PLATFORM.IOS ? 3 : 0,
 
   // Button
@@ -109,9 +107,7 @@ export default {
     return this.inverseTextColor;
   },
   get buttonTextSize() {
-    return platform === PLATFORM.IOS
-      ? this.fontSizeBase * 1.1
-      : this.fontSizeBase - 1;
+    return platform === PLATFORM.IOS ? this.fontSizeBase * 1.1 : this.fontSizeBase - 1;
   },
   get buttonTextSizeLarge() {
     return this.fontSizeBase * 1.5;
@@ -149,19 +145,19 @@ export default {
 
   // Color
   // brandPrimary: platform === PLATFORM.IOS ? '#007aff' : '#3F51B5',
-  brandInfo: '#62B1F6',
-  brandSuccess: '#5cb85c',
-  brandDanger: '#d9534f',
-  brandWarning: '#f0ad4e',
-  brandDark: '#000',
-  brandLight: '#f4f4f4',
+  brandInfo: "#62B1F6",
+  brandSuccess: "#5cb85c",
+  brandDanger: "#d9534f",
+  brandWarning: "#f0ad4e",
+  brandDark: "#000",
+  brandLight: "#f4f4f4",
 
   // Container
   // containerBgColor: '#fff',
 
   // Date Picker
-  datePickerTextColor: '#000',
-  datePickerBg: 'transparent',
+  datePickerTextColor: "#000",
+  datePickerBg: "transparent",
 
   // FAB
   fabWidth: 56,
@@ -188,49 +184,49 @@ export default {
   // FooterTab
   // tabBarTextColor: platform === PLATFORM.IOS ? '#737373' : '#bfc6ea',
   tabBarTextSize: platform === PLATFORM.IOS ? 14 : 11,
-  activeTab: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  sTabBarActiveTextColor: '#007aff',
-  tabBarActiveTextColor: platform === PLATFORM.IOS ? '#2874F0' : '#fff',
-  tabActiveBgColor: platform === PLATFORM.IOS ? '#cde1f9' : '#3F51B5',
+  activeTab: platform === PLATFORM.IOS ? "#007aff" : "#fff",
+  sTabBarActiveTextColor: "#007aff",
+  tabBarActiveTextColor: platform === PLATFORM.IOS ? "#2874F0" : "#fff",
+  tabActiveBgColor: platform === PLATFORM.IOS ? "#cde1f9" : "#3F51B5",
 
   // Header
   // toolbarBtnColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
   // toolbarDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#3F51B5',
   toolbarHeight: platform === PLATFORM.IOS ? 64 : 56,
   toolbarSearchIconSize: platform === PLATFORM.IOS ? 20 : 23,
-  toolbarInputColor: platform === PLATFORM.IOS ? '#CECDD2' : '#fff',
+  toolbarInputColor: platform === PLATFORM.IOS ? "#CECDD2" : "#fff",
   searchBarHeight: platform === PLATFORM.IOS ? 30 : 40,
   searchBarInputHeight: platform === PLATFORM.IOS ? 30 : platform === "macos" ? 20 : 50,
-  toolbarBtnTextColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  iosStatusbar: 'dark-content',
-  toolbarDefaultBorder: platform === PLATFORM.IOS ? '#a7a6ab' : '#3F51B5',
+  toolbarBtnTextColor: platform === PLATFORM.IOS ? "#007aff" : "#fff",
+  iosStatusbar: "dark-content",
+  toolbarDefaultBorder: platform === PLATFORM.IOS ? "#a7a6ab" : "#3F51B5",
   get statusBarColor() {
-    return color(this.toolbarDefaultBg)
-      // .darken(0.2)
-      .hex();
+    return (
+      color(this.toolbarDefaultBg)
+        // .darken(0.2)
+        .hex()
+    );
   },
   get darkenHeader() {
-    return color(this.tabBgColor)
-      .darken(0.03)
-      .hex();
+    return color(this.tabBgColor).darken(0.03).hex();
   },
 
   // Icon
-  iconFamily: 'Ionicons',
+  iconFamily: "Ionicons",
   iconFontSize: platform === PLATFORM.IOS ? 30 : 28,
   iconHeaderSize: platform === PLATFORM.IOS ? 33 : 24,
 
   // InputGroup
   inputFontSize: 17,
   // inputBorderColor: '#D9D5DC',
-  inputSuccessBorderColor: '#2b8339',
-  inputErrorBorderColor: '#ed2f2f',
+  inputSuccessBorderColor: "#2b8339",
+  inputErrorBorderColor: "#ed2f2f",
   inputHeightBase: platform !== "macos" ? 50 : 25,
   get inputColor() {
     return this.textColor;
   },
   get inputColorPlaceholder() {
-    return '#575757';
+    return "#575757";
   },
 
   // Line Height
@@ -241,48 +237,48 @@ export default {
   lineHeight: platform === PLATFORM.IOS ? 20 : 24,
 
   // List
-  listBg: 'transparent',
+  listBg: "transparent",
   // listBorderColor: '#c9c9c9',
-  listDividerBg: '#f4f4f4',
-  listBtnUnderlayColor: '#DDD',
+  listDividerBg: "#f4f4f4",
+  listBtnUnderlayColor: "#DDD",
   listItemPadding: platform === PLATFORM.IOS ? 10 : 12,
-  listNoteColor: '#808080',
+  listNoteColor: "#808080",
   listNoteSize: 13,
-  listItemSelected: platform === PLATFORM.IOS ? '#007aff' : '#3F51B5',
+  listItemSelected: platform === PLATFORM.IOS ? "#007aff" : "#3F51B5",
 
   // Progress Bar
-  defaultProgressColor: '#E4202D',
-  inverseProgressColor: '#1A191B',
+  defaultProgressColor: "#E4202D",
+  inverseProgressColor: "#1A191B",
 
   // Radio Button
   radioBtnSize: platform === PLATFORM.IOS ? 25 : 23,
-  radioSelectedColorAndroid: '#3F51B5',
+  radioSelectedColorAndroid: "#3F51B5",
   radioBtnLineHeight: platform === PLATFORM.IOS ? 29 : 24,
   get radioColor() {
     return this.brandPrimary;
   },
 
   // Segment
-  segmentBackgroundColor: platform === PLATFORM.IOS ? '#F8F8F8' : '#3F51B5',
-  segmentActiveBackgroundColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  segmentTextColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  segmentActiveTextColor: platform === PLATFORM.IOS ? '#fff' : '#3F51B5',
-  segmentBorderColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  segmentBorderColorMain: platform === PLATFORM.IOS ? '#a7a6ab' : '#3F51B5',
+  segmentBackgroundColor: platform === PLATFORM.IOS ? "#F8F8F8" : "#3F51B5",
+  segmentActiveBackgroundColor: platform === PLATFORM.IOS ? "#007aff" : "#fff",
+  segmentTextColor: platform === PLATFORM.IOS ? "#007aff" : "#fff",
+  segmentActiveTextColor: platform === PLATFORM.IOS ? "#fff" : "#3F51B5",
+  segmentBorderColor: platform === PLATFORM.IOS ? "#007aff" : "#fff",
+  segmentBorderColorMain: platform === PLATFORM.IOS ? "#a7a6ab" : "#3F51B5",
 
   // Spinner
-  defaultSpinnerColor: '#45D56E',
-  inverseSpinnerColor: '#1A191B',
+  defaultSpinnerColor: "#45D56E",
+  inverseSpinnerColor: "#1A191B",
 
   // Tab
-  tabDefaultBg: platform === PLATFORM.IOS ? '#F8F8F8' : '#3F51B5',
-  topTabBarTextColor: platform === PLATFORM.IOS ? '#6b6b6b' : '#b3c7f9',
-  topTabBarActiveTextColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  topTabBarBorderColor: platform === PLATFORM.IOS ? '#a7a6ab' : '#fff',
-  topTabBarActiveBorderColor: platform === PLATFORM.IOS ? '#007aff' : '#fff',
+  tabDefaultBg: platform === PLATFORM.IOS ? "#F8F8F8" : "#3F51B5",
+  topTabBarTextColor: platform === PLATFORM.IOS ? "#6b6b6b" : "#b3c7f9",
+  topTabBarActiveTextColor: platform === PLATFORM.IOS ? "#007aff" : "#fff",
+  topTabBarBorderColor: platform === PLATFORM.IOS ? "#a7a6ab" : "#fff",
+  topTabBarActiveBorderColor: platform === PLATFORM.IOS ? "#007aff" : "#fff",
 
   // Tabs
-  tabBgColor: '#F8F8F8',
+  tabBgColor: "#F8F8F8",
   tabFontSize: 15,
 
   // Text
@@ -298,13 +294,13 @@ export default {
   titleFontSize: platform === PLATFORM.IOS ? 17 : 19,
   subTitleFontSize: platform === PLATFORM.IOS ? 11 : 14,
   // subtitleColor: platform === PLATFORM.IOS ? '#000' : '#fff',
-  titleFontColor: platform === PLATFORM.IOS ? '#000' : '#fff',
+  titleFontColor: platform === PLATFORM.IOS ? "#000" : "#fff",
 
   // Other
   borderRadiusBase: platform === PLATFORM.IOS ? 5 : 2,
   borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
   contentPadding: 10,
-  dropdownLinkColor: '#414142',
+  dropdownLinkColor: "#414142",
   inputLineHeight: 24,
   deviceWidth,
   deviceHeight,
@@ -317,16 +313,15 @@ export default {
       topInset: 24,
       leftInset: 0,
       rightInset: 0,
-      bottomInset: 34
+      bottomInset: 34,
     },
     landscape: {
       topInset: 0,
       leftInset: 44,
       rightInset: 44,
-      bottomInset: 21
-    }
+      bottomInset: 21,
+    },
   },
-
 
   // Blixt customization:
   buttonFontFamily: platform === PLATFORM.IOS ? blixtTheme.fontMedium : blixtTheme.fontMedium,

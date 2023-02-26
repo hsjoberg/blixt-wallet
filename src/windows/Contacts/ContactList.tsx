@@ -30,20 +30,22 @@ export default function ContactList({ navigation }: IContactListProps) {
   const syncContact = useStoreActions((store) => store.contacts.syncContact);
   const clearLnUrl = useStoreActions((store) => store.lnUrl.clear);
   const promptLightningAddress = usePromptLightningAddress();
-  const getContactByLightningAddress = useStoreState((store) => store.contacts.getContactByLightningAddress);
+  const getContactByLightningAddress = useStoreState(
+    (store) => store.contacts.getContactByLightningAddress,
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: t("layout.title", { ns:namespaces.contacts.contactList }),
-      headerBackTitle: t("buttons.back", { ns:namespaces.common }),
+      headerTitle: t("layout.title", { ns: namespaces.contacts.contactList }),
+      headerBackTitle: t("buttons.back", { ns: namespaces.common }),
       headerShown: true,
       headerRight: () => {
         return (
           <NavigationButton onPress={addLightningAddress}>
             <Icon type="AntDesign" name="adduser" style={{ fontSize: 22 }} />
           </NavigationButton>
-        )
-      }
+        );
+      },
     });
     getContacts();
   }, [navigation]);
@@ -84,7 +86,7 @@ export default function ContactList({ navigation }: IContactListProps) {
 
   const sortedContacts = filteredContacts.sort((a, b) => {
     const aCmp = a.lightningAddress ?? a.domain;
-    const bCmp = b.lightningAddress ?? b.domain
+    const bCmp = b.lightningAddress ?? b.domain;
 
     if (aCmp < bCmp) {
       return -1;
@@ -93,7 +95,7 @@ export default function ContactList({ navigation }: IContactListProps) {
       return 1;
     }
     return 0;
-  })
+  });
 
   return (
     <Container>
@@ -117,21 +119,22 @@ export default function ContactList({ navigation }: IContactListProps) {
         translucent={true}
       />
       <Content>
-        {contacts.length === 0 &&
+        {contacts.length === 0 && (
           <Text style={{ textAlign: "center", marginTop: 20 }}>
-            {t("layout.nothingHereYet")+"\n\n"+t("layout.whyNotAdd")+"\n"}
-            <Text onPress={addLightningAddress} style={{color:blixtTheme.link}}>
+            {t("layout.nothingHereYet") + "\n\n" + t("layout.whyNotAdd") + "\n"}
+            <Text onPress={addLightningAddress} style={{ color: blixtTheme.link }}>
               {t("layout.tappingHere")}
-            </Text>?
+            </Text>
+            ?
           </Text>
-        }
+        )}
         {sortedContacts.map((contact) => (
           <Contact key={contact.id} contact={contact} />
         ))}
       </Content>
     </Container>
   );
-};
+}
 
 const style = StyleSheet.create({
   container: {
@@ -139,7 +142,8 @@ const style = StyleSheet.create({
     paddingBottom: 25,
   },
   searchHeader: {
-    backgroundColor: Chain === "mainnet" ? blixtTheme.primary : Color(blixtTheme.lightGray).darken(0.30).hex(),
+    backgroundColor:
+      Chain === "mainnet" ? blixtTheme.primary : Color(blixtTheme.lightGray).darken(0.3).hex(),
     paddingTop: 0,
     borderBottomWidth: 0,
     marginHorizontal: 8,

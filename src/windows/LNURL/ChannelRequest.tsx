@@ -38,12 +38,7 @@ export default function LNURLChannelRequest({ navigation }: IChannelRequestProps
           setDone(true);
           clear();
           Vibration.vibrate(32);
-          toast(
-            t("alert"),
-            10000,
-            "success",
-            "Okay"
-          );
+          toast(t("alert"), 10000, "success", "Okay");
           navigation.pop();
         } catch (e) {
           console.log(e);
@@ -51,10 +46,10 @@ export default function LNURLChannelRequest({ navigation }: IChannelRequestProps
           clear();
           Vibration.vibrate(50);
           toast(
-            `${t("msg.error",{ns:namespaces.common})}: ` + e.message,
+            `${t("msg.error", { ns: namespaces.common })}: ` + e.message,
             12000,
             "warning",
-            "Okay"
+            "Okay",
           );
           navigation.pop();
         }

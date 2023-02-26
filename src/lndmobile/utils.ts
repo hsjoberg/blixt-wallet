@@ -15,16 +15,16 @@ export interface ISendResponseClass<Res> {
 }
 
 export interface ISyncCommandOptions<IReq, Req, Res> {
-    request: ISendRequestClass<IReq, Req>;
-    response: ISendResponseClass<Res>;
-    method: string;
-    options: IReq;
+  request: ISendRequestClass<IReq, Req>;
+  response: ISendResponseClass<Res>;
+  method: string;
+  options: IReq;
 }
 
 export interface IStreamCommandOptions<IReq, Req> {
-    request: ISendRequestClass<IReq, Req>;
-    method: string;
-    options: IReq;
+  request: ISendRequestClass<IReq, Req>;
+  method: string;
+  options: IReq;
 }
 
 export interface IStreamResultOptions<Res> {
@@ -35,20 +35,40 @@ export interface IStreamResultOptions<Res> {
 /**
  * @throws
  */
-export const sendCommand = async <IReq, Req, Res>({ request, response, method, options }: ISyncCommandOptions<IReq, Req, Res>): Promise<Res> => {
+export const sendCommand = async <IReq, Req, Res>({
+  request,
+  response,
+  method,
+  options,
+}: ISyncCommandOptions<IReq, Req, Res>): Promise<Res> => {
   try {
     const instance = request.create(options);
-    const b64 = await LndMobile.sendCommand(method, base64.fromByteArray(request.encode(instance).finish()));
+    const b64 = await LndMobile.sendCommand(
+      method,
+      base64.fromByteArray(request.encode(instance).finish()),
+    );
     return response.decode(base64.toByteArray(b64.data || ""));
-  } catch (e) { throw e; }
+  } catch (e) {
+    throw e;
+  }
 };
 
-export const sendStreamCommand = async <IReq, Req>({ request, method, options }: IStreamCommandOptions<IReq, Req>, streamOnlyOnce: boolean = false): Promise<string> =>  {
+export const sendStreamCommand = async <IReq, Req>(
+  { request, method, options }: IStreamCommandOptions<IReq, Req>,
+  streamOnlyOnce: boolean = false,
+): Promise<string> => {
   const instance = request.create(options);
-  const response = await LndMobile.sendStreamCommand(method, base64.fromByteArray(request.encode(instance).finish()), streamOnlyOnce);
+  const response = await LndMobile.sendStreamCommand(
+    method,
+    base64.fromByteArray(request.encode(instance).finish()),
+    streamOnlyOnce,
+  );
   return response;
 };
 
-export const decodeStreamResult = <Res>( { base64Result, response }: IStreamResultOptions<Res>): Res => {
+export const decodeStreamResult = <Res>({
+  base64Result,
+  response,
+}: IStreamResultOptions<Res>): Res => {
   return response.decode(base64.toByteArray(base64Result));
 };

@@ -38,7 +38,10 @@ export default function LndMobileHelpCenter({ navigation }) {
     let listener: EmitterSubscription;
     (async () => {
       const tailLog = await NativeModules.LndMobileTools.tailLog(100);
-      log.current = tailLog.split("\n").map((row) => row.slice(11)).join("\n");
+      log.current = tailLog
+        .split("\n")
+        .map((row) => row.slice(11))
+        .join("\n");
 
       listener = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
         log.current = log.current + "\n" + data.slice(11);
@@ -54,23 +57,23 @@ export default function LndMobileHelpCenter({ navigation }) {
     };
   }, []);
 
-  let steps: { title: string, exec: () => Promise<boolean | string> }[] = [];
+  let steps: { title: string; exec: () => Promise<boolean | string> }[] = [];
 
   if (PLATFORM === "android") {
     steps.push({
       title: "Check LndMobileService process exist",
-      async exec () {
+      async exec() {
         if (PLATFORM === "ios" || PLATFORM === "macos") {
           return true;
         }
         const r = await NativeModules.LndMobileTools.checkLndProcessExist();
         return r;
-      }
+      },
     });
 
     steps.push({
       title: "Check LndMobileService connected",
-      async exec () {
+      async exec() {
         if (PLATFORM === "ios") {
           return true;
         }
@@ -84,56 +87,69 @@ export default function LndMobileHelpCenter({ navigation }) {
     ...steps,
     {
       title: "Ping LndMobileService",
-      async exec () {
+      async exec() {
         if (PLATFORM === "ios" || PLATFORM === "macos") {
           return true;
         }
         const r = await NativeModules.LndMobile.sendPongToLndMobileservice();
         return true;
-      }
-    }, {
+      },
+    },
+    {
       title: "Check status",
-      async exec () {
+      async exec() {
         const result = await NativeModules.LndMobile.checkStatus();
 
         let status = "";
-        if ((result & ELndMobileStatusCodes.STATUS_SERVICE_BOUND) === ELndMobileStatusCodes.STATUS_SERVICE_BOUND) {
+        if (
+          (result & ELndMobileStatusCodes.STATUS_SERVICE_BOUND) ===
+          ELndMobileStatusCodes.STATUS_SERVICE_BOUND
+        ) {
           status += "STATUS_SERVICE_BOUND\n";
         }
-        if ((result & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) === ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
+        if (
+          (result & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) ===
+          ELndMobileStatusCodes.STATUS_PROCESS_STARTED
+        ) {
           status += "STATUS_PROCESS_STARTED\n";
         }
-        if ((result & ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) === ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) {
+        if (
+          (result & ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED) ===
+          ELndMobileStatusCodes.STATUS_WALLET_UNLOCKED
+        ) {
           status += "STATUS_WALLET_UNLOCKED\n";
         }
 
         return status.trimRight();
-      }
-    }, {
+      },
+    },
+    {
       title: "Lnd GetInfo",
-      async exec () {
+      async exec() {
         const r = await getInfo();
         if (r && r.identityPubkey) {
           return true;
         }
         return false;
-      }
-    }, {
+      },
+    },
+    {
       title: "Lnd NewAddress",
-      async exec () {
+      async exec() {
         const r = await newAddress(lnrpc.AddressType.WITNESS_PUBKEY_HASH);
         console.log(r);
         if (r && r.address) {
           return true;
         }
         return false;
-      }
-    }, {
+      },
+    },
+    {
       title: "Test Done",
-      async exec () {
+      async exec() {
         return true;
-      }
-    }
+      },
+    },
   ];
 
   async function onPressDoTest() {
@@ -182,18 +198,23 @@ export default function LndMobileHelpCenter({ navigation }) {
   const runInit = async () => {
     try {
       const result = await NativeModules.LndMobile.initialize();
-      toast(t("msg.result",{ns:namespaces.common})+": " + result, 0, "success", "OK");
+      toast(t("msg.result", { ns: namespaces.common }) + ": " + result, 0, "success", "OK");
     } catch (e) {
-      toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
+      toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");
     }
   };
 
   const runStartLnd = async () => {
     try {
       const result = await startLnd(false);
-      toast(t("msg.result",{ns:namespaces.common})+": " + JSON.stringify(result), 0, "success", "OK");
+      toast(
+        t("msg.result", { ns: namespaces.common }) + ": " + JSON.stringify(result),
+        0,
+        "success",
+        "OK",
+      );
     } catch (e) {
-      toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
+      toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");
     }
   };
 
@@ -201,32 +222,37 @@ export default function LndMobileHelpCenter({ navigation }) {
     try {
       const password = await getWalletPassword();
       await unlockWallet(password!);
-      toast(t("msg.done",{ns:namespaces.common}));
+      toast(t("msg.done", { ns: namespaces.common }));
     } catch (e) {
-      toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
+      toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");
     }
   };
 
   const runSigKill = async () => {
     try {
       const result = await NativeModules.LndMobileTools.killLnd();
-      toast(t("msg.result",{ns:namespaces.common})+": " + JSON.stringify(result), 0, "success", "OK");
+      toast(
+        t("msg.result", { ns: namespaces.common }) + ": " + JSON.stringify(result),
+        0,
+        "success",
+        "OK",
+      );
     } catch (e) {
-      toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
+      toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");
     }
   };
 
   const runCopyLndLog = async (l: string) => {
     Clipboard.setString(l);
-    toast(t("msg.clipboardCopy",{ns:namespaces.common}));
+    toast(t("msg.clipboardCopy", { ns: namespaces.common }));
   };
 
   const runWaitForChainSync = async () => {
     try {
       await runWaitForChainSync();
-      toast(t("msg.done",{ns:namespaces.common}));
+      toast(t("msg.done", { ns: namespaces.common }));
     } catch (e) {
-      toast(t("msg.error",{ns:namespaces.common})+": " + e.message, 0, "danger", "OK");
+      toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");
     }
   };
 
@@ -236,38 +262,57 @@ export default function LndMobileHelpCenter({ navigation }) {
         <Card style={style.card}>
           <CardItem style={style.cardStyle}>
             <View style={style.headerContainer}>
-              <H1 style={style.header}>
-                LndMobile Help Center
-              </H1>
-              <Button small info disabled={runningSteps} style={{width: 85, justifyContent: "center" }} onPress={onPressDoTest}>
+              <H1 style={style.header}>LndMobile Help Center</H1>
+              <Button
+                small
+                info
+                disabled={runningSteps}
+                style={{ width: 85, justifyContent: "center" }}
+                onPress={onPressDoTest}
+              >
                 {!runningSteps && <Text>Do Test</Text>}
                 {runningSteps && <Spinner size="small" color={blixtTheme.light} />}
               </Button>
             </View>
-            <View style={{ flex: 1, padding: 3, backgroundColor: Color(blixtTheme.gray).darken(0.2).hex(), marginBottom: 10, width:"100%" }}>
+            <View
+              style={{
+                flex: 1,
+                padding: 3,
+                backgroundColor: Color(blixtTheme.gray).darken(0.2).hex(),
+                marginBottom: 10,
+                width: "100%",
+              }}
+            >
               {stepsResult.map((stepResult, i) => {
                 return (
                   <View style={style.resultItem} key={i}>
                     <Text>{stepResult.title}</Text>
-                    <View style={{ flex:1, flexDirection:"column",  alignItems:"flex-end" }}>
-                      {typeof stepResult.result === "boolean" &&
+                    <View style={{ flex: 1, flexDirection: "column", alignItems: "flex-end" }}>
+                      {typeof stepResult.result === "boolean" && (
                         <View style={stepResult.result ? style.resultOk : style.resultBad} />
-                      }
-                      {typeof stepResult.result === "string" &&
-                        <Text style={{ textAlign:"right", fontSize:12 }}>
+                      )}
+                      {typeof stepResult.result === "string" && (
+                        <Text style={{ textAlign: "right", fontSize: 12 }}>
                           {stepResult.result}
                         </Text>
-                      }
+                      )}
                       {stepResult.error && <Text>{stepResult.error.message}</Text>}
                     </View>
                   </View>
                 );
               })}
             </View>
-            <View style={{ flex: 0.75, padding: 3, width: "100%", backgroundColor: Color(blixtTheme.gray).darken(0.2).hex() }}>
+            <View
+              style={{
+                flex: 0.75,
+                padding: 3,
+                width: "100%",
+                backgroundColor: Color(blixtTheme.gray).darken(0.2).hex(),
+              }}
+            >
               <LogBox text={log.current} scrollLock={true} />
             </View>
-            <View style={{flexDirection: "row",  flexWrap:"wrap", justifyContent:"flex-end"}}>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-end" }}>
               <Button small style={style.actionButton} onPress={runInit}>
                 <Text style={style.actionButtonText}>init</Text>
               </Button>
@@ -278,7 +323,8 @@ export default function LndMobileHelpCenter({ navigation }) {
                 <Text style={style.actionButtonText}>unlockWallet</Text>
               </Button>
               <Button small style={style.actionButton} onPress={() => runCopyLndLog(log.current)}>
-                <Text style={style.actionButtonText}>Copy lnd log</Text></Button>
+                <Text style={style.actionButtonText}>Copy lnd log</Text>
+              </Button>
               <Button small style={style.actionButton} onPress={runWaitForChainSync}>
                 <Text style={style.actionButtonText}>waitForChainSync()</Text>
               </Button>
@@ -294,14 +340,14 @@ export default function LndMobileHelpCenter({ navigation }) {
       </View>
     </Blurmodal>
   );
-};
+}
 
 const style = StyleSheet.create({
   container: {
     margin: 5,
     height: "100%",
     justifyContent: "center",
-    alignItems:"center",
+    alignItems: "center",
   },
   card: {
     padding: 0,
@@ -309,7 +355,7 @@ const style = StyleSheet.create({
     minHeight: "86%",
   },
   cardStyle: {
-    flex:1,
+    flex: 1,
     flexDirection: "column",
     alignItems: "flex-start",
     paddingTop: 9,
@@ -318,9 +364,9 @@ const style = StyleSheet.create({
     paddingBottom: 9,
   },
   headerContainer: {
-    width:"100%",
-    flexDirection:"row",
-    justifyContent:"space-between",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   header: {
     fontWeight: "bold",
@@ -342,14 +388,14 @@ const style = StyleSheet.create({
     width: 9,
     height: 9,
     borderRadius: 8,
-    backgroundColor:"green",
+    backgroundColor: "green",
   },
   resultBad: {
     marginTop: 2,
     width: 9,
     height: 9,
     borderRadius: 8,
-    backgroundColor:"red",
+    backgroundColor: "red",
   },
   actionButton: {
     margin: 3,

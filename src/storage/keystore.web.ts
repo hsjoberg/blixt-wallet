@@ -1,9 +1,13 @@
 // TODO(hsjoberg)
 // import * as Keychain from 'react-native-keychain';
 
-const USER = 'blixt';
+const USER = "blixt";
 
-export const setItem = async (key: string, value: string, accessible: Keychain.ACCESSIBLE = Keychain.ACCESSIBLE.ALWAYS) => {
+export const setItem = async (
+  key: string,
+  value: string,
+  accessible: Keychain.ACCESSIBLE = Keychain.ACCESSIBLE.ALWAYS,
+) => {
   const options = {
     accessible,
   };
@@ -11,7 +15,7 @@ export const setItem = async (key: string, value: string, accessible: Keychain.A
   // // https://github.com/lightninglabs/lightning-app/blob/master/src/action/keychain-mobile.js#L21
   // // TODO tell them
   // await Keychain.setInternetCredentials(key, USER, value, options);
-  return
+  return;
 };
 
 export const getItem = async (key: string): Promise<string | null> => {
@@ -22,15 +26,16 @@ export const getItem = async (key: string): Promise<string | null> => {
   // else {
   //   return null;
   // }
-  return "test"
+  return "test";
 };
 
-export const setItemObject = async <T>(key: string, value: T) => await setItem(key, JSON.stringify(value));
-export const getItemObject = async (key: string) => JSON.parse(await getItem(key) || "null");
+export const setItemObject = async <T>(key: string, value: T) =>
+  await setItem(key, JSON.stringify(value));
+export const getItemObject = async (key: string) => JSON.parse((await getItem(key)) || "null");
 
 export const removeItem = async (key: string) => {
   // await Keychain.resetInternetCredentials(key);
-}
+};
 
 export const setSeed = async (seed: string[]) => setItemObject("seed", seed);
 export const getSeed = async (): Promise<string[] | null> => getItemObject("seed");
@@ -42,7 +47,7 @@ export const removePin = async () => removeItem("pin");
 
 export const setWalletPassword = async (password: string) => {
   // setItem("password", password, Keychain.ACCESSIBLE.ALWAYS);
-}
+};
 export const getWalletPassword = async (): Promise<string | null> => {
   return getItem("password");
-}
+};

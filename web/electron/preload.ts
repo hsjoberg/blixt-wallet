@@ -5,5 +5,5 @@ contextBridge.exposeInMainWorld("lndmobile", {
   hello: () => {
     ipcRenderer.send("blixt-prompt");
     return 123;
-  }
+  },
 });

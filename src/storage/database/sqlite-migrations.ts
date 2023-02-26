@@ -62,7 +62,7 @@ const schema = [
     lnUrlPay TEXT NULL,
     lnUrlWithdraw TEXT NULL,
     note TEXT NOT NULL
-  )`
+  )`,
 ];
 
 const migrations: string[][] = [];

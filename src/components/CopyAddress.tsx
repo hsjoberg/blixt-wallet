@@ -16,7 +16,12 @@ export default function CopyAddress({ text, onPress, ...props }: ICopyAddressPro
           {text}
         </Text>
         <Text style={style.iconText}>
-          <Icon type="MaterialCommunityIcons" name="content-copy" style={style.icon} onPress={onPress} />
+          <Icon
+            type="MaterialCommunityIcons"
+            name="content-copy"
+            style={style.icon}
+            onPress={onPress}
+          />
         </Text>
       </View>
     </View>

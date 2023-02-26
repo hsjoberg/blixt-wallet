@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react";
 import { StyleSheet } from "react-native";
 import { Container, View, Text, Icon } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
-import { useStoreActions, useStoreState, } from "../../state/store";
+import { useStoreActions, useStoreState } from "../../state/store";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useFingerprintAuth from "../../hooks/useFingerprintAuth";
 import { PLATFORM } from "../../utils/constants";
@@ -23,28 +23,47 @@ export default function ChangeFingerprintSettingsAuth() {
     <Container>
       <View style={style.content}>
         <Text style={style.message}>Authenticate to change biometrics settings</Text>
-        <View style={[style.fingerPrintSymbolContainer, {
-          marginBottom: sensor === "Face ID" ? 320 : 0,
-        }]}>
-          {sensor !== "Face ID" &&
-            <Icon onPress={startScan} type="Entypo" name="fingerprint" style={style.fingerPrintSymbol} />
-          }
-          {sensor === "Face ID" &&
-            <Icon onPress={startScan} type="MaterialCommunityIcons" name="face-recognition" style={style.fingerPrintSymbol} />
-          }
+        <View
+          style={[
+            style.fingerPrintSymbolContainer,
+            {
+              marginBottom: sensor === "Face ID" ? 320 : 0,
+            },
+          ]}
+        >
+          {sensor !== "Face ID" && (
+            <Icon
+              onPress={startScan}
+              type="Entypo"
+              name="fingerprint"
+              style={style.fingerPrintSymbol}
+            />
+          )}
+          {sensor === "Face ID" && (
+            <Icon
+              onPress={startScan}
+              type="MaterialCommunityIcons"
+              name="face-recognition"
+              style={style.fingerPrintSymbol}
+            />
+          )}
         </View>
       </View>
-      {PLATFORM === "ios" &&
-        <Icon style={{
-          position: "absolute",
-          right: 0,
-          padding: 4,
-          top: getStatusBarHeight(true),
-          }} type="Entypo" name="cross" onPress={() => navigation.goBack()}
+      {PLATFORM === "ios" && (
+        <Icon
+          style={{
+            position: "absolute",
+            right: 0,
+            padding: 4,
+            top: getStatusBarHeight(true),
+          }}
+          type="Entypo"
+          name="cross"
+          onPress={() => navigation.goBack()}
         />
-      }
+      )}
     </Container>
-  )
+  );
 }
 
 const style = StyleSheet.create({
@@ -62,10 +81,10 @@ const style = StyleSheet.create({
   fingerPrintSymbolContainer: {
     padding: 8,
     alignContent: "center",
-    alignItems:"center",
+    alignItems: "center",
     marginBottom: 16,
   },
   fingerPrintSymbol: {
-    fontSize: 36
+    fontSize: 36,
   },
 });

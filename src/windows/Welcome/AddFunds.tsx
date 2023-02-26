@@ -44,7 +44,7 @@ export default function AddFunds({ navigation }: IProps) {
 
   const onBtcAddressTextPress = () => {
     Clipboard.setString(address!);
-    toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
+    toast(t("msg.clipboardCopy", { ns: namespaces.common }), undefined, "warning");
   };
 
   const onBtcAddressQrPress = async () => {
@@ -66,7 +66,12 @@ export default function AddFunds({ navigation }: IProps) {
         <View style={style.upperContent}>
           <View style={extraStyle.qr}>
             <View style={extraStyle.qrInner}>
-              <QrCode size={smallScreen ? 150 : 250} style={extraStyle.qrImage} data={address} onPress={onBtcAddressQrPress} />
+              <QrCode
+                size={smallScreen ? 150 : 250}
+                style={extraStyle.qrImage}
+                data={address}
+                onPress={onBtcAddressQrPress}
+              />
               <CopyAddress text={address} onPress={onBtcAddressTextPress} />
             </View>
           </View>
@@ -75,19 +80,24 @@ export default function AddFunds({ navigation }: IProps) {
           <View style={style.text}>
             <H1 style={style.textHeader}>{t("title")}</H1>
             <Text>
-            {t("msg1")},{"\n"}{t("msg2")}.
+              {t("msg1")},{"\n"}
+              {t("msg2")}.
             </Text>
           </View>
           <View style={style.buttons}>
-            <Button style={style.button} block={true} onPress={() => navigation.navigate("AlmostDone")}>
-              <Text>{t("buttons.continue",{ns:namespaces.common})}</Text>
+            <Button
+              style={style.button}
+              block={true}
+              onPress={() => navigation.navigate("AlmostDone")}
+            >
+              <Text>{t("buttons.continue", { ns: namespaces.common })}</Text>
             </Button>
           </View>
         </View>
       </View>
     </Container>
   );
-};
+}
 
 const extraStyle = StyleSheet.create({
   qr: {

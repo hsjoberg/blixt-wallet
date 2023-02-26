@@ -20,14 +20,14 @@ export interface IPromptNavigationProps {
 
 type IFakeStack = {
   Prompt: IPromptNavigationProps;
-}
+};
 
 export interface ISelectListProps {
   navigation: StackNavigationProp<IFakeStack, "Prompt">;
   route: RouteProp<IFakeStack, "Prompt">;
 }
 
-export default function({ navigation, route }: ISelectListProps) {
+export default function ({ navigation, route }: ISelectListProps) {
   const { title, message, onOk, onCancel, defaultValue } = route.params;
   const [inputText, setInputText] = useState(defaultValue ?? "");
 
@@ -62,19 +62,10 @@ export default function({ navigation, route }: ISelectListProps) {
               />
             </View>
             <View style={style.buttons}>
-              <Button
-                small
-                success
-                style={style.button}
-                onPress={onPressOk}
-              >
+              <Button small success style={style.button} onPress={onPressOk}>
                 <Text>Okay</Text>
               </Button>
-              <Button
-                small
-                style={style.button}
-                onPress={onPressCancel}
-              >
+              <Button small style={style.button} onPress={onPressCancel}>
                 <Text>Cancel</Text>
               </Button>
             </View>
@@ -82,7 +73,7 @@ export default function({ navigation, route }: ISelectListProps) {
         </CardItem>
       </Card>
     </BlurModal>
-  )
+  );
 }
 
 const style = StyleSheet.create({
@@ -108,11 +99,8 @@ const style = StyleSheet.create({
   button: {
     marginLeft: 10,
   },
-  buttonOk: {
-  },
-  buttonCancel: {
-
-  },
+  buttonOk: {},
+  buttonCancel: {},
   description: {
     marginTop: 35,
     marginHorizontal: 10,
@@ -124,5 +112,5 @@ const style = StyleSheet.create({
     borderBottomWidth: 0,
     marginHorizontal: 8,
     elevation: 0,
-  }
+  },
 });

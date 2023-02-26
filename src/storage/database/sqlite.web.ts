@@ -25,5 +25,4 @@ export const dropTables = async (db: SqlJs.Database) => {
   await db.exec(`DROP TABLE channel_event`);
 };
 
-export const migrateDatabase = async () => {
-};
+export const migrateDatabase = async () => {};

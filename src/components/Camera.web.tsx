@@ -12,22 +12,25 @@ export interface ICamera {
   onNotAuthorized?: () => void;
   style?: StyleProp<ViewStyle>;
 }
-export default function CameraComponent({ cameraType, children, onNotAuthorized, onRead, style, active }: ICamera) {
+export default function CameraComponent({
+  cameraType,
+  children,
+  onNotAuthorized,
+  onRead,
+  style,
+  active,
+}: ICamera) {
   const [start, setStart] = useState(false);
   active = active ?? true;
 
   useEffect(() => {
     InteractionManager.runAfterInteractions(() => {
       setStart(true);
-    })
+    });
   }, []);
 
   if (!start || !active) {
-    return (
-      <Container style={{ backgroundColor: "black" }}>
-        {children ?? <></>}
-      </Container>
-    );
+    return <Container style={{ backgroundColor: "black" }}>{children ?? <></>}</Container>;
   }
 
   return (

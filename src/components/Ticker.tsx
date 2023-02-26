@@ -24,20 +24,23 @@ export const Ticker = ({ expire }: ITickerProps) => {
     dateFnsLocale = dateFnsLocales["en"];
   }
 
-  const [display, setDisplay] = useState(formatDistanceStrict(new Date(), fromUnixTime(expire), { locale: dateFnsLocale }));
+  const [display, setDisplay] = useState(
+    formatDistanceStrict(new Date(), fromUnixTime(expire), { locale: dateFnsLocale }),
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDisplay(
-        formatDistanceStrict(new Date(), fromUnixTime(expire), { locale: dateFnsLocale })
-      );
+      setDisplay(formatDistanceStrict(new Date(), fromUnixTime(expire), { locale: dateFnsLocale }));
     }, 1000);
 
     return () => clearInterval(interval);
   }, [expire]);
 
   return (
-    <>{t("qr.msg", { time : "" })}{display}</>
+    <>
+      {t("qr.msg", { time: "" })}
+      {display}
+    </>
   );
 };
 

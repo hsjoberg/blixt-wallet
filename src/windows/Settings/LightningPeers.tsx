@@ -1,6 +1,18 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
-import { Body, Button, Card, CardItem, Fab, Icon, Left, Right, Row, Text, Spinner } from "native-base";
+import {
+  Body,
+  Button,
+  Card,
+  CardItem,
+  Fab,
+  Icon,
+  Left,
+  Right,
+  Row,
+  Text,
+  Spinner,
+} from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import Long from "long";
@@ -22,7 +34,7 @@ export interface ISelectListProps {
   route: RouteProp<SettingsStackParamList, "LightningPeers">;
 }
 
-export default function({ navigation }: ISelectListProps) {
+export default function ({ navigation }: ISelectListProps) {
   const t = useTranslation(namespaces.settings.lightningPeers).t;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const syncedToChain = useStoreState((store) => store.lightning.syncedToChain);
@@ -47,11 +59,11 @@ export default function({ navigation }: ISelectListProps) {
       headerShown: true,
       headerRight: () => {
         return (
-          <NavigationButton onPress={async () => rpcReady && await getLightningPeers()}>
+          <NavigationButton onPress={async () => rpcReady && (await getLightningPeers())}>
             <Icon type="MaterialIcons" name="sync" style={{ fontSize: 22 }} />
           </NavigationButton>
-        )
-      }
+        );
+      },
     });
   }, [navigation]);
 
@@ -62,12 +74,12 @@ export default function({ navigation }: ISelectListProps) {
 
   return (
     <Container>
-      {(loading && lightningPeers.length === 0) &&
+      {loading && lightningPeers.length === 0 && (
         <View style={style.loadingContainer}>
           <Spinner color={blixtTheme.light} size={55} />
         </View>
-      }
-      {!loading &&
+      )}
+      {!loading && (
         <>
           <BlixtContent style={{ paddingBottom: 25 }}>
             {lightningPeers.map((peer) => {
@@ -85,18 +97,22 @@ export default function({ navigation }: ISelectListProps) {
                         <Left style={{ alignSelf: "flex-start" }}>
                           <Text>{t("alias")}</Text>
                         </Left>
-                        <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
-                          <Text style={style.cardDataText}>
-                            {peer.node?.alias}
-                          </Text>
-                          {service &&
+                        <Right
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "flex-start",
+                            justifyContent: "flex-end",
+                          }}
+                        >
+                          <Text style={style.cardDataText}>{peer.node?.alias}</Text>
+                          {service && (
                             <Image
                               source={{ uri: service.image }}
                               style={style.nodeImage}
                               width={28}
                               height={28}
                             />
-                          }
+                          )}
                         </Right>
                       </Row>
                       <Row style={{ width: "100%" }}>
@@ -104,7 +120,9 @@ export default function({ navigation }: ISelectListProps) {
                           <Text>{t("pubKey")}</Text>
                         </Left>
                         <Right>
-                          <Text style={{ fontSize: 9, textAlign:"right" }}>{peer.peer.pubKey}</Text>
+                          <Text style={{ fontSize: 9, textAlign: "right" }}>
+                            {peer.peer.pubKey}
+                          </Text>
                         </Right>
                       </Row>
                       <Row style={{ width: "100%" }}>
@@ -112,7 +130,7 @@ export default function({ navigation }: ISelectListProps) {
                           <Text>{t("address")}</Text>
                         </Left>
                         <Right>
-                        <Text style={style.cardDataText}>{peer.peer.address}</Text>
+                          <Text style={style.cardDataText}>{peer.peer.address}</Text>
                         </Right>
                       </Row>
                       <Row style={{ width: "100%" }}>
@@ -121,7 +139,8 @@ export default function({ navigation }: ISelectListProps) {
                         </Left>
                         <Right>
                           <Text style={style.cardDataText}>
-                            {Long.fromValue(peer.peer.bytesSent).toString()} {t("data.bytesSent")}{"\n"}
+                            {Long.fromValue(peer.peer.bytesSent).toString()} {t("data.bytesSent")}
+                            {"\n"}
                             {Long.fromValue(peer.peer.bytesRecv).toString()} {t("data.bytesRecv")}
                           </Text>
                         </Right>
@@ -132,7 +151,8 @@ export default function({ navigation }: ISelectListProps) {
                         </Left>
                         <Right>
                           <Text style={style.cardDataText}>
-                            {Long.fromValue(peer.peer.satSent).toString()} {t("transfer.satSent")}{"\n"}
+                            {Long.fromValue(peer.peer.satSent).toString()} {t("transfer.satSent")}
+                            {"\n"}
                             {Long.fromValue(peer.peer.satRecv).toString()} {t("transfer.satRecv")}
                           </Text>
                         </Right>
@@ -167,26 +187,32 @@ export default function({ navigation }: ISelectListProps) {
                           </Text>
                         </Right>
                       </Row>
-                      {peer.peer.errors.length > 0 &&
+                      {peer.peer.errors.length > 0 && (
                         <Row style={{ width: "100%" }}>
                           <Left style={{ alignSelf: "flex-start" }}>
                             <Text>{t("errors")}</Text>
                           </Left>
                           <Right>
                             <Text style={style.cardDataText}>
-                              {(peer.peer.errors.map((error, i) => (
+                              {peer.peer.errors.map((error, i) => (
                                 <Text key={`${i}${error.error}`}>
-                                  {error.error}{"\n"}
+                                  {error.error}
+                                  {"\n"}
                                 </Text>
-                              )))}
+                              ))}
                             </Text>
                           </Right>
                         </Row>
-                      }
+                      )}
                       <Row style={{ width: "100%" }}>
                         <Left>
-                          <Button style={{ marginTop: 14 }} primary={true} small={true} onPress={() => close(peer.peer.pubKey)}>
-                            <Text style={{fontSize: 9}}>{t("disconnect")}</Text>
+                          <Button
+                            style={{ marginTop: 14 }}
+                            primary={true}
+                            small={true}
+                            onPress={() => close(peer.peer.pubKey)}
+                          >
+                            <Text style={{ fontSize: 9 }}>{t("disconnect")}</Text>
                           </Button>
                         </Left>
                       </Row>
@@ -199,13 +225,14 @@ export default function({ navigation }: ISelectListProps) {
           <Fab
             style={style.fab}
             position="bottomRight"
-            onPress={() => navigation.navigate("ConnectToLightningPeer")}>
+            onPress={() => navigation.navigate("ConnectToLightningPeer")}
+          >
             <Icon type="Entypo" name="plus" style={style.fabConnectToPerIcon} />
           </Fab>
         </>
-      }
+      )}
     </Container>
-  )
+  );
 }
 
 const style = StyleSheet.create({
@@ -234,15 +261,15 @@ const style = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-})
+});
 
 function getPeerSyncType(type: lnrpc.Peer.SyncType) {
   if (type === lnrpc.Peer.SyncType.UNKNOWN_SYNC) {
-    return "UNKNOWN_SYNC"
+    return "UNKNOWN_SYNC";
   } else if (type === lnrpc.Peer.SyncType.ACTIVE_SYNC) {
-    return "ACTIVE_SYNC"
+    return "ACTIVE_SYNC";
   } else if (type === lnrpc.Peer.SyncType.PASSIVE_SYNC) {
-    return "PASSIVE_SYNC"
+    return "PASSIVE_SYNC";
   }
   return "UNKNOWN";
 }

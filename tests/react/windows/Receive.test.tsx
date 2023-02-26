@@ -6,7 +6,12 @@ import * as base64 from "base64-js";
 
 import Overview from "../../../src/windows/Overview";
 import Receive from "../../../src/windows/Receive";
-import { createNavigationContainer, setupStore, setDefaultAsyncStorage, initCommonStore } from "../../utils";
+import {
+  createNavigationContainer,
+  setupStore,
+  setDefaultAsyncStorage,
+  initCommonStore,
+} from "../../utils";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { DeviceEventEmitter } from "react-native";
@@ -20,11 +25,7 @@ const AppContainer = createNavigationContainer(Receive, "Receive");
 it("renders correctly", () => {
   const store = setupStore();
 
-  const { unmount, toJSON } = render(
-    <StoreProvider store={store}>
-      {AppContainer}
-    </StoreProvider>
-  );
+  const { unmount, toJSON } = render(<StoreProvider store={store}>{AppContainer}</StoreProvider>);
   expect(toJSON()).toMatchSnapshot();
 
   unmount();
@@ -35,9 +36,7 @@ it("is possible to create an invoice and go to the QR screen", async () => {
   const store = await initCommonStore(true);
 
   const { queryByTestId, unmount } = render(
-    <StoreProvider store={store}>
-      {AppContainer}
-    </StoreProvider>
+    <StoreProvider store={store}>{AppContainer}</StoreProvider>,
   );
 
   const inputAmountSat = queryByTestId("input-amount-sat");
@@ -84,9 +83,7 @@ test("invoice appears on the transaction list", async () => {
   );
 
   const { getByTestId, findByTestId, unmount, getAllByTestId } = render(
-    <StoreProvider store={store}>
-      {Container}
-    </StoreProvider>
+    <StoreProvider store={store}>{Container}</StoreProvider>,
   );
 
   // See if we can find the Overview transaction list
@@ -127,10 +124,10 @@ test("invoice appears on the transaction list", async () => {
     expiry: Long.fromValue(40),
     isKeysend: false,
     state: lnrpc.Invoice.InvoiceState.SETTLED,
-  })
+  });
   act(() => {
     DeviceEventEmitter.emit("SubscribeInvoices", {
-      data: base64.fromByteArray(lnrpc.Invoice.encode(invoice).finish())
+      data: base64.fromByteArray(lnrpc.Invoice.encode(invoice).finish()),
     });
   });
 

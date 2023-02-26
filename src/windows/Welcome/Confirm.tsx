@@ -21,9 +21,13 @@ interface IProps {
 export default function Confirm({ navigation }: IProps) {
   const t = useTranslation(namespaces.welcome.confirm).t;
   const [confirmedWords, setConfirmedWords] = useState<string[]>([]);
-  const [selectedWords, setSelectedWords] = useState<Array<string | undefined>>(new Array(24).fill(undefined));
+  const [selectedWords, setSelectedWords] = useState<Array<string | undefined>>(
+    new Array(24).fill(undefined),
+  );
   const [proceeding, setProceeding] = useState(false);
-  const [loadSpinnerForButton, setLoadSpinnerForButton] = useState<"skip" | "proceed" | undefined>(undefined);
+  const [loadSpinnerForButton, setLoadSpinnerForButton] = useState<"skip" | "proceed" | undefined>(
+    undefined,
+  );
 
   const getSeed = useStoreActions((store) => store.security.getSeed);
   const [seed, setSeed] = useState<string[] | undefined>([]);
@@ -49,7 +53,7 @@ export default function Confirm({ navigation }: IProps) {
   }, [seed]);
 
   if (!seed) {
-    return (<></>);
+    return <></>;
   }
 
   let seedCorrect = false;
@@ -73,7 +77,7 @@ export default function Confirm({ navigation }: IProps) {
     } else if (PLATFORM === "ios") {
       navigation.replace("ICloudBackup");
     } else {
-      navigation.replace("AlmostDone")
+      navigation.replace("AlmostDone");
     }
   };
 
@@ -122,7 +126,8 @@ export default function Confirm({ navigation }: IProps) {
                     <Text
                       key={word + i + 8}
                       style={{
-                        color: confirmedWords.length === i + 8 ? blixtTheme.primary : blixtTheme.light,
+                        color:
+                          confirmedWords.length === i + 8 ? blixtTheme.primary : blixtTheme.light,
                       }}
                     >
                       {i + 9}. {confirmedWords[i + 8]}
@@ -134,7 +139,8 @@ export default function Confirm({ navigation }: IProps) {
                     <Text
                       key={word + i + 16}
                       style={{
-                        color: confirmedWords.length === i + 16 ? blixtTheme.primary : blixtTheme.light,
+                        color:
+                          confirmedWords.length === i + 16 ? blixtTheme.primary : blixtTheme.light,
                       }}
                     >
                       {i + 17}. {confirmedWords[i + 16]}
@@ -148,14 +154,19 @@ export default function Confirm({ navigation }: IProps) {
         <View style={style.lowerContent}>
           <View style={style.text}>
             <View style={style.headerView}>
-              {smallScreen ?
+              {smallScreen ? (
                 <H3 style={style.textHeader}>{t("seed.title")}</H3>
-                :
+              ) : (
                 <H1 style={style.textHeader}>{t("seed.title")}</H1>
-              }
-              {confirmedWords.length > 0 &&
-                <Icon type="FontAwesome5" name="backspace" style={{ fontSize: 24, marginRight: 10, marginBottom: 6 }} onPress={onBackspacePress}  />
-              }
+              )}
+              {confirmedWords.length > 0 && (
+                <Icon
+                  type="FontAwesome5"
+                  name="backspace"
+                  style={{ fontSize: 24, marginRight: 10, marginBottom: 6 }}
+                  onPress={onBackspacePress}
+                />
+              )}
             </View>
             <View style={extraStyle.wordButtons}>
               {shuffledSeed.sort().map((word, i) => (
@@ -164,10 +175,10 @@ export default function Confirm({ navigation }: IProps) {
                   disabled={selectedWords[i] !== undefined}
                   style={{
                     ...extraStyle.wordButton,
-                    opacity: selectedWords[i] !== undefined ? 0 : 1}
-                  }
+                    opacity: selectedWords[i] !== undefined ? 0 : 1,
+                  }}
                   onPress={() => {
-                    setConfirmedWords([...confirmedWords, word])
+                    setConfirmedWords([...confirmedWords, word]);
                     setSelectedWords((words) => {
                       words[i] = word;
                       return words;
@@ -175,22 +186,47 @@ export default function Confirm({ navigation }: IProps) {
                   }}
                   small={true}
                 >
-                  <Text uppercase={false} style={extraStyle.wordButtonText}>{word}</Text>
+                  <Text uppercase={false} style={extraStyle.wordButtonText}>
+                    {word}
+                  </Text>
                 </Button>
               ))}
             </View>
           </View>
           <View style={style.buttons}>
-            <Button onPress={() => { if (!proceeding) { setLoadSpinnerForButton("skip"); onContinue(); }}} block={true} style={{width: "50%", marginRight: 5 }}>
+            <Button
+              onPress={() => {
+                if (!proceeding) {
+                  setLoadSpinnerForButton("skip");
+                  onContinue();
+                }
+              }}
+              block={true}
+              style={{ width: "50%", marginRight: 5 }}
+            >
               <>
                 {loadSpinnerForButton === "skip" && <Spinner color={blixtTheme.light} />}
-                {loadSpinnerForButton !== "skip" && <Text>{t("buttons.skip",{ns:namespaces.common})}</Text>}
+                {loadSpinnerForButton !== "skip" && (
+                  <Text>{t("buttons.skip", { ns: namespaces.common })}</Text>
+                )}
               </>
             </Button>
-            <Button disabled={!seedCorrect} onPress={() => { if (!proceeding) { setLoadSpinnerForButton("proceed"); onContinue(); }}} block={true} style={{width: "50%", marginLeft: 5 }}>
+            <Button
+              disabled={!seedCorrect}
+              onPress={() => {
+                if (!proceeding) {
+                  setLoadSpinnerForButton("proceed");
+                  onContinue();
+                }
+              }}
+              block={true}
+              style={{ width: "50%", marginLeft: 5 }}
+            >
               <>
                 {loadSpinnerForButton === "proceed" && <Spinner color={blixtTheme.light} />}
-                {loadSpinnerForButton !== "proceed" && <Text>{t("buttons.proceed",{ns:namespaces.common})}</Text>}
+                {loadSpinnerForButton !== "proceed" && (
+                  <Text>{t("buttons.proceed", { ns: namespaces.common })}</Text>
+                )}
               </>
             </Button>
           </View>
@@ -198,7 +234,7 @@ export default function Confirm({ navigation }: IProps) {
       </View>
     </Container>
   );
-};
+}
 
 const extraStyle = StyleSheet.create({
   wordButtons: {
@@ -219,10 +255,10 @@ const shuffleArray = (originalArray: string[] | undefined) => {
   }
   const array = originalArray.slice(0);
   for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
   }
   return array;
 };

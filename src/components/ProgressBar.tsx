@@ -1,28 +1,27 @@
-import React, { Component } from 'react';
-import { Animated, Easing, View, I18nManager } from 'react-native';
+import React, { Component } from "react";
+import { Animated, Easing, View, I18nManager } from "react-native";
 
 const INDETERMINATE_WIDTH_FACTOR = 0.3;
-const BAR_WIDTH_ZERO_POSITION =
-  INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
+const BAR_WIDTH_ZERO_POSITION = INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
 
 export interface IProgressBarProps {
-  animated?: boolean,
-  borderColor: string,
-  borderRadius?: number,
-  borderWidth?: number,
-  children?: any, // react node
-  color: string,
-  height?: number,
-  indeterminate?: boolean,
-  indeterminateAnimationDuration?: number,
-  onLayout: any, // func
-  progress?: number,
-  style: any,
-  unfilledColor: string,
-  width?: number,
-  useNativeDriver?: boolean,
-  animationConfig?: any, // Object
-  animationType?: "decay" | "timing" | "spring",
+  animated?: boolean;
+  borderColor: string;
+  borderRadius?: number;
+  borderWidth?: number;
+  children?: any; // react node
+  color: string;
+  height?: number;
+  indeterminate?: boolean;
+  indeterminateAnimationDuration?: number;
+  onLayout: any; // func
+  progress?: number;
+  style: any;
+  unfilledColor: string;
+  width?: number;
+  useNativeDriver?: boolean;
+  animationConfig?: any; // Object
+  animationType?: "decay" | "timing" | "spring";
 }
 
 export default class ProgressBar extends Component {
@@ -30,7 +29,7 @@ export default class ProgressBar extends Component {
     animated: true,
     borderRadius: 4,
     borderWidth: 1,
-    color: 'rgba(0, 122, 255, 1)',
+    color: "rgba(0, 122, 255, 1)",
     height: 6,
     indeterminate: false,
     indeterminateAnimationDuration: 1000,
@@ -38,16 +37,14 @@ export default class ProgressBar extends Component {
     width: 150,
     useNativeDriver: false,
     animationConfig: { bounciness: 0 },
-    animationType: 'spring',
+    animationType: "spring",
   };
   constructor(props) {
     super(props);
     const progress = Math.min(Math.max(props.progress, 0), 1);
     this.state = {
       width: 0,
-      progress: new Animated.Value(
-        props.indeterminate ? INDETERMINATE_WIDTH_FACTOR : progress
-      ),
+      progress: new Animated.Value(props.indeterminate ? INDETERMINATE_WIDTH_FACTOR : progress),
       animationValue: new Animated.Value(BAR_WIDTH_ZERO_POSITION),
     };
   }
@@ -90,7 +87,7 @@ export default class ProgressBar extends Component {
     }
   }
 
-  handleLayout = event => {
+  handleLayout = (event) => {
     if (!this.props.width) {
       this.setState({ width: event.nativeEvent.layout.width });
     }
@@ -107,7 +104,7 @@ export default class ProgressBar extends Component {
       easing: Easing.linear,
       isInteraction: false,
       useNativeDriver: this.props.useNativeDriver,
-    }).start(endState => {
+    }).start((endState) => {
       if (endState.finished) {
         this.animate();
       }
@@ -134,7 +131,7 @@ export default class ProgressBar extends Component {
       borderWidth,
       borderColor: borderColor || color,
       borderRadius,
-      overflow: 'hidden',
+      overflow: "hidden",
       backgroundColor: unfilledColor,
     };
     const progressStyle = {
@@ -164,11 +161,7 @@ export default class ProgressBar extends Component {
     };
 
     return (
-      <View
-        style={[containerStyle, style]}
-        onLayout={this.handleLayout}
-        {...restProps}
-      >
+      <View style={[containerStyle, style]} onLayout={this.handleLayout} {...restProps}>
         <Animated.View style={progressStyle} />
         {children}
       </View>
