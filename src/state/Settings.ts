@@ -5,7 +5,7 @@ import { IFiatRates } from "./Fiat";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
-import { DEFAULT_INVOICE_EXPIRY, DEFAULT_MAX_LN_FEE_PERCENTAGE } from "../utils/constants";
+import { DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE } from "../utils/constants";
 import { IStoreModel } from "./index";
 
 import { i18n } from "../i18n/i18n";
@@ -19,6 +19,8 @@ export const OnchainExplorer = {
   oxt: `https://oxt.me/transaction/`,
   blockchair: "https://blockchair.com/bitcoin/transaction/",
 };
+
+export type LndLogLevel = "trace" | "debug" | "info" | "warn" | "error" | "critical";
 
 export interface ISettingsModel {
   initialize: Thunk<ISettingsModel>;
@@ -56,6 +58,7 @@ export interface ISettingsModel {
   changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeStrictGraphPruningEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
+  changeLndLogLevel: Thunk<ISettingsModel, LndLogLevel>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -90,6 +93,7 @@ export interface ISettingsModel {
   setReceiveViaP2TR: Action<ISettingsModel, boolean>;
   setStrictGraphPruningEnabled: Action<ISettingsModel, boolean>;
   setMaxLNFeePercentage: Action<ISettingsModel, number>;
+  setLndLogLevel: Action<ISettingsModel, LndLogLevel>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -124,6 +128,7 @@ export interface ISettingsModel {
   receiveViaP2TR: boolean;
   strictGraphPruningEnabled: boolean;
   maxLNFeePercentage: number;
+  lndLogLevel: LndLogLevel;
 }
 
 export const settings: ISettingsModel = {
@@ -162,6 +167,7 @@ export const settings: ISettingsModel = {
     actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
     actions.setStrictGraphPruningEnabled(await getItemObject(StorageItem.strictGraphPruningEnabled) ?? false);
     actions.setMaxLNFeePercentage(await getItemObject(StorageItem.maxLNFeePercentage) ?? 2);
+    actions.setLndLogLevel((await getItem(StorageItem.lndLogLevel) ?? "info") as LndLogLevel);
 
     log.d("Done");
   }),
@@ -335,6 +341,11 @@ export const settings: ISettingsModel = {
     actions.setMaxLNFeePercentage(payload);
   }),
 
+  changeLndLogLevel: thunk(async (actions, payload) => {
+    await setItem(StorageItem.lndLogLevel, payload);
+    actions.setLndLogLevel(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -368,6 +379,7 @@ export const settings: ISettingsModel = {
   setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
   setStrictGraphPruningEnabled: action((state, payload) => { state.strictGraphPruningEnabled = payload; }),
   setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
+  setLndLogLevel: action((state, payload) => { state.lndLogLevel = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -402,4 +414,5 @@ export const settings: ISettingsModel = {
   receiveViaP2TR: false,
   strictGraphPruningEnabled: false,
   maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
+  lndLogLevel: DEFAULT_LND_LOG_LEVEL,
 };

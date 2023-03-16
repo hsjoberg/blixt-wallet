@@ -13,7 +13,7 @@ import LndMobileHelpCenter from "./LndMobileHelpCenter";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectList";
 import { IFiatRates } from "../../state/Fiat";
-import { OnchainExplorer } from "../../state/Settings";
+import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
 import LightningPeers from "./LightningPeers";
 import ConnectToLightningPeer from "./ConnectToLightningPeer";
 import LndLog from "./LndLog";
@@ -35,6 +35,7 @@ export type SettingsStackParamList = {
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
   ChangeLanguage: ISelectListNavigationProps<string>;
   ChangeOnchainExplorer: ISelectListNavigationProps<(keyof typeof OnchainExplorer) | string>;
+  ChangeLndLogLevel: ISelectListNavigationProps<LndLogLevel>;
   LightningPeers: undefined;
   ConnectToLighningPeer: undefined;
   ChannelProvider: ISelectListNavigationProps<string>;
@@ -63,6 +64,7 @@ export default function SettingsIndex() {
       <Stack.Screen name="ChangeBitcoinUnit" component={SelectList} />
       <Stack.Screen name="ChangeLanguage" component={SelectList} />
       <Stack.Screen name="ChangeOnchainExplorer" component={SelectList} />
+      <Stack.Screen name="ChangeLndLogLevel" component={SelectList} />
       <Stack.Screen name="LightningPeers" component={LightningPeers} />
       <Stack.Screen name="ConnectToLightningPeer" component={ConnectToLightningPeer} options={{
         animationEnabled: true,

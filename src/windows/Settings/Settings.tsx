@@ -17,9 +17,9 @@ import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
 import { getChanInfo, verifyChanBackup } from "../../lndmobile/channel";
 import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
-import { OnchainExplorer } from "../../state/Settings";
+import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
 import TorSvg from "./TorSvg";
-import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_MAX_LN_FEE_PERCENTAGE, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../utils/constants";
+import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../utils/constants";
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
@@ -1094,6 +1094,47 @@ ${t("experimental.tor.disabled.msg2")}`;
     toast(t("msg.written", { ns:namespaces.common }));
   };
 
+  const lndLogLevel = useStoreState((store) => store.settings.lndLogLevel);
+  const changeLndLogLevel = useStoreActions((store) => store.settings.changeLndLogLevel);
+  const onPressSetLndLogLevel = async () => {
+    const logLevels: LndLogLevel[] = [/*"trace", */"debug", "info", "warn", "error", "critical"];
+
+    navigation.navigate("ChangeLndLogLevel", {
+      title: t("miscelaneous.setLndLogLevel.dialog.title"),
+      description: t("miscelaneous.setLndLogLevel.dialog.description"),
+      data: logLevels.map((logLevel) => ({
+        title: logLevel,
+        value: logLevel,
+      })),
+      onPick: async (logLevel) => {
+        if (logLevel === lndLogLevel) {
+          return;
+        }
+        await changeLndLogLevel(logLevel);
+        await writeConfig();
+        restartNeeded();
+      },
+    });
+  };
+  const onLongPressSetLndLogLevel = async () => {
+    Alert.alert(
+      "",
+      t("miscelaneous.setLndLogLevel.restoreDialog.title",  { defaultLndLogLevel: DEFAULT_LND_LOG_LEVEL }),
+      [{
+        style: "cancel",
+        text: t("buttons.no", { ns:namespaces.common }),
+      }, {
+        style: "default",
+        text: t("buttons.yes", { ns:namespaces.common }),
+        onPress: async () => {
+          await changeLndLogLevel(DEFAULT_LND_LOG_LEVEL);
+          await writeConfig();
+          restartNeeded();
+        },
+      }]
+    );
+  }
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -1527,13 +1568,17 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           }
-          <ListItem style={style.listItem} icon={true} onPress={async () => {
-            navigation.navigate("LndLog");
-          }}>
+          <ListItem style={style.listItem} icon={true} onPress={async () => navigation.navigate("LndLog")}>
             <Left><Icon style={style.icon} type="Ionicons" name="newspaper-outline" /></Left>
             <Body><Text>{t("debug.lndLog.title")}</Text></Body>
           </ListItem>
-
+          <ListItem style={style.listItem} icon={true} onPress={onPressSetLndLogLevel} onLongPress={onLongPressSetLndLogLevel}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="file-code" /></Left>
+            <Body>
+              <Text>{t("miscelaneous.setLndLogLevel.title")}</Text>
+              <Text note={true}>{lndLogLevel}</Text>
+            </Body>
+          </ListItem>
           {((name === "Hampus" || __DEV__ === true)) &&
             <>
               <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("KeysendTest")}>

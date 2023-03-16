@@ -416,12 +416,13 @@ export const model: IStoreModel = {
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
     const lndNoGraphCache = await getItemAsyncStorage(StorageItem.lndNoGraphCache) || "0";
     const strictGraphPruningEnabled = await getItemAsyncStorage(StorageItem.strictGraphPruningEnabled) || "0";
+    const lndLogLevel = await getItemAsyncStorage(StorageItem.lndLogLevel) || "info";
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
 
     const config = `
 [Application Options]
-debuglevel=info
+debuglevel=${lndLogLevel}
 maxbackoff=2s
 norest=1
 sync-freelist=1

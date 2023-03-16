@@ -824,6 +824,16 @@
           "title": "Signature",
           "alert": "Copied to clipboard"
         }
+      },
+      "setLndLogLevel": {
+        "title": "Set lnd log level",
+        "dialog": {
+          "title": "Set lnd log level.",
+          "description": "The log level changes the verboseness of the lnd log, accessible from settings."
+        },
+        "restoreDialog": {
+          "title": "Would you like to restore lnd log level to the default level ({{defaultLndLogLevel}})?"
+        }
       }
     },
     "experimental": {
