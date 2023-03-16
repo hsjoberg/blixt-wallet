@@ -191,6 +191,13 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
     transactionValue = transaction.value;
   }
 
+  // In the case of an 0 sat invoice, transaction.value will be 0,
+  // instead get from amtPaidSat.
+  // TODO eventually sync up with what TransactionCard.tsx does.
+  if (transactionValue.eq(0)) {
+    transactionValue = transaction.amtPaidSat;
+  }
+
   const hasCoordinates = transaction.locationLat && transaction.locationLong;
 
   if (currentScreen === "Overview") {
