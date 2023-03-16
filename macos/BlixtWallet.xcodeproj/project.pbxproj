@@ -381,7 +381,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
@@ -394,7 +394,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 0.6.4;
+				MARKETING_VERSION = 0.6.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -419,7 +419,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -431,7 +431,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 0.6.4;
+				MARKETING_VERSION = 0.6.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -635,7 +635,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
@@ -647,7 +647,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 0.6.4;
+				MARKETING_VERSION = 0.6.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -728,7 +728,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
@@ -739,7 +739,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 0.6.4;
+				MARKETING_VERSION = 0.6.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -825,7 +825,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
@@ -837,7 +837,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 0.6.4;
+				MARKETING_VERSION = 0.6.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -918,7 +918,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = fakelnd;
@@ -929,7 +929,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 0.6.4;
+				MARKETING_VERSION = 0.6.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1015,7 +1015,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
@@ -1027,7 +1027,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 0.6.4;
+				MARKETING_VERSION = 0.6.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1108,7 +1108,7 @@
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 23;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
@@ -1119,7 +1119,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				MARKETING_VERSION = 0.6.4;
+				MARKETING_VERSION = 0.6.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
