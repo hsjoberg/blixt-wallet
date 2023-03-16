@@ -739,6 +739,16 @@
         "title": "Show Lightning peers",
         "subtitle": ""
       },
+      "maxLNFeePercentage": {
+        "title": "Set maximum payment fee",
+        "subtitle": "Proportional to the amount",
+        "dialog": {
+          "title": "Set max LN fee percentage"
+        },
+        "resetDialog": {
+          "title": "Would you like to restore max LN fee to the default value ({{defaultMaxLNFee}}%)?"
+        }
+      },
       "autopilot": {
         "title": "Automatically open channels",
         "subtitle": ""

@@ -138,6 +138,7 @@ export const send: ISendModel = {
 
     const name = getStoreState().settings.name;
     const multiPathPaymentsEnabled = getStoreState().settings.multiPathPaymentsEnabled;
+    const maxLNFeePercentage = getStoreState().settings.maxLNFeePercentage;
 
     const sendPaymentResult = await sendPaymentV2Sync(
       paymentRequestStr,
@@ -145,14 +146,14 @@ export const send: ISendModel = {
       paymentRequest.numSatoshis,
       name,
       multiPathPaymentsEnabled,
+      maxLNFeePercentage,
     );
 
-    
     log.i("status", [sendPaymentResult.status, sendPaymentResult.failureReason]);
     if (sendPaymentResult.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
       throw new Error(`${translatePaymentFailureReason(sendPaymentResult.failureReason)}`);
     }
-    
+
     const settlementDuration = (new Date().getTime() - start);
 
     const transaction: ITransaction = {

@@ -5,7 +5,7 @@ import { IFiatRates } from "./Fiat";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
-import { DEFAULT_INVOICE_EXPIRY } from "../utils/constants";
+import { DEFAULT_INVOICE_EXPIRY, DEFAULT_MAX_LN_FEE_PERCENTAGE } from "../utils/constants";
 import { IStoreModel } from "./index";
 
 import { i18n } from "../i18n/i18n";
@@ -55,6 +55,7 @@ export interface ISettingsModel {
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
   changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeStrictGraphPruningEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
+  changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -88,6 +89,7 @@ export interface ISettingsModel {
   setRescanWallet: Action<ISettingsModel, boolean>;
   setReceiveViaP2TR: Action<ISettingsModel, boolean>;
   setStrictGraphPruningEnabled: Action<ISettingsModel, boolean>;
+  setMaxLNFeePercentage: Action<ISettingsModel, number>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -121,6 +123,7 @@ export interface ISettingsModel {
   rescanWallet: boolean;
   receiveViaP2TR: boolean;
   strictGraphPruningEnabled: boolean;
+  maxLNFeePercentage: number;
 }
 
 export const settings: ISettingsModel = {
@@ -158,6 +161,7 @@ export const settings: ISettingsModel = {
     actions.setRescanWallet(await getRescanWallet());
     actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
     actions.setStrictGraphPruningEnabled(await getItemObject(StorageItem.strictGraphPruningEnabled) ?? false);
+    actions.setMaxLNFeePercentage(await getItemObject(StorageItem.maxLNFeePercentage) ?? 2);
 
     log.d("Done");
   }),
@@ -326,6 +330,11 @@ export const settings: ISettingsModel = {
     actions.setStrictGraphPruningEnabled(payload);
   }),
 
+  changeMaxLNFeePercentage: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.maxLNFeePercentage, payload);
+    actions.setMaxLNFeePercentage(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -358,6 +367,7 @@ export const settings: ISettingsModel = {
   setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
   setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
   setStrictGraphPruningEnabled: action((state, payload) => { state.strictGraphPruningEnabled = payload; }),
+  setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -391,4 +401,5 @@ export const settings: ISettingsModel = {
   rescanWallet: false,
   receiveViaP2TR: false,
   strictGraphPruningEnabled: false,
+  maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
 };

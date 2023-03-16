@@ -41,6 +41,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   const syncTransaction = useStoreActions((store) => store.transaction.syncTransaction);
 
   const name = useStoreState((store) => store.settings.name) || "";
+  const maxLNFeePercentage = useStoreState((store) => store.settings.maxLNFeePercentage);
 
   useEffect(() => {
     (async () => {
@@ -85,6 +86,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         JSON.parse(routehintsInput || "[]"),
         name,
         messageInput,
+        maxLNFeePercentage,
       );
       console.log(result);
       console.log("status", [result.status, result.failureReason]);

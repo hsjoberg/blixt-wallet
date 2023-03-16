@@ -196,13 +196,15 @@ export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlv
 };
 
 
-export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, payAmount?: Long, tlvRecordName?: string | null, multiPath?: boolean): Promise<lnrpc.Payment> => {
+export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, payAmount?: Long, tlvRecordName?: string | null, multiPath?: boolean, maxLNFeePercentage: number = 2): Promise<lnrpc.Payment> => {
+  const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
+
   const options: routerrpc.ISendPaymentRequest = {
     paymentRequest,
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: multiPath ? 16 : 1,
-    feeLimitSat: Long.fromValue(Math.max(10, (payAmount?.toNumber() || 0) * 0.02)),
+    feeLimitSat: Long.fromValue(Math.max(10, (payAmount?.toNumber() || 0) * maxFeeRatio)),
     cltvLimit: 0,
   };
   if (amount) {
@@ -250,7 +252,9 @@ export const decodeSendPaymentV2Result = (data: string): lnrpc.Payment => {
 };
 
 
-export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.IRouteHint[], tlvRecordNameStr: string, tlvRecordWhatSatMessageStr: string): Promise<lnrpc.Payment> => {
+export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.IRouteHint[], tlvRecordNameStr: string, tlvRecordWhatSatMessageStr: string, maxLNFeePercentage: number = 3): Promise<lnrpc.Payment> => {
+  const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
+
   const options: routerrpc.ISendPaymentRequest = {
     dest: hexToUint8Array(destinationPubKey),
     amt: sat,
@@ -267,7 +271,7 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: 2,
-    feeLimitSat: Long.fromValue(Math.max(10, sat?.mul(0.02).toNumber() ?? 0)),
+    feeLimitSat: Long.fromValue(Math.max(10, (sat?.toNumber() || 0) * maxFeeRatio)).toString(),
     cltvLimit: 0,
   };
   if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {

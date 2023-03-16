@@ -7,6 +7,7 @@ import { CheckBox, Body, Container, Icon, Text, Left, List, ListItem, Right } fr
 import DialogAndroid from "react-native-dialogs";
 import { fromUnixTime } from "date-fns";
 import { StackNavigationProp } from "@react-navigation/stack";
+import Long from "long";
 
 import { SettingsStackParamList } from "./index";
 import Content from "../../components/Content";
@@ -18,7 +19,7 @@ import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { MapStyle } from "../../utils/google-maps";
 import { OnchainExplorer } from "../../state/Settings";
 import TorSvg from "./TorSvg";
-import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../utils/constants";
+import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_MAX_LN_FEE_PERCENTAGE, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../../utils/constants";
 import { IFiatRates } from "../../state/Fiat";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Alert } from "../../utils/alert";
@@ -26,7 +27,6 @@ import { getNodeInfo, resetMissionControl } from "../../lndmobile";
 
 import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
-import Long from "long";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -923,6 +923,42 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeReceiveViaP2TR(!receiveViaP2TR);
   };
 
+  // Set Max LN Fee Percentage
+  const maxLNFeePercentage = useStoreState((store) => store.settings.maxLNFeePercentage);
+  const changeMaxLNFeePercentage = useStoreActions((store) => store.settings.changeMaxLNFeePercentage);
+  const onPressLNFee = async () => {
+    Alert.prompt(t("LN.maxLNFeePercentage.dialog.title"), undefined, async (text) => {
+      try {
+        const fee = Number.parseFloat(text);
+
+        if (fee <= 0 ?? fee >= 100) {
+          return;
+        }
+
+        await changeMaxLNFeePercentage(fee);
+      } catch (error) {
+        toast(error.message, 5, "danger");
+      }
+    }, undefined, maxLNFeePercentage.toString());
+  };
+
+  const onLongPressLNFee = async () => {
+    Alert.alert(
+      "",
+      t("LN.maxLNFeePercentage.resetDialog.title", { defaultMaxLNFee: DEFAULT_MAX_LN_FEE_PERCENTAGE }),
+      [{
+        style: "cancel",
+        text: t("buttons.no", { ns: namespaces.common }),
+      }, {
+        style: "default",
+        text: t("buttons.yes", {ns: namespaces.common }),
+        onPress: async () => {
+          await changeMaxLNFeePercentage(DEFAULT_MAX_LN_FEE_PERCENTAGE);
+        },
+      }]
+    );
+  }
+
   // Require graph sync before paying
   const requireGraphSync = useStoreState((store) => store.settings.requireGraphSync);
   const changeRequireGraphSync = useStoreActions((store) => store.settings.changeRequireGraphSync);
@@ -1325,6 +1361,13 @@ ${t("experimental.tor.disabled.msg2")}`;
           <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("LightningNetworkInfo")}>
             <Left><Icon style={style.icon} type="Entypo" name="network" /></Left>
             <Body><Text>{t("LN.network.title")}</Text></Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onPressLNFee} onLongPress={onLongPressLNFee}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="cash" /></Left>
+            <Body>
+              <Text>{t("LN.maxLNFeePercentage.title")}</Text>
+              <Text note={true}>{t("LN.maxLNFeePercentage.subtitle")}</Text>
+            </Body>
           </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onToggleAutopilotPress}>
             <Left><Icon style={style.icon} type="Entypo" name="circular-graph" /></Left>

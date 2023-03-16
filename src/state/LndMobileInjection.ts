@@ -108,7 +108,7 @@ export interface ILndMobileInjections {
     listPeers: () => Promise<lnrpc.ListPeersResponse>;
     readLndLog: () => Promise<IReadLndLogResponse>;
     sendPaymentSync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null) => Promise<lnrpc.SendResponse>;
-    sendPaymentV2Sync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null, multiPath?: boolean) => Promise<lnrpc.Payment>;
+    sendPaymentV2Sync: (paymentRequest: string, amount?: Long, payAmount?: Long, tlvRecordName?: string | null, multiPath?: boolean, maxLNFeePercentage?: number) => Promise<lnrpc.Payment>;
   };
   channel: {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;
