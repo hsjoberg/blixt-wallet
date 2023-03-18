@@ -1422,11 +1422,20 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text note={true}>{t("LN.inbound.subtitle")}</Text>
             </Body>
           </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onToggleDunderEnabled}>
+            <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
+            <Body>
+              <Text>{t("experimental.LSP.title")}</Text>
+              <Text note={true}>{t("experimental.LSP.subtitle")}</Text>
+            </Body>
+            <Right><CheckBox checked={dunderEnabled} onPress={onToggleDunderEnabled} /></Right>
+          </ListItem>
           {dunderEnabled &&
             <ListItem style={style.listItem} button={true} icon={true} onPress={onSetDunderServerPress} onLongPress={onSetDunderServerLongPress}>
               <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
               <Body>
                 <Text>{t("LN.LSP.title")}</Text>
+                <Text note={true}>{dunderServer}</Text>
               </Body>
             </ListItem>
           }
@@ -1484,14 +1493,6 @@ ${t("experimental.tor.disabled.msg2")}`;
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("experimental.title")}</Text>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onToggleDunderEnabled}>
-            <Left><Icon style={style.icon} type="Entypo" name="slideshare" /></Left>
-            <Body>
-              <Text>{t("experimental.LSP.title")}</Text>
-              <Text note={true}>{t("experimental.LSP.subtitle")}</Text>
-            </Body>
-            <Right><CheckBox checked={dunderEnabled} onPress={onToggleDunderEnabled} /></Right>
           </ListItem>
           {["android", "ios"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
