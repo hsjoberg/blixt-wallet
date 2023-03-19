@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar, StyleSheet, Alert, NativeModules } from "react-native";
+import { StatusBar, StyleSheet, Alert, NativeModules, TextInput } from "react-native";
 import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
 import { readFile } from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
@@ -185,7 +185,22 @@ export default function Restore({ navigation }: IProps) {
         <View style={style.upperContent}>
           <View style={style.seed}>
             {PLATFORM !== "android" && <GoBackIcon style={style.goBack} />}
-            <Textarea
+
+            {/* FIXME: react-native-macos breaks with multiline=true, onChangeText never fires */}
+            <TextInput
+              style={style.seedBox}
+              onChangeText={setSeedText}
+              multiline={PLATFORM !== "macos"}
+              underlineColorAndroid="rgba(0,0,0,0)"
+              returnKeyType="done"
+              blurOnSubmit={true}
+              autoComplete="off"
+              autoCapitalize="none"
+              autoCorrect={false}
+              importantForAutofill="no"
+              editable={true}
+            />
+            {/* <Textarea
               style={style.seedBox}
               bordered={false}
               underline={false}
@@ -197,7 +212,7 @@ export default function Restore({ navigation }: IProps) {
               autoCapitalize="none"
               autoCorrect={false}
               importantForAutofill="no"
-            />
+            /> */}
             <View style={{ height: 45 }}>
               <Input
                 style={style.passphrase}
@@ -303,6 +318,7 @@ const style = StyleSheet.create({
     alignContent: "center",
   },
   seedBox: {
+    textAlignVertical: "top",
     width: "100%",
     height: 120,
     backgroundColor: blixtTheme.gray,
