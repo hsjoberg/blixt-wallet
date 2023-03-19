@@ -13,9 +13,16 @@ import Restore from "./Restore";
 import AddFunds from "./AddFunds";
 
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
-import SelectList from "../HelperWindows/SelectList";
+import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectList";
 
 const Stack = createStackNavigator();
+
+export const StartSettings = {
+  enableTor: "Enable Tor",
+  disableTor: "Disable Tor",
+  setBitcoinNode: "Set Bitcoin node",
+  setLanguage: "Set Language"
+};
 
 export type WelcomeStackParamList = {
   Start: undefined;
@@ -32,6 +39,8 @@ export type WelcomeStackParamList = {
   SetPincode: undefined;
   RemovePincodeAuth: undefined;
   ChangeFingerprintSettingsAuth: undefined;
+
+  Settings: ISelectListNavigationProps<keyof typeof StartSettings>;
 };
 
 export default function WelcomeIndex() {
@@ -53,6 +62,8 @@ export default function WelcomeIndex() {
       <Stack.Screen name="Restore" component={Restore} />
 
       <Stack.Screen name="AddFunds" component={AddFunds} />
+
+      <Stack.Screen name="Settings" component={SelectList} />
     </Stack.Navigator>
   );
 }

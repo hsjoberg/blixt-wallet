@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { StyleSheet, StatusBar, NativeModules, SafeAreaView, Platform } from "react-native";
 import DialogAndroid from "react-native-dialogs";
-import { Text, H1, Button, View, Spinner, Icon, Body, Left, ListItem, Picker } from "native-base";
+import { Text, H1, Button, View, Spinner, Icon } from "native-base";
 import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
-import { Menu, MenuItem } from "react-native-material-menu";
+import { Menu, MenuItem } from "../../components/Modal";
 import { CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -18,8 +18,6 @@ import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { toast } from "../../utils";
 import { Alert } from "../../utils/alert";
-import { changeLanguage } from "i18next";
-import { i18n } from "../../i18n/i18n";
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -176,9 +174,36 @@ function TopMenu({ navigation }: IStartProps) {
     }
   };
 
+  const onPressDots = () => {
+    if (PLATFORM !== "macos" && PLATFORM !== "web") {
+      showMenu();
+      return;
+    }
+
+    navigation.navigate("Settings", {
+      title: "",
+      description: "",
+      data: [{
+        title: t("menu.setBitcoinNode"),
+        value: "setBitcoinNode",
+      }, {
+        title: t("language.title"),
+        value: "setLanguage",
+      }],
+      onPick: async (setting) => {
+        console.log(setting);
+        if (setting === "setBitcoinNode") {
+          onSetBitcoinNodePress();
+        } else if (setting === "setLanguage") {
+          onLanguageChange();
+        }
+      },
+    });
+  }
+
   return (
     <View style={style.menuDotsIcon}>
-      <Menu visible={visible} onRequestClose={hideMenu} anchor={<Icon type="Entypo" name="dots-three-horizontal" onPress={showMenu} />}>
+      <Menu visible={visible} onRequestClose={hideMenu} anchor={<Icon type="Entypo" name="dots-three-horizontal" onPress={onPressDots} />}>
         {PLATFORM !== "macos" && (
           <MenuItem onPress={toggleTorEnabled} textStyle={{ color: "#000" }}>
             {torEnabled ? t("menu.disableTor") : t("menu.enableTor")}

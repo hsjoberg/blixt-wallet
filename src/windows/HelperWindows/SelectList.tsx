@@ -74,8 +74,8 @@ export default function<T = string>({ navigation, route }: ISelectListProps<T>) 
         })}
         renderItem={({ item }) => (
           <ListItem style={{}} key={item.value} onPress={() => {
-            onPick(item.value);
             navigation.pop();
+            onPick(item.value);
           }}>
             <Text>{item.title}</Text>
           </ListItem>
