@@ -59,6 +59,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/CoreModulesHeaders (1000.0.0):
     - glog
@@ -68,6 +69,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/Default (1000.0.0):
     - glog
@@ -76,6 +78,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/DevSupport (1000.0.0):
     - glog
@@ -87,6 +90,7 @@ PODS:
     - React-jsiexecutor (= 1000.0.0)
     - React-jsinspector (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/RCTActionSheetHeaders (1000.0.0):
     - glog
@@ -96,6 +100,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/RCTAnimationHeaders (1000.0.0):
     - glog
@@ -105,6 +110,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/RCTBlobHeaders (1000.0.0):
     - glog
@@ -114,6 +120,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/RCTImageHeaders (1000.0.0):
     - glog
@@ -123,6 +130,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/RCTLinkingHeaders (1000.0.0):
     - glog
@@ -132,6 +140,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/RCTNetworkHeaders (1000.0.0):
     - glog
@@ -141,6 +150,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/RCTSettingsHeaders (1000.0.0):
     - glog
@@ -150,6 +160,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/RCTTextHeaders (1000.0.0):
     - glog
@@ -159,6 +170,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/RCTVibrationHeaders (1000.0.0):
     - glog
@@ -168,6 +180,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-Core/RCTWebSocket (1000.0.0):
     - glog
@@ -177,6 +190,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-jsiexecutor (= 1000.0.0)
     - React-perflogger (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
     - Yoga
   - React-CoreModules (1000.0.0):
     - RCT-Folly (= 2021.06.28.00-v2)
@@ -186,6 +200,7 @@ PODS:
     - React-jsi (= 1000.0.0)
     - React-RCTImage (= 1000.0.0)
     - ReactCommon/turbomodule/core (= 1000.0.0)
+    - SocketRocket (= 0.6.0)
   - React-cxxreact (1000.0.0):
     - boost (= 1.76.0)
     - DoubleConversion
@@ -303,6 +318,7 @@ PODS:
     - React
   - RNSVG (13.8.0):
     - React-Core
+  - SocketRocket (0.6.0)
   - SwiftProtobuf (1.19.0)
   - Yoga (1.14.0)
 
@@ -355,6 +371,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - fmt
+    - SocketRocket
     - SwiftProtobuf
 
 EXTERNAL SOURCES:
@@ -444,38 +461,38 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost: 613e39eac4239cc72b15421247b5ab05361266a2
   DoubleConversion: ed15e075aa758ac0e4c1f8b830bd4e4d40d669e8
-  FBLazyVector: 3b73c45802a3568d1f273bf57c2efe5a09484bd1
-  FBReactNativeSpec: 2f6a4410c4e7cd2bcb20291da0bcf0568b5b36f5
+  FBLazyVector: 13b85e471f933209b511b379cb6af91374e30b61
+  FBReactNativeSpec: 2e8da23075c0a835fe917c90d2b6b6f9d124af5a
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 20113a0d46931b6f096cf8302c68691d75a456ff
   RCT-Folly: 24c6da766832002a4a2aac5f79ee0ca50fbe8507
-  RCTRequired: 2831c9e7f8b6655558755381878d327838a4ee92
-  RCTTypeSafety: 5f79451ccc80153bba8319680477bcdbaed24cdf
-  React: aecc99c424aa81a6655f8d166d4918b8b57c82a1
-  React-callinvoker: 02c7a6091ea61b3fc69fbc3286aa1e764be8627e
+  RCTRequired: 6963dfc2204823a2c817627fcfe4c415894e7862
+  RCTTypeSafety: bed6151b23f31cc115c3b647a19d4e6cc6546da5
+  React: d8efc1401f5c63fb7307b705b13254da05253c7c
+  React-callinvoker: 44ca93a2a614cf21636ced23d2ef8252ca28ee0f
   React-Codegen: 61a79489c164568e1575cc662fa7c9a167215dcc
-  React-Core: 332267dca9f97e280208fe63a69ce2275ff79806
-  React-CoreModules: 298f09b6b116eda8b3ba26142f9daf5463cb51d2
-  React-cxxreact: c32fe65c3414248c9c52878e53bdda9a0bc303ed
-  React-jsi: d424ff5ae84327dfbbc0c893f0fd7b6720ffcc78
-  React-jsiexecutor: 2d6f7036de455d0e6122961b103c1b9f8e1e135f
-  React-jsinspector: 8eb2a392451e7662755d4baa76b2e1ad24bf1542
-  React-logger: 8d326996bdab369fa70d23336d8592d76d7d3fd6
+  React-Core: 577478681aa554c73b16a599b4e2c0765cf02a22
+  React-CoreModules: 173070fe69faf7cebce95a243ea8f187c004031c
+  React-cxxreact: 996d2784d38f220bd62e86087f63f327ae71ec50
+  React-jsi: 6788f474b46c126ff76081041563edb5a5df806a
+  React-jsiexecutor: e1e6ef1e95d20e01884b94dd3dc45cc27dede890
+  React-jsinspector: 3b80365544aec73367cdbc4e9cf6dc011ea039f8
+  React-logger: 4db220a3b9847591cac7926ffce38a80c338b582
   react-native-build-config: d2d6891311ca2e0fa7ca7eeb4324a768e63e485c
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-webview: 9f111dfbcfc826084d6c507f569e5e03342ee1c1
-  React-perflogger: 70732a297de25673334e19f9db09c68f5df08464
-  React-RCTActionSheet: a411b5d3b8cdca78dded3faa456a9e5581754145
-  React-RCTAnimation: 390d0d6cae8ce9ebc6c3695d43e58d3e58bbb71e
-  React-RCTBlob: 759776e9a5c574506865d701ce2194de75e3fe77
-  React-RCTImage: 6ef3f7f2a8e80a5bc86ba679348845f810d79289
-  React-RCTLinking: 88514dbe46cc5a74de112f9f9746406973adfd54
-  React-RCTNetwork: c39007515c0242e5be4cd5dd5d067f347cf6dd1b
-  React-RCTSettings: b7316972313c555ffca334d97e6c3801f4863212
-  React-RCTText: a2b32b5ab7c450b540b75749bdc5d063ca52f16b
-  React-RCTVibration: 03996a523268017ce2ee4d6ec7fbc5f57f01c43f
-  React-runtimeexecutor: db7dc22ed82cf76cacd4952746d32076ecbf4b7b
-  ReactCommon: a9fffb001a4c65d164663f56e6c1bb89ee393b71
+  React-perflogger: d878a8be48a70a23e2ada07d3a9d169208b44dbe
+  React-RCTActionSheet: 715316c41cae3e1bf6c75dfdf11f0f186c25e21e
+  React-RCTAnimation: c164dbf5e60f756bbf89647a620eb3ec26460bb1
+  React-RCTBlob: 9fe4abe1bac6f7fbfda310e47c5542db9c127b9b
+  React-RCTImage: eaa6a3157782d5f0eeb672fdb955bf00fd616dd3
+  React-RCTLinking: f7de91097c8f9499d2a9a433b7bb36697d79640d
+  React-RCTNetwork: f24525f25662d8bfd15c77fecf313671deddffd9
+  React-RCTSettings: d099b368daf97d8859e8758cb682354776fde7ec
+  React-RCTText: 39cda2bf357e047ba5964ef5385a9dee3571cb24
+  React-RCTVibration: c07e4bfd6f6aeedbe11bda7b0dfb6555ef899e06
+  React-runtimeexecutor: 07ce171114262b53ee6f0443479bf9e38c0332fc
+  ReactCommon: ab5238d4496b74d0f6846a3f50a35b20e9bba0ab
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
@@ -483,8 +500,9 @@ SPEC CHECKSUMS:
   RNLocalize: d4b8af4e442d4bcca54e68fc687a2129b4d71a81
   RNSecureRandom: 46403b4cc818c426b33d11f7981a923de558e0a8
   RNSVG: c1e76b81c76cdcd34b4e1188852892dc280eb902
+  SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SwiftProtobuf: 6ef3f0e422ef90d6605ca20b21a94f6c1324d6b3
-  Yoga: 99b4b388b57f90d014b992a406c66b537fdd8fcd
+  Yoga: 74e17337dd96a3da8e7136717b2b8f9bcd7af780
 
 PODFILE CHECKSUM: ade9884702ae3ec49700c6a4584fbf7f4541f063
 
