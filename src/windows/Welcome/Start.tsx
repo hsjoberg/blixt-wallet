@@ -4,7 +4,7 @@ import DialogAndroid from "react-native-dialogs";
 import { Text, H1, Button, View, Spinner, Icon } from "native-base";
 import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
-import { Menu, MenuItem } from "../../components/Modal";
+import { Menu, MenuItem } from "react-native-material-menu";
 import { CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
