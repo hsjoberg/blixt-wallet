@@ -85,7 +85,8 @@ export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNum
       const formattedNumber = Number(formatNumber).toLocaleString('en-US', {
         useGrouping: true,
         maximumFractionDigits: 0
-      });
+      }).replace(/,/g, ' ');
+
       return `${formattedNumber} ${getUnitNice(value, unit)}`;
     }
   };
