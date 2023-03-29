@@ -41,7 +41,7 @@ function AnimatedView({ children }: IAnimatedViewProps) {
   );
 }
 
-function TopMenu({ navigation }: IStartProps) {
+function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
   const t = useTranslation(namespaces.welcome.start).t;
   const torEnabled = useStoreState((store) => store.torEnabled);
   const changeTorEnabled = useStoreActions((store) => store.settings.changeTorEnabled);
@@ -50,9 +50,69 @@ function TopMenu({ navigation }: IStartProps) {
   const writeConfig = useStoreActions((store) => store.writeConfig);
   const changeLanguage = useStoreActions((store) => store.settings.changeLanguage);
   const currentLanguage = useStoreState((store) => store.settings.language);
+  const generateSeed = useStoreActions((store) => store.generateSeed);
+  const createWallet = useStoreActions((store) => store.createWallet);
+  const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
+  const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
+
+
+  const onCreateWalletWithPassphrasePress = async () => {
+    Alert.alert(
+      t("msg.warning", { ns: namespaces.common }),
+      `${t("createWallet.msg1")}
+  
+      ${t("createWallet.msg2")}
+  
+      ${t("createWallet.msg3")}`,
+      [
+        {
+          text: t("createWallet.msg4"),
+          onPress: async () => {
+              Alert.prompt(
+                t("createWalletWithPassphrase.title"),
+                "",
+                [
+                  {
+                    text: t("buttons.cancel", { ns: namespaces.common }),
+                    style: "cancel",
+                    onPress: () => {},
+                  },
+                  {
+                    text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
+                    onPress: async (text) => {
+                      try {
+                        if (!text || text.trim().length === 0) {
+                          return;
+                        }
+
+                        await generateSeed(text.trim());
+                        setCreateWalletLoading(true);
+                        await createWallet({init: {aezeedPassphrase: !!text ? text.trim() : undefined}});
+                        await setSyncEnabled(true); // TODO test
+                        await changeScheduledSyncEnabled(true);
+        
+                        navigation.dispatch(
+                          CommonActions.reset({
+                            index: 0,
+                            routes: [{ name: "Loading" }],
+                          })
+                        );
+                      } catch (error) {
+                        toast(error.message, undefined, "danger");
+                        setCreateWalletLoading(false);
+                      }
+                    },
+                  }
+                ]
+              );
+            },
+          },
+        ]
+    );
+  }
 
   const toggleTorEnabled = async () => {
     changeTorEnabled(!torEnabled);
@@ -189,6 +249,9 @@ function TopMenu({ navigation }: IStartProps) {
       }, {
         title: t("language.title"),
         value: "setLanguage",
+      }, {
+        title: t("menu.createWalletWithPassphrase"),
+        value: "createWalletWithPassphrase"
       }],
       onPick: async (setting) => {
         console.log(setting);
@@ -196,9 +259,12 @@ function TopMenu({ navigation }: IStartProps) {
           onSetBitcoinNodePress();
         } else if (setting === "setLanguage") {
           onLanguageChange();
+        } else if (setting === "createWalletWithPassphrase") {
+          onCreateWalletWithPassphrasePress();
         }
       },
     });
+
   }
 
   return (
@@ -215,6 +281,9 @@ function TopMenu({ navigation }: IStartProps) {
         <MenuItem onPress={onLanguageChange} textStyle={{ color: "#000" }}>
           {t("language.title")}
         </MenuItem>
+        <MenuItem onPress={onCreateWalletWithPassphrasePress} textStyle={{ color: "#000" }}>
+          {t("menu.createWalletWithPassphrase")}
+        </MenuItem>
       </Menu>
     </View>
   );
@@ -222,6 +291,7 @@ function TopMenu({ navigation }: IStartProps) {
 
 export interface IStartProps {
   navigation: StackNavigationProp<WelcomeStackParamList, "Start">;
+  setCreateWalletLoading: (loading: boolean) => void;
 }
 export default function Start({ navigation }: IStartProps) {
   const t = useTranslation(namespaces.welcome.start).t;
@@ -279,7 +349,7 @@ ${t("createWallet.msg3")}`,
       <SafeAreaView style={style.content}>
         <StatusBar backgroundColor="transparent" hidden={false} translucent={true} networkActivityIndicatorVisible={true} barStyle="light-content" />
 
-        {!createWalletLoading && <TopMenu navigation={navigation} />}
+        {!createWalletLoading && <TopMenu navigation={navigation} setCreateWalletLoading={setCreateWalletLoading} />}
 
         {!createWalletLoading ? <AnimatedH1>{t("title")}</AnimatedH1> : <H1 style={style.header}>{t("title")}</H1>}
         {!createWalletLoading ? (

@@ -53,6 +53,9 @@ export interface ICreateWalletPayload {
     restoreWallet: boolean,
     channelsBackup?: string;
     aezeedPassphrase?: string;
+  },
+  init? : {
+    aezeedPassphrase?: string;
   }
 }
 
@@ -75,7 +78,7 @@ export interface IStoreModel {
   setTorEnabled: Action<IStoreModel, boolean>;
   setTorLoading: Action<IStoreModel, boolean>;
 
-  generateSeed: Thunk<IStoreModel, void, IStoreInjections>;
+  generateSeed: Thunk<IStoreModel, string | undefined, IStoreInjections>;
   writeConfig: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   unlockWallet: Thunk<ILightningModel, void, IStoreInjections>;
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
@@ -392,9 +395,9 @@ export const model: IStoreModel = {
     }
   }),
 
-  generateSeed: thunk(async (actions, _, { injections }) => {
+  generateSeed: thunk(async (actions, passphrase, { injections }) => {
     const { genSeed } = injections.lndMobile.wallet;
-    const seed = await genSeed();
+    const seed = await genSeed(passphrase);
     actions.setWalletSeed(seed.cipherSeedMnemonic);
   }),
 
@@ -498,9 +501,11 @@ protocol.option-scid-alias=true
     await setItem(StorageItem.walletPassword, randomBase64);
     await setWalletPassword(randomBase64);
 
-    const wallet = payload && payload.restore && payload.restore
-      ? await initWallet(seed, randomBase64, 100, payload.restore.channelsBackup, payload.restore.aezeedPassphrase)
-      : await initWallet(seed, randomBase64)
+    const isRestore = payload && payload.restore && payload.restore.aezeedPassphrase;
+
+    const wallet = !!isRestore
+      ? await initWallet(seed, randomBase64, 100, payload.restore?.channelsBackup, payload.restore?.aezeedPassphrase)
+      : await initWallet(seed, randomBase64, undefined, undefined, payload?.init?.aezeedPassphrase);
 
     await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);

@@ -8,12 +8,15 @@ import { lnrpc, signrpc } from "../../proto/lightning";
  * @throws
  * TODO test
  */
-export const genSeed = async (): Promise<lnrpc.GenSeedResponse> => {
+export const genSeed = async (passphrase: string | undefined): Promise<lnrpc.GenSeedResponse> => {
+  console.log("genSeed", passphrase);
   const response = await sendCommand<lnrpc.IGenSeedRequest, lnrpc.GenSeedRequest, lnrpc.GenSeedResponse>({
     request: lnrpc.GenSeedRequest,
     response: lnrpc.GenSeedResponse,
     method: "GenSeed",
-    options: {},
+    options: {
+      aezeedPassphrase: passphrase ? stringToUint8Array(passphrase) : undefined,
+    },
   });
   return response;
 };
