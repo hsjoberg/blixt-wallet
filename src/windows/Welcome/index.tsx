@@ -21,7 +21,8 @@ export const StartSettings = {
   enableTor: "Enable Tor",
   disableTor: "Disable Tor",
   setBitcoinNode: "Set Bitcoin node",
-  setLanguage: "Set Language"
+  setLanguage: "Set Language",
+  createWalletWithPassphrase: "Create wallet with passphrase",
 };
 
 export type WelcomeStackParamList = {
