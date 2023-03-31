@@ -81,6 +81,35 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     }
   }, []);
 
+  // This use effect executes for zero amount invoices, fetch fee estimate on amount change.
+  useEffect(() => {
+    let timeoutId: any;
+
+    if (!!paymentRequest) {
+        const getFeeEstimate = async () => {
+          if (!!bitcoinValue) {
+            try {
+              const {routes} = await queryRoutes({amount: Long.fromValue(Number(bitcoinValue)), pubKey: paymentRequest.destination, routeHints: paymentRequest.routeHints});
+                if(!!routes.length) {
+                  if (routes[0].totalFees !== null && routes[0].totalFees !== undefined) {
+                    setFeeEstimate(routes[0].totalFees.toNumber());
+                  } else {
+                    setFeeEstimate(0);
+                  }
+                }
+                } catch (error) {
+                console.log(error);
+            }
+          }
+        }
+
+        // Delay the execution of the function 1 second so that we don't query too quickly.
+        timeoutId = setTimeout(getFeeEstimate, 1000);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [bitcoinValue]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: t("layout.title"),
