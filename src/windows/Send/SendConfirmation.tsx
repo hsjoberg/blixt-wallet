@@ -35,6 +35,8 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const [isPaying, setIsPaying] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const queryRoutes = useStoreActions((actions) => actions.send.queryRoutesForFeeEstimate);
+  const [feeEstimate, setFeeEstimate] = useState<number | undefined>(undefined);
   const {
     dollarValue,
     bitcoinValue,
@@ -53,6 +55,23 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     if (paymentRequest) {
       if (!paymentRequest.numSatoshis) {
         setAmountEditable(true);
+      }
+
+      if (!!paymentRequest.numSatoshis) {
+        const getFeeEstimate = async () => {
+          if (paymentRequest && paymentRequest.numSatoshis) {
+            try {
+              const {routes} = await queryRoutes({amount: paymentRequest.numSatoshis, pubKey: paymentRequest.destination, routeHints: paymentRequest.routeHints})
+                if (!!routes.length && !!routes[0].totalFees) {
+                  setFeeEstimate(routes[0].totalFees.toNumber());
+                }
+                } catch (error) {
+                console.log(error);
+            }
+          }
+        }
+
+        getFeeEstimate();
       }
     }
 
@@ -176,6 +195,14 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     title: t("form.description.title"),
     component: (<Input multiline={PLATFORM === "android"} disabled={true} value={description} />),
   });
+
+  if (feeEstimate !== undefined) {
+    formItems.push({
+      key: "FEE_ESTIMATE",
+      title: t("form.feeEstimate.title"),
+      component: (<Input disabled={true} value={String(feeEstimate)} />),
+    });
+  }
 
   const canSend = (
     lightningReadyToSend &&
