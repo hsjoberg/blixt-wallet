@@ -73,9 +73,24 @@ export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNum
       ? formatNumberGroupings(fixed)
       : fixed;
 
-  return `${unit === 'bitcoin' ? formatNumber.substring(0, formatNumber.indexOf(".") + 1) + 
-  formatNumber.substring(formatNumber.indexOf(".") + 1).replace(/(\d{2})(\d{3})(\d{3})/, "$1 $2 $3") : formatNumber} ${getUnitNice(value, unit)}`;
-};
+  switch (unit) {
+    case "bitcoin":
+      return `${formatNumber.substring(0, formatNumber.indexOf(".") + 1) + 
+      formatNumber.substring(formatNumber.indexOf(".") + 1).replace(/(\d{2})(\d{3})(\d{3})/, "$1 $2 $3")} ${getUnitNice(value, unit)}`;
+    case "milliBitcoin":
+    case "bit":
+      return `${formatNumber} ${getUnitNice(value, unit)}`;
+    case "sat":
+    case "satoshi": {
+      const formattedNumber = Number(formatNumber).toLocaleString('en-US', {
+        useGrouping: true,
+        maximumFractionDigits: 0
+      }).replace(/,/g, ' ');
+
+      return `${formattedNumber} ${getUnitNice(value, unit)}`;
+    }
+  };
+}
 
 export const getUnitNice = (value: BigNumber, unit: keyof IBitcoinUnits) => {
   let str = BitcoinUnits[unit].nice;
