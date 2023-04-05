@@ -46,6 +46,9 @@
       "msg3": "No hay torre de vigilancia (por ahora) que vigile tus canales mientras estas offline.",
       "msg4": "No tengo miedo. Continuar"
     },
+    "language": {
+      "title": "Seleccione el idioma"
+    },
     "restoreWallet": {
       "title": "Restaurar cartera"
     },
@@ -133,7 +136,7 @@
     "duration": "Tiempo que tarda en pagar la factura",
     "note": "Nota",
     "website": "Página web",
-    "type" : "Tipo",
+    "type": "Tipo",
     "lnurl": {
       "messageFromWebsite": "Mensaje desde página web",
       "urlReceivedFromWebsite": "URL recibido desde página web",
@@ -521,6 +524,9 @@
       "deleteContact": {
         "title": "Eliminar contacto",
         "msg": "¿Estás seguro de que quieres eliminar a este contacto {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
@@ -736,6 +742,16 @@
         "title": "Mostrar pares de Lightning",
         "subtitle": ""
       },
+      "maxLNFeePercentage": {
+        "title": "Establecer una tarifa de pago máximo",
+        "subtitle": "Proporcional a la cantidad",
+        "dialog": {
+          "title": "Establecer el porcentaje max de tarifa LN"
+        },
+        "resetDialog": {
+          "title": "¿Le gustaría restaurar la tarifa LN max al valor predeterminado ({{defaultMaxLNFee}}%)?"
+        }
+      },
       "autopilot": {
         "title": "Abrir canales automáticamente",
         "subtitle": ""
@@ -810,6 +826,16 @@
         "dialog2": {
           "title": "Firma",
           "alert": "Copiado al portapapeles"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Establecer el nivel de registro de LND",
+        "dialog": {
+          "title": "Establezca el nivel de registro de LND",
+          "description": "El nivel de registro cambia la verbosidad del registro LND, accesible desde la configuración"
+        },
+        "restoreDialog": {
+          "title": "¿Le gustaría restaurar el nivel de registro de LND al nivel predeterminado ({{defaultLndLogLevel}})?"
         }
       }
     },
@@ -916,6 +942,9 @@
       },
       "strictGraphPruning": {
         "title": "Habilitar la poda de gráfico LN estricta"
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },
@@ -1061,7 +1090,7 @@
       "msg1": "Si quieres restaurar tus canales de la Red Lightning, necesitas la copia de seguridad de los mismos.",
       "loading": "Restaurar cartera",
       "passphrase": {
-        "placeholder": "Passphrase (opcional)"
+        "placeholder": "Passphrase (optional)"
       },
       "channel": {
         "title": "Copia de seguridad de los canales",
