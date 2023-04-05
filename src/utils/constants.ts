@@ -22,6 +22,7 @@ export const DEFAULT_NEUTRINO_NODE = Chain === "mainnet" ? "node.blixtwallet.com
 export const DEFAULT_INVOICE_EXPIRY = 3600;
 export const DEFAULT_MAX_LN_FEE_PERCENTAGE = 2;
 export const DEFAULT_LND_LOG_LEVEL: LndLogLevel = "info";
+export const DEFAULT_PATHFINDING_ALGORITHM = "apriori";
 
 export const ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID = "common";
 export const ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_NAME = "Common notifications";

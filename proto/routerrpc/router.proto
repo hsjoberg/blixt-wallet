@@ -23,6 +23,16 @@ service Router {
     rpc TrackPaymentV2 (TrackPaymentRequest) returns (stream lnrpc.Payment);
 
     /*
+    TrackPayments returns an update stream for every payment that is not in a
+    terminal state. Note that if payments are in-flight while starting a new
+    subscription, the start of the payment stream could produce out-of-order
+    and/or duplicate events. In order to get updates for every in-flight
+    payment attempt make sure to subscribe to this method before initiating any
+    payments.
+    */
+    rpc TrackPayments (TrackPaymentsRequest) returns (stream lnrpc.Payment);
+
+    /*
     EstimateRouteFee allows callers to obtain a lower bound w.r.t how much it
     may cost to send an HTLC to the target end destination.
     */
@@ -84,8 +94,10 @@ service Router {
         returns (SetMissionControlConfigResponse);
 
     /*
-    QueryProbability returns the current success probability estimate for a
-    given node pair and amount.
+    Deprecated. QueryProbability returns the current success probability
+    estimate for a given node pair and amount. The call returns a zero success
+    probability if no channel is available or if the amount violates min/max
+    HTLC constraints.
     */
     rpc QueryProbability (QueryProbabilityRequest)
         returns (QueryProbabilityResponse);
@@ -303,6 +315,14 @@ message TrackPaymentRequest {
     bool no_inflight_updates = 2;
 }
 
+message TrackPaymentsRequest {
+    /*
+    If set, only the final payment updates are streamed back. Intermediate
+    updates that show which htlcs are still in flight are suppressed.
+    */
+    bool no_inflight_updates = 1;
+}
+
 message RouteFeeRequest {
     /*
     The destination once wishes to obtain a routing fee quote to.
@@ -448,6 +468,93 @@ message SetMissionControlConfigResponse {
 
 message MissionControlConfig {
     /*
+    Deprecated, use AprioriParameters. The amount of time mission control will
+    take to restore a penalized node or channel back to 50% success probability,
+    expressed in seconds. Setting this value to a higher value will penalize
+    failures for longer, making mission control less likely to route through
+    nodes and channels that we have previously recorded failures for.
+    */
+    uint64 half_life_seconds = 1 [deprecated = true];
+
+    /*
+    Deprecated, use AprioriParameters. The probability of success mission
+    control should assign to hop in a route where it has no other information
+    available. Higher values will make mission control more willing to try hops
+    that we have no information about, lower values will discourage trying these
+    hops.
+    */
+    float hop_probability = 2 [deprecated = true];
+
+    /*
+    Deprecated, use AprioriParameters. The importance that mission control
+    should place on historical results, expressed as a value in [0;1]. Setting
+    this value to 1 will ignore all historical payments and just use the hop
+    probability to assess the probability of success for each hop. A zero value
+    ignores hop probability completely and relies entirely on historical
+    results, unless none are available.
+    */
+    float weight = 3 [deprecated = true];
+
+    /*
+    The maximum number of payment results that mission control will store.
+    */
+    uint32 maximum_payment_results = 4;
+
+    /*
+    The minimum time that must have passed since the previously recorded failure
+    before we raise the failure amount.
+    */
+    uint64 minimum_failure_relax_interval = 5;
+
+    enum ProbabilityModel {
+        APRIORI = 0;
+        BIMODAL = 1;
+    }
+
+    /*
+    ProbabilityModel defines which probability estimator should be used in
+    pathfinding. Note that the bimodal estimator is experimental.
+    */
+    ProbabilityModel model = 6;
+
+    /*
+    EstimatorConfig is populated dependent on the estimator type.
+    */
+    oneof EstimatorConfig {
+        AprioriParameters apriori = 7;
+        BimodalParameters bimodal = 8;
+    }
+}
+
+message BimodalParameters {
+    /*
+    NodeWeight defines how strongly other previous forwardings on channels of a
+    router should be taken into account when computing a channel's probability
+    to route. The allowed values are in the range [0, 1], where a value of 0
+    means that only direct information about a channel is taken into account.
+    */
+    double node_weight = 1;
+
+    /*
+    ScaleMsat describes the scale over which channels statistically have some
+    liquidity left. The value determines how quickly the bimodal distribution
+    drops off from the edges of a channel. A larger value (compared to typical
+    channel capacities) means that the drop off is slow and that channel
+    balances are distributed more uniformly. A small value leads to the
+    assumption of very unbalanced channels.
+    */
+    uint64 scale_msat = 2;
+
+    /*
+    DecayTime describes the information decay of knowledge about previous
+    successes and failures in channels. The smaller the decay time, the quicker
+    we forget about past forwardings.
+    */
+    uint64 decay_time = 3;
+}
+
+message AprioriParameters {
+    /*
     The amount of time mission control will take to restore a penalized node
     or channel back to 50% success probability, expressed in seconds. Setting
     this value to a higher value will penalize failures for longer, making
@@ -462,7 +569,7 @@ message MissionControlConfig {
     control more willing to try hops that we have no information about, lower
     values will discourage trying these hops.
     */
-    float hop_probability = 2;
+    double hop_probability = 2;
 
     /*
     The importance that mission control should place on historical results,
@@ -472,18 +579,15 @@ message MissionControlConfig {
     completely and relies entirely on historical results, unless none are
     available.
     */
-    float weight = 3;
+    double weight = 3;
 
     /*
-    The maximum number of payment results that mission control will store.
+    The fraction of a channel's capacity that we consider to have liquidity. For
+    amounts that come close to or exceed the fraction, an additional penalty is
+    applied. A value of 1.0 disables the capacity factor. Allowed values are in
+    [0.75, 1.0].
     */
-    uint32 maximum_payment_results = 4;
-
-    /*
-    The minimum time that must have passed since the previously recorded failure
-    before we raise the failure amount.
-    */
-    uint64 minimum_failure_relax_interval = 5;
+    double capacity_fraction = 4;
 }
 
 message QueryProbabilityRequest {
@@ -600,6 +704,8 @@ message HtlcEvent {
         ForwardFailEvent forward_fail_event = 8;
         SettleEvent settle_event = 9;
         LinkFailEvent link_fail_event = 10;
+        SubscribedEvent subscribed_event = 11;
+        FinalHtlcEvent final_htlc_event = 12;
     }
 }
 
@@ -628,6 +734,14 @@ message ForwardFailEvent {
 message SettleEvent {
     // The revealed preimage.
     bytes preimage = 1;
+}
+
+message FinalHtlcEvent {
+    bool settled = 1;
+    bool offchain = 2;
+}
+
+message SubscribedEvent {
 }
 
 message LinkFailEvent {
@@ -774,6 +888,10 @@ message ForwardHtlcInterceptRequest {
 
     // The onion blob for the next hop
     bytes onion_blob = 9;
+
+    // The block height at which this htlc will be auto-failed to prevent the
+    // channel from force-closing.
+    int32 auto_fail_height = 10;
 }
 
 /**

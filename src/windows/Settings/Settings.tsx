@@ -1094,6 +1094,18 @@ ${t("experimental.tor.disabled.msg2")}`;
     toast(t("msg.written", { ns:namespaces.common }));
   };
 
+  // Bimodal path finding
+  const lndPathfindingAlgorithm = useStoreState((store) => store.settings.lndPathfindingAlgorithm);
+  const changeBimodalPathFindingEnabled = useStoreActions((store) => store.settings.changeLndPathfindingAlgorithm);
+  const changeBimodalPathFindingEnabledPress = async () => {
+    const modal = (lndPathfindingAlgorithm === "apriori" || lndPathfindingAlgorithm === null) ? "bimodal" : "apriori";
+
+    await changeBimodalPathFindingEnabled(modal);
+    await writeConfig();
+    toast(t("msg.written", { ns:namespaces.common }));
+    restartNeeded();
+  };
+
   const lndLogLevel = useStoreState((store) => store.settings.lndLogLevel);
   const changeLndLogLevel = useStoreActions((store) => store.settings.changeLndLogLevel);
   const onPressSetLndLogLevel = async () => {
@@ -1631,6 +1643,15 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Body>
             <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
           </ListItem>
+
+          <ListItem style={style.listItem} icon={true} onPress={changeBimodalPathFindingEnabledPress}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="map-marker-path" /></Left>
+            <Body>
+              <Text>{t("debug.bimodalPathFinding.title")}</Text>
+            </Body>
+            <Right><CheckBox checked={lndPathfindingAlgorithm === ('apriori' || null) ? false : true} onPress={changeBimodalPathFindingEnabledPress} /></Right>
+          </ListItem>
+
           <ListItem style={style.listItem} icon={true} onPress={changeStrictGraphPruningEnabledPress}>
             <Left><Icon style={style.icon} type="Entypo" name="trash" /></Left>
             <Body>

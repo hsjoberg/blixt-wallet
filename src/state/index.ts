@@ -34,7 +34,7 @@ import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "..
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
 import { setWalletPassword, getItem, getWalletPassword } from "../storage/keystore";
-import { PLATFORM } from "../utils/constants";
+import { DEFAULT_PATHFINDING_ALGORITHM, PLATFORM } from "../utils/constants";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { Chain, VersionCode } from "../utils/build";
 import { LndMobileEventEmitter } from "../utils/event-listener";
@@ -416,6 +416,7 @@ export const model: IStoreModel = {
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
     const lndNoGraphCache = await getItemAsyncStorage(StorageItem.lndNoGraphCache) || "0";
     const strictGraphPruningEnabled = await getItemAsyncStorage(StorageItem.strictGraphPruningEnabled) || "0";
+    const lndPathfindingAlgorithm = await getItemAsyncStorage(StorageItem.lndPathfindingAlgorithm) || DEFAULT_PATHFINDING_ALGORITHM;
     const lndLogLevel = await getItemAsyncStorage(StorageItem.lndLogLevel) || "info";
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
@@ -472,6 +473,9 @@ autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? 
 [protocol]
 protocol.wumbo-channels=true
 protocol.option-scid-alias=true
+
+[routerrpc]
+routerrpc.estimator=${lndPathfindingAlgorithm}
 `;
     await writeConfig(config);
   }),

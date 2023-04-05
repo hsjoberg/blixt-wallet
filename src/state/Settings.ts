@@ -5,7 +5,7 @@ import { IFiatRates } from "./Fiat";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
-import { DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE } from "../utils/constants";
+import { DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE, DEFAULT_PATHFINDING_ALGORITHM } from "../utils/constants";
 import { IStoreModel } from "./index";
 
 import { i18n } from "../i18n/i18n";
@@ -21,6 +21,8 @@ export const OnchainExplorer = {
 };
 
 export type LndLogLevel = "trace" | "debug" | "info" | "warn" | "error" | "critical";
+
+export type routerrpcEstimator = "apriori" | "bimodal";
 
 export interface ISettingsModel {
   initialize: Thunk<ISettingsModel>;
@@ -57,6 +59,7 @@ export interface ISettingsModel {
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
   changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeStrictGraphPruningEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
+  changeLndPathfindingAlgorithm: Thunk<ISettingsModel, routerrpcEstimator, any, IStoreModel>;
   changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
   changeLndLogLevel: Thunk<ISettingsModel, LndLogLevel>;
 
@@ -92,6 +95,7 @@ export interface ISettingsModel {
   setRescanWallet: Action<ISettingsModel, boolean>;
   setReceiveViaP2TR: Action<ISettingsModel, boolean>;
   setStrictGraphPruningEnabled: Action<ISettingsModel, boolean>;
+  setLndPathfindingAlgorithm: Action<ISettingsModel, routerrpcEstimator>;
   setMaxLNFeePercentage: Action<ISettingsModel, number>;
   setLndLogLevel: Action<ISettingsModel, LndLogLevel>;
 
@@ -127,6 +131,7 @@ export interface ISettingsModel {
   rescanWallet: boolean;
   receiveViaP2TR: boolean;
   strictGraphPruningEnabled: boolean;
+  lndPathfindingAlgorithm: routerrpcEstimator;
   maxLNFeePercentage: number;
   lndLogLevel: LndLogLevel;
 }
@@ -166,6 +171,7 @@ export const settings: ISettingsModel = {
     actions.setRescanWallet(await getRescanWallet());
     actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
     actions.setStrictGraphPruningEnabled(await getItemObject(StorageItem.strictGraphPruningEnabled) ?? false);
+    actions.setLndPathfindingAlgorithm(await getItemObject(StorageItem.lndPathfindingAlgorithm) ?? DEFAULT_PATHFINDING_ALGORITHM);
     actions.setMaxLNFeePercentage(await getItemObject(StorageItem.maxLNFeePercentage) ?? 2);
     actions.setLndLogLevel((await getItem(StorageItem.lndLogLevel) ?? "info") as LndLogLevel);
 
@@ -336,6 +342,11 @@ export const settings: ISettingsModel = {
     actions.setStrictGraphPruningEnabled(payload);
   }),
 
+  changeLndPathfindingAlgorithm: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.lndPathfindingAlgorithm, payload);
+    actions.setLndPathfindingAlgorithm(payload);
+  }),
+
   changeMaxLNFeePercentage: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.maxLNFeePercentage, payload);
     actions.setMaxLNFeePercentage(payload);
@@ -378,6 +389,7 @@ export const settings: ISettingsModel = {
   setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
   setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
   setStrictGraphPruningEnabled: action((state, payload) => { state.strictGraphPruningEnabled = payload; }),
+  setLndPathfindingAlgorithm: action((state, payload) => { state.lndPathfindingAlgorithm = payload; }),
   setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
   setLndLogLevel: action((state, payload) => { state.lndLogLevel = payload; }),
 
@@ -415,4 +427,5 @@ export const settings: ISettingsModel = {
   strictGraphPruningEnabled: false,
   maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
   lndLogLevel: DEFAULT_LND_LOG_LEVEL,
+  lndPathfindingAlgorithm: DEFAULT_PATHFINDING_ALGORITHM,
 };

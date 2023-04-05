@@ -6,7 +6,7 @@ import { MapStyle } from "../utils/google-maps";
 import { appMigration } from "../migration/app-migration";
 import { Chain, VersionCode } from "../utils/build";
 import { LndChainBackend } from "../state/Lightning";
-import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../utils/constants";
+import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE, DEFAULT_NEUTRINO_NODE, DEFAULT_PATHFINDING_ALGORITHM, PLATFORM } from "../utils/constants";
 import { LndLogLevel } from "../state/Settings";
 
 const APP_VERSION = appMigration.length - 1;
@@ -63,6 +63,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   rescanWallet = "rescanWallet",
   receiveViaP2TR = "receiveViaP2TR",
   strictGraphPruningEnabled = "strictGraphPruningEnabled",
+  lndPathfindingAlgorithm = "lndPathfindingAlgorithm",
   maxLNFeePercentage = "maxLNFeePercentage",
   lndLogLevel = "lndLogLevel",
 }
@@ -147,6 +148,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.rescanWallet),
     removeItem(StorageItem.receiveViaP2TR),
     removeItem(StorageItem.strictGraphPruningEnabled),
+    removeItem(StorageItem.lndPathfindingAlgorithm),
     removeItem(StorageItem.maxLNFeePercentage),
     removeItem(StorageItem.lndLogLevel),
   ]);
@@ -227,6 +229,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.rescanWallet, false),
     setItemObject<boolean>(StorageItem.receiveViaP2TR, false),
     setItemObject<boolean>(StorageItem.strictGraphPruningEnabled, false),
+    setItem(StorageItem.lndPathfindingAlgorithm, DEFAULT_PATHFINDING_ALGORITHM),
     setItemObject<number>(StorageItem.maxLNFeePercentage, DEFAULT_MAX_LN_FEE_PERCENTAGE),
     setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL),
   ]);
