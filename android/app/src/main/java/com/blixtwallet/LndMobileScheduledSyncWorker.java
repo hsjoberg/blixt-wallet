@@ -237,8 +237,8 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                         }, 10000);
                       }
                       else {
-                        if (++numGetInfoCalls == 10) {
-                          HyperLog.e(TAG, "GetInfo was called " + numGetInfoCalls + " times and still no syncedToChain = true. shutting down worker.");
+                        if (++numGetInfoCalls == 10 && res.getSyncedToGraph()) {
+                          HyperLog.e(TAG, "GetInfo was called " + numGetInfoCalls + " times and still no syncedToGraph = true. shutting down worker.");
                           stopWorker(false);
                         } else{
                           HyperLog.i(TAG, "Sleeping 10s then checking again");
