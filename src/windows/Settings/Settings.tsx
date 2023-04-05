@@ -1095,10 +1095,10 @@ ${t("experimental.tor.disabled.msg2")}`;
   };
 
   // Bimodal path finding
-  const bimodalPathFindingEnabled = useStoreState((store) => store.settings.bimodalPathFindingEnabled);
-  const changeBimodalPathFindingEnabled = useStoreActions((store) => store.settings.changeBimodalPathFindingEnabled);
+  const lndPathfindingAlgorithm = useStoreState((store) => store.settings.lndPathfindingAlgorithm);
+  const changeBimodalPathFindingEnabled = useStoreActions((store) => store.settings.changeLndPathfindingAlgorithm);
   const changeBimodalPathFindingEnabledPress = async () => {
-    const modal = bimodalPathFindingEnabled === ('apriori' || null) ? 'bimodal' : 'apriori';
+    const modal = lndPathfindingAlgorithm === ('apriori' || null) ? 'bimodal' : 'apriori';
     await changeBimodalPathFindingEnabled(modal);
     await writeConfig();
     toast(t("msg.written", { ns:namespaces.common }));
@@ -1647,7 +1647,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Body>
               <Text>{t("debug.bimodalPathFinding.title")}</Text>
             </Body>
-            <Right><CheckBox checked={bimodalPathFindingEnabled === ('apriori' || null) ? false : true} onPress={changeBimodalPathFindingEnabledPress} /></Right>
+            <Right><CheckBox checked={lndPathfindingAlgorithm === ('apriori' || null) ? false : true} onPress={changeBimodalPathFindingEnabledPress} /></Right>
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={changeStrictGraphPruningEnabledPress}>
