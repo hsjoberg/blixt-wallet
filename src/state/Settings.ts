@@ -5,7 +5,7 @@ import { IFiatRates } from "./Fiat";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
-import { DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE } from "../utils/constants";
+import { DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE, DEFAULT_ROUTERRPC_ESTIMATOR } from "../utils/constants";
 import { IStoreModel } from "./index";
 
 import { i18n } from "../i18n/i18n";
@@ -21,6 +21,8 @@ export const OnchainExplorer = {
 };
 
 export type LndLogLevel = "trace" | "debug" | "info" | "warn" | "error" | "critical";
+
+export type routerrpcEstimator = "apriori" | "bimodal";
 
 export interface ISettingsModel {
   initialize: Thunk<ISettingsModel>;
@@ -57,7 +59,7 @@ export interface ISettingsModel {
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
   changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeStrictGraphPruningEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
-  changeBimodalPathFindingEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
+  changeBimodalPathFindingEnabled: Thunk<ISettingsModel, routerrpcEstimator, any, IStoreModel>;
   changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
   changeLndLogLevel: Thunk<ISettingsModel, LndLogLevel>;
 
@@ -93,7 +95,7 @@ export interface ISettingsModel {
   setRescanWallet: Action<ISettingsModel, boolean>;
   setReceiveViaP2TR: Action<ISettingsModel, boolean>;
   setStrictGraphPruningEnabled: Action<ISettingsModel, boolean>;
-  setBimodalPathFindingEnabled: Action<ISettingsModel, boolean>;
+  setBimodalPathFindingEnabled: Action<ISettingsModel, routerrpcEstimator>;
   setMaxLNFeePercentage: Action<ISettingsModel, number>;
   setLndLogLevel: Action<ISettingsModel, LndLogLevel>;
 
@@ -129,7 +131,7 @@ export interface ISettingsModel {
   rescanWallet: boolean;
   receiveViaP2TR: boolean;
   strictGraphPruningEnabled: boolean;
-  bimodalPathFindingEnabled: boolean;
+  bimodalPathFindingEnabled: routerrpcEstimator;
   maxLNFeePercentage: number;
   lndLogLevel: LndLogLevel;
 }
@@ -425,5 +427,5 @@ export const settings: ISettingsModel = {
   strictGraphPruningEnabled: false,
   maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
   lndLogLevel: DEFAULT_LND_LOG_LEVEL,
-  bimodalPathFindingEnabled: false
+  bimodalPathFindingEnabled: DEFAULT_ROUTERRPC_ESTIMATOR,
 };

@@ -34,7 +34,7 @@ import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "..
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
 import { setWalletPassword, getItem, getWalletPassword } from "../storage/keystore";
-import { PLATFORM } from "../utils/constants";
+import { DEFAULT_ROUTERRPC_ESTIMATOR, PLATFORM } from "../utils/constants";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { Chain, VersionCode } from "../utils/build";
 import { LndMobileEventEmitter } from "../utils/event-listener";
@@ -416,7 +416,7 @@ export const model: IStoreModel = {
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
     const lndNoGraphCache = await getItemAsyncStorage(StorageItem.lndNoGraphCache) || "0";
     const strictGraphPruningEnabled = await getItemAsyncStorage(StorageItem.strictGraphPruningEnabled) || "0";
-    const bimodalPathFindingEnabled = await getItemAsyncStorage(StorageItem.bimodalPathFindingEnabled) === "true" ? "bimodal" : "apriori";
+    const bimodalPathFindingEnabled = await getItemAsyncStorage(StorageItem.bimodalPathFindingEnabled) || DEFAULT_ROUTERRPC_ESTIMATOR;
     const lndLogLevel = await getItemAsyncStorage(StorageItem.lndLogLevel) || "info";
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";

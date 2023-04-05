@@ -6,7 +6,7 @@ import { MapStyle } from "../utils/google-maps";
 import { appMigration } from "../migration/app-migration";
 import { Chain, VersionCode } from "../utils/build";
 import { LndChainBackend } from "../state/Lightning";
-import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE, DEFAULT_NEUTRINO_NODE, PLATFORM } from "../utils/constants";
+import { DEFAULT_DUNDER_SERVER, DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE, DEFAULT_NEUTRINO_NODE, DEFAULT_ROUTERRPC_ESTIMATOR, PLATFORM } from "../utils/constants";
 import { LndLogLevel } from "../state/Settings";
 
 const APP_VERSION = appMigration.length - 1;
@@ -229,7 +229,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.rescanWallet, false),
     setItemObject<boolean>(StorageItem.receiveViaP2TR, false),
     setItemObject<boolean>(StorageItem.strictGraphPruningEnabled, false),
-    setItemObject<boolean>(StorageItem.bimodalPathFindingEnabled, false),
+    setItemObject<string>(StorageItem.bimodalPathFindingEnabled, DEFAULT_ROUTERRPC_ESTIMATOR),
     setItemObject<number>(StorageItem.maxLNFeePercentage, DEFAULT_MAX_LN_FEE_PERCENTAGE),
     setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL),
   ]);
