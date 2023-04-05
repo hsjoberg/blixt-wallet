@@ -46,6 +46,9 @@
       "msg3": "Trenutno nema podrške za WatchTower za stražu vaših kanala dok ste odspojeni.",
       "msg4": "Nemaran sam, nastavi"
     },
+    "language": {
+      "title": "Odaberi jezik"
+    },
     "restoreWallet": {
       "title": "Oporavi novčanik"
     },
@@ -133,7 +136,7 @@
     "duration": "Utrošeno vrijeme za plaćanje fakture",
     "note": "Bilješka",
     "website": "Web stranica",
-    "type" : "Tip",
+    "type": "Tip",
     "lnurl": {
       "messageFromWebsite": "Poruka od",
       "urlReceivedFromWebsite": "URL primljen od",
@@ -521,6 +524,9 @@
       "deleteContact": {
         "title": "Brisanje kontakta",
         "msg": "Jeste li sigurni da želite izbrisati kontakt {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
@@ -736,6 +742,16 @@
         "title": "Prikaži Lightning peer-ove",
         "subtitle": ""
       },
+      "maxLNFeePercentage": {
+        "title": "Postavi maksimalnu naknadu za plaćanja",
+        "subtitle": "Proporcoinalno iznosu",
+        "dialog": {
+          "title": "Postavi max LN postotak naknade"
+        },
+        "resetDialog": {
+          "title": "Želite li vratiti maksimalnu LN naknadu na zadanu vrijednost ({{defaultMaxLNFee}}%)?"
+        }
+      },
       "autopilot": {
         "title": "Automatski otvori kanale",
         "subtitle": ""
@@ -810,6 +826,16 @@
         "dialog2": {
           "title": "Potpis",
           "alert": "Kopirano u međuspremnik"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Postavi lnd log razinu",
+        "dialog": {
+          "title": "Postavi lnd log razinu.",
+          "description": "Razina log-a mijenja opširnost lnd log-a, kojem se može pristupiti iz postavki."
+        },
+        "restoreDialog": {
+          "title": "Želite li vratiti lnd log razinu na zadanu razinu ({{defaultLndLogLevel}})?"
         }
       }
     },
@@ -916,6 +942,9 @@
       },
       "strictGraphPruning": {
         "title": "Omogući striktno rezanje LN grafa"
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },
@@ -1061,7 +1090,7 @@
       "msg1": "Ako želite vratiti svoje Lightning Network kanale, trebate obezbijediti sigurnosnu kopiju datoteke.",
       "loading": "Oporavi novčanik",
       "passphrase": {
-        "placeholder": "Passphrase (neobavezan)"
+        "placeholder": "Lozinka (neobavezno)"
       },
       "channel": {
         "title": "Sigurnosna kopija kanala",
