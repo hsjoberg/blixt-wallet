@@ -680,6 +680,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             ["listChannels", listChannels],
             ["listPeers", listPeers],
             ["listUnspent", listUnspent],
+            ["listInvoices", listInvoices],
             ["getNetworkInfo", getNetworkInfo],
           ].map(([name, f], i) => {
             return (
