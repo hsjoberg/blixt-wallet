@@ -40,7 +40,6 @@ export const notificationManager: INotificationManagerModel = {
           return;
         }
       } else if (PLATFORM === "android") {
-        log.i("code", [PermissionsAndroid.PERMISSIONS]);
         const granted = await PermissionsAndroid.request(
           "android.permission.POST_NOTIFICATIONS" // FIXME PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS needs newer react-native version
         );
