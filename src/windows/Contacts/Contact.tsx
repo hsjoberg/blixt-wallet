@@ -199,6 +199,21 @@ export default function Contact({ contact }: IContactProps) {
     );
   };
 
+  const editContact = async () => {
+    Alert.prompt(
+      t("contact.editContactLabel.title"),
+      undefined,
+      (text) => {
+        syncContact({
+          ...contact,
+          label: text || null,
+        });
+      },
+      undefined,
+      contact.label ?? undefined,
+    );
+  };
+
   return (
     <>
       <Card style={style.card}>
@@ -206,7 +221,7 @@ export default function Contact({ contact }: IContactProps) {
           <Pressable style={style.cardPressable} onPress={toggle}>
             <View style={style.cardSimple}>
               <Icon style={style.cardIcon} type="MaterialCommunityIcons" name={contact.type === "SERVICE" ? "web" : "at"} />
-              <Text style={style.cardTitle} numberOfLines={1} lineBreakMode="middle">
+              <Text style={[style.cardTitle, contact.label ? { fontSize: 11 } : null]} numberOfLines={1} lineBreakMode="middle">
                 {contact.type === "SERVICE" && (
                   <>
                     {contact.lnUrlPay && !contact.lnUrlWithdraw &&
@@ -223,6 +238,7 @@ export default function Contact({ contact }: IContactProps) {
                 {contact.type === "PERSON" &&
                   <>{contact.lightningAddress}</>
                 }
+                {contact.label && ` (${contact.label})`}
               </Text>
               <View style={style.expandContainer}>
                 <Icon type="AntDesign" name={expand ? "minus" : "plus"}/>
@@ -272,11 +288,11 @@ export default function Contact({ contact }: IContactProps) {
 
                 <View style={style.actionButtonsAdmin}>
                   <Button onPress={promptDeleteContact} small style={[style.actionButton]} icon danger>
-                    <Icon type="AntDesign" name="delete" style={[style.actionButton, {fontSize: 10, margin: 0, padding: 0 }]}/>
+                    <Icon type="AntDesign" name="delete" style={[style.actionButton, { fontSize: 10, margin: 0, padding: 0 }]}/>
                   </Button>
-                  {/* <Button small style={[style.actionButton, {  }]} icon warning>
-                    <Icon type="AntDesign" name="edit" style={[style.actionButton, {fontSize: 14 }]} />
-                  </Button> */}
+                  <Button onPress={editContact} small style={[style.actionButton]} icon>
+                    <Icon type="AntDesign" name="edit" style={[style.actionButton, { fontSize: 10, margin: 0, padding: 0 }]}/>
+                  </Button>
                 </View>
               </View>
             </View>

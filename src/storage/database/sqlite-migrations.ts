@@ -61,7 +61,8 @@ const schema = [
     lud16IdentifierMimeType TEXT NULL,
     lnUrlPay TEXT NULL,
     lnUrlWithdraw TEXT NULL,
-    note TEXT NOT NULL
+    note TEXT NOT NULL,
+    label TEXT NULL
   )`
 ];
 

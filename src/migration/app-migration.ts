@@ -286,4 +286,10 @@ export const appMigration: IAppMigration[] = [
       setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL);
     },
   },
+  // Version 34
+  {
+    async beforeLnd(db, i) {
+      await db.executeSql("ALTER TABLE contact ADD label TEXT NULL");
+    },
+  },
 ];

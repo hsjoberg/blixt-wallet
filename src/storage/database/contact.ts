@@ -13,6 +13,7 @@ export interface IDBContact {
   lnUrlPay: string | null,
   lnUrlWithdraw: string | null;
   note: string;
+  label: string | null;
 }
 
 export interface IContact {
@@ -24,6 +25,7 @@ export interface IContact {
   lnUrlPay: string | null,
   lnUrlWithdraw: string | null;
   note: string;
+  label: string | null;
 }
 
 export const createContact = async (db: SQLiteDatabase, contact: IContact): Promise<number> => {
@@ -37,10 +39,12 @@ export const createContact = async (db: SQLiteDatabase, contact: IContact): Prom
       lud16IdentifierMimeType,
       lnUrlPay,
       lnUrlWithdraw,
-      note
+      note,
+      label
     )
     VALUES
     (
+      ?,
       ?,
       ?,
       ?,
@@ -57,6 +61,7 @@ export const createContact = async (db: SQLiteDatabase, contact: IContact): Prom
       contact.lnUrlPay,
       contact.lnUrlWithdraw,
       contact.note,
+      contact.label,
     ],
   );
   return id;
@@ -72,7 +77,8 @@ export const updateContact = async (db: SQLiteDatabase, contact: IContact): Prom
         lud16IdentifierMimeType = ?,
         lnUrlPay = ?,
         lnUrlWithdraw = ?,
-        note = ?
+        note = ?,
+        label = ?
     WHERE id = ?`,
     [
       contact.domain,
@@ -82,6 +88,7 @@ export const updateContact = async (db: SQLiteDatabase, contact: IContact): Prom
       contact.lnUrlPay,
       contact.lnUrlWithdraw,
       contact.note,
+      contact.label,
       contact.id,
     ],
   );
@@ -107,5 +114,6 @@ const convertDBTransaction = (contact: IDBContact): IContact => {
     lnUrlPay: contact.lnUrlPay,
     lnUrlWithdraw: contact.lnUrlWithdraw,
     note: contact.note,
+    label: contact.label,
   };
 };

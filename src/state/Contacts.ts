@@ -56,7 +56,7 @@ export const contacts: IContactsModel = {
 
   /**
    * Delete a contact
-   * Deletes a contact by Id in the database, then removes it from our contact araray
+   * Deletes a contact by Id in the database, then removes it from our contact array
    */
   deleteContact: thunk(async (actions, id, { getState, getStoreState }) => {
     const db = getStoreState().db;

@@ -524,6 +524,9 @@
       "deleteContact": {
         "title": "Contact deletion",
         "msg": "Are you sure you want to delete contact {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
