@@ -46,6 +46,9 @@
       "msg3": "Il n'existe actuellement aucun support WatchTower pour surveiller vos canaux lorsque vous êtes hors ligne.",
       "msg4": "Je suis insouciant, continuer"
     },
+    "language": {
+      "title": "Choisir la langue"
+    },
     "restoreWallet": {
       "title": "Restaurer le portefeuille"
     },
@@ -133,7 +136,7 @@
     "duration": "Temps nécessaire pour payer la facture",
     "note": "Note",
     "website": "Site web",
-    "type" : "Type",
+    "type": "Type",
     "lnurl": {
       "messageFromWebsite": "Message de",
       "urlReceivedFromWebsite": "URL reçu de",
@@ -521,6 +524,9 @@
       "deleteContact": {
         "title": "Suppression de contacts",
         "msg": "Êtes-vous sûr de vouloir supprimer le contact {{contact}} ?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
@@ -736,6 +742,16 @@
         "title": "Afficher les pairs Lightning",
         "subtitle": ""
       },
+      "maxLNFeePercentage": {
+        "title": "Fixer des frais de paiement maximaux",
+        "subtitle": "Proportionnel au montant",
+        "dialog": {
+          "title": "Définir le pourcentage de frais LN maximum"
+        },
+        "resetDialog": {
+          "title": "Souhaitez-vous restaurer les frais maximaux LN à la valeur par défaut ({{defaultMaxLNFee}}%)?"
+        }
+      },
       "autopilot": {
         "title": "Ouvrir automatiquement des canaux",
         "subtitle": ""
@@ -810,6 +826,16 @@
         "dialog2": {
           "title": "Signature",
           "alert": "Copié dans le presse-papiers"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Définir le niveau du journal LND",
+        "dialog": {
+          "title": "Définissez le niveau de journal LND",
+          "description": "Le niveau de journal modifie la verbance du journal LND, accessible à partir des paramètres"
+        },
+        "restoreDialog": {
+          "title": "Souhaitez-vous restaurer le niveau de journal du LND au niveau par défaut ({{defaultLndLogLevel}})?"
         }
       }
     },
@@ -916,6 +942,9 @@
       },
       "strictGraphPruning": {
         "title": "Activer l'élagage strict du graphique LN"
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },
@@ -1061,7 +1090,7 @@
       "msg1": "Si vous souhaitez restaurer vos chaînes du réseau Lightning, vous devez fournir une sauvegarde des fichiers.",
       "loading": "Restaurer le portefeuille",
       "passphrase": {
-        "placeholder": "Passphrase (en option)"
+        "placeholder": "Mot de passe (facultatif)"
       },
       "channel": {
         "title": "Sauvegarde des canaux",
