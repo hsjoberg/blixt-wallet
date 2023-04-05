@@ -63,6 +63,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   rescanWallet = "rescanWallet",
   receiveViaP2TR = "receiveViaP2TR",
   strictGraphPruningEnabled = "strictGraphPruningEnabled",
+  bimodalPathFindingEnabled = "bimodalPathFindingEnabled",
   maxLNFeePercentage = "maxLNFeePercentage",
   lndLogLevel = "lndLogLevel",
 }
@@ -147,6 +148,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.rescanWallet),
     removeItem(StorageItem.receiveViaP2TR),
     removeItem(StorageItem.strictGraphPruningEnabled),
+    removeItem(StorageItem.bimodalPathFindingEnabled),
     removeItem(StorageItem.maxLNFeePercentage),
     removeItem(StorageItem.lndLogLevel),
   ]);
@@ -227,6 +229,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.rescanWallet, false),
     setItemObject<boolean>(StorageItem.receiveViaP2TR, false),
     setItemObject<boolean>(StorageItem.strictGraphPruningEnabled, false),
+    setItemObject<boolean>(StorageItem.bimodalPathFindingEnabled, false),
     setItemObject<number>(StorageItem.maxLNFeePercentage, DEFAULT_MAX_LN_FEE_PERCENTAGE),
     setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL),
   ]);

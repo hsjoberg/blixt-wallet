@@ -939,6 +939,9 @@
       },
       "strictGraphPruning": {
         "title": "Enable strict LN Graph pruning"
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },

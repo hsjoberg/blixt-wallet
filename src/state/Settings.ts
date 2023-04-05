@@ -57,6 +57,7 @@ export interface ISettingsModel {
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
   changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeStrictGraphPruningEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
+  changeBimodalPathFindingEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
   changeLndLogLevel: Thunk<ISettingsModel, LndLogLevel>;
 
@@ -92,6 +93,7 @@ export interface ISettingsModel {
   setRescanWallet: Action<ISettingsModel, boolean>;
   setReceiveViaP2TR: Action<ISettingsModel, boolean>;
   setStrictGraphPruningEnabled: Action<ISettingsModel, boolean>;
+  setBimodalPathFindingEnabled: Action<ISettingsModel, boolean>;
   setMaxLNFeePercentage: Action<ISettingsModel, number>;
   setLndLogLevel: Action<ISettingsModel, LndLogLevel>;
 
@@ -127,6 +129,7 @@ export interface ISettingsModel {
   rescanWallet: boolean;
   receiveViaP2TR: boolean;
   strictGraphPruningEnabled: boolean;
+  bimodalPathFindingEnabled: boolean;
   maxLNFeePercentage: number;
   lndLogLevel: LndLogLevel;
 }
@@ -166,6 +169,7 @@ export const settings: ISettingsModel = {
     actions.setRescanWallet(await getRescanWallet());
     actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
     actions.setStrictGraphPruningEnabled(await getItemObject(StorageItem.strictGraphPruningEnabled) ?? false);
+    actions.setBimodalPathFindingEnabled(await getItemObject(StorageItem.bimodalPathFindingEnabled) ?? false);
     actions.setMaxLNFeePercentage(await getItemObject(StorageItem.maxLNFeePercentage) ?? 2);
     actions.setLndLogLevel((await getItem(StorageItem.lndLogLevel) ?? "info") as LndLogLevel);
 
@@ -336,6 +340,11 @@ export const settings: ISettingsModel = {
     actions.setStrictGraphPruningEnabled(payload);
   }),
 
+  changeBimodalPathFindingEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.bimodalPathFindingEnabled, payload);
+    actions.setBimodalPathFindingEnabled(payload);
+  }),
+
   changeMaxLNFeePercentage: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.maxLNFeePercentage, payload);
     actions.setMaxLNFeePercentage(payload);
@@ -378,6 +387,7 @@ export const settings: ISettingsModel = {
   setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
   setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
   setStrictGraphPruningEnabled: action((state, payload) => { state.strictGraphPruningEnabled = payload; }),
+  setBimodalPathFindingEnabled: action((state, payload) => { state.bimodalPathFindingEnabled = payload; }),
   setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
   setLndLogLevel: action((state, payload) => { state.lndLogLevel = payload; }),
 
@@ -415,4 +425,5 @@ export const settings: ISettingsModel = {
   strictGraphPruningEnabled: false,
   maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
   lndLogLevel: DEFAULT_LND_LOG_LEVEL,
+  bimodalPathFindingEnabled: false
 };

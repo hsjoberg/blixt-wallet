@@ -416,6 +416,7 @@ export const model: IStoreModel = {
     const bitcoindPubRawTx = await getItemAsyncStorage(StorageItem.bitcoindPubRawTx) || null;
     const lndNoGraphCache = await getItemAsyncStorage(StorageItem.lndNoGraphCache) || "0";
     const strictGraphPruningEnabled = await getItemAsyncStorage(StorageItem.strictGraphPruningEnabled) || "0";
+    const bimodalPathFindingEnabled = await getItemAsyncStorage(StorageItem.bimodalPathFindingEnabled) === "true" ? "bimodal" : "apriori";
     const lndLogLevel = await getItemAsyncStorage(StorageItem.lndLogLevel) || "info";
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
@@ -472,6 +473,9 @@ autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? 
 [protocol]
 protocol.wumbo-channels=true
 protocol.option-scid-alias=true
+
+[routerrpc]
+routerrpc.estimator=${bimodalPathFindingEnabled}
 `;
     await writeConfig(config);
   }),
