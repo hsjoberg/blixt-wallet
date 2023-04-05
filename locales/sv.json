@@ -46,6 +46,9 @@
       "msg3": "Det finns för tillfället inget WatchTower-stöd som övervakar dina kanaler när du är offline.",
       "msg4": "Jag är besinningslös, fortsätt"
     },
+    "language": {
+      "title": "Select language"
+    },
     "restoreWallet": {
       "title": "Återställ plånbok"
     },
@@ -130,9 +133,10 @@
   "transactionDetails": {
     "title": "Transaktion",
     "date": "Datum",
+    "duration": "Time taken to pay invoice",
     "note": "Notis",
     "website": "Webbsida",
-    "type" : "Typ",
+    "type": "Typ",
     "lnurl": {
       "messageFromWebsite": "Meddelande ifrån",
       "urlReceivedFromWebsite": "URL mottaget ifrån",
@@ -274,6 +278,7 @@
       "localCommitmentTxid": "Lokalt commitment-TXID",
       "remoteCommitmentTxid": "Motpartens commitment-TXID",
       "closeChannel": "Stäng kanal",
+      "forceClosePendingChannel": "Force Close Pending Channel",
       "closeChannelPrompt": {
         "title": "Stäng kanal"
       }
@@ -519,6 +524,9 @@
       "deleteContact": {
         "title": "Kontaktborttagning",
         "msg": "Är du säker på att du vill ta bort kontakten {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
@@ -722,6 +730,10 @@
     },
     "LN": {
       "title": "Lightningnätverket",
+      "network": {
+        "title": "Show network info",
+        "subtitle": ""
+      },
       "node": {
         "title": "Visa data om noden ",
         "subtitle": ""
@@ -729,6 +741,16 @@
       "peers": {
         "title": "Visa Lightningnoder",
         "subtitle": ""
+      },
+      "maxLNFeePercentage": {
+        "title": "Set maximum payment fee",
+        "subtitle": "Proportional to the amount",
+        "dialog": {
+          "title": "Set max LN fee percentage"
+        },
+        "resetDialog": {
+          "title": "Would you like to restore max LN fee to the default value ({{defaultMaxLNFee}}%)?"
+        }
       },
       "autopilot": {
         "title": "Öppna automatiskt kanaler",
@@ -805,6 +827,16 @@
           "title": "Signatur",
           "alert": "Kopierat till urklipp"
         }
+      },
+      "setLndLogLevel": {
+        "title": "Set lnd log level",
+        "dialog": {
+          "title": "Set lnd log level.",
+          "description": "The log level changes the verboseness of the lnd log, accessible from settings."
+        },
+        "restoreDialog": {
+          "title": "Would you like to restore lnd log level to the default level ({{defaultLndLogLevel}})?"
+        }
       }
     },
     "experimental": {
@@ -815,7 +847,7 @@
       },
       "MPP": {
         "title": "Aktivera Multi-Path Payments",
-        "subtitle": "Betalningar kan ta upp till 16 vägar"
+        "subtitle": "Payments can take up to 16 paths"
       },
       "tor": {
         "title": "Aktivera Tor",
@@ -907,6 +939,12 @@
       },
       "resetMissionControl": {
         "title": "Nollställ vetskap om betalningsrutter"
+      },
+      "strictGraphPruning": {
+        "title": "Enable strict LN Graph pruning"
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },
@@ -958,6 +996,17 @@
       "placeholder": "Nod URI",
       "accept": "Anslut"
     }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Lightning Network Info",
+    "avgChannelSize": "Average Channel Size",
+    "avgOutDegree": "Average Out Degree",
+    "graphDiameter": "Graph Diameter",
+    "medianChannelSizeSat": "Median Channel Size",
+    "numChannels": "Number of Channels",
+    "numNodes": "Number of Nodes",
+    "numZombieChans": "Number of Zombie Channels",
+    "totalNetworkCapacity": "Total Network Capacity"
   },
   "settings.lightningNodeInfo": {
     "title": "Nodinfo",
@@ -1041,7 +1090,7 @@
       "msg1": "Om du vill återställa dina kanaler på Lightningnätverket så måste du förse en kanalbackup.",
       "loading": "Återställ plånbok",
       "passphrase": {
-        "placeholder": "Passphrase (valfritt)"
+        "placeholder": "Passphrase (optional)"
       },
       "channel": {
         "title": "Kanalbackup",
