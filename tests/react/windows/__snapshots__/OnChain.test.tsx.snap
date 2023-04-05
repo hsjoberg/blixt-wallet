@@ -569,7 +569,7 @@ exports[`renders correctly 1`] = `
                                                     }
                                                     testID="ONCHAIN_FUNDS"
                                                   >
-                                                    1000 sats
+                                                    1 000 sats
                                                   </Text>
                                                 </View>
                                                 <View

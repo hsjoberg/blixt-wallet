@@ -389,29 +389,22 @@ exports[`renders correctly 1`] = `
                                 autoComplete="off"
                                 autoCorrect={false}
                                 blurOnSubmit={true}
-                                bordered={false}
                                 editable={true}
                                 importantForAutofill="no"
                                 multiline={true}
                                 onChangeText={[Function]}
-                                placeholderTextColor="#575757"
                                 returnKeyType="done"
                                 style={
                                   {
                                     "backgroundColor": "#232323",
-                                    "color": "#000",
                                     "fontSize": 20,
                                     "height": 120,
                                     "marginTop": undefined,
-                                    "paddingLeft": 10,
-                                    "paddingRight": 5,
                                     "textAlignVertical": "top",
                                     "width": "100%",
                                   }
                                 }
-                                underline={false}
                                 underlineColorAndroid="rgba(0,0,0,0)"
-                                value=""
                               />
                               <View
                                 style={

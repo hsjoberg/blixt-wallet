@@ -64,7 +64,7 @@ it("is possible to create an invoice and go to the QR screen", async () => {
 
   expect(paymentRequestString).not.toBeNull();
   expect(expireString!.children[0]!.children!.join()).toContain("Expires in");
-  expect(payAmountString!.children.join()).toContain("10000");
+  expect(payAmountString!.children.join()).toContain("10 000");
 
   unmount();
   store.getActions().receive.deinitialize();
