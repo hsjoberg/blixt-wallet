@@ -1103,6 +1103,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeBimodalPathFindingEnabled(modal);
     await writeConfig();
     toast(t("msg.written", { ns:namespaces.common }));
+    restartNeeded();
   };
 
   const lndLogLevel = useStoreState((store) => store.settings.lndLogLevel);
