@@ -46,6 +46,9 @@
       "msg3": "Es gibt derzeit keinen WatchTower-Support, der deine Lightning-Kanäle im Fall einer Downtime schützen kann.",
       "msg4": "Ok akzeptiert, weiter"
     },
+    "language": {
+      "title": "Sprache auswählen"
+    },
     "restoreWallet": {
       "title": "Wallet-Wiederherstellung"
     },
@@ -133,7 +136,7 @@
     "duration": "Zeitaufwand zum Bezahlen der Rechnung",
     "note": "Notiz",
     "website": "Webseite",
-    "type" : "Typ",
+    "type": "Typ",
     "lnurl": {
       "messageFromWebsite": "Nachricht von",
       "urlReceivedFromWebsite": "URL empfangen von",
@@ -521,6 +524,9 @@
       "deleteContact": {
         "title": "Kontakt entfernen",
         "msg": "Möchtest Du diesen Kontakt wirklich löschen {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
@@ -736,6 +742,16 @@
         "title": "Lightning-Peers anzeigen",
         "subtitle": ""
       },
+      "maxLNFeePercentage": {
+        "title": "Legen Sie die maximale Zahlungsgebühr fest",
+        "subtitle": "Proportional zum Betrag",
+        "dialog": {
+          "title": "LN MAX -Gebührenprozentsatz festlegen"
+        },
+        "resetDialog": {
+          "title": "Möchten Sie die maximale LN -Gebühr auf den Standardwert wiederherstellen ({{defaultMaxLNFee}}%)?"
+        }
+      },
       "autopilot": {
         "title": "Kanäle automatisch öffnen",
         "subtitle": ""
@@ -810,6 +826,16 @@
         "dialog2": {
           "title": "Signatur",
           "alert": "In die Zwischenablage kopiert"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "LND -Protokollebene einstellen",
+        "dialog": {
+          "title": "LND -Protokollebene einstellen",
+          "description": "Die Protokollebene ändert die Ausführlichkeit des LND -Protokolls, das aus Einstellungen zugänglich ist."
+        },
+        "restoreDialog": {
+          "title": "Möchten Sie die LND -Protokollebene auf die Standardebene wiederherstellen ({{defaultLndLogLevel}})?"
         }
       }
     },
@@ -916,6 +942,9 @@
       },
       "strictGraphPruning": {
         "title": "Aktivieren Sie die strikte Bereinigung von LN-Diagrammen"
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },
