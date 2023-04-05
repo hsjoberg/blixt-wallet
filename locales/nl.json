@@ -46,6 +46,9 @@
       "msg3": "Er is momenteel geen WatchTower-ondersteuning om je kanalen te bewaken terwijl je offline bent.",
       "msg4": "Ik ben roekeloos, ga verder"
     },
+    "language": {
+      "title": "Selecteer taal"
+    },
     "restoreWallet": {
       "title": "Wallet Herstellen"
     },
@@ -133,7 +136,7 @@
     "duration": "Tijd nodig om factuur te betalen",
     "note": "Notitie",
     "website": "Website",
-    "type" : "Type",
+    "type": "Type",
     "lnurl": {
       "messageFromWebsite": "Bericht van",
       "urlReceivedFromWebsite": "URL ontvangen van",
@@ -521,6 +524,9 @@
       "deleteContact": {
         "title": "Contact verwijderen",
         "msg": "Weet je zeker dat je contact {{contact}} wilt verwijderen?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
@@ -736,6 +742,16 @@
         "title": "Lightning peers weergeven",
         "subtitle": ""
       },
+      "maxLNFeePercentage": {
+        "title": "Stel maximale betalingskosten in",
+        "subtitle": "Evenredig met de hoeveelheid",
+        "dialog": {
+          "title": "Stel Max LN Fee Percentage in"
+        },
+        "resetDialog": {
+          "title": "Wilt u Max LN -kosten herstellen voor de standaardwaarde ({{defaultMaxLNFee}}%)?"
+        }
+      },
       "autopilot": {
         "title": "Automatisch kanalen openen",
         "subtitle": ""
@@ -810,6 +826,16 @@
         "dialog2": {
           "title": "Handtekening",
           "alert": "Gekopieerd naar klembord"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Stel LND logniveau in",
+        "dialog": {
+          "title": "Stel LND logniveau in",
+          "description": "Het logniveau verandert de verboden van het LND -logboek, toegankelijk vanaf instellingen."
+        },
+        "restoreDialog": {
+          "title": "Wilt u het logniveau herstellen naar het standaardniveau ({{defaultLndLogLevel}})?"
         }
       }
     },
@@ -916,6 +942,9 @@
       },
       "strictGraphPruning": {
         "title": "Strikte LN Graph-snoei inschakelen"
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },
@@ -1061,7 +1090,7 @@
       "msg1": "Als je jouw Lightning Netwerk-kanalen wilt herstellen, moet je beschikken over een bestandsback-up.",
       "loading": "Herstel Wallet",
       "passphrase": {
-        "placeholder": "Passphrase (optionele)"
+        "placeholder": "Wachtwoordzin (optioneel)"
       },
       "channel": {
         "title": "Kanaalback-up",
