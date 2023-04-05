@@ -46,6 +46,9 @@
       "msg3": "Hiện không có hỗ trợ WatchTower để xem các kênh của bạn khi bạn ngoại tuyến.",
       "msg4": "Tôi không quan tâm, hãy tiếp tục"
     },
+    "language": {
+      "title": "Select language"
+    },
     "restoreWallet": {
       "title": "Phục hồi Ví"
     },
@@ -130,9 +133,10 @@
   "transactionDetails": {
     "title": "Giao dịch",
     "date": "Ngày tháng",
+    "duration": "Thời gian thực hiện để thanh toán hóa đơn",
     "note": "Ghi chú",
     "website": "Trang web",
-    "type" : "Loại",
+    "type": "Loại",
     "lnurl": {
       "messageFromWebsite": "Tin nhắn từ",
       "urlReceivedFromWebsite": "URL nhận từ",
@@ -520,6 +524,9 @@
       "deleteContact": {
         "title": "Xoá liên lạc",
         "msg": "Bạn chắc chắn muốn xoá liên lạc {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
@@ -735,6 +742,16 @@
         "title": "Hiển thị các đối tác ngang hàng Lightning",
         "subtitle": ""
       },
+      "maxLNFeePercentage": {
+        "title": "Set maximum payment fee",
+        "subtitle": "Proportional to the amount",
+        "dialog": {
+          "title": "Set max LN fee percentage"
+        },
+        "resetDialog": {
+          "title": "Would you like to restore max LN fee to the default value ({{defaultMaxLNFee}}%)?"
+        }
+      },
       "autopilot": {
         "title": "Tự động mở kênh",
         "subtitle": ""
@@ -809,6 +826,16 @@
         "dialog2": {
           "title": "Chữ ký",
           "alert": "Đã sao chép đến khay nhớ tạm"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Set lnd log level",
+        "dialog": {
+          "title": "Set lnd log level.",
+          "description": "The log level changes the verboseness of the lnd log, accessible from settings."
+        },
+        "restoreDialog": {
+          "title": "Would you like to restore lnd log level to the default level ({{defaultLndLogLevel}})?"
         }
       }
     },
@@ -915,6 +942,9 @@
       },
       "strictGraphPruning": {
         "title": "Kích hoạt lược bỏ LN Graph chính xác "
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },
