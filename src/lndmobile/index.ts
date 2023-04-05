@@ -597,6 +597,7 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
   });
   return response;
 };
+
 /**
  * @throws
  */
@@ -605,6 +606,19 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
     request: lnrpc.NetworkInfoRequest,
     response: lnrpc.NetworkInfo,
     method: "GetNetworkInfo",
+    options: {},
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+ export const listInvoices = async (): Promise<lnrpc.ListInvoiceResponse> => {
+  const response = await sendCommand<lnrpc.IListInvoiceRequest, lnrpc.ListInvoiceRequest, lnrpc.ListInvoiceResponse>({
+    request: lnrpc.ListInvoiceRequest,
+    response: lnrpc.ListInvoiceResponse,
+    method: "ListInvoices",
     options: {},
   });
   return response;
