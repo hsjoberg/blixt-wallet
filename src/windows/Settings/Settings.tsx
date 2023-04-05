@@ -1098,7 +1098,8 @@ ${t("experimental.tor.disabled.msg2")}`;
   const lndPathfindingAlgorithm = useStoreState((store) => store.settings.lndPathfindingAlgorithm);
   const changeBimodalPathFindingEnabled = useStoreActions((store) => store.settings.changeLndPathfindingAlgorithm);
   const changeBimodalPathFindingEnabledPress = async () => {
-    const modal = lndPathfindingAlgorithm === ('apriori' || null) ? 'bimodal' : 'apriori';
+    const modal = (lndPathfindingAlgorithm === "apriori" || lndPathfindingAlgorithm === null) ? "bimodal" : "apriori";
+
     await changeBimodalPathFindingEnabled(modal);
     await writeConfig();
     toast(t("msg.written", { ns:namespaces.common }));
