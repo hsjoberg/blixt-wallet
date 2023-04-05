@@ -46,6 +46,9 @@
       "msg3": "Al momento non esiste un supporto per la torre di guardia per guardare i tuoi canali mentre sei offline.",
       "msg4": "Sono sconsiderato, continua"
     },
+    "language": {
+      "title": "Seleziona la lingua"
+    },
     "restoreWallet": {
       "title": "Ripristina il wallet"
     },
@@ -133,7 +136,7 @@
     "duration": "Tempo impiegato per pagare la fattura",
     "note": "Nota",
     "website": "Sito web",
-    "type" : "Tipo",
+    "type": "Tipo",
     "lnurl": {
       "messageFromWebsite": "Messaggio da",
       "urlReceivedFromWebsite": "URL ricevuto da",
@@ -521,6 +524,9 @@
       "deleteContact": {
         "title": "Cancellazione del contatto",
         "msg": "Sei sicuro di voler eliminare il contatto {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
@@ -736,6 +742,16 @@
         "title": "Mostra Lightning pari",
         "subtitle": ""
       },
+      "maxLNFeePercentage": {
+        "title": "Impostare la tassa di pagamento massima",
+        "subtitle": "Proporzionale all'importo",
+        "dialog": {
+          "title": "Imposta la percentuale di tassa LN massima"
+        },
+        "resetDialog": {
+          "title": "Vorresti ripristinare la tassa massima LN al valore predefinito ({{defaultMaxLNFee}}%)?"
+        }
+      },
       "autopilot": {
         "title": "Apri automaticamente i canali",
         "subtitle": ""
@@ -810,6 +826,16 @@
         "dialog2": {
           "title": "Firma",
           "alert": "Copiato negli appunti"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Livello di impostazione e registro lnd",
+        "dialog": {
+          "title": "Imposta il livello di registro LND",
+          "description": "Il livello di registro cambia la verboseneità del registro LND, accessibile dalle impostazioni."
+        },
+        "restoreDialog": {
+          "title": "Vorresti ripristinare il livello di registro LND al livello predefinito ({{defaultLndLogLevel}})?"
         }
       }
     },
@@ -916,6 +942,9 @@
       },
       "strictGraphPruning": {
         "title": "Abilita la potatura grafica LN rigorosa"
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },
@@ -1061,7 +1090,7 @@
       "msg1": "Se desideri ripristinare i canali della rete Lightning, devi fornire un backup di file.",
       "loading": "Ripristina il wallet",
       "passphrase": {
-        "placeholder": "Passphrase (opzionale)"
+        "placeholder": "Frase di accesso (opzionale)"
       },
       "channel": {
         "title": "Backup di canale",
