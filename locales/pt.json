@@ -46,6 +46,9 @@
       "msg3": "Actualmente, não existe suporte para WatchTower para monitorar os seus canais enquanto estiver offline.",
       "msg4": "Eu sou imprudente, continue"
     },
+    "language": {
+      "title": "Selecione o idioma"
+    },
     "restoreWallet": {
       "title": "Restaurar Carteira"
     },
@@ -133,7 +136,7 @@
     "duration": "Tempo gasto para pagar a fatura",
     "note": "Nota",
     "website": "Website",
-    "type" : "Tipo",
+    "type": "Tipo",
     "lnurl": {
       "messageFromWebsite": "Mensagem para",
       "urlReceivedFromWebsite": "URL recebido de",
@@ -521,6 +524,9 @@
       "deleteContact": {
         "title": "Exclusão de contato",
         "msg": "Tem a certeza que quer apagar o contacto {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
@@ -736,6 +742,16 @@
         "title": "Mostrar pares do Lightning",
         "subtitle": ""
       },
+      "maxLNFeePercentage": {
+        "title": "Defina a taxa máxima de pagamento",
+        "subtitle": "Proporcional à quantidade",
+        "dialog": {
+          "title": "Defina a porcentagem de taxa LN máxima"
+        },
+        "resetDialog": {
+          "title": "Você gostaria de restaurar a taxa máxima do LN ao valor padrão ({{defaultMaxLNFee}}%)?"
+        }
+      },
       "autopilot": {
         "title": "Canais abertos automaticamente",
         "subtitle": ""
@@ -810,6 +826,16 @@
         "dialog2": {
           "title": "Assinatura",
           "alert": "Copiado para a área de transferência"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Defina o nível de log LND",
+        "dialog": {
+          "title": "Defina o nível de log LND",
+          "description": "O nível de log altera a verbosidade do log LND, acessível a partir de configurações."
+        },
+        "restoreDialog": {
+          "title": "Você gostaria de restaurar o nível de log do LND para o nível padrão ({{defaultLndLogLevel}})?"
         }
       }
     },
@@ -916,6 +942,9 @@
       },
       "strictGraphPruning": {
         "title": "Ativar remoção estrita do gráfico LN"
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },
@@ -1061,7 +1090,7 @@
       "msg1": "Se você deseja restaurar seus canais do Lightning Network, você precisa fornecer um backup de arquivo.",
       "loading": "Restaurar carteira",
       "passphrase": {
-        "placeholder": "Passphrase (opcional)"
+        "placeholder": "Senha (opcional)"
       },
       "channel": {
         "title": "Backup de canal",
