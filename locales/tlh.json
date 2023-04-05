@@ -46,6 +46,9 @@
       "msg3": "reH lut tlhaQ bOQoy boneHpu'chugh.",
       "msg4": "reH jIHvaD qelnIS"
     },
+    "language": {
+      "title": "QeH"
+    },
     "restoreWallet": {
       "title": "qevpa' tlhoy'"
     },
@@ -133,7 +136,7 @@
     "duration": "rojmajDaq qelI'qam law' vIwuvbogh",
     "note": "paghna'",
     "website": "ma'oy'",
-    "type" : "Segh",
+    "type": "Segh",
     "lnurl": {
       "messageFromWebsite": "qotlh",
       "urlReceivedFromWebsite": "URL che' Vo'",
@@ -521,6 +524,9 @@
       "deleteContact": {
         "title": "yIbochHa'moH",
         "msg": "bImevlaHchugh bIHeghchugh {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Contact label"
       }
     }
   },
@@ -736,6 +742,16 @@
         "title": "yIntaHvIS nuvpu'",
         "subtitle": ""
       },
+      "maxLNFeePercentage": {
+        "title": "ngIlmoH",
+        "subtitle": "ghomDaq ghongwI' HoSwI' joq",
+        "dialog": {
+          "title": "mI'law' LN"
+        },
+        "resetDialog": {
+          "title": "VeblIj Dalegh'a' ({{defaultMaxLNFee}}%)?"
+        }
+      },
       "autopilot": {
         "title": "motlhHa'",
         "subtitle": ""
@@ -810,6 +826,16 @@
         "dialog2": {
           "title": "bIH",
           "alert": "yIruch"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "SamaS",
+        "dialog": {
+          "title": "SamaS",
+          "description": "Dechbogh chu' chenmoHbogh Deghmey 'ej tangqu' lutu'lu'."
+        },
+        "restoreDialog": {
+          "title": "qo' rurchugh vaj qo' rur ({{defaultLndLogLevel}})?"
         }
       }
     },
@@ -916,6 +942,9 @@
       },
       "strictGraphPruning": {
         "title": "ghIlghameS 'e' yIHar"
+      },
+      "bimodalPathFinding": {
+        "title": "Enable bimodal path finding"
       }
     }
   },
@@ -1061,7 +1090,7 @@
       "msg1": "wa'SanID yuQmey vIlo'chugh, vaj qeylIS HoSlIj DachoHmeH mIw.",
       "loading": "chemwI'",
       "passphrase": {
-        "placeholder": "mu'tlheghmeyvam ngoQ."
+        "placeholder": "pe'vIl (le')"
       },
       "channel": {
         "title": "jejHa'",
