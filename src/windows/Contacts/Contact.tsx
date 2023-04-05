@@ -288,10 +288,10 @@ export default function Contact({ contact }: IContactProps) {
 
                 <View style={style.actionButtonsAdmin}>
                   <Button onPress={promptDeleteContact} small style={[style.actionButton]} icon danger>
-                    <Icon type="AntDesign" name="delete" style={[style.actionButton, { fontSize: 10, margin: 0, padding: 0 }]}/>
+                    <Icon type="AntDesign" name="delete" style={[style.actionButton, { fontSize: 10 }]}/>
                   </Button>
                   <Button onPress={editContact} small style={[style.actionButton]} icon>
-                    <Icon type="AntDesign" name="edit" style={[style.actionButton, { fontSize: 10, margin: 0, padding: 0 }]}/>
+                    <Icon type="AntDesign" name="edit" style={[style.actionButton, { fontSize: 10 }]}/>
                   </Button>
                 </View>
               </View>

@@ -1,7 +1,6 @@
-import React, { useLayoutEffect, useState } from "react";
-import { Button, Card, CardItem, Header, Icon, Item, ListItem, Text } from "native-base";
-import Container from "../../components/Container";
-import { AlertButton, FlatList, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { Button, Card, CardItem, Text } from "native-base";
+import { AlertButton, StyleSheet, View } from "react-native";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
@@ -22,12 +21,12 @@ type IFakeStack = {
   Prompt: IPromptNavigationProps;
 }
 
-export interface ISelectListProps {
+export interface IPromptProps {
   navigation: StackNavigationProp<IFakeStack, "Prompt">;
   route: RouteProp<IFakeStack, "Prompt">;
 }
 
-export default function({ navigation, route }: ISelectListProps) {
+export default function({ navigation, route }: IPromptProps) {
   const { title, message, onOk, onCancel, defaultValue } = route.params;
   const [inputText, setInputText] = useState(defaultValue ?? "");
 

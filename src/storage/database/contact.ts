@@ -61,7 +61,7 @@ export const createContact = async (db: SQLiteDatabase, contact: IContact): Prom
       contact.lnUrlPay,
       contact.lnUrlWithdraw,
       contact.note,
-      contact.label,
+      contact.label ?? null,
     ],
   );
   return id;
@@ -88,7 +88,7 @@ export const updateContact = async (db: SQLiteDatabase, contact: IContact): Prom
       contact.lnUrlPay,
       contact.lnUrlWithdraw,
       contact.note,
-      contact.label,
+      contact.label ?? null,
       contact.id,
     ],
   );

@@ -171,7 +171,7 @@ export const settings: ISettingsModel = {
     actions.setRescanWallet(await getRescanWallet());
     actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
     actions.setStrictGraphPruningEnabled(await getItemObject(StorageItem.strictGraphPruningEnabled) ?? false);
-    actions.setLndPathfindingAlgorithm(await getItemObject(StorageItem.lndPathfindingAlgorithm) ?? DEFAULT_PATHFINDING_ALGORITHM);
+    actions.setLndPathfindingAlgorithm((await getItem(StorageItem.lndPathfindingAlgorithm) ?? DEFAULT_PATHFINDING_ALGORITHM) as routerrpcEstimator);
     actions.setMaxLNFeePercentage(await getItemObject(StorageItem.maxLNFeePercentage) ?? 2);
     actions.setLndLogLevel((await getItem(StorageItem.lndLogLevel) ?? "info") as LndLogLevel);
 
