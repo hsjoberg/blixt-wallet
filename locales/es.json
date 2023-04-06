@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Sincronización de cadena programada",
-        "subtitle": "Corre en segundo plano cada 4 horas",
+        "subtitle": "Corre en segundo plano cada 2 horas",
         "dialog": {
           "title": "No recomendado",
           "msg": "Advertencia. No está recomendado deshabilitar la sincronización de cadena programada.\n\nAsegúrate de mantener la fecha sincronizada con la Red, de otra manera te arriesgas a perder tus fondos.\n\nSólo haz esto si sabes lo que estás haciendo."

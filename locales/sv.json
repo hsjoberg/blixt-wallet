@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Schemalagd kedjesynkning",
-        "subtitle": "Körs var 4:e timme",
+        "subtitle": "Körs var 2:e timme",
         "dialog": {
           "title": "Ej rekommenderat",
           "msg": "Varning. Det är inte rekommenderat att stänga av den schemalagda kedjesynkningen.\n\nVar säker på att du är uppdaterad med nätverket annars riskerar du att förlora dina tillgångar.\n\nGör endast detta ifall du vet vad du håller på med."

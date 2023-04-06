@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Scheduled chain sync",
-        "subtitle": "Runs in background every 4 hours",
+        "subtitle": "Runs in background every 2 hours",
         "dialog": {
           "title": "Not recommended",
           "msg": "Warning. It is not recommended to disable scheduled chain sync.\n\nMake sure you keep up-to-date with the network otherwise you risk losing your funds.\n\nOnly do this if you're know what you're doing."

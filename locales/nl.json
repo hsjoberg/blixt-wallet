@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Geplande blockchainsynchronisatie",
-        "subtitle": "Actief op de achtergrond elke 4 uur",
+        "subtitle": "Actief op de achtergrond elke 2 uur",
         "dialog": {
           "title": "Niet aanbevolen",
           "msg": "Waarschuwing. Het wordt niet aanbevolen om geplande blockchainsynchronisatie uit te schakelen.\n\nZorg ervoor dat je in-sync blijft met het netwerk, anders loop je het risico jouw geld te verliezen.\n\nDoe dit alleen als je weet wat je doet."

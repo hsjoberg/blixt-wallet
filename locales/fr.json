@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Synchronisation programmée de la chaîne",
-        "subtitle": "Fonctionne en arrière-plan toutes les 4 heures",
+        "subtitle": "Fonctionne en arrière-plan toutes les 2 heures",
         "dialog": {
           "title": "Non recommandée",
           "msg": "Avertissement . Il n'est pas recommandé de désactiver la synchronisation programmée de la chaine.\n\nAssurez-vous d'être à jour avec le réseau, sinon vous risquez de perdre vos fonds.\n\nNe le faites que si vous savez ce que vous faites."

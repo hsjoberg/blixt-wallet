@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Planirana sinkronizacija lanca",
-        "subtitle": "Radi u pozadini svaka 4 sata",
+        "subtitle": "Radi u pozadini svaka 2 sata",
         "dialog": {
           "title": "Nije preporučeno",
           "msg": "Upozorenje. Ne preporučuje se onemogućiti planiranu sinkronizaciju lanca.\n\nProvjerite jeste li u tijeku s mrežom jer inače riskirate gubitak sredstava.\n\nUčinite to samo ako znate što radite."

@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Sincronizzazione della catena programmata",
-        "subtitle": "Corre in background ogni 4 ore",
+        "subtitle": "Corre in background ogni 2 ore",
         "dialog": {
           "title": "Non consigliato",
           "msg": "Avvertimento. Non è consigliabile disabilitare la sincronizzazione della catena programmata.\n\nAssicurati di rimanere aggiornato con la rete altrimenti rischi di perdere i fondi.\n\nFallo solo se sai cosa stai facendo."

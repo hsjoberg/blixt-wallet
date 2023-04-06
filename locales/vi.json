@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Đồng bộ hóa chuỗi đã lên lịch",
-        "subtitle": "Chạy ngầm mỗi 4 giờ",
+        "subtitle": "Chạy ngầm mỗi 2 giờ",
         "dialog": {
           "title": "Không được khuyến khích",
           "msg": "Cảnh báo. Bạn không nên tắt đồng bộ hóa chuỗi đã lên lịch.\n\nĐảm bảo rằng bạn luôn cập nhật mạng, nếu không, bạn có nguy cơ mất tiền của mình.\n\nChỉ làm điều này nếu bạn biết mình đang làm gì."

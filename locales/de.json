@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Geplante Blockchain-Synchronisation",
-        "subtitle": "Im Hintergrund alle 4 Stunden",
+        "subtitle": "Im Hintergrund alle 2 Stunden",
         "dialog": {
           "title": "Nicht empfohlen",
           "msg": "Warnung. Es wird nicht empfohlen, die planmäßige Blockchain-Synchronisation zu deaktivieren.\n\nStelle sicher, dass die Anwendung auf dem aktuellen Netzwerk-Stand ist, um Kapitalverlust vorzubeugen.\n\nNur für fortgeschrittene Anwender!"
