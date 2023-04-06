@@ -343,7 +343,7 @@ export const settings: ISettingsModel = {
   }),
 
   changeLndPathfindingAlgorithm: thunk(async (actions, payload) => {
-    await setItemObject(StorageItem.lndPathfindingAlgorithm, payload);
+    await setItem(StorageItem.lndPathfindingAlgorithm, payload);
     actions.setLndPathfindingAlgorithm(payload);
   }),
 
