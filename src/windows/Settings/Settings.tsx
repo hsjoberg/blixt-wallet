@@ -1649,7 +1649,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Body>
               <Text>{t("debug.bimodalPathFinding.title")}</Text>
             </Body>
-            <Right><CheckBox checked={lndPathfindingAlgorithm === ('apriori' || null) ? false : true} onPress={changeBimodalPathFindingEnabledPress} /></Right>
+            <Right><CheckBox checked={(lndPathfindingAlgorithm === "apriori" || lndPathfindingAlgorithm === null) ? false : true} onPress={changeBimodalPathFindingEnabledPress} /></Right>
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={changeStrictGraphPruningEnabledPress}>
