@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { convertBitcoinToFiat, unitToSatoshi, valueBitcoinFromFiat, valueBitcoin, BitcoinUnits } from "../utils/bitcoin-units";
 import { useStoreState } from "../state/store";
+import { NativeModules } from 'react-native';
+import { PLATFORM } from "../utils/constants";
 
 import exprEval from "expr-eval";
 import { countCharInString } from "../utils";
 const Parser = exprEval.Parser;
+const commaLocales: string[] = ["en_AU", "en_CA", "en_NZ", "en_US", "fil_PH", "ja_JP", "zh_Hans_CN", "zh_CN"];
 
 export default function useBalance(initialSat?: Long, noConversion = false) {
   // gRPC/protobuf 0 is Number
@@ -49,7 +52,23 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
         text = text.replace(/\[^0-9+\-\/*]/g, "");
       }
       else {
-        text = text.replace(/,/g, ".");
+        let replaceComma: boolean = true;
+        if (PLATFORM === "ios") {
+          const locale = NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0];
+          if (commaLocales.indexOf(locale) > -1) {
+            replaceComma = false;
+          }
+        } else if (PLATFORM === "android") {
+          const locale = NativeModules.I18nManager.localeIdentifier;
+          if (commaLocales.indexOf(locale) > -1) {
+            replaceComma = false;
+          }
+        }
+        if (replaceComma) {
+          text = text.replace(/,/g, ".");
+        } else {
+          text = text.replace(/,/g, "");
+        }
       }
       if (text.length === 0) {
         setBitcoinValue(undefined);
@@ -66,7 +85,23 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
       );
     },
     onChangeFiatInput (text: string) {
-      text = text.replace(/,/g, ".");
+      let replaceComma: boolean = true;
+      if (PLATFORM === "ios") {
+        const locale = NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0];
+        if (commaLocales.indexOf(locale) > -1) {
+          replaceComma = false;
+        }
+      } else if (PLATFORM === "android") {
+        const locale = NativeModules.I18nManager.localeIdentifier;
+        if (commaLocales.indexOf(locale) > -1) {
+          replaceComma = false;
+        }
+      }
+      if (replaceComma) {
+        text = text.replace(/,/g, ".");
+      } else {
+        text = text.replace(/,/g, "");
+      }
       if (text.length === 0 || text[0] === ".") {
         setBitcoinValue(undefined);
         setDollarValue(undefined);
