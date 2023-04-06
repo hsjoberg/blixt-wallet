@@ -526,7 +526,7 @@
         "msg": "Êtes-vous sûr de vouloir supprimer le contact {{contact}} ?"
       },
       "editContactLabel": {
-        "title": "Contact label"
+        "title": "Étiquette de contact"
       }
     }
   },
@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Synchronisation programmée de la chaîne",
-        "subtitle": "Fonctionne en arrière-plan toutes les 2 heures",
+        "subtitle": "S'exécute en arrière-plan toutes les 2 heures",
         "dialog": {
           "title": "Non recommandée",
           "msg": "Avertissement . Il n'est pas recommandé de désactiver la synchronisation programmée de la chaine.\n\nAssurez-vous d'être à jour avec le réseau, sinon vous risquez de perdre vos fonds.\n\nNe le faites que si vous savez ce que vous faites."
@@ -944,7 +944,7 @@
         "title": "Activer l'élagage strict du graphique LN"
       },
       "bimodalPathFinding": {
-        "title": "Enable bimodal path finding"
+        "title": "Activer la recherche de chemin bimodal"
       }
     }
   },
