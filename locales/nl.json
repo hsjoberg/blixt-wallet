@@ -526,7 +526,7 @@
         "msg": "Weet je zeker dat je contact {{contact}} wilt verwijderen?"
       },
       "editContactLabel": {
-        "title": "Contact label"
+        "title": "Contactlabel"
       }
     }
   },
@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Geplande blockchainsynchronisatie",
-        "subtitle": "Actief op de achtergrond elke 2 uur",
+        "subtitle": "Wordt elke 2 uur op de achtergrond uitgevoerd",
         "dialog": {
           "title": "Niet aanbevolen",
           "msg": "Waarschuwing. Het wordt niet aanbevolen om geplande blockchainsynchronisatie uit te schakelen.\n\nZorg ervoor dat je in-sync blijft met het netwerk, anders loop je het risico jouw geld te verliezen.\n\nDoe dit alleen als je weet wat je doet."
@@ -944,7 +944,7 @@
         "title": "Strikte LN Graph-snoei inschakelen"
       },
       "bimodalPathFinding": {
-        "title": "Enable bimodal path finding"
+        "title": "Schakel bimodale padvinding in"
       }
     }
   },
