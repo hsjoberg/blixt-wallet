@@ -526,7 +526,7 @@
         "msg": "Jeste li sigurni da želite izbrisati kontakt {{contact}}?"
       },
       "editContactLabel": {
-        "title": "Contact label"
+        "title": "Oznaka kontakta"
       }
     }
   },
@@ -944,7 +944,7 @@
         "title": "Omogući striktno rezanje LN grafa"
       },
       "bimodalPathFinding": {
-        "title": "Enable bimodal path finding"
+        "title": "Omogući bimodalno traženje puta"
       }
     }
   },
