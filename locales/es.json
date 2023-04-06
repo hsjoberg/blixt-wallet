@@ -526,7 +526,7 @@
         "msg": "¿Estás seguro de que quieres eliminar a este contacto {{contact}}?"
       },
       "editContactLabel": {
-        "title": "Contact label"
+        "title": "Etiqueta de contacto"
       }
     }
   },
@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Sincronización de cadena programada",
-        "subtitle": "Corre en segundo plano cada 2 horas",
+        "subtitle": "Se ejecuta en segundo plano cada 2 horas",
         "dialog": {
           "title": "No recomendado",
           "msg": "Advertencia. No está recomendado deshabilitar la sincronización de cadena programada.\n\nAsegúrate de mantener la fecha sincronizada con la Red, de otra manera te arriesgas a perder tus fondos.\n\nSólo haz esto si sabes lo que estás haciendo."
@@ -944,7 +944,7 @@
         "title": "Habilitar la poda de gráfico LN estricta"
       },
       "bimodalPathFinding": {
-        "title": "Enable bimodal path finding"
+        "title": "Habilitar la búsqueda de rutas bimodal"
       }
     }
   },
