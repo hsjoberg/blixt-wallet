@@ -526,7 +526,7 @@
         "msg": "Möchtest Du diesen Kontakt wirklich löschen {{contact}}?"
       },
       "editContactLabel": {
-        "title": "Contact label"
+        "title": "Kontaktetikett"
       }
     }
   },
@@ -672,7 +672,7 @@
       },
       "chainSync": {
         "title": "Geplante Blockchain-Synchronisation",
-        "subtitle": "Im Hintergrund alle 2 Stunden",
+        "subtitle": "Läuft alle 2 Stunden im Hintergrund",
         "dialog": {
           "title": "Nicht empfohlen",
           "msg": "Warnung. Es wird nicht empfohlen, die planmäßige Blockchain-Synchronisation zu deaktivieren.\n\nStelle sicher, dass die Anwendung auf dem aktuellen Netzwerk-Stand ist, um Kapitalverlust vorzubeugen.\n\nNur für fortgeschrittene Anwender!"
@@ -944,7 +944,7 @@
         "title": "Aktivieren Sie die strikte Bereinigung von LN-Diagrammen"
       },
       "bimodalPathFinding": {
-        "title": "Enable bimodal path finding"
+        "title": "Bimodale Wegfindung aktivieren"
       }
     }
   },
