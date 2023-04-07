@@ -283,7 +283,7 @@ export const appMigration: IAppMigration[] = [
   // Version 33
   {
     async beforeLnd(db, i) {
-      setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL);
+      await setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL);
     },
   },
   // Version 34
