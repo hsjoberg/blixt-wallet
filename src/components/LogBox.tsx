@@ -33,6 +33,7 @@ export default function LogBox(props: ILndLogBoxProps) {
         setScrollViewAtTheEnd(isCloseToBottom(nativeEvent));
       }}
       scrollEventThrottle={450}
+      removeClippedSubviews={true}
     >
       <Text selectable={true} style={{ fontSize: 10 }}>{props.text}</Text>
     </ScrollView>

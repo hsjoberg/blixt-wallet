@@ -77,6 +77,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
         }
 
         getFeeEstimate();
+        setIsPaying(false);
       }
     }
 
