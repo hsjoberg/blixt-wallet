@@ -119,7 +119,7 @@
     "react-native-keychain": "^8.1.1",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-localize": "^2.2.6",
-    "react-native-macos": "git+https://github.com/microsoft/react-native-macos#551e640e88693f883867d9afdbf4dae510d8de87",
+    "react-native-macos": "git+https://github.com/microsoft/react-native-macos#90bf99c9300a93b80edb6447483d2a346f1ae187",
     "react-native-maps": "^1.4.0",
     "react-native-material-menu": "^2.0.0",
     "react-native-modal": "^13.0.1",
