@@ -7,6 +7,6 @@ export default function useFormatBitcoinValue() {
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   return function(value: Long) {
-    return formatBitcoin(value, bitcoinUnit, false);
+    return formatBitcoin(value, bitcoinUnit);
   }
 }
