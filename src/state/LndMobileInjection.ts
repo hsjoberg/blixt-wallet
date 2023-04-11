@@ -6,6 +6,7 @@ import {
   decodeState,
   checkStatus,
   startLnd,
+  gossipSync,
   checkICloudEnabled,
   checkApplicationSupportExists,
   checkLndFolderExists,
@@ -86,6 +87,7 @@ export interface ILndMobileInjections {
     decodeState: (data: string) => lnrpc.SubscribeStateResponse;
     checkStatus: () => Promise<number>;
     startLnd: (torEnabled: boolean, args: string) => Promise<string>;
+    gossipSync: () => Promise<{ data: string }>;
     checkICloudEnabled: () => Promise<boolean>;
     checkApplicationSupportExists: () => Promise<boolean>;
     checkLndFolderExists: () => Promise<boolean>;
@@ -164,6 +166,7 @@ export default {
     subscribeState,
     decodeState,
     startLnd,
+    gossipSync,
     checkICloudEnabled,
     checkApplicationSupportExists,
     checkLndFolderExists,
