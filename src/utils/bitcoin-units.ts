@@ -64,30 +64,20 @@ export const convertBitcoinUnit = (value: number, from: keyof IBitcoinUnits, to:
   return btc.div(BitcoinUnits[to].unit);
 };
 
-export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits, groupNumbers: boolean = false): string => {
+export const formatBitcoin = (satoshi: Long, unit: keyof IBitcoinUnits): string => {
   const value = convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit);
   const fixed = value.toFixed(BitcoinUnits[unit].decimals);
 
-  const formatNumber =
-    groupNumbers
-      ? formatNumberGroupings(fixed)
-      : fixed;
-
   switch (unit) {
     case "bitcoin":
-      return `${formatNumber.substring(0, formatNumber.indexOf(".") + 1) + 
-      formatNumber.substring(formatNumber.indexOf(".") + 1).replace(/(\d{2})(\d{3})(\d{3})/, "$1 $2 $3")} ${getUnitNice(value, unit)}`;
+      return `${fixed.substring(0, fixed.indexOf(".") + 1) +
+      fixed.substring(fixed.indexOf(".") + 1).replace(/(\d{2})(\d{3})(\d{3})/, "$1 $2 $3")} ${getUnitNice(value, unit)}`;
     case "milliBitcoin":
     case "bit":
-      return `${formatNumber} ${getUnitNice(value, unit)}`;
+      return `${fixed} ${getUnitNice(value, unit)}`;
     case "sat":
     case "satoshi": {
-      const formattedNumber = Number(formatNumber).toLocaleString('en-US', {
-        useGrouping: true,
-        maximumFractionDigits: 0
-      }).replace(/,/g, ' ');
-
-      return `${formattedNumber} ${getUnitNice(value, unit)}`;
+      return `${formatNumberGroupings(fixed)} ${getUnitNice(value, unit)}`;
     }
   };
 }

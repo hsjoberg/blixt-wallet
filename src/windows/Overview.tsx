@@ -183,7 +183,7 @@ function Overview({ navigation }: IOverviewProps) {
     navigation.navigate("SyncInfo");
   };
 
-  const bitcoinBalance = formatBitcoin(balance, bitcoinUnit, false);
+  const bitcoinBalance = formatBitcoin(balance, bitcoinUnit);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
 
   return (
