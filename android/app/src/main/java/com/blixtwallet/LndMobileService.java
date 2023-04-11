@@ -63,6 +63,8 @@ public class LndMobileService extends Service {
   static final int MSG_PONG = 20;
   static final int MSG_GRPC_BIDI_STREAM_COMMAND = 21;
   static final int MSG_GRPC_STREAM_WRITE_RESULT = 22;
+  static final int MSG_GOSSIP_SYNC = 23;
+  static final int MSG_GOSSIP_SYNC_RESULT = 24;
 
   private Map<String, Method> syncMethods = new HashMap<>();
   private Map<String, Method> streamMethods = new HashMap<>();
@@ -260,6 +262,11 @@ public class LndMobileService extends Service {
             stopLnd(msg.replyTo, request);
             break;
 
+          case MSG_GOSSIP_SYNC:
+            HyperLog.i(TAG, "Got MSG_GOSSIP_SYNC");
+            gossipSync(msg.replyTo, request);
+            break;
+
           case MSG_PING:
             HyperLog.d(TAG, "Got MSG_PING");
             sendToClient(msg.replyTo, Message.obtain(null, MSG_PONG, request, 0));
@@ -403,6 +410,45 @@ public class LndMobileService extends Service {
       sendToClient(recipient, msg);
       //sendToClients(msg);
     }
+  }
+
+  void gossipSync(Messenger recipient, int request) {
+    HyperLog.i(TAG, "gossipSync(): gossip sync");
+    Runnable gossipSync = new Runnable() {
+      public void run() {
+        Lndmobile.gossipSync(new lndmobile.Callback() {
+
+          @Override
+          public void onError(Exception e) {
+            HyperLog.e(TAG, "Could not invoke Lndmobile.gossipSync()", e);
+
+            Message msg = Message.obtain(null, MSG_GOSSIP_SYNC_RESULT, request, 0);
+
+            Bundle bundle = new Bundle();
+            bundle.putString("error_code", "Gossip Error");
+            bundle.putString("error_desc", e.toString());
+            msg.setData(bundle);
+
+            sendToClient(recipient, msg);
+            // sendToClients(msg);
+          }
+
+          @Override
+          public void onResponse(byte[] bytes) {
+            Message msg = Message.obtain(null, MSG_GOSSIP_SYNC_RESULT, request, 0);
+
+            Bundle bundle = new Bundle();
+            bundle.putByteArray("response", bytes);
+            msg.setData(bundle);
+
+            sendToClient(recipient, msg);
+            // sendToClients(msg);
+          }
+        });
+      }
+    };
+
+    new Thread(gossipSync).start();
   }
 
   void startLnd(Messenger recipient, String args, int request) {

@@ -163,7 +163,7 @@ export const model: IStoreModel = {
     }
     log.v("initializeApp()");
 
-    const { initialize, checkStatus, startLnd } = injections.lndMobile.index;
+    const { initialize, checkStatus, startLnd, gossipSync } = injections.lndMobile.index;
     const db = await actions.openDb();
     if (!(await getItemObjectAsyncStorage(StorageItem.app))) {
       log.i("Initializing app for the first time");
@@ -276,8 +276,9 @@ export const model: IStoreModel = {
 
       log.v("Running LndMobile.initialize()");
       const initReturn = await initialize();
-      log.v("initialize done", [initReturn]);
-
+      log.i("initialize done", [initReturn]);
+      const syncRes = await gossipSync();
+      log.i("syncRes done", [syncRes]);
       const status = await checkStatus();
       log.d("status", [status]);
       if (

@@ -1,6 +1,18 @@
 import {
   IAddInvoiceBlixtLspArgs,
   IReadLndLogResponse,
+  initialize,
+  writeConfig,
+  writeConfigFile,
+  subscribeState,
+  decodeState,
+  checkStatus,
+  startLnd,
+  gossipSync,
+  checkICloudEnabled,
+  checkApplicationSupportExists,
+  checkLndFolderExists,
+  createIOSApplicationSupportAndLndDirectories,
   TEMP_moveLndToApplicationSupport,
   addInvoice,
   addInvoiceBlixtLsp,
@@ -83,6 +95,7 @@ export interface ILndMobileInjections {
     decodeState: (data: string) => lnrpc.SubscribeStateResponse;
     checkStatus: () => Promise<number>;
     startLnd: (torEnabled: boolean, args: string) => Promise<string>;
+    gossipSync: () => Promise<{ data: string }>;
     checkICloudEnabled: () => Promise<boolean>;
     checkApplicationSupportExists: () => Promise<boolean>;
     checkLndFolderExists: () => Promise<boolean>;
@@ -212,6 +225,7 @@ export default {
     subscribeState,
     decodeState,
     startLnd,
+    gossipSync,
     checkICloudEnabled,
     checkApplicationSupportExists,
     checkLndFolderExists,
