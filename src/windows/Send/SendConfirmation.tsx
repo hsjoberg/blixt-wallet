@@ -37,8 +37,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const queryRoutes = useStoreActions((actions) => actions.send.queryRoutesForFeeEstimate);
-  const [feeEstimateOriginal, setFeeEstimate] = useState<number | undefined>(undefined);
-  const [feeEstimate] = useDebounce(feeEstimateOriginal, 500);
+  const [feeEstimate, setFeeEstimate] = useState<number | undefined>(undefined);
   
   const {
     dollarValue,
@@ -49,6 +48,8 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const clear = useStoreActions((store) => store.send.clear);
   const callback = (route.params?.callback) ?? (() => {});
   const lightningReadyToSend = useLightningReadyToSend();
+  const [bitcoinValueDebounce] = useDebounce(bitcoinValue, 1000);
+
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
@@ -107,7 +108,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
         getFeeEstimate();
     }
-  }, [bitcoinValue]);
+  }, [bitcoinValueDebounce]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
