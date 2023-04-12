@@ -186,6 +186,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => {
             actions.scheduledSync.setSyncEnabled(false);
           }}><Text style={styles.buttonText}>scheduledSync.setSyncEnabled(false)</Text></Button>
+          <Button small onPress={async () => {
+            actions.scheduledGossipSync.setSyncEnabled(true);
+          }}><Text style={styles.buttonText}>scheduledGossipSync.setSyncEnabled(true)</Text></Button>
+          <Button small onPress={async () => {
+            actions.scheduledGossipSync.setSyncEnabled(false);
+          }}><Text style={styles.buttonText}>scheduledGossipSync.setSyncEnabled(false)</Text></Button>
 
           <Button small onPress={async () => {
             interface IDemoInvoice {
@@ -510,6 +516,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.setupScheduledSyncWork())}><Text style={styles.buttonText}>setupScheduledSyncWork</Text></Button>
           <Button small onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.removeScheduledSyncWork())}><Text style={styles.buttonText}>removeScheduledSyncWork</Text></Button>
           <Button small onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.checkScheduledSyncWorkStatus())}><Text style={styles.buttonText}>checkScheduledSyncWorkStatus</Text></Button>
+          <Button small onPress={async () => console.log(await NativeModules.GossipFileScheduledSync.setupScheduledSyncWork())}><Text style={styles.buttonText}>setupScheduledGossipSyncWork</Text></Button>
+          <Button small onPress={async () => console.log(await NativeModules.GossipFileScheduledSync.removeScheduledSyncWork())}><Text style={styles.buttonText}>removeScheduledGossipSyncWork</Text></Button>
+          <Button small onPress={async () => console.log(await NativeModules.GossipFileScheduledSync.checkScheduledSyncWorkStatus())}><Text style={styles.buttonText}>checkScheduledGossipSyncWorkStatus</Text></Button>
           <Button small onPress={async () => console.log(await NativeModules.LndMobileTools.saveLogs())}><Text style={styles.buttonText}>saveLogs</Text></Button>
           <Button small onPress={async () => console.log(await NativeModules.LndMobileTools.copyLndLog())}><Text style={styles.buttonText}>copyLndLog</Text></Button>
           <Button small onPress={async () => {

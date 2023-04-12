@@ -2,6 +2,38 @@ import * as base64 from "base64-js";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import { AlertButton, NativeModules } from "react-native";
+import { IStoreInjections } from "./store";
+import { ILightningModel, lightning, LndChainBackend } from "./Lightning";
+import { ITransactionModel, transaction } from "./Transaction";
+import { IChannelModel, channel } from "./Channel";
+import { ISendModel, send } from "./Send";
+import { IReceiveModel, receive } from "./Receive";
+import { IOnChainModel, onChain } from "./OnChain";
+import { IFiatModel, fiat } from "./Fiat";
+import { ISecurityModel, security } from "./Security";
+import { ISettingsModel, settings } from "./Settings";
+import { IClipboardManagerModel, clipboardManager } from "./ClipboardManager";
+import { IScheduledSyncModel, scheduledSync } from "./ScheduledSync";
+import { IScheduledGossipSyncModel, scheduledGossipSync } from "./ScheduledGossip";
+import { ILNUrlModel, lnUrl } from "./LNURL";
+import { IGoogleModel, google } from "./Google";
+import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
+import { IWebLNModel, webln } from "./WebLN";
+import { IDeeplinkManager, deeplinkManager } from "./DeeplinkManager";
+import { INotificationManagerModel, notificationManager } from "./NotificationManager";
+import { ILightNameModel, lightName } from "./LightName";
+import { IICloudBackupModel, iCloudBackup } from "./ICloudBackup";
+import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
+import { IContactsModel, contacts } from "./Contacts";
+
+import { ELndMobileStatusCodes } from "../lndmobile/index";
+import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion, getAppBuild, setAppBuild, getRescanWallet, setRescanWallet, getLndCompactDb, setLndCompactDb } from "../storage/app";
+import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
+import { clearTransactions } from "../storage/database/transaction";
+import { appMigration } from "../migration/app-migration";
+import { setWalletPassword, getItem, getWalletPassword } from "../storage/keystore";
+import { DEFAULT_PATHFINDING_ALGORITHM, PLATFORM } from "../utils/constants";
+import SetupBlixtDemo from "../utils/setup-demo";
 import { Chain, VersionCode } from "../utils/build";
 import { DEFAULT_PATHFINDING_ALGORITHM, PLATFORM } from "../utils/constants";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
@@ -125,6 +157,7 @@ export interface IStoreModel {
   settings: ISettingsModel;
   clipboardManager: IClipboardManagerModel;
   scheduledSync: IScheduledSyncModel;
+  scheduledGossipSync: IScheduledGossipSyncModel;
   lnUrl: ILNUrlModel;
   google: IGoogleModel;
   googleDriveBackup: IGoogleDriveBackupModel;
@@ -629,6 +662,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   settings,
   clipboardManager,
   scheduledSync,
+  scheduledGossipSync,
   lnUrl,
   google,
   googleDriveBackup,

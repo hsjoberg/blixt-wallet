@@ -347,16 +347,32 @@ export default function Settings({ navigation }: ISettingsProps) {
 
   // Scheduled sync
   const workInfo = useStoreState((store) => store.scheduledSync.workInfo);
+  const gossipWorkInfo = useStoreState((store) => store.scheduledGossipSync.workInfo);
   const lastScheduledSync = useStoreState((store) => store.scheduledSync.lastScheduledSync);
   const lastScheduledSyncAttempt = useStoreState(
     (store) => store.scheduledSync.lastScheduledSyncAttempt,
   );
-
-  const scheduledSyncEnabled = useStoreState((store) => store.settings.scheduledSyncEnabled);
+  const lastScheduledGossipSync = useStoreState(
+    (store) => store.scheduledGossipSync.lastScheduledSync
+  );
+  const lastScheduledGossipSyncAttempt = useStoreState(
+    (store) => store.scheduledGossipSync.lastScheduledSyncAttempt
+  );
+  const scheduledSyncEnabled = useStoreState(
+    (store) => store.settings.scheduledSyncEnabled
+  );
+  const scheduledGossipSyncEnabled = useStoreState(
+    (store) => store.settings.scheduledGossipSyncEnabled
+  );
   const changeScheduledSyncEnabled = useStoreActions(
     (store) => store.settings.changeScheduledSyncEnabled,
   );
+  const changeScheduledGossipSyncEnabled = useStoreActions(
+    (store) => store.settings.changeScheduledGossipSyncEnabled
+  );
+
   const setSyncEnabled = useStoreActions((store) => store.scheduledSync.setSyncEnabled);
+  const setGossipSyncEnabled = useStoreActions((store) => store.scheduledGossipSync.setSyncEnabled);
   const onToggleScheduledSyncEnabled = async () => {
     if (scheduledSyncEnabled)
       Alert.alert(t("security.chainSync.dialog.title"), t("security.chainSync.dialog.msg"), [
@@ -390,6 +406,20 @@ export default function Settings({ navigation }: ISettingsProps) {
       t("buttons.ok", { ns: namespaces.common }),
     );
   };
+  const onToggleScheduledGossipSyncEnabled = async () => {
+    await setGossipSyncEnabled(!scheduledGossipSyncEnabled);
+    await changeScheduledGossipSyncEnabled(!scheduledGossipSyncEnabled);
+  };
+  const onLongPressScheduledGossipSyncEnabled = async () => {
+    toast(
+      `${t("msg.status", { ns:namespaces.common })}: ${gossipWorkInfo}\n`+
+      `${t("msg.lastSyncAttempt", { ns:namespaces.common })}: ${formatISO(fromUnixTime(lastScheduledGossipSyncAttempt))}\n` +
+      `${t("msg.lastSync",{ ns:namespaces.common })}: ${formatISO(fromUnixTime(lastScheduledGossipSync))}`,
+      0,
+      "success",
+      t("buttons.ok", { ns:namespaces.common }),
+    )
+  }
 
   // Debug show startup info
   const debugShowStartupInfo = useStoreState((store) => store.settings.debugShowStartupInfo);
@@ -1600,7 +1630,24 @@ ${t("experimental.tor.disabled.msg2")}`;
                 <CheckBox checked={scheduledSyncEnabled} onPress={onToggleScheduledSyncEnabled} />
               </Right>
             </ListItem>
+<<<<<<< HEAD
           )}
+=======
+          }
+          {PLATFORM === "android" &&
+            <ListItem style={style.listItem} icon={true} onPress={onToggleScheduledGossipSyncEnabled} onLongPress={onLongPressScheduledGossipSyncEnabled}>
+              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="cog-sync" /></Left>
+              <Body>
+                <Text>{t("security.gossipSync.title")}</Text>
+                <Text note={true}>
+                  {t("security.gossipSync.subtitle")}
+                </Text>
+              </Body>
+              <Right><CheckBox checked={scheduledGossipSyncEnabled} onPress={onToggleScheduledGossipSyncEnabled} /></Right>
+            </ListItem>
+          }
+
+>>>>>>> c1208e2 (GossipFileScheduledSync)
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("display.title")}</Text>

@@ -50,6 +50,7 @@ export interface ISettingsModel {
   changePushNotificationsEnabled: Thunk<ISettingsModel, boolean>;
   changeClipboardInvoiceCheckEnabled: Thunk<ISettingsModel, boolean>;
   changeScheduledSyncEnabled: Thunk<ISettingsModel, boolean>;
+  changeScheduledGossipSyncEnabled: Thunk<ISettingsModel, boolean>;
   changeDebugShowStartupInfo: Thunk<ISettingsModel, boolean>;
   changeGoogleDriveBackupEnabled: Thunk<ISettingsModel, boolean>;
   changePreferFiat: Thunk<ISettingsModel, boolean>;
@@ -88,6 +89,7 @@ export interface ISettingsModel {
   setPushNotificationsEnabled: Action<ISettingsModel, boolean>;
   setClipboardInvoiceCheckInvoicesEnabled: Action<ISettingsModel, boolean>;
   setScheduledSyncEnabled: Action<ISettingsModel, boolean>;
+  setScheduledGossipSyncEnabled: Action<ISettingsModel, boolean>;
   setDebugShowStartupInfo: Action<ISettingsModel, boolean>;
   setGoogleDriveBackupEnabled: Action<ISettingsModel, boolean>;
   setPreferFiat: Action<ISettingsModel, boolean>;
@@ -126,6 +128,7 @@ export interface ISettingsModel {
   pushNotificationsEnabled: boolean;
   clipboardInvoiceCheckEnabled: boolean;
   scheduledSyncEnabled: boolean;
+  scheduledGossipSyncEnabled: boolean;
   debugShowStartupInfo: boolean;
   googleDriveBackupEnabled: boolean;
   preferFiat: boolean;
@@ -269,6 +272,11 @@ export const settings: ISettingsModel = {
   changeScheduledSyncEnabled: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.scheduledSyncEnabled, payload);
     actions.setScheduledSyncEnabled(payload);
+  }),
+
+  changeScheduledGossipSyncEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.scheduledGossipSyncEnabled, payload);
+    actions.setScheduledGossipSyncEnabled(payload);
   }),
 
   changeDebugShowStartupInfo: thunk(async (actions, payload) => {
@@ -417,6 +425,7 @@ export const settings: ISettingsModel = {
     actions.setLndCompactDb(payload);
   }),
 
+<<<<<<< HEAD
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -528,6 +537,46 @@ export const settings: ISettingsModel = {
   setLndCompactDb: action((state, payload) => {
     state.lndCompactDb = payload;
   }),
+=======
+
+  setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
+  setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
+  setName: action((state, payload) => { state.name = payload; }),
+  setLanguage: action((state, payload) => { state.language = payload }),
+  setAutopilotEnabled: action((state, payload) => { state.autopilotEnabled = payload; }),
+  setPushNotificationsEnabled: action((state, payload) => { state.pushNotificationsEnabled = payload; }),
+  setClipboardInvoiceCheckInvoicesEnabled: action((state, payload) => { state.clipboardInvoiceCheckEnabled = payload; }),
+  setScheduledSyncEnabled: action((state, payload) => { state.scheduledSyncEnabled = payload; }),
+  setScheduledGossipSyncEnabled: action((state, payload) => { state.scheduledGossipSyncEnabled = payload; }),
+  setDebugShowStartupInfo: action((state, payload) => { state.debugShowStartupInfo = payload; }),
+  setGoogleDriveBackupEnabled: action((state, payload) => { state.googleDriveBackupEnabled = payload; }),
+  setPreferFiat: action((state, payload) => { state.preferFiat = payload; }),
+  setTransactionGeolocationEnabled: action((state, payload) => { state.transactionGeolocationEnabled = payload; }),
+  setTransactionGeolocationMapStyle: action((state, payload) => { state.transactionGeolocationMapStyle = payload; }),
+  setOnchainExplorer: action((state, payload) => { state.onchainExplorer = payload; }),
+  setMultiPathPaymentsEnabled: action((state, payload) => { state.multiPathPaymentsEnabled = payload; }),
+  setTorEnabled: action((state, payload) => { state.torEnabled = payload; }),
+  setHideExpiredInvoices: action((state, payload) => { state.hideExpiredInvoices = payload; }),
+  setScreenTransitionsEnabled: action((state, payload) => { state.screenTransitionsEnabled = payload; }),
+  setICloudBackupEnabled: action((state, payload) => { state.iCloudBackupEnabled = payload; }),
+  setLndChainBackend: action((state, payload) => { state.lndChainBackend = payload; }),
+  setNeutrinoPeers: action((state, payload) => { state.neutrinoPeers = payload; }),
+  setBitcoindRpcHost: action((state, payload) => { state.bitcoindRpcHost = payload; }),
+  setBitcoindPubRawBlock: action((state, payload) => { state.bitcoindPubRawBlock = payload; }),
+  setBitcoindPubRawTx: action((state, payload) => { state.bitcoindPubRawTx = payload; }),
+  setDunderServer: action((state, payload) => { state.dunderServer = payload; }),
+  setRequireGraphSync: action((state, payload) => { state.requireGraphSync = payload; }),
+  setDunderEnabled: action((state, payload) => { state.dunderEnabled = payload; }),
+  setLndNoGraphCache: action((state, payload) => { state.lndNoGraphCache = payload; }),
+  setInvoiceExpiry: action((state, payload) => { state.invoiceExpiry = payload; }),
+  setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
+  setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
+  setStrictGraphPruningEnabled: action((state, payload) => { state.strictGraphPruningEnabled = payload; }),
+  setLndPathfindingAlgorithm: action((state, payload) => { state.lndPathfindingAlgorithm = payload; }),
+  setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
+  setLndLogLevel: action((state, payload) => { state.lndLogLevel = payload; }),
+  setLndCompactDb: action((state, payload) => { state.lndCompactDb = payload; }),
+>>>>>>> c1208e2 (GossipFileScheduledSync)
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -537,6 +586,7 @@ export const settings: ISettingsModel = {
   pushNotificationsEnabled: false,
   clipboardInvoiceCheckEnabled: false,
   scheduledSyncEnabled: false,
+  scheduledGossipSyncEnabled: false,
   debugShowStartupInfo: false,
   googleDriveBackupEnabled: false,
   preferFiat: false,

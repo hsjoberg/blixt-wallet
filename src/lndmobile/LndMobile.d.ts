@@ -71,10 +71,17 @@ export interface ILndMobileScheduledSync {
   checkScheduledSyncWorkStatus: () => Promise<WorkInfo>;
 }
 
+export interface IGossipFileScheduledSync {
+  setupScheduledSyncWork: () => Promise<boolean>;
+  removeScheduledSyncWork: () => Promise<boolean>;
+  checkScheduledSyncWorkStatus: () => Promise<WorkInfo>;
+}
+
 declare module "react-native" {
   interface NativeModulesStatic {
     LndMobile: ILndMobile;
     LndMobileTools: ILndMobileTools;
     LndMobileScheduledSync: ILndMobileScheduledSync;
+    GossipFileScheduledSync: IGossipFileScheduledSync;
   }
 }

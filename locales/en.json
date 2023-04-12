@@ -686,6 +686,10 @@
           "title": "Not recommended",
           "msg": "Warning. It is not recommended to disable scheduled chain sync.\n\nMake sure you keep up-to-date with the network otherwise you risk losing your funds.\n\nOnly do this if you're know what you're doing."
         }
+      },
+      "gossipSync": {
+        "title": "Scheduled gossip sync",
+        "subtitle": "Runs in background every 2 hours"
       }
     },
     "display": {
