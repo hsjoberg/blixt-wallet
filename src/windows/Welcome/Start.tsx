@@ -85,12 +85,20 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
                     onPress: async (text) => {
                       try {
                         if (!text || text.trim().length === 0) {
+                          toast(t("createWalletWithPassphrase.invalidMessage"), undefined, "danger");
+                          return;
+                        }
+
+                        const hasLeadingTrailingSpaces = text.trim() !== text;
+
+                        if (!!hasLeadingTrailingSpaces) {
+                          toast(t("createWalletWithPassphrase.noLeadingTrailingSpaces"), undefined, "danger");
                           return;
                         }
 
                         await generateSeed(text.trim());
                         setCreateWalletLoading(true);
-                        await createWallet({init: {aezeedPassphrase: !!text ? text.trim() : undefined}});
+                        await createWallet({init: {aezeedPassphrase: text || undefined}});
                         await setSyncEnabled(true); // TODO test
                         await changeScheduledSyncEnabled(true);
         
