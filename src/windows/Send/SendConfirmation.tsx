@@ -19,6 +19,7 @@ import Input from "../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { useDebounce } from "use-debounce";
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
@@ -36,7 +37,9 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const queryRoutes = useStoreActions((actions) => actions.send.queryRoutesForFeeEstimate);
-  const [feeEstimate, setFeeEstimate] = useState<number | undefined>(undefined);
+  const [feeEstimateOriginal, setFeeEstimate] = useState<number | undefined>(undefined);
+  const [feeEstimate] = useDebounce(feeEstimateOriginal, 500);
+  
   const {
     dollarValue,
     bitcoinValue,
@@ -62,6 +65,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
           if (paymentRequest && paymentRequest.numSatoshis) {
             try {
               const {routes} = await queryRoutes({amount: paymentRequest.numSatoshis, pubKey: paymentRequest.destination, routeHints: paymentRequest.routeHints})
+
                 if (!!routes.length && !!routes[0].totalFees) {
                   setFeeEstimate(routes[0].totalFees.toNumber());
                 }
@@ -83,8 +87,6 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
   // This use effect executes for zero amount invoices, fetch fee estimate on amount change.
   useEffect(() => {
-    let timeoutId: any;
-
     if (!!paymentRequest) {
         const getFeeEstimate = async () => {
           if (!!bitcoinValue) {
@@ -103,11 +105,8 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
           }
         }
 
-        // Delay the execution of the function 1 second so that we don't query too quickly.
-        timeoutId = setTimeout(getFeeEstimate, 1000);
+        getFeeEstimate();
     }
-
-    return () => clearTimeout(timeoutId);
   }, [bitcoinValue]);
 
   useLayoutEffect(() => {
