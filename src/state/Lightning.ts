@@ -137,6 +137,7 @@ export const lightning: ILightningModel = {
         dispatch.onChain.initialize(),
         dispatch.transaction.checkOpenTransactions(),
         dispatch.scheduledSync.initialize(),
+        dispatch.scheduledGossipSync.initialize(),
         dispatch.notificationManager.initialize(),
         dispatch.clipboardManager.initialize(),
         dispatch.deeplinkManager.initialize(),
