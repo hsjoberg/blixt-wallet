@@ -47,7 +47,9 @@
       "msg4": "I am reckless, continue"
     },
     "createWalletWithPassphrase": {
-      "title": "Set passphrase (25th word to encrypt the seed)"
+      "title": "Set passphrase (25th word to encrypt the seed)",
+      "invalidMessage": "Enter a valid passphrase",
+      "noLeadingTrailingSpaces": "Leading or trailing spaces is not allowed"
     },
     "language": {
       "title": "Select language"
