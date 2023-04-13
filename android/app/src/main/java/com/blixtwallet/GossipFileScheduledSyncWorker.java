@@ -30,10 +30,15 @@ import com.oblador.keychain.KeychainModule;
 import com.google.protobuf.ByteString;
 import com.hypertrack.hyperlog.HyperLog;
 
+import org.brotli.dec.BrotliInputStream;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.net.HttpURLConnection;
+import java.util.zip.GZIPInputStream;
 
 public class GossipFileScheduledSyncWorker extends ListenableWorker {
   private final String TAG = "GossipFileScheduledSyncWorker";
@@ -72,12 +77,23 @@ public class GossipFileScheduledSyncWorker extends ListenableWorker {
       public void run() {
         HyperLog.i(TAG, "Handling periodic gossip file download");
         try {
-          URL url = new URL("https://bt2.breez.technology/mainnet/graph/graph-001d.db");
+          URL url = new URL("https://maps.eldamar.icu/mainnet/graph/graph-001d.db");
           File dgraph = new File("/sdcard/Android/data/com.blixtwallet/cache/dgraph");
           dgraph.mkdirs();
           FileOutputStream out = new FileOutputStream(new File("/sdcard/Android/data/com.blixtwallet/cache/dgraph/channel.db"));
-          out.write(url.openStream().readAllBytes());
+          HttpURLConnection con = (HttpURLConnection) url.openConnection();
+          con.setRequestProperty("Accept-Encoding", "br, gzip");
+          InputStream stream = null;
+          if ("gzip".equals(con.getContentEncoding())) {
+            stream = new GZIPInputStream(con.getInputStream());
+          } else if ("br".equals(con.getContentEncoding())) {
+            stream = new BrotliInputStream(con.getInputStream());
+          } else {
+            stream = con.getInputStream();
+          }
+          out.write(stream.readAllBytes());
           out.close();
+          stream.close();
         } catch (IOException e) {
           Log.e(TAG, e.getMessage());
           HyperLog.e(TAG, e.getMessage());
