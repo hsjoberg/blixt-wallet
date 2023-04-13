@@ -310,15 +310,19 @@ export const model: IStoreModel = {
       log.v("Running LndMobile.initialize()");
       const initReturn = await initialize();
       log.i("initialize done", [initReturn]);
-      const syncRes = await gossipSync();
-      log.i("syncRes done", [syncRes]);
+      let gossipStatus = null;
+      try {
+        gossipStatus = await gossipSync();
+      } catch (e) {
+        log.e("GossipSync exception!", [e]);
+      }
       const status = await checkStatus();
       log.d("status", [status]);
       if (
         (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !==
         ELndMobileStatusCodes.STATUS_PROCESS_STARTED
       ) {
-        log.i("Starting lnd");
+        log.i("Starting lnd, gossipStatus", [gossipStatus]);
         try {
           let args = "";
           if (socksPort > 0) {
