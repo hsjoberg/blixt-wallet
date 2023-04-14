@@ -32,7 +32,7 @@ class GossipFileScheduledSync extends ReactContextBaseJavaModule {
       ? new PeriodicWorkRequest.Builder(GossipFileScheduledSyncWorker.class, 15, TimeUnit.MINUTES)
           .setConstraints(new Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build())
           .build()
-      : new PeriodicWorkRequest.Builder(GossipFileScheduledSyncWorker.class, 15, TimeUnit.MINUTES)
+      : new PeriodicWorkRequest.Builder(GossipFileScheduledSyncWorker.class, 3, TimeUnit.HOURS)
           .setConstraints(new Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build())
           .build();
   }
