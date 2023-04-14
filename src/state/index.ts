@@ -254,11 +254,14 @@ export const model: IStoreModel = {
       log.v("Running LndMobile.initialize()");
       const initReturn = await initialize();
       log.i("initialize done", [initReturn]);
+      let gossipSyncEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.scheduledGossipSyncEnabled) ?? false;
       let gossipStatus = null;
-      try {
-        gossipStatus = await gossipSync();
-      } catch (e) {
-        log.e("GossipSync exception!", [e]);
+      if (gossipSyncEnabled) {
+        try {
+          gossipStatus = await gossipSync();
+        } catch (e) {
+          log.e("GossipSync exception!", [e]);
+        }
       }
       const status = await checkStatus();
       log.i("status", [status]);
