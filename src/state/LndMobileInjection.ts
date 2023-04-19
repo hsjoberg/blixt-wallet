@@ -12,7 +12,7 @@ import {
   createIOSApplicationSupportAndLndDirectories,
   TEMP_moveLndToApplicationSupport,
   excludeLndICloudBackup,
-
+  queryRoutes,
   addInvoice,
   addInvoiceBlixtLsp,
   IAddInvoiceBlixtLspArgs,
@@ -109,6 +109,7 @@ export interface ILndMobileInjections {
     readLndLog: () => Promise<IReadLndLogResponse>;
     sendPaymentSync: (paymentRequest: string, amount?: Long, tlvRecordName?: string | null) => Promise<lnrpc.SendResponse>;
     sendPaymentV2Sync: (paymentRequest: string, amount?: Long, payAmount?: Long, tlvRecordName?: string | null, multiPath?: boolean, maxLNFeePercentage?: number) => Promise<lnrpc.Payment>;
+    queryRoutes: (pubkey: string, amount?: Long, routeHints?: lnrpc.IRouteHint[]) => Promise<lnrpc.QueryRoutesResponse>;
   };
   channel: {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;
@@ -185,6 +186,7 @@ export default {
     readLndLog,
     sendPaymentSync,
     sendPaymentV2Sync,
+    queryRoutes,
   },
   channel: {
     channelBalance,

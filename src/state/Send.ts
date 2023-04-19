@@ -5,7 +5,7 @@ import Long from "long";
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
-import { lnrpc } from "../../proto/lightning";
+import { lnrpc, routerrpc } from "../../proto/lightning";
 import { valueFiat } from "../utils/bitcoin-units";
 import { LnBech32Prefix } from "../utils/build";
 import { getGeolocation, hexToUint8Array } from "../utils";
@@ -32,6 +32,12 @@ export interface IModelSendPaymentPayload {
   amount?: Long;
 }
 
+export interface IModelQueryRoutesPayload {
+  amount: Long,
+  pubKey: string,
+  routeHints?: lnrpc.IRouteHint[],
+}
+
 interface IExtraData {
   payer: string | null;
   type: ITransaction["type"];
@@ -46,6 +52,7 @@ export interface ISendModel {
   clear: Action<ISendModel>;
   setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections, {}, Promise<lnrpc.PayReq>>;
   sendPayment: Thunk<ISendModel, IModelSendPaymentPayload | void, IStoreInjections, IStoreModel, Promise<lnrpc.Payment>>;
+  queryRoutesForFeeEstimate: Thunk<ISendModel, IModelQueryRoutesPayload, IStoreInjections, IStoreModel, Promise<lnrpc.QueryRoutesResponse>>;
 
   setPaymentRequestStr: Action<ISendModel, PaymentRequest>;
   setPaymentRequest: Action<ISendModel, lnrpc.PayReq>;
@@ -64,6 +71,11 @@ export const send: ISendModel = {
     state.remoteNodeInfo = undefined;
     state.paymentRequest = undefined;
     state.extraData = undefined;
+  }),
+
+  queryRoutesForFeeEstimate: thunk(async (_, payload, { injections }) => {
+      const queryRoutes = injections.lndMobile.index.queryRoutes;
+      return await queryRoutes(payload.pubKey, payload.amount, payload.routeHints);
   }),
 
   /**

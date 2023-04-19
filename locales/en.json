@@ -246,6 +246,9 @@
       },
       "description": {
         "title": "Message"
+      },
+      "feeEstimate": {
+        "title": "Fee estimate"
       }
     }
   },

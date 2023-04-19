@@ -19,6 +19,7 @@ import Input from "../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { useDebounce } from "use-debounce";
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
@@ -35,6 +36,9 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const [isPaying, setIsPaying] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
+  const queryRoutes = useStoreActions((actions) => actions.send.queryRoutesForFeeEstimate);
+  const [feeEstimate, setFeeEstimate] = useState<number | undefined>(undefined);
+  
   const {
     dollarValue,
     bitcoinValue,
@@ -44,6 +48,8 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const clear = useStoreActions((store) => store.send.clear);
   const callback = (route.params?.callback) ?? (() => {});
   const lightningReadyToSend = useLightningReadyToSend();
+  const [bitcoinValueDebounce] = useDebounce(bitcoinValue, 1000);
+
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
@@ -54,6 +60,24 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       if (!paymentRequest.numSatoshis) {
         setAmountEditable(true);
       }
+
+      if (!!paymentRequest.numSatoshis) {
+        const getFeeEstimate = async () => {
+          if (paymentRequest && paymentRequest.numSatoshis) {
+            try {
+              const {routes} = await queryRoutes({amount: paymentRequest.numSatoshis, pubKey: paymentRequest.destination, routeHints: paymentRequest.routeHints})
+
+                if (!!routes.length && !!routes[0].totalFees) {
+                  setFeeEstimate(routes[0].totalFees.toNumber());
+                }
+                } catch (error) {
+                console.log(error);
+            }
+          }
+        }
+
+        getFeeEstimate();
+      }
     }
 
     return () => {
@@ -61,6 +85,30 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       clear();
     }
   }, []);
+
+  // This use effect executes for zero amount invoices, fetch fee estimate on amount change.
+  useEffect(() => {
+    if (!!paymentRequest) {
+        const getFeeEstimate = async () => {
+          if (!!bitcoinValue) {
+            try {
+              const {routes} = await queryRoutes({amount: Long.fromValue(Number(bitcoinValue)), pubKey: paymentRequest.destination, routeHints: paymentRequest.routeHints});
+                if(!!routes.length) {
+                  if (routes[0].totalFees !== null && routes[0].totalFees !== undefined) {
+                    setFeeEstimate(routes[0].totalFees.toNumber());
+                  } else {
+                    setFeeEstimate(0);
+                  }
+                }
+                } catch (error) {
+                console.log(error);
+            }
+          }
+        }
+
+        getFeeEstimate();
+    }
+  }, [bitcoinValueDebounce]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -176,6 +224,14 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     title: t("form.description.title"),
     component: (<Input multiline={PLATFORM === "android"} disabled={true} value={description} />),
   });
+
+  if (feeEstimate !== undefined) {
+    formItems.push({
+      key: "FEE_ESTIMATE",
+      title: t("form.feeEstimate.title"),
+      component: (<Input disabled={true} value={String(feeEstimate)} />),
+    });
+  }
 
   const canSend = (
     lightningReadyToSend &&
