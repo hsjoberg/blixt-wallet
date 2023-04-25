@@ -62,7 +62,7 @@ export default function LightningNetworkInfo() {
               <MetaData title={t("numChannels")} data={networkInfo.numChannels} />
               <MetaData title={t("numNodes")} data={networkInfo.numNodes} />
               <MetaData title={t("avgChannelSize")} data={networkInfo.avgChannelSize} />
-              <MetaData title={t("medianChannelSizeSat")} data={Long.fromValue(networkInfo.medianChannelSizeSat).toString()} />
+              {/* <MetaData title={t("medianChannelSizeSat")} data={Long.fromValue(networkInfo.medianChannelSizeSat).toString()} /> */}
               <MetaData title={t("numZombieChans")} data={Long.fromValue(networkInfo.numZombieChans).toString()} />
             </ScrollView>
           </Body>
