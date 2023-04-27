@@ -1533,6 +1533,13 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text note={true}>{t("experimental.invoiceExpiry.subtitle", { expiry: invoiceExpiry })}</Text>
             </Body>
           </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={changeBimodalPathFindingEnabledPress}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="map-marker-path" /></Left>
+            <Body>
+              <Text>{t("debug.bimodalPathFinding.title")}</Text>
+            </Body>
+            <Right><CheckBox checked={(lndPathfindingAlgorithm === "apriori" || lndPathfindingAlgorithm === null) ? false : true} onPress={changeBimodalPathFindingEnabledPress} /></Right>
+          </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("debug.title")}</Text>
@@ -1642,14 +1649,6 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text note={true}>{t("experimental.MPP.subtitle")}</Text>
             </Body>
             <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
-          </ListItem>
-
-          <ListItem style={style.listItem} icon={true} onPress={changeBimodalPathFindingEnabledPress}>
-            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="map-marker-path" /></Left>
-            <Body>
-              <Text>{t("debug.bimodalPathFinding.title")}</Text>
-            </Body>
-            <Right><CheckBox checked={(lndPathfindingAlgorithm === "apriori" || lndPathfindingAlgorithm === null) ? false : true} onPress={changeBimodalPathFindingEnabledPress} /></Right>
           </ListItem>
 
           <ListItem style={style.listItem} icon={true} onPress={changeStrictGraphPruningEnabledPress}>
