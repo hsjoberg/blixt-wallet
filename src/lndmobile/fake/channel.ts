@@ -50,6 +50,50 @@ export const openChannel = async (pubkey: string, amount: number, privateChannel
 
 /**
  * @throws
+ */
+export const openChannelAll = async (pubkey: string, privateChannel: boolean): Promise<lnrpc.ChannelPoint> => {
+  setTimeout(() => {
+    const channelEventUpdate = lnrpc.ChannelEventUpdate.create({
+      type: lnrpc.ChannelEventUpdate.UpdateType.OPEN_CHANNEL,
+      openChannel: {
+        active: true,
+        capacity: Long.fromNumber(1000),
+        chanId: Long.fromNumber(123456),
+        channelPoint: "abc:123",
+        private: true,
+        remotePubkey: pubkey,
+        localBalance: Long.fromNumber(10000),
+      }
+    });
+
+    DeviceEventEmitter.emit(
+      "SubscribeChannelEvents",
+      { data: base64.fromByteArray(lnrpc.ChannelEventUpdate.encode(channelEventUpdate).finish()) }
+    );
+  }, 100);
+
+  const response = lnrpc.ChannelPoint.create({
+    fundingTxidBytes: new Uint8Array([0,1,2,3]),
+    fundingTxidStr: "abcdef123456",
+    outputIndex: 0,
+  });
+  return response;
+  // const response = await sendCommand<lnrpc.IOpenChannelRequest, lnrpc.OpenChannelRequest, lnrpc.ChannelPoint>({
+  //   request: lnrpc.OpenChannelRequest,
+  //   response: lnrpc.ChannelPoint,
+  //   method: "OpenChannelSync",
+  //   options: {
+  //     nodePubkeyString: pubkey,
+  //     localFundingAmount: Long.fromValue(amount),
+  //     targetConf: 2,
+  //     private: privateChannel,
+  //   },
+  // });
+  // return response;
+};
+
+/**
+ * @throws
  * TODO implement
  */
 export const closeChannel = async (fundingTxId: string, outputIndex: number): Promise<string> => {

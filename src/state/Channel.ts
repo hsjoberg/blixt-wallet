@@ -22,6 +22,12 @@ export interface IOpenChannelPayload {
   feeRateSat?: number;
 }
 
+export interface IOpenChannelPayloadAll {
+  // <pubkey>@<ip>[:<port>]
+  peer: string;
+  feeRateSat?: number;
+}
+
 export interface ICloseChannelPayload {
   fundingTx: string;
   outputIndex: number;
@@ -52,6 +58,7 @@ export interface IChannelModel {
   getChannelEvents: Thunk<IChannelModel, void, any, IStoreModel>;
   getBalance: Thunk<IChannelModel, undefined, IStoreInjections>;
   connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload, IStoreInjections, IStoreModel>;
+  connectAndOpenChannelAll: Thunk<IChannelModel, IOpenChannelPayloadAll, IStoreInjections, IStoreModel>;
   closeChannel: Thunk<IChannelModel, ICloseChannelPayload, IStoreInjections, IStoreModel>;
   abandonChannel: Thunk<IChannelModel, ICloseChannelPayload>;
   exportChannelsBackup: Thunk<IChannelModel, void, IStoreInjections>;
@@ -296,6 +303,25 @@ export const channel: IChannelModel = {
     }
 
     const result = await openChannel(pubkey, amount, true, feeRateSat);
+    getStoreActions().onChain.addToTransactionNotificationBlacklist(bytesToHexString(result.fundingTxidBytes.reverse()))
+    log.d("openChannel", [result]);
+    return result;
+  }),
+
+  connectAndOpenChannelAll: thunk(async (_, { peer, feeRateSat }, { injections, getStoreActions }) => {
+    const { connectPeer } = injections.lndMobile.index;
+    const { openChannelAll } = injections.lndMobile.channel;
+    const [pubkey, host] = peer.split("@");
+    try {
+      await connectPeer(pubkey, host);
+    }
+    catch (e) {
+      if (!e.message.includes("already connected to peer")) {
+        throw e;
+      }
+    }
+
+    const result = await openChannelAll(pubkey, true, feeRateSat);
     getStoreActions().onChain.addToTransactionNotificationBlacklist(bytesToHexString(result.fundingTxidBytes.reverse()))
     log.d("openChannel", [result]);
     return result;

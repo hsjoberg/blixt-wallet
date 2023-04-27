@@ -38,6 +38,7 @@ import {
   closeChannel,
   listChannels,
   openChannel,
+  openChannelAll,
   pendingChannels,
   subscribeChannelEvents,
   decodeChannelEvent,
@@ -116,6 +117,7 @@ export interface ILndMobileInjections {
     closeChannel: (fundingTxId: string, outputIndex: number, force: boolean) => Promise<string>;
     listChannels: () => Promise<lnrpc.ListChannelsResponse>;
     openChannel: (pubkey: string, amount: number, privateChannel: boolean, feeRateSat?: number) => Promise<lnrpc.ChannelPoint>;
+    openChannelAll: (pubkey: string, privateChannel: boolean, feeRateSat?: number) => Promise<lnrpc.ChannelPoint>;
     pendingChannels: () => Promise<lnrpc.PendingChannelsResponse>;
     subscribeChannelEvents: () => Promise<string>;
     decodeChannelEvent: (data: string) => lnrpc.ChannelEventUpdate;
@@ -193,6 +195,7 @@ export default {
     closeChannel,
     listChannels,
     openChannel,
+    openChannelAll,
     pendingChannels,
     subscribeChannelEvents,
     decodeChannelEvent,

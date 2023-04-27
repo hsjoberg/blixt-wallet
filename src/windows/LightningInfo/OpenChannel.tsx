@@ -28,6 +28,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
   const t = useTranslation(namespaces.lightningInfo.openChannel).t;
   const peerUri = route.params?.peerUri;
   const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
+  const connectAndOpenChannelAll = useStoreActions((actions) => actions.channel.connectAndOpenChannelAll);
   const getChannels = useStoreActions((actions) => actions.channel.getChannels);
   const [peer, setPeer] = useState(peerUri ?? "");
   const [opening, setOpening] = useState(false);
@@ -46,6 +47,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
   } = useBalance();
   const torEnabled = useStoreState((store) => store.settings.torEnabled);
   const changeTorEnabled = useStoreActions((store) => store.settings.changeTorEnabled);
+  const [withdrawAll, setWithdrawAll] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -57,11 +59,18 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
   const onOpenChannelPress = async () => {
     try {
       setOpening(true);
-      await connectAndOpenChannel({
-        peer,
-        amount: satoshiValue,
-        feeRateSat: feeRate !== 0 ? feeRate : undefined,
-      });
+      if (withdrawAll) {
+        await connectAndOpenChannelAll({
+          peer,
+          feeRateSat: feeRate !== 0 ? feeRate : undefined,
+        });
+      } else {
+        await connectAndOpenChannel({
+          peer,
+          amount: satoshiValue,
+          feeRateSat: feeRate !== 0 ? feeRate : undefined,
+        });
+      }
       await getChannels(undefined);
       navigation.pop();
     } catch (error) {
@@ -105,6 +114,16 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
     });
   };
 
+
+  const onWithdrawAllPress = () => {
+    setWithdrawAll(true);
+  };
+
+  const onCancelWithdrawAllPress = () => {
+    setWithdrawAll(false);
+  };
+
+
   return (
     <Container>
       <BlixtForm
@@ -120,11 +139,26 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
         }, {
           key: "AMOUNT",
           title: `${t("form.amount.title")} ${bitcoinUnit.nice}`,
-          component: (<Input placeholder={`${t("form.amount.placeholder")} ${bitcoinUnit.nice}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeBitcoinInput} value={bitcoinValue} />)
+          component: (
+            <>
+              <Input
+                placeholder={`${t("form.amount.placeholder")} ${bitcoinUnit.nice}`}
+                keyboardType="numeric"
+                returnKeyType="done"
+                onChangeText={onChangeBitcoinInput}
+                value={withdrawAll ? t("form.amount.withdrawAll", { ns: namespaces.onchain.withdraw }) : bitcoinValue || ""}
+              />
+              {!withdrawAll
+                ? <Button onPress={onWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>{t("form.amount.all", { ns: namespaces.onchain.withdraw })}</Text></Button>
+                : <Button onPress={onCancelWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>x</Text></Button>
+              }
+            </>
+          )
         }, {
           key: "AMOUNT_FIAT",
+          active: !withdrawAll,
           title: `${t("form.amount.title")} ${fiatUnit}`,
-          component: (<Input placeholder={`${t("form.amount.placeholder")} ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} />)
+          component: (<Input placeholder={`${t("form.amount.placeholder")} ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} disabled={withdrawAll} />)
         }, {
           key: "SAT",
           title: t("form.fee_rate.title"),

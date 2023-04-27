@@ -25,6 +25,26 @@ export const openChannel = async (pubkey: string, amount: number, privateChannel
 
 /**
  * @throws
+ */
+export const openChannelAll = async (pubkey: string, privateChannel: boolean, feeRateSat?: number): Promise<lnrpc.ChannelPoint> => {
+  const response = await sendCommand<lnrpc.IOpenChannelRequest, lnrpc.OpenChannelRequest, lnrpc.ChannelPoint>({
+    request: lnrpc.OpenChannelRequest,
+    response: lnrpc.ChannelPoint,
+    method: "OpenChannelSync",
+    options: {
+      nodePubkeyString: pubkey,
+      fundMax: true,
+      targetConf: feeRateSat ? undefined : 2,
+      private: privateChannel,
+      satPerByte: feeRateSat ? Long.fromValue(feeRateSat) : undefined,
+      scidAlias: true,
+    },
+  });
+  return response;
+};
+
+/**
+ * @throws
  * TODO implement
  */
 export const closeChannel = async (fundingTxId: string, outputIndex: number, force: boolean): Promise<string> => {
