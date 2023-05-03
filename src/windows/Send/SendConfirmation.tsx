@@ -7,7 +7,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { SendStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import BlixtForm from "../../components/Form";
+import BlixtForm, { IFormItem } from "../../components/Form";
 import { BitcoinUnits, unitToSatoshi } from "../../utils/bitcoin-units";
 import { extractDescription } from "../../utils/NameDesc";
 import Long from "long";
@@ -38,7 +38,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const queryRoutes = useStoreActions((actions) => actions.send.queryRoutesForFeeEstimate);
   const [feeEstimate, setFeeEstimate] = useState<number | undefined>(undefined);
-  
+
   const {
     dollarValue,
     bitcoinValue,
@@ -67,11 +67,11 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
             try {
               const {routes} = await queryRoutes({amount: paymentRequest.numSatoshis, pubKey: paymentRequest.destination, routeHints: paymentRequest.routeHints})
 
-                if (!!routes.length && !!routes[0].totalFees) {
-                  setFeeEstimate(routes[0].totalFees.toNumber());
-                }
-                } catch (error) {
-                console.log(error);
+              if (!!routes.length && !!routes[0].totalFees) {
+                setFeeEstimate(routes[0]?.totalFees?.toNumber() ?? 0);
+              }
+            } catch (error) {
+              console.log(error);
             }
           }
         }
@@ -88,20 +88,21 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
   // This use effect executes for zero amount invoices, fetch fee estimate on amount change.
   useEffect(() => {
-    if (!!paymentRequest) {
+    if (paymentRequest && !paymentRequest.numSatoshis) {
         const getFeeEstimate = async () => {
           if (!!bitcoinValue) {
             try {
               const {routes} = await queryRoutes({amount: Long.fromValue(Number(bitcoinValue)), pubKey: paymentRequest.destination, routeHints: paymentRequest.routeHints});
-                if(!!routes.length) {
-                  if (routes[0].totalFees !== null && routes[0].totalFees !== undefined) {
-                    setFeeEstimate(routes[0].totalFees.toNumber());
-                  } else {
-                    setFeeEstimate(0);
-                  }
+
+              if(!!routes.length) {
+                if (routes[0].totalFees !== null && routes[0].totalFees !== undefined) {
+                  setFeeEstimate(routes[0]?.totalFees?.toNumber() ?? 0);
+                } else {
+                  setFeeEstimate(0);
                 }
-                } catch (error) {
-                console.log(error);
+              }
+            } catch (error) {
+              console.log(error);
             }
           }
         }
@@ -156,7 +157,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     }
   };
 
-  const formItems = [];
+  const formItems: IFormItem[] = [];
 
   formItems.push({
     key: "INVOICE",
@@ -229,7 +230,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     formItems.push({
       key: "FEE_ESTIMATE",
       title: t("form.feeEstimate.title"),
-      component: (<Input disabled={true} value={String(feeEstimate)} />),
+      component: (<Input disabled={true} value={feeEstimate.toString()} />),
     });
   }
 

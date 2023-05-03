@@ -86,6 +86,7 @@ open class Lnd {
     "GetRecoveryInfo": { bytes, cb in LndmobileGetRecoveryInfo(bytes, cb) },
     "WalletKitListUnspent": { bytes, cb in LndmobileWalletKitListUnspent(bytes, cb) },
     "RouterResetMissionControl": { bytes, cb in LndmobileRouterResetMissionControl(bytes, cb) },
+    "QueryRoutes": { bytes, cb in LndmobileQueryRoutes(bytes, cb) },
 
     // channel
     //
