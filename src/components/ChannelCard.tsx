@@ -12,6 +12,7 @@ import { valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
 import { identifyService, lightningServices } from "../utils/lightning-services";
 import CopyText from "./CopyText";
 import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
+import { toast } from "../utils";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
@@ -81,6 +82,10 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
     await Linking.openURL(constructOnchainExplorerUrl(onchainExplorer, txId ?? ""));
   }
 
+  const onAliasLongPress = async () => {
+    toast(lnrpc.CommitmentType[channel.commitmentType!]);
+  }
+
   let localBalance = channel.localBalance || Long.fromValue(0);
   if (localBalance.lessThanOrEqual(channel.localChanReserveSat!)) {
     localBalance = Long.fromValue(0);
@@ -118,7 +123,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 <Text style={style.channelDetailTitle}>{t("channel.alias")}</Text>
               </Left>
               <Right style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "flex-end" }}>
-                <CopyText style={style.channelDetailValue}>
+                <CopyText style={style.channelDetailValue} onLongPress={onAliasLongPress}>
                   {alias}
                 </CopyText>
                 {service &&
