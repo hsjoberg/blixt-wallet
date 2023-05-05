@@ -80,7 +80,7 @@ public class GossipFileScheduledSyncWorker extends ListenableWorker {
           URL url = new URL("https://maps.eldamar.icu/mainnet/graph/graph-001d.db");
           File dgraph = new File(getApplicationContext().getCacheDir().getAbsolutePath() + "/dgraph");
           dgraph.mkdirs();
-          FileOutputStream out = new FileOutputStream(new File("/sdcard/Android/data/com.blixtwallet/cache/dgraph/channel.db"));
+          FileOutputStream out = new FileOutputStream(new File(getApplicationContext().getCacheDir().getAbsolutePath() + "/dgraph/channel.db"));
           HttpURLConnection con = (HttpURLConnection) url.openConnection();
           con.setRequestProperty("Accept-Encoding", "br, gzip");
           InputStream stream = null;
