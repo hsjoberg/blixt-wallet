@@ -413,10 +413,10 @@ public class LndMobileService extends Service {
   }
 
   void gossipSync(Messenger recipient, int request) {
-    HyperLog.i(TAG, "gossipSync(): gossip sync");
+    HyperLog.i(TAG, "gossipSync()");
     Runnable gossipSync = new Runnable() {
       public void run() {
-        Lndmobile.gossipSync(new lndmobile.Callback() {
+        Lndmobile.gossipSync(getApplicationContext().getCacheDir().getAbsolutePath(), new lndmobile.Callback() {
 
           @Override
           public void onError(Exception e) {
