@@ -416,7 +416,7 @@ public class LndMobileService extends Service {
     HyperLog.i(TAG, "gossipSync()");
     Runnable gossipSync = new Runnable() {
       public void run() {
-        Lndmobile.gossipSync(getApplicationContext().getCacheDir().getAbsolutePath(), new lndmobile.Callback() {
+        Lndmobile.gossipSync(getApplicationContext().getCacheDir().getAbsolutePath(), getApplicationContext().getFilesDir().getAbsolutePath(), new lndmobile.Callback() {
 
           @Override
           public void onError(Exception e) {
