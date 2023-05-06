@@ -16,6 +16,7 @@
 		CC55A57A27DBCF5D00068976 /* Lndmobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC55A57927DBCF5D00068976 /* Lndmobile.xcframework */; };
 		CC55A57E27DBD11A00068976 /* dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC55A57D27DBD11A00068976 /* dummy.swift */; };
 		CCA064E627DBD988006F6853 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = CCA064E527DBD988006F6853 /* fonts */; };
+		CCD813882A067DE10033F3C6 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCD813872A067DE10033F3C6 /* libresolv.tbd */; };
 		CCE50C4427E1FF98007A4EC0 /* LndMobile.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE50C3A27E1FF97007A4EC0 /* LndMobile.m */; };
 		CCE50C4527E1FF98007A4EC0 /* LndMobileTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE50C3B27E1FF97007A4EC0 /* LndMobileTools.m */; };
 		CCE50C4627E1FF98007A4EC0 /* LndMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCE50C3C27E1FF97007A4EC0 /* LndMobile.swift */; };
@@ -56,6 +57,7 @@
 		CC55A57D27DBD11A00068976 /* dummy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dummy.swift; sourceTree = "<group>"; };
 		CCA064E527DBD988006F6853 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		CCA064E727DE379A006F6853 /* Lndmobile_ios.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Lndmobile_ios.xcframework; sourceTree = "<group>"; };
+		CCD813872A067DE10033F3C6 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
 		CCE50C3A27E1FF97007A4EC0 /* LndMobile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LndMobile.m; path = ../../ios/LndMobile/LndMobile.m; sourceTree = "<group>"; };
 		CCE50C3B27E1FF97007A4EC0 /* LndMobileTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LndMobileTools.m; path = ../../ios/LndMobile/LndMobileTools.m; sourceTree = "<group>"; };
 		CCE50C3C27E1FF97007A4EC0 /* LndMobile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LndMobile.swift; path = ../../ios/LndMobile/LndMobile.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCD813882A067DE10033F3C6 /* libresolv.tbd in Frameworks */,
 				CC55A57A27DBCF5D00068976 /* Lndmobile.xcframework in Frameworks */,
 				237DA5B7DB5722BF21323A8A /* libPods-BlixtWallet.a in Frameworks */,
 			);
@@ -110,6 +113,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CCD813872A067DE10033F3C6 /* libresolv.tbd */,
 				CCA064E727DE379A006F6853 /* Lndmobile_ios.xcframework */,
 				CC55A57927DBCF5D00068976 /* Lndmobile.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
