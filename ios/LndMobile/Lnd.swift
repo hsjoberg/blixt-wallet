@@ -69,7 +69,7 @@ open class Lnd {
   var lndStarted = false
   var activeStreams: [String] = []
 
-  static let syncMethods = [
+  static let syncMethods: [String: (Data?, (any LndmobileCallbackProtocol)?) -> Void] = [
     // index
     //
     "AddInvoice": { bytes, cb in LndmobileAddInvoice(bytes, cb) },
@@ -81,7 +81,7 @@ open class Lnd {
     "GetNodeInfo": { bytes, cb in LndmobileGetNodeInfo(bytes, cb) },
     "LookupInvoice": { bytes, cb in LndmobileLookupInvoice(bytes, cb) },
     "ListPeers": { bytes, cb in LndmobileListPeers(bytes, cb) },
-    "DisconnectPeer": { bytes, cb in Lndmobile.LndmobileDisconnectPeer (bytes, cb) },
+    "DisconnectPeer": { bytes, cb in LndmobileDisconnectPeer (bytes, cb) },
     "SendPaymentSync": { bytes, cb in LndmobileSendPaymentSync(bytes, cb) },
     "GetRecoveryInfo": { bytes, cb in LndmobileGetRecoveryInfo(bytes, cb) },
     "WalletKitListUnspent": { bytes, cb in LndmobileWalletKitListUnspent(bytes, cb) },
@@ -124,7 +124,7 @@ open class Lnd {
     "AutopilotSetScores": { bytes, cb in LndmobileAutopilotSetScores(bytes, cb) },
   ]
 
-  static let streamMethods = [
+  static let streamMethods: [String: (Data?, (any LndmobileRecvStreamProtocol)?) -> Void] = [
     // index
     //
     "RouterSendPaymentV2": { req, cb in return LndmobileRouterSendPaymentV2(req, cb) },
