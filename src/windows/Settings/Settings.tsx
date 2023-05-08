@@ -1634,7 +1634,7 @@ ${t("experimental.tor.disabled.msg2")}`;
           )}
 =======
           }
-          {PLATFORM === "android" &&
+          {["android", "ios", "macos"].includes(PLATFORM) &&
             <ListItem style={style.listItem} icon={true} onPress={onToggleScheduledGossipSyncEnabled} onLongPress={onLongPressScheduledGossipSyncEnabled}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="cog-sync" /></Left>
               <Body>
