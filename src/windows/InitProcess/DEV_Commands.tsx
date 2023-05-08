@@ -496,6 +496,14 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             actions.changeOnboardingState("DONE");
           }}><Text style={styles.buttonText}>onboardingState = DONE</Text></Button>
 
+          <Text style={{ width: "100%" }}>Speedloader:</Text>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile());
+          }}><Text style={styles.buttonText}>NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile()</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory());
+          }}><Text style={styles.buttonText}>NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory()</Text></Button>
+
           <Text style={{ width: "100%" }}>lndmobile:</Text>
           <Button small onPress={async () => await NativeModules.LndMobile.initialize()}><Text style={styles.buttonText}>LndMobile.initialize()</Text></Button>
           <Button small onPress={async () => {
