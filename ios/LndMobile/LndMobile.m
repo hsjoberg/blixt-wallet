@@ -66,6 +66,7 @@ RCT_EXTERN_METHOD(
   writeToStream: (NSString *)method
   payload: (NSString *)payload
   resolver: (RCTPromiseResolveBlock)resolve
+  gossipSync: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject
 )
 

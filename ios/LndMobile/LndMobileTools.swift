@@ -172,7 +172,7 @@ autopilot.heuristic=preferential:0.05
   func DEBUG_getWalletPasswordFromKeychain(resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     let server = "password"
 
-    let query = [
+    let query: [String: Any] = [
       kSecClass as String: kSecClassInternetPassword,
       kSecAttrServer as String: server,
       kSecReturnAttributes as String: kCFBooleanTrue!,
@@ -341,6 +341,36 @@ autopilot.heuristic=preferential:0.05
       print("Error while enumerating files \(lndUrl.path): \(error.localizedDescription)")
       reject("error", error.localizedDescription, error)
     }
+  }
+
+  @objc(DEBUG_deleteSpeedloaderLastrunFile:rejecter:)
+  func DEBUG_deleteSpeedloaderLastrunFile(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+    let lastrunPath = cachePath.appendingPathComponent("lastrun")
+
+    do {
+      try FileManager.default.removeItem(at: lastrunPath)
+    } catch {
+      reject("error", error.localizedDescription, error)
+      return
+    }
+
+    resolve(true)
+  }
+
+  @objc(DEBUG_deleteSpeedloaderDgraphDirectory:rejecter:)
+  func DEBUG_deleteSpeedloaderDgraphDirectory(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+    let dgraphPath = cachePath.appendingPathComponent("dgraph", isDirectory: true)
+
+    do {
+      try FileManager.default.removeItem(at: dgraphPath)
+    } catch {
+      reject("error", error.localizedDescription, error)
+      return
+    }
+
+    resolve(true)
   }
 
   @objc(checkApplicationSupportExists:rejecter:)

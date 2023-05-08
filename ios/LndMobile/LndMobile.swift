@@ -272,5 +272,20 @@ class LndMobile: RCTEventEmitter {
         resolve(data)
       }
     }
+  @objc(gossipSync:rejecter:)
+  func gossipSync(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+    let lndPath = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
+    let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+
+    Lnd.shared.gossipSync(cachePath.path, dataDir: lndPath.path, callback: { (data, error) in
+      if let e = error {
+        reject("error", e.localizedDescription, e)
+        return
+      }
+      resolve([
+        "data": data?.base64EncodedString()
+      ])
+    })
   }
 }
