@@ -58,6 +58,16 @@ RCT_EXTERN_METHOD(
 )
 
 RCT_EXTERN_METHOD(
+  DEBUG_deleteSpeedloaderLastrunFile: (RCTPromiseResolveBlock)resolve
+  rejecter: (RCTPromiseRejectBlock)reject
+)
+
+RCT_EXTERN_METHOD(
+  DEBUG_deleteSpeedloaderDgraphDirectory: (RCTPromiseResolveBlock)resolve
+  rejecter: (RCTPromiseRejectBlock)reject
+)
+
+RCT_EXTERN_METHOD(
   checkApplicationSupportExists: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject
 )

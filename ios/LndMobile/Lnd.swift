@@ -249,4 +249,9 @@ open class Lnd {
     let bytes = Data(base64Encoded: payload, options: [])
     block?(bytes, LndmobileReceiveStream(method: method, callback: callback))
   }
+
+  func gossipSync(_ cacheDir: String, dataDir: String, callback: @escaping Callback) {
+    LndmobileGossipSync(cacheDir, dataDir, LndmobileCallback(method: "blixt_gossipSync", callback: callback))
+  }
+
 }
