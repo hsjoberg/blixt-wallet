@@ -78,6 +78,7 @@ export interface IStoreModel {
   setOnboardingState: Action<IStoreModel, OnboardingState>;
   setTorEnabled: Action<IStoreModel, boolean>;
   setTorLoading: Action<IStoreModel, boolean>;
+  setSpeedloaderLoading: Action<IStoreModel, boolean>;
 
   generateSeed: Thunk<IStoreModel, string | undefined, IStoreInjections>;
   writeConfig: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
@@ -90,6 +91,7 @@ export interface IStoreModel {
   walletCreated: boolean;
   holdOnboarding: boolean;
   torLoading: boolean;
+  speedloaderLoading: boolean;
   torEnabled: boolean;
 
   lightning: ILightningModel;
@@ -256,6 +258,9 @@ export const model: IStoreModel = {
       log.i("initialize done", [initReturn]);
       let gossipSyncEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.scheduledGossipSyncEnabled) ?? false;
       let gossipStatus = null;
+      const speed = setTimeout(() => {
+        actions.setSpeedloaderLoading(true);
+      }, 3000);
       if (gossipSyncEnabled) {
         try {
           gossipStatus = await gossipSync();
@@ -263,6 +268,9 @@ export const model: IStoreModel = {
           log.e("GossipSync exception!", [e]);
         }
       }
+      clearTimeout(speed);
+      actions.setSpeedloaderLoading(false);
+
       const status = await checkStatus();
       log.i("status", [status]);
       if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
@@ -541,6 +549,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   setOnboardingState: action((state, value) => { state.onboardingState = value; }),
   setTorEnabled: action((state, value) => { state.torEnabled = value; }),
   setTorLoading: action((state, value) => { state.torLoading = value; }),
+  setSpeedloaderLoading: action((state, value) => { state.speedloaderLoading = value; }),
 
   appReady: false,
   walletCreated: false,
