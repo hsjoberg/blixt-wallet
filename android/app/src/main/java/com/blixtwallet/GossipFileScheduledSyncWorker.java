@@ -35,7 +35,6 @@ import org.brotli.dec.BrotliInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.util.zip.GZIPInputStream;
@@ -94,7 +93,7 @@ public class GossipFileScheduledSyncWorker extends ListenableWorker {
           out.write(stream.readAllBytes());
           out.close();
           stream.close();
-        } catch (IOException e) {
+        } catch (Throwable e) {
           Log.e(TAG, e.getMessage());
           HyperLog.e(TAG, e.getMessage());
           completer.set(Result.failure());
