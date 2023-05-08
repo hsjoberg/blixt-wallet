@@ -571,6 +571,23 @@ class LndMobileTools extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void DEBUG_deleteSpeedloaderLastrunFile(Promise promise) {
+    HyperLog.i(TAG, "DEBUG cache lastrun");
+    String filename = getReactApplicationContext().getCacheDir().toString() + "/lastrun";
+    File file = new File(filename);
+    promise.resolve(file.delete());
+  }
+
+  @ReactMethod
+  public void DEBUG_deleteSpeedloaderDgraphDirectory(Promise promise) {
+    HyperLog.i(TAG, "DEBUG cache lastrun");
+    String filename = getReactApplicationContext().getCacheDir().toString() + "/dgraph";
+    File file = new File(filename);
+    deleteRecursive(file);
+    promise.resolve(null);
+  }
+
+  @ReactMethod
   public void DEBUG_listProcesses(Promise promise) {
     String processes = "";
 
