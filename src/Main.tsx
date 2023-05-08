@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar, Alert, NativeModules } from "react-native";
-import { Spinner, H1 } from "native-base";
+import { Spinner, H1, H2 } from "native-base";
 import { createStackNavigator, CardStyleInterpolators, StackNavigationOptions } from "@react-navigation/stack";
 
 import Overview from "./windows/Overview";
@@ -35,6 +35,7 @@ import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
 import { navigator } from "./utils/navigation";
 import { PLATFORM } from "./utils/constants";
 import Prompt, { IPromptNavigationProps } from "./windows/HelperWindows/Prompt";
+import MultiPrompt, { IMultiPromptNavigationProps } from "./windows/HelperWindows/MultiPrompt";
 
 const RootStack = createStackNavigator();
 
@@ -69,6 +70,7 @@ export type RootStackParamList = {
   WebInfo: undefined;
 
   Prompt: IPromptNavigationProps;
+  MultiPrompt: IMultiPromptNavigationProps;
 
   DEV_CommandsX: undefined;
 }
@@ -82,6 +84,7 @@ export default function Main() {
   const initializeApp = useStoreActions((store) => store.initializeApp);
   const [initialRoute, setInitialRoute] = useState("Loading");
   const torLoading = useStoreState((store) => store.torLoading);
+  const speedloaderLoading = useStoreState((store) => store.speedloaderLoading);
 
   const [state, setState] =
     useState<"init" | "authentication" | "onboarding" | "started">("init");
@@ -185,6 +188,21 @@ export default function Main() {
         </Container>
       );
     }
+    if (speedloaderLoading) {
+      return (
+        <Container centered>
+          <StatusBar
+            backgroundColor="transparent"
+            hidden={false}
+            translucent={true}
+            networkActivityIndicatorVisible={true}
+            barStyle="light-content"
+          />
+          <Spinner color={blixtTheme.light} size={55} />
+          <H2>Syncing Lightning Network</H2>
+        </Container>
+      );
+    }
     return (
       <>
         <StatusBar
@@ -238,6 +256,7 @@ export default function Main() {
       <RootStack.Screen name="KeysendTest" component={KeysendTest} options={animationDisabled} />
       <RootStack.Screen name="KeysendExperiment" component={KeysendExperiment} options={horizontalTransition} />
       <RootStack.Screen name="Prompt" component={Prompt} options={animationDisabled} />
+      <RootStack.Screen name="MultiPrompt" component={MultiPrompt} options={animationDisabled} />
       <RootStack.Screen name="DEV_CommandsX" component={DEV_Commands} options={animationDisabled} />
     </RootStack.Navigator>
   );
