@@ -16,7 +16,7 @@ import { getTransactions, getTransaction, createTransaction, clearTransactions }
 import { useStoreState, useStoreActions } from "../../state/store";
 import { invoicesrpc, lnrpc } from "../../../proto/lightning";
 import { sendCommand } from "../../lndmobile/utils";
-import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus, getNodeInfo, listUnspent, getNetworkInfo, listInvoices } from "../../lndmobile/index";
+import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus, getNodeInfo, listUnspent, getNetworkInfo, importGraph, listInvoices } from "../../lndmobile/index";
 import { initWallet, genSeed, deriveKey, signMessage, derivePrivateKey } from "../../lndmobile/wallet";
 import { pendingChannels, listChannels, openChannel, closeChannel } from "../../lndmobile/channel";
 import { newAddress, sendCoins } from "../../lndmobile/onchain";
