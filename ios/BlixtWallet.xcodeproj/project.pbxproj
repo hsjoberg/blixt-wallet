@@ -15,6 +15,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		BA12DD7C6C3D42969E297EAE /* IBMPlexSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 53E703C0F141473C8564E7EA /* IBMPlexSans-Regular.ttf */; };
 		C22E6DD819CB41F69AADA37A /* IBMPlexSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D57823EDB09B4CD1998E77F2 /* IBMPlexSans-Medium.ttf */; };
+		CC15EBA52A06E9A800B4235F /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC15EBA42A06E9A800B4235F /* libresolv.tbd */; };
 		CC28DA1025925FD500A2DFA3 /* walletunlocker.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC28DA0F25925FD500A2DFA3 /* walletunlocker.pb.swift */; };
 		CC3C19202579C662004521F7 /* LndMobile.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6139F12579B66E0077D27B /* LndMobile.m */; };
 		CC3ED73F25983106007D29B4 /* LndMobileScheduledSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3ED73E25983106007D29B4 /* LndMobileScheduledSync.swift */; };
@@ -84,6 +85,7 @@
 		C132F37DCBE159303BCD7902 /* Pods-BlixtWallet-tvOS.debugfakelnd.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet-tvOS.debugfakelnd.xcconfig"; path = "Target Support Files/Pods-BlixtWallet-tvOS/Pods-BlixtWallet-tvOS.debugfakelnd.xcconfig"; sourceTree = "<group>"; };
 		C410974135376A18E1B2404A /* Pods-BlixtWallet-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet-tvOS.release.xcconfig"; path = "Target Support Files/Pods-BlixtWallet-tvOS/Pods-BlixtWallet-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		C5135C711128DAE99BAA4A63 /* Pods-BlixtWallet.debugtestnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet.debugtestnet.xcconfig"; path = "Target Support Files/Pods-BlixtWallet/Pods-BlixtWallet.debugtestnet.xcconfig"; sourceTree = "<group>"; };
+		CC15EBA42A06E9A800B4235F /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		CC23C04827E48F2700BE3D10 /* BlixtWallet-macOS-Bridgingh-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BlixtWallet-macOS-Bridgingh-Header.h"; sourceTree = "<group>"; };
 		CC23C04A27E497F200BE3D10 /* Lndmobile_macos.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Lndmobile_macos.xcframework; sourceTree = "<group>"; };
 		CC260FFC27E47852006C60EF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC15EBA52A06E9A800B4235F /* libresolv.tbd in Frameworks */,
 				CC84D3E5270F3EF9007C6D63 /* Lndmobile.xcframework in Frameworks */,
 				CCB51AEA259C2F74002637A2 /* CloudKit.framework in Frameworks */,
 				27EF54277E8BE60B52FD8A60 /* libPods-BlixtWallet.a in Frameworks */,
@@ -189,6 +192,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CC15EBA42A06E9A800B4235F /* libresolv.tbd */,
 				CC8A9EB628D8D44E00415019 /* hermes.xcframework */,
 				CC23C04A27E497F200BE3D10 /* Lndmobile_macos.xcframework */,
 				CCDE5A1F270E84D4004EE251 /* Lndmobile.xcframework */,
