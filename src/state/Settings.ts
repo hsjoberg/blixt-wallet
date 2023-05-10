@@ -80,6 +80,7 @@ export interface ISettingsModel {
   changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
   changeLndLogLevel: Thunk<ISettingsModel, LndLogLevel>;
   changeLndCompactDb: Thunk<ISettingsModel, boolean>;
+  changeEnforceSpeedloaderOnStartup: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -119,6 +120,7 @@ export interface ISettingsModel {
   setMaxLNFeePercentage: Action<ISettingsModel, number>;
   setLndLogLevel: Action<ISettingsModel, LndLogLevel>;
   setLndCompactDb: Action<ISettingsModel, boolean>;
+  setEnforceSpeedloaderOnStartup: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -158,6 +160,7 @@ export interface ISettingsModel {
   lndLogLevel: LndLogLevel;
   lndCompactDb: boolean;
   zeroConfPeers: string[];
+  enforceSpeedloaderOnStartup: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -226,6 +229,7 @@ export const settings: ISettingsModel = {
     actions.setMaxLNFeePercentage((await getItemObject(StorageItem.maxLNFeePercentage)) ?? 2);
     actions.setLndLogLevel(((await getItem(StorageItem.lndLogLevel)) ?? "info") as LndLogLevel);
     actions.setLndCompactDb(await getLndCompactDb());
+    actions.setEnforceSpeedloaderOnStartup(await getItemObject(StorageItem.enforceSpeedloaderOnStartup || false));
 
     log.d("Done");
   }),
@@ -426,6 +430,7 @@ export const settings: ISettingsModel = {
   }),
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -538,6 +543,12 @@ export const settings: ISettingsModel = {
     state.lndCompactDb = payload;
   }),
 =======
+=======
+  changeEnforceSpeedloaderOnStartup: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.enforceSpeedloaderOnStartup, payload);
+    actions.setEnforceSpeedloaderOnStartup(payload);
+  }),
+>>>>>>> f6e5b3f (Add setting to force speedloader gossip sync on startup)
 
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
@@ -576,7 +587,11 @@ export const settings: ISettingsModel = {
   setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
   setLndLogLevel: action((state, payload) => { state.lndLogLevel = payload; }),
   setLndCompactDb: action((state, payload) => { state.lndCompactDb = payload; }),
+<<<<<<< HEAD
 >>>>>>> c1208e2 (GossipFileScheduledSync)
+=======
+  setEnforceSpeedloaderOnStartup: action((state, payload) => { state.enforceSpeedloaderOnStartup = payload; }),
+>>>>>>> f6e5b3f (Add setting to force speedloader gossip sync on startup)
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -612,8 +627,10 @@ export const settings: ISettingsModel = {
   rescanWallet: false,
   receiveViaP2TR: false,
   strictGraphPruningEnabled: false,
+  lndPathfindingAlgorithm: DEFAULT_PATHFINDING_ALGORITHM,
   maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
   lndLogLevel: DEFAULT_LND_LOG_LEVEL,
   lndPathfindingAlgorithm: DEFAULT_PATHFINDING_ALGORITHM,
   lndCompactDb: false,
+  enforceSpeedloaderOnStartup: false,
 };

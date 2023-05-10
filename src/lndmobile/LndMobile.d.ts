@@ -40,6 +40,8 @@ export interface ILndMobileTools {
   saveChannelBackupFile(): Promise<boolean>;
   DEBUG_getWalletPasswordFromKeychain(): Promise<string>;
   getTorEnabled(): Promise<boolean>;
+  DEBUG_deleteSpeedloaderLastrunFile(): boolean;
+  DEBUG_deleteSpeedloaderDgraphDirectory(): null;
 
   // Android-specific
   getIntentStringData(): Promise<string | null>;

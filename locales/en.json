@@ -974,6 +974,9 @@
       },
       "compactLndDatabases": {
         "title": "Compact lnd's databases"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Enforce gossip sync on startup"
       }
     }
   },
