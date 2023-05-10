@@ -370,7 +370,7 @@ autopilot.heuristic=preferential:0.05
       return
     }
 
-    resolve(true)
+    resolve(nil)
   }
 
   @objc(checkApplicationSupportExists:rejecter:)
