@@ -1167,6 +1167,12 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
   }
 
+  const enforceSpeedloaderOnStartup = useStoreState((store) => store.settings.enforceSpeedloaderOnStartup);
+  const changeEnforceSpeedloaderOnStartup = useStoreActions((store) => store.settings.changeEnforceSpeedloaderOnStartup);
+  const onPressEnforceSpeedloaderOnStartup = async () => {
+    await changeEnforceSpeedloaderOnStartup(!enforceSpeedloaderOnStartup);
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -1682,7 +1688,6 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Body>
             <Right><CheckBox checked={multiPathPaymentsEnabled} onPress={onChangeMultiPartPaymentEnabledPress} /></Right>
           </ListItem>
-
           <ListItem style={style.listItem} icon={true} onPress={changeStrictGraphPruningEnabledPress}>
             <Left><Icon style={style.icon} type="Entypo" name="trash" /></Left>
             <Body>
@@ -1690,6 +1695,13 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Body>
             <Right><CheckBox checked={strictGraphPruningEnabled} onPress={changeStrictGraphPruningEnabledPress} /></Right>
           </ListItem>
+          {scheduledGossipSyncEnabled &&
+            <ListItem style={style.listItem} icon={true} onPress={changeStrictGraphPruningEnabledPress}>
+              <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="run-fast" /></Left>
+              <Body><Text>{t("debug.enforceSpeedloaderOnStartup.title")}</Text></Body>
+              <Right><CheckBox checked={enforceSpeedloaderOnStartup} onPress={onPressEnforceSpeedloaderOnStartup} /></Right>
+            </ListItem>
+          }
         </List>
       </Content>
     </Container>

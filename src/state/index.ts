@@ -257,11 +257,19 @@ export const model: IStoreModel = {
       const initReturn = await initialize();
       log.i("initialize done", [initReturn]);
       let gossipSyncEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.scheduledGossipSyncEnabled) ?? false;
+      let enforceSpeedloaderOnStartup = await getItemObjectAsyncStorage<boolean>(StorageItem.enforceSpeedloaderOnStartup) ?? false;
       let gossipStatus = null;
       const speed = setTimeout(() => {
         actions.setSpeedloaderLoading(true);
       }, 3000);
       if (gossipSyncEnabled) {
+        if (enforceSpeedloaderOnStartup) {
+          log.d("Clearing speedloader files");
+          // TODO(hsjoberg): LndMobileTools should be injected
+          await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile();
+          await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
+        }
+
         try {
           gossipStatus = await gossipSync();
         } catch (e) {

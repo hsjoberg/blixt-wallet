@@ -958,6 +958,9 @@
       },
       "bimodalPathFinding": {
         "title": "Enable bimodal pathfinding"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Enforce gossip sync on startup"
       }
     }
   },
