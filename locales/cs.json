@@ -1,0 +1,1132 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Lightning Adresa",
+      "nodeAlias": "Alias uzlu",
+      "description": "Popis",
+      "amount": "Částka",
+      "fee": "Poplatek",
+      "search": "Vyhledat",
+      "viewInBlockExplorer": "Zobrazit v prohlížeči blockchainu"
+    },
+    "buttons": {
+      "ok": "Ok",
+      "cancel": "Zrušit",
+      "continue": "Pokračovat",
+      "skip": "Přeskočit",
+      "proceed": "Zpracovat",
+      "back": "Zpět",
+      "no": "Ne",
+      "yes": "Ano",
+      "save": "Uložit",
+      "copy": "Kopírovat"
+    },
+    "msg": {
+      "status": "Stav",
+      "error": "Chyba",
+      "warning": "Varování",
+      "result": "Výsledek",
+      "pending": "čekající",
+      "done": "Hotovo",
+      "dismiss": "Zrušit",
+      "lastSync": "Poslední synchronizace",
+      "lastSyncAttempt": "Poslední pokus o synchronizaci",
+      "clipboardCopy": "Zkopírováno do schránky.",
+      "written": "Zapsáno",
+      "enabled": "Povoleno",
+      "disabled": "Zakázáno"
+    }
+  },
+  "welcome.start": {
+    "title": "Vítejte",
+    "createWallet": {
+      "title": "Vytvořit peněženku",
+      "msg1": "Blixt Wallet je stále v rané fázi vývoje.",
+      "msg2": "Pokud používáte tuto peněženku, ujistěte se, že rozumíte tomu, že můžete ztratit své prostředky.",
+      "msg3": "Momentálně není podpora pro WatchTower, aby bylo možné sledovat vaše kanály, když jste offline.",
+      "msg4": "Opravdu chcete pokračovat?"
+    },
+    "createWalletWithPassphrase": {
+      "title": "Nastavit passphrase (25. slovo pro šifrování seedu)",
+      "invalidMessage": "Zadejte platnou passphrase",
+      "noLeadingTrailingSpaces": "Mezery na začátku nebo na konci nejsou povoleny"
+    },
+    "language": {
+      "title": "Vyberte jazyk"
+    },
+    "restoreWallet": {
+      "title": "Obnovit peněženku"
+    },
+    "menu": {
+      "enableTor": "Povolit Tor",
+      "disableTor": "Zakázat Tor",
+      "setBitcoinNode": "Nastavit Bitcoinový uze",
+      "createWalletWithPassphrase": "Vytvořit peněženku s passphrase"
+    }
+  },
+  "footerNav": {
+    "receive": "Přijmout",
+    "send": "Odeslat"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Skenovat",
+      "receive": "Přijmout",
+      "pasteFromClipboard": "Vložit ze schránky",
+      "sendToLightningAddress": "Poslat na Lightning adresu",
+      "contactsAndServices": "Kontakty a Služby",
+      "lightningBrowser": "Lightning prohlížeč",
+      "onChainWallet": "On-chain",
+      "lightningChannels": "Lightning kanály",
+      "keysendExperiment": "Keysend Experimentální",
+      "showMore": "Rozšířené"
+    },
+    "madeInSweden": "Vytvořeno s ⚡ ve Švédsku."
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "Obnova peněženky probíhá.",
+      "msg2": "Obnova peněženky dokončena.",
+      "more": "Více informací"
+    },
+    "sendOnChain": {
+      "title": "Vítejte v Blixt Wallet!",
+      "msg1": "Abyste mohli začít používat peněženku Blixt, pošlete prostředky na adresu Bitcoinu na pravé straně.",
+      "msg2": "Kanál bude automaticky otevřen.",
+      "msg3": "Pošlete nejméně",
+      "alert": "Bitcoin adresa zkopírována do schránky."
+    },
+    "doBackup": {
+      "msg1": "Děkujeme, že používáte Blixt Wallet!",
+      "msg2": "Doporučujeme vytvořit zálohu peněženky, abyste mohli obnovit své prostředky v případě ztráty telefonu.",
+      "backup": "Zálohovat peněženku"
+    },
+    "newChannelBeingOpened": {
+      "info": "Probíhá otevírání nového kanálu...",
+      "view": "Zobrazit"
+    },
+    "noTransactionsYet": "Zatím žádné transakce"
+  },
+  "help": {
+    "title": "Nápověda",
+    "msg1": "Pokud narazíte na problém nebo máte zpětnou vazbu, můžete vývojáře peněženky Blixt kontaktovat zadáním problému na Githubu nebo přes email.",
+    "msg2": "Můžete se také připojit k naší veřejné chatovací skupině na Telegramu.",
+    "msg3": "Jelikož je Blixt Wallet nová peněženka, potřebujeme zpětnou vazbu o běžných problémech, se kterými se můžete setkat.",
+    "telegramGroup": "Telegramová skupina"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Probíhá synchronizace",
+      "title1": "Synchronizace dokončena",
+      "msg1": "Peněženka Blixt nyní synchronizuje blockchain.",
+      "msg2": "Jakmile bude vaše peněženka synchronizována s blockchainem, budou transakce a finanční prostředky v řetězci rozpoznány a zobrazeny v sekci Bitcoin on-chain.",
+      "msg3": "Peněženka Blixt je synchronizovaná s blockchainem.",
+      "blockHeight": {
+        "title": "Současná velikost bloku",
+        "msg1": "Průběh synchronizace řetězce"
+      }
+    },
+    "recoveryMode": {
+      "title": "Probíhá obnova",
+      "msg1": "Obnovení kompletní",
+      "msg2": "Zkontrolujte sekce Lightning kanály a On-chain"
+    },
+    "lndLog": {
+      "show": "Zobrazit protokol lnd",
+      "copy": "Kopírování textu protokolu"
+    }
+  },
+  "transactionDetails": {
+    "title": "Transakce",
+    "date": "Datum",
+    "duration": "Doba splatnosti faktury",
+    "note": "Poznámka",
+    "website": "Webové stránky",
+    "type": "Typ",
+    "lnurl": {
+      "messageFromWebsite": "Zpráva od",
+      "urlReceivedFromWebsite": "URL přijatá od",
+      "secretMessage": "Tajná zpráva"
+    },
+    "payer": "Plátce",
+    "recipient": "Příjemce",
+    "amountInFiatTimeOfPayment": "Částka ve fiatu (v době platby)",
+    "numberOfHops": "Počet skoků",
+    "remotePubkey": "Vzdálený pubkey",
+    "paymentHash": "Platební hash",
+    "preimage": "Předobraz",
+    "status": "Stav",
+    "goBack": "Vrátit se zpět",
+    "button": {
+      "setNote": "Nastavit poznámku",
+      "cancelInvoice": "Zrušit fakturu",
+      "showMap": "Zobrazit mapu"
+    },
+    "setNoteDialog": {
+      "title": "Poznámka",
+      "text": "Nastavení poznámky k této transakci"
+    }
+  },
+  "web.info": {
+    "title": "Interaktivní ukázka",
+    "pressToTry": "Stiskněte tlačítko a vyzkoušejte Blixt Wallet!"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Přijmout"
+    },
+    "createInvoice": {
+      "title": "Vytvořit fakturu",
+      "alert": "Než budete moci přijímat, musíte otevřít Lightning kanál.",
+      "lsp": {
+        "msg": "Po zaplacení této faktury bude otevřen platební kanál společnosti Dunder LSP.",
+        "msg1": "Co je to?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Otevírání kanálu",
+      "msg": "Aby bylo možné přijmout platbu za tuto fakturu, je třeba otevřít kanál v síti Lightning Network.",
+      "msg1": "Tento požadavek vyžaduje jednorázový poplatek ve výši přibližně",
+      "alert": "Nepodařilo se připojit ke službě Dunder, zkuste to prosím později.",
+      "proceed": "Pokračovat"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Částka",
+        "change": "Změna fiat měny",
+        "dunderPlaceholder": "Přinejmenším"
+      },
+      "amountBitcoin": {
+        "title": "Částka",
+        "change": "Změna bitcoin jednotky",
+        "dunderPlaceholder": "Minimálně"
+      },
+      "payer": {
+        "title": "Plátce",
+        "placeholder": "Pro účetnictví"
+      },
+      "description": {
+        "title": "Zpráva",
+        "placeholder": "Zpráva plátci"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "O Dunder LSP",
+    "msg": "Dunder je poskytovatel Lightning služeb (LSP), který za vás automaticky otevírá kanály, když nemáte dostatek příchozí likvidity.",
+    "msg1": "To se může stát například při prvním použití peněženky Blixt.",
+    "msg2": "Protože je vyžadována on-chain transakce, bude z příchozí platby odečten poplatek za on-chain transakci. Budoucí platby budou moci využívat nově otevřený platební kanál se sítí Lightning.",
+    "msg3": "Dunder je",
+    "msg4": "open-source",
+    "msg5": "software a výchozího poskytovatele služeb můžete změnit v Nastavení."
+  },
+  "receive.receiveQr": {
+    "title": "Přijato",
+    "qr": {
+      "title": "Skenování QR kódu",
+      "msg": "Platnost vyprší za {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Uhradit fakturu"
+    },
+    "form": {
+      "invoice": {
+        "title": "Faktura"
+      },
+      "amount": {
+        "title": "Částka"
+      },
+      "recipient": {
+        "title": "Příjemce"
+      },
+      "nodeAlias": {
+        "title": "Alias uzlu"
+      },
+      "description": {
+        "title": "Zpráva"
+      },
+      "feeEstimate": {
+        "title": "Odhadovaný poplatek"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "ODESLANÁ PLATBA"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Lightning kanály"
+    },
+    "balance": {
+      "title": "Zůstatek"
+    },
+    "channel": {
+      "alias": "Alias",
+      "node": "Uzel",
+      "channelId": "Kanál ID",
+      "status": "Stav",
+      "statusActive": "Aktivní",
+      "statusInactive": "Neaktivní",
+      "statusPending": "Čekající",
+      "statusClosing": "Zavírání",
+      "statusForceClosing": "Vynucené zavírání",
+      "statusWaitingForClose": "Čekání na uzavření",
+      "capacity": "Kapacita",
+      "howMuchCanBeSent": "Lze odeslat",
+      "howMuchCanBeReceived": "Lze přijmout",
+      "localReserve": "Místní rezerva",
+      "commitmentFee": "Závazný poplatek",
+      "pendingFunds": "Čekající prostředky",
+      "balanceInLimbo": "Limbo zůstatek",
+      "pendingHtlcs": "Probíhající HTLC",
+      "maturityHeight": "Velikost splatnosti",
+      "localCommitmentTxid": "Místní závazek TXID",
+      "remoteCommitmentTxid": "Vzdálený závazek TXID",
+      "closeChannel": "Uzavřít kanál",
+      "forceClosePendingChannel": "Vynutit zavření čekajícího kanálu",
+      "closeChannelPrompt": {
+        "title": "Uzavřít kanál"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Otevřít kanál"
+    },
+    "form": {
+      "title": "Otevřít kanál",
+      "channel": {
+        "title": "Uzel URI",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Částka",
+        "placeholder": "Částka"
+      },
+      "fee_rate": {
+        "title": "Sazba poplatků"
+      }
+    },
+    "torPrompt": {
+      "title": "Povolit Tor",
+      "text1": "Vypadá to, že se snažíte otevřít kanál k uzlu, který běží pod službou Tor onion.",
+      "text2": "Abyste se mohli připojit, musíte mít aktivní Tor pro peněženku Blixt."
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "On-chain prostředky"
+    },
+    "address": {
+      "title": "Odesílání Bitcoinů on-chain na tuto adresu",
+      "alert": "Zkopírováno do schránky."
+    },
+    "newAddress": {
+      "title": "Generování nové adresy"
+    },
+    "withdraw": {
+      "title": "Vybrat mince"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Transakce",
+    "txHash": "Id",
+    "timeStamp": "Datum",
+    "amount": "Částka",
+    "totalFees": "Poplatky",
+    "label": "Štítek",
+    "destAddresses": "Cíl",
+    "numConfirmations": "Potvrzení",
+    "blockHeight": "Velikost bloku",
+    "blockHash": "Hash bloku",
+    "rawTxHex": {
+      "title": "Raw tx hex",
+      "msg": "Stiskněte pro kopírování"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Protokol transakcí"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Výběr mincí"
+    },
+    "form": {
+      "address": {
+        "title": "Adresa",
+        "placeholder": "Bitcoin adresa"
+      },
+      "amount": {
+        "title": "Částka",
+        "placeholder": "Částka",
+        "withdrawAll": "Vybrat všechny prostředky",
+        "all": "Vše"
+      },
+      "feeRate": {
+        "title": "Sazba poplatků",
+        "auto": "automatické"
+      },
+      "withdraw": {
+        "title": "Vybrat",
+        "alert": "Výběr úspěšný"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Žádost o přihlášení",
+      "msg": "Chcete se přihlásit k",
+      "success": "Autentizováno k"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Otevření příchozího kanálu"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Zobrazit metadata",
+      "dialog": {
+        "title": "Technická metadata"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} je ve vašem seznamu kontaktů"
+      },
+      "add": {
+        "title": "Přidat do seznamu kontaktů",
+        "msg": "Chcete si přidat {{lightningAddress}} do seznamu kontaktů?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Kód platby pro {{domain}} je ve vašem seznamu kontaktů"
+      },
+      "add": {
+        "title": "Přidat do seznamu kontaktů",
+        "msg": "Chcete přidat tento kód platby na {{domain}} do seznamu kontaktů?"
+      }
+    },
+    "unableToPay": "Nelze zaplatit",
+    "payerData": {
+      "commentAllowed": "Komentář k {{target}} (max {{letters}} letters)",
+      "sendNameWithComment": "Pošlete mé jméno spolu s tímto komentářem",
+      "name": {
+        "ask": "Zašlete mé jméno spolu s touto platbou",
+        "mandatory": "Vaše jméno musí být zasláno společně s touto platbou."
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "U platby chybí popis."
+    },
+    "pay": {
+      "title": "Zaplatit",
+      "error": {
+        "mustProvideComment": "Pokud se rozhodnete k této platbě připojit své jméno, musíte uvést komentář."
+      }
+    },
+    "cancel": {
+      "title": "Zrušit"
+    },
+    "form": {
+      "asksYouToPay": "žádá o zaplacení.",
+      "description": {
+        "title": "Popis"
+      },
+      "amount": {
+        "title": "Částka",
+        "to": "komu",
+        "placeholder": "Vstupní částka"
+      },
+      "alert": "Nelze zaplatit"
+    },
+    "done": {
+      "message": {
+        "title": "Zpráva od"
+      },
+      "url": {
+        "description": "Popis",
+        "domain": "URL přijatá od",
+        "done": {
+          "title": "Hotovo"
+        },
+        "copy": {
+          "title": "Zkopírovat do schránky",
+          "msg": "Zkopírováno do schránky."
+        },
+        "open": {
+          "title": "Otevřít prohlížeč"
+        }
+      },
+      "aes": {
+        "domain": "Dostal jsem tajnou zašifrovanou zprávu od",
+        "description": "Zpráva od",
+        "secret": "Tajná zpráva"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "O Lightning adrese",
+      "msg1": "Lightning adresa",
+      "msg2": "je způsob platby osobě nebo službě v síti Lightning Network.",
+      "msg3": "Vypadají jako e-mailové adresy, ale místo e-mailu příjemci posíláte peníze.",
+      "msg4": "Peněženka Blixt má plnou podporu pro odesílání na adresu Lightning, ale přijímání",
+      "msg5": "prostřednictvím Lightning adresy se stále pracuje."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "Odeslaná žádost o výběr na {{domain}}",
+      "addToContactList": {
+        "title": "Přidat do seznamu kontaktů",
+        "msg": "Chcete přidat tento kód pro výběr do {{domain}} do svého seznamu kontaktů?",
+        "note": "Účet na {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "Žádost o výběr",
+      "msg": "Zpráva od",
+      "dialog": {
+        "msg": "Částka"
+      },
+      "dialog1": {
+        "minSat": "Minimální částka výběru",
+        "maxSat": "Maximální částka výběru",
+        "placeholder": "Částka"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Kontakty a služby",
+      "lightningAddressAlreadyExists": "již existuje ve vašem seznamu kontaktů",
+      "nothingHereYet": "Zatím tu nic není...",
+      "whyNotAdd": "Proč si nepřidat kontakt na Lightning adresu",
+      "tappingHere": "klepnutí zde"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Vzdálený zůstatek",
+        "error": "Neplatná operace, kontakt nemá kód LNURL-withdraw"
+      },
+      "list": {
+        "pay": "Platby pro",
+        "account": "Účet na"
+      },
+      "send": {
+        "title": "Odeslat",
+        "couldNotPay": "Nelze zaplatit na tento kód LNURL-pay",
+        "invalidResponse": "Odpověď nebyla odpovědí LNURL-pay (mám {{response}}).",
+        "invalidOperation": "Neplatná operace, kontakt nemá identifikátor LUD-16 ani kód LNURL-pay"
+      },
+      "withdraw": {
+        "title": "Vybrat",
+        "couldNotPay": "Nelze zaplatit na tento kód LNURL-pay",
+        "invalidResponse": "Odpověď nebyla odpovědí LNURL-pay (mám {{response}}).",
+        "invalidOperation": "Neplatná operace, kontakt nemá kód LNURL-withdraw"
+      },
+      "deleteContact": {
+        "title": "Odstranění kontaktu",
+        "msg": "Jste si jisti, že chcete odstranit kontakt {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Kontakt štítek"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Chcete zavřít prohlížeč?",
+    "home": "Zpět na seznam obchodů",
+    "placeholder": "Zde zadejte adresu URL"
+  },
+  "keysend.experiment": {
+    "title": "Odeslání klíčů",
+    "qr": {
+      "alert": "Zkopírováno do schránky"
+    },
+    "dialog": {
+      "msg1": "Vítejte na hřišti odesílání klíčů",
+      "msg2": "Pomocí služby odeslání klíčů můžete zaplatit jiné peněžence Blixt (nebo jakémukoli uzlu Lightning, který podporuje službu odeslání klíčů), aniž byste potřebovali fakturu.",
+      "msg3": "Kliknutím na fotoaparát naskenujte QR kód jiné peněženky nebo zadejte veřejný klíč a tipy na cestu níže."
+    },
+    "send": {
+      "title": "Odeslat",
+      "msg": "Platba odesláním klíčů",
+      "error": {
+        "checkAmount": "Zkontroluj částku",
+        "missingPubkey": "Chybějící pubkey"
+      },
+      "alert": "Platba proběhla úspěšně"
+    },
+    "form": {
+      "amount": {
+        "title": "Částka v sat"
+      },
+      "pubkey": {
+        "title": "Veřejný klíč",
+        "placeholder": "Pubkey"
+      },
+      "route": {
+        "title": "Tipy k trase",
+        "placeholder": "Tipy k trase"
+      },
+      "message": {
+        "title": "Zpráva",
+        "placeholder": "Zde zadejte zprávu chatu"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "Nastavení",
+    "general": {
+      "title": "Obecné",
+      "name": {
+        "title": "Jméno",
+        "subtitle": "Bude použito v transakcích",
+        "dialog": {
+          "msg": "Zvolte název, který se bude používat při transakcích.\n\nVaše jméno se bude zobrazovat ve fakturách těm, kteří vám platí, i lidem, kterým platíte.",
+          "accept": "Nastavit jméno"
+        }
+      },
+      "lang": {
+        "title": "Jazyk",
+        "dialog": {
+          "title": "Výběr jazyka"
+        }
+      },
+      "pushNotification": {
+        "title": "Upozornění Push",
+        "subtitle": "Pro události transakcí a kanálů"
+      },
+      "checkClipboard": {
+        "title": "Kontrola schránky na faktury",
+        "subtitle": "Automatická kontrola schránky na faktury"
+      },
+      "saveGeolocation": {
+        "title": "Uložit zeměpisnou polohu transakce",
+        "subtitle": "Lokální uložení umístění transakce",
+        "logGranted": "Geolokace povolena",
+        "logDenied": "Oprávnění ke geolokaci bylo odepřeno"
+      },
+      "mapTheme": {
+        "title": "Nastavení tématu mapy"
+      }
+    },
+    "wallet": {
+      "title": "Peněženka",
+      "seed": {
+        "show": {
+          "title": "Zobrazit mnemonic",
+          "subtitle": "Zobrazit 24-slovní seed pro tuto peněženku",
+          "dialog": {
+            "title": "Seed",
+            "alert": "Zkopírováno do schránky",
+            "copy": "Kopírovat seed"
+          }
+        },
+        "remove": {
+          "title": "Odstranění mnemonic ze zařízení",
+          "subtitle": "Trvale odstranit seed z tohoto zařízení",
+          "dialog": {
+            "title": "Odstranit seed",
+            "msg": "Tímto se seed z tohoto zařízení trvale odstraní. Toto proveďte pouze v případě, že jste si seed zálohovali!",
+            "accept": "Odstranit seed"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Exportovat zálohu kanálů",
+          "alert": "Soubor zapsán:"
+        },
+        "verify": {
+          "title": "Ověření zálohy kanálů"
+        },
+        "googleCloud": {
+          "title": "Zálohování kanálů na Disk Google",
+          "subtitle": "Automatické zálohování kanálů na Disk Google",
+          "alert": "Povolené zálohování na Disk Google"
+        },
+        "googleCloudForce": {
+          "title": "Ruční spuštění zálohování na Disk Google",
+          "alert": "Zálohované kanály na Disk Google"
+        },
+        "iCloud": {
+          "title": "Zálohování kanálů na iCloud",
+          "subtitle": "Automatické zálohování kanálů na iCloud",
+          "alert": "Zálohování na iCloud"
+        },
+        "iCloudForce": {
+          "title": "Ruční spuštění zálohování na iCloud",
+          "alert": "Zálohování kanálů na iCloud"
+        },
+        "error": "Chyba při zálohování"
+      }
+    },
+    "security": {
+      "title": "Zabezpečení",
+      "pincode": {
+        "title": "Přihlášení pomocí PIN kódu"
+      },
+      "biometrics": {
+        "title": "Přihlášení pomocí",
+        "fingerprint": "otisk prstu",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Plánovaná synchronizace řetězce",
+        "subtitle": "Spuštění na pozadí každé 2 hodiny",
+        "dialog": {
+          "title": "Nedoporučuje se",
+          "msg": "Varování. Nedoporučuje se vypínat plánovanou řetězovou synchronizaci.\n\nUjistěte se, že máte aktuální informace o síti, jinak riskujete ztrátu prostředků.\n\nUdělejte to pouze v případě, že víte, co děláte."
+        }
+      }
+    },
+    "display": {
+      "title": "Zobrazit",
+      "fiatUnit": {
+        "title": "Změna fiat měny"
+      },
+      "bitcoinUnit": {
+        "title": "Změna bitcoin jednotky"
+      },
+      "onchainExplorer": {
+        "title": "Průzkumník Onchain",
+        "dialog": {
+          "title": "Změna průzkumníka on-chain"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Bitcoin Network",
+      "node": {
+        "title": "Bitcoin Node",
+        "subtitle": "Nastavení uzlu Bitcoin (BIP157), ke kterému se má připojit",
+        "setDialog": {
+          "title": "Nastavení uzlu",
+          "info": "Nastavte uzel Bitcoin podporující BIP157, ke kterému chcete navázat spojení.",
+          "leaveBlankToSearch": "Nechte prázdné, aby peněženka Blixt hledala platný uzel v síti Bitcoin.",
+          "longPressToReset": "Chcete-li obnovit výchozí uzel ({{defaultNode}}), dlouze stiskněte nastavení."
+        },
+        "restoreDialog": {
+          "title": "Obnovení uzlu",
+          "msg": "Chcete obnovit výchozí uzel"
+        }
+      },
+      "restartDialog": {
+        "title": "Nutný restart",
+        "msg": "Před použitím nové konfigurace je třeba peněženku Blixt restartovat.",
+        "msg1": "Chcete to udělat nyní?"
+      },
+      "rpc": {
+        "title": "Nastavení bitcoind RPC Hostitele"
+      },
+      "zmqRawBlock": {
+        "title": "Nastavit bitcoind ZMQ Raw Block Hostitele"
+      },
+      "zmqRawTx": {
+        "title": "Nastavit bitcoind ZMQ Raw Tx Hostitele"
+      },
+      "p2tr": {
+        "title": "Povolení příjmu on-chain přes Taproot (P2TR)"
+      }
+    },
+    "LN": {
+      "title": "Lightning síť",
+      "network": {
+        "title": "Zobrazit informace o síti",
+        "subtitle": ""
+      },
+      "node": {
+        "title": "Zobrazit data uzlu",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Zobrazit Lightning propojení",
+        "subtitle": ""
+      },
+      "maxLNFeePercentage": {
+        "title": "Nastavení maximálního poplatku za platbu",
+        "subtitle": "Úměrně k částce",
+        "dialog": {
+          "title": "Nastavení max. procenta poplatku LN"
+        },
+        "resetDialog": {
+          "title": "Chcete obnovit maximální poplatek LN na výchozí hodnotu ({{defaultMaxLNFee}}%)?"
+        }
+      },
+      "autopilot": {
+        "title": "Automatické otevírání kanálů",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Služby pro příchozí kanály",
+        "subtitle": "Použit služby příchozího kanálu pro příjem plateb",
+        "dialog": {
+          "title": "Poskytovatel příchozího kanálu",
+          "msg1": "Vyberte poskytovatele příchozího kanálu a stiskněte Pokračovat.",
+          "msg2": "Váš webový prohlížeč bude otevřen na webové stránce příslušného poskytovatele, kde si budete moci vyžádat kanál.",
+          "msg3": "Po dokončení můžete zkopírovat kód adresy a/nebo otevřít odkaz pomocí aplikace Blixt Wallet."
+        }
+      },
+      "LSP": {
+        "title": "Nastavení serveru Dunder LSP",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Nastavení serveru Dunder",
+          "acept": "Nastavit server"
+        },
+        "restoreDialog": {
+          "title": "Obnovení serveru Dunder",
+          "msg": "Chtěli byste obnovit výchozí server Dunder"
+        }
+      },
+      "graphSync": {
+        "title": "Před zaplacením počkejte na synchronizaci grafu",
+        "subtitle": "Synchronizovaný graf vede k optimálním platebním cestám"
+      }
+    },
+    "miscelaneous": {
+      "title": "Různé",
+      "about": {
+        "title": "Informace o",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "Zkopírovat protokol aplikace do místního úložiště",
+        "subtitle": "",
+        "dialog": {
+          "alert": "Zkopírovat soubor protokolu aplikace do",
+          "error": "Chyba při kopírování souboru protokolu aplikace."
+        }
+      },
+      "lndLog": {
+        "title": "Kopírování protokolu lnd do místního úložiště",
+        "subtitle": "Získáno z /sdcard/BlixtWallet",
+        "dialog": {
+          "alert": "Zkopírovaný soubor protokolu lnd",
+          "error": "Chyba při kopírování souboru protokolu lnd."
+        }
+      },
+      "dev": {
+        "title": "Přejít na vývojářskou obrazovku",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Automatické skrytí prošlých faktur",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Přechody obrazovek",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Podepsání zprávy pomocí klíče peněženky",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Podepsat zprávu"
+        },
+        "dialog2": {
+          "title": "Podpis",
+          "alert": "Zkopírováno do schránky"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Nastavení úrovně protokolu lnd",
+        "dialog": {
+          "title": "Nastavení úrovně protokolu lnd",
+          "description": "Úroveň protokolu mění slovní vyjádření protokolu lnd, které je dostupné z nastavení."
+        },
+        "restoreDialog": {
+          "title": "Chcete obnovit výchozí úroveň protokolu lnd ({{defaultLndLogLevel}})?"
+        }
+      }
+    },
+    "experimental": {
+      "title": "Pokusy",
+      "LSP": {
+        "title": "Povolení služby Dunder LSP",
+        "subtitle": "VYSOCE EXPERIMENTÁLNÍ. Poskytovatel služeb Lightning, který pomáhá s příchozí likviditou"
+      },
+      "MPP": {
+        "title": "Povolení plateb více cestami",
+        "subtitle": "Platby mohou probíhat až 16 cestami"
+      },
+      "tor": {
+        "title": "Povolit Tor",
+        "subtitle": "",
+        "enabled": {
+          "title": "Restartování aplikace a povolení Tor",
+          "msg1": "Pokud povolíte Tor, peněženka se bude připojovat ke svým spojením (jak k Bitcoinu, tak k Lightning Network) prostřednictvím sítě Tor.",
+          "msg2": "Budete se také moci připojovat a otevírat kanály k uzlům Lightning, které používají služby onion.",
+          "msg3": "UPOZORNĚNÍ: Peněženka Blixt bude komunikovat s následujícími službami i bez Toru.",
+          "msg4": "Důvod: Chcete-li získat kurzy fiat/bitcoin",
+          "msg5": "Důvod: Zjištění aktuální velikosti bloku",
+          "msg6": "Důvod: Pro zálohování na Disk Google",
+          "msg7": "Důvod: Pro spolehlivé uzly Lightning",
+          "msg8": "Důvod: Pro spolehlivost Lightning WebLN Browser a LNURL také nepoužívají Tor.odes"
+        },
+        "disabled": {
+          "title": "Restartování aplikace a zakázání Tor",
+          "msg1": "Vypnutí Tor vyžaduje restart aplikace.",
+          "msg2": "Chcete pokračovat?"
+        }
+      },
+      "onion": {
+        "title": "Zobrazit službu Tor onion",
+        "subtitle": "Pro připojení a otevření kanálů k této peněžence"
+      },
+      "keysend": {
+        "title": "Keysend Experimentální",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Platnost faktury (v sekundách)",
+        "subtitle": "{{expiry}} sekund"
+      }
+    },
+    "debug": {
+      "title": "Ladění",
+      "startup": {
+        "title": "Zobrazení oznámení o spuštění",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "Centrum nápovědy LndMobile",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Diagnostika problémů se Dunder",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "Čtení protokolu lnd",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Odesláním klíčů test",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Testovací úložiště Disku Google",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Zápis konfigurace",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Aktivace ukázkového režimu",
+        "subtitle": "Používá se pro propagaci. Restart aplikace pro obnovení"
+      },
+      "rescanWallet": {
+        "title": "Znovu prohledat peněženku",
+        "subtitle": "Vyhledávání transakcí v blockchainu pro peněženku"
+      },
+      "getNodeInfo": {
+        "title": "Získání informací o uzlu"
+      },
+      "getChannelInfo": {
+        "title": "Získat informace o kanálu"
+      },
+      "demoMode": {
+        "title": "Aktivace ukázkového režimu",
+        "subtitle": "Používá se pro propagaci. Restart aplikace pro obnovení"
+      },
+      "disableGraphCache": {
+        "title": "Vypnutí mezipaměti grafu lnd"
+      },
+      "resetMissionControl": {
+        "title": "Obnovení znalostí o směrování plateb"
+      },
+      "strictGraphPruning": {
+        "title": "Povolit striktní ořezávání grafů LN"
+      },
+      "bimodalPathFinding": {
+        "title": "Povolit bimodální vyhledávání cest"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "O peněžence Blixt",
+    "msg1": "Verze",
+    "msg2": "Od",
+    "msg3": "Open-source peněženka s licencí MIT",
+    "msg4": "Vytvořeno pomocí",
+    "msg5": "a další úžasný open source software",
+    "msg6": "Ikona Tor je licencována pod CC BY 3.0 by",
+    "msg7": "licence"
+  },
+  "settings.setPincode": {
+    "enter": "Zadejte kód PIN",
+    "confirm": "Potvrďte kód PIN"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Zadejte aktuální pincode pro odstranění pincode"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Lightning spojení"
+    },
+    "alias": "Alias uzlu",
+    "pubKey": "Veřejný klíč uzlu",
+    "address": "Adresa uzlu",
+    "data": {
+      "title": "Data",
+      "bytesSent": "odeslané bajty",
+      "bytesRecv": "přijaté bajty"
+    },
+    "transfer": {
+      "title": "Přenos",
+      "satSent": "odesláno sat",
+      "satRecv": "přijato sat"
+    },
+    "inbound": "Příchozí",
+    "syncType": "Typ synchronizace",
+    "errors": "Chyby",
+    "disconnect": "Odpojení spojení"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Připojení k Lightning spojení"
+    },
+    "connect": {
+      "title": "URI uzlu",
+      "placeholder": "URI propojení",
+      "accept": "Připojení"
+    }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Informace o síti Lightning",
+    "avgChannelSize": "Průměrná velikost kanálu",
+    "avgOutDegree": "Průměrný výstupní stupeň",
+    "graphDiameter": "Průměr grafu",
+    "medianChannelSizeSat": "Medián velikosti kanálů",
+    "numChannels": "Počet kanálů",
+    "numNodes": "Počet uzlů",
+    "numZombieChans": "Počet zombie kanálů",
+    "totalNetworkCapacity": "Celková kapacita sítě"
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Informace o uzlu",
+    "alias": "Alias uzlu",
+    "chain": "Chain",
+    "timestamp": "Nejlepší časové razítko záhlaví",
+    "blockHash": "Blok Hash",
+    "blockHeight": "Velikost bloku",
+    "identityPubkey": "Identifikace Pubkey",
+    "channel": {
+      "title": "Počet kanálů",
+      "active": "Aktivní",
+      "inactive": "Neaktivní",
+      "pending": "Čekající"
+    },
+    "numPeers": "Počet spojení",
+    "syncedToChain": "Synchronizováno s řetězcem",
+    "syncedToGraph": "Synchronizováno s grafem",
+    "nodeUris": "URI uzlů",
+    "version": "Verze Lnd",
+    "features": "Funkce uzlů"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Služba Tor Onion",
+    "msg1": "Naskenováním tohoto QR kódu otevřete kanál k této peněžence.",
+    "msg2": "Nepodařilo se vyřešit adresu onion"
+  },
+  "welcome.addFunds": {
+    "title": "Přidání prostředků",
+    "msg1": "Začít používat Lightning v peněžence Blixt",
+    "msg2": "poslat bitcoiny na výše uvedenou adresu"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "Automatické otevírání kanálů",
+      "msg": "Otevření kanálů, když jsou k dispozici on-chain prostředky."
+    },
+    "done": {
+      "title": "Téměř hotovo!",
+      "msg1": "Zde jsou některá nastavení peněženky, která si můžete nastavit podle svých představ.",
+      "msg2": "Až budete připraveni, stiskněte pokračovat"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Zkuste to znovu",
+      "msg": "Je nám líto, napsal jste slova ve špatném pořadí, zkuste to prosím znovu."
+    },
+    "seed": {
+      "title": "Potvrzení vašeho seedu"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Povolení zálohování na Disk Google",
+      "msg": "Zálohování na Disk Google povoleno"
+    },
+    "backup": {
+      "title": "Zálohování do cloudu",
+      "msg": "Aby vaše off-chain prostředky zůstaly v případě ztráty zařízení v bezpečí, doporučujeme kanály zálohovat na Disku Google.",
+      "msg1": "Tím se uchová zašifrovaná záloha vašich kanálů, kterou lze použít pouze společně se seedem peněženky.",
+      "msg2": "Až budete připraveni, stiskněte pokračovat."
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Zapnutí zálohování iCloud",
+      "msg": "Zapnuté zálohování iCloud"
+    },
+    "backup": {
+      "title": "Zálohování na iCloud",
+      "msg": "Aby vaše prostředky mimo řetězec zůstaly v případě ztráty zařízení v bezpečí, doporučujeme kanály zálohovat na iCloudu.",
+      "msg1": "Tím se uchová zašifrovaná záloha vašich kanálů, kterou lze použít pouze společně se seedem peněženky.",
+      "msg2": "Až budete připraveni, stiskněte pokračovat."
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Obnovit peněženku",
+      "msg": "Chcete-li obnovit peněženku, napište každé slovo ze seedu oddělené mezerou.",
+      "msg1": "Pokud chcete obnovit své kanály Lightning Network, musíte poskytnout zálohu souboru.",
+      "loading": "Obnovit peněženku",
+      "passphrase": {
+        "placeholder": "Passphrase (nepovinné)"
+      },
+      "channel": {
+        "title": "Zálohování kanálů",
+        "file": "Zvolte soubor zálohy kanálu na disku",
+        "google": {
+          "title": "Obnovení prostřednictvím Disku Google",
+          "alert": "Obnovení přes Disk Google se nezdařilo"
+        },
+        "iCloud": {
+          "title": "Obnovení přes iCloud",
+          "alert": "Obnovení přes iCloud se nezdařilo"
+        }
+      },
+      "seed": "Seed musí obsahovat přesně 24 slov"
+    },
+    "backup": {
+      "google": "Zálohování přes Disk Google",
+      "iCloud": "Zálohování přes iCloud"
+    }
+  },
+  "welcome.seed": {
+    "title": "Vítejte v peněžence Blixt!",
+    "msg": "Toto je váš záložní seed.",
+    "msg1": "Zapište si ji na kus papíru a uložte ji na bezpečném místě.",
+    "msg2": "Pokud ztratíte přístup k peněžence",
+    "msg3": "můžete své prostředky získat zpět pomocí záložního seedu.",
+    "msg4": "Použitý standard pro seed je aezeed.",
+    "button": "Zapsal jsem si to"
+  }
+}
