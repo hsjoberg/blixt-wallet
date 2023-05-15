@@ -46,6 +46,11 @@
       "msg3": "No hay torre de vigilancia (por ahora) que vigile tus canales mientras estas offline.",
       "msg4": "No tengo miedo. Continuar"
     },
+    "createWalletWithPassphrase": {
+      "title": "Establecer frase de contraseña (25ª palabra para cifrar la semilla)",
+      "invalidMessage": "Introduzca una frase de contraseña válida",
+      "noLeadingTrailingSpaces": "No se permiten espacios iniciales o finales"
+    },
     "language": {
       "title": "Seleccione el idioma"
     },
@@ -55,7 +60,8 @@
     "menu": {
       "enableTor": "Habilitar Tor",
       "disableTor": "Deshabilitar Tor",
-      "setBitcoinNode": "Establecer nodo Bitcoin"
+      "setBitcoinNode": "Establecer nodo Bitcoin",
+      "createWalletWithPassphrase": "Crear billetera con frase de contraseña"
     }
   },
   "footerNav": {
@@ -240,6 +246,9 @@
       },
       "description": {
         "title": "Mensaje"
+      },
+      "feeEstimate": {
+        "title": "Estimación de tarifa"
       }
     }
   },
