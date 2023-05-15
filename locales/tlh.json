@@ -46,6 +46,11 @@
       "msg3": "reH lut tlhaQ bOQoy boneHpu'chugh.",
       "msg4": "reH jIHvaD qelnIS"
     },
+    "createWalletWithPassphrase": {
+      "title": "pIj qIp (25 qatlh qo' Hoch)",
+      "invalidMessage": "'entepray'",
+      "noLeadingTrailingSpaces": "pa' bIghHa'wI' 'e' vIpIHbe'chugh"
+    },
     "language": {
       "title": "QeH"
     },
@@ -55,7 +60,8 @@
     "menu": {
       "enableTor": "DaH 'entepray' Tor",
       "disableTor": "Qotlh Tor",
-      "setBitcoinNode": "jatlhbe' Bitcoin"
+      "setBitcoinNode": "jatlhbe' Bitcoin",
+      "createWalletWithPassphrase": "muSHa'chugh vay', vay'"
     }
   },
   "footerNav": {
@@ -240,6 +246,9 @@
       },
       "description": {
         "title": "QIn"
+      },
+      "feeEstimate": {
+        "title": "qaD"
       }
     }
   },
