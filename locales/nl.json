@@ -46,6 +46,11 @@
       "msg3": "Er is momenteel geen WatchTower-ondersteuning om je kanalen te bewaken terwijl je offline bent.",
       "msg4": "Ik ben roekeloos, ga verder"
     },
+    "createWalletWithPassphrase": {
+      "title": "Wachtwoordzin instellen (25e woord om het zaad te coderen)",
+      "invalidMessage": "Voer een geldig wachtwoord in",
+      "noLeadingTrailingSpaces": "Voorloop- of volgspaties zijn niet toegestaan"
+    },
     "language": {
       "title": "Selecteer taal"
     },
@@ -55,7 +60,8 @@
     "menu": {
       "enableTor": "Tor Inschakelen",
       "disableTor": "Tor Uitschakelen",
-      "setBitcoinNode": "Bitcoin node instellen"
+      "setBitcoinNode": "Bitcoin node instellen",
+      "createWalletWithPassphrase": "Portemonnee maken met wachtwoordzin"
     }
   },
   "footerNav": {
@@ -240,6 +246,9 @@
       },
       "description": {
         "title": "Bericht"
+      },
+      "feeEstimate": {
+        "title": "Kosten schatting"
       }
     }
   },
