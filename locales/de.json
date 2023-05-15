@@ -46,6 +46,11 @@
       "msg3": "Es gibt derzeit keinen WatchTower-Support, der deine Lightning-Kanäle im Fall einer Downtime schützen kann.",
       "msg4": "Ok akzeptiert, weiter"
     },
+    "createWalletWithPassphrase": {
+      "title": "Passphrase festlegen (25. Wort zum Verschlüsseln des Seeds)",
+      "invalidMessage": "Geben Sie eine gültige Passphrase ein",
+      "noLeadingTrailingSpaces": "Führende oder nachgestellte Leerzeichen sind nicht zulässig"
+    },
     "language": {
       "title": "Sprache auswählen"
     },
@@ -55,7 +60,8 @@
     "menu": {
       "enableTor": "Tor starten",
       "disableTor": "Tor stoppen",
-      "setBitcoinNode": "Bitcoin-Node auswählen"
+      "setBitcoinNode": "Bitcoin-Node auswählen",
+      "createWalletWithPassphrase": "Erstellen Sie eine Wallet mit Passphrase"
     }
   },
   "footerNav": {
@@ -240,6 +246,9 @@
       },
       "description": {
         "title": "Nachricht"
+      },
+      "feeEstimate": {
+        "title": "Kostenvoranschlag"
       }
     }
   },
