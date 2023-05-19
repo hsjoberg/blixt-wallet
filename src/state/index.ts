@@ -315,25 +315,6 @@ export const model: IStoreModel = {
       let gossipSyncEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.scheduledGossipSyncEnabled) ?? false;
       let enforceSpeedloaderOnStartup = await getItemObjectAsyncStorage<boolean>(StorageItem.enforceSpeedloaderOnStartup) ?? false;
       let gossipStatus = null;
-      const speed = setTimeout(() => {
-        actions.setSpeedloaderLoading(true);
-      }, 3000);
-      if (gossipSyncEnabled) {
-        if (enforceSpeedloaderOnStartup) {
-          log.d("Clearing speedloader files");
-          // TODO(hsjoberg): LndMobileTools should be injected
-          await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile();
-          await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
-        }
-
-        try {
-          gossipStatus = await gossipSync();
-        } catch (e) {
-          log.e("GossipSync exception!", [e]);
-        }
-      }
-      clearTimeout(speed);
-      actions.setSpeedloaderLoading(false);
 
       const status = await checkStatus();
       log.d("status", [status]);
@@ -341,6 +322,24 @@ export const model: IStoreModel = {
         (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !==
         ELndMobileStatusCodes.STATUS_PROCESS_STARTED
       ) {
+        const speed = setTimeout(() => {
+          actions.setSpeedloaderLoading(true);
+        }, 3000);
+        if (gossipSyncEnabled) {
+          if (enforceSpeedloaderOnStartup) {
+            log.d("Clearing speedloader files");
+            // TODO(hsjoberg): LndMobileTools should be injected
+            await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile();
+            await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
+          }
+          try {
+            gossipStatus = await gossipSync();
+          } catch (e) {
+            log.e("GossipSync exception!", [e]);
+          }
+        }
+        clearTimeout(speed);
+        actions.setSpeedloaderLoading(false);
         log.i("Starting lnd, gossipStatus", [gossipStatus]);
         try {
           let args = "";
