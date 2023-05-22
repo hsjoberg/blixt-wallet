@@ -43,7 +43,7 @@ public class MainActivity extends ReactActivity {
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
       }
     }
-    super.onCreate(savedInstanceState);
+    super.onCreate(false);
     currentActivity = new WeakReference<>(MainActivity.this);
     started = true;
   }
