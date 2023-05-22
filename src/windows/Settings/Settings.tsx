@@ -1696,7 +1696,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Right><CheckBox checked={strictGraphPruningEnabled} onPress={changeStrictGraphPruningEnabledPress} /></Right>
           </ListItem>
           {scheduledGossipSyncEnabled &&
-            <ListItem style={style.listItem} icon={true} onPress={changeStrictGraphPruningEnabledPress}>
+            <ListItem style={style.listItem} icon={true} onPress={onPressEnforceSpeedloaderOnStartup}>
               <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="run-fast" /></Left>
               <Body><Text>{t("debug.enforceSpeedloaderOnStartup.title")}</Text></Body>
               <Right><CheckBox checked={enforceSpeedloaderOnStartup} onPress={onPressEnforceSpeedloaderOnStartup} /></Right>
