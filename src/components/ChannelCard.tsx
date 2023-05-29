@@ -357,7 +357,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Right>
             </Row>
           }
-          {channel.zeroConf &&
+          {(channel.zeroConf && !channel.zeroConfConfirmedScid) &&
             <Row style={{ width: "100%" }}>
               <Right>
                 <Text style={{ color: "orange" }}>0conf channel</Text>
