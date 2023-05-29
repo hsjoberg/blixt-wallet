@@ -475,6 +475,7 @@ autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? 
 
 [protocol]
 protocol.wumbo-channels=true
+protocol.zero-conf=true
 protocol.option-scid-alias=true
 
 [routerrpc]

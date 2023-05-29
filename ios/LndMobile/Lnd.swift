@@ -139,6 +139,12 @@ open class Lnd {
     "SubscribeInvoices": { req, cb in return LndmobileSubscribeInvoices(req, cb) },
   ]
 
+  static let biStreamMethods: [String: ((any LndmobileRecvStreamProtocol)?) -> (any LndmobileSendStreamProtocol)?] = [
+    "ChannelAcceptor": {cb in return LndmobileChannelAcceptor(cb, nil) }
+  ]
+
+  var writeStreams: [String: LndmobileSendStream] = [:]
+
   func checkStatus() -> Int32 {
     // Service is always bound on iOS
     var flags = LndStatusCodes.STATUS_SERVICE_BOUND.rawValue.int32Value
@@ -248,5 +254,41 @@ open class Lnd {
 
     let bytes = Data(base64Encoded: payload, options: [])
     block?(bytes, LndmobileReceiveStream(method: method, callback: callback))
+  }
+
+  func sendBiStreamCommand(_ method: String, streamOnlyOnce: Bool, callback: @escaping StreamCallback) {
+    if (streamOnlyOnce) {
+      if (self.activeStreams.contains(method)) {
+        NSLog("Attempting to stream " + method + " twice, not allowing")
+        return
+      } else {
+        self.activeStreams.append(method)
+      }
+    }
+    let block = Lnd.biStreamMethods[method]
+    if block == nil {
+      NSLog("method not found" + method)
+      callback(nil, LndError(msg: "Lnd method not found: " + method))
+      return
+    }
+
+    let writeStream = block?(LndmobileReceiveStream(method: method, callback: callback))
+    writeStreams.updateValue(writeStream as! LndmobileSendStream, forKey: method)
+  }
+
+  func writeToStream(_ method: String, payload: String, callback: @escaping StreamCallback) {
+    let write = Lnd.shared.writeStreams[method]
+    if write == nil {
+      NSLog("method not found" + method)
+      callback(nil, LndError(msg: "Lnd method not found: " + method))
+      return
+    }
+    do {
+      let bytes = Data(base64Encoded: payload, options: [])
+      try write?.send(bytes) // TODO(hsjoberg): Figure out whether send returns a BOOL?
+      callback(nil, nil)
+    } catch let error {
+      callback(nil, error)
+    }
   }
 }

@@ -21,6 +21,12 @@ export interface ISyncCommandOptions<IReq, Req, Res> {
     options: IReq;
 }
 
+export interface IWriteStreamOptions<IReq, Req> {
+    request: ISendRequestClass<IReq, Req>;
+    method: string;
+    options: IReq;
+}
+
 export interface IStreamCommandOptions<IReq, Req> {
     request: ISendRequestClass<IReq, Req>;
     method: string;
@@ -48,6 +54,16 @@ export const sendStreamCommand = async <IReq, Req>({ request, method, options }:
   const response = await LndMobile.sendStreamCommand(method, base64.fromByteArray(request.encode(instance).finish()), streamOnlyOnce);
   return response;
 };
+
+export const sendBiStreamCommand = async (method: string, streamOnlyOnce: boolean = false): Promise<string> =>  {
+  const response = await LndMobile.sendBiStreamCommand(method, streamOnlyOnce);
+  return response;
+};
+
+export const writeToStream = async <IReq, Req>({ request, method, options }: IWriteStreamOptions<IReq, Req>) => {
+  const instance = request.create(options);
+  await LndMobile.writeToStream(method, base64.fromByteArray(request.encode(instance).finish()));
+}
 
 export const decodeStreamResult = <Res>( { base64Result, response }: IStreamResultOptions<Res>): Res => {
   return response.decode(base64.toByteArray(base64Result));

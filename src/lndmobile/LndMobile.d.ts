@@ -17,6 +17,8 @@ export interface ILndMobile {
   // Send gRPC LND API request
   sendCommand(method: string, base64Payload: string): Promise<{ data: string }>;
   sendStreamCommand(method: string, base64Payload: string, streamOnlyOnce: boolean): Promise<"done">;
+  sendBiStreamCommand(method: string, streamOnlyOnce: boolean): Promise<"done">;
+  writeToStream(method: string, payload: string): Promise<boolean>;
 
   // Android-specific
   unbindLndMobileService(): Promise<void>; // TODO(hsjoberg): function looks broken

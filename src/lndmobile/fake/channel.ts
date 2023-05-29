@@ -293,6 +293,24 @@ export const verifyChanBackup = async (channelsBackupBase64: string): Promise<ln
   // return response;
 };
 
+// TODO(hsjoberg): getChanInfo is missing
+
+export const channelAcceptor = async () => {
+  return null;
+};
+
+export const channelAcceptorResponse = async (pendingChanId: Uint8Array, accept: boolean, zeroConf: boolean = false) => {
+  return true;
+};
+
+// TODO error handling
+export const decodeChannelAcceptRequest = (data: string): lnrpc.ChannelAcceptRequest => {
+  if (data) {
+    return lnrpc.ChannelAcceptRequest.decode(base64.toByteArray(data));
+  }
+  return lnrpc.ChannelAcceptRequest.create({});
+};
+
 export const decodeChannelEvent = (data: string): lnrpc.ChannelEventUpdate => {
   if (data) {
     return lnrpc.ChannelEventUpdate.decode(base64.toByteArray(data));

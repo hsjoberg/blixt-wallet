@@ -34,7 +34,9 @@ class LndMobile: RCTEventEmitter {
   }
 
   override func supportedEvents() -> [String]! {
-    return Lnd.streamMethods.map{ $0.key }
+//    return Lnd.streamMethods.map{ $0.key }
+    let mergedKeys = Array(Lnd.streamMethods.keys) + Array(Lnd.biStreamMethods.keys)
+    return mergedKeys
   }
 
   @objc
@@ -221,5 +223,54 @@ class LndMobile: RCTEventEmitter {
       }
     }
     resolve("done")
+  }
+
+  @objc(sendBiStreamCommand:streamOnlyOnce:resolver:rejecter:)
+  func sendBiStreamCommand(_ method: String, streamOnlyOnce: Bool, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    Lnd.shared.sendBiStreamCommand(
+      method,
+      streamOnlyOnce: streamOnlyOnce
+    ) { (data, error) in
+      if let e = error {
+        NSLog("Stream error for " + method)
+        NSLog(e.localizedDescription)
+
+        let fullError = e.localizedDescription
+        var errorCode = "Error"
+        var errorDesc = fullError
+
+        if let codeRange = fullError.range(of: "code = "), let descRange = fullError.range(of: " desc = ") {
+          errorCode = String(fullError[codeRange.upperBound..<descRange.lowerBound])
+          errorDesc = String(fullError[descRange.upperBound..<fullError.endIndex])
+        }
+
+        self.sendEvent(
+          withName: method,
+          body: ["error_code": errorCode, "error_desc": errorDesc]
+        )
+      } else {
+        self.sendEvent(
+          withName: method,
+          body: ["data": data?.base64EncodedString()]
+        )
+      }
+    }
+    resolve("done")
+  }
+
+  @objc(writeToStream:payload:resolver:rejecter:)
+  func writeToStream(_ method: String, payload: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    Lnd.shared.writeToStream(
+      method,
+      payload: payload
+    ) { (data, error) in
+      if let e = error {
+        NSLog("writeToStream error for " + method)
+        NSLog(e.localizedDescription)
+        reject("error", e.localizedDescription, e)
+      } else {
+        resolve(data)
+      }
+    }
   }
 }

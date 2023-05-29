@@ -72,6 +72,21 @@ export const subscribeChannelEvents = jest.fn(async (): Promise<string> => {
   return ""; // TODO(hsjoberg)
 });
 
+export const channelAcceptor = async () => {
+  return null;
+};
+
+export const channelAcceptorResponse = async (pendingChanId: Uint8Array, accept: boolean, zeroConf: boolean = false) => {
+  return true;
+};
+
+// export const decodeChannelAcceptRequest = (data: string): lnrpc.ChannelAcceptRequest => {
+//   if (data) {
+//     return lnrpc.ChannelAcceptRequest.decode(base64.toByteArray(data));
+//   }
+//   return lnrpc.ChannelAcceptRequest.create({});
+// };
+
 export const exportAllChannelBackups = async (): Promise<lnrpc.ChanBackupSnapshot> => {
   const response = lnrpc.ChanBackupSnapshot.create({
     multiChanBackup: {

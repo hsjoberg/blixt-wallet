@@ -18,7 +18,7 @@ import { invoicesrpc, lnrpc } from "../../../proto/lightning";
 import { sendCommand } from "../../lndmobile/utils";
 import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus, getNodeInfo, listUnspent, getNetworkInfo, importGraph, listInvoices } from "../../lndmobile/index";
 import { initWallet, genSeed, deriveKey, signMessage, derivePrivateKey } from "../../lndmobile/wallet";
-import { pendingChannels, listChannels, openChannel, closeChannel } from "../../lndmobile/channel";
+import { pendingChannels, listChannels, openChannel, closeChannel, channelAcceptor, decodeChannelEvent, decodeChannelAcceptRequest, channelAcceptorResponse } from "../../lndmobile/channel";
 import { newAddress, sendCoins } from "../../lndmobile/onchain";
 import { storage, StorageItem, setItemObject, getItem, setItem } from "../../storage/app";
 import { status, modifyStatus, queryScores } from "../../lndmobile/autopilot";
@@ -37,6 +37,7 @@ import { ICLOUD_BACKUP_KEY } from "../../state/ICloudBackup";
 import { notificationManager } from "../../state/NotificationManager";
 import PushNotification from "react-native-push-notification";
 import { ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID, PLATFORM } from "../../utils/constants";
+import { LndMobileEventEmitter } from "../../utils/event-listener";
 
 let iCloudStorage: any;
 console.log(PLATFORM);
@@ -329,6 +330,21 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           }}><Text style={styles.buttonText}>lndmobile.hello()</Text></Button>
 
           <Text style={{ width: "100%"}}>iOS LndMobile:</Text>
+          <Button small onPress={async () => {
+            LndMobileEventEmitter.addListener("ChannelAcceptor", async (event) => {
+              try {
+                const channelAcceptRequest = decodeChannelAcceptRequest(event.data)
+
+                console.log("wantsZeroConf:" + channelAcceptRequest.wantsZeroConf);
+
+                console.log(await channelAcceptorResponse(channelAcceptRequest.pendingChanId, true, true));
+              } catch (error) {
+                console.error("error: " + error.message);
+              }
+            });
+
+            console.log(await channelAcceptor());
+          }}><Text style={styles.buttonText}>channelAcceptor</Text></Button>
           <Button small onPress={async () => {
             console.log(NativeModules.LndMobileTools);
             console.log(NativeModules.LndMobileTools.writeConfigFile());
