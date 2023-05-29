@@ -506,10 +506,8 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
     await setItem(StorageItem.walletPassword, randomBase64);
     await setWalletPassword(randomBase64);
 
-    const isRestore = payload && payload.restore && payload.restore.aezeedPassphrase;
-
-    const wallet = !!isRestore
-      ? await initWallet(seed, randomBase64, 100, payload.restore?.channelsBackup, payload.restore?.aezeedPassphrase)
+    const wallet = payload?.restore
+      ? await initWallet(seed, randomBase64, 100, payload.restore.channelsBackup, payload.restore.aezeedPassphrase)
       : await initWallet(seed, randomBase64, undefined, undefined, payload?.init?.aezeedPassphrase);
 
     await setItemObject(StorageItem.walletCreated, true);
