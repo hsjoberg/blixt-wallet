@@ -256,7 +256,7 @@ open class Lnd {
     block?(bytes, LndmobileReceiveStream(method: method, callback: callback))
   }
 
-  func sendBiStreamCommand(_ method: String, streamOnlyOnce: Bool, callback: @escaping StreamCallback) {
+  func sendBidiStreamCommand(_ method: String, streamOnlyOnce: Bool, callback: @escaping StreamCallback) {
     if (streamOnlyOnce) {
       if (self.activeStreams.contains(method)) {
         NSLog("Attempting to stream " + method + " twice, not allowing")

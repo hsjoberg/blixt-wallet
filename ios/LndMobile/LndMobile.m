@@ -56,7 +56,7 @@ RCT_EXTERN_METHOD(
 )
 
 RCT_EXTERN_METHOD(
-  sendBiStreamCommand: (NSString *)method
+  sendBidiStreamCommand: (NSString *)method
   streamOnlyOnce: (BOOL)streamOnlyOnce
   resolver: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject

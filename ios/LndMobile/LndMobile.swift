@@ -225,9 +225,9 @@ class LndMobile: RCTEventEmitter {
     resolve("done")
   }
 
-  @objc(sendBiStreamCommand:streamOnlyOnce:resolver:rejecter:)
-  func sendBiStreamCommand(_ method: String, streamOnlyOnce: Bool, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    Lnd.shared.sendBiStreamCommand(
+  @objc(sendBidiStreamCommand:streamOnlyOnce:resolver:rejecter:)
+  func sendBidiStreamCommand(_ method: String, streamOnlyOnce: Bool, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    Lnd.shared.sendBidiStreamCommand(
       method,
       streamOnlyOnce: streamOnlyOnce
     ) { (data, error) in

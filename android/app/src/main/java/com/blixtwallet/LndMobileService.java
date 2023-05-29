@@ -61,9 +61,12 @@ public class LndMobileService extends Service {
   static final int MSG_STOP_LND_RESULT = 18;
   static final int MSG_PING = 19;
   static final int MSG_PONG = 20;
+  static final int MSG_GRPC_BIDI_STREAM_COMMAND = 21;
+  static final int MSG_GRPC_STREAM_WRITE_RESULT = 22;
 
   private Map<String, Method> syncMethods = new HashMap<>();
   private Map<String, Method> streamMethods = new HashMap<>();
+  private Map<String, lndmobile.SendStream> writeStreams = new HashMap<>();
 
   private static boolean isReceiveStream(Method m) {
     return m.toString().contains("RecvStream");
@@ -105,6 +108,7 @@ public class LndMobileService extends Service {
 
           case MSG_GRPC_COMMAND:
           case MSG_GRPC_STREAM_COMMAND:
+          case MSG_GRPC_BIDI_STREAM_COMMAND: {
             final String method = bundle.getString("method");
             Method m = syncMethods.get(method);
 
@@ -119,7 +123,7 @@ public class LndMobileService extends Service {
 
             boolean streamOnlyOnce = bundle.getBoolean("stream_only_once");
 
-            if (msg.what == MSG_GRPC_STREAM_COMMAND) {
+            if (msg.what == MSG_GRPC_STREAM_COMMAND || msg.what == MSG_GRPC_BIDI_STREAM_COMMAND) {
               if (streamOnlyOnce) {
                 if (streamsStarted.contains(method)) {
                   HyperLog.d(TAG, "Attempting to stream " + method + " twice, not allowing");
@@ -133,15 +137,23 @@ public class LndMobileService extends Service {
             final byte[] b = bundle.getByteArray("payload");
 
             try {
-              m.invoke(
-                null,
-                b,
-                msg.what == MSG_GRPC_COMMAND
-                  ? new LndCallback(msg.replyTo, method, request)
-                  : new LndStreamCallback(msg.replyTo, method)
-              );
+              if (msg.what == MSG_GRPC_BIDI_STREAM_COMMAND) {
+                lndmobile.SendStream writeStream = (lndmobile.SendStream)m.invoke(
+                  null,
+                  new LndStreamCallback(msg.replyTo, method)
+                );
+                writeStreams.put(method, writeStream);
+              } else {
+                m.invoke(
+                  null,
+                  b,
+                  msg.what == MSG_GRPC_COMMAND
+                    ? new LndCallback(msg.replyTo, method, request)
+                    : new LndStreamCallback(msg.replyTo, method)
+                );
+              }
 
-              if (msg.what == MSG_GRPC_STREAM_COMMAND) {
+              if (msg.what == MSG_GRPC_STREAM_COMMAND || msg.what == MSG_GRPC_BIDI_STREAM_COMMAND) {
                 Message message = Message.obtain(null, MSG_GRPC_STREAM_STARTED, request, 0);
                 Bundle sendBundle = new Bundle();
                 sendBundle.putString("method", method);
@@ -158,6 +170,7 @@ public class LndMobileService extends Service {
             }
 
             break;
+          }
 
           case MSG_CHECKSTATUS:
             // lndmobile.Lndmobile.getStatus(new lndmobile.LndStatusCallback() {
@@ -250,6 +263,31 @@ public class LndMobileService extends Service {
           case MSG_PING:
             HyperLog.d(TAG, "Got MSG_PING");
             sendToClient(msg.replyTo, Message.obtain(null, MSG_PONG, request, 0));
+            break;
+
+          case MSG_GRPC_STREAM_WRITE:
+            HyperLog.d(TAG, "Got MSG_GRPC_STREAM_WRITE");
+            final String method = bundle.getString("method");
+            final byte[] payload = bundle.getByteArray("payload");
+
+            lndmobile.SendStream s = writeStreams.get(method);
+            if (s == null) {
+              HyperLog.e(TAG, "Could not find write stream for " + method);
+            }
+
+            try {
+              s.send(payload);
+            } catch (Throwable error) {
+              // TODO(hsjoberg): Handle errors
+              HyperLog.e(TAG, error.getMessage());
+            }
+
+            Message message = Message.obtain(null, MSG_GRPC_STREAM_WRITE_RESULT, request, 0);
+            Bundle sendBundle = new Bundle();
+            sendBundle.putString("method", method);
+            message.setData(sendBundle);
+            sendToClient(msg.replyTo, message);
+
             break;
 
           default:

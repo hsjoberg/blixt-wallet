@@ -55,8 +55,8 @@ export const sendStreamCommand = async <IReq, Req>({ request, method, options }:
   return response;
 };
 
-export const sendBiStreamCommand = async (method: string, streamOnlyOnce: boolean = false): Promise<string> =>  {
-  const response = await LndMobile.sendBiStreamCommand(method, streamOnlyOnce);
+export const sendBidiStreamCommand = async (method: string, streamOnlyOnce: boolean = false): Promise<string> =>  {
+  const response = await LndMobile.sendBidiStreamCommand(method, streamOnlyOnce);
   return response;
 };
 

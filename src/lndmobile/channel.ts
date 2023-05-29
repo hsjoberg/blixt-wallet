@@ -1,4 +1,4 @@
-import { sendCommand, sendStreamCommand, decodeStreamResult, sendBiStreamCommand, writeToStream } from "./utils";
+import { sendCommand, sendStreamCommand, decodeStreamResult, sendBidiStreamCommand, writeToStream } from "./utils";
 import { lnrpc } from "../../proto/lightning";
 import Long from "long";
 import * as base64 from "base64-js";
@@ -192,7 +192,7 @@ export const getChanInfo = async (chanId: Long): Promise<lnrpc.ChannelEdge> => {
 };
 
 export const channelAcceptor = async () => {
-  return await sendBiStreamCommand("ChannelAcceptor");
+  return await sendBidiStreamCommand("ChannelAcceptor");
 };
 
 export const channelAcceptorResponse = async (pendingChanId: Uint8Array, accept: boolean, zeroConf: boolean = false) => {
