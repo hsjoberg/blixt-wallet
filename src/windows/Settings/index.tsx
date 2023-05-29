@@ -18,6 +18,7 @@ import LightningPeers from "./LightningPeers";
 import ConnectToLightningPeer from "./ConnectToLightningPeer";
 import LndLog from "./LndLog";
 import DunderDoctor from "./DunderDoctor";
+import ToastLog from "./ToastLog";
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,7 @@ export type SettingsStackParamList = {
   ChannelProvider: ISelectListNavigationProps<string>;
   LndLog: undefined;
   DunderDoctor: undefined;
+  ToastLog: undefined;
 }
 
 export default function SettingsIndex() {
@@ -73,6 +75,7 @@ export default function SettingsIndex() {
       <Stack.Screen name="ChannelProvider" component={SelectList} />
       <Stack.Screen name="LndLog" component={LndLog} />
       <Stack.Screen name="DunderDoctor" component={DunderDoctor} />
+      <Stack.Screen name="ToastLog" component={ToastLog} />
     </Stack.Navigator>
   );
 }

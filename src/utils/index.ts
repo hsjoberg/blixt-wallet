@@ -74,9 +74,17 @@ export const hexToUint8Array = (hexString: string) => {
   return new Uint8Array(hexString.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));
 };
 
+export const toastEntries: string[] = []
+
+// TODO: maybe make array observable in order trigger re-render for hook
+export function useGetToastEntries(): string[] {
+  return toastEntries;
+}
+
 export const toast = (message: string, period = 8000, type: "danger" | "success" | "warning" = "success", button?: string) => {
+  toastEntries.push(message);
+  console.log(message);
   try {
-    console.log(message);
     if (AppState.currentState === "active") {
       Toast.show({
         duration: period,

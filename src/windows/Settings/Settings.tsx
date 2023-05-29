@@ -1555,6 +1555,12 @@ ${t("experimental.tor.disabled.msg2")}`;
             <Body><Text>{t("debug.startup.title")}</Text></Body>
             <Right><CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} /></Right>
           </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={() => navigation.navigate("ToastLog")}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="format-list-bulleted" /></Left>
+            <Body>
+              <Text>{t("debug.showNotifications.title")}</Text>
+            </Body>
+          </ListItem>
           <ListItem style={style.listItem} button={true} icon={true} onPress={onPressRescanWallet}>
             <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="restart" /></Left>
             <Body>
