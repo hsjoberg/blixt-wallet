@@ -247,17 +247,24 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                   </CopyText>
                 </Right>
               </Row>
-              {
-                isForceClosableChannel ? (
-                  <Row style={{ width: "100%" }}>
-                    <Left>
-                      <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => forceClose(channel)}>
-                        <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
-                      </Button>
-                    </Left>
-                  </Row>
-                ) : null
-              }
+              {isForceClosableChannel === true && (
+                <Row style={{ width: "100%" }}>
+                  <Left>
+                    <Button style={{ marginTop: 14 }} danger={true} small={true} onPress={() => forceClose(channel)}>
+                      <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
+                    </Button>
+                  </Left>
+                </Row>
+              )}
+              {!!(channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.closingTxid && (
+                <Row style={{ width: "100%" }}>
+                  <Left>
+                    <Button style={{ marginTop: 14 }} small={true} onPress={(() => onPressViewInExplorer((channel as lnrpc.PendingChannelsResponse.ClosedChannel).closingTxid))}>
+                      <Text style={{ fontSize: 8 }}>{t("generic.viewInBlockExplorer", { ns: namespaces.common })}</Text>
+                    </Button>
+                  </Left>
+                </Row>
+              )}
             </>
           }
           {type === "FORCE_CLOSING" &&
