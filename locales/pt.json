@@ -46,11 +46,6 @@
       "msg3": "Actualmente, não existe suporte para WatchTower para monitorar os seus canais enquanto estiver offline.",
       "msg4": "Eu sou imprudente, continue"
     },
-    "createWalletWithPassphrase": {
-      "title": "Definir senha (25ª palavra para criptografar a semente)",
-      "invalidMessage": "Digite uma senha válida",
-      "noLeadingTrailingSpaces": "Espaços iniciais ou finais não são permitidos"
-    },
     "language": {
       "title": "Selecione o idioma"
     },
@@ -60,8 +55,7 @@
     "menu": {
       "enableTor": "Activar Tor",
       "disableTor": "Desativar Tor",
-      "setBitcoinNode": "Definir nó Bitcoin",
-      "createWalletWithPassphrase": "Criar carteira com senha"
+      "setBitcoinNode": "Definir nó Bitcoin"
     }
   },
   "footerNav": {
@@ -246,9 +240,6 @@
       },
       "description": {
         "title": "Mensagem"
-      },
-      "feeEstimate": {
-        "title": "Estimativa de taxa"
       }
     }
   },
