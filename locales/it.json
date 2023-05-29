@@ -46,11 +46,6 @@
       "msg3": "Al momento non esiste un supporto per la torre di guardia per guardare i tuoi canali mentre sei offline.",
       "msg4": "Sono sconsiderato, continua"
     },
-    "createWalletWithPassphrase": {
-      "title": "Imposta passphrase (25a parola per crittografare il semi)",
-      "invalidMessage": "Inserisci una passphrase valida",
-      "noLeadingTrailingSpaces": "Gli spazi iniziali o finali non sono consentiti"
-    },
     "language": {
       "title": "Seleziona la lingua"
     },
@@ -60,8 +55,7 @@
     "menu": {
       "enableTor": "Abilita Tor",
       "disableTor": "Disabilita Tor",
-      "setBitcoinNode": "Imposta il nodo Bitcoin",
-      "createWalletWithPassphrase": "Crea portafoglio con passphrase"
+      "setBitcoinNode": "Imposta il nodo Bitcoin"
     }
   },
   "footerNav": {
@@ -246,9 +240,6 @@
       },
       "description": {
         "title": "Messaggio"
-      },
-      "feeEstimate": {
-        "title": "Preventivo tariffario"
       }
     }
   },
