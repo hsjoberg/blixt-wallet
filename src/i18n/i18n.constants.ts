@@ -45,6 +45,7 @@ export const namespaces = {
     removePincodeAuth: "settings.removePincodeAuth",
     setPincode: "settings.setPincode",
     torShowOnionAddress: "settings.torShowOnionAddress",
+    toastLog: "settings.toastLog",
   },
   web: {
     info: "web.info",

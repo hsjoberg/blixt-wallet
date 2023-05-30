@@ -16,17 +16,17 @@ import { namespaces } from "../../i18n/i18n.constants";
 
 
 export interface ISelectListProps {
-  navigation: StackNavigationProp<SettingsStackParamList, "LightningPeers">;
-  route: RouteProp<SettingsStackParamList, "LightningPeers">;
+  navigation: StackNavigationProp<SettingsStackParamList, "ToastLog">;
+  route: RouteProp<SettingsStackParamList, "ToastLog">;
 }
 
 export default function({ navigation }: ISelectListProps) {
-  const t = useTranslation(namespaces.settings.lightningPeers).t;
+  const t = useTranslation(namespaces.settings.toastLog).t;
   const toastEntries = useGetToastEntries();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: t("layout.title"),
+      headerTitle: t("title"),
       headerShown: true,
       headerRight: () => {
         return (
@@ -76,6 +76,10 @@ export default function({ navigation }: ISelectListProps) {
 }
 
 const style = StyleSheet.create({
+  card: {
+    width: "100%",
+    marginTop: 8,
+  },
   icon: {
     fontSize: 18 * fontFactorNormalized,
   },
