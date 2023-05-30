@@ -393,12 +393,18 @@ class LndMobile extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void gossipSync(Promise promise) {
+  public void gossipSync(String networkType, Promise promise) {
     int req = new Random().nextInt();
     requests.put(req, promise);
 
     Message message = Message.obtain(null, LndMobileService.MSG_GOSSIP_SYNC, req, 0);
     message.replyTo = messenger;
+    Bundle bundle = new Bundle();
+    bundle.putString(
+      "networkType",
+      networkType
+    );
+    message.setData(bundle);
 
     try {
       lndMobileServiceMessenger.send(message);

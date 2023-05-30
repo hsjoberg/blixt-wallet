@@ -336,6 +336,8 @@ export const model: IStoreModel = {
           }
           try {
             let connectionState = await NetInfo.fetch();
+            log.i("connectionState", [connectionState.type]);
+            log.i("gossipSync", [gossipSync]);
             gossipStatus = await gossipSync(connectionState.type);
           } catch (e) {
             log.e("GossipSync exception!", [e]);
