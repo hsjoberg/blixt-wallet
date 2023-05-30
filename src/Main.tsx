@@ -35,7 +35,6 @@ import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
 import { navigator } from "./utils/navigation";
 import { PLATFORM } from "./utils/constants";
 import Prompt, { IPromptNavigationProps } from "./windows/HelperWindows/Prompt";
-import MultiPrompt, { IMultiPromptNavigationProps } from "./windows/HelperWindows/MultiPrompt";
 
 const RootStack = createStackNavigator();
 
@@ -70,7 +69,6 @@ export type RootStackParamList = {
   WebInfo: undefined;
 
   Prompt: IPromptNavigationProps;
-  MultiPrompt: IMultiPromptNavigationProps;
 
   DEV_CommandsX: undefined;
 }
@@ -256,7 +254,6 @@ export default function Main() {
       <RootStack.Screen name="KeysendTest" component={KeysendTest} options={animationDisabled} />
       <RootStack.Screen name="KeysendExperiment" component={KeysendExperiment} options={horizontalTransition} />
       <RootStack.Screen name="Prompt" component={Prompt} options={animationDisabled} />
-      <RootStack.Screen name="MultiPrompt" component={MultiPrompt} options={animationDisabled} />
       <RootStack.Screen name="DEV_CommandsX" component={DEV_Commands} options={animationDisabled} />
     </RootStack.Navigator>
   );
