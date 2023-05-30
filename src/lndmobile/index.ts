@@ -69,8 +69,8 @@ export const startLnd = async (torEnabled: boolean, args?: string): Promise<{dat
 /**
  * @throws
  */
-export const gossipSync = async (): Promise<{ data: string } > => {
-  return await LndMobile.gossipSync();
+export const gossipSync = async (networkType: string): Promise<{ data: string } > => {
+  return await LndMobile.gossipSync(networkType);
 }
 
 export const checkICloudEnabled = async (): Promise<boolean> => {

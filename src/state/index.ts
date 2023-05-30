@@ -1,4 +1,6 @@
 import * as base64 from "base64-js";
+import Tor from "react-native-tor";
+import NetInfo from "@react-native-community/netinfo";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import { AlertButton, NativeModules } from "react-native";
@@ -333,7 +335,8 @@ export const model: IStoreModel = {
             await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
           }
           try {
-            gossipStatus = await gossipSync();
+            let connectionState = await NetInfo.fetch();
+            gossipStatus = await gossipSync(connectionState.type);
           } catch (e) {
             log.e("GossipSync exception!", [e]);
           }

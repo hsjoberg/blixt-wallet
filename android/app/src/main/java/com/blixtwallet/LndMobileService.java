@@ -264,7 +264,8 @@ public class LndMobileService extends Service {
 
           case MSG_GOSSIP_SYNC:
             HyperLog.i(TAG, "Got MSG_GOSSIP_SYNC");
-            gossipSync(msg.replyTo, request);
+            final String networkType = bundle.getString("networkType", "");
+            gossipSync(msg.replyTo, networkType, request);
             break;
 
           case MSG_PING:
@@ -412,11 +413,15 @@ public class LndMobileService extends Service {
     }
   }
 
-  void gossipSync(Messenger recipient, int request) {
+  void gossipSync(Messenger recipient, String networkType, int request) {
     HyperLog.i(TAG, "gossipSync()");
     Runnable gossipSync = new Runnable() {
       public void run() {
-        Lndmobile.gossipSync(getApplicationContext().getCacheDir().getAbsolutePath(), getApplicationContext().getFilesDir().getAbsolutePath(), new lndmobile.Callback() {
+        Lndmobile.gossipSync(
+          getApplicationContext().getCacheDir().getAbsolutePath(),
+          getApplicationContext().getFilesDir().getAbsolutePath(),
+          networkType,
+          new lndmobile.Callback() {
 
           @Override
           public void onError(Exception e) {

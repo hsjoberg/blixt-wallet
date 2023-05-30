@@ -118,7 +118,7 @@ export interface ILndMobileInjections {
     decodeState: (data: string) => lnrpc.SubscribeStateResponse;
     checkStatus: () => Promise<number>;
     startLnd: (torEnabled: boolean, args: string) => Promise<string>;
-    gossipSync: () => Promise<{ data: string }>;
+    gossipSync: (networkType: string) => Promise<{ data: string }>;
     checkICloudEnabled: () => Promise<boolean>;
     checkApplicationSupportExists: () => Promise<boolean>;
     checkLndFolderExists: () => Promise<boolean>;
