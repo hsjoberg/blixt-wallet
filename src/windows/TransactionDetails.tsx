@@ -5,6 +5,7 @@ import Clipboard from "@react-native-community/clipboard";
 import { Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
 import { fromUnixTime } from "date-fns";
 import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
+import type Long from "long";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
@@ -233,20 +234,20 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                 }
               </View>
               <MetaData title={t("date")} data={formatISO(fromUnixTime(transaction.date.toNumber()))} />
-              {transaction.note && <MetaData title={t("note")} data={transaction.note} />}
-              {transaction.website && <MetaData title={t("website")} data={transaction.website} url={"https://" + transaction.website} />}
+              {!!transaction.note && <MetaData title={t("note")} data={transaction.note} />}
+              {!!transaction.website && <MetaData title={t("website")} data={transaction.website} url={"https://" + transaction.website} />}
               {transaction.type !== "NORMAL" && <MetaData title={t("type")} data={transaction.type} />}
               {(transaction.type === "LNURL" && transaction.lnurlPayResponse && transaction.lnurlPayResponse.successAction) && <LNURLMetaData transaction={transaction} />}
-              {(transaction.nodeAliasCached && name === null) && <MetaData title={t("generic.nodeAlias", { ns: namespaces.common })} data={transaction.nodeAliasCached} />}
-              {direction === "send" && transaction.lightningAddress && <MetaDataLightningAddress title={t("generic.lightningAddress", { ns: namespaces.common })} data={transaction.lightningAddress} />}
-              {direction === "receive" && !transaction.tlvRecordName && transaction.payer && <MetaData title={t("payer")} data={transaction.payer} />}
-              {direction === "receive" && transaction.tlvRecordName && <MetaData title={t("payer")} data={transaction.tlvRecordName} />}
-              {(direction === "send" && name) && <MetaData title={t("recipient")} data={name} />}
-              {(description !== null && description.length > 0) && <MetaData title={t("generic.description", { ns: namespaces.common })} data={description} />}
+              {(!!transaction.nodeAliasCached && name === null) && <MetaData title={t("generic.nodeAlias", { ns: namespaces.common })} data={transaction.nodeAliasCached} />}
+              {direction === "send" && !!transaction.lightningAddress && <MetaDataLightningAddress title={t("generic.lightningAddress", { ns: namespaces.common })} data={transaction.lightningAddress} />}
+              {direction === "receive" && !transaction.tlvRecordName && !!transaction.payer && <MetaData title={t("payer")} data={transaction.payer} />}
+              {direction === "receive" && !!transaction.tlvRecordName && <MetaData title={t("payer")} data={transaction.tlvRecordName} />}
+              {(direction === "send" && !!name) && <MetaData title={t("recipient")} data={name} />}
+              {(!!description) && <MetaData title={t("generic.description", { ns: namespaces.common })} data={description} />}
               <MetaData title={t("generic.amount", { ns: namespaces.common })} data={formatBitcoin(transactionValue, bitcoinUnit)} />
               {transaction.valueFiat != null && transaction.valueFiatCurrency && <MetaData title={t("amountInFiatTimeOfPayment")} data={`${transaction.valueFiat.toFixed(2)} ${transaction.valueFiatCurrency}`} />}
               {transaction.fee !== null && transaction.fee !== undefined && <MetaData title={t("generic.fee", { ns: namespaces.common })} data={transaction.fee.toString() + " Satoshi"} />}
-              {transaction.duration && <MetaData title={t("duration")} data={durationAsSeconds(transaction.duration)} />}
+              {!!transaction.duration && <MetaData title={t("duration")} data={durationAsSeconds(transaction.duration)} />}
               {transaction.hops && transaction.hops.length > 0 && <MetaData title={t("numberOfHops")} data={transaction.hops.length.toString()} />}
               {direction === "send" && <MetaData title={t("remotePubkey")} data={transaction.remotePubkey} />}
               <MetaData title={t("paymentHash")} data={transaction.rHash}/>
