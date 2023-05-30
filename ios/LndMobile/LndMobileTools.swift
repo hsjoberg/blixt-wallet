@@ -172,13 +172,13 @@ autopilot.heuristic=preferential:0.05
   func DEBUG_getWalletPasswordFromKeychain(resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     let server = "password"
 
-    let query: [String: Any] = [
-      kSecClass as String: kSecClassInternetPassword,
-      kSecAttrServer as String: server,
-      kSecReturnAttributes as String: kCFBooleanTrue!,
-      kSecReturnData as String: kCFBooleanTrue!,
-      kSecMatchLimit as String: kSecMatchLimitOne as String
-    ] as CFDictionary
+    let query: CFDictionary = [
+      kSecClass: kSecClassInternetPassword,
+      kSecAttrServer: server,
+      kSecReturnAttributes: kCFBooleanTrue!,
+      kSecReturnData: kCFBooleanTrue!,
+      kSecMatchLimit: kSecMatchLimitOne as String
+    ] as [CFString: Any] as CFDictionary
 
     var result: AnyObject?
     let osStatus = SecItemCopyMatching(query, &result)
