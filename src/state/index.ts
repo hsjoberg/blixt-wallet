@@ -29,7 +29,7 @@ import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IContactsModel, contacts } from "./Contacts";
 
 import { ELndMobileStatusCodes } from "../lndmobile/index";
-import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion, getAppBuild, setAppBuild, getRescanWallet, setRescanWallet } from "../storage/app";
+import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion, getAppBuild, setAppBuild, getRescanWallet, setRescanWallet, getLndCompactDb, setLndCompactDb } from "../storage/app";
 import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
 import { clearTransactions } from "../storage/database/transaction";
 import { appMigration } from "../migration/app-migration";
@@ -258,13 +258,19 @@ export const model: IStoreModel = {
       if ((status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !== ELndMobileStatusCodes.STATUS_PROCESS_STARTED) {
         log.i("Starting lnd");
         try {
-          let args = "";//--skip-chain-sync ";
+          let args = "";
           if (socksPort > 0) {
             args = "--tor.socks=127.0.0.1:" + socksPort + " ";
           }
           if (await getRescanWallet()) {
+            log.d("Rescanning wallet");
             args +=  "--reset-wallet-transactions ";
             await setRescanWallet(false);
+          }
+          if (await getLndCompactDb()) {
+            log.d("Compacting lnd databases");
+            args +=  "--db.bolt.auto-compact --db.bolt.auto-compact-min-age=0 ";
+            await setLndCompactDb(false);
           }
 
           log.d("startLnd", [

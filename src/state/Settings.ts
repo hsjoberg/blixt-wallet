@@ -1,6 +1,6 @@
 import { Action, action, Thunk, thunk } from "easy-peasy";
 
-import { StorageItem, getItemObject, setItemObject, removeItem, getItem, setItem, setRescanWallet, getRescanWallet } from "../storage/app";
+import { StorageItem, getItemObject, setItemObject, removeItem, getItem, setItem, setRescanWallet, getRescanWallet, getLndCompactDb, setLndCompactDb } from "../storage/app";
 import { IFiatRates } from "./Fiat";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { MapStyle } from "../utils/google-maps";
@@ -62,6 +62,7 @@ export interface ISettingsModel {
   changeLndPathfindingAlgorithm: Thunk<ISettingsModel, routerrpcEstimator, any, IStoreModel>;
   changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
   changeLndLogLevel: Thunk<ISettingsModel, LndLogLevel>;
+  changeLndCompactDb: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -98,6 +99,7 @@ export interface ISettingsModel {
   setLndPathfindingAlgorithm: Action<ISettingsModel, routerrpcEstimator>;
   setMaxLNFeePercentage: Action<ISettingsModel, number>;
   setLndLogLevel: Action<ISettingsModel, LndLogLevel>;
+  setLndCompactDb: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -134,6 +136,7 @@ export interface ISettingsModel {
   lndPathfindingAlgorithm: routerrpcEstimator;
   maxLNFeePercentage: number;
   lndLogLevel: LndLogLevel;
+  lndCompactDb: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -174,6 +177,7 @@ export const settings: ISettingsModel = {
     actions.setLndPathfindingAlgorithm((await getItem(StorageItem.lndPathfindingAlgorithm) ?? DEFAULT_PATHFINDING_ALGORITHM) as routerrpcEstimator);
     actions.setMaxLNFeePercentage(await getItemObject(StorageItem.maxLNFeePercentage) ?? 2);
     actions.setLndLogLevel((await getItem(StorageItem.lndLogLevel) ?? "info") as LndLogLevel);
+    actions.setLndCompactDb(await getLndCompactDb());
 
     log.d("Done");
   }),
@@ -195,6 +199,7 @@ export const settings: ISettingsModel = {
     await setItemObject(StorageItem.name, payload);
     actions.setName(payload);
   }),
+
   changeLanguage: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.language, payload);
     await i18n.changeLanguage(payload);
@@ -357,6 +362,12 @@ export const settings: ISettingsModel = {
     actions.setLndLogLevel(payload);
   }),
 
+  changeLndCompactDb: thunk(async (actions, payload) => {
+    await setLndCompactDb(payload);
+    actions.setLndCompactDb(payload);
+  }),
+
+
   setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
   setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
   setName: action((state, payload) => { state.name = payload; }),
@@ -392,6 +403,7 @@ export const settings: ISettingsModel = {
   setLndPathfindingAlgorithm: action((state, payload) => { state.lndPathfindingAlgorithm = payload; }),
   setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
   setLndLogLevel: action((state, payload) => { state.lndLogLevel = payload; }),
+  setLndCompactDb: action((state, payload) => { state.lndCompactDb = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -428,4 +440,5 @@ export const settings: ISettingsModel = {
   maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
   lndLogLevel: DEFAULT_LND_LOG_LEVEL,
   lndPathfindingAlgorithm: DEFAULT_PATHFINDING_ALGORITHM,
+  lndCompactDb: false,
 };

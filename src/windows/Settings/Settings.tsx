@@ -1072,6 +1072,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeRescanWallet(true);
     restartNeeded();
   };
+
   // Setup demo environment
   const setupDemo = useStoreActions((store) => store.setupDemo);
 
@@ -1146,6 +1147,13 @@ ${t("experimental.tor.disabled.msg2")}`;
       }]
     );
   }
+
+  // Compact lnd databases
+  const changeLndCompactDb = useStoreActions((store) => store.settings.changeLndCompactDb);
+  const onPressLndCompactDb = async () => {
+    await changeLndCompactDb(true);
+    restartNeeded();
+  };
 
   return (
     <Container>
@@ -1663,6 +1671,12 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>{t("debug.strictGraphPruning.title")}</Text>
             </Body>
             <Right><CheckBox checked={strictGraphPruningEnabled} onPress={changeStrictGraphPruningEnabledPress} /></Right>
+          </ListItem>
+          <ListItem style={style.listItem} button={true} icon={true} onPress={onPressLndCompactDb}>
+            <Left><Icon style={style.icon} type="AntDesign" name="shrink" /></Left>
+            <Body>
+              <Text>{t("debug.compactLndDatabases.title")}</Text>
+            </Body>
           </ListItem>
         </List>
       </Content>

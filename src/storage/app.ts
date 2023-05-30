@@ -66,6 +66,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   lndPathfindingAlgorithm = "lndPathfindingAlgorithm",
   maxLNFeePercentage = "maxLNFeePercentage",
   lndLogLevel = "lndLogLevel",
+  lndCompactDb = "lndCompactDb",
 }
 
 export const setItem = async (key: StorageItem, value: string) => await AsyncStorage.setItem(key, value);
@@ -91,8 +92,14 @@ export const getWalletCreated = async (): Promise<boolean> => {
 export const getRescanWallet = async (): Promise<boolean> => {
   return await getItemObject(StorageItem.rescanWallet) || false;
 };
+export const getLndCompactDb = async (): Promise<boolean> => {
+  return await getItemObject(StorageItem.lndCompactDb) || false;
+};
 export const setRescanWallet = async (rescan: boolean): Promise<void> => {
   return await setItemObject<boolean>(StorageItem.rescanWallet, rescan);
+};
+export const setLndCompactDb = async (rescan: boolean): Promise<void> => {
+  return await setItemObject<boolean>(StorageItem.lndCompactDb, rescan);
 };
 
 export const clearApp = async () => {
@@ -151,6 +158,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.lndPathfindingAlgorithm),
     removeItem(StorageItem.maxLNFeePercentage),
     removeItem(StorageItem.lndLogLevel),
+    removeItem(StorageItem.lndCompactDb),
   ]);
 };
 
@@ -232,5 +240,6 @@ export const setupApp = async () => {
     setItem(StorageItem.lndPathfindingAlgorithm, DEFAULT_PATHFINDING_ALGORITHM),
     setItemObject<number>(StorageItem.maxLNFeePercentage, DEFAULT_MAX_LN_FEE_PERCENTAGE),
     setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL),
+    setItemObject<boolean>(StorageItem.lndCompactDb, false),
   ]);
 };

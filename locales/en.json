@@ -958,6 +958,9 @@
       },
       "bimodalPathFinding": {
         "title": "Enable bimodal pathfinding"
+      },
+      "compactLndDatabases": {
+        "title": "Compact lnd's databases"
       }
     }
   },
