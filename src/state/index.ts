@@ -259,6 +259,9 @@ export const model: IStoreModel = {
     );
     actions.setWalletCreated(await getWalletCreated());
 
+    const debugShowStartupInfo = await getItemObjectAsyncStorage<boolean>(StorageItem.debugShowStartupInfo) ?? false;
+    const start = new Date();
+
     try {
       let torEnabled = (await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled)) ?? false;
       actions.setTorEnabled(torEnabled);
@@ -279,6 +282,7 @@ export const model: IStoreModel = {
           if (socksPort === 0 && PLATFORM === "ios") {
             throw new Error("Unable to obtain SOCKS port");
           }
+          debugShowStartupInfo && toast("Tor initialized " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
         } catch (e) {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
@@ -316,7 +320,7 @@ export const model: IStoreModel = {
       log.i("initialize done", [initReturn]);
       let gossipSyncEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.scheduledGossipSyncEnabled) ?? false;
       let enforceSpeedloaderOnStartup = await getItemObjectAsyncStorage<boolean>(StorageItem.enforceSpeedloaderOnStartup) ?? false;
-      let gossipStatus = null;
+      let gossipStatus: unknown = null;
 
       const status = await checkStatus();
       log.d("status", [status]);
@@ -337,8 +341,8 @@ export const model: IStoreModel = {
           try {
             let connectionState = await NetInfo.fetch();
             log.i("connectionState", [connectionState.type]);
-            log.i("gossipSync", [gossipSync]);
             gossipStatus = await gossipSync(connectionState.type);
+            debugShowStartupInfo && toast("Gossip sync done " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
           } catch (e) {
             log.e("GossipSync exception!", [e]);
           }
@@ -391,8 +395,6 @@ export const model: IStoreModel = {
     await dispatch.channel.setupCachedBalance();
     log.d("Done starting up stores");
 
-    const debugShowStartupInfo = getState().settings.debugShowStartupInfo;
-    const start = new Date();
     LndMobileEventEmitter.addListener("SubscribeState", async (e: any) => {
       try {
         log.d("SubscribeState", [e]);

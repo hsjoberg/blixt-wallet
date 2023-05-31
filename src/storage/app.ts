@@ -142,6 +142,9 @@ export const clearApp = async () => {
     removeItem(StorageItem.scheduledSyncEnabled),
     removeItem(StorageItem.lastScheduledSync),
     removeItem(StorageItem.lastScheduledSyncAttempt),
+    removeItem(StorageItem.scheduledGossipSyncEnabled),
+    removeItem(StorageItem.lastScheduledGossipSync),
+    removeItem(StorageItem.lastScheduledGossipSyncAttempt),
     removeItem(StorageItem.debugShowStartupInfo),
     removeItem(StorageItem.googleDriveBackupEnabled),
     removeItem(StorageItem.preferFiat),
@@ -260,6 +263,6 @@ export const setupApp = async () => {
     setItemObject<number>(StorageItem.maxLNFeePercentage, DEFAULT_MAX_LN_FEE_PERCENTAGE),
     setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL),
     setItemObject<boolean>(StorageItem.lndCompactDb, false),
-    setItemObject<boolean>(StorageItem.enforceSpeedloaderOnStartup, true),
+    setItemObject<boolean>(StorageItem.enforceSpeedloaderOnStartup, false),
   ]);
 };
