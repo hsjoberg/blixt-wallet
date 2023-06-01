@@ -46,6 +46,11 @@
       "msg3": "Er is momenteel geen WatchTower-ondersteuning om je kanalen te bewaken terwijl je offline bent.",
       "msg4": "Ik ben roekeloos, ga verder"
     },
+    "createWalletWithPassphrase": {
+      "title": "Wachtwoordzin instellen (25e woord om het zaad te coderen)",
+      "invalidMessage": "Voer een geldig wachtwoord in",
+      "noLeadingTrailingSpaces": "Voorloop- of volgspaties zijn niet toegestaan"
+    },
     "language": {
       "title": "Selecteer taal"
     },
@@ -55,7 +60,8 @@
     "menu": {
       "enableTor": "Tor Inschakelen",
       "disableTor": "Tor Uitschakelen",
-      "setBitcoinNode": "Bitcoin node instellen"
+      "setBitcoinNode": "Bitcoin node instellen",
+      "createWalletWithPassphrase": "Portemonnee maken met wachtwoordzin"
     }
   },
   "footerNav": {
@@ -240,6 +246,9 @@
       },
       "description": {
         "title": "Bericht"
+      },
+      "feeEstimate": {
+        "title": "Kosten schatting"
       }
     }
   },
@@ -888,6 +897,10 @@
         "title": "Opstartinfo meldingen weergeven",
         "subtitle": ""
       },
+      "showNotifications": {
+        "title": "Toon meldingen voor deze sessie",
+        "subtitle": ""
+      },
       "helpCencer": {
         "title": "LndMobile-helpcentrum",
         "subtitle": ""
@@ -945,6 +958,9 @@
       },
       "bimodalPathFinding": {
         "title": "Schakel bimodale padvinding in"
+      },
+      "compactLndDatabases": {
+        "title": "Verdichten lnd databases"
       }
     }
   },
@@ -1033,6 +1049,9 @@
     "title": "Tor Onion Diensten",
     "msg1": "Scan deze QR-code om een kanaal voor deze wallet te openen",
     "msg2": "Kan onion-adres niet vinden"
+  },
+  "settings.toastLog": {
+    "title": "Meldingslogboek"
   },
   "welcome.addFunds": {
     "title": "Fondsen toevoegen",
