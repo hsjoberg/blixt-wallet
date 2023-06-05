@@ -286,13 +286,16 @@ export const lightning: ILightningModel = {
   startChannelAcceptanceManager: thunk(async (actions, _, { getState, injections }) => {
     LndMobileEventEmitter.addListener("ChannelAcceptor", async (event) => {
       try {
+        let isZeroConfAllowed = false;
+
         const channelAcceptRequest = decodeChannelAcceptRequest(event.data);
 
-        const zeroConfPeers = await getItemObject<string[]>(StorageItem.zeroConfPeers);
-
-        const isZeroConfAllowed = !!zeroConfPeers
-          ? zeroConfPeers.includes(bytesToHexString(channelAcceptRequest.nodePubkey))
-          : false;
+        if (!!channelAcceptRequest.wantsZeroConf) {
+          const zeroConfPeers = await getItemObject<string[]>(StorageItem.zeroConfPeers);
+          isZeroConfAllowed = !!zeroConfPeers
+            ? zeroConfPeers.includes(bytesToHexString(channelAcceptRequest.nodePubkey))
+            : false;
+        }
 
         await channelAcceptorResponse(channelAcceptRequest.pendingChanId, true, isZeroConfAllowed);
       } catch (error) {
