@@ -292,6 +292,7 @@ export const lightning: ILightningModel = {
 
         if (!!channelAcceptRequest.wantsZeroConf) {
           const zeroConfPeers = await getItemObject<string[]>(StorageItem.zeroConfPeers);
+
           isZeroConfAllowed = !!zeroConfPeers
             ? zeroConfPeers.includes(bytesToHexString(channelAcceptRequest.nodePubkey))
             : false;
@@ -302,6 +303,7 @@ export const lightning: ILightningModel = {
         console.error("channel acceptance error: " + error.message);
       }
     });
+
     await channelAcceptor();
   }),
 
