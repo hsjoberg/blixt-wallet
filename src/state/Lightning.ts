@@ -279,36 +279,6 @@ export const lightning: ILightningModel = {
     }
   }),
 
-  // startChannelAcceptanceManager: thunk(async (actions, _, { getState, injections }) => {
-  //   LndMobileEventEmitter.addListener("ChannelAcceptor", async (event) => {
-  //     try {
-  //       let isZeroConfAllowed = false;
-
-  //       const channelAcceptRequest = injections.lndMobile.channel.decodeChannelAcceptRequest(
-  //         event.data,
-  //       );
-
-  //       if (!!channelAcceptRequest.wantsZeroConf) {
-  //         const zeroConfPeers = await getItemObject<string[]>(StorageItem.zeroConfPeers);
-
-  //         isZeroConfAllowed = !!zeroConfPeers
-  //           ? zeroConfPeers.includes(bytesToHexString(channelAcceptRequest.nodePubkey))
-  //           : false;
-  //       }
-
-  //       await injections.lndMobile.channel.channelAcceptorResponse(
-  //         channelAcceptRequest.pendingChanId,
-  //         true,
-  //         isZeroConfAllowed,
-  //       );
-  //     } catch (error) {
-  //       console.error("channel acceptance error: " + error.message);
-  //     }
-  //   });
-
-  //   await injections.lndMobile.channel.channelAcceptor();
-  // }),
-
   waitForChainSync: thunk(async (actions, _, { getState, injections }) => {
     const getInfo = injections.lndMobile.index.getInfo;
     const firstSync = getState().firstSync;
