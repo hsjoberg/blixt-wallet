@@ -1,10 +1,6 @@
 import { Action, Computed, Thunk, action, computed, thunk } from "easy-peasy";
-import { StorageItem, getItem, getItemObject, setItemObject } from "../storage/app";
-import {
-  channelAcceptor,
-  channelAcceptorResponse,
-  decodeChannelAcceptRequest,
-} from "../lndmobile/channel";
+import { StorageItem, getItemObject, setItemObject } from "../storage/app";
+import { channelAcceptorResponse, decodeChannelAcceptRequest } from "../lndmobile/channel";
 import { stringToUint8Array, timeout, toast } from "../utils";
 
 import { Chain } from "../utils/build";
@@ -80,7 +76,7 @@ export interface ILightningModel {
 
   bestBlockheight?: number;
   initialKnownBlockheight?: number;
-  startChannelAcceptanceManager: Thunk<ILightningModel, void, IStoreInjections>;
+  // startChannelAcceptanceManager: Thunk<ILightningModel, void, IStoreInjections>;
 }
 
 export const lightning: ILightningModel = {
@@ -117,7 +113,6 @@ export const lightning: ILightningModel = {
           )
           .catch((error) => toast("checkRecoverInfo error: " + error.message, undefined, "danger"));
         await actions.waitForChainSync();
-        await actions.startChannelAcceptanceManager();
 
         debugShowStartupInfo &&
           toast("syncedToChain time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
@@ -168,6 +163,7 @@ export const lightning: ILightningModel = {
         dispatch.clipboardManager.initialize(),
         dispatch.deeplinkManager.initialize(),
         dispatch.blixtLsp.initialize(),
+        dispatch.channelRpcInterceptor.initialize(),
       ]);
     } catch (e) {
       toast(e.message, 0, "danger", "OK");
@@ -283,29 +279,35 @@ export const lightning: ILightningModel = {
     }
   }),
 
-  startChannelAcceptanceManager: thunk(async (actions, _, { getState, injections }) => {
-    LndMobileEventEmitter.addListener("ChannelAcceptor", async (event) => {
-      try {
-        let isZeroConfAllowed = false;
+  // startChannelAcceptanceManager: thunk(async (actions, _, { getState, injections }) => {
+  //   LndMobileEventEmitter.addListener("ChannelAcceptor", async (event) => {
+  //     try {
+  //       let isZeroConfAllowed = false;
 
-        const channelAcceptRequest = decodeChannelAcceptRequest(event.data);
+  //       const channelAcceptRequest = injections.lndMobile.channel.decodeChannelAcceptRequest(
+  //         event.data,
+  //       );
 
-        if (!!channelAcceptRequest.wantsZeroConf) {
-          const zeroConfPeers = await getItemObject<string[]>(StorageItem.zeroConfPeers);
+  //       if (!!channelAcceptRequest.wantsZeroConf) {
+  //         const zeroConfPeers = await getItemObject<string[]>(StorageItem.zeroConfPeers);
 
-          isZeroConfAllowed = !!zeroConfPeers
-            ? zeroConfPeers.includes(bytesToHexString(channelAcceptRequest.nodePubkey))
-            : false;
-        }
+  //         isZeroConfAllowed = !!zeroConfPeers
+  //           ? zeroConfPeers.includes(bytesToHexString(channelAcceptRequest.nodePubkey))
+  //           : false;
+  //       }
 
-        await channelAcceptorResponse(channelAcceptRequest.pendingChanId, true, isZeroConfAllowed);
-      } catch (error) {
-        console.error("channel acceptance error: " + error.message);
-      }
-    });
+  //       await injections.lndMobile.channel.channelAcceptorResponse(
+  //         channelAcceptRequest.pendingChanId,
+  //         true,
+  //         isZeroConfAllowed,
+  //       );
+  //     } catch (error) {
+  //       console.error("channel acceptance error: " + error.message);
+  //     }
+  //   });
 
-    await channelAcceptor();
-  }),
+  //   await injections.lndMobile.channel.channelAcceptor();
+  // }),
 
   waitForChainSync: thunk(async (actions, _, { getState, injections }) => {
     const getInfo = injections.lndMobile.index.getInfo;

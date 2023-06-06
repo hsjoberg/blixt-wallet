@@ -796,7 +796,7 @@
         "subtitle": "Add pubkeys of peers you want to allow zero conf channels from",
         "setDialog": {
           "title": "Zero conf peers",
-          "msg1": "Coma separated values of public keys, to allow zero conf channels from.",
+          "msg1": "Comma separated values of public keys, to allow zero conf channels from.",
           "msg2": "You will be trusting channels from these partners until there is at least one chain confirmation"
         }
       }
