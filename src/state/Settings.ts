@@ -1,16 +1,31 @@
-import { Action, action, Thunk, thunk } from "easy-peasy";
+import { Action, Thunk, action, thunk } from "easy-peasy";
+import {
+  DEFAULT_INVOICE_EXPIRY,
+  DEFAULT_LND_LOG_LEVEL,
+  DEFAULT_MAX_LN_FEE_PERCENTAGE,
+  DEFAULT_PATHFINDING_ALGORITHM,
+} from "../utils/constants";
+import {
+  StorageItem,
+  getItem,
+  getItemObject,
+  getLndCompactDb,
+  getRescanWallet,
+  removeItem,
+  setItem,
+  setItemObject,
+  setLndCompactDb,
+  setRescanWallet,
+} from "../storage/app";
 
-import { StorageItem, getItemObject, setItemObject, removeItem, getItem, setItem, setRescanWallet, getRescanWallet, getLndCompactDb, setLndCompactDb } from "../storage/app";
-import { IFiatRates } from "./Fiat";
-import { IBitcoinUnits } from "../utils/bitcoin-units";
-import { MapStyle } from "../utils/google-maps";
 import { Chain } from "../utils/build";
-import { DEFAULT_INVOICE_EXPIRY, DEFAULT_LND_LOG_LEVEL, DEFAULT_MAX_LN_FEE_PERCENTAGE, DEFAULT_PATHFINDING_ALGORITHM } from "../utils/constants";
+import { IBitcoinUnits } from "../utils/bitcoin-units";
+import { IFiatRates } from "./Fiat";
 import { IStoreModel } from "./index";
-
+import { MapStyle } from "../utils/google-maps";
 import { i18n } from "../i18n/i18n";
-
 import logger from "./../utils/log";
+
 const log = logger("Settings");
 
 export const OnchainExplorer = {
@@ -40,7 +55,7 @@ export interface ISettingsModel {
   changePreferFiat: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationEnabled: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationMapStyle: Thunk<ISettingsModel, keyof typeof MapStyle>;
-  changeOnchainExplorer: Thunk<ISettingsModel, (keyof typeof OnchainExplorer) | string>;
+  changeOnchainExplorer: Thunk<ISettingsModel, keyof typeof OnchainExplorer | string>;
   changeMultiPathPaymentsEnabled: Thunk<ISettingsModel, boolean>;
   changeTorEnabled: Thunk<ISettingsModel, boolean>;
   changeHideExpiredInvoices: Thunk<ISettingsModel, boolean>;
@@ -48,6 +63,7 @@ export interface ISettingsModel {
   changeICloudBackupEnabled: Thunk<ISettingsModel, boolean>;
   changeLndChainBackend: Thunk<ISettingsModel, string>;
   changeNeutrinoPeers: Thunk<ISettingsModel, string[]>;
+  changeZeroConfPeers: Thunk<ISettingsModel, string[]>;
   changeBitcoindRpcHost: Thunk<ISettingsModel, string>;
   changeBitcoindPubRawBlock: Thunk<ISettingsModel, string>;
   changeBitcoindPubRawTx: Thunk<ISettingsModel, string>;
@@ -77,7 +93,7 @@ export interface ISettingsModel {
   setPreferFiat: Action<ISettingsModel, boolean>;
   setTransactionGeolocationEnabled: Action<ISettingsModel, boolean>;
   setTransactionGeolocationMapStyle: Action<ISettingsModel, keyof typeof MapStyle>;
-  setOnchainExplorer: Action<ISettingsModel, (keyof typeof OnchainExplorer) | string>;
+  setOnchainExplorer: Action<ISettingsModel, keyof typeof OnchainExplorer | string>;
   setMultiPathPaymentsEnabled: Action<ISettingsModel, boolean>;
   setTorEnabled: Action<ISettingsModel, boolean>;
   setHideExpiredInvoices: Action<ISettingsModel, boolean>;
@@ -85,6 +101,7 @@ export interface ISettingsModel {
   setICloudBackupEnabled: Action<ISettingsModel, boolean>;
   setLndChainBackend: Action<ISettingsModel, string>;
   setNeutrinoPeers: Action<ISettingsModel, string[]>;
+  setZeroConfPeers: Action<ISettingsModel, string[]>;
   setBitcoindRpcHost: Action<ISettingsModel, string>;
   setBitcoindPubRawBlock: Action<ISettingsModel, string>;
   setBitcoindPubRawTx: Action<ISettingsModel, string>;
@@ -114,7 +131,7 @@ export interface ISettingsModel {
   preferFiat: boolean;
   transactionGeolocationEnabled: boolean;
   transactionGeolocationMapStyle: keyof typeof MapStyle;
-  onchainExplorer: (keyof typeof OnchainExplorer) | string;
+  onchainExplorer: keyof typeof OnchainExplorer | string;
   multiPathPaymentsEnabled: boolean;
   torEnabled: boolean;
   hideExpiredInvoices: boolean;
@@ -137,46 +154,74 @@ export interface ISettingsModel {
   maxLNFeePercentage: number;
   lndLogLevel: LndLogLevel;
   lndCompactDb: boolean;
+  zeroConfPeers: string[];
 }
 
 export const settings: ISettingsModel = {
   initialize: thunk(async (actions) => {
     log.d("Initializing");
-    actions.setBitcoinUnit(await getItemObject(StorageItem.bitcoinUnit) || "bitcoin");
-    actions.setFiatUnit(await getItemObject(StorageItem.fiatUnit) || "USD");
-    actions.setName(await getItemObject(StorageItem.name) || null);
-    actions.setLanguage(await getItemObject(StorageItem.language) || "en");
+    actions.setBitcoinUnit((await getItemObject(StorageItem.bitcoinUnit)) || "bitcoin");
+    actions.setFiatUnit((await getItemObject(StorageItem.fiatUnit)) || "USD");
+    actions.setName((await getItemObject(StorageItem.name)) || null);
+    actions.setLanguage((await getItemObject(StorageItem.language)) || "en");
     actions.setAutopilotEnabled(await getItemObject(StorageItem.autopilotEnabled || false));
-    actions.setPushNotificationsEnabled(await getItemObject(StorageItem.pushNotificationsEnabled || false));
-    actions.setClipboardInvoiceCheckInvoicesEnabled(await getItemObject(StorageItem.clipboardInvoiceCheck || false));
-    actions.setScheduledSyncEnabled(await getItemObject(StorageItem.scheduledSyncEnabled) || false);
-    actions.setDebugShowStartupInfo(await getItemObject(StorageItem.debugShowStartupInfo) || false);
-    actions.setGoogleDriveBackupEnabled(await getItemObject(StorageItem.googleDriveBackupEnabled) || false);
-    actions.setPreferFiat(await getItemObject(StorageItem.preferFiat) || false);
-    actions.setTransactionGeolocationEnabled(await getItemObject(StorageItem.transactionGeolocationEnabled) || false);
-    actions.setTransactionGeolocationMapStyle(await getItem(StorageItem.transactionGeolocationMapStyle) as keyof typeof MapStyle || "darkMode");
-    actions.setOnchainExplorer(await getItem(StorageItem.onchainExplorer) ?? "mempool");
-    actions.setMultiPathPaymentsEnabled(await getItemObject(StorageItem.multiPathPaymentsEnabled || false));
-    actions.setTorEnabled(await getItemObject(StorageItem.torEnabled) || false);
-    actions.setHideExpiredInvoices(await getItemObject(StorageItem.hideExpiredInvoices) || false);
-    actions.setScreenTransitionsEnabled(await getItemObject(StorageItem.screenTransitionsEnabled) ?? true);
+    actions.setPushNotificationsEnabled(
+      await getItemObject(StorageItem.pushNotificationsEnabled || false),
+    );
+    actions.setClipboardInvoiceCheckInvoicesEnabled(
+      await getItemObject(StorageItem.clipboardInvoiceCheck || false),
+    );
+    actions.setScheduledSyncEnabled(
+      (await getItemObject(StorageItem.scheduledSyncEnabled)) || false,
+    );
+    actions.setDebugShowStartupInfo(
+      (await getItemObject(StorageItem.debugShowStartupInfo)) || false,
+    );
+    actions.setGoogleDriveBackupEnabled(
+      (await getItemObject(StorageItem.googleDriveBackupEnabled)) || false,
+    );
+    actions.setPreferFiat((await getItemObject(StorageItem.preferFiat)) || false);
+    actions.setTransactionGeolocationEnabled(
+      (await getItemObject(StorageItem.transactionGeolocationEnabled)) || false,
+    );
+    actions.setTransactionGeolocationMapStyle(
+      ((await getItem(StorageItem.transactionGeolocationMapStyle)) as keyof typeof MapStyle) ||
+        "darkMode",
+    );
+    actions.setOnchainExplorer((await getItem(StorageItem.onchainExplorer)) ?? "mempool");
+    actions.setMultiPathPaymentsEnabled(
+      await getItemObject(StorageItem.multiPathPaymentsEnabled || false),
+    );
+    actions.setTorEnabled((await getItemObject(StorageItem.torEnabled)) || false);
+    actions.setHideExpiredInvoices((await getItemObject(StorageItem.hideExpiredInvoices)) || false);
+    actions.setScreenTransitionsEnabled(
+      (await getItemObject(StorageItem.screenTransitionsEnabled)) ?? true,
+    );
     actions.setICloudBackupEnabled(await getItemObject(StorageItem.iCloudBackupEnabled ?? false));
-    actions.setLndChainBackend(await getItem(StorageItem.lndChainBackend) ?? "");
-    actions.setNeutrinoPeers(await getItemObject(StorageItem.neutrinoPeers) ?? []);
-    actions.setBitcoindRpcHost(await getItem(StorageItem.bitcoindRpcHost) ?? "");
-    actions.setBitcoindPubRawBlock(await getItem(StorageItem.bitcoindPubRawBlock) ?? "");
-    actions.setBitcoindPubRawTx(await getItem(StorageItem.bitcoindPubRawTx) ?? "");
-    actions.setDunderServer(await getItem(StorageItem.dunderServer) ?? "");
-    actions.setRequireGraphSync(await getItemObject(StorageItem.requireGraphSync) ?? false);
-    actions.setDunderEnabled(await getItemObject(StorageItem.dunderEnabled) ?? false);
-    actions.setLndNoGraphCache(await getItemObject(StorageItem.lndNoGraphCache) ?? false);
-    actions.setInvoiceExpiry(await getItemObject(StorageItem.invoiceExpiry) ?? DEFAULT_INVOICE_EXPIRY);
+    actions.setLndChainBackend((await getItem(StorageItem.lndChainBackend)) ?? "");
+    actions.setNeutrinoPeers((await getItemObject(StorageItem.neutrinoPeers)) ?? []);
+    actions.setZeroConfPeers((await getItemObject(StorageItem.zeroConfPeers)) ?? []);
+    actions.setBitcoindRpcHost((await getItem(StorageItem.bitcoindRpcHost)) ?? "");
+    actions.setBitcoindPubRawBlock((await getItem(StorageItem.bitcoindPubRawBlock)) ?? "");
+    actions.setBitcoindPubRawTx((await getItem(StorageItem.bitcoindPubRawTx)) ?? "");
+    actions.setDunderServer((await getItem(StorageItem.dunderServer)) ?? "");
+    actions.setRequireGraphSync((await getItemObject(StorageItem.requireGraphSync)) ?? false);
+    actions.setDunderEnabled((await getItemObject(StorageItem.dunderEnabled)) ?? false);
+    actions.setLndNoGraphCache((await getItemObject(StorageItem.lndNoGraphCache)) ?? false);
+    actions.setInvoiceExpiry(
+      (await getItemObject(StorageItem.invoiceExpiry)) ?? DEFAULT_INVOICE_EXPIRY,
+    );
     actions.setRescanWallet(await getRescanWallet());
-    actions.setReceiveViaP2TR(await getItemObject(StorageItem.receiveViaP2TR) ?? false);
-    actions.setStrictGraphPruningEnabled(await getItemObject(StorageItem.strictGraphPruningEnabled) ?? false);
-    actions.setLndPathfindingAlgorithm((await getItem(StorageItem.lndPathfindingAlgorithm) ?? DEFAULT_PATHFINDING_ALGORITHM) as routerrpcEstimator);
-    actions.setMaxLNFeePercentage(await getItemObject(StorageItem.maxLNFeePercentage) ?? 2);
-    actions.setLndLogLevel((await getItem(StorageItem.lndLogLevel) ?? "info") as LndLogLevel);
+    actions.setReceiveViaP2TR((await getItemObject(StorageItem.receiveViaP2TR)) ?? false);
+    actions.setStrictGraphPruningEnabled(
+      (await getItemObject(StorageItem.strictGraphPruningEnabled)) ?? false,
+    );
+    actions.setLndPathfindingAlgorithm(
+      ((await getItem(StorageItem.lndPathfindingAlgorithm)) ??
+        DEFAULT_PATHFINDING_ALGORITHM) as routerrpcEstimator,
+    );
+    actions.setMaxLNFeePercentage((await getItemObject(StorageItem.maxLNFeePercentage)) ?? 2);
+    actions.setLndLogLevel(((await getItem(StorageItem.lndLogLevel)) ?? "info") as LndLogLevel);
     actions.setLndCompactDb(await getLndCompactDb());
 
     log.d("Done");
@@ -291,6 +336,11 @@ export const settings: ISettingsModel = {
     actions.setNeutrinoPeers(payload);
   }),
 
+  changeZeroConfPeers: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.zeroConfPeers, payload);
+    actions.setZeroConfPeers(payload);
+  }),
+
   changeBitcoindRpcHost: thunk(async (actions, payload) => {
     await setItem(StorageItem.bitcoindRpcHost, payload);
     actions.setBitcoindRpcHost(payload);
@@ -367,43 +417,117 @@ export const settings: ISettingsModel = {
     actions.setLndCompactDb(payload);
   }),
 
-
-  setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
-  setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
-  setName: action((state, payload) => { state.name = payload; }),
-  setLanguage: action((state, payload) => { state.language = payload }),
-  setAutopilotEnabled: action((state, payload) => { state.autopilotEnabled = payload; }),
-  setPushNotificationsEnabled: action((state, payload) => { state.pushNotificationsEnabled = payload; }),
-  setClipboardInvoiceCheckInvoicesEnabled: action((state, payload) => { state.clipboardInvoiceCheckEnabled = payload; }),
-  setScheduledSyncEnabled: action((state, payload) => { state.scheduledSyncEnabled = payload; }),
-  setDebugShowStartupInfo: action((state, payload) => { state.debugShowStartupInfo = payload; }),
-  setGoogleDriveBackupEnabled: action((state, payload) => { state.googleDriveBackupEnabled = payload; }),
-  setPreferFiat: action((state, payload) => { state.preferFiat = payload; }),
-  setTransactionGeolocationEnabled: action((state, payload) => { state.transactionGeolocationEnabled = payload; }),
-  setTransactionGeolocationMapStyle: action((state, payload) => { state.transactionGeolocationMapStyle = payload; }),
-  setOnchainExplorer: action((state, payload) => { state.onchainExplorer = payload; }),
-  setMultiPathPaymentsEnabled: action((state, payload) => { state.multiPathPaymentsEnabled = payload; }),
-  setTorEnabled: action((state, payload) => { state.torEnabled = payload; }),
-  setHideExpiredInvoices: action((state, payload) => { state.hideExpiredInvoices = payload; }),
-  setScreenTransitionsEnabled: action((state, payload) => { state.screenTransitionsEnabled = payload; }),
-  setICloudBackupEnabled: action((state, payload) => { state.iCloudBackupEnabled = payload; }),
-  setLndChainBackend: action((state, payload) => { state.lndChainBackend = payload; }),
-  setNeutrinoPeers: action((state, payload) => { state.neutrinoPeers = payload; }),
-  setBitcoindRpcHost: action((state, payload) => { state.bitcoindRpcHost = payload; }),
-  setBitcoindPubRawBlock: action((state, payload) => { state.bitcoindPubRawBlock = payload; }),
-  setBitcoindPubRawTx: action((state, payload) => { state.bitcoindPubRawTx = payload; }),
-  setDunderServer: action((state, payload) => { state.dunderServer = payload; }),
-  setRequireGraphSync: action((state, payload) => { state.requireGraphSync = payload; }),
-  setDunderEnabled: action((state, payload) => { state.dunderEnabled = payload; }),
-  setLndNoGraphCache: action((state, payload) => { state.lndNoGraphCache = payload; }),
-  setInvoiceExpiry: action((state, payload) => { state.invoiceExpiry = payload; }),
-  setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
-  setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
-  setStrictGraphPruningEnabled: action((state, payload) => { state.strictGraphPruningEnabled = payload; }),
-  setLndPathfindingAlgorithm: action((state, payload) => { state.lndPathfindingAlgorithm = payload; }),
-  setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
-  setLndLogLevel: action((state, payload) => { state.lndLogLevel = payload; }),
-  setLndCompactDb: action((state, payload) => { state.lndCompactDb = payload; }),
+  setBitcoinUnit: action((state, payload) => {
+    state.bitcoinUnit = payload;
+  }),
+  setFiatUnit: action((state, payload) => {
+    state.fiatUnit = payload;
+  }),
+  setName: action((state, payload) => {
+    state.name = payload;
+  }),
+  setLanguage: action((state, payload) => {
+    state.language = payload;
+  }),
+  setAutopilotEnabled: action((state, payload) => {
+    state.autopilotEnabled = payload;
+  }),
+  setPushNotificationsEnabled: action((state, payload) => {
+    state.pushNotificationsEnabled = payload;
+  }),
+  setClipboardInvoiceCheckInvoicesEnabled: action((state, payload) => {
+    state.clipboardInvoiceCheckEnabled = payload;
+  }),
+  setScheduledSyncEnabled: action((state, payload) => {
+    state.scheduledSyncEnabled = payload;
+  }),
+  setDebugShowStartupInfo: action((state, payload) => {
+    state.debugShowStartupInfo = payload;
+  }),
+  setGoogleDriveBackupEnabled: action((state, payload) => {
+    state.googleDriveBackupEnabled = payload;
+  }),
+  setPreferFiat: action((state, payload) => {
+    state.preferFiat = payload;
+  }),
+  setTransactionGeolocationEnabled: action((state, payload) => {
+    state.transactionGeolocationEnabled = payload;
+  }),
+  setTransactionGeolocationMapStyle: action((state, payload) => {
+    state.transactionGeolocationMapStyle = payload;
+  }),
+  setOnchainExplorer: action((state, payload) => {
+    state.onchainExplorer = payload;
+  }),
+  setMultiPathPaymentsEnabled: action((state, payload) => {
+    state.multiPathPaymentsEnabled = payload;
+  }),
+  setTorEnabled: action((state, payload) => {
+    state.torEnabled = payload;
+  }),
+  setHideExpiredInvoices: action((state, payload) => {
+    state.hideExpiredInvoices = payload;
+  }),
+  setScreenTransitionsEnabled: action((state, payload) => {
+    state.screenTransitionsEnabled = payload;
+  }),
+  setICloudBackupEnabled: action((state, payload) => {
+    state.iCloudBackupEnabled = payload;
+  }),
+  setLndChainBackend: action((state, payload) => {
+    state.lndChainBackend = payload;
+  }),
+  setNeutrinoPeers: action((state, payload) => {
+    state.neutrinoPeers = payload;
+  }),
+  setZeroConfPeers: action((state, payload) => {
+    state.zeroConfPeers = payload;
+  }),
+  setBitcoindRpcHost: action((state, payload) => {
+    state.bitcoindRpcHost = payload;
+  }),
+  setBitcoindPubRawBlock: action((state, payload) => {
+    state.bitcoindPubRawBlock = payload;
+  }),
+  setBitcoindPubRawTx: action((state, payload) => {
+    state.bitcoindPubRawTx = payload;
+  }),
+  setDunderServer: action((state, payload) => {
+    state.dunderServer = payload;
+  }),
+  setRequireGraphSync: action((state, payload) => {
+    state.requireGraphSync = payload;
+  }),
+  setDunderEnabled: action((state, payload) => {
+    state.dunderEnabled = payload;
+  }),
+  setLndNoGraphCache: action((state, payload) => {
+    state.lndNoGraphCache = payload;
+  }),
+  setInvoiceExpiry: action((state, payload) => {
+    state.invoiceExpiry = payload;
+  }),
+  setRescanWallet: action((state, payload) => {
+    state.rescanWallet = payload;
+  }),
+  setReceiveViaP2TR: action((state, payload) => {
+    state.receiveViaP2TR = payload;
+  }),
+  setStrictGraphPruningEnabled: action((state, payload) => {
+    state.strictGraphPruningEnabled = payload;
+  }),
+  setLndPathfindingAlgorithm: action((state, payload) => {
+    state.lndPathfindingAlgorithm = payload;
+  }),
+  setMaxLNFeePercentage: action((state, payload) => {
+    state.maxLNFeePercentage = payload;
+  }),
+  setLndLogLevel: action((state, payload) => {
+    state.lndLogLevel = payload;
+  }),
+  setLndCompactDb: action((state, payload) => {
+    state.lndCompactDb = payload;
+  }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -426,6 +550,7 @@ export const settings: ISettingsModel = {
   iCloudBackupEnabled: false,
   lndChainBackend: "",
   neutrinoPeers: [],
+  zeroConfPeers: [],
   bitcoindRpcHost: "",
   bitcoindPubRawBlock: "",
   bitcoindPubRawTx: "",

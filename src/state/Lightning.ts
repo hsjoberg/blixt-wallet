@@ -1,13 +1,16 @@
-import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
+import { Action, Computed, Thunk, action, computed, thunk } from "easy-peasy";
+import { StorageItem, getItemObject, setItemObject } from "../storage/app";
+import { channelAcceptorResponse, decodeChannelAcceptRequest } from "../lndmobile/channel";
+import { stringToUint8Array, timeout, toast } from "../utils";
 
-import { IStoreModel } from "./index";
-import { IStoreInjections } from "./store";
-import { lnrpc } from "../../proto/lightning";
-import { getItemObject, StorageItem, setItemObject, getItem } from "../storage/app";
-import { toast, timeout, stringToUint8Array } from "../utils";
 import { Chain } from "../utils/build";
-
+import { IStoreInjections } from "./store";
+import { IStoreModel } from "./index";
+import { LndMobileEventEmitter } from "../utils/event-listener";
+import { bytesToHexString } from "../utils";
+import { lnrpc } from "../../proto/lightning";
 import logger from "./../utils/log";
+
 const log = logger("Lightning");
 
 export type LndChainBackend = "neutrino" | "bitcoindWithZmq";
@@ -36,7 +39,13 @@ export interface ILightningModel {
   getLightningPeers: Thunk<ILightningModel, void, IStoreInjections>;
   connectPeer: Thunk<ILightningModel, string, IStoreInjections>;
   disconnectPeer: Thunk<ILightningModel, string, IStoreInjections>;
-  signMessage: Thunk<ILightningModel, string, IStoreInjections, {}, Promise<lnrpc.SignMessageResponse>>;
+  signMessage: Thunk<
+    ILightningModel,
+    string,
+    IStoreInjections,
+    {},
+    Promise<lnrpc.SignMessageResponse>
+  >;
 
   setNetworkInfo: Action<ILightningModel, lnrpc.NetworkInfo>;
   setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
@@ -48,7 +57,7 @@ export interface ILightningModel {
   setRecoverInfo: Action<ILightningModel, lnrpc.GetRecoveryInfoResponse>;
   setFirstSync: Action<ILightningModel, boolean>;
   setAutopilotSet: Action<ILightningModel, boolean>;
-  setLightningPeers: Action<ILightningModel, ISetLightningPeersPayload[]>
+  setLightningPeers: Action<ILightningModel, ISetLightningPeersPayload[]>;
 
   setBestBlockheight: Action<ILightningModel, number>;
 
@@ -67,12 +76,13 @@ export interface ILightningModel {
 
   bestBlockheight?: number;
   initialKnownBlockheight?: number;
+  // startChannelAcceptanceManager: Thunk<ILightningModel, void, IStoreInjections>;
 }
 
 export const lightning: ILightningModel = {
   initialize: thunk(async (actions, { start }, { getState, getStoreState }) => {
     log.d("getState().ready: " + getState().ready);
-    if (getState().ready)  {
+    if (getState().ready) {
       log.d("Lightning store already started");
       return;
     }
@@ -92,17 +102,28 @@ export const lightning: ILightningModel = {
     (async () => {
       try {
         actions.setupStores();
-        actions.checkRecoverInfo()
-          .then(() => debugShowStartupInfo && toast("checkRecoverInfo time: " + (new Date().getTime() - start.getTime()) / 1000 + "s"))
+        actions
+          .checkRecoverInfo()
+          .then(
+            () =>
+              debugShowStartupInfo &&
+              toast(
+                "checkRecoverInfo time: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
+              ),
+          )
           .catch((error) => toast("checkRecoverInfo error: " + error.message, undefined, "danger"));
         await actions.waitForChainSync();
-        debugShowStartupInfo && toast("syncedToChain time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
+
+        debugShowStartupInfo &&
+          toast("syncedToChain time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
         await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
         await actions.waitForGraphSync();
-        debugShowStartupInfo && toast("syncedToGraph time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
+        debugShowStartupInfo &&
+          toast("syncedToGraph time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
         actions.setInitializeDone(true);
       } catch (e) {
-        debugShowStartupInfo && toast("Error in initialization task: " + e.message, 10000, "danger");
+        debugShowStartupInfo &&
+          toast("Error in initialization task: " + e.message, 10000, "danger");
         return;
       }
     })();
@@ -110,9 +131,10 @@ export const lightning: ILightningModel = {
     (async () => {
       try {
         // tslint:disable-next-line: no-floating-promises
-        const result = await fetch(Chain === "mainnet"
-          ? "https://mempool.space/api/blocks/tip/height"
-          : "https://mempool.space/testnet/api/blocks/tip/height"
+        const result = await fetch(
+          Chain === "mainnet"
+            ? "https://mempool.space/api/blocks/tip/height"
+            : "https://mempool.space/testnet/api/blocks/tip/height",
         );
         if (result.ok) {
           const bestBlockHeight = await result.text();
@@ -141,6 +163,7 @@ export const lightning: ILightningModel = {
         dispatch.clipboardManager.initialize(),
         dispatch.deeplinkManager.initialize(),
         dispatch.blixtLsp.initialize(),
+        dispatch.channelRpcInterceptor.initialize(),
       ]);
     } catch (e) {
       toast(e.message, 0, "danger", "OK");
@@ -184,21 +207,25 @@ export const lightning: ILightningModel = {
 
     const response = await listPeers();
 
-    const lightningPeers = await Promise.all(response.peers.map(async (ipeer) => {
-      let nodeInfo = undefined;
-      try {
-        nodeInfo = await getNodeInfo(ipeer.pubKey ?? "");
-      } catch(e) { console.log(e) }
-      return {
-        peer: ipeer,
-        node: nodeInfo?.node ?? undefined,
-      }
-    }));
+    const lightningPeers = await Promise.all(
+      response.peers.map(async (ipeer) => {
+        let nodeInfo = undefined;
+        try {
+          nodeInfo = await getNodeInfo(ipeer.pubKey ?? "");
+        } catch (e) {
+          console.log(e);
+        }
+        return {
+          peer: ipeer,
+          node: nodeInfo?.node ?? undefined,
+        };
+      }),
+    );
 
     const sortedPeers = lightningPeers.sort((lightningNode, lightningNode2) => {
       if (lightningNode.peer.pubKey! < lightningNode2.peer.pubKey!) {
         return -1;
-      } else if (lightningNode.peer.pubKey! > lightningNode2.peer.pubKey!){
+      } else if (lightningNode.peer.pubKey! > lightningNode2.peer.pubKey!) {
         return 1;
       }
       return 0;
@@ -235,7 +262,7 @@ export const lightning: ILightningModel = {
     actions.setNetworkInfo(info);
   }),
 
-  checkRecoverInfo: thunk((async (actions, _, { getState, injections }) => {
+  checkRecoverInfo: thunk(async (actions, _, { getState, injections }) => {
     while (true) {
       try {
         const info = await injections.lndMobile.index.getRecoveryInfo();
@@ -250,7 +277,7 @@ export const lightning: ILightningModel = {
       }
       await timeout(10000);
     }
-  })),
+  }),
 
   waitForChainSync: thunk(async (actions, _, { getState, injections }) => {
     const getInfo = injections.lndMobile.index.getInfo;
@@ -263,8 +290,7 @@ export const lightning: ILightningModel = {
 
       if (info.syncedToChain !== true) {
         await timeout(firstSync ? 6000 : 1000);
-      }
-      else {
+      } else {
         log.d(JSON.stringify(info));
       }
     } while (!info.syncedToChain);
@@ -279,18 +305,38 @@ export const lightning: ILightningModel = {
       setTimeout(async () => {
         try {
           const nodes = [
-            ["030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f", "52.50.244.44:9735"],    // Bitrefill
-            ["03c2abfa93eacec04721c019644584424aab2ba4dff3ac9bdab4e9c97007491dda", "157.245.68.47:9735"],   // tippin.me
-            ["03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e", "18.221.23.28:9735"],    // OpenNode
-            ["02004c625d622245606a1ea2c1c69cfb4516b703b47945a3647713c05fe4aaeb1c", "172.81.178.151:9735"],  // WalletOfSatoshi.com [2]
-            ["02e7c42ae2952d7a71398e23535b53ffc60deb269acbc7c10307e6b797b91b1e79", "87.121.37.156:9735"],   // PeerName.com
-            ["03864ef025fde8fb587d989186ce6a4a186895ee44a926bfc370e2c366597a3f8f", "34.239.230.56:9735"],   // ACINQ
+            [
+              "030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f",
+              "52.50.244.44:9735",
+            ], // Bitrefill
+            [
+              "03c2abfa93eacec04721c019644584424aab2ba4dff3ac9bdab4e9c97007491dda",
+              "157.245.68.47:9735",
+            ], // tippin.me
+            [
+              "03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e",
+              "18.221.23.28:9735",
+            ], // OpenNode
+            [
+              "02004c625d622245606a1ea2c1c69cfb4516b703b47945a3647713c05fe4aaeb1c",
+              "172.81.178.151:9735",
+            ], // WalletOfSatoshi.com [2]
+            [
+              "02e7c42ae2952d7a71398e23535b53ffc60deb269acbc7c10307e6b797b91b1e79",
+              "87.121.37.156:9735",
+            ], // PeerName.com
+            [
+              "03864ef025fde8fb587d989186ce6a4a186895ee44a926bfc370e2c366597a3f8f",
+              "34.239.230.56:9735",
+            ], // ACINQ
           ];
           const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
           log.i(`Connecting to ${randomNode[0]}@${randomNode[1]} to get LN network graph`);
           await injections.lndMobile.index.connectPeer(randomNode[0], randomNode[1]);
         } catch (e) {
-          log.e("Connecting to node for channel graph failed in waitForChainSync firstSync=true", [e]);
+          log.e("Connecting to node for channel graph failed in waitForChainSync firstSync=true", [
+            e,
+          ]);
         }
       }, 1000);
     }
@@ -329,14 +375,30 @@ export const lightning: ILightningModel = {
   setNetworkInfo: action((state, payload) => {
     state.networkInfo = payload;
   }),
-  setRPCServerReady: action((state, payload) => { state.rpcReady = payload; }),
-  setReady: action((state, payload) => { state.ready = payload; }),
-  setInitializeDone: action((state, payload) => { state.initializeDone = payload; }),
-  setSyncedToChain: action((state, payload) => { state.syncedToChain = payload; }),
-  setSyncedToGraph: action((state, payload) => { state.syncedToGraph = payload; }),
-  setRecoverInfo: action((state, payload) => { state.recoverInfo = payload }),
-  setFirstSync: action((state, payload) => { state.firstSync = payload; }),
-  setAutopilotSet: action((state, payload) => { state.autopilotSet = payload; }),
+  setRPCServerReady: action((state, payload) => {
+    state.rpcReady = payload;
+  }),
+  setReady: action((state, payload) => {
+    state.ready = payload;
+  }),
+  setInitializeDone: action((state, payload) => {
+    state.initializeDone = payload;
+  }),
+  setSyncedToChain: action((state, payload) => {
+    state.syncedToChain = payload;
+  }),
+  setSyncedToGraph: action((state, payload) => {
+    state.syncedToGraph = payload;
+  }),
+  setRecoverInfo: action((state, payload) => {
+    state.recoverInfo = payload;
+  }),
+  setFirstSync: action((state, payload) => {
+    state.firstSync = payload;
+  }),
+  setAutopilotSet: action((state, payload) => {
+    state.autopilotSet = payload;
+  }),
   setLightningPeers: action((state, payload) => {
     state.lightningPeers = payload.map((p) => ({
       peer: lnrpc.Peer.create(p.peer),
@@ -344,13 +406,15 @@ export const lightning: ILightningModel = {
     }));
   }),
 
-  setBestBlockheight: action((state, payload) => { state.bestBlockheight = payload; }),
+  setBestBlockheight: action((state, payload) => {
+    state.bestBlockheight = payload;
+  }),
 
   rpcReady: false,
   ready: false,
   initializeDone: false,
-  syncedToChain: computed((state) => (state.nodeInfo?.syncedToChain) ?? false),
-  syncedToGraph: computed((state) => (state.nodeInfo?.syncedToGraph) ?? false),
+  syncedToChain: computed((state) => state.nodeInfo?.syncedToChain ?? false),
+  syncedToGraph: computed((state) => state.nodeInfo?.syncedToGraph ?? false),
   isRecoverMode: computed((state) => state.recoverInfo.recoveryMode),
   recoverInfo: lnrpc.GetRecoveryInfoResponse.create({
     progress: 0,
@@ -371,19 +435,20 @@ const getNodeScores = async () => {
 
   // TODO(hsjoberg): needs cleanup
 
-  const url = Chain === "mainnet"
-    ? "https://nodes.lightning.computer/availability/v1/btc.json"
-    : "https://nodes.lightning.computer/availability/v1/btctestnet.json";
+  const url =
+    Chain === "mainnet"
+      ? "https://nodes.lightning.computer/availability/v1/btc.json"
+      : "https://nodes.lightning.computer/availability/v1/btctestnet.json";
   const response = await fetch(url);
   const json = await response.json();
 
   const scores = json.scores.reduce((map, { public_key, score }) => {
-    if (typeof public_key !== 'string' || !Number.isInteger(score)) {
-      throw new Error('Invalid node score format!');
+    if (typeof public_key !== "string" || !Number.isInteger(score)) {
+      throw new Error("Invalid node score format!");
     }
     map[public_key] = score / 100000000.0;
     return map;
   }, {});
 
   return scores;
-}
+};
