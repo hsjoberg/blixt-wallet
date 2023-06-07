@@ -46,11 +46,6 @@
       "msg3": "Es gibt derzeit keinen WatchTower-Support, der deine Lightning-Kanäle im Fall einer Downtime schützen kann.",
       "msg4": "Ok akzeptiert, weiter"
     },
-    "createWalletWithPassphrase": {
-      "title": "Passphrase festlegen (25. Wort zum Verschlüsseln des Seeds)",
-      "invalidMessage": "Geben Sie eine gültige Passphrase ein",
-      "noLeadingTrailingSpaces": "Führende oder nachgestellte Leerzeichen sind nicht zulässig"
-    },
     "language": {
       "title": "Sprache auswählen"
     },
@@ -60,8 +55,7 @@
     "menu": {
       "enableTor": "Tor starten",
       "disableTor": "Tor stoppen",
-      "setBitcoinNode": "Bitcoin-Node auswählen",
-      "createWalletWithPassphrase": "Erstellen Sie eine Wallet mit Passphrase"
+      "setBitcoinNode": "Bitcoin-Node auswählen"
     }
   },
   "footerNav": {
@@ -246,9 +240,6 @@
       },
       "description": {
         "title": "Nachricht"
-      },
-      "feeEstimate": {
-        "title": "Kostenvoranschlag"
       }
     }
   },
@@ -897,10 +888,6 @@
         "title": "Startup-Info Benachrichtigungen",
         "subtitle": ""
       },
-      "showNotifications": {
-        "title": "Benachrichtigungen für diese Sitzung anzeigen",
-        "subtitle": ""
-      },
       "helpCencer": {
         "title": "LndMobile Hilfe Center",
         "subtitle": ""
@@ -958,9 +945,6 @@
       },
       "bimodalPathFinding": {
         "title": "Bimodale Wegfindung aktivieren"
-      },
-      "compactLndDatabases": {
-        "title": "Verdichten lnd-Datenbanken"
       }
     }
   },
@@ -1049,9 +1033,6 @@
     "title": "Tor Onion Service",
     "msg1": "Scanne diesen QR-Ccode, um einen Kanal zu dieser Wallet zu öffnen",
     "msg2": "Onion-Adresse konnte nicht aufgelöst werden"
-  },
-  "settings.toastLog": {
-    "title": "Benachrichtigungsprotokoll"
   },
   "welcome.addFunds": {
     "title": "Guthaben hinzufügen",
