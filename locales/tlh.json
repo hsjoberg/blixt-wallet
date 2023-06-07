@@ -46,11 +46,6 @@
       "msg3": "reH lut tlhaQ bOQoy boneHpu'chugh.",
       "msg4": "reH jIHvaD qelnIS"
     },
-    "createWalletWithPassphrase": {
-      "title": "pIj qIp (25 qatlh qo' Hoch)",
-      "invalidMessage": "'entepray'",
-      "noLeadingTrailingSpaces": "pa' bIghHa'wI' 'e' vIpIHbe'chugh"
-    },
     "language": {
       "title": "QeH"
     },
@@ -60,8 +55,7 @@
     "menu": {
       "enableTor": "DaH 'entepray' Tor",
       "disableTor": "Qotlh Tor",
-      "setBitcoinNode": "jatlhbe' Bitcoin",
-      "createWalletWithPassphrase": "muSHa'chugh vay', vay'"
+      "setBitcoinNode": "jatlhbe' Bitcoin"
     }
   },
   "footerNav": {
@@ -246,9 +240,6 @@
       },
       "description": {
         "title": "QIn"
-      },
-      "feeEstimate": {
-        "title": "qaD"
       }
     }
   },
@@ -897,10 +888,6 @@
         "title": "yuVHa'choH qabDaj 'angbe'nIS.",
         "subtitle": ""
       },
-      "showNotifications": {
-        "title": "YuvHa'be'chugh vaj bIHbe'",
-        "subtitle": ""
-      },
       "helpCencer": {
         "title": "LND pe'vIl ghoS",
         "subtitle": ""
@@ -958,9 +945,6 @@
       },
       "bimodalPathFinding": {
         "title": "chut yIH 'enqIyDu"
-      },
-      "compactLndDatabases": {
-        "title": "mInDu'wIj yInge'moHchoH"
       }
     }
   },
@@ -1049,9 +1033,6 @@
     "title": "QamchoH",
     "msg1": "mu'tlheghmeyvam daqmey law', ghertlhuD",
     "msg2": "nuvvam ngaDHom lururlu'meH"
-  },
-  "settings.toastLog": {
-    "title": "*be'neDIq* quvHa'chugh vay'"
   },
   "welcome.addFunds": {
     "title": "jatlh",
