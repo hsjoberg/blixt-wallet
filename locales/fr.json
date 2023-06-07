@@ -46,11 +46,6 @@
       "msg3": "Il n'existe actuellement aucun support WatchTower pour surveiller vos canaux lorsque vous êtes hors ligne.",
       "msg4": "Je suis insouciant, continuer"
     },
-    "createWalletWithPassphrase": {
-      "title": "Définir la phrase de passe (25e mot pour chiffrer la graine)",
-      "invalidMessage": "Saisissez une phrase de passe valide",
-      "noLeadingTrailingSpaces": "Les espaces de début ou de fin ne sont pas autorisés"
-    },
     "language": {
       "title": "Choisir la langue"
     },
@@ -60,8 +55,7 @@
     "menu": {
       "enableTor": "Activer Tor",
       "disableTor": "Désactiver Tor",
-      "setBitcoinNode": "Sélectionner nœud Bitcoin",
-      "createWalletWithPassphrase": "Créer un portefeuille avec une phrase de passe"
+      "setBitcoinNode": "Sélectionner nœud Bitcoin"
     }
   },
   "footerNav": {
@@ -246,9 +240,6 @@
       },
       "description": {
         "title": "Message"
-      },
-      "feeEstimate": {
-        "title": "Estimation des frais"
       }
     }
   },
@@ -897,10 +888,6 @@
         "title": "Afficher les notifications d'informations de démarrage",
         "subtitle": ""
       },
-      "showNotifications": {
-        "title": "Afficher les notifications pour cette session",
-        "subtitle": ""
-      },
       "helpCencer": {
         "title": "Centre d'aide de LndMobile",
         "subtitle": ""
@@ -958,9 +945,6 @@
       },
       "bimodalPathFinding": {
         "title": "Activer la recherche de chemin bimodal"
-      },
-      "compactLndDatabases": {
-        "title": "Comprimer lnd base de données"
       }
     }
   },
@@ -1049,9 +1033,6 @@
     "title": "Service Oignon de Tor",
     "msg1": "Scannez ce code QR pour ouvrir un canal vers ce portefeuille.",
     "msg2": "Impossible de résoudre l'adresse de l'oignon"
-  },
-  "settings.toastLog": {
-    "title": "Journal des notifications"
   },
   "welcome.addFunds": {
     "title": "Ajouter des fonds",
