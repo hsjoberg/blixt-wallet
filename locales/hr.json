@@ -46,6 +46,11 @@
       "msg3": "Trenutno nema podrške za WatchTower za stražu vaših kanala dok ste odspojeni.",
       "msg4": "Nemaran sam, nastavi"
     },
+    "createWalletWithPassphrase": {
+      "title": "Postavi lozinku (passphrase - 25. riječ za šifriranje sjemena)",
+      "invalidMessage": "Unesite valjanu lozinku",
+      "noLeadingTrailingSpaces": "Razmaci na početku ili na kraju nisu dopušteni"
+    },
     "language": {
       "title": "Odaberi jezik"
     },
@@ -55,7 +60,8 @@
     "menu": {
       "enableTor": "Omogući Tor",
       "disableTor": "Onemogući Tor",
-      "setBitcoinNode": "Postavite Bitcoin nod"
+      "setBitcoinNode": "Postavite Bitcoin nod",
+      "createWalletWithPassphrase": "Stvorite novčanik s lozinkom"
     }
   },
   "footerNav": {
@@ -240,6 +246,9 @@
       },
       "description": {
         "title": "Poruka"
+      },
+      "feeEstimate": {
+        "title": "Procjena naknade"
       }
     }
   },
@@ -888,6 +897,10 @@
         "title": "Prikaži obavijesti o informacijama o pokretanju",
         "subtitle": ""
       },
+      "showNotifications": {
+        "title": "Prikaži obavijesti za ovu sesiju",
+        "subtitle": ""
+      },
       "helpCencer": {
         "title": "LndMobile centar za pomoć",
         "subtitle": ""
@@ -945,6 +958,9 @@
       },
       "bimodalPathFinding": {
         "title": "Omogući bimodalno traženje puta"
+      },
+      "compactLndDatabases": {
+        "title": "Kompaktne lnd-ove baze podataka"
       }
     }
   },
@@ -1033,6 +1049,9 @@
     "title": "Tor Onion servis",
     "msg1": "Skenirajte ovaj QR kod da otvorite kanal prema ovom novčaniku",
     "msg2": "Nije moguće razriješiti onion adresu"
+  },
+  "settings.toastLog": {
+    "title": "Dnevnik obavijesti"
   },
   "welcome.addFunds": {
     "title": "Dodaj sredstva",
