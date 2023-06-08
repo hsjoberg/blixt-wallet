@@ -152,6 +152,46 @@ export const send: ISendModel = {
     const multiPathPaymentsEnabled = getStoreState().settings.multiPathPaymentsEnabled;
     const maxLNFeePercentage = getStoreState().settings.maxLNFeePercentage;
 
+    // Pre-settlement tx insert
+    const preTransaction: ITransaction = {
+      date: paymentRequest.timestamp,
+      description: extraData.lnurlPayTextPlain ?? paymentRequest.description,
+      duration: 0,
+      expire: paymentRequest.expiry,
+      paymentRequest: paymentRequestStr,
+      remotePubkey: paymentRequest.destination,
+      rHash: paymentRequest.paymentHash,
+      status: "OPEN",
+      value: paymentRequest.numSatoshis.neg(),
+      valueMsat: paymentRequest.numSatoshis.neg().mul(1000),
+      amtPaidSat: paymentRequest.numSatoshis.neg(),
+      amtPaidMsat: paymentRequest.numSatoshis.neg().mul(1000),
+      fee: Long.fromInt(0),
+      feeMsat: Long.fromInt(0),
+      nodeAliasCached: (remoteNodeInfo && remoteNodeInfo.node && remoteNodeInfo.node.alias) || null,
+      payer: extraData.payer,
+      valueUSD: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.fiatRates.USD.last),
+      valueFiat: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.currentRate),
+      valueFiatCurrency: getStoreState().settings.fiatUnit,
+      locationLong: null,
+      locationLat: null,
+      tlvRecordName: null,
+      type: extraData.type,
+      website: extraData.website,
+      identifiedService: identifyService(paymentRequest.destination, paymentRequest.description, extraData.website),
+      //note: // TODO: Why wasn't this added
+      lightningAddress: extraData.lightningAddress ?? null,
+      lud16IdentifierMimeType: extraData.lud16IdentifierMimeType ?? null,
+
+      preimage: hexToUint8Array("0"),
+      lnurlPayResponse: extraData.lnurlPayResponse,
+
+      hops: [],
+    };
+
+    log.d("IPreTransaction", [preTransaction]);
+    await dispatch.transaction.syncTransaction(preTransaction);
+
     const sendPaymentResult = await sendPaymentV2Sync(
       paymentRequestStr,
       payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
@@ -169,37 +209,13 @@ export const send: ISendModel = {
     const settlementDuration = (new Date().getTime() - start);
 
     const transaction: ITransaction = {
-      date: paymentRequest.timestamp,
-      description: extraData.lnurlPayTextPlain ?? paymentRequest.description,
+      ...preTransaction,
       duration: settlementDuration,
-      expire: paymentRequest.expiry,
-      paymentRequest: paymentRequestStr,
-      remotePubkey: paymentRequest.destination,
-      rHash: paymentRequest.paymentHash,
       status: "SETTLED",
-      value: paymentRequest.numSatoshis.neg(),
-      valueMsat: paymentRequest.numSatoshis.neg().mul(1000),
-      amtPaidSat: paymentRequest.numSatoshis.neg(),
-      amtPaidMsat: paymentRequest.numSatoshis.neg().mul(1000),
       fee: sendPaymentResult.fee || Long.fromInt(0),
       feeMsat: sendPaymentResult.feeMsat || Long.fromInt(0),
-      nodeAliasCached: (remoteNodeInfo && remoteNodeInfo.node && remoteNodeInfo.node.alias) || null,
-      payer: extraData.payer,
-      valueUSD: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.fiatRates.USD.last),
-      valueFiat: valueFiat(paymentRequest.numSatoshis, getStoreState().fiat.currentRate),
-      valueFiatCurrency: getStoreState().settings.fiatUnit,
-      locationLong: null,
-      locationLat: null,
-      tlvRecordName: null,
-      type: extraData.type,
-      website: extraData.website,
-      identifiedService: identifyService(paymentRequest.destination, paymentRequest.description, extraData.website),
-      //note: // TODO: Why wasn't this added
-      lightningAddress: extraData.lightningAddress ?? null,
-      lud16IdentifierMimeType: extraData.lud16IdentifierMimeType ?? null,
 
       preimage: hexToUint8Array(sendPaymentResult.paymentPreimage),
-      lnurlPayResponse: extraData.lnurlPayResponse,
 
       hops: sendPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
         chanId: hop.chanId ?? null,

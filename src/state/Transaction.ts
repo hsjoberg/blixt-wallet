@@ -5,10 +5,14 @@ import { ITransaction, getTransactions, createTransaction, updateTransaction } f
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { lnrpc } from "../../proto/lightning";
-import { bytesToHexString } from "../utils";
+import { bytesToHexString, hexToUint8Array } from "../utils";
+
+import Long from "long";
 
 import logger from "./../utils/log";
 const log = logger("Transaction");
+
+// let lock = Promise.resolve();
 
 export interface ITransactionModel {
   addTransaction: Action<ITransactionModel, ITransaction>;
@@ -37,11 +41,12 @@ export const transaction: ITransactionModel = {
     if (!db) {
       throw new Error("syncTransaction(): db not ready");
     }
+
     const transactions = getState().transactions;
     let foundTransaction = false;
 
     for (const txIt of transactions) {
-      if (txIt.rHash === tx.rHash) {
+      if (txIt.paymentRequest === tx.paymentRequest) {
         await updateTransaction(db, { ...txIt, ...tx });
         actions.updateTransaction({ transaction: { ...txIt, ...tx }});
         foundTransaction = true;
@@ -99,6 +104,7 @@ export const transaction: ITransactionModel = {
    * been settled while we were away.
    */
   checkOpenTransactions: thunk(async (actions, _, { getState, getStoreState, injections }) => {
+    const trackPayment = injections.lndMobile.index.trackPaymentV2Sync;
     const lookupInvoice = injections.lndMobile.index.lookupInvoice;
     const hideExpiredInvoices = getStoreState().settings.hideExpiredInvoices;
     const db = getStoreState().db;
@@ -109,43 +115,86 @@ export const transaction: ITransactionModel = {
 
     for (const tx of getState().transactions) {
       if (tx.status === "OPEN") {
-        const check = await lookupInvoice(tx.rHash);
-        if ((Date.now() / 1000) > (check.creationDate.add(check.expiry).toNumber())) {
-          const updated: ITransaction = {
-            ...tx,
-            status: "EXPIRED",
-          };
-          // tslint:disable-next-line
-          updateTransaction(db, updated).then(() => {
-            if (hideExpiredInvoices) {
-              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        log.i("trackpayment tx", [tx.rHash]);
+        if (tx.valueMsat.isNegative()) {
+          trackPayment(tx.rHash).then((trackPaymentResult) => {
+            log.i("trackpayment status", [trackPaymentResult.status, trackPaymentResult.paymentHash]);
+            if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.SUCCEEDED) {
+              log.i("trackpayment updating tx [settled]");
+              const updated: ITransaction = {
+                ...tx,
+                status: "SETTLED",
+                preimage: hexToUint8Array(trackPaymentResult.paymentPreimage),
+                hops: trackPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
+                  chanId: hop.chanId ?? null,
+                  chanCapacity: hop.chanCapacity ?? null,
+                  amtToForward: hop.amtToForward || Long.fromInt(0),
+                  amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
+                  fee: hop.fee || Long.fromInt(0),
+                  feeMsat: hop.feeMsat || Long.fromInt(0),
+                  expiry: hop.expiry || null,
+                  pubKey: hop.pubKey || null,
+                })) ?? [],
+              };
+              // tslint:disable-next-line
+              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+            } else if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.UNKNOWN) {
+              log.i("trackpayment updating tx [unknown]");
+              const updated: ITransaction = {
+                ...tx,
+                status: "UNKNOWN",
+              };
+              // tslint:disable-next-line
+              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+            } else if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.FAILED) {
+              log.i("trackpayment updating tx [failed]");
+              const updated: ITransaction = {
+                ...tx,
+                status: "CANCELED",
+              };
+              // tslint:disable-next-line
+              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
             }
-            actions.updateTransaction({ transaction: updated });
           });
-        }
-        else if (check.settled) {
-          const updated: ITransaction = {
-            ...tx,
-            status: "SETTLED",
-            value: check.amtPaidSat,
-            valueMsat: check.amtPaidMsat,
-            // TODO add valueUSD, valueFiat and valueFiatCurrency?
-          };
-          // tslint:disable-next-line
-          updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
-        }
-        else if (check.state === lnrpc.Invoice.InvoiceState.CANCELED) {
-          const updated: ITransaction = {
-            ...tx,
-            status: "CANCELED",
-          };
-          // tslint:disable-next-line
-          updateTransaction(db, updated).then(() => {
-            if (hideExpiredInvoices) {
-              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-            }
-            actions.updateTransaction({ transaction: updated })
-          });
+        } else {
+          const check = await lookupInvoice(tx.rHash);
+          if ((Date.now() / 1000) > (check.creationDate.add(check.expiry).toNumber())) {
+            const updated: ITransaction = {
+              ...tx,
+              status: "EXPIRED",
+            };
+            // tslint:disable-next-line
+            updateTransaction(db, updated).then(() => {
+              if (hideExpiredInvoices) {
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+              }
+              actions.updateTransaction({ transaction: updated });
+            });
+          }
+          else if (check.settled) {
+            const updated: ITransaction = {
+              ...tx,
+              status: "SETTLED",
+              value: check.amtPaidSat,
+              valueMsat: check.amtPaidMsat,
+              // TODO add valueUSD, valueFiat and valueFiatCurrency?
+            };
+            // tslint:disable-next-line
+            updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+          }
+          else if (check.state === lnrpc.Invoice.InvoiceState.CANCELED) {
+            const updated: ITransaction = {
+              ...tx,
+              status: "CANCELED",
+            };
+            // tslint:disable-next-line
+            updateTransaction(db, updated).then(() => {
+              if (hideExpiredInvoices) {
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+              }
+              actions.updateTransaction({ transaction: updated })
+            });
+          }
         }
       }
     }

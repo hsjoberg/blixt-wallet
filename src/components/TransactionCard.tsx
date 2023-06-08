@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Image, Platform, PixelRatio } from "react-native";
 import { Body, Card, CardItem, Text, Right, Row } from "native-base";
+import Long from "long";
 
 import { fromUnixTime } from "date-fns";
 import { ITransaction } from "../storage/database/transaction";
@@ -63,6 +64,19 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
     }
   }
 
+  let statusLabel: string | undefined = undefined;
+  if (status !== "SETTLED") {
+    statusLabel = capitalize(status);
+    // Special case for pending payments ("pre-transactions")
+    if (
+      status === "OPEN" &&
+      Long.isLong(transaction.valueMsat) &&
+      transaction.valueMsat.isNegative()
+    ) {
+      statusLabel = "Pending";
+    }
+  }
+
   return (
     <Card>
       <CardItem activeOpacity={1} button={true} onPress={() => onPress(transaction.rHash)}>
@@ -105,7 +119,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
                 }
               </Text>
               <Text note={true} style={transactionStyle.status}>
-                {status !== "SETTLED" && capitalize(status)}
+                {statusLabel}
               </Text>
             </View>
           </View>
