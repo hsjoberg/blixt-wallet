@@ -23,6 +23,10 @@ interface IInvoiceTempData {
   payer: string | null;
   type: ITransaction["type"];
   website: string | null;
+  callback?: (pr: string) => void;
+  lightningBox?: {
+    descHash: Uint8Array,
+  }
 }
 
 interface IReceiveModelAddInvoicePayload {
@@ -99,7 +103,7 @@ export const receive: IReceiveModel = {
     const invoiceExpiry = getStoreState().settings.invoiceExpiry;
     const description = setupDescription(payload.description, name);
 
-    const result = await addInvoice(payload.sat, description, payload.expiry ?? invoiceExpiry);
+    const result = await addInvoice(payload.sat, description, payload.expiry ?? invoiceExpiry, payload.tmpData?.lightningBox?.descHash);
     log.d("addInvoice() result", [result]);
     getStoreActions().clipboardManager.addToInvoiceCache(result.paymentRequest);
 
@@ -290,6 +294,10 @@ export const receive: IReceiveModel = {
           // We can now delete the temp data
           // as the invoice has been settled
           actions.deleteInvoiceTmpData(rHash);
+        } else if (invoice.state === lnrpc.Invoice.InvoiceState.OPEN) {
+          if (tmpData.callback) {
+            tmpData.callback(invoice.paymentRequest);
+          }
         }
 
         if (

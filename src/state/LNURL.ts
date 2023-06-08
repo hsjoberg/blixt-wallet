@@ -603,7 +603,7 @@ export const lnUrl: ILNUrlModel = {
     }
 
     // Normal LNURL fetch request follows:
-    const lnurlPayUrl = `https://${domain}/.well-known/lnurlp/${username}`;
+    const lnurlPayUrl = `http://${domain}/.well-known/lnurlp/${username}`;
     actions.setLNUrlStr(lnurlPayUrl);
     const result = await fetch(lnurlPayUrl);
 
