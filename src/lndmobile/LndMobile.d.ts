@@ -24,6 +24,7 @@ export interface ILndMobile {
   unbindLndMobileService(): Promise<void>; // TODO(hsjoberg): function looks broken
   sendPongToLndMobileservice(): Promise<{ data: string }>;
   checkLndMobileServiceConnected(): Promise<boolean>;
+  gossipSync(networkType: string): Promise<{ data: string }>;
 }
 
 export interface ILndMobileTools {
@@ -39,6 +40,8 @@ export interface ILndMobileTools {
   saveChannelBackupFile(): Promise<boolean>;
   DEBUG_getWalletPasswordFromKeychain(): Promise<string>;
   getTorEnabled(): Promise<boolean>;
+  DEBUG_deleteSpeedloaderLastrunFile(): boolean;
+  DEBUG_deleteSpeedloaderDgraphDirectory(): null;
 
   // Android-specific
   getIntentStringData(): Promise<string | null>;
@@ -70,10 +73,17 @@ export interface ILndMobileScheduledSync {
   checkScheduledSyncWorkStatus: () => Promise<WorkInfo>;
 }
 
+export interface IGossipFileScheduledSync {
+  setupScheduledSyncWork: () => Promise<boolean>;
+  removeScheduledSyncWork: () => Promise<boolean>;
+  checkScheduledSyncWorkStatus: () => Promise<WorkInfo>;
+}
+
 declare module "react-native" {
   interface NativeModulesStatic {
     LndMobile: ILndMobile;
     LndMobileTools: ILndMobileTools;
     LndMobileScheduledSync: ILndMobileScheduledSync;
+    GossipFileScheduledSync: IGossipFileScheduledSync;
   }
 }

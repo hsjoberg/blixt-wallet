@@ -1,6 +1,18 @@
 import {
   IAddInvoiceBlixtLspArgs,
   IReadLndLogResponse,
+  initialize,
+  writeConfig,
+  writeConfigFile,
+  subscribeState,
+  decodeState,
+  checkStatus,
+  startLnd,
+  gossipSync,
+  checkICloudEnabled,
+  checkApplicationSupportExists,
+  checkLndFolderExists,
+  createIOSApplicationSupportAndLndDirectories,
   TEMP_moveLndToApplicationSupport,
   addInvoice,
   addInvoiceBlixtLsp,
@@ -73,8 +85,31 @@ import {
   subscribeTransactions,
   walletBalance,
 } from "../lndmobile/onchain";
-import { modifyStatus, queryScores, setScores, status } from "../lndmobile/autopilot";
-
+import {
+  decodeInvoiceResult,
+  genSeed,
+  initWallet,
+  subscribeInvoices,
+  unlockWallet,
+  deriveKey,
+  derivePrivateKey,
+  verifyMessageNodePubkey,
+  signMessage,
+  signMessageNodePubkey,
+} from "../lndmobile/wallet";
+import {
+  status,
+  modifyStatus,
+  queryScores,
+  setScores,
+} from "../lndmobile/autopilot";
+import {
+  checkScheduledSyncWorkStatus
+} from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
+import {
+  checkScheduledGossipSyncWorkStatus
+} from "../lndmobile/scheduled-gossip-sync";
+import { lnrpc, signrpc, invoicesrpc, autopilotrpc, routerrpc } from "../../proto/lightning";
 import { WorkInfo } from "../lndmobile/LndMobile";
 import { checkScheduledSyncWorkStatus } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
 
@@ -87,6 +122,7 @@ export interface ILndMobileInjections {
     decodeState: (data: string) => lnrpc.SubscribeStateResponse;
     checkStatus: () => Promise<number>;
     startLnd: (torEnabled: boolean, args: string) => Promise<string>;
+    gossipSync: (networkType: string) => Promise<{ data: string }>;
     checkICloudEnabled: () => Promise<boolean>;
     checkApplicationSupportExists: () => Promise<boolean>;
     checkLndFolderExists: () => Promise<boolean>;
@@ -213,6 +249,9 @@ export interface ILndMobileInjections {
   scheduledSync: {
     checkScheduledSyncWorkStatus: () => Promise<WorkInfo>;
   };
+  scheduledGossipSync: {
+    checkScheduledGossipSyncWorkStatus: () => Promise<WorkInfo>;
+  };
 }
 
 export default {
@@ -224,6 +263,7 @@ export default {
     subscribeState,
     decodeState,
     startLnd,
+    gossipSync,
     checkICloudEnabled,
     checkApplicationSupportExists,
     checkLndFolderExists,
@@ -298,4 +338,11 @@ export default {
   scheduledSync: {
     checkScheduledSyncWorkStatus,
   },
+<<<<<<< HEAD
 } as unknown as ILndMobileInjections;
+=======
+  scheduledGossipSync: {
+    checkScheduledGossipSyncWorkStatus,
+  },
+} as ILndMobileInjections;
+>>>>>>> c1208e2 (GossipFileScheduledSync)
