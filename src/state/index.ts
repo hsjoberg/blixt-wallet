@@ -272,13 +272,13 @@ export const model: IStoreModel = {
         try {
           actions.setTorLoading(true);
           if (PLATFORM === "android") {
-            await NativeModules.BlixtTor.startTor();
+            socksPort = await NativeModules.BlixtTor.startTor();
           } else if (PLATFORM === "ios") {
             const tor = Tor({
               stopDaemonOnBackground: false,
               startDaemonOnActive: true,
             });
-            socksPort = await tor.startIfNotStarted();
+            await tor.startIfNotStarted();
           }
           log.i("socksPort", [socksPort]);
           if (socksPort === 0 && PLATFORM === "ios") {
@@ -316,7 +316,12 @@ export const model: IStoreModel = {
           }
         }
       }
-
+      let persistentServicesEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesEnabled) ?? false;
+      let persistentServicesWarningShown = await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesWarningShown) ?? false;
+      if (persistentServicesEnabled && !persistentServicesWarningShown) {
+        await setItemObject(StorageItem.persistentServicesWarningShown, true);
+        await NativeModules.BlixtTor.showMsg();
+      }
       log.v("Running LndMobile.initialize()");
       const initReturn = await initialize();
       log.i("initialize done", [initReturn]);

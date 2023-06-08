@@ -81,6 +81,8 @@ export enum StorageItem { // const enums not supported in Babel 7...
   lndCompactDb = "lndCompactDb",
   zeroConfPeers = "zeroConfPeers",
   enforceSpeedloaderOnStartup = "enforceSpeedloaderOnStartup",
+  persistentServicesEnabled = "persistentServicesEnabled",
+  persistentServicesWarningShown = "persistentServicesWarningShown",
 }
 
 export const setItem = async (key: StorageItem, value: string) =>
@@ -181,6 +183,8 @@ export const clearApp = async () => {
     removeItem(StorageItem.lndLogLevel),
     removeItem(StorageItem.lndCompactDb),
     removeItem(StorageItem.enforceSpeedloaderOnStartup),
+    removeItem(StorageItem.persistentServicesEnabled),
+    removeItem(StorageItem.persistentServicesWarningShown),
   ]);
 };
 
@@ -264,5 +268,7 @@ export const setupApp = async () => {
     setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL),
     setItemObject<boolean>(StorageItem.lndCompactDb, false),
     setItemObject<boolean>(StorageItem.enforceSpeedloaderOnStartup, false),
+    setItemObject<boolean>(StorageItem.persistentServicesEnabled, false),
+    setItemObject<boolean>(StorageItem.persistentServicesWarningShown, false),
   ]);
 };

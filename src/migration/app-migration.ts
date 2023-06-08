@@ -290,6 +290,18 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       await db.executeSql("ALTER TABLE contact ADD label TEXT NULL");
+    }
+  },
+  // Version 35
+  {
+    async beforeLnd(db, i) {
+      setItemObject<boolean>(StorageItem.persistentServicesEnabled, false);
+    },
+  },
+  // Version 34
+  {
+    async beforeLnd(db, i) {
+      setItemObject<boolean>(StorageItem.persistentServicesWarningShown, false);
     },
   },
   // Version 35
