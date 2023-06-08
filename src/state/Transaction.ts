@@ -117,44 +117,45 @@ export const transaction: ITransactionModel = {
       if (tx.status === "OPEN") {
         log.i("trackpayment tx", [tx.rHash]);
         if (tx.valueMsat.isNegative()) {
-        const trackPaymentResult = await trackPayment(tx.rHash);
-          log.i("trackpayment status", [trackPaymentResult.status, trackPaymentResult.paymentHash]);
-          if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.SUCCEEDED) {
-            log.i("trackpayment updating tx [settled]");
-            const updated: ITransaction = {
-              ...tx,
-              status: "SETTLED",
-              preimage: hexToUint8Array(trackPaymentResult.paymentPreimage),
-              hops: trackPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
-                chanId: hop.chanId ?? null,
-                chanCapacity: hop.chanCapacity ?? null,
-                amtToForward: hop.amtToForward || Long.fromInt(0),
-                amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-                fee: hop.fee || Long.fromInt(0),
-                feeMsat: hop.feeMsat || Long.fromInt(0),
-                expiry: hop.expiry || null,
-                pubKey: hop.pubKey || null,
-              })) ?? [],
-            };
-            // tslint:disable-next-line
-            updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
-          } else if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.UNKNOWN) {
-            log.i("trackpayment updating tx [unknown]");
-            const updated: ITransaction = {
-              ...tx,
-              status: "UNKNOWN",
-            };
-            // tslint:disable-next-line
-            updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
-          } else if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.FAILED) {
-            log.i("trackpayment updating tx [failed]");
-            const updated: ITransaction = {
-              ...tx,
-              status: "CANCELED",
-            };
-            // tslint:disable-next-line
-            updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
-          }
+          trackPayment(tx.rHash).then((trackPaymentResult) => {
+            log.i("trackpayment status", [trackPaymentResult.status, trackPaymentResult.paymentHash]);
+            if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.SUCCEEDED) {
+              log.i("trackpayment updating tx [settled]");
+              const updated: ITransaction = {
+                ...tx,
+                status: "SETTLED",
+                preimage: hexToUint8Array(trackPaymentResult.paymentPreimage),
+                hops: trackPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
+                  chanId: hop.chanId ?? null,
+                  chanCapacity: hop.chanCapacity ?? null,
+                  amtToForward: hop.amtToForward || Long.fromInt(0),
+                  amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
+                  fee: hop.fee || Long.fromInt(0),
+                  feeMsat: hop.feeMsat || Long.fromInt(0),
+                  expiry: hop.expiry || null,
+                  pubKey: hop.pubKey || null,
+                })) ?? [],
+              };
+              // tslint:disable-next-line
+              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+            } else if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.UNKNOWN) {
+              log.i("trackpayment updating tx [unknown]");
+              const updated: ITransaction = {
+                ...tx,
+                status: "UNKNOWN",
+              };
+              // tslint:disable-next-line
+              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+            } else if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.FAILED) {
+              log.i("trackpayment updating tx [failed]");
+              const updated: ITransaction = {
+                ...tx,
+                status: "CANCELED",
+              };
+              // tslint:disable-next-line
+              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+            }
+          });
         } else {
           const check = await lookupInvoice(tx.rHash);
           if ((Date.now() / 1000) > (check.creationDate.add(check.expiry).toNumber())) {
