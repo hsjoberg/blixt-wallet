@@ -221,9 +221,11 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, payAmou
       try {
         const error = checkLndStreamErrorResponse("RouterSendPaymentV2", e);
         if (error === "EOF") {
+          listener.remove();
           return;
         } else if (error) {
           console.log("Got error from RouterSendPaymentV2", [error]);
+          listener.remove();
           return reject(error);
         }
 
@@ -304,8 +306,8 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
       const response = decodeSendPaymentV2Result(e.data);
       console.log(response);
 
-      resolve(response);
       listener.remove();
+      resolve(response);
     });
 
     const response = await sendStreamCommand<routerrpc.ISendPaymentRequest, routerrpc.SendPaymentRequest>({
@@ -637,17 +639,19 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
       try {
         const error = checkLndStreamErrorResponse("RouterTrackPaymentV2", e);
         if (error == "EOF") {
+          listener.remove();
           return;
         } else if (error) {
           console.log("Got error from RouterTrackPaymentV2", [error]);
+          listener.remove();
           return reject(error);
         }
 
         const response = decodeTrackPaymentV2Result(e.data);
         // Only if we get an event that matches the original trackpayment request do we resolve the promise
         if (response.paymentHash == paymentHash) {
-          resolve(response);
           listener.remove();
+          resolve(response);
         }
       } catch (error) {
         reject(error.message);
