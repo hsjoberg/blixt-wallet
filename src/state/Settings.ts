@@ -429,8 +429,6 @@ export const settings: ISettingsModel = {
     actions.setLndCompactDb(payload);
   }),
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -587,11 +585,7 @@ export const settings: ISettingsModel = {
   setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
   setLndLogLevel: action((state, payload) => { state.lndLogLevel = payload; }),
   setLndCompactDb: action((state, payload) => { state.lndCompactDb = payload; }),
-<<<<<<< HEAD
->>>>>>> c1208e2 (GossipFileScheduledSync)
-=======
   setEnforceSpeedloaderOnStartup: action((state, payload) => { state.enforceSpeedloaderOnStartup = payload; }),
->>>>>>> f6e5b3f (Add setting to force speedloader gossip sync on startup)
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",

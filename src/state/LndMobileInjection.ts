@@ -322,11 +322,7 @@ export default {
   scheduledSync: {
     checkScheduledSyncWorkStatus,
   },
-<<<<<<< HEAD
-} as unknown as ILndMobileInjections;
-=======
   scheduledGossipSync: {
     checkScheduledGossipSyncWorkStatus,
   },
 } as ILndMobileInjections;
->>>>>>> c1208e2 (GossipFileScheduledSync)
