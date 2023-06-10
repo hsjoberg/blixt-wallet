@@ -228,11 +228,9 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, payAmou
       try {
         const error = checkLndStreamErrorResponse("RouterSendPaymentV2", e);
         if (error === "EOF") {
-          listener.remove();
           return;
         } else if (error) {
           console.log("Got error from RouterSendPaymentV2", [error]);
-          listener.remove();
           return reject(error);
         }
 
@@ -647,11 +645,9 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
       try {
         const error = checkLndStreamErrorResponse("RouterTrackPaymentV2", e);
         if (error == "EOF") {
-          listener.remove();
           return;
         } else if (error) {
           console.log("Got error from RouterTrackPaymentV2", [error]);
-          listener.remove();
           return reject(error);
         }
 
