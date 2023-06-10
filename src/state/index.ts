@@ -4,40 +4,9 @@ import NetInfo from "@react-native-community/netinfo";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import { AlertButton, NativeModules } from "react-native";
-import { IStoreInjections } from "./store";
-import { ILightningModel, lightning, LndChainBackend } from "./Lightning";
-import { ITransactionModel, transaction } from "./Transaction";
-import { IChannelModel, channel } from "./Channel";
-import { ISendModel, send } from "./Send";
-import { IReceiveModel, receive } from "./Receive";
-import { IOnChainModel, onChain } from "./OnChain";
-import { IFiatModel, fiat } from "./Fiat";
-import { ISecurityModel, security } from "./Security";
-import { ISettingsModel, settings } from "./Settings";
-import { IClipboardManagerModel, clipboardManager } from "./ClipboardManager";
-import { IScheduledSyncModel, scheduledSync } from "./ScheduledSync";
-import { IScheduledGossipSyncModel, scheduledGossipSync } from "./ScheduledGossip";
-import { ILNUrlModel, lnUrl } from "./LNURL";
-import { IGoogleModel, google } from "./Google";
-import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
-import { IWebLNModel, webln } from "./WebLN";
-import { IDeeplinkManager, deeplinkManager } from "./DeeplinkManager";
-import { INotificationManagerModel, notificationManager } from "./NotificationManager";
-import { ILightNameModel, lightName } from "./LightName";
-import { IICloudBackupModel, iCloudBackup } from "./ICloudBackup";
-import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
-import { IContactsModel, contacts } from "./Contacts";
 
-import { ELndMobileStatusCodes } from "../lndmobile/index";
-import { clearApp, setupApp, getWalletCreated, StorageItem, getItem as getItemAsyncStorage, getItemObject as getItemObjectAsyncStorage, setItemObject, setItem, getAppVersion, setAppVersion, getAppBuild, setAppBuild, getRescanWallet, setRescanWallet, getLndCompactDb, setLndCompactDb } from "../storage/app";
-import { openDatabase, setupInitialSchema, deleteDatabase, dropTables } from "../storage/database/sqlite";
-import { clearTransactions } from "../storage/database/transaction";
-import { appMigration } from "../migration/app-migration";
-import { setWalletPassword, getItem, getWalletPassword } from "../storage/keystore";
 import { DEFAULT_PATHFINDING_ALGORITHM, PLATFORM } from "../utils/constants";
-import SetupBlixtDemo from "../utils/setup-demo";
 import { Chain, VersionCode } from "../utils/build";
-import { DEFAULT_PATHFINDING_ALGORITHM, PLATFORM } from "../utils/constants";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
 import { IChannelRpcInterceptorModel, channelRpcInterceptor } from "./ChannelRpcInterceptor";
@@ -56,6 +25,7 @@ import { INotificationManagerModel, notificationManager } from "./NotificationMa
 import { IOnChainModel, onChain } from "./OnChain";
 import { IReceiveModel, receive } from "./Receive";
 import { IScheduledSyncModel, scheduledSync } from "./ScheduledSync";
+import { IScheduledGossipSyncModel, scheduledGossipSync } from "./ScheduledGossip";
 import { ISecurityModel, security } from "./Security";
 import { ISendModel, send } from "./Send";
 import { ISettingsModel, settings } from "./Settings";
@@ -93,7 +63,6 @@ import { IStoreInjections } from "./store";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import SetupBlixtDemo from "../utils/setup-demo";
-import Tor from "react-native-tor";
 import { appMigration } from "../migration/app-migration";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { clearTransactions } from "../storage/database/transaction";
@@ -261,7 +230,8 @@ export const model: IStoreModel = {
     );
     actions.setWalletCreated(await getWalletCreated());
 
-    const debugShowStartupInfo = await getItemObjectAsyncStorage<boolean>(StorageItem.debugShowStartupInfo) ?? false;
+    const debugShowStartupInfo =
+      (await getItemObjectAsyncStorage<boolean>(StorageItem.debugShowStartupInfo)) ?? false;
     const start = new Date();
 
     try {
@@ -284,7 +254,8 @@ export const model: IStoreModel = {
           if (socksPort === 0 && PLATFORM === "ios") {
             throw new Error("Unable to obtain SOCKS port");
           }
-          debugShowStartupInfo && toast("Tor initialized " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          debugShowStartupInfo &&
+            toast("Tor initialized " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
         } catch (e) {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
@@ -316,8 +287,11 @@ export const model: IStoreModel = {
           }
         }
       }
-      let persistentServicesEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesEnabled) ?? false;
-      let persistentServicesWarningShown = await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesWarningShown) ?? false;
+      let persistentServicesEnabled =
+        (await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesEnabled)) ?? false;
+      let persistentServicesWarningShown =
+        (await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesWarningShown)) ??
+        false;
       if (persistentServicesEnabled && !persistentServicesWarningShown) {
         await setItemObject(StorageItem.persistentServicesWarningShown, true);
         await NativeModules.BlixtTor.showMsg();
@@ -325,8 +299,11 @@ export const model: IStoreModel = {
       log.v("Running LndMobile.initialize()");
       const initReturn = await initialize();
       log.i("initialize done", [initReturn]);
-      let gossipSyncEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.scheduledGossipSyncEnabled) ?? false;
-      let enforceSpeedloaderOnStartup = await getItemObjectAsyncStorage<boolean>(StorageItem.enforceSpeedloaderOnStartup) ?? false;
+      let gossipSyncEnabled =
+        (await getItemObjectAsyncStorage<boolean>(StorageItem.scheduledGossipSyncEnabled)) ?? false;
+      let enforceSpeedloaderOnStartup =
+        (await getItemObjectAsyncStorage<boolean>(StorageItem.enforceSpeedloaderOnStartup)) ??
+        false;
       let gossipStatus: unknown = null;
 
       const status = await checkStatus();
@@ -349,7 +326,11 @@ export const model: IStoreModel = {
             let connectionState = await NetInfo.fetch();
             log.i("connectionState", [connectionState.type]);
             gossipStatus = await gossipSync(connectionState.type);
-            debugShowStartupInfo && toast("Gossip sync done " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+            debugShowStartupInfo &&
+              toast(
+                "Gossip sync done " + (new Date().getTime() - start.getTime()) / 1000 + "s",
+                1000,
+              );
           } catch (e) {
             log.e("GossipSync exception!", [e]);
           }
