@@ -1,18 +1,7 @@
 import {
   IAddInvoiceBlixtLspArgs,
   IReadLndLogResponse,
-  initialize,
-  writeConfig,
-  writeConfigFile,
-  subscribeState,
-  decodeState,
-  checkStatus,
-  startLnd,
   gossipSync,
-  checkICloudEnabled,
-  checkApplicationSupportExists,
-  checkLndFolderExists,
-  createIOSApplicationSupportAndLndDirectories,
   TEMP_moveLndToApplicationSupport,
   addInvoice,
   addInvoiceBlixtLsp,
@@ -64,7 +53,6 @@ import {
   pendingChannels,
   subscribeChannelEvents,
 } from "../lndmobile/channel";
-import { autopilotrpc, invoicesrpc, lnrpc, routerrpc, signrpc } from "../../proto/lightning";
 import {
   decodeInvoiceResult,
   deriveKey,
@@ -85,33 +73,11 @@ import {
   subscribeTransactions,
   walletBalance,
 } from "../lndmobile/onchain";
-import {
-  decodeInvoiceResult,
-  genSeed,
-  initWallet,
-  subscribeInvoices,
-  unlockWallet,
-  deriveKey,
-  derivePrivateKey,
-  verifyMessageNodePubkey,
-  signMessage,
-  signMessageNodePubkey,
-} from "../lndmobile/wallet";
-import {
-  status,
-  modifyStatus,
-  queryScores,
-  setScores,
-} from "../lndmobile/autopilot";
-import {
-  checkScheduledSyncWorkStatus
-} from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
-import {
-  checkScheduledGossipSyncWorkStatus
-} from "../lndmobile/scheduled-gossip-sync";
+import { status, modifyStatus, queryScores, setScores } from "../lndmobile/autopilot";
+import { checkScheduledSyncWorkStatus } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
+import { checkScheduledGossipSyncWorkStatus } from "../lndmobile/scheduled-gossip-sync";
 import { lnrpc, signrpc, invoicesrpc, autopilotrpc, routerrpc } from "../../proto/lightning";
 import { WorkInfo } from "../lndmobile/LndMobile";
-import { checkScheduledSyncWorkStatus } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
 
 export interface ILndMobileInjections {
   index: {
@@ -338,11 +304,7 @@ export default {
   scheduledSync: {
     checkScheduledSyncWorkStatus,
   },
-<<<<<<< HEAD
-} as unknown as ILndMobileInjections;
-=======
   scheduledGossipSync: {
     checkScheduledGossipSyncWorkStatus,
   },
-} as ILndMobileInjections;
->>>>>>> c1208e2 (GossipFileScheduledSync)
+} as unknown as ILndMobileInjections;
