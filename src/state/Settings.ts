@@ -186,6 +186,9 @@ export const settings: ISettingsModel = {
     actions.setScheduledSyncEnabled(
       (await getItemObject(StorageItem.scheduledSyncEnabled)) || false,
     );
+    actions.setScheduledGossipSyncEnabled(
+      (await getItemObject(StorageItem.scheduledGossipSyncEnabled)) || false,
+    );
     actions.setDebugShowStartupInfo(
       (await getItemObject(StorageItem.debugShowStartupInfo)) || false,
     );
@@ -481,6 +484,9 @@ export const settings: ISettingsModel = {
   }),
   setScheduledSyncEnabled: action((state, payload) => {
     state.scheduledSyncEnabled = payload;
+  }),
+  setScheduledGossipSyncEnabled: action((state, payload) => {
+    state.scheduledGossipSyncEnabled = payload;
   }),
   setDebugShowStartupInfo: action((state, payload) => {
     state.debugShowStartupInfo = payload;
