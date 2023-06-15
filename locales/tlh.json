@@ -46,6 +46,11 @@
       "msg3": "reH lut tlhaQ bOQoy boneHpu'chugh.",
       "msg4": "reH jIHvaD qelnIS"
     },
+    "createWalletWithPassphrase": {
+      "title": "pIj qIp (25 qatlh qo' Hoch)",
+      "invalidMessage": "'entepray'",
+      "noLeadingTrailingSpaces": "pa' bIghHa'wI' 'e' vIpIHbe'chugh"
+    },
     "language": {
       "title": "QeH"
     },
@@ -55,7 +60,8 @@
     "menu": {
       "enableTor": "DaH 'entepray' Tor",
       "disableTor": "Qotlh Tor",
-      "setBitcoinNode": "jatlhbe' Bitcoin"
+      "setBitcoinNode": "jatlhbe' Bitcoin",
+      "createWalletWithPassphrase": "muSHa'chugh vay', vay'"
     }
   },
   "footerNav": {
@@ -240,6 +246,9 @@
       },
       "description": {
         "title": "QIn"
+      },
+      "feeEstimate": {
+        "title": "qaD"
       }
     }
   },
@@ -781,6 +790,15 @@
       "graphSync": {
         "title": "veSvo' mIw'a' vIneH",
         "subtitle": "'ej ghIjtaHvIS nuvpu'"
+      },
+      "zeroConfPeers": {
+        "title": "Dotlh 'ugh vImaS",
+        "subtitle": "veqlargh bIHey 'ej bIvIt'eghchugh, vaj rojmaj bIvoq 'ej bIVIt'eghchugh, vaj rojmaj pe'vIl rur",
+        "setDialog": {
+          "title": "'ugh vImaS",
+          "msg1": "ghopDaj Sovbe'bogh ghotpu' HoSDaj.",
+          "msg2": "ru'Ha'wI' DaSabchugh, vaj yapbe'chugh."
+        }
       }
     },
     "miscelaneous": {
@@ -888,6 +906,10 @@
         "title": "yuVHa'choH qabDaj 'angbe'nIS.",
         "subtitle": ""
       },
+      "showNotifications": {
+        "title": "YuvHa'be'chugh vaj bIHbe'",
+        "subtitle": ""
+      },
       "helpCencer": {
         "title": "LND pe'vIl ghoS",
         "subtitle": ""
@@ -945,6 +967,9 @@
       },
       "bimodalPathFinding": {
         "title": "chut yIH 'enqIyDu"
+      },
+      "compactLndDatabases": {
+        "title": "mInDu'wIj yInge'moHchoH"
       }
     }
   },
@@ -1033,6 +1058,9 @@
     "title": "QamchoH",
     "msg1": "mu'tlheghmeyvam daqmey law', ghertlhuD",
     "msg2": "nuvvam ngaDHom lururlu'meH"
+  },
+  "settings.toastLog": {
+    "title": "*be'neDIq* quvHa'chugh vay'"
   },
   "welcome.addFunds": {
     "title": "jatlh",
