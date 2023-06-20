@@ -180,6 +180,9 @@ export const settings: ISettingsModel = {
     actions.setScheduledSyncEnabled(
       (await getItemObject(StorageItem.scheduledSyncEnabled)) || false,
     );
+    actions.setScheduledGossipSyncEnabled(
+      (await getItemObject(StorageItem.scheduledGossipSyncEnabled)) || false,
+    );
     actions.setDebugShowStartupInfo(
       (await getItemObject(StorageItem.debugShowStartupInfo)) || false,
     );
@@ -229,7 +232,9 @@ export const settings: ISettingsModel = {
     actions.setMaxLNFeePercentage((await getItemObject(StorageItem.maxLNFeePercentage)) ?? 2);
     actions.setLndLogLevel(((await getItem(StorageItem.lndLogLevel)) ?? "info") as LndLogLevel);
     actions.setLndCompactDb(await getLndCompactDb());
-    actions.setEnforceSpeedloaderOnStartup(await getItemObject(StorageItem.enforceSpeedloaderOnStartup || false));
+    actions.setEnforceSpeedloaderOnStartup(
+      await getItemObject(StorageItem.enforceSpeedloaderOnStartup || false),
+    );
 
     log.d("Done");
   }),
@@ -429,6 +434,11 @@ export const settings: ISettingsModel = {
     actions.setLndCompactDb(payload);
   }),
 
+  changeEnforceSpeedloaderOnStartup: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.enforceSpeedloaderOnStartup, payload);
+    actions.setEnforceSpeedloaderOnStartup(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -452,6 +462,9 @@ export const settings: ISettingsModel = {
   }),
   setScheduledSyncEnabled: action((state, payload) => {
     state.scheduledSyncEnabled = payload;
+  }),
+  setScheduledGossipSyncEnabled: action((state, payload) => {
+    state.scheduledGossipSyncEnabled = payload;
   }),
   setDebugShowStartupInfo: action((state, payload) => {
     state.debugShowStartupInfo = payload;
@@ -540,52 +553,9 @@ export const settings: ISettingsModel = {
   setLndCompactDb: action((state, payload) => {
     state.lndCompactDb = payload;
   }),
-=======
-=======
-  changeEnforceSpeedloaderOnStartup: thunk(async (actions, payload) => {
-    await setItemObject(StorageItem.enforceSpeedloaderOnStartup, payload);
-    actions.setEnforceSpeedloaderOnStartup(payload);
+  setEnforceSpeedloaderOnStartup: action((state, payload) => {
+    state.enforceSpeedloaderOnStartup = payload;
   }),
->>>>>>> f6e5b3f (Add setting to force speedloader gossip sync on startup)
-
-  setBitcoinUnit: action((state, payload) => { state.bitcoinUnit = payload; }),
-  setFiatUnit: action((state, payload) => { state.fiatUnit = payload; }),
-  setName: action((state, payload) => { state.name = payload; }),
-  setLanguage: action((state, payload) => { state.language = payload }),
-  setAutopilotEnabled: action((state, payload) => { state.autopilotEnabled = payload; }),
-  setPushNotificationsEnabled: action((state, payload) => { state.pushNotificationsEnabled = payload; }),
-  setClipboardInvoiceCheckInvoicesEnabled: action((state, payload) => { state.clipboardInvoiceCheckEnabled = payload; }),
-  setScheduledSyncEnabled: action((state, payload) => { state.scheduledSyncEnabled = payload; }),
-  setScheduledGossipSyncEnabled: action((state, payload) => { state.scheduledGossipSyncEnabled = payload; }),
-  setDebugShowStartupInfo: action((state, payload) => { state.debugShowStartupInfo = payload; }),
-  setGoogleDriveBackupEnabled: action((state, payload) => { state.googleDriveBackupEnabled = payload; }),
-  setPreferFiat: action((state, payload) => { state.preferFiat = payload; }),
-  setTransactionGeolocationEnabled: action((state, payload) => { state.transactionGeolocationEnabled = payload; }),
-  setTransactionGeolocationMapStyle: action((state, payload) => { state.transactionGeolocationMapStyle = payload; }),
-  setOnchainExplorer: action((state, payload) => { state.onchainExplorer = payload; }),
-  setMultiPathPaymentsEnabled: action((state, payload) => { state.multiPathPaymentsEnabled = payload; }),
-  setTorEnabled: action((state, payload) => { state.torEnabled = payload; }),
-  setHideExpiredInvoices: action((state, payload) => { state.hideExpiredInvoices = payload; }),
-  setScreenTransitionsEnabled: action((state, payload) => { state.screenTransitionsEnabled = payload; }),
-  setICloudBackupEnabled: action((state, payload) => { state.iCloudBackupEnabled = payload; }),
-  setLndChainBackend: action((state, payload) => { state.lndChainBackend = payload; }),
-  setNeutrinoPeers: action((state, payload) => { state.neutrinoPeers = payload; }),
-  setBitcoindRpcHost: action((state, payload) => { state.bitcoindRpcHost = payload; }),
-  setBitcoindPubRawBlock: action((state, payload) => { state.bitcoindPubRawBlock = payload; }),
-  setBitcoindPubRawTx: action((state, payload) => { state.bitcoindPubRawTx = payload; }),
-  setDunderServer: action((state, payload) => { state.dunderServer = payload; }),
-  setRequireGraphSync: action((state, payload) => { state.requireGraphSync = payload; }),
-  setDunderEnabled: action((state, payload) => { state.dunderEnabled = payload; }),
-  setLndNoGraphCache: action((state, payload) => { state.lndNoGraphCache = payload; }),
-  setInvoiceExpiry: action((state, payload) => { state.invoiceExpiry = payload; }),
-  setRescanWallet: action((state, payload) => { state.rescanWallet = payload; }),
-  setReceiveViaP2TR: action((state, payload) => { state.receiveViaP2TR = payload; }),
-  setStrictGraphPruningEnabled: action((state, payload) => { state.strictGraphPruningEnabled = payload; }),
-  setLndPathfindingAlgorithm: action((state, payload) => { state.lndPathfindingAlgorithm = payload; }),
-  setMaxLNFeePercentage: action((state, payload) => { state.maxLNFeePercentage = payload; }),
-  setLndLogLevel: action((state, payload) => { state.lndLogLevel = payload; }),
-  setLndCompactDb: action((state, payload) => { state.lndCompactDb = payload; }),
-  setEnforceSpeedloaderOnStartup: action((state, payload) => { state.enforceSpeedloaderOnStartup = payload; }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -624,7 +594,6 @@ export const settings: ISettingsModel = {
   lndPathfindingAlgorithm: DEFAULT_PATHFINDING_ALGORITHM,
   maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
   lndLogLevel: DEFAULT_LND_LOG_LEVEL,
-  lndPathfindingAlgorithm: DEFAULT_PATHFINDING_ALGORITHM,
   lndCompactDb: false,
   enforceSpeedloaderOnStartup: false,
 };

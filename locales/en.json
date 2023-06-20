@@ -688,8 +688,11 @@
         }
       },
       "gossipSync": {
+        "title": "Sync gossip on startup"
+      },
+      "gossipSyncAndroid": {
         "title": "Scheduled gossip sync",
-        "subtitle": "Runs in background every 2 hours"
+        "subtitle": "Runs in background every {{hours}} hours"
       }
     },
     "display": {
