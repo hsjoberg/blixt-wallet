@@ -308,9 +308,13 @@ export const model: IStoreModel = {
         if (gossipSyncEnabled) {
           if (enforceSpeedloaderOnStartup) {
             log.d("Clearing speedloader files");
-            // TODO(hsjoberg): LndMobileTools should be injected
-            await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile();
-            await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
+            try {
+              // TODO(hsjoberg): LndMobileTools should be injected
+              await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile();
+              await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
+            } catch (error) {
+              log.e("Gossip files deletion failed", [error]);
+            }
           }
           try {
             let connectionState = await NetInfo.fetch();
