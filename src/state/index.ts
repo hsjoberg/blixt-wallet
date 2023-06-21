@@ -1,9 +1,12 @@
 import * as base64 from "base64-js";
+import Tor from "react-native-tor";
+import NetInfo from "@react-native-community/netinfo";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import { AlertButton, NativeModules } from "react-native";
-import { Chain, VersionCode } from "../utils/build";
+
 import { DEFAULT_PATHFINDING_ALGORITHM, PLATFORM } from "../utils/constants";
+import { Chain, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
 import { IChannelRpcInterceptorModel, channelRpcInterceptor } from "./ChannelRpcInterceptor";
@@ -21,6 +24,7 @@ import { INotificationManagerModel, notificationManager } from "./NotificationMa
 import { IOnChainModel, onChain } from "./OnChain";
 import { IReceiveModel, receive } from "./Receive";
 import { IScheduledSyncModel, scheduledSync } from "./ScheduledSync";
+import { IScheduledGossipSyncModel, scheduledGossipSync } from "./ScheduledGossip";
 import { ISecurityModel, security } from "./Security";
 import { ISendModel, send } from "./Send";
 import { ISettingsModel, settings } from "./Settings";
@@ -58,7 +62,6 @@ import { IStoreInjections } from "./store";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import SetupBlixtDemo from "../utils/setup-demo";
-import Tor from "react-native-tor";
 import { appMigration } from "../migration/app-migration";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { clearTransactions } from "../storage/database/transaction";
@@ -100,6 +103,7 @@ export interface IStoreModel {
   setOnboardingState: Action<IStoreModel, OnboardingState>;
   setTorEnabled: Action<IStoreModel, boolean>;
   setTorLoading: Action<IStoreModel, boolean>;
+  setSpeedloaderLoading: Action<IStoreModel, boolean>;
 
   generateSeed: Thunk<IStoreModel, string | undefined, IStoreInjections>;
   writeConfig: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
@@ -112,6 +116,7 @@ export interface IStoreModel {
   walletCreated: boolean;
   holdOnboarding: boolean;
   torLoading: boolean;
+  speedloaderLoading: boolean;
   torEnabled: boolean;
 
   lightning: ILightningModel;
@@ -125,6 +130,7 @@ export interface IStoreModel {
   settings: ISettingsModel;
   clipboardManager: IClipboardManagerModel;
   scheduledSync: IScheduledSyncModel;
+  scheduledGossipSync: IScheduledGossipSyncModel;
   lnUrl: ILNUrlModel;
   google: IGoogleModel;
   googleDriveBackup: IGoogleDriveBackupModel;
@@ -163,7 +169,7 @@ export const model: IStoreModel = {
     }
     log.v("initializeApp()");
 
-    const { initialize, checkStatus, startLnd } = injections.lndMobile.index;
+    const { initialize, checkStatus, startLnd, gossipSync } = injections.lndMobile.index;
     const db = await actions.openDb();
     if (!(await getItemObjectAsyncStorage(StorageItem.app))) {
       log.i("Initializing app for the first time");
@@ -222,6 +228,10 @@ export const model: IStoreModel = {
     );
     actions.setWalletCreated(await getWalletCreated());
 
+    const debugShowStartupInfo =
+      (await getItemObjectAsyncStorage<boolean>(StorageItem.debugShowStartupInfo)) ?? false;
+    const start = new Date();
+
     try {
       let torEnabled = (await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled)) ?? false;
       actions.setTorEnabled(torEnabled);
@@ -242,6 +252,8 @@ export const model: IStoreModel = {
           if (socksPort === 0 && PLATFORM === "ios") {
             throw new Error("Unable to obtain SOCKS port");
           }
+          debugShowStartupInfo &&
+            toast("Tor initialized " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
         } catch (e) {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
@@ -276,7 +288,13 @@ export const model: IStoreModel = {
 
       log.v("Running LndMobile.initialize()");
       const initReturn = await initialize();
-      log.v("initialize done", [initReturn]);
+      log.i("initialize done", [initReturn]);
+      const gossipSyncEnabled =
+        (await getItemObjectAsyncStorage<boolean>(StorageItem.scheduledGossipSyncEnabled)) ?? false;
+      const enforceSpeedloaderOnStartup =
+        (await getItemObjectAsyncStorage<boolean>(StorageItem.enforceSpeedloaderOnStartup)) ??
+        false;
+      let gossipStatus: unknown = null;
 
       const status = await checkStatus();
       log.d("status", [status]);
@@ -284,7 +302,36 @@ export const model: IStoreModel = {
         (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !==
         ELndMobileStatusCodes.STATUS_PROCESS_STARTED
       ) {
-        log.i("Starting lnd");
+        const speed = setTimeout(() => {
+          actions.setSpeedloaderLoading(true);
+        }, 3000);
+        if (gossipSyncEnabled) {
+          if (enforceSpeedloaderOnStartup) {
+            log.d("Clearing speedloader files");
+            try {
+              // TODO(hsjoberg): LndMobileTools should be injected
+              await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile();
+              await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
+            } catch (error) {
+              log.e("Gossip files deletion failed", [error]);
+            }
+          }
+          try {
+            let connectionState = await NetInfo.fetch();
+            log.i("connectionState", [connectionState.type]);
+            gossipStatus = await gossipSync(connectionState.type);
+            debugShowStartupInfo &&
+              toast(
+                "Gossip sync done " + (new Date().getTime() - start.getTime()) / 1000 + "s",
+                1000,
+              );
+          } catch (e) {
+            log.e("GossipSync exception!", [e]);
+          }
+        }
+        clearTimeout(speed);
+        actions.setSpeedloaderLoading(false);
+        log.i("Starting lnd, gossipStatus", [gossipStatus]);
         try {
           let args = "";
           if (socksPort > 0) {
@@ -330,8 +377,6 @@ export const model: IStoreModel = {
     await dispatch.channel.setupCachedBalance();
     log.d("Done starting up stores");
 
-    const debugShowStartupInfo = getState().settings.debugShowStartupInfo;
-    const start = new Date();
     LndMobileEventEmitter.addListener("SubscribeState", async (e: any) => {
       try {
         log.d("SubscribeState", [e]);
@@ -607,6 +652,9 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   setTorLoading: action((state, value) => {
     state.torLoading = value;
   }),
+  setSpeedloaderLoading: action((state, value) => {
+    state.speedloaderLoading = value;
+  }),
 
   appReady: false,
   walletCreated: false,
@@ -628,6 +676,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   settings,
   clipboardManager,
   scheduledSync,
+  scheduledGossipSync,
   lnUrl,
   google,
   googleDriveBackup,

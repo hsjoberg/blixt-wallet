@@ -186,6 +186,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => {
             actions.scheduledSync.setSyncEnabled(false);
           }}><Text style={styles.buttonText}>scheduledSync.setSyncEnabled(false)</Text></Button>
+          <Button small onPress={async () => {
+            actions.scheduledGossipSync.setSyncEnabled(true);
+          }}><Text style={styles.buttonText}>scheduledGossipSync.setSyncEnabled(true)</Text></Button>
+          <Button small onPress={async () => {
+            actions.scheduledGossipSync.setSyncEnabled(false);
+          }}><Text style={styles.buttonText}>scheduledGossipSync.setSyncEnabled(false)</Text></Button>
 
           <Button small onPress={async () => {
             interface IDemoInvoice {
@@ -490,6 +496,14 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             actions.changeOnboardingState("DONE");
           }}><Text style={styles.buttonText}>onboardingState = DONE</Text></Button>
 
+          <Text style={{ width: "100%" }}>Speedloader:</Text>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile());
+          }}><Text style={styles.buttonText}>NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile()</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory());
+          }}><Text style={styles.buttonText}>NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory()</Text></Button>
+
           <Text style={{ width: "100%" }}>lndmobile:</Text>
           <Button small onPress={async () => await NativeModules.LndMobile.initialize()}><Text style={styles.buttonText}>LndMobile.initialize()</Text></Button>
           <Button small onPress={async () => {
@@ -510,6 +524,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.setupScheduledSyncWork())}><Text style={styles.buttonText}>setupScheduledSyncWork</Text></Button>
           <Button small onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.removeScheduledSyncWork())}><Text style={styles.buttonText}>removeScheduledSyncWork</Text></Button>
           <Button small onPress={async () => console.log(await NativeModules.LndMobileScheduledSync.checkScheduledSyncWorkStatus())}><Text style={styles.buttonText}>checkScheduledSyncWorkStatus</Text></Button>
+          <Button small onPress={async () => console.log(await NativeModules.GossipFileScheduledSync.setupScheduledSyncWork())}><Text style={styles.buttonText}>setupScheduledGossipSyncWork</Text></Button>
+          <Button small onPress={async () => console.log(await NativeModules.GossipFileScheduledSync.removeScheduledSyncWork())}><Text style={styles.buttonText}>removeScheduledGossipSyncWork</Text></Button>
+          <Button small onPress={async () => console.log(await NativeModules.GossipFileScheduledSync.checkScheduledSyncWorkStatus())}><Text style={styles.buttonText}>checkScheduledGossipSyncWorkStatus</Text></Button>
           <Button small onPress={async () => console.log(await NativeModules.LndMobileTools.saveLogs())}><Text style={styles.buttonText}>saveLogs</Text></Button>
           <Button small onPress={async () => console.log(await NativeModules.LndMobileTools.copyLndLog())}><Text style={styles.buttonText}>copyLndLog</Text></Button>
           <Button small onPress={async () => {

@@ -30,6 +30,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
             List<ReactPackage> packages = new PackageList(this).getPackages();
             packages.add(new LndMobilePackage());
             packages.add(new LndMobileToolsPackage());
+            packages.add(new GossipFileScheduledSyncPackage());
             packages.add(new LndMobileScheduledSyncPackage());
             packages.add(new BlixtTorPackage());
             packages.add(new RealTimeBlurPackage());

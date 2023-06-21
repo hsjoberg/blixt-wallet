@@ -292,4 +292,8 @@ open class Lnd {
       callback(nil, error)
     }
   }
+
+  func gossipSync(_ cacheDir: String, dataDir: String, networkType: String, callback: @escaping Callback) {
+    LndmobileGossipSync(cacheDir, dataDir, networkType, LndmobileCallback(method: "blixt_gossipSync", callback: callback))
+  }
 }

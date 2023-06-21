@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar, Alert, NativeModules } from "react-native";
-import { Spinner, H1 } from "native-base";
+import { Spinner, H1, H2 } from "native-base";
 import { createStackNavigator, CardStyleInterpolators, StackNavigationOptions } from "@react-navigation/stack";
 
 import Overview from "./windows/Overview";
@@ -82,6 +82,7 @@ export default function Main() {
   const initializeApp = useStoreActions((store) => store.initializeApp);
   const [initialRoute, setInitialRoute] = useState("Loading");
   const torLoading = useStoreState((store) => store.torLoading);
+  const speedloaderLoading = useStoreState((store) => store.speedloaderLoading);
 
   const [state, setState] =
     useState<"init" | "authentication" | "onboarding" | "started">("init");
@@ -182,6 +183,21 @@ export default function Main() {
           />
           <Spinner color={blixtTheme.light} size={55} />
           <H1>Initializing Tor</H1>
+        </Container>
+      );
+    }
+    if (speedloaderLoading) {
+      return (
+        <Container centered>
+          <StatusBar
+            backgroundColor="transparent"
+            hidden={false}
+            translucent={true}
+            networkActivityIndicatorVisible={true}
+            barStyle="light-content"
+          />
+          <Spinner color={blixtTheme.light} size={55} />
+          <H2>Syncing Lightning Network</H2>
         </Container>
       );
     }

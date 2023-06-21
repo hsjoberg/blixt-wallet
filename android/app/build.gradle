@@ -325,6 +325,7 @@ dependencies {
     implementation "net.freehaven.tor.control:jtorctl:0.2" // controlling tor instance via its control port
 
     implementation "com.jakewharton:process-phoenix:2.0.0"
+    implementation 'org.brotli:dec:0.1.2'
 }
 
 configurations {

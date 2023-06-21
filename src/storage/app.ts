@@ -40,8 +40,11 @@ export enum StorageItem { // const enums not supported in Babel 7...
   pushNotificationsEnabled = "pushNotificationsEnabled",
   clipboardInvoiceCheck = "clipboardInvoiceCheck",
   scheduledSyncEnabled = "scheduledSyncEnabled",
+  scheduledGossipSyncEnabled = "scheduledGossipSyncEnabled",
   lastScheduledSync = "lastScheduledSync",
   lastScheduledSyncAttempt = "lastScheduledSyncAttempt",
+  lastScheduledGossipSync = "lastScheduledGossipSync",
+  lastScheduledGossipSyncAttempt = "lastScheduledGossipSyncAttempt",
   debugShowStartupInfo = "debugShowStartupInfo",
   googleDriveBackupEnabled = "googleDriveBackupEnabled",
   preferFiat = "preferFiat",
@@ -77,6 +80,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   lndLogLevel = "lndLogLevel",
   lndCompactDb = "lndCompactDb",
   zeroConfPeers = "zeroConfPeers",
+  enforceSpeedloaderOnStartup = "enforceSpeedloaderOnStartup",
 }
 
 export const setItem = async (key: StorageItem, value: string) =>
@@ -138,6 +142,9 @@ export const clearApp = async () => {
     removeItem(StorageItem.scheduledSyncEnabled),
     removeItem(StorageItem.lastScheduledSync),
     removeItem(StorageItem.lastScheduledSyncAttempt),
+    removeItem(StorageItem.scheduledGossipSyncEnabled),
+    removeItem(StorageItem.lastScheduledGossipSync),
+    removeItem(StorageItem.lastScheduledGossipSyncAttempt),
     removeItem(StorageItem.debugShowStartupInfo),
     removeItem(StorageItem.googleDriveBackupEnabled),
     removeItem(StorageItem.preferFiat),
@@ -173,6 +180,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.maxLNFeePercentage),
     removeItem(StorageItem.lndLogLevel),
     removeItem(StorageItem.lndCompactDb),
+    removeItem(StorageItem.enforceSpeedloaderOnStartup),
   ]);
 };
 
@@ -255,5 +263,6 @@ export const setupApp = async () => {
     setItemObject<number>(StorageItem.maxLNFeePercentage, DEFAULT_MAX_LN_FEE_PERCENTAGE),
     setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL),
     setItemObject<boolean>(StorageItem.lndCompactDb, false),
+    setItemObject<boolean>(StorageItem.enforceSpeedloaderOnStartup, false),
   ]);
 };

@@ -50,6 +50,7 @@ export interface ISettingsModel {
   changePushNotificationsEnabled: Thunk<ISettingsModel, boolean>;
   changeClipboardInvoiceCheckEnabled: Thunk<ISettingsModel, boolean>;
   changeScheduledSyncEnabled: Thunk<ISettingsModel, boolean>;
+  changeScheduledGossipSyncEnabled: Thunk<ISettingsModel, boolean>;
   changeDebugShowStartupInfo: Thunk<ISettingsModel, boolean>;
   changeGoogleDriveBackupEnabled: Thunk<ISettingsModel, boolean>;
   changePreferFiat: Thunk<ISettingsModel, boolean>;
@@ -79,6 +80,7 @@ export interface ISettingsModel {
   changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
   changeLndLogLevel: Thunk<ISettingsModel, LndLogLevel>;
   changeLndCompactDb: Thunk<ISettingsModel, boolean>;
+  changeEnforceSpeedloaderOnStartup: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -88,6 +90,7 @@ export interface ISettingsModel {
   setPushNotificationsEnabled: Action<ISettingsModel, boolean>;
   setClipboardInvoiceCheckInvoicesEnabled: Action<ISettingsModel, boolean>;
   setScheduledSyncEnabled: Action<ISettingsModel, boolean>;
+  setScheduledGossipSyncEnabled: Action<ISettingsModel, boolean>;
   setDebugShowStartupInfo: Action<ISettingsModel, boolean>;
   setGoogleDriveBackupEnabled: Action<ISettingsModel, boolean>;
   setPreferFiat: Action<ISettingsModel, boolean>;
@@ -117,6 +120,7 @@ export interface ISettingsModel {
   setMaxLNFeePercentage: Action<ISettingsModel, number>;
   setLndLogLevel: Action<ISettingsModel, LndLogLevel>;
   setLndCompactDb: Action<ISettingsModel, boolean>;
+  setEnforceSpeedloaderOnStartup: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -126,6 +130,7 @@ export interface ISettingsModel {
   pushNotificationsEnabled: boolean;
   clipboardInvoiceCheckEnabled: boolean;
   scheduledSyncEnabled: boolean;
+  scheduledGossipSyncEnabled: boolean;
   debugShowStartupInfo: boolean;
   googleDriveBackupEnabled: boolean;
   preferFiat: boolean;
@@ -155,6 +160,7 @@ export interface ISettingsModel {
   lndLogLevel: LndLogLevel;
   lndCompactDb: boolean;
   zeroConfPeers: string[];
+  enforceSpeedloaderOnStartup: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -173,6 +179,9 @@ export const settings: ISettingsModel = {
     );
     actions.setScheduledSyncEnabled(
       (await getItemObject(StorageItem.scheduledSyncEnabled)) || false,
+    );
+    actions.setScheduledGossipSyncEnabled(
+      (await getItemObject(StorageItem.scheduledGossipSyncEnabled)) || false,
     );
     actions.setDebugShowStartupInfo(
       (await getItemObject(StorageItem.debugShowStartupInfo)) || false,
@@ -223,6 +232,9 @@ export const settings: ISettingsModel = {
     actions.setMaxLNFeePercentage((await getItemObject(StorageItem.maxLNFeePercentage)) ?? 2);
     actions.setLndLogLevel(((await getItem(StorageItem.lndLogLevel)) ?? "info") as LndLogLevel);
     actions.setLndCompactDb(await getLndCompactDb());
+    actions.setEnforceSpeedloaderOnStartup(
+      await getItemObject(StorageItem.enforceSpeedloaderOnStartup || false),
+    );
 
     log.d("Done");
   }),
@@ -269,6 +281,11 @@ export const settings: ISettingsModel = {
   changeScheduledSyncEnabled: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.scheduledSyncEnabled, payload);
     actions.setScheduledSyncEnabled(payload);
+  }),
+
+  changeScheduledGossipSyncEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.scheduledGossipSyncEnabled, payload);
+    actions.setScheduledGossipSyncEnabled(payload);
   }),
 
   changeDebugShowStartupInfo: thunk(async (actions, payload) => {
@@ -417,6 +434,11 @@ export const settings: ISettingsModel = {
     actions.setLndCompactDb(payload);
   }),
 
+  changeEnforceSpeedloaderOnStartup: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.enforceSpeedloaderOnStartup, payload);
+    actions.setEnforceSpeedloaderOnStartup(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -440,6 +462,9 @@ export const settings: ISettingsModel = {
   }),
   setScheduledSyncEnabled: action((state, payload) => {
     state.scheduledSyncEnabled = payload;
+  }),
+  setScheduledGossipSyncEnabled: action((state, payload) => {
+    state.scheduledGossipSyncEnabled = payload;
   }),
   setDebugShowStartupInfo: action((state, payload) => {
     state.debugShowStartupInfo = payload;
@@ -528,6 +553,9 @@ export const settings: ISettingsModel = {
   setLndCompactDb: action((state, payload) => {
     state.lndCompactDb = payload;
   }),
+  setEnforceSpeedloaderOnStartup: action((state, payload) => {
+    state.enforceSpeedloaderOnStartup = payload;
+  }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -537,6 +565,7 @@ export const settings: ISettingsModel = {
   pushNotificationsEnabled: false,
   clipboardInvoiceCheckEnabled: false,
   scheduledSyncEnabled: false,
+  scheduledGossipSyncEnabled: false,
   debugShowStartupInfo: false,
   googleDriveBackupEnabled: false,
   preferFiat: false,
@@ -562,8 +591,9 @@ export const settings: ISettingsModel = {
   rescanWallet: false,
   receiveViaP2TR: false,
   strictGraphPruningEnabled: false,
+  lndPathfindingAlgorithm: DEFAULT_PATHFINDING_ALGORITHM,
   maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
   lndLogLevel: DEFAULT_LND_LOG_LEVEL,
-  lndPathfindingAlgorithm: DEFAULT_PATHFINDING_ALGORITHM,
   lndCompactDb: false,
+  enforceSpeedloaderOnStartup: false,
 };
