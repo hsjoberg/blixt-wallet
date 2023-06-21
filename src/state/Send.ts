@@ -119,7 +119,7 @@ export const send: ISendModel = {
   /**
    * @throws
    */
-  sendPayment: thunk(async (_, payload, { getState, dispatch, injections, getStoreState }) => {
+  sendPayment: thunk(async (_, payload, { getState, dispatch, injections, getStoreState, getStoreActions }) => {
     const start = new Date().getTime();
 
     const sendPaymentV2Sync = injections.lndMobile.index.sendPaymentV2Sync;
@@ -151,9 +151,10 @@ export const send: ISendModel = {
     const name = getStoreState().settings.name;
     const multiPathPaymentsEnabled = getStoreState().settings.multiPathPaymentsEnabled;
     const maxLNFeePercentage = getStoreState().settings.maxLNFeePercentage;
+    const getTransactionByPaymentRequest = getStoreState().transaction.getTransactionByPaymentRequest;
 
     // Pre-settlement tx insert
-    const preTransaction: ITransaction = {
+    const preTransaction: ITransaction = getTransactionByPaymentRequest(paymentRequestStr) ?? {
       date: paymentRequest.timestamp,
       description: extraData.lnurlPayTextPlain ?? paymentRequest.description,
       duration: 0,
@@ -192,14 +193,23 @@ export const send: ISendModel = {
     log.d("IPreTransaction", [preTransaction]);
     await dispatch.transaction.syncTransaction(preTransaction);
 
-    const sendPaymentResult = await sendPaymentV2Sync(
-      paymentRequestStr,
-      payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
-      paymentRequest.numSatoshis,
-      name,
-      multiPathPaymentsEnabled,
-      maxLNFeePercentage,
-    );
+    let sendPaymentResult: lnrpc.Payment | undefined;
+    try {
+      sendPaymentResult = await sendPaymentV2Sync(
+        paymentRequestStr,
+        payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
+        paymentRequest.numSatoshis,
+        name,
+        multiPathPaymentsEnabled,
+        maxLNFeePercentage,
+      );
+    } catch (error) {
+      await dispatch.transaction.syncTransaction({
+        ...preTransaction,
+        status: preTransaction.status === "SETTLED" ? preTransaction.status : "CANCELED",
+      });
+      throw error;
+    }
 
     log.i("status", [sendPaymentResult.status, sendPaymentResult.failureReason]);
     if (sendPaymentResult.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
