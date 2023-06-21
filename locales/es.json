@@ -46,6 +46,11 @@
       "msg3": "No hay torre de vigilancia (por ahora) que vigile tus canales mientras estas offline.",
       "msg4": "No tengo miedo. Continuar"
     },
+    "createWalletWithPassphrase": {
+      "title": "Establecer frase de contraseña (25ª palabra para cifrar la semilla)",
+      "invalidMessage": "Introduzca una frase de contraseña válida",
+      "noLeadingTrailingSpaces": "No se permiten espacios iniciales o finales"
+    },
     "language": {
       "title": "Seleccione el idioma"
     },
@@ -55,7 +60,8 @@
     "menu": {
       "enableTor": "Habilitar Tor",
       "disableTor": "Deshabilitar Tor",
-      "setBitcoinNode": "Establecer nodo Bitcoin"
+      "setBitcoinNode": "Establecer nodo Bitcoin",
+      "createWalletWithPassphrase": "Crear billetera con frase de contraseña"
     }
   },
   "footerNav": {
@@ -240,6 +246,9 @@
       },
       "description": {
         "title": "Mensaje"
+      },
+      "feeEstimate": {
+        "title": "Estimación de tarifa"
       }
     }
   },
@@ -677,6 +686,13 @@
           "title": "No recomendado",
           "msg": "Advertencia. No está recomendado deshabilitar la sincronización de cadena programada.\n\nAsegúrate de mantener la fecha sincronizada con la Red, de otra manera te arriesgas a perder tus fondos.\n\nSólo haz esto si sabes lo que estás haciendo."
         }
+      },
+      "gossipSync": {
+        "title": "Sincronizar canales LN al inicio"
+      },
+      "gossipSyncAndroid": {
+        "title": "Sincronización de canales LN programada",
+        "subtitle": "Se ejecuta en segundo plano cada {{hours}} hours"
       }
     },
     "display": {
@@ -781,6 +797,15 @@
       "graphSync": {
         "title": "Espera a que el grafo se sincronice antes de pagar",
         "subtitle": "El grafo sincronizado dirige los pagos por las mejores rutas"
+      },
+      "zeroConfPeers": {
+        "title": "Establecer pares \"zero conf\"",
+        "subtitle": "Agregue los pubkeys de sus pares que desea permitir canales \"zero conf\" desde",
+        "setDialog": {
+          "title": "Pares \"zero conf\"",
+          "msg1": "Los valores separados por comas de las claves públicas, para permitir canales \"zero conf\"",
+          "msg2": "Confiará en los canales de estos pares hasta que haya al menos una confirmación de cadena."
+        }
       }
     },
     "miscelaneous": {
@@ -888,6 +913,10 @@
         "title": "Mostrar información sobre el inicio de la aplicación",
         "subtitle": ""
       },
+      "showNotifications": {
+        "title": "Mostrar notificaciones para esta sesión",
+        "subtitle": ""
+      },
       "helpCencer": {
         "title": "Centro de ayuda LndMobile",
         "subtitle": ""
@@ -945,6 +974,12 @@
       },
       "bimodalPathFinding": {
         "title": "Habilitar la búsqueda de rutas bimodal"
+      },
+      "compactLndDatabases": {
+        "title": "Compactar base de datos lnd"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Hacer cumplir la sincronización de \"gossip\" al inicio"
       }
     }
   },
@@ -1033,6 +1068,9 @@
     "title": "Tor Onion Service",
     "msg1": "Escanear este código QR para abrir un canal a esta cartera",
     "msg2": "No se pudo resolver la dirección onion"
+  },
+  "settings.toastLog": {
+    "title": "Registro de notificaciones"
   },
   "welcome.addFunds": {
     "title": "Añadir fondos",
