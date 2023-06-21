@@ -46,11 +46,6 @@
       "msg3": "Actualmente, não existe suporte para WatchTower para monitorar os seus canais enquanto estiver offline.",
       "msg4": "Eu sou imprudente, continue"
     },
-    "createWalletWithPassphrase": {
-      "title": "Definir senha (25ª palavra para criptografar a semente)",
-      "invalidMessage": "Digite uma senha válida",
-      "noLeadingTrailingSpaces": "Espaços iniciais ou finais não são permitidos"
-    },
     "language": {
       "title": "Selecione o idioma"
     },
@@ -60,8 +55,7 @@
     "menu": {
       "enableTor": "Activar Tor",
       "disableTor": "Desativar Tor",
-      "setBitcoinNode": "Definir nó Bitcoin",
-      "createWalletWithPassphrase": "Criar carteira com senha"
+      "setBitcoinNode": "Definir nó Bitcoin"
     }
   },
   "footerNav": {
@@ -246,9 +240,6 @@
       },
       "description": {
         "title": "Mensagem"
-      },
-      "feeEstimate": {
-        "title": "Estimativa de taxa"
       }
     }
   },
@@ -790,15 +781,6 @@
       "graphSync": {
         "title": "Aguarde a sincronização do gráfico antes de pagar",
         "subtitle": "Gráfico sincronizado leva a caminhos de pagamento ideais"
-      },
-      "zeroConfPeers": {
-        "title": "Defina os pares zero confirmação",
-        "subtitle": "Adicione pubkeys de colegas que você deseja permitir canais de zero confirmação de",
-        "setDialog": {
-          "title": "pares zero confirmação",
-          "msg1": "Valores separados por vírgula das chaves públicas, para permitir canais de confirmação zero de.",
-          "msg2": "Você estará confiando nos canais desses parceiros até que haja pelo menos uma confirmação da cadeia"
-        }
       }
     },
     "miscelaneous": {
@@ -906,10 +888,6 @@
         "title": "Mostrar notificações de informações de inicialização",
         "subtitle": ""
       },
-      "showNotifications": {
-        "title": "Mostrar notificações para esta sessão",
-        "subtitle": ""
-      },
       "helpCencer": {
         "title": "Central de Ajuda do LndMobile",
         "subtitle": ""
@@ -967,9 +945,6 @@
       },
       "bimodalPathFinding": {
         "title": "Habilitar pathfinding bimodal"
-      },
-      "compactLndDatabases": {
-        "title": "Compacta bancos de dados de lnd"
       }
     }
   },
@@ -1058,9 +1033,6 @@
     "title": "Serviço Tor Onion",
     "msg1": "Digitalize este código QR para abrir um canal para esta carteira",
     "msg2": "Não foi possível resolver o endereço onion"
-  },
-  "settings.toastLog": {
-    "title": "Registro de notificação"
   },
   "welcome.addFunds": {
     "title": "Adicionar fundos",
