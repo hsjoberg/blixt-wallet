@@ -692,7 +692,7 @@
       },
       "gossipSyncAndroid": {
         "title": "Sincronización de canales LN programada",
-        "subtitle": "Se ejecuta en segundo plano cada {{hours}} hours"
+        "subtitle": "Se ejecuta en segundo plano cada {{hours}} horas"
       }
     },
     "display": {
