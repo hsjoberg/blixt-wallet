@@ -688,10 +688,10 @@
         }
       },
       "gossipSync": {
-        "title": "Sync gossip on startup"
+        "title": "Sync LN channels on startup"
       },
       "gossipSyncAndroid": {
-        "title": "Scheduled gossip sync",
+        "title": "Scheduled LN channel sync",
         "subtitle": "Runs in background every {{hours}} hours"
       }
     },
