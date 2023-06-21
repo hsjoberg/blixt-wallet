@@ -203,6 +203,10 @@ export const send: ISendModel = {
 
     log.i("status", [sendPaymentResult.status, sendPaymentResult.failureReason]);
     if (sendPaymentResult.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
+      await dispatch.transaction.syncTransaction({
+        ...preTransaction,
+        status: "CANCELED",
+      });
       throw new Error(`${translatePaymentFailureReason(sendPaymentResult.failureReason)}`);
     }
 
