@@ -1643,33 +1643,6 @@ ${t("experimental.tor.disabled.msg2")}`;
             </ListItem>
           )}
 
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={onToggleScheduledGossipSyncEnabled}
-            onLongPress={onLongPressScheduledGossipSyncEnabled}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="cog-sync" />
-            </Left>
-            <Body>
-              <Text>
-                {PLATFORM === "android"
-                  ? t("security.gossipSyncAndroid.title")
-                  : t("security.gossipSync.title")}
-              </Text>
-              {PLATFORM === "android" && (
-                <Text note={true}>{t("security.gossipSyncAndroid.subtitle", { hours: "24" })}</Text>
-              )}
-            </Body>
-            <Right>
-              <CheckBox
-                checked={scheduledGossipSyncEnabled}
-                onPress={onToggleScheduledGossipSyncEnabled}
-              />
-            </Right>
-          </ListItem>
-
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("display.title")}</Text>
           </ListItem>
@@ -2068,6 +2041,32 @@ ${t("experimental.tor.disabled.msg2")}`;
                     : true
                 }
                 onPress={changeBimodalPathFindingEnabledPress}
+              />
+            </Right>
+          </ListItem>
+          <ListItem
+            style={style.listItem}
+            icon={true}
+            onPress={onToggleScheduledGossipSyncEnabled}
+            onLongPress={onLongPressScheduledGossipSyncEnabled}
+          >
+            <Left>
+              <Icon style={style.icon} type="MaterialCommunityIcons" name="cog-sync" />
+            </Left>
+            <Body>
+              <Text>
+                {PLATFORM === "android"
+                  ? t("security.gossipSyncAndroid.title")
+                  : t("security.gossipSync.title")}
+              </Text>
+              {PLATFORM === "android" && (
+                <Text note={true}>{t("security.gossipSyncAndroid.subtitle", { hours: "24" })}</Text>
+              )}
+            </Body>
+            <Right>
+              <CheckBox
+                checked={scheduledGossipSyncEnabled}
+                onPress={onToggleScheduledGossipSyncEnabled}
               />
             </Right>
           </ListItem>
