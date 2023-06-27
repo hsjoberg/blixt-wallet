@@ -106,7 +106,7 @@
     "react-native-camera": "git+https://github.com/hsjoberg/react-native-camera.git#6a38e09b9ec53309af21fbb2eec3d781e5bfc755",
     "react-native-codegen": "^0.72.0",
     "react-native-dialogs": "1.1.1",
-    "react-native-document-picker": "^9.0.1",
+    "react-native-document-picker": "8.2.1",
     "react-native-easy-grid": "0.2.2",
     "react-native-electron": "^0.18.0",
     "react-native-enhanced-popup-menu": "^0.7.0",
