@@ -46,6 +46,7 @@ export const namespaces = {
     setPincode: "settings.setPincode",
     torShowOnionAddress: "settings.torShowOnionAddress",
     toastLog: "settings.toastLog",
+    debugLog: "settings.debugLog",
   },
   web: {
     info: "web.info",
