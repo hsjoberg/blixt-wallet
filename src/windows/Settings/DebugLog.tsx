@@ -68,17 +68,17 @@ export default function({ navigation }: ISelectListProps) {
                 <Row style={{ width: "100%" }}>
                   <Text style={{
                     marginRight: 28,
-                    fontFamily: PLATFORM !=="macos" ? "monospace" : undefined,
-                    fontSize: 11
+                    fontFamily: !["macos", "ios"].includes(PLATFORM) ? "monospace" : undefined,
+                    fontSize: 11,
                   }}>
                     <Text style={{
-                      fontFamily: PLATFORM !=="macos" ? "monospace" : undefined,
+                      fontFamily: !["macos", "ios"].includes(PLATFORM) ? "monospace" : undefined,
                       fontSize: 9,
-                      color: fixLogLevelColor(toast[0])
+                      color: fixLogLevelColor(toast[0]),
                     }}>{toast[0]+"\n"}</Text>
                     {toast[1]}
                     </Text>
-                  <Text style={{ position:"absolute", right: 0 }}>
+                  <Text style={{ position: "absolute", right: 0 }}>
                     <Icon type="MaterialCommunityIcons" name="content-copy" style={style.icon} onPress={() => onCopyToastMessage(index)} />
                   </Text>
                 </Row>
