@@ -165,15 +165,17 @@ export default async function SetupBlixtDemo(
     lightningAddress: null,
     lud16IdentifierMimeType: null,
     note: "Account on LNMarkets",
+    label: null,
   }, {
     id: 2,
     domain: "lntxbot.com",
     type: "PERSON",
     lnUrlPay: "https://789",
     lnUrlWithdraw: null,
-    lightningAddress: "fiatjaf@lntxbot.com",
+    lightningAddress: "fiatjaf@ln.tips",
     lud16IdentifierMimeType: "text/identifier",
     note: "fiatjaf on Telegram",
+    label: null,
   }, {
     id: 3,
     domain: "blixtwallet.com",
@@ -183,6 +185,7 @@ export default async function SetupBlixtDemo(
     lightningAddress: "hampus@blixtwallet.com",
     lud16IdentifierMimeType: "text/identifier",
     note: "Hampus's Lightning Box",
+    label: null,
   }, {
     id: 4,
     domain: "kollider.com",
@@ -192,6 +195,7 @@ export default async function SetupBlixtDemo(
     lightningAddress: null,
     lud16IdentifierMimeType: null,
     note: "Account on Kollider",
+    label: null,
   }, {
     id: 5,
     domain: "zbd.gg",
@@ -201,14 +205,6 @@ export default async function SetupBlixtDemo(
     lightningAddress: "coco@zbd.gg",
     lud16IdentifierMimeType: "text/identifier",
     note: "coco on Zebedee",
-  }, {
-    id: 6,
-    domain: "lntxbot.com",
-    type: "PERSON",
-    lnUrlPay: "https://123",
-    lnUrlWithdraw: null,
-    lightningAddress: "hsjoberg@lntxbot.com",
-    lud16IdentifierMimeType: "text/identifier",
-    note: "hsjoberg on Telegram",
+    label: null,
   }]);
 };

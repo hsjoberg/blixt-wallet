@@ -286,7 +286,7 @@ class LndMobile: RCTEventEmitter {
         return
       }
       resolve([
-        "data": data?.base64EncodedString()
+        "data": data
       ])
     })
   }
