@@ -5,6 +5,14 @@ import { PLATFORM } from "./constants";
 
 const isNativePlatform = ["android", "ios"].includes(PLATFORM);
 
+export type LogLevel = "Verbose" | "Debug" | "Info" | "Warning" | "Error";
+export const logEntries: [LogLevel, string][] = [];
+
+// TODO: maybe make array observable in order trigger re-render for hook
+export function useGetLogEntries(): [LogLevel, string][] {
+  return logEntries;
+}
+
 const log = (tag?: string) => {
   tag = tag ?? "";
 
@@ -12,6 +20,7 @@ const log = (tag?: string) => {
     v: (message: string, data: any[] = []) => {
       if (Debug) {
         const msg = fixMessage(message, data);
+        logEntries.push(["Debug", `${tag}: ${msg}`]);
         console.debug(`${tag}: ${msg}`);
         if (isNativePlatform) {
           NativeModules.LndMobileTools.log("v", tag!, msg);
@@ -22,6 +31,7 @@ const log = (tag?: string) => {
     d: (message: string, data: any[] = []) => {
       if (Debug) {
         const msg = fixMessage(message, data);
+        logEntries.push(["Debug", `${tag}: ${msg}`]);
         console.debug(`${tag}: ${msg}`);
         if (isNativePlatform) {
           NativeModules.LndMobileTools.log("d", tag!, msg);
@@ -31,6 +41,7 @@ const log = (tag?: string) => {
 
     i: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
+      logEntries.push(["Info", `${tag}: ${msg}`]);
       console.log(`${tag}: ${msg}`)
       if (isNativePlatform) {
         NativeModules.LndMobileTools.log("i", tag!, msg);
@@ -39,6 +50,7 @@ const log = (tag?: string) => {
 
     w: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
+      logEntries.push(["Warning", `${tag}: ${msg}`]);
       console.warn(`${tag}: ${msg}`)
       if (isNativePlatform) {
         NativeModules.LndMobileTools.log("w", tag!, msg);
@@ -47,6 +59,7 @@ const log = (tag?: string) => {
 
     e: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
+      logEntries.push(["Error", `${tag}: ${msg}`]);
       console.error(`${tag}: ${msg}`)
       if (isNativePlatform) {
         NativeModules.LndMobileTools.log("e", tag!, msg);
