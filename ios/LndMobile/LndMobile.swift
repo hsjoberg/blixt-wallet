@@ -285,9 +285,7 @@ class LndMobile: RCTEventEmitter {
         reject("error", e.localizedDescription, e)
         return
       }
-      resolve([
-        "data": data
-      ])
+      resolve(String(data: data ?? Data(), encoding: .utf8))
     })
   }
 }
