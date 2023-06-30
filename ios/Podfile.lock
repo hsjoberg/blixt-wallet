@@ -253,7 +253,7 @@ PODS:
     - React-Core
   - react-native-camera/RN (4.2.1):
     - React-Core
-  - react-native-document-picker (9.0.1):
+  - react-native-document-picker (8.2.1):
     - React-Core
   - react-native-fingerprint-scanner (6.0.0):
     - React
@@ -263,7 +263,7 @@ PODS:
     - React
   - react-native-maps (1.7.1):
     - React-Core
-  - react-native-netinfo (9.3.10):
+  - react-native-netinfo (9.4.1):
     - React-Core
   - react-native-safe-area-context (4.6.3):
     - RCT-Folly
@@ -365,7 +365,7 @@ PODS:
     - React-Core
   - RNPermissions (3.8.1):
     - React-Core
-  - RNReactNativeHapticFeedback (1.14.0):
+  - RNReactNativeHapticFeedback (2.0.3):
     - React-Core
   - RNReanimated (1.13.4):
     - React-Core
@@ -614,7 +614,7 @@ SPEC CHECKSUMS:
   React: 72a676de573cc5ee0e375e5535238af9a4bd435c
   React-bridging: 12b6677a30fbd46555a35aa6096331737a9af598
   React-callinvoker: bb574a923c2281d01be23ed3b5d405caa583f56d
-  React-Codegen: d714637fe411291f96f933a535eaf03a774a21c9
+  React-Codegen: a5e05592b65963a4a453808d2233a04edb7ac8cd
   React-Core: 138385d05068622b2b1873eee7dc5be9762f5383
   React-CoreModules: 3a9be624998677db102b19090b1c33c7564ead6d
   React-cxxreact: eb24a767b0b811259947f3d538e7c999467e7131
@@ -625,12 +625,12 @@ SPEC CHECKSUMS:
   React-logger: 1e7ac909607ee65fd5c4d8bea8c6e644f66b8843
   react-native-build-config: d2d6891311ca2e0fa7ca7eeb4324a768e63e485c
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
-  react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
+  react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: 0f7fe8a4c2de477e278b0365cce27d089a8c5903
   react-native-hash: 4664516df1834e1293b30e711c63f61f7f801b6a
   react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
-  react-native-netinfo: ccbe1085dffd16592791d550189772e13bf479e2
+  react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
   react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
@@ -658,7 +658,7 @@ SPEC CHECKSUMS:
   RNKeychain: ff836453cba46938e0e9e4c22e43d43fa2c90333
   RNLocalize: d4b8af4e442d4bcca54e68fc687a2129b4d71a81
   RNPermissions: b471c990fd2bc1c5550af807d9f4e0313ee0b081
-  RNReactNativeHapticFeedback: 1e3efeca9628ff9876ee7cdd9edec1b336913f8c
+  RNReactNativeHapticFeedback: afa5bf2794aecbb2dba2525329253da0d66656df
   RNReanimated: c1b56d030d1616239861534d9adb531f8cffab68
   RNScreens: 68fd1060f57dd1023880bf4c05d74784b5392789
   RNSecureRandom: 46403b4cc818c426b33d11f7981a923de558e0a8
