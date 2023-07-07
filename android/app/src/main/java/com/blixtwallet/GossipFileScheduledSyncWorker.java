@@ -94,7 +94,6 @@ public class GossipFileScheduledSyncWorker extends ListenableWorker {
           out.close();
           stream.close();
         } catch (Throwable e) {
-          Log.e(TAG, e.getMessage());
           HyperLog.e(TAG, e.getMessage());
           completer.set(Result.failure());
           return;
