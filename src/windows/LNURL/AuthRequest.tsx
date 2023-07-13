@@ -3,8 +3,7 @@ import { Vibration, Alert } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { useStoreState, useStoreActions } from "../../state/store";
-import { getDomainFromURL, toast } from "../../utils";
-import { timeout } from "../../../mocks/lndmobile/utils";
+import { getDomainFromURL, timeout, toast } from "../../utils";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";

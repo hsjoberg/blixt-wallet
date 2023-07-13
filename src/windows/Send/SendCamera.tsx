@@ -9,7 +9,7 @@ import BarcodeMask from "../../components/BarCodeMask";
 import { SendStackParamList } from "./index";
 import { useStoreState } from "../../state/store";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import Camera from "../../components/Camera";
+import { Camera, CameraType } from 'react-native-camera-kit';
 import { Chain } from "../../utils/build";
 import { RouteProp } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
@@ -17,7 +17,7 @@ import { PLATFORM } from "../../utils/constants";
 import usePromptLightningAddress from "../../hooks/usePromptLightningAddress";
 import useEveluateLightningCode from "../../hooks/useEvaluateLightningCode";
 import { toast } from "../../utils";
-import { Alert } from "../../utils/alert";
+import Container from "../../components/Container";
 
 interface ISendCameraProps {
   bolt11Invoice?: string;
@@ -27,7 +27,7 @@ interface ISendCameraProps {
 export default function SendCamera({ navigation, route }: ISendCameraProps) {
   const viaSwipe = route.params?.viaSwipe ?? false;
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
-  const [cameraType, setCameraType] = useState<"front" | "back">("back");
+  const [cameraType, setCameraType] = useState<CameraType>(CameraType.Back);
   const [scanning, setScanning] = useState(true);
   const [cameraActive, setCameraActive] = useState(route.params?.viaSwipe ?? true);
   const promptLightningAddress = usePromptLightningAddress();
@@ -58,9 +58,9 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
 
   const onCameraSwitchClick = () => {
     setCameraType(
-      cameraType === "front"
-        ? "back"
-        : "front"
+      cameraType === CameraType.Front
+        ? CameraType.Back
+        : CameraType.Front
     );
   };
 
@@ -143,19 +143,13 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
   };
 
   return (
-    <Camera
-      active={cameraActive}
-      cameraType={cameraType}
-      onRead={onBarCodeRead}
-      onNotAuthorized={() => {
-        Alert.alert(
-          "Not authorized.",
-          "Camera access was not granted.\n" +
-          "Blixt Wallet needs access to the camera in order to be able to scan QR-codes."
-        );
-        setTimeout(() => navigation.goBack(), 1)
-      }}
-    >
+    <Container>
+      <Camera
+        style={StyleSheet.absoluteFill}
+        scanBarcode={true}
+        cameraType={cameraType}
+        onReadCode={(event) => onBarCodeRead(event.nativeEvent.codeStringValue)}
+      />
       <View style={StyleSheet.absoluteFill}>
         <BarcodeMask
           showAnimatedLine={false}
@@ -171,7 +165,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
           <GoBackIcon style={sendStyle.goBack} />
         }
       </View>
-    </Camera>
+    </Container>
   );
 };
 

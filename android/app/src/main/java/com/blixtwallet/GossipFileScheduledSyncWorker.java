@@ -20,8 +20,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 import androidx.work.ListenableWorker;
 import androidx.work.WorkerParameters;
 
-import com.facebook.react.modules.storage.ReactDatabaseSupplier;
-import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
+import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier;
+import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;

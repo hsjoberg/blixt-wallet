@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Blixt Wallet</string>
+    <string name="app_name_debug">Blixt Wallet Debug</string>
+</resources>

@@ -109,8 +109,8 @@ test("invoice appears on the transaction list", async () => {
   await waitFor(() => expect(store.getState().transaction.transactions).toHaveLength(1));
 
   // Go back to the Overview screen
-  const goBackButton = getAllByTestId("header-back");
-  fireEvent.press(goBackButton[1]);
+  const goBackButton = getByTestId("header-back");
+  fireEvent.press(goBackButton);
 
   // Expect a new invoice to be created with state OPEN
   const tx = store.getState().transaction.transactions[0];

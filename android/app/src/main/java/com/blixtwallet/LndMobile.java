@@ -1,6 +1,6 @@
 package com.blixtwallet;
 
-import com.blixtwallet.tor.BlixtTorUtils;
+// import com.blixtwallet.tor.BlixtTorUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,7 +65,7 @@ import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.permissions.PermissionsModule;
 
-import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
+import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.oblador.keychain.KeychainModule;
 
@@ -353,11 +353,11 @@ class LndMobile extends ReactContextBaseJavaModule {
 
     String params = "--lnddir=" + getReactApplicationContext().getFilesDir().getPath();
     if (torEnabled) {
-      int listenPort = BlixtTorUtils.getListenPort();
-      int socksPort = BlixtTorUtils.getSocksPort();
-      int controlPort = BlixtTorUtils.getControlPort();
-      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
-      params += " --tor.v3 --listen=localhost:" + listenPort;
+      // int listenPort = BlixtTorUtils.getListenPort();
+      // int socksPort = BlixtTorUtils.getSocksPort();
+      // int controlPort = BlixtTorUtils.getControlPort();
+      // params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
+      // params += " --tor.v3 --listen=localhost:" + listenPort;
     }
     else {
       // If Tor isn't active, make sure we aren't
@@ -558,5 +558,11 @@ class LndMobile extends ReactContextBaseJavaModule {
     } catch (RemoteException e) {
       promise.reject(TAG, "Could not Send MSG_INITWALLET to LndMobileService", e);
     }
+  }
+
+  @ReactMethod
+  void DEBUG_crash(Promise promise) {
+    HyperLog.e(TAG, null);
+    promise.resolve(true);
   }
 }

@@ -14,6 +14,7 @@ import store from "./state/store";
 import { clearApp } from "./storage/app";
 import { PLATFORM } from "./utils/constants";
 import "./i18n/i18n";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 
 export default function App() {
@@ -36,7 +37,9 @@ export default function App() {
   };
 
   return (
-    <StoreProvider store={store}>
+
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <StoreProvider store={store}>
         <StyleProvider style={getTheme(theme)}>
           <NavigationContainer theme={navigatorTheme} documentTitle={{ enabled: false }} ref={navigator}>
             <Root>
@@ -45,5 +48,6 @@ export default function App() {
           </NavigationContainer>
         </StyleProvider>
       </StoreProvider>
+    </GestureHandlerRootView>
   );
 };

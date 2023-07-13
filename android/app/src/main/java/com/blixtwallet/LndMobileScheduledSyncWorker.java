@@ -1,7 +1,7 @@
 package com.blixtwallet;
 
-import com.blixtwallet.tor.BlixtTor;
-import com.blixtwallet.tor.BlixtTorUtils;
+// import com.blixtwallet.tor.BlixtTor;
+// import com.blixtwallet.tor.BlixtTorUtils;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
@@ -32,8 +32,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.modules.storage.ReactDatabaseSupplier;
-import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
+import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier;
+import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.ReadableMap;
@@ -59,7 +59,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   // we'll close down lnd and the worker
   private int numGetInfoCalls = 0;
 
-  BlixtTor blixtTor;
+  // BlixtTor blixtTor;
 
   // private enum WorkState {
   //   NOT_STARTED, BOUND, WALLET_UNLOCKED, WAITING_FOR_SYNC, DONE;
@@ -75,7 +75,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   public LndMobileScheduledSyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
     super(context, workerParams);
     dbSupplier = ReactDatabaseSupplier.getInstance(getApplicationContext());
-    blixtTor = new BlixtTor(new ReactApplicationContext(getApplicationContext()));
+    // blixtTor = new BlixtTor(new ReactApplicationContext(getApplicationContext()));
   }
 
   @Override
@@ -325,33 +325,33 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
 
   private boolean startTor() {
     HyperLog.i(TAG, "Starting Tor");
-    blixtTor.startTor(new PromiseWrapper() {
-      @Override
-      void onSuccess(@Nullable Object value) {
-        HyperLog.i(TAG, "Tor started");
-        torStarted = true;
-      }
+    // blixtTor.startTor(new PromiseWrapper() {
+    //   @Override
+    //   void onSuccess(@Nullable Object value) {
+    //     HyperLog.i(TAG, "Tor started");
+    //     torStarted = true;
+    //   }
 
-      @Override
-      void onFail(Throwable throwable) {
-        HyperLog.e(TAG, "Failed to start Tor", throwable);
-        future.set(Result.failure());
-      }
-    });
-    int torTries = 0;
-    while (!torStarted) {
-      if (torTries++ > 30) {
-        HyperLog.e(TAG, "Couldn't start Tor.");
-        future.set(Result.failure());
-        return false;
-      }
-      HyperLog.i(TAG, "Waiting for Tor to start");
-      try {
-        Thread.sleep(1500);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
+    //   @Override
+    //   void onFail(Throwable throwable) {
+    //     HyperLog.e(TAG, "Failed to start Tor", throwable);
+    //     future.set(Result.failure());
+    //   }
+    // });
+    // int torTries = 0;
+    // while (!torStarted) {
+    //   if (torTries++ > 30) {
+    //     HyperLog.e(TAG, "Couldn't start Tor.");
+    //     future.set(Result.failure());
+    //     return false;
+    //   }
+    //   HyperLog.i(TAG, "Waiting for Tor to start");
+    //   try {
+    //     Thread.sleep(1500);
+    //   } catch (InterruptedException e) {
+    //     e.printStackTrace();
+    //   }
+    // }
     return true;
   }
 
@@ -361,12 +361,12 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     Bundle bundle = new Bundle();
     String params = "--lnddir=" + getApplicationContext().getFilesDir().getPath();
     if (torEnabled) {
-      HyperLog.d(TAG, "Adding Tor params for starting lnd");
-      int socksPort = BlixtTorUtils.getSocksPort();
-      int controlPort = BlixtTorUtils.getControlPort();
-      params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
-      // params += " --tor.v3 --listen=localhost";
-      params += " --nolisten";
+      // HyperLog.d(TAG, "Adding Tor params for starting lnd");
+      // int socksPort = BlixtTorUtils.getSocksPort();
+      // int controlPort = BlixtTorUtils.getControlPort();
+      // params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
+      // // params += " --tor.v3 --listen=localhost";
+      // params += " --nolisten";
     }
     else {
       // If Tor isn't active, make sure we aren't

@@ -1,4 +1,4 @@
-import { Chain, VersionCode } from "../utils/build";
+import { Chain, Debug, VersionCode } from "../utils/build";
 import {
   DEFAULT_DUNDER_SERVER,
   DEFAULT_INVOICE_EXPIRY,
@@ -9,7 +9,7 @@ import {
   PLATFORM,
 } from "../utils/constants";
 
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 import { LndChainBackend } from "../state/Lightning";
@@ -229,7 +229,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.scheduledSyncEnabled, false),
     setItemObject<number>(StorageItem.lastScheduledSync, 0),
     setItemObject<number>(StorageItem.lastScheduledSyncAttempt, 0),
-    setItemObject<boolean>(StorageItem.debugShowStartupInfo, false),
+    setItemObject<boolean>(StorageItem.debugShowStartupInfo, Debug),
     setItemObject<boolean>(StorageItem.googleDriveBackupEnabled, false),
     setItemObject<boolean>(StorageItem.preferFiat, false),
     setItemObject<boolean>(StorageItem.transactionGeolocationEnabled, false),

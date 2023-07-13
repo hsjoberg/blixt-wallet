@@ -3,7 +3,6 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
-
 const packageJson = require("../../package.json");
 
 const NOOP = () => {};
@@ -100,4 +99,6 @@ module.exports = [
     /node_modules\/react-native-icloudstore/,
     path.join(__dirname, "../web-hacks/react-native-icloudstore.js")
   ),
+
+  new webpack.EnvironmentPlugin({ JEST_WORKER_ID: null }),
 ];

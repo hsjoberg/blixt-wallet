@@ -1,6 +1,6 @@
 package com.blixtwallet;
 
-import com.blixtwallet.tor.BlixtTorUtils;
+// import com.blixtwallet.tor.BlixtTorUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,8 +63,8 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.modules.permissions.PermissionsModule;
-
-import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
+import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier;
+import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.oblador.keychain.KeychainModule;
 
@@ -462,7 +462,7 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getTorEnabled(Promise promise) {
-    android.database.sqlite.SQLiteDatabase db = com.facebook.react.modules.storage.ReactDatabaseSupplier.getInstance(getReactApplicationContext()).get();
+    android.database.sqlite.SQLiteDatabase db = ReactDatabaseSupplier.getInstance(getReactApplicationContext()).get();
     String torEnabled = AsyncLocalStorageUtil.getItemImpl(db, "torEnabled");
     if (torEnabled != null) {
       promise.resolve(torEnabled.equals("true"));
@@ -572,7 +572,6 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void DEBUG_deleteSpeedloaderLastrunFile(Promise promise) {
-    HyperLog.i(TAG, "DEBUG cache lastrun");
     String filename = getReactApplicationContext().getCacheDir().toString() + "/lastrun";
     File file = new File(filename);
     promise.resolve(file.delete());
@@ -580,7 +579,6 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void DEBUG_deleteSpeedloaderDgraphDirectory(Promise promise) {
-    HyperLog.i(TAG, "DEBUG cache lastrun");
     String filename = getReactApplicationContext().getCacheDir().toString() + "/dgraph";
     File file = new File(filename);
     deleteRecursive(file);

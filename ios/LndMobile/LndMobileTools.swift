@@ -197,8 +197,7 @@ autopilot.heuristic=preferential:0.05
 
   @objc(getTorEnabled:rejecter:)
   func getTorEnabled(resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    // let asyncStorage = self.bridge.module(forClass: RNCAsyncStorage.self)
-    let asyncStorage = RNCAsyncStorage.init()
+    let asyncStorage = RNCAsyncStorage()
 
     asyncStorage.methodQueue.async {
       asyncStorage.multiGet(["torEnabled"], callback: { (result) in
@@ -587,5 +586,13 @@ autopilot.heuristic=preferential:0.05
      }
     }
   #endif
+  }
+
+  @objc(getAppFolderPath:rejecter:)
+  func getAppFolderPath(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+    let url = paths[0]
+
+    resolve(url.relativeString)
   }
 }

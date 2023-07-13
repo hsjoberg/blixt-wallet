@@ -42,7 +42,11 @@ test("upload backup file", async () => {
   await setItem(StorageItem.walletPassword, "test1234");
   const store = await initCommonStore(true);
 
+
+  // TODO(hsjoberg): I don't know why this is needed twice. It just is
   mockGDriveGetFilesOnce();
+  mockGDriveGetFilesOnce();
+
 
   expect(async() => await store.getActions().googleDriveBackup.makeBackup()).not.toThrow();
 });
