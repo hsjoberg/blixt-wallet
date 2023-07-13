@@ -60,34 +60,25 @@ buck-out/
 # Bundle artifact
 *.jsbundle
 
-# Protobuf
+# Blixt
+.webpack
+android/app/lndmobile/Lndmobile.aar
+ios/Lndmobile.xcframework
+macos/Lndmobile.xcframework
 proto
-
-# Android Studio
 .classpath
 .project
 .settings
-
-# Google
 google-services.json
-
-# iOS
 ios/Pods
 macos/Pods
-
-# Lnd binaries
 android/lndmobile/Lndmobile.aar
 ios/Lndmobile.xcframework
 macos/Lndmobile.xcframework
-
-# Web
 dist
 .webpack
-
-# service-image
 contrib/service-image/webp
 contrib/service-image/code
-
 # vim
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]
@@ -98,7 +89,7 @@ contrib/service-image/code
 Session.vim
 Sessionx.vim
 *~
-
+out
 # Source files other than .ts
 android
 assets

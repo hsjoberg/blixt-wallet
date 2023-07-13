@@ -1,36 +1,40 @@
 require_relative '../node_modules/react-native-macos/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-pod 'SwiftProtobuf', '~> 1.0'
+pod 'SwiftProtobuf', '~> 1.22.0'
+
+prepare_react_native_project!
 
 project 'BlixtWallet',
-        'DebugTestnet' => :debug,
-        'ReleaseTestnet' => :release,
-        'DebugFakelnd' => :debug,
-        'ReleaseFakelnd' => :release,
-        'DebugRegtest' => :debug,
-        'ReleaseRegtest' => :release,
+prepare_react_native_project!
+        # 'DebugTestnet' => :debug,
+        # 'ReleaseTestnet' => :release,
+        # 'DebugFakelnd' => :debug,
+        # 'ReleaseFakelnd' => :release,
+        # 'DebugRegtest' => :debug,
+        # 'ReleaseRegtest' => :release,
         'Debug' => :debug,
         'Release' => :release
 
 target 'BlixtWallet' do
   platform :macos, '10.15'
   use_native_modules!
+
+  # Flags change depending on the env values.
+  flags = get_default_flags()
+
   use_react_native!(
     :path => '../node_modules/react-native-macos',
-
-    # To use Hermes, install the `hermes-engine-darwin` npm package, e.g.:
-    #   $ yarn add 'hermes-engine-darwin@~0.5.3'
-    #
-    # Then enable this option:
-    #   :hermes_enabled => true
+    :hermes_enabled => false,
+    :fabric_enabled => ENV['RCT_NEW_ARCH_ENABLED'] == '1',
+    # Flipper is not compatible w/ macOS
+    :flipper_configuration => FlipperConfiguration.disabled,
+    # An absolute path to your application root.
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
   post_install do |installer|
-    # flipper_post_install(installer)
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
-
-  # Pods specifically for macOS target
 end

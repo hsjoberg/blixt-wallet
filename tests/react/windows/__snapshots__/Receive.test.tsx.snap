@@ -182,7 +182,6 @@ exports[`renders correctly 1`] = `
         <RNSScreen
           activityState={2}
           collapsable={false}
-          forwardedRef={[Function]}
           gestureResponseDistance={
             {
               "bottom": -1,
@@ -192,6 +191,11 @@ exports[`renders correctly 1`] = `
             }
           }
           pointerEvents="box-none"
+          sheetAllowedDetents="large"
+          sheetCornerRadius={-1}
+          sheetExpandsWhenScrolledToEdge={true}
+          sheetGrabberVisible={false}
+          sheetLargestUndimmedDetent="all"
           style={
             {
               "bottom": 0,
@@ -275,7 +279,6 @@ exports[`renders correctly 1`] = `
             >
               <View
                 collapsable={false}
-                forwardedRef={[Function]}
                 handlerTag={1}
                 handlerType="PanGestureHandler"
                 needsOffscreenAlphaCompositing={false}
@@ -366,7 +369,6 @@ exports[`renders correctly 1`] = `
                               <RNSScreen
                                 activityState={2}
                                 collapsable={false}
-                                forwardedRef={[Function]}
                                 gestureResponseDistance={
                                   {
                                     "bottom": -1,
@@ -376,6 +378,11 @@ exports[`renders correctly 1`] = `
                                   }
                                 }
                                 pointerEvents="box-none"
+                                sheetAllowedDetents="large"
+                                sheetCornerRadius={-1}
+                                sheetExpandsWhenScrolledToEdge={true}
+                                sheetGrabberVisible={false}
+                                sheetLargestUndimmedDetent="all"
                                 style={
                                   {
                                     "bottom": 0,
@@ -459,7 +466,6 @@ exports[`renders correctly 1`] = `
                                   >
                                     <View
                                       collapsable={false}
-                                      forwardedRef={[Function]}
                                       handlerTag={2}
                                       handlerType="PanGestureHandler"
                                       needsOffscreenAlphaCompositing={true}
@@ -550,10 +556,26 @@ exports[`renders correctly 1`] = `
                                                   }
                                                 >
                                                   <View
+                                                    accessibilityState={
+                                                      {
+                                                        "busy": undefined,
+                                                        "checked": undefined,
+                                                        "disabled": undefined,
+                                                        "expanded": undefined,
+                                                        "selected": undefined,
+                                                      }
+                                                    }
+                                                    accessibilityValue={
+                                                      {
+                                                        "max": undefined,
+                                                        "min": undefined,
+                                                        "now": undefined,
+                                                        "text": undefined,
+                                                      }
+                                                    }
                                                     accessible={true}
                                                     collapsable={false}
                                                     focusable={false}
-                                                    forwardedRef={[Function]}
                                                     onClick={[Function]}
                                                     onResponderGrant={[Function]}
                                                     onResponderMove={[Function]}
@@ -659,10 +681,26 @@ exports[`renders correctly 1`] = `
                                                     </Text>
                                                   </View>
                                                   <View
+                                                    accessibilityState={
+                                                      {
+                                                        "busy": undefined,
+                                                        "checked": undefined,
+                                                        "disabled": undefined,
+                                                        "expanded": undefined,
+                                                        "selected": undefined,
+                                                      }
+                                                    }
+                                                    accessibilityValue={
+                                                      {
+                                                        "max": undefined,
+                                                        "min": undefined,
+                                                        "now": undefined,
+                                                        "text": undefined,
+                                                      }
+                                                    }
                                                     accessible={true}
                                                     collapsable={false}
                                                     focusable={false}
-                                                    forwardedRef={[Function]}
                                                     onClick={[Function]}
                                                     onResponderGrant={[Function]}
                                                     onResponderMove={[Function]}
@@ -763,10 +801,26 @@ exports[`renders correctly 1`] = `
                                                     </Text>
                                                   </View>
                                                   <View
+                                                    accessibilityState={
+                                                      {
+                                                        "busy": undefined,
+                                                        "checked": undefined,
+                                                        "disabled": undefined,
+                                                        "expanded": undefined,
+                                                        "selected": undefined,
+                                                      }
+                                                    }
+                                                    accessibilityValue={
+                                                      {
+                                                        "max": undefined,
+                                                        "min": undefined,
+                                                        "now": undefined,
+                                                        "text": undefined,
+                                                      }
+                                                    }
                                                     accessible={true}
                                                     collapsable={false}
                                                     focusable={false}
-                                                    forwardedRef={[Function]}
                                                     onClick={[Function]}
                                                     onResponderGrant={[Function]}
                                                     onResponderMove={[Function]}
@@ -832,10 +886,26 @@ exports[`renders correctly 1`] = `
                                                     />
                                                   </View>
                                                   <View
+                                                    accessibilityState={
+                                                      {
+                                                        "busy": undefined,
+                                                        "checked": undefined,
+                                                        "disabled": undefined,
+                                                        "expanded": undefined,
+                                                        "selected": undefined,
+                                                      }
+                                                    }
+                                                    accessibilityValue={
+                                                      {
+                                                        "max": undefined,
+                                                        "min": undefined,
+                                                        "now": undefined,
+                                                        "text": undefined,
+                                                      }
+                                                    }
                                                     accessible={true}
                                                     collapsable={false}
                                                     focusable={false}
-                                                    forwardedRef={[Function]}
                                                     onClick={[Function]}
                                                     onResponderGrant={[Function]}
                                                     onResponderMove={[Function]}
@@ -927,13 +997,24 @@ exports[`renders correctly 1`] = `
                                                     <View
                                                       accessibilityState={
                                                         {
+                                                          "busy": undefined,
+                                                          "checked": undefined,
                                                           "disabled": true,
+                                                          "expanded": undefined,
+                                                          "selected": undefined,
+                                                        }
+                                                      }
+                                                      accessibilityValue={
+                                                        {
+                                                          "max": undefined,
+                                                          "min": undefined,
+                                                          "now": undefined,
+                                                          "text": undefined,
                                                         }
                                                       }
                                                       accessible={true}
                                                       collapsable={false}
                                                       focusable={true}
-                                                      forwardedRef={[Function]}
                                                       onClick={[Function]}
                                                       onResponderGrant={[Function]}
                                                       onResponderMove={[Function]}

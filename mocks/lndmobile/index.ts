@@ -224,6 +224,13 @@ export const addInvoiceBlixtLsp = ({amount, memo, expiry = 600, servicePubkey, c
 //   return response;
 // };
 
+export const queryRoutes = async (pubKey: string, amount?: Long, routeHints?: lnrpc.IRouteHint[]): Promise<lnrpc.QueryRoutesResponse> => {
+  return lnrpc.QueryRoutesResponse.create({
+    routes: [],
+    successProb: 0.5,
+  });
+}
+
 // TODO test
 export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
   const payreq = payReq.decode(bolt11); // todo check second argument

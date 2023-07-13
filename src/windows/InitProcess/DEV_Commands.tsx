@@ -92,6 +92,31 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
 
           <Text style={{ width: "100%"}}>Random:</Text>
           <Button small onPress={async () => {
+            console.error("error");
+          }}><Text style={styles.buttonText}>console.error("error")</Text></Button>
+          <Button small onPress={async () => {
+            try {
+              await db!.executeSql("ALTER TABLE contact ADD label TEXT NULL");
+              toast("Done");
+            } catch (e) {
+              toast(e.message);
+            }
+          }}><Text style={styles.buttonText}>contact label fix</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await(await fetch("https://dunder.blixtwallet.com/ondemand-channel/service-status")).text());
+          }}><Text style={styles.buttonText}>dunder service status</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await(await fetch("http://mempoolhqx4isw62xs7abwphsq7ldayuidyx2v2oethdhhj6mlo2r6ad.onion/")).text());
+          }}><Text style={styles.buttonText}>mempool</Text></Button>
+          <Button small onPress={async () => {
+            await NativeModules.BlixtTor.showMsg();
+          }}><Text style={styles.buttonText}>show DOKI activity</Text></Button>
+          <Button small onPress={async () => {
+            console.log("Import lets go");
+            await importGraph();
+            console.log("done");
+          }}><Text style={styles.buttonText}>importGraph</Text></Button>
+          <Button small onPress={async () => {
             Alert.alert("",await Linking.getInitialURL()??"no");
           }}><Text style={styles.buttonText}>getInitialURL</Text></Button>
           <Button small onPress={async () => {
@@ -337,6 +362,10 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
 
           <Text style={{ width: "100%"}}>iOS LndMobile:</Text>
           <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobileTools.getAppFolderPath());
+          }}><Text style={styles.buttonText}>NativeModules.LndMobileTools.getAppFolderPath()</Text></Button>
+
+          <Button small onPress={async () => {
             LndMobileEventEmitter.addListener("ChannelAcceptor", async (event) => {
               try {
                 const channelAcceptRequest = decodeChannelAcceptRequest(event.data)
@@ -363,7 +392,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           }}><Text style={styles.buttonText}>NativeModules.LndMobileTools.DEBUG_listFilesInApplicationSupport()</Text></Button>
           <Button small onPress={async () => {
             console.log(NativeModules.LndMobile);
-            console.log(await NativeModules.LndMobile.startLnd(false));
+            console.log(await NativeModules.LndMobile.startLnd(false, ""));
           }}><Text style={styles.buttonText}>NativeModules.LndMobile.startLnd()</Text></Button>
 
           <Button small onPress={async () => {
@@ -511,7 +540,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           }}>
             <Text style={styles.buttonText}>LndMobile.checkStatus</Text>
           </Button>
-          <Button small onPress={async () => await NativeModules.LndMobile.startLnd(false)}><Text style={styles.buttonText}>LndMobile.startLnd()</Text></Button>
+          <Button small onPress={async () => await NativeModules.LndMobile.startLnd(false, "")}><Text style={styles.buttonText}>LndMobile.startLnd()</Text></Button>
           <Button small onPress={async () => await NativeModules.LndMobile.stopLnd()}><Text style={styles.buttonText}>LndMobile.stopLnd()</Text></Button>
 
           <Button small onPress={async () => await actions.initializeApp()}><Text style={styles.buttonText}>actions.initializeApp()</Text></Button>

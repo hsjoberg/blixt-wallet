@@ -20,7 +20,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-project.xcworkspace
+ios/.xcode.env.local
 
 # Android/IntelliJ
 #
@@ -29,22 +29,16 @@ build/
 .gradle
 local.properties
 *.iml
-android/gradle.properties
-
-# Visual Studio Code
-#
-.vscode/
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
 
 # node.js
 #
 node_modules/
 npm-debug.log
 yarn-error.log
-
-# BUCK
-buck-out/
-\.buckd/
-*.keystore
 
 # fastlane
 #
@@ -53,41 +47,44 @@ buck-out/
 # For more information about the recommended setup visit:
 # https://docs.fastlane.tools/best-practices/source-control/
 
-*/fastlane/report.xml
-*/fastlane/Preview.html
-*/fastlane/screenshots
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
 
 # Bundle artifact
 *.jsbundle
 
-# Protobuf
-proto
+# Ruby / CocoaPods
+/ios/Pods/
+/vendor/bundle/
 
-# Android Studio
+# Temporary files created by Metro to check the health of the file watcher
+.metro-health-check*
+
+# testing
+/coverage
+
+# Blixt
+.webpack
+android/app/lndmobile/Lndmobile.aar
+ios/Lndmobile.xcframework
+macos/Lndmobile.xcframework
+proto
 .classpath
 .project
 .settings
-
-# Google
 google-services.json
-
-# iOS
 ios/Pods
 macos/Pods
-
-# Lnd binaries
 android/lndmobile/Lndmobile.aar
 ios/Lndmobile.xcframework
 macos/Lndmobile.xcframework
-
-# Web
 dist
 .webpack
-
-# service-image
 contrib/service-image/webp
 contrib/service-image/code
-
+out
 # vim
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]

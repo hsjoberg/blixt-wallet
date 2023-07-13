@@ -1,7 +1,8 @@
 import { Platform } from "react-native";
 import BuildConfig from "react-native-build-config";
 
-console.log("BuildConfig",BuildConfig);
+console.log("BuildConfig", BuildConfig);
+
 export const Flavor: string = Platform.select({
   android: BuildConfig.FLAVOR_custom,
   ios: BuildConfig.FLAVOR,

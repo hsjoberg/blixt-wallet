@@ -1,6 +1,5 @@
 import React from "react";
-jest.mock("react-native-camera", () => require("./mocks/react-native-camera"));
-jest.mock("@react-native-community/async-storage", () => require("./mocks/@react-native-community/async-storage"));
+jest.mock("@react-native-async-storage/async-storage", () => require("./mocks/@react-native-community/async-storage"));
 jest.mock("react-native-sqlite-storage", () => require("./mocks/react-native-sqlite-storage"));
 jest.mock("react-native-build-config", () => require("./mocks/react-native-build-config"));
 jest.mock("react-native-push-notification", () => require("./mocks/react-native-push-notification"));
@@ -21,6 +20,7 @@ jest.mock("./src/lndmobile/channel", () => require("./mocks/lndmobile/channel"))
 jest.mock("./src/lndmobile/onchain", () => require("./mocks/lndmobile/onchain"));
 jest.mock("./src/lndmobile/autopilot", () => require("./mocks/lndmobile/autopilot"));
 jest.mock("./src/lndmobile/scheduled-sync", () => require("./mocks/lndmobile/scheduled-sync"));
+jest.mock("./src/lndmobile/scheduled-gossip-sync", () => require("./mocks/lndmobile/scheduled-gossip-sync"));
 
 jest.mock("./src/utils/constants.ts", () => require("./mocks/utils/constants"));
 

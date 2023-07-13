@@ -182,7 +182,6 @@ exports[`SendCamera renders correctly 1`] = `
         <RNSScreen
           activityState={2}
           collapsable={false}
-          forwardedRef={[Function]}
           gestureResponseDistance={
             {
               "bottom": -1,
@@ -192,6 +191,11 @@ exports[`SendCamera renders correctly 1`] = `
             }
           }
           pointerEvents="box-none"
+          sheetAllowedDetents="large"
+          sheetCornerRadius={-1}
+          sheetExpandsWhenScrolledToEdge={true}
+          sheetGrabberVisible={false}
+          sheetLargestUndimmedDetent="all"
           style={
             {
               "bottom": 0,
@@ -275,7 +279,6 @@ exports[`SendCamera renders correctly 1`] = `
             >
               <View
                 collapsable={false}
-                forwardedRef={[Function]}
                 handlerTag={1}
                 handlerType="PanGestureHandler"
                 needsOffscreenAlphaCompositing={false}
@@ -329,28 +332,48 @@ exports[`SendCamera renders correctly 1`] = `
                     >
                       <View
                         style={
-                          {
-                            "bottom": 0,
-                            "left": 0,
-                            "position": "absolute",
-                            "right": 0,
-                            "top": 0,
-                          }
+                          [
+                            {
+                              "backgroundColor": "#151314",
+                              "flex": 1,
+                              "height": "100%",
+                              "width": "100%",
+                            },
+                            {},
+                            undefined,
+                          ]
                         }
                       >
+                        <CKCamera
+                          cameraOptions={
+                            {
+                              "ratioOverlayColor": undefined,
+                            }
+                          }
+                          cameraType="back"
+                          onReadCode={[Function]}
+                          resetFocusTimeout={0}
+                          resetFocusWhenMotionDetected={true}
+                          scanBarcode={true}
+                          style={
+                            {
+                              "bottom": 0,
+                              "left": 0,
+                              "position": "absolute",
+                              "right": 0,
+                              "top": 0,
+                            }
+                          }
+                        />
                         <View
                           style={
-                            [
-                              {
-                                "alignItems": "center",
-                                "bottom": 0,
-                                "justifyContent": "center",
-                                "left": 0,
-                                "position": "absolute",
-                                "right": 0,
-                                "top": 0,
-                              },
-                            ]
+                            {
+                              "bottom": 0,
+                              "left": 0,
+                              "position": "absolute",
+                              "right": 0,
+                              "top": 0,
+                            }
                           }
                         >
                           <View
@@ -358,11 +381,12 @@ exports[`SendCamera renders correctly 1`] = `
                               [
                                 {
                                   "alignItems": "center",
+                                  "bottom": 0,
                                   "justifyContent": "center",
-                                },
-                                {
-                                  "height": 265,
-                                  "width": 265,
+                                  "left": 0,
+                                  "position": "absolute",
+                                  "right": 0,
+                                  "top": 0,
                                 },
                               ]
                             }
@@ -371,120 +395,12 @@ exports[`SendCamera renders correctly 1`] = `
                               style={
                                 [
                                   {
-                                    "borderColor": "#bc6610",
-                                    "height": 20,
-                                    "width": 20,
+                                    "alignItems": "center",
+                                    "justifyContent": "center",
                                   },
-                                  {
-                                    "left": 0,
-                                    "position": "absolute",
-                                    "top": 0,
-                                  },
-                                  {
-                                    "borderLeftWidth": 4,
-                                    "borderTopWidth": 4,
-                                  },
-                                ]
-                              }
-                            />
-                            <View
-                              style={
-                                [
-                                  {
-                                    "borderColor": "#bc6610",
-                                    "height": 20,
-                                    "width": 20,
-                                  },
-                                  {
-                                    "position": "absolute",
-                                    "right": 0,
-                                    "top": 0,
-                                  },
-                                  {
-                                    "borderRightWidth": 4,
-                                    "borderTopWidth": 4,
-                                  },
-                                ]
-                              }
-                            />
-                            <View
-                              style={
-                                [
-                                  {
-                                    "borderColor": "#bc6610",
-                                    "height": 20,
-                                    "width": 20,
-                                  },
-                                  {
-                                    "bottom": 0,
-                                    "left": 0,
-                                    "position": "absolute",
-                                  },
-                                  {
-                                    "borderBottomWidth": 4,
-                                    "borderLeftWidth": 4,
-                                  },
-                                ]
-                              }
-                            />
-                            <View
-                              style={
-                                [
-                                  {
-                                    "borderColor": "#bc6610",
-                                    "height": 20,
-                                    "width": 20,
-                                  },
-                                  {
-                                    "bottom": 0,
-                                    "position": "absolute",
-                                    "right": 0,
-                                  },
-                                  {
-                                    "borderBottomWidth": 4,
-                                    "borderRightWidth": 4,
-                                  },
-                                ]
-                              }
-                            />
-                          </View>
-                          <View
-                            style={
-                              {
-                                "alignItems": "center",
-                                "height": "100%",
-                                "justifyContent": "space-around",
-                                "left": 0,
-                                "position": "absolute",
-                                "top": 0,
-                                "width": "100%",
-                              }
-                            }
-                          >
-                            <View
-                              style={
-                                [
-                                  {
-                                    "width": "100%",
-                                  },
-                                  {
-                                    "backgroundColor": "rgba(0, 0, 0, 0.6)",
-                                    "flex": 1,
-                                  },
-                                ]
-                              }
-                            />
-                            <View
-                              onLayout={[Function]}
-                              style={
-                                [
                                   {
                                     "height": 265,
-                                    "width": "100%",
-                                  },
-                                  {
-                                    "display": "flex",
-                                    "flexDirection": "row",
+                                    "width": 265,
                                   },
                                 ]
                               }
@@ -493,6 +409,103 @@ exports[`SendCamera renders correctly 1`] = `
                                 style={
                                   [
                                     {
+                                      "borderColor": "#bc6610",
+                                      "height": 20,
+                                      "width": 20,
+                                    },
+                                    {
+                                      "left": 0,
+                                      "position": "absolute",
+                                      "top": 0,
+                                    },
+                                    {
+                                      "borderLeftWidth": 4,
+                                      "borderTopWidth": 4,
+                                    },
+                                  ]
+                                }
+                              />
+                              <View
+                                style={
+                                  [
+                                    {
+                                      "borderColor": "#bc6610",
+                                      "height": 20,
+                                      "width": 20,
+                                    },
+                                    {
+                                      "position": "absolute",
+                                      "right": 0,
+                                      "top": 0,
+                                    },
+                                    {
+                                      "borderRightWidth": 4,
+                                      "borderTopWidth": 4,
+                                    },
+                                  ]
+                                }
+                              />
+                              <View
+                                style={
+                                  [
+                                    {
+                                      "borderColor": "#bc6610",
+                                      "height": 20,
+                                      "width": 20,
+                                    },
+                                    {
+                                      "bottom": 0,
+                                      "left": 0,
+                                      "position": "absolute",
+                                    },
+                                    {
+                                      "borderBottomWidth": 4,
+                                      "borderLeftWidth": 4,
+                                    },
+                                  ]
+                                }
+                              />
+                              <View
+                                style={
+                                  [
+                                    {
+                                      "borderColor": "#bc6610",
+                                      "height": 20,
+                                      "width": 20,
+                                    },
+                                    {
+                                      "bottom": 0,
+                                      "position": "absolute",
+                                      "right": 0,
+                                    },
+                                    {
+                                      "borderBottomWidth": 4,
+                                      "borderRightWidth": 4,
+                                    },
+                                  ]
+                                }
+                              />
+                            </View>
+                            <View
+                              style={
+                                {
+                                  "alignItems": "center",
+                                  "height": "100%",
+                                  "justifyContent": "space-around",
+                                  "left": 0,
+                                  "position": "absolute",
+                                  "top": 0,
+                                  "width": "100%",
+                                }
+                              }
+                            >
+                              <View
+                                style={
+                                  [
+                                    {
+                                      "width": "100%",
+                                    },
+                                    {
                                       "backgroundColor": "rgba(0, 0, 0, 0.6)",
                                       "flex": 1,
                                     },
@@ -500,21 +513,60 @@ exports[`SendCamera renders correctly 1`] = `
                                 }
                               />
                               <View
+                                onLayout={[Function]}
                                 style={
                                   [
                                     {
-                                      "backgroundColor": "transparent",
+                                      "height": 265,
+                                      "width": "100%",
                                     },
                                     {
-                                      "height": 265,
-                                      "width": 265,
+                                      "display": "flex",
+                                      "flexDirection": "row",
                                     },
                                   ]
                                 }
-                              />
+                              >
+                                <View
+                                  style={
+                                    [
+                                      {
+                                        "backgroundColor": "rgba(0, 0, 0, 0.6)",
+                                        "flex": 1,
+                                      },
+                                    ]
+                                  }
+                                />
+                                <View
+                                  style={
+                                    [
+                                      {
+                                        "backgroundColor": "transparent",
+                                      },
+                                      {
+                                        "height": 265,
+                                        "width": 265,
+                                      },
+                                    ]
+                                  }
+                                />
+                                <View
+                                  style={
+                                    [
+                                      {
+                                        "backgroundColor": "rgba(0, 0, 0, 0.6)",
+                                        "flex": 1,
+                                      },
+                                    ]
+                                  }
+                                />
+                              </View>
                               <View
                                 style={
                                   [
+                                    {
+                                      "width": "100%",
+                                    },
                                     {
                                       "backgroundColor": "rgba(0, 0, 0, 0.6)",
                                       "flex": 1,
@@ -523,178 +575,165 @@ exports[`SendCamera renders correctly 1`] = `
                                 }
                               />
                             </View>
-                            <View
-                              style={
+                          </View>
+                          <Text
+                            allowFontScaling={false}
+                            onPress={[Function]}
+                            style={
+                              [
+                                {
+                                  "color": undefined,
+                                  "fontSize": 12,
+                                },
                                 [
                                   {
-                                    "width": "100%",
+                                    "color": "#000",
+                                    "fontSize": 30,
                                   },
                                   {
-                                    "backgroundColor": "rgba(0, 0, 0, 0.6)",
-                                    "flex": 1,
+                                    "color": "#000",
+                                    "fontSize": 30,
                                   },
-                                ]
-                              }
-                            />
-                          </View>
+                                  {
+                                    "color": "#e5eaea",
+                                    "fontSize": 28,
+                                    "padding": 9,
+                                    "position": "absolute",
+                                    "right": 14,
+                                    "top": 28,
+                                  },
+                                ],
+                                {
+                                  "fontFamily": "Ionicons",
+                                  "fontStyle": "normal",
+                                  "fontWeight": "normal",
+                                },
+                                {},
+                              ]
+                            }
+                            type="Ionicons"
+                          >
+                            
+                          </Text>
+                          <Text
+                            allowFontScaling={false}
+                            onPress={[Function]}
+                            style={
+                              [
+                                {
+                                  "color": undefined,
+                                  "fontSize": 12,
+                                },
+                                [
+                                  {
+                                    "color": "#000",
+                                    "fontSize": 30,
+                                  },
+                                  {
+                                    "color": "#000",
+                                    "fontSize": 30,
+                                  },
+                                  {
+                                    "bottom": 10,
+                                    "color": "#e5eaea",
+                                    "fontSize": 26,
+                                    "left": 13,
+                                    "padding": 9,
+                                    "position": "absolute",
+                                  },
+                                ],
+                                {
+                                  "fontFamily": "Ionicons",
+                                  "fontStyle": "normal",
+                                  "fontWeight": "normal",
+                                },
+                                {},
+                              ]
+                            }
+                            type="Ionicons"
+                          >
+                            
+                          </Text>
+                          <Text
+                            allowFontScaling={false}
+                            onPress={[Function]}
+                            style={
+                              [
+                                {
+                                  "color": undefined,
+                                  "fontSize": 12,
+                                },
+                                [
+                                  {
+                                    "color": "#000",
+                                    "fontSize": 30,
+                                  },
+                                  {
+                                    "color": "#000",
+                                    "fontSize": 30,
+                                  },
+                                  {
+                                    "bottom": 12,
+                                    "color": "#e5eaea",
+                                    "fontSize": 26,
+                                    "padding": 9,
+                                    "position": "absolute",
+                                    "right": 73,
+                                  },
+                                ],
+                                {
+                                  "fontFamily": "Material Design Icons",
+                                  "fontStyle": "normal",
+                                  "fontWeight": "normal",
+                                },
+                                {},
+                              ]
+                            }
+                            type="MaterialCommunityIcons"
+                          >
+                            󰆷
+                          </Text>
+                          <Text
+                            allowFontScaling={false}
+                            onPress={[Function]}
+                            style={
+                              [
+                                {
+                                  "color": undefined,
+                                  "fontSize": 12,
+                                },
+                                [
+                                  {
+                                    "color": "#000",
+                                    "fontSize": 30,
+                                  },
+                                  {
+                                    "color": "#000",
+                                    "fontSize": 30,
+                                  },
+                                  {
+                                    "bottom": 12,
+                                    "color": "#e5eaea",
+                                    "fontSize": 26,
+                                    "padding": 9,
+                                    "position": "absolute",
+                                    "right": 16,
+                                  },
+                                ],
+                                {
+                                  "fontFamily": "FontAwesome",
+                                  "fontStyle": "normal",
+                                  "fontWeight": "normal",
+                                },
+                                {},
+                              ]
+                            }
+                            testID="paste-clipboard"
+                            type="FontAwesome"
+                          >
+                            
+                          </Text>
                         </View>
-                        <Text
-                          allowFontScaling={false}
-                          onPress={[Function]}
-                          style={
-                            [
-                              {
-                                "color": undefined,
-                                "fontSize": 12,
-                              },
-                              [
-                                {
-                                  "color": "#000",
-                                  "fontSize": 30,
-                                },
-                                {
-                                  "color": "#000",
-                                  "fontSize": 30,
-                                },
-                                {
-                                  "color": "#e5eaea",
-                                  "fontSize": 28,
-                                  "padding": 9,
-                                  "position": "absolute",
-                                  "right": 14,
-                                  "top": 28,
-                                },
-                              ],
-                              {
-                                "fontFamily": "Ionicons",
-                                "fontStyle": "normal",
-                                "fontWeight": "normal",
-                              },
-                              {},
-                            ]
-                          }
-                          type="Ionicons"
-                        >
-                          
-                        </Text>
-                        <Text
-                          allowFontScaling={false}
-                          onPress={[Function]}
-                          style={
-                            [
-                              {
-                                "color": undefined,
-                                "fontSize": 12,
-                              },
-                              [
-                                {
-                                  "color": "#000",
-                                  "fontSize": 30,
-                                },
-                                {
-                                  "color": "#000",
-                                  "fontSize": 30,
-                                },
-                                {
-                                  "bottom": 10,
-                                  "color": "#e5eaea",
-                                  "fontSize": 26,
-                                  "left": 13,
-                                  "padding": 9,
-                                  "position": "absolute",
-                                },
-                              ],
-                              {
-                                "fontFamily": "Ionicons",
-                                "fontStyle": "normal",
-                                "fontWeight": "normal",
-                              },
-                              {},
-                            ]
-                          }
-                          type="Ionicons"
-                        >
-                          
-                        </Text>
-                        <Text
-                          allowFontScaling={false}
-                          onPress={[Function]}
-                          style={
-                            [
-                              {
-                                "color": undefined,
-                                "fontSize": 12,
-                              },
-                              [
-                                {
-                                  "color": "#000",
-                                  "fontSize": 30,
-                                },
-                                {
-                                  "color": "#000",
-                                  "fontSize": 30,
-                                },
-                                {
-                                  "bottom": 12,
-                                  "color": "#e5eaea",
-                                  "fontSize": 26,
-                                  "padding": 9,
-                                  "position": "absolute",
-                                  "right": 73,
-                                },
-                              ],
-                              {
-                                "fontFamily": "Material Design Icons",
-                                "fontStyle": "normal",
-                                "fontWeight": "normal",
-                              },
-                              {},
-                            ]
-                          }
-                          type="MaterialCommunityIcons"
-                        >
-                          󰆷
-                        </Text>
-                        <Text
-                          allowFontScaling={false}
-                          onPress={[Function]}
-                          style={
-                            [
-                              {
-                                "color": undefined,
-                                "fontSize": 12,
-                              },
-                              [
-                                {
-                                  "color": "#000",
-                                  "fontSize": 30,
-                                },
-                                {
-                                  "color": "#000",
-                                  "fontSize": 30,
-                                },
-                                {
-                                  "bottom": 12,
-                                  "color": "#e5eaea",
-                                  "fontSize": 26,
-                                  "padding": 9,
-                                  "position": "absolute",
-                                  "right": 16,
-                                },
-                              ],
-                              {
-                                "fontFamily": "FontAwesome",
-                                "fontStyle": "normal",
-                                "fontWeight": "normal",
-                              },
-                              {},
-                            ]
-                          }
-                          testID="paste-clipboard"
-                          type="FontAwesome"
-                        >
-                          
-                        </Text>
                       </View>
                     </View>
                   </View>

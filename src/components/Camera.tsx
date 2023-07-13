@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, useEffect } from "react";
 import { StyleProp, ViewStyle, InteractionManager } from "react-native";
-import { RNCamera, CameraType } from "react-native-camera";
+// import { RNCamera, CameraType } from "react-native-camera";
 import Container from "./Container";
 
 export interface ICamera {

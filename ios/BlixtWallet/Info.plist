@@ -38,8 +38,6 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CHAIN</key>
 	<string>$(CHAIN)</string>
-	<key>CONFIGURATION</key>
-	<string>$(CONFIGURATION)</string>
 	<key>DEBUG</key>
 	<string>$(DEBUG)</string>
 	<key>FLAVOR</key>
@@ -78,8 +76,6 @@
 	<string>Locally save location of where a transaction was made</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Locally save location of where a transaction was made</string>
-	<key>SCHEME</key>
-	<string>$(SCHEME)</string>
 	<key>TEAM_ID</key>
 	<string>$(TeamIdentifierPrefix)</string>
 	<key>UIAppFonts</key>
