@@ -19,6 +19,7 @@ import { useStoreActions, useStoreState } from "../../state/store";
 
 import { Alert } from "../../utils/alert";
 import BlixtWallet from "../../components/BlixtWallet";
+import { Chain } from "../../utils/build";
 import Clipboard from "@react-native-community/clipboard";
 import Content from "../../components/Content";
 import DialogAndroid from "react-native-dialogs";
@@ -33,7 +34,6 @@ import TorSvg from "./TorSvg";
 import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
-import { Chain } from "../../utils/build";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -729,14 +729,11 @@ ${t("LN.inbound.dialog.msg3")}`;
           onPress: async (text) => {
             if (!text) {
               await changeZeroConfPeers([]);
-              restartNeeded();
               return;
             }
 
             const pubkeys = text.split(",").map((n) => n.trim());
             await changeZeroConfPeers(pubkeys);
-
-            restartNeeded();
           },
         },
       ],
