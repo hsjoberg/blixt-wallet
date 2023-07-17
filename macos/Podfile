@@ -6,7 +6,6 @@ pod 'SwiftProtobuf', '~> 1.22.0'
 prepare_react_native_project!
 
 project 'BlixtWallet',
-prepare_react_native_project!
         # 'DebugTestnet' => :debug,
         # 'ReleaseTestnet' => :release,
         # 'DebugFakelnd' => :debug,
