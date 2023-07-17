@@ -10,8 +10,8 @@ project 'BlixtWallet',
         # 'ReleaseTestnet' => :release,
         # 'DebugFakelnd' => :debug,
         # 'ReleaseFakelnd' => :release,
-        # 'DebugRegtest' => :debug,
-        # 'ReleaseRegtest' => :release,
+        'Debug Regtest' => :debug,
+        'Release Regtest' => :release,
         'Debug' => :debug,
         'Release' => :release
 
