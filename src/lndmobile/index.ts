@@ -9,6 +9,7 @@ import Long from "long";
 import { NativeModules } from "react-native";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import sha from "sha.js";
+
 const { LndMobile, LndMobileTools } = NativeModules;
 
 /**
@@ -695,21 +696,3 @@ export type IReadLndLogResponse = string[];
 export const readLndLog = async (): Promise<IReadLndLogResponse> => {
   return [""];
 };
-
-
-export const abandonChannel = async (fundingTxId: string, index: number): Promise<lnrpc.AbandonChannelResponse> => {
-  const response = await sendCommand<lnrpc.IAbandonChannelRequest, lnrpc.AbandonChannelRequest, lnrpc.AbandonChannelResponse>({
-    request: lnrpc.AbandonChannelRequest,
-    response: lnrpc.AbandonChannelResponse,
-    method: "AbandonChannel",
-    options: {
-      channelPoint: {
-        fundingTxidStr: fundingTxId,
-        outputIndex: index,
-      },
-      iKnowWhatIAmDoing: true,
-    }
-  })
-
-  return response;
-}
