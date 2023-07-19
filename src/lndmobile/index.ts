@@ -1,13 +1,14 @@
-import { NativeModules } from "react-native";
-import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
-import { lnrpc, routerrpc, invoicesrpc, devrpc } from "../../proto/lightning";
-import Long from "long";
-import sha from "sha.js";
-import { stringToUint8Array, hexToUint8Array, unicodeStringToUint8Array } from "../utils";
 import { TLV_KEYSEND, TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
-import { LndMobileEventEmitter } from "../utils/event-listener";
+import { decodeStreamResult, sendCommand, sendStreamCommand } from "./utils";
+import { devrpc, invoicesrpc, lnrpc, routerrpc } from "../../proto/lightning";
 import { getChanInfo, listPrivateChannels } from "./channel";
+import { hexToUint8Array, stringToUint8Array, unicodeStringToUint8Array } from "../utils";
+
+import { LndMobileEventEmitter } from "../utils/event-listener";
+import Long from "long";
+import { NativeModules } from "react-native";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+import sha from "sha.js";
 const { LndMobile, LndMobileTools } = NativeModules;
 
 /**
@@ -694,3 +695,21 @@ export type IReadLndLogResponse = string[];
 export const readLndLog = async (): Promise<IReadLndLogResponse> => {
   return [""];
 };
+
+
+export const abandonChannel = async (fundingTxId: string, index: number): Promise<lnrpc.AbandonChannelResponse> => {
+  const response = await sendCommand<lnrpc.IAbandonChannelRequest, lnrpc.AbandonChannelRequest, lnrpc.AbandonChannelResponse>({
+    request: lnrpc.AbandonChannelRequest,
+    response: lnrpc.AbandonChannelResponse,
+    method: "AbandonChannel",
+    options: {
+      channelPoint: {
+        fundingTxidStr: fundingTxId,
+        outputIndex: index,
+      },
+      iKnowWhatIAmDoing: true,
+    }
+  })
+
+  return response;
+}
