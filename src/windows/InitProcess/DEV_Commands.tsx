@@ -1,43 +1,46 @@
-import React, { useState } from "react";
-import { StyleSheet, StatusBar, NativeModules, ScrollView, DeviceEventEmitter, EventEmitter, NativeEventEmitter, Linking } from "react-native";
-import Clipboard from "@react-native-community/clipboard";
-import { Text, Button, Toast, Input, View, Container } from "native-base";
-import Long from "long";
-import { StackNavigationProp } from "@react-navigation/stack";
-import * as base64 from "base64-js";
 import * as Keychain from 'react-native-keychain';
+import * as base64 from "base64-js";
+
+import { ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID, PLATFORM } from "../../utils/constants";
+import { Button, Container, Input, Text, Toast, View } from "native-base";
 // import Sound from "react-native-sound";
-import { JSHash, CONSTANTS } from "react-native-hash";
-import { generateSecureRandom } from "react-native-securerandom";
-// import RNLocalize from "react-native-localize";
+import { CONSTANTS, JSHash } from "react-native-hash";
+import { DeviceEventEmitter, EventEmitter, Linking, NativeEventEmitter, NativeModules, ScrollView, StatusBar, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { StorageItem, getItem, setItem, setItemObject, storage } from "../../storage/app";
+import { abandonChannel, checkStatus, connectPeer, decodePayReq, getInfo, getNetworkInfo, getNodeInfo, importGraph, listInvoices, listPeers, listUnspent, queryRoutes } from "../../lndmobile/index";
+import { bytesToHexString, bytesToString, stringToUint8Array, toast } from "../../utils";
+import { channelAcceptor, channelAcceptorResponse, closeChannel, decodeChannelAcceptRequest, decodeChannelEvent, listChannels, openChannel, pendingChannels } from "../../lndmobile/channel";
+import { clearTransactions, createTransaction, getTransaction, getTransactions } from "../../storage/database/transaction";
+import { deriveKey, derivePrivateKey, genSeed, initWallet, signMessage } from "../../lndmobile/wallet";
+import { getItemObject, getPin, getWalletPassword, setWalletPassword } from "../../storage/keystore";
+import { invoicesrpc, lnrpc } from "../../../proto/lightning";
+import { modifyStatus, queryScores, status } from "../../lndmobile/autopilot";
+import { newAddress, sendCoins } from "../../lndmobile/onchain";
+import { useStoreActions, useStoreState } from "../../state/store";
 
 import { Alert } from "../../utils/alert";
-import { getTransactions, getTransaction, createTransaction, clearTransactions } from "../../storage/database/transaction";
-import { useStoreState, useStoreActions } from "../../state/store";
-import { invoicesrpc, lnrpc } from "../../../proto/lightning";
-import { sendCommand } from "../../lndmobile/utils";
-import { getInfo, connectPeer, listPeers, decodePayReq, queryRoutes, checkStatus, getNodeInfo, listUnspent, getNetworkInfo, importGraph, listInvoices } from "../../lndmobile/index";
-import { initWallet, genSeed, deriveKey, signMessage, derivePrivateKey } from "../../lndmobile/wallet";
-import { pendingChannels, listChannels, openChannel, closeChannel, channelAcceptor, decodeChannelEvent, decodeChannelAcceptRequest, channelAcceptorResponse } from "../../lndmobile/channel";
-import { newAddress, sendCoins } from "../../lndmobile/onchain";
-import { storage, StorageItem, setItemObject, getItem, setItem } from "../../storage/app";
-import { status, modifyStatus, queryScores } from "../../lndmobile/autopilot";
-import { RootStackParamList } from "../../Main";
-import { setWalletPassword, getWalletPassword, getItemObject, getPin } from "../../storage/keystore";
+import Clipboard from "@react-native-community/clipboard";
 import Content from "../../components/Content";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { LoginMethods } from "../../state/Security";
-import Spinner from "../../components/Spinner";
-
-import secp256k1 from "secp256k1";
-import { bytesToString, bytesToHexString, stringToUint8Array, toast } from "../../utils";
-import { ILightningServices } from "../../utils/lightning-services";
-import { localNotification } from "../../utils/push-notification";
 import { ICLOUD_BACKUP_KEY } from "../../state/ICloudBackup";
-import { notificationManager } from "../../state/NotificationManager";
-import PushNotification from "react-native-push-notification";
-import { ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID, PLATFORM } from "../../utils/constants";
+import { ILightningServices } from "../../utils/lightning-services";
 import { LndMobileEventEmitter } from "../../utils/event-listener";
+import { LoginMethods } from "../../state/Security";
+import Long from "long";
+import PushNotification from "react-native-push-notification";
+import { RootStackParamList } from "../../Main";
+import Spinner from "../../components/Spinner";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { generateSecureRandom } from "react-native-securerandom";
+import { localNotification } from "../../utils/push-notification";
+import { notificationManager } from "../../state/NotificationManager";
+import secp256k1 from "secp256k1";
+import { sendCommand } from "../../lndmobile/utils";
+
+// import RNLocalize from "react-native-localize";
+
+
 
 let iCloudStorage: any;
 console.log(PLATFORM);
@@ -50,6 +53,7 @@ interface IProps {
   continueCallback?: () => void;
 }
 export default function DEV_Commands({ navigation, continueCallback }: IProps) {
+  const [channelPoint, setChannelPoint] = useState("");
   const [connectPeerStr, setConnectPeer] = useState("");
   const [sat, setSat] = useState("");
   const [addr, setAddr] = useState("");
@@ -917,6 +921,35 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
         </View>
         <View style={{ backgroundColor: blixtTheme.dark, padding: 15, marginTop: 10 }}>
           <Input
+          onChangeText={(text: string) => setChannelPoint(text)}
+          placeholder="<funding_tx_id>:<index>"
+          value={channelPoint}
+          />
+          <Button small danger onPress={async () => {
+            Alert.alert("Warning: Are you absolurely sure?", "Abdandoning a channel means you could potentially lose funds", [{
+              style: "cancel",
+              text: "No",
+            }, {
+              style: "default",
+              text: "Yes",
+              onPress: async () => {
+                try {
+                  const [fundingTxId, index] = channelPoint.split(":");
+                  const result = await abandonChannel(fundingTxId, Number(index));
+                  console.log("abandon channel() ", result);
+                  setCommandResult(result);
+                  setError({});
+                } catch (e: any) {
+                  setError(e);
+                  setCommandResult({});
+                }
+              }
+            }]);
+          }}
+          >
+            <Text style={styles.buttonText}>AbandonChannel()</Text>
+          </Button>
+          <Input
             onChangeText={(text: string) => {
               setConnectPeer(text);
             }}
@@ -932,7 +965,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               setCommandResult(result);
               setError({});
             }
-            catch (e) {
+            catch (e: any) {
               setError(e);
               setCommandResult({});
             }

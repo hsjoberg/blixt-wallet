@@ -1,21 +1,21 @@
-import React from "react";
-import { StyleSheet, Alert, Image, Linking } from "react-native";
-import { Button, Card, CardItem, Body, Row, Right, Text, Left } from "native-base";
-import { Svg, Line } from "react-native-svg";
-import Long from "long";
-import BigNumber from "bignumber.js";
-
-import { useStoreActions, useStoreState } from "../state/store";
-import { lnrpc } from "../../proto/lightning";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
-import { valueBitcoin, getUnitNice, valueFiat } from "../utils/bitcoin-units";
-import { identifyService, lightningServices } from "../utils/lightning-services";
-import CopyText from "./CopyText";
-import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
-import { toast } from "../utils";
 
-import { useTranslation } from "react-i18next";
+import { Alert, Image, Linking, StyleSheet } from "react-native";
+import { Body, Button, Card, CardItem, Left, Right, Row, Text } from "native-base";
+import { Line, Svg } from "react-native-svg";
+import { getUnitNice, valueBitcoin, valueFiat } from "../utils/bitcoin-units";
+import { identifyService, lightningServices } from "../utils/lightning-services";
+import { useStoreActions, useStoreState } from "../state/store";
+
+import BigNumber from "bignumber.js";
+import CopyText from "./CopyText";
+import Long from "long";
+import React from "react";
+import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
+import { lnrpc } from "../../proto/lightning";
 import { namespaces } from "../i18n/i18n.constants";
+import { toast } from "../utils";
+import { useTranslation } from "react-i18next";
 
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
@@ -151,6 +151,14 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             </Left>
             <Right>
               <CopyText style={{ fontSize: 14 }}>{channel.chanId?.toString()}</CopyText>
+            </Right>
+          </Row>
+          <Row style={{ width: "100%" }}>
+            <Left style={{ alignSelf: "flex-start" }}>
+              <Text style={style.channelDetailTitle}>{t("channel.channelPoint")}</Text>
+            </Left>
+            <Right>
+              <CopyText style={{ fontSize: 9.5 }}>{channel.channelPoint?.toString()}</CopyText>
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
