@@ -41,7 +41,7 @@ export const notificationManager: INotificationManagerModel = {
         }
       } else if (PLATFORM === "android") {
         const granted = await PermissionsAndroid.request(
-          "android.permission.POST_NOTIFICATIONS" // FIXME PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS needs newer react-native version
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
         );
         if (granted === "denied" || granted === "never_ask_again") {
           log.w("Post notification permission was denied", [granted]);

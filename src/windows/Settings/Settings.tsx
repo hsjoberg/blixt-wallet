@@ -2082,6 +2082,13 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Right>
             </ListItem>
           }
+          <ListItem style={style.listItem} icon={true} onPress={changePersistentServicesEnabledPress}>
+            <Left><Icon style={style.icon} type="Entypo" name="globe" /></Left>
+            <Body>
+              <Text>{t("debug.persistentServices.title")}</Text>
+            </Body>
+            <Right><CheckBox checked={persistentServicesEnabled} onPress={changePersistentServicesEnabledPress} /></Right>
+          </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("debug.title")}</Text>
@@ -2357,13 +2364,6 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>{t("debug.bimodalPathFinding.title")}</Text>
             </Body>
             <Right><CheckBox checked={(lndPathfindingAlgorithm === "apriori" || lndPathfindingAlgorithm === null) ? false : true} onPress={changeBimodalPathFindingEnabledPress} /></Right>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={changePersistentServicesEnabledPress}>
-            <Left><Icon style={style.icon} type="Entypo" name="globe" /></Left>
-            <Body>
-              <Text>{t("debug.persistentServices.title")}</Text>
-            </Body>
-            <Right><CheckBox checked={persistentServicesEnabled} onPress={changePersistentServicesEnabledPress} /></Right>
           </ListItem>
           <ListItem
             style={style.listItem}

@@ -61,13 +61,8 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.facebook.react.modules.permissions.PermissionsModule;
-import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
-import com.facebook.react.modules.storage.ReactDatabaseSupplier;
-
 import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
-import com.jakewharton.processphoenix.ProcessPhoenix;
-import com.oblador.keychain.KeychainModule;
+import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier;
 
 import com.hypertrack.hyperlog.HyperLog;
 
@@ -80,7 +75,6 @@ class LndMobile extends ReactContextBaseJavaModule {
   private boolean lndMobileServiceBound = false;
   private Messenger lndMobileServiceMessenger; // The service
   private HashMap<Integer, Promise> requests = new HashMap<>();
-  private ReactDatabaseSupplier dbSupplier;
 
   public enum LndStatus {
       SERVICE_BOUND, PROCESS_STARTED, WALLET_UNLOCKED;
@@ -246,7 +240,7 @@ class LndMobile extends ReactContextBaseJavaModule {
   private LndMobileServiceConnection lndMobileServiceConnection;
 
   private boolean getPersistentServicesEnabled(Context context) {
-    dbSupplier = ReactDatabaseSupplier.getInstance(context);
+    ReactDatabaseSupplier dbSupplier = ReactDatabaseSupplier.getInstance(context);
     SQLiteDatabase db = dbSupplier.get();
     String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
     if (persistentServicesEnabled != null) {
@@ -376,9 +370,6 @@ class LndMobile extends ReactContextBaseJavaModule {
       params += " --tor.active --tor.control=" + controlSocket;
       params += " --tor.v3 --listen=localhost:" + listenPort;
     } else {
-      params += " --nolisten";
-    }
-    else {
       // If Tor isn't active, make sure we aren't
       // listening at all
       params += " --nolisten";

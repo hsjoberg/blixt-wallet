@@ -56,7 +56,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   // we'll close down lnd and the worker
   private int numGetInfoCalls = 0;
 
-  // BlixtTor blixtTor;
+  BlixtTor blixtTor;
 
   // private enum WorkState {
   //   NOT_STARTED, BOUND, WALLET_UNLOCKED, WAITING_FOR_SYNC, DONE;
@@ -72,7 +72,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   public LndMobileScheduledSyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
     super(context, workerParams);
     dbSupplier = ReactDatabaseSupplier.getInstance(getApplicationContext());
-    // blixtTor = new BlixtTor(new ReactApplicationContext(getApplicationContext()));
+    blixtTor = new BlixtTor(new ReactApplicationContext(getApplicationContext()));
   }
 
   @Override

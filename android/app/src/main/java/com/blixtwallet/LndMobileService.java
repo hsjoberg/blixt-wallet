@@ -32,9 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
-
-import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
-import com.facebook.react.modules.storage.ReactDatabaseSupplier;
+import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
+import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier;
 
 import com.google.protobuf.ByteString;
 
@@ -79,7 +78,7 @@ public class LndMobileService extends Service {
   private Map<String, Method> streamMethods = new HashMap<>();
   private Map<String, lndmobile.SendStream> writeStreams = new HashMap<>();
 
-  private ReactDatabaseSupplier dbSupplier;
+
 
   private NotificationManager notificationManager;
 
@@ -535,7 +534,7 @@ public class LndMobileService extends Service {
   }
 
   private boolean getPersistentServicesEnabled(Context context) {
-    dbSupplier = ReactDatabaseSupplier.getInstance(context);
+    ReactDatabaseSupplier dbSupplier = ReactDatabaseSupplier.getInstance(context);
     SQLiteDatabase db = dbSupplier.get();
     String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
     if (persistentServicesEnabled != null) {

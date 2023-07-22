@@ -39,7 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
           packages.add(new LndMobileToolsPackage());
           packages.add(new GossipFileScheduledSyncPackage());
           packages.add(new LndMobileScheduledSyncPackage());
-          // packages.add(new BlixtTorPackage());
+          packages.add(new BlixtTorPackage());
           packages.add(new RealTimeBlurPackage());
 
           return packages;

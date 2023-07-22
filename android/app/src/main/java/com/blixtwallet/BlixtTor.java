@@ -25,8 +25,8 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.modules.storage.AsyncLocalStorageUtil;
-import com.facebook.react.modules.storage.ReactDatabaseSupplier;
+import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
+import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier;
 
 import org.torproject.jni.TorService;
 
@@ -132,11 +132,11 @@ public class BlixtTor extends ReactContextBaseJavaModule {
       return;
     }
     calleeResolvers.add(promise);
-    
+
     boolean persistentServicesEnabled = getPersistentServicesEnabled(getReactApplicationContext());
     getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS));
     Intent intent = new Intent(getReactApplicationContext(), TorService.class);
-    
+
     if (persistentServicesEnabled) {
       getReactApplicationContext().startForegroundService(intent);
     }
