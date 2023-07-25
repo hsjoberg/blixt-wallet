@@ -103,6 +103,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }
           }}><Text style={styles.buttonText}>contact label fix</Text></Button>
           <Button small onPress={async () => {
+            await setItemObject(StorageItem.persistentServicesWarningShown, false);
+          }}><Text style={styles.buttonText}>persistentServicesWarningShown = false</Text></Button>
+          <Button small onPress={async () => {
             console.log(await(await fetch("https://dunder.blixtwallet.com/ondemand-channel/service-status")).text());
           }}><Text style={styles.buttonText}>dunder service status</Text></Button>
           <Button small onPress={async () => {
