@@ -32,3 +32,5 @@
 -keep class lnrpc.** { *; }
 
 -keep class com.facebook.react.turbomodule.** { *; }
+
+-keep class org.torproject.jni.** { *; }

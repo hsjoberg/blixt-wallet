@@ -154,15 +154,17 @@ dependencies {
 
     implementation "com.github.mmin18:realtimeblurview:1.2.1"
 
-    // Tor
-    // implementation "com.msopentech.thali:universal:0.0.3"
-    // implementation "org.torproject:tor-android-binary:0.4.2.7a"
-    // implementation "com.msopentech.thali.toronionproxy.android:android:0.0.3@aar"
-    // implementation "org.slf4j:slf4j-android:1.7.30"
-    // implementation "net.freehaven.tor.control:jtorctl:0.2" // controlling tor instance via its control port
-
     implementation "com.jakewharton:process-phoenix:2.0.0"
     implementation 'org.brotli:dec:0.1.2'
+
+    implementation "com.jakewharton:process-phoenix:2.0.0"
+
+    implementation 'info.guardianproject:tor-android:0.4.7.8'
+    implementation 'info.guardianproject:jtorctl:0.4.5.7'
+
+    implementation('dev.doubledot.doki:library:0.0.1@aar') {
+        transitive = true
+    }
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

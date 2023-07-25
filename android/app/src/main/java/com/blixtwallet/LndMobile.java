@@ -1,7 +1,5 @@
 package com.blixtwallet;
 
-// import com.blixtwallet.tor.BlixtTorUtils;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -63,13 +61,12 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.facebook.react.modules.permissions.PermissionsModule;
-
 import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
-import com.jakewharton.processphoenix.ProcessPhoenix;
-import com.oblador.keychain.KeychainModule;
+import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier;
 
 import com.hypertrack.hyperlog.HyperLog;
+
+import org.torproject.jni.TorService;
 
 // TODO break this class up
 class LndMobile extends ReactContextBaseJavaModule {
@@ -242,6 +239,17 @@ class LndMobile extends ReactContextBaseJavaModule {
 
   private LndMobileServiceConnection lndMobileServiceConnection;
 
+  private boolean getPersistentServicesEnabled(Context context) {
+    ReactDatabaseSupplier dbSupplier = ReactDatabaseSupplier.getInstance(context);
+    SQLiteDatabase db = dbSupplier.get();
+    String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
+    if (persistentServicesEnabled != null) {
+      return persistentServicesEnabled.equals("true");
+    }
+    HyperLog.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
+    return false;
+  }
+
   public LndMobile(ReactApplicationContext reactContext) {
     super(reactContext);
   }
@@ -284,9 +292,13 @@ class LndMobile extends ReactContextBaseJavaModule {
 
       lndMobileServiceConnection = new LndMobileServiceConnection(req);
       messenger = new Messenger(new IncomingHandler()); // me
-
+      Intent intent = new Intent(getReactApplicationContext(), LndMobileService.class);
+      if (getPersistentServicesEnabled(getReactApplicationContext())) {
+        getReactApplicationContext().startForegroundService(intent);
+      }
+      // else rely on bindService to start LND
       getReactApplicationContext().bindService(
-        new Intent(getReactApplicationContext(), LndMobileService.class),
+        intent,
         lndMobileServiceConnection,
         Context.BIND_AUTO_CREATE
       );
@@ -353,13 +365,11 @@ class LndMobile extends ReactContextBaseJavaModule {
 
     String params = "--lnddir=" + getReactApplicationContext().getFilesDir().getPath();
     if (torEnabled) {
-      // int listenPort = BlixtTorUtils.getListenPort();
-      // int socksPort = BlixtTorUtils.getSocksPort();
-      // int controlPort = BlixtTorUtils.getControlPort();
-      // params += " --tor.active --tor.socks=127.0.0.1:" + socksPort + " --tor.control=127.0.0.1:" + controlPort;
-      // params += " --tor.v3 --listen=localhost:" + listenPort;
-    }
-    else {
+      int listenPort = BlixtTorUtils.getListenPort();
+      String controlSocket = "unix://" + getReactApplicationContext().getDir(TorService.class.getSimpleName(), Context.MODE_PRIVATE).getAbsolutePath() + "/data/ControlSocket";
+      params += " --tor.active --tor.control=" + controlSocket;
+      params += " --tor.v3 --listen=localhost:" + listenPort;
+    } else {
       // If Tor isn't active, make sure we aren't
       // listening at all
       params += " --nolisten";

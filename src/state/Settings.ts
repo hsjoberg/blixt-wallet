@@ -81,6 +81,8 @@ export interface ISettingsModel {
   changeLndLogLevel: Thunk<ISettingsModel, LndLogLevel>;
   changeLndCompactDb: Thunk<ISettingsModel, boolean>;
   changeEnforceSpeedloaderOnStartup: Thunk<ISettingsModel, boolean>;
+  changePersistentServicesEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
+  changePersistentServicesWarningShown: Thunk<ISettingsModel, booealn, any, IStoreModel>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -121,6 +123,8 @@ export interface ISettingsModel {
   setLndLogLevel: Action<ISettingsModel, LndLogLevel>;
   setLndCompactDb: Action<ISettingsModel, boolean>;
   setEnforceSpeedloaderOnStartup: Action<ISettingsModel, boolean>;
+  setPersistentServicesEnabled: Action<ISettingsModel, boolean>;
+  setPersistentServicesWarningShown: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -161,6 +165,8 @@ export interface ISettingsModel {
   lndCompactDb: boolean;
   zeroConfPeers: string[];
   enforceSpeedloaderOnStartup: boolean;
+  persistentServicesEnabled: boolean;
+  persistentServicesWarningShown: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -234,6 +240,12 @@ export const settings: ISettingsModel = {
     actions.setLndCompactDb(await getLndCompactDb());
     actions.setEnforceSpeedloaderOnStartup(
       await getItemObject(StorageItem.enforceSpeedloaderOnStartup || false),
+    );
+    actions.setPersistentServicesEnabled(
+      (await getItemObject(StorageItem.persistentServicesEnabled)) ?? false,
+    );
+    actions.setPersistentServicesWarningShown(
+      (await getItemObject(StorageItem.persistentServicesWarningShown)) ?? false,
     );
 
     log.d("Done");
@@ -439,6 +451,16 @@ export const settings: ISettingsModel = {
     actions.setEnforceSpeedloaderOnStartup(payload);
   }),
 
+  changePersistentServicesEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.persistentServicesEnabled, payload);
+    actions.setPersistentServicesEnabled(payload);
+  }),
+
+  changePersistentServicesWarningShown: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.persistentServicesWarningShown, payload);
+    actions.setPersistentServicesWarningShown(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -556,6 +578,12 @@ export const settings: ISettingsModel = {
   setEnforceSpeedloaderOnStartup: action((state, payload) => {
     state.enforceSpeedloaderOnStartup = payload;
   }),
+  setPersistentServicesEnabled: action((state, payload) => {
+    state.persistentServicesEnabled = payload;
+  }),
+  setPersistentServicesWarningShown: action((state, payload) => {
+    state.persistentServicesWarningShown = payload;
+  }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -596,4 +624,6 @@ export const settings: ISettingsModel = {
   lndLogLevel: DEFAULT_LND_LOG_LEVEL,
   lndCompactDb: false,
   enforceSpeedloaderOnStartup: false,
+  persistentServicesEnabled: false,
+  persistentServicesWarningShown: false,
 };

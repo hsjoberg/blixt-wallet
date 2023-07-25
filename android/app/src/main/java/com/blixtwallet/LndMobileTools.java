@@ -1,7 +1,5 @@
 package com.blixtwallet;
 
-// import com.blixtwallet.tor.BlixtTorUtils;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -70,12 +68,25 @@ import com.oblador.keychain.KeychainModule;
 
 import com.hypertrack.hyperlog.HyperLog;
 
+import org.torproject.jni.TorService;
+
 // TODO break this class up
 class LndMobileTools extends ReactContextBaseJavaModule {
   final String TAG = "LndMobileTools";
 
   public LndMobileTools(ReactApplicationContext reactContext) {
     super(reactContext);
+  }
+
+  private boolean getPersistentServicesEnabled(Context context) {
+    ReactDatabaseSupplier dbSupplier = ReactDatabaseSupplier.getInstance(context);
+    SQLiteDatabase db = dbSupplier.get();
+    String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
+    if (persistentServicesEnabled != null) {
+      return persistentServicesEnabled.equals("true");
+    }
+    HyperLog.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
+    return false;
   }
 
   @Override
@@ -631,6 +642,12 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void restartApp() {
+    Intent stopTorIntent = new Intent(getReactApplicationContext(), TorService.class);
+    stopTorIntent.setAction("org.torproject.android.intent.action.STOP");
+    getReactApplicationContext().stopService(stopTorIntent);
+    Intent stopLndIntent = new Intent(getReactApplicationContext(), LndMobileService.class);
+    stopLndIntent.setAction("com.blixtwallet.android.intent.action.STOP");
+    getReactApplicationContext().startService(stopLndIntent);
     ProcessPhoenix.triggerRebirth(getReactApplicationContext());
   }
 

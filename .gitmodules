@@ -1,3 +1,0 @@
-[submodule "tor"]
-	path = tor
-	url = https://github.com/thaliproject/Tor_Onion_Proxy_Library

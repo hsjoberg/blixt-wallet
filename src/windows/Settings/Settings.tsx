@@ -697,6 +697,7 @@ ${t("LN.inbound.dialog.msg3")}`;
           text: t("buttons.yes", { ns: namespaces.common }),
           onPress: async () => {
             try {
+              await NativeModules.BlixtTor.stopTor();
               await NativeModules.LndMobile.stopLnd();
               await NativeModules.LndMobileTools.killLnd();
             } catch (e) {
@@ -1361,6 +1362,14 @@ ${t("experimental.tor.disabled.msg2")}`;
   );
   const onPressEnforceSpeedloaderOnStartup = async () => {
     await changeEnforceSpeedloaderOnStartup(!enforceSpeedloaderOnStartup);
+  };
+
+  // Persistent services
+  const persistentServicesEnabled = useStoreState((store) => store.settings.persistentServicesEnabled);
+  const changePersistentServicesEnabled = useStoreActions((store) => store.settings.changePersistentServicesEnabled);
+  const changePersistentServicesEnabledPress = async () => {
+    await changePersistentServicesEnabled(!persistentServicesEnabled);
+    restartNeeded();
   };
 
   return (
@@ -2070,6 +2079,13 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Right>
             </ListItem>
           }
+          <ListItem style={style.listItem} icon={true} onPress={changePersistentServicesEnabledPress}>
+            <Left><Icon style={style.icon} type="Entypo" name="globe" /></Left>
+            <Body>
+              <Text>{t("debug.persistentServices.title")}</Text>
+            </Body>
+            <Right><CheckBox checked={persistentServicesEnabled} onPress={changePersistentServicesEnabledPress} /></Right>
+          </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("debug.title")}</Text>
@@ -2339,7 +2355,13 @@ ${t("experimental.tor.disabled.msg2")}`;
               />
             </Right>
           </ListItem>
-
+          <ListItem style={style.listItem} icon={true} onPress={changeBimodalPathFindingEnabledPress}>
+            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="map-marker-path" /></Left>
+            <Body>
+              <Text>{t("debug.bimodalPathFinding.title")}</Text>
+            </Body>
+            <Right><CheckBox checked={(lndPathfindingAlgorithm === "apriori" || lndPathfindingAlgorithm === null) ? false : true} onPress={changeBimodalPathFindingEnabledPress} /></Right>
+          </ListItem>
           <ListItem
             style={style.listItem}
             icon={true}
