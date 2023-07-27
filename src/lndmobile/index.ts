@@ -46,13 +46,19 @@ export const writeConfigFile = async () => {
 };
 
 export const subscribeState = async () => {
-  const response = await sendStreamCommand<lnrpc.ISubscribeStateRequest, lnrpc.SubscribeStateRequest>({
-    request: lnrpc.SubscribeStateRequest,
-    method: "SubscribeState",
-    options: {},
-  }, false);
+  const response = await sendStreamCommand<
+    lnrpc.ISubscribeStateRequest,
+    lnrpc.SubscribeStateRequest
+  >(
+    {
+      request: lnrpc.SubscribeStateRequest,
+      method: "SubscribeState",
+      options: {},
+    },
+    false,
+  );
   return response;
-}
+};
 
 export const decodeState = (data: string): lnrpc.SubscribeStateResponse => {
   return decodeStreamResult<lnrpc.SubscribeStateResponse>({
@@ -64,16 +70,16 @@ export const decodeState = (data: string): lnrpc.SubscribeStateResponse => {
 /**
  * @throws
  */
-export const startLnd = async (torEnabled: boolean, args?: string): Promise<{data:string}> => {
+export const startLnd = async (torEnabled: boolean, args?: string): Promise<{ data: string }> => {
   return await LndMobile.startLnd(torEnabled, args);
 };
 
 /**
  * @throws
  */
-export const gossipSync = async (networkType: string): Promise<{ data: string } > => {
+export const gossipSync = async (networkType: string): Promise<{ data: string }> => {
   return await LndMobile.gossipSync(networkType);
-}
+};
 
 export const checkICloudEnabled = async (): Promise<boolean> => {
   return await LndMobileTools.checkICloudEnabled();
@@ -117,8 +123,15 @@ export const excludeLndICloudBackup = async () => {
 /**
  * @throws
  */
-export const connectPeer = async (pubkey: string, host: string): Promise<lnrpc.ConnectPeerResponse> => {
-  return await sendCommand<lnrpc.IConnectPeerRequest, lnrpc.ConnectPeerRequest, lnrpc.ConnectPeerResponse>({
+export const connectPeer = async (
+  pubkey: string,
+  host: string,
+): Promise<lnrpc.ConnectPeerResponse> => {
+  return await sendCommand<
+    lnrpc.IConnectPeerRequest,
+    lnrpc.ConnectPeerRequest,
+    lnrpc.ConnectPeerResponse
+  >({
     request: lnrpc.ConnectPeerRequest,
     response: lnrpc.ConnectPeerResponse,
     method: "ConnectPeer",
@@ -135,7 +148,11 @@ export const connectPeer = async (pubkey: string, host: string): Promise<lnrpc.C
  * @throws
  */
 export const disconnectPeer = async (pubKey: string): Promise<lnrpc.DisconnectPeerResponse> => {
-  const response = await sendCommand<lnrpc.IDisconnectPeerRequest, lnrpc.DisconnectPeerRequest, lnrpc.DisconnectPeerResponse>({
+  const response = await sendCommand<
+    lnrpc.IDisconnectPeerRequest,
+    lnrpc.DisconnectPeerRequest,
+    lnrpc.DisconnectPeerResponse
+  >({
     request: lnrpc.DisconnectPeerRequest,
     response: lnrpc.DisconnectPeerResponse,
     method: "DisconnectPeer",
@@ -149,16 +166,21 @@ export const disconnectPeer = async (pubKey: string): Promise<lnrpc.DisconnectPe
 /**
  * @throws
  */
-export const getNodeInfo = async (pubKey: string, includeChannels: boolean = false): Promise<lnrpc.NodeInfo> => {
-  const response = await sendCommand<lnrpc.INodeInfoRequest, lnrpc.NodeInfoRequest, lnrpc.NodeInfo>({
-    request: lnrpc.NodeInfoRequest,
-    response: lnrpc.NodeInfo,
-    method: "GetNodeInfo",
-    options: {
-      pubKey,
-      includeChannels,
+export const getNodeInfo = async (
+  pubKey: string,
+  includeChannels: boolean = false,
+): Promise<lnrpc.NodeInfo> => {
+  const response = await sendCommand<lnrpc.INodeInfoRequest, lnrpc.NodeInfoRequest, lnrpc.NodeInfo>(
+    {
+      request: lnrpc.NodeInfoRequest,
+      response: lnrpc.NodeInfo,
+      method: "GetNodeInfo",
+      options: {
+        pubKey,
+        includeChannels,
+      },
     },
-  });
+  );
   return response;
 };
 
@@ -166,7 +188,11 @@ export const getNodeInfo = async (pubKey: string, includeChannels: boolean = fal
  * @throws
  */
 export const getInfo = async (): Promise<lnrpc.GetInfoResponse> => {
-  const response = await sendCommand<lnrpc.IGetInfoRequest, lnrpc.GetInfoRequest, lnrpc.GetInfoResponse>({
+  const response = await sendCommand<
+    lnrpc.IGetInfoRequest,
+    lnrpc.GetInfoRequest,
+    lnrpc.GetInfoResponse
+  >({
     request: lnrpc.GetInfoRequest,
     response: lnrpc.GetInfoResponse,
     method: "GetInfo",
@@ -182,14 +208,18 @@ export const getInfo = async (): Promise<lnrpc.GetInfoResponse> => {
  * @params name TLV record for sender name
  *
  */
-export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlvRecordName?: string | null): Promise<lnrpc.SendResponse> => {
+export const sendPaymentSync = async (
+  paymentRequest: string,
+  amount?: Long,
+  tlvRecordName?: string | null,
+): Promise<lnrpc.SendResponse> => {
   const options: lnrpc.ISendRequest = {
     paymentRequest,
   };
   if (tlvRecordName && tlvRecordName.length > 0) {
     options.destCustomRecords = {
       [TLV_RECORD_NAME]: unicodeStringToUint8Array(tlvRecordName),
-    }
+    };
   }
   if (amount) {
     options.amt = amount;
@@ -204,8 +234,15 @@ export const sendPaymentSync = async (paymentRequest: string, amount?: Long, tlv
   return response;
 };
 
-
-export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, payAmount?: Long, tlvRecordName?: string | null, multiPath?: boolean, maxLNFeePercentage: number = 2): Promise<lnrpc.Payment> => {
+export const sendPaymentV2Sync = (
+  paymentRequest: string,
+  amount?: Long,
+  payAmount?: Long,
+  tlvRecordName?: string | null,
+  multiPath?: boolean,
+  maxLNFeePercentage: number = 2,
+  outgoingChanId?: Long,
+): Promise<lnrpc.Payment> => {
   const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
 
   const options: routerrpc.ISendPaymentRequest = {
@@ -215,6 +252,7 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, payAmou
     maxParts: multiPath ? 16 : 1,
     feeLimitSat: Long.fromValue(Math.max(10, (payAmount?.toNumber() || 0) * maxFeeRatio)),
     cltvLimit: 0,
+    outgoingChanId,
   };
   if (amount) {
     options.amt = amount;
@@ -222,7 +260,7 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, payAmou
   if (tlvRecordName && tlvRecordName.length > 0) {
     options.destCustomRecords = {
       [TLV_RECORD_NAME]: unicodeStringToUint8Array(tlvRecordName),
-    }
+    };
   }
 
   return new Promise(async (resolve, reject) => {
@@ -249,11 +287,17 @@ export const sendPaymentV2Sync = (paymentRequest: string, amount?: Long, payAmou
       }
     });
 
-    const response = await sendStreamCommand<routerrpc.ISendPaymentRequest, routerrpc.SendPaymentRequest>({
-      request: routerrpc.SendPaymentRequest,
-      method: "RouterSendPaymentV2",
-      options,
-    }, false);
+    const response = await sendStreamCommand<
+      routerrpc.ISendPaymentRequest,
+      routerrpc.SendPaymentRequest
+    >(
+      {
+        request: routerrpc.SendPaymentRequest,
+        method: "RouterSendPaymentV2",
+        options,
+      },
+      false,
+    );
   });
 };
 
@@ -272,7 +316,15 @@ export const decodeTrackPaymentV2Result = (data: string): lnrpc.Payment => {
   });
 };
 
-export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.IRouteHint[], tlvRecordNameStr: string, tlvRecordWhatSatMessageStr: string, maxLNFeePercentage: number = 3): Promise<lnrpc.Payment> => {
+export const sendKeysendPaymentV2 = (
+  destinationPubKey: string,
+  sat: Long,
+  preImage: Uint8Array,
+  routeHints: lnrpc.IRouteHint[],
+  tlvRecordNameStr: string,
+  tlvRecordWhatSatMessageStr: string,
+  maxLNFeePercentage: number = 3,
+): Promise<lnrpc.Payment> => {
   const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
 
   const options: routerrpc.ISendPaymentRequest = {
@@ -298,7 +350,9 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
     options.destCustomRecords![TLV_RECORD_NAME] = unicodeStringToUint8Array(tlvRecordNameStr);
   }
   if (tlvRecordWhatSatMessageStr && tlvRecordWhatSatMessageStr.length > 0) {
-    options.destCustomRecords![TLV_WHATSAT_MESSAGE] = unicodeStringToUint8Array(tlvRecordWhatSatMessageStr);
+    options.destCustomRecords![TLV_WHATSAT_MESSAGE] = unicodeStringToUint8Array(
+      tlvRecordWhatSatMessageStr,
+    );
   }
 
   return new Promise(async (resolve, reject) => {
@@ -319,18 +373,34 @@ export const sendKeysendPaymentV2 = (destinationPubKey: string, sat: Long, preIm
       resolve(response);
     });
 
-    const response = await sendStreamCommand<routerrpc.ISendPaymentRequest, routerrpc.SendPaymentRequest>({
-      request: routerrpc.SendPaymentRequest,
-      method: "RouterSendPaymentV2",
-      options,
-    }, false);
+    const response = await sendStreamCommand<
+      routerrpc.ISendPaymentRequest,
+      routerrpc.SendPaymentRequest
+    >(
+      {
+        request: routerrpc.SendPaymentRequest,
+        method: "RouterSendPaymentV2",
+        options,
+      },
+      false,
+    );
     console.log(response);
   });
 };
 
-export const sendKeysendPayment = async (destinationPubKey: string, sat: Long, preImage: Uint8Array, routeHints: lnrpc.IRouteHint[], tlvRecordNameStr: string): Promise<lnrpc.SendResponse> => {
+export const sendKeysendPayment = async (
+  destinationPubKey: string,
+  sat: Long,
+  preImage: Uint8Array,
+  routeHints: lnrpc.IRouteHint[],
+  tlvRecordNameStr: string,
+): Promise<lnrpc.SendResponse> => {
   try {
-    const responseQueryRoutes = await sendCommand<lnrpc.IQueryRoutesRequest, lnrpc.QueryRoutesRequest, lnrpc.QueryRoutesResponse>({
+    const responseQueryRoutes = await sendCommand<
+      lnrpc.IQueryRoutesRequest,
+      lnrpc.QueryRoutesRequest,
+      lnrpc.QueryRoutesResponse
+    >({
       request: lnrpc.QueryRoutesRequest,
       response: lnrpc.QueryRoutesResponse,
       method: "QueryRoutes",
@@ -341,7 +411,6 @@ export const sendKeysendPayment = async (destinationPubKey: string, sat: Long, p
         destCustomRecords: {
           // Custom records are injected in a hacky way below
           // because of a bug in protobufjs
-
           // [TLV_RECORD_NAME]: stringToUint8Array(tlvRecordNameStr),
           // 5482373484 is the record for lnd
           // keysend payments as described in
@@ -358,12 +427,17 @@ export const sendKeysendPayment = async (destinationPubKey: string, sat: Long, p
       try {
         const lastHop = route.hops!.length - 1;
 
-        route.hops![lastHop].customRecords!["5482373484"] =  preImage;
+        route.hops![lastHop].customRecords!["5482373484"] = preImage;
         if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {
-          route.hops![lastHop].customRecords![TLV_RECORD_NAME] = stringToUint8Array(tlvRecordNameStr);
+          route.hops![lastHop].customRecords![TLV_RECORD_NAME] =
+            stringToUint8Array(tlvRecordNameStr);
         }
 
-        const response = await sendCommand<lnrpc.ISendToRouteRequest, lnrpc.SendToRouteRequest, lnrpc.SendResponse>({
+        const response = await sendCommand<
+          lnrpc.ISendToRouteRequest,
+          lnrpc.SendToRouteRequest,
+          lnrpc.SendResponse
+        >({
           request: lnrpc.SendToRouteRequest,
           response: lnrpc.SendResponse,
           method: "SendToRouteSync",
@@ -394,7 +468,13 @@ export const decodePaymentStatus = (data: string): routerrpc.PaymentStatus => {
 /**
  * @throws
  */
-export const addInvoice = async (amount: number, memo: string, expiry: number = 3600, descriptionHash?: Uint8Array, preimage?: Uint8Array): Promise<lnrpc.AddInvoiceResponse> => {
+export const addInvoice = async (
+  amount: number,
+  memo: string,
+  expiry: number = 3600,
+  descriptionHash?: Uint8Array,
+  preimage?: Uint8Array,
+): Promise<lnrpc.AddInvoiceResponse> => {
   const response = await sendCommand<lnrpc.IInvoice, lnrpc.Invoice, lnrpc.AddInvoiceResponse>({
     request: lnrpc.Invoice,
     response: lnrpc.AddInvoiceResponse,
@@ -428,8 +508,7 @@ export const getRouteHints = async (max: number = 5): Promise<lnrpc.IRouteHint[]
     let policy: lnrpc.IRoutingPolicy;
     if (remotePubkey === chanInfo.node1Pub) {
       policy = chanInfo.node1Policy!;
-    }
-    else {
+    } else {
       policy = chanInfo.node2Policy!;
     }
 
@@ -442,20 +521,26 @@ export const getRouteHints = async (max: number = 5): Promise<lnrpc.IRouteHint[]
       channelId = channel.peerScidAlias;
     }
 
-    routeHints.push(lnrpc.RouteHint.create({
-      hopHints: [{
-        nodeId: remotePubkey,
-        chanId: channelId,
-        feeBaseMsat: policy.feeBaseMsat ? policy.feeBaseMsat.toNumber() : 0,
-        feeProportionalMillionths: policy.feeRateMilliMsat ? policy.feeRateMilliMsat.toNumber() : 0,
-        cltvExpiryDelta: policy.timeLockDelta,
-      }]
-    }));
+    routeHints.push(
+      lnrpc.RouteHint.create({
+        hopHints: [
+          {
+            nodeId: remotePubkey,
+            chanId: channelId,
+            feeBaseMsat: policy.feeBaseMsat ? policy.feeBaseMsat.toNumber() : 0,
+            feeProportionalMillionths: policy.feeRateMilliMsat
+              ? policy.feeRateMilliMsat.toNumber()
+              : 0,
+            cltvExpiryDelta: policy.timeLockDelta,
+          },
+        ],
+      }),
+    );
   }
 
   console.log("our hints", routeHints);
   return routeHints;
-}
+};
 
 export interface IAddInvoiceBlixtLspArgs {
   amount: number;
@@ -473,7 +558,17 @@ export interface IAddInvoiceBlixtLspArgs {
 /**
  * @throws
  */
-export const addInvoiceBlixtLsp = async ({amount, memo, expiry = 600, servicePubkey, chanId, cltvExpiryDelta, feeBaseMsat, feeProportionalMillionths, preimage}: IAddInvoiceBlixtLspArgs): Promise<lnrpc.AddInvoiceResponse> => {
+export const addInvoiceBlixtLsp = async ({
+  amount,
+  memo,
+  expiry = 600,
+  servicePubkey,
+  chanId,
+  cltvExpiryDelta,
+  feeBaseMsat,
+  feeProportionalMillionths,
+  preimage,
+}: IAddInvoiceBlixtLspArgs): Promise<lnrpc.AddInvoiceResponse> => {
   const response = await sendCommand<lnrpc.IInvoice, lnrpc.Invoice, lnrpc.AddInvoiceResponse>({
     request: lnrpc.Invoice,
     response: lnrpc.AddInvoiceResponse,
@@ -484,13 +579,19 @@ export const addInvoiceBlixtLsp = async ({amount, memo, expiry = 600, servicePub
       memo,
       expiry: Long.fromValue(expiry),
       // private: true,
-      routeHints: [{hopHints: [{
-        nodeId: servicePubkey,
-        chanId: Long.fromString(chanId),
-        cltvExpiryDelta,
-        feeBaseMsat,
-        feeProportionalMillionths,
-      }]}],
+      routeHints: [
+        {
+          hopHints: [
+            {
+              nodeId: servicePubkey,
+              chanId: Long.fromString(chanId),
+              cltvExpiryDelta,
+              feeBaseMsat,
+              feeProportionalMillionths,
+            },
+          ],
+        },
+      ],
     },
   });
   return response;
@@ -499,8 +600,14 @@ export const addInvoiceBlixtLsp = async ({amount, memo, expiry = 600, servicePub
 /**
  * @throws
  */
-export const cancelInvoice = async (paymentHash: string): Promise<invoicesrpc.CancelInvoiceResp> => {
-  const response = await sendCommand<invoicesrpc.ICancelInvoiceMsg, invoicesrpc.CancelInvoiceMsg, invoicesrpc.CancelInvoiceResp>({
+export const cancelInvoice = async (
+  paymentHash: string,
+): Promise<invoicesrpc.CancelInvoiceResp> => {
+  const response = await sendCommand<
+    invoicesrpc.ICancelInvoiceMsg,
+    invoicesrpc.CancelInvoiceMsg,
+    invoicesrpc.CancelInvoiceResp
+  >({
     request: invoicesrpc.CancelInvoiceMsg,
     response: invoicesrpc.CancelInvoiceResp,
     method: "InvoicesCancelInvoice",
@@ -530,7 +637,11 @@ export const lookupInvoice = async (rHash: string): Promise<lnrpc.Invoice> => {
  * @throws
  */
 export const listPeers = async (): Promise<lnrpc.ListPeersResponse> => {
-  const response = await sendCommand<lnrpc.IListPeersRequest, lnrpc.ListPeersRequest, lnrpc.ListPeersResponse>({
+  const response = await sendCommand<
+    lnrpc.IListPeersRequest,
+    lnrpc.ListPeersRequest,
+    lnrpc.ListPeersResponse
+  >({
     request: lnrpc.ListPeersRequest,
     response: lnrpc.ListPeersResponse,
     method: "ListPeers",
@@ -542,8 +653,16 @@ export const listPeers = async (): Promise<lnrpc.ListPeersResponse> => {
 /**
  * @throws
  */
-export const queryRoutes = async (pubKey: string, amount?: Long, routeHints?: lnrpc.IRouteHint[]): Promise<lnrpc.QueryRoutesResponse> => {
-  const response = await sendCommand<lnrpc.IQueryRoutesRequest, lnrpc.IQueryRoutesRequest, lnrpc.QueryRoutesResponse>({
+export const queryRoutes = async (
+  pubKey: string,
+  amount?: Long,
+  routeHints?: lnrpc.IRouteHint[],
+): Promise<lnrpc.QueryRoutesResponse> => {
+  const response = await sendCommand<
+    lnrpc.IQueryRoutesRequest,
+    lnrpc.IQueryRoutesRequest,
+    lnrpc.QueryRoutesResponse
+  >({
     request: lnrpc.QueryRoutesRequest,
     response: lnrpc.QueryRoutesResponse,
     method: "QueryRoutes",
@@ -554,7 +673,7 @@ export const queryRoutes = async (pubKey: string, amount?: Long, routeHints?: ln
     },
   });
   return response;
-}
+};
 
 /**
  * @throws
@@ -575,7 +694,11 @@ export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
  * @throws
  */
 export const describeGraph = async (): Promise<lnrpc.ChannelGraph> => {
-  const response = await sendCommand<lnrpc.IChannelGraphRequest, lnrpc.ChannelGraphRequest, lnrpc.ChannelGraph>({
+  const response = await sendCommand<
+    lnrpc.IChannelGraphRequest,
+    lnrpc.ChannelGraphRequest,
+    lnrpc.ChannelGraph
+  >({
     request: lnrpc.ChannelGraphRequest,
     response: lnrpc.ChannelGraph,
     method: "DescribeGraph",
@@ -588,7 +711,11 @@ export const describeGraph = async (): Promise<lnrpc.ChannelGraph> => {
  * @throws
  */
 export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> => {
-  const response = await sendCommand<lnrpc.IGetRecoveryInfoRequest, lnrpc.GetRecoveryInfoRequest, lnrpc.GetRecoveryInfoResponse>({
+  const response = await sendCommand<
+    lnrpc.IGetRecoveryInfoRequest,
+    lnrpc.GetRecoveryInfoRequest,
+    lnrpc.GetRecoveryInfoResponse
+  >({
     request: lnrpc.GetRecoveryInfoRequest,
     response: lnrpc.GetRecoveryInfoResponse,
     method: "GetRecoveryInfo",
@@ -600,8 +727,12 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
 /**
  * @throws
  */
- export const listUnspent = async (): Promise<lnrpc.ListUnspentResponse> => {
-  const response = await sendCommand<lnrpc.IListUnspentRequest, lnrpc.ListUnspentRequest, lnrpc.ListUnspentResponse>({
+export const listUnspent = async (): Promise<lnrpc.ListUnspentResponse> => {
+  const response = await sendCommand<
+    lnrpc.IListUnspentRequest,
+    lnrpc.ListUnspentRequest,
+    lnrpc.ListUnspentResponse
+  >({
     request: lnrpc.ListUnspentRequest,
     response: lnrpc.ListUnspentResponse,
     method: "WalletKitListUnspent",
@@ -613,8 +744,12 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
 /**
  * @throws
  */
- export const resetMissionControl = async (): Promise<routerrpc.ResetMissionControlResponse> => {
-  const response = await sendCommand<routerrpc.IResetMissionControlRequest, routerrpc.ResetMissionControlRequest, routerrpc.ResetMissionControlResponse>({
+export const resetMissionControl = async (): Promise<routerrpc.ResetMissionControlResponse> => {
+  const response = await sendCommand<
+    routerrpc.IResetMissionControlRequest,
+    routerrpc.ResetMissionControlRequest,
+    routerrpc.ResetMissionControlResponse
+  >({
     request: routerrpc.ResetMissionControlRequest,
     response: routerrpc.ResetMissionControlResponse,
     method: "RouterResetMissionControl",
@@ -626,8 +761,12 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
 /**
  * @throws
  */
- export const getNetworkInfo = async (): Promise<lnrpc.NetworkInfo> => {
-  const response = await sendCommand<lnrpc.INetworkInfoRequest, lnrpc.NetworkInfoRequest, lnrpc.NetworkInfo>({
+export const getNetworkInfo = async (): Promise<lnrpc.NetworkInfo> => {
+  const response = await sendCommand<
+    lnrpc.INetworkInfoRequest,
+    lnrpc.NetworkInfoRequest,
+    lnrpc.NetworkInfo
+  >({
     request: lnrpc.NetworkInfoRequest,
     response: lnrpc.NetworkInfo,
     method: "GetNetworkInfo",
@@ -639,7 +778,7 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
 /**
  * @throws
  */
- export const trackPaymentV2Sync = async (paymentHash: string): Promise<lnrpc.Payment> => {
+export const trackPaymentV2Sync = async (paymentHash: string): Promise<lnrpc.Payment> => {
   const options: routerrpc.ITrackPaymentRequest = {
     paymentHash: hexToUint8Array(paymentHash),
     noInflightUpdates: true,
@@ -669,19 +808,29 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
       }
     });
 
-    const response = await sendStreamCommand<routerrpc.ITrackPaymentRequest, routerrpc.TrackPaymentRequest>({
-      request: routerrpc.TrackPaymentRequest,
-      method: "RouterTrackPaymentV2",
-      options,
-    }, false);
+    const response = await sendStreamCommand<
+      routerrpc.ITrackPaymentRequest,
+      routerrpc.TrackPaymentRequest
+    >(
+      {
+        request: routerrpc.TrackPaymentRequest,
+        method: "RouterTrackPaymentV2",
+        options,
+      },
+      false,
+    );
   });
 };
 
 /**
  * @throws
  */
- export const listInvoices = async (): Promise<lnrpc.ListInvoiceResponse> => {
-  const response = await sendCommand<lnrpc.IListInvoiceRequest, lnrpc.ListInvoiceRequest, lnrpc.ListInvoiceResponse>({
+export const listInvoices = async (): Promise<lnrpc.ListInvoiceResponse> => {
+  const response = await sendCommand<
+    lnrpc.IListInvoiceRequest,
+    lnrpc.ListInvoiceRequest,
+    lnrpc.ListInvoiceResponse
+  >({
     request: lnrpc.ListInvoiceRequest,
     response: lnrpc.ListInvoiceResponse,
     method: "ListInvoices",
@@ -691,13 +840,19 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
 };
 
 export const subscribeCustomMessages = async () => {
-  const response = await sendStreamCommand<lnrpc.ISubscribeCustomMessagesRequest, lnrpc.SubscribeCustomMessagesRequest>({
-    request: lnrpc.SubscribeCustomMessagesRequest,
-    method: "SubscribeCustomMessages",
-    options: {},
-  }, false);
+  const response = await sendStreamCommand<
+    lnrpc.ISubscribeCustomMessagesRequest,
+    lnrpc.SubscribeCustomMessagesRequest
+  >(
+    {
+      request: lnrpc.SubscribeCustomMessagesRequest,
+      method: "SubscribeCustomMessages",
+      options: {},
+    },
+    false,
+  );
   return response;
-}
+};
 
 export const decodeCustomMessage = (data: string): lnrpc.CustomMessage => {
   return decodeStreamResult<lnrpc.CustomMessage>({
@@ -709,8 +864,16 @@ export const decodeCustomMessage = (data: string): lnrpc.CustomMessage => {
 /**
  * @throws
  */
-export const sendCustomMessage = async (peerPubkeyHex: string, type: number, dataString: string): Promise<lnrpc.SendCustomMessageResponse> => {
-  const response = await sendCommand<lnrpc.ISendCustomMessageRequest, lnrpc.SendCustomMessageRequest, lnrpc.SendCustomMessageResponse>({
+export const sendCustomMessage = async (
+  peerPubkeyHex: string,
+  type: number,
+  dataString: string,
+): Promise<lnrpc.SendCustomMessageResponse> => {
+  const response = await sendCommand<
+    lnrpc.ISendCustomMessageRequest,
+    lnrpc.SendCustomMessageRequest,
+    lnrpc.SendCustomMessageResponse
+  >({
     request: lnrpc.SendCustomMessageRequest,
     response: lnrpc.SendCustomMessageResponse,
     method: "SendCustomMessage",
@@ -718,7 +881,7 @@ export const sendCustomMessage = async (peerPubkeyHex: string, type: number, dat
       type,
       peer: hexToUint8Array(peerPubkeyHex),
       data: stringToUint8Array(dataString),
-    }
+    },
   });
   return response;
 };
@@ -726,9 +889,15 @@ export const sendCustomMessage = async (peerPubkeyHex: string, type: number, dat
 /**
  * @throws
  */
- export const xImportMissionControl = async (pairs: routerrpc.IPairHistory[]): Promise<routerrpc.XImportMissionControlResponse> => {
+export const xImportMissionControl = async (
+  pairs: routerrpc.IPairHistory[],
+): Promise<routerrpc.XImportMissionControlResponse> => {
   console.log("pairs", pairs);
-  const response = await sendCommand<routerrpc.IXImportMissionControlRequest, routerrpc.XImportMissionControlRequest, routerrpc.XImportMissionControlResponse>({
+  const response = await sendCommand<
+    routerrpc.IXImportMissionControlRequest,
+    routerrpc.XImportMissionControlRequest,
+    routerrpc.XImportMissionControlResponse
+  >({
     request: routerrpc.XImportMissionControlRequest,
     response: routerrpc.XImportMissionControlResponse,
     method: "RouterXImportMissionControl",
@@ -742,8 +911,12 @@ export const sendCustomMessage = async (peerPubkeyHex: string, type: number, dat
 /**
  * @throws
  */
- export const queryMissionControl = async (): Promise<routerrpc.QueryMissionControlResponse> => {
-  const response = await sendCommand<routerrpc.IQueryMissionControlRequest, routerrpc.IQueryMissionControlRequest, routerrpc.QueryMissionControlResponse>({
+export const queryMissionControl = async (): Promise<routerrpc.QueryMissionControlResponse> => {
+  const response = await sendCommand<
+    routerrpc.IQueryMissionControlRequest,
+    routerrpc.IQueryMissionControlRequest,
+    routerrpc.QueryMissionControlResponse
+  >({
     request: routerrpc.QueryMissionControlRequest,
     response: routerrpc.QueryMissionControlResponse,
     method: "RouterQueryMissionControl",
@@ -751,7 +924,6 @@ export const sendCustomMessage = async (peerPubkeyHex: string, type: number, dat
   });
   return response;
 };
-
 
 export type IReadLndLogResponse = string[];
 /**
