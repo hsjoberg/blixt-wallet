@@ -1,4 +1,4 @@
-import { BackHandler, Keyboard, Vibration } from "react-native";
+import { BackHandler, Keyboard, StyleSheet, Vibration } from "react-native";
 import { BitcoinUnits, unitToSatoshi } from "../../utils/bitcoin-units";
 import BlixtForm, { IFormItem } from "../../components/Form";
 import { Button, Container, Icon, Picker, Spinner, Text } from "native-base";
@@ -265,13 +265,13 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
         <Picker
           note
           mode="dropdown"
-          style={{ width: 120 }}
+          style={styles.pickerStyle}
           selectedValue={outChannel}
           onValueChange={(n: Long) => setOutChannel(n)}
         >
-          <Picker.Item label="--None--" value="" />
+          <Picker.Item style={styles.itemStyle} label="--None--" value="" />
           {getChannels.map((n, i) => (
-            <Picker.Item label={choiceLabel(n)} key={i} value={n.chanId} />
+            <Picker.Item style={styles.itemStyle} label={choiceLabel(n)} key={i} value={n.chanId} />
           ))}
         </Picker>
       ),
@@ -306,3 +306,20 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     </Container>
   );
 }
+
+// Add this at the end of your component file
+const styles = StyleSheet.create({
+  pickerStyle: {
+    width: 120,
+    backgroundColor: "#3f3f3f", // Dark gray
+    borderColor: "#ffffff", // White
+    borderWidth: 1,
+    borderRadius: 5,
+    color: "#ffffff", // White color for text
+  },
+  itemStyle: {
+    backgroundColor: "#1f1f1f", // Even darker gray
+    padding: 10,
+    color: "#ffffff", // White color for text
+  },
+});
