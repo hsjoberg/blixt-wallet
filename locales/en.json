@@ -249,6 +249,9 @@
       },
       "feeEstimate": {
         "title": "Fee estimate"
+      },
+      "outgoingChannel": {
+        "title": "Select Outbound Channel"
       }
     }
   },

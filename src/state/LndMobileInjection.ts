@@ -1,7 +1,6 @@
 import {
   IAddInvoiceBlixtLspArgs,
   IReadLndLogResponse,
-  gossipSync,
   TEMP_moveLndToApplicationSupport,
   addInvoice,
   addInvoiceBlixtLsp,
@@ -20,8 +19,8 @@ import {
   getNetworkInfo,
   getNodeInfo,
   getRecoveryInfo,
+  gossipSync,
   initialize,
-  trackPaymentV2Sync,
   listPeers,
   listUnspent,
   lookupInvoice,
@@ -32,6 +31,7 @@ import {
   sendPaymentV2Sync,
   startLnd,
   subscribeState,
+  trackPaymentV2Sync,
   writeConfig,
   writeConfigFile,
 } from "../lndmobile/index";
@@ -50,6 +50,7 @@ import {
   pendingChannels,
   subscribeChannelEvents,
 } from "../lndmobile/channel";
+import { autopilotrpc, invoicesrpc, lnrpc, routerrpc, signrpc } from "../../proto/lightning";
 import {
   decodeInvoiceResult,
   deriveKey,
@@ -70,11 +71,11 @@ import {
   subscribeTransactions,
   walletBalance,
 } from "../lndmobile/onchain";
-import { status, modifyStatus, queryScores, setScores } from "../lndmobile/autopilot";
-import { checkScheduledSyncWorkStatus } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
-import { checkScheduledGossipSyncWorkStatus } from "../lndmobile/scheduled-gossip-sync";
-import { lnrpc, signrpc, invoicesrpc, autopilotrpc, routerrpc } from "../../proto/lightning";
+import { modifyStatus, queryScores, setScores, status } from "../lndmobile/autopilot";
+
 import { WorkInfo } from "../lndmobile/LndMobile";
+import { checkScheduledGossipSyncWorkStatus } from "../lndmobile/scheduled-gossip-sync";
+import { checkScheduledSyncWorkStatus } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
 
 export interface ILndMobileInjections {
   index: {
@@ -124,6 +125,7 @@ export interface ILndMobileInjections {
       tlvRecordName?: string | null,
       multiPath?: boolean,
       maxLNFeePercentage?: number,
+      outgoingChannelId?: Long,
     ) => Promise<lnrpc.Payment>;
     queryRoutes: (
       pubkey: string,
