@@ -9,7 +9,6 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import Input from "../../components/Input";
 import Long from "long";
 import { PLATFORM } from "../../utils/constants";
-// import { Picker } from "@react-native-picker/picker";
 import { RouteProp } from "@react-navigation/native";
 import { SendStackParamList } from "./index";
 import { StackNavigationProp } from "@react-navigation/stack";

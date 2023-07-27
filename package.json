@@ -63,6 +63,7 @@
     "@react-native-community/push-notification-ios": "^1.11.0",
     "@react-native-community/slider": "^4.4.2",
     "@react-native-google-signin/google-signin": "^10.0.1",
+    "@react-native-picker/picker": "^2.4.10",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/drawer": "7.0.0-alpha.2",
     "@react-navigation/native": "^6.1.7",
