@@ -1,5 +1,5 @@
-import { Chain, Debug, VersionCode } from "../utils/build";
 import {
+  BLIXT_NODE_PUBKEY,
   DEFAULT_DUNDER_SERVER,
   DEFAULT_INVOICE_EXPIRY,
   DEFAULT_LND_LOG_LEVEL,
@@ -8,6 +8,7 @@ import {
   DEFAULT_PATHFINDING_ALGORITHM,
   PLATFORM,
 } from "../utils/constants";
+import { Chain, Debug, VersionCode } from "../utils/build";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
@@ -270,5 +271,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.enforceSpeedloaderOnStartup, false),
     setItemObject<boolean>(StorageItem.persistentServicesEnabled, false),
     setItemObject<boolean>(StorageItem.persistentServicesWarningShown, false),
+    setItemObject<string[]>(StorageItem.zeroConfPeers, [BLIXT_NODE_PUBKEY])
   ]);
 };
