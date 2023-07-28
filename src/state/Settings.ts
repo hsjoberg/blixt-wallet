@@ -1,5 +1,6 @@
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import {
+  BLIXT_NODE_PUBKEY,
   DEFAULT_INVOICE_EXPIRY,
   DEFAULT_LND_LOG_LEVEL,
   DEFAULT_MAX_LN_FEE_PERCENTAGE,
@@ -215,7 +216,7 @@ export const settings: ISettingsModel = {
     actions.setICloudBackupEnabled(await getItemObject(StorageItem.iCloudBackupEnabled ?? false));
     actions.setLndChainBackend((await getItem(StorageItem.lndChainBackend)) ?? "");
     actions.setNeutrinoPeers((await getItemObject(StorageItem.neutrinoPeers)) ?? []);
-    actions.setZeroConfPeers((await getItemObject(StorageItem.zeroConfPeers)) ?? []);
+    actions.setZeroConfPeers((await getItemObject(StorageItem.zeroConfPeers)) ?? [BLIXT_NODE_PUBKEY]);
     actions.setBitcoindRpcHost((await getItem(StorageItem.bitcoindRpcHost)) ?? "");
     actions.setBitcoindPubRawBlock((await getItem(StorageItem.bitcoindPubRawBlock)) ?? "");
     actions.setBitcoindPubRawTx((await getItem(StorageItem.bitcoindPubRawTx)) ?? "");
