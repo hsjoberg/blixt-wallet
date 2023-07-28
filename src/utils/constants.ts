@@ -19,7 +19,8 @@ export const PLATFORM = Platform.OS;
 
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
-export const DEFAULT_NEUTRINO_NODE = Chain === "mainnet" ? "node.blixtwallet.com" : "testnet.blixtwallet.com";
+export const DEFAULT_NEUTRINO_NODE =
+  Chain === "mainnet" ? "node.blixtwallet.com" : "testnet.blixtwallet.com";
 export const DEFAULT_INVOICE_EXPIRY = 3600;
 export const DEFAULT_MAX_LN_FEE_PERCENTAGE = 2;
 export const DEFAULT_LND_LOG_LEVEL: LndLogLevel = "info";
@@ -34,18 +35,22 @@ export const DEFAULT_DUNDER_SERVER = chainSelect({
   regtest: "http://192.168.1.111:8080",
 });
 
-export const HEADER_MIN_HEIGHT = Platform.select({
-  android: (StatusBar.currentHeight ?? 0) + 53,
-  ios: getStatusBarHeight(true) + 53,
-  macos: 53
-}) ?? 53;
+export const HEADER_MIN_HEIGHT =
+  Platform.select({
+    android: (StatusBar.currentHeight ?? 0) + 53,
+    ios: getStatusBarHeight(true) + 53,
+    macos: 53,
+  }) ?? 53;
 
-export const HEADER_MAX_HEIGHT = (Platform.select({
-  android: 195,
-  ios: 195,
-  web: 195 - 32,
-  macos: 175
-}) ?? 195) / (zoomed ? 0.85 : 1);
+export const HEADER_MAX_HEIGHT =
+  (Platform.select({
+    android: 195,
+    ios: 195,
+    web: 195 - 32,
+    macos: 175,
+  }) ?? 195) / (zoomed ? 0.85 : 1);
 
-
-export const BLIXT_NODE_PUBKEY = "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb";
+export const BLIXT_NODE_PUBKEY =
+  Chain === "mainnet"
+    ? "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb"
+    : "036b7130b27a23d6fe1d55c1d3bed9e6da5a17090588b0834e8200e0d50ee6886a";
