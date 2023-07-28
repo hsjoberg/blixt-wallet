@@ -1,8 +1,9 @@
 import { Platform, StatusBar } from "react-native";
-import { getStatusBarHeight } from "react-native-status-bar-height";
-import { LndLogLevel } from "../state/Settings";
+
 import { Chain } from "./build";
+import { LndLogLevel } from "../state/Settings";
 import { chainSelect } from "./chain-select";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 import { zoomed } from "./scale";
 
 export const TLV_RECORD_NAME = 128101;
@@ -45,3 +46,6 @@ export const HEADER_MAX_HEIGHT = (Platform.select({
   web: 195 - 32,
   macos: 175
 }) ?? 195) / (zoomed ? 0.85 : 1);
+
+
+export const BLIXT_NODE_PUBKEY = "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb";
