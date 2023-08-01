@@ -1,27 +1,30 @@
+import { Button, Text, View } from "native-base";
+import {
+  ILNUrlPayRequest,
+  ILNUrlPayRequestMetadata,
+  ILNUrlPayResponsePayerData,
+} from "../../../state/LNURL";
+import { Image, Keyboard, Vibration } from "react-native";
 import React, { useState } from "react";
-import { Vibration, Keyboard, Image } from "react-native";
-import { Text, View, Button } from "native-base";
-import Long from "long";
-import { useNavigation } from "@react-navigation/core";
-
-import { useStoreState, useStoreActions } from "../../../state/store";
-import { toast, getDomainFromURL, hexToUint8Array } from "../../../utils";
-import { ILNUrlPayRequest, ILNUrlPayRequestMetadata, ILNUrlPayResponsePayerData } from "../../../state/LNURL";
-import ScaledImage from "../../../components/ScaledImage";
-import { formatBitcoin, convertBitcoinToFiat } from "../../../utils/bitcoin-units";
-import ButtonSpinner from "../../../components/ButtonSpinner";
-import style from "./style";
-import useLightningReadyToSend from "../../../hooks/useLightingReadyToSend";
+import { convertBitcoinToFiat, formatBitcoin } from "../../../utils/bitcoin-units";
+import { getDomainFromURL, hexToUint8Array, toast } from "../../../utils";
 import { identifyService, lightningServices } from "../../../utils/lightning-services";
-import { Alert } from "../../../utils/alert";
-import { setupDescription } from "../../../utils/NameDesc";
-import useBalance from "../../../hooks/useBalance";
-import { PayerData } from "./PayerData";
-import { PLATFORM } from "../../../utils/constants";
-import Input from "../../../components/Input";
+import { useStoreActions, useStoreState } from "../../../state/store";
 
-import { useTranslation } from "react-i18next";
+import { Alert } from "../../../utils/alert";
+import ButtonSpinner from "../../../components/ButtonSpinner";
+import Input from "../../../components/Input";
+import Long from "long";
+import { PLATFORM } from "../../../utils/constants";
+import { PayerData } from "./PayerData";
+import ScaledImage from "../../../components/ScaledImage";
 import { namespaces } from "../../../i18n/i18n.constants";
+import { setupDescription } from "../../../utils/NameDesc";
+import style from "./style";
+import useBalance from "../../../hooks/useBalance";
+import useLightningReadyToSend from "../../../hooks/useLightingReadyToSend";
+import { useNavigation } from "@react-navigation/core";
+import { useTranslation } from "react-i18next";
 
 export interface IPaymentCardProps {
   onPaid: (preimage: Uint8Array) => void;
@@ -48,7 +51,9 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
   const commentAllowed = lnUrlObject.commentAllowed ?? undefined;
   const domain = getDomainFromURL(lnurlStr ?? "");
   const name = useStoreState((store) => store.settings.name);
-  const [sendName, setSendName] = useState<boolean | undefined>(lnUrlObject.commentAllowed !== undefined ? false : undefined);
+  const [sendName, setSendName] = useState<boolean | undefined>(
+    lnUrlObject.commentAllowed !== undefined ? false : undefined,
+  );
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const changePreferFiat = useStoreActions((store) => store.settings.changePreferFiat);
   const {
@@ -67,14 +72,14 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
     const payerData = lnUrlObject.payerData;
     const payerDataName = payerData?.name ?? null;
 
-    console.log(metadata);
+    console.log("printing metadeta", metadata);
 
     const text = metadata.find((m, i) => {
       return m[0]?.toLowerCase?.() === "text/plain";
     })?.[1];
 
     if (!text) {
-      throw new Error(t("payloadErrors.error1"));
+      console.error("some rarted company is probably not following the spec");
     }
 
     const longDesc = metadata.find((m, i) => {
@@ -87,7 +92,10 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
     const image = imageData?.[1];
     const imageMimeType = imageData?.[0];
 
-    const lightningAddress = metadata?.find((item) => item[0]?.toLowerCase?.() === "text/identifier" || item[0]?.toLowerCase?.() === "text/email");
+    const lightningAddress = metadata?.find(
+      (item) =>
+        item[0]?.toLowerCase?.() === "text/identifier" || item[0]?.toLowerCase?.() === "text/email",
+    );
 
     const cancel = () => {
       callback?.(null);
@@ -118,9 +126,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
           }
         }
 
-        const amountMsat = minSpendable !== maxSpendable
-          ? satoshiValue * 1000
-          : minSpendable;
+        const amountMsat = minSpendable !== maxSpendable ? satoshiValue * 1000 : minSpendable;
 
         Keyboard.dismiss();
         setDoRequestLoading(true);
@@ -141,25 +147,32 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
         onPaid(preimage);
       } catch (e) {
         Vibration.vibrate(50);
-        toast(
-          "Error: " + e.message,
-          12000,
-          "danger",
-          "Okay"
-        );
+        toast("Error: " + e.message, 12000, "danger", "Okay");
       }
       setDoRequestLoading(false);
-    }
+    };
 
     const onPressCurrencyButton = async () => {
       await changePreferFiat(!preferFiat);
-    }
+    };
 
-    const minSpendableFormatted = formatBitcoin(Long.fromValue(minSpendable ?? 0).div(1000), bitcoinUnit.key);
-    const minSpendableFiatFormatted = convertBitcoinToFiat(Long.fromValue(minSpendable ?? 0).div(1000), currentRate) + " " + fiatUnit;
+    const minSpendableFormatted = formatBitcoin(
+      Long.fromValue(minSpendable ?? 0).div(1000),
+      bitcoinUnit.key,
+    );
+    const minSpendableFiatFormatted =
+      convertBitcoinToFiat(Long.fromValue(minSpendable ?? 0).div(1000), currentRate) +
+      " " +
+      fiatUnit;
 
-    const maxSpendableFormatted = formatBitcoin(Long.fromValue(maxSpendable ?? 0).div(1000), bitcoinUnit.key);
-    const maxSpendableFiatFormatted = convertBitcoinToFiat(Long.fromValue(maxSpendable ?? 0).div(1000), currentRate) + " " + fiatUnit;
+    const maxSpendableFormatted = formatBitcoin(
+      Long.fromValue(maxSpendable ?? 0).div(1000),
+      bitcoinUnit.key,
+    );
+    const maxSpendableFiatFormatted =
+      convertBitcoinToFiat(Long.fromValue(maxSpendable ?? 0).div(1000), currentRate) +
+      " " +
+      fiatUnit;
 
     const serviceKey = identifyService(null, "", domain);
     let service;
@@ -170,84 +183,95 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
     return (
       <>
         {/* <View style={style.contentContainer}> */}
-          <View style={{ flexDirection: "row" }}>
-            {service &&
-              <Image
-                source={{ uri: service.image }}
-                style={{
-                  borderRadius: 24,
-                  marginRight: 10,
-                  marginLeft: 3,
-                  marginTop: -2.5,
-                }}
-                width={26}
-                height={26}
-              />
-            }
-            <Text style={style.text}>
-              <Text style={style.boldText}>{domain}</Text> {t("form.asksYouToPay")}
-            </Text>
-          </View>
-          <Text style={style.text}>
-            <Text style={style.boldText}>{t("form.description.title")}:</Text>{"\n"}
-            {longDesc || text}
-          </Text>
-          <Text style={style.inputLabel}>
-            <Text style={style.boldText}>{t("form.amount.title")}:</Text>{"\n"}
-            {minSpendableFormatted} ({minSpendableFiatFormatted})
-            {(minSpendable !== maxSpendable) &&
-              <Text>{" "}{t("form.amount.to")} {maxSpendableFormatted} ({maxSpendableFiatFormatted})</Text>
-            }
-          </Text>
-          {minSpendable !== maxSpendable &&
-            <View style={style.inputAmountContainer}>
-              <Input
-                onChangeText={preferFiat ?  onChangeFiatInput : onChangeBitcoinInput}
-                keyboardType="numeric"
-                returnKeyType="done"
-                placeholder={`${t("form.amount.placeholder")} (${preferFiat ? fiatUnit : bitcoinUnit.nice})`}
-                style={[style.input, { marginRight: PLATFORM === "macos" ? 90 : undefined }]}
-                value={preferFiat ? dollarValue : bitcoinValue}
-              />
-              <Button
-                small
-                style={style.inputCurrencyButton}
-                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-                onPress={onPressCurrencyButton}
-              >
-                <Text style={{fontSize: 10 }}>
-                  {preferFiat && <>{fiatUnit}</>}
-                  {!preferFiat && <>{bitcoinUnit.nice}</>}
-                </Text>
-              </Button>
-            </View>
-          }
-          {(payerData || typeof commentAllowed === "number" && commentAllowed > 0) &&
-            <PayerData
-              commentAllowed={commentAllowed}
-              domain={domain}
-              name={name}
-              payerDataName={payerDataName}
-              sendName={sendName}
-              setComment={setComment}
-              setSendName={setSendName}
-            />
-          }
-          {image &&
-            <ScaledImage
-              uri={`data:${imageMimeType},` + image}
-              height={160}
+        <View style={{ flexDirection: "row" }}>
+          {service && (
+            <Image
+              source={{ uri: service.image }}
               style={{
-                alignSelf: "center",
-                marginBottom: 32,
+                borderRadius: 24,
+                marginRight: 10,
+                marginLeft: 3,
+                marginTop: -2.5,
               }}
+              width={26}
+              height={26}
             />
-          }
+          )}
+          <Text style={style.text}>
+            <Text style={style.boldText}>{domain}</Text> {t("form.asksYouToPay")}
+          </Text>
+        </View>
+        <Text style={style.text}>
+          <Text style={style.boldText}>{t("form.description.title")}:</Text>
+          {"\n"}
+          {longDesc || text}
+        </Text>
+        <Text style={style.inputLabel}>
+          <Text style={style.boldText}>{t("form.amount.title")}:</Text>
+          {"\n"}
+          {minSpendableFormatted} ({minSpendableFiatFormatted})
+          {minSpendable !== maxSpendable && (
+            <Text>
+              {" "}
+              {t("form.amount.to")} {maxSpendableFormatted} ({maxSpendableFiatFormatted})
+            </Text>
+          )}
+        </Text>
+        {minSpendable !== maxSpendable && (
+          <View style={style.inputAmountContainer}>
+            <Input
+              onChangeText={preferFiat ? onChangeFiatInput : onChangeBitcoinInput}
+              keyboardType="numeric"
+              returnKeyType="done"
+              placeholder={`${t("form.amount.placeholder")} (${
+                preferFiat ? fiatUnit : bitcoinUnit.nice
+              })`}
+              style={[style.input, { marginRight: PLATFORM === "macos" ? 90 : undefined }]}
+              value={preferFiat ? dollarValue : bitcoinValue}
+            />
+            <Button
+              small
+              style={style.inputCurrencyButton}
+              hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+              onPress={onPressCurrencyButton}
+            >
+              <Text style={{ fontSize: 10 }}>
+                {preferFiat && <>{fiatUnit}</>}
+                {!preferFiat && <>{bitcoinUnit.nice}</>}
+              </Text>
+            </Button>
+          </View>
+        )}
+        {(payerData || (typeof commentAllowed === "number" && commentAllowed > 0)) && (
+          <PayerData
+            commentAllowed={commentAllowed}
+            domain={domain}
+            name={name}
+            payerDataName={payerDataName}
+            sendName={sendName}
+            setComment={setComment}
+            setSendName={setSendName}
+          />
+        )}
+        {image && (
+          <ScaledImage
+            uri={`data:${imageMimeType},` + image}
+            height={160}
+            style={{
+              alignSelf: "center",
+              marginBottom: 32,
+            }}
+          />
+        )}
         {/* </View> */}
         <View style={[style.actionBar, { flexGrow: 1 }]}>
           <Button
             success
-            disabled={!lightningReadyToSend || doRequestLoading || (minSpendable !== maxSpendable ? satoshiValue <= 0 : false)}
+            disabled={
+              !lightningReadyToSend ||
+              doRequestLoading ||
+              (minSpendable !== maxSpendable ? satoshiValue <= 0 : false)
+            }
             onPress={onPressPay}
             style={{
               marginLeft: 10,
@@ -261,7 +285,11 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
             }}
             small={true}
           >
-            {(!doRequestLoading && lightningReadyToSend) ? <Text>{t("pay.title")}</Text> : <ButtonSpinner />}
+            {!doRequestLoading && lightningReadyToSend ? (
+              <Text>{t("pay.title")}</Text>
+            ) : (
+              <ButtonSpinner />
+            )}
           </Button>
           <Button
             onPress={cancel}
@@ -280,6 +308,6 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
     Alert.alert(`${t("form.alert")}:\n\n${error.message}`);
     callback?.(null);
     navigation.goBack();
-    return (<></>)
+    return <></>;
   }
 }
