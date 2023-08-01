@@ -11894,10 +11894,9 @@ react-native-keychain@^8.1.1:
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-8.1.1.tgz#3bb5e37946b964a7bcf7df2fe470dd244e01a340"
   integrity sha512-8fxgeHKwGcL657eAYpdBTkDIxNhbIHI+kyyO0Yac2dgVAN184JoIwQcW2z6snahwDaCObQOu0biLFHnsH+4KSg==
 
-react-native-linear-gradient@^2.7.3:
-  version "2.7.3"
-  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.7.3.tgz#f77b71ed7c955e033f9cba5fc8478df57953eb27"
-  integrity sha512-iyJszlZ1Ech2c+2qV+isMvvJKyoctR9ashDkhJg1/cuSF0vQaeLV1FAYTT3qW9doxChJGxVAFfYoxotH0yi3Iw==
+"react-native-linear-gradient@github:friederbluemle/react-native-linear-gradient#35f987e61b0c485da57aa8e2e9e8db65faffe13e":
+  version "2.8.0"
+  resolved "https://codeload.github.com/friederbluemle/react-native-linear-gradient/tar.gz/35f987e61b0c485da57aa8e2e9e8db65faffe13e"
 
 react-native-localize@^2.2.6:
   version "2.2.6"
@@ -11997,9 +11996,9 @@ react-native-qrcode-svg@^6.2.0:
     prop-types "^15.8.0"
     qrcode "^1.5.1"
 
-"react-native-reanimated@git+https://github.com/hsjoberg/react-native-reanimated.git#e4d770c77d24d2dfd2bbbeb9defe2868eaeaac64":
-  version "3.3.0"
-  resolved "git+https://github.com/hsjoberg/react-native-reanimated.git#e4d770c77d24d2dfd2bbbeb9defe2868eaeaac64"
+"react-native-reanimated@git+https://github.com/hsjoberg/react-native-reanimated.git#e998c740a083f075e6845a9ed1c81d5df1c220fc":
+  version "3.4.0"
+  resolved "git+https://github.com/hsjoberg/react-native-reanimated.git#e998c740a083f075e6845a9ed1c81d5df1c220fc"
   dependencies:
     "@babel/plugin-transform-object-assign" "^7.16.7"
     "@babel/preset-typescript" "^7.16.7"
