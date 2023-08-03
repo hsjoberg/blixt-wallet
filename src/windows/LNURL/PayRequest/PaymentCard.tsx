@@ -72,7 +72,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
     const payerData = lnUrlObject.payerData;
     const payerDataName = payerData?.name ?? null;
 
-    console.log("printing metadeta", metadata);
+    console.log("printing metadata", metadata);
 
     const text = metadata.find((m, i) => {
       return m[0]?.toLowerCase?.() === "text/plain";
