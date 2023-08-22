@@ -269,7 +269,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
           selectedValue={outChannel}
           onValueChange={(n: Long) => setOutChannel(n)}
         >
-          <Picker.Item style={styles.itemStyle} label="--None--" value="" />
+          <Picker.Item style={styles.itemStyle} label="--Any--" value="" />
           {getChannels.map((n, i) => (
             <Picker.Item style={styles.itemStyle} label={choiceLabel(n)} key={i} value={n.chanId} />
           ))}
@@ -307,19 +307,18 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   );
 }
 
-// Add this at the end of your component file
 const styles = StyleSheet.create({
   pickerStyle: {
     width: 120,
-    backgroundColor: "#3f3f3f", // Dark gray
-    borderColor: "#ffffff", // White
+    backgroundColor: blixtTheme.gray, 
+    borderColor: blixtTheme.light, 
     borderWidth: 1,
     borderRadius: 5,
-    color: "#ffffff", // White color for text
+    color: blixtTheme.light, 
   },
   itemStyle: {
-    backgroundColor: "#1f1f1f", // Even darker gray
+    backgroundColor: blixtTheme.gray, 
     padding: 10,
-    color: "#ffffff", // White color for text
+    color: blixtTheme.light,
   },
 });
