@@ -693,7 +693,7 @@
       },
       "gossipSyncAndroid": {
         "title": "Scheduled LN channel sync",
-        "subtitle": "Runs in background every {{hours}} hours"
+        "subtitle": "Runs at Blixt startup"
       }
     },
     "display": {

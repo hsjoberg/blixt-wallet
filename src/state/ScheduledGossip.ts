@@ -40,14 +40,7 @@ export const scheduledGossipSync: IScheduledGossipSyncModel = {
       log.w("retrieveSyncInfo(): Platform does not support scheduled gossip sync yet");
       return;
     }
-
-    try {
-      actions.setLastScheduledSync(await getItemObject<number>(StorageItem.lastScheduledGossipSync));
-      actions.setLastScheduledSyncAttempt(await getItemObject<number>(StorageItem.lastScheduledGossipSyncAttempt));
-      actions.setWorkInfo(await injections.lndMobile.scheduledGossipSync.checkScheduledGossipSyncWorkStatus());
-    } catch (e) {
-      log.e("Error retrieving gossip file sync info", [e]);
-    }
+    //noop: scheduled gossip sync removed
   }),
 
   setSyncEnabled: thunk(async (actions, enabled) => {
