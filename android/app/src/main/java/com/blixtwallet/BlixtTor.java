@@ -77,7 +77,6 @@ public class BlixtTor extends ReactContextBaseJavaModule {
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         notificationManager = NotificationManagerCompat.from(context);
         notificationManager.createNotificationChannel(channel);
-        notificationManager.createNotificationChannel(channel);
       }
       return new Notification.Builder(context, BuildConfig.APPLICATION_ID)
         .setContentTitle("Tor")
