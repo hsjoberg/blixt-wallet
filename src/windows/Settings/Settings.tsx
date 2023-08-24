@@ -348,16 +348,9 @@ export default function Settings({ navigation }: ISettingsProps) {
 
   // Scheduled sync
   const workInfo = useStoreState((store) => store.scheduledSync.workInfo);
-  const gossipWorkInfo = useStoreState((store) => store.scheduledGossipSync.workInfo);
   const lastScheduledSync = useStoreState((store) => store.scheduledSync.lastScheduledSync);
   const lastScheduledSyncAttempt = useStoreState(
     (store) => store.scheduledSync.lastScheduledSyncAttempt,
-  );
-  const lastScheduledGossipSync = useStoreState(
-    (store) => store.scheduledGossipSync.lastScheduledSync,
-  );
-  const lastScheduledGossipSyncAttempt = useStoreState(
-    (store) => store.scheduledGossipSync.lastScheduledSyncAttempt,
   );
   const scheduledSyncEnabled = useStoreState((store) => store.settings.scheduledSyncEnabled);
   const scheduledGossipSyncEnabled = useStoreState(
@@ -408,20 +401,6 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onToggleScheduledGossipSyncEnabled = async () => {
     await setGossipSyncEnabled(!scheduledGossipSyncEnabled);
     await changeScheduledGossipSyncEnabled(!scheduledGossipSyncEnabled);
-  };
-  const onLongPressScheduledGossipSyncEnabled = async () => {
-    toast(
-      `${t("msg.status", { ns: namespaces.common })}: ${gossipWorkInfo}\n` +
-        `${t("msg.lastSyncAttempt", { ns: namespaces.common })}: ${formatISO(
-          fromUnixTime(lastScheduledGossipSyncAttempt),
-        )}\n` +
-        `${t("msg.lastSync", { ns: namespaces.common })}: ${formatISO(
-          fromUnixTime(lastScheduledGossipSync),
-        )}`,
-      0,
-      "success",
-      t("buttons.ok", { ns: namespaces.common }),
-    );
   };
 
   // Debug show startup info
@@ -2056,7 +2035,6 @@ ${t("experimental.tor.disabled.msg2")}`;
               style={style.listItem}
               icon={true}
               onPress={onToggleScheduledGossipSyncEnabled}
-              onLongPress={onLongPressScheduledGossipSyncEnabled}
             >
               <Left>
                 <Icon style={style.icon} type="MaterialCommunityIcons" name="cog-sync" />

@@ -19,7 +19,7 @@
     "android:testnet-debug": "react-native run-android --variant chaintestnetNormalDebug --appIdSuffix testnet.debug",
     "android:testnet": "react-native run-android --variant chaintestnetNormalRelease --appIdSuffix testnet",
     "android:mainnet-debug": "react-native run-android --variant chainmainnetNormalDebug --appIdSuffix debug",
-    "android:mainnet": "react-native run-android --variant chainmainnetNormalRelease",
+    "android:mainnet": "react-native run-android --variant Release",
     "android:mainnet-experiment1-debug": "react-native run-android --variant chainmainnetExperiment1Debug --appIdSuffix experiment1.debug",
     "android:mainnet-fakelnd": "react-native run-android --variant chainmainnetFakelndRelease --appIdSuffix fakelnd",
     "android:mainnet-fakelnd-debug": "react-native run-android --variant chainmainnetFakelndDebug --appIdSuffix fakelnd.debug",
