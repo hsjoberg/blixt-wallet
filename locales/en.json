@@ -281,6 +281,7 @@
       "howMuchCanBeReceived": "Can receive",
       "localReserve": "Local reserve",
       "commitmentFee": "Commitment fee",
+      "channelType": "Channel type",
       "pendingFunds": "Pending funds",
       "balanceInLimbo": "Limbo balance",
       "pendingHtlcs": "Pending HTLCs",
