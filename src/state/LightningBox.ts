@@ -34,7 +34,7 @@ export const lightningBox: ILightningBoxModel = {
     await actions.subscribeCustomMessages();
   }),
 
-  subscribeCustomMessages: thunk(async (_, _2, { getStoreActions, injections }) => {
+  subscribeCustomMessages: thunk(async (_, _2, { getStoreActions,  getStoreState, injections }) => {
     LndMobileEventEmitter.addListener("SubscribeCustomMessages", async (e: any) => {
       log.i("NEW CUSTOM MESSAGE");
       const customMessage = injections.lndMobile.index.decodeCustomMessage(e.data);
@@ -51,11 +51,13 @@ export const lightningBox: ILightningBoxModel = {
         if (payload.request === "LNURLPAY_REQUEST1") {
           log.d("request === LNURLPAY_REQUEST1");
 
+          const maxSendable = getStoreState().channel.remoteBalance;
+
           const lnurlPayResponse: ILNUrlPayRequest = {
             // callback: "N/A",
             tag: "payRequest",
             minSendable: 1 * 1000,
-            maxSendable: 1000 * 1000,
+            maxSendable: maxSendable.mul(1000).toNumber(),
             metadata: JSON.stringify([
               ["text/plain", "Cheers!"],
             ]),
