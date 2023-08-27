@@ -190,6 +190,7 @@ exports[`SendCamera renders correctly 1`] = `
               "top": -1,
             }
           }
+          onGestureCancel={[Function]}
           pointerEvents="box-none"
           sheetAllowedDetents="large"
           sheetCornerRadius={-1}

@@ -159,12 +159,12 @@ export const lightning: ILightningModel = {
         dispatch.onChain.initialize(),
         dispatch.transaction.checkOpenTransactions(),
         dispatch.scheduledSync.initialize(),
-        dispatch.scheduledGossipSync.initialize(),
         dispatch.notificationManager.initialize(),
         dispatch.clipboardManager.initialize(),
         dispatch.deeplinkManager.initialize(),
         dispatch.blixtLsp.initialize(),
         dispatch.channelRpcInterceptor.initialize(),
+        dispatch.lightningBox.initialize(),
       ]);
     } catch (e) {
       toast(e.message, 0, "danger", "OK");

@@ -86,15 +86,16 @@ export interface ILndMobileInjections {
     createIOSApplicationSupportAndLndDirectories: () => Promise<boolean>;
     TEMP_moveLndToApplicationSupport: () => Promise<boolean>;
     excludeLndICloudBackup: () => Promise<boolean>;
-
     addInvoice: (
       amount: number,
       memo: string,
       expiry?: number,
+      descriptionHash?: Uint8Array,
     ) => Promise<lnrpc.AddInvoiceResponse>;
     addInvoiceBlixtLsp: (args: IAddInvoiceBlixtLspArgs) => Promise<lnrpc.AddInvoiceResponse>;
     cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>;
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
+    disconnectPeer: (pubkey: string) => Promise<lnrpc.DisconnectPeerResponse>; // TODO
     decodePayReq: (bolt11: string) => Promise<lnrpc.PayReq>;
     getRecoveryInfo: () => Promise<lnrpc.GetRecoveryInfoResponse>;
     listUnspent: () => Promise<lnrpc.ListUnspentResponse>;
@@ -118,6 +119,13 @@ export interface ILndMobileInjections {
       multiPath?: boolean,
       maxLNFeePercentage?: number,
     ) => Promise<lnrpc.Payment>;
+    subscribeCustomMessages: () => Promise<string>; // TODO
+    decodeCustomMessage: (data: string) => lnrpc.CustomMessage; // TODO
+    sendCustomMessage: (
+      peerPubkey: string,
+      type: number,
+      dataString: string,
+    ) => Promise<lnrpc.SendCustomMessageResponse>; // TODO
   };
   channel: {
     channelBalance: () => Promise<lnrpc.ChannelBalanceResponse>;

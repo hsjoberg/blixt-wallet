@@ -20,7 +20,6 @@ jest.mock("./src/lndmobile/channel", () => require("./mocks/lndmobile/channel"))
 jest.mock("./src/lndmobile/onchain", () => require("./mocks/lndmobile/onchain"));
 jest.mock("./src/lndmobile/autopilot", () => require("./mocks/lndmobile/autopilot"));
 jest.mock("./src/lndmobile/scheduled-sync", () => require("./mocks/lndmobile/scheduled-sync"));
-jest.mock("./src/lndmobile/scheduled-gossip-sync", () => require("./mocks/lndmobile/scheduled-gossip-sync"));
 
 jest.mock("./src/utils/constants.ts", () => require("./mocks/utils/constants"));
 

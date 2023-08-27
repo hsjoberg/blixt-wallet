@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, useEffect } from "react";
-import { StyleProp, ViewStyle, InteractionManager } from "react-native";
-// import { RNCamera, CameraType } from "react-native-camera";
+import { StyleProp, ViewStyle, InteractionManager, StyleSheet } from "react-native";
+import { Camera, CameraType } from "react-native-camera-kit";
 import Container from "./Container";
 
 export interface ICamera {
@@ -8,10 +8,10 @@ export interface ICamera {
   children?: ReactNode | JSX.Element;
   cameraType?: keyof CameraType;
   onRead?: (text: string) => void;
-  onNotAuthorized?: () => void;
+  onNotAuthorized?: () => void; // TODO(hsjoberg):
   style?: StyleProp<ViewStyle>;
 }
-export default function Camera({ cameraType, children, onNotAuthorized, onRead, style, active }: ICamera) {
+export default function CameraComponent({ cameraType, children, onNotAuthorized, onRead, style, active }: ICamera) {
   const [start, setStart] = useState(false);
   active = active ?? true;
 
@@ -30,23 +30,14 @@ export default function Camera({ cameraType, children, onNotAuthorized, onRead, 
   }
 
   return (
-    <RNCamera
-      style={[{ width: "100%", height: "100%" }, style]}
-      androidCameraPermissionOptions={{
-        title: "Permission to use camera",
-        message: "Permission to use the camera is needed to be able to scan QR codes",
-        buttonPositive: "Okay",
-      }}
-      onBarCodeRead={(e) => onRead && onRead(e.data)}
-      captureAudio={false}
-      type={cameraType}
-    >
-      {({ status }) => {
-        if (status === "NOT_AUTHORIZED" && onNotAuthorized) {
-          onNotAuthorized();
-        }
-        return (children ?? <></>);
-      }}
-    </RNCamera>
+    <>
+      <Camera
+        style={[{ width: "100%", height: "100%" }, style]}
+        scanBarcode={true}
+        cameraType={cameraType}
+        onReadCode={(event: any) => onRead?.(event.nativeEvent.codeStringValue)}
+      />
+      {children}
+    </>
   );
 }

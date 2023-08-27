@@ -12,6 +12,7 @@ import { IChannelModel, channel } from "./Channel";
 import { IChannelRpcInterceptorModel, channelRpcInterceptor } from "./ChannelRpcInterceptor";
 import { IClipboardManagerModel, clipboardManager } from "./ClipboardManager";
 import { IContactsModel, contacts } from "./Contacts";
+import { ILightningBoxModel, lightningBox } from "./LightningBox";
 import { IDeeplinkManager, deeplinkManager } from "./DeeplinkManager";
 import { IFiatModel, fiat } from "./Fiat";
 import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
@@ -139,6 +140,7 @@ export interface IStoreModel {
   iCloudBackup: IICloudBackupModel;
   blixtLsp: IBlixtLsp;
   contacts: IContactsModel;
+  lightningBox: ILightningBoxModel;
 
   walletSeed?: string[];
   appVersion: number;
@@ -691,6 +693,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   blixtLsp,
   contacts,
   channelRpcInterceptor,
+  lightningBox,
 };
 
 export default model;

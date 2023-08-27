@@ -134,6 +134,7 @@ open class Lnd {
     "RouterSendPaymentV2": { req, cb in return LndmobileRouterSendPaymentV2(req, cb) },
     "SubscribeState": { req, cb in return LndmobileSubscribeState(req, cb) },
     "RouterTrackPaymentV2": { req, cb in return LndmobileRouterTrackPaymentV2(req, cb) },
+    "SubscribeCustomMessages": { req, cb in return LndmobileSubscribeCustomMessages(req, cb) },
     // channel
     //
     "CloseChannel": { req, cb in return LndmobileCloseChannel(req, cb)},
