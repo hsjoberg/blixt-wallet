@@ -11,9 +11,9 @@ import {
 import { Linking, NativeModules, PermissionsAndroid, Platform, StyleSheet } from "react-native";
 import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
 import React, { useLayoutEffect } from "react";
-import { camelCaseToSpace, formatISO, toast } from "../../utils";
+import { camelCaseToSpace, formatISO, hexToUint8Array, toast } from "../../utils";
 import { getChanInfo, verifyChanBackup } from "../../lndmobile/channel";
-import { getNodeInfo, resetMissionControl } from "../../lndmobile";
+import { getNodeInfo, resetMissionControl, xImportMissionControl } from "../../lndmobile";
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { useStoreActions, useStoreState } from "../../state/store";
 
@@ -34,6 +34,7 @@ import TorSvg from "./TorSvg";
 import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
+import { routerrpc } from "../../../proto/lightning";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -2420,6 +2421,41 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Right>
             </ListItem>
           )}
+          <ListItem
+            style={style.listItem}
+            icon={true}
+            onPress={async () => {
+              try {
+                console.log(`${dunderServer}/channel-liquidity`);
+                const res = await fetch(`${dunderServer}/channel-liquidity`);
+
+                const json: { pairs: any[] } = await res.json();
+
+                const x: routerrpc.IXImportMissionControlRequest["pairs"] = json.pairs.filter((c) => c.history.successAmtSat > 0).map((c) => {
+                  return {
+                    nodeFrom: hexToUint8Array(c.nodeFrom),
+                    nodeTo: hexToUint8Array(c.nodeTo),
+                    history: {
+                      successAmtSat: Long.fromValue(c.history.successAmtSat),
+                      successTime: Long.fromValue(c.history.successTime),
+                    }
+                  }
+                });
+                await xImportMissionControl(x);
+
+                toast("Done");
+              } catch (e: any) {
+                toast("Error: " + e.message, 10000, "danger");
+              }
+            }}
+          >
+            <Left>
+              <Icon style={style.icon} type="MaterialCommunityIcons" name="run-fast" />
+            </Left>
+            <Body>
+              <Text>Dunder MissionControl import</Text>
+            </Body>
+          </ListItem>
         </List>
       </Content>
     </Container>

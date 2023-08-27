@@ -87,6 +87,9 @@ open class Lnd {
     "WalletKitListUnspent": { bytes, cb in LndmobileWalletKitListUnspent(bytes, cb) },
     "RouterResetMissionControl": { bytes, cb in LndmobileRouterResetMissionControl(bytes, cb) },
     "QueryRoutes": { bytes, cb in LndmobileQueryRoutes(bytes, cb) },
+    "SendCustomMessage": { bytes, cb in LndmobileSendCustomMessage(bytes, cb) },
+    "RouterXImportMissionControl": { bytes, cb in LndmobileRouterXImportMissionControl(bytes, cb) },
+    "RouterQueryMissionControl": { bytes, cb in LndmobileRouterQueryMissionControl(bytes, cb) },
 
     // channel
     //
@@ -99,6 +102,7 @@ open class Lnd {
     "GetChanInfo": { bytes, cb in LndmobileGetChanInfo(bytes, cb) },
     "AbandonChannel": { bytes, cb in LndmobileAbandonChannel(bytes, cb) },
     "GetNetworkInfo": { bytes, cb in LndmobileGetNetworkInfo(bytes, cb) },
+    "ClosedChannels": { bytes, cb in LndmobileClosedChannels(bytes, cb) },
 
     // onchain
     //

@@ -688,6 +688,69 @@ export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> 
   return response;
 };
 
+export const subscribeCustomMessages = async () => {
+  const response = await sendStreamCommand<lnrpc.ISubscribeCustomMessagesRequest, lnrpc.SubscribeCustomMessagesRequest>({
+    request: lnrpc.SubscribeCustomMessagesRequest,
+    method: "SubscribeCustomMessages",
+    options: {},
+  }, false);
+  return response;
+}
+
+export const decodeCustomMessage = (data: string): lnrpc.CustomMessage => {
+  return decodeStreamResult<lnrpc.CustomMessage>({
+    response: lnrpc.CustomMessage,
+    base64Result: data,
+  });
+};
+
+/**
+ * @throws
+ */
+export const sendCustomMessage = async (peerPubkeyHex: string, type: number, dataString: string): Promise<lnrpc.SendCustomMessageResponse> => {
+  const response = await sendCommand<lnrpc.ISendCustomMessageRequest, lnrpc.SendCustomMessageRequest, lnrpc.SendCustomMessageResponse>({
+    request: lnrpc.SendCustomMessageRequest,
+    response: lnrpc.SendCustomMessageResponse,
+    method: "SendCustomMessage",
+    options: {
+      type,
+      peer: hexToUint8Array(peerPubkeyHex),
+      data: stringToUint8Array(dataString),
+    }
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+ export const xImportMissionControl = async (pairs: routerrpc.IPairHistory[]): Promise<routerrpc.XImportMissionControlResponse> => {
+  console.log("pairs", pairs);
+  const response = await sendCommand<routerrpc.IXImportMissionControlRequest, routerrpc.XImportMissionControlRequest, routerrpc.XImportMissionControlResponse>({
+    request: routerrpc.XImportMissionControlRequest,
+    response: routerrpc.XImportMissionControlResponse,
+    method: "RouterXImportMissionControl",
+    options: {
+      pairs,
+    },
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+ export const queryMissionControl = async (): Promise<routerrpc.QueryMissionControlResponse> => {
+  const response = await sendCommand<routerrpc.IQueryMissionControlRequest, routerrpc.IQueryMissionControlRequest, routerrpc.QueryMissionControlResponse>({
+    request: routerrpc.QueryMissionControlRequest,
+    response: routerrpc.QueryMissionControlResponse,
+    method: "RouterQueryMissionControl",
+    options: {},
+  });
+  return response;
+};
+
+
 export type IReadLndLogResponse = string[];
 /**
  * @throws
