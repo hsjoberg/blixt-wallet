@@ -1,4 +1,3 @@
-import { StorageItem, getItemObject } from "../storage/app";
 import { Thunk, thunk } from "easy-peasy";
 
 import { ILightningModel } from "./Lightning";
@@ -6,15 +5,16 @@ import { IStoreInjections } from "./store";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { bytesToHexString } from "../utils";
 import logger from "./../utils/log";
+import { IStoreModel } from "./index";
 
-const log = logger("ScheduledSync");
+const log = logger("ChannelRpcInterceptor");
 
 export interface IChannelRpcInterceptorModel {
-  initialize: Thunk<ILightningModel, void, IStoreInjections>;
+  initialize: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
 }
 
 export const channelRpcInterceptor: IChannelRpcInterceptorModel = {
-  initialize: thunk(async (actions, _, { getState, injections }) => {
+  initialize: thunk(async (actions, _, { getStoreState, injections }) => {
     LndMobileEventEmitter.addListener("ChannelAcceptor", async (event) => {
       try {
         let isZeroConfAllowed = false;
@@ -23,8 +23,10 @@ export const channelRpcInterceptor: IChannelRpcInterceptorModel = {
           event.data,
         );
 
+        log.i("channelAcceptRequest", [channelAcceptRequest]);
+
         if (!!channelAcceptRequest.wantsZeroConf) {
-          const zeroConfPeers = await getItemObject<string[]>(StorageItem.zeroConfPeers);
+          const zeroConfPeers = getStoreState().settings.zeroConfPeers;
 
           isZeroConfAllowed = !!zeroConfPeers
             ? zeroConfPeers.includes(bytesToHexString(channelAcceptRequest.nodePubkey))

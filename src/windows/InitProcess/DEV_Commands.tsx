@@ -8,15 +8,15 @@ import { CONSTANTS, JSHash } from "react-native-hash";
 import { DeviceEventEmitter, EventEmitter, Linking, NativeEventEmitter, NativeModules, ScrollView, StatusBar, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { StorageItem, getItem, setItem, setItemObject, storage } from "../../storage/app";
-import { bytesToHexString, bytesToString, stringToUint8Array, toast } from "../../utils";
-import { channelAcceptor, channelAcceptorResponse, closeChannel, decodeChannelAcceptRequest, decodeChannelEvent, listChannels, openChannel, pendingChannels } from "../../lndmobile/channel";
-import { checkStatus, connectPeer, decodePayReq, getInfo, getNetworkInfo, getNodeInfo, importGraph, listInvoices, listPeers, listUnspent, queryRoutes } from "../../lndmobile/index";
+import { bytesToHexString, bytesToString, hexToUint8Array, stringToUint8Array, toast } from "../../utils";
+import { channelAcceptor, channelAcceptorResponse, closeChannel, closedChannels, decodeChannelAcceptRequest, decodeChannelEvent, listChannels, openChannel, pendingChannels } from "../../lndmobile/channel";
+import { addInvoice, checkStatus, connectPeer, decodePayReq, getInfo, getNetworkInfo, getNodeInfo, importGraph, listInvoices, listPeers, listUnspent, queryMissionControl, queryRoutes, xImportMissionControl } from "../../lndmobile/index";
 import { clearTransactions, createTransaction, getTransaction, getTransactions } from "../../storage/database/transaction";
 import { deriveKey, derivePrivateKey, genSeed, initWallet, signMessage } from "../../lndmobile/wallet";
 import { getItemObject, getPin, getWalletPassword, setWalletPassword } from "../../storage/keystore";
-import { invoicesrpc, lnrpc } from "../../../proto/lightning";
+import { invoicesrpc, lnrpc, routerrpc } from "../../../proto/lightning";
 import { modifyStatus, queryScores, status } from "../../lndmobile/autopilot";
-import { newAddress, sendCoins } from "../../lndmobile/onchain";
+import { newAddress, sendCoins, getTransactions as getTransactionsOnchain } from "../../lndmobile/onchain";
 import { useStoreActions, useStoreState } from "../../state/store";
 
 import { Alert } from "../../utils/alert";
@@ -96,6 +96,51 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           }
 
           <Text style={{ width: "100%"}}>Random:</Text>
+          <Button small onPress={async () => {
+            // const res = await fetch("http://192.168.10.120:8095/foaf");
+            const res = await fetch("https://dunder.blixtwallet.com/channel-liquidity");
+            const json: { pairs: any[] } = await res.json();
+
+            const x: routerrpc.IXImportMissionControlRequest["pairs"] = json.pairs.filter((c) => c.history.successAmtSat > 0).map((c) => {
+              return {
+                nodeFrom: hexToUint8Array(c.nodeFrom),
+                nodeTo: hexToUint8Array(c.nodeTo),
+                history: {
+                  successAmtSat: Long.fromValue(c.history.successAmtSat),
+                  successTime: Long.fromValue(c.history.successTime),
+                }
+              }
+            });
+
+            // const x: routerrpc.IXImportMissionControlRequest["pairs"] = json.pairs.slice(0, 10).map((c) => {
+            //   return {
+            //     nodeFrom: hexToUint8Array(c.nodeFrom),
+            //     nodeTo: hexToUint8Array(c.nodeTo),
+            //     history: {
+            //       successAmtSat: Long.fromValue(c.history.successAmtSat),
+            //       successTime: Long.fromValue(c.history.successTime),
+            //     }
+            //   }
+            // });
+console.log(x);
+            console.log(await xImportMissionControl(x));
+          }}><Text style={styles.buttonText}>ximport</Text></Button>
+          <Button small onPress={async () => {
+            const c = await listChannels();
+            const mc = await queryMissionControl();
+            console.log(
+              mc.pairs.map((p) => {
+                return {
+                  nodeFrom: bytesToHexString(p.nodeFrom),
+                  nodeTo: bytesToHexString(p.nodeTo),
+                  history: {
+                    successAmtSat: Long.fromValue(p.history?.successAmtSat!).toNumber(),
+                    successTime: Long.fromValue(p.history?.successTime!).toNumber(),
+                  }
+                };
+              })
+            );
+          }}><Text style={styles.buttonText}>QueryMissionControl</Text></Button>
           <Button small onPress={async () => {
             console.error("error");
           }}><Text style={styles.buttonText}>console.error("error")</Text></Button>
@@ -747,6 +792,8 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             ["listUnspent", listUnspent],
             ["listInvoices", listInvoices],
             ["getNetworkInfo", getNetworkInfo],
+            ["getTransactions", getTransactionsOnchain],
+            ["closedChannels", closedChannels],
           ].map(([name, f], i) => {
             return (
               <Button small key={i} onPress={async () => {
@@ -765,6 +812,20 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               </Button>
             );
           })}
+
+          <Button small onPress={async () => {
+            try {
+              const response = await addInvoice(0, "AMP", undefined, true);
+              console.log(response);
+              console.log(response.paymentRequest);
+              setCommandResult(response.toJSON());
+              setError({});
+            }
+            catch (e) {
+              setError(e);
+              setCommandResult({});
+            }
+          }}><Text style={styles.buttonText}>addInvoice AMP</Text></Button>
 
           <Button small onPress={async () => {
             try {

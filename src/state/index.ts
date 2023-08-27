@@ -24,7 +24,6 @@ import { INotificationManagerModel, notificationManager } from "./NotificationMa
 import { IOnChainModel, onChain } from "./OnChain";
 import { IReceiveModel, receive } from "./Receive";
 import { IScheduledSyncModel, scheduledSync } from "./ScheduledSync";
-import { IScheduledGossipSyncModel, scheduledGossipSync } from "./ScheduledGossip";
 import { ISecurityModel, security } from "./Security";
 import { ISendModel, send } from "./Send";
 import { ISettingsModel, settings } from "./Settings";
@@ -130,7 +129,6 @@ export interface IStoreModel {
   settings: ISettingsModel;
   clipboardManager: IClipboardManagerModel;
   scheduledSync: IScheduledSyncModel;
-  scheduledGossipSync: IScheduledGossipSyncModel;
   lnUrl: ILNUrlModel;
   google: IGoogleModel;
   googleDriveBackup: IGoogleDriveBackupModel;
@@ -682,7 +680,6 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   settings,
   clipboardManager,
   scheduledSync,
-  scheduledGossipSync,
   lnUrl,
   google,
   googleDriveBackup,

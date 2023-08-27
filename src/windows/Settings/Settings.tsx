@@ -375,7 +375,6 @@ export default function Settings({ navigation }: ISettingsProps) {
   );
 
   const setSyncEnabled = useStoreActions((store) => store.scheduledSync.setSyncEnabled);
-  const setGossipSyncEnabled = useStoreActions((store) => store.scheduledGossipSync.setSyncEnabled);
   const onToggleScheduledSyncEnabled = async () => {
     if (scheduledSyncEnabled)
       Alert.alert(t("security.chainSync.dialog.title"), t("security.chainSync.dialog.msg"), [
@@ -410,7 +409,6 @@ export default function Settings({ navigation }: ISettingsProps) {
     );
   };
   const onToggleScheduledGossipSyncEnabled = async () => {
-    await setGossipSyncEnabled(!scheduledGossipSyncEnabled);
     await changeScheduledGossipSyncEnabled(!scheduledGossipSyncEnabled);
   };
 
@@ -2051,7 +2049,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               />
             </Right>
           </ListItem>
-          {Chain === "mainnet" &&
+          {Chain === "mainnet" && (
             <ListItem
               style={style.listItem}
               icon={true}
@@ -2067,7 +2065,9 @@ ${t("experimental.tor.disabled.msg2")}`;
                     : t("security.gossipSync.title")}
                 </Text>
                 {PLATFORM === "android" && (
-                  <Text note={true}>{t("security.gossipSyncAndroid.subtitle", { hours: "24" })}</Text>
+                  <Text note={true}>
+                    {t("security.gossipSyncAndroid.subtitle", { hours: "24" })}
+                  </Text>
                 )}
               </Body>
               <Right>
@@ -2077,14 +2077,27 @@ ${t("experimental.tor.disabled.msg2")}`;
                 />
               </Right>
             </ListItem>
-          }
-          <ListItem style={style.listItem} icon={true} onPress={changePersistentServicesEnabledPress}>
-            <Left><Icon style={style.icon} type="Entypo" name="globe" /></Left>
-            <Body>
-              <Text>{t("debug.persistentServices.title")}</Text>
-            </Body>
-            <Right><CheckBox checked={persistentServicesEnabled} onPress={changePersistentServicesEnabledPress} /></Right>
-          </ListItem>
+          )}
+          {PLATFORM === "android" && (
+            <ListItem
+              style={style.listItem}
+              icon={true}
+              onPress={changePersistentServicesEnabledPress}
+            >
+              <Left>
+                <Icon style={style.icon} type="Entypo" name="globe" />
+              </Left>
+              <Body>
+                <Text>{t("debug.persistentServices.title")}</Text>
+              </Body>
+              <Right>
+                <CheckBox
+                  checked={persistentServicesEnabled}
+                  onPress={changePersistentServicesEnabledPress}
+                />
+              </Right>
+            </ListItem>
+          )}
 
           <ListItem style={style.itemHeader} itemHeader={true}>
             <Text>{t("debug.title")}</Text>
@@ -2132,8 +2145,15 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>{t("debug.showNotifications.title")}</Text>
             </Body>
           </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={() => navigation.navigate("DebugLog")}>
-            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="format-list-bulleted" /></Left>
+          <ListItem
+            style={style.listItem}
+            button={true}
+            icon={true}
+            onPress={() => navigation.navigate("DebugLog")}
+          >
+            <Left>
+              <Icon style={style.icon} type="MaterialCommunityIcons" name="format-list-bulleted" />
+            </Left>
             <Body>
               <Text>{t("debug.showDebugLog.title")}</Text>
             </Body>
@@ -2367,13 +2387,6 @@ ${t("experimental.tor.disabled.msg2")}`;
                 onPress={onChangeMultiPartPaymentEnabledPress}
               />
             </Right>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={changeBimodalPathFindingEnabledPress}>
-            <Left><Icon style={style.icon} type="MaterialCommunityIcons" name="map-marker-path" /></Left>
-            <Body>
-              <Text>{t("debug.bimodalPathFinding.title")}</Text>
-            </Body>
-            <Right><CheckBox checked={(lndPathfindingAlgorithm === "apriori" || lndPathfindingAlgorithm === null) ? false : true} onPress={changeBimodalPathFindingEnabledPress} /></Right>
           </ListItem>
           <ListItem
             style={style.listItem}

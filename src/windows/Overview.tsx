@@ -223,7 +223,7 @@ function Overview({ navigation }: IOverviewProps) {
               {/* <AnimatedIcon
                 style={[style.onchainIcon, { opacity: iconOpacity }]} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
               /> */}
-              {(layoutMode === "mobile" && PLATFORM !== "macos") && (
+              {(layoutMode === "mobile") && (
                 <AnimatedIcon
                   style={[style.menuIcon]} type="Entypo" name="menu" onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
                 />

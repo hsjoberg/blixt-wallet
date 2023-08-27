@@ -168,6 +168,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
       </Blurmodal>
     );
   } catch (error) {
+    console.log(error.message);
     Alert.alert(`${t("unableToPay")}:\n\n${error.message}`);
     callback(null);
     navigation.goBack();

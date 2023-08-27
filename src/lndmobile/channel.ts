@@ -209,6 +209,21 @@ export const channelAcceptorResponse = async (pendingChanId: Uint8Array, accept:
   });
 };
 
+/*
+* @throws
+* FIXME: mock, fakelnd and injection
+*/
+export const closedChannels = async (chanId: Long): Promise<lnrpc.ClosedChannelsResponse> => {
+ const response = await sendCommand<lnrpc.IClosedChannelsRequest, lnrpc.ClosedChannelsRequest, lnrpc.ClosedChannelsResponse>({
+   request: lnrpc.ClosedChannelsRequest,
+   response: lnrpc.ClosedChannelsResponse,
+   method: "ClosedChannels",
+   options: {},
+ });
+ return response;
+};
+
+
 export const decodeChannelAcceptRequest = (data: string): lnrpc.ChannelAcceptRequest => {
   return decodeStreamResult<lnrpc.ChannelAcceptRequest>({
     response: lnrpc.ChannelAcceptRequest,
