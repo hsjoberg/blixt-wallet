@@ -515,7 +515,7 @@ autopilot.heuristic=preferential:0.05
 
   @objc(tailSpeedloaderLog:resolver:rejecter:)
   func tailSpeedloaderLog(numberOfLines: Int32, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-    let cachePath[0] = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+    let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
 
     let url = cachePath[0].appendingPathComponent("log", isDirectory: true)
                           .appendingPathComponent("speedloader.log", isDirectory: false)
@@ -575,10 +575,12 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(copySpeedloaderog:rejecter:)
+  @objc(copySpeedloaderLog:rejecter:)
   func copySpeedloaderLog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     // TODO(hsjoberg): error handling if file doesn't exist
     DispatchQueue.main.async {
+      let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+
       let url = cachePath[0].appendingPathComponent("log", isDirectory: true)
                             .appendingPathComponent("speedloader.log", isDirectory: false)
 #if os(iOS)
