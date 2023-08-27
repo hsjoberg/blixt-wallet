@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
 import { NativeModules, StyleSheet, TextInput, View } from "react-native";
-import { Text, Container, Button, Icon, Spinner } from "native-base";
+import { Text, Container, Button, Icon, Spinner, CheckBox, Right, InputGroup } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
 import Long from "long";
@@ -19,6 +19,7 @@ import Input from "../../components/Input";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { Alert } from "../../utils/alert";
+import { lnrpc } from "../../../proto/lightning";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -48,6 +49,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
   const torEnabled = useStoreState((store) => store.settings.torEnabled);
   const changeTorEnabled = useStoreActions((store) => store.settings.changeTorEnabled);
   const [withdrawAll, setWithdrawAll] = useState(false);
+  const [taprootChan, setTaprootChan] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -63,12 +65,14 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
         await connectAndOpenChannelAll({
           peer,
           feeRateSat: feeRate !== 0 ? feeRate : undefined,
+          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : undefined,
         });
       } else {
         await connectAndOpenChannel({
           peer,
           amount: satoshiValue,
           feeRateSat: feeRate !== 0 ? feeRate : undefined,
+          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : undefined,
         });
       }
       await getChannels(undefined);
@@ -201,6 +205,17 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
               {feeRate === 0 && <Text> auto</Text>}
             </View>
           ),
+        }, {
+          key: "ENABLE_TAPROOT_CHANS",
+          active: !withdrawAll,
+          title: `Taproot channel`,
+            component: (
+              <View style={{ alignItems:"flex-end", flex:1, marginRight: 15 }}>
+                <CheckBox checked={taprootChan} onPress={() => setTaprootChan(!taprootChan)} style={{ marginBottom: 10 }} />
+              </View>
+          // <Input placeholder={`${t("form.amount.placeholder")} ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} disabled={withdrawAll} />
+          )
+
         }]}
         buttons={[
           <Button key="OPEN_CHANNEL" onPress={onOpenChannelPress} block={true} primary={true} disabled={opening}>

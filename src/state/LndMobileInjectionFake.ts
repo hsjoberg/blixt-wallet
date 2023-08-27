@@ -135,11 +135,13 @@ export interface ILndMobileInjections {
       amount: number,
       privateChannel: boolean,
       feeRateSat?: number,
+      type?: lnrpc.CommitmentType,
     ) => Promise<lnrpc.ChannelPoint>;
     openChannelAll: (
       pubkey: string,
       privateChannel: boolean,
       feeRateSat?: number,
+      type?: lnrpc.CommitmentType,
     ) => Promise<lnrpc.ChannelPoint>;
     pendingChannels: () => Promise<lnrpc.PendingChannelsResponse>;
     subscribeChannelEvents: () => Promise<string>;

@@ -579,6 +579,7 @@ autopilot.heuristic=preferential:${Chain === "testnet" || Chain === "mainnet" ? 
 protocol.wumbo-channels=true
 protocol.zero-conf=true
 protocol.option-scid-alias=true
+protocol.simple-taproot-chans=true
 
 [routerrpc]
 routerrpc.estimator=${lndPathfindingAlgorithm}

@@ -20,12 +20,14 @@ export interface IOpenChannelPayload {
   peer: string;
   amount: number;
   feeRateSat?: number;
+  type?: lnrpc.CommitmentType;
 }
 
 export interface IOpenChannelPayloadAll {
   // <pubkey>@<ip>[:<port>]
   peer: string;
   feeRateSat?: number;
+  type?: lnrpc.CommitmentType;
 }
 
 export interface ICloseChannelPayload {
@@ -289,7 +291,7 @@ export const channel: IChannelModel = {
     actions.setChannelEvents(channelEvents);
   }),
 
-  connectAndOpenChannel: thunk(async (_, { peer, amount, feeRateSat }, { injections, getStoreActions }) => {
+  connectAndOpenChannel: thunk(async (_, { peer, amount, feeRateSat, type }, { injections, getStoreActions }) => {
     const { connectPeer } = injections.lndMobile.index;
     const { openChannel } = injections.lndMobile.channel;
     const [pubkey, host] = peer.split("@");
@@ -302,13 +304,13 @@ export const channel: IChannelModel = {
       }
     }
 
-    const result = await openChannel(pubkey, amount, true, feeRateSat);
+    const result = await openChannel(pubkey, amount, true, feeRateSat, type);
     getStoreActions().onChain.addToTransactionNotificationBlacklist(bytesToHexString(result.fundingTxidBytes.reverse()))
     log.d("openChannel", [result]);
     return result;
   }),
 
-  connectAndOpenChannelAll: thunk(async (_, { peer, feeRateSat }, { injections, getStoreActions }) => {
+  connectAndOpenChannelAll: thunk(async (_, { peer, feeRateSat, type }, { injections, getStoreActions }) => {
     const { connectPeer } = injections.lndMobile.index;
     const { openChannelAll } = injections.lndMobile.channel;
     const [pubkey, host] = peer.split("@");
@@ -321,7 +323,7 @@ export const channel: IChannelModel = {
       }
     }
 
-    const result = await openChannelAll(pubkey, true, feeRateSat);
+    const result = await openChannelAll(pubkey, true, feeRateSat, type);
     getStoreActions().onChain.addToTransactionNotificationBlacklist(bytesToHexString(result.fundingTxidBytes.reverse()))
     log.d("openChannel", [result]);
     return result;

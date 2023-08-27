@@ -6,7 +6,7 @@ import * as base64 from "base64-js";
 /**
  * @throws
  */
-export const openChannel = async (pubkey: string, amount: number, privateChannel: boolean, feeRateSat?: number): Promise<lnrpc.ChannelPoint> => {
+export const openChannel = async (pubkey: string, amount: number, privateChannel: boolean, feeRateSat?: number, type?: lnrpc.CommitmentType): Promise<lnrpc.ChannelPoint> => {
   const response = await sendCommand<lnrpc.IOpenChannelRequest, lnrpc.OpenChannelRequest, lnrpc.ChannelPoint>({
     request: lnrpc.OpenChannelRequest,
     response: lnrpc.ChannelPoint,
@@ -18,6 +18,7 @@ export const openChannel = async (pubkey: string, amount: number, privateChannel
       private: privateChannel,
       satPerByte: feeRateSat ? Long.fromValue(feeRateSat) : undefined,
       scidAlias: true,
+      commitmentType: type,
     },
   });
   return response;
@@ -26,7 +27,7 @@ export const openChannel = async (pubkey: string, amount: number, privateChannel
 /**
  * @throws
  */
-export const openChannelAll = async (pubkey: string, privateChannel: boolean, feeRateSat?: number): Promise<lnrpc.ChannelPoint> => {
+export const openChannelAll = async (pubkey: string, privateChannel: boolean, feeRateSat?: number, type?: lnrpc.CommitmentType): Promise<lnrpc.ChannelPoint> => {
   const response = await sendCommand<lnrpc.IOpenChannelRequest, lnrpc.OpenChannelRequest, lnrpc.ChannelPoint>({
     request: lnrpc.OpenChannelRequest,
     response: lnrpc.ChannelPoint,
@@ -38,6 +39,7 @@ export const openChannelAll = async (pubkey: string, privateChannel: boolean, fe
       private: privateChannel,
       satPerByte: feeRateSat ? Long.fromValue(feeRateSat) : undefined,
       scidAlias: true,
+      commitmentType: type,
     },
   });
   return response;
