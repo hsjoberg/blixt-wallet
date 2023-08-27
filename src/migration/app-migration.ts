@@ -298,15 +298,13 @@ export const appMigration: IAppMigration[] = [
       setItemObject<boolean>(StorageItem.persistentServicesEnabled, false);
     },
   },
-  // Version 35
+  // Version 36
   {
     async beforeLnd(db, i) {
       setItemObject<boolean>(StorageItem.scheduledGossipSyncEnabled, false);
-      await setItemObject(StorageItem.lastScheduledGossipSync, 0);
-      await setItemObject(StorageItem.lastScheduledGossipSyncAttempt, 0);
     }
   },
-  // Version 34
+  // Version 37
   {
     async beforeLnd(db, i) {
       setItemObject<boolean>(StorageItem.persistentServicesWarningShown, false);
