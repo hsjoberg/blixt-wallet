@@ -99,12 +99,23 @@ RCT_EXTERN_METHOD(
 )
 
 RCT_EXTERN_METHOD(
+  tailSpeedloaderLog: (NSInteger)numberOfLines
+  resolver: (RCTPromiseResolveBlock)resolve
+  rejecter: (RCTPromiseRejectBlock)reject
+)
+
+RCT_EXTERN_METHOD(
   observeLndLogFile: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject
 )
 
 RCT_EXTERN_METHOD(
   copyLndLog: (RCTPromiseResolveBlock)resolve
+  rejecter: (RCTPromiseRejectBlock)reject
+)
+
+RCT_EXTERN_METHOD(
+  copySpeedloaderLog: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject
 )
 

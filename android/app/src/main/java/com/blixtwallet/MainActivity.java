@@ -60,6 +60,7 @@ public class MainActivity extends ReactActivity {
   static int INTENT_COPYLNDLOG = 100;
   static int INTENT_EXPORTCHANBACKUP = 101;
   static int INTENT_EXPORTCHANBACKUPFILE = 102;
+  static int INTENT_COPYSPEEDLOADERLOG = 103;
 
   static byte[] tmpChanBackup;
 
@@ -83,9 +84,12 @@ public class MainActivity extends ReactActivity {
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == INTENT_COPYLNDLOG && resultCode == Activity.RESULT_OK) {
+    if ((requestCode == INTENT_COPYLNDLOG || requestCode == INTENT_COPYSPEEDLOADERLOG) && resultCode == Activity.RESULT_OK) {
       Uri destUri = data.getData();
-      File sourceLocation = new File(getFilesDir().toString() + "/logs/bitcoin/" + BuildConfig.CHAIN + "/lnd.log");
+      File sourceLocation = requestCode == INTENT_COPYLNDLOG
+        ? new File(getFilesDir().toString() + "/logs/bitcoin/" + BuildConfig.CHAIN + "/lnd.log")
+        : new File(getCacheDir().toString() + "/log/speedloader.log");
+
       try {
         InputStream in = new FileInputStream(sourceLocation);
         OutputStream out = getContentResolver().openOutputStream(destUri);

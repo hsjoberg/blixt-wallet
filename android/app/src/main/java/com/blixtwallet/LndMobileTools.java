@@ -294,6 +294,16 @@ class LndMobileTools extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
+  public void copySpeedloaderLog(Promise promise) {
+    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+    intent.setType("text/plain");
+    intent.putExtra(Intent.EXTRA_TITLE, "speedloader.log");
+    getReactApplicationContext().getCurrentActivity().startActivityForResult(intent, MainActivity.INTENT_COPYSPEEDLOADERLOG);
+    promise.resolve(true);
+  }
+
+  @ReactMethod
   public void tailLog(Integer numberOfLines, Promise promise) {
     File file = new File(
       getReactApplicationContext().getFilesDir().toString() +
@@ -361,7 +371,7 @@ class LndMobileTools extends ReactContextBaseJavaModule {
     final String logFile = logDir + "/lnd.log";
 
     FileInputStream stream = null;
-    while (true) {
+    while (true) { // TODO(hsjoberg): This can probably be removed
       try {
         stream = new FileInputStream(logFile);
       } catch (FileNotFoundException e) {
@@ -404,6 +414,57 @@ class LndMobileTools extends ReactContextBaseJavaModule {
     logObserver.startWatching();
     Log.i(TAG, "Started watching " + logFile);
     p.resolve(true);
+  }
+
+  @ReactMethod
+  public void tailSpeedloaderLog(Integer numberOfLines, Promise promise) {
+    File file = new File(
+      getReactApplicationContext().getCacheDir().toString() +
+      "/log/speedloader.log"
+    );
+
+    java.io.RandomAccessFile fileHandler = null;
+    try {
+      fileHandler = new java.io.RandomAccessFile(file, "r");
+      long fileLength = fileHandler.length() - 1;
+      StringBuilder sb = new StringBuilder();
+      int line = 0;
+
+      for(long filePointer = fileLength; filePointer != -1; filePointer--){
+        fileHandler.seek( filePointer );
+        int readByte = fileHandler.readByte();
+
+        if (readByte == 0xA) {
+          if (filePointer < fileLength) {
+            line = line + 1;
+          }
+        } else if (readByte == 0xD) {
+          if (filePointer < fileLength-1) {
+              line = line + 1;
+          }
+        }
+        if (line >= numberOfLines) {
+          break;
+        }
+        sb.append((char) readByte);
+      }
+
+      String lastLine = sb.reverse().toString();
+      promise.resolve(lastLine);
+    } catch (java.io.FileNotFoundException e) {
+      e.printStackTrace();
+      promise.reject(e);
+    } catch (java.io.IOException e) {
+      e.printStackTrace();
+      promise.reject(e);
+    }
+    finally {
+      if (fileHandler != null) {
+        try {
+          fileHandler.close();
+        } catch (java.io.IOException e) {}
+      }
+    }
   }
 
   private void readToEnd(BufferedReader buf, boolean emit) throws IOException {

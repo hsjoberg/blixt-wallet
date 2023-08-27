@@ -826,10 +826,14 @@
       },
       "lndLog": {
         "title": "Copy lnd log to local storage",
-        "subtitle": "Reached from /sdcard/BlixtWallet",
         "dialog": {
-          "alert": "Copied lnd log file",
           "error": "Error copying lnd log file."
+        }
+      },
+      "speedloaderLog": {
+        "title": "Copy LN channel sync log file to local storage",
+        "dialog": {
+          "error": "Error copying speedloader log file."
         }
       },
       "dev": {
@@ -933,6 +937,10 @@
       },
       "lndLog": {
         "title": "Read lnd log",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "Read LN channel sync log",
         "subtitle": ""
       },
       "keysend": {

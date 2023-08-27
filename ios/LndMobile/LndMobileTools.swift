@@ -479,6 +479,7 @@ autopilot.heuristic=preferential:0.05
       return
     }
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
+
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
     let url = paths[0].appendingPathComponent("lnd", isDirectory: true)
                       .appendingPathComponent("logs", isDirectory: true)
@@ -512,6 +513,22 @@ autopilot.heuristic=preferential:0.05
     resolve(true)
   }
 
+  @objc(tailSpeedloaderLog:resolver:rejecter:)
+  func tailSpeedloaderLog(numberOfLines: Int32, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    let cachePath[0] = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+
+    let url = cachePath[0].appendingPathComponent("log", isDirectory: true)
+                          .appendingPathComponent("speedloader.log", isDirectory: false)
+
+    do {
+      let data = try String(contentsOf: url)
+      let lines = data.components(separatedBy: .newlines)
+      resolve(lines.suffix(Int(numberOfLines)).joined(separator: "\n"))
+    } catch {
+      reject("error", error.localizedDescription, error)
+    }
+  }
+
   @objc(copyLndLog:rejecter:)
   func copyLndLog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
@@ -537,6 +554,48 @@ autopilot.heuristic=preferential:0.05
         let data = try Data(contentsOf: url)
         let savePanel = NSSavePanel()
         savePanel.nameFieldStringValue = "lnd.log"
+        if (savePanel.runModal() == NSApplication.ModalResponse.OK) {
+          let saveUrl = savePanel.url
+          NSLog(saveUrl?.path ?? "")
+          NSLog(saveUrl?.absoluteString ?? "")
+          NSLog(saveUrl?.relativeString ?? "")
+
+          if let saveUrlUnwrapped = saveUrl {
+            try data.write(to: saveUrlUnwrapped)
+          }
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+      } catch {
+        print("Error saving backup")
+        reject("error", error.localizedDescription, error)
+      }
+#endif
+    }
+  }
+
+  @objc(copySpeedloaderog:rejecter:)
+  func copySpeedloaderLog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    // TODO(hsjoberg): error handling if file doesn't exist
+    DispatchQueue.main.async {
+      let url = cachePath[0].appendingPathComponent("log", isDirectory: true)
+                            .appendingPathComponent("speedloader.log", isDirectory: false)
+#if os(iOS)
+      do {
+        let data = try String(contentsOf: url)
+        let activityController = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+        RCTSharedApplication()?.delegate?.window??.rootViewController?.present(activityController, animated: true, completion: {
+          resolve(true)
+        })
+      } catch {
+        reject("error", error.localizedDescription, error)
+      }
+#else
+      do {
+        let data = try Data(contentsOf: url)
+        let savePanel = NSSavePanel()
+        savePanel.nameFieldStringValue = "speedloader.log"
         if (savePanel.runModal() == NSApplication.ModalResponse.OK) {
           let saveUrl = savePanel.url
           NSLog(saveUrl?.path ?? "")

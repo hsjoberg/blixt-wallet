@@ -300,7 +300,17 @@ export default function Settings({ navigation }: ISettingsProps) {
       await NativeModules.LndMobileTools.copyLndLog();
     } catch (e) {
       console.error(e);
-      toast(t("miscelaneous.lndLog.dialog.error"), undefined, "danger");
+      toast(`${t("miscelaneous.lndLog.dialog.error")}: ${e.message}`, undefined, "danger");
+    }
+  };
+
+  // Copy speedloader log
+  const copySpeedloaderLog = async () => {
+    try {
+      await NativeModules.LndMobileTools.copySpeedloaderLog();
+    } catch (e) {
+      console.error(e);
+      toast(`${t("miscelaneous.speedloaderLog.dialog.error")}: ${e.message}`, undefined, "danger");
     }
   };
 
@@ -1908,6 +1918,16 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           )}
+          {scheduledGossipSyncEnabled && (PLATFORM === "android" || PLATFORM === "ios" || PLATFORM === "macos") && (
+            <ListItem style={style.listItem} icon={true} onPress={() => copySpeedloaderLog()}>
+              <Left>
+                <Icon style={style.icon} type="AntDesign" name="copy1" />
+              </Left>
+              <Body>
+                <Text>{t("miscelaneous.speedloaderLog.title")}</Text>
+              </Body>
+            </ListItem>
+          )}
           <ListItem
             style={style.listItem}
             button={true}
@@ -2194,6 +2214,20 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>{t("debug.lndLog.title")}</Text>
             </Body>
           </ListItem>
+          {scheduledGossipSyncEnabled &&
+            <ListItem
+              style={style.listItem}
+              icon={true}
+              onPress={async () => navigation.navigate("SpeedloaderLog")}
+            >
+              <Left>
+                <Icon style={style.icon} type="Ionicons" name="newspaper-outline" />
+              </Left>
+              <Body>
+                <Text>{t("debug.speedloaderLog.title")}</Text>
+              </Body>
+            </ListItem>
+          }
           <ListItem
             style={style.listItem}
             icon={true}

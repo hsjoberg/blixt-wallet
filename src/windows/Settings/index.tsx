@@ -17,6 +17,7 @@ import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
 import LightningPeers from "./LightningPeers";
 import ConnectToLightningPeer from "./ConnectToLightningPeer";
 import LndLog from "./LndLog";
+import SpeedloaderLog from "./SpeedloaderLog";
 import DunderDoctor from "./DunderDoctor";
 import ToastLog from "./ToastLog";
 import DebugLog from "./DebugLog";
@@ -42,6 +43,7 @@ export type SettingsStackParamList = {
   ConnectToLighningPeer: undefined;
   ChannelProvider: ISelectListNavigationProps<string>;
   LndLog: undefined;
+  SpeedloaderLog: undefined;
   DunderDoctor: undefined;
   ToastLog: undefined;
   DebugLog: undefined;
@@ -76,6 +78,7 @@ export default function SettingsIndex() {
       }} />
       <Stack.Screen name="ChannelProvider" component={SelectList} />
       <Stack.Screen name="LndLog" component={LndLog} />
+      <Stack.Screen name="SpeedloaderLog" component={SpeedloaderLog} />
       <Stack.Screen name="DunderDoctor" component={DunderDoctor} />
       <Stack.Screen name="ToastLog" component={ToastLog} />
       <Stack.Screen name="DebugLog" component={DebugLog} />
