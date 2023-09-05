@@ -46,6 +46,11 @@
       "msg3": "Il n'existe actuellement aucun support WatchTower pour surveiller vos canaux lorsque vous êtes hors ligne.",
       "msg4": "Je suis insouciant, continuer"
     },
+    "createWalletWithPassphrase": {
+      "title": "Définir la phrase de passe (25e mot pour chiffrer la graine)",
+      "invalidMessage": "Saisissez une phrase de passe valide",
+      "noLeadingTrailingSpaces": "Les espaces de début ou de fin ne sont pas autorisés"
+    },
     "language": {
       "title": "Choisir la langue"
     },
@@ -55,7 +60,8 @@
     "menu": {
       "enableTor": "Activer Tor",
       "disableTor": "Désactiver Tor",
-      "setBitcoinNode": "Sélectionner nœud Bitcoin"
+      "setBitcoinNode": "Sélectionner nœud Bitcoin",
+      "createWalletWithPassphrase": "Créer un portefeuille avec une phrase de passe"
     }
   },
   "footerNav": {
@@ -240,6 +246,9 @@
       },
       "description": {
         "title": "Message"
+      },
+      "feeEstimate": {
+        "title": "Estimation des frais"
       }
     }
   },
@@ -259,6 +268,7 @@
       "alias": "Alias",
       "node": "Nœud",
       "channelId": "Channel ID",
+      "channelPoint": "Point du canal",
       "status": "Statut",
       "statusActive": "Actif",
       "statusInactive": "Inactif",
@@ -271,6 +281,7 @@
       "howMuchCanBeReceived": "Peut recevoir",
       "localReserve": "Réserve locale",
       "commitmentFee": "Commission d'engagement",
+      "channelType": "Type de canal",
       "pendingFunds": "Fonds en attente",
       "balanceInLimbo": "Solde en limbo",
       "pendingHtlcs": "HTLC en attente",
@@ -677,6 +688,13 @@
           "title": "Non recommandée",
           "msg": "Avertissement . Il n'est pas recommandé de désactiver la synchronisation programmée de la chaine.\n\nAssurez-vous d'être à jour avec le réseau, sinon vous risquez de perdre vos fonds.\n\nNe le faites que si vous savez ce que vous faites."
         }
+      },
+      "gossipSync": {
+        "title": "Synchroniser les canaux LN au démarrage"
+      },
+      "gossipSyncAndroid": {
+        "title": "Synchronisation programmée des canaux LN",
+        "subtitle": "Lancement au démarrage de Blixt"
       }
     },
     "display": {
@@ -781,6 +799,15 @@
       "graphSync": {
         "title": "Attendez la synchronisation du graphique avant de payer",
         "subtitle": "La synchronisation des graphes conduit à des chemins de paiement optimaux"
+      },
+      "zeroConfPeers": {
+        "title": "Définir les pairs \"zéro conf\"",
+        "subtitle": "Ajouter des pubkeys de pairs que vous souhaitez autoriser les canaux \"zéro conf\"",
+        "setDialog": {
+          "title": "Les pairs \"zero conf\"",
+          "msg1": "Comma separated values of public keys, to allow zero conf channels from.",
+          "msg2": "Vous ferez confiance aux canaux de ces partenaires jusqu'à ce qu'il y ait au moins une confirmation de chaîne"
+        }
       }
     },
     "miscelaneous": {
@@ -799,10 +826,14 @@
       },
       "lndLog": {
         "title": "Copier le journal de lnd vers le stockage local",
-        "subtitle": "Atteint de /sdcard/BlixtWallet",
         "dialog": {
-          "alert": "Copie du fichier journal lnd",
           "error": "Erreur de copie du fichier journal lnd."
+        }
+      },
+      "speedloaderLog": {
+        "title": "Copier le fichier journal de synchronisation des canaux LN sur la mémoire locale",
+        "dialog": {
+          "error": "Erreur de copie du fichier journal du speedloader."
         }
       },
       "dev": {
@@ -888,6 +919,14 @@
         "title": "Afficher les notifications d'informations de démarrage",
         "subtitle": ""
       },
+      "showNotifications": {
+        "title": "Afficher les notifications pour cette session",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "Afficher le journal de débogage pour cette session",
+        "subtitle": ""
+      },
       "helpCencer": {
         "title": "Centre d'aide de LndMobile",
         "subtitle": ""
@@ -898,6 +937,10 @@
       },
       "lndLog": {
         "title": "Lire le journal lnd",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "Lecture du journal de synchronisation du canal LN",
         "subtitle": ""
       },
       "keysend": {
@@ -945,6 +988,15 @@
       },
       "bimodalPathFinding": {
         "title": "Activer la recherche de chemin bimodal"
+      },
+      "compactLndDatabases": {
+        "title": "Comprimer lnd base de données"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Appliquer la synchronisation \"gossip\" au démarrage"
+      },
+      "persistentServices": {
+        "title": "Activer le LND persistant et Tor (si activé)"
       }
     }
   },
@@ -1033,6 +1085,12 @@
     "title": "Service Oignon de Tor",
     "msg1": "Scannez ce code QR pour ouvrir un canal vers ce portefeuille.",
     "msg2": "Impossible de résoudre l'adresse de l'oignon"
+  },
+  "settings.toastLog": {
+    "title": "Journal des notifications"
+  },
+  "settings.debugLog": {
+    "title": "Journal de débogage"
   },
   "welcome.addFunds": {
     "title": "Ajouter des fonds",
