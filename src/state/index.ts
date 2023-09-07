@@ -613,7 +613,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
       ? await initWallet(
           seed,
           randomBase64,
-          100,
+          500,
           payload.restore.channelsBackup,
           payload.restore.aezeedPassphrase,
         )
