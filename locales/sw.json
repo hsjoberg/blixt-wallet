@@ -316,7 +316,7 @@
     "torPrompt": {
       "title": "Wezesha Tor",
       "text1": "Inaonekana unajaribu kufungua chaneli kwa node ambayo inaendeshwa chini ya huduma ya kitunguu cha Tor.",
-      "text2": "Ili kuunganisha,unahitaji kuwezesha Tor kwa Pochi ya Blixt."
+      "text2": "Ili kuunganisha, unahitaji kuwezesha Tor kwa Pochi ya Blixt."
     }
   },
   "onchain.onChainInfo": {
