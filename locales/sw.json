@@ -417,7 +417,7 @@
     },
     "unableToPay": "Haiwezekani kulipa",
     "payerData": {
-      "commentAllowed": "Maoni kwa {{target}} (max {{letters}} herufi)",
+      "commentAllowed": "Maoni kwa {{target}} (max {{letters}} letters)",
       "sendNameWithComment": "Tuma jina langu pamoja na maoni haya",
       "name": {
         "ask": "Tuma jina langu pamoja na malipo haya",
