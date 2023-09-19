@@ -25,6 +25,8 @@ import {
   resetMissionControl,
   sendPaymentSync,
   sendPaymentV2Sync,
+  subscribeCustomMessages,
+  decodeCustomMessage,
   startLnd,
   subscribeState,
   writeConfig,
@@ -119,8 +121,8 @@ export interface ILndMobileInjections {
       multiPath?: boolean,
       maxLNFeePercentage?: number,
     ) => Promise<lnrpc.Payment>;
-    subscribeCustomMessages: () => Promise<string>; // TODO
-    decodeCustomMessage: (data: string) => lnrpc.CustomMessage; // TODO
+    subscribeCustomMessages: () => Promise<string>;
+    decodeCustomMessage: (data: string) => lnrpc.CustomMessage;
     sendCustomMessage: (
       peerPubkey: string,
       type: number,
@@ -235,6 +237,8 @@ export default {
     readLndLog,
     sendPaymentSync,
     sendPaymentV2Sync,
+    subscribeCustomMessages,
+    decodeCustomMessage,
   },
   channel: {
     channelBalance,

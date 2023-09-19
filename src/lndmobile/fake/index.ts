@@ -160,6 +160,17 @@ export const getNetworkInfo = async (): Promise<lnrpc.NetworkInfo> => {
   return response;
 };
 
+// TODO(hsjoberg): lots of missing API funcs
+
+
+export const subscribeCustomMessages = async () => {
+  return "subscribing";
+}
+
+export const decodeCustomMessage = (data: string): lnrpc.CustomMessage => {
+    console.error("fake decodeCustomMessage not implemented");
+};
+
 /**
  * @throws
  */
