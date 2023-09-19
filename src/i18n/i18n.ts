@@ -12,6 +12,7 @@ import fr from "./fr";
 import nl from "./nl";
 import tlh from "./tlh";
 import sv from "./sv";
+import sw from "./sw";
 import ru from "./ru";
 import pt from "./pt";
 import vi from "./vi";
@@ -33,6 +34,7 @@ const createI18n = (language: string): i18nInstance => {
       nl,
       tlh,
       sv,
+      sw,
       ru,
       pt,
       vi,
