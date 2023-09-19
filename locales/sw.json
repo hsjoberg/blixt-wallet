@@ -44,7 +44,7 @@
       "msg1": "Pochi ya Blixt bado iko katika hatua za mwanzo za maendeleo.",
       "msg2": "Ikiwa utatumia pochi hii, hakikisha unaelewa kwamba unaweza kupoteza fedha zako.",
       "msg3": "Kwa sasa hakuna msaada wa WatchTower wa kufuatilia njia zako wakati wewe haupo mtandaoni.",
-      "msg4": "Mimi ni mkorofi, endelea"
+      "msg4": "Mimi ni mkorofi, tuendelee"
     },
     "createWalletWithPassphrase": {
       "title": "Weka neno la siri (neno la 25 la kuficha mbegu)",
@@ -70,7 +70,7 @@
   },
   "drawer": {
     "menu": {
-      "scan": "Skena",
+      "scan": "Skeni",
       "receive": "Pokea",
       "pasteFromClipboard": "Bandika kutoka Ubao wa Kubandika",
       "sendToLightningAddress": "Tuma kwa Anwani ya Umeme",
@@ -265,7 +265,7 @@
       "title": "Salio"
     },
     "channel": {
-      "alias": "Alama",
+      "alias": "Jina",
       "node": "Node",
       "channelId": "Kitambulisho cha Chaneli",
       "channelPoint": "Pointi ya Chaneli",
@@ -1087,7 +1087,7 @@
     "msg2": "Haiwezi kutatua anwani ya vitunguu"
   },
   "settings.toastLog": {
-    "title": "Kumbukumbu za Taarifa"
+    "title": "Kumbukumbu ya Taarifa"
   },
   "settings.debugLog": {
     "title": "Kumbukumbu za Ugunduzi"
