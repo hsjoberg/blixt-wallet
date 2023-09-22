@@ -16,6 +16,7 @@ import sw from "./sw";
 import ru from "./ru";
 import pt from "./pt";
 import vi from "./vi";
+import zh from "./zh";
 
 const createI18n = (language: string): i18nInstance => {
   const i18n = i18next.createInstance().use(initReactI18next);
@@ -38,6 +39,7 @@ const createI18n = (language: string): i18nInstance => {
       ru,
       pt,
       vi,
+      zh,
     },
   });
 
