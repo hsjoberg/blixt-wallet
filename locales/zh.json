@@ -1,0 +1,1181 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "闪电地址",
+      "nodeAlias": "节点别名",
+      "description": "描述",
+      "amount": "金额",
+      "fee": "费用",
+      "search": "搜索",
+      "viewInBlockExplorer": "在区块浏览器中查看"
+    },
+    "buttons": {
+      "ok": "好的",
+      "cancel": "取消",
+      "continue": "继续",
+      "skip": "跳过",
+      "proceed": "继续",
+      "back": "返回",
+      "no": "否",
+      "yes": "是",
+      "save": "保存",
+      "copy": "复制"
+    },
+    "msg": {
+      "status": "状态",
+      "error": "错误",
+      "warning": "警告",
+      "result": "结果",
+      "pending": "待定",
+      "done": "完成",
+      "dismiss": "忽略",
+      "lastSync": "上次同步",
+      "lastSyncAttempt": "上次同步尝试",
+      "clipboardCopy": "已复制到剪贴板。",
+      "written": "已写入",
+      "enabled": "已启用",
+      "disabled": "已停用"
+    }
+  },
+  "welcome.start": {
+    "title": "欢迎",
+    "createWallet": {
+      "title": "创建钱包",
+      "msg1": "Blixt Wallet 仍处于开发的早期阶段。",
+      "msg2": "如果你使用此钱包，请确保你了解你可能会丢失资金。",
+      "msg3": "目前不支持瞭望塔在你离线时监控你的通道。",
+      "msg4": "我鲁莽，继续"
+    },
+    "createWalletWithPassphrase": {
+      "title": "设置密语（第 25 个单词用于加密种子）",
+      "invalidMessage": "输入有效的密语",
+      "noLeadingTrailingSpaces": "不允许前导或尾随空格"
+    },
+    "language": {
+      "title": "选择语言"
+    },
+    "restoreWallet": {
+      "title": "恢复钱包"
+    },
+    "menu": {
+      "enableTor": "启用 Tor",
+      "disableTor": "停用 Tor",
+      "setBitcoinNode": "设置比特币节点",
+      "createWalletWithPassphrase": "创建带有密语的钱包"
+    }
+  },
+  "footerNav": {
+    "receive": "接收",
+    "send": "发送"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "扫描",
+      "receive": "接收",
+      "pasteFromClipboard": "从剪贴板粘贴",
+      "sendToLightningAddress": "发送到闪电地址",
+      "contactsAndServices": "联系人和服务",
+      "lightningBrowser": "闪电浏览器",
+      "onChainWallet": "链上",
+      "lightningChannels": "闪电通道",
+      "keysendExperiment": "Keysend 实验",
+      "showMore": "高级"
+    },
+    "madeInSweden": "用 ⚡ 在瑞典创造"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "钱包恢复正在进行中。",
+      "msg2": "钱包恢复已完成。",
+      "more": "更多信息"
+    },
+    "sendOnChain": {
+      "title": "欢迎使用 Blixt Wallet！",
+      "msg1": "首先，将链上资金发送到右侧的比特币地址。",
+      "msg2": "会自动为你打开一条通道。",
+      "msg3": "发送至少",
+      "alert": "比特币地址已复制到剪贴板"
+    },
+    "doBackup": {
+      "msg1": "感谢你使用 Blixt Wallet！",
+      "msg2": "我们建议你对钱包进行备份，以便你在丢失手机时可以恢复资金。",
+      "backup": "备份钱包"
+    },
+    "newChannelBeingOpened": {
+      "info": "一条新的通道正在开通中......",
+      "view": "查看"
+    },
+    "noTransactionsYet": "尚无交易"
+  },
+  "help": {
+    "title": "帮助",
+    "msg1": "如果你遇到问题或有反馈，你可以通过在 Github 上提交问题或通过电子邮件来联系 Blixt Wallet 开发人员。",
+    "msg2": "也欢迎你加入我们的公开 Telegram 聊天群。",
+    "msg3": "由于 Blixt Wallet 是一个新钱包，我们需要有关你可能遇到的常见问题的反馈。",
+    "telegramGroup": "Telegram 社群"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "同步正在进行中",
+      "title1": "同步已完成",
+      "msg1": "Blixt Wallet 目前正在同步区块链。",
+      "msg2": "一旦你的钱包与区块链同步，链上交易和资金将被识别，并可以从比特币链上部分看到。",
+      "msg3": "Blixt Wallet 已与区块链同步。",
+      "blockHeight": {
+        "title": "当前区块高度",
+        "msg1": "区块链同步进度"
+      }
+    },
+    "recoveryMode": {
+      "title": "恢复进度",
+      "msg1": "恢复已完成",
+      "msg2": "检查闪电通道和链上部分"
+    },
+    "lndLog": {
+      "show": "显示 lnd 日志",
+      "copy": "复制日志文本"
+    }
+  },
+  "transactionDetails": {
+    "title": "交易",
+    "date": "日期",
+    "duration": "支付发票所需时间",
+    "note": "笔记",
+    "website": "网站",
+    "type": "种类",
+    "lnurl": {
+      "messageFromWebsite": "消息来自",
+      "urlReceivedFromWebsite": "已接收 URL 来自",
+      "secretMessage": "秘密消息"
+    },
+    "payer": "付款方",
+    "recipient": "收款方",
+    "amountInFiatTimeOfPayment": "法币金额（付款时）",
+    "numberOfHops": "跳数",
+    "remotePubkey": "远程公钥",
+    "paymentHash": "付款哈希",
+    "preimage": "原像",
+    "status": "状态",
+    "goBack": "返回",
+    "button": {
+      "setNote": "设置笔记",
+      "cancelInvoice": "取消发票",
+      "showMap": "显示地图"
+    },
+    "setNoteDialog": {
+      "title": "笔记",
+      "text": "为这笔交易设置笔记"
+    }
+  },
+  "web.info": {
+    "title": "互动演示",
+    "pressToTry": "点击来尝试 Blixt Wallet！"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "接收"
+    },
+    "createInvoice": {
+      "title": "创建发票",
+      "alert": "在能够接收之前，你需要打开闪电通道。",
+      "lsp": {
+        "msg": "当支付此发票时，将打开 Dunder LSP 的付款通道。",
+        "msg1": "这是什么？"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "通道开通",
+      "msg": "为了接受该发票的付款，必须打开闪电网络上的通道。",
+      "msg1": "这需要一笔一次性费用，大约",
+      "alert": "无法连接 Dunder，请稍后重试。",
+      "proceed": "继续"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "金额",
+        "change": "更改法币单位",
+        "dunderPlaceholder": "至少"
+      },
+      "amountBitcoin": {
+        "title": "金额",
+        "change": "更改比特币单位",
+        "dunderPlaceholder": "至少"
+      },
+      "payer": {
+        "title": "付款方",
+        "placeholder": "用于记账"
+      },
+      "description": {
+        "title": "消息",
+        "placeholder": "给付款方的消息"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "关于 Dunder LSP",
+    "msg": "Dunder 是一家闪电服务提供商 (LSP)，当你没有足够的入账流动性时，它会自动为你打开通道。",
+    "msg1": "例如，当你第一次开始使用 Blixt Wallet 时，可能会出现这种情况。",
+    "msg2": "由于这需要进行链上交易，比特币交易费用将从收到的付款中扣除。 未来的支付将能够使用新开通的闪电网络支付通道。",
+    "msg3": "Dunder 是",
+    "msg4": "开源的",
+    "msg5": "软件，你可以在“设置”中更改默认服务提供商。"
+  },
+  "receive.receiveQr": {
+    "title": "接收",
+    "qr": {
+      "title": "扫描这个二维码",
+      "msg": "在 {{time}} 内到期"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "支付发票"
+    },
+    "form": {
+      "invoice": {
+        "title": "发票"
+      },
+      "amount": {
+        "title": "金额"
+      },
+      "recipient": {
+        "title": "收款方"
+      },
+      "nodeAlias": {
+        "title": "节点别名"
+      },
+      "description": {
+        "title": "消息"
+      },
+      "feeEstimate": {
+        "title": "费用估算"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "付款已发送"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "闪电通道"
+    },
+    "balance": {
+      "title": "余额"
+    },
+    "channel": {
+      "alias": "别名",
+      "node": "节点",
+      "channelId": "通道 ID",
+      "channelPoint": "通道点",
+      "status": "状态",
+      "statusActive": "活跃",
+      "statusInactive": "不活跃",
+      "statusPending": "待定",
+      "statusClosing": "正在关闭",
+      "statusForceClosing": "正在强制关闭",
+      "statusWaitingForClose": "正在等待关闭",
+      "capacity": "容量",
+      "howMuchCanBeSent": "可以发送",
+      "howMuchCanBeReceived": "可以接收",
+      "localReserve": "本地储备",
+      "commitmentFee": "承诺费",
+      "channelType": "通道种类",
+      "pendingFunds": "待定资金",
+      "balanceInLimbo": "停滞余额",
+      "pendingHtlcs": "待定 HTLCs",
+      "maturityHeight": "成熟高度",
+      "localCommitmentTxid": "本地承诺 TXID",
+      "remoteCommitmentTxid": "远程承诺 TXID",
+      "closeChannel": "关闭通道",
+      "forceClosePendingChannel": "强制关闭待定通道",
+      "closeChannelPrompt": {
+        "title": "关闭通道"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "打开通道"
+    },
+    "form": {
+      "title": "打开通道",
+      "channel": {
+        "title": "节点 URI",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "金额",
+        "placeholder": "金额"
+      },
+      "fee_rate": {
+        "title": "费率"
+      }
+    },
+    "torPrompt": {
+      "title": "启用 Tor",
+      "text1": "看起来你正在尝试与在 Tor 洋葱服务下运行的节点打开通道。",
+      "text2": "为了进行连接，你需要为 Blixt Wallet 启用 Tor。"
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "链上资金"
+    },
+    "address": {
+      "title": "将链上比特币发送到这个地址",
+      "alert": "已复制到剪贴板。"
+    },
+    "newAddress": {
+      "title": "生成新地址"
+    },
+    "withdraw": {
+      "title": "提取比特币"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "交易",
+    "txHash": "Id",
+    "timeStamp": "日期",
+    "amount": "金额",
+    "totalFees": "费用",
+    "label": "标签",
+    "destAddresses": "目的地",
+    "numConfirmations": "确认",
+    "blockHeight": "区块高度",
+    "blockHash": "区块哈希",
+    "rawTxHex": {
+      "title": "原始 tx 十六进制",
+      "msg": "点击复制"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "交易日志"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "提取比特币"
+    },
+    "form": {
+      "address": {
+        "title": "地址",
+        "placeholder": "比特币地址"
+      },
+      "amount": {
+        "title": "金额",
+        "placeholder": "金额",
+        "withdrawAll": "提取所有资金",
+        "all": "所有"
+      },
+      "feeRate": {
+        "title": "费率",
+        "auto": "自动"
+      },
+      "withdraw": {
+        "title": "提款",
+        "alert": "提款已成功"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "登录请求",
+      "msg": "你是否想登录",
+      "success": "验证于"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "正在打开入账通道"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "查看元数据",
+      "dialog": {
+        "title": "技术性元数据"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} 在你的通讯录中"
+      },
+      "add": {
+        "title": "添加到通讯录",
+        "msg": "你是否想要将 {{lightningAddress}} 添加到你的通讯录？"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "{{domain}} 的付款代码在你的通讯录中"
+      },
+      "add": {
+        "title": "添加到通讯录",
+        "msg": "你是否想要将此 {{domain}} 的付款代码添加到你的通讯录？"
+      }
+    },
+    "unableToPay": "无法支付",
+    "payerData": {
+      "commentAllowed": "给 {{target}} 的评论（最多 {{letters}} 字符）",
+      "sendNameWithComment": "将我的名称与此评论一起发送",
+      "name": {
+        "ask": "将我的名称与此付款一起发送",
+        "mandatory": "你的名称必须与此付款一起发送"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "付款缺少描述。"
+    },
+    "pay": {
+      "title": "支付",
+      "error": {
+        "mustProvideComment": "如果选择在此付款中包含你的名称，你必须提供评论"
+      }
+    },
+    "cancel": {
+      "title": "取消"
+    },
+    "form": {
+      "asksYouToPay": "要求你支付。",
+      "description": {
+        "title": "描述"
+      },
+      "amount": {
+        "title": "金额",
+        "to": "到",
+        "placeholder": "输入金额"
+      },
+      "alert": "无法支付"
+    },
+    "done": {
+      "message": {
+        "title": "消息来自"
+      },
+      "url": {
+        "description": "描述",
+        "domain": "已接收 URL 来自",
+        "done": {
+          "title": "完成"
+        },
+        "copy": {
+          "title": "复制到剪贴板",
+          "msg": "已复制到剪贴板。"
+        },
+        "open": {
+          "title": "打开浏览器"
+        }
+      },
+      "aes": {
+        "domain": "收到一条秘密加密消息，来自",
+        "description": "消息来自",
+        "secret": "秘密消息"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "关于闪电地址",
+      "msg1": "闪电地址",
+      "msg2": "是在闪电网络上向个人或服务付款的一种方式。",
+      "msg3": "它们看起来像电子邮件地址，但你向收件人发送不是电子邮件，而是在汇款。",
+      "msg4": "Blixt Wallet 完全支持发送到闪电地址，但",
+      "msg5": "通过闪电地址接收的方式仍在研究中。"
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "已将提款请求发送到 {{domain}}",
+      "addToContactList": {
+        "title": "添加到通讯录",
+        "msg": "你是否想要将此 {{domain}} 的提款代码添加到你的通讯录？",
+        "note": "在 {{domain}} 上的帐户"
+      }
+    },
+    "layout": {
+      "title": "提款请求",
+      "msg": "消息来自",
+      "dialog": {
+        "msg": "金额"
+      },
+      "dialog1": {
+        "minSat": "最低提款金额",
+        "maxSat": "最高提款金额",
+        "placeholder": "金额"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "联系人和服务",
+      "lightningAddressAlreadyExists": "已在你的通讯录中",
+      "nothingHereYet": "这里还什么都没有...",
+      "whyNotAdd": "要不添加一个闪电地址联络人通过",
+      "tappingHere": "点击这里"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "远程余额",
+        "error": "操作无效，联系人没有 LNURL-withdraw 代码"
+      },
+      "list": {
+        "pay": "付款至",
+        "account": "帐户于"
+      },
+      "send": {
+        "title": "发送",
+        "couldNotPay": "无法支付此 LNURL-pay 代码",
+        "invalidResponse": "该响应不是 LNURL-pay 响应（得到 {{response}}）",
+        "invalidOperation": "无效操作，联系人既没有 LUD-16 标识符也没有 LNURL-pay 代码"
+      },
+      "withdraw": {
+        "title": "提款",
+        "couldNotPay": "无法支付这个 LNURL-pay 代码",
+        "invalidResponse": "该响应不是 LNURL-pay 响应（得到 {{response}}）",
+        "invalidOperation": "操作无效，联系人没有 LNURL-withdraw 代码"
+      },
+      "deleteContact": {
+        "title": "删除联系人",
+        "msg": "你是否确定要删除联系人 {{contact}} ？"
+      },
+      "editContactLabel": {
+        "title": "联系人标签"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "你是否想要关闭浏览器？",
+    "home": "返回商店列表",
+    "placeholder": "在此输入 URL"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "已复制到剪贴板"
+    },
+    "dialog": {
+      "msg1": "欢迎来到 keysend 实验",
+      "msg2": "Keysend 允许你支付另一个 Blixt Wallet（或任何支持 keysend 的闪电节点），而无需发票。",
+      "msg3": "点击摄像头扫描其他钱包的二维码或在下面提供公钥和路由提示。"
+    },
+    "send": {
+      "title": "发送",
+      "msg": "Keysend 付款",
+      "error": {
+        "checkAmount": "检查金额",
+        "missingPubkey": "缺少公钥"
+      },
+      "alert": "支付成功"
+    },
+    "form": {
+      "amount": {
+        "title": "聪金额"
+      },
+      "pubkey": {
+        "title": "公钥",
+        "placeholder": "公钥"
+      },
+      "route": {
+        "title": "路由提示",
+        "placeholder": "路由提示"
+      },
+      "message": {
+        "title": "消息",
+        "placeholder": "在此输入聊天消息"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "设置",
+    "general": {
+      "title": "一般",
+      "name": {
+        "title": "名称",
+        "subtitle": "将在交易中使用",
+        "dialog": {
+          "msg": "选择将在交易中使用的名称。\n\n你的名称将出现在向你付款的人的发票中以及你的付款中。",
+          "accept": "设置名称"
+        }
+      },
+      "lang": {
+        "title": "语言",
+        "dialog": {
+          "title": "选择语言"
+        }
+      },
+      "pushNotification": {
+        "title": "推送通知",
+        "subtitle": "用于交易和通道事件"
+      },
+      "checkClipboard": {
+        "title": "检查剪贴板中的发票",
+        "subtitle": "自动检查剪贴板中的发票"
+      },
+      "saveGeolocation": {
+        "title": "保存交易地理位置",
+        "subtitle": "本地保存交易地理位置",
+        "logGranted": "已授予地理位置",
+        "logDenied": "地理定位权限已被拒绝"
+      },
+      "mapTheme": {
+        "title": "设置地图主题"
+      }
+    },
+    "wallet": {
+      "title": "钱包",
+      "seed": {
+        "show": {
+          "title": "显示助记词组",
+          "subtitle": "显示此钱包的 24 字种子",
+          "dialog": {
+            "title": "种子",
+            "alert": "已复制到剪贴板",
+            "copy": "复制种子"
+          }
+        },
+        "remove": {
+          "title": "从设备中删除助记词",
+          "subtitle": "从此设备中永久删除种子",
+          "dialog": {
+            "title": "移除种子",
+            "msg": "这将从该设备中永久删除种子。 仅当你备份了种子时才执行此操作！",
+            "accept": "删除种子"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "导出通道备份",
+          "alert": "文件已写入："
+        },
+        "verify": {
+          "title": "验证通道备份"
+        },
+        "googleCloud": {
+          "title": "Google Drive 通道备份",
+          "subtitle": "自动将通道备份到 Google Drive",
+          "alert": "已启用 Google Drive 备份"
+        },
+        "googleCloudForce": {
+          "title": "手动触发 Google Drive 备份",
+          "alert": "已将通道备份到 Google Drive"
+        },
+        "iCloud": {
+          "title": "iCloud 通道备份",
+          "subtitle": "自动将通道备份到 iCloud",
+          "alert": "iCloud 备份"
+        },
+        "iCloudForce": {
+          "title": "手动触发 iCloud 备份",
+          "alert": "已将通道备份到 iCloud"
+        },
+        "error": "备份出错"
+      }
+    },
+    "security": {
+      "title": "安全",
+      "pincode": {
+        "title": "使用 PIN 码登录"
+      },
+      "biometrics": {
+        "title": "登录使用",
+        "fingerprint": "指纹",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "预定区块链同步",
+        "subtitle": "每 2 小时在后台运行一次",
+        "dialog": {
+          "title": "不推荐",
+          "msg": "警告。不建议禁用预定区块链同步。\n\n确保你及时了解网络最新情况，否则你将面临损失资金的风险。\n\n仅当你知道自己在做什么时才这样做。"
+        }
+      },
+      "gossipSync": {
+        "title": "启动时同步闪电通道"
+      },
+      "gossipSyncAndroid": {
+        "title": "预定闪电通道同步",
+        "subtitle": "在 Blixt 启动时运行"
+      }
+    },
+    "display": {
+      "title": "显示",
+      "fiatUnit": {
+        "title": "更改法币单位"
+      },
+      "bitcoinUnit": {
+        "title": "更改比特币单位"
+      },
+      "onchainExplorer": {
+        "title": "区块浏览器",
+        "dialog": {
+          "title": "更改区块浏览器"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "比特币网络",
+      "node": {
+        "title": "比特币节点",
+        "subtitle": "设置连接的比特币节点 （BIP157）",
+        "setDialog": {
+          "title": "设置节点",
+          "info": "设置一个支持 BIP157 的比特币节点以建立连接。",
+          "leaveBlankToSearch": "留空可让 Blixt Wallet 在比特币网络上搜索有效节点。",
+          "longPressToReset": "要重置为默认节点 ({{defaultNode}})，请长按该设置。"
+        },
+        "restoreDialog": {
+          "title": "恢复节点",
+          "msg": "你是否想要恢复默认节点"
+        }
+      },
+      "restartDialog": {
+        "title": "必须重启",
+        "msg": "在应用新配置之前，必须重新启动 Blixt Wallet。",
+        "msg1": "你是否想现在执行？"
+      },
+      "rpc": {
+        "title": "设置 bitcoind RPC 主机"
+      },
+      "zmqRawBlock": {
+        "title": "设置 bitcoind ZMQ Raw Block 主机"
+      },
+      "zmqRawTx": {
+        "title": "设置 bitcoind ZMQ Raw Tx 主机"
+      },
+      "p2tr": {
+        "title": "启用通过 Taproot (P2TR) 进行链上接收"
+      }
+    },
+    "LN": {
+      "title": "闪电网络",
+      "network": {
+        "title": "显示网络信息",
+        "subtitle": ""
+      },
+      "node": {
+        "title": "显示节点数据",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "显示闪电对等点",
+        "subtitle": ""
+      },
+      "maxLNFeePercentage": {
+        "title": "设置最高付款费用",
+        "subtitle": "与金额成正比",
+        "dialog": {
+          "title": "设置最高闪电费用百分比"
+        },
+        "resetDialog": {
+          "title": "你是否想要将最高闪电费用恢复为默认值 ({{defaultMaxLNFee}}%)？"
+        }
+      },
+      "autopilot": {
+        "title": "自动打开通道",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "入账通道服务",
+        "subtitle": "使用入账通道服务接收付款",
+        "dialog": {
+          "title": "入账通道提供商",
+          "msg1": "选择一个入账通道服务提供商并点击继续。",
+          "msg2": "你的浏览器将打开相应提供商的网站，你可以在其中请求通道。",
+          "msg3": "完成后，你可以复制地址代码并/或使用 Blixt Wallet 打开链接。"
+        }
+      },
+      "LSP": {
+        "title": "设置 Dunder LSP 服务器",
+        "subtitle": "",
+        "setDialog": {
+          "title": "设置 Dunder 服务器",
+          "acept": "设置服务器"
+        },
+        "restoreDialog": {
+          "title": "恢复 Dunder 服务器",
+          "msg": "你是否想要恢复到默认的 Dunder 服务器"
+        }
+      },
+      "graphSync": {
+        "title": "付款前等待路径图同步",
+        "subtitle": "已同步路径图带来最佳支付路径"
+      },
+      "zeroConfPeers": {
+        "title": "设置零确认对等点",
+        "subtitle": "添加你想要允许零确认通道的对等点的公钥",
+        "setDialog": {
+          "title": "零确认对等点",
+          "msg1": "逗号分隔的公钥值，以允许零确认通道。",
+          "msg2": "在至少有一个链上确认之前，你将信任这些合作伙伴的通道"
+        }
+      }
+    },
+    "miscelaneous": {
+      "title": "杂项",
+      "about": {
+        "title": "关于",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "将应用程序日志复制到本地存储",
+        "subtitle": "",
+        "dialog": {
+          "alert": "已将应用程序日志复制到",
+          "error": "复制应用程序日志文件时出错。"
+        }
+      },
+      "lndLog": {
+        "title": "将 lnd 日志复制到本地存储",
+        "dialog": {
+          "error": "复制 lnd 日志文件时出错。"
+        }
+      },
+      "speedloaderLog": {
+        "title": "将闪电通道同步日志复制到本地存储",
+        "dialog": {
+          "error": "复制 speedloader 日志文件时出错。"
+        }
+      },
+      "dev": {
+        "title": "前往开发屏幕",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "自动隐藏已到期的发票",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "屏幕转换",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "使用钱包密钥签署消息",
+        "subtitle": "",
+        "dialog1": {
+          "title": "签署消息"
+        },
+        "dialog2": {
+          "title": "签名",
+          "alert": "已复制到剪贴板"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "设置 lnd 日志级别",
+        "dialog": {
+          "title": "设置 lnd 日志级别。",
+          "description": "日志级别更改 lnd 日志的详细程度，可通过设置进行访问。"
+        },
+        "restoreDialog": {
+          "title": "你是否想将 lnd 日志级别恢复到默认级别 ({{defaultLndLogLevel}})？"
+        }
+      }
+    },
+    "experimental": {
+      "title": "实验",
+      "LSP": {
+        "title": "启用 Dunder LSP",
+        "subtitle": "高度实验性。 帮助提供入账流动性的闪电服务提供商"
+      },
+      "MPP": {
+        "title": "启用多路径支付",
+        "subtitle": "付款最多可采用 16 条路径"
+      },
+      "tor": {
+        "title": "启用 Tor",
+        "subtitle": "",
+        "enabled": {
+          "title": "重启应用程序并启用 Tor",
+          "msg1": "启用 Tor 将使钱包通过 Tor 网络连接到其对等点（比特币和闪电网络对等点）。",
+          "msg2": "你还可以连接并与使用洋葱服务的闪电节点打开通道。",
+          "msg3": "警告：在没有 Tor 的情况下，Blixt Wallet 仍将与以下服务通信",
+          "msg4": "原因：为了获取法币/比特币汇率",
+          "msg5": "原因：为了获取当前区块高度",
+          "msg6": "原因：为了使用 Google Drive 备份",
+          "msg7": "原因：为了可靠的闪电节点",
+          "msg8": "WebLN 浏览器和 LNURL 也不会使用 Tor。"
+        },
+        "disabled": {
+          "title": "重启应用程序并停用 Tor",
+          "msg1": "停用 Tor 需要重新启动应用程序。",
+          "msg2": "你想继续吗？"
+        }
+      },
+      "onion": {
+        "title": "显示 Tor 洋葱服务",
+        "subtitle": "用于连接和与此钱包打开通道"
+      },
+      "keysend": {
+        "title": "Keysend 实验",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "发票有效期（秒）",
+        "subtitle": "{{expiry}} 秒"
+      }
+    },
+    "debug": {
+      "title": "调试",
+      "startup": {
+        "title": "显示启动信息通知",
+        "subtitle": ""
+      },
+      "showNotifications": {
+        "title": "显示此会话的通知",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "显示此会话的调试日志",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "LndMobile 帮助中心",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "诊断 Dunder 问题",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "阅读 lnd 日志",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "阅读闪电通道同步日志",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Keysend 测试",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Google Drive 测试平台",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "写入配置",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "激活演示模式",
+        "subtitle": "用于宣传。重启应用程序来重置"
+      },
+      "rescanWallet": {
+        "title": "重新扫描钱包",
+        "subtitle": "重新扫描区块链以查找钱包交易"
+      },
+      "getNodeInfo": {
+        "title": "获取节点信息"
+      },
+      "getChannelInfo": {
+        "title": "获取通道信息"
+      },
+      "demoMode": {
+        "title": "激活演示模式",
+        "subtitle": "用于宣传。重启应用程序来重置"
+      },
+      "disableGraphCache": {
+        "title": "禁用 lnd 路径图缓存"
+      },
+      "resetMissionControl": {
+        "title": "重置支付路由知识"
+      },
+      "strictGraphPruning": {
+        "title": "启用严格的闪电路径图剪枝"
+      },
+      "bimodalPathFinding": {
+        "title": "启用双模式寻路"
+      },
+      "compactLndDatabases": {
+        "title": "压缩 lnd 数据库"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "在启动时强制执行八卦同步"
+      },
+      "persistentServices": {
+        "title": "启用持久 LND 和 Tor（如果启用）"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "关于 Blixt Wallet",
+    "msg1": "版本",
+    "msg2": "作者：",
+    "msg3": "具有 MIT 许可证的开源钱包",
+    "msg4": "创建使用",
+    "msg5": "和其他开源软件",
+    "msg6": "Tor 图标已获得 CC BY 3.0 许可，通过",
+    "msg7": "许可证"
+  },
+  "settings.setPincode": {
+    "enter": "输入 PIN 码",
+    "confirm": "确认你的 PIN 码"
+  },
+  "settings.removePincodeAuth": {
+    "title": "输入当前的 PIN 码来移除 PIN 码"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "闪电对等点"
+    },
+    "alias": "节点别名",
+    "pubKey": "节点公钥",
+    "address": "节点地址",
+    "data": {
+      "title": "数据",
+      "bytesSent": "已发送字节数",
+      "bytesRecv": "已接收字节数"
+    },
+    "transfer": {
+      "title": "传输",
+      "satSent": "已发送聪金额",
+      "satRecv": "已接收聪金额"
+    },
+    "inbound": "传入",
+    "syncType": "同步种类",
+    "errors": "错误",
+    "disconnect": "断连对等点"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "连接闪电对等点"
+    },
+    "connect": {
+      "title": "节点 URI",
+      "placeholder": "对等点 URI",
+      "accept": "连接"
+    }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "闪电网络信息",
+    "avgChannelSize": "平均通道大小",
+    "avgOutDegree": "平均出度",
+    "graphDiameter": "路径图直径",
+    "medianChannelSizeSat": "中值通道尺寸",
+    "numChannels": "通道数量",
+    "numNodes": "节点数量",
+    "numZombieChans": "僵尸通道数量",
+    "totalNetworkCapacity": "网络总容量"
+  },
+  "settings.lightningNodeInfo": {
+    "title": "节点信息",
+    "alias": "节点别名",
+    "chain": "区块链",
+    "timestamp": "最佳标头时间戳",
+    "blockHash": "区块哈希",
+    "blockHeight": "区块高度",
+    "identityPubkey": "身份公钥",
+    "channel": {
+      "title": "通道数量",
+      "active": "活跃",
+      "inactive": "不活跃",
+      "pending": "待定"
+    },
+    "numPeers": "对等点数量",
+    "syncedToChain": "已同步至链上",
+    "syncedToGraph": "已同步至路径图",
+    "nodeUris": "节点 URI",
+    "version": "LND 版本",
+    "features": "节点特征"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Tor 洋葱服务",
+    "msg1": "扫描此二维码即可与此钱包打开通道",
+    "msg2": "无法解析洋葱地址"
+  },
+  "settings.toastLog": {
+    "title": "通知日志"
+  },
+  "settings.debugLog": {
+    "title": "调试日志"
+  },
+  "welcome.addFunds": {
+    "title": "添加资金",
+    "msg1": "要开始在 Blixt Wallet 上使用闪电",
+    "msg2": "请将比特币发送到以上的地址"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "自动打开通道",
+      "msg": "当有可用的链上资金时，打开通道"
+    },
+    "done": {
+      "title": "快完成了！",
+      "msg1": "以下是一些钱包设置，你可以根据自己的喜好进行设置",
+      "msg2": "当你准备就绪时，点击继续"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "重试",
+      "msg": "抱歉，你写错了顺序，请重试。"
+    },
+    "seed": {
+      "title": "确认你的种子"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "启用 Google Drive 备份",
+      "msg": "已启用 Google Drive 备份"
+    },
+    "backup": {
+      "title": "云备份",
+      "msg": "为了确保你的链下资金在设备丢失时保持安全，我们建议你将通道备份到 Google Drive。",
+      "msg1": "这将保留你的通道的加密备份，该备份只能与钱包种子一起使用。",
+      "msg2": "当你准备就绪时，点击继续。"
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "启用 iCloud 备份",
+      "msg": "已启用 iCloud 备份"
+    },
+    "backup": {
+      "title": "iCloud 备份",
+      "msg": "为了确保你的链下资金在设备丢失时保持安全，我们建议你将通道备份到 iCloud。",
+      "msg1": "这将保留你的通道的加密备份，该备份只能与钱包种子一起使用。",
+      "msg2": "当你准备就绪时，点击继续。"
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "恢复钱包",
+      "msg": "要恢复你的钱包，请写下种子中的每个单词，并用空格分隔。",
+      "msg1": "如果你想恢复你的闪电通道，你必须提供一个备份文件。",
+      "loading": "恢复钱包",
+      "passphrase": {
+        "placeholder": "密语（可选）"
+      },
+      "channel": {
+        "title": "通道备份",
+        "file": "选择磁盘上的通道备份文件",
+        "google": {
+          "title": "通过 Google Drive 恢复",
+          "alert": "通过 Google Drive 恢复失败了"
+        },
+        "iCloud": {
+          "title": "通过 iCloud 恢复",
+          "alert": "通过 iCloud 恢复失败了"
+        }
+      },
+      "seed": "种子必须正好是 24 个字"
+    },
+    "backup": {
+      "google": "通过 Google Drive 备份",
+      "iCloud": "通过 iCloud 备份"
+    }
+  },
+  "welcome.seed": {
+    "title": "欢迎使用 Blixt Wallet！",
+    "msg": "这是你的备份种子。",
+    "msg1": "将其写在一张纸上并将其存放在安全的地方。",
+    "msg2": "如果你无法访问钱包",
+    "msg3": "你也许可以通过使用备份种子来恢复你的资金。",
+    "msg4": "使用的种子标准是 aezeed。",
+    "button": "我已经把它写下了"
+  }
+}
