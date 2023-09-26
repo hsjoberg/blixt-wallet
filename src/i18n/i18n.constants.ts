@@ -134,6 +134,6 @@ export const languages: ILanguages = {
   },
   zh: {
     id: "zh",
-    name: "中国人",
+    name: "简体",
   },
 };
