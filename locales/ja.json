@@ -1,0 +1,1181 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "ライトニングアドレス",
+      "nodeAlias": "ノードエイリアス",
+      "description": "説明",
+      "amount": "金額",
+      "fee": "手数料",
+      "search": "検索",
+      "viewInBlockExplorer": "ブロックエクスプローラで表示"
+    },
+    "buttons": {
+      "ok": "わかった",
+      "cancel": "キャンセル",
+      "continue": "続く",
+      "skip": "スキップ",
+      "proceed": "進む",
+      "back": "戻る",
+      "no": "いいえ",
+      "yes": "はい",
+      "save": "保存",
+      "copy": "コピー"
+    },
+    "msg": {
+      "status": "状態",
+      "error": "エラー",
+      "warning": "警告",
+      "result": "結果",
+      "pending": "保留中",
+      "done": "終わり",
+      "dismiss": "却下する",
+      "lastSync": "最終同期",
+      "lastSyncAttempt": "最後の同期試行",
+      "clipboardCopy": "クリップボードにコピーされました",
+      "written": "書かれた",
+      "enabled": "有効",
+      "disabled": "無効"
+    }
+  },
+  "welcome.start": {
+    "title": "ようこそ",
+    "createWallet": {
+      "title": "ウォレットを作成",
+      "msg1": "Blixt Walletはまだ開発初期段階です。",
+      "msg2": "このウォレットを使用する場合、資金を失う可能性があることを理解してください。",
+      "msg3": "現在、オフラインの間にチャネルを監視するWatchTowerサポートはありません。",
+      "msg4": "私は無謀です、続行します"
+    },
+    "createWalletWithPassphrase": {
+      "title": "パスフレーズを設定します (シードを暗号化するための 25 番目の単語)",
+      "invalidMessage": "有効なパスフレーズを入力してください",
+      "noLeadingTrailingSpaces": "先頭または末尾のスペースは使用できません"
+    },
+    "language": {
+      "title": "言語を選択する"
+    },
+    "restoreWallet": {
+      "title": "ウォレットを復元する"
+    },
+    "menu": {
+      "enableTor": "Torを有効にする",
+      "disableTor": "Torを無効にする",
+      "setBitcoinNode": "ビットコインノードを設定する",
+      "createWalletWithPassphrase": "パスフレーズを使用してウォレットを作成する"
+    }
+  },
+  "footerNav": {
+    "receive": "受信",
+    "send": "送信"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "スキャン",
+      "receive": "受信",
+      "pasteFromClipboard": "クリップボードから貼り付け",
+      "sendToLightningAddress": "ライトニングアドレスに送信",
+      "contactsAndServices": "連絡先とサービス",
+      "lightningBrowser": "ライトニングブラウザ",
+      "onChainWallet": "オンチェーン",
+      "lightningChannels": "ライトニングチャネル",
+      "keysendExperiment": "KeySend実験",
+      "showMore": "詳細表示"
+    },
+    "madeInSweden": "スウェーデンで⚡で作成されました"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "ウォレットの復元が進行中です。",
+      "msg2": "ウォレットの復元が完了しました。",
+      "more": "詳細情報"
+    },
+    "sendOnChain": {
+      "title": "Blixt Walletへようこそ！",
+      "msg1": "始めるには、右側のビットコインアドレスにオンチェーンの資金を送信してください。",
+      "msg2": "自動的にチャネルが開設されます。",
+      "msg3": "少なくとも以下を送信してください",
+      "alert": "ビットコインアドレスがクリップボードにコピーされました"
+    },
+    "doBackup": {
+      "msg1": "Blixt Walletをご利用いただきありがとうございます！",
+      "msg2": "電話の紛失の場合に資金を復元できるように、ウォレットのバックアップを作成することをお勧めします。",
+      "backup": "ウォレットのバックアップ"
+    },
+    "newChannelBeingOpened": {
+      "info": "新しいチャネルの開設が進行中です...",
+      "view": "表示"
+    },
+    "noTransactionsYet": "まだトランザクションはありません"
+  },
+  "help": {
+    "title": "ヘルプ",
+    "msg1": "問題が発生した場合やフィードバックがある場合は、GitHubでイシューを報告するか、メールでお問い合わせいただけます。",
+    "msg2": "また、公開テレグラムチャットグループにもご参加いただけます。",
+    "msg3": "Blixt Walletは新しいウォレットですので、お客様が遭遇する一般的な問題についてのフィードバックが必要です。",
+    "telegramGroup": "テレグラムグループ"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "同期中",
+      "title1": "同期完了",
+      "msg1": "Blixt Walletは現在ブロックチェーンと同期しています。",
+      "msg2": "ウォレットがブロックチェーンと同期すると、オンチェーントランザクションと資金が認識され、ビットコインのオンチェーンセクションから確認できます。",
+      "msg3": "Blixt Walletはブロックチェーンと同期しています。",
+      "blockHeight": {
+        "title": "現在のブロック高",
+        "msg1": "チェーン同期の進行状況"
+      }
+    },
+    "recoveryMode": {
+      "title": "復元中",
+      "msg1": "復元が完了しました",
+      "msg2": "ライトニングチャネルとオンチェーンセクションを確認してください"
+    },
+    "lndLog": {
+      "show": "lndログの表示",
+      "copy": "ログテキストのコピー"
+    }
+  },
+  "transactionDetails": {
+    "title": "トランザクション",
+    "date": "日付",
+    "duration": "請求書の支払いにかかった時間",
+    "note": "ノート",
+    "website": "ウェブサイト",
+    "type": "タイプ",
+    "lnurl": {
+      "messageFromWebsite": "ウェブサイトからのメッセージ",
+      "urlReceivedFromWebsite": "ウェブサイトから受信したURL",
+      "secretMessage": "秘密メッセージ"
+    },
+    "payer": "支払い元",
+    "recipient": "受取人",
+    "amountInFiatTimeOfPayment": "支払時の法定通貨での金額",
+    "numberOfHops": "ホップの数",
+    "remotePubkey": "リモートパブリックキー",
+    "paymentHash": "支払いハッシュ",
+    "preimage": "プリイメージ",
+    "status": "ステータス",
+    "goBack": "戻る",
+    "button": {
+      "setNote": "ノートを設定",
+      "cancelInvoice": "請求書をキャンセル",
+      "showMap": "地図を表示"
+    },
+    "setNoteDialog": {
+      "title": "ノート",
+      "text": "このトランザクションにノートを設定"
+    }
+  },
+  "web.info": {
+    "title": "インタラクティブデモ",
+    "pressToTry": "Blixt Walletを試してみる"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "受信"
+    },
+    "createInvoice": {
+      "title": "請求書を作成",
+      "alert": "受信するにはライトニングチャネルを開設する必要があります。",
+      "lsp": {
+        "msg": "この請求書が支払われると、Dunder LSPによる支払いチャネルが開設されます。",
+        "msg1": "これは何ですか？"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "チャネル開設",
+      "msg": "この請求書の支払いを受けるには、ライトニングネットワーク上でチャネルを開設する必要があります。",
+      "msg1": "これには一回限りの手数料がかかります（おおよそ）",
+      "alert": "Dunderへの接続に失敗しました。後でもう一度お試しください。",
+      "proceed": "続行"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "金額",
+        "change": "法定通貨ユニットの変更",
+        "dunderPlaceholder": "少なくとも"
+      },
+      "amountBitcoin": {
+        "title": "金額",
+        "change": "ビットコインユニットの変更",
+        "dunderPlaceholder": "少なくとも"
+      },
+      "payer": {
+        "title": "支払い元",
+        "placeholder": "帳簿用"
+      },
+      "description": {
+        "title": "メッセージ",
+        "placeholder": "支払い元へのメッセージ"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "Dunder LSPについて",
+    "msg": "Dunderは、インバウンドの流動性が不足している場合に自動的にチャネルを開設するライトニングサービスプロバイダ（LSP）です。",
+    "msg1": "これは、Blixt Walletを初めて使用する場合などに該当する場合があります。",
+    "msg2": "これにはオンチェーンのトランザクションが必要ですので、受信した支払いからビットコイントランザクション手数料が差し引かれます。将来の支払いでは、新たに開設されたライトニングネットワークの支払いチャネルが使用されます。",
+    "msg3": "Dunderは",
+    "msg4": "オープンソース",
+    "msg5": "ソフトウェアで、設定でデフォルトのサービスプロバイダを変更できます。"
+  },
+  "receive.receiveQr": {
+    "title": "受信",
+    "qr": {
+      "title": "このQRコードをスキャン",
+      "msg": "{{time}}で期限切れ"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "請求書を支払う"
+    },
+    "form": {
+      "invoice": {
+        "title": "請求書"
+      },
+      "amount": {
+        "title": "金額"
+      },
+      "recipient": {
+        "title": "受取人"
+      },
+      "nodeAlias": {
+        "title": "ノードエイリアス"
+      },
+      "description": {
+        "title": "メッセージ"
+      },
+      "feeEstimate": {
+        "title": "手数料見積り"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "支払い完了"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "ライトニングチャネル"
+    },
+    "balance": {
+      "title": "残高"
+    },
+    "channel": {
+      "alias": "エイリアス",
+      "node": "ノード",
+      "channelId": "チャネルID",
+      "channelPoint": "チャネルポイント",
+      "status": "ステータス",
+      "statusActive": "アクティブ",
+      "statusInactive": "非アクティブ",
+      "statusPending": "保留中",
+      "statusClosing": "クロージング中",
+      "statusForceClosing": "強制クローズ中",
+      "statusWaitingForClose": "クローズ待ち",
+      "capacity": "容量",
+      "howMuchCanBeSent": "送信可能",
+      "howMuchCanBeReceived": "受信可能",
+      "localReserve": "ローカルリザーブ",
+      "commitmentFee": "コミットメント手数料",
+      "channelType": "チャネルタイプ",
+      "pendingFunds": "保留中の資金",
+      "balanceInLimbo": "リンボ残高",
+      "pendingHtlcs": "保留中のHTLC",
+      "maturityHeight": "成熟高",
+      "localCommitmentTxid": "ローカルコミットメントTXID",
+      "remoteCommitmentTxid": "リモートコミットメントTXID",
+      "closeChannel": "チャネルをクローズ",
+      "forceClosePendingChannel": "強制クローズ保留チャネル",
+      "closeChannelPrompt": {
+        "title": "チャネルをクローズ"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "チャネルを開設"
+    },
+    "form": {
+      "title": "チャネルを開設",
+      "channel": {
+        "title": "ノードURI",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "金額",
+        "placeholder": "金額"
+      },
+      "fee_rate": {
+        "title": "手数料レート"
+      }
+    },
+    "torPrompt": {
+      "title": "Torを有効にする",
+      "text1": "Torオニオンサービスの下で稼働しているノードにチャネルを開設しようとしているようです。",
+      "text2": "接続するには、Blixt WalletでTorを有効にする必要があります。"
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "オンチェーン資金"
+    },
+    "address": {
+      "title": "ビットコインをオンチェーンで送信するためのアドレス",
+      "alert": "クリップボードにコピーされました。"
+    },
+    "newAddress": {
+      "title": "新しいアドレスを生成"
+    },
+    "withdraw": {
+      "title": "コインを引き出す"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "トランザクション",
+    "txHash": "ID",
+    "timeStamp": "日時",
+    "amount": "金額",
+    "totalFees": "手数料",
+    "label": "ラベル",
+    "destAddresses": "宛先",
+    "numConfirmations": "確認数",
+    "blockHeight": "ブロック高",
+    "blockHash": "ブロックハッシュ",
+    "rawTxHex": {
+      "title": "生のトランザクションヘキサ",
+      "msg": "コピーするにはタップ"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "トランザクションログ"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "コインを引き出す"
+    },
+    "form": {
+      "address": {
+        "title": "アドレス",
+        "placeholder": "ビットコインアドレス"
+      },
+      "amount": {
+        "title": "金額",
+        "placeholder": "金額",
+        "withdrawAll": "全ての資金を引き出す",
+        "all": "全て"
+      },
+      "feeRate": {
+        "title": "手数料レート",
+        "auto": "自動"
+      },
+      "withdraw": {
+        "title": "引き出し",
+        "alert": "引き出しが成功しました"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "ログインリクエスト",
+      "msg": "次にログインしますか？",
+      "success": "認証済み"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "インバウンドチャネルの開設中"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "メタデータを表示",
+      "dialog": {
+        "title": "テクニカルメタデータ"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} はお客様の連絡先リストに既に存在しています"
+      },
+      "add": {
+        "title": "連絡先リストに追加",
+        "msg": "{{lightningAddress}} をお客様の連絡先リストに追加しますか？"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "{{domain}} の支払いコードはお客様の連絡先リストに既に存在しています"
+      },
+      "add": {
+        "title": "連絡先リストに追加",
+        "msg": "この支払いコードを{{domain}} の連絡先リストに追加しますか？"
+      }
+    },
+    "unableToPay": "支払いできません",
+    "payerData": {
+      "commentAllowed": "{{target}} へのコメント（最大 {{letters}} 文字）",
+      "sendNameWithComment": "このコメントと共に私の名前を送信",
+      "name": {
+        "ask": "この支払いと一緒に私の名前を送信",
+        "mandatory": "この支払いと一緒には必ずお客様の名前を送信してください"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "支払いに説明がありません。"
+    },
+    "pay": {
+      "title": "支払う",
+      "error": {
+        "mustProvideComment": "この支払いにお客様の名前を含める場合、コメントを提供する必要があります"
+      }
+    },
+    "cancel": {
+      "title": "キャンセル"
+    },
+    "form": {
+      "asksYouToPay": "から支払いを求められました。",
+      "description": {
+        "title": "説明"
+      },
+      "amount": {
+        "title": "金額",
+        "to": "宛先",
+        "placeholder": "金額を入力"
+      },
+      "alert": "支払いできません"
+    },
+    "done": {
+      "message": {
+        "title": "メッセージ元"
+      },
+      "url": {
+        "description": "説明",
+        "domain": "受信元URL",
+        "done": {
+          "title": "完了"
+        },
+        "copy": {
+          "title": "クリップボードにコピー",
+          "msg": "クリップボードにコピーされました。"
+        },
+        "open": {
+          "title": "ブラウザで開く"
+        }
+      },
+      "aes": {
+        "domain": "から暗号化された秘密メッセージを受信しました",
+        "description": "メッセージ元",
+        "secret": "秘密メッセージ"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "ライトニングアドレスについて",
+      "msg1": "ライトニングアドレス",
+      "msg2": "は、ライトニングネットワークで個人やサービスに支払いを行う方法です。",
+      "msg3": "これは電子メールアドレスのように見えますが、受信者にメールを送信するのではなく、お金を送信します。",
+      "msg4": "Blixt Walletはライトニングアドレスへの送金に完全対応していますが、受信",
+      "msg5": "はライトニングアドレスを介してまだ作業中です。"
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "{{domain}} に引き出しリクエストを送信しました",
+      "addToContactList": {
+        "title": "連絡先リストに追加",
+        "msg": "この引き出しコードを{{domain}} の連絡先リストに追加しますか？",
+        "note": "{{domain}} のアカウント"
+      }
+    },
+    "layout": {
+      "title": "引き出しリクエスト",
+      "msg": "メッセージ元",
+      "dialog": {
+        "msg": "金額"
+      },
+      "dialog1": {
+        "minSat": "最小引き出し金額",
+        "maxSat": "最大引き出し金額",
+        "placeholder": "金額"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "連絡先＆サービス",
+      "lightningAddressAlreadyExists": "はすでに連絡先リストに存在しています",
+      "nothingHereYet": "まだ何もありません...",
+      "whyNotAdd": "なぜ",
+      "tappingHere": "ここをタップして"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "リモートバランス",
+        "error": "無効な操作、連絡先にはLNURL引き出しコードがありません"
+      },
+      "list": {
+        "pay": "支払い先",
+        "account": "アカウント"
+      },
+      "send": {
+        "title": "送信",
+        "couldNotPay": "このLNURL-payコードに支払いできませんでした",
+        "invalidResponse": "レスポンスはLNURL-payレスポンスではありませんでした（{{response}}を取得しました）",
+        "invalidOperation": "無効な操作、連絡先はLUD-16識別子またはLNURL-payコードを持っていません"
+      },
+      "withdraw": {
+        "title": "引き出し",
+        "couldNotPay": "このLNURL-payコードに支払いできませんでした",
+        "invalidResponse": "レスポンスはLNURL-payレスポンスではありませんでした（{{response}}を取得しました）",
+        "invalidOperation": "無効な操作、連絡先はLNURL-withdrawコードを持っていません"
+      },
+      "deleteContact": {
+        "title": "連絡先削除",
+        "msg": "{{contact}} を削除してもよろしいですか？"
+      },
+      "editContactLabel": {
+        "title": "連絡先ラベル"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "ブラウザを閉じますか？",
+    "home": "ストアリストに戻る",
+    "placeholder": "ここにURLを入力してください"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "クリップボードにコピーしました"
+    },
+    "dialog": {
+      "msg1": "Keysendプレイグラウンドへようこそ",
+      "msg2": "Keysendを使用すると、請求書を必要とせずに別のBlixt Wallet（またはKeysendをサポートするライトニングノード）に支払いができます。",
+      "msg3": "カメラをクリックして別のウォレットのQRコードをスキャンするか、下記の公開鍵とルートヒントを提供してください。"
+    },
+    "send": {
+      "title": "送信",
+      "msg": "Keysend支払い",
+      "error": {
+        "checkAmount": "金額を確認してください",
+        "missingPubkey": "公開鍵がありません"
+      },
+      "alert": "支払いが成功しました"
+    },
+    "form": {
+      "amount": {
+        "title": "金額 sat"
+      },
+      "pubkey": {
+        "title": "公開鍵",
+        "placeholder": "公開鍵"
+      },
+      "route": {
+        "title": "ルートヒント",
+        "placeholder": "ルートヒント"
+      },
+      "message": {
+        "title": "メッセージ",
+        "placeholder": "ここにチャットメッセージを入力"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "設定",
+    "general": {
+      "title": "一般",
+      "name": {
+        "title": "名前",
+        "subtitle": "取引に使用されます",
+        "dialog": {
+          "msg": "取引に使用される名前を選択してください。\n\nお客様の名前は、お客様に支払いを行う人々の請求書およびお客様が支払いを行う人々に表示されます。",
+          "accept": "名前を設定"
+        }
+      },
+      "lang": {
+        "title": "言語",
+        "dialog": {
+          "title": "言語を選択"
+        }
+      },
+      "pushNotification": {
+        "title": "プッシュ通知",
+        "subtitle": "取引とチャネルイベント用"
+      },
+      "checkClipboard": {
+        "title": "クリップボードの請求書を確認",
+        "subtitle": "自動的にクリップボードの請求書を確認"
+      },
+      "saveGeolocation": {
+        "title": "取引のジオロケーションを保存",
+        "subtitle": "取引のジオロケーションをローカルに保存",
+        "logGranted": "ジオロケーション許可済み",
+        "logDenied": "ジオロケーション許可が拒否されました"
+      },
+      "mapTheme": {
+        "title": "マップテーマを設定"
+      }
+    },
+    "wallet": {
+      "title": "ウォレット",
+      "seed": {
+        "show": {
+          "title": "ニーモニック表示",
+          "subtitle": "このウォレットの24ワードシードを表示",
+          "dialog": {
+            "title": "シード",
+            "alert": "クリップボードにコピーしました",
+            "copy": "シードをコピー"
+          }
+        },
+        "remove": {
+          "title": "デバイスからニーモニックを削除",
+          "subtitle": "このデバイスからシードを永久に削除",
+          "dialog": {
+            "title": "シードを削除",
+            "msg": "これにより、このデバイスからシードが永久に削除されます。バックアップを取得している場合以外は実行しないでください！",
+            "accept": "シードを削除"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "チャネルバックアップをエクスポート",
+          "alert": "ファイルが書き込まれました："
+        },
+        "verify": {
+          "title": "チャネルバックアップの検証"
+        },
+        "googleCloud": {
+          "title": "Google Driveチャネルバックアップ",
+          "subtitle": "チャネルをGoogle Driveに自動バックアップ",
+          "alert": "Google Driveバックアップが有効になりました"
+        },
+        "googleCloudForce": {
+          "title": "Google Driveバックアップを手動でトリガー",
+          "alert": "Google Driveへのバックアップが完了しました"
+        },
+        "iCloud": {
+          "title": "iCloudチャネルバックアップ",
+          "subtitle": "チャネルをiCloudに自動バックアップ",
+          "alert": "iCloudバックアップが完了しました"
+        },
+        "iCloudForce": {
+          "title": "iCloudバックアップを手動でトリガー",
+          "alert": "iCloudへのバックアップが完了しました"
+        },
+        "error": "バックアップエラー"
+      }
+    },
+    "security": {
+      "title": "セキュリティ",
+      "pincode": {
+        "title": "PINコードでログイン"
+      },
+      "biometrics": {
+        "title": "でログイン",
+        "fingerprint": "指紋",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "定期的なチェーン同期",
+        "subtitle": "バックグラウンドで2時間ごとに実行",
+        "dialog": {
+          "title": "非推奨",
+          "msg": "警告。定期的なチェーン同期を無効にすることはお勧めしません。\n\nネットワークとの最新情報を確認しておくことが重要です。そうしないと資金を失う可能性があります。\n\nこれを行うのは、自身が何をしているかを理解している場合にのみ行ってください。"
+        }
+      },
+      "gossipSync": {
+        "title": "起動時にLNチャネルを同期"
+      },
+      "gossipSyncAndroid": {
+        "title": "定期的なLNチャネル同期",
+        "subtitle": "Blixtの起動時に実行"
+      }
+    },
+    "display": {
+      "title": "表示",
+      "fiatUnit": {
+        "title": "法定通貨ユニットの変更"
+      },
+      "bitcoinUnit": {
+        "title": "ビットコインユニットの変更"
+      },
+      "onchainExplorer": {
+        "title": "オンチェーンエクスプローラー",
+        "dialog": {
+          "title": "オンチェーンエクスプローラーの変更"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Bitcoinネットワーク",
+      "node": {
+        "title": "Bitcoinノード",
+        "subtitle": "接続するためのBitcoinノード（BIP157）を設定",
+        "setDialog": {
+          "title": "ノードの設定",
+          "info": "BIP157対応のBitcoinノードを設定して接続を確立します。",
+          "leaveBlankToSearch": "有効なノードをBitcoinネットワークで検索するには空白のままにしてください。",
+          "longPressToReset": "デフォルトのノード（{{defaultNode}}）にリセットするには設定を長押ししてください。"
+        },
+        "restoreDialog": {
+          "title": "ノードの復元",
+          "msg": "デフォルトのノードに復元しますか"
+        }
+      },
+      "restartDialog": {
+        "title": "再起動が必要です",
+        "msg": "新しい設定が適用される前にBlixt Walletを再起動する必要があります。",
+        "msg1": "今すぐ行いますか？"
+      },
+      "rpc": {
+        "title": "bitcoind RPCホストの設定"
+      },
+      "zmqRawBlock": {
+        "title": "bitcoind ZMQ Raw Blockホストの設定"
+      },
+      "zmqRawTx": {
+        "title": "bitcoind ZMQ Raw Txホストの設定"
+      },
+      "p2tr": {
+        "title": "Taproot（P2TR）経由でオンチェーン受信を有効にする"
+      }
+    },
+    "LN": {
+      "title": "Lightning Network",
+      "network": {
+        "title": "ネットワーク情報を表示",
+        "subtitle": ""
+      },
+      "node": {
+        "title": "ノードデータを表示",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Lightningピアを表示",
+        "subtitle": ""
+      },
+      "maxLNFeePercentage": {
+        "title": "最大支払い手数料を設定",
+        "subtitle": "金額に比例",
+        "dialog": {
+          "title": "最大LN手数料パーセンテージを設定"
+        },
+        "resetDialog": {
+          "title": "デフォルトの最大LN手数料（{{defaultMaxLNFee}}%）に復元しますか？"
+        }
+      },
+      "autopilot": {
+        "title": "自動的にチャネルを開く",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "インバウンドチャネルサービス",
+        "subtitle": "支払いを受け取るためのインバウンドチャネルサービスを使用",
+        "dialog": {
+          "title": "インカミングチャネルプロバイダー",
+          "msg1": "インカミングチャネルプロバイダーを選択し、続行ボタンを押してください。",
+          "msg2": "対応するプロバイダーのウェブサイトが開き、チャネルをリクエストできるようになります。",
+          "msg3": "完了したら、アドレスコードをコピーしたり、Blixt Walletを使用してリンクを開いたりできます。"
+        }
+      },
+      "LSP": {
+        "title": "Dunder LSPサーバーを設定",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Dunderサーバーの設定",
+          "acept": "サーバーを設定"
+        },
+        "restoreDialog": {
+          "title": "ダンダーサーバを復元します",
+          "msg": "ダンダーサーバをデフォルトの状態に復元しますか？"
+        }
+      },
+      "graphSync": {
+        "title": "支払い前にグラフ同期を待つ",
+        "subtitle": "同期化されたグラフは最適な支払い経路につながります"
+      },
+      "zeroConfPeers": {
+        "title": "Zero confピアを設定",
+        "subtitle": "ゼロ確認チャネルを許可するピアの公開鍵を追加",
+        "setDialog": {
+          "title": "Zero confピア",
+          "msg1": "ゼロ確認チャネルを許可するためのカンマ区切りの公開鍵値を入力してください。",
+          "msg2": "少なくとも1つのチェーン確認があるまで、これらのパートナーからのチャネルを信頼することになります"
+        }
+      }
+    },
+    "miscelaneous": {
+      "title": "その他",
+      "about": {
+        "title": "について",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "アプリログをローカルストレージにコピー",
+        "subtitle": "",
+        "dialog": {
+          "alert": "アプリログファイルをコピーしました：",
+          "error": "アプリログファイルのコピー中にエラーが発生しました。"
+        }
+      },
+      "lndLog": {
+        "title": "lndログをローカルストレージにコピー",
+        "dialog": {
+          "error": "lndログファイルのコピー中にエラーが発生しました。"
+        }
+      },
+      "speedloaderLog": {
+        "title": "LNチャネル同期ログファイルをローカルストレージにコピー",
+        "dialog": {
+          "error": "速度制限ログファイルのコピー中にエラーが発生しました。"
+        }
+      },
+      "dev": {
+        "title": "デベロッパースクリーンに移動",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "期限切れの請求書を自動的に非表示にする",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "画面遷移",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "ウォレットキーでメッセージに署名",
+        "subtitle": "",
+        "dialog1": {
+          "title": "メッセージに署名"
+        },
+        "dialog2": {
+          "title": "署名",
+          "alert": "クリップボードにコピーされました"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "lndログレベルを設定",
+        "dialog": {
+          "title": "lndログレベルを設定。",
+          "description": "ログレベルは設定からアクセス可能なlndログの詳細度を変更します。"
+        },
+        "restoreDialog": {
+          "title": "lndログレベルをデフォルトレベル（{{defaultLndLogLevel}}）に復元しますか？"
+        }
+      }
+    },
+    "experimental": {
+      "title": "実験",
+      "LSP": {
+        "title": "Dunder LSPを有効にする",
+        "subtitle": "非常に実験的です。インバウンド流動性をサポートするLightningサービスプロバイダー"
+      },
+      "MPP": {
+        "title": "マルチパス支払いを有効にする",
+        "subtitle": "最大16の経路を使用できる支払い"
+      },
+      "tor": {
+        "title": "Torを有効にする",
+        "subtitle": "",
+        "enabled": {
+          "title": "アプリを再起動してTorを有効にする",
+          "msg1": "Torを有効にすると、ウォレットはTorネットワークを介してピア（BitcoinおよびLightning Networkピアの両方）に接続します。",
+          "msg2": "また、オニオンサービスを使用するLightningノードに接続してチャネルを開くこともできます。",
+          "msg3": "警告：Blixt WalletはTorを使用せずに以下のサービスと通信し続けます",
+          "msg4": "理由：フィアット/ビットコインレートを取得するため",
+          "msg5": "理由：現在のブロック高を取得するため",
+          "msg6": "理由：Google Driveバックアップのため",
+          "msg7": "理由：信頼性のあるLightningノードのため",
+          "msg8": "WebLN BrowserおよびLNURLもTorを使用しません。"
+        },
+        "disabled": {
+          "title": "アプリを再起動してTorを無効にする",
+          "msg1": "Torを無効にするにはアプリを再起動する必要があります。",
+          "msg2": "続行しますか？"
+        }
+      },
+      "onion": {
+        "title": "Torオニオンサービスを表示",
+        "subtitle": "このウォレットに接続してチャネルを開くため"
+      },
+      "keysend": {
+        "title": "Keysend実験",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "請求書の有効期限（秒）",
+        "subtitle": "{{expiry}} 秒"
+      }
+    },
+    "debug": {
+      "title": "デバッグ",
+      "startup": {
+        "title": "スタートアップ情報通知を表示",
+        "subtitle": ""
+      },
+      "showNotifications": {
+        "title": "このセッションの通知を表示",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "このセッションのデバッグログを表示",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "LndMobileヘルプセンター",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Dunderの問題を診断",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "lndログを読む",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "LNチャネル同期ログを読む",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Keysendテスト",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Google Driveテストベッド",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "設定を書き込む",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "デモモードを有効にする",
+        "subtitle": "プロモーションに使用。リセットするにはアプリを再起動してください"
+      },
+      "rescanWallet": {
+        "title": "ウォレットを再スキャン",
+        "subtitle": "ウォレットトランザクションのためにブロックチェーンを再スキャン"
+      },
+      "getNodeInfo": {
+        "title": "ノード情報を取得"
+      },
+      "getChannelInfo": {
+        "title": "チャネル情報を取得"
+      },
+      "demoMode": {
+        "title": "デモモードを有効にする",
+        "subtitle": "プロモーションに使用。リセットするにはアプリを再起動してください"
+      },
+      "disableGraphCache": {
+        "title": "lndグラフキャッシュを無効にする"
+      },
+      "resetMissionControl": {
+        "title": "支払いルーティングの知識をリセット"
+      },
+      "strictGraphPruning": {
+        "title": "厳密なLNグラフの剪定を有効にする"
+      },
+      "bimodalPathFinding": {
+        "title": "バイモーダルパスファインディングを有効にする"
+      },
+      "compactLndDatabases": {
+        "title": "lndのデータベースを圧縮"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "起動時にゴシップ同期を強制する"
+      },
+      "persistentServices": {
+        "title": "持続的なLNDおよびTorを有効にする（有効な場合）"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "Blixt Walletについて",
+    "msg1": "バージョン",
+    "msg2": "作者",
+    "msg3": "MITライセンスで提供されたオープンソースウォレット",
+    "msg4": "以下の素晴らしいオープンソースソフトウェアを使用して作成",
+    "msg5": "Torアイコンは、CC BY 3.0ライセンスで提供",
+    "msg6": "Tor アイコンは CC BY 3.0 に基づいてライセンスされています",
+    "msg7": "ライセンス"
+  },
+  "settings.setPincode": {
+    "enter": "暗証番号を入力",
+    "confirm": "暗証番号を確認"
+  },
+  "settings.removePincodeAuth": {
+    "title": "暗証番号を削除するには現在の暗証番号を入力"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Lightningピア"
+    },
+    "alias": "ノードエイリアス",
+    "pubKey": "ノードの公開鍵",
+    "address": "ノードアドレス",
+    "data": {
+      "title": "データ",
+      "bytesSent": "送信バイト数",
+      "bytesRecv": "受信バイト数"
+    },
+    "transfer": {
+      "title": "転送",
+      "satSent": "送信したSat",
+      "satRecv": "受信したSat"
+    },
+    "inbound": "インバウンド",
+    "syncType": "同期タイプ",
+    "errors": "エラー",
+    "disconnect": "ピアの切断"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Lightningピアに接続"
+    },
+    "connect": {
+      "title": "ノードURI",
+      "placeholder": "ピアURI",
+      "accept": "接続"
+    }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Lightningネットワーク情報",
+    "avgChannelSize": "平均チャネルサイズ",
+    "avgOutDegree": "平均アウトディグリー",
+    "graphDiameter": "グラフ直径",
+    "medianChannelSizeSat": "中央値チャネルサイズ",
+    "numChannels": "チャネル数",
+    "numNodes": "ノード数",
+    "numZombieChans": "ゾンビチャネル数",
+    "totalNetworkCapacity": "総ネットワーク容量"
+  },
+  "settings.lightningNodeInfo": {
+    "title": "ノード情報",
+    "alias": "ノードエイリアス",
+    "chain": "チェーン",
+    "timestamp": "最高ヘッダータイムスタンプ",
+    "blockHash": "ブロックハッシュ",
+    "blockHeight": "ブロック高",
+    "identityPubkey": "アイデンティティ公開鍵",
+    "channel": {
+      "title": "チャネル数",
+      "active": "アクティブ",
+      "inactive": "非アクティブ",
+      "pending": "ペンディング"
+    },
+    "numPeers": "ピア数",
+    "syncedToChain": "チェーンに同期",
+    "syncedToGraph": "グラフに同期",
+    "nodeUris": "ノードURI",
+    "version": "Lndバージョン",
+    "features": "ノード機能"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Torオニオンサービス",
+    "msg1": "このQRコードをスキャンして、このウォレットにチャネルを開く",
+    "msg2": "オニオンアドレスを解決できませんでした"
+  },
+  "settings.toastLog": {
+    "title": "通知ログ"
+  },
+  "settings.debugLog": {
+    "title": "デバッグログ"
+  },
+  "welcome.addFunds": {
+    "title": "資金を追加",
+    "msg1": "Blixt WalletでLightningを利用を開始するには、",
+    "msg2": "上記のアドレスにビットコインを送信してください"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "自動でチャネルを開く",
+      "msg": "オンチェーンの資金が利用可能になったときにチャネルを開く"
+    },
+    "done": {
+      "title": "ほぼ完了!",
+      "msg1": "ウォレット設定をお好みに設定できるいくつかの設定があります",
+      "msg2": "準備ができたら、続行ボタンを押してください"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "もう一度試してください",
+      "msg": "申し訳ありません、単語の順序が間違っています。もう一度お試しください。"
+    },
+    "seed": {
+      "title": "シードを確認"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Google Driveバックアップを有効にする",
+      "msg": "Google Driveバックアップが有効になりました"
+    },
+    "backup": {
+      "title": "クラウドバックアップ",
+      "msg": "デバイスの紛失の場合、オフチェーン資金を安全に保つために、チャネルをGoogle Driveにバックアップすることをお勧めします。",
+      "msg1": "これにより、ウォレットシードと一緒にのみ使用できるチャネルの暗号化されたバックアップが作成されます。",
+      "msg2": "準備ができたら、続行ボタンを押してください。"
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "iCloudバックアップを有効にする",
+      "msg": "iCloudバックアップが有効になりました"
+    },
+    "backup": {
+      "title": "iCloudバックアップ",
+      "msg": "デバイスの紛失の場合、オフチェーン資金を安全に保つために、チャネルをiCloudにバックアップすることをお勧めします。",
+      "msg1": "これにより、ウォレットシードと一緒にのみ使用できるチャネルの暗号化されたバックアップが作成されます。",
+      "msg2": "準備ができたら、続行ボタンを押してください。"
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "ウォレットを復元",
+      "msg": "ウォレットを復元するには、シードから各単語をスペースで区切って書き留めます。",
+      "msg1": "Lightning Networkのチャネルを復元する場合、ファイルバックアップを提供する必要があります。",
+      "loading": "ウォレットの復元",
+      "passphrase": {
+        "placeholder": "パスフレーズ（オプション）"
+      },
+      "channel": {
+        "title": "チャネルバックアップ",
+        "file": "ディスク上のチャネルバックアップファイルを選択",
+        "google": {
+          "title": "Google Driveを介した復元",
+          "alert": "Google Driveを介した復元に失敗しました"
+        },
+        "iCloud": {
+          "title": "iCloudを介した復元",
+          "alert": "iCloudを介した復元に失敗しました"
+        }
+      },
+      "seed": "シードは正確に24単語でなければなりません"
+    },
+    "backup": {
+      "google": "Google Driveを介したバックアップ",
+      "iCloud": "iCloudを介したバックアップ"
+    }
+  },
+  "welcome.seed": {
+    "title": "Blixt Walletへようこそ！",
+    "msg": "これがバックアップシードです。",
+    "msg1": "紙に書き留め、安全な場所に保管してください。",
+    "msg2": "ウォレットへのアクセスを失った場合、",
+    "msg3": "バックアップシードを使用して資金を回復できる場合があります。",
+    "msg4": "使用されているシード標準はaezeedです。",
+    "button": "書き留めました"
+  }
+}
