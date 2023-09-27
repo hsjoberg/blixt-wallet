@@ -1083,7 +1083,7 @@
   },
   "settings.torShowOnionAddress": {
     "title": "Tor 洋葱服务",
-    "msg1": "扫描此二维码即可与此钱包打开通道",
+    "msg1": "扫描此二维码即可向此钱包打开通道",
     "msg2": "无法解析洋葱地址"
   },
   "settings.toastLog": {
