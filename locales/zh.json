@@ -1077,7 +1077,7 @@
     "numPeers": "对等点数量",
     "syncedToChain": "已同步至链上",
     "syncedToGraph": "已同步至路径图",
-    "nodeUris": "节点 URI",
+    "nodeUris": "节点 URIs",
     "version": "LND 版本",
     "features": "节点特征"
   },
