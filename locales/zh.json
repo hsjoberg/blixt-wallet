@@ -1054,7 +1054,7 @@
     "avgChannelSize": "平均通道大小",
     "avgOutDegree": "平均出度",
     "graphDiameter": "路径图直径",
-    "medianChannelSizeSat": "中值通道尺寸",
+    "medianChannelSizeSat": "中值通道大小",
     "numChannels": "通道数量",
     "numNodes": "节点数量",
     "numZombieChans": "僵尸通道数量",
