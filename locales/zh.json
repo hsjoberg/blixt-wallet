@@ -716,7 +716,7 @@
       "title": "比特币网络",
       "node": {
         "title": "比特币节点",
-        "subtitle": "设置连接的比特币节点 （BIP157）",
+        "subtitle": "设置连接的比特币节点（BIP157）",
         "setDialog": {
           "title": "设置节点",
           "info": "设置一个支持 BIP157 的比特币节点以建立连接。",
