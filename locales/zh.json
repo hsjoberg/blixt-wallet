@@ -996,7 +996,7 @@
         "title": "在启动时强制执行八卦同步"
       },
       "persistentServices": {
-        "title": "启用持久 LND 和 Tor（如果启用）"
+        "title": "启用持久性 LND 和 Tor（如果启用）"
       }
     }
   },
