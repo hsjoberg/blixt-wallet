@@ -1,0 +1,1181 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "عنوان البرق",
+      "nodeAlias": "اسم العقدة",
+      "description": "الوصف",
+      "amount": "المبلغ",
+      "fee": "الرسوم",
+      "search": "بحث",
+      "viewInBlockExplorer": "عرض في مستكشف الكتل"
+    },
+    "buttons": {
+      "ok": "موافق",
+      "cancel": "إلغاء",
+      "continue": "متابعة",
+      "skip": "تخطي",
+      "proceed": "المتابعة",
+      "back": "رجوع",
+      "no": "لا",
+      "yes": "نعم",
+      "save": "حفظ",
+      "copy": "نسخ"
+    },
+    "msg": {
+      "status": "الحالة",
+      "error": "خطأ",
+      "warning": "تحذير",
+      "result": "النتيجة",
+      "pending": "قيد الانتظار",
+      "done": "تم",
+      "dismiss": "تجاهل",
+      "lastSync": "آخر مزامنة",
+      "lastSyncAttempt": "آخر محاولة مزامنة",
+      "clipboardCopy": "تم النسخ إلى الحافظة.",
+      "written": "تم الكتابة",
+      "enabled": "مفعل",
+      "disabled": "معطل"
+    }
+  },
+  "welcome.start": {
+    "title": "مرحبًا",
+    "createWallet": {
+      "title": "إنشاء محفظة",
+      "msg1": "محفظة Blixt لا تزال في مرحلة مبكرة من التطوير.",
+      "msg2": "إذا كنت تستخدم هذه المحفظة، تأكد من أنك تفهم أنه قد تكون معرضًا لفقدان أموالك.",
+      "msg3": "لا يوجد دعم WatchTower حاليًا لمراقبة قنواتك أثناء عدم اتصالك بالإنترنت.",
+      "msg4": "أنا متهور، الاستمرار"
+    },
+    "createWalletWithPassphrase": {
+      "title": "تعيين عبارة سرية (الكلمة 25 لتشفير البذرة)",
+      "invalidMessage": "أدخل عبارة سرية صالحة",
+      "noLeadingTrailingSpaces": "غير مسموح بالمسافات في البداية أو النهاية"
+    },
+    "language": {
+      "title": "اختر اللغة"
+    },
+    "restoreWallet": {
+      "title": "استعادة المحفظة"
+    },
+    "menu": {
+      "enableTor": "تمكين Tor",
+      "disableTor": "تعطيل Tor",
+      "setBitcoinNode": "تعيين عقدة بيتكوين",
+      "createWalletWithPassphrase": "إنشاء محفظة بعبارة سرية"
+    }
+  },
+  "footerNav": {
+    "receive": "استقبال",
+    "send": "إرسال"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "مسح",
+      "receive": "استقبال",
+      "pasteFromClipboard": "لصق من الحافظة",
+      "sendToLightningAddress": "إرسال إلى عنوان البرق",
+      "contactsAndServices": "جهات الاتصال والخدمات",
+      "lightningBrowser": "متصفح البرق",
+      "onChainWallet": "محفظة السلسلة",
+      "lightningChannels": "قنوات البرق",
+      "keysendExperiment": "تجربة KeySend",
+      "showMore": "مزيد من الخيارات"
+    },
+    "madeInSweden": "صُنعت بواسطة ⚡ في السويد"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "جاري استعادة المحفظة.",
+      "msg2": "اكتملت عملية استعادة المحفظة.",
+      "more": "المزيد من المعلومات"
+    },
+    "sendOnChain": {
+      "title": "مرحبًا بك في محفظة Blixt!",
+      "msg1": "للبدء، قم بإرسال أموال على السلسلة إلى عنوان بيتكوين على اليمين.",
+      "msg2": "سيتم فتح قناة تلقائيًا بالنسبة لك.",
+      "msg3": "قم بإرسال ما لا يقل عن",
+      "alert": "تم نسخ عنوان بيتكوين إلى الحافظة"
+    },
+    "doBackup": {
+      "msg1": "شكرًا لاستخدام محفظة Blixt!",
+      "msg2": "نوصي بأخذ نسخة احتياطية من المحفظة حتى تتمكن من استعادة أموالك في حالة فقدان الهاتف.",
+      "backup": "نسخ احتياطي للمحفظة"
+    },
+    "newChannelBeingOpened": {
+      "info": "جاري فتح قناة جديدة...",
+      "view": "عرض"
+    },
+    "noTransactionsYet": "لا توجد معاملات بعد"
+  },
+  "help": {
+    "title": "المساعدة",
+    "msg1": "إذا واجهت مشكلة أو لديك ملاحظات، يمكنك الاتصال بمطوري محفظة Blixt عن طريق تقديم طلب في Github أو عن طريق الاتصال بنا عبر البريد الإلكتروني.",
+    "msg2": "مرحبًا بك أيضًا في الانضمام إلى مجموعة الدردشة العامة على Telegram لدينا.",
+    "msg3": "نحتاج إلى ملاحظات حول مشكلات شائعة قد تواجهها محفظة Blixt نظرًا لأنها محفظة جديدة.",
+    "telegramGroup": "مجموعة Telegram"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "جاري المزامنة",
+      "title1": "اكتملت المزامنة",
+      "msg1": "محفظة Blixt تقوم حاليًا بمزامنة سلسلة الكتل.",
+      "msg2": "بمجرد أن تصبح محفظتك متزامنة مع سلسلة الكتل، ستتعرف على المعاملات على السلسلة ويمكن رؤية الأموال من قسم بيتكوين على السلسلة.",
+      "msg3": "محفظة Blixt متزامنة مع سلسلة الكتل.",
+      "blockHeight": {
+        "title": "ارتفاع الكتلة الحالي",
+        "msg1": "تقدم مزامنة السلسلة"
+      }
+    },
+    "recoveryMode": {
+      "title": "جاري استعادة البيانات",
+      "msg1": "اكتملت عملية استعادة البيانات.",
+      "msg2": "تحقق من قسم قنوات البرق وبيتكوين على السلسلة."
+    },
+    "lndLog": {
+      "show": "عرض سجل lnd",
+      "copy": "نسخ نص السجل"
+    }
+  },
+  "transactionDetails": {
+    "title": "المعاملة",
+    "date": "التاريخ",
+    "duration": "الوقت المستغرق لدفع الفاتورة",
+    "note": "ملاحظة",
+    "website": "الموقع الإلكتروني",
+    "type": "النوع",
+    "lnurl": {
+      "messageFromWebsite": "رسالة من",
+      "urlReceivedFromWebsite": "الرابط الذي تم استلامه من",
+      "secretMessage": "الرسالة السرية"
+    },
+    "payer": "الدافع",
+    "recipient": "المستلم",
+    "amountInFiatTimeOfPayment": "المبلغ بالعملة الورقية (وقت الدفع)",
+    "numberOfHops": "عدد القفزات",
+    "remotePubkey": "المفتاح البعيد",
+    "paymentHash": "هاش الدفع",
+    "preimage": "الصورة السابقة",
+    "status": "الحالة",
+    "goBack": "العودة",
+    "button": {
+      "setNote": "تعيين ملاحظة",
+      "cancelInvoice": "إلغاء الفاتورة",
+      "showMap": "عرض الخريطة"
+    },
+    "setNoteDialog": {
+      "title": "الملاحظة",
+      "text": "قم بتعيين ملاحظة لهذه المعاملة"
+    }
+  },
+  "web.info": {
+    "title": "عرض تفاعلي",
+    "pressToTry": "اضغط لتجربة محفظة Blixt!"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "استقبال"
+    },
+    "createInvoice": {
+      "title": "إنشاء فاتورة",
+      "alert": "قبل أن تتمكن من استقبال، يجب عليك فتح قناة برقية.",
+      "lsp": {
+        "msg": "سيتم فتح قناة دفع من قبل Dunder LSP عندما يتم دفع هذه الفاتورة.",
+        "msg1": "ما هذا؟"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "فتح القناة",
+      "msg": "لقبول الدفع لهذه الفاتورة، يجب فتح قناة على شبكة البرق.",
+      "msg1": "هذا يتطلب رسومًا مرة واحدة تقريبًا",
+      "alert": "فشل الاتصال بـ Dunder، يرجى المحاولة مرة أخرى في وقت لاحق.",
+      "proceed": "متابعة"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "المبلغ",
+        "change": "تغيير العملة الورقية",
+        "dunderPlaceholder": "على الأقل"
+      },
+      "amountBitcoin": {
+        "title": "المبلغ",
+        "change": "تغيير الوحدة البيتكوينية",
+        "dunderPlaceholder": "على الأقل"
+      },
+      "payer": {
+        "title": "الجهة المدفوعة",
+        "placeholder": "لأغراض المحاسبة"
+      },
+      "description": {
+        "title": "الرسالة",
+        "placeholder": "رسالة إلى الجهة المدفوعة"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "عن Dunder LSP",
+    "msg": "دوندر هو مزود خدمة البرق (LSP) الذي يقوم تلقائيًا بفتح قنوات لك عندما لا تكون لديك تدفق وارد كافي.",
+    "msg1": "هذا يمكن أن يكون على سبيل المثال عندما تبدأ للمرة الأولى في استخدام محفظة Blixt.",
+    "msg2": "نظرًا لأن هذا يتطلب معاملة على سلسلة الكتل، سيتم خصم رسوم معاملة بيتكوين من الدفعة الواردة. ستتمكن المدفوعات المستقبلية من استخدام القناة الدفع الجديدة المفتوحة مع شبكة البرق.",
+    "msg3": "دوندر هو",
+    "msg4": "برنامج مفتوح المصدر",
+    "msg5": "ويمكنك تغيير مزود الخدمة الافتراضي في الإعدادات."
+  },
+  "receive.receiveQr": {
+    "title": "استلام",
+    "qr": {
+      "title": "مسح هذا الرمز الاستجابي",
+      "msg": "ينتهي الصلاحية في {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "دفع الفاتورة"
+    },
+    "form": {
+      "invoice": {
+        "title": "الفاتورة"
+      },
+      "amount": {
+        "title": "المبلغ"
+      },
+      "recipient": {
+        "title": "المستلم"
+      },
+      "nodeAlias": {
+        "title": "اسم العقد"
+      },
+      "description": {
+        "title": "الرسالة"
+      },
+      "feeEstimate": {
+        "title": "تقدير الرسوم"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "تم الدفع"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "قنوات البرق"
+    },
+    "balance": {
+      "title": "الرصيد"
+    },
+    "channel": {
+      "alias": "الاسم المستعار",
+      "node": "العقد",
+      "channelId": "معرف القناة",
+      "channelPoint": "نقطة القناة",
+      "status": "الحالة",
+      "statusActive": "نشط",
+      "statusInactive": "غير نشط",
+      "statusPending": "معلق",
+      "statusClosing": "قيد الإغلاق",
+      "statusForceClosing": "إغلاق قائم بالقوة",
+      "statusWaitingForClose": "انتظار الإغلاق",
+      "capacity": "السعة",
+      "howMuchCanBeSent": "يمكن الإرسال",
+      "howMuchCanBeReceived": "يمكن الاستلام",
+      "localReserve": "الاحتياطي المحلي",
+      "commitmentFee": "رسوم الالتزام",
+      "channelType": "نوع القناة",
+      "pendingFunds": "الأموال المعلقة",
+      "balanceInLimbo": "رصيد في السماء",
+      "pendingHtlcs": "HTLCs المعلقة",
+      "maturityHeight": "ارتفاع النضج",
+      "localCommitmentTxid": "معرّف TXID المحلي للالتزام",
+      "remoteCommitmentTxid": "معرّف TXID البعيد للالتزام",
+      "closeChannel": "إغلاق القناة",
+      "forceClosePendingChannel": "إغلاق قناة معلقة بالقوة",
+      "closeChannelPrompt": {
+        "title": "إغلاق القناة"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "فتح قناة"
+    },
+    "form": {
+      "title": "فتح قناة",
+      "channel": {
+        "title": "عنوان العقد (URI)",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "المبلغ",
+        "placeholder": "المبلغ"
+      },
+      "fee_rate": {
+        "title": "سعر الرسوم (Fee-rate)"
+      }
+    },
+    "torPrompt": {
+      "title": "تمكين Tor",
+      "text1": "يبدو أنك تحاول فتح قناة مع عقد يعمل تحت خدمة Tor.",
+      "text2": "للاتصال، يجب عليك تفعيل خدمة Tor في تطبيق محفظة Blixt."
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "أموال على السلسلة"
+    },
+    "address": {
+      "title": "إرسال بيتكوين على السلسلة إلى هذا العنوان",
+      "alert": "تم نسخه إلى الحافظة."
+    },
+    "newAddress": {
+      "title": "إنشاء عنوان جديد"
+    },
+    "withdraw": {
+      "title": "سحب العملات"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "معاملة",
+    "txHash": "المعرف",
+    "timeStamp": "التاريخ",
+    "amount": "المبلغ",
+    "totalFees": "الرسوم",
+    "label": "العلامة",
+    "destAddresses": "الوجهة",
+    "numConfirmations": "التأكيدات",
+    "blockHeight": "ارتفاع الكتلة",
+    "blockHash": "معرف الكتلة",
+    "rawTxHex": {
+      "title": "بيانات المعاملة الأولية (Raw tx hex)",
+      "msg": "انقر للنسخ"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "سجل المعاملات"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "سحب العملات"
+    },
+    "form": {
+      "address": {
+        "title": "العنوان",
+        "placeholder": "عنوان بيتكوين"
+      },
+      "amount": {
+        "title": "المبلغ",
+        "placeholder": "المبلغ",
+        "withdrawAll": "سحب كل الأموال",
+        "all": "الكل"
+      },
+      "feeRate": {
+        "title": "سعر الرسوم (Fee-rate)",
+        "auto": "تلقائي"
+      },
+      "withdraw": {
+        "title": "سحب",
+        "alert": "تم السحب بنجاح"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "طلب تسجيل الدخول",
+      "msg": "هل ترغب في تسجيل الدخول إلى",
+      "success": "مصادق عليه"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "فتح قناة واردة"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "عرض البيانات الفنية",
+      "dialog": {
+        "title": "البيانات الفنية"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} موجود في قائمة جهات الاتصال الخاصة بك"
+      },
+      "add": {
+        "title": "إضافة إلى قائمة جهات الاتصال",
+        "msg": "هل ترغب في إضافة {{lightningAddress}} إلى قائمة جهات اتصالك؟"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "رمز الدفع لـ {{domain}} موجود في قائمة جهات اتصالك"
+      },
+      "add": {
+        "title": "إضافة إلى قائمة جهات الاتصال",
+        "msg": "هل ترغب في إضافة رمز الدفع هذا إلى {{domain}} إلى قائمة جهات اتصالك؟"
+      }
+    },
+    "unableToPay": "غير قادر على الدفع",
+    "payerData": {
+      "commentAllowed": "تعليق لـ {{target}} (بحد أقصى {{letters}} حرفًا)",
+      "sendNameWithComment": "أرسل اسمي مع هذا التعليق",
+      "name": {
+        "ask": "أرسل اسمي مع هذا الدفع",
+        "mandatory": "يجب أن يتم إرسال اسمك مع هذا الدفع"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "الدفع ناقص التفاصيل."
+    },
+    "pay": {
+      "title": "الدفع",
+      "error": {
+        "mustProvideComment": "يجب عليك تقديم تعليق إذا اخترت تضمين اسمك بهذا الدفع"
+      }
+    },
+    "cancel": {
+      "title": "إلغاء"
+    },
+    "form": {
+      "asksYouToPay": "يرغب في الدفع لديك.",
+      "description": {
+        "title": "الوصف"
+      },
+      "amount": {
+        "title": "المبلغ",
+        "to": "إلى",
+        "placeholder": "أدخل المبلغ"
+      },
+      "alert": "غير قادر على الدفع"
+    },
+    "done": {
+      "message": {
+        "title": "رسالة من"
+      },
+      "url": {
+        "description": "الوصف",
+        "domain": "رابط استلام من",
+        "done": {
+          "title": "تم"
+        },
+        "copy": {
+          "title": "نسخ إلى الحافظة",
+          "msg": "تم النسخ إلى الحافظة."
+        },
+        "open": {
+          "title": "فتح المتصفح"
+        }
+      },
+      "aes": {
+        "domain": "تلقيت رسالة سرية مشفرة من",
+        "description": "رسالة من",
+        "secret": "رسالة سرية"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "حول عنوان البرق",
+      "msg1": "عنوان البرق",
+      "msg2": "هو وسيلة لدفع شخص أو خدمة على شبكة البرق.",
+      "msg3": "يبدو أنها عناوين البريد الإلكتروني، ولكن بدلاً من إرسال بريد إلكتروني إلى المستلم، تقوم بإرسال الأموال.",
+      "msg4": "محفظة Blixt تدعم بالكامل الإرسال إلى عنوان البرق، ولكن الاستقبال",
+      "msg5": "عبر عنوان البرق لا يزال قيد العمل."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "تم إرسال طلب السحب إلى {{domain}}",
+      "addToContactList": {
+        "title": "أضف إلى قائمة الاتصال",
+        "msg": "هل ترغب في إضافة هذا الرمز للسحب إلى قائمة اتصالك على {{domain}}؟",
+        "note": "حساب على {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "طلب سحب",
+      "msg": "رسالة من",
+      "dialog": {
+        "msg": "المبلغ"
+      },
+      "dialog1": {
+        "minSat": "الحد الأدنى للسحب",
+        "maxSat": "الحد الأقصى للسحب",
+        "placeholder": "المبلغ"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "جهات الاتصال والخدمات",
+      "lightningAddressAlreadyExists": "موجود بالفعل في قائمة اتصالك",
+      "nothingHereYet": "لا يوجد شيء هنا بعد...",
+      "whyNotAdd": "لماذا لا تقم بإضافة جهة اتصال بعنوان Lightning عن طريق",
+      "tappingHere": "النقر هنا"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "الرصيد عن بعد",
+        "error": "عملية غير صالحة، الجهة الاتصال ليس لديها رمز LNURL-withdraw"
+      },
+      "list": {
+        "pay": "المدفوعات إلى",
+        "account": "حساب على"
+      },
+      "send": {
+        "title": "إرسال",
+        "couldNotPay": "تعذر الدفع عبر رمز LNURL-pay هذا",
+        "invalidResponse": "الاستجابة لم تكن استجابة LNURL-pay صالحة (تم الحصول على {{response}})",
+        "invalidOperation": "عملية غير صالحة، الجهة الاتصال ليس لديها هوية LUD-16 أو رمز LNURL-pay"
+      },
+      "withdraw": {
+        "title": "سحب",
+        "couldNotPay": "تعذر الدفع عبر رمز LNURL-pay هذا",
+        "invalidResponse": "الاستجابة لم تكن استجابة LNURL-pay صالحة (تم الحصول على {{response}})",
+        "invalidOperation": "عملية غير صالحة، الجهة الاتصال ليس لديها رمز LNURL-withdraw"
+      },
+      "deleteContact": {
+        "title": "حذف جهة الاتصال",
+        "msg": "هل ترغب حقًا في حذف جهة الاتصال {{contact}}؟"
+      },
+      "editContactLabel": {
+        "title": "تحرير تصنيف جهة الاتصال"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "هل ترغب في إغلاق المتصفح؟",
+    "home": "العودة إلى قائمة المتاجر",
+    "placeholder": "اكتب الرابط هنا"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "تم النسخ إلى الحافظة"
+    },
+    "dialog": {
+      "msg1": "مرحبًا بك في منطقة إرسال المفاتيح",
+      "msg2": "يتيح لك Keysend دفع مبلغ لآخر Blixt Wallet (أو أي عقد Lightning الذي يدعم Keysend) دون الحاجة إلى فاتورة.",
+      "msg3": "انقر على الكاميرا لمسح رمز الاستجابة السريعة لمحفظة أخرى أو قم بتقديم مفتاح عام وتلميحات المسار أدناه."
+    },
+    "send": {
+      "title": "إرسال",
+      "msg": "دفع مفتاحي",
+      "error": {
+        "checkAmount": "التحقق من المبلغ",
+        "missingPubkey": "نقص المفتاح العام"
+      },
+      "alert": "تم الدفع بنجاح"
+    },
+    "form": {
+      "amount": {
+        "title": "المبلغ بالساتوشي"
+      },
+      "pubkey": {
+        "title": "المفتاح العام",
+        "placeholder": "المفتاح العام"
+      },
+      "route": {
+        "title": "تلميحات الطريق",
+        "placeholder": "تلميحات الطريق"
+      },
+      "message": {
+        "title": "الرسالة",
+        "placeholder": "أدخل رسالة هنا"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "الإعدادات",
+    "general": {
+      "title": "عام",
+      "name": {
+        "title": "الاسم",
+        "subtitle": "سيتم استخدامه في المعاملات",
+        "dialog": {
+          "msg": "اختر اسمًا سيتم استخدامه في المعاملات.\n\nسيتم رؤية اسمك في الفواتير التي يدفعها لك الآخرون وأيضًا الأشخاص الذين تدفع لهم.",
+          "accept": "تعيين الاسم"
+        }
+      },
+      "lang": {
+        "title": "اللغة",
+        "dialog": {
+          "title": "اختر اللغة"
+        }
+      },
+      "pushNotification": {
+        "title": "إشعارات الدفع",
+        "subtitle": "لأحداث المعاملات والقنوات"
+      },
+      "checkClipboard": {
+        "title": "فحص الحافظة للفواتير",
+        "subtitle": "فحص الحافظة تلقائياً للفواتير"
+      },
+      "saveGeolocation": {
+        "title": "حفظ موقع المعاملة",
+        "subtitle": "حفظ موقع المعاملة محلياً",
+        "logGranted": "تم منح الإذن للموقع الجغرافي",
+        "logDenied": "تم رفض إذن الموقع الجغرافي"
+      },
+      "mapTheme": {
+        "title": "تعيين سمة الخريطة"
+      }
+    },
+    "wallet": {
+      "title": "المحفظة",
+      "seed": {
+        "show": {
+          "title": "عرض الكلمات الأساسية",
+          "subtitle": "عرض الكلمات الأساسية المؤلفة من 24 كلمة لهذه المحفظة",
+          "dialog": {
+            "title": "الكلمات الأساسية",
+            "alert": "تم النسخ إلى الحافظة",
+            "copy": "نسخ الكلمات الأساسية"
+          }
+        },
+        "remove": {
+          "title": "إزالة الكلمات الأساسية من الجهاز",
+          "subtitle": "إزالة الكلمات الأساسية نهائيًا من هذا الجهاز",
+          "dialog": {
+            "title": "إزالة الكلمات الأساسية",
+            "msg": "سيؤدي هذا إلى إزالة الكلمات الأساسية نهائيًا من هذا الجهاز. قم بذلك فقط إذا كنت قد قمت بنسخ احتياطي للكلمات الأساسية!",
+            "accept": "حذف الكلمات الأساسية"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "تصدير نسخة احتياطية للقناة",
+          "alert": "تم كتابة الملف:"
+        },
+        "verify": {
+          "title": "التحقق من نسخة احتياطية للقناة"
+        },
+        "googleCloud": {
+          "title": "نسخة احتياطية للقنوات على Google Drive",
+          "subtitle": "نسخ احتياطي تلقائي للقنوات على Google Drive",
+          "alert": "تم تمكين نسخ احتياطي للقنوات على Google Drive"
+        },
+        "googleCloudForce": {
+          "title": "تشغيل نسخة احتياطية للقنوات على Google Drive يدويًا",
+          "alert": "تم نسخ القنوات احتياطيًا على Google Drive"
+        },
+        "iCloud": {
+          "title": "نسخة احتياطية للقنوات على iCloud",
+          "subtitle": "نسخ احتياطي تلقائي للقنوات على iCloud",
+          "alert": "نسخ احتياطي على iCloud"
+        },
+        "iCloudForce": {
+          "title": "تشغيل نسخة احتياطية للقنوات على iCloud يدويًا",
+          "alert": "تم نسخ القنوات احتياطيًا على iCloud"
+        },
+        "error": "حدث خطأ أثناء عملية النسخ الاحتياطي"
+      }
+    },
+    "security": {
+      "title": "الأمان",
+      "pincode": {
+        "title": "تسجيل الدخول بواسطة رمز التعريف الشخصي"
+      },
+      "biometrics": {
+        "title": "تسجيل الدخول باستخدام",
+        "fingerprint": "بصمة الإصبع",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "تزامن السلسلة المجدول",
+        "subtitle": "يعمل في الخلفية كل 2 ساعة",
+        "dialog": {
+          "title": "غير مُوصى به",
+          "msg": "تحذير. غير مُوصى به إيقاف تزامن السلسلة المجدول.\n\nتأكد من أنك متابع لشبكة البيتكوين حتى لا تفقد أموالك.\n\nقم بذلك فقط إذا كنت تعرف ما تفعله."
+        }
+      },
+      "gossipSync": {
+        "title": "مزامنة قنوات LN عند بدء التشغيل"
+      },
+      "gossipSyncAndroid": {
+        "title": "مزامنة مجدولة لقنوات LN",
+        "subtitle": "يتم تشغيلها عند بدء Blixt"
+      }
+    },
+    "display": {
+      "title": "العرض",
+      "fiatUnit": {
+        "title": "تغيير وحدة العرض المعمول بها"
+      },
+      "bitcoinUnit": {
+        "title": "تغيير وحدة البيتكوين"
+      },
+      "onchainExplorer": {
+        "title": "مستكشف السلسلة",
+        "dialog": {
+          "title": "تغيير المستكشف الموجود على السلسلة"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "شبكة البيتكوين",
+      "node": {
+        "title": "عقدة البيتكوين",
+        "subtitle": "ضبط عقدة البيتكوين (BIP157) للاتصال بها",
+        "setDialog": {
+          "title": "ضبط العقدة",
+          "info": "قم بضبط عقدة بيتكوين تدعم BIP157 لإقامة اتصال بها.",
+          "leaveBlankToSearch": "اترك هذا الحقل فارغًا للسماح لـ Blixt Wallet بالبحث في شبكة البيتكوين عن عقدة صالحة.",
+          "longPressToReset": "لإعادة الضبط إلى العقدة الافتراضية ({{defaultNode}})، قم بالضغط المطول على الإعداد."
+        },
+        "restoreDialog": {
+          "title": "استعادة العقدة",
+          "msg": "هل ترغب في استعادة العقدة الافتراضية؟"
+        }
+      },
+      "restartDialog": {
+        "title": "مطلوب إعادة التشغيل",
+        "msg": "يجب إعادة تشغيل Blixt Wallet قبل تطبيق التكوين الجديد.",
+        "msg1": "هل ترغب في ذلك الآن؟"
+      },
+      "rpc": {
+        "title": "ضبط مضيف bitcoind RPC"
+      },
+      "zmqRawBlock": {
+        "title": "ضبط مضيف bitcoind ZMQ للكتل الخام"
+      },
+      "zmqRawTx": {
+        "title": "ضبط مضيف bitcoind ZMQ للمعاملات الخام"
+      },
+      "p2tr": {
+        "title": "تمكين الاستقبال على السلسلة عبر Taproot (P2TR)"
+      }
+    },
+    "LN": {
+      "title": "شبكة البرق",
+      "network": {
+        "title": "عرض معلومات الشبكة",
+        "subtitle": ""
+      },
+      "node": {
+        "title": "عرض بيانات العقدة",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "عرض أقران البرق",
+        "subtitle": ""
+      },
+      "maxLNFeePercentage": {
+        "title": "تعيين حد أقصى لرسوم الدفع",
+        "subtitle": "نسبياً للمبلغ",
+        "dialog": {
+          "title": "تعيين حد رسوم البرق القصوى"
+        },
+        "resetDialog": {
+          "title": "هل ترغب في استعادة حد رسوم البرق القصوى إلى القيمة الافتراضية (٪{{defaultMaxLNFee}})؟"
+        }
+      },
+      "autopilot": {
+        "title": "فتح القنوات تلقائياً",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "خدمات القنوات الواردة",
+        "subtitle": "استخدم خدمة قناة واردة لاستقبال المدفوعات",
+        "dialog": {
+          "title": "مزود قناة واردة",
+          "msg1": "اختر مزود قناة واردة واضغط على المتابعة.",
+          "msg2": "سيتم فتح متصفح الويب الخاص بك لموقع مزود الخدمة المقابل، حيث ستتمكن من طلب قناة.",
+          "msg3": "عند الانتهاء، يمكنك نسخ رمز العنوان و/أو فتح الرابط باستخدام محفظة Blixt."
+        }
+      },
+      "LSP": {
+        "title": "تعيين خادم Dunder LSP",
+        "subtitle": "",
+        "setDialog": {
+          "title": "تعيين خادم Dunder",
+          "acept": "تعيين الخادم"
+        },
+        "restoreDialog": {
+          "title": "هل ترغب في استعادة خادم Dunder الافتراضي؟",
+          "msg": "هل ترغب في الاستعادة إلى خادم Dunder الافتراضي"
+        }
+      },
+      "graphSync": {
+        "title": "انتظار مزامنة الرسم البياني قبل الدفع",
+        "subtitle": "تزامن الرسم البياني يؤدي إلى مسارات دفع مثلى"
+      },
+      "zeroConfPeers": {
+        "title": "تعيين أقران التأكيد الصفري",
+        "subtitle": "إضافة مفاتيح عمومية للأقران التي ترغب في السماح لها بقنوات تأكيد صفري",
+        "setDialog": {
+          "title": "أقران التأكيد الصفري",
+          "msg1": "قيم منفصلة بفاصلة للمفاتيح العمومية، للسماح بقنوات تأكيد صفري منها.",
+          "msg2": "ستثق في القنوات من هؤلاء الشركاء حتى يتم التأكيد على السلسلة على الأقل."
+        }
+      }
+    },
+    "miscelaneous": {
+      "title": "متنوع",
+      "about": {
+        "title": "عن",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "انسخ سجل التطبيق إلى وحدة التخزين المحلية",
+        "subtitle": "",
+        "dialog": {
+          "alert": "تم نسخ ملف سجل التطبيق إلى",
+          "error": "حدث خطأ أثناء نسخ ملف سجل التطبيق."
+        }
+      },
+      "lndLog": {
+        "title": "انسخ سجل lnd إلى وحدة التخزين المحلية",
+        "dialog": {
+          "error": "خطأ في نسخ ملف السجل LND."
+        }
+      },
+      "speedloaderLog": {
+        "title": "انسخ ملف سجل مزامنة قناة LN إلى وحدة التخزين المحلية",
+        "dialog": {
+          "error": "حدث خطأ أثناء نسخ ملف سجل أداة تحميل السرعة."
+        }
+      },
+      "dev": {
+        "title": "انتقل إلى شاشة التطوير",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "إخفاء الفواتير منتهية الصلاحية تلقائيا",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "انتقالات الشاشة",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "قم بتوقيع الرسالة باستخدام مفتاح المحفظة",
+        "subtitle": "",
+        "dialog1": {
+          "title": "توقيع الرسالة"
+        },
+        "dialog2": {
+          "title": "إمضاء",
+          "alert": "نسخ إلى الحافظة"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "تعيين مستوى السجل الثاني",
+        "dialog": {
+          "title": "تعيين مستوى السجل الثاني.",
+          "description": "يغير مستوى السجل مدى تفصيل السجل، ويمكن الوصول إليه من الإعدادات."
+        },
+        "restoreDialog": {
+          "title": "هل ترغب في استعادة مستوى السجل الوطني إلى المستوى الافتراضي ({{defaultLndLogLevel}})؟"
+        }
+      }
+    },
+    "experimental": {
+      "title": "التجارب",
+      "LSP": {
+        "title": "تمكين Dunder LSP",
+        "subtitle": "تجريبية للغاية. مزود خدمة Lightning الذي يساعد في السيولة الواردة"
+      },
+      "MPP": {
+        "title": "تمكين المدفوعات متعددة المسارات",
+        "subtitle": "يمكن أن تستغرق الدفعات ما يصل إلى 16 مسارًا"
+      },
+      "tor": {
+        "title": "تمكين تور",
+        "subtitle": "",
+        "enabled": {
+          "title": "أعد تشغيل التطبيق وقم بتمكين Tor",
+          "msg1": "سيؤدي تمكين Tor إلى جعل المحفظة تتصل بنظيراتها (نظراء Bitcoin وLightning Network) عبر شبكة Tor.",
+          "msg2": "ستتمكن أيضًا من الاتصال وفتح القنوات لعقد Lightning التي تستخدم خدمات البصل.",
+          "msg3": "تحذير: ستظل Blixt Wallet تتحدث مع الخدمات التالية بدون Tor",
+          "msg4": "السبب: للحصول على أسعار العملات الورقية/البيتكوين",
+          "msg5": "السبب: للحصول على ارتفاع الكتلة الحالي",
+          "msg6": "السبب: للنسخ الاحتياطي في Google Drive",
+          "msg7": "السبب: للحصول على عقد Lightning موثوقة",
+          "msg8": "متصفح WebLN وLNURL لن يستخدما Tor أيضًا."
+        },
+        "disabled": {
+          "title": "أعد تشغيل التطبيق وقم بتعطيل Tor",
+          "msg1": "يتطلب تعطيل Tor إعادة تشغيل التطبيق.",
+          "msg2": "هل ترغب في المتابعة؟"
+        }
+      },
+      "onion": {
+        "title": "عرض خدمة تور البصل",
+        "subtitle": "للاتصال وفتح القنوات لهذه المحفظة"
+      },
+      "keysend": {
+        "title": "تجربة Keysend",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "انتهاء الفاتورة (ثواني)",
+        "subtitle": "{{expiry}} ثانية"
+      }
+    },
+    "debug": {
+      "title": "تصحيح",
+      "startup": {
+        "title": "عرض إخطارات معلومات بدء التشغيل",
+        "subtitle": ""
+      },
+      "showNotifications": {
+        "title": "عرض الإخطارات لهذه الجلسة",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "إظهار سجل التصحيح لهذه الجلسة",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "مركز مساعدة LndMobile",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "تشخيص مشاكل الدندر",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "قراءة السجل الوطني",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "قراءة سجل مزامنة قناة LN",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "اختبار المفاتيح",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "جوجل درايف التجريبي",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "اكتب التكوين",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "تفعيل الوضع التجريبي",
+        "subtitle": "تستخدم للترويج. أعد تشغيل التطبيق لإعادة التعيين"
+      },
+      "rescanWallet": {
+        "title": "إعادة مسح المحفظة",
+        "subtitle": "أعد فحص blockchain لمعاملات المحفظة"
+      },
+      "getNodeInfo": {
+        "title": "الحصول على معلومات العقدة"
+      },
+      "getChannelInfo": {
+        "title": "الحصول على معلومات القناة"
+      },
+      "demoMode": {
+        "title": "تفعيل الوضع التجريبي",
+        "subtitle": "تستخدم للترويج. أعد تشغيل التطبيق لإعادة التعيين"
+      },
+      "disableGraphCache": {
+        "title": "تعطيل ذاكرة التخزين المؤقت للرسم البياني"
+      },
+      "resetMissionControl": {
+        "title": "إعادة تعيين معرفة توجيه الدفع"
+      },
+      "strictGraphPruning": {
+        "title": "تمكين التقليم الصارم للرسم البياني LN"
+      },
+      "bimodalPathFinding": {
+        "title": "تمكين تحديد المسار ثنائي الوضع"
+      },
+      "compactLndDatabases": {
+        "title": "قواعد بيانات LND المدمجة"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "فرض مزامنة القيل والقال عند بدء التشغيل"
+      },
+      "persistentServices": {
+        "title": "تمكين LND وTor المستمرين (إذا تم تمكينهما)"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "حول محفظة Blixt",
+    "msg1": "إصدار",
+    "msg2": "بواسطة",
+    "msg3": "محفظة مفتوحة المصدر مع ترخيص MIT",
+    "msg4": "تم إنشاؤها باستخدام",
+    "msg5": "وغيرها من البرامج مفتوحة المصدر المذهلة",
+    "msg6": "تم ترخيص أيقونة Tor بموجب CC BY 3.0 بواسطة",
+    "msg7": "رخصة"
+  },
+  "settings.setPincode": {
+    "enter": "أدخل الرمز السري",
+    "confirm": "قم بتأكيد الرمز السري الخاص بك"
+  },
+  "settings.removePincodeAuth": {
+    "title": "أدخل الرمز السري الحالي لإزالة الرمز السري"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "أقران البرق"
+    },
+    "alias": "الاسم المستعار للعقدة",
+    "pubKey": "عقدة المفتاح العام",
+    "address": "عنوان العقدة",
+    "data": {
+      "title": "بيانات",
+      "bytesSent": "البايتات المرسلة",
+      "bytesRecv": "البايتات المستلمة"
+    },
+    "transfer": {
+      "title": "تحويل",
+      "satSent": "جلس أرسل",
+      "satRecv": "جلس تلقى"
+    },
+    "inbound": "واردة",
+    "syncType": "نوع المزامنة",
+    "errors": "أخطاء",
+    "disconnect": "افصل الأقران"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "الاتصال بـ Lightning Peer"
+    },
+    "connect": {
+      "title": "عنوان URL للعقدة",
+      "placeholder": "عنوان URL للنظير",
+      "accept": "يتصل"
+    }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "معلومات عن شبكة البرق",
+    "avgChannelSize": "متوسط ​​حجم القناة",
+    "avgOutDegree": "متوسط ​​الدرجة",
+    "graphDiameter": "قطر الرسم البياني",
+    "medianChannelSizeSat": "متوسط ​​حجم القناة",
+    "numChannels": "عدد القنوات",
+    "numNodes": "عدد العقد",
+    "numZombieChans": "عدد قنوات الزومبي",
+    "totalNetworkCapacity": "إجمالي سعة الشبكة"
+  },
+  "settings.lightningNodeInfo": {
+    "title": "معلومات العقدة",
+    "alias": "اسم العقدة",
+    "chain": "السلسلة",
+    "timestamp": "أفضل لحظة للترويج",
+    "blockHash": "تجزئة الكتلة",
+    "blockHeight": "ارتفاع الكتلة",
+    "identityPubkey": "المفتاح العام للهوية",
+    "channel": {
+      "title": "عدد القنوات",
+      "active": "نشطة",
+      "inactive": "غير نشطة",
+      "pending": "معلقة"
+    },
+    "numPeers": "عدد النظراء",
+    "syncedToChain": "متزامن مع السلسلة",
+    "syncedToGraph": "متزامن مع الرسم البياني",
+    "nodeUris": "URI العقدة",
+    "version": "إصدار Lnd",
+    "features": "ميزات العقدة"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "خدمة البصل Tor",
+    "msg1": "مسح رمز الاستجابة السريعة هذا لفتح قناة إلى هذه المحفظة",
+    "msg2": "تعذر حلا عنوان البصل"
+  },
+  "settings.toastLog": {
+    "title": "سجل الإشعارات"
+  },
+  "settings.debugLog": {
+    "title": "سجل التصحيح"
+  },
+  "welcome.addFunds": {
+    "title": "إضافة أموال",
+    "msg1": "لبدء استخدام Lightning في محفظة Blixt",
+    "msg2": "قم بإرسال البيتكوين إلى العنوان أعلاه"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "فتح القنوات تلقائيًا",
+      "msg": "فتح القنوات عند توفر الأموال في السلسلة"
+    },
+    "done": {
+      "title": "قريبًا الانتهاء!",
+      "msg1": "إليك بعض إعدادات المحفظة التي يمكنك تكوينها وفقًا لاختيارك",
+      "msg2": "عندما تكون جاهزًا، اضغط على متابعة"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "حاول مرة أخرى",
+      "msg": "عذرًا، لقد كتبت الكلمات بالترتيب الخاطئ، يرجى المحاولة مرة أخرى."
+    },
+    "seed": {
+      "title": "قم بتأكيد بذرتك"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "تمكين نسخ احتياطي على Google Drive",
+      "msg": "تم تمكين نسخ الاحتياطي على Google Drive"
+    },
+    "backup": {
+      "title": "نسخ احتياطي في السحابة",
+      "msg": "من أجل الحفاظ على أموالك خارج السلسلة الآمنة في حالة فقدان الجهاز، نوصي بالاحتفاظ بقنوات نسخ احتياطي على Google Drive.",
+      "msg1": "سيتم الاحتفاظ بنسخة احتياطية مشفرة من قنواتك يمكن استخدامها فقط مع بذرة المحفظة.",
+      "msg2": "عندما تكون جاهزًا، اضغط على متابعة."
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "تمكين نسخ احتياطي على iCloud",
+      "msg": "تم تمكين نسخ الاحتياطي على iCloud"
+    },
+    "backup": {
+      "title": "نسخ احتياطي على iCloud",
+      "msg": "من أجل الحفاظ على أموالك خارج السلسلة الآمنة في حالة فقدان الجهاز، نوصي بالاحتفاظ بقنوات نسخ احتياطي على iCloud.",
+      "msg1": "سيتم الاحتفاظ بنسخة احتياطية مشفرة من قنواتك يمكن استخدامها فقط مع بذرة المحفظة.",
+      "msg2": "عندما تكون جاهزًا، اضغط على متابعة."
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "استعادة المحفظة",
+      "msg": "لاستعادة محفظتك، قم بكتابة كل كلمة من بذرتك مفصولة بمسافة.",
+      "msg1": "إذا كنت ترغب في استعادة قنوات الشبكة البرقية، يجب عليك تقديم نسخة احتياطية من الملف.",
+      "loading": "استعادة المحفظة",
+      "passphrase": {
+        "placeholder": "العبارة السرية (اختياري)"
+      },
+      "channel": {
+        "title": "نسخة احتياطية للقنوات",
+        "file": "اختر ملف نسخة احتياطية للقنوات على القرص",
+        "google": {
+          "title": "استعادة عبر Google Drive",
+          "alert": "فشل الاستعادة عبر Google Drive"
+        },
+        "iCloud": {
+          "title": "استعادة عبر iCloud",
+          "alert": "فشل الاستعادة عبر iCloud"
+        }
+      },
+      "seed": "يجب أن تكون البذرة مكونة من 24 كلمة بالضبط"
+    },
+    "backup": {
+      "google": "نسخ احتياطي عبر Google Drive",
+      "iCloud": "نسخ احتياطي عبر iCloud"
+    }
+  },
+  "welcome.seed": {
+    "title": "مرحبًا بك في محفظة Blixt!",
+    "msg": "هذه هي بذرتك الاحتياطية.",
+    "msg1": "اكتبها على ورقة واحفظها في مكان آمن.",
+    "msg2": "إذا فقدت وصولك إلى محفظتك،",
+    "msg3": "قد تتمكن من استعادة أموالك باستخدام بذرتك الاحتياطية.",
+    "msg4": "المعيار المستخدم للبذرة هو aezeed.",
+    "button": "لقد كتبتها"
+  }
+}
