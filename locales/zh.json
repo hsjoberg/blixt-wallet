@@ -524,7 +524,7 @@
         "title": "发送",
         "couldNotPay": "无法支付此 LNURL-pay 代码",
         "invalidResponse": "该响应不是 LNURL-pay 响应（得到 {{response}}）",
-        "invalidOperation": "无效操作，联系人既没有 LUD-16 标识符也没有 LNURL-pay 代码"
+        "invalidOperation": "操作无效，联系人既没有 LUD-16 标识符也没有 LNURL-pay 代码"
       },
       "withdraw": {
         "title": "提款",
