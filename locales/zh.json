@@ -1026,8 +1026,8 @@
     "address": "节点地址",
     "data": {
       "title": "数据",
-      "bytesSent": "已发送字节数",
-      "bytesRecv": "已接收字节数"
+      "bytesSent": "已发送字节",
+      "bytesRecv": "已接收字节"
     },
     "transfer": {
       "title": "传输",
