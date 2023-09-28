@@ -185,7 +185,7 @@
     },
     "createBlixtLspInvoice": {
       "title": "通道开通",
-      "msg": "为了接受该发票的付款，必须打开闪电网络上的通道。",
+      "msg": "为了接收该发票的付款，必须打开闪电网络上的通道。",
       "msg1": "这需要一笔一次性费用，大约",
       "alert": "无法连接 Dunder，请稍后重试。",
       "proceed": "继续"
@@ -376,7 +376,7 @@
       },
       "withdraw": {
         "title": "提款",
-        "alert": "提款已成功"
+        "alert": "提款成功"
       }
     }
   },
@@ -524,7 +524,7 @@
         "title": "发送",
         "couldNotPay": "无法支付此 LNURL-pay 代码",
         "invalidResponse": "该响应不是 LNURL-pay 响应（得到 {{response}}）",
-        "invalidOperation": "无效操作，联系人既没有 LUD-16 标识符也没有 LNURL-pay 代码"
+        "invalidOperation": "操作无效，联系人既没有 LUD-16 标识符也没有 LNURL-pay 代码"
       },
       "withdraw": {
         "title": "提款",
@@ -716,7 +716,7 @@
       "title": "比特币网络",
       "node": {
         "title": "比特币节点",
-        "subtitle": "设置连接的比特币节点 （BIP157）",
+        "subtitle": "设置连接的比特币节点（BIP157）",
         "setDialog": {
           "title": "设置节点",
           "info": "设置一个支持 BIP157 的比特币节点以建立连接。",
@@ -996,7 +996,7 @@
         "title": "在启动时强制执行八卦同步"
       },
       "persistentServices": {
-        "title": "启用持久 LND 和 Tor（如果启用）"
+        "title": "启用持久性 LND 和 Tor（如果启用）"
       }
     }
   },
@@ -1026,8 +1026,8 @@
     "address": "节点地址",
     "data": {
       "title": "数据",
-      "bytesSent": "已发送字节数",
-      "bytesRecv": "已接收字节数"
+      "bytesSent": "已发送字节",
+      "bytesRecv": "已接收字节"
     },
     "transfer": {
       "title": "传输",
@@ -1054,7 +1054,7 @@
     "avgChannelSize": "平均通道大小",
     "avgOutDegree": "平均出度",
     "graphDiameter": "路径图直径",
-    "medianChannelSizeSat": "中值通道尺寸",
+    "medianChannelSizeSat": "中值通道大小",
     "numChannels": "通道数量",
     "numNodes": "节点数量",
     "numZombieChans": "僵尸通道数量",
@@ -1077,13 +1077,13 @@
     "numPeers": "对等点数量",
     "syncedToChain": "已同步至链上",
     "syncedToGraph": "已同步至路径图",
-    "nodeUris": "节点 URI",
+    "nodeUris": "节点 URIs",
     "version": "LND 版本",
     "features": "节点特征"
   },
   "settings.torShowOnionAddress": {
     "title": "Tor 洋葱服务",
-    "msg1": "扫描此二维码即可与此钱包打开通道",
+    "msg1": "扫描此二维码即可向此钱包打开通道",
     "msg2": "无法解析洋葱地址"
   },
   "settings.toastLog": {
