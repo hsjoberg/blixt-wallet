@@ -140,4 +140,8 @@ export const languages: ILanguages = {
     id: "zh",
     name: "简体",
   },
+  zhHant: {
+    id: "zhHant",
+    name: "簡體",
+  },
 };
