@@ -130,7 +130,11 @@ export const languages: ILanguages = {
   },
   sw: {
     id: "sw",
-    name: "Kiswahili",
+    name: "Swahili",
+  },
+  swKE: {
+    id: "sw_KE",
+    name: "Swahili (Kenyan)",
   },
   vi: {
     id: "vi",
