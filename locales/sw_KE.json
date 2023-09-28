@@ -1,0 +1,1181 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Anwani ya Umeme",
+      "nodeAlias": "Jina la Node",
+      "description": "Maelezo",
+      "amount": "Kiasi",
+      "fee": "Ada",
+      "search": "Tafuta",
+      "viewInBlockExplorer": "Tazama kwenye kivinjari cha masafa"
+    },
+    "buttons": {
+      "ok": "Sawa",
+      "cancel": "Ghairi",
+      "continue": "Endelea",
+      "skip": "Ruka",
+      "proceed": "Endelea",
+      "back": "Rudi",
+      "no": "Hapana",
+      "yes": "Ndiyo",
+      "save": "Hifadhi",
+      "copy": "Nakili"
+    },
+    "msg": {
+      "status": "Hali",
+      "error": "Kosa",
+      "warning": "Onyo",
+      "result": "Matokeo",
+      "pending": "Inasubiri",
+      "done": "Imekamilika",
+      "dismiss": "Ondoa",
+      "lastSync": "Sawabisha ya mwisho",
+      "lastSyncAttempt": "Jaribio la Sawabisha la Mwisho",
+      "clipboardCopy": "Imenakiliwa kwenye ubao wa kubandika.",
+      "written": "Imeandikwa",
+      "enabled": "Imewezeshwa",
+      "disabled": "Imezimwa"
+    }
+  },
+  "welcome.start": {
+    "title": "Karibu",
+    "createWallet": {
+      "title": "Unda Pochi",
+      "msg1": "Pochi ya Blixt bado iko katika hatua za mwanzo za maendeleo.",
+      "msg2": "Ikiwa utatumia pochi hii, hakikisha unaelewa kwamba unaweza kupoteza fedha zako.",
+      "msg3": "Kwa sasa hakuna msaada wa WatchTower wa kufuatilia njia zako wakati wewe haupo mtandaoni.",
+      "msg4": "Mimi ni mkorofi, tuendelee"
+    },
+    "createWalletWithPassphrase": {
+      "title": "Weka neno la siri (neno la 25 la kuficha mbegu)",
+      "invalidMessage": "Weka neno la siri linalofaa",
+      "noLeadingTrailingSpaces": "Kuwa na nafasi mbele au nyuma haikubaliki"
+    },
+    "language": {
+      "title": "Chagua Lugha"
+    },
+    "restoreWallet": {
+      "title": "Rejesha Pochi"
+    },
+    "menu": {
+      "enableTor": "Wezesha Tor",
+      "disableTor": "Zima Tor",
+      "setBitcoinNode": "Weka Node ya Bitcoin",
+      "createWalletWithPassphrase": "Unda pochi kwa neno la siri"
+    }
+  },
+  "footerNav": {
+    "receive": "Pokea",
+    "send": "Tuma"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Skeni",
+      "receive": "Pokea",
+      "pasteFromClipboard": "Bandika kutoka Ubao wa Kubandika",
+      "sendToLightningAddress": "Tuma kwa Anwani ya Umeme",
+      "contactsAndServices": "Mawasiliano na Huduma",
+      "lightningBrowser": "Kivinjari cha Umeme",
+      "onChainWallet": "Pochi ya Mnyororo",
+      "lightningChannels": "Njia za Umeme",
+      "keysendExperiment": "Eksperimenti ya Keysend",
+      "showMore": "Onyesha Zaidi"
+    },
+    "madeInSweden": "Imetengenezwa kwa ⚡ huko Sweden"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "Uokoaji wa pochi unaendelea.",
+      "msg2": "Uokoaji wa pochi umekamilika.",
+      "more": "Maelezo zaidi"
+    },
+    "sendOnChain": {
+      "title": "Karibu kwenye Pochi ya Blixt!",
+      "msg1": "Ili kuanza, tuma fedha kwenye anwani ya Bitcoin upande wa kulia.",
+      "msg2": "Chaneli itafunguliwa moja kwa moja kwako.",
+      "msg3": "Tuma angalau",
+      "alert": "Anwani ya Bitcoin imekopishwa kwenye ubao wa kubandika"
+    },
+    "doBackup": {
+      "msg1": "Asante kwa kutumia Pochi ya Blixt!",
+      "msg2": "Tunapendekeza kufanya nakala ya pochi ili uweze kurejesha fedha zako ikiwa simu yako itapotea.",
+      "backup": "Nakala ya pochi"
+    },
+    "newChannelBeingOpened": {
+      "info": "Chaneli mpya inaendelea kufunguliwa...",
+      "view": "Tazama"
+    },
+    "noTransactionsYet": "Hakuna shughuli bado"
+  },
+  "help": {
+    "title": "Msaada",
+    "msg1": "Ikiwa unakutana na matatizo au una maoni, unaweza kuwasiliana na waendelezaji wa Pochi ya Blixt kwa kufungua suala kwenye Github au kwa kututumia barua pepe.",
+    "msg2": "Pia karibu kujiunga na kikundi chetu cha Telegram cha umma.",
+    "msg3": "Kwa kuwa Pochi ya Blixt ni pochi mpya, tunahitaji maoni kuhusu matatizo ya kawaida unayoweza kukutana nayo.",
+    "telegramGroup": "Kikundi cha Telegram"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Usawazishaji unaendelea",
+      "title1": "Usawazishaji umekamilika",
+      "msg1": "Pochi ya Blixt inaendelea kusawazisha blockchain.",
+      "msg2": "Maratibu yako ya pochi yakiwa sawa na blockchain, shughuli za mtandaoni na fedha zitaweza kutambuliwa na kuonekana kutoka sehemu ya Bitcoin mtandaoni.",
+      "msg3": "Pochi ya Blixt imeungana na blockchain.",
+      "blockHeight": {
+        "title": "Kimo cha masafa cha sasa",
+        "msg1": "Maendeleo ya usawazishaji wa masafa"
+      }
+    },
+    "recoveryMode": {
+      "title": "Usawazishaji wa uokoaji",
+      "msg1": "Uokoaji umekamilika",
+      "msg2": "Angalia Sehemu za Njia za Umeme & Bitcoin mtandaoni"
+    },
+    "lndLog": {
+      "show": "Onyesha magogo ya lnd",
+      "copy": "Nakili maandishi ya logi"
+    }
+  },
+  "transactionDetails": {
+    "title": "Shughuli",
+    "date": "Tarehe",
+    "duration": "Muda wa kulipa ankara",
+    "note": "Maelezo",
+    "website": "Tovuti",
+    "type": "Aina",
+    "lnurl": {
+      "messageFromWebsite": "Ujumbe kutoka kwa",
+      "urlReceivedFromWebsite": "URL iliyopokelewa kutoka kwa",
+      "secretMessage": "Ujumbe wa siri"
+    },
+    "payer": "Mlipaji",
+    "recipient": "Mpokeaji",
+    "amountInFiatTimeOfPayment": "Kiasi kwa Fiat (Wakati wa Malipo)",
+    "numberOfHops": "Idadi ya hatua",
+    "remotePubkey": "Remote pubkey",
+    "paymentHash": "Hash ya malipo",
+    "preimage": "Picha ya awali",
+    "status": "Hali",
+    "goBack": "Rudi nyuma",
+    "button": {
+      "setNote": "Weka maelezo",
+      "cancelInvoice": "Ghairi ankara",
+      "showMap": "Onyesha ramani"
+    },
+    "setNoteDialog": {
+      "title": "Maelezo",
+      "text": "Weka maelezo kwa shughuli hii"
+    }
+  },
+  "web.info": {
+    "title": "Demoshi ya Kuingiliana",
+    "pressToTry": "Bonyeza kujaribu Pochi ya Blixt!"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Pokea"
+    },
+    "createInvoice": {
+      "title": "Unda ankara",
+      "alert": "Kabla ya kupokea, unahitaji kufungua chaneli ya Lightning.",
+      "lsp": {
+        "msg": "Chaneli ya malipo ya Dunder LSP itafunguliwa wakati ankara hii itakapolipiwa.",
+        "msg1": "Hii ni nini?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Kufungua chaneli",
+      "msg": "Ili kukubali malipo kwa ankara hii, chaneli kwenye Mtandao wa Lightning inapaswa kufunguliwa.",
+      "msg1": "Hii inahitaji malipo ya wakati mmoja kiasi cha takriban",
+      "alert": "Kushindwa kuunganisha na Dunder, tafadhali jaribu tena baadaye.",
+      "proceed": "Endelea"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Kiasi",
+        "change": "Badilisha kitengo cha Fiat",
+        "dunderPlaceholder": "Angalau"
+      },
+      "amountBitcoin": {
+        "title": "Kiasi",
+        "change": "Badilisha kitengo cha Bitcoin",
+        "dunderPlaceholder": "Angalau"
+      },
+      "payer": {
+        "title": "Mlipaji",
+        "placeholder": "Kwa ajili ya kumbukumbu"
+      },
+      "description": {
+        "title": "Ujumbe",
+        "placeholder": "Ujumbe kwa mlipaji"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "Kuhusu Dunder LSP",
+    "msg": "Dunder ni Mtoa Huduma wa Lightning (LSP) ambaye hufungua chaneli kiotomatiki wakati huna utoshelevu wa malipo ndani.",
+    "msg1": "Hii inaweza kuwa kesi kwa mfano wakati unapoanza kutumia Pochi ya Blixt.",
+    "msg2": "Kwa kuwa hii inahitaji shughuli za Bitcoin, ada ya shughuli ya Bitcoin itatozwa kutoka kwenye malipo yanayopokelewa. Malipo ya baadaye yataweza kutumia chaneli ya malipo iliyofunguliwa kwenye Mtandao wa Lightning.",
+    "msg3": "Dunder ni",
+    "msg4": "programu huria",
+    "msg5": "na unaweza kubadilisha mtoa huduma wa chaguo-msingi kwenye Mipangilio."
+  },
+  "receive.receiveQr": {
+    "title": "Pokea",
+    "qr": {
+      "title": "Skena nambari hii ya QR",
+      "msg": "Inaisha baada ya {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Lipa ankara"
+    },
+    "form": {
+      "invoice": {
+        "title": "Ankara"
+      },
+      "amount": {
+        "title": "Kiasi"
+      },
+      "recipient": {
+        "title": "Mpokeaji"
+      },
+      "nodeAlias": {
+        "title": "Jina la Node"
+      },
+      "description": {
+        "title": "Ujumbe"
+      },
+      "feeEstimate": {
+        "title": "Thamani ya ada"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "MALIPO YAMETUMWA"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Njia za Lightning"
+    },
+    "balance": {
+      "title": "Salio"
+    },
+    "channel": {
+      "alias": "Jina",
+      "node": "Node",
+      "channelId": "Kitambulisho cha Chaneli",
+      "channelPoint": "Pointi ya Chaneli",
+      "status": "Hali",
+      "statusActive": "Imewezeshwa",
+      "statusInactive": "Haifanyi kazi",
+      "statusPending": "Inasubiri",
+      "statusClosing": "Kufunga",
+      "statusForceClosing": "Kufunga Kwa Nguvu",
+      "statusWaitingForClose": "Inasubiri kufunga",
+      "capacity": "Uwezo",
+      "howMuchCanBeSent": "Inaweza kutuma",
+      "howMuchCanBeReceived": "Inaweza kupokea",
+      "localReserve": "Amana ya Lokali",
+      "commitmentFee": "Ada ya Uthibitisho",
+      "channelType": "Aina ya Chaneli",
+      "pendingFunds": "Fedha zinazosubiri",
+      "balanceInLimbo": "Salio la Limbo",
+      "pendingHtlcs": "HTLC zinazosubiri",
+      "maturityHeight": "Kimo cha Utimilifu",
+      "localCommitmentTxid": "TXID ya Ahadi ya Lokali",
+      "remoteCommitmentTxid": "TXID ya Ahadi ya Mbali",
+      "closeChannel": "Funga Chaneli",
+      "forceClosePendingChannel": "Funga Chaneli Inayosubiri Kufungwa Kwa Nguvu",
+      "closeChannelPrompt": {
+        "title": "Funga Chaneli"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Fungua Chaneli"
+    },
+    "form": {
+      "title": "Fungua Chaneli",
+      "channel": {
+        "title": "Node URI",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Kiasi",
+        "placeholder": "Kiasi"
+      },
+      "fee_rate": {
+        "title": "Thamani ya ada"
+      }
+    },
+    "torPrompt": {
+      "title": "Wezesha Tor",
+      "text1": "Inaonekana unajaribu kufungua chaneli kwa node ambayo inaendeshwa chini ya huduma ya kitunguu cha Tor.",
+      "text2": "Ili kuunganisha, unahitaji kuwezesha Tor kwa Pochi ya Blixt."
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "Fedha za mtandaoni"
+    },
+    "address": {
+      "title": "Tuma Bitcoin kwenye mtandao kwa anwani hii",
+      "alert": "Imekopishwa kwenye ubao wa kubandika."
+    },
+    "newAddress": {
+      "title": "Jenga anwani mpya"
+    },
+    "withdraw": {
+      "title": "Kutoa sarafu"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Uhamisho",
+    "txHash": "Kitambulisho",
+    "timeStamp": "Tarehe",
+    "amount": "Kiasi",
+    "totalFees": "Ada",
+    "label": "Lebo",
+    "destAddresses": "Kielelezo",
+    "numConfirmations": "Thibitisho",
+    "blockHeight": "Kimo cha Block",
+    "blockHash": "Hash ya Block",
+    "rawTxHex": {
+      "title": "Hex ya Uhamisho wa Asilia",
+      "msg": "Bonyeza ili kunakili"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Rejista ya Uhamisho"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Kutoa Sarafu"
+    },
+    "form": {
+      "address": {
+        "title": "Anwani",
+        "placeholder": "Anwani ya Bitcoin"
+      },
+      "amount": {
+        "title": "Kiasi",
+        "placeholder": "Kiasi",
+        "withdrawAll": "Kutoa fedha zote",
+        "all": "Zote"
+      },
+      "feeRate": {
+        "title": "Kiwango cha Ada",
+        "auto": "kiotomatiki"
+      },
+      "withdraw": {
+        "title": "Kutoa",
+        "alert": "Utoaji umefanikiwa"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Ombi la Kuingia",
+      "msg": "Je, unataka kuingia kwenye",
+      "success": "Umejithibitisha kwa"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Kufungua kituo cha kuingia"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Onyesha maudhui",
+      "dialog": {
+        "title": "Maudhui ya kiufundi"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} ipo kwenye orodha yako ya mawasiliano"
+      },
+      "add": {
+        "title": "Ongeza kwenye Orodha ya Mawasiliano",
+        "msg": "Je, ungependa kuongeza {{lightningAddress}} kwenye orodha yako ya mawasiliano?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Nambari ya malipo kwa {{domain}} ipo kwenye orodha yako ya mawasiliano"
+      },
+      "add": {
+        "title": "Ongeza kwenye Orodha ya Mawasiliano",
+        "msg": "Je, ungependa kuongeza nambari hii ya malipo kwa {{domain}} kwenye orodha yako ya mawasiliano?"
+      }
+    },
+    "unableToPay": "Haiwezekani kulipa",
+    "payerData": {
+      "commentAllowed": "Maoni kwa {{target}} (max {{letters}} letters)",
+      "sendNameWithComment": "Tuma jina langu pamoja na maoni haya",
+      "name": {
+        "ask": "Tuma jina langu pamoja na malipo haya",
+        "mandatory": "Jina lako lazima litumwe pamoja na malipo haya"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "Malipo hayana maelezo."
+    },
+    "pay": {
+      "title": "Lipa",
+      "error": {
+        "mustProvideComment": "Lazimautoe maoni ikiwa utachagua kuweka jina lako kwenye malipo haya"
+      }
+    },
+    "cancel": {
+      "title": "Ghairi"
+    },
+    "form": {
+      "asksYouToPay": "anakuomba ulipe.",
+      "description": {
+        "title": "Maelezo"
+      },
+      "amount": {
+        "title": "Kiasi",
+        "to": "kwenda",
+        "placeholder": "Ingiza kiasi"
+      },
+      "alert": "Haiwezekani kulipa"
+    },
+    "done": {
+      "message": {
+        "title": "Ujumbe kutoka"
+      },
+      "url": {
+        "description": "Maelezo",
+        "domain": "URL imepokelewa kutoka",
+        "done": {
+          "title": "Imefanyika"
+        },
+        "copy": {
+          "title": "Nakili kwa ubao wa kuchorea",
+          "msg": "Imenakiliwa kwa ubao wa kuchorea."
+        },
+        "open": {
+          "title": "Fungua Kivinjari"
+        }
+      },
+      "aes": {
+        "domain": "Nimepokea ujumbe wa siri uliosimbwa kutoka kwa",
+        "description": "Ujumbe kutoka",
+        "secret": "Ujumbe wa siri"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "Kuhusu Anwani ya Lightning",
+      "msg1": "Anwani ya Lightning",
+      "msg2": "ni njia ya kulipa mtu au huduma kwenye Mtandao wa Lightning.",
+      "msg3": "Zinaonekana kama anwani za barua pepe, lakini badala ya kutuma barua pepe kwa mpokeaji, unatuma pesa.",
+      "msg4": "Blixt Wallet inaunga mkono kikamilifu kutuma kwa Anwani ya Lightning, lakini kupokea",
+      "msg5": "kwa kutumia Anwani ya Lightning bado inafanyiwa kazi."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "Ombi la kutoa limetumwa kwa {{domain}}",
+      "addToContactList": {
+        "title": "Ongeza kwa Orodha ya Mawasiliano",
+        "msg": "Je, ungependa kuongeza nambari hii ya kutoa {{domain}} kwenye orodha yako ya mawasiliano?",
+        "note": "Akaunti kwenye {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "Ombi la Kutoa",
+      "msg": "Ujumbe kutoka",
+      "dialog": {
+        "msg": "Kiasi"
+      },
+      "dialog1": {
+        "minSat": "Kiasi cha chini cha kutoa",
+        "maxSat": "Kiasi cha juu cha kutoa",
+        "placeholder": "Kiasi"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Orodha ya Mawasiliano na Huduma",
+      "lightningAddressAlreadyExists": "ipo tayari kwenye orodha yako ya mawasiliano",
+      "nothingHereYet": "Hakuna chochote hapa bado...",
+      "whyNotAdd": "Kwa nini usiweke mawasiliano ya Anwani ya Lightning kwa",
+      "tappingHere": "bonyeza hapa"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Salio la Mbali",
+        "error": "Operesheni batili, mawasiliano hana nambari ya LNURL-kutoa"
+      },
+      "list": {
+        "pay": "Malipo kwa",
+        "account": "Akaunti kwenye"
+      },
+      "send": {
+        "title": "Tuma",
+        "couldNotPay": "Haikuwezekana kulipa kwa nambari hii ya LNURL-lipa",
+        "invalidResponse": "Jibu halikuwa jibu la LNURL-lipa (tulipata {{response}})",
+        "invalidOperation": "Operesheni batili, mawasiliano haina kitambulisho cha LUD-16 au nambari ya LNURL-lipa"
+      },
+      "withdraw": {
+        "title": "Kutoa",
+        "couldNotPay": "Haikuwezekana kulipa kwa nambari hii ya LNURL-lipa",
+        "invalidResponse": "Jibu halikuwa jibu la LNURL-lipa (tulipata {{response}})",
+        "invalidOperation": "Operesheni batili, mawasiliano haina nambari ya LNURL-kutoa"
+      },
+      "deleteContact": {
+        "title": "Kufuta Mawasiliano",
+        "msg": "Una uhakika unataka kufuta mawasiliano {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Lebo ya Mawasiliano"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Je, ungependa kufunga kivinjari?",
+    "home": "Rudi kwenye orodha ya maduka",
+    "placeholder": "Ingiza URL hapa"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "Imenakiliwa kwa ubao wa kuchorea"
+    },
+    "dialog": {
+      "msg1": "Karibu kwenye uwanja wa michezo wa keysend",
+      "msg2": "Keysend inakuruhusu kulipa Blixt Wallet nyingine (au nodi ya Lightning yoyote inayounga mkono keysend) bila kuhitaji ankara.",
+      "msg3": "Bonyeza kwenye kamera kupepesa nambari ya QR ya mkoba mwingine au toa kielelezo cha kitufe cha umma na vidokezo vya njia hapa chini."
+    },
+    "send": {
+      "title": "Tuma",
+      "msg": "Malipo ya Keysend",
+      "error": {
+        "checkAmount": "Angalia kiasi",
+        "missingPubkey": "Pubkey haipo"
+      },
+      "alert": "Malipo yamefanikiwa"
+    },
+    "form": {
+      "amount": {
+        "title": "Kiasi (sat)"
+      },
+      "pubkey": {
+        "title": "Ufunguo wa Umma",
+        "placeholder": "Ufunguo wa Umma"
+      },
+      "route": {
+        "title": "Mawazo ya Njia",
+        "placeholder": "Mawazo ya Njia"
+      },
+      "message": {
+        "title": "Ujumbe",
+        "placeholder": "Ingiza ujumbe wa mazungumzo hapa"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "Mipangilio",
+    "general": {
+      "title": "Jumla",
+      "name": {
+        "title": "Jina",
+        "subtitle": "Litatumika kwenye shughuli",
+        "dialog": {
+          "msg": "Chagua jina litakalotumiwa kwenye shughuli.\n\nJina lako litaonekana kwenye ankara kwa wale wanaokulipa pia watu unaowalipa.",
+          "accept": "Weka jina"
+        }
+      },
+      "lang": {
+        "title": "Lugha",
+        "dialog": {
+          "title": "Chagua lugha"
+        }
+      },
+      "pushNotification": {
+        "title": "Arifa za Push",
+        "subtitle": "Kwa matukio ya shughuli na njia"
+      },
+      "checkClipboard": {
+        "title": "Angalia Ubao wa Kuchorea kwa Ankara",
+        "subtitle": "Kagua moja kwa moja ubao wa kuchorea kwa ankara"
+      },
+      "saveGeolocation": {
+        "title": "Hifadhi Mahali pa Shughuli",
+        "subtitle": "Hifadhi mahali pa shughuli kwa kifaa hiki",
+        "logGranted": "Idhini ya mahali imeruhusiwa",
+        "logDenied": "Ruhusa ya mahali imekataliwa"
+      },
+      "mapTheme": {
+        "title": "Chagua Mada ya Ramani"
+      }
+    },
+    "wallet": {
+      "title": "Mkoba",
+      "seed": {
+        "show": {
+          "title": "Onyesha mnemoniki",
+          "subtitle": "Onyesha mnemoniki ya maneno 24 kwa mkoba huu",
+          "dialog": {
+            "title": "Mnemoniki",
+            "alert": "Imenakiliwa kwa ubao wa kuchorea",
+            "copy": "Nakili mnemoniki"
+          }
+        },
+        "remove": {
+          "title": "Ondoa mnemoniki kwenye kifaa",
+          "subtitle": "Ondoa kwa kudumu mnemoniki kutoka kwenye kifaa hiki",
+          "dialog": {
+            "title": "Ondoa mnemoniki",
+            "msg": "Hii itaondoa kwa kudumu mnemoniki kutoka kwenye kifaa hiki. Fanya hivi tu ikiwa umefanya nakala ya mnemoniki!",
+            "accept": "Futa mnemoniki"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Chora Nakala ya Kuhifadhi Njia",
+          "alert": "Faili iliyoandikwa:"
+        },
+        "verify": {
+          "title": "Thibitisha Kuhifadhi Njia"
+        },
+        "googleCloud": {
+          "title": "Kuhifadhi Njia ya Google Drive",
+          "subtitle": "Hifadhi moja kwa moja njia kwenye Google Drive",
+          "alert": "Hifadhi kwenye Google Drive imewezeshwa"
+        },
+        "googleCloudForce": {
+          "title": "Tumia Kwa Nguvu Hifadhi Njia ya Google Drive",
+          "alert": "Imehifadhi njia kwenye Google Drive"
+        },
+        "iCloud": {
+          "title": "Hifadhi Njia ya iCloud",
+          "subtitle": "Hifadhi moja kwa moja njia kwenye iCloud",
+          "alert": "Hifadhi kwenye iCloud"
+        },
+        "iCloudForce": {
+          "title": "Tumia Kwa Nguvu Hifadhi Njia ya iCloud",
+          "alert": "Imehifadhi njia kwenye iCloud"
+        },
+        "error": "Kosa la kuhifadhi"
+      }
+    },
+    "security": {
+      "title": "Usalama",
+      "pincode": {
+        "title": "Ingia kwa Pincode"
+      },
+      "biometrics": {
+        "title": "Ingia kwa",
+        "fingerprint": "alama za vidole",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Sawazisha Mnyororo kwa Ratiba",
+        "subtitle": "Inakimbia nyuma kila baada ya saa 2",
+        "dialog": {
+          "title": "Siyo ya kupendekeza",
+          "msg": "Onyo. Siyo ya kupendekeza kuzima usawazishaji wa mnyororo kwa ratiba.\n\nHakikisha unaendana na mtandao vinginevyo unaweza kupoteza pesa zako.\n\nFanya hivi tu ikiwa unajua unachofanya."
+        }
+      },
+      "gossipSync": {
+        "title": "Sawazisha Njia za LN kwenye Kuanzisha tena"
+      },
+      "gossipSyncAndroid": {
+        "title": "Sawazisha Njia za LN kwa Ratiba",
+        "subtitle": "Inaendesha wakati wa kuanzisha tena kwa Blixt"
+      }
+    },
+    "display": {
+      "title": "Onyesha",
+      "fiatUnit": {
+        "title": "Badilisha Jedwali la Fiat"
+      },
+      "bitcoinUnit": {
+        "title": "Badilisha Jedwali la Bitcoin"
+      },
+      "onchainExplorer": {
+        "title": "Mbadala wa Kuchunguza Onchain",
+        "dialog": {
+          "title": "Badilisha mbadala wa kuchunguza kwenye mnyororo"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Mtandao wa Bitcoin",
+      "node": {
+        "title": "Node ya Bitcoin",
+        "subtitle": "Weka Node ya Bitcoin (BIP157) ya kuunganisha",
+        "setDialog": {
+          "title": "Weka Node",
+          "info": "Weka Node ya Bitcoin inayosaidia BIP157 ili kuweka uhusiano.",
+          "leaveBlankToSearch": "Acha wazi ili Blixt Wallet itafute kwenye mtandao wa Bitcoin kwa node halali.",
+          "longPressToReset": "Ili kurejesha kwenye node ya kawaida ({{defaultNode}}), bonyeza kwa muda mrefu kwenye mipangilio."
+        },
+        "restoreDialog": {
+          "title": "Rejesha node",
+          "msg": "Ungependa kurejesha kwenye node ya kawaida"
+        }
+      },
+      "restartDialog": {
+        "title": "Kuanza upya kunahitajika",
+        "msg": "Blixt Wallet inahitaji kuanza upya kabla ya mabadiliko mapya kutekelezwa.",
+        "msg1": "Ungependa kufanya hivyo sasa?"
+      },
+      "rpc": {
+        "title": "Weka bitcoind RPC Host"
+      },
+      "zmqRawBlock": {
+        "title": "Weka bitcoind ZMQ Raw Block Host"
+      },
+      "zmqRawTx": {
+        "title": "Weka bitcoind ZMQ Raw Tx Host"
+      },
+      "p2tr": {
+        "title": "Washa kupokea kwenye mnyororo kupitia Taproot (P2TR)"
+      }
+    },
+    "LN": {
+      "title": "Mtandao wa Lightning",
+      "network": {
+        "title": "Onyesha taarifa za mtandao",
+        "subtitle": ""
+      },
+      "node": {
+        "title": "Onyesha data ya node",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Onyesha wenzako wa Lightning",
+        "subtitle": ""
+      },
+      "maxLNFeePercentage": {
+        "title": "Weka kiwango cha juu cha ada ya malipo",
+        "subtitle": "Kulingana na kiasi",
+        "dialog": {
+          "title": "Weka kiwango cha juu cha ada ya LN"
+        },
+        "resetDialog": {
+          "title": "Ungependa kurejesha kiwango cha juu cha ada ya LN kwa thamani ya default ({{defaultMaxLNFee}}%)?"
+        }
+      },
+      "autopilot": {
+        "title": "Fungua njia moja kwa moja",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Huduma za njia zinazoingia",
+        "subtitle": "Tumia huduma ya njia inayoingia kupokea malipo",
+        "dialog": {
+          "title": "Mtoa huduma wa njia inayoingia",
+          "msg1": "Chagua mtoa huduma wa njia inayoingia na bonyeza Endelea.",
+          "msg2": "Kivinjari chako cha wavuti kitafunguliwa kwenye tovuti ya mtoa huduma husika, ambapo utaweza kuomba njia.",
+          "msg3": "Ukishamaliza, unaweza kunakili msimbo wa anwani na/au kufungua kiungo kwa kutumia Blixt Wallet."
+        }
+      },
+      "LSP": {
+        "title": "Weka Dunder LSP Server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Weka Server ya Dunder",
+          "acept": "Weka server"
+        },
+        "restoreDialog": {
+          "title": "Rejesha Server ya Dunder",
+          "msg": "Ungependa kurejesha kwenye server ya kawaida ya Dunder"
+        }
+      },
+      "graphSync": {
+        "title": "Ngoja usawazishe grafu kabla ya malipo",
+        "subtitle": "Grafu iliyo sawa inasababisha njia bora za malipo"
+      },
+      "zeroConfPeers": {
+        "title": "Weka wenzako wa zero conf",
+        "subtitle": "Ongeza funguo za umma za wenzako unaoipenda kuruhusu njia za zero conf",
+        "setDialog": {
+          "title": "Wenzako wa zero conf",
+          "msg1": "Thibitisha thamani zilizotenganishwa kwa funguo za umma, kuruhusu njia za zero conf kutoka kwa wenzako.",
+          "msg2": "Utakuwa unatuma njia kutoka kwa washirika hawa mpaka angalau kuna uthibitisho mmoja wa mnyororo"
+        }
+      }
+    },
+    "miscelaneous": {
+      "title": "Mbalimbali",
+      "about": {
+        "title": "Kuhusu",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "Nakili kumbukumbu ya programu kwenye uhifadhi wa ndani",
+        "subtitle": "",
+        "dialog": {
+          "alert": "Imenakili faili ya kumbukumbu ya programu kwenda kwenye",
+          "error": "Hitilafu katika kunakili faili ya kumbukumbu ya programu."
+        }
+      },
+      "lndLog": {
+        "title": "Nakili kumbukumbu ya lnd kwenye uhifadhi wa ndani",
+        "dialog": {
+          "error": "Hitilafu katika kunakili faili ya kumbukumbu ya lnd."
+        }
+      },
+      "speedloaderLog": {
+        "title": "Nakili faili ya kumbukumbu ya usawazishaji wa njia ya LN kwenye uhifadhi wa ndani",
+        "dialog": {
+          "error": "Hitilafu katika kunakili faili ya kumbukumbu ya speedloader."
+        }
+      },
+      "dev": {
+        "title": "Nenda kwenye skrini ya maendeleo",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Ficha ankara zilizoisha muda wake kiotomatiki",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Mzunguko wa skrini",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Saini ujumbe kwa kutumia ufunguo wa mkoba",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Saini ujumbe"
+        },
+        "dialog2": {
+          "title": "Saini",
+          "alert": "Imewekwa kwenye ubao wa kunakili"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Weka kiwango cha kumbukumbu cha lnd",
+        "dialog": {
+          "title": "Weka kiwango cha kumbukumbu cha lnd.",
+          "description": "Kiwango cha kumbukumbu kinabadilisha maneno mengi ya kumbukumbu ya lnd, inayopatikana kutoka kwenye mipangilio."
+        },
+        "restoreDialog": {
+          "title": "Je, ungependa kurejesha kiwango cha kumbukumbu cha lnd kwenye kiwango cha kawaida ({{defaultLndLogLevel}})?"
+        }
+      }
+    },
+    "experimental": {
+      "title": "Eksperimenti",
+      "LSP": {
+        "title": "Wezesha Huduma ya Dunder LSP",
+        "subtitle": "KIDOGO SANA KWA MAJARIBIO. Mtoa Huduma wa Lightning anayesaidia likwiditi inayoingia"
+      },
+      "MPP": {
+        "title": "Wezesha Malipo ya Njia Nyingi",
+        "subtitle": "Malipo yanaweza kuchukua njia hadi 16"
+      },
+      "tor": {
+        "title": "Wezesha Tor",
+        "subtitle": "",
+        "enabled": {
+          "title": "Anza upya programu na wezesha Tor",
+          "msg1": "Kuwezesha Tor kutafanya mkoba kuunganisha na wenzake (wenzake wa Bitcoin na Lightning Network) kupitia Mtandao wa Tor.",
+          "msg2": "Pia utaweza kuunganisha na kufungua njia za wenzake wa Lightning ambao wanatumia huduma za vitunguu.",
+          "msg3": "ONYO: Blixt Wallet bado itazungumza na huduma zifuatazo bila Tor",
+          "msg4": "Sababu: Kupata viwango vya fiat/bitcoin",
+          "msg5": "Sababu: Kupata kimoji cha block cha sasa",
+          "msg6": "Sababu: Kwa chelezo ya Google Drive",
+          "msg7": "Sababu: Kwa wenzake wa Lightning wenye uaminifu",
+          "msg8": "Kivinjari cha WebLN na LNURL pia haitatumia Tor."
+        },
+        "disabled": {
+          "title": "Anza upya programu na afute Tor",
+          "msg1": "Kufuta Tor kunahitaji kuanza upya programu.",
+          "msg2": "Je, unataka kuendelea?"
+        }
+      },
+      "onion": {
+        "title": "Onyesha Huduma ya Vitunguu vya Tor",
+        "subtitle": "Kwa kuunganisha na kufungua njia kwenye mkoba huu"
+      },
+      "keysend": {
+        "title": "Jaribio la Keysend",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Muda wa Kibali cha Ankara (sekunde)",
+        "subtitle": "{{expiry}} sekunde"
+      }
+    },
+    "debug": {
+      "title": "Ugunduzi",
+      "startup": {
+        "title": "Onyesha arifa za habari za kuanzisha",
+        "subtitle": ""
+      },
+      "showNotifications": {
+        "title": "Onyesha arifa kwa kipindi hiki",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "Onyesha kumbukumbu za kugundua kwa kipindi hiki",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "Kituo cha Msaada cha LndMobile",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Dhibiti Matatizo ya Dunder",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "Soma kumbukumbu ya lnd",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "Soma kumbukumbu ya usawazishaji wa njia ya LN",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Jaribio la Keysend",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Kitanda cha Majaribio ya Google Drive",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Andika mpangilio",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Washa Mode ya Onyesho",
+        "subtitle": "Inatumika kwa matangazo. Anza upya programu ili kurejesha"
+      },
+      "rescanWallet": {
+        "title": "Tafuta upya mkoba",
+        "subtitle": "Tafuta upya blockchain kwa shughuli za mkoba"
+      },
+      "getNodeInfo": {
+        "title": "Pata habari ya nodi"
+      },
+      "getChannelInfo": {
+        "title": "Pata habari ya njia"
+      },
+      "demoMode": {
+        "title": "Washa Mode ya Onyesho",
+        "subtitle": "Inatumika kwa matangazo. Anza upya programu ili kurejesha"
+      },
+      "disableGraphCache": {
+        "title": "Zima uhifadhi wa grafu wa lnd"
+      },
+      "resetMissionControl": {
+        "title": "Weka upya maarifa ya malipo"
+      },
+      "strictGraphPruning": {
+        "title": "Wezesha upogolewaji mkali wa Grafu ya LN"
+      },
+      "bimodalPathFinding": {
+        "title": "Wezesha utafutaji wa njia wa Bimodal"
+      },
+      "compactLndDatabases": {
+        "title": "Fanya Databases za lnd kuwa ndogo"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Thibitisha usawazishaji wa ghasia wakati wa kuanza upya"
+      },
+      "persistentServices": {
+        "title": "Wezesha Huduma za LND na Tor za Kudumu (ikiwa imezimwa)"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "Kuhusu Blixt Wallet",
+    "msg1": "Toleo",
+    "msg2": "Na",
+    "msg3": "Mkoba wa chanzo wazi na leseni ya MIT",
+    "msg4": "Imetengenezwa kwa kutumia",
+    "msg5": "na programu nyingine za chanzo wazi za kushangaza",
+    "msg6": "Alama ya Tor imelisishwa chini ya CC BY 3.0 na",
+    "msg7": "leseni"
+  },
+  "settings.setPincode": {
+    "enter": "Ingiza nambari ya siri",
+    "confirm": "Thibitisha nambari yako ya siri"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Ingiza nambari ya siri ya sasa kuondoa nambari ya siri"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Wenzake wa Lightning"
+    },
+    "alias": "Kifupi cha nodi",
+    "pubKey": "Kitufe cha umma cha nodi",
+    "address": "Anwani ya nodi",
+    "data": {
+      "title": "Data",
+      "bytesSent": "baiti zilizotumwa",
+      "bytesRecv": "baiti zilizopokelewa"
+    },
+    "transfer": {
+      "title": "Uhamisho",
+      "satSent": "sat zilizotumwa",
+      "satRecv": "sat zilizopokelewa"
+    },
+    "inbound": "Kuingia",
+    "syncType": "Aina ya Usawazishaji",
+    "errors": "Makosa",
+    "disconnect": "Katiza mwenzi"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Unganisha na Mwenzi wa Lightning"
+    },
+    "connect": {
+      "title": "Nodi ya URI",
+      "placeholder": "URI ya Mwenzi",
+      "accept": "Unganisha"
+    }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Maelezo ya Mtandao wa Lightning",
+    "avgChannelSize": "Ukubwa wa Wastani wa Njia",
+    "avgOutDegree": "Kiwango cha Wastani cha Nje",
+    "graphDiameter": "Umbali wa Grafu",
+    "medianChannelSizeSat": "Ukubwa wa Wastani wa Njia (Mediani)",
+    "numChannels": "Idadi ya Njia",
+    "numNodes": "Idadi ya Nodi",
+    "numZombieChans": "Idadi ya Njia za Zombie",
+    "totalNetworkCapacity": "Uwezo wa Jumla wa Mtandao"
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Maelezo ya Nodi",
+    "alias": "Kifupi cha Nodi",
+    "chain": "Mnyororo",
+    "timestamp": "Muda Bora wa Kichwa",
+    "blockHash": "Hashi ya Kichwa",
+    "blockHeight": "Kimo cha Kichwa",
+    "identityPubkey": "Kitufe cha Ufunguzi wa Nodi",
+    "channel": {
+      "title": "Idadi ya Njia",
+      "active": "Njia za Kazi",
+      "inactive": "Njia Zisizofanya Kazi",
+      "pending": "Njia Zilizosubiri"
+    },
+    "numPeers": "Idadi ya Wenzake",
+    "syncedToChain": "Imeunganishwa na Mnyororo",
+    "syncedToGraph": "Imeunganishwa na Grafu",
+    "nodeUris": "URI za Nodi",
+    "version": "Toleo la Lnd",
+    "features": "Sifa za Nodi"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Huduma ya Vitunguu vya Tor",
+    "msg1": "Soma nambari hii ya QR kufungua njia kwa mkoba huu",
+    "msg2": "Haiwezi kutatua anwani ya vitunguu"
+  },
+  "settings.toastLog": {
+    "title": "Kumbukumbu ya Taarifa"
+  },
+  "settings.debugLog": {
+    "title": "Kumbukumbu za Ugunduzi"
+  },
+  "welcome.addFunds": {
+    "title": "Ongeza Fedha",
+    "msg1": "Ili kuanza kutumia Lightning kwenye Mkoba wa Blixt",
+    "msg2": "tuma bitcoins kwa anwani iliyotajwa hapo juu"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "Fungua Njia kiatomati",
+      "msg": "Fungua njia wakati kuna fedha kwenye mnyororo"
+    },
+    "done": {
+      "title": "Karibu umalize!",
+      "msg1": "Hapa kuna mipangilio ya mkoba unaweza kuweka kulingana na upendeleo wako",
+      "msg2": "Wakati utakapokuwa tayari, bonyeza Endelea"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Jaribu tena",
+      "msg": "Samahani, umeweka maneno kwa mpangilio mbaya, tafadhali jaribu tena."
+    },
+    "seed": {
+      "title": "Thibitisha mbegu yako"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Wezesha Nakala ya Google Drive",
+      "msg": "Nakala ya Google Drive imewezeshwa"
+    },
+    "backup": {
+      "title": "Nakala ya Cloud",
+      "msg": "Ili fedha zako zisizo kwenye mnyororo zibaki salama ikiwa kifaa kinapotea, tunakushauri uhifadhi njia kwenye Google Drive.",
+      "msg1": "Hii itahifadhi nakala iliyosimbwa ya njia zako ambayo inaweza kutumiwa tu pamoja na mbegu ya mkoba.",
+      "msg2": "Wakati utakapokuwa tayari, bonyeza Endelea."
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Wezesha Nakala ya iCloud",
+      "msg": "Nakala ya iCloud imewezeshwa"
+    },
+    "backup": {
+      "title": "Nakala ya iCloud",
+      "msg": "Ili fedha zako zisizo kwenye mnyororo zibaki salama ikiwa kifaa kinapotea, tunakushauri uhifadhi njia kwenye iCloud.",
+      "msg1": "Hii itahifadhi nakala iliyosimbwa ya njia zako ambayo inaweza kutumiwa tu pamoja na mbegu ya mkoba.",
+      "msg2": "Wakati utakapokuwa tayari, bonyeza Endelea."
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Rejesha Mkoba",
+      "msg": "Ili kurejesha mkoba wako, andika kila neno kutoka kwa mbegu yako kwa kuzitenganisha kwa nafasi.",
+      "msg1": "Ikiwa unataka kurejesha njia za Lightning Network, unahitaji kutoa nakala ya faili.",
+      "loading": "Rejesha Mkoba",
+      "passphrase": {
+        "placeholder": "Maneno ya Siri (hiari)"
+      },
+      "channel": {
+        "title": "Nakala ya Njia",
+        "file": "Chagua faili ya nakala ya njia kwenye diski",
+        "google": {
+          "title": "Rejesha kupitia Google Drive",
+          "alert": "Kushindwa kwa Urejeshaji kupitia Google Drive"
+        },
+        "iCloud": {
+          "title": "Rejesha kupitia iCloud",
+          "alert": "Kushindwa kwa Urejeshaji kupitia iCloud"
+        }
+      },
+      "seed": "Mbegu lazima iwe na maneno 24 kwa usahihi"
+    },
+    "backup": {
+      "google": "Nakala kupitia Google Drive",
+      "iCloud": "Nakala kupitia iCloud"
+    }
+  },
+  "welcome.seed": {
+    "title": "Karibu kwenye Mkoba wa Blixt!",
+    "msg": "Hii ni mbegu yako ya urejesho.",
+    "msg1": "Andika kwenye karatasi na uhifadhi mahali salama.",
+    "msg2": "Ikiwa utapoteza upatikanaji wa mkoba wako",
+    "msg3": "inawezekana kurejesha fedha zako kwa kutumia mbegu yako ya urejesho.",
+    "msg4": "Mbegu inayotumiwa ni aezeed.",
+    "button": "Nimeandika chini"
+  }
+}
