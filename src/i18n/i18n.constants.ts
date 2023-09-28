@@ -100,6 +100,10 @@ export const languages: ILanguages = {
     id: "it",
     name: "Italiano",
   },
+  ja: {
+    id: "ja",
+    name: "日本語",
+  },
   fr: {
     id: "fr",
     name: "Français",
