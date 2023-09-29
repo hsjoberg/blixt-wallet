@@ -58,17 +58,6 @@ export default function LndMobileHelpCenter({ navigation }) {
 
   if (PLATFORM === "android") {
     steps.push({
-      title: "Check LndMobileService process exist",
-      async exec () {
-        if (PLATFORM === "ios" || PLATFORM === "macos") {
-          return true;
-        }
-        const r = await NativeModules.LndMobileTools.checkLndProcessExist();
-        return r;
-      }
-    });
-
-    steps.push({
       title: "Check LndMobileService connected",
       async exec () {
         if (PLATFORM === "ios") {
