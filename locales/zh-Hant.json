@@ -417,8 +417,8 @@
     },
     "unableToPay": "無法支付",
     "payerData": {
-      "commentAllowed": "給 {{target}} 的評論（最多 {{letters}}  字符）",
-      "sendNameWithComment": "將我的名稱與此評論一起發送",
+      "commentAllowed": "給 {{target}} 的留言（最多 {{letters}}  字符）",
+      "sendNameWithComment": "將我的名稱與此留言一起發送",
       "name": {
         "ask": "將我的名稱與此付款一起發送",
         "mandatory": "你的名稱必須與此付款一起發送"
