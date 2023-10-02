@@ -12,7 +12,7 @@ import { formatBitcoin, BitcoinUnits, IBitcoinUnits, valueBitcoin, valueFiat } f
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { MATH_PAD_NATIVE_ID, PLATFORM } from "../../utils/constants";
-import { toast } from "../../utils";
+import { hexToUint8Array, toast } from "../../utils";
 import { Keyboard, TextStyle } from "react-native";
 import Container from "../../components/Container";
 import { IFiatRates } from "../../state/Fiat";
@@ -67,6 +67,9 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
   const ondemandChannelAddInvoice = useStoreActions((store) => store.blixtLsp.ondemandChannel.addInvoice);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const remoteBalance = useStoreState((store) => store.channel.remoteBalance);
+
+  const customInvoicePreimageEnabled = useStoreState((store) => store.settings.customInvoicePreimageEnabled);
+  const [preimage, setPreimage] = useState<string>("");
 
   const shouldUseDunder =
     ondemandChannelServiceActive &&
@@ -131,6 +134,8 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     try {
       setCreateInvoiceDisabled(true);
 
+      const preimageBytes = preimage ? hexToUint8Array(preimage) : undefined;
+
       navigation.replace("ReceiveQr", {
         invoice: await addInvoice({
           sat: satoshiValue,
@@ -139,7 +144,8 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
             payer: payer || null,
             type: "NORMAL",
             website: null,
-          }
+          },
+          preimage: preimageBytes,
         })
       });
     } catch (e) {
@@ -171,11 +177,14 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     }
 
     try {
+      const preimageBytes = preimage ? hexToUint8Array(preimage) : undefined;
+
       setCreateInvoiceDisabled(true);
       navigation.replace("ReceiveQr", {
         invoice: await ondemandChannelAddInvoice({
           sat: satoshiValue,
-          description
+          description,
+          preimage: preimageBytes
         }),
       });
     } catch (error) {
@@ -324,6 +333,23 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
       />
     ),
   }];
+
+  if (customInvoicePreimageEnabled) {
+    formItems.push({
+      key: "PREIMAGE",
+      title: "Preimage",
+      component: (
+        <Input
+          testID="input-message"
+          onChangeText={setPreimage}
+          placeholder={t("form.preimage.placeholder")}
+          onFocus={() => setMathPadVisible(false)}
+          value={preimage}
+        />
+      ),
+    });
+  }
+
 
   const canSend = (
     (

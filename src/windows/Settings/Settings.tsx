@@ -1360,6 +1360,13 @@ ${t("experimental.tor.disabled.msg2")}`;
     restartNeeded();
   };
 
+  // Persistent services
+  const customInvoicePreimageEnabled = useStoreState((store) => store.settings.customInvoicePreimageEnabled);
+  const changeCustomInvoicePreimageEnabled = useStoreActions((store) => store.settings.changeCustomInvoicePreimageEnabled);
+  const onToggleCustomInvoicePreimageEnabled = async () => {
+    await changeCustomInvoicePreimageEnabled(!customInvoicePreimageEnabled);
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -1970,6 +1977,26 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>{t("miscelaneous.signMessage.title")}</Text>
             </Body>
           </ListItem>
+          <ListItem
+            style={style.listItem}
+            button={true}
+            icon={true}
+            onPress={onToggleCustomInvoicePreimageEnabled}
+          >
+            <Left>
+              <Icon style={style.icon} type="MaterialCommunityIcons" name="account-lock" />
+            </Left>
+            <Body>
+              <Text>{t("miscelaneous.customInvoicePreimageEnabled.title")}</Text>
+            </Body>
+            <Right>
+              <CheckBox
+                checked={customInvoicePreimageEnabled}
+                onPress={onToggleCustomInvoicePreimageEnabled}
+              />
+            </Right>
+          </ListItem>
+
           {/* <ListItem style={style.listItem} icon={true} onPress={onPressDeleteWallet}>
             <Left><Icon style={style.icon} type="FontAwesome5" name="file-signature" /></Left>
             <Body><Text>Delete wallet</Text></Body>

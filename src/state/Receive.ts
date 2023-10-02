@@ -34,6 +34,7 @@ interface IReceiveModelAddInvoicePayload {
   sat: number;
   expiry?: number;
   tmpData?: IInvoiceTempData;
+  preimage?: Uint8Array;
 }
 
 interface IReceiveModelAddInvoiceBlixtLspPayload {
@@ -103,7 +104,7 @@ export const receive: IReceiveModel = {
     const invoiceExpiry = getStoreState().settings.invoiceExpiry;
     const description = setupDescription(payload.description, name);
 
-    const result = await addInvoice(payload.sat, description, payload.expiry ?? invoiceExpiry, payload.tmpData?.lightningBox?.descHash);
+    const result = await addInvoice(payload.sat, description, payload.expiry ?? invoiceExpiry, payload.tmpData?.lightningBox?.descHash, payload.preimage);
     log.d("addInvoice() result", [result]);
     getStoreActions().clipboardManager.addToInvoiceCache(result.paymentRequest);
 

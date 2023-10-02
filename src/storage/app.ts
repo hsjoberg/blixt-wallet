@@ -82,6 +82,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   enforceSpeedloaderOnStartup = "enforceSpeedloaderOnStartup",
   persistentServicesEnabled = "persistentServicesEnabled",
   persistentServicesWarningShown = "persistentServicesWarningShown",
+  customInvoicePreimageEnabled = "customInvoicePreimageEnabled",
 }
 
 export const setItem = async (key: StorageItem, value: string) =>
@@ -267,6 +268,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.enforceSpeedloaderOnStartup, false),
     setItemObject<boolean>(StorageItem.persistentServicesEnabled, false),
     setItemObject<boolean>(StorageItem.persistentServicesWarningShown, false),
-    setItemObject<string[]>(StorageItem.zeroConfPeers, [BLIXT_NODE_PUBKEY])
+    setItemObject<string[]>(StorageItem.zeroConfPeers, [BLIXT_NODE_PUBKEY]),
+    setItemObject<boolean>(StorageItem.customInvoicePreimageEnabled, false),
   ]);
 };
