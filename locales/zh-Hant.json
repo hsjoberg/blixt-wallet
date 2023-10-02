@@ -430,7 +430,7 @@
     "pay": {
       "title": "支付",
       "error": {
-        "mustProvideComment": "如果選擇在此付款中包含你的名稱，你必須提供評論"
+        "mustProvideComment": "如果選擇在此付款中包含你的名稱，你必須提供留言"
       }
     },
     "cancel": {
