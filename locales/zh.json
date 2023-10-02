@@ -417,7 +417,7 @@
     },
     "unableToPay": "无法支付",
     "payerData": {
-      "commentAllowed": "给 {{target}} 的评论（最多 {{letters}} 字符）",
+      "commentAllowed": "给 {{target}} 的留言（最多 {{letters}} 字符）",
       "sendNameWithComment": "将我的名称与此评论一起发送",
       "name": {
         "ask": "将我的名称与此付款一起发送",
