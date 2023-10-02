@@ -6,6 +6,7 @@ import { getItemObject, StorageItem } from "../storage/app";
 import en from "./en";
 import es from "./es";
 import de from "./de";
+import hi from "./hi";
 import hr from "./hr";
 import it from "./it";
 import ja from "./ja";
@@ -33,6 +34,7 @@ const createI18n = (language: string): i18nInstance => {
       en,
       es,
       de,
+      hi,
       hr,
       it,
       ja,
