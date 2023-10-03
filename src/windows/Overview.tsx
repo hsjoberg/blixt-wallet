@@ -219,74 +219,74 @@ function Overview({ navigation }: IOverviewProps) {
         </ScrollView>
         <Animated.View style={[style.animatedTop, { height: headerHeight }]} pointerEvents="box-none">
           <BlixtHeader height={PLATFORM === "macos" ? headerHeight : undefined} />
-            <View style={StyleSheet.absoluteFill}>
-              {/* <AnimatedIcon
-                style={[style.onchainIcon, { opacity: iconOpacity }]} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
-              /> */}
-              {(layoutMode === "mobile") && (
-                <AnimatedIcon
-                  style={[style.menuIcon]} type="Entypo" name="menu" onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
-                />
-              )}
-              {/* <AnimatedIcon
-                style={[style.channelsIcon, { opacity: iconOpacity }]} type="Entypo" name="thunder-cloud" onPress={() => (navigation.navigate as any)("LightningInfo")}
-              /> */}
+          <View style={StyleSheet.absoluteFill}>
+            {/* <AnimatedIcon
+              style={[style.onchainIcon, { opacity: iconOpacity }]} type="FontAwesome" name="btc" onPress={() => navigation.navigate("OnChain")}
+            /> */}
+            {(layoutMode === "mobile") && (
               <AnimatedIcon
-                style={[style.settingsIcon, {}]} type="MaterialIcons" name="settings" onPress={() => navigation.navigate("Settings")}
+                style={[style.menuIcon]} type="Entypo" name="menu" onPress={() => navigation.dispatch(DrawerActions.toggleDrawer)}
               />
+            )}
+            {/* <AnimatedIcon
+              style={[style.channelsIcon, { opacity: iconOpacity }]} type="Entypo" name="thunder-cloud" onPress={() => (navigation.navigate as any)("LightningInfo")}
+            /> */}
+            <AnimatedIcon
+              style={[style.settingsIcon, {}]} type="MaterialIcons" name="settings" onPress={() => navigation.navigate("Settings")}
+            />
+            <AnimatedIcon
+              style={[style.helpIcon, { opacity: iconOpacity }]} type="MaterialIcons" name="live-help" onPress={() => navigation.navigate("Help")}
+            />
+            {!syncedToChain &&
+              <Animated.View style={[style.lightningSyncIcon, { opacity: iconOpacity }]}>
+                <Spinner onPress={onPressSyncIcon} />
+              </Animated.View>
+            }
+            {/* {syncedToChain &&
               <AnimatedIcon
-                style={[style.helpIcon, { opacity: iconOpacity }]} type="MaterialIcons" name="live-help" onPress={() => navigation.navigate("Help")}
+                style={[style.weblnBrowswerIcon, { opacity: iconOpacity }]} type="MaterialCommunityIcons" name="cart-outline" onPress={() => navigation.navigate("WebLNBrowser")}
               />
-              {!syncedToChain &&
-                <Animated.View style={[style.lightningSyncIcon, { opacity: iconOpacity }]}>
-                  <Spinner onPress={onPressSyncIcon} />
-                </Animated.View>
-              }
-              {/* {syncedToChain &&
-                <AnimatedIcon
-                  style={[style.weblnBrowswerIcon, { opacity: iconOpacity }]} type="MaterialCommunityIcons" name="cart-outline" onPress={() => navigation.navigate("WebLNBrowser")}
-                />
-              } */}
-            </View>
+            } */}
+          </View>
 
-            <Animated.Text
-              testID="BIG_BALANCE_HEADER"
-              onPress={onPressBalanceHeader}
-              style={[headerInfo.btc, {
-                fontSize: headerBtcFontSize,
-                height: PLATFORM === "web" ? undefined : headerBtcHeight,
-                position: "relative",
-                paddingHorizontal: 12,
+          <Animated.Text
+            testID="BIG_BALANCE_HEADER"
+            onPress={onPressBalanceHeader}
+            style={[headerInfo.btc, {
+              fontSize: headerBtcFontSize,
+              height: PLATFORM === "web" ? undefined : headerBtcHeight,
+              position: "relative",
+              paddingHorizontal: 12,
 
-                marginTop: Animated.add(
-                  headerBtcMarginTop,
-                  16 +
-                  iconTopPadding +
-                  (Platform.select({
-                    android: 3,
-                    web: -6,
-                    ios: 1
-                  }) ?? 0) +
-                  16
-                ),
-              }]}
-            >
-              {!preferFiat && bitcoinBalance}
-              {preferFiat && fiatBalance}
+              marginTop: Animated.add(
+                headerBtcMarginTop,
+                16 +
+                iconTopPadding +
+                (Platform.select({
+                  android: 3,
+                  web: -6,
+                  ios: 1
+                }) ?? 0) +
+                16
+              ),
+            }]}
+          >
+            {!preferFiat && bitcoinBalance}
+            {preferFiat && fiatBalance}
+          </Animated.Text>
+
+          {pendingOpenBalance.equals(0) &&
+            <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
+              {!preferFiat && fiatBalance}
+              {preferFiat && bitcoinBalance}
             </Animated.Text>
-
-            {pendingOpenBalance.equals(0) &&
-              <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
-                {!preferFiat && fiatBalance}
-                {preferFiat && bitcoinBalance}
-              </Animated.Text>
-            }
-            {pendingOpenBalance.greaterThan(0) &&
-              <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
-                {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
-                {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
-              </Animated.Text>
-            }
+          }
+          {pendingOpenBalance.greaterThan(0) &&
+            <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
+              {!preferFiat && <>({formatBitcoin(pendingOpenBalance, bitcoinUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
+              {preferFiat && <>({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)} {t("msg.pending",{ns:namespaces.common})})</>}
+            </Animated.Text>
+          }
         </Animated.View>
       </View>
     </Container>
