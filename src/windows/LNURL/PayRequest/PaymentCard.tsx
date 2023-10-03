@@ -51,9 +51,11 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
   const commentAllowed = lnUrlObject.commentAllowed ?? undefined;
   const domain = getDomainFromURL(lnurlStr ?? "");
   const name = useStoreState((store) => store.settings.name);
+  const identifier = null;
   const [sendName, setSendName] = useState<boolean | undefined>(
     lnUrlObject.commentAllowed !== undefined ? false : undefined,
   );
+  const [sendIdentifier, setSendIdentifier] = useState<boolean | undefined>();
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const changePreferFiat = useStoreActions((store) => store.settings.changePreferFiat);
   const {
@@ -71,6 +73,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
     const metadata = JSON.parse(lnUrlObject.metadata) as ILNUrlPayRequestMetadata;
     const payerData = lnUrlObject.payerData;
     const payerDataName = payerData?.name ?? null;
+    const payerDataIdentifier = payerData?.identifier ?? null;
 
     console.log("printing metadata", metadata);
 
@@ -123,6 +126,15 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
           } else if (sendName) {
             sendPayerData = true;
             payerData.name = name ?? "";
+          }
+        }
+
+        // TODO(hsjoberg)
+        if (payerDataIdentifier) {
+          if (payerDataIdentifier.mandatory) {
+          } else if (sendIdentifier) {
+            sendPayerData = true;
+            payerData.identifier = identifier ?? "";
           }
         }
 
@@ -247,10 +259,14 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
             commentAllowed={commentAllowed}
             domain={domain}
             name={name}
+            identifier={identifier}
             payerDataName={payerDataName}
+            payerDataIdentifier={payerDataIdentifier}
             sendName={sendName}
+            sendIdentifier={sendIdentifier}
             setComment={setComment}
             setSendName={setSendName}
+            setSendIdentifier={setSendIdentifier}
           />
         )}
         {image && (

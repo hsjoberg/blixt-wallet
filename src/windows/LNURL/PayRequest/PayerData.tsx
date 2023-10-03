@@ -1,6 +1,6 @@
 import { CheckBox, Text } from "native-base";
 import React from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { ILNUrlPayRequest, ILNUrlPayRequestPayerData } from "../../../state/LNURL";
 
 import style from "./style";
@@ -12,13 +12,17 @@ import { namespaces } from "../../../i18n/i18n.constants";
 export interface IPayerDataProps {
   setComment: (text: string) => void;
   setSendName: (send: boolean) => void;
+  setSendIdentifier: (send: boolean) => void;
   sendName: boolean | undefined;
+  sendIdentifier: boolean | undefined;
   name: string | null;
+  identifier: string | null;
   domain: string;
   commentAllowed: ILNUrlPayRequest["commentAllowed"];
   payerDataName: ILNUrlPayRequestPayerData["name"] | null;
+  payerDataIdentifier: ILNUrlPayRequestPayerData["identifier"] | null;
 }
-export function PayerData({ setComment, setSendName, sendName, name, domain, commentAllowed, payerDataName}: IPayerDataProps) {
+export function PayerData({ setComment, setSendName, setSendIdentifier, sendName, sendIdentifier, name, identifier, domain, commentAllowed, payerDataName, payerDataIdentifier}: IPayerDataProps) {
   const t = useTranslation(namespaces.LNURL.payRequest).t;
   return (
     <View style={style.metadataSection}>
@@ -43,7 +47,7 @@ export function PayerData({ setComment, setSendName, sendName, name, domain, com
       {(payerDataName && name) &&
         <>
           {!payerDataName.mandatory &&
-            <View style={{ flexDirection: "row" }}>
+            <View style={styles.payerData}>
               <CheckBox style={style.metadataSectionCheckbox} checked={sendName} onPress={() => setSendName(!sendName)}  />
               <Text style={style.metadataSectionCheckboxLabel} onPress={() => setSendName(!sendName)}>
                 {t("payerData.name.ask")}
@@ -51,9 +55,28 @@ export function PayerData({ setComment, setSendName, sendName, name, domain, com
             </View>
           }
           {payerDataName.mandatory &&
-            <View style={{ flexDirection: "row" }}>
+            <View style={styles.payerData}>
               <Text style={style.metadataSectionCheckboxLabel}>
                 {t("payerData.name.mandatory")}
+              </Text>
+            </View>
+          }
+        </>
+      }
+      {(payerDataIdentifier && identifier) &&
+        <>
+          {!payerDataIdentifier.mandatory &&
+            <View style={styles.payerData}>
+              <CheckBox style={style.metadataSectionCheckbox} checked={sendIdentifier} onPress={() => setSendIdentifier(!sendIdentifier)}  />
+              <Text style={style.metadataSectionCheckboxLabel} onPress={() => setSendIdentifier(!sendIdentifier)}>
+                {t("payerData.identifier.ask")}
+              </Text>
+            </View>
+          }
+          {payerDataIdentifier.mandatory &&
+            <View style={styles.payerData}>
+              <Text style={style.metadataSectionCheckboxLabel}>
+                {t("payerData.identifier.mandatory")}
               </Text>
             </View>
           }
@@ -62,3 +85,11 @@ export function PayerData({ setComment, setSendName, sendName, name, domain, com
     </View>
   )
 }
+
+
+const styles = StyleSheet.create({
+  payerData: {
+    flexDirection: "row",
+    marginBottom: 7,
+  }
+});
