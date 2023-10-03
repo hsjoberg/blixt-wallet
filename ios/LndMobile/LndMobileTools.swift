@@ -372,6 +372,32 @@ autopilot.heuristic=preferential:0.05
     resolve(nil)
   }
 
+  @objc(DEBUG_deleteNeutrinoFiles:rejecter:)
+  func DEBUG_deleteNeutrinoFiles(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
+    let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+    let chainPath = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
+                                      .appendingPathComponent("data", isDirectory: true)
+                                      .appendingPathComponent("chain", isDirectory: true)
+                                      .appendingPathComponent("bitcoin", isDirectory: true)
+                                      .appendingPathComponent(chain ?? "mainnet", isDirectory: true)
+
+    let neutrinoDbPath = chainPath.appendingPathComponent("neutrino.db")
+    let blockHeadersBinPath = chainPath.appendingPathComponent("block_headers.bin")
+    let regFiltersHeadersBinPath = chainPath.appendingPathComponent("reg_filter_headers.bin")
+
+    do {
+      try FileManager.default.removeItem(at: neutrinoDbPath)
+      try FileManager.default.removeItem(at: blockHeadersBinPath)
+      try FileManager.default.removeItem(at: regFiltersHeadersBinPath)
+    } catch {
+      reject("error", error.localizedDescription, error)
+      return
+    }
+
+    resolve(true)
+  }
+
   @objc(checkApplicationSupportExists:rejecter:)
   func checkApplicationSupportExists(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!

@@ -402,6 +402,9 @@ console.log(x);
           <Button small onPress={async () => {
             console.log(await NativeModules.LndMobileTools.tailLog(10));
           }}><Text style={styles.buttonText}>LndMobileTools.tailLog</Text></Button>
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobile.DEBUG_crash());
+          }}><Text style={styles.buttonText}>NativeModules.LndMobile.DEBUG_crash (Android)</Text></Button>
 
           <Text style={{ width: "100%"}}>Electron:</Text>
           <Button small onPress={async () => {
@@ -634,7 +637,9 @@ console.log(x);
           }}>
             <Text style={styles.buttonText}>connect to Bitrefill node</Text>
           </Button>
-
+          <Button small onPress={async () => {
+            console.log(await NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles());
+          }}><Text style={styles.buttonText}>NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles()</Text></Button>
 
           <Text style={{ width: "100%" }}>Sqlite:</Text>
           <Button small onPress={async () => console.log(await createTransaction(db!, {

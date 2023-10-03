@@ -11,7 +11,7 @@ import {
 import { Linking, NativeModules, PermissionsAndroid, Platform, StyleSheet } from "react-native";
 import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
 import React, { useLayoutEffect } from "react";
-import { camelCaseToSpace, formatISO, hexToUint8Array, toast } from "../../utils";
+import { camelCaseToSpace, formatISO, hexToUint8Array, timeout, toast } from "../../utils";
 import { getChanInfo, verifyChanBackup } from "../../lndmobile/channel";
 import { getNodeInfo, resetMissionControl, xImportMissionControl } from "../../lndmobile";
 import { languages, namespaces } from "../../i18n/i18n.constants";
@@ -2467,6 +2467,54 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Left>
             <Body>
               <Text>Dunder MissionControl import</Text>
+            </Body>
+          </ListItem>
+          <ListItem
+            style={style.listItem}
+            icon={true}
+            onPress={async () => {
+              try {
+                await NativeModules.LndMobile.stopLnd();
+                await timeout(5000); // Let lnd close down
+              } catch (e: any) {
+                // If lnd was closed down already
+                if (e?.message?.includes?.("closed")) {
+                  console.log("yes closed");
+                } else {
+                  toast("Error: " + e.message, 10000, "danger");
+                  return;
+                }
+              }
+
+              console.log(await NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles());
+              toast("Done. Restart is required");
+              restartNeeded();
+            }}
+          >
+            <Left>
+              <Icon style={style.icon} type="Foundation" name="page-delete" />
+            </Left>
+            <Body>
+              <Text>Stop lnd and delete neutrino files</Text>
+            </Body>
+          </ListItem>
+          <ListItem
+            style={style.listItem}
+            icon={true}
+            onPress={async () => {
+              try {
+                await NativeModules.LndMobile.stopLnd();
+              } catch (e: any) {
+                toast("Error: " + e.message, 10000, "danger");
+                return;
+              }
+            }}
+          >
+            <Left>
+              <Icon style={style.icon} type="FontAwesome" name="stop" />
+            </Left>
+            <Body>
+              <Text>Stop lnd</Text>
             </Body>
           </ListItem>
         </List>

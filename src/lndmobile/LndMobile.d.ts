@@ -42,6 +42,7 @@ export interface ILndMobileTools {
   getTorEnabled(): Promise<boolean>;
   DEBUG_deleteSpeedloaderLastrunFile(): boolean;
   DEBUG_deleteSpeedloaderDgraphDirectory(): null;
+  DEBUG_deleteNeutrinoFiles(): boolean;
 
   // Android-specific
   getIntentStringData(): Promise<string | null>;
