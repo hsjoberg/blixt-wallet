@@ -361,6 +361,8 @@ export const model: IStoreModel = {
             throw new Error("Failed to start lnd: " + e.message);
           }
         }
+      } else {
+        toast("lnd already started (lndmobile getStatus check)", 3000, "warning");
       }
     } catch (e) {
       log.e("Exception when trying to initialize LndMobile and start lnd", [e]);
