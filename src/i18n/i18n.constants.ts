@@ -120,6 +120,10 @@ export const languages: ILanguages = {
     id: "nl",
     name: "Nederlands",
   },
+  no: {
+    id: "no",
+    name: "Norsk",
+  },
   pt: {
     id: "pt",
     name: "Português",
