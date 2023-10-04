@@ -7,6 +7,7 @@ import { LndMobileEventEmitter } from "../utils/event-listener";
 import { IStoreInjections } from "./store";
 import { ILNUrlPayRequest, ILNUrlPayResponse } from "./LNURL";
 import { bytesToHexString, bytesToString, hexToUint8Array } from "../utils";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 const LnurlPayRequestLNP2PType = 32768 + 691;
 
@@ -36,16 +37,24 @@ export const lightningBox: ILightningBoxModel = {
 
   subscribeCustomMessages: thunk(async (_, _2, { getStoreActions,  getStoreState, injections }) => {
     LndMobileEventEmitter.addListener("SubscribeCustomMessages", async (e: any) => {
-      log.i("NEW CUSTOM MESSAGE");
-      const customMessage = injections.lndMobile.index.decodeCustomMessage(e.data);
-      log.d("customMessage", [customMessage]);
-
-      if (customMessage.type !== LnurlPayRequestLNP2PType) {
-        log.e(`Unknown custom message type ${customMessage.type}`);
-        return;
-      }
-
       try {
+        log.i("NEW CUSTOM MESSAGE");
+        const error = checkLndStreamErrorResponse("SubscribeChannelEvents", e);
+        if (error === "EOF") {
+          return;
+        } else if (error) {
+          log.d("Got error from SubscribeChannelEvents", [error]);
+          throw error;
+        }
+
+        const customMessage = injections.lndMobile.index.decodeCustomMessage(e.data);
+        log.d("customMessage", [customMessage]);
+
+        if (customMessage.type !== LnurlPayRequestLNP2PType) {
+          log.e(`Unknown custom message type ${customMessage.type}`);
+          return;
+        }
+
         const payload = JSON.parse(bytesToString(customMessage.data)) as ILnurlPayForwardP2PMessage;
 
         if (payload.request === "LNURLPAY_REQUEST1") {
@@ -53,8 +62,8 @@ export const lightningBox: ILightningBoxModel = {
 
           const maxSendable = getStoreState().channel.remoteBalance;
 
-          const lnurlPayResponse: ILNUrlPayRequest = {
-            // callback: "N/A",
+          // Omit callback as the server will handle that
+          const lnurlPayResponse: Omit<ILNUrlPayRequest, "callback"> = {
             tag: "payRequest",
             minSendable: 1 * 1000,
             maxSendable: maxSendable.mul(1000).toNumber(),

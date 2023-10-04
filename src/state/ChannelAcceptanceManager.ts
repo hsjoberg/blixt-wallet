@@ -6,24 +6,33 @@ import { LndMobileEventEmitter } from "../utils/event-listener";
 import { bytesToHexString } from "../utils";
 import logger from "./../utils/log";
 import { IStoreModel } from "./index";
+import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
-const log = logger("ChannelRpcInterceptor");
+const log = logger("ChannelAcceptanceManager");
 
-export interface IChannelRpcInterceptorModel {
+export interface IChannelAcceptanceManagerModel {
   initialize: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
 }
 
-export const channelRpcInterceptor: IChannelRpcInterceptorModel = {
+export const channelAcceptanceManager: IChannelAcceptanceManagerModel = {
   initialize: thunk(async (actions, _, { getStoreState, injections }) => {
     LndMobileEventEmitter.addListener("ChannelAcceptor", async (event) => {
       try {
+        const error = checkLndStreamErrorResponse("SubscribeChannelEvents", event);
+        if (error === "EOF") {
+          return;
+        } else if (error) {
+          log.d("Got error from SubscribeChannelEvents", [error]);
+          throw error;
+        }
+
         let isZeroConfAllowed = false;
 
         const channelAcceptRequest = injections.lndMobile.channel.decodeChannelAcceptRequest(
           event.data,
         );
 
-        log.i("channelAcceptRequest", [channelAcceptRequest]);
+        log.i("Channel accept request", [channelAcceptRequest]);
 
         if (!!channelAcceptRequest.wantsZeroConf) {
           const zeroConfPeers = getStoreState().settings.zeroConfPeers;
@@ -39,7 +48,7 @@ export const channelRpcInterceptor: IChannelRpcInterceptorModel = {
           isZeroConfAllowed,
         );
       } catch (error) {
-        console.error("channel acceptance error: " + error.message);
+        log.e("Channel acceptance error: ", [error]);
       }
     });
 

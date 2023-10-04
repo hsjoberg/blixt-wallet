@@ -206,10 +206,13 @@ export default function Settings({ navigation }: ISettingsProps) {
 
   // Language
   const changeLanguage = useStoreActions((store) => store.settings.changeLanguage);
-
   const onLangPress = async () => {
     navigation.navigate("ChangeLanguage", {
       title: t("general.lang.dialog.title"),
+      onPick: async (lang) => {
+        await changeLanguage(lang);
+      },
+      searchEnabled: true,
       data: Object.keys(languages)
         .sort()
         .map((key) => {
@@ -218,10 +221,6 @@ export default function Settings({ navigation }: ISettingsProps) {
             value: languages[key].id,
           };
         }),
-        onPick: async (lang) => {
-          await changeLanguage(lang);
-        },
-        searchEnabled: true,
     });
   };
 

@@ -695,7 +695,7 @@ public class LndMobileService extends Service {
 
         @Override
         public void onResponse(byte[] bytes) {
-          HyperLog.e(TAG, "onReponse for stopDaemon");
+          HyperLog.e(TAG, "onResponse for stopDaemon");
 
           lndStarted = false;
 

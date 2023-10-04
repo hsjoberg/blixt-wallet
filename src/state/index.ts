@@ -9,7 +9,7 @@ import { DEFAULT_PATHFINDING_ALGORITHM, PLATFORM } from "../utils/constants";
 import { Chain, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
-import { IChannelRpcInterceptorModel, channelRpcInterceptor } from "./ChannelRpcInterceptor";
+import { IChannelAcceptanceManagerModel, channelAcceptanceManager } from "./ChannelAcceptanceManager";
 import { IClipboardManagerModel, clipboardManager } from "./ClipboardManager";
 import { IContactsModel, contacts } from "./Contacts";
 import { ILightningBoxModel, lightningBox } from "./LightningBox";
@@ -146,7 +146,7 @@ export interface IStoreModel {
   appVersion: number;
   appBuild: number;
   onboardingState: OnboardingState;
-  channelRpcInterceptor: IChannelRpcInterceptorModel;
+  channelRpcInterceptor: IChannelAcceptanceManagerModel;
 }
 
 export const model: IStoreModel = {
@@ -692,7 +692,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   iCloudBackup,
   blixtLsp,
   contacts,
-  channelRpcInterceptor,
+  channelAcceptanceManager,
   lightningBox,
 };
 
