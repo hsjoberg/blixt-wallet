@@ -1,0 +1,1181 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Lynadresse",
+      "nodeAlias": "Node-alias",
+      "description": "Beskrivelse",
+      "amount": "Beløb",
+      "fee": "Gebyr",
+      "search": "Søg",
+      "viewInBlockExplorer": "Vis i blokudforsker"
+    },
+    "buttons": {
+      "ok": "Ok",
+      "cancel": "Annuller",
+      "continue": "Fortsæt",
+      "skip": "Spring over",
+      "proceed": "Fortsæt",
+      "back": "Tilbage",
+      "no": "Nej",
+      "yes": "Ja",
+      "save": "Gem",
+      "copy": "Kopiér"
+    },
+    "msg": {
+      "status": "Status",
+      "error": "Fejl",
+      "warning": "Advarsel",
+      "result": "Resultat",
+      "pending": "Afventer",
+      "done": "Færdig",
+      "dismiss": "Afvis",
+      "lastSync": "Seneste synkronisering",
+      "lastSyncAttempt": "Seneste forsøg på synkronisering",
+      "clipboardCopy": "Kopieret til udklipsholderen.",
+      "written": "Gemt",
+      "enabled": "aktiveret",
+      "disabled": "deaktiveret"
+    }
+  },
+  "welcome.start": {
+    "title": "Velkommen",
+    "createWallet": {
+      "title": "Opret tegnebog",
+      "msg1": "Blixt Wallet er stadig i en tidlig udviklingsfase.",
+      "msg2": "Hvis du bruger denne tegnebog, skal du sørge for at forstå, at du kan miste dine midler.",
+      "msg3": "Der er i øjeblikket ingen WatchTower-support til at overvåge dine kanaler, mens du er offline.",
+      "msg4": "Jeg er uforsigtig, fortsæt"
+    },
+    "createWalletWithPassphrase": {
+      "title": "Indstil adgangskode (25. ord for at kryptere frøet)",
+      "invalidMessage": "Indtast en gyldig adgangskode",
+      "noLeadingTrailingSpaces": "Førende eller efterfølgende mellemrum er ikke tilladt"
+    },
+    "language": {
+      "title": "Vælg sprog"
+    },
+    "restoreWallet": {
+      "title": "Gendan tegnebog"
+    },
+    "menu": {
+      "enableTor": "Aktivér Tor",
+      "disableTor": "Deaktiver Tor",
+      "setBitcoinNode": "Indstil Bitcoin-node",
+      "createWalletWithPassphrase": "Opret tegnebog med adgangskode"
+    }
+  },
+  "footerNav": {
+    "receive": "Modtag",
+    "send": "Send"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Scan",
+      "receive": "Modtag",
+      "pasteFromClipboard": "Indsæt fra udklipsholder",
+      "sendToLightningAddress": "Send til Lynadresse",
+      "contactsAndServices": "Kontakter og tjenester",
+      "lightningBrowser": "Lynbrowser",
+      "onChainWallet": "På kæden",
+      "lightningChannels": "Lynkanaler",
+      "keysendExperiment": "Keysend-eksperiment",
+      "showMore": "Avanceret"
+    },
+    "madeInSweden": "Lavet med ⚡ i Sverige"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "Tegnebogsgendannelse i gang.",
+      "msg2": "Tegnebogsgendannelse afsluttet.",
+      "more": "Mere info"
+    },
+    "sendOnChain": {
+      "title": "Velkommen til Blixt Wallet!",
+      "msg1": "For at komme i gang skal du sende midler på kæden til den bitcoin-adresse til højre.",
+      "msg2": "Der åbnes automatisk en kanal for dig.",
+      "msg3": "Send mindst",
+      "alert": "Bitcoin-adresse kopieret til udklipsholder"
+    },
+    "doBackup": {
+      "msg1": "Tak fordi du bruger Blixt Wallet!",
+      "msg2": "Vi anbefaler at lave en sikkerhedskopi af tegnebogen, så du kan gendanne dine midler i tilfælde af tab af telefonen.",
+      "backup": "Sikkerhedskopi af tegnebog"
+    },
+    "newChannelBeingOpened": {
+      "info": "Der åbnes i øjeblikket en ny kanal...",
+      "view": "Vis"
+    },
+    "noTransactionsYet": "Ingen transaktioner endnu"
+  },
+  "help": {
+    "title": "Hjælp",
+    "msg1": "Hvis du støder på problemer eller har feedback, kan du kontakte udviklerne af Blixt Wallet ved at indsende en sag på Github eller kontakte os via e-mail.",
+    "msg2": "Du er også velkommen til at deltage i vores offentlige Telegram-chatgruppe.",
+    "msg3": "Da Blixt Wallet er en ny tegnebog, har vi brug for feedback om almindelige problemer, som du måtte støde på.",
+    "telegramGroup": "Telegram-gruppe"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Synkronisering i gang",
+      "title1": "Synkronisering fuldført",
+      "msg1": "Blixt Wallet synkroniserer i øjeblikket blockchainen.",
+      "msg2": "Når din tegnebog er synkroniseret med blockchainen, vil on-chain-transaktioner og midler blive genkendt og kan ses fra Bitcoin on-chain-sektionen.",
+      "msg3": "Blixt Wallet er synkroniseret med blockchainen.",
+      "blockHeight": {
+        "title": "Nuværende blok-højde",
+        "msg1": "Kæde-synkroniseringsfremskridt"
+      }
+    },
+    "recoveryMode": {
+      "title": "Gendannelsesfremskridt",
+      "msg1": "Gendannelse fuldført",
+      "msg2": "Kontroller Lynkanaler og On-chain-sektionerne"
+    },
+    "lndLog": {
+      "show": "Vis lnd-log",
+      "copy": "Kopiér logtekst"
+    }
+  },
+  "transactionDetails": {
+    "title": "Transaktion",
+    "date": "Dato",
+    "duration": "Tid taget for at betale faktura",
+    "note": "Bemærkning",
+    "website": "Hjemmeside",
+    "type": "Type",
+    "lnurl": {
+      "messageFromWebsite": "Besked fra",
+      "urlReceivedFromWebsite": "URL modtaget fra",
+      "secretMessage": "Hemmelig besked"
+    },
+    "payer": "Betaler",
+    "recipient": "Modtager",
+    "amountInFiatTimeOfPayment": "Beløb i Fiat (Tidspunkt for betaling)",
+    "numberOfHops": "Antal spring",
+    "remotePubkey": "Fjern-publikationsnøgle",
+    "paymentHash": "Betalingshash",
+    "preimage": "Præbillede",
+    "status": "Status",
+    "goBack": "Gå tilbage",
+    "button": {
+      "setNote": "Sæt bemærkning",
+      "cancelInvoice": "Annuller faktura",
+      "showMap": "Vis kort"
+    },
+    "setNoteDialog": {
+      "title": "Bemærkning",
+      "text": "Sæt en bemærkning for denne transaktion"
+    }
+  },
+  "web.info": {
+    "title": "Interaktiv demo",
+    "pressToTry": "Tryk for at prøve Blixt Wallet!"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Modtag"
+    },
+    "createInvoice": {
+      "title": "Opret faktura",
+      "alert": "Før du kan modtage, skal du åbne en Lightning-kanal.",
+      "lsp": {
+        "msg": "En betalingskanal fra Dunder LSP åbnes, når denne faktura betales.",
+        "msg1": "Hvad er dette?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Kanalåbning",
+      "msg": "For at acceptere en betaling for denne faktura skal der åbnes en kanal på Lightning-netværket.",
+      "msg1": "Dette kræver en engangsomkostning på cirka",
+      "alert": "Kunne ikke forbinde til Dunder, prøv igen senere.",
+      "proceed": "Fortsæt"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Beløb",
+        "change": "Skift fiat-enhed",
+        "dunderPlaceholder": "Mindst"
+      },
+      "amountBitcoin": {
+        "title": "Beløb",
+        "change": "Skift bitcoin-enhed",
+        "dunderPlaceholder": "Mindst"
+      },
+      "payer": {
+        "title": "Betaler",
+        "placeholder": "Til bogføring"
+      },
+      "description": {
+        "title": "Besked",
+        "placeholder": "Besked til betaler"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "Om Dunder LSP",
+    "msg": "Dunder er en Lightning Service Provider (LSP), der automatisk åbner kanaler for dig, når du ikke har tilstrækkelig indadgående likviditet.",
+    "msg1": "Dette kan f.eks. være tilfældet, når du først begynder at bruge Blixt Wallet.",
+    "msg2": "Da dette kræver en on-chain-transaktion, vil et Bitcoin-transaktionsgebyr blive trukket fra den indgående betaling. Fremtidige betalinger vil kunne bruge den nyåbnede betalingskanal med Lightning-netværket.",
+    "msg3": "Dunder er",
+    "msg4": "open-source",
+    "msg5": "software, og du kan ændre standardtjenesteleverandøren i Indstillinger."
+  },
+  "receive.receiveQr": {
+    "title": "Modtag",
+    "qr": {
+      "title": "Scan denne QR-kode",
+      "msg": "Udløber om {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Betal faktura"
+    },
+    "form": {
+      "invoice": {
+        "title": "Faktura"
+      },
+      "amount": {
+        "title": "Beløb"
+      },
+      "recipient": {
+        "title": "Modtager"
+      },
+      "nodeAlias": {
+        "title": "Node-alias"
+      },
+      "description": {
+        "title": "Besked"
+      },
+      "feeEstimate": {
+        "title": "Gebyrestimat"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "BETALING SENDT"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Lightning-kanaler"
+    },
+    "balance": {
+      "title": "Saldo"
+    },
+    "channel": {
+      "alias": "Alias",
+      "node": "Node",
+      "channelId": "Kanal ID",
+      "channelPoint": "Kanalpunkt",
+      "status": "Status",
+      "statusActive": "Aktiv",
+      "statusInactive": "Inaktiv",
+      "statusPending": "Afventer",
+      "statusClosing": "Lukning",
+      "statusForceClosing": "Tvungen lukning",
+      "statusWaitingForClose": "Venter på lukning",
+      "capacity": "Kapacitet",
+      "howMuchCanBeSent": "Kan sende",
+      "howMuchCanBeReceived": "Kan modtage",
+      "localReserve": "Lokal reserve",
+      "commitmentFee": "Forpligtelsesgebyr",
+      "channelType": "Kanaltype",
+      "pendingFunds": "Afventende midler",
+      "balanceInLimbo": "Limbo-balance",
+      "pendingHtlcs": "Afventende HTLC'er",
+      "maturityHeight": "Modenhedshøjde",
+      "localCommitmentTxid": "Lokal forpligtelses-TXID",
+      "remoteCommitmentTxid": "Fjern forpligtelses-TXID",
+      "closeChannel": "Luk kanal",
+      "forceClosePendingChannel": "Tvungen lukning af afventende kanal",
+      "closeChannelPrompt": {
+        "title": "Luk kanal"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Åbn kanal"
+    },
+    "form": {
+      "title": "Åbn kanal",
+      "channel": {
+        "title": "Node URI",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Beløb",
+        "placeholder": "Beløb"
+      },
+      "fee_rate": {
+        "title": "Gebyrsats"
+      }
+    },
+    "torPrompt": {
+      "title": "Aktiver Tor",
+      "text1": "Det ser ud til, at du forsøger at åbne en kanal til en node, der kører under en Tor-løgløsningstjeneste.",
+      "text2": "For at oprette forbindelse skal du aktivere Tor for Blixt Wallet."
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "On-chain midler"
+    },
+    "address": {
+      "title": "Send Bitcoin on-chain til denne adresse",
+      "alert": "Kopieret til udklipsholderen."
+    },
+    "newAddress": {
+      "title": "Generer ny adresse"
+    },
+    "withdraw": {
+      "title": "Træk mønter ud"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Transaktion",
+    "txHash": "ID",
+    "timeStamp": "Dato",
+    "amount": "Beløb",
+    "totalFees": "Gebyrer",
+    "label": "Etiket",
+    "destAddresses": "Destination",
+    "numConfirmations": "Bekræftelser",
+    "blockHeight": "Blok højde",
+    "blockHash": "Blok hash",
+    "rawTxHex": {
+      "title": "Rå TX-hex",
+      "msg": "Tryk for at kopiere"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Transaktionslog"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Træk mønter ud"
+    },
+    "form": {
+      "address": {
+        "title": "Adresse",
+        "placeholder": "Bitcoin adresse"
+      },
+      "amount": {
+        "title": "Beløb",
+        "placeholder": "Beløb",
+        "withdrawAll": "Træk alle midler ud",
+        "all": "Alle"
+      },
+      "feeRate": {
+        "title": "Gebyrsats",
+        "auto": "auto"
+      },
+      "withdraw": {
+        "title": "Træk ud",
+        "alert": "Træk ud lykkedes"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Login-anmodning",
+      "msg": "Vil du logge ind på",
+      "success": "Godkendt til"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Åbner indadgående kanal"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Vis metadata",
+      "dialog": {
+        "title": "Teknisk metadata"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} findes allerede i din kontaktliste"
+      },
+      "add": {
+        "title": "Tilføj til kontaktliste",
+        "msg": "Vil du tilføje {{lightningAddress}} til din kontaktliste?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Betalingskode til {{domain}} findes allerede i din kontaktliste"
+      },
+      "add": {
+        "title": "Tilføj til kontaktliste",
+        "msg": "Vil du tilføje denne betalingskode til {{domain}} til din kontaktliste?"
+      }
+    },
+    "unableToPay": "Kan ikke betale",
+    "payerData": {
+      "commentAllowed": "Kommentar til {{target}} (maks {{letters}} bogstaver)",
+      "sendNameWithComment": "Send mit navn sammen med denne kommentar",
+      "name": {
+        "ask": "Send mit navn sammen med denne betaling",
+        "mandatory": "Dit navn skal sendes sammen med denne betaling"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "Betaling mangler en beskrivelse."
+    },
+    "pay": {
+      "title": "Betal",
+      "error": {
+        "mustProvideComment": "Du skal give en kommentar, hvis du vælger at inkludere dit navn til denne betaling"
+      }
+    },
+    "cancel": {
+      "title": "Annuller"
+    },
+    "form": {
+      "asksYouToPay": "beder dig om at betale.",
+      "description": {
+        "title": "Beskrivelse"
+      },
+      "amount": {
+        "title": "Beløb",
+        "to": "til",
+        "placeholder": "Indtast beløb"
+      },
+      "alert": "Kan ikke betale"
+    },
+    "done": {
+      "message": {
+        "title": "Besked fra"
+      },
+      "url": {
+        "description": "Beskrivelse",
+        "domain": "URL modtaget fra",
+        "done": {
+          "title": "Udført"
+        },
+        "copy": {
+          "title": "Kopier til udklipsholder",
+          "msg": "Kopieret til udklipsholder."
+        },
+        "open": {
+          "title": "Åbn browser"
+        }
+      },
+      "aes": {
+        "domain": "Fik en hemmelig krypteret besked fra",
+        "description": "Besked fra",
+        "secret": "Hemmelig besked"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "Om Lightning Address",
+      "msg1": "Lightning Address",
+      "msg2": "er en måde at betale en person eller en service på Lightning-netværket.",
+      "msg3": "De ligner e-mail-adresser, men i stedet for at sende en e-mail til modtageren, sender du penge.",
+      "msg4": "Blixt Wallet har fuld support til at sende til en Lightning Address, men modtagelse",
+      "msg5": "via en Lightning Address er stadig under udvikling."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "Sendt anmodning om udbetaling til {{domain}}",
+      "addToContactList": {
+        "title": "Tilføj til kontaktliste",
+        "msg": "Vil du tilføje denne udbetalingskode til {{domain}} til din kontaktliste?",
+        "note": "Konto på {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "Udbetalingsanmodning",
+      "msg": "Besked fra",
+      "dialog": {
+        "msg": "Beløb"
+      },
+      "dialog1": {
+        "minSat": "Min udbetalingsbeløb",
+        "maxSat": "Maks udbetalingsbeløb",
+        "placeholder": "Beløb"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Kontakter & Tjenester",
+      "lightningAddressAlreadyExists": "findes allerede i din kontaktliste",
+      "nothingHereYet": "Der er endnu ikke noget her...",
+      "whyNotAdd": "Hvorfor ikke tilføje en Lightning Address kontakt ved",
+      "tappingHere": "at trykke her"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Fjernsaldo",
+        "error": "Ugyldig operation, kontakten har ikke en LNURL-udbetalingskode"
+      },
+      "list": {
+        "pay": "Betalinger til",
+        "account": "Konto på"
+      },
+      "send": {
+        "title": "Send",
+        "couldNotPay": "Kunne ikke betale til denne LNURL-betalingskode",
+        "invalidResponse": "Svaret var ikke en LNURL-betalingsrespons (fik {{response}})",
+        "invalidOperation": "Ugyldig operation, kontakten har hverken en LUD-16-identifikator eller LNURL-betalingskode"
+      },
+      "withdraw": {
+        "title": "Træk",
+        "couldNotPay": "Kunne ikke betale til denne LNURL-betalingskode",
+        "invalidResponse": "Svaret var ikke en LNURL-betalingsrespons (fik {{response}})",
+        "invalidOperation": "Ugyldig operation, kontakten har ikke en LNURL-udbetalingskode"
+      },
+      "deleteContact": {
+        "title": "Slet kontakt",
+        "msg": "Er du sikker på, at du vil slette kontakten {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Kontaktmærkat"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Ønsker du at lukke browseren?",
+    "home": "Gå tilbage til butikslisten",
+    "placeholder": "Indtast URL her"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "Kopieret til udklipsholder"
+    },
+    "dialog": {
+      "msg1": "Velkommen til keysend legepladsen",
+      "msg2": "Keysend giver dig mulighed for at betale en anden Blixt Wallet (eller enhver Lightning-node, der understøtter keysend) uden at skulle bruge en faktura.",
+      "msg3": "Klik på kameraet for at scanne en anden punges QR-kode eller angiv en offentlig nøgle og rutehints nedenfor."
+    },
+    "send": {
+      "title": "Send",
+      "msg": "Keysend-betaling",
+      "error": {
+        "checkAmount": "Tjek beløb",
+        "missingPubkey": "Manglende publikationsnøgle"
+      },
+      "alert": "Betaling vellykket"
+    },
+    "form": {
+      "amount": {
+        "title": "Beløb sat"
+      },
+      "pubkey": {
+        "title": "Offentlig nøgle",
+        "placeholder": "Offentlig nøgle"
+      },
+      "route": {
+        "title": "Rutehints",
+        "placeholder": "Rutehints"
+      },
+      "message": {
+        "title": "Besked",
+        "placeholder": "Indtast en chatbesked her"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "Indstillinger",
+    "general": {
+      "title": "Generelt",
+      "name": {
+        "title": "Navn",
+        "subtitle": "Vil blive brugt i transaktioner",
+        "dialog": {
+          "msg": "Vælg et navn, der vil blive brugt i transaktioner.\n\nDit navn vil blive set i fakturaer til dem, der betaler dig, samt til personer, du betaler til.",
+          "accept": "Indstil navn"
+        }
+      },
+      "lang": {
+        "title": "Sprog",
+        "dialog": {
+          "title": "Vælg sprog"
+        }
+      },
+      "pushNotification": {
+        "title": "Push-meddelelser",
+        "subtitle": "For transaktioner og kanalhændelser"
+      },
+      "checkClipboard": {
+        "title": "Tjek udklipsholder for fakturaer",
+        "subtitle": "Automatisk tjek af udklipsholder for fakturaer"
+      },
+      "saveGeolocation": {
+        "title": "Gem geolocation af transaktion",
+        "subtitle": "Gem lokationen af en transaktion lokalt",
+        "logGranted": "Geolocation tildelt",
+        "logDenied": "Tilladelse til geolocation nægtet"
+      },
+      "mapTheme": {
+        "title": "Indstil korttema"
+      }
+    },
+    "wallet": {
+      "title": "Pung",
+      "seed": {
+        "show": {
+          "title": "Vis mnemonisk kode",
+          "subtitle": "Vis 24-ords kode for denne pung",
+          "dialog": {
+            "title": "Mnemonisk kode",
+            "alert": "Kopieret til udklipsholderen",
+            "copy": "Kopiér kode"
+          }
+        },
+        "remove": {
+          "title": "Fjern mnemonic fra enhed",
+          "subtitle": "Fjern frøet permanent fra denne enhed",
+          "dialog": {
+            "title": "Fjern frø",
+            "msg": "Dette vil permanent fjerne frøet fra denne enhed. Gør kun dette, hvis du har sikkerhedskopieret dit frø!",
+            "accept": "Slet frø"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Eksporter kanalsikkerhedskopi",
+          "alert": "Fil skrevet:"
+        },
+        "verify": {
+          "title": "Bekræft kanalsikkerhedskopi"
+        },
+        "googleCloud": {
+          "title": "Google Drive kanalsikkerhedskopi",
+          "subtitle": "Automatisk sikkerhedskopiering af kanaler til Google Drive",
+          "alert": "Google Drive sikkerhedskopi aktiveret"
+        },
+        "googleCloudForce": {
+          "title": "Udløs manuelt Google Drive sikkerhedskopi",
+          "alert": "Sikkerhedskopierede kanaler til Google Drive"
+        },
+        "iCloud": {
+          "title": "iCloud kanalsikkerhedskopi",
+          "subtitle": "Automatisk sikkerhedskopiering af kanaler til iCloud",
+          "alert": "iCloud sikkerhedskopi"
+        },
+        "iCloudForce": {
+          "title": "Udløs manuelt iCloud sikkerhedskopi",
+          "alert": "Sikkerhedskopierede kanaler til iCloud"
+        },
+        "error": "Fejl under sikkerhedskopiering"
+      }
+    },
+    "security": {
+      "title": "Sikkerhed",
+      "pincode": {
+        "title": "Log ind med pinkode"
+      },
+      "biometrics": {
+        "title": "Log ind med",
+        "fingerprint": "fingeraftryk",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Planlagt kædesynkronisering",
+        "subtitle": "Kører i baggrunden hver 2. time",
+        "dialog": {
+          "title": "Ikke anbefalet",
+          "msg": "Advarsel. Det anbefales ikke at deaktivere planlagt kædesynkronisering.\n\nSørg for at holde dig opdateret med netværket, ellers risikerer du at miste dine midler.\n\nGør kun dette, hvis du ved, hvad du laver."
+        }
+      },
+      "gossipSync": {
+        "title": "Synkroniser LN-kanaler ved opstart"
+      },
+      "gossipSyncAndroid": {
+        "title": "Planlagt LN-kanalsynkronisering",
+        "subtitle": "Kører ved opstart af Blixt"
+      }
+    },
+    "display": {
+      "title": "Skærm",
+      "fiatUnit": {
+        "title": "Skift fiat-enhed"
+      },
+      "bitcoinUnit": {
+        "title": "Skift bitcoin-enhed"
+      },
+      "onchainExplorer": {
+        "title": "On-chain-udforsker",
+        "dialog": {
+          "title": "Skift on-chain-udforsker"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Bitcoin Netværk",
+      "node": {
+        "title": "Bitcoin Node",
+        "subtitle": "Indstil Bitcoin-node (BIP157) for at oprette forbindelse til",
+        "setDialog": {
+          "title": "Indstil Node",
+          "info": "Indstil en Bitcoin-node, der understøtter BIP157, for at etablere forbindelse til.",
+          "leaveBlankToSearch": "Efterlad feltet tomt for at lade Blixt Wallet søge på Bitcoin-netværket efter en gyldig node.",
+          "longPressToReset": "For at nulstille til standardnoden ({{defaultNode}}), tryk og hold på indstillingen."
+        },
+        "restoreDialog": {
+          "title": "Gendan node",
+          "msg": "Vil du gendanne til standardnoden?"
+        }
+      },
+      "restartDialog": {
+        "title": "Genstart påkrævet",
+        "msg": "Blixt Wallet skal genstartes, før den nye konfiguration anvendes.",
+        "msg1": "Ønsker du at gøre det nu?"
+      },
+      "rpc": {
+        "title": "Indstil bitcoind RPC Vært"
+      },
+      "zmqRawBlock": {
+        "title": "Indstil bitcoind ZMQ Rå Blok Vært"
+      },
+      "zmqRawTx": {
+        "title": "Indstil bitcoind ZMQ Rå Transaktion Vært"
+      },
+      "p2tr": {
+        "title": "Aktivér modtagelse on-chain via Taproot (P2TR)"
+      }
+    },
+    "LN": {
+      "title": "Lightning Netværk",
+      "network": {
+        "title": "Vis netværksinfo",
+        "subtitle": ""
+      },
+      "node": {
+        "title": "Vis nodens data",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Vis Lightning-noder",
+        "subtitle": ""
+      },
+      "maxLNFeePercentage": {
+        "title": "Indstil maksimal betalingsgebyr",
+        "subtitle": "Proportionalt med beløbet",
+        "dialog": {
+          "title": "Indstil maks LN-gebyrprocent"
+        },
+        "resetDialog": {
+          "title": "Vil du gendanne det maksimale LN-gebyr til standardværdien ({{defaultMaxLNFee}}%)?"
+        }
+      },
+      "autopilot": {
+        "title": "Åbn kanaler automatisk",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Indgående kanaltjenester",
+        "subtitle": "Brug en indgående kanaltjeneste til at modtage betalinger",
+        "dialog": {
+          "title": "Indgående kanaludbyder",
+          "msg1": "Vælg en indgående kanaludbyder og tryk på Fortsæt.",
+          "msg2": "Din webbrowser åbnes til den tilsvarende udbyders hjemmeside, hvor du kan anmode om en kanal.",
+          "msg3": "Når du er færdig, kan du kopiere adressekoden og/eller åbne linket ved hjælp af Blixt Wallet."
+        }
+      },
+      "LSP": {
+        "title": "Indstil Dunder LSP Server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Indstil Dunder Server",
+          "acept": "Indstil server"
+        },
+        "restoreDialog": {
+          "title": "Gendan Dunder Server",
+          "msg": "Ønsker du at gendanne til standard Dunder-serveren?"
+        }
+      },
+      "graphSync": {
+        "title": "Vent på graf-synkronisering før betaling",
+        "subtitle": "Synkroniseret graf fører til optimale betalingsstier"
+      },
+      "zeroConfPeers": {
+        "title": "Indstil zero conf-noder",
+        "subtitle": "Tilføj offentlige nøgler for noder, du vil tillade zero conf-kanaler fra",
+        "setDialog": {
+          "title": "Zero conf-noder",
+          "msg1": "Komma-adskilte værdier af offentlige nøgler for at tillade zero conf-kanaler fra.",
+          "msg2": "Du vil stole på kanaler fra disse partnere, indtil der er mindst én bekræftelse på kæden."
+        }
+      }
+    },
+    "miscelaneous": {
+      "title": "Diverse",
+      "about": {
+        "title": "Om",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "Kopier app-log til lokal lagring",
+        "subtitle": "",
+        "dialog": {
+          "alert": "Kopieret app-logfil til",
+          "error": "Fejl ved kopiering af app-logfil."
+        }
+      },
+      "lndLog": {
+        "title": "Kopier lnd-log til lokal lagring",
+        "dialog": {
+          "error": "Fejl ved kopiering af lnd-logfil."
+        }
+      },
+      "speedloaderLog": {
+        "title": "Kopier LN-kanalsynkroniseringslogfil til lokal lagring",
+        "dialog": {
+          "error": "Fejl ved kopiering af speedloader logfil."
+        }
+      },
+      "dev": {
+        "title": "Gå til udvikler-skærmen",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Skjul automatisk udløbne fakturaer",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Skærmovergange",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Signer besked med wallet-nøgle",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Signer besked"
+        },
+        "dialog2": {
+          "title": "Signatur",
+          "alert": "Kopieret til udklipsholder"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Indstil lnd-logniveau",
+        "dialog": {
+          "title": "Indstil lnd-logniveau.",
+          "description": "Logniveauet ændrer lnd-logens nøjagtighed, der kan tilgås fra indstillinger."
+        },
+        "restoreDialog": {
+          "title": "Vil du gendanne lnd-logniveauet til standardniveauet ({{defaultLndLogLevel}})?"
+        }
+      }
+    },
+    "experimental": {
+      "title": "Eksperimenter",
+      "LSP": {
+        "title": "Aktivér Dunder LSP",
+        "subtitle": "MEGET EKSPERIMENTELT. Lightning Service Provider, der hjælper med indgående likviditet"
+      },
+      "MPP": {
+        "title": "Aktivér Multi-Path-betalinger",
+        "subtitle": "Betalinger kan tage op til 16 stier"
+      },
+      "tor": {
+        "title": "Aktivér Tor",
+        "subtitle": "",
+        "enabled": {
+          "title": "Genstart app og aktiver Tor",
+          "msg1": "Aktivering af Tor vil få wallet til at forbinde til sine peers (både Bitcoin og Lightning Network peers) via Tor-netværket.",
+          "msg2": "Du vil også kunne forbinde og åbne kanaler til Lightning-noder, der bruger onion-tjenester.",
+          "msg3": "ADVARSEL: Blixt Wallet vil stadig kommunikere med følgende tjenester uden Tor",
+          "msg4": "Årsag: For at få fiat/bitcoin-rater",
+          "msg5": "Årsag: For at få den aktuelle blokhøjde",
+          "msg6": "Årsag: For Google Drive-backup",
+          "msg7": "Årsag: For pålidelige Lightning-noder",
+          "msg8": "WebLN Browser og LNURL vil heller ikke bruge Tor."
+        },
+        "disabled": {
+          "title": "Genstart app og deaktiver Tor",
+          "msg1": "Deaktivering af Tor kræver en app-genstart.",
+          "msg2": "Ønsker du at fortsætte?"
+        }
+      },
+      "onion": {
+        "title": "Vis Tor onion-tjeneste",
+        "subtitle": "Til at oprette forbindelse og åbne kanaler til denne wallet"
+      },
+      "keysend": {
+        "title": "Keysend-eksperiment",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Fakturaudløb (sekunder)",
+        "subtitle": "{{expiry}} sekunder"
+      }
+    },
+    "debug": {
+      "title": "Fejlfinding",
+      "startup": {
+        "title": "Vis oplysninger om opstart",
+        "subtitle": ""
+      },
+      "showNotifications": {
+        "title": "Vis meddelelser for denne session",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "Vis fejlfindingslog for denne session",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "LndMobile hjælpecenter",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Diagnostiser Dunder-problemer",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "Læs lnd-log",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "Læs LN-kanalsynkroniseringslog",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Keysend-test",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Google Drive-testmiljø",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Skriv konfiguration",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Aktivér demotilstand",
+        "subtitle": "Bruges til promovering. Genstart app for at nulstille"
+      },
+      "rescanWallet": {
+        "title": "Genindlæs wallet",
+        "subtitle": "Genindlæs blockchain for wallet-transaktioner"
+      },
+      "getNodeInfo": {
+        "title": "Få nodeinfo"
+      },
+      "getChannelInfo": {
+        "title": "Få kanalinfo"
+      },
+      "demoMode": {
+        "title": "Aktivér demotilstand",
+        "subtitle": "Bruges til promovering. Genstart app for at nulstille"
+      },
+      "disableGraphCache": {
+        "title": "Deaktiver lnd graf-cache"
+      },
+      "resetMissionControl": {
+        "title": "Nulstil betalingsrouting-viden"
+      },
+      "strictGraphPruning": {
+        "title": "Aktivér streng LN-grafisk beskæring"
+      },
+      "bimodalPathFinding": {
+        "title": "Aktivér bimodal rutevalg"
+      },
+      "compactLndDatabases": {
+        "title": "Kompakt lnd's databaser"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Håndhæv gossip-synkronisering ved opstart"
+      },
+      "persistentServices": {
+        "title": "Aktivér vedvarende LND og Tor (hvis aktiveret)"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "Om Blixt Wallet",
+    "msg1": "Version",
+    "msg2": "Ved",
+    "msg3": "Open source-pung med MIT-licens",
+    "msg4": "Oprettet ved hjælp af",
+    "msg5": "og anden fantastisk open source-software",
+    "msg6": "Tor-ikonet er licenseret under CC BY 3.0 af",
+    "msg7": "licens"
+  },
+  "settings.setPincode": {
+    "enter": "Indtast en pinkode",
+    "confirm": "Bekræft din pinkode"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Indtast den aktuelle pinkode for at fjerne pinkoden"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Lightning Peers"
+    },
+    "alias": "Node alias",
+    "pubKey": "Node offentlig nøgle",
+    "address": "Node adresse",
+    "data": {
+      "title": "Data",
+      "bytesSent": "bytes sendt",
+      "bytesRecv": "modtagne bytes"
+    },
+    "transfer": {
+      "title": "Overførsel",
+      "satSent": "sad sendt",
+      "satRecv": "sad modtaget"
+    },
+    "inbound": "Indgående",
+    "syncType": "Synkroniseringstype",
+    "errors": "Fejl",
+    "disconnect": "Afbryd peer"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Opret forbindelse til Lightning Peer"
+    },
+    "connect": {
+      "title": "Node URI",
+      "placeholder": "Peer URI",
+      "accept": "Forbinde"
+    }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Lightning Network Info",
+    "avgChannelSize": "Gennemsnitlig kanalstørrelse",
+    "avgOutDegree": "Gennemsnitlig udegrad",
+    "graphDiameter": "Diameter af graf",
+    "medianChannelSizeSat": "Median kanalstørrelse",
+    "numChannels": "Antal kanaler",
+    "numNodes": "Antal knudepunkter",
+    "numZombieChans": "Antal zombiekanaler",
+    "totalNetworkCapacity": "Samlet netværkskapacitet"
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Node Info",
+    "alias": "Node Alias",
+    "chain": "Kæde",
+    "timestamp": "Bedste header tidsstempel",
+    "blockHash": "Bloker Hash",
+    "blockHeight": "Blokhøjde",
+    "identityPubkey": "Identitet Pubkey",
+    "channel": {
+      "title": "Antal kanaler",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "pending": "Verserende"
+    },
+    "numPeers": "Antal jævnaldrende",
+    "syncedToChain": "Synkroniseret til kæde",
+    "syncedToGraph": "Synkroniseret til Graph",
+    "nodeUris": "Node URI'er",
+    "version": "Lnd Version",
+    "features": "Node funktioner"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Tor Onion Service",
+    "msg1": "Scan denne QR-kode for at åbne en kanal til denne tegnebog",
+    "msg2": "Løgadressen kunne ikke løses"
+  },
+  "settings.toastLog": {
+    "title": "Notifikationslog"
+  },
+  "settings.debugLog": {
+    "title": "Debug log"
+  },
+  "welcome.addFunds": {
+    "title": "Tilføj midler",
+    "msg1": "For at begynde at bruge Lightning i Blixt Wallet",
+    "msg2": "send bitcoins til adressen ovenfor"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "Åbn automatisk kanaler",
+      "msg": "Åbn kanaler, når on-chain midler er tilgængelige"
+    },
+    "done": {
+      "title": "Næsten færdig!",
+      "msg1": "Her er nogle tegnebogsindstillinger, du kan konfigurere efter din smag",
+      "msg2": "Når du er klar, tryk fortsæt"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Prøv igen",
+      "msg": "Beklager, du skrev ordene i den forkerte rækkefølge, prøv venligst igen."
+    },
+    "seed": {
+      "title": "Bekræft dit frø"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Aktiver Google Drev-sikkerhedskopi",
+      "msg": "Google Drev-sikkerhedskopi aktiveret"
+    },
+    "backup": {
+      "title": "Cloud Backup",
+      "msg": "For at dine midler uden for kæden forbliver sikre i tilfælde af en enhedstab, anbefaler vi, at du holder kanaler sikkerhedskopieret til Google Drev.",
+      "msg1": "Dette vil beholde en krypteret backup af dine kanaler, som kun kan bruges sammen med tegnebogens frø.",
+      "msg2": "Når du er klar, tryk fortsæt."
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Aktiver iCloud-sikkerhedskopi",
+      "msg": "iCloud backup aktiveret"
+    },
+    "backup": {
+      "title": "iCloud-sikkerhedskopi",
+      "msg": "For at dine midler uden for kæden forbliver sikre i tilfælde af tab af enhed, anbefaler vi, at du holder kanaler sikkerhedskopieret til iCloud.",
+      "msg1": "Dette vil beholde en krypteret backup af dine kanaler, som kun kan bruges sammen med tegnebogens frø.",
+      "msg2": "Når du er klar, tryk fortsæt."
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Gendan tegnebogen",
+      "msg": "For at genoprette din tegnebog skal du skrive hvert ord fra dit frø adskilt af et mellemrum.",
+      "msg1": "Hvis du ønsker at gendanne dine Lightning Network-kanaler, skal du sørge for en sikkerhedskopi.",
+      "loading": "Gendan tegnebog",
+      "passphrase": {
+        "placeholder": "Adgangssætning (valgfrit)"
+      },
+      "channel": {
+        "title": "Kanal backup",
+        "file": "Vælg kanal backup fil på disken",
+        "google": {
+          "title": "Gendan via Google Drev",
+          "alert": "Gendannelse via Google Drev mislykkedes"
+        },
+        "iCloud": {
+          "title": "Gendan via iCloud",
+          "alert": "Gendannelse via iCloud mislykkedes"
+        }
+      },
+      "seed": "Frø skal være præcis 24 ord"
+    },
+    "backup": {
+      "google": "Sikkerhedskopier via Google Drev",
+      "iCloud": "Sikkerhedskopier via iCloud"
+    }
+  },
+  "welcome.seed": {
+    "title": "Velkommen til Blixt Wallet!",
+    "msg": "Dette er din backup frø.",
+    "msg1": "Skriv det ned på et stykke papir og opbevar det et sikkert sted.",
+    "msg2": "Skulle du miste adgangen til din pung",
+    "msg3": "du kan muligvis genvinde dine penge ved at bruge dit backup-seed.",
+    "msg4": "Frøstandarden, der anvendes, er aezeed.",
+    "button": "Jeg har skrevet det ned"
+  }
+}
