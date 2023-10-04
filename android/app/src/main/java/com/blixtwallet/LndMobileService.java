@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.os.Build;
@@ -570,7 +571,7 @@ public class LndMobileService extends Service {
         }
 
         Notification notification = notificationBuilder.build();
-        startForeground(ONGOING_NOTIFICATION_ID, notification);
+        startForeground(ONGOING_NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
       }
     }
 
