@@ -590,12 +590,8 @@ public class LndMobileService extends Service {
     HyperLog.v(TAG, "onUnbind()");
 
     if (mClients.isEmpty()) {
-      HyperLog.i(TAG, "Last client unbound. Checking if lnd is alive and stopping it.");
-
-      if (checkLndProcessExists()) {
-        HyperLog.i(TAG, "Lnd exists, attempting to stop it");
-        stopLnd(null, -1);
-      }
+      HyperLog.i(TAG, "Last client unbound. Stopping lnd.");
+      stopLnd(null, -1);
     }
 
     return false;
@@ -680,7 +676,7 @@ public class LndMobileService extends Service {
 
         @Override
         public void onResponse(byte[] bytes) {
-          HyperLog.e(TAG, "onResponse for stopDaemon");
+          HyperLog.i(TAG, "onResponse for stopDaemon");
 
           lndStarted = false;
 

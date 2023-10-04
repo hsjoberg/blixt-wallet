@@ -224,10 +224,13 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
                         HyperLog.i(TAG, "Got WalletState.RPC_ACTIVE");
                         HyperLog.i(TAG, "LndMobileService reports RPC server ready. Sending GetInfo request");
                         getInfoRequest();
-                      } else if (currentState == lnrpc.Stateservice.WalletState.SERVER_ACTIVE) {
-                        HyperLog.i(TAG, "Got WalletState.SERVER_ACTIVE");
-                        HyperLog.i(TAG, "We do not care about that.");
-                      } else  {
+                      } else if (
+                        currentState == lnrpc.Stateservice.WalletState.SERVER_ACTIVE ||
+                        currentState == lnrpc.Stateservice.WalletState.WAITING_TO_START
+                      ) {
+                        HyperLog.d(TAG, "Got WalletState.SERVER_ACTIVE or WalletState.WAITING_TO_START");
+                        HyperLog.d(TAG, "We do not care about those.");
+                      } else {
                         HyperLog.w(TAG, "SubscribeState got unknown state " + currentState);
                       }
                     } catch (Throwable t) {
