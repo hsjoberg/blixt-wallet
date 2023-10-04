@@ -208,6 +208,9 @@
       "description": {
         "title": "Message",
         "placeholder": "Message to payer"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -868,6 +871,9 @@
         "restoreDialog": {
           "title": "Would you like to restore lnd log level to the default level ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Enable custom invoice preimages"
       }
     },
     "experimental": {

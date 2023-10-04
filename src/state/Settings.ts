@@ -83,7 +83,8 @@ export interface ISettingsModel {
   changeLndCompactDb: Thunk<ISettingsModel, boolean>;
   changeEnforceSpeedloaderOnStartup: Thunk<ISettingsModel, boolean>;
   changePersistentServicesEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
-  changePersistentServicesWarningShown: Thunk<ISettingsModel, booealn, any, IStoreModel>;
+  changePersistentServicesWarningShown: Thunk<ISettingsModel, boolean, any, IStoreModel>;
+  changeCustomInvoicePreimageEnabled: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -126,6 +127,7 @@ export interface ISettingsModel {
   setEnforceSpeedloaderOnStartup: Action<ISettingsModel, boolean>;
   setPersistentServicesEnabled: Action<ISettingsModel, boolean>;
   setPersistentServicesWarningShown: Action<ISettingsModel, boolean>;
+  setCustomInvoicePreimageEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -168,6 +170,7 @@ export interface ISettingsModel {
   enforceSpeedloaderOnStartup: boolean;
   persistentServicesEnabled: boolean;
   persistentServicesWarningShown: boolean;
+  customInvoicePreimageEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -216,7 +219,9 @@ export const settings: ISettingsModel = {
     actions.setICloudBackupEnabled(await getItemObject(StorageItem.iCloudBackupEnabled ?? false));
     actions.setLndChainBackend((await getItem(StorageItem.lndChainBackend)) ?? "");
     actions.setNeutrinoPeers((await getItemObject(StorageItem.neutrinoPeers)) ?? []);
-    actions.setZeroConfPeers((await getItemObject(StorageItem.zeroConfPeers)) ?? [BLIXT_NODE_PUBKEY]);
+    actions.setZeroConfPeers(
+      (await getItemObject(StorageItem.zeroConfPeers)) ?? [BLIXT_NODE_PUBKEY],
+    );
     actions.setBitcoindRpcHost((await getItem(StorageItem.bitcoindRpcHost)) ?? "");
     actions.setBitcoindPubRawBlock((await getItem(StorageItem.bitcoindPubRawBlock)) ?? "");
     actions.setBitcoindPubRawTx((await getItem(StorageItem.bitcoindPubRawTx)) ?? "");
@@ -247,6 +252,9 @@ export const settings: ISettingsModel = {
     );
     actions.setPersistentServicesWarningShown(
       (await getItemObject(StorageItem.persistentServicesWarningShown)) ?? false,
+    );
+    actions.setCustomInvoicePreimageEnabled(
+      (await getItemObject(StorageItem.customInvoicePreimageEnabled)) ?? false,
     );
 
     log.d("Done");
@@ -462,6 +470,11 @@ export const settings: ISettingsModel = {
     actions.setPersistentServicesWarningShown(payload);
   }),
 
+  changeCustomInvoicePreimageEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.customInvoicePreimageEnabled, payload);
+    actions.setCustomInvoicePreimageEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -585,6 +598,9 @@ export const settings: ISettingsModel = {
   setPersistentServicesWarningShown: action((state, payload) => {
     state.persistentServicesWarningShown = payload;
   }),
+  setCustomInvoicePreimageEnabled: action((state, payload) => {
+    state.customInvoicePreimageEnabled = payload;
+  }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -627,4 +643,5 @@ export const settings: ISettingsModel = {
   enforceSpeedloaderOnStartup: false,
   persistentServicesEnabled: false,
   persistentServicesWarningShown: false,
+  customInvoicePreimageEnabled: false,
 };

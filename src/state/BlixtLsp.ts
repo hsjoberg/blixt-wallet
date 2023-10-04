@@ -69,7 +69,7 @@ export interface IOnDemandChannelUnknownRequestResponse extends IErrorResponse {
 export interface IOndemandChannel {
   checkOndemandChannelService: Thunk<IOndemandChannel, void, IStoreInjections>;
   connectToService: Thunk<IOndemandChannel, undefined, IStoreInjections, IStoreModel, Promise<boolean>>;
-  addInvoice: Thunk<IOndemandChannel, { sat: number; description: string }, IStoreInjections, IStoreModel>;
+  addInvoice: Thunk<IOndemandChannel, { sat: number; description: string, preimage?: Uint8Array }, IStoreInjections, IStoreModel>;
 
   serviceStatus: Thunk<IOndemandChannel, void, IStoreInjections, IStoreModel, Promise<IOnDemandChannelServiceStatusResponse>>;
   checkStatus: Thunk<IOndemandChannel, void, IStoreInjections, IStoreModel, Promise<IOnDemandChannelCheckStatusResponse>>;
@@ -184,8 +184,10 @@ export const blixtLsp: IBlixtLsp = {
       return connectToPeer;
     })),
 
-    addInvoice: thunk((async (actions, { sat, description }, { getStoreActions }) => {
-      const preimage = await generateSecureRandom(32);
+    addInvoice: thunk((async (actions, { sat, description, preimage }, { getStoreActions }) => {
+      if (!preimage) {
+        preimage = await generateSecureRandom(32);
+      }
       const result = await actions.register({
         preimage,
         amount: sat,
