@@ -208,40 +208,21 @@ export default function Settings({ navigation }: ISettingsProps) {
   const changeLanguage = useStoreActions((store) => store.settings.changeLanguage);
 
   const onLangPress = async () => {
-    if (PLATFORM === "android") {
-      const { selectedItem } = await DialogAndroid.showPicker(null, null, {
-        positiveText: null,
-        negativeText: t("buttons.cancel", { ns: namespaces.common }),
-        type: DialogAndroid.listRadio,
-        selectedId: currentLanguage,
-        items: Object.keys(languages)
-          .sort()
-          .map((key) => {
-            return {
-              label: languages[key].name,
-              id: languages[key].id,
-            };
-          }),
-      });
-      if (selectedItem) {
-        await changeLanguage(selectedItem.id);
-      }
-    } else {
-      navigation.navigate("ChangeLanguage", {
-        title: t("general.lang.dialog.title"),
-        data: Object.keys(languages)
-          .sort()
-          .map((key) => {
-            return {
-              title: languages[key].name,
-              value: languages[key].id,
-            };
-          }),
+    navigation.navigate("ChangeLanguage", {
+      title: t("general.lang.dialog.title"),
+      data: Object.keys(languages)
+        .sort()
+        .map((key) => {
+          return {
+            title: languages[key].name,
+            value: languages[key].id,
+          };
+        }),
         onPick: async (lang) => {
           await changeLanguage(lang);
         },
-      });
-    }
+        searchEnabled: true,
+    });
   };
 
   // Autopilot
