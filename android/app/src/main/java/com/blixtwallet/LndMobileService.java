@@ -19,6 +19,7 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.util.Base64;
 import android.util.Log;
+import static android.app.Notification.FOREGROUND_SERVICE_IMMEDIATE;
 
 import lndmobile.Callback;
 import lndmobile.Lndmobile;
@@ -556,6 +557,7 @@ public class LndMobileService extends Service {
       boolean persistentServicesEnabled = getPersistentServicesEnabled(this);
       // persistent services on, start service as foreground-svc
       if (persistentServicesEnabled) {
+        Notification.Builder notificationBuilder = null;
         Intent notificationIntent = new Intent (this, MainActivity.class);
         PendingIntent pendingIntent =
           PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
@@ -565,19 +567,29 @@ public class LndMobileService extends Service {
           notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
           assert notificationManager != null;
           notificationManager.createNotificationChannel(chan);
+
+          notificationBuilder = new Notification.Builder(this, BuildConfig.APPLICATION_ID);
+        } else {
+          notificationBuilder = new Notification.Builder(this);
         }
-        Notification notification = new Notification.Builder(this, BuildConfig.APPLICATION_ID)
-            .setContentTitle("LND")
-            .setContentText("LND is running in the background")
-            .setSmallIcon(R.drawable.ic_stat_ic_notification)
-            .setContentIntent(pendingIntent)
-            .setTicker("Blixt Wallet")
-            .setOngoing(true)
-            .build();
+
+        notificationBuilder
+          .setContentTitle("LND")
+          .setContentText("LND is running in the background")
+          .setSmallIcon(R.drawable.ic_stat_ic_notification)
+          .setContentIntent(pendingIntent)
+          .setTicker("Blixt Wallet")
+          .setOngoing(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          notificationBuilder.setForegroundServiceBehavior(FOREGROUND_SERVICE_IMMEDIATE);
+        }
+
+        Notification notification = notificationBuilder.build();
         startForeground(ONGOING_NOTIFICATION_ID, notification);
       }
     }
-    
+
     // else noop, instead of calling startService, start will be handled by binding
     return startid;
   }
