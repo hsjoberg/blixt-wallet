@@ -116,6 +116,10 @@ export const languages: ILanguages = {
     id: "fr",
     name: "Français",
   },
+  ko: {
+    id: "ko",
+    name: "한국인",
+  },
   nl: {
     id: "nl",
     name: "Nederlands",

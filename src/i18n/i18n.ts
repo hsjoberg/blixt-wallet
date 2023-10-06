@@ -12,6 +12,7 @@ import hr from "./hr";
 import it from "./it";
 import ja from "./ja";
 import fr from "./fr";
+import ko from "./ko";
 import nl from "./nl";
 import no from "./no";
 import tlh from "./tlh";
@@ -42,6 +43,7 @@ const createI18n = (language: string): i18nInstance => {
       it,
       ja,
       fr,
+      ko,
       nl,
       no,
       tlh,
