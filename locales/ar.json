@@ -208,6 +208,9 @@
       "description": {
         "title": "الرسالة",
         "placeholder": "رسالة إلى الجهة المدفوعة"
+      },
+      "preimage": {
+        "placeholder": "سلسلة سداسية 32 بايت"
       }
     }
   },
@@ -868,6 +871,9 @@
         "restoreDialog": {
           "title": "هل ترغب في استعادة مستوى السجل الوطني إلى المستوى الافتراضي ({{defaultLndLogLevel}})؟"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "تمكين الصور المسبقة للفاتورة المخصصة"
       }
     },
     "experimental": {
