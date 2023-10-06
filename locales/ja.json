@@ -208,6 +208,9 @@
       "description": {
         "title": "メッセージ",
         "placeholder": "支払い元へのメッセージ"
+      },
+      "preimage": {
+        "placeholder": "32バイトの16進数文字列"
       }
     }
   },
@@ -868,6 +871,9 @@
         "restoreDialog": {
           "title": "lndログレベルをデフォルトレベル（{{defaultLndLogLevel}}）に復元しますか？"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "カスタム請求書の事前画像を有効にする"
       }
     },
     "experimental": {
