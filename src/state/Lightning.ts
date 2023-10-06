@@ -76,7 +76,6 @@ export interface ILightningModel {
 
   bestBlockheight?: number;
   initialKnownBlockheight?: number;
-  // startChannelAcceptanceManager: Thunk<ILightningModel, void, IStoreInjections>;
 }
 
 export const lightning: ILightningModel = {
@@ -163,7 +162,7 @@ export const lightning: ILightningModel = {
         dispatch.clipboardManager.initialize(),
         dispatch.deeplinkManager.initialize(),
         dispatch.blixtLsp.initialize(),
-        dispatch.channelRpcInterceptor.initialize(),
+        dispatch.channelAcceptanceManager.initialize(),
         dispatch.lightningBox.initialize(),
       ]);
     } catch (e) {

@@ -146,7 +146,7 @@ export interface IStoreModel {
   appVersion: number;
   appBuild: number;
   onboardingState: OnboardingState;
-  channelRpcInterceptor: IChannelAcceptanceManagerModel;
+  channelAcceptanceManager: IChannelAcceptanceManagerModel;
 }
 
 export const model: IStoreModel = {
