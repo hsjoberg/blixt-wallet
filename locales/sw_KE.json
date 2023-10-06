@@ -208,6 +208,9 @@
       "description": {
         "title": "Ujumbe",
         "placeholder": "Ujumbe kwa mlipaji"
+      },
+      "preimage": {
+        "placeholder": "Mfuatano wa heksi wa baiti 32"
       }
     }
   },
@@ -868,6 +871,9 @@
         "restoreDialog": {
           "title": "Je, ungependa kurejesha kiwango cha kumbukumbu cha lnd kwenye kiwango cha kawaida ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Washa picha za awali za ankara maalum"
       }
     },
     "experimental": {
