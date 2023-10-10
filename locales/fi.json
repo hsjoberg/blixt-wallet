@@ -1,0 +1,1187 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Salamaosoite",
+      "nodeAlias": "Solmun lempinimi",
+      "description": "Kuvaus",
+      "amount": "Määrä",
+      "fee": "Palkkio",
+      "search": "Etsi",
+      "viewInBlockExplorer": "Näytä lohko-selaimessa"
+    },
+    "buttons": {
+      "ok": "Ok",
+      "cancel": "Peruuta",
+      "continue": "Jatka",
+      "skip": "Ohita",
+      "proceed": "Jatka",
+      "back": "Takaisin",
+      "no": "Ei",
+      "yes": "Kyllä",
+      "save": "Tallenna",
+      "copy": "Kopioi"
+    },
+    "msg": {
+      "status": "Tila",
+      "error": "Virhe",
+      "warning": "Varoitus",
+      "result": "Tulos",
+      "pending": "Odottaa",
+      "done": "Valmis",
+      "dismiss": "Hylkää",
+      "lastSync": "Viimeisin synkronointi",
+      "lastSyncAttempt": "Viimeinen synkronointiyritelmä",
+      "clipboardCopy": "Kopioitu leikepöydälle.",
+      "written": "Kirjoitettu",
+      "enabled": "Käytössä",
+      "disabled": "Poissa käytöstä"
+    }
+  },
+  "welcome.start": {
+    "title": "Tervetuloa",
+    "createWallet": {
+      "title": "Luo lompakko",
+      "msg1": "Blixt-lompakko on vielä varhaisessa kehitysvaiheessa.",
+      "msg2": "Jos käytät tätä lompakkoa, varmista, että ymmärrät, että saatat menettää varojasi.",
+      "msg3": "Tällä hetkellä ei ole WatchTower-tukea kanaviesi valvomiseksi, kun olet offline-tilassa.",
+      "msg4": "Olen uhkarohkea, jatka"
+    },
+    "createWalletWithPassphrase": {
+      "title": "Aseta salasana (25. sana siemenen salaukseen)",
+      "invalidMessage": "Syötä kelvollinen salasana",
+      "noLeadingTrailingSpaces": "Johto- tai peräkkäiset välilyönnit eivät ole sallittuja"
+    },
+    "language": {
+      "title": "Valitse kieli"
+    },
+    "restoreWallet": {
+      "title": "Palauta lompakko"
+    },
+    "menu": {
+      "enableTor": "Ota käyttöön Tor",
+      "disableTor": "Poista käytöstä Tor",
+      "setBitcoinNode": "Aseta Bitcoin-solmu",
+      "createWalletWithPassphrase": "Luo lompakko salasanalla"
+    }
+  },
+  "footerNav": {
+    "receive": "Vastaanota",
+    "send": "Lähetä"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Skannaa",
+      "receive": "Vastaanota",
+      "pasteFromClipboard": "Liitä leikepöydältä",
+      "sendToLightningAddress": "Lähetä salamaosoitteeseen",
+      "contactsAndServices": "Yhteystiedot ja palvelut",
+      "lightningBrowser": "Salamasiirtojen selain",
+      "onChainWallet": "Ketjulompakko",
+      "lightningChannels": "Salama-kanavat",
+      "keysendExperiment": "Keysend-koe",
+      "showMore": "Lisää asetuksia"
+    },
+    "madeInSweden": "Valmistettu ⚡ Ruotsissa"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "Lompakon palautus käynnissä.",
+      "msg2": "Lompakon palautus valmistui.",
+      "more": "Lisätietoja"
+    },
+    "sendOnChain": {
+      "title": "Tervetuloa Blixt-lompakkoon!",
+      "msg1": "Aloittaaksesi, lähetä varoja ketjuun osoitteeseen oikealla.",
+      "msg2": "Kanava avautuu automaattisesti sinulle.",
+      "msg3": "Lähetä vähintään",
+      "alert": "Bitcoin-osoite kopioitu leikepöydälle"
+    },
+    "doBackup": {
+      "msg1": "Kiitos, että käytät Blixt-lompakkoa!",
+      "msg2": "Suosittelemme varmuuskopion tekemistä lompakosta, jotta voit palauttaa varasi puhelimen menetyksen sattuessa.",
+      "backup": "Varmuuskopioi lompakko"
+    },
+    "newChannelBeingOpened": {
+      "info": "Uusi kanava on parhaillaan avaamassa...",
+      "view": "Näytä"
+    },
+    "noTransactionsYet": "Ei vielä tapahtumia"
+  },
+  "help": {
+    "title": "Apua",
+    "msg1": "Jos kohtaat ongelmia tai sinulla on palautetta, voit ottaa yhteyttä Blixt-lompakon kehittäjiin tekemällä ilmoituksen Githubissa tai ottamalla yhteyttä sähköpostitse.",
+    "msg2": "Olet myös tervetullut liittymään julkiseen Telegram-keskusteluryhmäämme.",
+    "msg3": "Koska Blixt-lompakko on uusi lompakko, tarvitsemme palautetta yleisistä ongelmista, joita saatat kohdata.",
+    "telegramGroup": "Telegram-ryhmä"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Synkronointi käynnissä",
+      "title1": "Synkronointi valmis",
+      "msg1": "Blixt-lompakko synkronoi tällä hetkellä lohkoketjun.",
+      "msg2": "Kun lompakkosi on synkronoitu lohkoketjun kanssa, ketjun tapahtumat ja varat tunnistetaan ja ne voidaan nähdä Bitcoin-ketjun osiossa.",
+      "msg3": "Blixt-lompakko on synkronoitu lohkoketjun kanssa.",
+      "blockHeight": {
+        "title": "Nykyinen lohkon korkeus",
+        "msg1": "Ketjun synkronointi etenee"
+      }
+    },
+    "recoveryMode": {
+      "title": "Palautustila",
+      "msg1": "Palautus on valmis",
+      "msg2": "Tarkista Salama-kanavat ja Ketjun osiot"
+    },
+    "lndLog": {
+      "show": "Näytä lnd-loki",
+      "copy": "Kopioi loki-teksti"
+    }
+  },
+  "transactionDetails": {
+    "title": "Tapahtuma",
+    "date": "Päivämäärä",
+    "duration": "Maksettavan laskun suoritusaika",
+    "note": "Huomautus",
+    "website": "Verkkosivusto",
+    "type": "Tyyppi",
+    "lnurl": {
+      "messageFromWebsite": "Viesti",
+      "urlReceivedFromWebsite": "Sivustolta saatu URL",
+      "secretMessage": "Salainen viesti"
+    },
+    "payer": "Maksaja",
+    "recipient": "Vastaanottaja",
+    "amountInFiatTimeOfPayment": "Määrä Fiat-valuutassa (maksuhetkellä)",
+    "numberOfHops": "Hyppyjen määrä",
+    "remotePubkey": "Kaukojulkisen avaimen",
+    "paymentHash": "Maksutunniste",
+    "preimage": "Esikuva",
+    "status": "Tila",
+    "goBack": "Palaa takaisin",
+    "button": {
+      "setNote": "Aseta huomautus",
+      "cancelInvoice": "Peruuta lasku",
+      "showMap": "Näytä kartta"
+    },
+    "setNoteDialog": {
+      "title": "Huomautus",
+      "text": "Aseta huomautus tälle tapahtumalle"
+    }
+  },
+  "web.info": {
+    "title": "Interaktiivinen demoversio",
+    "pressToTry": "Paina kokeillaksesi Blixt-lompakkoa!"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Vastaanota"
+    },
+    "createInvoice": {
+      "title": "Luo lasku",
+      "alert": "Ennen kuin voit vastaanottaa, sinun on avattava Salama-kanava.",
+      "lsp": {
+        "msg": "Dunder LSP:n maksukanava avataan, kun tämä lasku maksetaan.",
+        "msg1": "Mikä tämä on?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Kanavan avaaminen",
+      "msg": "Tämän laskun maksamiseksi Salama-verkossa on avattava kanava.",
+      "msg1": "Tämä vaatii noin kertaluonteisen maksun",
+      "alert": "Yhteys Dunderiin epäonnistui, yritä myöhemmin uudelleen.",
+      "proceed": "Jatka"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Määrä",
+        "change": "Vaihda Fiat-yksikkö",
+        "dunderPlaceholder": "Vähintään"
+      },
+      "amountBitcoin": {
+        "title": "Määrä",
+        "change": "Vaihda Bitcoin-yksikkö",
+        "dunderPlaceholder": "Vähintään"
+      },
+      "payer": {
+        "title": "Maksaja",
+        "placeholder": "Kirjanpitoa varten"
+      },
+      "description": {
+        "title": "Viesti",
+        "placeholder": "Viesti maksajalle"
+      },
+      "preimage": {
+        "placeholder": "32 merkin heksadesimaalijono"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "Tietoa Dunder LSP:stä",
+    "msg": "Dunder on Lightning Service Provider (LSP), joka avaa automaattisesti kanavia sinulle, kun sinulla ei ole tarpeeksi saapuvaa likviditeettiä.",
+    "msg1": "Tämä voi olla esimerkiksi tilanne, kun aloitat Blixt Walletin käytön ensimmäistä kertaa.",
+    "msg2": "Koska tämä vaatii on-chain-transaktion, siitä veloitetaan Bitcoin-transaktiomaksu saapuvasta maksusta. Tulevaisuudessa maksut voivat käyttää vasta avattua maksukanavaa Lightning-verkossa.",
+    "msg3": "Dunder on",
+    "msg4": "avoin lähdekoodi",
+    "msg5": "ohjelmisto, ja voit vaihtaa oletuspalveluntarjoajan Asetuksissa."
+  },
+  "receive.receiveQr": {
+    "title": "Vastaanota",
+    "qr": {
+      "title": "Skannaa tämä QR-koodi",
+      "msg": "Vanhenee {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Maksa lasku"
+    },
+    "form": {
+      "invoice": {
+        "title": "Lasku"
+      },
+      "amount": {
+        "title": "Määrä"
+      },
+      "recipient": {
+        "title": "Vastaanottaja"
+      },
+      "nodeAlias": {
+        "title": "Solmu Aliaksen nimi"
+      },
+      "description": {
+        "title": "Viesti"
+      },
+      "feeEstimate": {
+        "title": "Maksuarvion mukaan"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "MAKSU LÄHETETTY"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Lightning-kanavat"
+    },
+    "balance": {
+      "title": "Saldo"
+    },
+    "channel": {
+      "alias": "Aliaksen nimi",
+      "node": "Solmu",
+      "channelId": "Kanavan tunniste",
+      "channelPoint": "Kanavan piste",
+      "status": "Tila",
+      "statusActive": "Aktiivinen",
+      "statusInactive": "Ei aktiivinen",
+      "statusPending": "Odottaa",
+      "statusClosing": "Sulkeutumassa",
+      "statusForceClosing": "Väkisin sulkemassa",
+      "statusWaitingForClose": "Odottaa sulkemista",
+      "capacity": "Kapasiteetti",
+      "howMuchCanBeSent": "Voi lähettää",
+      "howMuchCanBeReceived": "Voi vastaanottaa",
+      "localReserve": "Paikallinen varaus",
+      "commitmentFee": "Sitoutumismaksu",
+      "channelType": "Kanavatyyppi",
+      "pendingFunds": "Odottavat varat",
+      "balanceInLimbo": "Limbo-saldo",
+      "pendingHtlcs": "Odottavat HTLC:t",
+      "maturityHeight": "Kypsyyskorkeus",
+      "localCommitmentTxid": "Paikallinen sitoutumisen TXID",
+      "remoteCommitmentTxid": "Etäinen sitoutumisen TXID",
+      "closeChannel": "Sulje kanava",
+      "forceClosePendingChannel": "Väkisin sulje odottava kanava",
+      "closeChannelPrompt": {
+        "title": "Sulje kanava"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Avaa kanava"
+    },
+    "form": {
+      "title": "Avaa kanava",
+      "channel": {
+        "title": "Solmun URI",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Määrä",
+        "placeholder": "Määrä"
+      },
+      "fee_rate": {
+        "title": "Maksunopeus"
+      }
+    },
+    "torPrompt": {
+      "title": "Ota käyttöön Tor",
+      "text1": "Vaikuttaa siltä, että yrität avata kanavaa solmulle, joka toimii Torin onion-palvelun alla.",
+      "text2": "Yhteyden muodostamiseksi sinun on otettava Blixt Walletissa käyttöön Tor."
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "On-chain-varat"
+    },
+    "address": {
+      "title": "Lähetä Bitcoin on-chain tähän osoitteeseen",
+      "alert": "Kopioitu leikepöydälle."
+    },
+    "newAddress": {
+      "title": "Luo uusi osoite"
+    },
+    "withdraw": {
+      "title": "Nosta kolikoita"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Siirto",
+    "txHash": "Tunniste",
+    "timeStamp": "Päivämäärä",
+    "amount": "Määrä",
+    "totalFees": "Maksut",
+    "label": "Tunnus",
+    "destAddresses": "Kohdeosoitteet",
+    "numConfirmations": "Vahvistukset",
+    "blockHeight": "Lohkon korkeus",
+    "blockHash": "Lohkon tunniste",
+    "rawTxHex": {
+      "title": "Raaka tx hex",
+      "msg": "Kopioi leikepöydälle"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Siirtoloki"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Nosta kolikoita"
+    },
+    "form": {
+      "address": {
+        "title": "Osoite",
+        "placeholder": "Bitcoin-osoite"
+      },
+      "amount": {
+        "title": "Määrä",
+        "placeholder": "Määrä",
+        "withdrawAll": "Nosta kaikki varat",
+        "all": "Kaikki"
+      },
+      "feeRate": {
+        "title": "Maksunopeus",
+        "auto": "automaattinen"
+      },
+      "withdraw": {
+        "title": "Nosta",
+        "alert": "Nosto onnistui"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Kirjautumispyyntö",
+      "msg": "Haluatko kirjautua",
+      "success": "Tunnistautunut"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Avataan saapuva kanava"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Näytä metatiedot",
+      "dialog": {
+        "title": "Tekniset metatiedot"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} on yhteystietoluettelossasi"
+      },
+      "add": {
+        "title": "Lisää yhteystietoluetteloon",
+        "msg": "Haluatko lisätä {{lightningAddress}} yhteystietoluetteloon?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Maksukoodi kohteelle {{domain}} on yhteystietoluettelossasi"
+      },
+      "add": {
+        "title": "Lisää yhteystietoluetteloon",
+        "msg": "Haluatko lisätä tämän maksukoodin kohteelle {{domain}} yhteystietoluetteloon?"
+      }
+    },
+    "unableToPay": "Ei voida maksaa",
+    "payerData": {
+      "commentAllowed": "Kommentti kohteelle {{target}} (enintään {{letters}} kirjainta)",
+      "sendNameWithComment": "Lähetä nimeni tämän kommentin kanssa",
+      "name": {
+        "ask": "Lähetä nimeni tämän maksun kanssa",
+        "mandatory": "Nimesi on lähetettävä tämän maksun kanssa"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "Maksulta puuttuu kuvaus."
+    },
+    "pay": {
+      "title": "Maksa",
+      "error": {
+        "mustProvideComment": "Sinun on annettava kommentti, jos päätät sisällyttää nimesi tähän maksuun"
+      }
+    },
+    "cancel": {
+      "title": "Peruuta"
+    },
+    "form": {
+      "asksYouToPay": "pyytää sinua maksamaan.",
+      "description": {
+        "title": "Kuvaus"
+      },
+      "amount": {
+        "title": "Määrä",
+        "to": "kohteelle",
+        "placeholder": "Syötä määrä"
+      },
+      "alert": "Ei voida maksaa"
+    },
+    "done": {
+      "message": {
+        "title": "Viesti kohteelta"
+      },
+      "url": {
+        "description": "Kuvaus",
+        "domain": "URL, joka saatiin kohteelta",
+        "done": {
+          "title": "Valmis"
+        },
+        "copy": {
+          "title": "Kopioi leikepöydälle",
+          "msg": "Kopioitu leikepöydälle."
+        },
+        "open": {
+          "title": "Avaa selain"
+        }
+      },
+      "aes": {
+        "domain": "Sain salaisen salatun viestin kohteelta",
+        "description": "Viesti kohteelta",
+        "secret": "Salainen viesti"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "Tietoa Lightning-osoitteesta",
+      "msg1": "Lightning-osoite",
+      "msg2": "on tapa maksaa henkilölle tai palvelulle Lightning-verkossa.",
+      "msg3": "Ne näyttävät sähköpostiosoitteilta, mutta sen sijaan, että lähetät sähköpostin vastaanottajalle, lähetät rahaa.",
+      "msg4": "Blixt Walletilla on täysi tuki lähettämiseen Lightning-osoitteeseen, mutta vastaanottaminen",
+      "msg5": "Lightning-osoitteen kautta on vielä työn alla."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "Lähetetty nostopyyntö kohteelle {{domain}}",
+      "addToContactList": {
+        "title": "Lisää yhteystietoluetteloon",
+        "msg": "Haluatko lisätä tämän nostokoodin kohteelle {{domain}} yhteystietoluetteloon?",
+        "note": "Tili kohteessa {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "Nostopyyntö",
+      "msg": "Viesti kohteelta",
+      "dialog": {
+        "msg": "Määrä"
+      },
+      "dialog1": {
+        "minSat": "Minimisumma nostolle",
+        "maxSat": "Maksimisumma nostolle",
+        "placeholder": "Määrä"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Yhteystiedot ja palvelut",
+      "lightningAddressAlreadyExists": "on jo yhteystietoluettelossasi",
+      "nothingHereYet": "Täällä ei ole vielä mitään...",
+      "whyNotAdd": "Miksi et lisäisi Salamaosoite-yhteystietoa napauttamalla",
+      "tappingHere": "tästä"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Kaukotase",
+        "error": "Virheellinen toimenpide, yhteystiedoilla ei ole LNURL-nosto-koodia"
+      },
+      "list": {
+        "pay": "Maksut kohteelle",
+        "account": "Tili kohteessa"
+      },
+      "send": {
+        "title": "Lähetä",
+        "couldNotPay": "Ei voitu maksaa tällä LNURL-maksukoodilla",
+        "invalidResponse": "Vastaus ei ollut LNURL-maksun vastaus (saatiin {{response}})",
+        "invalidOperation": "Virheellinen toimenpide, yhteystiedoilla ei ole LUD-16-tunnistetta eikä LNURL-maksukoodia"
+      },
+      "withdraw": {
+        "title": "Nosta",
+        "couldNotPay": "Ei voitu maksaa tällä LNURL-maksukoodilla",
+        "invalidResponse": "Vastaus ei ollut LNURL-maksun vastaus (saatiin {{response}})",
+        "invalidOperation": "Virheellinen toimenpide, yhteystiedoilla ei ole LNURL-nosto-koodia"
+      },
+      "deleteContact": {
+        "title": "Yhteystiedon poisto",
+        "msg": "Oletko varma, että haluat poistaa yhteystiedon {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Yhteystiedon nimi"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Haluatko sulkea selaimen?",
+    "home": "Palaa kauppaluetteloon",
+    "placeholder": "Kirjoita URL tähän"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "Kopioitu leikepöydälle"
+    },
+    "dialog": {
+      "msg1": "Tervetuloa keysend-leikkipaikkaan",
+      "msg2": "Keysend mahdollistaa maksamisen toiselle Blixt Walletille (tai mille tahansa Lightning-solmulle, joka tukee keysendia) ilman laskua.",
+      "msg3": "Napsauta kameraa toisen lompakon QR-koodin skannaamiseksi tai anna julkinen avain ja reititysohjeet alla."
+    },
+    "send": {
+      "title": "Lähetä",
+      "msg": "Keysend-maksu",
+      "error": {
+        "checkAmount": "Tarkista määrä",
+        "missingPubkey": "Puuttuva julkinen avain"
+      },
+      "alert": "Maksu onnistui"
+    },
+    "form": {
+      "amount": {
+        "title": "Määrä sat"
+      },
+      "pubkey": {
+        "title": "Julkinen avain",
+        "placeholder": "Julkinen avain"
+      },
+      "route": {
+        "title": "Reititysohjeet",
+        "placeholder": "Reititysohjeet"
+      },
+      "message": {
+        "title": "Viesti",
+        "placeholder": "Kirjoita chat-viesti tähän"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "Asetukset",
+    "general": {
+      "title": "Yleiset",
+      "name": {
+        "title": "Nimi",
+        "subtitle": "Käytetään tapahtumissa",
+        "dialog": {
+          "msg": "Valitse nimi, joka näkyy tapahtumissa.\n\nNimesi näkyy laskuissa niille, jotka maksavat sinulle, sekä ihmisille, joille maksat.",
+          "accept": "Aseta nimi"
+        }
+      },
+      "lang": {
+        "title": "Kieli",
+        "dialog": {
+          "title": "Valitse kieli"
+        }
+      },
+      "pushNotification": {
+        "title": "Push-ilmoitukset",
+        "subtitle": "Tapahtumille ja kanavatapahtumille"
+      },
+      "checkClipboard": {
+        "title": "Tarkista leikepöytä laskuille",
+        "subtitle": "Tarkista automaattisesti leikepöytä laskuille"
+      },
+      "saveGeolocation": {
+        "title": "Tallenna tapahtuman maantieteellinen sijainti",
+        "subtitle": "Tallenna tapahtuman sijainti paikallisesti",
+        "logGranted": "Maantieteellinen lupa myönnetty",
+        "logDenied": "Maantieteellinen lupa evätty"
+      },
+      "mapTheme": {
+        "title": "Aseta kartan teema"
+      }
+    },
+    "wallet": {
+      "title": "Lompakko",
+      "seed": {
+        "show": {
+          "title": "Näytä mnemoninen lause",
+          "subtitle": "Näytä 24 sanan lause tälle lompakolle",
+          "dialog": {
+            "title": "Lause",
+            "alert": "Kopioitu leikepöydälle",
+            "copy": "Kopioi lause"
+          }
+        },
+        "remove": {
+          "title": "Poista mnemoninen lause laitteesta",
+          "subtitle": "Poista siemen pysyvästi tästä laitteesta",
+          "dialog": {
+            "title": "Poista lause",
+            "msg": "Tämä poistaa siemenen pysyvästi tästä laitteesta. Tee tämä vain, jos olet varmuuskopioinut siemenesi!",
+            "accept": "Poista lause"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Vie kanavan varmuuskopio",
+          "alert": "Tiedosto kirjoitettu:"
+        },
+        "verify": {
+          "title": "Vahvista kanavan varmuuskopio"
+        },
+        "googleCloud": {
+          "title": "Google Drive -kanavan varmuuskopio",
+          "subtitle": "Varmuuskopioi kanavat automaattisesti Google Driveen",
+          "alert": "Google Drive -varmuuskopiointi otettu käyttöön"
+        },
+        "googleCloudForce": {
+          "title": "Käynnistä Google Drive -varmuuskopio manuaalisesti",
+          "alert": "Kanavat varmuuskopioitu Google Driveen"
+        },
+        "iCloud": {
+          "title": "iCloud-kanavan varmuuskopio",
+          "subtitle": "Varmuuskopioi kanavat automaattisesti iCloudiin",
+          "alert": "iCloud-varmuuskopiointi"
+        },
+        "iCloudForce": {
+          "title": "Käynnistä iCloud-varmuuskopio manuaalisesti",
+          "alert": "Kanavat varmuuskopioitu iCloudiin"
+        },
+        "error": "Virhe varmuuskopioinnissa"
+      }
+    },
+    "security": {
+      "title": "Turvallisuus",
+      "pincode": {
+        "title": "Kirjaudu PIN-koodilla"
+      },
+      "biometrics": {
+        "title": "Kirjaudu käyttäen",
+        "fingerprint": "sormenjälki",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Aikataulutettu ketjun synkronointi",
+        "subtitle": "Suoritetaan taustalla joka 2. tunti",
+        "dialog": {
+          "title": "Ei suositella",
+          "msg": "Varoitus. Aikataulutetun ketjun synkronoinnin poistaminen ei ole suositeltavaa.\n\nVarmista, että pidät verkoston ajan tasalla, muuten riskinä on varojen menetys.\n\nTee tämä vain, jos tiedät mitä teet."
+        }
+      },
+      "gossipSync": {
+        "title": "Synkronoi LN-kanavat käynnistyessä"
+      },
+      "gossipSyncAndroid": {
+        "title": "Aikataulutettu LN-kanavien synkronointi",
+        "subtitle": "Suoritetaan Blixtin käynnistyessä"
+      }
+    },
+    "display": {
+      "title": "Näyttö",
+      "fiatUnit": {
+        "title": "Vaihda fiat-yksikköä"
+      },
+      "bitcoinUnit": {
+        "title": "Vaihda bitcoin-yksikköä"
+      },
+      "onchainExplorer": {
+        "title": "On-chain-selain",
+        "dialog": {
+          "title": "Vaihda on-chain-selainta"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Bitcoin-verkko",
+      "node": {
+        "title": "Bitcoin-solmu",
+        "subtitle": "Aseta Bitcoin-solmu (BIP157) yhdistämään",
+        "setDialog": {
+          "title": "Aseta solmu",
+          "info": "Aseta BIP157-tukeva Bitcoin-solmu luomaan yhteys.",
+          "leaveBlankToSearch": "Jätä tyhjäksi, jos haluat Blixt Walletin etsivän kelvollista solmua Bitcoin-verkosta.",
+          "longPressToReset": "Palataksesi oletussolmuun ({{defaultNode}}), pidä asetusta painettuna pitkään."
+        },
+        "restoreDialog": {
+          "title": "Palauta solmu",
+          "msg": "Haluatko palauttaa oletussolmuun"
+        }
+      },
+      "restartDialog": {
+        "title": "Uudelleenkäynnistys vaaditaan",
+        "msg": "Blixt Wallet on käynnistettävä uudelleen ennen uuden kokoonpanon soveltamista.",
+        "msg1": "Haluatko tehdä sen nyt?"
+      },
+      "rpc": {
+        "title": "Aseta bitcoindin RPC-isäntä"
+      },
+      "zmqRawBlock": {
+        "title": "Aseta bitcoindin ZMQ Raw Block -isäntä"
+      },
+      "zmqRawTx": {
+        "title": "Aseta bitcoindin ZMQ Raw Tx -isäntä"
+      },
+      "p2tr": {
+        "title": "Ota käyttöön vastaanotto ketjussa Taprootin kautta (P2TR)"
+      }
+    },
+    "LN": {
+      "title": "Salama-verkko",
+      "network": {
+        "title": "Näytä verkkotiedot",
+        "subtitle": ""
+      },
+      "node": {
+        "title": "Näytä solmun tiedot",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Näytä Salaman kumppanit",
+        "subtitle": ""
+      },
+      "maxLNFeePercentage": {
+        "title": "Aseta maksimi maksu",
+        "subtitle": "Suhteessa summaan",
+        "dialog": {
+          "title": "Aseta maksimi LN-maksuprosentti"
+        },
+        "resetDialog": {
+          "title": "Haluatko palauttaa maksimi LN-maksun oletusarvoon ({{defaultMaxLNFee}}%)?"
+        }
+      },
+      "autopilot": {
+        "title": "Avaa kanavat automaattisesti",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Saapuvat kanavapalvelut",
+        "subtitle": "Käytä saapuvaa kanavapalvelua maksujen vastaanottamiseen",
+        "dialog": {
+          "title": "Saapuva kanavapalvelu",
+          "msg1": "Valitse saapuva kanavapalvelu ja paina Jatka.",
+          "msg2": "Web-selaimesi avautuu vastaavan palveluntarjoajan verkkosivustoon, jossa voit pyytää kanavaa.",
+          "msg3": "Kun olet valmis, voit kopioda osoitekoodin ja/tai avata linkin käyttäen Blixt Walletia."
+        }
+      },
+      "LSP": {
+        "title": "Aseta Dunder LSP-palvelin",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Aseta Dunder-palvelin",
+          "acept": "Aseta palvelin"
+        },
+        "restoreDialog": {
+          "title": "Palauta Dunder-palvelin",
+          "msg": "Haluatko palauttaa oletusarvoiseen Dunder-palvelimeen"
+        }
+      },
+      "graphSync": {
+        "title": "Odota graafin synkronointia ennen maksamista",
+        "subtitle": "Synkronoitu graafi johtaa optimaalisiin maksupoluihin"
+      },
+      "zeroConfPeers": {
+        "title": "Aseta zero conf -kumppanit",
+        "subtitle": "Lisää julkiset avaimet kumppaneilta, joilta haluat sallia zero conf -kanavat",
+        "setDialog": {
+          "title": "Zero conf -kumppanit",
+          "msg1": "Pilkulla erotetut julkisten avainten arvot sallivat zero conf -kanavat.",
+          "msg2": "Luottamuksesi kanaviin näiltä kumppaneilta säilyy, kunnes on vähintään yksi ketjun vahvistus."
+        }
+      }
+    },
+    "miscelaneous": {
+      "title": "Sekalaiset",
+      "about": {
+        "title": "Tietoja",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "Kopioi sovellusloki paikalliseen tallennustilaan",
+        "subtitle": "",
+        "dialog": {
+          "alert": "Kopioitu sovelluslokitiedosto",
+          "error": "Virhe kopioitaessa sovelluslokitiedostoa."
+        }
+      },
+      "lndLog": {
+        "title": "Kopioi lnd-loki paikalliseen tallennustilaan",
+        "dialog": {
+          "error": "Virhe kopioitaessa lnd-lokitiedostoa."
+        }
+      },
+      "speedloaderLog": {
+        "title": "Kopioi LN-kanavasynkronointilokitiedosto paikalliseen tallennustilaan",
+        "dialog": {
+          "error": "Virhe kopioitaessa speedloader-lokitiedostoa."
+        }
+      },
+      "dev": {
+        "title": "Siirry kehitysnäyttöön",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Piilota vanhentuneet laskut automaattisesti",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Näytön siirtymät",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Allekirjoita viesti lompakon avaimella",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Allekirjoita viesti"
+        },
+        "dialog2": {
+          "title": "Allekirjoitus",
+          "alert": "Kopioitu leikepöydälle"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Aseta lnd-lokitason taso",
+        "dialog": {
+          "title": "Aseta lnd-lokitaso.",
+          "description": "Lokitason muutos muuttaa lnd-lokin yksityiskohtaisuutta, joka on saatavilla asetuksista."
+        },
+        "restoreDialog": {
+          "title": "Haluatko palauttaa lnd-lokitason oletustasolle ({{defaultLndLogLevel}})?"
+        }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Ota mukautetut laskun esikuvat käyttöön"
+      }
+    },
+    "experimental": {
+      "title": "Kokeelliset",
+      "LSP": {
+        "title": "Ota käyttöön Dunder LSP",
+        "subtitle": "ERITTÄIN KOKEELLINEN. Salaman palveluntarjoaja, joka auttaa saapuvan likviditeetin kanssa"
+      },
+      "MPP": {
+        "title": "Ota käyttöön monireittimaksut",
+        "subtitle": "Maksut voivat kulkea jopa 16 reittiä"
+      },
+      "tor": {
+        "title": "Ota käyttöön Tor",
+        "subtitle": "",
+        "enabled": {
+          "title": "Käynnistä sovellus uudelleen ja ota Tor käyttöön",
+          "msg1": "Torin käyttöönotto tekee lompakosta yhteyden sen vertaisiin (sekä Bitcoin- että Salaman verkoston vertaisiin) Tor-verkon kautta.",
+          "msg2": "Voit myös muodostaa yhteyden ja avata kanavia salaman solmuihin, jotka käyttävät sipulipalveluita.",
+          "msg3": "VAROITUS: Blixt Wallet keskustelee edelleen seuraavien palvelujen kanssa ilman Toria",
+          "msg4": "Syy: Saadaksesi fiat/bitcoin-kurssit",
+          "msg5": "Syy: Saadaksesi nykyisen lohkokorkeuden",
+          "msg6": "Syy: Google Drive -varmuuskopiota varten",
+          "msg7": "Syy: Luotettaville Salaman solmuille",
+          "msg8": "WebLN-selain ja LNURL eivät myöskään käytä Toria."
+        },
+        "disabled": {
+          "title": "Käynnistä sovellus uudelleen ja poista Tor käytöstä",
+          "msg1": "Torin poistaminen käytöstä vaatii sovelluksen käynnistyksen uudelleen.",
+          "msg2": "Haluatko jatkaa?"
+        }
+      },
+      "onion": {
+        "title": "Näytä Tor sipulipalvelu",
+        "subtitle": "Yhteyden muodostamiseen ja kanavien avaamiseen tälle lompakolle"
+      },
+      "keysend": {
+        "title": "Keysend Koe",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Laskun vanhentuminen (sekunnit)",
+        "subtitle": "{{expiry}} sekuntia"
+      }
+    },
+    "debug": {
+      "title": "Vianmääritys",
+      "startup": {
+        "title": "Näytä käynnistystiedotilmoitukset",
+        "subtitle": ""
+      },
+      "showNotifications": {
+        "title": "Näytä ilmoitukset tässä istunnossa",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "Näytä vianmääritysloki tässä istunnossa",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "LndMobilen ohjekeskus",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Diagnosoi Dunder-ongelmat",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "Lue lnd-loki",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "Lue LN-kanavasynkronointiloki",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Keysend-testi",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Google Drive -testiympäristö",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Kirjoita asetukset",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Aktivoi demo-tila",
+        "subtitle": "Käytetään promootioon. Käynnistä sovellus nollataksesi"
+      },
+      "rescanWallet": {
+        "title": "Skannaa lompakko uudelleen",
+        "subtitle": "Skannaa lohkoketju lompakon tapahtumien osalta"
+      },
+      "getNodeInfo": {
+        "title": "Hae solmun tiedot"
+      },
+      "getChannelInfo": {
+        "title": "Hae kanavan tiedot"
+      },
+      "demoMode": {
+        "title": "Aktivoi demo-tila",
+        "subtitle": "Käytetään promootioon. Käynnistä sovellus nollataksesi"
+      },
+      "disableGraphCache": {
+        "title": "Poista lnd-graafin välimuisti käytöstä"
+      },
+      "resetMissionControl": {
+        "title": "Nollaa maksujen reititystiedot"
+      },
+      "strictGraphPruning": {
+        "title": "Ota käyttöön tiukka LN-graafin karsinta"
+      },
+      "bimodalPathFinding": {
+        "title": "Ota käyttöön kaksoisreitin etsintä"
+      },
+      "compactLndDatabases": {
+        "title": "Pakkaa lnd:n tietokannat"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Pakota juoruksen synkronointi käynnistyksen yhteydessä"
+      },
+      "persistentServices": {
+        "title": "Ota käyttöön pysyvät LND- ja Tor-palvelut (jos käytössä)"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "Tietoja Blixt-lompakosta",
+    "msg1": "Versio",
+    "msg2": "Tekijä",
+    "msg3": "Avoin lähdekoodi lompakko MIT-lisenssillä",
+    "msg4": "Luotu käyttäen",
+    "msg5": "ja muita mahtavia avoimen lähdekoodin ohjelmistoja",
+    "msg6": "Tor-kuvake on lisensoitu CC BY 3.0 -lisenssillä",
+    "msg7": "lisenssi"
+  },
+  "settings.setPincode": {
+    "enter": "Anna PIN-koodi",
+    "confirm": "Vahvista PIN-koodisi"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Anna nykyinen PIN-koodi poistaaksesi PIN-koodin"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Salaman vertaiset"
+    },
+    "alias": "Solmun alias",
+    "pubKey": "Solmun julkinen avain",
+    "address": "Solmun osoite",
+    "data": {
+      "title": "Tiedot",
+      "bytesSent": "lähetetyt tavut",
+      "bytesRecv": "vastaanotetut tavut"
+    },
+    "transfer": {
+      "title": "Siirto",
+      "satSent": "lähettäneet satoshit",
+      "satRecv": "vastaanottaneet satoshit"
+    },
+    "inbound": "Saapuva",
+    "syncType": "Synkronointityyppi",
+    "errors": "Virheet",
+    "disconnect": "Katkaise yhteys vertaiseen"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Yhdistä Salaman vertaiseen"
+    },
+    "connect": {
+      "title": "Solmun URI",
+      "placeholder": "Vertaisen URI",
+      "accept": "Yhdistä"
+    }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Salaman verkon tiedot",
+    "avgChannelSize": "Keskimääräinen kanavan koko",
+    "avgOutDegree": "Keskimääräinen ulostuloaste",
+    "graphDiameter": "Graafin halkaisija",
+    "medianChannelSizeSat": "Mediaani kanavan koko",
+    "numChannels": "Kanavien lukumäärä",
+    "numNodes": "Solmujen lukumäärä",
+    "numZombieChans": "Zombi-kanavien lukumäärä",
+    "totalNetworkCapacity": "Koko verkon kapasiteetti"
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Solmun tiedot",
+    "alias": "Solmun alias",
+    "chain": "Ketju",
+    "timestamp": "Paras otsikkoleima",
+    "blockHash": "Lohkon hajautus",
+    "blockHeight": "Lohkon korkeus",
+    "identityPubkey": "Identiteetin julkinen avain",
+    "channel": {
+      "title": "Kanavien määrä",
+      "active": "Aktiivinen",
+      "inactive": "Ei aktiivinen",
+      "pending": "Odottaa"
+    },
+    "numPeers": "Vertaissolmujen lukumäärä",
+    "syncedToChain": "Synkronoitu ketjuun",
+    "syncedToGraph": "Synkronoitu graafiin",
+    "nodeUris": "Solmun URIt",
+    "version": "Lnd-versio",
+    "features": "Solmun ominaisuudet"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Tor Sipulipalvelu",
+    "msg1": "Skannaa tämä QR-koodi avataksesi kanavan tähän lompakkoon",
+    "msg2": "Ei voitu ratkaista sipuliosoitetta"
+  },
+  "settings.toastLog": {
+    "title": "Ilmoitusloki"
+  },
+  "settings.debugLog": {
+    "title": "Vianmääritysloki"
+  },
+  "welcome.addFunds": {
+    "title": "Lisää varoja",
+    "msg1": "Aloittaaksesi Salaman käytön Blixt-lompakossa",
+    "msg2": "lähetä bitcoineja yllä olevaan osoitteeseen"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "Auto-avaa kanavat",
+      "msg": "Avaa kanavia kun on-chain-varoja on saatavilla"
+    },
+    "done": {
+      "title": "Lähes valmis!",
+      "msg1": "Tässä on joitain lompakon asetuksia, jotka voit mukauttaa mieleiseksesi",
+      "msg2": "Kun olet valmis, paina jatka"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Yritä uudelleen",
+      "msg": "Anteeksi, kirjoitit sanat väärässä järjestyksessä, yritä uudelleen."
+    },
+    "seed": {
+      "title": "Vahvista siemenesi"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Ota käyttöön Google Drive -varmuuskopiointi",
+      "msg": "Google Drive -varmuuskopiointi otettu käyttöön"
+    },
+    "backup": {
+      "title": "Pilvivarmuuskopio",
+      "msg": "Jotta varoja voitaisiin säilyttää turvallisesti laitteen menetyksen tapauksessa, suosittelemme säilyttämään kanavat varmuuskopioituna Google Driveen.",
+      "msg1": "Tämä pitää salattuna varmuuskopion kanavistasi, jota voidaan käyttää vain yhdessä lompakon siemenen kanssa.",
+      "msg2": "Kun olet valmis, paina jatka."
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Ota käyttöön iCloud-varmuuskopiointi",
+      "msg": "iCloud-varmuuskopiointi otettu käyttöön"
+    },
+    "backup": {
+      "title": "iCloud-varmuuskopio",
+      "msg": "Jotta varoja voitaisiin säilyttää turvallisesti laitteen menetyksen tapauksessa, suosittelemme säilyttämään kanavat varmuuskopioituna iCloudiin.",
+      "msg1": "Tämä pitää salattuna varmuuskopion kanavistasi, jota voidaan käyttää vain yhdessä lompakon siemenen kanssa.",
+      "msg2": "Kun olet valmis, paina jatka."
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Palauta lompakko",
+      "msg": "Palauttaaksesi lompakkosi, kirjoita kunkin sanan siemenestäsi välilyönneillä erotettuna.",
+      "msg1": "Jos haluat palauttaa Salaman verkoston kanavasi, sinun on annettava varmuuskopiotiedosto.",
+      "loading": "Palauta lompakko",
+      "passphrase": {
+        "placeholder": "Lisäsana (valinnainen)"
+      },
+      "channel": {
+        "title": "Kanavan varmuuskopio",
+        "file": "Valitse kanavan varmuuskopiotiedosto levyltä",
+        "google": {
+          "title": "Palauta Google Drive -n kautta",
+          "alert": "Palauttaminen Google Drive -n kautta epäonnistui"
+        },
+        "iCloud": {
+          "title": "Palauta iCloudin kautta",
+          "alert": "Palauttaminen iCloudin kautta epäonnistui"
+        }
+      },
+      "seed": "Siemenen on oltava tarkalleen 24 sanaa"
+    },
+    "backup": {
+      "google": "Varmuuskopio Google Drive -n kautta",
+      "iCloud": "Varmuuskopio iCloudin kautta"
+    }
+  },
+  "welcome.seed": {
+    "title": "Tervetuloa Blixt-lompakkoon!",
+    "msg": "Tämä on varmuuskopio-siemenesi.",
+    "msg1": "Kirjoita se paperille ja säilytä se turvallisessa paikassa.",
+    "msg2": "Jos menetät pääsyn lompakkoosi",
+    "msg3": "voit mahdollisesti palauttaa varasi käyttämällä varmuuskopiota.",
+    "msg4": "Käytetty siemenstandardi on aezeed.",
+    "button": "Olen kirjoittanut sen ylös"
+  }
+}
