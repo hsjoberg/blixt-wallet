@@ -112,6 +112,10 @@ export const languages: ILanguages = {
     id: "ja",
     name: "日本語",
   },
+  fa: {
+    id: "fa",
+    name: "پارسی",
+  },
   fr: {
     id: "fr",
     name: "Français",
