@@ -115,6 +115,26 @@ android {
 
 
     // Blixt
+    flavorDimensions "chain"
+    productFlavors {
+        chainregtest {
+            dimension "chain"
+            applicationIdSuffix ".regtest"
+            buildConfigField "String", "CHAIN", '"regtest"'
+            manifestPlaceholders = [chain: " Regtest"]
+        }
+        chaintestnet {
+            dimension "chain"
+            applicationIdSuffix ".testnet"
+            buildConfigField "String", "CHAIN", '"testnet"'
+            manifestPlaceholders = [chain: " Testnet"]
+        }
+        chainmainnet {
+            dimension "chain"
+            buildConfigField "String", "CHAIN", '"mainnet"'
+            manifestPlaceholders = [chain: ""]
+        }
+    }
     sourceSets {
         main {
             proto {
