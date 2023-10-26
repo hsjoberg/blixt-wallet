@@ -130,7 +130,7 @@
     "react-native-permissions": "^3.9.2",
     "react-native-push-notification": "8.1.1",
     "react-native-qrcode-svg": "^6.2.0",
-    "react-native-reanimated": "git+https://github.com/hsjoberg/react-native-reanimated.git#e998c740a083f075e6845a9ed1c81d5df1c220fc",
+    "react-native-reanimated": "3.5.4",
     "react-native-safe-area-context": "^4.7.2",
     "react-native-screens": "^3.24.0",
     "react-native-securerandom": "git+https://github.com/hsjoberg/react-native-securerandom.git#b6bc5b7e68bd3e626536a3048e280f9130a8ebb4",
