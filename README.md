@@ -64,7 +64,7 @@ It's useful if you want to make design and GUI changes.
 
 - Install [Node](https://nodejs.org), [Yarn](https://classic.yarnpkg.com) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
 - If needed, install an emulated android device inside Android Studio
-- Download lnd binary from [from the latest Blixt Wallet release](https://github.com/hsjoberg/blixt-wallet/releases) and put it in `android/lndmobile`. Alternatively build lnd for Android by following the steps in [Build Lnd For Mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
+- Download lnd binary from [from the latest Blixt Wallet release](https://github.com/hsjoberg/blixt-wallet/releases) and put it in `android/lndmobile`. Alternatively build lnd for Android by following the steps in [Build Lnd For mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
 - Get the tor sub-module: `git submodule update --init`
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
@@ -78,7 +78,7 @@ To start the application:
 To build the iOS version, a computer running macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
 
 - Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
-- Build lnd for iOS by following the steps in [Build Lnd for Mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
+- Build lnd for iOS by following the steps in [Build Lnd for mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
 - Install CocoaPods libs: `cd ios && pod install`
