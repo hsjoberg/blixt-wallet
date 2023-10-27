@@ -67,6 +67,8 @@ export interface ISettingsModel {
   changeNeutrinoPeers: Thunk<ISettingsModel, string[]>;
   changeZeroConfPeers: Thunk<ISettingsModel, string[]>;
   changeBitcoindRpcHost: Thunk<ISettingsModel, string>;
+  changeBitcoindRpcUser: Thunk<ISettingsModel, string>;
+  changeBitcoindRpcPassword: Thunk<ISettingsModel, string>;
   changeBitcoindPubRawBlock: Thunk<ISettingsModel, string>;
   changeBitcoindPubRawTx: Thunk<ISettingsModel, string>;
   changeDunderServer: Thunk<ISettingsModel, string>;
@@ -110,6 +112,8 @@ export interface ISettingsModel {
   setNeutrinoPeers: Action<ISettingsModel, string[]>;
   setZeroConfPeers: Action<ISettingsModel, string[]>;
   setBitcoindRpcHost: Action<ISettingsModel, string>;
+  setBitcoindRpcUser: Action<ISettingsModel, string>;
+  setBitcoindRpcPassword: Action<ISettingsModel, string>;
   setBitcoindPubRawBlock: Action<ISettingsModel, string>;
   setBitcoindPubRawTx: Action<ISettingsModel, string>;
   setDunderServer: Action<ISettingsModel, string>;
@@ -152,6 +156,8 @@ export interface ISettingsModel {
   lndChainBackend: string;
   neutrinoPeers: string[];
   bitcoindRpcHost: string;
+  bitcoindRpcUser: string;
+  bitcoindRpcPassword: string;
   bitcoindPubRawBlock: string;
   bitcoindPubRawTx: string;
   dunderServer: string;
@@ -384,6 +390,16 @@ export const settings: ISettingsModel = {
     actions.setBitcoindRpcHost(payload);
   }),
 
+  changeBitcoindRpcUser: thunk(async (actions, payload) => {
+    await setItem(StorageItem.bitcoindRpcUser, payload);
+    actions.setBitcoindRpcHost(payload);
+  }),
+
+  changeBitcoindRpcPassword: thunk(async (actions, payload) => {
+    await setItem(StorageItem.bitcoindRpcPass, payload);
+    actions.setBitcoindRpcHost(payload);
+  }),
+
   changeBitcoindPubRawBlock: thunk(async (actions, payload) => {
     await setItem(StorageItem.bitcoindPubRawBlock, payload);
     actions.setBitcoindPubRawBlock(payload);
@@ -547,6 +563,12 @@ export const settings: ISettingsModel = {
   setBitcoindRpcHost: action((state, payload) => {
     state.bitcoindRpcHost = payload;
   }),
+  setBitcoindRpcUser: action((state, payload) => {
+    state.bitcoindRpcUser = payload;
+  }),
+  setBitcoindRpcPassword: action((state, payload) => {
+    state.bitcoindRpcPassword = payload;
+  }),
   setBitcoindPubRawBlock: action((state, payload) => {
     state.bitcoindPubRawBlock = payload;
   }),
@@ -626,6 +648,8 @@ export const settings: ISettingsModel = {
   neutrinoPeers: [],
   zeroConfPeers: [],
   bitcoindRpcHost: "",
+  bitcoindRpcUser: "",
+  bitcoindRpcPassword: "",
   bitcoindPubRawBlock: "",
   bitcoindPubRawTx: "",
   dunderServer: "",

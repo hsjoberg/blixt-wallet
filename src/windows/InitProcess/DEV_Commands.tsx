@@ -561,6 +561,7 @@ console.log(x);
           <Button small onPress={async () => actions.resetDb()}><Text style={styles.buttonText}>actions.resetDb()</Text></Button>
           <Button small onPress={async () => await setItem(StorageItem.lndChainBackend, "neutrino")}><Text style={styles.buttonText}>lndChainBackend = neutrino</Text></Button>
           <Button small onPress={async () => await setItem(StorageItem.lndChainBackend, "bitcoindWithZmq")}><Text style={styles.buttonText}>lndChainBackend = bitcoindWithZmq</Text></Button>
+          <Button small onPress={async () => await setItem(StorageItem.lndChainBackend, "bitcoindWithRpcPolling")}><Text style={styles.buttonText}>lndChainBackend = bitcoindWithRpcPolling</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.walletCreated, true)}><Text style={styles.buttonText}>walletCreated = true</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, ["pincode"])}><Text style={styles.buttonText}>set logginMethods to ["pincode"]</Text></Button>
           <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, [])}><Text style={styles.buttonText}>set logginMethods to []</Text></Button>

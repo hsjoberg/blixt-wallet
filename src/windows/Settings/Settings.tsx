@@ -797,6 +797,64 @@ ${t("LN.inbound.dialog.msg3")}`;
     );
   };
 
+  // bitcoind RPC user
+  const bitcoindRpcUser = useStoreState((store) => store.settings.bitcoindRpcUser);
+  const changeBitcoindRpcUser = useStoreActions((store) => store.settings.changeBitcoindRpcUser);
+  const onSetBitcoindRpcUserPress = async () => {
+    Alert.prompt(
+      t("bitcoinNetwork.rpcuser.title"),
+      "",
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: t("buttons.save", { ns: namespaces.common }),
+          onPress: async (text) => {
+            if (text) {
+              await changeBitcoindRpcUser(text);
+              await writeConfig();
+            }
+          },
+        },
+      ],
+      "plain-text",
+      bitcoindRpcUser ?? "",
+    );
+  };
+
+  // bitcoind RPC password
+  const bitcoindRpcPassword = useStoreState((store) => store.settings.bitcoindRpcPassword);
+  const changeBitcoindRpcPassword = useStoreActions(
+    (store) => store.settings.changeBitcoindRpcPassword,
+  );
+  const onSetBitcoindRpcPasswordPress = async () => {
+    Alert.prompt(
+      t("bitcoinNetwork.rpcpass.title"),
+      "",
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: t("buttons.save", { ns: namespaces.common }),
+          onPress: async (text) => {
+            if (text) {
+              await changeBitcoindRpcPassword(text);
+              await writeConfig();
+            }
+          },
+        },
+      ],
+      "plain-text",
+      bitcoindRpcPassword ?? "",
+    );
+  };
+
   // bitcoind zmq block
   const bitcoindPubRawBlock = useStoreState((store) => store.settings.bitcoindPubRawBlock);
   const changeBitcoindPubRawBlock = useStoreActions(
@@ -1333,16 +1391,24 @@ ${t("experimental.tor.disabled.msg2")}`;
   };
 
   // Persistent services
-  const persistentServicesEnabled = useStoreState((store) => store.settings.persistentServicesEnabled);
-  const changePersistentServicesEnabled = useStoreActions((store) => store.settings.changePersistentServicesEnabled);
+  const persistentServicesEnabled = useStoreState(
+    (store) => store.settings.persistentServicesEnabled,
+  );
+  const changePersistentServicesEnabled = useStoreActions(
+    (store) => store.settings.changePersistentServicesEnabled,
+  );
   const changePersistentServicesEnabledPress = async () => {
     await changePersistentServicesEnabled(!persistentServicesEnabled);
     restartNeeded();
   };
 
   // Persistent services
-  const customInvoicePreimageEnabled = useStoreState((store) => store.settings.customInvoicePreimageEnabled);
-  const changeCustomInvoicePreimageEnabled = useStoreActions((store) => store.settings.changeCustomInvoicePreimageEnabled);
+  const customInvoicePreimageEnabled = useStoreState(
+    (store) => store.settings.customInvoicePreimageEnabled,
+  );
+  const changeCustomInvoicePreimageEnabled = useStoreActions(
+    (store) => store.settings.changeCustomInvoicePreimageEnabled,
+  );
   const onToggleCustomInvoicePreimageEnabled = async () => {
     await changeCustomInvoicePreimageEnabled(!customInvoicePreimageEnabled);
   };
@@ -1719,6 +1785,35 @@ ${t("experimental.tor.disabled.msg2")}`;
             </>
           )}
 
+          {lndChainBackend === "bitcoindWithRpcPolling" && (
+            <>
+              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcHostPress}>
+                <Left>
+                  <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
+                </Left>
+                <Body>
+                  <Text>{t("bitcoinNetwork.rpc.title")}</Text>
+                </Body>
+              </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcUserPress}>
+                <Left>
+                  <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
+                </Left>
+                <Body>
+                  <Text>{t("bitcoinNetwork.rpcuser.title")}</Text>
+                </Body>
+              </ListItem>
+              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcPasswordPress}>
+                <Left>
+                  <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
+                </Left>
+                <Body>
+                  <Text>{t("bitcoinNetwork.rpcpass.title")}</Text>
+                </Body>
+              </ListItem>
+            </>
+          )}
+
           <ListItem style={style.listItem} icon={true} onPress={onToggleReceiveViaP2TR}>
             <Left>
               <Icon style={style.icon} type="MaterialCommunityIcons" name="carrot" />
@@ -1904,16 +1999,17 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           )}
-          {scheduledGossipSyncEnabled && (PLATFORM === "android" || PLATFORM === "ios" || PLATFORM === "macos") && (
-            <ListItem style={style.listItem} icon={true} onPress={() => copySpeedloaderLog()}>
-              <Left>
-                <Icon style={style.icon} type="AntDesign" name="copy1" />
-              </Left>
-              <Body>
-                <Text>{t("miscelaneous.speedloaderLog.title")}</Text>
-              </Body>
-            </ListItem>
-          )}
+          {scheduledGossipSyncEnabled &&
+            (PLATFORM === "android" || PLATFORM === "ios" || PLATFORM === "macos") && (
+              <ListItem style={style.listItem} icon={true} onPress={() => copySpeedloaderLog()}>
+                <Left>
+                  <Icon style={style.icon} type="AntDesign" name="copy1" />
+                </Left>
+                <Body>
+                  <Text>{t("miscelaneous.speedloaderLog.title")}</Text>
+                </Body>
+              </ListItem>
+            )}
           <ListItem
             style={style.listItem}
             button={true}
@@ -2242,7 +2338,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>{t("debug.lndLog.title")}</Text>
             </Body>
           </ListItem>
-          {scheduledGossipSyncEnabled &&
+          {scheduledGossipSyncEnabled && (
             <ListItem
               style={style.listItem}
               icon={true}
@@ -2255,7 +2351,7 @@ ${t("experimental.tor.disabled.msg2")}`;
                 <Text>{t("debug.speedloaderLog.title")}</Text>
               </Body>
             </ListItem>
-          }
+          )}
           <ListItem
             style={style.listItem}
             icon={true}
@@ -2451,16 +2547,18 @@ ${t("experimental.tor.disabled.msg2")}`;
 
                 const json: { pairs: any[] } = await res.json();
 
-                const x: routerrpc.IXImportMissionControlRequest["pairs"] = json.pairs.filter((c) => c.history.successAmtSat > 0).map((c) => {
-                  return {
-                    nodeFrom: hexToUint8Array(c.nodeFrom),
-                    nodeTo: hexToUint8Array(c.nodeTo),
-                    history: {
-                      successAmtSat: Long.fromValue(c.history.successAmtSat),
-                      successTime: Long.fromValue(c.history.successTime),
-                    }
-                  }
-                });
+                const x: routerrpc.IXImportMissionControlRequest["pairs"] = json.pairs
+                  .filter((c) => c.history.successAmtSat > 0)
+                  .map((c) => {
+                    return {
+                      nodeFrom: hexToUint8Array(c.nodeFrom),
+                      nodeTo: hexToUint8Array(c.nodeTo),
+                      history: {
+                        successAmtSat: Long.fromValue(c.history.successAmtSat),
+                        successTime: Long.fromValue(c.history.successTime),
+                      },
+                    };
+                  });
                 await xImportMissionControl(x);
 
                 toast("Done");

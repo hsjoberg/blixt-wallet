@@ -9,7 +9,10 @@ import { DEFAULT_PATHFINDING_ALGORITHM, PLATFORM } from "../utils/constants";
 import { Chain, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
-import { IChannelAcceptanceManagerModel, channelAcceptanceManager } from "./ChannelAcceptanceManager";
+import {
+  IChannelAcceptanceManagerModel,
+  channelAcceptanceManager,
+} from "./ChannelAcceptanceManager";
 import { IClipboardManagerModel, clipboardManager } from "./ClipboardManager";
 import { IContactsModel, contacts } from "./Contacts";
 import { ILightningBoxModel, lightningBox } from "./LightningBox";
@@ -285,8 +288,11 @@ export const model: IStoreModel = {
           }
         }
       }
-      let persistentServicesEnabled = await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesEnabled) ?? false;
-      let persistentServicesWarningShown = await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesWarningShown) ?? false;
+      let persistentServicesEnabled =
+        (await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesEnabled)) ?? false;
+      let persistentServicesWarningShown =
+        (await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesWarningShown)) ??
+        false;
       if (persistentServicesEnabled && !persistentServicesWarningShown) {
         await setItemObject(StorageItem.persistentServicesWarningShown, true);
         await NativeModules.BlixtTor.showMsg();
@@ -564,6 +570,18 @@ bitcoind.rpcuser=${bitcoindRpcUser}
 bitcoind.rpcpass=${bitcoindRpcPass}
 bitcoind.zmqpubrawblock=${bitcoindPubRawBlock}
 bitcoind.zmqpubrawtx=${bitcoindPubRawTx}
+`
+    : ""
+}
+
+${
+  lndChainBackend === "bitcoindWithRpcPolling"
+    ? `
+[Bitcoind]
+bitcoind.rpchost=${bitcoindRpcHost}
+bitcoind.rpcuser=${bitcoindRpcUser}
+bitcoind.rpcpass=${bitcoindRpcPass}
+bitcoind.rpcpolling=true
 `
     : ""
 }
