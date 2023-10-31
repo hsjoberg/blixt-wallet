@@ -208,6 +208,9 @@
       "description": {
         "title": "Message",
         "placeholder": "Message au payeur"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -249,6 +252,9 @@
       },
       "feeEstimate": {
         "title": "Estimation des frais"
+      },
+      "outgoingChannel": {
+        "title": "Canal sortant"
       }
     }
   },
@@ -868,6 +874,9 @@
         "restoreDialog": {
           "title": "Souhaitez-vous restaurer le niveau de journal du LND au niveau par défaut ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Activer les préimages de facture personnalisées"
       }
     },
     "experimental": {
