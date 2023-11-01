@@ -103,7 +103,9 @@ export const listChannels = async (): Promise<lnrpc.ListChannelsResponse> => {
     request: lnrpc.ListChannelsRequest,
     response: lnrpc.ListChannelsResponse,
     method: "ListChannels",
-    options: {},
+    options: {
+      peerAliasLookup: true,
+    },
   });
   return response;
 };

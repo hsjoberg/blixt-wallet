@@ -1,13 +1,17 @@
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { BackHandler, Keyboard, StyleSheet, Vibration } from "react-native";
+import { Button, Container, Icon, Picker, Spinner, Text } from "native-base";
+import { useDebounce } from "use-debounce";
+import Long from "long";
+import { useTranslation } from "react-i18next";
+import { Dropdown } from "react-native-element-dropdown";
+import Color from "color";
+
 import { BitcoinUnits, unitToSatoshi } from "../../utils/bitcoin-units";
 import BlixtForm, { IFormItem } from "../../components/Form";
-import { Button, Container, Icon, Picker, Spinner, Text } from "native-base";
-import React, { useEffect, useLayoutEffect, useState } from "react";
 import { hexToUint8Array, toast } from "../../utils";
 import { useStoreActions, useStoreState } from "../../state/store";
-
 import Input from "../../components/Input";
-import Long from "long";
 import { PLATFORM } from "../../utils/constants";
 import { RouteProp } from "@react-navigation/native";
 import { SendStackParamList } from "./index";
@@ -17,9 +21,8 @@ import { extractDescription } from "../../utils/NameDesc";
 import { lnrpc } from "../../../proto/lightning";
 import { namespaces } from "../../i18n/i18n.constants";
 import useBalance from "../../hooks/useBalance";
-import { useDebounce } from "use-debounce";
 import useLightningReadyToSend from "../../hooks/useLightingReadyToSend";
-import { useTranslation } from "react-i18next";
+import { IModelSendPaymentPayload } from "../../state/Send";
 
 export interface ISendConfirmationProps {
   navigation: StackNavigationProp<SendStackParamList, "SendConfirmation">;
@@ -34,7 +37,7 @@ const choiceLabel = (n: lnrpc.IChannel) =>
 export default function SendConfirmation({ navigation, route }: ISendConfirmationProps) {
   const t = useTranslation(namespaces.send.sendConfirmation).t;
   const [amountEditable, setAmountEditable] = useState(false);
-  const [outChannel, setOutChannel] = useState<Long>();
+  const [outChannel, setOutChannel] = useState<string>("any");
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
   const getBalance = useStoreActions((actions) => actions.channel.getBalance);
   const getChannels = useStoreState((store) => store.channel.channels).filter((n) => !!n.active);
@@ -155,12 +158,12 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       setIsPaying(true);
       Keyboard.dismiss();
 
-      const payload = {
+      const payload: IModelSendPaymentPayload = {
         amount: !!amountEditable
           ? Long.fromValue(unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit))
           : undefined,
 
-        outgoingChannelId: outChannel,
+        outgoingChannelId: outChannel !== "any" ? Long.fromString(outChannel) : undefined,
       };
 
       const response = await sendPayment(payload);
@@ -258,24 +261,65 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   }
 
   if (getChannels !== undefined && !!getChannels.length) {
-    formItems.push({
-      key: "Channels",
-      title: t("form.outgoingChannel.title"),
-      component: (
-        <Picker
-          note
-          mode="dropdown"
-          style={styles.pickerStyle}
-          selectedValue={outChannel}
-          onValueChange={(n: Long) => setOutChannel(n)}
-        >
-          <Picker.Item style={styles.itemStyle} label="--Any--" value="" />
-          {getChannels.map((n, i) => (
-            <Picker.Item style={styles.itemStyle} label={choiceLabel(n)} key={i} value={n.chanId} />
-          ))}
-        </Picker>
-      ),
-    });
+    const dropdownData = [
+      {
+        label: "Any",
+        value: "any",
+      } as { label: string; value: string },
+    ].concat(
+      getChannels.map((n, i) => ({
+        label: choiceLabel(n),
+        value: n.chanId?.toString() ?? "any",
+      })),
+    );
+
+    if (PLATFORM !== "macos") {
+      // TODO(hsjoberg): cleanup styles
+      formItems.push({
+        key: "CHANNEL",
+        title: t("form.outgoingChannel.title"),
+        component: (
+          <Dropdown
+            labelField="label"
+            valueField="value"
+            data={dropdownData}
+            fontFamily={
+              PLATFORM === "ios" || PLATFORM === "macos" ? "IBMPlexSans" : "IBMPlexSans-Regular"
+            }
+            value={outChannel}
+            selectedTextProps={{
+              numberOfLines: 1,
+              lineBreakMode: "tail",
+              style: {
+                fontFamily:
+                  PLATFORM === "ios" || PLATFORM === "macos"
+                    ? "IBMPlexSans"
+                    : "IBMPlexSans-Regular",
+                fontSize: 17,
+                color: blixtTheme.light,
+              },
+            }}
+            onChange={(n) => setOutChannel(n.value?.toString() ?? "any")}
+            maxHeight={250}
+            style={styles.dropdown}
+            containerStyle={{
+              borderWidth: 0,
+              backgroundColor: blixtTheme.gray,
+            }}
+            itemContainerStyle={{
+              borderWidth: 0,
+              backgroundColor: blixtTheme.gray,
+            }}
+            itemTextStyle={{
+              fontSize: 13,
+              lineHeight: 18,
+              color: blixtTheme.light,
+            }}
+            activeColor={Color(blixtTheme.gray).lighten(0.3).hex()}
+          />
+        ),
+      });
+    }
   }
 
   const canSend = lightningReadyToSend && !isPaying;
@@ -308,17 +352,18 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 }
 
 const styles = StyleSheet.create({
-  pickerStyle: {
-    width: 120,
-    backgroundColor: blixtTheme.gray, 
-    borderColor: blixtTheme.light, 
-    borderWidth: 1,
-    borderRadius: 5,
-    color: blixtTheme.light, 
+  dropdown: {
+    flex: 1,
+    marginBottom: 8,
+    marginLeft: 5,
+    marginRight: 6,
+    minHeight: 60,
   },
-  itemStyle: {
-    backgroundColor: blixtTheme.gray, 
-    padding: 10,
-    color: blixtTheme.light,
+  icon: {
+    marginRight: 5,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
   },
 });

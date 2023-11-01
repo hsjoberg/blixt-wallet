@@ -189,7 +189,7 @@ export default {
   // tabBarTextColor: platform === PLATFORM.IOS ? '#737373' : '#bfc6ea',
   tabBarTextSize: platform === PLATFORM.IOS ? 14 : 11,
   activeTab: platform === PLATFORM.IOS ? '#007aff' : '#fff',
-  sTabBarActiveTextColor: '#007aff',
+  sTabBarActiveTextColor: '#007aff', // TODO(hsjoberg): s?
   tabBarActiveTextColor: platform === PLATFORM.IOS ? '#2874F0' : '#fff',
   tabActiveBgColor: platform === PLATFORM.IOS ? '#cde1f9' : '#3F51B5',
 

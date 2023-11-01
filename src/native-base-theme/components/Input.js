@@ -12,7 +12,10 @@ export default (variables /* : * */ = variable) => {
     paddingLeft: 5,
     paddingRight: 5,
     flex: 1,
-    fontSize: variables.inputFontSize
+    fontSize: variables.inputFontSize,
+
+    // Blixt
+    fontFamily: variables.fontFamily,
   };
 
   return inputTheme;
