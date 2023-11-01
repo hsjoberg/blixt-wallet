@@ -259,7 +259,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.lndNoGraphCache, false),
     setItemObject<number>(StorageItem.invoiceExpiry, DEFAULT_INVOICE_EXPIRY),
     setItemObject<boolean>(StorageItem.rescanWallet, false),
-    setItemObject<boolean>(StorageItem.receiveViaP2TR, false),
+    setItemObject<boolean>(StorageItem.receiveViaP2TR, true),
     setItemObject<boolean>(StorageItem.strictGraphPruningEnabled, false),
     setItem(StorageItem.lndPathfindingAlgorithm, DEFAULT_PATHFINDING_ALGORITHM),
     setItemObject<number>(StorageItem.maxLNFeePercentage, DEFAULT_MAX_LN_FEE_PERCENTAGE),
