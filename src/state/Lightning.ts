@@ -13,7 +13,7 @@ import logger from "./../utils/log";
 
 const log = logger("Lightning");
 
-export type LndChainBackend = "neutrino" | "bitcoindWithZmq";
+export type LndChainBackend = "neutrino" | "bitcoindWithZmq" | "bitcoindWithRpcPolling";
 
 interface ILightningPeer {
   peer: lnrpc.Peer;
