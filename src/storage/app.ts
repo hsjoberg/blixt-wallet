@@ -120,9 +120,6 @@ export const setRescanWallet = async (rescan: boolean): Promise<void> => {
 export const setLndCompactDb = async (rescan: boolean): Promise<void> => {
   return await setItemObject<boolean>(StorageItem.lndCompactDb, rescan);
 };
-export const setScheduledGossipSyncEnabled = async (): Promise<void> => {
-  return await setItemObject<boolean>(StorageItem.scheduledGossipSyncEnabled, true);
-};
 
 export const clearApp = async () => {
   // TODO use AsyncStorage.clear?
@@ -269,6 +266,7 @@ export const setupApp = async () => {
     setItem(StorageItem.lndLogLevel, DEFAULT_LND_LOG_LEVEL),
     setItemObject<boolean>(StorageItem.lndCompactDb, false),
     setItemObject<boolean>(StorageItem.enforceSpeedloaderOnStartup, false),
+    setItemObject<boolean>(StorageItem.scheduledGossipSyncEnabled, true),
     setItemObject<boolean>(StorageItem.persistentServicesEnabled, false),
     setItemObject<boolean>(StorageItem.persistentServicesWarningShown, false),
     setItemObject<string[]>(StorageItem.zeroConfPeers, [BLIXT_NODE_PUBKEY]),
