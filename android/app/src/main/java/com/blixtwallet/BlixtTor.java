@@ -133,7 +133,11 @@ public class BlixtTor extends ReactContextBaseJavaModule {
     calleeResolvers.add(promise);
 
     boolean persistentServicesEnabled = getPersistentServicesEnabled(getReactApplicationContext());
-    getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS));
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS), Context.RECEIVER_NOT_EXPORTED);
+    } else {
+      getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS));
+    }
     Intent intent = new Intent(getReactApplicationContext(), TorService.class);
 
     if (persistentServicesEnabled) {
