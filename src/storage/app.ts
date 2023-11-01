@@ -120,6 +120,9 @@ export const setRescanWallet = async (rescan: boolean): Promise<void> => {
 export const setLndCompactDb = async (rescan: boolean): Promise<void> => {
   return await setItemObject<boolean>(StorageItem.lndCompactDb, rescan);
 };
+export const setScheduledGossipSyncEnabled = async (): Promise<void> => {
+  return await setItemObject<boolean>(StorageItem.scheduledGossipSyncEnabled, true);
+};
 
 export const clearApp = async () => {
   // TODO use AsyncStorage.clear?
