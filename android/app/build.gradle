@@ -110,12 +110,17 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+
+            // Blixt:
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 
 
     // Blixt
-    flavorDimensions "chain"
+    flavorDimensions "chain", "custom"
     productFlavors {
         chainregtest {
             dimension "chain"
@@ -133,6 +138,16 @@ android {
             dimension "chain"
             buildConfigField "String", "CHAIN", '"mainnet"'
             manifestPlaceholders = [chain: ""]
+        }
+
+        normal {
+            dimension "custom"
+            manifestPlaceholders = [custom: ""]
+        }
+        fakelnd {
+            applicationIdSuffix ".fakelnd"
+            dimension "custom"
+            manifestPlaceholders  = [custom: " Fake lnd"]
         }
     }
     sourceSets {
