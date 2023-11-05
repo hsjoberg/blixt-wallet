@@ -185,7 +185,7 @@ export function uint8ArrayToUnicodeString(ua: Uint8Array) {
       return String.fromCharCode(ch);
   }).join('');
   var escstr = binstr.replace(/(.)/g, function (m, p) {
-      var code = p.charCodeAt(p).toString(16).toUpperCase();
+      var code = p.charCodeAt(0).toString(16).toUpperCase();
       if (code.length < 2) {
           code = '0' + code;
       }
