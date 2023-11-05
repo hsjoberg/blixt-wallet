@@ -19,6 +19,7 @@ interface ILnurlPayForwardP2PMessage {
     | "LNURLPAY_REQUEST2"
     | "LNURLPAY_REQUEST2_RESPONSE";
   data: any;
+  metadata?: any;
 }
 
 const log = logger("LightningBox");
@@ -27,7 +28,7 @@ export interface ILightningBoxModel {
   initialize: Thunk<ILightningBoxModel>;
 
   subscribeCustomMessages: Thunk<ILightningBoxModel, void, IStoreInjections, IStoreModel>;
-};
+}
 
 export const lightningBox: ILightningBoxModel = {
   initialize: thunk(async (actions, _) => {
@@ -35,7 +36,7 @@ export const lightningBox: ILightningBoxModel = {
     await actions.subscribeCustomMessages();
   }),
 
-  subscribeCustomMessages: thunk(async (_, _2, { getStoreActions,  getStoreState, injections }) => {
+  subscribeCustomMessages: thunk(async (_, _2, { getStoreActions, getStoreState, injections }) => {
     LndMobileEventEmitter.addListener("SubscribeCustomMessages", async (e: any) => {
       try {
         log.i("NEW CUSTOM MESSAGE");
@@ -56,20 +57,24 @@ export const lightningBox: ILightningBoxModel = {
         }
 
         const payload = JSON.parse(bytesToString(customMessage.data)) as ILnurlPayForwardP2PMessage;
+        log.d("metadata", [payload]);
 
         if (payload.request === "LNURLPAY_REQUEST1") {
           log.d("request === LNURLPAY_REQUEST1");
 
           const maxSendable = getStoreState().channel.remoteBalance;
 
+          const metadata = [["text/plain", "Cheers!"]];
+          if (payload?.metadata?.lightningAddress) {
+            metadata.push(["text/identifier", payload?.metadata.lightningAddress]);
+          }
+
           // Omit callback as the server will handle that
           const lnurlPayResponse: Omit<ILNUrlPayRequest, "callback"> = {
             tag: "payRequest",
             minSendable: 1 * 1000,
             maxSendable: maxSendable.mul(1000).toNumber(),
-            metadata: JSON.stringify([
-              ["text/plain", "Cheers!"],
-            ]),
+            metadata: JSON.stringify(metadata),
             commentAllowed: 100,
           };
 
@@ -79,13 +84,20 @@ export const lightningBox: ILightningBoxModel = {
             data: lnurlPayResponse,
           };
 
-          injections.lndMobile.index.sendCustomMessage(bytesToHexString(customMessage.peer), LnurlPayRequestLNP2PType, JSON.stringify(p2pResponse));
+          injections.lndMobile.index.sendCustomMessage(
+            bytesToHexString(customMessage.peer),
+            LnurlPayRequestLNP2PType,
+            JSON.stringify(p2pResponse),
+          );
         } else if (payload.request === "LNURLPAY_REQUEST2") {
           log.d("request === LNURLPAY_REQUEST2");
 
-          const descHash = await JSHash(JSON.stringify([
-            ["text/plain", "Cheers!"],
-          ]), CONSTANTS.HashAlgorithms.sha256);
+          const metadata = [["text/plain", "Cheers!"]];
+          if (payload?.metadata?.lightningAddress) {
+            metadata.push(["text/identifier", payload?.metadata.lightningAddress]);
+          }
+
+          const descHash = await JSHash(JSON.stringify(metadata), CONSTANTS.HashAlgorithms.sha256);
 
           let description = "Lightning Box";
           if (typeof payload.data.comment === "string") {
@@ -112,7 +124,11 @@ export const lightningBox: ILightningBoxModel = {
                   data: lnurlPayResponse2,
                 };
 
-                injections.lndMobile.index.sendCustomMessage(bytesToHexString(customMessage.peer), LnurlPayRequestLNP2PType, JSON.stringify(p2pResponse));
+                injections.lndMobile.index.sendCustomMessage(
+                  bytesToHexString(customMessage.peer),
+                  LnurlPayRequestLNP2PType,
+                  JSON.stringify(p2pResponse),
+                );
               },
               payer: null,
               type: "LIGHTNINGBOX_FORWARD",
@@ -129,5 +145,4 @@ export const lightningBox: ILightningBoxModel = {
     });
     injections.lndMobile.index.subscribeCustomMessages();
   }),
-
-}
+};
