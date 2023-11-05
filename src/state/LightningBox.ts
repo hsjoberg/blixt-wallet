@@ -70,6 +70,7 @@ export const lightningBox: ILightningBoxModel = {
             metadata: JSON.stringify([
               ["text/plain", "Cheers!"],
             ]),
+            commentAllowed: 100,
           };
 
           const p2pResponse: ILnurlPayForwardP2PMessage = {
@@ -86,9 +87,17 @@ export const lightningBox: ILightningBoxModel = {
             ["text/plain", "Cheers!"],
           ]), CONSTANTS.HashAlgorithms.sha256);
 
+          let description = "Lightning Box";
+          if (typeof payload.data.comment === "string") {
+            description = payload.data.comment.substring(0, 100);
+          }
+
+          // TODO(hsjoberg): LUD-12 to NameDesc is not working properly
+
           getStoreActions().receive.addInvoice({
-            description: "Lightning Box",
+            description,
             sat: Math.floor(payload.data.amount / 1000),
+            skipNameDesc: true,
             tmpData: {
               callback: (pr: string) => {
                 const lnurlPayResponse2: ILNUrlPayResponse = {

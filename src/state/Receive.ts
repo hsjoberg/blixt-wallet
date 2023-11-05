@@ -35,6 +35,7 @@ interface IReceiveModelAddInvoicePayload {
   expiry?: number;
   tmpData?: IInvoiceTempData;
   preimage?: Uint8Array;
+  skipNameDesc?: boolean;
 }
 
 interface IReceiveModelAddInvoiceBlixtLspPayload {
@@ -102,7 +103,7 @@ export const receive: IReceiveModel = {
     const addInvoice = injections.lndMobile.index.addInvoice;
     const name = getStoreState().settings.name;
     const invoiceExpiry = getStoreState().settings.invoiceExpiry;
-    const description = setupDescription(payload.description, name);
+    const description = payload.skipNameDesc ? payload.description : setupDescription(payload.description, name);
 
     const result = await addInvoice(payload.sat, description, payload.expiry ?? invoiceExpiry, payload.tmpData?.lightningBox?.descHash, payload.preimage);
     log.d("addInvoice() result", [result]);
