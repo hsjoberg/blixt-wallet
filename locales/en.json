@@ -808,6 +808,17 @@
           "msg": "Would you like to restore to the default Dunder server"
         }
       },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
       "graphSync": {
         "title": "Wait for graph sync before paying",
         "subtitle": "Synchronized graph leads to optimal payment paths"

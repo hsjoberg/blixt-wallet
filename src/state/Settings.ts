@@ -5,6 +5,7 @@ import {
   DEFAULT_LND_LOG_LEVEL,
   DEFAULT_MAX_LN_FEE_PERCENTAGE,
   DEFAULT_PATHFINDING_ALGORITHM,
+  DEFAULT_SPEEDLOADER_SERVER,
 } from "../utils/constants";
 import {
   StorageItem,
@@ -87,6 +88,7 @@ export interface ISettingsModel {
   changePersistentServicesEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changePersistentServicesWarningShown: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeCustomInvoicePreimageEnabled: Thunk<ISettingsModel, boolean>;
+  changeSpeedloaderServer: Thunk<ISettingsModel, string>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -132,6 +134,7 @@ export interface ISettingsModel {
   setPersistentServicesEnabled: Action<ISettingsModel, boolean>;
   setPersistentServicesWarningShown: Action<ISettingsModel, boolean>;
   setCustomInvoicePreimageEnabled: Action<ISettingsModel, boolean>;
+  setSpeedloaderServer: Action<ISettingsModel, string>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -177,6 +180,7 @@ export interface ISettingsModel {
   persistentServicesEnabled: boolean;
   persistentServicesWarningShown: boolean;
   customInvoicePreimageEnabled: boolean;
+  speedloaderServer: string;
 }
 
 export const settings: ISettingsModel = {
@@ -261,6 +265,9 @@ export const settings: ISettingsModel = {
     );
     actions.setCustomInvoicePreimageEnabled(
       (await getItemObject(StorageItem.customInvoicePreimageEnabled)) ?? false,
+    );
+    actions.setSpeedloaderServer(
+      (await getItem(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER,
     );
 
     log.d("Done");
@@ -491,6 +498,11 @@ export const settings: ISettingsModel = {
     actions.setCustomInvoicePreimageEnabled(payload);
   }),
 
+  changeSpeedloaderServer: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.speedloaderServer, payload);
+    actions.setSpeedloaderServer(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -623,6 +635,9 @@ export const settings: ISettingsModel = {
   setCustomInvoicePreimageEnabled: action((state, payload) => {
     state.customInvoicePreimageEnabled = payload;
   }),
+  setSpeedloaderServer: action((state, payload) => {
+    state.speedloaderServer = payload;
+  }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -668,4 +683,5 @@ export const settings: ISettingsModel = {
   persistentServicesEnabled: false,
   persistentServicesWarningShown: false,
   customInvoicePreimageEnabled: false,
+  speedloaderServer: DEFAULT_SPEEDLOADER_SERVER,
 };

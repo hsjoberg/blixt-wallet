@@ -35,6 +35,12 @@ export const DEFAULT_DUNDER_SERVER = chainSelect({
   regtest: "http://192.168.1.111:8080",
 });
 
+export const DEFAULT_SPEEDLOADER_SERVER = chainSelect({
+  mainnet: "https://primer.eldamar.icu",
+  testnet: "",
+  regtest: "",
+});
+
 export const HEADER_MIN_HEIGHT =
   Platform.select({
     android: (StatusBar.currentHeight ?? 0) + 53,

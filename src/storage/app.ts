@@ -6,6 +6,7 @@ import {
   DEFAULT_MAX_LN_FEE_PERCENTAGE,
   DEFAULT_NEUTRINO_NODE,
   DEFAULT_PATHFINDING_ALGORITHM,
+  DEFAULT_SPEEDLOADER_SERVER,
   PLATFORM,
 } from "../utils/constants";
 import { Chain, Debug, VersionCode } from "../utils/build";
@@ -83,6 +84,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   persistentServicesEnabled = "persistentServicesEnabled",
   persistentServicesWarningShown = "persistentServicesWarningShown",
   customInvoicePreimageEnabled = "customInvoicePreimageEnabled",
+  speedloaderServer = "speedloaderServer",
 }
 
 export const setItem = async (key: StorageItem, value: string) =>
@@ -183,6 +185,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.enforceSpeedloaderOnStartup),
     removeItem(StorageItem.persistentServicesEnabled),
     removeItem(StorageItem.persistentServicesWarningShown),
+    removeItem(StorageItem.speedloaderServer),
   ]);
 };
 
@@ -270,5 +273,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.persistentServicesWarningShown, false),
     setItemObject<string[]>(StorageItem.zeroConfPeers, [BLIXT_NODE_PUBKEY]),
     setItemObject<boolean>(StorageItem.customInvoicePreimageEnabled, false),
+    setItem(StorageItem.speedloaderServer, DEFAULT_SPEEDLOADER_SERVER),
   ]);
 };
