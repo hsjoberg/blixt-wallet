@@ -7,7 +7,8 @@
       "amount": "Quantità",
       "fee": "Tassa",
       "search": "Ricerca",
-      "viewInBlockExplorer": "Visualizza in Block Explorer"
+      "viewInBlockExplorer": "Visualizza in Block Explorer",
+      "blocks": "{{numBlocks}} blocchi"
     },
     "buttons": {
       "ok": "Ok",
@@ -296,6 +297,7 @@
       "remoteCommitmentTxid": "Impegno remoto TXID",
       "closeChannel": "Chiudere di canale",
       "forceClosePendingChannel": "Forzare il canale in sospeso",
+      "forceCloseDelay": "Ritardi di chiusura della forza",
       "closeChannelPrompt": {
         "title": "Chiudere di canale"
       }
@@ -742,6 +744,12 @@
       "rpc": {
         "title": "Imposta host Bitcoind RPC"
       },
+      "rpcuser": {
+        "title": "Imposta l'utente bitcoind RPC"
+      },
+      "rpcpass": {
+        "title": "Imposta la password bitcoind RPC"
+      },
       "zmqRawBlock": {
         "title": "Imposta host Bitcoind Zmq Raw Block"
       },
@@ -800,6 +808,17 @@
         "restoreDialog": {
           "title": "Ripristina Dunder Server",
           "msg": "Vorresti ripristinare sul server Dunder predefinito"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Imposta il server di sincronizzazione del canale LN",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Imposta il server di sincronizzazione del canale LN"
+        },
+        "restoreDialog": {
+          "title": "Ripristina il server di sincronizzazione del canale LN",
+          "msg": "Vorresti ripristinare sul server di sincronizzazione del canale LN predefinito ?"
         }
       },
       "graphSync": {
@@ -1005,7 +1024,8 @@
         "title": "Applica la sincronizzazione \"gossip\" all'avvio"
       },
       "persistentServices": {
-        "title": "Abilita Lnd e Tor persistenti (se abilitato)"
+        "title": "Abilita app persistente",
+        "subtitle": "L'app rimane attiva in background"
       }
     }
   },
