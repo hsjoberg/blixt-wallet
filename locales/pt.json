@@ -743,7 +743,7 @@
         "title": "Definir host RPC bitcoind"
       },
       "rpcuser": {
-        "title": "Defina o usuário do Bitcoind RPC"
+        "title": "Defina o usuário do bitcoind RPC"
       },
       "rpcpass": {
         "title": "Defina a senha do bitcoind RPC"
