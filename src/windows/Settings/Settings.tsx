@@ -6,6 +6,7 @@ import {
   DEFAULT_LND_LOG_LEVEL,
   DEFAULT_MAX_LN_FEE_PERCENTAGE,
   DEFAULT_NEUTRINO_NODE,
+  DEFAULT_SPEEDLOADER_SERVER,
   PLATFORM,
 } from "../../utils/constants";
 import { Linking, NativeModules, PermissionsAndroid, Platform, StyleSheet } from "react-native";
@@ -1099,6 +1100,56 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
   };
 
+  // Speedloader server
+  const speedloaderServer = useStoreState((store) => store.settings.speedloaderServer);
+  const changeSpeedloaderServer = useStoreActions(
+    (store) => store.settings.changeSpeedloaderServer,
+  );
+
+  const onSetSpeedloaderServerPress = async () => {
+    Alert.prompt(
+      t("LN.speedloaderServer.setDialog.title"),
+      "",
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          onPress: async (text) => {
+            if (text === speedloaderServer) {
+              return;
+            }
+
+            await changeSpeedloaderServer(text ?? "");
+          },
+        },
+      ],
+      "plain-text",
+      speedloaderServer ?? "",
+    );
+  };
+  const onSetSpeedloaderServerLongPress = async () => {
+    Alert.alert(
+      t("LN.speedloaderServer.restoreDialog.title"),
+      `${t("LN.speedloaderServer.restoreDialog.msg")} (${DEFAULT_SPEEDLOADER_SERVER})?`,
+      [
+        {
+          style: "cancel",
+          text: t("buttons.no", { ns: namespaces.common }),
+        },
+        {
+          style: "default",
+          text: t("buttons.yes", { ns: namespaces.common }),
+          onPress: async () => {
+            await changeSpeedloaderServer(DEFAULT_SPEEDLOADER_SERVER);
+          },
+        },
+      ],
+    );
+  };
+
   // Enable Dunder LSP
   const dunderEnabled = useStoreState((store) => store.settings.dunderEnabled);
   const changeDunderEnabled = useStoreActions((store) => store.settings.changeDunderEnabled);
@@ -1936,6 +1987,23 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Body>
                 <Text>{t("LN.LSP.title")}</Text>
                 <Text note={true}>{dunderServer}</Text>
+              </Body>
+            </ListItem>
+          )}
+          {scheduledGossipSyncEnabled && (
+            <ListItem
+              style={style.listItem}
+              button={true}
+              icon={true}
+              onPress={onSetSpeedloaderServerPress}
+              onLongPress={onSetSpeedloaderServerLongPress}
+            >
+              <Left>
+                <Icon style={style.icon} type="MaterialCommunityIcons" name="speedometer" />
+              </Left>
+              <Body>
+                <Text>{t("LN.speedloaderServer.title")}</Text>
+                <Text note={true}>{speedloaderServer}</Text>
               </Body>
             </ListItem>
           )}
