@@ -2236,9 +2236,7 @@ ${t("experimental.tor.disabled.msg2")}`;
                     : t("security.gossipSync.title")}
                 </Text>
                 {PLATFORM === "android" && (
-                  <Text note={true}>
-                    {t("security.gossipSyncAndroid.subtitle", { hours: "24" })}
-                  </Text>
+                  <Text note={true}>{t("security.gossipSyncAndroid.subtitle")}</Text>
                 )}
               </Body>
               <Right>
@@ -2260,6 +2258,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Left>
               <Body>
                 <Text>{t("debug.persistentServices.title")}</Text>
+                <Text note={true}>{t("debug.persistentServices.subtitle", { hours: "24" })}</Text>
               </Body>
               <Right>
                 <CheckBox

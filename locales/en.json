@@ -1024,7 +1024,8 @@
         "title": "Enforce gossip sync on startup"
       },
       "persistentServices": {
-        "title": "Enable persistent LND and Tor (if enabled)"
+        "title": "Enable persistent app",
+        "subtitle": "Blixt Wallet and lnd will stay active in the background"
       }
     }
   },

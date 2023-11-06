@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar, Alert, NativeModules } from "react-native";
 import { Spinner, H1, H2 } from "native-base";
-import { createStackNavigator, CardStyleInterpolators, StackNavigationOptions } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+  StackNavigationOptions,
+} from "@react-navigation/stack";
 
 import Overview from "./windows/Overview";
 import Help from "./windows/Help";
@@ -63,15 +67,17 @@ export type RootStackParamList = {
   KeysendTest: undefined;
   KeysendExperiment: undefined;
   DeeplinkChecker: undefined;
-  WebLNBrowser: {
-    url: string;
-  } | undefined;
+  WebLNBrowser:
+    | {
+        url: string;
+      }
+    | undefined;
   WebInfo: undefined;
 
   Prompt: IPromptNavigationProps;
 
   DEV_CommandsX: undefined;
-}
+};
 
 export default function Main() {
   const holdOnboarding = useStoreState((store) => store.holdOnboarding);
@@ -83,9 +89,11 @@ export default function Main() {
   const [initialRoute, setInitialRoute] = useState("Loading");
   const torLoading = useStoreState((store) => store.torLoading);
   const speedloaderLoading = useStoreState((store) => store.speedloaderLoading);
+  const screenTransitionsEnabled = useStoreState(
+    (store) => store.settings.screenTransitionsEnabled,
+  );
 
-  const [state, setState] =
-    useState<"init" | "authentication" | "onboarding" | "started">("init");
+  const [state, setState] = useState<"init" | "authentication" | "onboarding" | "started">("init");
 
   useEffect(() => {
     // tslint:disable-next-line
@@ -108,13 +116,11 @@ export default function Main() {
     (async () => {
       if (!loggedIn) {
         setState("authentication");
-      }
-      else if (!lightningReady) {
+      } else if (!lightningReady) {
         setState("started");
         if (!walletCreated) {
           setInitialRoute("Welcome");
-        }
-        else {
+        } else {
           // try {
           //   const lightningTimeout = setTimeout(() => {
           //     Alert.alert(
@@ -146,8 +152,7 @@ export default function Main() {
           //   toast(e.message, 0, "danger");
           // }
         }
-      }
-      else {
+      } else {
         setState("started");
       }
     })();
@@ -215,46 +220,78 @@ export default function Main() {
   }
 
   if (state === "authentication") {
-    return (<Authentication />);
+    return <Authentication />;
   }
 
   return (
     <RootStack.Navigator initialRouteName={initialRoute} screenOptions={screenOptions}>
-      <RootStack.Screen name="Welcome" component={Welcome} options={PLATFORM === "ios" ? {
-        gestureEnabled: true,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      } : animationDisabled} />
+      <RootStack.Screen
+        name="Welcome"
+        component={Welcome}
+        options={
+          PLATFORM === "ios"
+            ? {
+                gestureEnabled: true,
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+              }
+            : animationDisabled
+        }
+      />
       <RootStack.Screen name="Loading" component={Loading} options={animationDisabled} />
       <RootStack.Screen name="LoadingModal" component={LoadingModal} options={animationDisabled} />
-      <RootStack.Screen name="CameraFullscreen" component={CameraFullscreen} options={{
-        gestureEnabled: true,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }} />
+      <RootStack.Screen
+        name="CameraFullscreen"
+        component={CameraFullscreen}
+        options={{
+          gestureEnabled: true,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
 
       <RootStack.Screen name="Overview" component={Overview} options={animationDisabled} />
       <RootStack.Screen name="Help" component={Help} options={animationDisabled} />
-      <RootStack.Screen name="TransactionDetails" component={TransactionDetails as any} options={animationDisabled} />
+      <RootStack.Screen
+        name="TransactionDetails"
+        component={TransactionDetails as any}
+        options={animationDisabled}
+      />
       <RootStack.Screen name="SyncInfo" component={SyncInfo} options={animationDisabled} />
       <RootStack.Screen name="Receive" component={Receive} options={horizontalTransition} />
-      <RootStack.Screen name="Send" component={Send} options={{
-        animationEnabled: true,
-        gestureEnabled: true,
-        gestureResponseDistance: 1000,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }} />
+      <RootStack.Screen
+        name="Send"
+        component={Send}
+        options={{
+          animationEnabled: screenTransitionsEnabled,
+          gestureEnabled: true,
+          gestureResponseDistance: 1000,
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
       <RootStack.Screen name="OnChain" component={OnChain} options={horizontalTransition} />
-      <RootStack.Screen name="LightningInfo" component={LightningInfo} options={horizontalTransition} />
+      <RootStack.Screen
+        name="LightningInfo"
+        component={LightningInfo}
+        options={horizontalTransition}
+      />
       <RootStack.Screen name="Settings" component={Settings} options={horizontalTransition} />
       <RootStack.Screen name="LNURL" component={LNURL} options={animationDisabled} />
       <RootStack.Screen name="WebLNBrowser" component={WebLNBrowser} options={animationDisabled} />
       <RootStack.Screen name="WebInfo" component={WebInfo} options={animationDisabled} />
       <RootStack.Screen name="Contacts" component={Contacts} options={horizontalTransition} />
 
-      <RootStack.Screen name="GoogleDriveTestbed" component={GoogleDriveTestbed} options={animationDisabled} />
+      <RootStack.Screen
+        name="GoogleDriveTestbed"
+        component={GoogleDriveTestbed}
+        options={animationDisabled}
+      />
       <RootStack.Screen name="KeysendTest" component={KeysendTest} options={animationDisabled} />
-      <RootStack.Screen name="KeysendExperiment" component={KeysendExperiment} options={horizontalTransition} />
+      <RootStack.Screen
+        name="KeysendExperiment"
+        component={KeysendExperiment}
+        options={horizontalTransition}
+      />
       <RootStack.Screen name="Prompt" component={Prompt} options={animationDisabled} />
       <RootStack.Screen name="DEV_CommandsX" component={DEV_Commands} options={animationDisabled} />
     </RootStack.Navigator>
   );
-};
+}
