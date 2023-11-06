@@ -742,6 +742,12 @@
       "rpc": {
         "title": "Установить хост bitcoind RPC"
       },
+      "rpcuser": {
+        "title": "Установите пользователь bitcoind RPC"
+      },
+      "rpcpass": {
+        "title": "Установите пароль bitcoind RPC"
+      },
       "zmqRawBlock": {
         "title": "Установить хост bitcoind ZMQ Raw Block"
       },
