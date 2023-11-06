@@ -7,7 +7,8 @@
       "amount": "Сумма",
       "fee": "Комса",
       "search": "Поиск",
-      "viewInBlockExplorer": "Посмотреть в обозревателе блоков"
+      "viewInBlockExplorer": "Посмотреть в обозревателе блоков",
+      "blocks": "{{numBlocks}} блоки"
     },
     "buttons": {
       "ok": "Ok",
@@ -296,6 +297,7 @@
       "remoteCommitmentTxid": "Удалённое обязательство TXID",
       "closeChannel": "Закрыть канал",
       "forceClosePendingChannel": "Принудительно закрыть ожидающий канал",
+      "forceCloseDelay": "Задержка закрытия силы",
       "closeChannelPrompt": {
         "title": "Закрыть канал"
       }
@@ -742,6 +744,12 @@
       "rpc": {
         "title": "Установить хост bitcoind RPC"
       },
+      "rpcuser": {
+        "title": "Установите пользователь bitcoind RPC"
+      },
+      "rpcpass": {
+        "title": "Установите пароль bitcoind RPC"
+      },
       "zmqRawBlock": {
         "title": "Установить хост bitcoind ZMQ Raw Block"
       },
@@ -800,6 +808,17 @@
         "restoreDialog": {
           "title": "Восстановить сервер Dunder",
           "msg": "Хотите ли вы восстановить сервер Dunder по умолчанию?"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Установить синхронизацию канала LN",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Установить синхронизацию канала LN"
+        },
+        "restoreDialog": {
+          "title": "Восстановить синхронизацию канала LN",
+          "msg": "Хотели бы вы вернуться на сервер Sync Channel LN по умолчанию?"
         }
       },
       "graphSync": {
@@ -1005,7 +1024,8 @@
         "title": "Принудительно синхронизировать \"сплетни\" при запуске"
       },
       "persistentServices": {
-        "title": "Включить постоянный LND и Tor (если включено)"
+        "title": "Включить постоянное приложение",
+        "subtitle": "Приложение остается активным в фоновом режиме"
       }
     }
   },
