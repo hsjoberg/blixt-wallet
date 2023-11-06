@@ -86,6 +86,9 @@ android {
 
         // Blixt:
         buildConfigField "String", "CHAIN", '"mainnet"'
+        ndk {
+            abiFilters "arm64-v8a"
+        }
     }
     signingConfigs {
         debug {
@@ -156,6 +159,10 @@ android {
                 srcDir '../../proto'
             }
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
