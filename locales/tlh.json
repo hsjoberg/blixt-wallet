@@ -742,6 +742,12 @@
       "rpc": {
         "title": "meH HoD"
       },
+      "rpcuser": {
+        "title": "cha'DIch RPC"
+      },
+      "rpcpass": {
+        "title": "qIpyach Sep lutu'rIpchaj RPC"
+      },
       "zmqRawBlock": {
         "title": "yo' ZMQ Raw QIjwI'"
       },
