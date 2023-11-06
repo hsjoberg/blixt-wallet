@@ -559,7 +559,7 @@
 				CHAIN = mainnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 73;
+				CURRENT_PROJECT_VERSION = 75;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				ENABLE_BITCODE = NO;
@@ -596,7 +596,7 @@
 				CHAIN = mainnet;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BlixtWallet/BlixtWallet.entitlements;
-				CURRENT_PROJECT_VERSION = 73;
+				CURRENT_PROJECT_VERSION = 75;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
@@ -699,8 +699,8 @@
 					"$(inherited)",
 					"-Wl",
 					"-ld_classic",
-					" ",
-					"-Wl -ld_classic ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -778,8 +778,8 @@
 					"$(inherited)",
 					"-Wl",
 					"-ld_classic",
-					" ",
-					"-Wl -ld_classic ",
+					"-Wl",
+					"-ld_classic",
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;

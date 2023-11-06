@@ -51,7 +51,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
   const commentAllowed = lnUrlObject.commentAllowed ?? undefined;
   const domain = getDomainFromURL(lnurlStr ?? "");
   const name = useStoreState((store) => store.settings.name);
-  const identifier = null; // TODO needs to get data from Lightning Box store
+  const identifier = undefined; //"hampus@blixtwallet.com"; // TODO needs to get data from Lightning Box store
   const [sendName, setSendName] = useState<boolean | undefined>(
     lnUrlObject.commentAllowed !== undefined ? false : undefined,
   );

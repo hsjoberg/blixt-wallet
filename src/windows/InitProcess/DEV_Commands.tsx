@@ -270,6 +270,10 @@ console.log(x);
           <Button small onPress={async () => {
             actions.scheduledGossipSync.setSyncEnabled(false);
           }}><Text style={styles.buttonText}>scheduledGossipSync.setSyncEnabled(false)</Text></Button>
+          <Button small onPress={async () => {
+            setItemObject<boolean>(StorageItem.scheduledGossipSyncEnabled, false);
+          }}><Text style={styles.buttonText}>scheduledGossipSyncEnabled = false</Text></Button>
+
 
           <Button small onPress={async () => {
             interface IDemoInvoice {

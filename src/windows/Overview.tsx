@@ -584,7 +584,7 @@ export function DrawerComponent() {
       },
       drawerType: layoutMode === "mobile" ? "front" : "permanent",
       swipeEdgeWidth: 400,
-    }} drawerContent={() => <Drawer />}>
+    }} drawerContent={(props) => <Drawer {...props} />}>
       <DrawerNav.Screen name="OverviewTabs" component={OverviewTabsComponent} />
     </DrawerNav.Navigator>
   )

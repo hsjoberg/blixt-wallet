@@ -558,14 +558,13 @@ public class LndMobileService extends Service {
           notificationBuilder = new Notification.Builder(this, BuildConfig.APPLICATION_ID);
         } else {
           notificationBuilder = new Notification.Builder(this);
-        }
+      }
 
         notificationBuilder
-          .setContentTitle("LND")
+          .setContentTitle("Blixt Wallet")
           .setContentText("LND is running in the background")
           .setSmallIcon(R.drawable.ic_stat_ic_notification)
           .setContentIntent(pendingIntent)
-          .setTicker("Blixt Wallet")
           .setOngoing(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

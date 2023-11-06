@@ -101,6 +101,7 @@ export interface ILndMobileInjections {
       memo: string,
       expiry?: number,
       descriptionHash?: Uint8Array,
+      preimage?: Uint8Array,
     ) => Promise<lnrpc.AddInvoiceResponse>;
     addInvoiceBlixtLsp: (args: IAddInvoiceBlixtLspArgs) => Promise<lnrpc.AddInvoiceResponse>;
     cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>;

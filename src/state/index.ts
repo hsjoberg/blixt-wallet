@@ -5,7 +5,11 @@ import NetInfo from "@react-native-community/netinfo";
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import { AlertButton, NativeModules } from "react-native";
 
-import { DEFAULT_PATHFINDING_ALGORITHM, PLATFORM } from "../utils/constants";
+import {
+  DEFAULT_PATHFINDING_ALGORITHM,
+  DEFAULT_SPEEDLOADER_SERVER,
+  PLATFORM,
+} from "../utils/constants";
 import { Chain, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
@@ -305,6 +309,8 @@ export const model: IStoreModel = {
       const enforceSpeedloaderOnStartup =
         (await getItemObjectAsyncStorage<boolean>(StorageItem.enforceSpeedloaderOnStartup)) ??
         false;
+      const speedloaderServer =
+        (await getItem(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER;
       let gossipStatus: unknown = null;
 
       const status = await checkStatus();
@@ -330,7 +336,7 @@ export const model: IStoreModel = {
           try {
             let connectionState = await NetInfo.fetch();
             log.i("connectionState", [connectionState.type]);
-            gossipStatus = await gossipSync(connectionState.type);
+            gossipStatus = await gossipSync(speedloaderServer, connectionState.type);
             debugShowStartupInfo &&
               toast(
                 "Gossip sync done " + (new Date().getTime() - start.getTime()) / 1000 + "s",

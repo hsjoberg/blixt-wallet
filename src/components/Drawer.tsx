@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { PixelRatio, StyleSheet, TouchableOpacity, View, ScrollView, LayoutAnimation } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
 import { Icon, Text } from "native-base";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
+import { DrawerActions } from "@react-navigation/native";
+import { DrawerContentComponentProps } from "@react-navigation/drawer/lib/typescript/src/types";
 
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { BlixtLogo } from "./BlixtWallet";
@@ -17,9 +18,8 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
 
-export default function Drawer() {
+export default function Drawer({ navigation }: DrawerContentComponentProps) {
   const t = useTranslation(namespaces.drawer).t;
-  const navigation = useNavigation();
   const promptLightningAddress = usePromptLightningAddress();
   const evaluateLightningCode = useEvaluateLightningCode();
   const layoutMode = useLayoutMode();

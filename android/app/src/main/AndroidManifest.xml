@@ -3,6 +3,9 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <meta-data
+        android:name="com.google.mlkit.vision.DEPENDENCIES"
+        android:value="barcode" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -23,6 +26,7 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme"
+      android:usesCleartextTraffic="true"
       tools:replace="android:label"
   >
       <!--activity
