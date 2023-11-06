@@ -742,6 +742,12 @@
       "rpc": {
         "title": "Definir host RPC bitcoind"
       },
+      "rpcuser": {
+        "title": "Defina o usuário do Bitcoind RPC"
+      },
+      "rpcpass": {
+        "title": "Defina a senha do bitcoind RPC"
+      },
       "zmqRawBlock": {
         "title": "Definir host de bloco raw ZMQ bitcoind"
       },
