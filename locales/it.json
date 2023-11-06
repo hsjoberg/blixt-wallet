@@ -742,6 +742,12 @@
       "rpc": {
         "title": "Imposta host Bitcoind RPC"
       },
+      "rpcuser": {
+        "title": "Imposta l'utente bitcoind RPC"
+      },
+      "rpcpass": {
+        "title": "Imposta la password bitcoind RPC"
+      },
       "zmqRawBlock": {
         "title": "Imposta host Bitcoind Zmq Raw Block"
       },
