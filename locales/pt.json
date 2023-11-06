@@ -7,7 +7,8 @@
       "amount": "Montante",
       "fee": "Taxa",
       "search": "Buscar",
-      "viewInBlockExplorer": "Ver no explorador de blocos"
+      "viewInBlockExplorer": "Ver no explorador de blocos",
+      "blocks": "{{numBlocks}} blocos"
     },
     "buttons": {
       "ok": "Ok",
@@ -296,6 +297,7 @@
       "remoteCommitmentTxid": "Compromisso remoto TXID",
       "closeChannel": "Fechar canal",
       "forceClosePendingChannel": "Forçar fechamento do canal pendente",
+      "forceCloseDelay": "Atraso de fechamento da força",
       "closeChannelPrompt": {
         "title": "Fechar canal"
       }
@@ -742,6 +744,12 @@
       "rpc": {
         "title": "Definir host RPC bitcoind"
       },
+      "rpcuser": {
+        "title": "Defina o usuário do bitcoind RPC"
+      },
+      "rpcpass": {
+        "title": "Defina a senha do bitcoind RPC"
+      },
       "zmqRawBlock": {
         "title": "Definir host de bloco raw ZMQ bitcoind"
       },
@@ -800,6 +808,17 @@
         "restoreDialog": {
           "title": "Restaurar servidor Dunder",
           "msg": "Você gostaria de restaurar para o servidor Dunder padrão"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Defina o servidor de sincronização do canal LN",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Defina o servidor de sincronização de canal  LN"
+        },
+        "restoreDialog": {
+          "title": "Restaurar o servidor de sincronização do canal LN",
+          "msg": "Você gostaria de restaurar o servidor padrão de sincronização do canal LN"
         }
       },
       "graphSync": {
@@ -1005,7 +1024,8 @@
         "title": "Aplicar sincronização de \"gossip\" na inicialização"
       },
       "persistentServices": {
-        "title": "Ativar LND e Tor persistentes (se habilitado)"
+        "title": "Ativar aplicativo persistente",
+        "subtitle": "O aplicativo permanece ativo em segundo plano"
       }
     }
   },
