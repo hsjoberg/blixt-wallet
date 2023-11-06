@@ -7,7 +7,8 @@
       "amount": "Amount",
       "fee": "Fee",
       "search": "Search",
-      "viewInBlockExplorer": "View in block explorer"
+      "viewInBlockExplorer": "View in block explorer",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "Ok",
@@ -296,6 +297,7 @@
       "remoteCommitmentTxid": "Remote commitment TXID",
       "closeChannel": "Close channel",
       "forceClosePendingChannel": "Force Close Pending Channel",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Close channel"
       }
