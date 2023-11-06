@@ -73,7 +73,6 @@ export enum StorageItem { // const enums not supported in Babel 7...
   lndNoGraphCache = "lndNoGraphCache",
   invoiceExpiry = "invoiceExpiry", // in seconds
   rescanWallet = "rescanWallet",
-  receiveViaP2TR = "receiveViaP2TR",
   strictGraphPruningEnabled = "strictGraphPruningEnabled",
   lndPathfindingAlgorithm = "lndPathfindingAlgorithm",
   maxLNFeePercentage = "maxLNFeePercentage",
@@ -176,7 +175,6 @@ export const clearApp = async () => {
     removeItem(StorageItem.lndNoGraphCache),
     removeItem(StorageItem.invoiceExpiry),
     removeItem(StorageItem.rescanWallet),
-    removeItem(StorageItem.receiveViaP2TR),
     removeItem(StorageItem.strictGraphPruningEnabled),
     removeItem(StorageItem.lndPathfindingAlgorithm),
     removeItem(StorageItem.maxLNFeePercentage),
@@ -262,7 +260,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.lndNoGraphCache, false),
     setItemObject<number>(StorageItem.invoiceExpiry, DEFAULT_INVOICE_EXPIRY),
     setItemObject<boolean>(StorageItem.rescanWallet, false),
-    setItemObject<boolean>(StorageItem.receiveViaP2TR, false),
     setItemObject<boolean>(StorageItem.strictGraphPruningEnabled, false),
     setItem(StorageItem.lndPathfindingAlgorithm, DEFAULT_PATHFINDING_ALGORITHM),
     setItemObject<number>(StorageItem.maxLNFeePercentage, DEFAULT_MAX_LN_FEE_PERCENTAGE),

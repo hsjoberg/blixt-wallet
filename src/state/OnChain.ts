@@ -22,7 +22,7 @@ export interface ISetTransactionsPayload {
 
 export interface IGetAddressPayload {
   forceNew?: boolean;
-  p2sh?: boolean;
+  p2wkh?: boolean;
 }
 
 export interface ISendCoinsPayload {
@@ -140,30 +140,22 @@ export const onChain: IOnChainModel = {
     actions.setUnconfirmedBalance(walletBalanceResponse);
   }),
 
-  getAddress: thunk(async (actions, { forceNew, p2sh }, { injections, getStoreState }) => {
+  getAddress: thunk(async (actions, { forceNew, p2wkh }, { injections }) => {
     try {
     const { newAddress } = injections.lndMobile.onchain;
     let type: lnrpc.AddressType;
 
     if (forceNew) {
-      if (p2sh) {
-        type = lnrpc.AddressType.NESTED_PUBKEY_HASH;
+      if (p2wkh) {
+        type = lnrpc.AddressType.WITNESS_PUBKEY_HASH;
       } else {
-        if (getStoreState().settings.receiveViaP2TR) {
-          type = lnrpc.AddressType.TAPROOT_PUBKEY;
-        } else {
-          type = lnrpc.AddressType.WITNESS_PUBKEY_HASH;
-        }
+        type = lnrpc.AddressType.TAPROOT_PUBKEY;
       }
     } else {
-      if (p2sh) {
-        type = lnrpc.AddressType.UNUSED_NESTED_PUBKEY_HASH;
+      if (p2wkh) {
+        type = lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH;
       } else {
-        if (getStoreState().settings.receiveViaP2TR) {
-          type = lnrpc.AddressType.UNUSED_TAPROOT_PUBKEY;
-        } else {
-          type = lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH;
-        }
+        type = lnrpc.AddressType.UNUSED_TAPROOT_PUBKEY;
       }
     }
 
