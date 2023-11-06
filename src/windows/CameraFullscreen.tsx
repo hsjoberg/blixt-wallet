@@ -14,8 +14,8 @@ import { RootStackParamList } from "../Main";
 
 interface ICameraFullscreenProps {
   bolt11Invoice?: string;
-  navigation: StackNavigationProp<RootStackParamList, "CameraFullScreen">;
-  route: RouteProp<RootStackParamList, "CameraFullScreen">;
+  navigation: StackNavigationProp<RootStackParamList, "CameraFullscreen">;
+  route: RouteProp<RootStackParamList, "CameraFullscreen">;
 }
 
 export default function CameraFullscreen({ navigation, route }: ICameraFullscreenProps) {
@@ -47,9 +47,7 @@ export default function CameraFullscreen({ navigation, route }: ICameraFullscree
             width={smallScreen ? 270 : 275}
             height={smallScreen ? 270 : 275}
           />
-          {PLATFORM !== "android" &&
-            <GoBackIcon style={style.goBack} />
-          }
+          {PLATFORM !== "android" && <GoBackIcon style={style.goBack} />}
         </>
       </Camera>
     </>
