@@ -7,7 +7,8 @@
       "amount": "Cantidad",
       "fee": "Tarifa",
       "search": "Búsqueda",
-      "viewInBlockExplorer": "Ver en el explorador de bloques"
+      "viewInBlockExplorer": "Ver en el explorador de bloques",
+      "blocks": "{{numBlocks}} bloques"
     },
     "buttons": {
       "ok": "Ok",
@@ -296,6 +297,7 @@
       "remoteCommitmentTxid": "Compromiso remoto TXID",
       "closeChannel": "Cerrar Canal",
       "forceClosePendingChannel": "Cierre Forzoso del canal pendiente",
+      "forceCloseDelay": "Retraso de cierre forzado",
       "closeChannelPrompt": {
         "title": "Cerrar canal"
       }
@@ -742,6 +744,12 @@
       "rpc": {
         "title": "Establecer servidor de bitcoind RPC"
       },
+      "rpcuser": {
+        "title": "Establezca el usuario de bitcoind RPC"
+      },
+      "rpcpass": {
+        "title": "Establezca la contraseña de bitcoind RPC"
+      },
       "zmqRawBlock": {
         "title": "Establecer servidor de bitcoind ZMQ Raw Block"
       },
@@ -800,6 +808,17 @@
         "restoreDialog": {
           "title": "Restaurar servidor Dunder",
           "msg": "¿Te gustaría restaurar el servidor por defecto de Dunder?"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Establecer el servidor de sincronización del canal LN",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Establecer el servidor de sincronización del canal  LN"
+        },
+        "restoreDialog": {
+          "title": "Restaurar el servidor de sincronización del canal LN",
+          "msg": "¿Le gustaría restaurar al servidor predeterminado de sincronización de canal LN ?"
         }
       },
       "graphSync": {
@@ -1005,7 +1024,8 @@
         "title": "Hacer cumplir la sincronización de \"gossip\" al inicio"
       },
       "persistentServices": {
-        "title": "Habilitar LND y Tor persistentes (si están habilitados)"
+        "title": "Habilitar la aplicación persistente",
+        "subtitle": "La aplicación permanece activa en segundo plano"
       }
     }
   },
