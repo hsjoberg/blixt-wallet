@@ -742,12 +742,6 @@
       "rpc": {
         "title": "Establecer servidor de bitcoind RPC"
       },
-      "rpcuser": {
-        "title": "Establezca el usuario de bitcoind RPC"
-      },
-      "rpcpass": {
-        "title": "Establezca la contraseña de bitcoind RPC"
-      },
       "zmqRawBlock": {
         "title": "Establecer servidor de bitcoind ZMQ Raw Block"
       },
