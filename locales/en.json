@@ -1025,7 +1025,7 @@
       },
       "persistentServices": {
         "title": "Enable persistent app",
-        "subtitle": "Blixt Wallet and lnd will stay active in the background"
+        "subtitle": "The app stays active in the background"
       }
     }
   },

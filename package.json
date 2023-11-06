@@ -22,7 +22,7 @@
     "android:mainnet": "react-native run-android --mode chainmainnetNormalRelease",
     "android:mainnet-fakelnd": "react-native run-android --mode chainmainnetFakelndRelease --appIdSuffix fakelnd",
     "android:mainnet-fakelnd-debug": "react-native run-android --mode chainmainnetFakelndDebug --appIdSuffix fakelnd.debug",
-    "android:bundle-release": "NODE_OPTIONS=--openssl-legacy-provider cd android && ./gradlew clean && ./gradlew bundleRelease && ./gradlew bundleRelease",
+    "android:bundle-release": "NODE_OPTIONS=--openssl-legacy-provider cd android && ./gradlew clean && ./gradlew bundleChainmainnetNormalRelease && ./gradlew bundleChaintestnetNormalRelease",
     "android:bundle-release-mainnet": "cd android && ./gradlew clean && NODE_OPTIONS=--openssl-legacy-provider ./gradlew bundlechainmainnetNormalRelease",
     "android:bundle-release-testnet": "cd android && ./gradlew clean && NODE_OPTIONS=--openssl-legacy-provider ./gradlew bundlechaintestnetNormalRelease",
     "android:bundle-js-debug": "react-native bundle --platform android --dev true --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
