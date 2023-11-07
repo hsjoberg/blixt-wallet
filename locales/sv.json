@@ -7,7 +7,8 @@
       "amount": "Belopp",
       "fee": "Avgift",
       "search": "Sök",
-      "viewInBlockExplorer": "Visa i blockexplorer"
+      "viewInBlockExplorer": "Visa i blockexplorer",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "Okej",
@@ -46,6 +47,11 @@
       "msg3": "Det finns för tillfället inget WatchTower-stöd som övervakar dina kanaler när du är offline.",
       "msg4": "Jag är besinningslös, fortsätt"
     },
+    "createWalletWithPassphrase": {
+      "title": "Set passphrase (25th word to encrypt the seed)",
+      "invalidMessage": "Enter a valid passphrase",
+      "noLeadingTrailingSpaces": "Leading or trailing spaces is not allowed"
+    },
     "language": {
       "title": "Select language"
     },
@@ -55,7 +61,8 @@
     "menu": {
       "enableTor": "Aktivera Tor",
       "disableTor": "Deaktivera Tor",
-      "setBitcoinNode": "Sätt Bitcoinnod"
+      "setBitcoinNode": "Sätt Bitcoinnod",
+      "createWalletWithPassphrase": "Create wallet with passphrase"
     }
   },
   "footerNav": {
@@ -202,6 +209,9 @@
       "description": {
         "title": "Meddelande",
         "placeholder": "Meddelande till betalare"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -240,6 +250,12 @@
       },
       "description": {
         "title": "Meddelande"
+      },
+      "feeEstimate": {
+        "title": "Fee estimate"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -259,6 +275,7 @@
       "alias": "Alias",
       "node": "Nod",
       "channelId": "Kanal-ID",
+      "channelPoint": "Channel point",
       "status": "Status",
       "statusActive": "Aktiv",
       "statusInactive": "Inaktiv",
@@ -271,6 +288,7 @@
       "howMuchCanBeReceived": "Kan ta emot",
       "localReserve": "Lokal reserv",
       "commitmentFee": "Commitment-avgift",
+      "channelType": "Channel type",
       "pendingFunds": "Inväntande tillgångar",
       "balanceInLimbo": "Balans i limbo",
       "pendingHtlcs": "Inväntande HTLCs",
@@ -279,6 +297,7 @@
       "remoteCommitmentTxid": "Motpartens commitment-TXID",
       "closeChannel": "Stäng kanal",
       "forceClosePendingChannel": "Force Close Pending Channel",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Stäng kanal"
       }
@@ -672,11 +691,18 @@
       },
       "chainSync": {
         "title": "Schemalagd kedjesynkning",
-        "subtitle": "Körs var 2:e timme",
+        "subtitle": "Runs in background every 2 hours",
         "dialog": {
           "title": "Ej rekommenderat",
           "msg": "Varning. Det är inte rekommenderat att stänga av den schemalagda kedjesynkningen.\n\nVar säker på att du är uppdaterad med nätverket annars riskerar du att förlora dina tillgångar.\n\nGör endast detta ifall du vet vad du håller på med."
         }
+      },
+      "gossipSync": {
+        "title": "Sync LN channels on startup"
+      },
+      "gossipSyncAndroid": {
+        "title": "Scheduled LN channel sync",
+        "subtitle": "Runs at Blixt startup"
       }
     },
     "display": {
@@ -718,14 +744,17 @@
       "rpc": {
         "title": "Set bitcoind RPC host"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "Sätt bitcoind ZMQ Raw Block host"
       },
       "zmqRawTx": {
         "title": "Sätt bitcoind ZMQ Raw Tx Host"
-      },
-      "p2tr": {
-        "title": "Aktivera ta emot on-chain via Taproot (P2TR)"
       }
     },
     "LN": {
@@ -778,9 +807,29 @@
           "msg": "Vill du återställa till standardservern för Dunder"
         }
       },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
       "graphSync": {
         "title": "Vänta på graph-synk innan betalning",
         "subtitle": "En synkroniserad graph-synk leder till optimala betalningsrutter."
+      },
+      "zeroConfPeers": {
+        "title": "Set zero conf peers",
+        "subtitle": "Add pubkeys of peers you want to allow zero conf channels from",
+        "setDialog": {
+          "title": "Zero conf peers",
+          "msg1": "Comma separated values of public keys, to allow zero conf channels from.",
+          "msg2": "You will be trusting channels from these partners until there is at least one chain confirmation"
+        }
       }
     },
     "miscelaneous": {
@@ -799,10 +848,14 @@
       },
       "lndLog": {
         "title": "Kopiera lnd-loggen till lokal disk",
-        "subtitle": "Nås ifrån /sdcard/BlixtWallet",
         "dialog": {
-          "alert": "Kopierade lnd-loggen",
           "error": "Fel vid kopiering av lnd-loggen."
+        }
+      },
+      "speedloaderLog": {
+        "title": "Copy LN channel sync log file to local storage",
+        "dialog": {
+          "error": "Error copying speedloader log file."
         }
       },
       "dev": {
@@ -837,6 +890,9 @@
         "restoreDialog": {
           "title": "Would you like to restore lnd log level to the default level ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Enable custom invoice preimages"
       }
     },
     "experimental": {
@@ -888,6 +944,14 @@
         "title": "Visa uppstartsnotifikationer",
         "subtitle": ""
       },
+      "showNotifications": {
+        "title": "Show notifications for this session",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "Show debug log for this session",
+        "subtitle": ""
+      },
       "helpCencer": {
         "title": "LndMobile-hjälpcenter",
         "subtitle": ""
@@ -898,6 +962,10 @@
       },
       "lndLog": {
         "title": "Läs lnd-loggen",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "Read LN channel sync log",
         "subtitle": ""
       },
       "keysend": {
@@ -944,7 +1012,17 @@
         "title": "Enable strict LN Graph pruning"
       },
       "bimodalPathFinding": {
-        "title": "Enable bimodal path finding"
+        "title": "Enable bimodal pathfinding"
+      },
+      "compactLndDatabases": {
+        "title": "Compact lnd's databases"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Enforce gossip sync on startup"
+      },
+      "persistentServices": {
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
@@ -1033,6 +1111,12 @@
     "title": "Tor onion service",
     "msg1": "Skanna denna QR-kod för att öppna en kanal med denna plånbok",
     "msg2": "Det gick inte att lösa onion-adressen"
+  },
+  "settings.toastLog": {
+    "title": "Notification log"
+  },
+  "settings.debugLog": {
+    "title": "Debug log"
   },
   "welcome.addFunds": {
     "title": "Lägg till bitcoin",
