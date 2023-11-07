@@ -7,7 +7,8 @@
       "amount": "Montant",
       "fee": "Frais",
       "search": "Chercher",
-      "viewInBlockExplorer": "Afficher dans l'explorateur de blocs"
+      "viewInBlockExplorer": "Afficher dans l'explorateur de blocs",
+      "blocks": "{{numBlocks}} blocs"
     },
     "buttons": {
       "ok": "D'accord",
@@ -208,6 +209,9 @@
       "description": {
         "title": "Message",
         "placeholder": "Message au payeur"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -249,6 +253,9 @@
       },
       "feeEstimate": {
         "title": "Estimation des frais"
+      },
+      "outgoingChannel": {
+        "title": "Canal sortant"
       }
     }
   },
@@ -290,6 +297,7 @@
       "remoteCommitmentTxid": "Engagement à distance TXID",
       "closeChannel": "Fermer la chaîne",
       "forceClosePendingChannel": "Forcer la fermeture du canal en attente",
+      "forceCloseDelay": "Délai de fermeture de force",
       "closeChannelPrompt": {
         "title": "Fermer la chaîne"
       }
@@ -736,14 +744,17 @@
       "rpc": {
         "title": "Définir l'hôte RPC de bitcoind"
       },
+      "rpcuser": {
+        "title": "Définir l'utilisateur bitcoind RPC"
+      },
+      "rpcpass": {
+        "title": "Définir le mot de passe bitcoind RPC"
+      },
       "zmqRawBlock": {
         "title": "Définir l'hôte du bloc brut bitcoind ZMQ"
       },
       "zmqRawTx": {
         "title": "Régler l'hôte bitcoind ZMQ Raw Tx"
-      },
-      "p2tr": {
-        "title": "Permettre la réception on-chain via Taproot (P2TR)"
       }
     },
     "LN": {
@@ -794,6 +805,17 @@
         "restoreDialog": {
           "title": "Restaurer le serveur Dunder",
           "msg": "Voulez-vous restaurer le serveur Dunder par défaut ?"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Définir le serveur de synchronisation de la chaîne LN",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Définir le serveur de synchronisation de la chaîne LN"
+        },
+        "restoreDialog": {
+          "title": "Restaurer le serveur de synchronisation des canaux LN",
+          "msg": "Souhaitez-vous restaurer le serveur de synchronisation LN de canal LN par défaut"
         }
       },
       "graphSync": {
@@ -868,6 +890,9 @@
         "restoreDialog": {
           "title": "Souhaitez-vous restaurer le niveau de journal du LND au niveau par défaut ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Activer les préimages de facture personnalisées"
       }
     },
     "experimental": {
@@ -996,7 +1021,8 @@
         "title": "Appliquer la synchronisation \"gossip\" au démarrage"
       },
       "persistentServices": {
-        "title": "Activer le LND persistant et Tor (si activé)"
+        "title": "Activer l'application persistante",
+        "subtitle": "L'application reste active en arrière-plan"
       }
     }
   },
