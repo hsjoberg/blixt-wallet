@@ -755,9 +755,6 @@
       },
       "zmqRawTx": {
         "title": "Установить хост bitcoind ZMQ Raw Tx"
-      },
-      "p2tr": {
-        "title": "Включить получение в цепочке через Taproot (P2TR)"
       }
     },
     "LN": {
