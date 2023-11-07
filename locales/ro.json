@@ -1,0 +1,1207 @@
+{
+  "common": {
+    "generic": {
+      "lightningAddress": "Adresa Lightning",
+      "nodeAlias": "Alias nod",
+      "description": "Descriere",
+      "amount": "Cantitate",
+      "fee": "Taxă",
+      "search": "Căutare",
+      "viewInBlockExplorer": "Vizualizare în Block Explorer",
+      "blocks": "{{numBlocks}} blocuri"
+    },
+    "buttons": {
+      "ok": "OK",
+      "cancel": "Anulare",
+      "continue": "Continuă",
+      "skip": "Ocolire",
+      "proceed": "Continuă",
+      "back": "Înapoi",
+      "no": "Nu",
+      "yes": "Da",
+      "save": "Salvați",
+      "copy": "Copiază"
+    },
+    "msg": {
+      "status": "Stare",
+      "error": "Eroare",
+      "warning": "Avertizare",
+      "result": "Rezultat",
+      "pending": "în aşteptare",
+      "done": "Terminat",
+      "dismiss": "Respinge",
+      "lastSync": "Ultima sincronizare",
+      "lastSyncAttempt": "Ultima încercare de sincronizare",
+      "clipboardCopy": "Copiat în clipboard",
+      "written": "Scris",
+      "enabled": "activat",
+      "disabled": "dezactivat"
+    }
+  },
+  "welcome.start": {
+    "title": "Bine aţi venit",
+    "createWallet": {
+      "title": "Creați portofel",
+      "msg1": "Blixt Wallet este încă într -un stadiu incipient al dezvoltării.",
+      "msg2": "Dacă utilizați acest portofel, asigurați -vă că înțelegeți că vă puteți pierde fondurile.",
+      "msg3": "În prezent, nu există suport pentru Watchtower pentru a urmări canalele dvs. în timp ce sunteți offline.",
+      "msg4": "Sunt nechibzuit, continuă"
+    },
+    "createWalletWithPassphrase": {
+      "title": "Setați Passphrase (al 25 -lea cuvânt pentru a encripta sămânța)",
+      "invalidMessage": "Introduceți un passphrase valid",
+      "noLeadingTrailingSpaces": "Nu sunt permise locuri de conducere sau de tracțiune"
+    },
+    "language": {
+      "title": "Selecteaza limba"
+    },
+    "restoreWallet": {
+      "title": "Restaurați portofelul"
+    },
+    "menu": {
+      "enableTor": "Activați Tor",
+      "disableTor": "Dezactivați Tor",
+      "setBitcoinNode": "Setați nodul Bitcoin",
+      "createWalletWithPassphrase": "Creați portofel cu frază de acces"
+    }
+  },
+  "footerNav": {
+    "receive": "Primire",
+    "send": "Trimite"
+  },
+  "drawer": {
+    "menu": {
+      "scan": "Scanare",
+      "receive": "Primește",
+      "pasteFromClipboard": "Lipiți din clipboard",
+      "sendToLightningAddress": "Trimiteți la Adresa Lightning",
+      "contactsAndServices": "Contacte și servicii",
+      "lightningBrowser": "Lightning Browser",
+      "onChainWallet": "On-chain",
+      "lightningChannels": "Canale Lightning",
+      "keysendExperiment": "Keysend Experiment",
+      "showMore": "Avansat"
+    },
+    "madeInSweden": "Made with ⚡ in Sweden"
+  },
+  "overview": {
+    "recoverInfo": {
+      "msg1": "Recuperarea portofelului în curs",
+      "msg2": "Recuperarea portofelului a terminat",
+      "more": "Mai multe informații"
+    },
+    "sendOnChain": {
+      "title": "Bine ați venit la Blixt Wallet!",
+      "msg1": "Pentru a începe, trimiteți fonduri onchain către adresa Bitcoin din dreapta.",
+      "msg2": "Un canal va fi deschis automat pentru dvs.",
+      "msg3": "Trimite cel puțin",
+      "alert": "Adresa Bitcoin copiată în clipboard"
+    },
+    "doBackup": {
+      "msg1": "Vă mulțumim că folosiți Blixt Wallet!",
+      "msg2": "Vă recomandăm să faceți o copie de rezervă a portofelului, astfel încât să vă puteți restabili fondurile în caz de pierdere a mobilului.",
+      "backup": "Backup portofel"
+    },
+    "newChannelBeingOpened": {
+      "info": "Un nou canal este în proces de a fi deschis ...",
+      "view": "Vezi"
+    },
+    "noTransactionsYet": "Nu există încă tranzacții"
+  },
+  "help": {
+    "title": "Ajutor",
+    "msg1": "Dacă aveți probleme sau aveți feedback, puteți contacta dezvoltatorii de Blixt, depunând o problemă pe Github sau contactându -ne prin e -mail.",
+    "msg2": "De asemenea, sunteți bineveniți să vă alăturați grupului nostru public de chat Telegram.",
+    "msg3": "Deoarece Blixt Wallet este un portofel nou, avem nevoie de feedback cu privire la problemele comune pe care le -ați putea întâmpina.",
+    "telegramGroup": "Grup de Telegram"
+  },
+  "syncInfo": {
+    "syncedToChain": {
+      "title": "Sincronizarea în curs",
+      "title1": "Sincronizarea completă",
+      "msg1": "Blixt Wallet sincronizează în prezent blockchain -ul.",
+      "msg2": "Odată ce portofelul dvs. este sincronizat cu blockchain, tranzacțiile și fondurile onchain vor fi recunoscute și pot fi văzute din secțiunea Bitcoin onchain.",
+      "msg3": "Portofelul Blix este în sincronizare cu blockchain -ul.",
+      "blockHeight": {
+        "title": "Înălțimea blocului curent",
+        "msg1": "Progresul sincronizării onchain"
+      }
+    },
+    "recoveryMode": {
+      "title": "Progresul recuperării",
+      "msg1": "Recuperare completă",
+      "msg2": "Verificați canalele Lightning și secțiunea onchain"
+    },
+    "lndLog": {
+      "show": "Afișați jurnalul LND",
+      "copy": "Copiați textul jurnalului"
+    }
+  },
+  "transactionDetails": {
+    "title": "Tranzacţie",
+    "date": "Data",
+    "duration": "Timpul necesar pentru a plăti factura",
+    "note": "Notă",
+    "website": "Website",
+    "type": "Tip",
+    "lnurl": {
+      "messageFromWebsite": "Mesaj de la",
+      "urlReceivedFromWebsite": "URL a primit de la",
+      "secretMessage": "Mesaj secret"
+    },
+    "payer": "Plătitor",
+    "recipient": "Destinatar",
+    "amountInFiatTimeOfPayment": "Suma în fiat (timpul plăţii)",
+    "numberOfHops": "Numărul de salturi",
+    "remotePubkey": "Remote pubkey",
+    "paymentHash": "Hash-ul plăţii",
+    "preimage": "Preimage",
+    "status": "Stare",
+    "goBack": "Întoarce-te",
+    "button": {
+      "setNote": "Setați notă",
+      "cancelInvoice": "Anulați factura",
+      "showMap": "Arată harta"
+    },
+    "setNoteDialog": {
+      "title": "Notă",
+      "text": "Setați o notă pentru această tranzacție"
+    }
+  },
+  "web.info": {
+    "title": "Demo interactiv",
+    "pressToTry": "Apăsați pentru a încerca Blixt Wallet!"
+  },
+  "receive.receiveSetup": {
+    "layout": {
+      "title": "Primire"
+    },
+    "createInvoice": {
+      "title": "Creați factură",
+      "alert": "Înainte de a putea primi, trebuie să deschideți un canal Lightning.",
+      "lsp": {
+        "msg": "Un canal de plată de către Dunder LSP va fi deschis atunci când această factură este plătită.",
+        "msg1": "Ce-i asta?"
+      }
+    },
+    "createBlixtLspInvoice": {
+      "title": "Deschiderea canalului",
+      "msg": "Pentru a accepta o plată pentru această factură, trebuie să fie deschis un canal din rețeaua Lightning.",
+      "msg1": "Aceasta necesită o taxă unică de aproximativ",
+      "alert": "Nu a reușit să vă conectați la Dunder, vă rugăm să încercați din nou mai târziu.",
+      "proceed": "Continua"
+    },
+    "form": {
+      "amountFiat": {
+        "title": "Cantitate",
+        "change": "Schimbați unitatea fiat",
+        "dunderPlaceholder": "Cel puțin"
+      },
+      "amountBitcoin": {
+        "title": "Cantitate",
+        "change": "Schimbați unitatea Bitcoin",
+        "dunderPlaceholder": "Cel puțin"
+      },
+      "payer": {
+        "title": "Plătitor",
+        "placeholder": "Pentru contabilitate"
+      },
+      "description": {
+        "title": "Mesaj",
+        "placeholder": "Mesaj pentru plătitor"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
+      }
+    }
+  },
+  "receive.dunderLspInfo": {
+    "title": "Despre Dunder LSP",
+    "msg": "Dunder este un furnizor de servicii Lightning (LSP) care îți deschide automat canale pentru tine atunci când nu ai suficientă lichiditate de intrare.",
+    "msg1": "Acest lucru ar putea fi, de exemplu, cazul când începeți pentru prima dată să utilizați Blixt Wallet.",
+    "msg2": "Deoarece aceasta necesită o tranzacție pe lanț, se va deduce o taxă de tranzacție Bitcoin din plata primită. Plățile viitoare vor putea utiliza canalul de plată recent deschis cu rețeaua Lightning.",
+    "msg3": "Dunder e",
+    "msg4": "open-source",
+    "msg5": "software și puteți modifica furnizorul de servicii implicit în setări."
+  },
+  "receive.receiveQr": {
+    "title": "Primire",
+    "qr": {
+      "title": "Scanați acest cod QR",
+      "msg": "Expiră în {{time}}"
+    }
+  },
+  "send.sendConfirmation": {
+    "layout": {
+      "title": "Plătiți factura"
+    },
+    "form": {
+      "invoice": {
+        "title": "Factura"
+      },
+      "amount": {
+        "title": "Cantitate"
+      },
+      "recipient": {
+        "title": "Destinatar"
+      },
+      "nodeAlias": {
+        "title": "Alias nod"
+      },
+      "description": {
+        "title": "Mesaj"
+      },
+      "feeEstimate": {
+        "title": "Estimarea taxelor"
+      },
+      "outgoingChannel": {
+        "title": "Canal de ieșire"
+      }
+    }
+  },
+  "send.sendDone": {
+    "done": {
+      "title": "PLATĂ TRIMISĂ"
+    }
+  },
+  "lightningInfo.lightningInfo": {
+    "layout": {
+      "title": "Canale Lightning"
+    },
+    "balance": {
+      "title": "Sold"
+    },
+    "channel": {
+      "alias": "Alias",
+      "node": "Nod",
+      "channelId": "Channel ID",
+      "channelPoint": "Channel point",
+      "status": "Stare",
+      "statusActive": "Activ",
+      "statusInactive": "Inactiv",
+      "statusPending": "În aşteptare",
+      "statusClosing": "În închidere",
+      "statusForceClosing": "Închidere forțată",
+      "statusWaitingForClose": "Așteptând închiderea",
+      "capacity": "Capacitate",
+      "howMuchCanBeSent": "Poate trimite",
+      "howMuchCanBeReceived": "Poate primi",
+      "localReserve": "Rezerva locală",
+      "commitmentFee": "Taxa de angajament",
+      "channelType": "Tip de canal",
+      "pendingFunds": "Fonduri în așteptare",
+      "balanceInLimbo": "Soldul limbo",
+      "pendingHtlcs": "HTLCs în așteptare",
+      "maturityHeight": "Altura de maturitate",
+      "localCommitmentTxid": "TXID angajament local",
+      "remoteCommitmentTxid": "TXID angajament remote",
+      "closeChannel": "Închideți canalul",
+      "forceClosePendingChannel": "Forțați închiderea canalului în așteptare",
+      "forceCloseDelay": "Întârziere de închidere forțată",
+      "closeChannelPrompt": {
+        "title": "Închideți canalul"
+      }
+    }
+  },
+  "lightningInfo.openChannel": {
+    "layout": {
+      "title": "Deschidere canal"
+    },
+    "form": {
+      "title": "Deschidere canal",
+      "channel": {
+        "title": "URI nod",
+        "placeholder": "URI"
+      },
+      "amount": {
+        "title": "Cantitate",
+        "placeholder": "Cantitate"
+      },
+      "fee_rate": {
+        "title": "Rată de taxă"
+      }
+    },
+    "torPrompt": {
+      "title": "Activați Tor",
+      "text1": "Se pare că încercați să deschideți un canal către un nod care rulează sub un serviciu Tor.",
+      "text2": "Pentru a vă conecta, trebuie să activați Tor pentru portofelul Blixt."
+    }
+  },
+  "onchain.onChainInfo": {
+    "funds": {
+      "title": "Fonduri onchain"
+    },
+    "address": {
+      "title": "Trimiteți bitcoin onchain la această adresă",
+      "alert": "Copiat în clipboard"
+    },
+    "newAddress": {
+      "title": "Generează o nouă adresă"
+    },
+    "withdraw": {
+      "title": "Retrage monede"
+    }
+  },
+  "onchain.onChainTransactionDetails": {
+    "title": "Tranzacţie",
+    "txHash": "Id",
+    "timeStamp": "Data",
+    "amount": "Cantitate",
+    "totalFees": "Taxă",
+    "label": "Etichetă",
+    "destAddresses": "Destinaţie",
+    "numConfirmations": "Confirmări",
+    "blockHeight": "Block height",
+    "blockHash": "Block hash",
+    "rawTxHex": {
+      "title": "Raw tx hex",
+      "msg": "Apăsați pentru a copia"
+    }
+  },
+  "onchain.onChainTransactionLog": {
+    "layout": {
+      "title": "Log tranzacţie"
+    }
+  },
+  "onchain.withdraw": {
+    "layout": {
+      "title": "Retrage monede"
+    },
+    "form": {
+      "address": {
+        "title": "Adresă",
+        "placeholder": "Adresa Bitcoin"
+      },
+      "amount": {
+        "title": "Cantitate",
+        "placeholder": "Cantitate",
+        "withdrawAll": "Retrage toate fondurile",
+        "all": "Tot"
+      },
+      "feeRate": {
+        "title": "Rată de taxă",
+        "auto": "auto"
+      },
+      "withdraw": {
+        "title": "Retrage",
+        "alert": "Retragerea a reușit"
+      }
+    }
+  },
+  "LNURL.authRequest": {
+    "layout": {
+      "title": "Cerere de autentificare",
+      "msg": "Vrei să te autentifici la",
+      "success": "Autentificat la"
+    }
+  },
+  "LNURL.channelRequest": {
+    "alert": "Deschiderea canalului de intrare"
+  },
+  "LNURL.payRequest": {
+    "viewMetadata": {
+      "title": "Vizualizați metadatele",
+      "dialog": {
+        "title": "Metadate tehnice"
+      }
+    },
+    "lightningAddress": {
+      "alreadyExists": {
+        "msg": "{{lightningAddress}} este în lista dvs. de contacte"
+      },
+      "add": {
+        "title": "Adăugați la lista de contacte",
+        "msg": "Doriți să adăugați {{lightningAddress}} pe lista dvs. de contacte?"
+      }
+    },
+    "payContact": {
+      "alreadyExists": {
+        "msg": "Codul de plată pentru {{domain}} este în lista dvs. de contacte"
+      },
+      "add": {
+        "title": "Adăugați la lista de contacte",
+        "msg": "Doriți să adăugați acest cod de plată la {{domain}} pe lista dvs. de contacte?"
+      }
+    },
+    "unableToPay": "Incapabil să plătească",
+    "payerData": {
+      "commentAllowed": "Comentariu la {{target}} (max {{letters}} letters)",
+      "sendNameWithComment": "Trimite -mi numele împreună cu acest comentariu",
+      "name": {
+        "ask": "Trimite -mi numele împreună cu această plată",
+        "mandatory": "Numele tău trebuie trimis împreună cu această plată"
+      }
+    },
+    "payloadErrors": {
+      "missingDescription": "Lipsește descrierea plății"
+    },
+    "pay": {
+      "title": "Plătește",
+      "error": {
+        "mustProvideComment": "Trebuie să furnizați un comentariu dacă alegeți să includeți numele dvs. la această plată"
+      }
+    },
+    "cancel": {
+      "title": "Anulare"
+    },
+    "form": {
+      "asksYouToPay": "vă cere să plătiți",
+      "description": {
+        "title": "Descriere"
+      },
+      "amount": {
+        "title": "Cantitate",
+        "to": "către",
+        "placeholder": "Introducere sumă"
+      },
+      "alert": "Incapabil să plătească"
+    },
+    "done": {
+      "message": {
+        "title": "Mesaj de la"
+      },
+      "url": {
+        "description": "Descriere",
+        "domain": "URL a primit de la",
+        "done": {
+          "title": "Terminat"
+        },
+        "copy": {
+          "title": "Copiază în clipboard",
+          "msg": "Copiat în clipboard"
+        },
+        "open": {
+          "title": "Deschide browser"
+        }
+      },
+      "aes": {
+        "domain": "Ai un mesaj secret criptat de la",
+        "description": "Mesaj de la",
+        "secret": "Mesaj secret"
+      }
+    },
+    "aboutLightningAddress": {
+      "title": "Despre Lightning Address",
+      "msg1": "Lightning Address",
+      "msg2": "este o modalitate de a plăti o persoană sau un serviciu în rețeaua Lightning.",
+      "msg3": "Arată ca adrese de e -mail, dar în loc să trimită un e -mail către destinatar, trimiteți bani.",
+      "msg4": "Blixt Wallet are suport complet pentru trimiterea la o adresă Lightning, dar primirea",
+      "msg5": "prin intermediul unei adrese Lightning este încă în lucru."
+    }
+  },
+  "LNURL.withdrawRequest": {
+    "doRequest": {
+      "sentRequest": "A trimis cererea de retragere către {{domain}}",
+      "addToContactList": {
+        "title": "Adăugați la lista de contacte",
+        "msg": "Doriți să adăugați acest cod de retragere la {{domain}} pe lista dvs. de contacte?",
+        "note": "Cont pe {{domain}}"
+      }
+    },
+    "layout": {
+      "title": "Cerere de retragere",
+      "msg": "Mesaj de la",
+      "dialog": {
+        "msg": "Cantitate"
+      },
+      "dialog1": {
+        "minSat": "Suma de retragere min",
+        "maxSat": "Suma de retragere max",
+        "placeholder": "Cantitate"
+      }
+    }
+  },
+  "contacts.contactList": {
+    "layout": {
+      "title": "Contacte și servicii",
+      "lightningAddressAlreadyExists": "există deja în lista de contacte",
+      "nothingHereYet": "Încă nu este nimic aici ...",
+      "whyNotAdd": "De ce să nu adăugați o adresă Lightning de contact",
+      "tappingHere": "atingând aici"
+    },
+    "contact": {
+      "syncBalance": {
+        "title": "Soldul remote",
+        "error": "Operație invalidă, contactul nu are un cod de retragere LNURL"
+      },
+      "list": {
+        "pay": "Plăți la",
+        "account": "Cont pe"
+      },
+      "send": {
+        "title": "Trimite",
+        "couldNotPay": "Nu s-a putut plăti acest cod de plată LNURL",
+        "invalidResponse": "Răspunsul nu a fost un răspuns LNURL-pay (got {{response}})",
+        "invalidOperation": "Operație invalidă, contactul nu are identificator LUD-16 sau cod LNURL-pay"
+      },
+      "withdraw": {
+        "title": "Retrage",
+        "couldNotPay": "Nu s-a putut plăti acest cod de plată LNURL",
+        "invalidResponse": "Răspunsul nu a fost un răspuns LNURL-pay (got {{response}})",
+        "invalidOperation": "Operație invalidă, contactul nu are un cod de retragere LNURL"
+      },
+      "deleteContact": {
+        "title": "Ștergerea de contact",
+        "msg": "Sunteți sigur că doriți să ștergeți contactul {{contact}}?"
+      },
+      "editContactLabel": {
+        "title": "Etichetă de contact"
+      }
+    }
+  },
+  "webLN.browser": {
+    "close": "Vrei să închizi browserul?",
+    "home": "Reveniți la lista magazinelor",
+    "placeholder": "Tastați URL aici"
+  },
+  "keysend.experiment": {
+    "title": "Keysend",
+    "qr": {
+      "alert": "Copiat în clipboard"
+    },
+    "dialog": {
+      "msg1": "Bine ați venit la keysend playground",
+      "msg2": "Keysend vă permite să plătiți un alt portofel Blix (sau orice nod Lightning care acceptă keysend) fără a necesita o factură.",
+      "msg3": "Faceți clic pe cameră pentru a scana codul QR al altui portofel sau pentru a furniza o cheie publică și indicii de rută de mai jos."
+    },
+    "send": {
+      "title": "Trimite",
+      "msg": "Plată Keysend",
+      "error": {
+        "checkAmount": "Verificați suma",
+        "missingPubkey": "Pubkey lipsă"
+      },
+      "alert": "Plata realizată cu succes"
+    },
+    "form": {
+      "amount": {
+        "title": "Cantitate sat"
+      },
+      "pubkey": {
+        "title": "Public key",
+        "placeholder": "Pubkey"
+      },
+      "route": {
+        "title": "Route hints",
+        "placeholder": "Route hints"
+      },
+      "message": {
+        "title": "Mesaj",
+        "placeholder": "Introduceți un mesaj de chat aici"
+      }
+    }
+  },
+  "settings.settings": {
+    "title": "Setări",
+    "general": {
+      "title": "General",
+      "name": {
+        "title": "Nume",
+        "subtitle": "Va fi utilizat în tranzacții",
+        "dialog": {
+          "msg": "Alegeți un nume care va fi utilizat în tranzacții.\n\nNumele tău va fi văzut în facturi pentru cei care vă plătesc, precum și persoanele pe care le plătiți.",
+          "accept": "Setare nume"
+        }
+      },
+      "lang": {
+        "title": "Limba",
+        "dialog": {
+          "title": "Selecteaza limba"
+        }
+      },
+      "pushNotification": {
+        "title": "Notificări",
+        "subtitle": "Pentru tranzacții și evenimente de canal"
+      },
+      "checkClipboard": {
+        "title": "Verificați clipboard -ul pentru facturi",
+        "subtitle": "Verificați automat clipboard -ul pentru facturi"
+      },
+      "saveGeolocation": {
+        "title": "Salvați geolocalizarea tranzacției",
+        "subtitle": "Salvați local locația unei tranzacții",
+        "logGranted": "Geolocalizarea acordată",
+        "logDenied": "Permisiunea de geolocalizare refuzată"
+      },
+      "mapTheme": {
+        "title": "Setați tema hărții"
+      }
+    },
+    "wallet": {
+      "title": "Portofel",
+      "seed": {
+        "show": {
+          "title": "Arată mnemonic",
+          "subtitle": "Afișați semințe de 24 de cuvinte pentru acest portofel",
+          "dialog": {
+            "title": "Sămânța",
+            "alert": "Copiat în clipboard",
+            "copy": "Copiați sămânța"
+          }
+        },
+        "remove": {
+          "title": "Scoateți mnemonic de pe dispozitiv",
+          "subtitle": "Scoateți permanent sămânța de pe acest dispozitiv",
+          "dialog": {
+            "title": "Îndepărtați sămânța",
+            "msg": "Acest lucru va elimina permanent sămânța de pe acest dispozitiv. Faceți acest lucru numai dacă v -ați facut backup de semințe!",
+            "accept": "Ștergeți sămânța"
+          }
+        }
+      },
+      "backup": {
+        "export": {
+          "title": "Export de backup canale",
+          "alert": "Fișier scris in:"
+        },
+        "verify": {
+          "title": "Verificați backupul canalelor"
+        },
+        "googleCloud": {
+          "title": "Google Drive backup canale",
+          "subtitle": "Backup automat de canale in Google Drive",
+          "alert": "Google Drive backup activat"
+        },
+        "googleCloudForce": {
+          "title": "Declanșați manual backup Google Drive",
+          "alert": "Backup de canale in Google Drive"
+        },
+        "iCloud": {
+          "title": "iCloud backup de canale",
+          "subtitle": "Backup automat de canale in iCloud",
+          "alert": "iCloud backup"
+        },
+        "iCloudForce": {
+          "title": "Declanșați manual backup iCloud",
+          "alert": "Backup de canale in iCloud"
+        },
+        "error": "Eroare backup"
+      }
+    },
+    "security": {
+      "title": "Securitate",
+      "pincode": {
+        "title": "Login cu pincode"
+      },
+      "biometrics": {
+        "title": "Login cu",
+        "fingerprint": "amprentă",
+        "faceId": "Face ID",
+        "touchID": "Touch ID"
+      },
+      "chainSync": {
+        "title": "Sincronizarea onchain programata",
+        "subtitle": "Rulează în fundal la fiecare 2 ore",
+        "dialog": {
+          "title": "Nu se recomandă",
+          "msg": "Avertizare. Nu este recomandat să dezactivați sincronizarea lanțului programat.\n\nAsigurați-vă că sunteți la curent cu rețeaua, altfel riscați să vă pierdeți fondurile.\n\nFaceți asta numai dacă știți ce faceți."
+        }
+      },
+      "gossipSync": {
+        "title": "Sincronizați canalele LN la pornire"
+      },
+      "gossipSyncAndroid": {
+        "title": "Sincronizarea canalelor LN programata",
+        "subtitle": "Rulează la startup -ul Blixt"
+      }
+    },
+    "display": {
+      "title": "Ecran",
+      "fiatUnit": {
+        "title": "Schimbați unitatea fiat"
+      },
+      "bitcoinUnit": {
+        "title": "Schimbați unitatea Bitcoin"
+      },
+      "onchainExplorer": {
+        "title": "Onchain explorer",
+        "dialog": {
+          "title": "Schimbați on-chain explorer"
+        }
+      }
+    },
+    "bitcoinNetwork": {
+      "title": "Bitcoin Network",
+      "node": {
+        "title": "Bitcoin Node",
+        "subtitle": "Setați nodul Bitcoin (BIP157) la care să vă conectați",
+        "setDialog": {
+          "title": "Setați nod",
+          "info": "Setați un nod Bitcoin care suporta BIP157 pentru a stabili o conexiune la.",
+          "leaveBlankToSearch": "Lăsați gol pentru a lăsa Blixt Wallet să caute în rețeaua Bitcoin pentru un nod valid.",
+          "longPressToReset": "Pentru a reseta la nodul implicit ({{defaultNode}}), presează lung pe setare."
+        },
+        "restoreDialog": {
+          "title": "Restaurați nodul",
+          "msg": "Doriți să restabiliți la nodul implicit"
+        }
+      },
+      "restartDialog": {
+        "title": "Repornire necesară",
+        "msg": "Portofelul Blix trebuie repornit înainte de aplicarea noii configurații.",
+        "msg1": "Ai vrea să faci asta acum?"
+      },
+      "rpc": {
+        "title": "Set bitcoind RPC Host"
+      },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
+      "zmqRawBlock": {
+        "title": "Set bitcoind ZMQ Raw Block Host"
+      },
+      "zmqRawTx": {
+        "title": "Set bitcoind ZMQ Raw Tx Host"
+      }
+    },
+    "LN": {
+      "title": "Lightning Network",
+      "network": {
+        "title": "Afișați informații despre rețea",
+        "subtitle": ""
+      },
+      "node": {
+        "title": "Afișați datele nodului",
+        "subtitle": ""
+      },
+      "peers": {
+        "title": "Arată Lightning peers",
+        "subtitle": ""
+      },
+      "maxLNFeePercentage": {
+        "title": "Setați taxa maximă de plată",
+        "subtitle": "Proporțional cu suma",
+        "dialog": {
+          "title": "Setați procentul maxim de taxă LN"
+        },
+        "resetDialog": {
+          "title": "Doriți să restabiliți taxa maximă LN la valoarea implicită ({{defaultMaxLNFee}}%)?"
+        }
+      },
+      "autopilot": {
+        "title": "Deschidere automată de canale",
+        "subtitle": ""
+      },
+      "inbound": {
+        "title": "Servicii de canale de intrare",
+        "subtitle": "Utilizați un serviciu de canal de intrare pentru primirea plăților",
+        "dialog": {
+          "title": "Furnizor de canale de intrare",
+          "msg1": "Alegeți un furnizor de canale de intrare și apăsați Continuare.",
+          "msg2": "Browserul dvs. web va fi deschis pe site -ul furnizorului corespunzător, unde veți putea solicita un canal.",
+          "msg3": "După ce ați terminat, puteți copia codul de adresă și/sau puteți deschide linkul folosind Blixt Wallet."
+        }
+      },
+      "LSP": {
+        "title": "Set Dunder LSP Server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set Dunder Server",
+          "acept": "Set server"
+        },
+        "restoreDialog": {
+          "title": "Restaurați serverul Dunder",
+          "msg": "Ați dori să vă restabiliți la serverul Dunder implicit"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restabilire LN channel sync Server",
+          "msg": "Doriți să vă restabiliți la serverul de sincronizare a canalului LN implicit"
+        }
+      },
+      "graphSync": {
+        "title": "Așteptați sincronizarea LN Graph înainte de a plăti",
+        "subtitle": "LN Graph sincronizat duce la căi de plată optime"
+      },
+      "zeroConfPeers": {
+        "title": "Set zero conf peers",
+        "subtitle": "Adăugați pubkey -uri ale peers cu care doriți să permiteți canalele de zero conf.",
+        "setDialog": {
+          "title": "Zero conf peers",
+          "msg1": "Valori separate de virgule ale cheilor publice, pentru a permite canale de configurație zero.",
+          "msg2": "Veți avea încredere în canale de la acești peers până când nu există cel puțin o confirmare onchain"
+        }
+      }
+    },
+    "miscelaneous": {
+      "title": "Diverse",
+      "about": {
+        "title": "Despre",
+        "subtitle": ""
+      },
+      "appLog": {
+        "title": "Copiați jurnalul de aplicații în stocarea locală",
+        "subtitle": "",
+        "dialog": {
+          "alert": "Fișierul jurnal de aplicații copiat in",
+          "error": "Eroare la copierea fișierului jurnal al aplicației."
+        }
+      },
+      "lndLog": {
+        "title": "Copiați jurnalul LND în stocarea locală",
+        "dialog": {
+          "error": "Eroare la copierea fișierului jurnal LND."
+        }
+      },
+      "speedloaderLog": {
+        "title": "Copiați fișierul jurnal de sincronizare a canalului LN în stocarea locală",
+        "dialog": {
+          "error": "Eroare la copierea fișierului jurnal Speedloader."
+        }
+      },
+      "dev": {
+        "title": "Accesați Ecranul Dev",
+        "subtitle": ""
+      },
+      "expiredInvoices": {
+        "title": "Ascunde automat facturile expirate",
+        "subtitle": ""
+      },
+      "screenTransactions": {
+        "title": "Tranziții de ecran",
+        "subtitle": ""
+      },
+      "signMessage": {
+        "title": "Semnează mesajul cu cheia portofelului",
+        "subtitle": "",
+        "dialog1": {
+          "title": "Semnează mesajul"
+        },
+        "dialog2": {
+          "title": "Semnatura",
+          "alert": "Copiat în clipboard"
+        }
+      },
+      "setLndLogLevel": {
+        "title": "Setați nivelul de jurnal LND",
+        "dialog": {
+          "title": "Setați nivelul de jurnal LND",
+          "description": "Nivelul de jurnal schimbă verbositatea jurnalului LND, accesibil din setări."
+        },
+        "restoreDialog": {
+          "title": "Doriți să restabiliți nivelul de jurnal la nivelul implicit ({{defaultLndLogLevel}})?"
+        }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Activați preimagini de factură personalizate"
+      }
+    },
+    "experimental": {
+      "title": "Experimente",
+      "LSP": {
+        "title": "Activare Dunder LSP",
+        "subtitle": "Foarte experimental. Furnizor de servicii Lightning care ajută la lichiditatea de intrare"
+      },
+      "MPP": {
+        "title": "Activare plăti Multi-Path",
+        "subtitle": "Plățile pot lua până la 16 căi"
+      },
+      "tor": {
+        "title": "Activați Tor",
+        "subtitle": "",
+        "enabled": {
+          "title": "Reporniți aplicația și activați Tor",
+          "msg1": "Activarea Tor va face portofelul să se conecteze la peers lui (atât Bitcoin cât și Lightning Network Peers) prin intermediul rețelei Tor.",
+          "msg2": "De asemenea, veți putea conecta și deschide canale la noduri Lightning care utilizează servicii Tor.",
+          "msg3": "Avertisment: Blixt Wallet va vorbi în continuare cu următoarele servicii fără Tor",
+          "msg4": "Motiv: Pentru a obține tarife fiat/bitcoin",
+          "msg5": "Motiv: Pentru a obține înălțimea curentă a blocului",
+          "msg6": "Motiv: pentru backup -ul Google Drive",
+          "msg7": "Motiv: pentru noduri Lightning fiabile",
+          "msg8": "Browserul WebLN și LNURL nu vor folosi Tor."
+        },
+        "disabled": {
+          "title": "Reporniți aplicația și dezactivați Tor",
+          "msg1": "Dezactivarea Tor necesită o repornire a aplicației.",
+          "msg2": "Doresti sa continui?"
+        }
+      },
+      "onion": {
+        "title": "Afișați serviciul Tor onion",
+        "subtitle": "Pentru conectarea și deschiderea canalelor la acest portofel"
+      },
+      "keysend": {
+        "title": "Keysend Experiment",
+        "subtitle": ""
+      },
+      "invoiceExpiry": {
+        "title": "Expirare factura (secunde)",
+        "subtitle": "{{expiry}} seconde"
+      }
+    },
+    "debug": {
+      "title": "Debug",
+      "startup": {
+        "title": "Afișați notificările privind informațiile de pornire",
+        "subtitle": ""
+      },
+      "showNotifications": {
+        "title": "Afișați notificări pentru această sesiune",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "Afișați jurnalul de depanare pentru această sesiune",
+        "subtitle": ""
+      },
+      "helpCencer": {
+        "title": "Centrul de ajutor LndMobile",
+        "subtitle": ""
+      },
+      "LSP": {
+        "title": "Diagnosticați problemele Dunder",
+        "subtitle": ""
+      },
+      "lndLog": {
+        "title": "Citiți jurnalul LND",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "Citiți jurnalul de sincronizare a canalului LN",
+        "subtitle": ""
+      },
+      "keysend": {
+        "title": "Keysend Test",
+        "subtitle": ""
+      },
+      "googleDrive": {
+        "title": "Google Drive Testbed",
+        "subtitle": ""
+      },
+      "webln": {
+        "title": "WebLN",
+        "subtitle": ""
+      },
+      "config": {
+        "title": "Scrieți configurare",
+        "subtitle": ""
+      },
+      "demo": {
+        "title": "Activare Mod Demo",
+        "subtitle": "Folosit pentru promo. Reporniți aplicația pentru a reseta"
+      },
+      "rescanWallet": {
+        "title": "Rescanare portofel",
+        "subtitle": "Rescanați blockchain -ul pentru tranzacții cu portofelul"
+      },
+      "getNodeInfo": {
+        "title": "Obțineți informații despre nod"
+      },
+      "getChannelInfo": {
+        "title": "Obțineți informații despre canale"
+      },
+      "demoMode": {
+        "title": "Activare Mod Demo",
+        "subtitle": "Folosit pentru promo. Reporniți aplicația pentru a reseta"
+      },
+      "disableGraphCache": {
+        "title": "Dezactivați cache -ul grafic LND"
+      },
+      "resetMissionControl": {
+        "title": "Resetați cunoștințele de rutare a plăților"
+      },
+      "strictGraphPruning": {
+        "title": "Activare strict LN Graph pruning"
+      },
+      "bimodalPathFinding": {
+        "title": "Activare bimodal pathfinding"
+      },
+      "compactLndDatabases": {
+        "title": "Compactare baze de date LND"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Aplicați sincronizarea gossip la pornire"
+      },
+      "persistentServices": {
+        "title": "Activați aplicația persistentă",
+        "subtitle": "Aplicația rămâne activă în fundal"
+      }
+    }
+  },
+  "settings.about": {
+    "title": "Despre Blixt Wallet",
+    "msg1": "Versiune",
+    "msg2": "de către",
+    "msg3": "Open-source wallet with MIT license",
+    "msg4": "Creat folosind",
+    "msg5": "și alt uimitor software open source",
+    "msg6": "Pictograma Tor este licențiată în conformitate cu CC BY 3.0 de",
+    "msg7": "licență"
+  },
+  "settings.setPincode": {
+    "enter": "Introduceți un pincode",
+    "confirm": "Confirmați -vă pincodul"
+  },
+  "settings.removePincodeAuth": {
+    "title": "Introduceți pincode curente pentru a elimina pincode"
+  },
+  "settings.lightningPeers": {
+    "layout": {
+      "title": "Lightning Peers"
+    },
+    "alias": "Node alias",
+    "pubKey": "Node public key",
+    "address": "Node address",
+    "data": {
+      "title": "Data",
+      "bytesSent": "bytes trimisi",
+      "bytesRecv": "bytes primiți"
+    },
+    "transfer": {
+      "title": "Transfer",
+      "satSent": "sat trimisi",
+      "satRecv": "sat primiți"
+    },
+    "inbound": "Intrare",
+    "syncType": "Tip de sincronizare",
+    "errors": "Erori",
+    "disconnect": "Peer desconectat"
+  },
+  "settings.connectToLightningPeer": {
+    "layout": {
+      "title": "Conectați -vă la Peer Lightning"
+    },
+    "connect": {
+      "title": "Node URI",
+      "placeholder": "Peer URI",
+      "accept": "Conectați"
+    }
+  },
+  "settings.lightningNetworkInfo": {
+    "title": "Lightning Network Info",
+    "avgChannelSize": "Dimensiunea medie a canalului",
+    "avgOutDegree": "Grad mediu",
+    "graphDiameter": "Graph Diameter",
+    "medianChannelSizeSat": "Dimensiunea mediană a canalului",
+    "numChannels": "Numărul de canale",
+    "numNodes": "Numărul de noduri",
+    "numZombieChans": "Numărul de canale zombie",
+    "totalNetworkCapacity": "Capacitatea totală a rețelei"
+  },
+  "settings.lightningNodeInfo": {
+    "title": "Node Info",
+    "alias": "Node Alias",
+    "chain": "Chain",
+    "timestamp": "Best Header Timestamp",
+    "blockHash": "Block Hash",
+    "blockHeight": "Block Height",
+    "identityPubkey": "Identity Pubkey",
+    "channel": {
+      "title": "Numărul de canale",
+      "active": "Activ",
+      "inactive": "Inactiv",
+      "pending": "În aşteptare"
+    },
+    "numPeers": "Numărul de peers",
+    "syncedToChain": "Synced to Chain",
+    "syncedToGraph": "Synced to Graph",
+    "nodeUris": "Node URIs",
+    "version": "Lnd Version",
+    "features": "Caracteristici ale nodului"
+  },
+  "settings.torShowOnionAddress": {
+    "title": "Tor Onion Service",
+    "msg1": "Scanați acest cod QR pentru a deschide un canal în acest portofel",
+    "msg2": "Nu am putut rezolva adresa de onion"
+  },
+  "settings.toastLog": {
+    "title": "Jurnal de notificare"
+  },
+  "settings.debugLog": {
+    "title": "Jurnal de depanare"
+  },
+  "welcome.addFunds": {
+    "title": "Adaugă fonduri",
+    "msg1": "Pentru a începe să folosiți Lightning in Blixt Wallet",
+    "msg2": "Trimiteți bitcoins la adresa de mai sus"
+  },
+  "welcome.almostDone": {
+    "autopilot": {
+      "title": "Deschidere automată de canale",
+      "msg": "Deschideți canale atunci când sunt disponibile fonduri onchain"
+    },
+    "done": {
+      "title": "Aproape gata!",
+      "msg1": "Iată câteva setări de portofel pe care le puteți configura pe placul dvs.",
+      "msg2": "Când sunteți gata, apăsați continuați"
+    }
+  },
+  "welcome.confirm": {
+    "alert": {
+      "title": "Încearcă din nou",
+      "msg": "Ne pare rău, ați scris cuvintele în ordine greșită, vă rugăm să încercați din nou."
+    },
+    "seed": {
+      "title": "Confirmați sămânța"
+    }
+  },
+  "welcome.googleDriveBackup": {
+    "enable": {
+      "title": "Activare Google Drive backup",
+      "msg": "Google Drive backup activat"
+    },
+    "backup": {
+      "title": "Cloud Backup",
+      "msg": "Pentru ca fondurile dvs. off-chain să rămână în siguranță în cazul unei pierderi de dispozitiv, vă recomandăm să păstrați backupul de canale in Google Drive.",
+      "msg1": "Acest lucru va păstra o copie de rezervă criptată a canalelor dvs. care pot fi utilizate doar împreună cu semințele de portofel.",
+      "msg2": "Când sunteți gata, apăsați continuați"
+    }
+  },
+  "welcome.iCloudBackup": {
+    "enable": {
+      "title": "Activare iCloud backup",
+      "msg": "iCloud backup activat"
+    },
+    "backup": {
+      "title": "iCloud Backup",
+      "msg": "Pentru ca fondurile dvs. off-chain să rămână în siguranță în cazul unei pierderi de dispozitiv, vă recomandăm să păstrați backupul de canale in iCloud.",
+      "msg1": "Acest lucru va păstra o copie de rezervă criptată a canalelor dvs. care pot fi utilizate doar împreună cu semințele de portofel.",
+      "msg2": "Când sunteți gata, apăsați continuați"
+    }
+  },
+  "welcome.restore": {
+    "restore": {
+      "title": "Restaurați portofelul",
+      "msg": "Pentru a vă restabili portofelul, scrieți fiecare cuvânt din sămânța dvs. separată de un spațiu.",
+      "msg1": "Dacă doriți să vă restaurați canalele de rețea Lightning, trebuie să furnizați o copie de rezervă a fișierului backup.",
+      "loading": "Restaurați portofelul",
+      "passphrase": {
+        "placeholder": "Passphrase (optional)"
+      },
+      "channel": {
+        "title": "Backup canale",
+        "file": "Alegeți fișierul de rezervă al canalului pe disc",
+        "google": {
+          "title": "Restaurați prin Google Drive",
+          "alert": "Restaurarea prin Google Drive a eșuat"
+        },
+        "iCloud": {
+          "title": "Restaurați prin iCloud",
+          "alert": "Restaurarea prin iCloud a eșuat"
+        }
+      },
+      "seed": "Sămânța trebuie să fie exact 24 de cuvinte"
+    },
+    "backup": {
+      "google": "Backup via Google Drive",
+      "iCloud": "Backup via iCloud"
+    }
+  },
+  "welcome.seed": {
+    "title": "Bine ați venit la Blixt Wallet!",
+    "msg": "Aceasta este backup-ul de sămânță",
+    "msg1": "Scrieți -l pe o bucată de hârtie și depozitați -l într -un loc sigur.",
+    "msg2": "Dacă pierdeți accesul la portofel",
+    "msg3": "este posibil să vă puteți recupera fondurile folosind semințele de rezervă.",
+    "msg4": "Standardul de semințe utilizat este Aezeed.",
+    "button": "Am scris -o"
+  }
+}
