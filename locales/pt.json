@@ -755,9 +755,6 @@
       },
       "zmqRawTx": {
         "title": "Definir host bitcoind ZMQ Raw Tx"
-      },
-      "p2tr": {
-        "title": "Habilitar recebimento on-chain via Taproot (P2TR)"
       }
     },
     "LN": {
