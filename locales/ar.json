@@ -7,7 +7,8 @@
       "amount": "المبلغ",
       "fee": "الرسوم",
       "search": "بحث",
-      "viewInBlockExplorer": "عرض في مستكشف الكتل"
+      "viewInBlockExplorer": "عرض في مستكشف الكتل",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "موافق",
@@ -252,6 +253,9 @@
       },
       "feeEstimate": {
         "title": "تقدير الرسوم"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -293,6 +297,7 @@
       "remoteCommitmentTxid": "معرّف TXID البعيد للالتزام",
       "closeChannel": "إغلاق القناة",
       "forceClosePendingChannel": "إغلاق قناة معلقة بالقوة",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "إغلاق القناة"
       }
@@ -739,14 +744,17 @@
       "rpc": {
         "title": "ضبط مضيف bitcoind RPC"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "ضبط مضيف bitcoind ZMQ للكتل الخام"
       },
       "zmqRawTx": {
         "title": "ضبط مضيف bitcoind ZMQ للمعاملات الخام"
-      },
-      "p2tr": {
-        "title": "تمكين الاستقبال على السلسلة عبر Taproot (P2TR)"
       }
     },
     "LN": {
@@ -797,6 +805,17 @@
         "restoreDialog": {
           "title": "هل ترغب في استعادة خادم Dunder الافتراضي؟",
           "msg": "هل ترغب في الاستعادة إلى خادم Dunder الافتراضي"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
         }
       },
       "graphSync": {
@@ -1002,7 +1021,8 @@
         "title": "فرض مزامنة القيل والقال عند بدء التشغيل"
       },
       "persistentServices": {
-        "title": "تمكين LND وTor المستمرين (إذا تم تمكينهما)"
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
