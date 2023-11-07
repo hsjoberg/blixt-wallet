@@ -59,7 +59,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
   }, [navigation]);
 
   const onGeneratePress = async () => await getAddress({ forceNew: true });
-  const onGenerateP2SHPress = async () => await getAddress({ forceNew: true, p2sh: true });
+  const onGenerateP2WPKHPress = async () => await getAddress({ forceNew: true, p2wkh: true });
 
   const onWithdrawPress = () => navigation.navigate("Withdraw");
 
@@ -134,7 +134,7 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
             disabled={!rpcReady}
             style={style.button}
             onPress={onGeneratePress}
-            onLongPress={() => onGenerateP2SHPress()}
+            onLongPress={() => onGenerateP2WPKHPress()}
           >
             <Text>{t("newAddress.title")}</Text>
           </Button>

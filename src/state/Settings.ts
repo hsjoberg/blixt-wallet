@@ -78,7 +78,6 @@ export interface ISettingsModel {
   changeLndNoGraphCache: Thunk<ISettingsModel, boolean>;
   changeInvoiceExpiry: Thunk<ISettingsModel, number>;
   changeRescanWallet: Thunk<ISettingsModel, boolean>;
-  changeReceiveViaP2TR: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeStrictGraphPruningEnabled: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeLndPathfindingAlgorithm: Thunk<ISettingsModel, routerrpcEstimator, any, IStoreModel>;
   changeMaxLNFeePercentage: Thunk<ISettingsModel, number>;
@@ -124,7 +123,6 @@ export interface ISettingsModel {
   setLndNoGraphCache: Action<ISettingsModel, boolean>;
   setInvoiceExpiry: Action<ISettingsModel, number>;
   setRescanWallet: Action<ISettingsModel, boolean>;
-  setReceiveViaP2TR: Action<ISettingsModel, boolean>;
   setStrictGraphPruningEnabled: Action<ISettingsModel, boolean>;
   setLndPathfindingAlgorithm: Action<ISettingsModel, routerrpcEstimator>;
   setMaxLNFeePercentage: Action<ISettingsModel, number>;
@@ -169,7 +167,6 @@ export interface ISettingsModel {
   lndNoGraphCache: boolean;
   invoiceExpiry: number;
   rescanWallet: boolean;
-  receiveViaP2TR: boolean;
   strictGraphPruningEnabled: boolean;
   lndPathfindingAlgorithm: routerrpcEstimator;
   maxLNFeePercentage: number;
@@ -243,7 +240,6 @@ export const settings: ISettingsModel = {
       (await getItemObject(StorageItem.invoiceExpiry)) ?? DEFAULT_INVOICE_EXPIRY,
     );
     actions.setRescanWallet(await getRescanWallet());
-    actions.setReceiveViaP2TR((await getItemObject(StorageItem.receiveViaP2TR)) ?? false);
     actions.setStrictGraphPruningEnabled(
       (await getItemObject(StorageItem.strictGraphPruningEnabled)) ?? false,
     );
@@ -447,12 +443,6 @@ export const settings: ISettingsModel = {
     actions.setRescanWallet(payload);
   }),
 
-  changeReceiveViaP2TR: thunk(async (actions, payload, { getStoreActions }) => {
-    await setItemObject(StorageItem.receiveViaP2TR, payload);
-    actions.setReceiveViaP2TR(payload);
-    await getStoreActions().onChain.getAddress({});
-  }),
-
   changeStrictGraphPruningEnabled: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.strictGraphPruningEnabled, payload);
     actions.setStrictGraphPruningEnabled(payload);
@@ -605,9 +595,6 @@ export const settings: ISettingsModel = {
   setRescanWallet: action((state, payload) => {
     state.rescanWallet = payload;
   }),
-  setReceiveViaP2TR: action((state, payload) => {
-    state.receiveViaP2TR = payload;
-  }),
   setStrictGraphPruningEnabled: action((state, payload) => {
     state.strictGraphPruningEnabled = payload;
   }),
@@ -673,7 +660,6 @@ export const settings: ISettingsModel = {
   lndNoGraphCache: false,
   invoiceExpiry: DEFAULT_INVOICE_EXPIRY,
   rescanWallet: false,
-  receiveViaP2TR: false,
   strictGraphPruningEnabled: false,
   lndPathfindingAlgorithm: DEFAULT_PATHFINDING_ALGORITHM,
   maxLNFeePercentage: DEFAULT_MAX_LN_FEE_PERCENTAGE,
