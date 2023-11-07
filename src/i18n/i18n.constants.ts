@@ -88,6 +88,10 @@ export const languages: ILanguages = {
     id: "es",
     name: "Español",
   },
+  cs: {
+    id: "cs",
+    name: "Čeština",
+  },
   da: {
     id: "da",
     name: "Dansk",

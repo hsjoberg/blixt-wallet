@@ -5,6 +5,7 @@ import { getItemObject, StorageItem } from "../storage/app";
 
 import en from "./en";
 import es from "./es";
+import cs from "./cs";
 import da from "./da";
 import de from "./de";
 import hi from "./hi";
@@ -39,6 +40,7 @@ const createI18n = (language: string): i18nInstance => {
     resources: {
       en,
       es,
+      cs,
       da,
       de,
       hi,
