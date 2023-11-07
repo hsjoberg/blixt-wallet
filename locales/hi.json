@@ -7,7 +7,8 @@
       "amount": "मात्रा",
       "fee": "शुल्क",
       "search": "खोज",
-      "viewInBlockExplorer": "ब्लॉक एक्सप्लोरर में देखें"
+      "viewInBlockExplorer": "ब्लॉक एक्सप्लोरर में देखें",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "ठीक है",
@@ -208,6 +209,9 @@
       "description": {
         "title": "संदेश",
         "placeholder": "भुगतानकर्ता को संदेश"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -249,6 +253,9 @@
       },
       "feeEstimate": {
         "title": "शुल्क अनुमान"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -290,6 +297,7 @@
       "remoteCommitmentTxid": "दूरस्थ प्रतिबद्धता  TXID",
       "closeChannel": "चैनल बंद करें",
       "forceClosePendingChannel": "लंबित चैनल को बलपूर्वक बंद करें",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "चैनल बंद करें"
       }
@@ -736,14 +744,17 @@
       "rpc": {
         "title": "बिटकॉइन आरपीसी होस्ट सेट करें"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "बिटकॉइन ZMQ रॉ ब्लॉक होस्ट सेट करें"
       },
       "zmqRawTx": {
         "title": "बिटकॉइन ZMQ रॉ टीएक्स होस्ट सेट करें"
-      },
-      "p2tr": {
-        "title": "Taproot (P2TR) के माध्यम से ऑन-चेन प्राप्त करना सक्षम करें"
       }
     },
     "LN": {
@@ -794,6 +805,17 @@
         "restoreDialog": {
           "title": "डंडर सर्वर को पुनर्स्थापित करें",
           "msg": "क्या आप डिफ़ॉल्ट डंडर सर्वर को पुनर्स्थापित करना चाहेंगे?"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
         }
       },
       "graphSync": {
@@ -868,6 +890,9 @@
         "restoreDialog": {
           "title": "क्या आप एलएनडी लॉग स्तर को डिफ़ॉल्ट स्तर ({{defaultLndLogLevel}}) पर पुनर्स्थापित करना चाहेंगे?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Enable custom invoice preimages"
       }
     },
     "experimental": {
@@ -996,7 +1021,8 @@
         "title": "स्टार्टअप पर गपशप सिंक लागू करें"
       },
       "persistentServices": {
-        "title": "लगातार एलएनडी और टोर सक्षम करें (यदि सक्षम हो)"
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
