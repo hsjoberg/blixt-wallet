@@ -7,7 +7,8 @@
       "amount": "Beløb",
       "fee": "Gebyr",
       "search": "Søg",
-      "viewInBlockExplorer": "Vis i blokudforsker"
+      "viewInBlockExplorer": "Vis i blokudforsker",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "Ok",
@@ -208,6 +209,9 @@
       "description": {
         "title": "Besked",
         "placeholder": "Besked til betaler"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -249,6 +253,9 @@
       },
       "feeEstimate": {
         "title": "Gebyrestimat"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -290,6 +297,7 @@
       "remoteCommitmentTxid": "Fjern forpligtelses-TXID",
       "closeChannel": "Luk kanal",
       "forceClosePendingChannel": "Tvungen lukning af afventende kanal",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Luk kanal"
       }
@@ -736,14 +744,17 @@
       "rpc": {
         "title": "Indstil bitcoind RPC Vært"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "Indstil bitcoind ZMQ Rå Blok Vært"
       },
       "zmqRawTx": {
         "title": "Indstil bitcoind ZMQ Rå Transaktion Vært"
-      },
-      "p2tr": {
-        "title": "Aktivér modtagelse on-chain via Taproot (P2TR)"
       }
     },
     "LN": {
@@ -794,6 +805,17 @@
         "restoreDialog": {
           "title": "Gendan Dunder Server",
           "msg": "Ønsker du at gendanne til standard Dunder-serveren?"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
         }
       },
       "graphSync": {
@@ -868,6 +890,9 @@
         "restoreDialog": {
           "title": "Vil du gendanne lnd-logniveauet til standardniveauet ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Enable custom invoice preimages"
       }
     },
     "experimental": {
@@ -996,7 +1021,8 @@
         "title": "Håndhæv gossip-synkronisering ved opstart"
       },
       "persistentServices": {
-        "title": "Aktivér vedvarende LND og Tor (hvis aktiveret)"
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
