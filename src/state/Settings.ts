@@ -198,7 +198,7 @@ export const settings: ISettingsModel = {
       (await getItemObject(StorageItem.scheduledSyncEnabled)) || false,
     );
     actions.setScheduledGossipSyncEnabled(
-      (await getItemObject(StorageItem.scheduledGossipSyncEnabled)) || false,
+      (await getItemObject(StorageItem.scheduledGossipSyncEnabled)) || true,
     );
     actions.setDebugShowStartupInfo(
       (await getItemObject(StorageItem.debugShowStartupInfo)) || false,
@@ -634,7 +634,7 @@ export const settings: ISettingsModel = {
   pushNotificationsEnabled: false,
   clipboardInvoiceCheckEnabled: false,
   scheduledSyncEnabled: false,
-  scheduledGossipSyncEnabled: false,
+  scheduledGossipSyncEnabled: true,
   debugShowStartupInfo: false,
   googleDriveBackupEnabled: false,
   preferFiat: false,
