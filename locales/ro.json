@@ -755,9 +755,6 @@
       },
       "zmqRawTx": {
         "title": "Set bitcoind ZMQ Raw Tx Host"
-      },
-      "p2tr": {
-        "title": "Activați primirea onchain prin taproot (P2TR)"
       }
     },
     "LN": {
