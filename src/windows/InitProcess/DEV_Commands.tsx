@@ -583,23 +583,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>LndMobileTools.tailLog</Text>
           </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log(await NativeModules.LndMobile.DEBUG_crash());
-            }}
-          >
-            <Text style={styles.buttonText}>NativeModules.LndMobile.DEBUG_crash (Android)</Text>
-          </Button>
-          ∂<Text style={{ width: "100%" }}>iOS LndMobile:</Text>
-          <Button
-            small
-            onPress={async () => {
-              console.log(await NativeModules.LndMobileTools.getAppFolderPath());
-            }}
-          >
-            <Text style={styles.buttonText}>NativeModules.LndMobileTools.getAppFolderPath()</Text>
-          </Button>
+
           <Button
             small
             onPress={async () => {
