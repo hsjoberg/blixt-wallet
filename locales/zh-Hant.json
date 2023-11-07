@@ -7,7 +7,8 @@
       "amount": "金額",
       "fee": "費用",
       "search": "搜索",
-      "viewInBlockExplorer": "在區塊瀏覽器中查看"
+      "viewInBlockExplorer": "在區塊瀏覽器中查看",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "好的",
@@ -208,6 +209,9 @@
       "description": {
         "title": "消息",
         "placeholder": "給付款方的消息"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -249,6 +253,9 @@
       },
       "feeEstimate": {
         "title": "費用估算"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -290,6 +297,7 @@
       "remoteCommitmentTxid": "遠程承諾 TXID",
       "closeChannel": "關閉通道",
       "forceClosePendingChannel": "強制關閉待定通道",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "關閉通道"
       }
@@ -736,14 +744,17 @@
       "rpc": {
         "title": "設置 bitcoind RPC 主機"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "設置 bitcoind ZMQ Raw Block 主機"
       },
       "zmqRawTx": {
         "title": "設置 bitcoind ZMQ Raw Tx 主機"
-      },
-      "p2tr": {
-        "title": "啟用通過 Taproot (P2TR) 進行鏈上接收"
       }
     },
     "LN": {
@@ -794,6 +805,17 @@
         "restoreDialog": {
           "title": "恢復 Dunder 服務器",
           "msg": "你是否想要恢復到默認的 Dunder 服務器？"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
         }
       },
       "graphSync": {
@@ -868,6 +890,9 @@
         "restoreDialog": {
           "title": "你是否想將 lnd 日誌級別恢復到默認級別 ({{defaultLndLogLevel}})？"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Enable custom invoice preimages"
       }
     },
     "experimental": {
@@ -996,7 +1021,8 @@
         "title": "在啟動時強制執行八卦同步"
       },
       "persistentServices": {
-        "title": "啟用持久性 LND 和 Tor（如果啟用）"
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
