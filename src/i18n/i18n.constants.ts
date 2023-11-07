@@ -152,6 +152,10 @@ export const languages: ILanguages = {
     id: "sv",
     name: "Svenska",
   },
+  ro: {
+    id: "ro",
+    name: "Română",
+  },
   sw: {
     id: "sw",
     name: "Swahili",

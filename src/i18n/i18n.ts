@@ -18,6 +18,7 @@ import ko from "./ko";
 import nl from "./nl";
 import no from "./no";
 import tlh from "./tlh";
+import ro from "./ro";
 import sv from "./sv";
 import sw from "./sw";
 import swKE from "./sw_KE";
@@ -51,6 +52,7 @@ const createI18n = (language: string): i18nInstance => {
       nl,
       no,
       tlh,
+      ro,
       sv,
       sw,
       swKE,
