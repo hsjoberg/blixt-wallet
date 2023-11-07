@@ -7,7 +7,8 @@
       "amount": "Bedrag",
       "fee": "Vergoeding",
       "search": "Zoeken",
-      "viewInBlockExplorer": "Bekijken in block explorer"
+      "viewInBlockExplorer": "Bekijken in block explorer",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "Ok",
@@ -46,6 +47,11 @@
       "msg3": "Er is momenteel geen WatchTower-ondersteuning om je kanalen te bewaken terwijl je offline bent.",
       "msg4": "Ik ben roekeloos, ga verder"
     },
+    "createWalletWithPassphrase": {
+      "title": "Wachtwoordzin instellen (25e woord om het zaad te coderen)",
+      "invalidMessage": "Voer een geldig wachtwoord in",
+      "noLeadingTrailingSpaces": "Voorloop- of volgspaties zijn niet toegestaan"
+    },
     "language": {
       "title": "Selecteer taal"
     },
@@ -55,7 +61,8 @@
     "menu": {
       "enableTor": "Tor Inschakelen",
       "disableTor": "Tor Uitschakelen",
-      "setBitcoinNode": "Bitcoin node instellen"
+      "setBitcoinNode": "Bitcoin node instellen",
+      "createWalletWithPassphrase": "Portemonnee maken met wachtwoordzin"
     }
   },
   "footerNav": {
@@ -202,6 +209,9 @@
       "description": {
         "title": "Bericht",
         "placeholder": "Bericht aan betaler"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -240,6 +250,12 @@
       },
       "description": {
         "title": "Bericht"
+      },
+      "feeEstimate": {
+        "title": "Kosten schatting"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -259,6 +275,7 @@
       "alias": "Alias",
       "node": "Node",
       "channelId": "Kanaal ID",
+      "channelPoint": "Channel point",
       "status": "Status",
       "statusActive": "Actief",
       "statusInactive": "Niet actief",
@@ -271,6 +288,7 @@
       "howMuchCanBeReceived": "Kan ontvangen",
       "localReserve": "Lokale reserve",
       "commitmentFee": "Vastleggingsvergoeding",
+      "channelType": "Channel type",
       "pendingFunds": "Fondsen in behandeling",
       "balanceInLimbo": "Saldo in limbo",
       "pendingHtlcs": "HTLCs in behandeling",
@@ -279,6 +297,7 @@
       "remoteCommitmentTxid": "Vastlegging TXID tegenpartij",
       "closeChannel": "Kanaal sluiten",
       "forceClosePendingChannel": "Sluit kanaal in afwachting af",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Kanaal sluiten"
       }
@@ -677,6 +696,13 @@
           "title": "Niet aanbevolen",
           "msg": "Waarschuwing. Het wordt niet aanbevolen om geplande blockchainsynchronisatie uit te schakelen.\n\nZorg ervoor dat je in-sync blijft met het netwerk, anders loop je het risico jouw geld te verliezen.\n\nDoe dit alleen als je weet wat je doet."
         }
+      },
+      "gossipSync": {
+        "title": "Synchroniseer LN-kanalen bij opstarten"
+      },
+      "gossipSyncAndroid": {
+        "title": "Geplande LN-kanaalsynchronisatie",
+        "subtitle": "Runs at Blixt startup"
       }
     },
     "display": {
@@ -718,14 +744,17 @@
       "rpc": {
         "title": "Bitcoind RPC Host instellen"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "Bitcoind ZMQ Raw Block Host instellen"
       },
       "zmqRawTx": {
         "title": "Bitcoind ZMQ Raw Tx Host instellen"
-      },
-      "p2tr": {
-        "title": "On-chain via Taproot (P2TR) ontvangen inschakelen"
       }
     },
     "LN": {
@@ -778,9 +807,29 @@
           "msg": "Wilt je de standaard Dunder-server herstellen"
         }
       },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
       "graphSync": {
         "title": "Wacht op grafieksynchronisatie voordat je betaalt",
         "subtitle": "Gesynchroniseerde grafiek leidt tot optimale betalingsroutes"
+      },
+      "zeroConfPeers": {
+        "title": "Stel \"zero conf\" peers in",
+        "subtitle": "Voeg pubkeys toe van peers waarvan je \"zero conf\"-kanalen wilt toestaan",
+        "setDialog": {
+          "title": "Zero conf peers",
+          "msg1": "Door komma's gescheiden waarden van openbare sleutels, om \"zero conf\"-kanalen van toe te staan.",
+          "msg2": "U vertrouwt kanalen van deze partners totdat er ten minste één kettingbevestiging is"
+        }
       }
     },
     "miscelaneous": {
@@ -799,10 +848,14 @@
       },
       "lndLog": {
         "title": "Kopieer LND log naar lokale opslag",
-        "subtitle": "Bereikt vanaf /sd-kaart/Blixt Wallet",
         "dialog": {
-          "alert": "LND logbestand gekopieerd",
           "error": "Fout bij het kopiëren LND log file."
+        }
+      },
+      "speedloaderLog": {
+        "title": "Copy LN channel sync log file to local storage",
+        "dialog": {
+          "error": "Error copying speedloader log file."
         }
       },
       "dev": {
@@ -837,6 +890,9 @@
         "restoreDialog": {
           "title": "Wilt u het logniveau herstellen naar het standaardniveau ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Enable custom invoice preimages"
       }
     },
     "experimental": {
@@ -888,6 +944,14 @@
         "title": "Opstartinfo meldingen weergeven",
         "subtitle": ""
       },
+      "showNotifications": {
+        "title": "Toon meldingen voor deze sessie",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "Show debug log for this session",
+        "subtitle": ""
+      },
       "helpCencer": {
         "title": "LndMobile-helpcentrum",
         "subtitle": ""
@@ -898,6 +962,10 @@
       },
       "lndLog": {
         "title": "Lees LND-log",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "Read LN channel sync log",
         "subtitle": ""
       },
       "keysend": {
@@ -945,6 +1013,16 @@
       },
       "bimodalPathFinding": {
         "title": "Schakel bimodale padvinding in"
+      },
+      "compactLndDatabases": {
+        "title": "Verdichten lnd databases"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Dwing \"gossip\" -synchronisatie af bij opstarten"
+      },
+      "persistentServices": {
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
@@ -1033,6 +1111,12 @@
     "title": "Tor Onion Diensten",
     "msg1": "Scan deze QR-code om een kanaal voor deze wallet te openen",
     "msg2": "Kan onion-adres niet vinden"
+  },
+  "settings.toastLog": {
+    "title": "Meldingslogboek"
+  },
+  "settings.debugLog": {
+    "title": "Debug log"
   },
   "welcome.addFunds": {
     "title": "Fondsen toevoegen",
