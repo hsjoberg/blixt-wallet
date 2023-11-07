@@ -7,7 +7,8 @@
       "amount": "금액",
       "fee": "수수료",
       "search": "검색",
-      "viewInBlockExplorer": "블록 익스플로러에서 보기"
+      "viewInBlockExplorer": "블록 익스플로러에서 보기",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "확인",
@@ -252,6 +253,9 @@
       },
       "feeEstimate": {
         "title": "수수료 예상"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -293,6 +297,7 @@
       "remoteCommitmentTxid": "원격 커밋 TXID",
       "closeChannel": "채널 닫기",
       "forceClosePendingChannel": "강제 닫기 대기 중인 채널",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "채널 닫기"
       }
@@ -739,14 +744,17 @@
       "rpc": {
         "title": "bitcoind RPC 호스트 설정"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "bitcoind ZMQ Raw Block 호스트 설정"
       },
       "zmqRawTx": {
         "title": "bitcoind ZMQ Raw Tx 호스트 설정"
-      },
-      "p2tr": {
-        "title": "Taproot (P2TR)를 통한 온체인 수신 활성화"
       }
     },
     "LN": {
@@ -797,6 +805,17 @@
         "restoreDialog": {
           "title": "Dunder 서버 복원",
           "msg": "기본 Dunder 서버로 복원하시겠습니까?"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
         }
       },
       "graphSync": {
@@ -1002,7 +1021,8 @@
         "title": "시작 시 gossip 동기화 강제"
       },
       "persistentServices": {
-        "title": "영구적으로 LND 및 Tor 활성화 (활성화된 경우)"
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
