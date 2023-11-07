@@ -7,7 +7,8 @@
       "amount": "金額",
       "fee": "手数料",
       "search": "検索",
-      "viewInBlockExplorer": "ブロックエクスプローラで表示"
+      "viewInBlockExplorer": "ブロックエクスプローラで表示",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "わかった",
@@ -252,6 +253,9 @@
       },
       "feeEstimate": {
         "title": "手数料見積り"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -293,6 +297,7 @@
       "remoteCommitmentTxid": "リモートコミットメントTXID",
       "closeChannel": "チャネルをクローズ",
       "forceClosePendingChannel": "強制クローズ保留チャネル",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "チャネルをクローズ"
       }
@@ -739,14 +744,17 @@
       "rpc": {
         "title": "bitcoind RPCホストの設定"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "bitcoind ZMQ Raw Blockホストの設定"
       },
       "zmqRawTx": {
         "title": "bitcoind ZMQ Raw Txホストの設定"
-      },
-      "p2tr": {
-        "title": "Taproot（P2TR）経由でオンチェーン受信を有効にする"
       }
     },
     "LN": {
@@ -797,6 +805,17 @@
         "restoreDialog": {
           "title": "ダンダーサーバを復元します",
           "msg": "ダンダーサーバをデフォルトの状態に復元しますか？"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
         }
       },
       "graphSync": {
@@ -1002,7 +1021,8 @@
         "title": "起動時にゴシップ同期を強制する"
       },
       "persistentServices": {
-        "title": "持続的なLNDおよびTorを有効にする（有効な場合）"
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
