@@ -7,7 +7,8 @@
       "amount": "'Antu'",
       "fee": "Ngeb",
       "search": "SoQ",
-      "viewInBlockExplorer": "qorDu'Daq"
+      "viewInBlockExplorer": "qorDu'Daq",
+      "blocks": "{{numBlocks}} bot"
     },
     "buttons": {
       "ok": "lu'",
@@ -296,6 +297,7 @@
       "remoteCommitmentTxid": "yIpoSmoH TXID",
       "closeChannel": "mIghchoH",
       "forceClosePendingChannel": "tlha'qo' DaghajtaHvIS",
+      "forceCloseDelay": "'e' vIchaw'",
       "closeChannelPrompt": {
         "title": "mIghchoH"
       }
@@ -742,14 +744,17 @@
       "rpc": {
         "title": "meH HoD"
       },
+      "rpcuser": {
+        "title": "cha'DIch RPC"
+      },
+      "rpcpass": {
+        "title": "qIpyach Sep lutu'rIpchaj RPC"
+      },
       "zmqRawBlock": {
         "title": "yo' ZMQ Raw QIjwI'"
       },
       "zmqRawTx": {
         "title": "yo' ZMQ Raw Tx QIjwI'"
-      },
-      "p2tr": {
-        "title": "Datejpu'DI' 'enqIyDu Taproot (P2TR)"
       }
     },
     "LN": {
@@ -800,6 +805,17 @@
         "restoreDialog": {
           "title": "jab Dunder wI'",
           "msg": "qo' Dache'chugh DanoH Dunder chugh"
+        }
+      },
+      "speedloaderServer": {
+        "title": "bIHvaD toy'wI''a'",
+        "subtitle": "",
+        "setDialog": {
+          "title": "bIHvaD toy'wI''a'"
+        },
+        "restoreDialog": {
+          "title": "qutluSHa'ghach",
+          "msg": "qo' Hoch Dalo'chugh yIn danob"
         }
       },
       "graphSync": {
@@ -1005,7 +1021,8 @@
         "title": "pa' \"gossip\" 'entep"
       },
       "persistentServices": {
-        "title": "Qel yIchu' LND Tor (Hub)"
+        "title": "tu'HIvmeH chu'",
+        "subtitle": "DebDaq che'wI'"
       }
     }
   },
