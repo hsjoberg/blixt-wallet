@@ -7,7 +7,8 @@
       "amount": "مقدار",
       "fee": "کارمزد",
       "search": "جستجو",
-      "viewInBlockExplorer": "مشاهده در اکسپلور "
+      "viewInBlockExplorer": "مشاهده در اکسپلور ",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "پذیرش",
@@ -252,6 +253,9 @@
       },
       "feeEstimate": {
         "title": "برآورد کارمزد"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -293,6 +297,7 @@
       "remoteCommitmentTxid": "شناسه‌ی تراکنش پیمان سوی دیگر",
       "closeChannel": "بستن کانال",
       "forceClosePendingChannel": "یک طرفه بستن کانال در انتظار",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "بستن کانال"
       }
@@ -739,14 +744,17 @@
       "rpc": {
         "title": "پیکربندی میزبان آرپی‌سی بیت‌کوین‌دی"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "پیکربندی میزبان بلوک خام ZMQ بیت‌کوین‌دی"
       },
       "zmqRawTx": {
         "title": "پیکربندی میزبان تراکنش خام ZMQ بیت‌کوین‌دی"
-      },
-      "p2tr": {
-        "title": "فعال‌سازی دریافت روی زنجیره با تپروت (P2TR) "
       }
     },
     "LN": {
@@ -797,6 +805,17 @@
         "restoreDialog": {
           "title": "بازیابی سرور داندر",
           "msg": "آیا می‌خواهید سرور داندر پیشفرض بازیابی شود"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
         }
       },
       "graphSync": {
@@ -1002,7 +1021,8 @@
         "title": "وادارسازی به همگام‌سازی سخن‌چین در آغاز برنامه"
       },
       "persistentServices": {
-        "title": "فعال کردن ال‌ان‌دی پایدار و تور (اگر گزینه‌اش فعال شده باشد)"
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
