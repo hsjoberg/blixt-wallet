@@ -7,7 +7,8 @@
       "amount": "Määrä",
       "fee": "Palkkio",
       "search": "Etsi",
-      "viewInBlockExplorer": "Näytä lohko-selaimessa"
+      "viewInBlockExplorer": "Näytä lohko-selaimessa",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "Ok",
@@ -252,6 +253,9 @@
       },
       "feeEstimate": {
         "title": "Maksuarvion mukaan"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -293,6 +297,7 @@
       "remoteCommitmentTxid": "Etäinen sitoutumisen TXID",
       "closeChannel": "Sulje kanava",
       "forceClosePendingChannel": "Väkisin sulje odottava kanava",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Sulje kanava"
       }
@@ -739,14 +744,17 @@
       "rpc": {
         "title": "Aseta bitcoindin RPC-isäntä"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "Aseta bitcoindin ZMQ Raw Block -isäntä"
       },
       "zmqRawTx": {
         "title": "Aseta bitcoindin ZMQ Raw Tx -isäntä"
-      },
-      "p2tr": {
-        "title": "Ota käyttöön vastaanotto ketjussa Taprootin kautta (P2TR)"
       }
     },
     "LN": {
@@ -797,6 +805,17 @@
         "restoreDialog": {
           "title": "Palauta Dunder-palvelin",
           "msg": "Haluatko palauttaa oletusarvoiseen Dunder-palvelimeen"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
         }
       },
       "graphSync": {
@@ -1002,7 +1021,8 @@
         "title": "Pakota juoruksen synkronointi käynnistyksen yhteydessä"
       },
       "persistentServices": {
-        "title": "Ota käyttöön pysyvät LND- ja Tor-palvelut (jos käytössä)"
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
