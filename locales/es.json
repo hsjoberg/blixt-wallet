@@ -755,9 +755,6 @@
       },
       "zmqRawTx": {
         "title": "Establecer servidor de bitcoind ZMQ Raw Tx"
-      },
-      "p2tr": {
-        "title": "Habilita la recepción en On-chain a través de Taproot (P2TR)"
       }
     },
     "LN": {
