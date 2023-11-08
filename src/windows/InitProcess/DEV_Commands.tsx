@@ -18,9 +18,11 @@ import {
   channelAcceptor,
   channelAcceptorResponse,
   closeChannel,
+  closedChannels,
   decodeChannelAcceptRequest,
   listChannels,
   openChannel,
+  pendingChannels,
 } from "../../lndmobile/channel";
 import {
   addInvoice,
@@ -28,7 +30,11 @@ import {
   connectPeer,
   decodePayReq,
   getInfo,
+  getNetworkInfo,
   getNodeInfo,
+  listInvoices,
+  listPeers,
+  listUnspent,
   queryMissionControl,
   queryRoutes,
   xImportMissionControl,
@@ -43,7 +49,11 @@ import { genSeed, initWallet, signMessage } from "../../lndmobile/wallet";
 import { getPin, getWalletPassword } from "../../storage/keystore";
 import { lnrpc, routerrpc } from "../../../proto/lightning";
 import { modifyStatus, queryScores, status } from "../../lndmobile/autopilot";
-import { sendCoins } from "../../lndmobile/onchain";
+import {
+  newAddress,
+  sendCoins,
+  getTransactions as getTransactionsOnchain,
+} from "../../lndmobile/onchain";
 import { useStoreActions, useStoreState } from "../../state/store";
 
 import { Alert } from "../../utils/alert";
