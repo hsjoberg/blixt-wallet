@@ -1221,7 +1221,15 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           {[
             ["getInfo", getInfo],
             ["genSeed", genSeed],
-            // ... other commands
+            ["newAddress", newAddress],
+            ["pendingChannels", pendingChannels],
+            ["listChannels", listChannels],
+            ["listPeers", listPeers],
+            ["listUnspent", listUnspent],
+            ["listInvoices", listInvoices],
+            ["getNetworkInfo", getNetworkInfo],
+            ["getTransactions", getTransactionsOnchain],
+            ["closedChannels", closedChannels],
           ].map(([name, f], i) => {
             return (
               <Button
