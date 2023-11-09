@@ -34,13 +34,8 @@ export default ({ navigation }: IOpenChannelProps) => {
   const [withdrawAll, setWithdrawAll] = useState(false);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
-  const {
-    dollarValue,
-    bitcoinValue,
-    satoshiValue,
-    onChangeFiatInput,
-    onChangeBitcoinInput,
-  } = useBalance();
+  const { dollarValue, bitcoinValue, satoshiValue, onChangeFiatInput, onChangeBitcoinInput } =
+    useBalance();
   const onChainBalance = useStoreState((store) => store.onChain.balance);
   const formatBitcoinValue = useFormatBitcoinValue();
 
@@ -60,8 +55,7 @@ export default ({ navigation }: IOpenChannelProps) => {
           address,
           feeRate: feeRate !== 0 ? feeRate : undefined,
         });
-      }
-      else {
+      } else {
         result = await sendCoins({
           address,
           sat: satoshiValue,
@@ -74,7 +68,7 @@ export default ({ navigation }: IOpenChannelProps) => {
 
       toast(t("form.withdraw.alert"), 6000, "success");
     } catch (e) {
-      toast(`${t("msg.error",{ns:namespaces.common})}: ${e.message}`, 12000, "danger", "OK");
+      toast(`${t("msg.error", { ns: namespaces.common })}: ${e.message}`, 12000, "danger", "OK");
       setSending(false);
     }
   };
@@ -105,99 +99,128 @@ export default ({ navigation }: IOpenChannelProps) => {
   return (
     <Container>
       <BlixtForm
-        items={[{
-          key: "BTC_ADDRESS",
-          title: t("form.address.title"),
-          component: (
-            <>
-              <Input
-                testID="INPUT_BITCOIN_ADDRESS"
-                placeholder={t("form.address.placeholder")}
-                value={address}
-                onChangeText={onAddressChange}
-              />
-              {PLATFORM !== "macos" && <Icon type="AntDesign" name="camera" onPress={onCameraPress} style={{ padding: 10 }} />}
-            </>
-          ),
-        }, {
-          key: "AMOUNT",
-          title: `${t("form.amount.title")} ${BitcoinUnits[bitcoinUnit].nice}`,
-          component: (
-            <>
-              <Input
-                testID="INPUT_AMOUNT"
-                placeholder={`${t("form.amount.placeholder")} ${BitcoinUnits[bitcoinUnit].nice}`}
-                keyboardType="numeric"
-                returnKeyType="done"
-                onChangeText={onChangeBitcoinInput}
-                value={withdrawAll ? t("form.amount.withdrawAll") : bitcoinValue || ""}
-                disabled={withdrawAll}
-              />
-              {!withdrawAll
-                ? <Button onPress={onWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>{t("form.amount.all")}</Text></Button>
-                : <Button onPress={onCancelWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>x</Text></Button>
-              }
-            </>
-          ),
-        }, {
-          key: "AMOUNT_FIAT",
-          title: `${t("form.amount.title")} ${fiatUnit}`,
-          active: !withdrawAll,
-          component: (
-            <>
-              <Input
-                testID="INPUT_AMOUNT_FIAT"
-                placeholder={`${t("form.amount.placeholder")} ${fiatUnit}`}
-                keyboardType="numeric"
-                returnKeyType="done"
-                onChangeText={onChangeFiatInput}
-                value={dollarValue}
-                disabled={withdrawAll}
-              />
-            </>
-          ),
-        }, {
-          key: "SAT",
-          title: t("form.feeRate.title"),
-          component: (
-            <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: 5 }}>
-              {PLATFORM !== "macos" && (
-                <Slider
-                  ref={slider}
-                  style={{
-                    width: 185,
-                    height: 25,
-                    marginTop: 10,
-                    marginBottom: 10,
-                  }}
-                  onValueChange={setFeeRate}
-                  minimumValue={0}
-                  maximumValue={500}
-                  step={1}
-                  thumbTintColor={blixtTheme.primary}
-                  minimumTrackTintColor={blixtTheme.lightGray}
-                  maximumTrackTintColor={blixtTheme.lightGray}
+        items={[
+          {
+            key: "BTC_ADDRESS",
+            title: t("form.address.title"),
+            component: (
+              <>
+                <Input
+                  testID="INPUT_BITCOIN_ADDRESS"
+                  placeholder={t("form.address.placeholder")}
+                  value={address}
+                  onChangeText={onAddressChange}
                 />
-              )}
-              <TextInput
-                keyboardType="numeric"
-                returnKeyType="done"
-                value={`${feeRate || ""}`}
-                onChangeText={(text) => {
-                  let value = Math.min(Number.parseInt(text || "0"), 1000);
-                  if (Number.isNaN(value)) {
-                    value = 0
-                  }
-                  setFeeRate(value);
-                  slider.current?.setNativeProps({ value })
+                {PLATFORM !== "macos" && (
+                  <Icon
+                    type="AntDesign"
+                    name="camera"
+                    onPress={onCameraPress}
+                    style={{ padding: 10 }}
+                  />
+                )}
+              </>
+            ),
+          },
+          {
+            key: "AMOUNT",
+            title: `${t("form.amount.title")} ${BitcoinUnits[bitcoinUnit].nice}`,
+            component: (
+              <>
+                <Input
+                  testID="INPUT_AMOUNT"
+                  placeholder={`${t("form.amount.placeholder")} ${BitcoinUnits[bitcoinUnit].nice}`}
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  onChangeText={onChangeBitcoinInput}
+                  value={withdrawAll ? t("form.amount.withdrawAll") : bitcoinValue || ""}
+                  disabled={withdrawAll}
+                />
+                {!withdrawAll ? (
+                  <Button onPress={onWithdrawAllPress} style={{ marginRight: 5 }} small={true}>
+                    <Text>{t("form.amount.all")}</Text>
+                  </Button>
+                ) : (
+                  <Button
+                    onPress={onCancelWithdrawAllPress}
+                    style={{ marginRight: 5 }}
+                    small={true}
+                  >
+                    <Text>x</Text>
+                  </Button>
+                )}
+              </>
+            ),
+          },
+          {
+            key: "AMOUNT_FIAT",
+            title: `${t("form.amount.title")} ${fiatUnit}`,
+            active: !withdrawAll,
+            component: (
+              <>
+                <Input
+                  testID="INPUT_AMOUNT_FIAT"
+                  placeholder={`${t("form.amount.placeholder")} ${fiatUnit}`}
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  onChangeText={onChangeFiatInput}
+                  value={dollarValue}
+                  disabled={withdrawAll}
+                />
+              </>
+            ),
+          },
+          {
+            key: "SAT",
+            title: t("form.feeRate.title"),
+            component: (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingRight: 5,
                 }}
-                style={style.feeRateTextInput}
-              />
-              {feeRate !== 0 && <Text> sat/vB</Text>}
-              {feeRate === 0 && <Text> {t("form.feeRate.auto")}</Text>}
-            </View>
-          ),
-        }]}
+              >
+                {PLATFORM !== "macos" && (
+                  <Slider
+                    ref={slider}
+                    style={{
+                      flex: 1,
+                      height: 25,
+                      marginTop: 10,
+                      marginBottom: 10,
+                    }}
+                    onValueChange={setFeeRate}
+                    minimumValue={0}
+                    maximumValue={100}
+                    step={1}
+                    thumbTintColor={blixtTheme.primary}
+                    minimumTrackTintColor={blixtTheme.lightGray}
+                    maximumTrackTintColor={blixtTheme.lightGray}
+                  />
+                )}
+                <TextInput
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  value={`${feeRate || ""}`}
+                  onChangeText={(text) => {
+                    let value = Math.min(Number.parseInt(text || "0"), 1000);
+                    if (Number.isNaN(value)) {
+                      value = 0;
+                    }
+                    setFeeRate(value);
+                    slider.current?.setNativeProps({ value });
+                  }}
+                  style={style.feeRateTextInput}
+                />
+                {feeRate !== 0 && <Text> sat/vB</Text>}
+                {feeRate === 0 && <Text> {t("form.feeRate.auto")}</Text>}
+              </View>
+            ),
+          },
+        ]}
         buttons={[
           <Button
             testID="SEND_COINS"
@@ -209,7 +232,7 @@ export default ({ navigation }: IOpenChannelProps) => {
           >
             {!sending && <Text>{t("form.withdraw.title")}</Text>}
             {sending && <Spinner color={blixtTheme.light} />}
-          </Button>
+          </Button>,
         ]}
         noticeText={`${formatBitcoinValue(Long.fromValue(onChainBalance))} available`}
         noticeIcon={Long.fromValue(onChainBalance).gt(0) ? null : "info"}
@@ -225,6 +248,8 @@ const style = StyleSheet.create({
     fontSize: 15,
     padding: 0,
     color: blixtTheme.light,
-    flex: 1,
+    backgroundColor: blixtTheme.gray,
+    width: 40,
+    textAlign: "center",
   },
 });

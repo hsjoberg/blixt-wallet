@@ -29,7 +29,9 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
   const t = useTranslation(namespaces.lightningInfo.openChannel).t;
   const peerUri = route.params?.peerUri;
   const connectAndOpenChannel = useStoreActions((actions) => actions.channel.connectAndOpenChannel);
-  const connectAndOpenChannelAll = useStoreActions((actions) => actions.channel.connectAndOpenChannelAll);
+  const connectAndOpenChannelAll = useStoreActions(
+    (actions) => actions.channel.connectAndOpenChannelAll,
+  );
   const getChannels = useStoreActions((actions) => actions.channel.getChannels);
   const [peer, setPeer] = useState(peerUri ?? "");
   const [opening, setOpening] = useState(false);
@@ -82,31 +84,38 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
       setOpening(false);
 
       // Special case if the error is likely related to Tor
-      if (torEnabled && error.message?.includes(".onion: no such host") || error.message?.includes(".onion: No address associated with hostname")) {
+      if (
+        (torEnabled && error.message?.includes(".onion: no such host")) ||
+        error.message?.includes(".onion: No address associated with hostname")
+      ) {
         await Alert.alert(
-          t("torPrompt.title"), t("torPrompt.text1") + "\n\n" + t("torPrompt.text2"),
-          [{
-            text: "Cancel",
-          }, {
-            text: "Activate Tor",
-            async onPress(value?) {
-              await changeTorEnabled(!torEnabled);
-              if (PLATFORM === "android") {
-                try {
-                  await NativeModules.LndMobile.stopLnd();
-                  await NativeModules.LndMobileTools.killLnd();
-                } catch(e) {
-                  console.log(e);
-                }
-                NativeModules.LndMobileTools.restartApp();
-              } else {
-                Alert.alert(
-                  t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings }),
-                  t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings }),
-                );
-              }
+          t("torPrompt.title"),
+          t("torPrompt.text1") + "\n\n" + t("torPrompt.text2"),
+          [
+            {
+              text: "Cancel",
             },
-          }]
+            {
+              text: "Activate Tor",
+              async onPress(value?) {
+                await changeTorEnabled(!torEnabled);
+                if (PLATFORM === "android") {
+                  try {
+                    await NativeModules.LndMobile.stopLnd();
+                    await NativeModules.LndMobileTools.killLnd();
+                  } catch (e) {
+                    console.log(e);
+                  }
+                  NativeModules.LndMobileTools.restartApp();
+                } else {
+                  Alert.alert(
+                    t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings }),
+                    t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings }),
+                  );
+                }
+              },
+            },
+          ],
         );
       }
     }
@@ -118,7 +127,6 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
     });
   };
 
-
   const onWithdrawAllPress = () => {
     setWithdrawAll(true);
   };
@@ -127,108 +135,158 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
     setWithdrawAll(false);
   };
 
-
   return (
     <Container>
       <BlixtForm
-        items={[{
-          key: "CHANNEL",
-          title: t("form.channel.title"),
-          component: (
-            <>
-              <Input placeholder={t("form.channel.placeholder")} value={peer} onChangeText={setPeer} />
-              {PLATFORM !== "macos" && <Icon type="AntDesign" name="camera" onPress={onCameraPress} />}
-            </>
-          )
-        }, {
-          key: "AMOUNT",
-          title: `${t("form.amount.title")} ${bitcoinUnit.nice}`,
-          component: (
-            <>
-              <Input
-                placeholder={`${t("form.amount.placeholder")} ${bitcoinUnit.nice}`}
-                keyboardType="numeric"
-                returnKeyType="done"
-                onChangeText={onChangeBitcoinInput}
-                value={withdrawAll ? t("form.amount.withdrawAll", { ns: namespaces.onchain.withdraw }) : bitcoinValue || ""}
-              />
-              {!withdrawAll
-                ? <Button onPress={onWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>{t("form.amount.all", { ns: namespaces.onchain.withdraw })}</Text></Button>
-                : <Button onPress={onCancelWithdrawAllPress} style={{ marginRight: 5 }} small={true}><Text>x</Text></Button>
-              }
-            </>
-          )
-        }, {
-          key: "AMOUNT_FIAT",
-          active: !withdrawAll,
-          title: `${t("form.amount.title")} ${fiatUnit}`,
-          component: (<Input placeholder={`${t("form.amount.placeholder")} ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} disabled={withdrawAll} />)
-        }, {
-          key: "SAT",
-          title: t("form.fee_rate.title"),
-          component: (
-            <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: 5 }}>
-              {PLATFORM !== "macos" && (
-                <Slider
-                  ref={slider}
-                  style={{
-                    width: 185,
-                    height: 25,
-                    marginTop: 10,
-                    marginBottom: 10,
-                  }}
-                  onValueChange={setFeeRate}
-                  minimumValue={0}
-                  maximumValue={500}
-                  step={1}
-                  thumbTintColor={blixtTheme.primary}
-                  minimumTrackTintColor={blixtTheme.lightGray}
-                  maximumTrackTintColor={blixtTheme.lightGray}
-                />
-              )}
-              <TextInput
-                keyboardType="numeric"
-                returnKeyType="done"
-                value={`${feeRate || ""}`}
-                onChangeText={(text) => {
-                  let value = Math.min(Number.parseInt(text || "0"), 1000);
-                  if (Number.isNaN(value)) {
-                    value = 0
-                  }
-                  setFeeRate(value);
-                  slider.current?.setNativeProps({ value })
-                }}
-                style={style.feeRateTextInput}
-                enableFocusRing={false} // macOS prop
-              />
-              {feeRate !== 0 && <Text> sat/vB</Text>}
-              {feeRate === 0 && <Text> auto</Text>}
-            </View>
-          ),
-        }, {
-          key: "ENABLE_TAPROOT_CHANS",
-          active: !withdrawAll,
-          title: `Taproot channel`,
+        items={[
+          {
+            key: "CHANNEL",
+            title: t("form.channel.title"),
             component: (
-              <View style={{ alignItems:"flex-end", flex:1, marginRight: 15 }}>
-                <CheckBox checked={taprootChan} onPress={() => setTaprootChan(!taprootChan)} style={{ marginBottom: 10 }} />
+              <>
+                <Input
+                  placeholder={t("form.channel.placeholder")}
+                  value={peer}
+                  onChangeText={setPeer}
+                />
+                {PLATFORM !== "macos" && (
+                  <Icon type="AntDesign" name="camera" onPress={onCameraPress} />
+                )}
+              </>
+            ),
+          },
+          {
+            key: "AMOUNT",
+            title: `${t("form.amount.title")} ${bitcoinUnit.nice}`,
+            component: (
+              <>
+                <Input
+                  placeholder={`${t("form.amount.placeholder")} ${bitcoinUnit.nice}`}
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  onChangeText={onChangeBitcoinInput}
+                  value={
+                    withdrawAll
+                      ? t("form.amount.withdrawAll", { ns: namespaces.onchain.withdraw })
+                      : bitcoinValue || ""
+                  }
+                />
+                {!withdrawAll ? (
+                  <Button onPress={onWithdrawAllPress} style={{ marginRight: 5 }} small={true}>
+                    <Text>{t("form.amount.all", { ns: namespaces.onchain.withdraw })}</Text>
+                  </Button>
+                ) : (
+                  <Button
+                    onPress={onCancelWithdrawAllPress}
+                    style={{ marginRight: 5 }}
+                    small={true}
+                  >
+                    <Text>x</Text>
+                  </Button>
+                )}
+              </>
+            ),
+          },
+          {
+            key: "AMOUNT_FIAT",
+            active: !withdrawAll,
+            title: `${t("form.amount.title")} ${fiatUnit}`,
+            component: (
+              <Input
+                placeholder={`${t("form.amount.placeholder")} ${fiatUnit}`}
+                keyboardType="numeric"
+                returnKeyType="done"
+                onChangeText={onChangeFiatInput}
+                value={dollarValue}
+                disabled={withdrawAll}
+              />
+            ),
+          },
+          {
+            key: "SAT",
+            title: t("form.fee_rate.title"),
+            component: (
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingRight: 5,
+                }}
+              >
+                {PLATFORM !== "macos" && (
+                  <Slider
+                    ref={slider}
+                    style={{
+                      flex: 1,
+                      height: 25,
+                      marginTop: 10,
+                      marginBottom: 10,
+                    }}
+                    onValueChange={setFeeRate}
+                    minimumValue={0}
+                    maximumValue={100}
+                    step={1}
+                    thumbTintColor={blixtTheme.primary}
+                    minimumTrackTintColor={blixtTheme.lightGray}
+                    maximumTrackTintColor={blixtTheme.lightGray}
+                  />
+                )}
+                <TextInput
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  value={`${feeRate || ""}`}
+                  onChangeText={(text) => {
+                    let value = Math.min(Number.parseInt(text || "0"), 1000);
+                    if (Number.isNaN(value)) {
+                      value = 0;
+                    }
+                    setFeeRate(value);
+                    slider.current?.setNativeProps({ value });
+                  }}
+                  style={style.feeRateTextInput}
+                  enableFocusRing={false} // macOS prop
+                />
+                {feeRate !== 0 && <Text> sat/vB</Text>}
+                {feeRate === 0 && <Text> auto</Text>}
               </View>
-          // <Input placeholder={`${t("form.amount.placeholder")} ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} disabled={withdrawAll} />
-          )
-
-        }]}
+            ),
+          },
+          {
+            key: "ENABLE_TAPROOT_CHANS",
+            active: !withdrawAll,
+            title: `Taproot channel`,
+            component: (
+              <View style={{ alignItems: "flex-end", flex: 1, marginRight: 15 }}>
+                <CheckBox
+                  checked={taprootChan}
+                  onPress={() => setTaprootChan(!taprootChan)}
+                  style={{ marginBottom: 10 }}
+                />
+              </View>
+              // <Input placeholder={`${t("form.amount.placeholder")} ${fiatUnit}`} keyboardType="numeric" returnKeyType="done" onChangeText={onChangeFiatInput} value={dollarValue} disabled={withdrawAll} />
+            ),
+          },
+        ]}
         buttons={[
-          <Button key="OPEN_CHANNEL" onPress={onOpenChannelPress} block={true} primary={true} disabled={opening}>
+          <Button
+            key="OPEN_CHANNEL"
+            onPress={onOpenChannelPress}
+            block={true}
+            primary={true}
+            disabled={opening}
+          >
             {!opening && <Text>{t("form.title")}</Text>}
             {opening && <Spinner color={blixtTheme.light} />}
-          </Button>
+          </Button>,
         ]}
         noticeText={`${formatBitcoinValue(onChainBalance)} available`}
         noticeIcon={Long.fromValue(onChainBalance).gt(0) ? null : "info"}
       />
     </Container>
   );
-};
+}
 
 const style = StyleSheet.create({
   feeRateTextInput: {
@@ -237,6 +295,8 @@ const style = StyleSheet.create({
     fontSize: 15,
     padding: 0,
     color: blixtTheme.light,
-    flex: 1,
+    backgroundColor: blixtTheme.gray,
+    width: 40,
+    textAlign: "center",
   },
 });
