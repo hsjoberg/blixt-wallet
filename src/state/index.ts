@@ -178,7 +178,8 @@ export const model: IStoreModel = {
 
     const { initialize, checkStatus, startLnd, gossipSync } = injections.lndMobile.index;
     const db = await actions.openDb();
-    if (!(await getItemObjectAsyncStorage(StorageItem.app))) {
+    const firstStartup = !(await getItemObjectAsyncStorage(StorageItem.app));
+    if (firstStartup) {
       log.i("Initializing app for the first time");
       if (PLATFORM === "ios" || PLATFORM === "macos") {
         log.i("Creating Application Support and lnd directories");
@@ -322,7 +323,7 @@ export const model: IStoreModel = {
         const speed = setTimeout(() => {
           actions.setSpeedloaderLoading(true);
         }, 3000);
-        if (gossipSyncEnabled) {
+        if (gossipSyncEnabled && !firstStartup) {
           if (enforceSpeedloaderOnStartup) {
             log.d("Clearing speedloader files");
             try {
