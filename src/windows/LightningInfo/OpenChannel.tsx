@@ -226,7 +226,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
                     }}
                     onValueChange={setFeeRate}
                     minimumValue={0}
-                    maximumValue={100}
+                    maximumValue={500}
                     step={1}
                     thumbTintColor={blixtTheme.primary}
                     minimumTrackTintColor={blixtTheme.lightGray}
