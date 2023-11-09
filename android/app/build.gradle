@@ -81,7 +81,7 @@ android {
         applicationId "com.blixtwallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 137
+        versionCode 147
         versionName "0.6.9"
 
         // Blixt:
