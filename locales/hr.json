@@ -7,7 +7,8 @@
       "amount": "Iznos",
       "fee": "Naknada",
       "search": "Traži",
-      "viewInBlockExplorer": "Pogledaj u blok eksploreru"
+      "viewInBlockExplorer": "Pogledaj u blok eksploreru",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "Ok",
@@ -46,6 +47,11 @@
       "msg3": "Trenutno nema podrške za WatchTower za stražu vaših kanala dok ste odspojeni.",
       "msg4": "Nemaran sam, nastavi"
     },
+    "createWalletWithPassphrase": {
+      "title": "Postavi lozinku (passphrase - 25. riječ za šifriranje sjemena)",
+      "invalidMessage": "Unesite valjanu lozinku",
+      "noLeadingTrailingSpaces": "Razmaci na početku ili na kraju nisu dopušteni"
+    },
     "language": {
       "title": "Odaberi jezik"
     },
@@ -55,7 +61,8 @@
     "menu": {
       "enableTor": "Omogući Tor",
       "disableTor": "Onemogući Tor",
-      "setBitcoinNode": "Postavite Bitcoin nod"
+      "setBitcoinNode": "Postavite Bitcoin nod",
+      "createWalletWithPassphrase": "Stvorite novčanik s lozinkom"
     }
   },
   "footerNav": {
@@ -202,6 +209,9 @@
       "description": {
         "title": "Poruka",
         "placeholder": "Poruka platitelju"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -240,6 +250,12 @@
       },
       "description": {
         "title": "Poruka"
+      },
+      "feeEstimate": {
+        "title": "Procjena naknade"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -259,6 +275,7 @@
       "alias": "Alias",
       "node": "Nod",
       "channelId": "ID kanala",
+      "channelPoint": "Channel point",
       "status": "Status",
       "statusActive": "Aktivan",
       "statusInactive": "Neaktivan",
@@ -271,6 +288,7 @@
       "howMuchCanBeReceived": "Može primiti",
       "localReserve": "Lokalna rezerva",
       "commitmentFee": "Naknada za obavezivanje",
+      "channelType": "Channel type",
       "pendingFunds": "Sredstva na čekanju",
       "balanceInLimbo": "Iznos u limbu",
       "pendingHtlcs": "HTLC-ovi na čekanju",
@@ -279,6 +297,7 @@
       "remoteCommitmentTxid": "TXID udaljene obveze",
       "closeChannel": "Zatvori kanal",
       "forceClosePendingChannel": "Prisilno zatvori kanal na čekanju",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Zatvori kanal"
       }
@@ -677,6 +696,13 @@
           "title": "Nije preporučeno",
           "msg": "Upozorenje. Ne preporučuje se onemogućiti planiranu sinkronizaciju lanca.\n\nProvjerite jeste li u tijeku s mrežom jer inače riskirate gubitak sredstava.\n\nUčinite to samo ako znate što radite."
         }
+      },
+      "gossipSync": {
+        "title": "Sync LN channels on startup"
+      },
+      "gossipSyncAndroid": {
+        "title": "Scheduled LN channel sync",
+        "subtitle": "Runs at Blixt startup"
       }
     },
     "display": {
@@ -718,14 +744,17 @@
       "rpc": {
         "title": "Postavi bitcoind RPC host"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "Postavi bitcoind ZMQ Raw Block Host"
       },
       "zmqRawTx": {
         "title": "Postavi bitcoind ZMQ Raw Tx Host"
-      },
-      "p2tr": {
-        "title": "Omogući primanje on-chain putem Taproota (P2TR)"
       }
     },
     "LN": {
@@ -778,9 +807,29 @@
           "msg": "Želite li se vratiti na zadani Dunder poslužitelj"
         }
       },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
       "graphSync": {
         "title": "Prije plaćanja pričekajte sinkronizaciju grafa",
         "subtitle": "Sinkronizirani graf vodi do optimalnih putova plaćanja"
+      },
+      "zeroConfPeers": {
+        "title": "Set zero conf peers",
+        "subtitle": "Add pubkeys of peers you want to allow zero conf channels from",
+        "setDialog": {
+          "title": "Zero conf peers",
+          "msg1": "Comma separated values of public keys, to allow zero conf channels from.",
+          "msg2": "You will be trusting channels from these partners until there is at least one chain confirmation"
+        }
       }
     },
     "miscelaneous": {
@@ -799,10 +848,14 @@
       },
       "lndLog": {
         "title": "Kopiraj lnd log u lokalnu pohranu",
-        "subtitle": "Dostupno iz /sdcard/BlixtWallet",
         "dialog": {
-          "alert": "Kopirana lnd log datoteka",
           "error": "Pogreška pri kopiranju lnd log datoteke."
+        }
+      },
+      "speedloaderLog": {
+        "title": "Copy LN channel sync log file to local storage",
+        "dialog": {
+          "error": "Error copying speedloader log file."
         }
       },
       "dev": {
@@ -837,6 +890,9 @@
         "restoreDialog": {
           "title": "Želite li vratiti lnd log razinu na zadanu razinu ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Enable custom invoice preimages"
       }
     },
     "experimental": {
@@ -888,6 +944,14 @@
         "title": "Prikaži obavijesti o informacijama o pokretanju",
         "subtitle": ""
       },
+      "showNotifications": {
+        "title": "Prikaži obavijesti za ovu sesiju",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "Show debug log for this session",
+        "subtitle": ""
+      },
       "helpCencer": {
         "title": "LndMobile centar za pomoć",
         "subtitle": ""
@@ -898,6 +962,10 @@
       },
       "lndLog": {
         "title": "Pročitaj lnd log",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "Read LN channel sync log",
         "subtitle": ""
       },
       "keysend": {
@@ -945,6 +1013,16 @@
       },
       "bimodalPathFinding": {
         "title": "Omogući bimodalno traženje puta"
+      },
+      "compactLndDatabases": {
+        "title": "Kompaktne lnd-ove baze podataka"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Enforce gossip sync on startup"
+      },
+      "persistentServices": {
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
@@ -1033,6 +1111,12 @@
     "title": "Tor Onion servis",
     "msg1": "Skenirajte ovaj QR kod da otvorite kanal prema ovom novčaniku",
     "msg2": "Nije moguće razriješiti onion adresu"
+  },
+  "settings.toastLog": {
+    "title": "Dnevnik obavijesti"
+  },
+  "settings.debugLog": {
+    "title": "Debug log"
   },
   "welcome.addFunds": {
     "title": "Dodaj sredstva",
