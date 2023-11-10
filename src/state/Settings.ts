@@ -234,7 +234,7 @@ export const settings: ISettingsModel = {
     actions.setBitcoindPubRawTx((await getItem(StorageItem.bitcoindPubRawTx)) ?? "");
     actions.setDunderServer((await getItem(StorageItem.dunderServer)) ?? "");
     actions.setRequireGraphSync((await getItemObject(StorageItem.requireGraphSync)) ?? false);
-    actions.setDunderEnabled((await getItemObject(StorageItem.dunderEnabled)) ?? false);
+    actions.setDunderEnabled((await getItemObject(StorageItem.dunderEnabled)) ?? true);
     actions.setLndNoGraphCache((await getItemObject(StorageItem.lndNoGraphCache)) ?? false);
     actions.setInvoiceExpiry(
       (await getItemObject(StorageItem.invoiceExpiry)) ?? DEFAULT_INVOICE_EXPIRY,
@@ -656,7 +656,7 @@ export const settings: ISettingsModel = {
   bitcoindPubRawTx: "",
   dunderServer: "",
   requireGraphSync: false,
-  dunderEnabled: false,
+  dunderEnabled: true,
   lndNoGraphCache: false,
   invoiceExpiry: DEFAULT_INVOICE_EXPIRY,
   rescanWallet: false,

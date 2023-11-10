@@ -256,7 +256,7 @@ export const setupApp = async () => {
     setItem(StorageItem.bitcoindPubRawTx, bitcoindPubRawTx),
     setItem(StorageItem.dunderServer, DEFAULT_DUNDER_SERVER),
     setItemObject<boolean>(StorageItem.requireGraphSync, false),
-    setItemObject<boolean>(StorageItem.dunderEnabled, false),
+    setItemObject<boolean>(StorageItem.dunderEnabled, true),
     setItemObject<boolean>(StorageItem.lndNoGraphCache, false),
     setItemObject<number>(StorageItem.invoiceExpiry, DEFAULT_INVOICE_EXPIRY),
     setItemObject<boolean>(StorageItem.rescanWallet, false),
