@@ -198,7 +198,7 @@ export const settings: ISettingsModel = {
       (await getItemObject(StorageItem.scheduledSyncEnabled)) || false,
     );
     actions.setScheduledGossipSyncEnabled(
-      (await getItemObject(StorageItem.scheduledGossipSyncEnabled)) || true,
+      (await getItemObject(StorageItem.scheduledGossipSyncEnabled)) ?? true,
     );
     actions.setDebugShowStartupInfo(
       (await getItemObject(StorageItem.debugShowStartupInfo)) || false,
