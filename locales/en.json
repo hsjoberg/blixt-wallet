@@ -899,7 +899,7 @@
       "title": "Experiments",
       "LSP": {
         "title": "Enable Dunder LSP",
-        "subtitle": "HIGHLY EXPERIMENTAL. Lightning Service Provider that helps with inbound liquidity"
+        "subtitle": "Lightning Service Provider that helps with inbound liquidity"
       },
       "MPP": {
         "title": "Enable Multi-Path Payments",
