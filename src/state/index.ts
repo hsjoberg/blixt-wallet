@@ -254,7 +254,7 @@ export const model: IStoreModel = {
               stopDaemonOnBackground: false,
               startDaemonOnActive: true,
             });
-            await tor.startIfNotStarted();
+            socksPort = await tor.startIfNotStarted();
           }
           log.i("socksPort", [socksPort]);
           if (socksPort === 0 && PLATFORM === "ios") {
