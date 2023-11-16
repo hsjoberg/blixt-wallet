@@ -38,29 +38,13 @@ public class BlixtTor extends ReactContextBaseJavaModule {
   static Stack<Promise> calleeResolvers = new Stack<>();
   static NotificationManagerCompat notificationManager;
 
-  static private boolean getPersistentServicesEnabled(Context context) {
-    ReactDatabaseSupplier dbSupplier = ReactDatabaseSupplier.getInstance(context);
-    SQLiteDatabase db = dbSupplier.get();
-    String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
-    if (persistentServicesEnabled != null) {
-      return persistentServicesEnabled.equals("true");
-    }
-    Log.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
-    return false;
-  }
-
   static private final ServiceConnection torServiceConnection = new ServiceConnection() {
     @Override
     public void onServiceConnected(ComponentName className, IBinder service) {
+      Log.i(TAG, "onServiceConnected");
       // We've bound to LocalService, cast the IBinder and get LocalService instance
       TorService.LocalBinder binder = (TorService.LocalBinder) service;
       torService = binder.getService();
-      Log.i(TAG, "torService.getService()");
-      boolean persistentServicesEnabled = getPersistentServicesEnabled(torService);
-      if (persistentServicesEnabled) {
-        torService.startForeground(0xc0feefee, getNotification(torService));
-      }
-      Log.i(TAG, "onServiceConnected");
     }
 
     @Override
@@ -132,7 +116,6 @@ public class BlixtTor extends ReactContextBaseJavaModule {
     }
     calleeResolvers.add(promise);
 
-    boolean persistentServicesEnabled = getPersistentServicesEnabled(getReactApplicationContext());
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
       getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS), Context.RECEIVER_NOT_EXPORTED);
     } else {
@@ -140,9 +123,6 @@ public class BlixtTor extends ReactContextBaseJavaModule {
     }
     Intent intent = new Intent(getReactApplicationContext(), TorService.class);
 
-    if (persistentServicesEnabled) {
-      getReactApplicationContext().startForegroundService(intent);
-    }
     getReactApplicationContext().bindService(intent, torServiceConnection, Context.BIND_AUTO_CREATE);
   }
 
