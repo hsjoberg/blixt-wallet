@@ -311,7 +311,7 @@ export const model: IStoreModel = {
         (await getItemObjectAsyncStorage<boolean>(StorageItem.enforceSpeedloaderOnStartup)) ??
         false;
       const speedloaderServer =
-        (await getItem(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER;
+        (await getItemAsyncStorage(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER;
       let gossipStatus: unknown = null;
 
       const status = await checkStatus();

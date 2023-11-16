@@ -1117,6 +1117,8 @@ ${t("experimental.tor.disabled.msg2")}`;
           onPress: () => {},
         },
         {
+          style: "default",
+          text: t("buttons.yes", { ns: namespaces.common }),
           onPress: async (text) => {
             if (text === speedloaderServer) {
               return;
