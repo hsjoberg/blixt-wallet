@@ -489,7 +489,7 @@ export const settings: ISettingsModel = {
   }),
 
   changeSpeedloaderServer: thunk(async (actions, payload) => {
-    await setItemObject(StorageItem.speedloaderServer, payload);
+    await setItem(StorageItem.speedloaderServer, payload);
     actions.setSpeedloaderServer(payload);
   }),
 
