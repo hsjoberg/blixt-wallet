@@ -430,6 +430,10 @@
       "name": {
         "ask": "Send my name together with this payment",
         "mandatory": "Your name has to be sent together with this payment"
+      },
+      "identifier": {
+        "ask": "Send my Lightning Address together with this payment",
+        "mandatory": "Your Lightning Address has to be sent together with this payment"
       }
     },
     "payloadErrors": {
@@ -816,6 +820,17 @@
         "restoreDialog": {
           "title": "Restore LN channel sync Server",
           "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
+      "lightningBoxServer": {
+        "title": "Set Lightning Box server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set Lightning Box server"
+        },
+        "restoreDialog": {
+          "title": "Restore Lightning Box Server",
+          "msg": "Would you like to restore to the default Lightning Box server"
         }
       },
       "graphSync": {

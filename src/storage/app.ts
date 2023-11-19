@@ -2,6 +2,8 @@ import {
   BLIXT_NODE_PUBKEY,
   DEFAULT_DUNDER_SERVER,
   DEFAULT_INVOICE_EXPIRY,
+  DEFAULT_LIGHTNINGBOX_LNURLPDESC,
+  DEFAULT_LIGHTNINGBOX_SERVER,
   DEFAULT_LND_LOG_LEVEL,
   DEFAULT_MAX_LN_FEE_PERCENTAGE,
   DEFAULT_NEUTRINO_NODE,
@@ -84,6 +86,9 @@ export enum StorageItem { // const enums not supported in Babel 7...
   persistentServicesWarningShown = "persistentServicesWarningShown",
   customInvoicePreimageEnabled = "customInvoicePreimageEnabled",
   speedloaderServer = "speedloaderServer",
+  lightningBoxServer = "lightningBoxServer",
+  lightningBoxAddress = "lightningBoxAddress",
+  lightningBoxLnurlPayDesc = "lightningBoxLnurlPayDesc",
 }
 
 export const setItem = async (key: StorageItem, value: string) =>
@@ -184,6 +189,9 @@ export const clearApp = async () => {
     removeItem(StorageItem.persistentServicesEnabled),
     removeItem(StorageItem.persistentServicesWarningShown),
     removeItem(StorageItem.speedloaderServer),
+    removeItem(StorageItem.lightningBoxServer),
+    removeItem(StorageItem.lightningBoxAddress),
+    removeItem(StorageItem.lightningBoxLnurlPayDesc),
   ]);
 };
 
@@ -272,5 +280,8 @@ export const setupApp = async () => {
     setItemObject<string[]>(StorageItem.zeroConfPeers, [BLIXT_NODE_PUBKEY]),
     setItemObject<boolean>(StorageItem.customInvoicePreimageEnabled, false),
     setItem(StorageItem.speedloaderServer, DEFAULT_SPEEDLOADER_SERVER),
+    setItem(StorageItem.lightningBoxServer, DEFAULT_LIGHTNINGBOX_SERVER),
+    // setItem(StorageItem.lightningBoxAddress, ""),
+    setItem(StorageItem.lightningBoxLnurlPayDesc, DEFAULT_LIGHTNINGBOX_LNURLPDESC),
   ]);
 };

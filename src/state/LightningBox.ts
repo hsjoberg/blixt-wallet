@@ -63,8 +63,9 @@ export const lightningBox: ILightningBoxModel = {
           log.d("request === LNURLPAY_REQUEST1");
 
           const maxSendable = getStoreState().channel.remoteBalance;
+          const lnurlpDesc = getStoreState().settings.lightningBoxLnurlPayDesc; // TODO move to store initialization
 
-          const metadata = [["text/plain", "Cheers!"]];
+          const metadata = [["text/plain", lnurlpDesc]];
           if (payload?.metadata?.lightningAddress) {
             metadata.push(["text/identifier", payload?.metadata.lightningAddress]);
           }
@@ -91,8 +92,8 @@ export const lightningBox: ILightningBoxModel = {
           );
         } else if (payload.request === "LNURLPAY_REQUEST2") {
           log.d("request === LNURLPAY_REQUEST2");
-
-          const metadata = [["text/plain", "Cheers!"]];
+          const lnurlpDesc = getStoreState().settings.lightningBoxLnurlPayDesc;
+          const metadata = [["text/plain", lnurlpDesc]];
           if (payload?.metadata?.lightningAddress) {
             metadata.push(["text/identifier", payload?.metadata.lightningAddress]);
           }

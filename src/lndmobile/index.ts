@@ -883,7 +883,7 @@ export const sendCustomMessage = async (
     options: {
       type,
       peer: hexToUint8Array(peerPubkeyHex),
-      data: stringToUint8Array(dataString),
+      data: unicodeStringToUint8Array(dataString),
     },
   });
   return response;

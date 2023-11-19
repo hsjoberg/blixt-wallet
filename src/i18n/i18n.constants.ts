@@ -9,6 +9,9 @@ export const namespaces = {
   keysend: {
     experiment: "keysend.experiment",
   },
+  lightningBox: {
+    manage: "lightningBox.manage",
+  },
   lightningInfo: {
     lightningInfo: "lightningInfo.lightningInfo",
     openChannel: "lightningInfo.openChannel",

@@ -41,6 +41,13 @@ export const DEFAULT_SPEEDLOADER_SERVER = chainSelect({
   regtest: "",
 });
 
+export const DEFAULT_LIGHTNINGBOX_SERVER = chainSelect({
+  mainnet: "https://blixtwallet.com/lightning-box",
+  testnet: "",
+  regtest: "",
+});
+export const DEFAULT_LIGHTNINGBOX_LNURLPDESC = "Thanks for the sats! ⚡️";
+
 export const HEADER_MIN_HEIGHT =
   Platform.select({
     android: (StatusBar.currentHeight ?? 0) + 53,

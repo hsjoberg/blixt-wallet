@@ -3,6 +3,7 @@ import { Body, CheckBox, Container, Icon, Left, List, ListItem, Right, Text } fr
 import {
   DEFAULT_DUNDER_SERVER,
   DEFAULT_INVOICE_EXPIRY,
+  DEFAULT_LIGHTNINGBOX_SERVER,
   DEFAULT_LND_LOG_LEVEL,
   DEFAULT_MAX_LN_FEE_PERCENTAGE,
   DEFAULT_NEUTRINO_NODE,
@@ -1448,7 +1449,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     restartNeeded();
   };
 
-  // Persistent services
+  // Custom invoice preimage
   const customInvoicePreimageEnabled = useStoreState(
     (store) => store.settings.customInvoicePreimageEnabled,
   );
@@ -1457,6 +1458,63 @@ ${t("experimental.tor.disabled.msg2")}`;
   );
   const onToggleCustomInvoicePreimageEnabled = async () => {
     await changeCustomInvoicePreimageEnabled(!customInvoicePreimageEnabled);
+  };
+
+  // Lightning Box server
+  const lightningBoxServer = useStoreState((store) => store.settings.lightningBoxServer);
+  const changeLightningBoxAddress = useStoreActions(
+    (store) => store.settings.changeLightningBoxAddress,
+  );
+  const changeLightningBoxServer = useStoreActions(
+    (store) => store.settings.changeLightningBoxServer,
+  );
+
+  const onSetLightningBoxServerPress = async () => {
+    Alert.prompt(
+      t("LN.lightningBoxServer.setDialog.title"),
+      "",
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          style: "default",
+          text: t("buttons.yes", { ns: namespaces.common }),
+          onPress: async (text) => {
+            if (text === lightningBoxServer) {
+              return;
+            }
+
+            await changeLightningBoxAddress("");
+            await changeLightningBoxServer(text ?? "");
+          },
+        },
+      ],
+      "plain-text",
+      lightningBoxServer ?? "",
+    );
+  };
+  const onSetLightningBoxServerLongPress = async () => {
+    Alert.alert(
+      t("LN.lightningBoxServer.restoreDialog.title"),
+      `${t("LN.lightningBoxServer.restoreDialog.msg")} (${DEFAULT_LIGHTNINGBOX_SERVER})?`,
+      [
+        {
+          style: "cancel",
+          text: t("buttons.no", { ns: namespaces.common }),
+        },
+        {
+          style: "default",
+          text: t("buttons.yes", { ns: namespaces.common }),
+          onPress: async () => {
+            await changeLightningBoxAddress("");
+            await changeLightningBoxServer(DEFAULT_LIGHTNINGBOX_SERVER);
+          },
+        },
+      ],
+    );
   };
 
   return (
@@ -2241,7 +2299,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Left>
               <Body>
                 <Text>{t("debug.persistentServices.title")}</Text>
-                <Text note={true}>{t("debug.persistentServices.subtitle", { hours: "24" })}</Text>
+                <Text note={true}>{t("debug.persistentServices.subtitle")}</Text>
               </Body>
               <Right>
                 <CheckBox
@@ -2249,6 +2307,23 @@ ${t("experimental.tor.disabled.msg2")}`;
                   onPress={changePersistentServicesEnabledPress}
                 />
               </Right>
+            </ListItem>
+          )}
+          {PLATFORM === "android" && (
+            <ListItem
+              style={style.listItem}
+              button={true}
+              icon={true}
+              onPress={onSetLightningBoxServerPress}
+              onLongPress={onSetLightningBoxServerLongPress}
+            >
+              <Left>
+                <Icon style={style.icon} type="FontAwesome" name="inbox" />
+              </Left>
+              <Body>
+                <Text>{t("LN.lightningBoxServer.title")}</Text>
+                <Text note={true}>{lightningBoxServer}</Text>
+              </Body>
             </ListItem>
           )}
 

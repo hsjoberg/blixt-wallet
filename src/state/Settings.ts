@@ -2,6 +2,8 @@ import { Action, Thunk, action, thunk } from "easy-peasy";
 import {
   BLIXT_NODE_PUBKEY,
   DEFAULT_INVOICE_EXPIRY,
+  DEFAULT_LIGHTNINGBOX_LNURLPDESC,
+  DEFAULT_LIGHTNINGBOX_SERVER,
   DEFAULT_LND_LOG_LEVEL,
   DEFAULT_MAX_LN_FEE_PERCENTAGE,
   DEFAULT_PATHFINDING_ALGORITHM,
@@ -88,6 +90,9 @@ export interface ISettingsModel {
   changePersistentServicesWarningShown: Thunk<ISettingsModel, boolean, any, IStoreModel>;
   changeCustomInvoicePreimageEnabled: Thunk<ISettingsModel, boolean>;
   changeSpeedloaderServer: Thunk<ISettingsModel, string>;
+  changeLightningBoxServer: Thunk<ISettingsModel, string>;
+  changeLightningBoxAddress: Thunk<ISettingsModel, string>;
+  changeLightningBoxLnurlPayDesc: Thunk<ISettingsModel, string>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -133,6 +138,9 @@ export interface ISettingsModel {
   setPersistentServicesWarningShown: Action<ISettingsModel, boolean>;
   setCustomInvoicePreimageEnabled: Action<ISettingsModel, boolean>;
   setSpeedloaderServer: Action<ISettingsModel, string>;
+  setLightningBoxServer: Action<ISettingsModel, string>;
+  setLightningBoxAddress: Action<ISettingsModel, string>;
+  SetLightningBoxLnurlPayDesc: Action<ISettingsModel, string>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -178,6 +186,9 @@ export interface ISettingsModel {
   persistentServicesWarningShown: boolean;
   customInvoicePreimageEnabled: boolean;
   speedloaderServer: string;
+  lightningBoxServer: string;
+  lightningBoxAddress: string;
+  lightningBoxLnurlPayDesc: string;
 }
 
 export const settings: ISettingsModel = {
@@ -264,6 +275,13 @@ export const settings: ISettingsModel = {
     );
     actions.setSpeedloaderServer(
       (await getItem(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER,
+    );
+    actions.setLightningBoxServer(
+      (await getItem(StorageItem.lightningBoxServer)) ?? DEFAULT_LIGHTNINGBOX_SERVER,
+    );
+    actions.setLightningBoxAddress((await getItem(StorageItem.lightningBoxAddress)) ?? "");
+    actions.SetLightningBoxLnurlPayDesc(
+      (await getItem(StorageItem.lightningBoxLnurlPayDesc)) ?? DEFAULT_LIGHTNINGBOX_LNURLPDESC,
     );
 
     log.d("Done");
@@ -493,6 +511,21 @@ export const settings: ISettingsModel = {
     actions.setSpeedloaderServer(payload);
   }),
 
+  changeLightningBoxServer: thunk(async (actions, payload) => {
+    await setItem(StorageItem.lightningBoxServer, payload);
+    actions.setLightningBoxServer(payload);
+  }),
+
+  changeLightningBoxAddress: thunk(async (actions, payload) => {
+    await setItem(StorageItem.lightningBoxAddress, payload);
+    actions.setLightningBoxAddress(payload);
+  }),
+
+  changeLightningBoxLnurlPayDesc: thunk(async (actions, payload) => {
+    await setItem(StorageItem.lightningBoxLnurlPayDesc, payload);
+    actions.SetLightningBoxLnurlPayDesc(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -625,6 +658,15 @@ export const settings: ISettingsModel = {
   setSpeedloaderServer: action((state, payload) => {
     state.speedloaderServer = payload;
   }),
+  setLightningBoxServer: action((state, payload) => {
+    state.lightningBoxServer = payload;
+  }),
+  setLightningBoxAddress: action((state, payload) => {
+    state.lightningBoxAddress = payload;
+  }),
+  SetLightningBoxLnurlPayDesc: action((state, payload) => {
+    state.lightningBoxLnurlPayDesc = payload;
+  }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -670,4 +712,7 @@ export const settings: ISettingsModel = {
   persistentServicesWarningShown: false,
   customInvoicePreimageEnabled: false,
   speedloaderServer: DEFAULT_SPEEDLOADER_SERVER,
+  lightningBoxServer: DEFAULT_LIGHTNINGBOX_SERVER,
+  lightningBoxAddress: "",
+  lightningBoxLnurlPayDesc: DEFAULT_LIGHTNINGBOX_LNURLPDESC,
 };

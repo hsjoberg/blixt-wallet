@@ -20,6 +20,7 @@ import Welcome from "./windows/Welcome";
 import LNURL from "./windows/LNURL";
 import KeysendTest from "./windows/Keysend/Test";
 import KeysendExperiment from "./windows/Keysend/Experiment";
+import LightingBox from "./windows/LightningBox";
 import GoogleDriveTestbed from "./windows/Google/GoogleDriveTestbed";
 import TransactionDetails from "./windows/TransactionDetails";
 import SyncInfo from "./windows/SyncInfo";
@@ -66,6 +67,7 @@ export type RootStackParamList = {
   GoogleDriveTestbed: undefined;
   KeysendTest: undefined;
   KeysendExperiment: undefined;
+  LightningBox: undefined;
   DeeplinkChecker: undefined;
   WebLNBrowser:
     | {
@@ -288,6 +290,11 @@ export default function Main() {
       <RootStack.Screen
         name="KeysendExperiment"
         component={KeysendExperiment}
+        options={horizontalTransition}
+      />
+      <RootStack.Screen
+        name="LightningBox"
+        component={LightingBox}
         options={horizontalTransition}
       />
       <RootStack.Screen name="Prompt" component={Prompt} options={animationDisabled} />

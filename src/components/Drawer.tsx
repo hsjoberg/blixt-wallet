@@ -189,6 +189,19 @@ export default function Drawer({ navigation }: DrawerContentComponentProps) {
                 <Text style={style.menuItemText}>{t("menu.keysendExperiment")}</Text>
               </View>
             </TouchableOpacity>
+            {PLATFORM === "android" && (
+              <TouchableOpacity onPress={() => goToScreen("LightningBox")}>
+                <View style={style.menuItem}>
+                  <Icon
+                    style={[style.menuItemIcon, { fontSize: 25 }]}
+                    color={blixtTheme.dark}
+                    type="FontAwesome"
+                    name="inbox"
+                  />
+                  <Text style={style.menuItemText}>Lightning Box</Text>
+                </View>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </ScrollView>
