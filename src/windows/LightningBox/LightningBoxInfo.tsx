@@ -18,7 +18,7 @@ interface ILightningBoxProps {
   navigation: StackNavigationProp<RootStackParamList, "LightningBox">;
 }
 export default function LightningBoxRegistration({ navigation }: ILightningBoxProps) {
-  const t = useTranslation(namespaces.lightningBox.manage).t;
+  const t = useTranslation(namespaces.lightningBox.info).t;
 
   const lightningBoxAddress = useStoreState((store) => store.settings.lightningBoxAddress);
   // const lightningBoxLnurlPayDesc = useStoreState(
@@ -36,7 +36,7 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: t("title"),
+      headerTitle: t("generic.lightningBox", { ns: namespaces.common }),
       headerBackTitle: t("buttons.back", { ns: namespaces.common }),
       headerShown: true,
     });
@@ -59,9 +59,11 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
   return (
     <Container>
       <Content centered>
-        <H1 style={{ marginBottom: 10 }}>Lightning Address</H1>
+        <H1 style={{ marginBottom: 10 }}>
+          {t("generic.lightningAddress", { ns: namespaces.common })}
+        </H1>
 
-        <Text>Your Lightning Address by Lightning Box is:</Text>
+        <Text>{t("yourLightningAddress")}</Text>
         <View style={{ width: "89%", marginBottom: 16 }} testID="payment-request-string">
           <CopyAddress text={lightningBoxAddress} onPress={onPressLightningAddress} />
         </View>
@@ -69,7 +71,7 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
         {showQrCode && <QrCode size={150} border={15} data={lud17} onPress={onPressQrCode} />}
         {!showQrCode && (
           <Button onPress={onPressShowQrCode}>
-            <Text>Show QR code</Text>
+            <Text>{t("showQrCode")}</Text>
           </Button>
         )}
       </Content>

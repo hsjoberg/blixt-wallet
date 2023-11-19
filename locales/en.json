@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "Lightning Address",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "Node alias",
       "description": "Description",
       "amount": "Amount",
       "fee": "Fee",
       "search": "Search",
       "viewInBlockExplorer": "View in block explorer",
-      "blocks": "{{numBlocks}} blocks"
+      "blocks": "{{numBlocks}} blocks",
+      "reason": "Reason: {{reason}}"
     },
     "buttons": {
       "ok": "Ok",
@@ -1137,6 +1139,33 @@
     "title": "Add funds",
     "msg1": "To start using Lightning in Blixt Wallet",
     "msg2": "send bitcoins to the address above"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Welcome to the Lightning Box registration.",
+      "whatIs": "Lightning Box is a Lightning Address service provider that forwards payment requests directly to the phone, giving you a self-custodial Lightning Address for mobile devices.",
+      "persistentMode":"This service is dependent on persistent mode, because the app must stay active to receive incoming payments. Please make sure that battery optimization is turned off on your device. Otherwise this service may not work.",
+      "currentRules": "The service is free to use. However, due to technical reasons it currently requires a channel with the Lightning Box provider. It's currently not possible to change your Lightning Address after you have chosen one."
+    },
+    "prerequisites": {
+      "prerequisites": "Prerequisites",
+      "checkingEligibility": "Checking eligibility...",
+      "eligible": "Eligible",
+      "youHaveChannel": "You have a channel with the Lightning Box service.",
+      "notEligible": "Not eligible"
+    },
+    "registration": {
+      "registration": "Registration",
+      "fields": {
+        "address": "Address",
+        "messageToPayer": "Message to the payer"
+      },
+      "register": "Register"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Your Lightning Address by Lightning Box is:",
+    "showQrCode": "Show QR code"
   },
   "welcome.almostDone": {
     "autopilot": {

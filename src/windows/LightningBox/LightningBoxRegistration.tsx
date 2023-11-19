@@ -23,7 +23,7 @@ import Container from "../../components/Container";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { signMessageNodePubkey } from "../../lndmobile/wallet";
 import { getUnixTime } from "date-fns";
-import { bytesToHexString, stringToUint8Array, timeout, toast } from "../../utils";
+import { bytesToHexString, stringToUint8Array, toast } from "../../utils";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { NativeModules, Platform, StyleSheet } from "react-native";
@@ -62,7 +62,7 @@ interface ILightningBoxProps {
 }
 export default function LightningBoxRegistration({ navigation }: ILightningBoxProps) {
   const lightningBoxServer = useStoreState((store) => store.settings.lightningBoxServer);
-  const t = useTranslation(namespaces.lightningBox.manage).t;
+  const t = useTranslation(namespaces.lightningBox.registration).t;
   const tSettings = useTranslation(namespaces.settings.settings).t;
 
   const [loading, setLoading] = useState(false);
@@ -115,14 +115,18 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
           }
         }
       } catch (error: any) {
-        toast("Error: " + error.message, undefined, "danger");
+        toast(
+          t("msg.error", { ns: namespaces.common }) + ": " + error.message,
+          undefined,
+          "danger",
+        );
       }
     })();
   }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: t("title"),
+      headerTitle: t("generic.lightningBox", { ns: namespaces.common }),
       headerBackTitle: t("buttons.back", { ns: namespaces.common }),
       headerShown: true,
     });
@@ -159,7 +163,7 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
       }
     } catch (error) {
       console.error(error);
-      toast("Error: " + error.message, undefined, "danger");
+      toast(t("msg.error", { ns: namespaces.common }) + ": " + error.message, undefined, "danger");
       setLoading(false);
     }
   };
@@ -204,53 +208,43 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
   return (
     <Container>
       <Content>
-        <H1>📥 Lightning Box</H1>
+        <H1>📥 {t("generic.lightningBox", { ns: namespaces.common })}</H1>
         <View style={{ marginTop: 10 }}>
-          <Text style={style.p}>Welcome to the Lightning Box registration.</Text>
-          <Text style={style.p}>
-            Lightning Box is a Lightning Address service provider that forwards payment requests
-            directly to the phone, giving you a self-custodial Lightning Address for mobile devices.
-          </Text>
-          <Text style={style.p}>
-            This service is dependent on persistent mode, because the app must stay active to
-            receive incoming payments. Please make sure that battery optimization is turned off on
-            your device. Otherwise this service may not work.
-          </Text>
-          <Text style={style.p}>
-            The service is free to use. However, due to technical reasons it currently requires a
-            channel with the Lightning Box provider. It's currently not possible to change your
-            Lightning Address after you have chosen one.
-          </Text>
+          <Text style={style.p}>{t("info.welcome")}</Text>
+          <Text style={style.p}>{t("info.whatIs")}</Text>
+          <Text style={style.p}>{t("info.persistentMode")}</Text>
+          <Text style={style.p}>{t("info.currentRules")}</Text>
           {/* <Text style={style.p}>Follow the steps below in order to register your account.</Text> */}
         </View>
         <View style={style.prerequisites}>
-          <H2>Prerequisites</H2>
+          <H2>{t("prerequisites.prerequisites")}</H2>
           <List style={style.list}>
             <ListItem style={style.listItem} icon={true}>
               <Left>
                 <Icon style={style.icon} type="Entypo" name="magnifying-glass" />
               </Left>
               <Body>
-                {lnboxIsEligible == null && (
-                  <Text>{/*t("prerequisites.eligibility")*/}Checking eligibility...</Text>
-                )}
+                {lnboxIsEligible == null && <Text>{t("prerequisites.checkingEligibility")}</Text>}
                 {lnboxIsEligible === true && (
                   <>
-                    <Text>Eligible</Text>
-                    <Text note={true}>You have a channel with the Lightning Box service.</Text>
+                    <Text>{t("prerequisites.eligible")}</Text>
+                    <Text note={true}>{t("prerequisites.youHaveChannel")}</Text>
                   </>
                 )}
                 {lnboxIsEligible === false && (
                   <>
-                    <Text>Not eligible</Text>
-                    <Text note={true}>Reason: {lnboxNotEligibleReason}</Text>
+                    <Text>{t("prerequisites.notEligible")}</Text>
+                    <Text note={true}>
+                      {t("generic.reason", {
+                        ns: namespaces.common,
+                        reason: lnboxNotEligibleReason,
+                      })}
+                    </Text>
                   </>
                 )}
               </Body>
               <Right>
-                {lnboxIsEligible !== null && (
-                  <CheckBox disabled checked={lnboxIsEligible} onPress={undefined} />
-                )}
+                {lnboxIsEligible !== null && <CheckBox disabled checked={lnboxIsEligible} />}
               </Right>
             </ListItem>
 
@@ -277,9 +271,9 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
         </View>
 
         <View style={style.prerequisites}>
-          <H2>Registration</H2>
+          <H2>{t("registration.registration")}</H2>
           <Item>
-            <Label style={{ width: 95 }}>Address</Label>
+            <Label style={{ width: 95 }}>{t("registration.fields.address")}</Label>
             <Input
               autoCapitalize="none"
               secureTextEntry={true}
@@ -292,7 +286,7 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
             <Text>@blixtwallet.com</Text>
           </Item>
           <Item>
-            <Label style={{ width: 95 }}>Message to the payer</Label>
+            <Label style={{ width: 95 }}>{t("registration.fields.messageToPayer")}</Label>
             <Input value={lnurlpDesc} onChangeText={setLnurlpDesc} maxLength={64} />
           </Item>
           <Text></Text>
@@ -306,7 +300,11 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
           primary={true}
           disabled={!(lnboxIsEligible && name && !loading)}
         >
-          {loading ? <Spinner color={blixtTheme.light} /> : <Text>Register</Text>}
+          {loading ? (
+            <Spinner color={blixtTheme.light} />
+          ) : (
+            <Text>{t("registration.register")}</Text>
+          )}
         </Button>
       </Content>
     </Container>

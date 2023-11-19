@@ -21,7 +21,6 @@ export default function LightningBox() {
   // We use the setting in order to decide whether the user shuold go to the
   // registration screen or info screen.
   const lightningBoxAddress = useStoreState((store) => store.settings.lightningBoxAddress);
-  console.log("hej lnbox", lightningBoxAddress);
 
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
