@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "Tera'Nganpu'",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "LayerteS",
       "description": "Qurgh",
       "amount": "'Antu'",
       "fee": "Ngeb",
       "search": "SoQ",
       "viewInBlockExplorer": "qorDu'Daq",
-      "blocks": "{{numBlocks}} bot"
+      "blocks": "{{numBlocks}} bot",
+      "reason": "mo': {{reason}}"
     },
     "buttons": {
       "ok": "lu'",
@@ -430,6 +432,10 @@
       "name": {
         "ask": "'ej qaStaHvIS ramvam,",
         "mandatory": "wanI'vam taQ bopeghchugh,"
+      },
+      "identifier": {
+        "ask": "tIqDaj nga'chuqmeH ghomHa'moH",
+        "mandatory": "yIntaHvIS naBmaj ngoQmey'e' DaHar'a',"
       }
     },
     "payloadErrors": {
@@ -818,6 +824,17 @@
           "msg": "qo' Hoch Dalo'chugh yIn danob"
         }
       },
+      "lightningBoxServer": {
+        "title": "Sut vIghaj",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Sut vIghaj"
+        },
+        "restoreDialog": {
+          "title": "Do'Ha' wa'DIbaH choraQ",
+          "msg": "qo' DacharghmeH yInISQo'"
+        }
+      },
       "graphSync": {
         "title": "veSvo' mIw'a' vIneH",
         "subtitle": "'ej ghIjtaHvIS nuvpu'"
@@ -899,7 +916,7 @@
       "title": "ngoy'",
       "LSP": {
         "title": "DaH 'entepray' Dunder LSP",
-        "subtitle": "MINDU'WIJ pe'vIl vIHbe'bogh tlheghDaj bIHha'bogh"
+        "subtitle": "pe'vIl 'e' nISbe'chugh je"
       },
       "MPP": {
         "title": "DaH QongDaq QIp'a' bIH?",
@@ -1122,6 +1139,33 @@
     "title": "jatlh",
     "msg1": "tuQ'egh tlhoy'",
     "msg2": "reH tIqDu' SaQnIS 'iq lutu'lu'"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "qaDangan pegh wISov.",
+      "whatIs": "'ach tlhIngan SuvwI'pu' quv, DaH nuvpu' tInqu'mo' tlhIngan jontaHvIS DeSwI' Danob'eghtaHvIS.",
+      "persistentMode":"muchoHlu'DI' 'ach munglu'bogh quv law' 'e' vIchaw'. tlhogh Dup nap neH yIjatlh. QI'yaH, cha' qab rurbe'.",
+      "currentRules": "'uttaHvIS bIQ je tu'lu'. 'ach pe'vIl 'angqangtaH. wa'SanID yuQmeyDaq bIghoSbe'chugh vay' dajaHbe'."
+    },
+    "prerequisites": {
+      "prerequisites": "tlhoy",
+      "checkingEligibility": "Humanpu'.",
+      "eligible": "ghItlhwI'",
+      "youHaveChannel": "'ach bIpIv 'e' DaSov.",
+      "notEligible": "chIm"
+    },
+    "registration": {
+      "registration": "yIpoQ",
+      "fields": {
+        "address": "SoQ",
+        "messageToPayer": "puqbe'wI'"
+      },
+      "register": "qech"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "ghuy'cha' bommeH SuvwI' 'op ngeb",
+    "showQrCode": "ghotvam"
   },
   "welcome.almostDone": {
     "autopilot": {
