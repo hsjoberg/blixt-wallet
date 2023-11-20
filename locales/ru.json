@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "Адрес Молния",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "Имя узла",
       "description": "Описание",
       "amount": "Сумма",
       "fee": "Комса",
       "search": "Поиск",
       "viewInBlockExplorer": "Посмотреть в обозревателе блоков",
-      "blocks": "{{numBlocks}} блоки"
+      "blocks": "{{numBlocks}} блоки",
+      "reason": "Причина: {{reason}}"
     },
     "buttons": {
       "ok": "Ok",
@@ -430,6 +432,10 @@
       "name": {
         "ask": "Отправить мое имя вместе с этим платежом",
         "mandatory": "Ваше имя должно быть отправлено вместе с этим платежом"
+      },
+      "identifier": {
+        "ask": "Отправьте мой Lightning Address вместе с этим платежом",
+        "mandatory": "Ваш Lightning Address должен быть отправлен вместе с этим платежом"
       }
     },
     "payloadErrors": {
@@ -818,6 +824,17 @@
           "msg": "Хотели бы вы вернуться на сервер Sync Channel LN по умолчанию?"
         }
       },
+      "lightningBoxServer": {
+        "title": "Установить сервер Lightning Box",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Установить сервер Lightning Box"
+        },
+        "restoreDialog": {
+          "title": "Восстановить сервер Lightning Box",
+          "msg": "Хотели бы вы вернуться на сервер Lightning Box по умолчанию?"
+        }
+      },
       "graphSync": {
         "title": "Подождите синхронизации графиков перед оплатой",
         "subtitle": "Синхронизированный граф приводит к оптимальным путям оплаты"
@@ -899,7 +916,7 @@
       "title": "Эксперименты",
       "LSP": {
         "title": "Включить LSP Dunder",
-        "subtitle": "ОЧЕНЬ ЭКСПЕРИМЕНТАЛЬНЫЙ. Поставщик ликвидности в сети Молния, который помогает получить входящие платежи."
+        "subtitle": "Lightning Service Provider, который помогает с входящей ликвидностью"
       },
       "MPP": {
         "title": "Включить многопутевые платежи",
@@ -1122,6 +1139,33 @@
     "title": "Добавить средства",
     "msg1": "Чтобы начать использовать Молнию в кошельке Blixt",
     "msg2": "отправьте биткоины на указанный адрес"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Добро пожаловать в регистрацию Lightning Box",
+      "whatIs": "Lightning Box-это поставщик услуг Lightning Address, который направляет запросы на оплату непосредственно на телефон, предоставляя вам самостоятельную Lightning Address для мобильных устройств.",
+      "persistentMode":"Эта услуга зависит от постоянного режима, поскольку приложение должно оставаться активным для получения входящих платежей. Пожалуйста, убедитесь, что оптимизация батареи выключена на вашем устройстве. В противном случае эта услуга не может работать.",
+      "currentRules": "Сервис бесплатно. Однако по техническим причинам в настоящее время требуется канал с провайдером Lightning Box. В настоящее время невозможно изменить вашу Lightning Address, которую вы выбрали."
+    },
+    "prerequisites": {
+      "prerequisites": "Предварительные условия",
+      "checkingEligibility": "Проверка права на участие ...",
+      "eligible": "Имеющий право",
+      "youHaveChannel": "У вас есть канал с службой Lightning Box.",
+      "notEligible": "Не имеют права"
+    },
+    "registration": {
+      "registration": "Постановка на учет",
+      "fields": {
+        "address": "Адрес",
+        "messageToPayer": "Сообщение плательщику"
+      },
+      "register": "регистр"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Ваша Lightning Address By Lightning Box:",
+    "showQrCode": "Показать QR -код"
   },
   "welcome.almostDone": {
     "autopilot": {
