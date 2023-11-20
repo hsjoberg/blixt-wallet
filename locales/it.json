@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "Lightning Indirizzo",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "Alias nodo",
       "description": "Descrizione",
       "amount": "Quantità",
       "fee": "Tassa",
       "search": "Ricerca",
       "viewInBlockExplorer": "Visualizza in Block Explorer",
-      "blocks": "{{numBlocks}} blocchi"
+      "blocks": "{{numBlocks}} blocchi",
+      "reason": "Motivo: {{reason}}"
     },
     "buttons": {
       "ok": "Ok",
@@ -430,6 +432,10 @@
       "name": {
         "ask": "Invia il mio nome insieme a questo pagamento",
         "mandatory": "Il tuo nome deve essere inviato insieme a questo pagamento"
+      },
+      "identifier": {
+        "ask": "Invia il mio Lightning Address insieme a questo pagamento",
+        "mandatory": "Il tuo Lightning Address deve essere inviato insieme a questo pagamento"
       }
     },
     "payloadErrors": {
@@ -818,6 +824,17 @@
           "msg": "Vorresti ripristinare sul server di sincronizzazione del canale LN predefinito ?"
         }
       },
+      "lightningBoxServer": {
+        "title": "Imposta Lightning Box Server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Imposta Lightning Box Server"
+        },
+        "restoreDialog": {
+          "title": "Ripristina Lightning Box Server",
+          "msg": "Vorresti ripristinare sul server di Lightning Box predefinito?"
+        }
+      },
       "graphSync": {
         "title": "Attendi la sincronizzazione del grafico prima di pagare",
         "subtitle": "Il grafico sincronizzato porta a percorsi di pagamento ottimali"
@@ -899,7 +916,7 @@
       "title": "Esperimenti",
       "LSP": {
         "title": "Abilita Dunder LSP",
-        "subtitle": "ALTAMENTE SPERIMENTALE. Fornitore di servizi di Lightning che aiuta con la liquidità in entrata"
+        "subtitle": "Lightning Service Provider che aiuta con la liquidità in entrata"
       },
       "MPP": {
         "title": "Abilita pagamenti multi-percorso",
@@ -1122,6 +1139,33 @@
     "title": "Aggiungere fondi",
     "msg1": "Per iniziare a usare Lightning nel Blixt Wallet",
     "msg2": "Invia Bitcoin all'indirizzo sopra"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Benvenuti nella registrazione della Lightning Box",
+      "whatIs": "Lightning Box è un fornitore di servizi di indirizzo Lightning che inoltra le richieste di pagamento direttamente al telefono, dandoti un indirizzo Lightning autonomo per dispositivi mobili.",
+      "persistentMode":"Questo servizio dipende dalla modalità persistente, poiché l'app deve rimanere attiva per ricevere pagamenti in arrivo. Assicurati che l'ottimizzazione della batteria sia disattivata sul dispositivo. Altrimenti questo servizio potrebbe non funzionare.",
+      "currentRules": "Il servizio è gratuito. Tuttavia, per motivi tecnici, attualmente richiede un canale con il provider di Lightning Box. Al momento non è possibile cambiare il tuo indirizzo Lightning dopo averlo scelto."
+    },
+    "prerequisites": {
+      "prerequisites": "Prerequisiti",
+      "checkingEligibility": "Controllo dell'ammissibilità ...",
+      "eligible": "Idoneo",
+      "youHaveChannel": "Hai un canale con il servizio Lightning Box.",
+      "notEligible": "Non ammissibile"
+    },
+    "registration": {
+      "registration": "Registrazione",
+      "fields": {
+        "address": "Indirizzo",
+        "messageToPayer": "Messaggio al pagatore"
+      },
+      "register": "Registrati"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Il tuo Lightning Address di Lightning Box è:",
+    "showQrCode": "Mostra il codice QR"
   },
   "welcome.almostDone": {
     "autopilot": {
