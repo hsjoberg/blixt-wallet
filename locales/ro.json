@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "Adresa Lightning",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "Alias nod",
       "description": "Descriere",
       "amount": "Cantitate",
       "fee": "Taxă",
       "search": "Căutare",
       "viewInBlockExplorer": "Vizualizare în Block Explorer",
-      "blocks": "{{numBlocks}} blocuri"
+      "blocks": "{{numBlocks}} blocuri",
+      "reason": "Motiv: {{reason}}"
     },
     "buttons": {
       "ok": "OK",
@@ -430,6 +432,10 @@
       "name": {
         "ask": "Trimite -mi numele împreună cu această plată",
         "mandatory": "Numele tău trebuie trimis împreună cu această plată"
+      },
+      "identifier": {
+        "ask": "Trimite adresa mea Lightning împreună cu această plată",
+        "mandatory": "Adresa dvs. Lightning trebuie trimisă împreună cu această plată"
       }
     },
     "payloadErrors": {
@@ -818,6 +824,17 @@
           "msg": "Doriți să vă restabiliți la serverul de sincronizare a canalului LN implicit"
         }
       },
+      "lightningBoxServer": {
+        "title": "Setați serverul Lightning Box",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Setați serverul Lightning Box"
+        },
+        "restoreDialog": {
+          "title": "Restaurați serverul Lightning Box",
+          "msg": "Doriți să vă restabiliți pe serverul implicit de Lightning Box?"
+        }
+      },
       "graphSync": {
         "title": "Așteptați sincronizarea LN Graph înainte de a plăti",
         "subtitle": "LN Graph sincronizat duce la căi de plată optime"
@@ -899,7 +916,7 @@
       "title": "Experimente",
       "LSP": {
         "title": "Activare Dunder LSP",
-        "subtitle": "Foarte experimental. Furnizor de servicii Lightning care ajută la lichiditatea de intrare"
+        "subtitle": "Lightning Service Provider care ajută la lichiditatea de intrare"
       },
       "MPP": {
         "title": "Activare plăti Multi-Path",
@@ -1122,6 +1139,33 @@
     "title": "Adaugă fonduri",
     "msg1": "Pentru a începe să folosiți Lightning in Blixt Wallet",
     "msg2": "Trimiteți bitcoins la adresa de mai sus"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Bine ați venit la înregistrarea Lightning Box",
+      "whatIs": "Lightning Box este un furnizor de servicii de adrese Lightning care transmite solicitările de plată direct către telefon, oferindu-vă o adresă Lightning autocustodială pentru dispozitivele mobile.",
+      "persistentMode":"Acest serviciu depinde de modul persistent, deoarece aplicația trebuie să rămână activă pentru a primi plăți primite. Vă rugăm să vă asigurați că optimizarea bateriei este oprită pe dispozitiv. În caz contrar, acest serviciu poate să nu funcționeze.",
+      "currentRules": "Serviciul este gratuit de utilizat. Cu toate acestea, din motive tehnice, necesită în prezent un canal cu furnizorul Lightning Box. În prezent, nu este posibil să vă schimbați adresa Lightning după ce ați ales una."
+    },
+    "prerequisites": {
+      "prerequisites": "Premise",
+      "checkingEligibility": "Verificarea eligibilității ...",
+      "eligible": "Eligibil",
+      "youHaveChannel": "Aveți un canal cu serviciul Lightning Box.",
+      "notEligible": "Nu este eligibil"
+    },
+    "registration": {
+      "registration": "Înregistrare",
+      "fields": {
+        "address": "Adresă",
+        "messageToPayer": "Mesaj către plătitor"
+      },
+      "register": "Inregistreaza-te"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Adresa dvs. Lightning prin Lightning Box este:",
+    "showQrCode": "Afișați codul QR"
   },
   "welcome.almostDone": {
     "autopilot": {
