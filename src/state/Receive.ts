@@ -15,7 +15,7 @@ import {
   toast,
   uint8ArrayToUnicodeString,
 } from "../utils";
-import { TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
+import { TLV_RECORD_NAME, TLV_SATOGRAM, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
@@ -306,6 +306,7 @@ export const receive: IReceiveModel = {
               transaction.valueFiatCurrency = fiatUnit;
 
               let tlvRecordWhatSatMessage: string | undefined = undefined;
+              let isSatogram = false;
               // Loop through known TLV records
               for (const htlc of invoice.htlcs) {
                 if (htlc.customRecords) {
@@ -323,6 +324,9 @@ export const receive: IReceiveModel = {
                       if (invoice.isKeysend) {
                         transaction.description = tlvRecordWhatSatMessage;
                       }
+                    } else if (decodedTLVRecord === TLV_SATOGRAM) {
+                      log.i("Got a Satogram");
+                      isSatogram = true;
                     } else {
                       log.i("Unknown TLV record", [decodedTLVRecord]);
                     }
@@ -343,10 +347,13 @@ export const receive: IReceiveModel = {
               if (tlvRecordWhatSatMessage) {
                 message += ` with the message: ` + tlvRecordWhatSatMessage;
               }
-              getStoreActions().notificationManager.localNotification({
-                message,
-                importance: "high",
-              });
+
+              if (!isSatogram) {
+                getStoreActions().notificationManager.localNotification({
+                  message,
+                  importance: "high",
+                });
+              }
 
               // We can now delete the temp data
               // as the invoice has been settled
