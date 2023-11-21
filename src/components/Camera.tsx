@@ -23,7 +23,7 @@ export default function CameraComponent({
   style,
   active,
 }: ICamera) {
-  const [start, setStart] = useState(false);
+  const [start, setStart] = useState(true);
   const device = useCameraDevice("back");
   const { hasPermission, requestPermission } = useCameraPermission();
   const codeScanner = useCodeScanner({
@@ -36,11 +36,11 @@ export default function CameraComponent({
   });
   active = active ?? true;
 
-  useEffect(() => {
-    InteractionManager.runAfterInteractions(() => {
-      setStart(true);
-    });
-  }, []);
+  // useEffect(() => {
+  //   InteractionManager.runAfterInteractions(() => {
+  //     setStart(true);
+  //   });
+  // }, []);
 
   useEffect(() => {
     (async () => {

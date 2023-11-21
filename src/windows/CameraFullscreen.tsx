@@ -11,6 +11,7 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../Main";
+import { Container } from "native-base";
 
 interface ICameraFullscreenProps {
   bolt11Invoice?: string;
@@ -22,7 +23,7 @@ export default function CameraFullscreen({ navigation, route }: ICameraFullscree
   const [onReadCalled, setOnReadCalled] = useState(false);
   const onRead = route.params.onRead ?? (() => {});
   return (
-    <>
+    <Container>
       <StatusBar
         backgroundColor="transparent"
         hidden={false}
@@ -50,7 +51,7 @@ export default function CameraFullscreen({ navigation, route }: ICameraFullscree
           {PLATFORM !== "android" && <GoBackIcon style={style.goBack} />}
         </>
       </Camera>
-    </>
+    </Container>
   );
 }
 

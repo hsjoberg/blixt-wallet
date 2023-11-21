@@ -22,7 +22,6 @@ import Content from "../../components/Content";
 import Container from "../../components/Container";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { signMessageNodePubkey } from "../../lndmobile/wallet";
-import { getUnixTime } from "date-fns";
 import { bytesToHexString, stringToUint8Array, toast } from "../../utils";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";

@@ -120,10 +120,10 @@ export const lightningBox: ILightningBoxModel = {
               payerData = JSON.parse(payload?.data?.payerdata);
               payerData = {
                 name: payerData?.name,
-                pubkey: payerData?.pubkey,
-                auth: payerData?.auth,
                 email: payerData?.email,
                 identifier: payerData?.identifier,
+                // auth: payerData?.auth,
+                // pubkey: payerData?.pubkey,
               };
 
               if (

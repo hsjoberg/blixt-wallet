@@ -2,7 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Button, Icon, H1, Text, Spinner } from "native-base";
 import { View } from "react-native";
 import Clipboard from "@react-native-community/clipboard";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { getRouteHints, sendKeysendPaymentV2 } from "../../lndmobile/index";
 import Long from "long";
@@ -24,10 +24,10 @@ import Input from "../../components/Input";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
-interface ILightningInfoProps {
+interface IKeysendExperimentProps {
   navigation: StackNavigationProp<RootStackParamList, "KeysendExperiment">;
 }
-export default function KeysendTest({ navigation }: ILightningInfoProps) {
+export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
   const t = useTranslation(namespaces.keysend.experiment).t;
   const [sending, setSending] = useState(false);
   const myNodeInfo = useStoreState((store) => store.lightning.nodeInfo);
@@ -45,26 +45,22 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
 
   useEffect(() => {
     (async () => {
-      setRoutehints(
-        JSON.stringify(await getRouteHints())
-      );
+      setRoutehints(JSON.stringify(await getRouteHints()));
     })();
   }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: t("title"),
-      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
+      headerBackTitle: t("buttons.back", { ns: namespaces.common }),
       headerShown: true,
       headerRight: () => {
-        return (
-          PLATFORM !== "macos" ? (
-            <NavigationButton onPress={onPressCamera}>
-              <Icon type="AntDesign" name="camera" style={{ fontSize: 22 }} />
-            </NavigationButton>
-          ) : null
-        );
-      }
+        return PLATFORM !== "macos" ? (
+          <NavigationButton onPress={onPressCamera}>
+            <Icon type="AntDesign" name="camera" style={{ fontSize: 22 }} />
+          </NavigationButton>
+        ) : null;
+      },
     });
   }, [navigation]);
 
@@ -72,8 +68,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
     try {
       if (!satInput) {
         throw new Error(t("send.error.checkAmount"));
-      }
-      else if (!pubkeyInput) {
+      } else if (!pubkeyInput) {
         throw new Error(t("send.error.missingPubkey"));
       }
       setSending(true);
@@ -97,7 +92,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       console.log("Payment request is " + result.paymentRequest);
       console.log(typeof result.paymentRequest);
 
-      const settlementDuration = (new Date().getTime() - start);
+      const settlementDuration = new Date().getTime() - start;
 
       const transaction: ITransaction = {
         date: result.creationDate,
@@ -131,16 +126,17 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         preimage: hexToUint8Array(result.paymentPreimage),
         lnurlPayResponse: null,
 
-        hops: result.htlcs[0].route?.hops?.map((hop) => ({
-          chanId: hop.chanId ?? null,
-          chanCapacity: hop.chanCapacity ?? null,
-          amtToForward: hop.amtToForward || Long.fromInt(0),
-          amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-          fee: hop.fee || Long.fromInt(0),
-          feeMsat: hop.feeMsat || Long.fromInt(0),
-          expiry: hop.expiry || null,
-          pubKey: hop.pubKey || null,
-        })) ?? [],
+        hops:
+          result.htlcs[0].route?.hops?.map((hop) => ({
+            chanId: hop.chanId ?? null,
+            chanCapacity: hop.chanCapacity ?? null,
+            amtToForward: hop.amtToForward || Long.fromInt(0),
+            amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
+            fee: hop.fee || Long.fromInt(0),
+            feeMsat: hop.feeMsat || Long.fromInt(0),
+            expiry: hop.expiry || null,
+            pubKey: hop.pubKey || null,
+          })) ?? [],
       };
       syncTransaction(transaction);
     } catch (e) {
@@ -152,7 +148,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
   const onPressQr = () => {
     Clipboard.setString(JSON.stringify(routehints));
     toast(t("qr.alert"));
-  }
+  };
 
   const onPressCamera = () => {
     navigation.navigate("CameraFullscreen", {
@@ -170,19 +166,22 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
     });
   };
 
-  const formItems = [{
-    key: "AMOUNT_SAT",
-    title: t("form.amount.title"),
-    component: (
-      <Input
-        testID="input-amount-sat"
-        value={satInput}
-        onChangeText={setSatInput}
-        placeholder="0"
-        keyboardType="numeric"
-        returnKeyType="done"
-      />
-    )}, {
+  const formItems = [
+    {
+      key: "AMOUNT_SAT",
+      title: t("form.amount.title"),
+      component: (
+        <Input
+          testID="input-amount-sat"
+          value={satInput}
+          onChangeText={setSatInput}
+          placeholder="0"
+          keyboardType="numeric"
+          returnKeyType="done"
+        />
+      ),
+    },
+    {
       key: "PUBKEY",
       title: t("form.pubkey.title"),
       component: (
@@ -192,8 +191,9 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
           onChangeText={setPubkeyInput}
           placeholder={t("form.pubkey.placeholder")}
         />
-      )
-    }, {
+      ),
+    },
+    {
       key: "routehints",
       title: t("form.route.title"),
       component: (
@@ -203,8 +203,9 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
           onChangeText={setRoutehintsInput}
           placeholder={t("form.route.placeholder")}
         />
-      )
-    }, {
+      ),
+    },
+    {
       key: "message",
       title: t("form.message.title"),
       component: (
@@ -214,7 +215,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
           onChangeText={setMessageInput}
           placeholder={t("form.message.placeholder")}
         />
-      )
+      ),
     },
   ];
 
@@ -222,7 +223,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
     <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: blixtTheme.dark }}>
       <View style={{ alignItems: "center" }}>
         <H1 style={{ marginTop: 10, marginBottom: 5 }}>Keysend - scan to pay</H1>
-        {routehints.length > 0  &&
+        {routehints.length > 0 && (
           <QrCode
             onPress={onPressQr}
             size={220}
@@ -231,22 +232,21 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
               routehints,
             })}
           />
-        }
-        {routehints.length === 0 &&
+        )}
+        {routehints.length === 0 && (
           <View style={{ margin: 4, width: 220 + 26, height: 220 + 26 }}></View>
-        }
+        )}
       </View>
       <View style={{ padding: 16 }}>
         <Text style={{ marginBottom: 8 }}>
-          {t("dialog.msg1")}{"\n"}
+          {t("dialog.msg1")}
+          {"\n"}
           {t("dialog.msg2")}
         </Text>
-        <Text>
-          {t("dialog.msg3")}
-        </Text>
+        <Text>{t("dialog.msg3")}</Text>
       </View>
       <BlixtForm
-        style={{ flexGrow: 1}}
+        style={{ flexGrow: 1 }}
         items={formItems}
         buttons={[
           <Button
@@ -258,13 +258,9 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
             key="CREATE_INVOICE"
             onPress={onClickSend}
           >
-            {sending &&
-              <Spinner color={blixtTheme.light} />
-            }
-            {!sending &&
-              <Text>{t("send.title")}</Text>
-            }
-          </Button>
+            {sending && <Spinner color={blixtTheme.light} />}
+            {!sending && <Text>{t("send.title")}</Text>}
+          </Button>,
         ]}
       />
     </KeyboardAwareScrollView>
