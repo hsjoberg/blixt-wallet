@@ -272,7 +272,7 @@ export function identifyService(pubkey: string | null, description: string, webs
   else if (pubkey === "031015a7839468a3c266d662d5bb21ea4cea24226936e2864a7ca4f2c3939836e0") {
     return "breez";
   }
-  else if (pubkey === "03cc1d0932bb99b0697f5b5e5961b83ab7fd66f1efc4c9f5c7bad66c1bcbe78f02") {
+  else if (website?.includes("stacker.news") || pubkey === "03cc1d0932bb99b0697f5b5e5961b83ab7fd66f1efc4c9f5c7bad66c1bcbe78f02") {
     return "stackernews";
   }
   else if (pubkey === "03ee58475055820fbfa52e356a8920f62f8316129c39369dbdde3e5d0198a9e315" || website?.includes("lntxbot.com")) {
