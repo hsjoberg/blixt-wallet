@@ -682,4 +682,24 @@ autopilot.heuristic=preferential:0.05
 
     resolve(url.relativeString)
   }
+
+  @objc(getInternalFiles:rejecter:)
+  func getInternalFiles(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+    var filesMap: [String: Int] = [:]
+    if let enumerator = FileManager.default.enumerator(at: applicationSupport, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+        for case let fileURL as URL in enumerator {
+            do {
+                let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
+                if fileAttributes.isRegularFile! {
+                    let fileSize = try FileManager.default.attributesOfItem(atPath: fileURL.path)[.size] as! Int
+                    filesMap[fileURL.lastPathComponent] = fileSize
+                }
+            } catch {
+                reject("ERROR", "Failed to list files", error)
+            }
+        }
+    }
+    resolve(filesMap)
+  }
 }

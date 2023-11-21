@@ -205,6 +205,24 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
+              console.log(await NativeModules.LndMobileTools.getInternalFiles());
+              const files = await NativeModules.LndMobileTools.getInternalFiles();
+              let totalBytes = 0;
+              Object.keys(files).map((key) => {
+                totalBytes += files[key];
+                (files[key] as any) = (files[key] / 1000000).toFixed(2) + " MB";
+              });
+
+              console.log(JSON.stringify(files, undefined, 4));
+              Alert.alert("", JSON.stringify(files, undefined, 4));
+              console.log("Total GB: " + totalBytes / 1000000000);
+            }}
+          >
+            <Text style={styles.buttonText}>LndMobileTools.getInternalFiles()</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
               console.error("error");
             }}
           >
@@ -222,6 +240,14 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }}
           >
             <Text style={styles.buttonText}>contact label fix</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              await setItemObject(StorageItem.persistentServicesEnabled, false);
+            }}
+          >
+            <Text style={styles.buttonText}>persistentServicesEnabled = false</Text>
           </Button>
           <Button
             small
@@ -770,6 +796,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>DEBUG_listProcesses()</Text>
           </Button>
+
           <Text style={{ width: "100%" }}>Dangerous:</Text>
           <Button
             danger
@@ -834,6 +861,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>DEBUG_deleteDatafolder</Text>
           </Button>
+
           <Text style={{ width: "100%" }}>App storage:</Text>
           <Button small onPress={async () => actions.openDb()}>
             <Text style={styles.buttonText}>actions.openDb()</Text>
@@ -863,15 +891,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           </Button>
           <Button small onPress={async () => await setItemObject(StorageItem.walletCreated, true)}>
             <Text style={styles.buttonText}>walletCreated = true</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => await setItemObject(StorageItem.loginMethods, ["pincode"])}
-          >
-            <Text style={styles.buttonText}>set logginMethods to ["pincode"]</Text>
-          </Button>
-          <Button small onPress={async () => await setItemObject(StorageItem.loginMethods, [])}>
-            <Text style={styles.buttonText}>set logginMethods to []</Text>
           </Button>
           <Button
             small
@@ -918,6 +937,26 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>onboardingState = DONE</Text>
           </Button>
+
+          <Text style={{ width: "100%" }}>Lightning Box:</Text>
+          <Button
+            small
+            onPress={async () => {
+              setItem(StorageItem.lightningBoxAddress, "");
+            }}
+          >
+            <Text style={styles.buttonText}>lightningBoxAddress = ""</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              const t = await Alert.promisePromptCallback("lightningBoxAddress");
+              setItem(StorageItem.lightningBoxAddress, t);
+            }}
+          >
+            <Text style={styles.buttonText}>lightningBoxAddress prompt</Text>
+          </Button>
+
           <Text style={{ width: "100%" }}>Speedloader:</Text>
           <Button
             small

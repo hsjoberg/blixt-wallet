@@ -725,6 +725,37 @@ class LndMobileTools extends ReactContextBaseJavaModule {
     ProcessPhoenix.triggerRebirth(getReactApplicationContext());
   }
 
+  private HashMap<String, Long> listFiles(String dirPath) {
+    HashMap<String, Long> filesMap = new HashMap<>();
+    File dir = new File(dirPath);
+    File[] files = dir.listFiles();
+    if (files != null) {
+        for (File file : files) {
+            if (file.isDirectory()) {
+                filesMap.putAll(listFiles(file.getAbsolutePath()));
+            } else {
+                filesMap.put(file.getName(), file.length());
+            }
+        }
+    }
+    return filesMap;
+}
+
+  @ReactMethod
+  public void getInternalFiles(Promise promise) {
+      try {
+          String filesDir = getReactApplicationContext().getFilesDir().toString();
+          HashMap<String, Long> filesMap = listFiles(filesDir);
+          WritableMap result = Arguments.createMap();
+          for (String filePath : filesMap.keySet()) {
+              result.putDouble(filePath, (filesMap.get(filePath)));
+          }
+          promise.resolve(result);
+      } catch (Exception e) {
+          promise.reject("ERROR", e);
+      }
+  }
+
   private void checkWriteExternalStoragePermission(@NonNull RequestWriteExternalStoragePermissionCallback successCallback,
                                                    @NonNull Runnable failCallback,
                                                    @NonNull Runnable failPermissionCheckcallback) {
