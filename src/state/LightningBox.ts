@@ -12,7 +12,7 @@ import {
   ILNUrlPayResponseError,
   ILNUrlPayResponsePayerData,
 } from "./LNURL";
-import { bytesToHexString, bytesToString, hexToUint8Array } from "../utils";
+import { bytesToHexString, hexToUint8Array, uint8ArrayToUnicodeString } from "../utils";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 const LnurlPayRequestLNP2PType = 32768 + 691;
@@ -75,7 +75,9 @@ export const lightningBox: ILightningBoxModel = {
           return;
         }
 
-        const payload = JSON.parse(bytesToString(customMessage.data)) as ILnurlPayForwardP2PMessage;
+        const payload = JSON.parse(
+          uint8ArrayToUnicodeString(customMessage.data),
+        ) as ILnurlPayForwardP2PMessage;
         log.d("payload", [payload]);
 
         if (payload.request === "LNURLPAY_REQUEST1") {
