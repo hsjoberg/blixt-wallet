@@ -30,7 +30,10 @@ const schema = [
     identifiedService TEXT NULL,
     note TEXT NULL,
     lightningAddress TEXT NULL,
-    lud16IdentifierMimeType TEXT NULL
+    lud16IdentifierMimeType TEXT NULL,
+    lud18PayerDataName TEXT NULL,
+    lud18PayerDataIdentifier TEXT NULL,
+    lud18PayerDataEmail TEXT NULL
   )`,
 
   `CREATE TABLE tx_hops (
@@ -63,7 +66,7 @@ const schema = [
     lnUrlWithdraw TEXT NULL,
     note TEXT NOT NULL,
     label TEXT NULL
-  )`
+  )`,
 ];
 
 const migrations: string[][] = [];

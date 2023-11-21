@@ -5,7 +5,13 @@ import { IStoreModel } from "./index";
 import logger from "./../utils/log";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { IStoreInjections } from "./store";
-import { ILNUrlPayRequest, ILNUrlPayResponse } from "./LNURL";
+import {
+  ILNUrlPayRequest,
+  ILNUrlPayRequestPayerData,
+  ILNUrlPayResponse,
+  ILNUrlPayResponseError,
+  ILNUrlPayResponsePayerData,
+} from "./LNURL";
 import { bytesToHexString, bytesToString, hexToUint8Array } from "../utils";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
@@ -21,6 +27,12 @@ interface ILnurlPayForwardP2PMessage {
   data: any;
   metadata?: any;
 }
+
+const lnboxPayerDataRequest: ILNUrlPayRequestPayerData = {
+  name: { mandatory: false },
+  identifier: { mandatory: false },
+  email: { mandatory: false },
+};
 
 const log = logger("LightningBox");
 
@@ -57,7 +69,7 @@ export const lightningBox: ILightningBoxModel = {
         }
 
         const payload = JSON.parse(bytesToString(customMessage.data)) as ILnurlPayForwardP2PMessage;
-        log.d("metadata", [payload]);
+        log.d("payload", [payload]);
 
         if (payload.request === "LNURLPAY_REQUEST1") {
           log.d("request === LNURLPAY_REQUEST1");
@@ -77,6 +89,7 @@ export const lightningBox: ILightningBoxModel = {
             maxSendable: maxSendable.mul(1000).toNumber(),
             metadata: JSON.stringify(metadata),
             commentAllowed: 100,
+            payerData: lnboxPayerDataRequest,
           };
 
           const p2pResponse: ILnurlPayForwardP2PMessage = {
@@ -98,7 +111,54 @@ export const lightningBox: ILightningBoxModel = {
             metadata.push(["text/identifier", payload?.metadata.lightningAddress]);
           }
 
-          const descHash = await JSHash(JSON.stringify(metadata), CONSTANTS.HashAlgorithms.sha256);
+          const metadataStr = JSON.stringify(metadata);
+          let dataToHash = metadataStr;
+
+          let payerData: ILNUrlPayResponsePayerData | undefined = undefined;
+          if (payload?.data?.payerdata) {
+            try {
+              payerData = JSON.parse(payload?.data?.payerdata);
+              payerData = {
+                name: payerData?.name,
+                pubkey: payerData?.pubkey,
+                auth: payerData?.auth,
+                email: payerData?.email,
+                identifier: payerData?.identifier,
+              };
+
+              if (
+                (payerData.name && payerData.name?.length > 64) ||
+                (payerData.email && payerData.email?.length > 64) ||
+                (payerData.identifier && payerData.identifier?.length > 64)
+                // (payerData.pubkey && payerData.pubkey?.length > 64)
+                // TODO auth
+              ) {
+                throw new Error("Fields too big");
+              }
+            } catch (error) {
+              log.e("Failed to parse payerData", [error, payload?.data?.payerdata]);
+              const lnurlPayResponse2: ILNUrlPayResponseError = {
+                status: "ERROR",
+                reason: "Unable to parse payer data",
+              };
+
+              const p2pResponse: ILnurlPayForwardP2PMessage = {
+                id: payload.id,
+                request: "LNURLPAY_REQUEST2_RESPONSE",
+                data: lnurlPayResponse2,
+              };
+
+              injections.lndMobile.index.sendCustomMessage(
+                bytesToHexString(customMessage.peer),
+                LnurlPayRequestLNP2PType,
+                JSON.stringify(p2pResponse),
+              );
+              return;
+            }
+            dataToHash += payload?.data?.payerdata;
+          }
+
+          const descHash = await JSHash(dataToHash, CONSTANTS.HashAlgorithms.sha256);
 
           let description = "Lightning Box";
           if (typeof payload.data.comment === "string") {
@@ -136,6 +196,7 @@ export const lightningBox: ILightningBoxModel = {
               website: null,
               lightningBox: {
                 descHash: hexToUint8Array(descHash),
+                payerData,
               },
             },
           });

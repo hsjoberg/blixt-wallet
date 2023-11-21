@@ -1,8 +1,8 @@
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { queryInsert, queryMulti, querySingle, query } from "./db-utils";
 import Long from "long";
-import { ILNUrlPayResponse } from "../../state/LNURL";
-import { ILightningServices}  from "../../utils/lightning-services";
+import { ILNUrlPayResponse, ILNUrlPayResponsePayerData } from "../../state/LNURL";
+import { ILightningServices } from "../../utils/lightning-services";
 import { hexToUint8Array, bytesToHexString } from "../../utils";
 
 export interface IDBTransaction {
@@ -31,12 +31,15 @@ export interface IDBTransaction {
   locationLat: number | null;
   website: string | null;
   type: string;
-  preimage: string,
+  preimage: string;
   lnurlPayResponse: string | null;
   identifiedService: string | null;
   note: string | null;
   lightningAddress: string | null;
   lud16IdentifierMimeType: string | null;
+  lud18PayerDataName: string | null;
+  lud18PayerDataIdentifier: string | null;
+  lud18PayerDataEmail: string | null;
 }
 
 export interface ITransaction {
@@ -65,12 +68,13 @@ export interface ITransaction {
   locationLat: number | null;
   website: string | null;
   type: "NORMAL" | "WEBLN" | "LNURL" | "DUNDER_ONDEMANDCHANNEL" | "LIGHTNINGBOX_FORWARD";
-  preimage: Uint8Array,
+  preimage: Uint8Array;
   lnurlPayResponse: ILNUrlPayResponse | null;
-  identifiedService: keyof ILightningServices  | null;
+  identifiedService: keyof ILightningServices | null;
   note?: string | null;
   lightningAddress: string | null;
   lud16IdentifierMimeType: string | null;
+  lud18PayerData: ILNUrlPayResponsePayerData | null;
 
   hops: ITransactionHop[];
 }
@@ -89,14 +93,13 @@ export interface ITransactionHop {
 }
 
 export const clearTransactions = async (db: SQLiteDatabase) => {
-  await query(
-    db,
-    `DELETE FROM tx`,
-    [],
-  );
+  await query(db, `DELETE FROM tx`, []);
 };
 
-export const createTransaction = async (db: SQLiteDatabase, transaction: ITransaction): Promise<number> => {
+export const createTransaction = async (
+  db: SQLiteDatabase,
+  transaction: ITransaction,
+): Promise<number> => {
   const txId = await queryInsert(
     db,
     `INSERT INTO tx
@@ -130,10 +133,16 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       identifiedService,
       note,
       lightningAddress,
-      lud16IdentifierMimeType
+      lud16IdentifierMimeType,
+      lud18PayerDataName,
+      lud18PayerDataIdentifier,
+      lud18PayerDataEmail
     )
     VALUES
     (
+      ?,
+      ?,
+      ?,
       ?,
       ?,
       ?,
@@ -196,6 +205,9 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.note ?? null,
       transaction.lightningAddress ?? null,
       transaction.lud16IdentifierMimeType ?? null,
+      transaction.lud18PayerData?.name ?? null,
+      transaction.lud18PayerData?.identifier ?? null,
+      transaction.lud18PayerData?.email ?? null,
     ],
   );
 
@@ -227,7 +239,10 @@ export const createTransaction = async (db: SQLiteDatabase, transaction: ITransa
 };
 
 // TODO fee is not included here
-export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransaction): Promise<void> => {
+export const updateTransaction = async (
+  db: SQLiteDatabase,
+  transaction: ITransaction,
+): Promise<void> => {
   await query(
     db,
     `UPDATE tx
@@ -260,7 +275,10 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
         identifiedService = ?,
         note = ?,
         lightningAddress = ?,
-        lud16IdentifierMimeType = ?
+        lud16IdentifierMimeType = ?,
+        lud18PayerDataName = ?,
+        lud18PayerDataIdentifier = ?,
+        lud18PayerDataEmail = ?
     WHERE id = ?`,
     [
       transaction.date.toString(),
@@ -293,33 +311,45 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: ITransa
       transaction.note ?? null,
       transaction.lightningAddress ?? null,
       transaction.lud16IdentifierMimeType ?? null,
+      transaction.lud18PayerData?.name ?? null,
+      transaction.lud18PayerData?.identifier ?? null,
+      transaction.lud18PayerData?.email ?? null,
       transaction.id,
     ],
   );
 };
 
-export const getTransactionHops = async (db: SQLiteDatabase, txId: number): Promise<ITransactionHop[]> => {
+export const getTransactionHops = async (
+  db: SQLiteDatabase,
+  txId: number,
+): Promise<ITransactionHop[]> => {
   return await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [txId]);
 };
 
-export const getTransactions = async (db: SQLiteDatabase, getExpired: boolean): Promise<ITransaction[]> => {
+export const getTransactions = async (
+  db: SQLiteDatabase,
+  getExpired: boolean,
+): Promise<ITransaction[]> => {
   const sql = getExpired
     ? `SELECT * FROM tx ORDER BY date DESC;`
-    : `SELECT * FROM tx WHERE status != "EXPIRED" ORDER BY date DESC;`
-  ;
-
+    : `SELECT * FROM tx WHERE status != "EXPIRED" ORDER BY date DESC;`;
   const transactions = await queryMulti<IDBTransaction>(db, sql);
   try {
-    return await Promise.all(transactions.map(async (transaction) => ({
-      ...convertDBTransaction(transaction),
-      // hops: await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [transaction.id!]),
-    }))) as ITransaction[];
+    return (await Promise.all(
+      transactions.map(async (transaction) => ({
+        ...convertDBTransaction(transaction),
+        // hops: await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [transaction.id!]),
+      })),
+    )) as ITransaction[];
   } catch (e) {
     throw new Error("Error reading transactions from DB: " + e.message);
   }
 };
 
-export const getTransaction = async (db: SQLiteDatabase, id: number): Promise<ITransaction | null> => {
+export const getTransaction = async (
+  db: SQLiteDatabase,
+  id: number,
+): Promise<ITransaction | null> => {
   const result = await querySingle<IDBTransaction>(db, `SELECT * FROM tx WHERE id = ?`, [id]);
   return (result && convertDBTransaction(result)) || null;
 };
@@ -328,7 +358,20 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
   let lnurlPayResponse: ILNUrlPayResponse | null = null;
   try {
     lnurlPayResponse = JSON.parse(transaction.lnurlPayResponse ?? "null");
-  } catch (e) { }
+  } catch (e) {}
+
+  let lud18PayerData: ILNUrlPayResponsePayerData | null = null;
+  if (
+    transaction.lud18PayerDataName ||
+    transaction.lud18PayerDataIdentifier ||
+    transaction.lud18PayerDataEmail
+  ) {
+    lud18PayerData = {
+      name: transaction.lud18PayerDataName ?? undefined,
+      identifier: transaction.lud18PayerDataIdentifier ?? undefined,
+      email: transaction.lud18PayerDataEmail ?? undefined,
+    };
+  }
 
   return {
     id: transaction.id!,
@@ -355,13 +398,14 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
     locationLong: transaction.locationLong,
     locationLat: transaction.locationLat,
     website: transaction.website,
-    type: transaction.type as ITransaction["type"] || "NORMAL",
+    type: (transaction.type as ITransaction["type"]) || "NORMAL",
     preimage: transaction.preimage ? hexToUint8Array(transaction.preimage) : new Uint8Array([0]),
     lnurlPayResponse,
     identifiedService: transaction.identifiedService as ITransaction["identifiedService"],
     note: transaction.note,
     lightningAddress: transaction.lightningAddress,
     lud16IdentifierMimeType: transaction.lud16IdentifierMimeType,
+    lud18PayerData,
     hops: [],
   };
 };

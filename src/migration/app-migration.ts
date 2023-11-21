@@ -1,10 +1,29 @@
 import { NativeModules } from "react-native";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import { LndChainBackend } from "../state/Lightning";
-import { getWalletCreated, StorageItem, getItemObject, setItemObject, setItem, getItem } from "../storage/app";
-import { getPin, getSeed, removeSeed, setSeed, setPin, removePin, setWalletPassword } from "../storage/keystore";
+import {
+  getWalletCreated,
+  StorageItem,
+  getItemObject,
+  setItemObject,
+  setItem,
+  getItem,
+} from "../storage/app";
+import {
+  getPin,
+  getSeed,
+  removeSeed,
+  setSeed,
+  setPin,
+  removePin,
+  setWalletPassword,
+} from "../storage/keystore";
 import { Chain } from "../utils/build";
-import { DEFAULT_DUNDER_SERVER, DEFAULT_LND_LOG_LEVEL, DEFAULT_NEUTRINO_NODE } from "../utils/constants";
+import {
+  DEFAULT_DUNDER_SERVER,
+  DEFAULT_LND_LOG_LEVEL,
+  DEFAULT_NEUTRINO_NODE,
+} from "../utils/constants";
 const { LndMobile, LndMobileTools } = NativeModules;
 
 export interface IAppMigration {
@@ -14,7 +33,7 @@ export interface IAppMigration {
 export const appMigration: IAppMigration[] = [
   // Version 0
   {
-    async beforeLnd(db, i) { },
+    async beforeLnd(db, i) {},
   },
   // Version 1
   {
@@ -205,7 +224,10 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       if (Chain === "mainnet") {
-        if ((await getItemObject<string[]>(StorageItem.neutrinoPeers))[0] === "btcd-mainnet.lightning.computer") {
+        if (
+          (await getItemObject<string[]>(StorageItem.neutrinoPeers))[0] ===
+          "btcd-mainnet.lightning.computer"
+        ) {
           await setItemObject<string[]>(StorageItem.neutrinoPeers, [DEFAULT_NEUTRINO_NODE]);
         }
       }
@@ -250,7 +272,7 @@ export const appMigration: IAppMigration[] = [
           lnUrlPay TEXT NULL,
           lnUrlWithdraw TEXT NULL,
           note TEXT NOT NULL
-        )`
+        )`,
       );
       await db.executeSql("ALTER TABLE tx ADD lightningAddress TEXT NULL");
       await db.executeSql("ALTER TABLE tx ADD lud16IdentifierMimeType TEXT NULL");
@@ -290,7 +312,7 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       await db.executeSql("ALTER TABLE contact ADD label TEXT NULL");
-    }
+    },
   },
   // Version 35
   {
@@ -302,12 +324,20 @@ export const appMigration: IAppMigration[] = [
   {
     async beforeLnd(db, i) {
       setItemObject<boolean>(StorageItem.scheduledGossipSyncEnabled, false);
-    }
+    },
   },
   // Version 37
   {
     async beforeLnd(db, i) {
       setItemObject<boolean>(StorageItem.persistentServicesWarningShown, false);
+    },
+  },
+  // Version 38
+  {
+    async beforeLnd(db, i) {
+      await db.executeSql("ALTER TABLE tx ADD lud18PayerDataName TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD lud18PayerDataIdentifier TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD lud18PayerDataEmail TEXT NULL");
     },
   },
 ];
