@@ -186,13 +186,16 @@ export const lightningBox: ILightningBoxModel = {
                 LnurlPayRequestLNP2PType,
                 JSON.stringify(p2pResponse),
               );
+              return;
             }
+
+            description = payload.data.comment;
           }
 
           // TODO(hsjoberg): LUD-12 to NameDesc is not working properly
 
           getStoreActions().receive.addInvoice({
-            description,
+            description, // TODO this is ass. Add a new db field
             sat: Math.floor(payload.data.amount / 1000),
             skipNameDesc: true,
             tmpData: {
