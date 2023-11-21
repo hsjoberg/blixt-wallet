@@ -16,6 +16,7 @@ import { bytesToHexString, bytesToString, hexToUint8Array } from "../utils";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 const LnurlPayRequestLNP2PType = 32768 + 691;
+const PeerSwapMessagesRange = [42069, 42085];
 
 interface ILnurlPayForwardP2PMessage {
   id: number;
@@ -64,6 +65,12 @@ export const lightningBox: ILightningBoxModel = {
         log.d("customMessage", [customMessage]);
 
         if (customMessage.type !== LnurlPayRequestLNP2PType) {
+          if (
+            customMessage.type >= PeerSwapMessagesRange[0] ||
+            customMessage.type <= PeerSwapMessagesRange[1]
+          ) {
+            return;
+          }
           log.e(`Unknown custom message type ${customMessage.type}`);
           return;
         }
