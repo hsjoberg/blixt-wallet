@@ -351,7 +351,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "BlixtWallet/BlixtWallet-macOS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
@@ -386,7 +386,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "BlixtWallet/BlixtWallet-macOS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
@@ -640,7 +640,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "BlixtWallet/BlixtWallet-macOS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
@@ -746,7 +746,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "BlixtWallet/BlixtWallet-macOS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CURRENT_PROJECT_VERSION = 36;
+				CURRENT_PROJECT_VERSION = 37;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
