@@ -316,6 +316,8 @@ export const model: IStoreModel = {
 
       const status = await checkStatus();
       log.d("status", [status]);
+      log.i("gossipSyncEnabled", [gossipSyncEnabled]);
+      log.i("persistentServicesEnabled", [persistentServicesEnabled]);
       if (
         (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !==
         ELndMobileStatusCodes.STATUS_PROCESS_STARTED
