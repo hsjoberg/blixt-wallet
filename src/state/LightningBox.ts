@@ -124,6 +124,7 @@ export const lightningBox: ILightningBoxModel = {
           let dataToHash = metadataStr;
 
           let payerData: ILNUrlPayResponsePayerData | undefined = undefined;
+          let website = null;
           if (payload?.data?.payerdata) {
             try {
               payerData = JSON.parse(payload?.data?.payerdata);
@@ -143,6 +144,12 @@ export const lightningBox: ILightningBoxModel = {
                 // TODO auth
               ) {
                 throw new Error("Fields too big");
+              }
+
+              if (payerData.identifier) {
+                website = payerData.identifier?.split?.("@")[1];
+              } else if (payerData.email) {
+                website = payerData.email?.split?.("@")[1];
               }
             } catch (error) {
               log.e("Failed to parse payerData", [error, payload?.data?.payerdata]);
@@ -222,7 +229,7 @@ export const lightningBox: ILightningBoxModel = {
               },
               payer: null,
               type: "LIGHTNINGBOX_FORWARD",
-              website: null,
+              website,
               lightningBox: {
                 descHash: hexToUint8Array(descHash),
                 payerData,
