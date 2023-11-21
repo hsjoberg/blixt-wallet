@@ -88,7 +88,7 @@ export const lightningBox: ILightningBoxModel = {
             minSendable: 1 * 1000,
             maxSendable: maxSendable.mul(1000).toNumber(),
             metadata: JSON.stringify(metadata),
-            commentAllowed: 100,
+            commentAllowed: 500,
             payerData: lnboxPayerDataRequest,
           };
 
@@ -162,7 +162,24 @@ export const lightningBox: ILightningBoxModel = {
 
           let description = "Lightning Box";
           if (typeof payload.data.comment === "string") {
-            description = payload.data.comment.substring(0, 100);
+            if (payload.data.comment?.length > 500) {
+              const lnurlPayResponse2: ILNUrlPayResponseError = {
+                status: "ERROR",
+                reason: "Comment is too long.",
+              };
+
+              const p2pResponse: ILnurlPayForwardP2PMessage = {
+                id: payload.id,
+                request: "LNURLPAY_REQUEST2_RESPONSE",
+                data: lnurlPayResponse2,
+              };
+
+              injections.lndMobile.index.sendCustomMessage(
+                bytesToHexString(customMessage.peer),
+                LnurlPayRequestLNP2PType,
+                JSON.stringify(p2pResponse),
+              );
+            }
           }
 
           // TODO(hsjoberg): LUD-12 to NameDesc is not working properly
