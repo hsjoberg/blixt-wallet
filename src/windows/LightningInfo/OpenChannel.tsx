@@ -67,14 +67,14 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
         await connectAndOpenChannelAll({
           peer,
           feeRateSat: feeRate !== 0 ? feeRate : undefined,
-          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : undefined,
+          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : lnrpc.CommitmentType.ANCHORS,
         });
       } else {
         await connectAndOpenChannel({
           peer,
           amount: satoshiValue,
           feeRateSat: feeRate !== 0 ? feeRate : undefined,
-          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : undefined,
+          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : lnrpc.CommitmentType.ANCHORS,
         });
       }
       await getChannels(undefined);
@@ -88,35 +88,31 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
         (torEnabled && error.message?.includes(".onion: no such host")) ||
         error.message?.includes(".onion: No address associated with hostname")
       ) {
-        await Alert.alert(
-          t("torPrompt.title"),
-          t("torPrompt.text1") + "\n\n" + t("torPrompt.text2"),
-          [
-            {
-              text: "Cancel",
-            },
-            {
-              text: "Activate Tor",
-              async onPress(value?) {
-                await changeTorEnabled(!torEnabled);
-                if (PLATFORM === "android") {
-                  try {
-                    await NativeModules.LndMobile.stopLnd();
-                    await NativeModules.LndMobileTools.killLnd();
-                  } catch (e) {
-                    console.log(e);
-                  }
-                  NativeModules.LndMobileTools.restartApp();
-                } else {
-                  Alert.alert(
-                    t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings }),
-                    t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings }),
-                  );
+        Alert.alert(t("torPrompt.title"), t("torPrompt.text1") + "\n\n" + t("torPrompt.text2"), [
+          {
+            text: "Cancel",
+          },
+          {
+            text: "Activate Tor",
+            async onPress(value?) {
+              await changeTorEnabled(!torEnabled);
+              if (PLATFORM === "android") {
+                try {
+                  await NativeModules.LndMobile.stopLnd();
+                  await NativeModules.LndMobileTools.killLnd();
+                } catch (e) {
+                  console.log(e);
                 }
-              },
+                NativeModules.LndMobileTools.restartApp();
+              } else {
+                Alert.alert(
+                  t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings }),
+                  t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings }),
+                );
+              }
             },
-          ],
-        );
+          },
+        ]);
       }
     }
   };
