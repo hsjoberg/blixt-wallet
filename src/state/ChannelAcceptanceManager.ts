@@ -46,6 +46,8 @@ export const channelAcceptanceManager: IChannelAcceptanceManagerModel = {
             channelAcceptRequest.pendingChanId,
             false,
           );
+          
+          log.i("Channel request rejected", channelAcceptRequest.commitmentType);
           return;
         }
 
