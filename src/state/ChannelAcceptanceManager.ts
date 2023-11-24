@@ -7,6 +7,7 @@ import { bytesToHexString } from "../utils";
 import logger from "./../utils/log";
 import { IStoreModel } from "./index";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+import { lnrpc } from "../../proto/lightning";
 
 const log = logger("ChannelAcceptanceManager");
 
@@ -33,6 +34,20 @@ export const channelAcceptanceManager: IChannelAcceptanceManagerModel = {
         );
 
         log.i("Channel accept request", [channelAcceptRequest]);
+
+        // Reject unknown, legacy and static remote key channels
+
+        if (
+          channelAcceptRequest.commitmentType === lnrpc.CommitmentType.LEGACY ||
+          channelAcceptRequest.commitmentType === lnrpc.CommitmentType.STATIC_REMOTE_KEY ||
+          channelAcceptRequest.commitmentType === lnrpc.CommitmentType.UNKNOWN_COMMITMENT_TYPE
+        ) {
+          await injections.lndMobile.channel.channelAcceptorResponse(
+            channelAcceptRequest.pendingChanId,
+            false,
+          );
+          return;
+        }
 
         if (!!channelAcceptRequest.wantsZeroConf) {
           const zeroConfPeers = getStoreState().settings.zeroConfPeers;
