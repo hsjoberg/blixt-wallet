@@ -47,7 +47,7 @@ export const channelAcceptanceManager: IChannelAcceptanceManagerModel = {
             false,
           );
           
-          log.i("Channel request rejected", channelAcceptRequest.commitmentType);
+          log.i("Channel request rejected due to commitment type: ", [channelAcceptRequest.commitmentType]);
           return;
         }
 
