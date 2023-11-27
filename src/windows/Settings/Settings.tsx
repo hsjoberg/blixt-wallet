@@ -1559,6 +1559,22 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeLndChainBackend("neutrino");
   };
 
+  // Randomize settings
+  const randomize = useStoreActions((store) => store.settings.randomize);
+  const onPressRandomize = async () => {
+    await randomize();
+  };
+
+  const randomizeSettingsOnStartup = useStoreState(
+    (store) => store.settings.randomizeSettingsOnStartup,
+  );
+  const changeRandomizeSettingsOnStartup = useStoreActions(
+    (store) => store.settings.changeRandomizeSettingsOnStartup,
+  );
+  const onToggleRandomizeSettingsOnStartup = async () => {
+    await changeRandomizeSettingsOnStartup(!randomizeSettingsOnStartup);
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -2234,6 +2250,28 @@ ${t("experimental.tor.disabled.msg2")}`;
               <CheckBox
                 checked={customInvoicePreimageEnabled}
                 onPress={onToggleCustomInvoicePreimageEnabled}
+              />
+            </Right>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onPressRandomize}>
+            <Left>
+              <Icon style={style.icon} type="MaterialCommunityIcons" name="emoticon-cool" />
+            </Left>
+            <Body>
+              <Text>{t("miscelaneous.randomizeSettings.title")}</Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onToggleRandomizeSettingsOnStartup}>
+            <Left>
+              <Icon style={style.icon} type="MaterialCommunityIcons" name="emoticon-cool" />
+            </Left>
+            <Body>
+              <Text>{t("miscelaneous.randomizeSettingsOnStartup.title")}</Text>
+            </Body>
+            <Right>
+              <CheckBox
+                checked={randomizeSettingsOnStartup}
+                onPress={onToggleRandomizeSettingsOnStartup}
               />
             </Right>
           </ListItem>
