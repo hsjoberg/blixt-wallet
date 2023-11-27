@@ -1,16 +1,18 @@
 import { Button, Text, View } from "native-base";
+import { Image, Keyboard, Vibration } from "react-native";
+import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/core";
+import { useTranslation } from "react-i18next";
+
+import { convertBitcoinToFiat, formatBitcoin } from "../../../utils/bitcoin-units";
 import {
   ILNUrlPayRequest,
   ILNUrlPayRequestMetadata,
   ILNUrlPayResponsePayerData,
 } from "../../../state/LNURL";
-import { Image, Keyboard, Vibration } from "react-native";
-import React, { useState } from "react";
-import { convertBitcoinToFiat, formatBitcoin } from "../../../utils/bitcoin-units";
-import { getDomainFromURL, hexToUint8Array, toast } from "../../../utils";
+import { getDomainFromURL, hexToUint8Array, isValidNodePubkey, toast } from "../../../utils";
 import { identifyService, lightningServices } from "../../../utils/lightning-services";
 import { useStoreActions, useStoreState } from "../../../state/store";
-
 import { Alert } from "../../../utils/alert";
 import ButtonSpinner from "../../../components/ButtonSpinner";
 import Input from "../../../components/Input";
@@ -23,8 +25,7 @@ import { setupDescription } from "../../../utils/NameDesc";
 import style from "./style";
 import useBalance from "../../../hooks/useBalance";
 import useLightningReadyToSend from "../../../hooks/useLightingReadyToSend";
-import { useNavigation } from "@react-navigation/core";
-import { useTranslation } from "react-i18next";
+import { decodePayReq } from "../../../lndmobile";
 
 export interface IPaymentCardProps {
   onPaid: (preimage: Uint8Array) => void;
@@ -41,6 +42,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
 
   const doPayRequest = useStoreActions((store) => store.lnUrl.doPayRequest);
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
+  const originalLightningAddress = useStoreState((store) => store.lnUrl.lightningAddress); // This is the one we came from. May not match the one in the metadata
 
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const sendPayment = useStoreActions((actions) => actions.send.sendPayment);
@@ -151,6 +153,36 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
           payerData: sendPayerData ? payerData : undefined,
         });
         console.log(paymentRequestResponse);
+
+        // If the Lightning Address Identifier is a pubkey,
+        // then check if it matches with the invoice destination pubkey.
+        const lud16WellKnownPubkey = lnurlStr?.split("/")?.slice(-1)[0];
+        const lightningAddressPubkey = originalLightningAddress?.split("@")[0];
+        if (originalLightningAddress) {
+          console.log("lightningAddressPubkey", lightningAddressPubkey);
+          if (isValidNodePubkey(lightningAddressPubkey)) {
+            console.log(
+              `Valid pubkey "${lightningAddressPubkey}", doing strict invoice pubkey check`,
+            );
+            const payreq = await decodePayReq(paymentRequestResponse.pr);
+            if (payreq.destination !== lightningAddressPubkey) {
+              throw new Error(
+                "Unable to proceed. The pubkey in the invoice does not match the pubkey in the Lightning Address",
+              );
+            }
+          }
+        }
+        // Also do it for the well-known service URL:
+        else if (isValidNodePubkey(lud16WellKnownPubkey)) {
+          console.log(`Valid pubkey "${lud16WellKnownPubkey}", doing strict invoice pubkey check`);
+          const payreq = await decodePayReq(paymentRequestResponse.pr);
+          if (payreq.destination !== lud16WellKnownPubkey) {
+            throw new Error(
+              "Unable to proceed. The pubkey in the invoice does not match the pubkey in the Lightning Address",
+            );
+          }
+        }
+
         const response = await sendPayment();
         const preimage = hexToUint8Array(response.paymentPreimage);
 

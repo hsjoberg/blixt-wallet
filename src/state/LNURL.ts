@@ -224,11 +224,13 @@ export interface ILNUrlModel {
   >;
 
   setLNUrlStr: Action<ILNUrlModel, string>;
+  setLightningAddress: Action<ILNUrlModel, string>;
   setType: Action<ILNUrlModel, LNURLType>;
   setLNUrlObject: Action<ILNUrlModel, LNUrlRequest>;
   setPayRequestResponse: Action<ILNUrlModel, ILNUrlPayResponse>;
 
   lnUrlStr?: string;
+  lightningAddress?: string;
   type?: LNURLType;
   lnUrlObject: LNUrlRequest | undefined;
   payRequestResponse: ILNUrlPayResponse | undefined;
@@ -630,6 +632,9 @@ export const lnUrl: ILNUrlModel = {
   setLNUrlStr: action((state, payload) => {
     state.lnUrlStr = payload;
   }),
+  setLightningAddress: action((state, payload) => {
+    state.lightningAddress = payload;
+  }),
   setType: action((state, payload) => {
     state.type = payload;
   }),
@@ -642,6 +647,7 @@ export const lnUrl: ILNUrlModel = {
 
   clear: action((state) => {
     state.lnUrlStr = undefined;
+    state.lightningAddress = undefined;
     state.type = undefined;
     state.lnUrlObject = undefined;
     state.payRequestResponse = undefined;
@@ -664,6 +670,7 @@ export const lnUrl: ILNUrlModel = {
     // Normal LNURL fetch request follows:
     const lnurlPayUrl = `https://${domain}/.well-known/lnurlp/${username}`;
     actions.setLNUrlStr(lnurlPayUrl);
+    actions.setLightningAddress(lightningAddress.toLowerCase());
 
     let lnurlObject: ILNUrlPayRequest | ILNUrlPayResponseError;
     try {
@@ -695,6 +702,7 @@ export const lnUrl: ILNUrlModel = {
   }),
 
   lnUrlStr: undefined,
+  lightningAddress: undefined,
   type: undefined,
   lnUrlObject: undefined,
   payRequestResponse: undefined,

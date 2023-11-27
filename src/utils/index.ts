@@ -203,3 +203,7 @@ export function uint8ArrayToUnicodeString(ua: Uint8Array) {
   });
   return decodeURIComponent(escstr);
 }
+
+export function isValidNodePubkey(pubKeyStr: string | undefined) {
+  return /^[0-9a-fA-F]{66}$/.test(pubKeyStr ?? "");
+}

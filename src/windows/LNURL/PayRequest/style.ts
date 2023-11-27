@@ -24,8 +24,8 @@ export default StyleSheet.create({
     marginBottom: 10,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems:"center",
-    width: "100%"
+    alignItems: "center",
+    width: "100%",
   },
   header: {
     fontWeight: "bold",
@@ -40,7 +40,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   lightningAddress: {
-    fontSize: 13,
+    fontSize: 11,
   },
   contactAddIcon: {
     fontSize: 25,
@@ -61,8 +61,7 @@ export default StyleSheet.create({
   boldText: {
     fontWeight: "bold",
   },
-  iconText: {
-  },
+  iconText: {},
   icon: {
     fontSize: 18,
   },
@@ -89,7 +88,7 @@ export default StyleSheet.create({
     top: 4,
     padding: 0,
     justifyContent: "center",
-    height: 20
+    height: 20,
   },
   metadataSection: {
     marginBottom: 32,
