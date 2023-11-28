@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from "react";
 import { View, Share, StyleSheet } from "react-native";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { Text, H1, H3, Spinner } from "native-base";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -28,13 +28,15 @@ interface IReceiveQRProps {
 export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
   const t = useTranslation(namespaces.receive.receiveQr).t;
   const invoice: lnrpc.AddInvoiceResponse = route.params.invoice;
-  const transaction = useStoreState((store) => store.transaction.getTransactionByPaymentRequest(invoice.paymentRequest));
+  const transaction = useStoreState((store) =>
+    store.transaction.getTransactionByPaymentRequest(invoice.paymentRequest),
+  );
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: t("title"),
-      headerBackTitle: t("buttons.back",{ns:namespaces.common}),
+      headerBackTitle: t("buttons.back", { ns: namespaces.common }),
       headerShown: true,
     });
   }, [navigation]);
@@ -55,7 +57,7 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
 
   const onPressPaymentRequest = () => {
     Clipboard.setString(transaction.paymentRequest);
-    toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
+    toast(t("msg.clipboardCopy", { ns: namespaces.common }), undefined, "warning");
   };
 
   const onQrPress = async () => {
@@ -71,17 +73,21 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
         <Text testID="expire" style={style.expires}>
           <Ticker expire={transaction.expire.toNumber()} />
         </Text>
-        <QrCode size={smallScreen ? 225 : undefined} data={transaction.paymentRequest.toUpperCase()} onPress={onQrPress} />
+        <QrCode
+          size={smallScreen ? 225 : undefined}
+          data={transaction.paymentRequest.toUpperCase()}
+          onPress={onQrPress}
+        />
         <View style={{ width: "89%", marginBottom: 16 }} testID="payment-request-string">
           <CopyAddress text={transaction.paymentRequest} onPress={onPressPaymentRequest} />
         </View>
-        {transaction.value?.neq(0) &&
+        {transaction.value?.neq(0) && (
           <H3 testID="pay-amount">{formatBitcoin(transaction.value, bitcoinUnit)}</H3>
-        }
+        )}
       </View>
     </Container>
   );
-};
+}
 
 const style = StyleSheet.create({
   container: {

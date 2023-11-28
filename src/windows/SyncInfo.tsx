@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { EmitterSubscription, NativeModules, StyleSheet, View, ScrollView } from "react-native";
 import { Card, Text, CardItem, H1, Button } from "native-base";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import Bar from "../components/ProgressBar";
 
 import { useStoreState } from "../state/store";
@@ -17,7 +17,6 @@ import LogBox from "../components/LogBox";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
 
-
 interface IMetaDataProps {
   title: string;
   data: string;
@@ -31,10 +30,12 @@ const MetaData = ({ title, data, url }: IMetaDataProps) => {
       style={style.detailText}
       onPress={() => {
         Clipboard.setString(data);
-        toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
+        toast(t("msg.clipboardCopy", { ns: namespaces.common }), undefined, "warning");
       }}
     >
-      <Text style={{ fontWeight: "bold" }}>{title}:{"\n"}</Text>
+      <Text style={{ fontWeight: "bold" }}>
+        {title}:{"\n"}
+      </Text>
       {!url && data}
       {url && <TextLink url={url}>{data}</TextLink>}
     </Text>
@@ -63,7 +64,10 @@ export default function SyncInfo({}: ISyncInfoProps) {
 
   const onPressShowLndLog = async () => {
     const tailLog = await NativeModules.LndMobileTools.tailLog(100);
-    log.current = tailLog.split("\n").map((row) => row.slice(11)).join("\n");
+    log.current = tailLog
+      .split("\n")
+      .map((row) => row.slice(11))
+      .join("\n");
 
     listener.current = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
       log.current = log.current + "\n" + data.slice(11);
@@ -77,9 +81,8 @@ export default function SyncInfo({}: ISyncInfoProps) {
 
   const onPressCopy = (l: string) => {
     Clipboard.setString(l);
-    toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
-  }
-
+    toast(t("msg.clipboardCopy", { ns: namespaces.common }), undefined, "warning");
+  };
 
   if (PLATFORM === "web") {
     bestBlockheight = 600000;
@@ -102,15 +105,14 @@ export default function SyncInfo({}: ISyncInfoProps) {
             </H1>
             <Text style={{ marginBottom: 14 }}>
               {!nodeInfo?.syncedToChain
-                ?
-                  t("syncedToChain.msg1")+"\n\n" +
-                  t("syncedToChain.msg2")
-                :
-                  t("syncedToChain.msg3")
-              }
+                ? t("syncedToChain.msg1") + "\n\n" + t("syncedToChain.msg2")
+                : t("syncedToChain.msg3")}
             </Text>
-            <MetaData title={t("syncedToChain.blockHeight.title")} data={nodeInfo?.blockHeight?.toString() ?? "N/A"} />
-            {nodeInfo?.syncedToChain === false && bestBlockheight !== undefined &&
+            <MetaData
+              title={t("syncedToChain.blockHeight.title")}
+              data={nodeInfo?.blockHeight?.toString() ?? "N/A"}
+            />
+            {nodeInfo?.syncedToChain === false && bestBlockheight !== undefined && (
               <>
                 <Text style={[style.detailText, { fontWeight: "bold" }]}>
                   {t("syncedToChain.blockHeight.msg1")}:
@@ -127,16 +129,21 @@ export default function SyncInfo({}: ISyncInfoProps) {
                   </Text>
                 </View>
               </>
-            }
-            {nodeInfo?.syncedToChain === true &&
-              <MetaData title={t("syncedToChain.blockHeight.msg1")} data={t("syncedToChain.title1")} />
-            }
+            )}
+            {nodeInfo?.syncedToChain === true && (
+              <MetaData
+                title={t("syncedToChain.blockHeight.msg1")}
+                data={t("syncedToChain.title1")}
+              />
+            )}
 
             {recoverInfo.recoveryMode && (
               <View>
                 {!recoverInfo.recoveryFinished && (
                   <>
-                    <Text style={[style.detailText, { fontWeight: "bold" }]}>{t("recoveryMode.title")}:</Text>
+                    <Text style={[style.detailText, { fontWeight: "bold" }]}>
+                      {t("recoveryMode.title")}:
+                    </Text>
                     <View style={{ flexDirection: "row" }}>
                       <Bar
                         width={200}
@@ -151,7 +158,10 @@ export default function SyncInfo({}: ISyncInfoProps) {
                   </>
                 )}
                 {recoverInfo.recoveryFinished && (
-                  <MetaData title={t("recoveryMode.title")} data={t("recoveryMode.msg1")+"\n"+t("recoveryMode.msg2")} />
+                  <MetaData
+                    title={t("recoveryMode.title")}
+                    data={t("recoveryMode.msg1") + "\n" + t("recoveryMode.msg2")}
+                  />
                 )}
               </View>
             )}
@@ -177,7 +187,7 @@ export default function SyncInfo({}: ISyncInfoProps) {
       </Card>
     </Blurmodal>
   );
-};
+}
 
 const style = StyleSheet.create({
   card: {
@@ -197,5 +207,5 @@ const style = StyleSheet.create({
     paddingTop: 4,
     paddingLeft: 18,
     paddingRight: 18,
-  }
+  },
 });

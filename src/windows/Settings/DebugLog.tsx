@@ -3,7 +3,7 @@ import { FlatList, StyleSheet } from "react-native";
 import { Body, Card, CardItem, Icon, Row, Text } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 import Container from "../../components/Container";
 import { NavigationButton } from "../../components/NavigationButton";
@@ -18,13 +18,12 @@ import { Debug } from "../../utils/build";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { PLATFORM } from "../../utils/constants";
 
-
 export interface ISelectListProps {
   navigation: StackNavigationProp<SettingsStackParamList, "DebugLog">;
   route: RouteProp<SettingsStackParamList, "DebugLog">;
 }
 
-export default function({ navigation }: ISelectListProps) {
+export default function ({ navigation }: ISelectListProps) {
   const t = useTranslation(namespaces.settings.debugLog).t;
   const logEntries = useGetLogEntries();
 
@@ -37,8 +36,8 @@ export default function({ navigation }: ISelectListProps) {
           <NavigationButton onPress={onPressCopyAllToasts}>
             <Icon type="MaterialCommunityIcons" name="content-copy" style={{ fontSize: 22 }} />
           </NavigationButton>
-        )
-      }
+        );
+      },
     });
   }, [navigation]);
 
@@ -46,14 +45,16 @@ export default function({ navigation }: ISelectListProps) {
     console.log(logEntries[i]);
     Clipboard.setString(`[${logEntries[i][0]}] ${logEntries[i][1]}`);
     toast("Copied to clipboard");
-  }
+  };
 
   const onPressCopyAllToasts = () => {
-    Clipboard.setString(logEntries.reduce((prev, current, i) => {
-      return `${prev}\n${("["+logEntries[i][0]+"]").padEnd(8)} ${logEntries[i][1]}`
-    }, ""));
+    Clipboard.setString(
+      logEntries.reduce((prev, current, i) => {
+        return `${prev}\n${("[" + logEntries[i][0] + "]").padEnd(8)} ${logEntries[i][1]}`;
+      }, ""),
+    );
     toast("Copied to clipboard");
-  }
+  };
 
   return (
     <Container>
@@ -66,20 +67,31 @@ export default function({ navigation }: ISelectListProps) {
             <CardItem>
               <Body>
                 <Row style={{ width: "100%" }}>
-                  <Text style={{
-                    marginRight: 28,
-                    fontFamily: !["macos", "ios"].includes(PLATFORM) ? "monospace" : undefined,
-                    fontSize: 11,
-                  }}>
-                    <Text style={{
+                  <Text
+                    style={{
+                      marginRight: 28,
                       fontFamily: !["macos", "ios"].includes(PLATFORM) ? "monospace" : undefined,
-                      fontSize: 9,
-                      color: fixLogLevelColor(toast[0]),
-                    }}>{toast[0]+"\n"}</Text>
-                    {toast[1]}
+                      fontSize: 11,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: !["macos", "ios"].includes(PLATFORM) ? "monospace" : undefined,
+                        fontSize: 9,
+                        color: fixLogLevelColor(toast[0]),
+                      }}
+                    >
+                      {toast[0] + "\n"}
                     </Text>
+                    {toast[1]}
+                  </Text>
                   <Text style={{ position: "absolute", right: 0 }}>
-                    <Icon type="MaterialCommunityIcons" name="content-copy" style={style.icon} onPress={() => onCopyToastMessage(index)} />
+                    <Icon
+                      type="MaterialCommunityIcons"
+                      name="content-copy"
+                      style={style.icon}
+                      onPress={() => onCopyToastMessage(index)}
+                    />
                   </Text>
                 </Row>
               </Body>
@@ -89,7 +101,7 @@ export default function({ navigation }: ISelectListProps) {
         keyExtractor={(toast, i) => toast[1] + i}
       />
     </Container>
-  )
+  );
 }
 
 const style = StyleSheet.create({

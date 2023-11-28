@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Button, Icon, H1, Text, Spinner } from "native-base";
 import { View } from "react-native";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { getRouteHints, sendKeysendPaymentV2 } from "../../lndmobile/index";

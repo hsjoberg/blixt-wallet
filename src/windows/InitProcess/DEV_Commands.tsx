@@ -57,7 +57,7 @@ import {
 import { useStoreActions, useStoreState } from "../../state/store";
 
 import { Alert } from "../../utils/alert";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import Content from "../../components/Content";
 import { ICLOUD_BACKUP_KEY } from "../../state/ICloudBackup";
 import { ILightningServices } from "../../utils/lightning-services";

@@ -22,7 +22,7 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import { Alert } from "../../utils/alert";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Chain } from "../../utils/build";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import Content from "../../components/Content";
 import DialogAndroid from "react-native-dialogs";
 import DocumentPicker from "react-native-document-picker";

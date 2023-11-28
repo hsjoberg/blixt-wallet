@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { EmitterSubscription, NativeModules } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Icon } from "native-base";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 import { SettingsStackParamList } from "./index";
 import Container from "../../components/Container";
@@ -29,14 +29,13 @@ export default function LndLog({ navigation }: ILndLogProps) {
       try {
         const tailLog = await NativeModules.LndMobileTools.tailSpeedloaderLog(300);
         log.current = tailLog;
-        forceUpdate()
+        forceUpdate();
       } catch (error) {
         toast(error.message, 0, "danger", "OK");
       }
     })();
 
-    return () => {
-    }
+    return () => {};
   }, []);
 
   useLayoutEffect(() => {
@@ -48,20 +47,20 @@ export default function LndLog({ navigation }: ILndLogProps) {
           <NavigationButton onPress={() => onPressCopy(log.current)}>
             <Icon type="MaterialCommunityIcons" name="content-copy" style={{ fontSize: 22 }} />
           </NavigationButton>
-        )
-      }
+        );
+      },
     });
   }, [navigation]);
 
   const onPressCopy = (l: string) => {
     Clipboard.setString(l);
-    toast(t("msg.clipboardCopy",{ns:namespaces.common}));
-  }
+    toast(t("msg.clipboardCopy", { ns: namespaces.common }));
+  };
 
-  console.log(log.current)
+  console.log(log.current);
   return (
     <Container>
       <LogBox text={log.current} scrollLock={true} />
     </Container>
-  )
+  );
 }

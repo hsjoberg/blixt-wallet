@@ -7,7 +7,7 @@ import { useStoreState, useStoreActions } from "../../state/store";
 import QrCode from "../../components/QrCode";
 import { smallScreen } from "../../utils/device";
 import CopyAddress from "../../components/CopyAddress";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { toast } from "../../utils";
 
 import { useTranslation } from "react-i18next";
@@ -25,7 +25,7 @@ export default function TorShowOnionAddress() {
   }, [getNodeInfo]);
 
   if (!nodeInfo) {
-    return (<></>);
+    return <></>;
   }
 
   const onionService = nodeInfo?.uris ? nodeInfo?.uris[0] : null;
@@ -38,7 +38,7 @@ export default function TorShowOnionAddress() {
 
   const onPaymentRequestTextPress = () => {
     Clipboard.setString(onionService ?? "");
-    toast(t("msg.clipboardCopy",{ns:namespaces.common}), undefined, "warning");
+    toast(t("msg.clipboardCopy", { ns: namespaces.common }), undefined, "warning");
   };
 
   return (
@@ -46,31 +46,39 @@ export default function TorShowOnionAddress() {
       <Card style={style.card}>
         <CardItem>
           <Body>
-            <H1>
-              {t("title")}
-            </H1>
-            {onionService &&
+            <H1>{t("title")}</H1>
+            {onionService && (
               <>
                 <Text>{t("msg1")}.</Text>
-                <View style={{ marginTop: 16, width: "100%", alignItems: "center", justifyContent: "center" }}>
-                  {onionService &&
-                    <QrCode size={smallScreen ? 220 : 280} data={onionService} onPress={onQrPress} border={25} />
-                  }
+                <View
+                  style={{
+                    marginTop: 16,
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {onionService && (
+                    <QrCode
+                      size={smallScreen ? 220 : 280}
+                      data={onionService}
+                      onPress={onQrPress}
+                      border={25}
+                    />
+                  )}
                 </View>
                 <View style={{ alignItems: "center", justifyContent: "center" }}>
                   <CopyAddress text={onionService || ""} onPress={onPaymentRequestTextPress} />
                 </View>
               </>
-            }
-            {!onionService &&
-              <Text style={{ marginTop: 16 }}>{t("msg2")}</Text>
-            }
+            )}
+            {!onionService && <Text style={{ marginTop: 16 }}>{t("msg2")}</Text>}
           </Body>
         </CardItem>
       </Card>
     </Blurmodal>
   );
-};
+}
 
 const style = StyleSheet.create({
   card: {
@@ -91,6 +99,5 @@ const style = StyleSheet.create({
   },
   textBold: {
     fontWeight: "bold",
-  }
+  },
 });
-

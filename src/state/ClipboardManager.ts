@@ -1,5 +1,5 @@
 import { Alert, AppState, AppStateStatus } from "react-native";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 
 import { navigate, getNavigator } from "../utils/navigation";
@@ -72,12 +72,15 @@ export const clipboardManager: IClipboardManagerModel = {
         actions.tryInvoice({ paymentRequest: text });
       }
       // If this is a non-bech32 LNURL (LUD-17)
-      else if (text.includes("lnurlp://") || text.includes("lnurlw://") || text.includes("lnurlc://")) {
+      else if (
+        text.includes("lnurlp://") ||
+        text.includes("lnurlw://") ||
+        text.includes("lnurlc://")
+      ) {
         log.d("lnurl non-bech32");
         text = "https://" + text.substring(9).split(/[\s&]/)[0];
         actions.tryLNUrl({ url: text });
-      }
-      else if (text.includes("keyauth://")) {
+      } else if (text.includes("keyauth://")) {
         log.d("lnurl non-bech32 keyauth");
         text = "https://" + text.substring(10).split(/[\s&]/)[0];
         actions.tryLNUrl({ url: text });
@@ -95,7 +98,9 @@ export const clipboardManager: IClipboardManagerModel = {
 
   tryInvoice: thunk(async (_, payload, { dispatch, getStoreState }) => {
     try {
-      const paymentRequest = await dispatch.send.setPayment({ paymentRequestStr: payload.paymentRequest });
+      const paymentRequest = await dispatch.send.setPayment({
+        paymentRequestStr: payload.paymentRequest,
+      });
 
       if (getStoreState().lightning.nodeInfo?.identityPubkey === paymentRequest.destination) {
         log.d("Found own invoice");
@@ -110,15 +115,18 @@ export const clipboardManager: IClipboardManagerModel = {
       Alert.alert(
         "Found invoice in clipboard",
         "Found a lightning invoice in clipboard. Do you wish to pay this invoice?",
-        [{
-          text: "Cancel",
-          onPress: () => dispatch.send.clear()
-        }, {
-          text: "Pay invoice",
-          onPress: () => {
-            navigate("Send", { screen: "SendConfirmation" });
-          }
-        }]
+        [
+          {
+            text: "Cancel",
+            onPress: () => dispatch.send.clear(),
+          },
+          {
+            text: "Pay invoice",
+            onPress: () => {
+              navigate("Send", { screen: "SendConfirmation" });
+            },
+          },
+        ],
       );
     } catch (e) {
       dispatch.send.clear();
@@ -133,28 +141,27 @@ export const clipboardManager: IClipboardManagerModel = {
       Alert.alert(
         "Found LNURL channel request in clipboard",
         `Found an LNURL channel request in clipboard. Do you wish to continue?`,
-        [{
-          text: "Cancel",
-          onPress: () => dispatch.lnUrl.clear()
-        }, {
-          text: "Continue",
-          onPress: () => {
-            log.d("Navigating to channelRequest");
-            navigate("LNURL", { screen: "ChannelRequest" });
-          }
-        }]
+        [
+          {
+            text: "Cancel",
+            onPress: () => dispatch.lnUrl.clear(),
+          },
+          {
+            text: "Continue",
+            onPress: () => {
+              log.d("Navigating to channelRequest");
+              navigate("LNURL", { screen: "ChannelRequest" });
+            },
+          },
+        ],
       );
-    }
-    else if (type === "login") {
+    } else if (type === "login") {
       navigate("LNURL", { screen: "AuthRequest" });
-    }
-    else if (type === "withdrawRequest") {
+    } else if (type === "withdrawRequest") {
       navigate("LNURL", { screen: "WithdrawRequest" });
-    }
-    else if (type === "payRequest") {
+    } else if (type === "payRequest") {
       navigate("LNURL", { screen: "PayRequest" });
-    }
-    else {
+    } else {
       throw new Error("Unknown lnurl request");
     }
   }),

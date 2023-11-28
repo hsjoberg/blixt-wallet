@@ -7,7 +7,7 @@ import {
   ScrollView,
   LayoutAnimation,
 } from "react-native";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { Icon, Text } from "native-base";
 import { DrawerActions } from "@react-navigation/native";
 import { DrawerContentComponentProps } from "@react-navigation/drawer/lib/typescript/src/types";

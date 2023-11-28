@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Button, Body, Container, Header, Icon, Left, Title } from "native-base";
 import Content from "../../components/Content";
 import { TextInput, DeviceEventEmitter, Text } from "react-native";
-import Clipboard from "@react-native-community/clipboard";
-import { sendKeysendPayment, decodePaymentStatus, addInvoice, getNodeInfo, sendKeysendPayment2 } from "../../lndmobile/index";
+import Clipboard from "@react-native-clipboard/clipboard";
+import {
+  sendKeysendPayment,
+  decodePaymentStatus,
+  addInvoice,
+  getNodeInfo,
+  sendKeysendPayment2,
+} from "../../lndmobile/index";
 import Long from "long";
 import { hexToUint8Array, timeout, bytesToString, bytesToHexString } from "../../utils";
 import { routerrpc } from "../../../proto/router";
@@ -55,14 +61,14 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       Long.fromValue(Number.parseInt(satInput, 10)),
       await generateSecureRandom(32),
       JSON.parse(routehintsInput || "[]"),
-      name
+      name,
     );
     console.log("response r", r);
   };
 
   const getPubkey = () => {
     Clipboard.setString(myNodeInfo!.identityPubkey!);
-  }
+  };
 
   const getRouteHintsByInvoice = async () => {
     const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", (e) => {
@@ -75,7 +81,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
     });
 
     const r = await addInvoice(1, "ROUTEHINTS");
-  }
+  };
 
   const getRouteHints = async () => {
     const routeHints: lnrpc.IRouteHint[] = [];
@@ -94,8 +100,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       let policy: lnrpc.IRoutingPolicy;
       if (remotePubkey === chanInfo.node1Pub) {
         policy = chanInfo.node1Policy!;
-      }
-      else {
+      } else {
         policy = chanInfo.node2Policy!;
       }
 
@@ -103,15 +108,21 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         continue;
       }
 
-      routeHints.push(lnrpc.RouteHint.create({
-        hopHints: [{
-          nodeId: remotePubkey,
-          chanId: chanInfo.channelId,
-          feeBaseMsat: policy.feeBaseMsat ? policy.feeBaseMsat.toNumber() : undefined,
-          feeProportionalMillionths: policy.feeRateMilliMsat ? policy.feeRateMilliMsat.toNumber() : undefined,
-          cltvExpiryDelta: policy.timeLockDelta,
-        }]
-      }));
+      routeHints.push(
+        lnrpc.RouteHint.create({
+          hopHints: [
+            {
+              nodeId: remotePubkey,
+              chanId: chanInfo.channelId,
+              feeBaseMsat: policy.feeBaseMsat ? policy.feeBaseMsat.toNumber() : undefined,
+              feeProportionalMillionths: policy.feeRateMilliMsat
+                ? policy.feeRateMilliMsat.toNumber()
+                : undefined,
+              cltvExpiryDelta: policy.timeLockDelta,
+            },
+          ],
+        }),
+      );
     }
     Clipboard.setString(JSON.stringify(routeHints));
 
@@ -138,13 +149,13 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
     await register({
       username: "test12345",
     });
-  }
+  };
 
   const onPressUpdateRouteHints = async () => {
     await updateRouteHints({
       username: "test12345",
     });
-  }
+  };
 
   return (
     <Container>
@@ -160,8 +171,17 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
       </Header>
       <Content>
         <TextInput placeholder="Pubkey" value={pubkeyInput} onChangeText={setPubkeyInput} />
-        <TextInput placeholder="Route hints (JSON)" value={routehintsInput} onChangeText={setRoutehintsInput} />
-        <TextInput placeholder="Satoshi" keyboardType="numeric" value={satInput} onChangeText={setSatInput} />
+        <TextInput
+          placeholder="Route hints (JSON)"
+          value={routehintsInput}
+          onChangeText={setRoutehintsInput}
+        />
+        <TextInput
+          placeholder="Satoshi"
+          keyboardType="numeric"
+          value={satInput}
+          onChangeText={setSatInput}
+        />
         <Button onPress={onClickSend}>
           <Text>Send</Text>
         </Button>
@@ -190,7 +210,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
         </Button>
       </Content>
 
-      {routehints.length > 0   &&
+      {routehints.length > 0 && (
         <QrCode
           size={220}
           data={JSON.stringify({
@@ -198,7 +218,7 @@ export default function KeysendTest({ navigation }: ILightningInfoProps) {
             routehints,
           })}
         />
-      }
+      )}
     </Container>
   );
 }

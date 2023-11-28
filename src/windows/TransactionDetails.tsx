@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import DialogAndroid from "react-native-dialogs";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
 import { fromUnixTime } from "date-fns";
 import MapView, { PROVIDER_DEFAULT } from "react-native-maps";

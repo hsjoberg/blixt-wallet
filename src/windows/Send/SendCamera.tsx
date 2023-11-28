@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, InteractionManager } from "react-native";
-import Clipboard from "@react-native-community/clipboard";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { Icon, Text } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { getStatusBarHeight } from "react-native-status-bar-height";
