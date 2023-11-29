@@ -572,7 +572,12 @@ public class LndMobileService extends Service {
         }
 
         Notification notification = notificationBuilder.build();
-        startForeground(ONGOING_NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+          startForeground(ONGOING_NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+        } else {
+          startForeground(ONGOING_NOTIFICATION_ID, notification);
+        }
       }
     }
 
