@@ -1,5 +1,11 @@
 import React, { ReactNode } from "react";
-import { StyleSheet, KeyboardAvoidingView, StyleProp, ViewStyle, InputAccessoryView } from "react-native";
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  StyleProp,
+  ViewStyle,
+  InputAccessoryView,
+} from "react-native";
 import { View, Item, Text, Label, Icon } from "native-base";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { MathPad, IMathPadProps } from "../components/MathPad";
@@ -23,49 +29,69 @@ export interface IFormProps {
   mathPadProps?: IMathPadProps;
 }
 
-export default function Form({ buttons, items, style, noticeText, noticeIcon, mathPadProps }: IFormProps) {
+export default function Form({
+  buttons,
+  items,
+  style,
+  noticeText,
+  noticeIcon,
+  mathPadProps,
+}: IFormProps) {
   return (
-    <KeyboardAvoidingView enabled={PLATFORM === "ios"} style={[styles.content, style]} behavior={"padding"} keyboardVerticalOffset={77}>
+    <KeyboardAvoidingView
+      enabled={PLATFORM === "ios"}
+      style={[styles.content, style]}
+      behavior={"padding"}
+      keyboardVerticalOffset={77}
+    >
       <View style={styles.itemContainer}>
-        {items.map(({ key, title, component, success, active }, i) => (
-          active ?? true
-            ?
-            <Item key={key} style={{
-              marginTop: i > 0 ? 16 : 8
-            }} success={success}>
-              <Label style={{
-                ...styles.itemLabel,
-                fontSize: (title !== null && title.length) >= 14 ? 15 : 17,
-              }}>{title}</Label>
+        {items.map(({ key, title, component, success, active }, i) =>
+          active ?? true ? (
+            <Item
+              key={key}
+              style={{
+                marginTop: i > 0 ? 16 : 8,
+              }}
+              success={success}
+            >
+              <Label
+                style={{
+                  ...styles.itemLabel,
+                  fontSize: (title !== null && title.length) >= 14 ? 15 : 17,
+                }}
+              >
+                {title}
+              </Label>
               {component}
             </Item>
-            :
-            null
-        ))}
-        {noticeText &&
+          ) : null,
+        )}
+        {noticeText && (
           <View style={styles.notice}>
-            {noticeIcon == "info" && <Icon style={styles.noticeIcon} type="AntDesign" name="exclamationcircleo" />}
+            {noticeIcon == "info" && (
+              <Icon style={styles.noticeIcon} type="AntDesign" name="exclamationcircleo" />
+            )}
             <Text style={styles.noticeText}>{noticeText}</Text>
           </View>
-        }
+        )}
       </View>
       <View style={styles.buttonContainer}>
         <>
           {buttons.map((button, i) => {
-            return (<View key={i} style={{ marginTop: i > 0 ? 6 : 0, padding: 16, }}>{button}</View>);
+            return (
+              <View key={i} style={{ marginTop: i > 0 ? 6 : 0, padding: 16 }}>
+                {button}
+              </View>
+            );
           })}
-          {PLATFORM === "android" && mathPadProps &&
-            <MathPad
-              {...mathPadProps}
-            />
-          }
+          {/* {PLATFORM === "android" && mathPadProps && <MathPad {...mathPadProps} />} */}
         </>
       </View>
-      {PLATFORM === "ios" &&
+      {PLATFORM === "ios" && (
         <InputAccessoryView nativeID={MATH_PAD_NATIVE_ID}>
           <MathPad {...mathPadProps} />
         </InputAccessoryView>
-      }
+      )}
     </KeyboardAvoidingView>
   );
 }
@@ -84,6 +110,9 @@ const styles = StyleSheet.create({
     width: 105,
   },
   buttonContainer: {
+    // position: "absolute",
+    // width: "100%",
+    // bottom: 0,
     marginHorizontal: 2,
     marginBottom: 10,
   },
@@ -92,7 +121,7 @@ const styles = StyleSheet.create({
     marginLeft: 3,
   },
   errorText: {
-    color: blixtTheme.red
+    color: blixtTheme.red,
   },
   notice: {
     marginTop: 24,
@@ -109,6 +138,6 @@ const styles = StyleSheet.create({
     color: blixtTheme.lightGray,
     marginRight: 60,
     justifyContent: "center",
-    lineHeight: 20
+    lineHeight: 20,
   },
 });
