@@ -629,20 +629,15 @@ exports[`renders correctly 1`] = `
                                                       placeholderTextColor="#575757"
                                                       returnKeyType="done"
                                                       style={
-                                                        [
-                                                          {
-                                                            "color": "#000",
-                                                            "flex": 1,
-                                                            "fontSize": 17,
-                                                            "height": 50,
-                                                            "paddingLeft": 5,
-                                                            "paddingRight": 5,
-                                                            "top": 1.5,
-                                                          },
-                                                          {
-                                                            "fontSize": 17,
-                                                          },
-                                                        ]
+                                                        {
+                                                          "color": "#000",
+                                                          "flex": 1,
+                                                          "fontSize": 17,
+                                                          "height": 50,
+                                                          "paddingLeft": 5,
+                                                          "paddingRight": 5,
+                                                          "top": 1.5,
+                                                        }
                                                       }
                                                       testID="input-amount-sat"
                                                       underlineColorAndroid="rgba(0,0,0,0)"
@@ -759,20 +754,15 @@ exports[`renders correctly 1`] = `
                                                       placeholderTextColor="#575757"
                                                       returnKeyType="done"
                                                       style={
-                                                        [
-                                                          {
-                                                            "color": "#000",
-                                                            "flex": 1,
-                                                            "fontSize": 17,
-                                                            "height": 50,
-                                                            "paddingLeft": 5,
-                                                            "paddingRight": 5,
-                                                            "top": 1.5,
-                                                          },
-                                                          {
-                                                            "fontSize": 17,
-                                                          },
-                                                        ]
+                                                        {
+                                                          "color": "#000",
+                                                          "flex": 1,
+                                                          "fontSize": 17,
+                                                          "height": 50,
+                                                          "paddingLeft": 5,
+                                                          "paddingRight": 5,
+                                                          "top": 1.5,
+                                                        }
                                                       }
                                                       underlineColorAndroid="rgba(0,0,0,0)"
                                                     />
@@ -880,20 +870,15 @@ exports[`renders correctly 1`] = `
                                                       placeholder="For bookkeeping"
                                                       placeholderTextColor="#575757"
                                                       style={
-                                                        [
-                                                          {
-                                                            "color": "#000",
-                                                            "flex": 1,
-                                                            "fontSize": 17,
-                                                            "height": 50,
-                                                            "paddingLeft": 5,
-                                                            "paddingRight": 5,
-                                                            "top": 1.5,
-                                                          },
-                                                          {
-                                                            "fontSize": 17,
-                                                          },
-                                                        ]
+                                                        {
+                                                          "color": "#000",
+                                                          "flex": 1,
+                                                          "fontSize": 17,
+                                                          "height": 50,
+                                                          "paddingLeft": 5,
+                                                          "paddingRight": 5,
+                                                          "top": 1.5,
+                                                        }
                                                       }
                                                       underlineColorAndroid="rgba(0,0,0,0)"
                                                       value=""
@@ -970,20 +955,15 @@ exports[`renders correctly 1`] = `
                                                       placeholder="Message to payer"
                                                       placeholderTextColor="#575757"
                                                       style={
-                                                        [
-                                                          {
-                                                            "color": "#000",
-                                                            "flex": 1,
-                                                            "fontSize": 17,
-                                                            "height": 50,
-                                                            "paddingLeft": 5,
-                                                            "paddingRight": 5,
-                                                            "top": 1.5,
-                                                          },
-                                                          {
-                                                            "fontSize": 17,
-                                                          },
-                                                        ]
+                                                        {
+                                                          "color": "#000",
+                                                          "flex": 1,
+                                                          "fontSize": 17,
+                                                          "height": 50,
+                                                          "paddingLeft": 5,
+                                                          "paddingRight": 5,
+                                                          "top": 1.5,
+                                                        }
                                                       }
                                                       testID="input-message"
                                                       underlineColorAndroid="rgba(0,0,0,0)"
