@@ -47,20 +47,10 @@ export const notificationListener = () => {
 export const getFcmToken = async () => {
   try {
     const newFcmToken = await firebase.messaging().getToken();
+    console.log("firebase token: ", newFcmToken);
     return newFcmToken;
   } catch (error) {
     console.error("error fetching firebase token", error);
     return null;
-  }
-};
-
-export const requestUserPermission = async () => {
-  const authStatus = await firebase.messaging().requestPermission();
-  const enabled =
-    authStatus === firebase.messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === firebase.messaging.AuthorizationStatus.PROVISIONAL;
-
-  if (enabled) {
-    console.log("Authorization status:", authStatus);
   }
 };
