@@ -13,6 +13,7 @@ import { getFcmToken, localNotification, notificationListener } from "../utils/p
 import { toast } from "../utils";
 
 import logger from "./../utils/log";
+import { StorageItem, getItem, getItemObject, setItem } from "../storage/app";
 const log = logger("NotificationManager");
 
 interface ILocalNotificationPayload {
@@ -44,7 +45,10 @@ export const notificationManager: INotificationManagerModel = {
           return;
         }
 
-        await getFcmToken();
+        const token = await getFcmToken();
+        if (!!token) {
+          await setItem(StorageItem.firebaseToken, token);
+        }
         notificationListener();
       } else if (PLATFORM === "android") {
         const granted = await PermissionsAndroid.request(
@@ -53,7 +57,10 @@ export const notificationManager: INotificationManagerModel = {
         if (granted === "denied" || granted === "never_ask_again") {
           log.w("Post notification permission was denied", [granted]);
         } else {
-          await getFcmToken();
+          const token = await getFcmToken();
+          if (!!token) {
+            await setItem(StorageItem.firebaseToken, token);
+          }
           notificationListener();
           return;
         }
