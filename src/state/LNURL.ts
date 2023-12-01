@@ -5,7 +5,6 @@ import * as Bech32 from "bech32";
 // Reach out to me on Telegram @hsjoberg or lnurl mafia group https://t.me/lnurl if you have any questions.
 //
 import { Action, Thunk, action, thunk } from "easy-peasy";
-import { CONSTANTS, JSHash } from "react-native-hash";
 import {
   bytesToHexString,
   bytesToString,
@@ -587,36 +586,17 @@ export const lnUrl: ILNUrlModel = {
           },
         });
 
-        // 7. LN WALLET Verifies that h tag in provided invoice is a
-        //    hash of metadata string converted to byte array in UTF-8 encoding.
-        const descriptionHash = paymentRequest.descriptionHash;
-        if (!descriptionHash) {
-          log.d("", [descriptionHash]);
-          throw new Error("Invoice invalid. Description hash is missing.");
-        }
-
-        let dataToHash = lnUrlObject.metadata;
-        if (gotPayerData) {
-          dataToHash = `${dataToHash}${JSON.stringify(payload.payerData)}`;
-        }
-
-        const hashedMetadata = await JSHash(dataToHash, CONSTANTS.HashAlgorithms.sha256);
-        if (hashedMetadata !== descriptionHash) {
-          log.i("Description hash does not match metdata hash!", [hashedMetadata, descriptionHash]);
-          throw new Error("Invoice description hash is invalid.");
-        }
-
-        // 8. LN WALLET Verifies that amount in provided invoice equals an amount previously specified by user.
+        // 7. LN WALLET Verifies that amount in provided invoice equals an amount previously specified by user.
         if (paymentRequest.numMsat.notEquals(payload.msat)) {
           throw new Error("Received invoice does not match decided cost");
         }
 
-        // 9. If routes array is not empty: verifies signature for every provided ChannelUpdate, may use these routes if fee levels are acceptable.
+        // 8. If routes array is not empty: verifies signature for every provided ChannelUpdate, may use these routes if fee levels are acceptable.
         // TODO...
 
-        // 10. ommitted
+        // 9. ommitted
 
-        // 11. LN WALLET pays the invoice, no additional user confirmation is required at this point.
+        // 10. LN WALLET pays the invoice, no additional user confirmation is required at this point.
         // Jumping back to component:
         actions.setPayRequestResponse(response);
         return response;
