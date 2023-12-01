@@ -1,13 +1,14 @@
 import "react-native-gesture-handler";
 import React from "react";
 import ReactNative, { AppRegistry, LogBox, Platform, UIManager, Text } from "react-native";
+import "@react-native-firebase/messaging";
+import messaging from "@react-native-firebase/messaging";
 import App from "./src/App";
-import {name as appName} from "./app.json";
+import { name as appName } from "./app.json";
 import Long from "long";
 import protobuf from "protobufjs";
 import { enableES5 } from "immer";
 import "./src/i18n/i18n";
-
 
 protobuf.util.Long = Long;
 protobuf.configure();
@@ -29,11 +30,13 @@ LogBox.ignoreLogs([
   "i18next::pluralResolver: Your environment seems not to be Intl API compatible, use an Intl.PluralRules polyfill. Will fallback to the compatibilityJSON v3 format handling.",
 ]);
 
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
+
+// Register background handler
+messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+  console.log("Message handled in the background!", remoteMessage);
+});
 
 AppRegistry.registerComponent(appName, () => App);

@@ -14,9 +14,27 @@ import store from "./state/store";
 import { clearApp } from "./storage/app";
 import { PLATFORM } from "./utils/constants";
 import "./i18n/i18n";
+import {
+  getFcmToken,
+  notificationListener,
+  requestUserPermission,
+} from "./utils/push-notification";
 
 export default function App() {
   const [debug, setDebug] = useState(__DEV__ ? true : false);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const token = await getFcmToken();
+      if (token) {
+        console.log("Your Firebase Token is:", token);
+      }
+    };
+
+    fetchToken();
+    requestUserPermission();
+    notificationListener();
+  }, []);
 
   useEffect(() => {
     (async () => {

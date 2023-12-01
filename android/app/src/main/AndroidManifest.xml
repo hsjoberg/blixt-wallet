@@ -7,7 +7,10 @@
         android:name="com.google.mlkit.vision.DEPENDENCIES"
         android:value="barcode" />
 
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
@@ -18,6 +21,10 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <permission
+      android:name="${applicationId}.permission.C2D_MESSAGE"
+      android:protectionLevel="signature" />
 
     <application
       android:name=".MainApplication"
@@ -120,5 +127,33 @@
           android:value="Run Bitcoin Lightning Network node lnd in order for the user to receive incoming payments"
         />
       </service>
+
+
+      <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground"
+        android:value="false"/>
+        <!-- Change the resource name to your App's accent color - or any other color you want -->
+      <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"
+        android:resource="@color/white"/> <!-- or @android:color/{name} to use a standard color -->
+
+      <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions" />
+      <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
+      <receiver 
+        android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver"
+        android:exported="true">
+        <intent-filter>
+          <action android:name="android.intent.action.BOOT_COMPLETED" />
+            <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+          </intent-filter>
+      </receiver>
+
+      <service
+        android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
+        android:exported="false" >
+        <intent-filter>
+          <action android:name="com.google.firebase.MESSAGING_EVENT" />
+          </intent-filter>
+      </service>
+
     </application>
 </manifest>
