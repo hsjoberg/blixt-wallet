@@ -1,7 +1,10 @@
 import { Platform } from "react-native";
 import BuildConfig from "react-native-build-config";
+import logger from "./../utils/log";
 
-console.log("BuildConfig", BuildConfig);
+const log = logger("build.ts");
+
+log.i("BuildConfig", [BuildConfig]);
 
 export const Flavor: string = Platform.select({
   android: BuildConfig.FLAVOR_custom,
@@ -45,12 +48,12 @@ export const VersionName: string = Platform.select({
   web: BuildConfig.VERSION_NAME,
 });
 
-export const AppleTeamId: string = ["ios", "macos"].includes(Platform.OS) ? BuildConfig.TEAM_ID : "";
+export const AppleTeamId: string = ["ios", "macos"].includes(Platform.OS)
+  ? BuildConfig.TEAM_ID
+  : "";
 
 export const IsHermes: boolean = (global as any).HermesInternal != null;
 
-export const Chain: "mainnet" | "testnet" | "regtest" = BuildConfig.CHAIN;
+export const Chain: "mainnet" | "testnet" | "regtest" | "signet" = BuildConfig.CHAIN;
 
-export const LnBech32Prefix = (Chain === "mainnet" || Chain === "regtest")
-  ? "lnbc"
-  : "lntb";
+export const LnBech32Prefix = Chain === "mainnet" || Chain === "regtest" ? "lnbc" : "lntb";

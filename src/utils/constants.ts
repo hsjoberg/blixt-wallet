@@ -20,8 +20,12 @@ export const PLATFORM = Platform.OS;
 
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
-export const DEFAULT_NEUTRINO_NODE =
-  Chain === "mainnet" ? "node.blixtwallet.com" : "testnet.blixtwallet.com";
+export const DEFAULT_NEUTRINO_NODE = chainSelect({
+  mainnet: "node.blixtwallet.com",
+  testnet: "testnet.blixtwallet.com",
+  regtest: "",
+  signet: "",
+});
 export const DEFAULT_INVOICE_EXPIRY = 3600;
 export const DEFAULT_MAX_LN_FEE_PERCENTAGE = 2;
 export const DEFAULT_LND_LOG_LEVEL: LndLogLevel = "info";
@@ -34,18 +38,21 @@ export const DEFAULT_DUNDER_SERVER = chainSelect({
   mainnet: "https://dunder.blixtwallet.com",
   testnet: "https://testnetdunder.blixtwallet.com",
   regtest: "http://192.168.1.111:8080",
+  signet: "135.181.215.237:38333",
 });
 
 export const DEFAULT_SPEEDLOADER_SERVER = chainSelect({
   mainnet: "https://primer.eldamar.icu",
   testnet: "",
   regtest: "",
+  signet: "",
 });
 
 export const DEFAULT_LIGHTNINGBOX_SERVER = chainSelect({
   mainnet: "https://blixtwallet.com/lightning-box",
   testnet: "",
   regtest: "",
+  signet: "",
 });
 export const DEFAULT_LIGHTNINGBOX_LNURLPDESC = "Thanks for the sats! ⚡️";
 
