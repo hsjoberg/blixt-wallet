@@ -140,7 +140,6 @@ export const bumpFee = async (
   txid: string,
   index: number,
 ): Promise<walletrpc.BumpFeeResponse> => {
-  console.log("inside");
   const response = await sendCommand<
     walletrpc.BumpFeeRequest,
     walletrpc.IBumpFeeRequest,
