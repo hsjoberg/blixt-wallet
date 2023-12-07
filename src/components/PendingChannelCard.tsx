@@ -109,13 +109,33 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
 
     const [txid, index] = channel.channel?.channelPoint?.split(":");
 
-    const result = await bumpFee({
-      feeRate: 100,
-      index: Number(index),
-      txid,
-    });
+    Alert.alert('Fee rate', 'Enter fee rate in sat/vB', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: async (text) => {
+          const feeRate = Number(text);
 
-    console.log(result);
+          if (isNaN(feeRate)) {
+            Alert.alert('Invalid fee rate');
+            return;
+          }
+
+          const result = await bumpFee({
+            feeRate,
+            index: Number(index),
+            txid,
+          });
+      
+          console.log(result);
+        },
+      },
+    ]);
+
+
   };
 
   const abandon = async () => {

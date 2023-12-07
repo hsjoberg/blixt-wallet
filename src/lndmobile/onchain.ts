@@ -158,9 +158,6 @@ export const bumpFee = async (
       targetConf: 1,
       satPerByte: 0,
       satPerVbyte: Long.fromValue(feeRate),
-      toJSON: function (): { [k: string]: any } {
-        throw new Error("Function not implemented.");
-      },
     },
   });
 
