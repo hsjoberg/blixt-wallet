@@ -155,7 +155,7 @@ export const bumpFee = async (
         outputIndex: index,
       },
       force: true,
-      satPerVbyte: Long.fromValue(500),
+      satPerVbyte: Long.fromValue(feeRate),
     },
   });
 
