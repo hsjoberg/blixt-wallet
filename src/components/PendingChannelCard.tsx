@@ -107,35 +107,45 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
       return;
     }
 
-    const [txid, index] = channel.channel?.channelPoint?.split(":");
+    const [txid, _] = channel.channel?.channelPoint?.split(":");
 
-    Alert.alert('Fee rate', 'Enter fee rate in sat/vB', [
+    Alert.prompt("Bump Fee", "Enter fee rate (sat/vB) and index (FeeRate:index)", [
       {
-        text: 'Cancel',
-        style: 'cancel',
+        text: t("buttons.cancel", { ns: namespaces.common }),
+        style: "cancel",
+        onPress: () => {},
       },
       {
-        text: 'OK',
+        text: "OK",
         onPress: async (text) => {
-          const feeRate = Number(text);
+          const [feeRate, index] = text?.split(":") ?? [];
 
-          if (isNaN(feeRate)) {
-            Alert.alert('Invalid fee rate');
+          const feeRateNumber = Number(feeRate);
+
+          if (!index) {
+            Alert.alert("Missing Output Index");
             return;
           }
 
-          const result = await bumpFee({
-            feeRate,
-            index: Number(index),
-            txid,
-          });
-      
-          console.log(result);
+          if (isNaN(feeRateNumber)) {
+            Alert.alert("Invalid fee rate");
+            return;
+          }
+
+          try {
+            await bumpFee({
+              feeRate: feeRateNumber,
+              index: Number(index),
+              txid,
+            });
+
+            Alert.alert("Bumped Fee");
+          } catch (err) {
+            console.error("Fee bump failed", err);
+          }
         },
       },
     ]);
-
-
   };
 
   const abandon = async () => {

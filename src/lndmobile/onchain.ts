@@ -138,11 +138,12 @@ export const decodeSubscribeTransactionsResult = (data: string): lnrpc.Transacti
 export const bumpFee = async (
   feeRate: number,
   txid: string,
-  index: number,
+  index?: number,
 ): Promise<walletrpc.BumpFeeResponse> => {
+  console.log("bump fee", feeRate, txid, index);
   const response = await sendCommand<
-    walletrpc.BumpFeeRequest,
     walletrpc.IBumpFeeRequest,
+    walletrpc.BumpFeeRequest,
     walletrpc.BumpFeeResponse
   >({
     request: walletrpc.BumpFeeRequest,
@@ -151,15 +152,13 @@ export const bumpFee = async (
     options: {
       outpoint: {
         txidStr: txid,
-        outputIndex: index,
+        // outputIndex: index,
       },
-      force: false,
-      targetConf: 1,
-      satPerByte: 0,
-      satPerVbyte: Long.fromValue(feeRate),
+      force: true,
+      satPerVbyte: Long.fromValue(500),
     },
   });
 
-  console.log(response);
+  console.log("bump fee response", response);
   return response;
 };

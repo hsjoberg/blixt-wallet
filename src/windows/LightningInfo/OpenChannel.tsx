@@ -67,14 +67,14 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
         await connectAndOpenChannelAll({
           peer,
           feeRateSat: feeRate !== 0 ? feeRate : undefined,
-          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : lnrpc.CommitmentType.ANCHORS,
+          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : undefined,
         });
       } else {
         await connectAndOpenChannel({
           peer,
           amount: satoshiValue,
           feeRateSat: feeRate !== 0 ? feeRate : undefined,
-          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : lnrpc.CommitmentType.ANCHORS,
+          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : undefined,
         });
       }
       await getChannels(undefined);
