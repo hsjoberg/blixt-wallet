@@ -152,7 +152,7 @@ export const bumpFee = async (
     options: {
       outpoint: {
         txidStr: txid,
-        // outputIndex: index,
+        outputIndex: index,
       },
       force: true,
       satPerVbyte: Long.fromValue(500),
