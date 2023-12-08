@@ -42,12 +42,14 @@ platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
 project 'BlixtWallet',
-        # 'DebugTestnet' => :debug,
-        # 'ReleaseTestnet' => :release,
-        # 'DebugFakelnd' => :debug,
-        # 'ReleaseFakelnd' => :release,
-        # 'DebugRegtest' => :debug,
-        # 'ReleaseRegtest' => :release,
+        'DebugTestnet' => :debug,
+        'ReleaseTestnet' => :release,
+        'DebugFakelnd' => :debug,
+        'ReleaseFakelnd' => :release,
+        'DebugRegtest' => :debug,
+        'ReleaseRegtest' => :release,
+        'DebugSignet' => :debug,
+        'ReleaseSignet' => :release,
         'Debug' => :debug,
         'Release' => :release
 
@@ -60,7 +62,7 @@ project 'BlixtWallet',
 #   dependencies: {
 #     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
 # ```
-flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
+flipper_config = FlipperConfiguration.disabled # ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
