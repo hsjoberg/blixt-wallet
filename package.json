@@ -57,7 +57,7 @@
     "@babel/preset-typescript": "^7.23.3",
     "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-native-clipboard/clipboard": "1.11.1",
-    "@react-native-community/geolocation": "git+https://github.com/hsjoberg/react-native-geolocation#d1e2f4b9381309d1570231e47288c63c3246f402",
+    "@react-native-community/geolocation": "git+https://github.com/hsjoberg/react-native-geolocation#f8fe6f98246904621238a0a07877dab6a1a86350",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/netinfo": "^9.4.1",
     "@react-native-community/push-notification-ios": "^1.11.0",
