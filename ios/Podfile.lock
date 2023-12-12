@@ -1112,7 +1112,7 @@ PODS:
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNScreens (3.27.0):
+  - RNScreens (3.29.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1126,7 +1126,7 @@ PODS:
     - React-Core
   - SocketRocket (0.6.1)
   - SwiftProtobuf (1.22.1)
-  - VisionCamera (3.6.14):
+  - VisionCamera (3.6.15):
     - React
     - React-callinvoker
     - React-Core
@@ -1461,13 +1461,13 @@ SPEC CHECKSUMS:
   RNPermissions: bfc61982fffcce1a249d4ce8714d5274ce6a9629
   RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
   RNReanimated: 57f436e7aa3d277fbfed05e003230b43428157c0
-  RNScreens: 5f4df9babb21d30723580377b5f52d9f9baf0005
+  RNScreens: b582cb834dc4133307562e930e8fa914b8c04ef2
   RNSecureRandom: 7b1df97e96cde33fccc6b64ed4072592fc06627c
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   RNVectorIcons: 8cabd5809519015ed2c1cdb4ec83d563296bd5cc
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
-  VisionCamera: d8fa57fa3d5d97f3679c6a767c8382d9930e287b
+  VisionCamera: 1559d61e7e79fd61a16ae3d78dd4de3846ac7f02
   Yoga: 20d6a900dcc8d61d5e3b799bbf627cc34474a8c4
 
 PODFILE CHECKSUM: b058dce45c45848024f1ee19124a7f23283b45d7

@@ -397,7 +397,7 @@ PODS:
     - React-perflogger (= 0.72.11)
   - RNCAsyncStorage (1.21.0):
     - React-Core
-  - RNCClipboard (1.12.1):
+  - RNCClipboard (1.11.1):
     - React-Core
   - RNFS (2.20.0):
     - React-Core
@@ -618,10 +618,10 @@ SPEC CHECKSUMS:
   React-utils: 9dea803183d19497918b00f46429b8a209527e8a
   ReactCommon: ce035922bd18291a76c20b1153d8ae69dba8daf9
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
-  RNCClipboard: d77213bfa269013bf4b857b7a9ca37ee062d8ef1
+  RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
-  RNReanimated: fdbaa9c964bbab7fac50c90862b6cc5f041679b9
+  RNReanimated: 901764b6ba1ff82505db9a45a3b4b70f2f21f04f
   RNSecureRandom: 7b1df97e96cde33fccc6b64ed4072592fc06627c
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
@@ -630,4 +630,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e5b6ee4253053d65cb37c23ecf57e6b7f173865c
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.3

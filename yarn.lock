@@ -11648,9 +11648,10 @@ react-native-reanimated@^3.6.1:
   version "4.7.4"
   resolved "git+https://github.com/th3rdwave/react-native-safe-area-context#a16ed2e174a5a6103b0d934fe98368d67c4b4656"
 
-"react-native-screens@git+https://github.com/software-mansion/react-native-screens#c42cad00fa38b446cf0170d7a3b153dd4cd6bfb4":
-  version "3.27.0"
-  resolved "git+https://github.com/software-mansion/react-native-screens#c42cad00fa38b446cf0170d7a3b153dd4cd6bfb4"
+react-native-screens@3.29.0:
+  version "3.29.0"
+  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-3.29.0.tgz#1dee0326defbc1d4ef4e68287abb32a8e6b76b29"
+  integrity sha512-yB1GoAMamFAcYf4ku94uBPn0/ani9QG7NdI98beJ5cet2YFESYYzuEIuU+kt+CNRcO8qqKeugxlfgAa3HyTqlg==
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
@@ -11741,10 +11742,10 @@ react-native-vector-icons@^7.0.0:
     prop-types "^15.7.2"
     yargs "^15.0.2"
 
-react-native-vision-camera@^3.6.14:
-  version "3.6.14"
-  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-3.6.14.tgz#772ffe009943ff0398dc5d57f4f9672fd58ff8af"
-  integrity sha512-jS4I1sE2P+N9pukzTR8DY1GPXy5hJ2MPjAMDXxhMhlLZD2xUyxQBAp+2PoOZDAV66diZWV9lcN6oMNGUmJHLbw==
+react-native-vision-camera@3.6.15:
+  version "3.6.15"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-3.6.15.tgz#daa64c8c6c9ad5f745ea411effe2dd8e9af802ab"
+  integrity sha512-9/yv5C7QbGcOr6yam8qiAzN9xsgKaoBtCOexOoegp2ZZ69b5zPuXDDbfBkbAw1GtcQ2qBSbrq1b8giUwRFjU3g==
 
 react-native-web-linear-gradient@^1.1.2:
   version "1.1.2"
