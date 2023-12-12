@@ -55,9 +55,6 @@ export const transaction: ITransactionModel = {
 
     if (!foundTransaction) {
       const id = await createTransaction(db, tx);
-      // This is causing animation glitches when moving from setup invoice -> QR
-      // Disabling until we know how to solve this.
-      // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       actions.addTransaction({ ...tx, id });
     }
   }),
@@ -165,9 +162,6 @@ export const transaction: ITransactionModel = {
             };
             // tslint:disable-next-line
             updateTransaction(db, updated).then(() => {
-              if (hideExpiredInvoices) {
-                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-              }
               actions.updateTransaction({ transaction: updated });
             });
           }
@@ -189,9 +183,6 @@ export const transaction: ITransactionModel = {
             };
             // tslint:disable-next-line
             updateTransaction(db, updated).then(() => {
-              if (hideExpiredInvoices) {
-                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-              }
               actions.updateTransaction({ transaction: updated })
             });
           }

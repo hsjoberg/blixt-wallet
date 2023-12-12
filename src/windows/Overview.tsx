@@ -1,10 +1,9 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useCallback } from "react";
 import {
   Platform,
   Animated,
   StyleSheet,
   View,
-  ScrollView,
   StatusBar,
   Easing,
   RefreshControl,
@@ -19,6 +18,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Long from "long";
+import { FlashList } from "@shopify/flash-list";
 
 import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
@@ -45,14 +45,12 @@ const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 const theme = nativeBaseTheme.default;
 const blixtTheme = nativeBaseTheme.blixtTheme;
-const NUM_TRANSACTIONS_PER_LOAD = 25;
-const LOAD_BOTTOM_PADDING = 475;
 
 export interface IOverviewProps {
   navigation: BottomTabNavigationProp<RootStackParamList, "Overview">;
 }
 function Overview({ navigation }: IOverviewProps) {
-  const { t, i18n } = useTranslation(namespaces.overview);
+  const { t } = useTranslation(namespaces.overview);
 
   const layoutMode = useLayoutMode();
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
@@ -73,9 +71,6 @@ function Overview({ navigation }: IOverviewProps) {
 
   const scrollYAnimatedValue = useRef(new Animated.Value(0)).current;
   const [refreshing, setRefreshing] = useState(false);
-
-  const [contentExpand, setContentExpand] = useState<number>(1);
-  const [expanding, setExpanding] = useState<boolean>(false);
 
   const getBalance = useStoreActions((store) => store.channel.getBalance);
   const getFiatRate = useStoreActions((store) => store.fiat.getRate);
@@ -129,10 +124,10 @@ function Overview({ navigation }: IOverviewProps) {
   });
 
   const refreshControl =
-    PLATFORM === "android" ? (
+    PLATFORM === "android" || PLATFORM === "ios" ? (
       <RefreshControl
-        title="Refreshing"
-        progressViewOffset={183 / (zoomed ? 0.85 : 1)}
+        title=""
+        progressViewOffset={PLATFORM === "android" ? 183 : 204 / (zoomed ? 0.85 : 1)}
         refreshing={refreshing}
         colors={[blixtTheme.light]}
         progressBackgroundColor={blixtTheme.gray}
@@ -155,52 +150,21 @@ function Overview({ navigation }: IOverviewProps) {
           setRefreshing(false);
         }}
       />
-    ) : (
-      <></>
-    );
+    ) : undefined;
+
   const transactionListOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     Animated.event([{ nativeEvent: { contentOffset: { y: scrollYAnimatedValue } } }], {
       useNativeDriver: false,
     })(event);
-
-    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-    const paddingToBottom = LOAD_BOTTOM_PADDING;
-    if (
-      !expanding &&
-      layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom
-    ) {
-      if (contentExpand * NUM_TRANSACTIONS_PER_LOAD < transactions.length) {
-        setExpanding(true);
-        setTimeout(() => setExpanding(false), 1000);
-        setContentExpand(contentExpand + 1);
-      }
-    }
   };
 
   const txs = useMemo(() => {
-    if (transactions.length > 0) {
-      return transactions
-        .filter((transaction) =>
-          hideExpiredInvoices
-            ? !(transaction.status === "EXPIRED" || transaction.status === "CANCELED")
-            : true,
-        )
-        .map((transaction, key) => {
-          if (key > contentExpand * NUM_TRANSACTIONS_PER_LOAD) {
-            return null;
-          }
-          return (
-            <TransactionCard
-              key={transaction.rHash}
-              transaction={transaction}
-              unit={bitcoinUnit}
-              onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })}
-            />
-          );
-        });
-    }
-    return <Text style={{ textAlign: "center", margin: 16 }}>{t("noTransactionsYet")}</Text>;
-  }, [transactions, contentExpand, bitcoinUnit, hideExpiredInvoices]);
+    return transactions.filter((transaction) =>
+      hideExpiredInvoices
+        ? !(transaction.status === "EXPIRED" || transaction.status === "CANCELED")
+        : true,
+    );
+  }, [transactions, bitcoinUnit, hideExpiredInvoices]);
 
   const onPressBalanceHeader = async () => {
     await changePreferFiat(!preferFiat);
@@ -213,6 +177,8 @@ function Overview({ navigation }: IOverviewProps) {
   const bitcoinBalance = formatBitcoin(balance, bitcoinUnit);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
 
+  const flashlist = useRef<FlashList<any>>(null);
+
   return (
     <Container style={{ marginTop: PLATFORM === "macos" ? 0.5 : 0 }}>
       <StatusBar
@@ -223,19 +189,40 @@ function Overview({ navigation }: IOverviewProps) {
         translucent={true}
       />
       <View style={style.overview}>
-        <ScrollView
+        <FlashList
+          ref={flashlist}
+          alwaysBounceVertical={false}
           contentContainerStyle={style.transactionList}
-          scrollEventThrottle={16}
+          scrollEventThrottle={16} /* TODO: Remove? */
           refreshControl={refreshControl}
           onScroll={transactionListOnScroll}
           testID="TX_LIST"
-        >
-          {isRecoverMode && <RecoverInfo />}
-          {onboardingState === "SEND_ONCHAIN" && <SendOnChain bitcoinAddress={bitcoinAddress} />}
-          {onboardingState === "DO_BACKUP" && <DoBackup />}
-          {pendingOpenBalance.greaterThan(0) && <NewChannelBeingOpened />}
-          {txs}
-        </ScrollView>
+          data={txs}
+          renderItem={({ item: transaction }) => (
+            <TransactionCard
+              transaction={transaction}
+              unit={bitcoinUnit}
+              onPress={(rHash) => navigation.navigate("TransactionDetails", { rHash })}
+            />
+          )}
+          estimatedItemSize={86}
+          keyExtractor={(transaction) => transaction.id!?.toString()}
+          ListEmptyComponent={
+            <Text style={{ textAlign: "center", margin: 16 }}>{t("noTransactionsYet")}</Text>
+          }
+          ListHeaderComponent={() => {
+            return (
+              <>
+                {isRecoverMode && <RecoverInfo />}
+                {onboardingState === "SEND_ONCHAIN" && (
+                  <SendOnChain bitcoinAddress={bitcoinAddress} />
+                )}
+                {onboardingState === "DO_BACKUP" && <DoBackup />}
+                {pendingOpenBalance.greaterThan(0) && <NewChannelBeingOpened />}
+              </>
+            );
+          }}
+        />
         <Animated.View
           style={[style.animatedTop, { height: headerHeight }]}
           pointerEvents="box-none"

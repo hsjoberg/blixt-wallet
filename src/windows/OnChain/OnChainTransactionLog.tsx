@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect } from "react";
-import { FlatList } from "react-native";
 import { Container, Icon } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { FlashList } from "@shopify/flash-list";
 
 import { OnChainStackParamList } from "./index";
 import OnChainTransactionItem from "../../components/OnChainTransactionItem";
@@ -35,11 +35,11 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
       headerShown: true,
       headerRight: () => {
         return (
-          <NavigationButton onPress={async () => rpcReady && await getTransactions()}>
+          <NavigationButton onPress={async () => rpcReady && (await getTransactions())}>
             <Icon type="MaterialIcons" name="sync" style={{ fontSize: 22 }} />
           </NavigationButton>
-        )
-      }
+        );
+      },
     });
   }, [navigation]);
 
@@ -49,9 +49,11 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
 
   return (
     <Container>
-      <FlatList
-        initialNumToRender={13}
-        data={transactions.sort((tx1, tx2) => tx2.timeStamp!.toNumber() - tx1.timeStamp!.toNumber())}
+      <FlashList
+        estimatedItemSize={75}
+        data={transactions.sort(
+          (tx1, tx2) => tx2.timeStamp!.toNumber() - tx1.timeStamp!.toNumber(),
+        )}
         renderItem={({ item: transaction }) => (
           <OnChainTransactionItem
             key={transaction.txHash! + transaction.type}

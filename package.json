@@ -67,6 +67,7 @@
     "@react-navigation/drawer": "7.0.0-alpha.5",
     "@react-navigation/native": "7.0.0-alpha.4",
     "@react-navigation/stack": "^6.3.17",
+    "@shopify/flash-list": "^1.6.3",
     "@tsconfig/react-native": "^3.0.0",
     "add": "^2.0.6",
     "aes-js": "^3.1.2",
