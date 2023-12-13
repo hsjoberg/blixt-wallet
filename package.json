@@ -107,7 +107,7 @@
     "react-native-build-config": "git+https://github.com/hsjoberg/react-native-build-config.git#d53d9a486331dd8b06764a6bbc61e74eb253f475",
     "react-native-camera-kit": "^13.0.0",
     "react-native-codegen": "^0.72.0",
-    "react-native-dialogs": "git+https://github.com/hsjoberg/react-native-dialogs.git#3c7d60b4b89ad5920c2f629f72a0313ea3363ee9",
+    "react-native-dialogs": "1.1.2",
     "react-native-document-picker": "8.2.1",
     "react-native-easy-grid": "0.2.2",
     "react-native-electron": "^0.19.0",

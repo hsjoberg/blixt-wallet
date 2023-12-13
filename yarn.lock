@@ -11435,9 +11435,10 @@ react-native-codegen@^0.72.0:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
-"react-native-dialogs@git+https://github.com/hsjoberg/react-native-dialogs.git#3c7d60b4b89ad5920c2f629f72a0313ea3363ee9":
-  version "1.1.1"
-  resolved "git+https://github.com/hsjoberg/react-native-dialogs.git#3c7d60b4b89ad5920c2f629f72a0313ea3363ee9"
+react-native-dialogs@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-dialogs/-/react-native-dialogs-1.1.2.tgz#28f6173e381c9354002b1c7839aa23dec4c5f71b"
+  integrity sha512-W0y22JpiywLNVYny32Z85h2zETkY9Neh48zndHJ4Byx/vS96Ex/0fhZ55hRS7XER7SBH3SHo5+TBTuX7ECHrLw==
 
 react-native-document-picker@8.2.1:
   version "8.2.1"
