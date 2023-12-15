@@ -120,7 +120,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
         onPress: async (text) => {
           const [feeRate, index] = text?.split(":") ?? [];
 
-          const feeRateNumber = Number(feeRate);
+          const feeRateNumber = Number.parseInt(feeRate);
 
           if (!index) {
             Alert.alert("Missing Output Index");
@@ -135,12 +135,13 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
           try {
             await bumpFee({
               feeRate: feeRateNumber,
-              index: Number(index),
+              index: Number.parseInt(index),
               txid,
             });
 
             Alert.alert("Bumped Fee");
           } catch (err) {
+            Alert.alert("Failed To Bump Fee: ", err);
             console.error("Fee bump failed", err);
           }
         },
@@ -276,18 +277,18 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                     )}
                   </Text>
                 </Right>
-                <Row style={{ width: "100%" }}>
-                  <Left>
-                    <Button
-                      style={{ marginTop: 14 }}
-                      danger={true}
-                      small={true}
-                      onPress={() => bumpChannelFee(channel)}
-                    >
-                      <Text style={{ fontSize: 8 }}>{"bump fee"}</Text>
-                    </Button>
-                  </Left>
-                </Row>
+              </Row>
+              <Row style={{ width: "100%" }}>
+                <Left>
+                  <Button
+                    style={{ marginTop: 14 }}
+                    danger={true}
+                    small={true}
+                    onPress={() => bumpChannelFee(channel)}
+                  >
+                    <Text style={{ fontSize: 8 }}>{t("channel.bumpFee")}</Text>
+                  </Button>
+                </Left>
               </Row>
               <Row style={{ width: "100%" }}>
                 <Left>
@@ -369,18 +370,6 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                   </CopyText>
                 </Right>
               </Row>
-              <Row style={{ width: "100%" }}>
-                <Left>
-                  <Button
-                    style={{ marginTop: 14 }}
-                    danger={true}
-                    small={true}
-                    onPress={() => bumpChannelFee(channel)}
-                  >
-                    <Text style={{ fontSize: 8 }}>{"bump fee"}</Text>
-                  </Button>
-                </Left>
-              </Row>
               {isForceClosableChannel === true && (
                 <Row style={{ width: "100%" }}>
                   <Left>
@@ -396,23 +385,37 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                 </Row>
               )}
               {!!(channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.closingTxid && (
-                <Row style={{ width: "100%" }}>
-                  <Left>
-                    <Button
-                      style={{ marginTop: 14 }}
-                      small={true}
-                      onPress={() =>
-                        onPressViewInExplorer(
-                          (channel as lnrpc.PendingChannelsResponse.ClosedChannel).closingTxid,
-                        )
-                      }
-                    >
-                      <Text style={{ fontSize: 8 }}>
-                        {t("generic.viewInBlockExplorer", { ns: namespaces.common })}
-                      </Text>
-                    </Button>
-                  </Left>
-                </Row>
+                <>
+                  <Row style={{ width: "100%" }}>
+                    <Left>
+                      <Button
+                        style={{ marginTop: 14 }}
+                        danger={true}
+                        small={true}
+                        onPress={() => bumpChannelFee(channel)}
+                      >
+                        <Text style={{ fontSize: 8 }}>{t("channel.bumpFee")}</Text>
+                      </Button>
+                    </Left>
+                  </Row>
+                  <Row style={{ width: "100%" }}>
+                    <Left>
+                      <Button
+                        style={{ marginTop: 14 }}
+                        small={true}
+                        onPress={() =>
+                          onPressViewInExplorer(
+                            (channel as lnrpc.PendingChannelsResponse.ClosedChannel).closingTxid,
+                          )
+                        }
+                      >
+                        <Text style={{ fontSize: 8 }}>
+                          {t("generic.viewInBlockExplorer", { ns: namespaces.common })}
+                        </Text>
+                      </Button>
+                    </Left>
+                  </Row>
+                </>
               )}
             </>
           )}

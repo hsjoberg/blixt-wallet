@@ -148,7 +148,7 @@ export const bumpFee = async (
   >({
     request: walletrpc.BumpFeeRequest,
     response: walletrpc.BumpFeeResponse,
-    method: "BumpFee",
+    method: "WalletKitBumpFee",
     options: {
       outpoint: {
         txidStr: txid,

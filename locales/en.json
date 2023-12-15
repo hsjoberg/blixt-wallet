@@ -275,6 +275,7 @@
     },
     "channel": {
       "alias": "Alias",
+      "bumpFee": "Bump Fee",
       "node": "Node",
       "channelId": "Channel ID",
       "channelPoint": "Channel point",

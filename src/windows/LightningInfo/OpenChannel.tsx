@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { Alert } from "../../utils/alert";
 import { lnrpc } from "../../../proto/lightning";
+import { getNodeInfo } from "../../lndmobile";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -63,6 +64,22 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
   const onOpenChannelPress = async () => {
     try {
       setOpening(true);
+
+      const nodeInfo = await getNodeInfo((peer ?? "").split("@")[0], true);
+
+      // Check for anchors features
+      const features = nodeInfo.node?.features;
+
+      console.log("supported fetures are", features);
+      const isAnchorSupported = features ? features["23"] : undefined;
+
+      // Stop opening if anchors is not supported
+      if (!isAnchorSupported) {
+        Alert.alert("Opening to peers without anchor channels is no longer supported.");
+        setOpening(false);
+        return;
+      }
+
       if (withdrawAll) {
         await connectAndOpenChannelAll({
           peer,

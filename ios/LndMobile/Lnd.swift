@@ -110,7 +110,7 @@ open class Lnd {
     "NewAddress": { bytes, cb in LndmobileNewAddress(bytes, cb) },
     "SendCoins": { bytes, cb in LndmobileSendCoins(bytes, cb) },
     "WalletBalance": { bytes, cb in LndmobileWalletBalance(bytes, cb) },
-    "BumpFee": { bytes, cb in LndmobileWalletKitBumpFee(bytes, cb) },
+    "WalletKitBumpFee": { bytes, cb in LndmobileWalletKitBumpFee(bytes, cb) },
 
     // wallet
     "GenSeed": { bytes, cb in LndmobileGenSeed(bytes, cb) },
