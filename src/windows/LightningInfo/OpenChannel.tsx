@@ -77,7 +77,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
       if (!isAnchorSupported) {
         Alert.alert("Opening to peers without anchor channels is no longer supported.");
         setOpening(false);
-        return;
+        // return;
       }
 
       if (withdrawAll) {
