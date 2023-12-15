@@ -107,9 +107,9 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
       return;
     }
 
-    const [txid, _] = channel.channel?.channelPoint?.split(":");
+    const [txid, index] = channel.channel?.channelPoint?.split(":");
 
-    Alert.prompt("Bump Fee", "Enter fee rate (sat/vB) and index (FeeRate:index)", [
+    Alert.prompt("Bump Fee", "Enter fee rate (sats/vB)", [
       {
         text: t("buttons.cancel", { ns: namespaces.common }),
         style: "cancel",
@@ -117,15 +117,14 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
       },
       {
         text: "OK",
-        onPress: async (text) => {
-          const [feeRate, index] = text?.split(":") ?? [];
-
-          const feeRateNumber = Number.parseInt(feeRate);
-
-          if (!index) {
-            Alert.alert("Missing Output Index");
+        onPress: async (feeRate) => {
+          if (!feeRate) {
+            Alert.alert("Missing Fee Rate");
             return;
           }
+
+          const feeRateNumber = Number.parseInt(feeRate);
+          const childIndex = Number.parseInt(index === "0" ? "1" : "0");
 
           if (isNaN(feeRateNumber)) {
             Alert.alert("Invalid fee rate");
@@ -135,7 +134,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
           try {
             await bumpFee({
               feeRate: feeRateNumber,
-              index: Number.parseInt(index),
+              index: childIndex,
               txid,
             });
 
