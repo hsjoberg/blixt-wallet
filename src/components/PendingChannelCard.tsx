@@ -103,13 +103,13 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
       | lnrpc.PendingChannelsResponse.IWaitingCloseChannel,
   ) => {
     if (!channel.channel || !channel.channel.channelPoint) {
-      Alert.alert("Missing channel point in pending transaction");
+      Alert.alert(t("channel.bumpFeeAlerts.missingChannelPoint"));
       return;
     }
 
     const [txid, index] = channel.channel?.channelPoint?.split(":");
 
-    Alert.prompt("Bump Fee", "Enter fee rate (sats/vB)", [
+    Alert.prompt(t("channel.bumpFee"), t("channel.bumpFeeAlerts.enterFeeRate"), [
       {
         text: t("buttons.cancel", { ns: namespaces.common }),
         style: "cancel",
@@ -119,7 +119,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
         text: "OK",
         onPress: async (feeRate) => {
           if (!feeRate) {
-            Alert.alert("Missing Fee Rate");
+            Alert.alert(t("channel.bumpFeeAlerts.missingFeeRate"));
             return;
           }
 
@@ -127,7 +127,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
           const childIndex = Number.parseInt(index === "0" ? "1" : "0");
 
           if (isNaN(feeRateNumber)) {
-            Alert.alert("Invalid fee rate");
+            Alert.alert(t("channel.bumpFeeAlerts.invalidFeeRate"));
             return;
           }
 
@@ -138,9 +138,9 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               txid,
             });
 
-            Alert.alert("Bumped Fee");
+            Alert.alert(t("channel.bumpFeeAlerts.bumpFeeSuccess"));
           } catch (err) {
-            Alert.alert("Failed To Bump Fee: ", err);
+            Alert.alert(t("channel.bumpFeeAlerts.bumpFeeFailed"), err);
             console.error("Fee bump failed", err);
           }
         },

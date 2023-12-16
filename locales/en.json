@@ -303,6 +303,14 @@
       "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Close channel"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingChannelPoint": "Missing channel point in pending transaction",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },
