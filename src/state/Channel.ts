@@ -17,6 +17,7 @@ import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 import logger from "./../utils/log";
+import { getNodeInfo } from "../lndmobile";
 const log = logger("Channel");
 
 export interface IOpenChannelPayload {
@@ -337,6 +338,18 @@ export const channel: IChannelModel = {
         }
       }
 
+      const nodeInfo = await getNodeInfo(pubkey);
+
+      // Check for anchors features
+      const features = nodeInfo.node?.features;
+
+      const isAnchorSupported = features ? features["23"] : undefined;
+
+      // Stop opening if anchors is not supported
+      if (!isAnchorSupported) {
+        throw new Error("Anchor channels are not supported by the remote node");
+      }
+
       const result = await openChannel(pubkey, amount, true, feeRateSat, type);
       getStoreActions().onChain.addToTransactionNotificationBlacklist(
         bytesToHexString(result.fundingTxidBytes.reverse()),
@@ -357,6 +370,18 @@ export const channel: IChannelModel = {
         if (!e.message.includes("already connected to peer")) {
           throw e;
         }
+      }
+
+      const nodeInfo = await getNodeInfo(pubkey);
+
+      // Check for anchors features
+      const features = nodeInfo.node?.features;
+
+      const isAnchorSupported = features ? features["23"] : undefined;
+
+      // Stop opening if anchors is not supported
+      if (!isAnchorSupported) {
+        throw new Error("Anchor channels are not supported by the remote node");
       }
 
       const result = await openChannelAll(pubkey, true, feeRateSat, type);
