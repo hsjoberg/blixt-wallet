@@ -100,7 +100,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
 
   const bumpChannelFee = async (channel: lnrpc.PendingChannelsResponse.IPendingOpenChannel) => {
     if (!channel.channel || !channel.channel.channelPoint) {
-      Alert.alert(t("channel.bumpFeeAlerts.missingChannelPoint"));
+      Alert.alert(t("msg.error", { ns: namespaces.common }));
       return;
     }
 
