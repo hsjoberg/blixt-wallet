@@ -140,7 +140,6 @@ export const bumpFee = async (
   txid: string,
   index?: number,
 ): Promise<walletrpc.BumpFeeResponse> => {
-  console.log("bump fee", feeRate, txid, index);
   const response = await sendCommand<
     walletrpc.IBumpFeeRequest,
     walletrpc.BumpFeeRequest,
@@ -158,7 +157,5 @@ export const bumpFee = async (
       satPerVbyte: Long.fromValue(feeRate),
     },
   });
-
-  console.log("bump fee response", response);
   return response;
 };

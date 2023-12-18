@@ -15,9 +15,9 @@ import {
 import { bytesToHexString, toast } from "../utils";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+import { getNodeInfo } from "../lndmobile";
 
 import logger from "./../utils/log";
-import { getNodeInfo } from "../lndmobile";
 const log = logger("Channel");
 
 export interface IOpenChannelPayload {

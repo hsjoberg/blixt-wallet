@@ -1,4 +1,4 @@
-import { lnrpc } from "../../../proto/lightning";
+import { lnrpc, walletrpc } from "../../../proto/lightning";
 import Long from "long";
 import * as base64 from "base64-js";
 import { DeviceEventEmitter } from "react-native";
@@ -7,7 +7,11 @@ import { hexToUint8Array } from "../../utils";
 /**
  * @throws
  */
-export const openChannel = async (pubkey: string, amount: number, privateChannel: boolean): Promise<lnrpc.ChannelPoint> => {
+export const openChannel = async (
+  pubkey: string,
+  amount: number,
+  privateChannel: boolean,
+): Promise<lnrpc.ChannelPoint> => {
   setTimeout(() => {
     const channelEventUpdate = lnrpc.ChannelEventUpdate.create({
       type: lnrpc.ChannelEventUpdate.UpdateType.OPEN_CHANNEL,
@@ -19,17 +23,16 @@ export const openChannel = async (pubkey: string, amount: number, privateChannel
         private: true,
         remotePubkey: pubkey,
         localBalance: Long.fromNumber(10000),
-      }
+      },
     });
 
-    DeviceEventEmitter.emit(
-      "SubscribeChannelEvents",
-      { data: base64.fromByteArray(lnrpc.ChannelEventUpdate.encode(channelEventUpdate).finish()) }
-    );
+    DeviceEventEmitter.emit("SubscribeChannelEvents", {
+      data: base64.fromByteArray(lnrpc.ChannelEventUpdate.encode(channelEventUpdate).finish()),
+    });
   }, 100);
 
   const response = lnrpc.ChannelPoint.create({
-    fundingTxidBytes: new Uint8Array([0,1,2,3]),
+    fundingTxidBytes: new Uint8Array([0, 1, 2, 3]),
     fundingTxidStr: "abcdef123456",
     outputIndex: 0,
   });
@@ -51,7 +54,10 @@ export const openChannel = async (pubkey: string, amount: number, privateChannel
 /**
  * @throws
  */
-export const openChannelAll = async (pubkey: string, privateChannel: boolean): Promise<lnrpc.ChannelPoint> => {
+export const openChannelAll = async (
+  pubkey: string,
+  privateChannel: boolean,
+): Promise<lnrpc.ChannelPoint> => {
   setTimeout(() => {
     const channelEventUpdate = lnrpc.ChannelEventUpdate.create({
       type: lnrpc.ChannelEventUpdate.UpdateType.OPEN_CHANNEL,
@@ -63,17 +69,16 @@ export const openChannelAll = async (pubkey: string, privateChannel: boolean): P
         private: true,
         remotePubkey: pubkey,
         localBalance: Long.fromNumber(10000),
-      }
+      },
     });
 
-    DeviceEventEmitter.emit(
-      "SubscribeChannelEvents",
-      { data: base64.fromByteArray(lnrpc.ChannelEventUpdate.encode(channelEventUpdate).finish()) }
-    );
+    DeviceEventEmitter.emit("SubscribeChannelEvents", {
+      data: base64.fromByteArray(lnrpc.ChannelEventUpdate.encode(channelEventUpdate).finish()),
+    });
   }, 100);
 
   const response = lnrpc.ChannelPoint.create({
-    fundingTxidBytes: new Uint8Array([0,1,2,3]),
+    fundingTxidBytes: new Uint8Array([0, 1, 2, 3]),
     fundingTxidStr: "abcdef123456",
     outputIndex: 0,
   });
@@ -115,7 +120,10 @@ export const closeChannel = async (fundingTxId: string, outputIndex: number): Pr
  * @throws
  * TODO implement
  */
-export const abandonChannel = async (fundingTxId: string, outputIndex: number): Promise<lnrpc.AbandonChannelResponse> => {
+export const abandonChannel = async (
+  fundingTxId: string,
+  outputIndex: number,
+): Promise<lnrpc.AbandonChannelResponse> => {
   console.log("fake abandonChannel not implemented");
   // const response = await sendCommand<lnrpc.IAbandonChannelRequest, lnrpc.AbandonChannelRequest, lnrpc.AbandonChannelResponse>({
   //   request: lnrpc.AbandonChannelRequest,
@@ -136,87 +144,95 @@ export const abandonChannel = async (fundingTxId: string, outputIndex: number): 
  */
 export const pendingChannels = async (): Promise<lnrpc.PendingChannelsResponse> => {
   const response = lnrpc.PendingChannelsResponse.create({
-    pendingClosingChannels: window.BLIXT_WEB_DEMO ? [] : [
-      {
-        channel: {
-          capacity: new Long(1),
-          channelPoint: "a:0",
-          chanStatusFlags: null,
-          commitmentType: lnrpc.CommitmentType.ANCHORS,
-          initiator: lnrpc.Initiator.INITIATOR_LOCAL,
-          localBalance: new Long(10),
-          localChanReserveSat: new Long(10),
-          numForwardingPackages: new Long(10),
-          private: true,
-          remoteBalance: new Long(10),
-          remoteChanReserveSat: new Long(10),
-          remoteNodePub: "abcd",
-        },
-        closingTxid: "abc"
-      }
-    ],
-    pendingForceClosingChannels: window.BLIXT_WEB_DEMO ? [] : [
-      {
-        anchor: lnrpc.PendingChannelsResponse.ForceClosedChannel.AnchorState["LIMBO"],
-        blocksTilMaturity: 123,
-        channel: {
-          capacity: new Long(1),
-          channelPoint: "b:0",
-          chanStatusFlags: null,
-          commitmentType: lnrpc.CommitmentType.ANCHORS,
-          initiator: lnrpc.Initiator.INITIATOR_LOCAL,
-          localBalance: new Long(10),
-          localChanReserveSat: new Long(10),
-          numForwardingPackages: new Long(10),
-          private: true,
-          remoteBalance: new Long(10),
-          remoteChanReserveSat: new Long(10),
-          remoteNodePub: "abcd2",
-        },
-        closingTxid: "abc2",
-        limboBalance: new Long(1),
-        maturityHeight: 12345,
-        pendingHtlcs: [],
-        recoveredBalance: new Long(123),
-      }
-    ],
-    pendingOpenChannels: window.BLIXT_WEB_DEMO ? [] : [
-      {
-        channel: {
-          capacity: new Long(1),
-          channelPoint: "c:0",
-          chanStatusFlags: null,
-          commitmentType: lnrpc.CommitmentType.ANCHORS,
-          initiator: lnrpc.Initiator.INITIATOR_LOCAL,
-          localBalance: new Long(10),
-          localChanReserveSat: new Long(10),
-          numForwardingPackages: new Long(10),
-          private: true,
-          remoteBalance: new Long(10),
-          remoteChanReserveSat: new Long(10),
-          remoteNodePub: "abcd3",
-        },
-        commitFee: new Long(1),
-        commitWeight: new Long(1),
-        feePerKw: new Long(1)
-      }
-    ],
-    waitingCloseChannels: window.BLIXT_WEB_DEMO ? [] : [
-      {
-        channel: {
-          channelPoint: "d:0",
-        },
-        closingTxid: "abc3",
-        commitments: {
-          localCommitFeeSat: new Long(123),
-          localTxid: "abcdef",
-          remoteCommitFeeSat: new Long(123),
-          remotePendingCommitFeeSat: new Long(123),
-          remotePendingTxid: "abc2",
-          remoteTxid: "abcd4"
-        }
-      }
-    ],
+    pendingClosingChannels: window.BLIXT_WEB_DEMO
+      ? []
+      : [
+          {
+            channel: {
+              capacity: new Long(1),
+              channelPoint: "a:0",
+              chanStatusFlags: null,
+              commitmentType: lnrpc.CommitmentType.ANCHORS,
+              initiator: lnrpc.Initiator.INITIATOR_LOCAL,
+              localBalance: new Long(10),
+              localChanReserveSat: new Long(10),
+              numForwardingPackages: new Long(10),
+              private: true,
+              remoteBalance: new Long(10),
+              remoteChanReserveSat: new Long(10),
+              remoteNodePub: "abcd",
+            },
+            closingTxid: "abc",
+          },
+        ],
+    pendingForceClosingChannels: window.BLIXT_WEB_DEMO
+      ? []
+      : [
+          {
+            anchor: lnrpc.PendingChannelsResponse.ForceClosedChannel.AnchorState["LIMBO"],
+            blocksTilMaturity: 123,
+            channel: {
+              capacity: new Long(1),
+              channelPoint: "b:0",
+              chanStatusFlags: null,
+              commitmentType: lnrpc.CommitmentType.ANCHORS,
+              initiator: lnrpc.Initiator.INITIATOR_LOCAL,
+              localBalance: new Long(10),
+              localChanReserveSat: new Long(10),
+              numForwardingPackages: new Long(10),
+              private: true,
+              remoteBalance: new Long(10),
+              remoteChanReserveSat: new Long(10),
+              remoteNodePub: "abcd2",
+            },
+            closingTxid: "abc2",
+            limboBalance: new Long(1),
+            maturityHeight: 12345,
+            pendingHtlcs: [],
+            recoveredBalance: new Long(123),
+          },
+        ],
+    pendingOpenChannels: window.BLIXT_WEB_DEMO
+      ? []
+      : [
+          {
+            channel: {
+              capacity: new Long(1),
+              channelPoint: "c:0",
+              chanStatusFlags: null,
+              commitmentType: lnrpc.CommitmentType.ANCHORS,
+              initiator: lnrpc.Initiator.INITIATOR_LOCAL,
+              localBalance: new Long(10),
+              localChanReserveSat: new Long(10),
+              numForwardingPackages: new Long(10),
+              private: true,
+              remoteBalance: new Long(10),
+              remoteChanReserveSat: new Long(10),
+              remoteNodePub: "abcd3",
+            },
+            commitFee: new Long(1),
+            commitWeight: new Long(1),
+            feePerKw: new Long(1),
+          },
+        ],
+    waitingCloseChannels: window.BLIXT_WEB_DEMO
+      ? []
+      : [
+          {
+            channel: {
+              channelPoint: "d:0",
+            },
+            closingTxid: "abc3",
+            commitments: {
+              localCommitFeeSat: new Long(123),
+              localTxid: "abcdef",
+              remoteCommitFeeSat: new Long(123),
+              remotePendingCommitFeeSat: new Long(123),
+              remotePendingTxid: "abc2",
+              remoteTxid: "abcd4",
+            },
+          },
+        ],
     totalLimboBalance: Long.fromNumber(0),
   });
   return response;
@@ -227,19 +243,21 @@ export const pendingChannels = async (): Promise<lnrpc.PendingChannelsResponse> 
  */
 export const listChannels = async (): Promise<lnrpc.ListChannelsResponse> => {
   const response = lnrpc.ListChannelsResponse.create({
-    channels: [{
-      active: true,
-      capacity: Long.fromNumber(1000),
-      chanId: Long.fromNumber(0),
-      channelPoint: "abc:0",
-      localBalance: Long.fromNumber(490),
-      localChanReserveSat: Long.fromNumber(10),
-      remoteBalance: Long.fromNumber(500),
-      remoteChanReserveSat: Long.fromNumber(10),
-      remotePubkey: "abcdef1234567890",
-      commitFee: Long.fromValue(1),
-      private: true,
-    }],
+    channels: [
+      {
+        active: true,
+        capacity: Long.fromNumber(1000),
+        chanId: Long.fromNumber(0),
+        channelPoint: "abc:0",
+        localBalance: Long.fromNumber(490),
+        localChanReserveSat: Long.fromNumber(10),
+        remoteBalance: Long.fromNumber(500),
+        remoteChanReserveSat: Long.fromNumber(10),
+        remotePubkey: "abcdef1234567890",
+        commitFee: Long.fromValue(1),
+        private: true,
+      },
+    ],
   });
   return response;
 };
@@ -269,7 +287,7 @@ export const exportAllChannelBackups = async (): Promise<lnrpc.ChanBackupSnapsho
   const response = lnrpc.ChanBackupSnapshot.create({
     multiChanBackup: {
       // chanPoints
-      multiChanBackup: new Uint8Array([1,2,3,4,5,6,7,8,9,10]),
+      multiChanBackup: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
     },
   });
   return response;
@@ -278,7 +296,9 @@ export const exportAllChannelBackups = async (): Promise<lnrpc.ChanBackupSnapsho
 /**
  * @throws
  */
-export const verifyChanBackup = async (channelsBackupBase64: string): Promise<lnrpc.VerifyChanBackupResponse> => {
+export const verifyChanBackup = async (
+  channelsBackupBase64: string,
+): Promise<lnrpc.VerifyChanBackupResponse> => {
   console.error("fake verifyChanBackup not implemented");
   // const response = await sendCommand<lnrpc.IChanBackupSnapshot, lnrpc.ChanBackupSnapshot, lnrpc.VerifyChanBackupResponse>({
   //   request: lnrpc.ChanBackupSnapshot,
@@ -299,7 +319,11 @@ export const channelAcceptor = async () => {
   return null;
 };
 
-export const channelAcceptorResponse = async (pendingChanId: Uint8Array, accept: boolean, zeroConf: boolean = false) => {
+export const channelAcceptorResponse = async (
+  pendingChanId: Uint8Array,
+  accept: boolean,
+  zeroConf: boolean = false,
+) => {
   return true;
 };
 
@@ -316,4 +340,12 @@ export const decodeChannelEvent = (data: string): lnrpc.ChannelEventUpdate => {
     return lnrpc.ChannelEventUpdate.decode(base64.toByteArray(data));
   }
   return lnrpc.ChannelEventUpdate.create({});
+};
+
+/**
+ * @throws
+ */
+export const bumpFee = async (): Promise<walletrpc.BumpFeeResponse> => {
+  const response = walletrpc.BumpFeeResponse.create({});
+  return response;
 };

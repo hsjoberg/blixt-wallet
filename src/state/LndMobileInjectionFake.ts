@@ -170,6 +170,7 @@ export interface ILndMobileInjections {
     sendCoinsAll: (address: string, feeRate?: number) => Promise<lnrpc.SendCoinsResponse>;
     walletBalance: () => Promise<lnrpc.WalletBalanceResponse>;
     subscribeTransactions: () => Promise<string>;
+    bumpFee: (feeRate: number, txid: string, index: number) => Promise<walletrpc.BumpFeeResponse>;
   };
   wallet: {
     decodeInvoiceResult: (data: string) => lnrpc.Invoice;
