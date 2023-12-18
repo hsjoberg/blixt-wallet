@@ -135,6 +135,8 @@ export const onChain: IOnChainModel = {
                 importance: "high",
               });
               actions.addToTransactionNotificationBlacklist(transaction.txHash);
+
+              actions.getTransactions();
             }
           } catch (error) {
             toast(error.message, undefined, "danger");
@@ -143,6 +145,8 @@ export const onChain: IOnChainModel = {
 
         actions.setTransactionSubscriptionStarted(true);
       }
+
+      actions.getTransactions();
       return true;
     },
   ),
