@@ -544,7 +544,7 @@ sync-freelist=1
 accept-keysend=1
 tlsdisableautofill=1
 maxpendingchannels=1000
-max-commit-fee-rate-anchors=100
+max-commit-fee-rate-anchors=300
 
 [db]
 db.no-graph-cache=${lndNoGraphCache.toString()}
