@@ -21,7 +21,8 @@ export const PLATFORM = Platform.OS;
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
 export const DEFAULT_NEUTRINO_NODE = chainSelect({
-  mainnet: "node.blixtwallet.com",
+  mainnet:
+    "node.blixtwallet.com,btcd.lnolymp.us,neutrino.noderunner.wtf,node.eldamar.icu,btcd-mainnet.lightning.computer",
   testnet: "testnet.blixtwallet.com",
   regtest: "",
   signet: "",
@@ -75,11 +76,3 @@ export const BLIXT_NODE_PUBKEY =
   Chain === "mainnet"
     ? "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb"
     : "036b7130b27a23d6fe1d55c1d3bed9e6da5a17090588b0834e8200e0d50ee6886a";
-
-export const MAINNET_NEUTRINO_PEERS = {
-  blixt: "node.blixtwallet.com",
-  zeus: "btcd.lnolymp.us",
-  nitesh: "neutrino.noderunner.wtf",
-  kevin: "node.eldamar.icu",
-  lightningLabs: "btcd-mainnet.lightning.computer",
-};

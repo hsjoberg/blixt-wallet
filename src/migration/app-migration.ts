@@ -340,4 +340,14 @@ export const appMigration: IAppMigration[] = [
       await db.executeSql("ALTER TABLE tx ADD lud18PayerDataEmail TEXT NULL");
     },
   },
+  // Version 39
+  {
+    async beforeLnd(db, i) {
+      if (Chain === "testnet" || Chain === "mainnet") {
+        const neutrinoPeers = DEFAULT_NEUTRINO_NODE?.split(",");
+
+        await setItemObject<string[]>(StorageItem.neutrinoPeers, neutrinoPeers || []);
+      }
+    },
+  },
 ];

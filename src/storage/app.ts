@@ -201,7 +201,8 @@ export const setupApp = async () => {
   let neutrinoFeeUrl = "";
   if (Chain === "mainnet" || Chain === "testnet") {
     lndChainBackend = "neutrino";
-    neutrinoPeers.push(DEFAULT_NEUTRINO_NODE);
+    neutrinoPeers = DEFAULT_NEUTRINO_NODE?.split(",").map((peer) => peer.trim()) || [];
+
     neutrinoFeeUrl = "https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json";
   }
 

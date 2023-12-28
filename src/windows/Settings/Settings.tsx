@@ -730,12 +730,13 @@ ${t("LN.inbound.dialog.msg3")}`;
         {
           text: t("bitcoinNetwork.node.setDialog.title"),
           onPress: async (text) => {
-            if (text === neutrinoPeers[0]) {
+            if (text === neutrinoPeers.join(",")) {
               return;
             }
 
             if (text) {
-              await changeNeutrinoPeers([text]);
+              const neutrinoPeers = text.split(",").map((n) => n.trim());
+              await changeNeutrinoPeers(neutrinoPeers);
             } else {
               await changeNeutrinoPeers([]);
             }
