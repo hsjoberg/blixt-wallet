@@ -8,6 +8,7 @@ import { AlertButton, NativeModules } from "react-native";
 import {
   DEFAULT_PATHFINDING_ALGORITHM,
   DEFAULT_SPEEDLOADER_SERVER,
+  MAINNET_NEUTRINO_PEERS,
   PLATFORM,
 } from "../utils/constants";
 import { Chain, VersionCode } from "../utils/build";
@@ -563,13 +564,24 @@ ${
   lndChainBackend === "neutrino"
     ? `
 [Neutrino]
-${neutrinoPeers[0] !== undefined ? `neutrino.connect=${neutrinoPeers[0]}` : ""}
+${neutrinoPeers[0] !== undefined ? `neutrino.addpeer=${neutrinoPeers[0]}` : ""}
 neutrino.feeurl=${neutrinoFeeUrl}
 neutrino.broadcasttimeout=11s
 neutrino.persistfilters=true
 `
     : ""
 }
+${
+  node === "mainnet"
+    ? `
+  neutrino.addpeer=${MAINNET_NEUTRINO_PEERS.blixt}
+  neutrino.addpeer=${MAINNET_NEUTRINO_PEERS.kevin}
+  neutrino.addpeer=${MAINNET_NEUTRINO_PEERS.lightningLabs}
+  neutrino.addpeer=${MAINNET_NEUTRINO_PEERS.nitesh}
+  neutrino.addpeer=${MAINNET_NEUTRINO_PEERS.zeus}
+  `
+    : ""
+} 
 
 ${
   lndChainBackend === "bitcoindWithZmq"
