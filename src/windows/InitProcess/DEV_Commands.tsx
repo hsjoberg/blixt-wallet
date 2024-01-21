@@ -910,6 +910,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 28)}>
             <Text style={styles.buttonText}>appVersion = 28</Text>
           </Button>
+          <Button small onPress={async () => await setItemObject(StorageItem.appVersion, 38)}>
+            <Text style={styles.buttonText}>appVersion = 38</Text>
+          </Button>
           <Button
             small
             onPress={async () => {

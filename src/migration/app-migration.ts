@@ -343,10 +343,12 @@ export const appMigration: IAppMigration[] = [
   // Version 39
   {
     async beforeLnd(db, i) {
-      if (Chain === "testnet" || Chain === "mainnet") {
-        const neutrinoPeers = DEFAULT_NEUTRINO_NODE?.split(",");
-
-        await setItemObject<string[]>(StorageItem.neutrinoPeers, neutrinoPeers || []);
+      if (Chain === "mainnet") {
+        // Change the peers if the user hasn't manually changed it
+        const peers = await getItemObject<string[]>(StorageItem.neutrinoPeers);
+        if (peers.length === 1 && peers[0] === "node.blixtwallet.com") {
+          await setItemObject<string[]>(StorageItem.neutrinoPeers, DEFAULT_NEUTRINO_NODE);
+        }
       }
     },
   },

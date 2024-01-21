@@ -747,7 +747,7 @@ ${t("LN.inbound.dialog.msg3")}`;
         },
       ],
       "plain-text",
-      neutrinoPeers[0] ?? "",
+      neutrinoPeers.join(",") ?? "",
     );
   };
   const onSetBitcoinNodeLongPress = async () => {
@@ -763,7 +763,7 @@ ${t("LN.inbound.dialog.msg3")}`;
           style: "default",
           text: t("buttons.yes", { ns: namespaces.common }),
           onPress: async () => {
-            await changeNeutrinoPeers([DEFAULT_NEUTRINO_NODE]);
+            await changeNeutrinoPeers(DEFAULT_NEUTRINO_NODE);
             await writeConfig();
             restartNeeded();
           },

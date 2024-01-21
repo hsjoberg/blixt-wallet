@@ -21,11 +21,16 @@ export const PLATFORM = Platform.OS;
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
 export const DEFAULT_NEUTRINO_NODE = chainSelect({
-  mainnet:
-    "node.blixtwallet.com,btcd.lnolymp.us,neutrino.noderunner.wtf,node.eldamar.icu,btcd-mainnet.lightning.computer",
-  testnet: "testnet.blixtwallet.com",
-  regtest: "",
-  signet: "",
+  mainnet: [
+    "node.blixtwallet.com",
+    "btcd.lnolymp.us",
+    "neutrino.noderunner.wtf",
+    "node.eldamar.icu",
+    "btcd-mainnet.lightning.computer",
+  ],
+  testnet: ["testnet.blixtwallet.com"],
+  regtest: [],
+  signet: [],
 });
 export const DEFAULT_INVOICE_EXPIRY = 3600;
 export const DEFAULT_MAX_LN_FEE_PERCENTAGE = 2;
