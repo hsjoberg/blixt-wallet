@@ -535,6 +535,16 @@ export const model: IStoreModel = {
 
     const nodeBackend = lndChainBackend === "neutrino" ? "neutrino" : "bitcoind";
 
+    let neutrinoPeerConfig = "";
+    if (nodeBackend === "neutrino") {
+      // If there is only 1 peer, use `neutrino.connect`, otherwise `neutrino.addpeer`
+      if (neutrinoPeers.length === 1) {
+        neutrinoPeerConfig = `neutrino.connect=${neutrinoPeers[0]}`;
+      } else {
+        neutrinoPeerConfig = neutrinoPeers.map((peer) => `neutrino.addpeer=${peer}`).join("\n");
+      }
+    }
+
     const config = `
 [Application Options]
 debuglevel=${lndLogLevel}
@@ -563,7 +573,7 @@ ${
   lndChainBackend === "neutrino"
     ? `
 [Neutrino]
-${neutrinoPeers[0] !== undefined ? `neutrino.connect=${neutrinoPeers[0]}` : ""}
+${neutrinoPeerConfig}
 neutrino.feeurl=${neutrinoFeeUrl}
 neutrino.broadcasttimeout=11s
 neutrino.persistfilters=true

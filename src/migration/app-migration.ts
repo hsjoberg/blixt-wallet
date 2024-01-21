@@ -340,4 +340,16 @@ export const appMigration: IAppMigration[] = [
       await db.executeSql("ALTER TABLE tx ADD lud18PayerDataEmail TEXT NULL");
     },
   },
+  // Version 39
+  {
+    async beforeLnd(db, i) {
+      if (Chain === "mainnet") {
+        // Change the peers if the user hasn't manually changed it
+        const peers = await getItemObject<string[]>(StorageItem.neutrinoPeers);
+        if (peers.length === 1 && peers[0] === "node.blixtwallet.com") {
+          await setItemObject<string[]>(StorageItem.neutrinoPeers, DEFAULT_NEUTRINO_NODE);
+        }
+      }
+    },
+  },
 ];

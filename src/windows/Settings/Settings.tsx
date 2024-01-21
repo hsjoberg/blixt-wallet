@@ -730,12 +730,13 @@ ${t("LN.inbound.dialog.msg3")}`;
         {
           text: t("bitcoinNetwork.node.setDialog.title"),
           onPress: async (text) => {
-            if (text === neutrinoPeers[0]) {
+            if (text === neutrinoPeers.join(",")) {
               return;
             }
 
             if (text) {
-              await changeNeutrinoPeers([text]);
+              const neutrinoPeers = text.split(",").map((n) => n.trim());
+              await changeNeutrinoPeers(neutrinoPeers);
             } else {
               await changeNeutrinoPeers([]);
             }
@@ -746,7 +747,7 @@ ${t("LN.inbound.dialog.msg3")}`;
         },
       ],
       "plain-text",
-      neutrinoPeers[0] ?? "",
+      neutrinoPeers.join(",") ?? "",
     );
   };
   const onSetBitcoinNodeLongPress = async () => {
@@ -762,7 +763,7 @@ ${t("LN.inbound.dialog.msg3")}`;
           style: "default",
           text: t("buttons.yes", { ns: namespaces.common }),
           onPress: async () => {
-            await changeNeutrinoPeers([DEFAULT_NEUTRINO_NODE]);
+            await changeNeutrinoPeers(DEFAULT_NEUTRINO_NODE);
             await writeConfig();
             restartNeeded();
           },

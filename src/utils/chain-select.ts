@@ -1,6 +1,6 @@
 import { Chain } from "./build";
 
-export function chainSelect<T>(chains: { mainnet: T; testnet?: T; regtest?: T; signet?: T }) {
+export function chainSelect<T>(chains: { mainnet: T; testnet: T; regtest: T; signet: T }) {
   if (Chain === "mainnet") {
     return chains.mainnet;
   } else if (Chain === "testnet") {
