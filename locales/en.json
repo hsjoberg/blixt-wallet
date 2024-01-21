@@ -275,6 +275,7 @@
     },
     "channel": {
       "alias": "Alias",
+      "bumpFee": "Bump Fee",
       "node": "Node",
       "channelId": "Channel ID",
       "channelPoint": "Channel point",
@@ -302,6 +303,13 @@
       "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Close channel"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },

@@ -53,7 +53,14 @@ import {
   pendingChannels,
   subscribeChannelEvents,
 } from "../lndmobile/channel";
-import { autopilotrpc, invoicesrpc, lnrpc, routerrpc, signrpc } from "../../proto/lightning";
+import {
+  autopilotrpc,
+  invoicesrpc,
+  lnrpc,
+  routerrpc,
+  signrpc,
+  walletrpc,
+} from "../../proto/lightning";
 import {
   decodeInvoiceResult,
   deriveKey,
@@ -73,6 +80,7 @@ import {
   sendCoinsAll,
   subscribeTransactions,
   walletBalance,
+  bumpFee,
 } from "../lndmobile/onchain";
 import { modifyStatus, queryScores, setScores, status } from "../lndmobile/autopilot";
 
@@ -185,6 +193,7 @@ export interface ILndMobileInjections {
     sendCoinsAll: (address: string, feeRate?: number) => Promise<lnrpc.SendCoinsResponse>;
     walletBalance: () => Promise<lnrpc.WalletBalanceResponse>;
     subscribeTransactions: () => Promise<string>;
+    bumpFee: (feeRate: number, txid: string, index: number) => Promise<walletrpc.BumpFeeResponse>;
   };
   wallet: {
     decodeInvoiceResult: (data: string) => lnrpc.Invoice;
@@ -284,6 +293,7 @@ export default {
     sendCoinsAll,
     walletBalance,
     subscribeTransactions,
+    bumpFee,
   },
   wallet: {
     decodeInvoiceResult,
