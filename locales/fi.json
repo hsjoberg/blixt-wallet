@@ -2,15 +2,12 @@
   "common": {
     "generic": {
       "lightningAddress": "Salamaosoite",
-      "lightningBox": "Salamalaatikko",
       "nodeAlias": "Solmun lempinimi",
       "description": "Kuvaus",
       "amount": "Määrä",
       "fee": "Palkkio",
       "search": "Etsi",
-      "viewInBlockExplorer": "Näytä lohko-selaimessa",
-      "blocks": "{{numBlocks}} lohkot",
-      "reason": "Syy: {{reason}}"
+      "viewInBlockExplorer": "Näytä lohko-selaimessa"
     },
     "buttons": {
       "ok": "Ok",
@@ -255,9 +252,6 @@
       },
       "feeEstimate": {
         "title": "Maksuarvion mukaan"
-      },
-      "outgoingChannel": {
-        "title": "Lähtevä kanava"
       }
     }
   },
@@ -299,7 +293,6 @@
       "remoteCommitmentTxid": "Etäinen sitoutumisen TXID",
       "closeChannel": "Sulje kanava",
       "forceClosePendingChannel": "Väkisin sulje odottava kanava",
-      "forceCloseDelay": "Pakota sulkemisen viive",
       "closeChannelPrompt": {
         "title": "Sulje kanava"
       }
@@ -432,10 +425,6 @@
       "name": {
         "ask": "Lähetä nimeni tämän maksun kanssa",
         "mandatory": "Nimesi on lähetettävä tämän maksun kanssa"
-      },
-      "identifier": {
-        "ask": "Lähetä Lightning-osoitteeni tämän maksun yhteydessä",
-        "mandatory": "Lightning-osoitteesi on lähetettävä tämän maksun yhteydessä"
       }
     },
     "payloadErrors": {
@@ -750,17 +739,14 @@
       "rpc": {
         "title": "Aseta bitcoindin RPC-isäntä"
       },
-      "rpcuser": {
-        "title": "Aseta bitcoind RPC -käyttäjä"
-      },
-      "rpcpass": {
-        "title": "Aseta bitcoind RPC-salasana"
-      },
       "zmqRawBlock": {
         "title": "Aseta bitcoindin ZMQ Raw Block -isäntä"
       },
       "zmqRawTx": {
         "title": "Aseta bitcoindin ZMQ Raw Tx -isäntä"
+      },
+      "p2tr": {
+        "title": "Ota käyttöön vastaanotto ketjussa Taprootin kautta (P2TR)"
       }
     },
     "LN": {
@@ -811,28 +797,6 @@
         "restoreDialog": {
           "title": "Palauta Dunder-palvelin",
           "msg": "Haluatko palauttaa oletusarvoiseen Dunder-palvelimeen"
-        }
-      },
-      "speedloaderServer": {
-        "title": "Aseta LN-kanavan synkronointipalvelin",
-        "subtitle": "",
-        "setDialog": {
-          "title": "Aseta LN Sync -kanavapalvelin"
-        },
-        "restoreDialog": {
-          "title": "Palauta LN-kanavan synkronointipalvelin",
-          "msg": "Haluatko palauttaa oletusarvoisen LN-kanavan synkronointipalvelimen"
-        }
-      },
-      "lightningBoxServer": {
-        "title": "Aseta Lightning Box -palvelin",
-        "subtitle": "",
-        "setDialog": {
-          "title": "Aseta Lightning Box -palvelin"
-        },
-        "restoreDialog": {
-          "title": "Palauta Lightning Box -palvelin",
-          "msg": "Haluatko palauttaa Lightning Box -oletuspalvelimen"
         }
       },
       "graphSync": {
@@ -916,7 +880,7 @@
       "title": "Kokeelliset",
       "LSP": {
         "title": "Ota käyttöön Dunder LSP",
-        "subtitle": "Lightning-palveluntarjoaja, joka auttaa saapuvan likviditeetin kanssa"
+        "subtitle": "ERITTÄIN KOKEELLINEN. Salaman palveluntarjoaja, joka auttaa saapuvan likviditeetin kanssa"
       },
       "MPP": {
         "title": "Ota käyttöön monireittimaksut",
@@ -1038,8 +1002,7 @@
         "title": "Pakota juoruksen synkronointi käynnistyksen yhteydessä"
       },
       "persistentServices": {
-        "title": "Ota jatkuva sovellus käyttöön",
-        "subtitle": "Sovellus pysyy aktiivisena taustalla"
+        "title": "Ota käyttöön pysyvät LND- ja Tor-palvelut (jos käytössä)"
       }
     }
   },
@@ -1139,33 +1102,6 @@
     "title": "Lisää varoja",
     "msg1": "Aloittaaksesi Salaman käytön Blixt-lompakossa",
     "msg2": "lähetä bitcoineja yllä olevaan osoitteeseen"
-  },
-  "lightningBox.registration": {
-    "info": {
-      "welcome": "Tervetuloa Lightning Box -rekisteröintiin.",
-      "whatIs": "Lightning Box on Lightning Address -palveluntarjoaja, joka välittää maksupyynnöt suoraan puhelimeen ja antaa sinulle itsevarmottavan Lightning-osoitteen mobiililaitteille.",
-      "persistentMode":"Tämä palvelu on riippuvainen jatkuvasta tilasta, koska sovelluksen on pysyttävä aktiivisena vastaanottaakseen saapuvia maksuja. Varmista, että akun optimointi on poistettu käytöstä laitteessasi. Muuten tämä palvelu ei välttämättä toimi.",
-      "currentRules": "Palvelu on ilmainen käyttää. Teknisistä syistä se vaatii kuitenkin tällä hetkellä kanavan Lightning Box -palveluntarjoajan kanssa. Lightning-osoitettasi ei tällä hetkellä voi muuttaa sen jälkeen, kun olet valinnut sellaisen."
-    },
-    "prerequisites": {
-      "prerequisites": "Edellytykset",
-      "checkingEligibility": "Tarkistetaan kelpoisuutta...",
-      "eligible": "Tukikelpoinen",
-      "youHaveChannel": "Sinulla on kanava Lightning Box -palvelulla.",
-      "notEligible": "Ei oikeutettu"
-    },
-    "registration": {
-      "registration": "Rekisteröinti",
-      "fields": {
-        "address": "Osoite",
-        "messageToPayer": "Viesti maksajalle"
-      },
-      "register": "Rekisteröidy"
-    }
-  },
-  "lightningBox.info": {
-    "yourLightningAddress": "Lightning Boxin Lightning-osoitteesi on:",
-    "showQrCode": "Näytä QR-koodi"
   },
   "welcome.almostDone": {
     "autopilot": {
