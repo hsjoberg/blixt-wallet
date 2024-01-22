@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply plugin: "com.google.gms.google-services"
 
 // Blixt:
 apply plugin: "com.google.protobuf"
@@ -185,6 +186,7 @@ android {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:32.6.0')
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 

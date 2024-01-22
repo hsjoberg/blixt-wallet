@@ -7,7 +7,10 @@
         android:name="com.google.mlkit.vision.DEPENDENCIES"
         android:value="barcode" />
 
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
@@ -18,6 +21,10 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <permission
+      android:name="${applicationId}.permission.C2D_MESSAGE"
+      android:protectionLevel="signature" />
 
     <application
       android:name=".MainApplication"
@@ -120,5 +127,6 @@
           android:value="Run Bitcoin Lightning Network node lnd in order for the user to receive incoming payments"
         />
       </service>
+
     </application>
 </manifest>
