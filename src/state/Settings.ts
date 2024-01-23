@@ -23,12 +23,13 @@ import {
 } from "../storage/app";
 
 import { Chain } from "../utils/build";
-import { IBitcoinUnits } from "../utils/bitcoin-units";
+import { BitcoinUnits, IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "./Fiat";
 import { IStoreModel } from "./index";
 import { MapStyle } from "../utils/google-maps";
 import { i18n } from "../i18n/i18n";
 import logger from "./../utils/log";
+import { languages } from "../i18n/i18n.constants";
 
 const log = logger("Settings");
 
@@ -93,6 +94,7 @@ export interface ISettingsModel {
   changeLightningBoxServer: Thunk<ISettingsModel, string>;
   changeLightningBoxAddress: Thunk<ISettingsModel, string>;
   changeLightningBoxLnurlPayDesc: Thunk<ISettingsModel, string>;
+  changeRandomizeSettingsOnStartup: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -141,6 +143,7 @@ export interface ISettingsModel {
   setLightningBoxServer: Action<ISettingsModel, string>;
   setLightningBoxAddress: Action<ISettingsModel, string>;
   SetLightningBoxLnurlPayDesc: Action<ISettingsModel, string>;
+  setRandomizeSettingsOnStartup: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -189,11 +192,22 @@ export interface ISettingsModel {
   lightningBoxServer: string;
   lightningBoxAddress: string;
   lightningBoxLnurlPayDesc: string;
+  randomizeSettingsOnStartup: boolean;
+
+  randomize: Thunk<ISettingsModel, void, any, IStoreModel>;
 }
 
 export const settings: ISettingsModel = {
   initialize: thunk(async (actions) => {
     log.d("Initializing");
+    const randomizeSettingsOnStartup =
+      (await getItemObject(StorageItem.randomizeSettingsOnStartup)) ?? false;
+    if (randomizeSettingsOnStartup) {
+      actions.randomize();
+      return;
+    }
+    actions.setRandomizeSettingsOnStartup(randomizeSettingsOnStartup);
+
     actions.setBitcoinUnit((await getItemObject(StorageItem.bitcoinUnit)) || "bitcoin");
     actions.setFiatUnit((await getItemObject(StorageItem.fiatUnit)) || "USD");
     actions.setName((await getItemObject(StorageItem.name)) || null);
@@ -526,6 +540,11 @@ export const settings: ISettingsModel = {
     actions.SetLightningBoxLnurlPayDesc(payload);
   }),
 
+  changeRandomizeSettingsOnStartup: thunk(async (actions, payload) => {
+    await setItemObject<boolean>(StorageItem.randomizeSettingsOnStartup, payload);
+    actions.setRandomizeSettingsOnStartup(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -667,6 +686,9 @@ export const settings: ISettingsModel = {
   SetLightningBoxLnurlPayDesc: action((state, payload) => {
     state.lightningBoxLnurlPayDesc = payload;
   }),
+  setRandomizeSettingsOnStartup: action((state, payload) => {
+    state.randomizeSettingsOnStartup = payload;
+  }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -715,4 +737,140 @@ export const settings: ISettingsModel = {
   lightningBoxServer: DEFAULT_LIGHTNINGBOX_SERVER,
   lightningBoxAddress: "",
   lightningBoxLnurlPayDesc: DEFAULT_LIGHTNINGBOX_LNURLPDESC,
+  randomizeSettingsOnStartup: false,
+
+  randomize: thunk((state, _, { getStoreState, dispatch }) => {
+    const bitcoinUnits = Object.keys(BitcoinUnits);
+    state.setBitcoinUnit(getRandomFromArray(bitcoinUnits));
+
+    const fiatUnits = Object.keys(getStoreState().fiat.fiatRates);
+    state.setFiatUnit(getRandomFromArray(fiatUnits));
+
+    state.setName(getRandomFromArray(funnyNames));
+
+    const language = getRandomFromArray(Object.keys(languages));
+    state.setLanguage(getRandomFromArray(language));
+    i18n.changeLanguage(language);
+
+    const autopilotEnabled = rand(0, 1) === 1;
+    state.setAutopilotEnabled(autopilotEnabled);
+    dispatch.lightning.setupAutopilot(autopilotEnabled);
+
+    state.setPushNotificationsEnabled(rand(0, 1) === 1);
+    state.setClipboardInvoiceCheckInvoicesEnabled(rand(0, 1) === 1);
+    // state.scheduledSyncEnabled;
+    // state.scheduledGossipSyncEnabled;
+    state.setDebugShowStartupInfo(rand(0, 1) === 1);
+    // state.googleDriveBackupEnabled;
+    state.setPreferFiat(rand(0, 1) === 1);
+    // state.transactionGeolocationEnabled;
+    // state.transactionGeolocationMapStyle;
+    const onchainExplorers = Object.keys(OnchainExplorer);
+    state.setOnchainExplorer(getRandomFromArray(onchainExplorers));
+    state.setMultiPathPaymentsEnabled(rand(0, 1) === 1);
+    // state.torEnabled;
+    state.setHideExpiredInvoices(rand(0, 1) === 1);
+    state.setScreenTransitionsEnabled(rand(0, 1) === 1);
+    // state.iCloudBackupEnabled;
+    // state.lndChainBackend;
+    // state.neutrinoPeers;
+    // state.bitcoindRpcHost;
+    // state.bitcoindRpcUser;
+    // state.bitcoindRpcPassword;
+    // state.bitcoindPubRawBlock;
+    // state.bitcoindPubRawTx;
+    // state.dunderServer;
+    state.setRequireGraphSync(rand(0, 1) === 1);
+    state.setDunderEnabled(rand(0, 1) === 1);
+    // state.lndNoGraphCache;
+    state.setInvoiceExpiry(rand(0, 1000)); // TODO
+    // state.rescanWallet;
+    // state.strictGraphPruningEnabled;
+    // state.lndPathfindingAlgorithm;
+    state.setMaxLNFeePercentage(rand(0, 100) / 10);
+    // state.lndLogLevel;
+    // state.lndCompactDb;
+    // state.zeroConfPeers;
+    // state.enforceSpeedloaderOnStartup;
+    // state.persistentServicesEnabled;
+    // state.persistentServicesWarningShown;
+    // state.customInvoicePreimageEnabled;
+    state.setCustomInvoicePreimageEnabled(rand(0, 1) === 1);
+    // state.speedloaderServer;
+    // state.lightningBoxServer;
+    // state.lightningBoxAddress;
+    state.SetLightningBoxLnurlPayDesc(generateGarbageText());
+  }),
 };
+
+function rand(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getRandomFromArray(arr: any[]) {
+  return arr[rand(0, arr.length - 1)];
+}
+
+function generateGarbageText(): string {
+  // Add any weird characters you want to this string
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~`!@#$%^&*()_-+={[}]|\\:;"<,>.?/⊙△ΩβφÇ';
+  const length = Math.floor(Math.random() * 20) + 4; // This will give a random number between 4 and 16
+
+  return [...Array(length)]
+    .map(() => characters[Math.floor(Math.random() * characters.length)])
+    .join("");
+}
+
+const funnyNames = [
+  "Binky",
+  "Fido",
+  "Peaches",
+  "Puddles",
+  "Snickers",
+  "Wiggles",
+  "Twinkle",
+  "Pickles",
+  "Muffin",
+  "Giggles",
+  "Bubbles",
+  "Ziggy",
+  "Noodle",
+  "Doodle",
+  "Pookie",
+  "Fluffy",
+  "Sprinkles",
+  "Jingles",
+  "Boogie",
+  "Winky",
+  "Tootsie",
+  "Fuzzy",
+  "Spunky",
+  "Goober",
+  "Snuggles",
+  "Scrappy",
+  "Puddin'",
+  "Biscuit",
+  "Doogie",
+  "Waffle",
+  "Zippy",
+  "Jolly",
+  "Sassy",
+  "Rascal",
+  "Boppy",
+  "Cuddles",
+  "Dinky",
+  "Fiddle",
+  "Gadget",
+  "Hopper",
+  "Jester",
+  "Kiki",
+  "Lollipop",
+  "Mimi",
+  "Nibbles",
+  "Oreo",
+  "Peppy",
+  "Quirky",
+  "Roo",
+  "Sprout",
+];
