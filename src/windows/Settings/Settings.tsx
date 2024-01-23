@@ -15,7 +15,12 @@ import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
 import React, { useLayoutEffect } from "react";
 import { camelCaseToSpace, formatISO, hexToUint8Array, timeout, toast } from "../../utils";
 import { getChanInfo, verifyChanBackup } from "../../lndmobile/channel";
-import { getNodeInfo, resetMissionControl, xImportMissionControl } from "../../lndmobile";
+import {
+  getNodeInfo,
+  lookupInvoice,
+  resetMissionControl,
+  xImportMissionControl,
+} from "../../lndmobile";
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { useStoreActions, useStoreState } from "../../state/store";
 
@@ -1518,6 +1523,20 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
   };
 
+  const onPressLookupInvoiceByHash = async () => {
+    try {
+      const hash = await Alert.promisePromptCallback(
+        "Lookup invoice",
+        "Provide payment hash",
+        "plain-text",
+      );
+      const invoice = await lookupInvoice(hash);
+      Alert.alert("", JSON.stringify(invoice, undefined, 2));
+    } catch (error) {
+      toast("Error: " + error.message, 10000, "danger");
+    }
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -2727,6 +2746,14 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Left>
             <Body>
               <Text>Stop lnd and delete neutrino files</Text>
+            </Body>
+          </ListItem>
+          <ListItem style={style.listItem} icon={true} onPress={onPressLookupInvoiceByHash}>
+            <Left>
+              <Icon style={style.icon} type="AntDesign" name="file1" />
+            </Left>
+            <Body>
+              <Text>Lookup invoice</Text>
             </Body>
           </ListItem>
           <ListItem
