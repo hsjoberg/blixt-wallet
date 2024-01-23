@@ -90,6 +90,7 @@ open class Lnd {
     "SendCustomMessage": { bytes, cb in LndmobileSendCustomMessage(bytes, cb) },
     "RouterXImportMissionControl": { bytes, cb in LndmobileRouterXImportMissionControl(bytes, cb) },
     "RouterQueryMissionControl": { bytes, cb in LndmobileRouterQueryMissionControl(bytes, cb) },
+    "ListInvoices": { bytes, cb in LndmobileListInvoices(bytes, cb) },
 
     // channel
     //
