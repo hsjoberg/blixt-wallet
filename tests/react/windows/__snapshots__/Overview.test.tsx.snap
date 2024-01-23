@@ -424,194 +424,440 @@ exports[`renders correctly 1`] = `
                                       }
                                     }
                                   >
-                                    <RCTScrollView
-                                      contentContainerStyle={
+                                    <View
+                                      style={
                                         {
-                                          "paddingBottom": 12,
-                                          "paddingLeft": 7,
-                                          "paddingRight": 7,
-                                          "paddingTop": 205,
+                                          "flex": 1,
+                                          "overflow": "hidden",
                                         }
                                       }
-                                      onScroll={[Function]}
-                                      refreshControl={
-                                        <RefreshControlMock
-                                          colors={
-                                            [
-                                              "#e5eaea",
-                                            ]
-                                          }
-                                          onRefresh={[Function]}
-                                          progressBackgroundColor="#232323"
-                                          progressViewOffset={215.29411764705884}
-                                          refreshing={false}
-                                          title="Refreshing"
-                                        />
-                                      }
-                                      scrollEventThrottle={16}
-                                      testID="TX_LIST"
                                     >
-                                      <RCTRefreshControl />
-                                      <View>
-                                        <View
-                                          style={
-                                            {
-                                              "backgroundColor": "#fff",
-                                              "borderBottomWidth": 0.5,
-                                              "borderColor": "#ccc",
-                                              "borderLeftWidth": 0.5,
-                                              "borderRadius": 2,
-                                              "borderRightWidth": 0.5,
-                                              "borderTopWidth": 0.5,
-                                              "elevation": 3,
-                                              "flexWrap": "nowrap",
-                                              "marginBottom": 5,
-                                              "marginLeft": 2,
-                                              "marginRight": 2,
-                                              "marginTop": 5,
-                                              "shadowColor": "#000",
-                                              "shadowOffset": {
-                                                "height": 2,
-                                                "width": 0,
-                                              },
-                                              "shadowOpacity": 0.1,
-                                              "shadowRadius": 1.5,
+                                      <RCTScrollView
+                                        ListEmptyComponent={
+                                          <Styled(Text)
+                                            style={
+                                              {
+                                                "margin": 16,
+                                                "textAlign": "center",
+                                              }
                                             }
+                                          >
+                                            No transactions yet
+                                          </Styled(Text)>
+                                        }
+                                        ListHeaderComponent={[Function]}
+                                        alwaysBounceVertical={false}
+                                        applyWindowCorrection={[Function]}
+                                        canChangeSize={true}
+                                        contentContainerStyle={
+                                          {
+                                            "backgroundColor": undefined,
+                                            "minHeight": 1,
+                                            "minWidth": 1,
+                                            "paddingLeft": 7,
+                                            "paddingRight": 7,
                                           }
-                                        >
+                                        }
+                                        contentHeight={0}
+                                        contentWidth={0}
+                                        data={[]}
+                                        dataProvider={
+                                          DataProvider {
+                                            "_data": [],
+                                            "_firstIndexToProcess": 0,
+                                            "_hasStableIds": true,
+                                            "_requiresDataChangeHandling": false,
+                                            "_size": 0,
+                                            "getStableId": [Function],
+                                            "rowHasChanged": [Function],
+                                          }
+                                        }
+                                        disableRecycling={false}
+                                        estimatedItemSize={86}
+                                        extendedState={{}}
+                                        externalScrollView={[Function]}
+                                        finalRenderAheadOffset={250}
+                                        forceNonDeterministicRendering={true}
+                                        horizontal={false}
+                                        initialOffset={0}
+                                        initialRenderIndex={0}
+                                        isHorizontal={false}
+                                        keyExtractor={[Function]}
+                                        layoutProvider={
+                                          GridLayoutProviderWithProps {
+                                            "_acceptableRelayoutDelta": 1,
+                                            "_getHeightOrWidth": [Function],
+                                            "_getLayoutTypeForIndex": [Function],
+                                            "_getSpan": [Function],
+                                            "_hasExpired": false,
+                                            "_maxSpan": 1,
+                                            "_setLayoutForType": [Function],
+                                            "_tempDim": {
+                                              "height": 0,
+                                              "width": 0,
+                                            },
+                                            "averageWindow": AverageWindow {
+                                              "currentAverage": 86,
+                                              "currentCount": 1,
+                                              "inputValues": [
+                                                86,
+                                              ],
+                                              "nextIndex": 1,
+                                            },
+                                            "defaultEstimatedItemSize": 100,
+                                            "layoutObject": {
+                                              "size": undefined,
+                                              "span": undefined,
+                                            },
+                                            "props": {
+                                              "ListEmptyComponent": <Styled(Text)
+                                                style={
+                                                  {
+                                                    "margin": 16,
+                                                    "textAlign": "center",
+                                                  }
+                                                }
+                                              >
+                                                No transactions yet
+                                              </Styled(Text)>,
+                                              "ListHeaderComponent": [Function],
+                                              "alwaysBounceVertical": false,
+                                              "contentContainerStyle": {
+                                                "paddingBottom": 12,
+                                                "paddingLeft": 7,
+                                                "paddingRight": 7,
+                                                "paddingTop": 205,
+                                              },
+                                              "data": [],
+                                              "estimatedItemSize": 86,
+                                              "keyExtractor": [Function],
+                                              "numColumns": 1,
+                                              "onScroll": [Function],
+                                              "refreshControl": <RefreshControlMock
+                                                colors={
+                                                  [
+                                                    "#e5eaea",
+                                                  ]
+                                                }
+                                                onRefresh={[Function]}
+                                                progressBackgroundColor="#232323"
+                                                progressViewOffset={183}
+                                                refreshing={false}
+                                                title=""
+                                              />,
+                                              "renderItem": [Function],
+                                              "scrollEventThrottle": 16,
+                                              "testID": "TX_LIST",
+                                            },
+                                            "renderWindowInsets": {
+                                              "height": 0,
+                                              "width": -14,
+                                            },
+                                            "shouldRefreshWithAnchoring": true,
+                                          }
+                                        }
+                                        maxRenderAhead={750}
+                                        numColumns={1}
+                                        onEndReached={[Function]}
+                                        onEndReachedThreshold={0}
+                                        onEndReachedThresholdRelative={0}
+                                        onItemLayout={[Function]}
+                                        onLayout={[Function]}
+                                        onScroll={[Function]}
+                                        onScrollBeginDrag={[Function]}
+                                        onSizeChanged={[Function]}
+                                        onVisibleIndicesChanged={[Function]}
+                                        refreshControl={
+                                          <RefreshControlMock
+                                            colors={
+                                              [
+                                                "#e5eaea",
+                                              ]
+                                            }
+                                            onRefresh={[Function]}
+                                            progressBackgroundColor="#232323"
+                                            progressViewOffset={183}
+                                            refreshing={false}
+                                            title=""
+                                          />
+                                        }
+                                        removeClippedSubviews={false}
+                                        renderAheadOffset={0}
+                                        renderAheadStep={250}
+                                        renderContentContainer={[Function]}
+                                        renderItem={[Function]}
+                                        renderItemContainer={[Function]}
+                                        rowRenderer={[Function]}
+                                        scrollEventThrottle={16}
+                                        scrollThrottle={16}
+                                        scrollViewProps={
+                                          {
+                                            "contentContainerStyle": {
+                                              "backgroundColor": undefined,
+                                              "minHeight": 1,
+                                              "minWidth": 1,
+                                              "paddingLeft": 7,
+                                              "paddingRight": 7,
+                                            },
+                                            "onLayout": [Function],
+                                            "onScrollBeginDrag": [Function],
+                                            "refreshControl": <RefreshControlMock
+                                              colors={
+                                                [
+                                                  "#e5eaea",
+                                                ]
+                                              }
+                                              onRefresh={[Function]}
+                                              progressBackgroundColor="#232323"
+                                              progressViewOffset={183}
+                                              refreshing={false}
+                                              title=""
+                                            />,
+                                            "style": {
+                                              "minHeight": 1,
+                                              "minWidth": 1,
+                                            },
+                                          }
+                                        }
+                                        style={
+                                          {
+                                            "minHeight": 1,
+                                            "minWidth": 1,
+                                          }
+                                        }
+                                        suppressBoundedSizeException={true}
+                                        testID="TX_LIST"
+                                        windowCorrectionConfig={
+                                          {
+                                            "applyToInitialOffset": true,
+                                            "applyToItemScroll": true,
+                                            "value": {
+                                              "endCorrection": 0,
+                                              "startCorrection": 0,
+                                              "windowShift": -1,
+                                            },
+                                          }
+                                        }
+                                      >
+                                        <RCTRefreshControl />
+                                        <View>
                                           <View
                                             style={
                                               {
-                                                "alignItems": "center",
-                                                "backgroundColor": "#fff",
-                                                "borderRadius": 2,
-                                                "flexDirection": "row",
-                                                "paddingBottom": 10,
-                                                "paddingLeft": 15,
-                                                "paddingRight": 15,
-                                                "paddingTop": 10,
+                                                "flexDirection": "column",
                                               }
                                             }
                                           >
                                             <View
                                               style={
                                                 {
-                                                  "flex": 1,
-                                                  "flexDirection": "row",
-                                                  "justifyContent": "space-between",
+                                                  "paddingLeft": 7,
+                                                  "paddingTop": 205,
                                                 }
+                                              }
+                                            />
+                                            <View
+                                              style={
+                                                [
+                                                  undefined,
+                                                  undefined,
+                                                ]
                                               }
                                             >
                                               <View
                                                 style={
                                                   {
-                                                    "justifyContent": "center",
-                                                    "paddingRight": 4,
-                                                    "width": "59%",
-                                                  }
-                                                }
-                                              >
-                                                <Text
-                                                  style={
-                                                    [
-                                                      {
-                                                        "color": "#000",
-                                                        "fontFamily": "System",
-                                                        "fontSize": 16,
-                                                      },
-                                                      {
-                                                        "fontSize": 9.74025974025974,
-                                                      },
-                                                    ]
-                                                  }
-                                                  uppercase={false}
-                                                >
-                                                  Welcome to Blixt Wallet!
-                                                  
-
-
-                                                  <Text
-                                                    style={
-                                                      [
-                                                        {
-                                                          "color": "#000",
-                                                          "fontFamily": "System",
-                                                          "fontSize": 16,
-                                                        },
-                                                        {
-                                                          "fontSize": 8.441558441558442,
-                                                        },
-                                                      ]
-                                                    }
-                                                    uppercase={false}
-                                                  >
-                                                    To get started, send on-chain funds to the bitcoin address to the right.
-                                                    
-
-
-                                                    A channel will automatically be opened for you.
-                                                    
-
-
-                                                    Send at least
-                                                     
-                                                    0.00 022 000 ₿
-                                                     (
-                                                    0.00 USD
-                                                    ).
-                                                  </Text>
-                                                </Text>
-                                              </View>
-                                              <View
-                                                style={
-                                                  {
-                                                    "justifyContent": "center",
+                                                    "backgroundColor": "#fff",
+                                                    "borderBottomWidth": 0.5,
+                                                    "borderColor": "#ccc",
+                                                    "borderLeftWidth": 0.5,
+                                                    "borderRadius": 2,
+                                                    "borderRightWidth": 0.5,
+                                                    "borderTopWidth": 0.5,
+                                                    "elevation": 3,
+                                                    "flexWrap": "nowrap",
+                                                    "marginBottom": 5,
+                                                    "marginLeft": 2,
+                                                    "marginRight": 2,
+                                                    "marginTop": 5,
+                                                    "shadowColor": "#000",
+                                                    "shadowOffset": {
+                                                      "height": 2,
+                                                      "width": 0,
+                                                    },
+                                                    "shadowOpacity": 0.1,
+                                                    "shadowRadius": 1.5,
                                                   }
                                                 }
                                               >
                                                 <View
                                                   style={
                                                     {
-                                                      "height": 153,
-                                                      "justifyContent": "center",
-                                                      "width": 154,
+                                                      "alignItems": "center",
+                                                      "backgroundColor": "#fff",
+                                                      "borderRadius": 2,
+                                                      "flexDirection": "row",
+                                                      "paddingBottom": 10,
+                                                      "paddingLeft": 15,
+                                                      "paddingRight": 15,
+                                                      "paddingTop": 10,
                                                     }
                                                   }
                                                 >
-                                                  <ActivityIndicator
-                                                    color="#e5eaea"
-                                                    size="large"
+                                                  <View
                                                     style={
                                                       {
-                                                        "height": 80,
+                                                        "flex": 1,
+                                                        "flexDirection": "row",
+                                                        "justifyContent": "space-between",
                                                       }
                                                     }
-                                                  />
+                                                  >
+                                                    <View
+                                                      style={
+                                                        {
+                                                          "justifyContent": "center",
+                                                          "paddingRight": 4,
+                                                          "width": "59%",
+                                                        }
+                                                      }
+                                                    >
+                                                      <Text
+                                                        style={
+                                                          [
+                                                            {
+                                                              "color": "#000",
+                                                              "fontFamily": "System",
+                                                              "fontSize": 16,
+                                                            },
+                                                            {
+                                                              "fontSize": 9.74025974025974,
+                                                            },
+                                                          ]
+                                                        }
+                                                        uppercase={false}
+                                                      >
+                                                        Welcome to Blixt Wallet!
+                                                        
+
+
+                                                        <Text
+                                                          style={
+                                                            [
+                                                              {
+                                                                "color": "#000",
+                                                                "fontFamily": "System",
+                                                                "fontSize": 16,
+                                                              },
+                                                              {
+                                                                "fontSize": 8.441558441558442,
+                                                              },
+                                                            ]
+                                                          }
+                                                          uppercase={false}
+                                                        >
+                                                          To get started, send on-chain funds to the bitcoin address to the right.
+                                                          
+
+
+                                                          A channel will automatically be opened for you.
+                                                          
+
+
+                                                          Send at least
+                                                           
+                                                          0.00 022 000 ₿
+                                                           (
+                                                          0.00 USD
+                                                          ).
+                                                        </Text>
+                                                      </Text>
+                                                    </View>
+                                                    <View
+                                                      style={
+                                                        {
+                                                          "justifyContent": "center",
+                                                        }
+                                                      }
+                                                    >
+                                                      <View
+                                                        style={
+                                                          {
+                                                            "height": 153,
+                                                            "justifyContent": "center",
+                                                            "width": 154,
+                                                          }
+                                                        }
+                                                      >
+                                                        <ActivityIndicator
+                                                          color="#e5eaea"
+                                                          size="large"
+                                                          style={
+                                                            {
+                                                              "height": 80,
+                                                            }
+                                                          }
+                                                        />
+                                                      </View>
+                                                    </View>
+                                                  </View>
                                                 </View>
                                               </View>
                                             </View>
+                                            <AutoLayoutView
+                                              enableInstrumentation={false}
+                                              horizontal={false}
+                                              onBlankAreaEvent={[Function]}
+                                              onLayout={[Function]}
+                                              renderAheadOffset={0}
+                                              scrollOffset={0}
+                                              style={
+                                                {
+                                                  "height": 0,
+                                                  "width": 0,
+                                                }
+                                              }
+                                              windowSize={0}
+                                            />
+                                            <Text
+                                              style={
+                                                [
+                                                  {
+                                                    "color": "#000",
+                                                    "fontFamily": "System",
+                                                    "fontSize": 16,
+                                                  },
+                                                  {
+                                                    "margin": 16,
+                                                    "textAlign": "center",
+                                                  },
+                                                ]
+                                              }
+                                              uppercase={false}
+                                            >
+                                              No transactions yet
+                                            </Text>
+                                            <CellContainer
+                                              index={-1}
+                                              style={
+                                                [
+                                                  undefined,
+                                                  undefined,
+                                                ]
+                                              }
+                                            />
+                                            <View
+                                              style={
+                                                {
+                                                  "paddingBottom": 12,
+                                                  "paddingRight": 7,
+                                                }
+                                              }
+                                            />
                                           </View>
                                         </View>
-                                        <Text
-                                          style={
-                                            [
-                                              {
-                                                "color": "#000",
-                                                "fontFamily": "System",
-                                                "fontSize": 16,
-                                              },
-                                              {
-                                                "margin": 16,
-                                                "textAlign": "center",
-                                              },
-                                            ]
-                                          }
-                                          uppercase={false}
-                                        >
-                                          No transactions yet
-                                        </Text>
-                                      </View>
-                                    </RCTScrollView>
+                                      </RCTScrollView>
+                                    </View>
                                     <View
                                       collapsable={false}
                                       pointerEvents="box-none"

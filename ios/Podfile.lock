@@ -898,13 +898,13 @@ PODS:
     - React-Core
   - react-native-hash (3.0.3):
     - React
-  - react-native-maps (1.8.3):
+  - react-native-maps (1.10.0):
     - React-Core
-  - react-native-netinfo (9.5.0):
+  - react-native-netinfo (11.2.1):
     - React-Core
   - react-native-safe-area-context (4.7.4):
     - React-Core
-  - react-native-slider (4.4.4):
+  - react-native-slider (4.5.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -912,7 +912,9 @@ PODS:
     - React-Core
   - react-native-tor (0.1.8):
     - React
-  - react-native-webview (13.6.3):
+  - react-native-webview (13.6.4):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - React-nativeconfig (0.73.2)
   - React-NativeModulesApple (0.73.2):
@@ -1085,7 +1087,7 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.21.0):
     - React-Core
-  - RNCClipboard (1.11.1):
+  - RNCClipboard (1.13.2):
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
@@ -1095,7 +1097,7 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.14.0):
+  - RNGestureHandler (2.14.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1120,13 +1122,13 @@ PODS:
     - React
   - RNSVG (14.1.0):
     - React-Core
-  - RNVectorIcons (10.0.2):
+  - RNVectorIcons (10.0.3):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - SocketRocket (0.6.1)
   - SwiftProtobuf (1.22.1)
-  - VisionCamera (3.6.15):
+  - VisionCamera (3.8.2):
     - React
     - React-callinvoker
     - React-Core
@@ -1421,13 +1423,13 @@ SPEC CHECKSUMS:
   react-native-fingerprint-scanner: ac6656f18c8e45a7459302b84da41a44ad96dbbe
   react-native-geolocation: 0f7fe8a4c2de477e278b0365cce27d089a8c5903
   react-native-hash: 4664516df1834e1293b30e711c63f61f7f801b6a
-  react-native-maps: a5f431a3eaaef69f2e6f8d39901fb3f2e9de931e
-  react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
+  react-native-maps: b4c3b092b1c71240d8d4792bae3738828942f14a
+  react-native-netinfo: 8a7fd3f7130ef4ad2fb4276d5c9f8d3f28d2df3d
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
-  react-native-slider: 2ae4b4aa6f5ed9a25d546e590e83c0fc9ccfd58c
+  react-native-slider: 7d387c7e8dd0b4c12bf49c975c8666435f082a33
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-tor: 3b14e9160b2eb7fa3f310921b2dee71a5171e5b7
-  react-native-webview: 88293a0f23eca8465c0433c023ec632930e644d0
+  react-native-webview: f95eb7d4d6a7ca45d04d861d99f628241b2aff83
   React-nativeconfig: d753fbbc8cecc8ae413d615599ac378bbf6999bb
   React-NativeModulesApple: 964f4eeab1b4325e8b6a799cf4444c3fd4eb0a9c
   React-perflogger: 29efe63b7ef5fbaaa50ef6eaa92482f98a24b97e
@@ -1450,12 +1452,12 @@ SPEC CHECKSUMS:
   ReactCommon: 45b5d4f784e869c44a6f5a8fad5b114ca8f78c53
   ReactNativeCameraKit: 9d46a5d7dd544ca64aa9c03c150d2348faf437eb
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
-  RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd
+  RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: 61bfdfc05db9b79dd61f894dcd29d3dcc6db3c02
+  RNGestureHandler: 25b969a1ffc806b9f9ad2e170d4a3b049c6af85e
   RNICloudStore: 7ac4f2630e2a7e90a4b059b92e8483828bbacd2b
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNPermissions: bfc61982fffcce1a249d4ce8714d5274ce6a9629
@@ -1464,10 +1466,10 @@ SPEC CHECKSUMS:
   RNScreens: b582cb834dc4133307562e930e8fa914b8c04ef2
   RNSecureRandom: 7b1df97e96cde33fccc6b64ed4072592fc06627c
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
-  RNVectorIcons: 8cabd5809519015ed2c1cdb4ec83d563296bd5cc
+  RNVectorIcons: 210f910e834e3485af40693ad4615c1ec22fc02b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
-  VisionCamera: 1559d61e7e79fd61a16ae3d78dd4de3846ac7f02
+  VisionCamera: 4b98b273902ac18491bb68481b6601f1f0da0f2d
   Yoga: e64aa65de36c0832d04e8c7bd614396c77a80047
 
 PODFILE CHECKSUM: b058dce45c45848024f1ee19124a7f23283b45d7

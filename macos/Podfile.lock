@@ -854,11 +854,13 @@ PODS:
     - React-debug
   - react-native-build-config (0.3.2):
     - React
-  - react-native-netinfo (9.5.0):
+  - react-native-netinfo (11.2.1):
     - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
-  - react-native-webview (13.6.3):
+  - react-native-webview (13.6.4):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - React-nativeconfig (0.73.9)
   - React-NativeModulesApple (0.73.9):
@@ -1025,7 +1027,7 @@ PODS:
     - React-perflogger (= 0.73.9)
   - RNCAsyncStorage (1.21.0):
     - React-Core
-  - RNCClipboard (1.11.1):
+  - RNCClipboard (1.13.2):
     - React-Core
   - RNFS (2.20.0):
     - React-Core
@@ -1264,9 +1266,9 @@ SPEC CHECKSUMS:
   React-logger: d8e7f97108cf9ac10c587b3f80415b91b07ffd1b
   React-Mapbuffer: a32d6f485f0af753b29bc0ef3bb7d86536e490cb
   react-native-build-config: d2d6891311ca2e0fa7ca7eeb4324a768e63e485c
-  react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
+  react-native-netinfo: 8a7fd3f7130ef4ad2fb4276d5c9f8d3f28d2df3d
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
-  react-native-webview: 88293a0f23eca8465c0433c023ec632930e644d0
+  react-native-webview: f95eb7d4d6a7ca45d04d861d99f628241b2aff83
   React-nativeconfig: 7d9b84e9a7fa5fae18e04c63b7b2b99307e55fdd
   React-NativeModulesApple: e7f7509361e31196cdbab3063d231ab2e699be44
   React-perflogger: 1ceca66b4157b54f0f36587d57dda920b6061a12
@@ -1288,7 +1290,7 @@ SPEC CHECKSUMS:
   React-utils: f36a283748d1e30991c7121db7d567370df8c1c9
   ReactCommon: c26a8c18ff92ab4928d5d64f09089534de33aeab
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
-  RNCClipboard: 2834e1c4af68697089cdd455ee4a4cdd198fa7dd
+  RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNKeychain: a65256b6ca6ba6976132cc4124b238a5b13b3d9c
   RNReanimated: 57f436e7aa3d277fbfed05e003230b43428157c0
