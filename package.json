@@ -99,7 +99,7 @@
     "native-base": "git+https://github.com/hsjoberg/NativeBase.git#55959e0b5cc36b539da85cb25c24463899de0dc6",
     "node-abi": "3.54.0",
     "node-polyfill-webpack-plugin": "3.0.0",
-    "protobufjs": "7.2.6",
+    "protobufjs": "7.2.5",
     "protobufjs-cli": "^1.1.2",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
