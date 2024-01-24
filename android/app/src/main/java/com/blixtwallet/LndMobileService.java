@@ -498,8 +498,8 @@ public class LndMobileService extends Service {
     new Thread(startLnd).start();
   }
 
-  void sendToClient(Messenger reciever, Message msg) {
-    final int i = mClients.indexOf(reciever);
+  void sendToClient(Messenger receiver, Message msg) {
+    final int i = mClients.indexOf(receiver);
     if (i == -1) {
       HyperLog.w(TAG, "Warning, could not find recipient to send message to");
       return;

@@ -202,7 +202,7 @@ export const receive: IReceiveModel = {
       const decodePayReq = injections.lndMobile.index.decodePayReq;
       const decodeInvoiceResult = injections.lndMobile.wallet.decodeInvoiceResult;
       if (getState().invoiceSubscriptionStarted) {
-        log.d("Receive.subscribeInvoice() called when subsription already started");
+        log.d("Receive.subscribeInvoice() called when subscription already started");
         return;
       }
       const invoiceSubscription = LndMobileEventEmitter.addListener(

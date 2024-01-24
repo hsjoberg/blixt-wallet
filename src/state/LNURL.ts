@@ -594,7 +594,7 @@ export const lnUrl: ILNUrlModel = {
         // 8. If routes array is not empty: verifies signature for every provided ChannelUpdate, may use these routes if fee levels are acceptable.
         // TODO...
 
-        // 9. ommitted
+        // 9. omitted
 
         // 10. LN WALLET pays the invoice, no additional user confirmation is required at this point.
         // Jumping back to component:

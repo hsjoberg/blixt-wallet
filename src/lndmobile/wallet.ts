@@ -157,7 +157,7 @@ export const signMessage = async (keyFamily: number, keyIndex: number, msg: Uint
 };
 
 // TODO exception?
-// TODO move to a more appropiate file?
+// TODO move to a more appropriate file?
 export const subscribeInvoices = async (): Promise<string> => {
   try {
     const response = await sendStreamCommand<lnrpc.IInvoiceSubscription, lnrpc.InvoiceSubscription>({

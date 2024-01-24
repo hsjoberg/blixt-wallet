@@ -116,7 +116,7 @@ export const blixtLsp: IBlixtLsp = {
         log.d("Has registerInvoicePreimage");
         const tx = getStoreState().transaction.getTransactionByPreimage(registerInvoicePreimage);
         if (!tx) {
-          log.e("Couldn't find transaction while atttempting to settle BlixtLSP invoice", [tx]);
+          log.e("Couldn't find transaction while attempting to settle BlixtLSP invoice", [tx]);
           return;
         }
         tx.status = "SETTLED";

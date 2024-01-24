@@ -105,7 +105,7 @@ export const iCloudBackup: IICloudBackupModel = {
 
     const remoteStoredBackupsB64 = await iCloudStorage.getItem(ICLOUD_BACKUP_KEY);
     if (remoteStoredBackupsB64 !== backupsB64) {
-      log.i("iCloud storage missmatch, local, remote:", [backupsB64, remoteStoredBackupsB64])
+      log.i("iCloud storage mismatch, local, remote:", [backupsB64, remoteStoredBackupsB64])
       throw new Error("Could not save iCloud backup");
     }
 

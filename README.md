@@ -98,7 +98,7 @@ To start the application:
 To build the macOS version, a computer running macOS is required.
 - Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
 - Build lnd for macOS by following the steps in [build-ios-framework.md](build-ios-framework.md)
-  - Intead of running `make ios`, run `make macos` or `make apple`
+  - Instead of running `make ios`, run `make macos` or `make apple`
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
 - Install CocoaPods libs: `cd macos && pod install`
