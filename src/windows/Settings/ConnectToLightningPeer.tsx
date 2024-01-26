@@ -19,7 +19,7 @@ export interface IConnectToLightningPeerProps {
 }
 
 export default function OpenChannel({ navigation, route }: IConnectToLightningPeerProps) {
-  const { t } = useTranslation(namespaces.settings.connectToLightningPeer)
+  const { t } = useTranslation(namespaces.settings.connectToLightningPeer);
   const connectPeer = useStoreActions((store) => store.lightning.connectPeer);
   const getLightningPeers = useStoreActions((store) => store.lightning.getLightningPeers);
   const [peer, setPeer] = useState("");
@@ -39,7 +39,7 @@ export default function OpenChannel({ navigation, route }: IConnectToLightningPe
       await getLightningPeers();
       navigation.pop();
     } catch (e) {
-      toast(`${t("msg.error")}: ${e.message}`, 12000, "danger", "Okay");
+      toast(`${t("msg.error", { ns: namespaces.common })}: ${e.message}`, 12000, "danger", "Okay");
       setConnecting(false);
     }
   };
@@ -53,23 +53,33 @@ export default function OpenChannel({ navigation, route }: IConnectToLightningPe
   return (
     <Container>
       <BlixtForm
-        items={[{
-          key: "NODE",
-          title: t("connect.title"),
-          component: (
-            <>
-              <Input placeholder={t("connect.placeholder")} value={peer} onChangeText={setPeer} />
-              {PLATFORM !== "macos" && <Icon type="AntDesign" name="camera" onPress={onCameraPress} />}
-            </>
-          )
-        },]}
+        items={[
+          {
+            key: "NODE",
+            title: t("connect.title"),
+            component: (
+              <>
+                <Input placeholder={t("connect.placeholder")} value={peer} onChangeText={setPeer} />
+                {PLATFORM !== "macos" && (
+                  <Icon type="AntDesign" name="camera" onPress={onCameraPress} />
+                )}
+              </>
+            ),
+          },
+        ]}
         buttons={[
-          <Button key="CONNECT_TO_NODE" onPress={onConnectPress} block={true} primary={true} disabled={connecting}>
+          <Button
+            key="CONNECT_TO_NODE"
+            onPress={onConnectPress}
+            block={true}
+            primary={true}
+            disabled={connecting}
+          >
             {!connecting && <Text>{t("connect.accept")}</Text>}
             {connecting && <Spinner color={blixtTheme.light} />}
-          </Button>
+          </Button>,
         ]}
       />
     </Container>
   );
-};
+}
