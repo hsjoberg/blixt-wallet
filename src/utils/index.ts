@@ -69,7 +69,7 @@ export const bytesToHexString = (bytes) => {
   // console.log("inside bytesToHexString");
   // console.log(bytes);
   return bytes.reduce(function (memo, i) {
-    return memo + ("0" + i.toString(16)).slice(-2); //padd with leading 0 if <16
+    return memo + ("0" + i.toString(16)).slice(-2); //pad with leading 0 if <16
   }, "");
 };
 
@@ -166,13 +166,13 @@ export const waitUntilTrue = async (cb: () => boolean) => {
 };
 
 export const countCharInString = (str: string, char: string) => {
-  let occurances = 0;
+  let occurrences = 0;
   for (const subject of str) {
     if (subject === char) {
-      occurances++;
+      occurrences++;
     }
   }
-  return occurances;
+  return occurrences;
 };
 
 // from https://coolaj86.com/articles/unicode-string-to-a-utf-8-typed-array-buffer-in-javascript/

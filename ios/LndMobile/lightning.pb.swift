@@ -440,7 +440,7 @@ enum Lnrpc_PaymentFailureReason: SwiftProtobuf.Enum {
   case failureReasonNoRoute // = 2
 
   ///
-  ///A non-recoverable error has occured.
+  ///A non-recoverable error has occurred.
   case failureReasonError // = 3
 
   ///
@@ -1945,7 +1945,7 @@ struct Lnrpc_Channel {
 
   ///
   ///This uint32 indicates if this channel is to be considered 'frozen'. A
-  ///frozen channel doest not allow a cooperative channel close by the
+  ///frozen channel does not allow a cooperative channel close by the
   ///initiator. The thaw_height is the height that this restriction stops
   ///applying to the channel. This field is optional, not setting it or using a
   ///value of zero will mean the channel has no additional restrictions. The
@@ -2699,7 +2699,7 @@ struct Lnrpc_CloseChannelRequest {
   ///An optional address to send funds to in the case of a cooperative close.
   ///If the channel was opened with an upfront shutdown script and this field
   ///is set, the request to close will fail because the channel must pay out
-  ///to the upfront shutdown addresss.
+  ///to the upfront shutdown address.
   var deliveryAddress: String = String()
 
   /// A manual fee rate set in sat/vbyte that should be used when crafting the
@@ -3205,7 +3205,7 @@ struct Lnrpc_ChanPointShim {
   ///channel funding.
   var amt: Int64 = 0
 
-  /// The target channel point to refrence in created commitment transactions.
+  /// The target channel point to reference in created commitment transactions.
   var chanPoint: Lnrpc_ChannelPoint {
     get {return _chanPoint ?? Lnrpc_ChannelPoint()}
     set {_chanPoint = newValue}
@@ -3230,7 +3230,7 @@ struct Lnrpc_ChanPointShim {
 
   ///
   ///If non-zero, then this will be used as the pending channel ID on the wire
-  ///protocol to initate the funding request. This is an optional field, and
+  ///protocol to initiate the funding request. This is an optional field, and
   ///should only be set if the responder is already expecting a specific pending
   ///channel ID.
   var pendingChanID: Data = Data()

@@ -589,7 +589,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               PushNotification.clearLocalNotification("TEST123", 21312);
               // PushNotification.localNotification({
               //   channelId: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID,
-              //   message: "Persistant 123",
+              //   message: "Persistent 123",
               //   playSound: true,
               //   vibrate: false,
               //   priority: "high",
@@ -601,7 +601,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               // })
             }}
           >
-            <Text style={styles.buttonText}>persistant</Text>
+            <Text style={styles.buttonText}>persistent</Text>
           </Button>
           <Button
             small
@@ -1545,7 +1545,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             danger
             onPress={async () => {
               Alert.alert(
-                "Warning: Are you absolurely sure?",
+                "Warning: Are you absolutely sure?",
                 "Abdandoning a channel means you could potentially lose funds",
                 [
                   {

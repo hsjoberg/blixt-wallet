@@ -10,7 +10,7 @@ module.exports = {
     ".web.js",
     ".jsx",
     ".js",
-  ], // read files in fillowing order
+  ], // read files in following order
   alias: Object.assign({
     "react-native$": isElectron ? "react-native-electron" : "react-native-web",
     "react-native-linear-gradient": "react-native-web-linear-gradient",

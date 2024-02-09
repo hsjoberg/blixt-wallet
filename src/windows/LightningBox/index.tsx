@@ -18,7 +18,7 @@ export type LightningBoxStackParamList = {
 };
 
 export default function LightningBox() {
-  // We use the setting in order to decide whether the user shuold go to the
+  // We use the setting in order to decide whether the user should go to the
   // registration screen or info screen.
   const lightningBoxAddress = useStoreState((store) => store.settings.lightningBoxAddress);
 

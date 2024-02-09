@@ -70,7 +70,7 @@ export default function Restore({ navigation }: IProps) {
           // Due to system restrictions, we cannot deal with binary files
           // on iOS, thus the backup file is saved as a base64-string.
           //
-          // In other to keep compatiblity between platforms,
+          // In other to keep compatibility between platforms,
           // the native expected format for each platform is tried,
           // if an error is retrieved, the reverse is tried.
           //
