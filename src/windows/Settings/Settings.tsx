@@ -1073,7 +1073,7 @@ ${t("experimental.tor.disabled.msg2")}`;
           onPress: () => {},
         },
         {
-          text: t("LN.LSP.setDialog.accept"),
+          text: t("LN.LSP.setDialog.acept"),
           onPress: async (text) => {
             if (text === dunderServer) {
               return;
