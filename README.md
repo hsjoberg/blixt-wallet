@@ -73,6 +73,8 @@ To start the application:
 - Run: `yarn start-metro`
 - Run: `yarn android:mainnet-debug` or `yarn android:testnet-debug`
 
+For building Blixt Android on Windows, follow the build steps [here](./build-steps-android-windows.md).
+
 ### iOS
 
 To build the iOS version, a computer running macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
