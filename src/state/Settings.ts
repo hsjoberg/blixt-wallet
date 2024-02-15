@@ -244,7 +244,7 @@ export const settings: ISettingsModel = {
     actions.setBitcoindPubRawBlock((await getItem(StorageItem.bitcoindPubRawBlock)) ?? "");
     actions.setBitcoindPubRawTx((await getItem(StorageItem.bitcoindPubRawTx)) ?? "");
     actions.setDunderServer((await getItem(StorageItem.dunderServer)) ?? "");
-    actions.setRequireGraphSync((await getItemObject(StorageItem.requireGraphSync)) ?? false);
+    actions.setRequireGraphSync((await getItemObject(StorageItem.requireGraphSync)) ?? true);
     actions.setDunderEnabled((await getItemObject(StorageItem.dunderEnabled)) ?? true);
     actions.setLndNoGraphCache((await getItemObject(StorageItem.lndNoGraphCache)) ?? false);
     actions.setInvoiceExpiry(
