@@ -58,6 +58,7 @@ export interface ITransaction {
   paymentRequest: string;
   status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN" | "EXPIRED"; // Note: EXPIRED does not exist in lnd
   rHash: string;
+  ampInvoice: boolean;
   nodeAliasCached: string | null;
   payer?: string | null;
   valueUSD: number | null;

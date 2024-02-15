@@ -245,6 +245,7 @@ export const sendPaymentV2Sync = (
   multiPath?: boolean,
   maxLNFeePercentage: number = 2,
   outgoingChanId?: Long,
+  isAmp?: boolean,
 ): Promise<lnrpc.Payment> => {
   const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
 
@@ -256,6 +257,7 @@ export const sendPaymentV2Sync = (
     feeLimitSat: Long.fromValue(Math.max(10, (payAmount?.toNumber() || 0) * maxFeeRatio)),
     cltvLimit: 0,
     outgoingChanId,
+    amp: isAmp,
   };
   if (amount) {
     options.amt = amount;

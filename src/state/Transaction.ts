@@ -1,6 +1,11 @@
 import { LayoutAnimation } from "react-native";
 import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
-import { ITransaction, getTransactions, createTransaction, updateTransaction } from "../storage/database/transaction";
+import {
+  ITransaction,
+  getTransactions,
+  createTransaction,
+  updateTransaction,
+} from "../storage/database/transaction";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -26,8 +31,14 @@ export interface ITransactionModel {
 
   transactions: ITransaction[];
   getTransactionByRHash: Computed<ITransactionModel, (rHash: string) => ITransaction | undefined>;
-  getTransactionByPreimage: Computed<ITransactionModel, (preimage: Uint8Array) => ITransaction | undefined>;
-  getTransactionByPaymentRequest: Computed<ITransactionModel, (paymentRequest: string) => ITransaction | undefined>;
+  getTransactionByPreimage: Computed<
+    ITransactionModel,
+    (preimage: Uint8Array) => ITransaction | undefined
+  >;
+  getTransactionByPaymentRequest: Computed<
+    ITransactionModel,
+    (paymentRequest: string) => ITransaction | undefined
+  >;
 }
 
 export const transaction: ITransactionModel = {
@@ -42,13 +53,26 @@ export const transaction: ITransactionModel = {
       throw new Error("syncTransaction(): db not ready");
     }
 
+    // Don't insert open transactions for AMP invoices
+    if (tx.status === "OPEN" && tx.ampInvoice) {
+      return;
+    }
+
+    // If AMP invoice settles, insert a new tx
+    if (tx.status === "SETTLED" && tx.ampInvoice) {
+      const id = await createTransaction(db, tx);
+      actions.addTransaction({ ...tx, id });
+
+      return;
+    }
+
     const transactions = getState().transactions;
     let foundTransaction = false;
 
     for (const txIt of transactions) {
       if (txIt.paymentRequest === tx.paymentRequest) {
         await updateTransaction(db, { ...txIt, ...tx });
-        actions.updateTransaction({ transaction: { ...txIt, ...tx }});
+        actions.updateTransaction({ transaction: { ...txIt, ...tx } });
         foundTransaction = true;
       }
     }
@@ -109,32 +133,37 @@ export const transaction: ITransactionModel = {
       throw new Error("checkOpenTransactions(): db not ready");
     }
 
-
     for (const tx of getState().transactions) {
       if (tx.status === "OPEN") {
         log.i("trackpayment tx", [tx.rHash]);
         if (tx.valueMsat.isNegative()) {
           trackPayment(tx.rHash).then((trackPaymentResult) => {
-            log.i("trackpayment status", [trackPaymentResult.status, trackPaymentResult.paymentHash]);
+            log.i("trackpayment status", [
+              trackPaymentResult.status,
+              trackPaymentResult.paymentHash,
+            ]);
             if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.SUCCEEDED) {
               log.i("trackpayment updating tx [settled]");
               const updated: ITransaction = {
                 ...tx,
                 status: "SETTLED",
                 preimage: hexToUint8Array(trackPaymentResult.paymentPreimage),
-                hops: trackPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
-                  chanId: hop.chanId ?? null,
-                  chanCapacity: hop.chanCapacity ?? null,
-                  amtToForward: hop.amtToForward || Long.fromInt(0),
-                  amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-                  fee: hop.fee || Long.fromInt(0),
-                  feeMsat: hop.feeMsat || Long.fromInt(0),
-                  expiry: hop.expiry || null,
-                  pubKey: hop.pubKey || null,
-                })) ?? [],
+                hops:
+                  trackPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
+                    chanId: hop.chanId ?? null,
+                    chanCapacity: hop.chanCapacity ?? null,
+                    amtToForward: hop.amtToForward || Long.fromInt(0),
+                    amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
+                    fee: hop.fee || Long.fromInt(0),
+                    feeMsat: hop.feeMsat || Long.fromInt(0),
+                    expiry: hop.expiry || null,
+                    pubKey: hop.pubKey || null,
+                  })) ?? [],
               };
               // tslint:disable-next-line
-              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+              updateTransaction(db, updated).then(() =>
+                actions.updateTransaction({ transaction: updated }),
+              );
             } else if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.UNKNOWN) {
               log.i("trackpayment updating tx [unknown]");
               const updated: ITransaction = {
@@ -142,7 +171,9 @@ export const transaction: ITransactionModel = {
                 status: "UNKNOWN",
               };
               // tslint:disable-next-line
-              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+              updateTransaction(db, updated).then(() =>
+                actions.updateTransaction({ transaction: updated }),
+              );
             } else if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.FAILED) {
               log.i("trackpayment updating tx [failed]");
               const updated: ITransaction = {
@@ -150,12 +181,14 @@ export const transaction: ITransactionModel = {
                 status: "CANCELED",
               };
               // tslint:disable-next-line
-              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
+              updateTransaction(db, updated).then(() =>
+                actions.updateTransaction({ transaction: updated }),
+              );
             }
           });
         } else {
           const check = await lookupInvoice(tx.rHash);
-          if ((Date.now() / 1000) > (check.creationDate.add(check.expiry).toNumber())) {
+          if (Date.now() / 1000 > check.creationDate.add(check.expiry).toNumber()) {
             const updated: ITransaction = {
               ...tx,
               status: "EXPIRED",
@@ -164,8 +197,7 @@ export const transaction: ITransactionModel = {
             updateTransaction(db, updated).then(() => {
               actions.updateTransaction({ transaction: updated });
             });
-          }
-          else if (check.settled) {
+          } else if (check.settled) {
             const updated: ITransaction = {
               ...tx,
               status: "SETTLED",
@@ -174,16 +206,17 @@ export const transaction: ITransactionModel = {
               // TODO add valueUSD, valueFiat and valueFiatCurrency?
             };
             // tslint:disable-next-line
-            updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
-          }
-          else if (check.state === lnrpc.Invoice.InvoiceState.CANCELED) {
+            updateTransaction(db, updated).then(() =>
+              actions.updateTransaction({ transaction: updated }),
+            );
+          } else if (check.state === lnrpc.Invoice.InvoiceState.CANCELED) {
             const updated: ITransaction = {
               ...tx,
               status: "CANCELED",
             };
             // tslint:disable-next-line
             updateTransaction(db, updated).then(() => {
-              actions.updateTransaction({ transaction: updated })
+              actions.updateTransaction({ transaction: updated });
             });
           }
         }
@@ -195,32 +228,30 @@ export const transaction: ITransactionModel = {
   /**
    * Set transactions to our transaction array
    */
-  setTransactions: action((state, transactions) => { state.transactions = transactions; }),
+  setTransactions: action((state, transactions) => {
+    state.transactions = transactions;
+  }),
 
   transactions: [],
-  getTransactionByRHash: computed(
-    (state) => {
-      return (rHash: string) => {
-        return state.transactions.find((tx) => rHash === tx.rHash);
-      };
-    },
-  ),
+  getTransactionByRHash: computed((state) => {
+    return (rHash: string) => {
+      return state.transactions.find((tx) => rHash === tx.rHash);
+    };
+  }),
 
-  getTransactionByPreimage: computed(
-    (state) => {
-      return (preimage: Uint8Array) => {
-        return state.transactions.find((tx) => bytesToHexString(preimage) === bytesToHexString(tx.preimage));
-      };
-    },
-  ),
+  getTransactionByPreimage: computed((state) => {
+    return (preimage: Uint8Array) => {
+      return state.transactions.find(
+        (tx) => bytesToHexString(preimage) === bytesToHexString(tx.preimage),
+      );
+    };
+  }),
 
-  getTransactionByPaymentRequest: computed(
-    (state) => {
-      return (paymentRequest: string) => {
-        return state.transactions.find((tx) => {
-          return paymentRequest === tx.paymentRequest;
-        });
-      };
-    },
-  ),
+  getTransactionByPaymentRequest: computed((state) => {
+    return (paymentRequest: string) => {
+      return state.transactions.find((tx) => {
+        return paymentRequest === tx.paymentRequest;
+      });
+    };
+  }),
 };
