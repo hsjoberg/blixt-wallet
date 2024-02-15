@@ -29,6 +29,7 @@ import {
   checkStatus,
   connectPeer,
   decodePayReq,
+  generateSecureRandomAsBase64,
   getInfo,
   getNetworkInfo,
   getNodeInfo,
@@ -68,7 +69,7 @@ import { RootStackParamList } from "../../Main";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { abandonChannel } from "../../lndmobile/channel";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { generateSecureRandom } from "react-native-securerandom";
+import { generateSecureRandom } from "../../lndmobile/index";
 import { localNotification } from "../../utils/push-notification";
 import { sendCommand } from "../../lndmobile/utils";
 
@@ -306,6 +307,14 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }}
           >
             <Text style={styles.buttonText}>generateSecureRandom</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(await generateSecureRandomAsBase64(32));
+            }}
+          >
+            <Text style={styles.buttonText}>generateSecureRandomAsBase64</Text>
           </Button>
           <Button
             small

@@ -72,7 +72,6 @@ import SetupBlixtDemo from "../utils/setup-demo";
 import { appMigration } from "../migration/app-migration";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { clearTransactions } from "../storage/database/transaction";
-import { generateSecureRandom } from "react-native-securerandom";
 import { lnrpc } from "../../proto/lightning";
 import logger from "./../utils/log";
 import { toast } from "../utils";
@@ -115,7 +114,7 @@ export interface IStoreModel {
   generateSeed: Thunk<IStoreModel, string | undefined, IStoreInjections>;
   writeConfig: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   unlockWallet: Thunk<ILightningModel, void, IStoreInjections>;
-  createWallet: Thunk<IStoreModel, ICreateWalletPayload | void, IStoreInjections, IStoreModel>;
+  createWallet: Thunk<IStoreModel, ICreateWalletPayload | undefined, IStoreInjections, IStoreModel>;
   changeOnboardingState: Thunk<IStoreModel, OnboardingState>;
 
   db?: SQLiteDatabase;
@@ -639,13 +638,13 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
 
   createWallet: thunk(async (actions, payload, { injections, getState, dispatch }) => {
     const initWallet = injections.lndMobile.wallet.initWallet;
+    const generateSecureRandomAsBase64 = injections.lndMobile.index.generateSecureRandomAsBase64;
     const seed = getState().walletSeed;
     if (!seed) {
       return;
     }
-    let random = await generateSecureRandom(32);
+    const randomBase64 = await generateSecureRandomAsBase64(32);
 
-    const randomBase64 = base64.fromByteArray(random);
     await setItem(StorageItem.walletPassword, randomBase64);
     await setWalletPassword(randomBase64);
 

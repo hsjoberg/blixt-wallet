@@ -1,8 +1,9 @@
 import { TLV_KEYSEND, TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { decodeStreamResult, sendCommand, sendStreamCommand } from "./utils";
-import { devrpc, invoicesrpc, lnrpc, routerrpc } from "../../proto/lightning";
+import { invoicesrpc, lnrpc, routerrpc } from "../../proto/lightning";
 import { getChanInfo, listPrivateChannels } from "./channel";
 import { hexToUint8Array, stringToUint8Array, unicodeStringToUint8Array } from "../utils";
+import { toByteArray as base64ToByteArray } from "base64-js";
 
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import Long from "long";
@@ -58,6 +59,19 @@ export const subscribeState = async () => {
     false,
   );
   return response;
+};
+
+/**
+ * @throws
+ * @return string
+ */
+export const generateSecureRandomAsBase64 = async (length: number) => {
+  return await LndMobileTools.generateSecureRandomAsBase64(length);
+};
+
+export const generateSecureRandom = async (length: number) => {
+  const randomBase64 = await generateSecureRandomAsBase64(length);
+  return base64ToByteArray(randomBase64);
 };
 
 export const decodeState = (data: string): lnrpc.SubscribeStateResponse => {

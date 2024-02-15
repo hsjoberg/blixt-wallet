@@ -8,7 +8,7 @@ import { getRouteHints, sendKeysendPaymentV2 } from "../../lndmobile/index";
 import Long from "long";
 import { toast, hexToUint8Array } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
-import { generateSecureRandom } from "react-native-securerandom";
+import { generateSecureRandom } from "../../lndmobile/index";
 import { lnrpc } from "../../../proto/lightning";
 import QrCode from "../../components/QrCode";
 import BlixtForm from "../../components/Form";
