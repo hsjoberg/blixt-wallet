@@ -31,6 +31,8 @@ import {
   subscribeState,
   writeConfig,
   writeConfigFile,
+  generateSecureRandomAsBase64,
+  generateSecureRandom,
 } from "../lndmobile/fake/index";
 import { WorkInfo, checkScheduledSyncWorkStatus } from "../lndmobile/fake/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
 import {
@@ -78,6 +80,8 @@ export interface ILndMobileInjections {
     initialize: () => Promise<{ data: string } | number>;
     writeConfig: (config: string) => Promise<string>;
     writeConfigFile: () => Promise<string>;
+    generateSecureRandomAsBase64: (length: number) => Promise<string>;
+    generateSecureRandom: (length: number) => Promise<Uint8Array>;
     subscribeState: () => Promise<string>;
     decodeState: (data: string) => lnrpc.SubscribeStateResponse;
     checkStatus: () => Promise<number>;
@@ -212,6 +216,8 @@ export default {
     initialize,
     writeConfig,
     writeConfigFile,
+    generateSecureRandomAsBase64,
+    generateSecureRandom,
     subscribeState,
     decodeState,
     checkStatus,

@@ -33,6 +33,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.io.UnsupportedEncodingException;
 
@@ -754,6 +755,14 @@ class LndMobileTools extends ReactContextBaseJavaModule {
       } catch (Exception e) {
           promise.reject("ERROR", e);
       }
+  }
+
+  @ReactMethod
+  public void generateSecureRandomAsBase64(int length, Promise promise) {
+    SecureRandom secureRandom = new SecureRandom();
+    byte[] buffer = new byte[length];
+    secureRandom.nextBytes(buffer);
+    promise.resolve(Base64.encodeToString(buffer, Base64.NO_WRAP));
   }
 
   private void checkWriteExternalStoragePermission(@NonNull RequestWriteExternalStoragePermissionCallback successCallback,

@@ -702,4 +702,23 @@ autopilot.heuristic=preferential:0.05
     }
     resolve(filesMap)
   }
+
+  @objc(generateSecureRandomAsBase64:resolver:rejecter:)
+  func generateSecureRandomAsBase64(length: Int, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    var bytes = Data(count: length)
+    let result = bytes.withUnsafeMutableBytes { mutableBytes -> Int32 in
+      if let baseAddress = mutableBytes.baseAddress {
+        return SecRandomCopyBytes(kSecRandomDefault, length, baseAddress)
+      } else {
+        return errSecParam
+      }
+    }
+
+    if result == errSecSuccess {
+      resolve(bytes.base64EncodedString())
+    } else {
+      let error = NSError(domain: "LndMobileTools", code: Int(result), userInfo: nil)
+      reject("randombytes_error", "Error generating random bytes", error)
+    }
+  }
 }
