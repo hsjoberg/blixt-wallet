@@ -65,7 +65,7 @@ export const bytesToString = (bytes: ArrayLike<number>) => {
 
 export const uint8ArrayToString = (bytes: Uint8Array) => bytesToString(bytes);
 
-export const bytesToHexString = (bytes) => {
+export const bytesToHexString = (bytes: Uint8Array): string => {
   // console.log("inside bytesToHexString");
   // console.log(bytes);
   return bytes.reduce(function (memo, i) {

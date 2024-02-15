@@ -76,6 +76,7 @@ import { generateSecureRandom } from "react-native-securerandom";
 import { lnrpc } from "../../proto/lightning";
 import logger from "./../utils/log";
 import { toast } from "../utils";
+import { lspManager, ILspManagerModel } from "./LspManager";
 
 const log = logger("Store");
 
@@ -154,6 +155,7 @@ export interface IStoreModel {
   appBuild: number;
   onboardingState: OnboardingState;
   channelAcceptanceManager: IChannelAcceptanceManagerModel;
+  lspManager: ILspManagerModel;
 }
 
 export const model: IStoreModel = {
@@ -734,6 +736,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   contacts,
   channelAcceptanceManager,
   lightningBox,
+  lspManager,
 };
 
 export default model;

@@ -3,7 +3,13 @@ import { Action, action, computed, Computed, Thunk, thunk } from "easy-peasy";
 import { generateSecureRandom } from "react-native-securerandom";
 
 import { IStoreInjections } from "./store";
-import { bytesToHexString, stringToUint8Array, timeout } from "../utils";
+import {
+  bytesToHexString,
+  stringToUint8Array,
+  timeout,
+  uint8ArrayToString,
+  uint8ArrayToUnicodeString,
+} from "../utils";
 import { IStoreModel } from "./index";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
@@ -68,13 +74,48 @@ export interface IOnDemandChannelUnknownRequestResponse extends IErrorResponse {
 
 export interface IOndemandChannel {
   checkOndemandChannelService: Thunk<IOndemandChannel, void, IStoreInjections>;
-  connectToService: Thunk<IOndemandChannel, undefined, IStoreInjections, IStoreModel, Promise<boolean>>;
-  addInvoice: Thunk<IOndemandChannel, { sat: number; description: string, preimage?: Uint8Array }, IStoreInjections, IStoreModel>;
+  connectToService: Thunk<
+    IOndemandChannel,
+    undefined,
+    IStoreInjections,
+    IStoreModel,
+    Promise<boolean>
+  >;
+  addInvoice: Thunk<
+    IOndemandChannel,
+    { sat: number; description: string; preimage?: Uint8Array },
+    IStoreInjections,
+    IStoreModel
+  >;
 
-  serviceStatus: Thunk<IOndemandChannel, void, IStoreInjections, IStoreModel, Promise<IOnDemandChannelServiceStatusResponse>>;
-  checkStatus: Thunk<IOndemandChannel, void, IStoreInjections, IStoreModel, Promise<IOnDemandChannelCheckStatusResponse>>;
-  register: Thunk<IOndemandChannel, { preimage: Uint8Array; amount: number; }, IStoreInjections, IStoreModel, Promise<IOnDemandChannelRegisterOkResponse>>;
-  claim: Thunk<IOndemandChannel, void, IStoreInjections, IStoreModel, Promise<IOnDemandChannelRegisterOkResponse>>;
+  serviceStatus: Thunk<
+    IOndemandChannel,
+    void,
+    IStoreInjections,
+    IStoreModel,
+    Promise<IOnDemandChannelServiceStatusResponse>
+  >;
+  checkStatus: Thunk<
+    IOndemandChannel,
+    void,
+    IStoreInjections,
+    IStoreModel,
+    Promise<IOnDemandChannelCheckStatusResponse>
+  >;
+  register: Thunk<
+    IOndemandChannel,
+    { preimage: Uint8Array; amount: number },
+    IStoreInjections,
+    IStoreModel,
+    Promise<IOnDemandChannelRegisterOkResponse>
+  >;
+  claim: Thunk<
+    IOndemandChannel,
+    void,
+    IStoreInjections,
+    IStoreModel,
+    Promise<IOnDemandChannelRegisterOkResponse>
+  >;
 
   registerInvoicePreimage: Uint8Array | null;
   setRegisterInvoicePreimage: Action<IOndemandChannel, Uint8Array | null>;
@@ -90,7 +131,7 @@ export interface IBlixtLsp {
 
   // On-demand Channels
   ondemandChannel: IOndemandChannel;
-};
+}
 
 export const blixtLsp: IBlixtLsp = {
   initialize: thunk(async (actions, _, { getState, getStoreState, getStoreActions }) => {
@@ -149,20 +190,24 @@ export const blixtLsp: IBlixtLsp = {
       log.i("checkStatus");
       const dunderServer = getStoreState().settings.dunderServer;
 
-      const signMessageResult = await injections.lndMobile.wallet.signMessageNodePubkey(stringToUint8Array("CHECKSTATUS"));
+      const signMessageResult = await injections.lndMobile.wallet.signMessageNodePubkey(
+        stringToUint8Array("CHECKSTATUS"),
+      );
 
       const request = JSON.stringify({
         pubkey: getStoreState().lightning.nodeInfo?.identityPubkey,
         signature: signMessageResult.signature,
       });
 
-      return (await fetch(`${dunderServer}/ondemand-channel/check-status`, {
-        body: request,
-        method: "POST",
-      })).json();
+      return (
+        await fetch(`${dunderServer}/ondemand-channel/check-status`, {
+          body: request,
+          method: "POST",
+        })
+      ).json();
     }),
 
-    connectToService: thunk((async (actions, _, { getStoreActions }) => {
+    connectToService: thunk(async (actions, _, { getStoreActions }) => {
       const result = await actions.serviceStatus();
       log.d("serviceStatus", [result]);
 
@@ -182,9 +227,9 @@ export const blixtLsp: IBlixtLsp = {
         }
       }
       return connectToPeer;
-    })),
+    }),
 
-    addInvoice: thunk((async (actions, { sat, description, preimage }, { getStoreActions }) => {
+    addInvoice: thunk(async (actions, { sat, description, preimage }, { getStoreActions }) => {
       if (!preimage) {
         preimage = await generateSecureRandom(32);
       }
@@ -206,12 +251,15 @@ export const blixtLsp: IBlixtLsp = {
       });
       console.log(invoice);
       return invoice;
-    })),
+    }),
 
     register: thunk(async (actions, { preimage, amount }, { getStoreState, injections }) => {
       log.i("register");
       const dunderServer = getStoreState().settings.dunderServer;
-      const signMessageResult = await injections.lndMobile.wallet.signMessageNodePubkey(stringToUint8Array("REGISTER"));
+      const signMessageResult = await injections.lndMobile.wallet.signMessageNodePubkey(
+        stringToUint8Array("REGISTER"),
+      );
+
       // const getInfoResponse = await injections.lndMobile.index.getInfo();
       const request: IOnDemandChannelRegisterRequest = {
         pubkey: getStoreState().lightning.nodeInfo?.identityPubkey!,
@@ -237,17 +285,21 @@ export const blixtLsp: IBlixtLsp = {
       log.i("claim");
       const dunderServer = getStoreState().settings.dunderServer;
 
-      const signMessageResult = await injections.lndMobile.wallet.signMessageNodePubkey(stringToUint8Array("CLAIM"));
+      const signMessageResult = await injections.lndMobile.wallet.signMessageNodePubkey(
+        stringToUint8Array("CLAIM"),
+      );
 
       const request = JSON.stringify({
         pubkey: getStoreState().lightning.nodeInfo?.identityPubkey,
         signature: signMessageResult.signature,
       });
 
-      return (await fetch(`${dunderServer}/ondemand-channel/claim`, {
-        body: request,
-        method: "POST",
-      })).json();
+      return (
+        await fetch(`${dunderServer}/ondemand-channel/claim`, {
+          body: request,
+          method: "POST",
+        })
+      ).json();
     }),
 
     setRegisterInvoicePreimage: action((store, payload) => {
