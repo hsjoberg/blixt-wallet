@@ -1433,6 +1433,8 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeLndCompactDb(true);
     restartNeeded();
   };
+
+  // Enforce speedloader on startup
   const enforceSpeedloaderOnStartup = useStoreState(
     (store) => store.settings.enforceSpeedloaderOnStartup,
   );
@@ -1537,6 +1539,15 @@ ${t("experimental.tor.disabled.msg2")}`;
     }
   };
 
+  // Hide amounts
+  const hideAmountsEnabled = useStoreState((store) => store.settings.hideAmountsEnabled);
+  const changeHideAmountsEnabled = useStoreActions(
+    (store) => store.settings.changeHideAmountsEnabled,
+  );
+  const onToggleHideAmountsEnabled = async () => {
+    await changeHideAmountsEnabled(!hideAmountsEnabled);
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -1632,6 +1643,20 @@ ${t("experimental.tor.disabled.msg2")}`;
               </Body>
             </ListItem>
           )}
+          <ListItem style={style.listItem} icon={true} onPress={onToggleHideAmountsEnabled}>
+            <Left>
+              <Icon style={style.icon} type="Feather" name="align-justify" />
+            </Left>
+            <Body>
+              <Text>{t("general.hideAmountsEnabled.title")}</Text>
+            </Body>
+            <Right>
+              <CheckBox
+                checked={hideAmountsEnabled}
+                onPress={onToggleTransactionGeolocationEnabled}
+              />
+            </Right>
+          </ListItem>
 
           <ListItem style={style.itemHeader} itemHeader={true} first={true}>
             <Text>{t("wallet.title")}</Text>
