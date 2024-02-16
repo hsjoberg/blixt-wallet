@@ -8,10 +8,16 @@ import { ITransaction } from "../storage/database/transaction";
 import { blixtTheme } from ".././native-base-theme/variables/commonColor";
 import { capitalize, formatISO, isLong } from "../utils";
 import { extractDescription } from "../utils/NameDesc";
-import { IBitcoinUnits, formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
+import {
+  IBitcoinUnits,
+  formatBitcoin,
+  convertBitcoinToFiat,
+  getUnitNice,
+} from "../utils/bitcoin-units";
 import { useStoreState } from "../state/store";
 import { getLightningService } from "../utils/lightning-services";
 import { fontFactor, fontFactorSubtle, zoomed } from "../utils/scale";
+import BigNumber from "bignumber.js";
 
 interface IProps {
   onPress: (id: string) => void;
@@ -26,6 +32,8 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
+  const hideAmountsEnabled = useStoreState((store) => store.settings.hideAmountsEnabled);
+  const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
   let transactionValue: Long;
   if (isLong(amtPaidSat) && amtPaidSat.greaterThan(0)) {
@@ -108,8 +116,28 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
                   {transactionValue.notEquals(0) && (
                     <>
                       {positive ? "+" : ""}
-                      {!preferFiat && formatBitcoin(transactionValue, unit)}
-                      {preferFiat && convertBitcoinToFiat(transactionValue, currentRate, fiatUnit)}
+
+                      {!hideAmountsEnabled && (
+                        <>
+                          {!preferFiat && formatBitcoin(transactionValue, unit)}
+                          {preferFiat &&
+                            convertBitcoinToFiat(transactionValue, currentRate, fiatUnit)}
+                        </>
+                      )}
+                      {hideAmountsEnabled && (
+                        <>
+                          {!preferFiat && (
+                            <>
+                              {!positive ? "-" : ""}●●● {getUnitNice(new BigNumber(2), bitcoinUnit)}
+                            </>
+                          )}
+                          {preferFiat && (
+                            <>
+                              {!positive ? "-" : ""}●●● {fiatUnit}
+                            </>
+                          )}
+                        </>
+                      )}
                     </>
                   )}
                 </Text>

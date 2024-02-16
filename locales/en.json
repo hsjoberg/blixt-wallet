@@ -639,6 +639,9 @@
       },
       "mapTheme": {
         "title": "Set Map theme"
+      },
+      "hideAmountsEnabled": {
+        "title": "Hide amounts"
       }
     },
     "wallet": {
