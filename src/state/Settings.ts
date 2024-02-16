@@ -93,6 +93,7 @@ export interface ISettingsModel {
   changeLightningBoxServer: Thunk<ISettingsModel, string>;
   changeLightningBoxAddress: Thunk<ISettingsModel, string>;
   changeLightningBoxLnurlPayDesc: Thunk<ISettingsModel, string>;
+  changeHideAmountsEnabled: Thunk<ISettingsModel, boolean>;
 
   setBitcoinUnit: Action<ISettingsModel, keyof IBitcoinUnits>;
   setFiatUnit: Action<ISettingsModel, keyof IFiatRates>;
@@ -141,6 +142,7 @@ export interface ISettingsModel {
   setLightningBoxServer: Action<ISettingsModel, string>;
   setLightningBoxAddress: Action<ISettingsModel, string>;
   SetLightningBoxLnurlPayDesc: Action<ISettingsModel, string>;
+  setHideAmountsEnabled: Action<ISettingsModel, boolean>;
 
   bitcoinUnit: keyof IBitcoinUnits;
   fiatUnit: keyof IFiatRates;
@@ -189,6 +191,7 @@ export interface ISettingsModel {
   lightningBoxServer: string;
   lightningBoxAddress: string;
   lightningBoxLnurlPayDesc: string;
+  hideAmountsEnabled: boolean;
 }
 
 export const settings: ISettingsModel = {
@@ -283,6 +286,7 @@ export const settings: ISettingsModel = {
     actions.SetLightningBoxLnurlPayDesc(
       (await getItem(StorageItem.lightningBoxLnurlPayDesc)) ?? DEFAULT_LIGHTNINGBOX_LNURLPDESC,
     );
+    actions.setHideAmountsEnabled((await getItemObject(StorageItem.hideAmountsEnabled)) ?? false);
 
     log.d("Done");
   }),
@@ -526,6 +530,11 @@ export const settings: ISettingsModel = {
     actions.SetLightningBoxLnurlPayDesc(payload);
   }),
 
+  changeHideAmountsEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.hideAmountsEnabled, payload);
+    actions.setHideAmountsEnabled(payload);
+  }),
+
   setBitcoinUnit: action((state, payload) => {
     state.bitcoinUnit = payload;
   }),
@@ -667,6 +676,9 @@ export const settings: ISettingsModel = {
   SetLightningBoxLnurlPayDesc: action((state, payload) => {
     state.lightningBoxLnurlPayDesc = payload;
   }),
+  setHideAmountsEnabled: action((state, payload) => {
+    state.hideAmountsEnabled = payload;
+  }),
 
   bitcoinUnit: "bitcoin",
   fiatUnit: "USD",
@@ -715,4 +727,5 @@ export const settings: ISettingsModel = {
   lightningBoxServer: DEFAULT_LIGHTNINGBOX_SERVER,
   lightningBoxAddress: "",
   lightningBoxLnurlPayDesc: DEFAULT_LIGHTNINGBOX_LNURLPDESC,
+  hideAmountsEnabled: false,
 };
