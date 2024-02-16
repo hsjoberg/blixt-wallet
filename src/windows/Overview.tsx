@@ -19,13 +19,14 @@ import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-naviga
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Long from "long";
 import { FlashList } from "@shopify/flash-list";
+import BigNumber from "bignumber.js";
 
 import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
 import { timeout, toast } from "../utils/index";
-import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
+import { formatBitcoin, convertBitcoinToFiat, getUnitNice } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
 import Drawer from "../components/Drawer";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
@@ -65,7 +66,11 @@ function Overview({ navigation }: IOverviewProps) {
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const changePreferFiat = useStoreActions((store) => store.settings.changePreferFiat);
   const hideExpiredInvoices = useStoreState((store) => store.settings.hideExpiredInvoices);
-
+  const hideAmountsEnabled = useStoreState((store) => store.settings.hideAmountsEnabled);
+  const changeHideAmountsEnabled = useStoreActions(
+    (store) => store.settings.changeHideAmountsEnabled,
+  );
+  console.log(hideAmountsEnabled);
   const bitcoinAddress = useStoreState((store) => store.onChain.address);
   const onboardingState = useStoreState((store) => store.onboardingState);
 
@@ -170,6 +175,10 @@ function Overview({ navigation }: IOverviewProps) {
     await changePreferFiat(!preferFiat);
   };
 
+  const onLongPressBalanceHeader = async () => {
+    await changeHideAmountsEnabled(!hideAmountsEnabled);
+  };
+
   const onPressSyncIcon = () => {
     navigation.navigate("SyncInfo");
   };
@@ -267,9 +276,11 @@ function Overview({ navigation }: IOverviewProps) {
             } */}
           </View>
 
+          {/* The main balance text */}
           <Animated.Text
             testID="BIG_BALANCE_HEADER"
             onPress={onPressBalanceHeader}
+            onLongPress={onLongPressBalanceHeader}
             style={[
               headerInfo.btc,
               {
@@ -292,31 +303,54 @@ function Overview({ navigation }: IOverviewProps) {
               },
             ]}
           >
-            {!preferFiat && bitcoinBalance}
-            {preferFiat && fiatBalance}
+            {!hideAmountsEnabled && (
+              <>
+                {!preferFiat && bitcoinBalance}
+                {preferFiat && fiatBalance}
+              </>
+            )}
+            {hideAmountsEnabled && (
+              <>
+                {!preferFiat && <>●●● {getUnitNice(new BigNumber(2), bitcoinUnit)}</>}
+                {preferFiat && <>●●● {fiatUnit}</>}
+              </>
+            )}
           </Animated.Text>
 
-          {pendingOpenBalance.equals(0) && (
-            <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
-              {!preferFiat && fiatBalance}
-              {preferFiat && bitcoinBalance}
-            </Animated.Text>
+          {/* The smaller one underneath */}
+          {!hideAmountsEnabled && (
+            <>
+              {pendingOpenBalance.equals(0) && (
+                <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
+                  {!preferFiat && fiatBalance}
+                  {preferFiat && bitcoinBalance}
+                </Animated.Text>
+              )}
+              {pendingOpenBalance.greaterThan(0) && (
+                <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
+                  {!preferFiat && (
+                    <>
+                      ({formatBitcoin(pendingOpenBalance, bitcoinUnit)}{" "}
+                      {t("msg.pending", { ns: namespaces.common })})
+                    </>
+                  )}
+                  {preferFiat && (
+                    <>
+                      ({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)}{" "}
+                      {t("msg.pending", { ns: namespaces.common })})
+                    </>
+                  )}
+                </Animated.Text>
+              )}
+            </>
           )}
-          {pendingOpenBalance.greaterThan(0) && (
-            <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
-              {!preferFiat && (
-                <>
-                  ({formatBitcoin(pendingOpenBalance, bitcoinUnit)}{" "}
-                  {t("msg.pending", { ns: namespaces.common })})
-                </>
-              )}
-              {preferFiat && (
-                <>
-                  ({convertBitcoinToFiat(pendingOpenBalance, currentRate, fiatUnit)}{" "}
-                  {t("msg.pending", { ns: namespaces.common })})
-                </>
-              )}
-            </Animated.Text>
+          {hideAmountsEnabled && (
+            <>
+              <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
+                {preferFiat && <>●●● {getUnitNice(new BigNumber(2), bitcoinUnit)}</>}
+                {!preferFiat && <>●●● {fiatUnit}</>}
+              </Animated.Text>
+            </>
           )}
         </Animated.View>
       </View>
