@@ -206,7 +206,7 @@ function Overview({ navigation }: IOverviewProps) {
             />
           )}
           estimatedItemSize={86}
-          keyExtractor={(transaction) => transaction.id!?.toString()}
+          keyExtractor={(transaction) => transaction.id!?.toString() ?? transaction.date}
           ListEmptyComponent={
             <Text style={{ textAlign: "center", margin: 16 }}>{t("noTransactionsYet")}</Text>
           }
