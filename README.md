@@ -64,8 +64,7 @@ It's useful if you want to make design and GUI changes.
 
 - Install [Node](https://nodejs.org), [Yarn](https://yarnpkg.com/getting-started/install) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
 - If needed, install an emulated android device inside Android Studio
-- Download lnd binary from [from the latest Blixt Wallet release](https://github.com/hsjoberg/blixt-wallet/releases) and put it in `android/lndmobile`. Alternatively build lnd for Android by following the steps in [Build Lnd For mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
-- Get the tor sub-module: `git submodule update --init`
+- Download lnd binary from [from the latest Blixt Wallet release](https://github.com/hsjoberg/blixt-wallet/releases) and put it in `android/app/lndmobile`. Alternatively build lnd for Android by following the steps in [Build Lnd For mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
 
@@ -85,7 +84,7 @@ To build the iOS version, a computer running macOS is required. You also need an
 - Generate proto files: `yarn gen-proto`
 - Install CocoaPods libs: `cd ios && pod install`
 - Setup team signing:
-  - Open ios/BlixtWallet/BlixtWallet.xcworkspace with Xcode
+  - Open `ios/BlixtWallet/BlixtWallet.xcworkspace` with Xcode
   - Login with your Apple Developer account if Xcode asks you to
   - Click on BlixtWallet in the left column
   - Click on the Signing &amp; Capabilities tab
