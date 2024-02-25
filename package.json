@@ -2,6 +2,8 @@
   "name": "BlixtWallet",
   "version": "0.7.0",
   "private": true,
+  "packageManager": "yarn@4.1.0",
+  "nodeLinker": "node-modules",
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
     "ios": "react-native run-ios",

@@ -62,7 +62,7 @@ It's useful if you want to make design and GUI changes.
 
 ### Android
 
-- Install [Node](https://nodejs.org), [Yarn](https://classic.yarnpkg.com) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
+- Install [Node](https://nodejs.org), [Yarn](https://yarnpkg.com/getting-started/install) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
 - If needed, install an emulated android device inside Android Studio
 - Download lnd binary from [from the latest Blixt Wallet release](https://github.com/hsjoberg/blixt-wallet/releases) and put it in `android/lndmobile`. Alternatively build lnd for Android by following the steps in [Build Lnd For mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
 - Get the tor sub-module: `git submodule update --init`
@@ -73,7 +73,7 @@ To start the application:
 - Run: `yarn start-metro`
 - Run: `yarn android:mainnet-debug` or `yarn android:testnet-debug`
 
-For building Blixt Android on Windows, follow the build steps [here](./build-steps-android-windows.md).
+For building Blixt Android on Windows, follow the additional build steps [here](./build-steps-android-windows.md).
 
 ### iOS
 
