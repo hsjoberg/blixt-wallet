@@ -299,7 +299,7 @@
       "localCommitmentTxid": "شناسه تراکنش پیمان محلی",
       "remoteCommitmentTxid": "شناسه‌ی تراکنش پیمان سوی دیگر",
       "closeChannel": "بستن کانال",
-      "forceClosePendingChannel": "یک سویه بستنِ کانالِ در راه",
+      "forceClosePendingChannel": "زوربندی کانالِ در راه",
       "forceCloseDelay": "دیرکرد بسته شدن یک سویه",
       "closeChannelPrompt": {
         "title": "بستن کانال"
