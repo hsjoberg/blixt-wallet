@@ -300,7 +300,7 @@
       "remoteCommitmentTxid": "شناسه‌ی تراکنش پیمان سوی دیگر",
       "closeChannel": "بستن کانال",
       "forceClosePendingChannel": "زوربندی کانالِ در راه",
-      "forceCloseDelay": "دیرکرد بسته شدن یک سویه",
+      "forceCloseDelay": "دیرکرد زوربست کانال",
       "closeChannelPrompt": {
         "title": "بستن کانال"
       },
