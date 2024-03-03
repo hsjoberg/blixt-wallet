@@ -284,7 +284,7 @@
       "statusInactive": "غیرفعال",
       "statusPending": "در راه",
       "statusClosing": "در حال بسته شدن",
-      "statusForceClosing": "در حال یک سویه بسته شدن",
+      "statusForceClosing": "در حال زوربست",
       "statusWaitingForClose": "در انتظار بسته شدن",
       "capacity": "گنجایش",
       "howMuchCanBeSent": "می‌توان فرستاد",
