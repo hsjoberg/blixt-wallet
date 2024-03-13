@@ -32,6 +32,7 @@ export default function App() {
       ...DefaultTheme.colors,
       background: "transparent",
     },
+    fonts: DefaultTheme.fonts,
   };
 
   return (
