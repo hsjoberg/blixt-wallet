@@ -2,7 +2,7 @@
   "name": "BlixtWallet",
   "version": "0.7.0",
   "private": true,
-  "packageManager": "yarn@4.1.0",
+  "packageManager": "yarn@4.1.1",
   "nodeLinker": "node-modules",
   "scripts": {
     "android": "react-native run-android --appIdSuffix debug",
