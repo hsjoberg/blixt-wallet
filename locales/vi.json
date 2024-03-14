@@ -7,7 +7,8 @@
       "amount": "Số lượng",
       "fee": "Phí",
       "search": "Tìm kiếm",
-      "viewInBlockExplorer": "Xem bằng trình duyệt khối"
+      "viewInBlockExplorer": "Xem bằng trình duyệt khối",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "Ok",
@@ -46,6 +47,11 @@
       "msg3": "Hiện không có hỗ trợ WatchTower để xem các kênh của bạn khi bạn ngoại tuyến.",
       "msg4": "Tôi không quan tâm, hãy tiếp tục"
     },
+    "createWalletWithPassphrase": {
+      "title": "Set passphrase (25th word to encrypt the seed)",
+      "invalidMessage": "Enter a valid passphrase",
+      "noLeadingTrailingSpaces": "Leading or trailing spaces is not allowed"
+    },
     "language": {
       "title": "Select language"
     },
@@ -55,7 +61,8 @@
     "menu": {
       "enableTor": "Bật Tor",
       "disableTor": "Tắt Tor",
-      "setBitcoinNode": "Thiết lập nút Bitcoin"
+      "setBitcoinNode": "Thiết lập nút Bitcoin",
+      "createWalletWithPassphrase": "Create wallet with passphrase"
     }
   },
   "footerNav": {
@@ -202,6 +209,9 @@
       "description": {
         "title": "Tin nhắn",
         "placeholder": "Tin nhắn cho người thanh toán"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -240,6 +250,12 @@
       },
       "description": {
         "title": "Tin nhắn"
+      },
+      "feeEstimate": {
+        "title": "Fee estimate"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -259,6 +275,7 @@
       "alias": "Tên riêng",
       "node": "Nút",
       "channelId": "ID kênh",
+      "channelPoint": "Channel point",
       "status": "Trạng thái",
       "statusActive": "Kích hoạt",
       "statusInactive": "Không kích hoạt",
@@ -271,6 +288,7 @@
       "howMuchCanBeReceived": "Có thể nhận",
       "localReserve": "Dự phòng tại chỗ",
       "commitmentFee": "Phí cam kết",
+      "channelType": "Channel type",
       "pendingFunds": "Quỹ đang chờ",
       "balanceInLimbo": "Số dư Limbo",
       "pendingHtlcs": "HTLC đang đợi",
@@ -279,6 +297,7 @@
       "remoteCommitmentTxid": "TXID cam kết từ xa",
       "closeChannel": "Đóng kênh",
       "forceClosePendingChannel": "Bắt buộc đóng nguồn đang chờ xử lý",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Đóng kênh"
       }
@@ -672,11 +691,18 @@
       },
       "chainSync": {
         "title": "Đồng bộ hóa chuỗi đã lên lịch",
-        "subtitle": "Chạy ngầm mỗi 2 giờ",
+        "subtitle": "Runs in background every 2 hours",
         "dialog": {
           "title": "Không được khuyến khích",
           "msg": "Cảnh báo. Bạn không nên tắt đồng bộ hóa chuỗi đã lên lịch.\n\nĐảm bảo rằng bạn luôn cập nhật mạng, nếu không, bạn có nguy cơ mất tiền của mình.\n\nChỉ làm điều này nếu bạn biết mình đang làm gì."
         }
+      },
+      "gossipSync": {
+        "title": "Sync LN channels on startup"
+      },
+      "gossipSyncAndroid": {
+        "title": "Scheduled LN channel sync",
+        "subtitle": "Runs at Blixt startup"
       }
     },
     "display": {
@@ -718,14 +744,17 @@
       "rpc": {
         "title": "Thiết lập bitcoind RPC Host"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "Thiết lập bitcoind ZMQ Raw Block Host"
       },
       "zmqRawTx": {
         "title": "Thiếp lập bitcoind ZMQ Raw Tx Host"
-      },
-      "p2tr": {
-        "title": "Cho phép nhận trên chuỗi qua Taproot (P2TR)"
       }
     },
     "LN": {
@@ -778,9 +807,29 @@
           "msg": "Bạn có muốn khôi phục về máy chủ Dunder mặc định không"
         }
       },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
       "graphSync": {
         "title": "Chờ đồng bộ hóa biểu đồ trước khi thanh toán",
         "subtitle": "Biểu đồ được đồng bộ hóa dẫn đến đường dẫn thanh toán tối ưu"
+      },
+      "zeroConfPeers": {
+        "title": "Set zero conf peers",
+        "subtitle": "Add pubkeys of peers you want to allow zero conf channels from",
+        "setDialog": {
+          "title": "Zero conf peers",
+          "msg1": "Comma separated values of public keys, to allow zero conf channels from.",
+          "msg2": "You will be trusting channels from these partners until there is at least one chain confirmation"
+        }
       }
     },
     "miscelaneous": {
@@ -799,10 +848,14 @@
       },
       "lndLog": {
         "title": "Sao chép nhật ký lnd vào bộ nhớ cục bộ",
-        "subtitle": "Tiếp cận từ thẻ sd/Ví Blixt",
         "dialog": {
-          "alert": "Đã sao chép tệp nhật ký lnd",
           "error": "Lỗi khi sao chép tệp nhật ký lnd."
+        }
+      },
+      "speedloaderLog": {
+        "title": "Copy LN channel sync log file to local storage",
+        "dialog": {
+          "error": "Error copying speedloader log file."
         }
       },
       "dev": {
@@ -837,6 +890,9 @@
         "restoreDialog": {
           "title": "Would you like to restore lnd log level to the default level ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Enable custom invoice preimages"
       }
     },
     "experimental": {
@@ -888,6 +944,14 @@
         "title": "Hiển thị thông báo thông tin khởi động",
         "subtitle": ""
       },
+      "showNotifications": {
+        "title": "Show notifications for this session",
+        "subtitle": ""
+      },
+      "showDebugLog": {
+        "title": "Show debug log for this session",
+        "subtitle": ""
+      },
       "helpCencer": {
         "title": "Trung tâm trợ giúp LndMobile",
         "subtitle": ""
@@ -898,6 +962,10 @@
       },
       "lndLog": {
         "title": "Đọc nhật ký lnd",
+        "subtitle": ""
+      },
+      "speedloaderLog": {
+        "title": "Read LN channel sync log",
         "subtitle": ""
       },
       "keysend": {
@@ -944,7 +1012,17 @@
         "title": "Kích hoạt lược bỏ LN Graph chính xác "
       },
       "bimodalPathFinding": {
-        "title": "Enable bimodal path finding"
+        "title": "Enable bimodal pathfinding"
+      },
+      "compactLndDatabases": {
+        "title": "Compact lnd's databases"
+      },
+      "enforceSpeedloaderOnStartup": {
+        "title": "Enforce gossip sync on startup"
+      },
+      "persistentServices": {
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
@@ -1033,6 +1111,12 @@
     "title": "Dịch vụ Onion Tor",
     "msg1": "Quét mã QR để mở một kênh đến ví này",
     "msg2": "Không thể giải quyết địa chỉ onion"
+  },
+  "settings.toastLog": {
+    "title": "Notification log"
+  },
+  "settings.debugLog": {
+    "title": "Debug log"
   },
   "welcome.addFunds": {
     "title": "Thêm quỹ",
