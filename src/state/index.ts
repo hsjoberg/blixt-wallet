@@ -325,7 +325,7 @@ export const model: IStoreModel = {
         const speed = setTimeout(() => {
           actions.setSpeedloaderLoading(true);
         }, 3000);
-        if (gossipSyncEnabled && !firstStartup && Chain === "mainnet") {
+        if (gossipSyncEnabled && Chain === "mainnet") {
           if (enforceSpeedloaderOnStartup) {
             log.d("Clearing speedloader files");
             try {
