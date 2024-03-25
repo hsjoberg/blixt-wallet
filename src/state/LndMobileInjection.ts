@@ -34,6 +34,8 @@ import {
   trackPaymentV2Sync,
   writeConfig,
   writeConfigFile,
+  generateSecureRandomAsBase64,
+  generateSecureRandom,
   subscribeCustomMessages,
   decodeCustomMessage,
   sendCustomMessage,
@@ -85,7 +87,6 @@ import {
 import { modifyStatus, queryScores, setScores, status } from "../lndmobile/autopilot";
 
 import { WorkInfo } from "../lndmobile/LndMobile";
-import { checkScheduledGossipSyncWorkStatus } from "../lndmobile/scheduled-gossip-sync";
 import { checkScheduledSyncWorkStatus } from "../lndmobile/scheduled-sync"; // TODO(hsjoberg): This could be its own injection "LndMobileScheduledSync"
 
 export interface ILndMobileInjections {
@@ -93,6 +94,8 @@ export interface ILndMobileInjections {
     initialize: () => Promise<{ data: string } | number>;
     writeConfig: (config: string) => Promise<string>;
     writeConfigFile: () => Promise<string>;
+    generateSecureRandomAsBase64: (length: number) => Promise<string>;
+    generateSecureRandom: (length: number) => Promise<Uint8Array>;
     subscribeState: () => Promise<string>;
     decodeState: (data: string) => lnrpc.SubscribeStateResponse;
     checkStatus: () => Promise<number>;
@@ -236,6 +239,8 @@ export default {
     initialize,
     writeConfig,
     writeConfigFile,
+    generateSecureRandomAsBase64,
+    generateSecureRandom,
     checkStatus,
     subscribeState,
     decodeState,

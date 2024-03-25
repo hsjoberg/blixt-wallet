@@ -29,7 +29,7 @@ import { NativeModules, Platform, StyleSheet } from "react-native";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { Alert } from "../../utils/alert";
 import Input from "../../components/Input";
-import { generateSecureRandom } from "react-native-securerandom";
+import { generateSecureRandom } from "../../lndmobile/index";
 import { lnrpc } from "../../../proto/lightning";
 import { LightningBoxStackParamList } from "./index";
 import logger from "../../utils/log";

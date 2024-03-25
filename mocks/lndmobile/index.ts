@@ -33,16 +33,25 @@ export const writeConfigFile = jest.fn(async () => {
   return "File written:";
 });
 
-export const subscribeStateEmitter = (data: Uint8Array) => DeviceEventEmitter.emit("SubscribeState", { data: base64.fromByteArray(data) });
+export const subscribeStateEmitter = (data: Uint8Array) =>
+  DeviceEventEmitter.emit("SubscribeState", { data: base64.fromByteArray(data) });
 export const subscribeState = async () => {
   setTimeout(async () => {
     subscribeStateEmitter(
       lnrpc.SubscribeStateResponse.encode({
         state: lnrpc.WalletState.LOCKED,
-      }).finish()
+      }).finish(),
     );
-  }, 10)
-}
+  }, 10);
+};
+
+export const generateSecureRandomAsBase64 = jest.fn(async (length: number) => {
+  return "c2F0b3NoaQ==";
+});
+
+export const generateSecureRandom = jest.fn(async (length: number) => {
+  return new Uint8Array([0, 1, 2, 3]);
+});
 
 export const decodeState = (data: string): lnrpc.SubscribeStateResponse => {
   return decodeStreamResult<lnrpc.SubscribeStateResponse>({
@@ -84,10 +93,12 @@ export const startLnd = jest.fn(async (): Promise<string> => {
 
 export const getInfoResponse = lnrpc.GetInfoResponse.create({
   uris: [],
-  chains: [{
-    chain: "bitcoin",
-    network: "testnet",
-  }],
+  chains: [
+    {
+      chain: "bitcoin",
+      network: "testnet",
+    },
+  ],
   identityPubkey: "02b5380da0919e32b13c1a21c1c85000eed0ba9a9309fc6849d72230d43088ae1d",
   alias: "02b5380da0919e32b13c",
   numPeers: 3,
@@ -100,13 +111,18 @@ export const getInfoResponse = lnrpc.GetInfoResponse.create({
   version: "0.7.1-beta commit=v0.7.1-beta-rc1-10-g3760f29f5e758b2865b756604333ca22cf23e90b",
   features: {},
 });
-export const getInfo = jest.fn()
+export const getInfo = jest
+  .fn()
   .mockImplementationOnce(async () => getInfoResponse)
-  .mockImplementation(async () =>  ({ ...getInfoResponse, syncedToChain: true, syncedToGraph: true }));
+  .mockImplementation(async () => ({
+    ...getInfoResponse,
+    syncedToChain: true,
+    syncedToGraph: true,
+  }));
 
 export const sendPaymentSync = async (paymentRequest: string): Promise<lnrpc.SendResponse> => {
   const response = lnrpc.SendResponse.create({
-    paymentHash: new Uint8Array([1,2,3,4]),
+    paymentHash: new Uint8Array([1, 2, 3, 4]),
     paymentRoute: {
       totalAmt: Long.fromNumber(1000),
       totalAmtMsat: Long.fromNumber(1000000),
@@ -121,8 +137,8 @@ export const sendPaymentSync = async (paymentRequest: string): Promise<lnrpc.Sen
 export const sendPaymentV2Sync = async (paymentRequest: string): Promise<lnrpc.Payment> => {
   await timeout(600);
 
-  const paymentHash = new Uint8Array([0,1,2,3]);
-  const paymentPreimage = new Uint8Array([0,1,2,3]);
+  const paymentHash = new Uint8Array([0, 1, 2, 3]);
+  const paymentPreimage = new Uint8Array([0, 1, 2, 3]);
 
   const response = lnrpc.Payment.create({
     paymentHash: bytesToHexString(paymentHash),
@@ -131,25 +147,33 @@ export const sendPaymentV2Sync = async (paymentRequest: string): Promise<lnrpc.P
     status: lnrpc.Payment.PaymentStatus.SUCCEEDED,
     fee: Long.fromValue(1),
     feeMsat: Long.fromValue(1000),
-    htlcs: [{
-      route: {
-        hops: [{
-          chanId: Long.fromValue(1),
-          chanCapacity: Long.fromValue(10000),
-          amtToForward: Long.fromValue(100),
-          amtToForwardMsat: Long.fromValue(100000),
-          fee: Long.fromValue(1),
-          feeMsat: Long.fromValue(1000),
-          expiry: 3600,
-          pubKey: "abc",
-        }],
+    htlcs: [
+      {
+        route: {
+          hops: [
+            {
+              chanId: Long.fromValue(1),
+              chanCapacity: Long.fromValue(10000),
+              amtToForward: Long.fromValue(100),
+              amtToForwardMsat: Long.fromValue(100000),
+              fee: Long.fromValue(1),
+              feeMsat: Long.fromValue(1000),
+              expiry: 3600,
+              pubKey: "abc",
+            },
+          ],
+        },
       },
-    }],
+    ],
   });
   return response;
 };
 
-export const addInvoice = async (amount: number, memo: string, expiry: number = 3600): Promise<lnrpc.AddInvoiceResponse> => {
+export const addInvoice = async (
+  amount: number,
+  memo: string,
+  expiry: number = 3600,
+): Promise<lnrpc.AddInvoiceResponse> => {
   try {
     const unixTimestamp = Math.floor(Date.now() / 1000);
     const encoded = payReq.encode({
@@ -157,13 +181,16 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
       satoshis: amount,
       timestamp: unixTimestamp,
       timeExpireDate: expiry,
-      tags: [{
-        tagName: "payment_hash",
-        data: "0001020304050607080900010203040506070809000102030405060708090102",
-      }, {
-        tagName: "description",
-        data: memo,
-      }],
+      tags: [
+        {
+          tagName: "payment_hash",
+          data: "0001020304050607080900010203040506070809000102030405060708090102",
+        },
+        {
+          tagName: "description",
+          data: memo,
+        },
+      ],
     });
 
     const privateKeyHex = "e126f68f7eafcc8b74f54d269fe206be715000f94dac067d1c04a8ca3b2db734";
@@ -188,7 +215,7 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
         value: Long.fromNumber(signed!.satoshis!),
         amtPaidMsat: Long.fromNumber(signed!.satoshis!).mul(1000),
         amtPaidSat: Long.fromNumber(signed!.satoshis!),
-        cltvExpiry: cltvExpiry && (Long.fromNumber(cltvExpiry.data as number)),
+        cltvExpiry: cltvExpiry && Long.fromNumber(cltvExpiry.data as number),
         creationDate: Long.fromNumber(signed!.timestamp!),
         expiry: Long.fromNumber(expiry),
         rPreimage: new Uint8Array([1, 2, 3, 4]), // TODO
@@ -207,9 +234,19 @@ export const addInvoice = async (amount: number, memo: string, expiry: number = 
   }
 };
 
-export const addInvoiceBlixtLsp = ({amount, memo, expiry = 600, servicePubkey, chanId, cltvExpiryDelta, feeBaseMsat, feeProportionalMillionths, preimage}: IAddInvoiceBlixtLspArgs) => {
+export const addInvoiceBlixtLsp = ({
+  amount,
+  memo,
+  expiry = 600,
+  servicePubkey,
+  chanId,
+  cltvExpiryDelta,
+  feeBaseMsat,
+  feeProportionalMillionths,
+  preimage,
+}: IAddInvoiceBlixtLspArgs) => {
   return addInvoice(amount, memo, expiry);
-}
+};
 
 //
 // export const lookupInvoice = async (rHash: string): Promise<lnrpc.Invoice> => {
@@ -224,12 +261,16 @@ export const addInvoiceBlixtLsp = ({amount, memo, expiry = 600, servicePubkey, c
 //   return response;
 // };
 
-export const queryRoutes = async (pubKey: string, amount?: Long, routeHints?: lnrpc.IRouteHint[]): Promise<lnrpc.QueryRoutesResponse> => {
+export const queryRoutes = async (
+  pubKey: string,
+  amount?: Long,
+  routeHints?: lnrpc.IRouteHint[],
+): Promise<lnrpc.QueryRoutesResponse> => {
   return lnrpc.QueryRoutesResponse.create({
     routes: [],
     successProb: 0.5,
   });
-}
+};
 
 // TODO test
 export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
@@ -250,30 +291,30 @@ export const decodePayReq = async (bolt11: string): Promise<lnrpc.PayReq> => {
 /**
  * @throws
  */
- export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> => {
+export const getRecoveryInfo = async (): Promise<lnrpc.GetRecoveryInfoResponse> => {
   const response = lnrpc.GetRecoveryInfoResponse.create({
     progress: 1,
     recoveryFinished: false,
     recoveryMode: false,
-  })
+  });
   return response;
 };
 
 /**
  * @throws
  */
- export const listUnspent = async (): Promise<lnrpc.ListUnspentResponse> => {
+export const listUnspent = async (): Promise<lnrpc.ListUnspentResponse> => {
   const response = lnrpc.ListUnspentResponse.create({
-    utxos: []
-  })
+    utxos: [],
+  });
   return response;
 };
 
 /**
  * @throws
  */
- export const resetMissionControl = async (): Promise<routerrpc.ResetMissionControlResponse> => {
-  const response = routerrpc.ResetMissionControlResponse.create({})
+export const resetMissionControl = async (): Promise<routerrpc.ResetMissionControlResponse> => {
+  const response = routerrpc.ResetMissionControlResponse.create({});
   return response;
 };
 
