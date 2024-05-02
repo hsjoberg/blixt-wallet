@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar, Alert, NativeModules } from "react-native";
-import { Spinner, H1, H2 } from "native-base";
+import { Spinner, H1, H2, Text } from "native-base";
 import {
   createStackNavigator,
   CardStyleInterpolators,
@@ -40,6 +40,7 @@ import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
 import { navigator } from "./utils/navigation";
 import { PLATFORM } from "./utils/constants";
 import Prompt, { IPromptNavigationProps } from "./windows/HelperWindows/Prompt";
+import { isInstanceBricked } from "./storage/app";
 
 const RootStack = createStackNavigator();
 
@@ -86,6 +87,7 @@ export default function Main() {
   const appReady = useStoreState((store) => store.appReady);
   const lightningReady = useStoreState((store) => store.lightning.ready);
   const walletCreated = useStoreState((store) => store.walletCreated);
+  const importChannelDbOnStartup = useStoreState((store) => store.importChannelDbOnStartup);
   const loggedIn = useStoreState((store) => store.security.loggedIn);
   const initializeApp = useStoreActions((store) => store.initializeApp);
   const [initialRoute, setInitialRoute] = useState("Loading");
@@ -95,13 +97,22 @@ export default function Main() {
     (store) => store.settings.screenTransitionsEnabled,
   );
 
-  const [state, setState] = useState<"init" | "authentication" | "onboarding" | "started">("init");
+  console.log("walletCreated", walletCreated);
+
+  const [state, setState] = useState<
+    "init" | "authentication" | "onboarding" | "started" | "bricked"
+  >("init");
 
   useEffect(() => {
     // tslint:disable-next-line
     (async () => {
       if (!appReady) {
         try {
+          if (await isInstanceBricked()) {
+            setState("bricked");
+            return;
+          }
+
           await initializeApp();
         } catch (e) {
           toast(e.message, 0, "danger");
@@ -111,6 +122,8 @@ export default function Main() {
   }, [appReady]);
 
   useEffect(() => {
+    console.log("useEffect", lightningReady, walletCreated, state);
+
     if (!appReady) {
       return;
     }
@@ -120,7 +133,7 @@ export default function Main() {
         setState("authentication");
       } else if (!lightningReady) {
         setState("started");
-        if (!walletCreated) {
+        if (!walletCreated && !importChannelDbOnStartup) {
           setInitialRoute("Welcome");
         } else {
           // try {
@@ -223,6 +236,10 @@ export default function Main() {
 
   if (state === "authentication") {
     return <Authentication />;
+  }
+
+  if (state === "bricked") {
+    return <Text>Bricked</Text>;
   }
 
   return (

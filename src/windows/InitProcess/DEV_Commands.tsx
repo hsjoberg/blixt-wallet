@@ -148,6 +148,22 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
+              setItemObject<boolean>(StorageItem.bricked, false);
+            }}
+          >
+            <Text style={styles.buttonText}>set bricked false</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              setItemObject<boolean>(StorageItem.bricked, true);
+            }}
+          >
+            <Text style={styles.buttonText}>set bricked true</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
               // const res = await fetch("http://192.168.10.120:8095/foaf");
               const res = await fetch("https://dunder.blixtwallet.com/channel-liquidity");
               const json: { pairs: any[] } = await res.json();

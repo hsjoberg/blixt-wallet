@@ -19,6 +19,7 @@ import { toast } from "../../utils";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { setImportChannelDbOnStartup } from "../../storage/app";
 
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
@@ -30,27 +31,37 @@ export default function Restore({ navigation }: IProps) {
   const [loading, setLoading] = useState(false);
   const [seedText, setSeedText] = useState("");
   const [passphraseText, setPassphraseText] = useState("");
-  const [backupType, setBackupType] = useState<"file" | "google_drive" | "icloud" | "macos" | "none">("none");
+  const [backupType, setBackupType] = useState<
+    "file" | "google_drive" | "icloud" | "macos" | "channeldb" | "none"
+  >("none");
   const [backupFile, setBackupFile] = useState<DocumentPickerResponse | null>(null);
+  const [channelDbFile, setChannelDbFile] = useState<DocumentPickerResponse | null>(null);
   const [macosBakBase64, setMacosBakBase64] = useState<string | undefined>();
   const [b64Backup, setB64Backup] = useState<string | null>(null);
   const setWalletSeed = useStoreActions((store) => store.setWalletSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
   const isSignedInGoogle = useStoreState((store) => store.google.isSignedIn);
   const signInGoogle = useStoreActions((store) => store.google.signIn);
-  const googleDriveGetBackupFile = useStoreActions((store => store.googleDriveBackup.getBackupFile));
-  const iCloudGetBackup = useStoreActions((store => store.iCloudBackup.getBackup));
+  const googleDriveGetBackupFile = useStoreActions(
+    (store) => store.googleDriveBackup.getBackupFile,
+  );
+  const iCloudGetBackup = useStoreActions((store) => store.iCloudBackup.getBackup);
   const iCloudActive = useStoreState((store) => store.iCloudBackup.iCloudActive);
 
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
-  const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
+  const changeScheduledSyncEnabled = useStoreActions(
+    (state) => state.settings.changeScheduledSyncEnabled,
+  );
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
   const onRestorePress = async () => {
     try {
       // Note: the first trim is not a mistake, it's to trim out "white-space words" that could exist after the split
-      const splittedSeed = seedText.trim().split(" ").map((word) => word.trim());
+      const splittedSeed = seedText
+        .trim()
+        .split(" ")
+        .map((word) => word.trim());
       if (splittedSeed.length !== 24) {
         Alert.alert(t("restore.seed"));
         return;
@@ -62,8 +73,8 @@ export default function Restore({ navigation }: IProps) {
         restore: {
           restoreWallet: true,
           aezeedPassphrase: passphraseText,
-        }
-      }
+        },
+      };
 
       if (backupType === "file") {
         if (backupFile) {
@@ -77,11 +88,18 @@ export default function Restore({ navigation }: IProps) {
           // For Android want `readFile` to convert the binary to base64.
           // For iOS we want `readFile` to just read the file as a string (it's already in base64).
           let backupBase64: string;
-          const backupFileUri = PLATFORM === "ios" ? backupFile.uri.replace(/%20/g, " ") : backupFile.uri;
+          const backupFileUri =
+            PLATFORM === "ios" ? backupFile.uri.replace(/%20/g, " ") : backupFile.uri;
           try {
-            backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? "base64" : undefined);
+            backupBase64 = await readFile(
+              backupFileUri,
+              PLATFORM === "android" ? "base64" : undefined,
+            );
           } catch (e) {
-            backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? undefined : "base64");
+            backupBase64 = await readFile(
+              backupFileUri,
+              PLATFORM === "android" ? undefined : "base64",
+            );
           }
           createWalletOpts.restore!.channelsBackup = backupBase64;
         }
@@ -89,6 +107,23 @@ export default function Restore({ navigation }: IProps) {
         createWalletOpts.restore!.channelsBackup = b64Backup!;
       } else if (backupType === "macos") {
         createWalletOpts.restore!.channelsBackup = macosBakBase64;
+      } else if (backupType === "channeldb") {
+        if (channelDbFile.copyError) {
+          throw new Error("channel.db file copying failed: " + channelDbFile.copyError);
+        }
+
+        // await NativeModules.LndMobile.stopLnd();
+        await setImportChannelDbOnStartup({
+          channelDbPath: channelDbFile.fileCopyUri.replace(/^file:\/\//, ""),
+          seed: splittedSeed,
+          passphrase: passphraseText,
+        });
+
+        Alert.alert(
+          "Success",
+          "Blixt Wallet needs to be restarted in order to continue with the restore procedure. Close Blixt Wallet now and start it up again.",
+        );
+        return;
       }
 
       await createWallet(createWalletOpts);
@@ -103,10 +138,8 @@ export default function Restore({ navigation }: IProps) {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [
-            { name: "Loading" },
-          ],
-        })
+          routes: [{ name: "Loading" }],
+        }),
       );
     } catch (e) {
       console.log(e);
@@ -134,7 +167,7 @@ export default function Restore({ navigation }: IProps) {
 
   const iCloudBackup = async () => {
     try {
-      const base64Backup = await iCloudGetBackup()
+      const base64Backup = await iCloudGetBackup();
       console.log(base64Backup);
       setB64Backup(base64Backup);
       setBackupType("icloud");
@@ -158,19 +191,40 @@ export default function Restore({ navigation }: IProps) {
         setMacosBakBase64(b);
         setBackupType("macos");
       }
-
     } catch (e) {
       console.log(e);
       toast(e.message, undefined, "danger", "Okay");
     }
-  }
+  };
+
+  const pickChannelDbFile = async () => {
+    try {
+      if (PLATFORM !== "macos") {
+        const res = await DocumentPicker.pickSingle({
+          type: [DocumentPicker.types.allFiles],
+          copyTo: "documentDirectory",
+        });
+        console.log(res);
+        setChannelDbFile(res);
+        setBackupType("channeldb");
+      } else {
+        // const b = await NativeModules.LndMobileTools.macosOpenFileDialog();
+        // console.log(b);
+        // setMacosBakBase64(b);
+        // setBackupType("macos");
+      }
+    } catch (e) {
+      console.log(e);
+      toast(e.message, undefined, "danger", "Okay");
+    }
+  };
 
   const undoBackupChoice = () => {
     setBackupFile(null);
     setB64Backup(null);
     setMacosBakBase64(null);
     setBackupType("none");
-  }
+  };
 
   return (
     <Container>
@@ -224,65 +278,74 @@ export default function Restore({ navigation }: IProps) {
             </View>
             <View style={{ marginTop: 14, width: "100%", display: "flex" }}>
               <H3>{t("restore.channel.title")}</H3>
-              {backupType === "none" &&
+              {backupType === "none" && (
                 <View style={{ display: "flex", flexDirection: "column" }}>
-                  <Button style={{ marginTop: 6, marginBottom: 10 }} small onPress={pickChannelsExportFile}>
-                    <Text>
-                      {backupFile === null && t("restore.channel.file")}
-                    </Text>
+                  <Button
+                    style={{ marginTop: 6, marginBottom: 10 }}
+                    small
+                    onPress={pickChannelsExportFile}
+                  >
+                    <Text>{backupFile === null && t("restore.channel.file")}</Text>
                   </Button>
-                  {PLATFORM === "android" &&
+                  {PLATFORM === "android" && (
                     <Button small onPress={googleDriveBackup}>
-                      <Text>
-                        {t("restore.channel.google.title")}
-                      </Text>
+                      <Text>{t("restore.channel.google.title")}</Text>
                     </Button>
-                  }
-                  {(PLATFORM === "ios" && iCloudActive) &&
+                  )}
+                  {PLATFORM === "ios" && iCloudActive && (
                     <Button small onPress={iCloudBackup}>
-                      <Text>
-                        {t("restore.channel.iCloud.title")}
-                      </Text>
+                      <Text>{t("restore.channel.iCloud.title")}</Text>
                     </Button>
-                  }
-                </View>
-              }
-              {(backupType === "file" || backupType === "macos") &&
-                <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
-                  <Text>{backupFile &&  backupFile.name}</Text>
-                  <Button small onPress={undoBackupChoice}>
-                    <Text>
-                      x
-                    </Text>
+                  )}
+                  <Button
+                    small
+                    style={{ marginTop: 6, marginBottom: 10 }}
+                    onPress={pickChannelDbFile}
+                  >
+                    <Text>{t("restore.channel.importChannelDb.title")}</Text>
                   </Button>
                 </View>
-              }
-              {backupType === "google_drive" &&
-                <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
+              )}
+              {(backupType === "file" || backupType === "macos") && (
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                  <Text>{backupFile && backupFile.name}</Text>
+                  <Button small onPress={undoBackupChoice}>
+                    <Text>x</Text>
+                  </Button>
+                </View>
+              )}
+              {backupType === "channeldb" && (
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                  <Text>{channelDbFile && channelDbFile.name}</Text>
+                  <Button small onPress={undoBackupChoice}>
+                    <Text>x</Text>
+                  </Button>
+                </View>
+              )}
+              {backupType === "google_drive" && (
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                   <Text>{t("backup.google")}</Text>
                   <Button small onPress={undoBackupChoice}>
-                    <Text>
-                      x
-                    </Text>
+                    <Text>x</Text>
                   </Button>
                 </View>
-              }
-              {backupType === "icloud" &&
-                <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
+              )}
+              {backupType === "icloud" && (
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                   <Text>{t("backup.iCloud")}</Text>
                   <Button small onPress={undoBackupChoice}>
-                    <Text>
-                      x
-                    </Text>
+                    <Text>x</Text>
                   </Button>
                 </View>
-              }
+              )}
             </View>
           </View>
           <View style={style.text}>
             <H1 style={style.textHeader}>{t("restore.title")}</H1>
             <Text>
-              {t("restore.msg")}{"\n"}{"\n"}
+              {t("restore.msg")}
+              {"\n"}
+              {"\n"}
               {t("restore.msg1")}
             </Text>
           </View>
@@ -352,9 +415,7 @@ const style = StyleSheet.create({
   textHeader: {
     marginBottom: 3,
   },
-  card: {
-
-  },
+  card: {},
   cardItem: {
     width: "100%",
     flex: 1,

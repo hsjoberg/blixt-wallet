@@ -38,10 +38,14 @@ import { ISettingsModel, settings } from "./Settings";
 import { ITransactionModel, transaction } from "./Transaction";
 import { IWebLNModel, webln } from "./WebLN";
 import {
+  IImportChannelDbOnStartup,
   StorageItem,
+  brickInstance,
   clearApp,
   getAppBuild,
   getAppVersion,
+  getBrickDeviceAndExportChannelDb,
+  getImportChannelDbOnStartup,
   getItem as getItemAsyncStorage,
   getItemObject as getItemObjectAsyncStorage,
   getLndCompactDb,
@@ -49,6 +53,8 @@ import {
   getWalletCreated,
   setAppBuild,
   setAppVersion,
+  setBrickDeviceAndExportChannelDb,
+  setImportChannelDbOnStartup,
   setItem,
   setItemObject,
   setLndCompactDb,
@@ -110,6 +116,7 @@ export interface IStoreModel {
   setTorEnabled: Action<IStoreModel, boolean>;
   setTorLoading: Action<IStoreModel, boolean>;
   setSpeedloaderLoading: Action<IStoreModel, boolean>;
+  setImportChannelDbOnStartup: Action<IStoreModel, IImportChannelDbOnStartup>;
 
   generateSeed: Thunk<IStoreModel, string | undefined, IStoreInjections>;
   writeConfig: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
@@ -147,12 +154,13 @@ export interface IStoreModel {
   blixtLsp: IBlixtLsp;
   contacts: IContactsModel;
   lightningBox: ILightningBoxModel;
+  channelAcceptanceManager: IChannelAcceptanceManagerModel;
 
   walletSeed?: string[];
   appVersion: number;
   appBuild: number;
   onboardingState: OnboardingState;
-  channelAcceptanceManager: IChannelAcceptanceManagerModel;
+  importChannelDbOnStartup: IImportChannelDbOnStartup | null;
 }
 
 export const model: IStoreModel = {
@@ -174,6 +182,38 @@ export const model: IStoreModel = {
       return;
     }
     log.v("initializeApp()");
+
+    const brickDeviceAndExportChannelDb = await getBrickDeviceAndExportChannelDb();
+    if (brickDeviceAndExportChannelDb) {
+      await NativeModules.LndMobileTools.saveChannelDbFile();
+      await brickInstance();
+      await setBrickDeviceAndExportChannelDb(false);
+      Alert.alert(
+        "",
+        "This Blixt wallet instance is now stopped and disabled.\nUse your channel.db file to restore on another device.\nTake extreme caution and do not restore on more than one device.",
+        [
+          {
+            text: "OK",
+            onPress() {
+              if (PLATFORM === "android") {
+                NativeModules.LndMobileTools.restartApp();
+              }
+            },
+          },
+        ],
+      );
+      return;
+    }
+
+    const importChannelDbOnStartup = await getImportChannelDbOnStartup();
+    if (importChannelDbOnStartup) {
+      actions.setImportChannelDbOnStartup(importChannelDbOnStartup);
+      const path = importChannelDbOnStartup.channelDbPath.replace(/^file:\/\//, "");
+      toast("Beginning channel db import procedure", undefined, "warning");
+      log.i("Beginning channel db import procedure", [path]);
+      await NativeModules.LndMobileTools.importChannelDbFile(path);
+      toast("Successfully imported channel.db");
+    }
 
     const { initialize, checkStatus, startLnd, gossipSync } = injections.lndMobile.index;
     const db = await actions.openDb();
@@ -412,6 +452,27 @@ export const model: IStoreModel = {
         log.i("Current lnd state", [state]);
         if (state.state === lnrpc.WalletState.NON_EXISTING) {
           log.d("Got lnrpc.WalletState.NON_EXISTING");
+
+          // Continue channel db import restore
+          if (importChannelDbOnStartup) {
+            log.i("Continuing restoration with channel import");
+            actions.setWalletSeed(importChannelDbOnStartup.seed);
+            await actions.createWallet({
+              restore: {
+                restoreWallet: true,
+                aezeedPassphrase: importChannelDbOnStartup.passphrase,
+              },
+            });
+
+            await Promise.all([
+              actions.settings.changeAutopilotEnabled(false),
+              actions.scheduledSync.setSyncEnabled(true), // TODO test
+              actions.settings.changeScheduledSyncEnabled(true),
+              actions.changeOnboardingState("DONE"),
+            ]);
+
+            setImportChannelDbOnStartup(null);
+          }
         } else if (state.state === lnrpc.WalletState.LOCKED) {
           log.d("Got lnrpc.WalletState.LOCKED");
           log.d("Wallet locked, unlocking wallet");
@@ -702,6 +763,9 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   setSpeedloaderLoading: action((state, value) => {
     state.speedloaderLoading = value;
   }),
+  setImportChannelDbOnStartup: action((state, value) => {
+    state.importChannelDbOnStartup = value;
+  }),
 
   appReady: false,
   walletCreated: false,
@@ -709,6 +773,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   appVersion: 0,
   appBuild: 0,
   onboardingState: "SEND_ONCHAIN",
+  importChannelDbOnStartup: null,
   torEnabled: false,
   torLoading: false,
 
