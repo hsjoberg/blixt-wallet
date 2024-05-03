@@ -4,13 +4,13 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { Icon, Text } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import {
-  Camera,
-  useCodeScanner,
-  CameraPosition,
-  useCameraDevice,
-  useCameraPermission,
-} from "react-native-vision-camera";
+// import {
+//   Camera,
+//   useCodeScanner,
+//   CameraPosition,
+//   useCameraDevice,
+//   useCameraPermission,
+// } from "react-native-vision-camera";
 
 import BarcodeMask from "../../components/BarCodeMask";
 import { SendStackParamList } from "./index";

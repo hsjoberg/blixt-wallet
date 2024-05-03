@@ -1,11 +1,11 @@
 import React, { ReactNode, useState, useEffect } from "react";
 import { StyleProp, ViewStyle, InteractionManager, StyleSheet } from "react-native";
-import {
-  Camera,
-  useCodeScanner,
-  useCameraDevice,
-  useCameraPermission,
-} from "react-native-vision-camera";
+// import {
+//   Camera,
+//   useCodeScanner,
+//   useCameraDevice,
+//   useCameraPermission,
+// } from "react-native-vision-camera";
 import Container from "./Container";
 
 export interface ICamera {
