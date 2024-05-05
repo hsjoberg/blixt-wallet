@@ -1,8 +1,24 @@
 import React from "react";
 import { StatusBar, StyleSheet, ToastAndroid } from "react-native";
-import { Body, Icon, Text, View, Button, H1, List, Left, ListItem, Right, CheckBox } from "native-base";
+import {
+  Body,
+  Icon,
+  Text,
+  View,
+  Button,
+  H1,
+  List,
+  Left,
+  ListItem,
+  Right,
+  CheckBox,
+} from "native-base";
 import DialogAndroid from "react-native-dialogs";
-import { createStackNavigator, StackNavigationOptions, StackNavigationProp } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+  StackNavigationProp,
+} from "@react-navigation/stack";
 
 import { useStoreState, useStoreActions } from "../../state/store";
 import style from "./style";
@@ -35,16 +51,19 @@ const AlmostDone = ({ navigation }: IProps) => {
     Alert.prompt(
       t("general.name.title", { ns: namespaces.settings.settings }),
       t("general.name.dialog.msg", { ns: namespaces.settings.settings }),
-      [{
-        text: t("buttons.cancel",{ ns:namespaces.common }),
-        style: "cancel",
-        onPress: () => {},
-      }, {
-        text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
-        onPress: async (text) => {
-          await changeName(text ?? null);
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
         },
-      }],
+        {
+          text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
+          onPress: async (text) => {
+            await changeName(text ?? null);
+          },
+        },
+      ],
       "plain-text",
       name ?? "",
     );
@@ -61,7 +80,7 @@ const AlmostDone = ({ navigation }: IProps) => {
   const biometricsSensor = useStoreState((store) => store.security.sensor);
   const onToggleFingerprintPress = async () => {
     navigation.navigate("ChangeFingerprintSettingsAuth");
-  }
+  };
 
   // Fiat unit
   const fiatRates = useStoreState((store) => store.fiat.fiatRates);
@@ -71,7 +90,7 @@ const AlmostDone = ({ navigation }: IProps) => {
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
-        negativeText: t("buttons.cancel",{ns:namespaces.common}),
+        negativeText: t("buttons.cancel", { ns: namespaces.common }),
         type: DialogAndroid.listRadio,
         selectedId: currentFiatUnit,
         items: [
@@ -97,7 +116,7 @@ const AlmostDone = ({ navigation }: IProps) => {
           { label: "THB", id: "THB" },
           { label: "KRW", id: "KRW" },
           { label: "TWD", id: "TWD" },
-        ]
+        ],
       });
       if (selectedItem) {
         changeFiatUnit(selectedItem.id);
@@ -113,14 +132,15 @@ const AlmostDone = ({ navigation }: IProps) => {
         searchEnabled: true,
       });
     }
-  }
+  };
 
   // Autopilot
   const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
-  const onToggleAutopilotPress = () => { // TODO why not await?
+  const onToggleAutopilotPress = () => {
+    // TODO why not await?
     changeAutopilotEnabled(!autopilotEnabled);
-  }
+  };
 
   const onPressContinue = async () => {
     await changeOnboardingState("DONE");
@@ -141,30 +161,61 @@ const AlmostDone = ({ navigation }: IProps) => {
         <View style={[style.upperContent]}>
           <List style={extraStyle.list}>
             <ListItem style={extraStyle.listItem} icon={true} onPress={onNamePress}>
-              <Left><Icon style={extraStyle.icon} type="AntDesign" name="edit" /></Left>
+              <Left>
+                <Icon style={extraStyle.icon} type="AntDesign" name="edit" />
+              </Left>
               <Body>
-              <Text>{t("general.name.title", { ns: namespaces.settings.settings })}</Text>
-              <Text note={true}>
-                {name || t("general.name.subtitle", { ns: namespaces.settings.settings })}
-              </Text>
+                <Text>{t("general.name.title", { ns: namespaces.settings.settings })}</Text>
+                <Text note={true}>
+                  {name || t("general.name.subtitle", { ns: namespaces.settings.settings })}
+                </Text>
               </Body>
             </ListItem>
 
-            <ListItem style={extraStyle.listItem} button={true} icon={true} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress}>
-              <Left><Icon style={extraStyle.icon} type="AntDesign" name="lock" /></Left>
-              <Body><Text>{t("security.pincode.title", { ns: namespaces.settings.settings })}</Text></Body>
-              <Right><CheckBox checked={loginMethods!.has(LoginMethods.pincode)} onPress={loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress} /></Right>
+            <ListItem
+              style={extraStyle.listItem}
+              button={true}
+              icon={true}
+              onPress={
+                loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress
+              }
+            >
+              <Left>
+                <Icon style={extraStyle.icon} type="AntDesign" name="lock" />
+              </Left>
+              <Body>
+                <Text>{t("security.pincode.title", { ns: namespaces.settings.settings })}</Text>
+              </Body>
+              <Right>
+                <CheckBox
+                  checked={loginMethods!.has(LoginMethods.pincode)}
+                  onPress={
+                    loginMethods!.has(LoginMethods.pincode)
+                      ? onRemovePincodePress
+                      : onSetPincodePress
+                  }
+                />
+              </Right>
             </ListItem>
 
-            {fingerprintAvailable &&
-              <ListItem style={extraStyle.listItem} button={true} icon={true} onPress={onToggleFingerprintPress}>
+            {fingerprintAvailable && (
+              <ListItem
+                style={extraStyle.listItem}
+                button={true}
+                icon={true}
+                onPress={onToggleFingerprintPress}
+              >
                 <Left>
-                  {biometricsSensor !== "Face ID" &&
+                  {biometricsSensor !== "Face ID" && (
                     <Icon style={extraStyle.icon} type="Entypo" name="fingerprint" />
-                  }
-                  {biometricsSensor === "Face ID" &&
-                    <Icon style={extraStyle.icon} type="MaterialCommunityIcons" name="face-recognition" />
-                  }
+                  )}
+                  {biometricsSensor === "Face ID" && (
+                    <Icon
+                      style={extraStyle.icon}
+                      type="MaterialCommunityIcons"
+                      name="face-recognition"
+                    />
+                  )}
                 </Left>
                 <Body>
                   <Text>
@@ -174,25 +225,48 @@ const AlmostDone = ({ navigation }: IProps) => {
                     {biometricsSensor === "Touch ID" && "Touch ID"}
                   </Text>
                 </Body>
-                <Right><CheckBox checked={fingerPrintEnabled} onPress={onToggleFingerprintPress}/></Right>
+                <Right>
+                  <CheckBox checked={fingerPrintEnabled} onPress={onToggleFingerprintPress} />
+                </Right>
               </ListItem>
-            }
+            )}
 
             <ListItem style={extraStyle.listItem} icon={true} onPress={onFiatUnitPress}>
-              <Left><Icon style={extraStyle.icon} type="FontAwesome" name="money" /></Left>
+              <Left>
+                <Icon style={extraStyle.icon} type="FontAwesome" name="money" />
+              </Left>
               <Body>
-              <Text>{t("display.fiatUnit.title", { ns: namespaces.settings.settings })}</Text>
-                <Text note={true} numberOfLines={1} onPress={onFiatUnitPress}>{currentFiatUnit}</Text>
+                <Text>{t("display.fiatUnit.title", { ns: namespaces.settings.settings })}</Text>
+                <Text note={true} numberOfLines={1} onPress={onFiatUnitPress}>
+                  {currentFiatUnit}
+                </Text>
               </Body>
             </ListItem>
 
-            <ListItem style={extraStyle.listItem} button={true} icon={true} onLongPress={() => ToastAndroid.show("Open channels when on-chain funds are available", ToastAndroid.SHORT)} onPress={onToggleAutopilotPress}>
-              <Left><Icon style={extraStyle.icon} type="Entypo" name="circular-graph" /></Left>
+            <ListItem
+              style={extraStyle.listItem}
+              button={true}
+              icon={true}
+              onLongPress={() =>
+                ToastAndroid.show(
+                  "Open channels when on-chain funds are available",
+                  ToastAndroid.SHORT,
+                )
+              }
+              onPress={onToggleAutopilotPress}
+            >
+              <Left>
+                <Icon style={extraStyle.icon} type="Entypo" name="circular-graph" />
+              </Left>
               <Body>
                 <Text>{t("autopilot.title")}</Text>
-                <Text note={true} numberOfLines={1}>{t("autopilot.msg")}</Text>
+                <Text note={true} numberOfLines={1}>
+                  {t("autopilot.msg")}
+                </Text>
               </Body>
-              <Right><CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} /></Right>
+              <Right>
+                <CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} />
+              </Right>
             </ListItem>
           </List>
         </View>
@@ -206,14 +280,14 @@ const AlmostDone = ({ navigation }: IProps) => {
           </View>
           <View style={style.buttons}>
             <Button style={style.button} block={true} onPress={onPressContinue}>
-              <Text>{t("buttons.continue",{ns:namespaces.common})}</Text>
+              <Text>{t("buttons.continue", { ns: namespaces.common })}</Text>
             </Button>
           </View>
         </View>
       </View>
     </Container>
   );
-}
+};
 
 const extraStyle = StyleSheet.create({
   list: {
@@ -247,11 +321,11 @@ export type AlmostDoneStackParamList = {
   SetPincode: undefined;
   ChangeFingerprintSettingsAuth: undefined;
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
-}
+};
 export default () => {
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
-    animationEnabled: false,
+    animation: "none",
   };
 
   return (
@@ -259,9 +333,11 @@ export default () => {
       <Stack.Screen name="AlmostDone" component={AlmostDone} />
       <Stack.Screen name="RemovePincodeAuth" component={RemovePincodeAuth} />
       <Stack.Screen name="SetPincode" component={SetPincode} />
-      <Stack.Screen name="ChangeFingerprintSettingsAuth" component={ChangeFingerprintSettingsAuth} />
+      <Stack.Screen
+        name="ChangeFingerprintSettingsAuth"
+        component={ChangeFingerprintSettingsAuth}
+      />
       <Stack.Screen name="ChangeFiatUnit" component={SelectList} />
     </Stack.Navigator>
   );
 };
-

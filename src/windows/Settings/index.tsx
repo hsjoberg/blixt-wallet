@@ -1,12 +1,16 @@
 import React from "react";
-import { CardStyleInterpolators, createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+  StackNavigationOptions,
+} from "@react-navigation/stack";
 
 import Settings from "./Settings";
 import SetPincode from "./SetPincode";
 import RemovePincodeAuth from "./RemovePincodeAuth";
 import ChangeFingerprintSettingsAuth from "./ChangeFingerprintSettingsAuth";
 import LightningNodeInfo from "./LightningNodeInfo";
-import LightningNetworkInfo from './LightningNetworkInfo';
+import LightningNetworkInfo from "./LightningNetworkInfo";
 import About from "./About";
 import TorShowOnionAddress from "./TorShowOnionAddress";
 import LndMobileHelpCenter from "./LndMobileHelpCenter";
@@ -37,7 +41,7 @@ export type SettingsStackParamList = {
   ChangeBitcoinUnit: ISelectListNavigationProps<string>;
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
   ChangeLanguage: ISelectListNavigationProps<string>;
-  ChangeOnchainExplorer: ISelectListNavigationProps<(keyof typeof OnchainExplorer) | string>;
+  ChangeOnchainExplorer: ISelectListNavigationProps<keyof typeof OnchainExplorer | string>;
   ChangeLndLogLevel: ISelectListNavigationProps<LndLogLevel>;
   LightningPeers: undefined;
   ConnectToLighningPeer: undefined;
@@ -47,12 +51,12 @@ export type SettingsStackParamList = {
   DunderDoctor: undefined;
   ToastLog: undefined;
   DebugLog: undefined;
-}
+};
 
 export default function SettingsIndex() {
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
-    animationEnabled: false,
+    animation: "none",
   };
 
   return (
@@ -60,7 +64,10 @@ export default function SettingsIndex() {
       <Stack.Screen name="SettingsMain" component={Settings} />
       <Stack.Screen name="RemovePincodeAuth" component={RemovePincodeAuth} />
       <Stack.Screen name="SetPincode" component={SetPincode} />
-      <Stack.Screen name="ChangeFingerprintSettingsAuth" component={ChangeFingerprintSettingsAuth} />
+      <Stack.Screen
+        name="ChangeFingerprintSettingsAuth"
+        component={ChangeFingerprintSettingsAuth}
+      />
       <Stack.Screen name="LightningNetworkInfo" component={LightningNetworkInfo} />
       <Stack.Screen name="LightningNodeInfo" component={LightningNodeInfo} />
       <Stack.Screen name="About" component={About} />
@@ -72,10 +79,14 @@ export default function SettingsIndex() {
       <Stack.Screen name="ChangeOnchainExplorer" component={SelectList} />
       <Stack.Screen name="ChangeLndLogLevel" component={SelectList} />
       <Stack.Screen name="LightningPeers" component={LightningPeers} />
-      <Stack.Screen name="ConnectToLightningPeer" component={ConnectToLightningPeer} options={{
-        animationEnabled: true,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }} />
+      <Stack.Screen
+        name="ConnectToLightningPeer"
+        component={ConnectToLightningPeer}
+        options={{
+          // animationEnabled: true, // TODO(hsjoberg) check if we need to use `animation`
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
       <Stack.Screen name="ChannelProvider" component={SelectList} />
       <Stack.Screen name="LndLog" component={LndLog} />
       <Stack.Screen name="SpeedloaderLog" component={SpeedloaderLog} />

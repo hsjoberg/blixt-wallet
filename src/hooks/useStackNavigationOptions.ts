@@ -20,7 +20,9 @@ const forFade = ({ current, next, index, closing }: StackCardInterpolationProps)
 };
 
 export default function useStackNavigationOptions(): StackNavigationOptions {
-  const screenTransitionsEnabled = useStoreState((store) => store.settings.screenTransitionsEnabled);
+  const screenTransitionsEnabled = useStoreState(
+    (store) => store.settings.screenTransitionsEnabled,
+  );
 
   return {
     gestureEnabled: false,
@@ -29,21 +31,23 @@ export default function useStackNavigationOptions(): StackNavigationOptions {
     headerMode: "screen",
     cardStyle: {
       backgroundColor: "transparent",
-      ...Platform.select<any>({ // TODO any?
+      ...Platform.select<any>({
+        // TODO any?
         web: {
           flex: "auto",
           height: "100vh",
-        }
+        },
       }),
     },
     headerStyle: {
-      backgroundColor: Chain === "mainnet" ? blixtTheme.primary : Color(blixtTheme.lightGray).darken(0.30).hex(),
+      backgroundColor:
+        Chain === "mainnet" ? blixtTheme.primary : Color(blixtTheme.lightGray).darken(0.3).hex(),
       elevation: 0,
       shadowColor: "transparent",
       borderBottomColor: "transparent", // web
     },
     headerTitleStyle: {
-      color: blixtTheme.light
+      color: blixtTheme.light,
     },
     headerTintColor: blixtTheme.light,
     headerPressColor: blixtTheme.light,
@@ -52,11 +56,11 @@ export default function useStackNavigationOptions(): StackNavigationOptions {
     },
     headerBackTestID: "header-back",
 
-    animationEnabled: screenTransitionsEnabled,
+    animation: screenTransitionsEnabled ? undefined : "none",
     // cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
     cardStyleInterpolator: forFade,
     cardOverlayEnabled: false,
-    // animationTypeForReplace: "pop",
+    animationTypeForReplace: "pop",
 
     detachPreviousScreen: false,
   };
