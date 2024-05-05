@@ -2,6 +2,12 @@ import React, { ReactNode, useState, useEffect } from "react";
 import { StyleProp, ViewStyle, InteractionManager, StyleSheet } from "react-native";
 import { Camera, CameraType } from "react-native-camera-kit";
 import Container from "./Container";
+import { PLATFORM } from "../utils/constants";
+
+let ReactNativePermissions: any;
+if (PLATFORM !== "macos") {
+  ReactNativePermissions = require("react-native-permissions");
+}
 
 export interface ICamera {
   active?: boolean;
@@ -23,8 +29,19 @@ export default function CameraComponent({
   active = active ?? true;
 
   useEffect(() => {
-    InteractionManager.runAfterInteractions(() => {
-      setStart(true);
+    InteractionManager.runAfterInteractions(async () => {
+      const permission =
+        PLATFORM === "ios"
+          ? ReactNativePermissions.PERMISSIONS.IOS.CAMERA
+          : ReactNativePermissions.PERMISSIONS.ANDROID.CAMERA;
+      const result = await ReactNativePermissions.request(permission);
+
+      if (result === "granted" || result === "limited") {
+        console.log("Camera permission not granted");
+        setStart(true);
+      } else {
+        console.log("Camera permission granted");
+      }
     });
   }, []);
 

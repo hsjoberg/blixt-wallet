@@ -20,6 +20,11 @@ import useEveluateLightningCode from "../../hooks/useEvaluateLightningCode";
 import { toast } from "../../utils";
 import Container from "../../components/Container";
 
+let ReactNativePermissions: any;
+if (PLATFORM !== "macos") {
+  ReactNativePermissions = require("react-native-permissions");
+}
+
 interface ISendCameraProps {
   bolt11Invoice?: string;
   navigation: StackNavigationProp<SendStackParamList, "SendCamera">;
@@ -33,6 +38,24 @@ export default function SendCameraKit({ navigation, route }: ISendCameraProps) {
   const [cameraActive, setCameraActive] = useState(route.params?.viaSwipe ?? true);
   const promptLightningAddress = usePromptLightningAddress();
   const evaluateLightningCode = useEveluateLightningCode();
+  const [start, setStart] = useState(false);
+
+  useEffect(() => {
+    InteractionManager.runAfterInteractions(async () => {
+      const permission =
+        PLATFORM === "ios"
+          ? ReactNativePermissions.PERMISSIONS.IOS.CAMERA
+          : ReactNativePermissions.PERMISSIONS.ANDROID.CAMERA;
+      const result = await ReactNativePermissions.request(permission);
+
+      if (result === "granted" || result === "limited") {
+        console.log("Camera permission not granted");
+        setStart(true);
+      } else {
+        console.log("Camera permission granted");
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (route.params?.viaSwipe) {
@@ -137,6 +160,19 @@ export default function SendCameraKit({ navigation, route }: ISendCameraProps) {
   const onBarCodeRead = async (data: string) => {
     await tryInvoice(data, "QR scan error");
   };
+
+  if (!start) {
+    return (
+      <Container style={{ backgroundColor: "black" }}>
+        <BarcodeMask
+          showAnimatedLine={false}
+          edgeColor={blixtTheme.primary}
+          width={265}
+          height={265}
+        />
+      </Container>
+    );
+  }
 
   return (
     <Container>
