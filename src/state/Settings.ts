@@ -244,6 +244,8 @@ export const settings: ISettingsModel = {
       (await getItemObject(StorageItem.zeroConfPeers)) ?? [BLIXT_NODE_PUBKEY],
     );
     actions.setBitcoindRpcHost((await getItem(StorageItem.bitcoindRpcHost)) ?? "");
+    actions.setBitcoindRpcUser((await getItem(StorageItem.bitcoindRpcUser)) ?? "");
+    actions.setBitcoindRpcPassword((await getItem(StorageItem.bitcoindRpcPass)) ?? "");
     actions.setBitcoindPubRawBlock((await getItem(StorageItem.bitcoindPubRawBlock)) ?? "");
     actions.setBitcoindPubRawTx((await getItem(StorageItem.bitcoindPubRawTx)) ?? "");
     actions.setDunderServer((await getItem(StorageItem.dunderServer)) ?? "");
@@ -417,12 +419,12 @@ export const settings: ISettingsModel = {
 
   changeBitcoindRpcUser: thunk(async (actions, payload) => {
     await setItem(StorageItem.bitcoindRpcUser, payload);
-    actions.setBitcoindRpcHost(payload);
+    actions.setBitcoindRpcUser(payload);
   }),
 
   changeBitcoindRpcPassword: thunk(async (actions, payload) => {
     await setItem(StorageItem.bitcoindRpcPass, payload);
-    actions.setBitcoindRpcHost(payload);
+    actions.setBitcoindRpcPassword(payload);
   }),
 
   changeBitcoindPubRawBlock: thunk(async (actions, payload) => {
