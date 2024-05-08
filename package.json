@@ -135,7 +135,7 @@
     "react-native-permissions": "^3.10.1",
     "react-native-push-notification": "8.1.1",
     "react-native-qrcode-svg": "^6.2.0",
-    "react-native-reanimated": "^3.6.1",
+    "react-native-reanimated": "3.6.0",
     "react-native-safe-area-context": "github:th3rdwave/react-native-safe-area-context#a16ed2e174a5a6103b0d934fe98368d67c4b4656",
     "react-native-screens": "3.29.0",
     "react-native-securerandom": "github:hsjoberg/react-native-securerandom#b6bc5b7e68bd3e626536a3048e280f9130a8ebb4",
