@@ -1,7 +1,7 @@
 import * as Bech32 from "bech32";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
-import { getGeolocation, hexToUint8Array } from "../utils";
+import { getGeolocation, hexToUint8Array, uint8ArrayToString } from "../utils";
 import { lnrpc, routerrpc } from "../../proto/lightning";
 
 import { ILNUrlPayResponse } from "./LNURL";
@@ -32,6 +32,7 @@ export interface ISendModelSetPaymentPayload {
 export interface IModelSendPaymentPayload {
   amount?: Long;
   outgoingChannelId?: Long;
+  isAmpInvoice?: boolean;
 }
 
 export interface IModelQueryRoutesPayload {
@@ -180,8 +181,15 @@ export const send: ISendModel = {
       const getTransactionByPaymentRequest =
         getStoreState().transaction.getTransactionByPaymentRequest;
 
+      const isAmpInvoice = payload && payload.isAmpInvoice ? true : false;
+
+      // getTransactionByPaymentRequest only if isAmpInvoice is false
+      const transactionByPaymentRequest = !isAmpInvoice
+        ? getTransactionByPaymentRequest(paymentRequestStr)
+        : undefined;
+
       // Pre-settlement tx insert
-      const preTransaction: ITransaction = getTransactionByPaymentRequest(paymentRequestStr) ?? {
+      const preTransaction: ITransaction = transactionByPaymentRequest ?? {
         date: paymentRequest.timestamp,
         description: extraData.lnurlPayTextPlain ?? paymentRequest.description,
         duration: 0,
@@ -212,12 +220,14 @@ export const send: ISendModel = {
           paymentRequest.description,
           extraData.website,
         ),
+        ampInvoice: isAmpInvoice,
         //note: // TODO: Why wasn't this added
         lightningAddress: extraData.lightningAddress ?? null,
         lud16IdentifierMimeType: extraData.lud16IdentifierMimeType ?? null,
 
         preimage: hexToUint8Array("0"),
         lnurlPayResponse: extraData.lnurlPayResponse,
+        lud18PayerData: null,
 
         hops: [],
       };
@@ -235,6 +245,7 @@ export const send: ISendModel = {
           multiPathPaymentsEnabled,
           maxLNFeePercentage,
           outgoingChannelId,
+          payload && payload.isAmpInvoice ? true : false,
         );
       } catch (error) {
         await dispatch.transaction.syncTransaction({
@@ -263,6 +274,7 @@ export const send: ISendModel = {
         feeMsat: sendPaymentResult.feeMsat || Long.fromInt(0),
 
         preimage: hexToUint8Array(sendPaymentResult.paymentPreimage),
+        ampInvoice: isAmpInvoice,
 
         hops:
           sendPaymentResult.htlcs[0].route?.hops?.map((hop) => ({

@@ -139,6 +139,7 @@ export interface ILndMobileInjections {
       multiPath?: boolean,
       maxLNFeePercentage?: number,
       outgoingChannelId?: Long,
+      isAmp?: boolean,
     ) => Promise<lnrpc.Payment>;
     queryRoutes: (
       pubkey: string,
