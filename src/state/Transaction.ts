@@ -54,16 +54,18 @@ export const transaction: ITransactionModel = {
     }
 
     // Don't insert open transactions for AMP invoices
-    if (tx.status === "OPEN" && tx.ampInvoice) {
-      return;
-    }
+    if (tx.ampInvoice) {
+      if (tx.status === "OPEN") {
+        return;
+      }
 
-    // If AMP invoice settles, insert a new tx
-    if (tx.status === "SETTLED" && tx.ampInvoice) {
-      const id = await createTransaction(db, tx);
-      actions.addTransaction({ ...tx, id });
+      // If AMP invoice settles, insert a new tx
+      if (tx.status === "SETTLED") {
+        const id = await createTransaction(db, tx);
+        actions.addTransaction({ ...tx, id });
 
-      return;
+        return;
+      }
     }
 
     const transactions = getState().transactions;

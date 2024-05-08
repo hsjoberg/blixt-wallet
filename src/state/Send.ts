@@ -245,7 +245,7 @@ export const send: ISendModel = {
           multiPathPaymentsEnabled,
           maxLNFeePercentage,
           outgoingChannelId,
-          payload && payload.isAmpInvoice ? true : false,
+          (payload && payload.isAmpInvoice) ?? false,
         );
       } catch (error) {
         await dispatch.transaction.syncTransaction({

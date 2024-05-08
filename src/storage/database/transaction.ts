@@ -21,6 +21,7 @@ export interface IDBTransaction {
   status: "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN" | "EXPIRED";
   paymentRequest: string;
   rHash: string;
+  ampInvoice: boolean;
   nodeAliasCached: string | null;
   payer: string | null;
   valueUSD: number | null;
@@ -173,6 +174,7 @@ export const createTransaction = async (
       ?,
       ?,
       ?,
+      ?,
       ?
     )`,
     [
@@ -190,6 +192,7 @@ export const createTransaction = async (
       transaction.status,
       transaction.paymentRequest,
       transaction.rHash,
+      transaction.ampInvoice.toString(),
       transaction.nodeAliasCached ?? null,
       transaction.payer ?? null,
       transaction.valueUSD,
@@ -390,6 +393,7 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
     paymentRequest: transaction.paymentRequest,
     status: transaction.status,
     rHash: transaction.rHash,
+    ampInvoice: transaction.ampInvoice,
     nodeAliasCached: transaction.nodeAliasCached,
     payer: transaction.payer,
     valueUSD: transaction.valueUSD,
