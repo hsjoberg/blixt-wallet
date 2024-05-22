@@ -1175,7 +1175,7 @@
     }
   },
   "lightningBox.info": {
-    "yourLightningAddress": "آدرس لایتنینگ شما از راه لایتنینگ‌باکس این است:",
+    "yourLightningAddress": "نشانی لایتنینگ شما با لایتنینگ‌باکس این است:",
     "showQrCode": "نمایش کد QR"
   },
   "welcome.almostDone": {
