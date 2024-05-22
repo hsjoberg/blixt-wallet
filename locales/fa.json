@@ -1,7 +1,7 @@
 {
   "common": {
     "generic": {
-      "lightningAddress": "آدرس لایتنینگ",
+      "lightningAddress": "نشانی لایتنینگ",
       "lightningBox": "لایتنینگ‌باکس",
       "nodeAlias": "نامکِ گره",
       "description": "توضیح",
@@ -76,7 +76,7 @@
       "scan": "خواندن",
       "receive": "دریافت",
       "pasteFromClipboard": "خواندن از بریده‌دان.",
-      "sendToLightningAddress": "فرستادن به آدرس لایتنینگ",
+      "sendToLightningAddress": "فرستادن به نشانی لایتنینگ",
       "contactsAndServices": "کاره‌ها و مخاطب‌ها",
       "lightningBrowser": "مرورگر لایتنینگ",
       "onChainWallet": "روی زنجیره",
