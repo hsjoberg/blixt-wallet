@@ -1168,7 +1168,7 @@
     "registration": {
       "registration": "نام‌نویسی",
       "fields": {
-        "address": "آدرس",
+        "address": "نشانی",
         "messageToPayer": "پیام به پرداخت‌کننده"
       },
       "register": "نام‌نویسی"
