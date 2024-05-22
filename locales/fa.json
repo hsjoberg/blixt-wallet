@@ -380,7 +380,7 @@
     "form": {
       "address": {
         "title": "نشانی",
-        "placeholder": "آدرس بیت‌کوین"
+        "placeholder": "نشانی بیت‌کوین"
       },
       "amount": {
         "title": "مقدار",
