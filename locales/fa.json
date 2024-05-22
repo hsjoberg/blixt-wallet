@@ -1149,7 +1149,7 @@
   "welcome.addFunds": {
     "title": "افزودن پول",
     "msg1": "برای آغاز کار با لایتنینگ در Blixt",
-    "msg2": "به آدرس بالا بیت‌کوین بفرست"
+    "msg2": "به نشانی بالا بیت‌کوین بفرست"
   },
   "lightningBox.registration": {
     "info": {
