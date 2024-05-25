@@ -595,7 +595,7 @@ ${t("LN.inbound.dialog.msg3")}`;
     const setCustomExplorer = async () => {
       const explorer = await Alert.promisePromptCallback(
         "Custom Onchain Explorer",
-        "Set a custom onchain explorer (https://domain.com/)",
+        "Set a custom onchain explorer (https://domain.com/tx/)",
         undefined,
         onchainExplorer in OnchainExplorer ? undefined : onchainExplorer,
       );
