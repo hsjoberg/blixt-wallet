@@ -53,11 +53,12 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
   const generateSeed = useStoreActions((store) => store.generateSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
-  const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
+  const changeScheduledSyncEnabled = useStoreActions(
+    (state) => state.settings.changeScheduledSyncEnabled,
+  );
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
-
 
   const onCreateWalletWithPassphrasePress = async () => {
     Alert.alert(
@@ -71,56 +72,56 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
         {
           text: t("createWallet.msg4"),
           onPress: async () => {
-              Alert.prompt(
-                t("createWalletWithPassphrase.title"),
-                "",
-                [
-                  {
-                    text: t("buttons.cancel", { ns: namespaces.common }),
-                    style: "cancel",
-                    onPress: () => {},
-                  },
-                  {
-                    text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
-                    onPress: async (text) => {
-                      try {
-                        if (!text || text.trim().length === 0) {
-                          toast(t("createWalletWithPassphrase.invalidMessage"), undefined, "danger");
-                          return;
-                        }
+            Alert.prompt(t("createWalletWithPassphrase.title"), "", [
+              {
+                text: t("buttons.cancel", { ns: namespaces.common }),
+                style: "cancel",
+                onPress: () => {},
+              },
+              {
+                text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
+                onPress: async (text) => {
+                  try {
+                    if (!text || text.trim().length === 0) {
+                      toast(t("createWalletWithPassphrase.invalidMessage"), undefined, "danger");
+                      return;
+                    }
 
-                        const hasLeadingTrailingSpaces = text.trim() !== text;
+                    const hasLeadingTrailingSpaces = text.trim() !== text;
 
-                        if (!!hasLeadingTrailingSpaces) {
-                          toast(t("createWalletWithPassphrase.noLeadingTrailingSpaces"), undefined, "danger");
-                          return;
-                        }
+                    if (!!hasLeadingTrailingSpaces) {
+                      toast(
+                        t("createWalletWithPassphrase.noLeadingTrailingSpaces"),
+                        undefined,
+                        "danger",
+                      );
+                      return;
+                    }
 
-                        await generateSeed(text.trim());
-                        setCreateWalletLoading(true);
-                        await createWallet({init: {aezeedPassphrase: text || undefined}});
-                        await setSyncEnabled(true); // TODO test
-                        await changeScheduledSyncEnabled(true);
-        
-                        navigation.dispatch(
-                          CommonActions.reset({
-                            index: 0,
-                            routes: [{ name: "Loading" }],
-                          })
-                        );
-                      } catch (error) {
-                        toast(error.message, undefined, "danger");
-                        setCreateWalletLoading(false);
-                      }
-                    },
+                    await generateSeed(text.trim());
+                    setCreateWalletLoading(true);
+                    await createWallet({ init: { aezeedPassphrase: text || undefined } });
+                    await setSyncEnabled(true); // TODO test
+                    await changeScheduledSyncEnabled(true);
+
+                    navigation.dispatch(
+                      CommonActions.reset({
+                        index: 0,
+                        routes: [{ name: "Loading" }],
+                      }),
+                    );
+                  } catch (error) {
+                    toast(error.message, undefined, "danger");
+                    setCreateWalletLoading(false);
                   }
-                ]
-              );
-            },
+                },
+              },
+            ]);
           },
-        ]
+        },
+      ],
     );
-  }
+  };
 
   const toggleTorEnabled = async () => {
     changeTorEnabled(!torEnabled);
@@ -156,12 +157,13 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
         {
           text: t("bitcoinNetwork.node.setDialog.title", { ns: namespaces.settings.settings }),
           onPress: async (text) => {
-            if (text === neutrinoPeers[0]) {
+            if (text === neutrinoPeers.join(",")) {
               return;
             }
 
             if (text) {
-              await changeNeutrinoPeers([text]);
+              const neutrinoPeers = text.split(",").map((n) => n.trim());
+              await changeNeutrinoPeers(neutrinoPeers);
             } else {
               await changeNeutrinoPeers([]);
             }
@@ -172,7 +174,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
         },
       ],
       "plain-text",
-      neutrinoPeers[0] ?? ""
+      neutrinoPeers.join(",") ?? "",
     );
   };
 
@@ -180,25 +182,31 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
     const title = t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings });
     const message = t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings });
     if (PLATFORM === "android") {
-      Alert.alert(title, message + "\n" + t("bitcoinNetwork.restartDialog.msg1", { ns: namespaces.settings.settings }), [
-        {
-          style: "cancel",
-          text: t("buttons.no", { ns: namespaces.common }),
-        },
-        {
-          style: "default",
-          text: t("buttons.yes", { ns: namespaces.common }),
-          onPress: async () => {
-            try {
-              await NativeModules.LndMobile.stopLnd();
-              await NativeModules.LndMobileTools.killLnd();
-            } catch (e) {
-              console.log(e);
-            }
-            NativeModules.LndMobileTools.restartApp();
+      Alert.alert(
+        title,
+        message +
+          "\n" +
+          t("bitcoinNetwork.restartDialog.msg1", { ns: namespaces.settings.settings }),
+        [
+          {
+            style: "cancel",
+            text: t("buttons.no", { ns: namespaces.common }),
           },
-        },
-      ]);
+          {
+            style: "default",
+            text: t("buttons.yes", { ns: namespaces.common }),
+            onPress: async () => {
+              try {
+                await NativeModules.LndMobile.stopLnd();
+                await NativeModules.LndMobileTools.killLnd();
+              } catch (e) {
+                console.log(e);
+              }
+              NativeModules.LndMobileTools.restartApp();
+            },
+          },
+        ],
+      );
     } else {
       Alert.alert(title, message);
     }
@@ -251,16 +259,20 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
     navigation.navigate("Settings", {
       title: "",
       description: "",
-      data: [{
-        title: t("menu.setBitcoinNode"),
-        value: "setBitcoinNode",
-      }, {
-        title: t("language.title"),
-        value: "setLanguage",
-      }, {
-        title: t("menu.createWalletWithPassphrase"),
-        value: "createWalletWithPassphrase"
-      }],
+      data: [
+        {
+          title: t("menu.setBitcoinNode"),
+          value: "setBitcoinNode",
+        },
+        {
+          title: t("language.title"),
+          value: "setLanguage",
+        },
+        {
+          title: t("menu.createWalletWithPassphrase"),
+          value: "createWalletWithPassphrase",
+        },
+      ],
       onPick: async (setting) => {
         console.log(setting);
         if (setting === "setBitcoinNode") {
@@ -272,12 +284,15 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
         }
       },
     });
-
-  }
+  };
 
   return (
     <View style={style.menuDotsIcon}>
-      <Menu visible={visible} onRequestClose={hideMenu} anchor={<Icon type="Entypo" name="dots-three-horizontal" onPress={onPressDots} />}>
+      <Menu
+        visible={visible}
+        onRequestClose={hideMenu}
+        anchor={<Icon type="Entypo" name="dots-three-horizontal" onPress={onPressDots} />}
+      >
         {PLATFORM !== "macos" && (
           <MenuItem onPress={toggleTorEnabled} textStyle={{ color: "#000" }}>
             {torEnabled ? t("menu.disableTor") : t("menu.enableTor")}
@@ -306,7 +321,9 @@ export default function Start({ navigation }: IStartProps) {
   const generateSeed = useStoreActions((store) => store.generateSeed);
   const createWallet = useStoreActions((store) => store.createWallet);
   const setSyncEnabled = useStoreActions((state) => state.scheduledSync.setSyncEnabled);
-  const changeScheduledSyncEnabled = useStoreActions((state) => state.settings.changeScheduledSyncEnabled);
+  const changeScheduledSyncEnabled = useStoreActions(
+    (state) => state.settings.changeScheduledSyncEnabled,
+  );
   const [createWalletLoading, setCreateWalletLoading] = useState(false);
 
   const onCreateWalletPress = async () => {
@@ -333,7 +350,7 @@ ${t("createWallet.msg3")}`,
                   CommonActions.reset({
                     index: 0,
                     routes: [{ name: "Loading" }],
-                  })
+                  }),
                 );
               } catch (error) {
                 toast(error.message, undefined, "danger");
@@ -341,7 +358,7 @@ ${t("createWallet.msg3")}`,
               }
             },
           },
-        ]
+        ],
       );
     } catch (e) {
       Alert.alert(e.message);
@@ -355,11 +372,23 @@ ${t("createWallet.msg3")}`,
   return (
     <Container>
       <SafeAreaView style={style.content}>
-        <StatusBar backgroundColor="transparent" hidden={false} translucent={true} networkActivityIndicatorVisible={true} barStyle="light-content" />
+        <StatusBar
+          backgroundColor="transparent"
+          hidden={false}
+          translucent={true}
+          networkActivityIndicatorVisible={true}
+          barStyle="light-content"
+        />
 
-        {!createWalletLoading && <TopMenu navigation={navigation} setCreateWalletLoading={setCreateWalletLoading} />}
+        {!createWalletLoading && (
+          <TopMenu navigation={navigation} setCreateWalletLoading={setCreateWalletLoading} />
+        )}
 
-        {!createWalletLoading ? <AnimatedH1>{t("title")}</AnimatedH1> : <H1 style={style.header}>{t("title")}</H1>}
+        {!createWalletLoading ? (
+          <AnimatedH1>{t("title")}</AnimatedH1>
+        ) : (
+          <H1 style={style.header}>{t("title")}</H1>
+        )}
         {!createWalletLoading ? (
           <>
             <AnimatedView>
