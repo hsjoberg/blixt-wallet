@@ -1,5 +1,9 @@
-import React from "react"
-import { createStackNavigator, StackNavigationOptions, CardStyleInterpolators } from "@react-navigation/stack";
+import React from "react";
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+  CardStyleInterpolators,
+} from "@react-navigation/stack";
 
 import ReceiveSetup from "./ReceiveSetup";
 import ReceiveSetupLsp from "./ReceiveSetupLsp";
@@ -22,10 +26,10 @@ export type ReceiveStackParamList = {
   ChangeBitcoinUnit: ISelectListNavigationProps<string>;
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
   DunderLspInfo: undefined;
-}
+};
 
 const animationDisabled = {
-  animationEnabled: false,
+  animation: "none",
   cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
 };
 
@@ -37,15 +41,22 @@ export default function ReceiveIndex() {
   };
 
   return (
-    <Stack.Navigator initialRouteName={dunderEnabled ? "ReceiveSetupLsp" : "ReceiveSetup"} screenOptions={screenOptions}>
+    <Stack.Navigator
+      initialRouteName={dunderEnabled ? "ReceiveSetupLsp" : "ReceiveSetup"}
+      screenOptions={screenOptions}
+    >
       <Stack.Screen name="ReceiveSetupLsp" component={ReceiveSetupLsp} />
       <Stack.Screen name="ReceiveSetup" component={ReceiveSetup} />
-      <Stack.Screen name="ReceiveQr" component={ReceiveQr} options={{
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }} />
+      <Stack.Screen
+        name="ReceiveQr"
+        component={ReceiveQr}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
       <Stack.Screen name="ChangeFiatUnit" component={SelectList} />
       <Stack.Screen name="ChangeBitcoinUnit" component={SelectList} />
       <Stack.Screen name="DunderLspInfo" component={DunderLspInfo} options={animationDisabled} />
     </Stack.Navigator>
-  )
+  );
 }

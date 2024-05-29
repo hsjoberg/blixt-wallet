@@ -168,7 +168,7 @@ export default function Main() {
   };
 
   const animationDisabled: StackNavigationOptions = {
-    animationEnabled: false,
+    animation: "none",
     cardStyleInterpolator: CardStyleInterpolators.forNoAnimation,
   };
 
@@ -263,7 +263,7 @@ export default function Main() {
         name="Send"
         component={Send}
         options={{
-          animationEnabled: screenTransitionsEnabled,
+          animation: screenTransitionsEnabled ? undefined : "none",
           gestureEnabled: true,
           gestureResponseDistance: 1000,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
