@@ -554,6 +554,8 @@ sync-freelist=1
 accept-keysend=1
 tlsdisableautofill=1
 maxpendingchannels=1000
+maxlogfiles=10
+maxlogfilesize=100
 max-commit-fee-rate-anchors=300
 
 [db]
@@ -569,12 +571,14 @@ bitcoin.${node}=1
 bitcoin.node=${nodeBackend}
 bitcoin.defaultchanconfs=1
 
+[fee]
+fee.url=${neutrinoFeeUrl}
+
 ${
   lndChainBackend === "neutrino"
     ? `
 [Neutrino]
 ${neutrinoPeerConfig}
-neutrino.feeurl=${neutrinoFeeUrl}
 neutrino.broadcasttimeout=11s
 neutrino.persistfilters=true
 `
