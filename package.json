@@ -14,7 +14,7 @@
     "gen-proto": "pbjs -t static-module -w es6 --force-long -o proto/lightning.js proto/*.proto proto/*/*.proto && pbts -o proto/lightning.d.ts proto/lightning.js",
     "build-tor-lib": "./build-tor",
     "prepare-release": "yarn install && cd ios && pod install && cd ../macos && pod install",
-    "android:build": "yarn install && ./build/fetch_libraries && yarn android:bundle-release-mainnet",
+    "android:build": "yarn install && ./build/fetch_libraries.sh && yarn android:bundle-release-mainnet",
     "android:clean": "cd android && ./gradlew clean",
     "android:regtest-debug": "react-native run-android --mode chainregtestNormalDebug --appIdSuffix regtest.debug --main-activity MainActivity",
     "android:regtest": "react-native run-android --mode chainregtestNormalRelease --appIdSuffix regtest",
