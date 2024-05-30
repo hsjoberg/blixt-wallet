@@ -123,6 +123,7 @@ open class Lnd {
     "SignMessage": { bytes, cb in LndmobileSignMessage(bytes, cb) },
     "SignerSignMessage": { bytes, cb in LndmobileSignerSignMessage(bytes, cb) },
     "RestoreChannelBackups": { bytes, cb in LndmobileRestoreChannelBackups(bytes, cb) },
+    "WalletKitListSweeps": { bytes, cb in LndmobileWalletKitListSweeps(bytes, cb) },
 
     // autopilot
     "AutopilotStatus": { bytes, cb in LndmobileAutopilotStatus(bytes, cb) },

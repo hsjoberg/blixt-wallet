@@ -47,7 +47,7 @@ import {
   getTransaction,
   getTransactions,
 } from "../../storage/database/transaction";
-import { genSeed, initWallet, signMessage } from "../../lndmobile/wallet";
+import { genSeed, initWallet, pendingSweeps, signMessage } from "../../lndmobile/wallet";
 import { getPin, getWalletPassword } from "../../storage/keystore";
 import { lnrpc, routerrpc } from "../../../proto/lightning";
 import { modifyStatus, queryScores, status } from "../../lndmobile/autopilot";
@@ -72,6 +72,7 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { generateSecureRandom } from "../../lndmobile/index";
 import { localNotification } from "../../utils/push-notification";
 import { sendCommand } from "../../lndmobile/utils";
+import { getCFilter } from "../../lndmobile/neutrino";
 
 let iCloudStorage: any;
 console.log(PLATFORM);
@@ -195,6 +196,17 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }}
           >
             <Text style={styles.buttonText}>set bricked true</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              Alert.prompt("Compact filter", undefined, async (hash) => {
+                const filter = await getCFilter(hash);
+                Alert.alert(filter.filter.byteLength.toString());
+              });
+            }}
+          >
+            <Text style={styles.buttonText}>getCFilter size</Text>
           </Button>
           <Button
             small
@@ -1362,6 +1374,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             ["getNetworkInfo", getNetworkInfo],
             ["getTransactions", getTransactionsOnchain],
             ["closedChannels", closedChannels],
+            ["pendingSweeps", pendingSweeps],
           ].map(([name, f], i) => {
             return (
               <Button

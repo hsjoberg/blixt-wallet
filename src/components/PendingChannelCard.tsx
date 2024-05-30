@@ -5,7 +5,7 @@ import Long from "long";
 import BigNumber from "bignumber.js";
 
 import { style } from "./ChannelCard";
-import { lnrpc } from "../../proto/lightning";
+import { lnrpc, walletrpc } from "../../proto/lightning";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { useStoreActions, useStoreState } from "../state/store";
 import { identifyService, lightningServices } from "../utils/lightning-services";
@@ -16,6 +16,7 @@ import { getUnitNice, valueBitcoin, valueFiat } from "../utils/bitcoin-units";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
 import { Alert } from "../utils/alert";
+import { pendingSweeps } from "../lndmobile/wallet";
 
 const dataLossChannelState = "ChanStatusLocalDataLoss|ChanStatusRestored";
 
@@ -96,6 +97,54 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
         },
       ],
     );
+  };
+
+  const dragForceCloseAnchor = async (
+    channel: lnrpc.PendingChannelsResponse.IWaitingCloseChannel,
+  ) => {
+    Alert.prompt(t("channel.bumpFee"), t("channel.bumpFeeAlerts.enterFeeRate"), [
+      {
+        text: t("buttons.cancel", { ns: namespaces.common }),
+        style: "cancel",
+        onPress: () => {},
+      },
+      {
+        text: "OK",
+        onPress: async (feeRate) => {
+          if (!feeRate) {
+            Alert.alert(t("channel.bumpFeeAlerts.missingFeeRate"));
+            return;
+          }
+
+          const feeRateNumber = Number.parseInt(feeRate);
+
+          // Follows anchor sweep code in bumpForceCloseFee.go in lnd/cmd/lncli/walletrpc_active.go
+
+          //& Fetch waiting close channel commitments.
+          const sweeps = await pendingSweeps();
+
+          //& Retrieve pending sweeps.
+          const commitments = [channel.commitments?.localTxid, channel.commitments?.remoteTxid];
+
+          //& Match pending sweeps with commitments of the channel for which a bump
+          //& is requested and bump their fees.
+          for (const sweep of sweeps.pendingSweeps) {
+            //& Only bump anchor sweeps.
+            if (sweep.witnessType !== walletrpc.WitnessType.COMMITMENT_ANCHOR) {
+              continue;
+            }
+
+            if (commitments.includes(sweep.outpoint?.txidStr)) {
+              await bumpFee({
+                txid: sweep.outpoint?.txidStr ?? "",
+                index: sweep.outpoint?.outputIndex ?? 0,
+                feeRate: feeRateNumber,
+              });
+            }
+          }
+        },
+      },
+    ]);
   };
 
   const bumpChannelFee = async (channel: lnrpc.PendingChannelsResponse.IPendingOpenChannel) => {
@@ -391,6 +440,18 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                   </Left>
                 </Row>
               )}
+              <Row style={{ width: "100%" }}>
+                <Left>
+                  <Button
+                    style={{ marginTop: 14 }}
+                    danger={true}
+                    small={true}
+                    onPress={() => dragForceCloseAnchor(channel)}
+                  >
+                    <Text style={{ fontSize: 8 }}>{t("channel.bumpFee")}</Text>
+                  </Button>
+                </Left>
+              </Row>
             </>
           )}
           {type === "FORCE_CLOSING" && (
