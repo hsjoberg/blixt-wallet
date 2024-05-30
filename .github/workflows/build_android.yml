@@ -16,14 +16,14 @@ jobs:
         run: |
           apt-get update
           apt-get install -y curl unzip
-      - name: Install AWS CLI
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          ./aws/install
       - name: Build application
         run: yarn build-unsigned-android
-      - name: Find and upload APK to S3
+      - name: Find APK path
         run: |
           apk_path=$(find . -type f -name "*.apk" | head -n 1)
-          echo "APK path: $apk_path"
+          echo "APK_PATH=$apk_path" >> $GITHUB_ENV
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-unsigned
+          path: ${{ env.APK_PATH }}
