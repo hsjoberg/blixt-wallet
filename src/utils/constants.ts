@@ -21,13 +21,7 @@ export const PLATFORM = Platform.OS;
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
 export const DEFAULT_NEUTRINO_NODE = chainSelect({
-  mainnet: [
-    "node.blixtwallet.com",
-    "btcd.lnolymp.us",
-    "neutrino.noderunner.wtf",
-    "node.eldamar.icu",
-    "btcd-mainnet.lightning.computer",
-  ],
+  mainnet: ["neutrino.noderunner.wtf", "node.eldamar.icu"],
   testnet: ["testnet.blixtwallet.com"],
   regtest: [],
   signet: [],

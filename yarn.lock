@@ -11513,10 +11513,10 @@ react-native-linear-gradient@^2.8.3:
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz#9a116649f86d74747304ee13db325e20b21e564f"
   integrity sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==
 
-react-native-macos@0.73.26:
-  version "0.73.26"
-  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.73.26.tgz#2705ebffb8ff7dbeed02cb939f0bfbdb4b99d78c"
-  integrity sha512-BgRr00irEPu2SaCryQqrDatRViTqIdwflCHR6STpB9m7K8mqqStGXcLRESL6//3T3KQjmNvFlDVrSaKiPwhDGQ==
+react-native-macos@0.73.30:
+  version "0.73.30"
+  resolved "https://registry.yarnpkg.com/react-native-macos/-/react-native-macos-0.73.30.tgz#9d4c029818c0b3d95659276f0bb455d7dff6a892"
+  integrity sha512-EPaQ3jYhBp4D2yVA7fr0TtjzbBJTZrxsG4BYSS4q4wbLEiKU6+AZV80pvaSzv7EzW7OvF3T3dkLSRc9VBa9cxQ==
   dependencies:
     "@jest/create-cache-key-function" "^29.6.3"
     "@react-native-community/cli" "12.3.6"
@@ -11604,7 +11604,7 @@ react-native-qrcode-svg@^6.2.0:
     prop-types "^15.8.0"
     qrcode "^1.5.1"
 
-react-native-reanimated@^3.6.1:
+react-native-reanimated@^3.11.0:
   version "3.11.0"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-3.11.0.tgz#d4265d4e0232623f5958ed60e1686ca884fc3452"
   integrity sha512-BNw/XDgUfs8UhfY1X6IniU8kWpnotWGyt8qmQviaHisTi5lvwnaOdXQKfN1KGONx6ekdFRHRP5EFwLi0UajwKA==
