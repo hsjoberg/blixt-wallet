@@ -12,18 +12,14 @@ ANDROID_LINK=$FILE_PATH$ANDROID_FILE
 # Android #
 ###########
 
+# delete old instance of library file
+rm -rf android/app/lndmobile/$ANDROID_FILE
+
+# download Android LND library file
+curl -L $ANDROID_LINK > android/app/lndmobile/$ANDROID_FILE
+
+# check checksum
 if ! echo "$ANDROID_SHA256 android/app/lndmobile/$ANDROID_FILE" | sha256sum -c -; then
-    echo "Android library file missing or checksum failed" >&2
-
-    # delete old instance of library file
-    rm -rf android/app/lndmobile/$ANDROID_FILE
-
-    # download Android LND library file
-    curl -L $ANDROID_LINK > android/app/lndmobile/$ANDROID_FILE
-
-    # check checksum
-    if ! echo "$ANDROID_SHA256 android/app/lndmobile/$ANDROID_FILE" | sha256sum -c -; then
-        echo "Android checksum failed" >&2
-        exit 1
-    fi
+    echo "Android checksum failed" >&2
+    exit 1
 fi
