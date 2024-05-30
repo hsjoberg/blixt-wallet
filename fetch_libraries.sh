@@ -8,34 +8,21 @@ FILE_PATH=https://github.com/hsjoberg/lnd/releases/download/$VERSION/
 
 ANDROID_LINK=$FILE_PATH$ANDROID_FILE
 
-# test that curl and unzip are installed
-if ! command -v curl &> /dev/null
-then
-    echo "curl could not be found. Please install it and run the script again."
-    exit
-fi
-
-if ! command -v unzip &> /dev/null
-then
-    echo "unzip could not be found. Please install it and run the script again."
-    exit
-fi
-
 ###########
 # Android #
 ###########
 
-if ! echo "$ANDROID_SHA256 android/lndmobile/$ANDROID_FILE" | sha256sum -c -; then
+if ! echo "$ANDROID_SHA256 android/app/lndmobile/$ANDROID_FILE" | sha256sum -c -; then
     echo "Android library file missing or checksum failed" >&2
 
     # delete old instance of library file
-    rm android/lndmobile/$ANDROID_FILE
+    rm -rf android/app/lndmobile/$ANDROID_FILE
 
     # download Android LND library file
-    curl -L $ANDROID_LINK > android/lndmobile/$ANDROID_FILE
+    curl -L $ANDROID_LINK > android/app/lndmobile/$ANDROID_FILE
 
     # check checksum
-    if ! echo "$ANDROID_SHA256 android/lndmobile/$ANDROID_FILE" | sha256sum -c -; then
+    if ! echo "$ANDROID_SHA256 android/app/lndmobile/$ANDROID_FILE" | sha256sum -c -; then
         echo "Android checksum failed" >&2
         exit 1
     fi

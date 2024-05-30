@@ -12,5 +12,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Envinfo
         run: npx envinfo
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y curl unzip
       - name: Build application
         run: yarn android:build
