@@ -1,10 +1,10 @@
 name: Reproducible Android Build
+
 on:
   workflow_dispatch:
     inputs:
-      branch:
+      name:
         description: "Branch to build from"
-        required: true
         default: "reproducible-builds-2"
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch }}
+          ref: ${{ github.event.inputs.name }}
       - name: Envinfo
         run: npx envinfo
       - name: Install dependencies
