@@ -2,7 +2,7 @@ name: Build Android
 on:
   push:
     branches:
-      - reproducible-builds-2
+      - master
 
 jobs:
   build-android:
