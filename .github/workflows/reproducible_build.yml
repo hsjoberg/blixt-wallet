@@ -1,8 +1,11 @@
 name: Build Android
 on:
-  push:
-    branches:
-      - reproducible-builds-2
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to build from"
+        required: true
+        default: "reproducible-builds-2"
 
 jobs:
   build-android:
@@ -10,6 +13,8 @@ jobs:
     container: reactnativecommunity/react-native-android@sha256:4ff9c9f80da57c72284900fcfdbd079183e735684c62d7fafd3df50fdb895453
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
       - name: Envinfo
         run: npx envinfo
       - name: Install dependencies
