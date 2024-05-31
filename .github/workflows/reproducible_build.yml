@@ -1,11 +1,19 @@
 name: Reproducible Android Build
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       branch:
+#         description: "Branch to build from"
+#         required: true
+#         default: "reproducible-builds-2"
+
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: "Branch to build from"
-        required: true
-        default: "reproducible-builds-2"
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build-android:
