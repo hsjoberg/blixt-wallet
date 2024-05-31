@@ -1,4 +1,4 @@
-name: Build Android
+name: Reproducible Android Build
 on:
   workflow_dispatch:
     inputs:
