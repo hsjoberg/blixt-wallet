@@ -25,7 +25,7 @@ jobs:
         run: yarn build-unsigned-android
       - name: Find APK path
         run: |
-          for f in android/app/build/outputs/apk/release/*.apk; do
+          for f in ./android/app/build/outputs/apk/chainmainnetNormal/release/*.apk; do
             RENAMED_FILENAME=$(echo $f | sed -e "s/app-/blixt-/" | sed -e "s/-release-unsigned//")
             mv $f $RENAMED_FILENAME
             sha256sum $RENAMED_FILENAME
