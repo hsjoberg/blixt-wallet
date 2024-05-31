@@ -24,6 +24,7 @@ jobs:
       - name: Find APK path
         run: |
           apk_path=$(find . -type f -name "*.apk" | head -n 1)
+          echo "APK PATH: $apk_path"
           echo "APK_PATH=$apk_path" >> $GITHUB_ENV
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v4
