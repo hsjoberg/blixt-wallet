@@ -1,0 +1,20 @@
+name: Build Android
+on:
+  push:
+    branches:
+      - reproducible-builds-2
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    container: reactnativecommunity/react-native-android@sha256:4ff9c9f80da57c72284900fcfdbd079183e735684c62d7fafd3df50fdb895453
+    steps:
+      - uses: actions/checkout@v4
+      - name: Envinfo
+        run: npx envinfo
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y curl unzip
+      - name: Build application
+        run: chmod +x build.sh && ./build.sh
