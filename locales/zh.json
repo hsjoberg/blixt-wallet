@@ -2,12 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "闪电地址",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "节点别名",
       "description": "描述",
       "amount": "金额",
       "fee": "费用",
       "search": "搜索",
-      "viewInBlockExplorer": "在区块浏览器中查看"
+      "viewInBlockExplorer": "在区块浏览器中查看",
+      "blocks": "{{numBlocks}}区块",
+      "reason": "原因：{{reason}}"
     },
     "buttons": {
       "ok": "好的",
@@ -208,6 +211,9 @@
       "description": {
         "title": "消息",
         "placeholder": "给付款方的消息"
+      },
+      "preimage": {
+        "placeholder": "32字节的十六进制字符串"
       }
     }
   },
@@ -249,6 +255,9 @@
       },
       "feeEstimate": {
         "title": "费用估算"
+      },
+      "outgoingChannel": {
+        "title": "出账通道"
       }
     }
   },
@@ -266,6 +275,7 @@
     },
     "channel": {
       "alias": "别名",
+      "bumpFee": "增加费用",
       "node": "节点",
       "channelId": "通道 ID",
       "channelPoint": "通道点",
@@ -290,8 +300,16 @@
       "remoteCommitmentTxid": "远程承诺 TXID",
       "closeChannel": "关闭通道",
       "forceClosePendingChannel": "强制关闭待定通道",
+      "forceCloseDelay": "强制关闭延迟",
       "closeChannelPrompt": {
         "title": "关闭通道"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "输入费率（聪/字条）",
+        "missingFeeRate": "缺失费率",
+        "invalidFeeRate": "无效费率",
+        "bumpFeeSuccess": "增加费用成功",
+        "bumpFeeFailed": "增加费用失败"
       }
     }
   },
@@ -422,6 +440,10 @@
       "name": {
         "ask": "将我的名称与此付款一起发送",
         "mandatory": "你的名称必须与此付款一起发送"
+      },
+      "identifier": {
+        "ask": "将我的闪电地址与此付款一起发送",
+        "mandatory": "你的闪电地址必须与此付款一起发送"
       }
     },
     "payloadErrors": {
@@ -617,6 +639,9 @@
       },
       "mapTheme": {
         "title": "设置地图主题"
+      },
+      "hideAmountsEnabled": {
+        "title": "隐藏金额"
       }
     },
     "wallet": {
@@ -736,14 +761,17 @@
       "rpc": {
         "title": "设置 bitcoind RPC 主机"
       },
+      "rpcuser": {
+        "title": "设置bitcoind RPC用户"
+      },
+      "rpcpass": {
+        "title": "设置bitcoind RPC密码"
+      },
       "zmqRawBlock": {
         "title": "设置 bitcoind ZMQ Raw Block 主机"
       },
       "zmqRawTx": {
         "title": "设置 bitcoind ZMQ Raw Tx 主机"
-      },
-      "p2tr": {
-        "title": "启用通过 Taproot (P2TR) 进行链上接收"
       }
     },
     "LN": {
@@ -794,6 +822,28 @@
         "restoreDialog": {
           "title": "恢复 Dunder 服务器",
           "msg": "你是否想要恢复到默认的 Dunder 服务器"
+        }
+      },
+      "speedloaderServer": {
+        "title": "设置闪电通道同步服务器",
+        "subtitle": "",
+        "setDialog": {
+          "title": "设置闪电通道同步服务器"
+        },
+        "restoreDialog": {
+          "title": "恢复闪电通道同步服务器",
+          "msg": "你是否想要恢复默认的闪电通道同步服务器"
+        }
+      },
+      "lightningBoxServer": {
+        "title": "设置 Lightning Box 服务器",
+        "subtitle": "",
+        "setDialog": {
+          "title": "设置 Lightning Box 服务器"
+        },
+        "restoreDialog": {
+          "title": "恢复 Lightning Box 服务器",
+          "msg": "你是否想要恢复默认的 Lightning Box 服务器"
         }
       },
       "graphSync": {
@@ -868,13 +918,16 @@
         "restoreDialog": {
           "title": "你是否想将 lnd 日志级别恢复到默认级别 ({{defaultLndLogLevel}})？"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "启用自定义发票原像"
       }
     },
     "experimental": {
       "title": "实验",
       "LSP": {
         "title": "启用 Dunder LSP",
-        "subtitle": "高度实验性。 帮助提供入账流动性的闪电服务提供商"
+        "subtitle": "帮助提供入账流动性的闪电服务提供商"
       },
       "MPP": {
         "title": "启用多路径支付",
@@ -996,7 +1049,8 @@
         "title": "在启动时强制执行八卦同步"
       },
       "persistentServices": {
-        "title": "启用持久性 LND 和 Tor（如果启用）"
+        "title": "启用持久性应用程序",
+        "subtitle": "应用程序在后台保持激活状态"
       }
     }
   },
@@ -1096,6 +1150,33 @@
     "title": "添加资金",
     "msg1": "要开始在 Blixt Wallet 上使用闪电",
     "msg2": "请将比特币发送到以上的地址"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "欢迎注册 Lightning Box。",
+      "whatIs": "Lightning Box 是一个闪电地址服务提供商，可将支付请求直接转发到手机上，为你的移动设备提供一个自我监护的闪电地址。",
+      "persistentMode":"此服务依赖于持续模式，因为应用程序必须保持激活状态才能接收到付款。请确保你的设备已关闭电池优化功能。否则此服务可能无法使用。",
+      "currentRules": "该服务可免费使用。不过，由于技术原因，它目前需要与 Lightning Box 提供商建立通道。在你选择了一个闪电地址后，目前无法更改。"
+    },
+    "prerequisites": {
+      "prerequisites": "前提条件",
+      "checkingEligibility": "正在检查条件...",
+      "eligible": "符合条件",
+      "youHaveChannel": "你与 Lightning Box 服务拥有通道。",
+      "notEligible": "符合条件"
+    },
+    "registration": {
+      "registration": "注册",
+      "fields": {
+        "address": "地址",
+        "messageToPayer": "给付款方的消息"
+      },
+      "register": "注册"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "你的 Lightning Box 闪电地址是：",
+    "showQrCode": "显示二维码"
   },
   "welcome.almostDone": {
     "autopilot": {
