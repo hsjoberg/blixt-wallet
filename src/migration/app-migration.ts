@@ -352,10 +352,19 @@ export const appMigration: IAppMigration[] = [
       }
     },
   },
-    // Version 40
-    {
-      async beforeLnd(db, i) {
-        setItemObject<boolean>(StorageItem.requireGraphSync, true);
-      },
+  // Version 40
+  {
+    async beforeLnd(db, i) {
+      setItemObject<boolean>(StorageItem.requireGraphSync, true);
     },
+  },
+  // Version 41
+  {
+    async beforeLnd(db, i) {
+      if (Chain === "mainnet") {
+        // Override current neutrino peers
+        await setItemObject<string[]>(StorageItem.neutrinoPeers, DEFAULT_NEUTRINO_NODE);
+      }
+    },
+  },
 ];
