@@ -35,7 +35,7 @@ export default function SendCameraKit({ navigation, route }: ISendCameraProps) {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const [cameraType, setCameraType] = useState<CameraType>(CameraType.Back);
   const [scanning, setScanning] = useState(true);
-  const [cameraActive, setCameraActive] = useState(route.params?.viaSwipe ?? true);
+  const [cameraActive, setCameraActive] = useState(true); //route.params?.viaSwipe ?? true);
   const promptLightningAddress = usePromptLightningAddress();
   const evaluateLightningCode = useEveluateLightningCode();
   const [start, setStart] = useState(false);
