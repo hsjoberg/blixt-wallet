@@ -332,22 +332,30 @@ export const channel: IChannelModel = {
       const [pubkey, host] = peer.split("@");
       try {
         await connectPeer(pubkey, host);
-      } catch (e) {
-        if (!e.message.includes("already connected to peer")) {
-          throw e;
+      } catch (error) {
+        if (!error.message.includes("already connected to peer")) {
+          throw error;
         }
       }
 
-      const nodeInfo = await getNodeInfo(pubkey);
+      try {
+        const nodeInfo = await getNodeInfo(pubkey);
 
-      // Check for anchors features
-      const features = nodeInfo.node?.features;
+        // Check for anchors features
+        const features = nodeInfo.node?.features;
 
-      const isAnchorSupported = features ? features["23"] : undefined;
+        const isAnchorSupported = features ? features["23"] : undefined;
 
-      // Stop opening if anchors is not supported
-      if (!isAnchorSupported) {
-        throw new Error("Anchor channels are not supported by the remote node");
+        // Stop opening if anchors is not supported
+        if (!isAnchorSupported) {
+          throw new Error("Anchor channels are not supported by the remote node");
+        }
+      } catch (error) {
+        // If the node is not in channel graph for some reason, ignore anchor check and still open
+        // the channel
+        if (!error.message.includes("unable to find node")) {
+          throw error;
+        }
       }
 
       const result = await openChannel(pubkey, amount, true, feeRateSat, type);
