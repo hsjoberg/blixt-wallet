@@ -15,11 +15,7 @@ const AppContainer = createNavigationContainer(OnChain, "OnChain");
 it("renders correctly", async () => {
   const store = await initCommonStore(true);
 
-  const { unmount, toJSON } = render(
-    <StoreProvider store={store}>
-      {AppContainer}
-    </StoreProvider>
-  );
+  const { unmount, toJSON } = render(<StoreProvider store={store}>{AppContainer}</StoreProvider>);
   expect(toJSON()).toMatchSnapshot();
 
   unmount();
@@ -34,9 +30,7 @@ it("is possible display on-chain funds", async () => {
   });
 
   const { queryByTestId, queryByText, unmount } = render(
-    <StoreProvider store={store}>
-      {AppContainer}
-    </StoreProvider>
+    <StoreProvider store={store}>{AppContainer}</StoreProvider>,
   );
 
   const onChainFundsText = queryByTestId("ONCHAIN_FUNDS");
@@ -69,12 +63,10 @@ it("should be possible to withdraw funds (no camera)", async () => {
       txid: "7836ca1453ef598b989a09496f48be17e14950a44e6ab2526b4a7fc17f9e4591",
     });
     return response;
-  })
+  });
 
   const { queryByTestId, unmount } = render(
-    <StoreProvider store={store}>
-      {AppContainer}
-    </StoreProvider>
+    <StoreProvider store={store}>{AppContainer}</StoreProvider>,
   );
 
   const onChainFundsText = queryByTestId("ONCHAIN_FUNDS");
@@ -90,7 +82,13 @@ it("should be possible to withdraw funds (no camera)", async () => {
   const sendCoinsButton = await waitFor(() => queryByTestId("SEND_COINS"));
   expect(sendCoinsButton).not.toBeNull();
 
-  act(() => void fireEvent.changeText(inputBitcoinAddress!, "tb1qy24mr4attphw83xhmxcspkkrxwqwurxjy085vuz6t4gxtmfyuq9srzd0yw"));
+  act(
+    () =>
+      void fireEvent.changeText(
+        inputBitcoinAddress!,
+        "tb1qy24mr4attphw83xhmxcspkkrxwqwurxjy085vuz6t4gxtmfyuq9srzd0yw",
+      ),
+  );
   act(() => void fireEvent.changeText(inputAmount!, "1"));
   await act(async () => await fireEvent.press(sendCoinsButton!));
 
@@ -102,22 +100,22 @@ it("should be possible to withdraw funds (no camera)", async () => {
 it("should be possible generate a new bitcoin address", async () => {
   const store = await initCommonStore(true);
 
-  const {getByTestId, unmount, debug, baseElement } = render(
-    <StoreProvider store={store}>
-      {AppContainer}
-    </StoreProvider>
+  const { getByTestId, unmount, debug, baseElement } = render(
+    <StoreProvider store={store}>{AppContainer}</StoreProvider>,
   );
 
   const generateAddressButton = getByTestId("GENERATE_ADDRESS");
 
-  await waitFor(() => getByTestId('COPY_BITCOIN_ADDRESS'));
+  await waitFor(() => getByTestId("COPY_BITCOIN_ADDRESS"));
   const bitcoinAddress = getByTestId("COPY_BITCOIN_ADDRESS");
 
   expect(bitcoinAddress).not.toBeNull();
   const oldAddress = within(bitcoinAddress).getByTestId("BITCOIN_ADDRESS").children[0];
 
   newAddress.mockImplementationOnce(() => {
-    const response = lnrpc.NewAddressResponse.create({ address: "tb1qsl4hhqs8skzwknqhwjcyyyjepnwmq8tlcd32m4" });
+    const response = lnrpc.NewAddressResponse.create({
+      address: "tb1qsl4hhqs8skzwknqhwjcyyyjepnwmq8tlcd32m4",
+    });
     return response;
   });
 
