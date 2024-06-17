@@ -162,7 +162,12 @@ export interface ILndMobileInjections {
       accept: boolean,
       zeroConf?: boolean,
     ) => Promise<void>;
-    closeChannel: (fundingTxId: string, outputIndex: number, force: boolean) => Promise<string>;
+    closeChannel: (
+      fundingTxId: string,
+      outputIndex: number,
+      force: boolean,
+      deliveryAddress?: string,
+    ) => Promise<string>;
     listChannels: () => Promise<lnrpc.ListChannelsResponse>;
     openChannel: (
       pubkey: string,

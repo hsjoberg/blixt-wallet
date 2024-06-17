@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleProvider, Root } from "native-base";
 import { DefaultTheme, NavigationContainer, Theme } from "@react-navigation/native";
 import { StoreProvider } from "easy-peasy";
+import { MenuProvider } from "react-native-popup-menu";
 
 import Main from "./Main";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
@@ -43,9 +44,11 @@ export default function App() {
           documentTitle={{ enabled: false }}
           ref={navigator}
         >
-          <Root>
-            {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
-          </Root>
+          <MenuProvider>
+            <Root>
+              {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
+            </Root>
+          </MenuProvider>
         </NavigationContainer>
       </StyleProvider>
     </StoreProvider>

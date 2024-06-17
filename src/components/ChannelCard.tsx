@@ -1,8 +1,9 @@
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 
 import { Alert, Image, Linking, StyleSheet } from "react-native";
-import { Body, Button, Card, CardItem, Left, Right, Row, Text } from "native-base";
+import { Body, Card, CardItem, Icon, Left, Right, Row, Text, View } from "native-base";
 import { Line, Svg } from "react-native-svg";
+import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
 import { getUnitNice, valueBitcoin, valueFiat } from "../utils/bitcoin-units";
 import { identifyService, lightningServices } from "../utils/lightning-services";
 import { useStoreActions, useStoreState } from "../state/store";
@@ -10,7 +11,7 @@ import { useStoreActions, useStoreState } from "../state/store";
 import BigNumber from "bignumber.js";
 import CopyText from "./CopyText";
 import Long from "long";
-import React from "react";
+import React, { useState } from "react";
 import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
 import { lnrpc } from "../../proto/lightning";
 import { namespaces } from "../i18n/i18n.constants";
@@ -35,8 +36,36 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
+  const [deliveryAddress, setDeliveryAddress] = useState<string | undefined>();
 
-  const close = (force: boolean = false) => {
+  const closeWithAddress = async () => {
+    Alert.prompt(
+      t("channel.enterDeliveryAddress"),
+      "Enter the external Bitcoin address where you want your funds to be deposited.",
+      [
+        {
+          style: "cancel",
+          text: "No",
+        },
+        {
+          style: "default",
+          text: "Ok",
+          onPress: (address) => {
+            if (!address || address.trim().length === 0) {
+              toast(t("channel.invalidAddress"), undefined, "danger");
+              return;
+            }
+            setDeliveryAddress(address);
+            close(false, deliveryAddress);
+          },
+        },
+      ],
+      "plain-text",
+      "",
+    );
+  };
+
+  const close = (force: boolean = false, address: string | undefined) => {
     Alert.alert(
       t("channel.closeChannelPrompt.title"),
       `Are you sure you want to${force ? " force" : ""} close the channel${
@@ -55,6 +84,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               fundingTx: channel.channelPoint!.split(":")[0],
               outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
               force,
+              deliveryAddress: address,
             });
             console.log(result);
 
@@ -127,9 +157,34 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   return (
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
+        <View style={style.menuIconContainer}>
+          <Menu>
+            <MenuTrigger>
+              <Icon type="Entypo" name="dots-three-horizontal" />
+            </MenuTrigger>
+            <MenuOptions customStyles={menuOptionsStyles}>
+              <MenuOption
+                onSelect={onPressViewInExplorer}
+                text={t("generic.viewInBlockExplorer", { ns: namespaces.common })}
+              />
+              <MenuOption
+                onSelect={() => close(false, undefined)}
+                text={t("channel.closeChannel")}
+              />
+              <MenuOption
+                onSelect={() => close(true, undefined)}
+                text={t("channel.forceCloseChannel")}
+              />
+              <MenuOption
+                onSelect={() => closeWithAddress()}
+                text={t("channel.closeChannelToAddress")}
+              />
+            </MenuOptions>
+          </Menu>
+        </View>
         <Body>
           {alias && (
-            <Row style={{ width: "100%" }}>
+            <Row style={{ width: "100%", marginTop: 35 }}>
               <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>{t("channel.alias")}</Text>
               </Left>
@@ -398,28 +453,6 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Right>
             </Row>
           )}
-          <Row style={{ width: "100%" }}>
-            <Left style={{ flexDirection: "row" }}>
-              <Button
-                style={{ marginTop: 14 }}
-                danger={true}
-                small={true}
-                onPress={() => close(false)}
-                onLongPress={() => close(true)}
-              >
-                <Text style={{ fontSize: 8 }}>{t("channel.closeChannel")}</Text>
-              </Button>
-              <Button
-                style={{ marginTop: 14, marginLeft: 10 }}
-                small={true}
-                onPress={onPressViewInExplorer}
-              >
-                <Text style={{ fontSize: 8 }}>
-                  {t("generic.viewInBlockExplorer", { ns: namespaces.common })}
-                </Text>
-              </Button>
-            </Left>
-          </Row>
         </Body>
       </CardItem>
     </Card>
@@ -428,12 +461,35 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
 
 export default ChannelCard;
 
+const menuOptionsStyles = {
+  optionsContainer: {
+    padding: 5,
+    borderRadius: 5,
+    shadowColor: blixtTheme.dark,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    backgroundColor: blixtTheme.light,
+  },
+  optionWrapper: {
+    padding: 5,
+  },
+  optionText: {
+    fontSize: 16,
+    color: blixtTheme.dark,
+  },
+};
+
 export const style = StyleSheet.create({
   channelCard: {
     width: "100%",
     marginTop: 8,
+    paddingBottom: 16,
   },
-  channelDetail: {},
+  channelDetail: {
+    paddingTop: 8, // Add padding to the top of the detail section
+  },
   channelDetails: {
     fontSize: 16,
   },
@@ -447,5 +503,14 @@ export const style = StyleSheet.create({
     marginLeft: 10,
     marginTop: -2.5,
     marginBottom: 4,
+  },
+  menuIconContainer: {
+    position: "absolute",
+    top: 5,
+    right: 10,
+  },
+  menuIcon: {
+    fontSize: 35,
+    color: blixtTheme.light,
   },
 });
