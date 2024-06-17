@@ -38,6 +38,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
+  const [deliveryAddress, setDeliveryAddress] = useState<string | undefined>();
 
   const closeWithAddress = async () => {
     Alert.prompt(
@@ -166,6 +167,31 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   return (
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
+        <View style={style.menuIconContainer}>
+          <Menu>
+            <MenuTrigger>
+              <Icon type="Entypo" name="dots-three-horizontal" />
+            </MenuTrigger>
+            <MenuOptions customStyles={menuOptionsStyles}>
+              <MenuOption
+                onSelect={onPressViewInExplorer}
+                text={t("generic.viewInBlockExplorer", { ns: namespaces.common })}
+              />
+              <MenuOption
+                onSelect={() => close(false, undefined)}
+                text={t("channel.closeChannel")}
+              />
+              <MenuOption
+                onSelect={() => close(true, undefined)}
+                text={t("channel.forceCloseChannel")}
+              />
+              <MenuOption
+                onSelect={() => closeWithAddress()}
+                text={t("channel.closeChannelToAddress")}
+              />
+            </MenuOptions>
+          </Menu>
+        </View>
         <Body>
           <Row
             style={{
@@ -200,7 +226,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             </Right>
           </Row>
           {alias && (
-            <Row style={{ width: "100%" }}>
+            <Row style={{ width: "100%", marginTop: 35 }}>
               <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>{t("channel.alias")}</Text>
               </Left>
