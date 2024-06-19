@@ -82,6 +82,7 @@ export const closeChannel = async (
   fundingTxId: string,
   outputIndex: number,
   force: boolean,
+  deliveryAddress?: string,
 ): Promise<string> => {
   const response = await sendStreamCommand<lnrpc.ICloseChannelRequest, lnrpc.CloseChannelRequest>(
     {
@@ -93,6 +94,7 @@ export const closeChannel = async (
           outputIndex,
         },
         force,
+        deliveryAddress,
       },
     },
     false,

@@ -4,7 +4,8 @@ import DialogAndroid from "react-native-dialogs";
 import { Text, H1, Button, View, Spinner, Icon } from "native-base";
 import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
-import { Menu, MenuItem } from "react-native-material-menu";
+import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
+
 import { CommonActions } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
@@ -56,9 +57,6 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
   const changeScheduledSyncEnabled = useStoreActions(
     (state) => state.settings.changeScheduledSyncEnabled,
   );
-  const [visible, setVisible] = useState(false);
-  const hideMenu = () => setVisible(false);
-  const showMenu = () => setVisible(true);
 
   const onCreateWalletWithPassphrasePress = async () => {
     Alert.alert(
@@ -125,7 +123,6 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
 
   const toggleTorEnabled = async () => {
     changeTorEnabled(!torEnabled);
-    setVisible(false);
     if (PLATFORM === "android") {
       try {
         // await NativeModules.LndMobile.stopLnd();
@@ -142,7 +139,6 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
   };
 
   const onSetBitcoinNodePress = async () => {
-    setVisible(false);
     Alert.prompt(
       t("bitcoinNetwork.node.setDialog.title", { ns: namespaces.settings.settings }),
       t("bitcoinNetwork.node.setDialog.info", { ns: namespaces.settings.settings }) +
@@ -213,7 +209,6 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
   };
 
   const onLanguageChange = async () => {
-    setVisible(false);
     if (PLATFORM === "android") {
       const { selectedItem } = await DialogAndroid.showPicker(null, null, {
         positiveText: null,
@@ -250,63 +245,26 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
     }
   };
 
-  const onPressDots = () => {
-    if (PLATFORM !== "macos" && PLATFORM !== "web") {
-      showMenu();
-      return;
-    }
-
-    navigation.navigate("Settings", {
-      title: "",
-      description: "",
-      data: [
-        {
-          title: t("menu.setBitcoinNode"),
-          value: "setBitcoinNode",
-        },
-        {
-          title: t("language.title"),
-          value: "setLanguage",
-        },
-        {
-          title: t("menu.createWalletWithPassphrase"),
-          value: "createWalletWithPassphrase",
-        },
-      ],
-      onPick: async (setting) => {
-        console.log(setting);
-        if (setting === "setBitcoinNode") {
-          onSetBitcoinNodePress();
-        } else if (setting === "setLanguage") {
-          onLanguageChange();
-        } else if (setting === "createWalletWithPassphrase") {
-          onCreateWalletWithPassphrasePress();
-        }
-      },
-    });
-  };
-
   return (
     <View style={style.menuDotsIcon}>
-      <Menu
-        visible={visible}
-        onRequestClose={hideMenu}
-        anchor={<Icon type="Entypo" name="dots-three-horizontal" onPress={onPressDots} />}
-      >
-        {PLATFORM !== "macos" && (
-          <MenuItem onPress={toggleTorEnabled} textStyle={{ color: "#000" }}>
-            {torEnabled ? t("menu.disableTor") : t("menu.enableTor")}
-          </MenuItem>
-        )}
-        <MenuItem onPress={onSetBitcoinNodePress} textStyle={{ color: "#000" }}>
-          {t("menu.setBitcoinNode")}
-        </MenuItem>
-        <MenuItem onPress={onLanguageChange} textStyle={{ color: "#000" }}>
-          {t("language.title")}
-        </MenuItem>
-        <MenuItem onPress={onCreateWalletWithPassphrasePress} textStyle={{ color: "#000" }}>
-          {t("menu.createWalletWithPassphrase")}
-        </MenuItem>
+      <Menu>
+        <MenuTrigger>
+          <Icon type="Entypo" name="dots-three-horizontal" />
+        </MenuTrigger>
+        <MenuOptions customStyles={menuOptionsStyles}>
+          {PLATFORM !== "macos" && (
+            <MenuOption
+              onSelect={toggleTorEnabled}
+              text={torEnabled ? t("menu.disableTor") : t("menu.enableTor")}
+            />
+          )}
+          <MenuOption onSelect={onSetBitcoinNodePress} text={t("menu.setBitcoinNode")} />
+          <MenuOption onSelect={onLanguageChange} text={t("language.title")} />
+          <MenuOption
+            onSelect={onCreateWalletWithPassphrasePress}
+            text={t("menu.createWalletWithPassphrase")}
+          />
+        </MenuOptions>
       </Menu>
     </View>
   );
@@ -410,6 +368,26 @@ ${t("createWallet.msg3")}`,
 }
 
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
+
+const menuOptionsStyles = {
+  optionsContainer: {
+    padding: 5,
+    borderRadius: 5,
+    shadowColor: blixtTheme.dark,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    backgroundColor: blixtTheme.light,
+  },
+  optionWrapper: {
+    padding: 5,
+  },
+  optionText: {
+    fontSize: 16,
+    color: blixtTheme.dark,
+  },
+};
 
 const style = StyleSheet.create({
   content: {

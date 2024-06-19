@@ -1,8 +1,9 @@
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 
-import { Alert, Image, Linking, StyleSheet } from "react-native";
-import { Body, Button, Card, CardItem, Left, Right, Row, Text } from "native-base";
+import { Image, Linking, StyleSheet } from "react-native";
+import { Body, Card, CardItem, Icon, Left, Right, Row, Text, View } from "native-base";
 import { Line, Svg } from "react-native-svg";
+import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
 import { getUnitNice, valueBitcoin, valueFiat } from "../utils/bitcoin-units";
 import { identifyService, lightningServices } from "../utils/lightning-services";
 import { useStoreActions, useStoreState } from "../state/store";
@@ -10,12 +11,14 @@ import { useStoreActions, useStoreState } from "../state/store";
 import BigNumber from "bignumber.js";
 import CopyText from "./CopyText";
 import Long from "long";
-import React from "react";
+import React, { useState } from "react";
 import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
 import { lnrpc } from "../../proto/lightning";
 import { namespaces } from "../i18n/i18n.constants";
 import { toast } from "../utils";
 import { useTranslation } from "react-i18next";
+import { Alert } from "../utils/alert";
+import { PLATFORM } from "../utils/constants";
 
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
@@ -36,7 +39,33 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
 
-  const close = (force: boolean = false) => {
+  const closeWithAddress = async () => {
+    Alert.prompt(
+      t("channel.enterDeliveryAddress"),
+      "Enter the external Bitcoin address where you want your funds to be deposited.",
+      [
+        {
+          style: "cancel",
+          text: "No",
+        },
+        {
+          style: "default",
+          text: "Ok",
+          onPress: (address) => {
+            if (!address || address.trim().length === 0) {
+              toast(t("channel.invalidAddress"), undefined, "danger");
+              return;
+            }
+            close(false, address);
+          },
+        },
+      ],
+      "plain-text",
+      "",
+    );
+  };
+
+  const close = (force: boolean = false, address: string | undefined) => {
     Alert.alert(
       t("channel.closeChannelPrompt.title"),
       `Are you sure you want to${force ? " force" : ""} close the channel${
@@ -51,33 +80,43 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           style: "default",
           text: "Yes",
           onPress: async () => {
-            const result = await closeChannel({
-              fundingTx: channel.channelPoint!.split(":")[0],
-              outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
-              force,
-            });
-            console.log(result);
+            try {
+              const result = await closeChannel({
+                fundingTx: channel.channelPoint!.split(":")[0],
+                outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
+                force,
+                deliveryAddress: address,
+              });
+              console.log(result);
 
-            setTimeout(async () => {
-              await getChannels(undefined);
-            }, 3000);
+              setTimeout(async () => {
+                await getChannels(undefined);
+              }, 3000);
 
-            if (autopilotEnabled) {
-              Alert.alert(
-                "Autopilot",
-                "Automatic channel opening is enabled, " +
-                  "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
-                  "Do you wish to disable automatic channel opening?",
-                [
-                  { text: "No" },
-                  {
-                    text: "Yes",
-                    onPress: async () => {
-                      changeAutopilotEnabled(false);
-                      setupAutopilot(false);
+              if (autopilotEnabled) {
+                Alert.alert(
+                  "Autopilot",
+                  "Automatic channel opening is enabled, " +
+                    "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
+                    "Do you wish to disable automatic channel opening?",
+                  [
+                    { text: "No" },
+                    {
+                      text: "Yes",
+                      onPress: async () => {
+                        changeAutopilotEnabled(false);
+                        setupAutopilot(false);
+                      },
                     },
-                  },
-                ],
+                  ],
+                );
+              }
+            } catch (error: any) {
+              toast(
+                t("msg.error", { ns: namespaces.common }) + ": " + error.message,
+                0,
+                "danger",
+                "OK",
               );
             }
           },
@@ -128,6 +167,38 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
         <Body>
+          <Row
+            style={{
+              width: "100%",
+              marginBottom: PLATFORM === "ios" || PLATFORM === "macos" ? 10 : 0,
+            }}
+          >
+            <Right>
+              <Menu>
+                <MenuTrigger>
+                  <Icon type="Entypo" name="dots-three-horizontal" style={{}} />
+                </MenuTrigger>
+                <MenuOptions customStyles={menuOptionsStyles}>
+                  <MenuOption
+                    onSelect={onPressViewInExplorer}
+                    text={t("generic.viewInBlockExplorer", { ns: namespaces.common })}
+                  />
+                  <MenuOption
+                    onSelect={() => close(false, undefined)}
+                    text={t("channel.closeChannel")}
+                  />
+                  <MenuOption
+                    onSelect={() => close(true, undefined)}
+                    text={t("channel.forceCloseChannel")}
+                  />
+                  <MenuOption
+                    onSelect={() => closeWithAddress()}
+                    text={t("channel.closeChannelToAddress")}
+                  />
+                </MenuOptions>
+              </Menu>
+            </Right>
+          </Row>
           {alias && (
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
@@ -398,28 +469,6 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Right>
             </Row>
           )}
-          <Row style={{ width: "100%" }}>
-            <Left style={{ flexDirection: "row" }}>
-              <Button
-                style={{ marginTop: 14 }}
-                danger={true}
-                small={true}
-                onPress={() => close(false)}
-                onLongPress={() => close(true)}
-              >
-                <Text style={{ fontSize: 8 }}>{t("channel.closeChannel")}</Text>
-              </Button>
-              <Button
-                style={{ marginTop: 14, marginLeft: 10 }}
-                small={true}
-                onPress={onPressViewInExplorer}
-              >
-                <Text style={{ fontSize: 8 }}>
-                  {t("generic.viewInBlockExplorer", { ns: namespaces.common })}
-                </Text>
-              </Button>
-            </Left>
-          </Row>
         </Body>
       </CardItem>
     </Card>
@@ -428,12 +477,35 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
 
 export default ChannelCard;
 
+const menuOptionsStyles = {
+  optionsContainer: {
+    padding: 5,
+    borderRadius: 5,
+    shadowColor: blixtTheme.dark,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    backgroundColor: blixtTheme.light,
+  },
+  optionWrapper: {
+    padding: 5,
+  },
+  optionText: {
+    fontSize: 16,
+    color: blixtTheme.dark,
+  },
+};
+
 export const style = StyleSheet.create({
   channelCard: {
     width: "100%",
     marginTop: 8,
+    paddingBottom: 16,
   },
-  channelDetail: {},
+  channelDetail: {
+    paddingTop: 8, // Add padding to the top of the detail section
+  },
   channelDetails: {
     fontSize: 16,
   },
@@ -447,5 +519,10 @@ export const style = StyleSheet.create({
     marginLeft: 10,
     marginTop: -2.5,
     marginBottom: 4,
+  },
+  menuIconContainer: {},
+  menuIcon: {
+    fontSize: 35,
+    color: blixtTheme.light,
   },
 });

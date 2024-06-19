@@ -298,7 +298,11 @@
       "maturityHeight": "Maturity height",
       "localCommitmentTxid": "Local commitment TXID",
       "remoteCommitmentTxid": "Remote commitment TXID",
-      "closeChannel": "Close channel",
+      "enterDeliveryAddress": "Enter Closing Address",
+      "invalidAddress": "Enter a valid Bitcoin Address",
+      "closeChannel": "Close Channel",
+      "forceCloseChannel": "Force Close Channel",
+      "closeChannelToAddress": "Close Channel to External Address",
       "forceClosePendingChannel": "Force Close Pending Channel",
       "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
