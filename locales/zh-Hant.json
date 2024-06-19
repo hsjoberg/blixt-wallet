@@ -2,15 +2,12 @@
   "common": {
     "generic": {
       "lightningAddress": "閃電地址",
-      "lightningBox": "Lightning Box",
       "nodeAlias": "節點別名",
       "description": "描述",
       "amount": "金額",
       "fee": "費用",
       "search": "搜索",
-      "viewInBlockExplorer": "在區塊瀏覽器中查看",
-      "blocks": "{{numBlocks}} 區塊",
-      "reason": "原因： {{reason}}"
+      "viewInBlockExplorer": "在區塊瀏覽器中查看"
     },
     "buttons": {
       "ok": "好的",
@@ -211,9 +208,6 @@
       "description": {
         "title": "消息",
         "placeholder": "給付款方的消息"
-      },
-      "preimage": {
-        "placeholder": "32字節的十六進制字符串"
       }
     }
   },
@@ -255,9 +249,6 @@
       },
       "feeEstimate": {
         "title": "費用估算"
-      },
-      "outgoingChannel": {
-        "title": "出賬通道"
       }
     }
   },
@@ -275,7 +266,6 @@
     },
     "channel": {
       "alias": "別名",
-      "bumpFee": "增加費用",
       "node": "節點",
       "channelId": "通道 ID",
       "channelPoint": "通道點",
@@ -300,16 +290,8 @@
       "remoteCommitmentTxid": "遠程承諾 TXID",
       "closeChannel": "關閉通道",
       "forceClosePendingChannel": "強制關閉待定通道",
-      "forceCloseDelay": "強制關閉延遲",
       "closeChannelPrompt": {
         "title": "關閉通道"
-      },
-      "bumpFeeAlerts": {
-        "enterFeeRate": "輸入費率（聰/字節）",
-        "missingFeeRate": "缺失費率",
-        "invalidFeeRate": "無效費率",
-        "bumpFeeSuccess": "增加費率成功",
-        "bumpFeeFailed": "增加費率失敗"
       }
     }
   },
@@ -440,10 +422,6 @@
       "name": {
         "ask": "將我的名稱與此付款一起發送",
         "mandatory": "你的名稱必須與此付款一起發送"
-      },
-      "identifier": {
-        "ask": "將我的閃電地址與此付款一起發送",
-        "mandatory": "你的閃電地址必須與此付款一起發送"
       }
     },
     "payloadErrors": {
@@ -639,9 +617,6 @@
       },
       "mapTheme": {
         "title": "設置地圖主題"
-      },
-      "hideAmountsEnabled": {
-        "title": "隱藏金額"
       }
     },
     "wallet": {
@@ -761,17 +736,14 @@
       "rpc": {
         "title": "設置 bitcoind RPC 主機"
       },
-      "rpcuser": {
-        "title": "設置bitcoind RPC用戶"
-      },
-      "rpcpass": {
-        "title": "設置bitcoind RPC密碼"
-      },
       "zmqRawBlock": {
         "title": "設置 bitcoind ZMQ Raw Block 主機"
       },
       "zmqRawTx": {
         "title": "設置 bitcoind ZMQ Raw Tx 主機"
+      },
+      "p2tr": {
+        "title": "啟用通過 Taproot (P2TR) 進行鏈上接收"
       }
     },
     "LN": {
@@ -822,28 +794,6 @@
         "restoreDialog": {
           "title": "恢復 Dunder 服務器",
           "msg": "你是否想要恢復到默認的 Dunder 服務器？"
-        }
-      },
-      "speedloaderServer": {
-        "title": "設置閃電通道同步服務器",
-        "subtitle": "",
-        "setDialog": {
-          "title": "設置閃電通道同步服務器"
-        },
-        "restoreDialog": {
-          "title": "恢復閃電通道同步服務器",
-          "msg": "你是否想要恢復默認的閃電通道同步服務器"
-        }
-      },
-      "lightningBoxServer": {
-        "title": "設置 Lightning Box 服務器",
-        "subtitle": "",
-        "setDialog": {
-          "title": "設置 Lightning Box 服務器"
-        },
-        "restoreDialog": {
-          "title": "恢復 Lightning Box 服務器",
-          "msg": "你是否想要恢復默認的 Lightning Box 服務器"
         }
       },
       "graphSync": {
@@ -918,16 +868,13 @@
         "restoreDialog": {
           "title": "你是否想將 lnd 日誌級別恢復到默認級別 ({{defaultLndLogLevel}})？"
         }
-      },
-      "customInvoicePreimageEnabled": {
-        "title": "啓用自定義發票原像"
       }
     },
     "experimental": {
       "title": "試驗",
       "LSP": {
         "title": "啟用 Dunder LSP",
-        "subtitle": "幫助提供入賬流動性的閃電服務提供商"
+        "subtitle": "高度實驗性。幫助提供入賬流動性的閃電服務提供商"
       },
       "MPP": {
         "title": "啟用多路徑支付",
@@ -1049,8 +996,7 @@
         "title": "在啟動時強制執行八卦同步"
       },
       "persistentServices": {
-        "title": "啓用持久性應用程式",
-        "subtitle": "應用程式在後臺保持激活狀態"
+        "title": "啟用持久性 LND 和 Tor（如果啟用）"
       }
     }
   },
@@ -1150,33 +1096,6 @@
     "title": "添加資金",
     "msg1": "要開始在 Blixt Wallet 上使用閃電",
     "msg2": "請將比特幣發送到以上的地址"
-  },
-  "lightningBox.registration": {
-    "info": {
-      "welcome": "歡迎註冊 Lightning Box。",
-      "whatIs": "Lightning Box 是一個閃電地址服務提供商，可將支付請求直接轉發到手機上，爲你的移動設備提供一個自我監護的閃電地址。",
-      "persistentMode":"此服務依賴於持續模式，因爲應用程式必須保持激活狀態才能接收到付款。請確保你的設備已關閉電池優化功能。否則此服務可能無法使用。",
-      "currentRules": "該服務可免費使用。不過，由於技術原因，它目前需要與 Lightning Box 提供商建立通道。在你選擇了一個閃電地址後，目前無法更改。"
-    },
-    "prerequisites": {
-      "prerequisites": "前提條件",
-      "checkingEligibility": "正在檢查條件...",
-      "eligible": "符合條件",
-      "youHaveChannel": "你與 Lightning Box 服務擁有通道。",
-      "notEligible": "不符合條件"
-    },
-    "registration": {
-      "registration": "註冊",
-      "fields": {
-        "address": "地址",
-        "messageToPayer": "給付款方的消息"
-      },
-      "register": "註冊"
-    }
-  },
-  "lightningBox.info": {
-    "yourLightningAddress": "你的 Lightning Box 閃電地址是：",
-    "showQrCode": "顯示二維碼"
   },
   "welcome.almostDone": {
     "autopilot": {
