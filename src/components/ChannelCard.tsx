@@ -38,7 +38,6 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const currentRate = useStoreState((store) => store.fiat.currentRate);
   const preferFiat = useStoreState((store) => store.settings.preferFiat);
   const onchainExplorer = useStoreState((store) => store.settings.onchainExplorer);
-  const [deliveryAddress, setDeliveryAddress] = useState<string | undefined>();
 
   const closeWithAddress = async () => {
     Alert.prompt(
