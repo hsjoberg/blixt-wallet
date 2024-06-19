@@ -1,6 +1,6 @@
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 
-import { Alert, Image, Linking, StyleSheet } from "react-native";
+import { Image, Linking, StyleSheet } from "react-native";
 import { Body, Card, CardItem, Icon, Left, Right, Row, Text, View } from "native-base";
 import { Line, Svg } from "react-native-svg";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
@@ -17,6 +17,8 @@ import { lnrpc } from "../../proto/lightning";
 import { namespaces } from "../i18n/i18n.constants";
 import { toast } from "../utils";
 import { useTranslation } from "react-i18next";
+import { Alert } from "../utils/alert";
+import { PLATFORM } from "../utils/constants";
 
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
@@ -155,34 +157,36 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   return (
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
-        <View style={style.menuIconContainer}>
-          <Menu>
-            <MenuTrigger>
-              <Icon type="Entypo" name="dots-three-horizontal" />
-            </MenuTrigger>
-            <MenuOptions customStyles={menuOptionsStyles}>
-              <MenuOption
-                onSelect={onPressViewInExplorer}
-                text={t("generic.viewInBlockExplorer", { ns: namespaces.common })}
-              />
-              <MenuOption
-                onSelect={() => close(false, undefined)}
-                text={t("channel.closeChannel")}
-              />
-              <MenuOption
-                onSelect={() => close(true, undefined)}
-                text={t("channel.forceCloseChannel")}
-              />
-              <MenuOption
-                onSelect={() => closeWithAddress()}
-                text={t("channel.closeChannelToAddress")}
-              />
-            </MenuOptions>
-          </Menu>
-        </View>
         <Body>
+          <Row style={{ width: "100%", marginBottom: PLATFORM === "ios" ? 10 : 0 }}>
+            <Right>
+              <Menu>
+                <MenuTrigger>
+                  <Icon type="Entypo" name="dots-three-horizontal" style={{}} />
+                </MenuTrigger>
+                <MenuOptions customStyles={menuOptionsStyles}>
+                  <MenuOption
+                    onSelect={onPressViewInExplorer}
+                    text={t("generic.viewInBlockExplorer", { ns: namespaces.common })}
+                  />
+                  <MenuOption
+                    onSelect={() => close(false, undefined)}
+                    text={t("channel.closeChannel")}
+                  />
+                  <MenuOption
+                    onSelect={() => close(true, undefined)}
+                    text={t("channel.forceCloseChannel")}
+                  />
+                  <MenuOption
+                    onSelect={() => closeWithAddress()}
+                    text={t("channel.closeChannelToAddress")}
+                  />
+                </MenuOptions>
+              </Menu>
+            </Right>
+          </Row>
           {alias && (
-            <Row style={{ width: "100%", marginTop: 35 }}>
+            <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>{t("channel.alias")}</Text>
               </Left>
@@ -502,11 +506,7 @@ export const style = StyleSheet.create({
     marginTop: -2.5,
     marginBottom: 4,
   },
-  menuIconContainer: {
-    position: "absolute",
-    top: 5,
-    right: 10,
-  },
+  menuIconContainer: {},
   menuIcon: {
     fontSize: 35,
     color: blixtTheme.light,
