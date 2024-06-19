@@ -167,7 +167,12 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
     <Card style={style.channelCard}>
       <CardItem style={style.channelDetail}>
         <Body>
-          <Row style={{ width: "100%", marginBottom: PLATFORM === "ios" ? 10 : 0 }}>
+          <Row
+            style={{
+              width: "100%",
+              marginBottom: PLATFORM === "ios" || PLATFORM === "macos" ? 10 : 0,
+            }}
+          >
             <Right>
               <Menu>
                 <MenuTrigger>
