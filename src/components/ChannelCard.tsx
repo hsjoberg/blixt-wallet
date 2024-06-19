@@ -80,34 +80,43 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           style: "default",
           text: "Yes",
           onPress: async () => {
-            const result = await closeChannel({
-              fundingTx: channel.channelPoint!.split(":")[0],
-              outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
-              force,
-              deliveryAddress: address,
-            });
-            console.log(result);
+            try {
+              const result = await closeChannel({
+                fundingTx: channel.channelPoint!.split(":")[0],
+                outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
+                force,
+                deliveryAddress: address,
+              });
+              console.log(result);
 
-            setTimeout(async () => {
-              await getChannels(undefined);
-            }, 3000);
+              setTimeout(async () => {
+                await getChannels(undefined);
+              }, 3000);
 
-            if (autopilotEnabled) {
-              Alert.alert(
-                "Autopilot",
-                "Automatic channel opening is enabled, " +
-                  "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
-                  "Do you wish to disable automatic channel opening?",
-                [
-                  { text: "No" },
-                  {
-                    text: "Yes",
-                    onPress: async () => {
-                      changeAutopilotEnabled(false);
-                      setupAutopilot(false);
+              if (autopilotEnabled) {
+                Alert.alert(
+                  "Autopilot",
+                  "Automatic channel opening is enabled, " +
+                    "new on-chain funds will automatically go to a new channel unless you disable it.\n\n" +
+                    "Do you wish to disable automatic channel opening?",
+                  [
+                    { text: "No" },
+                    {
+                      text: "Yes",
+                      onPress: async () => {
+                        changeAutopilotEnabled(false);
+                        setupAutopilot(false);
+                      },
                     },
-                  },
-                ],
+                  ],
+                );
+              }
+            } catch (error: any) {
+              toast(
+                t("msg.error", { ns: namespaces.common }) + ": " + error.message,
+                0,
+                "danger",
+                "OK",
               );
             }
           },
