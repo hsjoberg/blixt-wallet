@@ -1,5 +1,16 @@
 import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
-import { Body, CheckBox, Container, Icon, Left, List, ListItem, Right, Text } from "native-base";
+import {
+  Body,
+  Button,
+  CheckBox,
+  Container,
+  Icon,
+  Left,
+  List,
+  ListItem,
+  Right,
+  Text,
+} from "native-base";
 import {
   DEFAULT_DUNDER_SERVER,
   DEFAULT_INVOICE_EXPIRY,
@@ -12,7 +23,7 @@ import {
 } from "../../utils/constants";
 import { Linking, NativeModules, PermissionsAndroid, Platform, StyleSheet } from "react-native";
 import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { camelCaseToSpace, formatISO, hexToUint8Array, timeout, toast } from "../../utils";
 import { getChanInfo, verifyChanBackup } from "../../lndmobile/channel";
 import {
@@ -42,6 +53,7 @@ import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
 import { routerrpc } from "../../../proto/lightning";
+import NeutrinoPeersModal from "../../components/NeutrinoPeersModal";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -55,6 +67,16 @@ export default function Settings({ navigation }: ISettingsProps) {
   const currentLanguage = useStoreState((store) => store.settings.language);
   const { t, i18n } = useTranslation(namespaces.settings.settings);
   const lndChainBackend = useStoreState((store) => store.settings.lndChainBackend);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [bitcoinPeers, setBitcoinPeers] = useState<string[]>([]);
+
+  const handleSetBitcoinNodePress = () => {
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -718,43 +740,22 @@ ${t("LN.inbound.dialog.msg3")}`;
     );
   };
 
-  const onSetBitcoinNodePress = async () => {
-    Alert.prompt(
-      t("bitcoinNetwork.node.setDialog.title"),
-      t("bitcoinNetwork.node.setDialog.info") +
-        "\n\n" +
-        t("bitcoinNetwork.node.setDialog.leaveBlankToSearch") +
-        "\n\n" +
-        t("bitcoinNetwork.node.setDialog.longPressToReset", { defaultNode: DEFAULT_NEUTRINO_NODE }),
-      [
-        {
-          text: t("buttons.cancel", { ns: namespaces.common }),
-          style: "cancel",
-          onPress: () => {},
-        },
-        {
-          text: t("bitcoinNetwork.node.setDialog.title"),
-          onPress: async (text) => {
-            if (text === neutrinoPeers.join(",")) {
-              return;
-            }
+  const onSetBitcoinNodePress = async (peers: string[]) => {
+    console.log("peers", peers);
+    setBitcoinPeers(peers.filter((peer) => peer.trim() !== ""));
+    setModalVisible(false);
 
-            if (text) {
-              const neutrinoPeers = text.split(",").map((n) => n.trim());
-              await changeNeutrinoPeers(neutrinoPeers);
-            } else {
-              await changeNeutrinoPeers([]);
-            }
-            await writeConfig();
+    if (!peers.length) {
+      await changeNeutrinoPeers([]);
+      return;
+    }
 
-            restartNeeded();
-          },
-        },
-      ],
-      "plain-text",
-      neutrinoPeers.join(",") ?? "",
-    );
+    await changeNeutrinoPeers(peers);
+
+    await writeConfig();
+    restartNeeded();
   };
+
   const onSetBitcoinNodeLongPress = async () => {
     Alert.alert(
       t("bitcoinNetwork.node.restoreDialog.title"),
@@ -768,6 +769,7 @@ ${t("LN.inbound.dialog.msg3")}`;
           style: "default",
           text: t("buttons.yes", { ns: namespaces.common }),
           onPress: async () => {
+            setBitcoinPeers(DEFAULT_NEUTRINO_NODE);
             await changeNeutrinoPeers(DEFAULT_NEUTRINO_NODE);
             await writeConfig();
             restartNeeded();
@@ -1890,20 +1892,29 @@ ${t("experimental.tor.disabled.msg2")}`;
           </ListItem>
 
           {lndChainBackend === "neutrino" && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={onSetBitcoinNodePress}
-              onLongPress={onSetBitcoinNodeLongPress}
-            >
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
-              </Left>
-              <Body>
-                <Text>{t("bitcoinNetwork.node.title")}</Text>
-                <Text note={true}>{t("bitcoinNetwork.node.subtitle")}</Text>
-              </Body>
-            </ListItem>
+            <>
+              <ListItem
+                style={style.listItem}
+                icon={true}
+                onPress={() => setModalVisible(!modalVisible)}
+                onLongPress={onSetBitcoinNodeLongPress}
+              >
+                <NeutrinoPeersModal
+                  visible={modalVisible}
+                  onClose={handleModalClose}
+                  onSave={onSetBitcoinNodePress}
+                  initialPeers={neutrinoPeers}
+                />
+
+                <Left>
+                  <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
+                </Left>
+                <Body>
+                  <Text>{t("bitcoinNetwork.node.title")}</Text>
+                  <Text note={true}>{t("bitcoinNetwork.node.subtitle")}</Text>
+                </Body>
+              </ListItem>
+            </>
           )}
           {lndChainBackend === "bitcoindWithZmq" && (
             <>
