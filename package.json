@@ -30,6 +30,7 @@
     "android:bundle-js-debug": "react-native bundle --platform android --dev true --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
     "android:bundle-js-release": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
     "android:mainnet-unsigned": "cd android && ./gradlew assembleChainmainnetNormalRelease",
+    "android:fdroid-unsigned": "cd android && ./gradlew assembleChainmainnetFdroidRelease",
     "ios:regtest-debug": "react-native run-ios --scheme BlixtWalletRegtest --configuration DebugRegtest",
     "ios:regtest": "react-native run-ios --scheme BlixtWalletRegtest --configuration ReleaseRegtest",
     "ios:testnet-debug": "react-native run-ios --scheme BlixtWalletTestnet --configuration DebugTestnet",

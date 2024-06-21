@@ -166,6 +166,12 @@ android {
             dimension "custom"
             manifestPlaceholders = [custom: ""]
         }
+
+        fdroid {
+            dimension "custom"
+            manifestPlaceholders = [custom: ""]
+        }
+
         fakelnd {
             applicationIdSuffix ".fakelnd"
             dimension "custom"
@@ -242,7 +248,12 @@ protobuf {
     }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 apply plugin: "com.google.gms.google-services"
 =======
 >>>>>>> 6321764d (clean up google services)
+=======
+
+// apply plugin: "com.google.gms.google-services" // TODO
+>>>>>>> 3d7676ce (update dep and gradle)
