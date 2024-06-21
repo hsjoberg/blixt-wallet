@@ -242,4 +242,4 @@ protobuf {
     }
 }
 
-// apply plugin: "com.google.gms.google-services" // TODO
+apply plugin: "com.google.gms.google-services"
