@@ -231,6 +231,12 @@ dependencies {
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 
+// Apply Google Services plugin conditionally
+android.applicationVariants.all { variant ->
+    if (!variant.productFlavors.any { it.name == 'fdroid' }) {
+        apply plugin: "com.google.gms.google-services"
+    }
+}
 
 // Blixt:
 protobuf {
@@ -247,13 +253,3 @@ protobuf {
         }
     }
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-apply plugin: "com.google.gms.google-services"
-=======
->>>>>>> 6321764d (clean up google services)
-=======
-
-// apply plugin: "com.google.gms.google-services" // TODO
->>>>>>> 3d7676ce (update dep and gradle)

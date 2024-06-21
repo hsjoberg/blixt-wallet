@@ -27,13 +27,16 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
         // classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
 
-
         // Blixt dependencies:
         // Needed for react-native-camera-kit
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
         classpath("com.google.protobuf:protobuf-gradle-plugin:0.9.3")// 0.8.12")
+<<<<<<< HEAD
         classpath("com.google.gms:google-services:4.4.2")
 
+=======
+        classpath("com.google.gms:google-services:4.3.14")
+>>>>>>> b446720f (remove a google dep)
     }
 }
 
