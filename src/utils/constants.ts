@@ -24,8 +24,9 @@ export const DEFAULT_NEUTRINO_NODE = chainSelect({
   mainnet: [
     "node.blixtwallet.com",
     "btcd.lnolymp.us",
-    "neutrino.noderunner.wtf",
-    "node.eldamar.icu",
+    "uswest.blixtwallet.com",
+    "europe.blixtwallet.com",
+    "asia.blixtwallet.com",
     "btcd-mainnet.lightning.computer",
   ],
   testnet: ["testnet.blixtwallet.com"],

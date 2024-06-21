@@ -1,0 +1,35 @@
+name: Reproducible Android Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Branch to build from"
+        default: "reproducible-builds-2"
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    container: reactnativecommunity/react-native-android@sha256:4ff9c9f80da57c72284900fcfdbd079183e735684c62d7fafd3df50fdb895453
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.name }}
+      - name: Envinfo
+        run: npx envinfo
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y curl unzip
+      - name: Build application
+        run: yarn build-unsigned-android
+      - name: Find APK path
+        run: |
+          apk_path=$(find . -type f -name "*.apk" | head -n 1)
+          echo "APK PATH: $apk_path"
+          for f in ./android/app/build/outputs/apk/chainmainnetNormal/release/*.apk; do
+            RENAMED_FILENAME=$(echo $f | sed -e "s/app-/blixt-/" | sed -e "s/-release-unsigned//")
+            mv $f $RENAMED_FILENAME
+            sha256sum $RENAMED_FILENAME
+          done
+          echo -e "\n"

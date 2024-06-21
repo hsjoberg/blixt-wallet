@@ -352,10 +352,31 @@ export const appMigration: IAppMigration[] = [
       }
     },
   },
-    // Version 40
-    {
-      async beforeLnd(db, i) {
-        setItemObject<boolean>(StorageItem.requireGraphSync, true);
-      },
+  // Version 40
+  {
+    async beforeLnd(db, i) {
+      setItemObject<boolean>(StorageItem.requireGraphSync, true);
     },
+  },
+  // Version 41
+  {
+    async beforeLnd(db, i) {
+      if (Chain === "mainnet") {
+        const oldPeers = [
+          "node.blixtwallet.com",
+          "btcd.lnolymp.us",
+          "neutrino.noderunner.wtf",
+          "node.eldamar.icu",
+          "btcd-mainnet.lightning.computer",
+        ].join(",");
+
+        const userPeers = (await getItemObject<string[]>(StorageItem.neutrinoPeers)).join(",");
+
+        // Override current neutrino peers if the users have not changed their nodes
+        if (oldPeers === userPeers) {
+          await setItemObject<string[]>(StorageItem.neutrinoPeers, DEFAULT_NEUTRINO_NODE);
+        }
+      }
+    },
+  },
 ];
