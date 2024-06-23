@@ -63,7 +63,6 @@ import { ICLOUD_BACKUP_KEY } from "../../state/ICloudBackup";
 import { ILightningServices } from "../../utils/lightning-services";
 import { LndMobileEventEmitter } from "../../utils/event-listener";
 import Long from "long";
-// import PushNotification from "react-native-push-notification";
 import { RootStackParamList } from "../../Main";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { abandonChannel } from "../../lndmobile/channel";

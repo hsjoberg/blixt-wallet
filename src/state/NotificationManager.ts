@@ -66,10 +66,10 @@ export const notificationManager: INotificationManagerModel = {
     }
   }),
 
-  localNotification: thunk((_, { message, importance }, { getStoreState }) => {
+  localNotification: thunk((_, { message }, { getStoreState }) => {
     if (getStoreState().settings.pushNotificationsEnabled) {
       if (PLATFORM !== "macos") {
-        localNotification(message, importance ?? "default");
+        localNotification(message);
       } else {
         toast(message);
       }

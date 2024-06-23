@@ -132,7 +132,6 @@ export const onChain: IOnChainModel = {
             ) {
               getStoreActions().notificationManager.localNotification({
                 message: "Received on-chain transaction",
-                importance: "high",
               });
               actions.addToTransactionNotificationBlacklist(transaction.txHash);
 

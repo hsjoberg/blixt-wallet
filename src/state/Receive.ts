@@ -351,7 +351,6 @@ export const receive: IReceiveModel = {
               if (!isSatogram) {
                 getStoreActions().notificationManager.localNotification({
                   message,
-                  importance: "high",
                 });
               }
 
