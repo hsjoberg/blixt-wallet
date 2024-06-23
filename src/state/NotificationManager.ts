@@ -1,7 +1,6 @@
 import { PermissionsAndroid } from "react-native";
 import { Thunk, thunk } from "easy-peasy";
 import { requestNotifications } from "react-native-permissions";
-// import PushNotification, { PushNotificationObject } from "react-native-push-notification";
 
 import { navigate } from "../utils/navigation";
 import { IStoreModel } from "./index";
@@ -25,7 +24,6 @@ const log = logger("NotificationManager");
 
 interface ILocalNotificationPayload {
   message: string;
-  // importance?: PushNotificationObject["importance"];
 }
 
 export interface INotificationManagerModel {
@@ -48,6 +46,17 @@ export const notificationManager: INotificationManagerModel = {
         log.i("Requesting permissions");
         const result = await requestNotifications(["alert", "sound", "badge"]);
         log.d("request notification status", [result.status]);
+
+        if (result.status === "granted" && PLATFORM === "android") {
+          Notifications.setNotificationChannel({
+            channelId: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID,
+            name: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_NAME,
+            importance: 3,
+            enableLights: true,
+            enableVibration: true,
+            showBadge: true,
+          });
+        }
       }
 
       Notifications.events().registerNotificationReceivedForeground(
