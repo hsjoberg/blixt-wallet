@@ -44,7 +44,7 @@ export default function App() {
           documentTitle={{ enabled: false }}
           ref={navigator}
         >
-          <MenuProvider skipInstanceCheck={true}>
+          <MenuProvider>
             <Root>
               {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
             </Root>
