@@ -171,7 +171,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             <Right>
               <Menu>
                 <MenuTrigger>
-                  <Icon type="Entypo" name="dots-three-horizontal" style={{}} />
+                  <Icon type="Entypo" name="dots-three-horizontal" />
                 </MenuTrigger>
                 <MenuOptions customStyles={menuOptionsStyles}>
                   <MenuOption
@@ -472,7 +472,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
 
 export default ChannelCard;
 
-const menuOptionsStyles = {
+const menuOptionsStyles = StyleSheet.create({
   optionsContainer: {
     padding: 5,
     borderRadius: 5,
@@ -490,7 +490,7 @@ const menuOptionsStyles = {
     fontSize: 16,
     color: blixtTheme.dark,
   },
-};
+});
 
 export const style = StyleSheet.create({
   channelCard: {
