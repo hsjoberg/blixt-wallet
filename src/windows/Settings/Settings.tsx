@@ -2926,26 +2926,28 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>Stop lnd</Text>
             </Body>
           </ListItem>
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={onPressExportChannelDbAndBrickInstance}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="file-export" />
-            </Left>
-            <Body>
-              <Text>
-                Export channel.db file and permanently disable this instance of Blixt Wallet
-              </Text>
-              <Text note={true}>
-                Use this feature to migrate this wallet to another device or to lnd.
-              </Text>
-              <Text note={true} style={{ color: blixtTheme.red }}>
-                Only do this if you're know what you're doing
-              </Text>
-            </Body>
-          </ListItem>
+          {PLATFORM === "android" && (
+            <ListItem
+              style={style.listItem}
+              icon={true}
+              onPress={onPressExportChannelDbAndBrickInstance}
+            >
+              <Left>
+                <Icon style={style.icon} type="MaterialCommunityIcons" name="file-export" />
+              </Left>
+              <Body>
+                <Text>
+                  Export channel.db file and permanently disable this instance of Blixt Wallet
+                </Text>
+                <Text note={true}>
+                  Use this feature to migrate this wallet to another device or to lnd.
+                </Text>
+                <Text note={true} style={{ color: blixtTheme.red }}>
+                  Only do this if you're know what you're doing
+                </Text>
+              </Body>
+            </ListItem>
+          )}
           <ListItem style={style.listItem} icon={true} onPress={onPressRestoreChannelBackup}>
             <Left>
               <Icon style={style.icon} type="MaterialCommunityIcons" name="file-export" />
