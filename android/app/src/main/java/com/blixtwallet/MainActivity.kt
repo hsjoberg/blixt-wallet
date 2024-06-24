@@ -108,7 +108,6 @@ class MainActivity : ReactActivity() {
                 out!!.close()
 
                 if (tmpExportChannelDbPromise != null) {
-                    Toast.makeText(this, "promise is not null", Toast.LENGTH_LONG).show()
                     tmpExportChannelDbPromise!!.resolve(true)
                 } else {
                     Toast.makeText(this, "promise is null", Toast.LENGTH_LONG).show()
