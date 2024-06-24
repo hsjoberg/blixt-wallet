@@ -90,6 +90,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   lightningBoxAddress = "lightningBoxAddress",
   lightningBoxLnurlPayDesc = "lightningBoxLnurlPayDesc",
   hideAmountsEnabled = "hideAmountsEnabled",
+  randomizeSettingsOnStartup = "randomizeSettingsOnStartup",
 }
 
 export const setItem = async (key: StorageItem, value: string) =>
@@ -194,6 +195,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.lightningBoxAddress),
     removeItem(StorageItem.lightningBoxLnurlPayDesc),
     removeItem(StorageItem.hideAmountsEnabled),
+    removeItem(StorageItem.randomizeSettingsOnStartup),
   ]);
 };
 
@@ -286,5 +288,6 @@ export const setupApp = async () => {
     // setItem(StorageItem.lightningBoxAddress, ""),
     setItem(StorageItem.lightningBoxLnurlPayDesc, DEFAULT_LIGHTNINGBOX_LNURLPDESC),
     setItemObject<boolean>(StorageItem.hideAmountsEnabled, false),
+    setItemObject<boolean>(StorageItem.randomizeSettingsOnStartup, false),
   ]);
 };
