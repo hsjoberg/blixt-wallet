@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.ActivityManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.FileObserver;
 import android.os.Process;
 import android.util.Base64;
@@ -763,6 +764,56 @@ class LndMobileTools extends ReactContextBaseJavaModule {
     byte[] buffer = new byte[length];
     secureRandom.nextBytes(buffer);
     promise.resolve(Base64.encodeToString(buffer, Base64.NO_WRAP));
+  }
+
+  @ReactMethod
+  public void saveChannelDbFile(Promise promise) {
+    // This promise will be resolved in MainActivity
+    MainActivity.tmpExportChannelDbPromise = promise;
+    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+    intent.setType("application/octet-stream");
+    intent.putExtra(Intent.EXTRA_TITLE, "channel.db");
+    getReactApplicationContext().getCurrentActivity().startActivityForResult(intent, MainActivity.INTENT_EXPORTCHANNELDBFILE);
+  }
+
+  @ReactMethod
+  public void importChannelDbFile(String channelDbImportPath, Promise promise) {
+    Log.i(TAG, getReactApplicationContext().getFilesDir().toString() + "/data/graph/" + BuildConfig.CHAIN + "/channel.db");
+    try {
+      File sourceFile = new File(channelDbImportPath);
+
+      String channelDbFilePath = getReactApplicationContext().getFilesDir().toString() + "/data/graph/" + BuildConfig.CHAIN + "/channel.db";
+      File destChannelDbFile = new File(channelDbFilePath);
+
+      // Delete the channel.db file first if there is one
+      destChannelDbFile.delete();
+
+      File destFile = new File(channelDbFilePath);
+      if (!destFile.exists() && !destFile.createNewFile()) {
+        promise.reject(new IOException("Failed to create destination channel.db file"));
+        return;
+      }
+
+      // Copy content
+      InputStream in = new FileInputStream(sourceFile);
+      OutputStream out = new FileOutputStream(destFile);
+      byte[] buffer = new byte[1024];
+      int read;
+      while ((read = in.read(buffer)) != -1) {
+        out.write(buffer, 0, read);
+      }
+      in.close();
+      out.flush();
+      out.close();
+
+      // Delete the cached file
+      sourceFile.delete();
+
+      promise.resolve(true);
+    } catch (IOException error) {
+      promise.reject(error);
+    }
   }
 
   private void checkWriteExternalStoragePermission(@NonNull RequestWriteExternalStoragePermissionCallback successCallback,

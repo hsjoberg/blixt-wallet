@@ -54,6 +54,8 @@ export interface ILndMobileTools {
   DEBUG_deleteSpeedloaderDgraphDirectory(): null;
   DEBUG_deleteNeutrinoFiles(): boolean;
   getInternalFiles(): Promise<Record<string, number>>;
+  saveChannelDbFile(): Promise<boolean>;
+  importChannelDbFile(channelDbPath: string): Promise<boolean>;
 
   // Android-specific
   getIntentStringData(): Promise<string | null>;

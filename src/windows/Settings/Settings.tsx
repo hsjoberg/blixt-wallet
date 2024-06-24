@@ -42,6 +42,9 @@ import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
 import { routerrpc } from "../../../proto/lightning";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { brickInstance, setBrickDeviceAndExportChannelDb } from "../../storage/app";
+import { restoreChannelBackups } from "../../lndmobile/wallet";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -1575,6 +1578,55 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeRandomizeSettingsOnStartup(!randomizeSettingsOnStartup);
   };
 
+  // Export channel db and brick
+  const onPressExportChannelDbAndBrickInstance = async () => {
+    try {
+      if (PLATFORM === "android") {
+        await setSyncEnabled(false);
+        await changeScheduledSyncEnabled(false);
+      }
+
+      await setBrickDeviceAndExportChannelDb(true);
+      await NativeModules.LndMobile.stopLnd();
+
+      Alert.alert("Restart the app to continue the procedure.", "", [
+        {
+          text: "OK",
+          onPress() {
+            if (PLATFORM === "android") {
+              NativeModules.LndMobileTools.restartApp();
+            }
+          },
+        },
+      ]);
+    } catch (e: any) {
+      toast("Error: " + e.message, 10000, "danger");
+      return;
+    }
+  };
+
+  // Restore SCB file
+  const onPressRestoreChannelBackup = async () => {
+    try {
+      const res = await DocumentPicker.pickSingle({
+        type: [DocumentPicker.types.allFiles],
+      });
+      console.log(res);
+
+      let backupBase64: string;
+      const backupFileUri = PLATFORM === "ios" ? res.uri.replace(/%20/g, " ") : res.uri;
+      try {
+        backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? "base64" : undefined);
+      } catch (e) {
+        backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? undefined : "base64");
+      }
+
+      await restoreChannelBackups(backupBase64);
+    } catch (error) {
+      toast("Error: " + error.message, 10000, "danger");
+    }
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -2872,6 +2924,36 @@ ${t("experimental.tor.disabled.msg2")}`;
             </Left>
             <Body>
               <Text>Stop lnd</Text>
+            </Body>
+          </ListItem>
+          {PLATFORM === "android" && name === "Hampus" && (
+            <ListItem
+              style={style.listItem}
+              icon={true}
+              onPress={onPressExportChannelDbAndBrickInstance}
+            >
+              <Left>
+                <Icon style={style.icon} type="MaterialCommunityIcons" name="file-export" />
+              </Left>
+              <Body>
+                <Text>
+                  Export channel.db file and permanently disable this instance of Blixt Wallet
+                </Text>
+                <Text note={true}>
+                  Use this feature to migrate this wallet to another device or to lnd.
+                </Text>
+                <Text note={true} style={{ color: blixtTheme.red }}>
+                  Only do this if you're know what you're doing
+                </Text>
+              </Body>
+            </ListItem>
+          )}
+          <ListItem style={style.listItem} icon={true} onPress={onPressRestoreChannelBackup}>
+            <Left>
+              <Icon style={style.icon} type="MaterialCommunityIcons" name="file-export" />
+            </Left>
+            <Body>
+              <Text>Restore SCB channel backup file</Text>
             </Body>
           </ListItem>
         </List>

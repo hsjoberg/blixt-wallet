@@ -26,6 +26,9 @@ const APP_VERSION = appMigration.length - 1;
 
 export enum StorageItem { // const enums not supported in Babel 7...
   app = "app",
+  brickDeviceAndExportChannelDb = "brickDeviceAndExportChannelDb", // This is used to copy the channel.db file when lnd is down
+  bricked = "bricked", // This is used when channel.db migration is commenced
+  importChannelDbOnStartup = "importChannelDbOnStartup",
   appVersion = "appVersion",
   appBuild = "appBuild",
   databaseCreated = "databaseCreated",
@@ -93,6 +96,12 @@ export enum StorageItem { // const enums not supported in Babel 7...
   randomizeSettingsOnStartup = "randomizeSettingsOnStartup",
 }
 
+export interface IImportChannelDbOnStartup {
+  channelDbPath: string;
+  seed: string[];
+  passphrase: string;
+}
+
 export const setItem = async (key: StorageItem, value: string) =>
   await AsyncStorage.setItem(key, value);
 export const setItemObject = async <T>(key: StorageItem, value: T) =>
@@ -128,11 +137,40 @@ export const setRescanWallet = async (rescan: boolean): Promise<void> => {
 export const setLndCompactDb = async (rescan: boolean): Promise<void> => {
   return await setItemObject<boolean>(StorageItem.lndCompactDb, rescan);
 };
+export const setBrickDeviceAndExportChannelDb = async (brick: boolean): Promise<void> => {
+  return await setItemObject<boolean>(StorageItem.brickDeviceAndExportChannelDb, brick);
+};
+export const getBrickDeviceAndExportChannelDb = async (): Promise<boolean> => {
+  return await getItemObject<boolean>(StorageItem.brickDeviceAndExportChannelDb);
+};
+export const brickInstance = async (): Promise<void> => {
+  return await setItemObject<boolean>(StorageItem.bricked, true);
+};
+export const isInstanceBricked = async (): Promise<boolean> => {
+  return await getItemObject<boolean>(StorageItem.bricked);
+};
+export const setImportChannelDbOnStartup = async (
+  value: IImportChannelDbOnStartup | null,
+): Promise<void> => {
+  return await setItemObject<IImportChannelDbOnStartup>(
+    StorageItem.importChannelDbOnStartup,
+    value,
+  );
+};
+export const getImportChannelDbOnStartup = async (): Promise<IImportChannelDbOnStartup> => {
+  return await getItemObject<IImportChannelDbOnStartup>(StorageItem.importChannelDbOnStartup);
+};
+export const removeImportChannelDbOnStartupKvItem = async (): Promise<void> => {
+  return removeItem(StorageItem.importChannelDbOnStartup);
+};
 
 export const clearApp = async () => {
   // TODO use AsyncStorage.clear?
   await Promise.all([
     removeItem(StorageItem.app),
+    removeItem(StorageItem.brickDeviceAndExportChannelDb),
+    removeItem(StorageItem.bricked),
+    removeItem(StorageItem.importChannelDbOnStartup),
     removeItem(StorageItem.appVersion),
     removeItem(StorageItem.appBuild),
     removeItem(StorageItem.walletCreated),
@@ -226,6 +264,9 @@ export const setupApp = async () => {
 
   await Promise.all([
     setItemObject<boolean>(StorageItem.app, true),
+    setItemObject<boolean>(StorageItem.brickDeviceAndExportChannelDb, false),
+    setItemObject<boolean>(StorageItem.bricked, false),
+    setItemObject<IImportChannelDbOnStartup>(StorageItem.bricked, null),
     setItemObject<number>(StorageItem.appVersion, APP_VERSION),
     setItemObject<number>(StorageItem.appBuild, VersionCode),
     setItemObject<boolean>(StorageItem.walletCreated, false),
