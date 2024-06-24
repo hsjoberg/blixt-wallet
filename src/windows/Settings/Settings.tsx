@@ -1548,6 +1548,17 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeHideAmountsEnabled(!hideAmountsEnabled);
   };
 
+  // Change backend to bitcoindWithZmq
+  const changeLndChainBackend = useStoreActions((store) => store.settings.changeLndChainBackend);
+  const onPressChangeBackendToBitcoindWithZmq = async () => {
+    await changeLndChainBackend("bitcoindWithZmq");
+  };
+
+  // Change backend to neutrino
+  const onPressChangeBackendToNeutrino = async () => {
+    await changeLndChainBackend("neutrino");
+  };
+
   return (
     <Container>
       <Content style={{ padding: 10 }}>
@@ -2781,6 +2792,31 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>Lookup invoice</Text>
             </Body>
           </ListItem>
+          {lndChainBackend === "neutrino" && (
+            <ListItem
+              style={style.listItem}
+              icon={true}
+              onPress={onPressChangeBackendToBitcoindWithZmq}
+            >
+              <Left>
+                <Icon style={style.icon} type="AntDesign" name="file1" />
+              </Left>
+              <Body>
+                <Text>Change bitcoin backend to bitcoindWithZmq</Text>
+              </Body>
+            </ListItem>
+          )}
+          {lndChainBackend !== "neutrino" && (
+            <ListItem style={style.listItem} icon={true} onPress={onPressChangeBackendToNeutrino}>
+              <Left>
+                <Icon style={style.icon} type="AntDesign" name="file1" />
+              </Left>
+              <Body>
+                <Text>Change bitcoin backend to neutrino</Text>
+              </Body>
+            </ListItem>
+          )}
+
           <ListItem
             style={style.listItem}
             icon={true}
