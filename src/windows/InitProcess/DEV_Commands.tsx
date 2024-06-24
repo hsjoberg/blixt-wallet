@@ -63,7 +63,6 @@ import { ICLOUD_BACKUP_KEY } from "../../state/ICloudBackup";
 import { ILightningServices } from "../../utils/lightning-services";
 import { LndMobileEventEmitter } from "../../utils/event-listener";
 import Long from "long";
-import PushNotification from "react-native-push-notification";
 import { RootStackParamList } from "../../Main";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { abandonChannel } from "../../lndmobile/channel";
@@ -582,26 +581,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }}
           >
             <Text style={styles.buttonText}>Setup demo environment</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              PushNotification.clearLocalNotification("TEST123", 21312);
-              // PushNotification.localNotification({
-              //   channelId: ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID,
-              //   message: "Persistent 123",
-              //   playSound: true,
-              //   vibrate: false,
-              //   priority: "high",
-              //   importance: "high",
-              //   autoCancel: true,
-              //   ongoing: true,
-              //   id: 21312,
-              //   tag:"TEST123"
-              // })
-            }}
-          >
-            <Text style={styles.buttonText}>persistent</Text>
           </Button>
           <Button
             small
