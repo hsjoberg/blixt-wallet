@@ -61,11 +61,6 @@ module.exports = [
   ),
 
   new webpack.NormalModuleReplacementPlugin(
-    /node_modules\/react-native-push-notification/,
-    path.join(__dirname, "../web-hacks/react-native-push-notification.js")
-  ),
-
-  new webpack.NormalModuleReplacementPlugin(
     /node_modules\/react-native-sqlite-storage/,
     path.join(__dirname, "../web-hacks/react-native-sqlite-storage.js")
   ),

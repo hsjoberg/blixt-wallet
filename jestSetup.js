@@ -4,9 +4,7 @@ jest.mock("@react-native-async-storage/async-storage", () =>
 );
 jest.mock("react-native-sqlite-storage", () => require("./mocks/react-native-sqlite-storage"));
 jest.mock("react-native-build-config", () => require("./mocks/react-native-build-config"));
-jest.mock("react-native-push-notification", () =>
-  require("./mocks/react-native-push-notification"),
-);
+jest.mock("@notifee/react-native", () => require("@notifee/react-native/jest-mock"));
 jest.mock("react-native-keychain", () => require("./mocks/react-native-keychain"));
 jest.mock("react-native-securerandom", () => require("./mocks/react-native-securerandom"));
 jest.mock("react-native-fingerprint-scanner", () =>
