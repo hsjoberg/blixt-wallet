@@ -968,9 +968,9 @@ PODS:
     - React
   - react-native-maps (1.15.6):
     - React-Core
-  - react-native-netinfo (11.3.1):
+  - react-native-netinfo (11.3.2):
     - React-Core
-  - react-native-safe-area-context (4.10.4):
+  - react-native-safe-area-context (4.10.5):
     - React-Core
   - react-native-slider (4.5.2):
     - DoubleConversion
@@ -997,7 +997,7 @@ PODS:
     - React-Core
   - react-native-tor (0.1.8):
     - React
-  - react-native-webview (13.10.3):
+  - react-native-webview (13.10.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1261,7 +1261,7 @@ PODS:
     - React-Core
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.16.2):
+  - RNGestureHandler (2.17.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1291,7 +1291,7 @@ PODS:
     - RNNotifee/NotifeeCore (= 7.8.2)
   - RNNotifee/NotifeeCore (7.8.2):
     - React-Core
-  - RNPermissions (3.10.1):
+  - RNPermissions (4.1.5):
     - React-Core
   - RNReactNativeHapticFeedback (2.2.0):
     - React-Core
@@ -1316,7 +1316,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.31.1):
+  - RNScreens (3.32.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1654,12 +1654,12 @@ SPEC CHECKSUMS:
   react-native-geolocation: fe0562c94eb0b6334f266aea717448dfd9b08cd0
   react-native-hash: 4664516df1834e1293b30e711c63f61f7f801b6a
   react-native-maps: 7b2c2cee95271592a92ba485eea1dec66a363a6e
-  react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
-  react-native-safe-area-context: 399a5859f6acbdf67f671c69b53113f535f3b5b0
+  react-native-netinfo: 076df4f9b07f6670acf4ce9a75aac8d34c2e2ccc
+  react-native-safe-area-context: a240ad4b683349e48b1d51fed1611138d1bdad97
   react-native-slider: ce295d2bf830a7990af05b0bd70ab28c133e230c
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-tor: 3b14e9160b2eb7fa3f310921b2dee71a5171e5b7
-  react-native-webview: 66c0e45a5aa931d7deada77e69042020a86f1aaa
+  react-native-webview: 596fb33d67a3cde5a74bf1f6b4c28d3543477fdd
   React-nativeconfig: 9f223cd321823afdecf59ed00861ab2d69ee0fc1
   React-NativeModulesApple: ff7efaff7098639db5631236cfd91d60abff04c0
   React-perflogger: 32ed45d9cee02cf6639acae34251590dccd30994
@@ -1690,14 +1690,14 @@ SPEC CHECKSUMS:
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNFlashList: b521ebdd7f9352673817f1d98e8bdc0c8cf8545b
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: 2282cfbcf86c360d29f44ace393203afd5c6cff7
+  RNGestureHandler: 8dbcccada4a7e702e7dec9338c251b1cf393c960
   RNICloudStore: 7ac4f2630e2a7e90a4b059b92e8483828bbacd2b
   RNKeychain: bfe3d12bf4620fe488771c414530bf16e88f3678
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
-  RNPermissions: bfc61982fffcce1a249d4ce8714d5274ce6a9629
+  RNPermissions: 827285b9d86f40c7dac5d86e19bbb8558cd8678b
   RNReactNativeHapticFeedback: ec56a5f81c3941206fd85625fa669ffc7b4545f9
   RNReanimated: 7ad0f08a845cb60955ee5d461d2156d7b9707118
-  RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
+  RNScreens: 5aeecbb09aa7285379b6e9f3c8a3c859bb16401c
   RNSecureRandom: 7b1df97e96cde33fccc6b64ed4072592fc06627c
   RNSVG: a48668fd382115bc89761ce291a81c4ca5f2fd2e
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
