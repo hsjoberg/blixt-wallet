@@ -122,8 +122,6 @@ export default function Main() {
   }, [appReady]);
 
   useEffect(() => {
-    console.log("useEffect", lightningReady, walletCreated, state);
-
     if (!appReady) {
       return;
     }
