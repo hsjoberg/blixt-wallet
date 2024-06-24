@@ -199,20 +199,19 @@ export default function Restore({ navigation }: IProps) {
 
   const pickChannelDbFile = async () => {
     try {
-      if (PLATFORM !== "macos") {
-        const res = await DocumentPicker.pickSingle({
-          type: [DocumentPicker.types.allFiles],
-          copyTo: "documentDirectory",
-        });
-        console.log(res);
-        setChannelDbFile(res);
-        setBackupType("channeldb");
-      } else {
-        // const b = await NativeModules.LndMobileTools.macosOpenFileDialog();
-        // console.log(b);
-        // setMacosBakBase64(b);
-        // setBackupType("macos");
+      if (PLATFORM !== "android") {
+        toast("channel.db is not supported on this platform", undefined, "danger");
+        return;
       }
+
+      setLoading(true);
+      const res = await DocumentPicker.pickSingle({
+        type: [DocumentPicker.types.allFiles],
+        copyTo: "documentDirectory",
+      });
+      setChannelDbFile(res);
+      setBackupType("channeldb");
+      setLoading(false);
     } catch (e) {
       console.log(e);
       toast(e.message, undefined, "danger", "Okay");
