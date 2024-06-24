@@ -284,6 +284,7 @@ export default function Restore({ navigation }: IProps) {
                     style={{ marginTop: 6, marginBottom: 10 }}
                     small
                     onPress={pickChannelsExportFile}
+                    onLongPress={pickChannelDbFile}
                   >
                     <Text>{backupFile === null && t("restore.channel.file")}</Text>
                   </Button>
@@ -297,13 +298,13 @@ export default function Restore({ navigation }: IProps) {
                       <Text>{t("restore.channel.iCloud.title")}</Text>
                     </Button>
                   )}
-                  <Button
+                  {/* <Button
                     small
                     style={{ marginTop: 6, marginBottom: 10 }}
                     onPress={pickChannelDbFile}
                   >
                     <Text>{t("restore.channel.importChannelDb.title")}</Text>
-                  </Button>
+                  </Button> */}
                 </View>
               )}
               {(backupType === "file" || backupType === "macos") && (

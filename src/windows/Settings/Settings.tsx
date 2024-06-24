@@ -2926,7 +2926,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>Stop lnd</Text>
             </Body>
           </ListItem>
-          {PLATFORM === "android" && (
+          {PLATFORM === "android" && name === "Hampus" && (
             <ListItem
               style={style.listItem}
               icon={true}
