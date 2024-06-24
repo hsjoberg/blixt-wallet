@@ -807,7 +807,8 @@ class LndMobileTools extends ReactContextBaseJavaModule {
       out.flush();
       out.close();
 
-//      sourceFile.delete(); // Delete the cached file
+      // Delete the cached file
+      sourceFile.delete();
 
       promise.resolve(true);
     } catch (IOException error) {
