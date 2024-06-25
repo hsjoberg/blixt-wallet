@@ -209,7 +209,7 @@ export default function Restore({ navigation }: IProps) {
   const pickChannelDbFile = async () => {
     try {
       if (PLATFORM !== "android") {
-        toast("channel.db is not supported on this platform", undefined, "danger");
+        toast("channel.db import is not supported on this platform", undefined, "danger");
         return;
       }
 
