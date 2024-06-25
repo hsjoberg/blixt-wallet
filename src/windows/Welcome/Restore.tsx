@@ -122,6 +122,15 @@ export default function Restore({ navigation }: IProps) {
         Alert.alert(
           "Success",
           "Blixt Wallet needs to be restarted in order to continue with the restore procedure. Close Blixt Wallet now and start it up again.",
+          [
+            {
+              style: "default",
+              text: t("buttons.ok", { ns: namespaces.common }),
+              onPress: async () => {
+                NativeModules.LndMobileTools.restartApp();
+              },
+            },
+          ],
         );
         return;
       }
