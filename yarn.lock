@@ -5480,6 +5480,10 @@ bl@^4.1.0:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
+"blixt-qr-scanner@github:niteshbalusu11/blixt-qr-scanner#7358709c011efd65355a53220221685fda75ce68":
+  version "0.1.0"
+  resolved "https://codeload.github.com/niteshbalusu11/blixt-qr-scanner/tar.gz/7358709c011efd65355a53220221685fda75ce68"
+
 bluebird@^3.1.1, bluebird@^3.7.2:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"

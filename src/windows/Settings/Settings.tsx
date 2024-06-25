@@ -42,9 +42,13 @@ import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
 import { routerrpc } from "../../../proto/lightning";
+<<<<<<< HEAD
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { brickInstance, setBrickDeviceAndExportChannelDb } from "../../storage/app";
 import { restoreChannelBackups } from "../../lndmobile/wallet";
+=======
+import BlixtQrScanner from "../../state/BlixtQrScanner";
+>>>>>>> 0c870f08 (initial use of the new qr scanner)
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -1633,6 +1637,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         <BlixtWallet />
 
         <List style={style.list}>
+          <BlixtQrScanner />
           <ListItem style={style.itemHeader} itemHeader={true} first={true}>
             <Text>{t("general.title")}</Text>
           </ListItem>
