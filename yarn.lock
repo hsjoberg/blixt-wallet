@@ -7612,8 +7612,6 @@ expo-asset@~8.3.3:
     path-browserify "^1.0.0"
     url-parse "^1.4.4"
 
-<<<<<<< HEAD
-=======
 expo-barcode-scanner@12.9.3:
   version "12.9.3"
   resolved "https://registry.yarnpkg.com/expo-barcode-scanner/-/expo-barcode-scanner-12.9.3.tgz#b6be7975c7a347d5906255b2117eb8ea35dde275"
@@ -7621,7 +7619,6 @@ expo-barcode-scanner@12.9.3:
   dependencies:
     expo-image-loader "~4.6.0"
 
->>>>>>> 0cc4d49c (remove expo camera)
 expo-constants@~11.0.2:
   version "11.0.2"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-11.0.2.tgz#069930145908fef7d76bf72a1a874a1d4621af82"
@@ -7645,6 +7642,11 @@ expo-image-loader@~2.2.0:
   resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-2.2.0.tgz#b5d49ec65e576c033823050b223ef462c5ec5711"
   integrity sha512-kTs/lW8LUXYFQ5t8wkdJs0A41zd7dIB8uRRC0a9L0EurSGUvQWiVTbHQoLo/GYWL7nM85OaPAe2qkHfcz5KeyA==
 
+expo-image-loader@~4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-4.6.0.tgz#ca7d4fdf53125bff2091d3a2c34a3155f10df147"
+  integrity sha512-RHQTDak7/KyhWUxikn2yNzXL7i2cs16cMp6gEAgkHOjVhoCJQoOJ0Ljrt4cKQ3IowxgCuOrAgSUzGkqs7omj8Q==
+
 expo-modules-autolinking@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-0.0.3.tgz#45ba8cb1798f9339347ae35e96e9cc70eafb3727"
@@ -7655,6 +7657,13 @@ expo-modules-autolinking@^0.0.3:
     fast-glob "^3.2.5"
     find-up "~5.0.0"
     fs-extra "^9.1.0"
+
+expo-modules-core@1.12.14:
+  version "1.12.14"
+  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-1.12.14.tgz#605b8e8a50c5ca4bc8f2f948a16eb1b417cbb67a"
+  integrity sha512-LCaq/t+FL0QRlIfcFHzhb+e9H6A+VIL3elgI6lKfiQBkLbDHbc9kzvV91k0yQbQASMJKpskSVjFakcDEMPEI8A==
+  dependencies:
+    invariant "^2.2.4"
 
 expo-modules-core@~0.2.0:
   version "0.2.0"

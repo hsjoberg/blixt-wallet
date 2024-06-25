@@ -70,7 +70,6 @@
     "@react-native-community/netinfo": "11.3.2",
     "@react-native-community/push-notification-ios": "^1.11.0",
     "@react-native-community/slider": "4.5.2",
-    "@react-native-google-signin/google-signin": "^10.1.1",
     "@react-native/babel-preset": "0.74.84",
     "@react-native/gradle-plugin": "0.74.84",
     "@react-navigation/bottom-tabs": "6.5.20",
