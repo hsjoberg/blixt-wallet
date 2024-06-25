@@ -20,9 +20,7 @@ export default function FooterNav() {
       <FooterTab>
         <Button
           testID="FOOTER_SEND"
-          onPress={() =>
-            navigation.navigate("Send", { screen: "SendCameraKit", params: { viaSwipe: false } })
-          }
+          onPress={() => navigation.navigate("Send", { params: { viaSwipe: false } })}
           onLongPress={() => {
             navigation.navigate("Send", { screen: "SendCameraKit", params: { viaSwipe: false } });
           }}
