@@ -509,7 +509,7 @@
   },
   "LNURL.withdrawRequest": {
     "doRequest": {
-      "sentRequest": "درخواست برداشت به {{domain}} ارسال شد",
+      "sentRequest": "درخواست برداشت به {{domain}} فرستاده شد",
       "addToContactList": {
         "title": "افزودن به فهرست مخاطبان",
         "msg": "آیا می‌خواهید این کد برداشت به  {{domain}} به لیست مخاطبان شما افزوده شود؟",
@@ -1090,7 +1090,7 @@
     "address": "نشانی گره",
     "data": {
       "title": "داده",
-      "bytesSent": "بایت ارسال شده",
+      "bytesSent": "بایت فرستاده شده",
       "bytesRecv": "بایت‌ دریافت‌شده"
     },
     "transfer": {
