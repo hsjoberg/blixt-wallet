@@ -1079,7 +1079,7 @@
     "confirm": "کد پین را تایید کنید"
   },
   "settings.removePincodeAuth": {
-    "title": "برای حذف کد پین، کد پین فعلی را وارد کنید"
+    "title": "برای حذف کد پین، کد پین کنونی را وارد کنید"
   },
   "settings.lightningPeers": {
     "layout": {
