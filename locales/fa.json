@@ -162,7 +162,7 @@
     "goBack": "برگرد",
     "button": {
       "setNote": "افزودن یادداشت",
-      "cancelInvoice": "این رسید را دور انداز",
+      "cancelInvoice": "دورانداختن رسید",
       "showMap": "نمایش نقشه"
     },
     "setNoteDialog": {
