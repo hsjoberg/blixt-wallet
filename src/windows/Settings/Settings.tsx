@@ -1730,10 +1730,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               <Text>{t("general.hideAmountsEnabled.title")}</Text>
             </Body>
             <Right>
-              <CheckBox
-                checked={hideAmountsEnabled}
-                onPress={onToggleTransactionGeolocationEnabled}
-              />
+              <CheckBox checked={hideAmountsEnabled} onPress={onToggleHideAmountsEnabled} />
             </Right>
           </ListItem>
 
