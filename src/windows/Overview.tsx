@@ -25,8 +25,8 @@ import { RootStackParamList } from "../Main";
 import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
-import { timeout, toast } from "../utils/index";
-import { formatBitcoin, convertBitcoinToFiat, getUnitNice } from "../utils/bitcoin-units";
+import { bytesToHexString, timeout, toast } from "../utils/index";
+import { formatBitcoin, convertBitcoinToFiat } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
 import Drawer from "../components/Drawer";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
@@ -41,6 +41,7 @@ import BlixtHeader from "../components/BlixtHeader";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
+import { ITransaction } from "../storage/database/transaction";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -207,7 +208,7 @@ function Overview({ navigation }: IOverviewProps) {
           onScroll={transactionListOnScroll}
           testID="TX_LIST"
           data={txs}
-          renderItem={({ item: transaction }) => (
+          renderItem={({ item: transaction }: { item: ITransaction }) => (
             <TransactionCard
               transaction={transaction}
               unit={bitcoinUnit}
@@ -215,7 +216,9 @@ function Overview({ navigation }: IOverviewProps) {
             />
           )}
           estimatedItemSize={86}
-          keyExtractor={(transaction) => transaction.id!?.toString() ?? transaction.date}
+          keyExtractor={(transaction: ITransaction) =>
+            bytesToHexString(transaction.preimage) || transaction.id!?.toString()
+          }
           ListEmptyComponent={
             <Text style={{ textAlign: "center", margin: 16 }}>{t("noTransactionsYet")}</Text>
           }
