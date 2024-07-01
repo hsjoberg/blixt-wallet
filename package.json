@@ -106,7 +106,7 @@
     "react-dom": "^18.2.0",
     "react-google-maps": "^9.4.5",
     "react-i18next": "14.1.2",
-    "react-native": "0.74.2",
+    "react-native": "0.74.3",
     "react-native-animatable": "^1.4.0",
     "react-native-build-config": "github:hsjoberg/react-native-build-config#d53d9a486331dd8b06764a6bbc61e74eb253f475",
     "react-native-camera-kit": "^13.0.0",
