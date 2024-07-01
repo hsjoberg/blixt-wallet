@@ -11,7 +11,7 @@ import DialogAndroid from "react-native-dialogs";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
 import { fromUnixTime } from "date-fns";
-import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
+import MapView, { PROVIDER_DEFAULT, Marker } from "react-native-maps";
 import type Long from "long";
 
 import Blurmodal from "../components/BlurModal";
@@ -406,7 +406,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
                 }}
                 customMapStyle={MapStyle[transactionGeolocationMapStyle]}
               >
-                <MapView.Marker
+                <Marker
                   coordinate={{
                     longitude: transaction.locationLong!,
                     latitude: transaction.locationLat!,

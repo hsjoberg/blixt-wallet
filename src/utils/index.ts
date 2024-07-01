@@ -108,7 +108,7 @@ export const toast = (
 
 export const getGeolocation = (): Promise<GeolocationResponse["coords"]> => {
   return new Promise((resolve, reject) => {
-    Geolocation.getCurrentPosition(
+    Geolocation.default.getCurrentPosition(
       (position) => {
         resolve(position.coords);
       },
