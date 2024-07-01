@@ -223,6 +223,7 @@ export default function Restore({ navigation }: IProps) {
       setLoading(false);
     } catch (e) {
       console.log(e);
+      setLoading(false);
       toast(e.message, undefined, "danger", "Okay");
     }
   };
