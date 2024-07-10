@@ -91,7 +91,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
       return "No description";
     }
 
-    if (description.length > 50) {
+    if (description.length > 100) {
       return `${description.substring(0, 100)}...`;
     }
 
