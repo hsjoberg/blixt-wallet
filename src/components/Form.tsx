@@ -5,6 +5,7 @@ import {
   StyleProp,
   ViewStyle,
   InputAccessoryView,
+  ScrollView,
 } from "react-native";
 import { View, Item, Text, Label, Icon } from "native-base";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
@@ -44,37 +45,39 @@ export default function Form({
       behavior={"padding"}
       keyboardVerticalOffset={77}
     >
-      <View style={styles.itemContainer}>
-        {items.map(({ key, title, component, success, active }, i) =>
-          active ?? true ? (
-            <Item
-              key={key}
-              style={{
-                marginTop: i > 0 ? 16 : 8,
-              }}
-              success={success}
-            >
-              <Label
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.itemContainer}>
+          {items.map(({ key, title, component, success, active }, i) =>
+            active ?? true ? (
+              <Item
+                key={key}
                 style={{
-                  ...styles.itemLabel,
-                  fontSize: (title !== null && title.length) >= 14 ? 15 : 17,
+                  marginTop: i > 0 ? 16 : 8,
                 }}
+                success={success}
               >
-                {title}
-              </Label>
-              {component}
-            </Item>
-          ) : null,
-        )}
-        {noticeText && (
-          <View style={styles.notice}>
-            {noticeIcon == "info" && (
-              <Icon style={styles.noticeIcon} type="AntDesign" name="exclamationcircleo" />
-            )}
-            <Text style={styles.noticeText}>{noticeText}</Text>
-          </View>
-        )}
-      </View>
+                <Label
+                  style={{
+                    ...styles.itemLabel,
+                    fontSize: (title !== null && title.length) >= 14 ? 15 : 17,
+                  }}
+                >
+                  {title}
+                </Label>
+                {component}
+              </Item>
+            ) : null,
+          )}
+          {noticeText && (
+            <View style={styles.notice}>
+              {noticeIcon == "info" && (
+                <Icon style={styles.noticeIcon} type="AntDesign" name="exclamationcircleo" />
+              )}
+              <Text style={styles.noticeText}>{noticeText}</Text>
+            </View>
+          )}
+        </View>
+      </ScrollView>
       <View style={styles.buttonContainer}>
         <>
           {buttons.map((button, i) => {
@@ -103,6 +106,9 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "space-between",
   },
+  scrollContent: {
+    flexGrow: 1,
+  },
   itemContainer: {
     padding: 16,
   },
@@ -110,9 +116,6 @@ const styles = StyleSheet.create({
     width: 105,
   },
   buttonContainer: {
-    // position: "absolute",
-    // width: "100%",
-    // bottom: 0,
     marginHorizontal: 2,
     marginBottom: 10,
   },
