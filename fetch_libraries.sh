@@ -1,8 +1,8 @@
-VERSION=v0.18.0-beta-blixt
+VERSION=v0.18.2-beta-blixt
 
 ANDROID_FILE=Lndmobile.aar
 
-ANDROID_SHA256='c0f8e77da00795a370ef2a1c5ba9d413707c52226c33c2ef1e272007c2f30149'
+ANDROID_SHA256='fd392400f80f1e91beac0dd926350119df50f30324c01e134a7afff1deadaee0'
 
 FILE_PATH=https://github.com/hsjoberg/lnd/releases/download/$VERSION/
 
