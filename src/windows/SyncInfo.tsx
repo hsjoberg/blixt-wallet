@@ -90,7 +90,12 @@ export default function SyncInfo({}: ISyncInfoProps) {
 
   const currentProgress = (nodeInfo?.blockHeight ?? 0) - (initialKnownBlockheight ?? 0);
   const numBlocksUntilSynced = (bestBlockheight ?? 0) - (initialKnownBlockheight ?? 0);
-  let progress = currentProgress / numBlocksUntilSynced;
+
+  let progress = 1;
+  if (numBlocksUntilSynced > 0) {
+    progress = currentProgress / numBlocksUntilSynced;
+  }
+
   if (Number.isNaN(progress)) {
     progress = 1;
   }
