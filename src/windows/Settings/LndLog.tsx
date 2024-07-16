@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { EmitterSubscription, NativeModules } from "react-native";
+import { NativeModules } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Icon } from "native-base";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -7,7 +7,6 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { SettingsStackParamList } from "./index";
 import Container from "../../components/Container";
 import { NavigationButton } from "../../components/NavigationButton";
-import { LndMobileToolsEventEmitter } from "../../utils/event-listener";
 import { toast } from "../../utils";
 import LogBox from "../../components/LogBox";
 import useForceUpdate from "../../hooks/useForceUpdate";
