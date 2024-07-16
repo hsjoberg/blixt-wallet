@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { EmitterSubscription, NativeModules } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Icon } from "native-base";
@@ -20,31 +20,24 @@ export interface ILndLogProps {
 }
 export default function LndLog({ navigation }: ILndLogProps) {
   const t = useTranslation(namespaces.settings.lndLog).t;
+  const [logs, setLogs] = useState("");
 
   let log = useRef("");
   const forceUpdate = useForceUpdate();
 
-  useEffect(() => {
-    let listener: EmitterSubscription;
-    (async () => {
+  const fetchLogs = async () => {
+    try {
       const tailLog = await NativeModules.LndMobileTools.tailLog(100);
-      log.current = tailLog
-        .split("\n")
-        .map((row) => row.slice(11))
-        .join("\n");
+      setLogs(tailLog);
+    } catch (error) {
+      console.error("Error fetching logs:", error);
+    }
+  };
 
-      listener = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
-        log.current = log.current + "\n" + data.slice(11);
-        forceUpdate();
-      });
-
-      NativeModules.LndMobileTools.observeLndLogFile();
-      forceUpdate();
-    })();
-
-    return () => {
-      listener.remove();
-    };
+  useEffect(() => {
+    fetchLogs();
+    const logUpdateTimer = setInterval(fetchLogs, 1000);
+    return () => clearInterval(logUpdateTimer);
   }, []);
 
   useLayoutEffect(() => {
@@ -53,7 +46,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
       headerShown: true,
       headerRight: () => {
         return (
-          <NavigationButton onPress={() => onPressCopy(log.current)}>
+          <NavigationButton onPress={() => onPressCopy(logs)}>
             <Icon type="MaterialCommunityIcons" name="content-copy" style={{ fontSize: 22 }} />
           </NavigationButton>
         );
@@ -68,7 +61,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
 
   return (
     <Container>
-      <LogBox text={log.current} scrollLock={true} />
+      <LogBox text={logs} scrollLock={true} />
     </Container>
   );
 }
