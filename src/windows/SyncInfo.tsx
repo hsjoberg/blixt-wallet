@@ -10,8 +10,6 @@ import TextLink from "../components/TextLink";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { toast } from "../utils";
 import { PLATFORM } from "../utils/constants";
-import useForceUpdate from "../hooks/useForceUpdate";
-import { LndMobileToolsEventEmitter } from "../utils/event-listener";
 import LogBox from "../components/LogBox";
 
 import { useTranslation } from "react-i18next";
