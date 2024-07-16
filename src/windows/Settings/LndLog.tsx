@@ -9,7 +9,6 @@ import Container from "../../components/Container";
 import { NavigationButton } from "../../components/NavigationButton";
 import { toast } from "../../utils";
 import LogBox from "../../components/LogBox";
-import useForceUpdate from "../../hooks/useForceUpdate";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -20,9 +19,6 @@ export interface ILndLogProps {
 export default function LndLog({ navigation }: ILndLogProps) {
   const t = useTranslation(namespaces.settings.lndLog).t;
   const [logs, setLogs] = useState("");
-
-  let log = useRef("");
-  const forceUpdate = useForceUpdate();
 
   const fetchLogs = async () => {
     try {
