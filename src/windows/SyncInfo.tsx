@@ -49,15 +49,6 @@ export default function SyncInfo({}: ISyncInfoProps) {
   let bestBlockheight = useStoreState((store) => store.lightning.bestBlockheight);
   const [showLndLog, setShowLndLog] = useState(false);
   const [logs, setLogs] = useState("");
-  const listener = useRef<EmitterSubscription>();
-
-  useEffect(() => {
-    return () => {
-      if (listener.current) {
-        listener.current?.remove();
-      }
-    };
-  }, []);
 
   const fetchLogs = async () => {
     try {
