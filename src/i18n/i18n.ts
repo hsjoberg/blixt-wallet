@@ -18,6 +18,7 @@ import fr from "./fr";
 import ko from "./ko";
 import nl from "./nl";
 import no from "./no";
+import pl from "./pl";
 import tlh from "./tlh";
 import ro from "./ro";
 import sv from "./sv";
@@ -53,6 +54,7 @@ const createI18n = (language: string): i18nInstance => {
       ko,
       nl,
       no,
+      pl,
       tlh,
       ro,
       sv,
