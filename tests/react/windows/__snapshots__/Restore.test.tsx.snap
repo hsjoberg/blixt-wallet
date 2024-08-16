@@ -78,12 +78,12 @@ exports[`renders correctly 1`] = `
                     "backgroundColor": "rgb(255, 255, 255)",
                     "borderBottomColor": "rgb(216, 216, 216)",
                     "flex": 1,
-                    "shadowColor": "rgb(216, 216, 216)",
+                    "shadowColor": "rgba(0, 0, 0, 1)",
                     "shadowOffset": {
                       "height": 0.5,
                       "width": 0,
                     },
-                    "shadowOpacity": 0.85,
+                    "shadowOpacity": 0.3,
                     "shadowRadius": 0,
                   }
                 }
@@ -100,11 +100,16 @@ exports[`renders correctly 1`] = `
             <View
               pointerEvents="box-none"
               style={
-                {
-                  "alignItems": "stretch",
-                  "flex": 1,
-                  "flexDirection": "row",
-                }
+                [
+                  {
+                    "alignItems": "stretch",
+                    "flex": 1,
+                    "flexDirection": "row",
+                  },
+                  {
+                    "marginHorizontal": 5,
+                  },
+                ]
               }
             >
               <View
@@ -112,10 +117,11 @@ exports[`renders correctly 1`] = `
                 pointerEvents="box-none"
                 style={
                   {
-                    "alignItems": "flex-start",
+                    "alignItems": "center",
                     "flexBasis": 0,
+                    "flexDirection": "row",
                     "flexGrow": 1,
-                    "justifyContent": "center",
+                    "justifyContent": "flex-start",
                     "marginStart": 0,
                     "opacity": 1,
                   }
@@ -156,10 +162,11 @@ exports[`renders correctly 1`] = `
                 pointerEvents="box-none"
                 style={
                   {
-                    "alignItems": "flex-end",
+                    "alignItems": "center",
                     "flexBasis": 0,
+                    "flexDirection": "row",
                     "flexGrow": 1,
-                    "justifyContent": "center",
+                    "justifyContent": "flex-end",
                     "marginEnd": 0,
                     "opacity": 1,
                   }
@@ -286,7 +293,6 @@ exports[`renders correctly 1`] = `
                     style={
                       {
                         "flex": 1,
-                        "flexDirection": "column-reverse",
                       }
                     }
                   >
@@ -396,8 +402,9 @@ exports[`renders correctly 1`] = `
                                   style={
                                     [
                                       {
-                                        "color": "#000",
+                                        "color": "#e5eaea",
                                         "flex": 1,
+                                        "fontFamily": "IBMPlexSans",
                                         "fontSize": 17,
                                         "height": 50,
                                         "paddingLeft": 5,
@@ -431,9 +438,10 @@ exports[`renders correctly 1`] = `
                                 <Text
                                   style={
                                     {
-                                      "color": "#000",
-                                      "fontSize": 21,
-                                      "lineHeight": 25,
+                                      "color": "#e5eaea",
+                                      "fontFamily": "IBMPlexSans",
+                                      "fontSize": 19.599999999999998,
+                                      "lineHeight": 22,
                                     }
                                   }
                                 >
@@ -481,24 +489,22 @@ exports[`renders correctly 1`] = `
                                     style={
                                       {
                                         "alignItems": "center",
-                                        "alignSelf": "flex-start",
-                                        "backgroundColor": "#007aff",
+                                        "backgroundColor": "#bc6610",
                                         "borderBottomWidth": null,
-                                        "borderColor": "#007aff",
+                                        "borderColor": "#bc6610",
                                         "borderLeftWidth": null,
                                         "borderRadius": 5,
                                         "borderRightWidth": null,
                                         "borderTopWidth": null,
                                         "borderWidth": undefined,
-                                        "elevation": 2,
                                         "flexDirection": "row",
-                                        "height": 30,
+                                        "height": 26,
                                         "justifyContent": "space-between",
                                         "marginBottom": 10,
                                         "marginTop": 6,
                                         "opacity": 1,
-                                        "paddingBottom": 6,
-                                        "paddingTop": 6,
+                                        "paddingBottom": 0,
+                                        "paddingTop": 0,
                                         "shadowColor": undefined,
                                         "shadowOffset": undefined,
                                         "shadowOpacity": undefined,
@@ -510,13 +516,14 @@ exports[`renders correctly 1`] = `
                                       style={
                                         {
                                           "backgroundColor": "transparent",
-                                          "color": "#fff",
-                                          "fontFamily": "System",
-                                          "fontSize": 14,
+                                          "color": "#e5eaea",
+                                          "fontFamily": "IBMPlexSans-Medium",
+                                          "fontSize": 10,
                                           "marginLeft": 0,
                                           "marginRight": 0,
                                           "paddingLeft": 16,
                                           "paddingRight": 16,
+                                          "textTransform": "uppercase",
                                         }
                                       }
                                       uppercase={false}
@@ -555,22 +562,20 @@ exports[`renders correctly 1`] = `
                                     style={
                                       {
                                         "alignItems": "center",
-                                        "alignSelf": "flex-start",
-                                        "backgroundColor": "#007aff",
+                                        "backgroundColor": "#bc6610",
                                         "borderBottomWidth": null,
-                                        "borderColor": "#007aff",
+                                        "borderColor": "#bc6610",
                                         "borderLeftWidth": null,
                                         "borderRadius": 5,
                                         "borderRightWidth": null,
                                         "borderTopWidth": null,
                                         "borderWidth": undefined,
-                                        "elevation": 2,
                                         "flexDirection": "row",
-                                        "height": 30,
+                                        "height": 26,
                                         "justifyContent": "space-between",
                                         "opacity": 1,
-                                        "paddingBottom": 6,
-                                        "paddingTop": 6,
+                                        "paddingBottom": 0,
+                                        "paddingTop": 0,
                                         "shadowColor": undefined,
                                         "shadowOffset": undefined,
                                         "shadowOpacity": undefined,
@@ -582,13 +587,14 @@ exports[`renders correctly 1`] = `
                                       style={
                                         {
                                           "backgroundColor": "transparent",
-                                          "color": "#fff",
-                                          "fontFamily": "System",
-                                          "fontSize": 14,
+                                          "color": "#e5eaea",
+                                          "fontFamily": "IBMPlexSans-Medium",
+                                          "fontSize": 10,
                                           "marginLeft": 0,
                                           "marginRight": 0,
                                           "paddingLeft": 16,
                                           "paddingRight": 16,
+                                          "textTransform": "uppercase",
                                         }
                                       }
                                       uppercase={false}
@@ -615,8 +621,9 @@ exports[`renders correctly 1`] = `
                                 style={
                                   [
                                     {
-                                      "color": "#000",
-                                      "fontSize": 27,
+                                      "color": "#e5eaea",
+                                      "fontFamily": "IBMPlexSans",
+                                      "fontSize": 25.2,
                                       "lineHeight": 32,
                                     },
                                     {
@@ -630,9 +637,9 @@ exports[`renders correctly 1`] = `
                               <Text
                                 style={
                                   {
-                                    "color": "#000",
-                                    "fontFamily": "System",
-                                    "fontSize": 16,
+                                    "color": "#e5eaea",
+                                    "fontFamily": "IBMPlexSans",
+                                    "fontSize": 15,
                                   }
                                 }
                                 uppercase={false}
@@ -693,21 +700,20 @@ exports[`renders correctly 1`] = `
                                 {
                                   "alignItems": "center",
                                   "alignSelf": "stretch",
-                                  "backgroundColor": "#007aff",
+                                  "backgroundColor": "#bc6610",
                                   "borderBottomWidth": null,
-                                  "borderColor": "#007aff",
+                                  "borderColor": "#bc6610",
                                   "borderLeftWidth": null,
                                   "borderRadius": 5,
                                   "borderRightWidth": null,
                                   "borderTopWidth": null,
                                   "borderWidth": undefined,
-                                  "elevation": 2,
                                   "flexDirection": "row",
                                   "height": 45,
                                   "justifyContent": "center",
                                   "opacity": 1,
-                                  "paddingBottom": 6,
-                                  "paddingTop": 6,
+                                  "paddingBottom": 0,
+                                  "paddingTop": 0,
                                   "shadowColor": undefined,
                                   "shadowOffset": undefined,
                                   "shadowOpacity": undefined,
@@ -719,13 +725,14 @@ exports[`renders correctly 1`] = `
                                 style={
                                   {
                                     "backgroundColor": "transparent",
-                                    "color": "#fff",
-                                    "fontFamily": "System",
-                                    "fontSize": 16.5,
+                                    "color": "#e5eaea",
+                                    "fontFamily": "IBMPlexSans-Medium",
+                                    "fontSize": 15.400000000000002,
                                     "marginLeft": 0,
                                     "marginRight": 0,
                                     "paddingLeft": 16,
                                     "paddingRight": 16,
+                                    "textTransform": "uppercase",
                                   }
                                 }
                                 uppercase={false}

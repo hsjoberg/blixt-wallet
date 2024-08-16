@@ -26,6 +26,7 @@ import androidx.work.ListenableWorker;
 import androidx.work.WorkerParameters;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.BridgeReactContext;
 import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier;
 import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
 import com.facebook.react.bridge.Arguments;
@@ -72,7 +73,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   public LndMobileScheduledSyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
     super(context, workerParams);
     dbSupplier = ReactDatabaseSupplier.getInstance(getApplicationContext());
-    blixtTor = new BlixtTor(new ReactApplicationContext(getApplicationContext()));
+    blixtTor = new BlixtTor(new BridgeReactContext(getApplicationContext()));
   }
 
   @Override
@@ -93,7 +94,7 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
         return null;
       }
 
-      KeychainModule keychain = new KeychainModule(new ReactApplicationContext(getApplicationContext()));
+      KeychainModule keychain = new KeychainModule(new BridgeReactContext(getApplicationContext()));
 
       WritableMap keychainOptions = Arguments.createMap();
       WritableMap keychainOptionsAuthenticationPrompt = Arguments.createMap();

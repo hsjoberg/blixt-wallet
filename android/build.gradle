@@ -13,7 +13,7 @@ buildscript {
 
         // reaniamted fix https://github.com/software-mansion/react-native-reanimated/issues/5625
         // ndkVersion = "23.1.7779620"
-        kotlinVersion = "1.9.22"
+        kotlinVersion = "1.9.24"
     }
     repositories {
         google()

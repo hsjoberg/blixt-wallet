@@ -28,6 +28,7 @@
       android:theme="@style/AppTheme"
       android:usesCleartextTraffic="true"
       tools:replace="android:label"
+      android:supportsRtl="true"
   >
       <!--activity
         android:name=".MainActivity"
