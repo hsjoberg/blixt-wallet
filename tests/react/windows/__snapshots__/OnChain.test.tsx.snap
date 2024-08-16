@@ -78,12 +78,12 @@ exports[`renders correctly 1`] = `
                     "backgroundColor": "rgb(255, 255, 255)",
                     "borderBottomColor": "rgb(216, 216, 216)",
                     "flex": 1,
-                    "shadowColor": "rgb(216, 216, 216)",
+                    "shadowColor": "rgba(0, 0, 0, 1)",
                     "shadowOffset": {
                       "height": 0.5,
                       "width": 0,
                     },
-                    "shadowOpacity": 0.85,
+                    "shadowOpacity": 0.3,
                     "shadowRadius": 0,
                   }
                 }
@@ -100,11 +100,16 @@ exports[`renders correctly 1`] = `
             <View
               pointerEvents="box-none"
               style={
-                {
-                  "alignItems": "stretch",
-                  "flex": 1,
-                  "flexDirection": "row",
-                }
+                [
+                  {
+                    "alignItems": "stretch",
+                    "flex": 1,
+                    "flexDirection": "row",
+                  },
+                  {
+                    "marginHorizontal": 5,
+                  },
+                ]
               }
             >
               <View
@@ -112,10 +117,11 @@ exports[`renders correctly 1`] = `
                 pointerEvents="box-none"
                 style={
                   {
-                    "alignItems": "flex-start",
+                    "alignItems": "center",
                     "flexBasis": 0,
+                    "flexDirection": "row",
                     "flexGrow": 1,
-                    "justifyContent": "center",
+                    "justifyContent": "flex-start",
                     "marginStart": 0,
                     "opacity": 1,
                   }
@@ -156,10 +162,11 @@ exports[`renders correctly 1`] = `
                 pointerEvents="box-none"
                 style={
                   {
-                    "alignItems": "flex-end",
+                    "alignItems": "center",
                     "flexBasis": 0,
+                    "flexDirection": "row",
                     "flexGrow": 1,
-                    "justifyContent": "center",
+                    "justifyContent": "flex-end",
                     "marginEnd": 0,
                     "opacity": 1,
                   }
@@ -286,7 +293,6 @@ exports[`renders correctly 1`] = `
                     style={
                       {
                         "flex": 1,
-                        "flexDirection": "column-reverse",
                       }
                     }
                   >
@@ -435,10 +441,373 @@ exports[`renders correctly 1`] = `
                                           style={
                                             {
                                               "flex": 1,
-                                              "flexDirection": "column-reverse",
                                             }
                                           }
                                         >
+                                          <View
+                                            collapsable={false}
+                                            pointerEvents="box-none"
+                                            style={
+                                              {
+                                                "zIndex": 1,
+                                              }
+                                            }
+                                          >
+                                            <View
+                                              accessibilityElementsHidden={false}
+                                              importantForAccessibility="auto"
+                                              onLayout={[Function]}
+                                              pointerEvents="box-none"
+                                              style={null}
+                                            >
+                                              <View
+                                                collapsable={false}
+                                                pointerEvents="box-none"
+                                                style={
+                                                  {
+                                                    "height": 44,
+                                                    "maxHeight": undefined,
+                                                    "minHeight": undefined,
+                                                    "opacity": undefined,
+                                                    "transform": undefined,
+                                                  }
+                                                }
+                                              >
+                                                <View
+                                                  collapsable={false}
+                                                  pointerEvents="box-none"
+                                                  style={
+                                                    {
+                                                      "bottom": 0,
+                                                      "left": 0,
+                                                      "position": "absolute",
+                                                      "right": 0,
+                                                      "top": 0,
+                                                    }
+                                                  }
+                                                >
+                                                  <View
+                                                    collapsable={false}
+                                                    style={
+                                                      {
+                                                        "backgroundColor": "#5F5F5F",
+                                                        "borderBottomColor": "transparent",
+                                                        "elevation": 0,
+                                                        "flex": 1,
+                                                        "shadowColor": "transparent",
+                                                        "shadowOffset": {
+                                                          "height": 0.5,
+                                                          "width": 0,
+                                                        },
+                                                        "shadowOpacity": 0.3,
+                                                        "shadowRadius": 0,
+                                                      }
+                                                    }
+                                                  />
+                                                </View>
+                                                <View
+                                                  pointerEvents="none"
+                                                  style={
+                                                    {
+                                                      "height": 0,
+                                                    }
+                                                  }
+                                                />
+                                                <View
+                                                  pointerEvents="box-none"
+                                                  style={
+                                                    [
+                                                      {
+                                                        "alignItems": "stretch",
+                                                        "flex": 1,
+                                                        "flexDirection": "row",
+                                                      },
+                                                      {
+                                                        "marginHorizontal": 5,
+                                                      },
+                                                    ]
+                                                  }
+                                                >
+                                                  <View
+                                                    collapsable={false}
+                                                    pointerEvents="box-none"
+                                                    style={
+                                                      {
+                                                        "alignItems": "center",
+                                                        "flexBasis": 0,
+                                                        "flexDirection": "row",
+                                                        "flexGrow": 1,
+                                                        "justifyContent": "flex-start",
+                                                        "marginStart": 0,
+                                                      }
+                                                    }
+                                                  >
+                                                    <View
+                                                      accessibilityLabel="Go back"
+                                                      accessibilityRole="button"
+                                                      accessibilityState={
+                                                        {
+                                                          "busy": undefined,
+                                                          "checked": undefined,
+                                                          "disabled": undefined,
+                                                          "expanded": undefined,
+                                                          "selected": undefined,
+                                                        }
+                                                      }
+                                                      accessibilityValue={
+                                                        {
+                                                          "max": undefined,
+                                                          "min": undefined,
+                                                          "now": undefined,
+                                                          "text": undefined,
+                                                        }
+                                                      }
+                                                      accessible={true}
+                                                      collapsable={false}
+                                                      focusable={true}
+                                                      onBlur={[Function]}
+                                                      onClick={[Function]}
+                                                      onFocus={[Function]}
+                                                      onResponderGrant={[Function]}
+                                                      onResponderMove={[Function]}
+                                                      onResponderRelease={[Function]}
+                                                      onResponderTerminate={[Function]}
+                                                      onResponderTerminationRequest={[Function]}
+                                                      onStartShouldSetResponder={[Function]}
+                                                      style={
+                                                        {
+                                                          "alignItems": "center",
+                                                          "borderRadius": 10,
+                                                          "cursor": "pointer",
+                                                          "flexDirection": "row",
+                                                          "minWidth": 0.5,
+                                                          "opacity": 1,
+                                                          "paddingHorizontal": 0,
+                                                        }
+                                                      }
+                                                      testID="header-back"
+                                                    >
+                                                      <Image
+                                                        fadeDuration={0}
+                                                        resizeMode="contain"
+                                                        source={
+                                                          {
+                                                            "process": [Function],
+                                                          }
+                                                        }
+                                                        style={
+                                                          [
+                                                            {
+                                                              "height": 21,
+                                                              "margin": 8,
+                                                              "width": 21,
+                                                            },
+                                                            false,
+                                                            {
+                                                              "tintColor": "rgb(28, 28, 30)",
+                                                            },
+                                                            [
+                                                              {
+                                                                "marginEnd": 22,
+                                                                "width": 13,
+                                                              },
+                                                              {
+                                                                "marginEnd": 6,
+                                                              },
+                                                              {
+                                                                "tintColor": "#e5eaea",
+                                                              },
+                                                            ],
+                                                          ]
+                                                        }
+                                                      />
+                                                      <View
+                                                        style={
+                                                          {
+                                                            "alignItems": "flex-start",
+                                                            "flexDirection": "row",
+                                                            "marginEnd": 8,
+                                                          }
+                                                        }
+                                                      >
+                                                        <Text
+                                                          collapsable={false}
+                                                          numberOfLines={1}
+                                                          onLayout={[Function]}
+                                                          style={
+                                                            {
+                                                              "fontFamily": "System",
+                                                              "fontSize": 17,
+                                                              "fontWeight": "400",
+                                                              "left": 0,
+                                                              "letterSpacing": 0.35,
+                                                              "opacity": 0,
+                                                              "position": "absolute",
+                                                              "top": 0,
+                                                            }
+                                                          }
+                                                        >
+                                                          Back
+                                                        </Text>
+                                                        <Text
+                                                          collapsable={false}
+                                                          numberOfLines={1}
+                                                          onLayout={[Function]}
+                                                          style={
+                                                            {
+                                                              "fontFamily": "System",
+                                                              "fontSize": 17,
+                                                              "fontWeight": "400",
+                                                              "left": 0,
+                                                              "letterSpacing": 0.35,
+                                                              "opacity": 0,
+                                                              "position": "absolute",
+                                                              "top": 0,
+                                                            }
+                                                          }
+                                                        >
+                                                          Back
+                                                        </Text>
+                                                        <Text
+                                                          accessible={false}
+                                                          allowFontScaling={false}
+                                                          collapsable={false}
+                                                          numberOfLines={1}
+                                                          onLayout={[Function]}
+                                                          style={
+                                                            {
+                                                              "color": "#e5eaea",
+                                                              "fontFamily": "System",
+                                                              "fontSize": 17,
+                                                              "fontWeight": "400",
+                                                              "letterSpacing": 0.35,
+                                                            }
+                                                          }
+                                                        >
+                                                          Back
+                                                        </Text>
+                                                      </View>
+                                                    </View>
+                                                  </View>
+                                                  <View
+                                                    collapsable={false}
+                                                    pointerEvents="box-none"
+                                                    style={
+                                                      {
+                                                        "justifyContent": "center",
+                                                        "marginHorizontal": 16,
+                                                        "maxWidth": 558,
+                                                      }
+                                                    }
+                                                  >
+                                                    <Text
+                                                      accessibilityRole="header"
+                                                      aria-level="1"
+                                                      collapsable={false}
+                                                      numberOfLines={1}
+                                                      onLayout={[Function]}
+                                                      style={
+                                                        {
+                                                          "color": "#e5eaea",
+                                                          "fontFamily": "System",
+                                                          "fontSize": 17,
+                                                          "fontWeight": "600",
+                                                        }
+                                                      }
+                                                    >
+                                                      Bitcoin
+                                                    </Text>
+                                                  </View>
+                                                  <View
+                                                    collapsable={false}
+                                                    pointerEvents="box-none"
+                                                    style={
+                                                      {
+                                                        "alignItems": "center",
+                                                        "flexBasis": 0,
+                                                        "flexDirection": "row",
+                                                        "flexGrow": 1,
+                                                        "justifyContent": "flex-end",
+                                                        "marginEnd": 0,
+                                                        "paddingRight": 20,
+                                                      }
+                                                    }
+                                                  >
+                                                    <View
+                                                      accessibilityState={
+                                                        {
+                                                          "busy": undefined,
+                                                          "checked": undefined,
+                                                          "disabled": undefined,
+                                                          "expanded": undefined,
+                                                          "selected": undefined,
+                                                        }
+                                                      }
+                                                      accessibilityValue={
+                                                        {
+                                                          "max": undefined,
+                                                          "min": undefined,
+                                                          "now": undefined,
+                                                          "text": undefined,
+                                                        }
+                                                      }
+                                                      accessible={true}
+                                                      focusable={true}
+                                                      hitSlop={
+                                                        {
+                                                          "bottom": 16,
+                                                          "left": 16,
+                                                          "right": 16,
+                                                          "top": 16,
+                                                        }
+                                                      }
+                                                      onClick={[Function]}
+                                                      onResponderGrant={[Function]}
+                                                      onResponderMove={[Function]}
+                                                      onResponderRelease={[Function]}
+                                                      onResponderTerminate={[Function]}
+                                                      onResponderTerminationRequest={[Function]}
+                                                      onStartShouldSetResponder={[Function]}
+                                                    >
+                                                      <Text
+                                                        allowFontScaling={false}
+                                                        style={
+                                                          [
+                                                            {
+                                                              "color": undefined,
+                                                              "fontSize": 12,
+                                                            },
+                                                            [
+                                                              {
+                                                                "color": "#e5eaea",
+                                                                "fontSize": 30,
+                                                              },
+                                                              {
+                                                                "color": "#e5eaea",
+                                                                "fontSize": 30,
+                                                              },
+                                                              {
+                                                                "fontSize": 22,
+                                                              },
+                                                            ],
+                                                            {
+                                                              "fontFamily": "anticon",
+                                                              "fontStyle": "normal",
+                                                              "fontWeight": "normal",
+                                                            },
+                                                            {},
+                                                          ]
+                                                        }
+                                                        type="AntDesign"
+                                                      >
+                                                        
+                                                      </Text>
+                                                    </View>
+                                                  </View>
+                                                </View>
+                                              </View>
+                                            </View>
+                                          </View>
                                           <View
                                             style={
                                               {
@@ -449,7 +818,7 @@ exports[`renders correctly 1`] = `
                                             <View
                                               style={
                                                 {
-                                                  "backgroundColor": "#fff",
+                                                  "backgroundColor": "#151314",
                                                   "flex": 1,
                                                   "height": 1334,
                                                 }
@@ -478,8 +847,9 @@ exports[`renders correctly 1`] = `
                                                     style={
                                                       [
                                                         {
-                                                          "color": "#000",
-                                                          "fontSize": 27,
+                                                          "color": "#e5eaea",
+                                                          "fontFamily": "IBMPlexSans",
+                                                          "fontSize": 25.2,
                                                           "lineHeight": 32,
                                                         },
                                                         {
@@ -497,8 +867,9 @@ exports[`renders correctly 1`] = `
                                                     style={
                                                       [
                                                         {
-                                                          "color": "#000",
-                                                          "fontSize": 27,
+                                                          "color": "#e5eaea",
+                                                          "fontFamily": "IBMPlexSans",
+                                                          "fontSize": 25.2,
                                                           "lineHeight": 32,
                                                         },
                                                         {
@@ -524,9 +895,9 @@ exports[`renders correctly 1`] = `
                                                     style={
                                                       [
                                                         {
-                                                          "color": "#000",
-                                                          "fontFamily": "System",
-                                                          "fontSize": 16,
+                                                          "color": "#e5eaea",
+                                                          "fontFamily": "IBMPlexSans",
+                                                          "fontSize": 15,
                                                         },
                                                         {
                                                           "marginBottom": 8,
@@ -727,9 +1098,9 @@ exports[`renders correctly 1`] = `
                                                         style={
                                                           [
                                                             {
-                                                              "color": "#000",
-                                                              "fontFamily": "System",
-                                                              "fontSize": 16,
+                                                              "color": "#e5eaea",
+                                                              "fontFamily": "IBMPlexSans",
+                                                              "fontSize": 15,
                                                             },
                                                             {
                                                               "fontSize": 7.5,
@@ -745,9 +1116,9 @@ exports[`renders correctly 1`] = `
                                                         style={
                                                           [
                                                             {
-                                                              "color": "#000",
-                                                              "fontFamily": "System",
-                                                              "fontSize": 16,
+                                                              "color": "#e5eaea",
+                                                              "fontFamily": "IBMPlexSans",
+                                                              "fontSize": 15,
                                                             },
                                                             {
                                                               "marginLeft": 4,
@@ -769,11 +1140,11 @@ exports[`renders correctly 1`] = `
                                                               },
                                                               [
                                                                 {
-                                                                  "color": "#000",
+                                                                  "color": "#e5eaea",
                                                                   "fontSize": 30,
                                                                 },
                                                                 {
-                                                                  "color": "#000",
+                                                                  "color": "#e5eaea",
                                                                   "fontSize": 30,
                                                                 },
                                                                 {
@@ -836,22 +1207,21 @@ exports[`renders correctly 1`] = `
                                                       {
                                                         "alignItems": "center",
                                                         "alignSelf": "stretch",
-                                                        "backgroundColor": "#007aff",
+                                                        "backgroundColor": "#bc6610",
                                                         "borderBottomWidth": null,
-                                                        "borderColor": "#007aff",
+                                                        "borderColor": "#bc6610",
                                                         "borderLeftWidth": null,
                                                         "borderRadius": 5,
                                                         "borderRightWidth": null,
                                                         "borderTopWidth": null,
                                                         "borderWidth": undefined,
-                                                        "elevation": 2,
                                                         "flexDirection": "row",
                                                         "height": 45,
                                                         "justifyContent": "center",
                                                         "marginBottom": 12,
                                                         "opacity": 1,
-                                                        "paddingBottom": 6,
-                                                        "paddingTop": 6,
+                                                        "paddingBottom": 0,
+                                                        "paddingTop": 0,
                                                         "shadowColor": undefined,
                                                         "shadowOffset": undefined,
                                                         "shadowOpacity": undefined,
@@ -864,13 +1234,14 @@ exports[`renders correctly 1`] = `
                                                       style={
                                                         {
                                                           "backgroundColor": "transparent",
-                                                          "color": "#fff",
-                                                          "fontFamily": "System",
-                                                          "fontSize": 16.5,
+                                                          "color": "#e5eaea",
+                                                          "fontFamily": "IBMPlexSans-Medium",
+                                                          "fontSize": 15.400000000000002,
                                                           "marginLeft": 0,
                                                           "marginRight": 0,
                                                           "paddingLeft": 16,
                                                           "paddingRight": 16,
+                                                          "textTransform": "uppercase",
                                                         }
                                                       }
                                                       uppercase={false}
@@ -910,22 +1281,21 @@ exports[`renders correctly 1`] = `
                                                       {
                                                         "alignItems": "center",
                                                         "alignSelf": "stretch",
-                                                        "backgroundColor": "#007aff",
+                                                        "backgroundColor": "#bc6610",
                                                         "borderBottomWidth": null,
-                                                        "borderColor": "#007aff",
+                                                        "borderColor": "#bc6610",
                                                         "borderLeftWidth": null,
                                                         "borderRadius": 5,
                                                         "borderRightWidth": null,
                                                         "borderTopWidth": null,
                                                         "borderWidth": undefined,
-                                                        "elevation": 2,
                                                         "flexDirection": "row",
                                                         "height": 45,
                                                         "justifyContent": "center",
                                                         "marginBottom": 0,
                                                         "opacity": 1,
-                                                        "paddingBottom": 6,
-                                                        "paddingTop": 6,
+                                                        "paddingBottom": 0,
+                                                        "paddingTop": 0,
                                                         "shadowColor": undefined,
                                                         "shadowOffset": undefined,
                                                         "shadowOpacity": undefined,
@@ -938,329 +1308,20 @@ exports[`renders correctly 1`] = `
                                                       style={
                                                         {
                                                           "backgroundColor": "transparent",
-                                                          "color": "#fff",
-                                                          "fontFamily": "System",
-                                                          "fontSize": 16.5,
+                                                          "color": "#e5eaea",
+                                                          "fontFamily": "IBMPlexSans-Medium",
+                                                          "fontSize": 15.400000000000002,
                                                           "marginLeft": 0,
                                                           "marginRight": 0,
                                                           "paddingLeft": 16,
                                                           "paddingRight": 16,
+                                                          "textTransform": "uppercase",
                                                         }
                                                       }
                                                       uppercase={false}
                                                     >
                                                       Withdraw coins
                                                     </Text>
-                                                  </View>
-                                                </View>
-                                              </View>
-                                            </View>
-                                          </View>
-                                          <View
-                                            collapsable={false}
-                                            pointerEvents="box-none"
-                                            style={{}}
-                                          >
-                                            <View
-                                              accessibilityElementsHidden={false}
-                                              importantForAccessibility="auto"
-                                              onLayout={[Function]}
-                                              pointerEvents="box-none"
-                                              style={null}
-                                            >
-                                              <View
-                                                collapsable={false}
-                                                pointerEvents="box-none"
-                                                style={
-                                                  {
-                                                    "height": 44,
-                                                    "maxHeight": undefined,
-                                                    "minHeight": undefined,
-                                                    "opacity": undefined,
-                                                    "transform": undefined,
-                                                  }
-                                                }
-                                              >
-                                                <View
-                                                  collapsable={false}
-                                                  pointerEvents="box-none"
-                                                  style={
-                                                    {
-                                                      "bottom": 0,
-                                                      "left": 0,
-                                                      "position": "absolute",
-                                                      "right": 0,
-                                                      "top": 0,
-                                                    }
-                                                  }
-                                                >
-                                                  <View
-                                                    collapsable={false}
-                                                    style={
-                                                      {
-                                                        "backgroundColor": "#5F5F5F",
-                                                        "borderBottomColor": "transparent",
-                                                        "elevation": 0,
-                                                        "flex": 1,
-                                                        "shadowColor": "transparent",
-                                                        "shadowOffset": {
-                                                          "height": 0.5,
-                                                          "width": 0,
-                                                        },
-                                                        "shadowOpacity": 0.85,
-                                                        "shadowRadius": 0,
-                                                      }
-                                                    }
-                                                  />
-                                                </View>
-                                                <View
-                                                  pointerEvents="none"
-                                                  style={
-                                                    {
-                                                      "height": 0,
-                                                    }
-                                                  }
-                                                />
-                                                <View
-                                                  pointerEvents="box-none"
-                                                  style={
-                                                    {
-                                                      "alignItems": "stretch",
-                                                      "flex": 1,
-                                                      "flexDirection": "row",
-                                                    }
-                                                  }
-                                                >
-                                                  <View
-                                                    collapsable={false}
-                                                    pointerEvents="box-none"
-                                                    style={
-                                                      {
-                                                        "alignItems": "flex-start",
-                                                        "flexBasis": 0,
-                                                        "flexGrow": 1,
-                                                        "justifyContent": "center",
-                                                        "marginStart": 0,
-                                                      }
-                                                    }
-                                                  >
-                                                    <View
-                                                      accessibilityLabel="Go back"
-                                                      accessibilityRole="button"
-                                                      accessibilityState={
-                                                        {
-                                                          "busy": undefined,
-                                                          "checked": undefined,
-                                                          "disabled": undefined,
-                                                          "expanded": undefined,
-                                                          "selected": undefined,
-                                                        }
-                                                      }
-                                                      accessibilityValue={
-                                                        {
-                                                          "max": undefined,
-                                                          "min": undefined,
-                                                          "now": undefined,
-                                                          "text": undefined,
-                                                        }
-                                                      }
-                                                      accessible={true}
-                                                      collapsable={false}
-                                                      focusable={true}
-                                                      onBlur={[Function]}
-                                                      onClick={[Function]}
-                                                      onFocus={[Function]}
-                                                      onResponderGrant={[Function]}
-                                                      onResponderMove={[Function]}
-                                                      onResponderRelease={[Function]}
-                                                      onResponderTerminate={[Function]}
-                                                      onResponderTerminationRequest={[Function]}
-                                                      onStartShouldSetResponder={[Function]}
-                                                      style={
-                                                        {
-                                                          "alignItems": "center",
-                                                          "flexDirection": "row",
-                                                          "minWidth": 0.5,
-                                                          "opacity": 1,
-                                                          "paddingHorizontal": 0,
-                                                        }
-                                                      }
-                                                      testID="header-back"
-                                                    >
-                                                      <Image
-                                                        fadeDuration={0}
-                                                        resizeMode="contain"
-                                                        source={
-                                                          {
-                                                            "process": [Function],
-                                                          }
-                                                        }
-                                                        style={
-                                                          [
-                                                            {
-                                                              "height": 21,
-                                                              "marginEnd": 22,
-                                                              "marginStart": 8,
-                                                              "marginVertical": 12,
-                                                              "width": 13,
-                                                            },
-                                                            false,
-                                                            {
-                                                              "marginEnd": 6,
-                                                            },
-                                                            {
-                                                              "tintColor": "#e5eaea",
-                                                            },
-                                                          ]
-                                                        }
-                                                      />
-                                                      <View
-                                                        style={
-                                                          [
-                                                            {
-                                                              "alignItems": "flex-start",
-                                                              "flexDirection": "row",
-                                                            },
-                                                            {
-                                                              "minWidth": 348,
-                                                            },
-                                                          ]
-                                                        }
-                                                      >
-                                                        <Text
-                                                          accessible={false}
-                                                          allowFontScaling={false}
-                                                          collapsable={false}
-                                                          numberOfLines={1}
-                                                          onLayout={[Function]}
-                                                          style={
-                                                            {
-                                                              "color": "#e5eaea",
-                                                              "fontFamily": "System",
-                                                              "fontSize": 17,
-                                                              "fontWeight": "400",
-                                                              "letterSpacing": 0.35,
-                                                            }
-                                                          }
-                                                        >
-                                                          Back
-                                                        </Text>
-                                                      </View>
-                                                    </View>
-                                                  </View>
-                                                  <View
-                                                    collapsable={false}
-                                                    pointerEvents="box-none"
-                                                    style={
-                                                      {
-                                                        "justifyContent": "center",
-                                                        "marginHorizontal": 16,
-                                                        "maxWidth": 590,
-                                                      }
-                                                    }
-                                                  >
-                                                    <Text
-                                                      accessibilityRole="header"
-                                                      aria-level="1"
-                                                      collapsable={false}
-                                                      numberOfLines={1}
-                                                      onLayout={[Function]}
-                                                      style={
-                                                        {
-                                                          "color": "#e5eaea",
-                                                          "fontFamily": "System",
-                                                          "fontSize": 17,
-                                                          "fontWeight": "600",
-                                                        }
-                                                      }
-                                                    >
-                                                      Bitcoin
-                                                    </Text>
-                                                  </View>
-                                                  <View
-                                                    collapsable={false}
-                                                    pointerEvents="box-none"
-                                                    style={
-                                                      {
-                                                        "alignItems": "flex-end",
-                                                        "flexBasis": 0,
-                                                        "flexGrow": 1,
-                                                        "justifyContent": "center",
-                                                        "marginEnd": 0,
-                                                        "paddingRight": 20,
-                                                      }
-                                                    }
-                                                  >
-                                                    <View
-                                                      accessibilityState={
-                                                        {
-                                                          "busy": undefined,
-                                                          "checked": undefined,
-                                                          "disabled": undefined,
-                                                          "expanded": undefined,
-                                                          "selected": undefined,
-                                                        }
-                                                      }
-                                                      accessibilityValue={
-                                                        {
-                                                          "max": undefined,
-                                                          "min": undefined,
-                                                          "now": undefined,
-                                                          "text": undefined,
-                                                        }
-                                                      }
-                                                      accessible={true}
-                                                      focusable={true}
-                                                      hitSlop={
-                                                        {
-                                                          "bottom": 16,
-                                                          "left": 16,
-                                                          "right": 16,
-                                                          "top": 16,
-                                                        }
-                                                      }
-                                                      onClick={[Function]}
-                                                      onResponderGrant={[Function]}
-                                                      onResponderMove={[Function]}
-                                                      onResponderRelease={[Function]}
-                                                      onResponderTerminate={[Function]}
-                                                      onResponderTerminationRequest={[Function]}
-                                                      onStartShouldSetResponder={[Function]}
-                                                    >
-                                                      <Text
-                                                        allowFontScaling={false}
-                                                        style={
-                                                          [
-                                                            {
-                                                              "color": undefined,
-                                                              "fontSize": 12,
-                                                            },
-                                                            [
-                                                              {
-                                                                "color": "#000",
-                                                                "fontSize": 30,
-                                                              },
-                                                              {
-                                                                "color": "#000",
-                                                                "fontSize": 30,
-                                                              },
-                                                              {
-                                                                "fontSize": 22,
-                                                              },
-                                                            ],
-                                                            {
-                                                              "fontFamily": "anticon",
-                                                              "fontStyle": "normal",
-                                                              "fontWeight": "normal",
-                                                            },
-                                                            {},
-                                                          ]
-                                                        }
-                                                        type="AntDesign"
-                                                      >
-                                                        
-                                                      </Text>
-                                                    </View>
                                                   </View>
                                                 </View>
                                               </View>

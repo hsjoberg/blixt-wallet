@@ -35,6 +35,8 @@ jest.mock("./src/lndmobile/scheduled-sync", () => require("./mocks/lndmobile/sch
 
 jest.mock("./src/utils/constants.ts", () => require("./mocks/utils/constants"));
 
+jest.mock("react-native-vision-camera", () => require("./mocks/react-native-vision-camera"));
+
 const ReactNative = require("react-native");
 ReactNative.NativeModules.LndMobile = {};
 ReactNative.NativeModules.LndMobileTools = {};

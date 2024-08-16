@@ -38,7 +38,7 @@ export default function App() {
 
   return (
     <StoreProvider store={store}>
-      <StyleProvider style={getTheme(theme)}>
+      <StyleProvider.Context.Provider value={{ theme: StyleProvider.fixTheme(getTheme(theme)) }}>
         <NavigationContainer
           theme={navigatorTheme}
           documentTitle={{ enabled: false }}
@@ -50,7 +50,7 @@ export default function App() {
             </Root>
           </MenuProvider>
         </NavigationContainer>
-      </StyleProvider>
+      </StyleProvider.Context.Provider>
     </StoreProvider>
   );
 }
