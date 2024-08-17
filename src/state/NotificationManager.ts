@@ -1,10 +1,11 @@
 import { PermissionsAndroid } from "react-native";
 import { Thunk, thunk } from "easy-peasy";
-import notifee, {
+const notifee = require("@notifee/react-native").default;
+const {
   AndroidImportance,
   AndroidVisibility,
   AuthorizationStatus,
-} from "@notifee/react-native";
+} = require("@notifee/react-native");
 
 import { navigate } from "../utils/navigation";
 import { IStoreModel } from "./index";
