@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { EmitterSubscription, NativeModules, StyleSheet, View, ScrollView } from "react-native";
+import { NativeModules, StyleSheet, View, ScrollView } from "react-native";
 import { Card, Text, CardItem, H1, Button } from "native-base";
 import Clipboard from "@react-native-clipboard/clipboard";
 import Bar from "../components/ProgressBar";
@@ -49,11 +49,16 @@ export default function SyncInfo({}: ISyncInfoProps) {
   let bestBlockheight = useStoreState((store) => store.lightning.bestBlockheight);
   const [showLndLog, setShowLndLog] = useState(false);
   const [logs, setLogs] = useState("");
+  const lastLogRef = useRef("");
 
   const fetchLogs = async () => {
     try {
       const tailLog = await NativeModules.LndMobileTools.tailLog(100);
-      setLogs(tailLog);
+      setLogs((prevLogs) => {
+        const newLogs = tailLog.replace(lastLogRef.current, "").trim();
+        lastLogRef.current = tailLog;
+        return prevLogs + (prevLogs ? "\n" : "") + newLogs;
+      });
     } catch (error) {
       console.error("Error fetching logs:", error);
     }
