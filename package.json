@@ -93,7 +93,7 @@
     "jetifier": "^2.0.0",
     "long": "^5.2.3",
     "metro-react-native-babel-preset": "^0.77.0",
-    "native-base": "github:hsjoberg/NativeBase#642509790862249efa89d7d341d9b36adde0a373",
+    "native-base": "github:hsjoberg/NativeBase#dcc1994745e1252eee4150a0424bae81518c5543",
     "node-abi": "3.67.0",
     "node-polyfill-webpack-plugin": "4.0.0",
     "protobufjs": "7.2.5",

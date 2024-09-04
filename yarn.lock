@@ -5112,7 +5112,7 @@ __metadata:
     long: ^5.2.3
     metro: 0.80.10
     metro-react-native-babel-preset: ^0.77.0
-    native-base: "github:hsjoberg/NativeBase#642509790862249efa89d7d341d9b36adde0a373"
+    native-base: "github:hsjoberg/NativeBase#dcc1994745e1252eee4150a0424bae81518c5543"
     node-abi: 3.67.0
     node-loader: ^2.0.0
     node-polyfill-webpack-plugin: 4.0.0
@@ -13187,9 +13187,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"native-base-shoutem-theme@github:hsjoberg/native-base-shoutem-theme#5e261ea75b56cf346be4eb094016e77016d81543":
-  version: 0.3.1
-  resolution: "native-base-shoutem-theme@https://github.com/hsjoberg/native-base-shoutem-theme.git#commit=5e261ea75b56cf346be4eb094016e77016d81543"
+"native-base-shoutem-theme@github:hsjoberg/native-base-shoutem-theme#036c009716d35a78b730a275891f7038881c2f22":
+  version: 0.3.2
+  resolution: "native-base-shoutem-theme@https://github.com/hsjoberg/native-base-shoutem-theme.git#commit=036c009716d35a78b730a275891f7038881c2f22"
   dependencies:
     hoist-non-react-statics: ^1.0.5
     lodash: ^4.17.14
@@ -13197,13 +13197,13 @@ __metadata:
   peerDependencies:
     react: ">=16.0.0-alpha.3"
     react-native: ">=0.43.0"
-  checksum: 747d79b6f542003f7e15df165a6918b1ca020fa67a523dfaf1174ae238256165a75e45981ef8ec1edfbd92dd81a8d8de3ed023674cfd29870693469a4d1d0971
+  checksum: 6f962e9670dc62100d6d9b96aee0627a55769ef42b369798ff1bd83e5fdb0259cb8a9aafe0cc6d5ff7f5030bdbee31249fee40690b911ed25d995ccdc3aa3c61
   languageName: node
   linkType: hard
 
-"native-base@github:hsjoberg/NativeBase#642509790862249efa89d7d341d9b36adde0a373":
-  version: 2.15.3
-  resolution: "native-base@https://github.com/hsjoberg/NativeBase.git#commit=642509790862249efa89d7d341d9b36adde0a373"
+"native-base@github:hsjoberg/NativeBase#dcc1994745e1252eee4150a0424bae81518c5543":
+  version: 2.15.4
+  resolution: "native-base@https://github.com/hsjoberg/NativeBase.git#commit=dcc1994745e1252eee4150a0424bae81518c5543"
   dependencies:
     "@codler/react-native-keyboard-aware-scroll-view": 1.0.1
     "@react-native-community/datetimepicker": ^3.0.2
@@ -13217,7 +13217,7 @@ __metadata:
     fs-extra: ^2.0.0
     jest-react-native: ^18.0.0
     lodash: ^4.17.14
-    native-base-shoutem-theme: "github:hsjoberg/native-base-shoutem-theme#5e261ea75b56cf346be4eb094016e77016d81543"
+    native-base-shoutem-theme: "github:hsjoberg/native-base-shoutem-theme#036c009716d35a78b730a275891f7038881c2f22"
     opencollective-postinstall: ^2.0.2
     print-message: ^2.1.0
     prop-types: ^15.5.10
@@ -13229,7 +13229,7 @@ __metadata:
   peerDependencies:
     react: ">=16.4.1"
     react-native: ">=0.56.0"
-  checksum: 055aade00444d5f942f42dcac3fb39f8bc632cd058374d1a3d340c8a8e815b9b11eaa42ee799e8c9ad2a353f576dfab46e66e638257ca3d6131ec04ccdaf67b1
+  checksum: f2eb89319bfe4b7f5d7e4d36c869281ba0726e502e619958a6e504bdc9aae45e16b22bc3ba835c7b37ee0c1588eb564beb02d5dfe825e6d8bab5e3a2767cc590
   languageName: node
   linkType: hard
 
