@@ -5348,7 +5348,6 @@ __metadata:
     webpack: 5.94.0
     webpack-cli: ^5.1.4
     webpack-dev-server: 5.0.4
-    yarn: ^1.22.21
   languageName: unknown
   linkType: soft
 
@@ -18906,16 +18905,6 @@ __metadata:
     yarn-or-npm: bin/index.js
     yon: bin/index.js
   checksum: 94421b4315520075b4db6c09b6284064c047058d8bbe2663cdd4269491e5f7ea5d2e68eeaa0182a760a8757479cef665b7040a8c9ddb48a3da52587a8b712b27
-  languageName: node
-  linkType: hard
-
-"yarn@npm:^1.22.21":
-  version: 1.22.22
-  resolution: "yarn@npm:1.22.22"
-  bin:
-    yarn: bin/yarn.js
-    yarnpkg: bin/yarn.js
-  checksum: 59aeef5ccfd3347287f939448e6d3594f0a42f74025b9bdc2a277641c1d4070c07a38b6e7c35e695f77410b0269a5a43c78535786564f86f39c9f781e6efa311
   languageName: node
   linkType: hard
 
