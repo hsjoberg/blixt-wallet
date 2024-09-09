@@ -275,6 +275,7 @@
     },
     "channel": {
       "alias": "'oSrIq",
+      "bumpFee": "'ach",
       "node": "ghobe'",
       "channelId": "batlh ID",
       "channelPoint": "yovchoHbe'",
@@ -297,11 +298,22 @@
       "maturityHeight": "'ej naDev",
       "localCommitmentTxid": "QumwI''a' TXID",
       "remoteCommitmentTxid": "yIpoSmoH TXID",
-      "closeChannel": "mIghchoH",
+      "enterDeliveryAddress": "tlhaw'DIyuS",
+      "invalidAddress": "QongDaqdajDaq QottaH ghomDu'Daj",
+      "closeChannel": "yab",
+      "forceCloseChannel": "molwI'",
+      "closeChannelToAddress": "qo'vamDaq QeH",
       "forceClosePendingChannel": "tlha'qo' DaghajtaHvIS",
       "forceCloseDelay": "'e' vIchaw'",
       "closeChannelPrompt": {
         "title": "mIghchoH"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "yI'el (sats/vB)",
+        "missingFeeRate": "chIl mIv'a' tu'lu'",
+        "invalidFeeRate": "yo'Daq",
+        "bumpFeeSuccess": "yo' qIjDaq",
+        "bumpFeeFailed": "naQchoH"
       }
     }
   },
@@ -631,6 +643,9 @@
       },
       "mapTheme": {
         "title": "ghItlh"
+      },
+      "hideAmountsEnabled": {
+        "title": "targh rur"
       }
     },
     "wallet": {
@@ -910,6 +925,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "Humbaba 'enqIyDu chenmoHlu'"
+      },
+      "randomizeSettings": {
+        "title": "HIja', ghertlhuD"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "HIja', naDevvo' tera'ngan"
       }
     },
     "experimental": {
