@@ -275,6 +275,7 @@
     },
     "channel": {
       "alias": "Alias",
+      "bumpFee": "Majorare tarif",
       "node": "Nod",
       "channelId": "Channel ID",
       "channelPoint": "Channel point",
@@ -297,11 +298,22 @@
       "maturityHeight": "Altura de maturitate",
       "localCommitmentTxid": "TXID angajament local",
       "remoteCommitmentTxid": "TXID angajament remote",
-      "closeChannel": "Închideți canalul",
+      "enterDeliveryAddress": "Introduceți adresa de închidere",
+      "invalidAddress": "Introduceți o adresă Bitcoin validă",
+      "closeChannel": "Închide canalul",
+      "forceCloseChannel": "Forțare închiderea canalului",
+      "closeChannelToAddress": "Închideți canalul la adresa externă",
       "forceClosePendingChannel": "Forțați închiderea canalului în așteptare",
       "forceCloseDelay": "Întârziere de închidere forțată",
       "closeChannelPrompt": {
         "title": "Închideți canalul"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Introduceți rata tarifului (sat/vB)",
+        "missingFeeRate": "Lipsă rata tarif",
+        "invalidFeeRate": "Tarif invalid",
+        "bumpFeeSuccess": "Mărirea tarifelor cu succes",
+        "bumpFeeFailed": "Mărirea tarifelor a eșuat"
       }
     }
   },
@@ -631,6 +643,9 @@
       },
       "mapTheme": {
         "title": "Setați tema hărții"
+      },
+      "hideAmountsEnabled": {
+        "title": "Ascundeți sumele"
       }
     },
     "wallet": {
@@ -910,6 +925,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "Activați preimagini de factură personalizate"
+      },
+      "randomizeSettings": {
+        "title": "Randomizați setările"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomizați setările la pornire"
       }
     },
     "experimental": {
