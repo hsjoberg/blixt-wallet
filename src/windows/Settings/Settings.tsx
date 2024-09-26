@@ -743,7 +743,7 @@ ${t("LN.inbound.dialog.msg3")}`;
             }
 
             if (text) {
-              const neutrinoPeers = text.split(",").map((n) => n.trim());
+              const neutrinoPeers = text.split(",").map((n) => n.trim().replaceAll('"', ""));
               await changeNeutrinoPeers(neutrinoPeers);
             } else {
               await changeNeutrinoPeers([]);

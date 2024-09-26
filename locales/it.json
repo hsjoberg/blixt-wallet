@@ -275,6 +275,7 @@
     },
     "channel": {
       "alias": "Alias",
+      "bumpFee": "Aumento di commissione",
       "node": "Nodo",
       "channelId": "Canale ID",
       "channelPoint": "Punto del canale",
@@ -297,11 +298,22 @@
       "maturityHeight": "Altezza della maturità",
       "localCommitmentTxid": "Impegno locale TXID",
       "remoteCommitmentTxid": "Impegno remoto TXID",
-      "closeChannel": "Chiudere di canale",
+      "enterDeliveryAddress": "Inserisci l'indirizzo di chiusura",
+      "invalidAddress": "Inserisci un indirizzo Bitcoin valido",
+      "closeChannel": "Chiudi canale",
+      "forceCloseChannel": "Forzare la chiusura del canale",
+      "closeChannelToAddress": "Chiudi canale all'indirizzo esterno",
       "forceClosePendingChannel": "Forzare il canale in sospeso",
       "forceCloseDelay": "Ritardi di chiusura della forza",
       "closeChannelPrompt": {
         "title": "Chiudere di canale"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Inserisci la tariffa (sats/vB)",
+        "missingFeeRate": "Tasso di commissione mancante",
+        "invalidFeeRate": "Tasso di commissione non valido",
+        "bumpFeeSuccess": "Aumento della tassa di successo",
+        "bumpFeeFailed": "L'aumento della tassa non è riuscita"
       }
     }
   },
@@ -631,6 +643,9 @@
       },
       "mapTheme": {
         "title": "Imposta il tema della mappa"
+      },
+      "hideAmountsEnabled": {
+        "title": "Nascondere gli importi"
       }
     },
     "wallet": {
@@ -910,6 +925,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "Abilita le preimi di fattura personalizzata"
+      },
+      "randomizeSettings": {
+        "title": "Randomizzare le impostazioni"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomizzare le impostazioni all'avvio"
       }
     },
     "experimental": {

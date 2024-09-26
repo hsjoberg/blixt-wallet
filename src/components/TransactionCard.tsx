@@ -86,6 +86,18 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
     }
   }
 
+  const getDescription = () => {
+    if (!description || !description.length) {
+      return "No description";
+    }
+
+    if (description.length > 120) {
+      return `${description.substring(0, 100)}...`;
+    }
+
+    return description;
+  };
+
   return (
     <Card>
       <CardItem activeOpacity={1} button={true} onPress={() => onPress(transaction.rHash)}>
@@ -158,7 +170,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
                     {recipientOrSender}:{" "}
                   </Text>
                 )}
-                {description && description.length !== 0 ? description : "No description"}
+                {getDescription()}
               </Text>
               <Text note={true} style={transactionStyle.status}>
                 {statusLabel}

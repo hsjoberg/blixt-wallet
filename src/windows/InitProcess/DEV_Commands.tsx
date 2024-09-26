@@ -31,6 +31,7 @@ import {
   decodePayReq,
   generateSecureRandomAsBase64,
   getInfo,
+  getInfoX,
   getNetworkInfo,
   getNodeInfo,
   listInvoices,
@@ -144,7 +145,41 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               </Button>
             </>
           )}
+          {/*
+           *
+           * Random
+           *
+           */}
           <Text style={{ width: "100%" }}>Random:</Text>
+          <Button
+            small
+            onPress={async () => {
+              const startTime = performance.now();
+              for (let i = 0; i < 10000; i++) {
+                // console.log(
+                await getInfoX();
+                // );
+              }
+              const endTime = performance.now();
+              const executionTime = endTime - startTime;
+
+              console.log("done");
+              console.log(`Execution time: ${executionTime} milliseconds`);
+              if (!__DEV__) {
+                Alert.alert(`Execution time: ${executionTime} milliseconds`);
+              }
+            }}
+          >
+            <Text style={styles.buttonText}>getInfo x 100 benchmark</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(await getInfoX());
+            }}
+          >
+            <Text style={styles.buttonText}>getInfoX</Text>
+          </Button>
           <Button
             small
             onPress={async () => {
@@ -761,6 +796,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>set lastICloudBackup to 0</Text>
           </Button>
+
+          {/*
+           *
+           * Security
+           *
+           */}
           <Text style={{ width: "100%" }}>Security:</Text>
           <Button
             small
@@ -801,6 +842,11 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             <Text style={styles.buttonText}>DEBUG_listProcesses()</Text>
           </Button>
 
+          {/*
+           *
+           * Dangerous
+           *
+           */}
           <Text style={{ width: "100%" }}>Dangerous:</Text>
           <Button
             danger
@@ -866,6 +912,11 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             <Text style={styles.buttonText}>DEBUG_deleteDatafolder</Text>
           </Button>
 
+          {/*
+           *
+           * App storage
+           *
+           */}
           <Text style={{ width: "100%" }}>App storage:</Text>
           <Button small onPress={async () => actions.openDb()}>
             <Text style={styles.buttonText}>actions.openDb()</Text>
@@ -945,6 +996,11 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             <Text style={styles.buttonText}>onboardingState = DONE</Text>
           </Button>
 
+          {/*
+           *
+           * Lightning Box
+           *
+           */}
           <Text style={{ width: "100%" }}>Lightning Box:</Text>
           <Button
             small
@@ -964,6 +1020,11 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             <Text style={styles.buttonText}>lightningBoxAddress prompt</Text>
           </Button>
 
+          {/*
+           *
+           * Speedloader
+           *
+           */}
           <Text style={{ width: "100%" }}>Speedloader:</Text>
           <Button
             small
@@ -987,6 +1048,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory()
             </Text>
           </Button>
+
+          {/*
+           *
+           * Lndmobile
+           *
+           */}
           <Text style={{ width: "100%" }}>lndmobile:</Text>
           <Button small onPress={async () => await NativeModules.LndMobile.initialize()}>
             <Text style={styles.buttonText}>LndMobile.initialize()</Text>
@@ -1004,9 +1071,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           </Button>
           <Button small onPress={async () => await NativeModules.LndMobile.stopLnd()}>
             <Text style={styles.buttonText}>LndMobile.stopLnd()</Text>
-          </Button>
-          <Button small onPress={async () => await actions.initializeApp()}>
-            <Text style={styles.buttonText}>actions.initializeApp()</Text>
           </Button>
           <Button
             small
@@ -1081,6 +1145,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles()
             </Text>
           </Button>
+
+          {/*
+           *
+           * Sqlite
+           *
+           */}
           <Text style={{ width: "100%" }}>Sqlite:</Text>
           <Button
             small
@@ -1273,6 +1343,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => console.log(await clearTransactions(db!))}>
             <Text style={styles.buttonText}>actions.clearTransactions()</Text>
           </Button>
+
+          {/*
+           *
+           * Lndmobile commands
+           *
+           */}
           <Text style={{ width: "100%" }}>Lndmobile commands:</Text>
           {[
             ["getInfo", getInfo],
@@ -1528,6 +1604,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>getRecoveryInfo()</Text>
           </Button>
+
+          {/*
+           *
+           * easy-peasy store
+           *
+           */}
           <Text style={{ width: "100%" }}>easy-peasy store:</Text>
           <Button
             small
@@ -1536,6 +1618,30 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }}
           >
             <Text style={styles.buttonText}>easy-peasy store initialize()</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              actions.setAppReady(false);
+            }}
+          >
+            <Text style={styles.buttonText}>actions.setAppReady(false)</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              actions.settings.changeNeutrinoPeers([]);
+            }}
+          >
+            <Text style={styles.buttonText}>actions.changeNeutrinoPeers([]])</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              actions.writeConfig();
+            }}
+          >
+            <Text style={styles.buttonText}>actions.writeConfig()</Text>
           </Button>
         </View>
         <View style={{ backgroundColor: blixtTheme.dark, padding: 15, marginTop: 10 }}>
