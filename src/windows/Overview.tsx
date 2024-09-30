@@ -227,7 +227,7 @@ function Overview({ navigation }: IOverviewProps) {
                   <SendOnChain bitcoinAddress={bitcoinAddress} />
                 )}
                 {onboardingState === "DO_BACKUP" && <DoBackup />}
-                {pendingOpenBalance.greaterThan(0) && <NewChannelBeingOpened />}
+                {pendingOpenBalance !== 0n && <NewChannelBeingOpened />}
               </>
             );
           }}
@@ -320,13 +320,13 @@ function Overview({ navigation }: IOverviewProps) {
           {/* The smaller one underneath */}
           {!hideAmountsEnabled && (
             <>
-              {pendingOpenBalance.equals(0) && (
+              {pendingOpenBalance === 0n && (
                 <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
                   {!preferFiat && fiatBalance}
                   {preferFiat && bitcoinBalance}
                 </Animated.Text>
               )}
-              {pendingOpenBalance.greaterThan(0) && (
+              {pendingOpenBalance !== 0n && (
                 <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
                   {!preferFiat && (
                     <>

@@ -3,7 +3,6 @@ import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import Long from "long";
 import * as base64 from "base64-js";
 
-import { lnrpc } from "../../proto/lightning";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
@@ -15,7 +14,29 @@ import {
 import { bytesToHexString, toast } from "../utils";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
-import { getNodeInfo } from "../lndmobile";
+
+import {
+  abandonChannel,
+  channelBalance,
+  closeChannel,
+  connectPeer,
+  exportAllChannelBackups,
+  getNodeInfo,
+  listChannels,
+  openChannelSync,
+  pendingChannels,
+  subscribeChannelEvents,
+} from "react-native-turbo-lnd";
+import {
+  Channel,
+  CommitmentType,
+  PendingChannelsResponse,
+  PendingChannelsResponse_ClosedChannel,
+  PendingChannelsResponse_ForceClosedChannel,
+  PendingChannelsResponse_PendingChannel,
+  PendingChannelsResponse_PendingOpenChannel,
+  PendingChannelsResponse_WaitingCloseChannel,
+} from "react-native-turbo-lnd/protos/lightning_pb";
 
 import logger from "./../utils/log";
 const log = logger("Channel");
@@ -25,14 +46,14 @@ export interface IOpenChannelPayload {
   peer: string;
   amount: number;
   feeRateSat?: number;
-  type?: lnrpc.CommitmentType;
+  type?: CommitmentType;
 }
 
 export interface IOpenChannelPayloadAll {
   // <pubkey>@<ip>[:<port>]
   peer: string;
   feeRateSat?: number;
-  type?: lnrpc.CommitmentType;
+  type?: CommitmentType;
 }
 
 export interface ICloseChannelPayload {
@@ -40,12 +61,6 @@ export interface ICloseChannelPayload {
   outputIndex: number;
   force: boolean;
   deliveryAddress?: string;
-}
-
-export interface ISetPendingChannelsPayload {
-  pendingOpenChannels: lnrpc.PendingChannelsResponse.IPendingOpenChannel[];
-  pendingClosingChannels: lnrpc.PendingChannelsResponse.IClosedChannel[];
-  pendingForceClosingChannels: lnrpc.PendingChannelsResponse.IForceClosedChannel[];
 }
 
 export interface INodeAlias {
@@ -77,25 +92,25 @@ export interface IChannelModel {
   exportChannelsBackup: Thunk<IChannelModel, void, IStoreInjections>;
   exportChannelBackupFile: Thunk<IChannelModel, void, IStoreInjections>;
 
-  setChannels: Action<IChannelModel, lnrpc.IChannel[]>;
+  setChannels: Action<IChannelModel, Channel[]>;
   setChannelEvents: Action<IChannelModel, IChannelEvent[]>;
   addChannelEvent: Action<IChannelModel, IChannelEvent>;
-  setPendingChannels: Action<IChannelModel, lnrpc.PendingChannelsResponse>;
+  setPendingChannels: Action<IChannelModel, PendingChannelsResponse>;
   setChannelUpdateSubscriptionStarted: Action<IChannelModel, boolean>;
   setAlias: Action<IChannelModel, ISetAliasPayload>;
-  setBalance: Action<IChannelModel, Long>;
-  setPendingOpenBalance: Action<IChannelModel, Long>;
+  setBalance: Action<IChannelModel, BigInt>;
+  setPendingOpenBalance: Action<IChannelModel, BigInt>;
 
-  channels: lnrpc.IChannel[];
+  channels: Channel[];
   aliases: INodeAlias;
-  pendingOpenChannels: lnrpc.PendingChannelsResponse.IPendingOpenChannel[];
-  pendingClosingChannels: lnrpc.PendingChannelsResponse.IClosedChannel[];
-  pendingForceClosingChannels: lnrpc.PendingChannelsResponse.IForceClosedChannel[];
-  waitingCloseChannels: lnrpc.PendingChannelsResponse.IWaitingCloseChannel[];
+  pendingOpenChannels: PendingChannelsResponse_PendingOpenChannel[];
+  pendingClosingChannels: PendingChannelsResponse_ClosedChannel[];
+  pendingForceClosingChannels: PendingChannelsResponse_ForceClosedChannel[];
+  waitingCloseChannels: PendingChannelsResponse_WaitingCloseChannel[];
   channelUpdateSubscriptionStarted: boolean;
-  balance: Long;
-  pendingOpenBalance: Long;
-  remoteBalance: Computed<IChannelModel, Long>;
+  balance: BigInt;
+  pendingOpenBalance: BigInt;
+  remoteBalance: Computed<IChannelModel, BigInt>;
   channelEvents: IChannelEvent[];
 }
 
@@ -103,11 +118,11 @@ export const channel: IChannelModel = {
   setupCachedBalance: thunk(async (actions) => {
     log.d("setupCachedBalance()");
     // Use cached balance before retrieving from lnd:
-    actions.setBalance(Long.fromString((await getItemObject(StorageItem.lightningBalance)) ?? "0"));
+    actions.setBalance(BigInt((await getItemObject(StorageItem.lightningBalance)) ?? "0"));
     log.d("setupCachedBalance() done");
   }),
 
-  initialize: thunk(async (actions, _, { getState, injections }) => {
+  initialize: thunk(async (actions, _, { getState }) => {
     if (getState().channelUpdateSubscriptionStarted) {
       log.d("Channel.initialize() called when subscription already started");
       return;
@@ -120,137 +135,138 @@ export const channel: IChannelModel = {
   }),
 
   setupChannelUpdateSubscriptions: thunk(
-    async (actions, _2, { getStoreState, getStoreActions, injections }) => {
+    async (actions, _2, { getStoreState, getStoreActions }) => {
       log.i("Starting channel update subscription");
-      LndMobileEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
-        try {
-          const error = checkLndStreamErrorResponse("SubscribeChannelEvents", e);
-          if (error === "EOF") {
-            return;
-          } else if (error) {
-            log.d("Got error from SubscribeChannelEvents", [error]);
-            throw error;
-          }
+      const db = getStoreState().db;
+      if (!db) {
+        throw new Error("SubscribeChannelEvents: db not ready");
+      }
 
-          const db = getStoreState().db;
-          if (!db) {
-            throw new Error("SubscribeChannelEvents: db not ready");
-          }
-          const pushNotificationsEnabled = getStoreState().settings.pushNotificationsEnabled;
+      subscribeChannelEvents(
+        {},
+        async (channelEvent) => {
+          try {
+            log.v("channelEvent", [channelEvent, channelEvent.type]);
+            const pushNotificationsEnabled = getStoreState().settings.pushNotificationsEnabled;
 
-          const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
-          log.v("Event SubscribeChannelEvents", [e]);
-          const channelEvent = decodeChannelEvent(e.data);
-          log.v("channelEvent", [channelEvent, channelEvent.type]);
+            if (getStoreState().onboardingState === "SEND_ONCHAIN") {
+              log.i("Changing onboarding state to DO_BACKUP");
+              getStoreActions().changeOnboardingState("DO_BACKUP");
+            }
 
-          if (getStoreState().onboardingState === "SEND_ONCHAIN") {
-            log.i("Changing onboarding state to DO_BACKUP");
-            getStoreActions().changeOnboardingState("DO_BACKUP");
-          }
+            if (channelEvent.channel.case === "openChannel") {
+              const txId = channelEvent.channel.value.channelPoint.split(":")[0];
+              const chanEvent: IChannelEvent = {
+                txId,
+                type: "OPEN",
+              };
+              const insertId = await createChannelEvent(db, chanEvent);
+              actions.addChannelEvent({ id: insertId, ...chanEvent });
 
-          if (channelEvent.openChannel) {
-            const txId = channelEvent.openChannel.channelPoint!.split(":")[0];
-            const chanEvent: IChannelEvent = {
-              txId,
-              type: "OPEN",
-            };
-            const insertId = await createChannelEvent(db, chanEvent);
-            actions.addChannelEvent({ id: insertId, ...chanEvent });
-
-            if (pushNotificationsEnabled) {
-              try {
-                let message = "Opened payment channel";
+              if (pushNotificationsEnabled) {
                 try {
-                  const nodeInfo = await injections.lndMobile.index.getNodeInfo(
-                    channelEvent.openChannel.remotePubkey!,
-                  );
+                  let message = "Opened payment channel";
+                  try {
+                    const nodeInfo = await getNodeInfo({
+                      pubKey: channelEvent.channel.value.remotePubkey,
+                    });
+                    if (nodeInfo.node) {
+                      message += ` with ${nodeInfo.node?.alias}`;
+                    }
+                  } catch (error) {
+                    message += ` with ${channelEvent.channel.value.remotePubkey}`;
+                  }
+                  getStoreActions().notificationManager.localNotification({
+                    message,
+                  });
+                } catch (e: any) {
+                  log.e("Push notification failed: ", [e.message]);
+                }
+              }
+            } else if (channelEvent.channel.case === "closedChannel") {
+              const txId = channelEvent.channel.value.closingTxHash;
+              const chanEvent: IChannelEvent = {
+                txId,
+                type: "CLOSE",
+              };
+              const insertId = await createChannelEvent(db, chanEvent);
+              actions.addChannelEvent({ id: insertId, ...chanEvent });
+
+              if (pushNotificationsEnabled) {
+                try {
+                  let message = "Payment channel";
+                  const nodeInfo = await getNodeInfo({
+                    pubKey: channelEvent.channel.value.remotePubkey,
+                  });
                   if (nodeInfo.node) {
                     message += ` with ${nodeInfo.node?.alias}`;
                   }
-                } catch (error) {
-                  message += ` with ${channelEvent.openChannel.remotePubkey}`;
+                  message += " closed";
+                  getStoreActions().notificationManager.localNotification({
+                    message,
+                  });
+                } catch (e: any) {
+                  log.e("Push notification failed: ", [e.message]);
                 }
-                getStoreActions().notificationManager.localNotification({
-                  message,
-                });
-              } catch (e) {
-                log.e("Push notification failed: ", [e.message]);
               }
-            }
-          } else if (channelEvent.closedChannel) {
-            const txId = channelEvent.closedChannel.closingTxHash;
-            const chanEvent: IChannelEvent = {
-              txId: txId!,
-              type: "CLOSE",
-            };
-            const insertId = await createChannelEvent(db, chanEvent);
-            actions.addChannelEvent({ id: insertId, ...chanEvent });
+            } else if (channelEvent.channel.case === "pendingOpenChannel") {
+              // TURBOTODO: Perhaps could use data from channelEvent.channel.value instead?
 
-            if (pushNotificationsEnabled) {
-              try {
-                let message = "Payment channel";
-                const nodeInfo = await injections.lndMobile.index.getNodeInfo(
-                  channelEvent.closedChannel.remotePubkey!,
-                );
-                if (nodeInfo.node) {
-                  message += ` with ${nodeInfo.node?.alias}`;
-                }
-                message += " closed";
-                getStoreActions().notificationManager.localNotification({
-                  message,
-                });
-              } catch (e) {
-                log.e("Push notification failed: ", [e.message]);
-              }
-            }
-          } else if (channelEvent.pendingOpenChannel) {
-            if (pushNotificationsEnabled) {
-              const pendingChannels = await injections.lndMobile.channel.pendingChannels();
-              let alias;
-              for (const pendingOpen of pendingChannels.pendingOpenChannels) {
-                if (pendingOpen.channel) {
-                  const txId = [...channelEvent.pendingOpenChannel.txid!].reverse();
-                  if (pendingOpen.channel.channelPoint!.split(":")[0] === bytesToHexString(txId)) {
-                    try {
-                      const nodeInfo = await injections.lndMobile.index.getNodeInfo(
-                        pendingOpen.channel.remoteNodePub!,
-                      );
-                      if (nodeInfo.node) {
-                        alias = nodeInfo.node?.alias;
+              if (pushNotificationsEnabled) {
+                const pendingChans = await pendingChannels({});
+                let alias;
+                for (const pendingOpen of pendingChans.pendingOpenChannels) {
+                  if (pendingOpen.channel) {
+                    const txId = [...channelEvent.channel.value.txid].reverse();
+                    if (
+                      pendingOpen.channel.channelPoint!.split(":")[0] === bytesToHexString(txId)
+                    ) {
+                      try {
+                        const nodeInfo = await getNodeInfo({
+                          pubKey: pendingOpen.channel.remoteNodePub,
+                        });
+                        if (nodeInfo.node) {
+                          alias = nodeInfo.node?.alias;
+                        }
+                      } catch (e) {
+                        log.e("getNodeInfo failed", [e]);
                       }
-                    } catch (e) {
-                      log.e("getNodeInfo failed", [e]);
                     }
                   }
                 }
-              }
 
-              try {
-                let message = "Opening Payment channel";
-                if (alias) {
-                  message += ` with ${alias}`;
+                try {
+                  let message = "Opening Payment channel";
+                  if (alias) {
+                    message += ` with ${alias}`;
+                  }
+                  getStoreActions().notificationManager.localNotification({
+                    message,
+                  });
+                } catch (e: any) {
+                  log.e("Push notification failed: ", [e.message]);
                 }
-                getStoreActions().notificationManager.localNotification({
-                  message,
-                });
-              } catch (e) {
-                log.e("Push notification failed: ", [e.message]);
               }
             }
-          }
 
-          // Silently ignore these errors because they can erroneously be triggered
-          // on an lnd shutdown as channel inactive event is fired just before the stream closure.
-          try {
-            await Promise.all([actions.getChannels(), actions.getBalance()]);
-          } catch (e) {
-            log.i("", [e]);
+            // TURBOTODO: look into if this is still needed:
+            // Silently ignore these errors because they can erroneously be triggered
+            // on an lnd shutdown as channel inactive event is fired just before the stream closure.
+            try {
+              await Promise.all([actions.getChannels(), actions.getBalance()]);
+            } catch (e) {
+              log.i("", [e]);
+            }
+          } catch (error: any) {
+            toast(error.message, undefined, "danger");
           }
-        } catch (error) {
-          toast(error.message, undefined, "danger");
-        }
-      });
+        },
+        (error) => {
+          toast("subscribeChannelEvents: " + error, 7000, "danger");
+        },
+      );
 
+      // TURBOTODO: how do we replace this?
       LndMobileEventEmitter.addListener("CloseChannel", async (e: any) => {
         const error = checkLndStreamErrorResponse("CloseChannel", e);
         if (error === "EOF") {
@@ -263,33 +279,28 @@ export const channel: IChannelModel = {
         log.i("Event CloseChannel", [e]);
         await actions.getChannels();
       });
-      await injections.lndMobile.channel.subscribeChannelEvents();
       actions.setChannelUpdateSubscriptionStarted(true);
     },
   ),
 
-  getChannels: thunk(async (actions, _, { getState, injections }) => {
-    const { getNodeInfo } = injections.lndMobile.index;
-    const { listChannels, pendingChannels } = injections.lndMobile.channel;
-
-    const channels = await listChannels();
+  getChannels: thunk(async (actions, _, { getState }) => {
+    const channels = await listChannels({});
     actions.setChannels(channels.channels);
 
-    const responsePendingChannels = await pendingChannels();
+    const responsePendingChannels = await pendingChannels({});
     actions.setPendingChannels(responsePendingChannels);
 
-    const { aliases } = getState();
-    const setupAlias = async (
-      chan: lnrpc.IChannel | lnrpc.PendingChannelsResponse.IPendingChannel,
-    ) => {
+    const aliases = getState().aliases;
+    const setupAlias = async (chan: Channel | PendingChannelsResponse_PendingChannel) => {
       const pubkey =
-        (chan as lnrpc.IChannel).remotePubkey !== undefined
-          ? (chan as lnrpc.IChannel).remotePubkey
-          : (chan as lnrpc.PendingChannelsResponse.IPendingChannel).remoteNodePub;
+        (chan as Channel).remotePubkey ??
+        (chan as PendingChannelsResponse_PendingChannel).remoteNodePub;
 
       if (pubkey && typeof pubkey === "string" && !(pubkey! in aliases)) {
         try {
-          const nodeInfo = await getNodeInfo(pubkey);
+          const nodeInfo = await getNodeInfo({
+            pubKey: pubkey,
+          });
           if (nodeInfo.node && nodeInfo.node.alias) {
             actions.setAlias({ pubkey, alias: nodeInfo.node.alias });
           }
@@ -303,6 +314,7 @@ export const channel: IChannelModel = {
     responsePendingChannels.pendingOpenChannels.map(
       async (chan) => chan.channel && setupAlias(chan.channel),
     );
+    // TODO pendingClosingChannels is deprecated
     responsePendingChannels.pendingClosingChannels.map(
       async (chan) => chan.channel && setupAlias(chan.channel),
     );
@@ -324,20 +336,25 @@ export const channel: IChannelModel = {
   }),
 
   connectAndOpenChannel: thunk(
-    async (_, { peer, amount, feeRateSat, type }, { injections, getStoreActions }) => {
-      const { connectPeer } = injections.lndMobile.index;
-      const { openChannel } = injections.lndMobile.channel;
+    async (_, { peer, amount, feeRateSat, type }, { getStoreActions }) => {
       const [pubkey, host] = peer.split("@");
       try {
-        await connectPeer(pubkey, host);
-      } catch (error) {
+        await connectPeer({
+          addr: {
+            host,
+            pubkey,
+          },
+        });
+      } catch (error: any) {
         if (!error.message.includes("already connected to peer")) {
           throw error;
         }
       }
 
       try {
-        const nodeInfo = await getNodeInfo(pubkey);
+        const nodeInfo = await getNodeInfo({
+          pubKey: pubkey,
+        });
 
         // Check for anchors features
         const features = nodeInfo.node?.features;
@@ -348,7 +365,7 @@ export const channel: IChannelModel = {
         if (!isAnchorSupported) {
           throw new Error("Anchor channels are not supported by the remote node");
         }
-      } catch (error) {
+      } catch (error: any) {
         // If the node is not in channel graph for some reason, ignore anchor check and still open
         // the channel
         if (!error.message.includes("unable to find node")) {
@@ -356,29 +373,47 @@ export const channel: IChannelModel = {
         }
       }
 
-      const result = await openChannel(pubkey, amount, true, feeRateSat, type);
-      getStoreActions().onChain.addToTransactionNotificationBlacklist(
-        bytesToHexString(result.fundingTxidBytes.reverse()),
-      );
+      const result = await openChannelSync({
+        nodePubkeyString: pubkey,
+        localFundingAmount: BigInt(amount),
+        targetConf: feeRateSat ? undefined : 2,
+        private: true,
+        satPerByte: feeRateSat ? BigInt(feeRateSat) : undefined,
+        scidAlias: true,
+        commitmentType: type,
+        remoteChanReserveSat: BigInt(360),
+      });
+
+      // TURBOTODO this is weird...
+      const txId = (result.fundingTxid.value as Uint8Array).reverse();
+      getStoreActions().onChain.addToTransactionNotificationBlacklist(bytesToHexString(txId));
+      // getStoreActions().onChain.addToTransactionNotificationBlacklist(
+      //   bytesToHexString(result.fundingTxidBytes.reverse()),
+      // );
       log.d("openChannel", [result]);
       return result;
     },
   ),
 
-  connectAndOpenChannelAll: thunk(
-    async (_, { peer, feeRateSat, type }, { injections, getStoreActions }) => {
-      const { connectPeer } = injections.lndMobile.index;
-      const { openChannelAll } = injections.lndMobile.channel;
-      const [pubkey, host] = peer.split("@");
-      try {
-        await connectPeer(pubkey, host);
-      } catch (e) {
-        if (!e.message.includes("already connected to peer")) {
-          throw e;
-        }
+  connectAndOpenChannelAll: thunk(async (_, { peer, feeRateSat, type }, { getStoreActions }) => {
+    const [pubkey, host] = peer.split("@");
+    try {
+      await connectPeer({
+        addr: {
+          host,
+          pubkey,
+        },
+      });
+    } catch (e: any) {
+      if (!e.message.includes("already connected to peer")) {
+        throw e;
       }
+    }
 
-      const nodeInfo = await getNodeInfo(pubkey);
+    try {
+      const nodeInfo = await getNodeInfo({
+        pubKey: pubkey,
+      });
 
       // Check for anchors features
       const features = nodeInfo.node?.features;
@@ -389,39 +424,80 @@ export const channel: IChannelModel = {
       if (!isAnchorSupported) {
         throw new Error("Anchor channels are not supported by the remote node");
       }
+    } catch (error: any) {
+      // If the node is not in channel graph for some reason, ignore anchor check and still open
+      // the channel
+      if (!error.message.includes("unable to find node")) {
+        throw error;
+      }
+    }
 
-      const result = await openChannelAll(pubkey, true, feeRateSat, type);
-      getStoreActions().onChain.addToTransactionNotificationBlacklist(
-        bytesToHexString(result.fundingTxidBytes.reverse()),
-      );
-      log.d("openChannel", [result]);
-      return result;
-    },
-  ),
+    const result = await openChannelSync({
+      nodePubkeyString: pubkey,
+      targetConf: feeRateSat ? undefined : 2,
+      private: true,
+      satPerByte: feeRateSat ? BigInt(feeRateSat) : undefined,
+      scidAlias: true,
+      commitmentType: type,
+      remoteChanReserveSat: BigInt(360),
+      fundMax: true,
+    });
+
+    // TURBOTODO this is weird...
+    const txId = (result.fundingTxid.value as Uint8Array).reverse();
+    getStoreActions().onChain.addToTransactionNotificationBlacklist(bytesToHexString(txId));
+    log.d("openChannel", [result]);
+    return result;
+  }),
 
   closeChannel: thunk(
-    async (
-      _,
-      { fundingTx, outputIndex, force, deliveryAddress },
-      { injections, getStoreActions },
-    ) => {
-      const closeChannel = injections.lndMobile.channel.closeChannel;
-      const result = await closeChannel(fundingTx, outputIndex, force, deliveryAddress);
+    async (actions, { fundingTx, outputIndex, force, deliveryAddress }, { getStoreActions }) => {
+      const unsubscribe = await closeChannel(
+        {
+          channelPoint: {
+            fundingTxid: {
+              case: "fundingTxidStr",
+              value: fundingTx,
+            },
+            outputIndex,
+          },
+
+          force,
+          deliveryAddress,
+        },
+        (result) => {
+          actions.getChannels();
+
+          if (result.update.case === "chanClose") {
+            unsubscribe();
+          }
+        },
+        (error) => {
+          toast("closeChannel: " + error, undefined, "danger");
+        },
+      );
+
       getStoreActions().onChain.addToTransactionNotificationBlacklist(fundingTx);
-      log.d("closeChannel", [result]);
-      return result;
     },
   ),
 
-  abandonChannel: thunk(async (_, { fundingTx, outputIndex }, { injections }) => {
-    const abandonChannel = injections.lndMobile.channel.abandonChannel;
-    const result = await abandonChannel(fundingTx, outputIndex);
+  abandonChannel: thunk(async (_, { fundingTx, outputIndex }) => {
+    const result = await abandonChannel({
+      channelPoint: {
+        fundingTxid: {
+          case: "fundingTxidStr",
+          value: fundingTx,
+        },
+        outputIndex,
+      },
+    });
+
     log.d("abandonChannel", [result]);
     return result;
   }),
 
   exportChannelsBackup: thunk(async (_, _2, { injections }) => {
-    const response = await injections.lndMobile.channel.exportAllChannelBackups();
+    const response = await exportAllChannelBackups({});
     if (response.multiChanBackup && response.multiChanBackup.multiChanBackup) {
       const exportResponse = await NativeModules.LndMobileTools.saveChannelsBackup(
         base64.fromByteArray(response.multiChanBackup.multiChanBackup),
@@ -432,17 +508,14 @@ export const channel: IChannelModel = {
     }
   }),
 
-  exportChannelBackupFile: thunk(async (_, _2, { injections }) => {
+  exportChannelBackupFile: thunk(async () => {
     return await NativeModules.LndMobileTools.saveChannelBackupFile();
   }),
 
   getBalance: thunk(async (actions, _, { injections }) => {
-    const { channelBalance } = injections.lndMobile.channel;
-    const response = await channelBalance(); // response.balance is not Long for some reason
-    actions.setBalance(response.balance.toNumber ? response.balance : Long.fromNumber(0));
-    actions.setPendingOpenBalance(
-      response.pendingOpenBalance.toNumber ? response.pendingOpenBalance : Long.fromNumber(0),
-    );
+    const response = await channelBalance({}); // response.balance is not Long for some reason
+    actions.setBalance(response.balance);
+    actions.setPendingOpenBalance(response.pendingOpenBalance);
     await setItemObject(StorageItem.lightningBalance, response.balance.toString());
   }),
 
@@ -482,15 +555,12 @@ export const channel: IChannelModel = {
   pendingForceClosingChannels: [],
   waitingCloseChannels: [],
   channelUpdateSubscriptionStarted: false,
-  balance: Long.fromNumber(0),
+  balance: BigInt(0),
   remoteBalance: computed((store) => {
     return store.channels
       .filter((channel) => channel.active)
-      .reduce(
-        (prev, currChannel) => prev.add(currChannel.remoteBalance || Long.fromValue(0)),
-        Long.fromValue(0),
-      );
+      .reduce((prev, currChannel) => prev + (currChannel.remoteBalance || BigInt(0)), BigInt(0));
   }),
-  pendingOpenBalance: Long.fromNumber(0),
+  pendingOpenBalance: BigInt(0),
   channelEvents: [],
 };
