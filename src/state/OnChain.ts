@@ -9,6 +9,9 @@ import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { toast } from "../utils";
 
+import { newAddress } from "react-native-turbo-lnd";
+import { AddressType, NewAddressResponse } from "react-native-turbo-lnd/protos/lightning_pb";
+
 import logger from "./../utils/log";
 const log = logger("OnChain");
 
@@ -64,7 +67,7 @@ export interface IOnChainModel {
 
   setBalance: Action<IOnChainModel, lnrpc.IWalletBalanceResponse>;
   setUnconfirmedBalance: Action<IOnChainModel, lnrpc.IWalletBalanceResponse>;
-  setAddress: Action<IOnChainModel, lnrpc.NewAddressResponse>;
+  setAddress: Action<IOnChainModel, NewAddressResponse>;
   setAddressType: Action<IOnChainModel, lnrpc.AddressType>;
   setTransactions: Action<IOnChainModel, ISetTransactionsPayload>;
   setTransactionSubscriptionStarted: Action<IOnChainModel, boolean>;
@@ -171,24 +174,25 @@ export const onChain: IOnChainModel = {
 
   getAddress: thunk(async (actions, { forceNew, p2wkh }, { injections }) => {
     try {
-      const { newAddress } = injections.lndMobile.onchain;
-      let type: lnrpc.AddressType;
+      let type: AddressType;
 
       if (forceNew) {
         if (p2wkh) {
-          type = lnrpc.AddressType.WITNESS_PUBKEY_HASH;
+          type = AddressType.WITNESS_PUBKEY_HASH;
         } else {
-          type = lnrpc.AddressType.TAPROOT_PUBKEY;
+          type = AddressType.TAPROOT_PUBKEY;
         }
       } else {
         if (p2wkh) {
-          type = lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH;
+          type = AddressType.UNUSED_WITNESS_PUBKEY_HASH;
         } else {
-          type = lnrpc.AddressType.UNUSED_TAPROOT_PUBKEY;
+          type = AddressType.UNUSED_TAPROOT_PUBKEY;
         }
       }
 
-      const newAddressResponse = await newAddress(type);
+      const newAddressResponse = await newAddress({
+        type,
+      });
 
       actions.setAddress(newAddressResponse);
       actions.setAddressType(type);
