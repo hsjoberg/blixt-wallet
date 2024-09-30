@@ -4,11 +4,10 @@ import model, { IStoreModel } from "./index";
 import { Flavor } from "../utils/build";
 
 let LndMobile;
-if (Flavor === "fakelnd") {
+if (Flavor === "fakelnd" || true) {
   console.log("Using fake lnd backend");
   LndMobile = require("./LndMobileInjectionFake").default;
-}
-else {
+} else {
   LndMobile = require("./LndMobileInjection").default;
 }
 
@@ -28,15 +27,17 @@ if (process.env.NODE_ENV === "development") {
     injections: {
       lndMobile: LndMobile,
     } as IStoreInjections,
-    compose: PLATFORM !== "web" ? composeWithDevTools({
-      realtime: true,
-      trace: true,
-      hostname: "192.168.1.100",
-      port: 8000,
-    }) : undefined,
+    compose:
+      PLATFORM !== "web"
+        ? composeWithDevTools({
+            realtime: true,
+            trace: true,
+            hostname: "192.168.1.100",
+            port: 8000,
+          })
+        : undefined,
   });
-}
-else {
+} else {
   store = createStore(model, {
     injections: {
       lndMobile: LndMobile,

@@ -67,20 +67,26 @@ import {
   openDatabase,
   setupInitialSchema,
 } from "../storage/database/sqlite";
-import { getItem, getWalletPassword, setWalletPassword } from "../storage/keystore";
+import { getWalletPassword, setWalletPassword } from "../storage/keystore";
 
 import { Alert } from "../utils/alert";
-import { ELndMobileStatusCodes } from "../lndmobile/index";
+import { ELndMobileStatusCodes, writeConfig } from "../lndmobile/index";
 import { IStoreInjections } from "./store";
-import { LndMobileEventEmitter } from "../utils/event-listener";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { appMigration } from "../migration/app-migration";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { clearTransactions } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/lightning";
 import logger from "./../utils/log";
-import { toast } from "../utils";
+import { stringToUint8Array, toast } from "../utils";
+
+import {
+  initWallet,
+  start as startLndTurbo,
+  subscribeState,
+  unlockWallet,
+} from "react-native-turbo-lnd";
+import { WalletState } from "react-native-turbo-lnd/protos/lightning_pb";
 
 const log = logger("Store");
 
@@ -407,7 +413,10 @@ export const model: IStoreModel = {
             await setLndCompactDb(false);
           }
 
-          log.d("startLnd", [await startLnd(torEnabled, args)]);
+          // log.d("startLnd", [await startLnd(torEnabled, args)]);
+          // TURBOTODO(hsjoberg)
+          args += " --lnddir=/data/user/0/com.blixtwallet.debug/files/";
+          log.d("startLnd", [await startLndTurbo(args)]);
         } catch (e) {
           if (e.message.includes("lnd already started")) {
             toast("lnd already started", 3000, "warning");
@@ -438,77 +447,75 @@ export const model: IStoreModel = {
     await dispatch.channel.setupCachedBalance();
     log.d("Done starting up stores");
 
-    LndMobileEventEmitter.addListener("SubscribeState", async (e: any) => {
-      try {
-        log.d("SubscribeState", [e]);
-        const error = checkLndStreamErrorResponse("SubscribeState", e);
-        if (error === "EOF") {
-          return;
-        } else if (error) {
-          throw error;
-        }
+    subscribeState(
+      {},
+      async (state) => {
+        try {
+          if (state.state === WalletState.NON_EXISTING) {
+            log.d("Got WalletState.NON_EXISTING");
 
-        const state = injections.lndMobile.index.decodeState(e.data ?? "");
-        log.i("Current lnd state", [state]);
-        if (state.state === lnrpc.WalletState.NON_EXISTING) {
-          log.d("Got lnrpc.WalletState.NON_EXISTING");
+            // Continue channel db import restore
+            if (importChannelDbOnStartup) {
+              log.i("Continuing restoration with channel import");
+              actions.setWalletSeed(importChannelDbOnStartup.seed);
+              await actions.createWallet({
+                restore: {
+                  restoreWallet: true,
+                  aezeedPassphrase: importChannelDbOnStartup.passphrase,
+                },
+              });
 
-          // Continue channel db import restore
-          if (importChannelDbOnStartup) {
-            log.i("Continuing restoration with channel import");
-            actions.setWalletSeed(importChannelDbOnStartup.seed);
-            await actions.createWallet({
-              restore: {
-                restoreWallet: true,
-                aezeedPassphrase: importChannelDbOnStartup.passphrase,
-              },
-            });
+              await Promise.all([
+                actions.settings.changeAutopilotEnabled(false),
+                actions.scheduledSync.setSyncEnabled(true), // TODO test
+                actions.settings.changeScheduledSyncEnabled(true),
+                actions.changeOnboardingState("DONE"),
+              ]);
 
-            await Promise.all([
-              actions.settings.changeAutopilotEnabled(false),
-              actions.scheduledSync.setSyncEnabled(true), // TODO test
-              actions.settings.changeScheduledSyncEnabled(true),
-              actions.changeOnboardingState("DONE"),
-            ]);
-
-            setImportChannelDbOnStartup(null);
-          }
-        } else if (state.state === lnrpc.WalletState.LOCKED) {
-          log.d("Got lnrpc.WalletState.LOCKED");
-          log.d("Wallet locked, unlocking wallet");
-          debugShowStartupInfo &&
-            toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-          await dispatch.unlockWallet();
-        } else if (state.state === lnrpc.WalletState.UNLOCKED) {
-          log.d("Got lnrpc.WalletState.UNLOCKED");
-          debugShowStartupInfo &&
-            toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-        } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
-          debugShowStartupInfo &&
-            toast(
-              "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
-              1000,
-            );
-          await dispatch.lightning.initialize({ start });
-          log.d("Got lnrpc.WalletState.RPC_ACTIVE");
-        } else if (state.state === lnrpc.WalletState.SERVER_ACTIVE) {
-          debugShowStartupInfo &&
-            toast("Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-          log.d("Got lnrpc.WalletState.SERVER_ACTIVE");
-
-          // We'll enter this branch of code if the react-native frontend desyncs with lnd.
-          // This can happen for example if Android kills react-native but not LndMobileService.
-          if (!getState().lightning.rpcReady) {
+              setImportChannelDbOnStartup(null);
+            }
+          } else if (state.state === WalletState.LOCKED) {
+            log.d("Got WalletState.LOCKED");
+            log.d("Wallet locked, unlocking wallet");
+            debugShowStartupInfo &&
+              toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+            await dispatch.unlockWallet();
+          } else if (state.state === lnrpc.WalletState.UNLOCKED) {
+            log.d("Got lnrpc.WalletState.UNLOCKED");
+            debugShowStartupInfo &&
+              toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
+            debugShowStartupInfo &&
+              toast(
+                "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
+                1000,
+              );
             await dispatch.lightning.initialize({ start });
+            log.d("Got lnrpc.WalletState.RPC_ACTIVE");
+          } else if (state.state === lnrpc.WalletState.SERVER_ACTIVE) {
+            debugShowStartupInfo &&
+              toast(
+                "Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
+                1000,
+              );
+            log.d("Got lnrpc.WalletState.SERVER_ACTIVE");
+
+            // We'll enter this branch of code if the react-native frontend desyncs with lnd.
+            // This can happen for example if Android kills react-native but not LndMobileService.
+            if (!getState().lightning.rpcReady) {
+              await dispatch.lightning.initialize({ start });
+            }
+          } else {
+            log.d("Got unknown lnrpc.WalletState", [state.state]);
           }
-        } else {
-          log.d("Got unknown lnrpc.WalletState", [state.state]);
+        } catch (error: any) {
+          toast(error.message, undefined, "danger");
         }
-      } catch (error: any) {
-        toast(error.message, undefined, "danger");
-      }
-    });
-    await injections.lndMobile.index.subscribeState();
+      },
+      (error) => {
+        toast("subscribeState: " + error, undefined, "danger");
+      },
+    );
 
     actions.setAppReady(true);
     log.d("App initialized");
@@ -571,7 +578,8 @@ export const model: IStoreModel = {
   }),
 
   writeConfig: thunk(async (_, _2, { injections, getState }) => {
-    const writeConfig = injections.lndMobile.index.writeConfig;
+    // TURBOTODO(hsjoberg)
+    //const writeConfig = injections.lndMobile.index.writeConfig;
 
     const lndChainBackend = (await getItemAsyncStorage(
       StorageItem.lndChainBackend,
@@ -690,17 +698,17 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   }),
 
   unlockWallet: thunk(async (_, _2, { injections }) => {
-    const unlockWallet = injections.lndMobile.wallet.unlockWallet;
-    // const password = await getItem(StorageItem.walletPassword);
     const password = await getWalletPassword();
     if (!password) {
       throw new Error("Cannot find wallet password");
     }
-    await unlockWallet(password);
+    await unlockWallet({
+      walletPassword: stringToUint8Array(password),
+    });
   }),
 
   createWallet: thunk(async (actions, payload, { injections, getState, dispatch }) => {
-    const initWallet = injections.lndMobile.wallet.initWallet;
+    // TURBOTODO(hsjoberg): Add generateSecureRandomAsBase64 to a local TurboModule
     const generateSecureRandomAsBase64 = injections.lndMobile.index.generateSecureRandomAsBase64;
     const seed = getState().walletSeed;
     if (!seed) {
@@ -712,14 +720,27 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
     await setWalletPassword(randomBase64);
 
     const wallet = payload?.restore
-      ? await initWallet(
-          seed,
-          randomBase64,
-          500,
-          payload.restore.channelsBackup,
-          payload.restore.aezeedPassphrase,
-        )
-      : await initWallet(seed, randomBase64, undefined, undefined, payload?.init?.aezeedPassphrase);
+      ? await initWallet({
+          cipherSeedMnemonic: seed,
+          walletPassword: stringToUint8Array(randomBase64),
+          recoveryWindow: 500,
+          // TURBOTODO: test if this works
+          channelBackups: {
+            multiChanBackup: {
+              multiChanBackup: base64.toByteArray(payload.restore.channelsBackup!),
+            },
+          },
+          aezeedPassphrase: payload.restore.aezeedPassphrase
+            ? stringToUint8Array(payload.restore.aezeedPassphrase)
+            : undefined,
+        })
+      : await initWallet({
+          cipherSeedMnemonic: seed,
+          walletPassword: stringToUint8Array(randomBase64),
+          aezeedPassphrase: payload?.init?.aezeedPassphrase
+            ? stringToUint8Array(payload?.init?.aezeedPassphrase)
+            : undefined,
+        });
 
     await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);
