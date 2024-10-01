@@ -3,7 +3,6 @@ import Long from "long";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { lnrpc } from "../../proto/lightning";
 import { toast } from "../utils";
 
 import {
@@ -18,6 +17,7 @@ import {
   AddressType,
   GetTransactionsRequestSchema,
   NewAddressResponse,
+  SendCoinsResponse,
   Transaction,
   WalletBalanceResponse,
 } from "react-native-turbo-lnd/protos/lightning_pb";
@@ -27,7 +27,7 @@ import { create } from "@bufbuild/protobuf";
 import { BumpFeeResponse } from "react-native-turbo-lnd/protos/walletrpc/walletkit_pb";
 const log = logger("OnChain");
 
-export interface IBlixtTransaction extends lnrpc.ITransaction {
+export interface IBlixtTransaction extends Transaction {
   type: "NORMAL" | "CHANNEL_OPEN" | "CHANNEL_CLOSE";
 }
 
@@ -67,20 +67,20 @@ export interface IOnChainModel {
     ISendCoinsPayload,
     IStoreInjections,
     any,
-    Promise<lnrpc.ISendCoinsResponse>
+    Promise<SendCoinsResponse>
   >;
   sendCoinsAll: Thunk<
     IOnChainModel,
     ISendCoinsAllPayload,
     IStoreInjections,
     any,
-    Promise<lnrpc.ISendCoinsResponse>
+    Promise<SendCoinsResponse>
   >;
 
   setBalance: Action<IOnChainModel, WalletBalanceResponse>;
-  setUnconfirmedBalance: Action<IOnChainModel, lnrpc.IWalletBalanceResponse>;
+  setUnconfirmedBalance: Action<IOnChainModel, WalletBalanceResponse>;
   setAddress: Action<IOnChainModel, NewAddressResponse>;
-  setAddressType: Action<IOnChainModel, lnrpc.AddressType>;
+  setAddressType: Action<IOnChainModel, AddressType>;
   setTransactions: Action<IOnChainModel, ISetTransactionsPayload>;
   setTransactionSubscriptionStarted: Action<IOnChainModel, boolean>;
 
@@ -90,14 +90,11 @@ export interface IOnChainModel {
   unconfirmedBalance: bigint;
   totalBalance: Computed<IOnChainModel, bigint>;
   address?: string;
-  addressType?: lnrpc.AddressType;
+  addressType?: AddressType;
   transactions: IBlixtTransaction[];
   transactionSubscriptionStarted: boolean;
 
-  getOnChainTransactionByTxId: Computed<
-    IOnChainModel,
-    (txId: string) => lnrpc.ITransaction | undefined
-  >;
+  getOnChainTransactionByTxId: Computed<IOnChainModel, (txId: string) => Transaction | undefined>;
 
   transactionNotificationBlacklist: string[];
   bumpFee: Thunk<IOnChainModel, IBumpFeePayload, IStoreInjections, any, Promise<BumpFeeResponse>>;
