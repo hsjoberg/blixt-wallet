@@ -4,15 +4,13 @@ import Long from "long";
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { lnrpc } from "../../proto/lightning";
-import { decodeSubscribeTransactionsResult } from "../lndmobile/onchain";
-import { LndMobileEventEmitter } from "../utils/event-listener";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { toast } from "../utils";
 
 import {
   getTransactions,
   newAddress,
   sendCoins,
+  subscribeTransactions,
   walletBalance,
   walletKitBumpFee,
 } from "react-native-turbo-lnd";
@@ -20,6 +18,7 @@ import {
   AddressType,
   GetTransactionsRequestSchema,
   NewAddressResponse,
+  Transaction,
   WalletBalanceResponse,
 } from "react-native-turbo-lnd/protos/lightning_pb";
 
@@ -115,42 +114,45 @@ export const onChain: IOnChainModel = {
         return;
       } else {
         await injections.lndMobile.onchain.subscribeTransactions();
-        LndMobileEventEmitter.addListener("SubscribeTransactions", async (e: any) => {
-          try {
-            log.d("Event SubscribeTransactions", [e]);
-            const error = checkLndStreamErrorResponse("SubscribeTransactions", e);
+        subscribeTransactions(
+          {},
+          async (transaction) => {
+            try {
+              log.d("Event SubscribeTransactions", []);
+
+              await actions.getBalance();
+
+              if (getStoreState().onboardingState === "SEND_ONCHAIN") {
+                log.i("Changing onboarding state to DO_BACKUP");
+                getStoreActions().changeOnboardingState("DO_BACKUP");
+              }
+
+              if (
+                !getState().transactionNotificationBlacklist.includes(transaction.txHash) &&
+                transaction.numConfirmations > 0 &&
+                Long.isLong(transaction.amount) &&
+                transaction.amount.greaterThan(0)
+              ) {
+                getStoreActions().notificationManager.localNotification({
+                  message: "Received on-chain transaction",
+                });
+                actions.addToTransactionNotificationBlacklist(transaction.txHash);
+
+                actions.getTransactions();
+              }
+            } catch (error: any) {
+              toast(error.message, undefined, "danger");
+            }
+          },
+          (error) => {
             if (error === "EOF") {
               return;
             } else if (error) {
               log.e("Got error from SubscribeTransactions", [error]);
               return;
             }
-
-            await actions.getBalance();
-
-            if (getStoreState().onboardingState === "SEND_ONCHAIN") {
-              log.i("Changing onboarding state to DO_BACKUP");
-              getStoreActions().changeOnboardingState("DO_BACKUP");
-            }
-
-            const transaction = decodeSubscribeTransactionsResult(e.data);
-            if (
-              !getState().transactionNotificationBlacklist.includes(transaction.txHash) &&
-              transaction.numConfirmations > 0 &&
-              Long.isLong(transaction.amount) &&
-              transaction.amount.greaterThan(0)
-            ) {
-              getStoreActions().notificationManager.localNotification({
-                message: "Received on-chain transaction",
-              });
-              actions.addToTransactionNotificationBlacklist(transaction.txHash);
-
-              actions.getTransactions();
-            }
-          } catch (error: any) {
-            toast(error.message, undefined, "danger");
-          }
-        });
+          },
+        );
 
         actions.setTransactionSubscriptionStarted(true);
       }
