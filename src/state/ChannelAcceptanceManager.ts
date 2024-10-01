@@ -2,12 +2,11 @@ import { Thunk, thunk } from "easy-peasy";
 
 import { ILightningModel } from "./Lightning";
 import { IStoreInjections } from "./store";
-import { LndMobileEventEmitter } from "../utils/event-listener";
 import { bytesToHexString } from "../utils";
 import logger from "./../utils/log";
 import { IStoreModel } from "./index";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
-import { lnrpc } from "../../proto/lightning";
+import { channelAcceptor } from "react-native-turbo-lnd";
+import { CommitmentType } from "react-native-turbo-lnd/protos/lightning_pb";
 
 const log = logger("ChannelAcceptanceManager");
 
@@ -17,58 +16,45 @@ export interface IChannelAcceptanceManagerModel {
 
 export const channelAcceptanceManager: IChannelAcceptanceManagerModel = {
   initialize: thunk(async (actions, _, { getStoreState, injections }) => {
-    LndMobileEventEmitter.addListener("ChannelAcceptor", async (event) => {
-      try {
-        const error = checkLndStreamErrorResponse("SubscribeChannelEvents", event);
-        if (error === "EOF") {
-          return;
-        } else if (error) {
-          log.d("Got error from SubscribeChannelEvents", [error]);
-          throw error;
-        }
+    log.i("Starting Channel Acceptor", []);
 
+    const { send, close } = channelAcceptor(
+      (event) => {
         let isZeroConfAllowed = false;
 
-        const channelAcceptRequest = injections.lndMobile.channel.decodeChannelAcceptRequest(
-          event.data,
-        );
-
-        log.i("Channel accept request", [channelAcceptRequest]);
-
-        // Reject unknown, legacy and static remote key channels
-
         if (
-          channelAcceptRequest.commitmentType === lnrpc.CommitmentType.LEGACY ||
-          channelAcceptRequest.commitmentType === lnrpc.CommitmentType.STATIC_REMOTE_KEY ||
-          channelAcceptRequest.commitmentType === lnrpc.CommitmentType.UNKNOWN_COMMITMENT_TYPE
+          event.commitmentType === CommitmentType.LEGACY ||
+          event.commitmentType === CommitmentType.STATIC_REMOTE_KEY ||
+          event.commitmentType === CommitmentType.UNKNOWN_COMMITMENT_TYPE
         ) {
-          await injections.lndMobile.channel.channelAcceptorResponse(
-            channelAcceptRequest.pendingChanId,
-            false,
-          );
-          
-          log.i("Channel request rejected due to commitment type: ", [channelAcceptRequest.commitmentType]);
+          send({
+            accept: false,
+            pendingChanId: event.pendingChanId,
+            error: "Only anchor channels are allowed",
+          });
+
+          log.i("Channel request rejected due to commitment type: ", [event.commitmentType]);
           return;
         }
 
-        if (!!channelAcceptRequest.wantsZeroConf) {
+        if (!!event.wantsZeroConf) {
           const zeroConfPeers = getStoreState().settings.zeroConfPeers;
 
           isZeroConfAllowed = !!zeroConfPeers
-            ? zeroConfPeers.includes(bytesToHexString(channelAcceptRequest.nodePubkey))
+            ? zeroConfPeers.includes(bytesToHexString(event.nodePubkey))
             : false;
         }
 
-        await injections.lndMobile.channel.channelAcceptorResponse(
-          channelAcceptRequest.pendingChanId,
-          !channelAcceptRequest.wantsZeroConf || isZeroConfAllowed,
-          isZeroConfAllowed,
-        );
-      } catch (error) {
+        send({
+          pendingChanId: event.pendingChanId,
+          accept: !event.wantsZeroConf || isZeroConfAllowed,
+          zeroConf: isZeroConfAllowed,
+        });
+      },
+      (error) => {
         log.e("Channel acceptance error: ", [error]);
-      }
-    });
-
-    await injections.lndMobile.channel.channelAcceptor();
+        close();
+      },
+    );
   }),
 };
