@@ -80,6 +80,8 @@ macos/Pods
 android/lndmobile/Lndmobile.aar
 ios/Lndmobile.xcframework
 macos/Lndmobile.xcframework
+liblnd.a
+jniLibs/
 dist
 .webpack
 contrib/service-image/webp

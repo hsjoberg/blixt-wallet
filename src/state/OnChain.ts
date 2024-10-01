@@ -3,16 +3,29 @@ import Long from "long";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { lnrpc, walletrpc } from "../../proto/lightning";
+import { lnrpc } from "../../proto/lightning";
 import { decodeSubscribeTransactionsResult } from "../lndmobile/onchain";
 import { LndMobileEventEmitter } from "../utils/event-listener";
 import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { toast } from "../utils";
 
-import { newAddress } from "react-native-turbo-lnd";
-import { AddressType, NewAddressResponse } from "react-native-turbo-lnd/protos/lightning_pb";
+import {
+  getTransactions,
+  newAddress,
+  sendCoins,
+  walletBalance,
+  walletKitBumpFee,
+} from "react-native-turbo-lnd";
+import {
+  AddressType,
+  GetTransactionsRequestSchema,
+  NewAddressResponse,
+  WalletBalanceResponse,
+} from "react-native-turbo-lnd/protos/lightning_pb";
 
 import logger from "./../utils/log";
+import { create } from "@bufbuild/protobuf";
+import { BumpFeeResponse } from "react-native-turbo-lnd/protos/walletrpc/walletkit_pb";
 const log = logger("OnChain");
 
 export interface IBlixtTransaction extends lnrpc.ITransaction {
@@ -65,7 +78,7 @@ export interface IOnChainModel {
     Promise<lnrpc.ISendCoinsResponse>
   >;
 
-  setBalance: Action<IOnChainModel, lnrpc.IWalletBalanceResponse>;
+  setBalance: Action<IOnChainModel, WalletBalanceResponse>;
   setUnconfirmedBalance: Action<IOnChainModel, lnrpc.IWalletBalanceResponse>;
   setAddress: Action<IOnChainModel, NewAddressResponse>;
   setAddressType: Action<IOnChainModel, lnrpc.AddressType>;
@@ -74,9 +87,9 @@ export interface IOnChainModel {
 
   addToTransactionNotificationBlacklist: Action<IOnChainModel, string>;
 
-  balance: Long;
-  unconfirmedBalance: Long;
-  totalBalance: Computed<IOnChainModel, Long>;
+  balance: bigint;
+  unconfirmedBalance: bigint;
+  totalBalance: Computed<IOnChainModel, bigint>;
   address?: string;
   addressType?: lnrpc.AddressType;
   transactions: IBlixtTransaction[];
@@ -88,13 +101,7 @@ export interface IOnChainModel {
   >;
 
   transactionNotificationBlacklist: string[];
-  bumpFee: Thunk<
-    IOnChainModel,
-    IBumpFeePayload,
-    IStoreInjections,
-    any,
-    Promise<walletrpc.BumpFeeResponse>
-  >;
+  bumpFee: Thunk<IOnChainModel, IBumpFeePayload, IStoreInjections, any, Promise<BumpFeeResponse>>;
 }
 
 export const onChain: IOnChainModel = {
@@ -140,7 +147,7 @@ export const onChain: IOnChainModel = {
 
               actions.getTransactions();
             }
-          } catch (error) {
+          } catch (error: any) {
             toast(error.message, undefined, "danger");
           }
         });
@@ -154,20 +161,8 @@ export const onChain: IOnChainModel = {
   ),
 
   getBalance: thunk(async (actions, _, { injections }) => {
-    const { walletBalance } = injections.lndMobile.onchain;
-    const walletBalanceResponse = await walletBalance();
+    const walletBalanceResponse = await walletBalance({});
 
-    // There's a bug here where totalBalance is
-    // set to 0 instead of Long(0)
-    if ((walletBalanceResponse.totalBalance as unknown) === 0) {
-      walletBalanceResponse.totalBalance = Long.fromNumber(0);
-    }
-    if ((walletBalanceResponse.confirmedBalance as unknown) === 0) {
-      walletBalanceResponse.confirmedBalance = Long.fromNumber(0);
-    }
-    if ((walletBalanceResponse.unconfirmedBalance as unknown) === 0) {
-      walletBalanceResponse.unconfirmedBalance = Long.fromNumber(0);
-    }
     actions.setBalance(walletBalanceResponse);
     actions.setUnconfirmedBalance(walletBalanceResponse);
   }),
@@ -196,15 +191,14 @@ export const onChain: IOnChainModel = {
 
       actions.setAddress(newAddressResponse);
       actions.setAddressType(type);
-    } catch (error) {
+    } catch (error: any) {
       throw new Error("Error while generating bitcoin address: " + error.message);
     }
   }),
 
   getTransactions: thunk(async (actions, _, { getStoreState, injections }) => {
-    const { getTransactions } = injections.lndMobile.onchain;
+    const transactionDetails = await getTransactions(create(GetTransactionsRequestSchema));
     const channelEvents = getStoreState().channel.channelEvents;
-    const transactionDetails = await getTransactions();
 
     const transactions: IBlixtTransaction[] = [];
     for (const tx of transactionDetails.transactions) {
@@ -232,31 +226,44 @@ export const onChain: IOnChainModel = {
   }),
 
   sendCoins: thunk(async (actions, { address, sat, feeRate }, { injections }) => {
-    const { sendCoins } = injections.lndMobile.onchain;
-    const response = await sendCoins(address, sat, feeRate);
+    const response = await sendCoins({
+      addr: address,
+      amount: BigInt(sat),
+      satPerVbyte: feeRate ? BigInt(feeRate) : undefined,
+    });
+
     actions.addToTransactionNotificationBlacklist(response.txid);
     return response;
   }),
 
   sendCoinsAll: thunk(async (actions, { address, feeRate }, { injections }) => {
-    const { sendCoinsAll } = injections.lndMobile.onchain;
-    const response = await sendCoinsAll(address, feeRate);
+    const response = await sendCoins({
+      sendAll: true,
+      addr: address,
+      satPerVbyte: feeRate ? BigInt(feeRate) : undefined,
+    });
+
     actions.addToTransactionNotificationBlacklist(response.txid);
     return response;
   }),
 
   bumpFee: thunk(async (_, { feeRate, txid, index }, { injections }) => {
-    const { bumpFee } = injections.lndMobile.onchain;
-    const response = await bumpFee(feeRate, txid, index);
+    const response = await walletKitBumpFee({
+      satPerVbyte: BigInt(feeRate),
+      outpoint: {
+        txidStr: txid,
+        outputIndex: index,
+      },
+    });
 
     return response;
   }),
 
   setBalance: action((state, payload) => {
-    state.balance = payload.confirmedBalance!;
+    state.balance = BigInt(payload.confirmedBalance?.toString() || "0");
   }),
   setUnconfirmedBalance: action((state, payload) => {
-    state.unconfirmedBalance = payload.unconfirmedBalance!;
+    state.unconfirmedBalance = BigInt(payload.unconfirmedBalance?.toString() || "0");
   }),
   setAddress: action((state, payload) => {
     state.address = payload.address;
@@ -275,9 +282,9 @@ export const onChain: IOnChainModel = {
     state.transactionNotificationBlacklist = [...state.transactionNotificationBlacklist, payload];
   }),
 
-  balance: Long.fromInt(0),
-  unconfirmedBalance: Long.fromInt(0),
-  totalBalance: computed((state) => state.balance.add(state.unconfirmedBalance)),
+  balance: BigInt(0),
+  unconfirmedBalance: BigInt(0),
+  totalBalance: computed((state) => state.balance + state.unconfirmedBalance),
   transactions: [],
   transactionSubscriptionStarted: false,
 
