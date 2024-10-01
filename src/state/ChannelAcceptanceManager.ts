@@ -15,7 +15,7 @@ export interface IChannelAcceptanceManagerModel {
 }
 
 export const channelAcceptanceManager: IChannelAcceptanceManagerModel = {
-  initialize: thunk(async (actions, _, { getStoreState, injections }) => {
+  initialize: thunk(async (actions, _, { getStoreState }) => {
     log.i("Starting Channel Acceptor", []);
 
     const { send, close } = channelAcceptor(

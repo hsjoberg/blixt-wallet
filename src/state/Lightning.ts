@@ -8,6 +8,7 @@ import { IStoreModel } from "./index";
 import logger from "./../utils/log";
 import {
   autopilotModifyStatus,
+  autopilotSetScores,
   autopilotStatus,
   connectPeer,
   disconnectPeer,
@@ -124,7 +125,9 @@ export const lightning: ILightningModel = {
                 "checkRecoverInfo time: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
               ),
           )
-          .catch((error) => toast("checkRecoverInfo error: " + error.message, undefined, "danger"));
+          .catch((error: any) =>
+            toast("checkRecoverInfo error: " + error.message, undefined, "danger"),
+          );
         await actions.waitForChainSync();
 
         debugShowStartupInfo &&
@@ -185,7 +188,7 @@ export const lightning: ILightningModel = {
     }
   }),
 
-  setupAutopilot: thunk(async (actions, enabled, { injections }) => {
+  setupAutopilot: thunk(async (actions, enabled, {}) => {
     log.i("Setting up Autopilot");
 
     if (enabled) {
@@ -193,8 +196,9 @@ export const lightning: ILightningModel = {
         await timeout(5000);
         const scores = await getNodeScores();
         // console.log(scores);
-        const setScores = injections.lndMobile.autopilot.setScores;
-        await setScores(scores);
+        await autopilotSetScores({
+          scores,
+        });
       } catch (e) {
         log.e("Autopilot fail", [e]);
       }
@@ -215,7 +219,7 @@ export const lightning: ILightningModel = {
     } while (true);
   }),
 
-  getLightningPeers: thunk(async (actions, _, { injections }) => {
+  getLightningPeers: thunk(async (actions, _, {}) => {
     const response = await listPeers({});
 
     const lightningPeers = await Promise.all(
@@ -247,7 +251,7 @@ export const lightning: ILightningModel = {
     actions.setLightningPeers(sortedPeers);
   }),
 
-  connectPeer: thunk(async (_, peer, { injections }) => {
+  connectPeer: thunk(async (_, peer, {}) => {
     const [pubkey, host] = peer.split("@");
     return await connectPeer({
       addr: {
@@ -257,29 +261,29 @@ export const lightning: ILightningModel = {
     });
   }),
 
-  disconnectPeer: thunk(async (_, pubkey, { injections }) => {
+  disconnectPeer: thunk(async (_, pubkey, {}) => {
     return await disconnectPeer({
       pubKey: pubkey,
     });
   }),
 
-  signMessage: thunk(async (_, message, { injections }) => {
+  signMessage: thunk(async (_, message, {}) => {
     return await signMessage({
       msg: stringToUint8Array(message),
     });
   }),
 
-  getInfo: thunk(async (actions, _, { injections }) => {
+  getInfo: thunk(async (actions, _, {}) => {
     const info = await getInfo({});
     actions.setNodeInfo(info);
   }),
 
-  getNetworkInfo: thunk(async (actions, _, { injections }) => {
+  getNetworkInfo: thunk(async (actions, _, {}) => {
     const info = await getNetworkInfo({});
     actions.setNetworkInfo(info);
   }),
 
-  checkRecoverInfo: thunk(async (actions, _, { getState, injections }) => {
+  checkRecoverInfo: thunk(async (actions, _, {}) => {
     while (true) {
       try {
         const info = await getRecoveryInfo({});
@@ -296,7 +300,7 @@ export const lightning: ILightningModel = {
     }
   }),
 
-  waitForChainSync: thunk(async (actions, _, { getState, injections }) => {
+  waitForChainSync: thunk(async (actions, _, { getState }) => {
     const firstSync = getState().firstSync;
     let info;
     do {
@@ -369,7 +373,7 @@ export const lightning: ILightningModel = {
     await setItemObject(StorageItem.timeSinceLastSync, new Date().getTime());
   }),
 
-  waitForGraphSync: thunk(async (actions, _, { getState, injections }) => {
+  waitForGraphSync: thunk(async (actions, _, {}) => {
     log.d("Start waiting for graph sync");
     let info;
     do {
