@@ -142,7 +142,7 @@ export const transaction: ITransactionModel = {
                       amtToForward:
                         Long.fromNumber(Number(hop.amtToForwardMsat) / 1000) || Long.fromInt(0),
                       amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-                      fee: Long.fromNumber(Number(hop.fee)) || Long.fromInt(0),
+                      fee: Long.fromNumber(Number(hop.feeMsat) / 1000) || Long.fromInt(0),
                       feeMsat: Long.fromNumber(Number(hop.feeMsat)) || Long.fromInt(0),
                       expiry: hop.expiry || null,
                       pubKey: hop.pubKey || null,

@@ -86,7 +86,7 @@ export interface IReceiveModel {
     Promise<AddInvoiceResponse>
   >;
 
-  //TODO: Nitesh: Check with Hampus on
+  //TURBOTODO: Nitesh: Check with Hampus on
   // IReceiveModelAddInvoiceBlixtLspPayload this type def
   addInvoiceBlixtLsp: Thunk<
     IReceiveModel,
@@ -103,7 +103,7 @@ export interface IReceiveModel {
   >;
   subscribeInvoice: Thunk<IReceiveModel, void, IStoreInjections, IStoreModel>;
   setInvoiceSubscriptionStarted: Action<IReceiveModel, boolean>;
-  // TODO: Nitesh - Unsure why this exists?
+  // TURBOTODO: Nitesh - Unsure why this exists?
   // setInvoiceSubscriptionResource: Action<IReceiveModel, EmitterSubscription | undefined>;
 
   setInvoiceTmpData: Action<IReceiveModel, IInvoiceTempData>;
@@ -140,7 +140,7 @@ export const receive: IReceiveModel = {
       invoiceSubscription.remove();
       actions.setInvoiceSubscriptionStarted(false);
 
-      // TODO: Nitesh - Unsure why this exists?
+      // TURBOTODO: Nitesh - Unsure why this exists?
       // actions.setInvoiceSubscriptionResource(undefined);
     }
   }),
@@ -416,7 +416,7 @@ export const receive: IReceiveModel = {
     state.invoiceSubscriptionStarted = payload;
   }),
 
-  // TODO: Nitesh - Unsure why this exists?
+  // TURBOTODO: Nitesh - Unsure why this exists?
   // setInvoiceSubscriptionResource: action((state, payload) => {
   //   state.invoiceSubscription = payload;
   // }),
