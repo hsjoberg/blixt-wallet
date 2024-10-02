@@ -1,5 +1,4 @@
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
-import Long from "long";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
@@ -127,8 +126,7 @@ export const onChain: IOnChainModel = {
               if (
                 !getState().transactionNotificationBlacklist.includes(transaction.txHash) &&
                 transaction.numConfirmations > 0 &&
-                Long.isLong(transaction.amount) &&
-                transaction.amount.greaterThan(0)
+                Number(transaction.amount) > 0
               ) {
                 getStoreActions().notificationManager.localNotification({
                   message: "Received on-chain transaction",

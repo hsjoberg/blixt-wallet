@@ -5,7 +5,7 @@ import Long from "long";
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
-import { lnrpc, invoicesrpc } from "../../proto/lightning";
+import { lnrpc } from "../../proto/lightning";
 import { setupDescription } from "../utils/NameDesc";
 import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
 import {
@@ -14,6 +14,7 @@ import {
   bytesToHexString,
   toast,
   uint8ArrayToUnicodeString,
+  hexToUint8Array,
 } from "../utils";
 import { TLV_RECORD_NAME, TLV_SATOGRAM, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
@@ -22,6 +23,9 @@ import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { ILNUrlPayResponsePayerData } from "./LNURL";
 
 import logger from "./../utils/log";
+import { AddInvoiceResponse } from "react-native-turbo-lnd/protos/lightning_pb";
+import { CancelInvoiceResp } from "react-native-turbo-lnd/protos/invoicesrpc/invoices_pb";
+import { addInvoice, invoicesCancelInvoice, subscribeInvoices } from "react-native-turbo-lnd";
 const log = logger("Receive");
 
 // TODO(hsjoberg): this should match Transaction model
@@ -46,7 +50,7 @@ interface IReceiveModelAddInvoicePayload {
   skipNameDesc?: boolean;
 }
 
-interface IReceiveModelAddInvoiceBlixtLspPayload {
+interface IReceiveModell {
   description: string;
   sat: number;
   expiry?: number;
@@ -73,20 +77,20 @@ export interface IReceiveModel {
     IReceiveModelAddInvoicePayload,
     IStoreInjections,
     IStoreModel,
-    Promise<lnrpc.AddInvoiceResponse>
+    Promise<AddInvoiceResponse>
   >;
   addInvoiceBlixtLsp: Thunk<
     IReceiveModel,
     IReceiveModelAddInvoiceBlixtLspPayload,
     IStoreInjections,
     IStoreModel,
-    Promise<lnrpc.AddInvoiceResponse>
+    Promise<AddInvoiceResponse>
   >;
   cancelInvoice: Thunk<
     IReceiveModel,
     IReceiveModelCancelInvoicePayload,
     IStoreInjections,
-    Promise<invoicesrpc.CancelInvoiceResp>
+    Promise<CancelInvoiceResp>
   >;
   subscribeInvoice: Thunk<IReceiveModel, void, IStoreInjections, IStoreModel>;
   setInvoiceSubscriptionStarted: Action<IReceiveModel, boolean>;
@@ -106,8 +110,14 @@ export const receive: IReceiveModel = {
       log.w("Receive.initialize() called when subscription already started");
       return;
     }
-    const subscribeInvoices = injections.lndMobile.wallet.subscribeInvoices;
-    await subscribeInvoices();
+
+    subscribeInvoices(
+      {},
+      (res) => {},
+      (err) => {
+        log.w("An error occourred subscribing to invoices", [err]);
+      },
+    );
     await timeout(2000); // Wait for the stream to get ready
     actions.subscribeInvoice();
     return true;
@@ -125,20 +135,19 @@ export const receive: IReceiveModel = {
 
   addInvoice: thunk(async (actions, payload, { injections, getStoreState, getStoreActions }) => {
     log.d("addInvoice()");
-    const addInvoice = injections.lndMobile.index.addInvoice;
     const name = getStoreState().settings.name;
     const invoiceExpiry = getStoreState().settings.invoiceExpiry;
     const description = payload.skipNameDesc
       ? payload.description
       : setupDescription(payload.description, name);
 
-    const result = await addInvoice(
-      payload.sat,
-      description,
-      payload.expiry ?? invoiceExpiry,
-      payload.tmpData?.lightningBox?.descHash,
-      payload.preimage,
-    );
+    const result = await addInvoice({
+      value: BigInt(payload.sat),
+      memo: description,
+      expiry: payload.expiry ? BigInt(payload.expiry) : BigInt(invoiceExpiry),
+      descriptionHash: payload.tmpData?.lightningBox?.descHash,
+      rPreimage: payload.preimage,
+    });
     log.d("addInvoice() result", [result]);
     getStoreActions().clipboardManager.addToInvoiceCache(result.paymentRequest);
 
@@ -155,19 +164,27 @@ export const receive: IReceiveModel = {
   addInvoiceBlixtLsp: thunk(
     async (actions, payload, { injections, getStoreState, getStoreActions }) => {
       log.d("addInvoice()");
-      const addInvoiceBlixtLsp = injections.lndMobile.index.addInvoiceBlixtLsp;
       const name = getStoreState().settings.name;
       const description = setupDescription(payload.description, name);
 
-      const result = await addInvoiceBlixtLsp({
-        amount: payload.sat,
-        preimage: payload.preimage,
-        chanId: payload.chanId,
-        cltvExpiryDelta: payload.cltvExpiryDelta,
-        feeBaseMsat: payload.feeBaseMsat,
-        feeProportionalMillionths: payload.feeProportionalMillionths,
+      const result = await addInvoice({
+        rPreimage: payload.preimage,
+        value: BigInt(payload.sat),
         memo: description,
-        servicePubkey: payload.servicePubkey,
+        expiry: BigInt(600),
+        routeHints: [
+          {
+            hopHints: [
+              {
+                nodeId: payload.servicePubkey,
+                chanId: payload.chanId,
+                cltvExpiryDelta: payload.cltvExpiryDelta,
+                feeBaseMsat: payload.feeBaseMsat,
+                feeProportionalMillionths: payload.feeProportionalMillionths,
+              },
+            ],
+          },
+        ],
       });
 
       // (payload.sat, description, payload.expiry);
@@ -192,9 +209,8 @@ export const receive: IReceiveModel = {
     },
   ),
 
-  cancelInvoice: thunk(async (_, payload, { injections }) => {
-    const cancelInvoice = injections.lndMobile.index.cancelInvoice;
-    return await cancelInvoice(payload.rHash);
+  cancelInvoice: thunk(async (_, payload, {}) => {
+    return await invoicesCancelInvoice({ paymentHash: hexToUint8Array(payload.rHash) });
   }),
 
   subscribeInvoice: thunk(
