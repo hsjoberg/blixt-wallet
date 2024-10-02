@@ -192,6 +192,7 @@ export const send: ISendModel = {
     const getTransactionByPaymentRequest =
       getStoreState().transaction.getTransactionByPaymentRequest;
 
+    //TURBOTODO: Fix this type error
     // Pre-settlement tx insert
     const preTransaction: ITransaction = getTransactionByPaymentRequest(paymentRequestStr) ?? {
       date: paymentRequest.timestamp,

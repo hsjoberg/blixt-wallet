@@ -1,6 +1,5 @@
 import { NativeModules } from "react-native";
 import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
-import Long from "long";
 import * as base64 from "base64-js";
 
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
@@ -452,7 +451,7 @@ export const channel: IChannelModel = {
 
   closeChannel: thunk(
     async (actions, { fundingTx, outputIndex, force, deliveryAddress }, { getStoreActions }) => {
-      const unsubscribe = await closeChannel(
+      const unsubscribe = closeChannel(
         {
           channelPoint: {
             fundingTxid: {

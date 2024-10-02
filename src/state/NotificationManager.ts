@@ -8,7 +8,6 @@ const {
   AuthorizationStatus,
 } = require("@notifee/react-native");
 
-import { navigate } from "../utils/navigation";
 import { IStoreModel } from "./index";
 import {
   ANDROID_PUSH_NOTIFICATION_PUSH_CHANNEL_ID,
@@ -58,7 +57,7 @@ export const notificationManager: INotificationManagerModel = {
           });
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       // TODO(hsjoberg): Perhaps should be handled in the lib instead?
       if (error.domain === "UNErrorDomain") {
         return;
