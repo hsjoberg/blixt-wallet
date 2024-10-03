@@ -90,6 +90,9 @@ export const toast = (
 ) => {
   toastEntries.push(message);
   console.log(message);
+  if (type === "danger") {
+    console.log("Current stack trace", new Error().stack);
+  }
   try {
     if (AppState.currentState === "active") {
       Toast.show({
