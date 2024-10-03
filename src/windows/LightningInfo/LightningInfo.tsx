@@ -71,12 +71,12 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
   }, [navigation]);
 
   const balance = channels.reduce((accumulator, channel) => {
-    return accumulator.add(channel.localBalance!);
+    return accumulator + channel.localBalance;
     // if (channel.localBalance!.lessThanOrEqual(channel.localChanReserveSat!)) {
     //   return accumulator;
     // }
     // return accumulator.add(channel.localBalance!.sub(channel.localChanReserveSat!));
-  }, Long.fromInt(0));
+  }, 0n);
 
   const channelsArr = [
     ...pendingOpenChannels.map((pendingChannel, i) => ({ ...pendingChannel, type: "pendingOpen" })),

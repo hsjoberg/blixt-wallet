@@ -1,7 +1,7 @@
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
 
 import { Image, Linking, StyleSheet } from "react-native";
-import { Body, Card, CardItem, Icon, Left, Right, Row, Text, View } from "native-base";
+import { Body, Card, CardItem, Icon, Left, Right, Row, Text } from "native-base";
 import { Line, Svg } from "react-native-svg";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
 import { getUnitNice, valueBitcoin, valueFiat } from "../utils/bitcoin-units";
@@ -10,20 +10,20 @@ import { useStoreActions, useStoreState } from "../state/store";
 
 import BigNumber from "bignumber.js";
 import CopyText from "./CopyText";
-import Long from "long";
-import React, { useState } from "react";
+import React from "react";
 import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
-import { lnrpc } from "../../proto/lightning";
 import { namespaces } from "../i18n/i18n.constants";
 import { toast } from "../utils";
 import { useTranslation } from "react-i18next";
 import { Alert } from "../utils/alert";
 import { PLATFORM } from "../utils/constants";
 
+import { Channel, CommitmentType } from "react-native-turbo-lnd/protos/lightning_pb";
+
 const blixtTheme = nativeBaseTheme.blixtTheme;
 
 export interface IChannelCardProps {
-  channel: lnrpc.IChannel;
+  channel: Channel;
   alias?: string;
 }
 export function ChannelCard({ channel, alias }: IChannelCardProps) {
@@ -82,8 +82,8 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
           onPress: async () => {
             try {
               const result = await closeChannel({
-                fundingTx: channel.channelPoint!.split(":")[0],
-                outputIndex: Number.parseInt(channel.channelPoint!.split(":")[1], 10),
+                fundingTx: channel.channelPoint.split(":")[0],
+                outputIndex: Number.parseInt(channel.channelPoint.split(":")[1], 10),
                 force,
                 deliveryAddress: address,
               });
@@ -126,35 +126,31 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   };
 
   const onPressViewInExplorer = async () => {
-    const txId = channel.channelPoint?.split(":")[0];
+    const txId = channel.channelPoint.split(":")[0];
     await Linking.openURL(constructOnchainExplorerUrl(onchainExplorer, txId ?? ""));
   };
 
   const onAliasLongPress = async () => {
-    toast(lnrpc.CommitmentType[channel.commitmentType!]);
+    toast(CommitmentType[channel.commitmentType]);
   };
 
-  let localBalance = channel.localBalance || Long.fromValue(0);
-  if (localBalance.lessThanOrEqual(channel.localChanReserveSat!)) {
-    localBalance = Long.fromValue(0);
+  let localBalance = channel.localBalance;
+  if (localBalance <= channel.localChanReserveSat) {
+    localBalance = 0n;
   } else {
-    localBalance = localBalance.sub(channel.localChanReserveSat!);
+    localBalance = localBalance - channel.localChanReserveSat;
   }
-  let remoteBalance = channel.remoteBalance || Long.fromValue(0);
-  if (remoteBalance.lessThanOrEqual(channel.remoteChanReserveSat || Long.fromValue(0))) {
-    remoteBalance = Long.fromValue(0);
+  let remoteBalance = channel.remoteBalance;
+  if (remoteBalance <= channel.remoteChanReserveSat) {
+    remoteBalance = 0n;
   } else {
-    remoteBalance = remoteBalance.sub(channel.remoteChanReserveSat || Long.fromValue(0));
+    remoteBalance = remoteBalance - channel.remoteChanReserveSat;
   }
-  const percentageLocal = localBalance.mul(100).div(channel.capacity!).toNumber() / 100;
-  const percentageRemote = remoteBalance.mul(100).div(channel.capacity!).toNumber() / 100;
-  const percentageReverse = 1 - (percentageLocal + percentageRemote);
-
-  const localReserve = Long.fromValue(
-    Math.min(
-      channel.localBalance?.toNumber?.() ?? 0,
-      channel.localChanReserveSat?.toNumber?.() ?? 0,
-    ),
+  const percentageLocal = (localBalance * 100n) / channel.capacity;
+  const percentageRemote = (remoteBalance * 100n) / channel.capacity;
+  const percentageReserve = 100n - (percentageLocal + percentageRemote);
+  const localReserve = BigInt(
+    Math.min(Number(channel.localBalance), Number(channel.localChanReserveSat)),
   );
 
   const serviceKey = identifyService(channel.remotePubkey ?? "", "", null);
@@ -235,7 +231,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text style={style.channelDetailTitle}>{t("channel.channelId")}</Text>
             </Left>
             <Right>
-              <CopyText style={{ fontSize: 14 }}>{channel.chanId?.toString()}</CopyText>
+              <CopyText style={{ fontSize: 14 }}>{channel.chanId.toString()}</CopyText>
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
@@ -243,7 +239,9 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text style={style.channelDetailTitle}>{t("channel.channelPoint")}</Text>
             </Left>
             <Right>
-              <CopyText style={{ fontSize: 9.5 }}>{channel.channelPoint?.toString()}</CopyText>
+              <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>
+                {channel.channelPoint.toString()}
+              </CopyText>
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
@@ -269,37 +267,36 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             <Right>
               {!preferFiat && (
                 <Text>
-                  {valueBitcoin(channel.capacity ?? Long.fromValue(0), bitcoinUnit)}{" "}
-                  {getUnitNice(new BigNumber(localBalance.toNumber()), bitcoinUnit)}
+                  {valueBitcoin(channel.capacity, bitcoinUnit)}{" "}
+                  {getUnitNice(new BigNumber(localBalance.toString()), bitcoinUnit)}
                 </Text>
               )}
               {preferFiat && (
                 <Text>
-                  {valueFiat(channel.capacity ?? Long.fromValue(0), currentRate).toFixed(2)}{" "}
-                  {fiatUnit}
+                  {valueFiat(channel.capacity, currentRate).toFixed(2)} {fiatUnit}
                 </Text>
               )}
               <Svg width="100" height="22" style={{ marginBottom: 4, marginTop: -1 }}>
                 <Line
                   x1="0"
                   y1="15"
-                  x2={100 * percentageLocal}
+                  x2={Number(percentageLocal)}
                   y2="15"
                   stroke={blixtTheme.green}
                   strokeWidth="8"
                 />
                 <Line
-                  x1={100 * percentageLocal}
+                  x1={Number(percentageLocal)}
                   y1="15"
-                  x2={100 * percentageLocal + 100 * percentageRemote}
+                  x2={Number(percentageLocal + percentageRemote)}
                   y2="15"
                   stroke={blixtTheme.red}
                   strokeWidth="8"
                 />
                 <Line
-                  x1={100 * percentageLocal + 100 * percentageRemote}
+                  x1={Number(percentageLocal + percentageRemote)}
                   y1="15"
-                  x2={100 * percentageLocal + 100 * percentageRemote + 100 * percentageReverse}
+                  x2={Number(percentageLocal + percentageRemote + percentageReserve)}
                   y2="15"
                   stroke={blixtTheme.lightGray}
                   strokeWidth="8"
@@ -318,7 +315,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                     <Text style={{ color: blixtTheme.green }}>
                       {valueBitcoin(localBalance, bitcoinUnit)}{" "}
                     </Text>
-                    <Text>{getUnitNice(new BigNumber(localBalance.toNumber()), bitcoinUnit)}</Text>
+                    <Text>{getUnitNice(new BigNumber(localBalance.toString()), bitcoinUnit)}</Text>
                   </>
                 )}
                 {preferFiat && (
@@ -343,7 +340,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                     <Text style={{ color: blixtTheme.red }}>
                       {valueBitcoin(remoteBalance, bitcoinUnit)}{" "}
                     </Text>
-                    <Text>{getUnitNice(new BigNumber(remoteBalance.toNumber()), bitcoinUnit)}</Text>
+                    <Text>{getUnitNice(new BigNumber(remoteBalance.toString()), bitcoinUnit)}</Text>
                   </>
                 )}
                 {preferFiat && (
@@ -366,29 +363,29 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 {!preferFiat && (
                   <>
                     <Text>
-                      {localReserve.eq(channel.localChanReserveSat!) && (
+                      {localReserve === channel.localChanReserveSat && (
                         <>{valueBitcoin(localReserve, bitcoinUnit)} </>
                       )}
-                      {localReserve.neq(channel.localChanReserveSat!) && (
+                      {localReserve !== channel.localChanReserveSat && (
                         <>
                           {valueBitcoin(localReserve, bitcoinUnit)}/
-                          {valueBitcoin(channel.localChanReserveSat!, bitcoinUnit)}{" "}
+                          {valueBitcoin(channel.localChanReserveSat, bitcoinUnit)}{" "}
                         </>
                       )}
                     </Text>
-                    <Text>{getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}</Text>
+                    <Text>{getUnitNice(new BigNumber(localReserve.toString()), bitcoinUnit)}</Text>
                   </>
                 )}
                 {preferFiat && (
                   <>
                     <Text>
-                      {localReserve.eq(channel.localChanReserveSat!) && (
+                      {localReserve === channel.localChanReserveSat && (
                         <>{valueFiat(localReserve, currentRate).toFixed(2)} </>
                       )}
-                      {localReserve.neq(channel.localChanReserveSat!) && (
+                      {localReserve !== channel.localChanReserveSat && (
                         <>
                           {valueFiat(localReserve, currentRate).toFixed(2)}/
-                          {valueFiat(channel.localChanReserveSat!, currentRate).toFixed(2)}{" "}
+                          {valueFiat(channel.localChanReserveSat, currentRate).toFixed(2)}{" "}
                         </>
                       )}
                     </Text>
@@ -405,23 +402,21 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
             <Right>
               <Text>
                 {preferFiat &&
-                  valueFiat(channel.commitFee ?? Long.fromValue(0), currentRate).toFixed(2) +
-                    " " +
-                    fiatUnit}
+                  valueFiat(channel.commitFee, currentRate).toFixed(2) + " " + fiatUnit}
                 {!preferFiat &&
-                  valueBitcoin(channel.commitFee ?? Long.fromValue(0), bitcoinUnit) +
+                  valueBitcoin(channel.commitFee, bitcoinUnit) +
                     " " +
-                    getUnitNice(new BigNumber(localReserve.toNumber()), bitcoinUnit)}
+                    getUnitNice(new BigNumber(localReserve.toString()), bitcoinUnit)}
               </Text>
             </Right>
           </Row>
-          {(channel.pendingHtlcs?.length ?? 0) > 0 && (
+          {channel.pendingHtlcs.length > 0 && (
             <Row style={{ width: "100%" }}>
               <Left style={{ alignSelf: "flex-start" }}>
                 <Text style={style.channelDetailTitle}>Pending HTLCs</Text>
               </Left>
               <Right>
-                <Text>{channel.pendingHtlcs?.length.toString()}</Text>
+                <Text>{channel.pendingHtlcs.length.toString()}</Text>
               </Right>
             </Row>
           )}
@@ -430,7 +425,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text style={style.channelDetailTitle}>{t("channel.channelType")}</Text>
             </Left>
             <Right>
-              <Text>{lnrpc.CommitmentType[channel.commitmentType!]}</Text>
+              <Text>{CommitmentType[channel.commitmentType]}</Text>
             </Right>
           </Row>
           <Row style={{ width: "100%" }}>
@@ -457,7 +452,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               </Right>
             </Row>
           )}
-          {channel.aliasScids?.length! > 0 && (
+          {channel.aliasScids.length > 0 && (
             <Row style={{ width: "100%" }}>
               <Right>
                 <Text style={{ color: "orange" }}>Alias scid</Text>
