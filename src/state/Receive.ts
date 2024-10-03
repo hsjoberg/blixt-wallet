@@ -213,7 +213,7 @@ export const receive: IReceiveModel = {
     return result;
   }),
 
-  cancelInvoice: thunk(async (_, payload, {}) => {
+  cancelInvoice: thunk(async (_, payload) => {
     return await invoicesCancelInvoice({ paymentHash: hexToUint8Array(payload.rHash) });
   }),
 

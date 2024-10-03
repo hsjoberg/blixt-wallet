@@ -10,7 +10,7 @@ import {
   DEFAULT_SPEEDLOADER_SERVER,
   PLATFORM,
 } from "../utils/constants";
-import { Chain, VersionCode } from "../utils/build";
+import { Chain, Debug, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
 import {
@@ -420,8 +420,9 @@ export const model: IStoreModel = {
 
           // log.d("startLnd", [await startLnd(torEnabled, args)]);
           // TURBOTODO(hsjoberg): temp code
-          const chain = Chain !== "mainnet" ? Chain.toLocaleLowerCase() + "." : "";
-          args += ` --lnddir=/data/user/0/com.blixtwallet.${chain}debug/files/`;
+          const chain = Chain !== "mainnet" ? "." + Chain.toLocaleLowerCase() : "";
+          const debug = Debug ? ".debug" : "";
+          args += ` --lnddir=/data/user/0/com.blixtwallet${chain}${debug}/files/`;
           log.d("args", [args]);
           log.d("startLnd", [await startLndTurbo(args)]);
         } catch (e: any) {

@@ -141,12 +141,11 @@ export const transaction: ITransactionModel = {
                   hops:
                     trackPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
                       chanId: hop.chanId ?? null,
-                      chanCapacity: Long.fromNumber(Number(hop.chanCapacity)) ?? null,
-                      amtToForward:
-                        Long.fromNumber(Number(hop.amtToForwardMsat) / 1000) || Long.fromInt(0),
-                      amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-                      fee: Long.fromNumber(Number(hop.feeMsat) / 1000) || Long.fromInt(0),
-                      feeMsat: Long.fromNumber(Number(hop.feeMsat)) || Long.fromInt(0),
+                      chanCapacity: Long.fromNumber(Number(hop.chanCapacity)),
+                      amtToForward: Long.fromNumber(Number(hop.amtToForwardMsat) / 1000),
+                      amtToForwardMsat: Long.fromNumber(Number(hop.amtToForwardMsat)),
+                      fee: Long.fromNumber(Number(hop.feeMsat) / 1000),
+                      feeMsat: Long.fromNumber(Number(hop.feeMsat)),
                       expiry: hop.expiry || null,
                       pubKey: hop.pubKey || null,
                     })) ?? [],

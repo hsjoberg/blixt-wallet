@@ -270,19 +270,19 @@ export const send: ISendModel = {
       ...preTransaction,
       duration: settlementDuration,
       status: "SETTLED",
-      fee: Long.fromNumber(Number(sendPaymentResult.fee)) || Long.fromInt(0),
-      feeMsat: Long.fromNumber(Number(sendPaymentResult.feeSat)) || Long.fromInt(0),
+      fee: Long.fromNumber(Number(sendPaymentResult.fee)),
+      feeMsat: Long.fromNumber(Number(sendPaymentResult.feeSat)),
 
       preimage: hexToUint8Array(sendPaymentResult.paymentPreimage),
 
       hops:
         sendPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
           chanId: hop.chanId ?? null,
-          chanCapacity: Long.fromNumber(Number(hop.chanCapacity)) ?? null,
-          amtToForward: Long.fromNumber(Number(hop.amtToForward)) || Long.fromInt(0),
-          amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-          fee: Long.fromNumber(Number(hop.fee)) || Long.fromInt(0),
-          feeMsat: Long.fromNumber(Number(hop.feeMsat)) || Long.fromInt(0),
+          chanCapacity: Long.fromNumber(Number(hop.chanCapacity)),
+          amtToForward: Long.fromNumber(Number(hop.amtToForward)),
+          amtToForwardMsat: Long.fromNumber(Number(hop.amtToForwardMsat)),
+          fee: Long.fromNumber(Number(hop.fee)),
+          feeMsat: Long.fromNumber(Number(hop.feeMsat)),
           expiry: hop.expiry || null,
           pubKey: hop.pubKey || null,
         })) ?? [],
