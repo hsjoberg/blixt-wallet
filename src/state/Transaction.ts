@@ -119,15 +119,15 @@ export const transaction: ITransactionModel = {
     }
 
     for (const tx of getState().transactions) {
-      const unsubscribeTrackPayment = routerTrackPaymentV2(
-        {
-          paymentHash: hexToUint8Array(tx.rHash),
-          noInflightUpdates: true,
-        },
-        async (trackPaymentResult) => {
-          if (tx.status === "OPEN") {
-            log.i("trackpayment tx", [tx.rHash]);
-            if (tx.valueMsat.isNegative()) {
+      if (tx.status === "OPEN") {
+        log.i("trackpayment tx", [tx.rHash]);
+        if (tx.valueMsat.isNegative()) {
+          const unsubscribeTrackPayment = routerTrackPaymentV2(
+            {
+              paymentHash: hexToUint8Array(tx.rHash),
+              noInflightUpdates: true,
+            },
+            async (trackPaymentResult) => {
               log.i("trackpayment status", [
                 trackPaymentResult.status,
                 trackPaymentResult.paymentHash,
@@ -176,54 +176,54 @@ export const transaction: ITransactionModel = {
                   actions.updateTransaction({ transaction: updated }),
                 );
               }
-            } else {
-              const check = await lookupInvoice({ rHash: hexToUint8Array(tx.rHash) });
-              if (
-                Date.now() / 1000 >
-                Long.fromNumber(Number(check.creationDate)).add(Number(check.expiry)).toNumber()
-              ) {
-                const updated: ITransaction = {
-                  ...tx,
-                  status: "EXPIRED",
-                };
-                // tslint:disable-next-line
-                updateTransaction(db, updated).then(() => {
-                  actions.updateTransaction({ transaction: updated });
-                });
-              } else if (check.state === Invoice_InvoiceState.SETTLED) {
-                const updated: ITransaction = {
-                  ...tx,
-                  status: "SETTLED",
-                  value: Long.fromNumber(Number(check.amtPaidSat)),
-                  valueMsat: Long.fromNumber(Number(check.amtPaidMsat)),
-                  // TODO add valueUSD, valueFiat and valueFiatCurrency?
-                };
-                // tslint:disable-next-line
-                updateTransaction(db, updated).then(() =>
-                  actions.updateTransaction({ transaction: updated }),
-                );
-              } else if (check.state === Invoice_InvoiceState.CANCELED) {
-                const updated: ITransaction = {
-                  ...tx,
-                  status: "CANCELED",
-                };
-                // tslint:disable-next-line
-                updateTransaction(db, updated).then(() => {
-                  actions.updateTransaction({ transaction: updated });
-                });
-              }
-            }
-          }
 
-          // TURBOLND(hsjoberg): commenting this one out for now as it's not clear when we should unsubscribe
-          // unsubscribeTrackPayment();
-        },
-        (err) => {
-          log.w("An error occourred inside routerTrackPaymentV2", [err]);
-          // TURBOLND(hsjoberg): commenting this one out for now as it's not clear when we should unsubscribe
-          // unsubscribeTrackPayment();
-        },
-      );
+              // TURBOLND(hsjoberg): commenting this one out for now as it's not clear when we should unsubscribe
+              // unsubscribeTrackPayment();
+            },
+            (err) => {
+              log.w("An error occourred inside routerTrackPaymentV2", [err]);
+              // TURBOLND(hsjoberg): commenting this one out for now as it's not clear when we should unsubscribe
+              // unsubscribeTrackPayment();
+            },
+          );
+        } else {
+          const check = await lookupInvoice({ rHash: hexToUint8Array(tx.rHash) });
+          if (
+            Date.now() / 1000 >
+            Long.fromNumber(Number(check.creationDate)).add(Number(check.expiry)).toNumber()
+          ) {
+            const updated: ITransaction = {
+              ...tx,
+              status: "EXPIRED",
+            };
+            // tslint:disable-next-line
+            updateTransaction(db, updated).then(() => {
+              actions.updateTransaction({ transaction: updated });
+            });
+          } else if (check.state === Invoice_InvoiceState.SETTLED) {
+            const updated: ITransaction = {
+              ...tx,
+              status: "SETTLED",
+              value: Long.fromNumber(Number(check.amtPaidSat)),
+              valueMsat: Long.fromNumber(Number(check.amtPaidMsat)),
+              // TODO add valueUSD, valueFiat and valueFiatCurrency?
+            };
+            // tslint:disable-next-line
+            updateTransaction(db, updated).then(() =>
+              actions.updateTransaction({ transaction: updated }),
+            );
+          } else if (check.state === Invoice_InvoiceState.CANCELED) {
+            const updated: ITransaction = {
+              ...tx,
+              status: "CANCELED",
+            };
+            // tslint:disable-next-line
+            updateTransaction(db, updated).then(() => {
+              actions.updateTransaction({ transaction: updated });
+            });
+          }
+        }
+      }
     }
 
     return true;
