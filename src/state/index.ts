@@ -414,10 +414,12 @@ export const model: IStoreModel = {
           }
 
           // log.d("startLnd", [await startLnd(torEnabled, args)]);
-          // TURBOTODO(hsjoberg)
-          args += " --lnddir=/data/user/0/com.blixtwallet.debug/files/";
+          // TURBOTODO(hsjoberg): temp code
+          const chain = Chain !== "mainnet" ? Chain.toLocaleLowerCase() + "." : "";
+          args += ` --lnddir=/data/user/0/com.blixtwallet.${chain}debug/files/`;
+          log.d("args", [args]);
           log.d("startLnd", [await startLndTurbo(args)]);
-        } catch (e) {
+        } catch (e: any) {
           if (e.message.includes("lnd already started")) {
             toast("lnd already started", 3000, "warning");
           } else {
