@@ -250,10 +250,10 @@ export const onChain: IOnChainModel = {
   }),
 
   setBalance: action((state, payload) => {
-    state.balance = BigInt(payload.confirmedBalance?.toString() || "0");
+    state.balance = BigInt(payload.confirmedBalance.toString() || "0");
   }),
   setUnconfirmedBalance: action((state, payload) => {
-    state.unconfirmedBalance = BigInt(payload.unconfirmedBalance?.toString() || "0");
+    state.unconfirmedBalance = BigInt(payload.unconfirmedBalance.toString() || "0");
   }),
   setAddress: action((state, payload) => {
     state.address = payload.address;

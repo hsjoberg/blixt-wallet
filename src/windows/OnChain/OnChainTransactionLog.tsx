@@ -51,9 +51,7 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
     <Container>
       <FlashList
         estimatedItemSize={75}
-        data={transactions.sort(
-          (tx1, tx2) => tx2.timeStamp!.toNumber() - tx1.timeStamp!.toNumber(),
-        )}
+        data={transactions.sort((tx1, tx2) => Number(tx2.timeStamp - tx1.timeStamp))}
         renderItem={({ item: transaction }) => (
           <OnChainTransactionItem
             key={transaction.txHash! + transaction.type}

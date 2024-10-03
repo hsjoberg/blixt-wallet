@@ -81,7 +81,7 @@ export default function OnChainTransactionDetails({ navigation, route }: ITransa
             <MetaData title={t("txHash")} data={transaction.txHash!} />
             <MetaData
               title={t("timeStamp")}
-              data={formatISO(fromUnixTime(transaction.timeStamp!.toNumber()))}
+              data={formatISO(fromUnixTime(Number(transaction.timeStamp)))}
             />
             {transaction.amount && (
               <MetaData title={t("amount")} data={formatBitcoin(transaction.amount, bitcoinUnit)} />
