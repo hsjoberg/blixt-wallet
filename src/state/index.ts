@@ -312,7 +312,7 @@ export const model: IStoreModel = {
           }
           debugShowStartupInfo &&
             toast("Tor initialized " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-        } catch (e) {
+        } catch (e: any) {
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
 
@@ -443,12 +443,6 @@ export const model: IStoreModel = {
     dispatch.fiat.getRate();
     await dispatch.settings.initialize();
     await dispatch.security.initialize();
-    if (PLATFORM === "android") {
-      await dispatch.google.initialize();
-      await dispatch.googleDriveBackup.initialize();
-    } else if (PLATFORM === "ios" || PLATFORM === "macos") {
-      await dispatch.iCloudBackup.initialize();
-    }
     await dispatch.transaction.getTransactions();
     await dispatch.contacts.getContacts();
     await dispatch.channel.setupCachedBalance();

@@ -33,6 +33,7 @@ import {
 import { create } from "@bufbuild/protobuf";
 
 import logger from "./../utils/log";
+import { PLATFORM } from "../utils/constants";
 const log = logger("Lightning");
 
 export type LndChainBackend = "neutrino" | "bitcoindWithZmq" | "bitcoindWithRpcPolling";
@@ -183,6 +184,15 @@ export const lightning: ILightningModel = {
         dispatch.channelAcceptanceManager.initialize(),
         dispatch.lightningBox.initialize(),
       ]);
+
+      if (PLATFORM === "android") {
+        await Promise.all([
+          await dispatch.google.initialize(),
+          await dispatch.googleDriveBackup.initialize(),
+        ]);
+      } else if (PLATFORM === "ios" || PLATFORM === "macos") {
+        await dispatch.iCloudBackup.initialize();
+      }
     } catch (e: any) {
       toast(e.message, 0, "danger", "OK");
       return;
