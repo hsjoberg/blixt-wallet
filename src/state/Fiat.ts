@@ -5,8 +5,10 @@ import logger from "./../utils/log";
 const log = logger("Fiat");
 
 const BLOCKCHAIN_FIAT_API_URL = "https://blockchain.info/ticker";
-const COINGECKO_CURRENCIES ="usd,eur,gbp,sek,aed,ars,aud,bdt,bhd,bmd,brl,cad,chf,clp,cny,czk,dkk,hkd,huf,idr,ils,inr,jpy,krw,kwd,lkr,mmk,mxn,myr,nok,nzd,php,pkr,pln,rub,sar,sgd,thb,try,twd,uah,vef,vnd,zar,xdr,xag,xau";
-const COINGECKO_FIAT_API_URL = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=" + COINGECKO_CURRENCIES;
+const COINGECKO_CURRENCIES =
+  "usd,eur,gbp,sek,aed,ars,aud,bdt,bhd,bmd,brl,cad,chf,clp,cny,czk,dkk,hkd,huf,idr,ils,inr,jpy,krw,kwd,lkr,mmk,mxn,myr,nok,nzd,php,pkr,pln,rub,sar,sgd,thb,try,twd,uah,vef,vnd,zar,xdr,xag,xau";
+const COINGECKO_FIAT_API_URL =
+  "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=" + COINGECKO_CURRENCIES;
 
 export interface IFiatRate {
   last: number;
@@ -38,7 +40,7 @@ export interface IFiatRates {
 
 interface ICoingeckoPriceResponse {
   bitcoin: {
-    usd: number,
+    usd: number;
     aed: number;
     ars: number;
     aud: number;
@@ -85,7 +87,7 @@ interface ICoingeckoPriceResponse {
     xdr: number;
     xag: number;
     xau: number;
-  }
+  };
 }
 
 export interface IFiatModel {
@@ -95,14 +97,14 @@ export interface IFiatModel {
 
   fiatRates: IFiatRates;
   currentRate: Computed<IFiatModel, number, IStoreModel>;
-};
+}
 
 export const fiat: IFiatModel = {
   getRate: thunk(async (actions) => {
     try {
       log.d("Fetching fiat rate from Coingecko");
       const result = await fetch(COINGECKO_FIAT_API_URL);
-      const jsonResult = await result.json() as ICoingeckoPriceResponse;
+      const jsonResult = (await result.json()) as ICoingeckoPriceResponse;
       const parsed = {} as any;
       for (const [currency, rate] of Object.entries(jsonResult.bitcoin)) {
         parsed[currency.toUpperCase()] = { last: rate };
@@ -154,15 +156,15 @@ export const fiat: IFiatModel = {
     TWD: { last: 0 },
   },
 
-  currentRate: computed([
-      (state) => state.fiatRates,
-      (_, storeState) => storeState.settings.fiatUnit,
-    ], (fiatRates, fiatUnit) => {
-    if (fiatRates[fiatUnit] && fiatRates[fiatUnit].last) {
-      return fiatRates[fiatUnit].last;
-    }
-    return 0;
-  }),
+  currentRate: computed(
+    [(state) => state.fiatRates, (_, storeState) => storeState.settings.fiatUnit],
+    (fiatRates, fiatUnit) => {
+      if (fiatRates[fiatUnit] && fiatRates[fiatUnit].last) {
+        return fiatRates[fiatUnit].last;
+      }
+      return 0;
+    },
+  ),
 };
 
 const validateFiatApiResponse = (response: any): response is IFiatRates => {

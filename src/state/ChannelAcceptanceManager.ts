@@ -3,11 +3,12 @@ import { Thunk, thunk } from "easy-peasy";
 import { ILightningModel } from "./Lightning";
 import { IStoreInjections } from "./store";
 import { bytesToHexString } from "../utils";
-import logger from "./../utils/log";
 import { IStoreModel } from "./index";
+
 import { channelAcceptor } from "react-native-turbo-lnd";
 import { CommitmentType } from "react-native-turbo-lnd/protos/lightning_pb";
 
+import logger from "./../utils/log";
 const log = logger("ChannelAcceptanceManager");
 
 export interface IChannelAcceptanceManagerModel {

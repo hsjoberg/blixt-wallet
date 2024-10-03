@@ -1,8 +1,6 @@
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import * as base64 from "base64-js";
 import { differenceInDays } from "date-fns";
-//TURBOTODO: Nitesh: Check with Hampus on why this import exists
-// when the package does not exist.
 import iCloudStorage from "react-native-icloudstore";
 
 import { IStoreInjections } from "./store";
@@ -118,6 +116,7 @@ export const iCloudBackup: IICloudBackupModel = {
     log.i("Backing up channels to iCloud succeeded");
   }),
 
+  // TODO
   getBackup: thunk(async () => {
     return await iCloudStorage.getItem(ICLOUD_BACKUP_KEY);
   }),

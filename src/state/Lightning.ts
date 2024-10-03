@@ -5,7 +5,7 @@ import { stringToUint8Array, timeout, toast } from "../utils";
 import { Chain } from "../utils/build";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
-import logger from "./../utils/log";
+
 import {
   autopilotModifyStatus,
   autopilotSetScores,
@@ -32,6 +32,7 @@ import {
 } from "react-native-turbo-lnd/protos/lightning_pb";
 import { create } from "@bufbuild/protobuf";
 
+import logger from "./../utils/log";
 const log = logger("Lightning");
 
 export type LndChainBackend = "neutrino" | "bitcoindWithZmq" | "bitcoindWithRpcPolling";

@@ -1,4 +1,3 @@
-import { PermissionsAndroid } from "react-native";
 import { Thunk, thunk } from "easy-peasy";
 
 const notifee = require("@notifee/react-native").default;

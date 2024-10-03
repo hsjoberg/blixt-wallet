@@ -2,7 +2,6 @@ import * as Bech32 from "bech32";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import { getGeolocation, hexToUint8Array, unicodeStringToUint8Array } from "../utils";
-import { routerrpc } from "../../proto/lightning";
 
 import { ILNUrlPayResponse } from "./LNURL";
 import { IStoreInjections } from "./store";
@@ -12,8 +11,8 @@ import { LnBech32Prefix } from "../utils/build";
 import Long from "long";
 import { PLATFORM, TLV_RECORD_NAME } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
-import logger from "./../utils/log";
 import { valueFiat } from "../utils/bitcoin-units";
+
 import {
   NodeInfo,
   Payment,
@@ -37,6 +36,7 @@ if (PLATFORM !== "macos") {
   ReactNativePermissions = require("react-native-permissions");
 }
 
+import logger from "./../utils/log";
 const log = logger("Send");
 
 type PaymentRequest = string;
@@ -117,8 +117,6 @@ export const send: ISendModel = {
    */
   setPayment: thunk(async (actions, payload, {}) => {
     actions.clear();
-    // const decodePayReq = injections.lndMobile.index.decodePayReq;
-    // const getNodeInfo = injections.lndMobile.index.getNodeInfo;
     const paymentRequestStr = payload.paymentRequestStr.replace(/^lightning:/i, "");
 
     try {
@@ -195,10 +193,10 @@ export const send: ISendModel = {
     //TURBOTODO: Fix this type error
     // Pre-settlement tx insert
     const preTransaction: ITransaction = getTransactionByPaymentRequest(paymentRequestStr) ?? {
-      date: paymentRequest.timestamp,
+      date: Long.fromValue(paymentRequest.timestamp.toString()),
       description: extraData.lnurlPayTextPlain ?? paymentRequest.description,
       duration: 0,
-      expire: paymentRequest.expiry,
+      expire: Long.fromValue(paymentRequest.expiry.toString()),
       paymentRequest: paymentRequestStr,
       remotePubkey: paymentRequest.destination,
       rHash: paymentRequest.paymentHash,
@@ -227,6 +225,7 @@ export const send: ISendModel = {
       //note: // TODO: Why wasn't this added
       lightningAddress: extraData.lightningAddress ?? null,
       lud16IdentifierMimeType: extraData.lud16IdentifierMimeType ?? null,
+      lud18PayerData: null,
 
       preimage: hexToUint8Array("0"),
       lnurlPayResponse: extraData.lnurlPayResponse,

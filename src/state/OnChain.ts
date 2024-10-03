@@ -21,9 +21,10 @@ import {
   WalletBalanceResponse,
 } from "react-native-turbo-lnd/protos/lightning_pb";
 
-import logger from "./../utils/log";
 import { create } from "@bufbuild/protobuf";
 import { BumpFeeResponse } from "react-native-turbo-lnd/protos/walletrpc/walletkit_pb";
+
+import logger from "./../utils/log";
 const log = logger("OnChain");
 
 export interface IBlixtTransaction extends Transaction {
@@ -100,66 +101,63 @@ export interface IOnChainModel {
 }
 
 export const onChain: IOnChainModel = {
-  initialize: thunk(
-    async (actions, _, { getState, getStoreActions, getStoreState, injections }) => {
-      log.i("Initializing");
-      await Promise.all([actions.getAddress({}), actions.getBalance(undefined)]);
+  initialize: thunk(async (actions, _, { getState, getStoreActions, getStoreState }) => {
+    log.i("Initializing");
+    await Promise.all([actions.getAddress({}), actions.getBalance(undefined)]);
 
-      if (getState().transactionSubscriptionStarted) {
-        log.d("OnChain.initialize called when subscription already started");
-        return;
-      } else {
-        await injections.lndMobile.onchain.subscribeTransactions();
-        subscribeTransactions(
-          {},
-          async (transaction) => {
-            try {
-              log.d("Event SubscribeTransactions", []);
+    if (getState().transactionSubscriptionStarted) {
+      log.d("OnChain.initialize called when subscription already started");
+      return;
+    } else {
+      subscribeTransactions(
+        {},
+        async (transaction) => {
+          try {
+            log.d("Event SubscribeTransactions", []);
 
-              await actions.getBalance();
+            await actions.getBalance();
 
-              if (getStoreState().onboardingState === "SEND_ONCHAIN") {
-                log.i("Changing onboarding state to DO_BACKUP");
-                getStoreActions().changeOnboardingState("DO_BACKUP");
-              }
-
-              if (
-                !getState().transactionNotificationBlacklist.includes(transaction.txHash) &&
-                transaction.numConfirmations > 0 &&
-                Number(transaction.amount) > 0
-              ) {
-                getStoreActions().notificationManager.localNotification({
-                  message: "Received on-chain transaction",
-                });
-                actions.addToTransactionNotificationBlacklist(transaction.txHash);
-
-                actions.getTransactions();
-              }
-            } catch (error: any) {
-              toast(error.message, undefined, "danger");
+            if (getStoreState().onboardingState === "SEND_ONCHAIN") {
+              log.i("Changing onboarding state to DO_BACKUP");
+              getStoreActions().changeOnboardingState("DO_BACKUP");
             }
-          },
-          (error) => {
-            log.e("Got error from SubscribeTransactions", [error]);
-          },
-        );
 
-        actions.setTransactionSubscriptionStarted(true);
-      }
+            if (
+              !getState().transactionNotificationBlacklist.includes(transaction.txHash) &&
+              transaction.numConfirmations > 0 &&
+              Number(transaction.amount) > 0
+            ) {
+              getStoreActions().notificationManager.localNotification({
+                message: "Received on-chain transaction",
+              });
+              actions.addToTransactionNotificationBlacklist(transaction.txHash);
 
-      actions.getTransactions();
-      return true;
-    },
-  ),
+              actions.getTransactions();
+            }
+          } catch (error: any) {
+            toast(error.message, undefined, "danger");
+          }
+        },
+        (error) => {
+          log.e("Got error from SubscribeTransactions", [error]);
+        },
+      );
 
-  getBalance: thunk(async (actions, _, { injections }) => {
+      actions.setTransactionSubscriptionStarted(true);
+    }
+
+    actions.getTransactions();
+    return true;
+  }),
+
+  getBalance: thunk(async (actions, _) => {
     const walletBalanceResponse = await walletBalance({});
 
     actions.setBalance(walletBalanceResponse);
     actions.setUnconfirmedBalance(walletBalanceResponse);
   }),
 
-  getAddress: thunk(async (actions, { forceNew, p2wkh }, { injections }) => {
+  getAddress: thunk(async (actions, { forceNew, p2wkh }) => {
     try {
       let type: AddressType;
 
@@ -188,7 +186,7 @@ export const onChain: IOnChainModel = {
     }
   }),
 
-  getTransactions: thunk(async (actions, _, { getStoreState, injections }) => {
+  getTransactions: thunk(async (actions, _, { getStoreState) => {
     const transactionDetails = await getTransactions(create(GetTransactionsRequestSchema));
     const channelEvents = getStoreState().channel.channelEvents;
 
@@ -217,7 +215,7 @@ export const onChain: IOnChainModel = {
     actions.setTransactions({ transactions });
   }),
 
-  sendCoins: thunk(async (actions, { address, sat, feeRate }, { injections }) => {
+  sendCoins: thunk(async (actions, { address, sat, feeRate }) => {
     const response = await sendCoins({
       addr: address,
       amount: BigInt(sat),
@@ -228,7 +226,7 @@ export const onChain: IOnChainModel = {
     return response;
   }),
 
-  sendCoinsAll: thunk(async (actions, { address, feeRate }, { injections }) => {
+  sendCoinsAll: thunk(async (actions, { address, feeRate }) => {
     const response = await sendCoins({
       sendAll: true,
       addr: address,
@@ -239,7 +237,7 @@ export const onChain: IOnChainModel = {
     return response;
   }),
 
-  bumpFee: thunk(async (_, { feeRate, txid, index }, { injections }) => {
+  bumpFee: thunk(async (_, { feeRate, txid, index }) => {
     const response = await walletKitBumpFee({
       satPerVbyte: BigInt(feeRate),
       outpoint: {

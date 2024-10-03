@@ -118,10 +118,13 @@ export const transaction: ITransactionModel = {
       throw new Error("checkOpenTransactions(): db not ready");
     }
 
-    const unsubscribeTrackPayment = routerTrackPaymentV2(
-      {},
-      async (trackPaymentResult) => {
-        for (const tx of getState().transactions) {
+    for (const tx of getState().transactions) {
+      const unsubscribeTrackPayment = routerTrackPaymentV2(
+        {
+          paymentHash: hexToUint8Array(tx.rHash),
+          noInflightUpdates: true,
+        },
+        async (trackPaymentResult) => {
           if (tx.status === "OPEN") {
             log.i("trackpayment tx", [tx.rHash]);
             if (tx.valueMsat.isNegative()) {
@@ -211,14 +214,17 @@ export const transaction: ITransactionModel = {
               }
             }
           }
-        }
-        unsubscribeTrackPayment();
-      },
-      (err) => {
-        log.w("An error occourred inside routerTrackPaymentV2", [err]);
-        unsubscribeTrackPayment();
-      },
-    );
+
+          // TURBOLND(hsjoberg): commenting this one out for now as it's not clear when we should unsubscribe
+          // unsubscribeTrackPayment();
+        },
+        (err) => {
+          log.w("An error occourred inside routerTrackPaymentV2", [err]);
+          // TURBOLND(hsjoberg): commenting this one out for now as it's not clear when we should unsubscribe
+          // unsubscribeTrackPayment();
+        },
+      );
+    }
 
     return true;
   }),

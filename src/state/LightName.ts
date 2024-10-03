@@ -1,15 +1,16 @@
 import { Thunk, thunk } from "easy-peasy";
 
-import { IStoreModel } from ".";
-import logger from "./../utils/log";
+import { IStoreModel } from "./index";
 import {
   RouteHint,
   RouteHintSchema,
   RoutingPolicy,
 } from "react-native-turbo-lnd/protos/lightning_pb";
+
 import { getChanInfo, listChannels } from "react-native-turbo-lnd";
 import { create } from "@bufbuild/protobuf";
 
+import logger from "./../utils/log";
 const log = logger("LightName");
 
 const LIGHT_NAME_API_SERVER = "http://192.168.1.109:3000/";
@@ -27,11 +28,11 @@ export interface ILightNameModel {
 }
 
 export const lightName: ILightNameModel = {
-  initialize: thunk(async (actions, _, {}) => {
+  initialize: thunk(async (_, _2, {}) => {
     log.i("Initializing LightName subsystem");
   }),
 
-  register: thunk(async (actions, payload, { getStoreState }) => {
+  register: thunk(async (_, payload, { getStoreState }) => {
     try {
       const routeHints = await getRouteHints();
       log.i("", [routeHints]);

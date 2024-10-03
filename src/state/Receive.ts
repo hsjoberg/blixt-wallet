@@ -17,10 +17,8 @@ import {
 } from "../utils";
 import { TLV_RECORD_NAME, TLV_SATOGRAM, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { ILNUrlPayResponsePayerData } from "./LNURL";
 
-import logger from "./../utils/log";
 import {
   AddInvoiceResponse,
   Invoice_InvoiceState,
@@ -32,6 +30,8 @@ import {
   invoicesCancelInvoice,
   subscribeInvoices,
 } from "react-native-turbo-lnd";
+
+import logger from "./../utils/log";
 const log = logger("Receive");
 
 // TODO(hsjoberg): this should match Transaction model
@@ -56,7 +56,7 @@ interface IReceiveModelAddInvoicePayload {
   skipNameDesc?: boolean;
 }
 
-interface IReceiveModell {
+interface IReceiveModelAddInvoiceBlixtLspPayload {
   description: string;
   sat: number;
   expiry?: number;
@@ -121,13 +121,7 @@ export const receive: IReceiveModel = {
       return;
     }
 
-    subscribeInvoices(
-      {},
-      (res) => {},
-      (err) => {
-        log.w("An error occourred subscribing to invoices", [err]);
-      },
-    );
+    // TURBOTODO lmao this is terrible
     await timeout(2000); // Wait for the stream to get ready
     actions.subscribeInvoice();
     return true;
@@ -232,15 +226,6 @@ export const receive: IReceiveModel = {
       {},
       async (invoice) => {
         try {
-          log.i("New invoice event");
-          const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
-          if (error === "EOF") {
-            return;
-          } else if (error) {
-            log.d("Got error from SubscribeInvoices", [error]);
-            throw error;
-          }
-
           const rHash = bytesToHexString(invoice.rHash);
           log.d("invoice", [rHash]);
 

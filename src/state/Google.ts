@@ -22,25 +22,27 @@ export interface IGoogleModel {
   isSignedIn: boolean;
   hasPlayServices: boolean;
   user?: any;
-};
+}
 
 export const google: IGoogleModel = {
-  initialize: thunk(async (actions) => {
-  }),
+  initialize: thunk(async (actions) => {}),
 
-  signIn: thunk(async (actions, _, { getState }) => {
-  }),
+  signIn: thunk(async (actions, _, { getState }) => {}),
 
-  signOut: thunk(async (actions) => {
-  }),
+  signOut: thunk(async (actions) => {}),
 
-  getTokens: thunk(async (_, _2, { getState }) => {
-  }),
+  getTokens: thunk(async (_, _2, { getState }) => {}),
 
-  setIsSignedIn: action((store, payload) => { store.isSignedIn = payload; }),
-  setHasPlayServices: action((store, payload) => { store.hasPlayServices = payload; }),
-  setUser: action((store, payload) => { store.user = payload; }),
+  setIsSignedIn: action((store, payload) => {
+    store.isSignedIn = payload;
+  }),
+  setHasPlayServices: action((store, payload) => {
+    store.hasPlayServices = payload;
+  }),
+  setUser: action((store, payload) => {
+    store.user = payload;
+  }),
 
   isSignedIn: false,
   hasPlayServices: false,
-}
+};

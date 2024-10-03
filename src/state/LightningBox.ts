@@ -2,7 +2,6 @@ import { Thunk, thunk } from "easy-peasy";
 import { CONSTANTS, JSHash } from "react-native-hash";
 
 import { IStoreModel } from "./index";
-import logger from "./../utils/log";
 import { IStoreInjections } from "./store";
 import {
   ILNUrlPayRequest,
@@ -12,7 +11,11 @@ import {
   ILNUrlPayResponsePayerData,
 } from "./LNURL";
 import { hexToUint8Array, stringToUint8Array, uint8ArrayToUnicodeString } from "../utils";
+
 import { sendCustomMessage, subscribeCustomMessages } from "react-native-turbo-lnd";
+
+import logger from "./../utils/log";
+const log = logger("LightningBox");
 
 const LnurlPayRequestLNP2PType = 32768 + 691;
 const PeerSwapMessagesRange = [42069, 42085];
@@ -33,8 +36,6 @@ const lnboxPayerDataRequest: ILNUrlPayRequestPayerData = {
   identifier: { mandatory: false },
   email: { mandatory: false },
 };
-
-const log = logger("LightningBox");
 
 export interface ILightningBoxModel {
   initialize: Thunk<ILightningBoxModel>;

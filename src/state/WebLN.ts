@@ -8,13 +8,15 @@ import {
 } from "webln";
 
 import { IStoreModel } from "./index";
-import logger from "./../utils/log";
 import { bytesToHexString, getDomainFromURL, stringToUint8Array } from "../utils";
 import { navigate } from "../utils/navigation";
 import { convertBitcoinToFiat } from "../utils/bitcoin-units";
 import { Alert } from "../utils/alert";
 import { IStoreInjections } from "./store";
 
+import { signMessage, verifyMessage } from "react-native-turbo-lnd";
+
+import logger from "./../utils/log";
 const log = logger("WebLN");
 
 interface IHandleMakeInvoiceRequestPayload {
@@ -232,7 +234,7 @@ export const webln: IWebLNModel = {
     },
   ),
 
-  handleSignMessageRequest: thunk((_, { data, requestUrl }, { injections }) => {
+  handleSignMessageRequest: thunk((_, { data, requestUrl }) => {
     log.i("handleSignMessage");
 
     return new Promise((resolve, reject) => {
@@ -251,9 +253,9 @@ export const webln: IWebLNModel = {
             style: "default",
             text: "Sign message",
             onPress: async () => {
-              const result = await injections.lndMobile.wallet.signMessageNodePubkey(
-                stringToUint8Array(data),
-              );
+              const result = await signMessage({
+                msg: stringToUint8Array(data),
+              });
               resolve({
                 message: data,
                 signature: result.signature,
@@ -265,11 +267,11 @@ export const webln: IWebLNModel = {
     });
   }),
 
-  handleVerifyMessageRequest: thunk(async (_, { data }, { injections }) => {
-    const response = await injections.lndMobile.wallet.verifyMessageNodePubkey(
-      data.signature,
-      stringToUint8Array(data.message),
-    );
+  handleVerifyMessageRequest: thunk(async (_, { data }) => {
+    const response = await verifyMessage({
+      msg: stringToUint8Array(data.message),
+      signature: data.signature,
+    });
     log.i("", [response]);
     if (response.valid) {
       return void 0;
@@ -277,7 +279,7 @@ export const webln: IWebLNModel = {
     throw new Error("Invalid signature.");
   }),
 
-  handleLNURL: thunk(async (actions, payload, { getStoreActions }) => {
+  handleLNURL: thunk(async (_, payload, { getStoreActions }) => {
     log.i("LNURL");
     const paymentRequestStr = payload.lnurl;
     return new Promise(async (resolve, reject) => {
