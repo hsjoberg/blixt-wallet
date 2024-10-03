@@ -12,20 +12,20 @@ import {
   hexToUint8Array,
   stringToUint8Array,
   timeout,
-  toast,
 } from "../utils/index";
 import { HMAC as sha256HMAC, Hash as sha256Hash } from "fast-sha256";
 
 import { Alert } from "../utils/alert";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
-import { LndMobileEventEmitter } from "../utils/event-listener";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { dunderPrompt } from "../utils/dunder";
-import { lnrpc } from "../../proto/lightning";
-import logger from "./../utils/log";
 import secp256k1 from "secp256k1";
+import Long from "long";
 
+import { connectPeer, signMessage, subscribeInvoices } from "react-native-turbo-lnd";
+import { PayReq } from "react-native-turbo-lnd/protos/lightning_pb";
+
+import logger from "./../utils/log";
 const log = logger("LNURL");
 
 export type LNURLType =
@@ -316,10 +316,9 @@ export const lnUrl: ILNUrlModel = {
     }
   }),
 
-  doChannelRequest: thunk(async (_, _2, { getStoreState, getState, injections }) => {
+  doChannelRequest: thunk(async (_, _2, { getStoreState, getState }) => {
     const type = getState().type;
     const lnUrlObject = getState().lnUrlObject;
-    const connectPeer = injections.lndMobile.index.connectPeer;
 
     if (type === "channelRequest" && lnUrlObject && lnUrlObject.tag === "channelRequest") {
       log.i("Processing channelRequest");
@@ -330,7 +329,12 @@ export const lnUrl: ILNUrlModel = {
       const localPubkey = getStoreState().lightning.nodeInfo!.identityPubkey;
       const [pubkey, host] = lnUrlObject.uri.split("@");
       try {
-        await connectPeer(pubkey, host);
+        await connectPeer({
+          addr: {
+            pubkey,
+            host,
+          },
+        });
       } catch (e) {}
       const request = `${lnUrlObject.callback}?k1=${lnUrlObject.k1}&remoteid=${localPubkey}&private=1`;
 
@@ -357,7 +361,7 @@ export const lnUrl: ILNUrlModel = {
     }
   }),
 
-  doAuthRequest: thunk(async (_, _2, { getStoreState, getState, injections }) => {
+  doAuthRequest: thunk(async (_, _2, { getStoreState, getState }) => {
     const type = getState().type;
     const lnUrlStr = getState().lnUrlStr;
     const lnUrlObject = getState().lnUrlObject;
@@ -373,9 +377,9 @@ export const lnUrl: ILNUrlModel = {
       const LNURLAUTH_CANONICAL_PHRASE =
         "DO NOT EVER SIGN THIS TEXT WITH YOUR PRIVATE KEYS! IT IS ONLY USED FOR DERIVATION OF LNURL-AUTH HASHING-KEY, DISCLOSING ITS SIGNATURE WILL COMPROMISE YOUR LNURL-AUTH IDENTITY AND MAY LEAD TO LOSS OF FUNDS!";
       // 2. LN WALLET obtains an RFC6979 deterministic signature of sha256(utf8ToBytes(canonical phrase)) using secp256k1 with node private key.
-      const signature = await injections.lndMobile.wallet.signMessageNodePubkey(
-        stringToUint8Array(LNURLAUTH_CANONICAL_PHRASE),
-      );
+      const signature = await signMessage({
+        msg: stringToUint8Array(LNURLAUTH_CANONICAL_PHRASE),
+      });
       // 3. LN WALLET defines hashingKey as PrivateKey(sha256(obtained signature)).
       const hashingKey = new sha256Hash().update(stringToUint8Array(signature.signature)).digest();
       // 4. SERVICE domain name is extracted from auth LNURL and then service-specific linkingPrivKey is defined as PrivateKey(hmacSha256(hashingKey, service domain name)).
@@ -419,78 +423,73 @@ export const lnUrl: ILNUrlModel = {
     }
   }),
 
-  doWithdrawRequest: thunk(
-    async (_, { satoshi }, { getStoreActions, getStoreState, getState, injections }) => {
-      const type = getState().type;
-      const lnUrlStr = getState().lnUrlStr;
-      const lnUrlObject = getState().lnUrlObject;
+  doWithdrawRequest: thunk(async (_, { satoshi }, { getStoreActions, getStoreState, getState }) => {
+    const type = getState().type;
+    const lnUrlStr = getState().lnUrlStr;
+    const lnUrlObject = getState().lnUrlObject;
 
-      const dunderEnabled = getStoreState().settings.dunderEnabled;
+    const dunderEnabled = getStoreState().settings.dunderEnabled;
 
-      if (dunderEnabled) {
-        await getStoreActions().blixtLsp.ondemandChannel.checkOndemandChannelService();
-      }
-      const shouldUseDunder =
-        dunderEnabled &&
-        getStoreState().blixtLsp.ondemandChannel.serviceActive &&
-        ((getStoreState().lightning.rpcReady && getStoreState().channel.channels.length === 0) ||
-          getStoreState().channel.remoteBalance.toSigned().subtract(5000).lessThan(satoshi)); // Not perfect...
+    if (dunderEnabled) {
+      await getStoreActions().blixtLsp.ondemandChannel.checkOndemandChannelService();
+    }
 
-      if (
-        lnUrlStr &&
-        type === "withdrawRequest" &&
-        lnUrlObject &&
-        lnUrlObject.tag === "withdrawRequest"
-      ) {
-        const promise = new Promise<boolean>(async (resolve, reject) => {
-          if (shouldUseDunder) {
-            await getStoreActions().blixtLsp.ondemandChannel.connectToService(); // TODO check if it worked
-            const serviceStatus = await getStoreActions().blixtLsp.ondemandChannel.serviceStatus();
-            const result = await dunderPrompt(
-              serviceStatus.approxFeeSat,
-              getStoreState().settings.bitcoinUnit,
-              getStoreState().fiat.currentRate,
-              getStoreState().settings.fiatUnit,
-            );
-            if (!result) {
-              return resolve(false);
-            }
+    // TURBOTODO: remove LongJS stuff
+    const remoteBalance = Long.fromValue(getStoreState().channel.remoteBalance.toString());
+    const shouldUseDunder =
+      dunderEnabled &&
+      getStoreState().blixtLsp.ondemandChannel.serviceActive &&
+      ((getStoreState().lightning.rpcReady && getStoreState().channel.channels.length === 0) ||
+        remoteBalance.subtract(5000).lessThan(satoshi)); // Not perfect...
 
-            try {
-              await getStoreActions().blixtLsp.ondemandChannel.addInvoice({
-                sat: satoshi,
-                description: lnUrlObject.defaultDescription,
-              });
-            } catch (error) {
-              Alert.alert("Error", error.message);
-              resolve(false);
-            }
-          } else {
-            const r = getStoreActions().receive.addInvoice({
-              description: lnUrlObject.defaultDescription,
-              sat: satoshi,
-              tmpData: {
-                website: getDomainFromURL(lnUrlStr),
-                type: "LNURL",
-                payer: null,
-              },
-            });
+    if (
+      lnUrlStr &&
+      type === "withdrawRequest" &&
+      lnUrlObject &&
+      lnUrlObject.tag === "withdrawRequest"
+    ) {
+      const promise = new Promise<boolean>(async (resolve, reject) => {
+        if (shouldUseDunder) {
+          await getStoreActions().blixtLsp.ondemandChannel.connectToService(); // TODO check if it worked
+          const serviceStatus = await getStoreActions().blixtLsp.ondemandChannel.serviceStatus();
+          const result = await dunderPrompt(
+            serviceStatus.approxFeeSat,
+            getStoreState().settings.bitcoinUnit,
+            getStoreState().fiat.currentRate,
+            getStoreState().settings.fiatUnit,
+          );
+          if (!result) {
+            return resolve(false);
           }
 
-          // 5. Once accepted by the user, LN WALLET sends a GET to LN SERVICE in the form of <callback>?k1=<k1>&pr=<lightning invoice, ...>
-          const listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e) => {
-            try {
-              log.d("SubscribeInvoices event", [e]);
-              listener.remove();
-              const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
-              if (error === "EOF") {
-                return;
-              } else if (error) {
-                log.d("Got error from SubscribeInvoices", [error]);
-                return;
-              }
+          try {
+            await getStoreActions().blixtLsp.ondemandChannel.addInvoice({
+              sat: satoshi,
+              description: lnUrlObject.defaultDescription,
+            });
+          } catch (error: any) {
+            Alert.alert("Error", error.message);
+            resolve(false);
+          }
+        } else {
+          const r = getStoreActions().receive.addInvoice({
+            description: lnUrlObject.defaultDescription,
+            sat: satoshi,
+            tmpData: {
+              website: getDomainFromURL(lnUrlStr),
+              type: "LNURL",
+              payer: null,
+            },
+          });
+        }
 
-              const invoice = injections.lndMobile.wallet.decodeInvoiceResult(e.data);
+        // 5. Once accepted by the user, LN WALLET sends a GET to LN SERVICE in the form of <callback>?k1=<k1>&pr=<lightning invoice, ...>
+        const unsubscribe = subscribeInvoices(
+          {},
+          async (invoice) => {
+            try {
+              unsubscribe();
+
               let firstSeparator = lnUrlObject.callback.includes("?") ? "&" : "?";
               const url = `${lnUrlObject.callback}${firstSeparator}k1=${lnUrlObject.k1}&pr=${invoice.paymentRequest}`;
               log.d("url", [url]);
@@ -512,20 +511,21 @@ export const lnUrl: ILNUrlModel = {
               }
 
               resolve(true);
-            } catch (error) {
+            } catch (error: any) {
               reject(new Error(error.message));
             }
-          });
-        });
-
-        return promise;
-      } else {
-        throw new Error(
-          "Requirements not satisfied, type must be login and lnUrlObject must be set",
+          },
+          (error) => {
+            console.log("error", error);
+          },
         );
-      }
-    },
-  ),
+      });
+
+      return promise;
+    } else {
+      throw new Error("Requirements not satisfied, type must be login and lnUrlObject must be set");
+    }
+  }),
 
   doPayRequest: thunk(async (actions, payload, { getStoreActions, getState }) => {
     const type = getState().type;
@@ -573,7 +573,7 @@ export const lnUrl: ILNUrlModel = {
 
       try {
         log.d("pr", [response.pr]);
-        const paymentRequest: lnrpc.PayReq = await getStoreActions().send.setPayment({
+        const paymentRequest: PayReq = await getStoreActions().send.setPayment({
           paymentRequestStr: response.pr,
           extraData: {
             lnurlPayResponse: response,
@@ -587,7 +587,8 @@ export const lnUrl: ILNUrlModel = {
         });
 
         // 7. LN WALLET Verifies that amount in provided invoice equals an amount previously specified by user.
-        if (paymentRequest.numMsat.notEquals(payload.msat)) {
+        // TURBOTODO: remove LongJS stuff
+        if (Long.fromValue(paymentRequest.numMsat.toString()).notEquals(payload.msat)) {
           throw new Error("Received invoice does not match decided cost");
         }
 
