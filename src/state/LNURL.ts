@@ -516,7 +516,7 @@ export const lnUrl: ILNUrlModel = {
             }
           },
           (error) => {
-            console.log("error", error);
+            log.e("subscribeInvoices error", [error]);
           },
         );
       });

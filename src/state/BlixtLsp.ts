@@ -4,8 +4,8 @@ import { generateSecureRandom } from "../lndmobile/index";
 import { IStoreInjections } from "./store";
 import { bytesToHexString, stringToUint8Array, timeout } from "../utils";
 import { IStoreModel } from "./index";
-import { LndMobileEventEmitter } from "../utils/event-listener";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+
+import { signMessage, subscribeChannelEvents } from "react-native-turbo-lnd";
 
 import logger from "./../utils/log";
 const log = logger("BlixtLsp");
@@ -128,35 +128,30 @@ export const blixtLsp: IBlixtLsp = {
   initialize: thunk(async (actions, _, { getState, getStoreState, getStoreActions }) => {
     log.d("Initializing");
 
-    // Expect subscription to be started in Channel store
-    LndMobileEventEmitter.addListener("SubscribeChannelEvents", async (e: any) => {
-      log.d("SubscribeChannelEvents");
-      const error = checkLndStreamErrorResponse("SubscribeChannelEvents", e);
-      if (error === "EOF") {
-        return;
-      } else if (error) {
-        log.d("Got error from SubscribeChannelEvents", [error]);
-        throw error;
-      }
+    subscribeChannelEvents(
+      {},
+      (_channelEvent) => {
+        log.d("SubscribeChannelEvents");
 
-      // const decodeChannelEvent = injections.lndMobile.channel.decodeChannelEvent;
-      // const channelEvent = decodeChannelEvent(e.data);
-
-      // This code isn't very good:
-      const registerInvoicePreimage = getState().ondemandChannel.registerInvoicePreimage;
-      if (registerInvoicePreimage) {
-        log.d("Has registerInvoicePreimage");
-        const tx = getStoreState().transaction.getTransactionByPreimage(registerInvoicePreimage);
-        if (!tx) {
-          log.e("Couldn't find transaction while attempting to settle BlixtLSP invoice", [tx]);
-          return;
+        // This code isn't very good:
+        const registerInvoicePreimage = getState().ondemandChannel.registerInvoicePreimage;
+        if (registerInvoicePreimage) {
+          log.d("Has registerInvoicePreimage");
+          const tx = getStoreState().transaction.getTransactionByPreimage(registerInvoicePreimage);
+          if (!tx) {
+            log.e("Couldn't find transaction while attempting to settle BlixtLSP invoice", [tx]);
+            return;
+          }
+          tx.status = "SETTLED";
+          getStoreActions().transaction.syncTransaction(tx);
+          log.i("tx should be synced");
+          actions.ondemandChannel.setRegisterInvoicePreimage(null);
         }
-        tx.status = "SETTLED";
-        getStoreActions().transaction.syncTransaction(tx);
-        log.i("tx should be synced");
-        actions.ondemandChannel.setRegisterInvoicePreimage(null);
-      }
-    });
+      },
+      (error) => {
+        log.e("Got error from subscribeChannelEvents", [error]);
+      },
+    );
   }),
 
   ondemandChannel: {
@@ -177,13 +172,11 @@ export const blixtLsp: IBlixtLsp = {
       return (await fetch(`${dunderServer}/ondemand-channel/service-status`)).json();
     }),
 
-    checkStatus: thunk(async (_, _2, { getStoreState, injections }) => {
+    checkStatus: thunk(async (_, _2, { getStoreState }) => {
       log.i("checkStatus");
       const dunderServer = getStoreState().settings.dunderServer;
 
-      const signMessageResult = await injections.lndMobile.wallet.signMessageNodePubkey(
-        stringToUint8Array("CHECKSTATUS"),
-      );
+      const signMessageResult = await signMessage({ msg: stringToUint8Array("CHECKSTATUS") });
 
       const request = JSON.stringify({
         pubkey: getStoreState().lightning.nodeInfo?.identityPubkey,
@@ -207,7 +200,7 @@ export const blixtLsp: IBlixtLsp = {
       while (attempt--) {
         try {
           connectToPeer = !!(await getStoreActions().lightning.connectPeer(result.peer));
-        } catch (e) {
+        } catch (e: any) {
           if (!e.message.includes("already connected to peer")) {
             log.i(`Failed to connect: ${e.message}.`);
             await timeout(1000);
@@ -244,13 +237,11 @@ export const blixtLsp: IBlixtLsp = {
       return invoice;
     }),
 
-    register: thunk(async (actions, { preimage, amount }, { getStoreState, injections }) => {
+    register: thunk(async (actions, { preimage, amount }, { getStoreState }) => {
       log.i("register");
       const dunderServer = getStoreState().settings.dunderServer;
-      const signMessageResult = await injections.lndMobile.wallet.signMessageNodePubkey(
-        stringToUint8Array("REGISTER"),
-      );
-      // const getInfoResponse = await injections.lndMobile.index.getInfo();
+      const signMessageResult = await signMessage({ msg: stringToUint8Array("REGISTER") });
+
       const request: IOnDemandChannelRegisterRequest = {
         pubkey: getStoreState().lightning.nodeInfo?.identityPubkey!,
         signature: signMessageResult.signature,
@@ -271,13 +262,11 @@ export const blixtLsp: IBlixtLsp = {
       return json;
     }),
 
-    claim: thunk(async (_, _2, { getStoreState, injections }) => {
+    claim: thunk(async (_, _2, { getStoreState }) => {
       log.i("claim");
       const dunderServer = getStoreState().settings.dunderServer;
 
-      const signMessageResult = await injections.lndMobile.wallet.signMessageNodePubkey(
-        stringToUint8Array("CLAIM"),
-      );
+      const signMessageResult = await signMessage({ msg: stringToUint8Array("CLAIM") });
 
       const request = JSON.stringify({
         pubkey: getStoreState().lightning.nodeInfo?.identityPubkey,

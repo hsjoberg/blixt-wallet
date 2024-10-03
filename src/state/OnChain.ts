@@ -140,12 +140,7 @@ export const onChain: IOnChainModel = {
             }
           },
           (error) => {
-            if (error === "EOF") {
-              return;
-            } else if (error) {
-              log.e("Got error from SubscribeTransactions", [error]);
-              return;
-            }
+            log.e("Got error from SubscribeTransactions", [error]);
           },
         );
 
