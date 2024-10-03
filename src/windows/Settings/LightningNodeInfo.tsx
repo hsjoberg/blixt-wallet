@@ -66,7 +66,7 @@ export default function LightningNodeInfo() {
               />
               <MetaData
                 title={t("timestamp")}
-                data={formatISO(fromUnixTime(nodeInfo.bestHeaderTimestamp!.toNumber()))}
+                data={formatISO(fromUnixTime(Number(nodeInfo.bestHeaderTimestamp)))}
               />
               <MetaData title={t("blockHash")} data={nodeInfo.blockHash!} />
               <MetaData title={t("blockHeight")} data={nodeInfo.blockHeight!.toString()} />
