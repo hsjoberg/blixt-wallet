@@ -70,7 +70,11 @@ import {
 import { getWalletPassword, setWalletPassword } from "../storage/keystore";
 
 import { Alert } from "../utils/alert";
-import { ELndMobileStatusCodes, writeConfig } from "../lndmobile/index";
+import {
+  ELndMobileStatusCodes,
+  generateSecureRandomAsBase64,
+  writeConfig,
+} from "../lndmobile/index";
 import { IStoreInjections } from "./store";
 import { SQLiteDatabase } from "react-native-sqlite-storage";
 import SetupBlixtDemo from "../utils/setup-demo";
@@ -81,6 +85,7 @@ import logger from "./../utils/log";
 import { stringToUint8Array, toast } from "../utils";
 
 import {
+  genSeed,
   initWallet,
   start as startLndTurbo,
   subscribeState,
@@ -569,9 +574,10 @@ export const model: IStoreModel = {
     }
   }),
 
-  generateSeed: thunk(async (actions, passphrase, { injections }) => {
-    const { genSeed } = injections.lndMobile.wallet;
-    const seed = await genSeed(passphrase);
+  generateSeed: thunk(async (actions, passphrase) => {
+    const seed = await genSeed({
+      aezeedPassphrase: passphrase ? stringToUint8Array(passphrase) : undefined,
+    });
     actions.setWalletSeed(seed.cipherSeedMnemonic);
   }),
 
@@ -579,7 +585,7 @@ export const model: IStoreModel = {
     state.walletSeed = payload;
   }),
 
-  writeConfig: thunk(async (_, _2, { injections, getState }) => {
+  writeConfig: thunk(async (_, _2) => {
     // TURBOTODO(hsjoberg)
     //const writeConfig = injections.lndMobile.index.writeConfig;
 
@@ -699,7 +705,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
     await writeConfig(config);
   }),
 
-  unlockWallet: thunk(async (_, _2, { injections }) => {
+  unlockWallet: thunk(async (_, _2) => {
     const password = await getWalletPassword();
     if (!password) {
       throw new Error("Cannot find wallet password");
@@ -709,9 +715,8 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
     });
   }),
 
-  createWallet: thunk(async (actions, payload, { injections, getState, dispatch }) => {
+  createWallet: thunk(async (actions, payload, { getState, dispatch }) => {
     // TURBOTODO(hsjoberg): Add generateSecureRandomAsBase64 to a local TurboModule
-    const generateSecureRandomAsBase64 = injections.lndMobile.index.generateSecureRandomAsBase64;
     const seed = getState().walletSeed;
     if (!seed) {
       return;
@@ -799,6 +804,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   importChannelDbOnStartup: null,
   torEnabled: false,
   torLoading: false,
+  speedloaderLoading: false,
 
   lightning,
   transaction,
