@@ -186,7 +186,7 @@ export const onChain: IOnChainModel = {
     }
   }),
 
-  getTransactions: thunk(async (actions, _, { getStoreState) => {
+  getTransactions: thunk(async (actions, _, { getStoreState }) => {
     const transactionDetails = await getTransactions(create(GetTransactionsRequestSchema));
     const channelEvents = getStoreState().channel.channelEvents;
 
