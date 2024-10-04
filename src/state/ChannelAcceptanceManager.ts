@@ -16,11 +16,12 @@ export interface IChannelAcceptanceManagerModel {
 }
 
 export const channelAcceptanceManager: IChannelAcceptanceManagerModel = {
-  initialize: thunk(async (actions, _, { getStoreState }) => {
+  initialize: thunk(async (_, _2, { getStoreState }) => {
     log.i("Starting Channel Acceptor", []);
 
     const { send, close } = channelAcceptor(
       (event) => {
+        log.i("Channel request received: ", [event]);
         let isZeroConfAllowed = false;
 
         if (

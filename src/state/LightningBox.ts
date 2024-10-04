@@ -10,7 +10,7 @@ import {
   ILNUrlPayResponseError,
   ILNUrlPayResponsePayerData,
 } from "./LNURL";
-import { hexToUint8Array, stringToUint8Array, uint8ArrayToUnicodeString } from "../utils";
+import { hexToUint8Array, uint8ArrayToUnicodeString, unicodeStringToUint8Array } from "../utils";
 
 import { sendCustomMessage, subscribeCustomMessages } from "react-native-turbo-lnd";
 
@@ -101,7 +101,7 @@ export const lightningBox: ILightningBoxModel = {
             };
 
             await sendCustomMessage({
-              data: stringToUint8Array(JSON.stringify(p2pResponse)),
+              data: unicodeStringToUint8Array(JSON.stringify(p2pResponse)),
               peer: customMessage.peer,
               type: LnurlPayRequestLNP2PType,
             });
@@ -156,7 +156,7 @@ export const lightningBox: ILightningBoxModel = {
                 };
 
                 await sendCustomMessage({
-                  data: stringToUint8Array(JSON.stringify(p2pResponse)),
+                  data: unicodeStringToUint8Array(JSON.stringify(p2pResponse)),
                   peer: customMessage.peer,
                   type: LnurlPayRequestLNP2PType,
                 });
@@ -182,7 +182,7 @@ export const lightningBox: ILightningBoxModel = {
                 };
 
                 await sendCustomMessage({
-                  data: stringToUint8Array(JSON.stringify(p2pResponse)),
+                  data: unicodeStringToUint8Array(JSON.stringify(p2pResponse)),
                   peer: customMessage.peer,
                   type: LnurlPayRequestLNP2PType,
                 });
@@ -213,7 +213,7 @@ export const lightningBox: ILightningBoxModel = {
                   };
 
                   await sendCustomMessage({
-                    data: stringToUint8Array(JSON.stringify(p2pResponse)),
+                    data: unicodeStringToUint8Array(JSON.stringify(p2pResponse)),
                     peer: customMessage.peer,
                     type: LnurlPayRequestLNP2PType,
                   });

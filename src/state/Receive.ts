@@ -153,6 +153,8 @@ export const receive: IReceiveModel = {
       expiry: payload.expiry ? BigInt(payload.expiry) : BigInt(invoiceExpiry),
       descriptionHash: payload.tmpData?.lightningBox?.descHash,
       rPreimage: payload.preimage,
+      private: true,
+      minHopHints: 6,
     });
     log.d("addInvoice() result", [result]);
     getStoreActions().clipboardManager.addToInvoiceCache(result.paymentRequest);

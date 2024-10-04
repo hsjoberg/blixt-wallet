@@ -77,14 +77,6 @@ export const googleDriveBackup: IGoogleDriveBackupModel = {
             return;
           }
 
-          const error = checkLndStreamErrorResponse("SubscribeChannelEvents", e);
-          if (error === "EOF") {
-            return;
-          } else if (error) {
-            console.log("Got error from SubscribeChannelEvents", [error]);
-            throw error;
-          }
-
           log.d("GoogleDriveBackup: Received SubscribeChannelEvents");
 
           if (
