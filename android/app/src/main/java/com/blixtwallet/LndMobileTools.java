@@ -182,6 +182,36 @@ class LndMobileTools extends ReactContextBaseJavaModule {
           "autopilot.heuristic=externalscore:0.95\n" +
           "autopilot.heuristic=preferential:0.05\n"
         );
+      } else if (BuildConfig.CHAIN.equals("signet")) {
+        out.println(
+          "[Application Options]\n" +
+          "debuglevel=info\n" +
+          "maxbackoff=2s\n" +
+          "norest=1\n" +
+          "sync-freelist=1\n" +
+          "accept-keysend=1\n" +
+          "\n" +
+          "[Routing]\n" +
+          "routing.assumechanvalid=1\n" +
+          "\n" +
+          "[Bitcoin]\n" +
+          "bitcoin.active=1\n" +
+          "bitcoin.signet=1\n" +
+          "bitcoin.node=neutrino\n" +
+          "\n" +
+          "[Neutrino]\n" +
+          "neutrino.connect=45.79.52.207:38333\n" +
+          "neutrino.feeurl=https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json\n" +
+          "\n" +
+          "[autopilot]\n" +
+          "autopilot.active=0\n" +
+          "autopilot.private=1\n" +
+          "autopilot.minconfs=1\n" +
+          "autopilot.conftarget=3\n" +
+          "autopilot.allocation=1.0\n" +
+          "autopilot.heuristic=externalscore:0.95\n" +
+          "autopilot.heuristic=preferential:0.05\n"
+        );
       } else if (BuildConfig.CHAIN.equals("regtest")) {
         out.println(
           "[Application Options]\n" +

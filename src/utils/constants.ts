@@ -31,7 +31,7 @@ export const DEFAULT_NEUTRINO_NODE = chainSelect({
   ],
   testnet: ["testnet.blixtwallet.com"],
   regtest: [],
-  signet: [],
+  signet: ["45.79.52.207:38333"],
 });
 export const DEFAULT_INVOICE_EXPIRY = 3600;
 export const DEFAULT_MAX_LN_FEE_PERCENTAGE = 2;

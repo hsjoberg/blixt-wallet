@@ -157,6 +157,12 @@ android {
             buildConfigField "String", "CHAIN", '"testnet"'
             manifestPlaceholders = [chain: " Testnet"]
         }
+        chainsignet {
+            dimension "chain"
+            applicationIdSuffix ".signet"
+            buildConfigField "String", "CHAIN", '"signet"'
+            manifestPlaceholders = [chain: " Signet"]
+        }
         chainmainnet {
             dimension "chain"
             buildConfigField "String", "CHAIN", '"mainnet"'

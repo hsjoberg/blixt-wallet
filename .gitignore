@@ -74,7 +74,7 @@ proto
 .classpath
 .project
 .settings
-google-services.json
+#google-services.json
 ios/Pods
 macos/Pods
 android/lndmobile/Lndmobile.aar

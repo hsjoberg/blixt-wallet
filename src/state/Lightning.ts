@@ -263,7 +263,7 @@ export const lightning: ILightningModel = {
   }),
 
   connectPeer: thunk(async (_, peer, {}) => {
-    const [pubkey, host] = peer.split("@");
+    const [pubkey, host] = peer.trim().split("@");
     return await connectPeer({
       addr: {
         pubkey,
