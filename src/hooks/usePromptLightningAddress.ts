@@ -1,10 +1,11 @@
 import { Alert } from "../utils/alert";
 import { useStoreActions } from "../state/store";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, NavigationProp } from "@react-navigation/core";
+import { NavigationRootStackParamList } from "../types";
 
 export default function usePromptLightningAddress() {
   const resolveLightningAddress = useStoreActions((store) => store.lnUrl.resolveLightningAddress);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
 
   return () =>
     new Promise<[boolean, string?]>((resolve, reject) => {

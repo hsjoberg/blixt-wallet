@@ -189,7 +189,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
         await getBalance();
         Vibration.vibrate(32);
         onPaid(preimage);
-      } catch (e) {
+      } catch (e: any) {
         Vibration.vibrate(50);
         toast("Error: " + e.message, 12000, "danger", "Okay");
       }
@@ -352,7 +352,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
         </View>
       </>
     );
-  } catch (error) {
+  } catch (error: any) {
     Alert.alert(`${t("form.alert")}:\n\n${error.message}`);
     callback?.(null);
     navigation.goBack();

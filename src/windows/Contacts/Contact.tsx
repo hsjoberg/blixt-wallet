@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, LayoutAnimation, Pressable, EmitterSubscription } from "react-native";
 import { Icon, Card, CardItem, Text, Button } from "native-base";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation, NavigationProp } from "@react-navigation/core";
 import Long from "long";
 import Color from "color";
 
@@ -23,13 +23,16 @@ import { fontFactorNormalized } from "../../utils/scale";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { NavigationRootStackParamList } from "../../types";
 
 interface IContactProps {
   contact: IContact;
 }
+
 export default function Contact({ contact }: IContactProps) {
   const t = useTranslation(namespaces.contacts.contactList).t;
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
+
   const setLNUrl = useStoreActions((store) => store.lnUrl.setLNUrl);
   const resolveLightningAddress = useStoreActions((store) => store.lnUrl.resolveLightningAddress);
   const deleteContact = useStoreActions((store) => store.contacts.deleteContact);

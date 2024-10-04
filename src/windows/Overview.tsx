@@ -13,7 +13,8 @@ import {
 } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
+import { DrawerActions, useNavigation, NavigationProp } from "@react-navigation/native";
+
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { getStatusBarHeight } from "react-native-status-bar-height";
@@ -38,6 +39,7 @@ import useLayoutMode from "../hooks/useLayoutMode";
 import CopyAddress from "../components/CopyAddress";
 import { StackNavigationProp } from "@react-navigation/stack";
 import BlixtHeader from "../components/BlixtHeader";
+import { NavigationRootStackParamList } from "../types";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
@@ -359,7 +361,7 @@ function Overview({ navigation }: IOverviewProps) {
 }
 
 const RecoverInfo = () => {
-  const { t, i18n } = useTranslation(namespaces.overview);
+  const { t } = useTranslation(namespaces.overview);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const recoverInfo = useStoreState((store) => store.lightning.recoverInfo);
 
@@ -391,7 +393,7 @@ interface ISendOnChain {
   bitcoinAddress?: string;
 }
 const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
-  const { t, i18n } = useTranslation(namespaces.overview);
+  const { t } = useTranslation(namespaces.overview);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -444,7 +446,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
 
 const DoBackup = () => {
   const { t } = useTranslation(namespaces.overview);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
   const onPressDismiss = async () => {
@@ -484,7 +486,7 @@ const DoBackup = () => {
 
 const NewChannelBeingOpened = () => {
   const { t } = useTranslation(namespaces.overview);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
 
   const onPressView = () => {
     navigation.navigate("LightningInfo");
