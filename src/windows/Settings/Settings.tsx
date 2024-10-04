@@ -45,6 +45,7 @@ import { routerrpc } from "../../../proto/lightning";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { brickInstance, setBrickDeviceAndExportChannelDb } from "../../storage/app";
 import { restoreChannelBackups } from "../../lndmobile/wallet";
+import { stopDaemon } from "react-native-turbo-lnd";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -676,8 +677,7 @@ ${t("LN.inbound.dialog.msg3")}`;
           onPress: async () => {
             try {
               await NativeModules.BlixtTor.stopTor();
-              await NativeModules.LndMobile.stopLnd();
-              await NativeModules.LndMobileTools.killLnd();
+              await stopDaemon({});
             } catch (e) {
               console.log(e);
             }
@@ -970,8 +970,7 @@ ${t("experimental.tor.disabled.msg2")}`;
           await changeTorEnabled(!torEnabled);
           if (PLATFORM === "android") {
             try {
-              await NativeModules.LndMobile.stopLnd();
-              await NativeModules.LndMobileTools.killLnd();
+              await stopDaemon({});
             } catch (e) {
               console.log(e);
             }
@@ -1032,30 +1031,6 @@ ${t("experimental.tor.disabled.msg2")}`;
             },
           },
         ]);
-      },
-      "plain-text",
-    );
-  };
-
-  // Delete wallet
-  const onPressDeleteWallet = async () => {
-    Alert.prompt(
-      "Delete wallet",
-      "WARNING!\nOnly do this if you're know what you're doing.\n" +
-        "Any funds that has not been properly backed up will be lost forever.\n\n" +
-        'Write "delete wallet" and press OK to continue.\n' +
-        "Once the wallet has been deleted, the app will be restarted " +
-        "for you to create restore or create a new wallet",
-      async (text) => {
-        if (text.length === 0 || text !== "delete wallet") {
-          return;
-        }
-
-        if (text === "delete wallet") {
-          // await NativeModules.LndMobile.stopLnd();
-          // await timeout(1000);
-          // await NativeModules.LndMobileTools.DEBUG_deleteDatafolder();
-        }
       },
       "plain-text",
     );
@@ -1587,7 +1562,7 @@ ${t("experimental.tor.disabled.msg2")}`;
       }
 
       await setBrickDeviceAndExportChannelDb(true);
-      await NativeModules.LndMobile.stopLnd();
+      await stopDaemon({});
 
       Alert.alert("Restart the app to continue the procedure.", "", [
         {
@@ -2847,7 +2822,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             icon={true}
             onPress={async () => {
               try {
-                await NativeModules.LndMobile.stopLnd();
+                await stopDaemon({});
                 await timeout(5000); // Let lnd close down
               } catch (e: any) {
                 // If lnd was closed down already
@@ -2909,7 +2884,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             icon={true}
             onPress={async () => {
               try {
-                await NativeModules.LndMobile.stopLnd();
+                await stopDaemon({});
               } catch (e: any) {
                 toast("Error: " + e.message, 10000, "danger");
                 return;

@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { toast } from "../../utils";
 import { Alert } from "../../utils/alert";
+import { stopDaemon } from "react-native-turbo-lnd";
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -62,9 +63,9 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
     Alert.alert(
       t("msg.warning", { ns: namespaces.common }),
       `${t("createWallet.msg1")}
-  
+
       ${t("createWallet.msg2")}
-  
+
       ${t("createWallet.msg3")}`,
       [
         {
@@ -125,8 +126,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
     changeTorEnabled(!torEnabled);
     if (PLATFORM === "android") {
       try {
-        // await NativeModules.LndMobile.stopLnd();
-        await NativeModules.LndMobileTools.killLnd();
+        await stopDaemon({});
       } catch (e) {
         console.log(e);
       }
@@ -193,8 +193,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
             text: t("buttons.yes", { ns: namespaces.common }),
             onPress: async () => {
               try {
-                await NativeModules.LndMobile.stopLnd();
-                await NativeModules.LndMobileTools.killLnd();
+                await stopDaemon({});
               } catch (e) {
                 console.log(e);
               }

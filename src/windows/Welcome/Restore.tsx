@@ -112,7 +112,6 @@ export default function Restore({ navigation }: IProps) {
           throw new Error("channel.db file copying failed: " + channelDbFile.copyError);
         }
 
-        // await NativeModules.LndMobile.stopLnd();
         await setImportChannelDbOnStartup({
           channelDbPath: channelDbFile.fileCopyUri.replace(/^file:\/\//, ""),
           seed: splittedSeed,

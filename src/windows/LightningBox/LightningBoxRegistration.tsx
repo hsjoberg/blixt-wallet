@@ -34,6 +34,7 @@ import { lnrpc } from "../../../proto/lightning";
 import { LightningBoxStackParamList } from "./index";
 import logger from "../../utils/log";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { stopDaemon } from "react-native-turbo-lnd";
 
 const log = logger("LightningBoxRegistration");
 
@@ -178,8 +179,7 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
         onPress: async () => {
           try {
             await NativeModules.BlixtTor.stopTor();
-            await NativeModules.LndMobile.stopLnd();
-            await NativeModules.LndMobileTools.killLnd();
+            await stopDaemon({});
           } catch (e) {
             console.log(e);
           }

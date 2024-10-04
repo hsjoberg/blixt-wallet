@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { Alert } from "../../utils/alert";
 import { lnrpc } from "../../../proto/lightning";
+import { stopDaemon } from "react-native-turbo-lnd";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -99,8 +100,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
               await changeTorEnabled(!torEnabled);
               if (PLATFORM === "android") {
                 try {
-                  await NativeModules.LndMobile.stopLnd();
-                  await NativeModules.LndMobileTools.killLnd();
+                  await stopDaemon({});
                 } catch (e) {
                   console.log(e);
                 }
