@@ -4,14 +4,13 @@ import { View, Text, Button, Icon } from "native-base";
 import color from "color";
 import * as Animatable from "react-native-animatable";
 import Container from "../components/Container";
-import ReactNativeHapticFeedback from "react-native-haptic-feedback";
-
+import ReactNativeHapticFeedback, { HapticOptions } from "react-native-haptic-feedback";
 
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { smallScreen } from "../utils/device";
 import { PLATFORM } from "../utils/constants";
 
-const hapticFeedbackOptions: ReactNativeHapticFeedback.HapticOptions = {
+const hapticFeedbackOptions: HapticOptions = {
   enableVibrateFallback: false,
   ignoreAndroidSystemSettings: false,
 };
@@ -64,7 +63,7 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
   useEffect(() => {
     if (code.length === 6) {
       (async () => {
-        if (!await onTryCode(code.join(""))) {
+        if (!(await onTryCode(code.join("")))) {
           setTimeout(() => pincodeText!.current!.shake!(950), 1);
           if (PLATFORM === "android") {
             Vibration.vibrate(300);
@@ -85,7 +84,7 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
       <View style={style.pincodeInput}>
         <Text style={style.enterPincodeText}>{textAction}</Text>
         <View style={style.pincodeInputContainer}>
-          <Animatable.Text style={style.pincodeInputText} ref={(pincodeText as any)}>
+          <Animatable.Text style={style.pincodeInputText} ref={pincodeText as any}>
             <Text style={style.pincodeInputText}>{pincodeInput}</Text>
             <Text style={[style.pincodeInputText, style.pincodeInputPlaceholderText]}>
               {pincodeInputPlaceholder}
@@ -96,7 +95,12 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
       <View style={style.pincodeButtons}>
         <View style={style.buttonRow}>
           {[1, 2, 3].map((n) => (
-            <Button key={n} onPress={() => onNumberPress(n)} style={style.pincodeButton} rounded={false}>
+            <Button
+              key={n}
+              onPress={() => onNumberPress(n)}
+              style={style.pincodeButton}
+              rounded={false}
+            >
               <Text style={style.pincodeButtonText}>{n}</Text>
             </Button>
           ))}
@@ -118,7 +122,11 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
         <View style={style.buttonRow}>
           <Button onPress={onClearPress} style={[style.buttonDelete, style.pincodeButton]}>
             <Text style={style.pincodeButtonText}>
-              <Icon style={style.buttonClearIcon} type="MaterialCommunityIcons" name="delete-forever" />
+              <Icon
+                style={style.buttonClearIcon}
+                type="MaterialCommunityIcons"
+                name="delete-forever"
+              />
             </Text>
           </Button>
           <Button onPress={() => onNumberPress(0)} style={style.pincodeButton} rounded={false}>
@@ -126,8 +134,12 @@ export default function Pincode({ onTryCode, textAction }: IPincode) {
           </Button>
           <Button onPress={onBackspacePress} style={[style.pincodeButton, style.buttonBackspace]}>
             <Text style={style.pincodeButtonText}>
-              {PLATFORM === "macos" && <Icon style={style.buttonBackspaceIcon} type="Entypo" name="erase" />}
-              {PLATFORM !== "macos" && <Icon style={style.buttonBackspaceIcon} type="FontAwesome5" name="backspace" />}
+              {PLATFORM === "macos" && (
+                <Icon style={style.buttonBackspaceIcon} type="Entypo" name="erase" />
+              )}
+              {PLATFORM !== "macos" && (
+                <Icon style={style.buttonBackspaceIcon} type="FontAwesome5" name="backspace" />
+              )}
             </Text>
           </Button>
         </View>

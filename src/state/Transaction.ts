@@ -12,12 +12,13 @@ import { bytesToHexString, hexToUint8Array } from "../utils";
 
 import Long from "long";
 
-import logger from "./../utils/log";
 import { lookupInvoice, routerTrackPaymentV2 } from "react-native-turbo-lnd";
 import {
   Invoice_InvoiceState,
   Payment_PaymentStatus,
 } from "react-native-turbo-lnd/protos/lightning_pb";
+
+import logger from "./../utils/log";
 const log = logger("Transaction");
 
 export interface ITransactionModel {

@@ -1,5 +1,5 @@
-import React, { useLayoutEffect } from "react";
-import { StyleSheet, LayoutAnimation, Animated, Keyboard } from "react-native";
+import React from "react";
+import { StyleSheet, Animated, Keyboard } from "react-native";
 import { createAnimatableComponent } from "react-native-animatable";
 import { Button, Text } from "native-base";
 
