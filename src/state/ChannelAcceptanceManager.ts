@@ -29,13 +29,16 @@ export const channelAcceptanceManager: IChannelAcceptanceManagerModel = {
           event.commitmentType === CommitmentType.STATIC_REMOTE_KEY ||
           event.commitmentType === CommitmentType.UNKNOWN_COMMITMENT_TYPE
         ) {
+          log.i("Rejecting channel request due to commitment type: ", [
+            CommitmentType[event.commitmentType],
+          ]);
+
           send({
             accept: false,
             pendingChanId: event.pendingChanId,
             error: "Only anchor channels are allowed",
           });
 
-          log.i("Channel request rejected due to commitment type: ", [event.commitmentType]);
           return;
         }
 
@@ -46,6 +49,11 @@ export const channelAcceptanceManager: IChannelAcceptanceManagerModel = {
             ? zeroConfPeers.includes(bytesToHexString(event.nodePubkey))
             : false;
         }
+
+        log.i("Accepting channel request from", [
+          bytesToHexString(event.nodePubkey),
+          event.commitmentType,
+        ]);
 
         send({
           pendingChanId: event.pendingChanId,

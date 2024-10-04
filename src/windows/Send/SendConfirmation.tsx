@@ -172,8 +172,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       await getBalance();
       Vibration.vibrate(32);
       navigation.replace("SendDone", { preimage, callback });
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
       toast(
         `${t("msg.error", { ns: namespaces.common })}: ${error.message}`,
         60000,

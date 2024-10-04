@@ -377,7 +377,7 @@ export const sendPaymentV2TurboLnd = (
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: multiPath ? 16 : 1,
-    feeLimitSat: BigInt(Math.max(10, (payAmount?.toNumber() || 0) * maxFeeRatio)),
+    feeLimitSat: BigInt(Math.floor(Math.max(10, (payAmount?.toNumber() || 0) * maxFeeRatio))),
     cltvLimit: 0,
     outgoingChanIds: outgoingChanId ? [BigInt(outgoingChanId.toNumber())] : [],
   });
