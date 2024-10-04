@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Image, Platform, PixelRatio } from "react-native";
-import { Body, Card, CardItem, Text, Right, Row } from "native-base";
+import { StyleSheet, View, Image, Platform } from "react-native";
+import { Body, Card, CardItem, Text, Right } from "native-base";
 import Long from "long";
 
 import { fromUnixTime } from "date-fns";
