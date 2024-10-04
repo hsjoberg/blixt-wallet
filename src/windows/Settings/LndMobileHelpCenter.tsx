@@ -169,7 +169,7 @@ export default function LndMobileHelpCenter({ navigation }) {
         if (!result) {
           break;
         }
-      } catch (e) {
+      } catch (e: any) {
         stepsRes.push({
           title: step.title,
           result: false,
@@ -188,7 +188,7 @@ export default function LndMobileHelpCenter({ navigation }) {
     try {
       const result = await NativeModules.LndMobile.initialize();
       toast(t("msg.result", { ns: namespaces.common }) + ": " + result, 0, "success", "OK");
-    } catch (e) {
+    } catch (e: any) {
       toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");
     }
   };
@@ -202,7 +202,7 @@ export default function LndMobileHelpCenter({ navigation }) {
         "success",
         "OK",
       );
-    } catch (e) {
+    } catch (e: any) {
       toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");
     }
   };
@@ -212,7 +212,7 @@ export default function LndMobileHelpCenter({ navigation }) {
       const password = await getWalletPassword();
       await unlockWallet(password!);
       toast(t("msg.done", { ns: namespaces.common }));
-    } catch (e) {
+    } catch (e: any) {
       toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");
     }
   };
@@ -226,7 +226,7 @@ export default function LndMobileHelpCenter({ navigation }) {
         "success",
         "OK",
       );
-    } catch (e) {
+    } catch (e: any) {
       toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");
     }
   };
@@ -240,7 +240,7 @@ export default function LndMobileHelpCenter({ navigation }) {
     try {
       await runWaitForChainSync();
       toast(t("msg.done", { ns: namespaces.common }));
-    } catch (e) {
+    } catch (e: any) {
       toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");
     }
   };

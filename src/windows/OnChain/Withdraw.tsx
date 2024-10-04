@@ -67,7 +67,7 @@ export default ({ navigation }: IOpenChannelProps) => {
       navigation.pop();
 
       toast(t("form.withdraw.alert"), 6000, "success");
-    } catch (e) {
+    } catch (e: any) {
       toast(`${t("msg.error", { ns: namespaces.common })}: ${e.message}`, 12000, "danger", "OK");
       setSending(false);
     }
@@ -234,8 +234,8 @@ export default ({ navigation }: IOpenChannelProps) => {
             {sending && <Spinner color={blixtTheme.light} />}
           </Button>,
         ]}
-        noticeText={`${formatBitcoinValue(Long.fromValue(onChainBalance))} available`}
-        noticeIcon={Long.fromValue(onChainBalance).gt(0) ? null : "info"}
+        noticeText={`${formatBitcoinValue(onChainBalance)} available`}
+        noticeIcon={Long.fromNumber(Number(onChainBalance)).gt(0) ? null : "info"}
       />
     </Container>
   );

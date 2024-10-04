@@ -81,7 +81,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
       }
       await getChannels(undefined);
       navigation.pop();
-    } catch (error) {
+    } catch (error: any) {
       toast(`Error: ${error.message}`, 12000, "danger", "Okay");
       setOpening(false);
 
@@ -279,7 +279,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
           </Button>,
         ]}
         noticeText={`${formatBitcoinValue(onChainBalance)} available`}
-        noticeIcon={Long.fromValue(onChainBalance).gt(0) ? null : "info"}
+        noticeIcon={Long.fromNumber(Number(onChainBalance)).gt(0) ? null : "info"}
       />
     </Container>
   );
