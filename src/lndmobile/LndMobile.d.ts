@@ -44,6 +44,7 @@ export interface ILndMobileTools {
   log(level: "v" | "d" | "i" | "w" | "e", tag: string, msg: string): void;
   saveLogs(): Promise<string>;
   copyLndLog(): Promise<boolean>;
+  copySpeedloaderLog(): Promise<boolean>;
   tailLog(numberOfLines: number): Promise<string>;
   observeLndLogFile(): Promise<boolean>;
   saveChannelsBackup(base64Backups: string): Promise<string>;

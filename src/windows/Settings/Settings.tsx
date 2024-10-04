@@ -46,6 +46,8 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { brickInstance, setBrickDeviceAndExportChannelDb } from "../../storage/app";
 import { restoreChannelBackups } from "../../lndmobile/wallet";
 import { stopDaemon } from "react-native-turbo-lnd";
+import { NavigationRootStackParamList } from "../../types";
+import { NavigationProp } from "@react-navigation/native";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -53,7 +55,7 @@ if (PLATFORM !== "macos") {
 }
 
 interface ISettingsProps {
-  navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
+  navigation: NavigationProp<NavigationRootStackParamList>;
 }
 export default function Settings({ navigation }: ISettingsProps) {
   const currentLanguage = useStoreState((store) => store.settings.language);
