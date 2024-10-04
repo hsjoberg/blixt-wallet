@@ -4,7 +4,7 @@ import { View } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import { getRouteHints, sendKeysendPaymentV2 } from "../../lndmobile/index";
+import { sendKeysendPaymentV2 } from "../../lndmobile/index";
 import Long from "long";
 import { toast, hexToUint8Array } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -23,6 +23,14 @@ import Input from "../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { getChanInfo, listChannels } from "react-native-turbo-lnd";
+import {
+  HopHintSchema,
+  RouteHint,
+  RouteHintSchema,
+  RoutingPolicy,
+} from "react-native-turbo-lnd/protos/lightning_pb";
+import { create, toJson, toJsonString } from "@bufbuild/protobuf";
 
 interface IKeysendExperimentProps {
   navigation: StackNavigationProp<RootStackParamList, "KeysendExperiment">;
@@ -38,6 +46,8 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
   const [satInput, setSatInput] = useState("");
   const [messageInput, setMessageInput] = useState("");
 
+  const sendPayment = useStoreActions((store) => store.send.sendPayment);
+
   const syncTransaction = useStoreActions((store) => store.transaction.syncTransaction);
 
   const name = useStoreState((store) => store.settings.name) || "";
@@ -45,7 +55,13 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
 
   useEffect(() => {
     (async () => {
-      setRoutehints(JSON.stringify(await getRouteHints()));
+      setRoutehints(
+        JSON.stringify(
+          (await getRouteHints()).map((routeHint) => {
+            return toJson(RouteHintSchema, routeHint);
+          }),
+        ),
+      );
     })();
   }, []);
 
@@ -266,3 +282,56 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
     </KeyboardAwareScrollView>
   );
 }
+
+export const getRouteHints = async (max: number = 5): Promise<RouteHint[]> => {
+  const routeHints: lnrpc.IRouteHint[] = [];
+  const routeHints2: RouteHint[] = [];
+  const channels = await listChannels({
+    privateOnly: true,
+  });
+
+  // Follows the code in `addInvoice()` of the lnd project
+  for (const channel of channels.channels) {
+    const chanInfo = await getChanInfo({
+      chanId: channel.chanId,
+    });
+    const remotePubkey = channel.remotePubkey;
+
+    // TODO check if node is publicly
+    // advertised in the network graph
+    // https://github.com/lightningnetwork/lnd/blob/38b521d87d3fd9cff628e5dc09b764aeabaf011a/channeldb/graph.go#L2141
+
+    let policy: RoutingPolicy | undefined;
+    if (remotePubkey === chanInfo.node1Pub) {
+      policy = chanInfo.node1Policy;
+    } else {
+      policy = chanInfo.node2Policy;
+    }
+
+    if (!policy) {
+      continue;
+    }
+
+    let channelId = chanInfo.channelId;
+    if (channel.peerScidAlias) {
+      channelId = channel.peerScidAlias;
+    }
+
+    routeHints2.push(
+      create(RouteHintSchema, {
+        hopHints: [
+          {
+            nodeId: remotePubkey,
+            chanId: channelId,
+            feeBaseMsat: Number(policy.feeBaseMsat),
+            feeProportionalMillionths: Number(policy.feeRateMilliMsat),
+            cltvExpiryDelta: policy.timeLockDelta,
+          },
+        ],
+      }),
+    );
+  }
+
+  console.log("our hints", routeHints2);
+  return routeHints2;
+};
