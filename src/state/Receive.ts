@@ -321,18 +321,18 @@ export const receive: IReceiveModel = {
                 for (const [customRecordKey, customRecordValue] of Object.entries(
                   htlc.customRecords,
                 )) {
-                  const decodedTLVRecord = decodeTLVRecord(customRecordKey);
-                  if (decodedTLVRecord === TLV_RECORD_NAME) {
+                  const decodedTLVRecord = customRecordKey; // decodeTLVRecord(customRecordKey);
+                  if (decodedTLVRecord === TLV_RECORD_NAME.toString()) {
                     const tlvRecordName = uint8ArrayToUnicodeString(customRecordValue);
                     log.i("Found TLV_RECORD_NAME 🎉", [tlvRecordName]);
                     transaction.tlvRecordName = tlvRecordName;
-                  } else if (decodedTLVRecord === TLV_WHATSAT_MESSAGE) {
+                  } else if (decodedTLVRecord === TLV_WHATSAT_MESSAGE.toString()) {
                     tlvRecordWhatSatMessage = uint8ArrayToUnicodeString(customRecordValue);
                     log.i("Found TLV_WHATSAT_MESSAGE 🎉", [tlvRecordWhatSatMessage]);
                     if (invoice.isKeysend) {
                       transaction.description = tlvRecordWhatSatMessage;
                     }
-                  } else if (decodedTLVRecord === TLV_SATOGRAM) {
+                  } else if (decodedTLVRecord === TLV_SATOGRAM.toString()) {
                     log.i("Got a Satogram");
                     isSatogram = true;
                   } else {
