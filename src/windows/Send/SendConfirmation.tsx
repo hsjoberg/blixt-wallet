@@ -62,6 +62,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   useEffect(() => {
     const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
       callback(null);
+      return null;
     });
 
     if (paymentRequest) {
@@ -74,13 +75,13 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
           if (paymentRequest && paymentRequest.numSatoshis) {
             try {
               const { routes } = await queryRoutes({
-                amount: paymentRequest.numSatoshis,
+                amount: Long.fromNumber(Number(paymentRequest.numSatoshis)),
                 pubKey: paymentRequest.destination,
                 routeHints: paymentRequest.routeHints,
               });
 
               if (!!routes.length && !!routes[0].totalFees) {
-                setFeeEstimate(routes[0]?.totalFees?.toNumber() ?? 0);
+                setFeeEstimate(routes[0].totalFees ? Number(routes[0].totalFees) : 0);
               }
             } catch (error) {
               console.log(error);
@@ -113,7 +114,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
             if (!!routes.length) {
               if (routes[0].totalFees !== null && routes[0].totalFees !== undefined) {
-                setFeeEstimate(routes[0]?.totalFees?.toNumber() ?? 0);
+                setFeeEstimate(routes[0].totalFees ? Number(routes[0].totalFees) : 0);
               } else {
                 setFeeEstimate(0);
               }
@@ -173,6 +174,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       Vibration.vibrate(32);
       navigation.replace("SendDone", { preimage, callback });
     } catch (error: any) {
+      console.log(error);
       toast(
         `${t("msg.error", { ns: namespaces.common })}: ${error.message}`,
         60000,
