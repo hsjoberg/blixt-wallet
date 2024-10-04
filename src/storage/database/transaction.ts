@@ -341,7 +341,7 @@ export const getTransactions = async (
         // hops: await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [transaction.id!]),
       })),
     )) as ITransaction[];
-  } catch (e) {
+  } catch (e: any) {
     throw new Error("Error reading transactions from DB: " + e.message);
   }
 };

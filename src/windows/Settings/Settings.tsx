@@ -151,7 +151,8 @@ export default function Settings({ navigation }: ISettingsProps) {
           { title: BitcoinUnits.satoshi.settings, value: "satoshi" },
           { title: BitcoinUnits.milliBitcoin.settings, value: "milliBitcoin" },
         ],
-        onPick: async (currency) => await changeBitcoinUnit(currency as keyof IBitcoinUnits),
+        onPick: async (currency: string) =>
+          await changeBitcoinUnit(currency as keyof IBitcoinUnits),
       });
     }
   };
@@ -184,7 +185,7 @@ export default function Settings({ navigation }: ISettingsProps) {
           title: currency,
           value: currency as keyof IFiatRates,
         })),
-        onPick: async (currency) => await changeFiatUnit(currency as keyof IFiatRates),
+        onPick: async (currency: string) => await changeFiatUnit(currency as keyof IFiatRates),
         searchEnabled: true,
       });
     }
@@ -220,7 +221,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onLangPress = async () => {
     navigation.navigate("ChangeLanguage", {
       title: t("general.lang.dialog.title"),
-      onPick: async (lang) => {
+      onPick: async (lang: string) => {
         await changeLanguage(lang);
       },
       searchEnabled: true,
@@ -280,7 +281,7 @@ export default function Settings({ navigation }: ISettingsProps) {
     try {
       const path = await NativeModules.LndMobileTools.saveLogs();
       toast(`${t("miscelaneous.appLog.dialog.alert")}: ` + path, 20000, "warning");
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
       toast(t("miscelaneous.appLog.dialog.error"), undefined, "danger");
     }
@@ -290,7 +291,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const copyLndLog = async () => {
     try {
       await NativeModules.LndMobileTools.copyLndLog();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
       toast(`${t("miscelaneous.lndLog.dialog.error")}: ${e.message}`, undefined, "danger");
     }
@@ -300,7 +301,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const copySpeedloaderLog = async () => {
     try {
       await NativeModules.LndMobileTools.copySpeedloaderLog();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
       toast(`${t("miscelaneous.speedloaderLog.dialog.error")}: ${e.message}`, undefined, "danger");
     }
@@ -311,7 +312,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onExportChannelsPress = async () => {
     try {
       const response = await exportChannelsBackup();
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       toast(e.message, 10000, "danger");
     }
@@ -320,7 +321,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onExportChannelsEmergencyPress = async () => {
     try {
       const response = await exportChannelBackupFile();
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       toast(e.message, 10000, "danger");
     }
@@ -340,7 +341,7 @@ export default function Settings({ navigation }: ISettingsProps) {
       console.log(backupBase64);
       await verifyChanBackup(backupBase64);
       Alert.alert("Channel backup file is valid");
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       if (!e.message?.includes?.("document picker")) {
         Alert.alert("Error verifying channel backup", e.message);
@@ -438,7 +439,7 @@ export default function Settings({ navigation }: ISettingsProps) {
     try {
       await googleDriveMakeBackup();
       toast(t("wallet.backup.googleCloudForce.alert"));
-    } catch (e) {
+    } catch (e: any) {
       toast(t("wallet.backup.error") + `: ${e.message}`, 10000, "danger");
     }
   };
@@ -460,7 +461,7 @@ export default function Settings({ navigation }: ISettingsProps) {
     try {
       await iCloudMakeBackup();
       toast(t("wallet.backup.iCloudForce.alert"));
-    } catch (e) {
+    } catch (e: any) {
       toast(t("wallet.backup.error") + `: ${e.message}`, 10000, "danger");
     }
   };
@@ -585,7 +586,7 @@ ${t("LN.inbound.dialog.msg3")}`;
             value: "BITREFILL_THOR",
           },
         ],
-        onPick: async (selectedItem) => {
+        onPick: async (selectedItem: any) => {
           goToSite(selectedItem as any);
         },
       });
@@ -646,7 +647,7 @@ ${t("LN.inbound.dialog.msg3")}`;
             title: "Custom explorer",
             value: "CUSTOM",
           }),
-        onPick: async (onchainExplorer) => {
+        onPick: async (onchainExplorer: string) => {
           if (onchainExplorer === "CUSTOM") {
             // Custom explorer, let's ask the user for a URL
             await setCustomExplorer();
@@ -678,7 +679,7 @@ ${t("LN.inbound.dialog.msg3")}`;
             try {
               await NativeModules.BlixtTor.stopTor();
               await stopDaemon({});
-            } catch (e) {
+            } catch (e: any) {
               console.log(e);
             }
             NativeModules.LndMobileTools.restartApp();
@@ -971,7 +972,7 @@ ${t("experimental.tor.disabled.msg2")}`;
           if (PLATFORM === "android") {
             try {
               await stopDaemon({});
-            } catch (e) {
+            } catch (e: any) {
               console.log(e);
             }
             NativeModules.LndMobileTools.restartApp();
@@ -1162,7 +1163,7 @@ ${t("experimental.tor.disabled.msg2")}`;
           }
 
           await changeMaxLNFeePercentage(fee);
-        } catch (error) {
+        } catch (error: any) {
           toast(error.message, 5, "danger");
         }
       },
@@ -1223,7 +1224,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             try {
               const nodeInfo = await getNodeInfo((text ?? "").split("@")[0], true);
               Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
-            } catch (e) {
+            } catch (e: any) {
               Alert.alert(e.message);
             }
           },
@@ -1252,7 +1253,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             try {
               const nodeInfo = await getChanInfo(Long.fromValue(text ?? ""));
               Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
-            } catch (e) {
+            } catch (e: any) {
               Alert.alert(e.message);
             }
           },
@@ -1284,7 +1285,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     try {
       const expiryNumber = Number.parseInt(expiryString, 10);
       await changeInvoiceExpiry(expiryNumber);
-    } catch (e) {
+    } catch (e: any) {
       Alert.alert("", "Could not update expiry.\n" + e.message);
     }
   };
@@ -1324,7 +1325,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     try {
       await resetMissionControl();
       toast("Done");
-    } catch (error) {
+    } catch (error: any) {
       toast(t("msg.error", { ns: namespaces.common }) + ": " + error.message, 0, "danger", "OK");
     }
   };
@@ -1371,7 +1372,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         title: logLevel,
         value: logLevel,
       })),
-      onPick: async (logLevel) => {
+      onPick: async (logLevel: any) => {
         if (logLevel === lndLogLevel) {
           return;
         }
@@ -1512,7 +1513,7 @@ ${t("experimental.tor.disabled.msg2")}`;
       );
       const invoice = await lookupInvoice(hash);
       Alert.alert("", JSON.stringify(invoice, undefined, 2));
-    } catch (error) {
+    } catch (error: any) {
       toast("Error: " + error.message, 10000, "danger");
     }
   };
@@ -1592,12 +1593,12 @@ ${t("experimental.tor.disabled.msg2")}`;
       const backupFileUri = PLATFORM === "ios" ? res.uri.replace(/%20/g, " ") : res.uri;
       try {
         backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? "base64" : undefined);
-      } catch (e) {
+      } catch (e: any) {
         backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? undefined : "base64");
       }
 
       await restoreChannelBackups(backupBase64);
-    } catch (error) {
+    } catch (error: any) {
       toast("Error: " + error.message, 10000, "danger");
     }
   };

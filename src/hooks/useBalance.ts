@@ -79,7 +79,7 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
           }
         } else if (PLATFORM === "android") {
           const locale = I18nManager.getConstants().localeIdentifier;
-          if (commaLocales.indexOf(locale) > -1) {
+          if (locale && commaLocales.indexOf(locale) > -1) {
             replaceComma = false;
           }
         }
@@ -111,7 +111,7 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
         }
       } else if (PLATFORM === "android") {
         const locale = I18nManager.getConstants().localeIdentifier;
-        if (commaLocales.indexOf(locale) > -1) {
+        if (locale && commaLocales.indexOf(locale) > -1) {
           replaceComma = false;
         }
       }

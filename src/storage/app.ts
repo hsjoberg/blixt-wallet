@@ -17,7 +17,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IBitcoinUnits } from "../utils/bitcoin-units";
 import { IFiatRates } from "../state/Fiat";
 import { LndChainBackend } from "../state/Lightning";
-import { LndLogLevel } from "../state/Settings";
 import { LoginMethods } from "../state/Security";
 import { MapStyle } from "../utils/google-maps";
 import { appMigration } from "../migration/app-migration";
@@ -154,7 +153,7 @@ export const setImportChannelDbOnStartup = async (
 ): Promise<void> => {
   return await setItemObject<IImportChannelDbOnStartup>(
     StorageItem.importChannelDbOnStartup,
-    value,
+    value!,
   );
 };
 export const getImportChannelDbOnStartup = async (): Promise<IImportChannelDbOnStartup> => {
