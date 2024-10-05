@@ -63,12 +63,17 @@ interface ISettingsProps {
 interface SettingsItem {
   type: string;
   title: string;
-  icon?: { type: string; name: string };
+  icon?: { type: string; name?: string } | { type: string };
   subtitle?: string;
-  onPress?: () => void;
-  onLongPress?: () => void;
+  onPress?: (...args: any[]) => any;
+  onLongPress?: (...args: any[]) => any;
   checkBox?: boolean;
   checked?: boolean;
+  rightComponent?: {
+    type: string;
+    checked: boolean;
+    onPress: (...args: any[]) => any;
+  };
 }
 
 export default function Settings({ navigation }: ISettingsProps) {
