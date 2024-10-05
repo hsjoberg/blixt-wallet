@@ -114,7 +114,7 @@ export default function Main() {
           }
 
           await initializeApp();
-        } catch (e) {
+        } catch (e: any) {
           toast(e.message, 0, "danger");
         }
       }

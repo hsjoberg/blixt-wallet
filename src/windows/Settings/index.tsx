@@ -25,7 +25,7 @@ import SpeedloaderLog from "./SpeedloaderLog";
 import DunderDoctor from "./DunderDoctor";
 import ToastLog from "./ToastLog";
 import DebugLog from "./DebugLog";
-
+import OldSettings from "./OldSettings";
 const Stack = createStackNavigator();
 
 export type SettingsStackParamList = {
@@ -62,6 +62,7 @@ export default function SettingsIndex() {
   return (
     <Stack.Navigator initialRouteName="SettingsMain" screenOptions={screenOptions}>
       <Stack.Screen name="SettingsMain" component={Settings} />
+      {/* <Stack.Screen name="NewSettingsMain" component={OldSettings} /> */}
       <Stack.Screen name="RemovePincodeAuth" component={RemovePincodeAuth} />
       <Stack.Screen name="SetPincode" component={SetPincode} />
       <Stack.Screen
