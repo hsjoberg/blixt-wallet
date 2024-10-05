@@ -1627,7 +1627,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     }
   };
 
-  const createSettingsData = useCallback(() => {
+  const createSettingsData = useCallback((): SettingsItem[] => {
     return [
       { type: "header", title: t("general.title") },
       {
@@ -2590,7 +2590,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         <FlashList
           data={dataSource}
           renderItem={renderItem}
-          estimatedItemSize={100}
+          estimatedItemSize={75}
           keyExtractor={(item, index) => `${item.title}-${index}`}
         />
       </Content>
