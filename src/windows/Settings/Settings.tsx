@@ -12,15 +12,9 @@ import {
 } from "../../utils/constants";
 import { Linking, NativeModules, PermissionsAndroid, Platform, StyleSheet } from "react-native";
 import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
-import React, { Component, useCallback, useLayoutEffect, useState } from "react";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import { camelCaseToSpace, formatISO, hexToUint8Array, timeout, toast } from "../../utils";
-import { getChanInfo, verifyChanBackup } from "../../lndmobile/channel";
-import {
-  getNodeInfo,
-  lookupInvoice,
-  resetMissionControl,
-  xImportMissionControl,
-} from "../../lndmobile";
+
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { useStoreActions, useStoreState } from "../../state/store";
 
@@ -33,22 +27,29 @@ import DialogAndroid from "react-native-dialogs";
 import DocumentPicker from "react-native-document-picker";
 import { IFiatRates } from "../../state/Fiat";
 import { LoginMethods } from "../../state/Security";
-import Long from "long";
 import { MapStyle } from "../../utils/google-maps";
-import { SettingsStackParamList } from "./index";
-import { StackNavigationProp } from "@react-navigation/stack";
 import TorSvg from "./TorSvg";
 import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
-import { routerrpc } from "../../../proto/lightning";
-import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { brickInstance, setBrickDeviceAndExportChannelDb } from "../../storage/app";
+import { setBrickDeviceAndExportChannelDb } from "../../storage/app";
 import { restoreChannelBackups } from "../../lndmobile/wallet";
-import { stopDaemon } from "react-native-turbo-lnd";
+import {
+  getChanInfo,
+  getNodeInfo,
+  lookupInvoice,
+  routerResetMissionControl,
+  routerXImportMissionControl,
+  stopDaemon,
+  verifyChanBackup,
+} from "react-native-turbo-lnd";
 import { NavigationRootStackParamList } from "../../types";
 import { NavigationProp } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
+import { create, toJson, toJsonString } from "@bufbuild/protobuf";
+import { ChannelEdgeSchema, NodeInfoSchema } from "react-native-turbo-lnd/protos/lightning_pb";
+import { base64Decode } from "@bufbuild/protobuf/wire";
+import { XImportMissionControlRequestSchema } from "react-native-turbo-lnd/protos/routerrpc/router_pb";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -350,12 +351,12 @@ export default function Settings({ navigation }: ISettingsProps) {
         type: [DocumentPicker.types.allFiles],
       });
       const backupFileUri = PLATFORM === "ios" ? res.uri.replace(/%20/g, " ") : res.uri;
-      const backupBase64 = await readFile(
-        backupFileUri,
-        PLATFORM === "android" ? "base64" : undefined,
-      );
-      console.log(backupBase64);
-      await verifyChanBackup(backupBase64);
+      const backupBase64 = await readFile(backupFileUri);
+      await verifyChanBackup({
+        multiChanBackup: {
+          multiChanBackup: base64Decode(backupBase64),
+        },
+      });
       Alert.alert("Channel backup file is valid");
     } catch (e: any) {
       console.log(e);
@@ -1238,8 +1239,10 @@ ${t("experimental.tor.disabled.msg2")}`;
               return;
             }
             try {
-              const nodeInfo = await getNodeInfo((text ?? "").split("@")[0], true);
-              Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
+              const nodeInfo = await getNodeInfo({
+                pubKey: text?.split("@")[0],
+              });
+              Alert.alert("", toJsonString(NodeInfoSchema, nodeInfo));
             } catch (e: any) {
               Alert.alert(e.message);
             }
@@ -1267,8 +1270,8 @@ ${t("experimental.tor.disabled.msg2")}`;
               return;
             }
             try {
-              const nodeInfo = await getChanInfo(Long.fromValue(text ?? ""));
-              Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
+              const nodeInfo = await getChanInfo({ chanId: text });
+              Alert.alert("", toJsonString(ChannelEdgeSchema, nodeInfo));
             } catch (e: any) {
               Alert.alert(e.message);
             }
@@ -1339,7 +1342,7 @@ ${t("experimental.tor.disabled.msg2")}`;
   // Reset mission control
   const onPressResetMissionControl = async () => {
     try {
-      await resetMissionControl();
+      await routerResetMissionControl({});
       toast("Done");
     } catch (error: any) {
       toast(t("msg.error", { ns: namespaces.common }) + ": " + error.message, 0, "danger", "OK");
@@ -1527,7 +1530,9 @@ ${t("experimental.tor.disabled.msg2")}`;
         "Provide payment hash",
         "plain-text",
       );
-      const invoice = await lookupInvoice(hash);
+      const invoice = await lookupInvoice({
+        rHashStr: hash,
+      });
       Alert.alert("", JSON.stringify(invoice, undefined, 2));
     } catch (error: any) {
       toast("Error: " + error.message, 10000, "danger");
@@ -2398,20 +2403,24 @@ ${t("experimental.tor.disabled.msg2")}`;
             const res = await fetch(`${dunderServer}/channel-liquidity`);
 
             const json: { pairs: any[] } = await res.json();
+            const schema = create(XImportMissionControlRequestSchema, {
+              pairs: json.pairs
+                .filter((c) => c.history.successAmtSat > 0)
+                .map((c) => {
+                  return {
+                    nodeFrom: hexToUint8Array(c.nodeFrom),
+                    nodeTo: hexToUint8Array(c.nodeTo),
+                    history: {
+                      successAmtSat: BigInt(c.history.successAmtSat),
+                      successTime: BigInt(c.history.successTime),
+                    },
+                  };
+                }),
+            });
 
-            const x: routerrpc.IXImportMissionControlRequest["pairs"] = json.pairs
-              .filter((c) => c.history.successAmtSat > 0)
-              .map((c) => {
-                return {
-                  nodeFrom: hexToUint8Array(c.nodeFrom),
-                  nodeTo: hexToUint8Array(c.nodeTo),
-                  history: {
-                    successAmtSat: Long.fromValue(c.history.successAmtSat),
-                    successTime: Long.fromValue(c.history.successTime),
-                  },
-                };
-              });
-            await xImportMissionControl(x);
+            await routerXImportMissionControl({
+              pairs: schema.pairs,
+            });
 
             toast("Done");
           } catch (e: any) {

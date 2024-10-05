@@ -25,7 +25,7 @@ import SpeedloaderLog from "./SpeedloaderLog";
 import DunderDoctor from "./DunderDoctor";
 import ToastLog from "./ToastLog";
 import DebugLog from "./DebugLog";
-import OldSettings from "./OldSettings";
+// import OldSettings from "./OldSettings";
 const Stack = createStackNavigator();
 
 export type SettingsStackParamList = {
