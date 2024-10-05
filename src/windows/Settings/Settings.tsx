@@ -440,6 +440,9 @@ export default function Settings({ navigation }: ISettingsProps) {
   const googleSignOut = useStoreActions((store) => store.google.signOut);
   const googleIsSignedIn = useStoreState((store) => store.google.isSignedIn);
   const googleDriveMakeBackup = useStoreActions((store) => store.googleDriveBackup.makeBackup);
+
+  // TURBOTODO: Nitesh: The checkbox doesn't seem to be flipping back and forth
+  // Just the button is getting clicked.
   const onToggleGoogleDriveBackup = async () => {
     if (!googleIsSignedIn) {
       await googleSignIn();
@@ -1790,7 +1793,6 @@ ${t("experimental.tor.disabled.msg2")}`;
               icon: { type: "MaterialCommunityIcons", name: "folder" },
               title: t("wallet.backup.iCloudForce.title"),
               onPress: onDoICloudBackupPress,
-              condition: iCloudBackupEnabled && !isRecoverMode,
             },
           ]
         : []),
@@ -1882,7 +1884,6 @@ ${t("experimental.tor.disabled.msg2")}`;
               subtitle: t("bitcoinNetwork.node.subtitle"),
               onPress: onSetBitcoinNodePress,
               onLongPress: onSetBitcoinNodeLongPress,
-              condition: lndChainBackend === "neutrino",
             },
           ]
         : []),
@@ -2114,12 +2115,11 @@ ${t("experimental.tor.disabled.msg2")}`;
 
       { type: "header", title: t("experimental.title") },
 
-      // TURBOTODO: Nitesh, I am not sure how to pass the Tor SVG
-      ...(["android", "ios"].includes(PLATFORM)
+      ...(["android", "ios"].includes(PLATFORM) && !isRecoverMode
         ? [
             {
               type: "item",
-              // icon: { type: "custom", name: "TorSvg" },
+              icon: { type: "torsvg" },
               title: t("experimental.tor.title"),
               checkBox: true,
               checked: torEnabled,
@@ -2127,6 +2127,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             },
           ]
         : []),
+
       ...(torEnabled && PLATFORM === "android"
         ? [
             {
@@ -2240,19 +2241,19 @@ ${t("experimental.tor.disabled.msg2")}`;
       },
       {
         type: "item",
-        icon: { type: "Entypo", name: "lifebuoy", style: { marginLeft: 1, marginRight: -1 } },
+        icon: { type: "Entypo", name: "lifebuoy" },
         title: t("debug.helpCencer.title"),
         onPress: onLndMobileHelpCenterPress,
       },
       {
         type: "item",
-        icon: { type: "Entypo", name: "info", style: { marginLeft: 1, marginRight: -1 } },
+        icon: { type: "Entypo", name: "info" },
         title: t("debug.getNodeInfo.title"),
         onPress: onGetNodeInfoPress,
       },
       {
         type: "item",
-        icon: { type: "Entypo", name: "info", style: { marginLeft: 1, marginRight: -1 } },
+        icon: { type: "Entypo", name: "info" },
         title: t("debug.getChannelInfo.title"),
         onPress: onGetChanInfoPress,
       },
@@ -2314,7 +2315,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         : []),
       {
         type: "item",
-        icon: { type: "AntDesign", name: "mobile1", style: { marginLeft: 1, marginRight: -1 } },
+        icon: { type: "AntDesign", name: "mobile1" },
         title: t("debug.demoMode.title"),
         subtitle: t("debug.demoMode.subtitle"),
         onPress: () => setupDemo({ changeDb: false }),
@@ -2563,7 +2564,11 @@ ${t("experimental.tor.disabled.msg2")}`;
     return (
       <ListItem style={styles.listItem} icon onPress={item.onPress}>
         <Left>
-          <Icon style={styles.icon} type={item.icon?.type} name={item.icon?.name} />
+          {item.icon?.type === "torsvg" ? (
+            <TorSvg /> // Render the custom Tor SVG here
+          ) : (
+            <Icon style={styles.icon} type={item.icon?.type} name={item.icon?.name} />
+          )}
         </Left>
         <Body>
           <Text>{item.title}</Text>
