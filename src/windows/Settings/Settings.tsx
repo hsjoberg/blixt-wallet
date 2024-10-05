@@ -1,5 +1,5 @@
 import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
-import { Body, CheckBox, Container, Icon, Left, List, ListItem, Right, Text } from "native-base";
+import { Body, CheckBox, Container, Icon, Left, ListItem, Right, Text } from "native-base";
 import {
   DEFAULT_DUNDER_SERVER,
   DEFAULT_INVOICE_EXPIRY,
@@ -46,7 +46,7 @@ import {
 import { NavigationRootStackParamList } from "../../types";
 import { NavigationProp } from "@react-navigation/native";
 import { FlashList } from "@shopify/flash-list";
-import { create, toJson, toJsonString } from "@bufbuild/protobuf";
+import { create, toJson } from "@bufbuild/protobuf";
 import { ChannelEdgeSchema, NodeInfoSchema } from "react-native-turbo-lnd/protos/lightning_pb";
 import { base64Decode } from "@bufbuild/protobuf/wire";
 import { XImportMissionControlRequestSchema } from "react-native-turbo-lnd/protos/routerrpc/router_pb";
@@ -351,7 +351,7 @@ export default function Settings({ navigation }: ISettingsProps) {
         type: [DocumentPicker.types.allFiles],
       });
       const backupFileUri = PLATFORM === "ios" ? res.uri.replace(/%20/g, " ") : res.uri;
-      const backupBase64 = await readFile(backupFileUri);
+      const backupBase64 = await readFile(backupFileUri, "base64");
       await verifyChanBackup({
         multiChanBackup: {
           multiChanBackup: base64Decode(backupBase64),
@@ -1242,7 +1242,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               const nodeInfo = await getNodeInfo({
                 pubKey: text?.split("@")[0],
               });
-              Alert.alert("", toJsonString(NodeInfoSchema, nodeInfo));
+              Alert.alert("", JSON.stringify(toJson(NodeInfoSchema, nodeInfo), null, 2));
             } catch (e: any) {
               Alert.alert(e.message);
             }
@@ -1271,7 +1271,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             }
             try {
               const nodeInfo = await getChanInfo({ chanId: text });
-              Alert.alert("", toJsonString(ChannelEdgeSchema, nodeInfo));
+              Alert.alert("", JSON.stringify(toJson(ChannelEdgeSchema, nodeInfo), null, 2));
             } catch (e: any) {
               Alert.alert(e.message);
             }
@@ -2549,8 +2549,6 @@ ${t("experimental.tor.disabled.msg2")}`;
     lndNoGraphCache,
     multiPathPaymentsEnabled,
     strictGraphPruningEnabled,
-
-    // ... include all other state variables and functions used in createSettingsData
   ]);
 
   useLayoutEffect(() => {
@@ -2581,13 +2579,13 @@ ${t("experimental.tor.disabled.msg2")}`;
   };
 
   return (
-    <Container>
+    <Container style={styles.container}>
       <Content style={{ padding: 10 }}>
         <BlixtWallet />
         <FlashList
           data={dataSource}
           renderItem={renderItem}
-          estimatedItemSize={60}
+          estimatedItemSize={100}
           keyExtractor={(item, index) => `${item.title}-${index}`}
         />
       </Content>
@@ -2596,6 +2594,9 @@ ${t("experimental.tor.disabled.msg2")}`;
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1, // This ensures that the container takes the available space
+  },
   listItem: {
     paddingLeft: 2,
     paddingRight: 2,
