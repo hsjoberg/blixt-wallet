@@ -22,7 +22,6 @@ import { Alert } from "../../utils/alert";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Chain } from "../../utils/build";
 import Clipboard from "@react-native-clipboard/clipboard";
-import Content from "../../components/Content";
 import DialogAndroid from "react-native-dialogs";
 import DocumentPicker from "react-native-document-picker";
 import { IFiatRates } from "../../state/Fiat";
@@ -45,11 +44,11 @@ import {
 } from "react-native-turbo-lnd";
 import { NavigationRootStackParamList } from "../../types";
 import { NavigationProp } from "@react-navigation/native";
-import { FlashList } from "@shopify/flash-list";
 import { create, toJson } from "@bufbuild/protobuf";
 import { ChannelEdgeSchema, NodeInfoSchema } from "react-native-turbo-lnd/protos/lightning_pb";
 import { base64Decode } from "@bufbuild/protobuf/wire";
 import { XImportMissionControlRequestSchema } from "react-native-turbo-lnd/protos/routerrpc/router_pb";
+import { FlatList } from "react-native";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -1633,7 +1632,6 @@ ${t("experimental.tor.disabled.msg2")}`;
 
   const settingsData = useMemo((): SettingsItem[] => {
     return [
-      { type: "component", component: <BlixtWallet /> },
       { type: "header", title: t("general.title") },
       {
         type: "item",
@@ -2585,13 +2583,15 @@ ${t("experimental.tor.disabled.msg2")}`;
 
   return (
     <Container>
-      <FlashList
+      <FlatList
         data={settingsData}
         renderItem={renderItem}
-        estimatedItemSize={50}
         ListHeaderComponent={<BlixtWallet />}
         contentContainerStyle={{ padding: 14 }}
+        initialNumToRender={35}
         keyExtractor={(item, index) => `${item.title}-${index}`}
+        maxToRenderPerBatch={15}
+        removeClippedSubviews={true}
       />
     </Container>
   );
