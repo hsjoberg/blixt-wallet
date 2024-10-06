@@ -10,4 +10,4 @@ export default function Loading() {
       <Spinner color={blixtTheme.light} size={55} />
     </Blurmodal>
   );
-};
+}

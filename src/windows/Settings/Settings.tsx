@@ -2588,7 +2588,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         renderItem={renderItem}
         ListHeaderComponent={<BlixtWallet />}
         contentContainerStyle={{ padding: 14 }}
-        initialNumToRender={35}
+        initialNumToRender={21}
         keyExtractor={(item, index) => `${item.title}-${index}`}
         maxToRenderPerBatch={15}
         removeClippedSubviews={true}

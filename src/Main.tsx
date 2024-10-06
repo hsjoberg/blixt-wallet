@@ -97,8 +97,6 @@ export default function Main() {
     (store) => store.settings.screenTransitionsEnabled,
   );
 
-  console.log("walletCreated", walletCreated);
-
   const [state, setState] = useState<
     "init" | "authentication" | "onboarding" | "started" | "bricked"
   >("init");

@@ -151,7 +151,7 @@ export const send: ISendModel = {
   /**
    * @throws
    */
-  sendPayment: thunk(async (_, payload, { getState, dispatch, getStoreState, getStoreActions }) => {
+  sendPayment: thunk(async (_, payload, { getState, dispatch, getStoreState }) => {
     const start = new Date().getTime();
 
     const paymentRequestStr = getState().paymentRequestStr;

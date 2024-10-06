@@ -72,7 +72,6 @@ function Overview({ navigation }: IOverviewProps) {
   const changeHideAmountsEnabled = useStoreActions(
     (store) => store.settings.changeHideAmountsEnabled,
   );
-  console.log(hideAmountsEnabled);
   const bitcoinAddress = useStoreState((store) => store.onChain.address);
   const onboardingState = useStoreState((store) => store.onboardingState);
 
