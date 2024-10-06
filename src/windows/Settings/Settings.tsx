@@ -68,11 +68,6 @@ interface SettingsItem {
   onLongPress?: (...args: any[]) => any;
   checkBox?: boolean;
   checked?: boolean;
-  rightComponent?: {
-    type: string;
-    checked: boolean;
-    onPress: (...args: any[]) => any;
-  };
 }
 
 export default function Settings({ navigation }: ISettingsProps) {
@@ -444,8 +439,6 @@ export default function Settings({ navigation }: ISettingsProps) {
   const googleIsSignedIn = useStoreState((store) => store.google.isSignedIn);
   const googleDriveMakeBackup = useStoreActions((store) => store.googleDriveBackup.makeBackup);
 
-  // TURBOTODO: Nitesh: The checkbox doesn't seem to be flipping back and forth
-  // Just the button is getting clicked.
   const onToggleGoogleDriveBackup = async () => {
     if (!googleIsSignedIn) {
       await googleSignIn();
@@ -1665,15 +1658,6 @@ ${t("experimental.tor.disabled.msg2")}`;
         checked: clipboardInvoiceCheckEnabled,
         onPress: onToggleClipBoardInvoiceCheck,
       },
-      {
-        type: "item",
-        icon: { type: "Entypo", name: "clipboard" },
-        title: t("general.checkClipboard.title"),
-        subtitle: t("general.checkClipboard.subtitle"),
-        checkBox: true,
-        checked: clipboardInvoiceCheckEnabled,
-        onPress: onToggleClipBoardInvoiceCheck,
-      },
       ...(["android", "ios"].includes(PLATFORM)
         ? [
             {
@@ -2332,11 +2316,8 @@ ${t("experimental.tor.disabled.msg2")}`;
         icon: { type: "MaterialCommunityIcons", name: "database-sync" },
         title: t("debug.disableGraphCache.title"),
         onPress: onToggleLndNoGraphCache,
-        rightComponent: {
-          type: "CheckBox",
-          checked: lndNoGraphCache,
-          onPress: onToggleLndNoGraphCache,
-        },
+        checkBox: true,
+        checked: lndNoGraphCache,
       },
       {
         type: "item",
@@ -2359,22 +2340,16 @@ ${t("experimental.tor.disabled.msg2")}`;
         title: t("experimental.MPP.title"),
         subtitle: t("experimental.MPP.subtitle"),
         onPress: onChangeMultiPartPaymentEnabledPress,
-        rightComponent: {
-          type: "CheckBox",
-          checked: multiPathPaymentsEnabled,
-          onPress: onChangeMultiPartPaymentEnabledPress,
-        },
+        checkBox: true,
+        checked: multiPathPaymentsEnabled,
       },
       {
         type: "item",
         icon: { type: "Entypo", name: "trash" },
         title: t("debug.strictGraphPruning.title"),
         onPress: changeStrictGraphPruningEnabledPress,
-        rightComponent: {
-          type: "CheckBox",
-          checked: strictGraphPruningEnabled,
-          onPress: changeStrictGraphPruningEnabledPress,
-        },
+        checkBox: true,
+        checked: strictGraphPruningEnabled,
       },
       {
         type: "item",
@@ -2389,11 +2364,8 @@ ${t("experimental.tor.disabled.msg2")}`;
               icon: { type: "MaterialCommunityIcons", name: "run-fast" },
               title: t("debug.enforceSpeedloaderOnStartup.title"),
               onPress: onPressEnforceSpeedloaderOnStartup,
-              rightComponent: {
-                type: "CheckBox",
-                checked: enforceSpeedloaderOnStartup,
-                onPress: onPressEnforceSpeedloaderOnStartup,
-              },
+              checkBox: true,
+              checked: enforceSpeedloaderOnStartup,
             },
           ]
         : []),
