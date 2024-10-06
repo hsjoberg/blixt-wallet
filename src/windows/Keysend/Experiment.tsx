@@ -4,12 +4,10 @@ import { View } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import { sendKeysendPaymentV2 } from "../../lndmobile/index";
 import Long from "long";
 import { toast, hexToUint8Array } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { generateSecureRandom } from "../../lndmobile/index";
-import { lnrpc } from "../../../proto/lightning";
 import QrCode from "../../components/QrCode";
 import BlixtForm from "../../components/Form";
 import { NavigationButton } from "../../components/NavigationButton";
@@ -142,6 +140,7 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
 
         preimage: hexToUint8Array(result.paymentPreimage),
         lnurlPayResponse: null,
+        lud18PayerData: null,
 
         hops:
           result.htlcs[0].route?.hops?.map((hop) => ({
@@ -175,7 +174,7 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
           setPubkeyInput(json.pubkey);
           setRoutehintsInput(json.routehints);
           console.log(data);
-        } catch (e) {
+        } catch (e: any) {
           setPubkeyInput(data?.split("@")[0]);
           console.log(e.message);
         }
@@ -285,8 +284,7 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
 }
 
 export const getRouteHints = async (max: number = 5): Promise<RouteHint[]> => {
-  const routeHints: lnrpc.IRouteHint[] = [];
-  const routeHints2: RouteHint[] = [];
+  const routeHints: RouteHint[] = [];
   const channels = await listChannels({
     privateOnly: true,
   });
@@ -318,7 +316,7 @@ export const getRouteHints = async (max: number = 5): Promise<RouteHint[]> => {
       channelId = channel.peerScidAlias;
     }
 
-    routeHints2.push(
+    routeHints.push(
       create(RouteHintSchema, {
         hopHints: [
           {
@@ -333,6 +331,6 @@ export const getRouteHints = async (max: number = 5): Promise<RouteHint[]> => {
     );
   }
 
-  console.log("our hints", routeHints2);
-  return routeHints2;
+  console.log("our hints", routeHints);
+  return routeHints;
 };

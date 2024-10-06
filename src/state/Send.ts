@@ -423,8 +423,6 @@ export const sendKeysendPaymentV2TurboLnd = (
   maxLNFeePercentage: number,
   routeHints?: RouteHint,
 ): Promise<Payment> => {
-  console.log("send keysendpayment v2", tlvRecordNameStr, tlvRecordWhatSatMessageStr);
-
   const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
 
   const paymentHash = sha("sha256").update(preimage).digest();
@@ -436,6 +434,7 @@ export const sendKeysendPaymentV2TurboLnd = (
     dest: pubkey,
     paymentHash,
     destFeatures: [FeatureBit.TLV_ONION_REQ],
+    amt: amount,
     destCustomRecords: {
       // 5482373484 is the record for lnd
       // keysend payments as described in
@@ -443,10 +442,6 @@ export const sendKeysendPaymentV2TurboLnd = (
       [TLV_KEYSEND]: preimage,
     },
   });
-
-  if (amount) {
-    options.amt = amount;
-  }
 
   if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {
     options.destCustomRecords![TLV_RECORD_NAME] = unicodeStringToUint8Array(tlvRecordNameStr);
