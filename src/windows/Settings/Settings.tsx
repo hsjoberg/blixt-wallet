@@ -12,7 +12,7 @@ import {
 } from "../../utils/constants";
 import { Linking, NativeModules, PermissionsAndroid, Platform, StyleSheet } from "react-native";
 import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
-import React, { useLayoutEffect, useMemo } from "react";
+import React, { useCallback, useLayoutEffect, useMemo } from "react";
 import { camelCaseToSpace, formatISO, hexToUint8Array, timeout, toast } from "../../utils";
 
 import { languages, namespaces } from "../../i18n/i18n.constants";
@@ -1633,6 +1633,7 @@ ${t("experimental.tor.disabled.msg2")}`;
 
   const settingsData = useMemo((): SettingsItem[] => {
     return [
+      { type: "component", component: <BlixtWallet /> },
       { type: "header", title: t("general.title") },
       {
         type: "item",
@@ -2556,16 +2557,15 @@ ${t("experimental.tor.disabled.msg2")}`;
     strictGraphPruningEnabled,
   ]);
 
-  const renderItem = ({ item }: { item: SettingsItem }) => {
+  const renderItem = useCallback(({ item }: { item: SettingsItem }) => {
     if (item.type === "header") {
       return <Text style={styles.itemHeader}>{item.title}</Text>;
     }
-
     return (
       <ListItem style={styles.listItem} icon onPress={item.onPress}>
         <Left>
           {item.icon?.type === "torsvg" ? (
-            <TorSvg /> // Render the custom Tor SVG here
+            <TorSvg />
           ) : (
             <Icon style={styles.icon} type={item.icon?.type} name={item.icon?.name} />
           )}
@@ -2581,24 +2581,18 @@ ${t("experimental.tor.disabled.msg2")}`;
         )}
       </ListItem>
     );
-  };
+  }, []);
 
-  // TURBOTODO: Nitesh: Not sure why wrapping
-  // in <Content> is causing the issue.
   return (
     <Container>
-      {/* <Content> */}
-
-      <BlixtWallet />
-
       <FlashList
         data={settingsData}
         renderItem={renderItem}
         estimatedItemSize={50}
+        ListHeaderComponent={<BlixtWallet />}
+        contentContainerStyle={{ padding: 14 }}
         keyExtractor={(item, index) => `${item.title}-${index}`}
       />
-
-      {/* </Content> */}
     </Container>
   );
 }
