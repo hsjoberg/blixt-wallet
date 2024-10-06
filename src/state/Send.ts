@@ -1,7 +1,12 @@
 import * as Bech32 from "bech32";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
-import { getGeolocation, hexToUint8Array, unicodeStringToUint8Array } from "../utils";
+import {
+  bytesToString,
+  getGeolocation,
+  hexToUint8Array,
+  unicodeStringToUint8Array,
+} from "../utils";
 
 import { ILNUrlPayResponse } from "./LNURL";
 import { IStoreInjections } from "./store";
@@ -9,11 +14,12 @@ import { IStoreModel } from "./index";
 import { ITransaction } from "../storage/database/transaction";
 import { LnBech32Prefix } from "../utils/build";
 import Long from "long";
-import { PLATFORM, TLV_RECORD_NAME } from "../utils/constants";
+import { PLATFORM, TLV_KEYSEND, TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
 import { valueFiat } from "../utils/bitcoin-units";
 
 import {
+  FeatureBit,
   NodeInfo,
   Payment,
   Payment_PaymentStatus,
@@ -37,6 +43,7 @@ if (PLATFORM !== "macos") {
 }
 
 import logger from "./../utils/log";
+import sha from "sha.js";
 const log = logger("Send");
 
 type PaymentRequest = string;
@@ -399,6 +406,63 @@ export const sendPaymentV2TurboLnd = (
           listener();
           resolve(response);
         }
+      },
+      (error) => {
+        reject(error);
+      },
+    );
+  });
+};
+
+export const sendKeysendPaymentV2TurboLnd = (
+  pubkey: Uint8Array,
+  amount: bigint,
+  preimage: Uint8Array,
+  tlvRecordNameStr: string,
+  tlvRecordWhatSatMessageStr: string,
+  maxLNFeePercentage: number,
+  routeHints?: RouteHint,
+): Promise<Payment> => {
+  console.log("send keysendpayment v2", tlvRecordNameStr, tlvRecordWhatSatMessageStr);
+
+  const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
+
+  const paymentHash = sha("sha256").update(preimage).digest();
+
+  const options = create(SendPaymentRequestSchema, {
+    noInflightUpdates: true,
+    timeoutSeconds: 60,
+    feeLimitSat: BigInt(Math.floor(Math.max(10, Number(amount) * maxFeeRatio))),
+    dest: pubkey,
+    paymentHash,
+    destFeatures: [FeatureBit.TLV_ONION_REQ],
+    destCustomRecords: {
+      // 5482373484 is the record for lnd
+      // keysend payments as described in
+      // https://github.com/lightningnetwork/lnd/releases/tag/v0.9.0-beta
+      [TLV_KEYSEND]: preimage,
+    },
+  });
+
+  if (amount) {
+    options.amt = amount;
+  }
+
+  if (tlvRecordNameStr && tlvRecordNameStr.length > 0) {
+    options.destCustomRecords![TLV_RECORD_NAME] = unicodeStringToUint8Array(tlvRecordNameStr);
+  }
+  if (tlvRecordWhatSatMessageStr && tlvRecordWhatSatMessageStr.length > 0) {
+    options.destCustomRecords![TLV_WHATSAT_MESSAGE] = unicodeStringToUint8Array(
+      tlvRecordWhatSatMessageStr,
+    );
+  }
+
+  return new Promise(async (resolve, reject) => {
+    const listener = routerSendPaymentV2(
+      options,
+      (response) => {
+        listener();
+        resolve(response);
       },
       (error) => {
         reject(error);

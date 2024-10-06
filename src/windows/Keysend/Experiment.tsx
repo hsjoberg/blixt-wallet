@@ -17,7 +17,7 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { ITransaction } from "../../storage/database/transaction";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../Main";
-import { translatePaymentFailureReason } from "../../state/Send";
+import { sendKeysendPaymentV2TurboLnd, translatePaymentFailureReason } from "../../state/Send";
 import { PLATFORM } from "../../utils/constants";
 import Input from "../../components/Input";
 
@@ -26,6 +26,7 @@ import { namespaces } from "../../i18n/i18n.constants";
 import { getChanInfo, listChannels } from "react-native-turbo-lnd";
 import {
   HopHintSchema,
+  Payment_PaymentStatus,
   RouteHint,
   RouteHintSchema,
   RoutingPolicy,
@@ -90,18 +91,18 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
       setSending(true);
       const start = new Date().getTime();
 
-      const result = await sendKeysendPaymentV2(
-        pubkeyInput,
-        Long.fromValue(Number.parseInt(satInput, 10)),
+      const result = await sendKeysendPaymentV2TurboLnd(
+        hexToUint8Array(pubkeyInput),
+        BigInt(satInput),
         await generateSecureRandom(32),
-        JSON.parse(routehintsInput || "[]"),
         name,
         messageInput,
         maxLNFeePercentage,
+        JSON.parse(routehintsInput || "[]"),
       );
       console.log(result);
       console.log("status", [result.status, result.failureReason]);
-      if (result.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
+      if (result.status !== Payment_PaymentStatus.SUCCEEDED) {
         throw new Error(`${translatePaymentFailureReason(result.failureReason)}`);
       }
       toast(t("send.alert"));
@@ -111,7 +112,7 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
       const settlementDuration = new Date().getTime() - start;
 
       const transaction: ITransaction = {
-        date: result.creationDate,
+        date: Long.fromNumber(Number(result.creationDate)),
         description: t("send.msg"),
         duration: settlementDuration,
         expire: Long.fromValue(0),
@@ -119,12 +120,12 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
         remotePubkey: pubkeyInput,
         rHash: result.paymentHash,
         status: "SETTLED",
-        value: result.value.neg(),
-        valueMsat: result.valueMsat.neg().mul(1000),
-        amtPaidSat: result.value.neg(),
-        amtPaidMsat: result.valueMsat.neg().mul(1000),
-        fee: result.fee,
-        feeMsat: result.feeMsat,
+        value: Long.fromNumber(Number(result.value)).neg(),
+        valueMsat: Long.fromNumber(Number(result.valueMsat)).neg().mul(1000),
+        amtPaidSat: Long.fromNumber(Number(result.value)).neg(),
+        amtPaidMsat: Long.fromNumber(Number(result.valueSat)).neg().mul(1000),
+        fee: Long.fromNumber(Number(result.fee)),
+        feeMsat: Long.fromNumber(Number(result.feeMsat)),
         nodeAliasCached: null,
         payer: null,
         valueUSD: 0,
@@ -145,17 +146,17 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
         hops:
           result.htlcs[0].route?.hops?.map((hop) => ({
             chanId: hop.chanId ?? null,
-            chanCapacity: hop.chanCapacity ?? null,
-            amtToForward: hop.amtToForward || Long.fromInt(0),
+            chanCapacity: Long.fromNumber(Number(hop.chanCapacity)) ?? null,
+            amtToForward: Long.fromNumber(Number(hop.amtToForward)) || Long.fromInt(0),
             amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-            fee: hop.fee || Long.fromInt(0),
-            feeMsat: hop.feeMsat || Long.fromInt(0),
+            fee: Long.fromNumber(Number(hop.fee)) || Long.fromInt(0),
+            feeMsat: Long.fromNumber(Number(hop.feeMsat)) || Long.fromInt(0),
             expiry: hop.expiry || null,
             pubKey: hop.pubKey || null,
           })) ?? [],
       };
       syncTransaction(transaction);
-    } catch (e) {
+    } catch (e: any) {
       toast(e.message, undefined, "danger");
     }
     setSending(false);
