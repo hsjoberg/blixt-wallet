@@ -3409,9 +3409,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-google-signin/google-signin@npm:13.0.1":
-  version: 13.0.1
-  resolution: "@react-native-google-signin/google-signin@npm:13.0.1"
+"@react-native-google-signin/google-signin@npm:13.1.0":
+  version: 13.1.0
+  resolution: "@react-native-google-signin/google-signin@npm:13.1.0"
   peerDependencies:
     expo: ">=50.0.0"
     react: "*"
@@ -3422,7 +3422,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 57bcb85c0cc142e46395b55c7445dc3a673b2f1885fc8a35e3118be8d3be28161ec21fa8ccbc44c8e207f4116354de6e384be02eb9d3f102c584c973e5ccc126
+  checksum: 777bb338ce1ce1b9581f1e3c67d04a1d8eb2486745868e170455b3485c26a6dcbeb202acfb949bf45817b7d7f9c8c7259342c1a0f237aa03eef2965e69b90f12
   languageName: node
   linkType: hard
 
@@ -5109,7 +5109,7 @@ __metadata:
     "@react-native-community/netinfo": 11.3.2
     "@react-native-community/push-notification-ios": ^1.11.0
     "@react-native-community/slider": 4.5.2
-    "@react-native-google-signin/google-signin": 13.0.1
+    "@react-native-google-signin/google-signin": 13.1.0
     "@react-native/babel-preset": 0.75.2
     "@react-native/eslint-config": 0.75.2
     "@react-native/metro-config": 0.75.2
@@ -5189,8 +5189,8 @@ __metadata:
     react-native-enhanced-popup-menu: ^0.7.0
     react-native-fingerprint-scanner: "github:hsjoberg/react-native-fingerprint-scanner#b568a440472a04ae8ec2c409c53ce80cbcb9bf00"
     react-native-fs: ^2.19.0
-    react-native-gesture-handler: "github:hsjoberg/react-native-gesture-handler#b7bff62a1e894eabb96faf6d8b7497e9b8162fb1"
-    react-native-haptic-feedback: ^2.0.3
+    react-native-gesture-handler: ^2.20.0
+    react-native-haptic-feedback: 2.3.3
     react-native-hash: ^3.0.3
     react-native-icloudstore: "github:hsjoberg/react-native-icloudstore#a68dc9cd260b9bd36fa1f1011d60a441c0c18db7"
     react-native-keyboard-aware-scroll-view: ^0.9.5
@@ -5211,11 +5211,11 @@ __metadata:
     react-native-svg: 15.6.0
     react-native-svg-path-gradient: ^0.4.0
     react-native-svg-web: ^1.0.9
-    react-native-tor: ^0.1.8
-    react-native-turbo-lnd: "github:hsjoberg/react-native-turbo-lnd#0197ab13b2f7f7e01cb1a130891ab64d2add9914"
+    react-native-tor: "github:hsjoberg/react-native-tor#938d80f798111ee790033d8f46dfdc92795c4766"
+    react-native-turbo-lnd: "github:hsjoberg/react-native-turbo-lnd#228f639d0246998d4e7052cc78e66ea9d0a3488e"
     react-native-unimodules: ^0.14.10
     react-native-vector-icons: 9.2.0
-    react-native-vision-camera: 4.5.2
+    react-native-vision-camera: 4.5.3
     react-native-web: 0.19.12
     react-native-web-linear-gradient: ^1.1.2
     react-native-web-maps: ^0.3.0
@@ -15031,9 +15031,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@github:hsjoberg/react-native-gesture-handler#b7bff62a1e894eabb96faf6d8b7497e9b8162fb1":
-  version: 2.19.0
-  resolution: "react-native-gesture-handler@https://github.com/hsjoberg/react-native-gesture-handler.git#commit=b7bff62a1e894eabb96faf6d8b7497e9b8162fb1"
+"react-native-gesture-handler@npm:^2.20.0":
+  version: 2.20.0
+  resolution: "react-native-gesture-handler@npm:2.20.0"
   dependencies:
     "@egjs/hammerjs": ^2.0.17
     hoist-non-react-statics: ^3.3.0
@@ -15042,16 +15042,16 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 22660491c7e297c5fa264053ee09fc40ea13279a05740695af985cb4921fa0ccde9508fac18ef1e1aba9ba84a738b2bc7cac86f2584ed473b1295ba277484020
+  checksum: f573bc3717ae0209ff30bf62b95b3c7f11bd97f4797090211bce416c250388f55d1995aac0a7f1bbc99b06223ea64cbeae8d4ef88dcb8c877201b49163ea0e4b
   languageName: node
   linkType: hard
 
-"react-native-haptic-feedback@npm:^2.0.3":
-  version: 2.3.1
-  resolution: "react-native-haptic-feedback@npm:2.3.1"
+"react-native-haptic-feedback@npm:2.3.3":
+  version: 2.3.3
+  resolution: "react-native-haptic-feedback@npm:2.3.3"
   peerDependencies:
     react-native: ">=0.60.0"
-  checksum: 2d6e39f59431150ffc350f79a8814d9d549b2b08cadec3f4e4b597893c1fcd158c794a7a48019d7eb32cf37ce6dfdea6b9a9f585e41d3f7fc464fd159ee91ca6
+  checksum: 5ff12aaf44fa1cad8ab3d9c58046a11c631c6622955120294060efc51c625203ee4cd7ccb565663c12b27552ebbb7034a386000d9da738b9eea5ff62d58b14c0
   languageName: node
   linkType: hard
 
@@ -15308,22 +15308,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-tor@npm:^0.1.8":
+"react-native-tor@github:hsjoberg/react-native-tor#938d80f798111ee790033d8f46dfdc92795c4766":
   version: 0.1.8
-  resolution: "react-native-tor@npm:0.1.8"
+  resolution: "react-native-tor@https://github.com/hsjoberg/react-native-tor.git#commit=938d80f798111ee790033d8f46dfdc92795c4766"
   dependencies:
     "@types/async": ^3.2.6
     async: ^3.2.0
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 944c2687a8b84d121a79bbaed8f863a3ebe56f5e7a740a8b83df73a43b9ac9c15ad0c634b83a74042add1b3ae77e98e3790bfd1e8c1685f3253c22d571397257
+  checksum: 9e4966aaa1f5c583ec5a4c037cc15314799308b06fe24501257bd4a153a69980da415c5e0a4bf88cde1a4978fa41bcf7eec3e4bee9098c4fad1c3e08ef65d67f
   languageName: node
   linkType: hard
 
-"react-native-turbo-lnd@github:hsjoberg/react-native-turbo-lnd#0197ab13b2f7f7e01cb1a130891ab64d2add9914":
+"react-native-turbo-lnd@github:hsjoberg/react-native-turbo-lnd#228f639d0246998d4e7052cc78e66ea9d0a3488e":
   version: 0.1.2
-  resolution: "react-native-turbo-lnd@https://github.com/hsjoberg/react-native-turbo-lnd.git#commit=0197ab13b2f7f7e01cb1a130891ab64d2add9914"
+  resolution: "react-native-turbo-lnd@https://github.com/hsjoberg/react-native-turbo-lnd.git#commit=228f639d0246998d4e7052cc78e66ea9d0a3488e"
   peerDependencies:
     "@bufbuild/protobuf": "*"
     react: "*"
@@ -15331,7 +15331,7 @@ __metadata:
   peerDependenciesMeta:
     "@bufbuild/protobuf":
       optional: true
-  checksum: c17919b6c7030165c9bb6f9d4abdcd8af9a4dd771e0084565067edfb622c53740d486deb24bc26afc0f4f87e205f086091e06e18e1647ebe4293ed4bd1968557
+  checksum: d3af1f40621174f7957d8299e9b02baac26adbe2817f51741e3e8e93361582a87290be598570f92d14f0ed46f2a4e5a4b65eb4864a2e30bf9225b41a3930f285
   languageName: node
   linkType: hard
 
@@ -15386,9 +15386,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vision-camera@npm:4.5.2":
-  version: 4.5.2
-  resolution: "react-native-vision-camera@npm:4.5.2"
+"react-native-vision-camera@npm:4.5.3":
+  version: 4.5.3
+  resolution: "react-native-vision-camera@npm:4.5.3"
   peerDependencies:
     "@shopify/react-native-skia": "*"
     react: "*"
@@ -15402,7 +15402,7 @@ __metadata:
       optional: true
     react-native-worklets-core:
       optional: true
-  checksum: 19ee9f5a4105c47b6abfd8e4cf7558634e60f7d68ce6d9cc4a2c5b2b359d921c1121978637a2a4d571a75204a39141159438aac84f679c5ab33469052da8b671
+  checksum: 99d57a70f93134903ae25ef798947f79804ea00e3b58cbb21131115552e6f2950d2a3be9a6a237232ca6bab7b5031aa12d9ca2df659be39dc607d75997317abc
   languageName: node
   linkType: hard
 
