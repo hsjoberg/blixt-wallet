@@ -221,5 +221,13 @@
     "Notifications",
     "Camera"
   ],
+  "codegenConfig": {
+    "name": "BlixtTurboModules",
+    "type": "modules",
+    "jsSrcsDir": "src/turbomodules",
+    "android": {
+      "javaPackageName": "com.blixtwallet"
+    }
+  },
   "packageManager": "yarn@3.6.4"
 }

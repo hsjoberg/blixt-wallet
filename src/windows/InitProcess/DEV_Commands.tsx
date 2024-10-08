@@ -66,6 +66,8 @@ import {
   closeChannel,
 } from "react-native-turbo-lnd";
 
+import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
+
 let iCloudStorage: any;
 console.log(PLATFORM);
 if (PLATFORM === "ios") {
@@ -165,6 +167,15 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>start</Text>
           </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(LndMobileToolsTurbo.hello());
+            }}
+          >
+            <Text style={styles.buttonText}>LndMobileToolsTurbo.hello</Text>
+          </Button>
+
           {/*
            *
            * Random

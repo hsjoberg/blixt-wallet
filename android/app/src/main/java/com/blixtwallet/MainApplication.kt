@@ -30,6 +30,10 @@ class MainApplication : Application(), ReactApplication {
                 packages.add(LndMobileScheduledSyncPackage())
                 packages.add(BlixtTorPackage())
                 packages.add(RealTimeBlurPackage())
+
+                // TurboModules
+                packages.add(LndMobileToolsTurboPackage())
+
                 return packages;
 
                 // return PackageList(this).packages
