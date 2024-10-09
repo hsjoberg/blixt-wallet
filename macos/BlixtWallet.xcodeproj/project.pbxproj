@@ -13,6 +13,8 @@
 		514201552437B4B40078DB4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 514201532437B4B40078DB4F /* Main.storyboard */; };
 		514201582437B4B40078DB4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 514201572437B4B40078DB4F /* main.m */; };
 		CC3585152A5F1AB5006924C2 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = CC3585142A5F1AB5006924C2 /* Fonts */; };
+		CC855CF12CB68B7B00C74CC4 /* liblnd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC855CF02CB68B7B00C74CC4 /* liblnd.a */; };
+		CC855CF72CB68FD000C74CC4 /* LndMobileToolsTurbo.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC855CF62CB68FD000C74CC4 /* LndMobileToolsTurbo.mm */; };
 		CC9860B52A5F2E9100047BB1 /* Lndmobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9860B42A5F2E9100047BB1 /* Lndmobile.xcframework */; };
 		CC9860EE2A5F393500047BB1 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9860ED2A5F391D00047BB1 /* libresolv.tbd */; };
 		CC9860FA2A5F3A3A00047BB1 /* LndMobileScheduledSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860F02A5F3A3A00047BB1 /* LndMobileScheduledSync.swift */; };
@@ -45,6 +47,9 @@
 		C53D295F96A418C41F3EFC19 /* Pods-BlixtWallet-macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet-macOS.debug.xcconfig"; path = "Target Support Files/Pods-BlixtWallet-macOS/Pods-BlixtWallet-macOS.debug.xcconfig"; sourceTree = "<group>"; };
 		CC26772C2A50A80E005E96BE /* BlixtWallet-macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BlixtWallet-macOS.entitlements"; sourceTree = "<group>"; };
 		CC3585142A5F1AB5006924C2 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../assets/fonts; sourceTree = "<group>"; };
+		CC855CF02CB68B7B00C74CC4 /* liblnd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblnd.a; sourceTree = "<group>"; };
+		CC855CF52CB68FD000C74CC4 /* LndMobileToolsTurbo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LndMobileToolsTurbo.h; path = ../ios/LndMobile/LndMobileToolsTurbo.h; sourceTree = SOURCE_ROOT; };
+		CC855CF62CB68FD000C74CC4 /* LndMobileToolsTurbo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = LndMobileToolsTurbo.mm; path = ../ios/LndMobile/LndMobileToolsTurbo.mm; sourceTree = SOURCE_ROOT; };
 		CC9860B42A5F2E9100047BB1 /* Lndmobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Lndmobile.xcframework; path = ../ios/Lndmobile.xcframework; sourceTree = "<group>"; };
 		CC9860ED2A5F391D00047BB1 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
 		CC9860F02A5F3A3A00047BB1 /* LndMobileScheduledSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LndMobileScheduledSync.swift; path = ../ios/LndMobile/LndMobileScheduledSync.swift; sourceTree = "<group>"; };
@@ -66,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC855CF12CB68B7B00C74CC4 /* liblnd.a in Frameworks */,
 				CC9860B52A5F2E9100047BB1 /* Lndmobile.xcframework in Frameworks */,
 				4601BE89385A6489AED7ED72 /* libPods-BlixtWallet.a in Frameworks */,
 				CC9860EE2A5F393500047BB1 /* libresolv.tbd in Frameworks */,
@@ -112,6 +118,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				CC855CF02CB68B7B00C74CC4 /* liblnd.a */,
 				CC9861032A5F3A9000047BB1 /* BlixtWallet-Bridging-Header.h */,
 				CC9860EF2A5F3A2400047BB1 /* LndMobile */,
 				CC3585142A5F1AB5006924C2 /* Fonts */,
@@ -137,6 +144,8 @@
 		CC9860EF2A5F3A2400047BB1 /* LndMobile */ = {
 			isa = PBXGroup;
 			children = (
+				CC855CF52CB68FD000C74CC4 /* LndMobileToolsTurbo.h */,
+				CC855CF62CB68FD000C74CC4 /* LndMobileToolsTurbo.mm */,
 				CC9860F42A5F3A3A00047BB1 /* lightning.pb.swift */,
 				CC9860F82A5F3A3A00047BB1 /* Lnd.swift */,
 				CC9860F22A5F3A3A00047BB1 /* LndMobile.m */,
@@ -177,6 +186,7 @@
 				514201472437B4B30078DB4F /* Resources */,
 				381D8A6E24576A4E00465D17 /* Bundle React Native code and images */,
 				20931586476EB512D27ACFDE /* [CP] Copy Pods Resources */,
+				665AEB7FD4C7CFDC18702C26 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -321,6 +331,24 @@
 			shellPath = /bin/sh;
 			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native-macos/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native-macos/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
 		};
+		665AEB7FD4C7CFDC18702C26 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BlixtWallet/Pods-BlixtWallet-frameworks.sh",
+				"${PODS_ROOT}/hermes-engine/destroot/Library/Frameworks/macosx/hermes.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BlixtWallet/Pods-BlixtWallet-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -329,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				514201582437B4B40078DB4F /* main.m in Sources */,
+				CC855CF72CB68FD000C74CC4 /* LndMobileToolsTurbo.mm in Sources */,
 				CC9861002A5F3A3A00047BB1 /* walletunlocker.pb.swift in Sources */,
 				CC9861012A5F3A3A00047BB1 /* Lnd.swift in Sources */,
 				CC9861022A5F3A3A00047BB1 /* LndMobileTools.m in Sources */,
@@ -366,7 +395,7 @@
 				CODE_SIGN_ENTITLEMENTS = "BlixtWallet/BlixtWallet-macOS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CURRENT_PROJECT_VERSION = 41;
-				DEAD_CODE_STRIPPING = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
@@ -374,6 +403,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.7.0;
@@ -401,6 +435,7 @@
 				CODE_SIGN_ENTITLEMENTS = "BlixtWallet/BlixtWallet-macOS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CURRENT_PROJECT_VERSION = 41;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
@@ -408,6 +443,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.7.0;
@@ -491,7 +531,7 @@
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
-				USE_HERMES = false;
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -556,7 +596,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				USE_HERMES = false;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -627,7 +667,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				USE_HERMES = false;
+				USE_HERMES = true;
 			};
 			name = "Debug Regtest";
 		};
@@ -641,7 +681,7 @@
 				CODE_SIGN_ENTITLEMENTS = "BlixtWallet/BlixtWallet-macOS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CURRENT_PROJECT_VERSION = 41;
-				DEAD_CODE_STRIPPING = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG = true;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
@@ -649,6 +689,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.7.0;
@@ -727,7 +772,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
-				USE_HERMES = false;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = "Release Regtest";
@@ -742,6 +787,7 @@
 				CODE_SIGN_ENTITLEMENTS = "BlixtWallet/BlixtWallet-macOS.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CURRENT_PROJECT_VERSION = 41;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG = false;
 				DEVELOPMENT_TEAM = AT26Z24V2Q;
 				FLAVOR = "";
@@ -749,6 +795,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 0.7.0;

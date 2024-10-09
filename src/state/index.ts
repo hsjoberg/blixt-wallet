@@ -3,7 +3,7 @@ import Tor from "react-native-tor";
 import NetInfo from "@react-native-community/netinfo";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
-import { AlertButton, NativeModules } from "react-native";
+import { AlertButton, NativeModules, Platform } from "react-native";
 
 import {
   DEFAULT_PATHFINDING_ALGORITHM,
@@ -420,9 +420,18 @@ export const model: IStoreModel = {
 
           // log.d("startLnd", [await startLnd(torEnabled, args)]);
           // TURBOTODO(hsjoberg): temp code
-          const chain = Chain !== "mainnet" ? "." + Chain.toLocaleLowerCase() : "";
-          const debug = Debug ? ".debug" : "";
-          args += ` --lnddir=/data/user/0/com.blixtwallet${chain}${debug}/files/`;
+          let appFolderPath: string;
+          if (PLATFORM === "android") {
+            const chain = Chain !== "mainnet" ? "." + Chain.toLocaleLowerCase() : "";
+            const debug = Debug ? ".debug" : "";
+            appFolderPath = `/data/user/0/com.blixtwallet${chain}${debug}/files/`;
+          } else {
+            appFolderPath = (await NativeModules.LndMobileTools.getAppFolderPath())
+              .replace("file://", "")
+              .replace(/%20/g, " ");
+            appFolderPath += "lnd/";
+          }
+          args += ` --lnddir=${appFolderPath}`;
           log.d("args", [args]);
           log.d("startLnd", [await startLndTurbo(args)]);
         } catch (e: any) {

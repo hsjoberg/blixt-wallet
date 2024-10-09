@@ -4,7 +4,11 @@ import { View, Text, Button, Icon } from "native-base";
 import color from "color";
 import * as Animatable from "react-native-animatable";
 import Container from "../components/Container";
-import ReactNativeHapticFeedback, { HapticOptions } from "react-native-haptic-feedback";
+
+let ReactNativeHapticFeedback;
+if (PLATFORM === "android" || PLATFORM === "ios") {
+  ReactNativeHapticFeedback = require("react-native-haptic-feedback");
+}
 
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { smallScreen } from "../utils/device";

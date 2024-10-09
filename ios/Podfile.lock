@@ -1772,7 +1772,7 @@ PODS:
     - Yoga
   - RNFS (2.20.0):
     - React-Core
-  - RNGestureHandler (2.19.0):
+  - RNGestureHandler (2.20.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2416,7 +2416,7 @@ SPEC CHECKSUMS:
   React-RuntimeHermes: b37c62718d6920ac2958a0052bdc1b01aca842b8
   React-runtimescheduler: e25750a18cbb7469e0513f1ace834d14e8c1a202
   React-utils: f2afa6acd905ca2ce7bb8ffb4a22f7f8a12534e8
-  ReactCodegen: ff95a93d5ab5d9b2551571886271478eaa168565
+  ReactCodegen: 6675f5c1acf055c85308166a6ff93cea457f101d
   ReactCommon: 289214026502e6a93484f4a46bcc0efa4f3f2864
   ReactNativeCameraKit: 9d46a5d7dd544ca64aa9c03c150d2348faf437eb
   RNCAsyncStorage: 597673c6086d359029afefef8fd5859f1f35ab87
@@ -2425,7 +2425,7 @@ SPEC CHECKSUMS:
   RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNFlashList: 6f169ad83e52579b7754cbbcec1b004c27d82c93
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
-  RNGestureHandler: d87ddf84d6c46a0cb44a19da7f841a3d7aea693f
+  RNGestureHandler: c374c750a0a9bacd95f5c740d146ab9428549d6b
   RNGoogleSignin: edec18754ff4af2cfee46072609ec5a7a754291a
   RNICloudStore: 7ac4f2630e2a7e90a4b059b92e8483828bbacd2b
   RNKeychain: bfe3d12bf4620fe488771c414530bf16e88f3678
