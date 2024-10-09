@@ -132,7 +132,7 @@ export const webln: IWebLNModel = {
               {
                 text: "Yes",
                 style: "default",
-                onPress: () => resolve(),
+                onPress: () => resolve(null),
               },
               {
                 text: "No",
@@ -198,7 +198,7 @@ export const webln: IWebLNModel = {
               {
                 text: "Yes",
                 style: "default",
-                onPress: () => resolve(),
+                onPress: () => resolve(null),
               },
               {
                 text: "No",
@@ -291,33 +291,33 @@ export const webln: IWebLNModel = {
               text: "Cancel",
               onPress: () => {
                 getStoreActions().lnUrl.clear();
-                resolve();
+                resolve(null);
               },
             },
             {
               text: "Continue",
               onPress: () => {
                 navigate("LNURL", { screen: "ChannelRequest" });
-                resolve();
+                resolve(null);
               },
             },
           ]);
         } else if (type === "login") {
           navigate("LNURL", { screen: "AuthRequest" });
-          resolve();
+          resolve(null);
         } else if (type === "withdrawRequest") {
           navigate("LNURL", { screen: "WithdrawRequest" });
-          resolve();
+          resolve(null);
         } else if (type === "payRequest") {
           navigate("LNURL", { screen: "PayRequest" });
-          resolve();
+          resolve(null);
         } else {
           console.log("Unknown lnurl request: " + type);
           getStoreActions().lnUrl.clear();
-          resolve();
+          resolve(null);
         }
       } catch (e) {
-        resolve();
+        resolve(null);
       }
     });
   }),

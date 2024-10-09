@@ -18,7 +18,6 @@ import Authentication from "./windows/InitProcess/Authentication";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
 import Welcome from "./windows/Welcome";
 import LNURL from "./windows/LNURL";
-import KeysendTest from "./windows/Keysend/Test";
 import KeysendExperiment from "./windows/Keysend/Experiment";
 import LightingBox from "./windows/LightningBox";
 import GoogleDriveTestbed from "./windows/Google/GoogleDriveTestbed";
@@ -299,7 +298,6 @@ export default function Main() {
         component={GoogleDriveTestbed}
         options={animationDisabled}
       />
-      <RootStack.Screen name="KeysendTest" component={KeysendTest} options={animationDisabled} />
       <RootStack.Screen
         name="KeysendExperiment"
         component={KeysendExperiment}

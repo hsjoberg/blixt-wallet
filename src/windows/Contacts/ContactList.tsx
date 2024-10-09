@@ -68,6 +68,7 @@ export default function ContactList({ navigation }: IContactListProps) {
         lightningAddress: lightningAddress!,
         lud16IdentifierMimeType: "text/identifier",
         note: "",
+        label: null,
       });
     }
     clearLnUrl();

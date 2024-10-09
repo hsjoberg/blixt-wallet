@@ -14,7 +14,6 @@ import { Alert } from "../../utils/alert";
 import { ILNUrlWithdrawRequest } from "../../state/LNURL";
 import ButtonSpinner from "../../components/ButtonSpinner";
 import { LndMobileEventEmitter } from "../../utils/event-listener";
-import { decodeInvoiceResult } from "../../lndmobile/wallet";
 import { lnrpc } from "../../../proto/lightning";
 import { Chain } from "../../utils/build";
 import { checkLndStreamErrorResponse } from "../../utils/lndmobile";
@@ -24,6 +23,9 @@ import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { NavigationRootStackParamList } from "../../types";
+import { subscribeInvoices } from "react-native-turbo-lnd";
+import { Invoice_InvoiceState } from "react-native-turbo-lnd/protos/lightning_pb";
+import { UnsubscribeFromStream } from "react-native-turbo-lnd/core";
 
 interface IContactProps {
   contact: IContact;
@@ -47,35 +49,26 @@ export default function Contact({ contact }: IContactProps) {
   const [sendButtonWidth, setSendButtonWidth] = useState<number | undefined>();
   const [widthdrawButtonWidth, setWithdrawButtonWidth] = useState<number | undefined>();
 
+  let listener: UnsubscribeFromStream;
   useEffect(() => {
-    let listener: EmitterSubscription | null = null;
-
     if (contact.lnUrlWithdraw && !currentBalance) {
-      console.log("Subscribing to invoice inside Contact " + contact.domain + " " + contact.note);
-      listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
-        try {
-          console.log("Contact component: SubscribeInvoices");
-          const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
-          if (error === "EOF") {
-            return;
-          } else if (error) {
-            console.log("ContactList: Got error from SubscribeInvoices", [error]);
-            throw error;
-          }
-
-          const invoice = decodeInvoiceResult(e.data);
-          if (invoice.state === lnrpc.Invoice.InvoiceState.SETTLED) {
+      listener = subscribeInvoices(
+        {},
+        async (invoice) => {
+          if (invoice.state === Invoice_InvoiceState.SETTLED) {
             console.log("Contact: An invoice was settled, querying balance");
             console.log("Syncing from subscription");
             await syncBalance();
           }
-        } catch (e) {
-          console.log("From Contact component" + e);
-        }
-      });
+        },
+        (err) => {
+          console.log("From Contact component" + err);
+        },
+      );
+      console.log("Subscribing to invoice inside Contact " + contact.domain + " " + contact.note);
     }
     return () => {
-      listener?.remove();
+      listener();
     };
   }, [currentBalance !== undefined]);
 

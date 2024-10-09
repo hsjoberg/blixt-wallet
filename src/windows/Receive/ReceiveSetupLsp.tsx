@@ -168,7 +168,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
           preimage: preimageBytes,
         }),
       });
-    } catch (e) {
+    } catch (e: any) {
       setCreateInvoiceDisabled(false);
       toast(`${t("msg.error")}: ${e.message}`, 12000, "danger", "Okay");
     }
@@ -207,7 +207,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
           preimage: preimageBytes,
         }),
       });
-    } catch (error) {
+    } catch (error: any) {
       Alert.alert("Error", error.message);
       setCreateInvoiceDisabled(false);
     }
@@ -242,7 +242,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
           { title: BitcoinUnits.satoshi.settings, value: "satoshi" },
           { title: BitcoinUnits.milliBitcoin.settings, value: "milliBitcoin" },
         ],
-        onPick: async (currency) => await changeBitcoinUnit(currency as keyof IBitcoinUnits),
+        onPick: async (currency: any) => await changeBitcoinUnit(currency as keyof IBitcoinUnits),
       });
     }
   };
@@ -275,7 +275,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
           title: currency,
           value: currency as keyof IFiatRates,
         })),
-        onPick: async (currency) => await changeFiatUnit(currency as keyof IFiatRates),
+        onPick: async (currency: any) => await changeFiatUnit(currency as keyof IFiatRates),
         searchEnabled: true,
       });
     }

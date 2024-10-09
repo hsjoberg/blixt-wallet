@@ -21,7 +21,6 @@ import {
 import Content from "../../components/Content";
 import Container from "../../components/Container";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { signMessageNodePubkey } from "../../lndmobile/wallet";
 import { bytesToHexString, stringToUint8Array, toast } from "../../utils";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -30,18 +29,18 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import { Alert } from "../../utils/alert";
 import Input from "../../components/Input";
 import { generateSecureRandom } from "../../lndmobile/index";
-import { lnrpc } from "../../../proto/lightning";
 import { LightningBoxStackParamList } from "./index";
 import logger from "../../utils/log";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { stopDaemon } from "react-native-turbo-lnd";
+import { signMessage, stopDaemon } from "react-native-turbo-lnd";
+import { SignMessageResponse } from "react-native-turbo-lnd/protos/lightning_pb";
 
 const log = logger("LightningBoxRegistration");
 
 async function signLightningBoxMessage(
   endpoint: string,
   data: any,
-): Promise<[string, lnrpc.SignMessageResponse]> {
+): Promise<[string, SignMessageResponse]> {
   const messageToSign = {
     nonce: bytesToHexString(await generateSecureRandom(16)),
     timestamp: Math.floor(Date.now() / 1000),
@@ -52,7 +51,9 @@ async function signLightningBoxMessage(
 
   const messageToSignStr = JSON.stringify(messageToSign);
 
-  const signMessageResult = await signMessageNodePubkey(stringToUint8Array(messageToSignStr));
+  const signMessageResult = await signMessage({
+    msg: stringToUint8Array(messageToSignStr),
+  });
 
   return [messageToSignStr, signMessageResult];
 }
@@ -161,7 +162,7 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
         await changeLightningBoxLnurlPayDesc(lnurlpDesc);
         navigation.replace("LightningBoxInfo");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       toast(t("msg.error", { ns: namespaces.common }) + ": " + error.message, undefined, "danger");
       setLoading(false);

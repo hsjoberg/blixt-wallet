@@ -149,7 +149,7 @@ export default function Restore({ navigation }: IProps) {
           routes: [{ name: "Loading" }],
         }),
       );
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       setLoading(false);
       Alert.alert(e.message);
@@ -168,7 +168,7 @@ export default function Restore({ navigation }: IProps) {
       console.log(base64Backup);
       setB64Backup(base64Backup);
       setBackupType("google_drive");
-    } catch (e) {
+    } catch (e: any) {
       Alert.alert(`${t("restore.channel.google.alert")}:\n\n${e.message}`);
     }
   };
@@ -179,7 +179,7 @@ export default function Restore({ navigation }: IProps) {
       console.log(base64Backup);
       setB64Backup(base64Backup);
       setBackupType("icloud");
-    } catch (e) {
+    } catch (e: any) {
       Alert.alert(`${t("restore.channel.iCloud.alert")}:\n\n${e.message}`);
     }
   };
@@ -199,7 +199,7 @@ export default function Restore({ navigation }: IProps) {
         setMacosBakBase64(b);
         setBackupType("macos");
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       toast(e.message, undefined, "danger", "Okay");
     }
@@ -220,7 +220,7 @@ export default function Restore({ navigation }: IProps) {
       setChannelDbFile(res);
       setBackupType("channeldb");
       setLoading(false);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       setLoading(false);
       toast(e.message, undefined, "danger", "Okay");

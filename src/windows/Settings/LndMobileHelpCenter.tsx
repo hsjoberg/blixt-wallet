@@ -3,11 +3,9 @@ import { StyleSheet, View, NativeModules, EmitterSubscription } from "react-nati
 import { Card, Text, CardItem, H1, Button, Spinner } from "native-base";
 
 import Blurmodal from "../../components/BlurModal";
-import { getInfo, ELndMobileStatusCodes, startLnd } from "../../lndmobile";
-import { newAddress } from "../../lndmobile/onchain";
-import { toast } from "../../utils";
+import { ELndMobileStatusCodes, startLnd } from "../../lndmobile";
+import { stringToUint8Array, toast } from "../../utils";
 import { getWalletPassword } from "../../storage/keystore";
-import { unlockWallet } from "../../lndmobile/wallet";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Color from "color";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -19,6 +17,8 @@ import useForceUpdate from "../../hooks/useForceUpdate";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { getInfo, newAddress, unlockWallet } from "react-native-turbo-lnd";
+import { AddressType } from "react-native-turbo-lnd/protos/lightning_pb";
 
 interface IStepsResult {
   title: string;
@@ -115,7 +115,7 @@ export default function LndMobileHelpCenter({ navigation }) {
     {
       title: "Lnd GetInfo",
       async exec() {
-        const r = await getInfo();
+        const r = await getInfo({});
         if (r && r.identityPubkey) {
           return true;
         }
@@ -125,7 +125,7 @@ export default function LndMobileHelpCenter({ navigation }) {
     {
       title: "Lnd NewAddress",
       async exec() {
-        const r = await newAddress(lnrpc.AddressType.WITNESS_PUBKEY_HASH);
+        const r = await newAddress({ type: AddressType.WITNESS_PUBKEY_HASH });
         console.log(r);
         if (r && r.address) {
           return true;
@@ -210,7 +210,7 @@ export default function LndMobileHelpCenter({ navigation }) {
   const runUnlockWallet = async () => {
     try {
       const password = await getWalletPassword();
-      await unlockWallet(password!);
+      await unlockWallet({ walletPassword: stringToUint8Array(password || "") });
       toast(t("msg.done", { ns: namespaces.common }));
     } catch (e: any) {
       toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 0, "danger", "OK");

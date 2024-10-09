@@ -47,8 +47,8 @@ export const google: IGoogleModel = {
         try {
           const user = await GoogleSignin.signInSilently();
           actions.setIsSignedIn(true);
-          actions.setUser(user);
-        } catch (e) {
+          actions.setUser(user.data!);
+        } catch (e: any) {
           if (e.code !== statusCodes.SIGN_IN_REQUIRED) {
             log.w(`Got unexpected error from GoogleSignin.signInSilently(): ${e.code}`, [e]);
           }
@@ -67,9 +67,9 @@ export const google: IGoogleModel = {
 
     try {
       const user = await GoogleSignin.signIn();
-      actions.setUser(user);
+      actions.setUser(user.data!);
       actions.setIsSignedIn(true);
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {

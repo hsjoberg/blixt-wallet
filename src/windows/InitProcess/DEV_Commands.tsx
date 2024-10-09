@@ -25,7 +25,6 @@ import { ILightningServices } from "../../utils/lightning-services";
 import Long from "long";
 import { RootStackParamList } from "../../Main";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { abandonChannel } from "../../lndmobile/channel";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { generateSecureRandom, generateSecureRandomAsBase64 } from "../../lndmobile/index";
 import { localNotification } from "../../utils/push-notification";
@@ -60,10 +59,10 @@ import {
   walletBalance,
   getRecoveryInfo,
   getNodeInfo,
-  openChannel,
   openChannelSync,
   sendCoins,
   closeChannel,
+  abandonChannel,
 } from "react-native-turbo-lnd";
 
 import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
@@ -1571,7 +1570,17 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                     onPress: async () => {
                       try {
                         const [fundingTxId, index] = channelPoint.split(":");
-                        const result = await abandonChannel(fundingTxId, Number(index));
+
+                        const result = await abandonChannel({
+                          iKnowWhatIAmDoing: true,
+                          channelPoint: {
+                            fundingTxid: {
+                              value: fundingTxId,
+                              case: "fundingTxidStr",
+                            },
+                            outputIndex: Number(index),
+                          },
+                        });
                         console.log("abandon channel() ", result);
                         setCommandResult(result);
                         setError({});

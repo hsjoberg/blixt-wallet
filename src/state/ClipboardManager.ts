@@ -128,7 +128,7 @@ export const clipboardManager: IClipboardManagerModel = {
           },
         ],
       );
-    } catch (e) {
+    } catch (e: any) {
       dispatch.send.clear();
       log.e(`Error checking clipboard for lightning invoice: ${e.message}`);
     }

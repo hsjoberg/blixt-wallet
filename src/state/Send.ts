@@ -421,7 +421,7 @@ export const sendKeysendPaymentV2TurboLnd = (
   tlvRecordNameStr: string,
   tlvRecordWhatSatMessageStr: string,
   maxLNFeePercentage: number,
-  routeHints?: RouteHint,
+  routeHints?: RouteHint[],
 ): Promise<Payment> => {
   const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
 
@@ -435,6 +435,7 @@ export const sendKeysendPaymentV2TurboLnd = (
     paymentHash,
     destFeatures: [FeatureBit.TLV_ONION_REQ],
     amt: amount,
+    routeHints,
     destCustomRecords: {
       // 5482373484 is the record for lnd
       // keysend payments as described in

@@ -67,7 +67,7 @@ export default function LightningNetworkInfo() {
               {/* <MetaData title={t("medianChannelSizeSat")} data={Long.fromValue(networkInfo.medianChannelSizeSat).toString()} /> */}
               <MetaData
                 title={t("numZombieChans")}
-                data={Long.fromValue(networkInfo.numZombieChans).toString()}
+                data={Long.fromNumber(Number(networkInfo.numZombieChans)).toString()}
               />
             </ScrollView>
           </Body>

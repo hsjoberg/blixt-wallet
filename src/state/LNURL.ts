@@ -663,7 +663,7 @@ export const lnUrl: ILNUrlModel = {
       const lnurlText = await result.text();
       log.i("lnurl text", [lnurlText]);
       lnurlObject = JSON.parse(lnurlText);
-    } catch (e) {
+    } catch (e: any) {
       throw new Error("Unable to parse message from the server: " + e.message);
     }
     log.d("response", [lnurlObject]);

@@ -88,7 +88,7 @@ export default function DunderDoctor({ navigation }: ISelectListProps) {
             pushLog("Connecting to Dunder's Lightning node...");
             await connectPeer(serviceStatusResult.peer);
             return true;
-          } catch (e) {
+          } catch (e: any) {
             if (!e.message.includes("already connected to peer")) {
               pushLog(`Failed to connect: ${e.message}.`);
               await timeout(5000);

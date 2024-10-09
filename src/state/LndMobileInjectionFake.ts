@@ -73,8 +73,6 @@ import {
 } from "../lndmobile/fake/onchain";
 import { modifyStatus, queryScores, setScores, status } from "../lndmobile/fake/autopilot";
 
-import { IAddInvoiceBlixtLspArgs } from "../lndmobile";
-
 export interface ILndMobileInjections {
   index: {
     initialize: () => Promise<{ data: string } | number>;
@@ -99,7 +97,7 @@ export interface ILndMobileInjections {
       descriptionHash?: Uint8Array,
       preimage?: Uint8Array,
     ) => Promise<lnrpc.AddInvoiceResponse>;
-    addInvoiceBlixtLsp: (args: IAddInvoiceBlixtLspArgs) => Promise<lnrpc.AddInvoiceResponse>;
+    addInvoiceBlixtLsp: (args: any) => Promise<lnrpc.AddInvoiceResponse>;
     cancelInvoice: (paymentHash: string) => Promise<invoicesrpc.CancelInvoiceResp>;
     connectPeer: (pubkey: string, host: string) => Promise<lnrpc.ConnectPeerResponse>;
     disconnectPeer: (pubkey: string) => Promise<lnrpc.DisconnectPeerResponse>; // TODO

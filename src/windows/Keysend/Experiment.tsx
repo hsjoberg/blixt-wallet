@@ -89,6 +89,8 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
       setSending(true);
       const start = new Date().getTime();
 
+      const routeHints: RouteHint[] = JSON.parse(routehintsInput) || undefined;
+
       const result = await sendKeysendPaymentV2TurboLnd(
         hexToUint8Array(pubkeyInput),
         BigInt(satInput),
@@ -96,7 +98,7 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
         name,
         messageInput,
         maxLNFeePercentage,
-        JSON.parse(routehintsInput || "[]"),
+        routeHints,
       );
       console.log(result);
       console.log("status", [result.status, result.failureReason]);

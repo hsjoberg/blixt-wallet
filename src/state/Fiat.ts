@@ -111,7 +111,7 @@ export const fiat: IFiatModel = {
       }
       actions.setFiatRates(parsed);
       return;
-    } catch (e) {
+    } catch (e: any) {
       log.e("Failed to fetch fiat rate from Coingecko: " + e.message);
       log.i("Falling back to Blockchain.info");
     }
@@ -123,7 +123,7 @@ export const fiat: IFiatModel = {
       if (validateFiatApiResponse(jsonResult)) {
         actions.setFiatRates(jsonResult);
       }
-    } catch (e) {
+    } catch (e: any) {
       log.e("Failed to fetch fiat rate from Blockchain.info: " + e.message);
     }
   }),

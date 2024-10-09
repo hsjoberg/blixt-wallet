@@ -109,7 +109,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
                         routes: [{ name: "Loading" }],
                       }),
                     );
-                  } catch (error) {
+                  } catch (error: any) {
                     toast(error.message, undefined, "danger");
                     setCreateWalletLoading(false);
                   }
@@ -309,7 +309,7 @@ ${t("createWallet.msg3")}`,
                     routes: [{ name: "Loading" }],
                   }),
                 );
-              } catch (error) {
+              } catch (error: any) {
                 toast(error.message, undefined, "danger");
                 setCreateWalletLoading(false);
               }
