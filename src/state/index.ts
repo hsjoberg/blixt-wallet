@@ -3,7 +3,7 @@ import Tor from "react-native-tor";
 import NetInfo from "@react-native-community/netinfo";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
-import { AlertButton, NativeModules } from "react-native";
+import { AlertButton, NativeModules, Platform } from "react-native";
 
 import {
   DEFAULT_PATHFINDING_ALGORITHM,

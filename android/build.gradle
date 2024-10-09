@@ -18,9 +18,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-
-        // Blixt:
-        jcenter()
     }
     dependencies {
         classpath("com.android.tools.build:gradle")
@@ -39,8 +36,7 @@ buildscript {
 
 allprojects {
     repositories {
-        // mavenCentral()
-        jcenter()
+        mavenCentral()
         flatDir {
             dirs("lndmobile")
         }

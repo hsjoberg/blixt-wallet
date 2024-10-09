@@ -207,9 +207,8 @@ dependencies {
     implementation "io.grpc:grpc-stub:1.30.0"
     implementation "io.grpc:grpc-protobuf-lite:1.30.0"
 
-    implementation "com.hypertrack:hyperlog:0.0.10"
-
-    implementation "com.github.mmin18:realtimeblurview:1.2.1"
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.solusguard.hyperlog:hyperlog:0.0.10'
 
     implementation "com.jakewharton:process-phoenix:2.0.0"
     implementation 'org.brotli:dec:0.1.2'
