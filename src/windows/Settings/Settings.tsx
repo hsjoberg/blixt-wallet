@@ -32,7 +32,6 @@ import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
 import { setBrickDeviceAndExportChannelDb } from "../../storage/app";
-import { restoreChannelBackups } from "../../lndmobile/wallet";
 import {
   getChanInfo,
   getNodeInfo,
@@ -1617,7 +1616,8 @@ ${t("experimental.tor.disabled.msg2")}`;
         backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? undefined : "base64");
       }
 
-      await restoreChannelBackups(backupBase64);
+      // TURBOTODO needs to be replaced
+      // await restoreChannelBackups(backupBase64);
     } catch (error: any) {
       toast("Error: " + error.message, 10000, "danger");
     }
