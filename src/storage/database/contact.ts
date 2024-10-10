@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from "react-native-sqlite-storage";
+import { Database } from "react-native-turbo-sqlite";
 import { query, queryInsert, queryMulti } from "./db-utils";
 
 type ContactType = "SERVICE" | "PERSON";
@@ -10,7 +10,7 @@ export interface IDBContact {
   type: string;
   lightningAddress: string | null;
   lud16IdentifierMimeType: string | null;
-  lnUrlPay: string | null,
+  lnUrlPay: string | null;
   lnUrlWithdraw: string | null;
   note: string;
   label: string | null;
@@ -22,13 +22,13 @@ export interface IContact {
   type: ContactType;
   lightningAddress: string | null;
   lud16IdentifierMimeType: ContactLud16IdentifierMimeType;
-  lnUrlPay: string | null,
+  lnUrlPay: string | null;
   lnUrlWithdraw: string | null;
   note: string;
   label: string | null;
 }
 
-export const createContact = async (db: SQLiteDatabase, contact: IContact): Promise<number> => {
+export const createContact = async (db: Database, contact: IContact): Promise<number> => {
   const id = await queryInsert(
     db,
     `INSERT INTO contact
@@ -65,9 +65,9 @@ export const createContact = async (db: SQLiteDatabase, contact: IContact): Prom
     ],
   );
   return id;
-}
+};
 
-export const updateContact = async (db: SQLiteDatabase, contact: IContact): Promise<void> => {
+export const updateContact = async (db: Database, contact: IContact): Promise<void> => {
   await query(
     db,
     `UPDATE contact
@@ -94,15 +94,15 @@ export const updateContact = async (db: SQLiteDatabase, contact: IContact): Prom
   );
 };
 
-export const deleteContact = async (db: SQLiteDatabase, id: number) => {
+export const deleteContact = async (db: Database, id: number) => {
   const c = await query(db, `DELETE FROM contact WHERE id = ?;`, [id]);
   return c;
-}
+};
 
-export const getContacts = async (db: SQLiteDatabase): Promise<IContact[]> => {
+export const getContacts = async (db: Database): Promise<IContact[]> => {
   const c = await queryMulti<IDBContact>(db, `SELECT * FROM contact;`);
   return c.map(convertDBTransaction);
-}
+};
 
 const convertDBTransaction = (contact: IDBContact): IContact => {
   return {

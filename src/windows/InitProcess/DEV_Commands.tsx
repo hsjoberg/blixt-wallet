@@ -65,6 +65,8 @@ import {
   abandonChannel,
 } from "react-native-turbo-lnd";
 
+import TurboSqlite from "react-native-turbo-sqlite";
+
 import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
 
 let iCloudStorage: any;
@@ -139,6 +141,27 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               </Button>
             </>
           )}
+          {/*
+           *
+           * TurboSqlite
+           *
+           */}
+          <Text style={{ width: "100%" }}>TurboSqlite:</Text>
+          <Button
+            small
+            onPress={async () => {
+              const db = TurboSqlite.openDatabase(
+                `/data/user/0/com.blixtwallet.debug/databases/Blixt`,
+              );
+
+              console.log(db.executeSql("SELECT * from tx", []));
+            }}
+          >
+            <Text>test</Text>
+          </Button>
+          <Button small onPress={async () => console.log(TurboSqlite.getVersionString())}>
+            <Text>TurboSqlite.getVersionString()</Text>
+          </Button>
           {/*
            *
            * TurboLnd
