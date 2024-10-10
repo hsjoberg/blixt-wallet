@@ -1265,6 +1265,27 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-turbo-sqlite (0.1.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-webview (13.12.1):
     - DoubleConversion
     - glog
@@ -1769,6 +1790,7 @@ DEPENDENCIES:
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-turbo-lnd (from `../node_modules/react-native-turbo-lnd`)
+  - react-native-turbo-sqlite (from `../node_modules/react-native-turbo-sqlite`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native-macos/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native-macos/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1892,6 +1914,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-sqlite-storage"
   react-native-turbo-lnd:
     :path: "../node_modules/react-native-turbo-lnd"
+  react-native-turbo-sqlite:
+    :path: "../node_modules/react-native-turbo-sqlite"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-nativeconfig:
@@ -2007,6 +2031,7 @@ SPEC CHECKSUMS:
   react-native-netinfo: 076df4f9b07f6670acf4ce9a75aac8d34c2e2ccc
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-turbo-lnd: fe620c96be53dda0d7975b04f9a678683ecb2082
+  react-native-turbo-sqlite: a4f80086d3e4913b4e2fc61dbb6eef0512d4686a
   react-native-webview: 102c402ca00dacf03760cedc28bc4ca83ee2cfa2
   React-nativeconfig: 12ca23c5d79829b3dd0e38bed71e77200dd5382c
   React-NativeModulesApple: 6a1eefad86f188520ed174d0542aca5870c4aabe

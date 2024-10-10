@@ -144,7 +144,7 @@
     "react-native-svg-web": "^1.0.9",
     "react-native-tor": "github:hsjoberg/react-native-tor#938d80f798111ee790033d8f46dfdc92795c4766",
     "react-native-turbo-lnd": "github:hsjoberg/react-native-turbo-lnd#228f639d0246998d4e7052cc78e66ea9d0a3488e",
-    "react-native-turbo-sqlite": "github:hsjoberg/react-native-turbo-sqlite#fe45de9426899ec502143973e09a6daf36c4ff72",
+    "react-native-turbo-sqlite": "github:hsjoberg/react-native-turbo-sqlite#db967265044ebb7196f4bc170e3c45069c88b9a6",
     "react-native-unimodules": "^0.14.10",
     "react-native-vector-icons": "9.2.0",
     "react-native-vision-camera": "4.5.3",
