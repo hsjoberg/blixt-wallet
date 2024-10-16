@@ -2,7 +2,7 @@
 {
   env.GREET = "devenv";
   env.YARN_CHECKSUM_BEHAVIOR = "reset";
-  packages = [ pkgs.git pkgs.curl ];
+  packages = [ pkgs.git pkgs.curl pkgs.unzip ];
   android = {
     enable = true;
     reactNative.enable = true;
