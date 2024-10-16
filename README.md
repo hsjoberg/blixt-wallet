@@ -74,6 +74,27 @@ To start the application:
 
 For building Blixt Android on Windows, follow the additional build steps [here](./build-steps-android-windows.md).
 
+### Android (Nix)
+
+- Install [Nix](https://github.com/DeterminateSystems/nix-installer)
+- Install [Devenv](https://devenv.sh/getting-started/)
+- For more awesome experience you can also install [direnv](https://devenv.sh/automatic-shell-activation/) and enable automatic shell activation.
+```
+cd blixt-wallet
+
+# Start the devenv shell (skip this if you installed direnv)
+devenv shell
+
+# Setup Android
+android-init
+
+# Start metro
+yarn start
+
+# Start blixt in regtest
+yarn android:regtest-debug
+```
+
 ### iOS
 
 To build the iOS version, a computer running macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
