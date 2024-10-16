@@ -78,6 +78,7 @@ For building Blixt Android on Windows, follow the additional build steps [here](
 
 - Install [Nix](https://github.com/DeterminateSystems/nix-installer)
 - Install [Devenv](https://devenv.sh/getting-started/)
+- Install [Android Studio](https://developer.android.com/studio/) and start a simulator
 - For more awesome experience you can also install [direnv](https://devenv.sh/automatic-shell-activation/) and enable automatic shell activation.
 ```
 cd blixt-wallet
