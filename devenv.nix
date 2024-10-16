@@ -4,6 +4,7 @@
   env.YARN_CHECKSUM_BEHAVIOR = "reset";
   packages = [ pkgs.git pkgs.curl pkgs.unzip ];
   android = {
+    platforms.version = [ "31" "34" ];
     enable = true;
     reactNative.enable = true;
     android-studio.enable = false;
