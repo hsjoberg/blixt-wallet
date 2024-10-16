@@ -15,6 +15,12 @@
 
   scripts = {
     android-init.exec = ''
+      # Install dependencies
+      yarn install
+
+      # Generate proto files
+      yarn gen-proto
+
       node node_modules/react-native-turbo-lnd/src/fetch-lnd.js
       echo "sdk.dir=$ANDROID_HOME" > android/local.properties
 
