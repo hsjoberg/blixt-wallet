@@ -5510,7 +5510,7 @@ __metadata:
     react-native-svg-web: ^1.0.9
     react-native-tor: "github:hsjoberg/react-native-tor#938d80f798111ee790033d8f46dfdc92795c4766"
     react-native-turbo-lnd: "github:hsjoberg/react-native-turbo-lnd#228f639d0246998d4e7052cc78e66ea9d0a3488e"
-    react-native-turbo-sqlite: "github:hsjoberg/react-native-turbo-sqlite#db967265044ebb7196f4bc170e3c45069c88b9a6"
+    react-native-turbo-sqlite: 0.1.1
     react-native-unimodules: ^0.14.10
     react-native-vector-icons: 9.2.0
     react-native-vision-camera: 4.5.3
@@ -15687,13 +15687,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-turbo-sqlite@github:hsjoberg/react-native-turbo-sqlite#db967265044ebb7196f4bc170e3c45069c88b9a6":
+"react-native-turbo-sqlite@npm:0.1.1":
   version: 0.1.1
-  resolution: "react-native-turbo-sqlite@https://github.com/hsjoberg/react-native-turbo-sqlite.git#commit=db967265044ebb7196f4bc170e3c45069c88b9a6"
+  resolution: "react-native-turbo-sqlite@npm:0.1.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 61f81434377319255d551d4befc04f6b5b3dd5fceeda16d76bb6e9dfc884f06826e7fadd7b08114d1a896842934aa2fa3cc5ca8205f4b120afb91fb1f44761ab
+  checksum: 1d68f65f2cd918dfaa7d8fc7709926d4e4b9c22d8f4460ff2a3896b89bf2d2c8b7f94c44a39d3598b3f4432984bd6e23ddb50a61b3b746ffd2adead1d2c81290
   languageName: node
   linkType: hard
 
