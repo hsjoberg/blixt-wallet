@@ -89,6 +89,11 @@ devenv shell
 # Setup Android
 android-init
 
+# To build unsigned apk. (use sudo if you get a permission denied error)
+android-unsigned-apk
+
+## For local development:
+
 # Start metro
 yarn start
 
