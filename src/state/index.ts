@@ -76,7 +76,7 @@ import {
   writeConfig,
 } from "../lndmobile/index";
 import { IStoreInjections } from "./store";
-import { SQLiteDatabase } from "react-native-sqlite-storage";
+import { Database } from "react-native-turbo-sqlite";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { appMigration } from "../migration/app-migration";
 import { clearTransactions } from "../storage/database/transaction";
@@ -110,13 +110,13 @@ export interface ICreateWalletPayload {
 
 export interface IStoreModel {
   setupDemo: Thunk<IStoreModel, { changeDb: boolean }, any, IStoreModel>;
-  openDb: Thunk<IStoreModel, undefined, any, {}, Promise<SQLiteDatabase>>;
+  openDb: Thunk<IStoreModel, undefined, any, {}, Promise<Database>>;
   initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   checkAppVersionMigration: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
   clearTransactions: Thunk<IStoreModel>;
   resetDb: Thunk<IStoreModel>;
-  setDb: Action<IStoreModel, SQLiteDatabase>;
+  setDb: Action<IStoreModel, Database>;
   setAppReady: Action<IStoreModel, boolean>;
   setWalletCreated: Action<IStoreModel, boolean>;
   setHoldOnboarding: Action<IStoreModel, boolean>;
@@ -135,7 +135,7 @@ export interface IStoreModel {
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | undefined, IStoreInjections, IStoreModel>;
   changeOnboardingState: Thunk<IStoreModel, OnboardingState>;
 
-  db?: SQLiteDatabase;
+  db?: Database;
   appReady: boolean;
   walletCreated: boolean;
   holdOnboarding: boolean;
@@ -736,11 +736,13 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
           walletPassword: stringToUint8Array(randomBase64),
           recoveryWindow: 500,
           // TURBOTODO: test if this works
-          channelBackups: {
-            multiChanBackup: {
-              multiChanBackup: base64.toByteArray(payload.restore.channelsBackup!),
-            },
-          },
+          channelBackups: payload.restore.channelsBackup
+            ? {
+                multiChanBackup: {
+                  multiChanBackup: base64.toByteArray(payload.restore.channelsBackup),
+                },
+              }
+            : undefined,
           aezeedPassphrase: payload.restore.aezeedPassphrase
             ? stringToUint8Array(payload.restore.aezeedPassphrase)
             : undefined,

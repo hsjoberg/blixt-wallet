@@ -1,4 +1,5 @@
-import { SQLiteDatabase } from "react-native-sqlite-storage";
+import { Database } from "react-native-turbo-sqlite";
+
 import { queryInsert, queryMulti, querySingle, query } from "./db-utils";
 import Long from "long";
 import { ILNUrlPayResponse, ILNUrlPayResponsePayerData } from "../../state/LNURL";
@@ -92,12 +93,12 @@ export interface ITransactionHop {
   pubKey: string | null;
 }
 
-export const clearTransactions = async (db: SQLiteDatabase) => {
+export const clearTransactions = async (db: Database) => {
   await query(db, `DELETE FROM tx`, []);
 };
 
 export const createTransaction = async (
-  db: SQLiteDatabase,
+  db: Database,
   transaction: ITransaction,
 ): Promise<number> => {
   const txId = await queryInsert(
@@ -239,10 +240,7 @@ export const createTransaction = async (
 };
 
 // TODO fee is not included here
-export const updateTransaction = async (
-  db: SQLiteDatabase,
-  transaction: ITransaction,
-): Promise<void> => {
+export const updateTransaction = async (db: Database, transaction: ITransaction): Promise<void> => {
   await query(
     db,
     `UPDATE tx
@@ -320,14 +318,14 @@ export const updateTransaction = async (
 };
 
 export const getTransactionHops = async (
-  db: SQLiteDatabase,
+  db: Database,
   txId: number,
 ): Promise<ITransactionHop[]> => {
   return await queryMulti<ITransactionHop>(db, `SELECT * FROM tx_hops WHERE txId = ?`, [txId]);
 };
 
 export const getTransactions = async (
-  db: SQLiteDatabase,
+  db: Database,
   getExpired: boolean,
 ): Promise<ITransaction[]> => {
   const sql = getExpired
@@ -346,10 +344,7 @@ export const getTransactions = async (
   }
 };
 
-export const getTransaction = async (
-  db: SQLiteDatabase,
-  id: number,
-): Promise<ITransaction | null> => {
+export const getTransaction = async (db: Database, id: number): Promise<ITransaction | null> => {
   const result = await querySingle<IDBTransaction>(db, `SELECT * FROM tx WHERE id = ?`, [id]);
   return (result && convertDBTransaction(result)) || null;
 };

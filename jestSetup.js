@@ -2,6 +2,7 @@ import React from "react";
 jest.mock("@react-native-async-storage/async-storage", () =>
   require("./mocks/@react-native-community/async-storage"),
 );
+// TURBOTODO: mock turbo-sqlite instead I suppose
 jest.mock("react-native-sqlite-storage", () => require("./mocks/react-native-sqlite-storage"));
 jest.mock("react-native-build-config", () => require("./mocks/react-native-build-config"));
 jest.mock("@notifee/react-native", () => require("@notifee/react-native/jest-mock"));

@@ -1,6 +1,6 @@
-import type { Database } from "react-native-turbo-sqlite";
+import type { Database, Params } from "react-native-turbo-sqlite";
 
-export const query = async (db: Database, sql: string, params: any[]) => {
+export const query = async (db: Database, sql: string, params: Params) => {
   const r = await db.executeSql(sql, params);
   return r;
 };
@@ -8,7 +8,7 @@ export const query = async (db: Database, sql: string, params: any[]) => {
 /**
  * @returns number Insert ID
  */
-export const queryInsert = async (db: Database, sql: string, params: any[]): Promise<number> => {
+export const queryInsert = async (db: Database, sql: string, params: Params): Promise<number> => {
   const r = await query(db, sql, params);
   if (r) {
     return r.insertId;

@@ -108,12 +108,12 @@ export default function Restore({ navigation }: IProps) {
       } else if (backupType === "macos") {
         createWalletOpts.restore!.channelsBackup = macosBakBase64;
       } else if (backupType === "channeldb") {
-        if (channelDbFile.copyError) {
-          throw new Error("channel.db file copying failed: " + channelDbFile.copyError);
+        if (channelDbFile!.copyError) {
+          throw new Error("channel.db file copying failed: " + channelDbFile!.copyError);
         }
 
         await setImportChannelDbOnStartup({
-          channelDbPath: channelDbFile.fileCopyUri.replace(/^file:\/\//, ""),
+          channelDbPath: channelDbFile!.fileCopyUri!.replace(/^file:\/\//, ""),
           seed: splittedSeed,
           passphrase: passphraseText,
         });

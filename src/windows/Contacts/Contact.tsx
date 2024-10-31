@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, LayoutAnimation, Pressable, EmitterSubscription } from "react-native";
+import { StyleSheet, View, Pressable } from "react-native";
 import { Icon, Card, CardItem, Text, Button } from "native-base";
 import { useNavigation, NavigationProp } from "@react-navigation/core";
 import Long from "long";
@@ -13,16 +13,13 @@ import { IContact } from "../../storage/database/contact";
 import { Alert } from "../../utils/alert";
 import { ILNUrlWithdrawRequest } from "../../state/LNURL";
 import ButtonSpinner from "../../components/ButtonSpinner";
-import { LndMobileEventEmitter } from "../../utils/event-listener";
-import { lnrpc } from "../../../proto/lightning";
 import { Chain } from "../../utils/build";
-import { checkLndStreamErrorResponse } from "../../utils/lndmobile";
 import { fontFactorNormalized } from "../../utils/scale";
-
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { NavigationRootStackParamList } from "../../types";
+
 import { subscribeInvoices } from "react-native-turbo-lnd";
 import { Invoice_InvoiceState } from "react-native-turbo-lnd/protos/lightning_pb";
 import { UnsubscribeFromStream } from "react-native-turbo-lnd/core";
@@ -49,8 +46,9 @@ export default function Contact({ contact }: IContactProps) {
   const [sendButtonWidth, setSendButtonWidth] = useState<number | undefined>();
   const [widthdrawButtonWidth, setWithdrawButtonWidth] = useState<number | undefined>();
 
-  let listener: UnsubscribeFromStream;
   useEffect(() => {
+    let listener: UnsubscribeFromStream;
+
     if (contact.lnUrlWithdraw && !currentBalance) {
       listener = subscribeInvoices(
         {},
@@ -68,7 +66,9 @@ export default function Contact({ contact }: IContactProps) {
       console.log("Subscribing to invoice inside Contact " + contact.domain + " " + contact.note);
     }
     return () => {
-      listener();
+      if (listener) {
+        listener();
+      }
     };
   }, [currentBalance !== undefined]);
 
