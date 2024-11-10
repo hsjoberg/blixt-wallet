@@ -6105,7 +6105,7 @@ __metadata:
     react-native-turbo-sqlite: "npm:0.2.0"
     react-native-unimodules: "npm:^0.14.10"
     react-native-vector-icons: "npm:9.2.0"
-    react-native-vision-camera: "npm:4.6.0"
+    react-native-vision-camera: "npm:4.6.1"
     react-native-web: "npm:0.19.12"
     react-native-web-linear-gradient: "npm:^1.1.2"
     react-native-web-maps: "npm:^0.3.0"
@@ -16413,9 +16413,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vision-camera@npm:4.6.0":
-  version: 4.6.0
-  resolution: "react-native-vision-camera@npm:4.6.0"
+"react-native-vision-camera@npm:4.6.1":
+  version: 4.6.1
+  resolution: "react-native-vision-camera@npm:4.6.1"
   peerDependencies:
     "@shopify/react-native-skia": "*"
     react: "*"
@@ -16429,7 +16429,7 @@ __metadata:
       optional: true
     react-native-worklets-core:
       optional: true
-  checksum: 10/530644092dcb4d43b50d662447e58420ff2e80f9b21fb3f4d498f7e8b7f9fb6f18484151bf21706fcbe5dfd0d4d6033329f6358321e776192c08b828ab279ed4
+  checksum: 10/742f11a74ca9e3eb3a41c65ba8ac588925b539d6e232f6a2c9c60b2ebcf07997d9a1bca0ef3ac471bf2b6d7eb99a81985a352a73755f8f0ee4aba1898c3b10d1
   languageName: node
   linkType: hard
 
