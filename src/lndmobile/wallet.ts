@@ -2,7 +2,7 @@ import * as base64 from "base64-js";
 
 import { sendCommand, sendStreamCommand, decodeStreamResult } from "./utils";
 import { stringToUint8Array } from "../utils";
-import { lnrpc, signrpc } from "../../proto/lightning";
+import { lnrpc, signrpc, walletrpc } from "../../proto/lightning";
 
 /**
  * @throws
@@ -220,6 +220,23 @@ export const restoreChannelBackups = async (
     options: {
       multiChanBackup: base64.toByteArray(channelsBackupBase64),
     },
+  });
+  return response;
+};
+
+/**
+ * @throws
+ */
+export const pendingSweeps = async (): Promise<walletrpc.PendingSweepsResponse> => {
+  const response = await sendCommand<
+    walletrpc.IPendingSweepsRequest,
+    walletrpc.PendingSweepsRequest,
+    walletrpc.PendingSweepsResponse
+  >({
+    request: walletrpc.PendingSweepsRequest,
+    response: walletrpc.PendingSweepsResponse,
+    method: "WalletKitPendingSweeps",
+    options: {},
   });
   return response;
 };
