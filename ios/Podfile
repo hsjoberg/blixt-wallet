@@ -1,6 +1,3 @@
-require_relative '../node_modules/react-native/scripts/react_native_pods'
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
-
 # Blixt
 def node_require(script)
   # Resolve script with node to allow for hoisting
