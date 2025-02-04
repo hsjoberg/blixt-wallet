@@ -11,7 +11,7 @@ class NativeSpeedloaderModule : public NativeSpeedloaderCxxSpec<NativeSpeedloade
 public:
   NativeSpeedloaderModule(std::shared_ptr<CallInvoker> jsInvoker);
 
-  std::string gossipSync(jsi::Runtime& rt, std::string serviceUrl);
+  facebook::react::AsyncPromise<std::string> gossipSync(jsi::Runtime& rt, std::string serviceUrl, std::string cacheDir, std::string filesDir);
 };
 
 } // namespace facebook::react

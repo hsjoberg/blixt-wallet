@@ -846,6 +846,18 @@ class LndMobileTools extends ReactContextBaseJavaModule {
     }
   }
 
+  @ReactMethod
+  public void getFilesDir(Promise promise) {
+    String s = getReactApplicationContext().getFilesDir().getAbsolutePath();
+    promise.resolve(s);
+  }
+
+  @ReactMethod
+  public void getCacheDir(Promise promise) {
+    String s = getReactApplicationContext().getCacheDir().getAbsolutePath();
+    promise.resolve(s);
+  }
+
   private void checkWriteExternalStoragePermission(@NonNull RequestWriteExternalStoragePermissionCallback successCallback,
                                                    @NonNull Runnable failCallback,
                                                    @NonNull Runnable failPermissionCheckcallback) {

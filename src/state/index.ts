@@ -1,6 +1,5 @@
 import * as base64 from "base64-js";
 import Tor from "react-native-tor";
-import NetInfo from "@react-native-community/netinfo";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import { AlertButton, NativeModules, Platform } from "react-native";
@@ -92,6 +91,8 @@ import {
   unlockWallet,
 } from "react-native-turbo-lnd";
 import { WalletState } from "react-native-turbo-lnd/protos/lightning_pb";
+
+import Speedloader from "../turbomodules/NativeSpeedloader";
 
 const log = logger("Store");
 
@@ -387,9 +388,11 @@ export const model: IStoreModel = {
             }
           }
           try {
-            let connectionState = await NetInfo.fetch();
-            log.i("connectionState", [connectionState.type]);
-            gossipStatus = await gossipSync(speedloaderServer, connectionState.type);
+            gossipStatus = await Speedloader.gossipSync(
+              speedloaderServer,
+              await NativeModules.LndMobileTools.getCacheDir(),
+              await NativeModules.LndMobileTools.getFilesDir(),
+            );
             debugShowStartupInfo &&
               toast(
                 "Gossip sync done " + (new Date().getTime() - start.getTime()) / 1000 + "s",
