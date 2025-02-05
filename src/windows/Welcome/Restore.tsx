@@ -170,7 +170,7 @@ export default function Restore({ navigation }: IProps) {
       setB64Backup(base64Backup);
       setBackupType("google_drive");
     } catch (e) {
-      Alert.alert(`${t("restore.channel.google.alert")}:\n\n${e.message}`);
+      Alert.alert(`${t("restore.channel.google.alert")}`, e.message);
     }
   };
 
@@ -181,7 +181,7 @@ export default function Restore({ navigation }: IProps) {
       setB64Backup(base64Backup);
       setBackupType("icloud");
     } catch (e) {
-      Alert.alert(`${t("restore.channel.iCloud.alert")}:\n\n${e.message}`);
+      Alert.alert(`${t("restore.channel.iCloud.alert")}`, e.message);
     }
   };
 
