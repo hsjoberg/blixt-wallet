@@ -2,6 +2,7 @@ BigInt.prototype.toJSON = function () {
   return { $bigint: this.toString() };
 };
 
+import "react-native-turbo-lnd";
 import "react-native-gesture-handler";
 import React from "react";
 import ReactNative, { AppRegistry, LogBox, Platform, UIManager, Text } from "react-native";

@@ -15,7 +15,7 @@
 		7699B88040F8A987B510C191 /* libPods-BlixtWallet-BlixtWalletTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-BlixtWallet-BlixtWalletTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9DD49E429A2B2567892B4CDE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7D9A028A2AECDD1817ED76D5 /* PrivacyInfo.xcprivacy */; };
-		CC4D35252CB491D4002081FE /* liblnd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC4D35242CB491D4002081FE /* liblnd.a */; };
+		CC173A032D5274C700FA4A3E /* liblnd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC4D35242CB491D4002081FE /* liblnd.a */; };
 		CC7C276B2A61A62C0050762A /* IBMPlexSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC7C27692A61A62C0050762A /* IBMPlexSans-Medium.ttf */; };
 		CC7C276C2A61A62C0050762A /* IBMPlexSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC7C276A2A61A62C0050762A /* IBMPlexSans-Regular.ttf */; };
 		CC9860E02A5F344800047BB1 /* LndMobileTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9860D62A5F344600047BB1 /* LndMobileTools.m */; };
@@ -29,6 +29,7 @@
 		CC9860E82A5F344900047BB1 /* LndMobileScheduledSync.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DF2A5F344800047BB1 /* LndMobileScheduledSync.m */; };
 		CC9861062A5F5AA900047BB1 /* Lndmobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9861052A5F5AA800047BB1 /* Lndmobile.xcframework */; };
 		CC98610A2A5F5AF400047BB1 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9861092A5F5AE500047BB1 /* libresolv.tbd */; };
+		CCB1E6E82D5268C6000B0C98 /* NativeSpeedloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB1E6E62D5268C6000B0C98 /* NativeSpeedloader.cpp */; };
 		CCC73A6D2CB5B07E0066575C /* LndMobileToolsTurbo.mm in Sources */ = {isa = PBXBuildFile; fileRef = CCC73A6C2CB5B07E0066575C /* LndMobileToolsTurbo.mm */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +87,13 @@
 		CC9861042A5F513300047BB1 /* BlixtWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BlixtWallet.entitlements; path = BlixtWallet/BlixtWallet.entitlements; sourceTree = "<group>"; };
 		CC9861052A5F5AA800047BB1 /* Lndmobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Lndmobile.xcframework; sourceTree = "<group>"; };
 		CC9861092A5F5AE500047BB1 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		CCB1E6DB2D5268C6000B0C98 /* liblnd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = liblnd.h; sourceTree = "<group>"; };
+		CCB1E6DD2D5268C6000B0C98 /* liblnd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = liblnd.h; sourceTree = "<group>"; };
+		CCB1E6DF2D5268C6000B0C98 /* liblnd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = liblnd.h; sourceTree = "<group>"; };
+		CCB1E6E12D5268C6000B0C98 /* liblnd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = liblnd.h; sourceTree = "<group>"; };
+		CCB1E6E42D5268C6000B0C98 /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
+		CCB1E6E52D5268C6000B0C98 /* NativeSpeedloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NativeSpeedloader.h; sourceTree = "<group>"; };
+		CCB1E6E62D5268C6000B0C98 /* NativeSpeedloader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NativeSpeedloader.cpp; sourceTree = "<group>"; };
 		CCC73A6B2CB5B0310066575C /* LndMobileToolsTurbo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LndMobileToolsTurbo.h; sourceTree = "<group>"; };
 		CCC73A6C2CB5B07E0066575C /* LndMobileToolsTurbo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LndMobileToolsTurbo.mm; sourceTree = "<group>"; };
 		E580869DA3E0CCF70AC3CC93 /* Pods-BlixtWallet-BlixtWalletTests.debugtestnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet-BlixtWalletTests.debugtestnet.xcconfig"; path = "Target Support Files/Pods-BlixtWallet-BlixtWalletTests/Pods-BlixtWallet-BlixtWalletTests.debugtestnet.xcconfig"; sourceTree = "<group>"; };
@@ -110,7 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC4D35252CB491D4002081FE /* liblnd.a in Frameworks */,
+				CC173A032D5274C700FA4A3E /* liblnd.a in Frameworks */,
 				CC9861062A5F5AA900047BB1 /* Lndmobile.xcframework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-BlixtWallet.a in Frameworks */,
 				CC98610A2A5F5AF400047BB1 /* libresolv.tbd in Frameworks */,
@@ -174,6 +182,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				CCB1E6E72D5268C6000B0C98 /* speedloader-turbomodule */,
 				CC4D35242CB491D4002081FE /* liblnd.a */,
 				CC7C27692A61A62C0050762A /* IBMPlexSans-Medium.ttf */,
 				CC7C276A2A61A62C0050762A /* IBMPlexSans-Regular.ttf */,
@@ -244,6 +253,61 @@
 			);
 			path = LndMobile;
 			sourceTree = "<group>";
+		};
+		CCB1E6DC2D5268C6000B0C98 /* arm64-v8a */ = {
+			isa = PBXGroup;
+			children = (
+				CCB1E6DB2D5268C6000B0C98 /* liblnd.h */,
+			);
+			path = "arm64-v8a";
+			sourceTree = "<group>";
+		};
+		CCB1E6DE2D5268C6000B0C98 /* armeabi-v7a */ = {
+			isa = PBXGroup;
+			children = (
+				CCB1E6DD2D5268C6000B0C98 /* liblnd.h */,
+			);
+			path = "armeabi-v7a";
+			sourceTree = "<group>";
+		};
+		CCB1E6E02D5268C6000B0C98 /* x86 */ = {
+			isa = PBXGroup;
+			children = (
+				CCB1E6DF2D5268C6000B0C98 /* liblnd.h */,
+			);
+			path = x86;
+			sourceTree = "<group>";
+		};
+		CCB1E6E22D5268C6000B0C98 /* x86_64 */ = {
+			isa = PBXGroup;
+			children = (
+				CCB1E6E12D5268C6000B0C98 /* liblnd.h */,
+			);
+			path = x86_64;
+			sourceTree = "<group>";
+		};
+		CCB1E6E32D5268C6000B0C98 /* liblnd */ = {
+			isa = PBXGroup;
+			children = (
+				CCB1E6DC2D5268C6000B0C98 /* arm64-v8a */,
+				CCB1E6DE2D5268C6000B0C98 /* armeabi-v7a */,
+				CCB1E6E02D5268C6000B0C98 /* x86 */,
+				CCB1E6E22D5268C6000B0C98 /* x86_64 */,
+			);
+			path = liblnd;
+			sourceTree = "<group>";
+		};
+		CCB1E6E72D5268C6000B0C98 /* speedloader-turbomodule */ = {
+			isa = PBXGroup;
+			children = (
+				CCB1E6E32D5268C6000B0C98 /* liblnd */,
+				CCB1E6E42D5268C6000B0C98 /* log.h */,
+				CCB1E6E52D5268C6000B0C98 /* NativeSpeedloader.h */,
+				CCB1E6E62D5268C6000B0C98 /* NativeSpeedloader.cpp */,
+			);
+			name = "speedloader-turbomodule";
+			path = "../speedloader-turbomodule";
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -518,6 +582,7 @@
 				CC9860E82A5F344900047BB1 /* LndMobileScheduledSync.m in Sources */,
 				CC9860E02A5F344800047BB1 /* LndMobileTools.m in Sources */,
 				CC9860E12A5F344900047BB1 /* LndMobileTools.swift in Sources */,
+				CCB1E6E82D5268C6000B0C98 /* NativeSpeedloader.cpp in Sources */,
 				CC9860E72A5F344900047BB1 /* LndMobileScheduledSync.swift in Sources */,
 				CC9860E52A5F344900047BB1 /* LndMobile.m in Sources */,
 				CC9860E42A5F344900047BB1 /* LndMobile.swift in Sources */,
@@ -616,6 +681,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MARKETING_VERSION = 0.7.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -652,6 +722,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 0.7.1;
 				OTHER_LDFLAGS = (
@@ -737,7 +812,10 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -813,7 +891,10 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -894,7 +975,10 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -926,6 +1010,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 0.7.1;
 				OTHER_LDFLAGS = (
@@ -1038,7 +1127,10 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -1070,6 +1162,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 0.7.1;
 				OTHER_LDFLAGS = (
@@ -1183,7 +1280,10 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -1215,6 +1315,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 0.7.1;
 				OTHER_LDFLAGS = (
@@ -1332,7 +1437,10 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -1364,6 +1472,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 0.7.1;
 				OTHER_LDFLAGS = (
@@ -1476,7 +1589,10 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -1508,6 +1624,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 0.7.1;
 				OTHER_LDFLAGS = (
@@ -1616,7 +1737,10 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -1648,6 +1772,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 0.7.1;
 				OTHER_LDFLAGS = (
@@ -1761,7 +1890,10 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -1793,6 +1925,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 0.7.1;
 				OTHER_LDFLAGS = (
@@ -1905,7 +2042,10 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = "$(inherited)  ";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -1937,6 +2077,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				MARKETING_VERSION = 0.7.1;
 				OTHER_LDFLAGS = (
