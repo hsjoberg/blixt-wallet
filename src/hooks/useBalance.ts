@@ -25,6 +25,8 @@ const commaLocales: string[] = [
 ];
 
 export default function useBalance(initialSat?: Long, noConversion = false) {
+  const settingsManagerConstants = NativeModules.SettingsManager.getConstants().settings;
+
   // gRPC/protobuf 0 is Number
   if (typeof initialSat === "number") {
     initialSat = undefined;
@@ -71,9 +73,9 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
       } else {
         let replaceComma: boolean = true;
         if (PLATFORM === "ios") {
-          const locale =
-            NativeModules.SettingsManager.settings.AppleLocale ||
-            NativeModules.SettingsManager.settings.AppleLanguages[0];
+          const locale: string =
+            settingsManagerConstants.AppleLocale || settingsManagerConstants.AppleLanguages[0];
+
           if (commaLocales.indexOf(locale) > -1) {
             replaceComma = false;
           }
@@ -103,9 +105,8 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
     onChangeFiatInput(text: string) {
       let replaceComma: boolean = true;
       if (PLATFORM === "ios") {
-        const locale =
-          NativeModules.SettingsManager.settings.AppleLocale ||
-          NativeModules.SettingsManager.settings.AppleLanguages[0];
+        const locale: string =
+          settingsManagerConstants.AppleLocale || settingsManagerConstants.AppleLanguages[0];
         if (commaLocales.indexOf(locale) > -1) {
           replaceComma = false;
         }
