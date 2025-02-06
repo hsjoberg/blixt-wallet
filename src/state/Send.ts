@@ -54,12 +54,12 @@ export interface ISendModelSetPaymentPayload {
 }
 
 export interface IModelSendPaymentPayload {
-  amount?: Long;
-  outgoingChannelId?: Long;
+  amount?: bigint;
+  outgoingChannelId?: bigint;
 }
 
 export interface IModelQueryRoutesPayload {
-  amount: Long;
+  amount: bigint;
   pubKey: string;
   routeHints?: RouteHint[];
 }
@@ -114,7 +114,7 @@ export const send: ISendModel = {
   queryRoutesForFeeEstimate: thunk(async (_, payload, {}) => {
     return await queryRoutes({
       pubKey: payload.pubKey,
-      amt: BigInt(payload.amount.toNumber()),
+      amt: payload.amount,
       routeHints: payload.routeHints,
     });
   }),
@@ -173,8 +173,8 @@ export const send: ISendModel = {
     // If this is a zero sum
     // invoice, hack the value in
     if (!paymentRequest.numSatoshis && payload && payload.amount) {
-      paymentRequest.numSatoshis = BigInt(payload.amount.toNumber());
-      paymentRequest.numMsat = BigInt(payload.amount.mul(1000).toNumber());
+      paymentRequest.numSatoshis = payload.amount;
+      paymentRequest.numMsat = payload.amount * 1000n;
     }
 
     if (!!payload && !!payload.outgoingChannelId) {
@@ -247,8 +247,8 @@ export const send: ISendModel = {
     try {
       sendPaymentResult = await sendPaymentV2TurboLnd(
         paymentRequestStr,
-        payload && payload.amount ? Long.fromValue(payload.amount) : undefined,
-        Long.fromNumber(Number(paymentRequest.numSatoshis)),
+        payload?.amount,
+        paymentRequest.numSatoshis,
         name,
         multiPathPaymentsEnabled,
         maxLNFeePercentage,
@@ -370,27 +370,28 @@ export const translatePaymentFailureReason = (reason: PaymentFailureReason) => {
 
 export const sendPaymentV2TurboLnd = (
   paymentRequest: string,
-  amount?: Long,
-  payAmount?: Long,
+  amount?: bigint,
+  payAmount?: bigint,
   tlvRecordName?: string | null,
   multiPath?: boolean,
   maxLNFeePercentage: number = 2,
-  outgoingChanId?: Long,
+  outgoingChanId?: bigint,
 ): Promise<Payment> => {
   const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
+  const feeLimitSat = BigInt(Math.floor(Math.max(10, Number(payAmount || 0) * maxFeeRatio)));
 
   const options = create(SendPaymentRequestSchema, {
     paymentRequest,
     noInflightUpdates: true,
     timeoutSeconds: 60,
     maxParts: multiPath ? 16 : 1,
-    feeLimitSat: BigInt(Math.floor(Math.max(10, (payAmount?.toNumber() || 0) * maxFeeRatio))),
+    feeLimitSat,
     cltvLimit: 0,
-    outgoingChanIds: outgoingChanId ? [BigInt(outgoingChanId.toNumber())] : [],
+    outgoingChanIds: outgoingChanId ? [outgoingChanId] : [],
   });
 
   if (amount) {
-    options.amt = BigInt(amount.toNumber());
+    options.amt = amount;
   }
   if (tlvRecordName && tlvRecordName.length > 0) {
     options.destCustomRecords = {

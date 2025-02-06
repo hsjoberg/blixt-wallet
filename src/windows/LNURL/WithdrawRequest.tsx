@@ -113,10 +113,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
         const maxWithdrawable = lnObject.maxWithdrawable;
 
         if (lnObject.minWithdrawable === lnObject.maxWithdrawable) {
-          const amount = formatBitcoin(
-            Long.fromValue(lnObject.maxWithdrawable).div(1000),
-            bitcoinUnit,
-          );
+          const amount = formatBitcoin(BigInt(lnObject.maxWithdrawable / 1000), bitcoinUnit);
           description += `\n\n${t("layout.dialog.msg")}: ${amount}`;
           sat = Math.floor(lnObject.minWithdrawable / 1000);
 
@@ -146,14 +143,8 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
             });
           }
         } else {
-          const minWithdrawableSat = formatBitcoin(
-            Long.fromValue(minWithdrawable).div(1000),
-            bitcoinUnit,
-          );
-          const maxWithdrawableSat = formatBitcoin(
-            Long.fromValue(maxWithdrawable).div(1000),
-            bitcoinUnit,
-          );
+          const minWithdrawableSat = formatBitcoin(BigInt(minWithdrawable / 1000), bitcoinUnit);
+          const maxWithdrawableSat = formatBitcoin(BigInt(maxWithdrawable / 1000), bitcoinUnit);
           description += `\n\n${t("layout.dialog1.minSat")}: ${minWithdrawableSat}\n${t("layout.dialog1.maxSat")}: ${maxWithdrawableSat}`;
 
           if (PLATFORM === "android") {

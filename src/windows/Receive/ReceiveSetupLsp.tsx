@@ -86,39 +86,27 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
     (store) => store.blixtLsp.ondemandChannel.addInvoice,
   );
   const currentRate = useStoreState((store) => store.fiat.currentRate);
-  let remoteBalance: Long | BigInt = useStoreState((store) => store.channel.remoteBalance);
+  let remoteBalance = useStoreState((store) => store.channel.remoteBalance);
 
   const customInvoicePreimageEnabled = useStoreState(
     (store) => store.settings.customInvoicePreimageEnabled,
   );
   const [preimage, setPreimage] = useState<string>("");
 
-  remoteBalance = Long.fromValue(remoteBalance.toString());
   const shouldUseDunder =
     ondemandChannelServiceActive &&
-    ((rpcReady && channels.length === 0) ||
-      remoteBalance.toSigned().subtract(5000).lessThan(satoshiValue)); // Not perfect...
+    ((rpcReady && channels.length === 0) || remoteBalance - 5000n < satoshiValue); // Not perfect...
 
   let minimumBitcoin: string | null = null;
   let minimumFiat: string | null = null;
   if (shouldUseDunder) {
     minimumBitcoin = valueBitcoin(
-      Long.fromValue(ondemandChannelStatus?.minimumPaymentSat || 0),
+      BigInt(ondemandChannelStatus?.minimumPaymentSat || 0),
       bitcoinUnitKey,
     );
     minimumFiat = Math.ceil(
-      valueFiat(Long.fromValue(ondemandChannelStatus?.minimumPaymentSat ?? 0), currentRate),
+      valueFiat(BigInt(ondemandChannelStatus?.minimumPaymentSat ?? 0), currentRate),
     ).toFixed(2);
-
-    // minimumBitcoin = formatBitcoin(
-    //   Long.fromValue(ondemandChannelStatus?.minimumPaymentSat || 0),
-    //   bitcoinUnitKey,
-    // );
-    // minimumFiat = convertBitcoinToFiat(
-    //   ondemandChannelStatus?.minimumPaymentSat ?? 0,
-    //   currentRate,
-    //   fiatUnit,
-    // );
   }
 
   useEffect(() => {

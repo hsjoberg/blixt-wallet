@@ -139,11 +139,9 @@ export default function ({ navigation }: ISelectListProps) {
                         </Left>
                         <Right>
                           <Text style={style.cardDataText}>
-                            {Long.fromValue(Number(peer.peer.bytesSent)).toString()}{" "}
-                            {t("data.bytesSent")}
+                            {peer.peer.bytesSent.toString()} {t("data.bytesSent")}
                             {"\n"}
-                            {Long.fromValue(Number(peer.peer.bytesRecv)).toString()}{" "}
-                            {t("data.bytesRecv")}
+                            {peer.peer.bytesRecv.toString()} {t("data.bytesRecv")}
                           </Text>
                         </Right>
                       </Row>
@@ -153,11 +151,9 @@ export default function ({ navigation }: ISelectListProps) {
                         </Left>
                         <Right>
                           <Text style={style.cardDataText}>
-                            {Long.fromValue(Number(peer.peer.satSent)).toString()}{" "}
-                            {t("transfer.satSent")}
+                            {peer.peer.satSent.toString()} {t("transfer.satSent")}
                             {"\n"}
-                            {Long.fromValue(Number(peer.peer.satRecv)).toString()}{" "}
-                            {t("transfer.satRecv")}
+                            {peer.peer.satRecv.toString()} {t("transfer.satRecv")}
                           </Text>
                         </Right>
                       </Row>
@@ -171,16 +167,16 @@ export default function ({ navigation }: ISelectListProps) {
                           </Text>
                         </Right>
                       </Row>
-                      {/* <Row style={{ width: "100%" }}>
+                      <Row style={{ width: "100%" }}>
                         <Left style={{ alignSelf: "flex-start" }}>
                           <Text>Ping time</Text>
                         </Left>
                         <Right>
                           <Text style={style.cardDataText}>
-                            {Long.fromValue(peer.peer.pingTime).divtoString()}
+                            {(peer.peer.pingTime / 1000n).toString()}ms
                           </Text>
                         </Right>
-                      </Row> */}
+                      </Row>
                       <Row style={{ width: "100%" }}>
                         <Left style={{ alignSelf: "flex-start" }}>
                           <Text>{t("syncType")}</Text>

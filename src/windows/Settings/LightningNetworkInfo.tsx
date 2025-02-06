@@ -9,7 +9,6 @@ import { useStoreState, useStoreActions } from "../../state/store";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-import Long from "long";
 
 interface IMetaDataProps {
   title: string;
@@ -60,15 +59,9 @@ export default function LightningNetworkInfo() {
           <Body>
             <ScrollView>
               <H1 style={style.header}>{t("title")}</H1>
-              {/* <MetaData title={t("totalNetworkCapacity")} data={Long.fromValue(networkInfo.totalNetworkCapacity).toString()} /> */}
-              <MetaData title={t("numChannels")} data={networkInfo.numChannels} />
               <MetaData title={t("numNodes")} data={networkInfo.numNodes} />
-              {/* <MetaData title={t("avgChannelSize")} data={networkInfo.avgChannelSize} /> */}
-              {/* <MetaData title={t("medianChannelSizeSat")} data={Long.fromValue(networkInfo.medianChannelSizeSat).toString()} /> */}
-              <MetaData
-                title={t("numZombieChans")}
-                data={Long.fromNumber(Number(networkInfo.numZombieChans)).toString()}
-              />
+              <MetaData title={t("numChannels")} data={networkInfo.numChannels} />
+              <MetaData title={t("numZombieChans")} data={networkInfo.numZombieChans.toString()} />
             </ScrollView>
           </Body>
         </CardItem>

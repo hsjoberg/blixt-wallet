@@ -97,8 +97,8 @@ export interface IChannelModel {
   setPendingChannels: Action<IChannelModel, PendingChannelsResponse>;
   setChannelUpdateSubscriptionStarted: Action<IChannelModel, boolean>;
   setAlias: Action<IChannelModel, ISetAliasPayload>;
-  setBalance: Action<IChannelModel, BigInt>;
-  setPendingOpenBalance: Action<IChannelModel, BigInt>;
+  setBalance: Action<IChannelModel, bigint>;
+  setPendingOpenBalance: Action<IChannelModel, bigint>;
 
   channels: Channel[];
   aliases: INodeAlias;
@@ -107,9 +107,9 @@ export interface IChannelModel {
   pendingForceClosingChannels: PendingChannelsResponse_ForceClosedChannel[];
   waitingCloseChannels: PendingChannelsResponse_WaitingCloseChannel[];
   channelUpdateSubscriptionStarted: boolean;
-  balance: BigInt;
-  pendingOpenBalance: BigInt;
-  remoteBalance: Computed<IChannelModel, BigInt>;
+  balance: bigint;
+  pendingOpenBalance: bigint;
+  remoteBalance: Computed<IChannelModel, bigint>;
   channelEvents: IChannelEvent[];
 }
 

@@ -415,7 +415,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
                 {"\n\n"}
                 {t("sendOnChain.msg2")}
                 {"\n\n"}
-                {t("sendOnChain.msg3")} {formatBitcoin(Long.fromValue(22000), bitcoinUnit)} (
+                {t("sendOnChain.msg3")} {formatBitcoin(22000n, bitcoinUnit)} (
                 {convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
               </Text>
             </Text>

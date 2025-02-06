@@ -200,23 +200,13 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
       await changePreferFiat(!preferFiat);
     };
 
-    const minSpendableFormatted = formatBitcoin(
-      Long.fromValue(minSpendable ?? 0).div(1000),
-      bitcoinUnit.key,
-    );
+    const minSpendableFormatted = formatBitcoin(BigInt(minSpendable / 1000), bitcoinUnit.key);
     const minSpendableFiatFormatted =
-      convertBitcoinToFiat(Long.fromValue(minSpendable ?? 0).div(1000), currentRate) +
-      " " +
-      fiatUnit;
+      convertBitcoinToFiat(BigInt(minSpendable / 1000), currentRate) + " " + fiatUnit;
 
-    const maxSpendableFormatted = formatBitcoin(
-      Long.fromValue(maxSpendable ?? 0).div(1000),
-      bitcoinUnit.key,
-    );
+    const maxSpendableFormatted = formatBitcoin(BigInt(maxSpendable / 1000), bitcoinUnit.key);
     const maxSpendableFiatFormatted =
-      convertBitcoinToFiat(Long.fromValue(maxSpendable ?? 0).div(1000), currentRate) +
-      " " +
-      fiatUnit;
+      convertBitcoinToFiat(BigInt(maxSpendable / 1000), currentRate) + " " + fiatUnit;
 
     const serviceKey = identifyService(null, "", domain);
     let service;

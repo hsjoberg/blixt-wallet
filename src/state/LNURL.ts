@@ -434,13 +434,12 @@ export const lnUrl: ILNUrlModel = {
       await getStoreActions().blixtLsp.ondemandChannel.checkOndemandChannelService();
     }
 
-    // TURBOTODO: remove LongJS stuff
-    const remoteBalance = Long.fromValue(getStoreState().channel.remoteBalance.toString());
+    const remoteBalance = getStoreState().channel.remoteBalance;
     const shouldUseDunder =
       dunderEnabled &&
       getStoreState().blixtLsp.ondemandChannel.serviceActive &&
       ((getStoreState().lightning.rpcReady && getStoreState().channel.channels.length === 0) ||
-        remoteBalance.subtract(5000).lessThan(satoshi)); // Not perfect...
+        remoteBalance - 5000n < satoshi); // Not perfect...
 
     if (
       lnUrlStr &&
@@ -587,8 +586,7 @@ export const lnUrl: ILNUrlModel = {
         });
 
         // 7. LN WALLET Verifies that amount in provided invoice equals an amount previously specified by user.
-        // TURBOTODO: remove LongJS stuff
-        if (Long.fromValue(paymentRequest.numMsat.toString()).notEquals(payload.msat)) {
+        if (paymentRequest.numMsat.toString() !== payload.msat.toString()) {
           throw new Error("Received invoice does not match decided cost");
         }
 
