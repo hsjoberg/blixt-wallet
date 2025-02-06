@@ -2,6 +2,8 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <RCTAppDelegate+Protected.h>
+#import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
+
 #import "NativeSpeedloader.h"
 
 @implementation AppDelegate
@@ -9,6 +11,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.moduleName = @"BlixtWallet";
+  self.dependencyProvider = [RCTAppDependencyProvider new];
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
