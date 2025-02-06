@@ -122,7 +122,7 @@ export const transaction: ITransactionModel = {
     for (const tx of getState().transactions) {
       if (tx.status === "OPEN") {
         log.i("trackpayment tx", [tx.rHash]);
-        if (tx.valueMsat.isNegative()) {
+        if (tx.valueMsat < 0n) {
           const unsubscribeTrackPayment = routerTrackPaymentV2(
             {
               paymentHash: hexToUint8Array(tx.rHash),
@@ -204,8 +204,8 @@ export const transaction: ITransactionModel = {
             const updated: ITransaction = {
               ...tx,
               status: "SETTLED",
-              value: Long.fromNumber(Number(check.amtPaidSat)),
-              valueMsat: Long.fromNumber(Number(check.amtPaidMsat)),
+              value: check.amtPaidSat,
+              valueMsat: check.amtPaidMsat,
               // TODO add valueUSD, valueFiat and valueFiatCurrency?
             };
             // tslint:disable-next-line

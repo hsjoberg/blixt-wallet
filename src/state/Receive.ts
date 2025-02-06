@@ -264,17 +264,15 @@ export const receive: IReceiveModel = {
 
           const transaction: ITransaction = {
             description: invoice.memo || (invoice.isKeysend ? "Keysend payment" : ""),
-            value: Long.fromNumber(Number(invoice.value)) ?? Long.fromNumber(0),
-            valueMsat: Long.fromNumber(Number(invoice.valueMsat)) ?? Long.fromNumber(0),
-            amtPaidSat: Long.fromNumber(Number(invoice.amtPaidSat)),
-            amtPaidMsat: Long.fromNumber(Number(invoice.amtPaidMsat)),
+            value: invoice.value,
+            valueMsat: invoice.valueMsat,
+            amtPaidSat: invoice.amtPaidSat,
+            amtPaidMsat: invoice.amtPaidMsat,
             fee: null,
             feeMsat: null,
-            date: Long.fromNumber(Number(invoice.creationDate)),
+            date: invoice.creationDate,
             duration: 0,
-            expire: paymentRequest
-              ? Long.fromNumber(Number(invoice.creationDate) + Number(paymentRequest.expiry))
-              : Long.fromNumber(0),
+            expire: paymentRequest ? invoice.creationDate + paymentRequest.expiry : 0n,
             remotePubkey: paymentRequest ? paymentRequest.destination : "", // TODO
             status: decodeInvoiceState(invoice.state),
             paymentRequest: invoice.paymentRequest,

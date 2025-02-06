@@ -45,15 +45,15 @@ export interface IDBTransaction {
 
 export interface ITransaction {
   id?: number;
-  date: Long;
+  date: bigint;
   duration: number | null;
-  expire: Long;
-  value: Long;
-  valueMsat: Long;
-  amtPaidSat: Long;
-  amtPaidMsat: Long;
-  fee: Long | null;
-  feeMsat: Long | null;
+  expire: bigint;
+  value: bigint;
+  valueMsat: bigint;
+  amtPaidSat: bigint;
+  amtPaidMsat: bigint;
+  fee: bigint | null;
+  feeMsat: bigint | null;
   description: string;
   remotePubkey: string;
   paymentRequest: string;
@@ -370,15 +370,15 @@ const convertDBTransaction = (transaction: IDBTransaction): ITransaction => {
 
   return {
     id: transaction.id!,
-    date: Long.fromString(transaction.date),
+    date: BigInt(transaction.date),
     duration: transaction.duration,
-    expire: Long.fromString(transaction.expire),
-    value: Long.fromString(transaction.value),
-    valueMsat: Long.fromString(transaction.valueMsat),
-    amtPaidSat: Long.fromString(transaction.amtPaidSat),
-    amtPaidMsat: Long.fromString(transaction.amtPaidMsat),
-    fee: transaction.fee ? Long.fromString(transaction.fee) : null,
-    feeMsat: transaction.feeMsat ? Long.fromString(transaction.feeMsat) : null,
+    expire: BigInt(transaction.expire),
+    value: BigInt(transaction.value),
+    valueMsat: BigInt(transaction.valueMsat),
+    amtPaidSat: BigInt(transaction.amtPaidSat),
+    amtPaidMsat: BigInt(transaction.amtPaidMsat),
+    fee: transaction.fee ? BigInt(transaction.fee) : null,
+    feeMsat: transaction.feeMsat ? BigInt(transaction.feeMsat) : null,
     description: transaction.description,
     remotePubkey: transaction.remotePubkey,
     paymentRequest: transaction.paymentRequest,
