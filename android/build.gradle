@@ -8,12 +8,8 @@ buildscript {
         targetSdkVersion = 34
 
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
-        ndkVersion = "26.1.10909125"
-        // ndkVersion = "25.1.8937393"
-
-        // reaniamted fix https://github.com/software-mansion/react-native-reanimated/issues/5625
-        // ndkVersion = "23.1.7779620"
-        kotlinVersion = "1.9.24"
+        ndkVersion = "27.1.12297006"
+        kotlinVersion = "2.0.21"
     }
     repositories {
         google()
