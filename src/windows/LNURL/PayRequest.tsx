@@ -137,7 +137,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     const KeyboardAvoid = PLATFORM === "ios" ? KeyboardAvoidingView : View;
 
     return (
-      <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
+      <Blurmodal goBackByClickingOutside={false}>
         <KeyboardAvoid behavior={"padding"} keyboardVerticalOffset={60}>
           <View style={style.keyboardContainer}>
             {__DEV__ && (
