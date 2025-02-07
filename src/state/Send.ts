@@ -284,14 +284,14 @@ export const send: ISendModel = {
 
       hops:
         sendPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
-          chanId: hop.chanId ?? null,
-          chanCapacity: Long.fromNumber(Number(hop.chanCapacity)),
-          amtToForward: Long.fromNumber(Number(hop.amtToForward)),
-          amtToForwardMsat: Long.fromNumber(Number(hop.amtToForwardMsat)),
-          fee: Long.fromNumber(Number(hop.fee)),
-          feeMsat: Long.fromNumber(Number(hop.feeMsat)),
-          expiry: hop.expiry || null,
-          pubKey: hop.pubKey || null,
+          chanId: BigInt(hop.chanId),
+          chanCapacity: hop.chanCapacity,
+          amtToForward: hop.amtToForwardMsat / 1000n,
+          amtToForwardMsat: hop.amtToForwardMsat,
+          fee: hop.feeMsat / 1000n,
+          feeMsat: hop.feeMsat,
+          expiry: hop.expiry,
+          pubKey: hop.pubKey,
         })) ?? [],
     };
 

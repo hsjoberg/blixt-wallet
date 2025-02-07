@@ -137,12 +137,6 @@ export const asciiToBytes = (str: string) => {
   return byteArray;
 };
 
-// TURBOLND remove
-export const decodeTLVRecord = (utf8: string) => {
-  const bytes = asciiToBytes(utf8);
-  return Long.fromBytesLE(bytes).toNumber();
-};
-
 export const getDomainFromURL = (url: string) =>
   url.replace("http://", "").replace("https://", "").split(/[/?#]/)[0];
 

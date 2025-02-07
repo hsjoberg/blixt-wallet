@@ -1,7 +1,6 @@
 import { Database } from "react-native-turbo-sqlite";
 
 import { queryInsert, queryMulti, querySingle, query } from "./db-utils";
-import Long from "long";
 import { ILNUrlPayResponse, ILNUrlPayResponsePayerData } from "../../state/LNURL";
 import { ILightningServices } from "../../utils/lightning-services";
 import { hexToUint8Array, bytesToHexString } from "../../utils";
@@ -83,12 +82,12 @@ export interface ITransaction {
 export interface ITransactionHop {
   id?: number;
   txId?: number;
-  chanId: Long.Long | null;
-  chanCapacity: Long.Long | null;
-  amtToForward: Long.Long | null;
-  amtToForwardMsat: Long.Long | null;
-  fee: Long.Long | null;
-  feeMsat: Long.Long | null;
+  chanId: bigint | null;
+  chanCapacity: bigint | null;
+  amtToForward: bigint | null;
+  amtToForwardMsat: bigint | null;
+  fee: bigint | null;
+  feeMsat: bigint | null;
   expiry: number | null;
   pubKey: string | null;
 }

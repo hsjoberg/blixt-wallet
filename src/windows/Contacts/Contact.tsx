@@ -266,8 +266,8 @@ export default function Contact({ contact }: IContactProps) {
                     {t("contact.syncBalance.title")}:{" "}
                     {currentBalance && (
                       <>
-                        {formatBitcoin(Long.fromValue(currentBalance).div(1000), bitcoinUnit)} (
-                        {valueFiat(Long.fromValue(currentBalance).div(1000), fiatRate).toFixed(2) +
+                        {formatBitcoin(BigInt(currentBalance / 10000), bitcoinUnit)} (
+                        {valueFiat(BigInt(currentBalance / 1000), fiatRate).toFixed(2) +
                           " " +
                           fiatUnit}
                         )

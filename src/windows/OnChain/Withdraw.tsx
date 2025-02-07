@@ -235,7 +235,7 @@ export default ({ navigation }: IOpenChannelProps) => {
           </Button>,
         ]}
         noticeText={`${formatBitcoinValue(onChainBalance)} available`}
-        noticeIcon={Long.fromNumber(Number(onChainBalance)).gt(0) ? null : "info"}
+        noticeIcon={onChainBalance > 0n ? null : "info"}
       />
     </Container>
   );

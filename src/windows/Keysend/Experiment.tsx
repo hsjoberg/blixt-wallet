@@ -146,14 +146,14 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
 
         hops:
           result.htlcs[0].route?.hops?.map((hop) => ({
-            chanId: hop.chanId ?? null,
-            chanCapacity: Long.fromNumber(Number(hop.chanCapacity)) ?? null,
-            amtToForward: Long.fromNumber(Number(hop.amtToForward)) || Long.fromInt(0),
-            amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-            fee: Long.fromNumber(Number(hop.fee)) || Long.fromInt(0),
-            feeMsat: Long.fromNumber(Number(hop.feeMsat)) || Long.fromInt(0),
-            expiry: hop.expiry || null,
-            pubKey: hop.pubKey || null,
+            chanId: BigInt(hop.chanId),
+            chanCapacity: hop.chanCapacity,
+            amtToForward: hop.amtToForwardMsat / 1000n,
+            amtToForwardMsat: hop.amtToForwardMsat,
+            fee: hop.feeMsat / 1000n,
+            feeMsat: hop.feeMsat,
+            expiry: hop.expiry,
+            pubKey: hop.pubKey,
           })) ?? [],
       };
       syncTransaction(transaction);

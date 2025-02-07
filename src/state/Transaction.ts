@@ -141,14 +141,14 @@ export const transaction: ITransactionModel = {
                   preimage: hexToUint8Array(trackPaymentResult.paymentPreimage),
                   hops:
                     trackPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
-                      chanId: hop.chanId ?? null,
-                      chanCapacity: Long.fromNumber(Number(hop.chanCapacity)),
-                      amtToForward: Long.fromNumber(Number(hop.amtToForwardMsat) / 1000),
-                      amtToForwardMsat: Long.fromNumber(Number(hop.amtToForwardMsat)),
-                      fee: Long.fromNumber(Number(hop.feeMsat) / 1000),
-                      feeMsat: Long.fromNumber(Number(hop.feeMsat)),
-                      expiry: hop.expiry || null,
-                      pubKey: hop.pubKey || null,
+                      chanId: BigInt(hop.chanId),
+                      chanCapacity: hop.chanCapacity,
+                      amtToForward: hop.amtToForwardMsat / 1000n,
+                      amtToForwardMsat: hop.amtToForwardMsat,
+                      fee: hop.feeMsat / 1000n,
+                      feeMsat: hop.feeMsat,
+                      expiry: hop.expiry,
+                      pubKey: hop.pubKey,
                     })) ?? [],
                 };
                 // tslint:disable-next-line
@@ -188,10 +188,7 @@ export const transaction: ITransactionModel = {
           );
         } else {
           const check = await lookupInvoice({ rHash: hexToUint8Array(tx.rHash) });
-          if (
-            Date.now() / 1000 >
-            Long.fromNumber(Number(check.creationDate)).add(Number(check.expiry)).toNumber()
-          ) {
+          if (Date.now() / 1000 > check.creationDate + check.expiry) {
             const updated: ITransaction = {
               ...tx,
               status: "EXPIRED",

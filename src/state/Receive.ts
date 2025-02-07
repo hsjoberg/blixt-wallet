@@ -9,7 +9,6 @@ import { setupDescription } from "../utils/NameDesc";
 import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
 import {
   timeout,
-  decodeTLVRecord,
   bytesToHexString,
   toast,
   uint8ArrayToUnicodeString,
@@ -242,19 +241,6 @@ export const receive: IReceiveModel = {
             }
           }
 
-          // TODO in the future we should handle
-          // both value (the requested amount in the payreq)
-          // and amtPaidMsat (the actual amount paid)
-          // if (!Long.isLong(invoice.value)) {
-          //   invoice.value = Long.fromValue(invoice.value);
-          // }
-          // if (!Long.isLong(invoice.valueMsat)) {
-          //   invoice.amtPaidSat = Long.fromValue(invoice.amtPaidSat);
-          // }
-          // if (!Long.isLong(invoice.amtPaidMsat)) {
-          //   invoice.amtPaidMsat = Long.fromValue(invoice.amtPaidMsat);
-          // }
-
           const tmpData: IInvoiceTempData = getState().invoiceTempData[rHash] ?? {
             rHash,
             payer: null,
@@ -319,22 +305,21 @@ export const receive: IReceiveModel = {
                 for (const [customRecordKey, customRecordValue] of Object.entries(
                   htlc.customRecords,
                 )) {
-                  const decodedTLVRecord = customRecordKey; // decodeTLVRecord(customRecordKey);
-                  if (decodedTLVRecord === TLV_RECORD_NAME.toString()) {
+                  if (customRecordKey === TLV_RECORD_NAME.toString()) {
                     const tlvRecordName = uint8ArrayToUnicodeString(customRecordValue);
                     log.i("Found TLV_RECORD_NAME 🎉", [tlvRecordName]);
                     transaction.tlvRecordName = tlvRecordName;
-                  } else if (decodedTLVRecord === TLV_WHATSAT_MESSAGE.toString()) {
+                  } else if (customRecordKey === TLV_WHATSAT_MESSAGE.toString()) {
                     tlvRecordWhatSatMessage = uint8ArrayToUnicodeString(customRecordValue);
                     log.i("Found TLV_WHATSAT_MESSAGE 🎉", [tlvRecordWhatSatMessage]);
                     if (invoice.isKeysend) {
                       transaction.description = tlvRecordWhatSatMessage;
                     }
-                  } else if (decodedTLVRecord === TLV_SATOGRAM.toString()) {
+                  } else if (customRecordKey === TLV_SATOGRAM.toString()) {
                     log.i("Got a Satogram");
                     isSatogram = true;
                   } else {
-                    log.i("Unknown TLV record", [decodedTLVRecord]);
+                    log.i("Unknown TLV record", [customRecordKey]);
                   }
                 }
               }
