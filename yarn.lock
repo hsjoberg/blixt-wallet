@@ -5712,15 +5712,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/long@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "@types/long@npm:5.0.0"
-  dependencies:
-    long: "npm:*"
-  checksum: 10/1483b703bd6257cff1c9921cdc80e36f83985bed1f7bf9a64919e29df0038c3eb5acc82b70cd0cf15e4fdd639f79976eed5f7f9053e8db152b21b9e5d202845c
-  languageName: node
-  linkType: hard
-
 "@types/markdown-it@npm:^14.1.1":
   version: 14.1.2
   resolution: "@types/markdown-it@npm:14.1.2"
@@ -6646,7 +6637,6 @@ __metadata:
     "@types/color": "npm:4.2.0"
     "@types/crypto-js": "npm:4.2.2"
     "@types/jest": "npm:^29.5.13"
-    "@types/long": "npm:^5.0.0"
     "@types/react": "npm:19.0.4"
     "@types/react-native-sqlite-storage": "npm:^6.0.5"
     "@types/react-native-vector-icons": "npm:^6.4.18"
@@ -6683,7 +6673,6 @@ __metadata:
     jest-date-mock: "npm:1.0.10"
     jest-fetch-mock: "npm:3.0.3"
     jetifier: "npm:^2.0.0"
-    long: "npm:5.2.4"
     metro-react-native-babel-preset: "npm:^0.77.0"
     native-base: "github:hsjoberg/NativeBase#dcc1994745e1252eee4150a0424bae81518c5543"
     node-abi: "npm:3.71.0"
@@ -13811,24 +13800,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"long@npm:*, long@npm:^5.0.0":
-  version: 5.2.3
-  resolution: "long@npm:5.2.3"
-  checksum: 10/9167ec6947a825b827c30da169a7384eec6c0c9ec2f0b9c74da2e93d81159bbe39fb09c3f13dae9721d4b807ccfa09797a7dd1012f5d478e3e33ca3c78b608e6
-  languageName: node
-  linkType: hard
-
-"long@npm:5.2.4":
-  version: 5.2.4
-  resolution: "long@npm:5.2.4"
-  checksum: 10/c27c060a683d4d76dc48da12ded0ae49c610aaf10d028ec938829d7bebe916979dcc8b67ed71f8bf6d845a90151b66a9b741a3ee51ec874908e496c2a576697a
-  languageName: node
-  linkType: hard
-
 "long@npm:^3.2.0":
   version: 3.2.0
   resolution: "long@npm:3.2.0"
   checksum: 10/ffc685ec458ddf71a830d6deb62ff7dc551a736d47473350d9e077c22db96ec88c8a3554c11ffce7d7f2291b0c30da36629e4d0a97c29b5360dc977533c96d28
+  languageName: node
+  linkType: hard
+
+"long@npm:^5.0.0":
+  version: 5.2.3
+  resolution: "long@npm:5.2.3"
+  checksum: 10/9167ec6947a825b827c30da169a7384eec6c0c9ec2f0b9c74da2e93d81159bbe39fb09c3f13dae9721d4b807ccfa09797a7dd1012f5d478e3e33ca3c78b608e6
   languageName: node
   linkType: hard
 

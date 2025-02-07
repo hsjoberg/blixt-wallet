@@ -24,8 +24,9 @@ const commaLocales: string[] = [
   "zh_CN",
 ];
 
-export default function useBalance(initialSat?: Long, noConversion = false) {
-  const settingsManagerConstants = NativeModules.SettingsManager.getConstants().settings;
+export default function useBalance(initialSat?: bigint, noConversion = false) {
+  const settingsManagerConstants =
+    PLATFORM === "ios" ? NativeModules.SettingsManager.getConstants().settings : undefined;
 
   // gRPC/protobuf 0 is Number
   if (typeof initialSat === "number") {
@@ -37,7 +38,7 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
   const [bitcoinValue, setBitcoinValue] = useState<string | undefined>(
-    initialSat && valueBitcoin(initialSat, bitcoinUnit),
+    initialSat !== undefined ? valueBitcoin(initialSat, bitcoinUnit) : undefined,
   );
   const [dollarValue, setDollarValue] = useState<string | undefined>(
     bitcoinValue &&

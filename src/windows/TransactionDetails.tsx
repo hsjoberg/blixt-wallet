@@ -18,7 +18,6 @@ import QrCode from "../components/QrCode";
 import {
   capitalize,
   formatISO,
-  isLong,
   decryptLNURLPayAesTagMessage,
   toast,
   bytesToHexString,

@@ -4,17 +4,12 @@ BigInt.prototype.toJSON = function () {
 
 import "react-native-turbo-lnd";
 import "react-native-gesture-handler";
-import React from "react";
-import ReactNative, { AppRegistry, LogBox, Platform, UIManager, Text } from "react-native";
+import { AppRegistry, LogBox, Platform, UIManager } from "react-native";
 import App from "./src/App";
 import { name as appName } from "./app.json";
-import Long from "long";
-import protobuf from "protobufjs";
 import { enableES5 } from "immer";
 import "./src/i18n/i18n";
 
-protobuf.util.Long = Long;
-protobuf.configure();
 enableES5();
 
 LogBox.ignoreLogs([

@@ -100,7 +100,7 @@ export const getUnitNice = (value: BigNumber, unit: keyof IBitcoinUnits) => {
 };
 
 export const valueBitcoin = (
-  satoshi: BigInt,
+  satoshi: bigint,
   unit: keyof IBitcoinUnits,
   groupNumbers: boolean = false,
 ): string => {
@@ -118,7 +118,7 @@ export const unitToSatoshi = (value: number, fromUnit: keyof IBitcoinUnits): num
 };
 
 export const convertBitcoinToFiat = (
-  satoshi: number | BigInt,
+  satoshi: number | bigint,
   conversion: number,
   fiatUnit?: string,
 ): string => {

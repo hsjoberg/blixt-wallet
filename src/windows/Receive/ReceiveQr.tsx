@@ -71,7 +71,7 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
       <View style={style.container}>
         <H1 style={style.scanThisQr}>{t("qr.title")}</H1>
         <Text testID="expire" style={style.expires}>
-          <Ticker expire={transaction.expire.toNumber()} />
+          <Ticker expire={Number(transaction.expire)} />
         </Text>
         <QrCode
           size={smallScreen ? 225 : undefined}
@@ -81,7 +81,7 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
         <View style={{ width: "89%", marginBottom: 16 }} testID="payment-request-string">
           <CopyAddress text={transaction.paymentRequest} onPress={onPressPaymentRequest} />
         </View>
-        {transaction.value?.neq(0) && (
+        {transaction.value !== 0n && (
           <H3 testID="pay-amount">{formatBitcoin(transaction.value, bitcoinUnit)}</H3>
         )}
       </View>
