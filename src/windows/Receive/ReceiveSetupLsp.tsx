@@ -3,18 +3,11 @@ import { Button, Icon, Text, Spinner } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { useDebounce } from "use-debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Long from "long";
 
 import { ReceiveStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
 import BlixtForm from "../../components/Form";
-import {
-  formatBitcoin,
-  BitcoinUnits,
-  IBitcoinUnits,
-  valueBitcoin,
-  valueFiat,
-} from "../../utils/bitcoin-units";
+import { BitcoinUnits, IBitcoinUnits, valueBitcoin, valueFiat } from "../../utils/bitcoin-units";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import useBalance from "../../hooks/useBalance";
 import { MATH_PAD_NATIVE_ID, PLATFORM } from "../../utils/constants";

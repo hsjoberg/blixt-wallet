@@ -4,7 +4,6 @@ import { View } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import Long from "long";
 import { toast, hexToUint8Array } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { generateSecureRandom } from "../../lndmobile/index";

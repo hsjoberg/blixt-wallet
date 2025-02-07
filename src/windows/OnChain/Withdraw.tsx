@@ -3,7 +3,6 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { Text, Container, Button, Icon, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
-import Long from "long";
 
 import { OnChainStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Pressable } from "react-native";
 import { Icon, Card, CardItem, Text, Button } from "native-base";
 import { useNavigation, NavigationProp } from "@react-navigation/core";
-import Long from "long";
 import Color from "color";
 
 import { useStoreState, useStoreActions } from "../../state/store";

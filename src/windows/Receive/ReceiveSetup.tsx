@@ -3,7 +3,6 @@ import { Button, Icon, Text, Spinner } from "native-base";
 import DialogAndroid from "react-native-dialogs";
 import { useDebounce } from "use-debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Long from "long";
 
 import { ReceiveStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";

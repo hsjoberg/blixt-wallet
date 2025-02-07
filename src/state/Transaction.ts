@@ -10,8 +10,6 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { bytesToHexString, hexToUint8Array } from "../utils";
 
-import Long from "long";
-
 import { lookupInvoice, routerTrackPaymentV2 } from "react-native-turbo-lnd";
 import {
   Invoice_InvoiceState,

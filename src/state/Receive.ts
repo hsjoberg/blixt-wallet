@@ -1,6 +1,5 @@
 import { EmitterSubscription } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
-import Long from "long";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";

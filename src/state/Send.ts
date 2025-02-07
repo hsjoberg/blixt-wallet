@@ -13,7 +13,6 @@ import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
 import { ITransaction } from "../storage/database/transaction";
 import { LnBech32Prefix } from "../utils/build";
-import Long from "long";
 import { PLATFORM, TLV_KEYSEND, TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
 import { valueFiat } from "../utils/bitcoin-units";

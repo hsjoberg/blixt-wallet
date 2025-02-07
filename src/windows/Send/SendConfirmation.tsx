@@ -2,7 +2,6 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { BackHandler, Keyboard, StyleSheet, Vibration } from "react-native";
 import { Button, Container, Icon, Spinner, Text } from "native-base";
 import { useDebounce } from "use-debounce";
-import Long from "long";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "react-native-element-dropdown";
 import Color from "color";

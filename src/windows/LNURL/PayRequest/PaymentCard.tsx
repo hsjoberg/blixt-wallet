@@ -16,7 +16,6 @@ import { useStoreActions, useStoreState } from "../../../state/store";
 import { Alert } from "../../../utils/alert";
 import ButtonSpinner from "../../../components/ButtonSpinner";
 import Input from "../../../components/Input";
-import Long from "long";
 import { PLATFORM } from "../../../utils/constants";
 import { PayerData } from "./PayerData";
 import ScaledImage from "../../../components/ScaledImage";

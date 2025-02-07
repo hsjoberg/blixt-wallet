@@ -1,5 +1,4 @@
 import { Dispatch } from "easy-peasy";
-import Long from "long";
 
 import { IStoreModel } from "../state";
 import { setItem, StorageItem } from "../storage/app";

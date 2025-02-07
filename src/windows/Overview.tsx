@@ -18,7 +18,6 @@ import { DrawerActions, useNavigation, NavigationProp } from "@react-navigation/
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import Long from "long";
 import { FlashList } from "@shopify/flash-list";
 import BigNumber from "bignumber.js";
 

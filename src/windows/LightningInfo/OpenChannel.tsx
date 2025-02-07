@@ -1,9 +1,8 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
 import { NativeModules, StyleSheet, TextInput, View } from "react-native";
-import { Text, Container, Button, Icon, Spinner, CheckBox, Right, InputGroup } from "native-base";
+import { Text, Container, Button, Icon, Spinner, CheckBox } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
-import Long from "long";
 import { RouteProp } from "@react-navigation/native";
 
 import { LightningInfoStackParamList } from "./index";

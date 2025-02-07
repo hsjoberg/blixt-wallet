@@ -22,7 +22,6 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import Content from "../../components/Content";
 import { ICLOUD_BACKUP_KEY } from "../../state/ICloudBackup";
 import { ILightningServices } from "../../utils/lightning-services";
-import Long from "long";
 import { RootStackParamList } from "../../Main";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
@@ -68,6 +67,8 @@ import {
 import TurboSqlite from "react-native-turbo-sqlite";
 
 import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
+
+import Speedloader from "../../turbomodules/NativeSpeedloader";
 
 let iCloudStorage: any;
 console.log(PLATFORM);
@@ -143,6 +144,23 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           )}
           {/*
            *
+           * Speedloader
+           *
+           */}
+          <Text style={{ width: "100%" }}>Speedloader:</Text>
+          <Button
+            small
+            onPress={async () => {
+              // console.log("TEST");
+              // console.log(await NativeModules.LndMobileTools.getFilesDir());
+              // console.log(await NativeModules.LndMobileTools.getCacheDir());
+              console.log(await Speedloader.gossipSync("hejsan"));
+            }}
+          >
+            <Text>Speedloader.gossipSync</Text>
+          </Button>
+          {/*
+           *
            * TurboSqlite
            *
            */}
@@ -204,6 +222,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
            *
            */}
           <Text style={{ width: "100%" }}>Random:</Text>
+          {/* <Button small onPress={async () => console.log(await Speedloader.gossipSync("hejsan"))}>
+            <Text style={styles.buttonText}>Speedloader.gossipSync</Text>
+          </Button> */}
           <Button
             small
             onPress={async () => {
@@ -274,8 +295,8 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               //     nodeFrom: hexToUint8Array(c.nodeFrom),
               //     nodeTo: hexToUint8Array(c.nodeTo),
               //     history: {
-              //       successAmtSat: Long.fromValue(c.history.successAmtSat),
-              //       successTime: Long.fromValue(c.history.successTime),
+              //       successAmtSat: BigInt(c.history.successAmtSat),
+              //       successTime: BigInt(c.history.successTime),
               //     }
               //   }
               // });
@@ -576,23 +597,21 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
                 for (const invoice of invoices) {
                   await createTransaction(db!, {
-                    date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
+                    date: BigInt(1546300800 + Math.floor(Math.random() * 1000000)),
                     description: invoice.description,
                     remotePubkey:
                       "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                    expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
+                    expire: BigInt(1577836800 + Math.floor(Math.random() * 1000)),
                     status: "SETTLED",
-                    value: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * invoice.value),
-                    valueMsat: Long.fromNumber(
-                      (invoice.type == "PAY" ? -1 : 1) * invoice.value * 1000,
-                    ),
-                    amtPaidSat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
-                    amtPaidMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
+                    value: BigInt((invoice.type == "PAY" ? -1 : 1) * invoice.value),
+                    valueMsat: BigInt((invoice.type == "PAY" ? -1 : 1) * invoice.value * 1000),
+                    amtPaidSat: BigInt((invoice.type == "PAY" ? -1 : 1) * 0),
+                    amtPaidMsat: BigInt((invoice.type == "PAY" ? -1 : 1) * 0),
                     valueUSD: (invoice.type == "PAY" ? -1 : 1) * 100,
                     valueFiat: (invoice.type == "PAY" ? -1 : 1) * 100,
                     valueFiatCurrency: "SEK",
-                    fee: Long.fromNumber(Math.floor(Math.random() * 5)),
-                    feeMsat: Long.fromNumber(Math.floor(Math.random() * 5) * 1000),
+                    fee: BigInt(Math.floor(Math.random() * 5)),
+                    feeMsat: BigInt(Math.floor(Math.random() * 5) * 1000),
                     paymentRequest: "abcdef123456",
                     rHash: Math.floor(Math.random() * 10000000).toString(),
                     nodeAliasCached: null,
@@ -1160,25 +1179,23 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             onPress={async () =>
               console.log(
                 await createTransaction(db!, {
-                  date: Long.fromValue(
-                    Math.floor(+new Date() / 1000) + Math.floor(Math.random() * 1000),
-                  ),
+                  date: BigInt(Math.floor(+new Date() / 1000) + Math.floor(Math.random() * 1000)),
                   description: "Alice:  Lunch Phil's Burger",
                   remotePubkey:
                     "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                  expire: Long.fromValue(
+                  expire: BigInt(
                     Math.floor(+new Date() / 1000) + Math.floor(1000 + Math.random() * 1000),
                   ),
                   status: "SETTLED",
-                  value: Long.fromValue(-1 * Math.floor(Math.random() * 10000)),
-                  valueMsat: Long.fromValue(1000),
-                  amtPaidSat: Long.fromValue(-1 * Math.floor(Math.random() * 10000)),
-                  amtPaidMsat: Long.fromNumber(1000),
+                  value: BigInt(-1 * Math.floor(Math.random() * 10000)),
+                  valueMsat: BigInt(1000),
+                  amtPaidSat: BigInt(-1 * Math.floor(Math.random() * 10000)),
+                  amtPaidMsat: BigInt(1000),
                   paymentRequest: "abcdef123456",
                   rHash: "abcdef123456",
                   type: "NORMAL",
-                  fee: Long.fromNumber(0),
-                  feeMsat: Long.fromNumber(0),
+                  fee: BigInt(0),
+                  feeMsat: BigInt(0),
                   nodeAliasCached: null,
                   valueUSD: 0,
                   valueFiat: 0,
@@ -1218,21 +1235,21 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                     (invoice.type == "PAY" ? -1 : 1) * Math.floor(Math.random() * 500) +
                     Math.floor(Math.random() * 1000);
                   await createTransaction(db!, {
-                    date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
+                    date: BigInt(1546300800 + Math.floor(Math.random() * 1000000)),
                     description: invoice.description,
                     remotePubkey:
                       "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                    expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
+                    expire: BigInt(1577836800 + Math.floor(Math.random() * 1000)),
                     status: "SETTLED",
-                    value: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * value),
-                    valueMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * value * 1000),
-                    amtPaidSat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
-                    amtPaidMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
+                    value: BigInt((invoice.type == "PAY" ? -1 : 1) * value),
+                    valueMsat: BigInt((invoice.type == "PAY" ? -1 : 1) * value * 1000),
+                    amtPaidSat: BigInt((invoice.type == "PAY" ? -1 : 1) * 0),
+                    amtPaidMsat: BigInt((invoice.type == "PAY" ? -1 : 1) * 0),
                     valueUSD: (invoice.type == "PAY" ? -1 : 1) * 100,
                     valueFiat: (invoice.type == "PAY" ? -1 : 1) * 100,
                     valueFiatCurrency: "SEK",
-                    fee: Long.fromNumber(Math.floor(Math.random() * 5)),
-                    feeMsat: Long.fromNumber(Math.floor(Math.random() * 5) * 1000),
+                    fee: BigInt(Math.floor(Math.random() * 5)),
+                    feeMsat: BigInt(Math.floor(Math.random() * 5) * 1000),
                     paymentRequest: "abcdef123456",
                     rHash: Math.floor(Math.random() * 10000000).toString(),
                     nodeAliasCached: null,

@@ -20,7 +20,6 @@ import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
 import { dunderPrompt } from "../utils/dunder";
 import secp256k1 from "secp256k1";
-import Long from "long";
 
 import { connectPeer, signMessage, subscribeInvoices } from "react-native-turbo-lnd";
 import { PayReq } from "react-native-turbo-lnd/protos/lightning_pb";

@@ -15,7 +15,6 @@ import {
 } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
-import Long from "long";
 
 import Container from "../../components/Container";
 import BlixtContent from "../../components/Content";

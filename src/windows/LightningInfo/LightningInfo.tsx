@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Icon, H1, Fab, Spinner } from "native-base";
-import Long from "long";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { FlashList } from "@shopify/flash-list";
 

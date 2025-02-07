@@ -1,6 +1,3 @@
-import { State } from "easy-peasy";
-import Long from "long";
-import { IStoreModel } from "../state";
 import { IFiatRates } from "../state/Fiat";
 import { Alert } from "./alert";
 import { convertBitcoinToFiat, formatBitcoin, IBitcoinUnits } from "./bitcoin-units";

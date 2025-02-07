@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Vibration } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import DialogAndroid from "react-native-dialogs";
-import Long from "long";
 
 import { useStoreState, useStoreActions } from "../../state/store";
 import { getDomainFromURL, toast, timeout } from "../../utils";
