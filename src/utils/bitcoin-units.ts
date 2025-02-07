@@ -1,6 +1,5 @@
 import BigNumber from "bignumber.js";
-import Long from "long";
-import { isLong, formatNumberGroupings } from "./index";
+import { formatNumberGroupings } from "./index";
 
 export interface IBitcoinUnit {
   key: keyof IBitcoinUnits;
@@ -68,12 +67,12 @@ export const convertBitcoinUnit = (
   return btc.div(BitcoinUnits[to].unit);
 };
 
-export const formatBitcoin = (satoshi: Long | BigInt, unit: keyof IBitcoinUnits): string => {
-  if (!isLong(satoshi)) {
-    satoshi = Long.fromValue(satoshi.toString());
+export const formatBitcoin = (satoshi: BigInt, unit: keyof IBitcoinUnits): string => {
+  if (typeof satoshi !== "bigint") {
+    throw new Error("Argument need to be type bigint. Arg: " + typeof satoshi);
   }
 
-  const value = convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit);
+  const value = convertBitcoinUnit(Number(satoshi), "satoshi", unit);
   const fixed = value.toFixed(BitcoinUnits[unit].decimals);
 
   switch (unit) {
@@ -101,17 +100,17 @@ export const getUnitNice = (value: BigNumber, unit: keyof IBitcoinUnits) => {
 };
 
 export const valueBitcoin = (
-  satoshi: Long | BigInt,
+  satoshi: BigInt,
   unit: keyof IBitcoinUnits,
   groupNumbers: boolean = false,
 ): string => {
-  if (!isLong(satoshi)) {
-    satoshi = Long.fromValue(satoshi.toString());
+  if (typeof satoshi !== "bigint") {
+    throw new Error("Argument need to be type bigint. Arg: " + typeof satoshi);
   }
 
   return groupNumbers
-    ? formatNumberGroupings(convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed())
-    : convertBitcoinUnit(satoshi.toNumber(), "satoshi", unit).toFixed();
+    ? formatNumberGroupings(convertBitcoinUnit(Number(satoshi), "satoshi", unit).toFixed())
+    : convertBitcoinUnit(Number(satoshi), "satoshi", unit).toFixed();
 };
 
 export const unitToSatoshi = (value: number, fromUnit: keyof IBitcoinUnits): number => {
@@ -119,12 +118,16 @@ export const unitToSatoshi = (value: number, fromUnit: keyof IBitcoinUnits): num
 };
 
 export const convertBitcoinToFiat = (
-  satoshi: Long | number | BigInt,
+  satoshi: number | BigInt,
   conversion: number,
   fiatUnit?: string,
 ): string => {
-  if (!isLong(satoshi)) {
-    satoshi = Long.fromValue(satoshi.toString());
+  if (typeof satoshi !== "bigint" && typeof satoshi !== "number") {
+    throw new Error("Argument need to be type bigint or number. Arg: " + typeof satoshi);
+  }
+
+  if (typeof satoshi === "number") {
+    satoshi = BigInt(satoshi);
   }
 
   if (fiatUnit) {
@@ -134,12 +137,12 @@ export const convertBitcoinToFiat = (
   return `${fiat}${fiatUnit ?? ""}`;
 };
 
-export const valueFiat = (satoshi: Long | BigInt, conversion: number): number => {
-  if (!isLong(satoshi)) {
-    satoshi = Long.fromValue(satoshi.toString());
+export const valueFiat = (satoshi: BigInt, conversion: number): number => {
+  if (typeof satoshi !== "bigint") {
+    throw new Error("Argument need to be type bigint. Arg: " + typeof satoshi);
   }
 
-  return convertBitcoinUnit(satoshi.toNumber(), "satoshi", "bitcoin")
+  return convertBitcoinUnit(Number(satoshi), "satoshi", "bitcoin")
     .multipliedBy(conversion)
     .toNumber();
 };
