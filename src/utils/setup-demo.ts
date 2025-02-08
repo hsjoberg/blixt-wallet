@@ -25,7 +25,7 @@ export default async function SetupBlixtDemo(
   const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
     for (const invoice of invoices) {
       const transaction: ITransaction = {
-        date: BigInt(new Date().getTime() / 1000 + Math.floor(Math.random() * 1000000)),
+        date: BigInt(Math.floor(new Date().getTime() / 1000) + Math.floor(Math.random() * 1000000)),
         description: invoice.description,
         remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
         expire: BigInt(1577836800 + Math.floor(Math.random() * 1000)),
