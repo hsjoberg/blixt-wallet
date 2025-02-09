@@ -39,6 +39,7 @@
             platforms-android-34
             platforms-android-35
             ndk-27-1-12297006
+            cmake-3-22-1
           ]
         );
 
@@ -66,13 +67,16 @@
 
             # Install dependencies
             yarn install
+
             # Generate proto files
             yarn gen-proto
+
             node node_modules/react-native-turbo-lnd/src/fetch-lnd.js
-            echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+
             # Download the Lndmobile.aar file and place it in the directory
             curl -L "https://github.com/hsjoberg/blixt-wallet/releases/download/v0.7.0/Lndmobile.aar" \
               -o android/app/lndmobile/Lndmobile.aar
+
             echo "Lndmobile.aar downloaded and placed in android/app/lndmobile/"
           '';
 
