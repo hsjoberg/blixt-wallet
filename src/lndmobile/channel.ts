@@ -19,7 +19,7 @@ export const openChannel = async (
   feeRateSat?: number,
   type?: lnrpc.CommitmentType,
 ): Promise<lnrpc.ChannelPoint> => {
-  const remoteChanReserveSat = Long.fromValue(360);
+  const remoteChanReserveSat = Long.fromValue(1000);
   const response = await sendCommand<
     lnrpc.IOpenChannelRequest,
     lnrpc.OpenChannelRequest,
