@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar, Alert, NativeModules } from "react-native";
-import { Spinner, H1, H2, Text } from "native-base";
+import { Spinner, H1, H2, Text, Button } from "native-base";
 import {
   createStackNavigator,
   CardStyleInterpolators,
@@ -92,6 +92,8 @@ export default function Main() {
   const [initialRoute, setInitialRoute] = useState("Loading");
   const torLoading = useStoreState((store) => store.torLoading);
   const speedloaderLoading = useStoreState((store) => store.speedloaderLoading);
+  const speedloaderCancelVisible = useStoreState((store) => store.speedloaderCancelVisible);
+  const cancelSpeedloader = useStoreActions((store) => store.cancelSpeedloader);
   const screenTransitionsEnabled = useStoreState(
     (store) => store.settings.screenTransitionsEnabled,
   );
@@ -213,6 +215,27 @@ export default function Main() {
           />
           <Spinner color={blixtTheme.light} size={55} />
           <H2>Syncing Lightning Network</H2>
+
+          {/* The button becomes visible after 10s */}
+          {speedloaderCancelVisible && (
+            <Button
+              small
+              style={{
+                marginTop: 24,
+                backgroundColor: "rgba(255, 255, 255, 0.15)",
+                paddingHorizontal: 20,
+                paddingVertical: 8,
+                borderRadius: 8,
+                minWidth: 120,
+                justifyContent: "center",
+              }}
+              onPress={() => cancelSpeedloader()}
+            >
+              <Text style={{ color: blixtTheme.light, fontSize: 14, textAlign: "center" }}>
+                Cancel Sync
+              </Text>
+            </Button>
+          )}
         </Container>
       );
     }

@@ -55,6 +55,8 @@ export interface ILndMobileTools {
   DEBUG_deleteSpeedloaderDgraphDirectory(): null;
   DEBUG_deleteNeutrinoFiles(): boolean;
   getInternalFiles(): Promise<Record<string, number>>;
+  getCacheDir(): Promise<string>;
+  getFilesDir(): Promise<string>;
   saveChannelDbFile(): Promise<boolean>;
   importChannelDbFile(channelDbPath: string): Promise<boolean>;
 

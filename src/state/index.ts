@@ -128,6 +128,7 @@ export interface IStoreModel {
   setTorEnabled: Action<IStoreModel, boolean>;
   setTorLoading: Action<IStoreModel, boolean>;
   setSpeedloaderLoading: Action<IStoreModel, boolean>;
+  setSpeedloaderCancelVisible: Action<IStoreModel, boolean>;
   setImportChannelDbOnStartup: Action<IStoreModel, IImportChannelDbOnStartup>;
 
   generateSeed: Thunk<IStoreModel, string | undefined, IStoreInjections>;
@@ -142,6 +143,7 @@ export interface IStoreModel {
   holdOnboarding: boolean;
   torLoading: boolean;
   speedloaderLoading: boolean;
+  speedloaderCancelVisible: boolean;
   torEnabled: boolean;
 
   lightning: ILightningModel;
@@ -173,6 +175,8 @@ export interface IStoreModel {
   appBuild: number;
   onboardingState: OnboardingState;
   importChannelDbOnStartup: IImportChannelDbOnStartup | null;
+
+  cancelSpeedloader: Thunk<IStoreModel>;
 }
 
 export const model: IStoreModel = {
@@ -373,14 +377,18 @@ export const model: IStoreModel = {
         (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !==
         ELndMobileStatusCodes.STATUS_PROCESS_STARTED
       ) {
-        const speed = setTimeout(() => {
-          actions.setSpeedloaderLoading(true);
-        }, 3000);
+        actions.setSpeedloaderLoading(true);
+        actions.setSpeedloaderCancelVisible(false);
+
+        // Show the speedloader cancel button after 10s
+        const cancelButtonTimer = setTimeout(() => {
+          actions.setSpeedloaderCancelVisible(true);
+        }, 10000);
+
         if (gossipSyncEnabled && Chain === "mainnet") {
           if (enforceSpeedloaderOnStartup) {
             log.d("Clearing speedloader files");
             try {
-              // TODO(hsjoberg): LndMobileTools should be injected
               await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile();
               await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
             } catch (error) {
@@ -398,12 +406,17 @@ export const model: IStoreModel = {
                 "Gossip sync done " + (new Date().getTime() - start.getTime()) / 1000 + "s",
                 1000,
               );
-          } catch (e) {
-            log.e("GossipSync exception!", [e]);
+          } catch (e: any) {
+            if (e.message === "Gossip sync cancelled by user") {
+              log.i("Gossip sync cancelled by user");
+            } else {
+              log.e("GossipSync exception!", [e]);
+            }
           }
         }
-        clearTimeout(speed);
+        clearTimeout(cancelButtonTimer);
         actions.setSpeedloaderLoading(false);
+        actions.setSpeedloaderCancelVisible(false);
         log.i("Starting lnd, gossipStatus", [gossipStatus]);
         try {
           let args = "";
@@ -534,6 +547,17 @@ export const model: IStoreModel = {
     actions.setAppReady(true);
     log.d("App initialized");
     return true;
+  }),
+
+  cancelSpeedloader: thunk(async (actions) => {
+    try {
+      log.d("Cancelling speedloader gossipsync");
+      await Speedloader.cancelGossipSync();
+      actions.setSpeedloaderLoading(false);
+      actions.setSpeedloaderCancelVisible(false);
+    } catch (e) {
+      log.e("Error cancelling speedloader", [e]);
+    }
   }),
 
   checkAppVersionMigration: thunk(async (actions, _2, { getState }) => {
@@ -797,8 +821,11 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   setTorLoading: action((state, value) => {
     state.torLoading = value;
   }),
-  setSpeedloaderLoading: action((state, value) => {
-    state.speedloaderLoading = value;
+  setSpeedloaderLoading: action((state, payload) => {
+    state.speedloaderLoading = payload;
+  }),
+  setSpeedloaderCancelVisible: action((state, payload) => {
+    state.speedloaderCancelVisible = payload;
   }),
   setImportChannelDbOnStartup: action((state, value) => {
     state.importChannelDbOnStartup = value;
@@ -814,6 +841,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   torEnabled: false,
   torLoading: false,
   speedloaderLoading: false,
+  speedloaderCancelVisible: false,
 
   lightning,
   transaction,

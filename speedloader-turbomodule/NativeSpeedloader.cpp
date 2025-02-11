@@ -5,15 +5,22 @@
 
 // Store global ref to the promise so that we can use it later in the callbacks from speedloader
 facebook::react::AsyncPromise<std::string>* promise = nullptr;
+bool isCancelled = false;
 
 void onResponse(void* context, const char* data, int length) {
   SPEEDLOADER_LOG_DEBUG("onResponse");
-  promise->resolve(std::string(data, length));
+  if (promise != nullptr && !isCancelled) {
+    promise->resolve(std::string(data, length));
+    promise = nullptr;
+  }
 }
 
 void onError(void* context, const char* message) {
   SPEEDLOADER_LOG_DEBUG("onError " << message);
-  promise->reject(facebook::react::Error(message));
+  if (promise != nullptr && !isCancelled) {
+    promise->reject(facebook::react::Error(message));
+    promise = nullptr;
+  }
 }
 
 namespace facebook::react {
@@ -25,8 +32,9 @@ facebook::react::AsyncPromise<std::string> NativeSpeedloaderModule::gossipSync(j
   SPEEDLOADER_LOG_DEBUG("gossipSync");
   AsyncPromise<std::string>* p = new AsyncPromise<std::string>(rt, jsInvoker_);
 
-  // Store the promise globally
+  // Store the promise globally and reset cancelled state
   promise = p;
+  isCancelled = false;
 
   CCallback callback = {
       .onResponse = &onResponse,
@@ -39,6 +47,16 @@ facebook::react::AsyncPromise<std::string> NativeSpeedloaderModule::gossipSync(j
   ::gossipSync((char*)serviceUrl.c_str(),  (char*)cacheDir.c_str(),  (char*)filesDir.c_str(), (char*)networkType, callback);
 
   return *p;
+}
+
+void NativeSpeedloaderModule::cancelGossipSync(jsi::Runtime& rt) {
+  SPEEDLOADER_LOG_DEBUG("cancelGossipSync");
+  isCancelled = true;
+  ::cancelGossipSync();
+  if (promise != nullptr) {
+    promise->reject(facebook::react::Error("Gossip sync cancelled by user"));
+    promise = nullptr;
+  }
 }
 
 } // namespace facebook::react
