@@ -383,7 +383,7 @@ export const model: IStoreModel = {
         // Show the speedloader cancel button after 10s
         const cancelButtonTimer = setTimeout(() => {
           actions.setSpeedloaderCancelVisible(true);
-        }, 10000);
+        }, 15000);
 
         if (gossipSyncEnabled && Chain === "mainnet") {
           if (enforceSpeedloaderOnStartup) {
