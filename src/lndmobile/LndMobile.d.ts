@@ -57,6 +57,7 @@ export interface ILndMobileTools {
   getInternalFiles(): Promise<Record<string, number>>;
   getCacheDir(): Promise<string>;
   getFilesDir(): Promise<string>;
+  getAppFolderPath(): Promise<string>;
   saveChannelDbFile(): Promise<boolean>;
   importChannelDbFile(channelDbPath: string): Promise<boolean>;
 
