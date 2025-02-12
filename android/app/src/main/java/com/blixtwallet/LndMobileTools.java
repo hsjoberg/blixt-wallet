@@ -81,13 +81,13 @@ class LndMobileTools extends ReactContextBaseJavaModule {
   }
 
   private boolean getPersistentServicesEnabled(Context context) {
-    ReactDatabaseSupplier dbSupplier = ReactDatabaseSupplier.getInstance(context);
-    SQLiteDatabase db = dbSupplier.get();
-    String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
-    if (persistentServicesEnabled != null) {
-      return persistentServicesEnabled.equals("true");
-    }
-    HyperLog.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
+    // ReactDatabaseSupplier dbSupplier = ReactDatabaseSupplier.getInstance(context);
+    // SQLiteDatabase db = dbSupplier.get();
+    // String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
+    // if (persistentServicesEnabled != null) {
+    //   return persistentServicesEnabled.equals("true");
+    // }
+    // HyperLog.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
     return false;
   }
 

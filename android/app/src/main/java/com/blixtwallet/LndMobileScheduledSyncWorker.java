@@ -473,13 +473,14 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   }
 
   private boolean getPersistentServicesEnabled() {
-    SQLiteDatabase db = dbSupplier.get();
-    String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
-    if (persistentServicesEnabled != null) {
-      return persistentServicesEnabled.equals("true");
-    }
-    HyperLog.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
     return false;
+    // SQLiteDatabase db = dbSupplier.get();
+    // String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
+    // if (persistentServicesEnabled != null) {
+    //   return persistentServicesEnabled.equals("true");
+    // }
+    // HyperLog.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
+    // return false;
   }
 
   private boolean getTorEnabled() {

@@ -25,7 +25,8 @@ interface ILocalNotificationPayload {
 
 export interface INotificationManagerModel {
   initialize: Thunk<INotificationManagerModel>;
-
+  startPersistentService: Thunk<INotificationManagerModel>;
+  stopPersistentService: Thunk<INotificationManagerModel>;
   localNotification: Thunk<INotificationManagerModel, ILocalNotificationPayload, any, IStoreModel>;
 }
 
@@ -64,6 +65,33 @@ export const notificationManager: INotificationManagerModel = {
 
       throw error;
     }
+  }),
+
+  startPersistentService: thunk(async () => {
+    log.i("starting notifee persistent service");
+    notifee.registerForegroundService(() => {
+      return new Promise(() => {});
+    });
+    const channelId = await notifee.createChannel({
+      id: "blixt",
+      name: "Blixt Wallet",
+    });
+    notifee.displayNotification({
+      title: "Blixt Wallet",
+      body: "",
+      android: {
+        smallIcon: "ic_small_icon",
+        channelId,
+        asForegroundService: true,
+        colorized: false,
+        ongoing: true,
+      },
+    });
+  }),
+
+  stopPersistentService: thunk(async () => {
+    log.i("STOPPING notifee persistent service");
+    await notifee.stopForegroundService();
   }),
 
   localNotification: thunk((_, { message }, { getStoreState }) => {

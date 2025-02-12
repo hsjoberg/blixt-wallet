@@ -193,6 +193,17 @@ export const lightning: ILightningModel = {
       } else if (PLATFORM === "ios" || PLATFORM === "macos") {
         await dispatch.iCloudBackup.initialize();
       }
+
+      // On startup, if persistent mode is enabled
+      // Start the notifee foreground service, else stop it.
+      // The function doesn't throw, so it is ok to start/stop it
+      // Even if it is already started or stopped
+      if (PLATFORM === "android" && (await getItemObject(StorageItem.persistentServicesEnabled))) {
+        await dispatch.notificationManager.initialize();
+        await dispatch.notificationManager.startPersistentService();
+      } else {
+        await dispatch.notificationManager.stopPersistentService();
+      }
     } catch (e: any) {
       toast(e.message, 0, "danger", "OK");
       return;
