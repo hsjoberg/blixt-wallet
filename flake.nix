@@ -1,13 +1,11 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-
     android-nixpkgs = {
       url = "github:tadfisher/android-nixpkgs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
   outputs =
     {
       self,
@@ -15,9 +13,11 @@
       android-nixpkgs,
     }:
     let
-      systems = [ "x86_64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
-
       pkgsFor =
         system:
         import nixpkgs {
@@ -27,7 +27,6 @@
             android_sdk.accept_license = true;
           };
         };
-
       androidSdkFor =
         system:
         android-nixpkgs.sdk.${system} (
@@ -42,13 +41,11 @@
             cmake-3-22-1
           ]
         );
-
       mkShellFor =
         system:
         let
           pkgs = pkgsFor system;
           androidSdk = androidSdkFor system;
-
           # Base packages
           basePackages = with pkgs; [
             nodejs_22
@@ -60,31 +57,23 @@
             unzip
             corepack
           ];
-
           # Create individual script files
           android-init = pkgs.writeScriptBin "android-init" ''
             #!${pkgs.stdenv.shell}
-
             # Install dependencies
             yarn install
-
             # Generate proto files
             yarn gen-proto
-
             node node_modules/react-native-turbo-lnd/src/fetch-lnd.js
-
             # Download the Lndmobile.aar file and place it in the directory
             curl -L "https://github.com/hsjoberg/blixt-wallet/releases/download/v0.7.0/Lndmobile.aar" \
               -o android/app/lndmobile/Lndmobile.aar
-
             echo "Lndmobile.aar downloaded and placed in android/app/lndmobile/"
           '';
-
           android-unsigned-apk = pkgs.writeScriptBin "android-unsigned-apk" ''
             #!${pkgs.stdenv.shell}
             yarn android:mainnet-unsigned
           '';
-
           # Shell hook
           commonHook = ''
             # Environment variables
@@ -92,11 +81,9 @@
             export YARN_CHECKSUM_BEHAVIOR="reset"
             export LC_ALL=en_US.UTF-8
             export LANG=en_US.UTF-8
-
             # Enable corepack
             corepack enable
           '';
-
         in
         pkgs.mkShellNoCC {
           buildInputs = basePackages ++ [
