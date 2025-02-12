@@ -12,7 +12,7 @@ import BlixtForm, { IFormItem } from "../../components/Form";
 import { hexToUint8Array, toast } from "../../utils";
 import { useStoreActions, useStoreState } from "../../state/store";
 import Input from "../../components/Input";
-import { PLATFORM } from "../../utils/constants";
+import { AMP_FEATURE_BIT, PLATFORM } from "../../utils/constants";
 import { RouteProp } from "@react-navigation/native";
 import { SendStackParamList } from "./index";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -151,6 +151,8 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
     return <Text>{t("msg.error", { ns: namespaces.common })}</Text>;
   }
 
+  const isAmpInvoice = paymentRequest.features.hasOwnProperty(AMP_FEATURE_BIT);
+
   const { name, description } = extractDescription(paymentRequest.description);
 
   const send = async () => {
@@ -164,6 +166,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
           : undefined,
 
         outgoingChannelId: outChannel !== "any" ? Long.fromString(outChannel) : undefined,
+        isAmpInvoice,
       };
 
       const response = await sendPayment(payload);
