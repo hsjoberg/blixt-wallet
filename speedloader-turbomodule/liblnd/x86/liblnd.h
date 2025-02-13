@@ -19,6 +19,34 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 /* Start of preamble from import "C" comments.  */
 
 
+#line 20 "autopilot_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
 #line 4 "cgo_utils_generated.go"
 
 #ifndef CALLBACK_DEFS_H
@@ -77,6 +105,251 @@ static inline void freeCSendStream(CSendStream* stream) {
 
 #line 1 "cgo-generated-wrapper"
 
+#line 20 "chainkit_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 20 "chainnotifier_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 6 "cshared.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 20 "invoices_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 17 "lightning_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 20 "neutrinokit_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 20 "peers_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 20 "router_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 20 "signer_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
 #line 3 "speedloader_cgo.go"
 
 #ifndef CALLBACK_DEFS_H
@@ -93,6 +366,174 @@ typedef struct CCallback {
     void* responseContext;
     void* errorContext;
 } CCallback;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 17 "state_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 20 "versioner_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 21 "walletkit_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 17 "walletunlocker_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 20 "watchtower_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
+
+#endif // CALLBACK_DEFS_H
+
+#line 1 "cgo-generated-wrapper"
+
+#line 20 "watchtowerclient_api_generated.go"
+
+#ifndef CALLBACK_DEFS_H
+#define CALLBACK_DEFS_H
+
+#include <stdlib.h>
+
+typedef void (*ResponseFunc)(void* context, const char* data, int length);
+typedef void (*ErrorFunc)(void* context, const char* error);
+
+typedef struct CCallback {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CCallback;
+
+typedef struct CRecvStream {
+    ResponseFunc onResponse;
+    ErrorFunc onError;
+    void* responseContext;
+    void* errorContext;
+} CRecvStream;
 
 #endif // CALLBACK_DEFS_H
 
@@ -152,8 +593,176 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
+extern void autopilotStatus(char* data, int length, CCallback callback);
+extern void autopilotModifyStatus(char* data, int length, CCallback callback);
+extern void autopilotQueryScores(char* data, int length, CCallback callback);
+extern void autopilotSetScores(char* data, int length, CCallback callback);
+extern int SendStreamC(uintptr_t streamPtr, char* data, int length);
+extern int StopStreamC(uintptr_t streamPtr);
+extern void chainKitGetBlock(char* data, int length, CCallback callback);
+extern void chainKitGetBlockHeader(char* data, int length, CCallback callback);
+extern void chainKitGetBestBlock(char* data, int length, CCallback callback);
+extern void chainKitGetBlockHash(char* data, int length, CCallback callback);
+extern void chainNotifierRegisterConfirmationsNtfn(char* data, int length, CRecvStream rStream);
+extern void chainNotifierRegisterSpendNtfn(char* data, int length, CRecvStream rStream);
+extern void chainNotifierRegisterBlockEpochNtfn(char* data, int length, CRecvStream rStream);
+extern void start(char* extraArgs, CCallback callback);
+extern void invoicesSubscribeSingleInvoice(char* data, int length, CRecvStream rStream);
+extern void invoicesCancelInvoice(char* data, int length, CCallback callback);
+extern void invoicesAddHoldInvoice(char* data, int length, CCallback callback);
+extern void invoicesSettleInvoice(char* data, int length, CCallback callback);
+extern void invoicesLookupInvoiceV2(char* data, int length, CCallback callback);
+extern void walletBalance(char* data, int length, CCallback callback);
+extern void channelBalance(char* data, int length, CCallback callback);
+extern void getTransactions(char* data, int length, CCallback callback);
+extern void estimateFee(char* data, int length, CCallback callback);
+extern void sendCoins(char* data, int length, CCallback callback);
+extern void listUnspent(char* data, int length, CCallback callback);
+extern void subscribeTransactions(char* data, int length, CRecvStream rStream);
+extern void sendMany(char* data, int length, CCallback callback);
+extern void newAddress(char* data, int length, CCallback callback);
+extern void signMessage(char* data, int length, CCallback callback);
+extern void verifyMessage(char* data, int length, CCallback callback);
+extern void connectPeer(char* data, int length, CCallback callback);
+extern void disconnectPeer(char* data, int length, CCallback callback);
+extern void listPeers(char* data, int length, CCallback callback);
+extern void subscribePeerEvents(char* data, int length, CRecvStream rStream);
+extern void getInfo(char* data, int length, CCallback callback);
+extern void getDebugInfo(char* data, int length, CCallback callback);
+extern void getRecoveryInfo(char* data, int length, CCallback callback);
+extern void pendingChannels(char* data, int length, CCallback callback);
+extern void listChannels(char* data, int length, CCallback callback);
+extern void subscribeChannelEvents(char* data, int length, CRecvStream rStream);
+extern void closedChannels(char* data, int length, CCallback callback);
+extern void openChannelSync(char* data, int length, CCallback callback);
+extern void openChannel(char* data, int length, CRecvStream rStream);
+extern void batchOpenChannel(char* data, int length, CCallback callback);
+extern void fundingStateStep(char* data, int length, CCallback callback);
+extern uintptr_t channelAcceptor(CRecvStream rStream);
+extern void closeChannel(char* data, int length, CRecvStream rStream);
+extern void abandonChannel(char* data, int length, CCallback callback);
+extern uintptr_t sendPayment(CRecvStream rStream);
+extern void sendPaymentSync(char* data, int length, CCallback callback);
+extern uintptr_t sendToRoute(CRecvStream rStream);
+extern void sendToRouteSync(char* data, int length, CCallback callback);
+extern void addInvoice(char* data, int length, CCallback callback);
+extern void listInvoices(char* data, int length, CCallback callback);
+extern void lookupInvoice(char* data, int length, CCallback callback);
+extern void subscribeInvoices(char* data, int length, CRecvStream rStream);
+extern void decodePayReq(char* data, int length, CCallback callback);
+extern void listPayments(char* data, int length, CCallback callback);
+extern void deletePayment(char* data, int length, CCallback callback);
+extern void deleteAllPayments(char* data, int length, CCallback callback);
+extern void describeGraph(char* data, int length, CCallback callback);
+extern void getNodeMetrics(char* data, int length, CCallback callback);
+extern void getChanInfo(char* data, int length, CCallback callback);
+extern void getNodeInfo(char* data, int length, CCallback callback);
+extern void queryRoutes(char* data, int length, CCallback callback);
+extern void getNetworkInfo(char* data, int length, CCallback callback);
+extern void stopDaemon(char* data, int length, CCallback callback);
+extern void subscribeChannelGraph(char* data, int length, CRecvStream rStream);
+extern void debugLevel(char* data, int length, CCallback callback);
+extern void feeReport(char* data, int length, CCallback callback);
+extern void updateChannelPolicy(char* data, int length, CCallback callback);
+extern void forwardingHistory(char* data, int length, CCallback callback);
+extern void exportChannelBackup(char* data, int length, CCallback callback);
+extern void exportAllChannelBackups(char* data, int length, CCallback callback);
+extern void verifyChanBackup(char* data, int length, CCallback callback);
+extern void restoreChannelBackups(char* data, int length, CCallback callback);
+extern void subscribeChannelBackups(char* data, int length, CRecvStream rStream);
+extern void bakeMacaroon(char* data, int length, CCallback callback);
+extern void listMacaroonIDs(char* data, int length, CCallback callback);
+extern void deleteMacaroonID(char* data, int length, CCallback callback);
+extern void listPermissions(char* data, int length, CCallback callback);
+extern void checkMacaroonPermissions(char* data, int length, CCallback callback);
+extern uintptr_t registerRPCMiddleware(CRecvStream rStream);
+extern void sendCustomMessage(char* data, int length, CCallback callback);
+extern void subscribeCustomMessages(char* data, int length, CRecvStream rStream);
+extern void listAliases(char* data, int length, CCallback callback);
+extern void lookupHtlcResolution(char* data, int length, CCallback callback);
+extern void neutrinoKitStatus(char* data, int length, CCallback callback);
+extern void neutrinoKitAddPeer(char* data, int length, CCallback callback);
+extern void neutrinoKitDisconnectPeer(char* data, int length, CCallback callback);
+extern void neutrinoKitIsBanned(char* data, int length, CCallback callback);
+extern void neutrinoKitGetBlockHeader(char* data, int length, CCallback callback);
+extern void neutrinoKitGetBlock(char* data, int length, CCallback callback);
+extern void neutrinoKitGetCFilter(char* data, int length, CCallback callback);
+extern void neutrinoKitGetBlockHash(char* data, int length, CCallback callback);
+extern void peersUpdateNodeAnnouncement(char* data, int length, CCallback callback);
+extern void routerSendPaymentV2(char* data, int length, CRecvStream rStream);
+extern void routerTrackPaymentV2(char* data, int length, CRecvStream rStream);
+extern void routerTrackPayments(char* data, int length, CRecvStream rStream);
+extern void routerEstimateRouteFee(char* data, int length, CCallback callback);
+extern void routerSendToRoute(char* data, int length, CCallback callback);
+extern void routerSendToRouteV2(char* data, int length, CCallback callback);
+extern void routerResetMissionControl(char* data, int length, CCallback callback);
+extern void routerQueryMissionControl(char* data, int length, CCallback callback);
+extern void routerXImportMissionControl(char* data, int length, CCallback callback);
+extern void routerGetMissionControlConfig(char* data, int length, CCallback callback);
+extern void routerSetMissionControlConfig(char* data, int length, CCallback callback);
+extern void routerQueryProbability(char* data, int length, CCallback callback);
+extern void routerBuildRoute(char* data, int length, CCallback callback);
+extern void routerSubscribeHtlcEvents(char* data, int length, CRecvStream rStream);
+extern void routerSendPayment(char* data, int length, CRecvStream rStream);
+extern void routerTrackPayment(char* data, int length, CRecvStream rStream);
+extern uintptr_t routerHtlcInterceptor(CRecvStream rStream);
+extern void routerUpdateChanStatus(char* data, int length, CCallback callback);
+extern void signerSignOutputRaw(char* data, int length, CCallback callback);
+extern void signerComputeInputScript(char* data, int length, CCallback callback);
+extern void signerSignMessage(char* data, int length, CCallback callback);
+extern void signerVerifyMessage(char* data, int length, CCallback callback);
+extern void signerDeriveSharedKey(char* data, int length, CCallback callback);
+extern void signerMuSig2CombineKeys(char* data, int length, CCallback callback);
+extern void signerMuSig2CreateSession(char* data, int length, CCallback callback);
+extern void signerMuSig2RegisterNonces(char* data, int length, CCallback callback);
+extern void signerMuSig2Sign(char* data, int length, CCallback callback);
+extern void signerMuSig2CombineSig(char* data, int length, CCallback callback);
+extern void signerMuSig2Cleanup(char* data, int length, CCallback callback);
 extern void gossipSync(char* serviceUrl, char* cacheDir, char* dataDir, char* networkType, CCallback callback);
 extern void cancelGossipSync();
+extern void subscribeState(char* data, int length, CRecvStream rStream);
+extern void getState(char* data, int length, CCallback callback);
+extern void versionerGetVersion(char* data, int length, CCallback callback);
+extern void walletKitListUnspent(char* data, int length, CCallback callback);
+extern void walletKitLeaseOutput(char* data, int length, CCallback callback);
+extern void walletKitReleaseOutput(char* data, int length, CCallback callback);
+extern void walletKitListLeases(char* data, int length, CCallback callback);
+extern void walletKitDeriveNextKey(char* data, int length, CCallback callback);
+extern void walletKitDeriveKey(char* data, int length, CCallback callback);
+extern void walletKitNextAddr(char* data, int length, CCallback callback);
+extern void walletKitGetTransaction(char* data, int length, CCallback callback);
+extern void walletKitListAccounts(char* data, int length, CCallback callback);
+extern void walletKitRequiredReserve(char* data, int length, CCallback callback);
+extern void walletKitListAddresses(char* data, int length, CCallback callback);
+extern void walletKitSignMessageWithAddr(char* data, int length, CCallback callback);
+extern void walletKitVerifyMessageWithAddr(char* data, int length, CCallback callback);
+extern void walletKitImportAccount(char* data, int length, CCallback callback);
+extern void walletKitImportPublicKey(char* data, int length, CCallback callback);
+extern void walletKitImportTapscript(char* data, int length, CCallback callback);
+extern void walletKitPublishTransaction(char* data, int length, CCallback callback);
+extern void walletKitRemoveTransaction(char* data, int length, CCallback callback);
+extern void walletKitSendOutputs(char* data, int length, CCallback callback);
+extern void walletKitEstimateFee(char* data, int length, CCallback callback);
+extern void walletKitPendingSweeps(char* data, int length, CCallback callback);
+extern void walletKitBumpFee(char* data, int length, CCallback callback);
+extern void walletKitListSweeps(char* data, int length, CCallback callback);
+extern void walletKitLabelTransaction(char* data, int length, CCallback callback);
+extern void walletKitFundPsbt(char* data, int length, CCallback callback);
+extern void walletKitSignPsbt(char* data, int length, CCallback callback);
+extern void walletKitFinalizePsbt(char* data, int length, CCallback callback);
+extern void genSeed(char* data, int length, CCallback callback);
+extern void initWallet(char* data, int length, CCallback callback);
+extern void unlockWallet(char* data, int length, CCallback callback);
+extern void changePassword(char* data, int length, CCallback callback);
+extern void watchtowerGetInfo(char* data, int length, CCallback callback);
+extern void watchtowerClientAddTower(char* data, int length, CCallback callback);
+extern void watchtowerClientRemoveTower(char* data, int length, CCallback callback);
+extern void watchtowerClientDeactivateTower(char* data, int length, CCallback callback);
+extern void watchtowerClientTerminateSession(char* data, int length, CCallback callback);
+extern void watchtowerClientListTowers(char* data, int length, CCallback callback);
+extern void watchtowerClientGetTowerInfo(char* data, int length, CCallback callback);
+extern void watchtowerClientStats(char* data, int length, CCallback callback);
+extern void watchtowerClientPolicy(char* data, int length, CCallback callback);
 
 #ifdef __cplusplus
 }

@@ -210,10 +210,10 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.hello());
+              console.log(LndMobileToolsTurbo.startSyncWorker());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.hello</Text>
+            <Text style={styles.buttonText}>LndMobileToolsTurbo.startSyncWorker</Text>
           </Button>
 
           {/*
