@@ -6,39 +6,39 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
-import com.blixtwallet.NativeLndmobileToolsSpec
 import java.util.concurrent.TimeUnit
 
-class LndMobileToolsTurboModule(reactContext: ReactApplicationContext) : NativeLndmobileToolsSpec(reactContext) {
+class LndMobileToolsTurboModule(reactContext: ReactApplicationContext) :
+  NativeLndmobileToolsSpec(reactContext) {
   override fun getName() = NAME
 
   override fun startSyncWorker() {
+    val syncWorkRequest = OneTimeWorkRequestBuilder<TurboLndSyncWorker>()
+      .addTag("LND_SYNC_JOB")
+      .addTag("ONE_OFF")
+      .setConstraints(Constraints.NONE)
+      .build()
 
-      val constraints = Constraints.Builder()
-          .build()
+    WorkManager.getInstance(reactApplicationContext).enqueue(syncWorkRequest)
+  }
 
+  override fun scheduleSyncWorker() {
+    val constraints = Constraints.Builder()
+      .setRequiredNetworkType(NetworkType.CONNECTED)
+      .build()
 
-      val syncWorkRequest = OneTimeWorkRequestBuilder<TurboLndSyncWorker>()
-          .addTag("LND_SYNC_JOB")
-          .setConstraints(Constraints.NONE)
-          .build()
+    val syncRequest = PeriodicWorkRequestBuilder<TurboLndSyncWorker>(1, TimeUnit.HOURS)
+      .addTag("LND_SYNC_JOB")
+      .addTag("PERIODIC")
+      .setConstraints(constraints)
+      .build()
 
-      WorkManager.getInstance(reactApplicationContext).enqueue(syncWorkRequest)
-
-//      val syncRequest = PeriodicWorkRequestBuilder<TurboLndSyncWorker>(
-//          15, // Repeat every 15 minutes
-//          TimeUnit.MINUTES
-//      )
-//          .setConstraints(constraints)
-//          .build()
-//
-//      WorkManager.getInstance(reactApplicationContext).enqueueUniquePeriodicWork(
-//          "turbolnd_sync",
-//          ExistingPeriodicWorkPolicy.KEEP,
-//          syncRequest
-//      )
+    WorkManager.getInstance(reactApplicationContext).enqueueUniquePeriodicWork(
+      "TURBOLND_SYNC",
+      ExistingPeriodicWorkPolicy.KEEP,
+      syncRequest
+    )
   }
 
   companion object {

@@ -3,7 +3,7 @@ import { Button, Container, Input, Text, Toast, View } from "native-base";
 import { CONSTANTS, JSHash } from "react-native-hash";
 import { Linking, NativeModules, StatusBar, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { StorageItem, setItem, setItemObject } from "../../storage/app";
+import { StorageItem, getItem, removeItem, setItem, setItemObject } from "../../storage/app";
 import { bytesToHexString, hexToUint8Array, stringToUint8Array, toast } from "../../utils";
 
 import {
@@ -214,6 +214,46 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }}
           >
             <Text style={styles.buttonText}>LndMobileToolsTurbo.startSyncWorker</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(LndMobileToolsTurbo.scheduleSyncWorker());
+            }}
+          >
+            <Text style={styles.buttonText}>LndMobileToolsTurbo.scheduleSyncWorker</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(await getItem("syncWorkHistory"));
+            }}
+          >
+            <Text style={styles.buttonText}>getItem syncWorkHistory</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(await removeItem("syncWorkHistory"));
+            }}
+          >
+            <Text style={styles.buttonText}>removeItem syncWorkHistory</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              navigation?.navigate("SyncWorkerReport");
+            }}
+          >
+            <Text style={styles.buttonText}>SyncWorkerReport</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              navigation?.navigate("SyncWorkerTimelineReport");
+            }}
+          >
+            <Text style={styles.buttonText}>SyncWorkerTimelineReport</Text>
           </Button>
 
           {/*

@@ -447,8 +447,8 @@ export const model: IStoreModel = {
               .replace(/%20/g, " ");
             appFolderPath += "lnd/";
           }
-          args += ` --lnddir=${appFolderPath}`;
-          log.d("args", [args]);
+          args += `--nolisten --lnddir=${appFolderPath}`;
+          log.i("args", [args]);
           log.d("startLnd", [await startLndTurbo(args)]);
         } catch (e: any) {
           if (e.message.includes("lnd already started")) {

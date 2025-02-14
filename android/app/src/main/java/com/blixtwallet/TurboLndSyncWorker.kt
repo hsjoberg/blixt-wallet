@@ -11,6 +11,8 @@ import com.facebook.react.bridge.ReadableMap
 import com.google.protobuf.ByteString
 import com.hypertrack.hyperlog.HyperLog
 import com.oblador.keychain.KeychainModule
+import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil
+import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -18,8 +20,32 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resumeWithException
+import org.json.JSONArray
+import org.json.JSONObject
 
 private const val TAG = "TurboLndSyncWorker"
+private const val SYNC_WORK_KEY = "syncWorkHistory"
+private const val ONE_OFF_TAG = "ONE_OFF"
+private const val PERIODIC_TAG = "PERIODIC"
+
+// Add enum to represent different sync results
+private enum class SyncResult {
+  EARLY_EXIT_ACTIVITY_RUNNING,  // Exited because MainActivity was running
+  SUCCESS_LND_ALREADY_RUNNING,      // LND was already running
+  SUCCESS_CHAIN_SYNCED,         // Full success with chain sync
+  FAILURE_STATE_TIMEOUT,        // State subscription timeout
+  SUCCESS_ACTIVITY_INTERRUPTED, // Stopped because MainActivity started
+  FAILURE_GENERAL,             // General failure
+  FAILURE_CHAIN_SYNC_TIMEOUT   // Chain sync specifically timed out
+}
+
+// Update data class with more metadata
+private data class SyncWorkRecord(
+  val timestamp: Long,
+  val duration: Long,
+  val result: SyncResult,
+  val errorMessage: String? = null
+)
 
 class TurboLndSyncWorker(
   context: Context,
@@ -28,12 +54,75 @@ class TurboLndSyncWorker(
 
   private val lnd = LndNative()
   private val stateChannel = Channel<lnrpc.Stateservice.WalletState>(Channel.UNLIMITED)
+  private val startTime = System.currentTimeMillis() // Track when work starts
+
+  // Add function to save sync work record
+  private fun saveSyncWorkRecord(result: SyncResult, errorMessage: String? = null) {
+    Log.d(TAG, "saveSyncWorkRecord start: $result")
+    try {
+      val duration = System.currentTimeMillis() - startTime
+      val newRecord = SyncWorkRecord(startTime, duration, result, errorMessage)
+      
+      val db = ReactDatabaseSupplier.getInstance(getApplicationContext()).get()
+      
+      // Get existing records
+      val existingJson = AsyncLocalStorageUtil.getItemImpl(db, SYNC_WORK_KEY) ?: "[]"
+      val records = try {
+        JSONArray(existingJson).let { jsonArray ->
+          (0 until jsonArray.length()).map { i ->
+            val obj = jsonArray.getJSONObject(i)
+            SyncWorkRecord(
+              obj.getLong("timestamp"),
+              obj.getLong("duration"),
+              SyncResult.valueOf(obj.getString("result")),
+              obj.optString("errorMessage", null)
+            )
+          }
+        }
+      } catch (e: Exception) {
+        Log.w(TAG, "Failed to parse existing records, starting fresh", e)
+        emptyList()
+      }
+
+      // Add new record and limit to 100 most recent
+      val updatedRecords = (records + newRecord).takeLast(100)
+
+      // Convert to JSON array
+      val jsonArray = JSONArray().apply {
+        updatedRecords.forEach { record ->
+          put(JSONObject().apply {
+            put("timestamp", record.timestamp)
+            put("duration", record.duration)
+            put("result", record.result.name)
+            record.errorMessage?.let { put("errorMessage", it) }
+          })
+        }
+      }
+
+      // Save back to database
+      val sql = "INSERT OR REPLACE INTO catalystLocalStorage VALUES (?, ?);"
+      db.compileStatement(sql).use { statement ->
+        db.beginTransaction()
+        try {
+          statement.bindString(1, SYNC_WORK_KEY)
+          statement.bindString(2, jsonArray.toString())
+          statement.execute()
+          db.setTransactionSuccessful()
+        } finally {
+          db.endTransaction()
+        }
+      }
+    } catch (e: Exception) {
+      Log.e(TAG, "Failed to save sync work record", e)
+    }
+    Log.d(TAG, "saveSyncWorkRecord done")
+  }
 
   override suspend fun doWork(): Result {
     return try {
-      // Bail out immediately if MainActivity is running
       if (isMainActivityRunning()) {
         Log.d(TAG, "MainActivity is running, skipping daemon stop")
+        saveSyncWorkRecord(SyncResult.EARLY_EXIT_ACTIVITY_RUNNING)
         return Result.success()
       }
 
@@ -44,6 +133,7 @@ class TurboLndSyncWorker(
 
       if (isAlreadyRunning) {
         Log.d(TAG, "LND already running, marking work as success")
+        saveSyncWorkRecord(SyncResult.SUCCESS_LND_ALREADY_RUNNING)
         return Result.success()
       }
 
@@ -85,12 +175,14 @@ class TurboLndSyncWorker(
       if (result == null) {
         Log.i(TAG, "State timeout reached")
         Log.i(TAG, "Exiting as success")
+        saveSyncWorkRecord(SyncResult.FAILURE_STATE_TIMEOUT)
+        stopDaemon()
         return Result.success()
       }
 
       // Poll until chain is synced or timeout reached
       Log.i(TAG, "Waiting for chain sync")
-      val chainSynced = withTimeoutOrNull(30_000) {
+      val chainSynced = withTimeoutOrNull(60_000) {
         var isSynced = false
         while (!isSynced) {
           val info = getInfo()
@@ -105,6 +197,9 @@ class TurboLndSyncWorker(
 
       if (!chainSynced) {
         Log.i(TAG, "Chain sync timeout reached")
+        saveSyncWorkRecord(SyncResult.FAILURE_CHAIN_SYNC_TIMEOUT)
+        stopDaemon()
+        return Result.success()
       }
 
       delay(1000)
@@ -112,6 +207,7 @@ class TurboLndSyncWorker(
       // Check if MainActivity is running before stopping daemon
       if (isMainActivityRunning()) {
         Log.d(TAG, "MainActivity is running, skipping daemon stop")
+        saveSyncWorkRecord(SyncResult.SUCCESS_ACTIVITY_INTERRUPTED)
         return Result.success()
       }
 
@@ -122,10 +218,17 @@ class TurboLndSyncWorker(
       HyperLog.i(TAG, "Sync worker finished");
       HyperLog.i(TAG, "------------------------------------");
 
-      Result.success()
+      saveSyncWorkRecord(SyncResult.SUCCESS_CHAIN_SYNCED)
+      return Result.success()
     } catch (e: Exception) {
       Log.e(TAG, "Fail in Sync Worker", e)
-      Result.failure()
+      saveSyncWorkRecord(SyncResult.FAILURE_GENERAL, e.message)
+      // try {
+      //   stopDaemon()
+      // } catch (stopError: Exception) {
+      //   Log.e(TAG, "Failed to stop daemon during error handling", stopError)
+      // }
+      return Result.failure()
     }
   }
 
@@ -169,6 +272,7 @@ class TurboLndSyncWorker(
 
       override fun onError(error: String) {
         if (error.contains("EOF")) {
+          Log.i(TAG, "Got EOF in subscribeState")
           return
         }
 
@@ -275,9 +379,13 @@ class TurboLndSyncWorker(
   }
 
   private fun isMainActivityRunning(): Boolean {
-    return false; // TODO remove once we're done testing
+    // For one-off workers, always return false
+    if (tags.contains(ONE_OFF_TAG)) {
+      return false
+    }
 
-    val activityManager =
+    // For periodic workers, actually check MainActivity status
+    val activityManager = 
       getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
     val appTasks = activityManager.appTasks
 

@@ -28,6 +28,8 @@ import WebInfo from "./windows/Web/Info";
 import Contacts from "./windows/Contacts";
 import Loading from "./windows/Loading";
 import LoadingModal from "./windows/LoadingModal";
+import SyncWorkerReport from "./windows/SyncWorkerReport";
+import SyncWorkerTimelineReport from "./windows/SyncWorkerTimelineReport";
 
 import { useStoreState, useStoreActions } from "./state/store";
 import { toast } from "./utils";
@@ -79,6 +81,7 @@ export type RootStackParamList = {
   Prompt: IPromptNavigationProps;
 
   DEV_CommandsX: undefined;
+  SyncWorkerReport: undefined;
 };
 
 export default function Main() {
@@ -333,6 +336,16 @@ export default function Main() {
       />
       <RootStack.Screen name="Prompt" component={Prompt} options={animationDisabled} />
       <RootStack.Screen name="DEV_CommandsX" component={DEV_Commands} options={animationDisabled} />
+      <RootStack.Screen
+        name="SyncWorkerReport"
+        component={SyncWorkerReport}
+        options={animationDisabled}
+      />
+      <RootStack.Screen
+        name="SyncWorkerTimelineReport"
+        component={SyncWorkerTimelineReport}
+        options={animationDisabled}
+      />
     </RootStack.Navigator>
   );
 }

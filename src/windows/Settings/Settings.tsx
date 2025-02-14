@@ -2482,6 +2482,18 @@ ${t("experimental.tor.disabled.msg2")}`;
         title: "Restore SCB channel backup file",
         onPress: onPressRestoreChannelBackup,
       },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
+        title: "Sync worker report",
+        onPress: () => navigation.navigate("SyncWorkerReport"),
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
+        title: "Sync worker timeline report",
+        onPress: () => navigation.navigate("SyncWorkerTimelineReport"),
+      },
     ];
   }, [
     t,
