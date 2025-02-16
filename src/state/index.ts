@@ -377,11 +377,15 @@ export const model: IStoreModel = {
         (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !==
         ELndMobileStatusCodes.STATUS_PROCESS_STARTED
       ) {
-        actions.setSpeedloaderLoading(true);
         actions.setSpeedloaderCancelVisible(false);
 
+        // Show the "Syncing Lightning Network" text after 3s
+        const speedloaderTextTimer = setTimeout(() => {
+          actions.setSpeedloaderLoading(true);
+        }, 3000);
+
         // Show the speedloader cancel button after 10s
-        const cancelButtonTimer = setTimeout(() => {
+        const cancelSpeedloaderButtonTimer = setTimeout(() => {
           actions.setSpeedloaderCancelVisible(true);
         }, 15000);
 
@@ -414,7 +418,8 @@ export const model: IStoreModel = {
             }
           }
         }
-        clearTimeout(cancelButtonTimer);
+        clearTimeout(speedloaderTextTimer);
+        clearTimeout(cancelSpeedloaderButtonTimer);
         actions.setSpeedloaderLoading(false);
         actions.setSpeedloaderCancelVisible(false);
         log.i("Starting lnd, gossipStatus", [gossipStatus]);

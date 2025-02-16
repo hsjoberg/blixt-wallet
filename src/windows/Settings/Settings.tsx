@@ -2576,6 +2576,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     lndNoGraphCache,
     multiPathPaymentsEnabled,
     strictGraphPruningEnabled,
+    enforceSpeedloaderOnStartup,
   ]);
 
   const renderItem = useCallback(({ item }: { item: SettingsItem }) => {
