@@ -41,6 +41,10 @@ class LndMobileToolsTurboModule(reactContext: ReactApplicationContext) :
     )
   }
 
+  override fun stopScheduleSyncWorker() {
+    WorkManager.getInstance(reactApplicationContext).cancelAllWorkByTag("LND_SYNC_JOB")
+  }
+
   companion object {
     const val NAME = "LndMobileToolsTurbo"
   }

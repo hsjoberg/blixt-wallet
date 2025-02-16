@@ -48,6 +48,9 @@ import { ChannelEdgeSchema, NodeInfoSchema } from "react-native-turbo-lnd/protos
 import { base64Decode } from "@bufbuild/protobuf/wire";
 import { XImportMissionControlRequestSchema } from "react-native-turbo-lnd/protos/routerrpc/router_pb";
 import { FlatList } from "react-native";
+import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+
+import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -63,6 +66,7 @@ interface SettingsItem {
   title: string;
   icon?: { type: string; name?: string } | { type: string };
   subtitle?: string;
+  warning?: string;
   onPress?: (...args: any[]) => any;
   onLongPress?: (...args: any[]) => any;
   checkBox?: boolean;
@@ -1576,6 +1580,18 @@ ${t("experimental.tor.disabled.msg2")}`;
   // Export channel db and brick
   const onPressExportChannelDbAndBrickInstance = async () => {
     try {
+      const result = await Alert.promiseAlert(
+        "Export channel db and brick",
+        "Are you sure you want to export the channel db and brick?",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "OK", style: "default" },
+        ],
+      );
+      if (result.style === "cancel") {
+        return;
+      }
+
       if (PLATFORM === "android") {
         await setSyncEnabled(false);
         await changeScheduledSyncEnabled(false);
@@ -2472,6 +2488,7 @@ ${t("experimental.tor.disabled.msg2")}`;
               icon: { type: "MaterialCommunityIcons", name: "file-export" },
               title: "Export channel.db file and permanently disable this instance of Blixt Wallet",
               subtitle: "Use this feature to migrate this wallet to another device or to lnd.",
+              warning: "Only do this if you're know what you're doing",
               onPress: onPressExportChannelDbAndBrickInstance,
             },
           ]
@@ -2482,18 +2499,40 @@ ${t("experimental.tor.disabled.msg2")}`;
         title: "Restore SCB channel backup file",
         onPress: onPressRestoreChannelBackup,
       },
-      {
-        type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
-        title: "Sync worker report",
-        onPress: () => navigation.navigate("SyncWorkerReport"),
-      },
-      {
-        type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
-        title: "Sync worker timeline report",
-        onPress: () => navigation.navigate("SyncWorkerTimelineReport"),
-      },
+      ...(PLATFORM === "android"
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
+              title: "Sync worker report",
+              onPress: () => navigation.navigate("SyncWorkerReport"),
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
+              title: "Sync worker timeline report",
+              onPress: () => navigation.navigate("SyncWorkerTimelineReport"),
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "sync-circle" },
+              title: "Schedule periodic sync",
+              onPress: () => {
+                LndMobileToolsTurbo.scheduleSyncWorker();
+                toast("Periodic sync scheduled");
+              },
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "sync-off" },
+              title: "Stop scheduled sync",
+              onPress: () => {
+                LndMobileToolsTurbo.stopScheduleSyncWorker();
+                toast("Scheduled sync stopped");
+              },
+            },
+          ]
+        : []),
     ];
   }, [
     t,
@@ -2555,6 +2594,11 @@ ${t("experimental.tor.disabled.msg2")}`;
         <Body>
           <Text>{item.title}</Text>
           {item.subtitle && <Text note>{item.subtitle}</Text>}
+          {item.warning && (
+            <Text note={true} style={{ color: blixtTheme.red }}>
+              {item.warning}
+            </Text>
+          )}
         </Body>
         {item.checkBox && (
           <Right>

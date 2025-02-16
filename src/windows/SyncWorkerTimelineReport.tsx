@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { format, addHours } from "date-fns";
 import Container from "../components/Container";
 import { getItem } from "../storage/app";
+import { StorageItem } from "../storage/storage-types";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 
 interface SyncWorkRecord {
@@ -138,6 +139,11 @@ export default function SyncWorkerTimelineReport() {
     }
   };
 
+  const formatDuration = (ms: number) => {
+    const seconds = Math.floor(ms / 1000);
+    return `${seconds}s`;
+  };
+
   return (
     <Container>
       <View style={styles.header}>
@@ -167,11 +173,10 @@ export default function SyncWorkerTimelineReport() {
                         style={[
                           styles.syncIndicator,
                           { backgroundColor: getBlockColor(sync.result) },
-                          index > 0 && styles.syncIndicatorOverlap,
                         ]}
                       >
                         <Text style={styles.syncText} numberOfLines={1}>
-                          {getStatusText(sync.result)}
+                          {getStatusText(sync.result)} ({formatDuration(sync.duration)})
                         </Text>
                       </View>
                     ))}
@@ -238,7 +243,7 @@ const styles = StyleSheet.create({
   syncIndicators: {
     flex: 1,
     flexDirection: "row",
-    alignItems: "center",
+    gap: 2,
   },
   syncIndicator: {
     flex: 1,
@@ -247,14 +252,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 8,
   },
-  syncIndicatorOverlap: {
-    marginLeft: -8, // Create overlapping effect
-    paddingLeft: 16, // Compensate for overlap
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-  },
   syncText: {
     color: "#fff",
-    fontSize: 11,
+    fontSize: 10,
   },
 });

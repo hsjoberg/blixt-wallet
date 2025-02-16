@@ -7,6 +7,7 @@ import Container from "../components/Container";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
 import { getItem } from "../storage/app";
+import { StorageItem } from "../storage/storage-types";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 
 interface SyncWorkRecord {
@@ -81,9 +82,7 @@ export default function SyncWorkerReport({}: ISyncWorkerReportProps) {
 
   const formatDuration = (ms: number) => {
     const seconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}m ${remainingSeconds}s`;
+    return `${seconds}s`;
   };
 
   return (

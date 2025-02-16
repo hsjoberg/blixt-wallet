@@ -82,6 +82,8 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     persistentServicesEnabled = getPersistentServicesEnabled();
 
     return CallbackToFutureAdapter.getFuture(completer -> {
+      return completer.set(Result.success());
+
       HyperLog.i(TAG, "------------------------------------");
       HyperLog.i(TAG, "Starting scheduled sync work");
       HyperLog.i(TAG, "I am " + getApplicationContext().getPackageName());
