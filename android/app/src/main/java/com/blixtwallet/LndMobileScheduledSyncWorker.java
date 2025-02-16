@@ -84,86 +84,86 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
     return CallbackToFutureAdapter.getFuture(completer -> {
       return completer.set(Result.success());
 
-      HyperLog.i(TAG, "------------------------------------");
-      HyperLog.i(TAG, "Starting scheduled sync work");
-      HyperLog.i(TAG, "I am " + getApplicationContext().getPackageName());
-      writeLastScheduledSyncAttemptToDb();
+    //   HyperLog.i(TAG, "------------------------------------");
+    //   HyperLog.i(TAG, "Starting scheduled sync work");
+    //   HyperLog.i(TAG, "I am " + getApplicationContext().getPackageName());
+    //   writeLastScheduledSyncAttemptToDb();
 
-      HyperLog.i(TAG, "MainActivity.started = " + MainActivity.started);
-      if (persistentServicesEnabled || MainActivity.started) {
-        HyperLog.i(TAG, "MainActivity is started or persistentServicesEnabled = " + persistentServicesEnabled + ", quitting job");
-        completer.set(Result.success());
-        return null;
-      }
+    //   HyperLog.i(TAG, "MainActivity.started = " + MainActivity.started);
+    //   if (persistentServicesEnabled || MainActivity.started) {
+    //     HyperLog.i(TAG, "MainActivity is started or persistentServicesEnabled = " + persistentServicesEnabled + ", quitting job");
+    //     completer.set(Result.success());
+    //     return null;
+    //   }
 
-      KeychainModule keychain = new KeychainModule(new BridgeReactContext(getApplicationContext()));
+    //   KeychainModule keychain = new KeychainModule(new BridgeReactContext(getApplicationContext()));
 
-      WritableMap keychainOptions = Arguments.createMap();
-      WritableMap keychainOptionsAuthenticationPrompt = Arguments.createMap();
-      keychainOptionsAuthenticationPrompt.putString("title", "Authenticate to retrieve secret");
-      keychainOptionsAuthenticationPrompt.putString("cancel", "Cancel");
-      keychainOptions.putMap("authenticationPrompt", keychainOptionsAuthenticationPrompt);
+    //   WritableMap keychainOptions = Arguments.createMap();
+    //   WritableMap keychainOptionsAuthenticationPrompt = Arguments.createMap();
+    //   keychainOptionsAuthenticationPrompt.putString("title", "Authenticate to retrieve secret");
+    //   keychainOptionsAuthenticationPrompt.putString("cancel", "Cancel");
+    //   keychainOptions.putMap("authenticationPrompt", keychainOptionsAuthenticationPrompt);
 
-      keychain.getInternetCredentialsForServer("password", keychainOptions, new PromiseWrapper() {
-        @Override
-        public void onSuccess(@Nullable Object value) {
-          HyperLog.d(TAG, "onSuccess");
+    //   keychain.getInternetCredentialsForServer("password", keychainOptions, new PromiseWrapper() {
+    //     @Override
+    //     public void onSuccess(@Nullable Object value) {
+    //       HyperLog.d(TAG, "onSuccess");
 
-          if (value == null) {
-            HyperLog.e(TAG, "Failed to get wallet password, got null from keychain provider");
-            completer.set(Result.failure());
-            return;
-          } else {
-            HyperLog.d(TAG, "Password data retrieved from keychain");
-            final String password = ((ReadableMap) value).getString("password");
-            HyperLog.d(TAG, "Password retrieved");
+    //       if (value == null) {
+    //         HyperLog.e(TAG, "Failed to get wallet password, got null from keychain provider");
+    //         completer.set(Result.failure());
+    //         return;
+    //       } else {
+    //         HyperLog.d(TAG, "Password data retrieved from keychain");
+    //         final String password = ((ReadableMap) value).getString("password");
+    //         HyperLog.d(TAG, "Password retrieved");
 
-            if (torEnabled) {
-              //            boolean startTorResult = startTor();
-              //            if (!startTorResult) {
-              //              Log.e(TAG, "Could not start Tor");
-              //              future.set(Result.failure());
-              //              return;
-              //            }
-              blixtTor.startTor(new PromiseWrapper() {
-                @Override
-                void onSuccess(@Nullable Object value) {
-                  HyperLog.i(TAG, "Tor started");
-                  HyperLog.i(TAG, "torSocksPort: " + (int) value);
-                  torStarted = true;
-                  torSocksPort = (int) value;
+    //         if (torEnabled) {
+    //           //            boolean startTorResult = startTor();
+    //           //            if (!startTorResult) {
+    //           //              Log.e(TAG, "Could not start Tor");
+    //           //              future.set(Result.failure());
+    //           //              return;
+    //           //            }
+    //           blixtTor.startTor(new PromiseWrapper() {
+    //             @Override
+    //             void onSuccess(@Nullable Object value) {
+    //               HyperLog.i(TAG, "Tor started");
+    //               HyperLog.i(TAG, "torSocksPort: " + (int) value);
+    //               torStarted = true;
+    //               torSocksPort = (int) value;
 
-                  startLndWorkThread(completer, password);
-                }
+    //               startLndWorkThread(completer, password);
+    //             }
 
-                @Override
-                void onFail(Throwable throwable) {
-                  HyperLog.e(TAG, "Failed to start Tor", throwable);
-                  blixtTor.stopTor(new PromiseWrapper() {
-                    @Override
-                    void onSuccess(@Nullable Object value) {
-                    }
+    //             @Override
+    //             void onFail(Throwable throwable) {
+    //               HyperLog.e(TAG, "Failed to start Tor", throwable);
+    //               blixtTor.stopTor(new PromiseWrapper() {
+    //                 @Override
+    //                 void onSuccess(@Nullable Object value) {
+    //                 }
 
-                    @Override
-                    void onFail(Throwable throwable) {
-                    }
-                  });
-                  completer.set(Result.failure());
-                }
-              });
-            } else {
-              startLndWorkThread(completer, password);
-            }
-          }
-        }
+    //                 @Override
+    //                 void onFail(Throwable throwable) {
+    //                 }
+    //               });
+    //               completer.set(Result.failure());
+    //             }
+    //           });
+    //         } else {
+    //           startLndWorkThread(completer, password);
+    //         }
+    //       }
+    //     }
 
-        @Override
-        public void onFail(Throwable throwable) {
-          HyperLog.d(TAG, "Failed to get wallet password " + throwable.getMessage(), throwable);
-          completer.set(Result.failure());
-        }
-      });
-      return null;
+    //     @Override
+    //     public void onFail(Throwable throwable) {
+    //       HyperLog.d(TAG, "Failed to get wallet password " + throwable.getMessage(), throwable);
+    //       completer.set(Result.failure());
+    //     }
+    //   });
+    //   return null;
     });
   }
 
