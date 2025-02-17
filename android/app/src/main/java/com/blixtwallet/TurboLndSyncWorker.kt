@@ -75,7 +75,7 @@ class TurboLndSyncWorker(
               obj.getLong("timestamp"),
               obj.getLong("duration"),
               SyncResult.valueOf(obj.getString("result")),
-              obj.optString("errorMessage", null)
+              obj.optString("errorMessage", "")
             )
           }
         }
