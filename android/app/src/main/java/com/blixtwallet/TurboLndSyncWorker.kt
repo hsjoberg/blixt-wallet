@@ -1,15 +1,22 @@
 package com.blixtwallet
 
 import android.app.ActivityManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.content.pm.ServiceInfo
+import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.BridgeReactContext
 import com.facebook.react.bridge.ReadableMap
 import com.google.protobuf.ByteString
-import com.hypertrack.hyperlog.HyperLog
 import com.oblador.keychain.KeychainModule
 import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil
 import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier
@@ -31,12 +38,12 @@ private const val PERIODIC_TAG = "PERIODIC"
 // Add enum to represent different sync results
 private enum class SyncResult {
   EARLY_EXIT_ACTIVITY_RUNNING,  // Exited because MainActivity was running
-  SUCCESS_LND_ALREADY_RUNNING,      // LND was already running
+  SUCCESS_LND_ALREADY_RUNNING,  // LND was already running
   SUCCESS_CHAIN_SYNCED,         // Full success with chain sync
   FAILURE_STATE_TIMEOUT,        // State subscription timeout
   SUCCESS_ACTIVITY_INTERRUPTED, // Stopped because MainActivity started
-  FAILURE_GENERAL,             // General failure
-  FAILURE_CHAIN_SYNC_TIMEOUT   // Chain sync specifically timed out
+  FAILURE_GENERAL,              // General failure
+  FAILURE_CHAIN_SYNC_TIMEOUT    // Chain sync specifically timed out
 }
 
 // Update data class with more metadata
@@ -62,9 +69,9 @@ class TurboLndSyncWorker(
     try {
       val duration = System.currentTimeMillis() - startTime
       val newRecord = SyncWorkRecord(startTime, duration, result, errorMessage)
-      
-      val db = ReactDatabaseSupplier.getInstance(getApplicationContext()).get()
-      
+
+      val db = ReactDatabaseSupplier.getInstance(applicationContext).get()
+
       // Get existing records
       val existingJson = AsyncLocalStorageUtil.getItemImpl(db, SYNC_WORK_KEY) ?: "[]"
       val records = try {
@@ -119,28 +126,37 @@ class TurboLndSyncWorker(
   }
 
   override suspend fun doWork(): Result {
-    return try {
+    try {
+      Log.i(TAG, "------------------------------------");
+      Log.i(TAG, "Starting sync worker");
+      Log.i(TAG, "I am " + applicationContext.packageName);
+
+      // Check if MainActivity is running before starting sync
+      // We don't want to start the sync worker if the app is running
       if (isMainActivityRunning()) {
         Log.d(TAG, "MainActivity is running, skipping daemon stop")
         saveSyncWorkRecord(SyncResult.EARLY_EXIT_ACTIVITY_RUNNING)
         return Result.success()
       }
 
-      Log.i(TAG, "------------------------------------");
-      Log.i(TAG, "Starting sync worker");
-      Log.i(TAG, "I am " + getApplicationContext().getPackageName());
+      // Start LND and check if it's already running
       val isAlreadyRunning = startLnd()
-
       if (isAlreadyRunning) {
-        Log.d(TAG, "LND already running, marking work as success")
-        saveSyncWorkRecord(SyncResult.SUCCESS_LND_ALREADY_RUNNING)
-        return Result.success()
+        Log.w(TAG, "LND was already running when sync worker started")
+        Log.w(TAG, "Continuing anyway, but this shouldn't happen")
+
+        // Log.d(TAG, "LND already running, marking work as success")
+        // saveSyncWorkRecord(SyncResult.SUCCESS_LND_ALREADY_RUNNING)
+        // stopDaemon() // Worth a try I suppose
+        // return Result.success()
       }
 
+      // Subscribe to the state of the wallet
+      // This will block until the wallet is unlocked and active
+      // Exit if the wallet is not unlocked and active after 60 seconds
       subscribeToState()
       var walletState: lnrpc.Stateservice.WalletState
-
-      val result = withTimeoutOrNull(30_000) {
+      val result = withTimeoutOrNull(60_000) {
         while (true) {
           walletState = stateChannel.receive()
 
@@ -160,7 +176,10 @@ class TurboLndSyncWorker(
               while (true) {
                 walletState = stateChannel.receive()
 
-                if (walletState == lnrpc.Stateservice.WalletState.RPC_ACTIVE) {
+                if (
+                  walletState == lnrpc.Stateservice.WalletState.RPC_ACTIVE ||
+                  walletState == lnrpc.Stateservice.WalletState.SERVER_ACTIVE
+                ) {
                   Log.d(TAG, "Got state: $walletState")
                   return@withTimeoutOrNull true
                 }
@@ -172,6 +191,7 @@ class TurboLndSyncWorker(
         }
       }
 
+      // If the wallet is not unlocked and active after 60 seconds, we'll exit
       if (result == null) {
         Log.i(TAG, "State timeout reached")
         Log.i(TAG, "Exiting as success")
@@ -215,19 +235,21 @@ class TurboLndSyncWorker(
 
       delay(5000)
 
-      HyperLog.i(TAG, "Sync worker finished");
-      HyperLog.i(TAG, "------------------------------------");
+      Log.i(TAG, "Sync worker finished");
+      Log.i(TAG, "------------------------------------");
 
       saveSyncWorkRecord(SyncResult.SUCCESS_CHAIN_SYNCED)
       return Result.success()
     } catch (e: Exception) {
       Log.e(TAG, "Fail in Sync Worker", e)
       saveSyncWorkRecord(SyncResult.FAILURE_GENERAL, e.message)
-      // try {
-      //   stopDaemon()
-      // } catch (stopError: Exception) {
-      //   Log.e(TAG, "Failed to stop daemon during error handling", stopError)
-      // }
+
+      try {
+        stopDaemon()
+      } catch (stopError: Exception) {
+        Log.e(TAG, "Failed to stop daemon during error handling", stopError)
+      }
+
       return Result.failure()
     }
   }
@@ -328,7 +350,7 @@ class TurboLndSyncWorker(
   }
 
   private suspend fun unlockWallet() = suspendCancellableCoroutine<Unit> { cont ->
-    val keychain = KeychainModule(BridgeReactContext(getApplicationContext()))
+    val keychain = KeychainModule(BridgeReactContext(applicationContext))
 
     val keychainOptions = Arguments.createMap()
     val keychainOptionsAuthenticationPrompt = Arguments.createMap()
@@ -342,16 +364,16 @@ class TurboLndSyncWorker(
       object : PromiseWrapper() {
         public override fun onSuccess(value: Any?) {
           if (value == null) {
-            HyperLog.e(
+            Log.e(
               TAG, "Failed to get wallet password, got null from keychain provider"
             )
             cont.resumeWithException(Exception("Unlock failed: value == null"))
             return
           }
 
-          HyperLog.d(TAG, "Password data retrieved from keychain")
+          Log.d(TAG, "Password data retrieved from keychain")
           val password = (value as ReadableMap).getString("password")
-          HyperLog.d(TAG, "Password retrieved")
+          Log.d(TAG, "Password retrieved")
 
           val unlockRequest = lnrpc.Walletunlocker.UnlockWalletRequest.newBuilder()
             .setWalletPassword(ByteString.copyFromUtf8(password))
@@ -371,7 +393,7 @@ class TurboLndSyncWorker(
         }
 
         public override fun onFail(throwable: Throwable) {
-          HyperLog.d(TAG, "Failed to get wallet password " + throwable.message, throwable)
+          Log.d(TAG, "Failed to get wallet password " + throwable.message, throwable)
           cont.resumeWithException(Exception("Unlock failed: $throwable"))
           return
         }
@@ -385,8 +407,8 @@ class TurboLndSyncWorker(
     }
 
     // For periodic workers, actually check MainActivity status
-    val activityManager = 
-      getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    val activityManager =
+      applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
     val appTasks = activityManager.appTasks
 
     return appTasks.any { task ->

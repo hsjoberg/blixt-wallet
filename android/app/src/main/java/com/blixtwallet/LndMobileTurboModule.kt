@@ -36,13 +36,18 @@ class LndMobileToolsTurboModule(reactContext: ReactApplicationContext) :
 
     WorkManager.getInstance(reactApplicationContext).enqueueUniquePeriodicWork(
       "TURBOLND_SYNC",
-      ExistingPeriodicWorkPolicy.KEEP,
+      ExistingPeriodicWorkPolicy.REPLACE,
       syncRequest
     )
   }
 
   override fun stopScheduleSyncWorker() {
     WorkManager.getInstance(reactApplicationContext).cancelAllWorkByTag("LND_SYNC_JOB")
+  }
+
+  override fun getStatus(): Double {
+    val lnd = LndNative()
+    return lnd.getStatus().toDouble()
   }
 
   companion object {

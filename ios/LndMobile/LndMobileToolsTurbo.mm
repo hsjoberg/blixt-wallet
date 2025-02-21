@@ -4,8 +4,20 @@
 
 RCT_EXPORT_MODULE()
 
-- (NSString *)hello {
-  return @"Hello from TurboModule!";
+- (void)startSyncWorker {
+  return;
+}
+
+- (void)scheduleSyncWorker {
+  return;
+}
+
+- (void)stopScheduleSyncWorker {
+  return;
+}
+
+- (int)getStatus {
+  return 0;
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:

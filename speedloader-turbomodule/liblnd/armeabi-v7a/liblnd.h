@@ -607,6 +607,7 @@ extern void chainNotifierRegisterConfirmationsNtfn(char* data, int length, CRecv
 extern void chainNotifierRegisterSpendNtfn(char* data, int length, CRecvStream rStream);
 extern void chainNotifierRegisterBlockEpochNtfn(char* data, int length, CRecvStream rStream);
 extern void start(char* extraArgs, CCallback callback);
+extern GoInt32 getStatus();
 extern void invoicesSubscribeSingleInvoice(char* data, int length, CRecvStream rStream);
 extern void invoicesCancelInvoice(char* data, int length, CCallback callback);
 extern void invoicesAddHoldInvoice(char* data, int length, CCallback callback);

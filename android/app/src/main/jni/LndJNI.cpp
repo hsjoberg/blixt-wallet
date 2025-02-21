@@ -296,3 +296,11 @@ extern "C" JNIEXPORT void JNICALL Java_com_blixtwallet_LndNative_subscribeState(
   // Cleanup request
   env->ReleaseByteArrayElements(jRequest, reqBytes, JNI_ABORT);
 }
+
+extern "C" JNIEXPORT jint JNICALL Java_com_blixtwallet_LndNative_getStatus(
+    JNIEnv *env,
+    jobject /* this */)
+{
+  // Call the native getStatus function from liblnd
+  return static_cast<jint>(::getStatus());
+}

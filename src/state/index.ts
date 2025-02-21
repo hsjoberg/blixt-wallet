@@ -522,8 +522,8 @@ export const model: IStoreModel = {
                 "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
                 1000,
               );
-            await dispatch.lightning.initialize({ start });
             log.d("Got lnrpc.WalletState.RPC_ACTIVE");
+            await dispatch.lightning.initialize({ start });
           } else if (state.state === lnrpc.WalletState.SERVER_ACTIVE) {
             debugShowStartupInfo &&
               toast(

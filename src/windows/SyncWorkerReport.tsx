@@ -161,7 +161,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     marginTop: 5,
-    color: blixtTheme.red,
     fontStyle: "italic",
   },
 });

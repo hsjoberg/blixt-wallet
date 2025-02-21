@@ -13,4 +13,5 @@ class LndNative {
     external fun unlockWallet(request: ByteArray, callback: LndCallback)
     external fun stopDaemon(request: ByteArray, callback: LndCallback)
     external fun subscribeState(request: ByteArray, listener: LndStreamListener)
+    external fun getStatus(): Int
 }

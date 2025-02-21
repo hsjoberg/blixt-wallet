@@ -226,6 +226,22 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
+              console.log(LndMobileToolsTurbo.stopScheduleSyncWorker());
+            }}
+          >
+            <Text style={styles.buttonText}>LndMobileToolsTurbo.stopScheduleSyncWorker</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(LndMobileToolsTurbo.getStatus());
+            }}
+          >
+            <Text style={styles.buttonText}>LndMobileToolsTurbo.getStatus</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
               console.log(await getItem("syncWorkHistory"));
             }}
           >
