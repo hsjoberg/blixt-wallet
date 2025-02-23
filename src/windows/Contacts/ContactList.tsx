@@ -1,7 +1,7 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { Icon, Text, Header, Item } from "native-base";
-import { FlashList } from "@shopify/flash-list";
+import { LegendList } from "@legendapp/list";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Color from "color";
 
@@ -33,7 +33,6 @@ export default function ContactList({ navigation }: IContactListProps) {
   const getContactByLightningAddress = useStoreState(
     (store) => store.contacts.getContactByLightningAddress,
   );
-  const flashlist = useRef<FlashList<any>>(null);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -120,8 +119,7 @@ export default function ContactList({ navigation }: IContactListProps) {
         animated={false}
         translucent={true}
       />
-      <FlashList
-        ref={flashlist}
+      <LegendList
         alwaysBounceVertical={false}
         contentContainerStyle={{ padding: 14 }}
         estimatedItemSize={72}
