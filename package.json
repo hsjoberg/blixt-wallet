@@ -64,6 +64,7 @@
     "@babel/preset-react": "7.26.3",
     "@babel/preset-typescript": "7.26.0",
     "@bufbuild/protobuf": "2.2.3",
+    "@legendapp/list": "1.0.0-beta.10",
     "@notifee/react-native": "^9.1.8",
     "@react-native-async-storage/async-storage": "2.1.1",
     "@react-native-clipboard/clipboard": "1.16.1",

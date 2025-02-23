@@ -4184,6 +4184,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@legendapp/list@npm:1.0.0-beta.10":
+  version: 1.0.0-beta.10
+  resolution: "@legendapp/list@npm:1.0.0-beta.10"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10/9074293c988e2c65bcc02463154df36b966c82fb4d497b294a258e8b6f8616c63f1024410dba2fc754a8ce8551fc48af0c0bc98a6445a7299d84002f196cc6e2
+  languageName: node
+  linkType: hard
+
 "@leichtgewicht/ip-codec@npm:^2.0.1":
   version: 2.0.5
   resolution: "@leichtgewicht/ip-codec@npm:2.0.5"
@@ -6608,6 +6618,7 @@ __metadata:
     "@electron-forge/cli": "npm:7.6.0"
     "@electron-forge/maker-zip": "npm:7.6.0"
     "@electron-forge/plugin-webpack": "npm:7.6.0"
+    "@legendapp/list": "npm:1.0.0-beta.10"
     "@notifee/react-native": "npm:^9.1.8"
     "@react-native-async-storage/async-storage": "npm:2.1.1"
     "@react-native-clipboard/clipboard": "npm:1.16.1"
