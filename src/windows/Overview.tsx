@@ -18,7 +18,7 @@ import { DrawerActions, useNavigation, NavigationProp } from "@react-navigation/
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import { FlashList } from "@shopify/flash-list";
+import { LegendList } from "@legendapp/list";
 import BigNumber from "bignumber.js";
 
 import { RootStackParamList } from "../Main";
@@ -186,8 +186,6 @@ function Overview({ navigation }: IOverviewProps) {
   const bitcoinBalance = formatBitcoin(balance, bitcoinUnit);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
 
-  const flashlist = useRef<FlashList<any>>(null);
-
   return (
     <Container style={{ marginTop: PLATFORM === "macos" ? 0.5 : 0 }}>
       <StatusBar
@@ -198,8 +196,7 @@ function Overview({ navigation }: IOverviewProps) {
         translucent={true}
       />
       <View style={style.overview}>
-        <FlashList
-          ref={flashlist}
+        <LegendList
           alwaysBounceVertical={false}
           contentContainerStyle={style.transactionList}
           scrollEventThrottle={16} /* TODO: Remove? */
@@ -231,6 +228,7 @@ function Overview({ navigation }: IOverviewProps) {
               </>
             );
           }}
+          recycleItems
         />
         <Animated.View
           style={[style.animatedTop, { height: headerHeight }]}
