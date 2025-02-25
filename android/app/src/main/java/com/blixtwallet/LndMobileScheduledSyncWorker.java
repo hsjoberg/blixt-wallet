@@ -356,43 +356,43 @@ public class LndMobileScheduledSyncWorker extends ListenableWorker {
   }
 
   private boolean startTor(CallbackToFutureAdapter.Completer<Result> completer) {
-    HyperLog.i(TAG, "Starting Tor");
-    blixtTor.startTor(new PromiseWrapper() {
-      @Override
-      void onSuccess(@Nullable Object value) {
-        HyperLog.i(TAG, "Tor started");
-        HyperLog.i(TAG, "torSocksPort: " + (int) value);
-        torStarted = true;
-        torSocksPort = (int) value;
-      }
+    // HyperLog.i(TAG, "Starting Tor");
+    // blixtTor.startTor(new PromiseWrapper() {
+    //   @Override
+    //   void onSuccess(@Nullable Object value) {
+    //     HyperLog.i(TAG, "Tor started");
+    //     HyperLog.i(TAG, "torSocksPort: " + (int) value);
+    //     torStarted = true;
+    //     torSocksPort = (int) value;
+    //   }
 
-      @Override
-      void onFail(Throwable throwable) {
-        HyperLog.e(TAG, "Failed to start Tor", throwable);
-        blixtTor.stopTor(new PromiseWrapper() {
-          @Override
-          void onSuccess(@Nullable Object value) {}
+    //   @Override
+    //   void onFail(Throwable throwable) {
+    //     HyperLog.e(TAG, "Failed to start Tor", throwable);
+    //     blixtTor.stopTor(new PromiseWrapper() {
+    //       @Override
+    //       void onSuccess(@Nullable Object value) {}
 
-          @Override
-          void onFail(Throwable throwable) {}
-        });
-        completer.set(Result.failure());
-      }
-    });
-    int torTries = 0;
-    while (!torStarted) {
-      if (torTries++ > 40) {
-        HyperLog.e(TAG, "Couldn't start Tor.");
-        completer.set(Result.failure());
-        return false;
-      }
-      HyperLog.i(TAG, "Waiting for Tor to start");
-      try {
-        Thread.sleep(1500);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
+    //       @Override
+    //       void onFail(Throwable throwable) {}
+    //     });
+    //     completer.set(Result.failure());
+    //   }
+    // });
+    // int torTries = 0;
+    // while (!torStarted) {
+    //   if (torTries++ > 40) {
+    //     HyperLog.e(TAG, "Couldn't start Tor.");
+    //     completer.set(Result.failure());
+    //     return false;
+    //   }
+    //   HyperLog.i(TAG, "Waiting for Tor to start");
+    //   try {
+    //     Thread.sleep(1500);
+    //   } catch (InterruptedException e) {
+    //     e.printStackTrace();
+    //   }
+    // }
     return true;
   }
 

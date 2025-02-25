@@ -109,34 +109,34 @@ public class BlixtTor extends ReactContextBaseJavaModule {
 //      promise.reject(TAG, "Tor already in progress starting");
 //      return;
 //    }
-    if (currentTorStatus.equals(TorService.STATUS_ON)) {
-      Log.i(TAG, "socksPort = " + TorService.socksPort + ", currentTorStatus.equals(TorService.STATUS_ON) " + currentTorStatus.equals(TorService.STATUS_ON));
-      promise.resolve(TorService.socksPort);
-      return;
-    }
-    calleeResolvers.add(promise);
+    // if (currentTorStatus.equals(TorService.STATUS_ON)) {
+    //   Log.i(TAG, "socksPort = " + TorService.socksPort + ", currentTorStatus.equals(TorService.STATUS_ON) " + currentTorStatus.equals(TorService.STATUS_ON));
+    //   promise.resolve(TorService.socksPort);
+    //   return;
+    // }
+    // calleeResolvers.add(promise);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS), Context.RECEIVER_NOT_EXPORTED);
-    } else {
-      getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS));
-    }
-    Intent intent = new Intent(getReactApplicationContext(), TorService.class);
+    // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    //   getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS), Context.RECEIVER_NOT_EXPORTED);
+    // } else {
+    //   getReactApplicationContext().registerReceiver(torBroadcastReceiver, new IntentFilter(TorService.ACTION_STATUS));
+    // }
+    // Intent intent = new Intent(getReactApplicationContext(), TorService.class);
 
-    getReactApplicationContext().bindService(intent, torServiceConnection, Context.BIND_AUTO_CREATE);
+    // getReactApplicationContext().bindService(intent, torServiceConnection, Context.BIND_AUTO_CREATE);
   }
 
   @ReactMethod
   public void stopTor(Promise promise) {
-    if (notificationManager != null) {
-      notificationManager.cancelAll();
-    }
-    Log.i(TAG,"Unbinding TorService");
-    try {
-      getReactApplicationContext().unbindService(torServiceConnection);
-    } catch (IllegalArgumentException e) {
-      Log.w(TAG, "Tried to unbindService on unbound service");
-    }
+    // if (notificationManager != null) {
+    //   notificationManager.cancelAll();
+    // }
+    // Log.i(TAG,"Unbinding TorService");
+    // try {
+    //   getReactApplicationContext().unbindService(torServiceConnection);
+    // } catch (IllegalArgumentException e) {
+    //   Log.w(TAG, "Tried to unbindService on unbound service");
+    // }
     promise.resolve(true);
   };
 

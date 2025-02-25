@@ -1,5 +1,5 @@
 import * as base64 from "base64-js";
-import Tor from "react-native-tor";
+import { RnTor } from "react-native-nitro-tor";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import { AlertButton, NativeModules, Platform } from "react-native";
@@ -8,6 +8,7 @@ import {
   DEFAULT_PATHFINDING_ALGORITHM,
   DEFAULT_SPEEDLOADER_SERVER,
   PLATFORM,
+  TOR_SETTINGS,
 } from "../utils/constants";
 import { Chain, Debug, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
@@ -299,26 +300,36 @@ export const model: IStoreModel = {
     try {
       let torEnabled = (await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled)) ?? false;
       actions.setTorEnabled(torEnabled);
-      let socksPort = 0;
+      let args = "";
+
       if (torEnabled) {
         try {
           actions.setTorLoading(true);
-          if (PLATFORM === "android") {
-            socksPort = await NativeModules.BlixtTor.startTor();
-          } else if (PLATFORM === "ios") {
-            const tor = Tor({
-              stopDaemonOnBackground: false,
-              startDaemonOnActive: true,
-            });
-            socksPort = await tor.startIfNotStarted();
+
+          const torResult = await RnTor.startTorIfNotRunning({
+            data_dir: TOR_SETTINGS.dataDir,
+            socks_port: TOR_SETTINGS.socksPort,
+            target_port: TOR_SETTINGS.targetPort,
+            timeout_ms: TOR_SETTINGS.timeoutMs,
+          });
+
+          log.i("tor result", [torResult]);
+
+          if (!torResult.is_success) {
+            throw new Error(torResult.error_message);
           }
-          log.i("socksPort", [socksPort]);
-          if (socksPort === 0 && PLATFORM === "ios") {
-            throw new Error("Unable to obtain SOCKS port");
-          }
+
+          args = `tor.active `;
+          args += `--tor.socks=127.0.0.1:${TOR_SETTINGS.socksPort} `;
+          args += `--tor.v3 `;
+          args += `--tor.control=${torResult.control} `;
+          args += `--listen=localhost `;
+
           debugShowStartupInfo &&
             toast("Tor initialized " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
         } catch (e: any) {
+          args = `--nolisten`;
+
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
 
@@ -348,7 +359,10 @@ export const model: IStoreModel = {
             actions.setTorLoading(false);
           }
         }
+      } else {
+        args = `--nolisten`;
       }
+
       let persistentServicesEnabled =
         (await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesEnabled)) ?? false;
       let persistentServicesWarningShown =
@@ -423,10 +437,6 @@ export const model: IStoreModel = {
 
         log.i("Starting lnd, gossipStatus", [gossipStatus]);
         try {
-          let args = "";
-          if (socksPort > 0) {
-            args = "--tor.socks=127.0.0.1:" + socksPort + " ";
-          }
           if (await getRescanWallet()) {
             log.d("Rescanning wallet");
             args += "--reset-wallet-transactions ";
@@ -451,7 +461,7 @@ export const model: IStoreModel = {
               .replace(/%20/g, " ");
             appFolderPath += "lnd/";
           }
-          args += `--nolisten --lnddir=${appFolderPath}`;
+          args += `--lnddir=${appFolderPath}`;
           log.i("args", [args]);
           log.d("startLnd", [await startLndTurbo(args)]);
         } catch (e: any) {
