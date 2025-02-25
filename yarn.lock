@@ -6709,8 +6709,8 @@ __metadata:
     react-native-keychain: "npm:^8.1.2"
     react-native-linear-gradient: "npm:^2.8.3"
     react-native-maps: "npm:1.20.1"
-    react-native-nitro-modules: "npm:^0.24.1"
-    react-native-nitro-tor: "npm:^0.0.5"
+    react-native-nitro-modules: "npm:^0.22.1"
+    react-native-nitro-tor: "npm:^0.0.8"
     react-native-paper: "npm:5.13.1"
     react-native-permissions: "npm:4.1.5"
     react-native-popup-menu: "npm:^0.16.1"
@@ -16611,24 +16611,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-nitro-modules@npm:^0.24.1":
-  version: 0.24.1
-  resolution: "react-native-nitro-modules@npm:0.24.1"
+"react-native-nitro-modules@npm:^0.22.1":
+  version: 0.22.1
+  resolution: "react-native-nitro-modules@npm:0.22.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/897202cf22aecc078e840414d09e867a1919680be3a3eb79ebc45f703bb9cbc428ca3ed88f4f26377be4c130514e32224557780342d8078550026f8364ecda64
+  checksum: 10/a12469024e5381203e66d4a9df00f51c0bf80bcf056de67944ffd154f7184ec389bf2c0772d0f1bddc9e44fbb12daba1cea2c3995ef8f2268799b382dc79521a
   languageName: node
   linkType: hard
 
-"react-native-nitro-tor@npm:^0.0.5":
-  version: 0.0.5
-  resolution: "react-native-nitro-tor@npm:0.0.5"
+"react-native-nitro-tor@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "react-native-nitro-tor@npm:0.0.8"
   peerDependencies:
     react: "*"
     react-native: "*"
-    react-native-nitro-modules: ^0.24.1
-  checksum: 10/97da7cff3ed2d2e6e9b170543586120ff65277a58268ae71ffa4bc757c6d589276eee158e9a774653d8e0193f085483d81f74915842e6bf7ffc84ff9479c456c
+    react-native-nitro-modules: ^0.22.1
+  checksum: 10/8cad004277d7a205a2c66e012f0257ab96bdf7e70b1e8e260813640b0ed54739e94c10b092c07d1f0244bf30cf2c817bb6a6211b7544e90e0b2c2152e95f0e26
   languageName: node
   linkType: hard
 
