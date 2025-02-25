@@ -406,14 +406,18 @@ class TurboLndSyncWorker(
       return false
     }
 
-    // For periodic workers, actually check MainActivity status
     val activityManager =
       applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
     val appTasks = activityManager.appTasks
 
+    val ourPackageName = applicationContext.packageName
+
     return appTasks.any { task ->
-      Log.d(TAG, task.taskInfo?.topActivity?.className!!)
-      task.taskInfo?.topActivity?.className?.contains("MainActivity") == true
+      val topActivity = task.taskInfo?.topActivity
+      Log.d(TAG, "Top activity: ${topActivity?.className}, package: ${topActivity?.packageName}")
+
+      topActivity?.className?.contains("MainActivity") == true &&
+      topActivity.packageName == ourPackageName
     }
   }
 }

@@ -495,7 +495,7 @@ export const channel: IChannelModel = {
     return result;
   }),
 
-  exportChannelsBackup: thunk(async (_, _2, { }) => {
+  exportChannelsBackup: thunk(async (_, _2, {}) => {
     const response = await exportAllChannelBackups({});
     if (response.multiChanBackup && response.multiChanBackup.multiChanBackup) {
       const exportResponse = await NativeModules.LndMobileTools.saveChannelsBackup(
@@ -511,7 +511,7 @@ export const channel: IChannelModel = {
     return await NativeModules.LndMobileTools.saveChannelBackupFile();
   }),
 
-  getBalance: thunk(async (actions, _, { }) => {
+  getBalance: thunk(async (actions, _, {}) => {
     const response = await channelBalance({}); // response.balance is not Long for some reason
     actions.setBalance(response.balance);
     actions.setPendingOpenBalance(response.pendingOpenBalance);

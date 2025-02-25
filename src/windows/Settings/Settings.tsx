@@ -2584,7 +2584,7 @@ ${t("experimental.tor.disabled.msg2")}`;
       return <Text style={styles.itemHeader}>{item.title}</Text>;
     }
     return (
-      <ListItem style={styles.listItem} icon onPress={item.onPress}>
+      <ListItem style={styles.listItem} icon onPress={item.onPress} onLongPress={item.onLongPress}>
         <Left>
           {item.icon?.type === "torsvg" ? (
             <TorSvg />

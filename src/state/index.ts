@@ -93,6 +93,7 @@ import {
 import { WalletState } from "react-native-turbo-lnd/protos/lightning_pb";
 
 import Speedloader from "../turbomodules/NativeSpeedloader";
+import NativeLndmobileTools from "../turbomodules/NativeLndmobileTools";
 
 const log = logger("Store");
 
@@ -369,27 +370,24 @@ export const model: IStoreModel = {
         (await getItemAsyncStorage(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER;
       let gossipStatus: unknown = null;
 
-      const status = await checkStatus();
+      const status = await NativeLndmobileTools.getStatus(); // await checkStatus();
       log.d("status", [status]);
       log.i("gossipSyncEnabled", [gossipSyncEnabled]);
       log.i("persistentServicesEnabled", [persistentServicesEnabled]);
-      if (
-        (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !==
-        ELndMobileStatusCodes.STATUS_PROCESS_STARTED
-      ) {
-        actions.setSpeedloaderCancelVisible(false);
-
-        // Show the "Syncing Lightning Network" text after 3s
-        const speedloaderTextTimer = setTimeout(() => {
-          actions.setSpeedloaderLoading(true);
-        }, 3000);
-
-        // Show the speedloader cancel button after 10s
-        const cancelSpeedloaderButtonTimer = setTimeout(() => {
-          actions.setSpeedloaderCancelVisible(true);
-        }, 15000);
-
+      if (status === 0) {
         if (gossipSyncEnabled && Chain === "mainnet") {
+          actions.setSpeedloaderCancelVisible(false);
+
+          // Show the "Syncing Lightning Network" text after 3s
+          const speedloaderTextTimer = setTimeout(() => {
+            actions.setSpeedloaderLoading(true);
+          }, 3000);
+
+          // Show the speedloader cancel button after 10s
+          const cancelSpeedloaderButtonTimer = setTimeout(() => {
+            actions.setSpeedloaderCancelVisible(true);
+          }, 15000);
+
           if (enforceSpeedloaderOnStartup) {
             log.d("Clearing speedloader files");
             try {
@@ -417,11 +415,12 @@ export const model: IStoreModel = {
               log.e("GossipSync exception!", [e]);
             }
           }
+          clearTimeout(speedloaderTextTimer);
+          clearTimeout(cancelSpeedloaderButtonTimer);
+          actions.setSpeedloaderLoading(false);
+          actions.setSpeedloaderCancelVisible(false);
         }
-        clearTimeout(speedloaderTextTimer);
-        clearTimeout(cancelSpeedloaderButtonTimer);
-        actions.setSpeedloaderLoading(false);
-        actions.setSpeedloaderCancelVisible(false);
+
         log.i("Starting lnd, gossipStatus", [gossipStatus]);
         try {
           let args = "";
@@ -463,7 +462,7 @@ export const model: IStoreModel = {
           }
         }
       } else {
-        toast("lnd already started (lndmobile getStatus check)", 3000, "warning");
+        toast("lnd already started (getStatus check)", 3000, "warning");
       }
     } catch (e) {
       log.e("Exception when trying to initialize LndMobile and start lnd", [e]);
