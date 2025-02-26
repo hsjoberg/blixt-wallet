@@ -127,7 +127,7 @@
     "react-native-linear-gradient": "^2.8.3",
     "react-native-maps": "1.20.1",
     "react-native-nitro-modules": "^0.24.1",
-    "react-native-nitro-tor": "^0.0.11",
+    "react-native-nitro-tor": "^0.0.12",
     "react-native-paper": "5.13.1",
     "react-native-permissions": "4.1.5",
     "react-native-popup-menu": "^0.16.1",
