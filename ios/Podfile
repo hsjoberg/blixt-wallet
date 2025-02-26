@@ -35,7 +35,7 @@ setup_permissions([
 pod 'SwiftProtobuf', '~> 1.22.0'
 # End Blixt
 
-platform :ios, min_ios_version_supported
+platform :ios, 16.6
 prepare_react_native_project!
 
 project 'BlixtWallet',

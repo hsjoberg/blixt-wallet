@@ -24,6 +24,51 @@ PODS:
   - hermes-engine (0.77.0):
     - hermes-engine/Pre-built (= 0.77.0)
   - hermes-engine/Pre-built (0.77.0)
+  - NitroModules (0.22.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-callinvoker
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - NitroTor (0.0.16):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - NitroModules
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1368,8 +1413,6 @@ PODS:
     - Yoga
   - react-native-sqlite-storage (6.0.1):
     - React-Core
-  - react-native-tor (0.1.8):
-    - React
   - react-native-turbo-lnd (0.1.2):
     - DoubleConversion
     - glog
@@ -1722,7 +1765,7 @@ PODS:
     - React-logger (= 0.77.0)
     - React-perflogger (= 0.77.0)
     - React-utils (= 0.77.0)
-  - ReactNativeCameraKit (14.1.0):
+  - ReactNativeCameraKit (14.2.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1859,10 +1902,10 @@ PODS:
     - React
   - RNKeychain (8.2.0):
     - React-Core
-  - RNNotifee (7.8.2):
+  - RNNotifee (9.1.8):
     - React-Core
-    - RNNotifee/NotifeeCore (= 7.8.2)
-  - RNNotifee/NotifeeCore (7.8.2):
+    - RNNotifee/NotifeeCore (= 9.1.8)
+  - RNNotifee/NotifeeCore (9.1.8):
     - React-Core
   - RNPermissions (4.1.5):
     - DoubleConversion
@@ -2087,11 +2130,11 @@ PODS:
     - React-Core
   - SocketRocket (0.7.1)
   - SwiftProtobuf (1.22.1)
-  - VisionCamera (4.6.3):
-    - VisionCamera/Core (= 4.6.3)
-    - VisionCamera/React (= 4.6.3)
-  - VisionCamera/Core (4.6.3)
-  - VisionCamera/React (4.6.3):
+  - VisionCamera (4.6.4):
+    - VisionCamera/Core (= 4.6.4)
+    - VisionCamera/React (= 4.6.4)
+  - VisionCamera/Core (4.6.4)
+  - VisionCamera/React (4.6.4):
     - React-Core
   - Yoga (0.0.0)
 
@@ -2104,6 +2147,8 @@ DEPENDENCIES:
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
+  - NitroModules (from `../node_modules/react-native-nitro-modules`)
+  - NitroTor (from `../node_modules/react-native-nitro-tor`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -2144,7 +2189,6 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
-  - react-native-tor (from `../node_modules/react-native-tor`)
   - react-native-turbo-lnd (from `../node_modules/react-native-turbo-lnd`)
   - react-native-turbo-sqlite (from `../node_modules/react-native-turbo-sqlite`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -2227,6 +2271,10 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2024-11-25-RNv0.77.0-d4f25d534ab744866448b36ca3bf3d97c08e638c
+  NitroModules:
+    :path: "../node_modules/react-native-nitro-modules"
+  NitroTor:
+    :path: "../node_modules/react-native-nitro-tor"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -2303,8 +2351,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/slider"
   react-native-sqlite-storage:
     :path: "../node_modules/react-native-sqlite-storage"
-  react-native-tor:
-    :path: "../node_modules/react-native-tor"
   react-native-turbo-lnd:
     :path: "../node_modules/react-native-turbo-lnd"
   react-native-turbo-sqlite:
@@ -2414,17 +2460,19 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
-  boost: 1dca942403ed9342f98334bf4c3621f011aa7946
+  boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
-  DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
+  DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 2bc03a5cf64e29c611bbc5d7eb9d9f7431f37ee6
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
-  glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
+  glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: 1f783c3d53940aed0d2c84586f0b7a85ab7827ef
+  NitroModules: 0b5ab12fb3d174f2dbf9101e167342cd1406cf7b
+  NitroTor: 3ef0f6eb8a5adb1e72d0554a5c15fa329851c739
   RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
   RCTDeprecation: f5c19ebdb8804b53ed029123eb69914356192fc8
   RCTRequired: 6ae6cebe470486e0e0ce89c1c0eabb998e7c51f4
@@ -2463,7 +2511,6 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 9c33120e9eac7741a5364cc2d9f74665049b76b3
   react-native-slider: 7885fc2db0361d294b75f0b523040160ce98d526
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
-  react-native-tor: 3b14e9160b2eb7fa3f310921b2dee71a5171e5b7
   react-native-turbo-lnd: 932beb2f724532b18959d8b872a563178d7f000b
   react-native-turbo-sqlite: e6df175e5b6d57e1111e9790325edac89df18dba
   react-native-webview: 8a4fbec772139ab2576aa0f7db9368b01b56a9a9
@@ -2496,7 +2543,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 3d947e9d62f351c06c71497e1be897e6006dc303
   ReactCodegen: 9be1b7a81a88b7a05573b476e5a14a394c7d8d50
   ReactCommon: 6014af4276bb2debc350e2620ef1bd856b4d981c
-  ReactNativeCameraKit: 6af629b1a6e67a085a20c34bd70103f3fec64307
+  ReactNativeCameraKit: 8ef8b536516a5d891e14882b3ded35c584d61dbe
   RNCAsyncStorage: 1d119293b08fc8673e775b6f86482a4d9092cc65
   RNCClipboard: 5917a290577018d3396eb64e332aff17495a0025
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
@@ -2507,7 +2554,7 @@ SPEC CHECKSUMS:
   RNGoogleSignin: 6ea46104d70ad75ab0361f36cfcec7c3bc1b8b9f
   RNICloudStore: 7ac4f2630e2a7e90a4b059b92e8483828bbacd2b
   RNKeychain: bfe3d12bf4620fe488771c414530bf16e88f3678
-  RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
+  RNNotifee: 4a6ee5c7deaf00e005050052d73ee6315dff7ec9
   RNPermissions: ceae5a0b52386cee1147c5cdee455c156b8867cb
   RNReactNativeHapticFeedback: 5fdbbaedabc1698dc3bb2a72105fadf63136a451
   RNReanimated: ef80cf675203a39bb5e5464234cb08a0f0040ac2
@@ -2517,9 +2564,9 @@ SPEC CHECKSUMS:
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
-  VisionCamera: 598ab83c6bf4d65f5c32ec54361eed866505d388
+  VisionCamera: b5c2b3c45e641102902a5194af11dc532805221e
   Yoga: c0d8564af14a858f962607cd7306539cb2ace926
 
-PODFILE CHECKSUM: 4c2ebc3745ad260f089ff01e29457da610b2e643
+PODFILE CHECKSUM: 05c150625b3a41b637beddf3cc85adb7f72fb9e8
 
 COCOAPODS: 1.14.3

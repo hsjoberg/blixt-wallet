@@ -16,8 +16,8 @@ RCT_EXPORT_MODULE()
   return;
 }
 
-- (int)getStatus {
-  return 0;
+- (NSNumber *)getStatus {
+  return @0;
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
