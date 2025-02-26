@@ -6710,7 +6710,7 @@ __metadata:
     react-native-linear-gradient: "npm:^2.8.3"
     react-native-maps: "npm:1.20.1"
     react-native-nitro-modules: "npm:^0.24.1"
-    react-native-nitro-tor: "npm:^0.0.12"
+    react-native-nitro-tor: "npm:^0.0.15"
     react-native-paper: "npm:5.13.1"
     react-native-permissions: "npm:4.1.5"
     react-native-popup-menu: "npm:^0.16.1"
@@ -16621,14 +16621,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-nitro-tor@npm:^0.0.12":
-  version: 0.0.12
-  resolution: "react-native-nitro-tor@npm:0.0.12"
+"react-native-nitro-tor@npm:^0.0.15":
+  version: 0.0.15
+  resolution: "react-native-nitro-tor@npm:0.0.15"
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-nitro-modules: ^0.24.1
-  checksum: 10/5450e8f3a0e2f60b13b885b593df2dd70c95297dfeaa15a8694fb95ded2caa6678542bd9e5c25756f5201ca9d5169285a4dbab1262ec553e10c2532d14d7f642
+  checksum: 10/c35313d710f739617b74f6b187ffb50d7dda5a81d75653515d82986d04b7f3c5feb886482c56e8d32d6caa98c6f0b9d45f4a5a2eb87a7c6ef7cbf06e99ec3cdf
   languageName: node
   linkType: hard
 
