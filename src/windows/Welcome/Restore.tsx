@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StatusBar, StyleSheet, Alert, NativeModules, TextInput } from "react-native";
-import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
+import DocumentPicker, { DocumentPickerResponse } from "@react-native-documents/picker";
 import { readFile } from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";

@@ -23,7 +23,7 @@ import BlixtWallet from "../../components/BlixtWallet";
 import { Chain } from "../../utils/build";
 import Clipboard from "@react-native-clipboard/clipboard";
 import DialogAndroid from "react-native-dialogs";
-import DocumentPicker from "react-native-document-picker";
+import DocumentPicker from "@react-native-clipboard/clipboard";
 import { IFiatRates } from "../../state/Fiat";
 import { LoginMethods } from "../../state/Security";
 import { MapStyle } from "../../utils/google-maps";
