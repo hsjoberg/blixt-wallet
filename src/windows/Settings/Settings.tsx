@@ -2448,7 +2448,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         title: "Lookup invoice",
         onPress: onPressLookupInvoiceByHash,
       },
-      ...(lndChainBackend === "neutrino"
+      ...((name === "Hampus" || __DEV__ === true) && lndChainBackend === "neutrino"
         ? [
             {
               type: "item",
@@ -2458,7 +2458,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             },
           ]
         : []),
-      ...(lndChainBackend !== "neutrino"
+      ...((name === "Hampus" || __DEV__ === true) && lndChainBackend !== "neutrino"
         ? [
             {
               type: "item",
