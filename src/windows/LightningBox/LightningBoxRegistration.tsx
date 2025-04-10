@@ -179,7 +179,6 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
         text: t("buttons.ok", { ns: namespaces.common }),
         onPress: async () => {
           try {
-            await NativeModules.BlixtTor.stopTor();
             await stopDaemon({});
           } catch (e) {
             console.log(e);

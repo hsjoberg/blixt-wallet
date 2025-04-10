@@ -696,7 +696,6 @@ ${t("LN.inbound.dialog.msg3")}`;
           text: t("buttons.yes", { ns: namespaces.common }),
           onPress: async () => {
             try {
-              await NativeModules.BlixtTor.stopTor();
               await stopDaemon({});
             } catch (e: any) {
               console.log(e);

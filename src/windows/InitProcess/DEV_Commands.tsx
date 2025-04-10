@@ -467,14 +467,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              await NativeModules.BlixtTor.showMsg();
-            }}
-          >
-            <Text style={styles.buttonText}>show DOKI activity</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
               Alert.alert("", (await Linking.getInitialURL()) ?? "no");
             }}
           >
@@ -546,22 +538,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }}
           >
             <Text style={styles.buttonText}>getTorEnabled</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log("Tor", await NativeModules.BlixtTor.startTor());
-            }}
-          >
-            <Text style={styles.buttonText}>startTor</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log("Tor", await NativeModules.BlixtTor.stopTor());
-            }}
-          >
-            <Text style={styles.buttonText}>stopTor</Text>
           </Button>
           <Button
             small

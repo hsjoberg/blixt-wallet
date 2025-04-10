@@ -370,7 +370,6 @@ export const model: IStoreModel = {
         false;
       if (persistentServicesEnabled && !persistentServicesWarningShown) {
         await setItemObject(StorageItem.persistentServicesWarningShown, true);
-        await NativeModules.BlixtTor.showMsg();
       }
       log.v("Running LndMobile.initialize()");
       const initReturn = await initialize();
