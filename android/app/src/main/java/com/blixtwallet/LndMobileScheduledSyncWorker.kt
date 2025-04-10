@@ -30,31 +30,31 @@ import kotlin.coroutines.resumeWithException
 import org.json.JSONArray
 import org.json.JSONObject
 
-private const val TAG = "TurboLndSyncWorker"
+private const val TAG = "LndMobileScheduledSyncWorker"
 private const val SYNC_WORK_KEY = "syncWorkHistory"
 private const val ONE_OFF_TAG = "ONE_OFF"
 private const val PERIODIC_TAG = "PERIODIC"
 
 // Add enum to represent different sync results
-// private enum class SyncResult {
-//   EARLY_EXIT_ACTIVITY_RUNNING,  // Exited because MainActivity was running
-//   SUCCESS_LND_ALREADY_RUNNING,  // LND was already running
-//   SUCCESS_CHAIN_SYNCED,         // Full success with chain sync
-//   FAILURE_STATE_TIMEOUT,        // State subscription timeout
-//   SUCCESS_ACTIVITY_INTERRUPTED, // Stopped because MainActivity started
-//   FAILURE_GENERAL,              // General failure
-//   FAILURE_CHAIN_SYNC_TIMEOUT    // Chain sync specifically timed out
-// }
+enum class SyncResult {
+  EARLY_EXIT_ACTIVITY_RUNNING,  // Exited because MainActivity was running
+  SUCCESS_LND_ALREADY_RUNNING,  // LND was already running
+  SUCCESS_CHAIN_SYNCED,         // Full success with chain sync
+  FAILURE_STATE_TIMEOUT,        // State subscription timeout
+  SUCCESS_ACTIVITY_INTERRUPTED, // Stopped because MainActivity started
+  FAILURE_GENERAL,              // General failure
+  FAILURE_CHAIN_SYNC_TIMEOUT    // Chain sync specifically timed out
+}
 
-// // Update data class with more metadata
-// private data class SyncWorkRecord(
-//   val timestamp: Long,
-//   val duration: Long,
-//   val result: SyncResult,
-//   val errorMessage: String? = null
-// )
+// Update data class with more metadata
+data class SyncWorkRecord(
+  val timestamp: Long,
+  val duration: Long,
+  val result: SyncResult,
+  val errorMessage: String? = null
+)
 
-class TurboLndSyncWorker(
+class LndMobileScheduledSyncWorker(
   context: Context,
   params: WorkerParameters
 ) : CoroutineWorker(context, params) {
@@ -127,8 +127,6 @@ class TurboLndSyncWorker(
 
   override suspend fun doWork(): Result {
     try {
-      return Result.success()
-
       Log.i(TAG, "------------------------------------");
       Log.i(TAG, "Starting sync worker");
       Log.i(TAG, "I am " + applicationContext.packageName);
