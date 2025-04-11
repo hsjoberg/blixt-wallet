@@ -33,9 +33,6 @@ buildscript {
 allprojects {
     repositories {
         mavenCentral()
-        flatDir {
-            dirs("lndmobile")
-        }
     }
 }
 
