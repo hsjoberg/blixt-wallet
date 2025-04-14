@@ -1,61 +1,20 @@
-import * as base64 from "base64-js";
-
 import { PLATFORM } from "../../utils/constants";
 import { Button, Container, Input, Text, Toast, View } from "native-base";
 import { CONSTANTS, JSHash } from "react-native-hash";
-import {
-  DeviceEventEmitter,
-  Linking,
-  NativeEventEmitter,
-  NativeModules,
-  StatusBar,
-  StyleSheet,
-} from "react-native";
+import { Linking, NativeModules, StatusBar, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { StorageItem, setItem, setItemObject } from "../../storage/app";
+import { StorageItem, getItem, removeItem, setItem, setItemObject } from "../../storage/app";
 import { bytesToHexString, hexToUint8Array, stringToUint8Array, toast } from "../../utils";
-import {
-  channelAcceptor,
-  channelAcceptorResponse,
-  closeChannel,
-  closedChannels,
-  decodeChannelAcceptRequest,
-  listChannels,
-  openChannel,
-  pendingChannels,
-} from "../../lndmobile/channel";
-import {
-  addInvoice,
-  checkStatus,
-  connectPeer,
-  decodePayReq,
-  generateSecureRandomAsBase64,
-  getInfo,
-  getInfoX,
-  getNetworkInfo,
-  getNodeInfo,
-  listInvoices,
-  listPeers,
-  listUnspent,
-  queryMissionControl,
-  queryRoutes,
-  xImportMissionControl,
-} from "../../lndmobile/index";
+
 import {
   clearTransactions,
   createTransaction,
   getTransaction,
   getTransactions,
 } from "../../storage/database/transaction";
-import { genSeed, initWallet, signMessage } from "../../lndmobile/wallet";
+
 import { getPin, getWalletPassword } from "../../storage/keystore";
-import { lnrpc, routerrpc } from "../../../proto/lightning";
-import { modifyStatus, queryScores, status } from "../../lndmobile/autopilot";
-import {
-  newAddress,
-  sendCoins,
-  getTransactions as getTransactionsOnchain,
-} from "../../lndmobile/onchain";
+
 import { useStoreActions, useStoreState } from "../../state/store";
 
 import { Alert } from "../../utils/alert";
@@ -63,15 +22,53 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import Content from "../../components/Content";
 import { ICLOUD_BACKUP_KEY } from "../../state/ICloudBackup";
 import { ILightningServices } from "../../utils/lightning-services";
-import { LndMobileEventEmitter } from "../../utils/event-listener";
-import Long from "long";
 import { RootStackParamList } from "../../Main";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { abandonChannel } from "../../lndmobile/channel";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { generateSecureRandom } from "../../lndmobile/index";
+import { generateSecureRandom, generateSecureRandomAsBase64 } from "../../lndmobile/index";
 import { localNotification } from "../../utils/push-notification";
-import { sendCommand } from "../../lndmobile/utils";
+
+import {
+  channelAcceptor,
+  connectPeer,
+  decodePayReq,
+  genSeed,
+  getInfo,
+  getNetworkInfo,
+  getTransactions as listTransactions,
+  initWallet,
+  invoicesSubscribeSingleInvoice,
+  listChannels,
+  listInvoices,
+  listPeers,
+  listUnspent,
+  newAddress,
+  pendingChannels,
+  queryRoutes,
+  routerQueryMissionControl,
+  routerXImportMissionControl,
+  start,
+  stopDaemon,
+  closedChannels,
+  addInvoice,
+  autopilotStatus,
+  autopilotModifyStatus,
+  autopilotQueryScores,
+  signMessage,
+  walletBalance,
+  getRecoveryInfo,
+  getNodeInfo,
+  openChannelSync,
+  sendCoins,
+  closeChannel,
+  abandonChannel,
+} from "react-native-turbo-lnd";
+
+import TurboSqlite from "react-native-turbo-sqlite";
+
+import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
+
+import Speedloader from "../../turbomodules/NativeSpeedloader";
 
 let iCloudStorage: any;
 console.log(PLATFORM);
@@ -147,17 +144,150 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           )}
           {/*
            *
+           * Speedloader
+           *
+           */}
+          <Text style={{ width: "100%" }}>Speedloader:</Text>
+          <Button
+            small
+            onPress={async () => {
+              // console.log("TEST");
+              // console.log(await NativeModules.LndMobileTools.getFilesDir());
+              // console.log(await NativeModules.LndMobileTools.getCacheDir());
+              console.log(await Speedloader.gossipSync("hejsan"));
+            }}
+          >
+            <Text>Speedloader.gossipSync</Text>
+          </Button>
+          {/*
+           *
+           * TurboSqlite
+           *
+           */}
+          <Text style={{ width: "100%" }}>TurboSqlite:</Text>
+          <Button
+            small
+            onPress={async () => {
+              const db = TurboSqlite.openDatabase(
+                `/data/user/0/com.blixtwallet.debug/databases/Blixt`,
+              );
+
+              console.log(db.executeSql("SELECT * from tx", []));
+            }}
+          >
+            <Text>test</Text>
+          </Button>
+          <Button small onPress={async () => console.log(TurboSqlite.getVersionString())}>
+            <Text>TurboSqlite.getVersionString()</Text>
+          </Button>
+          {/*
+           *
+           * TurboLnd
+           *
+           */}
+          <Text style={{ width: "100%" }}>TurboLnd:</Text>
+          <Button
+            small
+            onPress={async () => {
+              start(
+                `--lnddir="/data/user/0/com.blixtwallet.debug/files/"
+                --noseedbackup
+                --nolisten
+                --bitcoin.active
+                --bitcoin.mainnet
+                --bitcoin.node=neutrino
+                --feeurl="https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json"
+                --routing.assumechanvalid
+                --tlsdisableautofill
+                --db.bolt.auto-compact
+                --db.bolt.auto-compact-min-age=0
+                --neutrino.connect=192.168.10.120:19444`,
+              );
+            }}
+          >
+            <Text style={styles.buttonText}>start</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(LndMobileToolsTurbo.startSyncWorker());
+            }}
+          >
+            <Text style={styles.buttonText}>LndMobileToolsTurbo.startSyncWorker</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(LndMobileToolsTurbo.scheduleSyncWorker());
+            }}
+          >
+            <Text style={styles.buttonText}>LndMobileToolsTurbo.scheduleSyncWorker</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(LndMobileToolsTurbo.stopScheduleSyncWorker());
+            }}
+          >
+            <Text style={styles.buttonText}>LndMobileToolsTurbo.stopScheduleSyncWorker</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(LndMobileToolsTurbo.getStatus());
+            }}
+          >
+            <Text style={styles.buttonText}>LndMobileToolsTurbo.getStatus</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(await getItem("syncWorkHistory"));
+            }}
+          >
+            <Text style={styles.buttonText}>getItem syncWorkHistory</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(await removeItem("syncWorkHistory"));
+            }}
+          >
+            <Text style={styles.buttonText}>removeItem syncWorkHistory</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              navigation?.navigate("SyncWorkerReport");
+            }}
+          >
+            <Text style={styles.buttonText}>SyncWorkerReport</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              navigation?.navigate("SyncWorkerTimelineReport");
+            }}
+          >
+            <Text style={styles.buttonText}>SyncWorkerTimelineReport</Text>
+          </Button>
+
+          {/*
+           *
            * Random
            *
            */}
           <Text style={{ width: "100%" }}>Random:</Text>
+          {/* <Button small onPress={async () => console.log(await Speedloader.gossipSync("hejsan"))}>
+            <Text style={styles.buttonText}>Speedloader.gossipSync</Text>
+          </Button> */}
           <Button
             small
             onPress={async () => {
               const startTime = performance.now();
               for (let i = 0; i < 10000; i++) {
                 // console.log(
-                await getInfoX();
+                await getInfo({});
                 // );
               }
               const endTime = performance.now();
@@ -175,7 +305,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(await getInfoX());
+              console.log(await getInfo({}));
             }}
           >
             <Text style={styles.buttonText}>getInfoX</Text>
@@ -203,15 +333,15 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               const res = await fetch("https://dunder.blixtwallet.com/channel-liquidity");
               const json: { pairs: any[] } = await res.json();
 
-              const x: routerrpc.IXImportMissionControlRequest["pairs"] = json.pairs
+              const x = json.pairs
                 .filter((c) => c.history.successAmtSat > 0)
                 .map((c) => {
                   return {
                     nodeFrom: hexToUint8Array(c.nodeFrom),
                     nodeTo: hexToUint8Array(c.nodeTo),
                     history: {
-                      successAmtSat: Long.fromValue(c.history.successAmtSat),
-                      successTime: Long.fromValue(c.history.successTime),
+                      successAmtSat: BigInt(c.history.successAmtSat),
+                      successTime: BigInt(c.history.successTime),
                     },
                   };
                 });
@@ -221,13 +351,13 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               //     nodeFrom: hexToUint8Array(c.nodeFrom),
               //     nodeTo: hexToUint8Array(c.nodeTo),
               //     history: {
-              //       successAmtSat: Long.fromValue(c.history.successAmtSat),
-              //       successTime: Long.fromValue(c.history.successTime),
+              //       successAmtSat: BigInt(c.history.successAmtSat),
+              //       successTime: BigInt(c.history.successTime),
               //     }
               //   }
               // });
               console.log(x);
-              console.log(await xImportMissionControl(x));
+              console.log(await routerXImportMissionControl({ pairs: x }));
             }}
           >
             <Text style={styles.buttonText}>ximport</Text>
@@ -235,16 +365,16 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              const c = await listChannels();
-              const mc = await queryMissionControl();
+              const c = await listChannels({});
+              const mc = await routerQueryMissionControl({});
               console.log(
                 mc.pairs.map((p) => {
                   return {
                     nodeFrom: bytesToHexString(p.nodeFrom),
                     nodeTo: bytesToHexString(p.nodeTo),
                     history: {
-                      successAmtSat: Long.fromValue(p.history?.successAmtSat!).toNumber(),
-                      successTime: Long.fromValue(p.history?.successTime!).toNumber(),
+                      successAmtSat: Number(p.history?.successAmtSat!),
+                      successTime: Number(p.history?.successTime!),
                     },
                   };
                 }),
@@ -337,14 +467,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              await NativeModules.BlixtTor.showMsg();
-            }}
-          >
-            <Text style={styles.buttonText}>show DOKI activity</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
               Alert.alert("", (await Linking.getInitialURL()) ?? "no");
             }}
           >
@@ -395,14 +517,15 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               console.log(
-                await decodePayReq(
-                  "lnbc100n1p0nzg2kpp58f2ztjy39ak8hgd7saya4mvkhwmueuyq0tlet5fedn8ytu3xrllqhp5nh0t5w4w5zh8jdnn5a03hk4pk279l3eex4nzazgkwmqpn7wga6hqcqzpgxq92fjuqsp5sm4zt7024wpwplf705k0gfkyqzk3g984nv9e83pd4093ckg9sm2q9qy9qsqs0wuxrqazy9n0knyx7fhud4q2l92fl2c2qe58tks8hhgfy4dwc5kqe09j38szhjwshna0jp5pet7g27wdj7ecyq4y00vc023lzvtl2sq686za3",
-                ),
+                await decodePayReq({
+                  payReq:
+                    "lnbc100n1p0nzg2kpp58f2ztjy39ak8hgd7saya4mvkhwmueuyq0tlet5fedn8ytu3xrllqhp5nh0t5w4w5zh8jdnn5a03hk4pk279l3eex4nzazgkwmqpn7wga6hqcqzpgxq92fjuqsp5sm4zt7024wpwplf705k0gfkyqzk3g984nv9e83pd4093ckg9sm2q9qy9qsqs0wuxrqazy9n0knyx7fhud4q2l92fl2c2qe58tks8hhgfy4dwc5kqe09j38szhjwshna0jp5pet7g27wdj7ecyq4y00vc023lzvtl2sq686za3",
+                }),
               );
               console.log(
-                await queryRoutes(
-                  "03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e",
-                ),
+                await queryRoutes({
+                  pubKey: "03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e",
+                }),
               );
             }}
           >
@@ -415,22 +538,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             }}
           >
             <Text style={styles.buttonText}>getTorEnabled</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log("Tor", await NativeModules.BlixtTor.startTor());
-            }}
-          >
-            <Text style={styles.buttonText}>startTor</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log("Tor", await NativeModules.BlixtTor.stopTor());
-            }}
-          >
-            <Text style={styles.buttonText}>stopTor</Text>
           </Button>
           <Button
             small
@@ -455,17 +562,15 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              const subscribeInvoicesUpdate = lnrpc.Invoice.create({
-                amtPaid: Long.fromValue(1000),
-                amtPaidMsat: Long.fromValue(1000 * 1000),
-                rHash: new Uint8Array([0, 1, 2, 3]),
-              });
-
-              DeviceEventEmitter.emit("SubscribeInvoices", {
-                data: base64.fromByteArray(
-                  lnrpc.InvoiceSubscription.encode(subscribeInvoicesUpdate).finish(),
-                ),
-              });
+              invoicesSubscribeSingleInvoice(
+                {
+                  rHash: new Uint8Array([0, 1, 2, 3]),
+                },
+                (res) => {
+                  console.log("DevScreen: Invoice subscription:", res);
+                },
+                (err) => console.warn("DevScreen: invoice subscription warning", err),
+              );
             }}
           >
             <Text style={styles.buttonText}>Emit fake transaction</Text>
@@ -524,23 +629,21 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
                 for (const invoice of invoices) {
                   await createTransaction(db!, {
-                    date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
+                    date: BigInt(1546300800 + Math.floor(Math.random() * 1000000)),
                     description: invoice.description,
                     remotePubkey:
                       "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                    expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
+                    expire: BigInt(1577836800 + Math.floor(Math.random() * 1000)),
                     status: "SETTLED",
-                    value: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * invoice.value),
-                    valueMsat: Long.fromNumber(
-                      (invoice.type == "PAY" ? -1 : 1) * invoice.value * 1000,
-                    ),
-                    amtPaidSat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
-                    amtPaidMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
+                    value: BigInt((invoice.type == "PAY" ? -1 : 1) * invoice.value),
+                    valueMsat: BigInt((invoice.type == "PAY" ? -1 : 1) * invoice.value * 1000),
+                    amtPaidSat: BigInt((invoice.type == "PAY" ? -1 : 1) * 0),
+                    amtPaidMsat: BigInt((invoice.type == "PAY" ? -1 : 1) * 0),
                     valueUSD: (invoice.type == "PAY" ? -1 : 1) * 100,
                     valueFiat: (invoice.type == "PAY" ? -1 : 1) * 100,
                     valueFiatCurrency: "SEK",
-                    fee: Long.fromNumber(Math.floor(Math.random() * 5)),
-                    feeMsat: Long.fromNumber(Math.floor(Math.random() * 5) * 1000),
+                    fee: BigInt(Math.floor(Math.random() * 5)),
+                    feeMsat: BigInt(Math.floor(Math.random() * 5) * 1000),
                     paymentRequest: "abcdef123456",
                     rHash: Math.floor(Math.random() * 10000000).toString(),
                     nodeAliasCached: null,
@@ -557,6 +660,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                     duration: null,
                     lightningAddress: null,
                     lud16IdentifierMimeType: null,
+                    lud18PayerData: null,
                   });
                 }
               };
@@ -637,7 +741,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
 
               await setItem(StorageItem.onboardingState, "DONE");
               actions.setOnboardingState("DONE");
-              actions.channel.setBalance(Long.fromNumber(497581));
+              actions.channel.setBalance(BigInt(497581));
             }}
           >
             <Text style={styles.buttonText}>Setup demo environment</Text>
@@ -662,21 +766,19 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              LndMobileEventEmitter.addListener("ChannelAcceptor", async (event) => {
-                try {
-                  const channelAcceptRequest = decodeChannelAcceptRequest(event.data);
-
-                  console.log("wantsZeroConf:" + channelAcceptRequest.wantsZeroConf);
-
-                  console.log(
-                    await channelAcceptorResponse(channelAcceptRequest.pendingChanId, true, true),
-                  );
-                } catch (error: any) {
-                  console.error("error: " + error.message);
-                }
-              });
-
-              console.log(await channelAcceptor());
+              const { send, close } = channelAcceptor(
+                (event) => {
+                  send({
+                    pendingChanId: event.pendingChanId,
+                    accept: true,
+                    zeroConf: true,
+                  });
+                },
+                (error) => {
+                  console.warn("Channel acceptance error: ", error);
+                  close();
+                },
+              );
             }}
           >
             <Text style={styles.buttonText}>channelAcceptor</Text>
@@ -699,23 +801,11 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>NativeModules.LndMobile.startLnd()</Text>
           </Button>
+
           <Button
             small
             onPress={async () => {
-              new NativeEventEmitter(NativeModules.LndMobile).addListener(
-                "WalletUnlocked",
-                (event: any) => {
-                  console.log(event);
-                },
-              );
-            }}
-          >
-            <Text style={styles.buttonText}>Lndmobile add listener</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              const request = lnrpc.InitWalletRequest.create({
+              const request = {
                 cipherSeedMnemonic: [
                   "ability",
                   "quote",
@@ -743,32 +833,16 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                   "jewel",
                 ],
                 walletPassword: stringToUint8Array("Test12345!"),
-              });
+              };
 
-              const encoded = lnrpc.InitWalletRequest.encode(request).finish();
-              const b64 = base64.fromByteArray(encoded);
+              const initWalletResponse = await initWallet(request);
 
-              console.log(await NativeModules.LndMobile.initWallet(b64, null, null, null));
+              console.log(initWalletResponse);
             }}
           >
             <Text style={styles.buttonText}>NativeModules.LndMobile.initWallet()</Text>
           </Button>
-          <Button
-            small
-            onPress={async () => {
-              const request = lnrpc.GetInfoRequest.create({});
-              const encoded = lnrpc.GetInfoRequest.encode(request).finish();
-              const b64 = base64.fromByteArray(encoded);
 
-              const response = await NativeModules.LndMobile.sendCommand("GetInfo", b64);
-              const getInfoResponse = lnrpc.GetInfoResponse.decode(
-                base64.toByteArray(response.data),
-              );
-              console.log(getInfoResponse);
-            }}
-          >
-            <Text style={styles.buttonText}>sendCommand getInfo</Text>
-          </Button>
           <Button
             small
             onPress={async () => {
@@ -1029,7 +1103,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile());
+              console.log(NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile());
             }}
           >
             <Text style={styles.buttonText}>
@@ -1039,9 +1113,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(
-                await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory(),
-              );
+              console.log(NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory());
             }}
           >
             <Text style={styles.buttonText}>
@@ -1049,28 +1121,8 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             </Text>
           </Button>
 
-          {/*
-           *
-           * Lndmobile
-           *
-           */}
-          <Text style={{ width: "100%" }}>lndmobile:</Text>
-          <Button small onPress={async () => await NativeModules.LndMobile.initialize()}>
-            <Text style={styles.buttonText}>LndMobile.initialize()</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log(await checkStatus());
-            }}
-          >
-            <Text style={styles.buttonText}>LndMobile.checkStatus</Text>
-          </Button>
-          <Button small onPress={async () => await NativeModules.LndMobile.startLnd(false, "")}>
-            <Text style={styles.buttonText}>LndMobile.startLnd()</Text>
-          </Button>
-          <Button small onPress={async () => await NativeModules.LndMobile.stopLnd()}>
-            <Text style={styles.buttonText}>LndMobile.stopLnd()</Text>
+          <Button small onPress={async () => await stopDaemon({})}>
+            <Text style={styles.buttonText}>StopLnd()</Text>
           </Button>
           <Button
             small
@@ -1120,10 +1172,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               try {
-                const result = await connectPeer(
-                  "030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f",
-                  "52.50.244.44:9735",
-                );
+                const result = await connectPeer({
+                  addr: {
+                    host: "52.50.244.44:9735",
+                    pubkey: "030c3f19d742ca294a55c00376b3b355c3c90d61c6b6b39554dbc7ac19b141c14f",
+                  },
+                });
                 console.log("connectPeer()", result);
                 setCommandResult(`"${result}"`);
                 setError("{}");
@@ -1138,7 +1192,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(await NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles());
+              console.log(NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles());
             }}
           >
             <Text style={styles.buttonText}>
@@ -1157,25 +1211,23 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             onPress={async () =>
               console.log(
                 await createTransaction(db!, {
-                  date: Long.fromValue(
-                    Math.floor(+new Date() / 1000) + Math.floor(Math.random() * 1000),
-                  ),
+                  date: BigInt(Math.floor(+new Date() / 1000) + Math.floor(Math.random() * 1000)),
                   description: "Alice:  Lunch Phil's Burger",
                   remotePubkey:
                     "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                  expire: Long.fromValue(
+                  expire: BigInt(
                     Math.floor(+new Date() / 1000) + Math.floor(1000 + Math.random() * 1000),
                   ),
                   status: "SETTLED",
-                  value: Long.fromValue(-1 * Math.floor(Math.random() * 10000)),
-                  valueMsat: Long.fromValue(1000),
-                  amtPaidSat: Long.fromValue(-1 * Math.floor(Math.random() * 10000)),
-                  amtPaidMsat: Long.fromNumber(1000),
+                  value: BigInt(-1 * Math.floor(Math.random() * 10000)),
+                  valueMsat: BigInt(1000),
+                  amtPaidSat: BigInt(-1 * Math.floor(Math.random() * 10000)),
+                  amtPaidMsat: BigInt(1000),
                   paymentRequest: "abcdef123456",
                   rHash: "abcdef123456",
                   type: "NORMAL",
-                  fee: Long.fromNumber(0),
-                  feeMsat: Long.fromNumber(0),
+                  fee: BigInt(0),
+                  feeMsat: BigInt(0),
                   nodeAliasCached: null,
                   valueUSD: 0,
                   valueFiat: 0,
@@ -1191,6 +1243,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                   identifiedService: null,
                   lightningAddress: null,
                   lud16IdentifierMimeType: null,
+                  lud18PayerData: null,
                 }),
               )
             }
@@ -1214,21 +1267,21 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                     (invoice.type == "PAY" ? -1 : 1) * Math.floor(Math.random() * 500) +
                     Math.floor(Math.random() * 1000);
                   await createTransaction(db!, {
-                    date: Long.fromNumber(1546300800 + Math.floor(Math.random() * 1000000)),
+                    date: BigInt(1546300800 + Math.floor(Math.random() * 1000000)),
                     description: invoice.description,
                     remotePubkey:
                       "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-                    expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
+                    expire: BigInt(1577836800 + Math.floor(Math.random() * 1000)),
                     status: "SETTLED",
-                    value: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * value),
-                    valueMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * value * 1000),
-                    amtPaidSat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
-                    amtPaidMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
+                    value: BigInt((invoice.type == "PAY" ? -1 : 1) * value),
+                    valueMsat: BigInt((invoice.type == "PAY" ? -1 : 1) * value * 1000),
+                    amtPaidSat: BigInt((invoice.type == "PAY" ? -1 : 1) * 0),
+                    amtPaidMsat: BigInt((invoice.type == "PAY" ? -1 : 1) * 0),
                     valueUSD: (invoice.type == "PAY" ? -1 : 1) * 100,
                     valueFiat: (invoice.type == "PAY" ? -1 : 1) * 100,
                     valueFiatCurrency: "SEK",
-                    fee: Long.fromNumber(Math.floor(Math.random() * 5)),
-                    feeMsat: Long.fromNumber(Math.floor(Math.random() * 5) * 1000),
+                    fee: BigInt(Math.floor(Math.random() * 5)),
+                    feeMsat: BigInt(Math.floor(Math.random() * 5) * 1000),
                     paymentRequest: "abcdef123456",
                     rHash: Math.floor(Math.random() * 10000000).toString(),
                     nodeAliasCached: null,
@@ -1245,6 +1298,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                     identifiedService: null,
                     lightningAddress: null,
                     lud16IdentifierMimeType: null,
+                    lud18PayerData: null,
                   });
                 }
               };
@@ -1360,7 +1414,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             ["listUnspent", listUnspent],
             ["listInvoices", listInvoices],
             ["getNetworkInfo", getNetworkInfo],
-            ["getTransactions", getTransactionsOnchain],
+            ["getTransactions", listTransactions],
             ["closedChannels", closedChannels],
           ].map(([name, f], i) => {
             return (
@@ -1371,9 +1425,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                   try {
                     // Check if 'f' is a function before calling it
                     if (typeof f === "function") {
-                      const response = await f(undefined);
-                      console.log(`${name}()`, response.toJSON());
-                      setCommandResult(response.toJSON());
+                      const response = await f({});
+                      console.log(`${name}()`, response);
+                      setCommandResult(response);
                     } else {
                       // Handle the case where 'f' is not a function
                       console.error(`The command '${name}' is not associated with a function.`);
@@ -1393,10 +1447,14 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               try {
-                const response = await addInvoice(0, "AMP", undefined);
+                const response = await addInvoice({
+                  isAmp: true,
+                  value: BigInt(2000),
+                  memo: "AMP Invoice",
+                });
                 console.log(response);
                 console.log(response.paymentRequest);
-                setCommandResult(response.toJSON());
+                setCommandResult(response);
                 setError({});
               } catch (e: any) {
                 setError(e);
@@ -1410,10 +1468,10 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               try {
-                const response = await status();
+                const response = await autopilotStatus({});
                 console.log(response);
                 console.log(response.active);
-                setCommandResult(response.toJSON());
+                setCommandResult(response);
                 setError({});
               } catch (e: any) {
                 setError(e);
@@ -1421,15 +1479,15 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               }
             }}
           >
-            <Text style={styles.buttonText}>status</Text>
+            <Text style={styles.buttonText}>Autopilot status</Text>
           </Button>
           <Button
             small
             onPress={async () => {
               try {
-                const response = await modifyStatus(true);
+                const response = await autopilotModifyStatus({ enable: true });
                 console.log(response);
-                setCommandResult(response.toJSON());
+                setCommandResult(response);
                 setError({});
               } catch (e: any) {
                 setError(e);
@@ -1443,12 +1501,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               try {
-                const response = await queryScores();
+                const response = await autopilotQueryScores({});
                 console.log(response);
                 console.log("0", response.results[0].scores);
                 console.log("1", response.results[1].scores);
                 console.log("2", response.results[2].scores);
-                setCommandResult(response.toJSON());
+                setCommandResult(response);
                 setError({});
               } catch (e: any) {
                 setError(e);
@@ -1462,14 +1520,16 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               try {
-                const response = await signMessage(138, 5, new Uint8Array([1]));
+                const response = await signMessage({
+                  msg: stringToUint8Array("signing some message"),
+                });
                 console.log("signMessage()", response.signature);
                 // const privKey = await derivePrivateKey(138, 5);
                 // const signedMessage = secp256k1.ecdsaSign(message, privKey.rawKeyBytes);
                 // console.log("\nsecp256k1.ecdsaSign()", (signedMessage.signature));
                 // console.log("\nsecp256k1.signatureExport()", secp256k1.signatureExport(signedMessage.signature));
 
-                setCommandResult(response.toJSON());
+                setCommandResult(response);
                 setError({});
               } catch (e: any) {
                 console.log(e);
@@ -1480,95 +1540,18 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>signMessage()</Text>
           </Button>
+
           <Button
             small
             onPress={async () => {
               try {
-                const response = await sendCommand<
-                  lnrpc.IStopRequest,
-                  lnrpc.StopRequest,
-                  lnrpc.StopResponse
-                >({
-                  request: lnrpc.StopRequest,
-                  response: lnrpc.StopResponse,
-                  method: "StopDaemon",
-                  options: {},
-                });
-                console.log("stopDaemon()", response.toJSON());
-                setCommandResult(response.toJSON());
-                setError({});
-              } catch (e: any) {
-                setError(e);
-                setCommandResult({});
-              }
-            }}
-          >
-            <Text style={styles.buttonText}>stopDaemon()</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              try {
-                const response = await initWallet(
-                  [
-                    "absent",
-                    "path",
-                    "oyster",
-                    "net",
-                    "pig",
-                    "photo",
-                    "test",
-                    "magic",
-                    "inmate",
-                    "chair",
-                    "wash",
-                    "roast",
-                    "donor",
-                    "glow",
-                    "decline",
-                    "venue",
-                    "observe",
-                    "flavor",
-                    "ahead",
-                    "suit",
-                    "easily",
-                    "excite",
-                    "entire",
-                    "scheme",
-                  ],
-                  "test1234",
-                );
-                console.log("initWallet()", response.toJSON());
-                setCommandResult(response.toJSON());
-                setError({});
-              } catch (e: any) {
-                setError(e);
-                setCommandResult({});
-              }
-            }}
-          >
-            <Text style={styles.buttonText}>initWallet()</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              try {
-                const response = await sendCommand<
-                  lnrpc.IWalletBalanceRequest,
-                  lnrpc.WalletBalanceRequest,
-                  lnrpc.WalletBalanceResponse
-                >({
-                  request: lnrpc.WalletBalanceRequest,
-                  response: lnrpc.WalletBalanceResponse,
-                  method: "WalletBalance",
-                  options: {}, // TODO why is totalBalance a option property?
-                });
+                const response = await walletBalance({});
                 console.log("totalBalance", response.totalBalance);
                 console.log("unconfirmedBalance", response.unconfirmedBalance);
                 console.log("confirmedBalance", response.confirmedBalance);
                 console.log("walletBalance()", response);
-                console.log("walletBalance() toJSON", response.toJSON());
-                setCommandResult(response.toJSON());
+                console.log("walletBalance() toJSON", response);
+                setCommandResult(response);
                 setError({});
               } catch (e: any) {
                 setError(e);
@@ -1582,19 +1565,10 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               try {
-                const response = await sendCommand<
-                  lnrpc.IGetRecoveryInfoRequest,
-                  lnrpc.GetRecoveryInfoRequest,
-                  lnrpc.GetRecoveryInfoResponse
-                >({
-                  request: lnrpc.GetRecoveryInfoRequest,
-                  response: lnrpc.GetRecoveryInfoResponse,
-                  method: "GetRecoveryInfo",
-                  options: {}, // TODO why is totalBalance a option property?
-                });
+                const response = await getRecoveryInfo({});
 
-                console.log("GetRecoveryInfo() toJSON", response.toJSON());
-                setCommandResult(response.toJSON());
+                console.log("GetRecoveryInfo() toJSON", response);
+                setCommandResult(response);
                 setError({});
               } catch (e: any) {
                 setError(e);
@@ -1668,7 +1642,17 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                     onPress: async () => {
                       try {
                         const [fundingTxId, index] = channelPoint.split(":");
-                        const result = await abandonChannel(fundingTxId, Number(index));
+
+                        const result = await abandonChannel({
+                          iKnowWhatIAmDoing: true,
+                          channelPoint: {
+                            fundingTxid: {
+                              value: fundingTxId,
+                              case: "fundingTxidStr",
+                            },
+                            outputIndex: Number(index),
+                          },
+                        });
                         console.log("abandon channel() ", result);
                         setCommandResult(result);
                         setError({});
@@ -1697,7 +1681,12 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               try {
                 const [pubkey, host] = connectPeerStr.split("@");
 
-                const result = await connectPeer(pubkey, host);
+                const result = await connectPeer({
+                  addr: {
+                    pubkey,
+                    host,
+                  },
+                });
                 console.log("connectPeer()", result);
                 setCommandResult(result);
                 setError({});
@@ -1715,7 +1704,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               try {
                 const [pubkey] = connectPeerStr.split("@");
 
-                const result = await getNodeInfo(pubkey);
+                const result = await getNodeInfo({ pubKey: pubkey });
                 console.log("getNodeInfo()", result);
                 setCommandResult(result);
                 setError({});
@@ -1742,7 +1731,11 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               try {
                 const [pubkey] = connectPeerStr.split("@");
 
-                const result = await openChannel(pubkey, Number.parseInt(sat, 10), true);
+                const result = await openChannelSync({
+                  nodePubkey: hexToUint8Array(pubkey),
+                  localFundingAmount: BigInt(100000),
+                  private: true,
+                });
                 console.log("openChannel()", result);
                 setCommandResult(result);
                 setError({});
@@ -1766,7 +1759,10 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               try {
-                const result = await sendCoins(addr, Number.parseInt(sat, 10));
+                const result = await sendCoins({
+                  addr,
+                  amount: BigInt(100000),
+                });
                 console.log("sendCoins()", result);
                 setCommandResult(result);
                 setError({});
@@ -1791,14 +1787,27 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             onPress={async () => {
               try {
                 const [transaction, output] = tx.split(":");
-                const result = await closeChannel(transaction, Number.parseInt(output, 10), false);
-                console.log("closeChannel()", result);
-                setCommandResult(result);
-                setError({});
-              } catch (e: any) {
-                setError(e);
-                setCommandResult({});
-              }
+                closeChannel(
+                  {
+                    channelPoint: {
+                      fundingTxid: {
+                        case: "fundingTxidStr",
+                        value: transaction,
+                      },
+                      outputIndex: Number(output),
+                    },
+                  },
+                  (result) => {
+                    console.log("closeChannel()", result);
+                    setCommandResult(result);
+                    setError({});
+                  },
+                  (err) => {
+                    setError(err);
+                    setCommandResult({});
+                  },
+                );
+              } catch (e: any) {}
             }}
           >
             <Text style={styles.buttonText}>closeChannel()</Text>

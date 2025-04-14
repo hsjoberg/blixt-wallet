@@ -16,7 +16,6 @@ import { useStoreActions, useStoreState } from "../../../state/store";
 import { Alert } from "../../../utils/alert";
 import ButtonSpinner from "../../../components/ButtonSpinner";
 import Input from "../../../components/Input";
-import Long from "long";
 import { PLATFORM } from "../../../utils/constants";
 import { PayerData } from "./PayerData";
 import ScaledImage from "../../../components/ScaledImage";
@@ -189,7 +188,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
         await getBalance();
         Vibration.vibrate(32);
         onPaid(preimage);
-      } catch (e) {
+      } catch (e: any) {
         Vibration.vibrate(50);
         toast("Error: " + e.message, 12000, "danger", "Okay");
       }
@@ -200,23 +199,13 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
       await changePreferFiat(!preferFiat);
     };
 
-    const minSpendableFormatted = formatBitcoin(
-      Long.fromValue(minSpendable ?? 0).div(1000),
-      bitcoinUnit.key,
-    );
+    const minSpendableFormatted = formatBitcoin(BigInt(minSpendable / 1000), bitcoinUnit.key);
     const minSpendableFiatFormatted =
-      convertBitcoinToFiat(Long.fromValue(minSpendable ?? 0).div(1000), currentRate) +
-      " " +
-      fiatUnit;
+      convertBitcoinToFiat(BigInt(minSpendable / 1000), currentRate) + " " + fiatUnit;
 
-    const maxSpendableFormatted = formatBitcoin(
-      Long.fromValue(maxSpendable ?? 0).div(1000),
-      bitcoinUnit.key,
-    );
+    const maxSpendableFormatted = formatBitcoin(BigInt(maxSpendable / 1000), bitcoinUnit.key);
     const maxSpendableFiatFormatted =
-      convertBitcoinToFiat(Long.fromValue(maxSpendable ?? 0).div(1000), currentRate) +
-      " " +
-      fiatUnit;
+      convertBitcoinToFiat(BigInt(maxSpendable / 1000), currentRate) + " " + fiatUnit;
 
     const serviceKey = identifyService(null, "", domain);
     let service;
@@ -352,7 +341,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
         </View>
       </>
     );
-  } catch (error) {
+  } catch (error: any) {
     Alert.alert(`${t("form.alert")}:\n\n${error.message}`);
     callback?.(null);
     navigation.goBack();

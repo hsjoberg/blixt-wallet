@@ -1,8 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { BackHandler, Keyboard, StyleSheet, Vibration } from "react-native";
-import { Button, Container, Icon, Picker, Spinner, Text } from "native-base";
+import { Button, Container, Icon, Spinner, Text } from "native-base";
 import { useDebounce } from "use-debounce";
-import Long from "long";
 import { useTranslation } from "react-i18next";
 import { Dropdown } from "react-native-element-dropdown";
 import Color from "color";
@@ -62,6 +61,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   useEffect(() => {
     const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
       callback(null);
+      return null;
     });
 
     if (paymentRequest) {
@@ -80,7 +80,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
               });
 
               if (!!routes.length && !!routes[0].totalFees) {
-                setFeeEstimate(routes[0]?.totalFees?.toNumber() ?? 0);
+                setFeeEstimate(routes[0].totalFees ? Number(routes[0].totalFees) : 0);
               }
             } catch (error) {
               console.log(error);
@@ -106,14 +106,14 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
         if (!!bitcoinValue) {
           try {
             const { routes } = await queryRoutes({
-              amount: Long.fromValue(Number(bitcoinValue)),
+              amount: BigInt(bitcoinValue),
               pubKey: paymentRequest.destination,
               routeHints: paymentRequest.routeHints,
             });
 
             if (!!routes.length) {
               if (routes[0].totalFees !== null && routes[0].totalFees !== undefined) {
-                setFeeEstimate(routes[0]?.totalFees?.toNumber() ?? 0);
+                setFeeEstimate(routes[0].totalFees ? Number(routes[0].totalFees) : 0);
               } else {
                 setFeeEstimate(0);
               }
@@ -160,10 +160,10 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
 
       const payload: IModelSendPaymentPayload = {
         amount: !!amountEditable
-          ? Long.fromValue(unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit))
+          ? BigInt(unitToSatoshi(Number.parseFloat(bitcoinValue || "0"), bitcoinUnit))
           : undefined,
 
-        outgoingChannelId: outChannel !== "any" ? Long.fromString(outChannel) : undefined,
+        outgoingChannelId: outChannel !== "any" ? BigInt(outChannel) : undefined,
       };
 
       const response = await sendPayment(payload);
@@ -172,7 +172,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
       await getBalance();
       Vibration.vibrate(32);
       navigation.replace("SendDone", { preimage, callback });
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       toast(
         `${t("msg.error", { ns: namespaces.common })}: ${error.message}`,

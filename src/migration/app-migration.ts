@@ -1,5 +1,5 @@
 import { NativeModules } from "react-native";
-import { SQLiteDatabase } from "react-native-sqlite-storage";
+import { Database } from "react-native-turbo-sqlite";
 import { LndChainBackend } from "../state/Lightning";
 import {
   getWalletCreated,
@@ -24,10 +24,11 @@ import {
   DEFAULT_LND_LOG_LEVEL,
   DEFAULT_NEUTRINO_NODE,
 } from "../utils/constants";
+
 const { LndMobile, LndMobileTools } = NativeModules;
 
 export interface IAppMigration {
-  beforeLnd: (db: SQLiteDatabase, currentVersion: number) => Promise<void>;
+  beforeLnd: (db: Database, currentVersion: number) => Promise<void>;
 }
 
 export const appMigration: IAppMigration[] = [

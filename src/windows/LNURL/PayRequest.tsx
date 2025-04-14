@@ -94,6 +94,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
                   lightningAddress: lightningAddress[1],
                   lud16IdentifierMimeType: "text/identifier",
                   note: "",
+                  label: null,
                 });
               },
             },
@@ -121,6 +122,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
                 lightningAddress: null,
                 lud16IdentifierMimeType: null,
                 note: "",
+                label: null,
               });
             },
           },
@@ -135,7 +137,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
     const KeyboardAvoid = PLATFORM === "ios" ? KeyboardAvoidingView : View;
 
     return (
-      <Blurmodal useModalComponent={false} goBackByClickingOutside={false}>
+      <Blurmodal goBackByClickingOutside={false}>
         <KeyboardAvoid behavior={"padding"} keyboardVerticalOffset={60}>
           <View style={style.keyboardContainer}>
             {__DEV__ && (
@@ -197,7 +199,7 @@ export default function LNURLPayRequest({ navigation, route }: IPayRequestProps)
         </KeyboardAvoid>
       </Blurmodal>
     );
-  } catch (error) {
+  } catch (error: any) {
     console.log(error.message);
     Alert.alert(`${t("unableToPay")}:\n\n${error.message}`);
     callback(null);

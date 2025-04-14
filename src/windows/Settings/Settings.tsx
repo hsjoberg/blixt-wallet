@@ -1,5 +1,5 @@
 import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
-import { Body, CheckBox, Container, Icon, Left, List, ListItem, Right, Text } from "native-base";
+import { Body, CheckBox, Container, Icon, Left, ListItem, Right, Text } from "native-base";
 import {
   DEFAULT_DUNDER_SERVER,
   DEFAULT_INVOICE_EXPIRY,
@@ -12,15 +12,9 @@ import {
 } from "../../utils/constants";
 import { Linking, NativeModules, PermissionsAndroid, Platform, StyleSheet } from "react-native";
 import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
-import React, { useLayoutEffect } from "react";
+import React, { useCallback, useLayoutEffect, useMemo } from "react";
 import { camelCaseToSpace, formatISO, hexToUint8Array, timeout, toast } from "../../utils";
-import { getChanInfo, verifyChanBackup } from "../../lndmobile/channel";
-import {
-  getNodeInfo,
-  lookupInvoice,
-  resetMissionControl,
-  xImportMissionControl,
-} from "../../lndmobile";
+
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { useStoreActions, useStoreState } from "../../state/store";
 
@@ -28,23 +22,35 @@ import { Alert } from "../../utils/alert";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Chain } from "../../utils/build";
 import Clipboard from "@react-native-clipboard/clipboard";
-import Content from "../../components/Content";
 import DialogAndroid from "react-native-dialogs";
-import DocumentPicker from "react-native-document-picker";
+import DocumentPicker from "@react-native-clipboard/clipboard";
 import { IFiatRates } from "../../state/Fiat";
 import { LoginMethods } from "../../state/Security";
-import Long from "long";
 import { MapStyle } from "../../utils/google-maps";
-import { SettingsStackParamList } from "./index";
-import { StackNavigationProp } from "@react-navigation/stack";
 import TorSvg from "./TorSvg";
 import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
-import { routerrpc } from "../../../proto/lightning";
+import { setBrickDeviceAndExportChannelDb } from "../../storage/app";
+import {
+  getChanInfo,
+  getNodeInfo,
+  lookupInvoice,
+  routerResetMissionControl,
+  routerXImportMissionControl,
+  stopDaemon,
+  verifyChanBackup,
+} from "react-native-turbo-lnd";
+import { NavigationRootStackParamList } from "../../types";
+import { NavigationProp } from "@react-navigation/native";
+import { create, toJson } from "@bufbuild/protobuf";
+import { ChannelEdgeSchema, NodeInfoSchema } from "react-native-turbo-lnd/protos/lightning_pb";
+import { base64Decode } from "@bufbuild/protobuf/wire";
+import { XImportMissionControlRequestSchema } from "react-native-turbo-lnd/protos/routerrpc/router_pb";
+import { FlatList } from "react-native";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { brickInstance, setBrickDeviceAndExportChannelDb } from "../../storage/app";
-import { restoreChannelBackups } from "../../lndmobile/wallet";
+
+import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
 
 let ReactNativePermissions: any;
 if (PLATFORM !== "macos") {
@@ -52,8 +58,21 @@ if (PLATFORM !== "macos") {
 }
 
 interface ISettingsProps {
-  navigation: StackNavigationProp<SettingsStackParamList, "Settings">;
+  navigation: NavigationProp<NavigationRootStackParamList>;
 }
+
+interface SettingsItem {
+  type: string;
+  title: string;
+  icon?: { type: string; name?: string } | { type: string };
+  subtitle?: string;
+  warning?: string;
+  onPress?: (...args: any[]) => any;
+  onLongPress?: (...args: any[]) => any;
+  checkBox?: boolean;
+  checked?: boolean;
+}
+
 export default function Settings({ navigation }: ISettingsProps) {
   const currentLanguage = useStoreState((store) => store.settings.language);
   const { t, i18n } = useTranslation(namespaces.settings.settings);
@@ -150,7 +169,8 @@ export default function Settings({ navigation }: ISettingsProps) {
           { title: BitcoinUnits.satoshi.settings, value: "satoshi" },
           { title: BitcoinUnits.milliBitcoin.settings, value: "milliBitcoin" },
         ],
-        onPick: async (currency) => await changeBitcoinUnit(currency as keyof IBitcoinUnits),
+        onPick: async (currency: string) =>
+          await changeBitcoinUnit(currency as keyof IBitcoinUnits),
       });
     }
   };
@@ -183,7 +203,7 @@ export default function Settings({ navigation }: ISettingsProps) {
           title: currency,
           value: currency as keyof IFiatRates,
         })),
-        onPick: async (currency) => await changeFiatUnit(currency as keyof IFiatRates),
+        onPick: async (currency: string) => await changeFiatUnit(currency as keyof IFiatRates),
         searchEnabled: true,
       });
     }
@@ -219,7 +239,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onLangPress = async () => {
     navigation.navigate("ChangeLanguage", {
       title: t("general.lang.dialog.title"),
-      onPick: async (lang) => {
+      onPick: async (lang: string) => {
         await changeLanguage(lang);
       },
       searchEnabled: true,
@@ -279,7 +299,7 @@ export default function Settings({ navigation }: ISettingsProps) {
     try {
       const path = await NativeModules.LndMobileTools.saveLogs();
       toast(`${t("miscelaneous.appLog.dialog.alert")}: ` + path, 20000, "warning");
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
       toast(t("miscelaneous.appLog.dialog.error"), undefined, "danger");
     }
@@ -289,7 +309,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const copyLndLog = async () => {
     try {
       await NativeModules.LndMobileTools.copyLndLog();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
       toast(`${t("miscelaneous.lndLog.dialog.error")}: ${e.message}`, undefined, "danger");
     }
@@ -299,7 +319,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const copySpeedloaderLog = async () => {
     try {
       await NativeModules.LndMobileTools.copySpeedloaderLog();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
       toast(`${t("miscelaneous.speedloaderLog.dialog.error")}: ${e.message}`, undefined, "danger");
     }
@@ -310,7 +330,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onExportChannelsPress = async () => {
     try {
       const response = await exportChannelsBackup();
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       toast(e.message, 10000, "danger");
     }
@@ -319,7 +339,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const onExportChannelsEmergencyPress = async () => {
     try {
       const response = await exportChannelBackupFile();
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       toast(e.message, 10000, "danger");
     }
@@ -332,14 +352,14 @@ export default function Settings({ navigation }: ISettingsProps) {
         type: [DocumentPicker.types.allFiles],
       });
       const backupFileUri = PLATFORM === "ios" ? res.uri.replace(/%20/g, " ") : res.uri;
-      const backupBase64 = await readFile(
-        backupFileUri,
-        PLATFORM === "android" ? "base64" : undefined,
-      );
-      console.log(backupBase64);
-      await verifyChanBackup(backupBase64);
+      const backupBase64 = await readFile(backupFileUri, "base64");
+      await verifyChanBackup({
+        multiChanBackup: {
+          multiChanBackup: base64Decode(backupBase64),
+        },
+      });
       Alert.alert("Channel backup file is valid");
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       if (!e.message?.includes?.("document picker")) {
         Alert.alert("Error verifying channel backup", e.message);
@@ -421,6 +441,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const googleSignOut = useStoreActions((store) => store.google.signOut);
   const googleIsSignedIn = useStoreState((store) => store.google.isSignedIn);
   const googleDriveMakeBackup = useStoreActions((store) => store.googleDriveBackup.makeBackup);
+
   const onToggleGoogleDriveBackup = async () => {
     if (!googleIsSignedIn) {
       await googleSignIn();
@@ -437,7 +458,7 @@ export default function Settings({ navigation }: ISettingsProps) {
     try {
       await googleDriveMakeBackup();
       toast(t("wallet.backup.googleCloudForce.alert"));
-    } catch (e) {
+    } catch (e: any) {
       toast(t("wallet.backup.error") + `: ${e.message}`, 10000, "danger");
     }
   };
@@ -459,7 +480,7 @@ export default function Settings({ navigation }: ISettingsProps) {
     try {
       await iCloudMakeBackup();
       toast(t("wallet.backup.iCloudForce.alert"));
-    } catch (e) {
+    } catch (e: any) {
       toast(t("wallet.backup.error") + `: ${e.message}`, 10000, "danger");
     }
   };
@@ -584,7 +605,7 @@ ${t("LN.inbound.dialog.msg3")}`;
             value: "BITREFILL_THOR",
           },
         ],
-        onPick: async (selectedItem) => {
+        onPick: async (selectedItem: any) => {
           goToSite(selectedItem as any);
         },
       });
@@ -645,7 +666,7 @@ ${t("LN.inbound.dialog.msg3")}`;
             title: "Custom explorer",
             value: "CUSTOM",
           }),
-        onPick: async (onchainExplorer) => {
+        onPick: async (onchainExplorer: string) => {
           if (onchainExplorer === "CUSTOM") {
             // Custom explorer, let's ask the user for a URL
             await setCustomExplorer();
@@ -675,10 +696,8 @@ ${t("LN.inbound.dialog.msg3")}`;
           text: t("buttons.yes", { ns: namespaces.common }),
           onPress: async () => {
             try {
-              await NativeModules.BlixtTor.stopTor();
-              await NativeModules.LndMobile.stopLnd();
-              await NativeModules.LndMobileTools.killLnd();
-            } catch (e) {
+              await stopDaemon({});
+            } catch (e: any) {
               console.log(e);
             }
             NativeModules.LndMobileTools.restartApp();
@@ -970,9 +989,8 @@ ${t("experimental.tor.disabled.msg2")}`;
           await changeTorEnabled(!torEnabled);
           if (PLATFORM === "android") {
             try {
-              await NativeModules.LndMobile.stopLnd();
-              await NativeModules.LndMobileTools.killLnd();
-            } catch (e) {
+              await stopDaemon({});
+            } catch (e: any) {
               console.log(e);
             }
             NativeModules.LndMobileTools.restartApp();
@@ -1032,30 +1050,6 @@ ${t("experimental.tor.disabled.msg2")}`;
             },
           },
         ]);
-      },
-      "plain-text",
-    );
-  };
-
-  // Delete wallet
-  const onPressDeleteWallet = async () => {
-    Alert.prompt(
-      "Delete wallet",
-      "WARNING!\nOnly do this if you're know what you're doing.\n" +
-        "Any funds that has not been properly backed up will be lost forever.\n\n" +
-        'Write "delete wallet" and press OK to continue.\n' +
-        "Once the wallet has been deleted, the app will be restarted " +
-        "for you to create restore or create a new wallet",
-      async (text) => {
-        if (text.length === 0 || text !== "delete wallet") {
-          return;
-        }
-
-        if (text === "delete wallet") {
-          // await NativeModules.LndMobile.stopLnd();
-          // await timeout(1000);
-          // await NativeModules.LndMobileTools.DEBUG_deleteDatafolder();
-        }
       },
       "plain-text",
     );
@@ -1187,7 +1181,7 @@ ${t("experimental.tor.disabled.msg2")}`;
           }
 
           await changeMaxLNFeePercentage(fee);
-        } catch (error) {
+        } catch (error: any) {
           toast(error.message, 5, "danger");
         }
       },
@@ -1246,9 +1240,11 @@ ${t("experimental.tor.disabled.msg2")}`;
               return;
             }
             try {
-              const nodeInfo = await getNodeInfo((text ?? "").split("@")[0], true);
-              Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
-            } catch (e) {
+              const nodeInfo = await getNodeInfo({
+                pubKey: text?.split("@")[0],
+              });
+              Alert.alert("", JSON.stringify(toJson(NodeInfoSchema, nodeInfo), null, 2));
+            } catch (e: any) {
               Alert.alert(e.message);
             }
           },
@@ -1275,9 +1271,9 @@ ${t("experimental.tor.disabled.msg2")}`;
               return;
             }
             try {
-              const nodeInfo = await getChanInfo(Long.fromValue(text ?? ""));
-              Alert.alert("", JSON.stringify(nodeInfo.toJSON(), null, 2));
-            } catch (e) {
+              const nodeInfo = await getChanInfo({ chanId: text });
+              Alert.alert("", JSON.stringify(toJson(ChannelEdgeSchema, nodeInfo), null, 2));
+            } catch (e: any) {
               Alert.alert(e.message);
             }
           },
@@ -1309,7 +1305,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     try {
       const expiryNumber = Number.parseInt(expiryString, 10);
       await changeInvoiceExpiry(expiryNumber);
-    } catch (e) {
+    } catch (e: any) {
       Alert.alert("", "Could not update expiry.\n" + e.message);
     }
   };
@@ -1347,9 +1343,9 @@ ${t("experimental.tor.disabled.msg2")}`;
   // Reset mission control
   const onPressResetMissionControl = async () => {
     try {
-      await resetMissionControl();
+      await routerResetMissionControl({});
       toast("Done");
-    } catch (error) {
+    } catch (error: any) {
       toast(t("msg.error", { ns: namespaces.common }) + ": " + error.message, 0, "danger", "OK");
     }
   };
@@ -1396,7 +1392,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         title: logLevel,
         value: logLevel,
       })),
-      onPick: async (logLevel) => {
+      onPick: async (logLevel: any) => {
         if (logLevel === lndLogLevel) {
           return;
         }
@@ -1535,9 +1531,11 @@ ${t("experimental.tor.disabled.msg2")}`;
         "Provide payment hash",
         "plain-text",
       );
-      const invoice = await lookupInvoice(hash);
+      const invoice = await lookupInvoice({
+        rHashStr: hash,
+      });
       Alert.alert("", JSON.stringify(invoice, undefined, 2));
-    } catch (error) {
+    } catch (error: any) {
       toast("Error: " + error.message, 10000, "danger");
     }
   };
@@ -1581,13 +1579,25 @@ ${t("experimental.tor.disabled.msg2")}`;
   // Export channel db and brick
   const onPressExportChannelDbAndBrickInstance = async () => {
     try {
+      const result = await Alert.promiseAlert(
+        "Export channel db and brick",
+        "Are you sure you want to export the channel db and brick?",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "OK", style: "default" },
+        ],
+      );
+      if (result.style === "cancel") {
+        return;
+      }
+
       if (PLATFORM === "android") {
         await setSyncEnabled(false);
         await changeScheduledSyncEnabled(false);
       }
 
       await setBrickDeviceAndExportChannelDb(true);
-      await NativeModules.LndMobile.stopLnd();
+      await stopDaemon({});
 
       Alert.alert("Restart the app to continue the procedure.", "", [
         {
@@ -1617,1367 +1627,1015 @@ ${t("experimental.tor.disabled.msg2")}`;
       const backupFileUri = PLATFORM === "ios" ? res.uri.replace(/%20/g, " ") : res.uri;
       try {
         backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? "base64" : undefined);
-      } catch (e) {
+      } catch (e: any) {
         backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? undefined : "base64");
       }
 
-      await restoreChannelBackups(backupBase64);
-    } catch (error) {
+      // TURBOTODO needs to be replaced
+      // await restoreChannelBackups(backupBase64);
+    } catch (error: any) {
       toast("Error: " + error.message, 10000, "danger");
     }
   };
 
+  const settingsData = useMemo((): SettingsItem[] => {
+    return [
+      { type: "header", title: t("general.title") },
+      {
+        type: "item",
+        icon: { type: "AntDesign", name: "edit" },
+        title: t("general.name.title"),
+        subtitle: name || t("general.name.subtitle"),
+        onPress: onNamePress,
+      },
+      {
+        type: "item",
+        icon: { type: "Entypo", name: "language" },
+        title: t("general.lang.title"),
+        subtitle: languages[i18n.language].name,
+        onPress: onLangPress,
+      },
+      {
+        type: "item",
+        icon: { type: "Entypo", name: "bell" },
+        title: t("general.pushNotification.title"),
+        subtitle: t("general.pushNotification.subtitle"),
+        checkBox: true,
+        checked: pushNotificationsEnabled,
+        onPress: onTogglePushNotificationsPress,
+      },
+      {
+        type: "item",
+        icon: { type: "Entypo", name: "clipboard" },
+        title: t("general.checkClipboard.title"),
+        subtitle: t("general.checkClipboard.subtitle"),
+        checkBox: true,
+        checked: clipboardInvoiceCheckEnabled,
+        onPress: onToggleClipBoardInvoiceCheck,
+      },
+      ...(["android", "ios"].includes(PLATFORM)
+        ? [
+            {
+              type: "item",
+              icon: { type: "Entypo", name: "location-pin" },
+              title: t("general.saveGeolocation.title"),
+              subtitle: t("general.saveGeolocation.subtitle"),
+              checkBox: true,
+              checked: transactionGeolocationEnabled,
+              onPress: onToggleTransactionGeolocationEnabled,
+            },
+          ]
+        : []),
+      ...(transactionGeolocationEnabled && PLATFORM === "android"
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "google-maps" },
+              title: t("general.mapTheme.title"),
+              subtitle: camelCaseToSpace(transactionGeolocationMapStyle),
+              onPress: onChangeMapStylePress,
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "Feather", name: "align-justify" },
+        title: t("general.hideAmountsEnabled.title"),
+        checkBox: true,
+        checked: hideAmountsEnabled,
+        onPress: onToggleHideAmountsEnabled,
+      },
+
+      // ... Wallet items
+
+      { type: "header", title: t("wallet.title") },
+      ...(seedAvailable
+        ? [
+            {
+              type: "item",
+              icon: { type: "AntDesign", name: "form" },
+              title: t("wallet.seed.show.title"),
+              subtitle: t("wallet.seed.show.subtitle"),
+              onPress: onGetSeedPress,
+            },
+            ...(onboardingState === "DONE"
+              ? [
+                  {
+                    type: "item",
+                    icon: { type: "Entypo", name: "eraser" },
+                    title: t("wallet.seed.remove.title"),
+                    subtitle: t("wallet.seed.remove.subtitle"),
+                    onPress: onRemoveSeedPress,
+                  },
+                ]
+              : []),
+          ]
+        : []),
+      ...(["android", "ios", "macos"].includes(PLATFORM)
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialIcons", name: "save" },
+              title: t("wallet.backup.export.title"),
+              onPress: onExportChannelsPress,
+              onLongPress: onExportChannelsEmergencyPress,
+            },
+          ]
+        : []),
+      ...(["android", "ios"].includes(PLATFORM)
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialIcons", name: "backup" },
+              title: t("wallet.backup.verify.title"),
+              onPress: onVerifyChannelsBackupPress,
+            },
+          ]
+        : []),
+      ...(PLATFORM === "android" && !isRecoverMode
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "google-drive" },
+              title: t("wallet.backup.googleCloud.title"),
+              subtitle: t("wallet.backup.googleCloud.subtitle"),
+              checkBox: true,
+              checked: googleDriveBackupEnabled,
+              onPress: onToggleGoogleDriveBackup,
+            },
+          ]
+        : []),
+      ...(googleDriveBackupEnabled && !isRecoverMode
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "folder-google-drive" },
+              title: t("wallet.backup.googleCloudForce.title"),
+              onPress: onDoGoogleDriveBackupPress,
+            },
+          ]
+        : []),
+      ...(PLATFORM === "ios" && !isRecoverMode
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "apple-icloud" },
+              title: t("wallet.backup.iCloud.title"),
+              subtitle: t("wallet.backup.iCloud.subtitle"),
+              checkBox: true,
+              checked: iCloudBackupEnabled,
+              onPress: onToggleICloudBackup,
+            },
+          ]
+        : []),
+      ...(iCloudBackupEnabled && !isRecoverMode
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "folder" },
+              title: t("wallet.backup.iCloudForce.title"),
+              onPress: onDoICloudBackupPress,
+            },
+          ]
+        : []),
+
+      // ... Security items
+
+      { type: "header", title: t("security.title") },
+      {
+        type: "item",
+        icon: { type: "AntDesign", name: "lock" },
+        title: t("security.pincode.title"),
+        checkBox: true,
+        checked: loginMethods.has(LoginMethods.pincode),
+        onPress: loginMethods.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress,
+      },
+      ...(fingerprintAvailable
+        ? [
+            {
+              type: "item",
+              icon: {
+                type: biometricsSensor !== "Face ID" ? "Entypo" : "MaterialCommunityIcons",
+                name: biometricsSensor !== "Face ID" ? "fingerprint" : "face-recognition",
+              },
+              title: `${t("security.biometrics.title")} ${
+                biometricsSensor === "Biometrics"
+                  ? t("security.biometrics.fingerprint")
+                  : biometricsSensor === "Face ID"
+                    ? t("security.biometrics.faceId")
+                    : biometricsSensor === "Touch ID"
+                      ? t("security.biometrics.touchID")
+                      : ""
+              }`,
+              checkBox: true,
+              checked: fingerPrintEnabled,
+              onPress: onToggleFingerprintPress,
+            },
+          ]
+        : []),
+      ...(PLATFORM === "android"
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "sync-alert" },
+              title: t("security.chainSync.title"),
+              subtitle: t("security.chainSync.subtitle"),
+              checkBox: true,
+              checked: scheduledSyncEnabled,
+              onPress: onToggleScheduledSyncEnabled,
+              onLongPress: onLongPressScheduledSyncEnabled,
+            },
+          ]
+        : []),
+
+      // ... Display items
+
+      { type: "header", title: t("display.title") },
+      {
+        type: "item",
+        icon: { type: "FontAwesome", name: "money" },
+        title: t("display.fiatUnit.title"),
+        subtitle: currentFiatUnit,
+        onPress: onFiatUnitPress,
+      },
+      {
+        type: "item",
+        icon: { type: "FontAwesome5", name: "btc" },
+        title: t("display.bitcoinUnit.title"),
+        subtitle: BitcoinUnits[currentBitcoinUnit].settings,
+        onPress: onBitcoinUnitPress,
+      },
+      {
+        type: "item",
+        icon: { type: "FontAwesome", name: "chain" },
+        title: t("display.onchainExplorer.title"),
+        subtitle:
+          onchainExplorer in OnchainExplorer ? camelCaseToSpace(onchainExplorer) : onchainExplorer,
+        onPress: onChangeOnchainExplorerPress,
+      },
+
+      // ... Bitcoin Network items
+
+      { type: "header", title: t("bitcoinNetwork.title") },
+      ...(lndChainBackend === "neutrino"
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "router-network" },
+              title: t("bitcoinNetwork.node.title"),
+              subtitle: t("bitcoinNetwork.node.subtitle"),
+              onPress: onSetBitcoinNodePress,
+              onLongPress: onSetBitcoinNodeLongPress,
+            },
+          ]
+        : []),
+      ...(lndChainBackend === "bitcoindWithZmq"
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "router-network" },
+              title: t("bitcoinNetwork.rpc.title"),
+              onPress: onSetBitcoindRpcHostPress,
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "router-network" },
+              title: t("bitcoinNetwork.zmqRawBlock.title"),
+              onPress: onSetBitcoindPubRawBlockPress,
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "router-network" },
+              title: t("bitcoinNetwork.zmqRawTx.title"),
+              onPress: onSetBitcoindPubRawTxPress,
+            },
+          ]
+        : []),
+      ...(lndChainBackend === "bitcoindWithRpcPolling"
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "router-network" },
+              title: t("bitcoinNetwork.rpc.title"),
+              onPress: onSetBitcoindRpcHostPress,
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "router-network" },
+              title: t("bitcoinNetwork.rpcuser.title"),
+              onPress: onSetBitcoindRpcUserPress,
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "router-network" },
+              title: t("bitcoinNetwork.rpcpass.title"),
+              onPress: onSetBitcoindRpcPasswordPress,
+            },
+          ]
+        : []),
+
+      // ... Lightning Network items
+
+      { type: "header", title: t("LN.title") },
+      {
+        type: "item",
+        icon: { type: "Feather", name: "user" },
+        title: t("LN.node.title"),
+        onPress: () => navigation.navigate("LightningNodeInfo"),
+      },
+      {
+        type: "item",
+        icon: { type: "Feather", name: "users" },
+        title: t("LN.peers.title"),
+        onPress: () => navigation.navigate("LightningPeers"),
+      },
+      {
+        type: "item",
+        icon: { type: "Entypo", name: "network" },
+        title: t("LN.network.title"),
+        onPress: () => navigation.navigate("LightningNetworkInfo"),
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "cash" },
+        title: t("LN.maxLNFeePercentage.title"),
+        subtitle: t("LN.maxLNFeePercentage.subtitle"),
+        onPress: onPressLNFee,
+        onLongPress: onLongPressLNFee,
+      },
+      {
+        type: "item",
+        icon: { type: "Entypo", name: "circular-graph" },
+        title: t("LN.autopilot.title"),
+        checkBox: true,
+        checked: autopilotEnabled,
+        onPress: onToggleAutopilotPress,
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "cloud-download" },
+        title: t("LN.inbound.title"),
+        subtitle: t("LN.inbound.subtitle"),
+        onPress: onInboundServiceListPress,
+      },
+      {
+        type: "item",
+        icon: { type: "Entypo", name: "slideshare" },
+        title: t("experimental.LSP.title"),
+        subtitle: t("experimental.LSP.subtitle"),
+        checkBox: true,
+        checked: dunderEnabled,
+        onPress: onToggleDunderEnabled,
+      },
+      ...(dunderEnabled
+        ? [
+            {
+              type: "item",
+              icon: { type: "Entypo", name: "slideshare" },
+              title: t("LN.LSP.title"),
+              subtitle: dunderServer,
+              onPress: onSetDunderServerPress,
+              onLongPress: onSetDunderServerLongPress,
+            },
+          ]
+        : []),
+      ...(scheduledGossipSyncEnabled
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "speedometer" },
+              title: t("LN.speedloaderServer.title"),
+              subtitle: speedloaderServer,
+              onPress: onSetSpeedloaderServerPress,
+              onLongPress: onSetSpeedloaderServerLongPress,
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "database-sync" },
+        title: t("LN.graphSync.title"),
+        subtitle: t("LN.graphSync.subtitle"),
+        checkBox: true,
+        checked: requireGraphSync,
+        onPress: onToggleRequireGraphSyncPress,
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "router-network" },
+        title: t("LN.zeroConfPeers.title"),
+        subtitle: t("LN.zeroConfPeers.subtitle"),
+        onPress: onSetZeroConfPeersPress,
+      },
+
+      // ... Miscellaneous items
+
+      { type: "header", title: t("miscelaneous.title") },
+      {
+        type: "item",
+        icon: { type: "AntDesign", name: "info" },
+        title: t("miscelaneous.about.title"),
+        onPress: () => navigation.navigate("About"),
+      },
+
+      ...(PLATFORM === "android"
+        ? [
+            {
+              type: "item",
+              icon: { type: "AntDesign", name: "copy1" },
+              title: t("miscelaneous.appLog.title"),
+              onPress: () => copyAppLog(),
+            },
+          ]
+        : []),
+      ...(["android", "ios", "macos"].includes(PLATFORM)
+        ? [
+            {
+              type: "item",
+              icon: { type: "AntDesign", name: "copy1" },
+              title: t("miscelaneous.lndLog.title"),
+              onPress: () => copyLndLog(),
+            },
+          ]
+        : []),
+      ...(scheduledGossipSyncEnabled && ["android", "ios", "macos"].includes(PLATFORM)
+        ? [
+            {
+              type: "item",
+              icon: { type: "AntDesign", name: "copy1" },
+              title: t("miscelaneous.speedloaderLog.title"),
+              onPress: () => copySpeedloaderLog(),
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "file-hidden" },
+        title: t("miscelaneous.expiredInvoices.title"),
+        checkBox: true,
+        checked: hideExpiredInvoices,
+        onPress: onToggleHideExpiredInvoicesPress,
+      },
+      {
+        type: "item",
+        icon: { type: "Ionicons", name: "swap-horizontal" },
+        title: t("miscelaneous.screenTransactions.title"),
+        checkBox: true,
+        checked: screenTransitionsEnabled,
+        onPress: onToggleScreenTransitionsEnabledPress,
+      },
+      {
+        type: "item",
+        icon: { type: "FontAwesome5", name: "file-signature" },
+        title: t("miscelaneous.signMessage.title"),
+        onPress: onPressSignMesseage,
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "account-lock" },
+        title: t("miscelaneous.customInvoicePreimageEnabled.title"),
+        checkBox: true,
+        checked: customInvoicePreimageEnabled,
+        onPress: onToggleCustomInvoicePreimageEnabled,
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "emoticon-cool" },
+        title: t("miscelaneous.randomizeSettings.title"),
+        onPress: onPressRandomize,
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "emoticon-cool" },
+        title: t("miscelaneous.randomizeSettingsOnStartup.title"),
+        checkBox: true,
+        checked: randomizeSettingsOnStartup,
+        onPress: onToggleRandomizeSettingsOnStartup,
+      },
+
+      // ... Experimental items
+
+      { type: "header", title: t("experimental.title") },
+
+      ...(["android", "ios"].includes(PLATFORM) && !isRecoverMode
+        ? [
+            {
+              type: "item",
+              icon: { type: "torsvg" },
+              title: t("experimental.tor.title"),
+              checkBox: true,
+              checked: torEnabled,
+              onPress: onChangeTorEnabled,
+            },
+          ]
+        : []),
+
+      ...(torEnabled && PLATFORM === "android"
+        ? [
+            {
+              type: "item",
+              icon: { type: "AntDesign", name: "qrcode" },
+              title: t("experimental.onion.title"),
+              subtitle: t("experimental.onion.subtitle"),
+              onPress: onShowOnionAddressPress,
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "timer-outline" },
+        title: t("experimental.invoiceExpiry.title"),
+        subtitle: t("experimental.invoiceExpiry.subtitle", { expiry: invoiceExpiry }),
+        onPress: onPressSetInvoiceExpiry,
+        onLongPress: onLongPressSetInvoiceExpiry,
+      },
+
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "map-marker-path" },
+        title: t("debug.bimodalPathFinding.title"),
+        checkBox: true,
+        checked: lndPathfindingAlgorithm !== "apriori" && lndPathfindingAlgorithm !== null,
+        onPress: changeBimodalPathFindingEnabledPress,
+      },
+      ...(Chain === "mainnet"
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "cog-sync" },
+              title:
+                PLATFORM === "android"
+                  ? t("security.gossipSyncAndroid.title")
+                  : t("security.gossipSync.title"),
+              subtitle:
+                PLATFORM === "android" ? t("security.gossipSyncAndroid.subtitle") : undefined,
+              checkBox: true,
+              checked: scheduledGossipSyncEnabled,
+              onPress: onToggleScheduledGossipSyncEnabled,
+            },
+          ]
+        : []),
+      ...(PLATFORM === "android"
+        ? [
+            {
+              type: "item",
+              icon: { type: "Entypo", name: "globe" },
+              title: t("debug.persistentServices.title"),
+              subtitle: t("debug.persistentServices.subtitle"),
+              checkBox: true,
+              checked: persistentServicesEnabled,
+              onPress: changePersistentServicesEnabledPress,
+            },
+          ]
+        : []),
+      ...(PLATFORM === "android"
+        ? [
+            {
+              type: "item",
+              icon: { type: "FontAwesome", name: "inbox" },
+              title: t("LN.lightningBoxServer.title"),
+              subtitle: lightningBoxServer,
+              onPress: onSetLightningBoxServerPress,
+              onLongPress: onSetLightningBoxServerLongPress,
+            },
+          ]
+        : []),
+
+      // ... Debug items
+
+      { type: "header", title: t("debug.title") },
+      ...(name === "Hampus" || __DEV__ === true
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialIcons", name: "developer-mode" },
+              title: t("miscelaneous.dev.title"),
+              onPress: () => navigation.navigate("DEV_CommandsX"),
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "android-debug-bridge" },
+        title: t("debug.startup.title"),
+        checkBox: true,
+        checked: debugShowStartupInfo,
+        onPress: onToggleDebugShowStartupInfo,
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "format-list-bulleted" },
+        title: t("debug.showNotifications.title"),
+        onPress: () => navigation.navigate("ToastLog"),
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "format-list-bulleted" },
+        title: t("debug.showDebugLog.title"),
+        onPress: () => navigation.navigate("DebugLog"),
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "restart" },
+        title: t("debug.rescanWallet.title"),
+        subtitle: t("debug.rescanWallet.subtitle"),
+        onPress: onPressRescanWallet,
+      },
+      {
+        type: "item",
+        icon: { type: "Entypo", name: "lifebuoy" },
+        title: t("debug.helpCencer.title"),
+        onPress: onLndMobileHelpCenterPress,
+      },
+      {
+        type: "item",
+        icon: { type: "Entypo", name: "info" },
+        title: t("debug.getNodeInfo.title"),
+        onPress: onGetNodeInfoPress,
+      },
+      {
+        type: "item",
+        icon: { type: "Entypo", name: "info" },
+        title: t("debug.getChannelInfo.title"),
+        onPress: onGetChanInfoPress,
+      },
+      ...(dunderEnabled
+        ? [
+            {
+              type: "item",
+              icon: { type: "Entypo", name: "slideshare" },
+              title: t("debug.LSP.title"),
+              onPress: () => navigation.navigate("DunderDoctor"),
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "Ionicons", name: "newspaper-outline" },
+        title: t("debug.lndLog.title"),
+        onPress: async () => navigation.navigate("LndLog"),
+      },
+      ...(scheduledGossipSyncEnabled
+        ? [
+            {
+              type: "item",
+              icon: { type: "Ionicons", name: "newspaper-outline" },
+              title: t("debug.speedloaderLog.title"),
+              onPress: async () => navigation.navigate("SpeedloaderLog"),
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "file-code" },
+        title: t("miscelaneous.setLndLogLevel.title"),
+        subtitle: lndLogLevel,
+        onPress: onPressSetLndLogLevel,
+        onLongPress: onLongPressSetLndLogLevel,
+      },
+      ...(name === "Hampus" || __DEV__ === true
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialIcons", name: "developer-mode" },
+              title: t("debug.keysend.title"),
+              onPress: () => navigation.navigate("KeysendTest"),
+            },
+            {
+              type: "item",
+              icon: { type: "Entypo", name: "google-drive" },
+              title: t("debug.googleDrive.title"),
+              onPress: () => navigation.navigate("GoogleDriveTestbed"),
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialIcons", name: "local-grocery-store" },
+              title: t("debug.webln.title"),
+              onPress: () => navigation.navigate("WebLNBrowser"),
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "AntDesign", name: "mobile1" },
+        title: t("debug.demoMode.title"),
+        subtitle: t("debug.demoMode.subtitle"),
+        onPress: () => setupDemo({ changeDb: false }),
+        onLongPress: () => {
+          setupDemo({ changeDb: true });
+          toast("DB written");
+        },
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "database-sync" },
+        title: t("debug.disableGraphCache.title"),
+        onPress: onToggleLndNoGraphCache,
+        checkBox: true,
+        checked: lndNoGraphCache,
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "typewriter" },
+        title: t("debug.config.title"),
+        onPress: () => {
+          writeConfig();
+          toast(t("msg.written", { ns: namespaces.common }));
+        },
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "restore-alert" },
+        title: t("debug.resetMissionControl.title"),
+        onPress: onPressResetMissionControl,
+      },
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "multiplication" },
+        title: t("experimental.MPP.title"),
+        subtitle: t("experimental.MPP.subtitle"),
+        onPress: onChangeMultiPartPaymentEnabledPress,
+        checkBox: true,
+        checked: multiPathPaymentsEnabled,
+      },
+      {
+        type: "item",
+        icon: { type: "Entypo", name: "trash" },
+        title: t("debug.strictGraphPruning.title"),
+        onPress: changeStrictGraphPruningEnabledPress,
+        checkBox: true,
+        checked: strictGraphPruningEnabled,
+      },
+      {
+        type: "item",
+        icon: { type: "AntDesign", name: "shrink" },
+        title: t("debug.compactLndDatabases.title"),
+        onPress: onPressLndCompactDb,
+      },
+      ...(scheduledGossipSyncEnabled
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "run-fast" },
+              title: t("debug.enforceSpeedloaderOnStartup.title"),
+              onPress: onPressEnforceSpeedloaderOnStartup,
+              checkBox: true,
+              checked: enforceSpeedloaderOnStartup,
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "run-fast" },
+        title: "Dunder MissionControl import",
+        onPress: async () => {
+          try {
+            console.log(`${dunderServer}/channel-liquidity`);
+            const res = await fetch(`${dunderServer}/channel-liquidity`);
+
+            const json: { pairs: any[] } = await res.json();
+            const schema = create(XImportMissionControlRequestSchema, {
+              pairs: json.pairs
+                .filter((c) => c.history.successAmtSat > 0)
+                .map((c) => {
+                  return {
+                    nodeFrom: hexToUint8Array(c.nodeFrom),
+                    nodeTo: hexToUint8Array(c.nodeTo),
+                    history: {
+                      successAmtSat: BigInt(c.history.successAmtSat),
+                      successTime: BigInt(c.history.successTime),
+                    },
+                  };
+                }),
+            });
+
+            await routerXImportMissionControl({
+              pairs: schema.pairs,
+            });
+
+            toast("Done");
+          } catch (e: any) {
+            toast("Error: " + e.message, 10000, "danger");
+          }
+        },
+      },
+      {
+        type: "item",
+        icon: { type: "Foundation", name: "page-delete" },
+        title: "Stop lnd and delete neutrino files",
+        onPress: async () => {
+          try {
+            await stopDaemon({});
+            await timeout(5000); // Let lnd close down
+          } catch (e: any) {
+            if (e?.message?.includes?.("closed")) {
+              console.log("yes closed");
+            } else {
+              toast("Error: " + e.message, 10000, "danger");
+              return;
+            }
+          }
+
+          console.log(NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles());
+          toast("Done. Restart is required");
+          restartNeeded();
+        },
+      },
+      {
+        type: "item",
+        icon: { type: "AntDesign", name: "file1" },
+        title: "Lookup invoice",
+        onPress: onPressLookupInvoiceByHash,
+      },
+      ...((name === "Hampus" || __DEV__ === true) && lndChainBackend === "neutrino"
+        ? [
+            {
+              type: "item",
+              icon: { type: "AntDesign", name: "file1" },
+              title: "Change bitcoin backend to bitcoindWithZmq",
+              onPress: onPressChangeBackendToBitcoindWithZmq,
+            },
+          ]
+        : []),
+      ...((name === "Hampus" || __DEV__ === true) && lndChainBackend !== "neutrino"
+        ? [
+            {
+              type: "item",
+              icon: { type: "AntDesign", name: "file1" },
+              title: "Change bitcoin backend to neutrino",
+              onPress: onPressChangeBackendToNeutrino,
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "FontAwesome", name: "stop" },
+        title: "Stop lnd",
+        onPress: async () => {
+          try {
+            await stopDaemon({});
+          } catch (e: any) {
+            toast("Error: " + e.message, 10000, "danger");
+            return;
+          }
+        },
+      },
+      ...(PLATFORM === "android" && name === "Hampus"
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "file-export" },
+              title: "Export channel.db file and permanently disable this instance of Blixt Wallet",
+              subtitle: "Use this feature to migrate this wallet to another device or to lnd.",
+              warning: "Only do this if you're know what you're doing",
+              onPress: onPressExportChannelDbAndBrickInstance,
+            },
+          ]
+        : []),
+      {
+        type: "item",
+        icon: { type: "MaterialCommunityIcons", name: "file-export" },
+        title: "Restore SCB channel backup file",
+        onPress: onPressRestoreChannelBackup,
+      },
+      ...(PLATFORM === "android"
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
+              title: "Sync worker report",
+              onPress: () => navigation.navigate("SyncWorkerReport"),
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
+              title: "Sync worker timeline report",
+              onPress: () => navigation.navigate("SyncWorkerTimelineReport"),
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "sync-circle" },
+              title: "Schedule periodic sync",
+              onPress: () => {
+                LndMobileToolsTurbo.scheduleSyncWorker();
+                toast("Periodic sync scheduled");
+              },
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "sync-off" },
+              title: "Stop scheduled sync",
+              onPress: () => {
+                LndMobileToolsTurbo.stopScheduleSyncWorker();
+                toast("Scheduled sync stopped");
+              },
+            },
+          ]
+        : []),
+    ];
+  }, [
+    t,
+    i18n,
+    name,
+    pushNotificationsEnabled,
+    clipboardInvoiceCheckEnabled,
+    transactionGeolocationEnabled,
+    transactionGeolocationMapStyle,
+    PLATFORM,
+    hideAmountsEnabled,
+    seedAvailable,
+    onboardingState,
+    googleDriveBackupEnabled,
+    iCloudBackupEnabled,
+    isRecoverMode,
+    loginMethods,
+    fingerprintAvailable,
+    biometricsSensor,
+    scheduledSyncEnabled,
+    currentFiatUnit,
+    currentBitcoinUnit,
+    onchainExplorer,
+    lndChainBackend,
+    autopilotEnabled,
+    dunderServer,
+    speedloaderServer,
+    requireGraphSync,
+    dunderEnabled,
+    hideExpiredInvoices,
+    screenTransitionsEnabled,
+    customInvoicePreimageEnabled,
+    randomizeSettingsOnStartup,
+    torEnabled,
+    lndPathfindingAlgorithm,
+    scheduledGossipSyncEnabled,
+    persistentServicesEnabled,
+    lightningBoxServer,
+    debugShowStartupInfo,
+    lndLogLevel,
+    lndNoGraphCache,
+    multiPathPaymentsEnabled,
+    strictGraphPruningEnabled,
+    enforceSpeedloaderOnStartup,
+  ]);
+
+  const renderItem = useCallback(({ item }: { item: SettingsItem }) => {
+    if (item.type === "header") {
+      return <Text style={styles.itemHeader}>{item.title}</Text>;
+    }
+    return (
+      <ListItem style={styles.listItem} icon onPress={item.onPress} onLongPress={item.onLongPress}>
+        <Left>
+          {item.icon?.type === "torsvg" ? (
+            <TorSvg />
+          ) : (
+            <Icon style={styles.icon} type={item.icon?.type} name={item.icon?.name} />
+          )}
+        </Left>
+        <Body>
+          <Text>{item.title}</Text>
+          {item.subtitle && <Text note>{item.subtitle}</Text>}
+          {item.warning && (
+            <Text note={true} style={{ color: blixtTheme.red }}>
+              {item.warning}
+            </Text>
+          )}
+        </Body>
+        {item.checkBox && (
+          <Right>
+            <CheckBox checked={item.checked} onPress={item.onPress} />
+          </Right>
+        )}
+      </ListItem>
+    );
+  }, []);
+
   return (
     <Container>
-      <Content style={{ padding: 10 }}>
-        <BlixtWallet />
-
-        <List style={style.list}>
-          <ListItem style={style.itemHeader} itemHeader={true} first={true}>
-            <Text>{t("general.title")}</Text>
-          </ListItem>
-
-          <ListItem style={style.listItem} icon={true} onPress={onNamePress}>
-            <Left>
-              <Icon style={style.icon} type="AntDesign" name="edit" />
-            </Left>
-            <Body>
-              <Text>{t("general.name.title")}</Text>
-              <Text note={true}>{name || t("general.name.subtitle")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onLangPress}>
-            <Left>
-              <Icon style={style.icon} type="Entypo" name="language" />
-            </Left>
-            <Body>
-              <Text>{t("general.lang.title")}</Text>
-              <Text note={true}>{languages[i18n.language].name}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onTogglePushNotificationsPress}
-          >
-            <Left>
-              <Icon style={style.icon} type="Entypo" name="bell" />
-            </Left>
-            <Body>
-              <Text>{t("general.pushNotification.title")}</Text>
-              <Text note={true}>{t("general.pushNotification.subtitle")}</Text>
-            </Body>
-            <Right>
-              <CheckBox
-                checked={pushNotificationsEnabled}
-                onPress={onTogglePushNotificationsPress}
-              />
-            </Right>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onToggleClipBoardInvoiceCheck}>
-            <Left>
-              <Icon style={style.icon} type="Entypo" name="clipboard" />
-            </Left>
-            <Body>
-              <Text>{t("general.checkClipboard.title")}</Text>
-              <Text note={true}>{t("general.checkClipboard.subtitle")}</Text>
-            </Body>
-            <Right>
-              <CheckBox
-                checked={clipboardInvoiceCheckEnabled}
-                onPress={onToggleClipBoardInvoiceCheck}
-              />
-            </Right>
-          </ListItem>
-          {["android", "ios"].includes(PLATFORM) && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={onToggleTransactionGeolocationEnabled}
-            >
-              <Left>
-                <Icon style={style.icon} type="Entypo" name="location-pin" />
-              </Left>
-              <Body>
-                <Text>{t("general.saveGeolocation.title")}</Text>
-                <Text note={true}>{t("general.saveGeolocation.subtitle")}</Text>
-              </Body>
-              <Right>
-                <CheckBox
-                  checked={transactionGeolocationEnabled}
-                  onPress={onToggleTransactionGeolocationEnabled}
-                />
-              </Right>
-            </ListItem>
-          )}
-          {transactionGeolocationEnabled && PLATFORM === "android" && (
-            <ListItem style={style.listItem} icon={true} onPress={onChangeMapStylePress}>
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="google-maps" />
-              </Left>
-              <Body>
-                <Text>{t("general.mapTheme.title")}</Text>
-                <Text note={true}>{camelCaseToSpace(transactionGeolocationMapStyle)}</Text>
-              </Body>
-            </ListItem>
-          )}
-          <ListItem style={style.listItem} icon={true} onPress={onToggleHideAmountsEnabled}>
-            <Left>
-              <Icon style={style.icon} type="Feather" name="align-justify" />
-            </Left>
-            <Body>
-              <Text>{t("general.hideAmountsEnabled.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox checked={hideAmountsEnabled} onPress={onToggleHideAmountsEnabled} />
-            </Right>
-          </ListItem>
-
-          <ListItem style={style.itemHeader} itemHeader={true} first={true}>
-            <Text>{t("wallet.title")}</Text>
-          </ListItem>
-
-          {seedAvailable && (
-            <>
-              <ListItem style={style.listItem} button={true} icon={true} onPress={onGetSeedPress}>
-                <Left>
-                  <Icon style={style.icon} type="AntDesign" name="form" />
-                </Left>
-                <Body>
-                  <Text>{t("wallet.seed.show.title")}</Text>
-                  <Text note={true}>{t("wallet.seed.show.subtitle")}</Text>
-                </Body>
-              </ListItem>
-              {onboardingState === "DONE" && (
-                <ListItem
-                  style={style.listItem}
-                  button={true}
-                  icon={true}
-                  onPress={onRemoveSeedPress}
-                >
-                  <Left>
-                    <Icon style={style.icon} type="Entypo" name="eraser" />
-                  </Left>
-                  <Body>
-                    <Text>{t("wallet.seed.remove.title")}</Text>
-                    <Text note={true}>{t("wallet.seed.remove.subtitle")}</Text>
-                  </Body>
-                </ListItem>
-              )}
-            </>
-          )}
-          {["android", "ios", "macos"].includes(PLATFORM) && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={onExportChannelsPress}
-              onLongPress={onExportChannelsEmergencyPress}
-            >
-              <Left>
-                <Icon style={style.icon} type="MaterialIcons" name="save" />
-              </Left>
-              <Body>
-                <Text>{t("wallet.backup.export.title")}</Text>
-              </Body>
-            </ListItem>
-          )}
-          {["android", "ios"].includes(PLATFORM) && (
-            <ListItem style={style.listItem} icon={true} onPress={onVerifyChannelsBackupPress}>
-              <Left>
-                <Icon style={style.icon} type="MaterialIcons" name="backup" />
-              </Left>
-              <Body>
-                <Text>{t("wallet.backup.verify.title")}</Text>
-              </Body>
-            </ListItem>
-          )}
-          {PLATFORM == "android" && !isRecoverMode && (
-            <ListItem style={style.listItem} icon={true} onPress={onToggleGoogleDriveBackup}>
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="google-drive" />
-              </Left>
-              <Body>
-                <Text>{t("wallet.backup.googleCloud.title")}</Text>
-                <Text note={true}>{t("wallet.backup.googleCloud.subtitle")}</Text>
-              </Body>
-              <Right>
-                <CheckBox checked={googleDriveBackupEnabled} onPress={onToggleGoogleDriveBackup} />
-              </Right>
-            </ListItem>
-          )}
-          {googleDriveBackupEnabled && !isRecoverMode && (
-            <ListItem style={style.listItem} icon={true} onPress={onDoGoogleDriveBackupPress}>
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="folder-google-drive" />
-              </Left>
-              <Body>
-                <Text>{t("wallet.backup.googleCloudForce.title")}</Text>
-              </Body>
-            </ListItem>
-          )}
-          {PLATFORM == "ios" && !isRecoverMode && (
-            <ListItem style={style.listItem} icon={true} onPress={onToggleICloudBackup}>
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="apple-icloud" />
-              </Left>
-              <Body>
-                <Text>{t("wallet.backup.iCloud.title")}</Text>
-                <Text note={true}>{t("wallet.backup.iCloud.subtitle")}</Text>
-              </Body>
-              <Right>
-                <CheckBox checked={iCloudBackupEnabled} onPress={onToggleICloudBackup} />
-              </Right>
-            </ListItem>
-          )}
-          {iCloudBackupEnabled && !isRecoverMode && (
-            <ListItem style={style.listItem} icon={true} onPress={onDoICloudBackupPress}>
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="folder" />
-              </Left>
-              <Body>
-                <Text>{t("wallet.backup.iCloudForce.title")}</Text>
-              </Body>
-            </ListItem>
-          )}
-
-          <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>{t("security.title")}</Text>
-          </ListItem>
-
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={
-              loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress
-            }
-          >
-            <Left>
-              <Icon style={style.icon} type="AntDesign" name="lock" />
-            </Left>
-            <Body>
-              <Text>{t("security.pincode.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox
-                checked={loginMethods!.has(LoginMethods.pincode)}
-                onPress={
-                  loginMethods!.has(LoginMethods.pincode) ? onRemovePincodePress : onSetPincodePress
-                }
-              />
-            </Right>
-          </ListItem>
-          {fingerprintAvailable && (
-            <ListItem
-              style={style.listItem}
-              button={true}
-              icon={true}
-              onPress={onToggleFingerprintPress}
-            >
-              <Left>
-                {biometricsSensor !== "Face ID" && (
-                  <Icon style={style.icon} type="Entypo" name="fingerprint" />
-                )}
-                {biometricsSensor === "Face ID" && (
-                  <Icon style={style.icon} type="MaterialCommunityIcons" name="face-recognition" />
-                )}
-              </Left>
-              <Body>
-                <Text>
-                  {t("security.biometrics.title")}{" "}
-                  {biometricsSensor === "Biometrics" && t("security.biometrics.fingerprint")}
-                  {biometricsSensor === "Face ID" && t("security.biometrics.faceId")}
-                  {biometricsSensor === "Touch ID" && t("security.biometrics.touchID")}
-                </Text>
-              </Body>
-              <Right>
-                <CheckBox checked={fingerPrintEnabled} onPress={onToggleFingerprintPress} />
-              </Right>
-            </ListItem>
-          )}
-          {PLATFORM === "android" && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={onToggleScheduledSyncEnabled}
-              onLongPress={onLongPressScheduledSyncEnabled}
-            >
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="sync-alert" />
-              </Left>
-              <Body>
-                <Text>{t("security.chainSync.title")}</Text>
-                <Text note={true}>{t("security.chainSync.subtitle")}</Text>
-              </Body>
-              <Right>
-                <CheckBox checked={scheduledSyncEnabled} onPress={onToggleScheduledSyncEnabled} />
-              </Right>
-            </ListItem>
-          )}
-
-          <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>{t("display.title")}</Text>
-          </ListItem>
-
-          <ListItem style={style.listItem} icon={true} onPress={onFiatUnitPress}>
-            <Left>
-              <Icon style={style.icon} type="FontAwesome" name="money" />
-            </Left>
-            <Body>
-              <Text>{t("display.fiatUnit.title")}</Text>
-              <Text note={true} onPress={onFiatUnitPress}>
-                {currentFiatUnit}
-              </Text>
-            </Body>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onBitcoinUnitPress}>
-            <Left>
-              <Icon style={style.icon} type="FontAwesome5" name="btc" />
-            </Left>
-            <Body>
-              <Text>{t("display.bitcoinUnit.title")}</Text>
-              <Text note={true} onPress={onBitcoinUnitPress}>
-                {BitcoinUnits[currentBitcoinUnit].settings}
-              </Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onChangeOnchainExplorerPress}
-          >
-            <Left>
-              <Icon style={style.icon} type="FontAwesome" name="chain" />
-            </Left>
-            <Body>
-              <Text>{t("display.onchainExplorer.title")}</Text>
-              <Text note={true}>
-                {onchainExplorer in OnchainExplorer
-                  ? camelCaseToSpace(onchainExplorer)
-                  : onchainExplorer}
-              </Text>
-            </Body>
-          </ListItem>
-
-          <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>{t("bitcoinNetwork.title")}</Text>
-          </ListItem>
-
-          {lndChainBackend === "neutrino" && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={onSetBitcoinNodePress}
-              onLongPress={onSetBitcoinNodeLongPress}
-            >
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
-              </Left>
-              <Body>
-                <Text>{t("bitcoinNetwork.node.title")}</Text>
-                <Text note={true}>{t("bitcoinNetwork.node.subtitle")}</Text>
-              </Body>
-            </ListItem>
-          )}
-          {lndChainBackend === "bitcoindWithZmq" && (
-            <>
-              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcHostPress}>
-                <Left>
-                  <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
-                </Left>
-                <Body>
-                  <Text>{t("bitcoinNetwork.rpc.title")}</Text>
-                </Body>
-              </ListItem>
-              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindPubRawBlockPress}>
-                <Left>
-                  <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
-                </Left>
-                <Body>
-                  <Text>{t("bitcoinNetwork.zmqRawBlock.title")}</Text>
-                </Body>
-              </ListItem>
-              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindPubRawTxPress}>
-                <Left>
-                  <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
-                </Left>
-                <Body>
-                  <Text>{t("bitcoinNetwork.zmqRawTx.title")}</Text>
-                </Body>
-              </ListItem>
-            </>
-          )}
-
-          {lndChainBackend === "bitcoindWithRpcPolling" && (
-            <>
-              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcHostPress}>
-                <Left>
-                  <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
-                </Left>
-                <Body>
-                  <Text>{t("bitcoinNetwork.rpc.title")}</Text>
-                </Body>
-              </ListItem>
-              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcUserPress}>
-                <Left>
-                  <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
-                </Left>
-                <Body>
-                  <Text>{t("bitcoinNetwork.rpcuser.title")}</Text>
-                </Body>
-              </ListItem>
-              <ListItem style={style.listItem} icon={true} onPress={onSetBitcoindRpcPasswordPress}>
-                <Left>
-                  <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
-                </Left>
-                <Body>
-                  <Text>{t("bitcoinNetwork.rpcpass.title")}</Text>
-                </Body>
-              </ListItem>
-            </>
-          )}
-
-          <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>{t("LN.title")}</Text>
-          </ListItem>
-
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={() => navigation.navigate("LightningNodeInfo")}
-          >
-            <Left>
-              <Icon style={style.icon} type="Feather" name="user" />
-            </Left>
-            <Body>
-              <Text>{t("LN.node.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={() => navigation.navigate("LightningPeers")}
-          >
-            <Left>
-              <Icon style={style.icon} type="Feather" name="users" />
-            </Left>
-            <Body>
-              <Text>{t("LN.peers.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={() => navigation.navigate("LightningNetworkInfo")}
-          >
-            <Left>
-              <Icon style={style.icon} type="Entypo" name="network" />
-            </Left>
-            <Body>
-              <Text>{t("LN.network.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={onPressLNFee}
-            onLongPress={onLongPressLNFee}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="cash" />
-            </Left>
-            <Body>
-              <Text>{t("LN.maxLNFeePercentage.title")}</Text>
-              <Text note={true}>{t("LN.maxLNFeePercentage.subtitle")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onToggleAutopilotPress}
-          >
-            <Left>
-              <Icon style={style.icon} type="Entypo" name="circular-graph" />
-            </Left>
-            <Body>
-              <Text>{t("LN.autopilot.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox checked={autopilotEnabled} onPress={onToggleAutopilotPress} />
-            </Right>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onInboundServiceListPress}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="cloud-download" />
-            </Left>
-            <Body>
-              <Text>{t("LN.inbound.title")}</Text>
-              <Text note={true}>{t("LN.inbound.subtitle")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onToggleDunderEnabled}>
-            <Left>
-              <Icon style={style.icon} type="Entypo" name="slideshare" />
-            </Left>
-            <Body>
-              <Text>{t("experimental.LSP.title")}</Text>
-              <Text note={true}>{t("experimental.LSP.subtitle")}</Text>
-            </Body>
-            <Right>
-              <CheckBox checked={dunderEnabled} onPress={onToggleDunderEnabled} />
-            </Right>
-          </ListItem>
-          {dunderEnabled && (
-            <ListItem
-              style={style.listItem}
-              button={true}
-              icon={true}
-              onPress={onSetDunderServerPress}
-              onLongPress={onSetDunderServerLongPress}
-            >
-              <Left>
-                <Icon style={style.icon} type="Entypo" name="slideshare" />
-              </Left>
-              <Body>
-                <Text>{t("LN.LSP.title")}</Text>
-                <Text note={true}>{dunderServer}</Text>
-              </Body>
-            </ListItem>
-          )}
-          {scheduledGossipSyncEnabled && (
-            <ListItem
-              style={style.listItem}
-              button={true}
-              icon={true}
-              onPress={onSetSpeedloaderServerPress}
-              onLongPress={onSetSpeedloaderServerLongPress}
-            >
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="speedometer" />
-              </Left>
-              <Body>
-                <Text>{t("LN.speedloaderServer.title")}</Text>
-                <Text note={true}>{speedloaderServer}</Text>
-              </Body>
-            </ListItem>
-          )}
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onToggleRequireGraphSyncPress}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="database-sync" />
-            </Left>
-            <Body>
-              <Text>{t("LN.graphSync.title")}</Text>
-              <Text note={true}>{t("LN.graphSync.subtitle")}</Text>
-            </Body>
-            <Right>
-              <CheckBox checked={requireGraphSync} onPress={onToggleRequireGraphSyncPress} />
-            </Right>
-          </ListItem>
-
-          <ListItem style={style.listItem} icon={true} onPress={onSetZeroConfPeersPress}>
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="router-network" />
-            </Left>
-            <Body>
-              <Text>{t("LN.zeroConfPeers.title")}</Text>
-              <Text note={true}>{t("LN.zeroConfPeers.subtitle")}</Text>
-            </Body>
-          </ListItem>
-
-          <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>{t("miscelaneous.title")}</Text>
-          </ListItem>
-
-          <ListItem style={style.listItem} icon={true} onPress={() => navigation.navigate("About")}>
-            <Left>
-              <Icon style={style.icon} type="AntDesign" name="info" />
-            </Left>
-            <Body>
-              <Text>{t("miscelaneous.about.title")}</Text>
-            </Body>
-          </ListItem>
-          {PLATFORM === "android" && (
-            <ListItem style={style.listItem} icon={true} onPress={() => copyAppLog()}>
-              <Left>
-                <Icon style={style.icon} type="AntDesign" name="copy1" />
-              </Left>
-              <Body>
-                <Text>{t("miscelaneous.appLog.title")}</Text>
-              </Body>
-            </ListItem>
-          )}
-          {(PLATFORM === "android" || PLATFORM === "ios" || PLATFORM === "macos") && (
-            <ListItem style={style.listItem} icon={true} onPress={() => copyLndLog()}>
-              <Left>
-                <Icon style={style.icon} type="AntDesign" name="copy1" />
-              </Left>
-              <Body>
-                <Text>{t("miscelaneous.lndLog.title")}</Text>
-              </Body>
-            </ListItem>
-          )}
-          {scheduledGossipSyncEnabled &&
-            (PLATFORM === "android" || PLATFORM === "ios" || PLATFORM === "macos") && (
-              <ListItem style={style.listItem} icon={true} onPress={() => copySpeedloaderLog()}>
-                <Left>
-                  <Icon style={style.icon} type="AntDesign" name="copy1" />
-                </Left>
-                <Body>
-                  <Text>{t("miscelaneous.speedloaderLog.title")}</Text>
-                </Body>
-              </ListItem>
-            )}
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onToggleHideExpiredInvoicesPress}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="file-hidden" />
-            </Left>
-            <Body>
-              <Text>{t("miscelaneous.expiredInvoices.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox checked={hideExpiredInvoices} onPress={onToggleHideExpiredInvoicesPress} />
-            </Right>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onToggleScreenTransitionsEnabledPress}
-          >
-            <Left>
-              <Icon style={style.icon} type="Ionicons" name="swap-horizontal" />
-            </Left>
-            <Body>
-              <Text>{t("miscelaneous.screenTransactions.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox
-                checked={screenTransitionsEnabled}
-                onPress={onToggleScreenTransitionsEnabledPress}
-              />
-            </Right>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onPressSignMesseage}>
-            <Left>
-              <Icon style={style.icon} type="FontAwesome5" name="file-signature" />
-            </Left>
-            <Body>
-              <Text>{t("miscelaneous.signMessage.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onToggleCustomInvoicePreimageEnabled}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="account-lock" />
-            </Left>
-            <Body>
-              <Text>{t("miscelaneous.customInvoicePreimageEnabled.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox
-                checked={customInvoicePreimageEnabled}
-                onPress={onToggleCustomInvoicePreimageEnabled}
-              />
-            </Right>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onPressRandomize}>
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="emoticon-cool" />
-            </Left>
-            <Body>
-              <Text>{t("miscelaneous.randomizeSettings.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onToggleRandomizeSettingsOnStartup}>
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="emoticon-cool" />
-            </Left>
-            <Body>
-              <Text>{t("miscelaneous.randomizeSettingsOnStartup.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox
-                checked={randomizeSettingsOnStartup}
-                onPress={onToggleRandomizeSettingsOnStartup}
-              />
-            </Right>
-          </ListItem>
-
-          {/* <ListItem style={style.listItem} icon={true} onPress={onPressDeleteWallet}>
-            <Left><Icon style={style.icon} type="FontAwesome5" name="file-signature" /></Left>
-            <Body><Text>Delete wallet</Text></Body>
-          </ListItem> */}
-
-          <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>{t("experimental.title")}</Text>
-          </ListItem>
-          {["android", "ios"].includes(PLATFORM) && (
-            <ListItem style={style.listItem} icon={true} onPress={onChangeTorEnabled}>
-              <Left>
-                <TorSvg />
-              </Left>
-              <Body>
-                <Text>{t("experimental.tor.title")}</Text>
-              </Body>
-              <Right>
-                <CheckBox checked={torEnabled} onPress={onChangeTorEnabled} />
-              </Right>
-            </ListItem>
-          )}
-          {torEnabled && PLATFORM === "android" && (
-            <ListItem
-              style={style.listItem}
-              button={true}
-              icon={true}
-              onPress={onShowOnionAddressPress}
-            >
-              <Left>
-                <Icon
-                  style={[style.icon, { marginLeft: 1, marginRight: -1 }]}
-                  type="AntDesign"
-                  name="qrcode"
-                />
-              </Left>
-              <Body>
-                <Text>{t("experimental.onion.title")}</Text>
-                <Text note={true}>{t("experimental.onion.subtitle")}</Text>
-              </Body>
-            </ListItem>
-          )}
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={onPressSetInvoiceExpiry}
-            onLongPress={onLongPressSetInvoiceExpiry}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="timer-outline" />
-            </Left>
-            <Body>
-              <Text>{t("experimental.invoiceExpiry.title")}</Text>
-              <Text note={true}>
-                {t("experimental.invoiceExpiry.subtitle", { expiry: invoiceExpiry })}
-              </Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={changeBimodalPathFindingEnabledPress}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="map-marker-path" />
-            </Left>
-            <Body>
-              <Text>{t("debug.bimodalPathFinding.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox
-                checked={
-                  lndPathfindingAlgorithm === "apriori" || lndPathfindingAlgorithm === null
-                    ? false
-                    : true
-                }
-                onPress={changeBimodalPathFindingEnabledPress}
-              />
-            </Right>
-          </ListItem>
-          {Chain === "mainnet" && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={onToggleScheduledGossipSyncEnabled}
-            >
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="cog-sync" />
-              </Left>
-              <Body>
-                <Text>
-                  {PLATFORM === "android"
-                    ? t("security.gossipSyncAndroid.title")
-                    : t("security.gossipSync.title")}
-                </Text>
-                {PLATFORM === "android" && (
-                  <Text note={true}>{t("security.gossipSyncAndroid.subtitle")}</Text>
-                )}
-              </Body>
-              <Right>
-                <CheckBox
-                  checked={scheduledGossipSyncEnabled}
-                  onPress={onToggleScheduledGossipSyncEnabled}
-                />
-              </Right>
-            </ListItem>
-          )}
-          {PLATFORM === "android" && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={changePersistentServicesEnabledPress}
-            >
-              <Left>
-                <Icon style={style.icon} type="Entypo" name="globe" />
-              </Left>
-              <Body>
-                <Text>{t("debug.persistentServices.title")}</Text>
-                <Text note={true}>{t("debug.persistentServices.subtitle")}</Text>
-              </Body>
-              <Right>
-                <CheckBox
-                  checked={persistentServicesEnabled}
-                  onPress={changePersistentServicesEnabledPress}
-                />
-              </Right>
-            </ListItem>
-          )}
-          {PLATFORM === "android" && (
-            <ListItem
-              style={style.listItem}
-              button={true}
-              icon={true}
-              onPress={onSetLightningBoxServerPress}
-              onLongPress={onSetLightningBoxServerLongPress}
-            >
-              <Left>
-                <Icon style={style.icon} type="FontAwesome" name="inbox" />
-              </Left>
-              <Body>
-                <Text>{t("LN.lightningBoxServer.title")}</Text>
-                <Text note={true}>{lightningBoxServer}</Text>
-              </Body>
-            </ListItem>
-          )}
-
-          <ListItem style={style.itemHeader} itemHeader={true}>
-            <Text>{t("debug.title")}</Text>
-          </ListItem>
-          {(name === "Hampus" || __DEV__ === true) && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={() => navigation.navigate("DEV_CommandsX")}
-            >
-              <Left>
-                <Icon style={style.icon} type="MaterialIcons" name="developer-mode" />
-              </Left>
-              <Body>
-                <Text>{t("miscelaneous.dev.title")}</Text>
-              </Body>
-            </ListItem>
-          )}
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onToggleDebugShowStartupInfo}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="android-debug-bridge" />
-            </Left>
-            <Body>
-              <Text>{t("debug.startup.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox checked={debugShowStartupInfo} onPress={onToggleDebugShowStartupInfo} />
-            </Right>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={() => navigation.navigate("ToastLog")}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="format-list-bulleted" />
-            </Left>
-            <Body>
-              <Text>{t("debug.showNotifications.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={() => navigation.navigate("DebugLog")}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="format-list-bulleted" />
-            </Left>
-            <Body>
-              <Text>{t("debug.showDebugLog.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={onPressRescanWallet}>
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="restart" />
-            </Left>
-            <Body>
-              <Text>{t("debug.rescanWallet.title")}</Text>
-              <Text note={true}>{t("debug.rescanWallet.subtitle")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onLndMobileHelpCenterPress}
-          >
-            <Left>
-              <Icon
-                style={[style.icon, { marginLeft: 1, marginRight: -1 }]}
-                type="Entypo"
-                name="lifebuoy"
-              />
-            </Left>
-            <Body>
-              <Text>{t("debug.helpCencer.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={onGetNodeInfoPress}>
-            <Left>
-              <Icon
-                style={[style.icon, { marginLeft: 1, marginRight: -1 }]}
-                type="Entypo"
-                name="info"
-              />
-            </Left>
-            <Body>
-              <Text>{t("debug.getNodeInfo.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={onGetChanInfoPress}>
-            <Left>
-              <Icon
-                style={[style.icon, { marginLeft: 1, marginRight: -1 }]}
-                type="Entypo"
-                name="info"
-              />
-            </Left>
-            <Body>
-              <Text>{t("debug.getChannelInfo.title")}</Text>
-            </Body>
-          </ListItem>
-          {dunderEnabled && (
-            <ListItem
-              style={style.listItem}
-              button={true}
-              icon={true}
-              onPress={() => navigation.navigate("DunderDoctor")}
-            >
-              <Left>
-                <Icon style={style.icon} type="Entypo" name="slideshare" />
-              </Left>
-              <Body>
-                <Text>{t("debug.LSP.title")}</Text>
-              </Body>
-            </ListItem>
-          )}
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={async () => navigation.navigate("LndLog")}
-          >
-            <Left>
-              <Icon style={style.icon} type="Ionicons" name="newspaper-outline" />
-            </Left>
-            <Body>
-              <Text>{t("debug.lndLog.title")}</Text>
-            </Body>
-          </ListItem>
-          {scheduledGossipSyncEnabled && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={async () => navigation.navigate("SpeedloaderLog")}
-            >
-              <Left>
-                <Icon style={style.icon} type="Ionicons" name="newspaper-outline" />
-              </Left>
-              <Body>
-                <Text>{t("debug.speedloaderLog.title")}</Text>
-              </Body>
-            </ListItem>
-          )}
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={onPressSetLndLogLevel}
-            onLongPress={onLongPressSetLndLogLevel}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="file-code" />
-            </Left>
-            <Body>
-              <Text>{t("miscelaneous.setLndLogLevel.title")}</Text>
-              <Text note={true}>{lndLogLevel}</Text>
-            </Body>
-          </ListItem>
-          {(name === "Hampus" || __DEV__ === true) && (
-            <>
-              <ListItem
-                style={style.listItem}
-                icon={true}
-                onPress={() => navigation.navigate("KeysendTest")}
-              >
-                <Left>
-                  <Icon style={style.icon} type="MaterialIcons" name="developer-mode" />
-                </Left>
-                <Body>
-                  <Text>{t("debug.keysend.title")}</Text>
-                </Body>
-              </ListItem>
-              <ListItem
-                style={style.listItem}
-                icon={true}
-                onPress={() => navigation.navigate("GoogleDriveTestbed")}
-              >
-                <Left>
-                  <Icon style={style.icon} type="Entypo" name="google-drive" />
-                </Left>
-                <Body>
-                  <Text>{t("debug.googleDrive.title")}</Text>
-                </Body>
-              </ListItem>
-              <ListItem
-                style={style.listItem}
-                icon={true}
-                onPress={() => navigation.navigate("WebLNBrowser")}
-              >
-                <Left>
-                  <Icon style={style.icon} type="MaterialIcons" name="local-grocery-store" />
-                </Left>
-                <Body>
-                  <Text>{t("debug.webln.title")}</Text>
-                </Body>
-              </ListItem>
-            </>
-          )}
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={() => setupDemo({ changeDb: false })}
-            onLongPress={() => {
-              setupDemo({ changeDb: true });
-              toast("DB written");
-            }}
-          >
-            <Left>
-              <Icon
-                style={[style.icon, { marginLeft: 1, marginRight: -1 }]}
-                type="AntDesign"
-                name="mobile1"
-              />
-            </Left>
-            <Body>
-              <Text>{t("debug.demoMode.title")}</Text>
-              <Text note={true}>{t("debug.demoMode.subtitle")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onToggleLndNoGraphCache}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="database-sync" />
-            </Left>
-            <Body>
-              <Text>{t("debug.disableGraphCache.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox checked={lndNoGraphCache} onPress={onToggleLndNoGraphCache} />
-            </Right>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={() => {
-              writeConfig();
-              toast(t("msg.written", { ns: namespaces.common }));
-            }}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="typewriter" />
-            </Left>
-            <Body>
-              <Text>{t("debug.config.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            button={true}
-            icon={true}
-            onPress={onPressResetMissionControl}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="restore-alert" />
-            </Left>
-            <Body>
-              <Text>{t("debug.resetMissionControl.title")}</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={onChangeMultiPartPaymentEnabledPress}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="multiplication" />
-            </Left>
-            <Body>
-              <Text>{t("experimental.MPP.title")}</Text>
-              <Text note={true}>{t("experimental.MPP.subtitle")}</Text>
-            </Body>
-            <Right>
-              <CheckBox
-                checked={multiPathPaymentsEnabled}
-                onPress={onChangeMultiPartPaymentEnabledPress}
-              />
-            </Right>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={changeStrictGraphPruningEnabledPress}
-          >
-            <Left>
-              <Icon style={style.icon} type="Entypo" name="trash" />
-            </Left>
-            <Body>
-              <Text>{t("debug.strictGraphPruning.title")}</Text>
-            </Body>
-            <Right>
-              <CheckBox
-                checked={strictGraphPruningEnabled}
-                onPress={changeStrictGraphPruningEnabledPress}
-              />
-            </Right>
-          </ListItem>
-          <ListItem style={style.listItem} button={true} icon={true} onPress={onPressLndCompactDb}>
-            <Left>
-              <Icon style={style.icon} type="AntDesign" name="shrink" />
-            </Left>
-            <Body>
-              <Text>{t("debug.compactLndDatabases.title")}</Text>
-            </Body>
-          </ListItem>
-          {scheduledGossipSyncEnabled && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={onPressEnforceSpeedloaderOnStartup}
-            >
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="run-fast" />
-              </Left>
-              <Body>
-                <Text>{t("debug.enforceSpeedloaderOnStartup.title")}</Text>
-              </Body>
-              <Right>
-                <CheckBox
-                  checked={enforceSpeedloaderOnStartup}
-                  onPress={onPressEnforceSpeedloaderOnStartup}
-                />
-              </Right>
-            </ListItem>
-          )}
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={async () => {
-              try {
-                console.log(`${dunderServer}/channel-liquidity`);
-                const res = await fetch(`${dunderServer}/channel-liquidity`);
-
-                const json: { pairs: any[] } = await res.json();
-
-                const x: routerrpc.IXImportMissionControlRequest["pairs"] = json.pairs
-                  .filter((c) => c.history.successAmtSat > 0)
-                  .map((c) => {
-                    return {
-                      nodeFrom: hexToUint8Array(c.nodeFrom),
-                      nodeTo: hexToUint8Array(c.nodeTo),
-                      history: {
-                        successAmtSat: Long.fromValue(c.history.successAmtSat),
-                        successTime: Long.fromValue(c.history.successTime),
-                      },
-                    };
-                  });
-                await xImportMissionControl(x);
-
-                toast("Done");
-              } catch (e: any) {
-                toast("Error: " + e.message, 10000, "danger");
-              }
-            }}
-          >
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="run-fast" />
-            </Left>
-            <Body>
-              <Text>Dunder MissionControl import</Text>
-            </Body>
-          </ListItem>
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={async () => {
-              try {
-                await NativeModules.LndMobile.stopLnd();
-                await timeout(5000); // Let lnd close down
-              } catch (e: any) {
-                // If lnd was closed down already
-                if (e?.message?.includes?.("closed")) {
-                  console.log("yes closed");
-                } else {
-                  toast("Error: " + e.message, 10000, "danger");
-                  return;
-                }
-              }
-
-              console.log(await NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles());
-              toast("Done. Restart is required");
-              restartNeeded();
-            }}
-          >
-            <Left>
-              <Icon style={style.icon} type="Foundation" name="page-delete" />
-            </Left>
-            <Body>
-              <Text>Stop lnd and delete neutrino files</Text>
-            </Body>
-          </ListItem>
-          <ListItem style={style.listItem} icon={true} onPress={onPressLookupInvoiceByHash}>
-            <Left>
-              <Icon style={style.icon} type="AntDesign" name="file1" />
-            </Left>
-            <Body>
-              <Text>Lookup invoice</Text>
-            </Body>
-          </ListItem>
-          {lndChainBackend === "neutrino" && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={onPressChangeBackendToBitcoindWithZmq}
-            >
-              <Left>
-                <Icon style={style.icon} type="AntDesign" name="file1" />
-              </Left>
-              <Body>
-                <Text>Change bitcoin backend to bitcoindWithZmq</Text>
-              </Body>
-            </ListItem>
-          )}
-          {lndChainBackend !== "neutrino" && (
-            <ListItem style={style.listItem} icon={true} onPress={onPressChangeBackendToNeutrino}>
-              <Left>
-                <Icon style={style.icon} type="AntDesign" name="file1" />
-              </Left>
-              <Body>
-                <Text>Change bitcoin backend to neutrino</Text>
-              </Body>
-            </ListItem>
-          )}
-
-          <ListItem
-            style={style.listItem}
-            icon={true}
-            onPress={async () => {
-              try {
-                await NativeModules.LndMobile.stopLnd();
-              } catch (e: any) {
-                toast("Error: " + e.message, 10000, "danger");
-                return;
-              }
-            }}
-          >
-            <Left>
-              <Icon style={style.icon} type="FontAwesome" name="stop" />
-            </Left>
-            <Body>
-              <Text>Stop lnd</Text>
-            </Body>
-          </ListItem>
-          {PLATFORM === "android" && name === "Hampus" && (
-            <ListItem
-              style={style.listItem}
-              icon={true}
-              onPress={onPressExportChannelDbAndBrickInstance}
-            >
-              <Left>
-                <Icon style={style.icon} type="MaterialCommunityIcons" name="file-export" />
-              </Left>
-              <Body>
-                <Text>
-                  Export channel.db file and permanently disable this instance of Blixt Wallet
-                </Text>
-                <Text note={true}>
-                  Use this feature to migrate this wallet to another device or to lnd.
-                </Text>
-                <Text note={true} style={{ color: blixtTheme.red }}>
-                  Only do this if you're know what you're doing
-                </Text>
-              </Body>
-            </ListItem>
-          )}
-          <ListItem style={style.listItem} icon={true} onPress={onPressRestoreChannelBackup}>
-            <Left>
-              <Icon style={style.icon} type="MaterialCommunityIcons" name="file-export" />
-            </Left>
-            <Body>
-              <Text>Restore SCB channel backup file</Text>
-            </Body>
-          </ListItem>
-        </List>
-      </Content>
+      <FlatList
+        data={settingsData}
+        renderItem={renderItem}
+        ListHeaderComponent={<BlixtWallet />}
+        contentContainerStyle={{ padding: 14 }}
+        initialNumToRender={21}
+        keyExtractor={(item, index) => `${item.title}-${index}`}
+        maxToRenderPerBatch={15}
+        removeClippedSubviews={true}
+      />
     </Container>
   );
 }
 
-const style = StyleSheet.create({
-  list: {
-    paddingTop: 6,
-    marginBottom: 48,
-  },
+const styles = StyleSheet.create({
   listItem: {
     paddingLeft: 2,
     paddingRight: 2,
-    // paddingLeft: 24,
-    // paddingRight: 24,
   },
   itemHeader: {
     paddingLeft: 8,
     paddingRight: 8,
-    // paddingRight: 24,
-    // paddingLeft: 24,
     paddingTop: 24,
     paddingBottom: 16,
-    borderBottomWidth: 0,
+    fontWeight: "bold",
   },
   icon: {
     fontSize: 22,

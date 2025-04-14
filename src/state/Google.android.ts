@@ -1,8 +1,9 @@
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import { GoogleSignin, statusCodes, User } from "@react-native-google-signin/google-signin";
 
-import logger from "./../utils/log";
 import { PLATFORM } from "../utils/constants";
+
+import logger from "./../utils/log";
 const log = logger("Google");
 
 export interface IGoogleDriveToken {
@@ -24,7 +25,7 @@ export interface IGoogleModel {
   isSignedIn: boolean;
   hasPlayServices: boolean;
   user?: User;
-};
+}
 
 export const google: IGoogleModel = {
   initialize: thunk(async (actions) => {
@@ -46,8 +47,8 @@ export const google: IGoogleModel = {
         try {
           const user = await GoogleSignin.signInSilently();
           actions.setIsSignedIn(true);
-          actions.setUser(user);
-        } catch (e) {
+          actions.setUser(user.data!);
+        } catch (e: any) {
           if (e.code !== statusCodes.SIGN_IN_REQUIRED) {
             log.w(`Got unexpected error from GoogleSignin.signInSilently(): ${e.code}`, [e]);
           }
@@ -60,15 +61,15 @@ export const google: IGoogleModel = {
   }),
 
   signIn: thunk(async (actions, _, { getState }) => {
-    if (!(getState().hasPlayServices)) {
+    if (!getState().hasPlayServices) {
       throw new Error("Google Play Services needed to login to Google");
     }
 
     try {
       const user = await GoogleSignin.signIn();
-      actions.setUser(user);
+      actions.setUser(user.data!);
       actions.setIsSignedIn(true);
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -79,7 +80,7 @@ export const google: IGoogleModel = {
         // some other error happened
         log.e("Got expected error from GoogleSignin.signIn(): ${e.code}", [error]);
       }
-      return false
+      return false;
     }
     return true;
   }),
@@ -97,10 +98,16 @@ export const google: IGoogleModel = {
     return await GoogleSignin.getTokens();
   }),
 
-  setIsSignedIn: action((store, payload) => { store.isSignedIn = payload; }),
-  setHasPlayServices: action((store, payload) => { store.hasPlayServices = payload; }),
-  setUser: action((store, payload) => { store.user = payload; }),
+  setIsSignedIn: action((store, payload) => {
+    store.isSignedIn = payload;
+  }),
+  setHasPlayServices: action((store, payload) => {
+    store.hasPlayServices = payload;
+  }),
+  setUser: action((store, payload) => {
+    store.user = payload;
+  }),
 
   isSignedIn: false,
   hasPlayServices: false,
-}
+};

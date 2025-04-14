@@ -3,7 +3,6 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { Text, Container, Button, Icon, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
-import Long from "long";
 
 import { OnChainStackParamList } from "./index";
 import { useStoreActions, useStoreState } from "../../state/store";
@@ -67,7 +66,7 @@ export default ({ navigation }: IOpenChannelProps) => {
       navigation.pop();
 
       toast(t("form.withdraw.alert"), 6000, "success");
-    } catch (e) {
+    } catch (e: any) {
       toast(`${t("msg.error", { ns: namespaces.common })}: ${e.message}`, 12000, "danger", "OK");
       setSending(false);
     }
@@ -234,8 +233,8 @@ export default ({ navigation }: IOpenChannelProps) => {
             {sending && <Spinner color={blixtTheme.light} />}
           </Button>,
         ]}
-        noticeText={`${formatBitcoinValue(Long.fromValue(onChainBalance))} available`}
-        noticeIcon={Long.fromValue(onChainBalance).gt(0) ? null : "info"}
+        noticeText={`${formatBitcoinValue(onChainBalance)} available`}
+        noticeIcon={onChainBalance > 0n ? null : "info"}
       />
     </Container>
   );

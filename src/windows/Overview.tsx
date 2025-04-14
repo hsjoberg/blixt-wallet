@@ -13,12 +13,12 @@ import {
 } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
-import { DrawerActions, useNavigation } from "@react-navigation/native";
+import { DrawerActions, useNavigation, NavigationProp } from "@react-navigation/native";
+
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator, BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import Long from "long";
-import { FlashList } from "@shopify/flash-list";
+import { LegendList } from "@legendapp/list";
 import BigNumber from "bignumber.js";
 
 import { RootStackParamList } from "../Main";
@@ -38,6 +38,7 @@ import useLayoutMode from "../hooks/useLayoutMode";
 import CopyAddress from "../components/CopyAddress";
 import { StackNavigationProp } from "@react-navigation/stack";
 import BlixtHeader from "../components/BlixtHeader";
+import { NavigationRootStackParamList } from "../types";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
@@ -70,7 +71,6 @@ function Overview({ navigation }: IOverviewProps) {
   const changeHideAmountsEnabled = useStoreActions(
     (store) => store.settings.changeHideAmountsEnabled,
   );
-  console.log(hideAmountsEnabled);
   const bitcoinAddress = useStoreState((store) => store.onChain.address);
   const onboardingState = useStoreState((store) => store.onboardingState);
 
@@ -186,8 +186,6 @@ function Overview({ navigation }: IOverviewProps) {
   const bitcoinBalance = formatBitcoin(balance, bitcoinUnit);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
 
-  const flashlist = useRef<FlashList<any>>(null);
-
   return (
     <Container style={{ marginTop: PLATFORM === "macos" ? 0.5 : 0 }}>
       <StatusBar
@@ -198,8 +196,7 @@ function Overview({ navigation }: IOverviewProps) {
         translucent={true}
       />
       <View style={style.overview}>
-        <FlashList
-          ref={flashlist}
+        <LegendList
           alwaysBounceVertical={false}
           contentContainerStyle={style.transactionList}
           scrollEventThrottle={16} /* TODO: Remove? */
@@ -227,10 +224,11 @@ function Overview({ navigation }: IOverviewProps) {
                   <SendOnChain bitcoinAddress={bitcoinAddress} />
                 )}
                 {onboardingState === "DO_BACKUP" && <DoBackup />}
-                {pendingOpenBalance.greaterThan(0) && <NewChannelBeingOpened />}
+                {pendingOpenBalance !== 0n && <NewChannelBeingOpened />}
               </>
             );
           }}
+          recycleItems
         />
         <Animated.View
           style={[style.animatedTop, { height: headerHeight }]}
@@ -320,13 +318,13 @@ function Overview({ navigation }: IOverviewProps) {
           {/* The smaller one underneath */}
           {!hideAmountsEnabled && (
             <>
-              {pendingOpenBalance.equals(0) && (
+              {pendingOpenBalance === 0n && (
                 <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
                   {!preferFiat && fiatBalance}
                   {preferFiat && bitcoinBalance}
                 </Animated.Text>
               )}
-              {pendingOpenBalance.greaterThan(0) && (
+              {pendingOpenBalance !== 0n && (
                 <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
                   {!preferFiat && (
                     <>
@@ -359,7 +357,7 @@ function Overview({ navigation }: IOverviewProps) {
 }
 
 const RecoverInfo = () => {
-  const { t, i18n } = useTranslation(namespaces.overview);
+  const { t } = useTranslation(namespaces.overview);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const recoverInfo = useStoreState((store) => store.lightning.recoverInfo);
 
@@ -391,7 +389,7 @@ interface ISendOnChain {
   bitcoinAddress?: string;
 }
 const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
-  const { t, i18n } = useTranslation(namespaces.overview);
+  const { t } = useTranslation(namespaces.overview);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -414,7 +412,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
                 {"\n\n"}
                 {t("sendOnChain.msg2")}
                 {"\n\n"}
-                {t("sendOnChain.msg3")} {formatBitcoin(Long.fromValue(22000), bitcoinUnit)} (
+                {t("sendOnChain.msg3")} {formatBitcoin(22000n, bitcoinUnit)} (
                 {convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
               </Text>
             </Text>
@@ -444,7 +442,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
 
 const DoBackup = () => {
   const { t } = useTranslation(namespaces.overview);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
   const onPressDismiss = async () => {
@@ -484,7 +482,7 @@ const DoBackup = () => {
 
 const NewChannelBeingOpened = () => {
   const { t } = useTranslation(namespaces.overview);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
 
   const onPressView = () => {
     navigation.navigate("LightningInfo");

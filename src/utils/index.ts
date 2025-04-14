@@ -50,8 +50,6 @@ export const parseBech32 = (address: string): IParsedBech32 => {
 export const timeout = (timeMs: number) =>
   new Promise((resolve) => setTimeout(() => resolve(void 0), timeMs));
 
-export const isLong = (subject: any): subject is Long => Long.isLong(subject);
-
 export const formatNumberGroupings = (subject: number | string) =>
   subject.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 
@@ -65,7 +63,7 @@ export const bytesToString = (bytes: ArrayLike<number>) => {
 
 export const uint8ArrayToString = (bytes: Uint8Array) => bytesToString(bytes);
 
-export const bytesToHexString = (bytes) => {
+export const bytesToHexString = (bytes): string => {
   return bytes.reduce(function (memo, i) {
     return memo + ("0" + i.toString(16)).slice(-2); //pad with leading 0 if <16
   }, "");
@@ -90,6 +88,9 @@ export const toast = (
 ) => {
   toastEntries.push(message);
   console.log(message);
+  if (type === "danger") {
+    console.log("Current stack trace", new Error().stack);
+  }
   try {
     if (AppState.currentState === "active") {
       Toast.show({
@@ -132,11 +133,6 @@ export const asciiToBytes = (str: string) => {
     byteArray.push(str.charCodeAt(i) & 0xff);
   }
   return byteArray;
-};
-
-export const decodeTLVRecord = (utf8: string) => {
-  const bytes = asciiToBytes(utf8);
-  return Long.fromBytesLE(bytes).toNumber();
 };
 
 export const getDomainFromURL = (url: string) =>

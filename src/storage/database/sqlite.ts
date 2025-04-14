@@ -1,38 +1,36 @@
-import SQlite, { SQLiteDatabase } from "react-native-sqlite-storage";
+import TurboSqlite, { Database } from "react-native-turbo-sqlite";
+import { DocumentDirectoryPath } from "react-native-fs";
+
 import { getInitialSchema } from "./sqlite-migrations";
+import { PLATFORM } from "../../utils/constants";
 
-SQlite.enablePromise(true);
+export const openDatabase = async (): Promise<Database> => {
+  const path =
+    PLATFORM === "android"
+      ? DocumentDirectoryPath + " /../databases/"
+      : DocumentDirectoryPath + "/../Library/LocalDatabase/";
 
-export const openDatabase = async (): Promise<SQLiteDatabase> => {
-  const db = await SQlite.openDatabase({
-    name: "Blixt",
-    location: "default",
-  });
+  const db = await TurboSqlite.openDatabase(path + "Blixt");
   return db;
 };
 
-export const setupInitialSchema = async (db: SQLiteDatabase) => {
+export const setupInitialSchema = async (db: Database) => {
   console.log("Creating initial schema");
 
   for (const sql of getInitialSchema()) {
-    const r = await db.executeSql(sql);
+    const r = await db.executeSql(sql, []);
   }
 };
 
 export const deleteDatabase = async () => {
-  const r = await SQlite.deleteDatabase({
-    name: "Blixt",
-    location: "default",
-  });
-  console.log(r);
+  console.error("deleteDatabase() not implemented");
 };
 
-export const dropTables = async (db: SQLiteDatabase) => {
-  await db.executeSql(`DROP TABLE tx`);
-  await db.executeSql(`DROP TABLE tx_hops`);
-  await db.executeSql(`DROP TABLE channel_event`);
-  await db.executeSql(`DROP TABLE contact`);
+export const dropTables = async (db: Database) => {
+  await db.executeSql(`DROP TABLE tx`, []);
+  await db.executeSql(`DROP TABLE tx_hops`, []);
+  await db.executeSql(`DROP TABLE channel_event`, []);
+  await db.executeSql(`DROP TABLE contact`, []);
 };
 
-export const migrateDatabase = async () => {
-};
+export const migrateDatabase = async () => {};

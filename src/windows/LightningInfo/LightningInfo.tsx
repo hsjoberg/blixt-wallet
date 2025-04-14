@@ -1,9 +1,8 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Icon, H1, Fab, Spinner } from "native-base";
-import Long from "long";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { FlashList } from "@shopify/flash-list";
+import { LegendList } from "@legendapp/list";
 
 import { LightningInfoStackParamList } from "./index";
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -71,12 +70,12 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
   }, [navigation]);
 
   const balance = channels.reduce((accumulator, channel) => {
-    return accumulator.add(channel.localBalance!);
+    return accumulator + channel.localBalance;
     // if (channel.localBalance!.lessThanOrEqual(channel.localChanReserveSat!)) {
     //   return accumulator;
     // }
     // return accumulator.add(channel.localBalance!.sub(channel.localChanReserveSat!));
-  }, Long.fromInt(0));
+  }, 0n);
 
   const channelsArr = [
     ...pendingOpenChannels.map((pendingChannel, i) => ({ ...pendingChannel, type: "pendingOpen" })),
@@ -102,7 +101,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
   return (
     <Container>
       {rpcReady && (
-        <FlashList
+        <LegendList
           estimatedItemSize={334}
           ListHeaderComponent={
             <View style={style.balanceInfo}>

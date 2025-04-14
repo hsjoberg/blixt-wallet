@@ -30,7 +30,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
         const tailLog = await NativeModules.LndMobileTools.tailSpeedloaderLog(300);
         log.current = tailLog;
         forceUpdate();
-      } catch (error) {
+      } catch (error: any) {
         toast(error.message, 0, "danger", "OK");
       }
     })();

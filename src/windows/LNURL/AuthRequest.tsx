@@ -8,7 +8,6 @@ import { getDomainFromURL, timeout, toast } from "../../utils";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 
-
 interface IAuthRequestProps {
   navigation: StackNavigationProp<{}>;
 }
@@ -30,52 +29,44 @@ export default function LNURLChannelRequest({ navigation }: IAuthRequestProps) {
         await timeout(100);
 
         const domain = getDomainFromURL(lnurlStr!);
-        Alert.alert(
-          t("layout.title"),
-          `${t("layout.msg")} ${domain}?`,
-          [
-            {
-              text: t("buttons.yes",{ns:namespaces.common}),
-              onPress: async () => {
-                try {
-                  const result = await doAuthRequest();
-                  setDone(true);
-                  clear();
-                  Vibration.vibrate(32);
-                  toast(
-                    `${t("layout.success")} ${domain}`,
-                    10000,
-                    "success",
-                    "Okay"
-                  );
-                  navigation.pop();
-                } catch (e) {
-                  console.log(e);
-                  setDone(true);
-                  clear();
-                  Vibration.vibrate(50);
-                  toast(
-                    `${t("msg.error", { ns:namespaces.common })}: `  + e.message,
-                    12000,
-                    "warning",
-                    "Okay"
-                  );
-                  navigation.pop();
-                }
-              }
-            }, {
-              text: t("buttons.no",{ns:namespaces.common}),
-              onPress: () => {
+        Alert.alert(t("layout.title"), `${t("layout.msg")} ${domain}?`, [
+          {
+            text: t("buttons.yes", { ns: namespaces.common }),
+            onPress: async () => {
+              try {
+                const result = await doAuthRequest();
+                setDone(true);
                 clear();
+                Vibration.vibrate(32);
+                toast(`${t("layout.success")} ${domain}`, 10000, "success", "Okay");
                 navigation.pop();
-              },
-              style: 'cancel'
+              } catch (e: any) {
+                console.log(e);
+                setDone(true);
+                clear();
+                Vibration.vibrate(50);
+                toast(
+                  `${t("msg.error", { ns: namespaces.common })}: ` + e.message,
+                  12000,
+                  "warning",
+                  "Okay",
+                );
+                navigation.pop();
+              }
             },
-          ]
-        );
+          },
+          {
+            text: t("buttons.no", { ns: namespaces.common }),
+            onPress: () => {
+              clear();
+              navigation.pop();
+            },
+            style: "cancel",
+          },
+        ]);
       }
     })();
   }, []);
 
-  return (<></>);
+  return <></>;
 }

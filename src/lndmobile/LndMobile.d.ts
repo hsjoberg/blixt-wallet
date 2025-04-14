@@ -44,6 +44,7 @@ export interface ILndMobileTools {
   log(level: "v" | "d" | "i" | "w" | "e", tag: string, msg: string): void;
   saveLogs(): Promise<string>;
   copyLndLog(): Promise<boolean>;
+  copySpeedloaderLog(): Promise<boolean>;
   tailLog(numberOfLines: number): Promise<string>;
   observeLndLogFile(): Promise<boolean>;
   saveChannelsBackup(base64Backups: string): Promise<string>;
@@ -54,6 +55,9 @@ export interface ILndMobileTools {
   DEBUG_deleteSpeedloaderDgraphDirectory(): null;
   DEBUG_deleteNeutrinoFiles(): boolean;
   getInternalFiles(): Promise<Record<string, number>>;
+  getCacheDir(): Promise<string>;
+  getFilesDir(): Promise<string>;
+  getAppFolderPath(): Promise<string>;
   saveChannelDbFile(): Promise<boolean>;
   importChannelDbFile(channelDbPath: string): Promise<boolean>;
 

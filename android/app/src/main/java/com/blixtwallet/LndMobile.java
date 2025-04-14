@@ -293,9 +293,9 @@ class LndMobile extends ReactContextBaseJavaModule {
       lndMobileServiceConnection = new LndMobileServiceConnection(req);
       messenger = new Messenger(new IncomingHandler()); // me
       Intent intent = new Intent(getReactApplicationContext(), LndMobileService.class);
-      if (getPersistentServicesEnabled(getReactApplicationContext())) {
-        getReactApplicationContext().startForegroundService(intent);
-      }
+      // if (getPersistentServicesEnabled(getReactApplicationContext())) {
+      //   getReactApplicationContext().startForegroundService(intent);
+      // }
       // else rely on bindService to start LND
       getReactApplicationContext().bindService(
         intent,
@@ -364,16 +364,16 @@ class LndMobile extends ReactContextBaseJavaModule {
     Bundle bundle = new Bundle();
 
     String params = "--lnddir=" + getReactApplicationContext().getFilesDir().getPath();
-    if (torEnabled) {
-      int listenPort = BlixtTorUtils.getListenPort();
-      String controlSocket = "unix://" + getReactApplicationContext().getDir(TorService.class.getSimpleName(), Context.MODE_PRIVATE).getAbsolutePath() + "/data/ControlSocket";
-      params += " --tor.active --tor.control=" + controlSocket;
-      params += " --tor.v3 --listen=localhost:" + listenPort;
-    } else {
-      // If Tor isn't active, make sure we aren't
-      // listening at all
-      params += " --nolisten";
-    }
+    // if (torEnabled) {
+    //   int listenPort = BlixtTorUtils.getListenPort();
+    //   String controlSocket = "unix://" + getReactApplicationContext().getDir(TorService.class.getSimpleName(), Context.MODE_PRIVATE).getAbsolutePath() + "/data/ControlSocket";
+    //   params += " --tor.active --tor.control=" + controlSocket;
+    //   params += " --tor.v3 --listen=localhost:" + listenPort;
+    // } else {
+    //   // If Tor isn't active, make sure we aren't
+    //   // listening at all
+    //   params += " --nolisten";
+    // }
     bundle.putString(
       "args",
       params + " " + args

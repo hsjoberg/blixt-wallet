@@ -62,6 +62,7 @@ export default function SettingsIndex() {
   return (
     <Stack.Navigator initialRouteName="SettingsMain" screenOptions={screenOptions}>
       <Stack.Screen name="SettingsMain" component={Settings} />
+      {/* <Stack.Screen name="NewSettingsMain" component={OldSettings} /> */}
       <Stack.Screen name="RemovePincodeAuth" component={RemovePincodeAuth} />
       <Stack.Screen name="SetPincode" component={SetPincode} />
       <Stack.Screen

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StatusBar, StyleSheet, Alert, NativeModules, TextInput } from "react-native";
-import DocumentPicker, { DocumentPickerResponse } from "react-native-document-picker";
+import DocumentPicker, { DocumentPickerResponse } from "@react-native-documents/picker";
 import { readFile } from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -108,13 +108,12 @@ export default function Restore({ navigation }: IProps) {
       } else if (backupType === "macos") {
         createWalletOpts.restore!.channelsBackup = macosBakBase64;
       } else if (backupType === "channeldb") {
-        if (channelDbFile.copyError) {
-          throw new Error("channel.db file copying failed: " + channelDbFile.copyError);
+        if (channelDbFile!.copyError) {
+          throw new Error("channel.db file copying failed: " + channelDbFile!.copyError);
         }
 
-        // await NativeModules.LndMobile.stopLnd();
         await setImportChannelDbOnStartup({
-          channelDbPath: channelDbFile.fileCopyUri.replace(/^file:\/\//, ""),
+          channelDbPath: channelDbFile!.fileCopyUri!.replace(/^file:\/\//, ""),
           seed: splittedSeed,
           passphrase: passphraseText,
         });
@@ -150,7 +149,7 @@ export default function Restore({ navigation }: IProps) {
           routes: [{ name: "Loading" }],
         }),
       );
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       setLoading(false);
       Alert.alert(e.message);
@@ -169,8 +168,8 @@ export default function Restore({ navigation }: IProps) {
       console.log(base64Backup);
       setB64Backup(base64Backup);
       setBackupType("google_drive");
-    } catch (e) {
-      Alert.alert(`${t("restore.channel.google.alert")}`, e.message);
+    } catch (e: any) {
+      Alert.alert(`${t("restore.channel.google.alert")}:\n\n${e.message}`);
     }
   };
 
@@ -180,8 +179,8 @@ export default function Restore({ navigation }: IProps) {
       console.log(base64Backup);
       setB64Backup(base64Backup);
       setBackupType("icloud");
-    } catch (e) {
-      Alert.alert(`${t("restore.channel.iCloud.alert")}`, e.message);
+    } catch (e: any) {
+      Alert.alert(`${t("restore.channel.iCloud.alert")}:\n\n${e.message}`);
     }
   };
 
@@ -200,7 +199,7 @@ export default function Restore({ navigation }: IProps) {
         setMacosBakBase64(b);
         setBackupType("macos");
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       toast(e.message, undefined, "danger", "Okay");
     }
@@ -221,7 +220,7 @@ export default function Restore({ navigation }: IProps) {
       setChannelDbFile(res);
       setBackupType("channeldb");
       setLoading(false);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       setLoading(false);
       toast(e.message, undefined, "danger", "Okay");

@@ -1,7 +1,7 @@
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
 
-import { StorageItem, getItemObject, setItemObject, removeItem } from "../storage/app";
-import { Alert, AppState } from "react-native";
+import { StorageItem, getItemObject, setItemObject } from "../storage/app";
+import { Alert } from "react-native";
 
 import logger from "./../utils/log";
 const log = logger("Security");
@@ -43,7 +43,7 @@ export const security: ISecurityModel = {
     const loginMethods: Set<LoginMethods> = new Set(await getItemObject(StorageItem.loginMethods));
     actions.setLoginMethods(loginMethods);
     actions.setLoggedIn(loginMethods.size === 0);
-    actions.setSeedAvailable(await getItemObject(StorageItem.seedStored) || false);
+    actions.setSeedAvailable((await getItemObject(StorageItem.seedStored)) || false);
     try {
       // const sensor = await FingerprintScanner.isSensorAvailable();
       // actions.setSensor(sensor);
@@ -60,7 +60,7 @@ export const security: ISecurityModel = {
   }),
 
   checkPincode: thunk(async (actions, pincodeAttempt) => {
-    const pincode = "";//await getPin();
+    const pincode = ""; //await getPin();
     if (pincode === pincodeAttempt) {
       return true;
     }
@@ -77,7 +77,7 @@ export const security: ISecurityModel = {
 
   getSeed: thunk(async (_, _2, { getState }) => {
     if (getState().loggedIn) {
-      return [];//await keystoreGetSeed();
+      return []; //await keystoreGetSeed();
     }
     return null;
   }),
@@ -128,7 +128,7 @@ export const security: ISecurityModel = {
       // const r = await FingerprintScanner.authenticate({ onAttempt: () => {}});
       actions.setLoggedIn(true);
       return true;
-    } catch (e) {
+    } catch (e: any) {
       if (e.name !== "UserCancel" && e.name !== "UserFallback") {
         log.e("Error while fingerprint scanning", [e]);
         Alert.alert(e.message);
@@ -141,10 +141,18 @@ export const security: ISecurityModel = {
     // FingerprintScanner.release();
   }),
 
-  setLoggedIn: action((store, payload) => { store.loggedIn = payload; }),
-  setLoginMethods: action((store, payload) => { store.loginMethods = payload; }),
-  setSeedAvailable: action((store, payload) => { store.seedAvailable = payload; }),
-  setSensor: action((store, payload) => { store.sensor = payload; }),
+  setLoggedIn: action((store, payload) => {
+    store.loggedIn = payload;
+  }),
+  setLoginMethods: action((store, payload) => {
+    store.loginMethods = payload;
+  }),
+  setSeedAvailable: action((store, payload) => {
+    store.seedAvailable = payload;
+  }),
+  setSensor: action((store, payload) => {
+    store.sensor = payload;
+  }),
 
   loginMethods: new Set<LoginMethods>([]),
   loggedIn: false,

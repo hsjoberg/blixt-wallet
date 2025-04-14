@@ -11,7 +11,11 @@ export default function LogBox(props: ILndLogBoxProps) {
   const logScrollView = useRef<ScrollView>(null);
   const [scrollViewAtTheEnd, setScrollViewAtTheEnd] = useState(true);
 
-  const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}: NativeScrollEvent) => {
+  const isCloseToBottom = ({
+    layoutMeasurement,
+    contentOffset,
+    contentSize,
+  }: NativeScrollEvent) => {
     if (!props.scrollLock) {
       return true;
     }
@@ -35,7 +39,9 @@ export default function LogBox(props: ILndLogBoxProps) {
       scrollEventThrottle={450}
       removeClippedSubviews={true}
     >
-      <Text selectable={true} style={{ fontSize: 10 }}>{props.text}</Text>
+      <Text selectable={true} style={{ fontSize: 10 }}>
+        {props.text}
+      </Text>
     </ScrollView>
-  )
+  );
 }

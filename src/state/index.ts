@@ -1,6 +1,5 @@
 import * as base64 from "base64-js";
-import Tor from "react-native-tor";
-import NetInfo from "@react-native-community/netinfo";
+import { RnTor } from "react-native-nitro-tor";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import { AlertButton, NativeModules, Platform } from "react-native";
@@ -9,8 +8,9 @@ import {
   DEFAULT_PATHFINDING_ALGORITHM,
   DEFAULT_SPEEDLOADER_SERVER,
   PLATFORM,
+  TOR_SETTINGS,
 } from "../utils/constants";
-import { Chain, VersionCode } from "../utils/build";
+import { Chain, Debug, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
 import {
@@ -67,20 +67,34 @@ import {
   openDatabase,
   setupInitialSchema,
 } from "../storage/database/sqlite";
-import { getItem, getWalletPassword, setWalletPassword } from "../storage/keystore";
+import { getWalletPassword, setWalletPassword } from "../storage/keystore";
 
 import { Alert } from "../utils/alert";
-import { ELndMobileStatusCodes } from "../lndmobile/index";
+import {
+  ELndMobileStatusCodes,
+  generateSecureRandomAsBase64,
+  writeConfig,
+} from "../lndmobile/index";
 import { IStoreInjections } from "./store";
-import { LndMobileEventEmitter } from "../utils/event-listener";
-import { SQLiteDatabase } from "react-native-sqlite-storage";
+import { Database } from "react-native-turbo-sqlite";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { appMigration } from "../migration/app-migration";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 import { clearTransactions } from "../storage/database/transaction";
 import { lnrpc } from "../../proto/lightning";
 import logger from "./../utils/log";
-import { toast } from "../utils";
+import { stringToUint8Array, toast } from "../utils";
+
+import {
+  genSeed,
+  initWallet,
+  start as startLndTurbo,
+  subscribeState,
+  unlockWallet,
+} from "react-native-turbo-lnd";
+import { WalletState } from "react-native-turbo-lnd/protos/lightning_pb";
+
+import Speedloader from "../turbomodules/NativeSpeedloader";
+import NativeLndmobileTools from "../turbomodules/NativeLndmobileTools";
 
 const log = logger("Store");
 
@@ -99,13 +113,13 @@ export interface ICreateWalletPayload {
 
 export interface IStoreModel {
   setupDemo: Thunk<IStoreModel, { changeDb: boolean }, any, IStoreModel>;
-  openDb: Thunk<IStoreModel, undefined, any, {}, Promise<SQLiteDatabase>>;
+  openDb: Thunk<IStoreModel, undefined, any, {}, Promise<Database>>;
   initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   checkAppVersionMigration: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
   clearTransactions: Thunk<IStoreModel>;
   resetDb: Thunk<IStoreModel>;
-  setDb: Action<IStoreModel, SQLiteDatabase>;
+  setDb: Action<IStoreModel, Database>;
   setAppReady: Action<IStoreModel, boolean>;
   setWalletCreated: Action<IStoreModel, boolean>;
   setHoldOnboarding: Action<IStoreModel, boolean>;
@@ -116,6 +130,7 @@ export interface IStoreModel {
   setTorEnabled: Action<IStoreModel, boolean>;
   setTorLoading: Action<IStoreModel, boolean>;
   setSpeedloaderLoading: Action<IStoreModel, boolean>;
+  setSpeedloaderCancelVisible: Action<IStoreModel, boolean>;
   setImportChannelDbOnStartup: Action<IStoreModel, IImportChannelDbOnStartup>;
 
   generateSeed: Thunk<IStoreModel, string | undefined, IStoreInjections>;
@@ -124,12 +139,13 @@ export interface IStoreModel {
   createWallet: Thunk<IStoreModel, ICreateWalletPayload | undefined, IStoreInjections, IStoreModel>;
   changeOnboardingState: Thunk<IStoreModel, OnboardingState>;
 
-  db?: SQLiteDatabase;
+  db?: Database;
   appReady: boolean;
   walletCreated: boolean;
   holdOnboarding: boolean;
   torLoading: boolean;
   speedloaderLoading: boolean;
+  speedloaderCancelVisible: boolean;
   torEnabled: boolean;
 
   lightning: ILightningModel;
@@ -161,6 +177,8 @@ export interface IStoreModel {
   appBuild: number;
   onboardingState: OnboardingState;
   importChannelDbOnStartup: IImportChannelDbOnStartup | null;
+
+  cancelSpeedloader: Thunk<IStoreModel>;
 }
 
 export const model: IStoreModel = {
@@ -282,26 +300,36 @@ export const model: IStoreModel = {
     try {
       let torEnabled = (await getItemObjectAsyncStorage<boolean>(StorageItem.torEnabled)) ?? false;
       actions.setTorEnabled(torEnabled);
-      let socksPort = 0;
+      let args = "";
+
       if (torEnabled) {
         try {
           actions.setTorLoading(true);
-          if (PLATFORM === "android") {
-            socksPort = await NativeModules.BlixtTor.startTor();
-          } else if (PLATFORM === "ios") {
-            const tor = Tor({
-              stopDaemonOnBackground: false,
-              startDaemonOnActive: true,
-            });
-            socksPort = await tor.startIfNotStarted();
+
+          const torResult = await RnTor.startTorIfNotRunning({
+            data_dir: TOR_SETTINGS.dataDir,
+            socks_port: TOR_SETTINGS.socksPort,
+            target_port: TOR_SETTINGS.targetPort,
+            timeout_ms: TOR_SETTINGS.timeoutMs,
+          });
+
+          log.i("tor result", [torResult]);
+
+          if (!torResult.is_success) {
+            throw new Error(torResult.error_message);
           }
-          log.i("socksPort", [socksPort]);
-          if (socksPort === 0 && PLATFORM === "ios") {
-            throw new Error("Unable to obtain SOCKS port");
-          }
+
+          args = `tor.active `;
+          args += `--tor.socks=127.0.0.1:${TOR_SETTINGS.socksPort} `;
+          args += `--tor.v3 `;
+          args += `--tor.control=${torResult.control} `;
+          args += `--listen=localhost `;
+
           debugShowStartupInfo &&
             toast("Tor initialized " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-        } catch (e) {
+        } catch (e: any) {
+          args = `--nolisten`;
+
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
 
@@ -331,7 +359,10 @@ export const model: IStoreModel = {
             actions.setTorLoading(false);
           }
         }
+      } else {
+        args = `--nolisten`;
       }
+
       let persistentServicesEnabled =
         (await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesEnabled)) ?? false;
       let persistentServicesWarningShown =
@@ -339,7 +370,6 @@ export const model: IStoreModel = {
         false;
       if (persistentServicesEnabled && !persistentServicesWarningShown) {
         await setItemObject(StorageItem.persistentServicesWarningShown, true);
-        await NativeModules.BlixtTor.showMsg();
       }
       log.v("Running LndMobile.initialize()");
       const initReturn = await initialize();
@@ -353,22 +383,27 @@ export const model: IStoreModel = {
         (await getItemAsyncStorage(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER;
       let gossipStatus: unknown = null;
 
-      const status = await checkStatus();
+      const status = await NativeLndmobileTools.getStatus(); // await checkStatus();
       log.d("status", [status]);
       log.i("gossipSyncEnabled", [gossipSyncEnabled]);
       log.i("persistentServicesEnabled", [persistentServicesEnabled]);
-      if (
-        (status & ELndMobileStatusCodes.STATUS_PROCESS_STARTED) !==
-        ELndMobileStatusCodes.STATUS_PROCESS_STARTED
-      ) {
-        const speed = setTimeout(() => {
-          actions.setSpeedloaderLoading(true);
-        }, 3000);
+      if (status === 0) {
         if (gossipSyncEnabled && Chain === "mainnet") {
+          actions.setSpeedloaderCancelVisible(false);
+
+          // Show the "Syncing Lightning Network" text after 3s
+          const speedloaderTextTimer = setTimeout(() => {
+            actions.setSpeedloaderLoading(true);
+          }, 3000);
+
+          // Show the speedloader cancel button after 10s
+          const cancelSpeedloaderButtonTimer = setTimeout(() => {
+            actions.setSpeedloaderCancelVisible(true);
+          }, 15000);
+
           if (enforceSpeedloaderOnStartup) {
             log.d("Clearing speedloader files");
             try {
-              // TODO(hsjoberg): LndMobileTools should be injected
               await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile();
               await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
             } catch (error) {
@@ -376,26 +411,31 @@ export const model: IStoreModel = {
             }
           }
           try {
-            let connectionState = await NetInfo.fetch();
-            log.i("connectionState", [connectionState.type]);
-            gossipStatus = await gossipSync(speedloaderServer, connectionState.type);
+            gossipStatus = await Speedloader.gossipSync(
+              speedloaderServer,
+              await NativeModules.LndMobileTools.getCacheDir(),
+              await NativeModules.LndMobileTools.getFilesDir(),
+            );
             debugShowStartupInfo &&
               toast(
                 "Gossip sync done " + (new Date().getTime() - start.getTime()) / 1000 + "s",
                 1000,
               );
-          } catch (e) {
-            log.e("GossipSync exception!", [e]);
+          } catch (e: any) {
+            if (e.message === "Gossip sync cancelled by user") {
+              log.i("Gossip sync cancelled by user");
+            } else {
+              log.e("GossipSync exception!", [e]);
+            }
           }
+          clearTimeout(speedloaderTextTimer);
+          clearTimeout(cancelSpeedloaderButtonTimer);
+          actions.setSpeedloaderLoading(false);
+          actions.setSpeedloaderCancelVisible(false);
         }
-        clearTimeout(speed);
-        actions.setSpeedloaderLoading(false);
+
         log.i("Starting lnd, gossipStatus", [gossipStatus]);
         try {
-          let args = "";
-          if (socksPort > 0) {
-            args = "--tor.socks=127.0.0.1:" + socksPort + " ";
-          }
           if (await getRescanWallet()) {
             log.d("Rescanning wallet");
             args += "--reset-wallet-transactions ";
@@ -407,8 +447,23 @@ export const model: IStoreModel = {
             await setLndCompactDb(false);
           }
 
-          log.d("startLnd", [await startLnd(torEnabled, args)]);
-        } catch (e) {
+          // log.d("startLnd", [await startLnd(torEnabled, args)]);
+          // TURBOTODO(hsjoberg): temp code
+          let appFolderPath: string;
+          if (PLATFORM === "android") {
+            const chain = Chain !== "mainnet" ? "." + Chain.toLocaleLowerCase() : "";
+            const debug = Debug ? ".debug" : "";
+            appFolderPath = `/data/user/0/com.blixtwallet${chain}${debug}/files/`;
+          } else {
+            appFolderPath = (await NativeModules.LndMobileTools.getAppFolderPath())
+              .replace("file://", "")
+              .replace(/%20/g, " ");
+            appFolderPath += "lnd/";
+          }
+          args += `--lnddir=${appFolderPath}`;
+          log.i("args", [args]);
+          log.d("startLnd", [await startLndTurbo(args)]);
+        } catch (e: any) {
           if (e.message.includes("lnd already started")) {
             toast("lnd already started", 3000, "warning");
           } else {
@@ -416,7 +471,7 @@ export const model: IStoreModel = {
           }
         }
       } else {
-        toast("lnd already started (lndmobile getStatus check)", 3000, "warning");
+        toast("lnd already started (getStatus check)", 3000, "warning");
       }
     } catch (e) {
       log.e("Exception when trying to initialize LndMobile and start lnd", [e]);
@@ -427,92 +482,95 @@ export const model: IStoreModel = {
     dispatch.fiat.getRate();
     await dispatch.settings.initialize();
     await dispatch.security.initialize();
-    if (PLATFORM === "android") {
-      await dispatch.google.initialize();
-      await dispatch.googleDriveBackup.initialize();
-    } else if (PLATFORM === "ios" || PLATFORM === "macos") {
-      await dispatch.iCloudBackup.initialize();
-    }
     await dispatch.transaction.getTransactions();
     await dispatch.contacts.getContacts();
     await dispatch.channel.setupCachedBalance();
     log.d("Done starting up stores");
 
-    LndMobileEventEmitter.addListener("SubscribeState", async (e: any) => {
-      try {
-        log.d("SubscribeState", [e]);
-        const error = checkLndStreamErrorResponse("SubscribeState", e);
-        if (error === "EOF") {
-          return;
-        } else if (error) {
-          throw error;
-        }
+    subscribeState(
+      {},
+      async (state) => {
+        try {
+          if (state.state === WalletState.NON_EXISTING) {
+            log.d("Got WalletState.NON_EXISTING");
 
-        const state = injections.lndMobile.index.decodeState(e.data ?? "");
-        log.i("Current lnd state", [state]);
-        if (state.state === lnrpc.WalletState.NON_EXISTING) {
-          log.d("Got lnrpc.WalletState.NON_EXISTING");
+            // Continue channel db import restore
+            if (importChannelDbOnStartup) {
+              log.i("Continuing restoration with channel import");
+              actions.setWalletSeed(importChannelDbOnStartup.seed);
+              await actions.createWallet({
+                restore: {
+                  restoreWallet: true,
+                  aezeedPassphrase: importChannelDbOnStartup.passphrase,
+                },
+              });
 
-          // Continue channel db import restore
-          if (importChannelDbOnStartup) {
-            log.i("Continuing restoration with channel import");
-            actions.setWalletSeed(importChannelDbOnStartup.seed);
-            await actions.createWallet({
-              restore: {
-                restoreWallet: true,
-                aezeedPassphrase: importChannelDbOnStartup.passphrase,
-              },
-            });
+              await Promise.all([
+                actions.settings.changeAutopilotEnabled(false),
+                actions.scheduledSync.setSyncEnabled(true), // TODO test
+                actions.settings.changeScheduledSyncEnabled(true),
+                actions.changeOnboardingState("DONE"),
+              ]);
 
-            await Promise.all([
-              actions.settings.changeAutopilotEnabled(false),
-              actions.scheduledSync.setSyncEnabled(true), // TODO test
-              actions.settings.changeScheduledSyncEnabled(true),
-              actions.changeOnboardingState("DONE"),
-            ]);
-
-            setImportChannelDbOnStartup(null);
-          }
-        } else if (state.state === lnrpc.WalletState.LOCKED) {
-          log.d("Got lnrpc.WalletState.LOCKED");
-          log.d("Wallet locked, unlocking wallet");
-          debugShowStartupInfo &&
-            toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-          await dispatch.unlockWallet();
-        } else if (state.state === lnrpc.WalletState.UNLOCKED) {
-          log.d("Got lnrpc.WalletState.UNLOCKED");
-          debugShowStartupInfo &&
-            toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-        } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
-          debugShowStartupInfo &&
-            toast(
-              "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
-              1000,
-            );
-          await dispatch.lightning.initialize({ start });
-          log.d("Got lnrpc.WalletState.RPC_ACTIVE");
-        } else if (state.state === lnrpc.WalletState.SERVER_ACTIVE) {
-          debugShowStartupInfo &&
-            toast("Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-          log.d("Got lnrpc.WalletState.SERVER_ACTIVE");
-
-          // We'll enter this branch of code if the react-native frontend desyncs with lnd.
-          // This can happen for example if Android kills react-native but not LndMobileService.
-          if (!getState().lightning.rpcReady) {
+              setImportChannelDbOnStartup(null);
+            }
+          } else if (state.state === WalletState.LOCKED) {
+            log.d("Got WalletState.LOCKED");
+            log.d("Wallet locked, unlocking wallet");
+            debugShowStartupInfo &&
+              toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+            await dispatch.unlockWallet();
+          } else if (state.state === lnrpc.WalletState.UNLOCKED) {
+            log.d("Got lnrpc.WalletState.UNLOCKED");
+            debugShowStartupInfo &&
+              toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
+            debugShowStartupInfo &&
+              toast(
+                "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
+                1000,
+              );
+            log.d("Got lnrpc.WalletState.RPC_ACTIVE");
             await dispatch.lightning.initialize({ start });
+          } else if (state.state === lnrpc.WalletState.SERVER_ACTIVE) {
+            debugShowStartupInfo &&
+              toast(
+                "Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
+                1000,
+              );
+            log.d("Got lnrpc.WalletState.SERVER_ACTIVE");
+
+            // We'll enter this branch of code if the react-native frontend desyncs with lnd.
+            // This can happen for example if Android kills react-native but not LndMobileService.
+            if (!getState().lightning.rpcReady) {
+              await dispatch.lightning.initialize({ start });
+            }
+          } else {
+            log.d("Got unknown lnrpc.WalletState", [state.state]);
           }
-        } else {
-          log.d("Got unknown lnrpc.WalletState", [state.state]);
+        } catch (error: any) {
+          toast(error.message, undefined, "danger");
         }
-      } catch (error: any) {
-        toast(error.message, undefined, "danger");
-      }
-    });
-    await injections.lndMobile.index.subscribeState();
+      },
+      (error) => {
+        toast("subscribeState: " + error, undefined, "danger");
+      },
+    );
 
     actions.setAppReady(true);
     log.d("App initialized");
     return true;
+  }),
+
+  cancelSpeedloader: thunk(async (actions) => {
+    try {
+      log.d("Cancelling speedloader gossipsync");
+      await Speedloader.cancelGossipSync();
+      actions.setSpeedloaderLoading(false);
+      actions.setSpeedloaderCancelVisible(false);
+    } catch (e) {
+      log.e("Error cancelling speedloader", [e]);
+    }
   }),
 
   checkAppVersionMigration: thunk(async (actions, _2, { getState }) => {
@@ -560,9 +618,10 @@ export const model: IStoreModel = {
     }
   }),
 
-  generateSeed: thunk(async (actions, passphrase, { injections }) => {
-    const { genSeed } = injections.lndMobile.wallet;
-    const seed = await genSeed(passphrase);
+  generateSeed: thunk(async (actions, passphrase) => {
+    const seed = await genSeed({
+      aezeedPassphrase: passphrase ? stringToUint8Array(passphrase) : undefined,
+    });
     actions.setWalletSeed(seed.cipherSeedMnemonic);
   }),
 
@@ -570,8 +629,9 @@ export const model: IStoreModel = {
     state.walletSeed = payload;
   }),
 
-  writeConfig: thunk(async (_, _2, { injections, getState }) => {
-    const writeConfig = injections.lndMobile.index.writeConfig;
+  writeConfig: thunk(async (_, _2) => {
+    // TURBOTODO(hsjoberg)
+    //const writeConfig = injections.lndMobile.index.writeConfig;
 
     const lndChainBackend = (await getItemAsyncStorage(
       StorageItem.lndChainBackend,
@@ -689,19 +749,18 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
     await writeConfig(config);
   }),
 
-  unlockWallet: thunk(async (_, _2, { injections }) => {
-    const unlockWallet = injections.lndMobile.wallet.unlockWallet;
-    // const password = await getItem(StorageItem.walletPassword);
+  unlockWallet: thunk(async (_, _2) => {
     const password = await getWalletPassword();
     if (!password) {
       throw new Error("Cannot find wallet password");
     }
-    await unlockWallet(password);
+    await unlockWallet({
+      walletPassword: stringToUint8Array(password),
+    });
   }),
 
-  createWallet: thunk(async (actions, payload, { injections, getState, dispatch }) => {
-    const initWallet = injections.lndMobile.wallet.initWallet;
-    const generateSecureRandomAsBase64 = injections.lndMobile.index.generateSecureRandomAsBase64;
+  createWallet: thunk(async (actions, payload, { getState, dispatch }) => {
+    // TURBOTODO(hsjoberg): Add generateSecureRandomAsBase64 to a local TurboModule
     const seed = getState().walletSeed;
     if (!seed) {
       return;
@@ -712,14 +771,29 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
     await setWalletPassword(randomBase64);
 
     const wallet = payload?.restore
-      ? await initWallet(
-          seed,
-          randomBase64,
-          500,
-          payload.restore.channelsBackup,
-          payload.restore.aezeedPassphrase,
-        )
-      : await initWallet(seed, randomBase64, undefined, undefined, payload?.init?.aezeedPassphrase);
+      ? await initWallet({
+          cipherSeedMnemonic: seed,
+          walletPassword: stringToUint8Array(randomBase64),
+          recoveryWindow: 500,
+          // TURBOTODO: test if this works
+          channelBackups: payload.restore.channelsBackup
+            ? {
+                multiChanBackup: {
+                  multiChanBackup: base64.toByteArray(payload.restore.channelsBackup),
+                },
+              }
+            : undefined,
+          aezeedPassphrase: payload.restore.aezeedPassphrase
+            ? stringToUint8Array(payload.restore.aezeedPassphrase)
+            : undefined,
+        })
+      : await initWallet({
+          cipherSeedMnemonic: seed,
+          walletPassword: stringToUint8Array(randomBase64),
+          aezeedPassphrase: payload?.init?.aezeedPassphrase
+            ? stringToUint8Array(payload?.init?.aezeedPassphrase)
+            : undefined,
+        });
 
     await setItemObject(StorageItem.walletCreated, true);
     actions.setWalletCreated(true);
@@ -760,8 +834,11 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   setTorLoading: action((state, value) => {
     state.torLoading = value;
   }),
-  setSpeedloaderLoading: action((state, value) => {
-    state.speedloaderLoading = value;
+  setSpeedloaderLoading: action((state, payload) => {
+    state.speedloaderLoading = payload;
+  }),
+  setSpeedloaderCancelVisible: action((state, payload) => {
+    state.speedloaderCancelVisible = payload;
   }),
   setImportChannelDbOnStartup: action((state, value) => {
     state.importChannelDbOnStartup = value;
@@ -776,6 +853,8 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   importChannelDbOnStartup: null,
   torEnabled: false,
   torLoading: false,
+  speedloaderLoading: false,
+  speedloaderCancelVisible: false,
 
   lightning,
   transaction,

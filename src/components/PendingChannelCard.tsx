@@ -1,11 +1,9 @@
 import React, { useMemo } from "react";
 import { Body, Text, Left, Right, Card, CardItem, Row, Button } from "native-base";
 import { Image, Linking } from "react-native";
-import Long from "long";
 import BigNumber from "bignumber.js";
 
 import { style } from "./ChannelCard";
-import { lnrpc } from "../../proto/lightning";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { useStoreActions, useStoreState } from "../state/store";
 import { identifyService, lightningServices } from "../utils/lightning-services";
@@ -17,15 +15,25 @@ import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
 import { Alert } from "../utils/alert";
 
+import {
+  Initiator,
+  PendingChannelsResponse_ClosedChannel,
+  PendingChannelsResponse_ForceClosedChannel,
+  PendingChannelsResponse_PendingChannel,
+  PendingChannelsResponse_PendingOpenChannel,
+  PendingChannelsResponse_WaitingCloseChannel,
+} from "react-native-turbo-lnd/protos/lightning_pb";
+
 const dataLossChannelState = "ChanStatusLocalDataLoss|ChanStatusRestored";
 
 export interface IPendingChannelCardProps {
   type: "OPEN" | "CLOSING" | "FORCE_CLOSING" | "WAITING_CLOSE";
   channel:
-    | lnrpc.PendingChannelsResponse.IPendingOpenChannel
-    | lnrpc.PendingChannelsResponse.IClosedChannel
-    | lnrpc.PendingChannelsResponse.IForceClosedChannel
-    | lnrpc.PendingChannelsResponse.IWaitingCloseChannel;
+    | PendingChannelsResponse_PendingOpenChannel
+    | PendingChannelsResponse_ClosedChannel
+    | PendingChannelsResponse_ForceClosedChannel
+    | PendingChannelsResponse_WaitingCloseChannel;
+  // TURBOTODO: no PendingChannelsResponse_PendingChannel?
   alias?: string;
 }
 export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCardProps) => {
@@ -44,14 +52,14 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
   if (!channel.channel) {
     return <Text>Error</Text>;
   }
-  const closingChannel = channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel;
+  const closingChannel = channel as PendingChannelsResponse_WaitingCloseChannel;
 
   const isForceClosableChannel =
     channel.channel?.chanStatusFlags === dataLossChannelState || !!closingChannel.closingTxid
       ? false
       : true;
 
-  const forceClose = (channel: lnrpc.PendingChannelsResponse.IWaitingCloseChannel) => {
+  const forceClose = (channel: PendingChannelsResponse_WaitingCloseChannel) => {
     if (channel.channel?.chanStatusFlags === dataLossChannelState) {
       Alert.alert("Cannot Force Close A Channel In Recovery State");
       return;
@@ -98,13 +106,13 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
     );
   };
 
-  const bumpChannelFee = async (channel: lnrpc.PendingChannelsResponse.IPendingOpenChannel) => {
+  const bumpChannelFee = async (channel: PendingChannelsResponse_PendingOpenChannel) => {
     if (!channel.channel || !channel.channel.channelPoint) {
       Alert.alert(t("msg.error", { ns: namespaces.common }));
       return;
     }
 
-    const [txid, index] = channel.channel?.channelPoint?.split(":");
+    const [txid, index] = channel.channel.channelPoint.split(":");
 
     Alert.prompt(t("channel.bumpFee"), t("channel.bumpFeeAlerts.enterFeeRate"), [
       {
@@ -251,20 +259,10 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                   <Text>
                     {!preferFiat && (
                       <>
-                        <Text>
-                          {valueBitcoin(
-                            (channel as lnrpc.PendingChannelsResponse.IPendingOpenChannel)?.channel
-                              .localBalance || new Long(0),
-                            bitcoinUnit,
-                          )}{" "}
-                        </Text>
+                        <Text>{valueBitcoin(channel.channel.localBalance, bitcoinUnit)} </Text>
                         <Text>
                           {getUnitNice(
-                            new BigNumber(
-                              (
-                                channel as lnrpc.PendingChannelsResponse.IPendingOpenChannel
-                              )?.channel.localBalance?.toNumber?.(),
-                            ),
+                            new BigNumber(channel.channel.localBalance.toString()),
                             bitcoinUnit,
                           )}
                         </Text>
@@ -273,11 +271,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                     {preferFiat && (
                       <>
                         <Text>
-                          {valueFiat(
-                            (channel as lnrpc.PendingChannelsResponse.IPendingOpenChannel)?.channel
-                              .localBalance || new Long(0),
-                            currentRate,
-                          ).toFixed(2)}{" "}
+                          {valueFiat(channel.channel.localBalance, currentRate).toFixed(2)}{" "}
                         </Text>
                         <Text>{fiatUnit}</Text>
                       </>
@@ -287,13 +281,15 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
               </Row>
               <Row style={{ width: "100%" }}>
                 <Left style={{ flexDirection: "row" }}>
-                  {channel?.channel.initiator === lnrpc.Initiator["INITIATOR_LOCAL"] &&
+                  {channel.channel.initiator === Initiator["INITIATOR_LOCAL"] &&
                     isFeeBumpable === true && (
                       <Button
                         style={{ marginTop: 14 }}
                         danger={true}
                         small={true}
-                        onPress={() => bumpChannelFee(channel)}
+                        onPress={() =>
+                          bumpChannelFee(channel as PendingChannelsResponse_PendingOpenChannel)
+                        }
                       >
                         <Text style={{ fontSize: 8 }}>{t("channel.bumpFee")}</Text>
                       </Button>
@@ -326,15 +322,14 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                     <>
                       <Text>
                         {valueBitcoin(
-                          (channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)
-                            ?.limboBalance || new Long(0),
+                          (channel as PendingChannelsResponse_WaitingCloseChannel).limboBalance,
                           bitcoinUnit,
                         )}{" "}
                         {getUnitNice(
                           new BigNumber(
                             (
-                              channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel
-                            )?.limboBalance?.toNumber?.(),
+                              channel as PendingChannelsResponse_WaitingCloseChannel
+                            ).limboBalance.toString(),
                           ),
                           bitcoinUnit,
                         )}
@@ -345,8 +340,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                     <>
                       <Text>
                         {valueFiat(
-                          (channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)
-                            ?.limboBalance || new Long(0),
+                          (channel as PendingChannelsResponse_WaitingCloseChannel).limboBalance,
                           currentRate,
                         ).toFixed(2)}{" "}
                         {fiatUnit}
@@ -361,7 +355,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                 </Left>
                 <Right>
                   <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>
-                    {(channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.commitments
+                    {(channel as PendingChannelsResponse_WaitingCloseChannel).commitments
                       ?.localTxid || "N/A"}
                   </CopyText>
                 </Right>
@@ -372,7 +366,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                 </Left>
                 <Right>
                   <CopyText style={{ fontSize: 9.5, textAlign: "right" }}>
-                    {(channel as lnrpc.PendingChannelsResponse.IWaitingCloseChannel)?.commitments
+                    {(channel as PendingChannelsResponse_WaitingCloseChannel).commitments
                       ?.remoteTxid || "N/A"}
                   </CopyText>
                 </Right>
@@ -384,7 +378,9 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                       style={{ marginTop: 14 }}
                       danger={true}
                       small={true}
-                      onPress={() => forceClose(channel)}
+                      onPress={() =>
+                        forceClose(channel as PendingChannelsResponse_WaitingCloseChannel)
+                      }
                     >
                       <Text style={{ fontSize: 8 }}>{t("channel.forceClosePendingChannel")}</Text>
                     </Button>
@@ -405,15 +401,14 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                       <>
                         <Text>
                           {valueBitcoin(
-                            (channel as lnrpc.PendingChannelsResponse.IForceClosedChannel)
-                              ?.limboBalance || new Long(0),
+                            (channel as PendingChannelsResponse_ForceClosedChannel).limboBalance,
                             bitcoinUnit,
                           )}{" "}
                           {getUnitNice(
                             new BigNumber(
                               (
-                                channel as lnrpc.PendingChannelsResponse.IForceClosedChannel
-                              )?.limboBalance?.toNumber?.(),
+                                channel as PendingChannelsResponse_ForceClosedChannel
+                              ).limboBalance.toString(),
                             ),
                             bitcoinUnit,
                           )}
@@ -424,8 +419,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                       <>
                         <Text>
                           {valueFiat(
-                            (channel as lnrpc.PendingChannelsResponse.IForceClosedChannel)
-                              ?.limboBalance || new Long(0),
+                            (channel as PendingChannelsResponse_ForceClosedChannel).limboBalance,
                             currentRate,
                           ).toFixed(2)}{" "}
                         </Text>
@@ -442,13 +436,12 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                 <Right>
                   <CopyText style={{ textAlign: "right" }}>
                     {(
-                      channel as lnrpc.PendingChannelsResponse.IForceClosedChannel
-                    )?.pendingHtlcs?.length.toString()}
+                      channel as PendingChannelsResponse_ForceClosedChannel
+                    ).pendingHtlcs.length.toString()}
                   </CopyText>
                 </Right>
               </Row>
-              {(channel as lnrpc.PendingChannelsResponse.ForceClosedChannel).maturityHeight !==
-                0 && (
+              {(channel as PendingChannelsResponse_ForceClosedChannel).maturityHeight !== 0 && (
                 <Row style={{ width: "100%" }}>
                   <Left>
                     <Text style={style.channelDetailTitle}>{t("channel.maturityHeight")}</Text>
@@ -456,8 +449,8 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                   <Right>
                     <CopyText style={{ textAlign: "right" }}>
                       {(
-                        channel as lnrpc.PendingChannelsResponse.IForceClosedChannel
-                      )?.maturityHeight?.toString()}
+                        channel as PendingChannelsResponse_ForceClosedChannel
+                      ).maturityHeight.toString()}
                     </CopyText>
                   </Right>
                 </Row>
@@ -469,7 +462,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                     small={true}
                     onPress={() =>
                       onPressViewInExplorer(
-                        (channel as lnrpc.PendingChannelsResponse.ClosedChannel).closingTxid,
+                        (channel as PendingChannelsResponse_ForceClosedChannel).closingTxid,
                       )
                     }
                   >
@@ -490,7 +483,7 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
                     small={true}
                     onPress={() =>
                       onPressViewInExplorer(
-                        (channel as lnrpc.PendingChannelsResponse.IClosedChannel)?.closingTxid,
+                        (channel as PendingChannelsResponse_ClosedChannel).closingTxid,
                       )
                     }
                   >

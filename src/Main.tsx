@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar, Alert, NativeModules } from "react-native";
-import { Spinner, H1, H2, Text } from "native-base";
+import { Spinner, H1, H2, Text, Button } from "native-base";
 import {
   createStackNavigator,
   CardStyleInterpolators,
@@ -18,7 +18,6 @@ import Authentication from "./windows/InitProcess/Authentication";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
 import Welcome from "./windows/Welcome";
 import LNURL from "./windows/LNURL";
-import KeysendTest from "./windows/Keysend/Test";
 import KeysendExperiment from "./windows/Keysend/Experiment";
 import LightingBox from "./windows/LightningBox";
 import GoogleDriveTestbed from "./windows/Google/GoogleDriveTestbed";
@@ -29,6 +28,8 @@ import WebInfo from "./windows/Web/Info";
 import Contacts from "./windows/Contacts";
 import Loading from "./windows/Loading";
 import LoadingModal from "./windows/LoadingModal";
+import SyncWorkerReport from "./windows/SyncWorkerReport";
+import SyncWorkerTimelineReport from "./windows/SyncWorkerTimelineReport";
 
 import { useStoreState, useStoreActions } from "./state/store";
 import { toast } from "./utils";
@@ -80,6 +81,7 @@ export type RootStackParamList = {
   Prompt: IPromptNavigationProps;
 
   DEV_CommandsX: undefined;
+  SyncWorkerReport: undefined;
 };
 
 export default function Main() {
@@ -93,11 +95,11 @@ export default function Main() {
   const [initialRoute, setInitialRoute] = useState("Loading");
   const torLoading = useStoreState((store) => store.torLoading);
   const speedloaderLoading = useStoreState((store) => store.speedloaderLoading);
+  const speedloaderCancelVisible = useStoreState((store) => store.speedloaderCancelVisible);
+  const cancelSpeedloader = useStoreActions((store) => store.cancelSpeedloader);
   const screenTransitionsEnabled = useStoreState(
     (store) => store.settings.screenTransitionsEnabled,
   );
-
-  console.log("walletCreated", walletCreated);
 
   const [state, setState] = useState<
     "init" | "authentication" | "onboarding" | "started" | "bricked"
@@ -114,7 +116,7 @@ export default function Main() {
           }
 
           await initializeApp();
-        } catch (e) {
+        } catch (e: any) {
           toast(e.message, 0, "danger");
         }
       }
@@ -216,6 +218,27 @@ export default function Main() {
           />
           <Spinner color={blixtTheme.light} size={55} />
           <H2>Syncing Lightning Network</H2>
+
+          {/* The button becomes visible after 10s */}
+          {speedloaderCancelVisible && (
+            <Button
+              small
+              style={{
+                marginTop: 24,
+                backgroundColor: "rgba(255, 255, 255, 0.15)",
+                paddingHorizontal: 20,
+                paddingVertical: 8,
+                borderRadius: 8,
+                minWidth: 120,
+                justifyContent: "center",
+              }}
+              onPress={() => cancelSpeedloader()}
+            >
+              <Text style={{ color: blixtTheme.light, fontSize: 14, textAlign: "center" }}>
+                Cancel Sync
+              </Text>
+            </Button>
+          )}
         </Container>
       );
     }
@@ -301,7 +324,6 @@ export default function Main() {
         component={GoogleDriveTestbed}
         options={animationDisabled}
       />
-      <RootStack.Screen name="KeysendTest" component={KeysendTest} options={animationDisabled} />
       <RootStack.Screen
         name="KeysendExperiment"
         component={KeysendExperiment}
@@ -314,6 +336,16 @@ export default function Main() {
       />
       <RootStack.Screen name="Prompt" component={Prompt} options={animationDisabled} />
       <RootStack.Screen name="DEV_CommandsX" component={DEV_Commands} options={animationDisabled} />
+      <RootStack.Screen
+        name="SyncWorkerReport"
+        component={SyncWorkerReport}
+        options={animationDisabled}
+      />
+      <RootStack.Screen
+        name="SyncWorkerTimelineReport"
+        component={SyncWorkerTimelineReport}
+        options={animationDisabled}
+      />
     </RootStack.Navigator>
   );
 }

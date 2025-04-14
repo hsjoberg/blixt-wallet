@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { Container, Icon } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { FlashList } from "@shopify/flash-list";
+import { LegendList } from "@legendapp/list";
 
 import { OnChainStackParamList } from "./index";
 import OnChainTransactionItem from "../../components/OnChainTransactionItem";
@@ -49,11 +49,9 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
 
   return (
     <Container>
-      <FlashList
+      <LegendList
         estimatedItemSize={75}
-        data={transactions.sort(
-          (tx1, tx2) => tx2.timeStamp!.toNumber() - tx1.timeStamp!.toNumber(),
-        )}
+        data={transactions.sort((tx1, tx2) => Number(tx2.timeStamp - tx1.timeStamp))}
         renderItem={({ item: transaction }) => (
           <OnChainTransactionItem
             key={transaction.txHash! + transaction.type}
@@ -64,6 +62,7 @@ export const OnChainTransactionLog = ({ navigation }: IOnChainTransactionLogProp
           />
         )}
         keyExtractor={(transaction, i) => transaction.txHash! + transaction.type + i}
+        recycleItems
       />
     </Container>
   );

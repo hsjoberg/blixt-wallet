@@ -1,18 +1,23 @@
-import { LayoutAnimation } from "react-native";
 import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
-import { ITransaction, getTransactions, createTransaction, updateTransaction } from "../storage/database/transaction";
+import {
+  ITransaction,
+  getTransactions,
+  createTransaction,
+  updateTransaction,
+} from "../storage/database/transaction";
 
 import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
-import { lnrpc } from "../../proto/lightning";
 import { bytesToHexString, hexToUint8Array } from "../utils";
 
-import Long from "long";
+import { lookupInvoice, routerTrackPaymentV2 } from "react-native-turbo-lnd";
+import {
+  Invoice_InvoiceState,
+  Payment_PaymentStatus,
+} from "react-native-turbo-lnd/protos/lightning_pb";
 
 import logger from "./../utils/log";
 const log = logger("Transaction");
-
-// let lock = Promise.resolve();
 
 export interface ITransactionModel {
   addTransaction: Action<ITransactionModel, ITransaction>;
@@ -26,8 +31,14 @@ export interface ITransactionModel {
 
   transactions: ITransaction[];
   getTransactionByRHash: Computed<ITransactionModel, (rHash: string) => ITransaction | undefined>;
-  getTransactionByPreimage: Computed<ITransactionModel, (preimage: Uint8Array) => ITransaction | undefined>;
-  getTransactionByPaymentRequest: Computed<ITransactionModel, (paymentRequest: string) => ITransaction | undefined>;
+  getTransactionByPreimage: Computed<
+    ITransactionModel,
+    (preimage: Uint8Array) => ITransaction | undefined
+  >;
+  getTransactionByPaymentRequest: Computed<
+    ITransactionModel,
+    (paymentRequest: string) => ITransaction | undefined
+  >;
 }
 
 export const transaction: ITransactionModel = {
@@ -48,7 +59,7 @@ export const transaction: ITransactionModel = {
     for (const txIt of transactions) {
       if (txIt.paymentRequest === tx.paymentRequest) {
         await updateTransaction(db, { ...txIt, ...tx });
-        actions.updateTransaction({ transaction: { ...txIt, ...tx }});
+        actions.updateTransaction({ transaction: { ...txIt, ...tx } });
         foundTransaction = true;
       }
     }
@@ -100,62 +111,82 @@ export const transaction: ITransactionModel = {
    * On app start, check if any invoices have
    * been settled while we were away.
    */
-  checkOpenTransactions: thunk(async (actions, _, { getState, getStoreState, injections }) => {
-    const trackPayment = injections.lndMobile.index.trackPaymentV2Sync;
-    const lookupInvoice = injections.lndMobile.index.lookupInvoice;
-    const hideExpiredInvoices = getStoreState().settings.hideExpiredInvoices;
+  checkOpenTransactions: thunk(async (actions, _, { getState, getStoreState }) => {
     const db = getStoreState().db;
     if (!db) {
       throw new Error("checkOpenTransactions(): db not ready");
     }
 
-
     for (const tx of getState().transactions) {
       if (tx.status === "OPEN") {
         log.i("trackpayment tx", [tx.rHash]);
-        if (tx.valueMsat.isNegative()) {
-          trackPayment(tx.rHash).then((trackPaymentResult) => {
-            log.i("trackpayment status", [trackPaymentResult.status, trackPaymentResult.paymentHash]);
-            if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.SUCCEEDED) {
-              log.i("trackpayment updating tx [settled]");
-              const updated: ITransaction = {
-                ...tx,
-                status: "SETTLED",
-                preimage: hexToUint8Array(trackPaymentResult.paymentPreimage),
-                hops: trackPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
-                  chanId: hop.chanId ?? null,
-                  chanCapacity: hop.chanCapacity ?? null,
-                  amtToForward: hop.amtToForward || Long.fromInt(0),
-                  amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-                  fee: hop.fee || Long.fromInt(0),
-                  feeMsat: hop.feeMsat || Long.fromInt(0),
-                  expiry: hop.expiry || null,
-                  pubKey: hop.pubKey || null,
-                })) ?? [],
-              };
-              // tslint:disable-next-line
-              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
-            } else if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.UNKNOWN) {
-              log.i("trackpayment updating tx [unknown]");
-              const updated: ITransaction = {
-                ...tx,
-                status: "UNKNOWN",
-              };
-              // tslint:disable-next-line
-              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
-            } else if (trackPaymentResult.status === lnrpc.Payment.PaymentStatus.FAILED) {
-              log.i("trackpayment updating tx [failed]");
-              const updated: ITransaction = {
-                ...tx,
-                status: "CANCELED",
-              };
-              // tslint:disable-next-line
-              updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
-            }
-          });
+        if (tx.valueMsat < 0n) {
+          const unsubscribeTrackPayment = routerTrackPaymentV2(
+            {
+              paymentHash: hexToUint8Array(tx.rHash),
+              noInflightUpdates: true,
+            },
+            async (trackPaymentResult) => {
+              log.i("trackpayment status", [
+                trackPaymentResult.status,
+                trackPaymentResult.paymentHash,
+              ]);
+              if (trackPaymentResult.status === Payment_PaymentStatus.SUCCEEDED) {
+                log.i("trackpayment updating tx [settled]");
+                const updated: ITransaction = {
+                  ...tx,
+                  status: "SETTLED",
+                  preimage: hexToUint8Array(trackPaymentResult.paymentPreimage),
+                  hops:
+                    trackPaymentResult.htlcs[0].route?.hops?.map((hop) => ({
+                      chanId: BigInt(hop.chanId),
+                      chanCapacity: hop.chanCapacity,
+                      amtToForward: hop.amtToForwardMsat / 1000n,
+                      amtToForwardMsat: hop.amtToForwardMsat,
+                      fee: hop.feeMsat / 1000n,
+                      feeMsat: hop.feeMsat,
+                      expiry: hop.expiry,
+                      pubKey: hop.pubKey,
+                    })) ?? [],
+                };
+                // tslint:disable-next-line
+                updateTransaction(db, updated).then(() =>
+                  actions.updateTransaction({ transaction: updated }),
+                );
+              } else if (trackPaymentResult.status === Payment_PaymentStatus.UNKNOWN) {
+                log.i("trackpayment updating tx [unknown]");
+                const updated: ITransaction = {
+                  ...tx,
+                  status: "UNKNOWN",
+                };
+                // tslint:disable-next-line
+                updateTransaction(db, updated).then(() =>
+                  actions.updateTransaction({ transaction: updated }),
+                );
+              } else if (trackPaymentResult.status === Payment_PaymentStatus.FAILED) {
+                log.i("trackpayment updating tx [failed]");
+                const updated: ITransaction = {
+                  ...tx,
+                  status: "CANCELED",
+                };
+                // tslint:disable-next-line
+                updateTransaction(db, updated).then(() =>
+                  actions.updateTransaction({ transaction: updated }),
+                );
+              }
+
+              // TURBOLND(hsjoberg): commenting this one out for now as it's not clear when we should unsubscribe
+              // unsubscribeTrackPayment();
+            },
+            (err) => {
+              log.w("An error occourred inside routerTrackPaymentV2", [err]);
+              // TURBOLND(hsjoberg): commenting this one out for now as it's not clear when we should unsubscribe
+              // unsubscribeTrackPayment();
+            },
+          );
         } else {
-          const check = await lookupInvoice(tx.rHash);
-          if ((Date.now() / 1000) > (check.creationDate.add(check.expiry).toNumber())) {
+          const check = await lookupInvoice({ rHash: hexToUint8Array(tx.rHash) });
+          if (Date.now() / 1000 > check.creationDate + check.expiry) {
             const updated: ITransaction = {
               ...tx,
               status: "EXPIRED",
@@ -164,8 +195,7 @@ export const transaction: ITransactionModel = {
             updateTransaction(db, updated).then(() => {
               actions.updateTransaction({ transaction: updated });
             });
-          }
-          else if (check.settled) {
+          } else if (check.state === Invoice_InvoiceState.SETTLED) {
             const updated: ITransaction = {
               ...tx,
               status: "SETTLED",
@@ -174,53 +204,53 @@ export const transaction: ITransactionModel = {
               // TODO add valueUSD, valueFiat and valueFiatCurrency?
             };
             // tslint:disable-next-line
-            updateTransaction(db, updated).then(() => actions.updateTransaction({ transaction: updated }));
-          }
-          else if (check.state === lnrpc.Invoice.InvoiceState.CANCELED) {
+            updateTransaction(db, updated).then(() =>
+              actions.updateTransaction({ transaction: updated }),
+            );
+          } else if (check.state === Invoice_InvoiceState.CANCELED) {
             const updated: ITransaction = {
               ...tx,
               status: "CANCELED",
             };
             // tslint:disable-next-line
             updateTransaction(db, updated).then(() => {
-              actions.updateTransaction({ transaction: updated })
+              actions.updateTransaction({ transaction: updated });
             });
           }
         }
       }
     }
+
     return true;
   }),
 
   /**
    * Set transactions to our transaction array
    */
-  setTransactions: action((state, transactions) => { state.transactions = transactions; }),
+  setTransactions: action((state, transactions) => {
+    state.transactions = transactions;
+  }),
 
   transactions: [],
-  getTransactionByRHash: computed(
-    (state) => {
-      return (rHash: string) => {
-        return state.transactions.find((tx) => rHash === tx.rHash);
-      };
-    },
-  ),
+  getTransactionByRHash: computed((state) => {
+    return (rHash: string) => {
+      return state.transactions.find((tx) => rHash === tx.rHash);
+    };
+  }),
 
-  getTransactionByPreimage: computed(
-    (state) => {
-      return (preimage: Uint8Array) => {
-        return state.transactions.find((tx) => bytesToHexString(preimage) === bytesToHexString(tx.preimage));
-      };
-    },
-  ),
+  getTransactionByPreimage: computed((state) => {
+    return (preimage: Uint8Array) => {
+      return state.transactions.find(
+        (tx) => bytesToHexString(preimage) === bytesToHexString(tx.preimage),
+      );
+    };
+  }),
 
-  getTransactionByPaymentRequest: computed(
-    (state) => {
-      return (paymentRequest: string) => {
-        return state.transactions.find((tx) => {
-          return paymentRequest === tx.paymentRequest;
-        });
-      };
-    },
-  ),
+  getTransactionByPaymentRequest: computed((state) => {
+    return (paymentRequest: string) => {
+      return state.transactions.find((tx) => {
+        return paymentRequest === tx.paymentRequest;
+      });
+    };
+  }),
 };

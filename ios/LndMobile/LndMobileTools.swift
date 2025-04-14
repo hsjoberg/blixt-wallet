@@ -721,4 +721,17 @@ autopilot.heuristic=preferential:0.05
       reject("randombytes_error", "Error generating random bytes", error)
     }
   }
+
+  @objc(getFilesDir:rejecter:)
+  func getFilesDir(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+    let lndPath = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
+    resolve(lndPath.path)
+  }
+
+  @objc(getCacheDir:rejecter:)
+  func getCacheDir(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+    resolve(cacheDir.path)
+  }
 }

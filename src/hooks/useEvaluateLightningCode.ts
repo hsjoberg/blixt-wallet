@@ -65,7 +65,7 @@ export default function useEvaluateLightningCode() {
           ]);
           lnUrlClear();
         }
-      } catch (e) {
+      } catch (e: any) {
         Alert.alert(`${e.message}`, undefined, [{ text: "OK", onPress: () => {} }]);
       }
     } else if (code.includes("@")) {
@@ -76,7 +76,7 @@ export default function useEvaluateLightningCode() {
       try {
         await setPayment({ paymentRequestStr: code });
         return "BOLT11";
-      } catch (error) {
+      } catch (error: any) {
         await Alert.promiseAlert(`${errorPrefix}: ${error.message}`, undefined, [{ text: "OK" }]);
       }
     }

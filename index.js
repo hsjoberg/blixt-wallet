@@ -1,16 +1,15 @@
+BigInt.prototype.toJSON = function () {
+  return { $bigint: this.toString() };
+};
+
+import "react-native-turbo-lnd";
 import "react-native-gesture-handler";
-import React from "react";
-import ReactNative, { AppRegistry, LogBox, Platform, UIManager, Text } from "react-native";
+import { AppRegistry, LogBox, Platform, UIManager } from "react-native";
 import App from "./src/App";
-import {name as appName} from "./app.json";
-import Long from "long";
-import protobuf from "protobufjs";
+import { name as appName } from "./app.json";
 import { enableES5 } from "immer";
 import "./src/i18n/i18n";
 
-
-protobuf.util.Long = Long;
-protobuf.configure();
 enableES5();
 
 LogBox.ignoreLogs([
@@ -29,10 +28,7 @@ LogBox.ignoreLogs([
   "i18next::pluralResolver: Your environment seems not to be Intl API compatible, use an Intl.PluralRules polyfill. Will fallback to the compatibilityJSON v3 format handling.",
 ]);
 
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 

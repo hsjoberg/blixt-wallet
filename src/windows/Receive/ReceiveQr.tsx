@@ -7,7 +7,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 import { ReceiveStackParamList } from "./index";
 import { useStoreState } from "../../state/store";
-import { lnrpc } from "../../../proto/lightning";
 import QrCode from "../../components/QrCode";
 import { formatBitcoin } from "../../utils/bitcoin-units";
 import Ticker from "../../components/Ticker";
@@ -20,6 +19,7 @@ import { toast } from "../../utils";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { AddInvoiceResponse } from "react-native-turbo-lnd/protos/lightning_pb";
 
 interface IReceiveQRProps {
   navigation: StackNavigationProp<ReceiveStackParamList, "ReceiveQr">;
@@ -27,7 +27,7 @@ interface IReceiveQRProps {
 }
 export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
   const t = useTranslation(namespaces.receive.receiveQr).t;
-  const invoice: lnrpc.AddInvoiceResponse = route.params.invoice;
+  const invoice: AddInvoiceResponse = route.params.invoice;
   const transaction = useStoreState((store) =>
     store.transaction.getTransactionByPaymentRequest(invoice.paymentRequest),
   );
@@ -71,7 +71,7 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
       <View style={style.container}>
         <H1 style={style.scanThisQr}>{t("qr.title")}</H1>
         <Text testID="expire" style={style.expires}>
-          <Ticker expire={transaction.expire.toNumber()} />
+          <Ticker expire={Number(transaction.expire)} />
         </Text>
         <QrCode
           size={smallScreen ? 225 : undefined}
@@ -81,7 +81,7 @@ export default function ReceiveQr({ navigation, route }: IReceiveQRProps) {
         <View style={{ width: "89%", marginBottom: 16 }} testID="payment-request-string">
           <CopyAddress text={transaction.paymentRequest} onPress={onPressPaymentRequest} />
         </View>
-        {transaction.value?.neq(0) && (
+        {transaction.value !== 0n && (
           <H3 testID="pay-amount">{formatBitcoin(transaction.value, bitcoinUnit)}</H3>
         )}
       </View>

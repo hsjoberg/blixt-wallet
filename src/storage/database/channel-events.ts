@@ -1,4 +1,4 @@
-import { SQLiteDatabase } from "react-native-sqlite-storage";
+import { Database } from "react-native-turbo-sqlite";
 import { queryInsert, queryMulti } from "./db-utils";
 
 export interface IDBChannelEvent {
@@ -13,22 +13,22 @@ export interface IChannelEvent {
   type: "OPEN" | "CLOSE";
 }
 
-export const createChannelEvent = async (db: SQLiteDatabase, channelEvent: IChannelEvent): Promise<number> => {
+export const createChannelEvent = async (
+  db: Database,
+  channelEvent: IChannelEvent,
+): Promise<number> => {
   const id = await queryInsert(
     db,
     `INSERT INTO channel_event
     (txId, type)
     VALUES
     (?, ?)`,
-    [
-      channelEvent.txId,
-      channelEvent.type
-    ],
+    [channelEvent.txId, channelEvent.type],
   );
   return id;
-}
+};
 
-export const getChannelEvents = async (db: SQLiteDatabase): Promise<IChannelEvent[]> => {
+export const getChannelEvents = async (db: Database): Promise<IChannelEvent[]> => {
   const c = await queryMulti<IDBChannelEvent>(db, `SELECT * FROM channel_event;`);
   return c;
-}
+};

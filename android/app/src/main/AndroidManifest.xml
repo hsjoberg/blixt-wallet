@@ -18,6 +18,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
 
     <application
       android:name=".MainApplication"
@@ -112,9 +113,10 @@
         android:value="AIzaSyBQZ-aPqIvq4VYQJM_rcyIJ9OgEds4l4dQ"/>
 
       <service
-        android:name=".LndMobileService"
+        android:name="app.notifee.core.ForegroundService"
         android:exported="false"
         android:foregroundServiceType="specialUse"
+        tools:replace="android:foregroundServiceType"
       >
         <property
           android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"

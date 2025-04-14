@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, LayoutAnimation, Pressable, EmitterSubscription } from "react-native";
+import { StyleSheet, View, Pressable } from "react-native";
 import { Icon, Card, CardItem, Text, Button } from "native-base";
-import { useNavigation } from "@react-navigation/core";
-import Long from "long";
+import { useNavigation, NavigationProp } from "@react-navigation/core";
 import Color from "color";
 
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -13,23 +12,25 @@ import { IContact } from "../../storage/database/contact";
 import { Alert } from "../../utils/alert";
 import { ILNUrlWithdrawRequest } from "../../state/LNURL";
 import ButtonSpinner from "../../components/ButtonSpinner";
-import { LndMobileEventEmitter } from "../../utils/event-listener";
-import { decodeInvoiceResult } from "../../lndmobile/wallet";
-import { lnrpc } from "../../../proto/lightning";
 import { Chain } from "../../utils/build";
-import { checkLndStreamErrorResponse } from "../../utils/lndmobile";
 import { fontFactorNormalized } from "../../utils/scale";
-
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
+import { NavigationRootStackParamList } from "../../types";
+
+import { subscribeInvoices } from "react-native-turbo-lnd";
+import { Invoice_InvoiceState } from "react-native-turbo-lnd/protos/lightning_pb";
+import { UnsubscribeFromStream } from "react-native-turbo-lnd/core";
 
 interface IContactProps {
   contact: IContact;
 }
+
 export default function Contact({ contact }: IContactProps) {
   const t = useTranslation(namespaces.contacts.contactList).t;
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
+
   const setLNUrl = useStoreActions((store) => store.lnUrl.setLNUrl);
   const resolveLightningAddress = useStoreActions((store) => store.lnUrl.resolveLightningAddress);
   const deleteContact = useStoreActions((store) => store.contacts.deleteContact);
@@ -45,34 +46,28 @@ export default function Contact({ contact }: IContactProps) {
   const [widthdrawButtonWidth, setWithdrawButtonWidth] = useState<number | undefined>();
 
   useEffect(() => {
-    let listener: EmitterSubscription | null = null;
+    let listener: UnsubscribeFromStream;
 
     if (contact.lnUrlWithdraw && !currentBalance) {
-      console.log("Subscribing to invoice inside Contact " + contact.domain + " " + contact.note);
-      listener = LndMobileEventEmitter.addListener("SubscribeInvoices", async (e: any) => {
-        try {
-          console.log("Contact component: SubscribeInvoices");
-          const error = checkLndStreamErrorResponse("SubscribeInvoices", e);
-          if (error === "EOF") {
-            return;
-          } else if (error) {
-            console.log("ContactList: Got error from SubscribeInvoices", [error]);
-            throw error;
-          }
-
-          const invoice = decodeInvoiceResult(e.data);
-          if (invoice.state === lnrpc.Invoice.InvoiceState.SETTLED) {
+      listener = subscribeInvoices(
+        {},
+        async (invoice) => {
+          if (invoice.state === Invoice_InvoiceState.SETTLED) {
             console.log("Contact: An invoice was settled, querying balance");
             console.log("Syncing from subscription");
             await syncBalance();
           }
-        } catch (e) {
-          console.log("From Contact component" + e);
-        }
-      });
+        },
+        (err) => {
+          console.log("From Contact component" + err);
+        },
+      );
+      console.log("Subscribing to invoice inside Contact " + contact.domain + " " + contact.note);
     }
     return () => {
-      listener?.remove();
+      if (listener) {
+        listener();
+      }
     };
   }, [currentBalance !== undefined]);
 
@@ -270,8 +265,8 @@ export default function Contact({ contact }: IContactProps) {
                     {t("contact.syncBalance.title")}:{" "}
                     {currentBalance && (
                       <>
-                        {formatBitcoin(Long.fromValue(currentBalance).div(1000), bitcoinUnit)} (
-                        {valueFiat(Long.fromValue(currentBalance).div(1000), fiatRate).toFixed(2) +
+                        {formatBitcoin(BigInt(currentBalance / 10000), bitcoinUnit)} (
+                        {valueFiat(BigInt(currentBalance / 1000), fiatRate).toFixed(2) +
                           " " +
                           fiatUnit}
                         )

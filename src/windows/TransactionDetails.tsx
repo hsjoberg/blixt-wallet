@@ -12,14 +12,12 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
 import { fromUnixTime } from "date-fns";
 import MapView, { PROVIDER_DEFAULT, Marker } from "react-native-maps";
-import type Long from "long";
 
 import Blurmodal from "../components/BlurModal";
 import QrCode from "../components/QrCode";
 import {
   capitalize,
   formatISO,
-  isLong,
   decryptLNURLPayAesTagMessage,
   toast,
   bytesToHexString,
@@ -213,9 +211,9 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
     }
   };
 
-  let transactionValue: Long;
+  let transactionValue: bigint;
   let direction: "send" | "receive";
-  if (isLong(transaction.value) && transaction.value.greaterThanOrEqual(0)) {
+  if (transaction.value >= 0) {
     direction = "receive";
     transactionValue = transaction.value;
   } else {
@@ -226,7 +224,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
   // In the case of an 0 sat invoice, transaction.value will be 0,
   // instead get from amtPaidSat.
   // TODO eventually sync up with what TransactionCard.tsx does.
-  if (transactionValue.eq(0)) {
+  if (transactionValue === 0n) {
     transactionValue = transaction.amtPaidSat;
   }
 
@@ -268,7 +266,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
               </View>
               <MetaData
                 title={t("date")}
-                data={formatISO(fromUnixTime(transaction.date.toNumber()))}
+                data={formatISO(fromUnixTime(Number(transaction.date)))}
               />
               {!!transaction.note && <MetaData title={t("note")} data={transaction.note} />}
               {!!transaction.website && (

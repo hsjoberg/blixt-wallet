@@ -1,9 +1,8 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
 import { NativeModules, StyleSheet, TextInput, View } from "react-native";
-import { Text, Container, Button, Icon, Spinner, CheckBox, Right, InputGroup } from "native-base";
+import { Text, Container, Button, Icon, Spinner, CheckBox } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
-import Long from "long";
 import { RouteProp } from "@react-navigation/native";
 
 import { LightningInfoStackParamList } from "./index";
@@ -20,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { Alert } from "../../utils/alert";
 import { lnrpc } from "../../../proto/lightning";
+import { stopDaemon } from "react-native-turbo-lnd";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -80,7 +80,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
       }
       await getChannels(undefined);
       navigation.pop();
-    } catch (error) {
+    } catch (error: any) {
       toast(`Error: ${error.message}`, 12000, "danger", "Okay");
       setOpening(false);
 
@@ -99,8 +99,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
               await changeTorEnabled(!torEnabled);
               if (PLATFORM === "android") {
                 try {
-                  await NativeModules.LndMobile.stopLnd();
-                  await NativeModules.LndMobileTools.killLnd();
+                  await stopDaemon({});
                 } catch (e) {
                   console.log(e);
                 }
@@ -279,7 +278,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
           </Button>,
         ]}
         noticeText={`${formatBitcoinValue(onChainBalance)} available`}
-        noticeIcon={Long.fromValue(onChainBalance).gt(0) ? null : "info"}
+        noticeIcon={onChainBalance > 0n ? null : "info"}
       />
     </Container>
   );

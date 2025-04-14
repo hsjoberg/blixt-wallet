@@ -1,12 +1,11 @@
 import React from "react";
-import { StyleSheet, View, Image, Platform, PixelRatio } from "react-native";
-import { Body, Card, CardItem, Text, Right, Row } from "native-base";
-import Long from "long";
+import { StyleSheet, View, Image, Platform } from "react-native";
+import { Body, Card, CardItem, Text, Right } from "native-base";
 
 import { fromUnixTime } from "date-fns";
 import { ITransaction } from "../storage/database/transaction";
 import { blixtTheme } from ".././native-base-theme/variables/commonColor";
-import { capitalize, formatISO, isLong } from "../utils";
+import { capitalize, formatISO } from "../utils";
 import { extractDescription } from "../utils/NameDesc";
 import {
   IBitcoinUnits,
@@ -26,7 +25,7 @@ interface IProps {
 }
 export default function TransactionCard({ onPress, transaction, unit }: IProps) {
   const { date, value, amtPaidSat, status, tlvRecordName } = transaction;
-  const positive = value.isPositive();
+  const positive = value >= 0;
   let { name, description } = extractDescription(transaction.description);
 
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
@@ -35,8 +34,8 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
   const hideAmountsEnabled = useStoreState((store) => store.settings.hideAmountsEnabled);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
 
-  let transactionValue: Long;
-  if (isLong(amtPaidSat) && amtPaidSat.greaterThan(0)) {
+  let transactionValue: bigint;
+  if (amtPaidSat > 0) {
     transactionValue = amtPaidSat;
   } else {
     transactionValue = value;
@@ -64,11 +63,11 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
       recipientOrSender = lightningService.title;
     } else if (transaction.website) {
       recipientOrSender = transaction.website;
-    } else if (transaction.value.lessThan(0) && name) {
+    } else if (transaction.value < 0 && name) {
       recipientOrSender = name;
-    } else if (transaction.value.greaterThanOrEqual(0) && tlvRecordName) {
+    } else if (transaction.value >= 0 && tlvRecordName) {
       recipientOrSender = tlvRecordName;
-    } else if (transaction.value.greaterThanOrEqual(0) && transaction.payer) {
+    } else if (transaction.value >= 0 && transaction.payer) {
       recipientOrSender = transaction.payer;
     }
   }
@@ -77,11 +76,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
   if (status !== "SETTLED") {
     statusLabel = capitalize(status);
     // Special case for pending payments ("pre-transactions")
-    if (
-      status === "OPEN" &&
-      Long.isLong(transaction.valueMsat) &&
-      transaction.valueMsat.isNegative()
-    ) {
+    if (status === "OPEN" && transaction.valueMsat < 0) {
       statusLabel = "Pending";
     }
   }
@@ -115,7 +110,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
           <View style={{ flex: 1 }}>
             <View style={transactionStyle.transactionTop}>
               <Text style={transactionStyle.transactionTopDate}>
-                {formatISO(fromUnixTime(date.toNumber()), zoomed)}
+                {formatISO(fromUnixTime(Number(date)), zoomed)}
               </Text>
               <Right>
                 <Text
@@ -125,7 +120,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
                       : transactionStyle.transactionTopValueNegative
                   }
                 >
-                  {transactionValue.notEquals(0) && (
+                  {transactionValue !== 0n && (
                     <>
                       {positive ? "+" : ""}
 

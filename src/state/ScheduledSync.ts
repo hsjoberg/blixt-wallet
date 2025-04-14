@@ -1,4 +1,4 @@
-import { NativeModules } from "react-native"
+import { NativeModules } from "react-native";
 import { Action, action, Thunk, thunk, computed, Computed } from "easy-peasy";
 import { StorageItem, getItemObject } from "../storage/app";
 import { WorkInfo } from "../lndmobile/LndMobile";
@@ -43,7 +43,9 @@ export const scheduledSync: IScheduledSyncModel = {
 
     try {
       actions.setLastScheduledSync(await getItemObject<number>(StorageItem.lastScheduledSync));
-      actions.setLastScheduledSyncAttempt(await getItemObject<number>(StorageItem.lastScheduledSyncAttempt));
+      actions.setLastScheduledSyncAttempt(
+        await getItemObject<number>(StorageItem.lastScheduledSyncAttempt),
+      );
       actions.setWorkInfo(await injections.lndMobile.scheduledSync.checkScheduledSyncWorkStatus());
     } catch (e) {
       log.e("Error retrieving sync info", [e]);
@@ -62,11 +64,19 @@ export const scheduledSync: IScheduledSyncModel = {
     actions.setWorkInfo(await LndMobileScheduledSync.checkScheduledSyncWorkStatus());
   }),
 
-  setLastScheduledSync: action((state, payload) => { state.lastScheduledSync = payload; }),
-  setLastScheduledSyncAttempt: action((state, payload) => { state.lastScheduledSyncAttempt = payload; }),
-  setWorkInfo: action((state, payload) => { state.workInfo = payload; }),
+  setLastScheduledSync: action((state, payload) => {
+    state.lastScheduledSync = payload;
+  }),
+  setLastScheduledSyncAttempt: action((state, payload) => {
+    state.lastScheduledSyncAttempt = payload;
+  }),
+  setWorkInfo: action((state, payload) => {
+    state.workInfo = payload;
+  }),
 
-  syncEnabled: computed((store) => ["BLOCKED", "ENQUEUED", "FAILED", "RUNNING", "SUCCEEDED"].includes(store.workInfo!)),
+  syncEnabled: computed((store) =>
+    ["BLOCKED", "ENQUEUED", "FAILED", "RUNNING", "SUCCEEDED"].includes(store.workInfo!),
+  ),
   lastScheduledSync: 0,
   lastScheduledSyncAttempt: 0,
   workInfo: "WORK_NOT_EXIST",

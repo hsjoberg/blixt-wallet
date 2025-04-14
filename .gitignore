@@ -33,6 +33,7 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
+.kotlin/
 
 # node.js
 #
@@ -80,6 +81,8 @@ macos/Pods
 android/lndmobile/Lndmobile.aar
 ios/Lndmobile.xcframework
 macos/Lndmobile.xcframework
+liblnd.a
+jniLibs/
 dist
 .webpack
 contrib/service-image/webp
@@ -103,3 +106,14 @@ Sessionx.vim
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
+.android/*

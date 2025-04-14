@@ -10,18 +10,18 @@ import ReceiveSetupLsp from "./ReceiveSetupLsp";
 import ReceiveQr from "./ReceiveQr";
 import DunderLspInfo from "./DunderLspInfo";
 
-import { lnrpc } from "../../../proto/lightning";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectList";
 import { IFiatRates } from "../../state/Fiat";
 import { useStoreState } from "../../state/store";
+import { AddInvoiceResponse } from "react-native-turbo-lnd/protos/lightning_pb";
 
 const Stack = createStackNavigator();
 
 export type ReceiveStackParamList = {
   ReceiveSetup: undefined;
   ReceiveQr: {
-    invoice: lnrpc.AddInvoiceResponse;
+    invoice: AddInvoiceResponse;
   };
   ChangeBitcoinUnit: ISelectListNavigationProps<string>;
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;

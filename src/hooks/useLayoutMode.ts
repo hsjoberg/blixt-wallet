@@ -8,7 +8,7 @@ const evalutateMode = (width: number): LayoutMode => {
     return "mobile";
   }
   return width > 750 ? "full" : "mobile";
-}
+};
 
 // 767
 

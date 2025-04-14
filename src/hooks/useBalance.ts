@@ -24,7 +24,10 @@ const commaLocales: string[] = [
   "zh_CN",
 ];
 
-export default function useBalance(initialSat?: Long, noConversion = false) {
+export default function useBalance(initialSat?: bigint, noConversion = false) {
+  const settingsManagerConstants =
+    PLATFORM === "ios" ? NativeModules.SettingsManager.getConstants().settings : undefined;
+
   // gRPC/protobuf 0 is Number
   if (typeof initialSat === "number") {
     initialSat = undefined;
@@ -35,7 +38,7 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
   const currentRate = useStoreState((store) => store.fiat.currentRate);
 
   const [bitcoinValue, setBitcoinValue] = useState<string | undefined>(
-    initialSat && valueBitcoin(initialSat, bitcoinUnit),
+    initialSat !== undefined ? valueBitcoin(initialSat, bitcoinUnit) : undefined,
   );
   const [dollarValue, setDollarValue] = useState<string | undefined>(
     bitcoinValue &&
@@ -71,15 +74,15 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
       } else {
         let replaceComma: boolean = true;
         if (PLATFORM === "ios") {
-          const locale =
-            NativeModules.SettingsManager.settings.AppleLocale ||
-            NativeModules.SettingsManager.settings.AppleLanguages[0];
+          const locale: string =
+            settingsManagerConstants.AppleLocale || settingsManagerConstants.AppleLanguages[0];
+
           if (commaLocales.indexOf(locale) > -1) {
             replaceComma = false;
           }
         } else if (PLATFORM === "android") {
           const locale = I18nManager.getConstants().localeIdentifier;
-          if (commaLocales.indexOf(locale) > -1) {
+          if (locale && commaLocales.indexOf(locale) > -1) {
             replaceComma = false;
           }
         }
@@ -103,15 +106,14 @@ export default function useBalance(initialSat?: Long, noConversion = false) {
     onChangeFiatInput(text: string) {
       let replaceComma: boolean = true;
       if (PLATFORM === "ios") {
-        const locale =
-          NativeModules.SettingsManager.settings.AppleLocale ||
-          NativeModules.SettingsManager.settings.AppleLanguages[0];
+        const locale: string =
+          settingsManagerConstants.AppleLocale || settingsManagerConstants.AppleLanguages[0];
         if (commaLocales.indexOf(locale) > -1) {
           replaceComma = false;
         }
       } else if (PLATFORM === "android") {
         const locale = I18nManager.getConstants().localeIdentifier;
-        if (commaLocales.indexOf(locale) > -1) {
+        if (locale && commaLocales.indexOf(locale) > -1) {
           replaceComma = false;
         }
       }

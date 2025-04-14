@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Vibration } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import DialogAndroid from "react-native-dialogs";
-import Long from "long";
 
 import { useStoreState, useStoreActions } from "../../state/store";
 import { getDomainFromURL, toast, timeout } from "../../utils";
@@ -24,11 +23,15 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
   const lnurlStr = useStoreState((store) => store.lnUrl.lnUrlStr);
   const type = useStoreState((store) => store.lnUrl.type);
   const doWithdrawRequest = useStoreActions((store) => store.lnUrl.doWithdrawRequest);
-  const lnObject = useStoreState((store) => store.lnUrl.lnUrlObject) as unknown as ILNUrlWithdrawRequest;
+  const lnObject = useStoreState(
+    (store) => store.lnUrl.lnUrlObject,
+  ) as unknown as ILNUrlWithdrawRequest;
   const clear = useStoreActions((store) => store.lnUrl.clear);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const syncContact = useStoreActions((store) => store.contacts.syncContact);
-  const getContactByLnUrlWithdraw = useStoreState((store) => store.contacts.getContactByLnUrlWithdraw);
+  const getContactByLnUrlWithdraw = useStoreState(
+    (store) => store.contacts.getContactByLnUrlWithdraw,
+  );
 
   const doRequest = async (domain: string, satoshi: number) => {
     try {
@@ -38,12 +41,7 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
       clear();
       if (result) {
         Vibration.vibrate(32);
-        toast(
-          t("doRequest.sentRequest", { domain }),
-          10000,
-          "success",
-          "Okay"
-        );
+        toast(t("doRequest.sentRequest", { domain }), 10000, "success", "Okay");
       }
 
       if (lnObject.balanceCheck) {
@@ -52,22 +50,26 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
           Alert.alert(
             t("doRequest.addToContactList.title"),
             `${t("doRequest.addToContactList.msg", { domain })}`,
-            [{
-              text: t("buttons.no",{ns:namespaces.common}),
-            }, {
-              text: t("buttons.yes",{ns:namespaces.common}),
-              onPress: async () => {
-                await syncContact({
-                  type: "SERVICE",
-                  domain,
-                  lnUrlPay: lnObject.payLink ?? null,
-                  lnUrlWithdraw: lnObject.balanceCheck ?? null,
-                  lightningAddress: null,
-                  lud16IdentifierMimeType: null,
-                  note: t("doRequest.addToContactList.note", { domain }),
-                });
-              }
-            }],
+            [
+              {
+                text: t("buttons.no", { ns: namespaces.common }),
+              },
+              {
+                text: t("buttons.yes", { ns: namespaces.common }),
+                onPress: async () => {
+                  await syncContact({
+                    type: "SERVICE",
+                    domain,
+                    lnUrlPay: lnObject.payLink ?? null,
+                    lnUrlWithdraw: lnObject.balanceCheck ?? null,
+                    lightningAddress: null,
+                    lud16IdentifierMimeType: null,
+                    note: t("doRequest.addToContactList.note", { domain }),
+                    label: null,
+                  });
+                },
+              },
+            ],
           );
         } else {
           if (lnurlStr !== lnObject.balanceCheck) {
@@ -81,17 +83,12 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
       }
 
       navigation.pop();
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       setStatus("DONE");
       clear();
       Vibration.vibrate(50);
-      toast(
-        t("msg.error",{ns:namespaces.common})+": " + e.message,
-        12000,
-        "warning",
-        "Okay"
-      );
+      toast(t("msg.error", { ns: namespaces.common }) + ": " + e.message, 12000, "warning", "Okay");
       navigation.pop();
     }
   };
@@ -115,99 +112,97 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
         const maxWithdrawable = lnObject.maxWithdrawable;
 
         if (lnObject.minWithdrawable === lnObject.maxWithdrawable) {
-          const amount = formatBitcoin(Long.fromValue(lnObject.maxWithdrawable).div(1000), bitcoinUnit);
+          const amount = formatBitcoin(BigInt(lnObject.maxWithdrawable / 1000), bitcoinUnit);
           description += `\n\n${t("layout.dialog.msg")}: ${amount}`;
           sat = Math.floor(lnObject.minWithdrawable / 1000);
 
           if (PLATFORM === "android") {
-            const result = await DialogAndroid.alert(
-              title,
-              description,
-              {
-                negativeText: t("buttons.cancel",{ns:namespaces.common}),
-              }
-            );
+            const result = await DialogAndroid.alert(title, description, {
+              negativeText: t("buttons.cancel", { ns: namespaces.common }),
+            });
             action = result.action;
           } else {
             await new Promise((resolve) => {
-              Alert.alert(
-                title,
-                description,
-                [{
-                  text: t("buttons.cancel",{ns:namespaces.common}),
+              Alert.alert(title, description, [
+                {
+                  text: t("buttons.cancel", { ns: namespaces.common }),
                   onPress: () => {
                     action = DialogAndroid.actionNegative;
-                    resolve();
+                    resolve(null);
                   },
-                }, {
-                  text: t("buttons.ok",{ns:namespaces.common}),
+                },
+                {
+                  text: t("buttons.ok", { ns: namespaces.common }),
                   onPress: () => {
                     action = DialogAndroid.actionPositive;
-                    resolve();
+                    resolve(null);
                   },
-                }]
-              );
+                },
+              ]);
             });
           }
-        }
-        else {
-          const minWithdrawableSat = formatBitcoin(Long.fromValue(minWithdrawable).div(1000), bitcoinUnit);
-          const maxWithdrawableSat = formatBitcoin(Long.fromValue(maxWithdrawable).div(1000), bitcoinUnit);
+        } else {
+          const minWithdrawableSat = formatBitcoin(BigInt(minWithdrawable / 1000), bitcoinUnit);
+          const maxWithdrawableSat = formatBitcoin(BigInt(maxWithdrawable / 1000), bitcoinUnit);
           description += `\n\n${t("layout.dialog1.minSat")}: ${minWithdrawableSat}\n${t("layout.dialog1.maxSat")}: ${maxWithdrawableSat}`;
 
-
           if (PLATFORM === "android") {
-            const result = await DialogAndroid.prompt(
-              title,
-              description,
-              {
-                placeholder: `${t("layout.dialog1.placeholder")} (${BitcoinUnits[bitcoinUnit].nice})`,
-                keyboardType: "numeric",
-                allowEmptyInput: false,
-                negativeText: t("buttons.cancel",{ns:namespaces.common}),
-              }
-            );
+            const result = await DialogAndroid.prompt(title, description, {
+              placeholder: `${t("layout.dialog1.placeholder")} (${BitcoinUnits[bitcoinUnit].nice})`,
+              keyboardType: "numeric",
+              allowEmptyInput: false,
+              negativeText: t("buttons.cancel", { ns: namespaces.common }),
+            });
 
             action = result.action;
-            sat = convertBitcoinUnit(Number.parseFloat(result.text), bitcoinUnit, "satoshi").toNumber();
+            sat = convertBitcoinUnit(
+              Number.parseFloat(result.text),
+              bitcoinUnit,
+              "satoshi",
+            ).toNumber();
           } else {
             await new Promise((resolve) => {
               Alert.prompt(
                 title,
                 description,
-                [{
-                  text: t("buttons.cancel",{ns:namespaces.common}),
-                  onPress: () => {
-                    action = DialogAndroid.actionNegative;
-                    resolve(void(0));
+                [
+                  {
+                    text: t("buttons.cancel", { ns: namespaces.common }),
+                    onPress: () => {
+                      action = DialogAndroid.actionNegative;
+                      resolve(void 0);
+                    },
                   },
-                }, {
-                  text: t("buttons.ok",{ns:namespaces.common}),
-                  onPress: (text) => {
-                    action = DialogAndroid.actionPositive;
-                    text = text ?? "0";
-                    if (bitcoinUnit === "satoshi") {
-                      text = text.replace(/\[^0-9+\-\/*]/g, "");
-                    }
-                    else {
-                      text = text.replace(/,/g, ".");
-                    }
-                    sat = convertBitcoinUnit(Number.parseFloat(text ?? "0"), bitcoinUnit, "satoshi").toNumber();
-                    resolve(void(0));
+                  {
+                    text: t("buttons.ok", { ns: namespaces.common }),
+                    onPress: (text) => {
+                      action = DialogAndroid.actionPositive;
+                      text = text ?? "0";
+                      if (bitcoinUnit === "satoshi") {
+                        text = text.replace(/\[^0-9+\-\/*]/g, "");
+                      } else {
+                        text = text.replace(/,/g, ".");
+                      }
+                      sat = convertBitcoinUnit(
+                        Number.parseFloat(text ?? "0"),
+                        bitcoinUnit,
+                        "satoshi",
+                      ).toNumber();
+                      resolve(void 0);
+                    },
                   },
-                }],
+                ],
                 "plain-text",
                 undefined,
-                "decimal-pad"
-              )
-            })
+                "decimal-pad",
+              );
+            });
           }
         }
 
         if (action === DialogAndroid.actionPositive) {
           await doRequest(domain, sat);
-        }
-        else {
+        } else {
           navigation.pop();
         }
       }
@@ -215,10 +210,8 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
   }, []);
 
   if (status !== "PROCESSING") {
-    return (<></>);
+    return <></>;
   }
 
-  return (
-    <LoadingModal />
-  );
+  return <LoadingModal />;
 }

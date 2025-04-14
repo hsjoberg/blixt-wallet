@@ -14,7 +14,7 @@ import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { smallScreen } from "../utils/device";
 import { PLATFORM } from "../utils/constants";
 
-const hapticFeedbackOptions: ReactNativeHapticFeedback.HapticOptions = {
+const hapticFeedbackOptions: HapticOptions = {
   enableVibrateFallback: false,
   ignoreAndroidSystemSettings: false,
 };

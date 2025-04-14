@@ -4,12 +4,9 @@ import { View } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import { getRouteHints, sendKeysendPaymentV2 } from "../../lndmobile/index";
-import Long from "long";
 import { toast, hexToUint8Array } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { generateSecureRandom } from "../../lndmobile/index";
-import { lnrpc } from "../../../proto/lightning";
 import QrCode from "../../components/QrCode";
 import BlixtForm from "../../components/Form";
 import { NavigationButton } from "../../components/NavigationButton";
@@ -17,12 +14,21 @@ import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { ITransaction } from "../../storage/database/transaction";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../../Main";
-import { translatePaymentFailureReason } from "../../state/Send";
+import { sendKeysendPaymentV2TurboLnd, translatePaymentFailureReason } from "../../state/Send";
 import { PLATFORM } from "../../utils/constants";
 import Input from "../../components/Input";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { getChanInfo, listChannels } from "react-native-turbo-lnd";
+import {
+  HopHintSchema,
+  Payment_PaymentStatus,
+  RouteHint,
+  RouteHintSchema,
+  RoutingPolicy,
+} from "react-native-turbo-lnd/protos/lightning_pb";
+import { create, toJson, toJsonString } from "@bufbuild/protobuf";
 
 interface IKeysendExperimentProps {
   navigation: StackNavigationProp<RootStackParamList, "KeysendExperiment">;
@@ -38,6 +44,8 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
   const [satInput, setSatInput] = useState("");
   const [messageInput, setMessageInput] = useState("");
 
+  const sendPayment = useStoreActions((store) => store.send.sendPayment);
+
   const syncTransaction = useStoreActions((store) => store.transaction.syncTransaction);
 
   const name = useStoreState((store) => store.settings.name) || "";
@@ -45,7 +53,13 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
 
   useEffect(() => {
     (async () => {
-      setRoutehints(JSON.stringify(await getRouteHints()));
+      setRoutehints(
+        JSON.stringify(
+          (await getRouteHints()).map((routeHint) => {
+            return toJson(RouteHintSchema, routeHint);
+          }),
+        ),
+      );
     })();
   }, []);
 
@@ -74,18 +88,20 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
       setSending(true);
       const start = new Date().getTime();
 
-      const result = await sendKeysendPaymentV2(
-        pubkeyInput,
-        Long.fromValue(Number.parseInt(satInput, 10)),
+      const routeHints: RouteHint[] = JSON.parse(routehintsInput) || undefined;
+
+      const result = await sendKeysendPaymentV2TurboLnd(
+        hexToUint8Array(pubkeyInput),
+        BigInt(satInput),
         await generateSecureRandom(32),
-        JSON.parse(routehintsInput || "[]"),
         name,
         messageInput,
         maxLNFeePercentage,
+        routeHints,
       );
       console.log(result);
       console.log("status", [result.status, result.failureReason]);
-      if (result.status !== lnrpc.Payment.PaymentStatus.SUCCEEDED) {
+      if (result.status !== Payment_PaymentStatus.SUCCEEDED) {
         throw new Error(`${translatePaymentFailureReason(result.failureReason)}`);
       }
       toast(t("send.alert"));
@@ -98,15 +114,15 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
         date: result.creationDate,
         description: t("send.msg"),
         duration: settlementDuration,
-        expire: Long.fromValue(0),
+        expire: BigInt(0),
         paymentRequest: result.paymentRequest,
         remotePubkey: pubkeyInput,
         rHash: result.paymentHash,
         status: "SETTLED",
-        value: result.value.neg(),
-        valueMsat: result.valueMsat.neg().mul(1000),
-        amtPaidSat: result.value.neg(),
-        amtPaidMsat: result.valueMsat.neg().mul(1000),
+        value: 0n - result.value,
+        valueMsat: 0n - result.valueMsat * 1000n,
+        amtPaidSat: 0n - result.value,
+        amtPaidMsat: 0n - result.valueSat * 1000n,
         fee: result.fee,
         feeMsat: result.feeMsat,
         nodeAliasCached: null,
@@ -125,21 +141,22 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
 
         preimage: hexToUint8Array(result.paymentPreimage),
         lnurlPayResponse: null,
+        lud18PayerData: null,
 
         hops:
           result.htlcs[0].route?.hops?.map((hop) => ({
-            chanId: hop.chanId ?? null,
-            chanCapacity: hop.chanCapacity ?? null,
-            amtToForward: hop.amtToForward || Long.fromInt(0),
-            amtToForwardMsat: hop.amtToForwardMsat || Long.fromInt(0),
-            fee: hop.fee || Long.fromInt(0),
-            feeMsat: hop.feeMsat || Long.fromInt(0),
-            expiry: hop.expiry || null,
-            pubKey: hop.pubKey || null,
+            chanId: BigInt(hop.chanId),
+            chanCapacity: hop.chanCapacity,
+            amtToForward: hop.amtToForwardMsat / 1000n,
+            amtToForwardMsat: hop.amtToForwardMsat,
+            fee: hop.feeMsat / 1000n,
+            feeMsat: hop.feeMsat,
+            expiry: hop.expiry,
+            pubKey: hop.pubKey,
           })) ?? [],
       };
       syncTransaction(transaction);
-    } catch (e) {
+    } catch (e: any) {
       toast(e.message, undefined, "danger");
     }
     setSending(false);
@@ -158,7 +175,7 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
           setPubkeyInput(json.pubkey);
           setRoutehintsInput(json.routehints);
           console.log(data);
-        } catch (e) {
+        } catch (e: any) {
           setPubkeyInput(data?.split("@")[0]);
           console.log(e.message);
         }
@@ -266,3 +283,55 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
     </KeyboardAwareScrollView>
   );
 }
+
+export const getRouteHints = async (max: number = 5): Promise<RouteHint[]> => {
+  const routeHints: RouteHint[] = [];
+  const channels = await listChannels({
+    privateOnly: true,
+  });
+
+  // Follows the code in `addInvoice()` of the lnd project
+  for (const channel of channels.channels) {
+    const chanInfo = await getChanInfo({
+      chanId: channel.chanId,
+    });
+    const remotePubkey = channel.remotePubkey;
+
+    // TODO check if node is publicly
+    // advertised in the network graph
+    // https://github.com/lightningnetwork/lnd/blob/38b521d87d3fd9cff628e5dc09b764aeabaf011a/channeldb/graph.go#L2141
+
+    let policy: RoutingPolicy | undefined;
+    if (remotePubkey === chanInfo.node1Pub) {
+      policy = chanInfo.node1Policy;
+    } else {
+      policy = chanInfo.node2Policy;
+    }
+
+    if (!policy) {
+      continue;
+    }
+
+    let channelId = chanInfo.channelId;
+    if (channel.peerScidAlias) {
+      channelId = channel.peerScidAlias;
+    }
+
+    routeHints.push(
+      create(RouteHintSchema, {
+        hopHints: [
+          {
+            nodeId: remotePubkey,
+            chanId: channelId,
+            feeBaseMsat: Number(policy.feeBaseMsat),
+            feeProportionalMillionths: Number(policy.feeRateMilliMsat),
+            cltvExpiryDelta: policy.timeLockDelta,
+          },
+        ],
+      }),
+    );
+  }
+
+  console.log("our hints", routeHints);
+  return routeHints;
+};

@@ -1,6 +1,6 @@
-import { SQLiteDatabase } from "react-native-sqlite-storage";
+import type { Database, Params } from "react-native-turbo-sqlite";
 
-export const query = async (db: SQLiteDatabase, sql: string, params: any[]) => {
+export const query = async (db: Database, sql: string, params: Params) => {
   const r = await db.executeSql(sql, params);
   return r;
 };
@@ -8,29 +8,37 @@ export const query = async (db: SQLiteDatabase, sql: string, params: any[]) => {
 /**
  * @returns number Insert ID
  */
-export const queryInsert = async (db: SQLiteDatabase, sql: string, params: any[]): Promise<number> => {
+export const queryInsert = async (db: Database, sql: string, params: Params): Promise<number> => {
   const r = await query(db, sql, params);
-  if (r[0]) {
-    return r[0].insertId;
+  if (r) {
+    return r.insertId;
   }
   return -1; // TODO
 };
 
-export const queryMulti = async <T>(db: SQLiteDatabase, sql: string, params: any[] = []): Promise<T[]> => {
+export const queryMulti = async <T>(
+  db: Database,
+  sql: string,
+  params: any[] = [],
+): Promise<T[]> => {
   const r = await query(db, sql, params);
   const rows = [];
-  if (r[0]) {
-    for (let i = 0; i < r[0].rows.length; i++) {
-      rows.push(r[0].rows.item(i));
+  if (r) {
+    for (let i = 0; i < r.rows.length; i++) {
+      rows.push(r.rows[i]);
     }
   }
   return rows as T[];
 };
 
-export const querySingle = async <T>(db: SQLiteDatabase, sql: string, params: any[]): Promise<T | null> => {
+export const querySingle = async <T>(
+  db: Database,
+  sql: string,
+  params: any[],
+): Promise<T | null> => {
   const r = await query(db, sql, params);
-  if (r[0]) {
-    return r[0].rows.item(0) as T;
+  if (r) {
+    return r.rows[0] as T;
   }
   return null;
 };

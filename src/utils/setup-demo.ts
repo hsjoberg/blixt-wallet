@@ -1,5 +1,4 @@
 import { Dispatch } from "easy-peasy";
-import Long from "long";
 
 import { IStoreModel } from "../state";
 import { setItem, StorageItem } from "../storage/app";
@@ -26,20 +25,20 @@ export default async function SetupBlixtDemo(
   const createDemoTransactions = async (invoices: IDemoInvoice[]) => {
     for (const invoice of invoices) {
       const transaction: ITransaction = {
-        date: Long.fromNumber(new Date().getTime() / 1000 + Math.floor(Math.random() * 1000000)),
+        date: BigInt(Math.floor(new Date().getTime() / 1000) + Math.floor(Math.random() * 1000000)),
         description: invoice.description,
         remotePubkey: "02ad5e3811fb075e69fe2f038fcc1ece7dfb47150a3b20698f3e9845ef6b6283b6",
-        expire: Long.fromNumber(1577836800 + Math.floor(Math.random() * 1000)),
+        expire: BigInt(1577836800 + Math.floor(Math.random() * 1000)),
         status: "SETTLED",
-        value: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * invoice.value),
-        valueMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * invoice.value * 1000),
-        amtPaidSat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
-        amtPaidMsat: Long.fromNumber((invoice.type == "PAY" ? -1 : 1) * 0),
+        value: BigInt((invoice.type == "PAY" ? -1 : 1) * invoice.value),
+        valueMsat: BigInt((invoice.type == "PAY" ? -1 : 1) * invoice.value * 1000),
+        amtPaidSat: BigInt((invoice.type == "PAY" ? -1 : 1) * 0),
+        amtPaidMsat: BigInt((invoice.type == "PAY" ? -1 : 1) * 0),
         valueUSD: (invoice.type == "PAY" ? -1 : 1) * 100,
         valueFiat: (invoice.type == "PAY" ? -1 : 1) * 100,
         valueFiatCurrency: "SEK",
-        fee: Long.fromNumber(Math.floor(Math.random() * 5)),
-        feeMsat: Long.fromNumber(Math.floor(Math.random() * 5) * 1000),
+        fee: BigInt(Math.floor(Math.random() * 5)),
+        feeMsat: BigInt(Math.floor(Math.random() * 5) * 1000),
         paymentRequest: "abcdef123456",
         rHash: Math.floor(Math.random() * 10000000).toString(),
         nodeAliasCached: null,
@@ -158,7 +157,7 @@ export default async function SetupBlixtDemo(
 
   await setItem(StorageItem.onboardingState, "DONE");
   dispatch.setOnboardingState("DONE");
-  dispatch.channel.setBalance(Long.fromNumber(439758));
+  dispatch.channel.setBalance(439758n);
 
   const createDemoContacts = async (contacts: IContact[]) => {
     for (const contact of contacts) {

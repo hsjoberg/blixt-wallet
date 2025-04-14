@@ -1,28 +1,51 @@
 import { Action, Computed, Thunk, action, computed, thunk } from "easy-peasy";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
-import { channelAcceptorResponse, decodeChannelAcceptRequest } from "../lndmobile/channel";
 import { stringToUint8Array, timeout, toast } from "../utils";
 
 import { Chain } from "../utils/build";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
-import { LndMobileEventEmitter } from "../utils/event-listener";
-import { bytesToHexString } from "../utils";
-import { lnrpc } from "../../proto/lightning";
-import logger from "./../utils/log";
 
+import {
+  autopilotModifyStatus,
+  autopilotSetScores,
+  autopilotStatus,
+  connectPeer,
+  disconnectPeer,
+  getInfo,
+  getNetworkInfo,
+  getNodeInfo,
+  getRecoveryInfo,
+  listPeers,
+  signMessage,
+} from "react-native-turbo-lnd";
+import {
+  GetInfoResponse,
+  GetRecoveryInfoResponse,
+  GetRecoveryInfoResponseSchema,
+  LightningNode,
+  LightningNodeSchema,
+  NetworkInfo,
+  Peer,
+  PeerSchema,
+  SignMessageResponse,
+} from "react-native-turbo-lnd/protos/lightning_pb";
+import { create } from "@bufbuild/protobuf";
+
+import logger from "./../utils/log";
+import { PLATFORM } from "../utils/constants";
 const log = logger("Lightning");
 
 export type LndChainBackend = "neutrino" | "bitcoindWithZmq" | "bitcoindWithRpcPolling";
 
 interface ILightningPeer {
-  peer: lnrpc.Peer;
-  node?: lnrpc.LightningNode;
+  peer: Peer;
+  node?: LightningNode;
 }
 
 interface ISetLightningPeersPayload {
-  peer: lnrpc.IPeer;
-  node?: lnrpc.ILightningNode;
+  peer: Peer;
+  node?: LightningNode;
 }
 
 export interface ILightningModel {
@@ -39,34 +62,28 @@ export interface ILightningModel {
   getLightningPeers: Thunk<ILightningModel, void, IStoreInjections>;
   connectPeer: Thunk<ILightningModel, string, IStoreInjections>;
   disconnectPeer: Thunk<ILightningModel, string, IStoreInjections>;
-  signMessage: Thunk<
-    ILightningModel,
-    string,
-    IStoreInjections,
-    {},
-    Promise<lnrpc.SignMessageResponse>
-  >;
+  signMessage: Thunk<ILightningModel, string, IStoreInjections, {}, Promise<SignMessageResponse>>;
 
-  setNetworkInfo: Action<ILightningModel, lnrpc.NetworkInfo>;
-  setNodeInfo: Action<ILightningModel, lnrpc.IGetInfoResponse>;
+  setNetworkInfo: Action<ILightningModel, NetworkInfo>;
+  setNodeInfo: Action<ILightningModel, GetInfoResponse>;
   setRPCServerReady: Action<ILightningModel, boolean>;
   setReady: Action<ILightningModel, boolean>;
   setInitializeDone: Action<ILightningModel, boolean>;
   setSyncedToChain: Action<ILightningModel, boolean>;
   setSyncedToGraph: Action<ILightningModel, boolean>;
-  setRecoverInfo: Action<ILightningModel, lnrpc.GetRecoveryInfoResponse>;
+  setRecoverInfo: Action<ILightningModel, GetRecoveryInfoResponse>;
   setFirstSync: Action<ILightningModel, boolean>;
   setAutopilotSet: Action<ILightningModel, boolean>;
   setLightningPeers: Action<ILightningModel, ISetLightningPeersPayload[]>;
 
   setBestBlockheight: Action<ILightningModel, number>;
 
-  networkInfo?: lnrpc.NetworkInfo;
-  nodeInfo?: lnrpc.IGetInfoResponse;
+  networkInfo?: NetworkInfo;
+  nodeInfo?: GetInfoResponse;
   rpcReady: boolean;
   syncedToChain: Computed<ILightningModel, boolean>;
   syncedToGraph: Computed<ILightningModel, boolean>;
-  recoverInfo: lnrpc.GetRecoveryInfoResponse;
+  recoverInfo: GetRecoveryInfoResponse;
   isRecoverMode: Computed<ILightningModel, boolean>;
   ready: boolean;
   initializeDone: boolean;
@@ -110,7 +127,9 @@ export const lightning: ILightningModel = {
                 "checkRecoverInfo time: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
               ),
           )
-          .catch((error) => toast("checkRecoverInfo error: " + error.message, undefined, "danger"));
+          .catch((error: any) =>
+            toast("checkRecoverInfo error: " + error.message, undefined, "danger"),
+          );
         await actions.waitForChainSync();
 
         debugShowStartupInfo &&
@@ -120,7 +139,7 @@ export const lightning: ILightningModel = {
         debugShowStartupInfo &&
           toast("syncedToGraph time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
         actions.setInitializeDone(true);
-      } catch (e) {
+      } catch (e: any) {
         debugShowStartupInfo &&
           toast("Error in initialization task: " + e.message, 10000, "danger");
         return;
@@ -141,7 +160,7 @@ export const lightning: ILightningModel = {
         } else {
           log.e("Unable to get best block height from mempool.space");
         }
-      } catch (e) {
+      } catch (e: any) {
         debugShowStartupInfo && toast(e.message, 10000, "danger");
         return;
       }
@@ -165,24 +184,43 @@ export const lightning: ILightningModel = {
         dispatch.channelAcceptanceManager.initialize(),
         dispatch.lightningBox.initialize(),
       ]);
-    } catch (e) {
+
+      if (PLATFORM === "android") {
+        await Promise.all([
+          await dispatch.google.initialize(),
+          await dispatch.googleDriveBackup.initialize(),
+        ]);
+      } else if (PLATFORM === "ios" || PLATFORM === "macos") {
+        await dispatch.iCloudBackup.initialize();
+      }
+
+      // On startup, if persistent mode is enabled
+      // Start the notifee foreground service, else stop it.
+      // The function doesn't throw, so it is ok to start/stop it
+      // Even if it is already started or stopped
+      if (PLATFORM === "android" && (await getItemObject(StorageItem.persistentServicesEnabled))) {
+        await dispatch.notificationManager.initialize();
+        await dispatch.notificationManager.startPersistentService();
+      } else {
+        await dispatch.notificationManager.stopPersistentService();
+      }
+    } catch (e: any) {
       toast(e.message, 0, "danger", "OK");
       return;
     }
   }),
 
-  setupAutopilot: thunk(async (actions, enabled, { injections }) => {
+  setupAutopilot: thunk(async (actions, enabled, {}) => {
     log.i("Setting up Autopilot");
-    const modifyStatus = injections.lndMobile.autopilot.modifyStatus;
-    const status = injections.lndMobile.autopilot.status;
 
     if (enabled) {
       try {
         await timeout(5000);
         const scores = await getNodeScores();
         // console.log(scores);
-        const setScores = injections.lndMobile.autopilot.setScores;
-        await setScores(scores);
+        await autopilotSetScores({
+          scores,
+        });
       } catch (e) {
         log.e("Autopilot fail", [e]);
       }
@@ -190,28 +228,29 @@ export const lightning: ILightningModel = {
 
     do {
       try {
-        await modifyStatus(enabled);
+        await autopilotModifyStatus({
+          enable: enabled,
+        });
         actions.setAutopilotSet(enabled);
-        log.i("Autopilot status:", [await status()]);
+        log.i("Autopilot status:", [await autopilotStatus({})]);
         break;
-      } catch (e) {
+      } catch (e: any) {
         log.e("Error modifying Autopilot: " + e.message);
         await timeout(2000);
       }
     } while (true);
   }),
 
-  getLightningPeers: thunk(async (actions, _, { injections }) => {
-    const listPeers = injections.lndMobile.index.listPeers;
-    const getNodeInfo = injections.lndMobile.index.getNodeInfo;
-
-    const response = await listPeers();
+  getLightningPeers: thunk(async (actions, _, {}) => {
+    const response = await listPeers({});
 
     const lightningPeers = await Promise.all(
       response.peers.map(async (ipeer) => {
         let nodeInfo = undefined;
         try {
-          nodeInfo = await getNodeInfo(ipeer.pubKey ?? "");
+          nodeInfo = await getNodeInfo({
+            pubKey: ipeer.pubKey,
+          });
         } catch (e) {
           console.log(e);
         }
@@ -234,57 +273,60 @@ export const lightning: ILightningModel = {
     actions.setLightningPeers(sortedPeers);
   }),
 
-  connectPeer: thunk(async (_, peer, { injections }) => {
-    const connectPeer = injections.lndMobile.index.connectPeer;
-    const [pubkey, host] = peer.split("@");
-    return await connectPeer(pubkey, host);
+  connectPeer: thunk(async (_, peer, {}) => {
+    const [pubkey, host] = peer.trim().split("@");
+    return await connectPeer({
+      addr: {
+        pubkey,
+        host,
+      },
+    });
   }),
 
-  disconnectPeer: thunk(async (_, pubkey, { injections }) => {
-    const disconnectPeer = injections.lndMobile.index.disconnectPeer;
-    return await disconnectPeer(pubkey);
+  disconnectPeer: thunk(async (_, pubkey, {}) => {
+    return await disconnectPeer({
+      pubKey: pubkey,
+    });
   }),
 
-  signMessage: thunk(async (_, message, { injections }) => {
-    const signMessageNodePubkey = injections.lndMobile.wallet.signMessageNodePubkey;
-    return await signMessageNodePubkey(stringToUint8Array(message));
+  signMessage: thunk(async (_, message, {}) => {
+    return await signMessage({
+      msg: stringToUint8Array(message),
+    });
   }),
 
-  getInfo: thunk(async (actions, _, { injections }) => {
-    const { getInfo } = injections.lndMobile.index;
-    const info = await getInfo();
+  getInfo: thunk(async (actions, _, {}) => {
+    const info = await getInfo({});
     actions.setNodeInfo(info);
   }),
 
-  getNetworkInfo: thunk(async (actions, _, { injections }) => {
-    const networkInfo = injections.lndMobile.index.getNetworkInfo;
-    const info = await networkInfo();
+  getNetworkInfo: thunk(async (actions, _, {}) => {
+    const info = await getNetworkInfo({});
     actions.setNetworkInfo(info);
   }),
 
-  checkRecoverInfo: thunk(async (actions, _, { getState, injections }) => {
+  checkRecoverInfo: thunk(async (actions, _, {}) => {
     while (true) {
       try {
-        const info = await injections.lndMobile.index.getRecoveryInfo();
+        const info = await getRecoveryInfo({});
         log.i("Recovery info", [info, info.recoveryMode, info.recoveryFinished, info.progress]);
         actions.setRecoverInfo(info);
         if (!info.recoveryMode || info.recoveryFinished) {
           log.i("Recovery either finished or not activated");
           break;
         }
-      } catch (e) {
+      } catch (e: any) {
         log.e("checkRecoverInfo: " + e.message);
       }
       await timeout(10000);
     }
   }),
 
-  waitForChainSync: thunk(async (actions, _, { getState, injections }) => {
-    const getInfo = injections.lndMobile.index.getInfo;
+  waitForChainSync: thunk(async (actions, _, { getState }) => {
     const firstSync = getState().firstSync;
     let info;
     do {
-      info = await getInfo();
+      info = await getInfo({});
       log.d(`blockHeight: ${info.blockHeight}, syncedToChain: ${info.syncedToChain}`);
       actions.setNodeInfo(info);
 
@@ -333,11 +375,17 @@ export const lightning: ILightningModel = {
             ];
             const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
             log.i(`Connecting to ${randomNode[0]}@${randomNode[1]} to get LN network graph`);
-            await injections.lndMobile.index.connectPeer(randomNode[0], randomNode[1]);
+            await connectPeer({
+              addr: {
+                pubkey: randomNode[0],
+                host: randomNode[1],
+              },
+            });
           } catch (e) {
-            log.e("Connecting to node for channel graph failed in waitForChainSync firstSync=true", [
-              e,
-            ]);
+            log.e(
+              "Connecting to node for channel graph failed in waitForChainSync firstSync=true",
+              [e],
+            );
           }
         }, 1000);
       }
@@ -347,12 +395,11 @@ export const lightning: ILightningModel = {
     await setItemObject(StorageItem.timeSinceLastSync, new Date().getTime());
   }),
 
-  waitForGraphSync: thunk(async (actions, _, { getState, injections }) => {
+  waitForGraphSync: thunk(async (actions, _, {}) => {
     log.d("Start waiting for graph sync");
-    const { getInfo } = injections.lndMobile.index;
     let info;
     do {
-      info = await getInfo();
+      info = await getInfo({});
       log.d(`syncedToGraph: ${info.syncedToGraph}`);
       actions.setNodeInfo(info);
 
@@ -403,8 +450,9 @@ export const lightning: ILightningModel = {
   }),
   setLightningPeers: action((state, payload) => {
     state.lightningPeers = payload.map((p) => ({
-      peer: lnrpc.Peer.create(p.peer),
-      node: lnrpc.LightningNode.create(p.node),
+      // peer: lnrpc.Peer.create(p.peer),
+      peer: create(PeerSchema, p.peer),
+      node: create(LightningNodeSchema, p.node),
     }));
   }),
 
@@ -418,7 +466,7 @@ export const lightning: ILightningModel = {
   syncedToChain: computed((state) => state.nodeInfo?.syncedToChain ?? false),
   syncedToGraph: computed((state) => state.nodeInfo?.syncedToGraph ?? false),
   isRecoverMode: computed((state) => state.recoverInfo.recoveryMode),
-  recoverInfo: lnrpc.GetRecoveryInfoResponse.create({
+  recoverInfo: create(GetRecoveryInfoResponseSchema, {
     progress: 0,
     recoveryFinished: false,
     recoveryMode: false,
@@ -444,13 +492,16 @@ const getNodeScores = async () => {
   const response = await fetch(url);
   const json = await response.json();
 
-  const scores = json.scores.reduce((map, { public_key, score }) => {
-    if (typeof public_key !== "string" || !Number.isInteger(score)) {
-      throw new Error("Invalid node score format!");
-    }
-    map[public_key] = score / 100000000.0;
-    return map;
-  }, {});
+  const scores = json.scores.reduce(
+    (map: any, { public_key, score }: { public_key: any; score: any }) => {
+      if (typeof public_key !== "string" || !Number.isInteger(score)) {
+        throw new Error("Invalid node score format!");
+      }
+      map[public_key] = score / 100000000.0;
+      return map;
+    },
+    {},
+  );
 
   return scores;
 };

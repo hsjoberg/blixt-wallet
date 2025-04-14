@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "123456789",
+    "firebase_url": "https://phonyblixt.firebaseio.com",
+    "project_id": "phony-blixt-wallet",
+    "storage_bucket": "phony-blixt-wallet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123465798:android:123465798123",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.signet.debug"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "abcde123465789"
+        }
+      ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123465798:android:123465798123",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.signet"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "abcde123465789"
+        }
+      ]
+    },
+
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123465798:android:123465798123",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.signet.experiment1"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "abcde123465789"
+        }
+      ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123465798:android:123465798123",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.signet.experiment1.debug"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "abcde123465789"
+        }
+      ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123465798:android:123465798123",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.signet.fakelnd.debug"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "abcde123465789"
+        }
+      ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123465798:android:123465798123",
+        "android_client_info": {
+          "package_name": "com.blixtwallet.signet.fakelnd"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "abcde123465789"
+        }
+      ]
+    }
+  ],
+  "configuration_version": "1"
+}
