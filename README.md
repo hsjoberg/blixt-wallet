@@ -63,8 +63,8 @@ It's useful if you want to make design and GUI changes.
 ### Android
 
 - Install [Node](https://nodejs.org), [Yarn](https://yarnpkg.com/getting-started/install) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
-- If needed, install an emulated android device inside Android Studio
-- Download lnd binary from [from the latest Blixt Wallet release](https://github.com/hsjoberg/blixt-wallet/releases) and put it in `android/app/lndmobile`. Alternatively build lnd for Android by following the steps in [Build Lnd For mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
+- If needed, install an emulated android device inside Android Studio.
+- Download lnd binary from [from the latest Blixt Wallet release](https://github.com/hsjoberg/blixt-wallet/releases) and put it in `android/app/lndmobile`. Alternatively, build lnd for Android by following the steps in [Build Lnd For mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
 
@@ -78,8 +78,8 @@ For building Blixt Android on Windows, follow the additional build steps [here](
 
 - Install [Nix](https://github.com/DeterminateSystems/nix-installer)
 - Install [Devenv](https://devenv.sh/getting-started/)
-- For local development install [Android Studio](https://developer.android.com/studio/) and start a simulator
-- For more awesome experience you can also install [direnv](https://devenv.sh/automatic-shell-activation/) and enable automatic shell activation.
+- For local development, install [Android Studio](https://developer.android.com/studio/) and start a simulator.
+- For more awesome experience, you can also install [direnv](https://devenv.sh/automatic-shell-activation/) and enable automatic shell activation.
 ```
 cd blixt-wallet
 
@@ -105,8 +105,8 @@ yarn android:regtest-debug
 
 To build the iOS version, a computer running macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
 
-- Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
-- Build lnd for iOS by following the steps in [Build Lnd for mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
+- Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org), and [Yarn](https://classic.yarnpkg.com/).
+- Build lnd for iOS by following the steps in [Build Lnd for mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile).
 - Install Node packages: `yarn`
 - Generate proto files: `yarn gen-proto`
 - Install CocoaPods libs: `cd ios && pod install`
@@ -115,7 +115,7 @@ To build the iOS version, a computer running macOS is required. You also need an
   - Login with your Apple Developer account if Xcode asks you to
   - Click on BlixtWallet in the left column
   - Click on the Signing &amp; Capabilities tab
-  - Choose your Team in the dropdown and choose a new unique Bundle Identifier (cannot be the same as the ones released on the App Store). Do this for every configuration
+  - Choose your Team in the dropdown and choose a new unique Bundle Identifier (cannot be the same as the ones released on the App Store). Do this for every configuration.
 
 To start the application:
 - Run: `yarn start-metro`
