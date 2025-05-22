@@ -485,6 +485,9 @@ export const model: IStoreModel = {
     await dispatch.transaction.getTransactions();
     await dispatch.contacts.getContacts();
     await dispatch.channel.setupCachedBalance();
+    if (PLATFORM === "android") {
+      await dispatch.google.initialize();
+    }
     log.d("Done starting up stores");
 
     subscribeState(

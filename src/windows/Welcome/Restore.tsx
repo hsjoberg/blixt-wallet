@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { StatusBar, StyleSheet, Alert, NativeModules, TextInput } from "react-native";
-import DocumentPicker, { DocumentPickerResponse } from "@react-native-documents/picker";
+import {
+  DocumentPickerResponse,
+  pick,
+  types,
+  keepLocalCopy,
+  LocalCopyResponse,
+} from "@react-native-documents/picker";
 import { readFile } from "react-native-fs";
 import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -35,7 +41,7 @@ export default function Restore({ navigation }: IProps) {
     "file" | "google_drive" | "icloud" | "macos" | "channeldb" | "none"
   >("none");
   const [backupFile, setBackupFile] = useState<DocumentPickerResponse | null>(null);
-  const [channelDbFile, setChannelDbFile] = useState<DocumentPickerResponse | null>(null);
+  const [channelDbFile, setChannelDbFile] = useState<LocalCopyResponse | null>(null);
   const [macosBakBase64, setMacosBakBase64] = useState<string | undefined>();
   const [b64Backup, setB64Backup] = useState<string | null>(null);
   const setWalletSeed = useStoreActions((store) => store.setWalletSeed);
@@ -108,12 +114,16 @@ export default function Restore({ navigation }: IProps) {
       } else if (backupType === "macos") {
         createWalletOpts.restore!.channelsBackup = macosBakBase64;
       } else if (backupType === "channeldb") {
-        if (channelDbFile!.copyError) {
-          throw new Error("channel.db file copying failed: " + channelDbFile!.copyError);
+        if (!channelDbFile) {
+          return;
+        }
+        if (channelDbFile.status === "error") {
+          throw new Error("channel.db file copying failed: " + channelDbFile.copyError);
         }
 
+        console.log("channelDbFile.localUri", channelDbFile.localUri);
         await setImportChannelDbOnStartup({
-          channelDbPath: channelDbFile!.fileCopyUri!.replace(/^file:\/\//, ""),
+          channelDbPath: channelDbFile.localUri.replace(/^file:\/\//, ""),
           seed: splittedSeed,
           passphrase: passphraseText,
         });
@@ -157,11 +167,14 @@ export default function Restore({ navigation }: IProps) {
   };
 
   const googleDriveBackup = async () => {
-    if (!isSignedInGoogle) {
-      if (!(await signInGoogle())) {
-        return;
-      }
+    // if (!isSignedInGoogle) {
+    console.log("signing in");
+    if (!(await signInGoogle())) {
+      console.log("signing in failed");
+      toast("Google sign in failed", 5000, "danger");
+      return;
     }
+    // }
 
     try {
       const base64Backup = await googleDriveGetBackupFile();
@@ -169,7 +182,8 @@ export default function Restore({ navigation }: IProps) {
       setB64Backup(base64Backup);
       setBackupType("google_drive");
     } catch (e: any) {
-      Alert.alert(`${t("restore.channel.google.alert")}:\n\n${e.message}`);
+      console.log(e);
+      Alert.alert(`${t("restore.channel.google.alert")}`, e.message);
     }
   };
 
@@ -187,8 +201,8 @@ export default function Restore({ navigation }: IProps) {
   const pickChannelsExportFile = async () => {
     try {
       if (PLATFORM !== "macos") {
-        const res = await DocumentPicker.pickSingle({
-          type: [DocumentPicker.types.allFiles],
+        const [res] = await pick({
+          type: [types.allFiles],
         });
         console.log(res);
         setBackupFile(res);
@@ -213,11 +227,25 @@ export default function Restore({ navigation }: IProps) {
       }
 
       setLoading(true);
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
-        copyTo: "documentDirectory",
+
+      const [res] = await pick();
+
+      const [copyResult] = await keepLocalCopy({
+        files: [
+          {
+            uri: res.uri,
+            fileName: "channel.db", //res.name ?? "channel.db",
+          },
+        ],
+        destination: "documentDirectory",
       });
-      setChannelDbFile(res);
+      if (copyResult.status === "error") {
+        throw new Error("channel.db file copying failed: " + copyResult.copyError);
+      }
+
+      console.log("copy success", copyResult.localUri);
+
+      setChannelDbFile(copyResult);
       setBackupType("channeldb");
       setLoading(false);
     } catch (e: any) {

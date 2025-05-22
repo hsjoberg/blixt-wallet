@@ -23,7 +23,7 @@ import BlixtWallet from "../../components/BlixtWallet";
 import { Chain } from "../../utils/build";
 import Clipboard from "@react-native-clipboard/clipboard";
 import DialogAndroid from "react-native-dialogs";
-import DocumentPicker from "@react-native-clipboard/clipboard";
+import { pick } from "@react-native-documents/picker";
 import { IFiatRates } from "../../state/Fiat";
 import { LoginMethods } from "../../state/Security";
 import { MapStyle } from "../../utils/google-maps";
@@ -348,9 +348,8 @@ export default function Settings({ navigation }: ISettingsProps) {
   // Verify channels backup
   const onVerifyChannelsBackupPress = async () => {
     try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
-      });
+      const [res] = await pick();
+
       const backupFileUri = PLATFORM === "ios" ? res.uri.replace(/%20/g, " ") : res.uri;
       const backupBase64 = await readFile(backupFileUri, "base64");
       await verifyChanBackup({
@@ -1618,9 +1617,7 @@ ${t("experimental.tor.disabled.msg2")}`;
   // Restore SCB file
   const onPressRestoreChannelBackup = async () => {
     try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
-      });
+      const [res] = await pick();
       console.log(res);
 
       let backupBase64: string;
@@ -2511,24 +2508,6 @@ ${t("experimental.tor.disabled.msg2")}`;
               icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
               title: "Sync worker timeline report",
               onPress: () => navigation.navigate("SyncWorkerTimelineReport"),
-            },
-            {
-              type: "item",
-              icon: { type: "MaterialCommunityIcons", name: "sync-circle" },
-              title: "Schedule periodic sync",
-              onPress: () => {
-                LndMobileToolsTurbo.scheduleSyncWorker();
-                toast("Periodic sync scheduled");
-              },
-            },
-            {
-              type: "item",
-              icon: { type: "MaterialCommunityIcons", name: "sync-off" },
-              title: "Stop scheduled sync",
-              onPress: () => {
-                LndMobileToolsTurbo.stopScheduleSyncWorker();
-                toast("Scheduled sync stopped");
-              },
             },
           ]
         : []),

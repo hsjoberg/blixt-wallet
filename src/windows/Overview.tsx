@@ -614,7 +614,7 @@ const style = StyleSheet.create({
     color: blixtTheme.light,
   },
   transactionList: {
-    paddingTop: HEADER_MAX_HEIGHT + 10,
+    marginTop: HEADER_MAX_HEIGHT + 10,
     paddingLeft: 7,
     paddingRight: 7,
     paddingBottom: 12,

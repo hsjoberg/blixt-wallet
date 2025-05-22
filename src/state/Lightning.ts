@@ -187,7 +187,7 @@ export const lightning: ILightningModel = {
 
       if (PLATFORM === "android") {
         await Promise.all([
-          await dispatch.google.initialize(),
+          // await dispatch.google.initialize(),
           await dispatch.googleDriveBackup.initialize(),
         ]);
       } else if (PLATFORM === "ios" || PLATFORM === "macos") {
@@ -217,10 +217,12 @@ export const lightning: ILightningModel = {
       try {
         await timeout(5000);
         const scores = await getNodeScores();
-        // console.log(scores);
+        log.i("Setting autopilot scores", [scores]);
         await autopilotSetScores({
           scores,
+          heuristic: "externalscore",
         });
+        log.i("Autopilot scores set");
       } catch (e) {
         log.e("Autopilot fail", [e]);
       }
