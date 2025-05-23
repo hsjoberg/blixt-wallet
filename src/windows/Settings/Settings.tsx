@@ -1175,7 +1175,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         try {
           const fee = Number.parseFloat(text);
 
-          if (fee <= 0 ?? fee >= 100) {
+          if (fee <= 0 || fee >= 100) {
             return;
           }
 
@@ -2540,6 +2540,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     speedloaderServer,
     requireGraphSync,
     dunderEnabled,
+    maxLNFeePercentage,
     hideExpiredInvoices,
     screenTransitionsEnabled,
     customInvoicePreimageEnabled,

@@ -57,11 +57,12 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
   useEffect(() => {
     (async () => {
       if (hasPermission === false) {
-        console.log("Does not have camera permission");
-        if (await !requestPermission()) {
-          // TODO fix await
-          navigation.pop();
-        }
+        setTimeout(async () => {
+          console.log("Does not have camera permission");
+          if (await !requestPermission()) {
+            navigation.pop();
+          }
+        }, 600);
       }
     })();
   }, [requestPermission, hasPermission]);

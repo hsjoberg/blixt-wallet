@@ -60,7 +60,7 @@ export default function useStackNavigationOptions(): StackNavigationOptions {
     // cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
     cardStyleInterpolator: forFade,
     cardOverlayEnabled: false,
-    animationTypeForReplace: "pop",
+    animationTypeForReplace: "pop", // TURBOTODO(hsjoberg): can cause issues
 
     detachPreviousScreen: false,
   };

@@ -424,13 +424,14 @@ export const sendKeysendPaymentV2TurboLnd = (
   routeHints?: RouteHint[],
 ): Promise<Payment> => {
   const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
+  const feeLimitSat = BigInt(Math.floor(Math.max(10, Number(amount || 0) * maxFeeRatio)));
 
   const paymentHash = sha("sha256").update(preimage).digest();
 
   const options = create(SendPaymentRequestSchema, {
     noInflightUpdates: true,
     timeoutSeconds: 60,
-    feeLimitSat: BigInt(Math.floor(Math.max(10, Number(amount) * maxFeeRatio))),
+    feeLimitSat,
     dest: pubkey,
     paymentHash,
     destFeatures: [FeatureBit.TLV_ONION_REQ],

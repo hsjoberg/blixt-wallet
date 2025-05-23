@@ -32,11 +32,13 @@ export default function CameraComponent({ children, onNotAuthorized, onRead, act
   useEffect(() => {
     (async () => {
       if (hasPermission === false) {
-        console.log("Does not have camera permission");
-        if (await !requestPermission()) {
-          // TODO fix await
-          onNotAuthorized?.();
-        }
+        setTimeout(async () => {
+          console.log("Does not have camera permission");
+          if (await !requestPermission()) {
+            // TODO fix await
+            onNotAuthorized?.();
+          }
+        }, 600);
       }
     })();
   }, [requestPermission, hasPermission]);
