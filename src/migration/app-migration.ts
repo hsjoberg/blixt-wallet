@@ -380,4 +380,10 @@ export const appMigration: IAppMigration[] = [
       }
     },
   },
+  // Version 42
+  {
+    async beforeLnd(db, i) {
+      await setItem(StorageItem.lndChainBackend, "neutrino");
+    },
+  },
 ];
