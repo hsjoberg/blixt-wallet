@@ -13,37 +13,11 @@ class LndMobileToolsTurboModule(reactContext: ReactApplicationContext) :
   NativeLndmobileToolsSpec(reactContext) {
   override fun getName() = NAME
 
-  override fun startSyncWorker() {
-    val syncWorkRequest = OneTimeWorkRequestBuilder<TurboLndSyncWorker>()
-      .addTag("LND_SYNC_JOB")
-      .addTag("ONE_OFF")
-      .setConstraints(Constraints.NONE)
-      .build()
+  override fun startSyncWorker() {}
 
-    WorkManager.getInstance(reactApplicationContext).enqueue(syncWorkRequest)
-  }
+  override fun scheduleSyncWorker() {}
 
-  override fun scheduleSyncWorker() {
-    val constraints = Constraints.Builder()
-      .setRequiredNetworkType(NetworkType.CONNECTED)
-      .build()
-
-    val syncRequest = PeriodicWorkRequestBuilder<TurboLndSyncWorker>(1, TimeUnit.HOURS)
-      .addTag("LND_SYNC_JOB")
-      .addTag("PERIODIC")
-      .setConstraints(constraints)
-      .build()
-
-    WorkManager.getInstance(reactApplicationContext).enqueueUniquePeriodicWork(
-      "TURBOLND_SYNC",
-      ExistingPeriodicWorkPolicy.REPLACE,
-      syncRequest
-    )
-  }
-
-  override fun stopScheduleSyncWorker() {
-    WorkManager.getInstance(reactApplicationContext).cancelAllWorkByTag("LND_SYNC_JOB")
-  }
+  override fun stopScheduleSyncWorker() {}
 
   override fun getStatus(): Double {
     val lnd = LndNative()

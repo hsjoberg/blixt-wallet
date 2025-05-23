@@ -1,13 +1,12 @@
+// I generated this file with Cursor + Claude 3.5 Sonnet
 import React, { useEffect, useState } from "react";
 import { Button, Text, View, ScrollView, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import Container from "../components/Container";
-import { useTranslation } from "react-i18next";
-import { namespaces } from "../i18n/i18n.constants";
 import { getItem } from "../storage/app";
-import { StorageItem } from "../storage/storage-types";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 
 interface SyncWorkRecord {
@@ -86,7 +85,7 @@ export default function SyncWorkerReport({}: ISyncWorkerReportProps) {
   };
 
   return (
-    <Container>
+    <SafeAreaView style={{ flex: 1, backgroundColor: blixtTheme.dark }}>
       <View style={styles.header}>
         <Text style={styles.title}>Sync History</Text>
         <Button onPress={() => navigation.goBack()} title="Back" />
@@ -118,7 +117,7 @@ export default function SyncWorkerReport({}: ISyncWorkerReportProps) {
           </View>
         ))}
       </ScrollView>
-    </Container>
+    </SafeAreaView>
   );
 }
 
@@ -131,8 +130,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
+    color: blixtTheme.light,
   },
   scrollView: {
     flex: 1,

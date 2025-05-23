@@ -16,6 +16,7 @@ import { toast } from "../../utils";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import { PendingChannelsResponse_PendingChannel } from "react-native-turbo-lnd/protos/lightning_pb";
 
 interface ILightningInfoProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
@@ -157,6 +158,19 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
               );
             }
             return <></>;
+          }}
+          keyExtractor={(item) => {
+            if (item.type === "pendingOpen") {
+              return "pendingOpen" + item.channel?.channelPoint;
+            } else if (item.type === "pendingClose") {
+              return "pendingClose" + item.channel?.channelPoint;
+            } else if (item.type === "pendingForceClose") {
+              return "pendingForceClose" + item.channel?.channelPoint;
+            } else if (item.type === "waitingForClose") {
+              return "waitingForClose" + item.channel?.channelPoint;
+            } else {
+              return "unknown";
+            }
           }}
           contentContainerStyle={style.container}
         />

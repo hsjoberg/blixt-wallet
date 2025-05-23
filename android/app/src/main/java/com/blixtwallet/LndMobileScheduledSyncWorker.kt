@@ -32,8 +32,6 @@ import org.json.JSONObject
 
 private const val TAG = "LndMobileScheduledSyncWorker"
 private const val SYNC_WORK_KEY = "syncWorkHistory"
-private const val ONE_OFF_TAG = "ONE_OFF"
-private const val PERIODIC_TAG = "PERIODIC"
 
 // Add enum to represent different sync results
 enum class SyncResult {
@@ -256,8 +254,11 @@ class LndMobileScheduledSyncWorker(
 
   private suspend fun startLnd(): Boolean = suspendCancellableCoroutine { cont ->
     Log.i(TAG, "Starting lnd")
+
+    val params = "--nolisten --lnddir=" + applicationContext.filesDir.path;
+
     lnd.startLnd(
-      "--nolisten --lnddir=/data/user/0/com.blixtwallet.debug/files/",
+      params,
       object : LndCallback {
         override fun onResponse(data: ByteArray) {
           if (!cont.isCompleted) {
@@ -407,32 +408,10 @@ class LndMobileScheduledSyncWorker(
 
     Log.d(TAG, "appTasks: $appTasks")
 
-    // For one-off workers, always return false
-    if (tags.contains(ONE_OFF_TAG)) {
-       return true
-    }
-
     val ourPackageName = applicationContext.packageName
 
     return appTasks.any { task ->
       val taskInfo = task.taskInfo
-
-      Log.i(TAG, "Task info:" +
-          "\n  topActivity: ${taskInfo?.topActivity}" +
-          "\n  baseActivity: ${taskInfo?.baseActivity}" +
-          "\n  numActivities: ${taskInfo?.numActivities}" +
-          "\n  origActivity: ${taskInfo?.origActivity}" +
-          "\n  baseIntent: ${taskInfo.baseIntent}" +
-          "\n  taskDescription: ${taskInfo.taskDescription}"
-      )
-
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        Log.i(TAG, "  isRunning: ${taskInfo.isRunning}")
-      }
-
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
-        Log.i(TAG, "  isVisible: ${taskInfo.isVisible}")
-      }
 
       val topActivity = taskInfo?.topActivity
       Log.d(TAG, "Top activity: ${topActivity?.className}, package: ${topActivity?.packageName}")
