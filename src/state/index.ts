@@ -453,7 +453,7 @@ export const model: IStoreModel = {
           if (PLATFORM === "android") {
             const chain = Chain !== "mainnet" ? "." + Chain.toLocaleLowerCase() : "";
             const debug = Debug ? ".debug" : "";
-            appFolderPath = `/data/user/0/com.blixtwallet${chain}${debug}/files/`;
+            appFolderPath = await NativeModules.LndMobileTools.getFilesDir();
           } else {
             appFolderPath = (await NativeModules.LndMobileTools.getAppFolderPath())
               .replace("file://", "")
