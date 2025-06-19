@@ -65,8 +65,8 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
       return;
     }
 
-    if (!!channel.closingTxid || channel.closingTxid !== "") {
-      Alert.alert("Closing Tx Has Already Been Broadcasted");
+    if (!!channel.closingTxid && channel.closingTxid !== "") {
+      Alert.alert(`Closing Tx Has Already Been Broadcasted:\n${channel.closingTxid}`);
       return;
     }
 
