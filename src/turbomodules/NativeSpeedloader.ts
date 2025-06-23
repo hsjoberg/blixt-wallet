@@ -6,4 +6,4 @@ export interface Spec extends TurboModule {
   cancelGossipSync(): void;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>("NativeSpeedloaderCxx");
+export default TurboModuleRegistry.getEnforcing<Spec>("NativeSpeedloader");

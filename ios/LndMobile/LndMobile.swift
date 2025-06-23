@@ -1,5 +1,6 @@
 import Foundation
 import Lndmobile
+import React
 
 // https://stackoverflow.com/a/32306142
 extension StringProtocol {
