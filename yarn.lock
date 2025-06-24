@@ -6853,7 +6853,7 @@ __metadata:
     react-native-svg: "npm:15.12.0"
     react-native-svg-path-gradient: "npm:^0.4.0"
     react-native-svg-web: "npm:^1.0.9"
-    react-native-turbo-lnd: "github:hsjoberg/react-native-turbo-lnd#f9c563aeefe06e789940331045e7fcbc4a194870"
+    react-native-turbo-lnd: "github:hsjoberg/react-native-turbo-lnd#368dec8e8fa6a67b5deb4f9150b3dfcf3b73a92b"
     react-native-turbo-sqlite: "npm:0.2.0"
     react-native-unimodules: "npm:^0.14.10"
     react-native-vector-icons: "npm:9.2.0"
@@ -16778,9 +16778,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-turbo-lnd@github:hsjoberg/react-native-turbo-lnd#f9c563aeefe06e789940331045e7fcbc4a194870":
+"react-native-turbo-lnd@github:hsjoberg/react-native-turbo-lnd#368dec8e8fa6a67b5deb4f9150b3dfcf3b73a92b":
   version: 0.1.2
-  resolution: "react-native-turbo-lnd@https://github.com/hsjoberg/react-native-turbo-lnd.git#commit=f9c563aeefe06e789940331045e7fcbc4a194870"
+  resolution: "react-native-turbo-lnd@https://github.com/hsjoberg/react-native-turbo-lnd.git#commit=368dec8e8fa6a67b5deb4f9150b3dfcf3b73a92b"
   peerDependencies:
     "@bufbuild/protobuf": "*"
     react: "*"
@@ -16788,7 +16788,7 @@ __metadata:
   peerDependenciesMeta:
     "@bufbuild/protobuf":
       optional: true
-  checksum: 10/a4ed9b1300be60987461bab657e943b069d428d900b49de7d2b5105fdb3a50459e9d397a447f4f9adc8c8cd48219d40d5f47dd21d2ec6fa6d303f90e6833b8c4
+  checksum: 10/25ca1064f76e5304e6ec23fb6b79a2fe5410cd1333224ce324a85fc512ac5bdfd06b2064f91db0f9dc627175e354c7fcc8aac8a28b6fa7ad03179f65ebc99d7f
   languageName: node
   linkType: hard
 
