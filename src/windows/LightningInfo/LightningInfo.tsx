@@ -16,7 +16,14 @@ import { toast } from "../../utils";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-import { PendingChannelsResponse_PendingChannel } from "react-native-turbo-lnd/protos/lightning_pb";
+import {
+  Channel,
+  PendingChannelsResponse_ClosedChannel,
+  PendingChannelsResponse_ForceClosedChannel,
+  PendingChannelsResponse_PendingChannel,
+  PendingChannelsResponse_PendingOpenChannel,
+  PendingChannelsResponse_WaitingCloseChannel,
+} from "react-native-turbo-lnd/protos/lightning_pb";
 
 interface ILightningInfoProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
@@ -161,13 +168,27 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
           }}
           keyExtractor={(item) => {
             if (item.type === "pendingOpen") {
-              return "pendingOpen" + item.channel?.channelPoint;
+              return (
+                "pendingOpen" +
+                (item as PendingChannelsResponse_PendingOpenChannel).channel?.channelPoint
+              );
             } else if (item.type === "pendingClose") {
-              return "pendingClose" + item.channel?.channelPoint;
+              return (
+                "pendingClose" +
+                (item as PendingChannelsResponse_ClosedChannel).channel?.channelPoint
+              );
             } else if (item.type === "pendingForceClose") {
-              return "pendingForceClose" + item.channel?.channelPoint;
+              return (
+                "pendingForceClose" +
+                (item as PendingChannelsResponse_ForceClosedChannel).channel?.channelPoint
+              );
             } else if (item.type === "waitingForClose") {
-              return "waitingForClose" + item.channel?.channelPoint;
+              return (
+                "waitingForClose" +
+                (item as PendingChannelsResponse_WaitingCloseChannel).channel?.channelPoint
+              );
+            } else if (item.type === "open") {
+              return "open" + (item as Channel).channelPoint;
             } else {
               return "unknown";
             }
