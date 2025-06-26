@@ -80,9 +80,9 @@ import { Database } from "react-native-turbo-sqlite";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { appMigration } from "../migration/app-migration";
 import { clearTransactions } from "../storage/database/transaction";
-import { lnrpc } from "../../proto/lightning";
+import { lnrpc } from "../../proto/lightning"; //TURBOTODO
 import logger from "./../utils/log";
-import { stringToUint8Array, toast } from "../utils";
+import { stringToUint8Array, timeout, toast } from "../utils";
 
 import {
   genSeed,
@@ -383,8 +383,15 @@ export const model: IStoreModel = {
         (await getItemAsyncStorage(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER;
       let gossipStatus: unknown = null;
 
-      const status = await NativeLndmobileTools.getStatus(); // await checkStatus();
-      log.d("status", [status]);
+      let status = await NativeLndmobileTools.getStatus(); // await checkStatus();
+      log.i("status", [status]);
+      if (status === 1) {
+        log.i("status === 1, waiting for 9.5 seconds and check again");
+        await timeout(9500);
+        status = await NativeLndmobileTools.getStatus();
+        log.i("status", [status]);
+      }
+
       log.i("gossipSyncEnabled", [gossipSyncEnabled]);
       log.i("persistentServicesEnabled", [persistentServicesEnabled]);
       if (status === 0) {
