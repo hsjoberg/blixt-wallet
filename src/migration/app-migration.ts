@@ -72,14 +72,14 @@ export const appMigration: IAppMigration[] = [
   // Version 5
   {
     async beforeLnd(db, i) {
-      await db.executeSql("ALTER TABLE tx ADD tlvRecordName STRING");
+      await db.executeSql("ALTER TABLE tx ADD tlvRecordName STRING", []);
     },
   },
   // Version 6
   {
     async beforeLnd(db, i) {
-      await db.executeSql("ALTER TABLE tx ADD locationLong REAL");
-      await db.executeSql("ALTER TABLE tx ADD locationLat REAL");
+      await db.executeSql("ALTER TABLE tx ADD locationLong REAL", []);
+      await db.executeSql("ALTER TABLE tx ADD locationLat REAL", []);
     },
   },
   // Version 7
@@ -97,8 +97,8 @@ export const appMigration: IAppMigration[] = [
   // Version 8
   {
     async beforeLnd(db, i) {
-      await db.executeSql("ALTER TABLE tx ADD website TEXT NULL");
-      await db.executeSql("ALTER TABLE tx ADD type TEXT NOT NULL DEFAULT 'NORMAL'");
+      await db.executeSql("ALTER TABLE tx ADD website TEXT NULL", []);
+      await db.executeSql("ALTER TABLE tx ADD type TEXT NOT NULL DEFAULT 'NORMAL'", []);
     },
   },
   // Version 9
@@ -110,8 +110,8 @@ export const appMigration: IAppMigration[] = [
   // Version 10
   {
     async beforeLnd(db, i) {
-      await db.executeSql("ALTER TABLE tx ADD preimage TEXT NOT NULL DEFAULT '00'"); // hex string
-      await db.executeSql("ALTER TABLE tx ADD lnurlPayResponse TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD preimage TEXT NOT NULL DEFAULT '00'", []); // hex string
+      await db.executeSql("ALTER TABLE tx ADD lnurlPayResponse TEXT NULL", []);
     },
   },
   // Version 11
@@ -153,7 +153,7 @@ export const appMigration: IAppMigration[] = [
   // Version 17
   {
     async beforeLnd(db, i) {
-      await db.executeSql("ALTER TABLE tx ADD identifiedService TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD identifiedService TEXT NULL", []);
       await setItemObject<boolean>(StorageItem.hideExpiredInvoices, true);
       await setItemObject<number>(StorageItem.lastGoogleDriveBackup, new Date().getTime());
       await LndMobileTools.writeConfigFile();
@@ -168,7 +168,7 @@ export const appMigration: IAppMigration[] = [
   // Version 19
   {
     async beforeLnd(db, i) {
-      await db.executeSql("ALTER TABLE tx ADD note TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD note TEXT NULL", []);
     },
   },
   // Version 20
@@ -274,9 +274,10 @@ export const appMigration: IAppMigration[] = [
           lnUrlWithdraw TEXT NULL,
           note TEXT NOT NULL
         )`,
+        [],
       );
-      await db.executeSql("ALTER TABLE tx ADD lightningAddress TEXT NULL");
-      await db.executeSql("ALTER TABLE tx ADD lud16IdentifierMimeType TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD lightningAddress TEXT NULL", []);
+      await db.executeSql("ALTER TABLE tx ADD lud16IdentifierMimeType TEXT NULL", []);
     },
   },
   // Version 29
@@ -300,7 +301,7 @@ export const appMigration: IAppMigration[] = [
   // Version 32
   {
     async beforeLnd(db, i) {
-      await db.executeSql("ALTER TABLE tx ADD duration REAL NULL");
+      await db.executeSql("ALTER TABLE tx ADD duration REAL NULL", []);
     },
   },
   // Version 33
@@ -312,7 +313,7 @@ export const appMigration: IAppMigration[] = [
   // Version 34
   {
     async beforeLnd(db, i) {
-      await db.executeSql("ALTER TABLE contact ADD label TEXT NULL");
+      await db.executeSql("ALTER TABLE contact ADD label TEXT NULL", []);
     },
   },
   // Version 35
@@ -336,9 +337,9 @@ export const appMigration: IAppMigration[] = [
   // Version 38
   {
     async beforeLnd(db, i) {
-      await db.executeSql("ALTER TABLE tx ADD lud18PayerDataName TEXT NULL");
-      await db.executeSql("ALTER TABLE tx ADD lud18PayerDataIdentifier TEXT NULL");
-      await db.executeSql("ALTER TABLE tx ADD lud18PayerDataEmail TEXT NULL");
+      await db.executeSql("ALTER TABLE tx ADD lud18PayerDataName TEXT NULL", []);
+      await db.executeSql("ALTER TABLE tx ADD lud18PayerDataIdentifier TEXT NULL", []);
+      await db.executeSql("ALTER TABLE tx ADD lud18PayerDataEmail TEXT NULL", []);
     },
   },
   // Version 39
