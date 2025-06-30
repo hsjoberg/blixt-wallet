@@ -231,7 +231,7 @@ class LndMobileScheduledSyncWorker(
 
       stopDaemon()
 
-      delay(5000)
+      delay(10000)
 
       Log.i(TAG, "Sync worker finished");
       Log.i(TAG, "------------------------------------");

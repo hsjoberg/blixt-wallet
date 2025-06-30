@@ -386,8 +386,8 @@ export const model: IStoreModel = {
       let status = await NativeLndmobileTools.getStatus(); // await checkStatus();
       log.i("status", [status]);
       if (status === 1) {
-        log.i("status === 1, waiting for 9.5 seconds and check again");
-        await timeout(9500);
+        log.i("status === 1, waiting for 9.6 seconds and check again");
+        await timeout(9600);
         status = await NativeLndmobileTools.getStatus();
         log.i("status", [status]);
       }
