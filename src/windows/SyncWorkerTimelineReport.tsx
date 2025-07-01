@@ -24,6 +24,8 @@ enum SyncResult {
   SUCCESS_ACTIVITY_INTERRUPTED = "SUCCESS_ACTIVITY_INTERRUPTED",
   FAILURE_GENERAL = "FAILURE_GENERAL",
   FAILURE_CHAIN_SYNC_TIMEOUT = "FAILURE_CHAIN_SYNC_TIMEOUT",
+  EARLY_EXIT_PERSISTENT_SERVICES_ENABLED = "EARLY_EXIT_PERSISTENT_SERVICES_ENABLED",
+  EARLY_EXIT_TOR_ENABLED = "EARLY_EXIT_TOR_ENABLED",
 }
 
 // Modify TimeBlock interface
@@ -112,6 +114,8 @@ export default function SyncWorkerTimelineReport() {
         SyncResult.FAILURE_STATE_TIMEOUT,
         SyncResult.FAILURE_CHAIN_SYNC_TIMEOUT,
         SyncResult.FAILURE_GENERAL,
+        SyncResult.EARLY_EXIT_PERSISTENT_SERVICES_ENABLED,
+        SyncResult.EARLY_EXIT_TOR_ENABLED,
       ].includes(result)
     ) {
       return blixtTheme.red;
@@ -135,6 +139,10 @@ export default function SyncWorkerTimelineReport() {
         return "Sync Timeout";
       case SyncResult.EARLY_EXIT_ACTIVITY_RUNNING:
         return "MainActivity Running";
+      case SyncResult.EARLY_EXIT_PERSISTENT_SERVICES_ENABLED:
+        return "Skipped (Persistent Services Enabled)";
+      case SyncResult.EARLY_EXIT_TOR_ENABLED:
+        return "Skipped (Tor Enabled)";
       default:
         return "Unknown";
     }

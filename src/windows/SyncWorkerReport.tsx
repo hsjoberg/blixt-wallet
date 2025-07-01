@@ -24,6 +24,8 @@ enum SyncResult {
   SUCCESS_ACTIVITY_INTERRUPTED = "SUCCESS_ACTIVITY_INTERRUPTED",
   FAILURE_GENERAL = "FAILURE_GENERAL",
   FAILURE_CHAIN_SYNC_TIMEOUT = "FAILURE_CHAIN_SYNC_TIMEOUT",
+  EARLY_EXIT_PERSISTENT_SERVICES_ENABLED = "EARLY_EXIT_PERSISTENT_SERVICES_ENABLED",
+  EARLY_EXIT_TOR_ENABLED = "EARLY_EXIT_TOR_ENABLED",
 }
 
 const isNeutralResult = (result: SyncResult) => {
@@ -54,6 +56,10 @@ const getStatusText = (result: SyncResult): string => {
       return "Failed (Error)";
     case SyncResult.FAILURE_CHAIN_SYNC_TIMEOUT:
       return "Failed (Chain Sync Timeout)";
+    case SyncResult.EARLY_EXIT_PERSISTENT_SERVICES_ENABLED:
+      return "Skipped (Persistent Services Enabled)";
+    case SyncResult.EARLY_EXIT_TOR_ENABLED:
+      return "Skipped (Tor Enabled)";
   }
 };
 

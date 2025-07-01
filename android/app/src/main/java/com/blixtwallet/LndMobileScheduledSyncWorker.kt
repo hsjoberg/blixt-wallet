@@ -35,13 +35,15 @@ private const val SYNC_WORK_KEY = "syncWorkHistory"
 
 // Add enum to represent different sync results
 enum class SyncResult {
-  EARLY_EXIT_ACTIVITY_RUNNING,  // Exited because MainActivity was running
-  SUCCESS_LND_ALREADY_RUNNING,  // LND was already running
-  SUCCESS_CHAIN_SYNCED,         // Full success with chain sync
-  FAILURE_STATE_TIMEOUT,        // State subscription timeout
-  SUCCESS_ACTIVITY_INTERRUPTED, // Stopped because MainActivity started
-  FAILURE_GENERAL,              // General failure
-  FAILURE_CHAIN_SYNC_TIMEOUT    // Chain sync specifically timed out
+  EARLY_EXIT_ACTIVITY_RUNNING,            // Exited because MainActivity was running
+  SUCCESS_LND_ALREADY_RUNNING,            // LND was already running
+  SUCCESS_CHAIN_SYNCED,                   // Full success with chain sync
+  FAILURE_STATE_TIMEOUT,                  // State subscription timeout
+  SUCCESS_ACTIVITY_INTERRUPTED,           // Stopped because MainActivity started
+  FAILURE_GENERAL,                        // General failure
+  FAILURE_CHAIN_SYNC_TIMEOUT,             // Chain sync specifically timed out
+  EARLY_EXIT_PERSISTENT_SERVICES_ENABLED, // Persistent services enabled, skipping sync
+  EARLY_EXIT_TOR_ENABLED,                 // Tor is enabled, skipping sync
 }
 
 // Update data class with more metadata
@@ -134,6 +136,18 @@ class LndMobileScheduledSyncWorker(
       if (isMainActivityRunning()) {
         Log.d(TAG, "MainActivity is running, skipping daemon stop")
         saveSyncWorkRecord(SyncResult.EARLY_EXIT_ACTIVITY_RUNNING)
+        return Result.success()
+      }
+
+      if (getPersistentServicesEnabled()) {
+        Log.d(TAG, "Persistent services enabled, skipping sync")
+        saveSyncWorkRecord(SyncResult.EARLY_EXIT_PERSISTENT_SERVICES_ENABLED)
+        return Result.success()
+      }
+
+      if (getTorEnabled()) {
+        Log.d(TAG, "Tor is enabled, skipping sync")
+        saveSyncWorkRecord(SyncResult.EARLY_EXIT_TOR_ENABLED)
         return Result.success()
       }
 
@@ -419,5 +433,25 @@ class LndMobileScheduledSyncWorker(
       topActivity?.className?.contains("MainActivity") == true &&
       topActivity.packageName == ourPackageName
     }
+  }
+
+  private fun getTorEnabled(): Boolean {
+    val db = ReactDatabaseSupplier.getInstance(applicationContext).get()
+    val torEnabled = AsyncLocalStorageUtil.getItemImpl(db, "torEnabled")
+    if (torEnabled != null) {
+      return torEnabled == "true"
+    }
+    Log.w(TAG, "Could not find torEnabled in asyncStorage")
+    return false
+  }
+
+  private fun getPersistentServicesEnabled(): Boolean {
+    val db = ReactDatabaseSupplier.getInstance(applicationContext).get()
+    val persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled")
+    if (persistentServicesEnabled != null) {
+      return persistentServicesEnabled == "true"
+    }
+    Log.w(TAG, "Could not find persistentServicesEnabled in asyncStorage")
+    return false
   }
 }
