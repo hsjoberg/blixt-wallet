@@ -6854,7 +6854,7 @@ __metadata:
     react-native-svg-path-gradient: "npm:^0.4.0"
     react-native-svg-web: "npm:^1.0.9"
     react-native-turbo-lnd: "github:hsjoberg/react-native-turbo-lnd#368dec8e8fa6a67b5deb4f9150b3dfcf3b73a92b"
-    react-native-turbo-sqlite: "npm:0.2.0"
+    react-native-turbo-sqlite: "npm:0.3.0"
     react-native-unimodules: "npm:^0.14.10"
     react-native-vector-icons: "npm:9.2.0"
     react-native-vision-camera: "npm:4.6.4"
@@ -16792,15 +16792,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-turbo-sqlite@npm:0.2.0":
-  version: 0.2.0
-  resolution: "react-native-turbo-sqlite@npm:0.2.0"
+"react-native-turbo-sqlite@npm:0.3.0":
+  version: 0.3.0
+  resolution: "react-native-turbo-sqlite@npm:0.3.0"
   dependencies:
     "@react-native-community/cli": "npm:^15.0.1"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/54a42663f10d5d2e13f82cc777a0e928b0971eb2c933e52e23d4e4448c21fe6e83757badc45b25fcbaa9a2cce56a573c3c4d0cc78d668b9b1224081f4f269b70
+  checksum: 10/33cf93506ddf4cf3310d133eab3b702e358707015684ea31f80ba23d8f62b96910818c3d86ebc9d169d90f03fdc0b9aba73ec24a79ae233017b640de5e362ca1
   languageName: node
   linkType: hard
 

@@ -142,7 +142,7 @@
     "react-native-svg-path-gradient": "^0.4.0",
     "react-native-svg-web": "^1.0.9",
     "react-native-turbo-lnd": "github:hsjoberg/react-native-turbo-lnd#368dec8e8fa6a67b5deb4f9150b3dfcf3b73a92b",
-    "react-native-turbo-sqlite": "0.2.0",
+    "react-native-turbo-sqlite": "0.3.0",
     "react-native-unimodules": "^0.14.10",
     "react-native-vector-icons": "9.2.0",
     "react-native-vision-camera": "4.6.4",

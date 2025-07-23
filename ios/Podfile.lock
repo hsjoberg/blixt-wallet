@@ -1653,7 +1653,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-turbo-sqlite (0.2.0):
+  - react-native-turbo-sqlite (0.3.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2857,7 +2857,7 @@ SPEC CHECKSUMS:
   react-native-slider: c4c1a975352113af59b59dc783abc111618ec37a
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-turbo-lnd: 92ea41a16c17beab3ac136a8deadc210a102f4ce
-  react-native-turbo-sqlite: 1c0f8d7fa3bd67478a4cc081042d113496145ab1
+  react-native-turbo-sqlite: 3ef52fbf31a747a4d6a63dbe7d2661986d6add89
   react-native-webview: 4f9e162a206f312bdc128ecb058c25e0226476ee
   React-NativeModulesApple: 452b86b29fae99ed0a4015dca3ad9cd222f88abf
   React-oscompat: ef5df1c734f19b8003e149317d041b8ce1f7d29c
@@ -2916,4 +2916,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 05c150625b3a41b637beddf3cc85adb7f72fb9e8
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.16.2
