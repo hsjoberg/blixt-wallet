@@ -70,8 +70,6 @@ import com.oblador.keychain.KeychainModule;
 
 import com.hypertrack.hyperlog.HyperLog;
 
-import org.torproject.jni.TorService;
-
 // TODO break this class up
 class LndMobileTools extends ReactContextBaseJavaModule {
   final String TAG = "LndMobileTools";
@@ -748,9 +746,6 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void restartApp() {
-    Intent stopTorIntent = new Intent(getReactApplicationContext(), TorService.class);
-    stopTorIntent.setAction("org.torproject.android.intent.action.STOP");
-    getReactApplicationContext().stopService(stopTorIntent);
     Intent stopLndIntent = new Intent(getReactApplicationContext(), LndMobileService.class);
     stopLndIntent.setAction("com.blixtwallet.android.intent.action.STOP");
     getReactApplicationContext().startService(stopLndIntent);

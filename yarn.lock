@@ -6838,8 +6838,8 @@ __metadata:
     react-native-keychain: "npm:^8.1.2"
     react-native-linear-gradient: "npm:^2.8.3"
     react-native-maps: "npm:1.23.8"
-    react-native-nitro-modules: "npm:0.25.2"
-    react-native-nitro-tor: "npm:0.2.4"
+    react-native-nitro-modules: "npm:0.26.4"
+    react-native-nitro-tor: "npm:0.2.8"
     react-native-paper: "npm:5.14.5"
     react-native-permissions: "npm:4.1.5"
     react-native-popup-menu: "npm:0.17.0"
@@ -6857,7 +6857,7 @@ __metadata:
     react-native-turbo-sqlite: "npm:0.3.0"
     react-native-unimodules: "npm:^0.14.10"
     react-native-vector-icons: "npm:9.2.0"
-    react-native-vision-camera: "npm:4.6.4"
+    react-native-vision-camera: "npm:4.7.1"
     react-native-web: "npm:0.19.12"
     react-native-web-linear-gradient: "npm:^1.1.2"
     react-native-web-maps: "npm:^0.3.0"
@@ -16589,24 +16589,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-nitro-modules@npm:0.25.2":
-  version: 0.25.2
-  resolution: "react-native-nitro-modules@npm:0.25.2"
+"react-native-nitro-modules@npm:0.26.4":
+  version: 0.26.4
+  resolution: "react-native-nitro-modules@npm:0.26.4"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10/45f0c639d21da55302e641cc6a36ffd388efb3233d12d804807f422a37387079bda713e59482ab5a5cf7c0b867a0d68bc6df729c15a2e6035c2b2cbb87a0e28a
+  checksum: 10/ba35c920f0c78dbd17517721c2edbfb6a9a417144a4950c32cafd5d07f732f8f0ab54f7ab946181d53e3feb92971702936797ad44caa617c026b94679f58ec03
   languageName: node
   linkType: hard
 
-"react-native-nitro-tor@npm:0.2.4":
-  version: 0.2.4
-  resolution: "react-native-nitro-tor@npm:0.2.4"
+"react-native-nitro-tor@npm:0.2.8":
+  version: 0.2.8
+  resolution: "react-native-nitro-tor@npm:0.2.8"
   peerDependencies:
     react: "*"
     react-native: "*"
-    react-native-nitro-modules: ^0.25.2
-  checksum: 10/7aae09ff4d075ec220d31d06d4fb2287c34e060391ef1bc642907119f99f8f728ae390a95ea90e28b026ef73ba71484f8facaa6318589e6952b0aa75493f7e21
+    react-native-nitro-modules: ^0.26.4
+  checksum: 10/7a80388070cfa0a0aae23c36dd9e187724f210e4de8c4d947a9f02ed865ddde20591806f47d052e84590527d8cf6144dbdbeb045078891b52fac4a349099f998
   languageName: node
   linkType: hard
 
@@ -16855,9 +16855,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-vision-camera@npm:4.6.4":
-  version: 4.6.4
-  resolution: "react-native-vision-camera@npm:4.6.4"
+"react-native-vision-camera@npm:4.7.1":
+  version: 4.7.1
+  resolution: "react-native-vision-camera@npm:4.7.1"
   peerDependencies:
     "@shopify/react-native-skia": "*"
     react: "*"
@@ -16871,7 +16871,7 @@ __metadata:
       optional: true
     react-native-worklets-core:
       optional: true
-  checksum: 10/9de4166aae94f72d29ab6dc2b04066a8216b5d630508345da7cedfa300196b8c2500dd2b5c0076731357c0b9695961d4e71fe891b2714fffb278a410b081c3b5
+  checksum: 10/706db577a13748b029179d31bde00e67744e2d7c93d65448922b92b105df5d126aa5c4a969bd1780890eb153fe92ae5703f400b1e08d6d3b8c8d185bb3391dfe
   languageName: node
   linkType: hard
 

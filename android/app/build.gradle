@@ -89,7 +89,7 @@ android {
         applicationId "com.blixtwallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 169
+        versionCode 170
         versionName "0.8.0"
 
         // Blixt:
@@ -226,9 +226,6 @@ dependencies {
     implementation 'org.brotli:dec:0.1.2'
 
     implementation "com.jakewharton:process-phoenix:2.0.0"
-
-    implementation 'info.guardianproject:tor-android:0.4.7.14'
-    implementation 'info.guardianproject:jtorctl:0.4.5.7'
 
     implementation('dev.doubledot.doki:library:0.0.1@aar') {
         transitive = true
