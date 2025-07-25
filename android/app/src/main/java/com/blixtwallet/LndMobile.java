@@ -66,8 +66,6 @@ import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier;
 
 import com.hypertrack.hyperlog.HyperLog;
 
-import org.torproject.jni.TorService;
-
 // TODO break this class up
 class LndMobile extends ReactContextBaseJavaModule {
   private final String TAG = "LndMobile";
