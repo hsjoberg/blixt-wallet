@@ -70,6 +70,8 @@
 	<string>Locally save location of where a transaction was made</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Locally save location of where a transaction was made</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>TEAM_ID</key>
 	<string>$(TeamIdentifierPrefix)</string>
 	<key>UIAppFonts</key>

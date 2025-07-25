@@ -3,5 +3,5 @@
     "module": "ES2022",
     "moduleResolution": "Bundler"
   },
-  "extends": "@tsconfig/react-native/tsconfig.json"
+  "extends": "@react-native/typescript-config"
 }
