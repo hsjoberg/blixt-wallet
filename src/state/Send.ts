@@ -408,7 +408,7 @@ export const sendPaymentV2TurboLnd = (
         }
       },
       (error) => {
-        reject(error);
+        reject(new Error(error));
       },
     );
   });
