@@ -7047,7 +7047,7 @@ __metadata:
     react-native-keyboard-aware-scroll-view: "npm:^0.9.5"
     react-native-keychain: "npm:10.0.0"
     react-native-linear-gradient: "npm:^2.8.3"
-    react-native-maps: "npm:1.24.10"
+    react-native-maps: "npm:1.26.9"
     react-native-nitro-modules: "npm:0.26.4"
     react-native-nitro-tor: "npm:0.2.8"
     react-native-paper: "npm:5.14.5"
@@ -16929,9 +16929,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-maps@npm:1.24.10":
-  version: 1.24.10
-  resolution: "react-native-maps@npm:1.24.10"
+"react-native-maps@npm:1.26.9":
+  version: 1.26.9
+  resolution: "react-native-maps@npm:1.26.9"
   dependencies:
     "@types/geojson": "npm:^7946.0.13"
   peerDependencies:
@@ -16941,7 +16941,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-web:
       optional: true
-  checksum: 10/524db5d72e5c56941d41f075a50ccbe27f5b22cf5fe2a924781b97e8439f71c6255ac3c07c37d7b4bfe6379371117a64928e4318c2919bc2ebc36bea82575557
+  checksum: 10/4ecdad404d76f98609cec4d08313bee4541e1eb80b044663b9da1d4e9c2171e7e97e103732bcfa468fc72ca7237a78f0621eb5eb9ecbf962d8f882cedbec976a
   languageName: node
   linkType: hard
 
