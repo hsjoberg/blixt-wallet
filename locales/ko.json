@@ -421,11 +421,11 @@
     },
     "lightningAddress": {
       "alreadyExists": {
-        "msg": "{{lightningAddress}}이(가) 연락처 목록에 있습니다."
+        "msg": "{{lightningAddress}} 이(가) 연락처 목록에 있습니다."
       },
       "add": {
         "title": "연락처 목록에 추가",
-        "msg": "{{lightningAddress}}을(를) 연락처 목록에 추가하시겠습니까?"
+        "msg": "{{lightningAddress}} 을(를) 연락처 목록에 추가하시겠습니까?"
       }
     },
     "payContact": {
