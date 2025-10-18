@@ -1142,7 +1142,7 @@
     "syncedToChain": "체인에 동기화됨",
     "syncedToGraph": "그래프에 동기화됨",
     "nodeUris": "노드 URI",
-    "version": "Lnd 버전",
+    "version": "LND 버전",
     "features": "노드 기능"
   },
   "settings.torShowOnionAddress": {
