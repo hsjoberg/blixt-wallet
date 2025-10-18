@@ -589,11 +589,11 @@
         "checkAmount": "수량 확인",
         "missingPubkey": "공개 키 누락"
       },
-      "alert": "지불 성공"
+      "alert": "결제 성공"
     },
     "form": {
       "amount": {
-        "title": "금액 sat"
+        "title": "수량 sat"
       },
       "pubkey": {
         "title": "공개 키",
