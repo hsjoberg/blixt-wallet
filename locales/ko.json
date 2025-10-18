@@ -920,7 +920,7 @@
           "description": "로그 레벨은 설정에서 접근할 수 있는 LND 로그의 자세한 정도를 변경합니다."
         },
         "restoreDialog": {
-          "title": "LND 로그 수준을 기본 레벨({{defaultLndLogLevel}})로 복원하시겠습니까?"
+          "title": "LND 로그 수준을 기본 레벨({{defaultLndLogLevel}}) 로 복원하시겠습니까?"
         }
       },
       "customInvoicePreimageEnabled": {
