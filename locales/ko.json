@@ -1210,8 +1210,8 @@
   },
   "welcome.googleDriveBackup": {
     "enable": {
-      "title": "Google 드라이브 백업 활성화",
-      "msg": "Google 드라이브 백업이 활성화됨"
+      "title": "Google Drive 백업 활성화",
+      "msg": "Google Drive 백업이 활성화됨"
     },
     "backup": {
       "title": "클라우드 백업",
