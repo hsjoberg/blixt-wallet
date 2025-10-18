@@ -914,7 +914,7 @@
         }
       },
       "setLndLogLevel": {
-        "title": "lnd 로그 수준 설정",
+        "title": "LND 로그 레벨 설정",
         "dialog": {
           "title": "LND 로그 레벨을 설정합니다.",
           "description": "로그 레벨은 설정에서 접근할 수 있는 LND 로그의 자세한 정도를 변경합니다."
