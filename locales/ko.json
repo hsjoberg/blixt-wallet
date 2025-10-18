@@ -1158,7 +1158,7 @@
   },
   "welcome.addFunds": {
     "title": "자금 추가",
-    "msg1": "Blixt Wallet에서 Lightning을 사용하려면",
+    "msg1": "Blixt Wallet에서 라이트닝을 사용하려면",
     "msg2": "위의 주소로 비트코인을 보내십시오"
   },
   "lightningBox.registration": {
