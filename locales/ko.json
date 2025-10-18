@@ -480,7 +480,7 @@
       },
       "url": {
         "description": "설명",
-        "domain": "URL 받음",
+        "domain": "다음으로부터 받은 URL",
         "done": {
           "title": "완료"
         },
