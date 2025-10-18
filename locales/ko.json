@@ -1245,8 +1245,8 @@
         "title": "채널 백업",
         "file": "저장 공간에서 채널 백업 파일 선택",
         "google": {
-          "title": "Google 드라이브를 통한 복원",
-          "alert": "Google 드라이브를 통한 복원 실패"
+          "title": "Google Drive를 통한 복원",
+          "alert": "Google Drive를 통한 복원 실패"
         },
         "iCloud": {
           "title": "iCloud를 통한 복원",
