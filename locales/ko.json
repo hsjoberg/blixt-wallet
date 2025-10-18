@@ -1094,7 +1094,7 @@
       "bytesRecv": "수신된 바이트"
     },
     "transfer": {
-      "title": "이체",
+      "title": "전송",
       "satSent": "전송된 새토시",
       "satRecv": "수신된 새토시"
     },
