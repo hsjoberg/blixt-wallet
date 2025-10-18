@@ -379,7 +379,7 @@
   },
   "onchain.withdraw": {
     "layout": {
-      "title": "코인 인출"
+      "title": "코인 출금"
     },
     "form": {
       "address": {
@@ -389,7 +389,7 @@
       "amount": {
         "title": "수량",
         "placeholder": "수량",
-        "withdrawAll": "모든 자금 인출",
+        "withdrawAll": "모든 자금 출금",
         "all": "전체"
       },
       "feeRate": {
