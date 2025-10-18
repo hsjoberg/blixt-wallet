@@ -147,7 +147,7 @@
     "website": "웹사이트",
     "type": "유형",
     "lnurl": {
-      "messageFromWebsite": "다음으로부터 메시지",
+      "messageFromWebsite": "메세지 보낸 사람:",
       "urlReceivedFromWebsite": "다음으로부터 받은 URL",
       "secretMessage": "비밀 메시지"
     },
