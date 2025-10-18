@@ -387,8 +387,8 @@
         "placeholder": "비트코인 주소"
       },
       "amount": {
-        "title": "금액",
-        "placeholder": "금액",
+        "title": "수량",
+        "placeholder": "수량",
         "withdrawAll": "모든 자금 인출",
         "all": "전체"
       },
