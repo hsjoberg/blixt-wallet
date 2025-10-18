@@ -513,7 +513,7 @@
       "addToContactList": {
         "title": "연락처 목록에 추가",
         "msg": "이 출금 코드를 {{domain}} 에 연락처 목록에 추가하시겠습니까?",
-        "note": "{{domain}}의 계정"
+        "note": "{{domain}} 의 계정"
       }
     },
     "layout": {
