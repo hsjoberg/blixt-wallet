@@ -540,10 +540,10 @@
     "contact": {
       "syncBalance": {
         "title": "원격 잔고",
-        "error": "잘못된 작업, 연락처에는 LNURL-withdraw 코드가 없음"
+        "error": "유효하지 않은 작업입니다, 연락처에는 LNURL-출금 코드가 없음"
       },
       "list": {
-        "pay": "다음으로 지불",
+        "pay": "다음으로 지불:",
         "account": "계정"
       },
       "send": {
