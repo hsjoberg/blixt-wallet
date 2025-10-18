@@ -451,10 +451,10 @@
       }
     },
     "payloadErrors": {
-      "missingDescription": "결제에는 설명이 누락되었습니다."
+      "missingDescription": "결제에 설명이 누락되었습니다."
     },
     "pay": {
-      "title": "지불",
+      "title": "결제",
       "error": {
         "mustProvideComment": "이 결제에 내 이름을 포함하려면 코멘트를 제공해야 합니다."
       }
