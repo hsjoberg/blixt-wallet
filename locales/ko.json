@@ -472,7 +472,7 @@
         "to": "받는 사람",
         "placeholder": "수량 입력"
       },
-      "alert": "지불할 수 없음"
+      "alert": "결제할 수 없음"
     },
     "done": {
       "message": {
