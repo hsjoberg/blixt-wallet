@@ -1191,7 +1191,7 @@
   "welcome.almostDone": {
     "autopilot": {
       "title": "자동 채널 열기",
-      "msg": "온체인 자금이 있을 때 자동으로 채널 열기"
+      "msg": "온체인 자금이 확보되면 채널을 개설합니다."
     },
     "done": {
       "title": "거의 완료!",
