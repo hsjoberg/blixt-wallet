@@ -235,14 +235,14 @@
   },
   "send.sendConfirmation": {
     "layout": {
-      "title": "인보이스 지불"
+      "title": "인보이스 결제"
     },
     "form": {
       "invoice": {
         "title": "인보이스"
       },
       "amount": {
-        "title": "금액"
+        "title": "수량"
       },
       "recipient": {
         "title": "수령인"
