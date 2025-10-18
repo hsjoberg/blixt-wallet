@@ -5,7 +5,7 @@
       "lightningBox": "라이트닝 박스",
       "nodeAlias": "노드 별명",
       "description": "설명",
-      "amount": "금액",
+      "amount": "수량",
       "fee": "수수료",
       "search": "검색",
       "viewInBlockExplorer": "블록 익스플로러에서 보기",
