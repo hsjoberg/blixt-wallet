@@ -794,7 +794,7 @@
       },
       "maxLNFeePercentage": {
         "title": "최대 지불 수수료 설정",
-        "subtitle": "금액에 비례하여",
+        "subtitle": "수량에 비례하여",
         "dialog": {
           "title": "최대 LN 수수료 백분율 설정"
         },
