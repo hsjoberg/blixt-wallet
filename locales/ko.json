@@ -972,7 +972,7 @@
         "subtitle": ""
       },
       "invoiceExpiry": {
-        "title": "송장 만료 (초)",
+        "title": "인보이스 만료 (초)",
         "subtitle": "{{expiry}} 초"
       }
     },
