@@ -749,7 +749,7 @@
         "setDialog": {
           "title": "노드 설정",
           "info": "연결을 설정할 BIP157 지원 비트코인 노드를 설정합니다.",
-          "leaveBlankToSearch": "유효한 노드를 Bitcoin 네트워크에서 찾도록 하려면 비워두십시오.",
+          "leaveBlankToSearch": "유효한 노드를 비트코인 네트워크에서 찾도록 하려면 비워두십시오.",
           "longPressToReset": "기본 노드 ({{defaultNode}})로 재설정하려면 설정을 길게 누르세요."
         },
         "restoreDialog": {
