@@ -745,7 +745,7 @@
       "title": "비트코인 네트워크",
       "node": {
         "title": "비트코인 노드",
-        "subtitle": "연결할 Bitcoin 노드 (BIP157) 설정",
+        "subtitle": "연결할 비트코인 노드 (BIP157) 설정",
         "setDialog": {
           "title": "노드 설정",
           "info": "연결을 설정할 BIP157 지원 Bitcoin 노드를 설정합니다.",
