@@ -555,7 +555,7 @@
       "withdraw": {
         "title": "출금",
         "couldNotPay": "이 LNURL 결제 코드에 지불할 수 없습니다",
-        "invalidResponse": "응답이 LNURL-pay 응답이 아닙니다 (받은 {{response}})",
+        "invalidResponse": "응답이 LNURL 결제 응답이 아닙니다 (받은 {{response}})",
         "invalidOperation": "잘못된 작업, 연락처에는 LNURL-withdraw 코드가 없음"
       },
       "deleteContact": {
