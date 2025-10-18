@@ -195,12 +195,12 @@
     },
     "form": {
       "amountFiat": {
-        "title": "금액",
+        "title": "수량",
         "change": "화폐 단위 변경",
         "dunderPlaceholder": "최소"
       },
       "amountBitcoin": {
-        "title": "금액",
+        "title": "수량",
         "change": "비트코인 단위 변경",
         "dunderPlaceholder": "최소"
       },
