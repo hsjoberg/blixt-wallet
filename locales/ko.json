@@ -397,8 +397,8 @@
         "auto": "자동"
       },
       "withdraw": {
-        "title": "인출",
-        "alert": "인출 성공"
+        "title": "출금",
+        "alert": "출금 성공"
       }
     }
   },
