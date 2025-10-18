@@ -470,7 +470,7 @@
       "amount": {
         "title": "수량",
         "to": "받는 사람",
-        "placeholder": "금액 입력"
+        "placeholder": "수량 입력"
       },
       "alert": "지불할 수 없음"
     },
