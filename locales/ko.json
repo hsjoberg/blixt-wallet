@@ -142,7 +142,7 @@
   "transactionDetails": {
     "title": "거래",
     "date": "날짜",
-    "duration": "인보이스 지불에 걸린 시간",
+    "duration": "인보이스 결제에 걸린 시간",
     "note": "메모",
     "website": "웹사이트",
     "type": "유형",
