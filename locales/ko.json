@@ -303,7 +303,7 @@
       "closeChannel": "채널 닫기",
       "forceCloseChannel": "채널 강제 종료",
       "closeChannelToAddress": "외부 주소로 채널 닫기",
-      "forceClosePendingChannel": "강제 닫기 대기 중인 채널",
+      "forceClosePendingChannel": "강제 종료 대기 중인 채널",
       "forceCloseDelay": "강제 종료 지연 시간",
       "closeChannelPrompt": {
         "title": "채널 닫기"
