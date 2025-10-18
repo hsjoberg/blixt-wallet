@@ -151,7 +151,7 @@
       "urlReceivedFromWebsite": "다음으로부터 받은 URL",
       "secretMessage": "비밀 메시지"
     },
-    "payer": "지불자",
+    "payer": "결제자",
     "recipient": "수령인",
     "amountInFiatTimeOfPayment": "인보이스 지불 시점의 화폐 금액",
     "numberOfHops": "홉 수",
