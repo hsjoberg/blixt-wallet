@@ -652,7 +652,7 @@
       "title": "지갑",
       "seed": {
         "show": {
-          "title": "단어 시드 표시",
+          "title": "니모닉 표시",
           "subtitle": "이 지갑의 24단어 시드 표시",
           "dialog": {
             "title": "시드",
