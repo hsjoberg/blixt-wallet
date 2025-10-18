@@ -719,7 +719,7 @@
         }
       },
       "gossipSync": {
-        "title": "시작 시 LN 채널 동기화"
+        "title": "시작 시 라이트닝 채널 동기화"
       },
       "gossipSyncAndroid": {
         "title": "예약된 LN 채널 동기화",
