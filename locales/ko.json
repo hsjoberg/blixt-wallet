@@ -895,7 +895,7 @@
         "subtitle": ""
       },
       "expiredInvoices": {
-        "title": "만료된 송장 자동 숨기기",
+        "title": "만료된 인보이스 자동 숨기기",
         "subtitle": ""
       },
       "screenTransactions": {
