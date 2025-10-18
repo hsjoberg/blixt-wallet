@@ -357,7 +357,7 @@
     }
   },
   "onchain.onChainTransactionDetails": {
-    "title": "거래",
+    "title": "트랜잭션",
     "txHash": "ID",
     "timeStamp": "날짜",
     "amount": "수량",
