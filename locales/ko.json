@@ -1050,7 +1050,7 @@
         "title": "엄격한 LN 그래프 가지치기 활성화"
       },
       "bimodalPathFinding": {
-        "title": "이중 모드 경로 찾기 활성화"
+        "title": "이중 경로 탐색 활성화"
       },
       "compactLndDatabases": {
         "title": "lnd 데이터베이스 압축"
