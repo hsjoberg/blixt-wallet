@@ -836,7 +836,7 @@
         },
         "restoreDialog": {
           "title": "LN 채널 동기화 서버 복원",
-          "msg": "기본 라이트닝 채널 동기화 서버로 복원하시겠습니까?"
+          "msg": "기본 LN 채널 동기화 서버로 복원하시겠습니까?"
         }
       },
       "lightningBoxServer": {
