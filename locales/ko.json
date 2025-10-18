@@ -924,7 +924,7 @@
         }
       },
       "customInvoicePreimageEnabled": {
-        "title": "사용자 정의 송장 사전 이미지 활성화"
+        "title": "사용자 지정 인보이스 프리이미지 활성화"
       },
       "randomizeSettings": {
         "title": "설정 무작위화"
