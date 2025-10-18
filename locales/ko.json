@@ -50,7 +50,7 @@
       "msg4": "위험을 감수하고 계속하기"
     },
     "createWalletWithPassphrase": {
-      "title": "암호 설정 (시드를 암호화하는 25번째 단어)",
+      "title": "패스프레이즈 설정 (시드를 암호화하는 25번째 단어)",
       "invalidMessage": "유효한 암호를 입력하십시오.",
       "noLeadingTrailingSpaces": "선행 또는 후행 공백은 허용되지 않습니다."
     },
