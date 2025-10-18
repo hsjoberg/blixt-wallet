@@ -476,7 +476,7 @@
     },
     "done": {
       "message": {
-        "title": "다음으로부터의 메시지"
+        "title": "메세지 보낸 사람:"
       },
       "url": {
         "description": "설명",
