@@ -313,7 +313,7 @@
         "missingFeeRate": "수수료율이 입력되지 않았습니다",
         "invalidFeeRate": "잘못된 수수료율입니다",
         "bumpFeeSuccess": "수수료 높이기 완료",
-        "bumpFeeFailed": " 수수료 높이기 실패"
+        "bumpFeeFailed": "수수료 높이기 실패"
       }
     }
   },
