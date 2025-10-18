@@ -263,7 +263,7 @@
   },
   "send.sendDone": {
     "done": {
-      "title": "지불 완료"
+      "title": "결제 완료"
     }
   },
   "lightningInfo.lightningInfo": {
