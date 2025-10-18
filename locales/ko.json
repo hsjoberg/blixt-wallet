@@ -1253,7 +1253,7 @@
           "alert": "iCloud를 통한 복원 실패"
         }
       },
-      "seed": "씨앗은 정확히 24 단어여야합니다."
+      "seed": "시드은 정확히 24 단어여야합니다."
     },
     "backup": {
       "google": "Google Drive를 통한 백업",
