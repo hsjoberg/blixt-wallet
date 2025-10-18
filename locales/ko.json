@@ -1205,7 +1205,7 @@
       "msg": "죄송합니다. 단어를 잘못된 순서로 입력했습니다. 다시 시도하십시오."
     },
     "seed": {
-      "title": "씨앗 확인"
+      "title": "시드 확인"
     }
   },
   "welcome.googleDriveBackup": {
