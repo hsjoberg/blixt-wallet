@@ -155,7 +155,7 @@
     "recipient": "수령인",
     "amountInFiatTimeOfPayment": "결제 시점의 법정화폐 금액",
     "numberOfHops": "홉 수",
-    "remotePubkey": "원격 퍼블릭 키",
+    "remotePubkey": "원격 공개 키",
     "paymentHash": "지불 해시",
     "preimage": "프리이미지",
     "status": "상태",
