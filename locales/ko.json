@@ -1148,7 +1148,7 @@
   "settings.torShowOnionAddress": {
     "title": "Tor onion 서비스",
     "msg1": "이 QR 코드를 스캔하여 이 지갑에 채널을 엽니다",
-    "msg2": "온이언 주소를 확인할 수 없습니다"
+    "msg2": "onion 주소를 확인할 수 없습니다"
   },
   "settings.toastLog": {
     "title": "알림 로그"
