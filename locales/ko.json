@@ -405,7 +405,7 @@
   "LNURL.authRequest": {
     "layout": {
       "title": "로그인 요청",
-      "msg": "다음으로 로그인하시겠습니까",
+      "msg": "다음 방법으로 로그인하시겠습니까:",
       "success": "인증됨"
     }
   },
