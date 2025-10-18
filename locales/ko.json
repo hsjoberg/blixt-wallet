@@ -855,7 +855,7 @@
         "subtitle": "동기화된 그래프는 최적의 결제 경로로 이어집니다."
       },
       "zeroConfPeers": {
-        "title": "제로 확인 피어 설정",
+        "title": "0 컨펌 피어 설정",
         "subtitle": "허용할 피어의 퍼블릭 키 추가",
         "setDialog": {
           "title": "제로 확인 피어",
