@@ -368,7 +368,7 @@
     "blockHeight": "블록 높이",
     "blockHash": "블록 해시",
     "rawTxHex": {
-      "title": "원시 tx hex",
+      "title": "원시 트랜잭션 16진수",
       "msg": "복사하려면 누르세요"
     }
   },
