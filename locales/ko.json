@@ -463,12 +463,12 @@
       "title": "취소"
     },
     "form": {
-      "asksYouToPay": "이(가) 지불하도록 요청합니다.",
+      "asksYouToPay": "이(가) 결제하도록 요청합니다.",
       "description": {
         "title": "설명"
       },
       "amount": {
-        "title": "금액",
+        "title": "수량",
         "to": "받는 사람",
         "placeholder": "금액 입력"
       },
