@@ -759,7 +759,7 @@
       },
       "restartDialog": {
         "title": "재시작 필요",
-        "msg": "새로운 구성이 적용되기 전에 Blixt Wallet을 다시 시작해야 합니다.",
+        "msg": "새로운 설정이 적용되기 전에 Blixt Wallet을 다시 시작해야 합니다.",
         "msg1": "지금 재시작하시겠습니까?"
       },
       "rpc": {
