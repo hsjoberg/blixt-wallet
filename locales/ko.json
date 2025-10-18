@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "라이트닝 주소",
+      "lightningBox": "라이트닝 박스",
       "nodeAlias": "노드 별명",
       "description": "설명",
       "amount": "금액",
       "fee": "수수료",
       "search": "검색",
       "viewInBlockExplorer": "블록 익스플로러에서 보기",
-      "blocks": "{{numBlocks}} blocks"
+      "blocks": "{{numBlocks}} 블록",
+      "reason": "이유: {{reason}}"
     },
     "buttons": {
       "ok": "확인",
@@ -255,7 +257,7 @@
         "title": "수수료 예상"
       },
       "outgoingChannel": {
-        "title": "Outbound Channel"
+        "title": "아웃바운드 채널"
       }
     }
   },
@@ -273,6 +275,7 @@
     },
     "channel": {
       "alias": "별명",
+      "bumpFee": "수수료 높이기",
       "node": "노드",
       "channelId": "채널 ID",
       "channelPoint": "채널 포인트",
@@ -295,11 +298,22 @@
       "maturityHeight": "만료 높이",
       "localCommitmentTxid": "로컬 커밋 TXID",
       "remoteCommitmentTxid": "원격 커밋 TXID",
+      "enterDeliveryAddress": "종료 주소를 입력하세요",
+      "invalidAddress": "유효한 비트코인 주소를 입력하세요",
       "closeChannel": "채널 닫기",
+      "forceCloseChannel": "채널 강제 종료",
+      "closeChannelToAddress": "외부 주소로 채널 닫기",
       "forceClosePendingChannel": "강제 닫기 대기 중인 채널",
-      "forceCloseDelay": "Force closure delay",
+      "forceCloseDelay": "강제 종료 지연 시간",
       "closeChannelPrompt": {
         "title": "채널 닫기"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "수수료율을 입력하세요 (sats/vB)",
+        "missingFeeRate": "수수료율이 입력되지 않았습니다",
+        "invalidFeeRate": "잘못된 수수료율입니다",
+        "bumpFeeSuccess": "수수료 높이기 완료",
+        "bumpFeeFailed": " 수수료 높이기 실패"
       }
     }
   },
@@ -430,6 +444,10 @@
       "name": {
         "ask": "이 결제와 함께 내 이름을 전송",
         "mandatory": "이 결제와 함께 내 이름을 전송해야 합니다"
+      },
+      "identifier": {
+        "ask": "이번 결제와 함께 내 라이트닝 주소를 전송하기",
+        "mandatory": "이번 결제에는 당신의 라이트닝 주소를 함께 전송해야 합니다"
       }
     },
     "payloadErrors": {
@@ -625,6 +643,9 @@
       },
       "mapTheme": {
         "title": "지도 테마 설정"
+      },
+      "hideAmountsEnabled": {
+        "title": "수량 숨기기"
       }
     },
     "wallet": {
@@ -745,10 +766,10 @@
         "title": "bitcoind RPC 호스트 설정"
       },
       "rpcuser": {
-        "title": "Set the bitcoind RPC User"
+        "title": " bitcoind RPC 사용자 설정"
       },
       "rpcpass": {
-        "title": "Set the bitcoind RPC Password"
+        "title": "bitcoind RPC 비밀번호 설정"
       },
       "zmqRawBlock": {
         "title": "bitcoind ZMQ Raw Block 호스트 설정"
@@ -808,14 +829,25 @@
         }
       },
       "speedloaderServer": {
-        "title": "Set LN channel sync server",
+        "title": "라이트닝 채널 동기화 서버 설정",
         "subtitle": "",
         "setDialog": {
-          "title": "Set LN Sync channel server"
+          "title": "라이트닝 동기화 채널 서버 설정"
         },
         "restoreDialog": {
-          "title": "Restore LN channel sync Server",
-          "msg": "Would you like to restore to the default LN channel sync server"
+          "title": "라이트닝 채널 동기화 서버 복원",
+          "msg": "기본 라이트닝 채널 동기화 서버로 복원하시겠습니까?"
+        }
+      },
+      "lightningBoxServer": {
+        "title": "라이트닝 박스 서버 설정",
+        "subtitle": "",
+        "setDialog": {
+          "title": " 라이트닝 박스 서버 설정"
+        },
+        "restoreDialog": {
+          "title": "라이트닝 박스 서버 복원",
+          "msg": "기본 라이트닝 박스 서버로 복원하시겠습니까?"
         }
       },
       "graphSync": {
@@ -893,13 +925,19 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "사용자 정의 송장 사전 이미지 활성화"
+      },
+      "randomizeSettings": {
+        "title": "설정 무작위화"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "시작 시 설정 무작위화"
       }
     },
     "experimental": {
       "title": "실험",
       "LSP": {
         "title": "Dunder LSP 활성화",
-        "subtitle": "매우 실험적입니다. 인바운드 유동성을 돕는 Lightning Service Provider"
+        "subtitle": "인바운드 유동성을 지원하는 라이트닝 서비스 제공자"
       },
       "MPP": {
         "title": "다중 경로 지불 활성화",
@@ -1021,8 +1059,8 @@
         "title": "시작 시 gossip 동기화 강제"
       },
       "persistentServices": {
-        "title": "Enable persistent app",
-        "subtitle": "The app stays active in the background"
+        "title": "백그라운드 실행 허용",
+        "subtitle": "앱이 백그라운드에서 계속 실행됩니다"
       }
     }
   },
@@ -1122,6 +1160,33 @@
     "title": "자금 추가",
     "msg1": "Blixt Wallet에서 Lightning을 사용하려면",
     "msg2": "위의 주소로 비트코인을 보내십시오"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "라이트닝 박스 등록에 오신 것을 환영합니다.",
+      "whatIs": "라이트닝 박스는 결제 요청을 휴대폰으로 직접 전달하는 라이트닝 주소 서비스 제공자로, 사용자가 셀프 커스터디형 라이트닝 주소를 모바일 기기에서 사용할 수 있게 해줍니다.",
+      "persistentMode":"이 서비스는 백그라운드 실행 모드에 의존합니다. 결제를 수신하려면 앱이 계속 활성 상태를 유지해야 합니다. 기기의 배터리 최적화 기능을 꺼두지 않으면 서비스가 정상적으로 작동하지 않을 수 있습니다.",
+      "currentRules": "이 서비스는 무료로 이용할 수 있습니다. 다만 기술적 이유로, 현재는 라이트닝 박스 제공자와의 채널 연결이 필요합니다. 선택한 라이트닝 주소는 이후 변경할 수 없습니다."
+    },
+    "prerequisites": {
+      "prerequisites": "사전 조건",
+      "checkingEligibility": "사용 가능 여부 확인 중...",
+      "eligible": "사용 가능",
+      "youHaveChannel": "라이트닝 박스 서비스와 채널이 연결되어 있습니다.",
+      "notEligible": "사용 불가"
+    },
+    "registration": {
+      "registration": "등록",
+      "fields": {
+        "address": "주소",
+        "messageToPayer": "결제자에게 보낼 메시지"
+      },
+      "register": "등록하기"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "당신의 라이트닝 박스 라이트닝 주소:",
+    "showQrCode": "QR 코드 보기"
   },
   "welcome.almostDone": {
     "autopilot": {
