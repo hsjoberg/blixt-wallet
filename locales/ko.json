@@ -1028,7 +1028,7 @@
       },
       "rescanWallet": {
         "title": "지갑 다시 스캔",
-        "subtitle": "지갑 거래를 위해 블록체인을 다시 스캔"
+        "subtitle": "지갑 트랜잭션을 위해 블록체인을 다시 스캔"
       },
       "getNodeInfo": {
         "title": "노드 정보 가져오기"
