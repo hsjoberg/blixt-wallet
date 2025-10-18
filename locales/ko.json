@@ -393,7 +393,7 @@
         "all": "전체"
       },
       "feeRate": {
-        "title": "수수료 비율",
+        "title": "수수료율",
         "auto": "자동"
       },
       "withdraw": {
