@@ -964,7 +964,7 @@
         }
       },
       "onion": {
-        "title": "Tor 온이언 서비스 표시",
+        "title": "Tor onion 서비스 표시",
         "subtitle": "이 지갑에 대한 연결 및 채널 열기"
       },
       "keysend": {
