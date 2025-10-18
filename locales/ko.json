@@ -140,7 +140,7 @@
     }
   },
   "transactionDetails": {
-    "title": "거래",
+    "title": "트랜잭션",
     "date": "날짜",
     "duration": "인보이스 결제에 걸린 시간",
     "note": "메모",
@@ -167,7 +167,7 @@
     },
     "setNoteDialog": {
       "title": "메모",
-      "text": "이 거래에 대한 메모 설정"
+      "text": "이 트랜잭션에 대한 메모 설정"
     }
   },
   "web.info": {
