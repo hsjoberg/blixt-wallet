@@ -1116,7 +1116,7 @@
   "settings.lightningNetworkInfo": {
     "title": "라이트닝 네트워크 정보",
     "avgChannelSize": "평균 채널 크기",
-    "avgOutDegree": "평균 아웃 디그리",
+    "avgOutDegree": "평균 출력 차수",
     "graphDiameter": "그래프 지름",
     "medianChannelSizeSat": "중간 채널 크기",
     "numChannels": "채널 수",
