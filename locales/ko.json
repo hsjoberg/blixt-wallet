@@ -1256,7 +1256,7 @@
       "seed": "씨앗은 정확히 24 단어여야합니다."
     },
     "backup": {
-      "google": "Google 드라이브를 통한 백업",
+      "google": "Google Drive를 통한 백업",
       "iCloud": "iCloud를 통한 백업"
     }
   },
