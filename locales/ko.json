@@ -289,7 +289,7 @@
       "capacity": "용량",
       "howMuchCanBeSent": "전송 가능",
       "howMuchCanBeReceived": "수신 가능",
-      "localReserve": "로컬 리저브",
+      "localReserve": "로컬 예치금",
       "commitmentFee": "커밋 수수료",
       "channelType": "채널 유형",
       "pendingFunds": "대기 중인 자금",
