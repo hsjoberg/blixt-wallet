@@ -64,7 +64,7 @@
       "enableTor": "Tor 활성화",
       "disableTor": "Tor 비활성화",
       "setBitcoinNode": "비트코인 노드 설정",
-      "createWalletWithPassphrase": "암호를 사용하여 지갑 생성"
+      "createWalletWithPassphrase": "패스프레이즈를 사용하여 지갑 생성"
     }
   },
   "footerNav": {
