@@ -523,8 +523,8 @@
         "msg": "수량"
       },
       "dialog1": {
-        "minSat": "최소 출금 금액",
-        "maxSat": "최대 출금 금액",
+        "minSat": "최소 출금 수량",
+        "maxSat": "최대 출금 수량",
         "placeholder": "금액"
       }
     }
