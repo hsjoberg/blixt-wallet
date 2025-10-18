@@ -550,7 +550,7 @@
         "title": "보내기",
         "couldNotPay": "이 LNURL 결제 코드에 지불할 수 없습니다",
         "invalidResponse": "응답이 LNURL 결제 응답이 아닙니다 (받은 {{response}})",
-        "invalidOperation": "잘못된 작업, 연락처에는 LUD-16 식별자나 LNURL-pay 코드가 없음"
+        "invalidOperation": "유효하지 않은 작업입니다, 연락처에는 LUD-16 식별자나 LNURL 결제 코드가 없음"
       },
       "withdraw": {
         "title": "인출",
