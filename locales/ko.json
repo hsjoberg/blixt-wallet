@@ -148,7 +148,7 @@
     "type": "유형",
     "lnurl": {
       "messageFromWebsite": "다음으로부터 메시지:",
-      "urlReceivedFromWebsite": "다음으로부터 받은 URL",
+      "urlReceivedFromWebsite": "다음으로부터 받은 URL:",
       "secretMessage": "비밀 메시지"
     },
     "payer": "결제자",
@@ -480,7 +480,7 @@
       },
       "url": {
         "description": "설명",
-        "domain": "다음으로부터 받은 URL",
+        "domain": "다음으로부터 받은 URL:",
         "done": {
           "title": "완료"
         },
