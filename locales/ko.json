@@ -206,7 +206,7 @@
       },
       "payer": {
         "title": "결제자",
-        "placeholder": "부기록용"
+        "placeholder": "회계용"
       },
       "description": {
         "title": "메시지",
