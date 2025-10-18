@@ -353,7 +353,7 @@
       "title": "새 주소 생성"
     },
     "withdraw": {
-      "title": "코인 인출"
+      "title": "코인 출금"
     }
   },
   "onchain.onChainTransactionDetails": {
