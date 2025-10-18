@@ -1128,7 +1128,7 @@
     "title": "노드 정보",
     "alias": "노드 별명",
     "chain": "체인",
-    "timestamp": "최고 머리 시간",
+    "timestamp": "최적 헤더 타임스탬프",
     "blockHash": "블록 해시",
     "blockHeight": "블록 높이",
     "identityPubkey": "신원 공개 키",
