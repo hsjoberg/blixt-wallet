@@ -494,7 +494,7 @@
       },
       "aes": {
         "domain": "다음으로부터 비밀 암호화된 메시지 받음",
-        "description": "메시지",
+        "description": "다음으로부터 메시지:",
         "secret": "비밀 메시지"
       }
     },
