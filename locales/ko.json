@@ -556,7 +556,7 @@
         "title": "출금",
         "couldNotPay": "이 LNURL 결제 코드에 지불할 수 없습니다",
         "invalidResponse": "응답이 LNURL 결제 응답이 아닙니다 (받은 {{response}})",
-        "invalidOperation": "유효하지 않은 동작입니다, 연락처에는 LNURL 출금 코드가 없음"
+        "invalidOperation": "유효하지 않은 작업입니다, 연락처에는 LNURL 출금 코드가 없음"
       },
       "deleteContact": {
         "title": "연락처 삭제",
