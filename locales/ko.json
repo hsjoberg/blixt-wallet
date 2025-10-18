@@ -1185,7 +1185,7 @@
     }
   },
   "lightningBox.info": {
-    "yourLightningAddress": "당신의 라이트닝 박스 라이트닝 주소:",
+    "yourLightningAddress": "라이트닝 박스 주소:",
     "showQrCode": "QR 코드 보기"
   },
   "welcome.almostDone": {
