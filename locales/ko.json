@@ -636,8 +636,8 @@
         "subtitle": "자동으로 클립보드에서 송장 확인"
       },
       "saveGeolocation": {
-        "title": "거래의 지리적 위치 저장",
-        "subtitle": "거래의 위치를 로컬로 저장",
+        "title": "트랜잭션의 지리적 위치 저장",
+        "subtitle": "트랜잭션의 위치를 로컬로 저장",
         "logGranted": "지리적 위치 권한 부여됨",
         "logDenied": "지리적 위치 권한 거부됨"
       },
