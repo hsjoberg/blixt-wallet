@@ -586,7 +586,7 @@
       "title": "보내기",
       "msg": "Keysend 결제",
       "error": {
-        "checkAmount": "금액 확인",
+        "checkAmount": "수량 확인",
         "missingPubkey": "공개 키 누락"
       },
       "alert": "지불 성공"
