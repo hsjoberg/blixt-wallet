@@ -684,7 +684,7 @@
           "alert": "Google Drive 백업 활성화됨"
         },
         "googleCloudForce": {
-          "title": "수동으로 Google Drive 백업 트리거",
+          "title": "수동으로 Google Drive 백업 실행",
           "alert": "Google Drive에 채널 백업됨"
         },
         "iCloud": {
@@ -693,7 +693,7 @@
           "alert": "iCloud 백업"
         },
         "iCloudForce": {
-          "title": "수동으로 iCloud 백업 트리거",
+          "title": "수동으로 iCloud 백업 실행",
           "alert": "iCloud에 채널 백업됨"
         },
         "error": "백업 중 오류 발생"
