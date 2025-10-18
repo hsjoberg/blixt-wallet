@@ -437,7 +437,7 @@
         "msg": "이 결제 코드를 {{domain}}에 대한 연락처 목록에 추가하시겠습니까?"
       }
     },
-    "unableToPay": "지불할 수 없음",
+    "unableToPay": "결제할 수 없음",
     "payerData": {
       "commentAllowed": "{{target}}에 대한 코멘트 (최대 {{letters}}자)",
       "sendNameWithComment": "이 코멘트와 함께 내 이름을 전송",
