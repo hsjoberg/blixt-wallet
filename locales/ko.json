@@ -328,8 +328,8 @@
         "placeholder": "URI"
       },
       "amount": {
-        "title": "금액",
-        "placeholder": "금액"
+        "title": "수량",
+        "placeholder": "수량"
       },
       "fee_rate": {
         "title": "수수료 비율"
