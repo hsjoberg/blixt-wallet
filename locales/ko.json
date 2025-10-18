@@ -364,7 +364,7 @@
     "totalFees": "수수료",
     "label": "라벨",
     "destAddresses": "대상",
-    "numConfirmations": "확인 횟수",
+    "numConfirmations": "컨펌 횟수",
     "blockHeight": "블록 높이",
     "blockHash": "블록 해시",
     "rawTxHex": {
