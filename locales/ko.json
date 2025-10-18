@@ -766,7 +766,7 @@
         "title": "bitcoind RPC 호스트 설정"
       },
       "rpcuser": {
-        "title": " bitcoind RPC 사용자 설정"
+        "title": "bitcoind RPC 사용자 설정"
       },
       "rpcpass": {
         "title": "bitcoind RPC 비밀번호 설정"
