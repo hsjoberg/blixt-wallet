@@ -360,7 +360,7 @@
     "title": "거래",
     "txHash": "ID",
     "timeStamp": "날짜",
-    "amount": "금액",
+    "amount": "수량",
     "totalFees": "수수료",
     "label": "라벨",
     "destAddresses": "대상",
