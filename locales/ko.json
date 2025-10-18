@@ -152,7 +152,7 @@
       "secretMessage": "비밀 메시지"
     },
     "payer": "결제자",
-    "recipient": "수령인",
+    "recipient": "수신 주소",
     "amountInFiatTimeOfPayment": "결제 시점의 법정화폐 금액",
     "numberOfHops": "홉 수",
     "remotePubkey": "원격 공개 키",
