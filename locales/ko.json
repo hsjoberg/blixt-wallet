@@ -702,7 +702,7 @@
     "security": {
       "title": "보안",
       "pincode": {
-        "title": "핀 코드로 로그인"
+        "title": "PIN 코드로 로그인"
       },
       "biometrics": {
         "title": "다음으로 로그인",
