@@ -1041,7 +1041,7 @@
         "subtitle": "프로모션용입니다. 재시작하여 초기화"
       },
       "disableGraphCache": {
-        "title": "lnd 그래프 캐시 비활성화"
+        "title": "LND 그래프 캐시 비활성화"
       },
       "resetMissionControl": {
         "title": "결제 라우팅 지식 재설정"
