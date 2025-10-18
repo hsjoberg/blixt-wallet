@@ -1239,7 +1239,7 @@
       "msg1": "라이트닝 네트워크 채널을 복원하려면 파일 백업을 제공해야합니다.",
       "loading": "지갑 복원",
       "passphrase": {
-        "placeholder": "통로 (선택 사항)"
+        "placeholder": "패스프레이즈 (선택 사항)"
       },
       "channel": {
         "title": "채널 백업",
