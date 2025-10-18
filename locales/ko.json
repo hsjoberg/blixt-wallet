@@ -729,7 +729,7 @@
     "display": {
       "title": "디스플레이",
       "fiatUnit": {
-        "title": "법정 통화 단위 변경"
+        "title": "법정화폐 단위 변경"
       },
       "bitcoinUnit": {
         "title": "비트코인 단위 변경"
