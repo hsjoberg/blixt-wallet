@@ -205,7 +205,7 @@
         "dunderPlaceholder": "최소"
       },
       "payer": {
-        "title": "지불자",
+        "title": "결제자",
         "placeholder": "부기록용"
       },
       "description": {
