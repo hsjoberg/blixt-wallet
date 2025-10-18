@@ -332,7 +332,7 @@
         "placeholder": "수량"
       },
       "fee_rate": {
-        "title": "수수료 비율"
+        "title": "수수료율"
       }
     },
     "torPrompt": {
@@ -343,7 +343,7 @@
   },
   "onchain.onChainInfo": {
     "funds": {
-      "title": "온 체인 자금"
+      "title": "온체인 자금"
     },
     "address": {
       "title": "비트코인을 이 주소로 온 체인으로 보내세요",
