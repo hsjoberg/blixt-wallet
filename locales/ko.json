@@ -1053,7 +1053,7 @@
         "title": "이중 경로 탐색 활성화"
       },
       "compactLndDatabases": {
-        "title": "lnd 데이터베이스 압축"
+        "title": "LND 데이터베이스 압축"
       },
       "enforceSpeedloaderOnStartup": {
         "title": "시작 시 gossip 동기화 강제"
