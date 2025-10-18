@@ -1095,8 +1095,8 @@
     },
     "transfer": {
       "title": "전송",
-      "satSent": "전송된 새토시",
-      "satRecv": "수신된 새토시"
+      "satSent": "전송된 사토시",
+      "satRecv": "수신된 사토시"
     },
     "inbound": "인바운드",
     "syncType": "동기화 유형",
