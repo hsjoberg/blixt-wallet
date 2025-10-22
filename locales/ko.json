@@ -52,7 +52,7 @@
     "createWalletWithPassphrase": {
       "title": "패스프레이즈 설정 (시드를 암호화하는 25번째 단어)",
       "invalidMessage": "유효한 패스프레이즈를 입력하십시오.",
-      "noLeadingTrailingSpaces": "선행 또는 후행 공백은 허용되지 않습니다."
+      "noLeadingTrailingSpaces": "앞, 뒤 공백은 허용되지 않습니다."
     },
     "language": {
       "title": "언어 선택"
