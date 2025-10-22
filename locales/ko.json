@@ -596,8 +596,8 @@
         "title": "수량 sat"
       },
       "pubkey": {
-        "title": "공개 키",
-        "placeholder": "공개 키"
+        "title": "공개키",
+        "placeholder": "공개키"
       },
       "route": {
         "title": "라우트 힌트",
