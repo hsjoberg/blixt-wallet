@@ -587,7 +587,7 @@
       "msg": "Keysend 결제",
       "error": {
         "checkAmount": "수량 확인",
-        "missingPubkey": "공개 키 누락"
+        "missingPubkey": "공개키 누락"
       },
       "alert": "결제 성공"
     },
