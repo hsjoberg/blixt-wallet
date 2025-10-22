@@ -1131,7 +1131,7 @@
     "timestamp": "최적 헤더 타임스탬프",
     "blockHash": "블록 해시",
     "blockHeight": "블록 높이",
-    "identityPubkey": "식별용 공개 키",
+    "identityPubkey": "식별용 공개키",
     "channel": {
       "title": "채널 수",
       "active": "활성",
