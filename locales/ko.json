@@ -632,7 +632,7 @@
         "subtitle": "거래 및 채널 이벤트에 대한 알림"
       },
       "checkClipboard": {
-        "title": "클립보드에서 송장 확인",
+        "title": "클립보드에서 인보이스 확인",
         "subtitle": "자동으로 클립보드에서 송장 확인"
       },
       "saveGeolocation": {
