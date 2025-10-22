@@ -1056,7 +1056,7 @@
         "title": "LND 데이터베이스 압축"
       },
       "enforceSpeedloaderOnStartup": {
-        "title": "시작 시 gossip 동기화 강제"
+        "title": "시작 시 가십 동기화 강제"
       },
       "persistentServices": {
         "title": "백그라운드 실행 허용",
