@@ -155,7 +155,7 @@
     "recipient": "수신 주소",
     "amountInFiatTimeOfPayment": "결제 시점의 법정화폐 금액",
     "numberOfHops": "홉 수",
-    "remotePubkey": "원격 공개 키",
+    "remotePubkey": "원격 공개키",
     "paymentHash": "결제 해시",
     "preimage": "프리이미지",
     "status": "상태",
@@ -580,7 +580,7 @@
     "dialog": {
       "msg1": "Keysend 놀이터에 오신 것을 환영합니다",
       "msg2": "Keysend를 사용하면 인보이스 없이 다른 Blixt Wallet(또는 Keysend를 지원하는 모든 라이트닝 노드)에게 결제할 수 있습니다.",
-      "msg3": "카메라를 클릭하여 다른 지갑의 QR 코드를 스캔하거나 아래에 공개 키 및 라우트 힌트를 제공하세요."
+      "msg3": "카메라를 클릭하여 다른 지갑의 QR 코드를 스캔하거나 아래에 공개키 및 라우트 힌트를 제공하세요."
     },
     "send": {
       "title": "보내기",
