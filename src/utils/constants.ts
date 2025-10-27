@@ -50,7 +50,7 @@ export const DEFAULT_DUNDER_SERVER = chainSelect({
 });
 
 export const DEFAULT_SPEEDLOADER_SERVER = chainSelect({
-  mainnet: "https://primer.eldamar.icu",
+  mainnet: "https://primer.blixtwallet.com",
   testnet: "",
   regtest: "",
   signet: "",
