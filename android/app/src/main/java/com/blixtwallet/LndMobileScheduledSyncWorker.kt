@@ -16,6 +16,7 @@ import androidx.work.WorkerParameters
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.BridgeReactContext
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.UiThreadUtil
 import com.google.protobuf.ByteString
 import com.oblador.keychain.KeychainModule
 import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil
@@ -62,6 +63,8 @@ class LndMobileScheduledSyncWorker(
   private val lnd = LndNative()
   private val stateChannel = Channel<lnrpc.Stateservice.WalletState>(Channel.UNLIMITED)
   private val startTime = System.currentTimeMillis() // Track when work starts
+  private var bridgeReactContext: BridgeReactContext? = null // Track context for cleanup
+  private var keychainModule: KeychainModule? = null // Track KeychainModule for proper cleanup
 
   // Add function to save sync work record
   private fun saveSyncWorkRecord(result: SyncResult, errorMessage: String? = null) {
@@ -136,18 +139,21 @@ class LndMobileScheduledSyncWorker(
       if (isMainActivityRunning()) {
         Log.d(TAG, "MainActivity is running, skipping daemon stop")
         saveSyncWorkRecord(SyncResult.EARLY_EXIT_ACTIVITY_RUNNING)
+        cleanupBridgeReactContext()
         return Result.success()
       }
 
       if (getPersistentServicesEnabled()) {
         Log.d(TAG, "Persistent services enabled, skipping sync")
         saveSyncWorkRecord(SyncResult.EARLY_EXIT_PERSISTENT_SERVICES_ENABLED)
+        cleanupBridgeReactContext()
         return Result.success()
       }
 
       if (getTorEnabled()) {
         Log.d(TAG, "Tor is enabled, skipping sync")
         saveSyncWorkRecord(SyncResult.EARLY_EXIT_TOR_ENABLED)
+        cleanupBridgeReactContext()
         return Result.success()
       }
 
@@ -162,6 +168,11 @@ class LndMobileScheduledSyncWorker(
         // stopDaemon() // Worth a try I suppose
         // return Result.success()
       }
+
+      // Create BridgeReactContext now since we know we might need to unlock the wallet
+      // This ensures proper lifecycle management and cleanup
+      bridgeReactContext = BridgeReactContext(applicationContext)
+      Log.d(TAG, "Created BridgeReactContext for keychain operations")
 
       // Subscribe to the state of the wallet
       // This will block until the wallet is unlocked and active
@@ -209,6 +220,7 @@ class LndMobileScheduledSyncWorker(
         Log.i(TAG, "Exiting as success")
         saveSyncWorkRecord(SyncResult.FAILURE_STATE_TIMEOUT)
         stopDaemon()
+        cleanupBridgeReactContext()
         return Result.success()
       }
 
@@ -231,6 +243,7 @@ class LndMobileScheduledSyncWorker(
         Log.i(TAG, "Chain sync timeout reached")
         saveSyncWorkRecord(SyncResult.FAILURE_CHAIN_SYNC_TIMEOUT)
         stopDaemon()
+        cleanupBridgeReactContext()
         return Result.success()
       }
 
@@ -240,6 +253,7 @@ class LndMobileScheduledSyncWorker(
       if (isMainActivityRunning()) {
         Log.d(TAG, "MainActivity is running, skipping daemon stop")
         saveSyncWorkRecord(SyncResult.SUCCESS_ACTIVITY_INTERRUPTED)
+        cleanupBridgeReactContext()
         return Result.success()
       }
 
@@ -251,6 +265,7 @@ class LndMobileScheduledSyncWorker(
       Log.i(TAG, "------------------------------------");
 
       saveSyncWorkRecord(SyncResult.SUCCESS_CHAIN_SYNCED)
+      cleanupBridgeReactContext()
       return Result.success()
     } catch (e: Exception) {
       Log.e(TAG, "Fail in Sync Worker", e)
@@ -262,6 +277,7 @@ class LndMobileScheduledSyncWorker(
         Log.e(TAG, "Failed to stop daemon during error handling", stopError)
       }
 
+      cleanupBridgeReactContext()
       return Result.failure()
     }
   }
@@ -365,7 +381,9 @@ class LndMobileScheduledSyncWorker(
   }
 
   private suspend fun unlockWallet() = suspendCancellableCoroutine<Unit> { cont ->
-    val keychain = KeychainModule(BridgeReactContext(applicationContext))
+    // BridgeReactContext should be created and managed at worker level
+    keychainModule = KeychainModule(bridgeReactContext!!)
+    val keychain = keychainModule!!
 
     val keychainOptions = Arguments.createMap()
     val keychainOptionsAuthenticationPrompt = Arguments.createMap()
@@ -413,6 +431,36 @@ class LndMobileScheduledSyncWorker(
           return
         }
       })
+  }
+
+  private fun cleanupBridgeReactContext() {
+    try {
+      // First, invalidate the KeychainModule to cancel its coroutineScope
+      // This properly cleans up the DataStore by canceling the scope it's tied to
+      keychainModule?.let { module ->
+        Log.d(TAG, "Invalidating KeychainModule to cleanup DataStore")
+        module.invalidate()
+        keychainModule = null
+      }
+
+      // Then destroy the BridgeReactContext on the UI thread using React Native's utility
+      bridgeReactContext?.let { context ->
+        Log.d(TAG, "Scheduling BridgeReactContext destroy on UI thread")
+        UiThreadUtil.runOnUiThread(Runnable {
+          try {
+            Log.d(TAG, "Destroying BridgeReactContext")
+            context.destroy()
+          } catch (e: Exception) {
+            Log.w(TAG, "Error destroying BridgeReactContext", e)
+          }
+        })
+        bridgeReactContext = null
+      }
+
+      Log.d(TAG, "Keychain and context cleanup completed")
+    } catch (e: Exception) {
+      Log.w(TAG, "Error during cleanup", e)
+    }
   }
 
   private fun isMainActivityRunning(): Boolean {
