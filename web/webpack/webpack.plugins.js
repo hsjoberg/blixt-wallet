@@ -60,12 +60,6 @@ module.exports = [
     path.join(__dirname, "../web-hacks/react-native-permission.js"),
   ),
 
-  // TURBOTODO mock sqlite instead I suppose
-  new webpack.NormalModuleReplacementPlugin(
-    /node_modules[\\/]react-native-sqlite-storage/,
-    path.join(__dirname, "../web-hacks/react-native-sqlite-storage.js"),
-  ),
-
   new webpack.NormalModuleReplacementPlugin(
     /node_modules[\\/]react-native-dialogs/,
     path.join(__dirname, "../web-hacks/react-native-dialogs.js"),
