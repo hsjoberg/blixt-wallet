@@ -36,6 +36,7 @@ import {
   getChanInfo,
   getNodeInfo,
   lookupInvoice,
+  restoreChannelBackups,
   routerResetMissionControl,
   routerXImportMissionControl,
   stopDaemon,
@@ -44,7 +45,11 @@ import {
 import { NavigationRootStackParamList } from "../../types";
 import { NavigationProp } from "@react-navigation/native";
 import { create, toJson } from "@bufbuild/protobuf";
-import { ChannelEdgeSchema, NodeInfoSchema } from "react-native-turbo-lnd/protos/lightning_pb";
+import {
+  ChannelEdgeSchema,
+  NodeInfoSchema,
+  RestoreChanBackupRequestSchema,
+} from "react-native-turbo-lnd/protos/lightning_pb";
 import { base64Decode } from "@bufbuild/protobuf/wire";
 import { XImportMissionControlRequestSchema } from "react-native-turbo-lnd/protos/routerrpc/router_pb";
 import { FlatList } from "react-native";
@@ -1628,8 +1633,15 @@ ${t("experimental.tor.disabled.msg2")}`;
         backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? undefined : "base64");
       }
 
-      // TURBOTODO needs to be replaced
-      // await restoreChannelBackups(backupBase64);
+      // TURBOTODO needs to be tested
+      const r = create(RestoreChanBackupRequestSchema, {
+        backup: {
+          case: "multiChanBackup",
+          value: base64Decode(backupBase64),
+        },
+      });
+
+      await restoreChannelBackups(r);
     } catch (error: any) {
       toast("Error: " + error.message, 10000, "danger");
     }
