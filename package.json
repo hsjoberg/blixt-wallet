@@ -190,6 +190,7 @@
     "@types/sql.js": "^1.4.9",
     "babel-jest": "^29.5.0",
     "babel-loader": "9.2.1",
+    "babel-plugin-react-compiler": "^1.0.0",
     "babel-plugin-react-native-web": "0.19.13",
     "bolt11": "^1.4.1",
     "electron": "33.3.1",
