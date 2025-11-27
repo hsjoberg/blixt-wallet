@@ -140,7 +140,6 @@
     "react-native-svg-web": "^1.0.9",
     "react-native-turbo-lnd": "github:hsjoberg/react-native-turbo-lnd#79d38586552b1b8ca8e05313e3d2c876d7c5f36e",
     "react-native-turbo-sqlite": "0.3.1",
-    "react-native-unimodules": "^0.14.10",
     "react-native-vector-icons": "9.2.0",
     "react-native-vision-camera": "4.7.2",
     "react-native-web": "0.19.12",
@@ -221,6 +220,10 @@
     "Notifications",
     "Camera"
   ],
+  "patchedDependencies": {
+    "react-native": "patches/react-native@0.82.1.patch",
+    "react-native@0.82.1": "patches/react-native@0.82.1.patch"
+  },
   "codegenConfig": {
     "name": "BlixtTurboModules",
     "type": "modules",
