@@ -82,7 +82,8 @@
       "onChainWallet": "On-chain",
       "lightningChannels": "Lightning Channels",
       "keysendExperiment": "Keysend Experiment",
-      "showMore": "Advanced"
+      "showMore": "Advanced",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Made with ⚡ in Sweden"
   },
@@ -1062,6 +1063,10 @@
         "title": "Enable persistent app",
         "subtitle": "The app stays active in the background"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {

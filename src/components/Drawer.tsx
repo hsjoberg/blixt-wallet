@@ -231,6 +231,19 @@ export default function Drawer({ navigation }: DrawerContentComponentProps) {
                 </View>
               </TouchableOpacity>
             )}
+            <TouchableOpacity
+              onPress={() => goToScreen("Settings", { screen: "PowerUserTools" })}
+            >
+              <View style={style.menuItem}>
+                <Icon
+                  style={[style.menuItemIcon, { fontSize: 25 }]}
+                  color={blixtTheme.dark}
+                  type="MaterialCommunityIcons"
+                  name="wrench"
+                />
+                <Text style={style.menuItemText}>{t("menu.powerUserTools")}</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
