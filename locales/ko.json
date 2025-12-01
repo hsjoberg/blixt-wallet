@@ -52,7 +52,7 @@
     "createWalletWithPassphrase": {
       "title": "패스프레이즈 설정 (시드를 암호화하는 25번째 단어)",
       "invalidMessage": "유효한 패스프레이즈를 입력하십시오.",
-      "noLeadingTrailingSpaces": "앞뒤 공백은 허용되지 않습니다."
+      "noLeadingTrailingSpaces": "선행 또는 후행 공백은 허용되지 않습니다."
     },
     "language": {
       "title": "언어 선택"
@@ -155,7 +155,7 @@
     "recipient": "수신 주소",
     "amountInFiatTimeOfPayment": "결제 시점의 법정화폐 금액",
     "numberOfHops": "홉 수",
-    "remotePubkey": "원격 공개키",
+    "remotePubkey": "원격 공개 키",
     "paymentHash": "결제 해시",
     "preimage": "프리이미지",
     "status": "상태",
@@ -346,7 +346,7 @@
       "title": "온체인 자금"
     },
     "address": {
-      "title": "이 주소로 온체인으로 비트코인을 전송하세요.",
+      "title": "비트코인을 온체인으로 이 주소로 보내기",
       "alert": "클립보드에 복사되었습니다."
     },
     "newAddress": {
@@ -447,7 +447,7 @@
       },
       "identifier": {
         "ask": "이번 결제와 함께 내 라이트닝 주소를 전송하기",
-        "mandatory": "이번 결제에는 라이트닝 주소를 함께 전송해야 합니다"
+        "mandatory": "이번 결제에는 당신의 라이트닝 주소를 함께 전송해야 합니다"
       }
     },
     "payloadErrors": {
@@ -501,10 +501,10 @@
     "aboutLightningAddress": {
       "title": "라이트닝 주소 정보",
       "msg1": "라이트닝 주소",
-      "msg2": "는 라이트닝 네트워크에서 개인 또는 서비스에 결제하는 방법입니다.",
+      "msg2": "은(는) 라이트닝 네트워크에서 개인 또는 서비스에 결제하는 방법입니다.",
       "msg3": "이메일 주소처럼 보이지만 수신 주소에게 이메일을 보내는 대신 돈을 보내는 주소입니다.",
-      "msg4": "Blixt Wallet은 라이트닝 주소로의 송금을 완벽히 지원하지만, 받는 것",
-      "msg5": "즉, 라이트닝 주소를 통한 결제는 아직 작업 중입니다."
+      "msg4": "Blixt Wallet은 라이트닝 주소로의 송금을 완벽히 지원하지만, 받는 것은",
+      "msg5": "라이트닝 주소를 통한 결제는 아직 작업 중입니다."
     }
   },
   "LNURL.withdrawRequest": {
@@ -579,15 +579,15 @@
     },
     "dialog": {
       "msg1": "Keysend 놀이터에 오신 것을 환영합니다",
-      "msg2": "Keysend를 사용하면 인보이스 없이 다른 Blixt Wallet(또는 Keysend를 지원하는 모든 라이트닝 노드)에게 결제할 수 있습니다.",
-      "msg3": "카메라를 클릭하여 다른 지갑의 QR 코드를 스캔하거나 아래에 공개키 및 라우트 힌트를 제공하세요."
+      "msg2": "Keysend를 사용하면 송장없이 다른 Blixt Wallet(또는 Keysend를 지원하는 모든 라이트닝 노드)에게 결제할 수 있습니다.",
+      "msg3": "카메라를 클릭하여 다른 지갑의 QR 코드를 스캔하거나 아래에 공개 키 및 라우트 힌트를 제공하세요."
     },
     "send": {
       "title": "보내기",
       "msg": "Keysend 결제",
       "error": {
         "checkAmount": "수량 확인",
-        "missingPubkey": "공개키 누락"
+        "missingPubkey": "공개 키 누락"
       },
       "alert": "결제 성공"
     },
@@ -596,8 +596,8 @@
         "title": "수량 sat"
       },
       "pubkey": {
-        "title": "공개키",
-        "placeholder": "공개키"
+        "title": "공개 키",
+        "placeholder": "공개 키"
       },
       "route": {
         "title": "라우트 힌트",
@@ -617,7 +617,7 @@
         "title": "이름",
         "subtitle": "거래에 사용됨",
         "dialog": {
-          "msg": "거래에 사용될 이름을 선택하세요.\n\n해당 이름은 결제할 때 또는 결제를 받을 때, 상대방에게 이 이름이 표시됩니다.",
+          "msg": "거래에 사용될 이름을 선택하세요.\n\n당신의 이름은 당신에게 결제하는 사람들이나 당신이 결제하는 사람들에게 표시됩니다.",
           "accept": "이름 설정"
         }
       },
@@ -632,8 +632,8 @@
         "subtitle": "거래 및 채널 이벤트에 대한 알림"
       },
       "checkClipboard": {
-        "title": "클립보드에서 인보이스 확인",
-        "subtitle": "자동으로 클립보드에서 인보이스 확인"
+        "title": "클립보드에서 송장 확인",
+        "subtitle": "자동으로 클립보드에서 송장 확인"
       },
       "saveGeolocation": {
         "title": "트랜잭션의 지리적 위치 저장",
@@ -859,7 +859,7 @@
         "subtitle": "허용할 피어의 퍼블릭 키 추가",
         "setDialog": {
           "title": "0 컨펌 피어",
-          "msg1": "쉼표로 구분된 공개키 값으로, 0 컨펌 채널을 허용할 피어를 지정합니다.",
+          "msg1": "쉼표로 구분된 공개 키 값으로, 0 컨펌 채널을 허용할 피어를 지정합니다.",
           "msg2": "최소한 하나의 체인 확인이 있을 때까지 이러한 파트너의 채널을 신뢰하게 됩니다."
         }
       }
@@ -1056,7 +1056,7 @@
         "title": "LND 데이터베이스 압축"
       },
       "enforceSpeedloaderOnStartup": {
-        "title": "시작 시 가십 동기화 강제"
+        "title": "시작 시 gossip 동기화 강제"
       },
       "persistentServices": {
         "title": "백그라운드 실행 허용",
@@ -1086,7 +1086,7 @@
       "title": "라이트닝 피어"
     },
     "alias": "노드 별명",
-    "pubKey": "노드 공개키",
+    "pubKey": "노드 공개 키",
     "address": "노드 주소",
     "data": {
       "title": "데이터",
@@ -1131,7 +1131,7 @@
     "timestamp": "최적 헤더 타임스탬프",
     "blockHash": "블록 해시",
     "blockHeight": "블록 높이",
-    "identityPubkey": "식별용 공개키",
+    "identityPubkey": "식별용 공개 키",
     "channel": {
       "title": "채널 수",
       "active": "활성",
