@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { EmitterSubscription, NativeModules, StyleSheet, View, ScrollView } from "react-native";
+import { NativeModules, StyleSheet, View, ScrollView } from "react-native";
 import { Card, Text, CardItem, H1, Button } from "native-base";
 import Clipboard from "@react-native-clipboard/clipboard";
 import Bar from "../components/ProgressBar";
@@ -10,8 +10,6 @@ import TextLink from "../components/TextLink";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { toast } from "../utils";
 import { PLATFORM } from "../utils/constants";
-import useForceUpdate from "../hooks/useForceUpdate";
-import { LndMobileToolsEventEmitter } from "../utils/event-listener";
 import LogBox from "../components/LogBox";
 
 import { useTranslation } from "react-i18next";
@@ -49,35 +47,28 @@ export default function SyncInfo({}: ISyncInfoProps) {
   const recoverInfo = useStoreState((store) => store.lightning.recoverInfo);
   const initialKnownBlockheight = useStoreState((store) => store.lightning.initialKnownBlockheight);
   let bestBlockheight = useStoreState((store) => store.lightning.bestBlockheight);
-  const log = useRef("");
-  const forceUpdate = useForceUpdate();
   const [showLndLog, setShowLndLog] = useState(false);
-  const listener = useRef<EmitterSubscription>();
+  const [logs, setLogs] = useState("");
+  const lastLogRef = useRef("");
+
+  const fetchLogs = async () => {
+    try {
+      const tailLog = await NativeModules.LndMobileTools.tailLog(100);
+      setLogs((prevLogs) => {
+        const newLogs = tailLog.replace(lastLogRef.current, "").trim();
+        lastLogRef.current = tailLog;
+        return prevLogs + (prevLogs ? "\n" : "") + newLogs;
+      });
+    } catch (error) {
+      console.error("Error fetching logs:", error);
+    }
+  };
 
   useEffect(() => {
-    return () => {
-      if (listener.current) {
-        listener.current?.remove();
-      }
-    };
+    fetchLogs();
+    const logUpdateTimer = setInterval(fetchLogs, 1000);
+    return () => clearInterval(logUpdateTimer);
   }, []);
-
-  const onPressShowLndLog = async () => {
-    const tailLog = await NativeModules.LndMobileTools.tailLog(100);
-    log.current = tailLog
-      .split("\n")
-      .map((row) => row.slice(11))
-      .join("\n");
-
-    listener.current = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
-      log.current = log.current + "\n" + data.slice(11);
-      forceUpdate();
-    });
-
-    NativeModules.LndMobileTools.observeLndLogFile();
-    forceUpdate();
-    setShowLndLog(true);
-  };
 
   const onPressCopy = (l: string) => {
     Clipboard.setString(l);
@@ -172,16 +163,16 @@ export default function SyncInfo({}: ISyncInfoProps) {
             )}
             {!showLndLog && (
               <View style={{ marginTop: 10, flexDirection: "row" }}>
-                <Button small onPress={onPressShowLndLog}>
+                <Button small onPress={() => setShowLndLog(true)}>
                   <Text>{t("lndLog.show")}</Text>
                 </Button>
               </View>
             )}
             {showLndLog && (
               <View style={{ marginTop: 10 }}>
-                <LogBox text={log.current} style={{ maxHeight: 170 }} />
+                <LogBox text={logs} style={{ maxHeight: 170 }} />
                 <View style={{ marginTop: 10, flexDirection: "row" }}>
-                  <Button small onPress={() => onPressCopy(log.current)}>
+                  <Button small onPress={() => onPressCopy(logs)}>
                     <Text>{t("lndLog.copy")}</Text>
                   </Button>
                 </View>
