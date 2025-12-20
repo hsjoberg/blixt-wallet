@@ -17,6 +17,7 @@ interface SyncWorkRecord {
 }
 
 enum SyncResult {
+  IN_PROGRESS = "IN_PROGRESS",
   EARLY_EXIT_ACTIVITY_RUNNING = "EARLY_EXIT_ACTIVITY_RUNNING",
   SUCCESS_LND_ALREADY_RUNNING = "SUCCESS_LND_ALREADY_RUNNING",
   SUCCESS_CHAIN_SYNCED = "SUCCESS_CHAIN_SYNCED",
@@ -109,6 +110,7 @@ export default function SyncWorkerTimelineReport() {
   const getBlockColor = (result: SyncResult) => {
     if (result === SyncResult.SUCCESS_CHAIN_SYNCED) return blixtTheme.green;
     if (result === SyncResult.SUCCESS_LND_ALREADY_RUNNING) return blixtTheme.primary;
+    if (result === SyncResult.IN_PROGRESS) return blixtTheme.lightGray;
     if (
       [
         SyncResult.FAILURE_STATE_TIMEOUT,
@@ -125,6 +127,8 @@ export default function SyncWorkerTimelineReport() {
 
   const getStatusText = (result: SyncResult) => {
     switch (result) {
+      case SyncResult.IN_PROGRESS:
+        return "In Progress / Crashed";
       case SyncResult.SUCCESS_CHAIN_SYNCED:
         return "Synced";
       case SyncResult.SUCCESS_LND_ALREADY_RUNNING:

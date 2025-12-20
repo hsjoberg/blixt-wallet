@@ -17,6 +17,8 @@ import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.BridgeReactContext
 import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.UiThreadUtil
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import com.google.protobuf.ByteString
 import com.oblador.keychain.KeychainModule
 import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil
@@ -36,6 +38,7 @@ private const val SYNC_WORK_KEY = "syncWorkHistory"
 
 // Add enum to represent different sync results
 enum class SyncResult {
+  IN_PROGRESS,                            // Job is currently running
   EARLY_EXIT_ACTIVITY_RUNNING,            // Exited because MainActivity was running
   SUCCESS_LND_ALREADY_RUNNING,            // LND was already running
   SUCCESS_CHAIN_SYNCED,                   // Full success with chain sync
@@ -63,69 +66,102 @@ class LndMobileScheduledSyncWorker(
   private val lnd = LndNative()
   private val stateChannel = Channel<lnrpc.Stateservice.WalletState>(Channel.UNLIMITED)
   private val startTime = System.currentTimeMillis() // Track when work starts
-  private var bridgeReactContext: BridgeReactContext? = null // Track context for cleanup
-  private var keychainModule: KeychainModule? = null // Track KeychainModule for proper cleanup
 
-  // Add function to save sync work record
-  private fun saveSyncWorkRecord(result: SyncResult, errorMessage: String? = null) {
-    Log.d(TAG, "saveSyncWorkRecord start: $result")
+  // Creates a new sync work record with IN_PROGRESS status
+  // Call this at the start of the job
+  private fun createSyncWorkRecord() {
+    Log.d(TAG, "createSyncWorkRecord start")
     try {
-      val duration = System.currentTimeMillis() - startTime
-      val newRecord = SyncWorkRecord(startTime, duration, result, errorMessage)
-
+      val newRecord = SyncWorkRecord(startTime, 0, SyncResult.IN_PROGRESS, null)
       val db = ReactDatabaseSupplier.getInstance(applicationContext).get()
 
       // Get existing records
       val existingJson = AsyncLocalStorageUtil.getItemImpl(db, SYNC_WORK_KEY) ?: "[]"
-      val records = try {
-        JSONArray(existingJson).let { jsonArray ->
-          (0 until jsonArray.length()).map { i ->
-            val obj = jsonArray.getJSONObject(i)
-            SyncWorkRecord(
-              obj.getLong("timestamp"),
-              obj.getLong("duration"),
-              SyncResult.valueOf(obj.getString("result")),
-              obj.optString("errorMessage", "")
-            )
-          }
-        }
-      } catch (e: Exception) {
-        Log.w(TAG, "Failed to parse existing records, starting fresh", e)
-        emptyList()
-      }
+      val records = parseRecords(existingJson)
 
       // Add new record and limit to 200 most recent
       val updatedRecords = (records + newRecord).takeLast(200)
 
-      // Convert to JSON array
-      val jsonArray = JSONArray().apply {
-        updatedRecords.forEach { record ->
-          put(JSONObject().apply {
-            put("timestamp", record.timestamp)
-            put("duration", record.duration)
-            put("result", record.result.name)
-            record.errorMessage?.let { put("errorMessage", it) }
-          })
+      saveRecordsToDb(db, updatedRecords)
+    } catch (e: Exception) {
+      Log.e(TAG, "Failed to create sync work record", e)
+    }
+    Log.d(TAG, "createSyncWorkRecord done")
+  }
+
+  // Updates an existing sync work record by timestamp (startTime)
+  // Call this when the job finishes
+  private fun updateSyncWorkRecord(result: SyncResult, errorMessage: String? = null) {
+    Log.d(TAG, "updateSyncWorkRecord start: $result")
+    try {
+      val duration = System.currentTimeMillis() - startTime
+      val db = ReactDatabaseSupplier.getInstance(applicationContext).get()
+
+      // Get existing records
+      val existingJson = AsyncLocalStorageUtil.getItemImpl(db, SYNC_WORK_KEY) ?: "[]"
+      val records = parseRecords(existingJson)
+
+      // Find and update the record with matching timestamp
+      val updatedRecords = records.map { record ->
+        if (record.timestamp == startTime) {
+          SyncWorkRecord(startTime, duration, result, errorMessage)
+        } else {
+          record
         }
       }
 
-      // Save back to database
-      val sql = "INSERT OR REPLACE INTO catalystLocalStorage VALUES (?, ?);"
-      db.compileStatement(sql).use { statement ->
-        db.beginTransaction()
-        try {
-          statement.bindString(1, SYNC_WORK_KEY)
-          statement.bindString(2, jsonArray.toString())
-          statement.execute()
-          db.setTransactionSuccessful()
-        } finally {
-          db.endTransaction()
+      saveRecordsToDb(db, updatedRecords)
+    } catch (e: Exception) {
+      Log.e(TAG, "Failed to update sync work record", e)
+    }
+    Log.d(TAG, "updateSyncWorkRecord done")
+  }
+
+  private fun parseRecords(json: String): List<SyncWorkRecord> {
+    return try {
+      JSONArray(json).let { jsonArray ->
+        (0 until jsonArray.length()).map { i ->
+          val obj = jsonArray.getJSONObject(i)
+          SyncWorkRecord(
+            obj.getLong("timestamp"),
+            obj.getLong("duration"),
+            SyncResult.valueOf(obj.getString("result")),
+            obj.optString("errorMessage", "").ifEmpty { null }
+          )
         }
       }
     } catch (e: Exception) {
-      Log.e(TAG, "Failed to save sync work record", e)
+      Log.w(TAG, "Failed to parse existing records, starting fresh", e)
+      emptyList()
     }
-    Log.d(TAG, "saveSyncWorkRecord done")
+  }
+
+  private fun saveRecordsToDb(db: android.database.sqlite.SQLiteDatabase, records: List<SyncWorkRecord>) {
+    // Convert to JSON array
+    val jsonArray = JSONArray().apply {
+      records.forEach { record ->
+        put(JSONObject().apply {
+          put("timestamp", record.timestamp)
+          put("duration", record.duration)
+          put("result", record.result.name)
+          record.errorMessage?.let { put("errorMessage", it) }
+        })
+      }
+    }
+
+    // Save back to database
+    val sql = "INSERT OR REPLACE INTO catalystLocalStorage VALUES (?, ?);"
+    db.compileStatement(sql).use { statement ->
+      db.beginTransaction()
+      try {
+        statement.bindString(1, SYNC_WORK_KEY)
+        statement.bindString(2, jsonArray.toString())
+        statement.execute()
+        db.setTransactionSuccessful()
+      } finally {
+        db.endTransaction()
+      }
+    }
   }
 
   override suspend fun doWork(): Result {
@@ -134,26 +170,26 @@ class LndMobileScheduledSyncWorker(
       Log.i(TAG, "Starting sync worker");
       Log.i(TAG, "I am " + applicationContext.packageName);
 
+      // Create the sync work record immediately so we always have a trace
+      createSyncWorkRecord()
+
       // Check if MainActivity is running before starting sync
       // We don't want to start the sync worker if the app is running
       if (isMainActivityRunning()) {
         Log.d(TAG, "MainActivity is running, skipping daemon stop")
-        saveSyncWorkRecord(SyncResult.EARLY_EXIT_ACTIVITY_RUNNING)
-        cleanupBridgeReactContext()
+        updateSyncWorkRecord(SyncResult.EARLY_EXIT_ACTIVITY_RUNNING)
         return Result.success()
       }
 
       if (getPersistentServicesEnabled()) {
         Log.d(TAG, "Persistent services enabled, skipping sync")
-        saveSyncWorkRecord(SyncResult.EARLY_EXIT_PERSISTENT_SERVICES_ENABLED)
-        cleanupBridgeReactContext()
+        updateSyncWorkRecord(SyncResult.EARLY_EXIT_PERSISTENT_SERVICES_ENABLED)
         return Result.success()
       }
 
       if (getTorEnabled()) {
         Log.d(TAG, "Tor is enabled, skipping sync")
-        saveSyncWorkRecord(SyncResult.EARLY_EXIT_TOR_ENABLED)
-        cleanupBridgeReactContext()
+        updateSyncWorkRecord(SyncResult.EARLY_EXIT_TOR_ENABLED)
         return Result.success()
       }
 
@@ -168,11 +204,6 @@ class LndMobileScheduledSyncWorker(
         // stopDaemon() // Worth a try I suppose
         // return Result.success()
       }
-
-      // Create BridgeReactContext now since we know we might need to unlock the wallet
-      // This ensures proper lifecycle management and cleanup
-      bridgeReactContext = BridgeReactContext(applicationContext)
-      Log.d(TAG, "Created BridgeReactContext for keychain operations")
 
       // Subscribe to the state of the wallet
       // This will block until the wallet is unlocked and active
@@ -218,9 +249,11 @@ class LndMobileScheduledSyncWorker(
       if (result == null) {
         Log.i(TAG, "State timeout reached")
         Log.i(TAG, "Exiting as success")
-        saveSyncWorkRecord(SyncResult.FAILURE_STATE_TIMEOUT)
-        stopDaemon()
-        cleanupBridgeReactContext()
+        updateSyncWorkRecord(SyncResult.FAILURE_STATE_TIMEOUT)
+        val appRunning = stopDaemonIfAppNotRunning()
+        if (appRunning) {
+          updateSyncWorkRecord(SyncResult.FAILURE_STATE_TIMEOUT, "app started, daemon not stopped")
+        }
         return Result.success()
       }
 
@@ -241,44 +274,48 @@ class LndMobileScheduledSyncWorker(
 
       if (!chainSynced) {
         Log.i(TAG, "Chain sync timeout reached")
-        saveSyncWorkRecord(SyncResult.FAILURE_CHAIN_SYNC_TIMEOUT)
-        stopDaemon()
-        cleanupBridgeReactContext()
+        updateSyncWorkRecord(SyncResult.FAILURE_CHAIN_SYNC_TIMEOUT)
+        val appRunning = stopDaemonIfAppNotRunning()
+        if (appRunning) {
+          updateSyncWorkRecord(SyncResult.FAILURE_CHAIN_SYNC_TIMEOUT, "app started, daemon not stopped")
+        }
         return Result.success()
       }
 
       delay(1000)
 
-      // Check if MainActivity is running before stopping daemon
-      if (isMainActivityRunning()) {
-        Log.d(TAG, "MainActivity is running, skipping daemon stop")
-        saveSyncWorkRecord(SyncResult.SUCCESS_ACTIVITY_INTERRUPTED)
-        cleanupBridgeReactContext()
-        return Result.success()
+      updateSyncWorkRecord(SyncResult.SUCCESS_CHAIN_SYNCED)
+      val appRunning = stopDaemonIfAppNotRunning()
+      if (appRunning) {
+        updateSyncWorkRecord(SyncResult.SUCCESS_CHAIN_SYNCED, "app started, daemon not stopped")
       }
 
-      stopDaemon()
-
-      delay(10000)
+      if (!appRunning) {
+        delay(10000)
+      }
 
       Log.i(TAG, "Sync worker finished");
       Log.i(TAG, "------------------------------------");
 
-      saveSyncWorkRecord(SyncResult.SUCCESS_CHAIN_SYNCED)
-      cleanupBridgeReactContext()
       return Result.success()
     } catch (e: Exception) {
       Log.e(TAG, "Fail in Sync Worker", e)
-      saveSyncWorkRecord(SyncResult.FAILURE_GENERAL, e.message)
 
+      updateSyncWorkRecord(SyncResult.FAILURE_GENERAL, e.message)
+
+      var appRunning = false
       try {
-        stopDaemon()
+        appRunning = stopDaemonIfAppNotRunning()
       } catch (stopError: Exception) {
         Log.e(TAG, "Failed to stop daemon during error handling", stopError)
       }
 
-      cleanupBridgeReactContext()
-      return Result.failure()
+      if (appRunning) {
+        val errorMsg = (e.message ?: "") + " (app started, daemon not stopped)"
+        updateSyncWorkRecord(SyncResult.FAILURE_GENERAL, errorMsg)
+      }
+
+      return if (appRunning) Result.success() else Result.failure()
     }
   }
 
@@ -380,26 +417,124 @@ class LndMobileScheduledSyncWorker(
     })
   }
 
-  private suspend fun unlockWallet() = suspendCancellableCoroutine<Unit> { cont ->
-    // BridgeReactContext should be created and managed at worker level
-    keychainModule = KeychainModule(bridgeReactContext!!)
-    val keychain = keychainModule!!
+  // Returns true if the app was running (daemon was NOT stopped)
+  // Returns false if the daemon was stopped successfully
+  private suspend fun stopDaemonIfAppNotRunning(): Boolean {
+    if (isMainActivityRunning()) {
+      Log.d(TAG, "MainActivity is running, skipping daemon stop")
+      return true
+    }
+    stopDaemon()
+    return false
+  }
 
+  // Self-contained function that handles:
+  // 1. Creating BridgeReactContext
+  // 2. Creating KeychainModule
+  // 3. Retrieving password from keychain
+  // 4. Cleaning up context/module immediately after getting password
+  // 5. Unlocking the wallet with lnd
+  private suspend fun unlockWallet() = suspendCancellableCoroutine<Unit> { cont ->
+    var bridgeReactContext: BridgeReactContext? = null
+    var keychainModule: KeychainModule? = null
+
+    // Helper to clean up the context and module
+    fun cleanup() {
+      val module = keychainModule
+      val context = bridgeReactContext
+
+      if (module == null && context == null) {
+        Log.d(TAG, "Nothing to cleanup")
+        return
+      }
+
+      try {
+        val latch = CountDownLatch(1)
+        Log.d(TAG, "Scheduling React Native cleanup on UI thread")
+        UiThreadUtil.runOnUiThread(Runnable {
+          try {
+            module?.let {
+              Log.d(TAG, "Invalidating KeychainModule on UI thread")
+              it.invalidate()
+            }
+            context?.let {
+              Log.d(TAG, "Destroying BridgeReactContext on UI thread")
+              it.destroy()
+            }
+            Log.d(TAG, "React Native cleanup completed on UI thread")
+          } catch (e: Exception) {
+            Log.w(TAG, "Error during React Native cleanup on UI thread", e)
+          } finally {
+            latch.countDown()
+          }
+        })
+
+        val completed = latch.await(5, TimeUnit.SECONDS)
+        if (!completed) {
+          Log.w(TAG, "Timeout waiting for UI thread cleanup")
+        }
+        Log.d(TAG, "Keychain and context cleanup finished")
+      } catch (e: Exception) {
+        Log.w(TAG, "Error during cleanup", e)
+      }
+    }
+
+    // Step 1: Create BridgeReactContext on UI thread
+    val contextLatch = CountDownLatch(1)
+    Log.d(TAG, "Creating BridgeReactContext on UI thread")
+    UiThreadUtil.runOnUiThread(Runnable {
+      try {
+        bridgeReactContext = BridgeReactContext(applicationContext)
+        Log.d(TAG, "BridgeReactContext created on UI thread")
+      } catch (e: Exception) {
+        Log.e(TAG, "Failed to create BridgeReactContext on UI thread", e)
+      } finally {
+        contextLatch.countDown()
+      }
+    })
+    contextLatch.await(5, TimeUnit.SECONDS)
+
+    if (bridgeReactContext == null) {
+      cont.resumeWithException(Exception("Failed to create BridgeReactContext"))
+      return@suspendCancellableCoroutine
+    }
+
+    // Step 2: Create KeychainModule on UI thread
+    val moduleLatch = CountDownLatch(1)
+    Log.d(TAG, "Creating KeychainModule on UI thread")
+    UiThreadUtil.runOnUiThread(Runnable {
+      try {
+        keychainModule = KeychainModule(bridgeReactContext!!)
+        Log.d(TAG, "KeychainModule created on UI thread")
+      } catch (e: Exception) {
+        Log.e(TAG, "Failed to create KeychainModule on UI thread", e)
+      } finally {
+        moduleLatch.countDown()
+      }
+    })
+    moduleLatch.await(5, TimeUnit.SECONDS)
+
+    if (keychainModule == null) {
+      cleanup()
+      cont.resumeWithException(Exception("Failed to create KeychainModule"))
+      return@suspendCancellableCoroutine
+    }
+
+    // Step 3: Get password from keychain
     val keychainOptions = Arguments.createMap()
     val keychainOptionsAuthenticationPrompt = Arguments.createMap()
     keychainOptionsAuthenticationPrompt.putString("title", "Authenticate to retrieve secret")
     keychainOptionsAuthenticationPrompt.putString("cancel", "Cancel")
     keychainOptions.putMap("authenticationPrompt", keychainOptionsAuthenticationPrompt)
 
-    keychain.getInternetCredentialsForServer(
+    keychainModule!!.getInternetCredentialsForServer(
       "password",
       keychainOptions,
       object : PromiseWrapper() {
         public override fun onSuccess(value: Any?) {
           if (value == null) {
-            Log.e(
-              TAG, "Failed to get wallet password, got null from keychain provider"
-            )
+            Log.e(TAG, "Failed to get wallet password, got null from keychain provider")
+            cleanup()
             cont.resumeWithException(Exception("Unlock failed: value == null"))
             return
           }
@@ -408,6 +543,11 @@ class LndMobileScheduledSyncWorker(
           val password = (value as ReadableMap).getString("password")
           Log.d(TAG, "Password retrieved")
 
+          // Step 4: Clean up immediately after getting password
+          Log.d(TAG, "Cleaning up keychain access before unlocking wallet")
+          cleanup()
+
+          // Step 5: Unlock wallet with lnd
           val unlockRequest = lnrpc.Walletunlocker.UnlockWalletRequest.newBuilder()
             .setWalletPassword(ByteString.copyFromUtf8(password))
             .build()
@@ -427,40 +567,11 @@ class LndMobileScheduledSyncWorker(
 
         public override fun onFail(throwable: Throwable) {
           Log.d(TAG, "Failed to get wallet password " + throwable.message, throwable)
+          cleanup()
           cont.resumeWithException(Exception("Unlock failed: $throwable"))
           return
         }
       })
-  }
-
-  private fun cleanupBridgeReactContext() {
-    try {
-      // First, invalidate the KeychainModule to cancel its coroutineScope
-      // This properly cleans up the DataStore by canceling the scope it's tied to
-      keychainModule?.let { module ->
-        Log.d(TAG, "Invalidating KeychainModule to cleanup DataStore")
-        module.invalidate()
-        keychainModule = null
-      }
-
-      // Then destroy the BridgeReactContext on the UI thread using React Native's utility
-      bridgeReactContext?.let { context ->
-        Log.d(TAG, "Scheduling BridgeReactContext destroy on UI thread")
-        UiThreadUtil.runOnUiThread(Runnable {
-          try {
-            Log.d(TAG, "Destroying BridgeReactContext")
-            context.destroy()
-          } catch (e: Exception) {
-            Log.w(TAG, "Error destroying BridgeReactContext", e)
-          }
-        })
-        bridgeReactContext = null
-      }
-
-      Log.d(TAG, "Keychain and context cleanup completed")
-    } catch (e: Exception) {
-      Log.w(TAG, "Error during cleanup", e)
-    }
   }
 
   private fun isMainActivityRunning(): Boolean {

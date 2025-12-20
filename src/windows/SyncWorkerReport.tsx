@@ -17,6 +17,7 @@ interface SyncWorkRecord {
 }
 
 enum SyncResult {
+  IN_PROGRESS = "IN_PROGRESS",
   EARLY_EXIT_ACTIVITY_RUNNING = "EARLY_EXIT_ACTIVITY_RUNNING",
   SUCCESS_LND_ALREADY_RUNNING = "SUCCESS_LND_ALREADY_RUNNING",
   SUCCESS_CHAIN_SYNCED = "SUCCESS_CHAIN_SYNCED",
@@ -29,9 +30,11 @@ enum SyncResult {
 }
 
 const isNeutralResult = (result: SyncResult) => {
-  return [SyncResult.SUCCESS_LND_ALREADY_RUNNING, SyncResult.EARLY_EXIT_ACTIVITY_RUNNING].includes(
-    result,
-  );
+  return [
+    SyncResult.IN_PROGRESS,
+    SyncResult.SUCCESS_LND_ALREADY_RUNNING,
+    SyncResult.EARLY_EXIT_ACTIVITY_RUNNING,
+  ].includes(result);
 };
 
 const isSuccessResult = (result: SyncResult) => {
@@ -42,6 +45,8 @@ const isSuccessResult = (result: SyncResult) => {
 
 const getStatusText = (result: SyncResult): string => {
   switch (result) {
+    case SyncResult.IN_PROGRESS:
+      return "In Progress (or crashed)";
     case SyncResult.EARLY_EXIT_ACTIVITY_RUNNING:
       return "Skipped (App Running)";
     case SyncResult.SUCCESS_LND_ALREADY_RUNNING:
