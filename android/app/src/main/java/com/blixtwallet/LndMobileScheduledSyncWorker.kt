@@ -290,10 +290,6 @@ class LndMobileScheduledSyncWorker(
         updateSyncWorkRecord(SyncResult.SUCCESS_CHAIN_SYNCED, "app started, daemon not stopped")
       }
 
-      if (!appRunning) {
-        delay(10000)
-      }
-
       Log.i(TAG, "Sync worker finished");
       Log.i(TAG, "------------------------------------");
 
@@ -402,19 +398,53 @@ class LndMobileScheduledSyncWorker(
       })
     }
 
-  private suspend fun stopDaemon() = suspendCancellableCoroutine<Unit> { cont ->
-    val emptyRequest = ByteArray(0)
-    lnd.stopDaemon(emptyRequest, object : LndCallback {
-      override fun onResponse(data: ByteArray) {
-        Log.d(TAG, "stopDaemon onResponse")
-        cont.resume(Unit) { _, _, _ -> }
+  private suspend fun stopDaemon() {
+    // Check if lnd is already stopped
+    val initialStatus = lnd.getStatus()
+    if (initialStatus == 0) {
+      Log.d(TAG, "lnd is already stopped, nothing to do")
+      return
+    }
+
+    // Step 1: Send the stopDaemon RPC
+    suspendCancellableCoroutine<Unit> { cont ->
+      val emptyRequest = ByteArray(0)
+      lnd.stopDaemon(emptyRequest, object : LndCallback {
+        override fun onResponse(data: ByteArray) {
+          Log.d(TAG, "stopDaemon onResponse (RPC acknowledged)")
+          cont.resume(Unit) { _, _, _ -> }
+        }
+
+        override fun onError(error: String) {
+          Log.d(TAG, "stopDaemon onError $error")
+          cont.resumeWithException(Exception("stopDaemon failed: $error"))
+        }
+      })
+    }
+
+    // Step 2: Wait for lnd to actually shut down by polling getStatus()
+    // getStatus() returns 1 if lnd is running, 0 if stopped
+    Log.d(TAG, "Waiting for lnd to fully shut down...")
+    val maxWaitMs = 80_000L // 80 seconds max wait
+    val pollIntervalMs = 500L
+    val startTime = System.currentTimeMillis()
+
+    while (true) {
+      val status = lnd.getStatus()
+      Log.d(TAG, "lnd status: $status")
+
+      if (status == 0) {
+        Log.d(TAG, "lnd has fully shut down")
+        break
       }
 
-      override fun onError(error: String) {
-        Log.d(TAG, "stopDaemon onError $error")
-        cont.resumeWithException(Exception("stopDaemon failed: $error"))
+      if (System.currentTimeMillis() - startTime > maxWaitMs) {
+        Log.w(TAG, "Timeout waiting for lnd to shut down, status still: $status")
+        break
       }
-    })
+
+      delay(pollIntervalMs)
+    }
   }
 
   // Returns true if the app was running (daemon was NOT stopped)
