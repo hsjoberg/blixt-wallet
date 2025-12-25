@@ -10,14 +10,21 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { bytesToHexString, hexToUint8Array } from "../utils";
 
-import { lookupInvoice, routerTrackPaymentV2 } from "react-native-turbo-lnd";
+import { listInvoices, lookupInvoice, routerTrackPaymentV2 } from "react-native-turbo-lnd";
 import {
+  Invoice,
   Invoice_InvoiceState,
   Payment_PaymentStatus,
 } from "react-native-turbo-lnd/protos/lightning_pb";
 
 import logger from "./../utils/log";
 const log = logger("Transaction");
+
+export interface ISyncInvoicesFromLndResult {
+  syncedInvoices: number;
+  updatedInvoices: number;
+  totalLndInvoices: number;
+}
 
 export interface ITransactionModel {
   addTransaction: Action<ITransactionModel, ITransaction>;
@@ -27,6 +34,13 @@ export interface ITransactionModel {
 
   getTransactions: Thunk<ITransactionModel, undefined, any, IStoreModel>;
   checkOpenTransactions: Thunk<ITransactionModel, undefined, IStoreInjections, IStoreModel>;
+  syncInvoicesFromLnd: Thunk<
+    ITransactionModel,
+    undefined,
+    IStoreInjections,
+    IStoreModel,
+    Promise<ISyncInvoicesFromLndResult>
+  >;
   setTransactions: Action<ITransactionModel, ITransaction[]>;
 
   transactions: ITransaction[];
@@ -225,6 +239,88 @@ export const transaction: ITransactionModel = {
   }),
 
   /**
+   * Syncs invoices from LND's internal database to our SQLite database.
+   * This helps recover invoices that may have been missed or lost.
+   */
+  syncInvoicesFromLnd: thunk(async (actions, _, { getState, getStoreState }) => {
+    const db = getStoreState().db;
+    if (!db) {
+      throw new Error("syncInvoicesFromLnd(): db not ready");
+    }
+
+    log.i("Starting invoice sync from LND");
+
+    let syncedInvoices = 0;
+    let updatedInvoices = 0;
+    let totalLndInvoices = 0;
+    let indexOffset = 0n;
+    const numMaxInvoices = 100n;
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await listInvoices({
+        indexOffset,
+        numMaxInvoices,
+        reversed: false,
+      });
+
+      const invoices = response.invoices;
+      totalLndInvoices += invoices.length;
+
+      for (const invoice of invoices) {
+        const rHash = bytesToHexString(invoice.rHash);
+        const existingTx = getState().transactions.find((tx) => tx.rHash === rHash);
+
+        if (!existingTx) {
+          // Invoice not in our database, create it
+          const newTransaction = convertLndInvoiceToTransaction(invoice);
+          const id = await createTransaction(db, newTransaction);
+          actions.addTransaction({ ...newTransaction, id });
+          syncedInvoices++;
+          log.d("Synced missing invoice", [rHash]);
+        } else {
+          // Check if status needs updating
+          const lndStatus = decodeInvoiceState(invoice.state);
+          if (existingTx.status !== lndStatus && lndStatus !== "UNKNOWN") {
+            const updated: ITransaction = {
+              ...existingTx,
+              status: lndStatus,
+              preimage: invoice.rPreimage,
+              value: invoice.value,
+              valueMsat: invoice.valueMsat,
+              amtPaidSat: invoice.amtPaidSat,
+              amtPaidMsat: invoice.amtPaidMsat,
+            };
+            await updateTransaction(db, updated);
+            actions.updateTransaction({ transaction: updated });
+            updatedInvoices++;
+            log.d("Updated invoice status", [rHash, existingTx.status, "->", lndStatus]);
+          }
+        }
+      }
+
+      // Check if there are more invoices to fetch
+      if (invoices.length < Number(numMaxInvoices)) {
+        hasMore = false;
+      } else {
+        indexOffset = response.lastIndexOffset;
+      }
+    }
+
+    log.i("Invoice sync complete", [
+      `synced: ${syncedInvoices}`,
+      `updated: ${updatedInvoices}`,
+      `total from LND: ${totalLndInvoices}`,
+    ]);
+
+    return {
+      syncedInvoices,
+      updatedInvoices,
+      totalLndInvoices,
+    };
+  }),
+
+  /**
    * Set transactions to our transaction array
    */
   setTransactions: action((state, transactions) => {
@@ -254,3 +350,64 @@ export const transaction: ITransactionModel = {
     };
   }),
 };
+
+/**
+ * Converts an LND Invoice to our ITransaction format
+ */
+function convertLndInvoiceToTransaction(invoice: Invoice): ITransaction {
+  const rHash = bytesToHexString(invoice.rHash);
+
+  return {
+    description: invoice.memo || (invoice.isKeysend ? "Keysend payment" : ""),
+    value: invoice.value,
+    valueMsat: invoice.valueMsat,
+    amtPaidSat: invoice.amtPaidSat,
+    amtPaidMsat: invoice.amtPaidMsat,
+    fee: null,
+    feeMsat: null,
+    date: invoice.creationDate,
+    duration: 0,
+    expire: invoice.creationDate + invoice.expiry,
+    remotePubkey: "", // Not available from listInvoices
+    status: decodeInvoiceState(invoice.state),
+    paymentRequest: invoice.paymentRequest,
+    rHash,
+    nodeAliasCached: null,
+    valueUSD: null,
+    valueFiat: null,
+    valueFiatCurrency: null,
+    tlvRecordName: null,
+    lightningAddress: null,
+    lud16IdentifierMimeType: null,
+    payer: null,
+    website: null,
+    identifiedService: null,
+    type: "NORMAL",
+    locationLat: null,
+    locationLong: null,
+    preimage: invoice.rPreimage,
+    lnurlPayResponse: null,
+    lud18PayerData: null,
+    hops: [],
+  };
+}
+
+/**
+ * Decodes LND's Invoice_InvoiceState to our status string
+ */
+function decodeInvoiceState(
+  invoiceState: Invoice_InvoiceState,
+): "ACCEPTED" | "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN" {
+  switch (invoiceState) {
+    case Invoice_InvoiceState.ACCEPTED:
+      return "ACCEPTED";
+    case Invoice_InvoiceState.CANCELED:
+      return "CANCELED";
+    case Invoice_InvoiceState.OPEN:
+      return "OPEN";
+    case Invoice_InvoiceState.SETTLED:
+      return "SETTLED";
+    default:
+      return "UNKNOWN";
+  }
+}

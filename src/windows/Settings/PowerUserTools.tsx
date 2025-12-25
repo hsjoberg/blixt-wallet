@@ -33,6 +33,7 @@ import {
   routerXImportMissionControl,
   stopDaemon,
 } from "react-native-turbo-lnd";
+import { ISyncInvoicesFromLndResult } from "../../state/Transaction";
 import { NavigationProp } from "@react-navigation/native";
 import { create, toJson } from "@bufbuild/protobuf";
 import {
@@ -278,6 +279,23 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
     }
   };
 
+  // Resync invoices from LND
+  const syncInvoicesFromLnd = useStoreActions((store) => store.transaction.syncInvoicesFromLnd);
+  const onPressSyncInvoicesFromLnd = async () => {
+    try {
+      toast("Syncing invoices from LND...", undefined, "warning");
+      const result: ISyncInvoicesFromLndResult = await syncInvoicesFromLnd();
+      Alert.alert(
+        "Invoice Sync Complete",
+        `Recovered ${result.syncedInvoices} missing invoice(s)\n` +
+          `Updated ${result.updatedInvoices} invoice(s)\n` +
+          `Total invoices in LND: ${result.totalLndInvoices}`,
+      );
+    } catch (error: any) {
+      toast("Error: " + error.message, 10000, "danger");
+    }
+  };
+
   // Change backend to bitcoindWithZmq
   const changeLndChainBackend = useStoreActions((store) => store.settings.changeLndChainBackend);
   const onPressChangeBackendToBitcoindWithZmq = async () => {
@@ -396,6 +414,13 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
       icon: { type: "AntDesign", name: "file1" },
       title: "Lookup invoice",
       onPress: onPressLookupInvoiceByHash,
+    },
+    {
+      type: "item",
+      icon: { type: "MaterialCommunityIcons", name: "database-sync" },
+      title: "Resync invoices from LND",
+      subtitle: "Recover missing invoices from LND's database",
+      onPress: onPressSyncInvoicesFromLnd,
     },
     {
       type: "item",
