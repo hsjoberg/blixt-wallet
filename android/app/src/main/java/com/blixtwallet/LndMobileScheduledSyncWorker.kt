@@ -32,6 +32,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resumeWithException
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.UUID
 
 private const val TAG = "LndMobileScheduledSyncWorker"
 private const val SYNC_WORK_KEY = "syncWorkHistory"
@@ -52,7 +53,8 @@ enum class SyncResult {
 
 // Update data class with more metadata
 data class SyncWorkRecord(
-  val timestamp: Long,
+  val id: String,           // UUID for unique identification
+  val timestamp: Long,      // When the work started (wall clock time)
   val duration: Long,
   val result: SyncResult,
   val errorMessage: String? = null
@@ -65,6 +67,7 @@ class LndMobileScheduledSyncWorker(
 
   private val lnd = LndNative()
   private val stateChannel = Channel<lnrpc.Stateservice.WalletState>(Channel.UNLIMITED)
+  private val workId = UUID.randomUUID().toString()  // Unique identifier for this work instance
   private val startTime = System.currentTimeMillis() // Track when work starts
 
   // Creates a new sync work record with IN_PROGRESS status
@@ -72,7 +75,7 @@ class LndMobileScheduledSyncWorker(
   private fun createSyncWorkRecord() {
     Log.d(TAG, "createSyncWorkRecord start")
     try {
-      val newRecord = SyncWorkRecord(startTime, 0, SyncResult.IN_PROGRESS, null)
+      val newRecord = SyncWorkRecord(workId, startTime, 0, SyncResult.IN_PROGRESS, null)
       val db = ReactDatabaseSupplier.getInstance(applicationContext).get()
 
       // Get existing records
@@ -89,7 +92,7 @@ class LndMobileScheduledSyncWorker(
     Log.d(TAG, "createSyncWorkRecord done")
   }
 
-  // Updates an existing sync work record by timestamp (startTime)
+  // Updates an existing sync work record by workId (UUID)
   // Call this when the job finishes
   private fun updateSyncWorkRecord(result: SyncResult, errorMessage: String? = null) {
     Log.d(TAG, "updateSyncWorkRecord start: $result")
@@ -101,10 +104,10 @@ class LndMobileScheduledSyncWorker(
       val existingJson = AsyncLocalStorageUtil.getItemImpl(db, SYNC_WORK_KEY) ?: "[]"
       val records = parseRecords(existingJson)
 
-      // Find and update the record with matching timestamp
+      // Find and update the record with matching workId
       val updatedRecords = records.map { record ->
-        if (record.timestamp == startTime) {
-          SyncWorkRecord(startTime, duration, result, errorMessage)
+        if (record.id == workId) {
+          SyncWorkRecord(workId, startTime, duration, result, errorMessage)
         } else {
           record
         }
@@ -120,9 +123,12 @@ class LndMobileScheduledSyncWorker(
   private fun parseRecords(json: String): List<SyncWorkRecord> {
     return try {
       JSONArray(json).let { jsonArray ->
-        (0 until jsonArray.length()).map { i ->
+        (0 until jsonArray.length()).mapNotNull { i ->
           val obj = jsonArray.getJSONObject(i)
+          // Skip records without id (legacy records before UUID was added)
+          val id = obj.optString("id", "").ifEmpty { null } ?: return@mapNotNull null
           SyncWorkRecord(
+            id,
             obj.getLong("timestamp"),
             obj.getLong("duration"),
             SyncResult.valueOf(obj.getString("result")),
@@ -141,6 +147,7 @@ class LndMobileScheduledSyncWorker(
     val jsonArray = JSONArray().apply {
       records.forEach { record ->
         put(JSONObject().apply {
+          put("id", record.id)
           put("timestamp", record.timestamp)
           put("duration", record.duration)
           put("result", record.result.name)
