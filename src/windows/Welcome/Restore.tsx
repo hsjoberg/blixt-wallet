@@ -422,6 +422,7 @@ const style = StyleSheet.create({
     width: "100%",
     height: 120,
     backgroundColor: blixtTheme.gray,
+    color: blixtTheme.light,
     fontSize: 20,
     marginTop: PLATFORM !== "android" ? 60 : undefined,
   },

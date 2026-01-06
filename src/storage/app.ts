@@ -23,7 +23,8 @@ import { appMigration } from "../migration/app-migration";
 
 const APP_VERSION = appMigration.length - 1;
 
-export enum StorageItem { // const enums not supported in Babel 7...
+// const enums not supported in Babel 7...
+export enum StorageItem {
   app = "app",
   brickDeviceAndExportChannelDb = "brickDeviceAndExportChannelDb", // This is used to copy the channel.db file when lnd is down
   bricked = "bricked", // This is used when channel.db migration is commenced
@@ -265,7 +266,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.app, true),
     setItemObject<boolean>(StorageItem.brickDeviceAndExportChannelDb, false),
     setItemObject<boolean>(StorageItem.bricked, false),
-    setItemObject<IImportChannelDbOnStartup>(StorageItem.bricked, null),
+    setItemObject<IImportChannelDbOnStartup | null>(StorageItem.importChannelDbOnStartup, null),
     setItemObject<number>(StorageItem.appVersion, APP_VERSION),
     setItemObject<number>(StorageItem.appBuild, VersionCode),
     setItemObject<boolean>(StorageItem.walletCreated, false),
