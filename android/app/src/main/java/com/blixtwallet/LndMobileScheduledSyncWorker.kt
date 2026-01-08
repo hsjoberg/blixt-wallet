@@ -49,6 +49,7 @@ enum class SyncResult {
   FAILURE_CHAIN_SYNC_TIMEOUT,             // Chain sync specifically timed out
   EARLY_EXIT_PERSISTENT_SERVICES_ENABLED, // Persistent services enabled, skipping sync
   EARLY_EXIT_TOR_ENABLED,                 // Tor is enabled, skipping sync
+  FAILURE_KEYCHAIN_DATASTORE_CONFLICT,    // DataStore conflict when accessing keychain
 }
 
 // Update data class with more metadata
@@ -123,10 +124,9 @@ class LndMobileScheduledSyncWorker(
   private fun parseRecords(json: String): List<SyncWorkRecord> {
     return try {
       JSONArray(json).let { jsonArray ->
-        (0 until jsonArray.length()).mapNotNull { i ->
+        (0 until jsonArray.length()).map { i ->
           val obj = jsonArray.getJSONObject(i)
-          // Skip records without id (legacy records before UUID was added)
-          val id = obj.optString("id", "").ifEmpty { null } ?: return@mapNotNull null
+          val id = obj.optString("id", "")
           SyncWorkRecord(
             id,
             obj.getLong("timestamp"),
@@ -200,6 +200,17 @@ class LndMobileScheduledSyncWorker(
         return Result.success()
       }
 
+      // Get wallet password early - fail fast if keychain access fails
+      // This avoids starting LND only to fail at unlock time
+      Log.i(TAG, "Retrieving wallet password from keychain")
+      val walletPassword = try {
+        getWalletPassword()
+      } catch (e: DataStoreConflictException) {
+        Log.e(TAG, "DataStore conflict when accessing keychain", e)
+        updateSyncWorkRecord(SyncResult.FAILURE_KEYCHAIN_DATASTORE_CONFLICT, e.message)
+        return Result.success() // Don't retry immediately, wait for next scheduled run
+      }
+
       // Start LND and check if it's already running
       val isAlreadyRunning = startLnd()
       if (isAlreadyRunning) {
@@ -231,7 +242,7 @@ class LndMobileScheduledSyncWorker(
 
             lnrpc.Stateservice.WalletState.LOCKED -> {
               Log.d(TAG, "Wallet locked, attempting unlock")
-              unlockWallet()
+              unlockWallet(walletPassword)
 
               // Wait for unlock confirmation
               while (true) {
@@ -465,15 +476,46 @@ class LndMobileScheduledSyncWorker(
     return false
   }
 
-  // Self-contained function that handles:
-  // 1. Creating BridgeReactContext
-  // 2. Creating KeychainModule
-  // 3. Retrieving password from keychain
-  // 4. Cleaning up context/module immediately after getting password
-  // 5. Unlocking the wallet with lnd
-  private suspend fun unlockWallet() = suspendCancellableCoroutine<Unit> { cont ->
+  // Custom exception for DataStore conflicts
+  class DataStoreConflictException(message: String) : Exception(message)
+
+  // Retrieves wallet password from keychain with retry logic
+  // Retries up to 3 times with exponential backoff (2s, 4s, 8s) on DataStore conflicts
+  // Throws DataStoreConflictException if all retries fail
+  private suspend fun getWalletPassword(): String {
+    val maxRetries = 3
+    var lastException: Exception? = null
+
+    for (attempt in 1..maxRetries) {
+      try {
+        Log.d(TAG, "getWalletPassword attempt $attempt of $maxRetries")
+        return getWalletPasswordInternal()
+      } catch (e: DataStoreConflictException) {
+        lastException = e
+        Log.w(TAG, "DataStore conflict on attempt $attempt: ${e.message}")
+
+        if (attempt < maxRetries) {
+          val backoffMs = (1 shl attempt) * 1000L // 2s, 4s, 8s
+          Log.d(TAG, "Waiting ${backoffMs}ms before retry...")
+          delay(backoffMs)
+
+          // Check if app started during backoff
+          if (isMainActivityRunning()) {
+            throw Exception("MainActivity started during password retrieval, aborting")
+          }
+        }
+      }
+    }
+
+    // All retries exhausted - throw the DataStore exception so caller can handle it
+    throw lastException ?: DataStoreConflictException("getWalletPassword failed after $maxRetries attempts")
+  }
+
+  // Internal implementation that retrieves password from keychain
+  private suspend fun getWalletPasswordInternal(): String = suspendCancellableCoroutine { cont ->
     var bridgeReactContext: BridgeReactContext? = null
     var keychainModule: KeychainModule? = null
+    var keychainModuleError: Exception? = null
 
     // Helper to clean up the context and module
     fun cleanup() {
@@ -516,6 +558,12 @@ class LndMobileScheduledSyncWorker(
       }
     }
 
+    // Check if MainActivity started (race condition protection)
+    // if (isMainActivityRunning()) {
+    //   cont.resumeWithException(Exception("MainActivity is now running, aborting password retrieval"))
+    //   return@suspendCancellableCoroutine
+    // }
+
     // Step 1: Create BridgeReactContext on UI thread
     val contextLatch = CountDownLatch(1)
     Log.d(TAG, "Creating BridgeReactContext on UI thread")
@@ -545,6 +593,7 @@ class LndMobileScheduledSyncWorker(
         Log.d(TAG, "KeychainModule created on UI thread")
       } catch (e: Exception) {
         Log.e(TAG, "Failed to create KeychainModule on UI thread", e)
+        keychainModuleError = e
       } finally {
         moduleLatch.countDown()
       }
@@ -553,7 +602,13 @@ class LndMobileScheduledSyncWorker(
 
     if (keychainModule == null) {
       cleanup()
-      cont.resumeWithException(Exception("Failed to create KeychainModule"))
+      val error = keychainModuleError
+      // Check if this is a DataStore conflict error
+      if (error != null && error.message?.contains("multiple DataStores active") == true) {
+        cont.resumeWithException(DataStoreConflictException(error.message ?: "DataStore conflict"))
+      } else {
+        cont.resumeWithException(error ?: Exception("Failed to create KeychainModule"))
+      }
       return@suspendCancellableCoroutine
     }
 
@@ -572,7 +627,7 @@ class LndMobileScheduledSyncWorker(
           if (value == null) {
             Log.e(TAG, "Failed to get wallet password, got null from keychain provider")
             cleanup()
-            cont.resumeWithException(Exception("Unlock failed: value == null"))
+            cont.resumeWithException(Exception("Password retrieval failed: value == null"))
             return
           }
 
@@ -580,35 +635,48 @@ class LndMobileScheduledSyncWorker(
           val password = (value as ReadableMap).getString("password")
           Log.d(TAG, "Password retrieved")
 
-          // Step 4: Clean up immediately after getting password
-          Log.d(TAG, "Cleaning up keychain access before unlocking wallet")
+          // Clean up immediately after getting password
+          Log.d(TAG, "Cleaning up keychain access")
           cleanup()
 
-          // Step 5: Unlock wallet with lnd
-          val unlockRequest = lnrpc.Walletunlocker.UnlockWalletRequest.newBuilder()
-            .setWalletPassword(ByteString.copyFromUtf8(password))
-            .build()
-            .toByteArray()
-
-          lnd.unlockWallet(unlockRequest, object : LndCallback {
-            override fun onResponse(data: ByteArray) {
-              cont.resume(Unit) { _, _, _ -> }
-            }
-
-            override fun onError(error: String) {
-              Log.e(TAG, "unlockWallet failed $error")
-              cont.resumeWithException(Exception("Unlock failed: $error"))
-            }
-          })
+          // Return the password
+          cont.resume(password ?: "") { _, _, _ -> }
         }
 
         public override fun onFail(throwable: Throwable) {
           Log.d(TAG, "Failed to get wallet password " + throwable.message, throwable)
           cleanup()
-          cont.resumeWithException(Exception("Unlock failed: $throwable"))
+          // Check if this is a DataStore conflict error
+          if (throwable.message?.contains("multiple DataStores active") == true) {
+            cont.resumeWithException(DataStoreConflictException(throwable.message ?: "DataStore conflict"))
+          } else {
+            cont.resumeWithException(Exception("Password retrieval failed: $throwable"))
+          }
           return
         }
       })
+  }
+
+  // Unlocks the wallet with the provided password
+  private suspend fun unlockWallet(password: String) = suspendCancellableCoroutine<Unit> { cont ->
+    Log.d(TAG, "Unlocking wallet with lnd")
+
+    val unlockRequest = lnrpc.Walletunlocker.UnlockWalletRequest.newBuilder()
+      .setWalletPassword(ByteString.copyFromUtf8(password))
+      .build()
+      .toByteArray()
+
+    lnd.unlockWallet(unlockRequest, object : LndCallback {
+      override fun onResponse(data: ByteArray) {
+        Log.d(TAG, "Wallet unlocked successfully")
+        cont.resume(Unit) { _, _, _ -> }
+      }
+
+      override fun onError(error: String) {
+        Log.e(TAG, "unlockWallet failed: $error")
+        cont.resumeWithException(Exception("Unlock failed: $error"))
+      }
+    })
   }
 
   private fun isMainActivityRunning(): Boolean {
