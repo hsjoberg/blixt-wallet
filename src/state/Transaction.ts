@@ -10,10 +10,16 @@ import { IStoreModel } from "./index";
 import { IStoreInjections } from "./store";
 import { bytesToHexString, hexToUint8Array } from "../utils";
 
-import { listInvoices, lookupInvoice, routerTrackPaymentV2 } from "react-native-turbo-lnd";
+import {
+  listInvoices,
+  listPayments,
+  lookupInvoice,
+  routerTrackPaymentV2,
+} from "react-native-turbo-lnd";
 import {
   Invoice,
   Invoice_InvoiceState,
+  Payment,
   Payment_PaymentStatus,
 } from "react-native-turbo-lnd/protos/lightning_pb";
 
@@ -24,6 +30,12 @@ export interface ISyncInvoicesFromLndResult {
   syncedInvoices: number;
   updatedInvoices: number;
   totalLndInvoices: number;
+}
+
+export interface ISyncPaymentsFromLndResult {
+  syncedPayments: number;
+  updatedPayments: number;
+  totalLndPayments: number;
 }
 
 export interface ITransactionModel {
@@ -40,6 +52,13 @@ export interface ITransactionModel {
     IStoreInjections,
     IStoreModel,
     Promise<ISyncInvoicesFromLndResult>
+  >;
+  syncPaymentsFromLnd: Thunk<
+    ITransactionModel,
+    undefined,
+    IStoreInjections,
+    IStoreModel,
+    Promise<ISyncPaymentsFromLndResult>
   >;
   setTransactions: Action<ITransactionModel, ITransaction[]>;
 
@@ -321,6 +340,87 @@ export const transaction: ITransactionModel = {
   }),
 
   /**
+   * Syncs payments from LND's internal database to our SQLite database.
+   * This helps recover payments that may have been missed or lost.
+   */
+  syncPaymentsFromLnd: thunk(async (actions, _, { getState, getStoreState }) => {
+    const db = getStoreState().db;
+    if (!db) {
+      throw new Error("syncPaymentsFromLnd(): db not ready");
+    }
+
+    log.i("Starting payment sync from LND");
+
+    let syncedPayments = 0;
+    let updatedPayments = 0;
+    let totalLndPayments = 0;
+    let indexOffset = 0n;
+    const maxPayments = 100n;
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await listPayments({
+        indexOffset,
+        maxPayments,
+        reversed: false,
+        includeIncomplete: false,
+      });
+
+      const payments = response.payments;
+      totalLndPayments += payments.length;
+
+      for (const payment of payments) {
+        const rHash = payment.paymentHash;
+        const existingTx = getState().transactions.find((tx) => tx.rHash === rHash);
+
+        if (!existingTx) {
+          // Payment not in our database, create it
+          const newTransaction = convertLndPaymentToTransaction(payment);
+          const id = await createTransaction(db, newTransaction);
+          actions.addTransaction({ ...newTransaction, id });
+          syncedPayments++;
+          log.d("Synced missing payment", [rHash]);
+        } else {
+          // Check if status needs updating
+          const lndStatus = decodePaymentStatus(payment.status);
+          if (existingTx.status !== lndStatus && lndStatus !== "UNKNOWN") {
+            const updated: ITransaction = {
+              ...existingTx,
+              status: lndStatus,
+              preimage: hexToUint8Array(payment.paymentPreimage),
+              fee: payment.feeSat,
+              feeMsat: payment.feeMsat,
+            };
+            await updateTransaction(db, updated);
+            actions.updateTransaction({ transaction: updated });
+            updatedPayments++;
+            log.d("Updated payment status", [rHash, existingTx.status, "->", lndStatus]);
+          }
+        }
+      }
+
+      // Check if there are more payments to fetch
+      if (payments.length < Number(maxPayments)) {
+        hasMore = false;
+      } else {
+        indexOffset = response.lastIndexOffset;
+      }
+    }
+
+    log.i("Payment sync complete", [
+      `synced: ${syncedPayments}`,
+      `updated: ${updatedPayments}`,
+      `total from LND: ${totalLndPayments}`,
+    ]);
+
+    return {
+      syncedPayments,
+      updatedPayments,
+      totalLndPayments,
+    };
+  }),
+
+  /**
    * Set transactions to our transaction array
    */
   setTransactions: action((state, transactions) => {
@@ -407,6 +507,85 @@ function decodeInvoiceState(
       return "OPEN";
     case Invoice_InvoiceState.SETTLED:
       return "SETTLED";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+/**
+ * Converts an LND Payment to our ITransaction format
+ */
+function convertLndPaymentToTransaction(payment: Payment): ITransaction {
+  // Payment values are stored as negative (outgoing)
+  const valueSat = 0n - payment.valueSat;
+  const valueMsat = 0n - payment.valueMsat;
+
+  // Convert creation time from nanoseconds to seconds
+  const creationTimeSec = payment.creationTimeNs / 1000000000n;
+
+  // Get the destination pubkey from the last hop of the route
+  const hops = payment.htlcs[0]?.route?.hops ?? [];
+  const lastHop = hops[hops.length - 1];
+  const remotePubkey = lastHop?.pubKey ?? "";
+
+  return {
+    description: "", // Not available from listPayments
+    value: valueSat,
+    valueMsat: valueMsat,
+    amtPaidSat: valueSat,
+    amtPaidMsat: valueMsat,
+    fee: payment.feeSat,
+    feeMsat: payment.feeMsat,
+    date: creationTimeSec,
+    duration: 0,
+    expire: 0n, // Payments don't have expiry
+    remotePubkey,
+    status: decodePaymentStatus(payment.status),
+    paymentRequest: payment.paymentRequest,
+    rHash: payment.paymentHash,
+    nodeAliasCached: null,
+    valueUSD: null,
+    valueFiat: null,
+    valueFiatCurrency: null,
+    tlvRecordName: null,
+    lightningAddress: null,
+    lud16IdentifierMimeType: null,
+    payer: null,
+    website: null,
+    identifiedService: null,
+    type: "NORMAL",
+    locationLat: null,
+    locationLong: null,
+    preimage: hexToUint8Array(payment.paymentPreimage),
+    lnurlPayResponse: null,
+    lud18PayerData: null,
+    hops: hops.map((hop) => ({
+      chanId: BigInt(hop.chanId),
+      chanCapacity: hop.chanCapacity,
+      amtToForward: hop.amtToForwardMsat / 1000n,
+      amtToForwardMsat: hop.amtToForwardMsat,
+      fee: hop.feeMsat / 1000n,
+      feeMsat: hop.feeMsat,
+      expiry: hop.expiry,
+      pubKey: hop.pubKey,
+    })),
+  };
+}
+
+/**
+ * Decodes LND's Payment_PaymentStatus to our status string
+ */
+function decodePaymentStatus(
+  paymentStatus: Payment_PaymentStatus,
+): "CANCELED" | "OPEN" | "SETTLED" | "UNKNOWN" {
+  switch (paymentStatus) {
+    case Payment_PaymentStatus.FAILED:
+      return "CANCELED";
+    case Payment_PaymentStatus.IN_FLIGHT:
+      return "OPEN";
+    case Payment_PaymentStatus.SUCCEEDED:
+      return "SETTLED";
+    case Payment_PaymentStatus.UNKNOWN:
     default:
       return "UNKNOWN";
   }
