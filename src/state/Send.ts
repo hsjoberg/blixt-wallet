@@ -75,7 +75,13 @@ interface IExtraData {
 
 export interface ISendModel {
   clear: Action<ISendModel>;
-  setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections, {}, Promise<PayReq>>;
+  setPayment: Thunk<
+    ISendModel,
+    ISendModelSetPaymentPayload,
+    IStoreInjections,
+    IStoreModel,
+    Promise<PayReq>
+  >;
   sendPayment: Thunk<
     ISendModel,
     IModelSendPaymentPayload | void,
@@ -121,7 +127,7 @@ export const send: ISendModel = {
   /**
    * @throws
    */
-  setPayment: thunk(async (actions, payload, {}) => {
+  setPayment: thunk(async (actions, payload, { getStoreState }) => {
     actions.clear();
     const paymentRequestStr = payload.paymentRequestStr.replace(/^lightning:/i, "");
 
@@ -140,6 +146,11 @@ export const send: ISendModel = {
       actions.setPaymentRequest(paymentRequest);
     } catch (e) {
       throw new Error("Code is not a valid Lightning invoice");
+    }
+
+    const ownPubkey = getStoreState().lightning.nodeInfo?.identityPubkey;
+    if (ownPubkey && paymentRequest.destination === ownPubkey) {
+      throw new Error("Cannot pay your own invoice");
     }
 
     if (payload.extraData) {
