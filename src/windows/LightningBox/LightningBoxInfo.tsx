@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect } from "react";
 
-import { Button, Text, View, H1 } from "native-base";
+import { Text, View, H1 } from "native-base";
+import { Button } from "../../components/Button";
 import Clipboard from "@react-native-clipboard/clipboard";
 
 import Content from "../../components/Content";

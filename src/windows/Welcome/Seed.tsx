@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "react-native";
-import { Text, View, Button, H1, Card, CardItem, H3 } from "native-base";
+import { Text, View, H1, Card, CardItem, H3 } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { StatusBar, StyleSheet, Alert } from "react-native";
-import { View, Button, H1, Card, CardItem, Text, Spinner, Icon, H3 } from "native-base";
+import { View, H1, Card, CardItem, Text, Spinner, Icon, H3 } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";

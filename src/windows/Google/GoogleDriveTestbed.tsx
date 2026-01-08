@@ -1,5 +1,6 @@
 import React, { useState, useLayoutEffect } from "react";
-import { Button, Text, View } from "native-base";
+import { Text, View } from "native-base";
+import { Button } from "../../components/Button";
 
 import Content from "../../components/Content";
 import Container from "../../components/Container";

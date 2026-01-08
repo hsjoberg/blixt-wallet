@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Footer, FooterTab, Icon, Text } from "native-base";
+import { Footer, FooterTab, Icon, Text } from "native-base";
+import { Button } from "./Button";
 import { useNavigation, NavigationProp } from "@react-navigation/core";
 
 import { useTranslation } from "react-i18next";

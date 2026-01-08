@@ -1,4 +1,5 @@
-import { Button, Text, View } from "native-base";
+import { Text, View } from "native-base";
+import { Button } from "../../../components/Button";
 import { Image, Keyboard, Vibration } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/core";

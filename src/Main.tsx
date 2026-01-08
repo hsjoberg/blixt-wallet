@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar, Alert, NativeModules } from "react-native";
-import { Spinner, H1, H2, Text, Button } from "native-base";
+import { Spinner, H1, H2, Text } from "native-base";
+import { Button } from "./components/Button";
 import {
   createStackNavigator,
   CardStyleInterpolators,

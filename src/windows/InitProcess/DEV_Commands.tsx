@@ -1,5 +1,6 @@
 import { PLATFORM } from "../../utils/constants";
-import { Button, Container, Input, Text, Toast, View } from "native-base";
+import { Container, Input, Text, Toast, View } from "native-base";
+import { Button } from "../../components/Button";
 import { CONSTANTS, JSHash } from "react-native-hash";
 import { Linking, NativeModules, StatusBar, StyleSheet } from "react-native";
 import React, { useState } from "react";

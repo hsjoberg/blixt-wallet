@@ -8,7 +8,8 @@ import {
   LocalCopyResponse,
 } from "@react-native-documents/picker";
 import { readFile } from "react-native-fs";
-import { Text, View, Button, H1, Textarea, Spinner, H3 } from "native-base";
+import { Text, View, H1, Textarea, Spinner, H3 } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";

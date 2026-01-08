@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet, Animated, Keyboard } from "react-native";
 import { createAnimatableComponent } from "react-native-animatable";
-import { Button, Text } from "native-base";
+import { Text } from "native-base";
+import { Button } from "./Button";
 
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { PLATFORM } from "../utils/constants";

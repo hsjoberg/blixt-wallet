@@ -1,7 +1,8 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { StyleSheet, View, Share } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { Text, Container, H1, H2, Button, Icon, Spinner } from "native-base";
+import { Text, Container, H1, H2, Icon, Spinner } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { OnChainStackParamList } from "./index";

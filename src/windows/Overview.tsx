@@ -12,7 +12,8 @@ import {
   PixelRatio,
 } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
+import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner } from "native-base";
+import { Button } from "../components/Button";
 import { DrawerActions, useNavigation, NavigationProp } from "@react-navigation/native";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";

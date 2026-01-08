@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Linking } from "react-native";
-import { Body, Card, Text, CardItem, H1, View, Button } from "native-base";
+import { Body, Card, Text, CardItem, H1, View } from "native-base";
+import { Button } from "../components/Button";
 
 import Blurmodal from "../components/BlurModal";
 import { GITHUB_REPO_URL, HAMPUS_EMAIL, TELEGRAM, FAQ } from "../utils/constants";

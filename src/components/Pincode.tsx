@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { StyleSheet, Vibration } from "react-native";
-import { View, Text, Button, Icon } from "native-base";
+import { View, Text, Icon } from "native-base";
+import { Button } from "./Button";
 import color from "color";
 import * as Animatable from "react-native-animatable";
 import Container from "../components/Container";

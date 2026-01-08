@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { EmitterSubscription, NativeModules, StyleSheet, View, ScrollView } from "react-native";
-import { Card, Text, CardItem, H1, Button } from "native-base";
+import { Card, Text, CardItem, H1 } from "native-base";
+import { Button } from "../components/Button";
 import Clipboard from "@react-native-clipboard/clipboard";
 import Bar from "../components/ProgressBar";
 

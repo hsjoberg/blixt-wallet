@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-import { Text, Container, Button, Icon, Spinner } from "native-base";
+import { Text, Container, Icon, Spinner } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
 

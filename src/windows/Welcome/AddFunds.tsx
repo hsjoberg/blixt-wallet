@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { StatusBar, StyleSheet, Share } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { View, Button, H1, Text, Spinner } from "native-base";
+import { View, H1, Text, Spinner } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";

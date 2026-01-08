@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Card, CardItem, Text } from "native-base";
+import { Card, CardItem, Text } from "native-base";
+import { Button } from "../../components/Button";
 import { AlertButton, StyleSheet, View } from "react-native";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { StackNavigationProp } from "@react-navigation/stack";

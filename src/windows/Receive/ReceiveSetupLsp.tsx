@@ -1,5 +1,6 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { Button, Icon, Text, Spinner } from "native-base";
+import { Icon, Text, Spinner } from "native-base";
+import { Button } from "../../components/Button";
 import DialogAndroid from "react-native-dialogs";
 import { useDebounce } from "use-debounce";
 import { StackNavigationProp } from "@react-navigation/stack";

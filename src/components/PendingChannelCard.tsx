@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { Body, Text, Left, Right, Card, CardItem, Row, Button } from "native-base";
+import { Body, Text, Left, Right, Card, CardItem, Row } from "native-base";
+import { Button } from "./Button";
 import { Image, Linking } from "react-native";
 import BigNumber from "bignumber.js";
 

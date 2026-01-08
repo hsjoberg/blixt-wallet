@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, TouchableOpacity } from "react-native";
-import { Body, Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
+import { Body, Card, Text, CardItem, H1, View, Icon } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { LnUrlStackParamList } from "./index";

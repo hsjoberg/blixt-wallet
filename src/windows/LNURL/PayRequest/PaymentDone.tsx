@@ -1,7 +1,8 @@
 import React from "react";
 import { Linking } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { Text, View, Button } from "native-base";
+import { Text, View } from "native-base";
+import { Button } from "../../../components/Button";
 import { useNavigation } from "@react-navigation/native";
 
 import { useStoreState, useStoreActions } from "../../../state/store";

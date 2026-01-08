@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet, StatusBar, NativeModules, SafeAreaView, Platform } from "react-native";
 import DialogAndroid from "react-native-dialogs";
-import { Text, H1, Button, View, Spinner, Icon } from "native-base";
+import { Text, H1, View, Spinner, Icon } from "native-base";
+import { Button } from "../../components/Button";
 import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
