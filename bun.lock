@@ -160,6 +160,9 @@
   "patchedDependencies": {
     "react-native@0.83.1": "patches/react-native@0.83.1.patch",
   },
+  "overrides": {
+    "hermes-compiler": "250829098.0.4",
+  },
   "packages": {
     "@babel/code-frame": ["@babel/code-frame@7.27.1", "", { "dependencies": { "@babel/helper-validator-identifier": "^7.27.1", "js-tokens": "^4.0.0", "picocolors": "^1.1.1" } }, "sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg=="],
 
@@ -1777,7 +1780,7 @@
 
     "he": ["he@1.2.0", "", { "bin": { "he": "bin/he" } }, "sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw=="],
 
-    "hermes-compiler": ["hermes-compiler@0.14.0", "", {}, "sha512-clxa193o+GYYwykWVFfpHduCATz8fR5jvU7ngXpfKHj+E9hr9vjLNtdLSEe8MUbObvVexV3wcyxQ00xTPIrB1Q=="],
+    "hermes-compiler": ["hermes-compiler@250829098.0.4", "", {}, "sha512-8PEHLTuGOXUAnv2zByUG7Vud0TbU21fPuVqlMuek8PZgdYwb7KFWjw3+6In9J93Tx/6c/nRf5I30vzbaHBlgAQ=="],
 
     "hermes-engine": ["hermes-engine@0.11.0", "", {}, "sha512-7aMUlZja2IyLYAcZ69NBnwJAR5ZOYlSllj0oMpx08a8HzxHOys0eKCzfphrf6D0vX1JGO1QQvVsQKe6TkYherw=="],
 
