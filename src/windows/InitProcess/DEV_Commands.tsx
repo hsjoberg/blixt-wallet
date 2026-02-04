@@ -279,6 +279,14 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
            *
            */}
           <Text style={{ width: "100%" }}>Random:</Text>
+          <Button
+            small
+            onPress={async () => {
+              Alert.alert(HermesInternal.getRuntimeProperties()["OSS Release Version"]);
+            }}
+          >
+            <Text style={styles.buttonText}>Check Hermes version</Text>
+          </Button>
           {/* <Button small onPress={async () => console.log(await Speedloader.gossipSync("hejsan"))}>
             <Text style={styles.buttonText}>Speedloader.gossipSync</Text>
           </Button> */}
