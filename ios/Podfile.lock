@@ -35,9 +35,9 @@ PODS:
     - AppAuth/Core (~> 2.0)
     - GTMSessionFetcher/Core (< 4.0, >= 3.3)
   - GTMSessionFetcher/Core (3.5.0)
-  - hermes-engine (250829098.0.4):
-    - hermes-engine/Pre-built (= 250829098.0.4)
-  - hermes-engine/Pre-built (250829098.0.4)
+  - hermes-engine (0.14.0):
+    - hermes-engine/Pre-built (= 0.14.0)
+  - hermes-engine/Pre-built (0.14.0)
   - PromisesObjC (2.4.0)
   - RCT-Folly (2024.11.18.00):
     - boost
@@ -3333,7 +3333,7 @@ PODS:
     - Yoga
   - RNVectorIcons (9.2.0):
     - React-Core
-  - RNWorklets (0.7.2):
+  - RNWorklets (0.7.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -3360,10 +3360,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNWorklets/worklets (= 0.7.2)
+    - RNWorklets/worklets (= 0.7.1)
     - SocketRocket
     - Yoga
-  - RNWorklets/worklets (0.7.2):
+  - RNWorklets/worklets (0.7.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -3390,10 +3390,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNWorklets/worklets/apple (= 0.7.2)
+    - RNWorklets/worklets/apple (= 0.7.1)
     - SocketRocket
     - Yoga
-  - RNWorklets/worklets/apple (0.7.2):
+  - RNWorklets/worklets/apple (0.7.1):
     - boost
     - DoubleConversion
     - fast_float
@@ -3576,7 +3576,7 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
-    :tag: hermes-v250829098.0.4
+    :tag: hermes-v0.14.0
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -3796,7 +3796,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   GTMAppAuth: 217a876b249c3c585a54fd6f73e6b58c4f5c4238
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
-  hermes-engine: 515b87f3b47d305dd47eb4c41e4ddd57fc7c9edb
+  hermes-engine: b78d2801c517cff51307f29aa317aafed27887c4
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: a41bbdd9af30bf2e5715796b313e44ec43eefff1
@@ -3897,7 +3897,7 @@ SPEC CHECKSUMS:
   RNSecureRandom: 7b1df97e96cde33fccc6b64ed4072592fc06627c
   RNSVG: 55fc5dc0eaa36a875ffb7d05c0f2cd5b2cbfc342
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
-  RNWorklets: 483956c938b149568c4f3b6d481c373ad9891280
+  RNWorklets: b94f5c1b61a985c309dcc0092aacf41515cc39d6
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftProtobuf: 7773c4e96a99d7b8ab7cda0fc30a883732ff93b1
   VisionCamera: 3ea10c46a5c612f5f89fb46a54bef4a0de8b58a7
@@ -3905,4 +3905,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: f035767ab7282bbe2cbf8fe7529b2eb71571181d
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.16.2
