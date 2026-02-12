@@ -236,8 +236,5 @@
         "NativeSpeedloader": "NativeSpeedloaderModuleProvider"
       }
     }
-  },
-  "resolutions": {
-    "hermes-compiler": "250829098.0.4"
   }
 }
