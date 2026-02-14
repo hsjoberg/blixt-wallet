@@ -73,15 +73,5 @@ target 'BlixtWallet' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
-
-    # https://github.com/dream-sports-labs/react-native-fast-image/issues/273
-    # https://github.com/facebook/folly/issues/2297#issuecomment-2441706674
-    system("chmod -R u+w Pods/RCT-Folly")
-    Dir.glob("Pods/RCT-Folly/folly/Portability.h").each do |file|
-      text = File.read(file)
-      new_contents = text.gsub('#define FOLLY_HAS_COROUTINES 1', '#define FOLLY_HAS_COROUTINES 0')
-      File.open(file, "w") { |file| file.puts new_contents }
-    end
-
   end
 end

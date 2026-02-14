@@ -12,7 +12,8 @@ type NativeBaseButtonProps = ComponentProps<typeof NativeBaseButton>;
  * the component, causing NativeBase to recompute styles.
  */
 export function Button(props: NativeBaseButtonProps) {
-  return <NativeBaseButton key={`nb-btn-${props.disabled}`} {...props} />;
+  // NativeBase fix if required in the future: key={`nb-btn-${props.disabled}`}
+  return <NativeBaseButton {...props} />;
 }
 
 export default Button;

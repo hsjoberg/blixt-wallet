@@ -321,7 +321,7 @@ export const model: IStoreModel = {
             throw new Error(torResult.error_message);
           }
 
-          args = `tor.active `;
+          args = `--tor.active `;
           args += `--tor.socks=127.0.0.1:${TOR_SETTINGS.socksPort} `;
           args += `--tor.v3 `;
           args += `--tor.control=${torResult.control} `;
@@ -330,7 +330,7 @@ export const model: IStoreModel = {
           debugShowStartupInfo &&
             toast("Tor initialized " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
         } catch (e: any) {
-          args = `--nolisten`;
+          args = `--nolisten `;
 
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
@@ -362,7 +362,7 @@ export const model: IStoreModel = {
           }
         }
       } else {
-        args = `--nolisten`;
+        args = `--nolisten `;
       }
 
       let persistentServicesEnabled =
