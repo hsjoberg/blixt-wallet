@@ -44,6 +44,7 @@ export enum StorageItem {
   language = "language",
   walletPassword = "walletPassword",
   autopilotEnabled = "autopilotEnabled",
+  autopilotNodePubkey = "autopilotNodePubkey",
   pushNotificationsEnabled = "pushNotificationsEnabled",
   clipboardInvoiceCheck = "clipboardInvoiceCheck",
   scheduledSyncEnabled = "scheduledSyncEnabled",
@@ -185,6 +186,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.language),
     removeItem(StorageItem.walletPassword),
     removeItem(StorageItem.autopilotEnabled),
+    removeItem(StorageItem.autopilotNodePubkey),
     removeItem(StorageItem.pushNotificationsEnabled),
     removeItem(StorageItem.clipboardInvoiceCheck),
     removeItem(StorageItem.scheduledSyncEnabled),
@@ -280,6 +282,7 @@ export const setupApp = async () => {
     setItemObject<string>(StorageItem.language, "en"),
     // walletPassword
     setItemObject<boolean>(StorageItem.autopilotEnabled, true),
+    setItemObject<string>(StorageItem.autopilotNodePubkey, BLIXT_NODE_PUBKEY),
     setItemObject<boolean>(StorageItem.pushNotificationsEnabled, true),
     setItemObject<boolean>(StorageItem.clipboardInvoiceCheck, PLATFORM === "ios" ? false : true),
     setItemObject<boolean>(StorageItem.scheduledSyncEnabled, false),

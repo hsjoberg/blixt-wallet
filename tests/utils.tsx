@@ -67,7 +67,9 @@ export const initCommonStore = async (waitUntilReady = false) => {
     await waitFor(() => expect(store.getState().lightning.syncedToGraph).toBe(true), {
       timeout: 5000,
     });
-    await waitFor(() => expect(store.getState().lightning.autopilotSet).toBeDefined());
+    await waitFor(() =>
+      expect(store.getState().autopilot.transactionSubscriptionStarted).toBe(true),
+    );
     await waitFor(() => expect(store.getState().receive.invoiceSubscriptionStarted).toBe(true), {
       timeout: 5000,
     });

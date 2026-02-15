@@ -1097,7 +1097,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               const t = await Alert.promisePromptCallback("lightningBoxAddress");
-              setItem(StorageItem.lightningBoxAddress, t);
+              setItem(StorageItem.lightningBoxAddress, t ?? "");
             }}
           >
             <Text style={styles.buttonText}>lightningBoxAddress prompt</Text>

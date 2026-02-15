@@ -87,6 +87,7 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
   );
   const setSyncEnabled = useStoreActions((store) => store.scheduledSync.setSyncEnabled);
   const writeConfig = useStoreActions((store) => store.writeConfig);
+  const checkAutopilot = useStoreActions((store) => store.autopilot.checkAutopilot);
 
   const restartNeeded = () => {
     const title = t("bitcoinNetwork.restartDialog.title");
@@ -202,6 +203,15 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
     restartNeeded();
   };
 
+  const onPressTriggerAutopilot = async () => {
+    try {
+      toast("Triggering autopilot check");
+      await checkAutopilot({ force: true });
+    } catch (error: any) {
+      toast("Error: " + error.message, 10000, "danger");
+    }
+  };
+
   const onGetNodeInfoPress = async () => {
     Alert.prompt(
       "Get node info",
@@ -270,6 +280,11 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
         "Provide payment hash",
         "plain-text",
       );
+
+      if (hash === null) {
+        return;
+      }
+
       const invoice = await lookupInvoice({
         rHashStr: hash,
       });
@@ -620,6 +635,13 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
         writeConfig();
         toast(t("msg.written", { ns: namespaces.common }));
       },
+    },
+    {
+      type: "item",
+      icon: { type: "MaterialCommunityIcons", name: "flash-outline" },
+      title: "Trigger autopilot check",
+      subtitle: "Run custom channel-open autopilot now",
+      onPress: onPressTriggerAutopilot,
     },
     {
       type: "item",

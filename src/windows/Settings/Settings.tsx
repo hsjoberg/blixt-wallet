@@ -14,6 +14,7 @@ import {
 import {
   DEFAULT_DUNDER_SERVER,
   DEFAULT_INVOICE_EXPIRY,
+  BLIXT_NODE_PUBKEY,
   DEFAULT_LIGHTNINGBOX_SERVER,
   DEFAULT_LND_LOG_LEVEL,
   DEFAULT_MAX_LN_FEE_PERCENTAGE,
@@ -255,15 +256,72 @@ export default function Settings({ navigation }: ISettingsProps) {
 
   // Autopilot
   const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
+  const autopilotNodePubkey = useStoreState((store) => store.settings.autopilotNodePubkey);
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
-  const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
-  const onToggleAutopilotPress = () => {
+  const changeAutopilotNodePubkey = useStoreActions(
+    (store) => store.settings.changeAutopilotNodePubkey,
+  );
+  const checkAutopilot = useStoreActions((store) => store.autopilot.checkAutopilot);
+  const onToggleAutopilotPress = async () => {
     // TODO why not await?
     if (!rpcReady) {
       return;
     }
-    changeAutopilotEnabled(!autopilotEnabled);
-    setupAutopilot(!autopilotEnabled);
+    await changeAutopilotEnabled(!autopilotEnabled);
+    if (!autopilotEnabled) {
+      await checkAutopilot();
+    }
+  };
+  const onSetAutopilotNodePubkeyPress = () => {
+    Alert.prompt(
+      t("LN.autopilotNodePubkey.setDialog.title"),
+      undefined,
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: t("buttons.ok", { ns: namespaces.common }),
+          onPress: async (text?: string) => {
+            const trimmed = text?.trim() ?? "";
+            if (!trimmed) {
+              return;
+            }
+            await changeAutopilotNodePubkey(trimmed);
+            if (autopilotEnabled) {
+              await checkAutopilot();
+            }
+          },
+        },
+      ],
+      "plain-text",
+      autopilotNodePubkey,
+    );
+  };
+
+  const onSetAutopilotNodePubkeyLongPress = () => {
+    Alert.alert(
+      t("LN.autopilotNodePubkey.restoreDialog.title"),
+      t("LN.autopilotNodePubkey.restoreDialog.msg") + "?",
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: t("buttons.yes", { ns: namespaces.common }),
+          onPress: async () => {
+            await changeAutopilotNodePubkey(BLIXT_NODE_PUBKEY);
+            if (autopilotEnabled) {
+              await checkAutopilot();
+            }
+          },
+        },
+      ],
+    );
   };
 
   // Push Notifications
@@ -591,7 +649,7 @@ ${t("LN.inbound.dialog.msg3")}`;
         onchainExplorer in OnchainExplorer ? undefined : onchainExplorer,
       );
 
-      if (explorer.trim().length !== 0) {
+      if (explorer !== null && explorer.trim().length !== 0) {
         await changeOnchainExplorer(explorer);
       }
     };
@@ -1178,10 +1236,13 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
 
     try {
+      if (expiryString === null) {
+        return;
+      }
       const expiryNumber = Number.parseInt(expiryString, 10);
       await changeInvoiceExpiry(expiryNumber);
-    } catch (e: any) {
-      Alert.alert("", "Could not update expiry.\n" + e.message);
+    } catch (error: any) {
+      Alert.alert("", "Could not update expiry.\n" + error.message);
     }
   };
 
@@ -1711,6 +1772,19 @@ ${t("experimental.tor.disabled.msg2")}`;
         checked: autopilotEnabled,
         onPress: onToggleAutopilotPress,
       },
+      ...(autopilotEnabled
+        ? [
+            {
+              type: "item",
+              icon: { type: "FontAwesome", name: "server" },
+              title: t("LN.autopilotNodePubkey.title"),
+              subtitle:
+                autopilotNodePubkey === BLIXT_NODE_PUBKEY ? "Blixt LSP" : autopilotNodePubkey,
+              onPress: onSetAutopilotNodePubkeyPress,
+              onLongPress: onSetAutopilotNodePubkeyLongPress,
+            },
+          ]
+        : []),
       {
         type: "item",
         icon: { type: "MaterialCommunityIcons", name: "cloud-download" },
@@ -2002,6 +2076,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     onchainExplorer,
     lndChainBackend,
     autopilotEnabled,
+    autopilotNodePubkey,
     dunderServer,
     speedloaderServer,
     requireGraphSync,
