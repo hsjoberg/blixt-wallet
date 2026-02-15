@@ -1,6 +1,8 @@
 import BigNumber from "bignumber.js";
 import { formatNumberGroupings } from "./index";
 
+const SATS_UNIT = 1 / 1e8;
+
 export interface IBitcoinUnit {
   key: keyof IBitcoinUnits;
   nice: string;
@@ -12,6 +14,7 @@ export interface IBitcoinUnit {
 
 export interface IBitcoinUnits {
   bitcoin: IBitcoinUnit;
+  bip177: IBitcoinUnit;
   milliBitcoin: IBitcoinUnit;
   bit: IBitcoinUnit;
   sat: IBitcoinUnit;
@@ -25,6 +28,13 @@ export const BitcoinUnits: IBitcoinUnits = {
     settings: "Bitcoin",
     unit: 1,
     decimals: 8,
+  },
+  bip177: {
+    key: "bip177",
+    nice: "₿",
+    settings: "BIP177",
+    unit: SATS_UNIT,
+    decimals: 0,
   },
   milliBitcoin: {
     key: "milliBitcoin",
@@ -46,14 +56,14 @@ export const BitcoinUnits: IBitcoinUnits = {
     nice: "sat",
     settings: "Sats",
     pluralize: true,
-    unit: 1 / 1e8,
+    unit: SATS_UNIT,
     decimals: 0,
   },
   satoshi: {
     key: "satoshi",
     nice: "satoshi",
     settings: "Satoshi",
-    unit: 1 / 1e8,
+    unit: SATS_UNIT,
     decimals: 0,
   },
 };
@@ -84,11 +94,16 @@ export const formatBitcoin = (satoshi: BigInt, unit: keyof IBitcoinUnits): strin
     case "milliBitcoin":
     case "bit":
       return `${fixed} ${getUnitNice(value, unit)}`;
+    case "bip177":
     case "sat":
     case "satoshi": {
       return `${formatNumberGroupings(fixed)} ${getUnitNice(value, unit)}`;
     }
   }
+};
+
+export const isSats = (unit: keyof IBitcoinUnits): boolean => {
+  return BitcoinUnits[unit].unit === SATS_UNIT;
 };
 
 export const getUnitNice = (value: BigNumber, unit: keyof IBitcoinUnits) => {
