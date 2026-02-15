@@ -48,7 +48,7 @@ export default function Form({
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.itemContainer}>
           {items.map(({ key, title, component, success, active }, i) =>
-            active ?? true ? (
+            (active ?? true) ? (
               <Item
                 key={key}
                 style={{

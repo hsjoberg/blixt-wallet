@@ -27,7 +27,12 @@ import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
 import { timeout, toast } from "../utils/index";
-import { formatBitcoin, convertBitcoinToFiat, getUnitNice } from "../utils/bitcoin-units";
+import {
+  formatBitcoin,
+  convertBitcoinToFiat,
+  getUnitNice,
+  isSats,
+} from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
 import Drawer from "../components/Drawer";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
@@ -99,8 +104,8 @@ function Overview({ navigation }: IOverviewProps) {
   const headerBtcFontSize = scrollYAnimatedValue.interpolate({
     inputRange: [0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT],
     outputRange: [
-      (!preferFiat && bitcoinUnit === "satoshi" ? 32 : 37) * fontFactor,
-      (!preferFiat && bitcoinUnit === "satoshi" ? 24 : 27) * fontFactor,
+      (!preferFiat && isSats(bitcoinUnit) ? 32 : 37) * fontFactor,
+      (!preferFiat && isSats(bitcoinUnit) ? 24 : 27) * fontFactor,
     ],
     extrapolate: "clamp",
   });
@@ -108,10 +113,10 @@ function Overview({ navigation }: IOverviewProps) {
   const headerBtcHeight = scrollYAnimatedValue.interpolate({
     inputRange: [0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT],
     outputRange: [
-      (!preferFiat && bitcoinUnit === "satoshi" ? 37 : 40) *
+      (!preferFiat && isSats(bitcoinUnit) ? 37 : 40) *
         1.3 *
         Math.min(PixelRatio.getFontScale(), 1.4),
-      !preferFiat && bitcoinUnit === "satoshi" ? 38.5 : 42,
+      !preferFiat && isSats(bitcoinUnit) ? 38.5 : 42,
     ],
     extrapolate: "clamp",
   });
@@ -186,6 +191,10 @@ function Overview({ navigation }: IOverviewProps) {
 
   const bitcoinBalance = formatBitcoin(balance, bitcoinUnit);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
+  const concealedBitcoinBalance =
+    bitcoinUnit === "bip177"
+      ? `${getUnitNice(new BigNumber(2), bitcoinUnit)} ●●●`
+      : `●●● ${getUnitNice(new BigNumber(2), bitcoinUnit)}`;
 
   return (
     <Container style={{ marginTop: PLATFORM === "macos" ? 0.5 : 0 }}>
@@ -310,7 +319,7 @@ function Overview({ navigation }: IOverviewProps) {
             )}
             {hideAmountsEnabled && (
               <>
-                {!preferFiat && <>●●● {getUnitNice(new BigNumber(2), bitcoinUnit)}</>}
+                {!preferFiat && <>{concealedBitcoinBalance}</>}
                 {preferFiat && <>●●● {fiatUnit}</>}
               </>
             )}
@@ -346,7 +355,7 @@ function Overview({ navigation }: IOverviewProps) {
           {hideAmountsEnabled && (
             <>
               <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
-                {preferFiat && <>●●● {getUnitNice(new BigNumber(2), bitcoinUnit)}</>}
+                {preferFiat && <>{concealedBitcoinBalance}</>}
                 {!preferFiat && <>●●● {fiatUnit}</>}
               </Animated.Text>
             </>

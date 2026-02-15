@@ -1,6 +1,8 @@
 import BigNumber from "bignumber.js";
 import { formatNumberGroupings } from "./index";
 
+const SATS_UNIT = 1 / 1e8;
+
 export interface IBitcoinUnit {
   key: keyof IBitcoinUnits;
   nice: string;
@@ -12,6 +14,7 @@ export interface IBitcoinUnit {
 
 export interface IBitcoinUnits {
   bitcoin: IBitcoinUnit;
+  bip177: IBitcoinUnit;
   milliBitcoin: IBitcoinUnit;
   bit: IBitcoinUnit;
   sat: IBitcoinUnit;
@@ -25,6 +28,13 @@ export const BitcoinUnits: IBitcoinUnits = {
     settings: "Bitcoin",
     unit: 1,
     decimals: 8,
+  },
+  bip177: {
+    key: "bip177",
+    nice: "₿",
+    settings: "BIP177",
+    unit: SATS_UNIT,
+    decimals: 0,
   },
   milliBitcoin: {
     key: "milliBitcoin",
@@ -46,14 +56,14 @@ export const BitcoinUnits: IBitcoinUnits = {
     nice: "sat",
     settings: "Sats",
     pluralize: true,
-    unit: 1 / 1e8,
+    unit: SATS_UNIT,
     decimals: 0,
   },
   satoshi: {
     key: "satoshi",
     nice: "satoshi",
     settings: "Satoshi",
-    unit: 1 / 1e8,
+    unit: SATS_UNIT,
     decimals: 0,
   },
 };
@@ -67,28 +77,53 @@ export const convertBitcoinUnit = (
   return btc.div(BitcoinUnits[to].unit);
 };
 
-export const formatBitcoin = (satoshi: BigInt, unit: keyof IBitcoinUnits): string => {
+export interface IFormatBitcoinOptions {
+  includeSign?: boolean;
+}
+
+export const formatBitcoin = (
+  satoshi: BigInt,
+  unit: keyof IBitcoinUnits,
+  options?: IFormatBitcoinOptions,
+): string => {
   if (typeof satoshi !== "bigint") {
     throw new Error("Argument need to be type bigint. Arg: " + typeof satoshi);
   }
 
-  const value = convertBitcoinUnit(Number(satoshi), "satoshi", unit);
-  const fixed = value.toFixed(BitcoinUnits[unit].decimals);
+  const isNegative = satoshi < 0n;
+  const absSatoshi = isNegative ? -satoshi : satoshi;
+  const value = convertBitcoinUnit(Number(absSatoshi), "satoshi", unit);
+  const fixedAbs = value.toFixed(BitcoinUnits[unit].decimals);
+
+  let formattedWithoutSign: string;
 
   switch (unit) {
     case "bitcoin":
-      return `${
-        fixed.substring(0, fixed.indexOf(".") + 1) +
-        fixed.substring(fixed.indexOf(".") + 1).replace(/(\d{2})(\d{3})(\d{3})/, "$1 $2 $3")
+      formattedWithoutSign = `${
+        fixedAbs.substring(0, fixedAbs.indexOf(".") + 1) +
+        fixedAbs.substring(fixedAbs.indexOf(".") + 1).replace(/(\d{2})(\d{3})(\d{3})/, "$1 $2 $3")
       } ${getUnitNice(value, unit)}`;
+      break;
     case "milliBitcoin":
     case "bit":
-      return `${fixed} ${getUnitNice(value, unit)}`;
+      formattedWithoutSign = `${fixedAbs} ${getUnitNice(value, unit)}`;
+      break;
+    case "bip177":
+      formattedWithoutSign = `${getUnitNice(value, unit)} ${formatNumberGroupings(fixedAbs)}`;
+      break;
     case "sat":
     case "satoshi": {
-      return `${formatNumberGroupings(fixed)} ${getUnitNice(value, unit)}`;
+      formattedWithoutSign = `${formatNumberGroupings(fixedAbs)} ${getUnitNice(value, unit)}`;
+      break;
     }
   }
+
+  const sign = options?.includeSign ? (isNegative ? "-" : "+") : isNegative ? "-" : "";
+  return `${sign}${formattedWithoutSign}`;
+};
+
+export const isSats = (unit: keyof IBitcoinUnits): boolean => {
+  return BitcoinUnits[unit].unit === SATS_UNIT;
 };
 
 export const getUnitNice = (value: BigNumber, unit: keyof IBitcoinUnits) => {

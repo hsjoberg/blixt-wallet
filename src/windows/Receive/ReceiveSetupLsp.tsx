@@ -152,7 +152,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
       });
     } catch (e: any) {
       setCreateInvoiceDisabled(false);
-      toast(`${t("msg.error")}: ${e.message}`, 12000, "danger", "Okay");
+      toast(`${t("msg.error", { ns: namespaces.common })}: ${e.message}`, 12000, "danger", "Okay");
     }
   };
 
@@ -207,6 +207,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
         selectedId: currentBitcoinUnit,
         items: [
           { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
+          { label: BitcoinUnits.bip177.settings, id: "bip177" },
           { label: BitcoinUnits.bit.settings, id: "bit" },
           { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
           { label: BitcoinUnits.milliBitcoin.settings, id: "milliBitcoin" },
@@ -220,6 +221,7 @@ export default function ReceiveSetupLsp({ navigation }: IReceiveSetupProps) {
         title: t("form.amountBitcoin.change"),
         data: [
           { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
+          { title: BitcoinUnits.bip177.settings, value: "bip177" },
           { title: BitcoinUnits.bit.settings, value: "bit" },
           { title: BitcoinUnits.satoshi.settings, value: "satoshi" },
           { title: BitcoinUnits.milliBitcoin.settings, value: "milliBitcoin" },

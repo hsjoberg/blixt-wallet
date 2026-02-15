@@ -229,6 +229,11 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
     transactionValue = transaction.amtPaidSat;
   }
 
+  const formattedTransactionValue =
+    transactionValue === 0n
+      ? formatBitcoin(transactionValue, bitcoinUnit)
+      : formatBitcoin(transactionValue, bitcoinUnit, { includeSign: true });
+
   const hasCoordinates = transaction.locationLat && transaction.locationLong;
 
   if (currentScreen === "Overview") {
@@ -312,7 +317,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
               )}
               <MetaData
                 title={t("generic.amount", { ns: namespaces.common })}
-                data={formatBitcoin(transactionValue, bitcoinUnit)}
+                data={formattedTransactionValue}
               />
               {transaction.valueFiat != null && transaction.valueFiatCurrency && (
                 <MetaData

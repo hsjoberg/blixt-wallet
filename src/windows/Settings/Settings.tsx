@@ -149,6 +149,7 @@ export default function Settings({ navigation }: ISettingsProps) {
         selectedId: currentBitcoinUnit,
         items: [
           { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
+          { label: BitcoinUnits.bip177.settings, id: "bip177" },
           { label: BitcoinUnits.bit.settings, id: "bit" },
           { label: BitcoinUnits.sat.settings, id: "sat" },
           { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
@@ -163,6 +164,7 @@ export default function Settings({ navigation }: ISettingsProps) {
         title: t("display.bitcoinUnit.title"),
         data: [
           { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
+          { title: BitcoinUnits.bip177.settings, value: "bip177" },
           { title: BitcoinUnits.bit.settings, value: "bit" },
           { title: BitcoinUnits.sat.settings, value: "sat" },
           { title: BitcoinUnits.satoshi.settings, value: "satoshi" },
