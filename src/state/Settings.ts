@@ -52,6 +52,7 @@ export interface ISettingsModel {
   changeName: Thunk<ISettingsModel, string | null>;
   changeLanguage: Thunk<ISettingsModel, string>;
   changeAutopilotEnabled: Thunk<ISettingsModel, boolean>;
+  changeAutopilotNodePubkey: Thunk<ISettingsModel, string>;
   changePushNotificationsEnabled: Thunk<ISettingsModel, boolean>;
   changeClipboardInvoiceCheckEnabled: Thunk<ISettingsModel, boolean>;
   changeScheduledSyncEnabled: Thunk<ISettingsModel, boolean>;
@@ -102,6 +103,7 @@ export interface ISettingsModel {
   setName: Action<ISettingsModel, string | null>;
   setLanguage: Action<ISettingsModel, string>;
   setAutopilotEnabled: Action<ISettingsModel, boolean>;
+  setAutopilotNodePubkey: Action<ISettingsModel, string>;
   setPushNotificationsEnabled: Action<ISettingsModel, boolean>;
   setClipboardInvoiceCheckInvoicesEnabled: Action<ISettingsModel, boolean>;
   setScheduledSyncEnabled: Action<ISettingsModel, boolean>;
@@ -152,6 +154,7 @@ export interface ISettingsModel {
   name: string | null;
   language: string;
   autopilotEnabled: boolean;
+  autopilotNodePubkey: string;
   pushNotificationsEnabled: boolean;
   clipboardInvoiceCheckEnabled: boolean;
   scheduledSyncEnabled: boolean;
@@ -216,7 +219,10 @@ export const settings: ISettingsModel = {
     actions.setFiatUnit((await getItemObject(StorageItem.fiatUnit)) || "USD");
     actions.setName((await getItemObject(StorageItem.name)) || null);
     actions.setLanguage((await getItemObject(StorageItem.language)) || "en");
-    actions.setAutopilotEnabled(await getItemObject(StorageItem.autopilotEnabled || false));
+    actions.setAutopilotEnabled((await getItemObject(StorageItem.autopilotEnabled)) ?? true);
+    actions.setAutopilotNodePubkey(
+      (await getItemObject(StorageItem.autopilotNodePubkey)) || BLIXT_NODE_PUBKEY,
+    );
     actions.setPushNotificationsEnabled(
       await getItemObject(StorageItem.pushNotificationsEnabled || false),
     );
@@ -335,6 +341,11 @@ export const settings: ISettingsModel = {
   changeAutopilotEnabled: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.autopilotEnabled, payload);
     actions.setAutopilotEnabled(payload);
+  }),
+
+  changeAutopilotNodePubkey: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.autopilotNodePubkey, payload);
+    actions.setAutopilotNodePubkey(payload);
   }),
 
   changePushNotificationsEnabled: thunk(async (actions, payload) => {
@@ -572,6 +583,9 @@ export const settings: ISettingsModel = {
   setAutopilotEnabled: action((state, payload) => {
     state.autopilotEnabled = payload;
   }),
+  setAutopilotNodePubkey: action((state, payload) => {
+    state.autopilotNodePubkey = payload;
+  }),
   setPushNotificationsEnabled: action((state, payload) => {
     state.pushNotificationsEnabled = payload;
   }),
@@ -710,7 +724,8 @@ export const settings: ISettingsModel = {
   fiatUnit: "USD",
   name: null,
   language: "en",
-  autopilotEnabled: false,
+  autopilotEnabled: true,
+  autopilotNodePubkey: BLIXT_NODE_PUBKEY,
   pushNotificationsEnabled: false,
   clipboardInvoiceCheckEnabled: false,
   scheduledSyncEnabled: false,
@@ -771,7 +786,7 @@ export const settings: ISettingsModel = {
 
     const autopilotEnabled = rand(0, 1) === 1;
     state.setAutopilotEnabled(autopilotEnabled);
-    dispatch.lightning.setupAutopilot(autopilotEnabled);
+    state.setAutopilotNodePubkey(BLIXT_NODE_PUBKEY);
 
     state.setPushNotificationsEnabled(rand(0, 1) === 1);
     state.setClipboardInvoiceCheckInvoicesEnabled(rand(0, 1) === 1);
