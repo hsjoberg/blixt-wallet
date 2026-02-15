@@ -32,7 +32,6 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
-  const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -105,7 +104,6 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                       text: "Yes",
                       onPress: async () => {
                         changeAutopilotEnabled(false);
-                        setupAutopilot(false);
                       },
                     },
                   ],
