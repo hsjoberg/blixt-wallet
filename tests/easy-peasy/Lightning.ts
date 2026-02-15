@@ -9,6 +9,13 @@ jest.setTimeout(20000);
 test("initialize lightning store", async () => {
   const store = await initCommonStore(true);
 
-  await waitFor(() => expect(store.getState().lightning.syncedToChain).toBe(true), { timeout: 5000 });
-  await waitFor(() => expect(store.getState().lightning.autopilotSet).toBeDefined(), { timeout: 5000 });
+  await waitFor(() => expect(store.getState().lightning.syncedToChain).toBe(true), {
+    timeout: 5000,
+  });
+  await waitFor(
+    () => expect(store.getState().autopilot.transactionSubscriptionStarted).toBe(true),
+    {
+      timeout: 5000,
+    },
+  );
 });

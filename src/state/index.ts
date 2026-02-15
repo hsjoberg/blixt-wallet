@@ -25,6 +25,7 @@ import { IFiatModel, fiat } from "./Fiat";
 import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
 import { IGoogleModel, google } from "./Google";
 import { IICloudBackupModel, iCloudBackup } from "./ICloudBackup";
+import { IAutopilotModel, autopilot } from "./Autopilot";
 import { ILNUrlModel, lnUrl } from "./LNURL";
 import { ILightNameModel, lightName } from "./LightName";
 import { ILightningModel, LndChainBackend, lightning } from "./Lightning";
@@ -157,6 +158,7 @@ export interface IStoreModel {
   fiat: IFiatModel;
   security: ISecurityModel;
   settings: ISettingsModel;
+  autopilot: IAutopilotModel;
   clipboardManager: IClipboardManagerModel;
   scheduledSync: IScheduledSyncModel;
   lnUrl: ILNUrlModel;
@@ -872,6 +874,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   send,
   receive,
   onChain,
+  autopilot,
   fiat,
   security,
   settings,

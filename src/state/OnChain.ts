@@ -113,7 +113,7 @@ export const onChain: IOnChainModel = {
         {},
         async (transaction) => {
           try {
-            log.d("Event SubscribeTransactions", []);
+            log.d("Event SubscribeTransactions", [transaction]);
 
             await actions.getBalance();
 

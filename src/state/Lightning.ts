@@ -1,15 +1,11 @@
 import { Action, Computed, Thunk, action, computed, thunk } from "easy-peasy";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { stringToUint8Array, timeout, toast } from "../utils";
-
 import { Chain } from "../utils/build";
 import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
 
 import {
-  autopilotModifyStatus,
-  autopilotSetScores,
-  autopilotStatus,
   connectPeer,
   disconnectPeer,
   getInfo,
@@ -58,7 +54,6 @@ export interface ILightningModel {
   waitForChainSync: Thunk<ILightningModel, void, IStoreInjections>;
   waitForGraphSync: Thunk<ILightningModel, void, IStoreInjections>;
   checkRecoverInfo: Thunk<ILightningModel, void, IStoreInjections, IStoreModel, Promise<void>>;
-  setupAutopilot: Thunk<ILightningModel, boolean, IStoreInjections>;
   getLightningPeers: Thunk<ILightningModel, void, IStoreInjections>;
   connectPeer: Thunk<ILightningModel, string, IStoreInjections>;
   disconnectPeer: Thunk<ILightningModel, string, IStoreInjections>;
@@ -73,7 +68,6 @@ export interface ILightningModel {
   setSyncedToGraph: Action<ILightningModel, boolean>;
   setRecoverInfo: Action<ILightningModel, GetRecoveryInfoResponse>;
   setFirstSync: Action<ILightningModel, boolean>;
-  setAutopilotSet: Action<ILightningModel, boolean>;
   setLightningPeers: Action<ILightningModel, ISetLightningPeersPayload[]>;
 
   setBestBlockheight: Action<ILightningModel, number>;
@@ -88,7 +82,6 @@ export interface ILightningModel {
   ready: boolean;
   initializeDone: boolean;
   firstSync: boolean;
-  autopilotSet?: boolean;
   lightningPeers: ILightningPeer[];
 
   bestBlockheight?: number;
@@ -96,7 +89,7 @@ export interface ILightningModel {
 }
 
 export const lightning: ILightningModel = {
-  initialize: thunk(async (actions, { start }, { getState, getStoreState }) => {
+  initialize: thunk(async (actions, { start }, { getState, getStoreState, getStoreActions }) => {
     log.d("getState().ready: " + getState().ready);
     if (getState().ready) {
       log.d("Lightning store already started");
@@ -134,10 +127,11 @@ export const lightning: ILightningModel = {
 
         debugShowStartupInfo &&
           toast("syncedToChain time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
-        await actions.setupAutopilot(getStoreState().settings.autopilotEnabled);
+        await getStoreActions().autopilot.checkAutopilot();
         await actions.waitForGraphSync();
         debugShowStartupInfo &&
           toast("syncedToGraph time: " + (new Date().getTime() - start.getTime()) / 1000 + "s");
+        await getStoreActions().autopilot.checkAutopilot();
         actions.setInitializeDone(true);
       } catch (e: any) {
         debugShowStartupInfo &&
@@ -175,6 +169,7 @@ export const lightning: ILightningModel = {
         dispatch.channel.initialize(),
         dispatch.receive.initialize(),
         dispatch.onChain.initialize(),
+        dispatch.autopilot.initialize(),
         dispatch.transaction.checkOpenTransactions(),
         dispatch.scheduledSync.initialize(),
         dispatch.notificationManager.initialize(),
@@ -208,39 +203,6 @@ export const lightning: ILightningModel = {
       toast(e.message, 0, "danger", "OK");
       return;
     }
-  }),
-
-  setupAutopilot: thunk(async (actions, enabled, {}) => {
-    log.i("Setting up Autopilot");
-
-    if (enabled) {
-      try {
-        await timeout(5000);
-        const scores = await getNodeScores();
-        log.i("Setting autopilot scores", [scores]);
-        await autopilotSetScores({
-          scores,
-          heuristic: "externalscore",
-        });
-        log.i("Autopilot scores set");
-      } catch (e) {
-        log.e("Autopilot fail", [e]);
-      }
-    }
-
-    do {
-      try {
-        await autopilotModifyStatus({
-          enable: enabled,
-        });
-        actions.setAutopilotSet(enabled);
-        log.i("Autopilot status:", [await autopilotStatus({})]);
-        break;
-      } catch (e: any) {
-        log.e("Error modifying Autopilot: " + e.message);
-        await timeout(2000);
-      }
-    } while (true);
   }),
 
   getLightningPeers: thunk(async (actions, _, {}) => {
@@ -447,9 +409,6 @@ export const lightning: ILightningModel = {
   setFirstSync: action((state, payload) => {
     state.firstSync = payload;
   }),
-  setAutopilotSet: action((state, payload) => {
-    state.autopilotSet = payload;
-  }),
   setLightningPeers: action((state, payload) => {
     state.lightningPeers = payload.map((p) => ({
       // peer: lnrpc.Peer.create(p.peer),
@@ -476,34 +435,4 @@ export const lightning: ILightningModel = {
   firstSync: false,
   bestBlockheight: undefined,
   lightningPeers: [],
-};
-
-const getNodeScores = async () => {
-  if (Chain === "testnet") {
-    return { "036b7130b27a23d6fe1d55c1d3bed9e6da5a17090588b0834e8200e0d50ee6886a": 1 };
-  } else if (Chain === "mainnet") {
-    return { "0230a5bca558e6741460c13dd34e636da28e52afd91cf93db87ed1b0392a7466eb": 1 };
-  }
-
-  // TODO(hsjoberg): needs cleanup
-
-  const url =
-    Chain === "mainnet"
-      ? "https://nodes.lightning.computer/availability/v1/btc.json"
-      : "https://nodes.lightning.computer/availability/v1/btctestnet.json";
-  const response = await fetch(url);
-  const json = await response.json();
-
-  const scores = json.scores.reduce(
-    (map: any, { public_key, score }: { public_key: any; score: any }) => {
-      if (typeof public_key !== "string" || !Number.isInteger(score)) {
-        throw new Error("Invalid node score format!");
-      }
-      map[public_key] = score / 100000000.0;
-      return map;
-    },
-    {},
-  );
-
-  return scores;
 };
