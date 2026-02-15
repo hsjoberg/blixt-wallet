@@ -5,6 +5,7 @@ import {
   valueBitcoinFromFiat,
   valueBitcoin,
   BitcoinUnits,
+  isSats,
 } from "../utils/bitcoin-units";
 import { useStoreState } from "../state/store";
 import { I18nManager, NativeModules } from "react-native";
@@ -69,8 +70,8 @@ export default function useBalance(initialSat?: bigint, noConversion = false) {
 
   return {
     onChangeBitcoinInput(text: string) {
-      if (bitcoinUnit === "satoshi") {
-        text = text.replace(/\[^0-9+\-\/*]/g, "");
+      if (isSats(bitcoinUnit)) {
+        text = text.replace(/[^0-9+\-\/*]/g, "");
       } else {
         let replaceComma: boolean = true;
         if (PLATFORM === "ios") {

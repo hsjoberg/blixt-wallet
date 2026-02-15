@@ -6,7 +6,12 @@ import DialogAndroid from "react-native-dialogs";
 import { useStoreState, useStoreActions } from "../../state/store";
 import { getDomainFromURL, toast, timeout } from "../../utils";
 import { ILNUrlWithdrawRequest } from "../../state/LNURL";
-import { convertBitcoinUnit, formatBitcoin, BitcoinUnits } from "../../utils/bitcoin-units";
+import {
+  convertBitcoinUnit,
+  formatBitcoin,
+  BitcoinUnits,
+  isSats,
+} from "../../utils/bitcoin-units";
 import { PLATFORM } from "../../utils/constants";
 import LoadingModal from "../LoadingModal";
 import { Alert } from "../../utils/alert";
@@ -178,8 +183,8 @@ export default function LNURLWithdrawRequest({ navigation }: IWithdrawRequestPro
                     onPress: (text) => {
                       action = DialogAndroid.actionPositive;
                       text = text ?? "0";
-                      if (bitcoinUnit === "satoshi") {
-                        text = text.replace(/\[^0-9+\-\/*]/g, "");
+                      if (isSats(bitcoinUnit)) {
+                        text = text.replace(/[^0-9+\-\/*]/g, "");
                       } else {
                         text = text.replace(/,/g, ".");
                       }
