@@ -40,6 +40,13 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
   } else {
     transactionValue = value;
   }
+  const absTransactionValue = transactionValue < 0n ? -transactionValue : transactionValue;
+  const signedTransactionValue = positive ? absTransactionValue : -absTransactionValue;
+  const transactionSign = positive ? "+" : "-";
+  const concealedBitcoinValue =
+    unit === "bip177"
+      ? `${transactionSign}${getUnitNice(new BigNumber(2), bitcoinUnit)} ●●●`
+      : `${transactionSign}●●● ${getUnitNice(new BigNumber(2), bitcoinUnit)}`;
 
   // const start = performance.now();
   const lightningService = getLightningService(transaction);
@@ -122,25 +129,27 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
                 >
                   {transactionValue !== 0n && (
                     <>
-                      {positive ? "+" : ""}
-
                       {!hideAmountsEnabled && (
                         <>
-                          {!preferFiat && formatBitcoin(transactionValue, unit)}
+                          {!preferFiat &&
+                            formatBitcoin(signedTransactionValue, unit, {
+                              includeSign: true,
+                            })}
                           {preferFiat &&
-                            convertBitcoinToFiat(transactionValue, currentRate, fiatUnit)}
+                            transactionSign +
+                              convertBitcoinToFiat(absTransactionValue, currentRate, fiatUnit)}
                         </>
                       )}
                       {hideAmountsEnabled && (
                         <>
                           {!preferFiat && (
                             <>
-                              {!positive ? "-" : ""}●●● {getUnitNice(new BigNumber(2), bitcoinUnit)}
+                              {concealedBitcoinValue}
                             </>
                           )}
                           {preferFiat && (
                             <>
-                              {!positive ? "-" : ""}●●● {fiatUnit}
+                              {transactionSign}●●● {fiatUnit}
                             </>
                           )}
                         </>

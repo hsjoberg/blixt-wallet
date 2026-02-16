@@ -4,11 +4,10 @@ import { Image, Linking, StyleSheet } from "react-native";
 import { Body, Card, CardItem, Icon, Left, Right, Row, Text } from "native-base";
 import { Line, Svg } from "react-native-svg";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
-import { getUnitNice, valueBitcoin, valueFiat } from "../utils/bitcoin-units";
+import { formatBitcoin, valueFiat } from "../utils/bitcoin-units";
 import { identifyService, lightningServices } from "../utils/lightning-services";
 import { useStoreActions, useStoreState } from "../state/store";
 
-import BigNumber from "bignumber.js";
 import CopyText from "./CopyText";
 import React from "react";
 import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
@@ -263,12 +262,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text>{t("channel.capacity")}</Text>
             </Left>
             <Right>
-              {!preferFiat && (
-                <Text>
-                  {valueBitcoin(channel.capacity, bitcoinUnit)}{" "}
-                  {getUnitNice(new BigNumber(localBalance.toString()), bitcoinUnit)}
-                </Text>
-              )}
+              {!preferFiat && <Text>{formatBitcoin(channel.capacity, bitcoinUnit)}</Text>}
               {preferFiat && (
                 <Text>
                   {valueFiat(channel.capacity, currentRate).toFixed(2)} {fiatUnit}
@@ -311,9 +305,8 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 {!preferFiat && (
                   <>
                     <Text style={{ color: blixtTheme.green }}>
-                      {valueBitcoin(localBalance, bitcoinUnit)}{" "}
+                      {formatBitcoin(localBalance, bitcoinUnit)}
                     </Text>
-                    <Text>{getUnitNice(new BigNumber(localBalance.toString()), bitcoinUnit)}</Text>
                   </>
                 )}
                 {preferFiat && (
@@ -336,9 +329,8 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 {!preferFiat && (
                   <>
                     <Text style={{ color: blixtTheme.red }}>
-                      {valueBitcoin(remoteBalance, bitcoinUnit)}{" "}
+                      {formatBitcoin(remoteBalance, bitcoinUnit)}
                     </Text>
-                    <Text>{getUnitNice(new BigNumber(remoteBalance.toString()), bitcoinUnit)}</Text>
                   </>
                 )}
                 {preferFiat && (
@@ -362,16 +354,15 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                   <>
                     <Text>
                       {localReserve === channel.localChanReserveSat && (
-                        <>{valueBitcoin(localReserve, bitcoinUnit)} </>
+                        <>{formatBitcoin(localReserve, bitcoinUnit)}</>
                       )}
                       {localReserve !== channel.localChanReserveSat && (
                         <>
-                          {valueBitcoin(localReserve, bitcoinUnit)}/
-                          {valueBitcoin(channel.localChanReserveSat, bitcoinUnit)}{" "}
+                          {formatBitcoin(localReserve, bitcoinUnit)}/
+                          {formatBitcoin(channel.localChanReserveSat, bitcoinUnit)}
                         </>
                       )}
                     </Text>
-                    <Text>{getUnitNice(new BigNumber(localReserve.toString()), bitcoinUnit)}</Text>
                   </>
                 )}
                 {preferFiat && (
@@ -401,10 +392,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text>
                 {preferFiat &&
                   valueFiat(channel.commitFee, currentRate).toFixed(2) + " " + fiatUnit}
-                {!preferFiat &&
-                  valueBitcoin(channel.commitFee, bitcoinUnit) +
-                    " " +
-                    getUnitNice(new BigNumber(localReserve.toString()), bitcoinUnit)}
+                {!preferFiat && formatBitcoin(channel.commitFee, bitcoinUnit)}
               </Text>
             </Right>
           </Row>
