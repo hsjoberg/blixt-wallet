@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { StyleSheet, StatusBar, NativeModules, SafeAreaView, Platform } from "react-native";
 import DialogAndroid from "react-native-dialogs";
 import { Text, H1, View, Spinner, Icon } from "native-base";
@@ -283,8 +283,18 @@ export default function Start({ navigation }: IStartProps) {
     (state) => state.settings.changeScheduledSyncEnabled,
   );
   const [createWalletLoading, setCreateWalletLoading] = useState(false);
+  const [createWalletPressLocked, setCreateWalletPressLocked] = useState(false);
+  const createWalletInFlightRef = useRef(false);
+  const createWalletBusy = createWalletLoading || createWalletPressLocked;
 
   const onCreateWalletPress = async () => {
+    if (createWalletInFlightRef.current || createWalletBusy) {
+      return;
+    }
+
+    createWalletInFlightRef.current = true;
+    setCreateWalletPressLocked(true);
+
     try {
       await generateSeed(undefined);
       Alert.alert(
@@ -313,13 +323,17 @@ ${t("createWallet.msg3")}`,
               } catch (error: any) {
                 toast(error.message, undefined, "danger");
                 setCreateWalletLoading(false);
+                createWalletInFlightRef.current = false;
+                setCreateWalletPressLocked(false);
               }
             },
           },
         ],
       );
-    } catch (e) {
+    } catch (e: any) {
       Alert.alert(e.message);
+      createWalletInFlightRef.current = false;
+      setCreateWalletPressLocked(false);
     }
   };
 
@@ -338,7 +352,7 @@ ${t("createWallet.msg3")}`,
           barStyle="light-content"
         />
 
-        {!createWalletLoading && (
+        {!createWalletBusy && (
           <TopMenu navigation={navigation} setCreateWalletLoading={setCreateWalletLoading} />
         )}
 
@@ -347,7 +361,7 @@ ${t("createWallet.msg3")}`,
         ) : (
           <H1 style={style.header}>{t("title")}</H1>
         )}
-        {!createWalletLoading ? (
+        {!createWalletBusy ? (
           <>
             <AnimatedView>
               <Button style={style.button} onPress={onCreateWalletPress}>
