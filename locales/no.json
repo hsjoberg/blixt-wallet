@@ -40,11 +40,7 @@
   "welcome.start": {
     "title": "Velkommen",
     "createWallet": {
-      "title": "Opprett lommebok",
-      "msg1": "Blixt Wallet er fortsatt i en tidlig utviklingsfase.",
-      "msg2": "Hvis du bruker denne lommeboken, sørg for at du forstår at du kan miste midlene dine.",
-      "msg3": "Det er for øyeblikket ingen WatchTower-støtte for å overvåke kanalene dine mens du er frakoblet.",
-      "msg4": "Jeg er uansvarlig, fortsett"
+      "title": "Opprett lommebok"
     },
     "createWalletWithPassphrase": {
       "title": "Angi passfrase (25. ord for å kryptere frøet)",

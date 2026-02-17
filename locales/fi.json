@@ -40,11 +40,7 @@
   "welcome.start": {
     "title": "Tervetuloa",
     "createWallet": {
-      "title": "Luo lompakko",
-      "msg1": "Blixt-lompakko on vielä varhaisessa kehitysvaiheessa.",
-      "msg2": "Jos käytät tätä lompakkoa, varmista, että ymmärrät, että saatat menettää varojasi.",
-      "msg3": "Tällä hetkellä ei ole WatchTower-tukea kanaviesi valvomiseksi, kun olet offline-tilassa.",
-      "msg4": "Olen uhkarohkea, jatka"
+      "title": "Luo lompakko"
     },
     "createWalletWithPassphrase": {
       "title": "Aseta salasana (25. sana siemenen salaukseen)",

@@ -41,11 +41,7 @@
   "welcome.start": {
     "title": "Vítejte",
     "createWallet": {
-      "title": "Vytvořit peněženku",
-      "msg1": "Blixt Wallet je stále v rané fázi vývoje.",
-      "msg2": "Pokud používáte tuto peněženku, ujistěte se, že rozumíte tomu, že můžete ztratit své prostředky.",
-      "msg3": "Momentálně není podpora pro WatchTower, aby bylo možné sledovat vaše kanály, když jste offline.",
-      "msg4": "Opravdu chcete pokračovat?"
+      "title": "Vytvořit peněženku"
     },
     "createWalletWithPassphrase": {
       "title": "Nastavit passphrase (25. slovo pro šifrování seedu)",

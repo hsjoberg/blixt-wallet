@@ -41,11 +41,7 @@
   "welcome.start": {
     "title": "Welkom",
     "createWallet": {
-      "title": "Wallet aanmaken",
-      "msg1": "Blixt Wallet bevindt zich nog in een vroeg ontwikkelingsstadium.",
-      "msg2": "Als je deze wallet gebruikt, zorg er dan voor dat je begrijpt dat je jouw geld zou kunnen verliezen.",
-      "msg3": "Er is momenteel geen WatchTower-ondersteuning om je kanalen te bewaken terwijl je offline bent.",
-      "msg4": "Ik ben roekeloos, ga verder"
+      "title": "Wallet aanmaken"
     },
     "createWalletWithPassphrase": {
       "title": "Wachtwoordzin instellen (25e woord om het zaad te coderen)",

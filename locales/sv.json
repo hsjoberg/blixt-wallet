@@ -41,11 +41,7 @@
   "welcome.start": {
     "title": "Välkommen",
     "createWallet": {
-      "title": "Skapa plånbok",
-      "msg1": "Blixt Wallet är fortfarande i en tidig utvecklingsfas.",
-      "msg2": "Om du använder denna plånbok, var beredd på att du kan förlora dina pengar.",
-      "msg3": "Det finns för tillfället inget WatchTower-stöd som övervakar dina kanaler när du är offline.",
-      "msg4": "Jag är besinningslös, fortsätt"
+      "title": "Skapa plånbok"
     },
     "createWalletWithPassphrase": {
       "title": "Set passphrase (25th word to encrypt the seed)",

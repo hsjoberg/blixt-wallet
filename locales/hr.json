@@ -41,11 +41,7 @@
   "welcome.start": {
     "title": "Dobrodošli",
     "createWallet": {
-      "title": "Stvori novčanik",
-      "msg1": "Blixt Wallet je još uvijek u ranoj fazi razvoja.",
-      "msg2": "Ako koristite ovaj novčanik, svakako shvatite da biste mogli izgubiti svoja sredstva.",
-      "msg3": "Trenutno nema podrške za WatchTower za stražu vaših kanala dok ste odspojeni.",
-      "msg4": "Nemaran sam, nastavi"
+      "title": "Stvori novčanik"
     },
     "createWalletWithPassphrase": {
       "title": "Postavi lozinku (passphrase - 25. riječ za šifriranje sjemena)",

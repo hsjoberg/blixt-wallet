@@ -43,11 +43,7 @@
   "welcome.start": {
     "title": "yI'el",
     "createWallet": {
-      "title": "ChenmoH tlhoy'",
-      "msg1": "yo' qIjDaq suvchoH SuvwI'pu' 'e' luHarlu'.",
-      "msg2": "joHwI', bIvumchugh, vaj choquvHa'moHlaHbe'chugh.",
-      "msg3": "reH lut tlhaQ bOQoy boneHpu'chugh.",
-      "msg4": "reH jIHvaD qelnIS"
+      "title": "ChenmoH tlhoy'"
     },
     "createWalletWithPassphrase": {
       "title": "pIj qIp (25 qatlh qo' Hoch)",
@@ -1165,7 +1161,7 @@
     "info": {
       "welcome": "qaDangan pegh wISov.",
       "whatIs": "'ach tlhIngan SuvwI'pu' quv, DaH nuvpu' tInqu'mo' tlhIngan jontaHvIS DeSwI' Danob'eghtaHvIS.",
-      "persistentMode":"muchoHlu'DI' 'ach munglu'bogh quv law' 'e' vIchaw'. tlhogh Dup nap neH yIjatlh. QI'yaH, cha' qab rurbe'.",
+      "persistentMode": "muchoHlu'DI' 'ach munglu'bogh quv law' 'e' vIchaw'. tlhogh Dup nap neH yIjatlh. QI'yaH, cha' qab rurbe'.",
       "currentRules": "'uttaHvIS bIQ je tu'lu'. 'ach pe'vIl 'angqangtaH. wa'SanID yuQmeyDaq bIghoSbe'chugh vay' dajaHbe'."
     },
     "prerequisites": {

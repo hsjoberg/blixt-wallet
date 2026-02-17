@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { JSX, useRef, useState } from "react";
 import { StyleSheet, StatusBar, NativeModules, SafeAreaView, Platform } from "react-native";
 import DialogAndroid from "react-native-dialogs";
 import { Text, H1, View, Spinner, Icon } from "native-base";
@@ -80,7 +80,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
               },
               {
                 text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
-                onPress: async (text) => {
+                onPress: async (text?: string) => {
                   try {
                     if (!text || text.trim().length === 0) {
                       toast(t("createWalletWithPassphrase.invalidMessage"), undefined, "danger");
@@ -153,7 +153,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
         },
         {
           text: t("bitcoinNetwork.node.setDialog.title", { ns: namespaces.settings.settings }),
-          onPress: async (text) => {
+          onPress: async (text?: string) => {
             if (text === neutrinoPeers.join(",")) {
               return;
             }
@@ -271,7 +271,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
 }
 
 export interface IStartProps {
-  navigation: StackNavigationProp<WelcomeStackParamList, "Start">;
+  navigation: StackNavigationProp<WelcomeStackParamList>;
   setCreateWalletLoading: (loading: boolean) => void;
 }
 export default function Start({ navigation }: IStartProps) {
@@ -297,39 +297,25 @@ export default function Start({ navigation }: IStartProps) {
 
     try {
       await generateSeed(undefined);
-      Alert.alert(
-        t("msg.warning", { ns: namespaces.common }),
-        `${t("createWallet.msg1")}
 
-${t("createWallet.msg2")}
+      try {
+        setCreateWalletLoading(true);
+        await createWallet();
+        await setSyncEnabled(true);
+        await changeScheduledSyncEnabled(true);
 
-${t("createWallet.msg3")}`,
-        [
-          {
-            text: t("createWallet.msg4"),
-            onPress: async () => {
-              try {
-                setCreateWalletLoading(true);
-                await createWallet();
-                await setSyncEnabled(true); // TODO test
-                await changeScheduledSyncEnabled(true);
-
-                navigation.dispatch(
-                  CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: "Loading" }],
-                  }),
-                );
-              } catch (error: any) {
-                toast(error.message, undefined, "danger");
-                setCreateWalletLoading(false);
-                createWalletInFlightRef.current = false;
-                setCreateWalletPressLocked(false);
-              }
-            },
-          },
-        ],
-      );
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "Loading" }],
+          }),
+        );
+      } catch (error: any) {
+        toast(error.message, undefined, "danger");
+        setCreateWalletLoading(false);
+        createWalletInFlightRef.current = false;
+        setCreateWalletPressLocked(false);
+      }
     } catch (e: any) {
       Alert.alert(e.message);
       createWalletInFlightRef.current = false;

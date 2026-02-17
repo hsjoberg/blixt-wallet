@@ -41,11 +41,7 @@
   "welcome.start": {
     "title": "Chào mừng",
     "createWallet": {
-      "title": "Tạo Ví",
-      "msg1": "Ví Blixt vẫn đang trong giai đoạn phát triển.",
-      "msg2": "Nếu bạn dùng ví này, nên hiểu rằng trong trường hợp xấu nhất bạn có thể mất coin của mình.",
-      "msg3": "Hiện không có hỗ trợ WatchTower để xem các kênh của bạn khi bạn ngoại tuyến.",
-      "msg4": "Tôi không quan tâm, hãy tiếp tục"
+      "title": "Tạo Ví"
     },
     "createWalletWithPassphrase": {
       "title": "Set passphrase (25th word to encrypt the seed)",

@@ -41,11 +41,7 @@
   "welcome.start": {
     "title": "ようこそ",
     "createWallet": {
-      "title": "ウォレットを作成",
-      "msg1": "Blixt Walletはまだ開発初期段階です。",
-      "msg2": "このウォレットを使用する場合、資金を失う可能性があることを理解してください。",
-      "msg3": "現在、オフラインの間にチャネルを監視するWatchTowerサポートはありません。",
-      "msg4": "私は無謀です、続行します"
+      "title": "ウォレットを作成"
     },
     "createWalletWithPassphrase": {
       "title": "パスフレーズを設定します (シードを暗号化するための 25 番目の単語)",

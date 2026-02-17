@@ -41,11 +41,7 @@
   "welcome.start": {
     "title": "Velkommen",
     "createWallet": {
-      "title": "Opret tegnebog",
-      "msg1": "Blixt Wallet er stadig i en tidlig udviklingsfase.",
-      "msg2": "Hvis du bruger denne tegnebog, skal du sørge for at forstå, at du kan miste dine midler.",
-      "msg3": "Der er i øjeblikket ingen WatchTower-support til at overvåge dine kanaler, mens du er offline.",
-      "msg4": "Jeg er uforsigtig, fortsæt"
+      "title": "Opret tegnebog"
     },
     "createWalletWithPassphrase": {
       "title": "Indstil adgangskode (25. ord for at kryptere frøet)",

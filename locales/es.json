@@ -43,11 +43,7 @@
   "welcome.start": {
     "title": "Bienvenido",
     "createWallet": {
-      "title": "Crear Cartera",
-      "msg1": "Blixt Wallet continúa en desarrollo.",
-      "msg2": "Si usas esta cartera, asegúrate de tener claro que puedes perder tus fondos.",
-      "msg3": "No hay torre de vigilancia (por ahora) que vigile tus canales mientras estas offline.",
-      "msg4": "No tengo miedo. Continuar"
+      "title": "Crear Cartera"
     },
     "createWalletWithPassphrase": {
       "title": "Establecer frase de contraseña (25ª palabra para cifrar la semilla)",
@@ -1165,7 +1161,7 @@
     "info": {
       "welcome": "Bienvenido al registro de Lightning Box ",
       "whatIs": "Lightning Box es un proveedor de servicios de direcciones Lightning que reenvía las solicitudes de pago directamente al teléfono, lo que le brinda una dirección Lightning de custodia propria para dispositivos móviles.",
-      "persistentMode":"Este servicio depende del modo persistente, porque la aplicación debe permanecer activa para recibir pagos entrantes. Asegúrese de que la optimización de la batería esté apagada en su dispositivo. De lo contrario, este servicio puede no funcionar.",
+      "persistentMode": "Este servicio depende del modo persistente, porque la aplicación debe permanecer activa para recibir pagos entrantes. Asegúrese de que la optimización de la batería esté apagada en su dispositivo. De lo contrario, este servicio puede no funcionar.",
       "currentRules": "El servicio es de uso gratuito. Sin embargo, debido a razones técnicas, actualmente requiere un canal con el proveedor de Lightning Box. Actualmente no es posible cambiar su dirección Lightning después de haber elegido una."
     },
     "prerequisites": {
