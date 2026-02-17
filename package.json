@@ -1,6 +1,6 @@
 {
   "name": "BlixtWallet",
-  "version": "0.7.1",
+  "version": "0.9.0",
   "private": true,
   "nodeLinker": "node-modules",
   "scripts": {
@@ -100,7 +100,6 @@
     "react-native": "0.84.0",
     "react-native-animatable": "^1.4.0",
     "react-native-build-config": "github:hsjoberg/react-native-build-config#53b2e6dcababc465fef13dfa0a11cb3edd7e95b3",
-    "react-native-camera-kit": "15.1.0",
     "react-native-dialogs": "github:hsjoberg/react-native-dialogs#0ae8e9713786e80b2bac3da290a44e448e0fa2db",
     "react-native-easy-grid": "0.2.2",
     "react-native-electron": "^0.22.1",

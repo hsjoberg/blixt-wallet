@@ -22,7 +22,7 @@ export default function CameraComponent({ children, onNotAuthorized, onRead, act
   const codeScanner = useCodeScanner({
     codeTypes: ["qr"],
     onCodeScanned: (codes) => {
-      if (codes.length >= 0) {
+      if (codes.length > 0) {
         onRead?.(codes[0].value ?? "");
       }
     },

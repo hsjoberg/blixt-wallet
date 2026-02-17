@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, InteractionManager } from "react-native";
+import { View, StyleSheet } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { Icon, Text } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -17,7 +17,6 @@ import { SendStackParamList } from "./index";
 import { useStoreState } from "../../state/store";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { Chain } from "../../utils/build";
-import { RouteProp } from "@react-navigation/native";
 import GoBackIcon from "../../components/GoBackIcon";
 import { PLATFORM } from "../../utils/constants";
 import usePromptLightningAddress from "../../hooks/usePromptLightningAddress";
@@ -28,15 +27,13 @@ import Container from "../../components/Container";
 interface ISendCameraProps {
   bolt11Invoice?: string;
   navigation: StackNavigationProp<SendStackParamList, "SendCamera">;
-  route: RouteProp<SendStackParamList, "SendCamera">;
 }
-export default function SendCamera({ navigation, route }: ISendCameraProps) {
-  const viaSwipe = route.params?.viaSwipe ?? false;
+export default function SendCamera({ navigation }: ISendCameraProps) {
   const rpcReady = useStoreState((store) => store.lightning.rpcReady);
   const [cameraType, setCameraType] = useState<CameraPosition>("back");
   const device = useCameraDevice(cameraType);
   const [scanning, setScanning] = useState(true);
-  const [cameraActive, setCameraActive] = useState(route.params?.viaSwipe ?? true);
+  const [cameraActive, setCameraActive] = useState(true);
   const scannedTexts = useRef<Array<string | undefined>>([]);
   const { hasPermission, requestPermission } = useCameraPermission();
   const promptLightningAddress = usePromptLightningAddress();
@@ -44,7 +41,7 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
   const codeScanner = useCodeScanner({
     codeTypes: ["qr"],
     onCodeScanned: (codes) => {
-      if (codes.length >= 0) {
+      if (codes.length > 0) {
         if (scannedTexts.current[0] === codes[0].value) {
           return;
         }
@@ -67,56 +64,43 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
     })();
   }, [requestPermission, hasPermission]);
 
-  useEffect(() => {
-    if (route.params?.viaSwipe) {
-      const startCallback = () => {
-        console.log("Focus");
-        setTimeout(() => {
-          setCameraActive(true);
-        }, 250);
-        setScanning(true);
-      };
-      const endCallback = () => {
-        console.log("Blur");
-        setTimeout(() => setCameraActive(false), 700);
-      };
-      navigation.addListener("focus", startCallback);
-      navigation.addListener("blur", endCallback);
-
-      return () => {
-        navigation.removeListener("focus", startCallback);
-        navigation.removeListener("blur", endCallback);
-      };
-    }
-  }, []);
-
   const onCameraSwitchClick = () => {
     setCameraType((p) => (p === "back" ? "front" : "back"));
+  };
+
+  const gotoNextScreen = (screen: string, options: any) => {
+    (navigation as any).replace(screen, options);
+  };
+
+  const gotoLnurlAfterReturningToRoot = (
+    screen: "AuthRequest" | "ChannelRequest" | "PayRequest" | "WithdrawRequest",
+  ) => {
+    const parentNavigation = navigation.getParent();
+    const canReturnToParent = parentNavigation?.canGoBack?.() ?? false;
+
+    if (!parentNavigation?.navigate) {
+      gotoNextScreen("LNURL", { screen });
+      return;
+    }
+
+    if (canReturnToParent) {
+      parentNavigation.goBack();
+      setTimeout(() => {
+        parentNavigation.navigate("LNURL", { screen });
+      }, 220);
+      return;
+    }
+
+    parentNavigation.navigate("LNURL", { screen });
   };
 
   const onLightningAddressClick = async () => {
     setScanning(false);
 
     if ((await promptLightningAddress())[0]) {
-      gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
+      gotoLnurlAfterReturningToRoot("PayRequest");
     } else {
       setScanning(true);
-    }
-  };
-
-  const gotoNextScreen = (screen: string, options: any, goBackAfterInteraction = true) => {
-    if (viaSwipe) {
-      // Reset TopTabNavigator to Overview screen again
-      if (goBackAfterInteraction) {
-        InteractionManager.runAfterInteractions(() => {
-          navigation.getParent()?.goBack();
-        });
-      } else {
-        navigation.getParent()?.goBack();
-      }
-      navigation.navigate(screen, options);
-    } else {
-      navigation.replace(screen, options);
     }
   };
 
@@ -134,16 +118,16 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
           gotoNextScreen("Send", { screen: "SendConfirmation" });
           break;
         case "LNURLAuthRequest":
-          gotoNextScreen("LNURL", { screen: "AuthRequest" }, false);
+          gotoLnurlAfterReturningToRoot("AuthRequest");
           break;
         case "LNURLChannelRequest":
-          gotoNextScreen("LNURL", { screen: "ChannelRequest" });
+          gotoLnurlAfterReturningToRoot("ChannelRequest");
           break;
         case "LNURLPayRequest":
-          gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
+          gotoLnurlAfterReturningToRoot("PayRequest");
           break;
         case "LNURLWithdrawRequest":
-          gotoNextScreen("LNURL", { screen: "WithdrawRequest" }, false);
+          gotoLnurlAfterReturningToRoot("WithdrawRequest");
           break;
         case null:
           setCameraActive(true);

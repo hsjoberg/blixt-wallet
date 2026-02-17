@@ -18,7 +18,6 @@ import { fontFactorNormalized } from "../../utils/scale";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { NavigationRootStackParamList } from "../../types";
 
 import { subscribeInvoices } from "react-native-turbo-lnd";
 import { Invoice_InvoiceState } from "react-native-turbo-lnd/protos/lightning_pb";
@@ -30,7 +29,7 @@ interface IContactProps {
 
 export default function Contact({ contact }: IContactProps) {
   const t = useTranslation(namespaces.contacts.contactList).t;
-  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const setLNUrl = useStoreActions((store) => store.lnUrl.setLNUrl);
   const resolveLightningAddress = useStoreActions((store) => store.lnUrl.resolveLightningAddress);

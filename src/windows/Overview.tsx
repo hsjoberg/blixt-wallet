@@ -27,12 +27,7 @@ import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
 import { timeout, toast } from "../utils/index";
-import {
-  formatBitcoin,
-  convertBitcoinToFiat,
-  getUnitNice,
-  isSats,
-} from "../utils/bitcoin-units";
+import { formatBitcoin, convertBitcoinToFiat, getUnitNice, isSats } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
 import Drawer from "../components/Drawer";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
@@ -44,7 +39,6 @@ import useLayoutMode from "../hooks/useLayoutMode";
 import CopyAddress from "../components/CopyAddress";
 import { StackNavigationProp } from "@react-navigation/stack";
 import BlixtHeader from "../components/BlixtHeader";
-import { NavigationRootStackParamList } from "../types";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
@@ -452,7 +446,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
 
 const DoBackup = () => {
   const { t } = useTranslation(namespaces.overview);
-  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
   const onPressDismiss = async () => {
@@ -492,7 +486,7 @@ const DoBackup = () => {
 
 const NewChannelBeingOpened = () => {
   const { t } = useTranslation(namespaces.overview);
-  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const onPressView = () => {
     navigation.navigate("LightningInfo");

@@ -44,7 +44,6 @@ import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
 import { stopDaemon, verifyChanBackup } from "react-native-turbo-lnd";
-import { NavigationRootStackParamList } from "../../types";
 import { NavigationProp } from "@react-navigation/native";
 import { base64Decode } from "@bufbuild/protobuf/wire";
 import { FlatList } from "react-native";
@@ -57,7 +56,7 @@ if (PLATFORM !== "macos") {
 }
 
 interface ISettingsProps {
-  navigation: NavigationProp<NavigationRootStackParamList>;
+  navigation: NavigationProp<any>;
 }
 
 interface SettingsItem {

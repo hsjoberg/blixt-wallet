@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { StatusBar, StyleSheet } from "react-native";
 
 import Camera from "../components/Camera";
@@ -20,8 +20,16 @@ interface ICameraFullscreenProps {
 }
 
 export default function CameraFullscreen({ navigation, route }: ICameraFullscreenProps) {
-  const [onReadCalled, setOnReadCalled] = useState(false);
+  const [cameraActive, setCameraActive] = useState(true);
+  const onReadHandled = useRef(false);
   const onRead = route.params.onRead ?? (() => {});
+
+  const closeScreen = () => {
+    if (navigation.canGoBack()) {
+      navigation.pop();
+    }
+  };
+
   return (
     <Container>
       <StatusBar
@@ -32,14 +40,20 @@ export default function CameraFullscreen({ navigation, route }: ICameraFullscree
         barStyle="light-content"
       />
       <Camera
+        active={cameraActive}
         onRead={(data) => {
-          if (!onReadCalled) {
-            onRead(data);
-            navigation.pop();
-            setOnReadCalled(true);
+          if (onReadHandled.current || !data) {
+            return;
           }
+
+          onReadHandled.current = true;
+          setCameraActive(false);
+          onRead(data);
+          closeScreen();
         }}
-        onNotAuthorized={() => setTimeout(() => navigation.pop(), 1)}
+        onNotAuthorized={() => {
+          setTimeout(() => closeScreen(), 1);
+        }}
       >
         <>
           <BarcodeMask

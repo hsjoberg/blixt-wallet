@@ -40,13 +40,35 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
     setScanning(false);
 
     if ((await promptLightningAddress())[0]) {
-      gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
+      gotoLnurlAfterReturningToRoot("PayRequest");
     } else {
       setScanning(true);
     }
   };
 
-  const gotoNextScreen = (screen: string, options: any, goBackAfterInteraction = true) => {
+  const gotoLnurlAfterReturningToRoot = (
+    screen: "AuthRequest" | "ChannelRequest" | "PayRequest" | "WithdrawRequest",
+  ) => {
+    const parentNavigation = navigation.getParent() as any;
+    const canReturnToParent = parentNavigation?.canGoBack?.() ?? false;
+
+    if (!parentNavigation?.navigate) {
+      gotoNextScreen("LNURL", { screen });
+      return;
+    }
+
+    if (canReturnToParent) {
+      parentNavigation.goBack();
+      setTimeout(() => {
+        parentNavigation.navigate("LNURL", { screen });
+      }, 220);
+      return;
+    }
+
+    parentNavigation.navigate("LNURL", { screen });
+  };
+
+  const gotoNextScreen = (screen: string, options: any) => {
     navigation.replace(screen, options);
   };
 
@@ -64,16 +86,16 @@ export default function SendCamera({ navigation, route }: ISendCameraProps) {
           gotoNextScreen("Send", { screen: "SendConfirmation" });
           break;
         case "LNURLAuthRequest":
-          gotoNextScreen("LNURL", { screen: "AuthRequest" }, false);
+          gotoLnurlAfterReturningToRoot("AuthRequest");
           break;
         case "LNURLChannelRequest":
-          gotoNextScreen("LNURL", { screen: "ChannelRequest" });
+          gotoLnurlAfterReturningToRoot("ChannelRequest");
           break;
         case "LNURLPayRequest":
-          gotoNextScreen("LNURL", { screen: "PayRequest" }, false);
+          gotoLnurlAfterReturningToRoot("PayRequest");
           break;
         case "LNURLWithdrawRequest":
-          gotoNextScreen("LNURL", { screen: "WithdrawRequest" }, false);
+          gotoLnurlAfterReturningToRoot("WithdrawRequest");
           break;
         case null:
           setCameraActive(true);

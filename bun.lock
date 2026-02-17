@@ -55,7 +55,6 @@
         "react-native": "0.84.0",
         "react-native-animatable": "^1.4.0",
         "react-native-build-config": "github:hsjoberg/react-native-build-config#53b2e6dcababc465fef13dfa0a11cb3edd7e95b3",
-        "react-native-camera-kit": "15.1.0",
         "react-native-dialogs": "github:hsjoberg/react-native-dialogs#0ae8e9713786e80b2bac3da290a44e448e0fa2db",
         "react-native-easy-grid": "0.2.2",
         "react-native-electron": "^0.22.1",
@@ -2579,8 +2578,6 @@
     "react-native-animatable": ["react-native-animatable@1.4.0", "", { "dependencies": { "prop-types": "^15.8.1" } }, "sha512-DZwaDVWm2NBvBxf7I0wXKXLKb/TxDnkV53sWhCvei1pRyTX3MVFpkvdYBknNBqPrxYuAIlPxEp7gJOidIauUkw=="],
 
     "react-native-build-config": ["react-native-build-config@github:hsjoberg/react-native-build-config#53b2e6d", {}, "hsjoberg-react-native-build-config-53b2e6d"],
-
-    "react-native-camera-kit": ["react-native-camera-kit@15.1.0", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-4gPOJAoWAj9WaiNxPgKFYa/+M79O/Ggvc271SGgH5TmetmtinctJFm2zxeg+bAxVS9TDIYcF3ojRD98n88+VEw=="],
 
     "react-native-dialogs": ["react-native-dialogs@github:hsjoberg/react-native-dialogs#0ae8e97", {}, "hsjoberg-react-native-dialogs-0ae8e97"],
 

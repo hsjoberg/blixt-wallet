@@ -2137,28 +2137,6 @@ PODS:
     - React-perflogger (= 0.84.0)
     - React-utils (= 0.84.0)
     - ReactNativeDependencies
-  - ReactNativeCameraKit (15.1.0):
-    - hermes-engine
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-Core-prebuilt
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - ReactNativeDependencies
-    - Yoga
   - ReactNativeDependencies (0.84.0)
   - ReactNativeNitroTor (0.5.2):
     - hermes-engine
@@ -2706,7 +2684,6 @@ DEPENDENCIES:
   - ReactAppDependencyProvider (from `build/generated/ios/ReactAppDependencyProvider`)
   - ReactCodegen (from `build/generated/ios/ReactCodegen`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - ReactNativeCameraKit (from `../node_modules/react-native-camera-kit`)
   - ReactNativeDependencies (from `../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec`)
   - ReactNativeNitroTor (from `../node_modules/react-native-nitro-tor`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
@@ -2912,8 +2889,6 @@ EXTERNAL SOURCES:
     :path: build/generated/ios/ReactCodegen
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeCameraKit:
-    :path: "../node_modules/react-native-camera-kit"
   ReactNativeDependencies:
     :podspec: "../node_modules/react-native/third-party-podspecs/ReactNativeDependencies.podspec"
   ReactNativeNitroTor:
@@ -3051,7 +3026,6 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 625d2f6d9d5ef01acc9dfe2b5385504bbffd2ad0
   ReactCodegen: af15126e35c0260118ad333603cb54124ca37f2c
   ReactCommon: cc0e38600f82487c5fe5d29150abb6fa9d981986
-  ReactNativeCameraKit: 6657e25a0fe319bb6a5d32ac5f03a580b712de82
   ReactNativeDependencies: ef325a74b29d701c5910bd0d112b287b75c82210
   ReactNativeNitroTor: 9fac0d418f3ceb44ff0c641794075450542f403d
   RNCAsyncStorage: e85a99325df9eb0191a6ee2b2a842644c7eb29f4
