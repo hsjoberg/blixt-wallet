@@ -1,16 +1,17 @@
 import React, { ReactNode } from "react";
 import {
   StyleSheet,
-  KeyboardAvoidingView,
   StyleProp,
   ViewStyle,
   InputAccessoryView,
   ScrollView,
+  KeyboardAvoidingView as RNKeyboardAvoidingView,
 } from "react-native";
 import { View, Item, Text, Label, Icon } from "native-base";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { MathPad, IMathPadProps } from "../components/MathPad";
 import { MATH_PAD_NATIVE_ID, PLATFORM } from "../utils/constants";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller"; // TODO(macos): potentially problematic on macos
 
 export interface IFormItem {
   title: string | null;
@@ -38,12 +39,15 @@ export default function Form({
   noticeIcon,
   mathPadProps,
 }: IFormProps) {
+  const TheKeyboardAvoidingView =
+    PLATFORM === "android" ? KeyboardAvoidingView : RNKeyboardAvoidingView;
+
   return (
-    <KeyboardAvoidingView
-      enabled={PLATFORM === "ios"}
+    <TheKeyboardAvoidingView
+      enabled={true}
       style={[styles.content, style]}
       behavior={"padding"}
-      keyboardVerticalOffset={77}
+      keyboardVerticalOffset={PLATFORM === "android" ? 120 : 77}
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.itemContainer}>
@@ -91,11 +95,12 @@ export default function Form({
         </>
       </View>
       {PLATFORM === "ios" && (
-        <InputAccessoryView nativeID={MATH_PAD_NATIVE_ID}>
-          <MathPad {...mathPadProps} />
-        </InputAccessoryView>
+        <></>
+        // <InputAccessoryView nativeID={MATH_PAD_NATIVE_ID}>
+        //   <MathPad {...mathPadProps} />
+        // </InputAccessoryView>
       )}
-    </KeyboardAvoidingView>
+    </TheKeyboardAvoidingView>
   );
 }
 

@@ -3,6 +3,7 @@ import { StyleProvider, Root } from "native-base";
 import { DefaultTheme, NavigationContainer, Theme } from "@react-navigation/native";
 import { StoreProvider } from "easy-peasy";
 import { MenuProvider } from "react-native-popup-menu";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 import Main from "./Main";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
@@ -37,20 +38,22 @@ export default function App() {
   };
 
   return (
-    <StoreProvider store={store}>
-      <StyleProvider.Context.Provider value={{ theme: StyleProvider.fixTheme(getTheme(theme)) }}>
-        <NavigationContainer
-          theme={navigatorTheme}
-          documentTitle={{ enabled: false }}
-          ref={navigator}
-        >
-          <MenuProvider>
-            <Root>
-              {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
-            </Root>
-          </MenuProvider>
-        </NavigationContainer>
-      </StyleProvider.Context.Provider>
-    </StoreProvider>
+    <KeyboardProvider>
+      <StoreProvider store={store}>
+        <StyleProvider.Context.Provider value={{ theme: StyleProvider.fixTheme(getTheme(theme)) }}>
+          <NavigationContainer
+            theme={navigatorTheme}
+            documentTitle={{ enabled: false }}
+            ref={navigator}
+          >
+            <MenuProvider>
+              <Root>
+                {debug ? <DEV_Commands continueCallback={() => setDebug(false)} /> : <Main />}
+              </Root>
+            </MenuProvider>
+          </NavigationContainer>
+        </StyleProvider.Context.Provider>
+      </StoreProvider>
+    </KeyboardProvider>
   );
 }
