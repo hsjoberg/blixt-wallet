@@ -458,6 +458,14 @@ export default function Settings({ navigation }: ISettingsProps) {
     await changeDebugShowStartupInfo(!debugShowStartupInfo);
   };
 
+  const useLegacyHeaderGradient = useStoreState((store) => store.settings.useLegacyHeaderGradient);
+  const changeUseLegacyHeaderGradient = useStoreActions(
+    (store) => store.settings.changeUseLegacyHeaderGradient,
+  );
+  const onToggleUseLegacyHeaderGradient = async () => {
+    await changeUseLegacyHeaderGradient(!useLegacyHeaderGradient);
+  };
+
   const googleDriveBackupEnabled = useStoreState(
     (store) => store.settings.googleDriveBackupEnabled,
   );
@@ -2003,6 +2011,15 @@ ${t("experimental.tor.disabled.msg2")}`;
       },
       {
         type: "item",
+        icon: { type: "MaterialIcons", name: "gradient" },
+        title: "Use legacy header gradient",
+        subtitle: "Use react-native-linear-gradient instead of experimental CSS gradient",
+        checkBox: true,
+        checked: useLegacyHeaderGradient,
+        onPress: onToggleUseLegacyHeaderGradient,
+      },
+      {
+        type: "item",
         icon: { type: "MaterialCommunityIcons", name: "file-code" },
         title: t("miscelaneous.setLndLogLevel.title"),
         subtitle: lndLogLevel,
@@ -2094,6 +2111,7 @@ ${t("experimental.tor.disabled.msg2")}`;
     persistentServicesEnabled,
     lightningBoxServer,
     debugShowStartupInfo,
+    useLegacyHeaderGradient,
     lndLogLevel,
     lndNoGraphCache,
     multiPathPaymentsEnabled,
