@@ -109,8 +109,8 @@ android {
         applicationId "com.blixtwallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 170
-        versionName "0.8.0"
+        versionCode 171
+        versionName "0.9.0"
 
         // Blixt:
         buildConfigField "String", "CHAIN", '"mainnet"'
