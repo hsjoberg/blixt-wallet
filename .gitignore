@@ -99,13 +99,6 @@ Session.vim
 Sessionx.vim
 *~
 
-# Yarn
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 # Devenv
 .devenv*
 devenv.local.nix

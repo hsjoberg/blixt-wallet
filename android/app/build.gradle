@@ -93,11 +93,16 @@ def enableProguardInReleaseBuilds = true
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
+
+// Blixt
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localProperties.load(new FileInputStream(localPropertiesFile))
 }
+def reactNativeArchs = (
+    project.findProperty("reactNativeArchitectures") ?: "arm64-v8a,x86_64"
+).toString().split(",").collect { it.trim() }.findAll { !it.isEmpty() }
 
 android {
     ndkVersion rootProject.ext.ndkVersion
@@ -115,7 +120,7 @@ android {
         // Blixt:
         buildConfigField "String", "CHAIN", '"mainnet"'
         ndk {
-            abiFilters "arm64-v8a"
+            abiFilters(*reactNativeArchs)
         }
     }
     signingConfigs {
@@ -153,7 +158,6 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
 
-            // Blixt:
             if (localProperties.containsKey('MYAPP_RELEASE_STORE_FILE')) {
                 signingConfig signingConfigs.release
             }

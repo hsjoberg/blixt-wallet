@@ -2003,7 +2003,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         : []),
       {
         type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "android-debug-bridge" },
+        icon: { type: "MaterialIcons", name: "info" },
         title: t("debug.startup.title"),
         checkBox: true,
         checked: debugShowStartupInfo,
