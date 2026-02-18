@@ -49,7 +49,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
         {
           style: "default",
           text: "Ok",
-          onPress: (address) => {
+          onPress: (address?: string) => {
             if (!address || address.trim().length === 0) {
               toast(t("channel.invalidAddress"), undefined, "danger");
               return;
@@ -63,7 +63,34 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
     );
   };
 
-  const close = (force: boolean = false, address: string | undefined) => {
+  const closeWithCustomFee = () => {
+    Alert.prompt(t("channel.closeChannel"), t("channel.bumpFeeAlerts.enterFeeRate"), [
+      {
+        text: t("buttons.cancel", { ns: namespaces.common }),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        style: "default",
+        onPress: (feeRate?: string) => {
+          if (!feeRate) {
+            Alert.alert(t("channel.bumpFeeAlerts.missingFeeRate"));
+            return;
+          }
+
+          const feeRateNumber = Number.parseInt(feeRate, 10);
+          if (isNaN(feeRateNumber) || feeRateNumber <= 0) {
+            Alert.alert(t("channel.bumpFeeAlerts.invalidFeeRate"));
+            return;
+          }
+
+          close(false, undefined, feeRateNumber);
+        },
+      },
+    ]);
+  };
+
+  const close = (force: boolean = false, address: string | undefined, feeRateSat?: number) => {
     Alert.alert(
       t("channel.closeChannelPrompt.title"),
       `Are you sure you want to${force ? " force" : ""} close the channel${
@@ -84,6 +111,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 outputIndex: Number.parseInt(channel.channelPoint.split(":")[1], 10),
                 force,
                 deliveryAddress: address,
+                feeRateSat,
               });
               console.log(result);
 
@@ -174,6 +202,12 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                   <MenuOption
                     onSelect={() => close(false, undefined)}
                     text={t("channel.closeChannel")}
+                  />
+                  <MenuOption
+                    onSelect={closeWithCustomFee}
+                    text={`${t("channel.closeChannel")} (${t("form.fee_rate.title", {
+                      ns: namespaces.lightningInfo.openChannel,
+                    })})`}
                   />
                   <MenuOption
                     onSelect={() => close(true, undefined)}
