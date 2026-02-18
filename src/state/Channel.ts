@@ -60,6 +60,7 @@ export interface ICloseChannelPayload {
   outputIndex: number;
   force: boolean;
   deliveryAddress?: string;
+  feeRateSat?: number;
 }
 
 export interface INodeAlias {
@@ -450,7 +451,11 @@ export const channel: IChannelModel = {
   }),
 
   closeChannel: thunk(
-    async (actions, { fundingTx, outputIndex, force, deliveryAddress }, { getStoreActions }) => {
+    async (
+      actions,
+      { fundingTx, outputIndex, force, deliveryAddress, feeRateSat },
+      { getStoreActions },
+    ) => {
       const unsubscribe = closeChannel(
         {
           channelPoint: {
@@ -463,6 +468,7 @@ export const channel: IChannelModel = {
 
           force,
           deliveryAddress,
+          satPerVbyte: feeRateSat ? BigInt(feeRateSat) : undefined,
         },
         (result) => {
           actions.getChannels();
