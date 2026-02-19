@@ -185,7 +185,7 @@
     "babel-plugin-react-native-web": "0.21.2",
     "bolt11": "^1.4.1",
     "electron": "39.2.7",
-    "eslint": "^10.0.0",
+    "eslint": "^8.19.0",
     "eslint-plugin-ft-flow": "3.0.11",
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-react-hooks": "^7.0.1",
