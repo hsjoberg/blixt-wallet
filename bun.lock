@@ -76,7 +76,7 @@
         "react-native-permissions": "5.4.4",
         "react-native-popup-menu": "0.19.0",
         "react-native-qrcode-svg": "6.3.21",
-        "react-native-reanimated": "4.2.1",
+        "react-native-reanimated": "4.2.2",
         "react-native-safe-area-context": "5.6.2",
         "react-native-screens": "4.19.0",
         "react-native-securerandom": "github:hsjoberg/react-native-securerandom#8a740d8bb74a69d94c075bdd96db4edba1871955",
@@ -156,9 +156,6 @@
         "webpack-dev-server": "5.2.3",
       },
     },
-  },
-  "patchedDependencies": {
-    "react-native-reanimated@4.2.1": "patches/react-native-reanimated@4.2.1.patch",
   },
   "overrides": {
     "native-base/react-native-vector-icons": "9.2.0",
@@ -2629,7 +2626,7 @@
 
     "react-native-qrcode-svg": ["react-native-qrcode-svg@6.3.21", "", { "dependencies": { "prop-types": "^15.8.0", "qrcode": "^1.5.4", "text-encoding": "^0.7.0" }, "peerDependencies": { "react": "*", "react-native": ">=0.63.4", "react-native-svg": ">=14.0.0" } }, "sha512-6vcj4rcdpWedvphDR+NSJcudJykNuLgNGFwm2p4xYjR8RdyTzlrELKI5LkO4ANS9cQUbqsfkpippPv64Q2tUtA=="],
 
-    "react-native-reanimated": ["react-native-reanimated@4.2.1", "", { "dependencies": { "react-native-is-edge-to-edge": "1.2.1", "semver": "7.7.3" }, "peerDependencies": { "react": "*", "react-native": "*", "react-native-worklets": ">=0.7.0" } }, "sha512-/NcHnZMyOvsD/wYXug/YqSKw90P9edN0kEPL5lP4PFf1aQ4F1V7MKe/E0tvfkXKIajy3Qocp5EiEnlcrK/+BZg=="],
+    "react-native-reanimated": ["react-native-reanimated@4.2.2", "", { "dependencies": { "react-native-is-edge-to-edge": "1.2.1", "semver": "7.7.3" }, "peerDependencies": { "react": "*", "react-native": "*", "react-native-worklets": ">=0.7.0" } }, "sha512-o3kKvdD8cVlg12Z4u3jv0MFAt53QV4k7gD9OLwQqU8eZLyd8QvaOjVZIghMZhC2pjP93uUU44PlO5JgF8S4Vxw=="],
 
     "react-native-safe-area-context": ["react-native-safe-area-context@5.6.2", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-4XGqMNj5qjUTYywJqpdWZ9IG8jgkS3h06sfVjfw5yZQZfWnRFXczi0GnYyFyCc2EBps/qFmoCH8fez//WumdVg=="],
 
