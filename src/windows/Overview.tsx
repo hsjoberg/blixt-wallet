@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
   Platform,
   Animated,
@@ -74,7 +74,7 @@ function Overview({ navigation }: IOverviewProps) {
   const bitcoinAddress = useStoreState((store) => store.onChain.address);
   const onboardingState = useStoreState((store) => store.onboardingState);
 
-  const scrollYAnimatedValue = useRef(new Animated.Value(0)).current;
+  const [scrollYAnimatedValue] = useState(() => new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
 
   const getBalance = useStoreActions((store) => store.channel.getBalance);
@@ -228,7 +228,7 @@ function Overview({ navigation }: IOverviewProps) {
                   <SendOnChain bitcoinAddress={bitcoinAddress} />
                 )}
                 {onboardingState === "DO_BACKUP" && <DoBackup />}
-                {pendingOpenBalance !== 0n && <NewChannelBeingOpened />}
+                {pendingOpenBalance !== BigInt(0) && <NewChannelBeingOpened />}
               </>
             );
           }}
@@ -322,13 +322,13 @@ function Overview({ navigation }: IOverviewProps) {
           {/* The smaller one underneath */}
           {!hideAmountsEnabled && (
             <>
-              {pendingOpenBalance === 0n && (
+              {pendingOpenBalance === BigInt(0) && (
                 <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
                   {!preferFiat && fiatBalance}
                   {preferFiat && bitcoinBalance}
                 </Animated.Text>
               )}
-              {pendingOpenBalance !== 0n && (
+              {pendingOpenBalance !== BigInt(0) && (
                 <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
                   {!preferFiat && (
                     <>
@@ -416,7 +416,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
                 {"\n\n"}
                 {t("sendOnChain.msg2")}
                 {"\n\n"}
-                {t("sendOnChain.msg3")} {formatBitcoin(22000n, bitcoinUnit)} (
+                {t("sendOnChain.msg3")} {formatBitcoin(BigInt(22000), bitcoinUnit)} (
                 {convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
               </Text>
             </Text>

@@ -21,12 +21,16 @@ export default function usePromptLightningAddress() {
           {
             text: "Ok",
             onPress: async (text?: string) => {
+              const lightningAddress = (text ?? "").trim();
+              navigation.navigate("LoadingModal");
+
               try {
-                const lightningAddress = (text ?? "").trim();
-                navigation.navigate("LoadingModal");
                 if (await resolveLightningAddress(lightningAddress)) {
                   navigation.goBack();
                   resolve([true, lightningAddress]);
+                } else {
+                  navigation.goBack();
+                  resolve([false]);
                 }
               } catch (error: any) {
                 navigation.goBack();

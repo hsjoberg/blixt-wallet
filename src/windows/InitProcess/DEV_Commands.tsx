@@ -396,11 +396,15 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               console.log(await NativeModules.LndMobileTools.getInternalFiles());
-              const files = await NativeModules.LndMobileTools.getInternalFiles();
+              const files = (await NativeModules.LndMobileTools.getInternalFiles()) as Record<
+                string,
+                number | string
+              >;
               let totalBytes = 0;
               Object.keys(files).map((key) => {
-                totalBytes += files[key];
-                (files[key] as any) = (files[key] / 1000000).toFixed(2) + " MB";
+                const fileSizeBytes = Number(files[key]);
+                totalBytes += fileSizeBytes;
+                files[key] = (fileSizeBytes / 1000000).toFixed(2) + " MB";
               });
 
               console.log(JSON.stringify(files, undefined, 4));
