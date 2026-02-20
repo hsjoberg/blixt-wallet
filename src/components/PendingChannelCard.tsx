@@ -83,13 +83,12 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
           style: "default",
           text: "Yes",
           onPress: async () => {
+            const channelPoint = channel.channel?.channelPoint;
+            if (!channelPoint) {
+              return;
+            }
+
             try {
-              const channelPoint = channel.channel?.channelPoint || undefined;
-
-              if (!channelPoint) {
-                return;
-              }
-
               const result = await closeChannel({
                 fundingTx: channelPoint.split(":")[0],
                 outputIndex: Number.parseInt(channelPoint.split(":")[1], 10),

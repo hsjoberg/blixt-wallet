@@ -83,7 +83,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
     //   return accumulator;
     // }
     // return accumulator.add(channel.localBalance!.sub(channel.localChanReserveSat!));
-  }, 0n);
+  }, BigInt(0));
 
   const channelsArr = [
     ...pendingOpenChannels.map((pendingChannel, i) => ({ ...pendingChannel, type: "pendingOpen" })),

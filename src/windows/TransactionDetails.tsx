@@ -225,12 +225,12 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
   // In the case of an 0 sat invoice, transaction.value will be 0,
   // instead get from amtPaidSat.
   // TODO eventually sync up with what TransactionCard.tsx does.
-  if (transactionValue === 0n) {
+  if (transactionValue === BigInt(0)) {
     transactionValue = transaction.amtPaidSat;
   }
 
   const formattedTransactionValue =
-    transactionValue === 0n
+    transactionValue === BigInt(0)
       ? formatBitcoin(transactionValue, bitcoinUnit)
       : formatBitcoin(transactionValue, bitcoinUnit, { includeSign: true });
 

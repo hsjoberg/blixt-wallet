@@ -40,7 +40,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
   } else {
     transactionValue = value;
   }
-  const absTransactionValue = transactionValue < 0n ? -transactionValue : transactionValue;
+  const absTransactionValue = transactionValue < BigInt(0) ? -transactionValue : transactionValue;
   const signedTransactionValue = positive ? absTransactionValue : -absTransactionValue;
   const transactionSign = positive ? "+" : "-";
   const concealedBitcoinValue =
@@ -127,7 +127,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
                       : transactionStyle.transactionTopValueNegative
                   }
                 >
-                  {transactionValue !== 0n && (
+                  {transactionValue !== BigInt(0) && (
                     <>
                       {!hideAmountsEnabled && (
                         <>
@@ -142,11 +142,7 @@ export default function TransactionCard({ onPress, transaction, unit }: IProps) 
                       )}
                       {hideAmountsEnabled && (
                         <>
-                          {!preferFiat && (
-                            <>
-                              {concealedBitcoinValue}
-                            </>
-                          )}
+                          {!preferFiat && <>{concealedBitcoinValue}</>}
                           {preferFiat && (
                             <>
                               {transactionSign}●●● {fiatUnit}

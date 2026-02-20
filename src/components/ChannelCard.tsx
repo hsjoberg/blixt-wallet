@@ -161,19 +161,19 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
 
   let localBalance = channel.localBalance;
   if (localBalance <= channel.localChanReserveSat) {
-    localBalance = 0n;
+    localBalance = BigInt(0);
   } else {
     localBalance = localBalance - channel.localChanReserveSat;
   }
   let remoteBalance = channel.remoteBalance;
   if (remoteBalance <= channel.remoteChanReserveSat) {
-    remoteBalance = 0n;
+    remoteBalance = BigInt(0);
   } else {
     remoteBalance = remoteBalance - channel.remoteChanReserveSat;
   }
-  const percentageLocal = (localBalance * 100n) / channel.capacity;
-  const percentageRemote = (remoteBalance * 100n) / channel.capacity;
-  const percentageReserve = 100n - (percentageLocal + percentageRemote);
+  const percentageLocal = (localBalance * BigInt(100)) / channel.capacity;
+  const percentageRemote = (remoteBalance * BigInt(100)) / channel.capacity;
+  const percentageReserve = BigInt(100) - (percentageLocal + percentageRemote);
   const localReserve = BigInt(
     Math.min(Number(channel.localBalance), Number(channel.localChanReserveSat)),
   );

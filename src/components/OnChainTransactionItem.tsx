@@ -22,7 +22,7 @@ export const OnChainTransactionItem = ({
 }: IOnChainTransactionItemProps) => {
   let icon;
   let text;
-  if (transaction.amount === 0n) {
+  if (transaction.amount === BigInt(0)) {
     icon = <Icon type="MaterialIcons" name="error-outline" style={{ color: blixtTheme.red }} />;
     text = <Text>Error</Text>;
   } else if (transaction.type === "NORMAL" && transaction.amount > 0) {
