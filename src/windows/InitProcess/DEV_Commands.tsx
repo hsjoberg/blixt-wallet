@@ -68,6 +68,7 @@ import {
 import TurboSqlite from "react-native-turbo-sqlite";
 
 import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
+import ScheduledSyncTurbo from "../../turbomodules/NativeScheduledSyncTurbo";
 
 import Speedloader from "../../turbomodules/NativeSpeedloader";
 
@@ -211,26 +212,26 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.startSyncWorker());
+              console.log(ScheduledSyncTurbo.startSyncWorker());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.startSyncWorker</Text>
+            <Text style={styles.buttonText}>ScheduledSyncTurbo.startSyncWorker</Text>
           </Button>
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.scheduleSyncWorker());
+              console.log(ScheduledSyncTurbo.scheduleSyncWorker());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.scheduleSyncWorker</Text>
+            <Text style={styles.buttonText}>ScheduledSyncTurbo.scheduleSyncWorker</Text>
           </Button>
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.stopScheduleSyncWorker());
+              console.log(ScheduledSyncTurbo.stopScheduleSyncWorker());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.stopScheduleSyncWorker</Text>
+            <Text style={styles.buttonText}>ScheduledSyncTurbo.stopScheduleSyncWorker</Text>
           </Button>
           <Button
             small

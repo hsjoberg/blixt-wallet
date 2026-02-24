@@ -24,6 +24,7 @@ import {
   DEFAULT_LND_LOG_LEVEL,
   DEFAULT_NEUTRINO_NODE,
 } from "../utils/constants";
+import { setupScheduledSyncWork } from "../lndmobile/scheduled-sync";
 
 const { LndMobileTools } = NativeModules;
 
@@ -52,7 +53,7 @@ export const appMigration: IAppMigration[] = [
   // Version 3
   {
     async beforeLnd(db, i) {
-      await NativeModules.LndMobileScheduledSync.setupScheduledSyncWork();
+      await setupScheduledSyncWork();
       await setItemObject(StorageItem.scheduledSyncEnabled, true);
       await setItemObject(StorageItem.lastScheduledSync, 0);
       await setItemObject(StorageItem.lastScheduledSyncAttempt, 0);

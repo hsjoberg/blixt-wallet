@@ -75,8 +75,7 @@ export interface ITransactionModel {
 
 export const transaction: ITransactionModel = {
   /**
-   * Synchronizes incoming transactions coming
-   * from gGPRC `SubscribeInvoices` (Java backend), from listener in `Receive` store
+   * Synchronizes incoming transactions coming from the `Receive` store
    * Checks if we have it in our transaction array, otherwise create a new transaction in the db
    */
   syncTransaction: thunk(async (actions, tx, { getState, getStoreState }) => {

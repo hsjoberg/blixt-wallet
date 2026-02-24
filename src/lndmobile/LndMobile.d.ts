@@ -49,12 +49,6 @@ export type WorkInfo =
   | "SUCCEEDED"
   | "WORK_NOT_EXIST";
 
-export interface ILndMobileScheduledSync {
-  setupScheduledSyncWork: () => Promise<boolean>;
-  removeScheduledSyncWork: () => Promise<boolean>;
-  checkScheduledSyncWorkStatus: () => Promise<WorkInfo>;
-}
-
 export interface IGossipFileScheduledSync {
   setupScheduledSyncWork: () => Promise<boolean>;
   removeScheduledSyncWork: () => Promise<boolean>;
@@ -64,7 +58,6 @@ export interface IGossipFileScheduledSync {
 declare module "react-native" {
   interface NativeModulesStatic {
     LndMobileTools: ILndMobileTools;
-    LndMobileScheduledSync: ILndMobileScheduledSync;
     GossipFileScheduledSync: IGossipFileScheduledSync;
   }
 }

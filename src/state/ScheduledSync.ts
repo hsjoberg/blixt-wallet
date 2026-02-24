@@ -1,14 +1,15 @@
-import { NativeModules } from "react-native";
 import { Action, action, Thunk, thunk, computed, Computed } from "easy-peasy";
 import { StorageItem, getItemObject } from "../storage/app";
-import { WorkInfo } from "../lndmobile/LndMobile";
-import { checkScheduledSyncWorkStatus } from "../lndmobile/scheduled-sync";
+import { WorkInfo } from "../turbomodules/NativeScheduledSyncTurbo";
+import {
+  checkScheduledSyncWorkStatus,
+  removeScheduledSyncWork,
+  setupScheduledSyncWork,
+} from "../lndmobile/scheduled-sync";
 import { PLATFORM } from "../utils/constants";
 
 import logger from "./../utils/log";
 const log = logger("ScheduledSync");
-
-const { LndMobileScheduledSync } = NativeModules;
 
 export interface IScheduledSyncModel {
   initialize: Thunk<IScheduledSyncModel>;
@@ -58,10 +59,8 @@ export const scheduledSync: IScheduledSyncModel = {
       return;
     }
 
-    enabled
-      ? await LndMobileScheduledSync.setupScheduledSyncWork()
-      : await LndMobileScheduledSync.removeScheduledSyncWork();
-    actions.setWorkInfo(await LndMobileScheduledSync.checkScheduledSyncWorkStatus());
+    enabled ? await setupScheduledSyncWork() : await removeScheduledSyncWork();
+    actions.setWorkInfo(await checkScheduledSyncWorkStatus());
   }),
 
   setLastScheduledSync: action((state, payload) => {
