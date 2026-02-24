@@ -2,7 +2,7 @@ import * as base64 from "base64-js";
 import { RnTor } from "react-native-nitro-tor";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
-import { AlertButton, NativeModules, Platform } from "react-native";
+import { AlertButton, NativeModules } from "react-native";
 
 import {
   DEFAULT_PATHFINDING_ALGORITHM,
@@ -72,16 +72,15 @@ import { getWalletPassword, setWalletPassword } from "../storage/keystore";
 
 import { Alert } from "../utils/alert";
 import {
-  ELndMobileStatusCodes,
+  createIOSApplicationSupportAndLndDirectories,
+  excludeLndICloudBackup,
   generateSecureRandomAsBase64,
   writeConfig,
 } from "../lndmobile/index";
-import { IStoreInjections } from "./store";
 import { Database } from "react-native-turbo-sqlite";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { appMigration } from "../migration/app-migration";
 import { clearTransactions } from "../storage/database/transaction";
-import { lnrpc } from "../../proto/lightning"; //TURBOTODO
 import logger from "./../utils/log";
 import { stringToUint8Array, timeout, toast } from "../utils";
 
@@ -115,8 +114,8 @@ export interface ICreateWalletPayload {
 export interface IStoreModel {
   setupDemo: Thunk<IStoreModel, { changeDb: boolean }, any, IStoreModel>;
   openDb: Thunk<IStoreModel, undefined, any, {}, Promise<Database>>;
-  initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
-  checkAppVersionMigration: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
+  initializeApp: Thunk<IStoreModel, void, any, IStoreModel>;
+  checkAppVersionMigration: Thunk<IStoreModel, void, any, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
   clearTransactions: Thunk<IStoreModel>;
   resetDb: Thunk<IStoreModel>;
@@ -134,10 +133,10 @@ export interface IStoreModel {
   setSpeedloaderCancelVisible: Action<IStoreModel, boolean>;
   setImportChannelDbOnStartup: Action<IStoreModel, IImportChannelDbOnStartup>;
 
-  generateSeed: Thunk<IStoreModel, string | undefined, IStoreInjections>;
-  writeConfig: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
-  unlockWallet: Thunk<ILightningModel, void, IStoreInjections>;
-  createWallet: Thunk<IStoreModel, ICreateWalletPayload | undefined, IStoreInjections, IStoreModel>;
+  generateSeed: Thunk<IStoreModel, string | undefined, any>;
+  writeConfig: Thunk<IStoreModel, void, any, IStoreModel>;
+  unlockWallet: Thunk<ILightningModel, void, any>;
+  createWallet: Thunk<IStoreModel, ICreateWalletPayload | undefined, any, IStoreModel>;
   changeOnboardingState: Thunk<IStoreModel, OnboardingState>;
 
   db?: Database;
@@ -195,7 +194,7 @@ export const model: IStoreModel = {
     return db;
   }),
 
-  initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
+  initializeApp: thunk(async (actions, _, { getState, dispatch }) => {
     log.d("getState().appReady: " + getState().appReady);
     if (getState().appReady) {
       log.d("App already initialized");
@@ -235,18 +234,14 @@ export const model: IStoreModel = {
       toast("Successfully imported channel.db");
     }
 
-    const { initialize, checkStatus, startLnd, gossipSync } = injections.lndMobile.index;
     const db = await actions.openDb();
     const firstStartup = !(await getItemObjectAsyncStorage(StorageItem.app));
     if (firstStartup) {
       log.i("Initializing app for the first time");
       if (PLATFORM === "ios" || PLATFORM === "macos") {
         log.i("Creating Application Support and lnd directories");
-        await injections.lndMobile.index.createIOSApplicationSupportAndLndDirectories();
-      }
-      if (PLATFORM === "ios") {
-        log.i("Excluding lnd directory from backup");
-        await injections.lndMobile.index.excludeLndICloudBackup();
+        await createIOSApplicationSupportAndLndDirectories();
+        await excludeLndICloudBackup();
       }
       await setupApp();
       if (Chain === "regtest") {
@@ -273,17 +268,6 @@ export const model: IStoreModel = {
         await dispatch.setupDemo({ changeDb: true });
         await dispatch.generateSeed();
         await dispatch.createWallet();
-      }
-    } else {
-      // Temporarily dealing with moving lnd to "Application Support" folder
-      if (PLATFORM === "ios") {
-        if (!(await injections.lndMobile.index.checkLndFolderExists())) {
-          log.i("Moving lnd from Documents to Application Support");
-          await injections.lndMobile.index.createIOSApplicationSupportAndLndDirectories();
-          await injections.lndMobile.index.TEMP_moveLndToApplicationSupport();
-          log.i("Excluding lnd directory from backup");
-          await injections.lndMobile.index.excludeLndICloudBackup();
-        }
       }
     }
     actions.setAppVersion(await getAppVersion());
@@ -373,9 +357,6 @@ export const model: IStoreModel = {
       if (persistentServicesEnabled && !persistentServicesWarningShown) {
         await setItemObject(StorageItem.persistentServicesWarningShown, true);
       }
-      log.v("Running LndMobile.initialize()");
-      const initReturn = await initialize();
-      log.i("initialize done", [initReturn]);
       const gossipSyncEnabled =
         (await getItemObjectAsyncStorage<boolean>(StorageItem.scheduledGossipSyncEnabled)) ?? false;
       const enforceSpeedloaderOnStartup =
@@ -385,7 +366,7 @@ export const model: IStoreModel = {
         (await getItemAsyncStorage(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER;
       let gossipStatus: unknown = null;
 
-      let status = await NativeLndmobileTools.getStatus(); // await checkStatus();
+      let status = await NativeLndmobileTools.getStatus();
       log.i("status", [status]);
       if (status === 1) {
         log.i("status === 1, waiting for 9.6 seconds and check again");
@@ -530,33 +511,34 @@ export const model: IStoreModel = {
             debugShowStartupInfo &&
               toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
             await dispatch.unlockWallet();
-          } else if (state.state === lnrpc.WalletState.UNLOCKED) {
-            log.d("Got lnrpc.WalletState.UNLOCKED");
+          } else if (state.state === WalletState.UNLOCKED) {
+            log.d("Got WalletState.UNLOCKED");
             debugShowStartupInfo &&
               toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-          } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
+          } else if (state.state === WalletState.RPC_ACTIVE) {
             debugShowStartupInfo &&
               toast(
                 "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
                 1000,
               );
-            log.d("Got lnrpc.WalletState.RPC_ACTIVE");
+            log.d("Got WalletState.RPC_ACTIVE");
             await dispatch.lightning.initialize({ start });
-          } else if (state.state === lnrpc.WalletState.SERVER_ACTIVE) {
+          } else if (state.state === WalletState.SERVER_ACTIVE) {
             debugShowStartupInfo &&
               toast(
                 "Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
                 1000,
               );
-            log.d("Got lnrpc.WalletState.SERVER_ACTIVE");
+            log.d("Got WalletState.SERVER_ACTIVE");
 
+            // TURBOTODO(hsjoberg): test this
             // We'll enter this branch of code if the react-native frontend desyncs with lnd.
             // This can happen for example if Android kills react-native but not LndMobileService.
             if (!getState().lightning.rpcReady) {
               await dispatch.lightning.initialize({ start });
             }
           } else {
-            log.d("Got unknown lnrpc.WalletState", [state.state]);
+            log.d("Got unknown WalletState", [state.state]);
           }
         } catch (error: any) {
           toast(error.message, undefined, "danger");
@@ -641,7 +623,6 @@ export const model: IStoreModel = {
 
   writeConfig: thunk(async (_, _2) => {
     // TURBOTODO(hsjoberg)
-    //const writeConfig = injections.lndMobile.index.writeConfig;
 
     const lndChainBackend = (await getItemAsyncStorage(
       StorageItem.lndChainBackend,

@@ -25,7 +25,7 @@ import {
   DEFAULT_NEUTRINO_NODE,
 } from "../utils/constants";
 
-const { LndMobile, LndMobileTools } = NativeModules;
+const { LndMobileTools } = NativeModules;
 
 export interface IAppMigration {
   beforeLnd: (db: Database, currentVersion: number) => Promise<void>;

@@ -108,13 +108,6 @@ export const createIOSApplicationSupportAndLndDirectories = async () => {
 /**
  * @throws
  */
-export const TEMP_moveLndToApplicationSupport = async () => {
-  return await LndMobileTools.TEMP_moveLndToApplicationSupport();
-};
-
-/**
- * @throws
- */
 export const excludeLndICloudBackup = async () => {
   return await LndMobileTools.excludeLndICloudBackup();
 };

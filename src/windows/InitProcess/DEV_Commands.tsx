@@ -805,15 +805,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>NativeModules.LndMobileTools.writeConfigFile()</Text>
           </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log(NativeModules.LndMobile);
-              console.log(await NativeModules.LndMobile.startLnd(false, ""));
-            }}
-          >
-            <Text style={styles.buttonText}>NativeModules.LndMobile.startLnd()</Text>
-          </Button>
 
           <Button
             small
@@ -853,7 +844,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               console.log(initWalletResponse);
             }}
           >
-            <Text style={styles.buttonText}>NativeModules.LndMobile.initWallet()</Text>
+            <Text style={styles.buttonText}>react-native-turbo-lnd.initWallet()</Text>
           </Button>
 
           <Button

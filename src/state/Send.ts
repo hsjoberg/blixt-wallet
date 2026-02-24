@@ -9,7 +9,6 @@ import {
 } from "../utils";
 
 import { ILNUrlPayResponse } from "./LNURL";
-import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
 import { ITransaction } from "../storage/database/transaction";
 import { LnBech32Prefix } from "../utils/build";
@@ -78,21 +77,21 @@ export interface ISendModel {
   setPayment: Thunk<
     ISendModel,
     ISendModelSetPaymentPayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<PayReq>
   >;
   sendPayment: Thunk<
     ISendModel,
     IModelSendPaymentPayload | void,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<Payment>
   >;
   queryRoutesForFeeEstimate: Thunk<
     ISendModel,
     IModelQueryRoutesPayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<QueryRoutesResponse>
   >;

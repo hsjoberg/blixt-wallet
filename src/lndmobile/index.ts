@@ -1,25 +1,9 @@
 import { toByteArray as base64ToByteArray } from "base64-js";
-
 import { NativeModules } from "react-native";
 
-const { LndMobile, LndMobileTools } = NativeModules;
+import Speedloader from "../turbomodules/NativeSpeedloader";
 
-/**
- * @throws
- */
-export const initialize = async (): Promise<{ data: string } | number> => {
-  return await LndMobile.initialize();
-};
-
-export enum ELndMobileStatusCodes {
-  STATUS_SERVICE_BOUND = 1,
-  STATUS_PROCESS_STARTED = 2,
-  STATUS_WALLET_UNLOCKED = 4,
-}
-
-export const checkStatus = async (): Promise<ELndMobileStatusCodes> => {
-  return await LndMobile.checkStatus();
-};
+const { LndMobileTools } = NativeModules;
 
 /**
  * @throws
@@ -53,18 +37,16 @@ export const generateSecureRandom = async (length: number) => {
 /**
  * @throws
  */
-export const startLnd = async (torEnabled: boolean, args?: string): Promise<{ data: string }> => {
-  return await LndMobile.startLnd(torEnabled, args);
-};
-
-/**
- * @throws
- */
 export const gossipSync = async (
   serviceUrl: string,
-  networkType: string,
+  _networkType: string,
 ): Promise<{ data: string }> => {
-  return await LndMobile.gossipSync(serviceUrl, networkType);
+  const [cacheDir, filesDir] = await Promise.all([
+    LndMobileTools.getCacheDir(),
+    LndMobileTools.getFilesDir(),
+  ]);
+  const data = await Speedloader.gossipSync(serviceUrl, cacheDir, filesDir);
+  return { data };
 };
 
 export const checkICloudEnabled = async (): Promise<boolean> => {
@@ -90,13 +72,6 @@ export const checkLndFolderExists = async () => {
  */
 export const createIOSApplicationSupportAndLndDirectories = async () => {
   return await LndMobileTools.createIOSApplicationSupportAndLndDirectories();
-};
-
-/**
- * @throws
- */
-export const TEMP_moveLndToApplicationSupport = async () => {
-  return await LndMobileTools.TEMP_moveLndToApplicationSupport();
 };
 
 /**

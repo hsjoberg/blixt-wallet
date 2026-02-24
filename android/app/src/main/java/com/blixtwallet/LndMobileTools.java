@@ -746,9 +746,6 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void restartApp() {
-    Intent stopLndIntent = new Intent(getReactApplicationContext(), LndMobileService.class);
-    stopLndIntent.setAction("com.blixtwallet.android.intent.action.STOP");
-    getReactApplicationContext().startService(stopLndIntent);
     ProcessPhoenix.triggerRebirth(getReactApplicationContext());
   }
 

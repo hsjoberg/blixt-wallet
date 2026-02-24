@@ -21,7 +21,6 @@ override val reactHost: ReactHost by lazy {
             PackageList(this).packages.apply {
               // Packages that cannot be autolinked yet can be added manually here, for example:
               // add(MyReactNativePackage())
-              add(LndMobilePackage())
               add(LndMobileToolsPackage())
               add(LndMobileScheduledSyncPackage())
 

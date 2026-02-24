@@ -447,37 +447,6 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(TEMP_moveLndToApplicationSupport:rejecter:)
-  func TEMP_moveLndToApplicationSupport(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-    let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-
-    let newLndFolder = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
-
-    let lndData = documents.appendingPathComponent("data", isDirectory: true)
-    let lndConfig = documents.appendingPathComponent("lnd.conf")
-
-    let newlndDataPath = newLndFolder.appendingPathComponent("data")
-    let newLndConfigPath = newLndFolder.appendingPathComponent("lnd.conf")
-
-    NSLog("FROM: \(lndData.path)")
-    NSLog("TO: \(newlndDataPath.path)")
-
-    do {
-      if FileManager.default.fileExists(atPath: newLndFolder.path) {
-        try FileManager.default.moveItem(at: lndData, to: newlndDataPath)
-        try FileManager.default.moveItem(at: lndConfig, to: newLndConfigPath)
-        resolve(true)
-      } else {
-        let error = LndMobileToolsError(msg: "lnd path \(newLndFolder.path) doesn't exist")
-        reject("error", error.localizedDescription, error)
-      }
-    } catch let error {
-      NSLog("Failed moving lnd files: \(error)")
-      reject("error", error.localizedDescription, error)
-    }
-  }
-
   @objc(tailLog:resolver:rejecter:)
   func tailLog(numberOfLines: Int32, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String

@@ -7,7 +7,6 @@ import {
 } from "../storage/database/transaction";
 
 import { IStoreModel } from "./index";
-import { IStoreInjections } from "./store";
 import { bytesToHexString, hexToUint8Array } from "../utils";
 
 import {
@@ -45,18 +44,18 @@ export interface ITransactionModel {
   syncTransaction: Thunk<ITransactionModel, ITransaction, any, IStoreModel>;
 
   getTransactions: Thunk<ITransactionModel, undefined, any, IStoreModel>;
-  checkOpenTransactions: Thunk<ITransactionModel, undefined, IStoreInjections, IStoreModel>;
+  checkOpenTransactions: Thunk<ITransactionModel, undefined, any, IStoreModel>;
   syncInvoicesFromLnd: Thunk<
     ITransactionModel,
     undefined,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<ISyncInvoicesFromLndResult>
   >;
   syncPaymentsFromLnd: Thunk<
     ITransactionModel,
     undefined,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<ISyncPaymentsFromLndResult>
   >;

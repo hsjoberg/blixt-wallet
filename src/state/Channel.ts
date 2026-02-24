@@ -3,7 +3,6 @@ import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import * as base64 from "base64-js";
 
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
-import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
 import {
   IChannelEvent,
@@ -74,23 +73,23 @@ export interface ISetAliasPayload {
 
 export interface IChannelModel {
   setupCachedBalance: Thunk<IChannelModel>;
-  initialize: Thunk<IChannelModel, undefined, IStoreInjections>;
+  initialize: Thunk<IChannelModel, undefined, any>;
 
-  setupChannelUpdateSubscriptions: Thunk<IChannelModel, void, IStoreInjections, IStoreModel>;
-  getChannels: Thunk<IChannelModel, void, IStoreInjections>;
+  setupChannelUpdateSubscriptions: Thunk<IChannelModel, void, any, IStoreModel>;
+  getChannels: Thunk<IChannelModel, void, any>;
   getChannelEvents: Thunk<IChannelModel, void, any, IStoreModel>;
-  getBalance: Thunk<IChannelModel, undefined, IStoreInjections>;
-  connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload, IStoreInjections, IStoreModel>;
+  getBalance: Thunk<IChannelModel, undefined, any>;
+  connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload, any, IStoreModel>;
   connectAndOpenChannelAll: Thunk<
     IChannelModel,
     IOpenChannelPayloadAll,
-    IStoreInjections,
+    any,
     IStoreModel
   >;
-  closeChannel: Thunk<IChannelModel, ICloseChannelPayload, IStoreInjections, IStoreModel>;
+  closeChannel: Thunk<IChannelModel, ICloseChannelPayload, any, IStoreModel>;
   abandonChannel: Thunk<IChannelModel, ICloseChannelPayload>;
-  exportChannelsBackup: Thunk<IChannelModel, void, IStoreInjections>;
-  exportChannelBackupFile: Thunk<IChannelModel, void, IStoreInjections>;
+  exportChannelsBackup: Thunk<IChannelModel, void, any>;
+  exportChannelBackupFile: Thunk<IChannelModel, void, any>;
 
   setChannels: Action<IChannelModel, Channel[]>;
   setChannelEvents: Action<IChannelModel, IChannelEvent[]>;
@@ -267,18 +266,18 @@ export const channel: IChannelModel = {
       );
 
       // TURBOTODO: how do we replace this?
-      LndMobileEventEmitter.addListener("CloseChannel", async (e: any) => {
-        const error = checkLndStreamErrorResponse("CloseChannel", e);
-        if (error === "EOF") {
-          return;
-        } else if (error) {
-          log.d("Got error from CloseChannel", [error]);
-          return;
-        }
+      // LndMobileEventEmitter.addListener("CloseChannel", async (e: any) => {
+      //   const error = checkLndStreamErrorResponse("CloseChannel", e);
+      //   if (error === "EOF") {
+      //     return;
+      //   } else if (error) {
+      //     log.d("Got error from CloseChannel", [error]);
+      //     return;
+      //   }
 
-        log.i("Event CloseChannel", [e]);
-        await actions.getChannels();
-      });
+      //   log.i("Event CloseChannel", [e]);
+      //   await actions.getChannels();
+      // });
       actions.setChannelUpdateSubscriptionStarted(true);
     },
   ),

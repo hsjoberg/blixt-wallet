@@ -2,7 +2,6 @@ import { Thunk, thunk } from "easy-peasy";
 import { CONSTANTS, JSHash } from "react-native-hash";
 
 import { IStoreModel } from "./index";
-import { IStoreInjections } from "./store";
 import {
   ILNUrlPayRequest,
   ILNUrlPayRequestPayerData,
@@ -40,7 +39,7 @@ const lnboxPayerDataRequest: ILNUrlPayRequestPayerData = {
 export interface ILightningBoxModel {
   initialize: Thunk<ILightningBoxModel>;
 
-  subscribeCustomMessages: Thunk<ILightningBoxModel, void, IStoreInjections, IStoreModel>;
+  subscribeCustomMessages: Thunk<ILightningBoxModel, void, any, IStoreModel>;
 }
 
 export const lightningBox: ILightningBoxModel = {

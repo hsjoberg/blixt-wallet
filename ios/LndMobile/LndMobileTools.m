@@ -93,11 +93,6 @@ RCT_EXTERN_METHOD(
 )
 
 RCT_EXTERN_METHOD(
-  TEMP_moveLndToApplicationSupport: (RCTPromiseResolveBlock)resolve
-  rejecter: (RCTPromiseRejectBlock)reject
-)
-
-RCT_EXTERN_METHOD(
   tailLog: (NSInteger)numberOfLines
   resolver: (RCTPromiseResolveBlock)resolve
   rejecter: (RCTPromiseRejectBlock)reject
