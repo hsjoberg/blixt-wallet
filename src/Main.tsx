@@ -152,7 +152,6 @@ export default function Main() {
           //       }, {
           //         text: "Restart app",
           //         onPress: async () => {
-          //           await NativeModules.LndMobileTools.killLnd();
           //           NativeModules.LndMobileTools.restartApp();
           //         },
           //       }, {

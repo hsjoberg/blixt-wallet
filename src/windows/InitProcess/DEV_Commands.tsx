@@ -911,14 +911,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>restartApp()</Text>
           </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log(await NativeModules.LndMobileTools.DEBUG_listProcesses());
-            }}
-          >
-            <Text style={styles.buttonText}>DEBUG_listProcesses()</Text>
-          </Button>
 
           {/*
            *

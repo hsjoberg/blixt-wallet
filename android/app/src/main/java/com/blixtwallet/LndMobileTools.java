@@ -1,28 +1,11 @@
 package com.blixtwallet;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.app.ActivityManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.FileObserver;
-import android.os.Process;
 import android.util.Base64;
 import android.util.Log;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Environment;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.Handler;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.os.RemoteException;
 
 import android.nfc.Tag;
 import android.nfc.NfcAdapter;
@@ -45,12 +28,8 @@ import java.io.OutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.EnumSet;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -59,10 +38,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.facebook.react.modules.permissions.PermissionsModule;
 import com.reactnativecommunity.asyncstorage.ReactDatabaseSupplier;
 import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil;
 import com.jakewharton.processphoenix.ProcessPhoenix;
@@ -76,17 +52,6 @@ class LndMobileTools extends ReactContextBaseJavaModule {
 
   public LndMobileTools(ReactApplicationContext reactContext) {
     super(reactContext);
-  }
-
-  private boolean getPersistentServicesEnabled(Context context) {
-    // ReactDatabaseSupplier dbSupplier = ReactDatabaseSupplier.getInstance(context);
-    // SQLiteDatabase db = dbSupplier.get();
-    // String persistentServicesEnabled = AsyncLocalStorageUtil.getItemImpl(db, "persistentServicesEnabled");
-    // if (persistentServicesEnabled != null) {
-    //   return persistentServicesEnabled.equals("true");
-    // }
-    // HyperLog.w(TAG, "Could not find persistentServicesEnabled in asyncStorage");
-    return false;
   }
 
   @Override
@@ -255,25 +220,6 @@ class LndMobileTools extends ReactContextBaseJavaModule {
     }
 
     promise.resolve("File written: " + filename);
-  }
-
-  @ReactMethod
-  public void killLnd(Promise promise) {
-    boolean result = killLndProcess();
-    promise.resolve(result);
-  }
-
-  private boolean killLndProcess() {
-    String packageName = getReactApplicationContext().getPackageName();
-    ActivityManager am = (ActivityManager) getCurrentActivity().getSystemService(Context.ACTIVITY_SERVICE);
-    for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
-      if (p.processName.equals(packageName + ":blixtLndMobile")) {
-        HyperLog.i(TAG, "Killing " + packageName + ":blixtLndMobile with pid: " + String.valueOf(p.pid));
-        Process.killProcess(p.pid);
-        return true;
-      }
-    }
-    return false;
   }
 
   @ReactMethod
@@ -701,50 +647,6 @@ class LndMobileTools extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void DEBUG_listProcesses(Promise promise) {
-    String processes = "";
-
-    String packageName = getReactApplicationContext().getPackageName();
-    ActivityManager am = (ActivityManager) getCurrentActivity().getSystemService(Context.ACTIVITY_SERVICE);
-    for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
-      processes += p.processName + "\n";
-    }
-
-    promise.resolve(processes);
-  }
-
-  @ReactMethod
-  public void checkLndProcessExist(Promise promise) {
-    String packageName = getReactApplicationContext().getPackageName();
-    ActivityManager am = (ActivityManager) getReactApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
-    for (ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses()) {
-      if (p.processName.equals(packageName + ":blixtLndMobile")) {
-        HyperLog.d(TAG, packageName + ":blixtLndMobile pid: " + String.valueOf(p.pid));
-        promise.resolve(true);
-        return;
-      }
-    }
-    promise.resolve(false);
-  }
-
-  @ReactMethod
-  public void deleteTLSCerts(Promise promise) {
-    HyperLog.i(TAG, "Deleting lnd TLS certificates");
-
-    String tlsKeyFilename = getReactApplicationContext().getFilesDir().toString() + "/tls.key";
-    File tlsKeyFile = new File(tlsKeyFilename);
-    boolean tlsKeyFileDeletion = tlsKeyFile.delete();
-    HyperLog.i(TAG, "Delete: " + tlsKeyFilename.toString() + ": " + tlsKeyFileDeletion);
-
-    String tlsCertFilename = getReactApplicationContext().getFilesDir().toString() + "/tls.cert";
-    File tlsCertFile = new File(tlsCertFilename);
-    boolean tlsCertFileDeletion = tlsCertFile.delete();
-    HyperLog.i(TAG, "Delete: " + tlsCertFilename.toString() + ": " + tlsCertFileDeletion);
-
-    promise.resolve(tlsKeyFileDeletion && tlsCertFileDeletion);
-  }
-
-  @ReactMethod
   public void restartApp() {
     ProcessPhoenix.triggerRebirth(getReactApplicationContext());
   }
@@ -850,39 +752,4 @@ class LndMobileTools extends ReactContextBaseJavaModule {
     promise.resolve(s);
   }
 
-  private void checkWriteExternalStoragePermission(@NonNull RequestWriteExternalStoragePermissionCallback successCallback,
-                                                   @NonNull Runnable failCallback,
-                                                   @NonNull Runnable failPermissionCheckcallback) {
-    PermissionsModule permissions = new PermissionsModule(getReactApplicationContext());
-
-    PromiseWrapper requestPromiseWrapper = new PromiseWrapper() {
-      @Override
-      public void onSuccess(@Nullable Object value) {
-        successCallback.success(value);
-      }
-
-      @Override
-      public void onFail(Throwable throwable) {
-        failCallback.run();
-      }
-    };
-
-    PromiseWrapper checkPromiseWrapper = new PromiseWrapper() {
-      @Override
-      void onSuccess(@Nullable Object value) {
-        permissions.requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, requestPromiseWrapper);
-      }
-
-      @Override
-      void onFail(Throwable throwable) {
-        failPermissionCheckcallback.run();
-      }
-    };
-
-    permissions.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, checkPromiseWrapper);
-  }
-
-  private interface RequestWriteExternalStoragePermissionCallback {
-    void success(@Nullable Object value);
-  }
 }

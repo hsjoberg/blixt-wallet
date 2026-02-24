@@ -531,9 +531,8 @@ export const model: IStoreModel = {
               );
             log.d("Got WalletState.SERVER_ACTIVE");
 
-            // TURBOTODO(hsjoberg): test this
-            // We'll enter this branch of code if the react-native frontend desyncs with lnd.
-            // This can happen for example if Android kills react-native but not LndMobileService.
+            // We'll enter this branch of code if the react-native frontend desyncs with lnd,
+            // for example if the JS runtime restarts while lnd keeps running.
             if (!getState().lightning.rpcReady) {
               await dispatch.lightning.initialize({ start });
             }

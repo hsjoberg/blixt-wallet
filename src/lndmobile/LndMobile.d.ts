@@ -2,7 +2,6 @@ export interface ILndMobileTools {
   writeConfig(data: string): Promise<string>;
   writeConfigFile(): Promise<string>;
   generateSecureRandomAsBase64(length: number): Promise<string>;
-  killLnd(): Promise<boolean>;
   log(level: "v" | "d" | "i" | "w" | "e", tag: string, msg: string): void;
   saveLogs(): Promise<string>;
   copyLndLog(): Promise<boolean>;
@@ -28,9 +27,6 @@ export interface ILndMobileTools {
   getIntentNfcData(): Promise<string | null>;
   DEBUG_deleteWallet(): Promise<boolean>;
   DEBUG_deleteDatafolder(): Promise<null>;
-  DEBUG_listProcesses(): Promise<string>;
-  checkLndProcessExist(): Promise<boolean>;
-  deleteTLSCerts(): Promise<boolean>;
   restartApp(): void;
 
   // iOS-specific
