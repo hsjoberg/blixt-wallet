@@ -12,7 +12,6 @@ import {
 } from "../utils/google-drive";
 import { Chain, Debug } from "../utils/build";
 import { getItemObject, StorageItem, setItemObject } from "../storage/app";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 import { exportAllChannelBackups, subscribeChannelEvents } from "react-native-turbo-lnd";
 import { MultiChanBackup } from "react-native-turbo-lnd/protos/lightning_pb";

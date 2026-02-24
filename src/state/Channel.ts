@@ -10,8 +10,6 @@ import {
   createChannelEvent,
 } from "../storage/database/channel-events";
 import { bytesToHexString, toast } from "../utils";
-import { LndMobileEventEmitter } from "../utils/event-listener";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
 
 import {
   abandonChannel,
@@ -80,12 +78,7 @@ export interface IChannelModel {
   getChannelEvents: Thunk<IChannelModel, void, any, IStoreModel>;
   getBalance: Thunk<IChannelModel, undefined, any>;
   connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload, any, IStoreModel>;
-  connectAndOpenChannelAll: Thunk<
-    IChannelModel,
-    IOpenChannelPayloadAll,
-    any,
-    IStoreModel
-  >;
+  connectAndOpenChannelAll: Thunk<IChannelModel, IOpenChannelPayloadAll, any, IStoreModel>;
   closeChannel: Thunk<IChannelModel, ICloseChannelPayload, any, IStoreModel>;
   abandonChannel: Thunk<IChannelModel, ICloseChannelPayload>;
   exportChannelsBackup: Thunk<IChannelModel, void, any>;
@@ -144,6 +137,9 @@ export const channel: IChannelModel = {
       subscribeChannelEvents(
         {},
         async (channelEvent) => {
+          log.d("subscribeChannelEvents", [channelEvent]);
+          await actions.getChannels();
+
           try {
             log.v("channelEvent", [channelEvent, channelEvent.type]);
             const pushNotificationsEnabled = getStoreState().settings.pushNotificationsEnabled;
@@ -265,19 +261,6 @@ export const channel: IChannelModel = {
         },
       );
 
-      // TURBOTODO: how do we replace this?
-      // LndMobileEventEmitter.addListener("CloseChannel", async (e: any) => {
-      //   const error = checkLndStreamErrorResponse("CloseChannel", e);
-      //   if (error === "EOF") {
-      //     return;
-      //   } else if (error) {
-      //     log.d("Got error from CloseChannel", [error]);
-      //     return;
-      //   }
-
-      //   log.i("Event CloseChannel", [e]);
-      //   await actions.getChannels();
-      // });
       actions.setChannelUpdateSubscriptionStarted(true);
     },
   ),

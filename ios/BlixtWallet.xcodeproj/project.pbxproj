@@ -20,12 +20,8 @@
 		CC9860E12A5F344900047BB1 /* LndMobileTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860D72A5F344700047BB1 /* LndMobileTools.swift */; };
 		CC9860E22A5F344900047BB1 /* lightning.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860D92A5F344700047BB1 /* lightning.pb.swift */; };
 		CC9860E32A5F344900047BB1 /* walletunlocker.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DA2A5F344700047BB1 /* walletunlocker.pb.swift */; };
-		CC9860E42A5F344900047BB1 /* LndMobile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DB2A5F344800047BB1 /* LndMobile.swift */; };
-		CC9860E52A5F344900047BB1 /* LndMobile.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DC2A5F344800047BB1 /* LndMobile.m */; };
-		CC9860E62A5F344900047BB1 /* Lnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DD2A5F344800047BB1 /* Lnd.swift */; };
 		CC9860E72A5F344900047BB1 /* LndMobileScheduledSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DE2A5F344800047BB1 /* LndMobileScheduledSync.swift */; };
 		CC9860E82A5F344900047BB1 /* LndMobileScheduledSync.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DF2A5F344800047BB1 /* LndMobileScheduledSync.m */; };
-		CC9861062A5F5AA900047BB1 /* Lndmobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9861052A5F5AA800047BB1 /* Lndmobile.xcframework */; };
 		CC98610A2A5F5AF400047BB1 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9861092A5F5AE500047BB1 /* libresolv.tbd */; };
 		CCB1E6E82D5268C6000B0C98 /* NativeSpeedloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB1E6E62D5268C6000B0C98 /* NativeSpeedloader.cpp */; };
 		CCC73A6D2CB5B07E0066575C /* LndMobileToolsTurbo.mm in Sources */ = {isa = PBXBuildFile; fileRef = CCC73A6C2CB5B07E0066575C /* LndMobileToolsTurbo.mm */; };
@@ -70,13 +66,9 @@
 		CC9860D82A5F344700047BB1 /* BlixtWallet-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BlixtWallet-Bridging-Header.h"; sourceTree = "<group>"; };
 		CC9860D92A5F344700047BB1 /* lightning.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = lightning.pb.swift; sourceTree = "<group>"; };
 		CC9860DA2A5F344700047BB1 /* walletunlocker.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = walletunlocker.pb.swift; sourceTree = "<group>"; };
-		CC9860DB2A5F344800047BB1 /* LndMobile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LndMobile.swift; sourceTree = "<group>"; };
-		CC9860DC2A5F344800047BB1 /* LndMobile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LndMobile.m; sourceTree = "<group>"; };
-		CC9860DD2A5F344800047BB1 /* Lnd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lnd.swift; sourceTree = "<group>"; };
 		CC9860DE2A5F344800047BB1 /* LndMobileScheduledSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LndMobileScheduledSync.swift; sourceTree = "<group>"; };
 		CC9860DF2A5F344800047BB1 /* LndMobileScheduledSync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LndMobileScheduledSync.m; sourceTree = "<group>"; };
 		CC9861042A5F513300047BB1 /* BlixtWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BlixtWallet.entitlements; path = BlixtWallet/BlixtWallet.entitlements; sourceTree = "<group>"; };
-		CC9861052A5F5AA800047BB1 /* Lndmobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Lndmobile.xcframework; sourceTree = "<group>"; };
 		CC9861092A5F5AE500047BB1 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		CCB1E6DB2D5268C6000B0C98 /* liblnd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = liblnd.h; sourceTree = "<group>"; };
 		CCB1E6DD2D5268C6000B0C98 /* liblnd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = liblnd.h; sourceTree = "<group>"; };
@@ -106,7 +98,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC173A032D5274C700FA4A3E /* liblnd.a in Frameworks */,
-				CC9861062A5F5AA900047BB1 /* Lndmobile.xcframework in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-BlixtWallet.a in Frameworks */,
 				CC98610A2A5F5AF400047BB1 /* libresolv.tbd in Frameworks */,
 			);
@@ -151,7 +142,6 @@
 			isa = PBXGroup;
 			children = (
 				CC9861092A5F5AE500047BB1 /* libresolv.tbd */,
-				CC9861052A5F5AA800047BB1 /* Lndmobile.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				5DCACB8F33CDC322A6C60F78 /* libPods-BlixtWallet.a */,
 			);
@@ -216,9 +206,6 @@
 			children = (
 				CC9860D82A5F344700047BB1 /* BlixtWallet-Bridging-Header.h */,
 				CC9860D92A5F344700047BB1 /* lightning.pb.swift */,
-				CC9860DD2A5F344800047BB1 /* Lnd.swift */,
-				CC9860DC2A5F344800047BB1 /* LndMobile.m */,
-				CC9860DB2A5F344800047BB1 /* LndMobile.swift */,
 				CC9860DF2A5F344800047BB1 /* LndMobileScheduledSync.m */,
 				CC9860DE2A5F344800047BB1 /* LndMobileScheduledSync.swift */,
 				CC9860D62A5F344600047BB1 /* LndMobileTools.m */,
@@ -494,7 +481,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC9860E22A5F344900047BB1 /* lightning.pb.swift in Sources */,
-				CC9860E62A5F344900047BB1 /* Lnd.swift in Sources */,
 				CC9860E82A5F344900047BB1 /* LndMobileScheduledSync.m in Sources */,
 				CCCC227B2DF8F3D800AA97B7 /* AppDelegate.swift in Sources */,
 				CC9860E02A5F344800047BB1 /* LndMobileTools.m in Sources */,
@@ -502,8 +488,6 @@
 				CC96DB512DFB59F5009A4BA1 /* NativeSpeedloaderModuleProvider.mm in Sources */,
 				CCB1E6E82D5268C6000B0C98 /* NativeSpeedloader.cpp in Sources */,
 				CC9860E72A5F344900047BB1 /* LndMobileScheduledSync.swift in Sources */,
-				CC9860E52A5F344900047BB1 /* LndMobile.m in Sources */,
-				CC9860E42A5F344900047BB1 /* LndMobile.swift in Sources */,
 				CC9860E32A5F344900047BB1 /* walletunlocker.pb.swift in Sources */,
 				CCC73A6D2CB5B07E0066575C /* LndMobileToolsTurbo.mm in Sources */,
 			);
