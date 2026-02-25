@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
-import { EmitterSubscription, NativeModules } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Icon } from "native-base";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -7,13 +6,13 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { SettingsStackParamList } from "./index";
 import Container from "../../components/Container";
 import { NavigationButton } from "../../components/NavigationButton";
-import { LndMobileToolsEventEmitter } from "../../utils/event-listener";
 import { toast } from "../../utils";
 import LogBox from "../../components/LogBox";
 import useForceUpdate from "../../hooks/useForceUpdate";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
 
 export interface ILndLogProps {
   navigation: StackNavigationProp<SettingsStackParamList, "SpeedloaderLog">;
@@ -27,7 +26,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
   useEffect(() => {
     (async () => {
       try {
-        const tailLog = await NativeModules.LndMobileTools.tailSpeedloaderLog(300);
+        const tailLog = await NativeBlixtTools.tailSpeedloaderLog(300);
         log.current = tailLog;
         forceUpdate();
       } catch (error: any) {

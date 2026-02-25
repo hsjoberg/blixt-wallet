@@ -2,7 +2,7 @@ import * as base64 from "base64-js";
 import { RnTor } from "react-native-nitro-tor";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
-import { AlertButton, NativeModules } from "react-native";
+import { AlertButton } from "react-native";
 
 import {
   DEFAULT_PATHFINDING_ALGORITHM,
@@ -10,7 +10,7 @@ import {
   PLATFORM,
   TOR_SETTINGS,
 } from "../utils/constants";
-import { Chain, Debug, VersionCode } from "../utils/build";
+import { Chain, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
 import {
@@ -93,6 +93,7 @@ import {
 } from "react-native-turbo-lnd";
 import { WalletState } from "react-native-turbo-lnd/protos/lightning_pb";
 
+import NativeBlixtTools from "../turbomodules/NativeBlixtTools";
 import Speedloader from "../turbomodules/NativeSpeedloader";
 import NativeLndmobileTools from "../turbomodules/NativeLndmobileTools";
 
@@ -204,7 +205,7 @@ export const model: IStoreModel = {
 
     const brickDeviceAndExportChannelDb = await getBrickDeviceAndExportChannelDb();
     if (brickDeviceAndExportChannelDb) {
-      await NativeModules.LndMobileTools.saveChannelDbFile();
+      await NativeBlixtTools.saveChannelDbFile();
       await brickInstance();
       await setBrickDeviceAndExportChannelDb(false);
       Alert.alert(
@@ -215,7 +216,7 @@ export const model: IStoreModel = {
             text: "OK",
             onPress() {
               if (PLATFORM === "android") {
-                NativeModules.LndMobileTools.restartApp();
+                NativeBlixtTools.restartApp();
               }
             },
           },
@@ -230,7 +231,7 @@ export const model: IStoreModel = {
       const path = importChannelDbOnStartup.channelDbPath.replace(/^file:\/\//, "");
       toast("Beginning channel db import procedure", undefined, "warning");
       log.i("Beginning channel db import procedure", [path]);
-      await NativeModules.LndMobileTools.importChannelDbFile(path);
+      await NativeBlixtTools.importChannelDbFile(path);
       toast("Successfully imported channel.db");
     }
 
@@ -337,7 +338,7 @@ export const model: IStoreModel = {
           );
 
           if (result.text === restartText) {
-            NativeModules.LndMobileTools.restartApp();
+            NativeBlixtTools.restartApp();
             return;
           } else {
             actions.setTorEnabled(false);
@@ -394,8 +395,8 @@ export const model: IStoreModel = {
           if (enforceSpeedloaderOnStartup) {
             log.d("Clearing speedloader files");
             try {
-              await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile();
-              await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
+              await NativeBlixtTools.DEBUG_deleteSpeedloaderLastrunFile();
+              await NativeBlixtTools.DEBUG_deleteSpeedloaderDgraphDirectory();
             } catch (error) {
               log.e("Gossip files deletion failed", [error]);
             }
@@ -403,8 +404,8 @@ export const model: IStoreModel = {
           try {
             gossipStatus = await Speedloader.gossipSync(
               speedloaderServer,
-              await NativeModules.LndMobileTools.getCacheDir(),
-              await NativeModules.LndMobileTools.getFilesDir(),
+              await NativeBlixtTools.getCacheDir(),
+              await NativeBlixtTools.getFilesDir(),
             );
             debugShowStartupInfo &&
               toast(
@@ -437,13 +438,11 @@ export const model: IStoreModel = {
             await setLndCompactDb(false);
           }
 
-          // log.d("startLnd", [await startLnd(torEnabled, args)]);
-          // TURBOTODO(hsjoberg): temp code
           let appFolderPath: string;
           if (PLATFORM === "android") {
-            appFolderPath = await NativeModules.LndMobileTools.getFilesDir();
+            appFolderPath = await NativeBlixtTools.getFilesDir();
           } else {
-            appFolderPath = (await NativeModules.LndMobileTools.getAppFolderPath())
+            appFolderPath = (await NativeBlixtTools.getAppFolderPath())
               .replace("file://", "")
               .replace(/%20/g, " ");
             appFolderPath += "lnd/";

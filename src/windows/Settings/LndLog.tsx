@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
-import { EmitterSubscription, NativeModules } from "react-native";
+import { EmitterSubscription } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Icon } from "native-base";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -14,6 +14,7 @@ import useForceUpdate from "../../hooks/useForceUpdate";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
 
 export interface ILndLogProps {
   navigation: StackNavigationProp<SettingsStackParamList, "LndLog">;
@@ -27,7 +28,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
   useEffect(() => {
     let listener: EmitterSubscription;
     (async () => {
-      const tailLog = await NativeModules.LndMobileTools.tailLog(100);
+      const tailLog = await NativeBlixtTools.tailLog(100);
       log.current = tailLog
         .split("\n")
         .map((row) => row.slice(11))
@@ -38,7 +39,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
         forceUpdate();
       });
 
-      NativeModules.LndMobileTools.observeLndLogFile();
+      NativeBlixtTools.observeLndLogFile();
       forceUpdate();
     })();
 

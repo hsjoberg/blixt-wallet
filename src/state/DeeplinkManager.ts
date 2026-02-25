@@ -1,4 +1,4 @@
-import { AppState, AppStateStatus, Linking, NativeModules } from "react-native"
+import { AppState, AppStateStatus, Linking } from "react-native"
 import { Action, action, Thunk, thunk } from "easy-peasy";
 import { NavigationContainerRef } from "@react-navigation/native";
 
@@ -7,6 +7,7 @@ import { IStoreModel } from "./index";
 import { waitUntilTrue } from "../utils";
 import { LnBech32Prefix } from "../utils/build";
 import { PLATFORM } from "../utils/constants";
+import NativeBlixtTools from "../turbomodules/NativeBlixtTools";
 
 import logger from "./../utils/log";
 const log = logger("DeeplinkManager");
@@ -60,10 +61,10 @@ export const deeplinkManager: IDeeplinkManager = {
       }
       if (PLATFORM === "android") {
         if (data === null) {
-          data = await NativeModules.LndMobileTools.getIntentStringData();
+          data = await NativeBlixtTools.getIntentStringData();
         }
         if (data === null) {
-          data = await NativeModules.LndMobileTools.getIntentNfcData();
+          data = await NativeBlixtTools.getIntentNfcData();
         }
       }
       log.d("Deeplink", [data]);

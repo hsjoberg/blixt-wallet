@@ -1,4 +1,3 @@
-import { NativeModules } from "react-native";
 import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import * as base64 from "base64-js";
 
@@ -10,6 +9,7 @@ import {
   createChannelEvent,
 } from "../storage/database/channel-events";
 import { bytesToHexString, toast } from "../utils";
+import NativeBlixtTools from "../turbomodules/NativeBlixtTools";
 
 import {
   abandonChannel,
@@ -486,7 +486,7 @@ export const channel: IChannelModel = {
   exportChannelsBackup: thunk(async (_, _2, {}) => {
     const response = await exportAllChannelBackups({});
     if (response.multiChanBackup && response.multiChanBackup.multiChanBackup) {
-      const exportResponse = await NativeModules.LndMobileTools.saveChannelsBackup(
+      const exportResponse = await NativeBlixtTools.saveChannelsBackup(
         base64.fromByteArray(response.multiChanBackup.multiChanBackup),
       );
       return exportResponse;
@@ -496,7 +496,7 @@ export const channel: IChannelModel = {
   }),
 
   exportChannelBackupFile: thunk(async () => {
-    return await NativeModules.LndMobileTools.saveChannelBackupFile();
+    return await NativeBlixtTools.saveChannelBackupFile();
   }),
 
   getBalance: thunk(async (actions, _, {}) => {

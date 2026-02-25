@@ -24,7 +24,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { bytesToHexString, stringToUint8Array, toast } from "../../utils";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
-import { NativeModules, Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { useStoreActions, useStoreState } from "../../state/store";
 import { Alert } from "../../utils/alert";
 import Input from "../../components/Input";
@@ -34,6 +34,7 @@ import logger from "../../utils/log";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { signMessage, stopDaemon } from "react-native-turbo-lnd";
 import { SignMessageResponse } from "react-native-turbo-lnd/protos/lightning_pb";
+import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
 
 const log = logger("LightningBoxRegistration");
 
@@ -183,7 +184,7 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
           } catch (e) {
             console.log(e);
           }
-          NativeModules.LndMobileTools.restartApp();
+          NativeBlixtTools.restartApp();
         },
       },
     ]);

@@ -1,24 +1,14 @@
 import { toByteArray as base64ToByteArray } from "base64-js";
-import { NativeModules } from "react-native";
 
+import NativeBlixtTools from "../turbomodules/NativeBlixtTools";
 import Speedloader from "../turbomodules/NativeSpeedloader";
-
-const { LndMobileTools } = NativeModules;
 
 /**
  * @throws
  * @return string
  */
 export const writeConfig = async (data: string) => {
-  return await LndMobileTools.writeConfig(data);
-};
-
-/**
- * @throws
- * @return string
- */
-export const writeConfigFile = async () => {
-  return await LndMobileTools.writeConfigFile();
+  return await NativeBlixtTools.writeConfig(data);
 };
 
 /**
@@ -26,7 +16,7 @@ export const writeConfigFile = async () => {
  * @return string
  */
 export const generateSecureRandomAsBase64 = async (length: number) => {
-  return await LndMobileTools.generateSecureRandomAsBase64(length);
+  return await NativeBlixtTools.generateSecureRandomAsBase64(length);
 };
 
 export const generateSecureRandom = async (length: number) => {
@@ -42,43 +32,36 @@ export const gossipSync = async (
   _networkType: string,
 ): Promise<{ data: string }> => {
   const [cacheDir, filesDir] = await Promise.all([
-    LndMobileTools.getCacheDir(),
-    LndMobileTools.getFilesDir(),
+    NativeBlixtTools.getCacheDir(),
+    NativeBlixtTools.getFilesDir(),
   ]);
   const data = await Speedloader.gossipSync(serviceUrl, cacheDir, filesDir);
   return { data };
 };
 
 export const checkICloudEnabled = async (): Promise<boolean> => {
-  return await LndMobileTools.checkICloudEnabled();
+  return await NativeBlixtTools.checkICloudEnabled();
 };
 
 /**
  * @throws
  */
 export const checkApplicationSupportExists = async () => {
-  return await LndMobileTools.checkApplicationSupportExists();
-};
-
-/**
- * @throws
- */
-export const checkLndFolderExists = async () => {
-  return await LndMobileTools.checkLndFolderExists();
+  return await NativeBlixtTools.checkApplicationSupportExists();
 };
 
 /**
  * @throws
  */
 export const createIOSApplicationSupportAndLndDirectories = async () => {
-  return await LndMobileTools.createIOSApplicationSupportAndLndDirectories();
+  return await NativeBlixtTools.createIOSApplicationSupportAndLndDirectories();
 };
 
 /**
  * @throws
  */
 export const excludeLndICloudBackup = async () => {
-  return await LndMobileTools.excludeLndICloudBackup();
+  return await NativeBlixtTools.excludeLndICloudBackup();
 };
 
 /**

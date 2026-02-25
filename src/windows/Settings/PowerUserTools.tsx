@@ -11,9 +11,10 @@ import {
   Item,
 } from "native-base";
 import { PLATFORM } from "../../utils/constants";
-import { NativeModules, Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import React, { useCallback, useLayoutEffect, useState } from "react";
 import { hexToUint8Array, timeout, toast } from "../../utils";
+import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
 
 import { namespaces } from "../../i18n/i18n.constants";
 import { useStoreActions, useStoreState } from "../../state/store";
@@ -107,7 +108,7 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
             } catch (e: any) {
               console.log(e);
             }
-            NativeModules.LndMobileTools.restartApp();
+            NativeBlixtTools.restartApp();
           },
         },
       ]);
@@ -148,7 +149,7 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
   // Copy App log
   const copyAppLog = async () => {
     try {
-      const path = await NativeModules.LndMobileTools.saveLogs();
+      const path = await NativeBlixtTools.saveLogs();
       toast(`${t("miscelaneous.appLog.dialog.alert")}: ` + path, 20000, "warning");
     } catch (e: any) {
       console.error(e);
@@ -159,7 +160,7 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
   // Copy lnd log
   const copyLndLog = async () => {
     try {
-      await NativeModules.LndMobileTools.copyLndLog();
+      await NativeBlixtTools.copyLndLog();
     } catch (e: any) {
       console.error(e);
       toast(`${t("miscelaneous.lndLog.dialog.error")}: ${e.message}`, undefined, "danger");
@@ -169,7 +170,7 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
   // Copy speedloader log
   const copySpeedloaderLog = async () => {
     try {
-      await NativeModules.LndMobileTools.copySpeedloaderLog();
+      await NativeBlixtTools.copySpeedloaderLog();
     } catch (e: any) {
       console.error(e);
       toast(`${t("miscelaneous.speedloaderLog.dialog.error")}: ${e.message}`, undefined, "danger");
@@ -367,7 +368,7 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
           text: "OK",
           onPress() {
             if (PLATFORM === "android") {
-              NativeModules.LndMobileTools.restartApp();
+              NativeBlixtTools.restartApp();
             }
           },
         },
@@ -701,7 +702,7 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
           }
         }
 
-        console.log(NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles());
+        console.log(NativeBlixtTools.DEBUG_deleteNeutrinoFiles());
         toast("Done. Restart is required");
         restartNeeded();
       },

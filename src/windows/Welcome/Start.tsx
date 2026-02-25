@@ -1,5 +1,5 @@
 import React, { JSX, useRef, useState } from "react";
-import { StyleSheet, StatusBar, NativeModules, SafeAreaView, Platform } from "react-native";
+import { StyleSheet, StatusBar, SafeAreaView, Platform } from "react-native";
 import DialogAndroid from "react-native-dialogs";
 import { Text, H1, View, Spinner, Icon } from "native-base";
 import { Button } from "../../components/Button";
@@ -21,6 +21,7 @@ import { languages, namespaces } from "../../i18n/i18n.constants";
 import { toast } from "../../utils";
 import { Alert } from "../../utils/alert";
 import { stopDaemon } from "react-native-turbo-lnd";
+import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -131,7 +132,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
       } catch (e) {
         console.log(e);
       }
-      NativeModules.LndMobileTools.restartApp();
+      NativeBlixtTools.restartApp();
     } else {
       const title = "Restart required";
       const message = "Blixt Wallet has to be restarted before the new configuration is applied.";
@@ -198,7 +199,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
               } catch (e) {
                 console.log(e);
               }
-              NativeModules.LndMobileTools.restartApp();
+              NativeBlixtTools.restartApp();
             },
           },
         ],

@@ -107,7 +107,7 @@ export interface IReceiveModel {
   deleteInvoiceTmpData: Action<IReceiveModel, string>;
 
   invoiceSubscriptionStarted: boolean; // TODO make computed value
-  invoiceSubscription?: EmitterSubscription;
+  invoiceSubscription?: EmitterSubscription; // TURBOTODO(hsjoberg): remove
   invoiceTempData: { [key: string]: IInvoiceTempData };
 }
 

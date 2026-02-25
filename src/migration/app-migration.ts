@@ -26,7 +26,7 @@ import {
 } from "../utils/constants";
 import { setupScheduledSyncWork } from "../lndmobile/scheduled-sync";
 
-const { LndMobileTools } = NativeModules;
+// const { LndMobileTools } = NativeModules;
 
 export interface IAppMigration {
   beforeLnd: (db: Database, currentVersion: number) => Promise<void>;
@@ -40,14 +40,14 @@ export const appMigration: IAppMigration[] = [
   // Version 1
   {
     async beforeLnd(db, i) {
-      await LndMobileTools.writeConfigFile();
+      // await LndMobileTools.writeConfigFile();
     },
   },
   // Version 2
   {
     async beforeLnd(db, i) {
       await setItemObject(StorageItem.clipboardInvoiceCheck, true);
-      await LndMobileTools.writeConfigFile();
+      // await LndMobileTools.writeConfigFile();
     },
   },
   // Version 3
@@ -118,7 +118,7 @@ export const appMigration: IAppMigration[] = [
   // Version 11
   {
     async beforeLnd(db, i) {
-      await LndMobileTools.writeConfigFile();
+      // await LndMobileTools.writeConfigFile();
     },
   },
   // Version 12
@@ -142,7 +142,7 @@ export const appMigration: IAppMigration[] = [
   // Version 15
   {
     async beforeLnd(db, i) {
-      await LndMobileTools.writeConfigFile();
+      // await LndMobileTools.writeConfigFile();
     },
   },
   // Version 16
@@ -157,7 +157,7 @@ export const appMigration: IAppMigration[] = [
       await db.executeSql("ALTER TABLE tx ADD identifiedService TEXT NULL", []);
       await setItemObject<boolean>(StorageItem.hideExpiredInvoices, true);
       await setItemObject<number>(StorageItem.lastGoogleDriveBackup, new Date().getTime());
-      await LndMobileTools.writeConfigFile();
+      // await LndMobileTools.writeConfigFile();
     },
   },
   // Version 18

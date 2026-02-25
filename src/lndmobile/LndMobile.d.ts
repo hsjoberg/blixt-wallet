@@ -1,6 +1,5 @@
 export interface ILndMobileTools {
   writeConfig(data: string): Promise<string>;
-  writeConfigFile(): Promise<string>;
   generateSecureRandomAsBase64(length: number): Promise<string>;
   log(level: "v" | "d" | "i" | "w" | "e", tag: string, msg: string): void;
   saveLogs(): Promise<string>;
@@ -10,7 +9,6 @@ export interface ILndMobileTools {
   observeLndLogFile(): Promise<boolean>;
   saveChannelsBackup(base64Backups: string): Promise<string>;
   saveChannelBackupFile(): Promise<boolean>;
-  DEBUG_getWalletPasswordFromKeychain(): Promise<string>;
   getTorEnabled(): Promise<boolean>;
   DEBUG_deleteSpeedloaderLastrunFile(): boolean;
   DEBUG_deleteSpeedloaderDgraphDirectory(): null;
@@ -32,7 +30,6 @@ export interface ILndMobileTools {
   // iOS-specific
   checkICloudEnabled(): Promise<boolean>;
   checkApplicationSupportExists(): Promise<boolean>;
-  checkLndFolderExists(): Promise<boolean>;
   createIOSApplicationSupportAndLndDirectories(): Promise<boolean>;
   excludeLndICloudBackup(): Promise<boolean>;
 
@@ -57,7 +54,7 @@ export interface IGossipFileScheduledSync {
 
 declare module "react-native" {
   interface NativeModulesStatic {
-    LndMobileTools: ILndMobileTools;
+    BlixtTools: ILndMobileTools;
     GossipFileScheduledSync: IGossipFileScheduledSync;
   }
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { EmitterSubscription, NativeModules, StyleSheet, View, ScrollView } from "react-native";
+import { EmitterSubscription, StyleSheet, View, ScrollView } from "react-native";
 import { Card, Text, CardItem, H1 } from "native-base";
 import { Button } from "../components/Button";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -17,6 +17,7 @@ import LogBox from "../components/LogBox";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
+import NativeBlixtTools from "../turbomodules/NativeBlixtTools";
 
 interface IMetaDataProps {
   title: string;
@@ -64,7 +65,7 @@ export default function SyncInfo({}: ISyncInfoProps) {
   }, []);
 
   const onPressShowLndLog = async () => {
-    const tailLog = await NativeModules.LndMobileTools.tailLog(100);
+    const tailLog = await NativeBlixtTools.tailLog(100);
     log.current = tailLog
       .split("\n")
       .map((row) => row.slice(11))
@@ -75,7 +76,7 @@ export default function SyncInfo({}: ISyncInfoProps) {
       forceUpdate();
     });
 
-    NativeModules.LndMobileTools.observeLndLogFile();
+    NativeBlixtTools.observeLndLogFile();
     forceUpdate();
     setShowLndLog(true);
   };

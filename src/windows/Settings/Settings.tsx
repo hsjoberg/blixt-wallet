@@ -22,10 +22,11 @@ import {
   DEFAULT_SPEEDLOADER_SERVER,
   PLATFORM,
 } from "../../utils/constants";
-import { Linking, NativeModules, PermissionsAndroid, Platform, StyleSheet } from "react-native";
+import { Linking, PermissionsAndroid, Platform, StyleSheet } from "react-native";
 import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
 import React, { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { camelCaseToSpace, formatISO, toast } from "../../utils";
+import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
 
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { useStoreActions, useStoreState } from "../../state/store";
@@ -734,7 +735,7 @@ ${t("LN.inbound.dialog.msg3")}`;
             } catch (e: any) {
               console.log(e);
             }
-            NativeModules.LndMobileTools.restartApp();
+            NativeBlixtTools.restartApp();
           },
         },
       ]);
@@ -1027,7 +1028,7 @@ ${t("experimental.tor.disabled.msg2")}`;
             } catch (e: any) {
               console.log(e);
             }
-            NativeModules.LndMobileTools.restartApp();
+            NativeBlixtTools.restartApp();
           } else {
             Alert.alert(
               t("bitcoinNetwork.restartDialog.title"),
