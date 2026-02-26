@@ -460,8 +460,6 @@ export const model: IStoreModel = {
           // TURBOTODO(hsjoberg): temp code
           let appFolderPath: string;
           if (PLATFORM === "android") {
-            const chain = Chain !== "mainnet" ? "." + Chain.toLocaleLowerCase() : "";
-            const debug = Debug ? ".debug" : "";
             appFolderPath = await NativeModules.LndMobileTools.getFilesDir();
           } else {
             appFolderPath = (await NativeModules.LndMobileTools.getAppFolderPath())
