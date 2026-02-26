@@ -443,7 +443,7 @@ class LndMobileScheduledSyncWorker(
     // Step 2: Wait for lnd to actually shut down by polling getStatus()
     // getStatus() returns 1 if lnd is running, 0 if stopped
     Log.d(TAG, "Waiting for lnd to fully shut down...")
-    val maxWaitMs = 80_000L // 80 seconds max wait
+    val maxWaitMs = 120_000L // 120 seconds max wait
     val pollIntervalMs = 500L
     val startTime = System.currentTimeMillis()
 
