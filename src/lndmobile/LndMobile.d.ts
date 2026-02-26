@@ -33,7 +33,6 @@ export interface ILndMobile {
   unbindLndMobileService(): Promise<void>; // TODO(hsjoberg): function looks broken
   sendPongToLndMobileservice(): Promise<{ data: string }>;
   checkLndMobileServiceConnected(): Promise<boolean>;
-  gossipSync(networkType: string): Promise<{ data: string }>;
 }
 
 export interface ILndMobileTools {

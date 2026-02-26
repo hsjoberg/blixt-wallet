@@ -223,11 +223,6 @@
     "jsSrcsDir": "src/turbomodules",
     "android": {
       "javaPackageName": "com.blixtwallet"
-    },
-    "ios": {
-      "modulesProvider": {
-        "NativeSpeedloader": "NativeSpeedloaderModuleProvider"
-      }
     }
   }
 }

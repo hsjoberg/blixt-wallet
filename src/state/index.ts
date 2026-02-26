@@ -2,7 +2,7 @@ import * as base64 from "base64-js";
 import { RnTor } from "react-native-nitro-tor";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
-import { AlertButton, NativeModules, Platform } from "react-native";
+import { AlertButton, NativeModules } from "react-native";
 
 import {
   DEFAULT_PATHFINDING_ALGORITHM,
@@ -10,7 +10,7 @@ import {
   PLATFORM,
   TOR_SETTINGS,
 } from "../utils/constants";
-import { Chain, Debug, VersionCode } from "../utils/build";
+import { Chain, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
 import {
@@ -71,11 +71,7 @@ import {
 import { getWalletPassword, setWalletPassword } from "../storage/keystore";
 
 import { Alert } from "../utils/alert";
-import {
-  ELndMobileStatusCodes,
-  generateSecureRandomAsBase64,
-  writeConfig,
-} from "../lndmobile/index";
+import { generateSecureRandomAsBase64, writeConfig } from "../lndmobile/index";
 import { IStoreInjections } from "./store";
 import { Database } from "react-native-turbo-sqlite";
 import SetupBlixtDemo from "../utils/setup-demo";
@@ -94,8 +90,7 @@ import {
 } from "react-native-turbo-lnd";
 import { WalletState } from "react-native-turbo-lnd/protos/lightning_pb";
 
-import Speedloader from "../turbomodules/NativeSpeedloader";
-import NativeLndmobileTools from "../turbomodules/NativeLndmobileTools";
+import NativeBlixtTools from "../turbomodules/NativeBlixtTools";
 
 const log = logger("Store");
 
@@ -235,7 +230,7 @@ export const model: IStoreModel = {
       toast("Successfully imported channel.db");
     }
 
-    const { initialize, checkStatus, startLnd, gossipSync } = injections.lndMobile.index;
+    const { initialize } = injections.lndMobile.index;
     const db = await actions.openDb();
     const firstStartup = !(await getItemObjectAsyncStorage(StorageItem.app));
     if (firstStartup) {
@@ -385,12 +380,12 @@ export const model: IStoreModel = {
         (await getItemAsyncStorage(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER;
       let gossipStatus: unknown = null;
 
-      let status = await NativeLndmobileTools.getStatus(); // await checkStatus();
+      let status = await NativeBlixtTools.getStatus(); // await checkStatus();
       log.i("status", [status]);
       if (status === 1) {
         log.i("status === 1, waiting for 9.6 seconds and check again");
         await timeout(9600);
-        status = await NativeLndmobileTools.getStatus();
+        status = await NativeBlixtTools.getStatus();
         log.i("status", [status]);
       }
 
@@ -419,19 +414,19 @@ export const model: IStoreModel = {
               log.e("Gossip files deletion failed", [error]);
             }
           }
+
           try {
-            gossipStatus = await Speedloader.gossipSync(
-              speedloaderServer,
-              await NativeModules.LndMobileTools.getCacheDir(),
-              await NativeModules.LndMobileTools.getFilesDir(),
-            );
+            gossipStatus = await NativeBlixtTools.gossipSync(speedloaderServer);
             debugShowStartupInfo &&
               toast(
                 "Gossip sync done " + (new Date().getTime() - start.getTime()) / 1000 + "s",
                 1000,
               );
           } catch (e: any) {
-            if (e.message === "Gossip sync cancelled by user") {
+            if (
+              typeof e.message === "string" &&
+              e.message.includes("Gossip sync cancelled by user")
+            ) {
               log.i("Gossip sync cancelled by user");
             } else {
               log.e("GossipSync exception!", [e]);
@@ -577,7 +572,7 @@ export const model: IStoreModel = {
   cancelSpeedloader: thunk(async (actions) => {
     try {
       log.d("Cancelling speedloader gossipsync");
-      await Speedloader.cancelGossipSync();
+      await NativeBlixtTools.cancelGossipSync();
       actions.setSpeedloaderLoading(false);
       actions.setSpeedloaderCancelVisible(false);
     } catch (e) {

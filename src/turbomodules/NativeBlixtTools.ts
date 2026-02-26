@@ -6,6 +6,8 @@ export interface Spec extends TurboModule {
   scheduleSyncWorker(): void;
   stopScheduleSyncWorker(): void;
   getStatus(): number;
+  gossipSync(serviceUrl: string): Promise<void>;
+  cancelGossipSync(): void;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>("LndMobileToolsTurbo");
+export default TurboModuleRegistry.getEnforcing<Spec>("BlixtTools");

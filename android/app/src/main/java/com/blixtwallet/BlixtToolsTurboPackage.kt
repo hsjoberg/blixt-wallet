@@ -6,19 +6,19 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
 
-class LndMobileToolsTurboPackage : BaseReactPackage() {
+class BlixtToolsTurboPackage : BaseReactPackage() {
   override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? =
-    if (name == LndMobileToolsTurboModule.NAME) {
-      LndMobileToolsTurboModule(reactContext)
+    if (name == BlixtToolsTurboModule.NAME) {
+      BlixtToolsTurboModule(reactContext)
     } else {
       null
     }
 
   override fun getReactModuleInfoProvider() = ReactModuleInfoProvider {
     mapOf(
-      LndMobileToolsTurboModule.NAME to ReactModuleInfo(
-        LndMobileToolsTurboModule.NAME,
-        LndMobileToolsTurboModule.NAME,
+      BlixtToolsTurboModule.NAME to ReactModuleInfo(
+        BlixtToolsTurboModule.NAME,
+        BlixtToolsTurboModule.NAME,
         false, // canOverrideExistingModule
         false, // needsEagerInit
         false, // isCxxModule

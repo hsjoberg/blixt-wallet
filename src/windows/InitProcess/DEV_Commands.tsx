@@ -67,9 +67,7 @@ import {
 
 import TurboSqlite from "react-native-turbo-sqlite";
 
-import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
-
-import Speedloader from "../../turbomodules/NativeSpeedloader";
+import BlixtToolsTurbo from "../../turbomodules/NativeBlixtTools";
 
 let iCloudStorage: any;
 console.log(PLATFORM);
@@ -152,13 +150,10 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              // console.log("TEST");
-              // console.log(await NativeModules.LndMobileTools.getFilesDir());
-              // console.log(await NativeModules.LndMobileTools.getCacheDir());
-              console.log(await Speedloader.gossipSync("hejsan"));
+              console.log(await BlixtToolsTurbo.gossipSync("hejsan"));
             }}
           >
-            <Text>Speedloader.gossipSync</Text>
+            <Text>BlixtToolsTurbo.gossipSync</Text>
           </Button>
           {/*
            *
@@ -211,34 +206,34 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.startSyncWorker());
+              console.log(BlixtToolsTurbo.startSyncWorker());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.startSyncWorker</Text>
+            <Text style={styles.buttonText}>BlixtToolsTurbo.startSyncWorker</Text>
           </Button>
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.scheduleSyncWorker());
+              console.log(BlixtToolsTurbo.scheduleSyncWorker());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.scheduleSyncWorker</Text>
+            <Text style={styles.buttonText}>BlixtToolsTurbo.scheduleSyncWorker</Text>
           </Button>
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.stopScheduleSyncWorker());
+              console.log(BlixtToolsTurbo.stopScheduleSyncWorker());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.stopScheduleSyncWorker</Text>
+            <Text style={styles.buttonText}>BlixtToolsTurbo.stopScheduleSyncWorker</Text>
           </Button>
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.getStatus());
+              console.log(BlixtToolsTurbo.getStatus());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.getStatus</Text>
+            <Text style={styles.buttonText}>BlixtToolsTurbo.getStatus</Text>
           </Button>
           <Button
             small
@@ -287,8 +282,8 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>Check Hermes version</Text>
           </Button>
-          {/* <Button small onPress={async () => console.log(await Speedloader.gossipSync("hejsan"))}>
-            <Text style={styles.buttonText}>Speedloader.gossipSync</Text>
+          {/* <Button small onPress={async () => console.log(await BlixtToolsTurbo.gossipSync("hejsan"))}>
+            <Text style={styles.buttonText}>BlixtToolsTurbo.gossipSync</Text>
           </Button> */}
           <Button
             small
@@ -1116,22 +1111,10 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile());
+              console.log(BlixtToolsTurbo.cancelGossipSync());
             }}
           >
-            <Text style={styles.buttonText}>
-              NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile()
-            </Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log(NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory());
-            }}
-          >
-            <Text style={styles.buttonText}>
-              NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory()
-            </Text>
+            <Text style={styles.buttonText}>BlixtToolsTurbo.cancelGossipSync()</Text>
           </Button>
 
           <Button small onPress={async () => await stopDaemon({})}>

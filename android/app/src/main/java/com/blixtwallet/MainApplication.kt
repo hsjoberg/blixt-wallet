@@ -26,7 +26,7 @@ override val reactHost: ReactHost by lazy {
               add(LndMobileScheduledSyncPackage())
 
               // TurboModules
-              add(LndMobileToolsTurboPackage())
+              add(BlixtToolsTurboPackage())
             },
         )
       }

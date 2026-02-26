@@ -15,7 +15,6 @@
 		CC173A032D5274C700FA4A3E /* liblnd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC4D35242CB491D4002081FE /* liblnd.a */; };
 		CC7C276B2A61A62C0050762A /* IBMPlexSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC7C27692A61A62C0050762A /* IBMPlexSans-Medium.ttf */; };
 		CC7C276C2A61A62C0050762A /* IBMPlexSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC7C276A2A61A62C0050762A /* IBMPlexSans-Regular.ttf */; };
-		CC96DB512DFB59F5009A4BA1 /* NativeSpeedloaderModuleProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC96DB502DFB59F5009A4BA1 /* NativeSpeedloaderModuleProvider.mm */; };
 		CC9860E02A5F344800047BB1 /* LndMobileTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9860D62A5F344600047BB1 /* LndMobileTools.m */; };
 		CC9860E12A5F344900047BB1 /* LndMobileTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860D72A5F344700047BB1 /* LndMobileTools.swift */; };
 		CC9860E22A5F344900047BB1 /* lightning.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860D92A5F344700047BB1 /* lightning.pb.swift */; };
@@ -25,10 +24,10 @@
 		CC9860E62A5F344900047BB1 /* Lnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DD2A5F344800047BB1 /* Lnd.swift */; };
 		CC9860E72A5F344900047BB1 /* LndMobileScheduledSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DE2A5F344800047BB1 /* LndMobileScheduledSync.swift */; };
 		CC9860E82A5F344900047BB1 /* LndMobileScheduledSync.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DF2A5F344800047BB1 /* LndMobileScheduledSync.m */; };
+		CDA1B2C72E5A111100ABCDEF /* BlixtTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA1B2C62E5A111100ABCDEF /* BlixtTools.swift */; };
 		CC9861062A5F5AA900047BB1 /* Lndmobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9861052A5F5AA800047BB1 /* Lndmobile.xcframework */; };
 		CC98610A2A5F5AF400047BB1 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9861092A5F5AE500047BB1 /* libresolv.tbd */; };
-		CCB1E6E82D5268C6000B0C98 /* NativeSpeedloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB1E6E62D5268C6000B0C98 /* NativeSpeedloader.cpp */; };
-		CCC73A6D2CB5B07E0066575C /* LndMobileToolsTurbo.mm in Sources */ = {isa = PBXBuildFile; fileRef = CCC73A6C2CB5B07E0066575C /* LndMobileToolsTurbo.mm */; };
+		CCC73A6D2CB5B07E0066575C /* BlixtToolsTurbo.mm in Sources */ = {isa = PBXBuildFile; fileRef = CCC73A6C2CB5B07E0066575C /* BlixtToolsTurbo.mm */; };
 		CCCC227B2DF8F3D800AA97B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCC227A2DF8F3D800AA97B7 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -63,8 +62,6 @@
 		CC4D35242CB491D4002081FE /* liblnd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblnd.a; sourceTree = "<group>"; };
 		CC7C27692A61A62C0050762A /* IBMPlexSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "IBMPlexSans-Medium.ttf"; path = "../assets/fonts/IBMPlexSans-Medium.ttf"; sourceTree = "<group>"; };
 		CC7C276A2A61A62C0050762A /* IBMPlexSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "IBMPlexSans-Regular.ttf"; path = "../assets/fonts/IBMPlexSans-Regular.ttf"; sourceTree = "<group>"; };
-		CC96DB4D2DFB59B2009A4BA1 /* NativeSpeedloaderModuleProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NativeSpeedloaderModuleProvider.h; path = BlixtWallet/NativeSpeedloaderModuleProvider.h; sourceTree = "<group>"; };
-		CC96DB502DFB59F5009A4BA1 /* NativeSpeedloaderModuleProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = NativeSpeedloaderModuleProvider.mm; path = BlixtWallet/NativeSpeedloaderModuleProvider.mm; sourceTree = "<group>"; };
 		CC9860D62A5F344600047BB1 /* LndMobileTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LndMobileTools.m; sourceTree = "<group>"; };
 		CC9860D72A5F344700047BB1 /* LndMobileTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LndMobileTools.swift; sourceTree = "<group>"; };
 		CC9860D82A5F344700047BB1 /* BlixtWallet-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BlixtWallet-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -75,18 +72,13 @@
 		CC9860DD2A5F344800047BB1 /* Lnd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lnd.swift; sourceTree = "<group>"; };
 		CC9860DE2A5F344800047BB1 /* LndMobileScheduledSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LndMobileScheduledSync.swift; sourceTree = "<group>"; };
 		CC9860DF2A5F344800047BB1 /* LndMobileScheduledSync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LndMobileScheduledSync.m; sourceTree = "<group>"; };
+		CDA1B2C52E5A111100ABCDEF /* BlixtTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlixtTools.h; sourceTree = "<group>"; };
+		CDA1B2C62E5A111100ABCDEF /* BlixtTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlixtTools.swift; sourceTree = "<group>"; };
 		CC9861042A5F513300047BB1 /* BlixtWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = BlixtWallet.entitlements; path = BlixtWallet/BlixtWallet.entitlements; sourceTree = "<group>"; };
 		CC9861052A5F5AA800047BB1 /* Lndmobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Lndmobile.xcframework; sourceTree = "<group>"; };
 		CC9861092A5F5AE500047BB1 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
-		CCB1E6DB2D5268C6000B0C98 /* liblnd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = liblnd.h; sourceTree = "<group>"; };
-		CCB1E6DD2D5268C6000B0C98 /* liblnd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = liblnd.h; sourceTree = "<group>"; };
-		CCB1E6DF2D5268C6000B0C98 /* liblnd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = liblnd.h; sourceTree = "<group>"; };
-		CCB1E6E12D5268C6000B0C98 /* liblnd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = liblnd.h; sourceTree = "<group>"; };
-		CCB1E6E42D5268C6000B0C98 /* blixtlog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = blixtlog.h; sourceTree = "<group>"; };
-		CCB1E6E52D5268C6000B0C98 /* NativeSpeedloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NativeSpeedloader.h; sourceTree = "<group>"; };
-		CCB1E6E62D5268C6000B0C98 /* NativeSpeedloader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NativeSpeedloader.cpp; sourceTree = "<group>"; };
-		CCC73A6B2CB5B0310066575C /* LndMobileToolsTurbo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LndMobileToolsTurbo.h; sourceTree = "<group>"; };
-		CCC73A6C2CB5B07E0066575C /* LndMobileToolsTurbo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = LndMobileToolsTurbo.mm; sourceTree = "<group>"; };
+		CCC73A6B2CB5B0310066575C /* BlixtToolsBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlixtToolsBridge.m; sourceTree = "<group>"; };
+		CCC73A6C2CB5B07E0066575C /* BlixtToolsTurbo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = BlixtToolsTurbo.mm; sourceTree = "<group>"; };
 		CCCC227A2DF8F3D800AA97B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = BlixtWallet/AppDelegate.swift; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F3AFA76AFE297D21C419D70F /* Pods-BlixtWallet.debugtestnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet.debugtestnet.xcconfig"; path = "Target Support Files/Pods-BlixtWallet/Pods-BlixtWallet.debugtestnet.xcconfig"; sourceTree = "<group>"; };
@@ -141,8 +133,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				7D9A028A2AECDD1817ED76D5 /* PrivacyInfo.xcprivacy */,
-				CC96DB4D2DFB59B2009A4BA1 /* NativeSpeedloaderModuleProvider.h */,
-				CC96DB502DFB59F5009A4BA1 /* NativeSpeedloaderModuleProvider.mm */,
 			);
 			name = BlixtWallet;
 			sourceTree = "<group>";
@@ -168,7 +158,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				CCB1E6E72D5268C6000B0C98 /* speedloader-turbomodule */,
 				CC4D35242CB491D4002081FE /* liblnd.a */,
 				CC7C27692A61A62C0050762A /* IBMPlexSans-Medium.ttf */,
 				CC7C276A2A61A62C0050762A /* IBMPlexSans-Regular.ttf */,
@@ -223,67 +212,14 @@
 				CC9860DE2A5F344800047BB1 /* LndMobileScheduledSync.swift */,
 				CC9860D62A5F344600047BB1 /* LndMobileTools.m */,
 				CC9860D72A5F344700047BB1 /* LndMobileTools.swift */,
+				CDA1B2C52E5A111100ABCDEF /* BlixtTools.h */,
+				CDA1B2C62E5A111100ABCDEF /* BlixtTools.swift */,
 				CC9860DA2A5F344700047BB1 /* walletunlocker.pb.swift */,
-				CCC73A6B2CB5B0310066575C /* LndMobileToolsTurbo.h */,
-				CCC73A6C2CB5B07E0066575C /* LndMobileToolsTurbo.mm */,
+				CCC73A6B2CB5B0310066575C /* BlixtToolsBridge.m */,
+				CCC73A6C2CB5B07E0066575C /* BlixtToolsTurbo.mm */,
 			);
 			path = LndMobile;
 			sourceTree = "<group>";
-		};
-		CCB1E6DC2D5268C6000B0C98 /* arm64-v8a */ = {
-			isa = PBXGroup;
-			children = (
-				CCB1E6DB2D5268C6000B0C98 /* liblnd.h */,
-			);
-			path = "arm64-v8a";
-			sourceTree = "<group>";
-		};
-		CCB1E6DE2D5268C6000B0C98 /* armeabi-v7a */ = {
-			isa = PBXGroup;
-			children = (
-				CCB1E6DD2D5268C6000B0C98 /* liblnd.h */,
-			);
-			path = "armeabi-v7a";
-			sourceTree = "<group>";
-		};
-		CCB1E6E02D5268C6000B0C98 /* x86 */ = {
-			isa = PBXGroup;
-			children = (
-				CCB1E6DF2D5268C6000B0C98 /* liblnd.h */,
-			);
-			path = x86;
-			sourceTree = "<group>";
-		};
-		CCB1E6E22D5268C6000B0C98 /* x86_64 */ = {
-			isa = PBXGroup;
-			children = (
-				CCB1E6E12D5268C6000B0C98 /* liblnd.h */,
-			);
-			path = x86_64;
-			sourceTree = "<group>";
-		};
-		CCB1E6E32D5268C6000B0C98 /* liblnd */ = {
-			isa = PBXGroup;
-			children = (
-				CCB1E6DC2D5268C6000B0C98 /* arm64-v8a */,
-				CCB1E6DE2D5268C6000B0C98 /* armeabi-v7a */,
-				CCB1E6E02D5268C6000B0C98 /* x86 */,
-				CCB1E6E22D5268C6000B0C98 /* x86_64 */,
-			);
-			path = liblnd;
-			sourceTree = "<group>";
-		};
-		CCB1E6E72D5268C6000B0C98 /* speedloader-turbomodule */ = {
-			isa = PBXGroup;
-			children = (
-				CCB1E6E32D5268C6000B0C98 /* liblnd */,
-				CCB1E6E42D5268C6000B0C98 /* blixtlog.h */,
-				CCB1E6E52D5268C6000B0C98 /* NativeSpeedloader.h */,
-				CCB1E6E62D5268C6000B0C98 /* NativeSpeedloader.cpp */,
-			);
-			name = "speedloader-turbomodule";
-			path = "../speedloader-turbomodule";
-			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -507,13 +443,12 @@
 				CCCC227B2DF8F3D800AA97B7 /* AppDelegate.swift in Sources */,
 				CC9860E02A5F344800047BB1 /* LndMobileTools.m in Sources */,
 				CC9860E12A5F344900047BB1 /* LndMobileTools.swift in Sources */,
-				CC96DB512DFB59F5009A4BA1 /* NativeSpeedloaderModuleProvider.mm in Sources */,
-				CCB1E6E82D5268C6000B0C98 /* NativeSpeedloader.cpp in Sources */,
 				CC9860E72A5F344900047BB1 /* LndMobileScheduledSync.swift in Sources */,
 				CC9860E52A5F344900047BB1 /* LndMobile.m in Sources */,
 				CC9860E42A5F344900047BB1 /* LndMobile.swift in Sources */,
 				CC9860E32A5F344900047BB1 /* walletunlocker.pb.swift in Sources */,
-				CCC73A6D2CB5B07E0066575C /* LndMobileToolsTurbo.mm in Sources */,
+				CCC73A6D2CB5B07E0066575C /* BlixtToolsTurbo.mm in Sources */,
+				CDA1B2C72E5A111100ABCDEF /* BlixtTools.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
