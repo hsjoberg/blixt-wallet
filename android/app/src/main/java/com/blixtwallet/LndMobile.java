@@ -42,7 +42,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -132,20 +131,6 @@ class LndMobile extends ReactContextBaseJavaModule {
             promise.resolve(params);
           }
 
-          break;
-        }
-        case LndMobileService.MSG_GOSSIP_SYNC_RESULT: {
-          final int request = msg.arg1;
-          final Promise promise = requests.remove(request);
-          if (bundle.containsKey("response")) {
-            final byte[] bytes = (byte[]) bundle.get("response");
-            promise.resolve("response=" + new String(bytes, StandardCharsets.UTF_8));
-          } else if (bundle.containsKey("error_code")) {
-            HyperLog.e(TAG, "ERROR" + msg);
-            promise.reject(bundle.getString("error_code"), bundle.getString("error_desc"));
-          } else {
-            promise.reject("noresponse");
-          }
           break;
         }
         case LndMobileService.MSG_GRPC_STREAM_RESULT: {
@@ -397,31 +382,6 @@ class LndMobile extends ReactContextBaseJavaModule {
       lndMobileServiceMessenger.send(message);
     } catch (RemoteException e) {
       promise.reject(TAG, "Could not Send MSG_STOP_LND to LndMobileService", e);
-    }
-  }
-
-  @ReactMethod
-  public void gossipSync(String serviceUrl, String networkType, Promise promise) {
-    int req = new Random().nextInt();
-    requests.put(req, promise);
-
-    Message message = Message.obtain(null, LndMobileService.MSG_GOSSIP_SYNC, req, 0);
-    message.replyTo = messenger;
-    Bundle bundle = new Bundle();
-    bundle.putString(
-      "serviceUrl",
-      serviceUrl
-    );
-    bundle.putString(
-      "networkType",
-      networkType
-    );
-    message.setData(bundle);
-
-    try {
-      lndMobileServiceMessenger.send(message);
-    } catch (RemoteException e) {
-      promise.reject(TAG, "Could not Send MSG_GOSSIP_SYNC to LndMobileService", e);
     }
   }
 

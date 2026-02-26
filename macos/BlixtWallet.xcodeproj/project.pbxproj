@@ -14,7 +14,7 @@
 		514201582437B4B40078DB4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 514201572437B4B40078DB4F /* main.m */; };
 		CC3585152A5F1AB5006924C2 /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = CC3585142A5F1AB5006924C2 /* Fonts */; };
 		CC855CF12CB68B7B00C74CC4 /* liblnd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC855CF02CB68B7B00C74CC4 /* liblnd.a */; };
-		CC855CF72CB68FD000C74CC4 /* LndMobileToolsTurbo.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC855CF62CB68FD000C74CC4 /* LndMobileToolsTurbo.mm */; };
+		CC855CF72CB68FD000C74CC4 /* BlixtToolsTurbo.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC855CF62CB68FD000C74CC4 /* BlixtToolsTurbo.mm */; };
 		CC9860B52A5F2E9100047BB1 /* Lndmobile.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9860B42A5F2E9100047BB1 /* Lndmobile.xcframework */; };
 		CC9860EE2A5F393500047BB1 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9860ED2A5F391D00047BB1 /* libresolv.tbd */; };
 		CC9860FA2A5F3A3A00047BB1 /* LndMobileScheduledSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860F02A5F3A3A00047BB1 /* LndMobileScheduledSync.swift */; };
@@ -48,8 +48,8 @@
 		CC26772C2A50A80E005E96BE /* BlixtWallet-macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BlixtWallet-macOS.entitlements"; sourceTree = "<group>"; };
 		CC3585142A5F1AB5006924C2 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = ../assets/fonts; sourceTree = "<group>"; };
 		CC855CF02CB68B7B00C74CC4 /* liblnd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblnd.a; sourceTree = "<group>"; };
-		CC855CF52CB68FD000C74CC4 /* LndMobileToolsTurbo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LndMobileToolsTurbo.h; path = ../ios/LndMobile/LndMobileToolsTurbo.h; sourceTree = SOURCE_ROOT; };
-		CC855CF62CB68FD000C74CC4 /* LndMobileToolsTurbo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = LndMobileToolsTurbo.mm; path = ../ios/LndMobile/LndMobileToolsTurbo.mm; sourceTree = SOURCE_ROOT; };
+		CC855CF52CB68FD000C74CC4 /* BlixtToolsBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = BlixtToolsBridge.m; path = ../ios/LndMobile/BlixtToolsBridge.m; sourceTree = SOURCE_ROOT; };
+		CC855CF62CB68FD000C74CC4 /* BlixtToolsTurbo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = BlixtToolsTurbo.mm; path = ../ios/LndMobile/BlixtToolsTurbo.mm; sourceTree = SOURCE_ROOT; };
 		CC9860B42A5F2E9100047BB1 /* Lndmobile.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Lndmobile.xcframework; path = ../ios/Lndmobile.xcframework; sourceTree = "<group>"; };
 		CC9860ED2A5F391D00047BB1 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/lib/libresolv.tbd; sourceTree = DEVELOPER_DIR; };
 		CC9860F02A5F3A3A00047BB1 /* LndMobileScheduledSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LndMobileScheduledSync.swift; path = ../ios/LndMobile/LndMobileScheduledSync.swift; sourceTree = "<group>"; };
@@ -144,8 +144,8 @@
 		CC9860EF2A5F3A2400047BB1 /* LndMobile */ = {
 			isa = PBXGroup;
 			children = (
-				CC855CF52CB68FD000C74CC4 /* LndMobileToolsTurbo.h */,
-				CC855CF62CB68FD000C74CC4 /* LndMobileToolsTurbo.mm */,
+				CC855CF52CB68FD000C74CC4 /* BlixtToolsBridge.m */,
+				CC855CF62CB68FD000C74CC4 /* BlixtToolsTurbo.mm */,
 				CC9860F42A5F3A3A00047BB1 /* lightning.pb.swift */,
 				CC9860F82A5F3A3A00047BB1 /* Lnd.swift */,
 				CC9860F22A5F3A3A00047BB1 /* LndMobile.m */,
@@ -357,7 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				514201582437B4B40078DB4F /* main.m in Sources */,
-				CC855CF72CB68FD000C74CC4 /* LndMobileToolsTurbo.mm in Sources */,
+				CC855CF72CB68FD000C74CC4 /* BlixtToolsTurbo.mm in Sources */,
 				CC9861002A5F3A3A00047BB1 /* walletunlocker.pb.swift in Sources */,
 				CC9861012A5F3A3A00047BB1 /* Lnd.swift in Sources */,
 				CC9861022A5F3A3A00047BB1 /* LndMobileTools.m in Sources */,

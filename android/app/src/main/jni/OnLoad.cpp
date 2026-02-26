@@ -34,9 +34,6 @@
 #include <react/renderer/componentregistry/ComponentDescriptorProviderRegistry.h>
 #include <FBReactNativeSpec.h>
 
-
-#include <NativeSpeedloader.h>
-
 #ifdef REACT_NATIVE_APP_CODEGEN_HEADER
 #include REACT_NATIVE_APP_CODEGEN_HEADER
 #endif
@@ -75,11 +72,6 @@ std::shared_ptr<TurboModule> cxxModuleProvider(
   // if (name == NativeCxxModuleExample::kModuleName) {
   //   return std::make_shared<NativeCxxModuleExample>(jsInvoker);
   // }
-
-  if (name == NativeSpeedloaderModule::kModuleName) {
-    return std::make_shared<NativeSpeedloaderModule>(jsInvoker);
-  }
-
 
   // And we fallback to the CXX module providers autolinked
   return autolinking_cxxModuleProvider(name, jsInvoker);

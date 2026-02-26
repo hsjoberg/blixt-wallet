@@ -2,7 +2,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface LndMobileToolsTurbo : NSObject <NativeLndmobileToolsSpec>
+@interface BlixtToolsTurbo : NSObject <NativeBlixtToolsSpec>
 
 @end
 
