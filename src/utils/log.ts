@@ -3,10 +3,7 @@ import { NativeModules } from "react-native";
 import { Debug } from "./build";
 import { PLATFORM } from "./constants";
 
-const isNativePlatform =
-  ["android", "ios", "macos"].includes(PLATFORM) && !window?.process?.env?.JEST_WORKER_ID;
-
-console.log("!window?.process?.env?.JEST_WORKER_ID", window?.process?.env?.JEST_WORKER_ID);
+const isNativePlatform = ["android", "ios", "macos"].includes(PLATFORM);
 
 export type LogLevel = "Verbose" | "Debug" | "Info" | "Warning" | "Error";
 export const logEntries: [LogLevel, string][] = [];
