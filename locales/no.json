@@ -7,7 +7,8 @@
       "amount": "Beløp",
       "fee": "Gebyr",
       "search": "Søk",
-      "viewInBlockExplorer": "Vis i blokkutforsker"
+      "viewInBlockExplorer": "Vis i blokkutforsker",
+      "blocks": "{{numBlocks}} blocks"
     },
     "buttons": {
       "ok": "Ok",
@@ -204,6 +205,9 @@
       "description": {
         "title": "Melding",
         "placeholder": "Melding til betaler"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -245,6 +249,9 @@
       },
       "feeEstimate": {
         "title": "Gebyranbefaling"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -286,6 +293,7 @@
       "remoteCommitmentTxid": "Ekstern forpliktelse TXID",
       "closeChannel": "Lukk kanal",
       "forceClosePendingChannel": "Tving lukking av ventende kanal",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Lukk kanal"
       }
@@ -732,14 +740,17 @@
       "rpc": {
         "title": "Angi bitcoind RPC-vert"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "Angi bitcoind ZMQ råblokk-vert"
       },
       "zmqRawTx": {
         "title": "Angi bitcoind ZMQ råtransaksjons-vert"
-      },
-      "p2tr": {
-        "title": "Aktiver mottak on-chain via Taproot (P2TR)"
       }
     },
     "LN": {
@@ -790,6 +801,17 @@
         "restoreDialog": {
           "title": "Gjenopprett Dunder Server",
           "msg": "Vil du gjenopprette til standard Dunder-server"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
         }
       },
       "graphSync": {
@@ -864,6 +886,9 @@
         "restoreDialog": {
           "title": "Vil du gjenopprette lnd-loggnivået til standardnivået ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Enable custom invoice preimages"
       }
     },
     "experimental": {
@@ -992,7 +1017,8 @@
         "title": "Tving ryktesynkronisering ved oppstart"
       },
       "persistentServices": {
-        "title": "Aktiver vedvarende LND og Tor (hvis aktivert)"
+        "title": "Enable persistent app",
+        "subtitle": "The app stays active in the background"
       }
     }
   },
