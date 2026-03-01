@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
-import { EmitterSubscription } from "react-native";
+import { EventSubscription } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Icon } from "native-base";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -7,7 +7,6 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { SettingsStackParamList } from "./index";
 import Container from "../../components/Container";
 import { NavigationButton } from "../../components/NavigationButton";
-import { LndMobileToolsEventEmitter } from "../../utils/event-listener";
 import { toast } from "../../utils";
 import LogBox from "../../components/LogBox";
 import useForceUpdate from "../../hooks/useForceUpdate";
@@ -26,7 +25,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
   const forceUpdate = useForceUpdate();
 
   useEffect(() => {
-    let listener: EmitterSubscription;
+    let listener: EventSubscription | null = null;
     (async () => {
       const tailLog = await NativeBlixtTools.tailLog(100);
       log.current = tailLog
@@ -34,7 +33,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
         .map((row) => row.slice(11))
         .join("\n");
 
-      listener = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
+      listener = NativeBlixtTools.onLndLog(function (data: string) {
         log.current = log.current + "\n" + data.slice(11);
         forceUpdate();
       });
@@ -44,7 +43,7 @@ export default function LndLog({ navigation }: ILndLogProps) {
     })();
 
     return () => {
-      listener.remove();
+      listener?.remove();
     };
   }, []);
 

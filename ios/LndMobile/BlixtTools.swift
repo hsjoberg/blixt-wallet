@@ -18,10 +18,6 @@ class BlixtTools: RCTEventEmitter {
     "BlixtTools"
   }
 
-  override func supportedEvents() -> [String]! {
-    return ["lndlog"]
-  }
-
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return false
@@ -490,7 +486,10 @@ autopilot.heuristic=preferential:0.05
               s = String(bytes: bytes, encoding: .utf8)
             }
             if let s = s {
-              self.sendEvent(withName: "lndlog", body: s)
+              // Emit through TurboModule event callback.
+              if self.responds(to: NSSelectorFromString("emitOnLndLog:")) {
+                self.perform(NSSelectorFromString("emitOnLndLog:"), with: s)
+              }
             }
           }
           fileHandle?.readInBackgroundAndNotify()

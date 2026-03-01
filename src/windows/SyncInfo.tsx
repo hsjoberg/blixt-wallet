@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { EmitterSubscription, StyleSheet, View, ScrollView } from "react-native";
+import { EventSubscription, StyleSheet, View, ScrollView } from "react-native";
 import { Card, Text, CardItem, H1 } from "native-base";
 import { Button } from "../components/Button";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -12,7 +12,6 @@ import { blixtTheme } from "../native-base-theme/variables/commonColor";
 import { toast } from "../utils";
 import { PLATFORM } from "../utils/constants";
 import useForceUpdate from "../hooks/useForceUpdate";
-import { LndMobileToolsEventEmitter } from "../utils/event-listener";
 import LogBox from "../components/LogBox";
 
 import { useTranslation } from "react-i18next";
@@ -54,7 +53,7 @@ export default function SyncInfo({}: ISyncInfoProps) {
   const log = useRef("");
   const forceUpdate = useForceUpdate();
   const [showLndLog, setShowLndLog] = useState(false);
-  const listener = useRef<EmitterSubscription>();
+  const listener = useRef<EventSubscription | null>(null);
 
   useEffect(() => {
     return () => {
@@ -71,7 +70,7 @@ export default function SyncInfo({}: ISyncInfoProps) {
       .map((row) => row.slice(11))
       .join("\n");
 
-    listener.current = LndMobileToolsEventEmitter.addListener("lndlog", function (data: string) {
+    listener.current = NativeBlixtTools.onLndLog(function (data: string) {
       log.current = log.current + "\n" + data.slice(11);
       forceUpdate();
     });

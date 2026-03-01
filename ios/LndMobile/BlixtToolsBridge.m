@@ -1,7 +1,6 @@
 #import <React/RCTBridgeModule.h>
-#import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(BlixtTools, RCTEventEmitter)
+@interface RCT_EXTERN_MODULE(BlixtTools, NSObject)
 
 RCT_EXTERN_METHOD(
   writeConfig: (NSString *)config

@@ -1,5 +1,5 @@
-import type { TurboModule } from "react-native";
-import { NativeModules, TurboModuleRegistry } from "react-native";
+import type { CodegenTypes, TurboModule } from "react-native";
+import { TurboModuleRegistry } from "react-native";
 
 export interface Spec extends TurboModule {
   writeConfig(config: string): Promise<string>;
@@ -33,6 +33,7 @@ export interface Spec extends TurboModule {
   createIOSApplicationSupportAndLndDirectories(): Promise<boolean>;
   excludeLndICloudBackup(): Promise<boolean>;
   macosOpenFileDialog(): Promise<string | null>;
+  readonly onLndLog: CodegenTypes.EventEmitter<string>;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>("BlixtTools");

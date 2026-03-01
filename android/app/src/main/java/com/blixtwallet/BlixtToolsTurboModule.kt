@@ -12,7 +12,6 @@ import android.util.Log
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.hypertrack.hyperlog.HyperLog
 import com.jakewharton.processphoenix.ProcessPhoenix
 import com.reactnativecommunity.asyncstorage.AsyncLocalStorageUtil
@@ -492,9 +491,7 @@ class BlixtToolsTurboModule(reactContext: ReactApplicationContext) :
       if (!emit) {
         continue
       }
-      reactApplicationContext
-        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-        .emit("lndlog", line)
+      emitOnLndLog(line)
     }
   }
 
