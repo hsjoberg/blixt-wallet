@@ -138,9 +138,10 @@ export const channel: IChannelModel = {
         {},
         async (channelEvent) => {
           log.d("subscribeChannelEvents", [channelEvent]);
-          await actions.getChannels();
 
           try {
+            await actions.getChannels();
+
             log.v("channelEvent", [channelEvent, channelEvent.type]);
             const pushNotificationsEnabled = getStoreState().settings.pushNotificationsEnabled;
 
