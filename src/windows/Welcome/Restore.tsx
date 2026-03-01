@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StatusBar, StyleSheet, Alert, NativeModules, TextInput } from "react-native";
+import { StatusBar, StyleSheet, Alert, TextInput } from "react-native";
 import {
   DocumentPickerResponse,
   pick,
@@ -27,6 +27,7 @@ import { toast } from "../../utils";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { setImportChannelDbOnStartup } from "../../storage/app";
+import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
 
 const iconTopPadding = (StatusBar.currentHeight ?? 0) + getStatusBarHeight(true);
 
@@ -137,7 +138,7 @@ export default function Restore({ navigation }: IProps) {
               style: "default",
               text: t("buttons.ok", { ns: namespaces.common }),
               onPress: async () => {
-                NativeModules.LndMobileTools.restartApp();
+                NativeBlixtTools.restartApp();
               },
             },
           ],
@@ -209,7 +210,7 @@ export default function Restore({ navigation }: IProps) {
         setBackupFile(res);
         setBackupType("file");
       } else {
-        const b = await NativeModules.LndMobileTools.macosOpenFileDialog();
+        const b = await NativeBlixtTools.macosOpenFileDialog();
         console.log(b);
         setMacosBakBase64(b);
         setBackupType("macos");

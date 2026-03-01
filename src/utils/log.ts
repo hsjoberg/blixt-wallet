@@ -3,10 +3,7 @@ import { NativeModules } from "react-native";
 import { Debug } from "./build";
 import { PLATFORM } from "./constants";
 
-const isNativePlatform =
-  ["android", "ios", "macos"].includes(PLATFORM) && !window?.process?.env?.JEST_WORKER_ID;
-
-console.log("!window?.process?.env?.JEST_WORKER_ID", window?.process?.env?.JEST_WORKER_ID);
+const isNativePlatform = ["android", "ios", "macos"].includes(PLATFORM);
 
 export type LogLevel = "Verbose" | "Debug" | "Info" | "Warning" | "Error";
 export const logEntries: [LogLevel, string][] = [];
@@ -26,7 +23,7 @@ const log = (tag?: string) => {
         logEntries.push(["Debug", `${tag}: ${msg}`]);
         console.debug(`${tag}: ${msg}`);
         if (isNativePlatform) {
-          NativeModules.LndMobileTools.log("v", tag!, msg);
+          NativeModules.BlixtTools.log("v", tag!, msg);
         }
       }
     },
@@ -37,7 +34,7 @@ const log = (tag?: string) => {
         logEntries.push(["Debug", `${tag}: ${msg}`]);
         console.debug(`${tag}: ${msg}`);
         if (isNativePlatform) {
-          NativeModules.LndMobileTools.log("d", tag!, msg);
+          NativeModules.BlixtTools.log("d", tag!, msg);
         }
       }
     },
@@ -47,7 +44,7 @@ const log = (tag?: string) => {
       logEntries.push(["Info", `${tag}: ${msg}`]);
       console.log(`${tag}: ${msg}`);
       if (isNativePlatform) {
-        NativeModules.LndMobileTools.log("i", tag!, msg);
+        NativeModules.BlixtTools.log("i", tag!, msg);
       }
     },
 
@@ -56,7 +53,7 @@ const log = (tag?: string) => {
       logEntries.push(["Warning", `${tag}: ${msg}`]);
       console.warn(`${tag}: ${msg}`);
       if (isNativePlatform) {
-        NativeModules.LndMobileTools.log("w", tag!, msg);
+        NativeModules.BlixtTools.log("w", tag!, msg);
       }
     },
 
@@ -65,7 +62,7 @@ const log = (tag?: string) => {
       logEntries.push(["Error", `${tag}: ${msg}`]);
       PLATFORM !== "macos" ? console.error(`${tag}: ${msg}`) : console.log(`${tag}: ${msg}`);
       if (isNativePlatform) {
-        NativeModules.LndMobileTools.log("e", tag!, msg);
+        NativeModules.BlixtTools.log("e", tag!, msg);
       }
     },
   };

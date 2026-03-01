@@ -2,7 +2,6 @@ import { EmitterSubscription } from "react-native";
 import { Action, action, Thunk, thunk } from "easy-peasy";
 
 import { IStoreModel } from "./index";
-import { IStoreInjections } from "./store";
 import { ITransaction } from "../storage/database/transaction";
 import { setupDescription } from "../utils/NameDesc";
 import { valueFiat, formatBitcoin } from "../utils/bitcoin-units";
@@ -73,13 +72,13 @@ interface IReceiveModelCancelInvoicePayload {
 }
 
 export interface IReceiveModel {
-  initialize: Thunk<IReceiveModel, void, IStoreInjections>;
+  initialize: Thunk<IReceiveModel, void, any>;
   deinitialize: Thunk<IReceiveModel>;
 
   addInvoice: Thunk<
     IReceiveModel,
     IReceiveModelAddInvoicePayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<AddInvoiceResponse>
   >;
@@ -89,17 +88,17 @@ export interface IReceiveModel {
   addInvoiceBlixtLsp: Thunk<
     IReceiveModel,
     IReceiveModelAddInvoiceBlixtLspPayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<AddInvoiceResponse>
   >;
   cancelInvoice: Thunk<
     IReceiveModel,
     IReceiveModelCancelInvoicePayload,
-    IStoreInjections,
+    any,
     Promise<CancelInvoiceResp>
   >;
-  subscribeInvoice: Thunk<IReceiveModel, void, IStoreInjections, IStoreModel>;
+  subscribeInvoice: Thunk<IReceiveModel, void, any, IStoreModel>;
   setInvoiceSubscriptionStarted: Action<IReceiveModel, boolean>;
   // TURBOTODO: Nitesh - Unsure why this exists?
   // setInvoiceSubscriptionResource: Action<IReceiveModel, EmitterSubscription | undefined>;
@@ -108,7 +107,7 @@ export interface IReceiveModel {
   deleteInvoiceTmpData: Action<IReceiveModel, string>;
 
   invoiceSubscriptionStarted: boolean; // TODO make computed value
-  invoiceSubscription?: EmitterSubscription;
+  invoiceSubscription?: EmitterSubscription; // TURBOTODO(hsjoberg): remove
   invoiceTempData: { [key: string]: IInvoiceTempData };
 }
 

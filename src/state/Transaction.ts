@@ -7,7 +7,6 @@ import {
 } from "../storage/database/transaction";
 
 import { IStoreModel } from "./index";
-import { IStoreInjections } from "./store";
 import { bytesToHexString, hexToUint8Array } from "../utils";
 
 import {
@@ -45,18 +44,18 @@ export interface ITransactionModel {
   syncTransaction: Thunk<ITransactionModel, ITransaction, any, IStoreModel>;
 
   getTransactions: Thunk<ITransactionModel, undefined, any, IStoreModel>;
-  checkOpenTransactions: Thunk<ITransactionModel, undefined, IStoreInjections, IStoreModel>;
+  checkOpenTransactions: Thunk<ITransactionModel, undefined, any, IStoreModel>;
   syncInvoicesFromLnd: Thunk<
     ITransactionModel,
     undefined,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<ISyncInvoicesFromLndResult>
   >;
   syncPaymentsFromLnd: Thunk<
     ITransactionModel,
     undefined,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<ISyncPaymentsFromLndResult>
   >;
@@ -76,8 +75,7 @@ export interface ITransactionModel {
 
 export const transaction: ITransactionModel = {
   /**
-   * Synchronizes incoming transactions coming
-   * from gGPRC `SubscribeInvoices` (Java backend), from listener in `Receive` store
+   * Synchronizes incoming transactions coming from the `Receive` store
    * Checks if we have it in our transaction array, otherwise create a new transaction in the db
    */
   syncTransaction: thunk(async (actions, tx, { getState, getStoreState }) => {

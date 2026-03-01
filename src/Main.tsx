@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar, Alert, NativeModules } from "react-native";
+import { StatusBar } from "react-native";
 import { Spinner, H1, H2, Text } from "native-base";
 import { Button } from "./components/Button";
 import {
@@ -152,7 +152,6 @@ export default function Main() {
           //       }, {
           //         text: "Restart app",
           //         onPress: async () => {
-          //           await NativeModules.LndMobileTools.killLnd();
           //           NativeModules.LndMobileTools.restartApp();
           //         },
           //       }, {

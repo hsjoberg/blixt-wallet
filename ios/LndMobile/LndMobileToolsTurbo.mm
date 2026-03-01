@@ -4,18 +4,6 @@
 
 RCT_EXPORT_MODULE()
 
-- (void)startSyncWorker {
-  return;
-}
-
-- (void)scheduleSyncWorker {
-  return;
-}
-
-- (void)stopScheduleSyncWorker {
-  return;
-}
-
 - (NSNumber *)getStatus {
   return @0;
 }

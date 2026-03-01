@@ -1,7 +1,6 @@
 import { Action, action, Thunk, thunk, Computed, computed } from "easy-peasy";
 
 import { IStoreModel } from "./index";
-import { IStoreInjections } from "./store";
 import { toast } from "../utils";
 
 import {
@@ -58,21 +57,21 @@ export interface IBumpFeePayload {
 }
 
 export interface IOnChainModel {
-  initialize: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
-  getBalance: Thunk<IOnChainModel, void, IStoreInjections>;
-  getAddress: Thunk<IOnChainModel, IGetAddressPayload, IStoreInjections, IStoreModel>;
-  getTransactions: Thunk<IOnChainModel, void, IStoreInjections, IStoreModel>;
+  initialize: Thunk<IOnChainModel, void, any, IStoreModel>;
+  getBalance: Thunk<IOnChainModel, void, any>;
+  getAddress: Thunk<IOnChainModel, IGetAddressPayload, any, IStoreModel>;
+  getTransactions: Thunk<IOnChainModel, void, any, IStoreModel>;
   sendCoins: Thunk<
     IOnChainModel,
     ISendCoinsPayload,
-    IStoreInjections,
+    any,
     any,
     Promise<SendCoinsResponse>
   >;
   sendCoinsAll: Thunk<
     IOnChainModel,
     ISendCoinsAllPayload,
-    IStoreInjections,
+    any,
     any,
     Promise<SendCoinsResponse>
   >;
@@ -97,7 +96,7 @@ export interface IOnChainModel {
   getOnChainTransactionByTxId: Computed<IOnChainModel, (txId: string) => Transaction | undefined>;
 
   transactionNotificationBlacklist: string[];
-  bumpFee: Thunk<IOnChainModel, IBumpFeePayload, IStoreInjections, any, Promise<BumpFeeResponse>>;
+  bumpFee: Thunk<IOnChainModel, IBumpFeePayload, any, any, Promise<BumpFeeResponse>>;
 }
 
 export const onChain: IOnChainModel = {

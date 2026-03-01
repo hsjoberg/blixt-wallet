@@ -2,7 +2,6 @@ import { AppState } from "react-native";
 import { Toast } from "native-base";
 import { format } from "date-fns";
 import * as querystring from "querystring";
-import Long from "long";
 import aesjs, { ByteSource } from "aes-js";
 import * as base64 from "base64-js";
 import { Alert } from "react-native";

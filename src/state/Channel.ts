@@ -1,9 +1,7 @@
-import { NativeModules } from "react-native";
 import { Thunk, thunk, Action, action, Computed, computed } from "easy-peasy";
 import * as base64 from "base64-js";
 
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
-import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
 import {
   IChannelEvent,
@@ -11,8 +9,7 @@ import {
   createChannelEvent,
 } from "../storage/database/channel-events";
 import { bytesToHexString, toast } from "../utils";
-import { LndMobileEventEmitter } from "../utils/event-listener";
-import { checkLndStreamErrorResponse } from "../utils/lndmobile";
+import NativeBlixtTools from "../turbomodules/NativeBlixtTools";
 
 import {
   abandonChannel,
@@ -74,23 +71,18 @@ export interface ISetAliasPayload {
 
 export interface IChannelModel {
   setupCachedBalance: Thunk<IChannelModel>;
-  initialize: Thunk<IChannelModel, undefined, IStoreInjections>;
+  initialize: Thunk<IChannelModel, undefined, any>;
 
-  setupChannelUpdateSubscriptions: Thunk<IChannelModel, void, IStoreInjections, IStoreModel>;
-  getChannels: Thunk<IChannelModel, void, IStoreInjections>;
+  setupChannelUpdateSubscriptions: Thunk<IChannelModel, void, any, IStoreModel>;
+  getChannels: Thunk<IChannelModel, void, any>;
   getChannelEvents: Thunk<IChannelModel, void, any, IStoreModel>;
-  getBalance: Thunk<IChannelModel, undefined, IStoreInjections>;
-  connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload, IStoreInjections, IStoreModel>;
-  connectAndOpenChannelAll: Thunk<
-    IChannelModel,
-    IOpenChannelPayloadAll,
-    IStoreInjections,
-    IStoreModel
-  >;
-  closeChannel: Thunk<IChannelModel, ICloseChannelPayload, IStoreInjections, IStoreModel>;
+  getBalance: Thunk<IChannelModel, undefined, any>;
+  connectAndOpenChannel: Thunk<IChannelModel, IOpenChannelPayload, any, IStoreModel>;
+  connectAndOpenChannelAll: Thunk<IChannelModel, IOpenChannelPayloadAll, any, IStoreModel>;
+  closeChannel: Thunk<IChannelModel, ICloseChannelPayload, any, IStoreModel>;
   abandonChannel: Thunk<IChannelModel, ICloseChannelPayload>;
-  exportChannelsBackup: Thunk<IChannelModel, void, IStoreInjections>;
-  exportChannelBackupFile: Thunk<IChannelModel, void, IStoreInjections>;
+  exportChannelsBackup: Thunk<IChannelModel, void, any>;
+  exportChannelBackupFile: Thunk<IChannelModel, void, any>;
 
   setChannels: Action<IChannelModel, Channel[]>;
   setChannelEvents: Action<IChannelModel, IChannelEvent[]>;
@@ -145,7 +137,11 @@ export const channel: IChannelModel = {
       subscribeChannelEvents(
         {},
         async (channelEvent) => {
+          log.d("subscribeChannelEvents", [channelEvent]);
+
           try {
+            await actions.getChannels();
+
             log.v("channelEvent", [channelEvent, channelEvent.type]);
             const pushNotificationsEnabled = getStoreState().settings.pushNotificationsEnabled;
 
@@ -266,19 +262,6 @@ export const channel: IChannelModel = {
         },
       );
 
-      // TURBOTODO: how do we replace this?
-      LndMobileEventEmitter.addListener("CloseChannel", async (e: any) => {
-        const error = checkLndStreamErrorResponse("CloseChannel", e);
-        if (error === "EOF") {
-          return;
-        } else if (error) {
-          log.d("Got error from CloseChannel", [error]);
-          return;
-        }
-
-        log.i("Event CloseChannel", [e]);
-        await actions.getChannels();
-      });
       actions.setChannelUpdateSubscriptionStarted(true);
     },
   ),
@@ -504,7 +487,7 @@ export const channel: IChannelModel = {
   exportChannelsBackup: thunk(async (_, _2, {}) => {
     const response = await exportAllChannelBackups({});
     if (response.multiChanBackup && response.multiChanBackup.multiChanBackup) {
-      const exportResponse = await NativeModules.LndMobileTools.saveChannelsBackup(
+      const exportResponse = await NativeBlixtTools.saveChannelsBackup(
         base64.fromByteArray(response.multiChanBackup.multiChanBackup),
       );
       return exportResponse;
@@ -514,7 +497,7 @@ export const channel: IChannelModel = {
   }),
 
   exportChannelBackupFile: thunk(async () => {
-    return await NativeModules.LndMobileTools.saveChannelBackupFile();
+    return await NativeBlixtTools.saveChannelBackupFile();
   }),
 
   getBalance: thunk(async (actions, _, {}) => {

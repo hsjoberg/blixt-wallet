@@ -2,7 +2,6 @@ import { Action, Computed, Thunk, action, computed, thunk } from "easy-peasy";
 import { StorageItem, getItemObject, setItemObject } from "../storage/app";
 import { stringToUint8Array, timeout, toast } from "../utils";
 import { Chain } from "../utils/build";
-import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
 
 import {
@@ -45,19 +44,19 @@ interface ISetLightningPeersPayload {
 }
 
 export interface ILightningModel {
-  initialize: Thunk<ILightningModel, { start: Date }, IStoreInjections, IStoreModel>;
+  initialize: Thunk<ILightningModel, { start: Date }, any, IStoreModel>;
 
-  setupStores: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
+  setupStores: Thunk<ILightningModel, void, any, IStoreModel>;
 
-  getInfo: Thunk<ILightningModel, void, IStoreInjections>;
-  getNetworkInfo: Thunk<ILightningModel, void, IStoreInjections>;
-  waitForChainSync: Thunk<ILightningModel, void, IStoreInjections>;
-  waitForGraphSync: Thunk<ILightningModel, void, IStoreInjections>;
-  checkRecoverInfo: Thunk<ILightningModel, void, IStoreInjections, IStoreModel, Promise<void>>;
-  getLightningPeers: Thunk<ILightningModel, void, IStoreInjections>;
-  connectPeer: Thunk<ILightningModel, string, IStoreInjections>;
-  disconnectPeer: Thunk<ILightningModel, string, IStoreInjections>;
-  signMessage: Thunk<ILightningModel, string, IStoreInjections, {}, Promise<SignMessageResponse>>;
+  getInfo: Thunk<ILightningModel, void, any>;
+  getNetworkInfo: Thunk<ILightningModel, void, any>;
+  waitForChainSync: Thunk<ILightningModel, void, any>;
+  waitForGraphSync: Thunk<ILightningModel, void, any>;
+  checkRecoverInfo: Thunk<ILightningModel, void, any, IStoreModel, Promise<void>>;
+  getLightningPeers: Thunk<ILightningModel, void, any>;
+  connectPeer: Thunk<ILightningModel, string, any>;
+  disconnectPeer: Thunk<ILightningModel, string, any>;
+  signMessage: Thunk<ILightningModel, string, any, {}, Promise<SignMessageResponse>>;
 
   setNetworkInfo: Action<ILightningModel, NetworkInfo>;
   setNodeInfo: Action<ILightningModel, GetInfoResponse>;

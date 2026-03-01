@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "module": "ES2022",
-    "moduleResolution": "Bundler",
-    "types": ["jest"]
+    "moduleResolution": "Bundler"
   },
   "extends": "@react-native/typescript-config",
   "include": ["**/*.ts", "**/*.tsx"],

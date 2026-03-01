@@ -1,7 +1,6 @@
 import { Action, Thunk, action, thunk } from "easy-peasy";
 import { BLIXT_NODE_PUBKEY } from "../utils/constants";
 import { toast } from "../utils";
-import type { IStoreInjections } from "./store";
 import type { IStoreModel } from "./index";
 import { Alert } from "../utils/alert";
 import logger from "./../utils/log";
@@ -13,11 +12,11 @@ import { NodeInfo } from "react-native-turbo-lnd/protos/lightning_pb";
 const log = logger("Autopilot");
 
 export interface IAutopilotModel {
-  initialize: Thunk<IAutopilotModel, void, IStoreInjections, IStoreModel>;
+  initialize: Thunk<IAutopilotModel, void, any, IStoreModel>;
   checkAutopilot: Thunk<
     IAutopilotModel,
     { force?: boolean } | undefined,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<void>
   >;

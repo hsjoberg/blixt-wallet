@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
-import { NativeModules, StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, View } from "react-native";
 import { Text, Container, Icon, Spinner, CheckBox } from "native-base";
 import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -21,6 +21,7 @@ import { namespaces } from "../../i18n/i18n.constants";
 import { Alert } from "../../utils/alert";
 import { lnrpc } from "../../../proto/lightning";
 import { stopDaemon } from "react-native-turbo-lnd";
+import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -104,7 +105,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
                 } catch (e) {
                   console.log(e);
                 }
-                NativeModules.LndMobileTools.restartApp();
+                NativeBlixtTools.restartApp();
               } else {
                 Alert.alert(
                   t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings }),

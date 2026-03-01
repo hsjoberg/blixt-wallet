@@ -1,25 +1,21 @@
 import Foundation
 import React
 
-public struct LndMobileToolsError: Error {
+public struct BlixtToolsError: Error {
   let msg: String
 }
 
-extension LndMobileToolsError: LocalizedError {
+extension BlixtToolsError: LocalizedError {
   public var errorDescription: String? {
     return NSLocalizedString(msg, comment: "")
   }
 }
 
-@objc(LndMobileTools)
-class LndMobileTools: RCTEventEmitter {
+@objc(BlixtTools)
+class BlixtTools: RCTEventEmitter {
   @objc
   override static func moduleName() -> String! {
-    "LndMobileTools"
-  }
-
-  override func supportedEvents() -> [String]! {
-    return ["lndlog"]
+    "BlixtTools"
   }
 
   @objc
@@ -27,8 +23,8 @@ class LndMobileTools: RCTEventEmitter {
     return false
   }
 
-  @objc(writeConfig:resolver:rejecter:)
-  func writeConfig(config: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(writeConfig:resolve:reject:)
+  func writeConfig(config: String, resolve: @escaping RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     do {
       let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
       let url = paths[0].appendingPathComponent("lnd", isDirectory: true).appendingPathComponent("lnd.conf", isDirectory: false)
@@ -44,8 +40,8 @@ class LndMobileTools: RCTEventEmitter {
     }
   }
 
-  @objc(writeConfigFile:rejecter:)
-  func writeConfigFile(resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) -> Void {
+  @objc(writeConfigFile:reject:)
+  func writeConfigFile(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) -> Void {
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
     var str = ""
 
@@ -164,13 +160,13 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(log:tag:msg:)
-  func log(level: String, tag: String, msg: String) {
-    NSLog("[" + tag + "] " + msg)
+  @objc(log:tag:message:)
+  func log(level: String, tag: String, message: String) {
+    NSLog("[" + tag + "] " + message)
   }
 
-  @objc(DEBUG_getWalletPasswordFromKeychain:rejecter:)
-  func DEBUG_getWalletPasswordFromKeychain(resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(DEBUG_getWalletPasswordFromKeychain:reject:)
+  func DEBUG_getWalletPasswordFromKeychain(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let server = "password"
 
     let query: CFDictionary = [
@@ -196,8 +192,8 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(getTorEnabled:rejecter:)
-  func getTorEnabled(resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  @objc(getTorEnabled:reject:)
+  func getTorEnabled(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     let asyncStorage = RNCAsyncStorage()
 
     asyncStorage.methodQueue.async {
@@ -220,8 +216,8 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(saveChannelsBackup:resolver:rejecter:)
-  func saveChannelsBackup(base64Backups: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  @objc(saveChannelsBackup:resolve:reject:)
+  func saveChannelsBackup(base64Backups: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
 #if os(macOS)
       do {
@@ -260,8 +256,8 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(saveChannelBackupFile:rejecter:)
-  func saveChannelBackupFile(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  @objc(saveChannelBackupFile:reject:)
+  func saveChannelBackupFile(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
       let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
       let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
@@ -307,14 +303,14 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(checkICloudEnabled:rejecter:)
-  func checkICloudEnabled(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(checkICloudEnabled:reject:)
+  func checkICloudEnabled(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let token = FileManager.default.ubiquityIdentityToken
     resolve(token != nil)
   }
 
-  @objc(DEBUG_listFilesInDocuments:rejecter:)
-  func DEBUG_listFilesInDocuments(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(DEBUG_listFilesInDocuments:reject:)
+  func DEBUG_listFilesInDocuments(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let fileManager = FileManager.default
     let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
     do {
@@ -327,8 +323,8 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(DEBUG_listFilesInApplicationSupport:rejecter:)
-  func DEBUG_listFilesInApplicationSupport(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(DEBUG_listFilesInApplicationSupport:reject:)
+  func DEBUG_listFilesInApplicationSupport(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let fileManager = FileManager.default
     let applicationSupportUrl = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
     let lndUrl = applicationSupportUrl.appendingPathComponent("lnd")
@@ -343,8 +339,8 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(DEBUG_deleteSpeedloaderLastrunFile:rejecter:)
-  func DEBUG_deleteSpeedloaderLastrunFile(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(DEBUG_deleteSpeedloaderLastrunFile:reject:)
+  func DEBUG_deleteSpeedloaderLastrunFile(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
     let lastrunPath = cachePath.appendingPathComponent("lastrun")
 
@@ -358,8 +354,8 @@ autopilot.heuristic=preferential:0.05
     resolve(true)
   }
 
-  @objc(DEBUG_deleteSpeedloaderDgraphDirectory:rejecter:)
-  func DEBUG_deleteSpeedloaderDgraphDirectory(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(DEBUG_deleteSpeedloaderDgraphDirectory:reject:)
+  func DEBUG_deleteSpeedloaderDgraphDirectory(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
     let dgraphPath = cachePath.appendingPathComponent("dgraph", isDirectory: true)
 
@@ -373,8 +369,8 @@ autopilot.heuristic=preferential:0.05
     resolve(nil)
   }
 
-  @objc(DEBUG_deleteNeutrinoFiles:rejecter:)
-  func DEBUG_deleteNeutrinoFiles(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(DEBUG_deleteNeutrinoFiles:reject:)
+  func DEBUG_deleteNeutrinoFiles(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
     let chainPath = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
@@ -399,21 +395,14 @@ autopilot.heuristic=preferential:0.05
     resolve(true)
   }
 
-  @objc(checkApplicationSupportExists:rejecter:)
-  func checkApplicationSupportExists(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(checkApplicationSupportExists:reject:)
+  func checkApplicationSupportExists(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
     resolve(FileManager.default.fileExists(atPath: applicationSupport.path))
   }
 
-  @objc(checkLndFolderExists:rejecter:)
-  func checkLndFolderExists(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-    let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-    let lndFolder = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
-    resolve(FileManager.default.fileExists(atPath: lndFolder.path))
-  }
-
-  @objc(createIOSApplicationSupportAndLndDirectories:rejecter:)
-  func createIOSApplicationSupportAndLndDirectories(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(createIOSApplicationSupportAndLndDirectories:reject:)
+  func createIOSApplicationSupportAndLndDirectories(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     do {
       let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
       let lndFolder = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
@@ -426,8 +415,8 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(excludeLndICloudBackup:rejecter:)
-  func excludeLndICloudBackup(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(excludeLndICloudBackup:reject:)
+  func excludeLndICloudBackup(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
     var lndFolder = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
 
@@ -438,7 +427,7 @@ autopilot.heuristic=preferential:0.05
         try lndFolder.setResourceValues(resourceValues)
         resolve(true)
       } else {
-        let error = LndMobileToolsError(msg: "lnd path " + lndFolder.path + " doesn't exist")
+        let error = BlixtToolsError(msg: "lnd path " + lndFolder.path + " doesn't exist")
         reject("error", error.localizedDescription, error)
       }
     } catch let error {
@@ -447,39 +436,8 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(TEMP_moveLndToApplicationSupport:rejecter:)
-  func TEMP_moveLndToApplicationSupport(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-    let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-
-    let newLndFolder = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
-
-    let lndData = documents.appendingPathComponent("data", isDirectory: true)
-    let lndConfig = documents.appendingPathComponent("lnd.conf")
-
-    let newlndDataPath = newLndFolder.appendingPathComponent("data")
-    let newLndConfigPath = newLndFolder.appendingPathComponent("lnd.conf")
-
-    NSLog("FROM: \(lndData.path)")
-    NSLog("TO: \(newlndDataPath.path)")
-
-    do {
-      if FileManager.default.fileExists(atPath: newLndFolder.path) {
-        try FileManager.default.moveItem(at: lndData, to: newlndDataPath)
-        try FileManager.default.moveItem(at: lndConfig, to: newLndConfigPath)
-        resolve(true)
-      } else {
-        let error = LndMobileToolsError(msg: "lnd path \(newLndFolder.path) doesn't exist")
-        reject("error", error.localizedDescription, error)
-      }
-    } catch let error {
-      NSLog("Failed moving lnd files: \(error)")
-      reject("error", error.localizedDescription, error)
-    }
-  }
-
-  @objc(tailLog:resolver:rejecter:)
-  func tailLog(numberOfLines: Int32, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(tailLog:resolve:reject:)
+  func tailLog(numberOfLines: Double, resolve: @escaping RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
 
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
@@ -499,8 +457,8 @@ autopilot.heuristic=preferential:0.05
   }
 
   var lndLogFileObservingStarted = false
-  @objc(observeLndLogFile:rejecter:)
-  func observeLndLogFile(resolver resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(observeLndLogFile:reject:)
+  func observeLndLogFile(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     if (lndLogFileObservingStarted) {
       resolve(true)
       return
@@ -528,7 +486,10 @@ autopilot.heuristic=preferential:0.05
               s = String(bytes: bytes, encoding: .utf8)
             }
             if let s = s {
-              self.sendEvent(withName: "lndlog", body: s)
+              // Emit through TurboModule event callback.
+              if self.responds(to: NSSelectorFromString("emitOnLndLog:")) {
+                self.perform(NSSelectorFromString("emitOnLndLog:"), with: s)
+              }
             }
           }
           fileHandle?.readInBackgroundAndNotify()
@@ -540,8 +501,8 @@ autopilot.heuristic=preferential:0.05
     resolve(true)
   }
 
-  @objc(tailSpeedloaderLog:resolver:rejecter:)
-  func tailSpeedloaderLog(numberOfLines: Int32, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  @objc(tailSpeedloaderLog:resolve:reject:)
+  func tailSpeedloaderLog(numberOfLines: Double, resolve: @escaping RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
 
     let url = cachePath[0].appendingPathComponent("log", isDirectory: true)
@@ -556,8 +517,8 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(copyLndLog:rejecter:)
-  func copyLndLog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  @objc(copyLndLog:reject:)
+  func copyLndLog(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     DispatchQueue.main.async {
       let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
       let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
@@ -602,8 +563,8 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(copySpeedloaderLog:rejecter:)
-  func copySpeedloaderLog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  @objc(copySpeedloaderLog:reject:)
+  func copySpeedloaderLog(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     // TODO(hsjoberg): error handling if file doesn't exist
     DispatchQueue.main.async {
       let cachePath = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
@@ -646,10 +607,10 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(macosOpenFileDialog:rejecter:)
-  func macosOpenFileDialog(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  @objc(macosOpenFileDialog:reject:)
+  func macosOpenFileDialog(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
   #if os(iOS)
-    let error = LndMobileToolsError(msg: "Not supported iOS")
+    let error = BlixtToolsError(msg: "Not supported iOS")
     reject("error", error.localizedDescription, error)
   #else
     DispatchQueue.main.async {
@@ -661,7 +622,7 @@ autopilot.heuristic=preferential:0.05
           if let u = panel.url {
             resolve(try Data(contentsOf: u).base64EncodedString())
           } else {
-            let error = LndMobileToolsError(msg: "Could not open file")
+            let error = BlixtToolsError(msg: "Could not open file")
             reject("error", error.localizedDescription, error)
           }
         } else {
@@ -676,16 +637,16 @@ autopilot.heuristic=preferential:0.05
   #endif
   }
 
-  @objc(getAppFolderPath:rejecter:)
-  func getAppFolderPath(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  @objc(getAppFolderPath:reject:)
+  func getAppFolderPath(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
     let url = paths[0]
 
     resolve(url.relativeString)
   }
 
-  @objc(getInternalFiles:rejecter:)
-  func getInternalFiles(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  @objc(getInternalFiles:reject:)
+  func getInternalFiles(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
     var filesMap: [String: Int] = [:]
     if let enumerator = FileManager.default.enumerator(at: applicationSupport, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
@@ -704,12 +665,13 @@ autopilot.heuristic=preferential:0.05
     resolve(filesMap)
   }
 
-  @objc(generateSecureRandomAsBase64:resolver:rejecter:)
-  func generateSecureRandomAsBase64(length: Int, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-    var bytes = Data(count: length)
+  @objc(generateSecureRandomAsBase64:resolve:reject:)
+  func generateSecureRandomAsBase64(length: Double, resolve: @escaping RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+    let numberOfBytes = Int(length)
+    var bytes = Data(count: numberOfBytes)
     let result = bytes.withUnsafeMutableBytes { mutableBytes -> Int32 in
       if let baseAddress = mutableBytes.baseAddress {
-        return SecRandomCopyBytes(kSecRandomDefault, length, baseAddress)
+        return SecRandomCopyBytes(kSecRandomDefault, numberOfBytes, baseAddress)
       } else {
         return errSecParam
       }
@@ -718,21 +680,77 @@ autopilot.heuristic=preferential:0.05
     if result == errSecSuccess {
       resolve(bytes.base64EncodedString())
     } else {
-      let error = NSError(domain: "LndMobileTools", code: Int(result), userInfo: nil)
+      let error = NSError(domain: "BlixtTools", code: Int(result), userInfo: nil)
       reject("randombytes_error", "Error generating random bytes", error)
     }
   }
 
-  @objc(getFilesDir:rejecter:)
-  func getFilesDir(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  @objc(getFilesDir:reject:)
+  func getFilesDir(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
     let lndPath = applicationSupport.appendingPathComponent("lnd", isDirectory: true)
     resolve(lndPath.path)
   }
 
-  @objc(getCacheDir:rejecter:)
-  func getCacheDir(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+  @objc(getCacheDir:reject:)
+  func getCacheDir(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
     let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
     resolve(cacheDir.path)
+  }
+
+  @objc(saveLogs:reject:)
+  func saveLogs(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    let chain = Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String
+    let url = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+      .appendingPathComponent("lnd", isDirectory: true)
+      .appendingPathComponent("logs", isDirectory: true)
+      .appendingPathComponent("bitcoin", isDirectory: true)
+      .appendingPathComponent(chain ?? "mainnet", isDirectory: true)
+      .appendingPathComponent("lnd.log", isDirectory: false)
+
+    if FileManager.default.fileExists(atPath: url.path) {
+      resolve(url.path)
+      return
+    }
+
+    let error = BlixtToolsError(msg: "lnd.log does not exist")
+    reject("error", error.localizedDescription, error)
+  }
+
+  @objc(saveChannelDbFile:reject:)
+  func saveChannelDbFile(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    resolve(false)
+  }
+
+  @objc(importChannelDbFile:resolve:reject:)
+  func importChannelDbFile(channelDbPath: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    resolve(false)
+  }
+
+  @objc(getIntentStringData:reject:)
+  func getIntentStringData(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    resolve(nil)
+  }
+
+  @objc(getIntentNfcData:reject:)
+  func getIntentNfcData(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    resolve(nil)
+  }
+
+  @objc(DEBUG_deleteWallet:reject:)
+  func DEBUG_deleteWallet(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    resolve(false)
+  }
+
+  @objc(DEBUG_deleteDatafolder:reject:)
+  func DEBUG_deleteDatafolder(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+    resolve(false)
+  }
+
+  @objc(restartApp)
+  func restartApp() {
+    DispatchQueue.main.async {
+      self.bridge?.reload()
+    }
   }
 }
