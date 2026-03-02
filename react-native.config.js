@@ -6,12 +6,6 @@ module.exports = {
     android: {},
     macos: {},
   },
-  dependencies: {
-    "react-native-tor": {
-      platforms: {
-        android: null,
-      },
-    },
-  },
+  dependencies: {},
   assets: ["./assets/fonts/"],
 };

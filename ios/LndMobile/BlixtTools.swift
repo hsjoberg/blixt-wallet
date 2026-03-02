@@ -23,6 +23,63 @@ class BlixtTools: RCTEventEmitter {
     return false
   }
 
+  @objc(getFlavor)
+  func getFlavor() -> String {
+    return Bundle.main.object(forInfoDictionaryKey: "FLAVOR") as? String ?? ""
+  }
+
+  @objc(getDebug)
+  func getDebug() -> Bool {
+    if let debugValue = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String {
+      let normalized = debugValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+      if normalized == "true" || normalized == "1" || normalized == "yes" {
+        return true
+      }
+      if normalized == "false" || normalized == "0" || normalized == "no" {
+        return false
+      }
+    }
+#if DEBUG
+    return true
+#else
+    return false
+#endif
+  }
+
+  @objc(getVersionCode)
+  func getVersionCode() -> NSNumber {
+    if let versionCode = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String,
+       let parsedVersionCode = Int(versionCode) {
+      return NSNumber(value: parsedVersionCode)
+    }
+    return NSNumber(value: 0)
+  }
+
+  @objc(getBuildType)
+  func getBuildType() -> String {
+    return getDebug() ? "debug" : "release"
+  }
+
+  @objc(getApplicationId)
+  func getApplicationId() -> String {
+    return Bundle.main.bundleIdentifier ?? ""
+  }
+
+  @objc(getVersionName)
+  func getVersionName() -> String {
+    return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+  }
+
+  @objc(getAppleTeamId)
+  func getAppleTeamId() -> String {
+    return Bundle.main.object(forInfoDictionaryKey: "TEAM_ID") as? String ?? ""
+  }
+
+  @objc(getChain)
+  func getChain() -> String {
+    return Bundle.main.object(forInfoDictionaryKey: "CHAIN") as? String ?? "mainnet"
+  }
+
   @objc(writeConfig:resolve:reject:)
   func writeConfig(config: String, resolve: @escaping RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
     do {

@@ -1,7 +1,17 @@
 import type { CodegenTypes, TurboModule } from "react-native";
 import { TurboModuleRegistry } from "react-native";
 
+export type BuildChain = "mainnet" | "testnet" | "regtest" | "signet";
+
 export interface Spec extends TurboModule {
+  getFlavor(): string;
+  getDebug(): boolean;
+  getVersionCode(): number;
+  getBuildType(): string;
+  getApplicationId(): string;
+  getVersionName(): string;
+  getAppleTeamId(): string;
+  getChain(): BuildChain;
   writeConfig(config: string): Promise<string>;
   generateSecureRandomAsBase64(length: number): Promise<string>;
   log(level: "v" | "d" | "i" | "w" | "e", tag: string, message: string): void;

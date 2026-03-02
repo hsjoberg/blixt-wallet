@@ -81,11 +81,6 @@ module.exports = [
   ),
 
   new webpack.NormalModuleReplacementPlugin(
-    /node_modules[\\/]react-native-build-config/,
-    path.join(__dirname, "../web-hacks/react-native-build-config.js"),
-  ),
-
-  new webpack.NormalModuleReplacementPlugin(
     /node_modules[\\/]react-native-icloudstore/,
     path.join(__dirname, "../web-hacks/react-native-icloudstore.js"),
   ),

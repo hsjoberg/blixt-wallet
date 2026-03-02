@@ -37,6 +37,38 @@ class BlixtToolsTurboModule(reactContext: ReactApplicationContext) :
 
   override fun getName() = NAME
 
+  override fun getFlavor(): String {
+    return readBuildConfigString("FLAVOR_custom") ?: BuildConfig.FLAVOR
+  }
+
+  override fun getDebug(): Boolean {
+    return BuildConfig.DEBUG
+  }
+
+  override fun getVersionCode(): Double {
+    return BuildConfig.VERSION_CODE.toDouble()
+  }
+
+  override fun getBuildType(): String {
+    return BuildConfig.BUILD_TYPE
+  }
+
+  override fun getApplicationId(): String {
+    return BuildConfig.APPLICATION_ID
+  }
+
+  override fun getVersionName(): String {
+    return BuildConfig.VERSION_NAME
+  }
+
+  override fun getAppleTeamId(): String {
+    return ""
+  }
+
+  override fun getChain(): String {
+    return BuildConfig.CHAIN
+  }
+
   override fun writeConfig(config: String, promise: Promise) {
     val filename = "${reactApplicationContext.filesDir}/lnd.conf"
 
@@ -519,6 +551,14 @@ class BlixtToolsTurboModule(reactContext: ReactApplicationContext) :
       }
     }
     return filesMap
+  }
+
+  private fun readBuildConfigString(fieldName: String): String? {
+    return try {
+      BuildConfig::class.java.getField(fieldName).get(null)?.toString()
+    } catch (_: Exception) {
+      null
+    }
   }
 
   companion object {
