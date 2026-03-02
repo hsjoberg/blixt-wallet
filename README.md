@@ -50,21 +50,19 @@ The web target is only used for prototyping and is not a real wallet.
 ### Web
 
 The easiest way get started is to build the web version, because you only need NodeJS and Bun installed.
-For the other targets you need to install their respective toolchains and also [golang](https://golang.org) &amp; [gomobile](https://pkg.go.dev/golang.org/x/mobile#section-readme) in order to build lnd for Blixt.
 
 The web version is not used as a real wallet and is only for fast prototyping.
 It's useful if you want to make design and GUI changes.
 
 - Install [Node](https://nodejs.org) and [Bun](https://bun.com)
-- Install Node packages: `bun install`
+- Install libs: `bun install`
 - Start the web server: `bun run web`
 
 ### Android
 
 - Install [Node](https://nodejs.org), [Bun](https://bun.com) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
 - If needed, install an emulated android device inside Android Studio
-- Download lnd binary from [from the latest Blixt Wallet release](https://github.com/hsjoberg/blixt-wallet/releases) and put it in `android/app/lndmobile`. Alternatively build lnd for Android by following the steps in [Build Lnd For mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
-- Install Node packages: `bun install`
+- Install libs: `bun install`
 
 To start the application:
 
