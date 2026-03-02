@@ -84,7 +84,7 @@
         "react-native-svg": "15.15.3",
         "react-native-svg-path-gradient": "^0.4.0",
         "react-native-svg-web": "^1.0.9",
-        "react-native-turbo-lnd": "github:hsjoberg/react-native-turbo-lnd#79d38586552b1b8ca8e05313e3d2c876d7c5f36e",
+        "react-native-turbo-lnd": "0.0.4",
         "react-native-turbo-sqlite": "0.3.1",
         "react-native-vector-icons": "9.2.0",
         "react-native-vision-camera": "4.7.3",
@@ -2600,7 +2600,7 @@
 
     "react-native-svg-web": ["react-native-svg-web@1.0.9", "", { "peerDependencies": { "prop-types": "*", "react": "*", "react-native-web": ">= 0.10.1" } }, "sha512-fggz1MPx55xP92ZlFWhvxfsd8/Mj3z63E1eo1pldtBRuNbR4LffvtY9hwj96bgHZU3gRwJL00LV3GAWRFthlnA=="],
 
-    "react-native-turbo-lnd": ["react-native-turbo-lnd@github:hsjoberg/react-native-turbo-lnd#79d3858", { "peerDependencies": { "@bufbuild/protobuf": "*", "react": "*", "react-native": "*" }, "optionalPeers": ["@bufbuild/protobuf"] }, "hsjoberg-react-native-turbo-lnd-79d3858"],
+    "react-native-turbo-lnd": ["react-native-turbo-lnd@0.0.4", "", { "dependencies": { "@babel/runtime": "^7.25.0" }, "peerDependencies": { "@bufbuild/protobuf": "*", "react": "*", "react-native": "*" }, "optionalPeers": ["@bufbuild/protobuf"] }, "sha512-vLjmIQEg9IC0A3nx4hVwkCgbo3il0oxKqFhPYqO4/liaehuXctX5P0z3slEGMplQn8gQrw/Sh7HJHRBKUj6vGQ=="],
 
     "react-native-turbo-sqlite": ["react-native-turbo-sqlite@0.3.1", "", { "dependencies": { "@react-native-community/cli": "^15.0.1" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-Fc+wIyshp49+M3T1JW9fxr+TaTLy3JxmwGeQhJMmFXBOibEu2Qtzt+tjBCRsARqamg5mezIf1gOwWWT+Z7TQZg=="],
 
