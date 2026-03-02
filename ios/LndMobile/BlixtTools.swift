@@ -29,21 +29,25 @@ class BlixtTools: RCTEventEmitter {
   }
 
   @objc(getDebug)
-  func getDebug() -> Bool {
+  func getDebug() -> NSNumber {
+    let isDebug: Bool
     if let debugValue = Bundle.main.object(forInfoDictionaryKey: "DEBUG") as? String {
       let normalized = debugValue.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
       if normalized == "true" || normalized == "1" || normalized == "yes" {
-        return true
+        isDebug = true
+        return NSNumber(value: isDebug)
       }
       if normalized == "false" || normalized == "0" || normalized == "no" {
-        return false
+        isDebug = false
+        return NSNumber(value: isDebug)
       }
     }
 #if DEBUG
-    return true
+    isDebug = true
 #else
-    return false
+    isDebug = false
 #endif
+    return NSNumber(value: isDebug)
   }
 
   @objc(getVersionCode)
@@ -57,7 +61,7 @@ class BlixtTools: RCTEventEmitter {
 
   @objc(getBuildType)
   func getBuildType() -> String {
-    return getDebug() ? "debug" : "release"
+    return getDebug().boolValue ? "debug" : "release"
   }
 
   @objc(getApplicationId)
