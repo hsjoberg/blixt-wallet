@@ -85,6 +85,7 @@ liblnd.a
 jniLibs/
 dist
 .webpack
+.react-native-turbo-lnd-version
 contrib/service-image/webp
 contrib/service-image/code
 out

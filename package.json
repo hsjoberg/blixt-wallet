@@ -5,6 +5,7 @@
   "nodeLinker": "node-modules",
   "scripts": {
     "lint": "eslint .",
+    "postinstall": "node scripts/fetch-lnd-if-needed.js",
     "start": "react-native start",
     "start-metro": "react-native start",
     "android:clean": "cd android && ./gradlew clean",
