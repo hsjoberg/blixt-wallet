@@ -9,8 +9,8 @@ import Main from "./Main";
 import DEV_Commands from "./windows/InitProcess/DEV_Commands";
 import { navigator } from "./utils/navigation";
 
-const getTheme = require("./native-base-theme/components").default;
-const theme = require("./native-base-theme/variables/commonColor").default;
+import getTheme from "./native-base-theme/components";
+import theme from "./native-base-theme/variables/commonColor";
 
 import store from "./state/store";
 import { clearApp } from "./storage/app";

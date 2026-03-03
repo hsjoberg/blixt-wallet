@@ -171,13 +171,14 @@ export default function Main() {
         setState("started");
       }
     })();
-  }, [appReady, loggedIn, holdOnboarding, walletCreated]);
+  }, [appReady, loggedIn, holdOnboarding, walletCreated, importChannelDbOnStartup]);
 
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
     gestureEnabled: false,
     gestureDirection: "horizontal",
     gestureVelocityImpact: 1.9,
+    animation: screenTransitionsEnabled ? "default" : "none",
   };
 
   const animationDisabled: StackNavigationOptions = {
@@ -301,7 +302,7 @@ export default function Main() {
         name="Send"
         component={Send}
         options={{
-          animation: screenTransitionsEnabled ? undefined : "none",
+          animation: screenTransitionsEnabled ? "default" : "none",
           gestureEnabled: true,
           gestureResponseDistance: 1000,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,

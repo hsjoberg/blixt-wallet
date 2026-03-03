@@ -3,7 +3,6 @@ import { Icon, H1, Text, Spinner } from "native-base";
 import { Button } from "../../components/Button";
 import { View } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { toast, hexToUint8Array } from "../../utils";
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -242,7 +241,7 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
   ];
 
   return (
-    <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: blixtTheme.dark }}>
+    <View style={{ flex: 1, backgroundColor: blixtTheme.dark }}>
       <View style={{ alignItems: "center" }}>
         <H1 style={{ marginTop: 10, marginBottom: 5 }}>Keysend - scan to pay</H1>
         {routehints.length > 0 && (
@@ -285,7 +284,7 @@ export default function KeysendTest({ navigation }: IKeysendExperimentProps) {
           </Button>,
         ]}
       />
-    </KeyboardAwareScrollView>
+    </View>
   );
 }
 
