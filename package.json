@@ -97,7 +97,6 @@
     "querystring": "^0.2.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-google-maps": "^9.4.5",
     "react-i18next": "16.5.4",
     "react-native": "0.84.1",
     "react-native-animatable": "^1.4.0",
