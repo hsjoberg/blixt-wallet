@@ -19,7 +19,7 @@ import Input from "../../components/Input";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { Alert } from "../../utils/alert";
-import { lnrpc } from "../../../proto/lightning";
+import { CommitmentType } from "react-native-turbo-lnd/protos/lightning_pb";
 import { stopDaemon } from "react-native-turbo-lnd";
 import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
 
@@ -70,14 +70,14 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
         await connectAndOpenChannelAll({
           peer,
           feeRateSat: feeRate !== 0 ? feeRate : undefined,
-          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : undefined,
+          type: taprootChan ? CommitmentType.SIMPLE_TAPROOT : undefined,
         });
       } else {
         await connectAndOpenChannel({
           peer,
           amount: satoshiValue,
           feeRateSat: feeRate !== 0 ? feeRate : undefined,
-          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : undefined,
+          type: taprootChan ? CommitmentType.SIMPLE_TAPROOT : undefined,
         });
       }
       await getChannels(undefined);

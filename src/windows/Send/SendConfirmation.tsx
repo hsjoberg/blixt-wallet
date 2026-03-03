@@ -17,7 +17,7 @@ import { SendStackParamList } from "./index";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { extractDescription } from "../../utils/NameDesc";
-import { lnrpc } from "../../../proto/lightning";
+import { Channel } from "react-native-turbo-lnd/protos/lightning_pb";
 import { namespaces } from "../../i18n/i18n.constants";
 import useBalance from "../../hooks/useBalance";
 import useLightningReadyToSend from "../../hooks/useLightingReadyToSend";
@@ -28,10 +28,8 @@ export interface ISendConfirmationProps {
   route: RouteProp<SendStackParamList, "SendConfirmation">;
 }
 
-const choiceLabel = (n: lnrpc.IChannel) =>
-  `${n.peerAlias || n.remotePubkey?.substring(0, 7)} - ${n.chanId} - ${n.localBalance}/${
-    n.remoteBalance
-  } `;
+const choiceLabel = (n: Channel) =>
+  `${n.peerAlias || n.remotePubkey?.substring(0, 7)} - ${n.chanId} - ${n.localBalance.toString()}/${n.remoteBalance.toString()}`;
 
 export default function SendConfirmation({ navigation, route }: ISendConfirmationProps) {
   const t = useTranslation(namespaces.send.sendConfirmation).t;
