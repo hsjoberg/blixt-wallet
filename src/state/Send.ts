@@ -15,6 +15,7 @@ import { LnBech32Prefix } from "../utils/build";
 import { PLATFORM, TLV_KEYSEND, TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
 import { valueFiat } from "../utils/bitcoin-units";
+import ReactNativePermissions from "react-native-permissions";
 
 import {
   FeatureBit,
@@ -34,11 +35,6 @@ import {
 } from "react-native-turbo-lnd";
 import { SendPaymentRequestSchema } from "react-native-turbo-lnd/protos/routerrpc/router_pb";
 import { create } from "@bufbuild/protobuf";
-
-let ReactNativePermissions: any;
-if (PLATFORM !== "macos") {
-  ReactNativePermissions = require("react-native-permissions");
-}
 
 import logger from "./../utils/log";
 import sha from "sha.js";

@@ -50,11 +50,7 @@ import { base64Decode } from "@bufbuild/protobuf/wire";
 import { FlatList } from "react-native";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Input from "../../components/Input";
-
-let ReactNativePermissions: any;
-if (PLATFORM !== "macos") {
-  ReactNativePermissions = require("react-native-permissions");
-}
+import ReactNativePermissions from "react-native-permissions";
 
 interface ISettingsProps {
   navigation: NavigationProp<any>;

@@ -1,5 +1,5 @@
 import { Action, Thunk, action, thunk } from "easy-peasy";
-import { BLIXT_NODE_PUBKEY } from "../utils/constants";
+import { BLIXT_NODE_PUBKEY, PLATFORM } from "../utils/constants";
 import { toast } from "../utils";
 import type { IStoreModel } from "./index";
 import { Alert } from "../utils/alert";
@@ -68,6 +68,10 @@ export const autopilot: IAutopilotModel = {
 
   checkAutopilot: thunk(
     async (actions, payload = {}, { getState, getStoreState, getStoreActions }) => {
+      if (PLATFORM === "web") {
+        return;
+      }
+
       const autopilotPrompting = getState().autopilotPrompting;
       const autopilotOpening = getState().autopilotOpening;
       const autopilotNodePubkey = getStoreState().settings.autopilotNodePubkey;

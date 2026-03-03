@@ -24,6 +24,7 @@ import {
   PendingChannelsResponse_PendingOpenChannel,
   PendingChannelsResponse_WaitingCloseChannel,
 } from "react-native-turbo-lnd/protos/lightning_pb";
+import { LegendList } from "@legendapp/list";
 
 interface ILightningInfoProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
@@ -109,7 +110,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
   return (
     <Container>
       {rpcReady && (
-        <FlashList
+        <LegendList
           estimatedItemSize={334}
           ListHeaderComponent={
             <View style={style.balanceInfo}>
