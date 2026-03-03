@@ -94,8 +94,6 @@
     "native-base": "github:hsjoberg/NativeBase#ad673eb2d280d03ff2577cbf7f60fc5ebb25d26a",
     "node-abi": "4.26.0",
     "node-polyfill-webpack-plugin": "4.1.0",
-    "protobufjs": "8.0.0",
-    "protobufjs-cli": "2.0.0",
     "querystring": "^0.2.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
