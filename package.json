@@ -42,15 +42,12 @@
     "macos:mainnet": "react-native-macos run-macos --scheme BlixtWallet --configuration Release",
     "macos:mainnet-fakelnd-debug": "react-native-macos run-macos --scheme BlixtWalletFakelnd --configuration DebugFakelnd",
     "macos:mainnet-fakelnd": "react-native-macos run-macos --scheme BlixtWalletFakelnd --configuration ReleaseFakelnd",
-    "web": "cross-env CHAIN=mainnet FLAVOR=fakelnd APPLICATION_ID=com.blixtwallet.webdemo BLIXT_WEB_DEMO=true vite --force --config ./vite.config.ts",
+    "web": "cross-env CHAIN=mainnet FLAVOR=fakelnd APPLICATION_ID=com.blixtwallet.webdemo BLIXT_WEB_DEMO=true vite --config ./vite.config.ts",
     "web:bundle": "cross-env NODE_ENV=production CHAIN=mainnet FLAVOR=fakelnd APPLICATION_ID=com.blixtwallet.webdemo BLIXT_WEB_DEMO=true vite build --config ./vite.config.ts",
     "web:preview": "vite preview --config ./vite.config.ts",
-    "electrobun:web:bundle": "cross-env NODE_ENV=production CHAIN=mainnet FLAVOR=fakelnd APPLICATION_ID=com.blixtwallet.electrobun BLIXT_WEB_DEMO=false VITE_VERSION_NAME=0.9.0-electrobun vite build --config ./vite.config.ts --outDir ./electrobun/src/mainview/dist",
-    "electrobun:dev": "bun run electrobun:web:bundle && cd electrobun && bun run dev",
-    "electrobun:build": "bun run electrobun:web:bundle && cd electrobun && bun run build",
-    "electron:start": "CHAIN=mainnet FLAVOR=fakelnd APPLICATION_ID=com.blixtwallet.debug electron-forge start",
-    "electron:make": "NODE_ENV=production CHAIN=mainnet FLAVOR=fakelnd APPLICATION_ID=com.blixtwallet.webdemo electron-forge make",
-    "electron:package": "NODE_ENV=production CHAIN=mainnet FLAVOR=fakelnd APPLICATION_ID=com.blixtwallet.webdemo electron-forge package"
+    "electrobun:bundle": "cross-env NODE_ENV=production CHAIN=mainnet FLAVOR=fakelnd APPLICATION_ID=com.blixtwallet.electrobun BLIXT_WEB_DEMO=false VITE_VERSION_NAME=0.9.0-electrobun vite build --config ./vite.config.ts --base ./ --outDir ../electrobun/src/mainview/dist --emptyOutDir",
+    "electrobun:dev": "bun run electrobun:bundle && cd electrobun && bun run dev",
+    "electrobun:build": "bun run electrobun:bundle && cd electrobun && bun run build"
   },
   "dependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
