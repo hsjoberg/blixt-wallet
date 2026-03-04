@@ -64,6 +64,8 @@ import {
   sendCoins,
   closeChannel,
   abandonChannel,
+  subscribeState,
+  subscribeTransactions,
 } from "react-native-turbo-lnd";
 
 import TurboSqlite from "react-native-turbo-sqlite";
@@ -145,6 +147,108 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               </Button>
             </>
           )}
+          {/*
+           *
+           * Electrobun
+           *
+           */}
+          <Text style={{ width: "100%" }}>Electrobun:</Text>
+          <Button
+            small
+            onPress={async () => {
+              try {
+                if (!(globalThis as any).__electrobunBunBridge) {
+                  const message = "Electrobun LND bridge is unavailable in this runtime.";
+                  console.warn(message);
+                  setCommandResult({ message });
+                  setError({});
+                  return;
+                }
+
+                const args = [
+                  "--lnddir=.lnd-mobile",
+                  "--noseedbackup",
+                  "--nolisten",
+                  "--bitcoin.active",
+                  "--bitcoin.regtest",
+                  "--bitcoin.node=neutrino",
+                  '--feeurl="https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json"',
+                  "--routing.assumechanvalid",
+                  "--tlsdisableautofill",
+                  "--db.bolt.auto-compact",
+                  "--db.bolt.auto-compact-min-age=0",
+                  "--neutrino.connect=192.168.10.120:19444",
+                ].join(" ");
+                const result = await start(args);
+                console.log("Electrobun start()", result);
+                setCommandResult({ result, args });
+                setError({});
+              } catch (e: any) {
+                console.error("Electrobun start() failed", e);
+                setError(e);
+                setCommandResult({});
+              }
+            }}
+          >
+            <Text style={styles.buttonText}>Electrobun start real lnd</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(
+                await subscribeState(
+                  {},
+                  (res) => {
+                    console.log("subscribeState", res);
+                  },
+                  (err) => {
+                    console.error("subscribeState error", err);
+                  },
+                ),
+              );
+            }}
+          >
+            <Text style={styles.buttonText}>Electrobun subscribeState</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log("Running subscribeState x 2 benchmark...");
+
+              for (let i = 0; i < 2; i++) {
+                await subscribeState(
+                  {},
+                  (res) => {
+                    console.log("subscribeState", res);
+                  },
+                  (err) => {
+                    console.error("subscribeState error", err);
+                  },
+                );
+              }
+            }}
+          >
+            <Text style={styles.buttonText}>subscribeState x 2</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log("Running subscribeTransactions...");
+
+              await subscribeTransactions(
+                {},
+                (res) => {
+                  console.log("subscribeTransactions", res);
+                },
+                (err) => {
+                  console.error("subscribeTransactions error", err);
+                },
+              );
+            }}
+          >
+            <Text style={styles.buttonText}>subscribeTransactions</Text>
+          </Button>
+
           {/*
            *
            * Speedloader
@@ -295,8 +399,9 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
+              console.log("Running getInfo x 100 benchmark...");
               const startTime = performance.now();
-              for (let i = 0; i < 10000; i++) {
+              for (let i = 0; i < 100; i++) {
                 // console.log(
                 await getInfo({});
                 // );
@@ -1112,16 +1217,10 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button small onPress={async () => await stopDaemon({})}>
             <Text style={styles.buttonText}>StopLnd()</Text>
           </Button>
-          <Button
-            small
-            onPress={async () => console.log(await NativeBlixtTools.saveLogs())}
-          >
+          <Button small onPress={async () => console.log(await NativeBlixtTools.saveLogs())}>
             <Text style={styles.buttonText}>saveLogs</Text>
           </Button>
-          <Button
-            small
-            onPress={async () => console.log(await NativeBlixtTools.copyLndLog())}
-          >
+          <Button small onPress={async () => console.log(await NativeBlixtTools.copyLndLog())}>
             <Text style={styles.buttonText}>copyLndLog</Text>
           </Button>
           <Button
@@ -1151,9 +1250,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               console.log(NativeBlixtTools.DEBUG_deleteNeutrinoFiles());
             }}
           >
-            <Text style={styles.buttonText}>
-              NativeBlixtTools.DEBUG_deleteNeutrinoFiles()
-            </Text>
+            <Text style={styles.buttonText}>NativeBlixtTools.DEBUG_deleteNeutrinoFiles()</Text>
           </Button>
 
           {/*

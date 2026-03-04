@@ -1,0 +1,16 @@
+{
+	"name": "blixt-wallet-electrobun",
+	"version": "1.0.0",
+	"description": "A simple Electrobun app showcasing core features",
+	"scripts": {
+		"start": "electrobun dev",
+		"dev": "electrobun dev --watch",
+		"build": "electrobun build"
+	},
+	"dependencies": {
+		"electrobun": "1.14.4"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	}
+}
