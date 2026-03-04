@@ -19,6 +19,29 @@ export const FAQ = "https://blixtwallet.github.io/faq";
 
 export const PLATFORM = Platform.OS;
 
+type ElectrobunStartupMode = "parallel" | "sequential";
+
+function resolveElectrobunStartupMode(): ElectrobunStartupMode {
+  const rawValue =
+    typeof process !== "undefined" && process.env
+      ? process.env.ELECTROBUN_SAFE_STARTUP
+      : undefined;
+
+  if (typeof rawValue === "string") {
+    const normalized = rawValue.trim().toLowerCase();
+    if (normalized === "parallel" || normalized === "0" || normalized === "false") {
+      return "parallel";
+    }
+    if (normalized === "sequential" || normalized === "1" || normalized === "true") {
+      return "sequential";
+    }
+  }
+
+  return PLATFORM === "web" ? "sequential" : "parallel";
+}
+
+export const ELECTROBUN_SAFE_STARTUP_MODE = resolveElectrobunStartupMode();
+
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
 export const DEFAULT_NEUTRINO_NODE = chainSelect({

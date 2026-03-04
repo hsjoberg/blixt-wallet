@@ -41,8 +41,11 @@ const isReactNativeWebWebViewIndexModule = (id: string) =>
 const REACT_NATIVE_WEB_WEBVIEW_POSTMOCK_VIRTUAL_ID = "\0react-native-web-webview-postmock-html";
 
 export default defineConfig(({ mode }) => {
-  loadEnv(mode, process.cwd(), "");
+  const env = loadEnv(mode, process.cwd(), "");
   const isProduction = mode === "production";
+  const flavor = (env.FLAVOR ?? env.VITE_FLAVOR ?? "fakelnd").toLowerCase();
+  const turboLndModuleReplacement =
+    flavor === "normal" ? "react-native-turbo-lnd/electrobun/view" : "react-native-turbo-lnd/mock";
 
   return {
     root: resolvePath("web"),
@@ -287,7 +290,7 @@ export default defineConfig(({ mode }) => {
         },
         {
           find: /^react-native-turbo-lnd$/,
-          replacement: "react-native-turbo-lnd/mock",
+          replacement: turboLndModuleReplacement,
         },
         {
           find: "react-native-permissions",
@@ -324,6 +327,9 @@ export default defineConfig(({ mode }) => {
       __DEV__: JSON.stringify(!isProduction),
       "process.env.NODE_ENV": JSON.stringify(isProduction ? "production" : "development"),
       "process.env.JEST_WORKER_ID": "null",
+      "process.env.ELECTROBUN_SAFE_STARTUP": JSON.stringify(
+        env.ELECTROBUN_SAFE_STARTUP ?? env.VITE_ELECTROBUN_SAFE_STARTUP ?? "",
+      ),
     },
 
     optimizeDeps: {

@@ -1,8 +1,12 @@
 import { BrowserWindow } from "electrobun/bun";
+import { defineTurboLndElectrobunRPC } from "react-native-turbo-lnd/electrobun/bun-rpc";
+
+const appRpc = defineTurboLndElectrobunRPC();
 
 const mainWindow = new BrowserWindow({
   title: "Blixt Wallet",
   url: "views://mainview/dist/index.html",
+  rpc: appRpc,
   frame: {
     width: 1400,
     height: 900,
