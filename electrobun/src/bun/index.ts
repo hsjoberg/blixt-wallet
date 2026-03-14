@@ -1,7 +1,13 @@
 import { BrowserWindow } from "electrobun/bun";
 import { defineTurboLndElectrobunRPC } from "react-native-turbo-lnd/electrobun/bun-rpc";
+import { createBlixtElectrobunHandlers } from "./BlixtTools";
 
-const appRpc = defineTurboLndElectrobunRPC();
+const DEFAULT_TURBO_LND_RPC_MAX_REQUEST_TIME_MS = 10 * 60 * 1000;
+
+const appRpc = defineTurboLndElectrobunRPC({
+  ...createBlixtElectrobunHandlers(),
+  maxRequestTime: DEFAULT_TURBO_LND_RPC_MAX_REQUEST_TIME_MS,
+});
 
 const mainWindow = new BrowserWindow({
   title: "Blixt Wallet",
@@ -10,7 +16,7 @@ const mainWindow = new BrowserWindow({
   frame: {
     width: 1400,
     height: 900,
-    x: 200,
+    x: 500,
     y: 200,
   },
 });

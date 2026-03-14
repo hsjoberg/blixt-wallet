@@ -406,8 +406,8 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
   return (
     <Card>
       <CardItem>
-        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
-          <View style={{ width: "59%", justifyContent: "center", paddingRight: 4 }}>
+        <View style={sendOnChainStyle.container}>
+          <View style={sendOnChainStyle.infoContainer}>
             <Text style={{ fontSize: 15 * fontFactor }}>
               {t("sendOnChain.title")}
               {"\n\n"}
@@ -421,7 +421,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
               </Text>
             </Text>
           </View>
-          <View style={{ justifyContent: "center" }}>
+          <View style={sendOnChainStyle.qrContainer}>
             {bitcoinAddress ? (
               <>
                 <QrCode
@@ -433,7 +433,13 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
                 <CopyAddress text={bitcoinAddress} onPress={copyAddress} />
               </>
             ) : (
-              <View style={{ width: 135 + 10 + 9, height: 135 + 10 + 8, justifyContent: "center" }}>
+              <View
+                style={{
+                  width: 135 + 10 + 9,
+                  height: 135 + 10 + 8,
+                  justifyContent: "center",
+                }}
+              >
                 <NativeBaseSpinner color={blixtTheme.light} />
               </View>
             )}
@@ -622,6 +628,27 @@ const style = StyleSheet.create({
     paddingLeft: 7,
     paddingRight: 7,
     paddingBottom: 12,
+  },
+});
+
+const sendOnChainStyle = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  infoContainer: {
+    flex: 1,
+    minWidth: 0,
+    justifyContent: "center",
+    paddingRight: 8,
+  },
+  qrContainer: {
+    width: 162,
+    justifyContent: "center",
+    alignItems: "center",
+    flexShrink: 0,
   },
 });
 

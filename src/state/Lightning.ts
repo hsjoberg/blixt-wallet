@@ -164,8 +164,10 @@ export const lightning: ILightningModel = {
 
   setupStores: thunk(async (_, _2, { dispatch }) => {
     try {
+      // Electrobun doesn't like it and segfaults when we fire a lot of RPC requests at the same
+      // time. Or our TurboLnd's Electrobun bindings are buggy.
       if (ELECTROBUN_SAFE_STARTUP_MODE === "sequential") {
-        // Keep startup deterministic when safe startup mode is enabled.
+        log.i('ELECTROBUN_SAFE_STARTUP_MODE = "sequential". Sequential bootup of stores');
         await dispatch.channel.initialize();
         await dispatch.receive.initialize();
         await dispatch.onChain.initialize();
@@ -179,6 +181,7 @@ export const lightning: ILightningModel = {
         await dispatch.channelAcceptanceManager.initialize();
         await dispatch.lightningBox.initialize();
       } else {
+        log.i('ELECTROBUN_SAFE_STARTUP_MODE = "parallel". Parallel bootup of stores');
         await Promise.all([
           dispatch.channel.initialize(),
           dispatch.receive.initialize(),

@@ -18,6 +18,10 @@ export const TELEGRAM = "https://t.me/blixtwallet";
 export const FAQ = "https://blixtwallet.github.io/faq";
 
 export const PLATFORM = Platform.OS;
+const runtimeGlobals = globalThis as Record<string, unknown>;
+export const IS_ELECTROBUN =
+  PLATFORM === "web" &&
+  (runtimeGlobals.IS_ELECTROBUN === true || typeof runtimeGlobals.__electrobun !== "undefined");
 
 type ElectrobunStartupMode = "parallel" | "sequential";
 

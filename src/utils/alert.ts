@@ -1,13 +1,34 @@
 // https://github.com/necolas/react-native-web/issues/1026#issuecomment-687572134
-import { AlertButton, AlertStatic, AlertType, Alert as RealAlert, Platform } from "react-native";
+import {
+  AlertButton,
+  AlertStatic,
+  AlertType,
+  Alert as RealAlert,
+  Platform,
+  ViewStyle,
+} from "react-native";
 import DialogAndroid from "react-native-dialogs";
-import { PLATFORM } from "./constants";
-import { navigate } from "./navigation";
+import { IS_ELECTROBUN, PLATFORM } from "./constants";
+import { getNavigator, navigate } from "./navigation";
 import { IPromptNavigationProps } from "../windows/HelperWindows/Prompt";
+import { IHelperAlertNavigationProps } from "../windows/HelperWindows/Alert";
+
+export interface IHelperAlertOptions {
+  maxWidth?: ViewStyle["maxWidth"];
+}
 
 class WebAlert implements AlertStatic {
   public alert(title: string, message?: string, buttons?: AlertButton[]): void {
-    if (PLATFORM === "web") {
+    if (IS_ELECTROBUN) {
+      if (getNavigator()?.getRootState()?.routeNames.includes("HelperAlert")) {
+        navigate<IHelperAlertNavigationProps>("HelperAlert", {
+          title,
+          message,
+          buttons: buttons?.length ? buttons : [{ text: "OK" }],
+        });
+        return;
+      }
+
       if (buttons === undefined || buttons.length === 0) {
         window.alert([title, message].filter(Boolean).join("\n"));
         return;
@@ -32,15 +53,21 @@ class WebAlert implements AlertStatic {
     title: string,
     message: string | undefined,
     buttons: AlertButton[],
+    options?: IHelperAlertOptions,
   ): Promise<AlertButton> {
-    return new Promise((resolve, reject) => {
-      for (const button of buttons) {
-        button.onPress = () => {
-          resolve(button);
-        };
-      }
+    return new Promise((resolve) => {
+      const wrappedButtons = buttons.map((button) => ({
+        ...button,
+        onPress: () => {
+          try {
+            button.onPress?.();
+          } finally {
+            resolve(button);
+          }
+        },
+      }));
 
-      this.alert(title, message, buttons);
+      this.alert(title, message, wrappedButtons, options);
     });
   }
 
@@ -52,7 +79,7 @@ class WebAlert implements AlertStatic {
     defaultValue?: string,
     keyboardType?: string,
   ) {
-    if (Platform.isElectron) {
+    if (Platform.OS === "web") {
       navigate<IPromptNavigationProps>("Prompt", {
         title,
         message,

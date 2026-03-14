@@ -1,7 +1,6 @@
 import path from "path";
-import fs from "fs/promises";
 import { transformAsync } from "@babel/core";
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig, loadEnv, type UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
@@ -9,6 +8,21 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 const projectRoot = __dirname;
 const resolvePath = (...segments: string[]) => path.resolve(projectRoot, ...segments);
 const normalizePath = (filePath: string) => filePath.replaceAll("\\", "/");
+const parseEnvBoolean = (value: string | undefined, fallback: boolean) => {
+  if (value == null) {
+    return fallback;
+  }
+
+  const normalized = value.trim().toLowerCase();
+  if (["1", "true", "yes", "on"].includes(normalized)) {
+    return true;
+  }
+  if (["0", "false", "no", "off"].includes(normalized)) {
+    return false;
+  }
+
+  return fallback;
+};
 
 const transpileDependencyPatterns = [
   /node_modules\/react-native-web\/src\//,
@@ -40,12 +54,23 @@ const isReactNativeWebWebViewIndexModule = (id: string) =>
 
 const REACT_NATIVE_WEB_WEBVIEW_POSTMOCK_VIRTUAL_ID = "\0react-native-web-webview-postmock-html";
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const isProduction = mode === "production";
+  const isAppDev = parseEnvBoolean(env.BLIXT_DEV ?? env.VITE_BLIXT_DEV, !isProduction);
+  const disableHmrForProductionNodeEnv =
+    command === "serve" && process.env.NODE_ENV === "production";
   const flavor = (env.FLAVOR ?? env.VITE_FLAVOR ?? "fakelnd").toLowerCase();
+  const isElectrobunTarget = (env.VITE_IS_ELECTROBUN ?? "false").toLowerCase() === "true";
   const turboLndModuleReplacement =
-    flavor === "normal" ? "react-native-turbo-lnd/electrobun/view" : "react-native-turbo-lnd/mock";
+    flavor === "normal"
+      ? isElectrobunTarget
+        ? resolvePath("electrobun/src/mainview/shims/react-native-turbo-lnd-view.ts")
+        : "react-native-turbo-lnd/electrobun/view"
+      : "react-native-turbo-lnd/mock";
+  const turboSqliteModuleReplacement = isElectrobunTarget
+    ? resolvePath("electrobun/src/mainview/shims/react-native-turbo-sqlite.ts")
+    : "react-native-turbo-sqlite/mocks";
 
   return {
     root: resolvePath("web"),
@@ -183,6 +208,21 @@ export default defineConfig(({ mode }) => {
       }),
     ],
 
+    // Electrobun/web renderer module wiring lives in two places:
+    // 1. The aliases below are the explicit package-level shims. This is where native packages are
+    //    swapped for browser or Electrobun-safe implementations under `web/web-hacks/**` or
+    //    `electrobun/src/mainview/shims/**`.
+    // 2. Local imports keep using platform file resolution because `.web.*` comes first in
+    //    `extensions`. That means imports like `../storage/keystore` resolve to
+    //    `src/storage/keystore.web.ts` in the renderer, so the `react-native-keychain` import in
+    //    `src/storage/keystore.ts` never reaches the web/Electrobun bundle. The same pattern is
+    //    used for files like `src/storage/database/sqlite.web.ts` and
+    //    `src/turbomodules/NativeBlixtTools.web.ts`.
+    // For Electrobun specifically, `isElectrobunTarget` enables the RPC-backed renderer shims for
+    // `react-native-turbo-lnd`, `react-native-turbo-sqlite`, and
+    // `@react-native-async-storage/async-storage`. If a native dependency leaks into the renderer,
+    // decide first whether it should be handled here with an alias or by adding a colocated
+    // `.web.*` implementation.
     resolve: {
       extensions: [
         ".web.tsx",
@@ -314,8 +354,16 @@ export default defineConfig(({ mode }) => {
         },
         {
           find: /^react-native-turbo-sqlite$/,
-          replacement: "react-native-turbo-sqlite/mocks",
+          replacement: turboSqliteModuleReplacement,
         },
+        ...(isElectrobunTarget
+          ? [
+              {
+                find: /^@react-native-async-storage\/async-storage$/,
+                replacement: resolvePath("electrobun/src/mainview/shims/async-storage.js"),
+              },
+            ]
+          : []),
         {
           find: "@notifee/react-native",
           replacement: resolvePath("web/web-hacks/notifee-react-native.js"),
@@ -324,7 +372,8 @@ export default defineConfig(({ mode }) => {
     },
 
     define: {
-      __DEV__: JSON.stringify(!isProduction),
+      global: "globalThis",
+      __DEV__: JSON.stringify(isAppDev),
       "process.env.NODE_ENV": JSON.stringify(isProduction ? "production" : "development"),
       "process.env.JEST_WORKER_ID": "null",
       "process.env.ELECTROBUN_SAFE_STARTUP": JSON.stringify(
@@ -342,32 +391,22 @@ export default defineConfig(({ mode }) => {
         "@codler/react-native-keyboard-aware-scroll-view",
         "react-native-web-webview",
       ],
-      esbuildOptions: {
-        define: {
-          global: "globalThis",
+      rolldownOptions: {
+        transform: {
+          define: {
+            global: "globalThis",
+          },
         },
-        loader: {
+        moduleTypes: {
           ".html": "text",
         },
-        plugins: [
-          {
-            name: "optimize-react-native-drawer-jsx",
-            setup(build) {
-              build.onLoad(
-                { filter: /node_modules[\\/]+react-native-drawer[\\/].*\.js$/ },
-                async (args) => ({
-                  contents: await fs.readFile(args.path, "utf8"),
-                  loader: "jsx",
-                }),
-              );
-            },
-          },
-        ],
+        plugins: [],
       },
     },
 
     server: {
       port: 8080,
+      hmr: disableHmrForProductionNodeEnv ? false : undefined,
       fs: {
         allow: [resolvePath(".")],
       },
@@ -387,10 +426,10 @@ export default defineConfig(({ mode }) => {
       },
     },
 
-    envPrefix: ["VITE_", "CHAIN", "FLAVOR", "APPLICATION_ID", "BLIXT_WEB_DEMO"],
+    envPrefix: ["VITE_", "CHAIN", "FLAVOR", "APPLICATION_ID", "BLIXT_WEB_DEMO", "BLIXT_DEV"],
 
     css: {
       devSourcemap: true,
     },
-  };
+  } satisfies UserConfig;
 });
