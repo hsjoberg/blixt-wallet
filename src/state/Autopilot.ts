@@ -8,6 +8,7 @@ import logger from "./../utils/log";
 import { getNodeInfo, subscribeTransactions, walletBalance } from "react-native-turbo-lnd";
 import { convertBitcoinToFiat, formatBitcoin } from "../utils/bitcoin-units";
 import { NodeInfo } from "react-native-turbo-lnd/protos/lightning_pb";
+import { Flavor } from "../utils/build";
 
 const log = logger("Autopilot");
 
@@ -68,7 +69,7 @@ export const autopilot: IAutopilotModel = {
 
   checkAutopilot: thunk(
     async (actions, payload = {}, { getState, getStoreState, getStoreActions }) => {
-      if (PLATFORM === "web") {
+      if (PLATFORM === "web" && Flavor === "fakelnd") {
         return;
       }
 
@@ -129,7 +130,7 @@ export const autopilot: IAutopilotModel = {
       actions.setAutopilotPrompting(true);
       try {
         const peer = await getAutopilotPeerUri(autopilotNodePubkey, torEnabled);
-        let feeRate = undefined;
+        let feeRate: number | undefined;
 
         let message = `You have ${availableBalanceFormatted} (${availableBalanceInFiatFormatted}) on chain.\n\n`;
         if (BLIXT_NODE_PUBKEY === autopilotNodePubkey) {

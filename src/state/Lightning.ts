@@ -28,7 +28,7 @@ import {
 import { create } from "@bufbuild/protobuf";
 
 import logger from "./../utils/log";
-import { PLATFORM } from "../utils/constants";
+import { ELECTROBUN_SAFE_STARTUP_MODE, PLATFORM } from "../utils/constants";
 const log = logger("Lightning");
 
 export type LndChainBackend = "neutrino" | "bitcoindWithZmq" | "bitcoindWithRpcPolling";
@@ -164,20 +164,39 @@ export const lightning: ILightningModel = {
 
   setupStores: thunk(async (_, _2, { dispatch }) => {
     try {
-      await Promise.all([
-        dispatch.channel.initialize(),
-        dispatch.receive.initialize(),
-        dispatch.onChain.initialize(),
-        dispatch.autopilot.initialize(),
-        dispatch.transaction.checkOpenTransactions(),
-        dispatch.scheduledSync.initialize(),
-        dispatch.notificationManager.initialize(),
-        dispatch.clipboardManager.initialize(),
-        dispatch.deeplinkManager.initialize(),
-        dispatch.blixtLsp.initialize(),
-        dispatch.channelAcceptanceManager.initialize(),
-        dispatch.lightningBox.initialize(),
-      ]);
+      // Electrobun doesn't like it and segfaults when we fire a lot of RPC requests at the same
+      // time. Or our TurboLnd's Electrobun bindings are buggy.
+      if (ELECTROBUN_SAFE_STARTUP_MODE === "sequential") {
+        log.i('ELECTROBUN_SAFE_STARTUP_MODE = "sequential". Sequential bootup of stores');
+        await dispatch.channel.initialize();
+        await dispatch.receive.initialize();
+        await dispatch.onChain.initialize();
+        await dispatch.autopilot.initialize();
+        await dispatch.transaction.checkOpenTransactions();
+        await dispatch.scheduledSync.initialize();
+        await dispatch.notificationManager.initialize();
+        await dispatch.clipboardManager.initialize();
+        await dispatch.deeplinkManager.initialize();
+        await dispatch.blixtLsp.initialize();
+        await dispatch.channelAcceptanceManager.initialize();
+        await dispatch.lightningBox.initialize();
+      } else {
+        log.i('ELECTROBUN_SAFE_STARTUP_MODE = "parallel". Parallel bootup of stores');
+        await Promise.all([
+          dispatch.channel.initialize(),
+          dispatch.receive.initialize(),
+          dispatch.onChain.initialize(),
+          dispatch.autopilot.initialize(),
+          dispatch.transaction.checkOpenTransactions(),
+          dispatch.scheduledSync.initialize(),
+          dispatch.notificationManager.initialize(),
+          dispatch.clipboardManager.initialize(),
+          dispatch.deeplinkManager.initialize(),
+          dispatch.blixtLsp.initialize(),
+          dispatch.channelAcceptanceManager.initialize(),
+          dispatch.lightningBox.initialize(),
+        ]);
+      }
 
       if (PLATFORM === "android") {
         await Promise.all([

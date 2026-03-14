@@ -1,4 +1,5 @@
 import type { CodegenTypes } from "react-native";
+import { electrobunRequest } from "../../electrobun/src/shared/rpc-client.web";
 
 import type { BuildChain, Spec } from "./NativeBlixtTools";
 
@@ -16,6 +17,24 @@ const eventEmitter = ((_: (payload: string) => void) => ({
   remove() {},
 })) as CodegenTypes.EventEmitter<string>;
 
+const isElectrobunRuntime = () => {
+  const runtimeGlobals = globalThis as Record<string, unknown>;
+  return (
+    runtimeGlobals.IS_ELECTROBUN === true || typeof runtimeGlobals.__electrobun !== "undefined"
+  );
+};
+
+const requestElectrobun = async <TResponse = unknown>(
+  method: string,
+  params?: unknown,
+): Promise<TResponse | null> => {
+  if (!isElectrobunRuntime()) {
+    return null;
+  }
+
+  return await electrobunRequest<TResponse>(method, params);
+};
+
 const NativeBlixtToolsWeb: Spec = {
   getFlavor: () => flavor,
   getDebug: () => debug,
@@ -26,8 +45,20 @@ const NativeBlixtToolsWeb: Spec = {
   getAppleTeamId: () => "",
   getChain: () => chain,
 
-  writeConfig: async () => "",
+  writeConfig: async (config) => {
+    const result = await requestElectrobun<{ path: string }>("__BlixtWriteConfig", {
+      config,
+    });
+    return result?.path ?? "";
+  },
   generateSecureRandomAsBase64: async (length) => {
+    const randomFromBridge = await requestElectrobun<string>("__BlixtGenerateSecureRandomAsBase64", {
+      length,
+    });
+    if (typeof randomFromBridge === "string" && randomFromBridge.length > 0) {
+      return randomFromBridge;
+    }
+
     const data = new Uint8Array(length);
     crypto.getRandomValues(data);
     return btoa(String.fromCharCode(...data));
@@ -48,9 +79,10 @@ const NativeBlixtToolsWeb: Spec = {
   DEBUG_deleteSpeedloaderDgraphDirectory: async () => true,
   DEBUG_deleteNeutrinoFiles: async () => true,
   getInternalFiles: async () => ({}),
-  getCacheDir: async () => "/tmp",
-  getFilesDir: async () => "/",
-  getAppFolderPath: async () => "/",
+  getCacheDir: async () => (await requestElectrobun<string>("__BlixtGetCacheDir")) ?? "/tmp",
+  getFilesDir: async () => (await requestElectrobun<string>("__BlixtGetFilesDir")) ?? "/",
+  getAppFolderPath: async () =>
+    (await requestElectrobun<string>("__BlixtGetAppFolderPath")) ?? "/",
   saveChannelDbFile: async () => false,
   importChannelDbFile: async () => false,
   getIntentStringData: async () => null,
