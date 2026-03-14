@@ -63,11 +63,7 @@ export default defineConfig(({ command, mode }) => {
   const flavor = (env.FLAVOR ?? env.VITE_FLAVOR ?? "fakelnd").toLowerCase();
   const isElectrobunTarget = (env.VITE_IS_ELECTROBUN ?? "false").toLowerCase() === "true";
   const turboLndModuleReplacement =
-    flavor === "normal"
-      ? isElectrobunTarget
-        ? resolvePath("electrobun/src/mainview/shims/react-native-turbo-lnd-view.ts")
-        : "react-native-turbo-lnd/electrobun/view"
-      : "react-native-turbo-lnd/mock";
+    flavor === "normal" ? "react-native-turbo-lnd/electrobun/view" : "react-native-turbo-lnd/mock";
   const turboSqliteModuleReplacement = isElectrobunTarget
     ? resolvePath("electrobun/src/mainview/shims/react-native-turbo-sqlite.ts")
     : "react-native-turbo-sqlite/mocks";
@@ -208,21 +204,43 @@ export default defineConfig(({ command, mode }) => {
       }),
     ],
 
-    // Electrobun/web renderer module wiring lives in two places:
-    // 1. The aliases below are the explicit package-level shims. This is where native packages are
-    //    swapped for browser or Electrobun-safe implementations under `web/web-hacks/**` or
-    //    `electrobun/src/mainview/shims/**`.
-    // 2. Local imports keep using platform file resolution because `.web.*` comes first in
-    //    `extensions`. That means imports like `../storage/keystore` resolve to
-    //    `src/storage/keystore.web.ts` in the renderer, so the `react-native-keychain` import in
-    //    `src/storage/keystore.ts` never reaches the web/Electrobun bundle. The same pattern is
-    //    used for files like `src/storage/database/sqlite.web.ts` and
-    //    `src/turbomodules/NativeBlixtTools.web.ts`.
-    // For Electrobun specifically, `isElectrobunTarget` enables the RPC-backed renderer shims for
-    // `react-native-turbo-lnd`, `react-native-turbo-sqlite`, and
-    // `@react-native-async-storage/async-storage`. If a native dependency leaks into the renderer,
-    // decide first whether it should be handled here with an alias or by adding a colocated
-    // `.web.*` implementation.
+    // Essential runtime replacements for web/Electrobun live in three layers:
+    // 1. Explicit package aliases in `resolve.alias`.
+    //    - `react-native-turbo-lnd`
+    //      - `flavor=normal`: upstream `react-native-turbo-lnd/electrobun/view`
+    //      - those helpers are imported separately from
+    //        `react-native-turbo-lnd/electrobun/custom-rpc` by
+    //        `electrobun/src/shared/rpc-client.web.ts`
+    //      - `flavor!=normal`: `react-native-turbo-lnd/mock`
+    //    - `react-native-turbo-sqlite`
+    //      - plain web: `react-native-turbo-sqlite/mocks`
+    //      - Electrobun: `electrobun/src/mainview/shims/react-native-turbo-sqlite.ts`, which forwards
+    //        DB open/query/close calls over Electrobun RPC to the Bun-side SQLite implementation
+    //    - `@react-native-async-storage/async-storage`
+    //      - Electrobun only: `electrobun/src/mainview/shims/async-storage.js`, which forwards the
+    //        AsyncStorage API over Electrobun RPC to the Bun-side KV store
+    // 2. Platform file resolution via `.web.*` because `.web.*` comes first in `extensions`.
+    //    - `src/storage/keystore.web.ts`: localStorage-backed replacement for `src/storage/keystore.ts`,
+    //      so the native `react-native-keychain` dependency never enters the web/Electrobun bundle
+    //    - `src/storage/database/sqlite.web.ts`: web DB entrypoint that imports
+    //      `react-native-turbo-sqlite`; on plain web that resolves to mocks, on Electrobun it resolves
+    //      to the RPC-backed SQLite shim above
+    //    - `src/turbomodules/NativeBlixtTools.web.ts`: web/Electrobun stand-in for native build/file
+    //      helpers; it reads the globals assigned in `web/main.ts` and optionally bridges file/config
+    //      operations over Electrobun RPC
+    //    - `src/turbomodules/NativeLndmobileTools.web.ts`,
+    //      `src/turbomodules/NativeScheduledSyncTurbo.web.ts`, and
+    //      `src/turbomodules/NativeSpeedloader.web.ts`: minimal web stand-ins for native TurboModules
+    // 3. Runtime globals outside aliasing.
+    //    - `define.global = "globalThis"` here, plus `globalThis.global = globalThis` in
+    //      `web/main.ts`, keeps React Native code that expects a Node-style `global` working
+    //    - `web/main.ts` assigns `FLAVOR`, `CHAIN`, `APPLICATION_ID`, `VERSION_NAME`,
+    //      `VERSION_CODE`, `BUILD_TYPE`, `DEBUG`, `__DEV__`, `BLIXT_WEB_DEMO`, and `IS_ELECTROBUN`
+    //      before loading `index.web.js`; `NativeBlixtTools.web.ts` reads several of those directly
+    //
+    // The large `web/web-hacks/**` alias block below is a separate category: compatibility patches for
+    // React Native libraries. If a missing dependency is core app runtime surface area, document it in
+    // the inventory above; if it is just a broken RN package import path, keep it with the patch aliases.
     resolve: {
       extensions: [
         ".web.tsx",
