@@ -129,7 +129,7 @@
     "react-native-svg": "15.15.3",
     "react-native-svg-path-gradient": "^0.4.0",
     "react-native-svg-web": "^1.0.9",
-    "react-native-turbo-lnd": "0.0.10",
+    "react-native-turbo-lnd": "0.0.12",
     "react-native-turbo-sqlite": "0.4.0",
     "react-native-vector-icons": "9.2.0",
     "react-native-vision-camera": "4.7.3",

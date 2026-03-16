@@ -178,14 +178,18 @@ export default defineConfig(({ command, mode }) => {
 
       viteStaticCopy({
         targets: [
-          {
-            src: normalizePath(resolvePath("node_modules/sql.js/dist/sql-wasm.wasm")),
-            dest: ".",
-          },
-          {
-            src: normalizePath(resolvePath("node_modules/sql.js/dist/sql-wasm-browser.wasm")),
-            dest: ".",
-          },
+          ...(isElectrobunTarget
+            ? []
+            : [
+                {
+                  src: normalizePath(resolvePath("node_modules/sql.js/dist/sql-wasm.wasm")),
+                  dest: ".",
+                },
+                {
+                  src: normalizePath(resolvePath("node_modules/sql.js/dist/sql-wasm-browser.wasm")),
+                  dest: ".",
+                },
+              ]),
           {
             src: normalizePath(resolvePath("assets/fonts/*")),
             dest: ".",
@@ -216,6 +220,8 @@ export default defineConfig(({ command, mode }) => {
     //      - plain web: `react-native-turbo-sqlite/mocks`
     //      - Electrobun: `electrobun/src/mainview/shims/react-native-turbo-sqlite.ts`, which forwards
     //        DB open/query/close calls over Electrobun RPC to the Bun-side SQLite implementation
+    //      - Electrobun also remaps `react-native-turbo-sqlite/mocks` to a local shim so plain-web
+    //        code paths that await `mockReady` cannot accidentally initialize the sql.js WASM backend
     //    - `@react-native-async-storage/async-storage`
     //      - Electrobun only: `electrobun/src/mainview/shims/async-storage.js`, which forwards the
     //        AsyncStorage API over Electrobun RPC to the Bun-side KV store
@@ -376,6 +382,12 @@ export default defineConfig(({ command, mode }) => {
         },
         ...(isElectrobunTarget
           ? [
+              {
+                find: /^react-native-turbo-sqlite\/mocks$/,
+                replacement: resolvePath(
+                  "electrobun/src/mainview/shims/react-native-turbo-sqlite-mocks.ts",
+                ),
+              },
               {
                 find: /^@react-native-async-storage\/async-storage$/,
                 replacement: resolvePath("electrobun/src/mainview/shims/async-storage.js"),
