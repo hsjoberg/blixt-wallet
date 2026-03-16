@@ -1,3 +1,6 @@
+import type { CodegenTypes } from "react-native";
+import { electrobunNativeBlixtTools } from "../../electrobun/src/shims/native-blixt-tools";
+
 import type { BuildChain, Spec } from "./NativeBlixtTools";
 
 const chain = ((globalThis as Record<string, unknown>).CHAIN ?? "mainnet") as BuildChain;
@@ -10,11 +13,7 @@ const versionName = String((globalThis as Record<string, unknown>).VERSION_NAME 
 const versionCode = Number((globalThis as Record<string, unknown>).VERSION_CODE ?? 0);
 const buildType = String((globalThis as Record<string, unknown>).BUILD_TYPE ?? "debug");
 
-const emptyLndLogEmitter = ((_: (payload: string) => void) => ({
-  remove() {},
-})) as Spec["onLndLog"];
-
-const NativeBlixtToolsWeb: Spec = {
+const NativeBlixtToolsElectrobun: Spec = {
   getFlavor: () => flavor,
   getDebug: () => debug,
   getVersionCode: () => versionCode,
@@ -25,10 +24,14 @@ const NativeBlixtToolsWeb: Spec = {
   getChain: () => chain,
 
   writeConfig: async (config) => {
-    void config;
-    return "";
+    return await electrobunNativeBlixtTools.writeConfig(config);
   },
   generateSecureRandomAsBase64: async (length) => {
+    const randomFromBridge = await electrobunNativeBlixtTools.generateSecureRandomAsBase64(length);
+    if (typeof randomFromBridge === "string" && randomFromBridge.length > 0) {
+      return randomFromBridge;
+    }
+
     const data = new Uint8Array(length);
     crypto.getRandomValues(data);
     return btoa(String.fromCharCode(...data));
@@ -39,9 +42,10 @@ const NativeBlixtToolsWeb: Spec = {
   saveLogs: async () => "",
   copyLndLog: async () => false,
   copySpeedloaderLog: async () => false,
-  tailLog: async (_numberOfLines) => "",
-  observeLndLogFile: async () => false,
-  tailSpeedloaderLog: async (_numberOfLines) => "",
+  tailLog: async (numberOfLines) => await electrobunNativeBlixtTools.tailLog(numberOfLines),
+  observeLndLogFile: async () => await electrobunNativeBlixtTools.observeLndLogFile(),
+  tailSpeedloaderLog: async (numberOfLines) =>
+    await electrobunNativeBlixtTools.tailSpeedloaderLog(numberOfLines),
   saveChannelsBackup: async () => false,
   saveChannelBackupFile: async () => false,
   getTorEnabled: async () => false,
@@ -49,9 +53,9 @@ const NativeBlixtToolsWeb: Spec = {
   DEBUG_deleteSpeedloaderDgraphDirectory: async () => true,
   DEBUG_deleteNeutrinoFiles: async () => true,
   getInternalFiles: async () => ({}),
-  getCacheDir: async () => "/tmp",
-  getFilesDir: async () => "/",
-  getAppFolderPath: async () => "/",
+  getCacheDir: async () => await electrobunNativeBlixtTools.getCacheDir(),
+  getFilesDir: async () => await electrobunNativeBlixtTools.getFilesDir(),
+  getAppFolderPath: async () => await electrobunNativeBlixtTools.getAppFolderPath(),
   saveChannelDbFile: async () => false,
   importChannelDbFile: async () => false,
   getIntentStringData: async () => null,
@@ -66,7 +70,7 @@ const NativeBlixtToolsWeb: Spec = {
   createIOSApplicationSupportAndLndDirectories: async () => true,
   excludeLndICloudBackup: async () => true,
   macosOpenFileDialog: async () => null,
-  onLndLog: emptyLndLogEmitter,
+  onLndLog: electrobunNativeBlixtTools.onLndLog as CodegenTypes.EventEmitter<string>,
 };
 
-export default NativeBlixtToolsWeb;
+export default NativeBlixtToolsElectrobun;

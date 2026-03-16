@@ -1,4 +1,4 @@
-import { electrobunRequest } from "../../shared/rpc-client.web";
+import { electrobunRequest } from "../shared/rpc-client.web";
 
 const createPromise = (executor, callback) => {
   return new Promise((resolve, reject) => {

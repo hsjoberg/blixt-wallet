@@ -1,4 +1,4 @@
-import { electrobunRequest } from "../../shared/rpc-client.web";
+import { electrobunRequest } from "../shared/rpc-client.web";
 
 export type Params = Array<string | number | null | undefined | boolean>;
 
@@ -19,12 +19,14 @@ type OpenDatabaseResponse = {
 
 const TurboSqlite = {
   openDatabase(path: string): Database {
-    const openPromise = electrobunRequest<OpenDatabaseResponse>("__BlixtOpenDatabase", { path });
+    const openPromise = electrobunRequest<OpenDatabaseResponse>("__TurboSqliteOpenDatabase", {
+      path,
+    });
 
     return {
       async executeSql(sql: string, params: Params): Promise<SqlResult> {
         const { databaseId } = await openPromise;
-        return await electrobunRequest<SqlResult>("__BlixtExecuteSql", {
+        return await electrobunRequest<SqlResult>("__TurboSqliteExecuteSql", {
           databaseId,
           sql,
           params,
@@ -33,7 +35,7 @@ const TurboSqlite = {
 
       async close(): Promise<void> {
         const { databaseId } = await openPromise;
-        await electrobunRequest("__BlixtCloseDatabase", {
+        await electrobunRequest("__TurboSqliteCloseDatabase", {
           databaseId,
         });
       },

@@ -1,14 +1,45 @@
 import { BrowserWindow, defineElectrobunRPC } from "electrobun/bun";
-import { createBlixtElectrobunHandlers } from "./BlixtTools";
+import type { AdditionalElectrobunHandlers } from "react-native-turbo-lnd/electrobun/bun-rpc-factory";
+import { ensureBlixtPaths } from "../backend/BlixtPaths";
+import { createAsyncStorageElectrobunHandlers } from "../backend/AsyncStorage";
+import { createBlixtToolsElectrobunHandlers } from "../backend/BlixtTools";
+import { createKeystoreElectrobunHandlers } from "../backend/Keystore";
+import { createTurboSqliteElectrobunHandlers } from "../backend/TurboSqlite";
 
 const DEFAULT_TURBO_LND_RPC_MAX_REQUEST_TIME_MS = 10 * 60 * 1000;
 const flavor = process.env.FLAVOR?.trim().toLowerCase() ?? "normal";
 const isFakeLnd = flavor === "fakelnd";
 
-const additionalHandlers = {
-  ...createBlixtElectrobunHandlers(),
-  maxRequestTime: DEFAULT_TURBO_LND_RPC_MAX_REQUEST_TIME_MS,
+ensureBlixtPaths();
+
+const mergeAdditionalHandlers = (
+  ...handlersList: Array<AdditionalElectrobunHandlers<any>>
+): AdditionalElectrobunHandlers<any> => {
+  return handlersList.reduce<AdditionalElectrobunHandlers<any>>(
+    (mergedHandlers, handlers) => ({
+      maxRequestTime: handlers.maxRequestTime ?? mergedHandlers.maxRequestTime,
+      requests: {
+        ...(mergedHandlers.requests ?? {}),
+        ...(handlers.requests ?? {}),
+      },
+      messages: {
+        ...(mergedHandlers.messages ?? {}),
+        ...(handlers.messages ?? {}),
+      },
+    }),
+    {},
+  );
 };
+
+const additionalHandlers = mergeAdditionalHandlers(
+  createBlixtToolsElectrobunHandlers(),
+  createTurboSqliteElectrobunHandlers(),
+  createAsyncStorageElectrobunHandlers(),
+  createKeystoreElectrobunHandlers(),
+  {
+    maxRequestTime: DEFAULT_TURBO_LND_RPC_MAX_REQUEST_TIME_MS,
+  },
+);
 
 const appRpc = isFakeLnd
   ? defineElectrobunRPC("bun", {

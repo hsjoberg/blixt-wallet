@@ -62,10 +62,13 @@ export default defineConfig(({ command, mode }) => {
     command === "serve" && process.env.NODE_ENV === "production";
   const flavor = (env.FLAVOR ?? env.VITE_FLAVOR ?? "fakelnd").toLowerCase();
   const isElectrobunTarget = (env.VITE_IS_ELECTROBUN ?? "false").toLowerCase() === "true";
+  const platformExtensions = isElectrobunTarget
+    ? [".electrobun.tsx", ".electrobun.ts", ".electrobun.jsx", ".electrobun.js"]
+    : [];
   const turboLndModuleReplacement =
     flavor === "normal" ? "react-native-turbo-lnd/electrobun/view" : "react-native-turbo-lnd/mock";
   const turboSqliteModuleReplacement = isElectrobunTarget
-    ? resolvePath("electrobun/src/mainview/shims/react-native-turbo-sqlite.ts")
+    ? resolvePath("electrobun/src/shims/react-native-turbo-sqlite.ts")
     : "react-native-turbo-sqlite/mocks";
 
   return {
@@ -218,22 +221,27 @@ export default defineConfig(({ command, mode }) => {
     //      - `flavor!=normal`: `react-native-turbo-lnd/mock`
     //    - `react-native-turbo-sqlite`
     //      - plain web: `react-native-turbo-sqlite/mocks`
-    //      - Electrobun: `electrobun/src/mainview/shims/react-native-turbo-sqlite.ts`, which forwards
+    //      - Electrobun: `electrobun/src/shims/react-native-turbo-sqlite.ts`, which forwards
     //        DB open/query/close calls over Electrobun RPC to the Bun-side SQLite implementation
     //      - Electrobun also remaps `react-native-turbo-sqlite/mocks` to a local shim so plain-web
     //        code paths that await `mockReady` cannot accidentally initialize the sql.js WASM backend
     //    - `@react-native-async-storage/async-storage`
-    //      - Electrobun only: `electrobun/src/mainview/shims/async-storage.js`, which forwards the
+    //      - Electrobun only: `electrobun/src/shims/async-storage.js`, which forwards the
     //        AsyncStorage API over Electrobun RPC to the Bun-side KV store
-    // 2. Platform file resolution via `.web.*` because `.web.*` comes first in `extensions`.
+    // 2. Platform file resolution via `.electrobun.*` / `.web.*` because those extensions come
+    //    first in `extensions`.
+    //    - For the Electrobun renderer we prefer `.electrobun.*`, so files like
+    //      `src/turbomodules/NativeBlixtTools.electrobun.ts` can stay Electrobun-specific without
+    //      polluting the plain browser `*.web.*` implementations.
     //    - `src/storage/keystore.web.ts`: localStorage-backed replacement for `src/storage/keystore.ts`,
     //      so the native `react-native-keychain` dependency never enters the web/Electrobun bundle
     //    - `src/storage/database/sqlite.web.ts`: web DB entrypoint that imports
     //      `react-native-turbo-sqlite`; on plain web that resolves to mocks, on Electrobun it resolves
     //      to the RPC-backed SQLite shim above
-    //    - `src/turbomodules/NativeBlixtTools.web.ts`: web/Electrobun stand-in for native build/file
-    //      helpers; it reads the globals assigned in `web/main.ts` and optionally bridges file/config
-    //      operations over Electrobun RPC
+    //    - `src/turbomodules/NativeBlixtTools.web.ts`: plain browser fallback for native build/file
+    //      helpers
+    //    - `src/turbomodules/NativeBlixtTools.electrobun.ts`: Electrobun-specific NativeBlixtTools
+    //      implementation that delegates into `electrobun/src/shims/native-blixt-tools.ts`
     //    - `src/turbomodules/NativeLndmobileTools.web.ts`,
     //      `src/turbomodules/NativeScheduledSyncTurbo.web.ts`, and
     //      `src/turbomodules/NativeSpeedloader.web.ts`: minimal web stand-ins for native TurboModules
@@ -249,6 +257,7 @@ export default defineConfig(({ command, mode }) => {
     // the inventory above; if it is just a broken RN package import path, keep it with the patch aliases.
     resolve: {
       extensions: [
+        ...platformExtensions,
         ".web.tsx",
         ".web.ts",
         ".tsx",
@@ -385,12 +394,12 @@ export default defineConfig(({ command, mode }) => {
               {
                 find: /^react-native-turbo-sqlite\/mocks$/,
                 replacement: resolvePath(
-                  "electrobun/src/mainview/shims/react-native-turbo-sqlite-mocks.ts",
+                  "electrobun/src/shims/react-native-turbo-sqlite-mocks.ts",
                 ),
               },
               {
                 find: /^@react-native-async-storage\/async-storage$/,
-                replacement: resolvePath("electrobun/src/mainview/shims/async-storage.js"),
+                replacement: resolvePath("electrobun/src/shims/async-storage.js"),
               },
             ]
           : []),

@@ -111,3 +111,6 @@ devenv.local.nix
 .pre-commit-config.yaml
 
 .android/*
+
+# Electrobun
+electrobun/vendor
