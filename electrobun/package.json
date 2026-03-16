@@ -4,10 +4,10 @@
   "description": "A simple Electrobun app showcasing core features",
   "scripts": {
     "prepare:bundle-assets": "bun ./scripts/prebuild.ts",
-    "start": "bun run prepare:bundle-assets && bun run ensure:bun-override && electrobun dev",
-    "dev": "bun run prepare:bundle-assets && bun run ensure:bun-override && electrobun dev --watch",
-    "build": "bun run prepare:bundle-assets && bun run ensure:bun-override && electrobun build",
-    "package:stable": "bun run prepare:bundle-assets && bun run ensure:bun-override && electrobun build --env=stable"
+    "start": "bun run prepare:bundle-asset && electrobun dev",
+    "dev": "bun run prepare:bundle-assets && electrobun dev --watch",
+    "build": "bun run prepare:bundle-assets && electrobun build",
+    "package:stable": "bun run prepare:bundle-assets && electrobun build --env=stable"
   },
   "dependencies": {
     "electrobun": "1.15.1"
