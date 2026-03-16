@@ -11,10 +11,12 @@ const BlixtLndConfigPath = path.resolve(BlixtLndPath, "lnd.conf");
 const BlixtCachePath = path.resolve(BlixtRootPath, "cache");
 const BlixtSqlitePath = path.resolve(BlixtRootPath, "sqlite.db");
 const BlixtKvPath = path.resolve(BlixtRootPath, "kv.json");
+const BlixtKeystorePath = path.resolve(BlixtRootPath, "keystore.json");
 
 const sqliteDatabaseMap = new Map<string, BunSqliteDatabase>();
 let nextDatabaseId = 1;
 let kvStoreCache: Record<string, string> | null = null;
+let keystoreCache: Record<string, string> | null = null;
 
 const normalizeFsPath = (targetPath: string) => targetPath.replaceAll("\\", "/");
 
@@ -61,6 +63,39 @@ const persistKvStore = (nextStore: Record<string, string>) => {
   ensureBlixtPaths();
   kvStoreCache = nextStore;
   writeFileSync(BlixtKvPath, JSON.stringify(nextStore), "utf8");
+};
+
+const loadKeystore = (): Record<string, string> => {
+  if (keystoreCache !== null) {
+    return keystoreCache;
+  }
+
+  if (!existsSync(BlixtKeystorePath)) {
+    keystoreCache = {};
+    return keystoreCache;
+  }
+
+  try {
+    const parsed = JSON.parse(readFileSync(BlixtKeystorePath, "utf8"));
+    if (parsed && typeof parsed === "object") {
+      keystoreCache = Object.fromEntries(
+        Object.entries(parsed as Record<string, unknown>).map(([key, value]) => [
+          key,
+          typeof value === "string" ? value : JSON.stringify(value),
+        ]),
+      );
+      return keystoreCache;
+    }
+  } catch (_error) {}
+
+  keystoreCache = {};
+  return keystoreCache;
+};
+
+const persistKeystore = (nextStore: Record<string, string>) => {
+  ensureBlixtPaths();
+  keystoreCache = nextStore;
+  writeFileSync(BlixtKeystorePath, JSON.stringify(nextStore), "utf8");
 };
 
 const isPlainObject = (value: unknown): value is Record<string, unknown> =>
@@ -172,6 +207,7 @@ export const createBlixtElectrobunHandlers = (): AdditionalElectrobunHandlers<an
           cachePath: normalizeFsPath(BlixtCachePath),
           sqlitePath: normalizeFsPath(BlixtSqlitePath),
           kvPath: normalizeFsPath(BlixtKvPath),
+          keystorePath: normalizeFsPath(BlixtKeystorePath),
         };
       },
 
@@ -400,6 +436,46 @@ export const createBlixtElectrobunHandlers = (): AdditionalElectrobunHandlers<an
         }
 
         persistKvStore(nextStore);
+        return true;
+      },
+
+      __BlixtKeystoreGetItem: async ({ key }: { key: string }) => {
+        if (typeof key !== "string") {
+          throw new Error("Invalid keystore getItem payload.");
+        }
+
+        const store = loadKeystore();
+        return Object.prototype.hasOwnProperty.call(store, key) ? store[key] : null;
+      },
+
+      __BlixtKeystoreGetAllItems: async () => {
+        return {
+          ...loadKeystore(),
+        };
+      },
+
+      __BlixtKeystoreSetItem: async ({ key, value }: { key: string; value: string }) => {
+        if (typeof key !== "string" || typeof value !== "string") {
+          throw new Error("Invalid keystore setItem payload.");
+        }
+
+        persistKeystore({
+          ...loadKeystore(),
+          [key]: value,
+        });
+        return true;
+      },
+
+      __BlixtKeystoreRemoveItem: async ({ key }: { key: string }) => {
+        if (typeof key !== "string") {
+          throw new Error("Invalid keystore removeItem payload.");
+        }
+
+        const nextStore = {
+          ...loadKeystore(),
+        };
+        delete nextStore[key];
+        persistKeystore(nextStore);
         return true;
       },
     },

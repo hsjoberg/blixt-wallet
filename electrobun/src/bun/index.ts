@@ -1,21 +1,34 @@
-import { BrowserWindow } from "electrobun/bun";
-import { defineTurboLndElectrobunRPC } from "react-native-turbo-lnd/electrobun/bun-rpc";
+import { BrowserWindow, defineElectrobunRPC } from "electrobun/bun";
 import { createBlixtElectrobunHandlers } from "./BlixtTools";
 
 const DEFAULT_TURBO_LND_RPC_MAX_REQUEST_TIME_MS = 10 * 60 * 1000;
+const flavor = process.env.FLAVOR?.trim().toLowerCase() ?? "normal";
+const isFakeLnd = flavor === "fakelnd";
 
-const appRpc = defineTurboLndElectrobunRPC({
+const additionalHandlers = {
   ...createBlixtElectrobunHandlers(),
   maxRequestTime: DEFAULT_TURBO_LND_RPC_MAX_REQUEST_TIME_MS,
-});
+};
+
+const appRpc = isFakeLnd
+  ? defineElectrobunRPC("bun", {
+      maxRequestTime: additionalHandlers.maxRequestTime,
+      handlers: {
+        requests: additionalHandlers.requests ?? {},
+        messages: additionalHandlers.messages ?? {},
+      },
+    })
+  : (
+      await import("react-native-turbo-lnd/electrobun/bun-rpc")
+    ).defineTurboLndElectrobunRPC(additionalHandlers);
 
 const mainWindow = new BrowserWindow({
   title: "Blixt Wallet",
   url: "views://mainview/dist/index.html",
   rpc: appRpc,
   frame: {
-    width: 1400,
-    height: 900,
+    width: 1600,
+    height: 1030,
     x: 500,
     y: 200,
   },
@@ -39,4 +52,4 @@ mainWindow.webview.on("dom-ready", () => {
   }, 100);
 });
 
-console.log("Blixt Electrobun app started");
+console.log(`Blixt Electrobun app started (flavor=${flavor})`);
