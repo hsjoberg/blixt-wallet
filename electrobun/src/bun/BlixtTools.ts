@@ -12,6 +12,7 @@ const BlixtCachePath = path.resolve(BlixtRootPath, "cache");
 const BlixtSqlitePath = path.resolve(BlixtRootPath, "sqlite.db");
 const BlixtKvPath = path.resolve(BlixtRootPath, "kv.json");
 const BlixtKeystorePath = path.resolve(BlixtRootPath, "keystore.json");
+const BlixtChain = process.env.CHAIN?.trim().toLowerCase() ?? "mainnet";
 
 const sqliteDatabaseMap = new Map<string, BunSqliteDatabase>();
 let nextDatabaseId = 1;
@@ -192,6 +193,71 @@ const getDatabaseOrThrow = (databaseId: string): BunSqliteDatabase => {
   return db;
 };
 
+const resolveLndLogPath = () =>
+  path.resolve(BlixtLndPath, "logs", "bitcoin", BlixtChain, "lnd.log");
+
+const resolveSpeedloaderLogPath = () => path.resolve(BlixtCachePath, "log", "speedloader.log");
+
+type LogKind = "lnd" | "speedloader";
+
+const resolveLogPath = (kind: LogKind) =>
+  kind === "speedloader" ? resolveSpeedloaderLogPath() : resolveLndLogPath();
+
+const ensureLogParentDirectory = (targetPath: string) => {
+  ensureDirectory(path.dirname(targetPath));
+};
+
+const readLog = ({
+  kind,
+  offset,
+  maxLines,
+}: {
+  kind: LogKind;
+  offset?: number;
+  maxLines?: number;
+}) => {
+  const logPath = resolveLogPath(kind);
+  ensureLogParentDirectory(logPath);
+
+  if (!existsSync(logPath)) {
+    return {
+      text: "",
+      nextOffset: 0,
+      path: normalizeFsPath(logPath),
+    };
+  }
+
+  const content = readFileSync(logPath);
+  const nextOffset = content.byteLength;
+  const parsedOffset = Number(offset);
+  const hasOffset = Number.isFinite(parsedOffset) && parsedOffset >= 0;
+
+  if (hasOffset) {
+    const startOffset = parsedOffset > nextOffset ? 0 : parsedOffset;
+    return {
+      text: content.subarray(startOffset).toString("utf8"),
+      nextOffset,
+      path: normalizeFsPath(logPath),
+    };
+  }
+
+  const text = content.toString("utf8");
+  const parsedMaxLines = Number(maxLines);
+  if (!Number.isFinite(parsedMaxLines) || parsedMaxLines <= 0) {
+    return {
+      text,
+      nextOffset,
+      path: normalizeFsPath(logPath),
+    };
+  }
+
+  return {
+    text: text.split(/\r?\n/).slice(-Math.floor(parsedMaxLines)).join("\n"),
+    nextOffset,
+    path: normalizeFsPath(logPath),
+  };
+};
+
 export const createBlixtElectrobunHandlers = (): AdditionalElectrobunHandlers<any> => {
   ensureBlixtPaths();
 
@@ -310,6 +376,19 @@ export const createBlixtElectrobunHandlers = (): AdditionalElectrobunHandlers<an
         return {
           deleted: true,
         };
+      },
+
+      __BlixtReadLog: async (payload?: {
+        kind?: LogKind;
+        offset?: number;
+        maxLines?: number;
+      }) => {
+        const kind = payload?.kind === "speedloader" ? "speedloader" : "lnd";
+        return readLog({
+          kind,
+          offset: payload?.offset,
+          maxLines: payload?.maxLines,
+        });
       },
 
       __BlixtKvGetItem: async ({ key }: { key: string }) => {
