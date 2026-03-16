@@ -4,7 +4,7 @@
   "description": "A simple Electrobun app showcasing core features",
   "scripts": {
     "prepare:bundle-assets": "bun ./scripts/prebuild.ts",
-    "start": "bun run prepare:bundle-asset && electrobun dev",
+    "start": "bun run prepare:bundle-assets && electrobun dev",
     "dev": "bun run prepare:bundle-assets && electrobun dev --watch",
     "build": "bun run prepare:bundle-assets && electrobun build",
     "package:stable": "bun run prepare:bundle-assets && electrobun build --env=stable"

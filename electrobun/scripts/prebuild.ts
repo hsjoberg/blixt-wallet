@@ -8,6 +8,19 @@ const NAPI_ADDON_FILENAME = "turbolnd_electrobun_napi.node";
 const requireFromElectrobun = createRequire(import.meta.url);
 const currentPlatform = platform();
 
+function getLndLibraryFilename(): string {
+  switch (currentPlatform) {
+    case "win32":
+      return "liblnd.dll";
+    case "linux":
+      return "liblnd.so";
+    case "darwin":
+      return "liblnd.dylib";
+    default:
+      throw new Error(`Unsupported platform for liblnd packaging: ${currentPlatform}`);
+  }
+}
+
 function getNapiPlatformArchDir(): string {
   const arch = process.arch;
   if (
@@ -50,11 +63,12 @@ function stageNapiAddon() {
 
 stageNapiAddon();
 
-const repoLndDllPath = resolve("..", "liblnd.dll");
-const localLndDllPath = resolve("vendor", "liblnd.dll");
-if (existsSync(repoLndDllPath)) {
+const lndLibraryFilename = getLndLibraryFilename();
+const repoLndLibraryPath = resolve("..", lndLibraryFilename);
+const localLndLibraryPath = resolve("vendor", lndLibraryFilename);
+if (existsSync(repoLndLibraryPath)) {
 	mkdirSync(resolve("vendor"), { recursive: true });
-	cpSync(repoLndDllPath, localLndDllPath, { dereference: true });
+	cpSync(repoLndLibraryPath, localLndLibraryPath, { dereference: true });
 }
 
 if (currentPlatform !== "win32") {
