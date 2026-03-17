@@ -9,10 +9,23 @@ import {
   normalizeFsPath,
 } from "./BlixtPaths";
 import { createFileKeystoreStore } from "./keystore/KeystoreStore.file";
+import { createLinuxKeystoreStore } from "./keystore/KeystoreStore.linux";
 import { createWindowsKeystoreStore } from "./keystore/KeystoreStore.windows";
 
-const keystoreStore =
-  process.platform === "win32" ? createWindowsKeystoreStore() : createFileKeystoreStore();
+const createKeystoreStore = () => {
+  if (process.platform === "win32") {
+    return createWindowsKeystoreStore();
+  }
+
+  const fileStore = createFileKeystoreStore();
+  if (process.platform === "linux") {
+    return createLinuxKeystoreStore(fileStore);
+  }
+
+  return fileStore;
+};
+
+const keystoreStore = createKeystoreStore();
 
 export const createKeystoreElectrobunHandlers = (): AdditionalElectrobunHandlers<any> => {
   return {

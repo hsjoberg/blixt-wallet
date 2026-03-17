@@ -76,19 +76,12 @@ $plainBytes = [System.Security.Cryptography.ProtectedData]::Unprotect(
 };
 
 export const createWindowsKeystoreStore = (): KeystoreStore => {
-  let cache: Record<string, string> | null = null;
-
   return {
     path: BlixtWindowsKeystorePath,
 
     load() {
-      if (cache !== null) {
-        return cache;
-      }
-
       if (!existsSync(BlixtWindowsKeystorePath)) {
-        cache = {};
-        return cache;
+        return {};
       }
 
       const ciphertextBase64 = readFileSync(BlixtWindowsKeystorePath, "utf8").trim();
@@ -102,8 +95,7 @@ export const createWindowsKeystoreStore = (): KeystoreStore => {
           throw new Error("Windows keystore payload must be a JSON object.");
         }
 
-        cache = normalizeStore(parsed as Record<string, unknown>);
-        return cache;
+        return normalizeStore(parsed as Record<string, unknown>);
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         throw new Error(
@@ -113,7 +105,6 @@ export const createWindowsKeystoreStore = (): KeystoreStore => {
     },
 
     persist(nextStore) {
-      cache = nextStore;
       writeFileSync(BlixtWindowsKeystorePath, dpapiEncrypt(JSON.stringify(nextStore)), "utf8");
     },
   };
