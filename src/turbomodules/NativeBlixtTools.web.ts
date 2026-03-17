@@ -33,8 +33,7 @@ const NativeBlixtToolsWeb: Spec = {
     crypto.getRandomValues(data);
     return btoa(String.fromCharCode(...data));
   },
-  log: (_level, tag, message) => {
-    console.log(`${tag}: ${message}`);
+  log: (_level, _tag, _message) => {
   },
   saveLogs: async () => "",
   copyLndLog: async () => false,

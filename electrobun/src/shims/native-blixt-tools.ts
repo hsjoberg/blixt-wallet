@@ -1,5 +1,11 @@
 import type { CodegenTypes } from "react-native";
 import { electrobunRequest } from "../shared/rpc-client.web";
+import {
+  type BlixtToolsElectrobunMethod,
+  type BlixtToolsRpcParams,
+  type BlixtToolsRpcResponse,
+  toBlixtToolsRpcMethodName,
+} from "../shared/blixt-tools-rpc";
 
 type EventListener<TPayload> = (payload: TPayload) => void;
 type EventSubscription = {
@@ -67,6 +73,16 @@ const requestElectrobun = async <TResponse = unknown>(
   return await electrobunRequest<TResponse>(method, params);
 };
 
+const requestBlixtTool = async <Method extends BlixtToolsElectrobunMethod>(
+  method: Method,
+  ...params: BlixtToolsRpcParams<Method>
+): Promise<BlixtToolsRpcResponse<Method> | null> => {
+  return await requestElectrobun<BlixtToolsRpcResponse<Method>>(
+    toBlixtToolsRpcMethodName(method),
+    params,
+  );
+};
+
 const syncLndLogCursor = async () => {
   const response = await requestElectrobun<LogCursorResponse>("__BlixtToolsGetLndLogCursor");
   lndLogPollState.nextOffset = response?.nextOffset ?? 0;
@@ -109,17 +125,19 @@ const pollLndLogDelta = async () => {
 
 export const electrobunNativeBlixtTools = {
   writeConfig: async (config: string) => {
-    return (await requestElectrobun<string>("__BlixtToolsWriteConfig", { config })) ?? "";
+    return (await requestBlixtTool("writeConfig", config)) ?? "";
   },
 
   generateSecureRandomAsBase64: async (length: number) => {
-    return await requestElectrobun<string>("__BlixtToolsGenerateSecureRandomAsBase64", { length });
+    return await requestBlixtTool("generateSecureRandomAsBase64", length);
+  },
+
+  log: async (level: "v" | "d" | "i" | "w" | "e", tag: string, message: string) => {
+    await requestBlixtTool("log", level, tag, message);
   },
 
   tailLog: async (numberOfLines: number) => {
-    const response = await requestElectrobun<string>("__BlixtToolsTailLog", {
-      numberOfLines,
-    });
+    const response = await requestBlixtTool("tailLog", numberOfLines);
     if (response === null) {
       return "";
     }
@@ -129,7 +147,7 @@ export const electrobunNativeBlixtTools = {
   },
 
   observeLndLogFile: async () => {
-    const started = await requestElectrobun<boolean>("__BlixtToolsObserveLndLogFile");
+    const started = await requestBlixtTool("observeLndLogFile");
     if (started !== true) {
       return false;
     }
@@ -147,23 +165,19 @@ export const electrobunNativeBlixtTools = {
   },
 
   tailSpeedloaderLog: async (numberOfLines: number) => {
-    return (
-      (await requestElectrobun<string>("__BlixtToolsTailSpeedloaderLog", {
-        numberOfLines,
-      })) ?? ""
-    );
+    return (await requestBlixtTool("tailSpeedloaderLog", numberOfLines)) ?? "";
   },
 
   getCacheDir: async () => {
-    return (await requestElectrobun<string>("__BlixtToolsGetCacheDir")) ?? "/tmp";
+    return (await requestBlixtTool("getCacheDir")) ?? "/tmp";
   },
 
   getFilesDir: async () => {
-    return (await requestElectrobun<string>("__BlixtToolsGetFilesDir")) ?? "/";
+    return (await requestBlixtTool("getFilesDir")) ?? "/";
   },
 
   getAppFolderPath: async () => {
-    return (await requestElectrobun<string>("__BlixtToolsGetAppFolderPath")) ?? "/";
+    return (await requestBlixtTool("getAppFolderPath")) ?? "/";
   },
 
   onLndLog: ((listener: EventListener<string>) => {

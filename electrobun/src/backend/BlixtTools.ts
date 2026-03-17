@@ -11,6 +11,16 @@ import {
   ensureDirectory,
   normalizeFsPath,
 } from "./BlixtPaths";
+import { backendLog, type BackendLogLevel } from "./BackendLog";
+import {
+  BlixtToolsElectrobunMethods,
+  type BlixtToolsElectrobunAsyncImplementation,
+  type BlixtToolsElectrobunMethod,
+  type BlixtToolsRpcMethodName,
+  type BlixtToolsRpcParams,
+  type BlixtToolsRpcResponse,
+  toBlixtToolsRpcMethodName,
+} from "../shared/blixt-tools-rpc";
 
 const resolveLndLogPath = () =>
   path.resolve(BlixtLndPath, "logs", "bitcoin", BlixtChain, "lnd.log");
@@ -73,52 +83,84 @@ const getLndLogCursor = () => {
   };
 };
 
+type BlixtToolsRpcRequestHandlers = {
+  [Method in BlixtToolsElectrobunMethod as BlixtToolsRpcMethodName<Method>]: (
+    params: BlixtToolsRpcParams<Method>,
+  ) => Promise<BlixtToolsRpcResponse<Method>>;
+};
+
+const blixtToolsImplementation = {
+  writeConfig: async (config: string) => {
+    writeFileSync(BlixtLndConfigPath, config, "utf8");
+
+    return normalizeFsPath(BlixtLndConfigPath);
+  },
+
+  generateSecureRandomAsBase64: async (length: number) => {
+    const parsedLength = Number(length);
+    if (!Number.isFinite(parsedLength) || parsedLength <= 0) {
+      throw new Error("Invalid generateSecureRandomAsBase64 payload.");
+    }
+
+    return randomBytes(Math.floor(parsedLength)).toString("base64");
+  },
+
+  log: async (level: "v" | "d" | "i" | "w" | "e", tag: string, message: string) => {
+    const backendLevel: BackendLogLevel =
+      level === "v" || level === "d"
+        ? "debug"
+        : level === "i"
+          ? "info"
+          : level === "w"
+            ? "warn"
+            : "error";
+
+    backendLog(backendLevel, `${tag}: ${message}`);
+  },
+
+  getFilesDir: async () => {
+    return normalizeFsPath(BlixtRootPath);
+  },
+
+  getCacheDir: async () => {
+    return normalizeFsPath(BlixtCachePath);
+  },
+
+  getAppFolderPath: async () => {
+    return `${normalizeFsPath(BlixtRootPath)}/`;
+  },
+
+  tailLog: async (numberOfLines: number) => {
+    return tailFile(resolveLndLogPath(), numberOfLines);
+  },
+
+  observeLndLogFile: async () => {
+    ensureLogParentDirectory(resolveLndLogPath());
+    return true;
+  },
+
+  tailSpeedloaderLog: async (numberOfLines: number) => {
+    return tailFile(resolveSpeedloaderLogPath(), numberOfLines);
+  },
+} satisfies BlixtToolsElectrobunAsyncImplementation;
+
+const createBlixtToolsRpcRequests = (): BlixtToolsRpcRequestHandlers => {
+  const requests = {} as BlixtToolsRpcRequestHandlers;
+
+  for (const method of BlixtToolsElectrobunMethods) {
+    const rpcMethodName = toBlixtToolsRpcMethodName(method);
+    requests[rpcMethodName] = (async (params) => {
+      return await blixtToolsImplementation[method](...params);
+    }) as BlixtToolsRpcRequestHandlers[typeof rpcMethodName];
+  }
+
+  return requests;
+};
+
 export const createBlixtToolsElectrobunHandlers = (): AdditionalElectrobunHandlers<any> => {
   return {
     requests: {
-      __BlixtToolsWriteConfig: async ({ config }: { config: string }) => {
-        if (typeof config !== "string") {
-          throw new Error("Invalid writeConfig payload.");
-        }
-
-        writeFileSync(BlixtLndConfigPath, config, "utf8");
-
-        return normalizeFsPath(BlixtLndConfigPath);
-      },
-
-      __BlixtToolsGenerateSecureRandomAsBase64: async ({ length }: { length: number }) => {
-        const parsedLength = Number(length);
-        if (!Number.isFinite(parsedLength) || parsedLength <= 0) {
-          throw new Error("Invalid generateSecureRandomAsBase64 payload.");
-        }
-
-        return randomBytes(Math.floor(parsedLength)).toString("base64");
-      },
-
-      __BlixtToolsGetFilesDir: async () => {
-        return normalizeFsPath(BlixtRootPath);
-      },
-
-      __BlixtToolsGetCacheDir: async () => {
-        return normalizeFsPath(BlixtCachePath);
-      },
-
-      __BlixtToolsGetAppFolderPath: async () => {
-        return `${normalizeFsPath(BlixtRootPath)}/`;
-      },
-
-      __BlixtToolsTailLog: async ({ numberOfLines }: { numberOfLines: number }) => {
-        return tailFile(resolveLndLogPath(), numberOfLines);
-      },
-
-      __BlixtToolsObserveLndLogFile: async () => {
-        ensureLogParentDirectory(resolveLndLogPath());
-        return true;
-      },
-
-      __BlixtToolsTailSpeedloaderLog: async ({ numberOfLines }: { numberOfLines: number }) => {
-        return tailFile(resolveSpeedloaderLogPath(), numberOfLines);
-      },
+      ...createBlixtToolsRpcRequests(),
 
       // Internal renderer helper used to poll for new log data while keeping the public
       // RPC method names aligned with the TurboModule surface above.

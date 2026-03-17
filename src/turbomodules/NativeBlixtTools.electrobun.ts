@@ -36,8 +36,8 @@ const NativeBlixtToolsElectrobun: Spec = {
     crypto.getRandomValues(data);
     return btoa(String.fromCharCode(...data));
   },
-  log: (_level, tag, message) => {
-    console.log(`${tag}: ${message}`);
+  log: (level, tag, message) => {
+    void electrobunNativeBlixtTools.log(level, tag, message);
   },
   saveLogs: async () => "",
   copyLndLog: async () => false,
