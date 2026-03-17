@@ -1,5 +1,9 @@
 const env = import.meta.env;
 const runtimeGlobals = globalThis as Record<string, unknown>;
+type BackendLogEntry = {
+  level: "debug" | "info" | "warn" | "error";
+  message: string;
+};
 
 if (typeof runtimeGlobals.global === "undefined") {
   runtimeGlobals.global = globalThis;
@@ -28,6 +32,77 @@ const isWebDemo = (env.BLIXT_WEB_DEMO ?? env.VITE_BLIXT_WEB_DEMO ?? "true") === 
 const isElectrobun =
   (env.VITE_IS_ELECTROBUN ?? "false") === "true" ||
   typeof (globalThis as { __electrobun?: unknown }).__electrobun !== "undefined";
+
+type ElectrobunConsoleMethod = "debug" | "info" | "warn" | "error" | "trace";
+type ElectrobunConsole = Console & {
+  __blixtElectrobunConsoleFallbacksInstalled__?: boolean;
+};
+
+function installElectrobunConsoleFallbacks() {
+  if (!isElectrobun) {
+    return;
+  }
+
+  // Electrobun currently surfaces console.log reliably, but not the other levels.
+  const electrobunConsole = console as ElectrobunConsole;
+  if (electrobunConsole.__blixtElectrobunConsoleFallbacksInstalled__ === true) {
+    return;
+  }
+
+  electrobunConsole.__blixtElectrobunConsoleFallbacksInstalled__ = true;
+  const log = electrobunConsole.log.bind(electrobunConsole);
+
+  const fallbackToLog = (level: ElectrobunConsoleMethod) => {
+    return (...args: unknown[]) => {
+      if (level === "trace") {
+        const trace = new Error().stack?.split("\n").slice(2).join("\n");
+        log("[trace]", ...args, ...(trace ? [trace] : []));
+        return;
+      }
+
+      log(`[${level}]`, ...args);
+    };
+  };
+
+  electrobunConsole.debug = fallbackToLog("debug");
+  electrobunConsole.info = fallbackToLog("info");
+  electrobunConsole.warn = fallbackToLog("warn");
+  electrobunConsole.error = fallbackToLog("error");
+  electrobunConsole.trace = fallbackToLog("trace");
+}
+
+installElectrobunConsoleFallbacks();
+
+async function installElectrobunBackendLogListener() {
+  if (!isElectrobun) {
+    return;
+  }
+
+  const { ensureElectrobunRpc } = await import("react-native-turbo-lnd/electrobun/rpc-runtime");
+  const rpc = ensureElectrobunRpc() as {
+    addMessageListener(message: string, listener: (payload: BackendLogEntry) => void): void;
+  };
+
+  rpc.addMessageListener("__BlixtBackendLog", (entry) => {
+    const level = entry?.level ?? "info";
+    const message = entry?.message ?? "";
+    const prefix = `[backend:${level}]`;
+
+    if (level === "error") {
+      console.error(prefix, message);
+      return;
+    }
+
+    if (level === "warn") {
+      console.warn(prefix, message);
+      return;
+    }
+
+    console.log(prefix, message);
+  });
+}
+
+void installElectrobunBackendLogListener();
 
 Object.assign(globalThis, {
   FLAVOR: flavor,

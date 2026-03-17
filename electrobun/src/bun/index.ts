@@ -2,6 +2,7 @@ import { BrowserWindow, defineElectrobunRPC } from "electrobun/bun";
 import type { AdditionalElectrobunHandlers } from "react-native-turbo-lnd/electrobun/bun-rpc-factory";
 import { ensureBlixtPaths } from "../backend/BlixtPaths";
 import { createAsyncStorageElectrobunHandlers } from "../backend/AsyncStorage";
+import { registerBackendLogListener } from "../backend/BackendLog";
 import { createBlixtToolsElectrobunHandlers } from "../backend/BlixtTools";
 import { createKeystoreElectrobunHandlers } from "../backend/Keystore";
 import { createTurboSqliteElectrobunHandlers } from "../backend/TurboSqlite";
@@ -49,9 +50,9 @@ const appRpc = isFakeLnd
         messages: additionalHandlers.messages ?? {},
       },
     })
-  : (
-      await import("react-native-turbo-lnd/electrobun/bun-rpc")
-    ).defineTurboLndElectrobunRPC(additionalHandlers);
+  : (await import("react-native-turbo-lnd/electrobun/bun-rpc")).defineTurboLndElectrobunRPC(
+      additionalHandlers,
+    );
 
 const mainWindow = new BrowserWindow({
   title: "Blixt Wallet",
@@ -63,6 +64,14 @@ const mainWindow = new BrowserWindow({
     x: 500,
     y: 200,
   },
+});
+
+registerBackendLogListener((entry) => {
+  try {
+    (appRpc.send as Record<string, (payload: unknown) => void>).__BlixtBackendLog?.(entry);
+  } catch (error) {
+    console.error("Failed to forward backend log to webview", error);
+  }
 });
 
 let didNormalizeInitialLayout = false;

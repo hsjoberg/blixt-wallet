@@ -1,4 +1,6 @@
 import { spawnSync, type SpawnSyncReturns } from "node:child_process";
+import { existsSync } from "node:fs";
+import { backendLog } from "../BackendLog";
 import type { KeystoreStore } from "./KeystoreStore";
 import { normalizeStore } from "./shared";
 
@@ -67,12 +69,17 @@ export const createLinuxKeystoreStore = (fileStore: KeystoreStore): KeystoreStor
     backend = "file";
     if (!warnedFallback) {
       warnedFallback = true;
-      console.log(`Linux keystore: falling back to file store (${reason}).`);
+      backendLog("info", `Linux keystore: falling back to file store (${reason}).`);
     }
   };
 
   const ensureBackend = () => {
     if (backend !== null) {
+      return backend;
+    }
+
+    if (existsSync(fileStore.path)) {
+      fallbackToFile(`existing keystore file found at ${fileStore.path}`);
       return backend;
     }
 
