@@ -1,9 +1,5 @@
 const env = import.meta.env;
 const runtimeGlobals = globalThis as Record<string, unknown>;
-type BackendLogEntry = {
-  level: "debug" | "info" | "warn" | "error";
-  message: string;
-};
 
 if (typeof runtimeGlobals.global === "undefined") {
   runtimeGlobals.global = globalThis;
@@ -72,37 +68,6 @@ function installElectrobunConsoleFallbacks() {
 }
 
 installElectrobunConsoleFallbacks();
-
-async function installElectrobunBackendLogListener() {
-  if (!isElectrobun) {
-    return;
-  }
-
-  const { ensureElectrobunRpc } = await import("react-native-turbo-lnd/electrobun/rpc-runtime");
-  const rpc = ensureElectrobunRpc() as {
-    addMessageListener(message: string, listener: (payload: BackendLogEntry) => void): void;
-  };
-
-  rpc.addMessageListener("__BlixtBackendLog", (entry) => {
-    const level = entry?.level ?? "info";
-    const message = entry?.message ?? "";
-    const prefix = `[backend:${level}]`;
-
-    if (level === "error") {
-      console.error(prefix, message);
-      return;
-    }
-
-    if (level === "warn") {
-      console.warn(prefix, message);
-      return;
-    }
-
-    console.log(prefix, message);
-  });
-}
-
-void installElectrobunBackendLogListener();
 
 Object.assign(globalThis, {
   FLAVOR: flavor,

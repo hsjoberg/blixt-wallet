@@ -68,7 +68,9 @@ const mainWindow = new BrowserWindow({
 
 registerBackendLogListener((entry) => {
   try {
-    (appRpc.send as Record<string, (payload: unknown) => void>).__BlixtBackendLog?.(entry);
+    const level = entry.level === "warn" || entry.level === "error" ? entry.level : "log";
+    const message = `[backend:${entry.level}] ${entry.message}`;
+    mainWindow.webview.executeJavascript(`console.${level}(${JSON.stringify(message)});`);
   } catch (error) {
     console.error("Failed to forward backend log to webview", error);
   }
