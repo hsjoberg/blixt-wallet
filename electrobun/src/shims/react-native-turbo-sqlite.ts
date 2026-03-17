@@ -1,49 +1,43 @@
+import type { Spec } from "react-native-turbo-sqlite";
 import { electrobunRequest } from "../shared/rpc-client.web";
+import {
+  TurboSqliteRpcMethodNames,
+  type TurboSqliteDatabase,
+  type TurboSqliteSqlParams,
+  type TurboSqliteTransportCloseDatabaseResponse,
+  type TurboSqliteTransportOpenDatabaseResponse,
+  turboSqliteVersionString,
+} from "../shared/turbo-sqlite-rpc";
 
-export type Params = Array<string | number | null | undefined | boolean>;
-
-export interface SqlResult {
-  rows: Array<{ [key: string]: any }>;
-  rowsAffected: number;
-  insertId: number;
-}
-
-export interface Database {
-  executeSql: (sql: string, params: Params) => Promise<SqlResult>;
-  close: () => Promise<void>;
-}
-
-type OpenDatabaseResponse = {
-  databaseId: string;
-};
-
-const TurboSqlite = {
-  openDatabase(path: string): Database {
-    const openPromise = electrobunRequest<OpenDatabaseResponse>("__TurboSqliteOpenDatabase", {
-      path,
-    });
+const TurboSqlite: Spec = {
+  openDatabase(path: string): TurboSqliteDatabase {
+    const openPromise = electrobunRequest<TurboSqliteTransportOpenDatabaseResponse>(
+      TurboSqliteRpcMethodNames.openDatabase,
+      [path],
+    );
 
     return {
-      async executeSql(sql: string, params: Params): Promise<SqlResult> {
+      async executeSql(sql: string, params: TurboSqliteSqlParams) {
         const { databaseId } = await openPromise;
-        return await electrobunRequest<SqlResult>("__TurboSqliteExecuteSql", {
+        return await electrobunRequest(TurboSqliteRpcMethodNames.executeSql, [
           databaseId,
           sql,
           params,
-        });
+        ]);
       },
 
-      async close(): Promise<void> {
+      async close() {
         const { databaseId } = await openPromise;
-        await electrobunRequest("__TurboSqliteCloseDatabase", {
-          databaseId,
-        });
+        await electrobunRequest<TurboSqliteTransportCloseDatabaseResponse>(
+          TurboSqliteRpcMethodNames.closeDatabase,
+          [databaseId],
+        );
       },
     };
   },
 
   getVersionString(): string {
-    return "electrobun-bun-sqlite";
+    return turboSqliteVersionString;
   },
 };
 

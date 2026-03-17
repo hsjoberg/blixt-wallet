@@ -2,6 +2,13 @@ import { rmSync } from "node:fs";
 import { Database as BunSqliteDatabase } from "bun:sqlite";
 import type { AdditionalElectrobunHandlers } from "react-native-turbo-lnd/electrobun/bun-rpc-factory";
 import { BlixtSqlitePath, normalizeFsPath } from "./BlixtPaths";
+import {
+  TurboSqliteRpcMethodNames,
+  type TurboSqliteTransport,
+  type TurboSqliteTransportCloseDatabaseResponse,
+  type TurboSqliteTransportDeleteDatabaseResponse,
+  type TurboSqliteTransportOpenDatabaseResponse,
+} from "../shared/turbo-sqlite-rpc";
 
 const sqliteDatabaseMap = new Map<string, BunSqliteDatabase>();
 let nextDatabaseId = 1;
@@ -71,57 +78,86 @@ const getDatabaseOrThrow = (databaseId: string): BunSqliteDatabase => {
   return db;
 };
 
+type TurboSqliteModuleRequestHandlers = {
+  [typeof TurboSqliteRpcMethodNames.openDatabase]: (
+    params: Parameters<TurboSqliteTransport["openDatabase"]>,
+  ) => Promise<Awaited<ReturnType<TurboSqliteTransport["openDatabase"]>>>;
+};
+
+type TurboSqliteDatabaseRequestHandlers = {
+  [typeof TurboSqliteRpcMethodNames.executeSql]: (
+    params: Parameters<TurboSqliteTransport["executeSql"]>,
+  ) => Promise<Awaited<ReturnType<TurboSqliteTransport["executeSql"]>>>;
+  [typeof TurboSqliteRpcMethodNames.closeDatabase]: (
+    params: Parameters<TurboSqliteTransport["closeDatabase"]>,
+  ) => Promise<Awaited<ReturnType<TurboSqliteTransport["closeDatabase"]>>>;
+};
+
+const turboSqliteTransport = {
+  openDatabase: async (_path: string): Promise<TurboSqliteTransportOpenDatabaseResponse> => {
+    const databaseId = `db-${nextDatabaseId++}`;
+    const db = new BunSqliteDatabase(BlixtSqlitePath, {
+      create: true,
+    });
+
+    sqliteDatabaseMap.set(databaseId, db);
+
+    return {
+      databaseId,
+      path: normalizeFsPath(BlixtSqlitePath),
+    };
+  },
+  executeSql: async (databaseId: string, sql: string, params) => {
+    const db = getDatabaseOrThrow(databaseId);
+    return executeSql(db, sql, Array.isArray(params) ? params : []);
+  },
+
+  closeDatabase: async (
+    databaseId: string,
+  ): Promise<TurboSqliteTransportCloseDatabaseResponse> => {
+    const db = sqliteDatabaseMap.get(databaseId);
+    if (!db) {
+      return {
+        closed: false,
+      };
+    }
+
+    db.close();
+    sqliteDatabaseMap.delete(databaseId);
+
+    return {
+      closed: true,
+    };
+  },
+} satisfies TurboSqliteTransport;
+
+const createTurboSqliteModuleRequests = (): TurboSqliteModuleRequestHandlers => {
+  return {
+    __TurboSqliteOpenDatabase: async (params) => {
+      return await turboSqliteTransport.openDatabase(...params);
+    },
+  };
+};
+
+const createTurboSqliteDatabaseRequests = (): TurboSqliteDatabaseRequestHandlers => {
+  return {
+    __TurboSqliteExecuteSql: async (params) => {
+      return await turboSqliteTransport.executeSql(...params);
+    },
+
+    __TurboSqliteCloseDatabase: async (params) => {
+      return await turboSqliteTransport.closeDatabase(...params);
+    },
+  };
+};
+
 export const createTurboSqliteElectrobunHandlers = (): AdditionalElectrobunHandlers<any> => {
   return {
     requests: {
-      __TurboSqliteOpenDatabase: async (_payload?: { path?: string }) => {
-        const databaseId = `db-${nextDatabaseId++}`;
-        const db = new BunSqliteDatabase(BlixtSqlitePath, {
-          create: true,
-        });
+      ...createTurboSqliteModuleRequests(),
+      ...createTurboSqliteDatabaseRequests(),
 
-        sqliteDatabaseMap.set(databaseId, db);
-
-        return {
-          databaseId,
-          path: normalizeFsPath(BlixtSqlitePath),
-        };
-      },
-
-      __TurboSqliteExecuteSql: async (payload: {
-        databaseId: string;
-        sql: string;
-        params?: unknown[];
-      }) => {
-        if (!payload || typeof payload.databaseId !== "string" || typeof payload.sql !== "string") {
-          throw new Error("Invalid sqlite execute payload.");
-        }
-
-        const db = getDatabaseOrThrow(payload.databaseId);
-        return executeSql(db, payload.sql, Array.isArray(payload.params) ? payload.params : []);
-      },
-
-      __TurboSqliteCloseDatabase: async ({ databaseId }: { databaseId: string }) => {
-        if (typeof databaseId !== "string") {
-          throw new Error("Invalid sqlite close payload.");
-        }
-
-        const db = sqliteDatabaseMap.get(databaseId);
-        if (!db) {
-          return {
-            closed: false,
-          };
-        }
-
-        db.close();
-        sqliteDatabaseMap.delete(databaseId);
-
-        return {
-          closed: true,
-        };
-      },
-
-      __TurboSqliteDeleteDatabase: async () => {
+      __TurboSqliteDeleteDatabase: async (): Promise<TurboSqliteTransportDeleteDatabaseResponse> => {
         for (const db of sqliteDatabaseMap.values()) {
           db.close();
         }
