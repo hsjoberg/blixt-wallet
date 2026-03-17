@@ -1,8 +1,6 @@
-import { readFileSync, writeFileSync } from "node:fs";
 import type { AdditionalElectrobunHandlers } from "react-native-turbo-lnd/electrobun/bun-rpc-factory";
 import {
   BlixtCachePath,
-  BlixtKeystorePath,
   BlixtKvPath,
   BlixtLndConfigPath,
   BlixtLndPath,
@@ -10,35 +8,11 @@ import {
   BlixtSqlitePath,
   normalizeFsPath,
 } from "./BlixtPaths";
+import { createFileKeystoreStore } from "./keystore/KeystoreStore.file";
+import { createWindowsKeystoreStore } from "./keystore/KeystoreStore.windows";
 
-let keystoreCache: Record<string, string> | null = null;
-
-const loadKeystore = (): Record<string, string> => {
-  if (keystoreCache !== null) {
-    return keystoreCache;
-  }
-
-  try {
-    const parsed = JSON.parse(readFileSync(BlixtKeystorePath, "utf8"));
-    if (parsed && typeof parsed === "object") {
-      keystoreCache = Object.fromEntries(
-        Object.entries(parsed as Record<string, unknown>).map(([key, value]) => [
-          key,
-          typeof value === "string" ? value : JSON.stringify(value),
-        ]),
-      );
-      return keystoreCache;
-    }
-  } catch (_error) {}
-
-  keystoreCache = {};
-  return keystoreCache;
-};
-
-const persistKeystore = (nextStore: Record<string, string>) => {
-  keystoreCache = nextStore;
-  writeFileSync(BlixtKeystorePath, JSON.stringify(nextStore), "utf8");
-};
+const keystoreStore =
+  process.platform === "win32" ? createWindowsKeystoreStore() : createFileKeystoreStore();
 
 export const createKeystoreElectrobunHandlers = (): AdditionalElectrobunHandlers<any> => {
   return {
@@ -51,7 +25,7 @@ export const createKeystoreElectrobunHandlers = (): AdditionalElectrobunHandlers
           cachePath: normalizeFsPath(BlixtCachePath),
           sqlitePath: normalizeFsPath(BlixtSqlitePath),
           kvPath: normalizeFsPath(BlixtKvPath),
-          keystorePath: normalizeFsPath(BlixtKeystorePath),
+          keystorePath: normalizeFsPath(keystoreStore.path),
         };
       },
 
@@ -60,13 +34,13 @@ export const createKeystoreElectrobunHandlers = (): AdditionalElectrobunHandlers
           throw new Error("Invalid keystore getItem payload.");
         }
 
-        const store = loadKeystore();
+        const store = keystoreStore.load();
         return Object.prototype.hasOwnProperty.call(store, key) ? store[key] : null;
       },
 
       __BlixtKeystoreGetAllItems: async () => {
         return {
-          ...loadKeystore(),
+          ...keystoreStore.load(),
         };
       },
 
@@ -75,8 +49,8 @@ export const createKeystoreElectrobunHandlers = (): AdditionalElectrobunHandlers
           throw new Error("Invalid keystore setItem payload.");
         }
 
-        persistKeystore({
-          ...loadKeystore(),
+        keystoreStore.persist({
+          ...keystoreStore.load(),
           [key]: value,
         });
         return true;
@@ -88,10 +62,10 @@ export const createKeystoreElectrobunHandlers = (): AdditionalElectrobunHandlers
         }
 
         const nextStore = {
-          ...loadKeystore(),
+          ...keystoreStore.load(),
         };
         delete nextStore[key];
-        persistKeystore(nextStore);
+        keystoreStore.persist(nextStore);
         return true;
       },
     },

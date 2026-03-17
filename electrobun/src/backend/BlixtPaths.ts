@@ -9,6 +9,7 @@ export const BlixtCachePath = path.resolve(BlixtRootPath, "cache");
 export const BlixtSqlitePath = path.resolve(BlixtRootPath, "sqlite.db");
 export const BlixtKvPath = path.resolve(BlixtRootPath, "kv.json");
 export const BlixtKeystorePath = path.resolve(BlixtRootPath, "keystore.json");
+export const BlixtWindowsKeystorePath = path.resolve(BlixtRootPath, "keystore.dpapi");
 export const BlixtChain = process.env.CHAIN?.trim().toLowerCase() ?? "mainnet";
 
 export const normalizeFsPath = (targetPath: string) => targetPath.replaceAll("\\", "/");
