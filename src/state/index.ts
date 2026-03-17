@@ -540,41 +540,15 @@ export const model: IStoreModel = {
       }
     };
 
-    if (IS_ELECTROBUN) {
-      log.i("IS_ELECTROBUN = true, polling wallet state");
-      const pollWalletState = async () => {
-        while (true) {
-          try {
-            const state = await getLndState({});
-            await onWalletState(state);
-
-            if (
-              state.state === WalletState.RPC_ACTIVE ||
-              (state.state === WalletState.SERVER_ACTIVE && getState().lightning.rpcReady)
-            ) {
-              break;
-            }
-          } catch (error: any) {
-            toast("getState: " + error.message, undefined, "danger");
-            break;
-          }
-
-          await timeout(1000);
-        }
-      };
-
-      pollWalletState();
-    } else {
-      subscribeState(
-        {},
-        async (state) => {
-          await onWalletState(state);
-        },
-        (error) => {
-          toast("subscribeState: " + error, undefined, "danger");
-        },
-      );
-    }
+    subscribeState(
+      {},
+      async (state) => {
+        await onWalletState(state);
+      },
+      (error) => {
+        toast("subscribeState: " + error, undefined, "danger");
+      },
+    );
 
     actions.setAppReady(true);
     log.d("App initialized");
