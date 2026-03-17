@@ -48,6 +48,7 @@ const secretServiceUnavailable = (result: SpawnSyncReturns<string> | NodeJS.Errn
   const stderr = result.stderr.trim().toLowerCase();
   return (
     stderr.includes("cannot autolaunch d-bus") ||
+    stderr.includes("could not connect") ||
     stderr.includes("no such secret collection") ||
     stderr.includes("no secret service") ||
     stderr.includes("service unknown") ||
@@ -64,6 +65,7 @@ const secretMissing = (result: SpawnSyncReturns<string>) => {
 export const createLinuxKeystoreStore = (fileStore: KeystoreStore): KeystoreStore => {
   let backend: LinuxKeystoreBackend | null = null;
   let warnedFallback = false;
+  let loggedSecretService = false;
 
   const fallbackToFile = (reason: string) => {
     backend = "file";
@@ -71,6 +73,15 @@ export const createLinuxKeystoreStore = (fileStore: KeystoreStore): KeystoreStor
       warnedFallback = true;
       backendLog("info", `Linux keystore: falling back to file store (${reason}).`);
     }
+  };
+
+  const useSecretService = () => {
+    backend = "secret-service";
+    if (!loggedSecretService) {
+      loggedSecretService = true;
+      backendLog("info", "Linux keystore: using Secret Service.");
+    }
+    return backend;
   };
 
   const ensureBackend = () => {
@@ -95,8 +106,7 @@ export const createLinuxKeystoreStore = (fileStore: KeystoreStore): KeystoreStor
     }
 
     if (probe.status === 0 || secretMissing(probe)) {
-      backend = "secret-service";
-      return backend;
+      return useSecretService();
     }
 
     if (secretServiceUnavailable(probe)) {
@@ -104,8 +114,7 @@ export const createLinuxKeystoreStore = (fileStore: KeystoreStore): KeystoreStor
       return backend;
     }
 
-    backend = "secret-service";
-    return backend;
+    return useSecretService();
   };
 
   const loadFromSecretService = (): Record<string, string> => {
