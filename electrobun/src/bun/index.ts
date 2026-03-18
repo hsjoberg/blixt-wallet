@@ -5,6 +5,7 @@ import { createAsyncStorageElectrobunHandlers } from "../backend/AsyncStorage";
 import { registerBackendLogListener } from "../backend/BackendLog";
 import { createBlixtToolsElectrobunHandlers } from "../backend/BlixtTools";
 import { createKeystoreElectrobunHandlers } from "../backend/Keystore";
+import { createNativeSpeedloaderElectrobunHandlers } from "../backend/NativeSpeedloader";
 import { createTurboSqliteElectrobunHandlers } from "../backend/TurboSqlite";
 
 const DEFAULT_TURBO_LND_RPC_MAX_REQUEST_TIME_MS = 10 * 60 * 1000;
@@ -34,6 +35,7 @@ const mergeAdditionalHandlers = (
 
 const additionalHandlers = mergeAdditionalHandlers(
   createBlixtToolsElectrobunHandlers(),
+  createNativeSpeedloaderElectrobunHandlers(),
   createTurboSqliteElectrobunHandlers(),
   createAsyncStorageElectrobunHandlers(),
   createKeystoreElectrobunHandlers(),
@@ -42,7 +44,7 @@ const additionalHandlers = mergeAdditionalHandlers(
   },
 );
 
-const appRpc = isFakeLnd
+const appRpc = isFakeLnd // Note: TurboLnd mocks are being wired in vite.config.ts
   ? defineElectrobunRPC("bun", {
       maxRequestTime: additionalHandlers.maxRequestTime,
       handlers: {

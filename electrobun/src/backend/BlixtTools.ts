@@ -119,7 +119,7 @@ const blixtToolsImplementation = {
   },
 
   getFilesDir: async () => {
-    return normalizeFsPath(BlixtRootPath);
+    return normalizeFsPath(BlixtLndPath);
   },
 
   getCacheDir: async () => {
