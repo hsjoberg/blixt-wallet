@@ -322,7 +322,7 @@ export default function Restore({ navigation }: IProps) {
                     style={{ marginTop: 6, marginBottom: 10 }}
                     small
                     onPress={pickChannelsExportFile}
-                    onLongPress={pickChannelDbFile}
+                    onLongPress={PLATFORM === "android" ? pickChannelDbFile : undefined}
                   >
                     <Text>{backupFile === null && t("restore.channel.file")}</Text>
                   </Button>

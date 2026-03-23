@@ -12,6 +12,9 @@ const applicationId = String(
 const versionName = String((globalThis as Record<string, unknown>).VERSION_NAME ?? "0.9.0-web");
 const versionCode = Number((globalThis as Record<string, unknown>).VERSION_CODE ?? 0);
 const buildType = String((globalThis as Record<string, unknown>).BUILD_TYPE ?? "debug");
+const unsupportedElectrobunChannelDbOperation = async (..._args: unknown[]): Promise<never> => {
+  throw new Error("channel.db import/export is not supported on Electrobun yet");
+};
 
 const NativeBlixtToolsElectrobun: Spec = {
   getFlavor: () => flavor,
@@ -56,8 +59,8 @@ const NativeBlixtToolsElectrobun: Spec = {
   getCacheDir: async () => await electrobunNativeBlixtTools.getCacheDir(),
   getFilesDir: async () => await electrobunNativeBlixtTools.getFilesDir(),
   getAppFolderPath: async () => await electrobunNativeBlixtTools.getAppFolderPath(),
-  saveChannelDbFile: async () => false,
-  importChannelDbFile: async () => false,
+  saveChannelDbFile: unsupportedElectrobunChannelDbOperation,
+  importChannelDbFile: unsupportedElectrobunChannelDbOperation,
   getIntentStringData: async () => null,
   getIntentNfcData: async () => null,
   DEBUG_deleteWallet: async () => true,

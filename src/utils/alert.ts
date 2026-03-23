@@ -19,34 +19,35 @@ export interface IHelperAlertOptions {
 
 class WebAlert implements AlertStatic {
   public alert(title: string, message?: string, buttons?: AlertButton[]): void {
-    if (IS_ELECTROBUN) {
-      if (getNavigator()?.getRootState()?.routeNames.includes("HelperAlert")) {
-        navigate<IHelperAlertNavigationProps>("HelperAlert", {
-          title,
-          message,
-          buttons: buttons?.length ? buttons : [{ text: "OK" }],
-        });
-        return;
-      }
-
-      if (buttons === undefined || buttons.length === 0) {
-        window.alert([title, message].filter(Boolean).join("\n"));
-        return;
-      }
-
-      const result = window.confirm([title, message].filter(Boolean).join("\n"));
-
-      if (result === true) {
-        const confirm = buttons.find(({ style }) => style !== "cancel");
-        confirm?.onPress?.();
-        return;
-      }
-
-      const cancel = buttons.find(({ style }) => style === "cancel");
-      cancel?.onPress?.();
-    } else {
+    if (PLATFORM !== "web") {
       RealAlert.alert(title, message, buttons);
+      return;
     }
+
+    if (IS_ELECTROBUN && getNavigator()?.getRootState()?.routeNames.includes("HelperAlert")) {
+      navigate<IHelperAlertNavigationProps>("HelperAlert", {
+        title,
+        message,
+        buttons: buttons?.length ? buttons : [{ text: "OK" }],
+      });
+      return;
+    }
+
+    if (buttons === undefined || buttons.length === 0) {
+      window.alert([title, message].filter(Boolean).join("\n"));
+      return;
+    }
+
+    const result = window.confirm([title, message].filter(Boolean).join("\n"));
+
+    if (result === true) {
+      const confirm = buttons.find(({ style }) => style !== "cancel");
+      confirm?.onPress?.();
+      return;
+    }
+
+    const cancel = buttons.find(({ style }) => style === "cancel");
+    cancel?.onPress?.();
   }
 
   public promiseAlert(

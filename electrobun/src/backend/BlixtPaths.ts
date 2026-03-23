@@ -2,7 +2,20 @@ import { existsSync, mkdirSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-export const BlixtRootPath = path.resolve(os.homedir(), ".blixt");
+const flavor = process.env.FLAVOR?.trim().toLowerCase() ?? "normal";
+export const BlixtChain = process.env.CHAIN?.trim().toLowerCase() ?? "mainnet";
+
+const rootPathSuffix = [
+  flavor !== "normal" ? flavor : null,
+  BlixtChain !== "mainnet" ? BlixtChain : null,
+]
+  .filter((segment): segment is string => segment !== null)
+  .join("-");
+
+export const BlixtRootPath = path.resolve(
+  os.homedir(),
+  rootPathSuffix.length > 0 ? `.blixt-${rootPathSuffix}` : ".blixt",
+);
 export const BlixtLndPath = path.resolve(BlixtRootPath, "lnd");
 export const BlixtLndConfigPath = path.resolve(BlixtLndPath, "lnd.conf");
 export const BlixtCachePath = path.resolve(BlixtRootPath, "cache");
@@ -10,7 +23,6 @@ export const BlixtSqlitePath = path.resolve(BlixtRootPath, "sqlite.db");
 export const BlixtKvPath = path.resolve(BlixtRootPath, "kv.json");
 export const BlixtKeystorePath = path.resolve(BlixtRootPath, "keystore.json");
 export const BlixtWindowsKeystorePath = path.resolve(BlixtRootPath, "keystore.dpapi");
-export const BlixtChain = process.env.CHAIN?.trim().toLowerCase() ?? "mainnet";
 
 export const normalizeFsPath = (targetPath: string) => targetPath.replaceAll("\\", "/");
 
