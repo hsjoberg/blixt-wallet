@@ -168,6 +168,14 @@ export const electrobunNativeBlixtTools = {
     return (await requestBlixtTool("tailSpeedloaderLog", numberOfLines)) ?? "";
   },
 
+  DEBUG_deleteSpeedloaderLastrunFile: async () => {
+    return (await requestBlixtTool("DEBUG_deleteSpeedloaderLastrunFile")) ?? false;
+  },
+
+  DEBUG_deleteSpeedloaderDgraphDirectory: async () => {
+    return (await requestBlixtTool("DEBUG_deleteSpeedloaderDgraphDirectory")) ?? false;
+  },
+
   getCacheDir: async () => {
     return (await requestBlixtTool("getCacheDir")) ?? "/tmp";
   },

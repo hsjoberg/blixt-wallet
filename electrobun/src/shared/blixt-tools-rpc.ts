@@ -13,6 +13,8 @@ export const BlixtToolsElectrobunMethods = [
   "tailLog",
   "observeLndLogFile",
   "tailSpeedloaderLog",
+  "DEBUG_deleteSpeedloaderLastrunFile",
+  "DEBUG_deleteSpeedloaderDgraphDirectory",
   "getCacheDir",
   "getFilesDir",
   "getAppFolderPath",

@@ -52,8 +52,10 @@ const NativeBlixtToolsElectrobun: Spec = {
   saveChannelsBackup: async () => false,
   saveChannelBackupFile: async () => false,
   getTorEnabled: async () => false,
-  DEBUG_deleteSpeedloaderLastrunFile: async () => true,
-  DEBUG_deleteSpeedloaderDgraphDirectory: async () => true,
+  DEBUG_deleteSpeedloaderLastrunFile: async () =>
+    await electrobunNativeBlixtTools.DEBUG_deleteSpeedloaderLastrunFile(),
+  DEBUG_deleteSpeedloaderDgraphDirectory: async () =>
+    await electrobunNativeBlixtTools.DEBUG_deleteSpeedloaderDgraphDirectory(),
   DEBUG_deleteNeutrinoFiles: async () => true,
   getInternalFiles: async () => ({}),
   getCacheDir: async () => await electrobunNativeBlixtTools.getCacheDir(),

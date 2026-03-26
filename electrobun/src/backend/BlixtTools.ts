@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import type { AdditionalElectrobunHandlers } from "react-native-turbo-lnd/electrobun/bun-rpc-factory";
 import {
@@ -26,6 +26,8 @@ const resolveLndLogPath = () =>
   path.resolve(BlixtLndPath, "logs", "bitcoin", BlixtChain, "lnd.log");
 
 const resolveSpeedloaderLogPath = () => path.resolve(BlixtCachePath, "log", "speedloader.log");
+const resolveSpeedloaderLastrunPath = () => path.resolve(BlixtCachePath, "lastrun");
+const resolveSpeedloaderDgraphPath = () => path.resolve(BlixtCachePath, "dgraph");
 
 const ensureLogParentDirectory = (targetPath: string) => {
   ensureDirectory(path.dirname(targetPath));
@@ -81,6 +83,15 @@ const getLndLogCursor = () => {
   return {
     nextOffset: readFileSync(logPath).byteLength,
   };
+};
+
+const deletePathIfPresent = (targetPath: string) => {
+  if (!existsSync(targetPath)) {
+    return false;
+  }
+
+  rmSync(targetPath, { force: false, recursive: true });
+  return !existsSync(targetPath);
 };
 
 type BlixtToolsRpcRequestHandlers = {
@@ -141,6 +152,14 @@ const blixtToolsImplementation = {
 
   tailSpeedloaderLog: async (numberOfLines: number) => {
     return tailFile(resolveSpeedloaderLogPath(), numberOfLines);
+  },
+
+  DEBUG_deleteSpeedloaderLastrunFile: async () => {
+    return deletePathIfPresent(resolveSpeedloaderLastrunPath());
+  },
+
+  DEBUG_deleteSpeedloaderDgraphDirectory: async () => {
+    return deletePathIfPresent(resolveSpeedloaderDgraphPath());
   },
 } satisfies BlixtToolsElectrobunAsyncImplementation;
 

@@ -81,40 +81,38 @@ class WebAlert implements AlertStatic {
     keyboardType?: string,
   ) {
     if (Platform.OS === "web") {
-      navigate<IPromptNavigationProps>("Prompt", {
-        title,
-        message,
-        defaultValue,
-        onOk: (result) => {
-          if (typeof callbackOrButtons === "object") {
-            const ok = callbackOrButtons.find(({ style }) => style !== "cancel");
-            ok?.onPress?.(result);
-          } else {
-            callbackOrButtons?.(result);
-          }
-        },
-        onCancel: () => {
-          if (typeof callbackOrButtons === "object") {
-            const cancel = callbackOrButtons.find(({ style }) => style === "cancel");
-            cancel?.onPress?.();
-          }
-        },
-      });
-    } else if (PLATFORM === "web") {
-      const result = window.prompt(message, defaultValue);
-      if (result === null) {
-        if (typeof callbackOrButtons === "object") {
-          const cancel = callbackOrButtons.find(({ style }) => style === "cancel");
-          cancel?.onPress?.();
-        }
-        // TODO callbackOrOptions?
-      } else {
+      const onOk = (result: string) => {
         if (typeof callbackOrButtons === "object") {
           const ok = callbackOrButtons.find(({ style }) => style !== "cancel");
           ok?.onPress?.(result);
         } else {
           callbackOrButtons?.(result);
         }
+      };
+      const onCancel = () => {
+        if (typeof callbackOrButtons === "object") {
+          const cancel = callbackOrButtons.find(({ style }) => style === "cancel");
+          cancel?.onPress?.();
+        }
+      };
+
+      const canUsePromptScreen = getNavigator()?.getRootState()?.routeNames.includes("Prompt");
+      if (canUsePromptScreen) {
+        navigate<IPromptNavigationProps>("Prompt", {
+          title,
+          message,
+          defaultValue,
+          onOk,
+          onCancel,
+        });
+        return;
+      }
+
+      const result = window.prompt(message, defaultValue);
+      if (result === null) {
+        onCancel();
+      } else {
+        onOk(result);
       }
     } else if (PLATFORM === "android") {
       const positiveText =
