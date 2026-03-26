@@ -11,11 +11,11 @@ The short version is:
 
 ## Runtime Overview
 
-The main entrypoint is [src/bun/index.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/bun/index.ts).
+The main entrypoint is [src/bun/index.ts](src/bun/index.ts).
 
 At startup it:
 
-- creates the `~/.blixt` directory structure
+- creates the OS-native app data/cache directory structure
 - registers all app-specific RPC handlers
 - creates the main `BrowserWindow`
 - forwards backend logs into the webview console as `[backend:<level>] ...`
@@ -35,23 +35,32 @@ The underlying RPC transport comes from:
 
 ## Directory Layout
 
-Important Electrobun paths are defined in [BlixtPaths.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/backend/BlixtPaths.ts):
+Important Electrobun paths are defined in [BlixtPaths.ts](src/backend/BlixtPaths.ts):
 
-- app root: `~/.blixt`
-- LND root: `~/.blixt/lnd`
-- cache: `~/.blixt/cache`
-- sqlite: `~/.blixt/sqlite.db`
-- key-value storage: `~/.blixt/kv.json`
-- default file keystore: `~/.blixt/keystore.json`
-- Windows secure keystore: `~/.blixt/keystore.dpapi`
+- app root:
+  - Windows: `%APPDATA%/blixt-wallet[-fakelnd][-testnet]`
+  - macOS: `~/Library/Application Support/blixt-wallet[-fakelnd][-testnet]`
+  - Linux: `${XDG_DATA_HOME:-~/.local/share}/blixt-wallet[-fakelnd][-testnet]`
+- LND root: `<app root>/lnd`
+- cache:
+  - Windows: `%LOCALAPPDATA%/blixt-wallet[-fakelnd][-testnet]`
+  - macOS: `~/Library/Caches/blixt-wallet[-fakelnd][-testnet]`
+  - Linux: `${XDG_CACHE_HOME:-~/.cache}/blixt-wallet[-fakelnd][-testnet]`
+- sqlite: `<app root>/sqlite.db`
+- key-value storage: `<app root>/kv.json`
+- default file keystore: `<app root>/keystore.json`
+- Windows secure keystore: `<app root>/keystore.dpapi`
+
+Examples:
+`blixt-wallet`, `blixt-wallet-testnet`, `blixt-wallet-fakelnd`, `blixt-wallet-fakelnd-testnet`
 
 `getFilesDir()` for Electrobun intentionally returns the LND root, not the app root. In practice that means:
 
-- `getFilesDir()` -> `~/.blixt/lnd`
-- `getAppFolderPath()` -> `~/.blixt/`
-- `getCacheDir()` -> `~/.blixt/cache`
+- `getFilesDir()` -> `<app root>/lnd`
+- `getAppFolderPath()` -> `<app root>/`
+- `getCacheDir()` -> `<cache root>`
 
-This matters for Speedloader and `channel.db`, which are expected under `~/.blixt/lnd/data/...`.
+This matters for Speedloader and `channel.db`, which are expected under `<app root>/lnd/data/...`.
 
 ## Wiring Model
 
@@ -88,7 +97,7 @@ That split is intentional:
 
 ## BlixtTools
 
-The backend implementation lives in [BlixtTools.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/backend/BlixtTools.ts).
+The backend implementation lives in [BlixtTools.ts](src/backend/BlixtTools.ts).
 
 It handles:
 
@@ -102,12 +111,12 @@ It handles:
 - `observeLndLogFile`
 - `tailSpeedloaderLog`
 
-The typed RPC name generation lives in [blixt-tools-rpc.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/shared/blixt-tools-rpc.ts).
+The typed RPC name generation lives in [blixt-tools-rpc.ts](src/shared/blixt-tools-rpc.ts).
 
 Notes:
 
 - `NativeBlixtTools.log(...)` goes to the backend logger, not just the renderer console.
-- Backend logs are also mirrored into the webview console by [src/bun/index.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/bun/index.ts).
+- Backend logs are also mirrored into the webview console by [src/bun/index.ts](src/bun/index.ts).
 - LND log tailing uses two internal helper RPC methods:
   - `__BlixtToolsReadLndLogDelta`
   - `__BlixtToolsGetLndLogCursor`
@@ -116,9 +125,9 @@ Those two helpers are intentionally manual and are not part of the public TurboM
 
 ## AsyncStorage Backend
 
-The Electrobun AsyncStorage backend lives in [AsyncStorage.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/backend/AsyncStorage.ts).
+The Electrobun AsyncStorage backend lives in [AsyncStorage.ts](src/backend/AsyncStorage.ts).
 
-It stores string values in `~/.blixt/kv.json`.
+It stores string values in `<app root>/kv.json`.
 
 Supported operations include:
 
@@ -141,7 +150,7 @@ Notes:
 
 ## Keystore
 
-The Electrobun keystore facade is [Keystore.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/backend/Keystore.ts).
+The Electrobun keystore facade is [Keystore.ts](src/backend/Keystore.ts).
 
 It exposes RPC methods for:
 
@@ -153,9 +162,9 @@ It exposes RPC methods for:
 
 The actual persistence is split by backend:
 
-- [KeystoreStore.file.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/backend/keystore/KeystoreStore.file.ts)
-- [KeystoreStore.windows.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/backend/keystore/KeystoreStore.windows.ts)
-- [KeystoreStore.linux.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/backend/keystore/KeystoreStore.linux.ts)
+- [KeystoreStore.file.ts](src/backend/keystore/KeystoreStore.file.ts)
+- [KeystoreStore.windows.ts](src/backend/keystore/KeystoreStore.windows.ts)
+- [KeystoreStore.linux.ts](src/backend/keystore/KeystoreStore.linux.ts)
 
 ### Windows
 
@@ -166,7 +175,7 @@ Implementation details:
 - Bun spawns `pwsh` first and falls back to `powershell`
 - `.NET` `ProtectedData.Protect/Unprotect` performs the encryption
 - the entire keystore is stored as one encrypted JSON blob
-- ciphertext is written to `~/.blixt/keystore.dpapi`
+- ciphertext is written to `<app root>/keystore.dpapi`
 
 Important properties:
 
@@ -214,15 +223,15 @@ Any non-Windows, non-Linux Electrobun platform currently uses the file backend.
 
 That means plaintext JSON in:
 
-- `~/.blixt/keystore.json`
+- `<app root>/keystore.json`
 
 ## TurboSqlite
 
-The Bun backend lives in [TurboSqlite.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/backend/TurboSqlite.ts).
+The Bun backend lives in [TurboSqlite.ts](src/backend/TurboSqlite.ts).
 
-The renderer shim lives in [react-native-turbo-sqlite.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/shims/react-native-turbo-sqlite.ts).
+The renderer shim lives in [react-native-turbo-sqlite.ts](src/shims/react-native-turbo-sqlite.ts).
 
-The shared transport contract lives in [turbo-sqlite-rpc.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/shared/turbo-sqlite-rpc.ts).
+The shared transport contract lives in [turbo-sqlite-rpc.ts](src/shared/turbo-sqlite-rpc.ts).
 
 This is one of the more important pieces to understand:
 
@@ -233,24 +242,24 @@ This is one of the more important pieces to understand:
 Flow:
 
 1. Renderer calls `openDatabase(path)`.
-2. Bun opens `~/.blixt/sqlite.db`.
+2. Bun opens `<app root>/sqlite.db`.
 3. Bun returns `{ databaseId, path }`.
 4. The renderer shim creates a real `Database` object that closes over `databaseId`.
 5. `executeSql(...)` and `close()` go back over RPC using that `databaseId`.
 
 Notes:
 
-- Electrobun always opens `~/.blixt/sqlite.db` currently.
+- Electrobun always opens `<app root>/sqlite.db` currently.
 - `getVersionString()` is shim-local and returns `electrobun-bun-sqlite`.
 - There is also an internal `__TurboSqliteDeleteDatabase` helper used outside the public sqlite `Spec`.
 
 ## NativeSpeedloader
 
-The Bun backend lives in [NativeSpeedloader.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/backend/NativeSpeedloader.ts).
+The Bun backend lives in [NativeSpeedloader.ts](src/backend/NativeSpeedloader.ts).
 
-The renderer shim lives in [native-speedloader.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/shims/native-speedloader.ts).
+The renderer shim lives in [native-speedloader.ts](src/shims/native-speedloader.ts).
 
-The app-facing TurboModule adapter is [NativeSpeedloader.electrobun.ts](/C:/Users/CocoT1/Projects/blixt-wallet/src/turbomodules/NativeSpeedloader.electrobun.ts).
+The app-facing TurboModule adapter is [NativeSpeedloader.electrobun.ts](../src/turbomodules/NativeSpeedloader.electrobun.ts).
 
 Implementation details:
 
@@ -277,7 +286,7 @@ It checks the current working directory, the Bun executable directory, packaged-
 
 ## Logging
 
-Backend logging is centralized in [BackendLog.ts](/C:/Users/CocoT1/Projects/blixt-wallet/electrobun/src/backend/BackendLog.ts).
+Backend logging is centralized in [BackendLog.ts](src/backend/BackendLog.ts).
 
 The current behavior is:
 
