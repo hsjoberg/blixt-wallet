@@ -20,8 +20,7 @@ import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { toast } from "../../utils";
 import { Alert } from "../../utils/alert";
-import { stopDaemon } from "react-native-turbo-lnd";
-import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
+import { restartAppOrNotify, showRestartNeededAlert } from "../../utils/restart-app";
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -126,18 +125,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
 
   const toggleTorEnabled = async () => {
     changeTorEnabled(!torEnabled);
-    if (PLATFORM === "android") {
-      try {
-        await stopDaemon({});
-      } catch (e) {
-        console.log(e);
-      }
-      NativeBlixtTools.restartApp();
-    } else {
-      const title = "Restart required";
-      const message = "Blixt Wallet has to be restarted before the new configuration is applied.";
-      Alert.alert(title, message);
-    }
+    await restartAppOrNotify();
   };
 
   const onSetBitcoinNodePress = async () => {
@@ -177,36 +165,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
   };
 
   const restartNeeded = () => {
-    const title = t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings });
-    const message = t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings });
-    if (PLATFORM === "android") {
-      Alert.alert(
-        title,
-        message +
-          "\n" +
-          t("bitcoinNetwork.restartDialog.msg1", { ns: namespaces.settings.settings }),
-        [
-          {
-            style: "cancel",
-            text: t("buttons.no", { ns: namespaces.common }),
-          },
-          {
-            style: "default",
-            text: t("buttons.yes", { ns: namespaces.common }),
-            onPress: async () => {
-              try {
-                await stopDaemon({});
-              } catch (e) {
-                console.log(e);
-              }
-              NativeBlixtTools.restartApp();
-            },
-          },
-        ],
-      );
-    } else {
-      Alert.alert(title, message);
-    }
+    showRestartNeededAlert();
   };
 
   const onLanguageChange = async () => {
@@ -253,7 +212,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
           <Icon type="Entypo" name="dots-three-horizontal" />
         </MenuTrigger>
         <MenuOptions customStyles={menuOptionsStyles}>
-          {PLATFORM !== "macos" && (
+          {["android", "ios"].includes(PLATFORM) && (
             <MenuOption
               onSelect={toggleTorEnabled}
               text={torEnabled ? t("menu.disableTor") : t("menu.enableTor")}

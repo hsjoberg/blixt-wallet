@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { Utils } from "electrobun/bun";
 import type { AdditionalElectrobunHandlers } from "react-native-turbo-lnd/electrobun/bun-rpc-factory";
 import {
   BlixtCachePath,
@@ -94,6 +95,67 @@ const deletePathIfPresent = (targetPath: string) => {
   return !existsSync(targetPath);
 };
 
+const resolveElectrobunRestartTarget = () => {
+  const launcherNames =
+    process.platform === "win32" ? ["launcher.exe", "launcher"] : ["launcher", "launcher.exe"];
+  const execPath = path.resolve(process.execPath);
+  const execDir = path.dirname(execPath);
+  const candidateDirectories = [
+    path.resolve(process.cwd()),
+    execDir,
+    path.resolve(execDir, ".."),
+    path.resolve(execDir, "..", "MacOS"),
+  ];
+  const uniqueDirectories = [...new Set(candidateDirectories)];
+
+  if (launcherNames.includes(path.basename(execPath).toLowerCase()) && existsSync(execPath)) {
+    return {
+      executable: execPath,
+      cwd: execDir,
+    };
+  }
+
+  for (const directory of uniqueDirectories) {
+    for (const launcherName of launcherNames) {
+      const executable = path.resolve(directory, launcherName);
+      if (existsSync(executable)) {
+        return {
+          executable,
+          cwd: directory,
+        };
+      }
+    }
+  }
+
+  throw new Error(
+    [
+      "Unable to resolve Electrobun launcher for restart.",
+      `process.execPath=${execPath}`,
+      `process.cwd()=${process.cwd()}`,
+      "Checked directories:",
+      ...uniqueDirectories.map((directory) => `  - ${directory}`),
+    ].join("\n"),
+  );
+};
+
+const restartElectrobunAppProcess = () => {
+  const restartTarget = resolveElectrobunRestartTarget();
+  backendLog("info", `Restarting Electrobun app via ${restartTarget.executable}`);
+
+  const replacementProcess = Bun.spawn([restartTarget.executable], {
+    cwd: restartTarget.cwd,
+    stdio: ["ignore", "ignore", "ignore"],
+  });
+
+  if (typeof replacementProcess.unref === "function") {
+    replacementProcess.unref();
+  }
+
+  globalThis.setTimeout(() => {
+    Utils.quit();
+  }, 50);
+};
+
 type BlixtToolsRpcRequestHandlers = {
   [Method in BlixtToolsElectrobunMethod as BlixtToolsRpcMethodName<Method>]: (
     params: BlixtToolsRpcParams<Method>,
@@ -127,6 +189,10 @@ const blixtToolsImplementation = {
             : "error";
 
     backendLog(backendLevel, `${tag}: ${message}`);
+  },
+
+  restartApp: async () => {
+    restartElectrobunAppProcess();
   },
 
   getFilesDir: async () => {

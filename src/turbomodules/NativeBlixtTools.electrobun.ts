@@ -68,7 +68,7 @@ const NativeBlixtToolsElectrobun: Spec = {
   DEBUG_deleteWallet: async () => true,
   DEBUG_deleteDatafolder: async () => true,
   restartApp: () => {
-    location.reload();
+    void electrobunNativeBlixtTools.restartApp();
   },
   checkICloudEnabled: async () => false,
   checkApplicationSupportExists: async () => true,

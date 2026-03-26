@@ -10,6 +10,7 @@ export const BlixtToolsElectrobunMethods = [
   "writeConfig",
   "generateSecureRandomAsBase64",
   "log",
+  "restartApp",
   "tailLog",
   "observeLndLogFile",
   "tailSpeedloaderLog",

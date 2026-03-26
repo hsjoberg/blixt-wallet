@@ -26,8 +26,6 @@ import { Linking, PermissionsAndroid, Platform, StyleSheet } from "react-native"
 import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
 import React, { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { camelCaseToSpace, formatISO, toast } from "../../utils";
-import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
-
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { useStoreActions, useStoreState } from "../../state/store";
 
@@ -44,13 +42,14 @@ import TorSvg from "./TorSvg";
 import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
-import { stopDaemon, verifyChanBackup } from "react-native-turbo-lnd";
+import { verifyChanBackup } from "react-native-turbo-lnd";
 import { NavigationProp } from "@react-navigation/native";
 import { base64Decode } from "@bufbuild/protobuf/wire";
 import { FlatList } from "react-native";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import Input from "../../components/Input";
 import ReactNativePermissions from "react-native-permissions";
+import { restartAppOrNotify, showRestartNeededAlert } from "../../utils/restart-app";
 
 interface ISettingsProps {
   navigation: NavigationProp<any>;
@@ -714,30 +713,7 @@ ${t("LN.inbound.dialog.msg3")}`;
   const changeNeutrinoPeers = useStoreActions((store) => store.settings.changeNeutrinoPeers);
   const writeConfig = useStoreActions((store) => store.writeConfig);
   const restartNeeded = () => {
-    const title = t("bitcoinNetwork.restartDialog.title");
-    const message = t("bitcoinNetwork.restartDialog.msg");
-    if (PLATFORM === "android") {
-      Alert.alert(title, message + "\n" + t("bitcoinNetwork.restartDialog.msg1"), [
-        {
-          style: "cancel",
-          text: t("buttons.no", { ns: namespaces.common }),
-        },
-        {
-          style: "default",
-          text: t("buttons.yes", { ns: namespaces.common }),
-          onPress: async () => {
-            try {
-              await stopDaemon({});
-            } catch (e: any) {
-              console.log(e);
-            }
-            NativeBlixtTools.restartApp();
-          },
-        },
-      ]);
-    } else {
-      Alert.alert(title, message);
-    }
+    showRestartNeededAlert();
   };
 
   const zeroConfPeers = useStoreState((store) => store.settings.zeroConfPeers);
@@ -1018,19 +994,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         text: t("buttons.yes", { ns: namespaces.common }),
         onPress: async () => {
           await changeTorEnabled(!torEnabled);
-          if (PLATFORM === "android") {
-            try {
-              await stopDaemon({});
-            } catch (e: any) {
-              console.log(e);
-            }
-            NativeBlixtTools.restartApp();
-          } else {
-            Alert.alert(
-              t("bitcoinNetwork.restartDialog.title"),
-              t("bitcoinNetwork.restartDialog.msg"),
-            );
-          }
+          await restartAppOrNotify();
         },
       },
     ]);

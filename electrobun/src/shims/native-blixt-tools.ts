@@ -136,6 +136,10 @@ export const electrobunNativeBlixtTools = {
     await requestBlixtTool("log", level, tag, message);
   },
 
+  restartApp: async () => {
+    await requestBlixtTool("restartApp");
+  },
+
   tailLog: async (numberOfLines: number) => {
     const response = await requestBlixtTool("tailLog", numberOfLines);
     if (response === null) {

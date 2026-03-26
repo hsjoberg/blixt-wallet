@@ -32,9 +32,9 @@ import { generateSecureRandom } from "../../lndmobile/index";
 import { LightningBoxStackParamList } from "./index";
 import logger from "../../utils/log";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-import { signMessage, stopDaemon } from "react-native-turbo-lnd";
+import { signMessage } from "react-native-turbo-lnd";
 import { SignMessageResponse } from "react-native-turbo-lnd/protos/lightning_pb";
-import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
+import { showRestartNeededAlert } from "../../utils/restart-app";
 
 const log = logger("LightningBoxRegistration");
 
@@ -171,23 +171,7 @@ export default function LightningBoxRegistration({ navigation }: ILightningBoxPr
   };
 
   const restartNeeded = () => {
-    const title = tSettings("bitcoinNetwork.restartDialog.title");
-    const message = tSettings("bitcoinNetwork.restartDialog.msg");
-
-    Alert.alert(title, message, [
-      {
-        style: "default",
-        text: t("buttons.ok", { ns: namespaces.common }),
-        onPress: async () => {
-          try {
-            await stopDaemon({});
-          } catch (e) {
-            console.log(e);
-          }
-          NativeBlixtTools.restartApp();
-        },
-      },
-    ]);
+    showRestartNeededAlert({ mode: "acknowledge" });
   };
 
   // Persistent services
