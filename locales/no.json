@@ -2,12 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "Lynadresse",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "Nodenavn",
       "description": "Beskrivelse",
       "amount": "Beløp",
       "fee": "Gebyr",
       "search": "Søk",
-      "viewInBlockExplorer": "Vis i blokkutforsker"
+      "viewInBlockExplorer": "Vis i blokkutforsker",
+      "blocks": "{{numBlocks}} blocks",
+      "reason": "Reason: {{reason}}"
     },
     "buttons": {
       "ok": "Ok",
@@ -75,7 +78,8 @@
       "onChainWallet": "På kjeden",
       "lightningChannels": "Lynkanaler",
       "keysendExperiment": "Keysend-eksperiment",
-      "showMore": "Avansert"
+      "showMore": "Avansert",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Laget med ⚡ i Sverige"
   },
@@ -204,6 +208,9 @@
       "description": {
         "title": "Melding",
         "placeholder": "Melding til betaler"
+      },
+      "preimage": {
+        "placeholder": "32-byte hex string"
       }
     }
   },
@@ -245,6 +252,9 @@
       },
       "feeEstimate": {
         "title": "Gebyranbefaling"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -262,6 +272,7 @@
     },
     "channel": {
       "alias": "Alias",
+      "bumpFee": "Bump Fee",
       "node": "Node",
       "channelId": "Kanal-ID",
       "channelPoint": "Kanalpunkt",
@@ -284,10 +295,22 @@
       "maturityHeight": "Modenhetsnivå",
       "localCommitmentTxid": "Lokal forpliktelse TXID",
       "remoteCommitmentTxid": "Ekstern forpliktelse TXID",
+      "enterDeliveryAddress": "Enter Closing Address",
+      "invalidAddress": "Enter a valid Bitcoin Address",
       "closeChannel": "Lukk kanal",
+      "forceCloseChannel": "Force Close Channel",
+      "closeChannelToAddress": "Close Channel to External Address",
       "forceClosePendingChannel": "Tving lukking av ventende kanal",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Lukk kanal"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },
@@ -418,6 +441,10 @@
       "name": {
         "ask": "Send mitt navn sammen med denne betalingen",
         "mandatory": "Navnet ditt må sendes sammen med denne betalingen"
+      },
+      "identifier": {
+        "ask": "Send my Lightning Address together with this payment",
+        "mandatory": "Your Lightning Address has to be sent together with this payment"
       }
     },
     "payloadErrors": {
@@ -613,6 +640,9 @@
       },
       "mapTheme": {
         "title": "Velg karttema"
+      },
+      "hideAmountsEnabled": {
+        "title": "Hide amounts"
       }
     },
     "wallet": {
@@ -732,14 +762,17 @@
       "rpc": {
         "title": "Angi bitcoind RPC-vert"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "Angi bitcoind ZMQ råblokk-vert"
       },
       "zmqRawTx": {
         "title": "Angi bitcoind ZMQ råtransaksjons-vert"
-      },
-      "p2tr": {
-        "title": "Aktiver mottak on-chain via Taproot (P2TR)"
       }
     },
     "LN": {
@@ -770,6 +803,16 @@
         "title": "Åpne kanaler automatisk",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Innkommende kanaltjenester",
         "subtitle": "Bruk en innkommende kanaltjeneste for å motta betalinger",
@@ -790,6 +833,28 @@
         "restoreDialog": {
           "title": "Gjenopprett Dunder Server",
           "msg": "Vil du gjenopprette til standard Dunder-server"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
+      "lightningBoxServer": {
+        "title": "Set Lightning Box server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set Lightning Box server"
+        },
+        "restoreDialog": {
+          "title": "Restore Lightning Box Server",
+          "msg": "Would you like to restore to the default Lightning Box server"
         }
       },
       "graphSync": {
@@ -864,6 +929,15 @@
         "restoreDialog": {
           "title": "Vil du gjenopprette lnd-loggnivået til standardnivået ({{defaultLndLogLevel}})?"
         }
+      },
+      "customInvoicePreimageEnabled": {
+        "title": "Enable custom invoice preimages"
+      },
+      "randomizeSettings": {
+        "title": "Randomize settings"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomize settings on startup"
       }
     },
     "experimental": {
@@ -992,8 +1066,13 @@
         "title": "Tving ryktesynkronisering ved oppstart"
       },
       "persistentServices": {
-        "title": "Aktiver vedvarende LND og Tor (hvis aktivert)"
+        "title": "Aktiver vedvarende LND og Tor (hvis aktivert)",
+        "subtitle": "The app stays active in the background"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
@@ -1092,6 +1171,33 @@
     "title": "Legg til midler",
     "msg1": "For å begynne å bruke Lightning i Blixt Lommebok",
     "msg2": "send bitcoins til adressen ovenfor"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Welcome to the Lightning Box registration.",
+      "whatIs": "Lightning Box is a Lightning Address service provider that forwards payment requests directly to the phone, giving you a self-custodial Lightning Address for mobile devices.",
+      "persistentMode": "This service is dependent on persistent mode, because the app must stay active to receive incoming payments. Please make sure that battery optimization is turned off on your device. Otherwise this service may not work.",
+      "currentRules": "The service is free to use. However, due to technical reasons it currently requires a channel with the Lightning Box provider. It's currently not possible to change your Lightning Address after you have chosen one."
+    },
+    "prerequisites": {
+      "prerequisites": "Prerequisites",
+      "checkingEligibility": "Checking eligibility...",
+      "eligible": "Eligible",
+      "youHaveChannel": "You have a channel with the Lightning Box service.",
+      "notEligible": "Not eligible"
+    },
+    "registration": {
+      "registration": "Registration",
+      "fields": {
+        "address": "Address",
+        "messageToPayer": "Message to the payer"
+      },
+      "register": "Register"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Your Lightning Address by Lightning Box is:",
+    "showQrCode": "Show QR code"
   },
   "welcome.almostDone": {
     "autopilot": {

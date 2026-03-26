@@ -78,7 +78,8 @@
       "onChainWallet": "On-chain",
       "lightningChannels": "Canale Lightning",
       "keysendExperiment": "Keysend Experiment",
-      "showMore": "Avansat"
+      "showMore": "Avansat",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Made with ⚡ in Sweden"
   },
@@ -802,6 +803,16 @@
         "title": "Deschidere automată de canale",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Servicii de canale de intrare",
         "subtitle": "Utilizați un serviciu de canal de intrare pentru primirea plăților",
@@ -1058,6 +1069,10 @@
         "title": "Activați aplicația persistentă",
         "subtitle": "Aplicația rămâne activă în fundal"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {

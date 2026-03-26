@@ -2,12 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "Salamaosoite",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "Solmun lempinimi",
       "description": "Kuvaus",
       "amount": "Määrä",
       "fee": "Palkkio",
       "search": "Etsi",
-      "viewInBlockExplorer": "Näytä lohko-selaimessa"
+      "viewInBlockExplorer": "Näytä lohko-selaimessa",
+      "blocks": "{{numBlocks}} blocks",
+      "reason": "Reason: {{reason}}"
     },
     "buttons": {
       "ok": "Ok",
@@ -75,7 +78,8 @@
       "onChainWallet": "Ketjulompakko",
       "lightningChannels": "Salama-kanavat",
       "keysendExperiment": "Keysend-koe",
-      "showMore": "Lisää asetuksia"
+      "showMore": "Lisää asetuksia",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Valmistettu ⚡ Ruotsissa"
   },
@@ -248,6 +252,9 @@
       },
       "feeEstimate": {
         "title": "Maksuarvion mukaan"
+      },
+      "outgoingChannel": {
+        "title": "Outbound Channel"
       }
     }
   },
@@ -265,6 +272,7 @@
     },
     "channel": {
       "alias": "Aliaksen nimi",
+      "bumpFee": "Bump Fee",
       "node": "Solmu",
       "channelId": "Kanavan tunniste",
       "channelPoint": "Kanavan piste",
@@ -287,10 +295,22 @@
       "maturityHeight": "Kypsyyskorkeus",
       "localCommitmentTxid": "Paikallinen sitoutumisen TXID",
       "remoteCommitmentTxid": "Etäinen sitoutumisen TXID",
+      "enterDeliveryAddress": "Enter Closing Address",
+      "invalidAddress": "Enter a valid Bitcoin Address",
       "closeChannel": "Sulje kanava",
+      "forceCloseChannel": "Force Close Channel",
+      "closeChannelToAddress": "Close Channel to External Address",
       "forceClosePendingChannel": "Väkisin sulje odottava kanava",
+      "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Sulje kanava"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },
@@ -421,6 +441,10 @@
       "name": {
         "ask": "Lähetä nimeni tämän maksun kanssa",
         "mandatory": "Nimesi on lähetettävä tämän maksun kanssa"
+      },
+      "identifier": {
+        "ask": "Send my Lightning Address together with this payment",
+        "mandatory": "Your Lightning Address has to be sent together with this payment"
       }
     },
     "payloadErrors": {
@@ -616,6 +640,9 @@
       },
       "mapTheme": {
         "title": "Aseta kartan teema"
+      },
+      "hideAmountsEnabled": {
+        "title": "Hide amounts"
       }
     },
     "wallet": {
@@ -735,14 +762,17 @@
       "rpc": {
         "title": "Aseta bitcoindin RPC-isäntä"
       },
+      "rpcuser": {
+        "title": "Set the bitcoind RPC User"
+      },
+      "rpcpass": {
+        "title": "Set the bitcoind RPC Password"
+      },
       "zmqRawBlock": {
         "title": "Aseta bitcoindin ZMQ Raw Block -isäntä"
       },
       "zmqRawTx": {
         "title": "Aseta bitcoindin ZMQ Raw Tx -isäntä"
-      },
-      "p2tr": {
-        "title": "Ota käyttöön vastaanotto ketjussa Taprootin kautta (P2TR)"
       }
     },
     "LN": {
@@ -773,6 +803,16 @@
         "title": "Avaa kanavat automaattisesti",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Saapuvat kanavapalvelut",
         "subtitle": "Käytä saapuvaa kanavapalvelua maksujen vastaanottamiseen",
@@ -793,6 +833,28 @@
         "restoreDialog": {
           "title": "Palauta Dunder-palvelin",
           "msg": "Haluatko palauttaa oletusarvoiseen Dunder-palvelimeen"
+        }
+      },
+      "speedloaderServer": {
+        "title": "Set LN channel sync server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set LN Sync channel server"
+        },
+        "restoreDialog": {
+          "title": "Restore LN channel sync Server",
+          "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
+      "lightningBoxServer": {
+        "title": "Set Lightning Box server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set Lightning Box server"
+        },
+        "restoreDialog": {
+          "title": "Restore Lightning Box Server",
+          "msg": "Would you like to restore to the default Lightning Box server"
         }
       },
       "graphSync": {
@@ -870,6 +932,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "Ota mukautetut laskun esikuvat käyttöön"
+      },
+      "randomizeSettings": {
+        "title": "Randomize settings"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomize settings on startup"
       }
     },
     "experimental": {
@@ -998,8 +1066,13 @@
         "title": "Pakota juoruksen synkronointi käynnistyksen yhteydessä"
       },
       "persistentServices": {
-        "title": "Ota käyttöön pysyvät LND- ja Tor-palvelut (jos käytössä)"
+        "title": "Ota käyttöön pysyvät LND- ja Tor-palvelut (jos käytössä)",
+        "subtitle": "The app stays active in the background"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
@@ -1098,6 +1171,33 @@
     "title": "Lisää varoja",
     "msg1": "Aloittaaksesi Salaman käytön Blixt-lompakossa",
     "msg2": "lähetä bitcoineja yllä olevaan osoitteeseen"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Welcome to the Lightning Box registration.",
+      "whatIs": "Lightning Box is a Lightning Address service provider that forwards payment requests directly to the phone, giving you a self-custodial Lightning Address for mobile devices.",
+      "persistentMode": "This service is dependent on persistent mode, because the app must stay active to receive incoming payments. Please make sure that battery optimization is turned off on your device. Otherwise this service may not work.",
+      "currentRules": "The service is free to use. However, due to technical reasons it currently requires a channel with the Lightning Box provider. It's currently not possible to change your Lightning Address after you have chosen one."
+    },
+    "prerequisites": {
+      "prerequisites": "Prerequisites",
+      "checkingEligibility": "Checking eligibility...",
+      "eligible": "Eligible",
+      "youHaveChannel": "You have a channel with the Lightning Box service.",
+      "notEligible": "Not eligible"
+    },
+    "registration": {
+      "registration": "Registration",
+      "fields": {
+        "address": "Address",
+        "messageToPayer": "Message to the payer"
+      },
+      "register": "Register"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Your Lightning Address by Lightning Box is:",
+    "showQrCode": "Show QR code"
   },
   "welcome.almostDone": {
     "autopilot": {

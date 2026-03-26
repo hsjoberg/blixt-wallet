@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "Địa chỉ Lightning",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "Tên riêng nút",
       "description": "Mô tả",
       "amount": "Số lượng",
       "fee": "Phí",
       "search": "Tìm kiếm",
       "viewInBlockExplorer": "Xem bằng trình duyệt khối",
-      "blocks": "{{numBlocks}} blocks"
+      "blocks": "{{numBlocks}} blocks",
+      "reason": "Reason: {{reason}}"
     },
     "buttons": {
       "ok": "Ok",
@@ -76,7 +78,8 @@
       "onChainWallet": "Trên chuỗi",
       "lightningChannels": "Kênh Lightning",
       "keysendExperiment": "Thử nghiệm Keysend",
-      "showMore": "Nâng cao"
+      "showMore": "Nâng cao",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Thực hiện với ⚡ tại Thụy Điển"
   },
@@ -269,6 +272,7 @@
     },
     "channel": {
       "alias": "Tên riêng",
+      "bumpFee": "Bump Fee",
       "node": "Nút",
       "channelId": "ID kênh",
       "channelPoint": "Channel point",
@@ -291,11 +295,22 @@
       "maturityHeight": "Chiều cao trưởng thành",
       "localCommitmentTxid": "TXID cam kết tại chỗ",
       "remoteCommitmentTxid": "TXID cam kết từ xa",
+      "enterDeliveryAddress": "Enter Closing Address",
+      "invalidAddress": "Enter a valid Bitcoin Address",
       "closeChannel": "Đóng kênh",
+      "forceCloseChannel": "Force Close Channel",
+      "closeChannelToAddress": "Close Channel to External Address",
       "forceClosePendingChannel": "Bắt buộc đóng nguồn đang chờ xử lý",
       "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Đóng kênh"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },
@@ -426,6 +441,10 @@
       "name": {
         "ask": "Gửi tên tôi cùng với khoản thanh toán này",
         "mandatory": "Tên bạn đã được gửi cùng với khoản thanh toán này"
+      },
+      "identifier": {
+        "ask": "Send my Lightning Address together with this payment",
+        "mandatory": "Your Lightning Address has to be sent together with this payment"
       }
     },
     "payloadErrors": {
@@ -621,6 +640,9 @@
       },
       "mapTheme": {
         "title": "Thiết lập theme bản đồ"
+      },
+      "hideAmountsEnabled": {
+        "title": "Hide amounts"
       }
     },
     "wallet": {
@@ -781,6 +803,16 @@
         "title": "Tự động mở kênh",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Dịch vụ kênh đến",
         "subtitle": "Sử dụng dịch vụ kênh đến để nhận thanh toán",
@@ -812,6 +844,17 @@
         "restoreDialog": {
           "title": "Restore LN channel sync Server",
           "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
+      "lightningBoxServer": {
+        "title": "Set Lightning Box server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set Lightning Box server"
+        },
+        "restoreDialog": {
+          "title": "Restore Lightning Box Server",
+          "msg": "Would you like to restore to the default Lightning Box server"
         }
       },
       "graphSync": {
@@ -889,6 +932,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "Enable custom invoice preimages"
+      },
+      "randomizeSettings": {
+        "title": "Randomize settings"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomize settings on startup"
       }
     },
     "experimental": {
@@ -1020,6 +1069,10 @@
         "title": "Enable persistent app",
         "subtitle": "The app stays active in the background"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
@@ -1118,6 +1171,33 @@
     "title": "Thêm quỹ",
     "msg1": "Để bắt đầu sử dụng Lightning trong Ví Blixt",
     "msg2": "gửi bitcoin đến địa chỉ trên"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Welcome to the Lightning Box registration.",
+      "whatIs": "Lightning Box is a Lightning Address service provider that forwards payment requests directly to the phone, giving you a self-custodial Lightning Address for mobile devices.",
+      "persistentMode": "This service is dependent on persistent mode, because the app must stay active to receive incoming payments. Please make sure that battery optimization is turned off on your device. Otherwise this service may not work.",
+      "currentRules": "The service is free to use. However, due to technical reasons it currently requires a channel with the Lightning Box provider. It's currently not possible to change your Lightning Address after you have chosen one."
+    },
+    "prerequisites": {
+      "prerequisites": "Prerequisites",
+      "checkingEligibility": "Checking eligibility...",
+      "eligible": "Eligible",
+      "youHaveChannel": "You have a channel with the Lightning Box service.",
+      "notEligible": "Not eligible"
+    },
+    "registration": {
+      "registration": "Registration",
+      "fields": {
+        "address": "Address",
+        "messageToPayer": "Message to the payer"
+      },
+      "register": "Register"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Your Lightning Address by Lightning Box is:",
+    "showQrCode": "Show QR code"
   },
   "welcome.almostDone": {
     "autopilot": {

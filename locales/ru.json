@@ -78,7 +78,8 @@
       "onChainWallet": "Ончейн",
       "lightningChannels": "Каналы Молния",
       "keysendExperiment": "Эксперимент Keysend",
-      "showMore": "Продвинутые опции"
+      "showMore": "Продвинутые опции",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Сделано с ⚡, в Швеции"
   },
@@ -89,7 +90,7 @@
       "more": "Больше инфо"
     },
     "sendOnChain": {
-      "title": "Добро пожаловать в кошелёк Bixt!",
+      "title": "Добро пожаловать в кошелёк Biixt Wallet!",
       "msg1": "Чтобы начать, отправьте биткоины ончейн на адрес справа.",
       "msg2": "Ваш канал будет открыт автоматически.",
       "msg3": "Отправьте как минимум",
@@ -271,6 +272,7 @@
     },
     "channel": {
       "alias": "Имя",
+      "bumpFee": "Bump Fee",
       "node": "Узел",
       "channelId": "ID Канала",
       "channelPoint": "Точка канала",
@@ -293,11 +295,22 @@
       "maturityHeight": "Высота расчёта",
       "localCommitmentTxid": "Локальное обязательство TXID",
       "remoteCommitmentTxid": "Удалённое обязательство TXID",
+      "enterDeliveryAddress": "Enter Closing Address",
+      "invalidAddress": "Enter a valid Bitcoin Address",
       "closeChannel": "Закрыть канал",
+      "forceCloseChannel": "Force Close Channel",
+      "closeChannelToAddress": "Close Channel to External Address",
       "forceClosePendingChannel": "Принудительно закрыть ожидающий канал",
       "forceCloseDelay": "Задержка закрытия силы",
       "closeChannelPrompt": {
         "title": "Закрыть канал"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },
@@ -627,6 +640,9 @@
       },
       "mapTheme": {
         "title": "Установить тему карты"
+      },
+      "hideAmountsEnabled": {
+        "title": "Hide amounts"
       }
     },
     "wallet": {
@@ -787,6 +803,16 @@
         "title": "Автоматически открывать каналы",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Услуги входящих каналов",
         "subtitle": "Использовать сервис входящего канала для приема платежей",
@@ -906,6 +932,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "Включить индивидуальные счета -фактуры"
+      },
+      "randomizeSettings": {
+        "title": "Randomize settings"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomize settings on startup"
       }
     },
     "experimental": {
@@ -1037,6 +1069,10 @@
         "title": "Включить постоянное приложение",
         "subtitle": "Приложение остается активным в фоновом режиме"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {

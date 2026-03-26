@@ -78,7 +78,8 @@
       "onChainWallet": "روی زنجیره",
       "lightningChannels": "کانال‌های لایتنینگ",
       "keysendExperiment": "آزمایش کلیدفرست",
-      "showMore": "پیشرفته"
+      "showMore": "پیشرفته",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "ساخته شده با ⚡ در سوئد"
   },
@@ -802,6 +803,16 @@
         "title": "باز کردن کانال به صورت خودکار",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "کاره‌های کانال درون‌سو",
         "subtitle": "استفاده از کاره‌ی کانال درون‌سو برای دریافت پرداخت",
@@ -1058,6 +1069,10 @@
         "title": "فعال‌سازی حالت ماندگار",
         "subtitle": "برنامه در پیش‌زمینه فعال خواهد ماند"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {

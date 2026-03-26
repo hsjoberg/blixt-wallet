@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "عنوان البرق",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "اسم العقدة",
       "description": "الوصف",
       "amount": "المبلغ",
       "fee": "الرسوم",
       "search": "بحث",
       "viewInBlockExplorer": "عرض في مستكشف الكتل",
-      "blocks": "{{numBlocks}} blocks"
+      "blocks": "{{numBlocks}} blocks",
+      "reason": "Reason: {{reason}}"
     },
     "buttons": {
       "ok": "موافق",
@@ -76,7 +78,8 @@
       "onChainWallet": "محفظة السلسلة",
       "lightningChannels": "قنوات البرق",
       "keysendExperiment": "تجربة KeySend",
-      "showMore": "مزيد من الخيارات"
+      "showMore": "مزيد من الخيارات",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "صُنعت بواسطة ⚡ في السويد"
   },
@@ -269,6 +272,7 @@
     },
     "channel": {
       "alias": "الاسم المستعار",
+      "bumpFee": "Bump Fee",
       "node": "العقد",
       "channelId": "معرف القناة",
       "channelPoint": "نقطة القناة",
@@ -291,11 +295,22 @@
       "maturityHeight": "ارتفاع النضج",
       "localCommitmentTxid": "معرّف TXID المحلي للالتزام",
       "remoteCommitmentTxid": "معرّف TXID البعيد للالتزام",
+      "enterDeliveryAddress": "Enter Closing Address",
+      "invalidAddress": "Enter a valid Bitcoin Address",
       "closeChannel": "إغلاق القناة",
+      "forceCloseChannel": "Force Close Channel",
+      "closeChannelToAddress": "Close Channel to External Address",
       "forceClosePendingChannel": "إغلاق قناة معلقة بالقوة",
       "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "إغلاق القناة"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },
@@ -426,6 +441,10 @@
       "name": {
         "ask": "أرسل اسمي مع هذا الدفع",
         "mandatory": "يجب أن يتم إرسال اسمك مع هذا الدفع"
+      },
+      "identifier": {
+        "ask": "Send my Lightning Address together with this payment",
+        "mandatory": "Your Lightning Address has to be sent together with this payment"
       }
     },
     "payloadErrors": {
@@ -621,6 +640,9 @@
       },
       "mapTheme": {
         "title": "تعيين سمة الخريطة"
+      },
+      "hideAmountsEnabled": {
+        "title": "Hide amounts"
       }
     },
     "wallet": {
@@ -781,6 +803,16 @@
         "title": "فتح القنوات تلقائياً",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "خدمات القنوات الواردة",
         "subtitle": "استخدم خدمة قناة واردة لاستقبال المدفوعات",
@@ -812,6 +844,17 @@
         "restoreDialog": {
           "title": "Restore LN channel sync Server",
           "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
+      "lightningBoxServer": {
+        "title": "Set Lightning Box server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set Lightning Box server"
+        },
+        "restoreDialog": {
+          "title": "Restore Lightning Box Server",
+          "msg": "Would you like to restore to the default Lightning Box server"
         }
       },
       "graphSync": {
@@ -889,6 +932,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "تمكين الصور المسبقة للفاتورة المخصصة"
+      },
+      "randomizeSettings": {
+        "title": "Randomize settings"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomize settings on startup"
       }
     },
     "experimental": {
@@ -1020,6 +1069,10 @@
         "title": "Enable persistent app",
         "subtitle": "The app stays active in the background"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
@@ -1118,6 +1171,33 @@
     "title": "إضافة أموال",
     "msg1": "لبدء استخدام Lightning في محفظة Blixt",
     "msg2": "قم بإرسال البيتكوين إلى العنوان أعلاه"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Welcome to the Lightning Box registration.",
+      "whatIs": "Lightning Box is a Lightning Address service provider that forwards payment requests directly to the phone, giving you a self-custodial Lightning Address for mobile devices.",
+      "persistentMode": "This service is dependent on persistent mode, because the app must stay active to receive incoming payments. Please make sure that battery optimization is turned off on your device. Otherwise this service may not work.",
+      "currentRules": "The service is free to use. However, due to technical reasons it currently requires a channel with the Lightning Box provider. It's currently not possible to change your Lightning Address after you have chosen one."
+    },
+    "prerequisites": {
+      "prerequisites": "Prerequisites",
+      "checkingEligibility": "Checking eligibility...",
+      "eligible": "Eligible",
+      "youHaveChannel": "You have a channel with the Lightning Box service.",
+      "notEligible": "Not eligible"
+    },
+    "registration": {
+      "registration": "Registration",
+      "fields": {
+        "address": "Address",
+        "messageToPayer": "Message to the payer"
+      },
+      "register": "Register"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Your Lightning Address by Lightning Box is:",
+    "showQrCode": "Show QR code"
   },
   "welcome.almostDone": {
     "autopilot": {
