@@ -78,7 +78,8 @@
       "onChainWallet": "온체인",
       "lightningChannels": "라이트닝 채널",
       "keysendExperiment": "KeySend 실험",
-      "showMore": "고급 설정"
+      "showMore": "고급 설정",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "스웨덴에서 제작 ⚡"
   },
@@ -802,6 +803,16 @@
         "title": "채널 자동 열기",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "인바운드 채널 서비스",
         "subtitle": "결제를 받기 위해 인바운드 채널 서비스 사용",
@@ -1058,6 +1069,10 @@
         "title": "백그라운드 실행 허용",
         "subtitle": "앱이 백그라운드에서 계속 실행됩니다"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
