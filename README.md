@@ -39,7 +39,7 @@ The wallet uses lnd that is young and might have bugs. Check [lnd bug list here]
 
 ## Translation
 
-You can contribute to the project by translating the app via [Transifex](https://www.transifex.com/blixt-wallet/blixt-wallet).
+You can contribute to the project by translating the app via [Transifex](https://explore.transifex.com/blixt-wallet/blixt-wallet/).
 
 ## Build Steps
 
