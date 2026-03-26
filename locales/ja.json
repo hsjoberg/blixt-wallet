@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "ライトニングアドレス",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "ノードエイリアス",
       "description": "説明",
       "amount": "金額",
       "fee": "手数料",
       "search": "検索",
       "viewInBlockExplorer": "ブロックエクスプローラで表示",
-      "blocks": "{{numBlocks}} blocks"
+      "blocks": "{{numBlocks}} blocks",
+      "reason": "Reason: {{reason}}"
     },
     "buttons": {
       "ok": "わかった",
@@ -76,7 +78,8 @@
       "onChainWallet": "オンチェーン",
       "lightningChannels": "ライトニングチャネル",
       "keysendExperiment": "KeySend実験",
-      "showMore": "詳細表示"
+      "showMore": "詳細表示",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "スウェーデンで⚡で作成されました"
   },
@@ -269,6 +272,7 @@
     },
     "channel": {
       "alias": "エイリアス",
+      "bumpFee": "Bump Fee",
       "node": "ノード",
       "channelId": "チャネルID",
       "channelPoint": "チャネルポイント",
@@ -291,11 +295,22 @@
       "maturityHeight": "成熟高",
       "localCommitmentTxid": "ローカルコミットメントTXID",
       "remoteCommitmentTxid": "リモートコミットメントTXID",
+      "enterDeliveryAddress": "Enter Closing Address",
+      "invalidAddress": "Enter a valid Bitcoin Address",
       "closeChannel": "チャネルをクローズ",
+      "forceCloseChannel": "Force Close Channel",
+      "closeChannelToAddress": "Close Channel to External Address",
       "forceClosePendingChannel": "強制クローズ保留チャネル",
       "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "チャネルをクローズ"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },
@@ -426,6 +441,10 @@
       "name": {
         "ask": "この支払いと一緒に私の名前を送信",
         "mandatory": "この支払いと一緒には必ずお客様の名前を送信してください"
+      },
+      "identifier": {
+        "ask": "Send my Lightning Address together with this payment",
+        "mandatory": "Your Lightning Address has to be sent together with this payment"
       }
     },
     "payloadErrors": {
@@ -621,6 +640,9 @@
       },
       "mapTheme": {
         "title": "マップテーマを設定"
+      },
+      "hideAmountsEnabled": {
+        "title": "Hide amounts"
       }
     },
     "wallet": {
@@ -781,6 +803,16 @@
         "title": "自動的にチャネルを開く",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "インバウンドチャネルサービス",
         "subtitle": "支払いを受け取るためのインバウンドチャネルサービスを使用",
@@ -812,6 +844,17 @@
         "restoreDialog": {
           "title": "Restore LN channel sync Server",
           "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
+      "lightningBoxServer": {
+        "title": "Set Lightning Box server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set Lightning Box server"
+        },
+        "restoreDialog": {
+          "title": "Restore Lightning Box Server",
+          "msg": "Would you like to restore to the default Lightning Box server"
         }
       },
       "graphSync": {
@@ -889,6 +932,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "カスタム請求書の事前画像を有効にする"
+      },
+      "randomizeSettings": {
+        "title": "Randomize settings"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomize settings on startup"
       }
     },
     "experimental": {
@@ -1020,6 +1069,10 @@
         "title": "Enable persistent app",
         "subtitle": "The app stays active in the background"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
@@ -1118,6 +1171,33 @@
     "title": "資金を追加",
     "msg1": "Blixt WalletでLightningを利用を開始するには、",
     "msg2": "上記のアドレスにビットコインを送信してください"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Welcome to the Lightning Box registration.",
+      "whatIs": "Lightning Box is a Lightning Address service provider that forwards payment requests directly to the phone, giving you a self-custodial Lightning Address for mobile devices.",
+      "persistentMode": "This service is dependent on persistent mode, because the app must stay active to receive incoming payments. Please make sure that battery optimization is turned off on your device. Otherwise this service may not work.",
+      "currentRules": "The service is free to use. However, due to technical reasons it currently requires a channel with the Lightning Box provider. It's currently not possible to change your Lightning Address after you have chosen one."
+    },
+    "prerequisites": {
+      "prerequisites": "Prerequisites",
+      "checkingEligibility": "Checking eligibility...",
+      "eligible": "Eligible",
+      "youHaveChannel": "You have a channel with the Lightning Box service.",
+      "notEligible": "Not eligible"
+    },
+    "registration": {
+      "registration": "Registration",
+      "fields": {
+        "address": "Address",
+        "messageToPayer": "Message to the payer"
+      },
+      "register": "Register"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Your Lightning Address by Lightning Box is:",
+    "showQrCode": "Show QR code"
   },
   "welcome.almostDone": {
     "autopilot": {
