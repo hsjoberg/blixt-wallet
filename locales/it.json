@@ -78,7 +78,8 @@
       "onChainWallet": "On-chain",
       "lightningChannels": "Canali Lightning",
       "keysendExperiment": "Keysend Sperimentare",
-      "showMore": "Avanzate"
+      "showMore": "Avanzate",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Realizzato con ⚡ in Svezia"
   },
@@ -802,6 +803,16 @@
         "title": "Apri automaticamente i canali",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Servizi di canale in entrata",
         "subtitle": "Utilizzare un servizio di canale in entrata per ricevere pagamenti",
@@ -1058,6 +1069,10 @@
         "title": "Abilita app persistente",
         "subtitle": "L'app rimane attiva in background"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
