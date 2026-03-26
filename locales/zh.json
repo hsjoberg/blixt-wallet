@@ -78,7 +78,8 @@
       "onChainWallet": "链上",
       "lightningChannels": "闪电通道",
       "keysendExperiment": "Keysend 实验",
-      "showMore": "高级"
+      "showMore": "高级",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "用 ⚡ 在瑞典创造"
   },
@@ -802,6 +803,16 @@
         "title": "自动打开通道",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "入账通道服务",
         "subtitle": "使用入账通道服务接收付款",
@@ -1058,6 +1069,10 @@
         "title": "启用持久性应用程序",
         "subtitle": "应用程序在后台保持激活状态"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
