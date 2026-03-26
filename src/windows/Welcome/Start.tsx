@@ -125,7 +125,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
 
   const toggleTorEnabled = async () => {
     changeTorEnabled(!torEnabled);
-    await restartAppOrNotify();
+    await restartAppOrNotify({ stopDaemonFirst: false });
   };
 
   const onSetBitcoinNodePress = async () => {
@@ -165,7 +165,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
   };
 
   const restartNeeded = () => {
-    showRestartNeededAlert();
+    showRestartNeededAlert({ stopDaemonFirst: false });
   };
 
   const onLanguageChange = async () => {

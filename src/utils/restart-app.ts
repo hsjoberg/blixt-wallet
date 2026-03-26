@@ -3,8 +3,10 @@ import { stopDaemon } from "react-native-turbo-lnd";
 
 import { namespaces } from "../i18n/i18n.constants";
 import NativeBlixtTools from "../turbomodules/NativeBlixtTools";
+import NativeLndmobileTools from "../turbomodules/NativeLndmobileTools";
 import { Alert } from "./alert";
-import { PLATFORM } from "./constants";
+import { IS_ELECTROBUN, PLATFORM } from "./constants";
+import { timeout } from ".";
 
 type RestartAlertMode = "confirm" | "acknowledge" | "notice";
 
@@ -13,7 +15,9 @@ type ShowRestartNeededAlertOptions = {
   stopDaemonFirst?: boolean;
 };
 
-const canRestartInCurrentRuntime = PLATFORM === "android" || PLATFORM === "web";
+const canRestartInCurrentRuntime = PLATFORM === "android" || IS_ELECTROBUN;
+const RESTART_STOP_DAEMON_TIMEOUT_MS = 15000;
+const RESTART_STOP_DAEMON_POLL_INTERVAL_MS = 250;
 
 const getRestartDialogStrings = () => {
   return {
@@ -38,11 +42,19 @@ export async function restartApp(options: { stopDaemonFirst?: boolean } = {}) {
   if (stopDaemonFirst) {
     try {
       await stopDaemon({});
+
+      const start = Date.now();
+      while (NativeLndmobileTools.getStatus() !== 0) {
+        if (Date.now() - start >= RESTART_STOP_DAEMON_TIMEOUT_MS) {
+          break;
+        }
+        await timeout(RESTART_STOP_DAEMON_POLL_INTERVAL_MS);
+      }
     } catch (error) {
       console.log(error);
     }
   }
-
+  await timeout(1000);
   NativeBlixtTools.restartApp();
 }
 
@@ -59,11 +71,6 @@ export function showRestartNeededAlert(options: ShowRestartNeededAlertOptions = 
   const { mode = "confirm", stopDaemonFirst = canRestartInCurrentRuntime } = options;
   const strings = getRestartDialogStrings();
 
-  if (!canRestartInCurrentRuntime || mode === "notice") {
-    Alert.alert(strings.title, strings.message);
-    return;
-  }
-
   if (mode === "acknowledge") {
     Alert.alert(strings.title, strings.message, [
       {
@@ -74,6 +81,11 @@ export function showRestartNeededAlert(options: ShowRestartNeededAlertOptions = 
         },
       },
     ]);
+    return;
+  }
+
+  if (!canRestartInCurrentRuntime || mode === "notice") {
+    Alert.alert(strings.title, strings.message);
     return;
   }
 
