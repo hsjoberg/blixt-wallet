@@ -247,7 +247,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
   formItems.push({
     key: "MESSAGE",
     title: t("form.description.title"),
-    component: <Input multiline={PLATFORM === "android"} disabled={true} value={description} />,
+    component: <Input multiline={PLATFORM === "android"} numberOfLines={3} disabled={true} value={description} />,
   });
 
   if (feeEstimate !== undefined) {
