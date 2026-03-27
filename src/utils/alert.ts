@@ -1,46 +1,74 @@
 // https://github.com/necolas/react-native-web/issues/1026#issuecomment-687572134
-import { AlertButton, AlertStatic, AlertType, Alert as RealAlert, Platform } from "react-native";
+import {
+  AlertButton,
+  AlertStatic,
+  AlertType,
+  Alert as RealAlert,
+  Platform,
+  ViewStyle,
+} from "react-native";
 import DialogAndroid from "react-native-dialogs";
-import { PLATFORM } from "./constants";
-import { navigate } from "./navigation";
+import { IS_ELECTROBUN, PLATFORM } from "./constants";
+import { getNavigator, navigate } from "./navigation";
 import { IPromptNavigationProps } from "../windows/HelperWindows/Prompt";
+import { IHelperAlertNavigationProps } from "../windows/HelperWindows/Alert";
+
+export interface IHelperAlertOptions {
+  maxWidth?: ViewStyle["maxWidth"];
+}
 
 class WebAlert implements AlertStatic {
   public alert(title: string, message?: string, buttons?: AlertButton[]): void {
-    if (PLATFORM === "web") {
-      if (buttons === undefined || buttons.length === 0) {
-        window.alert([title, message].filter(Boolean).join("\n"));
-        return;
-      }
-
-      const result = window.confirm([title, message].filter(Boolean).join("\n"));
-
-      if (result === true) {
-        const confirm = buttons.find(({ style }) => style !== "cancel");
-        confirm?.onPress?.();
-        return;
-      }
-
-      const cancel = buttons.find(({ style }) => style === "cancel");
-      cancel?.onPress?.();
-    } else {
+    if (PLATFORM !== "web") {
       RealAlert.alert(title, message, buttons);
+      return;
     }
+
+    if (IS_ELECTROBUN && getNavigator()?.getRootState()?.routeNames.includes("HelperAlert")) {
+      navigate<IHelperAlertNavigationProps>("HelperAlert", {
+        title,
+        message,
+        buttons: buttons?.length ? buttons : [{ text: "OK" }],
+      });
+      return;
+    }
+
+    if (buttons === undefined || buttons.length === 0) {
+      window.alert([title, message].filter(Boolean).join("\n"));
+      return;
+    }
+
+    const result = window.confirm([title, message].filter(Boolean).join("\n"));
+
+    if (result === true) {
+      const confirm = buttons.find(({ style }) => style !== "cancel");
+      confirm?.onPress?.();
+      return;
+    }
+
+    const cancel = buttons.find(({ style }) => style === "cancel");
+    cancel?.onPress?.();
   }
 
   public promiseAlert(
     title: string,
     message: string | undefined,
     buttons: AlertButton[],
+    options?: IHelperAlertOptions,
   ): Promise<AlertButton> {
-    return new Promise((resolve, reject) => {
-      for (const button of buttons) {
-        button.onPress = () => {
-          resolve(button);
-        };
-      }
+    return new Promise((resolve) => {
+      const wrappedButtons = buttons.map((button) => ({
+        ...button,
+        onPress: () => {
+          try {
+            button.onPress?.();
+          } finally {
+            resolve(button);
+          }
+        },
+      }));
 
-      this.alert(title, message, buttons);
+      this.alert(title, message, wrappedButtons, options);
     });
   }
 
@@ -52,41 +80,39 @@ class WebAlert implements AlertStatic {
     defaultValue?: string,
     keyboardType?: string,
   ) {
-    if (Platform.isElectron) {
-      navigate<IPromptNavigationProps>("Prompt", {
-        title,
-        message,
-        defaultValue,
-        onOk: (result) => {
-          if (typeof callbackOrButtons === "object") {
-            const ok = callbackOrButtons.find(({ style }) => style !== "cancel");
-            ok?.onPress?.(result);
-          } else {
-            callbackOrButtons?.(result);
-          }
-        },
-        onCancel: () => {
-          if (typeof callbackOrButtons === "object") {
-            const cancel = callbackOrButtons.find(({ style }) => style === "cancel");
-            cancel?.onPress?.();
-          }
-        },
-      });
-    } else if (PLATFORM === "web") {
-      const result = window.prompt(message, defaultValue);
-      if (result === null) {
-        if (typeof callbackOrButtons === "object") {
-          const cancel = callbackOrButtons.find(({ style }) => style === "cancel");
-          cancel?.onPress?.();
-        }
-        // TODO callbackOrOptions?
-      } else {
+    if (Platform.OS === "web") {
+      const onOk = (result: string) => {
         if (typeof callbackOrButtons === "object") {
           const ok = callbackOrButtons.find(({ style }) => style !== "cancel");
           ok?.onPress?.(result);
         } else {
           callbackOrButtons?.(result);
         }
+      };
+      const onCancel = () => {
+        if (typeof callbackOrButtons === "object") {
+          const cancel = callbackOrButtons.find(({ style }) => style === "cancel");
+          cancel?.onPress?.();
+        }
+      };
+
+      const canUsePromptScreen = getNavigator()?.getRootState()?.routeNames.includes("Prompt");
+      if (canUsePromptScreen) {
+        navigate<IPromptNavigationProps>("Prompt", {
+          title,
+          message,
+          defaultValue,
+          onOk,
+          onCancel,
+        });
+        return;
+      }
+
+      const result = window.prompt(message, defaultValue);
+      if (result === null) {
+        onCancel();
+      } else {
+        onOk(result);
       }
     } else if (PLATFORM === "android") {
       const positiveText =

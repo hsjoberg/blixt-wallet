@@ -14,7 +14,7 @@ import theme from "./native-base-theme/variables/commonColor";
 
 import store from "./state/store";
 import { clearApp } from "./storage/app";
-import { PLATFORM } from "./utils/constants";
+import { BLIXT_WEB_DEMO, IS_ELECTROBUN, PLATFORM } from "./utils/constants";
 import "./i18n/i18n";
 
 export default function App() {
@@ -22,7 +22,7 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      if (PLATFORM === "web") {
+      if (PLATFORM === "web" && !IS_ELECTROBUN && BLIXT_WEB_DEMO) {
         await clearApp();
       }
     })();

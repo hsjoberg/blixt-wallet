@@ -1,0 +1,18 @@
+{
+  "name": "blixt-wallet-electrobun",
+  "version": "1.0.0",
+  "description": "A simple Electrobun app showcasing core features",
+  "scripts": {
+    "prepare:bundle-assets": "bun ./scripts/prebuild.ts",
+    "start": "bun run prepare:bundle-assets && electrobun dev",
+    "dev": "bun run prepare:bundle-assets && electrobun dev --watch",
+    "build": "bun run prepare:bundle-assets && electrobun build",
+    "package:stable": "bun run prepare:bundle-assets && electrobun build --env=stable"
+  },
+  "dependencies": {
+    "electrobun": "1.15.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

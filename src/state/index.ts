@@ -5,12 +5,14 @@ import { Action, Thunk, action, thunk } from "easy-peasy";
 import { AlertButton } from "react-native";
 
 import {
+  BLIXT_WEB_DEMO,
   DEFAULT_PATHFINDING_ALGORITHM,
   DEFAULT_SPEEDLOADER_SERVER,
+  IS_ELECTROBUN,
   PLATFORM,
   TOR_SETTINGS,
 } from "../utils/constants";
-import { Chain, VersionCode } from "../utils/build";
+import { Chain, Flavor, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
 import {
@@ -86,6 +88,7 @@ import { stringToUint8Array, timeout, toast } from "../utils";
 
 import {
   genSeed,
+  getState as getLndState,
   initWallet,
   start as startLndTurbo,
   subscribeState,
@@ -264,8 +267,8 @@ export const model: IStoreModel = {
       }
       log.i("Writing lnd.conf");
       await actions.writeConfig();
-
-      if (PLATFORM === "web") {
+      if (PLATFORM === "web" && BLIXT_WEB_DEMO && Flavor === "fakelnd") {
+        log.i("web demo initializing");
         await dispatch.setupDemo({ changeDb: true });
         await dispatch.generateSeed();
         await dispatch.createWallet();
@@ -477,70 +480,71 @@ export const model: IStoreModel = {
     }
     log.d("Done starting up stores");
 
+    const onWalletState = async (state: { state: WalletState }) => {
+      try {
+        if (state.state === WalletState.NON_EXISTING) {
+          log.d("Got WalletState.NON_EXISTING");
+
+          // Continue channel db import restore
+          if (importChannelDbOnStartup) {
+            log.i("Continuing restoration with channel import");
+            actions.setWalletSeed(importChannelDbOnStartup.seed);
+            await actions.createWallet({
+              restore: {
+                restoreWallet: true,
+                aezeedPassphrase: importChannelDbOnStartup.passphrase,
+              },
+            });
+
+            await Promise.all([
+              actions.settings.changeAutopilotEnabled(false),
+              actions.scheduledSync.setSyncEnabled(true), // TODO test
+              actions.settings.changeScheduledSyncEnabled(true),
+              actions.changeOnboardingState("DONE"),
+            ]);
+
+            setImportChannelDbOnStartup(null);
+          }
+        } else if (state.state === WalletState.LOCKED) {
+          log.d("Got WalletState.LOCKED");
+          log.d("Wallet locked, unlocking wallet");
+          debugShowStartupInfo &&
+            toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          await dispatch.unlockWallet();
+        } else if (state.state === WalletState.UNLOCKED) {
+          log.d("Got WalletState.UNLOCKED");
+          debugShowStartupInfo &&
+            toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+        } else if (state.state === WalletState.RPC_ACTIVE) {
+          debugShowStartupInfo &&
+            toast(
+              "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
+              1000,
+            );
+          log.d("Got WalletState.RPC_ACTIVE");
+          await dispatch.lightning.initialize({ start });
+        } else if (state.state === WalletState.SERVER_ACTIVE) {
+          debugShowStartupInfo &&
+            toast("Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          log.d("Got WalletState.SERVER_ACTIVE");
+
+          // We'll enter this branch of code if the react-native frontend desyncs with lnd,
+          // for example if the JS runtime restarts while lnd keeps running.
+          if (!getState().lightning.rpcReady) {
+            await dispatch.lightning.initialize({ start });
+          }
+        } else {
+          log.d("Got unknown WalletState", [state.state]);
+        }
+      } catch (error: any) {
+        toast(error.message, undefined, "danger");
+      }
+    };
+
     subscribeState(
       {},
       async (state) => {
-        try {
-          if (state.state === WalletState.NON_EXISTING) {
-            log.d("Got WalletState.NON_EXISTING");
-
-            // Continue channel db import restore
-            if (importChannelDbOnStartup) {
-              log.i("Continuing restoration with channel import");
-              actions.setWalletSeed(importChannelDbOnStartup.seed);
-              await actions.createWallet({
-                restore: {
-                  restoreWallet: true,
-                  aezeedPassphrase: importChannelDbOnStartup.passphrase,
-                },
-              });
-
-              await Promise.all([
-                actions.settings.changeAutopilotEnabled(false),
-                actions.scheduledSync.setSyncEnabled(true), // TODO test
-                actions.settings.changeScheduledSyncEnabled(true),
-                actions.changeOnboardingState("DONE"),
-              ]);
-
-              setImportChannelDbOnStartup(null);
-            }
-          } else if (state.state === WalletState.LOCKED) {
-            log.d("Got WalletState.LOCKED");
-            log.d("Wallet locked, unlocking wallet");
-            debugShowStartupInfo &&
-              toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-            await dispatch.unlockWallet();
-          } else if (state.state === WalletState.UNLOCKED) {
-            log.d("Got WalletState.UNLOCKED");
-            debugShowStartupInfo &&
-              toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-          } else if (state.state === WalletState.RPC_ACTIVE) {
-            debugShowStartupInfo &&
-              toast(
-                "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
-                1000,
-              );
-            log.d("Got WalletState.RPC_ACTIVE");
-            await dispatch.lightning.initialize({ start });
-          } else if (state.state === WalletState.SERVER_ACTIVE) {
-            debugShowStartupInfo &&
-              toast(
-                "Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
-                1000,
-              );
-            log.d("Got WalletState.SERVER_ACTIVE");
-
-            // We'll enter this branch of code if the react-native frontend desyncs with lnd,
-            // for example if the JS runtime restarts while lnd keeps running.
-            if (!getState().lightning.rpcReady) {
-              await dispatch.lightning.initialize({ start });
-            }
-          } else {
-            log.d("Got unknown WalletState", [state.state]);
-          }
-        } catch (error: any) {
-          toast(error.message, undefined, "danger");
-        }
+        await onWalletState(state);
       },
       (error) => {
         toast("subscribeState: " + error, undefined, "danger");
@@ -749,7 +753,6 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   }),
 
   createWallet: thunk(async (actions, payload, { getState, dispatch }) => {
-    // TURBOTODO(hsjoberg): Add generateSecureRandomAsBase64 to a local TurboModule
     const seed = getState().walletSeed;
     if (!seed) {
       return;

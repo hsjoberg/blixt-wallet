@@ -1,5 +1,3 @@
-import type { CodegenTypes } from "react-native";
-
 import type { BuildChain, Spec } from "./NativeBlixtTools";
 
 const chain = ((globalThis as Record<string, unknown>).CHAIN ?? "mainnet") as BuildChain;
@@ -12,9 +10,9 @@ const versionName = String((globalThis as Record<string, unknown>).VERSION_NAME 
 const versionCode = Number((globalThis as Record<string, unknown>).VERSION_CODE ?? 0);
 const buildType = String((globalThis as Record<string, unknown>).BUILD_TYPE ?? "debug");
 
-const eventEmitter = ((_: (payload: string) => void) => ({
+const emptyLndLogEmitter = ((_: (payload: string) => void) => ({
   remove() {},
-})) as CodegenTypes.EventEmitter<string>;
+})) as Spec["onLndLog"];
 
 const NativeBlixtToolsWeb: Spec = {
   getFlavor: () => flavor,
@@ -26,21 +24,23 @@ const NativeBlixtToolsWeb: Spec = {
   getAppleTeamId: () => "",
   getChain: () => chain,
 
-  writeConfig: async () => "",
+  writeConfig: async (config) => {
+    void config;
+    return "";
+  },
   generateSecureRandomAsBase64: async (length) => {
     const data = new Uint8Array(length);
     crypto.getRandomValues(data);
     return btoa(String.fromCharCode(...data));
   },
-  log: (_level, tag, message) => {
-    console.log(`${tag}: ${message}`);
+  log: (_level, _tag, _message) => {
   },
   saveLogs: async () => "",
   copyLndLog: async () => false,
   copySpeedloaderLog: async () => false,
-  tailLog: async () => "",
+  tailLog: async (_numberOfLines) => "",
   observeLndLogFile: async () => false,
-  tailSpeedloaderLog: async () => "",
+  tailSpeedloaderLog: async (_numberOfLines) => "",
   saveChannelsBackup: async () => false,
   saveChannelBackupFile: async () => false,
   getTorEnabled: async () => false,
@@ -65,7 +65,7 @@ const NativeBlixtToolsWeb: Spec = {
   createIOSApplicationSupportAndLndDirectories: async () => true,
   excludeLndICloudBackup: async () => true,
   macosOpenFileDialog: async () => null,
-  onLndLog: eventEmitter,
+  onLndLog: emptyLndLogEmitter,
 };
 
 export default NativeBlixtToolsWeb;

@@ -1,7 +1,6 @@
 import path from "path";
-import fs from "fs/promises";
 import { transformAsync } from "@babel/core";
-import { defineConfig, loadEnv } from "vite";
+import { defineConfig, loadEnv, type UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
@@ -9,6 +8,21 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 const projectRoot = __dirname;
 const resolvePath = (...segments: string[]) => path.resolve(projectRoot, ...segments);
 const normalizePath = (filePath: string) => filePath.replaceAll("\\", "/");
+const parseEnvBoolean = (value: string | undefined, fallback: boolean) => {
+  if (value == null) {
+    return fallback;
+  }
+
+  const normalized = value.trim().toLowerCase();
+  if (["1", "true", "yes", "on"].includes(normalized)) {
+    return true;
+  }
+  if (["0", "false", "no", "off"].includes(normalized)) {
+    return false;
+  }
+
+  return fallback;
+};
 
 const transpileDependencyPatterns = [
   /node_modules\/react-native-web\/src\//,
@@ -40,9 +54,22 @@ const isReactNativeWebWebViewIndexModule = (id: string) =>
 
 const REACT_NATIVE_WEB_WEBVIEW_POSTMOCK_VIRTUAL_ID = "\0react-native-web-webview-postmock-html";
 
-export default defineConfig(({ mode }) => {
-  loadEnv(mode, process.cwd(), "");
+export default defineConfig(({ command, mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
   const isProduction = mode === "production";
+  const isAppDev = parseEnvBoolean(env.BLIXT_DEV ?? env.VITE_BLIXT_DEV, !isProduction);
+  const disableHmrForProductionNodeEnv =
+    command === "serve" && process.env.NODE_ENV === "production";
+  const flavor = (env.FLAVOR ?? env.VITE_FLAVOR ?? "fakelnd").toLowerCase();
+  const isElectrobunTarget = (env.VITE_IS_ELECTROBUN ?? "false").toLowerCase() === "true";
+  const platformExtensions = isElectrobunTarget
+    ? [".electrobun.tsx", ".electrobun.ts", ".electrobun.jsx", ".electrobun.js"]
+    : [];
+  const turboLndModuleReplacement =
+    flavor === "normal" ? "react-native-turbo-lnd/electrobun/view" : "react-native-turbo-lnd/mock";
+  const turboSqliteModuleReplacement = isElectrobunTarget
+    ? resolvePath("electrobun/src/shims/react-native-turbo-sqlite.ts")
+    : "react-native-turbo-sqlite/mocks";
 
   return {
     root: resolvePath("web"),
@@ -154,14 +181,18 @@ export default defineConfig(({ mode }) => {
 
       viteStaticCopy({
         targets: [
-          {
-            src: normalizePath(resolvePath("node_modules/sql.js/dist/sql-wasm.wasm")),
-            dest: ".",
-          },
-          {
-            src: normalizePath(resolvePath("node_modules/sql.js/dist/sql-wasm-browser.wasm")),
-            dest: ".",
-          },
+          ...(isElectrobunTarget
+            ? []
+            : [
+                {
+                  src: normalizePath(resolvePath("node_modules/sql.js/dist/sql-wasm.wasm")),
+                  dest: ".",
+                },
+                {
+                  src: normalizePath(resolvePath("node_modules/sql.js/dist/sql-wasm-browser.wasm")),
+                  dest: ".",
+                },
+              ]),
           {
             src: normalizePath(resolvePath("assets/fonts/*")),
             dest: ".",
@@ -180,8 +211,53 @@ export default defineConfig(({ mode }) => {
       }),
     ],
 
+    // Essential runtime replacements for web/Electrobun live in three layers:
+    // 1. Explicit package aliases in `resolve.alias`.
+    //    - `react-native-turbo-lnd`
+    //      - `flavor=normal`: upstream `react-native-turbo-lnd/electrobun/view`
+    //      - those helpers are imported separately from
+    //        `react-native-turbo-lnd/electrobun/custom-rpc` by
+    //        `electrobun/src/shared/rpc-client.web.ts`
+    //      - `flavor!=normal`: `react-native-turbo-lnd/mock`
+    //    - `react-native-turbo-sqlite`
+    //      - plain web: `react-native-turbo-sqlite/mocks`
+    //      - Electrobun: `electrobun/src/shims/react-native-turbo-sqlite.ts`, which forwards
+    //        DB open/query/close calls over Electrobun RPC to the Bun-side SQLite implementation
+    //      - Electrobun also remaps `react-native-turbo-sqlite/mocks` to a local shim so plain-web
+    //        code paths that await `mockReady` cannot accidentally initialize the sql.js WASM backend
+    //    - `@react-native-async-storage/async-storage`
+    //      - Electrobun only: `electrobun/src/shims/async-storage.js`, which forwards the
+    //        AsyncStorage API over Electrobun RPC to the Bun-side KV store
+    // 2. Platform file resolution via `.electrobun.*` / `.web.*` because those extensions come
+    //    first in `extensions`.
+    //    - For the Electrobun renderer we prefer `.electrobun.*`, so files like
+    //      `src/turbomodules/NativeBlixtTools.electrobun.ts` can stay Electrobun-specific without
+    //      polluting the plain browser `*.web.*` implementations.
+    //    - `src/storage/keystore.web.ts`: localStorage-backed replacement for `src/storage/keystore.ts`,
+    //      so the native `react-native-keychain` dependency never enters the web/Electrobun bundle
+    //    - `src/storage/database/sqlite.web.ts`: web DB entrypoint that imports
+    //      `react-native-turbo-sqlite`; on plain web that resolves to mocks, on Electrobun it resolves
+    //      to the RPC-backed SQLite shim above
+    //    - `src/turbomodules/NativeBlixtTools.web.ts`: plain browser fallback for native build/file
+    //      helpers
+    //    - `src/turbomodules/NativeBlixtTools.electrobun.ts`: Electrobun-specific NativeBlixtTools
+    //      implementation that delegates into `electrobun/src/shims/native-blixt-tools.ts`
+    //    - `src/turbomodules/NativeLndmobileTools.web.ts`,
+    //      `src/turbomodules/NativeScheduledSyncTurbo.web.ts`, and
+    //      `src/turbomodules/NativeSpeedloader.web.ts`: minimal web stand-ins for native TurboModules
+    // 3. Runtime globals outside aliasing.
+    //    - `define.global = "globalThis"` here, plus `globalThis.global = globalThis` in
+    //      `web/main.ts`, keeps React Native code that expects a Node-style `global` working
+    //    - `web/main.ts` assigns `FLAVOR`, `CHAIN`, `APPLICATION_ID`, `VERSION_NAME`,
+    //      `VERSION_CODE`, `BUILD_TYPE`, `DEBUG`, `__DEV__`, `BLIXT_WEB_DEMO`, and `IS_ELECTROBUN`
+    //      before loading `index.web.js`; `NativeBlixtTools.web.ts` reads several of those directly
+    //
+    // The large `web/web-hacks/**` alias block below is a separate category: compatibility patches for
+    // React Native libraries. If a missing dependency is core app runtime surface area, document it in
+    // the inventory above; if it is just a broken RN package import path, keep it with the patch aliases.
     resolve: {
       extensions: [
+        ...platformExtensions,
         ".web.tsx",
         ".web.ts",
         ".tsx",
@@ -287,7 +363,7 @@ export default defineConfig(({ mode }) => {
         },
         {
           find: /^react-native-turbo-lnd$/,
-          replacement: "react-native-turbo-lnd/mock",
+          replacement: turboLndModuleReplacement,
         },
         {
           find: "react-native-permissions",
@@ -311,8 +387,22 @@ export default defineConfig(({ mode }) => {
         },
         {
           find: /^react-native-turbo-sqlite$/,
-          replacement: "react-native-turbo-sqlite/mocks",
+          replacement: turboSqliteModuleReplacement,
         },
+        ...(isElectrobunTarget
+          ? [
+              {
+                find: /^react-native-turbo-sqlite\/mocks$/,
+                replacement: resolvePath(
+                  "electrobun/src/shims/react-native-turbo-sqlite-mocks.ts",
+                ),
+              },
+              {
+                find: /^@react-native-async-storage\/async-storage$/,
+                replacement: resolvePath("electrobun/src/shims/async-storage.js"),
+              },
+            ]
+          : []),
         {
           find: "@notifee/react-native",
           replacement: resolvePath("web/web-hacks/notifee-react-native.js"),
@@ -321,9 +411,13 @@ export default defineConfig(({ mode }) => {
     },
 
     define: {
-      __DEV__: JSON.stringify(!isProduction),
+      global: "globalThis",
+      __DEV__: JSON.stringify(isAppDev),
       "process.env.NODE_ENV": JSON.stringify(isProduction ? "production" : "development"),
       "process.env.JEST_WORKER_ID": "null",
+      "process.env.ELECTROBUN_SAFE_STARTUP": JSON.stringify(
+        env.ELECTROBUN_SAFE_STARTUP ?? env.VITE_ELECTROBUN_SAFE_STARTUP ?? "",
+      ),
     },
 
     optimizeDeps: {
@@ -336,32 +430,22 @@ export default defineConfig(({ mode }) => {
         "@codler/react-native-keyboard-aware-scroll-view",
         "react-native-web-webview",
       ],
-      esbuildOptions: {
-        define: {
-          global: "globalThis",
+      rolldownOptions: {
+        transform: {
+          define: {
+            global: "globalThis",
+          },
         },
-        loader: {
+        moduleTypes: {
           ".html": "text",
         },
-        plugins: [
-          {
-            name: "optimize-react-native-drawer-jsx",
-            setup(build) {
-              build.onLoad(
-                { filter: /node_modules[\\/]+react-native-drawer[\\/].*\.js$/ },
-                async (args) => ({
-                  contents: await fs.readFile(args.path, "utf8"),
-                  loader: "jsx",
-                }),
-              );
-            },
-          },
-        ],
+        plugins: [],
       },
     },
 
     server: {
       port: 8080,
+      hmr: disableHmrForProductionNodeEnv ? false : undefined,
       fs: {
         allow: [resolvePath(".")],
       },
@@ -381,10 +465,10 @@ export default defineConfig(({ mode }) => {
       },
     },
 
-    envPrefix: ["VITE_", "CHAIN", "FLAVOR", "APPLICATION_ID", "BLIXT_WEB_DEMO"],
+    envPrefix: ["VITE_", "CHAIN", "FLAVOR", "APPLICATION_ID", "BLIXT_WEB_DEMO", "BLIXT_DEV"],
 
     css: {
       devSourcemap: true,
     },
-  };
+  } satisfies UserConfig;
 });

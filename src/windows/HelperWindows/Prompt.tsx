@@ -32,13 +32,13 @@ export default function({ navigation, route }: IPromptProps) {
   const [inputText, setInputText] = useState(defaultValue ?? "");
 
   function onPressOk() {
-    onOk(inputText);
     navigation.pop();
+    setTimeout(() => onOk(inputText), 0);
   }
 
   function onPressCancel() {
-    onCancel();
     navigation.pop();
+    setTimeout(() => onCancel(), 0);
   }
 
   return (

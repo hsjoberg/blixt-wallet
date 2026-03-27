@@ -4,7 +4,7 @@ import { getInitialSchema } from "./sqlite-migrations";
 
 export const openDatabase = async (): Promise<Database> => {
   await mockReady;
-  return await TurboSqlite.openDatabase("web:Blixt");
+  return await TurboSqlite.openDatabase("Blixt");
 };
 
 export const setupInitialSchema = async (db: Database) => {

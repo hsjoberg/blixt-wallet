@@ -58,6 +58,24 @@ It's useful if you want to make design and GUI changes.
 - Install libs: `bun install`
 - Start the web server: `bun run web`
 
+### Electrobun
+
+The Electrobun target is experimental and should currently be treated as a desktop development target, not a fully supported release target.
+
+- Install [Node](https://nodejs.org) and [Bun](https://bun.com)
+- Install libs: `bun install`
+- Download the `lnd` binary for your current desktop platform from the [`react-native-turbo-lnd`](https://github.com/hsjoberg/react-native-turbo-lnd/releases) releases page and place the file in project root:
+  - Windows: `liblnd-windows.zip`
+  - Linux: `liblnd-linux.zip`
+  - macOS: `liblnd-macos-dylib.zip`
+- Start the app:
+  - `bun run electrobun:dev:normal`
+
+To build/package:
+
+- Build app bundle only: `bun run electrobun:build:fakelnd` or `bun run electrobun:build:normal`
+- Package distributable app: `bun run electrobun:package:fakelnd` or `bun run electrobun:package:normal`
+
 ### Android
 
 - Install [Node](https://nodejs.org), [Bun](https://bun.com) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)

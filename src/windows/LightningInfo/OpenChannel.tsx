@@ -20,8 +20,7 @@ import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { Alert } from "../../utils/alert";
 import { CommitmentType } from "react-native-turbo-lnd/protos/lightning_pb";
-import { stopDaemon } from "react-native-turbo-lnd";
-import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
+import { restartAppOrNotify } from "../../utils/restart-app";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -99,19 +98,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
             text: "Activate Tor",
             async onPress(value?) {
               await changeTorEnabled(!torEnabled);
-              if (PLATFORM === "android") {
-                try {
-                  await stopDaemon({});
-                } catch (e) {
-                  console.log(e);
-                }
-                NativeBlixtTools.restartApp();
-              } else {
-                Alert.alert(
-                  t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings }),
-                  t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings }),
-                );
-              }
+              await restartAppOrNotify();
             },
           },
         ]);

@@ -265,7 +265,7 @@ export default function SendConfirmation({ navigation, route }: ISendConfirmatio
         value: "any",
       } as { label: string; value: string },
     ].concat(
-      getChannels.map((n, i) => ({
+      getChannels.map((n, _) => ({
         label: choiceLabel(n),
         value: n.chanId?.toString() ?? "any",
       })),

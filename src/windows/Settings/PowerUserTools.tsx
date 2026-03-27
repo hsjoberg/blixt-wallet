@@ -20,6 +20,7 @@ import { namespaces } from "../../i18n/i18n.constants";
 import { useStoreActions, useStoreState } from "../../state/store";
 
 import { Alert } from "../../utils/alert";
+import { restartApp, showRestartNeededAlert } from "../../utils/restart-app";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { pick } from "@react-native-documents/picker";
 import { readFile } from "react-native-fs";
@@ -91,30 +92,7 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
   const checkAutopilot = useStoreActions((store) => store.autopilot.checkAutopilot);
 
   const restartNeeded = () => {
-    const title = t("bitcoinNetwork.restartDialog.title");
-    const message = t("bitcoinNetwork.restartDialog.msg");
-    if (PLATFORM === "android") {
-      Alert.alert(title, message + "\n" + t("bitcoinNetwork.restartDialog.msg1"), [
-        {
-          style: "cancel",
-          text: t("buttons.no", { ns: namespaces.common }),
-        },
-        {
-          style: "default",
-          text: t("buttons.yes", { ns: namespaces.common }),
-          onPress: async () => {
-            try {
-              await stopDaemon({});
-            } catch (e: any) {
-              console.log(e);
-            }
-            NativeBlixtTools.restartApp();
-          },
-        },
-      ]);
-    } else {
-      Alert.alert(title, message);
-    }
+    showRestartNeededAlert();
   };
 
   // Sign message
@@ -509,6 +487,14 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
         } catch (e: any) {
           toast("Error: " + e.message, 10000, "danger");
         }
+      },
+    },
+    {
+      type: "item",
+      icon: { type: "MaterialCommunityIcons", name: "restart" },
+      title: "Restart app",
+      onPress: () => {
+        void restartApp();
       },
     },
 

@@ -28,7 +28,7 @@ import {
 import { create } from "@bufbuild/protobuf";
 
 import logger from "./../utils/log";
-import { PLATFORM } from "../utils/constants";
+import { ELECTROBUN_SAFE_STARTUP_MODE, PLATFORM } from "../utils/constants";
 const log = logger("Lightning");
 
 export type LndChainBackend = "neutrino" | "bitcoindWithZmq" | "bitcoindWithRpcPolling";
@@ -199,7 +199,7 @@ export const lightning: ILightningModel = {
         await dispatch.notificationManager.stopPersistentService();
       }
     } catch (e: any) {
-      toast(e.message, 0, "danger", "OK");
+      toast("setupStores: " + e.message, 0, "danger", "OK");
       return;
     }
   }),
