@@ -5,6 +5,7 @@ import { Action, Thunk, action, thunk } from "easy-peasy";
 import { AlertButton } from "react-native";
 
 import {
+  BLIXT_WEB_DEMO,
   DEFAULT_PATHFINDING_ALGORITHM,
   DEFAULT_SPEEDLOADER_SERVER,
   IS_ELECTROBUN,
@@ -266,7 +267,7 @@ export const model: IStoreModel = {
       }
       log.i("Writing lnd.conf");
       await actions.writeConfig();
-      if (PLATFORM === "web" && Flavor === "fakelnd") {
+      if (PLATFORM === "web" && BLIXT_WEB_DEMO && Flavor === "fakelnd") {
         log.i("web demo initializing");
         await dispatch.setupDemo({ changeDb: true });
         await dispatch.generateSeed();
