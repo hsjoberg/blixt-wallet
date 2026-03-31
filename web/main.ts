@@ -15,7 +15,7 @@ if (typeof (BigInt.prototype as { toJSON?: () => unknown }).toJSON !== "function
 
 const chain = env.CHAIN ?? env.VITE_CHAIN ?? "mainnet";
 const flavor = env.FLAVOR ?? env.VITE_FLAVOR ?? "fakelnd";
-const applicationId = env.APPLICATION_ID ?? env.VITE_APPLICATION_ID ?? "com.blixtwallet.webdemo";
+const applicationId = env.APPLICATION_ID ?? env.VITE_APPLICATION_ID ?? "com.blixtwallet.web";
 const versionCode = Number.parseInt(env.VITE_VERSION_CODE ?? "0", 10);
 const appDevValue = env.BLIXT_DEV ?? env.VITE_BLIXT_DEV;
 const appDev =
@@ -24,7 +24,16 @@ const appDev =
     : ["1", "true", "yes", "on"].includes(appDevValue.trim().toLowerCase());
 const buildType = appDev ? "debug" : "release";
 const versionName = env.VITE_VERSION_NAME ?? `0.9.0-web`;
-const isWebDemo = (env.BLIXT_WEB_DEMO ?? env.VITE_BLIXT_WEB_DEMO ?? "true") === "true";
+const parseEnvBoolean = (value: string | boolean | undefined, fallback: boolean) => {
+  if (typeof value === "boolean") {
+    return value;
+  }
+  if (typeof value === "string") {
+    return ["1", "true", "yes", "on"].includes(value.trim().toLowerCase());
+  }
+  return fallback;
+};
+const isWebDemo = parseEnvBoolean(env.BLIXT_WEB_DEMO ?? env.VITE_BLIXT_WEB_DEMO, false);
 const isElectrobun =
   (env.VITE_IS_ELECTROBUN ?? "false") === "true" ||
   typeof (globalThis as { __electrobun?: unknown }).__electrobun !== "undefined";

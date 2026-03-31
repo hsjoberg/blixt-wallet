@@ -7,7 +7,7 @@ import Container from "../components/Container";
 import { useStoreActions } from "../state/store";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Main";
-import { PLATFORM } from "../utils/constants";
+import { BLIXT_WEB_DEMO, PLATFORM } from "../utils/constants";
 
 export interface ILoadingProps {
   navigation: StackNavigationProp<RootStackParamList, "Loading">;
@@ -23,7 +23,7 @@ export default function Loading({ navigation }: ILoadingProps) {
       navigation.replace("Overview");
       if (cb) {
         cb(navigation);
-      } else if (PLATFORM === "web" && window.BLIXT_WEB_DEMO) {
+      } else if (PLATFORM === "web" && BLIXT_WEB_DEMO) {
         navigation.navigate("WebInfo");
       }
     })();

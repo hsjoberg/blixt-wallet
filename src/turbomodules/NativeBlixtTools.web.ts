@@ -4,7 +4,7 @@ const chain = ((globalThis as Record<string, unknown>).CHAIN ?? "mainnet") as Bu
 const debug = Boolean((globalThis as Record<string, unknown>).DEBUG ?? false);
 const flavor = String((globalThis as Record<string, unknown>).FLAVOR ?? "fakelnd");
 const applicationId = String(
-  (globalThis as Record<string, unknown>).APPLICATION_ID ?? "com.blixtwallet.webdemo",
+  (globalThis as Record<string, unknown>).APPLICATION_ID ?? "com.blixtwallet.web",
 );
 const versionName = String((globalThis as Record<string, unknown>).VERSION_NAME ?? "0.9.0-web");
 const versionCode = Number((globalThis as Record<string, unknown>).VERSION_CODE ?? 0);
