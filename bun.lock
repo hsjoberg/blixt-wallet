@@ -76,7 +76,7 @@
         "react-native-svg": "15.15.3",
         "react-native-svg-path-gradient": "^0.4.0",
         "react-native-svg-web": "^1.0.9",
-        "react-native-turbo-lnd": "0.0.12",
+        "react-native-turbo-lnd": "0.0.18",
         "react-native-turbo-sqlite": "0.4.0",
         "react-native-vector-icons": "9.2.0",
         "react-native-vision-camera": "4.7.3",
@@ -2125,7 +2125,7 @@
 
     "react-native-svg-web": ["react-native-svg-web@1.0.9", "", { "peerDependencies": { "prop-types": "*", "react": "*", "react-native-web": ">= 0.10.1" } }, "sha512-fggz1MPx55xP92ZlFWhvxfsd8/Mj3z63E1eo1pldtBRuNbR4LffvtY9hwj96bgHZU3gRwJL00LV3GAWRFthlnA=="],
 
-    "react-native-turbo-lnd": ["react-native-turbo-lnd@0.0.12", "", { "dependencies": { "@babel/runtime": "^7.25.0" }, "peerDependencies": { "@bufbuild/protobuf": "*", "electrobun": "*", "react": "*", "react-native": "*" }, "optionalPeers": ["@bufbuild/protobuf", "electrobun"] }, "sha512-Sa7Xn4f0YR6MxYAoBNyTTJX7lgyv5/u7y8vzv0J44CtZjo2FXAfV49WAWKsWIl0zf/NZa4lYZXeHmgO2hUhfbA=="],
+    "react-native-turbo-lnd": ["react-native-turbo-lnd@0.0.18", "", { "peerDependencies": { "@bufbuild/protobuf": "*", "electrobun": "*", "react": "*", "react-native": "*" }, "optionalPeers": ["@bufbuild/protobuf", "electrobun"] }, "sha512-8WtuQk8K6fCoonVPFD8CejNvBOKnoa0d/h2se52LybiN1fBzoIFmrM/IXa5F2t+kGa/sfPAFJugvC7zjnMgvYA=="],
 
     "react-native-turbo-sqlite": ["react-native-turbo-sqlite@0.4.0", "", { "dependencies": { "@react-native-community/cli": "^15.0.1" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-WNijEhvDtbAOrm//kxrAb2nNjWiRvaG+e7G+iorHF7X9CZ35CgVboRCL7+2Pe62VIojH/e+PgjVT6Xh2oJAxPg=="],
 

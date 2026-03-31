@@ -17,8 +17,9 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE ./LndJNI.cpp)
 # Define where CMake can find the additional header files. We need to crawl back the jni, main, src, app, android folders
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ../../../../../speedloader-turbomodule)
 
-# We need to make usage of the liblnd.so library for the `gossipSync` function
-set(SPEEDLOADER_JNILIBS_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs")
+# We need to make usage of the liblnd.so library for the `gossipSync` function.
+set(SPEEDLOADER_JNILIBS_PATH
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../node_modules/react-native-turbo-lnd/android/src/main/jniLibs")
 set(SPEEDLOADER_LIBRARY_PATH "${SPEEDLOADER_JNILIBS_PATH}/${CMAKE_ANDROID_ARCH_ABI}/liblnd.so")
 if(NOT EXISTS ${SPEEDLOADER_LIBRARY_PATH})
     message(FATAL_ERROR "liblnd.so not found at ${SPEEDLOADER_LIBRARY_PATH}")
