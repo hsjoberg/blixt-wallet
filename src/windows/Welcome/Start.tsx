@@ -61,66 +61,51 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
   );
 
   const onCreateWalletWithPassphrasePress = async () => {
-    Alert.alert(
-      t("msg.warning", { ns: namespaces.common }),
-      `${t("createWallet.msg1")}
+    Alert.prompt(t("createWalletWithPassphrase.title"), "", [
+      {
+        text: t("buttons.cancel", { ns: namespaces.common }),
+        style: "cancel",
+        onPress: () => {},
+      },
+      {
+        text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
+        onPress: async (text?: string) => {
+          try {
+            if (!text || text.trim().length === 0) {
+              toast(t("createWalletWithPassphrase.invalidMessage"), undefined, "danger");
+              return;
+            }
 
-      ${t("createWallet.msg2")}
+            const hasLeadingTrailingSpaces = text.trim() !== text;
 
-      ${t("createWallet.msg3")}`,
-      [
-        {
-          text: t("createWallet.msg4"),
-          onPress: async () => {
-            Alert.prompt(t("createWalletWithPassphrase.title"), "", [
-              {
-                text: t("buttons.cancel", { ns: namespaces.common }),
-                style: "cancel",
-                onPress: () => {},
-              },
-              {
-                text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
-                onPress: async (text?: string) => {
-                  try {
-                    if (!text || text.trim().length === 0) {
-                      toast(t("createWalletWithPassphrase.invalidMessage"), undefined, "danger");
-                      return;
-                    }
+            if (!!hasLeadingTrailingSpaces) {
+              toast(
+                t("createWalletWithPassphrase.noLeadingTrailingSpaces"),
+                undefined,
+                "danger",
+              );
+              return;
+            }
 
-                    const hasLeadingTrailingSpaces = text.trim() !== text;
+            await generateSeed(text.trim());
+            setCreateWalletLoading(true);
+            await createWallet({ init: { aezeedPassphrase: text || undefined } });
+            await setSyncEnabled(true); // TODO test
+            await changeScheduledSyncEnabled(true);
 
-                    if (!!hasLeadingTrailingSpaces) {
-                      toast(
-                        t("createWalletWithPassphrase.noLeadingTrailingSpaces"),
-                        undefined,
-                        "danger",
-                      );
-                      return;
-                    }
-
-                    await generateSeed(text.trim());
-                    setCreateWalletLoading(true);
-                    await createWallet({ init: { aezeedPassphrase: text || undefined } });
-                    await setSyncEnabled(true); // TODO test
-                    await changeScheduledSyncEnabled(true);
-
-                    navigation.dispatch(
-                      CommonActions.reset({
-                        index: 0,
-                        routes: [{ name: "Loading" }],
-                      }),
-                    );
-                  } catch (error: any) {
-                    toast(error.message, undefined, "danger");
-                    setCreateWalletLoading(false);
-                  }
-                },
-              },
-            ]);
-          },
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "Loading" }],
+              }),
+            );
+          } catch (error: any) {
+            toast(error.message, undefined, "danger");
+            setCreateWalletLoading(false);
+          }
         },
-      ],
-    );
+      },
+    ]);
   };
 
   const toggleTorEnabled = async () => {
