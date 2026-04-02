@@ -28,7 +28,7 @@ import {
 import { create } from "@bufbuild/protobuf";
 
 import logger from "./../utils/log";
-import { ELECTROBUN_SAFE_STARTUP_MODE, PLATFORM } from "../utils/constants";
+import { PLATFORM } from "../utils/constants";
 const log = logger("Lightning");
 
 export type LndChainBackend = "neutrino" | "bitcoindWithZmq" | "bitcoindWithRpcPolling";
