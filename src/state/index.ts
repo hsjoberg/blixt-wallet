@@ -507,6 +507,19 @@ export const model: IStoreModel = {
           }
         } else if (state.state === WalletState.LOCKED) {
           log.d("Got WalletState.LOCKED");
+          // TurboLnd's mocks always return LOCKED and never NON_EXISTING,
+          // as there's no wallet persistence. Simply ignore.
+          if (PLATFORM === "web" && Flavor === "fakelnd") {
+            const [walletCreated, walletPassword] = await Promise.all([
+              getWalletCreated(),
+              getWalletPassword(),
+            ]);
+
+            if (!walletCreated && !walletPassword) {
+              log.w("Ignoring fakelnd LOCKED state before wallet creation on web");
+              return;
+            }
+          }
           log.d("Wallet locked, unlocking wallet");
           debugShowStartupInfo &&
             toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
