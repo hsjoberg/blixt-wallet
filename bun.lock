@@ -77,7 +77,7 @@
         "react-native-svg-path-gradient": "^0.4.0",
         "react-native-svg-web": "^1.0.9",
         "react-native-turbo-lnd": "0.0.18",
-        "react-native-turbo-sqlite": "0.4.0",
+        "react-native-turbo-sqlite": "0.6.0",
         "react-native-vector-icons": "9.2.0",
         "react-native-vision-camera": "4.7.3",
         "react-native-web": "0.21.2",
@@ -556,8 +556,6 @@
     "@react-native-community/cli-config-android": ["@react-native-community/cli-config-android@20.1.2", "", { "dependencies": { "@react-native-community/cli-tools": "20.1.2", "fast-glob": "^3.3.2", "fast-xml-parser": "^5.3.6", "picocolors": "^1.1.1" } }, "sha512-W0Qx+lW8pbQMz8x3Rlf/H7D2j2u8O+u9HnrZnKzDl1DaXgaOQqL484lTZlMEQofjq7eLXdmzWxuZdqS6K1QfmQ=="],
 
     "@react-native-community/cli-config-apple": ["@react-native-community/cli-config-apple@20.1.2", "", { "dependencies": { "@react-native-community/cli-tools": "20.1.2", "execa": "^5.0.0", "fast-glob": "^3.3.2", "picocolors": "^1.1.1" } }, "sha512-Dhi1N1EoMMmJ4dnDlmNWCrJggfv7X/kl3l8uax72uaxepQI/CfohJP2rBdG2mWis+vzrCIk14z2keY0ixxsN8g=="],
-
-    "@react-native-community/cli-debugger-ui": ["@react-native-community/cli-debugger-ui@15.1.3", "", { "dependencies": { "serve-static": "^1.13.1" } }, "sha512-m+fb9iAUNb9WiDdokCBLh0InJvollcgAM3gLjCT8DGTP6bH/jxtZ3DszzyIRqN9cMamItVrvDM0vkIg48xK7rQ=="],
 
     "@react-native-community/cli-doctor": ["@react-native-community/cli-doctor@20.1.2", "", { "dependencies": { "@react-native-community/cli-config": "20.1.2", "@react-native-community/cli-platform-android": "20.1.2", "@react-native-community/cli-platform-apple": "20.1.2", "@react-native-community/cli-platform-ios": "20.1.2", "@react-native-community/cli-tools": "20.1.2", "command-exists": "^1.2.8", "deepmerge": "^4.3.0", "envinfo": "^7.13.0", "execa": "^5.0.0", "node-stream-zip": "^1.9.1", "ora": "^5.4.1", "picocolors": "^1.1.1", "semver": "^7.5.2", "wcwidth": "^1.0.1", "yaml": "^2.2.1" } }, "sha512-bbT1EhomvHz5ZtzxY2czA4/JMXhP4aIAxRDsqiW6wfZA9A9/HXqA4uv6CxP0wZUUmovmPNRl3kW/LWXrRmdv3A=="],
 
@@ -2127,7 +2125,7 @@
 
     "react-native-turbo-lnd": ["react-native-turbo-lnd@0.0.18", "", { "peerDependencies": { "@bufbuild/protobuf": "*", "electrobun": "*", "react": "*", "react-native": "*" }, "optionalPeers": ["@bufbuild/protobuf", "electrobun"] }, "sha512-8WtuQk8K6fCoonVPFD8CejNvBOKnoa0d/h2se52LybiN1fBzoIFmrM/IXa5F2t+kGa/sfPAFJugvC7zjnMgvYA=="],
 
-    "react-native-turbo-sqlite": ["react-native-turbo-sqlite@0.4.0", "", { "dependencies": { "@react-native-community/cli": "^15.0.1" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-WNijEhvDtbAOrm//kxrAb2nNjWiRvaG+e7G+iorHF7X9CZ35CgVboRCL7+2Pe62VIojH/e+PgjVT6Xh2oJAxPg=="],
+    "react-native-turbo-sqlite": ["react-native-turbo-sqlite@0.6.0", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-8jW7/8lyz/rB/kpKz4m0qHXjpDQuNLcX+/xOXjx0nMBsM9+ECtELHjq5No2evJ2OuUGb8ogYqRwh+uZ7TxKnWA=="],
 
     "react-native-vector-icons": ["react-native-vector-icons@9.2.0", "", { "dependencies": { "prop-types": "^15.7.2", "yargs": "^16.1.1" }, "bin": { "fa5-upgrade": "bin/fa5-upgrade.sh", "generate-icon": "bin/generate-icon.js" } }, "sha512-wKYLaFuQST/chH3AJRjmOLoLy3JEs1JR6zMNgTaemFpNoXs0ztRnTxcxFD9xhX7cJe1/zoN5BpQYe7kL0m5yyA=="],
 
@@ -2350,8 +2348,6 @@
     "strnum": ["strnum@2.2.2", "", {}, "sha512-DnR90I+jtXNSTXWdwrEy9FakW7UX+qUZg28gj5fk2vxxl7uS/3bpI4fjFYVmdK9etptYBPNkpahuQnEwhwECqA=="],
 
     "styleq": ["styleq@0.1.3", "", {}, "sha512-3ZUifmCDCQanjeej1f6kyl/BeP/Vae5EYkQ9iJfUm/QwZvlgnZzyflqAsAWYURdtea8Vkvswu2GrC57h3qffcA=="],
-
-    "sudo-prompt": ["sudo-prompt@9.2.1", "", {}, "sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw=="],
 
     "supports-color": ["supports-color@7.2.0", "", { "dependencies": { "has-flag": "^4.0.0" } }, "sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw=="],
 
@@ -2813,8 +2809,6 @@
 
     "react-native-svg-path-gradient/color": ["color@3.2.1", "", { "dependencies": { "color-convert": "^1.9.3", "color-string": "^1.6.0" } }, "sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA=="],
 
-    "react-native-turbo-sqlite/@react-native-community/cli": ["@react-native-community/cli@15.1.3", "", { "dependencies": { "@react-native-community/cli-clean": "15.1.3", "@react-native-community/cli-config": "15.1.3", "@react-native-community/cli-debugger-ui": "15.1.3", "@react-native-community/cli-doctor": "15.1.3", "@react-native-community/cli-server-api": "15.1.3", "@react-native-community/cli-tools": "15.1.3", "@react-native-community/cli-types": "15.1.3", "chalk": "^4.1.2", "commander": "^9.4.1", "deepmerge": "^4.3.0", "execa": "^5.0.0", "find-up": "^5.0.0", "fs-extra": "^8.1.0", "graceful-fs": "^4.1.3", "prompts": "^2.4.2", "semver": "^7.5.2" }, "bin": { "rnc-cli": "build/bin.js" } }, "sha512-+ih/WYUkJsEV2CMAnOHvVoSIz/Ahg5UJk+sqSIOmY79mWAglQzfLP71o7b0neJCnJWLmWiO6G6/S+kmULefD5g=="],
-
     "react-native-vector-icons/yargs": ["yargs@16.2.0", "", { "dependencies": { "cliui": "^7.0.2", "escalade": "^3.1.1", "get-caller-file": "^2.0.5", "require-directory": "^2.1.1", "string-width": "^4.2.0", "y18n": "^5.0.5", "yargs-parser": "^20.2.2" } }, "sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw=="],
 
     "react-native-web/@react-native/normalize-colors": ["@react-native/normalize-colors@0.74.89", "", {}, "sha512-qoMMXddVKVhZ8PA1AbUCk83trpd6N+1nF2A6k1i6LsQObyS92fELuk8kU/lQs6M7BsMHwqyLCpQJ1uFgNvIQXg=="],
@@ -3039,20 +3033,6 @@
 
     "react-native-svg-path-gradient/color/color-string": ["color-string@1.9.1", "", { "dependencies": { "color-name": "^1.0.0", "simple-swizzle": "^0.2.2" } }, "sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg=="],
 
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-clean": ["@react-native-community/cli-clean@15.1.3", "", { "dependencies": { "@react-native-community/cli-tools": "15.1.3", "chalk": "^4.1.2", "execa": "^5.0.0", "fast-glob": "^3.3.2" } }, "sha512-3s9NGapIkONFoCUN2s77NYI987GPSCdr74rTf0TWyGIDf4vTYgKoWKKR+Ml3VTa1BCj51r4cYuHEKE1pjUSc0w=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-config": ["@react-native-community/cli-config@15.1.3", "", { "dependencies": { "@react-native-community/cli-tools": "15.1.3", "chalk": "^4.1.2", "cosmiconfig": "^9.0.0", "deepmerge": "^4.3.0", "fast-glob": "^3.3.2", "joi": "^17.2.1" } }, "sha512-fJ9MrWp+/SszEVg5Wja8A57Whl5EfjRCHWFNkvFBtfjVUfi2hWvSTW3VBxzJuCHnPIIwpQafwjEgOrIRUI8y6w=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor": ["@react-native-community/cli-doctor@15.1.3", "", { "dependencies": { "@react-native-community/cli-config": "15.1.3", "@react-native-community/cli-platform-android": "15.1.3", "@react-native-community/cli-platform-apple": "15.1.3", "@react-native-community/cli-platform-ios": "15.1.3", "@react-native-community/cli-tools": "15.1.3", "chalk": "^4.1.2", "command-exists": "^1.2.8", "deepmerge": "^4.3.0", "envinfo": "^7.13.0", "execa": "^5.0.0", "node-stream-zip": "^1.9.1", "ora": "^5.4.1", "semver": "^7.5.2", "strip-ansi": "^5.2.0", "wcwidth": "^1.0.1", "yaml": "^2.2.1" } }, "sha512-WC9rawobuITAtJjyZ68E1M0geRt+b9A2CGB354L/tQp+XMKobGGVI4Y0DsattK83Wdg59GPyldE8C0Wevfgm/A=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-server-api": ["@react-native-community/cli-server-api@15.1.3", "", { "dependencies": { "@react-native-community/cli-debugger-ui": "15.1.3", "@react-native-community/cli-tools": "15.1.3", "compression": "^1.7.1", "connect": "^3.6.5", "errorhandler": "^1.5.1", "nocache": "^3.0.1", "pretty-format": "^26.6.2", "serve-static": "^1.13.1", "ws": "^6.2.3" } }, "sha512-kXZ0evedluLt6flWQiI3JqwnW8rSBspOoQ7JVTQYiG5lDHAeL3Om9PjAyiQBg1EZRMjiWZDV7nDxhR+m+6NX5Q=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-tools": ["@react-native-community/cli-tools@15.1.3", "", { "dependencies": { "appdirsjs": "^1.2.4", "chalk": "^4.1.2", "execa": "^5.0.0", "find-up": "^5.0.0", "mime": "^2.4.1", "open": "^6.2.0", "ora": "^5.4.1", "prompts": "^2.4.2", "semver": "^7.5.2", "shell-quote": "^1.7.3", "sudo-prompt": "^9.0.0" } }, "sha512-2RzoUKR+Y03ijBeeSoCSQihyN6dxy3fbHjraO4MheZZUzt/Yd1VMEDd0R5aa6rtiRDoknbHt45RL2GMa8MSaEA=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-types": ["@react-native-community/cli-types@15.1.3", "", { "dependencies": { "joi": "^17.2.1" } }, "sha512-0ZaM8LMsa7z7swBN+ObL2ysc6aA3AdS698Q6uEukym6RyX1uLbiofUdlvFSMpWSEL3D8f9OTymmL4RkCH8k6dw=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/semver": ["semver@7.7.4", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA=="],
-
     "react-native-vector-icons/yargs/cliui": ["cliui@7.0.4", "", { "dependencies": { "string-width": "^4.2.0", "strip-ansi": "^6.0.0", "wrap-ansi": "^7.0.0" } }, "sha512-OcRE68cOsVMXp1Yvonl/fzkQOyjLSu/8bhPDfQt0e0/Eb283TKP20Fs2MqoPsr9SwA595rRCA+QMzYc9nBP+JQ=="],
 
     "react-native-vector-icons/yargs/yargs-parser": ["yargs-parser@20.2.9", "", {}, "sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w=="],
@@ -3139,20 +3119,6 @@
 
     "react-native-svg-path-gradient/color/color-string/color-name": ["color-name@1.1.4", "", {}, "sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA=="],
 
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/@react-native-community/cli-platform-android": ["@react-native-community/cli-platform-android@15.1.3", "", { "dependencies": { "@react-native-community/cli-config-android": "15.1.3", "@react-native-community/cli-tools": "15.1.3", "chalk": "^4.1.2", "execa": "^5.0.0", "logkitty": "^0.7.1" } }, "sha512-ZwrBK0UK4DRHoQm2v5m8+PlNHBK5gmibBU6rqNFLo4aZJ2Rufalbv3SF+DukgSyoI9/kI8UVrzSNj17e+HhN5A=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/@react-native-community/cli-platform-apple": ["@react-native-community/cli-platform-apple@15.1.3", "", { "dependencies": { "@react-native-community/cli-config-apple": "15.1.3", "@react-native-community/cli-tools": "15.1.3", "chalk": "^4.1.2", "execa": "^5.0.0", "fast-xml-parser": "^4.4.1" } }, "sha512-awotqCGVcTdeRmTlE3wlsZgNxZUDGojUhPYOVMKejgdCzNM2bvzF8fqhETH2sc64Hbw/tQJg8pYeD4MZR0bHxw=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/@react-native-community/cli-platform-ios": ["@react-native-community/cli-platform-ios@15.1.3", "", { "dependencies": { "@react-native-community/cli-platform-apple": "15.1.3" } }, "sha512-DxM8GYkqjrlGuuGiGjrcvUmKC2xv9zDzHbsc4+S160Nn0zbF2OH1DhMlnIuUeCmQnAO6QFMqU99O120iEzCAug=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/strip-ansi": ["strip-ansi@5.2.0", "", { "dependencies": { "ansi-regex": "^4.1.0" } }, "sha512-DuRs1gKbBqsMKIZlrffwlug8MHkcnpjs5VPmL1PAh+mA30U0DTotfDZ0d2UUsXpPmPmMMJ6W773MaA3J+lbiWA=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-server-api/pretty-format": ["pretty-format@26.6.2", "", { "dependencies": { "@jest/types": "^26.6.2", "ansi-regex": "^5.0.0", "ansi-styles": "^4.0.0", "react-is": "^17.0.1" } }, "sha512-7AeGuCYNGmycyQbCqd/3PWH4eOoX/OiCa0uphp57NVTeAGdJGaAliecxwBDHYQCIvrW7aDBZCYeNTP/WX69mkg=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-server-api/ws": ["ws@6.2.3", "", { "dependencies": { "async-limiter": "~1.0.0" } }, "sha512-jmTjYU0j60B+vHey6TfR3Z7RD61z/hmxBS3VMSGIrroOWXQEneK1zNuotOUrGyBHQj0yrpsLHPWtigEFd13ndA=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-tools/open": ["open@6.4.0", "", { "dependencies": { "is-wsl": "^1.1.0" } }, "sha512-IFenVPgF70fSm1keSd2iDBIDIBZkroLeuffXq+wKTzTJlBpesFWojV9lb8mzOfaAzM1sr7HQHuO0vtV0zYekGg=="],
-
     "renderkid/css-select/domutils/dom-serializer": ["dom-serializer@1.4.1", "", { "dependencies": { "domelementtype": "^2.0.1", "domhandler": "^4.2.0", "entities": "^2.0.0" } }, "sha512-VHwB3KfrcOOkelEG2ZOfxqLZdfkil8PtJi4P8N2MMXucZq2yLp75ClViUlOVwyoHEDjYU433Aq+5zWP61+RGag=="],
 
     "ripemd160/hash-base/readable-stream/isarray": ["isarray@1.0.0", "", {}, "sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ=="],
@@ -3171,30 +3137,10 @@
 
     "qrcode/yargs/find-up/locate-path/p-locate": ["p-locate@4.1.0", "", { "dependencies": { "p-limit": "^2.2.0" } }, "sha512-R79ZZ/0wAxKGu3oYMlz8jy/kbhsNrS7SKZ7PxEHBgJ5+F2mtFW2fK2cOtBh1cHYkQsbzFV7I+EoRKe6Yt0oK7A=="],
 
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/@react-native-community/cli-platform-android/@react-native-community/cli-config-android": ["@react-native-community/cli-config-android@15.1.3", "", { "dependencies": { "@react-native-community/cli-tools": "15.1.3", "chalk": "^4.1.2", "fast-glob": "^3.3.2", "fast-xml-parser": "^4.4.1" } }, "sha512-v9okV/WQfMJEWRddI0S6no2v9Lvk54KgFkw1mvMYhJKVqloCNsIWzoqme0u7zIuYSzwsjXUQXVlGiDzbbwdkBw=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/@react-native-community/cli-platform-apple/@react-native-community/cli-config-apple": ["@react-native-community/cli-config-apple@15.1.3", "", { "dependencies": { "@react-native-community/cli-tools": "15.1.3", "chalk": "^4.1.2", "execa": "^5.0.0", "fast-glob": "^3.3.2" } }, "sha512-Qv6jaEaycv+7s8wR9l9bdpIeSNFCeVANfGCX1x76SgOmGfZNIa7J3l1HaeF/5ktERMYsw/hm4u3rUn4Ks0YV1g=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/@react-native-community/cli-platform-apple/fast-xml-parser": ["fast-xml-parser@4.5.5", "", { "dependencies": { "strnum": "^1.0.5" }, "bin": { "fxparser": "src/cli/cli.js" } }, "sha512-cK9c5I/DwIOI7/Q7AlGN3DuTdwN61gwSfL8rvuVPK+0mcCNHHGxRrpiFtaZZRfRMJL3Gl8B2AFlBG6qXf03w9A=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/strip-ansi/ansi-regex": ["ansi-regex@4.1.1", "", {}, "sha512-ILlv4k/3f6vfQ4OoP2AGvirOktlQ98ZEL1k9FaQjxa3L1abBgbuTDAdPOpvbGncC0BTVQrl+OM8xZGK6tWXt7g=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-server-api/pretty-format/@jest/types": ["@jest/types@26.6.2", "", { "dependencies": { "@types/istanbul-lib-coverage": "^2.0.0", "@types/istanbul-reports": "^3.0.0", "@types/node": "*", "@types/yargs": "^15.0.0", "chalk": "^4.0.0" } }, "sha512-fC6QCp7Sc5sX6g8Tvbmj4XUTbyrik0akgRy03yjXbQaBWWNWGE7SGtJk98m0N8nzegD/7SggrUlivxo5ax4KWQ=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-server-api/pretty-format/react-is": ["react-is@17.0.2", "", {}, "sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w=="],
-
     "import-local/pkg-dir/find-up/locate-path/p-locate/p-limit": ["p-limit@2.3.0", "", { "dependencies": { "p-try": "^2.0.0" } }, "sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w=="],
 
     "logkitty/yargs/find-up/locate-path/p-locate/p-limit": ["p-limit@2.3.0", "", { "dependencies": { "p-try": "^2.0.0" } }, "sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w=="],
 
     "qrcode/yargs/find-up/locate-path/p-locate/p-limit": ["p-limit@2.3.0", "", { "dependencies": { "p-try": "^2.0.0" } }, "sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/@react-native-community/cli-platform-android/@react-native-community/cli-config-android/fast-xml-parser": ["fast-xml-parser@4.5.5", "", { "dependencies": { "strnum": "^1.0.5" }, "bin": { "fxparser": "src/cli/cli.js" } }, "sha512-cK9c5I/DwIOI7/Q7AlGN3DuTdwN61gwSfL8rvuVPK+0mcCNHHGxRrpiFtaZZRfRMJL3Gl8B2AFlBG6qXf03w9A=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/@react-native-community/cli-platform-apple/fast-xml-parser/strnum": ["strnum@1.1.2", "", {}, "sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-server-api/pretty-format/@jest/types/@types/yargs": ["@types/yargs@15.0.20", "", { "dependencies": { "@types/yargs-parser": "*" } }, "sha512-KIkX+/GgfFitlASYCGoSF+T4XRXhOubJLhkLVtSfsRTe9jWMmuM2g28zQ41BtPTG7TRBb2xHW+LCNVE9QR/vsg=="],
-
-    "react-native-turbo-sqlite/@react-native-community/cli/@react-native-community/cli-doctor/@react-native-community/cli-platform-android/@react-native-community/cli-config-android/fast-xml-parser/strnum": ["strnum@1.1.2", "", {}, "sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA=="],
   }
 }

@@ -67,9 +67,6 @@ export default defineConfig(({ command, mode }) => {
     : [];
   const turboLndModuleReplacement =
     flavor === "normal" ? "react-native-turbo-lnd/electrobun/view" : "react-native-turbo-lnd/mock";
-  const turboSqliteModuleReplacement = isElectrobunTarget
-    ? resolvePath("electrobun/src/shims/react-native-turbo-sqlite.ts")
-    : "react-native-turbo-sqlite/mocks";
 
   return {
     root: resolvePath("web"),
@@ -220,11 +217,9 @@ export default defineConfig(({ command, mode }) => {
     //        `electrobun/src/shared/rpc-client.web.ts`
     //      - `flavor!=normal`: `react-native-turbo-lnd/mock`
     //    - `react-native-turbo-sqlite`
-    //      - plain web: `react-native-turbo-sqlite/mocks`
+    //      - plain web: upstream package browser export; no alias needed
     //      - Electrobun: `electrobun/src/shims/react-native-turbo-sqlite.ts`, which forwards
     //        DB open/query/close calls over Electrobun RPC to the Bun-side SQLite implementation
-    //      - Electrobun also remaps `react-native-turbo-sqlite/mocks` to a local shim so plain-web
-    //        code paths that await `mockReady` cannot accidentally initialize the sql.js WASM backend
     //    - `@react-native-async-storage/async-storage`
     //      - Electrobun only: `electrobun/src/shims/async-storage.js`, which forwards the
     //        AsyncStorage API over Electrobun RPC to the Bun-side KV store
@@ -236,8 +231,8 @@ export default defineConfig(({ command, mode }) => {
     //    - `src/storage/keystore.web.ts`: localStorage-backed replacement for `src/storage/keystore.ts`,
     //      so the native `react-native-keychain` dependency never enters the web/Electrobun bundle
     //    - `src/storage/database/sqlite.web.ts`: web DB entrypoint that imports
-    //      `react-native-turbo-sqlite`; on plain web that resolves to mocks, on Electrobun it resolves
-    //      to the RPC-backed SQLite shim above
+    //      `react-native-turbo-sqlite`; on plain web that resolves to the package browser backend,
+    //      on Electrobun it resolves to the RPC-backed SQLite shim above
     //    - `src/turbomodules/NativeBlixtTools.web.ts`: plain browser fallback for native build/file
     //      helpers
     //    - `src/turbomodules/NativeBlixtTools.electrobun.ts`: Electrobun-specific NativeBlixtTools
@@ -385,17 +380,15 @@ export default defineConfig(({ command, mode }) => {
           find: "react-native-nitro-tor",
           replacement: resolvePath("web/web-hacks/react-native-nitro-tor.js"),
         },
-        {
-          find: /^react-native-turbo-sqlite$/,
-          replacement: turboSqliteModuleReplacement,
-        },
         ...(isElectrobunTarget
           ? [
               {
+                find: /^react-native-turbo-sqlite$/,
+                replacement: resolvePath("electrobun/src/shims/react-native-turbo-sqlite.ts"),
+              },
+              {
                 find: /^react-native-turbo-sqlite\/mocks$/,
-                replacement: resolvePath(
-                  "electrobun/src/shims/react-native-turbo-sqlite-mocks.ts",
-                ),
+                replacement: resolvePath("electrobun/src/shims/react-native-turbo-sqlite-mocks.ts"),
               },
               {
                 find: /^@react-native-async-storage\/async-storage$/,
@@ -448,6 +441,11 @@ export default defineConfig(({ command, mode }) => {
       hmr: disableHmrForProductionNodeEnv ? false : undefined,
       fs: {
         allow: [resolvePath(".")],
+      },
+      headers: {
+        // For react-native-turbo-sqlite web (uses OPFS):
+        "Cross-Origin-Opener-Policy": "same-origin",
+        "Cross-Origin-Embedder-Policy": "require-corp",
       },
     },
 

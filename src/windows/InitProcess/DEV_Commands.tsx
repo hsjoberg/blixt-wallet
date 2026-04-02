@@ -275,16 +275,31 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              const db = TurboSqlite.openDatabase(
-                `/data/user/0/com.blixtwallet.debug/databases/Blixt`,
-              );
+              if (PLATFORM === "web") {
+                const db = await TurboSqlite.openDatabaseAsync("Blixt");
+                console.log(await db.executeSqlAsync("SELECT * from tx", []));
+                return;
+              }
 
+              const db = TurboSqlite.openDatabase(`/data/user/0/com.blixtwallet.debug/databases/Blixt`);
               console.log(db.executeSql("SELECT * from tx", []));
             }}
           >
             <Text>test</Text>
           </Button>
-          <Button small onPress={async () => console.log(TurboSqlite.getVersionString())}>
+          <Button
+            small
+            onPress={async () => {
+              if (PLATFORM === "web") {
+                const db = await TurboSqlite.openDatabaseAsync("Blixt");
+                console.log(await db.executeSqlAsync("SELECT sqlite_version() AS version", []));
+                await db.closeAsync();
+                return;
+              }
+
+              console.log(TurboSqlite.getVersionString());
+            }}
+          >
             <Text>TurboSqlite.getVersionString()</Text>
           </Button>
           {/*

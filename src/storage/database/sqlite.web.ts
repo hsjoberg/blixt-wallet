@@ -1,10 +1,21 @@
-import TurboSqlite, { Database } from "react-native-turbo-sqlite";
-import { mockReady } from "react-native-turbo-sqlite/mocks";
+import TurboSqlite, { Database, Params, SqlResult } from "react-native-turbo-sqlite";
 import { getInitialSchema } from "./sqlite-migrations";
 
+const adaptWebDatabase = (db: Database): Database => {
+  const webDb = db as Database & {
+    executeSqlAsync: (sql: string, params: Params) => Promise<SqlResult>;
+    closeAsync: () => Promise<void>;
+  };
+
+  return {
+    ...webDb,
+    executeSql: (sql: string, params: Params) => webDb.executeSqlAsync(sql, params),
+    close: () => webDb.closeAsync(),
+  } as unknown as Database;
+};
+
 export const openDatabase = async (): Promise<Database> => {
-  await mockReady;
-  return await TurboSqlite.openDatabase("Blixt");
+  return adaptWebDatabase(await TurboSqlite.openDatabaseAsync("Blixt"));
 };
 
 export const setupInitialSchema = async (db: Database) => {

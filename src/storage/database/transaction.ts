@@ -329,8 +329,8 @@ export const getTransactions = async (
 ): Promise<ITransaction[]> => {
   const sql = getExpired
     ? `SELECT * FROM tx ORDER BY date DESC;`
-    : `SELECT * FROM tx WHERE status != "EXPIRED" ORDER BY date DESC;`;
-  const transactions = await queryMulti<IDBTransaction>(db, sql);
+    : `SELECT * FROM tx WHERE status != ? ORDER BY date DESC;`;
+  const transactions = await queryMulti<IDBTransaction>(db, sql, getExpired ? [] : ["EXPIRED"]);
   try {
     return (await Promise.all(
       transactions.map(async (transaction) => ({
