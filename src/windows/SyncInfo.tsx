@@ -64,20 +64,24 @@ export default function SyncInfo({}: ISyncInfoProps) {
   }, []);
 
   const onPressShowLndLog = async () => {
-    const tailLog = await NativeBlixtTools.tailLog(100);
-    log.current = tailLog
-      .split("\n")
-      .map((row) => row.slice(11))
-      .join("\n");
+    try {
+      const tailLog = await NativeBlixtTools.tailLog(100);
+      log.current = tailLog
+        .split("\n")
+        .map((row) => row.slice(11))
+        .join("\n");
 
-    listener.current = NativeBlixtTools.onLndLog(function (data: string) {
-      log.current = log.current + "\n" + data.slice(11);
+      listener.current = NativeBlixtTools.onLndLog(function (data: string) {
+        log.current = log.current + "\n" + data.slice(11);
+        forceUpdate();
+      });
+
+      await NativeBlixtTools.observeLndLogFile();
       forceUpdate();
-    });
-
-    NativeBlixtTools.observeLndLogFile();
-    forceUpdate();
-    setShowLndLog(true);
+      setShowLndLog(true);
+    } catch (error: any) {
+      toast(error.message, undefined, "danger");
+    }
   };
 
   const onPressCopy = (l: string) => {
