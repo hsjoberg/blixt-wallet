@@ -77,7 +77,7 @@
         "react-native-svg-path-gradient": "^0.4.0",
         "react-native-svg-web": "^1.0.9",
         "react-native-turbo-lnd": "0.0.18",
-        "react-native-turbo-sqlite": "0.6.0",
+        "react-native-turbo-sqlite": "0.6.1",
         "react-native-vector-icons": "9.2.0",
         "react-native-vision-camera": "4.7.3",
         "react-native-web": "0.21.2",
@@ -2128,7 +2128,7 @@
 
     "react-native-turbo-lnd": ["react-native-turbo-lnd@0.0.18", "", { "peerDependencies": { "@bufbuild/protobuf": "*", "electrobun": "*", "react": "*", "react-native": "*" }, "optionalPeers": ["@bufbuild/protobuf", "electrobun"] }, "sha512-8WtuQk8K6fCoonVPFD8CejNvBOKnoa0d/h2se52LybiN1fBzoIFmrM/IXa5F2t+kGa/sfPAFJugvC7zjnMgvYA=="],
 
-    "react-native-turbo-sqlite": ["react-native-turbo-sqlite@0.6.0", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-8jW7/8lyz/rB/kpKz4m0qHXjpDQuNLcX+/xOXjx0nMBsM9+ECtELHjq5No2evJ2OuUGb8ogYqRwh+uZ7TxKnWA=="],
+    "react-native-turbo-sqlite": ["react-native-turbo-sqlite@0.6.1", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-xtRm/tLNT7R/1b2Pc9HhIi8hGX7exwW251pH9OWtr8fJb9Frps8RAmUwTDZNR+AYx4yRZWL6jbuV9v+NdHTqDw=="],
 
     "react-native-vector-icons": ["react-native-vector-icons@9.2.0", "", { "dependencies": { "prop-types": "^15.7.2", "yargs": "^16.1.1" }, "bin": { "fa5-upgrade": "bin/fa5-upgrade.sh", "generate-icon": "bin/generate-icon.js" } }, "sha512-wKYLaFuQST/chH3AJRjmOLoLy3JEs1JR6zMNgTaemFpNoXs0ztRnTxcxFD9xhX7cJe1/zoN5BpQYe7kL0m5yyA=="],
 
