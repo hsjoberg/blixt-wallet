@@ -191,14 +191,6 @@ export default defineConfig(({ command, mode }) => {
                 },
               ]),
           {
-            src: normalizePath(resolvePath("assets/fonts/*")),
-            dest: ".",
-          },
-          {
-            src: normalizePath(resolvePath("node_modules/react-native-vector-icons/Fonts/*")),
-            dest: ".",
-          },
-          {
             src: normalizePath(
               resolvePath("node_modules/react-native-web-webview/dist/postMock.html"),
             ),
