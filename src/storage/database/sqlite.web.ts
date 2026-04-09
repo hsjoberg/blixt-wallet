@@ -1,20 +1,21 @@
-import TurboSqlite, { Database, Params, SqlResult } from "react-native-turbo-sqlite";
+import TurboSqlite, { Database, Params } from "react-native-turbo-sqlite";
 import { getInitialSchema } from "./sqlite-migrations";
+import { IS_ELECTROBUN } from "../../utils/constants";
 
 const adaptWebDatabase = (db: Database): Database => {
-  const webDb = db as Database & {
-    executeSqlAsync: (sql: string, params: Params) => Promise<SqlResult>;
-    closeAsync: () => Promise<void>;
-  };
-
   return {
-    ...webDb,
-    executeSql: (sql: string, params: Params) => webDb.executeSqlAsync(sql, params),
-    close: () => webDb.closeAsync(),
+    ...db,
+    executeSql: (sql: string, params: Params) => db.executeSqlAsync(sql, params),
+    close: () => db.closeAsync(),
   } as unknown as Database;
 };
 
 export const openDatabase = async (): Promise<Database> => {
+  // Electrobun backend does not use sqlite wasm,
+  // as we have our own bun:sqlite shim
+  if (IS_ELECTROBUN) {
+    return await TurboSqlite.openDatabaseAsync("Blixt");
+  }
   return adaptWebDatabase(await TurboSqlite.openDatabaseAsync("Blixt"));
 };
 

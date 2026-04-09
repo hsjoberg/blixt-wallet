@@ -9,6 +9,34 @@ import {
   turboSqliteVersionString,
 } from "../shared/turbo-sqlite-rpc";
 
+const createDatabase = (
+  openPromise: Promise<TurboSqliteTransportOpenDatabaseResponse>,
+): TurboSqliteDatabase => {
+  const executeSql = async (sql: string, params: TurboSqliteSqlParams) => {
+    const { databaseId } = await openPromise;
+    return await electrobunRequest(TurboSqliteRpcMethodNames.executeSql, [
+      databaseId,
+      sql,
+      params,
+    ]);
+  };
+
+  const close = async () => {
+    const { databaseId } = await openPromise;
+    await electrobunRequest<TurboSqliteTransportCloseDatabaseResponse>(
+      TurboSqliteRpcMethodNames.closeDatabase,
+      [databaseId],
+    );
+  };
+
+  return {
+    executeSql,
+    executeSqlAsync: executeSql,
+    close,
+    closeAsync: close,
+  };
+};
+
 const TurboSqlite: Spec = {
   openDatabase(path: string): TurboSqliteDatabase {
     const openPromise = electrobunRequest<TurboSqliteTransportOpenDatabaseResponse>(
@@ -16,24 +44,16 @@ const TurboSqlite: Spec = {
       [path],
     );
 
-    return {
-      async executeSql(sql: string, params: TurboSqliteSqlParams) {
-        const { databaseId } = await openPromise;
-        return await electrobunRequest(TurboSqliteRpcMethodNames.executeSql, [
-          databaseId,
-          sql,
-          params,
-        ]);
-      },
+    return createDatabase(openPromise);
+  },
 
-      async close() {
-        const { databaseId } = await openPromise;
-        await electrobunRequest<TurboSqliteTransportCloseDatabaseResponse>(
-          TurboSqliteRpcMethodNames.closeDatabase,
-          [databaseId],
-        );
-      },
-    };
+  async openDatabaseAsync(path: string): Promise<TurboSqliteDatabase> {
+    const openPromise = electrobunRequest<TurboSqliteTransportOpenDatabaseResponse>(
+      TurboSqliteRpcMethodNames.openDatabase,
+      [path],
+    );
+
+    return createDatabase(openPromise);
   },
 
   getVersionString(): string {
