@@ -12,7 +12,6 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9DD49E429A2B2567892B4CDE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 7D9A028A2AECDD1817ED76D5 /* PrivacyInfo.xcprivacy */; };
-		CC173A032D5274C700FA4A3E /* liblnd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC4D35242CB491D4002081FE /* liblnd.a */; };
 		CC7C276B2A61A62C0050762A /* IBMPlexSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC7C27692A61A62C0050762A /* IBMPlexSans-Medium.ttf */; };
 		CC7C276C2A61A62C0050762A /* IBMPlexSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC7C276A2A61A62C0050762A /* IBMPlexSans-Regular.ttf */; };
 		CC96DB512DFB59F5009A4BA1 /* NativeSpeedloaderModuleProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC96DB502DFB59F5009A4BA1 /* NativeSpeedloaderModuleProvider.mm */; };
@@ -21,7 +20,6 @@
 		CC9860E32A5F344900047BB1 /* walletunlocker.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DA2A5F344700047BB1 /* walletunlocker.pb.swift */; };
 		CC9860E72A5F344900047BB1 /* LndMobileScheduledSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DE2A5F344800047BB1 /* LndMobileScheduledSync.swift */; };
 		CC9860E82A5F344900047BB1 /* LndMobileScheduledSync.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9860DF2A5F344800047BB1 /* LndMobileScheduledSync.m */; };
-		CC98610A2A5F5AF400047BB1 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC9861092A5F5AE500047BB1 /* libresolv.tbd */; };
 		CCB1E6E82D5268C6000B0C98 /* NativeSpeedloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB1E6E62D5268C6000B0C98 /* NativeSpeedloader.cpp */; };
 		CCB700012E11111100A1B2C3 /* BlixtToolsTurbo.mm in Sources */ = {isa = PBXBuildFile; fileRef = CCB700022E11111100A1B2C3 /* BlixtToolsTurbo.mm */; };
 		CCB700052E11111100A1B2C3 /* BlixtToolsBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB700042E11111100A1B2C3 /* BlixtToolsBridge.m */; };
@@ -58,7 +56,6 @@
 		7D9A028A2AECDD1817ED76D5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = BlixtWallet/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = BlixtWallet/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C2DA902628B4FAC47EFD5875 /* Pods-BlixtWallet.releasetestnet.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlixtWallet.releasetestnet.xcconfig"; path = "Target Support Files/Pods-BlixtWallet/Pods-BlixtWallet.releasetestnet.xcconfig"; sourceTree = "<group>"; };
-		CC4D35242CB491D4002081FE /* liblnd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblnd.a; sourceTree = "<group>"; };
 		CC7C27692A61A62C0050762A /* IBMPlexSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "IBMPlexSans-Medium.ttf"; path = "../assets/fonts/IBMPlexSans-Medium.ttf"; sourceTree = "<group>"; };
 		CC7C276A2A61A62C0050762A /* IBMPlexSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "IBMPlexSans-Regular.ttf"; path = "../assets/fonts/IBMPlexSans-Regular.ttf"; sourceTree = "<group>"; };
 		CC96DB4D2DFB59B2009A4BA1 /* NativeSpeedloaderModuleProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NativeSpeedloaderModuleProvider.h; path = BlixtWallet/NativeSpeedloaderModuleProvider.h; sourceTree = "<group>"; };
@@ -102,9 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC173A032D5274C700FA4A3E /* liblnd.a in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-BlixtWallet.a in Frameworks */,
-				CC98610A2A5F5AF400047BB1 /* libresolv.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,7 +159,6 @@
 			isa = PBXGroup;
 			children = (
 				CCB1E6E72D5268C6000B0C98 /* speedloader-turbomodule */,
-				CC4D35242CB491D4002081FE /* liblnd.a */,
 				CC7C27692A61A62C0050762A /* IBMPlexSans-Medium.ttf */,
 				CC7C276A2A61A62C0050762A /* IBMPlexSans-Regular.ttf */,
 				CC9860D52A5F342D00047BB1 /* LndMobile */,
