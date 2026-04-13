@@ -3,6 +3,7 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 
 const repoRoot = path.resolve(__dirname, "..");
+const packageJson = require(path.join(repoRoot, "package.json"));
 const turboLndRoot = path.join(repoRoot, "node_modules", "react-native-turbo-lnd");
 const turboLndPackagePath = path.join(turboLndRoot, "package.json");
 const turboLndFetchPath = path.join(turboLndRoot, "fetch-lnd.js");
@@ -12,6 +13,14 @@ try {
   if (!fs.existsSync(turboLndPackagePath) || !fs.existsSync(turboLndFetchPath)) {
     console.warn(
       "[postinstall] react-native-turbo-lnd is not available yet; skipping LND binary fetch.",
+    );
+    process.exit(0);
+  }
+
+  const declaredDependency = packageJson.dependencies?.["react-native-turbo-lnd"] ?? "";
+  if (declaredDependency.startsWith("file:")) {
+    console.log(
+      `[postinstall] react-native-turbo-lnd is using a local path (${declaredDependency}); skipping binary fetch.`,
     );
     process.exit(0);
   }
