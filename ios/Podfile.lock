@@ -1647,7 +1647,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - react-native-turbo-lnd (0.0.18):
+  - react-native-turbo-lnd (0.0.19):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2941,7 +2941,7 @@ SPEC CHECKSUMS:
   react-native-maps: cb32168a32e30f83beb08198325ff96b70dd5c9f
   react-native-safe-area-context: 6b4966397ada0f7dd481e4486a2ef936834861a1
   react-native-slider: 08ecfc4e9cc16cc388a56dd9caeca51b55cd9bb7
-  react-native-turbo-lnd: bf5f8f4210163d24bfcb807ab1ed83f073dbb0ab
+  react-native-turbo-lnd: 609501ce66ace34c2aea0d91c5f7d418d6cdd95a
   react-native-turbo-sqlite: cace87d980c7ee8e70d7b8a92dc68468438018e2
   react-native-webview: 2da09bdea1aeb6c46e27dd94632e21059cade6c1
   React-NativeModulesApple: 9c1f8815ebd72cc1c75587fe588513f6dd9cb708
