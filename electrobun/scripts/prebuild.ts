@@ -4,7 +4,7 @@ import { dirname, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 
-const NAPI_ADDON_FILENAME = "turbolnd_electrobun_napi.node";
+const NAPI_ADDON_FILENAME = "turbolnd_napi.node";
 const requireFromElectrobun = createRequire(import.meta.url);
 const currentPlatform = platform();
 
@@ -43,7 +43,7 @@ function stageNapiAddon() {
   const addonPath = join(
     turboLndPackageRoot,
     "native",
-    "electrobun-napi",
+    "napi",
     getNapiPlatformArchDir(),
     NAPI_ADDON_FILENAME,
   );
@@ -67,17 +67,17 @@ const lndLibraryFilename = getLndLibraryFilename();
 const repoLndLibraryPath = resolve("..", lndLibraryFilename);
 const localLndLibraryPath = resolve("vendor", lndLibraryFilename);
 if (existsSync(repoLndLibraryPath)) {
-	mkdirSync(resolve("vendor"), { recursive: true });
-	cpSync(repoLndLibraryPath, localLndLibraryPath, { dereference: true });
+  mkdirSync(resolve("vendor"), { recursive: true });
+  cpSync(repoLndLibraryPath, localLndLibraryPath, { dereference: true });
 }
 
 if (currentPlatform !== "win32") {
-	process.exit(0);
+  process.exit(0);
 }
 
 const buildDirEnv = process.env.ELECTROBUN_BUILD_DIR;
 if (!buildDirEnv) {
-	process.exit(0);
+  process.exit(0);
 }
 
 const buildDir = resolve(buildDirEnv);
