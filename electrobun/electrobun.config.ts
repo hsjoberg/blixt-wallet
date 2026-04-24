@@ -1,6 +1,6 @@
 import type { ElectrobunConfig } from "electrobun";
 
-const NAPI_ADDON_FILENAME = "turbolnd_electrobun_napi.node";
+const NAPI_ADDON_FILENAME = "turbolnd_napi.node";
 
 function getLndLibraryFilename(): string {
   switch (process.platform) {
