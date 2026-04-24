@@ -1,13 +1,30 @@
-const PREFIX = "blixt-keystore:";
+import { electrobunRequest } from "../../electrobun/src/shared/rpc-client.web";
 
-const keyOf = (key: string) => `${PREFIX}${key}`;
+const setElectrobunItem = async (key: string, value: string) => {
+  await electrobunRequest("__BlixtKeystoreSetItem", {
+    key,
+    value,
+  });
+};
+
+const getElectrobunItem = async (key: string): Promise<string | null> => {
+  return await electrobunRequest<string | null>("__BlixtKeystoreGetItem", {
+    key,
+  });
+};
+
+const removeElectrobunItem = async (key: string) => {
+  await electrobunRequest("__BlixtKeystoreRemoveItem", {
+    key,
+  });
+};
 
 export const setItem = async (key: string, value: string) => {
-  localStorage.setItem(keyOf(key), value);
+  await setElectrobunItem(key, value);
 };
 
 export const getItem = async (key: string): Promise<string | null> => {
-  return localStorage.getItem(keyOf(key));
+  return await getElectrobunItem(key);
 };
 
 export const setItemObject = async <T>(key: string, value: T) => {
@@ -17,7 +34,7 @@ export const setItemObject = async <T>(key: string, value: T) => {
 export const getItemObject = async (key: string) => JSON.parse((await getItem(key)) || "null");
 
 export const removeItem = async (key: string) => {
-  localStorage.removeItem(keyOf(key));
+  await removeElectrobunItem(key);
 };
 
 export const setSeed = async (seed: string[]) => setItemObject("seed", seed);
