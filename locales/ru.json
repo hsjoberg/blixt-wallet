@@ -43,11 +43,7 @@
   "welcome.start": {
     "title": "Добро пожаловать",
     "createWallet": {
-      "title": "Создать Кошелёк",
-      "msg1": "Blixt Кошелёк всё ещё в ранней стадии разработки.",
-      "msg2": "Если вы используете этот кошелёк, вы должны отдавать себе отчёт в риске потери средств.",
-      "msg3": "Сейчас не поддерживаются WatchTower для \"наблюдения\" за вашими каналами, пока вы оффлайн.",
-      "msg4": "Я дерзок, продолжить"
+      "title": "Создать Кошелёк"
     },
     "createWalletWithPassphrase": {
       "title": "Установите парольную фразу (25-е слово для шифрования начального числа)",
@@ -82,7 +78,8 @@
       "onChainWallet": "Ончейн",
       "lightningChannels": "Каналы Молния",
       "keysendExperiment": "Эксперимент Keysend",
-      "showMore": "Продвинутые опции"
+      "showMore": "Продвинутые опции",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Сделано с ⚡, в Швеции"
   },
@@ -93,7 +90,7 @@
       "more": "Больше инфо"
     },
     "sendOnChain": {
-      "title": "Добро пожаловать в кошелёк Bixt!",
+      "title": "Добро пожаловать в кошелёк Biixt Wallet!",
       "msg1": "Чтобы начать, отправьте биткоины ончейн на адрес справа.",
       "msg2": "Ваш канал будет открыт автоматически.",
       "msg3": "Отправьте как минимум",
@@ -275,6 +272,7 @@
     },
     "channel": {
       "alias": "Имя",
+      "bumpFee": "Bump Fee",
       "node": "Узел",
       "channelId": "ID Канала",
       "channelPoint": "Точка канала",
@@ -297,11 +295,22 @@
       "maturityHeight": "Высота расчёта",
       "localCommitmentTxid": "Локальное обязательство TXID",
       "remoteCommitmentTxid": "Удалённое обязательство TXID",
+      "enterDeliveryAddress": "Enter Closing Address",
+      "invalidAddress": "Enter a valid Bitcoin Address",
       "closeChannel": "Закрыть канал",
+      "forceCloseChannel": "Force Close Channel",
+      "closeChannelToAddress": "Close Channel to External Address",
       "forceClosePendingChannel": "Принудительно закрыть ожидающий канал",
       "forceCloseDelay": "Задержка закрытия силы",
       "closeChannelPrompt": {
         "title": "Закрыть канал"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },
@@ -631,6 +640,9 @@
       },
       "mapTheme": {
         "title": "Установить тему карты"
+      },
+      "hideAmountsEnabled": {
+        "title": "Hide amounts"
       }
     },
     "wallet": {
@@ -791,6 +803,16 @@
         "title": "Автоматически открывать каналы",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Услуги входящих каналов",
         "subtitle": "Использовать сервис входящего канала для приема платежей",
@@ -910,6 +932,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "Включить индивидуальные счета -фактуры"
+      },
+      "randomizeSettings": {
+        "title": "Randomize settings"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomize settings on startup"
       }
     },
     "experimental": {
@@ -1041,6 +1069,10 @@
         "title": "Включить постоянное приложение",
         "subtitle": "Приложение остается активным в фоновом режиме"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
@@ -1144,7 +1176,7 @@
     "info": {
       "welcome": "Добро пожаловать в регистрацию Lightning Box",
       "whatIs": "Lightning Box-это поставщик услуг Lightning Address, который направляет запросы на оплату непосредственно на телефон, предоставляя вам самостоятельную Lightning Address для мобильных устройств.",
-      "persistentMode":"Эта услуга зависит от постоянного режима, поскольку приложение должно оставаться активным для получения входящих платежей. Пожалуйста, убедитесь, что оптимизация батареи выключена на вашем устройстве. В противном случае эта услуга не может работать.",
+      "persistentMode": "Эта услуга зависит от постоянного режима, поскольку приложение должно оставаться активным для получения входящих платежей. Пожалуйста, убедитесь, что оптимизация батареи выключена на вашем устройстве. В противном случае эта услуга не может работать.",
       "currentRules": "Сервис бесплатно. Однако по техническим причинам в настоящее время требуется канал с провайдером Lightning Box. В настоящее время невозможно изменить вашу Lightning Address, которую вы выбрали."
     },
     "prerequisites": {

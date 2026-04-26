@@ -23,7 +23,8 @@ import { appMigration } from "../migration/app-migration";
 
 const APP_VERSION = appMigration.length - 1;
 
-export enum StorageItem { // const enums not supported in Babel 7...
+// const enums not supported in Babel 7...
+export enum StorageItem {
   app = "app",
   brickDeviceAndExportChannelDb = "brickDeviceAndExportChannelDb", // This is used to copy the channel.db file when lnd is down
   bricked = "bricked", // This is used when channel.db migration is commenced
@@ -43,6 +44,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   language = "language",
   walletPassword = "walletPassword",
   autopilotEnabled = "autopilotEnabled",
+  autopilotNodePubkey = "autopilotNodePubkey",
   pushNotificationsEnabled = "pushNotificationsEnabled",
   clipboardInvoiceCheck = "clipboardInvoiceCheck",
   scheduledSyncEnabled = "scheduledSyncEnabled",
@@ -50,6 +52,7 @@ export enum StorageItem { // const enums not supported in Babel 7...
   lastScheduledSync = "lastScheduledSync",
   lastScheduledSyncAttempt = "lastScheduledSyncAttempt",
   debugShowStartupInfo = "debugShowStartupInfo",
+  useLegacyHeaderGradient = "useLegacyHeaderGradient",
   googleDriveBackupEnabled = "googleDriveBackupEnabled",
   preferFiat = "preferFiat",
   transactionGeolocationEnabled = "transactionGeolocationEnabled",
@@ -184,6 +187,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.language),
     removeItem(StorageItem.walletPassword),
     removeItem(StorageItem.autopilotEnabled),
+    removeItem(StorageItem.autopilotNodePubkey),
     removeItem(StorageItem.pushNotificationsEnabled),
     removeItem(StorageItem.clipboardInvoiceCheck),
     removeItem(StorageItem.scheduledSyncEnabled),
@@ -191,6 +195,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.lastScheduledSyncAttempt),
     removeItem(StorageItem.scheduledGossipSyncEnabled),
     removeItem(StorageItem.debugShowStartupInfo),
+    removeItem(StorageItem.useLegacyHeaderGradient),
     removeItem(StorageItem.googleDriveBackupEnabled),
     removeItem(StorageItem.preferFiat),
     removeItem(StorageItem.transactionGeolocationEnabled),
@@ -265,7 +270,7 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.app, true),
     setItemObject<boolean>(StorageItem.brickDeviceAndExportChannelDb, false),
     setItemObject<boolean>(StorageItem.bricked, false),
-    setItemObject<IImportChannelDbOnStartup>(StorageItem.bricked, null),
+    setItemObject<IImportChannelDbOnStartup | null>(StorageItem.importChannelDbOnStartup, null),
     setItemObject<number>(StorageItem.appVersion, APP_VERSION),
     setItemObject<number>(StorageItem.appBuild, VersionCode),
     setItemObject<boolean>(StorageItem.walletCreated, false),
@@ -274,17 +279,19 @@ export const setupApp = async () => {
     setItemObject<string>(StorageItem.lightningBalance, "0"),
     setItemObject<LoginMethods[]>(StorageItem.loginMethods, []),
     setItemObject<boolean>(StorageItem.seedStored, false), // !
-    setItemObject<keyof IBitcoinUnits>(StorageItem.bitcoinUnit, "sat"),
+    setItemObject<keyof IBitcoinUnits>(StorageItem.bitcoinUnit, "bip177"),
     setItemObject<keyof IFiatRates>(StorageItem.fiatUnit, "USD"),
     setItemObject<string>(StorageItem.language, "en"),
     // walletPassword
     setItemObject<boolean>(StorageItem.autopilotEnabled, true),
+    setItemObject<string>(StorageItem.autopilotNodePubkey, BLIXT_NODE_PUBKEY),
     setItemObject<boolean>(StorageItem.pushNotificationsEnabled, true),
     setItemObject<boolean>(StorageItem.clipboardInvoiceCheck, PLATFORM === "ios" ? false : true),
     setItemObject<boolean>(StorageItem.scheduledSyncEnabled, false),
     setItemObject<number>(StorageItem.lastScheduledSync, 0),
     setItemObject<number>(StorageItem.lastScheduledSyncAttempt, 0),
     setItemObject<boolean>(StorageItem.debugShowStartupInfo, Debug),
+    setItemObject<boolean>(StorageItem.useLegacyHeaderGradient, false),
     setItemObject<boolean>(StorageItem.googleDriveBackupEnabled, false),
     setItemObject<boolean>(StorageItem.preferFiat, false),
     setItemObject<boolean>(StorageItem.transactionGeolocationEnabled, false),

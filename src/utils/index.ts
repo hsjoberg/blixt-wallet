@@ -2,17 +2,11 @@ import { AppState } from "react-native";
 import { Toast } from "native-base";
 import { format } from "date-fns";
 import * as querystring from "querystring";
-import Long from "long";
 import aesjs, { ByteSource } from "aes-js";
 import * as base64 from "base64-js";
 import { Alert } from "react-native";
+import Geolocation from "@react-native-community/geolocation";
 import type { GeolocationResponse, GeolocationError } from "@react-native-community/geolocation";
-import { PLATFORM } from "./constants";
-
-let Geolocation: any;
-if (PLATFORM !== "macos") {
-  Geolocation = require("@react-native-community/geolocation");
-}
 
 export const capitalize = (word: string) =>
   word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
@@ -109,7 +103,7 @@ export const toast = (
 
 export const getGeolocation = (): Promise<GeolocationResponse["coords"]> => {
   return new Promise((resolve, reject) => {
-    Geolocation.default.getCurrentPosition(
+    Geolocation.getCurrentPosition(
       (position) => {
         resolve(position.coords);
       },

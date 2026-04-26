@@ -18,6 +18,12 @@ export const TELEGRAM = "https://t.me/blixtwallet";
 export const FAQ = "https://blixtwallet.github.io/faq";
 
 export const PLATFORM = Platform.OS;
+const runtimeGlobals = globalThis as Record<string, unknown>;
+export const IS_ELECTROBUN =
+  PLATFORM === "web" &&
+  (runtimeGlobals.IS_ELECTROBUN === true || typeof runtimeGlobals.__electrobun !== "undefined");
+export const BLIXT_WEB_DEMO =
+  runtimeGlobals.BLIXT_WEB_DEMO === true || runtimeGlobals.BLIXT_WEB_DEMO === "true";
 
 export const MATH_PAD_NATIVE_ID = "MATH_PAD";
 
@@ -50,7 +56,7 @@ export const DEFAULT_DUNDER_SERVER = chainSelect({
 });
 
 export const DEFAULT_SPEEDLOADER_SERVER = chainSelect({
-  mainnet: "https://primer.eldamar.icu",
+  mainnet: "https://primer.blixtwallet.com",
   testnet: "",
   regtest: "",
   signet: "",

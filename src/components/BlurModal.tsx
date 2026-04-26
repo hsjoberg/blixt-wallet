@@ -14,16 +14,11 @@ export interface ITransactionDetailsProps {
   noMargin?: boolean;
   style?: ViewStyle;
 }
-export default function BlurModal({
-  children,
-  goBackByClickingOutside,
-  hideCross,
-  noMargin,
-  style: userStyle,
-}: ITransactionDetailsProps) {
+export default function BlurModal(props: ITransactionDetailsProps) {
+  const { children, hideCross, style: userStyle } = props;
   const navigation = useNavigation();
-  goBackByClickingOutside = goBackByClickingOutside ?? true;
-  noMargin = noMargin ?? false;
+  const goBackByClickingOutside = props.goBackByClickingOutside ?? true;
+  const noMargin = props.noMargin ?? false;
 
   const goBack = () => {
     if (goBackByClickingOutside) {
@@ -43,7 +38,9 @@ export default function BlurModal({
           }}
           onPress={goBack}
         />
-        <View style={[style.modal, userStyle]}>{children}</View>
+        <View style={[style.modal, noMargin ? style.modalNoMargin : undefined, userStyle]}>
+          {children}
+        </View>
         {goBackByClickingOutside && !hideCross && (
           <Icon
             onPress={() => navigation.goBack()}
@@ -68,6 +65,9 @@ const style = StyleSheet.create({
     marginHorizontal: 6,
     maxWidth: 800,
     flex: 1,
+  },
+  modalNoMargin: {
+    marginHorizontal: 0,
   },
   cross: {
     position: "absolute",

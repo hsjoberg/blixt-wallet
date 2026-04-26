@@ -1,7 +1,13 @@
-import { NativeModules } from "react-native";
-import { WorkInfo } from "./LndMobile";
-const { LndMobileScheduledSync } = NativeModules;
+import ScheduledSyncTurbo, { WorkInfo } from "../turbomodules/NativeScheduledSyncTurbo";
+
+export const setupScheduledSyncWork = async (): Promise<boolean> => {
+  return await ScheduledSyncTurbo.setupScheduledSyncWork();
+};
+
+export const removeScheduledSyncWork = async (): Promise<boolean> => {
+  return await ScheduledSyncTurbo.removeScheduledSyncWork();
+};
 
 export const checkScheduledSyncWorkStatus = async (): Promise<WorkInfo> => {
-  return await LndMobileScheduledSync.checkScheduledSyncWorkStatus();
+  return await ScheduledSyncTurbo.checkScheduledSyncWorkStatus();
 };

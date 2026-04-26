@@ -13,7 +13,6 @@ import LightningNodeInfo from "./LightningNodeInfo";
 import LightningNetworkInfo from "./LightningNetworkInfo";
 import About from "./About";
 import TorShowOnionAddress from "./TorShowOnionAddress";
-import LndMobileHelpCenter from "./LndMobileHelpCenter";
 import useStackNavigationOptions from "../../hooks/useStackNavigationOptions";
 import SelectList, { ISelectListNavigationProps } from "../HelperWindows/SelectList";
 import { IFiatRates } from "../../state/Fiat";
@@ -25,6 +24,7 @@ import SpeedloaderLog from "./SpeedloaderLog";
 import DunderDoctor from "./DunderDoctor";
 import ToastLog from "./ToastLog";
 import DebugLog from "./DebugLog";
+import PowerUserTools from "./PowerUserTools";
 
 const Stack = createStackNavigator();
 
@@ -37,7 +37,6 @@ export type SettingsStackParamList = {
   LightningNodeInfo: undefined;
   About: undefined;
   TorShowOnionAddress: undefined;
-  LndMobileHelpCenter: undefined;
   ChangeBitcoinUnit: ISelectListNavigationProps<string>;
   ChangeFiatUnit: ISelectListNavigationProps<keyof IFiatRates>;
   ChangeLanguage: ISelectListNavigationProps<string>;
@@ -51,6 +50,7 @@ export type SettingsStackParamList = {
   DunderDoctor: undefined;
   ToastLog: undefined;
   DebugLog: undefined;
+  PowerUserTools: undefined;
 };
 
 export default function SettingsIndex() {
@@ -73,7 +73,6 @@ export default function SettingsIndex() {
       <Stack.Screen name="LightningNodeInfo" component={LightningNodeInfo} />
       <Stack.Screen name="About" component={About} />
       <Stack.Screen name="TorShowOnionAddress" component={TorShowOnionAddress} />
-      <Stack.Screen name="LndMobileHelpCenter" component={LndMobileHelpCenter} />
       <Stack.Screen name="ChangeFiatUnit" component={SelectList} />
       <Stack.Screen name="ChangeBitcoinUnit" component={SelectList} />
       <Stack.Screen name="ChangeLanguage" component={SelectList} />
@@ -94,6 +93,13 @@ export default function SettingsIndex() {
       <Stack.Screen name="DunderDoctor" component={DunderDoctor} />
       <Stack.Screen name="ToastLog" component={ToastLog} />
       <Stack.Screen name="DebugLog" component={DebugLog} />
+      <Stack.Screen
+        name="PowerUserTools"
+        component={PowerUserTools}
+        options={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      />
     </Stack.Navigator>
   );
 }

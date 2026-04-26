@@ -43,11 +43,7 @@
   "welcome.start": {
     "title": "Bienvenido",
     "createWallet": {
-      "title": "Crear Cartera",
-      "msg1": "Blixt Wallet continúa en desarrollo.",
-      "msg2": "Si usas esta cartera, asegúrate de tener claro que puedes perder tus fondos.",
-      "msg3": "No hay torre de vigilancia (por ahora) que vigile tus canales mientras estas offline.",
-      "msg4": "No tengo miedo. Continuar"
+      "title": "Crear Cartera"
     },
     "createWalletWithPassphrase": {
       "title": "Establecer frase de contraseña (25ª palabra para cifrar la semilla)",
@@ -82,7 +78,8 @@
       "onChainWallet": "Cartera On-chain",
       "lightningChannels": "Canales Lightning",
       "keysendExperiment": "Keysend (experimental)",
-      "showMore": "Ver más"
+      "showMore": "Ver más",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Hecho con ⚡ en Suecia"
   },
@@ -806,6 +803,16 @@
         "title": "Abrir canales automáticamente",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Servicios de canal entrante",
         "subtitle": "Usar un servicio que otorgue capacidad entrante para poder recibir pagos",
@@ -1062,6 +1069,10 @@
         "title": "Habilitar la aplicación persistente",
         "subtitle": "La aplicación permanece activa en segundo plano"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
@@ -1165,7 +1176,7 @@
     "info": {
       "welcome": "Bienvenido al registro de Lightning Box ",
       "whatIs": "Lightning Box es un proveedor de servicios de direcciones Lightning que reenvía las solicitudes de pago directamente al teléfono, lo que le brinda una dirección Lightning de custodia propria para dispositivos móviles.",
-      "persistentMode":"Este servicio depende del modo persistente, porque la aplicación debe permanecer activa para recibir pagos entrantes. Asegúrese de que la optimización de la batería esté apagada en su dispositivo. De lo contrario, este servicio puede no funcionar.",
+      "persistentMode": "Este servicio depende del modo persistente, porque la aplicación debe permanecer activa para recibir pagos entrantes. Asegúrese de que la optimización de la batería esté apagada en su dispositivo. De lo contrario, este servicio puede no funcionar.",
       "currentRules": "El servicio es de uso gratuito. Sin embargo, debido a razones técnicas, actualmente requiere un canal con el proveedor de Lightning Box. Actualmente no es posible cambiar su dirección Lightning después de haber elegido una."
     },
     "prerequisites": {

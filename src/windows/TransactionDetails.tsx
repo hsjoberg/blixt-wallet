@@ -9,7 +9,8 @@ import {
 } from "react-native";
 import DialogAndroid from "react-native-dialogs";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { Card, Text, CardItem, H1, View, Button, Icon } from "native-base";
+import { Card, Text, CardItem, H1, View, Icon } from "native-base";
+import { Button } from "../components/Button";
 import { fromUnixTime } from "date-fns";
 import MapView, { PROVIDER_DEFAULT, Marker } from "react-native-maps";
 
@@ -224,9 +225,14 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
   // In the case of an 0 sat invoice, transaction.value will be 0,
   // instead get from amtPaidSat.
   // TODO eventually sync up with what TransactionCard.tsx does.
-  if (transactionValue === 0n) {
+  if (transactionValue === BigInt(0)) {
     transactionValue = transaction.amtPaidSat;
   }
+
+  const formattedTransactionValue =
+    transactionValue === BigInt(0)
+      ? formatBitcoin(transactionValue, bitcoinUnit)
+      : formatBitcoin(transactionValue, bitcoinUnit, { includeSign: true });
 
   const hasCoordinates = transaction.locationLat && transaction.locationLong;
 
@@ -311,7 +317,7 @@ export default function TransactionDetails({ route, navigation }: ITransactionDe
               )}
               <MetaData
                 title={t("generic.amount", { ns: namespaces.common })}
-                data={formatBitcoin(transactionValue, bitcoinUnit)}
+                data={formattedTransactionValue}
               />
               {transaction.valueFiat != null && transaction.valueFiatCurrency && (
                 <MetaData

@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
-import { Button, Icon, Text, Spinner } from "native-base";
+import { Icon, Text, Spinner } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 import Clipboard from "@react-native-clipboard/clipboard";

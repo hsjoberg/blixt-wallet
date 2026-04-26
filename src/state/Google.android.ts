@@ -45,9 +45,11 @@ export const google: IGoogleModel = {
 
       if (hasPlayServices) {
         try {
+          log.i("Signing in silently");
           const user = await GoogleSignin.signInSilently();
           actions.setIsSignedIn(true);
           actions.setUser(user.data!);
+          log.i("Signed in silently", [user]);
         } catch (e: any) {
           if (e.code !== statusCodes.SIGN_IN_REQUIRED) {
             log.w(`Got unexpected error from GoogleSignin.signInSilently(): ${e.code}`, [e]);
@@ -69,6 +71,7 @@ export const google: IGoogleModel = {
       const user = await GoogleSignin.signIn();
       actions.setUser(user.data!);
       actions.setIsSignedIn(true);
+      log.i("Google signed in");
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -78,7 +81,7 @@ export const google: IGoogleModel = {
         // play services not available or outdated
       } else {
         // some other error happened
-        log.e("Got expected error from GoogleSignin.signIn(): ${e.code}", [error]);
+        log.e(`Got expected error from GoogleSignin.signIn(): ${error.code}`, [error]);
       }
       return false;
     }

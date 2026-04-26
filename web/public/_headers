@@ -1,0 +1,12 @@
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+
+/assets/*
+  Cross-Origin-Resource-Policy: same-origin
+
+/*.js
+  Cross-Origin-Resource-Policy: same-origin
+
+/*.wasm
+  Cross-Origin-Resource-Policy: same-origin

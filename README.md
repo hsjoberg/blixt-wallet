@@ -39,7 +39,7 @@ The wallet uses lnd that is young and might have bugs. Check [lnd bug list here]
 
 ## Translation
 
-You can contribute to the project by translating the app via [Transifex](https://www.transifex.com/blixt-wallet/blixt-wallet).
+You can contribute to the project by translating the app via [Transifex](https://explore.transifex.com/blixt-wallet/blixt-wallet/).
 
 ## Build Steps
 
@@ -49,37 +49,50 @@ The web target is only used for prototyping and is not a real wallet.
 
 ### Web
 
-The easiest way get started is to build the web version, because you only need NodeJS and Yarn installed.
-For the other targets you need to install their respective toolchains and also [golang](https://golang.org) &amp; [gomobile](https://pkg.go.dev/golang.org/x/mobile#section-readme) in order to build lnd for Blixt.
+The easiest way get started is to build the web version, because you only need NodeJS and Bun installed.
 
 The web version is not used as a real wallet and is only for fast prototyping.
 It's useful if you want to make design and GUI changes.
 
-- Install [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com)
-- Install Node packages: `yarn`
-- Generate proto files: `yarn gen-proto`
-- Start the web server: `yarn web`
+- Install [Node](https://nodejs.org) and [Bun](https://bun.com)
+- Install libs: `bun install`
+- Start the web server: `bun run web`
+
+### Electrobun
+
+The Electrobun target is experimental and should currently be treated as a desktop development target, not a fully supported release target.
+
+- Install [Node](https://nodejs.org) and [Bun](https://bun.com)
+- Install libs: `bun install`
+- Download the `lnd` binary for your current desktop platform from the [`react-native-turbo-lnd`](https://github.com/hsjoberg/react-native-turbo-lnd/releases) releases page and place the file in project root:
+  - Windows: `liblnd-windows.zip`
+  - Linux: `liblnd-linux.zip`
+  - macOS: `liblnd-macos-dylib.zip`
+- Start the app:
+  - `bun run electrobun:dev:normal`
+
+To build/package:
+
+- Build app bundle only: `bun run electrobun:build:fakelnd` or `bun run electrobun:build:normal`
+- Package distributable app: `bun run electrobun:package:fakelnd` or `bun run electrobun:package:normal`
 
 ### Android
 
-- Install [Node](https://nodejs.org), [Yarn](https://yarnpkg.com/getting-started/install) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
-- If needed, install an emulated android device inside Android Studio.
-- Download lnd binary from [from the latest Blixt Wallet release](https://github.com/hsjoberg/blixt-wallet/releases) and put it in `android/app/lndmobile`. Alternatively, build lnd for Android by following the steps in [Build Lnd For mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile)
-- Install Node packages: `yarn`
-- Generate proto files: `yarn gen-proto`
+- Install [Node](https://nodejs.org), [Bun](https://bun.com) and [Android Studio + Android SDK (including NDK)](https://developer.android.com/studio/)
+- If needed, install an emulated android device inside Android Studio
+- Install libs: `bun install`
 
 To start the application:
-- Run: `yarn start-metro`
-- Run: `yarn android:mainnet-debug` or `yarn android:testnet-debug`
 
-For building Blixt Android on Windows, follow the additional build steps [here](./build-steps-android-windows.md).
+- Run: `bun start-metro`
+- Run: `bun android:mainnet-debug` or `bun android:testnet-debug`
 
 ### Android (Nix)
 
 - Install [Nix](https://github.com/DeterminateSystems/nix-installer)
 - Install [Devenv](https://devenv.sh/getting-started/)
 - For local development, install [Android Studio](https://developer.android.com/studio/) and start a simulator.
-- For more awesome experience, you can also install [direnv](https://devenv.sh/automatic-shell-activation/) and enable automatic shell activation.
+- For a more awesome experience, you can also install [direnv](https://devenv.sh/automatic-shell-activation/) and enable automatic shell activation.
 ```
 cd blixt-wallet
 
@@ -95,20 +108,18 @@ android-unsigned-apk
 ## For local development:
 
 # Start metro
-yarn start
+bun start
 
 # Start blixt in regtest
-yarn android:regtest-debug
+bun android:regtest-debug
 ```
 
 ### iOS
 
 To build the iOS version, a computer running macOS is required. You also need an Apple Developer account, although you do not need to be enrolled in the Developer Program.
 
-- Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org), and [Yarn](https://classic.yarnpkg.com/).
-- Build lnd for iOS by following the steps in [Build Lnd for mobile](https://github.com/lightningnetwork/lnd/tree/master/mobile).
-- Install Node packages: `yarn`
-- Generate proto files: `yarn gen-proto`
+- Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Bun](https://bun.com)
+- Install Node packages: `bun install`
 - Install CocoaPods libs: `cd ios && pod install`
 - Setup team signing:
   - Open `ios/BlixtWallet/BlixtWallet.xcworkspace` with Xcode
@@ -118,22 +129,24 @@ To build the iOS version, a computer running macOS is required. You also need an
   - Choose your Team in the dropdown and choose a new unique Bundle Identifier (cannot be the same as the ones released on the App Store). Do this for every configuration.
 
 To start the application:
-- Run: `yarn start-metro`
-- Run: `yarn ios:mainnet-debug --device "<your device name>"` or build from Xcode
+
+- Run: `bun start-metro`
+- Run: `bun ios:mainnet-debug --device "<your device name>"` or build from Xcode
 
 ### macOS
 
 To build the macOS version, a computer running macOS is required.
-- Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Yarn](https://classic.yarnpkg.com/)
+
+- Install [Xcode](https://developer.apple.com/xcode/), [Node](https://nodejs.org) and [Bun](https://bun.com)
 - Build lnd for macOS by following the steps in [build-ios-framework.md](build-ios-framework.md)
   - Instead of running `make ios`, run `make macos` or `make apple`
-- Install Node packages: `yarn`
-- Generate proto files: `yarn gen-proto`
+- Install Node packages: `bun install`
 - Install CocoaPods libs: `cd macos && pod install`
 
 To start the application:
-- Run: `yarn start-metro`
-- Build app from Xcode or run `yarn macos:mainnet-debug`
+
+- Run: `bun start-metro`
+- Build app from Xcode or run `bun macos:mainnet-debug`
 
 ## Commit and Code-Style
 

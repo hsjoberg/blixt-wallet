@@ -1,7 +1,6 @@
 import { Thunk, thunk } from "easy-peasy";
 
 import { ILightningModel } from "./Lightning";
-import { IStoreInjections } from "./store";
 import { bytesToHexString } from "../utils";
 import { IStoreModel } from "./index";
 
@@ -12,7 +11,7 @@ import logger from "../utils/log";
 const log = logger("ChannelAcceptanceManager");
 
 export interface IChannelAcceptanceManagerModel {
-  initialize: Thunk<ILightningModel, void, IStoreInjections, IStoreModel>;
+  initialize: Thunk<ILightningModel, void, any, IStoreModel>;
 }
 
 export const channelAcceptanceManager: IChannelAcceptanceManagerModel = {

@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Icon, H1, Fab, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { LegendList } from "@legendapp/list";
+import { FlashList } from "@shopify/flash-list";
 
 import { LightningInfoStackParamList } from "./index";
 import { useStoreState, useStoreActions } from "../../state/store";
@@ -16,6 +16,15 @@ import { toast } from "../../utils";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
+import {
+  Channel,
+  PendingChannelsResponse_ClosedChannel,
+  PendingChannelsResponse_ForceClosedChannel,
+  PendingChannelsResponse_PendingChannel,
+  PendingChannelsResponse_PendingOpenChannel,
+  PendingChannelsResponse_WaitingCloseChannel,
+} from "react-native-turbo-lnd/protos/lightning_pb";
+import { LegendList } from "@legendapp/list";
 
 interface ILightningInfoProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "LightningInfo">;
@@ -75,7 +84,7 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
     //   return accumulator;
     // }
     // return accumulator.add(channel.localBalance!.sub(channel.localChanReserveSat!));
-  }, 0n);
+  }, BigInt(0));
 
   const channelsArr = [
     ...pendingOpenChannels.map((pendingChannel, i) => ({ ...pendingChannel, type: "pendingOpen" })),
@@ -157,6 +166,33 @@ export default function LightningInfo({ navigation }: ILightningInfoProps) {
               );
             }
             return <></>;
+          }}
+          keyExtractor={(item) => {
+            if (item.type === "pendingOpen") {
+              return (
+                "pendingOpen" +
+                (item as PendingChannelsResponse_PendingOpenChannel).channel?.channelPoint
+              );
+            } else if (item.type === "pendingClose") {
+              return (
+                "pendingClose" +
+                (item as PendingChannelsResponse_ClosedChannel).channel?.channelPoint
+              );
+            } else if (item.type === "pendingForceClose") {
+              return (
+                "pendingForceClose" +
+                (item as PendingChannelsResponse_ForceClosedChannel).channel?.channelPoint
+              );
+            } else if (item.type === "waitingForClose") {
+              return (
+                "waitingForClose" +
+                (item as PendingChannelsResponse_WaitingCloseChannel).channel?.channelPoint
+              );
+            } else if (item.type === "open") {
+              return "open" + (item as Channel).channelPoint;
+            } else {
+              return "unknown";
+            }
           }}
           contentContainerStyle={style.container}
         />

@@ -43,11 +43,7 @@
   "welcome.start": {
     "title": "Witaj",
     "createWallet": {
-      "title": "Utwórz portfel",
-      "msg1": "Portfel Blixt jest wciąż na wczesnym etapie rozwoju.",
-      "msg2": "Jeśli korzystasz z tego portfela, upewnij się, że rozumiesz, że możesz stracić swoje środki.",
-      "msg3": "Obecnie nie ma wsparcia dla WatchTower aby doglądać Twoich kanałów gdy jesteś offline.",
-      "msg4": "Jestem nierozważny, kontynuuj"
+      "title": "Utwórz portfel"
     },
     "createWalletWithPassphrase": {
       "title": "Ustaw hasło (25. słowo szyfrujące ziarno)",
@@ -82,7 +78,8 @@
       "onChainWallet": "Łańcuch główny",
       "lightningChannels": "Kanały Lightning",
       "keysendExperiment": "Eksperyment Keysend",
-      "showMore": "Zaawansowane"
+      "showMore": "Zaawansowane",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Zrobione z ⚡ w Szwecji"
   },
@@ -806,6 +803,16 @@
         "title": "Automatycznie otwieraj kanały",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Usługi kanału przychodzącego",
         "subtitle": "Korzystanie z usługi kanału przychodzącego do odbierania płatności",
@@ -1062,6 +1069,10 @@
         "title": "Włącz działanie aplikacji w tle",
         "subtitle": "Aplikacja pozostaje aktywna w tle"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
@@ -1165,7 +1176,7 @@
     "info": {
       "welcome": "Witaj w rejestracji Lightning Box.",
       "whatIs": "Lightning Box to dostawca usługi adres Lightning, która przekazuje żądania płatności bezpośrednio na telefon, zapewniając Ci samodzielny adres Lightning dla urządzeń mobilnych.",
-      "persistentMode":"Ta usługa jest zależna od działania aplikacji w tle, ponieważ aplikacja musi pozostać aktywna, aby otrzymywać płatności przychodzące. Upewnij się, że optymalizacja baterii jest wyłączona na Twoim urządzeniu. W przeciwnym razie ta usługa może nie działać.",
+      "persistentMode": "Ta usługa jest zależna od działania aplikacji w tle, ponieważ aplikacja musi pozostać aktywna, aby otrzymywać płatności przychodzące. Upewnij się, że optymalizacja baterii jest wyłączona na Twoim urządzeniu. W przeciwnym razie ta usługa może nie działać.",
       "currentRules": "Korzystanie z usługi jest bezpłatne. Jednak ze względów technicznych obecnie wymagany jest kanał u dostawcy Lightning Box. Obecnie nie ma możliwości zmiany adresu Lightning po jego wybraniu."
     },
     "prerequisites": {

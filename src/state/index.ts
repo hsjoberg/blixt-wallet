@@ -2,15 +2,17 @@ import * as base64 from "base64-js";
 import { RnTor } from "react-native-nitro-tor";
 
 import { Action, Thunk, action, thunk } from "easy-peasy";
-import { AlertButton, NativeModules, Platform } from "react-native";
+import { AlertButton } from "react-native";
 
 import {
+  BLIXT_WEB_DEMO,
   DEFAULT_PATHFINDING_ALGORITHM,
   DEFAULT_SPEEDLOADER_SERVER,
+  IS_ELECTROBUN,
   PLATFORM,
   TOR_SETTINGS,
 } from "../utils/constants";
-import { Chain, Debug, VersionCode } from "../utils/build";
+import { Chain, Flavor, VersionCode } from "../utils/build";
 import { IBlixtLsp, blixtLsp } from "./BlixtLsp";
 import { IChannelModel, channel } from "./Channel";
 import {
@@ -25,6 +27,7 @@ import { IFiatModel, fiat } from "./Fiat";
 import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
 import { IGoogleModel, google } from "./Google";
 import { IICloudBackupModel, iCloudBackup } from "./ICloudBackup";
+import { IAutopilotModel, autopilot } from "./Autopilot";
 import { ILNUrlModel, lnUrl } from "./LNURL";
 import { ILightNameModel, lightName } from "./LightName";
 import { ILightningModel, LndChainBackend, lightning } from "./Lightning";
@@ -71,21 +74,21 @@ import { getWalletPassword, setWalletPassword } from "../storage/keystore";
 
 import { Alert } from "../utils/alert";
 import {
-  ELndMobileStatusCodes,
+  createIOSApplicationSupportAndLndDirectories,
+  excludeLndICloudBackup,
   generateSecureRandomAsBase64,
   writeConfig,
 } from "../lndmobile/index";
-import { IStoreInjections } from "./store";
 import { Database } from "react-native-turbo-sqlite";
 import SetupBlixtDemo from "../utils/setup-demo";
 import { appMigration } from "../migration/app-migration";
 import { clearTransactions } from "../storage/database/transaction";
-import { lnrpc } from "../../proto/lightning";
 import logger from "./../utils/log";
-import { stringToUint8Array, toast } from "../utils";
+import { stringToUint8Array, timeout, toast } from "../utils";
 
 import {
   genSeed,
+  getState as getLndState,
   initWallet,
   start as startLndTurbo,
   subscribeState,
@@ -93,6 +96,7 @@ import {
 } from "react-native-turbo-lnd";
 import { WalletState } from "react-native-turbo-lnd/protos/lightning_pb";
 
+import NativeBlixtTools from "../turbomodules/NativeBlixtTools";
 import Speedloader from "../turbomodules/NativeSpeedloader";
 import NativeLndmobileTools from "../turbomodules/NativeLndmobileTools";
 
@@ -114,8 +118,8 @@ export interface ICreateWalletPayload {
 export interface IStoreModel {
   setupDemo: Thunk<IStoreModel, { changeDb: boolean }, any, IStoreModel>;
   openDb: Thunk<IStoreModel, undefined, any, {}, Promise<Database>>;
-  initializeApp: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
-  checkAppVersionMigration: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
+  initializeApp: Thunk<IStoreModel, void, any, IStoreModel>;
+  checkAppVersionMigration: Thunk<IStoreModel, void, any, IStoreModel>;
   clearApp: Thunk<IStoreModel>;
   clearTransactions: Thunk<IStoreModel>;
   resetDb: Thunk<IStoreModel>;
@@ -133,10 +137,10 @@ export interface IStoreModel {
   setSpeedloaderCancelVisible: Action<IStoreModel, boolean>;
   setImportChannelDbOnStartup: Action<IStoreModel, IImportChannelDbOnStartup>;
 
-  generateSeed: Thunk<IStoreModel, string | undefined, IStoreInjections>;
-  writeConfig: Thunk<IStoreModel, void, IStoreInjections, IStoreModel>;
-  unlockWallet: Thunk<ILightningModel, void, IStoreInjections>;
-  createWallet: Thunk<IStoreModel, ICreateWalletPayload | undefined, IStoreInjections, IStoreModel>;
+  generateSeed: Thunk<IStoreModel, string | undefined, any>;
+  writeConfig: Thunk<IStoreModel, void, any, IStoreModel>;
+  unlockWallet: Thunk<ILightningModel, void, any>;
+  createWallet: Thunk<IStoreModel, ICreateWalletPayload | undefined, any, IStoreModel>;
   changeOnboardingState: Thunk<IStoreModel, OnboardingState>;
 
   db?: Database;
@@ -157,6 +161,7 @@ export interface IStoreModel {
   fiat: IFiatModel;
   security: ISecurityModel;
   settings: ISettingsModel;
+  autopilot: IAutopilotModel;
   clipboardManager: IClipboardManagerModel;
   scheduledSync: IScheduledSyncModel;
   lnUrl: ILNUrlModel;
@@ -193,7 +198,7 @@ export const model: IStoreModel = {
     return db;
   }),
 
-  initializeApp: thunk(async (actions, _, { getState, dispatch, injections }) => {
+  initializeApp: thunk(async (actions, _, { getState, dispatch }) => {
     log.d("getState().appReady: " + getState().appReady);
     if (getState().appReady) {
       log.d("App already initialized");
@@ -203,7 +208,7 @@ export const model: IStoreModel = {
 
     const brickDeviceAndExportChannelDb = await getBrickDeviceAndExportChannelDb();
     if (brickDeviceAndExportChannelDb) {
-      await NativeModules.LndMobileTools.saveChannelDbFile();
+      await NativeBlixtTools.saveChannelDbFile();
       await brickInstance();
       await setBrickDeviceAndExportChannelDb(false);
       Alert.alert(
@@ -214,7 +219,7 @@ export const model: IStoreModel = {
             text: "OK",
             onPress() {
               if (PLATFORM === "android") {
-                NativeModules.LndMobileTools.restartApp();
+                NativeBlixtTools.restartApp();
               }
             },
           },
@@ -229,22 +234,18 @@ export const model: IStoreModel = {
       const path = importChannelDbOnStartup.channelDbPath.replace(/^file:\/\//, "");
       toast("Beginning channel db import procedure", undefined, "warning");
       log.i("Beginning channel db import procedure", [path]);
-      await NativeModules.LndMobileTools.importChannelDbFile(path);
+      await NativeBlixtTools.importChannelDbFile(path);
       toast("Successfully imported channel.db");
     }
 
-    const { initialize, checkStatus, startLnd, gossipSync } = injections.lndMobile.index;
     const db = await actions.openDb();
     const firstStartup = !(await getItemObjectAsyncStorage(StorageItem.app));
     if (firstStartup) {
       log.i("Initializing app for the first time");
       if (PLATFORM === "ios" || PLATFORM === "macos") {
         log.i("Creating Application Support and lnd directories");
-        await injections.lndMobile.index.createIOSApplicationSupportAndLndDirectories();
-      }
-      if (PLATFORM === "ios") {
-        log.i("Excluding lnd directory from backup");
-        await injections.lndMobile.index.excludeLndICloudBackup();
+        await createIOSApplicationSupportAndLndDirectories();
+        await excludeLndICloudBackup();
       }
       await setupApp();
       if (Chain === "regtest") {
@@ -266,22 +267,11 @@ export const model: IStoreModel = {
       }
       log.i("Writing lnd.conf");
       await actions.writeConfig();
-
-      if (PLATFORM === "web") {
+      if (PLATFORM === "web" && BLIXT_WEB_DEMO && Flavor === "fakelnd") {
+        log.i("web demo initializing");
         await dispatch.setupDemo({ changeDb: true });
         await dispatch.generateSeed();
         await dispatch.createWallet();
-      }
-    } else {
-      // Temporarily dealing with moving lnd to "Application Support" folder
-      if (PLATFORM === "ios") {
-        if (!(await injections.lndMobile.index.checkLndFolderExists())) {
-          log.i("Moving lnd from Documents to Application Support");
-          await injections.lndMobile.index.createIOSApplicationSupportAndLndDirectories();
-          await injections.lndMobile.index.TEMP_moveLndToApplicationSupport();
-          log.i("Excluding lnd directory from backup");
-          await injections.lndMobile.index.excludeLndICloudBackup();
-        }
       }
     }
     actions.setAppVersion(await getAppVersion());
@@ -319,7 +309,7 @@ export const model: IStoreModel = {
             throw new Error(torResult.error_message);
           }
 
-          args = `tor.active `;
+          args = `--tor.active `;
           args += `--tor.socks=127.0.0.1:${TOR_SETTINGS.socksPort} `;
           args += `--tor.v3 `;
           args += `--tor.control=${torResult.control} `;
@@ -328,7 +318,7 @@ export const model: IStoreModel = {
           debugShowStartupInfo &&
             toast("Tor initialized " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
         } catch (e: any) {
-          args = `--nolisten`;
+          args = `--nolisten `;
 
           const restartText = "Restart app and try again with Tor";
           const continueText = "Continue without Tor";
@@ -351,7 +341,7 @@ export const model: IStoreModel = {
           );
 
           if (result.text === restartText) {
-            NativeModules.LndMobileTools.restartApp();
+            NativeBlixtTools.restartApp();
             return;
           } else {
             actions.setTorEnabled(false);
@@ -360,7 +350,7 @@ export const model: IStoreModel = {
           }
         }
       } else {
-        args = `--nolisten`;
+        args = `--nolisten `;
       }
 
       let persistentServicesEnabled =
@@ -371,9 +361,6 @@ export const model: IStoreModel = {
       if (persistentServicesEnabled && !persistentServicesWarningShown) {
         await setItemObject(StorageItem.persistentServicesWarningShown, true);
       }
-      log.v("Running LndMobile.initialize()");
-      const initReturn = await initialize();
-      log.i("initialize done", [initReturn]);
       const gossipSyncEnabled =
         (await getItemObjectAsyncStorage<boolean>(StorageItem.scheduledGossipSyncEnabled)) ?? false;
       const enforceSpeedloaderOnStartup =
@@ -383,8 +370,15 @@ export const model: IStoreModel = {
         (await getItemAsyncStorage(StorageItem.speedloaderServer)) ?? DEFAULT_SPEEDLOADER_SERVER;
       let gossipStatus: unknown = null;
 
-      const status = await NativeLndmobileTools.getStatus(); // await checkStatus();
-      log.d("status", [status]);
+      let status = await NativeLndmobileTools.getStatus();
+      log.i("status", [status]);
+      if (status === 1) {
+        log.i("status === 1, waiting for 9.6 seconds and check again");
+        await timeout(9600);
+        status = await NativeLndmobileTools.getStatus();
+        log.i("status", [status]);
+      }
+
       log.i("gossipSyncEnabled", [gossipSyncEnabled]);
       log.i("persistentServicesEnabled", [persistentServicesEnabled]);
       if (status === 0) {
@@ -404,8 +398,8 @@ export const model: IStoreModel = {
           if (enforceSpeedloaderOnStartup) {
             log.d("Clearing speedloader files");
             try {
-              await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile();
-              await NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory();
+              await NativeBlixtTools.DEBUG_deleteSpeedloaderLastrunFile();
+              await NativeBlixtTools.DEBUG_deleteSpeedloaderDgraphDirectory();
             } catch (error) {
               log.e("Gossip files deletion failed", [error]);
             }
@@ -413,8 +407,8 @@ export const model: IStoreModel = {
           try {
             gossipStatus = await Speedloader.gossipSync(
               speedloaderServer,
-              await NativeModules.LndMobileTools.getCacheDir(),
-              await NativeModules.LndMobileTools.getFilesDir(),
+              await NativeBlixtTools.getCacheDir(),
+              await NativeBlixtTools.getFilesDir(),
             );
             debugShowStartupInfo &&
               toast(
@@ -447,15 +441,11 @@ export const model: IStoreModel = {
             await setLndCompactDb(false);
           }
 
-          // log.d("startLnd", [await startLnd(torEnabled, args)]);
-          // TURBOTODO(hsjoberg): temp code
           let appFolderPath: string;
           if (PLATFORM === "android") {
-            const chain = Chain !== "mainnet" ? "." + Chain.toLocaleLowerCase() : "";
-            const debug = Debug ? ".debug" : "";
-            appFolderPath = `/data/user/0/com.blixtwallet${chain}${debug}/files/`;
+            appFolderPath = await NativeBlixtTools.getFilesDir();
           } else {
-            appFolderPath = (await NativeModules.LndMobileTools.getAppFolderPath())
+            appFolderPath = (await NativeBlixtTools.getAppFolderPath())
               .replace("file://", "")
               .replace(/%20/g, " ");
             appFolderPath += "lnd/";
@@ -485,72 +475,89 @@ export const model: IStoreModel = {
     await dispatch.transaction.getTransactions();
     await dispatch.contacts.getContacts();
     await dispatch.channel.setupCachedBalance();
+    if (PLATFORM === "android") {
+      await dispatch.google.initialize();
+    }
     log.d("Done starting up stores");
+
+    const onWalletState = async (state: { state: WalletState }) => {
+      try {
+        if (state.state === WalletState.NON_EXISTING) {
+          log.d("Got WalletState.NON_EXISTING");
+
+          // Continue channel db import restore
+          if (importChannelDbOnStartup) {
+            log.i("Continuing restoration with channel import");
+            actions.setWalletSeed(importChannelDbOnStartup.seed);
+            await actions.createWallet({
+              restore: {
+                restoreWallet: true,
+                aezeedPassphrase: importChannelDbOnStartup.passphrase,
+              },
+            });
+
+            await Promise.all([
+              actions.settings.changeAutopilotEnabled(false),
+              actions.scheduledSync.setSyncEnabled(true), // TODO test
+              actions.settings.changeScheduledSyncEnabled(true),
+              actions.changeOnboardingState("DONE"),
+            ]);
+
+            setImportChannelDbOnStartup(null);
+          }
+        } else if (state.state === WalletState.LOCKED) {
+          log.d("Got WalletState.LOCKED");
+          // TurboLnd's mocks always return LOCKED and never NON_EXISTING,
+          // as there's no wallet persistence. Simply ignore.
+          if (PLATFORM === "web" && Flavor === "fakelnd") {
+            const [walletCreated, walletPassword] = await Promise.all([
+              getWalletCreated(),
+              getWalletPassword(),
+            ]);
+
+            if (!walletCreated && !walletPassword) {
+              log.w("Ignoring fakelnd LOCKED state before wallet creation on web");
+              return;
+            }
+          }
+          log.d("Wallet locked, unlocking wallet");
+          debugShowStartupInfo &&
+            toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          await dispatch.unlockWallet();
+        } else if (state.state === WalletState.UNLOCKED) {
+          log.d("Got WalletState.UNLOCKED");
+          debugShowStartupInfo &&
+            toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+        } else if (state.state === WalletState.RPC_ACTIVE) {
+          debugShowStartupInfo &&
+            toast(
+              "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
+              1000,
+            );
+          log.d("Got WalletState.RPC_ACTIVE");
+          await dispatch.lightning.initialize({ start });
+        } else if (state.state === WalletState.SERVER_ACTIVE) {
+          debugShowStartupInfo &&
+            toast("Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
+          log.d("Got WalletState.SERVER_ACTIVE");
+
+          // We'll enter this branch of code if the react-native frontend desyncs with lnd,
+          // for example if the JS runtime restarts while lnd keeps running.
+          if (!getState().lightning.rpcReady) {
+            await dispatch.lightning.initialize({ start });
+          }
+        } else {
+          log.d("Got unknown WalletState", [state.state]);
+        }
+      } catch (error: any) {
+        toast(error.message, undefined, "danger");
+      }
+    };
 
     subscribeState(
       {},
       async (state) => {
-        try {
-          if (state.state === WalletState.NON_EXISTING) {
-            log.d("Got WalletState.NON_EXISTING");
-
-            // Continue channel db import restore
-            if (importChannelDbOnStartup) {
-              log.i("Continuing restoration with channel import");
-              actions.setWalletSeed(importChannelDbOnStartup.seed);
-              await actions.createWallet({
-                restore: {
-                  restoreWallet: true,
-                  aezeedPassphrase: importChannelDbOnStartup.passphrase,
-                },
-              });
-
-              await Promise.all([
-                actions.settings.changeAutopilotEnabled(false),
-                actions.scheduledSync.setSyncEnabled(true), // TODO test
-                actions.settings.changeScheduledSyncEnabled(true),
-                actions.changeOnboardingState("DONE"),
-              ]);
-
-              setImportChannelDbOnStartup(null);
-            }
-          } else if (state.state === WalletState.LOCKED) {
-            log.d("Got WalletState.LOCKED");
-            log.d("Wallet locked, unlocking wallet");
-            debugShowStartupInfo &&
-              toast("locked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-            await dispatch.unlockWallet();
-          } else if (state.state === lnrpc.WalletState.UNLOCKED) {
-            log.d("Got lnrpc.WalletState.UNLOCKED");
-            debugShowStartupInfo &&
-              toast("unlocked: " + (new Date().getTime() - start.getTime()) / 1000 + "s", 1000);
-          } else if (state.state === lnrpc.WalletState.RPC_ACTIVE) {
-            debugShowStartupInfo &&
-              toast(
-                "RPC server active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
-                1000,
-              );
-            log.d("Got lnrpc.WalletState.RPC_ACTIVE");
-            await dispatch.lightning.initialize({ start });
-          } else if (state.state === lnrpc.WalletState.SERVER_ACTIVE) {
-            debugShowStartupInfo &&
-              toast(
-                "Service active: " + (new Date().getTime() - start.getTime()) / 1000 + "s",
-                1000,
-              );
-            log.d("Got lnrpc.WalletState.SERVER_ACTIVE");
-
-            // We'll enter this branch of code if the react-native frontend desyncs with lnd.
-            // This can happen for example if Android kills react-native but not LndMobileService.
-            if (!getState().lightning.rpcReady) {
-              await dispatch.lightning.initialize({ start });
-            }
-          } else {
-            log.d("Got unknown lnrpc.WalletState", [state.state]);
-          }
-        } catch (error: any) {
-          toast(error.message, undefined, "danger");
-        }
+        await onWalletState(state);
       },
       (error) => {
         toast("subscribeState: " + error, undefined, "danger");
@@ -631,7 +638,6 @@ export const model: IStoreModel = {
 
   writeConfig: thunk(async (_, _2) => {
     // TURBOTODO(hsjoberg)
-    //const writeConfig = injections.lndMobile.index.writeConfig;
 
     const lndChainBackend = (await getItemAsyncStorage(
       StorageItem.lndChainBackend,
@@ -760,7 +766,6 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   }),
 
   createWallet: thunk(async (actions, payload, { getState, dispatch }) => {
-    // TURBOTODO(hsjoberg): Add generateSecureRandomAsBase64 to a local TurboModule
     const seed = getState().walletSeed;
     if (!seed) {
       return;
@@ -862,6 +867,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   send,
   receive,
   onChain,
+  autopilot,
   fiat,
   security,
   settings,

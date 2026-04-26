@@ -7,8 +7,7 @@ import Container from "../components/Container";
 import { useStoreActions } from "../state/store";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../Main";
-import { CommonActions } from "@react-navigation/native";
-import { PLATFORM } from "../utils/constants";
+import { BLIXT_WEB_DEMO, PLATFORM } from "../utils/constants";
 
 export interface ILoadingProps {
   navigation: StackNavigationProp<RootStackParamList, "Loading">;
@@ -21,15 +20,10 @@ export default function Loading({ navigation }: ILoadingProps) {
     (async () => {
       let cb = await checkDeeplink();
 
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: "Overview" }],
-        }),
-      );
+      navigation.replace("Overview");
       if (cb) {
         cb(navigation);
-      } else if (PLATFORM === "web" && window.BLIXT_WEB_DEMO) {
+      } else if (PLATFORM === "web" && BLIXT_WEB_DEMO) {
         navigation.navigate("WebInfo");
       }
     })();

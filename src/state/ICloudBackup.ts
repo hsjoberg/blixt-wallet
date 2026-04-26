@@ -3,11 +3,11 @@ import * as base64 from "base64-js";
 import { differenceInDays } from "date-fns";
 import iCloudStorage from "react-native-icloudstore";
 
-import { IStoreInjections } from "./store";
 import { IStoreModel } from "../state";
 import { waitUntilTrue, timeout, toast } from "../utils";
 import { Chain, Debug, Flavor } from "../utils/build";
 import { getItemObject, StorageItem, setItemObject } from "../storage/app";
+import { checkICloudEnabled } from "../lndmobile/index";
 
 import { exportAllChannelBackups, subscribeChannelEvents } from "react-native-turbo-lnd";
 import { MultiChanBackup } from "react-native-turbo-lnd/protos/lightning_pb";
@@ -18,7 +18,7 @@ const log = logger("ICloudBackup");
 export const ICLOUD_BACKUP_KEY = `blixt-wallet-backup-${Chain}${Debug ? "-debug" : ""}${Flavor ? `-${Flavor}` : ""}`;
 
 export interface IICloudBackupModel {
-  initialize: Thunk<IICloudBackupModel, void, IStoreInjections, IStoreModel>;
+  initialize: Thunk<IICloudBackupModel, void, any, IStoreModel>;
 
   setupChannelUpdateSubscriptions: Thunk<IICloudBackupModel, void, any, IStoreModel>;
   makeBackup: Thunk<IICloudBackupModel, void, any, IStoreModel>;
@@ -32,13 +32,13 @@ export interface IICloudBackupModel {
 }
 
 export const iCloudBackup: IICloudBackupModel = {
-  initialize: thunk(async (actions, _, { getState, getStoreState, injections }) => {
+  initialize: thunk(async (actions, _, { getState, getStoreState }) => {
     log.d("Initializing");
     if (!getState().channelUpdateSubscriptionStarted) {
       await actions.setupChannelUpdateSubscriptions();
     }
 
-    const iCloudActive = await injections.lndMobile.index.checkICloudEnabled();
+    const iCloudActive = await checkICloudEnabled();
     log.i("iCloudActive", [iCloudActive]);
     actions.setICloudActive(iCloudActive);
 

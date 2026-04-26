@@ -1,12 +1,6 @@
-import { NativeModules } from "react-native";
-
 import { Debug } from "./build";
+import NativeBlixtTools from "../turbomodules/NativeBlixtTools";
 import { PLATFORM } from "./constants";
-
-const isNativePlatform =
-  ["android", "ios", "macos"].includes(PLATFORM) && !window?.process?.env?.JEST_WORKER_ID;
-
-console.log("!window?.process?.env?.JEST_WORKER_ID", window?.process?.env?.JEST_WORKER_ID);
 
 export type LogLevel = "Verbose" | "Debug" | "Info" | "Warning" | "Error";
 export const logEntries: [LogLevel, string][] = [];
@@ -25,9 +19,7 @@ const log = (tag?: string) => {
         const msg = fixMessage(message, data);
         logEntries.push(["Debug", `${tag}: ${msg}`]);
         console.debug(`${tag}: ${msg}`);
-        if (isNativePlatform) {
-          NativeModules.LndMobileTools.log("v", tag!, msg);
-        }
+        NativeBlixtTools.log("v", tag!, msg);
       }
     },
 
@@ -36,9 +28,7 @@ const log = (tag?: string) => {
         const msg = fixMessage(message, data);
         logEntries.push(["Debug", `${tag}: ${msg}`]);
         console.debug(`${tag}: ${msg}`);
-        if (isNativePlatform) {
-          NativeModules.LndMobileTools.log("d", tag!, msg);
-        }
+        NativeBlixtTools.log("d", tag!, msg);
       }
     },
 
@@ -46,27 +36,21 @@ const log = (tag?: string) => {
       const msg = fixMessage(message, data);
       logEntries.push(["Info", `${tag}: ${msg}`]);
       console.log(`${tag}: ${msg}`);
-      if (isNativePlatform) {
-        NativeModules.LndMobileTools.log("i", tag!, msg);
-      }
+      NativeBlixtTools.log("i", tag!, msg);
     },
 
     w: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       logEntries.push(["Warning", `${tag}: ${msg}`]);
       console.warn(`${tag}: ${msg}`);
-      if (isNativePlatform) {
-        NativeModules.LndMobileTools.log("w", tag!, msg);
-      }
+      NativeBlixtTools.log("w", tag!, msg);
     },
 
     e: (message: string, data: any[] = []) => {
       const msg = fixMessage(message, data);
       logEntries.push(["Error", `${tag}: ${msg}`]);
       PLATFORM !== "macos" ? console.error(`${tag}: ${msg}`) : console.log(`${tag}: ${msg}`);
-      if (isNativePlatform) {
-        NativeModules.LndMobileTools.log("e", tag!, msg);
-      }
+      NativeBlixtTools.log("e", tag!, msg);
     },
   };
 };

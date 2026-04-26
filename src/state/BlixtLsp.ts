@@ -1,7 +1,6 @@
 import { Action, action, computed, Computed, Thunk, thunk } from "easy-peasy";
 import { generateSecureRandom } from "../lndmobile/index";
 
-import { IStoreInjections } from "./store";
 import { bytesToHexString, stringToUint8Array, timeout } from "../utils";
 import { IStoreModel } from "./index";
 
@@ -64,46 +63,46 @@ export interface IOnDemandChannelRegisterErrorResponse extends IErrorResponse {}
 export interface IOnDemandChannelUnknownRequestResponse extends IErrorResponse {}
 
 export interface IOndemandChannel {
-  checkOndemandChannelService: Thunk<IOndemandChannel, void, IStoreInjections>;
+  checkOndemandChannelService: Thunk<IOndemandChannel, void, any>;
   connectToService: Thunk<
     IOndemandChannel,
     undefined,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<boolean>
   >;
   addInvoice: Thunk<
     IOndemandChannel,
     { sat: number; description: string; preimage?: Uint8Array },
-    IStoreInjections,
+    any,
     IStoreModel
   >;
 
   serviceStatus: Thunk<
     IOndemandChannel,
     void,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<IOnDemandChannelServiceStatusResponse>
   >;
   checkStatus: Thunk<
     IOndemandChannel,
     void,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<IOnDemandChannelCheckStatusResponse>
   >;
   register: Thunk<
     IOndemandChannel,
     { preimage: Uint8Array; amount: number },
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<IOnDemandChannelRegisterOkResponse>
   >;
   claim: Thunk<
     IOndemandChannel,
     void,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<IOnDemandChannelRegisterOkResponse>
   >;
@@ -118,7 +117,7 @@ export interface IOndemandChannel {
 }
 
 export interface IBlixtLsp {
-  initialize: Thunk<IBlixtLsp, void, IStoreInjections, IStoreModel>;
+  initialize: Thunk<IBlixtLsp, void, any, IStoreModel>;
 
   // On-demand Channels
   ondemandChannel: IOndemandChannel;

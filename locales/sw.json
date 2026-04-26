@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "Anwani ya Umeme",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "Jina la Node",
       "description": "Maelezo",
       "amount": "Kiasi",
       "fee": "Ada",
       "search": "Tafuta",
       "viewInBlockExplorer": "Tazama kwenye kivinjari cha masafa",
-      "blocks": "{{numBlocks}} blocks"
+      "blocks": "{{numBlocks}} blocks",
+      "reason": "Reason: {{reason}}"
     },
     "buttons": {
       "ok": "Sawa",
@@ -41,11 +43,7 @@
   "welcome.start": {
     "title": "Karibu",
     "createWallet": {
-      "title": "Unda Pochi",
-      "msg1": "Pochi ya Blixt bado iko katika hatua za mwanzo za maendeleo.",
-      "msg2": "Ikiwa utatumia pochi hii, hakikisha unaelewa kwamba unaweza kupoteza fedha zako.",
-      "msg3": "Kwa sasa hakuna msaada wa WatchTower wa kufuatilia njia zako wakati wewe haupo mtandaoni.",
-      "msg4": "Mimi ni mkorofi, tuendelee"
+      "title": "Unda Pochi"
     },
     "createWalletWithPassphrase": {
       "title": "Weka neno la siri (neno la 25 la kuficha mbegu)",
@@ -80,7 +78,8 @@
       "onChainWallet": "Pochi ya Mnyororo",
       "lightningChannels": "Njia za Umeme",
       "keysendExperiment": "Eksperimenti ya Keysend",
-      "showMore": "Onyesha Zaidi"
+      "showMore": "Onyesha Zaidi",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Imetengenezwa kwa ⚡ huko Sweden"
   },
@@ -273,6 +272,7 @@
     },
     "channel": {
       "alias": "Jina",
+      "bumpFee": "Bump Fee",
       "node": "Node",
       "channelId": "Kitambulisho cha Chaneli",
       "channelPoint": "Pointi ya Chaneli",
@@ -295,11 +295,22 @@
       "maturityHeight": "Kimo cha Utimilifu",
       "localCommitmentTxid": "TXID ya Ahadi ya Lokali",
       "remoteCommitmentTxid": "TXID ya Ahadi ya Mbali",
+      "enterDeliveryAddress": "Enter Closing Address",
+      "invalidAddress": "Enter a valid Bitcoin Address",
       "closeChannel": "Funga Chaneli",
+      "forceCloseChannel": "Force Close Channel",
+      "closeChannelToAddress": "Close Channel to External Address",
       "forceClosePendingChannel": "Funga Chaneli Inayosubiri Kufungwa Kwa Nguvu",
       "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Funga Chaneli"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },
@@ -430,6 +441,10 @@
       "name": {
         "ask": "Tuma jina langu pamoja na malipo haya",
         "mandatory": "Jina lako lazima litumwe pamoja na malipo haya"
+      },
+      "identifier": {
+        "ask": "Send my Lightning Address together with this payment",
+        "mandatory": "Your Lightning Address has to be sent together with this payment"
       }
     },
     "payloadErrors": {
@@ -625,6 +640,9 @@
       },
       "mapTheme": {
         "title": "Chagua Mada ya Ramani"
+      },
+      "hideAmountsEnabled": {
+        "title": "Hide amounts"
       }
     },
     "wallet": {
@@ -785,6 +803,16 @@
         "title": "Fungua njia moja kwa moja",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Huduma za njia zinazoingia",
         "subtitle": "Tumia huduma ya njia inayoingia kupokea malipo",
@@ -816,6 +844,17 @@
         "restoreDialog": {
           "title": "Restore LN channel sync Server",
           "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
+      "lightningBoxServer": {
+        "title": "Set Lightning Box server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set Lightning Box server"
+        },
+        "restoreDialog": {
+          "title": "Restore Lightning Box Server",
+          "msg": "Would you like to restore to the default Lightning Box server"
         }
       },
       "graphSync": {
@@ -893,6 +932,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "Washa picha za awali za ankara maalum"
+      },
+      "randomizeSettings": {
+        "title": "Randomize settings"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomize settings on startup"
       }
     },
     "experimental": {
@@ -1024,6 +1069,10 @@
         "title": "Enable persistent app",
         "subtitle": "The app stays active in the background"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
@@ -1122,6 +1171,33 @@
     "title": "Ongeza Fedha",
     "msg1": "Ili kuanza kutumia Lightning kwenye Mkoba wa Blixt",
     "msg2": "tuma bitcoins kwa anwani iliyotajwa hapo juu"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Welcome to the Lightning Box registration.",
+      "whatIs": "Lightning Box is a Lightning Address service provider that forwards payment requests directly to the phone, giving you a self-custodial Lightning Address for mobile devices.",
+      "persistentMode": "This service is dependent on persistent mode, because the app must stay active to receive incoming payments. Please make sure that battery optimization is turned off on your device. Otherwise this service may not work.",
+      "currentRules": "The service is free to use. However, due to technical reasons it currently requires a channel with the Lightning Box provider. It's currently not possible to change your Lightning Address after you have chosen one."
+    },
+    "prerequisites": {
+      "prerequisites": "Prerequisites",
+      "checkingEligibility": "Checking eligibility...",
+      "eligible": "Eligible",
+      "youHaveChannel": "You have a channel with the Lightning Box service.",
+      "notEligible": "Not eligible"
+    },
+    "registration": {
+      "registration": "Registration",
+      "fields": {
+        "address": "Address",
+        "messageToPayer": "Message to the payer"
+      },
+      "register": "Register"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Your Lightning Address by Lightning Box is:",
+    "showQrCode": "Show QR code"
   },
   "welcome.almostDone": {
     "autopilot": {

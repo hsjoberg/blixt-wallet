@@ -85,6 +85,7 @@ liblnd.a
 jniLibs/
 dist
 .webpack
+.react-native-turbo-lnd-version
 contrib/service-image/webp
 contrib/service-image/code
 out
@@ -99,13 +100,6 @@ Session.vim
 Sessionx.vim
 *~
 
-# Yarn
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 # Devenv
 .devenv*
 devenv.local.nix
@@ -117,3 +111,6 @@ devenv.local.nix
 .pre-commit-config.yaml
 
 .android/*
+
+# Electrobun
+electrobun/vendor

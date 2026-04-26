@@ -52,11 +52,13 @@ export interface ISettingsModel {
   changeName: Thunk<ISettingsModel, string | null>;
   changeLanguage: Thunk<ISettingsModel, string>;
   changeAutopilotEnabled: Thunk<ISettingsModel, boolean>;
+  changeAutopilotNodePubkey: Thunk<ISettingsModel, string>;
   changePushNotificationsEnabled: Thunk<ISettingsModel, boolean>;
   changeClipboardInvoiceCheckEnabled: Thunk<ISettingsModel, boolean>;
   changeScheduledSyncEnabled: Thunk<ISettingsModel, boolean>;
   changeScheduledGossipSyncEnabled: Thunk<ISettingsModel, boolean>;
   changeDebugShowStartupInfo: Thunk<ISettingsModel, boolean>;
+  changeUseLegacyHeaderGradient: Thunk<ISettingsModel, boolean>;
   changeGoogleDriveBackupEnabled: Thunk<ISettingsModel, boolean>;
   changePreferFiat: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationEnabled: Thunk<ISettingsModel, boolean>;
@@ -102,11 +104,13 @@ export interface ISettingsModel {
   setName: Action<ISettingsModel, string | null>;
   setLanguage: Action<ISettingsModel, string>;
   setAutopilotEnabled: Action<ISettingsModel, boolean>;
+  setAutopilotNodePubkey: Action<ISettingsModel, string>;
   setPushNotificationsEnabled: Action<ISettingsModel, boolean>;
   setClipboardInvoiceCheckInvoicesEnabled: Action<ISettingsModel, boolean>;
   setScheduledSyncEnabled: Action<ISettingsModel, boolean>;
   setScheduledGossipSyncEnabled: Action<ISettingsModel, boolean>;
   setDebugShowStartupInfo: Action<ISettingsModel, boolean>;
+  setUseLegacyHeaderGradient: Action<ISettingsModel, boolean>;
   setGoogleDriveBackupEnabled: Action<ISettingsModel, boolean>;
   setPreferFiat: Action<ISettingsModel, boolean>;
   setTransactionGeolocationEnabled: Action<ISettingsModel, boolean>;
@@ -152,11 +156,13 @@ export interface ISettingsModel {
   name: string | null;
   language: string;
   autopilotEnabled: boolean;
+  autopilotNodePubkey: string;
   pushNotificationsEnabled: boolean;
   clipboardInvoiceCheckEnabled: boolean;
   scheduledSyncEnabled: boolean;
   scheduledGossipSyncEnabled: boolean;
   debugShowStartupInfo: boolean;
+  useLegacyHeaderGradient: boolean;
   googleDriveBackupEnabled: boolean;
   preferFiat: boolean;
   transactionGeolocationEnabled: boolean;
@@ -216,7 +222,10 @@ export const settings: ISettingsModel = {
     actions.setFiatUnit((await getItemObject(StorageItem.fiatUnit)) || "USD");
     actions.setName((await getItemObject(StorageItem.name)) || null);
     actions.setLanguage((await getItemObject(StorageItem.language)) || "en");
-    actions.setAutopilotEnabled(await getItemObject(StorageItem.autopilotEnabled || false));
+    actions.setAutopilotEnabled((await getItemObject(StorageItem.autopilotEnabled)) ?? true);
+    actions.setAutopilotNodePubkey(
+      (await getItemObject(StorageItem.autopilotNodePubkey)) || BLIXT_NODE_PUBKEY,
+    );
     actions.setPushNotificationsEnabled(
       await getItemObject(StorageItem.pushNotificationsEnabled || false),
     );
@@ -231,6 +240,9 @@ export const settings: ISettingsModel = {
     );
     actions.setDebugShowStartupInfo(
       (await getItemObject(StorageItem.debugShowStartupInfo)) || false,
+    );
+    actions.setUseLegacyHeaderGradient(
+      (await getItemObject(StorageItem.useLegacyHeaderGradient)) || false,
     );
     actions.setGoogleDriveBackupEnabled(
       (await getItemObject(StorageItem.googleDriveBackupEnabled)) || false,
@@ -337,6 +349,11 @@ export const settings: ISettingsModel = {
     actions.setAutopilotEnabled(payload);
   }),
 
+  changeAutopilotNodePubkey: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.autopilotNodePubkey, payload);
+    actions.setAutopilotNodePubkey(payload);
+  }),
+
   changePushNotificationsEnabled: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.pushNotificationsEnabled, payload);
     actions.setPushNotificationsEnabled(payload);
@@ -360,6 +377,11 @@ export const settings: ISettingsModel = {
   changeDebugShowStartupInfo: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.debugShowStartupInfo, payload);
     actions.setDebugShowStartupInfo(payload);
+  }),
+
+  changeUseLegacyHeaderGradient: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.useLegacyHeaderGradient, payload);
+    actions.setUseLegacyHeaderGradient(payload);
   }),
 
   changeGoogleDriveBackupEnabled: thunk(async (actions, payload) => {
@@ -572,6 +594,9 @@ export const settings: ISettingsModel = {
   setAutopilotEnabled: action((state, payload) => {
     state.autopilotEnabled = payload;
   }),
+  setAutopilotNodePubkey: action((state, payload) => {
+    state.autopilotNodePubkey = payload;
+  }),
   setPushNotificationsEnabled: action((state, payload) => {
     state.pushNotificationsEnabled = payload;
   }),
@@ -586,6 +611,9 @@ export const settings: ISettingsModel = {
   }),
   setDebugShowStartupInfo: action((state, payload) => {
     state.debugShowStartupInfo = payload;
+  }),
+  setUseLegacyHeaderGradient: action((state, payload) => {
+    state.useLegacyHeaderGradient = payload;
   }),
   setGoogleDriveBackupEnabled: action((state, payload) => {
     state.googleDriveBackupEnabled = payload;
@@ -710,12 +738,14 @@ export const settings: ISettingsModel = {
   fiatUnit: "USD",
   name: null,
   language: "en",
-  autopilotEnabled: false,
+  autopilotEnabled: true,
+  autopilotNodePubkey: BLIXT_NODE_PUBKEY,
   pushNotificationsEnabled: false,
   clipboardInvoiceCheckEnabled: false,
   scheduledSyncEnabled: false,
   scheduledGossipSyncEnabled: true,
   debugShowStartupInfo: false,
+  useLegacyHeaderGradient: false,
   googleDriveBackupEnabled: false,
   preferFiat: false,
   transactionGeolocationEnabled: false,
@@ -771,7 +801,7 @@ export const settings: ISettingsModel = {
 
     const autopilotEnabled = rand(0, 1) === 1;
     state.setAutopilotEnabled(autopilotEnabled);
-    dispatch.lightning.setupAutopilot(autopilotEnabled);
+    state.setAutopilotNodePubkey(BLIXT_NODE_PUBKEY);
 
     state.setPushNotificationsEnabled(rand(0, 1) === 1);
     state.setClipboardInvoiceCheckInvoicesEnabled(rand(0, 1) === 1);

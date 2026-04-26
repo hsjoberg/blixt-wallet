@@ -22,7 +22,7 @@ export default function CameraComponent({ children, onNotAuthorized, onRead, act
   const codeScanner = useCodeScanner({
     codeTypes: ["qr"],
     onCodeScanned: (codes) => {
-      if (codes.length >= 0) {
+      if (codes.length > 0) {
         onRead?.(codes[0].value ?? "");
       }
     },
@@ -32,11 +32,13 @@ export default function CameraComponent({ children, onNotAuthorized, onRead, act
   useEffect(() => {
     (async () => {
       if (hasPermission === false) {
-        console.log("Does not have camera permission");
-        if (await !requestPermission()) {
-          // TODO fix await
-          onNotAuthorized?.();
-        }
+        setTimeout(async () => {
+          console.log("Does not have camera permission");
+          if (await !requestPermission()) {
+            // TODO fix await
+            onNotAuthorized?.();
+          }
+        }, 600);
       }
     })();
   }, [requestPermission, hasPermission]);

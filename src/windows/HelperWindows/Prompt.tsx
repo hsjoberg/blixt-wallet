@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Card, CardItem, Text } from "native-base";
+import { Card, CardItem, Text } from "native-base";
+import { Button } from "../../components/Button";
 import { AlertButton, StyleSheet, View } from "react-native";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -19,25 +20,25 @@ export interface IPromptNavigationProps {
 
 type IFakeStack = {
   Prompt: IPromptNavigationProps;
-}
+};
 
 export interface IPromptProps {
   navigation: StackNavigationProp<IFakeStack, "Prompt">;
   route: RouteProp<IFakeStack, "Prompt">;
 }
 
-export default function({ navigation, route }: IPromptProps) {
+export default function Prompt({ navigation, route }: IPromptProps) {
   const { title, message, onOk, onCancel, defaultValue } = route.params;
   const [inputText, setInputText] = useState(defaultValue ?? "");
 
   function onPressOk() {
-    onOk(inputText);
     navigation.pop();
+    setTimeout(() => onOk(inputText), 0);
   }
 
   function onPressCancel() {
-    onCancel();
     navigation.pop();
+    setTimeout(() => onCancel(), 0);
   }
 
   return (
@@ -61,19 +62,10 @@ export default function({ navigation, route }: IPromptProps) {
               />
             </View>
             <View style={style.buttons}>
-              <Button
-                small
-                success
-                style={style.button}
-                onPress={onPressOk}
-              >
+              <Button small success style={style.button} onPress={onPressOk}>
                 <Text>Okay</Text>
               </Button>
-              <Button
-                small
-                style={style.button}
-                onPress={onPressCancel}
-              >
+              <Button small style={style.button} onPress={onPressCancel}>
                 <Text>Cancel</Text>
               </Button>
             </View>
@@ -81,7 +73,7 @@ export default function({ navigation, route }: IPromptProps) {
         </CardItem>
       </Card>
     </BlurModal>
-  )
+  );
 }
 
 const style = StyleSheet.create({
@@ -107,11 +99,8 @@ const style = StyleSheet.create({
   button: {
     marginLeft: 10,
   },
-  buttonOk: {
-  },
-  buttonCancel: {
-
-  },
+  buttonOk: {},
+  buttonCancel: {},
   description: {
     marginTop: 35,
     marginHorizontal: 10,
@@ -123,5 +112,5 @@ const style = StyleSheet.create({
     borderBottomWidth: 0,
     marginHorizontal: 8,
     elevation: 0,
-  }
+  },
 });

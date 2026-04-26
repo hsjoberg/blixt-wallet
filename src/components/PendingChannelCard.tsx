@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { Body, Text, Left, Right, Card, CardItem, Row, Button } from "native-base";
+import { Body, Text, Left, Right, Card, CardItem, Row } from "native-base";
+import { Button } from "./Button";
 import { Image, Linking } from "react-native";
 import BigNumber from "bignumber.js";
 
@@ -65,8 +66,8 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
       return;
     }
 
-    if (!!channel.closingTxid || channel.closingTxid !== "") {
-      Alert.alert("Closing Tx Has Already Been Broadcasted");
+    if (!!channel.closingTxid && channel.closingTxid !== "") {
+      Alert.alert(`Closing Tx Has Already Been Broadcasted:\n${channel.closingTxid}`);
       return;
     }
 
@@ -82,13 +83,12 @@ export const PendingChannelCard = ({ channel, type, alias }: IPendingChannelCard
           style: "default",
           text: "Yes",
           onPress: async () => {
+            const channelPoint = channel.channel?.channelPoint;
+            if (!channelPoint) {
+              return;
+            }
+
             try {
-              const channelPoint = channel.channel?.channelPoint || undefined;
-
-              if (!channelPoint) {
-                return;
-              }
-
               const result = await closeChannel({
                 fundingTx: channelPoint.split(":")[0],
                 outputIndex: Number.parseInt(channelPoint.split(":")[1], 10),

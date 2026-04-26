@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect, useRef } from "react";
-import { NativeModules, StyleSheet, TextInput, View } from "react-native";
-import { Text, Container, Button, Icon, Spinner, CheckBox } from "native-base";
+import { StyleSheet, TextInput, View } from "react-native";
+import { Text, Container, Icon, Spinner, CheckBox } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Slider from "@react-native-community/slider";
 import { RouteProp } from "@react-navigation/native";
@@ -18,8 +19,8 @@ import Input from "../../components/Input";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
 import { Alert } from "../../utils/alert";
-import { lnrpc } from "../../../proto/lightning";
-import { stopDaemon } from "react-native-turbo-lnd";
+import { CommitmentType } from "react-native-turbo-lnd/protos/lightning_pb";
+import { restartAppOrNotify } from "../../utils/restart-app";
 
 export interface IOpenChannelProps {
   navigation: StackNavigationProp<LightningInfoStackParamList, "OpenChannel">;
@@ -68,14 +69,14 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
         await connectAndOpenChannelAll({
           peer,
           feeRateSat: feeRate !== 0 ? feeRate : undefined,
-          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : undefined,
+          type: taprootChan ? CommitmentType.SIMPLE_TAPROOT : undefined,
         });
       } else {
         await connectAndOpenChannel({
           peer,
           amount: satoshiValue,
           feeRateSat: feeRate !== 0 ? feeRate : undefined,
-          type: taprootChan ? lnrpc.CommitmentType["SIMPLE_TAPROOT"] : undefined,
+          type: taprootChan ? CommitmentType.SIMPLE_TAPROOT : undefined,
         });
       }
       await getChannels(undefined);
@@ -97,19 +98,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
             text: "Activate Tor",
             async onPress(value?) {
               await changeTorEnabled(!torEnabled);
-              if (PLATFORM === "android") {
-                try {
-                  await stopDaemon({});
-                } catch (e) {
-                  console.log(e);
-                }
-                NativeModules.LndMobileTools.restartApp();
-              } else {
-                Alert.alert(
-                  t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings }),
-                  t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings }),
-                );
-              }
+              await restartAppOrNotify();
             },
           },
         ]);

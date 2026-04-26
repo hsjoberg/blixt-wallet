@@ -1,13 +1,12 @@
+// I generated this file with Cursor + Claude 3.5 Sonnet
 import React, { useEffect, useState } from "react";
 import { Button, Text, View, ScrollView, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import Container from "../components/Container";
-import { useTranslation } from "react-i18next";
-import { namespaces } from "../i18n/i18n.constants";
 import { getItem } from "../storage/app";
-import { StorageItem } from "../storage/storage-types";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 
 interface SyncWorkRecord {
@@ -18,6 +17,7 @@ interface SyncWorkRecord {
 }
 
 enum SyncResult {
+  IN_PROGRESS = "IN_PROGRESS",
   EARLY_EXIT_ACTIVITY_RUNNING = "EARLY_EXIT_ACTIVITY_RUNNING",
   SUCCESS_LND_ALREADY_RUNNING = "SUCCESS_LND_ALREADY_RUNNING",
   SUCCESS_CHAIN_SYNCED = "SUCCESS_CHAIN_SYNCED",
@@ -25,12 +25,16 @@ enum SyncResult {
   SUCCESS_ACTIVITY_INTERRUPTED = "SUCCESS_ACTIVITY_INTERRUPTED",
   FAILURE_GENERAL = "FAILURE_GENERAL",
   FAILURE_CHAIN_SYNC_TIMEOUT = "FAILURE_CHAIN_SYNC_TIMEOUT",
+  EARLY_EXIT_PERSISTENT_SERVICES_ENABLED = "EARLY_EXIT_PERSISTENT_SERVICES_ENABLED",
+  EARLY_EXIT_TOR_ENABLED = "EARLY_EXIT_TOR_ENABLED",
 }
 
 const isNeutralResult = (result: SyncResult) => {
-  return [SyncResult.SUCCESS_LND_ALREADY_RUNNING, SyncResult.EARLY_EXIT_ACTIVITY_RUNNING].includes(
-    result,
-  );
+  return [
+    SyncResult.IN_PROGRESS,
+    SyncResult.SUCCESS_LND_ALREADY_RUNNING,
+    SyncResult.EARLY_EXIT_ACTIVITY_RUNNING,
+  ].includes(result);
 };
 
 const isSuccessResult = (result: SyncResult) => {
@@ -41,6 +45,8 @@ const isSuccessResult = (result: SyncResult) => {
 
 const getStatusText = (result: SyncResult): string => {
   switch (result) {
+    case SyncResult.IN_PROGRESS:
+      return "In Progress (or crashed)";
     case SyncResult.EARLY_EXIT_ACTIVITY_RUNNING:
       return "Skipped (App Running)";
     case SyncResult.SUCCESS_LND_ALREADY_RUNNING:
@@ -55,6 +61,10 @@ const getStatusText = (result: SyncResult): string => {
       return "Failed (Error)";
     case SyncResult.FAILURE_CHAIN_SYNC_TIMEOUT:
       return "Failed (Chain Sync Timeout)";
+    case SyncResult.EARLY_EXIT_PERSISTENT_SERVICES_ENABLED:
+      return "Skipped (Persistent Services Enabled)";
+    case SyncResult.EARLY_EXIT_TOR_ENABLED:
+      return "Skipped (Tor Enabled)";
   }
 };
 
@@ -86,7 +96,7 @@ export default function SyncWorkerReport({}: ISyncWorkerReportProps) {
   };
 
   return (
-    <Container>
+    <SafeAreaView style={{ flex: 1, backgroundColor: blixtTheme.dark }}>
       <View style={styles.header}>
         <Text style={styles.title}>Sync History</Text>
         <Button onPress={() => navigation.goBack()} title="Back" />
@@ -118,7 +128,7 @@ export default function SyncWorkerReport({}: ISyncWorkerReportProps) {
           </View>
         ))}
       </ScrollView>
-    </Container>
+    </SafeAreaView>
   );
 }
 
@@ -131,8 +141,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
+    color: blixtTheme.light,
   },
   scrollView: {
     flex: 1,

@@ -1,6 +1,14 @@
 pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
 plugins { id("com.facebook.react.settings") }
-extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+def isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
+def bunxCommand = isWindows ? ["cmd", "/c", "bunx"] : ["bunx"]
+
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
+    ex.autolinkLibrariesFromCommand(
+        bunxCommand + ["@react-native-community/cli", "config"]
+    )
+}
+
 rootProject.name = 'BlixtWallet'
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')

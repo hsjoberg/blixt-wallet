@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar, Alert, NativeModules } from "react-native";
-import { Spinner, H1, H2, Text, Button } from "native-base";
+import { StatusBar } from "react-native";
+import { Spinner, H1, H2, Text } from "native-base";
+import { Button } from "./components/Button";
 import {
   createStackNavigator,
   CardStyleInterpolators,
@@ -41,6 +42,7 @@ import useStackNavigationOptions from "./hooks/useStackNavigationOptions";
 import { navigator } from "./utils/navigation";
 import { PLATFORM } from "./utils/constants";
 import Prompt, { IPromptNavigationProps } from "./windows/HelperWindows/Prompt";
+import HelperAlert, { IHelperAlertNavigationProps } from "./windows/HelperWindows/Alert";
 import { isInstanceBricked } from "./storage/app";
 
 const RootStack = createStackNavigator();
@@ -79,6 +81,7 @@ export type RootStackParamList = {
   WebInfo: undefined;
 
   Prompt: IPromptNavigationProps;
+  HelperAlert: IHelperAlertNavigationProps;
 
   DEV_CommandsX: undefined;
   SyncWorkerReport: undefined;
@@ -92,6 +95,7 @@ export default function Main() {
   const importChannelDbOnStartup = useStoreState((store) => store.importChannelDbOnStartup);
   const loggedIn = useStoreState((store) => store.security.loggedIn);
   const initializeApp = useStoreActions((store) => store.initializeApp);
+  const setAppReady = useStoreActions((store) => store.setAppReady);
   const [initialRoute, setInitialRoute] = useState("Loading");
   const torLoading = useStoreState((store) => store.torLoading);
   const speedloaderLoading = useStoreState((store) => store.speedloaderLoading);
@@ -104,12 +108,14 @@ export default function Main() {
   const [state, setState] = useState<
     "init" | "authentication" | "onboarding" | "started" | "bricked"
   >("init");
+  const [initError, setInitError] = useState<string | null>(null);
 
   useEffect(() => {
     // tslint:disable-next-line
     (async () => {
       if (!appReady) {
         try {
+          setInitError(null);
           if (await isInstanceBricked()) {
             setState("bricked");
             return;
@@ -117,11 +123,15 @@ export default function Main() {
 
           await initializeApp();
         } catch (e: any) {
-          toast(e.message, 0, "danger");
+          const message = e?.message ?? String(e);
+          const detail = e?.stack ?? message;
+          console.error("initializeApp failed", e);
+          setInitError(detail);
+          toast(message, 0, "danger");
         }
       }
     })();
-  }, [appReady]);
+  }, [appReady, initializeApp]);
 
   useEffect(() => {
     if (!appReady) {
@@ -151,7 +161,6 @@ export default function Main() {
           //       }, {
           //         text: "Restart app",
           //         onPress: async () => {
-          //           await NativeModules.LndMobileTools.killLnd();
           //           NativeModules.LndMobileTools.restartApp();
           //         },
           //       }, {
@@ -171,13 +180,14 @@ export default function Main() {
         setState("started");
       }
     })();
-  }, [appReady, loggedIn, holdOnboarding, walletCreated]);
+  }, [appReady, loggedIn, holdOnboarding, walletCreated, importChannelDbOnStartup]);
 
   const screenOptions: StackNavigationOptions = {
     ...useStackNavigationOptions(),
     gestureEnabled: false,
     gestureDirection: "horizontal",
     gestureVelocityImpact: 1.9,
+    animation: screenTransitionsEnabled ? "default" : "none",
   };
 
   const animationDisabled: StackNavigationOptions = {
@@ -191,6 +201,41 @@ export default function Main() {
   };
 
   if (state === "init") {
+    if (initError) {
+      return (
+        <Container centered>
+          <StatusBar
+            backgroundColor="transparent"
+            hidden={false}
+            translucent={true}
+            networkActivityIndicatorVisible={true}
+            barStyle="light-content"
+          />
+          <H2>Initialization Failed</H2>
+          <Text selectable>{initError}</Text>
+          <Button
+            small
+            onPress={async () => {
+              setInitError(null);
+              setState("init");
+              setAppReady(false);
+              try {
+                await initializeApp();
+              } catch (e: any) {
+                const message = e?.message ?? String(e);
+                const detail = e?.stack ?? message;
+                console.error("initializeApp retry failed", e);
+                setInitError(detail);
+                toast(message, 0, "danger");
+              }
+            }}
+          >
+            <Text>Retry Startup</Text>
+          </Button>
+        </Container>
+      );
+    }
+
     if (torLoading) {
       return (
         <Container centered>
@@ -301,7 +346,7 @@ export default function Main() {
         name="Send"
         component={Send}
         options={{
-          animation: screenTransitionsEnabled ? undefined : "none",
+          animation: screenTransitionsEnabled ? "default" : "none",
           gestureEnabled: true,
           gestureResponseDistance: 1000,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -335,6 +380,7 @@ export default function Main() {
         options={horizontalTransition}
       />
       <RootStack.Screen name="Prompt" component={Prompt} options={animationDisabled} />
+      <RootStack.Screen name="HelperAlert" component={HelperAlert} options={animationDisabled} />
       <RootStack.Screen name="DEV_CommandsX" component={DEV_Commands} options={animationDisabled} />
       <RootStack.Screen
         name="SyncWorkerReport"

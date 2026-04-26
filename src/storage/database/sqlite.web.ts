@@ -1,17 +1,29 @@
-import initSqlJs from "sql.js";
-import { SqlJs } from "sql.js/module";
+import TurboSqlite, { Database, Params } from "react-native-turbo-sqlite";
 import { getInitialSchema } from "./sqlite-migrations";
+import { IS_ELECTROBUN } from "../../utils/constants";
 
-export const openDatabase = async (): Promise<SqlJs.Database> => {
-  const res = await initSqlJs();
-  return new res.Database();
+const adaptWebDatabase = (db: Database): Database => {
+  return {
+    ...db,
+    executeSql: (sql: string, params: Params) => db.executeSqlAsync(sql, params),
+    close: () => db.closeAsync(),
+  } as unknown as Database;
 };
 
-export const setupInitialSchema = async (db: SqlJs.Database) => {
+export const openDatabase = async (): Promise<Database> => {
+  // Electrobun backend does not use sqlite wasm,
+  // as we have our own bun:sqlite shim
+  if (IS_ELECTROBUN) {
+    return await TurboSqlite.openDatabaseAsync("Blixt");
+  }
+  return adaptWebDatabase(await TurboSqlite.openDatabaseAsync("Blixt"));
+};
+
+export const setupInitialSchema = async (db: Database) => {
   console.log("Creating initial schema");
 
   for (const sql of getInitialSchema()) {
-    const r = await db.exec(sql);
+    await db.executeSql(sql, []);
   }
 };
 
@@ -19,11 +31,11 @@ export const deleteDatabase = async () => {
   console.warn("deleteDatabase() not implemented");
 };
 
-export const dropTables = async (db: SqlJs.Database) => {
-  await db.exec(`DROP TABLE tx`);
-  await db.exec(`DROP TABLE tx_hops`);
-  await db.exec(`DROP TABLE channel_event`);
+export const dropTables = async (db: Database) => {
+  await db.executeSql(`DROP TABLE tx`, []);
+  await db.executeSql(`DROP TABLE tx_hops`, []);
+  await db.executeSql(`DROP TABLE channel_event`, []);
+  await db.executeSql(`DROP TABLE contact`, []);
 };
 
-export const migrateDatabase = async () => {
-};
+export const migrateDatabase = async () => {};

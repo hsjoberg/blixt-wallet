@@ -3,8 +3,38 @@
 #include <atomic>
 
 #include "liblnd.h"
-#include "blixtlog.h"
+#include "utils/log.h"
 #include "JvmStore.h"
+
+namespace {
+void freeLndOwnedMemory(const char *ptr) {
+  if (ptr != nullptr) {
+    ::lndFree(const_cast<char *>(ptr));
+  }
+}
+
+bool hasInvalidCallbackPayload(const char *data, int length) {
+  return length < 0 || (length > 0 && data == nullptr);
+}
+
+void notifyJavaError(JNIEnv *env, jobject target, const char *message) {
+  jclass cls = env->GetObjectClass(target);
+  if (cls == nullptr) {
+    return;
+  }
+
+  jmethodID onError = env->GetMethodID(cls, "onError", "(Ljava/lang/String;)V");
+  if (onError != nullptr) {
+    jstring jError = env->NewStringUTF(message ? message : "Unknown error");
+    if (jError != nullptr) {
+      env->CallVoidMethod(target, onError, jError);
+      env->DeleteLocalRef(jError);
+    }
+  }
+
+  env->DeleteLocalRef(cls);
+}
+} // namespace
 
 struct CallbackContext {
   jobject callback;
@@ -16,7 +46,7 @@ struct CallbackContext {
 /////////
 // Response callback (matches ResponseFunc signature)
 void handleOnResponse(void *context, const char *data, int length) {
-  BLIXT_LOG_DEBUG("handleOnResponse " << data);
+  TURBOLND_LOG_DEBUG("handleOnResponse length=" << length);
 
   auto ctx = reinterpret_cast<CallbackContext *>(context);
 
@@ -28,9 +58,41 @@ void handleOnResponse(void *context, const char *data, int length) {
     shouldDetach = true;
   }
 
-  // Convert native data to Java byte[]
+  if (hasInvalidCallbackPayload(data, length)) {
+    notifyJavaError(env, ctx->callback, "invalid callback payload");
+    freeLndOwnedMemory(data);
+
+    if (!ctx->cleaned.exchange(true)) {
+      env->DeleteGlobalRef(ctx->callback);
+      delete ctx;
+    }
+
+    if (shouldDetach) {
+      gJvm->DetachCurrentThread();
+    }
+    return;
+  }
+
+  // Convert native data to Java byte[].
+  // The bytes are copied into JVM-managed memory here.
   jbyteArray jData = env->NewByteArray(length);
-  env->SetByteArrayRegion(jData, 0, length, (const jbyte *)data);
+  if (jData == nullptr) {
+    freeLndOwnedMemory(data);
+
+    if (!ctx->isStart && !ctx->cleaned.exchange(true)) {
+      env->DeleteGlobalRef(ctx->callback);
+      delete ctx;
+    }
+
+    if (shouldDetach) {
+      gJvm->DetachCurrentThread();
+    }
+    return;
+  }
+  if (data != nullptr && length > 0) {
+    env->SetByteArrayRegion(jData, 0, length, (const jbyte *)data);
+  }
+  freeLndOwnedMemory(data);
 
   jclass cls = env->GetObjectClass(ctx->callback);
   jmethodID onResponse = env->GetMethodID(cls, "onResponse", "([B)V");
@@ -38,9 +100,13 @@ void handleOnResponse(void *context, const char *data, int length) {
 
   // Cleanup
   env->DeleteLocalRef(jData);
+  env->DeleteLocalRef(cls);
 
   // Only delete the global ref if this isn't a start() operation
   // For start(), we'll let the error handler clean up
+  //
+  // I think the reason for this was that both onResponse and onError callbacks can be triggered
+  // from lnd's side.
   if (!ctx->isStart) {
     if (!ctx->cleaned.exchange(true)) {
       env->DeleteGlobalRef(ctx->callback);
@@ -55,7 +121,9 @@ void handleOnResponse(void *context, const char *data, int length) {
 
 // Error callback (matches ErrorFunc signature)
 void handleOnError(void *context, const char *error) {
-  BLIXT_LOG_DEBUG("handleOnError " << error);
+  const std::string errorString = error ? std::string(error) : "Unknown error";
+  TURBOLND_LOG_DEBUG("handleOnError " << errorString);
+  freeLndOwnedMemory(error);
 
   auto ctx = reinterpret_cast<CallbackContext *>(context);
 
@@ -67,13 +135,14 @@ void handleOnError(void *context, const char *error) {
     shouldDetach = true;
   }
 
-  jstring jError = env->NewStringUTF(error ? error : "Unknown error");
+  jstring jError = env->NewStringUTF(errorString.c_str());
 
   jclass cls = env->GetObjectClass(ctx->callback);
   jmethodID onError = env->GetMethodID(cls, "onError", "(Ljava/lang/String;)V");
   env->CallVoidMethod(ctx->callback, onError, jError);
 
   env->DeleteLocalRef(jError);
+  env->DeleteLocalRef(cls);
 
   // Clean up if not already done
   if (!ctx->cleaned.exchange(true)) {
@@ -105,12 +174,12 @@ extern "C" JNIEXPORT void JNICALL Java_com_blixtwallet_LndNative_startLnd(
   CCallback cCallback {
     .onResponse = handleOnResponse,
     .onError = handleOnError,
-    .responseContext = ctx,
-    .errorContext = ctx
+    .responseContext = reinterpret_cast<uintptr_t>(ctx),
+    .errorContext = reinterpret_cast<uintptr_t>(ctx)
   };
 
   // Call native function
-  ::start(strdup(extraArgs), cCallback); // strdup to copy string TODO probably not needed
+  ::start(const_cast<char *>(extraArgs), cCallback);
 
   // Release resources
   env->ReleaseStringUTFChars(jExtraArgs, extraArgs);
@@ -130,15 +199,15 @@ extern "C" JNIEXPORT void JNICALL Java_com_blixtwallet_LndNative_getInfo(
   auto *ctx = new CallbackContext {
     .callback = env->NewGlobalRef(jCallback),
     .cleaned = false,
-    .isStart = true
+    .isStart = false
   };
 
   // Configure C callback struct
   CCallback cCallback {
     .onResponse = handleOnResponse,
     .onError = handleOnError,
-    .responseContext = ctx,
-    .errorContext = ctx
+    .responseContext = reinterpret_cast<uintptr_t>(ctx),
+    .errorContext = reinterpret_cast<uintptr_t>(ctx)
   };
 
 
@@ -162,15 +231,15 @@ extern "C" JNIEXPORT void JNICALL Java_com_blixtwallet_LndNative_unlockWallet(
   auto *ctx = new CallbackContext {
     .callback = env->NewGlobalRef(jCallback),
     .cleaned = false,
-    .isStart = true
+    .isStart = false
   };
 
   // Configure C callback struct
   CCallback cCallback {
     .onResponse = handleOnResponse,
     .onError = handleOnError,
-    .responseContext = ctx,
-    .errorContext = ctx
+    .responseContext = reinterpret_cast<uintptr_t>(ctx),
+    .errorContext = reinterpret_cast<uintptr_t>(ctx)
   };
 
   // Call native function with actual request data
@@ -194,15 +263,15 @@ extern "C" JNIEXPORT void JNICALL Java_com_blixtwallet_LndNative_stopDaemon(
   auto *ctx = new CallbackContext {
     .callback = env->NewGlobalRef(jCallback),
     .cleaned = false,
-    .isStart = true
+    .isStart = false
   };
 
   // Configure C callback struct
   CCallback cCallback {
     .onResponse = handleOnResponse,
     .onError = handleOnError,
-    .responseContext = ctx,
-    .errorContext = ctx
+    .responseContext = reinterpret_cast<uintptr_t>(ctx),
+    .errorContext = reinterpret_cast<uintptr_t>(ctx)
   };
 
   // Call native function with actual request data
@@ -226,15 +295,38 @@ void handleServerStreamOnResponse(void *context, const char *data, int length) {
 
   auto callback = reinterpret_cast<jobject>(context);
 
-  // Convert native data to Java byte[]
+  if (hasInvalidCallbackPayload(data, length)) {
+    notifyJavaError(env, callback, "invalid callback payload");
+    freeLndOwnedMemory(data);
+
+    if (shouldDetach) {
+      gJvm->DetachCurrentThread();
+    }
+    return;
+  }
+
+  // Convert native data to Java byte[].
+  // The bytes are copied into JVM-managed memory here.
   jbyteArray jData = env->NewByteArray(length);
-  env->SetByteArrayRegion(jData, 0, length, (const jbyte *)data);
+  if (jData == nullptr) {
+    freeLndOwnedMemory(data);
+
+    if (shouldDetach) {
+      gJvm->DetachCurrentThread();
+    }
+    return;
+  }
+  if (data != nullptr && length > 0) {
+    env->SetByteArrayRegion(jData, 0, length, (const jbyte *)data);
+  }
+  freeLndOwnedMemory(data);
 
   jclass cls = env->GetObjectClass(callback);
   jmethodID onResponse = env->GetMethodID(cls, "onResponse", "([B)V");
   env->CallVoidMethod(callback, onResponse, jData);
 
   env->DeleteLocalRef(jData);
+  env->DeleteLocalRef(cls);
 
   if (shouldDetach) {
     gJvm->DetachCurrentThread();
@@ -252,7 +344,10 @@ void handleServerStreamOnError(void *context, const char *error) {
   }
 
   auto listener = reinterpret_cast<jobject>(context);
-  jstring jError = env->NewStringUTF(error);
+  const std::string errorString = error ? std::string(error) : "Unknown error";
+  const bool isEof = errorString.find("EOF") != std::string::npos;
+  freeLndOwnedMemory(error);
+  jstring jError = env->NewStringUTF(errorString.c_str());
 
   jclass cls = env->GetObjectClass(listener);
   jmethodID onError = env->GetMethodID(cls, "onError", "(Ljava/lang/String;)V");
@@ -260,10 +355,11 @@ void handleServerStreamOnError(void *context, const char *error) {
 
   // Only cleanup global ref if error contains "EOF". We should expect that
   // the stream will be closed after the error is received.
-  if (strstr(error, "EOF") != nullptr) {
+  if (isEof) {
     env->DeleteGlobalRef(listener);
   }
   env->DeleteLocalRef(jError);
+  env->DeleteLocalRef(cls);
 
   if (shouldDetach) {
     gJvm->DetachCurrentThread();
@@ -286,8 +382,8 @@ extern "C" JNIEXPORT void JNICALL Java_com_blixtwallet_LndNative_subscribeState(
   CRecvStream stream {
     .onResponse = handleServerStreamOnResponse,
     .onError = handleServerStreamOnError,
-    .responseContext = gListener,
-    .errorContext = gListener
+    .responseContext = reinterpret_cast<uintptr_t>(gListener),
+    .errorContext = reinterpret_cast<uintptr_t>(gListener)
   };
 
   // Call native function

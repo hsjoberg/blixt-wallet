@@ -1,11 +1,11 @@
 import { Alert } from "../utils/alert";
 import { useStoreActions } from "../state/store";
 import { useNavigation, NavigationProp } from "@react-navigation/core";
-import { NavigationRootStackParamList } from "../types";
+import { RootStackParamList } from "../Main";
 
 export default function usePromptLightningAddress() {
   const resolveLightningAddress = useStoreActions((store) => store.lnUrl.resolveLightningAddress);
-  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return () =>
     new Promise<[boolean, string?]>((resolve, reject) => {
@@ -20,13 +20,17 @@ export default function usePromptLightningAddress() {
           },
           {
             text: "Ok",
-            onPress: async (text) => {
+            onPress: async (text?: string) => {
+              const lightningAddress = (text ?? "").trim();
+              navigation.navigate("LoadingModal");
+
               try {
-                const lightningAddress = (text ?? "").trim();
-                navigation.navigate("LoadingModal");
                 if (await resolveLightningAddress(lightningAddress)) {
                   navigation.goBack();
                   resolve([true, lightningAddress]);
+                } else {
+                  navigation.goBack();
+                  resolve([false]);
                 }
               } catch (error: any) {
                 navigation.goBack();

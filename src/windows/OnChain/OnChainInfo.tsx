@@ -1,7 +1,8 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import { StyleSheet, View, Share } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { Text, Container, H1, H2, Button, Icon, Spinner } from "native-base";
+import { Text, Container, H1, H2, Icon, Spinner } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { OnChainStackParamList } from "./index";
@@ -13,7 +14,7 @@ import CopyAddress from "../../components/CopyAddress";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
 import { toast } from "../../utils";
 import { NavigationButton } from "../../components/NavigationButton";
-import { lnrpc } from "../../../proto/lightning";
+import { AddressType } from "react-native-turbo-lnd/protos/lightning_pb";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n/i18n.constants";
@@ -107,8 +108,8 @@ export const OnChainInfo = ({ navigation }: IOnChainInfoProps) => {
               <Text style={style.sendBitcoinsLabel}>{t("address.title")}:</Text>
               <QrCode
                 data={
-                  addressType === lnrpc.AddressType.WITNESS_PUBKEY_HASH ||
-                  addressType === lnrpc.AddressType.UNUSED_WITNESS_PUBKEY_HASH
+                  addressType === AddressType.WITNESS_PUBKEY_HASH ||
+                  addressType === AddressType.UNUSED_WITNESS_PUBKEY_HASH
                     ? address.toUpperCase()
                     : address
                 }

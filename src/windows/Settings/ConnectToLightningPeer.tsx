@@ -1,5 +1,6 @@
 import React, { useState, useLayoutEffect } from "react";
-import { Text, Container, Button, Icon, Spinner } from "native-base";
+import { Text, Container, Icon, Spinner } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useTranslation } from "react-i18next";
 

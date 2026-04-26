@@ -1,10 +1,12 @@
 import { PLATFORM } from "../../utils/constants";
-import { Button, Container, Input, Text, Toast, View } from "native-base";
+import { Container, Input, Text, Toast, View } from "native-base";
+import { Button } from "../../components/Button";
 import { CONSTANTS, JSHash } from "react-native-hash";
-import { Linking, NativeModules, StatusBar, StyleSheet } from "react-native";
+import { Linking, StatusBar, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { StorageItem, getItem, removeItem, setItem, setItemObject } from "../../storage/app";
 import { bytesToHexString, hexToUint8Array, stringToUint8Array, toast } from "../../utils";
+import NativeBlixtTools from "../../turbomodules/NativeBlixtTools";
 
 import {
   clearTransactions,
@@ -62,11 +64,14 @@ import {
   sendCoins,
   closeChannel,
   abandonChannel,
+  subscribeState,
+  subscribeTransactions,
 } from "react-native-turbo-lnd";
 
 import TurboSqlite from "react-native-turbo-sqlite";
 
 import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
+import ScheduledSyncTurbo from "../../turbomodules/NativeScheduledSyncTurbo";
 
 import Speedloader from "../../turbomodules/NativeSpeedloader";
 
@@ -144,6 +149,108 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           )}
           {/*
            *
+           * Electrobun
+           *
+           */}
+          <Text style={{ width: "100%" }}>Electrobun:</Text>
+          <Button
+            small
+            onPress={async () => {
+              try {
+                if (!(globalThis as any).__electrobunBunBridge) {
+                  const message = "Electrobun LND bridge is unavailable in this runtime.";
+                  console.warn(message);
+                  setCommandResult({ message });
+                  setError({});
+                  return;
+                }
+
+                const args = [
+                  "--lnddir=.lnd-mobile",
+                  "--noseedbackup",
+                  "--nolisten",
+                  "--bitcoin.active",
+                  "--bitcoin.regtest",
+                  "--bitcoin.node=neutrino",
+                  '--feeurl="https://nodes.lightning.computer/fees/v1/btc-fee-estimates.json"',
+                  "--routing.assumechanvalid",
+                  "--tlsdisableautofill",
+                  "--db.bolt.auto-compact",
+                  "--db.bolt.auto-compact-min-age=0",
+                  "--neutrino.connect=192.168.10.120:19444",
+                ].join(" ");
+                const result = await start(args);
+                console.log("Electrobun start()", result);
+                setCommandResult({ result, args });
+                setError({});
+              } catch (e: any) {
+                console.error("Electrobun start() failed", e);
+                setError(e);
+                setCommandResult({});
+              }
+            }}
+          >
+            <Text style={styles.buttonText}>Electrobun start real lnd</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log(
+                await subscribeState(
+                  {},
+                  (res) => {
+                    console.log("subscribeState", res);
+                  },
+                  (err) => {
+                    console.error("subscribeState error", err);
+                  },
+                ),
+              );
+            }}
+          >
+            <Text style={styles.buttonText}>Electrobun subscribeState</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log("Running subscribeState x 2 benchmark...");
+
+              for (let i = 0; i < 2; i++) {
+                await subscribeState(
+                  {},
+                  (res) => {
+                    console.log("subscribeState", res);
+                  },
+                  (err) => {
+                    console.error("subscribeState error", err);
+                  },
+                );
+              }
+            }}
+          >
+            <Text style={styles.buttonText}>subscribeState x 2</Text>
+          </Button>
+          <Button
+            small
+            onPress={async () => {
+              console.log("Running subscribeTransactions...");
+
+              await subscribeTransactions(
+                {},
+                (res) => {
+                  console.log("subscribeTransactions", res);
+                },
+                (err) => {
+                  console.error("subscribeTransactions error", err);
+                },
+              );
+            }}
+          >
+            <Text style={styles.buttonText}>subscribeTransactions</Text>
+          </Button>
+
+          {/*
+           *
            * Speedloader
            *
            */}
@@ -152,8 +259,8 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               // console.log("TEST");
-              // console.log(await NativeModules.LndMobileTools.getFilesDir());
-              // console.log(await NativeModules.LndMobileTools.getCacheDir());
+              // console.log(await NativeBlixtTools.getFilesDir());
+              // console.log(await NativeBlixtTools.getCacheDir());
               console.log(await Speedloader.gossipSync("hejsan"));
             }}
           >
@@ -168,16 +275,31 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              const db = TurboSqlite.openDatabase(
-                `/data/user/0/com.blixtwallet.debug/databases/Blixt`,
-              );
+              if (PLATFORM === "web") {
+                const db = await TurboSqlite.openDatabaseAsync("Blixt");
+                console.log(await db.executeSqlAsync("SELECT * from tx", []));
+                return;
+              }
 
+              const db = TurboSqlite.openDatabase(`/data/user/0/com.blixtwallet.debug/databases/Blixt`);
               console.log(db.executeSql("SELECT * from tx", []));
             }}
           >
             <Text>test</Text>
           </Button>
-          <Button small onPress={async () => console.log(TurboSqlite.getVersionString())}>
+          <Button
+            small
+            onPress={async () => {
+              if (PLATFORM === "web") {
+                const db = await TurboSqlite.openDatabaseAsync("Blixt");
+                console.log(await db.executeSqlAsync("SELECT sqlite_version() AS version", []));
+                await db.closeAsync();
+                return;
+              }
+
+              console.log(TurboSqlite.getVersionString());
+            }}
+          >
             <Text>TurboSqlite.getVersionString()</Text>
           </Button>
           {/*
@@ -210,26 +332,26 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.startSyncWorker());
+              console.log(ScheduledSyncTurbo.startSyncWorker());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.startSyncWorker</Text>
+            <Text style={styles.buttonText}>ScheduledSyncTurbo.startSyncWorker</Text>
           </Button>
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.scheduleSyncWorker());
+              console.log(ScheduledSyncTurbo.scheduleSyncWorker());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.scheduleSyncWorker</Text>
+            <Text style={styles.buttonText}>ScheduledSyncTurbo.scheduleSyncWorker</Text>
           </Button>
           <Button
             small
             onPress={async () => {
-              console.log(LndMobileToolsTurbo.stopScheduleSyncWorker());
+              console.log(ScheduledSyncTurbo.stopScheduleSyncWorker());
             }}
           >
-            <Text style={styles.buttonText}>LndMobileToolsTurbo.stopScheduleSyncWorker</Text>
+            <Text style={styles.buttonText}>ScheduledSyncTurbo.stopScheduleSyncWorker</Text>
           </Button>
           <Button
             small
@@ -278,14 +400,23 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
            *
            */}
           <Text style={{ width: "100%" }}>Random:</Text>
+          <Button
+            small
+            onPress={async () => {
+              Alert.alert(HermesInternal.getRuntimeProperties()["OSS Release Version"]);
+            }}
+          >
+            <Text style={styles.buttonText}>Check Hermes version</Text>
+          </Button>
           {/* <Button small onPress={async () => console.log(await Speedloader.gossipSync("hejsan"))}>
             <Text style={styles.buttonText}>Speedloader.gossipSync</Text>
           </Button> */}
           <Button
             small
             onPress={async () => {
+              console.log("Running getInfo x 100 benchmark...");
               const startTime = performance.now();
-              for (let i = 0; i < 10000; i++) {
+              for (let i = 0; i < 100; i++) {
                 // console.log(
                 await getInfo({});
                 // );
@@ -386,12 +517,16 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(await NativeModules.LndMobileTools.getInternalFiles());
-              const files = await NativeModules.LndMobileTools.getInternalFiles();
+              console.log(await NativeBlixtTools.getInternalFiles());
+              const files = (await NativeBlixtTools.getInternalFiles()) as Record<
+                string,
+                number | string
+              >;
               let totalBytes = 0;
               Object.keys(files).map((key) => {
-                totalBytes += files[key];
-                (files[key] as any) = (files[key] / 1000000).toFixed(2) + " MB";
+                const fileSizeBytes = Number(files[key]);
+                totalBytes += fileSizeBytes;
+                files[key] = (fileSizeBytes / 1000000).toFixed(2) + " MB";
               });
 
               console.log(JSON.stringify(files, undefined, 4));
@@ -534,7 +669,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(await NativeModules.LndMobileTools.getTorEnabled());
+              console.log(await NativeBlixtTools.getTorEnabled());
             }}
           >
             <Text style={styles.buttonText}>getTorEnabled</Text>
@@ -757,7 +892,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(await NativeModules.LndMobileTools.tailLog(10));
+              console.log(await NativeBlixtTools.tailLog(10));
             }}
           >
             <Text style={styles.buttonText}>LndMobileTools.tailLog</Text>
@@ -783,25 +918,6 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           >
             <Text style={styles.buttonText}>channelAcceptor</Text>
           </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log(NativeModules.LndMobileTools);
-              console.log(NativeModules.LndMobileTools.writeConfigFile());
-            }}
-          >
-            <Text style={styles.buttonText}>NativeModules.LndMobileTools.writeConfigFile()</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log(NativeModules.LndMobile);
-              console.log(await NativeModules.LndMobile.startLnd(false, ""));
-            }}
-          >
-            <Text style={styles.buttonText}>NativeModules.LndMobile.startLnd()</Text>
-          </Button>
-
           <Button
             small
             onPress={async () => {
@@ -840,13 +956,13 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
               console.log(initWalletResponse);
             }}
           >
-            <Text style={styles.buttonText}>NativeModules.LndMobile.initWallet()</Text>
+            <Text style={styles.buttonText}>react-native-turbo-lnd.initWallet()</Text>
           </Button>
 
           <Button
             small
             onPress={async () => {
-              const response = await NativeModules.LndMobileTools.checkICloudEnabled();
+              const response = await NativeBlixtTools.checkICloudEnabled();
               console.log(response);
             }}
           >
@@ -902,18 +1018,10 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              NativeModules.LndMobileTools.restartApp();
+              NativeBlixtTools.restartApp();
             }}
           >
             <Text style={styles.buttonText}>restartApp()</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              console.log(await NativeModules.LndMobileTools.DEBUG_listProcesses());
-            }}
-          >
-            <Text style={styles.buttonText}>DEBUG_listProcesses()</Text>
           </Button>
 
           {/*
@@ -956,7 +1064,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                   style: "default",
                   text: "Yes",
                   onPress: async () => {
-                    console.log(await NativeModules.LndMobileTools.DEBUG_deleteWallet());
+                    console.log(await NativeBlixtTools.DEBUG_deleteWallet());
                   },
                 },
               ]);
@@ -977,7 +1085,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
                   style: "default",
                   text: "Yes",
                   onPress: async () => {
-                    console.log(await NativeModules.LndMobileTools.DEBUG_deleteDatafolder());
+                    console.log(await NativeBlixtTools.DEBUG_deleteDatafolder());
                   },
                 },
               ]);
@@ -1088,7 +1196,7 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
             small
             onPress={async () => {
               const t = await Alert.promisePromptCallback("lightningBoxAddress");
-              setItem(StorageItem.lightningBoxAddress, t);
+              setItem(StorageItem.lightningBoxAddress, t ?? "");
             }}
           >
             <Text style={styles.buttonText}>lightningBoxAddress prompt</Text>
@@ -1103,70 +1211,32 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile());
+              console.log(NativeBlixtTools.DEBUG_deleteSpeedloaderLastrunFile());
             }}
           >
             <Text style={styles.buttonText}>
-              NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderLastrunFile()
+              NativeBlixtTools.DEBUG_deleteSpeedloaderLastrunFile()
             </Text>
           </Button>
           <Button
             small
             onPress={async () => {
-              console.log(NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory());
+              console.log(NativeBlixtTools.DEBUG_deleteSpeedloaderDgraphDirectory());
             }}
           >
             <Text style={styles.buttonText}>
-              NativeModules.LndMobileTools.DEBUG_deleteSpeedloaderDgraphDirectory()
+              NativeBlixtTools.DEBUG_deleteSpeedloaderDgraphDirectory()
             </Text>
           </Button>
 
           <Button small onPress={async () => await stopDaemon({})}>
             <Text style={styles.buttonText}>StopLnd()</Text>
           </Button>
-          <Button
-            small
-            onPress={async () => {
-              try {
-                console.log(
-                  await NativeModules.LndMobileTools.DEBUG_getWalletPasswordFromKeychain(),
-                );
-              } catch (e: any) {
-                console.log(e);
-              }
-            }}
-          >
-            <Text style={styles.buttonText}>
-              LndMobileTools.DEBUG_getWalletPasswordFromKeychain()
-            </Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => console.log(await NativeModules.LndMobileTools.saveLogs())}
-          >
+          <Button small onPress={async () => console.log(await NativeBlixtTools.saveLogs())}>
             <Text style={styles.buttonText}>saveLogs</Text>
           </Button>
-          <Button
-            small
-            onPress={async () => console.log(await NativeModules.LndMobileTools.copyLndLog())}
-          >
+          <Button small onPress={async () => console.log(await NativeBlixtTools.copyLndLog())}>
             <Text style={styles.buttonText}>copyLndLog</Text>
-          </Button>
-          <Button
-            small
-            onPress={async () => {
-              try {
-                const result = await NativeModules.LndMobileTools.writeConfigFile();
-                console.log("writeConfigFile()", result);
-                setCommandResult(`"${result}"`);
-                setError("{}");
-              } catch (e: any) {
-                setError(e);
-                setCommandResult({});
-              }
-            }}
-          >
-            <Text style={styles.buttonText}>writeConfigFile()</Text>
           </Button>
           <Button
             small
@@ -1192,12 +1262,10 @@ export default function DEV_Commands({ navigation, continueCallback }: IProps) {
           <Button
             small
             onPress={async () => {
-              console.log(NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles());
+              console.log(NativeBlixtTools.DEBUG_deleteNeutrinoFiles());
             }}
           >
-            <Text style={styles.buttonText}>
-              NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles()
-            </Text>
+            <Text style={styles.buttonText}>NativeBlixtTools.DEBUG_deleteNeutrinoFiles()</Text>
           </Button>
 
           {/*

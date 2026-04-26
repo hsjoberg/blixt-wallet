@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet, Linking, View } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { Body, Card, Text, CardItem, H1, Button } from "native-base";
+import { Body, Card, Text, CardItem, H1 } from "native-base";
+import { Button } from "../../components/Button";
 import { fromUnixTime } from "date-fns";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";

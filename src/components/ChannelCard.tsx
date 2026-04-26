@@ -4,11 +4,10 @@ import { Image, Linking, StyleSheet } from "react-native";
 import { Body, Card, CardItem, Icon, Left, Right, Row, Text } from "native-base";
 import { Line, Svg } from "react-native-svg";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
-import { getUnitNice, valueBitcoin, valueFiat } from "../utils/bitcoin-units";
+import { formatBitcoin, valueFiat } from "../utils/bitcoin-units";
 import { identifyService, lightningServices } from "../utils/lightning-services";
 import { useStoreActions, useStoreState } from "../state/store";
 
-import BigNumber from "bignumber.js";
 import CopyText from "./CopyText";
 import React from "react";
 import { constructOnchainExplorerUrl } from "../utils/onchain-explorer";
@@ -32,7 +31,6 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
   const getChannels = useStoreActions((store) => store.channel.getChannels);
   const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
-  const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
   const bitcoinUnit = useStoreState((store) => store.settings.bitcoinUnit);
   const fiatUnit = useStoreState((store) => store.settings.fiatUnit);
   const currentRate = useStoreState((store) => store.fiat.currentRate);
@@ -51,7 +49,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
         {
           style: "default",
           text: "Ok",
-          onPress: (address) => {
+          onPress: (address?: string) => {
             if (!address || address.trim().length === 0) {
               toast(t("channel.invalidAddress"), undefined, "danger");
               return;
@@ -65,7 +63,34 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
     );
   };
 
-  const close = (force: boolean = false, address: string | undefined) => {
+  const closeWithCustomFee = () => {
+    Alert.prompt(t("channel.closeChannel"), t("channel.bumpFeeAlerts.enterFeeRate"), [
+      {
+        text: t("buttons.cancel", { ns: namespaces.common }),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        style: "default",
+        onPress: (feeRate?: string) => {
+          if (!feeRate) {
+            Alert.alert(t("channel.bumpFeeAlerts.missingFeeRate"));
+            return;
+          }
+
+          const feeRateNumber = Number.parseInt(feeRate, 10);
+          if (isNaN(feeRateNumber) || feeRateNumber <= 0) {
+            Alert.alert(t("channel.bumpFeeAlerts.invalidFeeRate"));
+            return;
+          }
+
+          close(false, undefined, feeRateNumber);
+        },
+      },
+    ]);
+  };
+
+  const close = (force: boolean = false, address: string | undefined, feeRateSat?: number) => {
     Alert.alert(
       t("channel.closeChannelPrompt.title"),
       `Are you sure you want to${force ? " force" : ""} close the channel${
@@ -86,6 +111,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 outputIndex: Number.parseInt(channel.channelPoint.split(":")[1], 10),
                 force,
                 deliveryAddress: address,
+                feeRateSat,
               });
               console.log(result);
 
@@ -105,7 +131,6 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                       text: "Yes",
                       onPress: async () => {
                         changeAutopilotEnabled(false);
-                        setupAutopilot(false);
                       },
                     },
                   ],
@@ -136,19 +161,19 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
 
   let localBalance = channel.localBalance;
   if (localBalance <= channel.localChanReserveSat) {
-    localBalance = 0n;
+    localBalance = BigInt(0);
   } else {
     localBalance = localBalance - channel.localChanReserveSat;
   }
   let remoteBalance = channel.remoteBalance;
   if (remoteBalance <= channel.remoteChanReserveSat) {
-    remoteBalance = 0n;
+    remoteBalance = BigInt(0);
   } else {
     remoteBalance = remoteBalance - channel.remoteChanReserveSat;
   }
-  const percentageLocal = (localBalance * 100n) / channel.capacity;
-  const percentageRemote = (remoteBalance * 100n) / channel.capacity;
-  const percentageReserve = 100n - (percentageLocal + percentageRemote);
+  const percentageLocal = (localBalance * BigInt(100)) / channel.capacity;
+  const percentageRemote = (remoteBalance * BigInt(100)) / channel.capacity;
+  const percentageReserve = BigInt(100) - (percentageLocal + percentageRemote);
   const localReserve = BigInt(
     Math.min(Number(channel.localBalance), Number(channel.localChanReserveSat)),
   );
@@ -177,6 +202,12 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                   <MenuOption
                     onSelect={() => close(false, undefined)}
                     text={t("channel.closeChannel")}
+                  />
+                  <MenuOption
+                    onSelect={closeWithCustomFee}
+                    text={`${t("channel.closeChannel")} (${t("form.fee_rate.title", {
+                      ns: namespaces.lightningInfo.openChannel,
+                    })})`}
                   />
                   <MenuOption
                     onSelect={() => close(true, undefined)}
@@ -265,12 +296,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text>{t("channel.capacity")}</Text>
             </Left>
             <Right>
-              {!preferFiat && (
-                <Text>
-                  {valueBitcoin(channel.capacity, bitcoinUnit)}{" "}
-                  {getUnitNice(new BigNumber(localBalance.toString()), bitcoinUnit)}
-                </Text>
-              )}
+              {!preferFiat && <Text>{formatBitcoin(channel.capacity, bitcoinUnit)}</Text>}
               {preferFiat && (
                 <Text>
                   {valueFiat(channel.capacity, currentRate).toFixed(2)} {fiatUnit}
@@ -313,9 +339,8 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 {!preferFiat && (
                   <>
                     <Text style={{ color: blixtTheme.green }}>
-                      {valueBitcoin(localBalance, bitcoinUnit)}{" "}
+                      {formatBitcoin(localBalance, bitcoinUnit)}
                     </Text>
-                    <Text>{getUnitNice(new BigNumber(localBalance.toString()), bitcoinUnit)}</Text>
                   </>
                 )}
                 {preferFiat && (
@@ -338,9 +363,8 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                 {!preferFiat && (
                   <>
                     <Text style={{ color: blixtTheme.red }}>
-                      {valueBitcoin(remoteBalance, bitcoinUnit)}{" "}
+                      {formatBitcoin(remoteBalance, bitcoinUnit)}
                     </Text>
-                    <Text>{getUnitNice(new BigNumber(remoteBalance.toString()), bitcoinUnit)}</Text>
                   </>
                 )}
                 {preferFiat && (
@@ -364,16 +388,15 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
                   <>
                     <Text>
                       {localReserve === channel.localChanReserveSat && (
-                        <>{valueBitcoin(localReserve, bitcoinUnit)} </>
+                        <>{formatBitcoin(localReserve, bitcoinUnit)}</>
                       )}
                       {localReserve !== channel.localChanReserveSat && (
                         <>
-                          {valueBitcoin(localReserve, bitcoinUnit)}/
-                          {valueBitcoin(channel.localChanReserveSat, bitcoinUnit)}{" "}
+                          {formatBitcoin(localReserve, bitcoinUnit)}/
+                          {formatBitcoin(channel.localChanReserveSat, bitcoinUnit)}
                         </>
                       )}
                     </Text>
-                    <Text>{getUnitNice(new BigNumber(localReserve.toString()), bitcoinUnit)}</Text>
                   </>
                 )}
                 {preferFiat && (
@@ -403,10 +426,7 @@ export function ChannelCard({ channel, alias }: IChannelCardProps) {
               <Text>
                 {preferFiat &&
                   valueFiat(channel.commitFee, currentRate).toFixed(2) + " " + fiatUnit}
-                {!preferFiat &&
-                  valueBitcoin(channel.commitFee, bitcoinUnit) +
-                    " " +
-                    getUnitNice(new BigNumber(localReserve.toString()), bitcoinUnit)}
+                {!preferFiat && formatBitcoin(channel.commitFee, bitcoinUnit)}
               </Text>
             </Right>
           </Row>

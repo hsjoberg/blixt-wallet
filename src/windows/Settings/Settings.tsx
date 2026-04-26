@@ -1,8 +1,20 @@
 import { BitcoinUnits, IBitcoinUnits } from "../../utils/bitcoin-units";
-import { Body, CheckBox, Container, Icon, Left, ListItem, Right, Text } from "native-base";
+import {
+  Body,
+  CheckBox,
+  Container,
+  Header,
+  Icon,
+  Item,
+  Left,
+  ListItem,
+  Right,
+  Text,
+} from "native-base";
 import {
   DEFAULT_DUNDER_SERVER,
   DEFAULT_INVOICE_EXPIRY,
+  BLIXT_NODE_PUBKEY,
   DEFAULT_LIGHTNINGBOX_SERVER,
   DEFAULT_LND_LOG_LEVEL,
   DEFAULT_MAX_LN_FEE_PERCENTAGE,
@@ -10,11 +22,10 @@ import {
   DEFAULT_SPEEDLOADER_SERVER,
   PLATFORM,
 } from "../../utils/constants";
-import { Linking, NativeModules, PermissionsAndroid, Platform, StyleSheet } from "react-native";
+import { Linking, PermissionsAndroid, Platform, StyleSheet } from "react-native";
 import { LndLogLevel, OnchainExplorer } from "../../state/Settings";
-import React, { useCallback, useLayoutEffect, useMemo } from "react";
-import { camelCaseToSpace, formatISO, hexToUint8Array, timeout, toast } from "../../utils";
-
+import React, { useCallback, useLayoutEffect, useMemo, useState } from "react";
+import { camelCaseToSpace, formatISO, toast } from "../../utils";
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { useStoreActions, useStoreState } from "../../state/store";
 
@@ -23,7 +34,7 @@ import BlixtWallet from "../../components/BlixtWallet";
 import { Chain } from "../../utils/build";
 import Clipboard from "@react-native-clipboard/clipboard";
 import DialogAndroid from "react-native-dialogs";
-import DocumentPicker from "@react-native-clipboard/clipboard";
+import { pick } from "@react-native-documents/picker";
 import { IFiatRates } from "../../state/Fiat";
 import { LoginMethods } from "../../state/Security";
 import { MapStyle } from "../../utils/google-maps";
@@ -31,34 +42,17 @@ import TorSvg from "./TorSvg";
 import { fromUnixTime } from "date-fns";
 import { readFile } from "react-native-fs";
 import { useTranslation } from "react-i18next";
-import { setBrickDeviceAndExportChannelDb } from "../../storage/app";
-import {
-  getChanInfo,
-  getNodeInfo,
-  lookupInvoice,
-  routerResetMissionControl,
-  routerXImportMissionControl,
-  stopDaemon,
-  verifyChanBackup,
-} from "react-native-turbo-lnd";
-import { NavigationRootStackParamList } from "../../types";
+import { verifyChanBackup } from "react-native-turbo-lnd";
 import { NavigationProp } from "@react-navigation/native";
-import { create, toJson } from "@bufbuild/protobuf";
-import { ChannelEdgeSchema, NodeInfoSchema } from "react-native-turbo-lnd/protos/lightning_pb";
 import { base64Decode } from "@bufbuild/protobuf/wire";
-import { XImportMissionControlRequestSchema } from "react-native-turbo-lnd/protos/routerrpc/router_pb";
 import { FlatList } from "react-native";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";
-
-import LndMobileToolsTurbo from "../../turbomodules/NativeLndmobileTools";
-
-let ReactNativePermissions: any;
-if (PLATFORM !== "macos") {
-  ReactNativePermissions = require("react-native-permissions");
-}
+import Input from "../../components/Input";
+import ReactNativePermissions from "react-native-permissions";
+import { restartAppOrNotify, showRestartNeededAlert } from "../../utils/restart-app";
 
 interface ISettingsProps {
-  navigation: NavigationProp<NavigationRootStackParamList>;
+  navigation: NavigationProp<any>;
 }
 
 interface SettingsItem {
@@ -77,6 +71,7 @@ export default function Settings({ navigation }: ISettingsProps) {
   const currentLanguage = useStoreState((store) => store.settings.language);
   const { t, i18n } = useTranslation(namespaces.settings.settings);
   const lndChainBackend = useStoreState((store) => store.settings.lndChainBackend);
+  const [searchText, setSearchText] = useState("");
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -150,6 +145,7 @@ export default function Settings({ navigation }: ISettingsProps) {
         selectedId: currentBitcoinUnit,
         items: [
           { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
+          { label: BitcoinUnits.bip177.settings, id: "bip177" },
           { label: BitcoinUnits.bit.settings, id: "bit" },
           { label: BitcoinUnits.sat.settings, id: "sat" },
           { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
@@ -164,6 +160,7 @@ export default function Settings({ navigation }: ISettingsProps) {
         title: t("display.bitcoinUnit.title"),
         data: [
           { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
+          { title: BitcoinUnits.bip177.settings, value: "bip177" },
           { title: BitcoinUnits.bit.settings, value: "bit" },
           { title: BitcoinUnits.sat.settings, value: "sat" },
           { title: BitcoinUnits.satoshi.settings, value: "satoshi" },
@@ -256,15 +253,72 @@ export default function Settings({ navigation }: ISettingsProps) {
 
   // Autopilot
   const autopilotEnabled = useStoreState((store) => store.settings.autopilotEnabled);
+  const autopilotNodePubkey = useStoreState((store) => store.settings.autopilotNodePubkey);
   const changeAutopilotEnabled = useStoreActions((store) => store.settings.changeAutopilotEnabled);
-  const setupAutopilot = useStoreActions((store) => store.lightning.setupAutopilot);
-  const onToggleAutopilotPress = () => {
+  const changeAutopilotNodePubkey = useStoreActions(
+    (store) => store.settings.changeAutopilotNodePubkey,
+  );
+  const checkAutopilot = useStoreActions((store) => store.autopilot.checkAutopilot);
+  const onToggleAutopilotPress = async () => {
     // TODO why not await?
     if (!rpcReady) {
       return;
     }
-    changeAutopilotEnabled(!autopilotEnabled);
-    setupAutopilot(!autopilotEnabled);
+    await changeAutopilotEnabled(!autopilotEnabled);
+    if (!autopilotEnabled) {
+      await checkAutopilot();
+    }
+  };
+  const onSetAutopilotNodePubkeyPress = () => {
+    Alert.prompt(
+      t("LN.autopilotNodePubkey.setDialog.title"),
+      undefined,
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: t("buttons.ok", { ns: namespaces.common }),
+          onPress: async (text?: string) => {
+            const trimmed = text?.trim() ?? "";
+            if (!trimmed) {
+              return;
+            }
+            await changeAutopilotNodePubkey(trimmed);
+            if (autopilotEnabled) {
+              await checkAutopilot();
+            }
+          },
+        },
+      ],
+      "plain-text",
+      autopilotNodePubkey,
+    );
+  };
+
+  const onSetAutopilotNodePubkeyLongPress = () => {
+    Alert.alert(
+      t("LN.autopilotNodePubkey.restoreDialog.title"),
+      t("LN.autopilotNodePubkey.restoreDialog.msg") + "?",
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: t("buttons.yes", { ns: namespaces.common }),
+          onPress: async () => {
+            await changeAutopilotNodePubkey(BLIXT_NODE_PUBKEY);
+            if (autopilotEnabled) {
+              await checkAutopilot();
+            }
+          },
+        },
+      ],
+    );
   };
 
   // Push Notifications
@@ -294,37 +348,6 @@ export default function Settings({ navigation }: ISettingsProps) {
     }
   };
 
-  // Copy App log
-  const copyAppLog = async () => {
-    try {
-      const path = await NativeModules.LndMobileTools.saveLogs();
-      toast(`${t("miscelaneous.appLog.dialog.alert")}: ` + path, 20000, "warning");
-    } catch (e: any) {
-      console.error(e);
-      toast(t("miscelaneous.appLog.dialog.error"), undefined, "danger");
-    }
-  };
-
-  // Copy lnd log
-  const copyLndLog = async () => {
-    try {
-      await NativeModules.LndMobileTools.copyLndLog();
-    } catch (e: any) {
-      console.error(e);
-      toast(`${t("miscelaneous.lndLog.dialog.error")}: ${e.message}`, undefined, "danger");
-    }
-  };
-
-  // Copy speedloader log
-  const copySpeedloaderLog = async () => {
-    try {
-      await NativeModules.LndMobileTools.copySpeedloaderLog();
-    } catch (e: any) {
-      console.error(e);
-      toast(`${t("miscelaneous.speedloaderLog.dialog.error")}: ${e.message}`, undefined, "danger");
-    }
-  };
-
   // Export channels
   const exportChannelsBackup = useStoreActions((store) => store.channel.exportChannelsBackup);
   const onExportChannelsPress = async () => {
@@ -348,9 +371,8 @@ export default function Settings({ navigation }: ISettingsProps) {
   // Verify channels backup
   const onVerifyChannelsBackupPress = async () => {
     try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
-      });
+      const [res] = await pick();
+
       const backupFileUri = PLATFORM === "ios" ? res.uri.replace(/%20/g, " ") : res.uri;
       const backupBase64 = await readFile(backupFileUri, "base64");
       await verifyChanBackup({
@@ -429,6 +451,14 @@ export default function Settings({ navigation }: ISettingsProps) {
   );
   const onToggleDebugShowStartupInfo = async () => {
     await changeDebugShowStartupInfo(!debugShowStartupInfo);
+  };
+
+  const useLegacyHeaderGradient = useStoreState((store) => store.settings.useLegacyHeaderGradient);
+  const changeUseLegacyHeaderGradient = useStoreActions(
+    (store) => store.settings.changeUseLegacyHeaderGradient,
+  );
+  const onToggleUseLegacyHeaderGradient = async () => {
+    await changeUseLegacyHeaderGradient(!useLegacyHeaderGradient);
   };
 
   const googleDriveBackupEnabled = useStoreState(
@@ -624,7 +654,7 @@ ${t("LN.inbound.dialog.msg3")}`;
         onchainExplorer in OnchainExplorer ? undefined : onchainExplorer,
       );
 
-      if (explorer.trim().length !== 0) {
+      if (explorer !== null && explorer.trim().length !== 0) {
         await changeOnchainExplorer(explorer);
       }
     };
@@ -683,30 +713,7 @@ ${t("LN.inbound.dialog.msg3")}`;
   const changeNeutrinoPeers = useStoreActions((store) => store.settings.changeNeutrinoPeers);
   const writeConfig = useStoreActions((store) => store.writeConfig);
   const restartNeeded = () => {
-    const title = t("bitcoinNetwork.restartDialog.title");
-    const message = t("bitcoinNetwork.restartDialog.msg");
-    if (PLATFORM === "android") {
-      Alert.alert(title, message + "\n" + t("bitcoinNetwork.restartDialog.msg1"), [
-        {
-          style: "cancel",
-          text: t("buttons.no", { ns: namespaces.common }),
-        },
-        {
-          style: "default",
-          text: t("buttons.yes", { ns: namespaces.common }),
-          onPress: async () => {
-            try {
-              await stopDaemon({});
-            } catch (e: any) {
-              console.log(e);
-            }
-            NativeModules.LndMobileTools.restartApp();
-          },
-        },
-      ]);
-    } else {
-      Alert.alert(title, message);
-    }
+    showRestartNeededAlert();
   };
 
   const zeroConfPeers = useStoreState((store) => store.settings.zeroConfPeers);
@@ -987,19 +994,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         text: t("buttons.yes", { ns: namespaces.common }),
         onPress: async () => {
           await changeTorEnabled(!torEnabled);
-          if (PLATFORM === "android") {
-            try {
-              await stopDaemon({});
-            } catch (e: any) {
-              console.log(e);
-            }
-            NativeModules.LndMobileTools.restartApp();
-          } else {
-            Alert.alert(
-              t("bitcoinNetwork.restartDialog.title"),
-              t("bitcoinNetwork.restartDialog.msg"),
-            );
-          }
+          await restartAppOrNotify();
         },
       },
     ]);
@@ -1025,34 +1020,6 @@ ${t("experimental.tor.disabled.msg2")}`;
   );
   const onToggleScreenTransitionsEnabledPress = async () => {
     await changeScreenTransitionsEnabled(!screenTransitionsEnabled);
-  };
-
-  const signMessage = useStoreActions((store) => store.lightning.signMessage);
-  const onPressSignMesseage = async () => {
-    Alert.prompt(
-      t("miscelaneous.signMessage.dialog1.title"),
-      undefined,
-      async (text) => {
-        if (text.length === 0) {
-          return;
-        }
-        const signMessageResponse = await signMessage(text);
-
-        Alert.alert(t("miscelaneous.signMessage.dialog2.title"), signMessageResponse.signature, [
-          {
-            text: t("buttons.ok", { ns: namespaces.common }),
-          },
-          {
-            text: t("buttons.copy", { ns: namespaces.common }),
-            onPress: async () => {
-              Clipboard.setString(signMessageResponse.signature);
-              toast(t("miscelaneous.signMessage.dialog2.alert"), undefined, "warning");
-            },
-          },
-        ]);
-      },
-      "plain-text",
-    );
   };
 
   // Dunder server
@@ -1176,7 +1143,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         try {
           const fee = Number.parseFloat(text);
 
-          if (fee <= 0 ?? fee >= 100) {
+          if (fee <= 0 || fee >= 100) {
             return;
           }
 
@@ -1219,70 +1186,6 @@ ${t("experimental.tor.disabled.msg2")}`;
     await changeRequireGraphSync(!requireGraphSync);
   };
 
-  const onLndMobileHelpCenterPress = async () => {
-    navigation.navigate("LndMobileHelpCenter");
-  };
-
-  const onGetNodeInfoPress = async () => {
-    Alert.prompt(
-      "Get node info",
-      "Enter Node ID",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-          onPress: () => {},
-        },
-        {
-          text: "Get info",
-          onPress: async (text) => {
-            if (text === "") {
-              return;
-            }
-            try {
-              const nodeInfo = await getNodeInfo({
-                pubKey: text?.split("@")[0],
-              });
-              Alert.alert("", JSON.stringify(toJson(NodeInfoSchema, nodeInfo), null, 2));
-            } catch (e: any) {
-              Alert.alert(e.message);
-            }
-          },
-        },
-      ],
-      "plain-text",
-    );
-  };
-
-  const onGetChanInfoPress = async () => {
-    Alert.prompt(
-      "Get channel info",
-      "Enter Channel ID",
-      [
-        {
-          text: "Cancel",
-          style: "cancel",
-          onPress: () => {},
-        },
-        {
-          text: "Get info",
-          onPress: async (text) => {
-            if (text === "") {
-              return;
-            }
-            try {
-              const nodeInfo = await getChanInfo({ chanId: text });
-              Alert.alert("", JSON.stringify(toJson(ChannelEdgeSchema, nodeInfo), null, 2));
-            } catch (e: any) {
-              Alert.alert(e.message);
-            }
-          },
-        },
-      ],
-      "plain-text",
-    );
-  };
-
   // Lnd Graph Cache
   const lndNoGraphCache = useStoreState((store) => store.settings.lndNoGraphCache);
   const changeLndNoGraphCache = useStoreActions((store) => store.settings.changeLndNoGraphCache);
@@ -1303,10 +1206,13 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
 
     try {
+      if (expiryString === null) {
+        return;
+      }
       const expiryNumber = Number.parseInt(expiryString, 10);
       await changeInvoiceExpiry(expiryNumber);
-    } catch (e: any) {
-      Alert.alert("", "Could not update expiry.\n" + e.message);
+    } catch (error: any) {
+      Alert.alert("", "Could not update expiry.\n" + error.message);
     }
   };
 
@@ -1328,26 +1234,6 @@ ${t("experimental.tor.disabled.msg2")}`;
         },
       ],
     );
-  };
-
-  // Rescan wallet
-  const changeRescanWallet = useStoreActions((store) => store.settings.changeRescanWallet);
-  const onPressRescanWallet = async () => {
-    await changeRescanWallet(true);
-    restartNeeded();
-  };
-
-  // Setup demo environment
-  const setupDemo = useStoreActions((store) => store.setupDemo);
-
-  // Reset mission control
-  const onPressResetMissionControl = async () => {
-    try {
-      await routerResetMissionControl({});
-      toast("Done");
-    } catch (error: any) {
-      toast(t("msg.error", { ns: namespaces.common }) + ": " + error.message, 0, "danger", "OK");
-    }
   };
 
   // Strict Graph Pruning
@@ -1424,13 +1310,6 @@ ${t("experimental.tor.disabled.msg2")}`;
         },
       ],
     );
-  };
-
-  // Compact lnd databases
-  const changeLndCompactDb = useStoreActions((store) => store.settings.changeLndCompactDb);
-  const onPressLndCompactDb = async () => {
-    await changeLndCompactDb(true);
-    restartNeeded();
   };
 
   // Enforce speedloader on startup
@@ -1524,22 +1403,6 @@ ${t("experimental.tor.disabled.msg2")}`;
     );
   };
 
-  const onPressLookupInvoiceByHash = async () => {
-    try {
-      const hash = await Alert.promisePromptCallback(
-        "Lookup invoice",
-        "Provide payment hash",
-        "plain-text",
-      );
-      const invoice = await lookupInvoice({
-        rHashStr: hash,
-      });
-      Alert.alert("", JSON.stringify(invoice, undefined, 2));
-    } catch (error: any) {
-      toast("Error: " + error.message, 10000, "danger");
-    }
-  };
-
   // Hide amounts
   const hideAmountsEnabled = useStoreState((store) => store.settings.hideAmountsEnabled);
   const changeHideAmountsEnabled = useStoreActions(
@@ -1547,17 +1410,6 @@ ${t("experimental.tor.disabled.msg2")}`;
   );
   const onToggleHideAmountsEnabled = async () => {
     await changeHideAmountsEnabled(!hideAmountsEnabled);
-  };
-
-  // Change backend to bitcoindWithZmq
-  const changeLndChainBackend = useStoreActions((store) => store.settings.changeLndChainBackend);
-  const onPressChangeBackendToBitcoindWithZmq = async () => {
-    await changeLndChainBackend("bitcoindWithZmq");
-  };
-
-  // Change backend to neutrino
-  const onPressChangeBackendToNeutrino = async () => {
-    await changeLndChainBackend("neutrino");
   };
 
   // Randomize settings
@@ -1574,68 +1426,6 @@ ${t("experimental.tor.disabled.msg2")}`;
   );
   const onToggleRandomizeSettingsOnStartup = async () => {
     await changeRandomizeSettingsOnStartup(!randomizeSettingsOnStartup);
-  };
-
-  // Export channel db and brick
-  const onPressExportChannelDbAndBrickInstance = async () => {
-    try {
-      const result = await Alert.promiseAlert(
-        "Export channel db and brick",
-        "Are you sure you want to export the channel db and brick?",
-        [
-          { text: "Cancel", style: "cancel" },
-          { text: "OK", style: "default" },
-        ],
-      );
-      if (result.style === "cancel") {
-        return;
-      }
-
-      if (PLATFORM === "android") {
-        await setSyncEnabled(false);
-        await changeScheduledSyncEnabled(false);
-      }
-
-      await setBrickDeviceAndExportChannelDb(true);
-      await stopDaemon({});
-
-      Alert.alert("Restart the app to continue the procedure.", "", [
-        {
-          text: "OK",
-          onPress() {
-            if (PLATFORM === "android") {
-              NativeModules.LndMobileTools.restartApp();
-            }
-          },
-        },
-      ]);
-    } catch (e: any) {
-      toast("Error: " + e.message, 10000, "danger");
-      return;
-    }
-  };
-
-  // Restore SCB file
-  const onPressRestoreChannelBackup = async () => {
-    try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
-      });
-      console.log(res);
-
-      let backupBase64: string;
-      const backupFileUri = PLATFORM === "ios" ? res.uri.replace(/%20/g, " ") : res.uri;
-      try {
-        backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? "base64" : undefined);
-      } catch (e: any) {
-        backupBase64 = await readFile(backupFileUri, PLATFORM === "android" ? undefined : "base64");
-      }
-
-      // TURBOTODO needs to be replaced
-      // await restoreChannelBackups(backupBase64);
-    } catch (error: any) {
-      toast("Error: " + error.message, 10000, "danger");
-    }
   };
 
   const settingsData = useMemo((): SettingsItem[] => {
@@ -1935,26 +1725,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         : []),
 
       // ... Lightning Network items
-
       { type: "header", title: t("LN.title") },
-      {
-        type: "item",
-        icon: { type: "Feather", name: "user" },
-        title: t("LN.node.title"),
-        onPress: () => navigation.navigate("LightningNodeInfo"),
-      },
-      {
-        type: "item",
-        icon: { type: "Feather", name: "users" },
-        title: t("LN.peers.title"),
-        onPress: () => navigation.navigate("LightningPeers"),
-      },
-      {
-        type: "item",
-        icon: { type: "Entypo", name: "network" },
-        title: t("LN.network.title"),
-        onPress: () => navigation.navigate("LightningNetworkInfo"),
-      },
       {
         type: "item",
         icon: { type: "MaterialCommunityIcons", name: "cash" },
@@ -1971,6 +1742,19 @@ ${t("experimental.tor.disabled.msg2")}`;
         checked: autopilotEnabled,
         onPress: onToggleAutopilotPress,
       },
+      ...(autopilotEnabled
+        ? [
+            {
+              type: "item",
+              icon: { type: "FontAwesome", name: "server" },
+              title: t("LN.autopilotNodePubkey.title"),
+              subtitle:
+                autopilotNodePubkey === BLIXT_NODE_PUBKEY ? "Blixt LSP" : autopilotNodePubkey,
+              onPress: onSetAutopilotNodePubkeyPress,
+              onLongPress: onSetAutopilotNodePubkeyLongPress,
+            },
+          ]
+        : []),
       {
         type: "item",
         icon: { type: "MaterialCommunityIcons", name: "cloud-download" },
@@ -2037,37 +1821,6 @@ ${t("experimental.tor.disabled.msg2")}`;
         title: t("miscelaneous.about.title"),
         onPress: () => navigation.navigate("About"),
       },
-
-      ...(PLATFORM === "android"
-        ? [
-            {
-              type: "item",
-              icon: { type: "AntDesign", name: "copy1" },
-              title: t("miscelaneous.appLog.title"),
-              onPress: () => copyAppLog(),
-            },
-          ]
-        : []),
-      ...(["android", "ios", "macos"].includes(PLATFORM)
-        ? [
-            {
-              type: "item",
-              icon: { type: "AntDesign", name: "copy1" },
-              title: t("miscelaneous.lndLog.title"),
-              onPress: () => copyLndLog(),
-            },
-          ]
-        : []),
-      ...(scheduledGossipSyncEnabled && ["android", "ios", "macos"].includes(PLATFORM)
-        ? [
-            {
-              type: "item",
-              icon: { type: "AntDesign", name: "copy1" },
-              title: t("miscelaneous.speedloaderLog.title"),
-              onPress: () => copySpeedloaderLog(),
-            },
-          ]
-        : []),
       {
         type: "item",
         icon: { type: "MaterialCommunityIcons", name: "file-hidden" },
@@ -2083,12 +1836,6 @@ ${t("experimental.tor.disabled.msg2")}`;
         checkBox: true,
         checked: screenTransitionsEnabled,
         onPress: onToggleScreenTransitionsEnabledPress,
-      },
-      {
-        type: "item",
-        icon: { type: "FontAwesome5", name: "file-signature" },
-        title: t("miscelaneous.signMessage.title"),
-        onPress: onPressSignMesseage,
       },
       {
         type: "item",
@@ -2216,7 +1963,7 @@ ${t("experimental.tor.disabled.msg2")}`;
         : []),
       {
         type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "android-debug-bridge" },
+        icon: { type: "MaterialIcons", name: "info" },
         title: t("debug.startup.title"),
         checkBox: true,
         checked: debugShowStartupInfo,
@@ -2224,67 +1971,13 @@ ${t("experimental.tor.disabled.msg2")}`;
       },
       {
         type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "format-list-bulleted" },
-        title: t("debug.showNotifications.title"),
-        onPress: () => navigation.navigate("ToastLog"),
+        icon: { type: "MaterialIcons", name: "gradient" },
+        title: "Use legacy header gradient",
+        subtitle: "Use react-native-linear-gradient instead of experimental CSS gradient",
+        checkBox: true,
+        checked: useLegacyHeaderGradient,
+        onPress: onToggleUseLegacyHeaderGradient,
       },
-      {
-        type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "format-list-bulleted" },
-        title: t("debug.showDebugLog.title"),
-        onPress: () => navigation.navigate("DebugLog"),
-      },
-      {
-        type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "restart" },
-        title: t("debug.rescanWallet.title"),
-        subtitle: t("debug.rescanWallet.subtitle"),
-        onPress: onPressRescanWallet,
-      },
-      {
-        type: "item",
-        icon: { type: "Entypo", name: "lifebuoy" },
-        title: t("debug.helpCencer.title"),
-        onPress: onLndMobileHelpCenterPress,
-      },
-      {
-        type: "item",
-        icon: { type: "Entypo", name: "info" },
-        title: t("debug.getNodeInfo.title"),
-        onPress: onGetNodeInfoPress,
-      },
-      {
-        type: "item",
-        icon: { type: "Entypo", name: "info" },
-        title: t("debug.getChannelInfo.title"),
-        onPress: onGetChanInfoPress,
-      },
-      ...(dunderEnabled
-        ? [
-            {
-              type: "item",
-              icon: { type: "Entypo", name: "slideshare" },
-              title: t("debug.LSP.title"),
-              onPress: () => navigation.navigate("DunderDoctor"),
-            },
-          ]
-        : []),
-      {
-        type: "item",
-        icon: { type: "Ionicons", name: "newspaper-outline" },
-        title: t("debug.lndLog.title"),
-        onPress: async () => navigation.navigate("LndLog"),
-      },
-      ...(scheduledGossipSyncEnabled
-        ? [
-            {
-              type: "item",
-              icon: { type: "Ionicons", name: "newspaper-outline" },
-              title: t("debug.speedloaderLog.title"),
-              onPress: async () => navigation.navigate("SpeedloaderLog"),
-            },
-          ]
-        : []),
       {
         type: "item",
         icon: { type: "MaterialCommunityIcons", name: "file-code" },
@@ -2293,39 +1986,18 @@ ${t("experimental.tor.disabled.msg2")}`;
         onPress: onPressSetLndLogLevel,
         onLongPress: onLongPressSetLndLogLevel,
       },
-      ...(name === "Hampus" || __DEV__ === true
+      ...(scheduledGossipSyncEnabled
         ? [
             {
               type: "item",
-              icon: { type: "MaterialIcons", name: "developer-mode" },
-              title: t("debug.keysend.title"),
-              onPress: () => navigation.navigate("KeysendTest"),
-            },
-            {
-              type: "item",
-              icon: { type: "Entypo", name: "google-drive" },
-              title: t("debug.googleDrive.title"),
-              onPress: () => navigation.navigate("GoogleDriveTestbed"),
-            },
-            {
-              type: "item",
-              icon: { type: "MaterialIcons", name: "local-grocery-store" },
-              title: t("debug.webln.title"),
-              onPress: () => navigation.navigate("WebLNBrowser"),
+              icon: { type: "MaterialCommunityIcons", name: "run-fast" },
+              title: t("debug.enforceSpeedloaderOnStartup.title"),
+              onPress: onPressEnforceSpeedloaderOnStartup,
+              checkBox: true,
+              checked: enforceSpeedloaderOnStartup,
             },
           ]
         : []),
-      {
-        type: "item",
-        icon: { type: "AntDesign", name: "mobile1" },
-        title: t("debug.demoMode.title"),
-        subtitle: t("debug.demoMode.subtitle"),
-        onPress: () => setupDemo({ changeDb: false }),
-        onLongPress: () => {
-          setupDemo({ changeDb: true });
-          toast("DB written");
-        },
-      },
       {
         type: "item",
         icon: { type: "MaterialCommunityIcons", name: "database-sync" },
@@ -2333,21 +2005,6 @@ ${t("experimental.tor.disabled.msg2")}`;
         onPress: onToggleLndNoGraphCache,
         checkBox: true,
         checked: lndNoGraphCache,
-      },
-      {
-        type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "typewriter" },
-        title: t("debug.config.title"),
-        onPress: () => {
-          writeConfig();
-          toast(t("msg.written", { ns: namespaces.common }));
-        },
-      },
-      {
-        type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "restore-alert" },
-        title: t("debug.resetMissionControl.title"),
-        onPress: onPressResetMissionControl,
       },
       {
         type: "item",
@@ -2368,170 +2025,11 @@ ${t("experimental.tor.disabled.msg2")}`;
       },
       {
         type: "item",
-        icon: { type: "AntDesign", name: "shrink" },
-        title: t("debug.compactLndDatabases.title"),
-        onPress: onPressLndCompactDb,
+        icon: { type: "MaterialCommunityIcons", name: "wrench" },
+        title: t("powerUserTools.title"),
+        subtitle: t("powerUserTools.subtitle"),
+        onPress: () => navigation.navigate("PowerUserTools"),
       },
-      ...(scheduledGossipSyncEnabled
-        ? [
-            {
-              type: "item",
-              icon: { type: "MaterialCommunityIcons", name: "run-fast" },
-              title: t("debug.enforceSpeedloaderOnStartup.title"),
-              onPress: onPressEnforceSpeedloaderOnStartup,
-              checkBox: true,
-              checked: enforceSpeedloaderOnStartup,
-            },
-          ]
-        : []),
-      {
-        type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "run-fast" },
-        title: "Dunder MissionControl import",
-        onPress: async () => {
-          try {
-            console.log(`${dunderServer}/channel-liquidity`);
-            const res = await fetch(`${dunderServer}/channel-liquidity`);
-
-            const json: { pairs: any[] } = await res.json();
-            const schema = create(XImportMissionControlRequestSchema, {
-              pairs: json.pairs
-                .filter((c) => c.history.successAmtSat > 0)
-                .map((c) => {
-                  return {
-                    nodeFrom: hexToUint8Array(c.nodeFrom),
-                    nodeTo: hexToUint8Array(c.nodeTo),
-                    history: {
-                      successAmtSat: BigInt(c.history.successAmtSat),
-                      successTime: BigInt(c.history.successTime),
-                    },
-                  };
-                }),
-            });
-
-            await routerXImportMissionControl({
-              pairs: schema.pairs,
-            });
-
-            toast("Done");
-          } catch (e: any) {
-            toast("Error: " + e.message, 10000, "danger");
-          }
-        },
-      },
-      {
-        type: "item",
-        icon: { type: "Foundation", name: "page-delete" },
-        title: "Stop lnd and delete neutrino files",
-        onPress: async () => {
-          try {
-            await stopDaemon({});
-            await timeout(5000); // Let lnd close down
-          } catch (e: any) {
-            if (e?.message?.includes?.("closed")) {
-              console.log("yes closed");
-            } else {
-              toast("Error: " + e.message, 10000, "danger");
-              return;
-            }
-          }
-
-          console.log(NativeModules.LndMobileTools.DEBUG_deleteNeutrinoFiles());
-          toast("Done. Restart is required");
-          restartNeeded();
-        },
-      },
-      {
-        type: "item",
-        icon: { type: "AntDesign", name: "file1" },
-        title: "Lookup invoice",
-        onPress: onPressLookupInvoiceByHash,
-      },
-      ...((name === "Hampus" || __DEV__ === true) && lndChainBackend === "neutrino"
-        ? [
-            {
-              type: "item",
-              icon: { type: "AntDesign", name: "file1" },
-              title: "Change bitcoin backend to bitcoindWithZmq",
-              onPress: onPressChangeBackendToBitcoindWithZmq,
-            },
-          ]
-        : []),
-      ...((name === "Hampus" || __DEV__ === true) && lndChainBackend !== "neutrino"
-        ? [
-            {
-              type: "item",
-              icon: { type: "AntDesign", name: "file1" },
-              title: "Change bitcoin backend to neutrino",
-              onPress: onPressChangeBackendToNeutrino,
-            },
-          ]
-        : []),
-      {
-        type: "item",
-        icon: { type: "FontAwesome", name: "stop" },
-        title: "Stop lnd",
-        onPress: async () => {
-          try {
-            await stopDaemon({});
-          } catch (e: any) {
-            toast("Error: " + e.message, 10000, "danger");
-            return;
-          }
-        },
-      },
-      ...(PLATFORM === "android" && name === "Hampus"
-        ? [
-            {
-              type: "item",
-              icon: { type: "MaterialCommunityIcons", name: "file-export" },
-              title: "Export channel.db file and permanently disable this instance of Blixt Wallet",
-              subtitle: "Use this feature to migrate this wallet to another device or to lnd.",
-              warning: "Only do this if you're know what you're doing",
-              onPress: onPressExportChannelDbAndBrickInstance,
-            },
-          ]
-        : []),
-      {
-        type: "item",
-        icon: { type: "MaterialCommunityIcons", name: "file-export" },
-        title: "Restore SCB channel backup file",
-        onPress: onPressRestoreChannelBackup,
-      },
-      ...(PLATFORM === "android"
-        ? [
-            {
-              type: "item",
-              icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
-              title: "Sync worker report",
-              onPress: () => navigation.navigate("SyncWorkerReport"),
-            },
-            {
-              type: "item",
-              icon: { type: "MaterialCommunityIcons", name: "cellphone-information" },
-              title: "Sync worker timeline report",
-              onPress: () => navigation.navigate("SyncWorkerTimelineReport"),
-            },
-            {
-              type: "item",
-              icon: { type: "MaterialCommunityIcons", name: "sync-circle" },
-              title: "Schedule periodic sync",
-              onPress: () => {
-                LndMobileToolsTurbo.scheduleSyncWorker();
-                toast("Periodic sync scheduled");
-              },
-            },
-            {
-              type: "item",
-              icon: { type: "MaterialCommunityIcons", name: "sync-off" },
-              title: "Stop scheduled sync",
-              onPress: () => {
-                LndMobileToolsTurbo.stopScheduleSyncWorker();
-                toast("Scheduled sync stopped");
-              },
-            },
-          ]
-        : []),
     ];
   }, [
     t,
@@ -2557,10 +2055,12 @@ ${t("experimental.tor.disabled.msg2")}`;
     onchainExplorer,
     lndChainBackend,
     autopilotEnabled,
+    autopilotNodePubkey,
     dunderServer,
     speedloaderServer,
     requireGraphSync,
     dunderEnabled,
+    maxLNFeePercentage,
     hideExpiredInvoices,
     screenTransitionsEnabled,
     customInvoicePreimageEnabled,
@@ -2571,12 +2071,41 @@ ${t("experimental.tor.disabled.msg2")}`;
     persistentServicesEnabled,
     lightningBoxServer,
     debugShowStartupInfo,
+    useLegacyHeaderGradient,
     lndLogLevel,
     lndNoGraphCache,
     multiPathPaymentsEnabled,
     strictGraphPruningEnabled,
     enforceSpeedloaderOnStartup,
   ]);
+
+  const getFilteredSettingsData = (): SettingsItem[] => {
+    if (!searchText.trim()) {
+      return settingsData;
+    }
+    const lowerSearch = searchText.toLowerCase();
+    const filtered: SettingsItem[] = [];
+    let currentHeader: SettingsItem | null = null;
+    let hasItemsInSection = false;
+
+    for (const item of settingsData) {
+      if (item.type === "header") {
+        currentHeader = item;
+        hasItemsInSection = false;
+      } else {
+        if (item.title.toLowerCase().includes(lowerSearch)) {
+          if (currentHeader && !hasItemsInSection) {
+            filtered.push(currentHeader);
+            hasItemsInSection = true;
+          }
+          filtered.push(item);
+        }
+      }
+    }
+    return filtered;
+  };
+
+  const filteredSettingsData = getFilteredSettingsData();
 
   const renderItem = useCallback(({ item }: { item: SettingsItem }) => {
     if (item.type === "header") {
@@ -2611,10 +2140,28 @@ ${t("experimental.tor.disabled.msg2")}`;
 
   return (
     <Container>
+      <Header
+        iosBarStyle="light-content"
+        androidStatusBarColor="transparent"
+        searchBar
+        rounded
+        style={styles.searchHeader}
+      >
+        <Item rounded style={{ height: 35 }}>
+          <Input
+            style={{ marginLeft: 8, marginTop: -2.5, borderRadius: 8, color: blixtTheme.dark }}
+            placeholder={t("generic.search", { ns: namespaces.common })}
+            onChangeText={setSearchText}
+            value={searchText}
+            autoCorrect={false}
+          />
+          <Icon name="ios-search" />
+        </Item>
+      </Header>
       <FlatList
-        data={settingsData}
+        data={filteredSettingsData}
         renderItem={renderItem}
-        ListHeaderComponent={<BlixtWallet />}
+        ListHeaderComponent={!searchText.trim() ? <BlixtWallet /> : null}
         contentContainerStyle={{ padding: 14 }}
         initialNumToRender={21}
         keyExtractor={(item, index) => `${item.title}-${index}`}
@@ -2644,5 +2191,12 @@ const styles = StyleSheet.create({
         marginRight: 5,
       },
     }),
+  },
+  searchHeader: {
+    backgroundColor: blixtTheme.primary,
+    paddingTop: 0,
+    borderBottomWidth: 0,
+    marginHorizontal: 8,
+    elevation: 0,
   },
 });

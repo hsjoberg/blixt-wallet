@@ -2,13 +2,15 @@
   "common": {
     "generic": {
       "lightningAddress": "Lightning Adres",
+      "lightningBox": "Lightning Box",
       "nodeAlias": "Node alias",
       "description": "Beschrijving",
       "amount": "Bedrag",
       "fee": "Vergoeding",
       "search": "Zoeken",
       "viewInBlockExplorer": "Bekijken in block explorer",
-      "blocks": "{{numBlocks}} blocks"
+      "blocks": "{{numBlocks}} blocks",
+      "reason": "Reason: {{reason}}"
     },
     "buttons": {
       "ok": "Ok",
@@ -41,11 +43,7 @@
   "welcome.start": {
     "title": "Welkom",
     "createWallet": {
-      "title": "Wallet aanmaken",
-      "msg1": "Blixt Wallet bevindt zich nog in een vroeg ontwikkelingsstadium.",
-      "msg2": "Als je deze wallet gebruikt, zorg er dan voor dat je begrijpt dat je jouw geld zou kunnen verliezen.",
-      "msg3": "Er is momenteel geen WatchTower-ondersteuning om je kanalen te bewaken terwijl je offline bent.",
-      "msg4": "Ik ben roekeloos, ga verder"
+      "title": "Wallet aanmaken"
     },
     "createWalletWithPassphrase": {
       "title": "Wachtwoordzin instellen (25e woord om het zaad te coderen)",
@@ -80,7 +78,8 @@
       "onChainWallet": "On-chain",
       "lightningChannels": "Lightning Kanalen",
       "keysendExperiment": "Keysend-experiment",
-      "showMore": "Geavanceerd"
+      "showMore": "Geavanceerd",
+      "powerUserTools": "Power user tools"
     },
     "madeInSweden": "Gemaakt met ⚡ in Zweden"
   },
@@ -273,6 +272,7 @@
     },
     "channel": {
       "alias": "Alias",
+      "bumpFee": "Bump Fee",
       "node": "Node",
       "channelId": "Kanaal ID",
       "channelPoint": "Channel point",
@@ -295,11 +295,22 @@
       "maturityHeight": "Maturiteit blokhoogte",
       "localCommitmentTxid": "Lokale vastlegging TXID",
       "remoteCommitmentTxid": "Vastlegging TXID tegenpartij",
+      "enterDeliveryAddress": "Enter Closing Address",
+      "invalidAddress": "Enter a valid Bitcoin Address",
       "closeChannel": "Kanaal sluiten",
+      "forceCloseChannel": "Force Close Channel",
+      "closeChannelToAddress": "Close Channel to External Address",
       "forceClosePendingChannel": "Sluit kanaal in afwachting af",
       "forceCloseDelay": "Force closure delay",
       "closeChannelPrompt": {
         "title": "Kanaal sluiten"
+      },
+      "bumpFeeAlerts": {
+        "enterFeeRate": "Enter fee rate (sats/vB)",
+        "missingFeeRate": "Missing Fee Rate",
+        "invalidFeeRate": "Invalid Fee Rate",
+        "bumpFeeSuccess": "Fee Bumping Successful",
+        "bumpFeeFailed": "Fee Bumping Failed"
       }
     }
   },
@@ -430,6 +441,10 @@
       "name": {
         "ask": "Vermeld mijn naam bij deze betaling",
         "mandatory": "Jouw naam moet worden vermeld bij deze betaling"
+      },
+      "identifier": {
+        "ask": "Send my Lightning Address together with this payment",
+        "mandatory": "Your Lightning Address has to be sent together with this payment"
       }
     },
     "payloadErrors": {
@@ -625,6 +640,9 @@
       },
       "mapTheme": {
         "title": "Map thema instellen"
+      },
+      "hideAmountsEnabled": {
+        "title": "Hide amounts"
       }
     },
     "wallet": {
@@ -785,6 +803,16 @@
         "title": "Automatisch kanalen openen",
         "subtitle": ""
       },
+      "autopilotNodePubkey": {
+        "title": "Node for automatic channel opener",
+        "setDialog": {
+          "title": "Set node"
+        },
+        "restoreDialog": {
+          "title": "Restore automatic channel opener node",
+          "msg": "Would you like to restore to the default node"
+        }
+      },
       "inbound": {
         "title": "Inkomende kanaaldiensten",
         "subtitle": "Gebruik een inkomende kanaaldienst voor het ontvangen van betalingen",
@@ -816,6 +844,17 @@
         "restoreDialog": {
           "title": "Restore LN channel sync Server",
           "msg": "Would you like to restore to the default LN channel sync server"
+        }
+      },
+      "lightningBoxServer": {
+        "title": "Set Lightning Box server",
+        "subtitle": "",
+        "setDialog": {
+          "title": "Set Lightning Box server"
+        },
+        "restoreDialog": {
+          "title": "Restore Lightning Box Server",
+          "msg": "Would you like to restore to the default Lightning Box server"
         }
       },
       "graphSync": {
@@ -893,6 +932,12 @@
       },
       "customInvoicePreimageEnabled": {
         "title": "Enable custom invoice preimages"
+      },
+      "randomizeSettings": {
+        "title": "Randomize settings"
+      },
+      "randomizeSettingsOnStartup": {
+        "title": "Randomize settings on startup"
       }
     },
     "experimental": {
@@ -1024,6 +1069,10 @@
         "title": "Enable persistent app",
         "subtitle": "The app stays active in the background"
       }
+    },
+    "powerUserTools": {
+      "title": "Power user tools",
+      "subtitle": "Debug and advanced tools for power users"
     }
   },
   "settings.about": {
@@ -1122,6 +1171,33 @@
     "title": "Fondsen toevoegen",
     "msg1": "Om Lightning te beginnen gebruiken in Blixt Wallet",
     "msg2": "stuur bitcoin naar het bovenstaande adres"
+  },
+  "lightningBox.registration": {
+    "info": {
+      "welcome": "Welcome to the Lightning Box registration.",
+      "whatIs": "Lightning Box is a Lightning Address service provider that forwards payment requests directly to the phone, giving you a self-custodial Lightning Address for mobile devices.",
+      "persistentMode": "This service is dependent on persistent mode, because the app must stay active to receive incoming payments. Please make sure that battery optimization is turned off on your device. Otherwise this service may not work.",
+      "currentRules": "The service is free to use. However, due to technical reasons it currently requires a channel with the Lightning Box provider. It's currently not possible to change your Lightning Address after you have chosen one."
+    },
+    "prerequisites": {
+      "prerequisites": "Prerequisites",
+      "checkingEligibility": "Checking eligibility...",
+      "eligible": "Eligible",
+      "youHaveChannel": "You have a channel with the Lightning Box service.",
+      "notEligible": "Not eligible"
+    },
+    "registration": {
+      "registration": "Registration",
+      "fields": {
+        "address": "Address",
+        "messageToPayer": "Message to the payer"
+      },
+      "register": "Register"
+    }
+  },
+  "lightningBox.info": {
+    "yourLightningAddress": "Your Lightning Address by Lightning Box is:",
+    "showQrCode": "Show QR code"
   },
   "welcome.almostDone": {
     "autopilot": {

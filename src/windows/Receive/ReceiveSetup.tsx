@@ -1,5 +1,6 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { Button, Icon, Text, Spinner } from "native-base";
+import { Icon, Text, Spinner } from "native-base";
+import { Button } from "../../components/Button";
 import DialogAndroid from "react-native-dialogs";
 import { useDebounce } from "use-debounce";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -122,6 +123,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
         selectedId: currentBitcoinUnit,
         items: [
           { label: BitcoinUnits.bitcoin.settings, id: "bitcoin" },
+          { label: BitcoinUnits.bip177.settings, id: "bip177" },
           { label: BitcoinUnits.bit.settings, id: "bit" },
           { label: BitcoinUnits.sat.settings, id: "sat" },
           { label: BitcoinUnits.satoshi.settings, id: "satoshi" },
@@ -136,6 +138,7 @@ export default function ReceiveSetup({ navigation }: IReceiveSetupProps) {
         title: t("form.amountBitcoin.change"),
         data: [
           { title: BitcoinUnits.bitcoin.settings, value: "bitcoin" },
+          { title: BitcoinUnits.bip177.settings, value: "bip177" },
           { title: BitcoinUnits.bit.settings, value: "bit" },
           { title: BitcoinUnits.sat.settings, value: "sat" },
           { title: BitcoinUnits.satoshi.settings, value: "satoshi" },

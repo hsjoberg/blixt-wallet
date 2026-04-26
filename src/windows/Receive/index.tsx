@@ -51,6 +51,7 @@ export default function ReceiveIndex() {
         name="ReceiveQr"
         component={ReceiveQr}
         options={{
+          animationTypeForReplace: "push",
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       />

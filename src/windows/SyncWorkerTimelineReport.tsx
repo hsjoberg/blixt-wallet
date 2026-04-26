@@ -1,11 +1,12 @@
 // I generated this file with Cursor + Claude 3.5 Sonnet
 import React, { useEffect, useState } from "react";
 import { Button, Text, View, ScrollView, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { format, addHours } from "date-fns";
+
 import Container from "../components/Container";
 import { getItem } from "../storage/app";
-import { StorageItem } from "../storage/storage-types";
 import { blixtTheme } from "../native-base-theme/variables/commonColor";
 
 interface SyncWorkRecord {
@@ -16,6 +17,7 @@ interface SyncWorkRecord {
 }
 
 enum SyncResult {
+  IN_PROGRESS = "IN_PROGRESS",
   EARLY_EXIT_ACTIVITY_RUNNING = "EARLY_EXIT_ACTIVITY_RUNNING",
   SUCCESS_LND_ALREADY_RUNNING = "SUCCESS_LND_ALREADY_RUNNING",
   SUCCESS_CHAIN_SYNCED = "SUCCESS_CHAIN_SYNCED",
@@ -23,6 +25,8 @@ enum SyncResult {
   SUCCESS_ACTIVITY_INTERRUPTED = "SUCCESS_ACTIVITY_INTERRUPTED",
   FAILURE_GENERAL = "FAILURE_GENERAL",
   FAILURE_CHAIN_SYNC_TIMEOUT = "FAILURE_CHAIN_SYNC_TIMEOUT",
+  EARLY_EXIT_PERSISTENT_SERVICES_ENABLED = "EARLY_EXIT_PERSISTENT_SERVICES_ENABLED",
+  EARLY_EXIT_TOR_ENABLED = "EARLY_EXIT_TOR_ENABLED",
 }
 
 // Modify TimeBlock interface
@@ -106,11 +110,14 @@ export default function SyncWorkerTimelineReport() {
   const getBlockColor = (result: SyncResult) => {
     if (result === SyncResult.SUCCESS_CHAIN_SYNCED) return blixtTheme.green;
     if (result === SyncResult.SUCCESS_LND_ALREADY_RUNNING) return blixtTheme.primary;
+    if (result === SyncResult.IN_PROGRESS) return blixtTheme.lightGray;
     if (
       [
         SyncResult.FAILURE_STATE_TIMEOUT,
         SyncResult.FAILURE_CHAIN_SYNC_TIMEOUT,
         SyncResult.FAILURE_GENERAL,
+        SyncResult.EARLY_EXIT_PERSISTENT_SERVICES_ENABLED,
+        SyncResult.EARLY_EXIT_TOR_ENABLED,
       ].includes(result)
     ) {
       return blixtTheme.red;
@@ -120,6 +127,8 @@ export default function SyncWorkerTimelineReport() {
 
   const getStatusText = (result: SyncResult) => {
     switch (result) {
+      case SyncResult.IN_PROGRESS:
+        return "In Progress / Crashed";
       case SyncResult.SUCCESS_CHAIN_SYNCED:
         return "Synced";
       case SyncResult.SUCCESS_LND_ALREADY_RUNNING:
@@ -134,6 +143,10 @@ export default function SyncWorkerTimelineReport() {
         return "Sync Timeout";
       case SyncResult.EARLY_EXIT_ACTIVITY_RUNNING:
         return "MainActivity Running";
+      case SyncResult.EARLY_EXIT_PERSISTENT_SERVICES_ENABLED:
+        return "Skipped (Persistent Services Enabled)";
+      case SyncResult.EARLY_EXIT_TOR_ENABLED:
+        return "Skipped (Tor Enabled)";
       default:
         return "Unknown";
     }
@@ -145,51 +158,53 @@ export default function SyncWorkerTimelineReport() {
   };
 
   return (
-    <Container>
-      <View style={styles.header}>
-        <Text style={styles.title}>Sync Timeline</Text>
-        <Button onPress={() => navigation.goBack()} title="Back" />
-      </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: blixtTheme.dark }}>
+      <Container>
+        <View style={styles.header}>
+          <Text style={styles.title}>Sync Timeline</Text>
+          <Button onPress={() => navigation.goBack()} title="Back" />
+        </View>
 
-      <ScrollView style={styles.scrollView}>
-        {timeBlocks.map((block, i) => (
-          <View key={i} style={styles.timelineRow}>
-            {/* Date header for first block of the day or first block overall */}
-            {(i === 0 ||
-              format(block.date, "yyyy-MM-dd") !==
-                format(timeBlocks[i - 1].date, "yyyy-MM-dd")) && (
-              <Text style={styles.dateHeader}>{format(block.date, "MMMM d, yyyy")}</Text>
-            )}
+        <ScrollView style={styles.scrollView}>
+          {timeBlocks.map((block, i) => (
+            <View key={i} style={styles.timelineRow}>
+              {/* Date header for first block of the day or first block overall */}
+              {(i === 0 ||
+                format(block.date, "yyyy-MM-dd") !==
+                  format(timeBlocks[i - 1].date, "yyyy-MM-dd")) && (
+                <Text style={styles.dateHeader}>{format(block.date, "MMMM d, yyyy")}</Text>
+              )}
 
-            <View style={styles.hourRow}>
-              <Text style={styles.timeText}>{format(block.date, "HH:mm")}</Text>
+              <View style={styles.hourRow}>
+                <Text style={styles.timeText}>{format(block.date, "HH:mm")}</Text>
 
-              <View style={styles.syncBlock}>
-                {block?.syncs.length > 0 ? (
-                  <View style={styles.syncIndicators}>
-                    {block.syncs.map((sync, index) => (
-                      <View
-                        key={index}
-                        style={[
-                          styles.syncIndicator,
-                          { backgroundColor: getBlockColor(sync.result) },
-                        ]}
-                      >
-                        <Text style={styles.syncText} numberOfLines={1}>
-                          {getStatusText(sync.result)} ({formatDuration(sync.duration)})
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-                ) : (
-                  <View style={[styles.syncIndicator, { backgroundColor: blixtTheme.gray }]} />
-                )}
+                <View style={styles.syncBlock}>
+                  {block?.syncs.length > 0 ? (
+                    <View style={styles.syncIndicators}>
+                      {block.syncs.map((sync, index) => (
+                        <View
+                          key={index}
+                          style={[
+                            styles.syncIndicator,
+                            { backgroundColor: getBlockColor(sync.result) },
+                          ]}
+                        >
+                          <Text style={styles.syncText} numberOfLines={1}>
+                            {getStatusText(sync.result)} ({formatDuration(sync.duration)})
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+                  ) : (
+                    <View style={[styles.syncIndicator, { backgroundColor: blixtTheme.gray }]} />
+                  )}
+                </View>
               </View>
             </View>
-          </View>
-        ))}
-      </ScrollView>
-    </Container>
+          ))}
+        </ScrollView>
+      </Container>
+    </SafeAreaView>
   );
 }
 

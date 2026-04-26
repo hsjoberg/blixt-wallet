@@ -1,11 +1,9 @@
 import { Thunk, thunk } from "easy-peasy";
-
-const notifee = require("@notifee/react-native").default;
-const {
+import notifee, {
   AndroidImportance,
   AndroidVisibility,
   AuthorizationStatus,
-} = require("@notifee/react-native");
+} from "@notifee/react-native";
 
 import { IStoreModel } from "./index";
 import {

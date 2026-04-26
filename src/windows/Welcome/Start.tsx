@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { StyleSheet, StatusBar, NativeModules, SafeAreaView, Platform } from "react-native";
+import React, { JSX, useRef, useState } from "react";
+import { StyleSheet, StatusBar, SafeAreaView, Platform } from "react-native";
 import DialogAndroid from "react-native-dialogs";
-import { Text, H1, Button, View, Spinner, Icon } from "native-base";
+import { Text, H1, View, Spinner, Icon } from "native-base";
+import { Button } from "../../components/Button";
 import { useStoreActions, useStoreState } from "../../state/store";
 import * as Animatable from "react-native-animatable";
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from "react-native-popup-menu";
@@ -19,7 +20,7 @@ import { useTranslation } from "react-i18next";
 import { languages, namespaces } from "../../i18n/i18n.constants";
 import { toast } from "../../utils";
 import { Alert } from "../../utils/alert";
-import { stopDaemon } from "react-native-turbo-lnd";
+import { restartAppOrNotify, showRestartNeededAlert } from "../../utils/restart-app";
 
 interface IAnimatedH1Props {
   children: JSX.Element | string;
@@ -60,82 +61,56 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
   );
 
   const onCreateWalletWithPassphrasePress = async () => {
-    Alert.alert(
-      t("msg.warning", { ns: namespaces.common }),
-      `${t("createWallet.msg1")}
+    Alert.prompt(t("createWalletWithPassphrase.title"), "", [
+      {
+        text: t("buttons.cancel", { ns: namespaces.common }),
+        style: "cancel",
+        onPress: () => {},
+      },
+      {
+        text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
+        onPress: async (text?: string) => {
+          try {
+            if (!text || text.trim().length === 0) {
+              toast(t("createWalletWithPassphrase.invalidMessage"), undefined, "danger");
+              return;
+            }
 
-      ${t("createWallet.msg2")}
+            const hasLeadingTrailingSpaces = text.trim() !== text;
 
-      ${t("createWallet.msg3")}`,
-      [
-        {
-          text: t("createWallet.msg4"),
-          onPress: async () => {
-            Alert.prompt(t("createWalletWithPassphrase.title"), "", [
-              {
-                text: t("buttons.cancel", { ns: namespaces.common }),
-                style: "cancel",
-                onPress: () => {},
-              },
-              {
-                text: t("general.name.dialog.accept", { ns: namespaces.settings.settings }),
-                onPress: async (text) => {
-                  try {
-                    if (!text || text.trim().length === 0) {
-                      toast(t("createWalletWithPassphrase.invalidMessage"), undefined, "danger");
-                      return;
-                    }
+            if (!!hasLeadingTrailingSpaces) {
+              toast(
+                t("createWalletWithPassphrase.noLeadingTrailingSpaces"),
+                undefined,
+                "danger",
+              );
+              return;
+            }
 
-                    const hasLeadingTrailingSpaces = text.trim() !== text;
+            await generateSeed(text.trim());
+            setCreateWalletLoading(true);
+            await createWallet({ init: { aezeedPassphrase: text || undefined } });
+            await setSyncEnabled(true); // TODO test
+            await changeScheduledSyncEnabled(true);
 
-                    if (!!hasLeadingTrailingSpaces) {
-                      toast(
-                        t("createWalletWithPassphrase.noLeadingTrailingSpaces"),
-                        undefined,
-                        "danger",
-                      );
-                      return;
-                    }
-
-                    await generateSeed(text.trim());
-                    setCreateWalletLoading(true);
-                    await createWallet({ init: { aezeedPassphrase: text || undefined } });
-                    await setSyncEnabled(true); // TODO test
-                    await changeScheduledSyncEnabled(true);
-
-                    navigation.dispatch(
-                      CommonActions.reset({
-                        index: 0,
-                        routes: [{ name: "Loading" }],
-                      }),
-                    );
-                  } catch (error: any) {
-                    toast(error.message, undefined, "danger");
-                    setCreateWalletLoading(false);
-                  }
-                },
-              },
-            ]);
-          },
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "Loading" }],
+              }),
+            );
+          } catch (error: any) {
+            toast(error.message, undefined, "danger");
+            setCreateWalletLoading(false);
+          }
         },
-      ],
-    );
+      },
+    ]);
   };
 
   const toggleTorEnabled = async () => {
     changeTorEnabled(!torEnabled);
-    if (PLATFORM === "android") {
-      try {
-        await stopDaemon({});
-      } catch (e) {
-        console.log(e);
-      }
-      NativeModules.LndMobileTools.restartApp();
-    } else {
-      const title = "Restart required";
-      const message = "Blixt Wallet has to be restarted before the new configuration is applied.";
-      Alert.alert(title, message);
-    }
+    await restartAppOrNotify({ stopDaemonFirst: false });
   };
 
   const onSetBitcoinNodePress = async () => {
@@ -152,7 +127,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
         },
         {
           text: t("bitcoinNetwork.node.setDialog.title", { ns: namespaces.settings.settings }),
-          onPress: async (text) => {
+          onPress: async (text?: string) => {
             if (text === neutrinoPeers.join(",")) {
               return;
             }
@@ -175,36 +150,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
   };
 
   const restartNeeded = () => {
-    const title = t("bitcoinNetwork.restartDialog.title", { ns: namespaces.settings.settings });
-    const message = t("bitcoinNetwork.restartDialog.msg", { ns: namespaces.settings.settings });
-    if (PLATFORM === "android") {
-      Alert.alert(
-        title,
-        message +
-          "\n" +
-          t("bitcoinNetwork.restartDialog.msg1", { ns: namespaces.settings.settings }),
-        [
-          {
-            style: "cancel",
-            text: t("buttons.no", { ns: namespaces.common }),
-          },
-          {
-            style: "default",
-            text: t("buttons.yes", { ns: namespaces.common }),
-            onPress: async () => {
-              try {
-                await stopDaemon({});
-              } catch (e) {
-                console.log(e);
-              }
-              NativeModules.LndMobileTools.restartApp();
-            },
-          },
-        ],
-      );
-    } else {
-      Alert.alert(title, message);
-    }
+    showRestartNeededAlert({ stopDaemonFirst: false });
   };
 
   const onLanguageChange = async () => {
@@ -251,7 +197,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
           <Icon type="Entypo" name="dots-three-horizontal" />
         </MenuTrigger>
         <MenuOptions customStyles={menuOptionsStyles}>
-          {PLATFORM !== "macos" && (
+          {["android", "ios"].includes(PLATFORM) && (
             <MenuOption
               onSelect={toggleTorEnabled}
               text={torEnabled ? t("menu.disableTor") : t("menu.enableTor")}
@@ -270,7 +216,7 @@ function TopMenu({ navigation, setCreateWalletLoading }: IStartProps) {
 }
 
 export interface IStartProps {
-  navigation: StackNavigationProp<WelcomeStackParamList, "Start">;
+  navigation: StackNavigationProp<WelcomeStackParamList>;
   setCreateWalletLoading: (loading: boolean) => void;
 }
 export default function Start({ navigation }: IStartProps) {
@@ -282,43 +228,43 @@ export default function Start({ navigation }: IStartProps) {
     (state) => state.settings.changeScheduledSyncEnabled,
   );
   const [createWalletLoading, setCreateWalletLoading] = useState(false);
+  const [createWalletPressLocked, setCreateWalletPressLocked] = useState(false);
+  const createWalletInFlightRef = useRef(false);
+  const createWalletBusy = createWalletLoading || createWalletPressLocked;
 
   const onCreateWalletPress = async () => {
+    if (createWalletInFlightRef.current || createWalletBusy) {
+      return;
+    }
+
+    createWalletInFlightRef.current = true;
+    setCreateWalletPressLocked(true);
+
     try {
       await generateSeed(undefined);
-      Alert.alert(
-        t("msg.warning", { ns: namespaces.common }),
-        `${t("createWallet.msg1")}
 
-${t("createWallet.msg2")}
+      try {
+        setCreateWalletLoading(true);
+        await createWallet();
+        await setSyncEnabled(true);
+        await changeScheduledSyncEnabled(true);
 
-${t("createWallet.msg3")}`,
-        [
-          {
-            text: t("createWallet.msg4"),
-            onPress: async () => {
-              try {
-                setCreateWalletLoading(true);
-                await createWallet();
-                await setSyncEnabled(true); // TODO test
-                await changeScheduledSyncEnabled(true);
-
-                navigation.dispatch(
-                  CommonActions.reset({
-                    index: 0,
-                    routes: [{ name: "Loading" }],
-                  }),
-                );
-              } catch (error: any) {
-                toast(error.message, undefined, "danger");
-                setCreateWalletLoading(false);
-              }
-            },
-          },
-        ],
-      );
-    } catch (e) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "Loading" }],
+          }),
+        );
+      } catch (error: any) {
+        toast(error.message, undefined, "danger");
+        setCreateWalletLoading(false);
+        createWalletInFlightRef.current = false;
+        setCreateWalletPressLocked(false);
+      }
+    } catch (e: any) {
       Alert.alert(e.message);
+      createWalletInFlightRef.current = false;
+      setCreateWalletPressLocked(false);
     }
   };
 
@@ -337,7 +283,7 @@ ${t("createWallet.msg3")}`,
           barStyle="light-content"
         />
 
-        {!createWalletLoading && (
+        {!createWalletBusy && (
           <TopMenu navigation={navigation} setCreateWalletLoading={setCreateWalletLoading} />
         )}
 
@@ -346,7 +292,7 @@ ${t("createWallet.msg3")}`,
         ) : (
           <H1 style={style.header}>{t("title")}</H1>
         )}
-        {!createWalletLoading ? (
+        {!createWalletBusy ? (
           <>
             <AnimatedView>
               <Button style={style.button} onPress={onCreateWalletPress}>

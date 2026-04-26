@@ -34,3 +34,13 @@
 -keep class com.facebook.react.turbomodule.** { *; }
 
 -keep class org.torproject.jni.** { *; }
+
+-keep class com.blixtwallet.LndMobileScheduledSyncWorker { *; }
+-keep interface com.blixtwallet.LndCallback { *; }
+-keep interface com.blixtwallet.LndStreamListener { *; }
+-keep class com.blixtwallet.LndNative { *; }
+-keep class * implements com.blixtwallet.LndCallback { *; }
+
+-keepclasseswithmembers class * {
+    native <methods>;
+}

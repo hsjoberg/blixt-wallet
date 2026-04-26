@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 BigInt.prototype.toJSON = function () {
   return { $bigint: this.toString() };
 };

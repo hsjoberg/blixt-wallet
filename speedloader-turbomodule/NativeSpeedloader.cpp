@@ -39,8 +39,8 @@ facebook::react::AsyncPromise<std::string> NativeSpeedloaderModule::gossipSync(j
   CCallback callback = {
       .onResponse = &onResponse,
       .onError = &onError,
-      .responseContext = nullptr,
-      .errorContext = nullptr
+      .responseContext = static_cast<uintptr_t>(0),
+      .errorContext = static_cast<uintptr_t>(0)
   };
   const char* networkType = "wifi";
 

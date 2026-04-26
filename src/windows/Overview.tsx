@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
   Platform,
   Animated,
@@ -12,7 +12,8 @@ import {
   PixelRatio,
 } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner, Button } from "native-base";
+import { Icon, Text, Card, CardItem, Spinner as NativeBaseSpinner } from "native-base";
+import { Button } from "../components/Button";
 import { DrawerActions, useNavigation, NavigationProp } from "@react-navigation/native";
 
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -26,7 +27,7 @@ import { useStoreActions, useStoreState } from "../state/store";
 import TransactionCard from "../components/TransactionCard";
 import Container from "../components/Container";
 import { timeout, toast } from "../utils/index";
-import { formatBitcoin, convertBitcoinToFiat, getUnitNice } from "../utils/bitcoin-units";
+import { formatBitcoin, convertBitcoinToFiat, getUnitNice, isSats } from "../utils/bitcoin-units";
 import FooterNav from "../components/FooterNav";
 import Drawer from "../components/Drawer";
 import * as nativeBaseTheme from "../native-base-theme/variables/commonColor";
@@ -38,7 +39,6 @@ import useLayoutMode from "../hooks/useLayoutMode";
 import CopyAddress from "../components/CopyAddress";
 import { StackNavigationProp } from "@react-navigation/stack";
 import BlixtHeader from "../components/BlixtHeader";
-import { NavigationRootStackParamList } from "../types";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
@@ -74,7 +74,7 @@ function Overview({ navigation }: IOverviewProps) {
   const bitcoinAddress = useStoreState((store) => store.onChain.address);
   const onboardingState = useStoreState((store) => store.onboardingState);
 
-  const scrollYAnimatedValue = useRef(new Animated.Value(0)).current;
+  const [scrollYAnimatedValue] = useState(() => new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
 
   const getBalance = useStoreActions((store) => store.channel.getBalance);
@@ -98,8 +98,8 @@ function Overview({ navigation }: IOverviewProps) {
   const headerBtcFontSize = scrollYAnimatedValue.interpolate({
     inputRange: [0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT],
     outputRange: [
-      (!preferFiat && bitcoinUnit === "satoshi" ? 32 : 37) * fontFactor,
-      (!preferFiat && bitcoinUnit === "satoshi" ? 24 : 27) * fontFactor,
+      (!preferFiat && isSats(bitcoinUnit) ? 32 : 37) * fontFactor,
+      (!preferFiat && isSats(bitcoinUnit) ? 24 : 27) * fontFactor,
     ],
     extrapolate: "clamp",
   });
@@ -107,10 +107,10 @@ function Overview({ navigation }: IOverviewProps) {
   const headerBtcHeight = scrollYAnimatedValue.interpolate({
     inputRange: [0, HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT],
     outputRange: [
-      (!preferFiat && bitcoinUnit === "satoshi" ? 37 : 40) *
+      (!preferFiat && isSats(bitcoinUnit) ? 37 : 40) *
         1.3 *
         Math.min(PixelRatio.getFontScale(), 1.4),
-      !preferFiat && bitcoinUnit === "satoshi" ? 38.5 : 42,
+      !preferFiat && isSats(bitcoinUnit) ? 38.5 : 42,
     ],
     extrapolate: "clamp",
   });
@@ -185,6 +185,10 @@ function Overview({ navigation }: IOverviewProps) {
 
   const bitcoinBalance = formatBitcoin(balance, bitcoinUnit);
   const fiatBalance = convertBitcoinToFiat(balance, currentRate, fiatUnit);
+  const concealedBitcoinBalance =
+    bitcoinUnit === "bip177"
+      ? `${getUnitNice(new BigNumber(2), bitcoinUnit)} ●●●`
+      : `●●● ${getUnitNice(new BigNumber(2), bitcoinUnit)}`;
 
   return (
     <Container style={{ marginTop: PLATFORM === "macos" ? 0.5 : 0 }}>
@@ -224,7 +228,7 @@ function Overview({ navigation }: IOverviewProps) {
                   <SendOnChain bitcoinAddress={bitcoinAddress} />
                 )}
                 {onboardingState === "DO_BACKUP" && <DoBackup />}
-                {pendingOpenBalance !== 0n && <NewChannelBeingOpened />}
+                {pendingOpenBalance !== BigInt(0) && <NewChannelBeingOpened />}
               </>
             );
           }}
@@ -309,7 +313,7 @@ function Overview({ navigation }: IOverviewProps) {
             )}
             {hideAmountsEnabled && (
               <>
-                {!preferFiat && <>●●● {getUnitNice(new BigNumber(2), bitcoinUnit)}</>}
+                {!preferFiat && <>{concealedBitcoinBalance}</>}
                 {preferFiat && <>●●● {fiatUnit}</>}
               </>
             )}
@@ -318,13 +322,13 @@ function Overview({ navigation }: IOverviewProps) {
           {/* The smaller one underneath */}
           {!hideAmountsEnabled && (
             <>
-              {pendingOpenBalance === 0n && (
+              {pendingOpenBalance === BigInt(0) && (
                 <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
                   {!preferFiat && fiatBalance}
                   {preferFiat && bitcoinBalance}
                 </Animated.Text>
               )}
-              {pendingOpenBalance !== 0n && (
+              {pendingOpenBalance !== BigInt(0) && (
                 <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.pending]}>
                   {!preferFiat && (
                     <>
@@ -345,7 +349,7 @@ function Overview({ navigation }: IOverviewProps) {
           {hideAmountsEnabled && (
             <>
               <Animated.Text style={[{ opacity: headerFiatOpacity }, headerInfo.fiat]}>
-                {preferFiat && <>●●● {getUnitNice(new BigNumber(2), bitcoinUnit)}</>}
+                {preferFiat && <>{concealedBitcoinBalance}</>}
                 {!preferFiat && <>●●● {fiatUnit}</>}
               </Animated.Text>
             </>
@@ -402,8 +406,8 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
   return (
     <Card>
       <CardItem>
-        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
-          <View style={{ width: "59%", justifyContent: "center", paddingRight: 4 }}>
+        <View style={sendOnChainStyle.container}>
+          <View style={sendOnChainStyle.infoContainer}>
             <Text style={{ fontSize: 15 * fontFactor }}>
               {t("sendOnChain.title")}
               {"\n\n"}
@@ -412,12 +416,12 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
                 {"\n\n"}
                 {t("sendOnChain.msg2")}
                 {"\n\n"}
-                {t("sendOnChain.msg3")} {formatBitcoin(22000n, bitcoinUnit)} (
+                {t("sendOnChain.msg3")} {formatBitcoin(BigInt(22000), bitcoinUnit)} (
                 {convertBitcoinToFiat(22000, currentRate, fiatUnit)}).
               </Text>
             </Text>
           </View>
-          <View style={{ justifyContent: "center" }}>
+          <View style={sendOnChainStyle.qrContainer}>
             {bitcoinAddress ? (
               <>
                 <QrCode
@@ -429,7 +433,13 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
                 <CopyAddress text={bitcoinAddress} onPress={copyAddress} />
               </>
             ) : (
-              <View style={{ width: 135 + 10 + 9, height: 135 + 10 + 8, justifyContent: "center" }}>
+              <View
+                style={{
+                  width: 135 + 10 + 9,
+                  height: 135 + 10 + 8,
+                  justifyContent: "center",
+                }}
+              >
                 <NativeBaseSpinner color={blixtTheme.light} />
               </View>
             )}
@@ -442,7 +452,7 @@ const SendOnChain = ({ bitcoinAddress }: ISendOnChain) => {
 
 const DoBackup = () => {
   const { t } = useTranslation(namespaces.overview);
-  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const changeOnboardingState = useStoreActions((store) => store.changeOnboardingState);
 
   const onPressDismiss = async () => {
@@ -482,7 +492,7 @@ const DoBackup = () => {
 
 const NewChannelBeingOpened = () => {
   const { t } = useTranslation(namespaces.overview);
-  const navigation = useNavigation<NavigationProp<NavigationRootStackParamList>>();
+  const navigation = useNavigation<NavigationProp<any>>();
 
   const onPressView = () => {
     navigation.navigate("LightningInfo");
@@ -614,10 +624,31 @@ const style = StyleSheet.create({
     color: blixtTheme.light,
   },
   transactionList: {
-    paddingTop: HEADER_MAX_HEIGHT + 10,
+    marginTop: HEADER_MAX_HEIGHT + 10,
     paddingLeft: 7,
     paddingRight: 7,
     paddingBottom: 12,
+  },
+});
+
+const sendOnChainStyle = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  infoContainer: {
+    flex: 1,
+    minWidth: 0,
+    justifyContent: "center",
+    paddingRight: 8,
+  },
+  qrContainer: {
+    width: 162,
+    justifyContent: "center",
+    alignItems: "center",
+    flexShrink: 0,
   },
 });
 

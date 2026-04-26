@@ -1,4 +1,5 @@
-import { Button, Text, View } from "native-base";
+import { Text, View } from "native-base";
+import { Button } from "../../../components/Button";
 import { Image, Keyboard, Vibration } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/core";
@@ -24,7 +25,7 @@ import { setupDescription } from "../../../utils/NameDesc";
 import style from "./style";
 import useBalance from "../../../hooks/useBalance";
 import useLightningReadyToSend from "../../../hooks/useLightingReadyToSend";
-import { decodePayReq } from "../../../lndmobile";
+import { decodePayReq } from "react-native-turbo-lnd";
 
 export interface IPaymentCardProps {
   onPaid: (preimage: Uint8Array) => void;
@@ -163,7 +164,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
             console.log(
               `Valid pubkey "${lightningAddressPubkey}", doing strict invoice pubkey check`,
             );
-            const payreq = await decodePayReq(paymentRequestResponse.pr);
+            const payreq = await decodePayReq({ payReq: paymentRequestResponse.pr });
             if (payreq.destination !== lightningAddressPubkey) {
               throw new Error(
                 "Unable to proceed. The pubkey in the invoice does not match the pubkey in the Lightning Address",
@@ -174,7 +175,7 @@ export default function PaymentCard({ onPaid, lnUrlObject, callback }: IPaymentC
         // Also do it for the well-known service URL:
         else if (isValidNodePubkey(lud16WellKnownPubkey)) {
           console.log(`Valid pubkey "${lud16WellKnownPubkey}", doing strict invoice pubkey check`);
-          const payreq = await decodePayReq(paymentRequestResponse.pr);
+          const payreq = await decodePayReq({ payReq: paymentRequestResponse.pr });
           if (payreq.destination !== lud16WellKnownPubkey) {
             throw new Error(
               "Unable to proceed. The pubkey in the invoice does not match the pubkey in the Lightning Address",

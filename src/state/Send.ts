@@ -9,13 +9,13 @@ import {
 } from "../utils";
 
 import { ILNUrlPayResponse } from "./LNURL";
-import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
 import { ITransaction } from "../storage/database/transaction";
 import { LnBech32Prefix } from "../utils/build";
 import { PLATFORM, TLV_KEYSEND, TLV_RECORD_NAME, TLV_WHATSAT_MESSAGE } from "../utils/constants";
 import { identifyService } from "../utils/lightning-services";
 import { valueFiat } from "../utils/bitcoin-units";
+import ReactNativePermissions from "react-native-permissions";
 
 import {
   FeatureBit,
@@ -35,11 +35,6 @@ import {
 } from "react-native-turbo-lnd";
 import { SendPaymentRequestSchema } from "react-native-turbo-lnd/protos/routerrpc/router_pb";
 import { create } from "@bufbuild/protobuf";
-
-let ReactNativePermissions: any;
-if (PLATFORM !== "macos") {
-  ReactNativePermissions = require("react-native-permissions");
-}
 
 import logger from "./../utils/log";
 import sha from "sha.js";
@@ -75,18 +70,24 @@ interface IExtraData {
 
 export interface ISendModel {
   clear: Action<ISendModel>;
-  setPayment: Thunk<ISendModel, ISendModelSetPaymentPayload, IStoreInjections, {}, Promise<PayReq>>;
+  setPayment: Thunk<
+    ISendModel,
+    ISendModelSetPaymentPayload,
+    any,
+    IStoreModel,
+    Promise<PayReq>
+  >;
   sendPayment: Thunk<
     ISendModel,
     IModelSendPaymentPayload | void,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<Payment>
   >;
   queryRoutesForFeeEstimate: Thunk<
     ISendModel,
     IModelQueryRoutesPayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<QueryRoutesResponse>
   >;
@@ -121,7 +122,7 @@ export const send: ISendModel = {
   /**
    * @throws
    */
-  setPayment: thunk(async (actions, payload, {}) => {
+  setPayment: thunk(async (actions, payload, { getStoreState }) => {
     actions.clear();
     const paymentRequestStr = payload.paymentRequestStr.replace(/^lightning:/i, "");
 
@@ -140,6 +141,11 @@ export const send: ISendModel = {
       actions.setPaymentRequest(paymentRequest);
     } catch (e) {
       throw new Error("Code is not a valid Lightning invoice");
+    }
+
+    const ownPubkey = getStoreState().lightning.nodeInfo?.identityPubkey;
+    if (ownPubkey && paymentRequest.destination === ownPubkey) {
+      throw new Error("Cannot pay your own invoice");
     }
 
     if (payload.extraData) {
@@ -408,7 +414,7 @@ export const sendPaymentV2TurboLnd = (
         }
       },
       (error) => {
-        reject(error);
+        reject(new Error(error));
       },
     );
   });
@@ -424,13 +430,14 @@ export const sendKeysendPaymentV2TurboLnd = (
   routeHints?: RouteHint[],
 ): Promise<Payment> => {
   const maxFeeRatio = (maxLNFeePercentage ?? 2) / 100;
+  const feeLimitSat = BigInt(Math.floor(Math.max(10, Number(amount || 0) * maxFeeRatio)));
 
   const paymentHash = sha("sha256").update(preimage).digest();
 
   const options = create(SendPaymentRequestSchema, {
     noInflightUpdates: true,
     timeoutSeconds: 60,
-    feeLimitSat: BigInt(Math.floor(Math.max(10, Number(amount) * maxFeeRatio))),
+    feeLimitSat,
     dest: pubkey,
     paymentHash,
     destFeatures: [FeatureBit.TLV_ONION_REQ],

@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { formatDistanceStrict, fromUnixTime, Locale } from "date-fns";
+import * as dateFnsLocales from "date-fns/locale";
 
 import { useStoreState } from "../state/store";
 
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n/i18n.constants";
-
-// Clumsy, but not sure how bad
-const dateFnsLocales = require("date-fns/locale");
 
 export interface ITickerProps {
   expire: number;
@@ -18,26 +16,30 @@ export const Ticker = ({ expire }: ITickerProps) => {
   if (language === "en") {
     language = "enUS";
   }
-  let dateFnsLocale = dateFnsLocales[language];
+  const dateFnsLocaleMap = dateFnsLocales as Record<string, Locale>;
+  let dateFnsLocale = dateFnsLocaleMap[language];
   if (!dateFnsLocale) {
     console.warn("Could not find date-fns locale for language " + language + ". Defaulting to en");
-    dateFnsLocale = dateFnsLocales["en"];
+    dateFnsLocale = dateFnsLocaleMap["en"];
   }
 
-  const [display, setDisplay] = useState(formatDistanceStrict(new Date(), fromUnixTime(expire), { locale: dateFnsLocale }));
+  const [display, setDisplay] = useState(
+    formatDistanceStrict(new Date(), fromUnixTime(expire), { locale: dateFnsLocale }),
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDisplay(
-        formatDistanceStrict(new Date(), fromUnixTime(expire), { locale: dateFnsLocale })
-      );
+      setDisplay(formatDistanceStrict(new Date(), fromUnixTime(expire), { locale: dateFnsLocale }));
     }, 1000);
 
     return () => clearInterval(interval);
   }, [expire]);
 
   return (
-    <>{t("qr.msg", { time : "" })}{display}</>
+    <>
+      {t("qr.msg", { time: "" })}
+      {display}
+    </>
   );
 };
 

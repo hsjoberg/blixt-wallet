@@ -12,7 +12,6 @@ import { bytesToHexString, getDomainFromURL, stringToUint8Array } from "../utils
 import { navigate } from "../utils/navigation";
 import { convertBitcoinToFiat } from "../utils/bitcoin-units";
 import { Alert } from "../utils/alert";
-import { IStoreInjections } from "./store";
 
 import { signMessage, verifyMessage } from "react-native-turbo-lnd";
 
@@ -50,35 +49,35 @@ export interface IWebLNModel {
   handleGetInfoRequest: Thunk<
     IWebLNModel,
     void,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<GetInfoResponse>
   >;
   handleMakeInvoiceRequest: Thunk<
     IWebLNModel,
     IHandleMakeInvoiceRequestPayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<RequestInvoiceResponse>
   >;
   handleSendPaymentRequest: Thunk<
     IWebLNModel,
     IHandleSendPaymentRequestPayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<SendPaymentResponse>
   >;
   handleSignMessageRequest: Thunk<
     IWebLNModel,
     IHandleSignMessageRequestPayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<SignMessageResponse>
   >;
   handleVerifyMessageRequest: Thunk<
     IWebLNModel,
     IHandleVerifyMessageRequestPayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<void>
   >;

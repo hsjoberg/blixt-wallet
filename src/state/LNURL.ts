@@ -16,7 +16,6 @@ import {
 import { HMAC as sha256HMAC, Hash as sha256Hash } from "fast-sha256";
 
 import { Alert } from "../utils/alert";
-import { IStoreInjections } from "./store";
 import { IStoreModel } from "./index";
 import { dunderPrompt } from "../utils/dunder";
 import secp256k1 from "secp256k1";
@@ -201,22 +200,22 @@ export interface ILNUrlModel {
   doChannelRequest: Thunk<
     ILNUrlModel,
     IDoChannelRequestPayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<boolean>
   >;
-  doAuthRequest: Thunk<ILNUrlModel, void, IStoreInjections, IStoreModel, Promise<boolean>>;
+  doAuthRequest: Thunk<ILNUrlModel, void, any, IStoreModel, Promise<boolean>>;
   doWithdrawRequest: Thunk<
     ILNUrlModel,
     { satoshi: number },
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<boolean>
   >;
   doPayRequest: Thunk<
     ILNUrlModel,
     IDoPayRequestPayload,
-    IStoreInjections,
+    any,
     IStoreModel,
     Promise<IDoPayRequestResponse>
   >;

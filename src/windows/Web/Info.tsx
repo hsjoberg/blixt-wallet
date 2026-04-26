@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, H1, Text } from "native-base";
+import { H1, Text } from "native-base";
+import { Button } from "../../components/Button";
 
 import Blurmodal from "../../components/BlurModal";
 import { blixtTheme } from "../../native-base-theme/variables/commonColor";

@@ -1,6 +1,7 @@
 import React from "react";
 import { StatusBar } from "react-native";
-import { Icon, Text, View, Button, H1 } from "native-base";
+import { Icon, Text, View, H1 } from "native-base";
+import { Button } from "../../components/Button";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 import { WelcomeStackParamList } from "./index";
