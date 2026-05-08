@@ -35,4 +35,44 @@ allprojects {
     }
 }
 
+def reproducibleBuildRoot = rootProject.projectDir.parentFile.absolutePath.replace(File.separatorChar, '/' as char)
+def reproducibleNativeFlags = [
+        "-frandom-seed=blixt-wallet",
+        "-fdebug-compilation-dir=.",
+        "-ffile-prefix-map=${reproducibleBuildRoot}=.",
+        "-fdebug-prefix-map=${reproducibleBuildRoot}=."
+]
+def reproducibleNativeLinkerFlags = "-Wl,--build-id=sha1"
+
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+subprojects { subproject ->
+    ["com.android.application", "com.android.library"].each { androidPlugin ->
+        subproject.plugins.withId(androidPlugin) {
+            def androidExtension = subproject.extensions.findByName("android")
+            if (androidExtension == null) {
+                return
+            }
+
+            androidExtension.defaultConfig {
+                externalNativeBuild {
+                    cmake {
+                        arguments "-DCMAKE_SHARED_LINKER_FLAGS=${reproducibleNativeLinkerFlags}"
+                        cFlags(*reproducibleNativeFlags)
+                        cppFlags(*reproducibleNativeFlags)
+                    }
+                }
+            }
+        }
+    }
+
+    subproject.tasks.withType(AbstractArchiveTask).configureEach {
+        preserveFileTimestamps = false
+        reproducibleFileOrder = true
+    }
+}
+
 apply plugin: "com.facebook.react.rootproject"
