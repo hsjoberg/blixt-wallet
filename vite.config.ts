@@ -65,8 +65,7 @@ export default defineConfig(({ command, mode }) => {
   const platformExtensions = isElectrobunTarget
     ? [".electrobun.tsx", ".electrobun.ts", ".electrobun.jsx", ".electrobun.js"]
     : [];
-  const turboLndModuleReplacement =
-    flavor === "normal" ? "react-native-turbo-lnd/electrobun/view" : "react-native-turbo-lnd/mock";
+  const turboLndModuleReplacement = "react-native-turbo-lnd/mock";
 
   return {
     root: resolvePath("web"),
@@ -203,7 +202,8 @@ export default defineConfig(({ command, mode }) => {
     // Essential runtime replacements for web/Electrobun live in three layers:
     // 1. Explicit package aliases in `resolve.alias`.
     //    - `react-native-turbo-lnd`
-    //      - `flavor=normal`: upstream `react-native-turbo-lnd/electrobun/view`
+    //      - plain web `flavor=normal`: no alias; rely on the package's own browser entry
+    //      - Electrobun `flavor=normal`: upstream `react-native-turbo-lnd/electrobun/view`
     //      - those helpers are imported separately from
     //        `react-native-turbo-lnd/electrobun/custom-rpc` by
     //        `electrobun/src/shared/rpc-client.web.ts`
@@ -348,10 +348,14 @@ export default defineConfig(({ command, mode }) => {
           find: /^react-native-keyboard-controller$/,
           replacement: resolvePath("web/web-hacks/react-native-keyboard-controller.js"),
         },
-        {
-          find: /^react-native-turbo-lnd$/,
-          replacement: turboLndModuleReplacement,
-        },
+        ...(!isElectrobunTarget && flavor !== "normal"
+          ? [
+              {
+                find: /^react-native-turbo-lnd$/,
+                replacement: turboLndModuleReplacement,
+              },
+            ]
+          : []),
         {
           find: "react-native-permissions",
           replacement: resolvePath("web/web-hacks/react-native-permission.js"),
@@ -374,6 +378,19 @@ export default defineConfig(({ command, mode }) => {
         },
         ...(isElectrobunTarget
           ? [
+              ...(flavor === "normal"
+                ? [
+                    {
+                      find: /^react-native-turbo-lnd$/,
+                      replacement: "react-native-turbo-lnd/electrobun/view",
+                    },
+                  ]
+                : [
+                    {
+                      find: /^react-native-turbo-lnd$/,
+                      replacement: turboLndModuleReplacement,
+                    },
+                  ]),
               {
                 find: /^react-native-turbo-sqlite$/,
                 replacement: resolvePath("electrobun/src/shims/react-native-turbo-sqlite.ts"),
