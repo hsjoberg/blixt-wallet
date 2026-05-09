@@ -91,9 +91,8 @@ To start the application:
 
 - Install [Nix](https://github.com/DeterminateSystems/nix-installer)
 - Install [Devenv](https://devenv.sh/getting-started/)
-- For local development install [Android Studio](https://developer.android.com/studio/) and start a simulator
-- For more awesome experience you can also install [direnv](https://devenv.sh/automatic-shell-activation/) and enable automatic shell activation.
-
+- For local development, install [Android Studio](https://developer.android.com/studio/) and start a simulator.
+- For a more awesome experience, you can also install [direnv](https://devenv.sh/automatic-shell-activation/) and enable automatic shell activation.
 ```
 cd blixt-wallet
 
@@ -127,7 +126,7 @@ To build the iOS version, a computer running macOS is required. You also need an
   - Login with your Apple Developer account if Xcode asks you to
   - Click on BlixtWallet in the left column
   - Click on the Signing &amp; Capabilities tab
-  - Choose your Team in the dropdown and choose a new unique Bundle Identifier (cannot be the same as the ones released on the App Store). Do this for every configuration
+  - Choose your Team in the dropdown and choose a new unique Bundle Identifier (cannot be the same as the ones released on the App Store). Do this for every configuration.
 
 To start the application:
 
