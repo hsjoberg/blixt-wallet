@@ -515,6 +515,118 @@ export default function Settings({ navigation }: ISettingsProps) {
     }
   };
 
+  const webDavBackupEnabled = useStoreState((store) => store.settings.webDavBackupEnabled);
+  const webDavBackupUrl = useStoreState((store) => store.settings.webDavBackupUrl);
+  const webDavBackupUsername = useStoreState((store) => store.settings.webDavBackupUsername);
+  const webDavBackupPasswordSet = useStoreState((store) => store.settings.webDavBackupPasswordSet);
+  const changeWebDavBackupEnabled = useStoreActions(
+    (store) => store.settings.changeWebDavBackupEnabled,
+  );
+  const changeWebDavBackupUrl = useStoreActions((store) => store.settings.changeWebDavBackupUrl);
+  const changeWebDavBackupUsername = useStoreActions(
+    (store) => store.settings.changeWebDavBackupUsername,
+  );
+  const changeWebDavBackupPassword = useStoreActions(
+    (store) => store.settings.changeWebDavBackupPassword,
+  );
+  const webDavMakeBackup = useStoreActions((store) => store.webDavBackup.makeBackup);
+
+  const onSetWebDavBackupUrlPress = async () => {
+    Alert.prompt(
+      "WebDAV backup URL",
+      "Enter a WebDAV folder URL or a .b64 backup file URL.",
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: t("buttons.save", { ns: namespaces.common }),
+          onPress: async (text) => {
+            await changeWebDavBackupUrl(text ?? "");
+          },
+        },
+      ],
+      "plain-text",
+      webDavBackupUrl ?? "",
+    );
+  };
+
+  const onSetWebDavBackupUsernamePress = async () => {
+    Alert.prompt(
+      "WebDAV username",
+      "Leave empty if your server does not require a username.",
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: t("buttons.save", { ns: namespaces.common }),
+          onPress: async (text) => {
+            await changeWebDavBackupUsername(text ?? "");
+          },
+        },
+      ],
+      "plain-text",
+      webDavBackupUsername ?? "",
+    );
+  };
+
+  const onSetWebDavBackupPasswordPress = async () => {
+    Alert.prompt(
+      "WebDAV app password",
+      "Leave empty to clear the stored password.",
+      [
+        {
+          text: t("buttons.cancel", { ns: namespaces.common }),
+          style: "cancel",
+          onPress: () => {},
+        },
+        {
+          text: t("buttons.save", { ns: namespaces.common }),
+          onPress: async (text) => {
+            await changeWebDavBackupPassword(text ?? "");
+          },
+        },
+      ],
+      "secure-text",
+      "",
+    );
+  };
+
+  const onToggleWebDavBackup = async () => {
+    if (webDavBackupEnabled) {
+      await changeWebDavBackupEnabled(false);
+      toast("WebDAV backup disabled");
+      return;
+    }
+
+    if (!webDavBackupUrl.trim()) {
+      toast("Set a WebDAV backup URL first", 10000, "danger");
+      return;
+    }
+
+    try {
+      await webDavMakeBackup();
+      await changeWebDavBackupEnabled(true);
+      toast("WebDAV backup enabled");
+    } catch (e: any) {
+      toast(t("wallet.backup.error") + `: ${e.message}`, 10000, "danger");
+    }
+  };
+
+  const onDoWebDavBackupPress = async () => {
+    try {
+      await webDavMakeBackup();
+      toast("Backed up channels to WebDAV");
+    } catch (e: any) {
+      toast(t("wallet.backup.error") + `: ${e.message}`, 10000, "danger");
+    }
+  };
+
   // Transaction geolocation
   const transactionGeolocationEnabled = useStoreState(
     (store) => store.settings.transactionGeolocationEnabled,
@@ -1588,6 +1700,50 @@ ${t("experimental.tor.disabled.msg2")}`;
             },
           ]
         : []),
+      ...(!isRecoverMode
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "web" },
+              title: "WebDAV backup URL",
+              subtitle: webDavBackupUrl || "Set a WebDAV folder or .b64 backup file URL",
+              onPress: onSetWebDavBackupUrlPress,
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "account-key" },
+              title: "WebDAV username",
+              subtitle: webDavBackupUsername || "Optional",
+              onPress: onSetWebDavBackupUsernamePress,
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "key" },
+              title: "WebDAV app password",
+              subtitle: webDavBackupPasswordSet ? "Password set" : "Optional",
+              onPress: onSetWebDavBackupPasswordPress,
+            },
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "cloud-upload" },
+              title: "WebDAV channel backup",
+              subtitle: "Automatically backup channels to WebDAV",
+              checkBox: true,
+              checked: webDavBackupEnabled,
+              onPress: onToggleWebDavBackup,
+            },
+          ]
+        : []),
+      ...(webDavBackupEnabled && !isRecoverMode
+        ? [
+            {
+              type: "item",
+              icon: { type: "MaterialCommunityIcons", name: "cloud-upload-outline" },
+              title: "Manually trigger WebDAV Backup",
+              onPress: onDoWebDavBackupPress,
+            },
+          ]
+        : []),
 
       // ... Security items
 
@@ -2045,6 +2201,10 @@ ${t("experimental.tor.disabled.msg2")}`;
     onboardingState,
     googleDriveBackupEnabled,
     iCloudBackupEnabled,
+    webDavBackupEnabled,
+    webDavBackupUrl,
+    webDavBackupUsername,
+    webDavBackupPasswordSet,
     isRecoverMode,
     loginMethods,
     fingerprintAvailable,

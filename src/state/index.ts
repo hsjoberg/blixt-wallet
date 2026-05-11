@@ -27,6 +27,7 @@ import { IFiatModel, fiat } from "./Fiat";
 import { IGoogleDriveBackupModel, googleDriveBackup } from "./GoogleDriveBackup";
 import { IGoogleModel, google } from "./Google";
 import { IICloudBackupModel, iCloudBackup } from "./ICloudBackup";
+import { IWebDavBackupModel, webDavBackup } from "./WebDavBackup";
 import { IAutopilotModel, autopilot } from "./Autopilot";
 import { ILNUrlModel, lnUrl } from "./LNURL";
 import { ILightNameModel, lightName } from "./LightName";
@@ -167,6 +168,7 @@ export interface IStoreModel {
   lnUrl: ILNUrlModel;
   google: IGoogleModel;
   googleDriveBackup: IGoogleDriveBackupModel;
+  webDavBackup: IWebDavBackupModel;
   webln: IWebLNModel;
   deeplinkManager: IDeeplinkManager;
   notificationManager: INotificationManagerModel;
@@ -876,6 +878,7 @@ routerrpc.estimator=${lndPathfindingAlgorithm}
   lnUrl,
   google,
   googleDriveBackup,
+  webDavBackup,
   webln,
   deeplinkManager,
   notificationManager,
