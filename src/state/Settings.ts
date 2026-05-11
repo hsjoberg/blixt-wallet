@@ -21,6 +21,11 @@ import {
   setLndCompactDb,
   setRescanWallet,
 } from "../storage/app";
+import {
+  getWebDavBackupPassword,
+  removeWebDavBackupPassword,
+  setWebDavBackupPassword,
+} from "../storage/keystore";
 
 import { Chain } from "../utils/build";
 import { BitcoinUnits, IBitcoinUnits } from "../utils/bitcoin-units";
@@ -60,6 +65,10 @@ export interface ISettingsModel {
   changeDebugShowStartupInfo: Thunk<ISettingsModel, boolean>;
   changeUseLegacyHeaderGradient: Thunk<ISettingsModel, boolean>;
   changeGoogleDriveBackupEnabled: Thunk<ISettingsModel, boolean>;
+  changeWebDavBackupEnabled: Thunk<ISettingsModel, boolean>;
+  changeWebDavBackupUrl: Thunk<ISettingsModel, string>;
+  changeWebDavBackupUsername: Thunk<ISettingsModel, string>;
+  changeWebDavBackupPassword: Thunk<ISettingsModel, string>;
   changePreferFiat: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationEnabled: Thunk<ISettingsModel, boolean>;
   changeTransactionGeolocationMapStyle: Thunk<ISettingsModel, keyof typeof MapStyle>;
@@ -112,6 +121,10 @@ export interface ISettingsModel {
   setDebugShowStartupInfo: Action<ISettingsModel, boolean>;
   setUseLegacyHeaderGradient: Action<ISettingsModel, boolean>;
   setGoogleDriveBackupEnabled: Action<ISettingsModel, boolean>;
+  setWebDavBackupEnabled: Action<ISettingsModel, boolean>;
+  setWebDavBackupUrl: Action<ISettingsModel, string>;
+  setWebDavBackupUsername: Action<ISettingsModel, string>;
+  setWebDavBackupPasswordSet: Action<ISettingsModel, boolean>;
   setPreferFiat: Action<ISettingsModel, boolean>;
   setTransactionGeolocationEnabled: Action<ISettingsModel, boolean>;
   setTransactionGeolocationMapStyle: Action<ISettingsModel, keyof typeof MapStyle>;
@@ -164,6 +177,10 @@ export interface ISettingsModel {
   debugShowStartupInfo: boolean;
   useLegacyHeaderGradient: boolean;
   googleDriveBackupEnabled: boolean;
+  webDavBackupEnabled: boolean;
+  webDavBackupUrl: string;
+  webDavBackupUsername: string;
+  webDavBackupPasswordSet: boolean;
   preferFiat: boolean;
   transactionGeolocationEnabled: boolean;
   transactionGeolocationMapStyle: keyof typeof MapStyle;
@@ -247,6 +264,10 @@ export const settings: ISettingsModel = {
     actions.setGoogleDriveBackupEnabled(
       (await getItemObject(StorageItem.googleDriveBackupEnabled)) || false,
     );
+    actions.setWebDavBackupEnabled((await getItemObject(StorageItem.webDavBackupEnabled)) || false);
+    actions.setWebDavBackupUrl((await getItem(StorageItem.webDavBackupUrl)) ?? "");
+    actions.setWebDavBackupUsername((await getItem(StorageItem.webDavBackupUsername)) ?? "");
+    actions.setWebDavBackupPasswordSet((await getWebDavBackupPassword()) !== null);
     actions.setPreferFiat((await getItemObject(StorageItem.preferFiat)) || false);
     actions.setTransactionGeolocationEnabled(
       (await getItemObject(StorageItem.transactionGeolocationEnabled)) || false,
@@ -387,6 +408,30 @@ export const settings: ISettingsModel = {
   changeGoogleDriveBackupEnabled: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.googleDriveBackupEnabled, payload);
     actions.setGoogleDriveBackupEnabled(payload);
+  }),
+
+  changeWebDavBackupEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.webDavBackupEnabled, payload);
+    actions.setWebDavBackupEnabled(payload);
+  }),
+
+  changeWebDavBackupUrl: thunk(async (actions, payload) => {
+    await setItem(StorageItem.webDavBackupUrl, payload.trim());
+    actions.setWebDavBackupUrl(payload.trim());
+  }),
+
+  changeWebDavBackupUsername: thunk(async (actions, payload) => {
+    await setItem(StorageItem.webDavBackupUsername, payload.trim());
+    actions.setWebDavBackupUsername(payload.trim());
+  }),
+
+  changeWebDavBackupPassword: thunk(async (actions, payload) => {
+    if (payload) {
+      await setWebDavBackupPassword(payload);
+    } else {
+      await removeWebDavBackupPassword();
+    }
+    actions.setWebDavBackupPasswordSet(!!payload);
   }),
 
   changePreferFiat: thunk(async (actions, payload) => {
@@ -618,6 +663,18 @@ export const settings: ISettingsModel = {
   setGoogleDriveBackupEnabled: action((state, payload) => {
     state.googleDriveBackupEnabled = payload;
   }),
+  setWebDavBackupEnabled: action((state, payload) => {
+    state.webDavBackupEnabled = payload;
+  }),
+  setWebDavBackupUrl: action((state, payload) => {
+    state.webDavBackupUrl = payload;
+  }),
+  setWebDavBackupUsername: action((state, payload) => {
+    state.webDavBackupUsername = payload;
+  }),
+  setWebDavBackupPasswordSet: action((state, payload) => {
+    state.webDavBackupPasswordSet = payload;
+  }),
   setPreferFiat: action((state, payload) => {
     state.preferFiat = payload;
   }),
@@ -747,6 +804,10 @@ export const settings: ISettingsModel = {
   debugShowStartupInfo: false,
   useLegacyHeaderGradient: false,
   googleDriveBackupEnabled: false,
+  webDavBackupEnabled: false,
+  webDavBackupUrl: "",
+  webDavBackupUsername: "",
+  webDavBackupPasswordSet: false,
   preferFiat: false,
   transactionGeolocationEnabled: false,
   transactionGeolocationMapStyle: "darkMode",
@@ -809,6 +870,10 @@ export const settings: ISettingsModel = {
     // state.scheduledGossipSyncEnabled;
     state.setDebugShowStartupInfo(rand(0, 1) === 1);
     // state.googleDriveBackupEnabled;
+    // state.webDavBackupEnabled;
+    // state.webDavBackupUrl;
+    // state.webDavBackupUsername;
+    // state.webDavBackupPasswordSet;
     state.setPreferFiat(rand(0, 1) === 1);
     // state.transactionGeolocationEnabled;
     // state.transactionGeolocationMapStyle;
