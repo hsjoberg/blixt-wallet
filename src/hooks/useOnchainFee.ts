@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useStoreState } from "../state/store";
+import { PLATFORM } from "../utils/constants";
 import {
   FeePriority,
   RecommendedFees,
@@ -31,7 +32,7 @@ export default function useOnchainFee() {
     const controller = new AbortController();
     let active = true;
     const timeout = setTimeout(() => controller.abort(), 15000);
-    fetchRecommendedFees(feeServer, controller.signal)
+    fetchRecommendedFees(feeServer, controller.signal, PLATFORM)
       .then((fees) => {
         if (active) {
           setResult({ server: feeServer, request: feeRequest, fees, error: false });

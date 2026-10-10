@@ -8,6 +8,7 @@ import {
   DEFAULT_MAX_LN_FEE_PERCENTAGE,
   DEFAULT_PATHFINDING_ALGORITHM,
   DEFAULT_SPEEDLOADER_SERVER,
+  PLATFORM,
 } from "../utils/constants";
 import {
   StorageItem,
@@ -413,7 +414,7 @@ export const settings: ISettingsModel = {
 
   changeOnchainFeeServer: thunk(async (actions, payload) => {
     const server = payload.trim()
-      ? normalizeOnchainFeeServer(payload)
+      ? normalizeOnchainFeeServer(payload, PLATFORM)
       : defaultOnchainFeeServer(Chain);
     await setItem(StorageItem.onchainFeeServer, server);
     actions.setOnchainFeeServer(server);

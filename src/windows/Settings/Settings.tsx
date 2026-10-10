@@ -32,7 +32,11 @@ import { useStoreActions, useStoreState } from "../../state/store";
 import { Alert } from "../../utils/alert";
 import BlixtWallet from "../../components/BlixtWallet";
 import { Chain } from "../../utils/build";
-import { defaultOnchainFeeServer, normalizeOnchainFeeServer } from "../../utils/onchain-fees";
+import {
+  defaultOnchainFeeServer,
+  normalizeOnchainFeeServer,
+  FeeServerRequiresHttpsError,
+} from "../../utils/onchain-fees";
 import Clipboard from "@react-native-clipboard/clipboard";
 import DialogAndroid from "react-native-dialogs";
 import { pick } from "@react-native-documents/picker";
@@ -1094,14 +1098,19 @@ ${t("experimental.tor.disabled.msg2")}`;
             let server;
             try {
               server = text.trim()
-                ? normalizeOnchainFeeServer(text)
+                ? normalizeOnchainFeeServer(text, PLATFORM)
                 : defaultOnchainFeeServer(Chain);
-            } catch {
+            } catch (error) {
               Alert.alert(
-                t("bitcoinNetwork.feeServer.invalid", {
-                  defaultValue:
-                    "Enter a valid HTTP or HTTPS API URL without credentials, a query, or a fragment.",
-                }),
+                error instanceof FeeServerRequiresHttpsError
+                  ? t("bitcoinNetwork.feeServer.requiresHttps", {
+                      defaultValue:
+                        "On iOS, use HTTPS for public hostnames. HTTP is allowed for local hostnames and IP addresses.",
+                    })
+                  : t("bitcoinNetwork.feeServer.invalid", {
+                      defaultValue:
+                        "Enter a valid HTTP or HTTPS API URL without credentials, a query, or a fragment.",
+                    }),
               );
               return;
             }

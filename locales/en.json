@@ -753,6 +753,7 @@
         "title": "On-chain fee server",
         "description": "Enter a mempool or Esplora API base URL, including /api (for example, https://mempool.space/api). Leave blank to restore the default.",
         "invalid": "Enter a valid HTTP or HTTPS API URL without credentials, a query, or a fragment.",
+        "requiresHttps": "On iOS, use HTTPS for public hostnames. HTTP is allowed for local hostnames and IP addresses.",
         "saveFailed": "Could not save the fee server. Please try again."
       },
       "node": {

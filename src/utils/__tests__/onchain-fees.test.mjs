@@ -5,6 +5,7 @@ import {
   normalizeOnchainFeeServer,
   fetchRecommendedFees,
   parseCustomFee,
+  FeeServerRequiresHttpsError,
 } from "../onchain-fees.ts";
 
 const recommendations = { hourFee: 2, halfHourFee: 5, fastestFee: 9 };
@@ -108,6 +109,65 @@ test("normalizes custom API URLs, preserving network paths and local ports", () 
   ]) {
     assert.throws(() => normalizeOnchainFeeServer(invalid));
   }
+});
+
+test("iOS rejects cleartext public hostnames with a transport-specific error", () => {
+  for (const host of [
+    "fees.example.com",
+    "FEES.EXAMPLE.COM",
+    "fees.example.com.",
+    "localhost.example.com",
+    "node.local.example.com",
+    "192.168.1.2.example.com",
+  ]) {
+    assert.throws(
+      () => normalizeOnchainFeeServer(`http://${host}:3002/api`, "ios"),
+      FeeServerRequiresHttpsError,
+    );
+    assert.equal(normalizeOnchainFeeServer(`https://${host}/api`, "ios"), `https://${host}/api`);
+  }
+});
+
+test("iOS retains the HTTP endpoints allowed by NSAllowsLocalNetworking", () => {
+  for (const host of [
+    "localhost",
+    "feeserver",
+    "node.local",
+    "NODE.LOCAL",
+    "node.local.",
+    "127.0.0.1",
+    "192.168.1.2",
+    "10.0.0.2",
+    "172.16.0.2",
+    "203.0.113.1",
+    "[::1]",
+    "[fd00::1]",
+    "[::ffff:192.168.1.2]",
+    "[2001:db8::1]",
+  ]) {
+    const url = `http://${host}:3002/api`;
+    assert.equal(normalizeOnchainFeeServer(url, "ios"), url);
+  }
+  assert.throws(() => normalizeOnchainFeeServer("http://user:pass@localhost/api", "ios"));
+  assert.throws(() => normalizeOnchainFeeServer("http://node.local/api?x=1", "ios"));
+});
+
+test("other platforms retain HTTP URL validation", () => {
+  for (const platform of ["android", "macos", "web"]) {
+    assert.equal(
+      normalizeOnchainFeeServer("http://fees.example.com/api", platform),
+      "http://fees.example.com/api",
+    );
+  }
+});
+
+test("iOS rejects a previously saved blocked server before fetching", async (t) => {
+  const fetch = t.mock.method(globalThis, "fetch", async () => assert.fail("Unexpected request"));
+  await assert.rejects(
+    fetchRecommendedFees("http://fees.example.com/api", new AbortController().signal, "ios"),
+    FeeServerRequiresHttpsError,
+  );
+  assert.equal(fetch.mock.callCount(), 0);
 });
 
 test("uses a custom mempool server without contacting the default server", async (t) => {

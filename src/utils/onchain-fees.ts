@@ -14,7 +14,15 @@ export function defaultOnchainFeeServer(chain: string): string {
   }
 }
 
-export function normalizeOnchainFeeServer(value: string): string {
+export class FeeServerRequiresHttpsError extends Error {
+  constructor() {
+    super(
+      "On iOS, use HTTPS for public hostnames. HTTP is allowed for local hostnames and IP addresses.",
+    );
+  }
+}
+
+export function normalizeOnchainFeeServer(value: string, platform?: string): string {
   const server = value.trim().replace(/\/+$/, "");
   const url = new URL(server);
   if (
@@ -26,6 +34,19 @@ export function normalizeOnchainFeeServer(value: string): string {
     url.password
   ) {
     throw new Error("Invalid fee server URL");
+  }
+  if (platform === "ios" && url.protocol === "http:") {
+    const hostname = url.hostname.toLowerCase().replace(/\.$/, "");
+    // Match Info.plist's NSAllowsLocalNetworking exception: unqualified names,
+    // .local domains and IP literals (including public IPs), not arbitrary DNS names.
+    const allowsHttp =
+      !hostname.includes(".") ||
+      hostname.endsWith(".local") ||
+      /^\d+\.\d+\.\d+\.\d+$/.test(hostname) ||
+      hostname.includes(":");
+    if (!allowsHttp) {
+      throw new FeeServerRequiresHttpsError();
+    }
   }
   return server;
 }
@@ -41,8 +62,9 @@ export function parseCustomFee(value: string): number | undefined {
 export async function fetchRecommendedFees(
   server: string,
   signal: AbortSignal,
+  platform?: string,
 ): Promise<RecommendedFees> {
-  const baseUrl = normalizeOnchainFeeServer(server);
+  const baseUrl = normalizeOnchainFeeServer(server, platform);
   const options = {
     // Native and DOM AbortSignal declarations differ, but both support fetch cancellation.
     signal: signal as RequestInit["signal"],
