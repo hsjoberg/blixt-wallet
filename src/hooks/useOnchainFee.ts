@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n/i18n.constants";
+import { Alert } from "../utils/alert";
 import { useStoreState } from "../state/store";
 import { PLATFORM } from "../utils/constants";
 import {
@@ -6,9 +9,11 @@ import {
   RecommendedFees,
   fetchRecommendedFees,
   parseCustomFee,
+  confirmOnchainFee,
 } from "../utils/onchain-fees";
 
 export default function useOnchainFee() {
+  const t = useTranslation(namespaces.onchain.withdraw).t;
   const [feePriority, setFeePriority] = useState<FeePriority | "custom">("medium");
   const [customFee, setCustomFee] = useState("");
   const [result, setResult] = useState<{
@@ -27,6 +32,29 @@ export default function useOnchainFee() {
   const feesError = currentResult?.error ?? false;
   const feeRate =
     feePriority === "custom" ? parseCustomFee(customFee) : recommendedFees?.[feePriority];
+
+  const confirmFee = () =>
+    confirmOnchainFee(feeRate, async (rate) => {
+      const choice = await Alert.promiseAlert(
+        t("form.feeRate.highFeeTitle", { defaultValue: "Unusually high network fee" }),
+        t("form.feeRate.highFeeMessage", {
+          feeRate: rate,
+          defaultValue:
+            "The selected fee rate is {{feeRate}} sat/vB. This could spend a large part of your balance on network fees. The total fee depends on transaction size. Continue with this fee rate?",
+        }),
+        [
+          {
+            text: t("buttons.cancel", { ns: namespaces.common, defaultValue: "Cancel" }),
+            style: "cancel",
+          },
+          {
+            text: t("form.feeRate.highFeeConfirm", { defaultValue: "Use high fee" }),
+            style: "destructive",
+          },
+        ],
+      );
+      return choice.style === "destructive";
+    });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -54,6 +82,7 @@ export default function useOnchainFee() {
   }, [feeRequest, feeServer]);
 
   return {
+    confirmFee,
     feeRate,
     feePriority,
     setFeePriority,

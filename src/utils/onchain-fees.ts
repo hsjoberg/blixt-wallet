@@ -1,6 +1,23 @@
 export type FeePriority = "low" | "medium" | "high";
 export type RecommendedFees = Record<FeePriority, number>;
 
+// An absolute threshold also catches bad recommendations from the fee server.
+export const HIGH_ONCHAIN_FEE_RATE = 100;
+
+export async function confirmOnchainFee(
+  feeRate: number | undefined,
+  confirmHighFee: (feeRate: number) => Promise<boolean>,
+): Promise<boolean> {
+  if (feeRate === undefined || !Number.isSafeInteger(feeRate) || feeRate <= 0) {
+    return false;
+  }
+  if (feeRate < HIGH_ONCHAIN_FEE_RATE) {
+    return true;
+  }
+  // Approval is specific to this rate and submission; never remember it for retries.
+  return (await confirmHighFee(feeRate)) === true;
+}
+
 export function defaultOnchainFeeServer(chain: string): string {
   switch (chain) {
     case "mainnet":

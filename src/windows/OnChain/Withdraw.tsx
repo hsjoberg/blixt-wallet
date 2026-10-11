@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useRef } from "react";
 import { useWindowDimensions } from "react-native";
 import { Text, Container, Icon, Spinner } from "native-base";
 import { Button } from "../../components/Button";
@@ -31,6 +31,7 @@ export default ({ navigation }: IOpenChannelProps) => {
   const getBalance = useStoreActions((actions) => actions.onChain.getBalance);
   const [address, setAddress] = useState("");
   const [sending, setSending] = useState(false);
+  const submitting = useRef(false);
   const fee = useOnchainFee();
   const { feeRate } = fee;
   const [withdrawAll, setWithdrawAll] = useState(false);
@@ -49,11 +50,15 @@ export default ({ navigation }: IOpenChannelProps) => {
   }, [navigation, t]);
 
   const onWithdrawClick = async () => {
-    if (sending || feeRate === undefined) {
+    if (submitting.current || feeRate === undefined) {
       return;
     }
+    submitting.current = true;
     try {
       setSending(true);
+      if (!(await fee.confirmFee())) {
+        return;
+      }
       let result;
       if (withdrawAll) {
         result = await sendCoinsAll({
@@ -74,6 +79,8 @@ export default ({ navigation }: IOpenChannelProps) => {
       toast(t("form.withdraw.alert"), 6000, "success");
     } catch (e: any) {
       toast(`${t("msg.error", { ns: namespaces.common })}: ${e.message}`, 12000, "danger", "OK");
+    } finally {
+      submitting.current = false;
       setSending(false);
     }
   };

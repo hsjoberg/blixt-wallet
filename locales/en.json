@@ -398,6 +398,9 @@
         "custom": "Custom",
         "customAction": "Custom fee",
         "customLabel": "Custom fee in sat/vB",
+        "highFeeTitle": "Unusually high network fee",
+        "highFeeMessage": "The selected fee rate is {{feeRate}} sat/vB. This could spend a large part of your balance on network fees. The total fee depends on transaction size. Continue with this fee rate?",
+        "highFeeConfirm": "Use high fee",
         "invalid": "Enter a whole number of at least 1 sat/vB.",
         "unavailable": "Could not load fees. Retry or enter a custom fee.",
         "retry": "Retry"

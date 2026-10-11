@@ -6,9 +6,70 @@ import {
   fetchRecommendedFees,
   parseCustomFee,
   FeeServerRequiresHttpsError,
+  confirmOnchainFee,
 } from "../onchain-fees.ts";
 
 const recommendations = { hourFee: 2, halfHourFee: 5, fastestFee: 9 };
+
+test("ordinary fees need no extra confirmation, but invalid rates cannot proceed", async () => {
+  const unexpectedConfirmation = async () => assert.fail("Unexpected confirmation");
+  for (const rate of [1, 5, 99]) {
+    assert.equal(await confirmOnchainFee(rate, unexpectedConfirmation), true);
+  }
+  for (const rate of [undefined, 0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1]) {
+    assert.equal(await confirmOnchainFee(rate, unexpectedConfirmation), false);
+  }
+});
+
+test("rates of 100 sat/vB and above require explicit approval of the exact rate", async () => {
+  for (const rate of [100, 101, 10000, Number.MAX_SAFE_INTEGER]) {
+    for (const approval of [true, false, undefined]) {
+      let confirmations = 0;
+      const approved = await confirmOnchainFee(rate, async (shownRate) => {
+        confirmations++;
+        assert.equal(shownRate, rate);
+        return approval;
+      });
+      assert.equal(approved, approval === true);
+      assert.equal(confirmations, 1);
+    }
+  }
+});
+
+test("high-fee approval waits for the user and is requested again for each attempt", async () => {
+  let resolveConfirmation;
+  const firstAttempt = confirmOnchainFee(
+    100,
+    () =>
+      new Promise((resolve) => {
+        resolveConfirmation = resolve;
+      }),
+  );
+  let settled = false;
+  firstAttempt.then(() => {
+    settled = true;
+  });
+  await Promise.resolve();
+  assert.equal(settled, false);
+  resolveConfirmation(true);
+  assert.equal(await firstAttempt, true);
+  assert.equal(await confirmOnchainFee(100, async () => false), false);
+  assert.equal(await confirmOnchainFee(101, async () => false), false);
+});
+
+test("both server recommendations and custom high fees require confirmation", async (t) => {
+  t.mock.method(globalThis, "fetch", async () => ({
+    ok: true,
+    json: async () => ({ hourFee: 100, halfHourFee: 10000, fastestFee: 20000 }),
+  }));
+  const fees = await fetchRecommendedFees(
+    defaultOnchainFeeServer("mainnet"),
+    new AbortController().signal,
+  );
+  for (const rate of [...Object.values(fees), parseCustomFee("10000")]) {
+    assert.equal(await confirmOnchainFee(rate, async () => false), false);
+  }
+});
 
 test("uses the correct network and maps the three priorities", async (t) => {
   for (const [chain, path] of [

@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useRef } from "react";
 import { View, useWindowDimensions } from "react-native";
 import { Text, Container, Icon, Spinner, CheckBox } from "native-base";
 import { Button } from "../../components/Button";
@@ -38,6 +38,7 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
   const getChannels = useStoreActions((actions) => actions.channel.getChannels);
   const [peer, setPeer] = useState(peerUri ?? "");
   const [opening, setOpening] = useState(false);
+  const submitting = useRef(false);
   const fee = useOnchainFee();
   const { feeRate } = fee;
   const onChainBalance = useStoreState((store) => store.onChain.balance);
@@ -64,11 +65,15 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
   }, [navigation, t]);
 
   const onOpenChannelPress = async () => {
-    if (opening || feeRate === undefined) {
+    if (submitting.current || feeRate === undefined) {
       return;
     }
+    submitting.current = true;
     try {
       setOpening(true);
+      if (!(await fee.confirmFee())) {
+        return;
+      }
 
       if (withdrawAll) {
         await connectAndOpenChannelAll({
@@ -88,7 +93,6 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
       navigation.pop();
     } catch (error: any) {
       toast(`Error: ${error.message}`, 12000, "danger", "Okay");
-      setOpening(false);
 
       // Special case if the error is likely related to Tor
       if (
@@ -108,6 +112,9 @@ export default function OpenChannel({ navigation, route }: IOpenChannelProps) {
           },
         ]);
       }
+    } finally {
+      submitting.current = false;
+      setOpening(false);
     }
   };
 
