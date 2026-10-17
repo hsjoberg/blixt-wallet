@@ -64,6 +64,7 @@ const NativeBlixtToolsWeb: Spec = {
   checkApplicationSupportExists: async () => true,
   createIOSApplicationSupportAndLndDirectories: async () => true,
   excludeLndICloudBackup: async () => true,
+  setTrayEnabled: (_enabled: boolean) => {},
   macosOpenFileDialog: async () => null,
   onLndLog: emptyLndLogEmitter,
 };

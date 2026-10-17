@@ -71,6 +71,7 @@ export interface ISettingsModel {
   changeTorEnabled: Thunk<ISettingsModel, boolean>;
   changeHideExpiredInvoices: Thunk<ISettingsModel, boolean>;
   changeScreenTransitionsEnabled: Thunk<ISettingsModel, boolean>;
+  changeTrayEnabled: Thunk<ISettingsModel, boolean>;
   changeICloudBackupEnabled: Thunk<ISettingsModel, boolean>;
   changeLndChainBackend: Thunk<ISettingsModel, string>;
   changeNeutrinoPeers: Thunk<ISettingsModel, string[]>;
@@ -124,6 +125,7 @@ export interface ISettingsModel {
   setTorEnabled: Action<ISettingsModel, boolean>;
   setHideExpiredInvoices: Action<ISettingsModel, boolean>;
   setScreenTransitionsEnabled: Action<ISettingsModel, boolean>;
+  setTrayEnabled: Action<ISettingsModel, boolean>;
   setICloudBackupEnabled: Action<ISettingsModel, boolean>;
   setLndChainBackend: Action<ISettingsModel, string>;
   setNeutrinoPeers: Action<ISettingsModel, string[]>;
@@ -177,6 +179,7 @@ export interface ISettingsModel {
   torEnabled: boolean;
   hideExpiredInvoices: boolean;
   screenTransitionsEnabled: boolean;
+  trayEnabled: boolean;
   iCloudBackupEnabled: boolean;
   lndChainBackend: string;
   neutrinoPeers: string[];
@@ -266,6 +269,10 @@ export const settings: ISettingsModel = {
     );
     actions.setMultiPathPaymentsEnabled(
       await getItemObject(StorageItem.multiPathPaymentsEnabled || false),
+    );
+    actions.setTrayEnabled(
+      (await getItemObject(StorageItem.trayEnabled)) ??
+      (await getItemObject(StorageItem.legacyMacosMenuBarEnabled)) ?? false,
     );
     actions.setTorEnabled((await getItemObject(StorageItem.torEnabled)) || false);
     actions.setHideExpiredInvoices((await getItemObject(StorageItem.hideExpiredInvoices)) || false);
@@ -440,6 +447,10 @@ export const settings: ISettingsModel = {
     actions.setHideExpiredInvoices(payload);
   }),
 
+  changeTrayEnabled: thunk(async (actions, payload) => {
+    await setItemObject(StorageItem.trayEnabled, payload);
+    actions.setTrayEnabled(payload);
+  }),
   changeScreenTransitionsEnabled: thunk(async (actions, payload) => {
     await setItemObject(StorageItem.screenTransitionsEnabled, payload);
     actions.setScreenTransitionsEnabled(payload);
@@ -658,6 +669,9 @@ export const settings: ISettingsModel = {
   setHideExpiredInvoices: action((state, payload) => {
     state.hideExpiredInvoices = payload;
   }),
+  setTrayEnabled: action((state, payload) => {
+    state.trayEnabled = payload;
+  }),
   setScreenTransitionsEnabled: action((state, payload) => {
     state.screenTransitionsEnabled = payload;
   }),
@@ -775,6 +789,7 @@ export const settings: ISettingsModel = {
   torEnabled: false,
   hideExpiredInvoices: false,
   screenTransitionsEnabled: true,
+  trayEnabled: false,
   iCloudBackupEnabled: false,
   lndChainBackend: "",
   neutrinoPeers: [],

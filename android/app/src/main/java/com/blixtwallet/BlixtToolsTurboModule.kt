@@ -481,6 +481,10 @@ class BlixtToolsTurboModule(reactContext: ReactApplicationContext) :
     promise.resolve(false)
   }
 
+  override fun setTrayEnabled(enabled: Boolean) {
+    // macOS-only window behavior.
+  }
+
   override fun macosOpenFileDialog(promise: Promise) {
     promise.resolve(null)
   }

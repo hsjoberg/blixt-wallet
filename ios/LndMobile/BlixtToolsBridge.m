@@ -170,4 +170,6 @@ RCT_EXTERN_METHOD(
   reject: (RCTPromiseRejectBlock)reject
 )
 
+RCT_EXTERN_METHOD(setTrayEnabled: (BOOL)enabled)
+
 @end
