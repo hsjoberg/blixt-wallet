@@ -518,6 +518,6 @@ The upstream podspec task is tracked in [UPSTREAM_FIXES.md](../UPSTREAM_FIXES.md
 
 Persistent Mode now controls macOS menu-bar behavior through the existing `persistentServicesEnabled` setting. The separate Power User Tools tray toggle has been removed. On macOS, enabling Persistent Mode keeps the node running when the window closes, and Quit Blixt exits the app. Changes apply immediately. Android retains its existing foreground service and restart prompt.
 
-Existing macOS `trayEnabled` preferences (or the older `macosMenuBarEnabled` fallback) migrate once into Persistent Mode, including explicit false values. Migration replaces the previously initialized Persistent Mode default and removes both legacy keys after saving. Subsequent launches use only Persistent Mode. Mobile preferences are unaffected by the migration.
+Persistent Mode uses only `persistentServicesEnabled`, defaulting to false when absent. The unreleased tray preferences have no migration, fallback, or reset compatibility code.
 
-Validation: all 46 macOS/Tor regression tests pass, including migration, interrupted storage writes/cleanup, and platform-specific restart behavior.
+Validation: macOS/Tor regression tests cover preference loading, persistence failures, and platform-specific restart behavior.
