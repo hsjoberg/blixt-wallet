@@ -16,7 +16,7 @@ window.delegate = previous
 controller.attach(window)
 assert(!controller.windowShouldClose(window))
 assert(previous.closeRequests == 1)
-NotificationCenter.default.post(name: Notification.Name("BlixtTrayEnabledChanged"), object: true)
+NotificationCenter.default.post(name: Notification.Name("BlixtPersistentModeEnabledChanged"), object: true)
 assert(controller.enabled)
 assert(app.activationPolicy() == .regular)
 window.makeKeyAndOrderFront(nil)

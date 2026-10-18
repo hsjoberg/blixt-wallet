@@ -469,13 +469,13 @@ The user subsequently confirmed the shared transformed-gradient implementation f
 
 ### Optional persistent menu-bar presence
 
-Power User Tools now offers the macOS-only “Keep Blixt in the menu bar” toggle, off by default. The flag uses Blixt's existing settings model and `storage/app` persistence (`trayEnabled`, with fallback to the earlier `macosMenuBarEnabled` key), including initialization and reset. Main applies the loaded value and subsequent changes through `BlixtTools.setTrayEnabled`; native code holds only runtime state, with no separate UserDefaults preference. The menu icon appears after the JS settings load. The earlier UserDefaults implementation was replaced before completion at the user's request.
+Persistent Mode controls the macOS menu bar through `persistentServicesEnabled`. Main applies the loaded value and subsequent changes through `BlixtTools.setPersistentModeEnabled`; native code holds only runtime state, with no separate UserDefaults preference. The menu icon appears after the JS settings load.
 
 When enabled, a lightning-bolt status item offers Open Blixt and Quit Blixt. Window close hides the same native window, preserving the React surface and embedded LND process; Open or Dock reopen brings it back. Disabling the feature brings a hidden window forward before removing the status item. The existing SwiftUI window delegate receives other delegate methods, including the close decision when the feature is disabled. Quit invokes the normal NSApplication termination path, as does Command-Q; this does not introduce a separate daemon, login item, or new graceful-LND-shutdown mechanism. Menu balance, sync status, and send/receive actions are deferred.
 
 An isolated AppKit smoke test exercises the actual controller with no wallet data: default off, native setting notification, hiding/reopening, disabling while hidden, and delegation of the original close decision. It creates no React runtime and touches no wallet. Run with `node --test tests/macos-menu-bar.test.cjs` on macOS in a graphical session. Interactive integration validation in the wallet remains pending.
 
-The persistence-path correction is covered by tests of the actual settings thunk: writes use `StorageItem.macosMenuBarEnabled` before committing state, and storage errors leave state unchanged. Both storage tests, the revised AppKit controller smoke test, native code generation, and the macOS bundle pass. The native controller no longer reads or writes UserDefaults.
+The settings thunk persists `StorageItem.persistentServicesEnabled` before committing state, and storage errors leave state unchanged. The native controller does not read or write UserDefaults.
 
 The corrected implementation's signed arm64 Mainnet Debug native build passed. The wallet itself was not relaunched during verification; interactive menu selection and full wallet close/reopen remain user checks. A native rebuild/restart is required to add the new method and menu controller; subsequent setting changes apply immediately.
 
@@ -484,11 +484,11 @@ Menu-bar implementation is now in `macos/BlixtWallet/BlixtMenuBarController.swif
 
 ### Platform-neutral tray API and SwiftUI background lifetime
 
-Renamed the shared API to `setTrayEnabled` and the application setting/actions to `trayEnabled`/`changeTrayEnabled`/`setTrayEnabled`. Existing macOS settings are read as a fallback when the new storage key is absent; an explicit new false value takes precedence. Reset clears both keys. The macOS implementation still owns the native menu-bar UI. Windows and Electrobun tray implementations remain future work, and the toggle is still shown only on macOS.
+The shared native API is `setPersistentModeEnabled`. The macOS implementation owns the native menu-bar UI; Windows and Electrobun tray implementations remain future work. There are no legacy preference keys or fallback reads.
 
 The user reported the process exited on window close despite the menu-bar option. A standalone SwiftUI reproducer confirmed that the original `Window` scene exits even when its window delegate hides the window and cancels closing. The original AppKit-only smoke test did not exercise this scene behavior. Using `WindowGroup` instead keeps the process alive and lets the same window reopen. Blixt now uses that scene, removes the New Window command, and terminates after the last actual window closes only when tray mode is disabled. Explicit Quit remains an exit action regardless of the setting. A SwiftUI smoke test now covers hiding/reopening followed by disabled-mode close and explicit Quit.
 
-Validation: the new SwiftUI lifecycle regression test passes for both disabled-mode window close and explicit Quit after a successful hide/reopen. The AppKit controller test and three storage tests also pass, including old-key fallback and new-false precedence. The macOS production bundle and both macOS/iOS pod/codegen updates pass; the generated interfaces use the neutral `setTrayEnabled` method. No existing wallet was launched during these isolated tests.
+The SwiftUI lifecycle regression test covers disabled-mode window close and explicit Quit after a successful hide/reopen. The AppKit controller and settings tests cover native menu behavior and persistence. No existing wallet is launched during these isolated tests.
 
 The signed arm64 Mainnet Debug native build also passed with the renamed API and WindowGroup lifecycle fix. The full wallet was not relaunched as part of this validation; the new SwiftUI regression test establishes process survival and reopening independently of React/LND. Windows/Linux tray support is not implemented by this change.
 

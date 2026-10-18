@@ -10,7 +10,7 @@ final class BlixtMenuBarController: NSObject, NSWindowDelegate {
 
   func start() {
     NotificationCenter.default.addObserver(self, selector: #selector(settingChanged(_:)),
-      name: Notification.Name("BlixtTrayEnabledChanged"), object: nil)
+      name: Notification.Name("BlixtPersistentModeEnabledChanged"), object: nil)
   }
 
   deinit {

@@ -74,7 +74,7 @@ const NativeBlixtToolsElectrobun: Spec = {
   checkApplicationSupportExists: async () => true,
   createIOSApplicationSupportAndLndDirectories: async () => true,
   excludeLndICloudBackup: async () => true,
-  setTrayEnabled: (_enabled: boolean) => {},
+  setPersistentModeEnabled: (_enabled: boolean) => {},
   macosOpenFileDialog: async () => null,
   onLndLog: electrobunNativeBlixtTools.onLndLog as CodegenTypes.EventEmitter<string>,
 };

@@ -92,7 +92,7 @@ export default function Main() {
   const persistentServicesEnabled = useStoreState((store) => store.settings.persistentServicesEnabled);
   useEffect(() => {
     if (PLATFORM === "macos") {
-      NativeBlixtTools.setTrayEnabled(persistentServicesEnabled);
+      NativeBlixtTools.setPersistentModeEnabled(persistentServicesEnabled);
     }
   }, [persistentServicesEnabled]);
   const holdOnboarding = useStoreState((store) => store.holdOnboarding);

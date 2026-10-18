@@ -481,7 +481,7 @@ class BlixtToolsTurboModule(reactContext: ReactApplicationContext) :
     promise.resolve(false)
   }
 
-  override fun setTrayEnabled(enabled: Boolean) {
+  override fun setPersistentModeEnabled(enabled: Boolean) {
     // macOS-only window behavior.
   }
 

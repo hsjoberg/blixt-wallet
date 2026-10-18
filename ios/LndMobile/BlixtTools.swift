@@ -659,11 +659,11 @@ autopilot.heuristic=preferential:0.05
     }
   }
 
-  @objc(setTrayEnabled:)
-  func setTrayEnabled(_ enabled: Bool) {
+  @objc(setPersistentModeEnabled:)
+  func setPersistentModeEnabled(_ enabled: Bool) {
     #if os(macOS)
     DispatchQueue.main.async {
-      NotificationCenter.default.post(name: Notification.Name("BlixtTrayEnabledChanged"), object: enabled)
+      NotificationCenter.default.post(name: Notification.Name("BlixtPersistentModeEnabledChanged"), object: enabled)
     }
     #endif
   }
