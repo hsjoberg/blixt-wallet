@@ -27,19 +27,23 @@ export default function LndLog({ navigation }: ILndLogProps) {
   useEffect(() => {
     let listener: EventSubscription | null = null;
     (async () => {
-      const tailLog = await NativeBlixtTools.tailLog(100);
-      log.current = tailLog
-        .split("\n")
-        .map((row) => row.slice(11))
-        .join("\n");
+      try {
+        const tailLog = await NativeBlixtTools.tailLog(100);
+        log.current = tailLog
+          .split("\n")
+          .map((row) => row.slice(11))
+          .join("\n");
 
-      listener = NativeBlixtTools.onLndLog(function (data: string) {
-        log.current = log.current + "\n" + data.slice(11);
+        listener = NativeBlixtTools.onLndLog(function (data: string) {
+          log.current = log.current + "\n" + data.slice(11);
+          forceUpdate();
+        });
+
+        await NativeBlixtTools.observeLndLogFile();
         forceUpdate();
-      });
-
-      NativeBlixtTools.observeLndLogFile();
-      forceUpdate();
+      } catch (error: any) {
+        toast(error.message, undefined, "danger");
+      }
     })();
 
     return () => {

@@ -8,7 +8,6 @@ import {
   BLIXT_WEB_DEMO,
   DEFAULT_PATHFINDING_ALGORITHM,
   DEFAULT_SPEEDLOADER_SERVER,
-  IS_ELECTROBUN,
   PLATFORM,
   TOR_SETTINGS,
 } from "../utils/constants";
@@ -88,7 +87,6 @@ import { stringToUint8Array, timeout, toast } from "../utils";
 
 import {
   genSeed,
-  getState as getLndState,
   initWallet,
   start as startLndTurbo,
   subscribeState,
@@ -285,6 +283,7 @@ export const model: IStoreModel = {
 
     const debugShowStartupInfo =
       (await getItemObjectAsyncStorage<boolean>(StorageItem.debugShowStartupInfo)) ?? false;
+    const isPlainWebNormalFlavor = PLATFORM === "web" && Flavor === "normal";
     const start = new Date();
 
     try {
@@ -382,7 +381,7 @@ export const model: IStoreModel = {
       log.i("gossipSyncEnabled", [gossipSyncEnabled]);
       log.i("persistentServicesEnabled", [persistentServicesEnabled]);
       if (status === 0) {
-        if (gossipSyncEnabled && Chain === "mainnet") {
+        if (gossipSyncEnabled && Chain === "mainnet" && !isPlainWebNormalFlavor) {
           actions.setSpeedloaderCancelVisible(false);
 
           // Show the "Syncing Lightning Network" text after 3s
@@ -450,7 +449,16 @@ export const model: IStoreModel = {
               .replace(/%20/g, " ");
             appFolderPath += "lnd/";
           }
-          args += `--lnddir=${appFolderPath}`;
+          args += `--lnddir=${appFolderPath} `;
+          if (isPlainWebNormalFlavor) {
+            args += "--no-rest-tls ";
+            args += "--nobootstrap ";
+            args += "--no-macaroons ";
+            args += "--rpclisten=127.0.0.1:10009 ";
+            args += "--restlisten=127.0.0.1:8080 ";
+            args += "--tor.socks=127.0.0.1:9050 ";
+            args += "--tor.control=127.0.0.1:9051 ";
+          }
           log.i("args", [args]);
           log.d("startLnd", [await startLndTurbo(args)]);
         } catch (e: any) {
