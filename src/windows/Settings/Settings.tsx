@@ -1415,8 +1415,12 @@ ${t("experimental.tor.disabled.msg2")}`;
     (store) => store.settings.changePersistentServicesEnabled,
   );
   const changePersistentServicesEnabledPress = async () => {
-    await changePersistentServicesEnabled(!persistentServicesEnabled);
-    restartNeeded();
+    try {
+      await changePersistentServicesEnabled(!persistentServicesEnabled);
+      if (PLATFORM === "android") restartNeeded();
+    } catch (error: any) {
+      toast(error.message);
+    }
   };
 
   // Custom invoice preimage
@@ -1955,7 +1959,7 @@ ${t("experimental.tor.disabled.msg2")}`;
 
       { type: "header", title: t("experimental.title") },
 
-      ...(["android", "ios"].includes(PLATFORM) && !isRecoverMode
+      ...(["android", "ios", "macos"].includes(PLATFORM) && !isRecoverMode
         ? [
             {
               type: "item",
@@ -2013,13 +2017,17 @@ ${t("experimental.tor.disabled.msg2")}`;
             },
           ]
         : []),
-      ...(PLATFORM === "android"
+      ...(["android", "macos"].includes(PLATFORM)
         ? [
             {
               type: "item",
               icon: { type: "Entypo", name: "globe" },
               title: t("debug.persistentServices.title"),
-              subtitle: t("debug.persistentServices.subtitle"),
+              subtitle: PLATFORM === "macos"
+                ? t("debug.persistentServices.subtitleMacos", {
+                    defaultValue: "Keep the node running when you close the window. Use Quit Blixt to exit.",
+                  })
+                : t("debug.persistentServices.subtitle"),
               checkBox: true,
               checked: persistentServicesEnabled,
               onPress: changePersistentServicesEnabledPress,

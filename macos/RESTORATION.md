@@ -513,3 +513,11 @@ Validation: focused JavaScript tests cover permission states, explicit permissio
 The macOS Podfile temporarily adds `:osx => "14.0"` to react-native-hash 3.0.3's iOS-only podspec before autolinking. The workaround is idempotent and reapplied after dependency installs. The native exclusion and Metro SHA-256 shim are removed; Blixt now uses the package's real JavaScript JSHash implementation. The Apple native module itself remains placeholder code, not a native hashing backend.
 
 The upstream podspec task is tracked in [UPSTREAM_FIXES.md](../UPSTREAM_FIXES.md#react-native-hash). JSHash SHA-256 passes empty, ASCII, Unicode, and multi-block vectors in Hermes against Node crypto; the full macOS bundle and signed arm64 Mainnet Debug build also pass.
+
+## Persistent Mode
+
+Persistent Mode now controls macOS menu-bar behavior through the existing `persistentServicesEnabled` setting. The separate Power User Tools tray toggle has been removed. On macOS, enabling Persistent Mode keeps the node running when the window closes, and Quit Blixt exits the app. Changes apply immediately. Android retains its existing foreground service and restart prompt.
+
+Existing macOS `trayEnabled` preferences (or the older `macosMenuBarEnabled` fallback) migrate once into Persistent Mode, including explicit false values. Migration replaces the previously initialized Persistent Mode default and removes both legacy keys after saving. Subsequent launches use only Persistent Mode. Mobile preferences are unaffected by the migration.
+
+Validation: all 46 macOS/Tor regression tests pass, including migration, interrupted storage writes/cleanup, and platform-specific restart behavior.

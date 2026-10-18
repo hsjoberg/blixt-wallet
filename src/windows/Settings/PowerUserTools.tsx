@@ -69,15 +69,6 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
   const { t } = useTranslation(namespaces.settings.settings);
   const lndChainBackend = useStoreState((store) => store.settings.lndChainBackend);
   const [searchText, setSearchText] = useState("");
-  const menuBarEnabled = useStoreState((store) => store.settings.trayEnabled);
-  const changeMenuBarEnabled = useStoreActions((store) => store.settings.changeTrayEnabled);
-  const toggleMenuBar = async () => {
-    try {
-      await changeMenuBarEnabled(!menuBarEnabled);
-    } catch (error: any) {
-      toast(error.message, 10000, "danger");
-    }
-  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -415,15 +406,6 @@ export default function PowerUserTools({ navigation }: IPowerUserToolsProps) {
   };
 
   const toolsData: ToolItem[] = [
-    ...(PLATFORM === "macos" ? [{
-      type: "item",
-      title: "Keep Blixt in the menu bar",
-      subtitle: "Closing the window keeps the node running. Use Quit Blixt to exit.",
-      icon: { type: "MaterialIcons", name: "desktop-mac" },
-      checkBox: true,
-      checked: menuBarEnabled,
-      onPress: toggleMenuBar,
-    }] : []),
     // Lnd section
     { type: "header", title: "Lnd" },
     {

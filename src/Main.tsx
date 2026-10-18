@@ -89,12 +89,12 @@ export type RootStackParamList = {
 };
 
 export default function Main() {
-  const trayEnabled = useStoreState((store) => store.settings.trayEnabled);
+  const persistentServicesEnabled = useStoreState((store) => store.settings.persistentServicesEnabled);
   useEffect(() => {
     if (PLATFORM === "macos") {
-      NativeBlixtTools.setTrayEnabled(trayEnabled);
+      NativeBlixtTools.setTrayEnabled(persistentServicesEnabled);
     }
-  }, [trayEnabled]);
+  }, [persistentServicesEnabled]);
   const holdOnboarding = useStoreState((store) => store.holdOnboarding);
   const appReady = useStoreState((store) => store.appReady);
   const lightningReady = useStoreState((store) => store.lightning.ready);

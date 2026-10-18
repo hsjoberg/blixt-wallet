@@ -52,6 +52,7 @@ import {
   getItem as getItemAsyncStorage,
   getItemObject as getItemObjectAsyncStorage,
   getLndCompactDb,
+  getPersistentServicesEnabled,
   getRescanWallet,
   getWalletCreated,
   setAppBuild,
@@ -346,12 +347,11 @@ export const model: IStoreModel = {
         args = `--nolisten `;
       }
 
-      let persistentServicesEnabled =
-        (await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesEnabled)) ?? false;
+      const persistentServicesEnabled = await getPersistentServicesEnabled();
       let persistentServicesWarningShown =
         (await getItemObjectAsyncStorage<boolean>(StorageItem.persistentServicesWarningShown)) ??
         false;
-      if (persistentServicesEnabled && !persistentServicesWarningShown) {
+      if (PLATFORM === "android" && persistentServicesEnabled && !persistentServicesWarningShown) {
         await setItemObject(StorageItem.persistentServicesWarningShown, true);
       }
       const gossipSyncEnabled =

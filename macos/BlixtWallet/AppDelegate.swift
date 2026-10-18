@@ -65,6 +65,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   @objc private func getURL(_ event: NSAppleEventDescriptor, withReplyEvent reply: NSAppleEventDescriptor) {
+    menuBar.openWallet()
     RCTLinkingManager.getUrlEventHandler(event, withReplyEvent: reply)
   }
 }

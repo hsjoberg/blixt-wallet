@@ -66,7 +66,7 @@ export enum StorageItem {
   hideExpiredInvoices = "hideExpiredInvoices",
   lastGoogleDriveBackup = "lastGoogleDriveBackup",
   screenTransitionsEnabled = "screenTransitionsEnabled",
-  trayEnabled = "trayEnabled",
+  legacyTrayEnabled = "trayEnabled", // Migration/reset compatibility.
   legacyMacosMenuBarEnabled = "macosMenuBarEnabled", // Read/reset compatibility.
   iCloudBackupEnabled = "iCloudBackupEnabled",
   lastICloudBackup = "lastICloudBackup",
@@ -137,6 +137,27 @@ export const getRescanWallet = async (): Promise<boolean> => {
 export const getLndCompactDb = async (): Promise<boolean> => {
   return (await getItemObject(StorageItem.lndCompactDb)) || false;
 };
+
+// Older macOS builds stored the window behavior separately, while Persistent
+// Mode was initialized to false. Import the tray preference once, even when
+// that old default is present, then let Persistent Mode be authoritative.
+export const getPersistentServicesEnabled = async (): Promise<boolean> => {
+  if (PLATFORM === "macos") {
+    const legacy =
+      (await getItemObject<boolean>(StorageItem.legacyTrayEnabled)) ??
+      (await getItemObject<boolean>(StorageItem.legacyMacosMenuBarEnabled));
+    if (legacy != null) {
+      await setItemObject(StorageItem.persistentServicesEnabled, legacy);
+      // Remove the older fallback first so a partial cleanup cannot resurrect
+      // it over an explicit false stored in the more recent tray preference.
+      await removeItem(StorageItem.legacyMacosMenuBarEnabled);
+      await removeItem(StorageItem.legacyTrayEnabled);
+      return legacy;
+    }
+  }
+  return (await getItemObject<boolean>(StorageItem.persistentServicesEnabled)) ?? false;
+};
+
 export const setRescanWallet = async (rescan: boolean): Promise<void> => {
   return await setItemObject<boolean>(StorageItem.rescanWallet, rescan);
 };
@@ -212,7 +233,7 @@ export const clearApp = async () => {
     removeItem(StorageItem.hideExpiredInvoices),
     removeItem(StorageItem.lastGoogleDriveBackup),
     removeItem(StorageItem.screenTransitionsEnabled),
-    removeItem(StorageItem.trayEnabled),
+    removeItem(StorageItem.legacyTrayEnabled),
     removeItem(StorageItem.legacyMacosMenuBarEnabled),
     removeItem(StorageItem.iCloudBackupEnabled),
     removeItem(StorageItem.lastICloudBackup),
@@ -314,7 +335,6 @@ export const setupApp = async () => {
     setItemObject<boolean>(StorageItem.hideExpiredInvoices, true),
     setItemObject<number>(StorageItem.lastGoogleDriveBackup, new Date().getTime()),
     setItemObject<boolean>(StorageItem.screenTransitionsEnabled, PLATFORM !== "macos"),
-    setItemObject<boolean>(StorageItem.trayEnabled, false),
     setItemObject<boolean>(StorageItem.iCloudBackupEnabled, false),
     setItemObject<number>(StorageItem.lastICloudBackup, new Date().getTime()),
     setItem(StorageItem.lndChainBackend, lndChainBackend),
