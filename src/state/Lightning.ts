@@ -188,6 +188,8 @@ export const lightning: ILightningModel = {
         await dispatch.iCloudBackup.initialize();
       }
 
+      await dispatch.webDavBackup.initialize();
+
       // On startup, if persistent mode is enabled
       // Start the notifee foreground service, else stop it.
       // The function doesn't throw, so it is ok to start/stop it

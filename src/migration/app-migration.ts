@@ -388,4 +388,13 @@ export const appMigration: IAppMigration[] = [
       await setItem(StorageItem.lndChainBackend, "neutrino");
     },
   },
+  // Version 43
+  {
+    async beforeLnd(db, i) {
+      await setItemObject<boolean>(StorageItem.webDavBackupEnabled, false);
+      await setItem(StorageItem.webDavBackupUrl, "");
+      await setItem(StorageItem.webDavBackupUsername, "");
+      await setItemObject<number>(StorageItem.lastWebDavBackup, new Date().getTime());
+    },
+  },
 ];
