@@ -1,4 +1,3 @@
-import React from "react";
 import { KeyboardAvoidingView as RNKeyboardAvoidingView } from "react-native";
 
 export const KeyboardProvider = ({ children }) => children;
