@@ -59,6 +59,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Scan Lightning invoices and LNURL QR codes to send payments.</string>
+	<key>NSCameraUseContinuityCameraDeviceType</key>
+	<true/>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSSupportsAutomaticTermination</key>

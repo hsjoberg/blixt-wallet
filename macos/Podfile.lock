@@ -27,6 +27,34 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - BlixtCamera (1.0.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - boost (1.84.0)
   - DoubleConversion (1.1.6)
   - fast_float (8.0.0)
@@ -3116,6 +3144,7 @@ PODS:
 
 DEPENDENCIES:
   - "AsyncStorage (from `node_modules/@react-native-async-storage/async-storage`)"
+  - BlixtCamera (from `camera`)
   - boost (from `node_modules/react-native-macos/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `node_modules/react-native-macos/third-party-podspecs/DoubleConversion.podspec`)
   - fast_float (from `node_modules/react-native-macos/third-party-podspecs/fast_float.podspec`)
@@ -3221,6 +3250,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   AsyncStorage:
     :path: "node_modules/@react-native-async-storage/async-storage"
+  BlixtCamera:
+    :path: camera
   boost:
     :podspec: node_modules/react-native-macos/third-party-podspecs/boost.podspec
   DoubleConversion:
@@ -3411,6 +3442,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AsyncStorage: 10b4956c3184302f5003b3360acc30b9c59dce1e
+  BlixtCamera: 0f739740ad307b7040336946265c8ded1cb160e2
   boost: cea1d4f90a3a59537f3deb03ff5656489d7133dd
   DoubleConversion: d31b1eb37f6d6f456530c4fd9124b857d6889cab
   fast_float: 20817c22759af6ac8d4d67e6e059b8b499953656

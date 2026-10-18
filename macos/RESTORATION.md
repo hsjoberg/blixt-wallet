@@ -8,7 +8,7 @@ The target uses the React Native macOS 0.83.0 template and now runs a minimal wa
 
 The user confirmed the title-bar color, scrolling in Settings and Power User Tools, picker cancellation, and backup/recovery functions work. The user also confirms their old mainnet Debug and Release wallets work correctly. No legacy-settings migration failure is reported; migration is not tracked as an outstanding revival blocker.
 
-Deferred by request: Touch ID/biometrics, iCloud backup, camera/QR scanning, location/maps, and investigation of the underlying FlatList virtualization/clipping failure. Settings and Power User Tools keep the macOS ScrollView workaround. Touch ID requires a macOS-capable native integration, either an extension to the existing library or a LocalAuthentication bridge, with cancellation/error handling and the existing authentication policy preserved.
+Deferred by request: Touch ID/biometrics, iCloud backup, camera scanning outside Send, location/maps, and investigation of the underlying FlatList virtualization/clipping failure. Settings and Power User Tools keep the macOS ScrollView workaround. Touch ID requires a macOS-capable native integration, either an extension to the existing library or a LocalAuthentication bridge, with cancellation/error handling and the existing authentication policy preserved.
 
 Compatibility code is consolidated in `src/shims/`. Browser-specific implementations remain in `src/shims/web/`. Electrobun's native SQLite, storage, BlixtTools, and Speedloader bridges remain in `electrobun/src/shims/` because they implement a different runtime rather than duplicate unavailable-feature shims. There is no separate macOS adapter directory. Desktop Metro still substitutes Keyboard Controller, Fingerprint Scanner, iCloud Store, Permissions, Notifee, geolocation, document picker, and maps. Native backup dialogs bypass the unavailable generic document-picker shim. Hashing uses the real react-native-hash JSHash implementation, with a temporary Podfile fix for macOS platform declaration. The Notifee shim now forwards macOS permission checks/requests and local notification delivery to a native module; its web implementation remains unavailable. Other replacements provide limited or unavailable behavior. NitroTor and Screens use real libraries (Screens uses its upstream JS fallback).
 
@@ -521,3 +521,16 @@ Persistent Mode now controls macOS menu-bar behavior through the existing `persi
 Persistent Mode uses only `persistentServicesEnabled`, defaulting to false when absent. The unreleased tray preferences have no migration, fallback, or reset compatibility code.
 
 Validation: macOS/Tor regression tests cover preference loading, persistence failures, and platform-specific restart behavior.
+
+
+## Embedded Send camera
+
+The Send screen uses a focused macOS camera package in `macos/camera`, autolinked only by the desktop dependency install. Its `NativeBlixtCamera` TurboModule provides camera permission and device discovery. A Fabric component embeds an AppKit/AVFoundation preview beneath the React scanning frame and controls. The shared Speedloader TurboModule and mobile camera implementations are unchanged.
+
+The native preview processes QR codes with Apple Vision, limits decoding to five frames per second, and emits one decoded value per active scan. Frames stay native. The Send screen passes decoded text through the existing invoice/LNURL evaluation and confirmation flow; scanning itself never sends a payment. Paste and Lightning-address entry remain available without camera access. Invalid results pause scanning until Scan again is selected, avoiding repeated error dialogs for the same QR code.
+
+Capture runs on a serial background queue and stops when the view is inactive, detached, hidden, the window is minimized/occluded, or the app resigns active. Generation checks discard stale queued starts/results. Permission denial, missing/disconnected cameras, and capture failures provide a retry path. Camera selection supports the devices AVFoundation discovers, including external and Continuity cameras. Physical-device behavior still needs hardware testing.
+
+The macOS target now includes the camera sandbox entitlement, a camera usage description, and the Continuity Camera opt-in. The package is deliberately limited to the Send screen; the generic fullscreen camera remains deferred. No VisionCamera or Nitro view port is included.
+
+Validation: all 56 macOS/Tor regression tests pass, including native Vision decoding of generated invoice/LNURL/address QR frames, duplicate suppression, stale-result cancellation, and Send permission/navigation/retry tests. Codegen, the production macOS bundle, and the signed arm64 Mainnet Debug build pass. An isolated React runtime mounted the Fabric preview at 640×480 and discovered the FaceTime HD Camera through the TurboModule, with capture disabled and no wallet code loaded. Live camera capture, permission prompts, physical QR codes, and external/Continuity cameras still require interactive hardware validation. The repository-wide TypeScript check retains existing errors; no errors were reported in the new camera files.

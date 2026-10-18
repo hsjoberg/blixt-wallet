@@ -29,6 +29,7 @@
         "base64-js": "1.5.1",
         "bech32": "2.0.0",
         "bignumber.js": "11.1.5",
+        "blixt-macos-camera": "file:./camera",
         "color": "5.0.3",
         "date-fns": "4.4.0",
         "easy-peasy": "6.1.1",
@@ -853,6 +854,8 @@
     "bitcoinjs-lib": ["bitcoinjs-lib@6.1.8", "", { "dependencies": { "@noble/hashes": "^1.2.0", "bech32": "^2.0.0", "bip174": "^2.1.1", "bs58check": "^3.0.1", "typeforce": "^1.11.3", "varuint-bitcoin": "^1.1.2" } }, "sha512-A6o+yq7BvwlmLj4F0NC5f3XX109rRe5evxi368S9zil5voOtUfiqfiMCzZYKHk4k7iIJ3+NmcQW05Ar4CBlKyg=="],
 
     "bl": ["bl@4.1.0", "", { "dependencies": { "buffer": "^5.5.0", "inherits": "^2.0.4", "readable-stream": "^3.4.0" } }, "sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w=="],
+
+    "blixt-macos-camera": ["blixt-macos-camera@file:camera", {}],
 
     "blueimp-md5": ["blueimp-md5@2.19.0", "", {}, "sha512-DRQrD6gJyy8FbiE4s+bDoXS9hiW3Vbx5uCdwvcCf3zLHL+Iv7LtGHLpr+GZV8rHG8tK766FGYBwRbu8pELTt+w=="],
 
